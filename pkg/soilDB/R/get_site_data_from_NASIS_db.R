@@ -1,0 +1,37 @@
+get_site_data_from_NASIS_db <-
+function(dsn)
+  {
+  q <- "SELECT dbo.site.siteiid as site_rec_id, dbo.site.usiteid as site_id, dbo.pedon.upedonid as pedon_id, dbo.siteobs.obsdate as obs_date, -(longdegrees + CASE WHEN longminutes IS NULL THEN 0.0 ELSE longminutes / 60.0 END + CASE WHEN longseconds IS NULL THEN 0.0 ELSE longseconds / 60.0 / 60.0 END) as x, latdegrees + CASE WHEN latminutes IS NULL THEN 0.0 ELSE latminutes / 60.0 END + CASE WHEN latseconds IS NULL THEN 0.0 ELSE latseconds / 60.0 / 60.0 END as y, dbo.pedon.descname as describer, soinmassamp as sampled_as, soinmascorr as correlated_as, psctopdepth, pscbotdepth, ps.ChoiceLabel as part_size_class, dm.ChoiceName as datum, elev, slope, aspect, plantassocnm, bedrckdepth, br.ChoiceLabel as bedrock_kind, hs.ChoiceLabel as hillslope_pos
+FROM
+(
+(
+( 
+(dbo.site INNER JOIN (dbo.siteobs LEFT JOIN dbo.pedon ON dbo.siteobs.siteobsiid = dbo.pedon.siteobsiidref) ON dbo.site.siteiid = dbo.siteobs.siteiidref)
+LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 1261) AS dm ON dbo.site.horizdatnm = dm.ChoiceValue)
+LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 517) AS br ON dbo.site.bedrckkind = br.ChoiceValue)
+LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 127) AS ps ON dbo.pedon.taxpartsize = ps.ChoiceValue)
+LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 971) AS hs ON dbo.site.hillslopeprof = hs.ChoiceValue
+ORDER BY dbo.site.usiteid ;"
+  
+  # setup connection to our local NASIS database
+  channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='Re@d0n1y') 
+
+  # exec query
+  cat(paste('fetching from', dsn, '...\n'))
+  d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
+
+  # close connection
+  odbcClose(channel)
+  
+  # warn if mixed datums
+  if(length(unique(na.omit(d$datum))) > 1)
+    warning('multiple datums present')
+  
+  # are there any dupes?
+  if(any(table(d$pedon_id) > 1))
+    warning('duplicate site/pedon information in results')
+  
+  # done
+  return(d)
+  }
+

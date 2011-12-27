@@ -1,16 +1,16 @@
-get_colors_from_pedon_db <-
+get_colors_from_NASIS_db <-
 function(dsn)
   {
   # color data... check
-  q <- "SELECT pedon.upedonid as pedon_id, phorizon.phiid as hz_id, colormoistst, colorpct as pct, mh.choice AS colorhue, colorvalue, colorchroma
+  q <- "SELECT pedon.upedonid as pedon_id, phorizon.phiid as hz_id, colormoistst, colorpct as pct, mh.ChoiceName AS colorhue, colorvalue, colorchroma
 FROM (
-(pedon INNER JOIN phorizon ON pedon.peiid = phorizon.peiidref)
-INNER JOIN phcolor ON phorizon.phiid = phcolor.phiidref)
-LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 1242) AS mh ON phcolor.colorhue = mh.choice_id
-ORDER BY pedon.upedonid, phiidref, colormoistst;"
+(dbo.pedon INNER JOIN dbo.phorizon ON dbo.pedon.peiid = dbo.phorizon.peiidref)
+INNER JOIN dbo.phcolor ON dbo.phorizon.phiid = dbo.phcolor.phiidref)
+LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE DomainID = 1242) AS mh ON dbo.phcolor.colorhue = mh.ChoiceValue
+ORDER BY dbo.pedon.upedonid, dbo.phcolor.phiidref, dbo.phcolor.colormoistst;"
   
-  # setup connection to our pedon database
-  channel <- odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
+  # setup connection to our local NASIS database
+  channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='Re@d0n1y') 
 
   # exec query
   cat(paste('fetching from', dsn, '...\n'))
