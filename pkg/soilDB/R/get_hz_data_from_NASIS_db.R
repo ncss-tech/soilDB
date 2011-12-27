@@ -1,5 +1,4 @@
-get_hz_data_from_NASIS_db <-
-function(dsn)
+get_hz_data_from_NASIS_db <- function(dsn)
   {
   # this can be optimized
   # RF calculation should be done in  a sub-query

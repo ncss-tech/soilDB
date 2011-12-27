@@ -9,6 +9,5 @@ Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
 License: gpl
 LazyLoad: yes
-Depends: R (>= 2.9.0), methods, plyr, Hmisc, RODBC, RCurl, XML, SSOAP
+Depends: R (>= 2.9.0), methods, plyr, Hmisc, RODBC, RCurl, XML, SSOAP, aqp
 Suggests: rgdal
-Suggests: aqp
