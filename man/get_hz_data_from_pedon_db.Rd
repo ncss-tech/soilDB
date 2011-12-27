@@ -1,5 +1,6 @@
 \name{get_hz_data_from_pedon_db}
 \alias{get_hz_data_from_pedon_db}
+\alias{mix_and_clean_colors}
 
 \title{Extract Horizon Data from a PedonPC Database}
 \description{Get horizon-level data from a PedonPC database.}
