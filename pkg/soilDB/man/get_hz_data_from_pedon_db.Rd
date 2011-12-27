@@ -1,6 +1,5 @@
 \name{get_hz_data_from_pedon_db}
 \alias{get_hz_data_from_pedon_db}
-\alias{mix_and_clean_colors}
 
 \title{Extract Horizon Data from a PedonPC Database}
 \description{Get horizon-level data from a PedonPC database.}
@@ -14,7 +13,7 @@ get_hz_data_from_pedon_db(dsn)
 \details{This function currently works only on Windows.}
 \value{A dataframe.}
 \references{}
-\author{Dylan E. Beaudette and Jay Skovlin}
+\author{Dylan E. Beaudette and Jay M. Skovlin}
 \note{NULL total rock fragment values are assumed to represent an _absense_ of rock fragments, and set to 0.}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

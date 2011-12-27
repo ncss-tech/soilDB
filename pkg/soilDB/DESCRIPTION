@@ -7,7 +7,7 @@ Packaged: 2011-12-27; dylan
 Author: D.E. Beaudette and J.M. Skovlin
 Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
-License: gpl
+License: GPL (>= 2)
 LazyLoad: yes
 Depends: R (>= 2.9.0), methods, plyr, Hmisc, RODBC, RCurl, XML, SSOAP, aqp
 Suggests: rgdal
