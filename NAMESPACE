@@ -1,2 +1,2 @@
-import(plyr)
-import(RODBC)
+
+exportPattern("^[^\\.]")
