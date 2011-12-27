@@ -14,7 +14,7 @@ get_colors_from_pedon_db(dsn)
 \details{This function currently works only on Windows.}
 \value{A dataframe with the results.}
 \references{}
-\author{Dylan E. Beaudette and Jay Skovlin}
+\author{Dylan E. Beaudette and Jay M. Skovlin}
 \note{}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
