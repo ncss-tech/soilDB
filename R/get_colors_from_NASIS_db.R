@@ -1,5 +1,4 @@
-get_colors_from_NASIS_db <-
-function(dsn)
+get_colors_from_NASIS_db <- function(dsn)
   {
   # color data... check
   q <- "SELECT pedon.upedonid as pedon_id, phorizon.phiid as hz_id, colormoistst, colorpct as pct, mh.ChoiceName AS colorhue, colorvalue, colorchroma
