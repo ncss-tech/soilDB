@@ -1,3 +1,7 @@
--------------------------- nrcs 0.1 (2011-12-23) --------------------------
+-------------------------- soilDB 0.2 (2011-12-27) --------------------------
+* moved functions out of aqp package
+* basic query functionality from local NASIS DB (Jay)
+
+-------------------------- soilDB 0.1 (2011-12-23) --------------------------
 * initial version on r-forge
-* functions still exist in AQP... need to move over completely
+* functions still exist in aqp package... need to move over completely
