@@ -1,12 +1,13 @@
+# results can be referenced via phiid (horizon-level ID)
 get_colors_from_NASIS_db <- function(dsn)
   {
-  # color data... check
-  q <- "SELECT pedon.upedonid as pedon_id, phorizon.phiid as hz_id, colormoistst, colorpct as pct, mh.ChoiceName AS colorhue, colorvalue, colorchroma
+  # unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
+  q <- "SELECT dbo.pedon.peiid, phorizon.phiid as phiid, colormoistst, colorpct as pct, mh.ChoiceName AS colorhue, colorvalue, colorchroma
 FROM (
 (dbo.pedon INNER JOIN dbo.phorizon ON dbo.pedon.peiid = dbo.phorizon.peiidref)
 INNER JOIN dbo.phcolor ON dbo.phorizon.phiid = dbo.phcolor.phiidref)
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE DomainID = 1242) AS mh ON dbo.phcolor.colorhue = mh.ChoiceValue
-ORDER BY dbo.pedon.upedonid, dbo.phcolor.phiidref, dbo.phcolor.colormoistst;"
+ORDER BY phiid, dbo.phcolor.colormoistst;"
   
   # setup connection to our local NASIS database
   channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='Re@d0n1y') 
@@ -31,12 +32,12 @@ ORDER BY dbo.pedon.upedonid, dbo.phcolor.phiidref, dbo.phcolor.colormoistst;"
   
   # mix and clean colors
   cat('mixing and cleaning colors ...\n')
-  dry.colors.final <- ddply(dry.colors, c('pedon_id', 'hz_id'), mix_and_clean_colors, .progress='text')
-  moist.colors.final <- ddply(moist.colors, c('pedon_id', 'hz_id'), mix_and_clean_colors, .progress='text')
+  dry.colors.final <- ddply(dry.colors, c('phiid'), mix_and_clean_colors, .progress='text')
+  moist.colors.final <- ddply(moist.colors, c('phiid'), mix_and_clean_colors, .progress='text')
 
   # rename columns
-  names(dry.colors.final) <- c('pedon_id','hz_id','d_r','d_g','d_b')
-  names(moist.colors.final) <- c('pedon_id','hz_id','m_r','m_g','m_b')
+  names(dry.colors.final) <- c('phiid','d_r','d_g','d_b')
+  names(moist.colors.final) <- c('phiid','m_r','m_g','m_b')
 
   # merge into single df
   d.final <- join(dry.colors.final, moist.colors.final, type='full')

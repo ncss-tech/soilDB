@@ -1,3 +1,7 @@
+-------------------------- soilDB 0.3 (2011-12-28) --------------------------
+* updated query structure, switching over to native NASIS/PedonPC IDs
+* extended summaries added: NASIS only
+
 -------------------------- soilDB 0.2 (2011-12-27) --------------------------
 * moved functions out of aqp package
 * basic query functionality from local NASIS DB (Jay)
