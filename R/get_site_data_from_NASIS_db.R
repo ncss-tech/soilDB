@@ -1,6 +1,6 @@
 get_site_data_from_NASIS_db <- function(dsn)
   {
-  q <- "SELECT dbo.site.siteiid as site_rec_id, dbo.site.usiteid as site_id, dbo.pedon.upedonid as pedon_id, dbo.siteobs.obsdate as obs_date, -(longdegrees + CASE WHEN longminutes IS NULL THEN 0.0 ELSE longminutes / 60.0 END + CASE WHEN longseconds IS NULL THEN 0.0 ELSE longseconds / 60.0 / 60.0 END) as x, latdegrees + CASE WHEN latminutes IS NULL THEN 0.0 ELSE latminutes / 60.0 END + CASE WHEN latseconds IS NULL THEN 0.0 ELSE latseconds / 60.0 / 60.0 END as y, dbo.pedon.descname as describer, soinmassamp as sampled_as, soinmascorr as correlated_as, psctopdepth, pscbotdepth, ps.ChoiceLabel as part_size_class, dm.ChoiceName as datum, elev, slope, aspect, plantassocnm, bedrckdepth, br.ChoiceLabel as bedrock_kind, hs.ChoiceLabel as hillslope_pos
+  q <- "SELECT dbo.site.siteiid as siteiid, dbo.pedon.peiid, dbo.site.usiteid as site_id, dbo.pedon.upedonid as pedon_id, dbo.siteobs.obsdate as obs_date, -(longdegrees + CASE WHEN longminutes IS NULL THEN 0.0 ELSE longminutes / 60.0 END + CASE WHEN longseconds IS NULL THEN 0.0 ELSE longseconds / 60.0 / 60.0 END) as x, latdegrees + CASE WHEN latminutes IS NULL THEN 0.0 ELSE latminutes / 60.0 END + CASE WHEN latseconds IS NULL THEN 0.0 ELSE latseconds / 60.0 / 60.0 END as y, dbo.pedon.descname as describer, soinmassamp as sampled_as, soinmascorr as correlated_as, pedlabsampnum, psctopdepth, pscbotdepth, ps.ChoiceLabel as part_size_class, dm.ChoiceName as datum, elev, slope, aspect, plantassocnm, bedrckdepth, br.ChoiceLabel as bedrock_kind, hs.ChoiceLabel as hillslope_pos
 FROM
 (
 (
@@ -24,11 +24,15 @@ ORDER BY dbo.site.usiteid ;"
   
   # warn if mixed datums
   if(length(unique(na.omit(d$datum))) > 1)
-    warning('multiple datums present')
+    cat('NOTICE: multiple datums present\n')
   
-  # are there any dupes?
-  if(any(table(d$pedon_id) > 1))
-    warning('duplicate site/pedon information in results')
+  # are there any dupelicate pedon IDs?
+  t.pedon_id <- table(d$pedon_id)
+  if(any(t.pedon_id > 1)) {
+    cat('NOTICE: duplicate pedons')
+    print(t.pedon_id[which(t.pedon_id > 1)])
+  }
+    
   
   # done
   return(d)

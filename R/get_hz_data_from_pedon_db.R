@@ -3,8 +3,7 @@ function(dsn)
   {
   # this can be optimized
   # RF calculation should be done in  a sub-query
-  q <- "SELECT pedon.upedonid as pedon_id, phorizon.phiid as hz_id,
-  phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
+  q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid as pedon_id, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
   phorizon.claytotest as clay, phorizon.silttotest as silt, phorizon.sandtotest as sand, phfield, 
   IIF(IsNULL(f.total_frags_pct), 0, f.total_frags_pct) AS total_frags_pct
   FROM (

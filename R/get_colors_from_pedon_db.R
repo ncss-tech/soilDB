@@ -2,12 +2,12 @@ get_colors_from_pedon_db <-
 function(dsn)
   {
   # color data... check
-  q <- "SELECT pedon.upedonid as pedon_id, phorizon.phiid as hz_id, colormoistst, colorpct as pct, mh.choice AS colorhue, colorvalue, colorchroma
+  q <- "SELECT phorizon.phiid, colormoistst, colorpct as pct, mh.choice AS colorhue, colorvalue, colorchroma
 FROM (
 (pedon INNER JOIN phorizon ON pedon.peiid = phorizon.peiidref)
 INNER JOIN phcolor ON phorizon.phiid = phcolor.phiidref)
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 1242) AS mh ON phcolor.colorhue = mh.choice_id
-ORDER BY pedon.upedonid, phiidref, colormoistst;"
+ORDER BY phiidref, colormoistst;"
   
   # setup connection to our pedon database
   channel <- odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
@@ -32,12 +32,12 @@ ORDER BY pedon.upedonid, phiidref, colormoistst;"
   
   # mix and clean colors
   cat('mixing and cleaning colors ...\n')
-  dry.colors.final <- ddply(dry.colors, c('pedon_id', 'hz_id'), mix_and_clean_colors, .progress='text')
-  moist.colors.final <- ddply(moist.colors, c('pedon_id', 'hz_id'), mix_and_clean_colors, .progress='text')
+  dry.colors.final <- ddply(dry.colors, c('phiid'), mix_and_clean_colors, .progress='text')
+  moist.colors.final <- ddply(moist.colors, c('phiid'), mix_and_clean_colors, .progress='text')
 
   # rename columns
-  names(dry.colors.final) <- c('pedon_id','hz_id','d_r','d_g','d_b')
-  names(moist.colors.final) <- c('pedon_id','hz_id','m_r','m_g','m_b')
+  names(dry.colors.final) <- c('phiid','d_r','d_g','d_b')
+  names(moist.colors.final) <- c('phiid','m_r','m_g','m_b')
 
   # merge into single df
   d.final <- join(dry.colors.final, moist.colors.final, type='full')
