@@ -27,7 +27,12 @@ mapunit_geom_by_ll_bbox(bbox, source = 'sda')
 # basic usage
 b <- c(-120.54,38.61,-120.41,38.70)
 x <- mapunit_geom_by_ll_bbox(b) # about 20 seconds
+
+# note that the returned geometry is everything overlapping the bbox
+# and not an intersection... why?
 plot(x)
+rect(b[1], b[2], b[3], b[4], border='red', lwd=2)
+
 
 # get map unit data for matching map unit keys
 in.statement <- format_SQL_in_statement(unique(x$MUKEY))
