@@ -21,7 +21,7 @@
 # NASIS export metadata:
 \dontrun{
 res <- SDA_query('select areasymbol, exportcertdate from distlegendmd order by areasymbol')
-res$exportcertdate <- as.Date(as.POSIXct(res$exportcertdate, format='\%m/\%d/\%Y \%H:\%M:\%S'))
+res$exportcertdate <- as.Date(as.POSIXct(res$exportcertdate, format="\%m/\%d/\%Y \%H:\%M:\%S"))
 recently_updated <- res$areasymbol[res$exportcertdate > as.Date('2011-01-01')]
 }
 
