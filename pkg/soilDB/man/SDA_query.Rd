@@ -14,7 +14,7 @@
 \value{A dataframe containing the results.}
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E. Beaudette}
-\note{This function requires the `SSOAP` (\url{http://www.omegahat.org/SSOAP/}), `RCurl` (\url{http://www.omegahat.org/RCurl/}) and `XML` (\url{http://www.omegahat.org/RSXML/}) packages. It appears that there is a bug in one of the dependencies, rendering this function broken on some MacOS and UNIX variants. Details pending.}
+\note{This function requires the `SSOAP` (\url{http://www.omegahat.org/SSOAP/}), `RCurl` (\url{http://www.omegahat.org/RCurl/}) and `XML` (\url{http://www.omegahat.org/RSXML/}) packages. You may also need the `XMLSchema' package: \code{install.packages("XMLSchema", repos = "http://www.omegahat.org/R", type = "source")}. It appears that there is a bug in one of the dependencies, rendering this function broken on some MacOS and UNIX variants. Details pending.}
 
 \seealso{\code{\link{MUKEYS_by_ll_bbox}}, \code{\link{mapunit_geom_by_ll_bbox}}}
 \examples{

@@ -3,8 +3,8 @@
 \alias{soilDB}
 \docType{package}
 \title{Soil Database Interface}
-\description{A collection of functions for reading data from USDA-NCSS soil databases.}
-\details{It can be difficult to locate all of the dependencies required for sending/processing SOAP requests. install.packages("XMLSchema", repos = "http://www.omegahat.org/R", type = "source")}
+\description{This package provides methods for extracting soils information from local PedonPC and AK Site databases (MS Access format), local NASIS databases (MS SQL Server), and the SDA webservice. Currently USDA-NCSS data sources are supported, however, there are plans to develop interfaces to outside systems such as the Global Soil Mapping project.}
+\details{It can be difficult to locate all of the dependencies required for sending/processing SOAP requests, especially on UNIX-like operating systems.}
 \author{
 D.E. Beaudette and J.M. Skovlin
 Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
@@ -12,4 +12,11 @@ Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
 \references{}
 \keyword{package}
 \seealso{}
-\examples{}
+\examples{
+
+
+\dontrun{
+	
+	
+}	
+}
