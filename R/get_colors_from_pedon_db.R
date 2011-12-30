@@ -7,7 +7,7 @@ FROM (
 (pedon INNER JOIN phorizon ON pedon.peiid = phorizon.peiidref)
 INNER JOIN phcolor ON phorizon.phiid = phcolor.phiidref)
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 1242) AS mh ON phcolor.colorhue = mh.choice_id
-ORDER BY phiidref, colormoistst;"
+ORDER BY phorizon.phiid, colormoistst;"
   
   # setup connection to our pedon database
   channel <- odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
