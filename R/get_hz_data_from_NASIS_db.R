@@ -8,14 +8,11 @@ get_hz_data_from_NASIS_db <- function(dsn)
   LEFT OUTER JOIN (SELECT phiidref, SUM(fragvol) as total_frags_pct 
     FROM dbo.phfrags
     GROUP BY dbo.phfrags.phiidref) as f ON dbo.phorizon.phiid = f.phiidref) 
-  LEFT OUTER JOIN (SELECT phiidref, labsampnum 
-    FROM dbo.phsample) as l ON dbo.phorizon.phiid = l.phiidref)
-  LEFT OUTER JOIN (SELECT phtiid, phiidref, texcl, lieutex 
-    FROM dbo.phtexture) as t ON dbo.phorizon.phiid = t.phiidref)
+  LEFT OUTER JOIN (SELECT phiidref, labsampnum FROM dbo.phsample) as l ON dbo.phorizon.phiid = l.phiidref)
+  LEFT OUTER JOIN (SELECT phtiid, phiidref, texcl, lieutex FROM dbo.phtexture) as t ON dbo.phorizon.phiid = t.phiidref)
   LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 189) AS tx ON t.texcl = tx.ChoiceValue)
   LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 192) AS til ON t.lieutex = til.ChoiceValue)
-  LEFT OUTER JOIN (SELECT phtiidref, texmod 
-    FROM dbo.phtexturemod) as tm ON t.phtiid = tm.phtiidref)
+  LEFT OUTER JOIN (SELECT phtiidref, texmod FROM dbo.phtexturemod) as tm ON t.phtiid = tm.phtiidref)
   LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 190) AS tmod ON tm.texmod = tmod.ChoiceValue)
   LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 1255) AS eff ON dbo.phorizon.effclass = eff.ChoiceValue
   ORDER BY pedon.upedonid, phorizon.hzdept ASC;"
@@ -24,7 +21,7 @@ get_hz_data_from_NASIS_db <- function(dsn)
   channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='Re@d0n1y')
 
   # exec query
-  cat(paste('fetching from', dsn, '...\n'))
+  cat(paste('fetching from', 'local NASIS database', '...\n'))
   d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
   
   ## TODO test for non-uniqueness

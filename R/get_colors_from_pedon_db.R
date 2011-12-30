@@ -2,7 +2,7 @@ get_colors_from_pedon_db <-
 function(dsn)
   {
   # color data... check
-  q <- "SELECT phorizon.phiid, colormoistst, colorpct as pct, mh.choice AS colorhue, colorvalue, colorchroma
+  q <- "SELECT phorizon.phiid as phiid, colormoistst, colorpct as pct, mh.choice AS colorhue, colorvalue, colorchroma
 FROM (
 (pedon INNER JOIN phorizon ON pedon.peiid = phorizon.peiidref)
 INNER JOIN phcolor ON phorizon.phiid = phcolor.phiidref)

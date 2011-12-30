@@ -45,13 +45,13 @@ ORDER BY dbo.phfrags.phiidref;"
   # exec queries
   cat(paste('fetching from', dsn, '...\n'))
   d.diagnostic <- sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
-  d.rf.summmary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
+  d.rf.summary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
 
   # close connection
   odbcClose(channel)
   
   
   # return a list of results
-  return(list(diagnostic=d.diagnostic, frag_summary=d.rf.summmary))
+  return(list(diagnostic=d.diagnostic, frag_summary=d.rf.summary))
   }
 
