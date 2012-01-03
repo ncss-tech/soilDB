@@ -1,3 +1,6 @@
+-------------------------- soilDB 0.3-3 (2011-12-30) --------------------------
+* moving hard to find packages to 'suggested' status: SSOAP, RCurl, XML, rgdal
+
 -------------------------- soilDB 0.3-2 (2011-12-30) --------------------------
 * NASIS/pedonPC queries synced
 * minor bug fixes and documentation updates
