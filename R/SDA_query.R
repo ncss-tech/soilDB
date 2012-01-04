@@ -29,12 +29,24 @@ cleanSDA <- function(i)
   return(as.data.frame(i))
   }
 
+
+## suggestions from DTL 2012-01-03
+## doesn't seem to work
+
+# library(SSOAP)
+# library(XMLSchema)
+# w = processWSDL("http://sdmdataaccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx?WSDL")
+# iface = genSOAPClientInterface(,w)
+# 
+# # Then you can call the function
+# o = iface@functions$RunQuery(query, .convert = FALSE)
+
 # TODO: figure out how to inspect the results and set column classes
 SDA_query <- function(q)
   {
   # check for required packages
-  if(!require(SSOAP))
-    stop('please install the `SSOAP` package')
+  if(!require(SSOAP) | !require(XMLSchema))
+    stop('please install the `SSOAP` and `XMLSchema` packages')
     
   # setup server, action, and xmlns
   s <- SOAPServer('SDMDataAccess.nrcs.usda.gov', '/Tabular/SDMTabularService.asmx')
