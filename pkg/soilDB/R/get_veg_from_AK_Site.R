@@ -1,6 +1,4 @@
-get_veg_from_AK_Site <-
-function(dsn)
-  {
+get_veg_from_AK_Site <- function(dsn) {
   # basic query
   q <- "SELECT VegStop.usiteid as site_id, localplant.lplantsym as plantsym, localplant.lplantname as plantname, vegetation.COVER as pct_cover
   FROM 

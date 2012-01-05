@@ -1,6 +1,5 @@
 # results can be referenced via phiid (horizon-level ID)
-get_colors_from_NASIS_db <- function(dsn)
-  {
+get_colors_from_NASIS_db <- function(dsn) {
   # unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
   q <- "SELECT dbo.pedon.peiid, phorizon.phiid as phiid, colormoistst, colorpct as pct, mh.ChoiceName AS colorhue, colorvalue, colorchroma
 FROM (

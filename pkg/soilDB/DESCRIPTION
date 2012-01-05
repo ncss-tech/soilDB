@@ -10,4 +10,4 @@ Description: A collection of functions for reading data from USDA-NCSS soil data
 License: GPL (>= 2)
 LazyLoad: yes
 Depends: R (>= 2.9.0), methods, plyr, Hmisc, RODBC, aqp
-Suggests: rgdal, RCurl, XML, SSOAP
+Suggests: rgdal, RCurl, XML, SSOAP, XMLSchema

@@ -1,6 +1,4 @@
-get_colors_from_pedon_db <-
-function(dsn)
-  {
+get_colors_from_pedon_db <- function(dsn) {
   # color data... check
   q <- "SELECT phorizon.phiid as phiid, colormoistst, colorpct as pct, mh.choice AS colorhue, colorvalue, colorchroma
 FROM (

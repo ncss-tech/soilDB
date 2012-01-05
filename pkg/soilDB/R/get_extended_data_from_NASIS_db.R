@@ -1,5 +1,4 @@
-get_extended_data_from_NASIS_db <- function(dsn)
-  {
+get_extended_data_from_NASIS_db <- function(dsn) {
   # query diagnostic horizons, usually a 1:many relationship with pedons
   q.diagnostic <- "SELECT peiidref as peiid, dfk.ChoiceName as diag_kind, featdept, featdepb
 FROM dbo.pediagfeatures 
