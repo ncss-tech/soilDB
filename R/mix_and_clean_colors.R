@@ -1,6 +1,4 @@
-mix_and_clean_colors <-
-function(x)
-  {
+mix_and_clean_colors <- function(x) {
   # fill missing weights with 1
   x$pct[is.na(x$pct)] <- 1
   

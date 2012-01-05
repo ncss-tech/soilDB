@@ -3,8 +3,7 @@
 
 # format vector of values into a string suitable for an SQL `IN` statement
 # currently expects character data only
-format_SQL_in_statement <- function(x)
-  {
+format_SQL_in_statement <- function(x) {
   i <- paste(x, collapse="','")
   i <- paste("('", i, "')", sep='')
   return(i)

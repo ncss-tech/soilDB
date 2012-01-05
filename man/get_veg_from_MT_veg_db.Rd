@@ -1,0 +1,29 @@
+\name{get_veg_from_MT_veg_db}
+\alias{get_veg_from_MT_veg_db}
+
+\title{Extract Site and Plot-level Data from a Montana RangeDB database}
+\description{Get Site and Plot-level data from a Montana RangeDB database.}
+\usage{
+get_veg_from_MT_veg_db(dsn) 
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{dsn}{The name of the Montana RangeDB front-end database connection (see details).}
+}
+\details{This function currently works only on Windows.}
+\value{A dataframe.}
+\references{}
+\author{Jay M. Skovlin}
+\note{}
+
+%% ~Make other sections like Warning with \section{Warning }{....} ~
+
+\seealso{
+\code{\link{get_veg_species_from_MT_veg_db}}, \code{\link{get_veg_other_from_MT_veg_db}}
+}
+\examples{
+
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{manip}

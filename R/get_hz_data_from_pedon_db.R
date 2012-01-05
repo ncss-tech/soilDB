@@ -1,6 +1,4 @@
-get_hz_data_from_pedon_db <-
-function(dsn)
-  {
+get_hz_data_from_pedon_db <- function(dsn) {
   # this can be optimized
   # RF calculation should be done in  a sub-query
   q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid as pedon_id, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
