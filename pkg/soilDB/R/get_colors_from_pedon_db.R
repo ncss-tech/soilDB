@@ -11,7 +11,6 @@ ORDER BY phorizon.phiid, colormoistst;"
   channel <- odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
 
   # exec query
-  cat(paste('fetching from', dsn, '...\n'))
   d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
 
   # close connection
@@ -38,7 +37,7 @@ ORDER BY phorizon.phiid, colormoistst;"
   names(moist.colors.final) <- c('phiid','m_r','m_g','m_b')
 
   # merge into single df
-  d.final <- join(dry.colors.final, moist.colors.final, type='full')
+  d.final <- join(dry.colors.final, moist.colors.final, by='phiid', type='full')
   
   # clean-up
   rm(d, d.rgb, dry.colors, moist.colors, dry.colors.final, moist.colors.final)
