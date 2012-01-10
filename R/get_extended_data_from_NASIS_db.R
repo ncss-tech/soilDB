@@ -36,7 +36,14 @@ LEFT OUTER JOIN (SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS flagst
   GROUP BY dbo.phfrags.phiidref) as f6 ON dbo.phfrags.phiidref = f6.phiidref)
 GROUP BY dbo.phfrags.phiidref, gravel, cobbles, stones, boulders, channers, flagstones
 ORDER BY dbo.phfrags.phiidref;"
-  
+
+# get horizon texture modifiers
+q.hz.texmod <- "SELECT dbo.phorizon.peiidref AS peiid, dbo.phorizon.phiid AS phiid, dbo.phtexture.phtiid AS phtiid, dbo.phtexturemod.seqnum, tmod.ChoiceName as texture_modifier 
+  FROM (
+  (dbo.phorizon INNER JOIN dbo.phtexture ON dbo.phorizon.phiid = dbo.phtexture.phiidref) 
+  LEFT OUTER JOIN dbo.phtexturemod ON dbo.phtexture.phtiid = dbo.phtexturemod.phtiidref) 
+  LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 190) AS tmod ON dbo.phtexturemod.texmod =   tmod.ChoiceValue;"
+   
   
   # setup connection to our local NASIS database
   channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='Re@d0n1y') 
@@ -45,6 +52,7 @@ ORDER BY dbo.phfrags.phiidref;"
   cat(paste('fetching from', dsn, '...\n'))
   d.diagnostic <- sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
   d.rf.summary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
+  d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
 
   # close connection
   odbcClose(channel)

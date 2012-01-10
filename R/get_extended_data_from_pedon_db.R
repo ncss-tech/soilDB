@@ -4,8 +4,7 @@ get_extended_data_from_pedon_db <- function(dsn) {
 FROM pediagfeatures
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 147) AS dfk ON pediagfeatures.featkind = dfk.choice_id
 ORDER BY pediagfeatures.peiidref, pediagfeatures.featdept;"
-  
-  
+    
   # this query is resistant to dupes
   # query rock-fragment summary by horizon
   q.rf.summary <- "SELECT phfrags.phiidref as phiid, IIF(IsNULL(f1.gravel), 0.0, f1.gravel) as gravel, IIF(IsNULL(f2.cobbles), 0.0, f2.cobbles) as cobbles, IIF(IsNULL(f3.stones), 0.0, f3.stones) as stones, IIF(IsNULL(f4.boulders), 0.0, f4.boulders) as boulders, IIF(IsNULL(f5.channers), 0.0, f5.channers) as channers, IIF(IsNULL(f6.flagstones), 0.0, f6.flagstones) as flagstones
@@ -36,6 +35,14 @@ LEFT OUTER JOIN (SELECT phfrags.phiidref, Sum(phfrags.fragvol) AS flagstones
   GROUP BY phfrags.phiidref) as f6 ON phfrags.phiidref = f6.phiidref)
 GROUP BY phfrags.phiidref, gravel, cobbles, stones, boulders, channers, flagstones
 ORDER BY phfrags.phiidref;"
+
+
+# get horizon texture modifiers
+q.hz.texmod <- "SELECT phorizon.peiidref, phorizon.phiid, phtexture.phtiid, phtexturemod.seqnum, tmod.choice as texture_modifier 
+  FROM (
+  (phorizon INNER JOIN phtexture ON phorizon.phiid = phtexture.phiidref) 
+  LEFT OUTER JOIN phtexturemod ON phtexture.phtiid = phtexturemod.phtiidref) 
+  LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_detail.domain_id = 190) AS tmod ON phtexturemod.texmod =   tmod.choice_id;"
   
   
   # setup connection to our pedon database
@@ -45,12 +52,13 @@ ORDER BY phfrags.phiidref;"
   cat(paste('fetching from', dsn, '...\n'))
   d.diagnostic <- sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
   d.rf.summary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
+  d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
 
   # close connection
   odbcClose(channel)
   
   
   # return a list of results
-  return(list(diagnostic=d.diagnostic, frag_summary=d.rf.summary))
+  return(list(diagnostic=d.diagnostic, frag_summary=d.rf.summary, texmodifier=d.hz.texmod))
   }
 
