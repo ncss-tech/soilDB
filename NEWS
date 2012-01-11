@@ -1,8 +1,11 @@
--------------------------- soilDB 0.3-3 (2011-12-30) --------------------------
+-------------------------- soilDB 0.3-3 (2012-01-10) --------------------------
+* SDA_query() now functional on MacOS/UNIX-like OSes with (SSOAP 0.8-1, XMLSchema 0.6-0, and XML 3.7-1)
+  - thanks to D.T. Lang for the updates!
 * moving hard to find packages to 'suggested' status: SSOAP, RCurl, XML, rgdal
 * new wrapper function fetchPedonPC() for typical site/pedon/hz queries
 * new function getHzErrorsPedonPC() for ID-ing pedons with problem horizonation
-* NOTE: hz data queries will return 2 rows/hz (error) when multiple texture classes are assigned to a single horizon- this is a bug, not a feature!
+* NOTE: hz data queries will return 2 rows/hz (error) when multiple texture 
+  classes are assigned to a single horizon- this is a bug, not a feature!
 
 -------------------------- soilDB 0.3-2 (2011-12-30) --------------------------
 * NASIS/pedonPC queries synced
