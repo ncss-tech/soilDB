@@ -22,8 +22,12 @@ get_hz_data_from_NASIS_db <- function(dsn) {
 	
 	# test for duplicate horizons: due to bugs in our queries that lead to >1 row/hz
 	hz.tab <- table(d$phiid)
-	if(any(hz.tab > 1))
-		cat('notice: duplicate horizons in query results\n')
+	dupe.hz <- which(hz.tab > 1)
+	dupe.hz.pedon.ids <- d$pedon_id[d$phiid == names(hz.tab[dupe.hz])]
+	
+	if(length(dupe.hz) > 0) {
+		cat(paste('notice: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), '\n', sep=''))
+	}
 	
 	# close connection
 	odbcClose(channel)
