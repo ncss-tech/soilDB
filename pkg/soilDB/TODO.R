@@ -1,0 +1,4 @@
+1. how should multiple textures be dealt with? (2 rows/hz are currently returned)
+-- can this be fixed in SQL ?
+
+2. how should A/B horizons be dealt with when entered as 2 horizons sharing the same depths?
