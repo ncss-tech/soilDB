@@ -19,7 +19,6 @@ ORDER BY dbo.site.usiteid ;"
 	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='Re@d0n1y') 
 	
 	# exec query
-	cat(paste('fetching from', 'local NASIS database', '...\n'))
 	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
 	
 	# close connection
