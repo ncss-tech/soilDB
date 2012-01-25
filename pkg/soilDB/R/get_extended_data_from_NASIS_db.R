@@ -49,7 +49,6 @@ FROM (((((((dbo.phorizon INNER JOIN dbo.phfrags ON dbo.phorizon.phiid = dbo.phfr
 	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='Re@d0n1y') 
 	
 	# exec queries
-	cat(paste('fetching from', dsn, '...\n'))
 	d.diagnostic <- sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
 	d.rf.summary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
 	d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
@@ -57,8 +56,10 @@ FROM (((((((dbo.phorizon INNER JOIN dbo.phfrags ON dbo.phorizon.phiid = dbo.phfr
 	# close connection
 	odbcClose(channel)
 	
+	# generate wide-formatted, diagnostic boolean summary
+	d.diag.boolean <- diagHzLongtoWide(d.diagnostic)
 	
 	# return a list of results
-	return(list(diagnostic=d.diagnostic, frag_summary=d.rf.summary))
+	return(list(diagnostic=d.diagnostic, diagHzBoolean=d.diag.boolean, frag_summary=d.rf.summary, texmodifier=d.hz.texmod))
 }
 

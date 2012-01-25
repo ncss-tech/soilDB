@@ -48,8 +48,7 @@ FROM (((((((phorizon INNER JOIN phfrags ON phorizon.phiid = phfrags.phiidref)
 	# setup connection to our pedon database
 	channel <- odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
 	
-	# exec query
-	cat(paste('fetching from', dsn, '...\n'))
+	# exec queries
 	d.diagnostic <- sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
 	d.rf.summary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
 	d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
@@ -57,8 +56,10 @@ FROM (((((((phorizon INNER JOIN phfrags ON phorizon.phiid = phfrags.phiidref)
 	# close connection
 	odbcClose(channel)
 	
+	# generate wide-formatted, diagnostic boolean summary
+	d.diag.boolean <- diagHzLongtoWide(d.diagnostic)
 	
 	# return a list of results
-	return(list(diagnostic=d.diagnostic, frag_summary=d.rf.summary, texmodifier=d.hz.texmod))
+	return(list(diagnostic=d.diagnostic, diagHzBoolean=d.diag.boolean, frag_summary=d.rf.summary, texmodifier=d.hz.texmod))
 }
 
