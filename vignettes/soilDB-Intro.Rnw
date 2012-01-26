@@ -36,7 +36,7 @@
 \maketitle
 
 <<my-label, eval=TRUE, dev=png>>=
-library(soilDB, quietly=TRUE)
+suppressMessages(library(soilDB))
 data(loafercreek)
 
 ##
@@ -48,7 +48,7 @@ hz.tab <- rev(sort(table(loafercreek$hzname)))
 hz.tab[hz.tab > 5]
 
 # add generalized hz name
-loafercreek$hz <- rep('other', times=nrow(horizons(loafercreek)))
+loafercreek$hz <- rep('other', times=nrow(loafercreek))
 
 # generalize horizons
 loafercreek$hz[grep('O', loafercreek@horizons$hzname)] <- 'O'
