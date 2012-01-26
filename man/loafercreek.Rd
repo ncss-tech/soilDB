@@ -4,9 +4,7 @@
 \title{LoaferCreek Soils}
 \description{A SoilProfileCollection Object of LoaferCreek Soils from the CA630 Soil Survey Area.}
 \usage{data(loafercreek)}
-\format{\preformatted{
-  The format is:
-Formal class 'SoilProfileCollection' [package "aqp"] with 7 slots
+\format{\preformatted{Formal class 'SoilProfileCollection' [package "aqp"] with 7 slots
   ..@ idcol     : chr "pedon_id"
   ..@ depthcols : chr [1:2] "hzdept" "hzdepb"
   ..@ metadata  :'data.frame':	1 obs. of  1 variable:
