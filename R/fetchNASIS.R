@@ -33,7 +33,7 @@ fetchNASIS <- function(dsn) {
 	depths(f) <- pedon_id ~ hzdept + hzdepb
 	
 	# move site data into @site
-	site(f) <- ~ peiid + site_id + siteiid + sampled_as + correlated_as + hillslope_pos + x + y + datum + elev + slope + aspect + plantassocnm + bedrckdepth + bedrock_kind + describer + psctopdepth + pscbotdepth + part_size_class + tax_subgroup + obs_date + pedon_purpose + pedlabsampnum
+	site(f) <- ~ peiid + site_id + siteiid + sampled_as + correlated_as + hillslope_pos + x + y + datum + elev + slope + aspect + plantassocnm + bedrckdepth + bedrock_kind + describer + psctopdepth + pscbotdepth + part_size_class + tax_subgroup + obs_date + pedon_purpose + pedon_type + pedlabsampnum
 	
 	# 5. convert colors... in the presence of missing color data
 	f$soil_color <- rep(NA, times=nrow(horizons(f)))
