@@ -1,39 +1,59 @@
-%\VignetteIndexEntry{soilDB Package Introduction}
-\documentclass[nohyper,justified]{tufte-handout}
+\documentclass[nohyper,justified]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{url}
+\usepackage[unicode=true]{hyperref}
+\usepackage{breakurl}
 
-\title{soilDB Introduction}
+% \makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+
+\title{Soil Database Interface}
 \author{D.E. Beaudette and J.M. Skovlin}
 
-\usepackage{amsmath}
-\usepackage{subfigure}
-\usepackage{natbib}
-\usepackage{graphicx}
-\usepackage{textcomp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.8}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\floatpagefraction}{0.75}
 
+\usepackage[buttonsize=1em]{animate}
 
-% reset some float-controlling parameters
-\renewcommand{\floatpagefraction}{0.8}	% require fuller float pages
+\hypersetup{breaklinks=true,pdfstartview=FitH}
 
-% N.B.: floatpagefraction MUST be less than topfraction !!
-\renewcommand{\topfraction}{0.9}	% max fraction of floats at top
-\renewcommand{\bottomfraction}{0.8}	% max fraction of floats at bottom
-
-
+% \makeatother
 
 \begin{document}
+
+% \SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=pdf, external=TRUE, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE}
+
+<<setup,echo=FALSE,results=hide,cache=FALSE>>=
+	options(replace.assign=TRUE,width=80)
+knit_hooks$set(par=function(before, options, envir){
+	if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
+}, crop=hook_pdfcrop)
+@
 
 \maketitle
 
 
-\section{Introduction}
-\label{introduction}
+<<test-plot>>=
+	test_plot=function() {
+		with(trees, symbols(Height, Volume, circles = Girth/16, inches = FALSE, bg = 'deeppink', fg = 'gray30'))
+	}
+@
 
+\begin{marginfigure}
+<<pdf-dev,dev=pdf,out.width=\linewidth,echo=FALSE,dependson=test-plot>>=
+	test_plot()
+@
 
+\caption{The default PDF device.\label{mar:pdf-dev}}
+\end{marginfigure}
 
-
-
-<<>>=
-library("soilDB")
+<<my-label, eval=TRUE, dev=png>>=
+library(soilDB)
 data(loafercreek)
 
 ##
@@ -62,15 +82,13 @@ loafercreek.hz.agg <- slab(loafercreek, fm= ~ hz)
 loafercreek.hz.agg.long <- melt(loafercreek.hz.agg, id.var=c('top','bottom', 'contributing_fraction', 'all.profiles', 'variable'),  variable_name='horizon')
 
 # plot horizon type proportions
-p1 <- xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, subset=value > 0 & horizon != 'other', asp=2, ylab='', xlab='')
+xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, subset=value > 0 & horizon != 'other', asp=2, ylab='', xlab='')
 @
 
-...
-
-\begin{center}
-<<fig=TRUE,echo=FALSE>>=
-print(p1)
-@
-\end{center}
 
 \end{document}
+
+
+
+
+
