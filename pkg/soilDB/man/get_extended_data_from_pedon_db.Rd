@@ -1,6 +1,6 @@
 \name{get_extended_data_from_pedon_db}
 \alias{get_extended_data_from_pedon_db}
-\alias{.diagHzLongtoWide}
+\alias{diagHzLongtoWide}
 
 \title{Extract accessory tables and summaries from a local pedonPC Database}
 \description{Extract accessory tables and summaries from a local pedonPC Database.}

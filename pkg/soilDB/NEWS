@@ -1,6 +1,9 @@
 -------------------------- soilDB 0.4 (2012-01-20) ----------------------------
 * new wide-formatted, boolean representation of diagnostic horizon data
 * queries standardized between NASIS/PedonPC
+* new fetchNASIS() function for 1-line access to local NASIS data
+* new sample data set 'loafercreek'
+* basic vignette added, switching to knitr-style vignettes
 
 -------------------------- soilDB 0.3-3 (2012-01-10) --------------------------
 * SDA_query() now functional on MacOS/UNIX-like OSes with (SSOAP 0.8-1, XMLSchema 0.6-0, and XML 3.7-1)

@@ -1,0 +1,76 @@
+%\VignetteIndexEntry{soilDB Package Introduction}
+\documentclass[nohyper,justified]{tufte-handout}
+
+\title{soilDB Introduction}
+\author{D.E. Beaudette and J.M. Skovlin}
+
+\usepackage{amsmath}
+\usepackage{subfigure}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{textcomp}
+
+
+% reset some float-controlling parameters
+\renewcommand{\floatpagefraction}{0.8}	% require fuller float pages
+
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\topfraction}{0.9}	% max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}	% max fraction of floats at bottom
+
+
+
+\begin{document}
+
+\maketitle
+
+
+\section{Introduction}
+\label{introduction}
+
+
+
+
+
+<<>>=
+library("soilDB")
+data(loafercreek)
+
+##
+## aggregate major horizon types over 1cm intervals
+##
+
+# categorize major horizon types
+hz.tab <- rev(sort(table(loafercreek$hzname)))
+hz.tab[hz.tab > 5]
+
+# add generalized hz name
+loafercreek$hz <- rep('other', times=nrow(horizons(loafercreek)))
+
+# generalize horizons
+loafercreek$hz[grep('O', loafercreek@horizons$hzname)] <- 'O'
+loafercreek$hz[grep('A', loafercreek@horizons$hzname)] <- 'A'
+loafercreek$hz[grep('Bt', loafercreek@horizons$hzname)] <- 'Bt'
+loafercreek$hz[grep('Cr', loafercreek@horizons$hzname)] <- 'Cr'
+loafercreek$hz[grep('R', loafercreek@horizons$hzname)] <- 'R'
+
+# convert generalized hz to factor
+loafercreek$hz <- factor(loafercreek$hz)
+loafercreek.hz.agg <- slab(loafercreek, fm= ~ hz)
+
+# wide->long format
+loafercreek.hz.agg.long <- melt(loafercreek.hz.agg, id.var=c('top','bottom', 'contributing_fraction', 'all.profiles', 'variable'),  variable_name='horizon')
+
+# plot horizon type proportions
+p1 <- xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, subset=value > 0 & horizon != 'other', asp=2, ylab='', xlab='')
+@
+
+...
+
+\begin{center}
+<<fig=TRUE,echo=FALSE>>=
+print(p1)
+@
+\end{center}
+
+\end{document}
