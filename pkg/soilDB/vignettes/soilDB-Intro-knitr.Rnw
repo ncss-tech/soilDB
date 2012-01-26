@@ -29,7 +29,7 @@
 
 \begin{document}
 
-% \SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=tikz, external=TRUE, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE}
+% \SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=pdf, external=TRUE, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE}
 
 <<setup,echo=FALSE,results=hide,cache=FALSE>>=
 	options(replace.assign=TRUE,width=80)
@@ -92,18 +92,6 @@ in the \textbf{Cairo} or \textbf{cairoDevice} package, e.g., the chunk
 below uses the \emph{Cairo\_png()} device in the \textbf{cairoDevice}
 package.
 
-<<cairo-png-dev,dev=Cairo_png,out.width=.5\linewidth,echo=FALSE,dependson=test-plot>>=
-	test_plot()
-@
-
-Finally we show an example of \emph{cairo\_pdf()} (in base R) with
-some multi-byte characters (say hello in Chinese):
-	
-	<<cairo-pdf-dev,dev=cairo_pdf,fig.width=8,fig.height=2,out.width=.8\linewidth,warning=FALSE,tidy=FALSE,echo=FALSE>>=
-	par(mar=c(2,2,.1,.1),las=1)
-plot(1,type='n',ann=FALSE)
-text(1,1,'\u55E8\uFF0C\u4F60\u597D\u5417',cex=4) # hello
-@
 
 Depending on the graphics packages and devices you use, the background
 of plots might be transparent (e.g. tikz for base graphics) or white
@@ -270,34 +258,6 @@ one line. Of course we can also set it to be an absolute width like
 \texttt{3in} (3 inches). This option is used extensively in this document
 to control the size of plots in the output document.
 
-
-\section{The tikz Device}
-
-The main advantage of using tikz graphics is the consistency of styles
-between texts in plots and those in the main document. Since we can
-use native \LaTeX{} commands in plots, the styles of texts in plots
-can be very sophisticated.
-
-\begin{figure}
-<<math-formula-tt,fig.width=6,fig.height=2,out.width=\linewidth,echo=T>>=
-	plot(0:1,0:1,type='n', ylab='origin of statistics', xlab='statistical presentation rocks with \\LaTeX{}')
-text(.5,c(.8,.5,.2), c('\\texttt{lm(y \\textasciitilde{} x)}', '$\\hat{\\beta}=(X^{\\prime}X)^{-1}X^{\\prime}y$',  '$(\\Omega,\\mathcal{F},\\mu)$'))
-@
-
-\caption{A plot created by \textbf{tikzDevice} with math expressions and typewriter
-				 fonts. Note the font style consistency -- we write the same expressions
-				 in \protect\LaTeX{} here: $\hat{\beta}=(X^{\prime}X)^{-1}X^{\prime}y$ and
-				 $(\Omega,\mathcal{F},\mu)$; also \texttt{lm(y \textasciitilde{} x)}.}
-\end{figure}
-
-
-When using Xe\LaTeX{} instead of PDF\LaTeX{} to compile the document,
-we need to tell the \textbf{tikzDevice} package by setting the \texttt{tikzDefaultEngine}
-option before all plot chunks (preferably in the first chunk):
-	
-	<<xetex-tikz,eval=FALSE>>=
-	options(tikzDefaultEngine='xetex')
-@
 
 This is useful and often necessary to compile tikz plots which contain
 (UTF8) multi-byte characters.
