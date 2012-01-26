@@ -1,11 +1,15 @@
-\documentclass[nohyper,justified]{article}
-\usepackage[T1]{fontenc}
-\usepackage[latin9]{inputenc}
-\usepackage{url}
-\usepackage[unicode=true]{hyperref}
-\usepackage{breakurl}
 
-% \makeatletter
+\documentclass{article}
+\usepackage{url}
+\usepackage{hyperref}
+
+
+\makeatletter
+
+
+% tufte-handout + resize package bug:
+% https://groups.google.com/group/tufte-latex/browse_thread/thread/30354db116115a15?pli=1
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
 
@@ -18,42 +22,21 @@
 \renewcommand{\bottomfraction}{0.8}
 \renewcommand{\floatpagefraction}{0.75}
 
-\usepackage[buttonsize=1em]{animate}
 
 \hypersetup{breaklinks=true,pdfstartview=FitH}
 
-% \makeatother
+\makeatother
 
 \begin{document}
 
 % \SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=pdf, external=TRUE, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE}
 
-<<setup,echo=FALSE,results=hide,cache=FALSE>>=
-	options(replace.assign=TRUE,width=80)
-knit_hooks$set(par=function(before, options, envir){
-	if (before && options$fig.show!='none') par(mar=c(4,4,.1,.1),cex.lab=.95,cex.axis=.9,mgp=c(2,.7,0),tcl=-.3)
-}, crop=hook_pdfcrop)
-@
+
 
 \maketitle
 
-
-<<test-plot>>=
-	test_plot=function() {
-		with(trees, symbols(Height, Volume, circles = Girth/16, inches = FALSE, bg = 'deeppink', fg = 'gray30'))
-	}
-@
-
-\begin{marginfigure}
-<<pdf-dev,dev=pdf,out.width=\linewidth,echo=FALSE,dependson=test-plot>>=
-	test_plot()
-@
-
-\caption{The default PDF device.\label{mar:pdf-dev}}
-\end{marginfigure}
-
 <<my-label, eval=TRUE, dev=png>>=
-library(soilDB)
+library(soilDB, quietly=TRUE)
 data(loafercreek)
 
 ##
@@ -82,9 +65,15 @@ loafercreek.hz.agg <- slab(loafercreek, fm= ~ hz)
 loafercreek.hz.agg.long <- melt(loafercreek.hz.agg, id.var=c('top','bottom', 'contributing_fraction', 'all.profiles', 'variable'),  variable_name='horizon')
 
 # plot horizon type proportions
-xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, subset=value > 0 & horizon != 'other', asp=2, ylab='', xlab='')
+p1 <- xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, subset=value > 0 & horizon != 'other', asp=2, ylab='', xlab='')
 @
 
+\begin{figure}
+<<pdf-dev,dev=pdf,out.width=\linewidth,echo=FALSE,dependson=my-label>>=
+	print(p1)
+@
+\caption{\label{pdf-dev}: horizon proportions}
+\end{figure}
 
 \end{document}
 
