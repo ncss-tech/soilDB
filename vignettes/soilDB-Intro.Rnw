@@ -52,6 +52,27 @@ It can be difficult to locate all of the dependencies required for sending/proce
 \section{Examples}
 
 
+\subsection{Plotting Soil Texture}
+
+<<loafercreek-soiltexture, eval=TRUE>>=
+library(soilDB)
+library(plotrix)
+
+data(loafercreek)
+# subset and order columns into something that plotrix will like
+ssc <- horizons(loafercreek)[, c('sand', 'silt', 'clay')]
+
+# add some flags to the soil texture subset of data:
+rs <- rowSums(ssc) # compute row-wise sums
+# flag as OK if S+Si+C within 98-102 and not NA
+ssc$is.ok <- ifelse(is.na(rs) | rs > 102 | rs < 98, FALSE, TRUE)
+# plot just the OK records
+soil.texture(ssc[which(ssc$is.ok), ], cex=0.5, pch=16, col.symbols='RoyalBlue')
+@
+
+
+
+
 <<loafercreek-demo1, eval=TRUE>>=
 suppressMessages(library(soilDB))
 data(loafercreek)
