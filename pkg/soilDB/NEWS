@@ -1,4 +1,6 @@
--------------------------- soilDB 0.4 (2012-01-20) ----------------------------
+-------------------------- soilDB 0.4 (2012-01-26) ----------------------------
+* added local NASIS ODBC connection vignette (thanks JMS)
+* removed dsn argument from NASIS functions as it should always be 'nasis_local'
 * new wide-formatted, boolean representation of diagnostic horizon data
 * queries standardized between NASIS/PedonPC
 * new fetchNASIS() function for 1-line access to local NASIS data

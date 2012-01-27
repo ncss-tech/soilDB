@@ -4,11 +4,7 @@
 \title{Extract Horizon Data from a local NASIS Database}
 \description{Get horizon-level data from a local NASIS database.}
 \usage{
-get_hz_data_from_NASIS_db(dsn)
-}
-%- maybe also 'usage' for other objects documented here.
-\arguments{
-  \item{dsn}{The name of the local NASIS database connection (see details).}
+get_hz_data_from_NASIS_db()
 }
 \details{This function currently works only on Windows.}
 \value{A dataframe.}
