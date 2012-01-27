@@ -1,41 +1,58 @@
-
 \documentclass{article}
+
+% latex packages for enhanced functionality
 \usepackage{url}
 \usepackage{hyperref}
+% hack to get fuller pages
+\usepackage[letterpaper,left=0.75in,right=0.75in,top=1in,bottom=1in]{geometry}
 
-
-\makeatletter
-
-
-% tufte-handout + resize package bug:
-% https://groups.google.com/group/tufte-latex/browse_thread/thread/30354db116115a15?pli=1
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
-
-\title{Soil Database Interface}
-\author{D.E. Beaudette and J.M. Skovlin}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+% local ajustments
 \renewcommand{\textfraction}{0.05}
 \renewcommand{\topfraction}{0.8}
 \renewcommand{\bottomfraction}{0.8}
 \renewcommand{\floatpagefraction}{0.75}
-
-
 \hypersetup{breaklinks=true,pdfstartview=FitH}
 
-\makeatother
+
+% document info
+\title{Soil Database Interface\\ \large{The \texttt{soilDB} package}}
+\author{D.E. Beaudette and J.M. Skovlin}
+
 
 \begin{document}
 
-% \SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=pdf, external=TRUE, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE}
-
-
+% sweave / knitr config
+\SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=pdf, external=TRUE, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE, background=0.97;0.97;0.97}
 
 \maketitle
 
-<<my-label, eval=TRUE, dev=png>>=
+\section{Introduction}
+This package provides methods for extracting soils information from local PedonPC and AK Site databases (MS Access format), local NASIS databases (MS SQL Server), and the SDA webservice. Currently USDA-NCSS data sources are supported, however, there are plans to develop interfaces to outside systems such as the Global Soil Mapping project.
+
+It can be difficult to locate all of the dependencies required for sending/processing SOAP requests, especially on UNIX-like operating systems. Windows binary packages for the dependencies can be found here \url{http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/2.14/}.
+
+
+\subsection{Design}
+
+\subsection{High-Level Functions}
+
+\subsection{Low-Level Functions}
+
+\subsection{Possible Applications}
+
+
+\section{Linkages to the `aqp' Package}
+
+\subsection{The `SoilProfileCollection' Class and Methods}
+
+
+\section{Sample Dataset: `loafercreek'}
+
+
+\section{Examples}
+
+
+<<loafercreek-demo1, eval=TRUE>>=
 suppressMessages(library(soilDB))
 data(loafercreek)
 
@@ -69,10 +86,10 @@ p1 <- xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(1
 @
 
 \begin{figure}
-<<pdf-dev,dev=pdf,out.width=\linewidth,echo=FALSE,dependson=my-label>>=
+<<pdf-dev, dev=pdf, out.width=0.5\linewidth, echo=FALSE, dependson=loafercreek-demo1, background=1;1;1>>=
 	print(p1)
 @
-\caption{\label{pdf-dev}: horizon proportions}
+\caption{\label{pdf-dev} horizon proportions}
 \end{figure}
 
 \end{document}
