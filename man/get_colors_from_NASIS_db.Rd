@@ -4,12 +4,9 @@
 \title{Extract Soil Color Data from a local NASIS Database}
 \description{Get, format, mix, and return color data from a NASIS database.}
 \usage{
-get_colors_from_NASIS_db(dsn)
+get_colors_from_NASIS_db()
 }
-%- maybe also 'usage' for other objects documented here.
-\arguments{
-  \item{dsn}{The name of the local NASIS database connection (see details).}
-}
+
 \details{This function currently works only on Windows.}
 \value{A dataframe with the results.}
 \references{}

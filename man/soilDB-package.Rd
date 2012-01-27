@@ -59,14 +59,13 @@ f$soil_color[idx] <- with(horizons(f)[idx, ], rgb(m_r, m_g, m_b)) # moist colors
 ##
 ## these depend on the user setting up a new DSN within the ODBC Data Sources Control Panel
 ## and naming it 'nasis_local'
-## see instructions from P. Finnel
+## see attached vignette 'setup_ODBC_local_NASIS'
 ##
 
 # 1. fetch data from Local NASIS DB
-dsn <- 'nasis_local'
-site_data <- get_site_data_from_NASIS_db(dsn)
-hz_data <- get_hz_data_from_NASIS_db(dsn)
-color_data <- get_colors_from_NASIS_db(dsn)
+site_data <- get_site_data_from_NASIS_db()
+hz_data <- get_hz_data_from_NASIS_db()
+color_data <- get_colors_from_NASIS_db()
 
 # 2. join data into single object
 h <- join(hz_data, color_data, by='phiid', type='left')

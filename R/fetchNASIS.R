@@ -1,9 +1,9 @@
-fetchNASIS <- function(dsn) {
+fetchNASIS <- function() {
 	
 	# 1. load data in pieces
-	site_data <- get_site_data_from_NASIS_db(dsn)
-	hz_data <- get_hz_data_from_NASIS_db(dsn)
-	color_data <- get_colors_from_NASIS_db(dsn)
+	site_data <- get_site_data_from_NASIS_db()
+	hz_data <- get_hz_data_from_NASIS_db()
+	color_data <- get_colors_from_NASIS_db()
 	
 	# 2. join pieces
 	# horizon + hz color: all horizons

@@ -1,4 +1,4 @@
-get_hz_data_from_NASIS_db <- function(dsn) {
+get_hz_data_from_NASIS_db <- function() {
 	q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid as pedon_id,
   phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
   phorizon.claytotest as clay, phorizon.silttotest as silt, phorizon.sandtotest as sand, CASE WHEN tx.ChoiceName IS NULL THEN til.ChoiceName  ELSE tx.ChoiceName END as texture_class, phfield, eff.ChoiceName AS effervescence, l.labsampnum, CASE WHEN f.total_frags_pct IS NULL THEN 0 ELSE f.total_frags_pct END AS total_frags_pct
