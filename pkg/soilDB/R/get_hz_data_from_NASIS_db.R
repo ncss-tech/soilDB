@@ -1,7 +1,7 @@
 get_hz_data_from_NASIS_db <- function() {
 	q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid as pedon_id,
   phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
-  phorizon.claytotest as clay, phorizon.silttotest as silt, phorizon.sandtotest as sand, CASE WHEN tx.ChoiceName IS NULL THEN til.ChoiceName  ELSE tx.ChoiceName END as texture_class, phfield, eff.ChoiceName AS effervescence, l.labsampnum, CASE WHEN f.total_frags_pct IS NULL THEN 0 ELSE f.total_frags_pct END AS total_frags_pct
+  phorizon.claytotest as clay, CASE WHEN phorizon.silttotest IS NULL THEN 100 - (phorizon.claytotest + phorizon.sandtotest) ELSE phorizon.silttotest END as silt, phorizon.sandtotest as sand, CASE WHEN tx.ChoiceName IS NULL THEN til.ChoiceName  ELSE tx.ChoiceName END as texture_class, phfield, eff.ChoiceName AS effervescence, l.labsampnum, CASE WHEN f.total_frags_pct IS NULL THEN 0 ELSE f.total_frags_pct END AS total_frags_pct
   FROM (((((
   (dbo.pedon INNER JOIN dbo.phorizon ON dbo.pedon.peiid = dbo.phorizon.peiidref) 
   LEFT OUTER JOIN (SELECT phiidref, SUM(fragvol) as total_frags_pct 
@@ -23,7 +23,8 @@ get_hz_data_from_NASIS_db <- function() {
 	# test for duplicate horizons: due to bugs in our queries that lead to >1 row/hz
 	hz.tab <- table(d$phiid)
 	dupe.hz <- which(hz.tab > 1)
-	dupe.hz.pedon.ids <- d$pedon_id[d$phiid == names(hz.tab[dupe.hz])]
+	dupe.hz.phiid <- names(hz.tab[dupe.hz])
+	dupe.hz.pedon.ids <- d$pedon_id[d$phiid %in% dupe.hz.phiid]
 	
 	if(length(dupe.hz) > 0) {
 		cat(paste('notice: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), '\n', sep=''))

@@ -1,4 +1,5 @@
 -------------------------- soilDB 0.4 (2012-01-26) ----------------------------
+* silt fraction is estimates from 100-(sand+clay) when possible
 * added local NASIS ODBC connection vignette (thanks JMS)
 * removed dsn argument from NASIS functions as it should always be 'nasis_local'
 * new wide-formatted, boolean representation of diagnostic horizon data
