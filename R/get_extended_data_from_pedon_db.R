@@ -4,7 +4,7 @@ get_extended_data_from_pedon_db <- function(dsn) {
 FROM pediagfeatures
 	LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 147) AS dfk ON pediagfeatures.featkind = dfk.choice_id
 	ORDER BY pediagfeatures.peiidref, pediagfeatures.featdept;"
-    
+	
 	# this query is resistant to dupes
 	# query rock-fragment summary by horizon
 	q.rf.summary <- "SELECT phfrags.phiidref as phiid, IIF(IsNULL(f1.gravel), 0.0, f1.gravel) as gravel, IIF(IsNULL(f2.cobbles), 0.0, f2.cobbles) as cobbles, IIF(IsNULL(f3.stones), 0.0, f3.stones) as stones, IIF(IsNULL(f4.boulders), 0.0, f4.boulders) as boulders, IIF(IsNULL(f5.channers), 0.0, f5.channers) as channers, IIF(IsNULL(f6.flagstones), 0.0, f6.flagstones) as flagstones
@@ -43,6 +43,12 @@ FROM (((((((phorizon INNER JOIN phfrags ON phorizon.phiid = phfrags.phiidref)
 	(phorizon INNER JOIN phtexture ON phorizon.phiid = phtexture.phiidref) 
 	LEFT OUTER JOIN phtexturemod ON phtexture.phtiid = phtexturemod.phtiidref) 
 	LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_detail.domain_id = 190) AS tmod ON phtexturemod.texmod =   tmod.choice_id;"
+	
+	## TODO: does this query need a DISTINCT keyword ?
+	# get geomorphic features
+	q.geomorph <- "SELECT pedon.peiid, sitegeomordesc.geomfeatid, sitegeomordesc.existsonfeat, 	sitegeomordesc.geomfmod, geomorfeat.geomfname, IIf(([sitegeomordesc].[geomftiidref]=1),'landform',IIf(([sitegeomordesc].[geomftiidref]=2),'landscape',IIf(([sitegeomordesc].[geomftiidref]=3),'microfeature','anthropogenic feature'))) AS feature_type
+FROM (geomorfeat INNER JOIN (site INNER JOIN sitegeomordesc ON site.siteiid = sitegeomordesc.siteiidref) ON (geomorfeat.geomftdbsidref = sitegeomordesc.geomftdbsidref) AND (geomorfeat.geomftiidref = sitegeomordesc.geomftiidref) AND (geomorfeat.geomfiid = sitegeomordesc.geomfiidref)) INNER JOIN pedon ON site.siteiid = pedon.siteiidref 
+ORDER BY peiid ASC;"
   
 	
 	# setup connection to our pedon database
@@ -52,6 +58,7 @@ FROM (((((((phorizon INNER JOIN phfrags ON phorizon.phiid = phfrags.phiidref)
 	d.diagnostic <- sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
 	d.rf.summary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
 	d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
+	d.geomorph <- sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
 	
 	# close connection
 	odbcClose(channel)
@@ -60,6 +67,5 @@ FROM (((((((phorizon INNER JOIN phfrags ON phorizon.phiid = phfrags.phiidref)
 	d.diag.boolean <- diagHzLongtoWide(d.diagnostic)
 	
 	# return a list of results
-	return(list(diagnostic=d.diagnostic, diagHzBoolean=d.diag.boolean, frag_summary=d.rf.summary, texmodifier=d.hz.texmod))
+	return(list(diagnostic=d.diagnostic, diagHzBoolean=d.diag.boolean, frag_summary=d.rf.summary, texmodifier=d.hz.texmod, geomorph=d.geomorph))
 }
-
