@@ -4,7 +4,7 @@
 \usepackage{url}
 \usepackage{hyperref}
 % hack to get fuller pages
-\usepackage[letterpaper,left=0.75in,right=0.75in,top=1in,bottom=1in]{geometry}
+\usepackage[letterpaper,left=0.5in,right=0.5in,top=0.5in,bottom=1in]{geometry}
 
 % local ajustments
 \renewcommand{\textfraction}{0.05}
@@ -19,10 +19,12 @@
 \author{D.E. Beaudette and J.M. Skovlin}
 
 
+%  knit('soilDB-Intro.Rnw') ; system('pdflatex soilDB-Intro.tex')
+
 \begin{document}
 
 % sweave / knitr config
-\SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=pdf, external=TRUE, fig.width=5, fig.height=5, fig.show=hold, cache=TRUE, par=TRUE, background=0.97;0.97;0.97}
+\SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=pdf, fig.width=5, fig.height=5, fig.show=hold, dpi=100, cache=TRUE, par=TRUE, warning=FALSE, message=FALSE, background=0.97;0.97;0.97}
 
 \maketitle
 
@@ -38,6 +40,43 @@ It can be difficult to locate all of the dependencies required for sending/proce
 
 \subsection{Low-Level Functions}
 
+<<pedonPC-demo, eval=FALSE>>=
+library(soilDB)
+
+## setup: this will only work if you have a PedonPC Database and Windows :( ##
+
+# get all of the data (you will have to adjust the DSN)
+dsn <- "S:/Service_Center/NRCS/pedon/pedon.mdb"
+s <- fetchPedonPC(dsn)
+e <- get_extended_data_from_pedon_db(dsn)
+
+# subset Gopheridge pedons
+subset.idx <- grep('gopheridge', s$sampled_as, ignore.case=TRUE)
+s <- s[subset.idx, ]
+
+# move peiid into @site, so that we can use as join condition for diagnostic data
+site(s) <- ~ peiid
+
+
+## diagnostic features ##
+
+# extract diagnostic hz data (all records)
+d <- e$diagnostic
+
+# save only those rows with paralithic material/contact
+s.paralithic <- d[grep('paralithic', d$diag_kind, ignore.case=TRUE), ]
+
+
+## adding data to @site slot ##
+
+# save to @site: via LEFT join by peiid
+# this will ignore all pedons not already in 's'
+# note that other diagnostic data could be added to @site, by re-naming the columns in s.paralithic
+# names(s.paralithic) <- c('peiid', 'para', 'para.top', 'para.bottom')
+site(s) <- s.paralithic
+@
+
+
 \subsection{Possible Applications}
 
 
@@ -48,33 +87,173 @@ It can be difficult to locate all of the dependencies required for sending/proce
 
 \section{Sample Dataset: `loafercreek'}
 
+\section{Sample Dataset: `gopheridge'}
+
 
 \section{Examples}
 
-
-\subsection{Plotting Soil Texture}
-
-<<loafercreek-soiltexture, eval=TRUE>>=
+<<gopheridge-demo, eval=TRUE>>=
+# libraries: you may have to install these
 library(soilDB)
-library(plotrix)
+library(ape)
 
-data(loafercreek)
-# subset and order columns into something that plotrix will like
-ssc <- horizons(loafercreek)[, c('sand', 'silt', 'clay')]
+# load stored SoilProfileCollection
+data(gopheridge)
 
-# add some flags to the soil texture subset of data:
-rs <- rowSums(ssc) # compute row-wise sums
-# flag as OK if S+Si+C within 98-102 and not NA
-ssc$is.ok <- ifelse(is.na(rs) | rs > 102 | rs < 98, FALSE, TRUE)
-# plot just the OK records
-soil.texture(ssc[which(ssc$is.ok), ], cex=0.5, pch=16, col.symbols='RoyalBlue')
+# temp hack: save a copy in 's'
+s <- gopheridge
+
+## aggregates of horizon data, moved into @site
+
+# horizon-thickness weighted mean (beware of NA)
+f.wt.prop <- function(x, prop) {h <- horizons(x); w <- with(h, hzdepb-hzdept); wtd.mean(h[[prop]], weights=w)}
+
+# apply by-profile, returning a vector, assigned to new column in @site
+s$wt.clay <- profileApply(s, f.wt.prop, prop='clay')
+s$wt.rf <- profileApply(s, f.wt.prop, prop='total_frags_pct')
+
+# soil depth using an in-line function, note that max(SPC) returns the bottom-most depth
+s$soil.depth <- profileApply(s, function(x) max(x))
+
+# compute aggregate (wt.mean) clay within particle-size control section
+# note that this requires conditional eval of data that may contain NA
+# see ?slab and ?soil.slot for details on the syntax
+f.pcs.prop <- function(x, prop) {
+  # these are accessed from @site
+  sv <- c(x$psctopdepth, x$pscbotdepth)
+  # test for missing PCS data
+  if(any(is.na(sv)))
+    return(NA)
+
+  # create formula from named property
+  fm <- as.formula(paste('~', prop))
+  # return just the (weighted) mean, accessed from @horizons
+  s <- slab(x, fm, seg_vect=sv)$p.mean
+  return(s)
+}
+
+# compute wt.mean clay within PCS, save to @site
+s$pcs.clay <- profileApply(s, f.pcs.prop, prop='clay')
 @
 
+\begin{figure}[h]
+<<basic_plotting, dev=pdf, fig.width=12, fig.height=6, out.width=\linewidth, echo=TRUE, background=1;1;1>>=
+# order by presence of paralithic materials/contact
+new.order <- order(s$diag_kind)
+plot(s, name='hzname', plot.order=new.order)
+# annotate paralithic data with lines
+x.pos <- 1:length(s)
+lines(x.pos, s$featdept[new.order], lty=2, col='black')
+lines(x.pos, s$featdepb[new.order], lty=2, col='black')
+@
+\caption{\label{basic_plotting} Basic plotting}
+\end{figure}
 
+
+\begin{figure}[h]
+<<slicing-plot, dev=pdf, fig.width=10, fig.height=4, out.width=\linewidth, echo=TRUE, background=1;1;1>>=
+# slice all hz data into 1-cm slices, from 0-100cm
+s.sliced <- slice(s, 0:100 ~ . )
+plot(s.sliced)
+@
+\caption{\label{slicing-plot} slicing, plotting}
+\end{figure}
+
+
+\begin{figure}[h]
+<<indexing_1, dev=pdf, fig.width=12, fig.height=6, out.width=\linewidth, echo=TRUE, background=1;1;1>>=
+# extract and plot first 10 slices (0-10 cm)
+plot(s.sliced[, 1:10], name='hzname')
+@
+\caption{\label{indexing_1} simple indexing}
+\end{figure}
+
+\begin{figure}[h]
+<<indexing_2, dev=pdf, fig.width=6, fig.height=3, out.width=0.5\linewidth, echo=TRUE, background=1;1;1>>=
+# extract and plot pedons 1-5, slices 25-50 (25-50 cm)
+plot(s.sliced[1:5, 25:50])
+@
+\caption{\label{indexing_2} simple indexing + slice subsetting}
+\end{figure}
+
+\begin{figure}[h]
+<<indexing_3, dev=pdf, fig.width=10, fig.height=4, out.width=\linewidth, echo=TRUE, background=1;1;1>>=
+# extract and plot pedons with paralithic materials/contact, slices 50-75 (50-75 cm)
+plot(s.sliced[grep('paralithic', s.sliced$diag_kind, ignore.case=TRUE), 50:75])
+@
+\caption{\label{indexing_3} indexing based on query}
+\end{figure}
+
+\begin{figure}[ht]
+<<profile_plot_annotation, dev=pdf, fig.width=12, fig.height=6, out.width=\linewidth, echo=TRUE, background=1;1;1>>=
+## applying a function by profile ##
+
+f <- function(x) {h <- horizons(x) ; max.clay <- which.max(h$clay) ; with(h[max.clay, ], (hzdept+hzdepb) / 2)}
+max.clay.depth <- profileApply(s, f)
+
+# plot and annotate with max clay depths
+plot(s, name='hzname')
+x.pos <- 1:length(s)
+points(x.pos, max.clay.depth, col='white', pch=21, cex=0.75, bg='black')
+lines(x.pos, max.clay.depth, col='black', lty=2)
+@
+\caption{\label{profile_plot_annotation} annotating profile plot with additional graphics}
+\end{figure}
+
+
+
+\begin{figure}[h]
+<<profile_aggregation, dev=pdf, fig.width=8, fig.height=4, out.width=0.75\linewidth, echo=TRUE, background=1;1;1>>=
+# all profiles: clay, sand, total RF
+a <- slab(s, ~ clay + sand + total_frags_pct)
+a$mid <- with(a, (top+bottom)/2)
+
+# plot median +/- IQR of clay, sand, total RF
+xyplot(mid ~ p.q50 | variable, upper=a$p.q75, lower=a$p.q25, id=a$major_bedrock_kind, data=a, ylim=c(180,-5), ylab='Depth (cm)', xlab=c('% Clay', '% Sand', '% Total RF'), strip=strip.custom(bg='yellow'), par.settings=list(superpose.line=list(col=1)), as.table=TRUE, panel=panel.depth_function, prepanel=prepanel.depth_function, scales=list(y=list(tick.number=7, alternating=3), x=list(alternating=1)), layout=c(3,1), cf=a$contributing_fraction)
+@
+\caption{\label{profile_aggregation} profile aggregation}
+\end{figure}
+
+
+<<profile_dissimilarity, eval=TRUE>>=
+## assess dissimilarity: only horizon attributes for now ##
+
+# D evaluated to 100 cm depth, using clay, sand, total RF, no depth-weighting
+d <- profile_compare(s, vars=c('clay', 'sand', 'total_frags_pct'), k=0, max_d=100)
+
+# divising hierarchical clustering
+h.hclust <- as.hclust(diana(d))
+
+# convert to phylo class
+p <- as.phylo(h.hclust)
+@
+
+\begin{figure}[h]
+<<dend_with_profiles, dev=pdf, fig.width=12, fig.height=6, out.width=\linewidth, echo=TRUE, dependson=gopheridge-demo, background=1;1;1>>=
+# plot dendrogram + profiles
+par(mar=c(0,0,0,1))
+p.plot <- plot(p, cex=0.8, label.offset=-3, direction='up', y.lim=c(85,0), x.lim=c(1, length(s)+1), show.tip.label=FALSE)
+
+# get the last plot geometry
+lastPP <- get("last_plot.phylo", envir = .PlotPhyloEnv)
+
+# vector of indices for plotting soil profiles below leaves of dendrogram
+new_order <- sapply(1:lastPP$Ntip, function(i) which(as.integer(lastPP$xx[1:lastPP$Ntip]) == i))
+
+# plot the profiles, in the ordering defined by the dendrogram
+# with a couple fudge factors to make them fit
+sf <- 0.15
+yoff <- max(lastPP$yy) + 2.2
+
+# add profiles below leaves of the dendrogram
+plot(s, name='hzname', color="soil_color", plot.order=new_order, cex.id=0.5, max.depth=150,  n.depth.ticks=6, scaling.factor=sf, width=0.1, cex.names=0.5, cex.depth.axis=0.75, y.offset=yoff, add=TRUE, id.style='side')
+@
+\caption{\label{dend_with_profiles} Dendrogram + profiles.}
+\end{figure}
 
 
 <<loafercreek-demo1, eval=TRUE>>=
-suppressMessages(library(soilDB))
+library(soilDB)
 data(loafercreek)
 
 ##
@@ -106,7 +285,7 @@ loafercreek.hz.agg.long <- melt(loafercreek.hz.agg, id.var=c('top','bottom', 'co
 p1 <- xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, subset=value > 0 & horizon != 'other', asp=2, ylab='', xlab='')
 @
 
-\begin{figure}
+\begin{figure}[h]
 <<pdf-dev, dev=pdf, out.width=0.5\linewidth, echo=FALSE, dependson=loafercreek-demo1, background=1;1;1>>=
 	print(p1)
 @
