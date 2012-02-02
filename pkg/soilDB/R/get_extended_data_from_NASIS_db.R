@@ -43,6 +43,11 @@ FROM (((((((dbo.phorizon INNER JOIN dbo.phfrags ON dbo.phorizon.phiid = dbo.phfr
 	(dbo.phorizon INNER JOIN dbo.phtexture ON dbo.phorizon.phiid = dbo.phtexture.phiidref) 
 	LEFT OUTER JOIN dbo.phtexturemod ON dbo.phtexture.phtiid = dbo.phtexturemod.phtiidref) 
 	LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 190) AS tmod ON dbo.phtexturemod.texmod =   tmod.ChoiceValue;"
+	
+	# get geomorphic features
+	q.geomorph <- "SELECT pedon.peiid, sitegeomordesc.sitegeomdiid, sitegeomordesc.geomfeatid, sitegeomordesc.existsonfeat, sitegeomordesc.geomfmod, geomorfeat.geomfname, CASE WHEN dbo.sitegeomordesc.geomfeatid=1 THEN 'landform' WHEN dbo.sitegeomordesc.geomfeatid=2 THEN 'landscape' WHEN dbo.sitegeomordesc.geomfeatid=3 THEN 'microfeature' WHEN dbo.sitegeomordesc.geomfeatid=4 THEN 'anthropogenic feature' END AS feature_type
+	FROM ((geomorfeat INNER JOIN (site INNER JOIN sitegeomordesc ON site.siteiid = sitegeomordesc.siteiidref) ON (geomorfeat.geomftiidref = sitegeomordesc.geomfeatid) AND (geomorfeat.geomfiid = sitegeomordesc.geomfiidref)) INNER JOIN siteobs ON site.siteiid = siteobs.siteiidref) INNER JOIN pedon ON (siteobs.siteobsiid = pedon.siteobsiidref) AND (siteobs.siteobsiid = pedon.siteobsiidref)
+ORDER BY pedon.peiid, sitegeomordesc.sitegeomdiid;"
    
 	
 	# setup connection to our local NASIS database
@@ -52,6 +57,7 @@ FROM (((((((dbo.phorizon INNER JOIN dbo.phfrags ON dbo.phorizon.phiid = dbo.phfr
 	d.diagnostic <- sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
 	d.rf.summary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
 	d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
+	d.geomorph <- sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
 	
 	# close connection
 	odbcClose(channel)
@@ -60,6 +66,6 @@ FROM (((((((dbo.phorizon INNER JOIN dbo.phfrags ON dbo.phorizon.phiid = dbo.phfr
 	d.diag.boolean <- diagHzLongtoWide(d.diagnostic)
 	
 	# return a list of results
-	return(list(diagnostic=d.diagnostic, diagHzBoolean=d.diag.boolean, frag_summary=d.rf.summary, texmodifier=d.hz.texmod))
+	return(list(diagnostic=d.diagnostic, diagHzBoolean=d.diag.boolean, frag_summary=d.rf.summary, texmodifier=d.hz.texmod, geomorph=d.geomorph))
 }
 
