@@ -9,8 +9,9 @@ fetchPedonPC <- function(dsn) {
 	# horizon + hz color: all horizons
 	h <- join(hz_data, color_data, by='phiid', type='left')
 	
+	## TODO: this creates 2 columns of 'pedon_id', temp work-around is to remove it from site data
 	# (hz + color) + site: only those with horizon data
-	f <- join(h, site_data, by='peiid', type='inner')
+	f <- join(h, site_data[, -which(names(site_data) == 'pedon_id')], by='peiid', type='inner')
 	
 	
 	# 3. fix some common problems
