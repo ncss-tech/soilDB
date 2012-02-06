@@ -1,8 +1,8 @@
 getHzErrorsNASIS <- function() {
 	
 	# get data
-	site_data <- get_site_data_from_pedon_db()
-	hz_data <- get_hz_data_from_pedon_db()
+	site_data <- get_site_data_from_NASIS_db()
+	hz_data <- get_hz_data_from_NASIS_db()
 	
 	# combine pieces
 	f <- join(hz_data, site_data, by='peiid', type='inner')
