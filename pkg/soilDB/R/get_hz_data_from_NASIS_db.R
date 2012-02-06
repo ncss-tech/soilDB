@@ -27,7 +27,7 @@ get_hz_data_from_NASIS_db <- function() {
 	dupe.hz.pedon.ids <- d$pedon_id[d$phiid %in% dupe.hz.phiid]
 	
 	if(length(dupe.hz) > 0) {
-		cat(paste('notice: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), '\n', sep=''))
+		message(paste('notice: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), sep=''))
 	}
 	
 	# close connection
