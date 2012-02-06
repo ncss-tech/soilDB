@@ -33,7 +33,7 @@ get_hz_data_from_pedon_db <- function(dsn) {
 	dupe.hz.pedon.ids <- d$pedon_id[d$phiid == names(hz.tab[dupe.hz])]
 	
 	if(length(dupe.hz) > 0) {
-		cat(paste('notice: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), '\n', sep=''))
+		message(paste('notice: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), sep=''))
 	}
 	
 	

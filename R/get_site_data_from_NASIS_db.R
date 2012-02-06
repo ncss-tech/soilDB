@@ -30,12 +30,12 @@ ORDER BY dbo.site.usiteid ;"
 	
 	# warn if mixed datums
 	if(length(unique(na.omit(d$datum))) > 1)
-		cat('NOTICE: multiple datums present\n')
+		message('NOTICE: multiple datums present')
 	
 	# are there any dupelicate pedon IDs?
 	t.pedon_id <- table(d$pedon_id)
 	if(any(t.pedon_id > 1)) {
-		cat('NOTICE: duplicate pedons')
+		message('NOTICE: duplicate pedons:')
 		print(t.pedon_id[which(t.pedon_id > 1)])
 	}
 	

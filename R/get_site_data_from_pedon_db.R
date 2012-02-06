@@ -37,11 +37,14 @@ get_site_data_from_pedon_db <- function(dsn) {
   
   # warn if mixed datums
   if(length(unique(na.omit(d$datum))) > 1)
-    warning('multiple datums present')
+    message('multiple datums present')
   
   # are there any dupes?
-  if(any(table(d$pedon_id) > 1))
-    warning('duplicate site/pedon information in results')
+  t.pedon_id <- table(d$pedon_id)
+  if(any(t.pedon_id > 1)) {
+  	message('NOTICE: duplicate pedons:')
+  	print(t.pedon_id[which(t.pedon_id > 1)])
+  }
   
   # done
   return(d)
