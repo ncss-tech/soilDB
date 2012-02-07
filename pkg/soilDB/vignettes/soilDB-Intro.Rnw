@@ -36,7 +36,11 @@ It can be difficult to locate all of the dependencies required for sending/proce
 
 \subsection{Design}
 
+The \texttt{soilDB} package provides two layers of functionality for extracting data from file-based databases (PedonPC), relational databases (local NASIS), and online data sources (Soil Data Access). High-level functions \texttt{fetchPedonPC()} and \texttt{fetchNASIS()} query, combine, verify horizon logic, and return \texttt{SoilProfileCollection} class objects containing the most commonly used site/pedon/horizon data. Low-level functions such as \texttt{get\_site\_data\_from\_pedon\_db()} and \texttt{get\_hz\_data\_from\_pedon\_db()} extract specific data from a designated source, and return the results as a \texttt{data.frame} class object.
+
 \subsection{High-Level Functions}
+
+
 
 \subsection{Low-Level Functions}
 
