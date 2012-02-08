@@ -1,4 +1,4 @@
-getHzErrorsPedonPC <- function(dsn) {
+getHzErrorsPedonPC <- function(dsn, test.NA=FALSE, strict=TRUE) {
 	
 	# get data
 	site_data <- get_site_data_from_pedon_db(dsn)
@@ -8,7 +8,7 @@ getHzErrorsPedonPC <- function(dsn) {
 	f <- join(hz_data, site_data, by='peiid', type='inner')
 	
 	# ignore missing lower boundary
-	f.test <- ddply(f, .(pedon_id), test_hz_logic, topcol='hzdept', bottomcol='hzdepb', test.NA=FALSE, strict=TRUE)
+	f.test <- ddply(f, .(pedon_id), test_hz_logic, topcol='hzdept', bottomcol='hzdepb', test.NA=test.NA, strict=strict)
 	
 	# find bad ones
 	bad.pedon.ids <- as.character(f.test$pedon_id[which(f.test$hz_logic_pass == FALSE)])
