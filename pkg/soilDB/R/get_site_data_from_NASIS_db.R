@@ -39,6 +39,12 @@ ORDER BY dbo.site.usiteid ;"
 		print(t.pedon_id[which(t.pedon_id > 1)])
 	}
 	
+	# warn about sites without a matching pedon (records missing peiid)
+	missing.pedon <- which(is.na(d$peiid))
+	if(length(missing.pedon)> 0) {
+		message(paste('NOTICE: sites without pedons:', paste(d$site_id[missing.pedon], collapse=', ')))
+	}
+		
 	
 	# done
 	return(d)
