@@ -14,7 +14,7 @@ get_hz_data_from_NASIS_db <- function() {
     GROUP BY dbo.phfrags.phiidref
 	) as f ON dbo.phorizon.phiid = f.phiidref)
 	
-	INNER JOIN (
+	LEFT OUTER JOIN (
 		SELECT phiidref, min(CASE WHEN tx.ChoiceName IS NULL THEN til.ChoiceName ELSE tx.ChoiceName END) as texture_class
 		FROM ((
 		dbo.phtexture
