@@ -28,7 +28,7 @@ LEFT OUTER JOIN (
 		FROM dbo.phfrags
 		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
 		WHERE ((dbo.phfrags.fragsize_h <= 76) OR (dbo.phfrags.fragsize_r <= 76 And dbo.phfrags.fragsize_r >= 2))
-		AND m.ChoiceName IN ('strongly', 'very strongly', 'indurated')
+		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
 		GROUP BY dbo.phfrags.phiidref
 	) as f1_gr ON dbo.phfrags.phiidref = f1_gr.phiidref)
 
@@ -46,7 +46,7 @@ LEFT OUTER JOIN (
 		FROM dbo.phfrags
 		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
 		WHERE ((dbo.phfrags.fragsize_l >= 75 AND dbo.phfrags.fragsize_h <= 250) OR (dbo.phfrags.fragsize_r >= 76 And dbo.phfrags.fragsize_r <= 250))
-		AND m.ChoiceName IN ('strongly', 'very strongly', 'indurated')
+		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
 		GROUP BY dbo.phfrags.phiidref
 	) as f2_cb ON dbo.phfrags.phiidref = f2_cb.phiidref)
 
