@@ -3,7 +3,7 @@
 # 2. joining to tables with 1:many cardinality will result in multiple rows/horizon
 # 3. this can be overcome using CTE queries to local NASIS, but not Access
 # 4. cases where this happens:
-#    - multiple textures defined for a single horizon
+#    - multiple textures defined for a single horizon-- currently texture is not returned, see NASIS version for 50% fix
 
 get_hz_data_from_pedon_db <- function(dsn) {
 	q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid as pedon_id, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
