@@ -34,6 +34,36 @@ This package provides methods for extracting soils information from local PedonP
 It can be difficult to locate all of the dependencies required for sending/processing SOAP requests, especially on UNIX-like operating systems. Windows binary packages for the dependencies can be found here \url{http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/2.14/}.
 
 
+\subsection{Inteded Users}
+
+
+\subsection{R Notes}
+A basic understanding of R syntax, object structure, package management system, and programming style will greatly help with integration of the \texttt{soilDB} \texttt{aqp} into standard workflows. Here are some reminders. Recall that online help documents can be accessed with the syntax `?mean', which would load the manual page for the `mean()' function. Two `??' can be used to perform fuzzy searching for functions that contain matching keywords.
+
+<<R-notes>>=
+# 1. objects: creation, structure, etc.
+x <- 1:10       # 'x' is now a vector of integers 1 to 10 
+y <- rnorm(10)  # 'y' is now a vector of 10 random numbers {mean=0, sd=1}
+d <- data.frame(x, y) # d is a rectangular table with columns 'x' and 'y'
+
+str(d) # check structure
+class(d) # inspect object class
+head(d) # view first 6 rows
+rm(d, x, y) # clean-up by deleting these objects
+
+# 2. most function are vectorized: i.e. automatic iteration
+x <- 1:10
+x + 1 # the '+' function knows about vectors, and recycles scalars accordingly
+
+# 3. missing data can cause problems unless accounted for
+x <- c(x, NA) # 'c()' is the concatonate function
+x
+mean(x) # result is NA, as most functions return NA in the presence of missing data
+mean(x, na.rm=TRUE) # mean computed after removal of missing data
+@
+
+
+
 \subsection{Design}
 
 The \texttt{soilDB} package provides two layers of functionality for extracting data from file-based databases (PedonPC), relational databases (local NASIS), and online data sources (Soil Data Access). High-level functions \texttt{fetchPedonPC()} and \texttt{fetchNASIS()} query, combine, verify horizon logic, and return \texttt{SoilProfileCollection} class objects containing the most commonly used site/pedon/horizon data. Low-level functions such as \texttt{get\_site\_data\_from\_pedon\_db()} and \texttt{get\_hz\_data\_from\_pedon\_db()} extract specific data from a designated source, and return the results as a \texttt{data.frame} class object.
