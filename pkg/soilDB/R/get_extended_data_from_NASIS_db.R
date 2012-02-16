@@ -1,3 +1,5 @@
+## TODO: need to be careful about how l,rv,h are used here...
+
 get_extended_data_from_NASIS_db <- function(dsn) {
 	# query diagnostic horizons, usually a 1:many relationship with pedons
 	q.diagnostic <- "SELECT peiidref as peiid, dfk.ChoiceName as diag_kind, featdept, featdepb
@@ -8,33 +10,87 @@ FROM dbo.pediagfeatures
 	
 	# this query is resistant to dupes
 	# query rock-fragment summary by horizon
-	q.rf.summary <- "SELECT dbo.phfrags.phiidref as phiid, CASE WHEN f1.gravel IS NULL THEN 0.0 ELSE f1.gravel END as gravel, CASE WHEN f2.cobbles IS NULL THEN 0.0 ELSE f2.cobbles END as cobbles, CASE WHEN f3.stones IS NULL THEN 0.0 ELSE f3.stones END as stones, CASE WHEN f4.boulders IS NULL THEN 0.0 ELSE f4.boulders END as boulders, CASE WHEN f5.channers IS NULL THEN 0.0 ELSE f5.channers END as channers, CASE WHEN f6.flagstones IS NULL THEN 0.0 ELSE f6.flagstones END as flagstones
-FROM (((((((dbo.phorizon INNER JOIN dbo.phfrags ON dbo.phorizon.phiid = dbo.phfrags.phiidref)
-	LEFT OUTER JOIN (SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS gravel
-	FROM dbo.phfrags
-	WHERE (((dbo.phfrags.fragsize_h)<=76) OR ((dbo.phfrags.fragsize_r)<=76 And (dbo.phfrags.fragsize_r)>=2))
-	GROUP BY dbo.phfrags.phiidref) as f1 ON dbo.phfrags.phiidref = f1.phiidref)
-	LEFT OUTER JOIN (SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS cobbles
-	FROM dbo.phfrags
-	WHERE (((dbo.phfrags.fragsize_l)>=75) AND ((dbo.phfrags.fragsize_h)<=250)) OR (((dbo.phfrags.fragsize_r)>=76 And (dbo.phfrags.fragsize_r)<=250))
-	GROUP BY dbo.phfrags.phiidref) as f2 ON dbo.phfrags.phiidref = f2.phiidref)
-	LEFT OUTER JOIN (SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS stones
-	FROM dbo.phfrags
-	WHERE (((dbo.phfrags.fragsize_l)>=250) OR ((dbo.phfrags.fragsize_r)>=250) OR (((dbo.phfrags.fragsize_l)>=380) AND (dbo.phfrags.fragshp)=1) OR   (((dbo.phfrags.fragsize_r)>=380) AND ((dbo.phfrags.fragshp)=1)))
-	GROUP BY dbo.phfrags.phiidref) as f3 ON dbo.phfrags.phiidref = f3.phiidref)
-	LEFT OUTER JOIN (SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS boulders
-	FROM dbo.phfrags
-	WHERE (((dbo.phfrags.fragsize_l)>=600) OR (((dbo.phfrags.fragsize_r)>=600)  AND ((dbo.phfrags.fragshp)=1)))
-	GROUP BY dbo.phfrags.phiidref) as f4 ON dbo.phfrags.phiidref = f4.phiidref)
-	LEFT OUTER JOIN (SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS channers
-	FROM dbo.phfrags
-	WHERE (((dbo.phfrags.fragsize_l)>=2) AND ((dbo.phfrags.fragsize_h)<=150) AND ((dbo.phfrags.fragshp)=1)) OR (((dbo.phfrags.fragshp)=1) AND   ((dbo.phfrags.fragsize_r)>=2 And (dbo.phfrags.fragsize_r)<=150))
-	GROUP BY dbo.phfrags.phiidref) as f5 ON dbo.phfrags.phiidref = f5.phiidref)
-	LEFT OUTER JOIN (SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS flagstones
-	FROM dbo.phfrags
-	WHERE (((dbo.phfrags.fragsize_l)>=150) AND ((dbo.phfrags.fragsize_h)<=380) AND ((dbo.phfrags.fragshp)=1)) OR (((dbo.phfrags.fragshp)=1) AND   ((dbo.phfrags.fragsize_r)>=150 And (dbo.phfrags.fragsize_r)<=380))
-	GROUP BY dbo.phfrags.phiidref) as f6 ON dbo.phfrags.phiidref = f6.phiidref)
-	GROUP BY dbo.phfrags.phiidref, gravel, cobbles, stones, boulders, channers, flagstones
+	q.rf.summary <- "SELECT DISTINCT dbo.phfrags.phiidref as phiid, 
+
+CASE WHEN f1_gr.gravel IS NULL THEN 0.0 ELSE f1_gr.gravel END as gravel, 
+CASE WHEN f1_pgr.gravel IS NULL THEN 0.0 ELSE f1_pgr.gravel END as paragravel,
+CASE WHEN f2_cb.cobbles IS NULL THEN 0.0 ELSE f2_cb.cobbles END as cobbles, 
+CASE WHEN f2_pcb.cobbles IS NULL THEN 0.0 ELSE f2_pcb.cobbles END as paracobbles,
+CASE WHEN f3.stones IS NULL THEN 0.0 ELSE f3.stones END as stones, 
+CASE WHEN f4.boulders IS NULL THEN 0.0 ELSE f4.boulders END as boulders, 
+CASE WHEN f5.channers IS NULL THEN 0.0 ELSE f5.channers END as channers, 
+CASE WHEN f6.flagstones IS NULL THEN 0.0 ELSE f6.flagstones END as flagstones
+
+FROM ((((((((
+dbo.phfrags
+LEFT OUTER JOIN (
+		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS gravel
+		FROM dbo.phfrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
+		WHERE ((dbo.phfrags.fragsize_h <= 76) OR (dbo.phfrags.fragsize_r <= 76 And dbo.phfrags.fragsize_r >= 2))
+		AND m.ChoiceName IN ('strongly', 'very strongly', 'indurated')
+		GROUP BY dbo.phfrags.phiidref
+	) as f1_gr ON dbo.phfrags.phiidref = f1_gr.phiidref)
+
+LEFT OUTER JOIN (
+		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS gravel
+		FROM dbo.phfrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
+		WHERE (dbo.phfrags.fragsize_h <= 76 OR (dbo.phfrags.fragsize_r <= 76 And dbo.phfrags.fragsize_r >= 2))
+		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
+		GROUP BY dbo.phfrags.phiidref
+	) as f1_pgr ON dbo.phfrags.phiidref = f1_pgr.phiidref)
+
+	LEFT OUTER JOIN (
+		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS cobbles
+		FROM dbo.phfrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
+		WHERE ((dbo.phfrags.fragsize_l >= 75 AND dbo.phfrags.fragsize_h <= 250) OR (dbo.phfrags.fragsize_r >= 76 And dbo.phfrags.fragsize_r <= 250))
+		AND m.ChoiceName IN ('strongly', 'very strongly', 'indurated')
+		GROUP BY dbo.phfrags.phiidref
+	) as f2_cb ON dbo.phfrags.phiidref = f2_cb.phiidref)
+
+	LEFT OUTER JOIN (
+		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS cobbles
+		FROM dbo.phfrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
+		WHERE ((dbo.phfrags.fragsize_l >= 75 AND dbo.phfrags.fragsize_h <= 250) OR (dbo.phfrags.fragsize_r >= 76 And dbo.phfrags.fragsize_r <= 250))
+		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
+		GROUP BY dbo.phfrags.phiidref
+	) as f2_pcb ON dbo.phfrags.phiidref = f2_pcb.phiidref)
+
+	LEFT OUTER JOIN (
+		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS stones
+		FROM dbo.phfrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
+		WHERE (((dbo.phfrags.fragsize_l)>=250) OR ((dbo.phfrags.fragsize_r)>=250) OR (((dbo.phfrags.fragsize_l)>=380) AND (dbo.phfrags.fragshp)=1) OR   (((dbo.phfrags.fragsize_r)>=380) AND ((dbo.phfrags.fragshp)=1)))
+		GROUP BY dbo.phfrags.phiidref
+	) as f3 ON dbo.phfrags.phiidref = f3.phiidref)
+
+	LEFT OUTER JOIN (
+		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS boulders
+		FROM dbo.phfrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
+		WHERE (((dbo.phfrags.fragsize_l)>=600) OR (((dbo.phfrags.fragsize_r)>=600)  AND ((dbo.phfrags.fragshp)=1)))
+		GROUP BY dbo.phfrags.phiidref
+	) as f4 ON dbo.phfrags.phiidref = f4.phiidref)
+
+	LEFT OUTER JOIN (
+		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS channers
+		FROM dbo.phfrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
+		WHERE (((dbo.phfrags.fragsize_l)>=2) AND ((dbo.phfrags.fragsize_h)<=150) AND ((dbo.phfrags.fragshp)=1)) OR (((dbo.phfrags.fragshp)=1) AND   ((dbo.phfrags.fragsize_r)>=2 And (dbo.phfrags.fragsize_r)<=150))
+		GROUP BY dbo.phfrags.phiidref
+	) as f5 ON dbo.phfrags.phiidref = f5.phiidref)
+	
+	LEFT OUTER JOIN (
+		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS flagstones
+		FROM dbo.phfrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
+		WHERE (((dbo.phfrags.fragsize_l)>=150) AND ((dbo.phfrags.fragsize_h)<=380) AND ((dbo.phfrags.fragshp)=1)) OR (((dbo.phfrags.fragshp)=1) AND   ((dbo.phfrags.fragsize_r)>=150 And (dbo.phfrags.fragsize_r)<=380))
+		GROUP BY dbo.phfrags.phiidref
+	) as f6 ON dbo.phfrags.phiidref = f6.phiidref)
+	
 	ORDER BY dbo.phfrags.phiidref;"
 
 	# get horizon texture modifiers
