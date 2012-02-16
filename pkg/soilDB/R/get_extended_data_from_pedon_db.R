@@ -5,6 +5,10 @@ FROM pediagfeatures
 	LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 147) AS dfk ON pediagfeatures.featkind = dfk.choice_id
 	ORDER BY pediagfeatures.peiidref, pediagfeatures.featdept;"
 	
+	
+	##
+	## TODO: split GR/PGR and CB/PCB
+	##
 	# this query is resistant to dupes
 	# query rock-fragment summary by horizon
 	q.rf.summary <- "SELECT phfrags.phiidref as phiid, IIF(IsNULL(f1.gravel), 0.0, f1.gravel) as gravel, IIF(IsNULL(f2.cobbles), 0.0, f2.cobbles) as cobbles, IIF(IsNULL(f3.stones), 0.0, f3.stones) as stones, IIF(IsNULL(f4.boulders), 0.0, f4.boulders) as boulders, IIF(IsNULL(f5.channers), 0.0, f5.channers) as channers, IIF(IsNULL(f6.flagstones), 0.0, f6.flagstones) as flagstones
