@@ -1,8 +1,13 @@
 1. how should multiple textures be dealt with? (2 rows/hz are currently returned)
 -- can this be fixed in SQL ?
+--> NASIS: we are keeping only the first record
+--> PedonPC: texture class is ommited from query
 
 2. how should A/B horizons be dealt with when entered as 2 horizons sharing the same depths?
 
 
 3. soil texture plotting / subsetting / flagging helper function or guidance
 
+4. splitting frags/para-frags:
+--> NASIS this is done for GR/PGR and CB/PCB
+--> pedonPC: not split
