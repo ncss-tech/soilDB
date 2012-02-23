@@ -1,4 +1,6 @@
--------------------------- soilDB 0.5 (2012-02-21) ----------------------------
+-------------------------- soilDB 0.5-1 (2012-02-22) ----------------------------
+* fetchNASIS() and fetchPedonPC() now integrate extended data
+* warning and error messages cleaned-up
 * multiple textures no longer cause duplicate HZ rows (NASIS only)
 * exteded queries now split frags/para-frags
 * silt fraction is estimated from 100-(sand+clay) when possible

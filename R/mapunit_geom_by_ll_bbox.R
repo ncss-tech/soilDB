@@ -4,7 +4,7 @@
 mapunit_geom_by_ll_bbox <- function(bbox, source='sda') {
 	# need rgdal
 	if(!require(rgdal))
-		stop('This function requires the `rgdal` package.')
+		stop('This function requires the `rgdal` package.', call.=FALSE)
 	
 	# parse bbox
 	bbox.text <- paste(bbox, collapse=',')
@@ -16,7 +16,7 @@ mapunit_geom_by_ll_bbox <- function(bbox, source='sda') {
 	if(source == 'sda') {
 		# check to make sure the user's OGR has been compiled with GML support:
 		if( ! "GML" %in% ogr.Drv)
-			stop('GML support is missing from your GDAL/OGR build.')
+			stop('GML support is missing from your GDAL/OGR build.', call.=FALSE)
 		
 		# compose URL
 		u <- paste( 'http://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&Version=1.0.0&Request=GetFeature&Typename=MapunitPoly&BBOX=', bbox.text, sep='')
@@ -31,11 +31,11 @@ mapunit_geom_by_ll_bbox <- function(bbox, source='sda') {
 	if(source == 'soilweb') {
 		# soilweb emits mixed-geometry KML, OGR can't deal with this
 		# ... need a new strategy
-		stop('Data from SoilWeb is currently not supported.')
+		stop('Data from SoilWeb is currently not supported.', call.=FALSE)
 		
 		# check to make sure the user's OGR has been compiled with GML support:
 		if( ! "KML" %in% ogr.Drv)
-			stop('KML support is missing from your GDAL/OGR build.')
+			stop('KML support is missing from your GDAL/OGR build.', call.=FALSE)
 		
 		# parse URL
 		u <- paste( 'http://casoilresource.lawr.ucdavis.edu/soil_web/export.php?format=kml&srid=4326&BBOX=', bbox.text, sep='')

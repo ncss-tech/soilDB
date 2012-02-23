@@ -43,7 +43,7 @@ cleanSDA <- function(i) {
 SDA_query <- function(q) {
 	# check for required packages
 	if(!require(SSOAP) | !require(XMLSchema))
-		stop('please install the `SSOAP` and `XMLSchema` packages')
+		stop('please install the `SSOAP` and `XMLSchema` packages', call.=FALSE)
 	
 	# setup server, action, and xmlns
 	s <- SOAPServer('SDMDataAccess.nrcs.usda.gov', '/Tabular/SDMTabularService.asmx')
