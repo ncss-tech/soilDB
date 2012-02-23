@@ -4,6 +4,7 @@ fetchPedonPC <- function(dsn) {
 	site_data <- get_site_data_from_pedon_db(dsn)
 	hz_data <- get_hz_data_from_pedon_db(dsn)
 	color_data <- get_colors_from_pedon_db(dsn)
+	extended_data <- get_extended_data_from_pedon_db(dsn)
 	
 	# 2. join pieces
 	# horizon + hz color: all horizons
@@ -41,7 +42,15 @@ fetchPedonPC <- function(dsn) {
 	idx <- complete.cases(f$m_r)
 	f$soil_color[idx] <- with(horizons(f)[idx, ], rgb(m_r, m_g, m_b)) # moist colors
 	
-	# 6. mention bad pedons
+	# 6. merge-in extended data:
+	# replace horizons with hz + fragment summary
+	horizons(f) <- join(horizons(f), extended_data$frag_summary, by='phiid', type='left')
+	# add diagnostic boolean data into @site
+	site(f) <- extended_data$diagHzBoolean
+	# load diagnostic horizons into @diagnostic: note that this requires one additional join
+	diagnostic_hz(f) <- join(site(f)[, c('pedon_id','peiid')], extended_data$diagnostic, by='peiid', type='left')
+	
+	# 7. mention bad pedons
 	if(length(bad.pedon.ids) > 0)
 		cat(paste('horizon errors in:', paste(bad.pedon.ids, collapse=','), '\n'))
 	

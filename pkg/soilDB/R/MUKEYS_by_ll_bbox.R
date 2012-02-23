@@ -4,7 +4,7 @@
 MUKEYS_by_ll_bbox <- function(bbox) {
 	# check for required packages
 	if(!require(RCurl) | !require(XML))
-		stop('please install the `RCurl` and `XML` packages')
+		stop('please install the `RCurl` and `XML` packages', call.=FALSE)
 	
 	bbox.text <- paste(bbox, collapse=',')
 	
