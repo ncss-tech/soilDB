@@ -166,6 +166,51 @@ f.pcs.prop <- function(x, prop) {
   return(s)
 }
 
+
+# compute the weighted-mean of some property within a given diagnostic horizon
+# note that this requires conditional eval of data that may contain NA
+# see ?slab and ?soil.slot for details on the syntax
+# note that function expects certain columns within 'x'
+f.diag.wt.prop <- function(x, d.hz, prop) {
+	# extract diagnostic horizon data
+	d <- diagnostic_hz(x)
+	# subset to the requested diagnostic hz
+	d <- d[d$diag_kind == d.hz, ]
+	# if missing return NA
+	if(nrow(d) == 0)
+		return(NA)
+	
+	# extract depths and check for missing
+	sv <- c(d$featdept, d$featdepb)
+	if(any(is.na(sv)))
+		return(NA)
+	
+	# create formula from named property
+	fm <- as.formula(paste('~', prop))
+	# return just the (weighted) mean, accessed from @horizons
+	s <- slab(x, fm, seg_vect=sv)$p.mean
+	return(s)
+}
+
+
+# conditional eval of thickness of some diagnostic feature or horizon
+# will return a vector of length(x), you can save to @site
+f.diag.thickness <- function(x, d.hz) {
+	# extract diagnostic horizon data
+	d <- diagnostic_hz(x)
+	# subset to the requested diagnostic hz
+	d <- d[d$diag_kind == d.hz, ]
+	# if missing return NA
+	if(nrow(d) == 0)
+		return(NA)
+	
+	# compute thickness
+	thick <- d$featdepb - d$featdept
+	return(thick)
+}
+
+
+
 # compute wt.mean clay within PCS, save to @site
 s$pcs.clay <- profileApply(s, f.pcs.prop, prop='clay')
 @
@@ -325,6 +370,53 @@ p1 <- xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(1
 @
 \caption{\label{pdf-dev} horizon proportions}
 \end{figure}
+
+
+<<>>=
+f.andic <- f[which(f$andic.soil.properties), ]
+
+# extract and subset only andic soil properties
+d <- diagnostic_hz(f.andic)
+d <- d[d$diag_kind == 'andic soil properties', c('pedon_id', 'featdept', 'featdepb')]
+
+
+# join these data with existing site data
+site(f.andic) <- d
+
+# check: plot profiles
+plot(f.andic, name='hzname')
+# add lines along top/bottom of "andic soil properties" diagnostic data
+lines(1:length(f.andic), f.andic$featdept, lty=2, lwd=2)
+lines(1:length(f.andic), f.andic$featdepb, lty=2, lwd=2)
+
+# OK
+
+# subset horizons, by profile, according to 'andic soil properties' depths
+# this is tricky, as it involves taking apart an SPC
+# convert from SPC -> data.frame: 
+# 1 row / horizon, with site data joined with hz data
+f.andic.df <- as(f.andic, 'data.frame')
+h.andic <- subset(f.andic.df, subset=hzdept >= featdept & hzdepb <= featdepb)
+
+# check: OK
+h.andic[, c('pedon_id', 'hzname', 'hzdept', 'hzdepb', 'featdept', 'featdepb')]
+
+# aggregate / stack / plot
+# two collections of pedons
+a.mvo <- slab(f[which(f$bedrock_kind == 'Metavolcanics'), ], ~ clay + sand + total_frags_pct) # mvo data
+a.slate <- slab(f[which(f$bedrock_kind == 'Slate'), ], ~ clay + sand + total_frags_pct) # mvo data
+a.andic <- slab(f.andic, ~ clay + sand + total_frags_pct) # andic soils
+
+# stack:
+a <- make.groups(metavolcanic=a.mvo, slate=a.slate, andic.soils=a.andic)
+a$mid <- with(a, (top+bottom)/2)
+
+# plot median +/- IQR of clay, sand, total RF
+xyplot(mid ~ p.q50 | variable, groups=which, upper=a$p.q75, lower=a$p.q25, id=a$major_bedrock_kind, data=a, ylim=c(180,-5), ylab='Depth (cm)', xlab=c('% Clay', '% Sand', '% Total RF'), strip=strip.custom(bg=grey(0.8)), par.settings=list(superpose.line=list(col=c('orange', 'RoyalBlue', 'Darkgreen'), lwd=2)), as.table=TRUE, panel=panel.depth_function, prepanel=prepanel.depth_function, scales=list(y=list(tick.number=7, alternating=3), x=list(relation='free', alternating=1)), layout=c(3,1), sync.colors=TRUE, alpha=0.5, auto.key=list(columns=3, lines=TRUE, points=FALSE))
+
+
+@
+
 
 \end{document}
 
