@@ -132,9 +132,39 @@ loafercreek$hz <- factor(loafercreek$hz)
 loafercreek.hz.agg <- slab(loafercreek, fm= ~ hz)
 
 # wide->long format
-loafercreek.hz.agg.long <- melt(loafercreek.hz.agg, id.var=c('top','bottom', 'contributing_fraction', 'all.profiles', 'variable'),  variable_name='horizon')
+loafercreek.hz.agg.long <- melt(loafercreek.hz.agg, 
+id.var=c('top','bottom', 'contributing_fraction', 'all.profiles', 'variable'), 
+variable_name='horizon')
 
 # plot horizon type proportions
-xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(150, -5), type=c('S','g'), horizontal=TRUE, subset=value > 0 & horizon != 'other', asp=2, ylab='', xlab='')
+xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(150, -5), 
+type=c('S','g'), horizontal=TRUE, subset=value > 0 & horizon != 'other', 
+asp=2, ylab='', xlab='')
 }
+
+
+## 
+## compute dissimilarty 2 ways: 1) with hz data, 2) with hz+site data
+##
+
+# just hz-level variables: need at least 2
+d.hz <- profile_compare(loafercreek, vars=c('clay', 'total_frags_pct'), k=0, max_d=100)
+
+# hz and site level variables: need at least 2 hz-level and 2 site-level
+# character-class variables should be manually converted to factors first !!
+d.site.hz <- profile_compare(loafercreek, 
+vars=c('clay', 'total_frags_pct', 'paralithic.contact', 'slope'), k=0, max_d=100)
+
+library(ape)
+par(mfcol=c(1,2))
+
+plot(as.phylo(as.hclust(diana(d.hz))), cex=0.5, 
+no.margin=TRUE, label.offset=1)
+
+plot(as.phylo(as.hclust(diana(d.site.hz))), cex=0.5, 
+direction='left',no.margin=TRUE, label.offset=0.01)
+
+# check: profiles missing lithic contact:
+profile_id(loafercreek[which( ! loafercreek$paralithic.contact), ])
+
 \keyword{datasets}
