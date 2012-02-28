@@ -18,8 +18,11 @@
 \title{Soil Database Interface\\ \large{The \texttt{soilDB} package}}
 \author{D.E. Beaudette and J.M. Skovlin}
 
-
+%  linux:
 %  knit('soilDB-Intro.Rnw') ; system('pdflatex soilDB-Intro.tex')
+
+% mac
+% knit('soilDB-Intro.Rnw')
 
 \begin{document}
 
@@ -40,7 +43,7 @@ It can be difficult to locate all of the dependencies required for sending/proce
 \subsection{R Notes}
 A basic understanding of R syntax, object structure, package management system, and programming style will greatly help with integration of the \texttt{soilDB} \texttt{aqp} into standard workflows. Here are some reminders. Recall that online help documents can be accessed with the syntax `?mean', which would load the manual page for the `mean()' function. Two `??' can be used to perform fuzzy searching for functions that contain matching keywords.
 
-<<R-notes>>=
+<<R-notes, eval=FALSE>>=
 # 1. objects: creation, structure, etc.
 x <- 1:10       # 'x' is now a vector of integers 1 to 10 
 y <- rnorm(10)  # 'y' is now a vector of 10 random numbers {mean=0, sd=1}
@@ -372,7 +375,8 @@ p1 <- xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(1
 \end{figure}
 
 
-<<>>=
+\clearpage
+<<andic.properties.example, echo=TRUE, eval=FALSE>>=
 f.andic <- f[which(f$andic.soil.properties), ]
 
 # extract and subset only andic soil properties
@@ -388,8 +392,6 @@ plot(f.andic, name='hzname')
 # add lines along top/bottom of "andic soil properties" diagnostic data
 lines(1:length(f.andic), f.andic$featdept, lty=2, lwd=2)
 lines(1:length(f.andic), f.andic$featdepb, lty=2, lwd=2)
-
-# OK
 
 # subset horizons, by profile, according to 'andic soil properties' depths
 # this is tricky, as it involves taking apart an SPC
@@ -413,8 +415,6 @@ a$mid <- with(a, (top+bottom)/2)
 
 # plot median +/- IQR of clay, sand, total RF
 xyplot(mid ~ p.q50 | variable, groups=which, upper=a$p.q75, lower=a$p.q25, id=a$major_bedrock_kind, data=a, ylim=c(180,-5), ylab='Depth (cm)', xlab=c('% Clay', '% Sand', '% Total RF'), strip=strip.custom(bg=grey(0.8)), par.settings=list(superpose.line=list(col=c('orange', 'RoyalBlue', 'Darkgreen'), lwd=2)), as.table=TRUE, panel=panel.depth_function, prepanel=prepanel.depth_function, scales=list(y=list(tick.number=7, alternating=3), x=list(relation='free', alternating=1)), layout=c(3,1), sync.colors=TRUE, alpha=0.5, auto.key=list(columns=3, lines=TRUE, points=FALSE))
-
-
 @
 
 
