@@ -140,7 +140,7 @@ variable_name='horizon')
 xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(150, -5), 
 type=c('S','g'), horizontal=TRUE, subset=value > 0 & horizon != 'other', 
 asp=2, ylab='', xlab='')
-}
+
 
 
 ## 
@@ -166,5 +166,6 @@ direction='left',no.margin=TRUE, label.offset=0.01)
 
 # check: profiles missing lithic contact:
 profile_id(loafercreek[which( ! loafercreek$paralithic.contact), ])
+}
 
 \keyword{datasets}
