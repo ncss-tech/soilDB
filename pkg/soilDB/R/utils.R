@@ -2,9 +2,10 @@
 ## misc functions used by soilDB
 ##
 
+## TODO: consider toggling paralithic contact to FALSE when lithic contact is TRUE
+
 
 # convert diagnostic horizon info into wide-formatted, boolean table
-
 diagHzLongtoWide <- function(d) {
 	
 	# get unique vector of diagnostic hz
