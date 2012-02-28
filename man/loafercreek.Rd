@@ -153,7 +153,7 @@ d.hz <- profile_compare(loafercreek, vars=c('clay', 'total_frags_pct'), k=0, max
 # hz and site level variables: need at least 2 hz-level and 2 site-level
 # character-class variables should be manually converted to factors first !!
 d.site.hz <- profile_compare(loafercreek, 
-vars=c('clay', 'total_frags_pct', 'paralithic.contact', 'slope'), k=0, max_d=100)
+vars=c('clay', 'total_frags_pct', 'paralithic.contact', 'lithic.contact'), k=0, max_d=100)
 
 library(ape)
 par(mfcol=c(1,2))
