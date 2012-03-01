@@ -1,5 +1,9 @@
 \name{loafercreek}
 \alias{loafercreek}
+
+\alias{andic.subset}
+\alias{gopheridge}
+
 \docType{data}
 \title{LoaferCreek Soils}
 \description{A SoilProfileCollection Object of LoaferCreek Soils from the CA630 Soil Survey Area.}
