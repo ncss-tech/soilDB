@@ -150,46 +150,82 @@ asp=2, ylab='', xlab='')
 ## 
 ## compute dissimilarty 2 ways: 1) with hz data, 2) with hz+site data
 ##
-data(loafercreek)
 
 # just hz-level variables: need at least 2
-d.hz <- profile_compare(loafercreek, vars=c('clay', 'total_frags_pct'), k=0, max_d=100)
+d.hz <- profile_compare(loafercreek, vars=c('clay', 'total_frags_pct'), k=0, max_d=100, 
+rescale.result=TRUE)
 
 # hz and site level variables: need at least 2 hz-level and 2 site-level
 # character-class variables should be manually converted to factors first !!
 d.site.hz <- profile_compare(loafercreek, 
-vars=c('clay', 'total_frags_pct', 'paralithic.contact', 'lithic.contact'), k=0, max_d=100)
+vars=c('clay', 'total_frags_pct', 'paralithic.contact', 'slope'), k=0, max_d=100, 
+rescale.result=TRUE)
 
+# better plotting of dendrograms
 if(require(ape)) {
 
-# plot hz-level dissimilarities on left-hand side
-plot(as.phylo(as.hclust(diana(d.hz))), cex=0.5, 
-direction='right', no.margin=TRUE, label.offset=0.01, x.lim=c(0, 1.75))
-p.left <- get("last_plot.phylo", envir = .PlotPhyloEnv)
+	# cluster via divisive hierarchical algorithm
+	phylo.hz <- as.phylo(as.hclust(diana(d.hz)))
+	phylo.site.hz <- as.phylo(as.hclust(diana(d.site.hz)))
+	
+	# generate vector of labels for site-level clustering criteria
+	# paralithic contact = 1, missing = 2
+	paralithic.contact.code <- as.integer(loafercreek$paralithic.contact)+1
+	
+	# setup some geometry
+	# since our dissimilarity matrices are scaled to [0,1]
+	# we can hard-code some limits
+	dend.edge <- 1.7
+	arrow.left <- dend.edge * 0.4
+	arrow.right <- dend.edge - 0.62
 
-# plot site+hz-level dissimilarities on right-hand side
-par(new=TRUE)
-plot(as.phylo(as.hclust(diana(d.site.hz))), cex=0.5, 
-direction='left',no.margin=TRUE, label.offset=0.01, x.lim=c(0, 1.75))
-p.right <- get("last_plot.phylo", envir = .PlotPhyloEnv)
-
-# save pedon ID labels
-d.site.hz.labels <- attr(d.site.hz, 'Labels')
-d.hz.labels <- attr(d.hz, 'Labels')
-
-# get ordering of pedon IDs on each side
-left.new_order <- sapply(1:p.left$Ntip,
-function(i) which(as.integer(p.left$yy[1:p.left$Ntip]) == i))
-right.new_order <- sapply(1:p.right$Ntip,
-function(i) which(as.integer(p.right$yy[1:p.right$Ntip]) == i))
-
-## this almost works... needs some more thought
-# connect with line segments
-segments(0.70, right.new_order, 1.08, left.new_order, col=rgb(0, 0, 0, alpha=0.5))
-
-# check: profiles missing lithic contact:
-profile_id(loafercreek[which( ! loafercreek$paralithic.contact), ])
+	# plot hz-level dissimilarities on left-hand side
+	plot(phylo.hz, cex=0.65, font=1,
+	direction='right', no.margin=TRUE, label.offset=0.015, x.lim=c(0, dend.edge))
+	# save results of phylo environment
+	p.left <- get("last_plot.phylo", envir = .PlotPhyloEnv)
+	# annotate pedons with paralithic contact
+	tiplabels(pch=15, col=c('orange', NA)[paralithic.contact.code])
+	
+	# plot site+hz-level dissimilarities on right-hand side
+	par(new=TRUE) # keep the existing plot, and add to it
+	plot(phylo.site.hz, cex=0.65, font=1,
+	direction='left',no.margin=TRUE, label.offset=0.015, x.lim=c(0, dend.edge))
+	# save results of phylo environment
+	p.right <- get("last_plot.phylo", envir = .PlotPhyloEnv)
+	# annotate pedons with paralithic contact
+	tiplabels(pch=15, col=c('orange', NA)[paralithic.contact.code])
+	
+	# save pedon ID labels
+	d.hz.labels <- attr(d.hz, 'Labels')
+	d.site.hz.labels <- attr(d.site.hz, 'Labels')
+	
+	# get ordering of pedon IDs on each side
+	# left-hand side
+	left.new_order <- sapply(1:p.left$Ntip,
+	function(i) which(as.integer(p.left$yy[1:p.left$Ntip]) == i))
+	# right-hand side
+	right.new_order <- sapply(1:p.right$Ntip,
+	function(i) which(as.integer(p.right$yy[1:p.right$Ntip]) == i))
+	
+	# re-order right-hand side nodes so that they match the ordering of left-side nodes
+	left.right.converstion.order <- right.new_order[match(left.new_order, right.new_order)]
+	
+	# plot arrows
+	arrows(x0=arrow.left, y0=p.left$yy[left.new_order], x1=arrow.right, y1=p.right$yy[left.right.converstion.order], 
+	length=0.1, code=3, col='RoyalBlue')
+	
+	# annotate with type of dissimilarity calculation
+	mtext('Horizon Data', side=2, line=-1, font=2)
+	mtext('Horizon + Site Data', side=4, line=-1.5, font=2)
+	
+	# legend
+	legend('bottomright', legend=c('Paralithic Contact'), pch=15, col='orange', bty='n')
+	
+	# check: profiles missing lithic contact:
+	profile_id(loafercreek[which( ! loafercreek$paralithic.contact), ])
 }
+
 }
 
 \keyword{datasets}
