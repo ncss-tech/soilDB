@@ -150,6 +150,7 @@ asp=2, ylab='', xlab='')
 ## 
 ## compute dissimilarty 2 ways: 1) with hz data, 2) with hz+site data
 ##
+data(loafercreek)
 
 # just hz-level variables: need at least 2
 d.hz <- profile_compare(loafercreek, vars=c('clay', 'total_frags_pct'), k=0, max_d=100)
@@ -159,17 +160,36 @@ d.hz <- profile_compare(loafercreek, vars=c('clay', 'total_frags_pct'), k=0, max
 d.site.hz <- profile_compare(loafercreek, 
 vars=c('clay', 'total_frags_pct', 'paralithic.contact', 'lithic.contact'), k=0, max_d=100)
 
-library(ape)
-par(mfcol=c(1,2))
+if(require(ape)) {
 
+# plot hz-level dissimilarities on left-hand side
 plot(as.phylo(as.hclust(diana(d.hz))), cex=0.5, 
-no.margin=TRUE, label.offset=1)
+direction='right', no.margin=TRUE, label.offset=0.01, x.lim=c(0, 1.75))
+p.left <- get("last_plot.phylo", envir = .PlotPhyloEnv)
 
+# plot site+hz-level dissimilarities on right-hand side
+par(new=TRUE)
 plot(as.phylo(as.hclust(diana(d.site.hz))), cex=0.5, 
-direction='left',no.margin=TRUE, label.offset=0.01)
+direction='left',no.margin=TRUE, label.offset=0.01, x.lim=c(0, 1.75))
+p.right <- get("last_plot.phylo", envir = .PlotPhyloEnv)
+
+# save pedon ID labels
+d.site.hz.labels <- attr(d.site.hz, 'Labels')
+d.hz.labels <- attr(d.hz, 'Labels')
+
+# get ordering of pedon IDs on each side
+left.new_order <- sapply(1:p.left$Ntip,
+function(i) which(as.integer(p.left$yy[1:p.left$Ntip]) == i))
+right.new_order <- sapply(1:p.right$Ntip,
+function(i) which(as.integer(p.right$yy[1:p.right$Ntip]) == i))
+
+## this almost works... needs some more thought
+# connect with line segments
+segments(0.70, right.new_order, 1.08, left.new_order, col=rgb(0, 0, 0, alpha=0.5))
 
 # check: profiles missing lithic contact:
 profile_id(loafercreek[which( ! loafercreek$paralithic.contact), ])
+}
 }
 
 \keyword{datasets}
