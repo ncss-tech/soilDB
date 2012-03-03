@@ -163,7 +163,7 @@ rescale.result=TRUE)
 
 # better plotting of dendrograms
 if(require(ape)) {
-
+	
 	# cluster via divisive hierarchical algorithm
 	phylo.hz <- as.phylo(as.hclust(diana(d.hz)))
 	phylo.site.hz <- as.phylo(as.hclust(diana(d.site.hz)))
@@ -174,31 +174,36 @@ if(require(ape)) {
 	
 	# setup some geometry
 	# since our dissimilarity matrices are scaled to [0,1]
-	# we can hard-code some limits
-	dend.edge <- 1.7
-	arrow.left <- dend.edge * 0.4
-	arrow.right <- dend.edge - 0.62
-
+	# hard-code some limits
+	fig.x.max <- 2
+	arrow.left <- fig.x.max * 0.42 # hand-tune
+	arrow.right <- fig.x.max * 0.62 # hand-tune
+	arrow.length <- 0.1
+	
 	# plot hz-level dissimilarities on left-hand side
 	plot(phylo.hz, cex=0.65, font=1,
-	direction='right', no.margin=TRUE, label.offset=0.015, x.lim=c(0, dend.edge))
+	direction='rightwards', no.margin=TRUE, label.offset=0.015, x.lim=c(0, fig.x.max))
+	
 	# save results of phylo environment
 	p.left <- get("last_plot.phylo", envir = .PlotPhyloEnv)
 	# annotate pedons with paralithic contact
 	tiplabels(pch=15, col=c('orange', NA)[paralithic.contact.code])
 	
+	## TODO: how can we scale this dendrogram to match the previous one?
 	# plot site+hz-level dissimilarities on right-hand side
 	par(new=TRUE) # keep the existing plot, and add to it
 	plot(phylo.site.hz, cex=0.65, font=1,
-	direction='left',no.margin=TRUE, label.offset=0.015, x.lim=c(0, dend.edge))
+	direction='leftwards',no.margin=TRUE, label.offset=0.015, x.lim=c(0, fig.x.max))
+	
 	# save results of phylo environment
 	p.right <- get("last_plot.phylo", envir = .PlotPhyloEnv)
 	# annotate pedons with paralithic contact
 	tiplabels(pch=15, col=c('orange', NA)[paralithic.contact.code])
 	
-	# save pedon ID labels
-	d.hz.labels <- attr(d.hz, 'Labels')
-	d.site.hz.labels <- attr(d.site.hz, 'Labels')
+	# annotate with axis to assist with placement
+	s <- seq(from=0, to=fig.x.max, by=0.1)
+	abline(v=s, lty=3, col='grey')
+	text(x=s, y=max(p.left$yy)+1.5, labels=s, cex=0.65)
 	
 	# get ordering of pedon IDs on each side
 	# left-hand side
@@ -211,9 +216,13 @@ if(require(ape)) {
 	# re-order right-hand side nodes so that they match the ordering of left-side nodes
 	left.right.converstion.order <- right.new_order[match(left.new_order, right.new_order)]
 	
-	# plot arrows
-	arrows(x0=arrow.left, y0=p.left$yy[left.new_order], x1=arrow.right, y1=p.right$yy[left.right.converstion.order], 
-	length=0.1, code=3, col='RoyalBlue')
+	# plot connecting segments
+	segments(x0=arrow.left, y0=p.left$yy[left.new_order], x1=arrow.right, 
+  y1=p.right$yy[left.right.converstion.order], col='RoyalBlue')
+	
+	# plot helper arrows
+	arrows(x0=arrow.left, y0=p.left$yy[left.new_order], x1=arrow.left-arrow.length, y1=p.left$yy[left.new_order], col='RoyalBlue', code=2, length=0.1)
+	arrows(x0=arrow.right, y0=p.right$yy[right.new_order], x1=arrow.right+arrow.length, y1=p.right$yy[right.new_order], col='RoyalBlue', code=2, length=0.1)
 	
 	# annotate with type of dissimilarity calculation
 	mtext('Horizon Data', side=2, line=-1, font=2)
