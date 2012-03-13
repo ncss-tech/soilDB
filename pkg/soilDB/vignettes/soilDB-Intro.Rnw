@@ -26,8 +26,17 @@
 
 \begin{document}
 
-% sweave / knitr config
-\SweaveOpts{fig.path=figure/graphics-, cache.path=cache/graphics-, fig.align=center, dev=pdf, fig.width=5, fig.height=5, fig.show=hold, dpi=100, cache=TRUE, par=TRUE, warning=FALSE, message=FALSE, background=0.97;0.97;0.97}
+% knitr config
+\SweaveOpts{message=FALSE, warning=FALSE, background='#F7F7F7', cache=TRUE, cache.path='cache/', fig.path='cache/', dpi=100, fig.align='center'}
+
+% setup R session
+<<setup, echo=FALSE, results='hide'>>=
+options(replace.assign=TRUE, width=140)
+@
+
+
+
+
 
 \maketitle
 
@@ -219,7 +228,7 @@ s$pcs.clay <- profileApply(s, f.pcs.prop, prop='clay')
 @
 
 \begin{figure}[h]
-<<basic_plotting, dev=pdf, fig.width=12, fig.height=6, out.width=\linewidth, echo=TRUE, background=1;1;1>>=
+<<basic_plotting, fig.width=15, fig.height=5, out.width='\\linewidth'>>=
 # order by presence of paralithic materials/contact
 new.order <- order(s$diag_kind)
 plot(s, name='hzname', plot.order=new.order)
@@ -233,7 +242,7 @@ lines(x.pos, s$featdepb[new.order], lty=2, col='black')
 
 
 \begin{figure}[h]
-<<slicing-plot, dev=pdf, fig.width=10, fig.height=4, out.width=\linewidth, echo=TRUE, background=1;1;1>>=
+<<slicing-plot, fig.width=12, out.width='0.9\\linewidth'>>=
 # slice all hz data into 1-cm slices, from 0-100cm
 s.sliced <- slice(s, 0:100 ~ . )
 plot(s.sliced)
@@ -243,7 +252,7 @@ plot(s.sliced)
 
 
 \begin{figure}[h]
-<<indexing_1, dev=pdf, fig.width=12, fig.height=6, out.width=\linewidth, echo=TRUE, background=1;1;1>>=
+<<indexing_1, fig.width=12, out.width='0.9\\linewidth'>>=
 # extract and plot first 10 slices (0-10 cm)
 plot(s.sliced[, 1:10], name='hzname')
 @
@@ -251,7 +260,7 @@ plot(s.sliced[, 1:10], name='hzname')
 \end{figure}
 
 \begin{figure}[h]
-<<indexing_2, dev=pdf, fig.width=6, fig.height=3, out.width=0.5\linewidth, echo=TRUE, background=1;1;1>>=
+<<indexing_2, fig.width=6, out.width='0.9\\linewidth'>>=
 # extract and plot pedons 1-5, slices 25-50 (25-50 cm)
 plot(s.sliced[1:5, 25:50])
 @
@@ -259,7 +268,7 @@ plot(s.sliced[1:5, 25:50])
 \end{figure}
 
 \begin{figure}[h]
-<<indexing_3, dev=pdf, fig.width=10, fig.height=4, out.width=\linewidth, echo=TRUE, background=1;1;1>>=
+<<indexing_3, fig.width=12, out.width='0.9\\linewidth'>>=
 # extract and plot pedons with paralithic materials/contact, slices 50-75 (50-75 cm)
 plot(s.sliced[grep('paralithic', s.sliced$diag_kind, ignore.case=TRUE), 50:75])
 @
@@ -267,7 +276,7 @@ plot(s.sliced[grep('paralithic', s.sliced$diag_kind, ignore.case=TRUE), 50:75])
 \end{figure}
 
 \begin{figure}[ht]
-<<profile_plot_annotation, dev=pdf, fig.width=12, fig.height=6, out.width=\linewidth, echo=TRUE, background=1;1;1>>=
+<<profile_plot_annotation, fig.width=12, out.width='0.9\\linewidth'>>=
 ## applying a function by profile ##
 
 f <- function(x) {h <- horizons(x) ; max.clay <- which.max(h$clay) ; with(h[max.clay, ], (hzdept+hzdepb) / 2)}
@@ -285,7 +294,7 @@ lines(x.pos, max.clay.depth, col='black', lty=2)
 
 
 \begin{figure}[h]
-<<profile_aggregation, dev=pdf, fig.width=8, fig.height=4, out.width=0.75\linewidth, echo=TRUE, background=1;1;1>>=
+<<profile_aggregation, fig.width=8, out.width='0.6\\linewidth'>>=
 # all profiles: clay, sand, total RF
 a <- slab(s, ~ clay + sand + total_frags_pct)
 a$mid <- with(a, (top+bottom)/2)
@@ -311,7 +320,7 @@ p <- as.phylo(h.hclust)
 @
 
 \begin{figure}[h]
-<<dend_with_profiles, dev=pdf, fig.width=12, fig.height=6, out.width=\linewidth, echo=TRUE, dependson=gopheridge-demo, background=1;1;1>>=
+<<dend_with_profiles, fig.width=12, out.width='0.9\\linewidth'>>=
 # plot dendrogram + profiles
 par(mar=c(0,0,0,1))
 p.plot <- plot(p, cex=0.8, label.offset=-3, direction='up', y.lim=c(85,0), x.lim=c(1, length(s)+1), show.tip.label=FALSE)
@@ -368,10 +377,10 @@ p1 <- xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(1
 @
 
 \begin{figure}[h]
-<<pdf-dev, dev=pdf, out.width=0.5\linewidth, echo=FALSE, dependson=loafercreek-demo1, background=1;1;1>>=
+<<hz_proportions, fig.width=4, out.width='0.3\\linewidth'>>=
 	print(p1)
 @
-\caption{\label{pdf-dev} horizon proportions}
+\caption{\label{hz_proportions} horizon proportions}
 \end{figure}
 
 
@@ -448,35 +457,32 @@ paralithic.contact.code <- as.integer(loafercreek$paralithic.contact)+1
 # setup some geometry
 # since our dissimilarity matrices are scaled to [0,1]
 # hard-code some limits
-fig.x.max <- 2
-arrow.left <- fig.x.max * 0.42 # hand-tune
-arrow.right <- fig.x.max * 0.62 # hand-tune
+arrow.left <- 0.1
+arrow.right <- 0.9
 arrow.length <- 0.1
 
+# setup plot layout
+lo <- layout(matrix(c(1,3,2), ncol=3), widths=c(1, 1, 1)) # layout.show(lo)
+
 # plot hz-level dissimilarities on left-hand side
-plot(phylo.hz, cex=0.65, font=1,
-direction='rightwards', no.margin=TRUE, label.offset=0.015, x.lim=c(0, fig.x.max))
+plot(phylo.hz, cex=0.65, font=1, 
+direction='rightwards', label.offset=0.015)
+mtext('Horizon Data', side=3, line=-1.5, font=2, cex=0.75)
 
 # save results of phylo environment
 p.left <- get("last_plot.phylo", envir = .PlotPhyloEnv)
 # annotate pedons with paralithic contact
 tiplabels(pch=15, col=c('orange', NA)[paralithic.contact.code])
 
-## TODO: how can we scale this dendrogram to match the previous one?
 # plot site+hz-level dissimilarities on right-hand side
-par(new=TRUE) # keep the existing plot, and add to it
 plot(phylo.site.hz, cex=0.65, font=1,
-direction='leftwards',no.margin=TRUE, label.offset=0.015, x.lim=c(0, fig.x.max))
+direction='leftwards', no.margin=TRUE, label.offset=0.015)
+mtext('Horizon + Site Data', side=3, line=-1.5, font=2, cex=0.75)
 
 # save results of phylo environment
 p.right <- get("last_plot.phylo", envir = .PlotPhyloEnv)
 # annotate pedons with paralithic contact
 tiplabels(pch=15, col=c('orange', NA)[paralithic.contact.code])
-
-# annotate with axis to assist with placement
-s <- seq(from=0, to=fig.x.max, by=0.1)
-abline(v=s, lty=3, col='grey')
-text(x=s, y=max(p.left$yy)+1.5, labels=s, cex=0.65)
 
 # get ordering of pedon IDs on each side
 # left-hand side
@@ -489,20 +495,19 @@ function(i) which(as.integer(p.right$yy[1:p.right$Ntip]) == i))
 # re-order right-hand side nodes so that they match the ordering of left-side nodes
 left.right.converstion.order <- right.new_order[match(left.new_order, right.new_order)]
 
+# setup new plot region
+plot(0, 0, type='n', xlim=c(0,1), ylim=range(p.left$yy), axes=FALSE, xpd=FALSE)
+
 # plot connecting segments
 segments(x0=arrow.left, y0=p.left$yy[left.new_order], x1=arrow.right, 
 y1=p.right$yy[left.right.converstion.order], col='RoyalBlue')
 
 # plot helper arrows
-arrows(x0=arrow.left, y0=p.left$yy[left.new_order], x1=arrow.left-arrow.length, y1=p.left$yy[left.new_order], col='RoyalBlue', code=2, length=0.1)
-arrows(x0=arrow.right, y0=p.right$yy[right.new_order], x1=arrow.right+arrow.length, y1=p.right$yy[right.new_order], col='RoyalBlue', code=2, length=0.1)
+arrows(x0=arrow.left, y0=p.left$yy[left.new_order], x1=arrow.left-arrow.length, y1=p.left$yy[left.new_order], col='RoyalBlue', code=2, length=0.05)
+arrows(x0=arrow.right, y0=p.right$yy[right.new_order], x1=arrow.right+arrow.length, y1=p.right$yy[right.new_order], col='RoyalBlue', code=2, length=0.05)
 
-# annotate with type of dissimilarity calculation
-mtext('Horizon Data', side=2, line=-1, font=2)
-mtext('Horizon + Site Data', side=4, line=-1.5, font=2)
-
-# legend
-legend('bottomright', legend=c('Paralithic Contact'), pch=15, col='orange', bty='n')
+# legend: top-center
+legend('top', legend=c('Paralithic Contact'), pch=15, col='orange', bty='n')
 @
 
 
