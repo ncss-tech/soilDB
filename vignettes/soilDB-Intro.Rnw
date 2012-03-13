@@ -18,6 +18,9 @@
 \title{Soil Database Interface\\ \large{The \texttt{soilDB} package}}
 \author{D.E. Beaudette and J.M. Skovlin}
 
+% try Frank's suggestions:
+% http://biostat.mc.vanderbilt.edu/wiki/Main/KnitrHowto
+
 %  linux:
 %  knit('soilDB-Intro.Rnw') ; system('pdflatex soilDB-Intro.tex')
 
