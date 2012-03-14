@@ -449,7 +449,11 @@ d.site.hz <- profile_compare(loafercreek,
 vars=c('clay', 'total_frags_pct', 'paralithic.contact', 'slope'), k=0, max_d=100, 
 rescale.result=TRUE)
 
+# note: both dissimilarity matrices have been rescaled to [0,1]
+range(d.hz) ; range(d.site.hz)
+
 # cluster via divisive hierarchical algorithm
+# convert to 'phylo' class
 phylo.hz <- as.phylo(as.hclust(diana(d.hz)))
 phylo.site.hz <- as.phylo(as.hclust(diana(d.site.hz)))
 
@@ -468,7 +472,7 @@ arrow.length <- 0.1
 lo <- layout(matrix(c(1,3,2), ncol=3), widths=c(1, 1, 1)) # layout.show(lo)
 
 # plot hz-level dissimilarities on left-hand side
-plot(phylo.hz, cex=0.65, font=1, 
+plot(phylo.hz, cex=0.75, font=1, no.margin=TRUE,
 direction='rightwards', label.offset=0.015)
 mtext('Horizon Data', side=3, line=-1.5, font=2, cex=0.75)
 
@@ -478,7 +482,7 @@ p.left <- get("last_plot.phylo", envir = .PlotPhyloEnv)
 tiplabels(pch=15, col=c('orange', NA)[paralithic.contact.code])
 
 # plot site+hz-level dissimilarities on right-hand side
-plot(phylo.site.hz, cex=0.65, font=1,
+plot(phylo.site.hz, cex=0.75, font=1,
 direction='leftwards', no.margin=TRUE, label.offset=0.015)
 mtext('Horizon + Site Data', side=3, line=-1.5, font=2, cex=0.75)
 
@@ -499,6 +503,7 @@ function(i) which(as.integer(p.right$yy[1:p.right$Ntip]) == i))
 left.right.converstion.order <- right.new_order[match(left.new_order, right.new_order)]
 
 # setup new plot region
+par(mar=c(0,0,0,0))
 plot(0, 0, type='n', xlim=c(0,1), ylim=range(p.left$yy), axes=FALSE, xpd=FALSE)
 
 # plot connecting segments
@@ -512,6 +517,9 @@ arrows(x0=arrow.right, y0=p.right$yy[right.new_order], x1=arrow.right+arrow.leng
 # legend: top-center
 legend('top', legend=c('Paralithic Contact'), pch=15, col='orange', bty='n')
 @
+
+
+
 
 
 \end{document}
