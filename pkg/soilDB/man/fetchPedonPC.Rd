@@ -5,7 +5,6 @@
 \title{Fetch commonly used site/horizon data from a PedonPC database.}
 \description{Fetch commonly used site/horizon data from a PedonPC or local NASIS database, return as a SoilProfileCollection object.}
 \usage{fetchPedonPC(dsn)}
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{dsn}{The path to a 'pedon.mdb' or local database.}
 }
@@ -21,15 +20,14 @@
 # path to local PedonPC back-end DB
 dsn <- "S:/Service_Center/NRCS/pedon/pedon.mdb"
 
-# get standard horizon, pedon, site data as SoilProfileCollection object
+# get routinely used soil data SoilProfileCollection object
 f <- fetchPedonPC(dsn)
 
-# get extended data
-e <- get_extended_data_from_pedon_db(dsn)
-
-# join boolean flagged, diagnostic hz data in wide-format with @site
-# this works because e$diagHzBoolean has 1 row / peiid
-site(f) <- e$diagHzBoolean
+# alternatively, get these data from a local NASIS database
+# query depends on some pedon data, queried against the national database
+# note that you must setup this connection ahead of time
+# see inst/doc/setup_ODBC_local_NASIS.pdf
+f <- fetchNASIS()
 
 # plot only those profiles with densic contact
 plot(f[which(f$densic.contact), ], name='hzname')
