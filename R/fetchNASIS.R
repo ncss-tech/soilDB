@@ -2,6 +2,10 @@
 # convenience function for loading most commonly used information from local NASIS database
 fetchNASIS <- function() {
 	
+	# 0. test connection
+	if(! 'nasis_local' %in% names(odbcDataSources()))
+			stop('Local NASIS ODBC connection has not been setup. Please see the `setup_ODBC_local_NASIS.pdf` document included with this package.')
+	
 	# 1. load data in pieces
 	site_data <- get_site_data_from_NASIS_db()
 	hz_data <- get_hz_data_from_NASIS_db()
