@@ -1,13 +1,13 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 0.5-6
-Date: 2012-03-20
-Packaged: 2012-03-20; dylan
+Version: 0.5-7
+Date: 2012-04-16
+Packaged: 2012-04-16; dylan
 Author: D.E. Beaudette and J.M. Skovlin
 Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
 License: GPL (>= 2)
 LazyLoad: yes
-Depends: R (>= 2.9.0), methods, plyr, Hmisc, RODBC, aqp
+Depends: R (>= 2.9.0), methods, plyr, reshape, lattice, Hmisc, RODBC, aqp
 Suggests: rgdal, RCurl, XML, SSOAP, XMLSchema

@@ -11,17 +11,11 @@ format_SQL_in_statement <- function(x) {
 
 # clean-up results from SDA SOAP query, and return as DF
 cleanSDA <- function(i) {
-	# important: change the default behavior of data.frame and melt
-	opt.original <- options(stringsAsFactors = FALSE)
-	
 	# remove left-overs from SOAP result
 	i$.attrs <- NULL
 	
 	# convert NULL in NA
 	i[which(sapply(i, is.null))] <- NA
-	
-	# reset options:
-	options(opt.original)
 	
 	# convert list to DF
 	return(as.data.frame(i))
@@ -44,6 +38,9 @@ SDA_query <- function(q) {
 	# check for required packages
 	if(!require(SSOAP) | !require(XMLSchema))
 		stop('please install the `SSOAP` and `XMLSchema` packages', call.=FALSE)
+	
+	# important: change the default behavior of data.frame and melt
+	opt.original <- options(stringsAsFactors = FALSE)
 	
 	# setup server, action, and xmlns
 	s <- SOAPServer('SDMDataAccess.nrcs.usda.gov', '/Tabular/SDMTabularService.asmx')
@@ -68,7 +65,10 @@ SDA_query <- function(q) {
 	# write out to tempfile, and read back in
 	f <- tempfile()
 	write.table(df, file=f, col.names=TRUE, row.names=FALSE, quote=FALSE, sep='|')
-	df <- read.table(f, header=TRUE, as.is=TRUE, sep='|')
+	df <- read.table(f, header=TRUE, sep='|')
+	
+	# reset options:
+	options(opt.original)
 	
 	# done
 	return(df)
