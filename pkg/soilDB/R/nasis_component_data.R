@@ -72,7 +72,7 @@ fetchNASIS_component_data <- function() {
 	f <- join(f.comp, f.chorizon, by='coiid')
 	
 	cat('finding horizonation errors ...\n')
-	f.test <- ddply(f, .(coiid), test_hz_logic, topcol='hzdept_r', bottomcol='hzdepb_r', strict=TRUE)
+	f.test <- ddply(f, 'coiid', test_hz_logic, topcol='hzdept_r', bottomcol='hzdepb_r', strict=TRUE)
 	
 	# which are the good (valid) ones?
 	good.ids <- as.character(f.test$coiid[which(f.test$hz_logic_pass)])

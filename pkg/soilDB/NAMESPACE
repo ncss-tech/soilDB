@@ -1,2 +1,22 @@
+importFrom(plyr, 
+  ddply,
+  llply,
+  ldply,
+  dlply,
+  join
+)
+
+importFrom(reshape, 
+  melt,
+  melt.data.frame
+)
+
+importFrom(Hmisc, 
+  wtd.mean, 
+  wtd.var, 
+  wtd.quantile, 
+  wtd.rank, 
+  wtd.table
+)
 
 exportPattern("^[^\\.]")

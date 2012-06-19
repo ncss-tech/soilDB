@@ -1,6 +1,5 @@
 \name{get_hz_data_from_NASIS_db}
 \alias{get_hz_data_from_NASIS_db}
-\alias{getHzErrorsNASIS}
 
 \title{Extract Horizon Data from a local NASIS Database}
 \description{Get horizon-level data from a local NASIS database.}

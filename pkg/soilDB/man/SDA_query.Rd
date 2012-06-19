@@ -26,7 +26,11 @@ recently_updated <- res$areasymbol[res$exportcertdate > as.Date('2011-01-01')]
 }
 
 # basic query:
-\dontrun{res <- SDA_query("select cokey, compname, comppct_r from component where compname = 'yolo' and majcompflag = 'Yes' ")}
+\dontrun{
+res <- SDA_query("select cokey, compname, comppct_r 
+from component 
+where compname = 'yolo' and majcompflag = 'Yes' ")
+}
 
 # get tabular data based on result from spatial query:
 \dontrun{

@@ -6,7 +6,7 @@
 
 \docType{data}
 \title{LoaferCreek Soils}
-\description{A SoilProfileCollection Object of LoaferCreek Soils from the CA630 Soil Survey Area.}
+\description{A SoilProfileCollection Object of Loafercreek Soils from the CA630 Soil Survey Area.}
 \usage{data(loafercreek)}
 \format{\preformatted{Formal class 'SoilProfileCollection' [package "aqp"] with 7 slots
   ..@ idcol     : chr "pedon_id"
@@ -107,10 +107,9 @@
   .. ..$ featdept : int [1:169] 0 23 64 1 12 68 0 9 97 110 ...
   .. ..$ featdepb : int [1:169] 23 64 NA 12 68 100 9 97 110 NA ..
 }}
-\details{}
-\source{}
-\references{}
+
 \examples{
+require(reshape)
 data(loafercreek)
 
 ##
@@ -122,7 +121,7 @@ hz.tab <- rev(sort(table(loafercreek$hzname)))
 hz.tab[hz.tab > 5]
 
 # add generalized hz name
-loafercreek$hz <- rep('other', times=nrow(horizons(loafercreek)))
+loafercreek$hz <- rep(NA, times=nrow(horizons(loafercreek)))
 
 # generalize horizons
 loafercreek$hz[grep('O', loafercreek@horizons$hzname)] <- 'O'
@@ -141,10 +140,10 @@ id.var=c('top','bottom', 'contributing_fraction', 'all.profiles', 'variable'),
 variable_name='horizon')
 
 # plot horizon type proportions
+require(lattice)
 xyplot(top ~ value, groups=horizon, data=loafercreek.hz.agg.long, ylim=c(150, -5), 
-type=c('S','g'), horizontal=TRUE, subset=value > 0 & horizon != 'other', 
-asp=2, ylab='', xlab='')
-
+type=c('S','g'), horizontal=TRUE, subset=value > 0, asp=1.5, ylab='', xlab='', 
+auto.key=list(columns=5, lines=TRUE, points=FALSE))
 }
 
 \keyword{datasets}
