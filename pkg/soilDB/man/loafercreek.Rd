@@ -124,11 +124,11 @@ hz.tab[hz.tab > 5]
 loafercreek$hz <- rep(NA, times=nrow(horizons(loafercreek)))
 
 # generalize horizons
-loafercreek$hz[grep('O', loafercreek@horizons$hzname)] <- 'O'
-loafercreek$hz[grep('A', loafercreek@horizons$hzname)] <- 'A'
-loafercreek$hz[grep('Bt', loafercreek@horizons$hzname)] <- 'Bt'
-loafercreek$hz[grep('Cr', loafercreek@horizons$hzname)] <- 'Cr'
-loafercreek$hz[grep('R', loafercreek@horizons$hzname)] <- 'R'
+loafercreek$hz[grep('O', loafercreek$hzname)] <- 'O'
+loafercreek$hz[grep('A', loafercreek$hzname)] <- 'A'
+loafercreek$hz[grep('Bt', loafercreek$hzname)] <- 'Bt'
+loafercreek$hz[grep('Cr', loafercreek$hzname)] <- 'Cr'
+loafercreek$hz[grep('R', loafercreek$hzname)] <- 'R'
 
 # convert generalized hz to factor
 loafercreek$hz <- factor(loafercreek$hz)
