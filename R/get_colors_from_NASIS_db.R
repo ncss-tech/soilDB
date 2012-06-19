@@ -30,15 +30,15 @@ FROM (
 	
 	# mix and clean colors
 	cat('mixing and cleaning colors ...\n')
-	dry.colors.final <- ddply(dry.colors, c('phiid'), mix_and_clean_colors, .progress='text')
-	moist.colors.final <- ddply(moist.colors, c('phiid'), mix_and_clean_colors, .progress='text')
+	dry.colors.final <- ddply(dry.colors, 'phiid', mix_and_clean_colors, .progress='text')
+	moist.colors.final <- ddply(moist.colors, 'phiid', mix_and_clean_colors, .progress='text')
 	
 	# rename columns
 	names(dry.colors.final) <- c('phiid','d_r','d_g','d_b')
 	names(moist.colors.final) <- c('phiid','m_r','m_g','m_b')
 	
 	# merge into single df
-	d.final <- join(dry.colors.final, moist.colors.final, type='full')
+	d.final <- join(dry.colors.final, moist.colors.final, by='phiid', type='full')
 	
 	# clean-up
 	rm(d, d.rgb, dry.colors, moist.colors, dry.colors.final, moist.colors.final)

@@ -22,7 +22,7 @@ fetchPedonPC <- function(dsn) {
 	
 	# test for bad horizonation... flag, and remove
 	cat('finding horizonation errors ...\n')
-	f.test <- ddply(f, .(pedon_id), test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
+	f.test <- ddply(f, 'pedon_id', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
 	
 	# which are the good (valid) ones?
 	good.pedon.ids <- as.character(f.test$pedon_id[which(f.test$hz_logic_pass)])

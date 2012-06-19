@@ -1,3 +1,6 @@
+-------------------------- soilDB 0.6 (2012-06-19) ----------------------------
+* tidying up documentation, package dependencies, and NAMESPACE
+
 -------------------------- soilDB 0.5-6 (2012-04-16) ----------------------------
 * adding preimlinary functions for querying component data from local NASIS
 * fixed minor bug in SDA_query() and added some links to related documentation

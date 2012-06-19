@@ -29,8 +29,8 @@ FROM (
 	
 	# mix and clean colors
 	cat('mixing and cleaning colors ...\n')
-	dry.colors.final <- ddply(dry.colors, c('phiid'), mix_and_clean_colors, .progress='text')
-	moist.colors.final <- ddply(moist.colors, c('phiid'), mix_and_clean_colors, .progress='text')
+	dry.colors.final <- ddply(dry.colors, 'phiid', mix_and_clean_colors, .progress='text')
+	moist.colors.final <- ddply(moist.colors, 'phiid', mix_and_clean_colors, .progress='text')
 	
 	# rename columns
 	names(dry.colors.final) <- c('phiid','d_r','d_g','d_b')
