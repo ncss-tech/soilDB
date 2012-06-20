@@ -12,18 +12,14 @@ get_veg_from_MT_veg_db(dsn)
 }
 \details{This function currently works only on Windows.}
 \value{A dataframe.}
-\references{}
 \author{Jay M. Skovlin}
-\note{}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 \code{\link{get_veg_species_from_MT_veg_db}}, \code{\link{get_veg_other_from_MT_veg_db}}
 }
-\examples{
 
-}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{manip}

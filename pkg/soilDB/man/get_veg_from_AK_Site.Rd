@@ -10,9 +10,8 @@ get_veg_from_AK_Site(dsn)
 \arguments{
   \item{dsn}{file path the the AK Site access database}
 }
-\details{}
+
 \value{A dataframe with vegetation data in long format, linked to site ID.}
-\references{}
 \author{Dylan E. Beaudette}
 \note{This function currently works only on Windows.}
 
@@ -21,8 +20,7 @@ get_veg_from_AK_Site(dsn)
 \seealso{
 \code{\link{get_hz_data_from_pedon_db}}, \code{\link{get_site_data_from_pedon_db}}
 }
-\examples{
-}
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{manip}

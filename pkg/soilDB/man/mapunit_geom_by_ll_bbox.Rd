@@ -14,7 +14,6 @@ mapunit_geom_by_ll_bbox(bbox, source = 'sda')
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E Beaudette}
 \note{It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that are completely within the bounding box / overlap with the bbox. This function requires the `rgdal` (\url{http://cran.r-project.org/web/packages/rgdal/index.html}) package.}
-\seealso{}
 \examples{
 # fetch map unit geometry from a bounding-box:
 # 

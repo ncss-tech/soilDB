@@ -1,9 +1,0 @@
-%\VignetteIndexEntry{Setup Local NASIS ODBC}
-%\VignettePackage{soilDB}
-
-\documentclass[letterpaper]{article}
-\usepackage{hyperref}
-\usepackage{pdfpages}
-\begin{document}
-\includepdf[fitpaper=true,pages=-]{setup_ODBC_local_NASIS.pdf}
-\end{document}
