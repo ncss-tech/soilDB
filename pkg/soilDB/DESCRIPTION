@@ -1,7 +1,7 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 0.6-1
+Version: 0.6-2
 Date: 2012-06-20
 Packaged: 2012-06-20; dylan
 Author: D.E. Beaudette and J.M. Skovlin
