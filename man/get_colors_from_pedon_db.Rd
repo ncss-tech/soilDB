@@ -13,17 +13,14 @@ get_colors_from_pedon_db(dsn)
 }
 \details{This function currently works only on Windows.}
 \value{A dataframe with the results.}
-\references{}
 \author{Dylan E. Beaudette and Jay M. Skovlin}
-\note{}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 \code{\link{get_hz_data_from_pedon_db}}, \code{\link{get_site_data_from_pedon_db}}
 }
-\examples{
-}
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{manip}

@@ -10,11 +10,9 @@ get_site_data_from_pedon_db(dsn)
 \arguments{
   \item{dsn}{The path to a 'pedon.mdb' database.}
 }
-\details{}
+
 \value{A dataframe.}
-\references{
-%% ~put references to the literature/web site here ~
-}
+
 \author{Dylan E. Beaudette and Jay M. Skovlin}
 \note{This function currently works only on Windows.}
 
@@ -23,8 +21,7 @@ get_site_data_from_pedon_db(dsn)
 \seealso{
 \code{\link{get_hz_data_from_pedon_db}}, \code{\link{get_veg_from_AK_Site}}, 
 }
-\examples{
-}
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{manip}

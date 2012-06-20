@@ -6,11 +6,8 @@
 \usage{
 get_site_data_from_NASIS_db()
 }
-\details{}
+
 \value{A dataframe.}
-\references{
-%% ~put references to the literature/web site here ~
-}
 \author{Jay M. Skovlin and Dylan E. Beaudette}
 \note{This function currently works only on Windows.}
 
@@ -19,8 +16,7 @@ get_site_data_from_NASIS_db()
 \seealso{
 \code{\link{get_hz_data_from_NASIS_db}}, 
 }
-\examples{
-}
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{manip}

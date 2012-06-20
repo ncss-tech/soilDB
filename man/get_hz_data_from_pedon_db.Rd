@@ -12,7 +12,7 @@ get_hz_data_from_pedon_db(dsn)
 }
 \details{This function currently works only on Windows.}
 \value{A dataframe.}
-\references{}
+
 \author{Dylan E. Beaudette and Jay M. Skovlin}
 \note{NULL total rock fragment values are assumed to represent an _absense_ of rock fragments, and set to 0.}
 
@@ -21,9 +21,7 @@ get_hz_data_from_pedon_db(dsn)
 \seealso{
 \code{\link{get_colors_from_pedon_db}}, \code{\link{get_site_data_from_pedon_db}}
 }
-\examples{
 
-}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{manip}
