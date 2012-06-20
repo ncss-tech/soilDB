@@ -33,6 +33,10 @@ ORDER BY dbo.site.usiteid ;"
 	# close connection
 	odbcClose(channel)
 	
+	# test for no data
+	if(nrow(d) == 0)
+		stop('there are no pedons in your local database!')
+	
 	# warn if mixed datums
 	if(length(unique(na.omit(d$datum))) > 1)
 		message('NOTICE: multiple datums present')
