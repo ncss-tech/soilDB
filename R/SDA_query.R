@@ -18,7 +18,7 @@ cleanSDA <- function(i) {
 	i[which(sapply(i, is.null))] <- NA
 	
 	# convert list to DF
-	return(as.data.frame(i))
+	return(as.data.frame(i, stringsAsFactors=FALSE))
 }
 
 
