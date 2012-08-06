@@ -8,7 +8,7 @@ FROM (
 	ORDER BY phorizon.phiid, colormoistst;"
   
 	# setup connection to our pedon database
-	channel <- odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
+	channel <- odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
 	
 	# exec query
 	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)

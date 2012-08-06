@@ -4,6 +4,7 @@
 # 3. this can be overcome using CTE queries to local NASIS, but not Access
 # 4. cases where this happens:
 #    - multiple textures defined for a single horizon-- currently texture is not returned, see NASIS version for 50% fix
+#    - multiple lab sample numbers in phsample
 
 get_hz_data_from_pedon_db <- function(dsn) {
 	q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid as pedon_id, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
@@ -22,7 +23,7 @@ get_hz_data_from_pedon_db <- function(dsn) {
 	ORDER BY pedon.upedonid, phorizon.hzdept ASC;"
   
 	# setup connection to our pedon database
-	channel <- odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
+	channel <- odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
 	
 	# exec query
 	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
@@ -30,7 +31,7 @@ get_hz_data_from_pedon_db <- function(dsn) {
 	# test for duplicate horizons: due to bugs in our queries that lead to >1 row/hz
 	hz.tab <- table(d$phiid)
 	dupe.hz <- which(hz.tab > 1)
-	dupe.hz.pedon.ids <- d$pedon_id[d$phiid == names(hz.tab[dupe.hz])]
+	dupe.hz.pedon.ids <- d$pedon_id[d$phiid %in% names(hz.tab[dupe.hz])]
 	
 	if(length(dupe.hz) > 0) {
 		message(paste('notice: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), sep=''))
@@ -52,7 +53,7 @@ LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_deta
 	d.texture <- sqlQuery(channel, q.texture, stringsAsFactors=FALSE)
 	
 	# concat multiple textures/horizon into a single record
-	d.texture <- aggregate(texture_class ~ phiid, data=d.texture, FUN=function(x) do.call(paste, as.list(x)))
+	d.texture <- aggregate(texture_class ~ phiid, data=d.texture, FUN=function(x) do.call('paste', as.list(x)))
 	
 	# join
 	d <- join(d, d.texture, by='phiid', type='left')
