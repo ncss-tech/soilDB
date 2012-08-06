@@ -1,3 +1,10 @@
+-------------------------- soilDB 0.7 (2012-08-06) ----------------------------
+* updating for PedonPC 5.0 and NASIS 6.2
+  - site data contains the best-guessed corresponding row from the taxhistory table, based on:
+		1) most recent record, or 2) record with the least amount of missing data
+  - taxhistory data are now included in the output from get_extended_data_from_pedon_db()
+* package is not yet compatible with NASIS 6.2
+
 -------------------------- soilDB 0.6 (2012-06-19) ----------------------------
 * tidying up documentation, package dependencies, and NAMESPACE
 

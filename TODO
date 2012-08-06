@@ -8,3 +8,5 @@
 3. soil texture plotting / subsetting / flagging helper function or guidance
 
 4. finish NASIS component queries
+
+5. best-guess record from taxhistory table-- see fetchPedonPC() for current implementation
