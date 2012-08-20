@@ -107,7 +107,7 @@ ORDER BY pedon.peiid, sitegeomordesc.sitegeomdiid;"
    
 	
 	# setup connection to our local NASIS database
-	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='Re@d0n1y') 
+	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
 	
 	# exec queries
 	d.diagnostic <- sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
