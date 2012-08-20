@@ -25,7 +25,7 @@ LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomain
 ORDER BY dbo.site.usiteid ;"
 	
 	# setup connection to our local NASIS database
-	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='Re@d0n1y') 
+	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
 	
 	# exec query
 	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)

@@ -29,7 +29,7 @@ get_hz_data_from_NASIS_db <- function() {
   ORDER BY pedon.upedonid, phorizon.hzdept ASC;"
 	
 	# setup connection to our pedon database
-	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='Re@d0n1y')
+	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y')
 	
 	# exec query
 	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
