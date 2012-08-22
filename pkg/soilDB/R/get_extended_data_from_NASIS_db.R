@@ -98,13 +98,23 @@ LEFT OUTER JOIN (
   FROM (
 	(dbo.phorizon INNER JOIN dbo.phtexture ON dbo.phorizon.phiid = dbo.phtexture.phiidref) 
 	LEFT OUTER JOIN dbo.phtexturemod ON dbo.phtexture.phtiid = dbo.phtexturemod.phtiidref) 
-	LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 190) AS tmod ON dbo.phtexturemod.texmod =   tmod.ChoiceValue;"
+	LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 190) AS tmod ON dbo.phtexturemod.texmod = tmod.ChoiceValue;"
 	
 	# get geomorphic features
 	q.geomorph <- "SELECT pedon.peiid, sitegeomordesc.sitegeomdiid, sitegeomordesc.geomfeatid, sitegeomordesc.existsonfeat, sitegeomordesc.geomfmod, geomorfeat.geomfname, CASE WHEN dbo.sitegeomordesc.geomfeatid=1 THEN 'landform' WHEN dbo.sitegeomordesc.geomfeatid=2 THEN 'landscape' WHEN dbo.sitegeomordesc.geomfeatid=3 THEN 'microfeature' WHEN dbo.sitegeomordesc.geomfeatid=4 THEN 'anthropogenic feature' END AS feature_type
 	FROM ((geomorfeat INNER JOIN (site INNER JOIN sitegeomordesc ON site.siteiid = sitegeomordesc.siteiidref) ON (geomorfeat.geomftiidref = sitegeomordesc.geomfeatid) AND (geomorfeat.geomfiid = sitegeomordesc.geomfiidref)) INNER JOIN siteobs ON site.siteiid = siteobs.siteiidref) INNER JOIN pedon ON (siteobs.siteobsiid = pedon.siteobsiidref) AND (siteobs.siteobsiid = pedon.siteobsiidref)
 ORDER BY pedon.peiid, sitegeomordesc.sitegeomdiid;"
    
+	# get petaxhistory data 
+	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, petaxhistory.taxonname as sampled_as, tk.ChoiceName as taxon_kind, ss.ChoiceName as series_status, ps.ChoiceName as part_size_class, ts.ChoiceName as tax_subgroup, te.ChoiceName as tax_edition, osdtypelocflag
+  	FROM (((((dbo.petaxhistory 
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 127) AS ps ON petaxhistory.taxpartsize = ps.ChoiceValue)
+  		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 187) AS ts ON petaxhistory.taxsubgrp = ts.ChoiceValue)
+  		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 102) AS tk ON petaxhistory.taxonkind = tk.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 4956) AS ss ON petaxhistory.seriesstatus = ss.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 2030) AS te ON petaxhistory.seriesstatus = te.ChoiceValue)
+	ORDER BY petaxhistory.peiidref;"
+	
 	
 	# setup connection to our local NASIS database
 	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
@@ -114,6 +124,7 @@ ORDER BY pedon.peiid, sitegeomordesc.sitegeomdiid;"
 	d.rf.summary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
 	d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
 	d.geomorph <- sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
+	d.taxhistory <- sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
 	
 	# close connection
 	odbcClose(channel)
@@ -122,6 +133,6 @@ ORDER BY pedon.peiid, sitegeomordesc.sitegeomdiid;"
 	d.diag.boolean <- diagHzLongtoWide(d.diagnostic)
 	
 	# return a list of results
-	return(list(diagnostic=d.diagnostic, diagHzBoolean=d.diag.boolean, frag_summary=d.rf.summary, texmodifier=d.hz.texmod, geomorph=d.geomorph))
+	return(list(diagnostic=d.diagnostic, diagHzBoolean=d.diag.boolean, frag_summary=d.rf.summary, texmodifier=d.hz.texmod, geomorph=d.geomorph, taxhistory=d.taxhistory))
 }
 

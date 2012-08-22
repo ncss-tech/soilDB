@@ -33,13 +33,13 @@ ORDER BY dmudesc;"
 	
 	# exec query
 	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
+
+	# close connection
+	odbcClose(channel)
 	
 	# test for no data
 	if(nrow(d) == 0)
 		stop('there are no NASIS components in your local database!')
-	
-	# close connection
-	odbcClose(channel)
 	
 	# done
 	return(d)
