@@ -38,13 +38,16 @@ diagHzLongtoWide <- function(d) {
 ## try and pick the best possible taxhistory record
 pickBestTaxHistory <- function(d) {
 	
+	# add a method field
+	d$selection_method <- NA
+	
 	# try to get the most recent:
 	d.order <- order(d$classdate, decreasing=TRUE)
 	
 	# if there are multiple (unique) dates, return the most recent
 	if(length(unique(d$classdate)) > 1) {
-		print('using most recent')
-		return(d[d.order[1]], )
+		d$selection_method <- 'most recent'
+		return(d[d.order[1], ])
 	}
 	
 	# otherwise, return the record with the least number of missing cells
@@ -52,7 +55,7 @@ pickBestTaxHistory <- function(d) {
 	n.na <- apply(d, 1, function(i) length(which(is.na(i))))
 	best.record <- which.min(n.na)
 	
-	# print('using least missing criteria')
+	d$selection_method <- 'least missing data'
 	return(d[best.record, ])
 }
 

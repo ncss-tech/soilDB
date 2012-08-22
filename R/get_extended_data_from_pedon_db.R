@@ -99,7 +99,7 @@ FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeom
 ORDER BY peiid ASC;"
 
 	# get petaxhistory data 
-	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, petaxhistory.taxonname as sampled_as, tk.choice as taxon_kind, ss.choice as series_status, ps.choice_label as part_size_class, ts.choice_label as tax_subgroup, te.choice_label as tax_edition, osdtypelocflag
+	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, petaxhistory.taxonname as sampled_as, tk.choice_label as taxon_kind, ss.choice_label as series_status, ps.choice_label as part_size_class, ts.choice_label as tax_subgroup, te.choice_label as tax_edition, osdtypelocflag
   	FROM (((((petaxhistory 
 		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 127) AS ps ON petaxhistory.taxpartsize = ps.choice_id)
   		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 187) AS ts ON petaxhistory.taxsubgrp = ts.choice_id)
