@@ -1,7 +1,8 @@
--------------------------- soilDB 0.8-1 (2012-08-22) ----------------------------
+-------------------------- soilDB 0.8-2 (2012-08-23) ----------------------------
 * compatible with NASIS 6.2
 * bug fixes
 * taxhistory selection method is preserved in the results
+* 'taxonname' is used instead of 'sampled_as' / 'correlated_as'
 ! needs further testing
 
 -------------------------- soilDB 0.8 (2012-08-20) ----------------------------

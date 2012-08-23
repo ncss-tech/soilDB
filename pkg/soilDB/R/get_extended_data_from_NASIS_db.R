@@ -106,7 +106,7 @@ LEFT OUTER JOIN (
 ORDER BY pedon.peiid, sitegeomordesc.sitegeomdiid;"
    
 	# get petaxhistory data 
-	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, petaxhistory.taxonname as sampled_as, tk.ChoiceName as taxon_kind, ss.ChoiceName as series_status, ps.ChoiceName as part_size_class, ts.ChoiceName as tax_subgroup, te.ChoiceName as tax_edition, osdtypelocflag
+	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, classtype, taxonname, tk.ChoiceName as taxon_kind, ss.ChoiceName as series_status, ps.ChoiceName as part_size_class, ts.ChoiceName as tax_subgroup, te.ChoiceName as tax_edition, osdtypelocflag
   	FROM (((((dbo.petaxhistory 
 		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 127) AS ps ON petaxhistory.taxpartsize = ps.ChoiceValue)
   		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 187) AS ts ON petaxhistory.taxsubgrp = ts.ChoiceValue)
