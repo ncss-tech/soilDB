@@ -1,3 +1,5 @@
+# horizon checking may be too strict
+
 fetchPedonPC <- function(dsn) {
 	
 	# 1. load data in pieces

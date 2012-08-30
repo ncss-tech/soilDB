@@ -1,4 +1,5 @@
 # updated to NASIS 6.2 -- needs testing
+# horizon checking may be too strict
 
 # convenience function for loading most commonly used information from local NASIS database
 fetchNASIS <- function() {
