@@ -1,3 +1,7 @@
+-------------------------- soilDB 0.8-3 (2012-09-28) ----------------------------
+* site-level data: {elev, slope, aspect} are now named {elev_field, slope_field, aspect_field}
+  - this affects the data returned by fetchNASIS() and fetchPedonPC()
+
 -------------------------- soilDB 0.8-2 (2012-08-23) ----------------------------
 * compatible with NASIS 6.2
 * bug fixes
