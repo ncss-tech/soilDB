@@ -1,3 +1,9 @@
+-------------------------- soilDB 0.9 (2012-10-24) ----------------------------
+* added a surface fragment summary "surf_frag_summary" to the results of get_extended_data_from_NASIS()
+* integrated surf_frag_summary data into data returned from fetchNASIS(), stored in @site
+* minor bug-fix in horizon-level rock fragment summary SQL which previously mis-classified BD as ST in some, rare cases
+
+
 -------------------------- soilDB 0.8-3 (2012-09-28) ----------------------------
 * site-level data: {elev, slope, aspect} are now named {elev_field, slope_field, aspect_field}
   - this affects the data returned by fetchNASIS() and fetchPedonPC()
@@ -7,7 +13,7 @@
 * bug fixes
 * taxhistory selection method is preserved in the results
 * 'taxonname' is used instead of 'sampled_as' / 'correlated_as'
-! needs further testing
+	! seems to work, but needs further testing
 
 -------------------------- soilDB 0.8 (2012-08-20) ----------------------------
 * updating for PedonPC 5.0 and NASIS 6.2

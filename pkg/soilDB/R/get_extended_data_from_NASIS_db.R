@@ -1,4 +1,4 @@
-## TODO: need to be careful about how l,rv,h are used here...
+## TODO: need to be careful about how {l, rv, h} are used here...
 
 get_extended_data_from_NASIS_db <- function(dsn) {
 	# query diagnostic horizons, usually a 1:many relationship with pedons
@@ -7,91 +7,190 @@ FROM dbo.pediagfeatures
 	LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE DomainID = 147) AS dfk ON dbo.pediagfeatures.featkind = dfk.ChoiceValue
 	ORDER BY dbo.pediagfeatures.peiidref, dbo.pediagfeatures.featdept;"
   
+	q.surf.rf.summary <- "SELECT dbo.pedon.peiid, 
+
+CASE WHEN f1_gr.gravel IS NULL THEN 0.0 ELSE f1_gr.gravel END as surface_gravel, 
+CASE WHEN f2_cb.cobbles IS NULL THEN 0.0 ELSE f2_cb.cobbles END as surface_cobbles, 
+CASE WHEN f3.stones IS NULL THEN 0.0 ELSE f3.stones END as surface_stones, 
+CASE WHEN f4.boulders IS NULL THEN 0.0 ELSE f4.boulders END as surface_boulders,
+CASE WHEN f5.channers IS NULL THEN 0.0 ELSE f5.channers END as surface_channers, 
+CASE WHEN f6.flagstones IS NULL THEN 0.0 ELSE f6.flagstones END as surface_flagstones,
+CASE WHEN f1_pgr.gravel IS NULL THEN 0.0 ELSE f1_pgr.gravel END as surface_paragravel,
+CASE WHEN f2_pcb.cobbles IS NULL THEN 0.0 ELSE f2_pcb.cobbles END as surface_paracobbles
+
+FROM ((((((((((
+
+dbo.pedon
+
+INNER JOIN dbo.siteobs 
+ON siteobsiid = pedon.siteobsiidref)
+
+LEFT OUTER JOIN
+(
+SELECT DISTINCT siteobsiidref FROM dbo.sitesurffrags
+) as p ON p.siteobsiidref = siteobs.siteobsiid)
+
+LEFT OUTER JOIN (
+		SELECT siteobsiidref, Sum(sfragcov) AS gravel
+		FROM dbo.sitesurffrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		WHERE (sfragsize_r <= 76 OR sfragsize_h <= 76) AND (sfragshp != 1 OR sfragshp IS NULL) 
+		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
+		GROUP BY siteobsiidref
+	) as f1_gr ON p.siteobsiidref = f1_gr.siteobsiidref)
+
+LEFT OUTER JOIN (
+		SELECT siteobsiidref, Sum(sfragcov) AS gravel
+		FROM dbo.sitesurffrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		WHERE (sfragsize_r <= 76 OR sfragsize_h <= 76) AND (sfragshp != 1 OR sfragshp IS NULL)
+		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
+		GROUP BY siteobsiidref
+	) as f1_pgr ON p.siteobsiidref = f1_pgr.siteobsiidref)
+
+	LEFT OUTER JOIN (
+		SELECT siteobsiidref, Sum(sfragcov) AS cobbles
+		FROM dbo.sitesurffrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		WHERE (sfragsize_r >= 76 OR sfragsize_l >= 76) AND (sfragsize_r <= 250 OR sfragsize_h <= 250) AND (sfragshp != 1 OR sfragshp IS NULL)
+		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
+		GROUP BY siteobsiidref
+	) as f2_cb ON p.siteobsiidref = f2_cb.siteobsiidref)
+
+	LEFT OUTER JOIN (
+		SELECT siteobsiidref, Sum(sfragcov) AS cobbles
+		FROM dbo.sitesurffrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		WHERE (sfragsize_r >= 76 OR sfragsize_l >= 76) AND (sfragsize_r <= 250 OR sfragsize_h <= 250) AND (sfragshp != 1 OR sfragshp IS NULL)
+		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
+		GROUP BY siteobsiidref
+	) as f2_pcb ON p.siteobsiidref = f2_pcb.siteobsiidref)
+
+	LEFT OUTER JOIN (
+		SELECT siteobsiidref, Sum(sfragcov) AS stones
+		FROM dbo.sitesurffrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		WHERE (sfragsize_r >= 250 OR sfragsize_l >= 250) AND (sfragsize_r <= 600 OR sfragsize_h <= 600) AND (sfragshp != 1 OR sfragshp IS NULL)
+		GROUP BY siteobsiidref
+	) as f3 ON p.siteobsiidref = f3.siteobsiidref)
+
+	LEFT OUTER JOIN (
+		SELECT siteobsiidref, Sum(sfragcov) AS boulders
+		FROM dbo.sitesurffrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		WHERE sfragsize_r >= 600 OR sfragsize_l >= 600
+		GROUP BY siteobsiidref
+	) as f4 ON p.siteobsiidref = f4.siteobsiidref)
+
+	LEFT OUTER JOIN (
+		SELECT siteobsiidref, Sum(sfragcov) AS channers
+		FROM dbo.sitesurffrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		WHERE (sfragsize_r <= 76 OR sfragsize_h <= 76) AND sfragshp = 1
+		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
+		GROUP BY siteobsiidref
+	) as f5 ON p.siteobsiidref = f5.siteobsiidref)
 	
-	# this query is resistant to dupes
+	LEFT OUTER JOIN (
+		SELECT siteobsiidref, Sum(sfragcov) AS flagstones
+		FROM dbo.sitesurffrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		WHERE (sfragsize_r >= 150 OR sfragsize_l >= 150) AND (sfragsize_r <= 380 OR sfragsize_h <= 380) AND sfragshp = 1
+		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
+		GROUP BY siteobsiidref
+	) as f6 ON p.siteobsiidref = f6.siteobsiidref)
+	
+	ORDER BY dbo.pedon.peiid;"
+	
+	
 	# query rock-fragment summary by horizon
-	q.rf.summary <- "SELECT DISTINCT dbo.phfrags.phiidref as phiid, 
+	q.rf.summary <- "SELECT p.phiidref as phiid, 
 
 CASE WHEN f1_gr.gravel IS NULL THEN 0.0 ELSE f1_gr.gravel END as gravel, 
-CASE WHEN f1_pgr.gravel IS NULL THEN 0.0 ELSE f1_pgr.gravel END as paragravel,
-CASE WHEN f2_cb.cobbles IS NULL THEN 0.0 ELSE f2_cb.cobbles END as cobbles, 
-CASE WHEN f2_pcb.cobbles IS NULL THEN 0.0 ELSE f2_pcb.cobbles END as paracobbles,
+CASE WHEN f2_cb.cobbles IS NULL THEN 0.0 ELSE f2_cb.cobbles END as cobbles,
 CASE WHEN f3.stones IS NULL THEN 0.0 ELSE f3.stones END as stones, 
-CASE WHEN f4.boulders IS NULL THEN 0.0 ELSE f4.boulders END as boulders, 
+CASE WHEN f4.boulders IS NULL THEN 0.0 ELSE f4.boulders END as boulders,
+CASE WHEN f1_pgr.gravel IS NULL THEN 0.0 ELSE f1_pgr.gravel END as paragravel,
+CASE WHEN f2_pcb.cobbles IS NULL THEN 0.0 ELSE f2_pcb.cobbles END as paracobbles,
 CASE WHEN f5.channers IS NULL THEN 0.0 ELSE f5.channers END as channers, 
 CASE WHEN f6.flagstones IS NULL THEN 0.0 ELSE f6.flagstones END as flagstones
 
 FROM ((((((((
-dbo.phfrags
-LEFT OUTER JOIN (
-		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS gravel
-		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
-		WHERE ((dbo.phfrags.fragsize_h <= 76) OR (dbo.phfrags.fragsize_r <= 76 And dbo.phfrags.fragsize_r >= 2))
-		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
-		GROUP BY dbo.phfrags.phiidref
-	) as f1_gr ON dbo.phfrags.phiidref = f1_gr.phiidref)
+(
+SELECT DISTINCT phiidref FROM dbo.phfrags
+) as p
 
 LEFT OUTER JOIN (
-		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS gravel
+		SELECT phiidref, Sum(fragvol) AS gravel
 		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
-		WHERE (dbo.phfrags.fragsize_h <= 76 OR (dbo.phfrags.fragsize_r <= 76 And dbo.phfrags.fragsize_r >= 2))
-		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
-		GROUP BY dbo.phfrags.phiidref
-	) as f1_pgr ON dbo.phfrags.phiidref = f1_pgr.phiidref)
-
-	LEFT OUTER JOIN (
-		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS cobbles
-		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
-		WHERE ((dbo.phfrags.fragsize_l >= 75 AND dbo.phfrags.fragsize_h <= 250) OR (dbo.phfrags.fragsize_r >= 76 And dbo.phfrags.fragsize_r <= 250))
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		WHERE (fragsize_r <= 76 OR fragsize_h <= 76) AND (fragshp != 1 OR fragshp IS NULL)
 		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
-		GROUP BY dbo.phfrags.phiidref
-	) as f2_cb ON dbo.phfrags.phiidref = f2_cb.phiidref)
+		GROUP BY phiidref
+	) as f1_gr ON p.phiidref = f1_gr.phiidref)
 
-	LEFT OUTER JOIN (
-		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS cobbles
+LEFT OUTER JOIN (
+		SELECT phiidref, Sum(fragvol) AS gravel
 		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
-		WHERE ((dbo.phfrags.fragsize_l >= 75 AND dbo.phfrags.fragsize_h <= 250) OR (dbo.phfrags.fragsize_r >= 76 And dbo.phfrags.fragsize_r <= 250))
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		WHERE (fragsize_r <= 76 OR fragsize_h <= 76) AND (fragshp != 1 OR fragshp IS NULL)
 		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
-		GROUP BY dbo.phfrags.phiidref
-	) as f2_pcb ON dbo.phfrags.phiidref = f2_pcb.phiidref)
+		GROUP BY phiidref
+	) as f1_pgr ON p.phiidref = f1_pgr.phiidref)
 
 	LEFT OUTER JOIN (
-		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS stones
+		SELECT phiidref, Sum(fragvol) AS cobbles
 		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
-		WHERE (((dbo.phfrags.fragsize_l)>=250) OR ((dbo.phfrags.fragsize_r)>=250) OR (((dbo.phfrags.fragsize_l)>=380) AND (dbo.phfrags.fragshp)=1) OR   (((dbo.phfrags.fragsize_r)>=380) AND ((dbo.phfrags.fragshp)=1)))
-		GROUP BY dbo.phfrags.phiidref
-	) as f3 ON dbo.phfrags.phiidref = f3.phiidref)
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		WHERE (fragsize_r >= 76 OR fragsize_l >= 76) AND (fragsize_r <= 250 OR fragsize_h <= 250) AND (fragshp != 1 OR fragshp IS NULL)
+		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
+		GROUP BY phiidref
+	) as f2_cb ON p.phiidref = f2_cb.phiidref)
 
 	LEFT OUTER JOIN (
-		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS boulders
+		SELECT phiidref, Sum(fragvol) AS cobbles
 		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
-		WHERE (((dbo.phfrags.fragsize_l)>=600) OR (((dbo.phfrags.fragsize_r)>=600)  AND ((dbo.phfrags.fragshp)=1)))
-		GROUP BY dbo.phfrags.phiidref
-	) as f4 ON dbo.phfrags.phiidref = f4.phiidref)
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		WHERE (fragsize_r >= 76 OR fragsize_l >= 76) AND (fragsize_r <= 250 OR fragsize_h <= 250) AND (fragshp != 1 OR fragshp IS NULL)
+		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
+		GROUP BY phiidref
+	) as f2_pcb ON p.phiidref = f2_pcb.phiidref)
 
 	LEFT OUTER JOIN (
-		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS channers
+		SELECT phiidref, Sum(fragvol) AS stones
 		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
-		WHERE (((dbo.phfrags.fragsize_l)>=2) AND ((dbo.phfrags.fragsize_h)<=150) AND ((dbo.phfrags.fragshp)=1)) OR (((dbo.phfrags.fragshp)=1) AND   ((dbo.phfrags.fragsize_r)>=2 And (dbo.phfrags.fragsize_r)<=150))
-		GROUP BY dbo.phfrags.phiidref
-	) as f5 ON dbo.phfrags.phiidref = f5.phiidref)
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		WHERE (fragsize_r >= 250 OR fragsize_l >= 250) AND (fragsize_r <= 600 OR fragsize_h <= 600) AND (fragshp != 1 OR fragshp IS NULL)
+		GROUP BY phiidref
+	) as f3 ON p.phiidref = f3.phiidref)
+
+	LEFT OUTER JOIN (
+		SELECT phiidref, Sum(fragvol) AS boulders
+		FROM dbo.phfrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		WHERE fragsize_r >= 600 OR fragsize_l >= 600
+		GROUP BY phiidref
+	) as f4 ON p.phiidref = f4.phiidref)
+
+	LEFT OUTER JOIN (
+		SELECT phiidref, Sum(fragvol) AS channers
+		FROM dbo.phfrags
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		WHERE (fragsize_r <= 76 OR fragsize_h <= 76) AND fragshp = 1
+		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
+		GROUP BY phiidref
+	) as f5 ON p.phiidref = f5.phiidref)
 	
 	LEFT OUTER JOIN (
-		SELECT dbo.phfrags.phiidref, Sum(dbo.phfrags.fragvol) AS flagstones
+		SELECT phiidref, Sum(fragvol) AS flagstones
 		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON phfrags.fraghard = m.ChoiceValue
-		WHERE (((dbo.phfrags.fragsize_l)>=150) AND ((dbo.phfrags.fragsize_h)<=380) AND ((dbo.phfrags.fragshp)=1)) OR (((dbo.phfrags.fragshp)=1) AND   ((dbo.phfrags.fragsize_r)>=150 And (dbo.phfrags.fragsize_r)<=380))
-		GROUP BY dbo.phfrags.phiidref
-	) as f6 ON dbo.phfrags.phiidref = f6.phiidref)
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		WHERE (fragsize_r >= 150 OR fragsize_l >= 150) AND (fragsize_r <= 380 OR fragsize_h <= 380) AND fragshp = 1
+		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
+		GROUP BY phiidref
+	) as f6 ON p.phiidref = f6.phiidref)
 	
-	ORDER BY dbo.phfrags.phiidref;"
+	ORDER BY p.phiidref;"
 
 	# get horizon texture modifiers
 	q.hz.texmod <- "SELECT dbo.phorizon.peiidref AS peiid, dbo.phorizon.phiid AS phiid, dbo.phtexture.phtiid AS phtiid, dbo.phtexturemod.seqnum, tmod.ChoiceName as texture_modifier 
@@ -122,6 +221,7 @@ ORDER BY pedon.peiid, sitegeomordesc.sitegeomdiid;"
 	# exec queries
 	d.diagnostic <- sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
 	d.rf.summary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
+	d.surf.rf.summary <- sqlQuery(channel, q.surf.rf.summary, stringsAsFactors=FALSE)
 	d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
 	d.geomorph <- sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
 	d.taxhistory <- sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
@@ -133,6 +233,6 @@ ORDER BY pedon.peiid, sitegeomordesc.sitegeomdiid;"
 	d.diag.boolean <- diagHzLongtoWide(d.diagnostic)
 	
 	# return a list of results
-	return(list(diagnostic=d.diagnostic, diagHzBoolean=d.diag.boolean, frag_summary=d.rf.summary, texmodifier=d.hz.texmod, geomorph=d.geomorph, taxhistory=d.taxhistory))
+	return(list(diagnostic=d.diagnostic, diagHzBoolean=d.diag.boolean, frag_summary=d.rf.summary, surf_frag_summary=d.surf.rf.summary, texmodifier=d.hz.texmod, geomorph=d.geomorph, taxhistory=d.taxhistory))
 }
 
