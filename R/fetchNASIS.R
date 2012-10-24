@@ -57,6 +57,9 @@ fetchNASIS <- function() {
 	# add diagnostic boolean data into @site
 	site(f) <- extended_data$diagHzBoolean
 	
+	# add surface frag summary
+	site(f) <- extended_data$surf_frag_summary
+	
 	# load diagnostic horizons into @diagnostic: note that this requires one additional join 
 	# and implicitly filters diagnostic hz by our subset of f
 	diagnostic_hz(f) <- join(site(f)[, c('pedon_id','peiid')], extended_data$diagnostic, by='peiid', type='left')
