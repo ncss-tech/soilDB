@@ -1,8 +1,8 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 0.9
-Date: 2012-10-24
+Version: 0.9-1
+Date: 2012-11-27
 Packaged: 2012-10-24; dylan
 Author: D.E. Beaudette and J.M. Skovlin
 Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
