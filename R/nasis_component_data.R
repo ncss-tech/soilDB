@@ -1,14 +1,16 @@
 ##
-## 13 March, 2012
+## December, 2012
 ## D.E. Beaudette
+## J.M. Scovlin
 ## 
 ## prototype functions for extracting component data from local NASIS
 ##
+## requires that named tables are populated in the local NASIS database
 
 get_component_data_from_NASIS_db <- function() {
-	q <- "SELECT dmudesc, coiid, compname, comppct_r, ck.ChoiceName as compkind, majcompflag, localphase, slope_l, slope_r, slope_h, tfact, wei, weg, dc.ChoiceName as drainage_class, elev_l, elev_r, elev_h, aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, reannualprecip_l, reannualprecip_r, reannualprecip_h, ffd_l, ffd_r, ffd_h, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, fa.ChoiceName as frost_action, hydgrp, crc.ChoiceName as corcon, crs.ChoiceName as corsteel, taxclname, txo.ChoiceName as taxorder, txs.ChoiceName as taxsuborder, txgg.ChoiceName as  taxgrtgroup, txsg.ChoiceName as taxsubgrp, txps.ChoiceName as taxpartsize, txpsm.ChoiceName as taxpartsizemod, txact.ChoiceName as taxceactcl, txr.ChoiceName as taxreaction, txtc.ChoiceName as taxtempcl, txmc.ChoiceName as taxmoistscl, txtr.ChoiceName as taxtempregime, txed.ChoiceName as soiltaxedition
-FROM (((((((((((((((((datamapunit 
-	INNER JOIN component ON datamapunit.dmuiid = component.dmuiidref
+	q <- "SELECT dmudesc, coiid, compname, comppct_r, ck.ChoiceName as compkind, majcompflag, localphase, slope_r, tfact, wei, weg, dc.ChoiceName as drainage_class, elev_r, aspectrep, map_r,  reannualprecip_r, ffd_r, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, fa.ChoiceName as frost_action, hydgrp, crc.ChoiceName as corcon, crs.ChoiceName as corsteel, taxclname, txo.ChoiceName as taxorder, txs.ChoiceName as taxsuborder, txgg.ChoiceName as  taxgrtgroup, txsg.ChoiceName as taxsubgrp, txps.ChoiceName as taxpartsize, txpsm.ChoiceName as taxpartsizemod, txact.ChoiceName as taxceactcl, txr.ChoiceName as taxreaction, txtc.ChoiceName as taxtempcl, txmc.ChoiceName as taxmoistscl, txtr.ChoiceName as taxtempregime, txed.ChoiceName as soiltaxedition, nationalmusym, muname, mk.ChoiceName as mukind, musym, ms.ChoiceName as mustatus, fc.ChoiceLabel as farmlndcl, dmuiid, muiid
+FROM (((((((((((((((((((((lmapunit INNER JOIN (mapunit INNER JOIN (correlation INNER JOIN (datamapunit 
+	INNER JOIN component ON datamapunit.dmuiid = component.dmuiidref) ON correlation.dmuiidref = datamapunit.dmuiid) ON mapunit.muiid = correlation.muiidref) ON lmapunit.muiidref = mapunit.muiid)	
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 148) AS dc ON drainagecl = dc.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 120) AS fa ON frostact = fa.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 103) AS crc ON corcon = crc.ChoiceValue)
@@ -26,6 +28,9 @@ LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomain
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 131) AS txmc ON taxmoistscl = txmc.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 188) AS txtr ON taxtempregime = txtr.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 2030) AS txed ON soiltaxedition = txed.ChoiceValue)
+LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 118) AS mk ON mukind = mk.ChoiceValue)
+LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 138) AS ms ON mustatus = ms.ChoiceValue)
+LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 151) AS fc ON farmlndcl = fc.ChoiceName)
 ORDER BY dmudesc;"
 	
 	# setup connection to our pedon database
@@ -93,7 +98,7 @@ fetchNASIS_component_data <- function() {
 	depths(f) <- coiid ~ hzdept_r + hzdepb_r
 	
 	# move site data
-	site(f) <- ~ dmudesc + comppct_r + compname + localphase + compkind + majcompflag
+	site(f) <- ~ slope_r + tfact + wei + weg + drainage_class + elev_r + aspectrep + map_r + reannualprecip_r + ffd_r + nirrcapcl + nirrcapscl + irrcapcl + irrcapscl + frost_action + hydgrp + corcon + corsteel + taxclname + taxorder + taxsuborder + taxgrtgroup + taxsubgrp + taxpartsize + taxpartsizemod + taxceactcl + taxreaction + taxtempcl + taxmoistscl + taxtempregime + soiltaxedition + dmudesc + compname + comppct_r + compkind + majcompflag + localphase + dmuiid + musym + nationalmusym + muname + mukind + mustatus + farmlndcl + muiid
 	
 	# done, return SPC
 	return(f)
