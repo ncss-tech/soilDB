@@ -1,6 +1,8 @@
 -------------------------- soilDB 0.9-1 (2012-11-27) ----------------------------
 * updated functionality in fetchNASIS_component_data() pulls mapunit-level data as well as component-level data
 
+* Munsell 'value' is now returned from PedonPC/NASIS fetching functions
+
 
 -------------------------- soilDB 0.9 (2012-10-24) ----------------------------
 * added a surface fragment summary "surf_frag_summary" to the results of get_extended_data_from_NASIS()
