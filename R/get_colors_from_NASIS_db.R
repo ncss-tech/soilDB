@@ -34,8 +34,8 @@ FROM (
 	moist.colors.final <- ddply(moist.colors, 'phiid', mix_and_clean_colors, .progress='text')
 	
 	# rename columns
-	names(dry.colors.final) <- c('phiid','d_r','d_g','d_b')
-	names(moist.colors.final) <- c('phiid','m_r','m_g','m_b')
+	names(dry.colors.final) <- c('phiid', 'd_r', 'd_g', 'd_b', 'd_value')
+	names(moist.colors.final) <- c('phiid', 'm_r', 'm_g', 'm_b', 'm_value')
 	
 	# merge into single df
 	d.final <- join(dry.colors.final, moist.colors.final, by='phiid', type='full')
