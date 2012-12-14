@@ -9,17 +9,12 @@
 
 get_component_data_from_NASIS_db <- function() {
 	q <- "SELECT dmudesc, coiid, compname, comppct_r, ck.ChoiceName as compkind, majcompflag, localphase, slope_r, tfact, wei, weg, dc.ChoiceName as drainage_class, elev_r, aspectrep, map_r, airtempa_r as maat_r, soiltempa_r as mast_r, reannualprecip_r, ffd_r, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, fa.ChoiceName as frost_action, hydgrp, crc.ChoiceName as corcon, crs.ChoiceName as corsteel, taxclname, txo.ChoiceName as taxorder, txs.ChoiceName as taxsuborder, txgg.ChoiceName as  taxgrtgroup, txsg.ChoiceName as taxsubgrp, txps.ChoiceName as taxpartsize, txpsm.ChoiceName as taxpartsizemod, txact.ChoiceName as taxceactcl, txr.ChoiceName as taxreaction, txtc.ChoiceName as taxtempcl, txmc.ChoiceName as taxmoistscl, txtr.ChoiceName as taxtempregime, txed.ChoiceName as soiltaxedition, nationalmusym, muname, mk.ChoiceName as mukind, musym, ms.ChoiceName as mustatus, fc.ChoiceLabel as farmlndcl, dmuiid, muiid, repdmu
-FROM (((((((((((((((((((((
-lmapunit 
-	LEFT OUTER JOIN (
-		mapunit INNER JOIN (
-			correlation INNER JOIN (
-				datamapunit INNER JOIN 
-					component ON datamapunit.dmuiid = component.dmuiidref
-			) ON correlation.dmuiidref = datamapunit.dmuiid AND repdmu = 1
-		) ON mapunit.muiid = correlation.muiidref AND repdmu = 1
-	) ON lmapunit.muiidref = mapunit.muiid
-)	
+FROM (((((((((((((((((((((((
+component 
+INNER JOIN datamapunit ON datamapunit.dmuiid = component.dmuiidref)
+	LEFT OUTER JOIN correlation ON correlation.dmuiidref = datamapunit.dmuiid AND repdmu = 1)
+			LEFT OUTER JOIN mapunit ON mapunit.muiid = correlation.muiidref AND repdmu = 1)
+					LEFT OUTER JOIN lmapunit ON lmapunit.muiidref = mapunit.muiid)
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 148) AS dc ON drainagecl = dc.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 120) AS fa ON frostact = fa.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 103) AS crc ON corcon = crc.ChoiceValue)
@@ -39,8 +34,8 @@ LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomain
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 2030) AS txed ON soiltaxedition = txed.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 118) AS mk ON mukind = mk.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 138) AS ms ON mustatus = ms.ChoiceValue)
-LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 151) AS fc ON farmlndcl = fc.ChoiceName)
-WHERE ms.ChoiceName != 'additional'
+LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 151) AS fc ON farmlndcl = fc.ChoiceName
+WHERE ms.ChoiceName IS NULL OR ms.Choicename != 'additional'
 ORDER BY dmudesc, coiid, comppct_r DESC;"
 	
 	# setup connection to our pedon database
