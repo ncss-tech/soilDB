@@ -1,6 +1,5 @@
 -------------------------- soilDB 0.9-1 (2012-11-27) ----------------------------
 * updated functionality in fetchNASIS_component_data() pulls mapunit-level data as well as component-level data
-
 * Munsell 'value' is now returned from PedonPC/NASIS fetching functions
 
 
