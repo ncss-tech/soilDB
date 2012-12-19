@@ -3,6 +3,7 @@
 
 \alias{andic.subset}
 \alias{gopheridge}
+\alias{cisne}
 
 \docType{data}
 \title{LoaferCreek Soils}
