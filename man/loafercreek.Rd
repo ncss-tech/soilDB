@@ -113,6 +113,6 @@
   .. ..$ featdepb     : int [1:170] 23 64 NA 12 68 100 9 97 110 NA ...
 }}
 
-\examples{}
+
 
 \keyword{datasets}
