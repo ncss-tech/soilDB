@@ -1,8 +1,9 @@
+# TODO: sitebedrock _may_ contain more than 1 row / site... this will result in duplicate rows returned by this function
+
 ## Notes:
 # source of the plantassocnm column changed - now resides in the siteobs table
 # siteiidref key removed from pedon table - use the pedon.siteobsiidref through the siteobs table (siteobs.siteobsiid) as the new linkage	
 
-## TODO: Does it matter whether the taxonkind is pulled from the pedon or petaxhistory tables? Should probably come from petaxhistory table
 
 get_site_data_from_pedon_db <- function(dsn) {
   q <- "SELECT site.siteiid, pedon.peiid, upedonid as pedon_id, site.usiteid as site_id, siteobs.obsdate as obs_date,

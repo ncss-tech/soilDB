@@ -1,3 +1,5 @@
+# 2013-01-08: now much faster since we only mix/clean data with > 1 color / horizon
+
 get_colors_from_pedon_db <- function(dsn) {
 	# color data... check
 	q <- "SELECT phorizon.phiid as phiid, colormoistst, colorpct as pct, mh.choice AS colorhue, colorvalue, colorchroma
@@ -29,8 +31,32 @@ FROM (
 	
 	# mix and clean colors
 	cat('mixing and cleaning colors ...\n')
-	dry.colors.final <- ddply(dry.colors, 'phiid', mix_and_clean_colors, .progress='text')
-	moist.colors.final <- ddply(moist.colors, 'phiid', mix_and_clean_colors, .progress='text')
+	
+	# split-out those data that need color mixing:
+	dry.to.mix <- names(which(table(dry.colors$phiid) > 1))
+	moist.to.mix <- names(which(table(moist.colors$phiid) > 1))
+	
+	# mix/combine if there are any horizons that need mixing
+	if(length(dry.to.mix) > 0) {
+		# filter out and mix only colors with >1 color / horizon
+		dry.mix.idx <- which(dry.colors$phiid %in% dry.to.mix)
+		mixed.dry <- ddply(dry.colors[dry.mix.idx, ], 'phiid', mix_and_clean_colors)
+		# combine original[-horizons to be mixed] + mixed horizons
+		dry.colors.final <- rbind(dry.colors[-dry.mix.idx, c("phiid", "r", "g", "b", "colorvalue")], mixed.dry)
+	}
+	else # otherwise subset the columns only
+		dry.colors.final <- dry.colors[, c("phiid", "r", "g", "b", "colorvalue")]
+	
+	# mix/combine if there are any horizons that need mixing
+	if(length(moist.to.mix) > 0) {
+		# filter out and mix only colors with >1 color / horizon
+		moist.mix.idx <- which(moist.colors$phiid %in% moist.to.mix)
+		mixed.moist <- ddply(moist.colors[moist.mix.idx, ], 'phiid', mix_and_clean_colors)
+		# combine original[-horizons to be mixed] + mixed horizons
+		moist.colors.final <- rbind(moist.colors[-moist.mix.idx, c("phiid", "r", "g", "b", "colorvalue")], mixed.moist)
+	}
+	else # otherwise subset the columns only
+		moist.colors.final <- moist.colors[, c("phiid", "r", "g", "b", "colorvalue")]
 	
 	# rename columns
 	names(dry.colors.final) <- c('phiid', 'd_r', 'd_g', 'd_b', 'd_value')
