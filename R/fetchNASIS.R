@@ -28,6 +28,7 @@ fetchNASIS <- function() {
 	cat('replacing missing lower boundaries ...\n')
 	f$hzdepb[!is.na(f$hzdept) & is.na(f$hzdepb)] <- f$hzdept[!is.na(f$hzdept) & is.na(f$hzdepb)]
 	
+	## TODO: this can be made more efficient
 	# test for bad horizonation... flag, and remove
 	cat('finding horizonation errors ...\n')
 	f.test <- ddply(f, 'pedon_id', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)

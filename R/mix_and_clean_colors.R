@@ -1,3 +1,4 @@
+# this function is called by ddply() thus requires a data.frame as the return value
 mix_and_clean_colors <- function(x) {
 	# fill missing weights with 1
 	x$pct[is.na(x$pct)] <- 1
