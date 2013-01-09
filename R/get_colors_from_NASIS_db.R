@@ -20,7 +20,7 @@ FROM (
 	odbcClose(channel)
 	
 	# convert Munsell to RGB
-	cat('converting Munsell to RGB ...\n')
+	message('converting Munsell to RGB ...')
 	d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, return_triplets=TRUE))
 	
 	# re-combine
@@ -31,7 +31,7 @@ FROM (
 	moist.colors <- subset(d, d$colormoistst == 2)
 	
 	# mix and clean colors
-	cat('mixing and cleaning colors ...\n')
+	message('mixing and cleaning colors ...')
 	
 	# split-out those data that need color mixing:
 	dry.to.mix <- names(which(table(dry.colors$phiid) > 1))
