@@ -14,6 +14,10 @@ fetchNASIS <- function() {
 	color_data <- get_colors_from_NASIS_db()
 	extended_data <- get_extended_data_from_NASIS_db()
 	
+	# test for multiple pedons / site
+	# note that this is also checked and reported on in get_site_data_from_NASIS_db()
+	multiple.pedons.per.site <- names(which(table(site_data$pedon_id) > 1))
+	
 	# 2. join pieces
 	# horizon + hz color: all horizons
 	h <- join(hz_data, color_data, by='phiid', type='left')
@@ -22,15 +26,23 @@ fetchNASIS <- function() {
 	# (hz + color) + site: only those with horizon data
 	f <- join(h, site_data[, -which(names(site_data) == 'pedon_id')], by='peiid', type='inner')
 	
-	
 	# 3. fix some common problems
 	# replace missing lower boundaries
-	cat('replacing missing lower boundaries ...\n')
+	message('replacing missing lower boundaries ...')
 	f$hzdepb[!is.na(f$hzdept) & is.na(f$hzdepb)] <- f$hzdept[!is.na(f$hzdept) & is.na(f$hzdepb)]
+	
+	## TODO: is this really a good idea?
+	# when multiple pedons / site, replace pedon_id with pedon_id-peiid
+	pedon.ids.to.fix.idx <- which(f$pedon_id %in% multiple.pedons.per.site)
+	if(length(pedon.ids.to.fix.idx) > 0)
+		message('appending peiid to duplicate pedon IDs...')
+	
+	# fix offending pedon IDs by concatenating pedon_id with peiid
+	f$pedon_id[pedon.ids.to.fix.idx] <- paste(f$pedon_id[pedon.ids.to.fix.idx], f$peiid[pedon.ids.to.fix.idx], sep='-')
 	
 	## TODO: this can be made more efficient
 	# test for bad horizonation... flag, and remove
-	cat('finding horizonation errors ...\n')
+	message('finding horizonation errors ...')
 	f.test <- ddply(f, 'pedon_id', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
 	
 	# which are the good (valid) ones?
@@ -72,7 +84,7 @@ fetchNASIS <- function() {
 	
 	# 7. mention bad pedons
 	if(length(bad.pedon.ids) > 0)
-		cat(paste('horizon errors in:', paste(bad.pedon.ids, collapse=','), '\n'))
+		message(paste('horizon errors in:', paste(bad.pedon.ids, collapse=',')))
 	
 	# done
 	return(f)
