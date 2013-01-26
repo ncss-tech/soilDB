@@ -233,6 +233,12 @@ ORDER BY pedon.peiid, sitegeomordesc.sitegeomdiid;"
 	d.diag.boolean <- diagHzLongtoWide(d.diagnostic)
 	
 	# return a list of results
-	return(list(diagnostic=d.diagnostic, diagHzBoolean=d.diag.boolean, frag_summary=d.rf.summary, surf_frag_summary=d.surf.rf.summary, texmodifier=d.hz.texmod, geomorph=d.geomorph, taxhistory=d.taxhistory))
+	return(list(diagnostic=d.diagnostic, 
+							diagHzBoolean=d.diag.boolean, 
+							frag_summary=d.rf.summary, 
+							surf_frag_summary=d.surf.rf.summary, 
+							texmodifier=d.hz.texmod, 
+							geomorph=d.geomorph, 
+							taxhistory=d.taxhistory))
 }
 
