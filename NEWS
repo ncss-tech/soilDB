@@ -1,3 +1,6 @@
+-------------------------- soilDB 0.9-4 (2013-01-31) ----------------------------
+* new function: fetchOSD() returns basic OSD data as a SoilProfileCollection
+
 -------------------------- soilDB 0.9-3 (2013-01-08) ----------------------------
 * speed-bump in color-fetching functions from NASIS/pedonPC
 * fetchNASIS() now attempts to correct for >1 pedon/site by appending peiid to pedon_id
