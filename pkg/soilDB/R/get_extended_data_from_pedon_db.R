@@ -93,19 +93,21 @@ LEFT OUTER JOIN (
 	
 	# get geomorphic features
 	##changes made: added join to peiid through the siteobs table, change to key field linkages for geomftiidref - key field was dropped from sitegeomordesc table
-	## TODO: does this query need a DISTINCT keyword ?
-	q.geomorph <- "SELECT pedon.peiid, sitegeomordesc.geomfeatid, sitegeomordesc.existsonfeat, sitegeomordesc.geomfmod, sitegeomordesc.geomfiidref, IIf(([geomorfeat].[geomftiidref]=1),'landform',IIf(([geomorfeat].[geomftiidref]=2),'landscape',IIf(([geomorfeat].[geomftiidref]=3),'microfeature','anthropogenic feature'))) AS feature_type
-FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeomordesc ON site.siteiid = sitegeomordesc.siteiidref) INNER JOIN (siteobs INNER JOIN pedon ON siteobs.siteobsiid = pedon.siteobsiidref) ON site.siteiid = siteobs.siteiidref) ON geomorfeat.geomfiid = sitegeomordesc.geomfiidref) ON geomorfeattype.geomftiid = geomorfeat.geomftiidref
-ORDER BY peiid ASC;"
+	q.geomorph <- "SELECT pedon.peiid, sitegeomordesc.geomfmod, geomorfeat.geomfname, sitegeomordesc.existsonfeat, sitegeomordesc.geomfiidref, lower(geomorfeattype.geomftname)
+FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeomordesc ON site.siteiid = sitegeomordesc.siteiidref) INNER JOIN (siteobs INNER JOIN pedon ON siteobs.siteobsiid = pedon.siteobsiidref) ON site.siteiid = siteobs.siteiidref) ON geomorfeat.geomfiid = sitegeomordesc.geomfiidref) ON geomorfeattype.geomftiid = geomorfeat.geomftiidref ORDER BY peiid ASC;"
 
 	# get petaxhistory data 
-	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, classtype, taxonname, tk.choice_label as taxon_kind, ss.choice_label as series_status, ps.choice_label as part_size_class, ts.choice_label as tax_subgroup, te.choice_label as tax_edition, osdtypelocflag
-  	FROM (((((petaxhistory 
+	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, cl.choice_label as class_type, taxonname, tk.choice_label as taxon_kind, ss.choice_label as series_status, ps.choice_label as part_size_class, tord.choice_label as tax_order, tso.choice_label as tax_suborder, tgg.choice_label as tax_grtgroup, ts.choice_label as tax_subgroup, te.choice_label as tax_edition, osdtypelocflag
+  	FROM (((((((((petaxhistory 
 		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 127) AS ps ON petaxhistory.taxpartsize = ps.choice_id)
   		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 187) AS ts ON petaxhistory.taxsubgrp = ts.choice_id)
   		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 102) AS tk ON petaxhistory.taxonkind = tk.choice_id)
 		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 4956) AS ss ON petaxhistory.seriesstatus = ss.choice_id)
-		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 2030) AS te ON petaxhistory.seriesstatus = te.choice_id)
+		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 2030) AS te ON petaxhistory.soiltaxedition = te.choice_id)
+		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 4942) AS cl ON petaxhistory.classtype = cl.choice_id)
+		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 132) AS tord ON petaxhistory.taxorder = tord.choice_id)
+		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 134) AS tso ON petaxhistory.taxsuborder = tso.choice_id)
+		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 130) AS tgg ON petaxhistory.taxgrtgroup = tgg.choice_id)		
 	ORDER BY petaxhistory.peiidref;"	
 	
 	# setup connection to our pedon database

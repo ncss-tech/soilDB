@@ -11,6 +11,10 @@ fetchOSD <- function(soils) {
 	u.site <- paste(u.osd_site, paste(soils, collapse=','), sep='')
 	u.hz <- paste(u.osd_hz, paste(soils, collapse=','), sep='')
 	
+	# encode special characters into URLS
+	u.site <- URLencode(u.site)
+	u.hz <- URLencode(u.hz)
+	
 	# request data
 	s <- read.csv(url(u.site), stringsAsFactors=FALSE)
 	h <- read.csv(url(u.hz), stringsAsFactors=FALSE)
