@@ -1,3 +1,7 @@
+-------------------------- soilDB 0.9-5 (2013-02-06) ----------------------------
+* bug fixes to PedonPC and NASIS queries, new data elements returned by extended query functions
+* SoilWeb queries via URL are now URL-encoded to allow for spaces in soil series names
+
 -------------------------- soilDB 0.9-4 (2013-01-31) ----------------------------
 * new function: fetchOSD() returns basic OSD data as a SoilProfileCollection
 

@@ -200,18 +200,21 @@ LEFT OUTER JOIN (
 	LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 190) AS tmod ON dbo.phtexturemod.texmod = tmod.ChoiceValue;"
 	
 	# get geomorphic features
-	q.geomorph <- "SELECT pedon.peiid, sitegeomordesc.sitegeomdiid, sitegeomordesc.geomfeatid, sitegeomordesc.existsonfeat, sitegeomordesc.geomfmod, geomorfeat.geomfname, CASE WHEN dbo.sitegeomordesc.geomfeatid=1 THEN 'landform' WHEN dbo.sitegeomordesc.geomfeatid=2 THEN 'landscape' WHEN dbo.sitegeomordesc.geomfeatid=3 THEN 'microfeature' WHEN dbo.sitegeomordesc.geomfeatid=4 THEN 'anthropogenic feature' END AS feature_type
-	FROM ((geomorfeat INNER JOIN (site INNER JOIN sitegeomordesc ON site.siteiid = sitegeomordesc.siteiidref) ON (geomorfeat.geomftiidref = sitegeomordesc.geomfeatid) AND (geomorfeat.geomfiid = sitegeomordesc.geomfiidref)) INNER JOIN siteobs ON site.siteiid = siteobs.siteiidref) INNER JOIN pedon ON (siteobs.siteobsiid = pedon.siteobsiidref) AND (siteobs.siteobsiid = pedon.siteobsiidref)
-ORDER BY pedon.peiid, sitegeomordesc.sitegeomdiid;"
+	q.geomorph <- "SELECT pedon.peiid, sitegeomordesc.geomfmod, geomorfeat.geomfname, sitegeomordesc.existsonfeat, sitegeomordesc.geomfiidref, lower(geomorfeattype.geomftname)
+FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeomordesc ON site.siteiid = sitegeomordesc.siteiidref) INNER JOIN (siteobs INNER JOIN pedon ON siteobs.siteobsiid = pedon.siteobsiidref) ON site.siteiid = siteobs.siteiidref) ON geomorfeat.geomfiid = sitegeomordesc.geomfiidref) ON geomorfeattype.geomftiid = geomorfeat.geomftiidref ORDER BY peiid ASC;"
    
 	# get petaxhistory data 
-	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, classtype, taxonname, tk.ChoiceName as taxon_kind, ss.ChoiceName as series_status, ps.ChoiceName as part_size_class, ts.ChoiceName as tax_subgroup, te.ChoiceName as tax_edition, osdtypelocflag
-  	FROM (((((dbo.petaxhistory 
+	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, tk.ChoiceName as class_type, taxonname, tk.ChoiceName as taxon_kind, ss.ChoiceName as series_status, ps.ChoiceName as part_size_class, tord.ChoiceName as tax_order, tso.ChoiceName as tax_suborder, tgg.ChoiceName as tax_grtgroup, ts.ChoiceName as tax_subgroup, te.ChoiceName as tax_edition, osdtypelocflag
+  	FROM (((((((((dbo.petaxhistory 
 		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 127) AS ps ON petaxhistory.taxpartsize = ps.ChoiceValue)
   		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 187) AS ts ON petaxhistory.taxsubgrp = ts.ChoiceValue)
   		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 102) AS tk ON petaxhistory.taxonkind = tk.ChoiceValue)
 		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 4956) AS ss ON petaxhistory.seriesstatus = ss.ChoiceValue)
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 2030) AS te ON petaxhistory.seriesstatus = te.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 2030) AS te ON petaxhistory.soiltaxedition = te.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 4942) AS cl ON petaxhistory.classtype = cl.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 132) AS tord ON petaxhistory.taxorder = tord.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 134) AS tso ON petaxhistory.taxsuborder = tso.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 130) AS tgg ON petaxhistory.taxgrtgroup = tgg.ChoiceValue)
 	ORDER BY petaxhistory.peiidref;"
 	
 	
