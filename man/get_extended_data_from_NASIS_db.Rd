@@ -4,12 +4,9 @@
 \title{Extract accessory tables and summaries from a local NASIS Database}
 \description{Extract accessory tables and summaries from a local NASIS Database.}
 \usage{
-get_extended_data_from_NASIS_db(dsn)
+get_extended_data_from_NASIS_db()
 }
-%- maybe also 'usage' for other objects documented here.
-\arguments{
-  \item{dsn}{The name of the local NASIS database connection (see details).}
-}
+
 \details{This function currently works only on Windows.}
 \value{A list with the results.}
 \author{Jay M. Skovlin and Dylan E. Beaudette}
