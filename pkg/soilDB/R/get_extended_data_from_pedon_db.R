@@ -93,8 +93,8 @@ LEFT OUTER JOIN (
 	
 	# get geomorphic features
 	##changes made: added join to peiid through the siteobs table, change to key field linkages for geomftiidref - key field was dropped from sitegeomordesc table
-	q.geomorph <- "SELECT pedon.peiid, sitegeomordesc.geomfmod, geomorfeat.geomfname, sitegeomordesc.existsonfeat, sitegeomordesc.geomfiidref, lower(geomorfeattype.geomftname)
-FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeomordesc ON site.siteiid = sitegeomordesc.siteiidref) INNER JOIN (siteobs INNER JOIN pedon ON siteobs.siteobsiid = pedon.siteobsiidref) ON site.siteiid = siteobs.siteiidref) ON geomorfeat.geomfiid = sitegeomordesc.geomfiidref) ON geomorfeattype.geomftiid = geomorfeat.geomftiidref ORDER BY peiid ASC;"
+	q.geomorph <- "SELECT pedon.peiid, sitegeomordesc.geomfmod, geomorfeat.geomfname, sitegeomordesc.existsonfeat, sitegeomordesc.geomfiidref, lcase(geomorfeattype.geomftname) as geomftname FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeomordesc ON site.siteiid = sitegeomordesc.siteiidref) INNER JOIN (siteobs INNER JOIN pedon ON siteobs.siteobsiid = pedon.siteobsiidref) ON site.siteiid = siteobs.siteiidref) ON geomorfeat.geomfiid = sitegeomordesc.geomfiidref) ON geomorfeattype.geomftiid = geomorfeat.geomftiidref ORDER BY peiid ASC;"
+	
 
 	# get petaxhistory data 
 	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, cl.choice_label as class_type, taxonname, tk.choice_label as taxon_kind, ss.choice_label as series_status, ps.choice_label as part_size_class, tord.choice_label as tax_order, tso.choice_label as tax_suborder, tgg.choice_label as tax_grtgroup, ts.choice_label as tax_subgroup, te.choice_label as tax_edition, osdtypelocflag

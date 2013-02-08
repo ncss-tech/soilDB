@@ -1,6 +1,6 @@
 ## TODO: need to be careful about how {l, rv, h} are used here...
 
-get_extended_data_from_NASIS_db <- function(dsn) {
+get_extended_data_from_NASIS_db <- function() {
 	# query diagnostic horizons, usually a 1:many relationship with pedons
 	q.diagnostic <- "SELECT peiidref as peiid, dfk.ChoiceName as diag_kind, featdept, featdepb
 FROM dbo.pediagfeatures 
@@ -200,7 +200,7 @@ LEFT OUTER JOIN (
 	LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 190) AS tmod ON dbo.phtexturemod.texmod = tmod.ChoiceValue;"
 	
 	# get geomorphic features
-	q.geomorph <- "SELECT pedon.peiid, sitegeomordesc.geomfmod, geomorfeat.geomfname, sitegeomordesc.existsonfeat, sitegeomordesc.geomfiidref, lower(geomorfeattype.geomftname)
+	q.geomorph <- "SELECT pedon.peiid, sitegeomordesc.geomfmod, geomorfeat.geomfname, sitegeomordesc.existsonfeat, sitegeomordesc.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
 FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeomordesc ON site.siteiid = sitegeomordesc.siteiidref) INNER JOIN (siteobs INNER JOIN pedon ON siteobs.siteobsiid = pedon.siteobsiidref) ON site.siteiid = siteobs.siteiidref) ON geomorfeat.geomfiid = sitegeomordesc.geomfiidref) ON geomorfeattype.geomftiid = geomorfeat.geomftiidref ORDER BY peiid ASC;"
    
 	# get petaxhistory data 
