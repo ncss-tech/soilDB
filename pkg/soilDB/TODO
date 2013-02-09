@@ -17,3 +17,5 @@
 
 8. need to check for presence of STD coordinates vs. DMS/datum coordinates, maybe warn users
 
+9. figure out data problems: total_frags_pct vs. fragvoltot
+
