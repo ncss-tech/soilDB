@@ -3,7 +3,7 @@
 get_hz_data_from_NASIS_db <- function() {
 	q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid as pedon_id,
   phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
-  phorizon.claytotest as clay, CASE WHEN phorizon.silttotest IS NULL THEN 100 - (phorizon.claytotest + phorizon.sandtotest) ELSE phorizon.silttotest END as silt, phorizon.sandtotest as sand, t.texture_class, phfield, phnaf, eff.ChoiceName AS effervescence, l.labsampnum, CASE WHEN f.total_frags_pct IS NULL THEN 0 ELSE f.total_frags_pct END AS total_frags_pct
+  phorizon.claytotest as clay, CASE WHEN phorizon.silttotest IS NULL THEN 100 - (phorizon.claytotest + phorizon.sandtotest) ELSE phorizon.silttotest END as silt, phorizon.sandtotest as sand, t.texture_class, phfield, phnaf, eff.ChoiceName AS effervescence, l.labsampnum, CASE WHEN f.total_frags_pct IS NULL THEN 0 ELSE f.total_frags_pct END AS total_frags_pct, fragvoltot
   FROM ((((
 	dbo.pedon 
 	INNER JOIN dbo.phorizon ON dbo.pedon.peiid = dbo.phorizon.peiidref) 
