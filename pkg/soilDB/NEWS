@@ -1,4 +1,5 @@
--------------------------- soilDB 0.9-5 (2013-02-06) ----------------------------
+-------------------------- soilDB 0.9-6 (2013-02-26) ----------------------------
+* new function get_text_notes_from_NASIS_db() -- still needs proper documentation
 * bug fixes to PedonPC and NASIS queries, new data elements returned by extended query functions
 * SoilWeb queries via URL are now URL-encoded to allow for spaces in soil series names
 
