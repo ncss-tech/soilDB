@@ -3,12 +3,12 @@
 # results can be referenced via phiid (horizon-level ID)
 get_colors_from_NASIS_db <- function() {
 	# unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
-	q <- "SELECT dbo.pedon.peiid, phorizon.phiid as phiid, colormoistst, colorpct as pct, mh.ChoiceName AS colorhue, colorvalue, colorchroma
-FROM (
-	(dbo.pedon INNER JOIN dbo.phorizon ON dbo.pedon.peiid = dbo.phorizon.peiidref)
-	INNER JOIN dbo.phcolor ON dbo.phorizon.phiid = dbo.phcolor.phiidref)
-	LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE DomainID = 1242) AS mh ON dbo.phcolor.colorhue = mh.ChoiceValue
-	ORDER BY phiid, dbo.phcolor.colormoistst;"
+	q <- "SELECT peiid, phiid, colormoistst, colorpct as pct, mh.ChoiceName AS colorhue, colorvalue, colorchroma
+FROM ((
+pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref)
+	INNER JOIN phcolor_View_1 ON phorizon_View_1.phiid = phcolor_View_1.phiidref)
+	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1242) AS mh ON phcolor_View_1.colorhue = mh.ChoiceValue
+	ORDER BY phiid, phcolor_View_1.colormoistst;"
   
 	# setup connection to our local NASIS database
 	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
