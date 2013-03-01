@@ -1,3 +1,6 @@
+-------------------------- soilDB 0.9-7 (2013-03-01) ----------------------------
+* NASIS query functions now return only records from the selected set, please test older code!
+
 -------------------------- soilDB 0.9-6 (2013-02-26) ----------------------------
 * new function get_text_notes_from_NASIS_db() -- still needs proper documentation
 * bug fixes to PedonPC and NASIS queries, new data elements returned by extended query functions

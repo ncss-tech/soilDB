@@ -3,11 +3,11 @@
 get_extended_data_from_NASIS_db <- function() {
 	# query diagnostic horizons, usually a 1:many relationship with pedons
 	q.diagnostic <- "SELECT peiidref as peiid, dfk.ChoiceName as diag_kind, featdept, featdepb
-FROM dbo.pediagfeatures 
-	LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE DomainID = 147) AS dfk ON dbo.pediagfeatures.featkind = dfk.ChoiceValue
-	ORDER BY dbo.pediagfeatures.peiidref, dbo.pediagfeatures.featdept;"
+FROM pediagfeatures_View_1 
+	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 147) AS dfk ON pediagfeatures_View_1.featkind = dfk.ChoiceValue
+	ORDER BY pediagfeatures_View_1.peiidref, pediagfeatures_View_1.featdept;"
   
-	q.surf.rf.summary <- "SELECT dbo.pedon.peiid, 
+	q.surf.rf.summary <- "SELECT pedon_View_1.peiid, 
 
 CASE WHEN f1_gr.gravel IS NULL THEN 0.0 ELSE f1_gr.gravel END as surface_gravel, 
 CASE WHEN f2_cb.cobbles IS NULL THEN 0.0 ELSE f2_cb.cobbles END as surface_cobbles, 
@@ -20,20 +20,20 @@ CASE WHEN f2_pcb.cobbles IS NULL THEN 0.0 ELSE f2_pcb.cobbles END as surface_par
 
 FROM ((((((((((
 
-dbo.pedon
+pedon_View_1
 
-INNER JOIN dbo.siteobs 
-ON siteobsiid = pedon.siteobsiidref)
+INNER JOIN siteobs_View_1 
+ON siteobsiid = pedon_View_1.siteobsiidref)
 
 LEFT OUTER JOIN
 (
-SELECT DISTINCT siteobsiidref FROM dbo.sitesurffrags
-) as p ON p.siteobsiidref = siteobs.siteobsiid)
+SELECT DISTINCT siteobsiidref FROM sitesurffrags_View_1
+) as p ON p.siteobsiidref = siteobs_View_1.siteobsiid)
 
 LEFT OUTER JOIN (
 		SELECT siteobsiidref, Sum(sfragcov) AS gravel
-		FROM dbo.sitesurffrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		FROM sitesurffrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
 		WHERE (sfragsize_r <= 76 OR sfragsize_h <= 76) AND (sfragshp != 1 OR sfragshp IS NULL) 
 		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
 		GROUP BY siteobsiidref
@@ -41,8 +41,8 @@ LEFT OUTER JOIN (
 
 LEFT OUTER JOIN (
 		SELECT siteobsiidref, Sum(sfragcov) AS gravel
-		FROM dbo.sitesurffrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		FROM sitesurffrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
 		WHERE (sfragsize_r <= 76 OR sfragsize_h <= 76) AND (sfragshp != 1 OR sfragshp IS NULL)
 		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
 		GROUP BY siteobsiidref
@@ -50,8 +50,8 @@ LEFT OUTER JOIN (
 
 	LEFT OUTER JOIN (
 		SELECT siteobsiidref, Sum(sfragcov) AS cobbles
-		FROM dbo.sitesurffrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		FROM sitesurffrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
 		WHERE (sfragsize_r >= 76 OR sfragsize_l >= 76) AND (sfragsize_r <= 250 OR sfragsize_h <= 250) AND (sfragshp != 1 OR sfragshp IS NULL)
 		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
 		GROUP BY siteobsiidref
@@ -59,8 +59,8 @@ LEFT OUTER JOIN (
 
 	LEFT OUTER JOIN (
 		SELECT siteobsiidref, Sum(sfragcov) AS cobbles
-		FROM dbo.sitesurffrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		FROM sitesurffrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
 		WHERE (sfragsize_r >= 76 OR sfragsize_l >= 76) AND (sfragsize_r <= 250 OR sfragsize_h <= 250) AND (sfragshp != 1 OR sfragshp IS NULL)
 		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
 		GROUP BY siteobsiidref
@@ -68,24 +68,24 @@ LEFT OUTER JOIN (
 
 	LEFT OUTER JOIN (
 		SELECT siteobsiidref, Sum(sfragcov) AS stones
-		FROM dbo.sitesurffrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		FROM sitesurffrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
 		WHERE (sfragsize_r >= 250 OR sfragsize_l >= 250) AND (sfragsize_r <= 600 OR sfragsize_h <= 600) AND (sfragshp != 1 OR sfragshp IS NULL)
 		GROUP BY siteobsiidref
 	) as f3 ON p.siteobsiidref = f3.siteobsiidref)
 
 	LEFT OUTER JOIN (
 		SELECT siteobsiidref, Sum(sfragcov) AS boulders
-		FROM dbo.sitesurffrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		FROM sitesurffrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
 		WHERE sfragsize_r >= 600 OR sfragsize_l >= 600
 		GROUP BY siteobsiidref
 	) as f4 ON p.siteobsiidref = f4.siteobsiidref)
 
 	LEFT OUTER JOIN (
 		SELECT siteobsiidref, Sum(sfragcov) AS channers
-		FROM dbo.sitesurffrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		FROM sitesurffrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
 		WHERE (sfragsize_r <= 76 OR sfragsize_h <= 76) AND sfragshp = 1
 		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
 		GROUP BY siteobsiidref
@@ -93,14 +93,14 @@ LEFT OUTER JOIN (
 	
 	LEFT OUTER JOIN (
 		SELECT siteobsiidref, Sum(sfragcov) AS flagstones
-		FROM dbo.sitesurffrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON sfraghard = m.ChoiceValue
+		FROM sitesurffrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
 		WHERE (sfragsize_r >= 150 OR sfragsize_l >= 150) AND (sfragsize_r <= 380 OR sfragsize_h <= 380) AND sfragshp = 1
 		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
 		GROUP BY siteobsiidref
 	) as f6 ON p.siteobsiidref = f6.siteobsiidref)
 	
-	ORDER BY dbo.pedon.peiid;"
+	ORDER BY pedon_View_1.peiid;"
 	
 	
 	# query rock-fragment summary by horizon
@@ -117,13 +117,13 @@ CASE WHEN f6.flagstones IS NULL THEN 0.0 ELSE f6.flagstones END as flagstones
 
 FROM ((((((((
 (
-SELECT DISTINCT phiidref FROM dbo.phfrags
+SELECT DISTINCT phiidref FROM phfrags_View_1
 ) as p
 
 LEFT OUTER JOIN (
 		SELECT phiidref, Sum(fragvol) AS gravel
-		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		FROM phfrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
 		WHERE (fragsize_r <= 76 OR fragsize_h <= 76) AND (fragshp != 1 OR fragshp IS NULL)
 		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
 		GROUP BY phiidref
@@ -131,8 +131,8 @@ LEFT OUTER JOIN (
 
 LEFT OUTER JOIN (
 		SELECT phiidref, Sum(fragvol) AS gravel
-		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		FROM phfrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
 		WHERE (fragsize_r <= 76 OR fragsize_h <= 76) AND (fragshp != 1 OR fragshp IS NULL)
 		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
 		GROUP BY phiidref
@@ -140,8 +140,8 @@ LEFT OUTER JOIN (
 
 	LEFT OUTER JOIN (
 		SELECT phiidref, Sum(fragvol) AS cobbles
-		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		FROM phfrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
 		WHERE (fragsize_r >= 76 OR fragsize_l >= 76) AND (fragsize_r <= 250 OR fragsize_h <= 250) AND (fragshp != 1 OR fragshp IS NULL)
 		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
 		GROUP BY phiidref
@@ -149,8 +149,8 @@ LEFT OUTER JOIN (
 
 	LEFT OUTER JOIN (
 		SELECT phiidref, Sum(fragvol) AS cobbles
-		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		FROM phfrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
 		WHERE (fragsize_r >= 76 OR fragsize_l >= 76) AND (fragsize_r <= 250 OR fragsize_h <= 250) AND (fragshp != 1 OR fragshp IS NULL)
 		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
 		GROUP BY phiidref
@@ -158,24 +158,24 @@ LEFT OUTER JOIN (
 
 	LEFT OUTER JOIN (
 		SELECT phiidref, Sum(fragvol) AS stones
-		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		FROM phfrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
 		WHERE (fragsize_r >= 250 OR fragsize_l >= 250) AND (fragsize_r <= 600 OR fragsize_h <= 600) AND (fragshp != 1 OR fragshp IS NULL)
 		GROUP BY phiidref
 	) as f3 ON p.phiidref = f3.phiidref)
 
 	LEFT OUTER JOIN (
 		SELECT phiidref, Sum(fragvol) AS boulders
-		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		FROM phfrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
 		WHERE fragsize_r >= 600 OR fragsize_l >= 600
 		GROUP BY phiidref
 	) as f4 ON p.phiidref = f4.phiidref)
 
 	LEFT OUTER JOIN (
 		SELECT phiidref, Sum(fragvol) AS channers
-		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		FROM phfrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
 		WHERE (fragsize_r <= 76 OR fragsize_h <= 76) AND fragshp = 1
 		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
 		GROUP BY phiidref
@@ -183,8 +183,8 @@ LEFT OUTER JOIN (
 	
 	LEFT OUTER JOIN (
 		SELECT phiidref, Sum(fragvol) AS flagstones
-		FROM dbo.phfrags
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 173) AS m ON fraghard = m.ChoiceValue
+		FROM phfrags_View_1
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
 		WHERE (fragsize_r >= 150 OR fragsize_l >= 150) AND (fragsize_r <= 380 OR fragsize_h <= 380) AND fragshp = 1
 		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
 		GROUP BY phiidref
@@ -193,29 +193,29 @@ LEFT OUTER JOIN (
 	ORDER BY p.phiidref;"
 
 	# get horizon texture modifiers
-	q.hz.texmod <- "SELECT dbo.phorizon.peiidref AS peiid, dbo.phorizon.phiid AS phiid, dbo.phtexture.phtiid AS phtiid, dbo.phtexturemod.seqnum, tmod.ChoiceName as texture_modifier 
+	q.hz.texmod <- "SELECT phorizon_View_1.peiidref AS peiid, phorizon_View_1.phiid AS phiid, phtexture_View_1.phtiid AS phtiid, phtexturemod_View_1.seqnum, tmod.ChoiceName as texture_modifier 
   FROM (
-	(dbo.phorizon INNER JOIN dbo.phtexture ON dbo.phorizon.phiid = dbo.phtexture.phiidref) 
-	LEFT OUTER JOIN dbo.phtexturemod ON dbo.phtexture.phtiid = dbo.phtexturemod.phtiidref) 
-	LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 190) AS tmod ON dbo.phtexturemod.texmod = tmod.ChoiceValue;"
+	(phorizon_View_1 INNER JOIN phtexture_View_1 ON phorizon_View_1.phiid = phtexture_View_1.phiidref) 
+	LEFT OUTER JOIN phtexturemod_View_1 ON phtexture_View_1.phtiid = phtexturemod_View_1.phtiidref) 
+	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 190) AS tmod ON phtexturemod_View_1.texmod = tmod.ChoiceValue;"
 	
 	# get geomorphic features
-	q.geomorph <- "SELECT pedon.peiid, sitegeomordesc.geomfmod, geomorfeat.geomfname, sitegeomordesc.existsonfeat, sitegeomordesc.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
-FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeomordesc ON site.siteiid = sitegeomordesc.siteiidref) INNER JOIN (siteobs INNER JOIN pedon ON siteobs.siteobsiid = pedon.siteobsiidref) ON site.siteiid = siteobs.siteiidref) ON geomorfeat.geomfiid = sitegeomordesc.geomfiidref) ON geomorfeattype.geomftiid = geomorfeat.geomftiidref ORDER BY peiid ASC;"
+	q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod, geomorfeat_View_1.geomfname, sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref, lower(geomorfeattype_View_1.geomftname) as geomftname
+FROM geomorfeattype_View_1 RIGHT JOIN (geomorfeat_View_1 RIGHT JOIN ((site_View_1 INNER JOIN sitegeomordesc_View_1 ON site_View_1.siteiid = sitegeomordesc_View_1.siteiidref) INNER JOIN (siteobs_View_1 INNER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref) ON site_View_1.siteiid = siteobs_View_1.siteiidref) ON geomorfeat_View_1.geomfiid = sitegeomordesc_View_1.geomfiidref) ON geomorfeattype_View_1.geomftiid = geomorfeat_View_1.geomftiidref ORDER BY peiid ASC;"
    
 	# get petaxhistory data 
 	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, tk.ChoiceName as class_type, taxonname, tk.ChoiceName as taxon_kind, ss.ChoiceName as series_status, ps.ChoiceName as part_size_class, tord.ChoiceName as tax_order, tso.ChoiceName as tax_suborder, tgg.ChoiceName as tax_grtgroup, ts.ChoiceName as tax_subgroup, te.ChoiceName as tax_edition, osdtypelocflag
-  	FROM (((((((((dbo.petaxhistory 
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 127) AS ps ON petaxhistory.taxpartsize = ps.ChoiceValue)
-  		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 187) AS ts ON petaxhistory.taxsubgrp = ts.ChoiceValue)
-  		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 102) AS tk ON petaxhistory.taxonkind = tk.ChoiceValue)
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 4956) AS ss ON petaxhistory.seriesstatus = ss.ChoiceValue)
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 2030) AS te ON petaxhistory.soiltaxedition = te.ChoiceValue)
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 4942) AS cl ON petaxhistory.classtype = cl.ChoiceValue)
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 132) AS tord ON petaxhistory.taxorder = tord.ChoiceValue)
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 134) AS tso ON petaxhistory.taxsuborder = tso.ChoiceValue)
-		LEFT OUTER JOIN (SELECT * FROM dbo.MetadataDomainDetail WHERE dbo.MetadataDomainDetail.DomainID = 130) AS tgg ON petaxhistory.taxgrtgroup = tgg.ChoiceValue)
-	ORDER BY petaxhistory.peiidref;"
+  	FROM (((((((((petaxhistory_View_1 
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 127) AS ps ON petaxhistory_View_1.taxpartsize = ps.ChoiceValue)
+  		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 187) AS ts ON petaxhistory_View_1.taxsubgrp = ts.ChoiceValue)
+  		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 102) AS tk ON petaxhistory_View_1.taxonkind = tk.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 4956) AS ss ON petaxhistory_View_1.seriesstatus = ss.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 2030) AS te ON petaxhistory_View_1.soiltaxedition = te.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 4942) AS cl ON petaxhistory_View_1.classtype = cl.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 132) AS tord ON petaxhistory_View_1.taxorder = tord.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 134) AS tso ON petaxhistory_View_1.taxsuborder = tso.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 130) AS tgg ON petaxhistory_View_1.taxgrtgroup = tgg.ChoiceValue)
+	ORDER BY petaxhistory_View_1.peiidref;"
 	
 	
 	# setup connection to our local NASIS database
