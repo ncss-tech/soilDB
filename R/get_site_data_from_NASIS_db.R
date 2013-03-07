@@ -49,7 +49,7 @@ ORDER BY pedon_View_1.peiid ;"
 	t.pedon_id <- table(d$pedon_id)
 	not.unique.pedon_id <- t.pedon_id > 1
 	if(any(not.unique.pedon_id)) {
-		message('NOTICE: duplicate pedons or multiple pedons / site:', appendLF=FALSE)
+		message('NOTICE: duplicate pedons or multiple pedons / site:', appendLF=TRUE)
 		print(t.pedon_id[which(not.unique.pedon_id)])
 	}
 	
