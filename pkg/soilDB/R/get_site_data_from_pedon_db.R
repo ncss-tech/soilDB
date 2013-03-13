@@ -1,4 +1,4 @@
-# TODO: sitebedrock _may_ contain more than 1 row / site... this will result in duplicate rows returned by this function
+# TODO: sitebedrock _may_ contain more than 1 row / site... this will result in duplicate rows returned by this function.
 
 ## Notes:
 # source of the plantassocnm column changed - now resides in the siteobs table
