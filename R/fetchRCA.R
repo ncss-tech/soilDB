@@ -1,15 +1,16 @@
-# updated to NASIS 6.2 -- needs testing
-# horizon checking may be too strict
+## prototype RCA fetching
+# only using extended data for taxon history information
+
 
 # convenience function for loading most commonly used information from local NASIS database
-fetchNASIS <- function() {
+fetchRCA <- function() {
 	
 	# 0. test connection
 	if(! 'nasis_local' %in% names(odbcDataSources()))
 			stop('Local NASIS ODBC connection has not been setup. Please see the `setup_ODBC_local_NASIS.pdf` document included with this package.')
 	
 	# 1. load data in pieces
-	site_data <- get_site_data_from_NASIS_db()
+	site_data <- getRCA_site_data()
 	hz_data <- get_hz_data_from_NASIS_db()
 	color_data <- get_colors_from_NASIS_db()
 	extended_data <- get_extended_data_from_NASIS_db()
@@ -57,26 +58,26 @@ fetchNASIS <- function() {
 	depths(f) <- pedon_id ~ hzdept + hzdepb
 	
 	# move site data into @site
-	site(f) <- ~ peiid + site_id + siteiid + hillslope_pos + slope_position + shapeacross + shapedown + slopecomplex + drainagecl + x + y + datum + x_std + y_std + elev_field + slope_field + aspect_field + plantassocnm + bedrckdepth + bedrock_kind + bedrock_hardness + describer + psctopdepth + pscbotdepth + obs_date + pedon_purpose + pedon_type + pedlabsampnum
+	site(f) <- ~ peiid + site_id + siteiid + hillslope_pos + slope_position + shapeacross + shapedown + slopecomplex + drainagecl + x_std + y_std + elev_field + slope_field + aspect_field + plantassocnm + bedrckdepth + bedrock_kind + bedrock_hardness + psctopdepth + pscbotdepth + obs_date + pedon_purpose + pedon_type + pedlabsampnum + rcasiteid + plotconfig + exposedsoilpct + rcapointnumber + azimuthfromplotcenter + distancefromplotcenter + basalareafactor + numberoftreesin + localdisturbancedistance + localdisturbancedescription + drainedflag + beddingflag + plantationflag + forestrotationstage
 	
 	# 5. convert colors... in the presence of missing color data
 	f$soil_color <- rep(NA, times=nrow(horizons(f)))
 	idx <- complete.cases(f$m_r)
 	f$soil_color[idx] <- with(horizons(f)[idx, ], rgb(m_r, m_g, m_b)) # moist colors
 	
-	# 6. merge-in extended data:
-	# replace horizons with hz + fragment summary
-	horizons(f) <- join(horizons(f), extended_data$frag_summary, by='phiid', type='left')
-	
-	# add diagnostic boolean data into @site
-	site(f) <- extended_data$diagHzBoolean
-	
-	# add surface frag summary
-	site(f) <- extended_data$surf_frag_summary
-	
-	# load diagnostic horizons into @diagnostic: note that this requires one additional join 
-	# and implicitly filters diagnostic hz by our subset of f
-	diagnostic_hz(f) <- join(site(f)[, c('pedon_id','peiid')], extended_data$diagnostic, by='peiid', type='left')
+# 	# 6. merge-in extended data:
+# 	# replace horizons with hz + fragment summary
+# 	horizons(f) <- join(horizons(f), extended_data$frag_summary, by='phiid', type='left')
+# 	
+# 	# add diagnostic boolean data into @site
+# 	site(f) <- extended_data$diagHzBoolean
+# 	
+# 	# add surface frag summary
+# 	site(f) <- extended_data$surf_frag_summary
+# 	
+# 	# load diagnostic horizons into @diagnostic: note that this requires one additional join 
+# 	# and implicitly filters diagnostic hz by our subset of f
+# 	diagnostic_hz(f) <- join(site(f)[, c('pedon_id','peiid')], extended_data$diagnostic, by='peiid', type='left')
 	
 	# 6.1 load best-guess optimal records from taxhistory
 	# method is added to the new field called 'selection_method'

@@ -201,7 +201,16 @@ LEFT OUTER JOIN (
 	
 	# get geomorphic features
 	q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod, geomorfeat_View_1.geomfname, sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref, lower(geomorfeattype_View_1.geomftname) as geomftname
-FROM geomorfeattype_View_1 RIGHT JOIN (geomorfeat_View_1 RIGHT JOIN ((site_View_1 INNER JOIN sitegeomordesc_View_1 ON site_View_1.siteiid = sitegeomordesc_View_1.siteiidref) INNER JOIN (siteobs_View_1 INNER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref) ON site_View_1.siteiid = siteobs_View_1.siteiidref) ON geomorfeat_View_1.geomfiid = sitegeomordesc_View_1.geomfiidref) ON geomorfeattype_View_1.geomftiid = geomorfeat_View_1.geomftiidref ORDER BY peiid ASC;"
+FROM geomorfeattype_View_1 
+	RIGHT JOIN (
+	geomorfeat_View_1 
+	RIGHT JOIN ((
+	site_View_1 INNER JOIN sitegeomordesc_View_1 ON site_View_1.siteiid = sitegeomordesc_View_1.siteiidref) 
+	INNER JOIN (
+	siteobs_View_1 INNER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref) 
+	ON site_View_1.siteiid = siteobs_View_1.siteiidref) 
+	ON geomorfeat_View_1.geomfiid = sitegeomordesc_View_1.geomfiidref) 
+	ON geomorfeattype_View_1.geomftiid = geomorfeat_View_1.geomftiidref ORDER BY peiid ASC;"
    
 	# get petaxhistory data 
 	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, tk.ChoiceName as class_type, taxonname, tk.ChoiceName as taxon_kind, ss.ChoiceName as series_status, ps.ChoiceName as part_size_class, tord.ChoiceName as tax_order, tso.ChoiceName as tax_suborder, tgg.ChoiceName as tax_grtgroup, ts.ChoiceName as tax_subgroup, te.ChoiceName as tax_edition, osdtypelocflag
