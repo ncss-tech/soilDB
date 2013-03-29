@@ -39,14 +39,15 @@ FROM ((((((((
   # are there any dupes?
   t.pedon_id <- table(d$pedon_id)
   if(any(t.pedon_id > 1)) {
-  	message('NOTICE: duplicate pedons:')
-  	print(t.pedon_id[which(t.pedon_id > 1)])
+  	assign('dup.pedon.ids', value=names(t.pedon_id[which(not.unique.pedon_id)]), envir=soilDB.env)
+  	message("NOTICE: duplicate pedons: use `get('dup.pedon.ids', envir=soilDB.env)` for a list of pedon IDs")
   }
   
   # warn about sites without a matching pedon (records missing peiid)
   missing.pedon <- which(is.na(d$peiid))
   if(length(missing.pedon)> 0) {
-  	message(paste('NOTICE: sites without pedons:', paste(unique(d$site_id[missing.pedon]), collapse=', ')))
+  	assign('sites.missing.pedons', value=unique(d$site_id[missing.pedon]), envir=soilDB.env)
+  	message("NOTICE: sites without pedons: use `get('sites.missing.pedons', envir=soilDB.env)` for a list of site IDs")
   }
   
   # done
