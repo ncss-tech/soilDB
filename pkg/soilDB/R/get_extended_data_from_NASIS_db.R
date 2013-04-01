@@ -1,6 +1,17 @@
 ## TODO: need to be careful about how {l, rv, h} are used here...
 
 get_extended_data_from_NASIS_db <- function() {
+	
+	# existing veg
+	q.veg <- "SELECT peiid, siteexistveg.seqnum, lplantname
+	FROM
+	(((
+	site INNER JOIN siteobs ON site.siteiid = siteobs.siteiidref) 
+	INNER JOIN pedon ON siteobs.siteobsiid = pedon.siteobsiidref)
+	INNER JOIN siteexistveg ON siteexistveg.siteobsiidref = siteobs.siteobsiid)
+	INNER JOIN localplant ON siteexistveg.lplantiidref = localplant.lplantiid
+	ORDER BY pedon.peiid ;"
+	
 	# query diagnostic horizons, usually a 1:many relationship with pedons
 	q.diagnostic <- "SELECT peiidref as peiid, dfk.ChoiceName as diag_kind, featdept, featdepb
 FROM pediagfeatures_View_1 
@@ -231,6 +242,7 @@ FROM geomorfeattype_View_1
 	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
 	
 	# exec queries
+	d.veg <- sqlQuery(channel, q.veg, stringsAsFactors=FALSE)
 	d.diagnostic <- sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
 	d.rf.summary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
 	d.surf.rf.summary <- sqlQuery(channel, q.surf.rf.summary, stringsAsFactors=FALSE)
@@ -245,7 +257,8 @@ FROM geomorfeattype_View_1
 	d.diag.boolean <- diagHzLongtoWide(d.diagnostic)
 	
 	# return a list of results
-	return(list(diagnostic=d.diagnostic, 
+	return(list(veg=d.veg,
+							diagnostic=d.diagnostic, 
 							diagHzBoolean=d.diag.boolean, 
 							frag_summary=d.rf.summary, 
 							surf_frag_summary=d.surf.rf.summary, 
