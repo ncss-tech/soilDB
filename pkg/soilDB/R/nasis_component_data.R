@@ -7,14 +7,18 @@
 ##
 ## requires that named tables are populated in the local NASIS database
 
+## TODO: make more efficient based on RCA queries
+## TODO: add more child tables via 'extra-' query functions
+
+
 get_component_data_from_NASIS_db <- function() {
 	q <- "SELECT dmudesc, coiid, compname, comppct_r, ck.ChoiceName as compkind, majcompflag, localphase, slope_r, tfact, wei, weg, dc.ChoiceName as drainage_class, elev_r, aspectrep, map_r, airtempa_r as maat_r, soiltempa_r as mast_r, reannualprecip_r, ffd_r, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, fa.ChoiceName as frost_action, hydgrp, crc.ChoiceName as corcon, crs.ChoiceName as corsteel, taxclname, txo.ChoiceName as taxorder, txs.ChoiceName as taxsuborder, txgg.ChoiceName as  taxgrtgroup, txsg.ChoiceName as taxsubgrp, txps.ChoiceName as taxpartsize, txpsm.ChoiceName as taxpartsizemod, txact.ChoiceName as taxceactcl, txr.ChoiceName as taxreaction, txtc.ChoiceName as taxtempcl, txmc.ChoiceName as taxmoistscl, txtr.ChoiceName as taxtempregime, txed.ChoiceName as soiltaxedition, nationalmusym, muname, mk.ChoiceName as mukind, musym, ms.ChoiceName as mustatus, fc.ChoiceLabel as farmlndcl, dmuiid, muiid, repdmu
 FROM (((((((((((((((((((((((
 component_View_1
 INNER JOIN datamapunit_View_1 ON datamapunit_View_1.dmuiid = component_View_1.dmuiidref)
-	LEFT OUTER JOIN correlation_View_1 ON correlation_View_1.dmuiidref = datamapunit_View_1.dmuiid AND repdmu = 1)
-			LEFT OUTER JOIN mapunit_View_1 ON mapunit_View_1.muiid = correlation_View_1.muiidref AND repdmu = 1)
-					LEFT OUTER JOIN lmapunit_View_1 ON lmapunit_View_1.muiidref = mapunit_View_1.muiid)
+LEFT OUTER JOIN correlation_View_1 ON correlation_View_1.dmuiidref = datamapunit_View_1.dmuiid AND repdmu = 1)
+LEFT OUTER JOIN mapunit_View_1 ON mapunit_View_1.muiid = correlation_View_1.muiidref AND repdmu = 1)
+LEFT OUTER JOIN lmapunit_View_1 ON lmapunit_View_1.muiidref = mapunit_View_1.muiid)
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 148) AS dc ON drainagecl = dc.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 120) AS fa ON frostact = fa.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 103) AS crc ON corcon = crc.ChoiceValue)
