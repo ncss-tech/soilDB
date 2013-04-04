@@ -6,8 +6,6 @@
 ## prototype functions for extracting component data from local NASIS
 ##
 ## requires that named tables are populated in the local NASIS database
-
-## TODO: make more efficient based on RCA queries
 ## TODO: add more child tables via 'extra-' query functions
 
 
@@ -62,7 +60,8 @@ ORDER BY dmudesc, coiid, comppct_r DESC;"
 
 get_component_horizon_data_from_NASIS_db <- function() {
 	q <- "SELECT chiid, coiidref as coiid, hzname, hzdept_r, hzdepb_r, fragvoltot_r, sandtotal_r, silttotal_r, claytotal_r, om_r, dbovendry_r, ksat_r, awc_r, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_r
-	FROM chorizon_View_1 ORDER BY coiidref, hzdept_r ASC;"
+	FROM chorizon_View_1 
+	ORDER BY coiidref, hzdept_r ASC;"
 	
 	# setup connection to our pedon database
 	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y')
@@ -78,39 +77,42 @@ get_component_horizon_data_from_NASIS_db <- function() {
 }
 
 
+## TODO: this will not ID horizons with no depths
+## TODO: better error checking / reporting is needed: coiid, dmu id, component name
 fetchNASIS_component_data <- function() {
 	
-	# get component table
+	# load data in pieces
 	f.comp <- get_component_data_from_NASIS_db()
-	
-	# get chorizon table
 	f.chorizon <- get_component_horizon_data_from_NASIS_db()
 	
-	# join
-	f <- join(f.comp, f.chorizon, by='coiid')
-	
-	cat('finding horizonation errors ...\n')
-	f.test <- ddply(f, 'coiid', test_hz_logic, topcol='hzdept_r', bottomcol='hzdepb_r', strict=TRUE)
+	# test for bad horizonation... flag, and remove
+	message('finding horizonation errors ...')
+	f.chorizon.test <- ddply(f.chorizon, 'coiid', test_hz_logic, topcol='hzdept_r', bottomcol='hzdepb_r', strict=TRUE)
 	
 	# which are the good (valid) ones?
-	good.ids <- as.character(f.test$coiid[which(f.test$hz_logic_pass)])
-	bad.ids <- as.character(f.test$coiid[which(f.test$hz_logic_pass == FALSE)])
-	
-	# mention bad pedons
-	if(length(bad.ids) > 0)
-		cat(paste('horizon errors in:', paste(bad.ids, collapse=','), '\n'))
+	good.ids <- as.character(f.chorizon.test$coiid[which(f.chorizon.test$hz_logic_pass)])
+	bad.ids <- as.character(f.chorizon.test$coiid[which(f.chorizon.test$hz_logic_pass == FALSE)])
 	
 	# keep the good ones
-	f <- subset(f, coiid %in% good.ids)
+	f.chorizon <- subset(f.chorizon, coiid %in% good.ids)
 	
-	# init SPC from chorizon data
-	depths(f) <- coiid ~ hzdept_r + hzdepb_r
+	# upgrade to SoilProfilecollection
+	depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
 	
-	# move site data
-	site(f) <- ~ slope_r + tfact + wei + weg + drainage_class + elev_r + aspectrep + map_r + maat_r + mast_r + reannualprecip_r + ffd_r + nirrcapcl + nirrcapscl + irrcapcl + irrcapscl + frost_action + hydgrp + corcon + corsteel + taxclname + taxorder + taxsuborder + taxgrtgroup + taxsubgrp + taxpartsize + taxpartsizemod + taxceactcl + taxreaction + taxtempcl + taxmoistscl + taxtempregime + soiltaxedition + dmudesc + compname + comppct_r + compkind + majcompflag + localphase + dmuiid + musym + nationalmusym + muname + mukind + mustatus + farmlndcl + muiid
+	## TODO: this will fail in the presence of duplicates
+	# add site data to object
+	site(f.chorizon) <- f.comp # left-join via coiid
+	
+	# 7. save and mention bad pedons
+	if(length(bad.ids) > 0) {
+		bad.idx <- which(f.comp$coiid %in% bad.ids)
+		bad.labels <- paste(f.comp[bad.idx, ]$dmudesc, f.comp[bad.idx, ]$compname, sep='-')
+		assign('bad.components', value=cbind(coiid=bad.ids, component=bad.labels), envir=soilDB.env)
+		message("horizon errors detected, use `get('bad.components', envir=soilDB.env)` for a list of pedon IDs")
+	}
 	
 	# done, return SPC
-	return(f)
+	return(f.chorizon)
 	
 }
 

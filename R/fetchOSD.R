@@ -15,9 +15,18 @@ fetchOSD <- function(soils) {
 	u.site <- URLencode(u.site)
 	u.hz <- URLencode(u.hz)
 	
+	# init empty vars
+	s <- NULL
+	h <- NULL
+	
 	# request data
-	s <- read.csv(url(u.site), stringsAsFactors=FALSE)
-	h <- read.csv(url(u.hz), stringsAsFactors=FALSE)
+	try(s <- read.csv(url(u.site), stringsAsFactors=FALSE), silent=TRUE)
+	try(h <- read.csv(url(u.hz), stringsAsFactors=FALSE), silent=TRUE)
+	
+	# report missing data
+	if(all(c(is.null(s), is.null(h)))) {
+		stop('query returned no data', call.=FALSE)
+	}
 	
 	# reformatting and color conversion
 	h$soil_color <- with(h, munsell2rgb(matrix_wet_color_hue, matrix_wet_color_value, matrix_wet_color_chroma))
