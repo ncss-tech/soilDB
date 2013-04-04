@@ -1,4 +1,5 @@
 \name{soilDB-package}
+\alias{soilDB.env}
 \alias{soilDB-package}
 \alias{soilDB}
 \docType{package}
