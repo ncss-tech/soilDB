@@ -1,3 +1,8 @@
+-------------------------- soilDB 0.9-8 (2013-04-03) ----------------------------
+* fetchOSD() now immune to queries for non-soils
+* improved efficiency in fetch* functions
+* NASIS-DMU fetching functions now return more information, still not as complete as pedon-queries
+
 -------------------------- soilDB 0.9-7 (2013-03-01) ----------------------------
 * NASIS query functions now return only records from the selected set, please test older code!
 
