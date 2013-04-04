@@ -1,0 +1,37 @@
+\name{fetchKSSL}
+\alias{fetchKSSL}
+\title{Fetch KSSL Data (EXPERIMENTAL)}
+\description{Get KSSL data via BBOX or series query, from the SoilWeb system.}
+\usage{fetchKSSL(series = NULL, bbox = NULL)}
+
+\arguments{
+  \item{series}{a soil series name}
+  \item{bbox}{a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}}
+}
+\details{This is an experimental interface to most of the KSSL data as of June 2012. Series-queries are case insensitive.}
+\value{a \code{SoilProfileCollection} object}
+\references{
+\url{http://ncsslabdatamart.sc.egov.usda.gov/}
+}
+\author{D.E. Beaudette}
+\note{SoilWeb maintains a snapshot of the KSSL data. Please use the link above for the live data.}
+
+\seealso{\code{\link{fetchOSD}}}
+\examples{
+# search by series name
+s <- fetchKSSL(series='auburn')
+
+# search by bounding-box
+# s <- fetchKSSL(bbox=c(-120, 37, -122, 38))
+
+# how many pedons
+length(s)
+
+# plot 
+par(mar=c(0,0,0,0))
+plot(s, name='hzn_desgn', max.depth=150)
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{ ~kwd1 }
+\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

@@ -2,6 +2,22 @@
 
 get_extended_data_from_NASIS_db <- function() {
 	
+	## TODO: adapt this for SQL server syntax!
+	# returns the first structure defined per horizon
+	q.structure <- "SELECT s.phiid, FIRST(s.structure_grade) as structure_grade, FIRST(s.structure_size) as structure_size, FIRST(s.structure_type) as structure_type
+	FROM
+	(SELECT phstructure.phiidref as phiid, sg.ChoiceName as structure_grade, ss.ChoiceName as structure_size, st.ChoiceName as structure_type, structid, structpartsto
+	FROM ((
+	phstructure
+	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1300) AS sg ON phstructure.structgrade = sg.ChoiceValue)
+	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1302) AS ss ON phstructure.structsize = ss.ChoiceValue)
+	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1303) AS st ON phstructure.structtype = st.ChoiceValue
+	WHERE structtype IS NOT NULL
+	ORDER BY phstructure.phiidref, structid ASC
+	) as s
+	GROUP BY s.phiid
+	ORDER BY s.phiid;"
+	
 	# existing veg
 	q.veg <- "SELECT siteiid, siteexistveg_View_1.seqnum, plantsym, plantsciname, plantnatvernm, vegetationstratalevel, orderofdominance
 	FROM
