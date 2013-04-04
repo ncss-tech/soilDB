@@ -1,3 +1,9 @@
+-------------------------- soilDB 1.0 (2013-04-04) ----------------------------
+* fetchNASIS() is now much more efficient: faster / less memory used
+* new function! fetchKSSL(): experimental interface to (most of) the KSSL data
+	- queries can be performed by series name or GCS bounding box
+	- data are delivered via CA Soil Resource Lab server
+
 -------------------------- soilDB 0.9-8 (2013-04-03) ----------------------------
 * fetchOSD() now immune to queries for non-soils
 * improved efficiency in fetch* functions
