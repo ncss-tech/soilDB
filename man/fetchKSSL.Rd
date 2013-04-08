@@ -14,7 +14,7 @@
 \url{http://ncsslabdatamart.sc.egov.usda.gov/}
 }
 \author{D.E. Beaudette}
-\note{SoilWeb maintains a snapshot of the KSSL data. Please use the link above for the live data.}
+\note{SoilWeb maintains a snapshot of the KSSL data. Please use the link below for the live data.}
 
 \seealso{\code{\link{fetchOSD}}}
 \examples{
