@@ -38,7 +38,8 @@ FROM ((((((((
   
   # are there any dupes?
   t.pedon_id <- table(d$pedon_id)
-  if(any(t.pedon_id > 1)) {
+  not.unique.pedon_id <- t.pedon_id > 1
+  if(any(not.unique.pedon_id)) {
   	assign('dup.pedon.ids', value=names(t.pedon_id[which(not.unique.pedon_id)]), envir=soilDB.env)
   	message("NOTICE: duplicate pedons: use `get('dup.pedon.ids', envir=soilDB.env)` for a list of pedon IDs")
   }
