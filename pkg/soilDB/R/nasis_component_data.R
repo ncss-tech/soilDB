@@ -36,7 +36,7 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 188) AS txt
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 2030) AS txed ON soiltaxedition = txed.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 118) AS mk ON mukind = mk.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 138) AS ms ON mustatus = ms.ChoiceValue)
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 151) AS fc ON farmlndcl = fc.ChoiceName
+LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 151) AS fc ON farmlndcl = fc.ChoiceValue
 WHERE ms.ChoiceName IS NULL OR ms.Choicename != 'additional'
 ORDER BY dmudesc, coiid, comppct_r DESC;"
 	
