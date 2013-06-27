@@ -11,8 +11,6 @@
 
 5. best-guess record from taxhistory table-- see fetchPedonPC() for current implementation
 
-6. what do we do with multiple entries / site in the Site Bedrock table?
-
 7. check sync between NASIS / PedonPC functions
 
 8. need to check for presence of STD coordinates vs. DMS/datum coordinates, maybe warn users

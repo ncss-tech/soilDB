@@ -7,6 +7,7 @@
 
 \value{A dataframe.}
 \author{Jay M. Skovlin and Dylan E. Beaudette}
+\details{When multiple "site bedrock" entries are present, only the shallowest is returned by this function.}
 \note{This function currently works only on Windows.}
 
 \seealso{
