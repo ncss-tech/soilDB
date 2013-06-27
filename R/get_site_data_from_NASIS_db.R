@@ -4,7 +4,6 @@
 # for now, 'longstddecimaldegrees' and 'latstddecimaldegrees' are read-in as new site-level attributes
 # ... this needs to be synced to PedonPC functions
 
-# TODO: sitebedrock _may_ contain more than 1 row / site... this will result in duplicate rows returned by this function
 
 get_site_data_from_NASIS_db <- function() {
 	q <- "SELECT siteiid as siteiid, peiid, usiteid as site_id, upedonid as pedon_id, obsdate as obs_date, -(longdegrees + CASE WHEN longminutes IS NULL THEN 0.0 ELSE longminutes / 60.0 END + CASE WHEN longseconds IS NULL THEN 0.0 ELSE longseconds / 60.0 / 60.0 END) as x, latdegrees + CASE WHEN latminutes IS NULL THEN 0.0 ELSE latminutes / 60.0 END + CASE WHEN latseconds IS NULL THEN 0.0 ELSE latseconds / 60.0 / 60.0 END as y, dm.ChoiceName as datum, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, descname as describer, pp.ChoiceName as pedon_purpose, pt.ChoiceName as pedon_type, pedlabsampnum, psctopdepth, pscbotdepth, elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, bedrckdepth, br.ChoiceLabel as bedrock_kind, bh.ChoiceLabel as bedrock_hardness, hs.ChoiceLabel as hillslope_pos, sp.ChoiceLabel as slope_position, sa.ChoiceLabel as shapeacross, sd.ChoiceLabel as shapedown, sc.ChoiceLabel as slopecomplex, dc.ChoiceLabel as drainagecl
@@ -14,13 +13,21 @@ FROM
 	
 	site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref) 
 	LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref) 
-	LEFT OUTER JOIN sitebedrock_View_1 ON site_View_1.siteiid = sitebedrock_View_1.siteiidref)
+	LEFT OUTER JOIN 
+                (SELECT * FROM
+                      (
+                      SELECT siteiidref, bedrckkind, bedrckhardness, bedrckdepth,
+                      ROW_NUMBER() OVER (PARTITION BY siteiidref ORDER BY bedrckdepth ASC) AS rn
+                      FROM sitebedrock_View_1
+                      ) as sbrn
+                  WHERE rn = 1
+                ) as first_site_bedrock ON site_View_1.siteiid = first_site_bedrock.siteiidref)
 
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1261) AS dm ON site_View_1.horizdatnm = dm.ChoiceValue)
 
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 517) AS br ON sitebedrock_View_1.bedrckkind = br.ChoiceValue)
+LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 517) AS br ON first_site_bedrock.bedrckkind = br.ChoiceValue)
 
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1247) AS bh ON sitebedrock_View_1.bedrckhardness = bh.ChoiceValue)
+LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1247) AS bh ON first_site_bedrock.bedrckhardness = bh.ChoiceValue)
 
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1271) AS pp ON pedon_View_1.pedonpurpose = pp.ChoiceValue)
 

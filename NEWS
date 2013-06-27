@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.1 (2013-06-27) ----------------------------
+* get_site_data_from_NASIS_db() no longer has problems when more than 1 site bedrock kind is defined; only the shallowest row is returned
+
 -------------------------- soilDB 1.0 (2013-04-04) ----------------------------
 * fetchNASIS() is now much more efficient: faster / less memory used
 * new function! fetchKSSL(): experimental interface to (most of) the KSSL data
