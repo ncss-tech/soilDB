@@ -8,7 +8,7 @@
   \item{series}{a soil series name}
   \item{bbox}{a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}}
 }
-\details{This is an experimental interface to most of the KSSL data as of June 2012. Series-queries are case insensitive.}
+\details{This is an experimental interface to most of the KSSL data as of June 2013. Series-queries are case insensitive.}
 \value{a \code{SoilProfileCollection} object}
 \references{
 \url{http://ncsslabdatamart.sc.egov.usda.gov/}
