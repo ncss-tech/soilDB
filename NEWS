@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.1-1 (2013-07-19) ----------------------------
+* new function get_copedon_from_NASIS_db(): returns basic information associated with pedons linked to component data in NASIS
+
 -------------------------- soilDB 1.1 (2013-06-27) ----------------------------
 * get_site_data_from_NASIS_db() no longer has problems when more than 1 site bedrock kind is defined; only the shallowest row is returned
 

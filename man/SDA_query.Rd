@@ -49,9 +49,12 @@ m <- MUKEYS_by_ll_bbox(b)
 # make an SQL-compliant "in" statment
 in.statement <- format_SQL_in_statement(m)
 # format query:
-q <- paste("SELECT component.cokey, compname, comppct_r, hzdept_r, hzdepb_r, hzname, sandtotal_r, silttotal_r, claytotal_r
+q <- paste("
+SELECT component.cokey, compname, comppct_r, hzdept_r, hzdepb_r, 
+hzname, sandtotal_r, silttotal_r, claytotal_r
 FROM component JOIN chorizon ON component.cokey = chorizon.cokey
-WHERE majcompflag = 'Yes' AND mukey IN ", in.statement, "ORDER BY cokey, comppct_r DESC, hzdept_r ASC", sep="")
+WHERE majcompflag = 'Yes' AND mukey IN ", in.statement, 
+"ORDER BY cokey, comppct_r DESC, hzdept_r ASC", sep="")
 # now get component and horizon-level data for these map unit keys
 res <- SDA_query(q)
 }
@@ -59,7 +62,8 @@ res <- SDA_query(q)
 # get component-level data for a specific soil survey area (Yolo county, CA)
 \dontrun{
 q <- "SELECT 
-component.mukey, cokey, comppct_r, compname, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp
+component.mukey, cokey, comppct_r, compname, taxclname, 
+taxorder, taxsuborder, taxgrtgroup, taxsubgrp
 FROM legend
 INNER JOIN mapunit ON mapunit.lkey = legend.lkey
 LEFT OUTER JOIN component ON component.mukey = mapunit.mukey

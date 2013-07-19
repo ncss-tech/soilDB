@@ -21,7 +21,8 @@ fetchOSD(soils)
 
 \examples{
 # soils of interest
-s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz', 'reiff', 'san joaquin', 'montpellier', 'grangeville', 'pollasky', 'ramona')
+s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz', 
+'reiff', 'san joaquin', 'montpellier', 'grangeville', 'pollasky', 'ramona')
 
 # fetch and convert data into an SPC
 s <- fetchOSD(s.list)

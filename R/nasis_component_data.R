@@ -58,6 +58,29 @@ ORDER BY dmudesc, coiid, comppct_r DESC;"
 }
 
 
+# get linked pedons by peiid and user pedon ID
+# note that there may be >=1 pedons / coiid
+get_copedon_from_NASIS_db <- function() {
+  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id
+FROM copedon
+JOIN pedon ON peiidref = peiid
+WHERE rvindicator = 1;
+"
+  # setup connection to our local NASIS database
+  channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
+  
+  # exec query
+  d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
+  
+  # close connection
+  odbcClose(channel)
+  
+  # done
+  return(d)
+}
+
+
+
 get_component_horizon_data_from_NASIS_db <- function() {
 	q <- "SELECT chiid, coiidref as coiid, hzname, hzdept_r, hzdepb_r, fragvoltot_r, sandtotal_r, silttotal_r, claytotal_r, om_r, dbovendry_r, ksat_r, awc_r, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_r
 	FROM chorizon_View_1 
