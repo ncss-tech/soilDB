@@ -51,13 +51,13 @@ s$proj4 <- paste('+proj=longlat +datum=', s$datum, sep='')
 
 # iterate over pedons, and convert to WGS84
 new.coords <- ddply(s, 'peiid', 
-										.progress='text', .fun=function(i) {
-											coordinates(i) <- ~ x + y
-											proj4string(i) <- CRS(i$proj4)
-											i.t <- spTransform(i, CRS('+proj=longlat +datum=WGS84'))
-											i.c <- as.matrix(coordinates(i.t))
-											return(data.frame(x.new=i.c[, 1], y.new=i.c[, 2]))
-										})
+  .progress='text', .fun=function(i) {
+    coordinates(i) <- ~ x + y
+    proj4string(i) <- CRS(i$proj4)
+    i.t <- spTransform(i, CRS('+proj=longlat +datum=WGS84'))
+    i.c <- as.matrix(coordinates(i.t))
+    return(data.frame(x.new=i.c[, 1], y.new=i.c[, 2]))
+  })
 
 # merge in new coordinates
 s <- join(s, new.coords)
