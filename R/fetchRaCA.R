@@ -60,6 +60,10 @@ fetchRaCA <- function(series=NULL, bbox=NULL) {
   depths(h) <- rcapid ~ hzdept + hzdepb
   site(h) <- s
   
+  # don't init coordinates, as it would be hard for the user to update later
+  # coordinates(h) <- ~ x + y
+  # proj4string(h) <- '+proj=longlat +datum=WGS84'
+  
   # pack into a list and return
   return(list(pedons=h, trees=trees, veg=veg, conc=conc, stock=stock))
 }

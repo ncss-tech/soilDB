@@ -13,11 +13,10 @@
 \usage{
 fetchNASIS()
 fetchNASIS_component_data()
-getHzErrorsNASIS(test.NA=FALSE, strict=TRUE)
+getHzErrorsNASIS(strict=TRUE)
 }
 
 \arguments{
-  \item{test.NA}{should missing lower boundaries result in an error? (FALSE)}
   \item{strict}{should horizonation by strictly enforced? (TRUE)}
 }
 

@@ -54,7 +54,7 @@ fetchNASIS <- function() {
 	bad.pedon.ids <- as.character(h.test$pedon_id[which(h.test$hz_logic_pass == FALSE)])
 	
 	# keep the good ones
-	h <- subset(h, subset=pedon_id %in% good.pedon.ids)
+	h <- h[which(h$pedon_id %in% good.pedon.ids), ]
 	
 	# upgrade to SoilProfilecollection
 	depths(h) <- pedon_id ~ hzdept + hzdepb

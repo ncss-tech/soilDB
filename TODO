@@ -11,13 +11,13 @@
 
 5. best-guess record from taxhistory table-- see fetchPedonPC() for current implementation
 
-7. check sync between NASIS / PedonPC functions
+7. synchronize NASIS ---> PedonPC functions
 
 8. need to check for presence of STD coordinates vs. DMS/datum coordinates, maybe warn users
 
 9. figure out data problems: total_frags_pct vs. fragvoltot
 
-10. allow for querying the selected set (local NASIS):
+10. remove getHzErrorsNASIS() and pedonPC equiv.
 
 # ideas
 library(RODBC)
