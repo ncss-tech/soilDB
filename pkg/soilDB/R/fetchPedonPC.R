@@ -31,7 +31,7 @@ fetchPedonPC <- function(dsn) {
 	bad.pedon.ids <- as.character(f.test$pedon_id[which(f.test$hz_logic_pass == FALSE)])
 	
 	# keep the good ones
-	f <- subset(f, subset=pedon_id %in% good.pedon.ids)
+	f <- f[which(f$pedon_id %in% good.pedon.ids), ]
 	
 	# 4. upgrade to SoilProfilecollection
 	depths(f) <- pedon_id ~ hzdept + hzdepb

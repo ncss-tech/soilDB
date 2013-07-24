@@ -27,8 +27,8 @@ pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.
 	d <- cbind(d, d.rgb)
 	
 	# split into dry / moist
-	dry.colors <- subset(d, d$colormoistst == 1)
-	moist.colors <- subset(d, d$colormoistst == 2)
+	dry.colors <- d[which(d$colormoistst == 1), ]
+	moist.colors <- d[which(d$colormoistst == 2), ]
 	
 	# split-out those data that need color mixing:
 	dry.to.mix <- names(which(table(dry.colors$phiid) > 1))

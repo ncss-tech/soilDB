@@ -7,12 +7,11 @@
 
 \usage{
 fetchPedonPC(dsn)
-getHzErrorsPedonPC(dsn, test.NA=FALSE, strict=TRUE)
+getHzErrorsPedonPC(dsn, strict=TRUE)
 }
 
 \arguments{
   \item{dsn}{The path to a PedonPC version 5.x database}
-  \item{test.NA}{should missing lower boundaries result in an error? (FALSE)}
   \item{strict}{should horizonation by strictly enforced? (TRUE)}
 }
 

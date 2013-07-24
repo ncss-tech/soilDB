@@ -26,8 +26,8 @@ FROM (
 	d <- cbind(d, d.rgb)
 	
 	# split into dry / moist
-	dry.colors <- subset(d, d$colormoistst == 1)
-	moist.colors <- subset(d, d$colormoistst == 2)
+	dry.colors <- d[which(d$colormoistst == 1), ]
+	moist.colors <- d[which(d$colormoistst == 2), ]
 	
 	# mix and clean colors
 	cat('mixing and cleaning colors ...\n')
