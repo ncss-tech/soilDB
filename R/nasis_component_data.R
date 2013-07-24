@@ -117,7 +117,7 @@ fetchNASIS_component_data <- function() {
 	bad.ids <- as.character(f.chorizon.test$coiid[which(f.chorizon.test$hz_logic_pass == FALSE)])
 	
 	# keep the good ones
-	f.chorizon <- subset(f.chorizon, coiid %in% good.ids)
+	f.chorizon <- subset(f.chorizon, subset=coiid %in% good.ids)
 	
 	# upgrade to SoilProfilecollection
 	depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
