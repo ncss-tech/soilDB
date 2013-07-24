@@ -68,7 +68,9 @@ summary(sqrt(apply((s[, c('x', 'y')] - s[, c('x.new', 'y.new')])^2, 1, sum)))
 # save to update file for use with "Import of Standard WGS84 Georeference" calculation in NASIS
 # note that this defines the coordinate source as "GPS", hence the last column of '1's.
 std.coordinates.update.data <- unique(cbind(s[, c('siteiid', 'y.new', 'x.new')], 1))
-write.table(std.coordinates.update.data, file='c:/data/sgeoref.txt', col.names=FALSE, row.names=FALSE, sep='|')
+# save to file
+write.table(std.coordinates.update.data, 
+file='c:/data/sgeoref.txt', col.names=FALSE, row.names=FALSE, sep='|')
 }}
 
 \keyword{manip}
