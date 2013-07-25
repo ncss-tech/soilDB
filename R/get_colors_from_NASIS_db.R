@@ -1,4 +1,5 @@
 # 2013-01-08: now much faster since we only mix/clean data with > 1 color / horizon
+# consider mixing and returning closest Munsell color... does this make sense in RGB color space?
 
 # results can be referenced via phiid (horizon-level ID)
 get_colors_from_NASIS_db <- function() {
