@@ -76,7 +76,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, get.vnir=FALSE) {
     message('spectra are large, download may take some time...', appendLF=TRUE)
     
     # save the file locally
-    download.file(url=vnir.url, destfile=tf.vnir, mode='wb', quiet=FALSE)
+    download.file(url=vnir.url, destfile=tf.vnir, mode='wb', quiet=TRUE)
     # try to open
     try(vnir <- read.table(gzfile(tf.vnir), header=TRUE, sep='|'), silent=TRUE)
     

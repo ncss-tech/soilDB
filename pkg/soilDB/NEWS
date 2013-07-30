@@ -1,4 +1,4 @@
--------------------------- soilDB 1.1-2 (2013-07-24) ----------------------------
+-------------------------- soilDB 1.1-3 (2013-07-30) ----------------------------
 * new function get_copedon_from_NASIS_db(): returns basic information associated with pedons linked to component data in NASIS
 * new function fetchRaCA(): gets data from the Rapid Carbon Assessment project [work in progress]
 
