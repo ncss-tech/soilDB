@@ -2,11 +2,12 @@
 \alias{fetchRaCA}
 \title{Fetch KSSL Data (EXPERIMENTAL)}
 \description{Get Rapid Carbon Assessment (RaCA) data via BBOX or series query, from the SoilWeb system.}
-\usage{fetchRaCA(series = NULL, bbox = NULL)}
+\usage{fetchRaCA(series = NULL, bbox = NULL, get.vnir = FALSE)}
 
 \arguments{
   \item{series}{a soil series name, case insensitive}
   \item{bbox}{a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}}
+  \item{get.vnir}{boolean, should associated VNIR spectra be downloaded? (see details)}
 }
 
 \value{
@@ -16,12 +17,16 @@
     \item{\code{veg}:}{a \code{data.frame} object containing plant species}
     \item{\code{conc}:}{a \code{data.frame} object containing carbon concentrations at standardized depths}
     \item{\code{stock}:}{a \code{data.frame} object containing carbon quantities (stocks) at standardized depths}
+    \item{\code{spectra}:}{a numeric \code{matrix} containing VNIR reflectance spectra from 350--2500 nm}
   }
 }
+
+\details{The VNIR spectra associated with RaCA data are quite large [each gzip-compressed VNIR spectra record is about 6.6kb], so requests for these data are disabled by default.}
+
 \references{
   \url{http://soils.usda.gov/survey/raca/index.html}
 }
-\author{D.E. Beaudette}
+\author{D.E. Beaudette, USDA-NRCS staff}
 
 \seealso{\code{\link{fetchOSD}}}
 \examples{
