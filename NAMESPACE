@@ -6,11 +6,6 @@ importFrom(plyr,
   join
 )
 
-importFrom(reshape, 
-  melt,
-  melt.data.frame
-)
-
 importFrom(Hmisc, 
   wtd.mean, 
   wtd.var, 

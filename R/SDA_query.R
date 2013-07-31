@@ -39,7 +39,7 @@ SDA_query <- function(q) {
 	if(!require(SSOAP) | !require(XMLSchema))
 		stop('please install the `SSOAP` and `XMLSchema` packages', call.=FALSE)
 	
-	# important: change the default behavior of data.frame and melt
+	# important: change the default behavior of data.frame
 	opt.original <- options(stringsAsFactors = FALSE)
 	
 	# setup server, action, and xmlns

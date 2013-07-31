@@ -20,6 +20,7 @@ fetchOSD(soils)
 
 
 \examples{
+\dontrun{
 # soils of interest
 s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz', 
 'reiff', 'san joaquin', 'montpellier', 'grangeville', 'pollasky', 'ramona')
@@ -30,6 +31,7 @@ s <- fetchOSD(s.list)
 # plot profiles
 par(mar=c(0,0,0,0))
 plot(s, name='hzname', cex.names=0.85, axis.line.offset=-4)
+}
 }
 
 \keyword{manip}

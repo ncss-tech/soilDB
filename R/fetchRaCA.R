@@ -4,7 +4,7 @@
 # this loads and packages the data into a list of objects
 fetchRaCA <- function(series=NULL, bbox=NULL, get.vnir=FALSE) {
   
-  # important: change the default behavior of data.frame and melt
+  # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)
   
   # sanity-check: user must supply some kind of criteria
