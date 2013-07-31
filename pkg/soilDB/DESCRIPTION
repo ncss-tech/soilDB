@@ -1,16 +1,16 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 1.1-3
-Date: 2013-07-30
-Packaged: 2013-07-30; dylan
+Version: 1.1-4
+Date: 2013-07-31
+Packaged: 2013-07-31; dylan
 Author: D.E. Beaudette and J.M. Skovlin
 Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
 License: GPL (>= 2)
 LazyLoad: yes
 Depends: R (>= 2.9.0), RODBC, aqp
-Imports: methods, plyr, reshape, Hmisc
+Imports: methods, plyr, Hmisc
 Suggests: lattice, rgdal, RCurl, XML, SSOAP, XMLSchema, dismo
 Repository: CRAN
 URL: http://aqp.r-forge.r-project.org/
