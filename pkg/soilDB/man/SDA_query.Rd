@@ -26,11 +26,12 @@ install.packages("SSOAP", repos = "http://www.omegahat.org/R", type="source")
 install.packages("XMLSchema", repos = "http://www.omegahat.org/R", type="source")
 }
 
-# NASIS export metadata:
+# SSURGO export metadata:
 \dontrun{
-res <- SDA_query('select areasymbol, exportcertdate from distlegendmd order by areasymbol')
-res$exportcertdate <- as.Date(as.POSIXct(res$exportcertdate, format="\%m/\%d/\%Y \%H:\%M:\%S"))
-recently_updated <- res$areasymbol[res$exportcertdate > as.Date('2011-01-01')]
+q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA%';"
+x <- SDA_query(q)
+x$saverest <- as.Date(x$saverest, format="%m/%d/%Y")
+head(x)
 }
 
 # basic query:
