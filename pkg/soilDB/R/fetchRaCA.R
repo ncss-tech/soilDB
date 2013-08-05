@@ -113,7 +113,14 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   # reset options:
   options(opt.original)
   
-  # pack into a list and return
-  return(list(pedons=h, trees=trees, veg=veg, conc=conc, stock=stock, spectra=spectra))
+  # pack into a list for the user
+  res <- list(pedons=h, trees=trees, veg=veg, conc=conc, stock=stock, spectra=spectra)
+  res.size <- round(object.size(res) / 1024 / 1024, 2)
+  
+  # some feedback via message:
+  message(paste(length(unique(h$rcasiteid)), ' RaCA sites loaded (', res.size, ' Mb transfered)', sep=''))
+  
+  # done
+  return(res)
   
 }
