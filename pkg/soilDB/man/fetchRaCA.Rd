@@ -1,12 +1,13 @@
 \name{fetchRaCA}
 \alias{fetchRaCA}
 \title{Fetch KSSL Data (EXPERIMENTAL)}
-\description{Get Rapid Carbon Assessment (RaCA) data via BBOX or series query, from the SoilWeb system.}
-\usage{fetchRaCA(series = NULL, bbox = NULL, get.vnir = FALSE)}
+\description{Get Rapid Carbon Assessment (RaCA) data via state, geographic bounding-box, or series query from the SoilWeb system.}
+\usage{fetchRaCA(series = NULL, bbox = NULL, state = NULL, get.vnir = FALSE)}
 
 \arguments{
   \item{series}{a soil series name, case insensitive}
   \item{bbox}{a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}}
+  \item{state}{a two-letter US state abbreviation, case insensitive}
   \item{get.vnir}{boolean, should associated VNIR spectra be downloaded? (see details)}
 }
 
