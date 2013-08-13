@@ -19,7 +19,6 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   h <- NULL
   trees <- NULL
   veg <- NULL
-  conc <- NULL
   stock <- NULL
   vnir <- NULL
   spectra <- NULL
@@ -46,7 +45,6 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   hz.url <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=horizon', f, sep=''))
   trees.url <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=trees', f, sep=''))
   veg.url <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=veg', f, sep=''))
-  conc.url <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=conc', f, sep=''))
   stock.url <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=stock', f, sep=''))
   vnir.url <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=vnir', f, sep=''))
   
@@ -55,7 +53,6 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   tf.hz <- tempfile()
   tf.trees <- tempfile()
   tf.veg <- tempfile()
-  tf.conc <- tempfile()
   tf.stock <- tempfile()
   tf.vnir <- tempfile()
   
@@ -64,7 +61,6 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   download.file(url=hz.url, destfile=tf.hz, mode='wb', quiet=TRUE)
   download.file(url=trees.url, destfile=tf.trees, mode='wb', quiet=TRUE)
   download.file(url=veg.url, destfile=tf.veg, mode='wb', quiet=TRUE)
-  download.file(url=conc.url, destfile=tf.conc, mode='wb', quiet=TRUE)
   download.file(url=stock.url, destfile=tf.stock, mode='wb', quiet=TRUE)
   
   # load pieces
@@ -72,7 +68,6 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   try(h <- read.table(gzfile(tf.hz), header=TRUE, sep='|'), silent=TRUE)
   try(trees <- read.table(gzfile(tf.trees), header=TRUE, sep='|'), silent=TRUE)
   try(veg <- read.table(gzfile(tf.veg), header=TRUE, sep='|'), silent=TRUE)
-  try(conc <- read.table(gzfile(tf.conc), header=TRUE, sep='|'), silent=TRUE)
   try(stock <- read.table(gzfile(tf.stock), header=TRUE, sep='|'), silent=TRUE)
   
   # optionally load spectra
@@ -114,7 +109,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   options(opt.original)
   
   # pack into a list for the user
-  res <- list(pedons=h, trees=trees, veg=veg, conc=conc, stock=stock, spectra=spectra)
+  res <- list(pedons=h, trees=trees, veg=veg, stock=stock, spectra=spectra)
   res.size <- round(object.size(res) / 1024 / 1024, 2)
   
   # some feedback via message:
