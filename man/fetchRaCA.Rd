@@ -17,6 +17,7 @@
     \item{\code{trees}:}{a \code{data.frame} object containing tree DBH and height}
     \item{\code{veg}:}{a \code{data.frame} object containing plant species}
     \item{\code{stock}:}{a \code{data.frame} object containing carbon quantities (stocks) at standardized depths}
+    \item{\code{lab}:}{a \code{data.frame} object containing sample-level bulk density and soil organic carbon values}
     \item{\code{spectra}:}{a numeric \code{matrix} containing VNIR reflectance spectra from 350--2500 nm}
   }
 }

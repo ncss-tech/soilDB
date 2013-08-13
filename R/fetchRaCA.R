@@ -20,6 +20,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   trees <- NULL
   veg <- NULL
   stock <- NULL
+  lab <- NULL
   vnir <- NULL
   spectra <- NULL
   
@@ -46,6 +47,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   trees.url <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=trees', f, sep=''))
   veg.url <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=veg', f, sep=''))
   stock.url <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=stock', f, sep=''))
+  lab.url <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=lab', f, sep=''))
   vnir.url <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=vnir', f, sep=''))
   
   # init temp files
@@ -54,6 +56,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   tf.trees <- tempfile()
   tf.veg <- tempfile()
   tf.stock <- tempfile()
+  tf.lab <- tempfile()
   tf.vnir <- tempfile()
   
   # download pieces
@@ -62,6 +65,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   download.file(url=trees.url, destfile=tf.trees, mode='wb', quiet=TRUE)
   download.file(url=veg.url, destfile=tf.veg, mode='wb', quiet=TRUE)
   download.file(url=stock.url, destfile=tf.stock, mode='wb', quiet=TRUE)
+  download.file(url=lab.url, destfile=tf.lab, mode='wb', quiet=TRUE)
   
   # load pieces
   try(s <- read.table(gzfile(tf.site), header=TRUE, sep='|'), silent=TRUE)
@@ -69,6 +73,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   try(trees <- read.table(gzfile(tf.trees), header=TRUE, sep='|'), silent=TRUE)
   try(veg <- read.table(gzfile(tf.veg), header=TRUE, sep='|'), silent=TRUE)
   try(stock <- read.table(gzfile(tf.stock), header=TRUE, sep='|'), silent=TRUE)
+  try(lab <- read.table(gzfile(tf.lab), header=TRUE, sep='|'), silent=TRUE)
   
   # optionally load spectra
   if(get.vnir) {
@@ -109,7 +114,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   options(opt.original)
   
   # pack into a list for the user
-  res <- list(pedons=h, trees=trees, veg=veg, stock=stock, spectra=spectra)
+  res <- list(pedons=h, trees=trees, veg=veg, stock=stock, lab=lab, spectra=spectra)
   res.size <- round(object.size(res) / 1024 / 1024, 2)
   
   # some feedback via message:
