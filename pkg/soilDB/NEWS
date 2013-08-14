@@ -1,5 +1,6 @@
 -------------------------- soilDB 1.2 (2013-08-13) ----------------------------
 * fetchRaCA() function now stable, ready for general usage
+* fixed bug in fetchRaCA() function where the presence of single-quote character in horizon designation would throw and error
 
 -------------------------- soilDB 1.1-3 (2013-07-30) ----------------------------
 * new function get_copedon_from_NASIS_db(): returns basic information associated with pedons linked to component data in NASIS
