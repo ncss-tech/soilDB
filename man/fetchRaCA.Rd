@@ -26,6 +26,7 @@
 
 \references{
   \url{http://soils.usda.gov/survey/raca/index.html}
+  \href{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/RaCA-demo.html?root=aqp}{fetchRaCA() Tutorial}
 }
 \author{D.E. Beaudette, USDA-NRCS staff}
 
