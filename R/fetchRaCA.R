@@ -72,12 +72,12 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   download.file(url=sample.url, destfile=tf.sample, mode='wb', quiet=TRUE)
   
   # load pieces
-  try(s <- read.table(gzfile(tf.site), header=TRUE, sep='|', quote=''), silent=TRUE)
-  try(h <- read.table(gzfile(tf.hz), header=TRUE, sep='|', quote=''), silent=TRUE)
-  try(trees <- read.table(gzfile(tf.trees), header=TRUE, sep='|', quote=''), silent=TRUE)
-  try(veg <- read.table(gzfile(tf.veg), header=TRUE, sep='|', quote=''), silent=TRUE)
-  try(stock <- read.table(gzfile(tf.stock), header=TRUE, sep='|', quote=''), silent=TRUE)
-  try(sample <- read.table(gzfile(tf.sample), header=TRUE, sep='|', quote=''), silent=TRUE)
+  try(s <- read.table(gzfile(tf.site), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
+  try(h <- read.table(gzfile(tf.hz), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
+  try(trees <- read.table(gzfile(tf.trees), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
+  try(veg <- read.table(gzfile(tf.veg), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
+  try(stock <- read.table(gzfile(tf.stock), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
+  try(sample <- read.table(gzfile(tf.sample), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
   
   # optionally load spectra
   if(get.vnir) {
@@ -122,7 +122,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   res.size <- round(object.size(res) / 1024 / 1024, 2)
   
   # some feedback via message:
-  message(paste(length(unique(h$rcasiteid)), ' RaCA sites loaded (', res.size, ' Mb transfered)', sep=''))
+  message(paste(length(unique(h$rcasiteid)), ' RaCA sites loaded (', res.size, ' Mb transferred)', sep=''))
   
   # done
   return(res)

@@ -1,3 +1,8 @@
+-------------------------- soilDB 1.2-1 (2013-09-12) ----------------------------
+* bug fixing in fetchRaCA(): 
+  - "#" characters no longer cause errors
+  - duplicate IDs in source data have been fixed
+
 -------------------------- soilDB 1.2 (2013-08-13) ----------------------------
 * fetchRaCA() function now stable, ready for general usage
 * fixed bug in fetchRaCA() function where the presence of single-quote character in horizon designation would throw and error
