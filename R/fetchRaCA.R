@@ -108,6 +108,13 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   
   # upgrade to SoilProfileCollection
   depths(h) <- rcapid ~ hzdept + hzdepb
+  
+  # extract landuse, region, soilgroup as characters
+  s$landuse <- substr(s$rcasiteid, 6, 6)
+  s$region <- substr(s$rcasiteid, 2, 3)
+  s$soilgroup <- substr(s$rcasiteid, 2, 5)
+  
+  # merge-in site data
   site(h) <- s
   
   # don't init coordinates, as it would be hard for the user to update later
