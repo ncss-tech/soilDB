@@ -65,7 +65,7 @@ SDA_query <- function(q) {
 	# write out to tempfile, and read back in
 	f <- tempfile()
 	write.table(df, file=f, col.names=TRUE, row.names=FALSE, quote=FALSE, sep='|')
-	df <- read.table(f, header=TRUE, sep='|')
+	df <- read.table(f, header=TRUE, sep='|', quote='', comment='')
 	
 	# reset options:
 	options(opt.original)
