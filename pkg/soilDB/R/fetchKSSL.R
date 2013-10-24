@@ -31,8 +31,8 @@ fetchKSSL <- function(series=NULL, bbox=NULL) {
 	hz.url <- url(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?what=horizon', f, sep=''))
 	
 	# load pieces
-	try(s <- read.table(site.url, header=TRUE, sep='|', stringsAsFactors=FALSE, quote='', comment=''), silent=TRUE)
-	try(h <- read.table(hz.url, header=TRUE, sep='|', stringsAsFactors=FALSE, quote='', comment=''), silent=TRUE)
+	try(s <- read.table(site.url, header=TRUE, sep='|', stringsAsFactors=FALSE, quote='', comment.char=''), silent=TRUE)
+	try(h <- read.table(hz.url, header=TRUE, sep='|', stringsAsFactors=FALSE, quote='', comment.char=''), silent=TRUE)
 	
 	# report missing data
 	if(all(c(is.null(s), is.null(h)))) {
