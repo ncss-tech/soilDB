@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.2-3 (2013-10-25) ----------------------------
+* added new function fetchSCAN() for downloading soil/climate data from USDA-NRCS SCAN stations (still experimental!)
+
 -------------------------- soilDB 1.2-1 (2013-09-12) ----------------------------
 * bug fixing in fetchRaCA(): 
   - "#" characters no longer cause errors
