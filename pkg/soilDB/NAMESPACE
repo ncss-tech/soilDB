@@ -6,6 +6,13 @@ importFrom(plyr,
   join
 )
 
+importFrom(RODBC, 
+  odbcDataSources,
+  odbcConnect,
+  sqlQuery,
+  odbcClose
+)
+
 importFrom(Hmisc, 
   wtd.mean, 
   wtd.var, 

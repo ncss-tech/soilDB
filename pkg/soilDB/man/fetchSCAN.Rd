@@ -16,16 +16,20 @@
 \examples{
 \dontrun{
 # soil / air temps
-req <- c(intervalType=' View Historic ', report='STO', timeseries='Daily', format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY', day='')
+req <- c(intervalType=' View Historic ', report='STO', timeseries='Daily', 
+format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY', day='')
 
 # standard SCAN report
-req <- c(intervalType=' View Historic ', report='SCAN', timeseries='Daily', format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY', day='')
+req <- c(intervalType=' View Historic ', report='SCAN', timeseries='Daily', 
+format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY', day='')
 
 # soil moisture
-req <- c(intervalType=' View Historic ', report='27', timeseries='Daily', format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY', day='')
+req <- c(intervalType=' View Historic ', report='27', timeseries='Daily', 
+format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY', day='')
 
 # soil moisture, hourly
-req <- c(intervalType=' View Historic ', report='27', timeseries='Hourly', format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY', day='')
+req <- c(intervalType=' View Historic ', report='27', timeseries='Hourly', 
+format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY', day='')
 
 # get data, format into DF
 x <- fetchSCAN(req)
