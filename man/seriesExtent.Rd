@@ -12,13 +12,13 @@ seriesExtentAsGmap(s, timeout=60, exp=1.25)
 	\item{timeout}{time that we are willing to wait for a response, in seconds}
 	\item{exp}{expansion factor used to expand Google Maps region}
 }
-\details{These functions are only useful for querying the }
+\details{Soil series extent data are generated as KMZ files, and cached on the SoilWeb server. Initial creation of the KMZ extent may require 1-10+ seconds depending on the spatial extent of the series and server load. All subsequent requests for the same series will return cached data. The cache is purged whenever soil survey data are synced with the official repository.}
 
 \value{when calling \code{seriesExtent}, a SpatialPolygonsDataFrame object}
 
 \references{http://casoilresource.lawr.ucdavis.edu/}
 
-\author{D. E. Beaudette}
+\author{D.E. Beaudette}
 
 \note{These function require the `rgdal` and `dismo` packages.}
 

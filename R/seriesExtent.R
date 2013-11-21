@@ -27,17 +27,21 @@ seriesExtent <- function(s, timeout=60) {
 		stop('please install the `rgdal` package', call.=FALSE)
 	
 	# make URL to SoilWeb KMZ
-	u <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/reflector_api/soils.php?what=soil_series_extent&q_string=', s, '&mode=bbox&query_level=mapunit&format=kmz&', sep=''))
+	u <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/reflector_api/soils.php?what=soil_series_extent&q_string=', s, '&query_level=mapunit', sep=''))
 	
-	# save result as tempfile
-	tf <- tempfile()
-	
+	# init temp files / dirs
+	td <- tempdir()
+	tf.kmz <- tempfile(fileext='kmz')
+  
 	# note that we are transfering as binary (KMZ), extend timeout if needed
-	download.file(url=u, destfile=tf, mode='wb', extra=c(timeout=timeout))
+	download.file(url=u, destfile=tf.kmz, mode='wb', extra=c(timeout=timeout))
+	
+	# readOGR can't open KMZ files directly, so we must unzip
+	unzip(zipfile=tf.kmz, files='doc.kml', exdir=td)
 	
 	# load into sp object and clean-up
-	x <- readOGR(dsn=tf, layer='Soil Series Extent')
-	unlink(tf)
+	x <- readOGR(dsn=file.path(td, 'doc.kml'), layer='Soil Series Extent')
+	unlink(tf.kmz)
 	
 	# return in WGS84 GCS
 	return(x)
