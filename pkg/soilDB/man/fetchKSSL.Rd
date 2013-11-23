@@ -8,13 +8,17 @@
   \item{series}{a soil series name}
   \item{bbox}{a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}}
 }
-\details{This is an experimental interface to most of the KSSL data as of June 2013. Series-queries are case insensitive. Series name queries are based on the `correlated as` name when present. When missing, the `sampled as` name is queried.}
+
+\details{This is an experimental interface to most of the KSSL data as of June 2013. Series-queries are case insensitive. Series name is based on the "correlated as" field (from KSSL snapshot) when present.  The "sampled as" classification was promoted to "correlated as" if the "correlated as" classification was missing.}
+
 \value{a \code{SoilProfileCollection} object}
+
+\author{D.E. Beaudette}
+\note{SoilWeb maintains a snapshot of the KSSL data. Please use the link below for the live data.}
+
 \references{
 \url{http://ncsslabdatamart.sc.egov.usda.gov/}
 }
-\author{D.E. Beaudette}
-\note{SoilWeb maintains a snapshot of the KSSL data. Please use the link below for the live data.}
 
 \seealso{\code{\link{fetchOSD}}}
 \examples{
