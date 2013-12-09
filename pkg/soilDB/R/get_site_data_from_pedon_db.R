@@ -9,9 +9,9 @@ get_site_data_from_pedon_db <- function(dsn) {
   q <- "SELECT site.siteiid, pedon.peiid, upedonid as pedon_id, site.usiteid as site_id, siteobs.obsdate as obs_date,
   latdegrees + IIF(IsNull(latminutes), 0.0, latminutes/ 60.0) + IIF(IsNULL(latseconds), 0.0, latseconds / 60.0 / 60.0) as y,
   -(longdegrees + IIF(IsNull(longminutes), 0.0, longminutes / 60.0) + IIF(IsNull(longseconds), 0.0, longseconds / 60.0 / 60.0)) as x,
- dm.choice as datum, descname as describer, pp.choice as pedon_purpose, pt.choice as pedon_type, pedlabsampnum, psctopdepth, pscbotdepth, elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, bedrckdepth, br.choice_label as bedrock_kind, bh.choice_label as bedrock_hardness, hs.choice AS hillslope_pos 
-FROM ((((((((
-	site INNER JOIN siteobs ON site.siteiid = siteobs.siteiidref) 
+ dm.choice as datum, descname as describer, pp.choice as pedon_purpose, pt.choice as pedon_type, pedlabsampnum, psctopdepth, pscbotdepth, elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, pe.choice_label as coverkind_1, bedrckdepth, br.choice_label as bedrock_kind, bh.choice_label as bedrock_hardness, hs.choice AS hillslope_pos 
+FROM (((((((((
+  site INNER JOIN siteobs ON site.siteiid = siteobs.siteiidref) 
 	LEFT OUTER JOIN pedon ON siteobs.siteobsiid = pedon.siteobsiidref) 
 	LEFT OUTER JOIN sitebedrock ON site.siteiid = sitebedrock.siteiidref) 
   LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 1261) AS dm ON site.horizdatnm = dm.choice_id)
@@ -19,6 +19,7 @@ FROM ((((((((
   LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 1247) AS bh ON sitebedrock.bedrckhardness = bh.choice_id)
   LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 1271) AS pp ON pedon.pedonpurpose = pp.choice_id)
   LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 1273) AS pt ON pedon.pedontype = pt.choice_id)
+  LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 149) AS pe ON pedon.earthcovkind1 = pe.choice_id)
   LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 971) AS hs ON site.hillslopeprof = hs.choice_id
   ORDER BY site.usiteid;"
 
