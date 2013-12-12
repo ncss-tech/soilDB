@@ -2,7 +2,7 @@
 
 get_hz_data_from_NASIS_db <- function() {
 	q <- "SELECT peiid, phiid, upedonid as pedon_id,
-  hzname, hzdept, hzdepb,
+  hzname, dspcomplayerid as genhz, hzdept, hzdepb,
   claytotest as clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END as silt, sandtotest as sand, t.texture_class, phfield, phnaf, eff.ChoiceName AS effervescence, l.labsampnum, CASE WHEN f.total_frags_pct IS NULL THEN 0 ELSE f.total_frags_pct END AS total_frags_pct
   FROM ((((
 	pedon_View_1 
