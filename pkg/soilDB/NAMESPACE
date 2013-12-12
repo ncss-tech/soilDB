@@ -21,4 +21,12 @@ importFrom(Hmisc,
   wtd.table
 )
 
+importFrom(aqp, 
+  "depths<-", 
+  "site<-",
+  diagnostic_hz,
+  "diagnostic_hz<-",
+  test_hz_logic
+)
+
 exportPattern("^[^\\.]")
