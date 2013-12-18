@@ -2,6 +2,13 @@
 
 get_extended_data_from_NASIS_db <- function() {
 	
+  # photo links from PedonPC
+  q.photolink <- "SELECT siteobs.siteiidref AS siteiid, siteobstext.recdate,siteobstext.textcat, siteobstext.textentry AS imagepath
+  FROM (
+  siteobs LEFT OUTER JOIN siteobstext ON siteobs.siteobsiid = siteobstext.siteobsiidref) 
+  WHERE siteobstext.textcat LIKE 'Photo%' ORDER BY siteobstext.siteobstextkind;"
+  
+  
 	## TODO: adapt this for SQL server syntax!
 	# returns the first structure defined per horizon
 	q.structure <- "SELECT s.phiid, FIRST(s.structure_grade) as structure_grade, FIRST(s.structure_size) as structure_size, FIRST(s.structure_type) as structure_type
@@ -265,6 +272,7 @@ FROM geomorfeattype
 	d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
 	d.geomorph <- sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
 	d.taxhistory <- sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
+  d.photolink <- sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
 	
 	# close connection
 	odbcClose(channel)
@@ -280,6 +288,7 @@ FROM geomorfeattype
 							surf_frag_summary=d.surf.rf.summary, 
 							texmodifier=d.hz.texmod, 
 							geomorph=d.geomorph, 
-							taxhistory=d.taxhistory))
+							taxhistory=d.taxhistory,
+              photo=d.photolink))
 }
 
