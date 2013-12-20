@@ -38,7 +38,7 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 118) AS mk 
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 138) AS ms ON mustatus = ms.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 115) AS hg ON hydgrp = hg.ChoiceValue)
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 151) AS fc ON farmlndcl = fc.ChoiceValue
-WHERE ms.ChoiceName IS NULL OR ms.Choicename != 'additional'
+WHERE ms.ChoiceName IS NULL OR ms.ChoiceName != 'additional'
 ORDER BY dmudesc, coiid, comppct_r DESC;"
 	
 	# setup connection to our pedon database
@@ -54,6 +54,16 @@ ORDER BY dmudesc, coiid, comppct_r DESC;"
 	if(nrow(d) == 0)
 		stop('there are no NASIS components in your selected set!')
 	
+  # test for duplication, this suggests errors:
+  # 1. a map unit NOT marked as additional that should be
+  # 2. two or more map unit symbols linked to the same DMU, and rep DMU checked on >1 row
+	dupe.check <- which(table(d$coiid) > 1)
+  if(length(dupe.check) > 0) {
+    bad.data <- d[d$coiid %in% names(dupe.check), c('musym', 'mustatus', 'dmudesc', 'compname', 'coiid', 'dmuiid', 'muiid')]
+    message('NOTICE: tangled [legend]--[correlation]--[data mapunit] links: ')
+    print(bad.data)  
+  }
+  
 	# done
 	return(d)
 }
