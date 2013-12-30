@@ -19,29 +19,3 @@
 
 10. remove getHzErrorsNASIS() and pedonPC equiv.
 
-# ideas
-library(RODBC)
-channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y')
-tt <- sqlTables(channel, schema='dbo')
-tt[grep('site_', tt$TABLE_NAME, ignore.case=TRUE), ]
-
-
-q.1 <- "SELECT * from site;"
-q.2 <- "SELECT * from site_View_0;"
-q.3 <- "SELECT * from site_View_1;"
-q.4 <- "SELECT * from site_View_NONDEL_0;"
-q.5 <- "SELECT * from site_View_NONDEL_1;"
-
-r.1 <- sqlQuery(channel, q.1, stringsAsFactors=FALSE)
-r.2 <- sqlQuery(channel, q.2, stringsAsFactors=FALSE)
-r.3 <- sqlQuery(channel, q.3, stringsAsFactors=FALSE)
-r.4 <- sqlQuery(channel, q.4, stringsAsFactors=FALSE)
-r.5 <- sqlQuery(channel, q.5, stringsAsFactors=FALSE)
-
-ss <- TRUE
-tables <- c('site')
-if(ss == TRUE)
-	tables <- paste(tables, 'View_1', sep='_')
-
-(q <- paste('SELECT * from ', tables[1], ';', sep=''))
-
