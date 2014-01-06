@@ -1,3 +1,8 @@
+-------------------------- soilDB 1.2-9 (2014-01-06) ----------------------------
+* SOC concentration and stock values are temporarily disabled in fetchRaCA() 
+  - waiting for new estimates from the Soil Survey Center...
+
+
 -------------------------- soilDB 1.2-6 (2013-12-05) ----------------------------
 * added new function contributed by J.M. Skovlin: get_veg_from_NPS_PLOTS_db()
 * bugfixes in get_extended_data_from_NASIS_db(): results from geomorph tables are now returned
