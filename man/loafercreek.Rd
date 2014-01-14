@@ -113,6 +113,34 @@
   .. ..$ featdepb     : int [1:170] 23 64 NA 12 68 100 9 97 110 NA ...
 }}
 
+\examples{
+# load example dataset
+data(gopheridge)
+
+# what kind of object is this?
+class(gopheridge)
+
+# tighten figure margins:
+par(mar=c(0,0,4,0))
+
+# plot soil colors
+plot(gopheridge, name='hzname', color='soil_color')
+
+# generate colors based on clay content
+plot(gopheridge, name='hzname', color='clay')
+
+# plot soils sorted by depth to contact
+plot(gopheridge, name='hzname', plot.order=order(gopheridge$bedrckdepth))
+
+# plot first 10 profiles
+plot(gopheridge[1:10, ], name='hzname', color='soil_color')
+
+# add rock fragment data to plot:
+addVolumeFraction(gopheridge[1:10, ], colname='total_frags_pct')
+
+# add diagnostic horizons
+addDiagnosticBracket(gopheridge[1:10, ], kind='argillic horizon', col='red')
+}
 
 
 \keyword{datasets}
