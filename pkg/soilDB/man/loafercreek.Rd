@@ -114,6 +114,7 @@
 }}
 
 \examples{
+\dontrun{
 # load example dataset
 data(gopheridge)
 
@@ -140,6 +141,7 @@ addVolumeFraction(gopheridge[1:10, ], colname='total_frags_pct')
 
 # add diagnostic horizons
 addDiagnosticBracket(gopheridge[1:10, ], kind='argillic horizon', col='red')
+}
 }
 
 
