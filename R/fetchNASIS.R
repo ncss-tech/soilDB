@@ -22,19 +22,21 @@ fetchNASIS <- function() {
 	missing.lower.depth.idx <- which(!is.na(h$hzdept) & is.na(h$hzdepb))
 	h$hzdepb[missing.lower.depth.idx] <- h$hzdept[missing.lower.depth.idx]
 	
-	# in the presence of duplicate pedons, replace pedon_id with pedon_id-peiid
-	# test for duplicate pedons
-	if(exists('dup.pedon.ids', envir=soilDB.env)) {
-		message('appending peiid to duplicate pedon IDs...')
-		
-		# extract from error reporting environment
-		dupe.pedons <- get('dup.pedon.ids', envir=soilDB.env)	
-		# convert into row-index
-		pedon.ids.to.fix.idx <- which(h$pedon_id %in% dupe.pedons)
-		
-		# fix offending pedon IDs by concatenating pedon_id with peiid
-		h$pedon_id[pedon.ids.to.fix.idx] <- paste(h$pedon_id[pedon.ids.to.fix.idx], h$peiid[pedon.ids.to.fix.idx], sep='-')
-	}
+## as of NASIS 6.3 we will use peiid as our ID
+## remove this code
+# 	# in the presence of duplicate pedons, replace pedon_id with pedon_id-peiid
+# 	# test for duplicate pedons
+# 	if(exists('dup.pedon.ids', envir=soilDB.env)) {
+# 		message('appending peiid to duplicate pedon IDs...')
+# 		
+# 		# extract from error reporting environment
+# 		dupe.pedons <- get('dup.pedon.ids', envir=soilDB.env)	
+# 		# convert into row-index
+# 		pedon.ids.to.fix.idx <- which(h$pedon_id %in% dupe.pedons)
+# 		
+# 		# fix offending pedon IDs by concatenating pedon_id with peiid
+# 		h$pedon_id[pedon.ids.to.fix.idx] <- paste(h$pedon_id[pedon.ids.to.fix.idx], h$peiid[pedon.ids.to.fix.idx], sep='-')
+# 	}
 	
 	# convert colors... in the presence of missing color data
 	h$soil_color <- NA
@@ -47,21 +49,21 @@ fetchNASIS <- function() {
 	
 	# test for bad horizonation... flag, and remove
 	message('finding horizonation errors ...')
-	h.test <- ddply(h, 'pedon_id', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
+	h.test <- ddply(h, 'peiid', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
 	
 	# which are the good (valid) ones?
-	good.pedon.ids <- as.character(h.test$pedon_id[which(h.test$hz_logic_pass)])
-	bad.pedon.ids <- as.character(h.test$pedon_id[which(h.test$hz_logic_pass == FALSE)])
+	good.pedon.ids <- as.character(h.test$peiid[which(h.test$hz_logic_pass)])
+	bad.pedon.ids <- as.character(h.test$peiid[which(!h.test$hz_logic_pass)])
 	
 	# keep the good ones
-	h <- h[which(h$pedon_id %in% good.pedon.ids), ]
+	h <- h[which(h$peiid %in% good.pedon.ids), ]
 	
 	# upgrade to SoilProfilecollection
-	depths(h) <- pedon_id ~ hzdept + hzdepb
+	depths(h) <- peiid ~ hzdept + hzdepb
 	
 	## TODO: this is slow
-	# move peiid into @site, this will be used to join full table of site data
-	site(h) <- ~ peiid
+	# move pedon_id into @site, this will be used to join full table of site data
+	site(h) <- ~ pedon_id
 	
 	## TODO: this will fail in the presence of duplicates
 	# add site data to object
@@ -84,7 +86,8 @@ fetchNASIS <- function() {
 	## TODO: we don't really need pedon_id in @diagnostic
 	# load diagnostic horizons into @diagnostic: note that this requires one additional join 
 	# and implicitly filters diagnostic hz by our subset of f
-	diagnostic_hz(h) <- join(site(h)[, c('pedon_id','peiid')], extended_data$diagnostic, by='peiid', type='left')
+# 	diagnostic_hz(h) <- join(site(h)[, c('pedon_id','peiid')], extended_data$diagnostic, by='peiid', type='left')
+	diagnostic_hz(h) <- extended_data$diagnostic
 		
 	# 7. save and mention bad pedons
 	assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
