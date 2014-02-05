@@ -1,5 +1,4 @@
-# 2013-10-24
-# post-WSS 3.0, there is a lot of junk included with the GML... manually removing in this code, but download is now much slower
+
 
 # 2011-06-22
 # It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that overlap the bbox.
@@ -64,9 +63,6 @@ mapunit_geom_by_ll_bbox <- function(bbox, source='sda') {
 	
 	# throw-out some garbage columns
 	d$gml_id <- NULL
-	d$spatialversion <- NULL
-	d$mupolygonproj <- NULL
-	d$mupolygonkey <- NULL
 	gc()
 	
 	# done, clean-up
