@@ -62,7 +62,7 @@ fetchNASIS <- function() {
 	depths(h) <- peiid ~ hzdept + hzdepb
 	
 	## TODO: this is slow
-	# move pedon_id into @site, this will be used to join full table of site data
+	# move pedon_id into @site
 	site(h) <- ~ pedon_id
 	
 	## TODO: this will fail in the presence of duplicates
