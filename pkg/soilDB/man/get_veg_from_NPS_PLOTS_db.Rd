@@ -3,7 +3,7 @@
 
 \title{Retrieve Vegetation Data from an NPS PLOTS Database}
 
-\description{Used to extract species, stratum, and cover vegetation data from a backend NPS PLOTS Database.  Currently works for any Microsoft Access database with an .accdb file format.}
+\description{Used to extract species, stratum, and cover vegetation data from a backend NPS PLOTS Database.  Currently works for any Microsoft Access database with an .mdb file format.}
 
 \usage{get_veg_from_NPS_PLOTS_db(dsn)}
 
