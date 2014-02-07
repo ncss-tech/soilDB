@@ -18,9 +18,9 @@ fetchNASIS <- function() {
 	
 	# fix some common problems
 	# replace missing lower boundaries
-	message('replacing missing lower horizon boundaries ...')
+	message('replacing missing lower horizon depths with top depth + 1cm ...')
 	missing.lower.depth.idx <- which(!is.na(h$hzdept) & is.na(h$hzdepb))
-	h$hzdepb[missing.lower.depth.idx] <- h$hzdept[missing.lower.depth.idx]
+	h$hzdepb[missing.lower.depth.idx] <- h$hzdept[missing.lower.depth.idx] + 1
 	
 ## as of NASIS 6.3 we will use peiid as our ID
 ## remove this code
