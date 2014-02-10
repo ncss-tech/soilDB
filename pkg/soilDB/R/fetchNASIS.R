@@ -39,7 +39,8 @@ fetchNASIS <- function() {
 	
 	# which are the good (valid) ones?
 	good.ids <- as.character(h.test$peiid[which(h.test$hz_logic_pass)])
-	bad.pedon.ids <- as.character(h.test$pedon_id[which(!h.test$hz_logic_pass)])
+	bad.ids <- as.character(h.test$peiid[which(!h.test$hz_logic_pass)])
+  bad.pedon.ids <- site_data$pedon_id[which(site_data$peiid %in% bad.ids)]
 	
 	# keep the good ones
 	h <- h[which(h$peiid %in% good.ids), ]
