@@ -3,7 +3,7 @@
 get_hz_data_from_NASIS_db <- function() {
 	q <- "SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
-  claytotest as clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END as silt, sandtotest as sand, t.texture_class, phfield, phnaf, eff.ChoiceName AS effervescence, l.labsampnum, CASE WHEN f.total_frags_pct IS NULL THEN 0 ELSE f.total_frags_pct END AS total_frags_pct
+  claytotest as clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END as silt, sandtotest as sand, t.texture_class, texture, phfield, phnaf, eff.ChoiceName AS effervescence, l.labsampnum, CASE WHEN f.total_frags_pct IS NULL THEN 0 ELSE f.total_frags_pct END AS total_frags_pct
   FROM ((((
 	pedon_View_1 
 	INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref) 
@@ -28,7 +28,7 @@ get_hz_data_from_NASIS_db <- function() {
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1255) AS eff ON phorizon_View_1.effclass = eff.ChoiceValue
   ORDER BY pedon_View_1.upedonid, phorizon_View_1.hzdept ASC;"
 	
-	# setup connection to our pedon database
+	# setup connection to our NASIS database
 	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y')
 	
 	# exec query
