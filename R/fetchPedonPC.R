@@ -16,7 +16,7 @@ fetchPedonPC <- function(dsn) {
 	# replace missing lower boundaries
 	message('replacing missing lower horizon boundaries ...')
 	missing.lower.depth.idx <- which(!is.na(h$hzdept) & is.na(h$hzdepb))
-	h$hzdepb[missing.lower.depth.idx] <- h$hzdept[missing.lower.depth.idx]
+	h$hzdepb[missing.lower.depth.idx] <- h$hzdept[missing.lower.depth.idx] + 1
 
 		
 	# test for bad horizonation... flag, and remove
