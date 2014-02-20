@@ -235,7 +235,7 @@ CASE WHEN f1_gr.gravel IS NULL THEN 0.0 ELSE f1_gr.gravel END as gravel,
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 190) AS tmod ON phtexturemod_View_1.texmod = tmod.ChoiceValue;"
 	
 	# get geomorphic features
-	q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod, geomorfeat.geomfname, sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
+	q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod, geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid, sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
 FROM geomorfeattype 
   RIGHT JOIN (geomorfeat 
   RIGHT JOIN ((site_View_1 INNER JOIN sitegeomordesc_View_1 ON site_View_1.siteiid = sitegeomordesc_View_1.siteiidref) 
@@ -243,7 +243,7 @@ FROM geomorfeattype
   ON site_View_1.siteiid = siteobs_View_1.siteiidref) 
   ON geomorfeat.geomfiid = sitegeomordesc_View_1.geomfiidref) 
   ON geomorfeattype.geomftiid = geomorfeat.geomftiidref 
-  ORDER BY peiid ASC;"
+  ORDER BY peiid, geomfeatid ASC;"
 	
    
 	# get petaxhistory data 
