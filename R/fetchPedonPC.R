@@ -2,35 +2,42 @@
 
 fetchPedonPC <- function(dsn) {
 	
-	# 1. load data in pieces
+	# load data in pieces
 	site_data <- get_site_data_from_pedon_db(dsn)
 	hz_data <- get_hz_data_from_pedon_db(dsn)
 	color_data <- get_colors_from_pedon_db(dsn)
 	extended_data <- get_extended_data_from_pedon_db(dsn)
-	
-	# 2. join pieces
+  
+	# join pieces
 	# horizon + hz color: all horizons
 	h <- join(hz_data, color_data, by='phiid', type='left')
 	
-	# 3. fix some common problems
+	# convert colors... in the presence of missing color data
+	h$soil_color <- NA
+	idx <- complete.cases(h$m_r)
+	h$soil_color[idx] <- with(h[idx, ], rgb(m_r, m_g, m_b)) # moist colors
+	
+	# replace horizons with hz + fragment summary
+	h <- join(h, extended_data$frag_summary, by='phiid', type='left')
+  
+	# fix some common problems
 	# replace missing lower boundaries
 	message('replacing missing lower horizon boundaries ...')
 	missing.lower.depth.idx <- which(!is.na(h$hzdept) & is.na(h$hzdepb))
 	h$hzdepb[missing.lower.depth.idx] <- h$hzdept[missing.lower.depth.idx] + 1
 
-		
 	# test for bad horizonation... flag, and remove
 	cat('finding horizonation errors ...\n')
 	h.test <- ddply(h, 'peiid', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
 	
 	# which are the good (valid) ones?
-	good.pedon.ids <- as.character(f.test$peiid[which(h.test$hz_logic_pass)])
-	bad.pedon.ids <- as.character(f.test$pedon_id[which(!h.test$hz_logic_pass)])
+	good.pedon.ids <- as.character(h.test$peiid[which(h.test$hz_logic_pass)])
+	bad.pedon.ids <- as.character(h.test$pedon_id[which(!h.test$hz_logic_pass)])
 	
 	# keep the good ones
 	h <- h[which(h$peiid %in% good.pedon.ids), ]
-	
-	# 4. upgrade to SoilProfilecollection
+  
+	# upgrade to SoilProfilecollection
 	depths(h) <- peiid ~ hzdept + hzdepb
 
 	## TODO: this is slow
@@ -41,15 +48,6 @@ fetchPedonPC <- function(dsn) {
 	# add site data to object
 	site_data$pedon_id <- NULL # remove 'pedon_id' column from site_data
 	site(h) <- site_data # left-join via peiid
-	
-	# 5. convert colors... in the presence of missing color data
-	h$soil_color <- NA
-	idx <- complete.cases(h$m_r)
-	h$soil_color[idx] <- with(h[idx, ], rgb(m_r, m_g, m_b)) # moist colors
-	
-	# 6. merge-in extended data:
-	# replace horizons with hz + fragment summary
-	h <- join(h, extended_data$frag_summary, by='phiid', type='left')
 		
 	# load diagnostic horizons into @diagnostic
 	diagnostic_hz(h) <- extended_data$diagnostic
