@@ -1,3 +1,7 @@
+-------------------------- soilDB 1.3 (2014-02-26) ----------------------------
+* Changes made to fetch functions to accommodate changes implemented in the NASIS 6.3 data structure
+
+
 -------------------------- soilDB 1.2-9 (2014-01-06) ----------------------------
 * SOC concentration and stock values are temporarily disabled in fetchRaCA() 
   - waiting for new estimates from the Soil Survey Center...
