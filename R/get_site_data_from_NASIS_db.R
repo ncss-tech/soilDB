@@ -1,3 +1,12 @@
+## TODO: temporary hack to deal with the possibility of multiple site-bedrock entries:
+# row number is computed for the site-bedrock table... we can't depend on the verticle order column to contain useful information
+# we then filter on sb.rn at the end of the query. 
+# this same syntax will not work in Access
+
+## further ideas:
+# http://stackoverflow.com/questions/3800551/select-first-row-in-each-group-by-group
+# ... this would be a lot cleaner if we used WITH ... to define all sub-tables
+
 ## TODO: spatial data will likely be referenced to multiple datums... 
 # the STD coordiants in NASIS are WGS84, but have to be manually "calculated"
 # see: Import of Standard WGS84 Georeference
@@ -13,13 +22,16 @@ FROM
 	
 	site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref) 
 	LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref) 
-	LEFT OUTER JOIN sitebedrock_View_1 ON site_View_1.siteiid = sitebedrock_View_1.siteiidref)
+	LEFT OUTER JOIN (
+      SELECT siteiidref, bedrckdepth, bedrckkind, bedrckhardness, ROW_NUMBER() OVER(PARTITION BY siteiidref ORDER BY bedrckdepth ASC) as rn
+      FROM sitebedrock_View_1
+    ) as sb ON site_View_1.siteiid = sb.siteiidref)
 	
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1261) AS dm ON site_View_1.horizdatnm = dm.ChoiceValue)
 	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 517) AS br ON sitebedrock_View_1.bedrckkind = br.ChoiceValue)
+	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 517) AS br ON sb.bedrckkind = br.ChoiceValue)
 	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1247) AS bh ON sitebedrock_View_1.bedrckhardness = bh.ChoiceValue)
+	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1247) AS bh ON sb.bedrckhardness = bh.ChoiceValue)
 	
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1271) AS pp ON pedon_View_1.pedonpurpose = pp.ChoiceValue)
 	
@@ -38,6 +50,9 @@ FROM
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 149) AS pe ON pedon_View_1.earthcovkind1 = pe.ChoiceValue)
 	
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 971) AS hs ON site_View_1.hillslopeprof = hs.ChoiceValue
+
+  WHERE sb.rn IS NULL OR sb.rn = 1
+
 	ORDER BY pedon_View_1.peiid ;"
 	
 	# setup connection to our local NASIS database
