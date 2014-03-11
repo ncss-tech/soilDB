@@ -4,19 +4,18 @@ q.ncsslablayer <- "SELECT ncsspedonlabdataiidref AS labpeiid, labsampnum, layers
 FROM ((
 ncsslayerlabdata_View_1
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 5103) AS mps ON ncsslayerlabdata_View_1.moistprepstate = mps.ChoiceValue)
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 189) AS txcl ON ncsslayerlabdata_View_1.texcl = txcl.ChoiceValue);"
+LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 189) AS txcl ON ncsslayerlabdata_View_1.texcl = txcl.ChoiceValue)
+ORDER BY labpeiid, hzdept ASC;"
 
-# setup connection to our local NASIS database
+  # setup connection to our local NASIS database
 	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
 	
 	# exec queries
-	#d.hz.labresults <- sqlQuery(channel, q.phlabresults, stringsAsFactors=FALSE)
-	#d.labpedon <- sqlQuery(channel, q.ncsslabpedon, stringsAsFactors=FALSE)
 	d.lablayer <- sqlQuery(channel, q.ncsslablayer, stringsAsFactors=FALSE)
 		
 	# close connection
 	odbcClose(channel)
 	
 	# return a list of results
-	return(list(lablayer=d.lablayer))
+	return(d.lablayer)
 }
