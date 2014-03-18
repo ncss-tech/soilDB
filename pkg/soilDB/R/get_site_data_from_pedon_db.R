@@ -9,7 +9,7 @@ get_site_data_from_pedon_db <- function(dsn) {
   q <- "SELECT site.siteiid, pedon.peiid, upedonid as pedon_id, site.usiteid as site_id, siteobs.obsdate as obs_date,
   latdegrees + IIF(IsNull(latminutes), 0.0, latminutes/ 60.0) + IIF(IsNULL(latseconds), 0.0, latseconds / 60.0 / 60.0) as y,
   -(longdegrees + IIF(IsNull(longminutes), 0.0, longminutes / 60.0) + IIF(IsNull(longseconds), 0.0, longseconds / 60.0 / 60.0)) as x,
-dm.choice as datum, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, descname as describer, pp.choice as pedon_purpose, pt.choice as pedon_type, pedlabsampnum, psctopdepth, pscbotdepth, elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, pe.choice_label as coverkind_1, bedrckdepth, br.choice_label as bedrock_kind, bh.choice_label as bedrock_hardness, hs.choice AS hillslope_pos, sp.choice as slope_position, sa.choice as shapeacross, sd.choice as shapedown, sc.choice as slopecomplex, dc.choice as drainagecl
+dm.choice as datum, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, descname as describer, pp.choice as pedon_purpose, pt.choice as pedon_type, pedlabsampnum, psctopdepth, pscbotdepth, elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, se.choice_label as coverkind_1, bedrckdepth, br.choice_label as bedrock_kind, bh.choice_label as bedrock_hardness, hs.choice AS hillslope_pos, sp.choice as slope_position, sa.choice as shapeacross, sd.choice as shapedown, sc.choice as slopecomplex, dc.choice as drainagecl
 FROM ((((((((((((((
 site INNER JOIN siteobs ON site.siteiid = siteobs.siteiidref) 
 LEFT OUTER JOIN pedon ON siteobs.siteobsiid = pedon.siteobsiidref) 
@@ -24,7 +24,7 @@ LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 975) AS 
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 975) AS sd ON site.shapedown = sd.choice_id)
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 1295) AS sc ON site.slopecomplex = sc.choice_id)
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 148) AS dc ON site.drainagecl = dc.choice_id)
-LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 149) AS pe ON pedon.earthcovkind1 = pe.choice_id)
+LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 149) AS se ON siteobs.earthcovkind1 = se.choice_id)
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 971) AS hs ON site.hillslopeprof = hs.choice_id
 ORDER BY site.usiteid;"
 
