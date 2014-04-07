@@ -22,6 +22,7 @@
 
 \seealso{\code{\link{fetchOSD}}}
 \examples{
+\dontrun{
 # search by series name
 s <- fetchKSSL(series='auburn')
 
@@ -34,6 +35,7 @@ length(s)
 # plot 
 par(mar=c(0,0,0,0))
 plot(s, name='hzn_desgn', max.depth=150)
+}
 }
 
 \keyword{utilities}
