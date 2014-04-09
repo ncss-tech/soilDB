@@ -4,7 +4,7 @@
 \alias{getHzErrorsNASIS}
 
 \title{Fetch lab data used site/horizon data from a PedonPC database.}
-\description{Fetch KSSL laboratory pedon/horizon data from a local NASIS database, return as a SoilProfileCollection object.}
+\description{Fetch KSSL laboratory pedon/horizon layer data from a local NASIS database, return as a SoilProfileCollection object.}
 
 \usage{
 fetchNASISLabData()
