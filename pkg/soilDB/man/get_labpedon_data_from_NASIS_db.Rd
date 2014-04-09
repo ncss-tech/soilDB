@@ -7,19 +7,15 @@
 
 \value{A dataframe.}
 \author{Jay M. Skovlin and Dylan E. Beaudette}
-\details{}
-\note{This function currently works only on Windows.}
+\details{This function currently works only on Windows, and requires a 'nasis_local' ODBC connection.}
+\note{This fuction queries KSSL laboratory site/horizon data from a local NASIS database from the lab pedon data table.}
 
 \seealso{
-\code{\link{get_lablayer_data_from_NASIS_db}}, 
+\code{\link{get_lablayer_data_from_NASIS_db}} 
 }
 
-\examples{
-
-\dontrun{
-
-
-}}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
 
 \keyword{manip}
 
