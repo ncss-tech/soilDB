@@ -28,9 +28,9 @@ install.packages("XMLSchema", repos = "http://www.omegahat.org/R", type="source"
 
 # SSURGO export metadata:
 \dontrun{
-q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA%';"
+q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA\%';"
 x <- SDA_query(q)
-x$saverest <- as.Date(x$saverest, format="%m/%d/%Y")
+x$saverest <- as.Date(x$saverest, format="\%m/\%d/\%Y")
 head(x)
 }
 
