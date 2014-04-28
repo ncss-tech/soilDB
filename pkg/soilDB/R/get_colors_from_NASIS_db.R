@@ -46,9 +46,12 @@ pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.
 		mixed.dry <- ddply(dry.colors[dry.mix.idx, ], 'phiid', mix_and_clean_colors)
 		# combine original[-horizons to be mixed] + mixed horizons
 		dry.colors.final <- rbind(dry.colors[-dry.mix.idx, c("phiid", "r", "g", "b", "colorvalue")], mixed.dry)
+		names(dry.colors.final) <- c('phiid', 'd_r', 'd_g', 'd_b', 'd_value')
 	}
-	else # otherwise subset the columns only
+	else {# otherwise subset the columns only
 		dry.colors.final <- dry.colors[, c("phiid", "r", "g", "b", "colorhue", "colorvalue", "colorchroma")]
+		names(dry.colors.final) <- c('phiid', 'd_r', 'd_g', 'd_b', 'd_hue', 'd_value', 'd_chroma')
+	}
 	
 	# mix/combine if there are any horizons that need mixing
 	if(length(moist.to.mix) > 0) {
@@ -59,14 +62,13 @@ pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.
 		mixed.moist <- ddply(moist.colors[moist.mix.idx, ], 'phiid', mix_and_clean_colors)
 		# combine original[-horizons to be mixed] + mixed horizons
 		moist.colors.final <- rbind(moist.colors[-moist.mix.idx, c("phiid", "r", "g", "b", "colorvalue")], mixed.moist)
+		names(moist.colors.final) <- c('phiid', 'm_r', 'm_g', 'm_b', 'm_value')
 	}
-	else # otherwise subset the columns only
+	else {# otherwise subset the columns only
 		moist.colors.final <- moist.colors[, c("phiid", "r", "g", "b", "colorhue", "colorvalue", "colorchroma")]
+		names(moist.colors.final) <- c('phiid', 'm_r', 'm_g', 'm_b', 'm_hue', 'm_value', 'm_chroma')
+	}
 	
-	
-	# rename columns
-	names(dry.colors.final) <- c('phiid', 'd_r', 'd_g', 'd_b', 'd_hue', 'd_value', 'd_chroma')
-	names(moist.colors.final) <- c('phiid', 'm_r', 'm_g', 'm_b', 'm_hue', 'm_value', 'm_chroma')
 	
 	# merge into single df
 	d.final <- join(dry.colors.final, moist.colors.final, by='phiid', type='full')
