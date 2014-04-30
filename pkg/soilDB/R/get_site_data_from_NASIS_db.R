@@ -13,6 +13,8 @@
 # for now, 'longstddecimaldegrees' and 'latstddecimaldegrees' are read-in as new site-level attributes
 # ... this needs to be synced to PedonPC functions
 
+## TODO: multiple records / site in siteobs are possible and will result in duplicate data
+
 
 get_site_data_from_NASIS_db <- function() {
 	q <- "SELECT siteiid as siteiid, peiid, usiteid as site_id, upedonid as pedon_id, obsdate as obs_date, -(longdegrees + CASE WHEN longminutes IS NULL THEN 0.0 ELSE longminutes / 60.0 END + CASE WHEN longseconds IS NULL THEN 0.0 ELSE longseconds / 60.0 / 60.0 END) as x, latdegrees + CASE WHEN latminutes IS NULL THEN 0.0 ELSE latminutes / 60.0 END + CASE WHEN latseconds IS NULL THEN 0.0 ELSE latseconds / 60.0 / 60.0 END as y, dm.ChoiceName as datum, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, descname as describer, pp.ChoiceName as pedon_purpose, pt.ChoiceName as pedon_type, pedlabsampnum, elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, se.ChoiceLabel as coverkind_1, bedrckdepth, br.ChoiceLabel as bedrock_kind, bh.ChoiceLabel as bedrock_hardness, hs.ChoiceLabel as hillslope_pos, sp.ChoiceLabel as slope_position, sa.ChoiceLabel as shapeacross, sd.ChoiceLabel as shapedown, sc.ChoiceLabel as slopecomplex, dc.ChoiceLabel as drainagecl
@@ -68,10 +70,12 @@ FROM
 	if(nrow(d) == 0)
 		stop('there are no pedons in your selected set!')
 	
+  ## TODO: this should be removed once we switch to WGS84 coordinates
 	# warn if mixed datums
 	if(length(unique(na.omit(d$datum))) > 1)
 		message('NOTICE: multiple datums present')
 	
+  ## TODO: this should probably use peiid
 	# are there any duplicate pedon IDs?
 	t.pedon_id <- table(d$pedon_id)
 	not.unique.pedon_id <- t.pedon_id > 1

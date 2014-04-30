@@ -1,5 +1,7 @@
 ## TODO: need to be careful about how {l, rv, h} are used here...
 
+## TODO: multiple records / site in siteobs are possible and will result in duplicate data
+
 get_extended_data_from_NASIS_db <- function() {
 	
   # photo links from PedonPC
@@ -294,7 +296,7 @@ ORDER BY petaxhistory_View_1.peiidref;"
 	d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
 	d.geomorph <- sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
 	d.taxhistory <- sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
-  	d.photolink <- sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
+  d.photolink <- sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
 	
 	# close connection
 	odbcClose(channel)
