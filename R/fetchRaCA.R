@@ -2,13 +2,13 @@
 ## NOTE: each VNIR spectra record is 6.6kb of data (compressed, gzip, level 5)
 
 # this loads and packages the data into a list of objects
-fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
+fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vnir=FALSE) {
   
   # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)
   
   # sanity-check: user must supply some kind of criteria
-  if(missing(series) & missing(state) & missing(bbox))
+  if(missing(series) & missing(state) & missing(bbox) & missing(rcasiteid))
     stop('you must provide some filtering criteria', call.=FALSE)
   
   # sanity-check: cannot request VNIR by state
@@ -40,6 +40,10 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, get.vnir=FALSE) {
   
   if(!missing(state)) {
     f <- c(f, paste('&state=', state, sep=''))
+  }
+  
+  if(!missing(rcasiteid)) {
+    f <- c(f, paste('&rcasiteid=', rcasiteid, sep=''))
   }
   
   # combine filters
