@@ -82,9 +82,9 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   try(veg <- read.table(gzfile(tf.veg), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
   
   ### 2014-01-16: data need to be re-generated, offline for now:
-  message('Carbon concentration and stock values are currently being re-estimated and are unavailable. Sorry.')
-#   try(stock <- read.table(gzfile(tf.stock), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
-#   try(sample <- read.table(gzfile(tf.sample), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
+  message('Carbon concentration and stock values are probably wrong, or at least suspect. USE WITH CAUTION.')
+  try(stock <- read.table(gzfile(tf.stock), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
+  try(sample <- read.table(gzfile(tf.sample), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
   
   # optionally load spectra
   if(get.vnir) {
