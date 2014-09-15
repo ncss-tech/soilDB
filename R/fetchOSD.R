@@ -1,4 +1,4 @@
-## TODO: update SoilWeb's snapshot of the SC database and check on subgroup_mod column
+## NOTE: this function assumes that the series name in osd.osd_colors exactly matches seriesname in osd.taxa
 
 # fetch basic OSD data from the SoilWeb snapshot of the SC database
 fetchOSD <- function(soils) {
