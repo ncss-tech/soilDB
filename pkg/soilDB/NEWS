@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.3-4 (2014-09-16) ----------------------------
+* seriesExtent() now utilizes pre-cached GeoJSON files from [http://casoilresource.lawr.ucdavis.edu/see/]
+
 -------------------------- soilDB 1.3 (2014-02-26) ----------------------------
 * Changes made to fetch functions to accommodate changes implemented in the NASIS 6.3 data structure
 * get_site_data_from_NASIS_db(): in cases where multiple records in site-bedrock exist, retain only the most shallow
