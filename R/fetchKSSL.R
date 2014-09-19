@@ -33,12 +33,13 @@ fetchKSSL <- function(series=NULL, bbox=NULL) {
 	# load pieces
 	try(s <- read.table(site.url, header=TRUE, sep='|', stringsAsFactors=FALSE, quote='', comment.char=''), silent=TRUE)
 	try(h <- read.table(hz.url, header=TRUE, sep='|', stringsAsFactors=FALSE, quote='', comment.char=''), silent=TRUE)
-	
+  
 	# report missing data
 	if(all(c(is.null(s), is.null(h)))) {
 		stop('query returned no data', call.=FALSE)
 	}
 	
+  
 	# upgrade to SoilProfileCollection
 	depths(h) <- pedon_key ~ hzn_top + hzn_bot
 	site(h) <- s
