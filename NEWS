@@ -1,4 +1,5 @@
--------------------------- soilDB 1.3-4 (2014-09-16) ----------------------------
+-------------------------- soilDB 1.3-5 (2014-09-25) ----------------------------
+* loafercreek sample dataset re-created from new data
 * seriesExtent() now utilizes pre-cached GeoJSON files from [http://casoilresource.lawr.ucdavis.edu/see/]
 
 -------------------------- soilDB 1.3 (2014-02-26) ----------------------------
