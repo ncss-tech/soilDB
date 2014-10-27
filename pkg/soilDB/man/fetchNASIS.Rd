@@ -11,12 +11,13 @@
 \description{Fetch commonly used site/horizon data from a PedonPC or local NASIS database, return as a SoilProfileCollection object.}
 
 \usage{
-fetchNASIS()
+fetchNASIS(rmHzErrors = TRUE)
 fetchNASIS_component_data()
 getHzErrorsNASIS(strict=TRUE)
 }
 
 \arguments{
+  \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (TRUE)}
   \item{strict}{should horizonation by strictly enforced? (TRUE)}
 }
 
