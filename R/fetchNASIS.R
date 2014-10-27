@@ -1,7 +1,7 @@
 # updated to NASIS 6.2
 
 # convenience function for loading most commonly used information from local NASIS database
-fetchNASIS <- function() {
+fetchNASIS <- function(rmHzErrors=TRUE) {
 	
 	# test connection
 	if(! 'nasis_local' %in% names(odbcDataSources()))
@@ -33,17 +33,25 @@ fetchNASIS <- function() {
 	# join hz + fragment summary
 	h <- join(h, extended_data$frag_summary, by='phiid', type='left')
 	
-	# test for bad horizonation... flag, and remove
-	message('finding horizonation errors ...')
-	h.test <- ddply(h, 'peiid', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
+	# optionally test for bad horizonation... flag, and remove
+  if(rmHzErrors) {
+    message('finding horizonation errors ...')
+    h.test <- ddply(h, 'peiid', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
+    
+    # which are the good (valid) ones?
+    good.ids <- as.character(h.test$peiid[which(h.test$hz_logic_pass)])
+    bad.ids <- as.character(h.test$peiid[which(!h.test$hz_logic_pass)])
+    bad.pedon.ids <- site_data$pedon_id[which(site_data$peiid %in% bad.ids)]
+    
+    # keep the good ones
+    h <- h[which(h$peiid %in% good.ids), ]
+    
+    # keep track of those pedons with horizonation errors
+    assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
+    if(length(bad.pedon.ids) > 0)
+      message("horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for a list of pedon IDs")
+  }
 	
-	# which are the good (valid) ones?
-	good.ids <- as.character(h.test$peiid[which(h.test$hz_logic_pass)])
-	bad.ids <- as.character(h.test$peiid[which(!h.test$hz_logic_pass)])
-  bad.pedon.ids <- site_data$pedon_id[which(site_data$peiid %in% bad.ids)]
-	
-	# keep the good ones
-	h <- h[which(h$peiid %in% good.ids), ]
 	
 	# upgrade to SoilProfilecollection
 	depths(h) <- peiid ~ hzdept + hzdepb
@@ -73,11 +81,6 @@ fetchNASIS <- function() {
 	# load diagnostic horizons into @diagnostic:
 	diagnostic_hz(h) <- extended_data$diagnostic
 		
-	# 7. save and mention bad pedons
-	assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
-	if(length(bad.pedon.ids) > 0)
-		message("horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for a list of pedon IDs")
-	
 	# done
 	return(h)
 }
