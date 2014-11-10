@@ -6,7 +6,45 @@ importFrom(plyr,
   join
 )
 
+importFrom(RCurl,
+  getURL,
+  curlOptions,
+  postForm
+)
+
+importFrom(SSOAP,
+  SOAPServer,
+  .SOAP  
+)
+
+importFrom(dismo,
+  gmap
+)
+
+importFrom(raster,
+  extent
+)
+
+importFrom(sp,
+  spTransform,
+  CRS
+)
+
+importFrom(rgdal,
+  ogrDrivers,
+  readOGR,
+  ogrListLayers
+)
+
+importFrom(XML,
+  htmlTreeParse,
+  getNodeSet,
+  xmlValue
+)
+
 importFrom(RODBC, 
+  odbcConnectAccess2007,
+  odbcConnectAccess,
   odbcDataSources,
   odbcConnect,
   sqlQuery,
