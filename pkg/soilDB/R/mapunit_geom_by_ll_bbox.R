@@ -3,10 +3,7 @@
 # 2011-06-22
 # It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that overlap the bbox.
 mapunit_geom_by_ll_bbox <- function(bbox, source='sda') {
-	# need rgdal
-	if(!require(rgdal))
-		stop('This function requires the `rgdal` package.', call.=FALSE)
-	
+		
 	# parse bbox
 	bbox.text <- paste(bbox, collapse=',')
 	

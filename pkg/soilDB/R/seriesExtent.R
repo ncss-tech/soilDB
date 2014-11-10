@@ -1,8 +1,5 @@
 # get the series extent fromSEE pre-cached GeoJSON data and plot on Google Maps
 seriesExtentAsGmap <- function(s, timeout=60, exp=1.25) {
-	if(!require(dismo))
-		stop('please install the `dismo` package', call.=FALSE)
-	
 	# load series extent data in WGS84 GCS
 	x <- seriesExtent(s, timeout)
 	
@@ -23,8 +20,6 @@ seriesExtentAsGmap <- function(s, timeout=60, exp=1.25) {
 
 # get the series extent from SoilWeb KMZ service and return as SpatialPolygonsDataFrame
 # seriesExtent <- function(s, timeout=60) {
-# 	if(!require(rgdal))
-# 		stop('please install the `rgdal` package', call.=FALSE)
 # 	
 # 	# make URL to SoilWeb KMZ
 # 	u <- URLencode(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/reflector_api/soils.php?what=soil_series_extent&q_string=', s, '&query_level=mapunit', sep=''))
@@ -50,9 +45,6 @@ seriesExtentAsGmap <- function(s, timeout=60, exp=1.25) {
 
 # get pre-cached series extent GeoJSON from SoilWeb server
 seriesExtent <- function(s, timeout=60) {
-  if(!require(rgdal))
-    stop('please install the `rgdal` package', call.=FALSE)
-  
   # encode series name
   s <- gsub(pattern=' ', replacement='_', x=tolower(s))
   

@@ -4,9 +4,6 @@
 ## 3. better documentation / testing
 ## 4. work with Deb / programmers to get compressed output
 fetchSCAN <- function(req) {
-  # need this
-  require(RCurl)
-  
   # base URL to service
   uri <- 'http://www.wcc.nrcs.usda.gov/nwcc/view'
   
