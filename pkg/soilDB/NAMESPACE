@@ -13,10 +13,6 @@ importFrom(RCurl,
 )
 
 
-importFrom(dismo,
-  gmap
-)
-
 importFrom(raster,
   extent
 )

@@ -1,5 +1,8 @@
 # get the series extent fromSEE pre-cached GeoJSON data and plot on Google Maps
 seriesExtentAsGmap <- function(s, timeout=60, exp=1.25) {
+  if(!require(dismo))
+    stop('please install the `dismo` package', call.=FALSE)
+  
 	# load series extent data in WGS84 GCS
 	x <- seriesExtent(s, timeout)
 	
