@@ -12,10 +12,6 @@ importFrom(RCurl,
   postForm
 )
 
-importFrom(SSOAP,
-  SOAPServer,
-  .SOAP  
-)
 
 importFrom(dismo,
   gmap

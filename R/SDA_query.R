@@ -38,6 +38,10 @@ SDA_query <- function(q) {
 	# important: change the default behavior of data.frame
 	opt.original <- options(stringsAsFactors = FALSE)
 	
+	# check for required packages
+	if(!require(SSOAP) | !require(XMLSchema))
+	  stop('please install the `SSOAP` and `XMLSchema` packages', call.=FALSE)
+  
 	# setup server, action, and xmlns
 	s <- SOAPServer('SDMDataAccess.nrcs.usda.gov', '/Tabular/SDMTabularService.asmx')
 	a <- I('http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx/RunQuery')
