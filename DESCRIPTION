@@ -10,7 +10,7 @@ Description: A collection of functions for reading data from USDA-NCSS soil data
 License: GPL (>= 2)
 LazyLoad: yes
 Depends: R (>= 2.15.0)
-Imports: plyr, Hmisc, RCurl, XML, raster, rgdal, dismo, RODBC, sp, aqp
-Suggests: lattice, XMLSchema, SSOAP
+Imports: plyr, Hmisc, RCurl, XML, raster, rgdal, RODBC, sp, aqp
+Suggests: lattice, XMLSchema, SSOAP, dismo
 Repository: CRAN
 URL: http://aqp.r-forge.r-project.org/
