@@ -1,5 +1,8 @@
 get_veg_species_from_MT_veg_db <- function(dsn) {
-	
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
 	#pull site and plot data and total production value
 	q <- "SELECT tblESD_DK.PlotKey, tblESD_DK.DKKey, tblSites.SiteID AS site_id, SpeciesSymbol, Spec.CommonName as species_common_name, Spec.ScientificName as species_scientific, DKClass, Production 
   FROM (

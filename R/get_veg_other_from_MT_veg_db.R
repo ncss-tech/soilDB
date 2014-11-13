@@ -1,4 +1,8 @@
 get_veg_other_from_MT_veg_db <- function(dsn) {
+  
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
 	
 	#pull site and plot data and total production value
 	q <- "SELECT tblESD_DK.PlotKey, tblESD_DK.DKKey, tblSites.SiteID AS site_id, tblESD_DK.SpeciesSymbol, tblESD_DK.LPIPercentBasal, tblESD_DK.CanopyCoverPercent

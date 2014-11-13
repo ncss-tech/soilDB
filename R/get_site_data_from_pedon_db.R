@@ -6,6 +6,11 @@
 
 
 get_site_data_from_pedon_db <- function(dsn) {
+  
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
   q <- "SELECT site.siteiid, pedon.peiid, upedonid as pedon_id, site.usiteid as site_id, siteobs.obsdate as obs_date,
   latdegrees + IIF(IsNull(latminutes), 0.0, latminutes/ 60.0) + IIF(IsNULL(latseconds), 0.0, latseconds / 60.0 / 60.0) as y,
   -(longdegrees + IIF(IsNull(longminutes), 0.0, longminutes / 60.0) + IIF(IsNull(longseconds), 0.0, longseconds / 60.0 / 60.0)) as x,

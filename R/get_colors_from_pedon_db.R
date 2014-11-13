@@ -1,6 +1,10 @@
 # 2013-01-08: now much faster since we only mix/clean data with > 1 color / horizon
 
 get_colors_from_pedon_db <- function(dsn) {
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
 	# color data... check
 	q <- "SELECT phorizon.phiid as phiid, colormoistst, colorpct as pct, mh.choice AS colorhue, colorvalue, colorchroma
 FROM (

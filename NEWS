@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.4 (2014-11-13) ----------------------------
+* moving most of the hard-to-install packages into `suggests`, and checking for package availability at function runtime. this will make soilDB more portable, as not every user will want or need all functionality.
+
 -------------------------- soilDB 1.3-6 (2014-10-27) ----------------------------
 * fetchNASIS() gains argument rmHzErrors to optionally retain pedons with horizonation errors. use with caution.
 

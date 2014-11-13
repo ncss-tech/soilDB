@@ -1,6 +1,10 @@
 ## note: when multiple textures have been defined, only the first one is returned (alphabetical ?)
 
 get_hz_data_from_NASIS_db <- function() {
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
 	q <- "SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
   claytotest as clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END as silt, sandtotest as sand, t.texture_class, texture, phfield, eff.ChoiceName AS effervescence, l.labsampnum, CASE WHEN f.total_frags_pct IS NULL THEN 0 ELSE f.total_frags_pct END AS total_frags_pct

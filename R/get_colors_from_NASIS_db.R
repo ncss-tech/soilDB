@@ -5,6 +5,10 @@
 
 # results can be referenced via phiid (horizon-level ID)
 get_colors_from_NASIS_db <- function() {
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
 	# unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
 	q <- "SELECT peiid, phiid, colormoistst, colorpct as pct, mh.ChoiceName AS colorhue, colorvalue, colorchroma
 FROM ((

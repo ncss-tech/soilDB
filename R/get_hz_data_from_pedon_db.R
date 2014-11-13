@@ -7,6 +7,10 @@
 #    - multiple lab sample numbers in phsample
 
 get_hz_data_from_pedon_db <- function(dsn) {
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
 	q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid as pedon_id, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
   phorizon.claytotest AS clay, IIF(IsNULL(phorizon.silttotest), (100 - (phorizon.sandtotest + phorizon.claytotest)), phorizon.silttotest) AS silt, phorizon.sandtotest AS sand, texture, phfield, phnaf, eff.choice AS effervescence, l.labsampnum, IIF(IsNULL(f.total_frags_pct), 0, f.total_frags_pct) AS total_frags_pct, fragvoltot
 	FROM (

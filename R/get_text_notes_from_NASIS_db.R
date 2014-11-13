@@ -1,5 +1,8 @@
 get_text_notes_from_NASIS_db <- function() {
-
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
 	# petext
 	q.petext <- "SELECT recdate, recauthor, tk.ChoiceName AS textkind, textcat, textsubcat, textentry, peiidref AS peiid, petextiid FROM (petext_View_1 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1311) AS tk ON petext_View_1.pedontextkind = tk.ChoiceValue);"
 	
