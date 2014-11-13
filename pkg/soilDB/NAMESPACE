@@ -13,20 +13,11 @@ importFrom(RCurl,
 )
 
 
-importFrom(raster,
-  extent
-)
-
 importFrom(sp,
   spTransform,
   CRS
 )
 
-importFrom(rgdal,
-  ogrDrivers,
-  readOGR,
-  ogrListLayers
-)
 
 importFrom(XML,
   htmlTreeParse,
@@ -34,14 +25,6 @@ importFrom(XML,
   xmlValue
 )
 
-importFrom(RODBC, 
-  odbcConnectAccess2007,
-  odbcConnectAccess,
-  odbcDataSources,
-  odbcConnect,
-  sqlQuery,
-  odbcClose
-)
 
 importFrom(Hmisc, 
   wtd.mean, 

@@ -10,6 +10,10 @@
 
 
 get_component_data_from_NASIS_db <- function() {
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
 	q <- "SELECT dmudesc, coiid, compname, comppct_r, ck.ChoiceName as compkind, majcompflag, localphase, slope_r, tfact, wei, weg, dc.ChoiceName as drainage_class, elev_r, aspectrep, map_r, airtempa_r as maat_r, soiltempa_r as mast_r, reannualprecip_r, ffd_r, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, fa.ChoiceName as frost_action, hg.ChoiceLabel as hydgrp, crc.ChoiceName as corcon, crs.ChoiceName as corsteel, taxclname, txo.ChoiceName as taxorder, txs.ChoiceName as taxsuborder, txgg.ChoiceName as  taxgrtgroup, txsg.ChoiceName as taxsubgrp, txps.ChoiceName as taxpartsize, txpsm.ChoiceName as taxpartsizemod, txact.ChoiceName as taxceactcl, txr.ChoiceName as taxreaction, txtc.ChoiceName as taxtempcl, txmc.ChoiceName as taxmoistscl, txtr.ChoiceName as taxtempregime, txed.ChoiceName as soiltaxedition, nationalmusym, muname, mk.ChoiceName as mukind, musym, ms.ChoiceName as mustatus, fc.ChoiceLabel as farmlndcl, dmuiid, muiid, repdmu
 FROM ((((((((((((((((((((((((
 component_View_1
@@ -72,6 +76,10 @@ ORDER BY dmudesc, coiid, comppct_r DESC;"
 # get linked pedons by peiid and user pedon ID
 # note that there may be >=1 pedons / coiid
 get_copedon_from_NASIS_db <- function() {
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
   q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id
 FROM copedon
 JOIN pedon ON peiidref = peiid
@@ -93,6 +101,10 @@ WHERE rvindicator = 1;
 
 
 get_component_horizon_data_from_NASIS_db <- function() {
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
 	q <- "SELECT chiid, coiidref as coiid, hzname, hzdept_r, hzdepb_r, fragvoltot_r, sandtotal_r, silttotal_r, claytotal_r, om_r, dbovendry_r, ksat_r, awc_r, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_r
 	FROM chorizon_View_1 
 	ORDER BY coiidref, hzdept_r ASC;"
@@ -114,7 +126,10 @@ get_component_horizon_data_from_NASIS_db <- function() {
 ## TODO: this will not ID horizons with no depths
 ## TODO: better error checking / reporting is needed: coiid, dmu id, component name
 fetchNASIS_component_data <- function() {
-	
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
 	# load data in pieces
 	f.comp <- get_component_data_from_NASIS_db()
 	f.chorizon <- get_component_horizon_data_from_NASIS_db()

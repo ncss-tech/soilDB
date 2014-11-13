@@ -1,4 +1,7 @@
 get_veg_from_MT_veg_db <- function(dsn) {
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
 	
 	#pull site and plot data and total production value
 	q <- "SELECT tblSites.SiteKey, tblPlots.PlotKey, SiteID AS site_id, EScalled.EcolSite as Ecol_Site_called, EScalled.SiteName as Ecol_Sitename_called, ESkeyed.EcolSite as Ecol_Site_keyed, ESkeyed.SiteName as Ecol_Sitename_keyed, tblPlots.ESD_MLRA as MLRA, tblPLots.ESD_LRU as LRU, HT.abbreviation as habitat_type, TP.total_production as total_production  

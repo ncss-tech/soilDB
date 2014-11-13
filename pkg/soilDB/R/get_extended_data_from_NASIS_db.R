@@ -3,7 +3,10 @@
 ## TODO: multiple records / site in siteobs are possible and will result in duplicate data
 
 get_extended_data_from_NASIS_db <- function() {
-	
+  # must have RODBC installed
+  if(!require(RODBC))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
   # photo links from PedonPC
   q.photolink <- "SELECT siteobs.siteiidref AS siteiid, siteobstext.recdate,siteobstext.textcat, siteobstext.textentry AS imagepath
   FROM (
