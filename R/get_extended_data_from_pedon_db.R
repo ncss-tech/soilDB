@@ -129,7 +129,7 @@ FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeom
 	odbcClose(channel)
 	
 	# generate wide-formatted, diagnostic boolean summary
-	d.diag.boolean <- diagHzLongtoWide(d.diagnostic)
+	d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)
 	
 	# return a list of results
 	return(list(diagnostic=d.diagnostic, diagHzBoolean=d.diag.boolean, frag_summary=d.rf.summary, texmodifier=d.hz.texmod, geomorph=d.geomorph, taxhistory=d.taxhistory))

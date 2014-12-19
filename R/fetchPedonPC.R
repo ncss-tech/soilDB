@@ -62,9 +62,14 @@ fetchPedonPC <- function(dsn) {
 	### TODO: consider moving this into the extended data function ###
 	# load best-guess optimal records from taxhistory
 	# method is added to the new field called 'selection_method'
-	best.tax.data <- ddply(extended_data$taxhistory, 'peiid', pickBestTaxHistory)
+	best.tax.data <- ddply(extended_data$taxhistory, 'peiid', .pickBestTaxHistory)
 	site(h) <- best.tax.data
 	
+  # join-in landform string
+  lf <- ddply(extended_data$geomorph, 'peiid', .formatLandformString, name.sep='|')
+  if(nrow(lf) > 0)
+    site(h) <- lf
+  
 	# 7. save and mention bad pedons
 	assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
 	if(length(bad.pedon.ids) > 0)

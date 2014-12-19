@@ -73,7 +73,7 @@ fetchNASIS <- function(rmHzErrors=TRUE) {
 	### TODO: consider moving this into the extended data function ###
 	# load best-guess optimal records from taxhistory
 	# method is added to the new field called 'selection_method'
-	best.tax.data <- ddply(extended_data$taxhistory, 'peiid', pickBestTaxHistory)
+	best.tax.data <- ddply(extended_data$taxhistory, 'peiid', .pickBestTaxHistory)
 	site(h) <- best.tax.data
 	
 	# add diagnostic boolean data into @site
@@ -84,7 +84,12 @@ fetchNASIS <- function(rmHzErrors=TRUE) {
 	
 	# load diagnostic horizons into @diagnostic:
 	diagnostic_hz(h) <- extended_data$diagnostic
-		
+	
+  # join-in landform string
+  lf <- ddply(extended_data$geomorph, 'peiid', .formatLandformString, name.sep='|')
+  if(nrow(lf) > 0)
+    site(h) <- lf
+  
 	# done
 	return(h)
 }
