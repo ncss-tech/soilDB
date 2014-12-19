@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.4-1 (2014-12-19) ----------------------------
+* new internally-used function .formatLandformString() for reducing NASIS/PedonPC "landform" data into a single string
+
 -------------------------- soilDB 1.4 (2014-11-13) ----------------------------
 * moving most of the hard-to-install packages into `suggests`, and checking for package availability at function runtime. this will make soilDB more portable, as not every user will want or need all functionality.
 

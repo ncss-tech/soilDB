@@ -4,7 +4,7 @@
 
 ## TODO: consider toggling paralithic contact to FALSE when lithic contact is TRUE
 # convert diagnostic horizon info into wide-formatted, boolean table
-diagHzLongtoWide <- function(d) {
+.diagHzLongtoWide <- function(d) {
 	
 	# get unique vector of diagnostic hz
 	d.unique <- na.omit(unique(d$diag_kind))
@@ -36,7 +36,7 @@ diagHzLongtoWide <- function(d) {
 
 ## TODO: this may need some review
 ## try and pick the best possible taxhistory record
-pickBestTaxHistory <- function(d) {
+.pickBestTaxHistory <- function(d) {
 	
 	# add a method field
 	d$selection_method <- NA
@@ -60,4 +60,67 @@ pickBestTaxHistory <- function(d) {
 }
 
 
+# attempt to format "landform" records into a single string
+# note: there are several assumptions made about the data, 
+# see "short-circuits" used when there are funky data
+.formatLandformString <- function(i.gm, name.sep='|') {
+  # get the current 
+  u.peiid <- unique(i.gm$peiid)
+  
+  # sanity check: this function can only be applied to data from a single pedon
+  if(length(u.peiid) > 1)
+    stop('data are from multiple pedon records')
+  
+  # subset geomorph data to landforms
+  i.gm <- i.gm[which(i.gm$geomftname == 'landform'), ]
+  
+  # allow for NA's
+  if(nrow(i.gm) == 0)
+    return(data.frame(peiid=u.peiid, landform.string=NA, stringsAsFactors=FALSE))
+  
+  # short-circuit: if any geomfeatid are NA, then we don't know the order
+  # string together as-is, in row-order
+  if(any(is.na(i.gm$geomfeatid))) {
+    warning(paste0('Using row-order. NA in geomfeatid:', u.peiid), call.=FALSE)
+    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+  }
+  
+  # get an index to the top-most and bottom-most features
+  # only 1 row should match these criteria
+  top.feature <- which(! i.gm$geomfeatid %in% i.gm$existsonfeat)
+  bottom.feature <- which(! i.gm$existsonfeat %in% i.gm$geomfeatid)
+  
+  # short-circuit: if the exists-on logic is wrong, use row-order
+  if(length(top.feature) > 1 | length(bottom.feature) > 1) {
+    warning(paste0('Using row-order. Incorrect exists-on specification:', u.peiid), call.=FALSE)
+    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+  }
+  
+  # init a vector to store feature names
+  ft.vect <- vector(mode='character', length=nrow(i.gm))
+  # the first feature is the top-most feature
+  this.feature.idx <- top.feature
+  
+  # loop over features, until the bottom-most feature
+  i <- 1
+  while(i <= nrow(i.gm)){
+    # get the current feature
+    f.i <- i.gm$geomfname[this.feature.idx]
+
+    # assign to vector of labels
+    ft.vect[i] <- f.i
+    
+    # jump to the next feature
+    this.feature.idx <- which(i.gm$geomfeatid == i.gm$existsonfeat[this.feature.idx])
+    i <- i + 1
+  }
+  
+  # paste into single string
+  ft.string <- paste(ft.vect, collapse=name.sep)
+  
+  # done!
+  return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+}
 

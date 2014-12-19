@@ -305,7 +305,7 @@ ORDER BY petaxhistory_View_1.peiidref;"
 	odbcClose(channel)
 	
 	# generate wide-formatted, diagnostic boolean summary
-	d.diag.boolean <- diagHzLongtoWide(d.diagnostic)
+	d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)
 	
 	# return a list of results
 	return(list(veg=d.veg,
