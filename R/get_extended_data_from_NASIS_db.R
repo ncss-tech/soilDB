@@ -325,7 +325,7 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1309) AS pm
 							texmodifier=d.hz.texmod, 
 							geomorph=d.geomorph, 
 							taxhistory=d.taxhistory,
-						        photo=d.photolink,
+						  photo=d.photolink,
 							pm=d.sitepm))
 }
 

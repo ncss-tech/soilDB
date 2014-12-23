@@ -124,3 +124,38 @@
   return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
 }
 
+
+# attempt to flatten parent material data into 2 strings
+.formatParentMaterialString <- function(i.pm, name.sep='|') {
+  # get the current site
+  u.siteiid <- unique(i.pm$siteiid)
+  
+  # sanity check: this function can only be applied to data from a single site
+  if(length(u.siteiid) > 1)
+    stop('data are from multiple site records')
+  
+  # subset sitepm data to remove any with NA for pm_kind
+  i.pm <- i.pm[which(!is.na(i.pm$pm_kind)), ]
+  
+  # if there is no data, then return a DF formatted as if there were data
+  if(nrow(i.pm) == 0)
+    return(data.frame(siteiid=u.siteiid, pmkind=NA, pmorigin=NA, stringsAsFactors=FALSE))
+  
+  # short-circuit: if any pmorder are NA, then we don't know the order
+  # string together as-is, in row-order
+  if(any(is.na(i.pm$pmorder))) {
+    warning(paste0('Using row-order. NA in pmorder:', u.siteiid), call.=FALSE)
+  }
+  else{
+    # there are no NAs in pmorder --> sort according to pmorder
+    i.pm <- i.pm[order(i.pm$pmorder), ]
+  }
+  
+  # composite strings and return
+  str.kind <- paste(i.pm$pm_kind, collapse=name.sep)
+  str.origin <- paste(unique(i.pm$pm_origin), collapse=name.sep)
+  
+  return(data.frame(siteiid=u.siteiid, pmkind=str.kind, pmorigin=str.origin, stringsAsFactors=FALSE))
+}
+
+

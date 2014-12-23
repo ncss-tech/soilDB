@@ -90,6 +90,11 @@ fetchNASIS <- function(rmHzErrors=TRUE) {
   if(nrow(lf) > 0)
     site(h) <- lf
   
+  # join-in parent material strings
+  pm <- ddply(extended_data$pm, 'siteiid', .formatParentMaterialString, name.sep='|')
+  if(nrow(pm) > 0)
+    site(h) <- pm
+  
 	# done
 	return(h)
 }
