@@ -8,11 +8,10 @@ get_extended_data_from_NASIS_db <- function() {
     stop('please install the `RODBC` package', call.=FALSE)
   
   # photo links from PedonPC
-  q.photolink <- "SELECT siteobs.siteiidref AS siteiid, siteobstext.recdate,siteobstext.textcat, siteobstext.textentry AS imagepath
+  q.photolink <- "SELECT siteobs_View_1.siteiidref AS siteiid, siteobstext_View_1.recdate, siteobstext_View_1.textcat, siteobstext_View_1.textentry AS imagepath
   FROM (
-  siteobs LEFT OUTER JOIN siteobstext ON siteobs.siteobsiid = siteobstext.siteobsiidref) 
-  WHERE siteobstext.textcat LIKE 'Photo%' ORDER BY siteobstext.siteobstextkind;"
-  
+  siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) 
+  WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
   
 	## TODO: adapt this for SQL server syntax!
 	# returns the first structure defined per horizon
@@ -286,6 +285,15 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 186) AS mcl
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 184) AS txo ON petxhistfmother_View_1.taxfamother = txo.ChoiceValue)
 ORDER BY petaxhistory_View_1.peiidref;"
 
+
+q.sitepm <- "SELECT siteiidref as siteiid, seqnum, pmorder, pmdept, pmdepb, pmm.ChoiceName as pm_modifier, pmgenmod, pmk.ChoiceName as pm_kind, pmo.ChoiceName as pm_origin, pmw.ChoiceName as pm_weathering 
+FROM (((((sitepm_View_1 INNER JOIN site_View_1 on sitepm_View_1.siteiidref = site_View_1.siteiid) 
+LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 516 ) AS pmm ON sitepm_View_1.pmmodifier = pmm.ChoiceValue)
+LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 515) AS pmk ON sitepm_View_1.pmkind = pmk.ChoiceValue)
+LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 2587) AS pmo ON sitepm_View_1.pmorigin = pmo.ChoiceValue)
+LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1309) AS pmw ON sitepm_View_1.pmweathering = pmw.ChoiceValue);"
+
+
 	
 	
 	# setup connection to our local NASIS database
@@ -299,7 +307,8 @@ ORDER BY petaxhistory_View_1.peiidref;"
 	d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
 	d.geomorph <- sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
 	d.taxhistory <- sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
-  d.photolink <- sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
+  	d.photolink <- sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
+	d.sitepm <- sqlQuery(channel, q.sitepm, stringsAsFactors=FALSE)
 	
 	# close connection
 	odbcClose(channel)
@@ -316,6 +325,7 @@ ORDER BY petaxhistory_View_1.peiidref;"
 							texmodifier=d.hz.texmod, 
 							geomorph=d.geomorph, 
 							taxhistory=d.taxhistory,
-              photo=d.photolink))
+						        photo=d.photolink,
+							pm=d.sitepm))
 }
 
