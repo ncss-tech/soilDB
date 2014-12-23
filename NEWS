@@ -2,6 +2,7 @@
 * new internally-used function .formatLandformString() for flattening NASIS/PedonPC "landform" records
 * new internally-used function .formatParentMaterialString() for flattening NASIS/PedonPC "parent material" records
 * fetchNASIS() incorporates the results of these two new functions
+* new function SSURGO_spatial_query() queries SSURGO data from SoilWeb (see manual page for details)
 
 -------------------------- soilDB 1.4 (2014-11-13) ----------------------------
 * moving most of the hard-to-install packages into `suggests`, and checking for package availability at function runtime. this will make soilDB more portable, as not every user will want or need all functionality.
