@@ -6,13 +6,13 @@
 MUKEYS_by_ll_bbox(bbox)
 }
 \arguments{
-  \item{bbox}{a bounding box in WGS coordinates}
+  \item{bbox}{a bounding box in WGS84 geographic coordinates}
 }
-\details{The SDA website can be found at \url{http://sdmdataaccess.nrcs.usda.gov}. See examples for bounding box formatting.}
+\details{The SDA website can be found at \url{http://sdmdataaccess.nrcs.usda.gov}. See examples for bounding box formatting. This website can be very slow. An updated approach can be found in \code{\link{SSURGO_spatial_query}}.}
 \value{a vector of map unit keys}
 \references{http://casoilresource.lawr.ucdavis.edu/}
 \author{Dylan E Beaudette}
-\note{This function requires the `RCurl` (\url{http://www.omegahat.org/RCurl/}) and `XML` (\url{http://www.omegahat.org/RSXML/}) packages.}
+\note{This function requires the `RCurl` and `XML` packages.}
 \seealso{\code{\link{SDA_query}}, \code{\link{mapunit_geom_by_ll_bbox}}}
 \examples{
 # fetch map unit keys from the bounding-box:

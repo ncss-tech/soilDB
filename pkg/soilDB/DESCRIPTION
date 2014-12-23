@@ -11,7 +11,7 @@ License: GPL (>= 2)
 LazyLoad: yes
 Depends: R (>= 2.15.0), aqp
 Imports: plyr, Hmisc, RCurl, XML, sp
-Suggests: lattice, XMLSchema, SSOAP, dismo, raster, RODBC, rgdal
+Suggests: lattice, XMLSchema, SSOAP, dismo, raster, RODBC, rgdal, jsonlite
 Repository: CRAN
 Additional_repositories: http://www.omegahat.org/R
 URL: http://aqp.r-forge.r-project.org/
