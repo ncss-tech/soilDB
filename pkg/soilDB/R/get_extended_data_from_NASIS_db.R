@@ -46,16 +46,15 @@ FROM pediagfeatures_View_1
 	ORDER BY pediagfeatures_View_1.peiidref, pediagfeatures_View_1.featdept;"
   
 	q.surf.rf.summary <- "SELECT pedon_View_1.peiid, 
-
-CASE WHEN f1_fgr.gravel IS NULL THEN NULL ELSE f1_fgr.gravel END as surface_fgravel, 
-CASE WHEN f1_gr.gravel IS NULL THEN NULL ELSE f1_gr.gravel END as surface_gravel, 
-CASE WHEN f2_cb.cobbles IS NULL THEN NULL ELSE f2_cb.cobbles END as surface_cobbles, 
-CASE WHEN f3.stones IS NULL THEN NULL ELSE f3.stones END as surface_stones, 
-CASE WHEN f4.boulders IS NULL THEN NULL ELSE f4.boulders END as surface_boulders,
-CASE WHEN f5.channers IS NULL THEN NULL ELSE f5.channers END as surface_channers, 
-CASE WHEN f6.flagstones IS NULL THEN NULL ELSE f6.flagstones END as surface_flagstones,
-CASE WHEN f1_pgr.gravel IS NULL THEN NULL ELSE f1_pgr.gravel END as surface_paragravel,
-CASE WHEN f2_pcb.cobbles IS NULL THEN NULL ELSE f2_pcb.cobbles END as surface_paracobbles
+f1_fgr.gravel as surface_fgravel, 
+f1_gr.gravel as surface_gravel, 
+f2_cb.cobbles as surface_cobbles, 
+f3.stones as surface_stones, 
+f4.boulders as surface_boulders,
+f5.channers as surface_channers, 
+f6.flagstones as surface_flagstones,
+f1_pgr.gravel as surface_paragravel,
+f2_pcb.cobbles as surface_paracobbles
 
 FROM (((((((((((
 
@@ -154,15 +153,15 @@ LEFT OUTER JOIN (
 	# query rock-fragment summary by horizon
 	q.rf.summary <- "SELECT p.phiid, 
 
-CASE WHEN f1_fgr.gravel IS NULL THEN NULL ELSE f1_fgr.gravel END as fine_gravel,
-	CASE WHEN f1_gr.gravel IS NULL THEN NULL ELSE f1_gr.gravel END as gravel, 
-	CASE WHEN f2_cb.cobbles IS NULL THEN NULL ELSE f2_cb.cobbles END as cobbles,
-	CASE WHEN f3.stones IS NULL THEN NULL ELSE f3.stones END as stones, 
-	CASE WHEN f4.boulders IS NULL THEN NULL ELSE f4.boulders END as boulders,
-	CASE WHEN f1_pgr.gravel IS NULL THEN NULL ELSE f1_pgr.gravel END as paragravel,
-	CASE WHEN f2_pcb.cobbles IS NULL THEN NULL ELSE f2_pcb.cobbles END as paracobbles,
-	CASE WHEN f5.channers IS NULL THEN NULL ELSE f5.channers END as channers, 
-	CASE WHEN f6.flagstones IS NULL THEN NULL ELSE f6.flagstones END as flagstones
+  f1_fgr.gravel as fine_gravel,
+  f1_gr.gravel as gravel, 
+	f2_cb.cobbles as cobbles,
+	f3.stones as stones, 
+	f4.boulders as boulders,
+	f1_pgr.gravel as paragravel,
+	f2_pcb.cobbles as paracobbles,
+	f5.channers as channers, 
+	f6.flagstones as flagstones
 	
 	FROM (((((((((
 	(
@@ -307,7 +306,7 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1309) AS pm
 	d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
 	d.geomorph <- sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
 	d.taxhistory <- sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
-  	d.photolink <- sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
+  d.photolink <- sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
 	d.sitepm <- sqlQuery(channel, q.sitepm, stringsAsFactors=FALSE)
 	
 	# close connection

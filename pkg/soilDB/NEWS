@@ -1,3 +1,8 @@
+-------------------------- soilDB 1.4-3 (2015-01-12) ----------------------------
+* get_hz_data_from_NASIS_db() no longer assumes fragment volume of NULL = 0
+* get_extended_data_from_NASIS_db() no longer assumes fragment volume of NULL = 0
+* fetchNASIS() has a new argument, nullFragsAreZero=FALSE; set to TRUE for past NULL -> 0 conversion
+
 -------------------------- soilDB 1.4-2 (2014-12-23) ----------------------------
 * new internally-used function .formatLandformString() for flattening NASIS/PedonPC "landform" records
 * new internally-used function .formatParentMaterialString() for flattening NASIS/PedonPC "parent material" records
