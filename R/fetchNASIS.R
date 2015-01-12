@@ -1,7 +1,7 @@
 # updated to NASIS 6.2
 
 # convenience function for loading most commonly used information from local NASIS database
-fetchNASIS <- function(rmHzErrors=TRUE) {
+fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=FALSE) {
 	
   # must have RODBC installed
   if(!require(RODBC))
@@ -17,6 +17,13 @@ fetchNASIS <- function(rmHzErrors=TRUE) {
 	color_data <- get_colors_from_NASIS_db()
 	extended_data <- get_extended_data_from_NASIS_db()
 	
+  # optionally convert NA fragvol to 0
+  if(nullFragsAreZero) {
+    hz_data$total_frags_pct <- ifelse(is.na(hz_data$total_frags_pct), 0, hz_data$total_frags_pct)
+    hz_data$total_frags_pct_cal <- ifelse(is.na(hz_data$total_frags_pct_cal), 0, hz_data$total_frags_pct_cal)
+  }
+  
+  
 	# join horizon + hz color: all horizons
 	h <- join(hz_data, color_data, by='phiid', type='left')
 	
@@ -35,7 +42,15 @@ fetchNASIS <- function(rmHzErrors=TRUE) {
 	h$soil_color[idx] <- with(h[idx, ], rgb(m_r, m_g, m_b)) # moist colors
 	
 	# join hz + fragment summary
-	h <- join(h, extended_data$frag_summary, by='phiid', type='left')
+  hfs <- extended_data$frag_summary
+  # optionally convert NA fragvol to 0
+  if(nullFragsAreZero) {
+    hfs <- as.data.frame(
+      cbind(hfs[, 1, drop=FALSE], 
+            lapply(hfs[, -1], function(i) ifelse(is.na(i), 0, i))
+      ), stringsAsFactors=FALSE)
+  }
+	h <- join(h, hfs, by='phiid', type='left')
 	
 	# optionally test for bad horizonation... flag, and remove
   if(rmHzErrors) {
@@ -80,7 +95,16 @@ fetchNASIS <- function(rmHzErrors=TRUE) {
 	site(h) <- extended_data$diagHzBoolean
 	
 	# add surface frag summary
-	site(h) <- extended_data$surf_frag_summary
+  sfs <- extended_data$surf_frag_summary
+  # optionally convert NA fragvol to 0
+  if(nullFragsAreZero) {
+    sfs <- as.data.frame(
+      cbind(sfs[, 1, drop=FALSE], 
+            lapply(sfs[, -1], function(i) ifelse(is.na(i), 0, i))
+            ), stringsAsFactors=FALSE)
+  }
+  
+	site(h) <-sfs
 	
 	# load diagnostic horizons into @diagnostic:
 	diagnostic_hz(h) <- extended_data$diagnostic

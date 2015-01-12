@@ -11,13 +11,14 @@
 \description{Fetch commonly used site/horizon data from a PedonPC or local NASIS database, return as a SoilProfileCollection object.}
 
 \usage{
-fetchNASIS(rmHzErrors = TRUE)
+fetchNASIS(rmHzErrors = TRUE, nullFragsAreZero=FALSE)
 fetchNASIS_component_data()
 getHzErrorsNASIS(strict=TRUE)
 }
 
 \arguments{
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (TRUE)}
+  \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (FALSE)}
   \item{strict}{should horizonation by strictly enforced? (TRUE)}
 }
 
