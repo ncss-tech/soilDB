@@ -1,0 +1,99 @@
+# TODO: make these more specific
+import(aqp)
+import(ape)
+
+importFrom(igraph,
+  graph.edgelist,
+  count.multiple,
+  get.adjacency,
+  graph.adjacency,
+  get.edgelist,
+  get.edges,
+  add.edges,
+  simplify,
+  E,
+  'E<-',
+  V,
+  'V<-',
+  degree,
+  minimum.spanning.tree,
+  delete.edges,
+  fastgreedy.community,
+  membership,
+  layout.fruchterman.reingold,
+  dendPlot,
+  plot.igraph
+)
+
+importFrom(cluster,
+  daisy,
+  diana
+)
+
+importFrom(lattice,
+  levelplot,
+  panel.levelplot,
+  panel.segments
+)
+
+importFrom(latticeExtra,
+  dendrogramGrob
+)
+
+importFrom(vegan,
+  decostand,
+  vegdist
+)
+
+importFrom(soilDB,
+  format_SQL_in_statement,
+  SDA_query
+)
+
+importFrom(sp,
+  spsample,
+  coordinates,
+  spTransform
+)
+
+importFrom(reshape2,
+  dcast,
+  melt
+)
+
+importFrom(Hmisc, 
+  hdquantile,
+	wtd.mean, 
+  wtd.var, 
+  wtd.quantile, 
+  wtd.rank, 
+  wtd.table,
+  binconf				 
+)
+	
+importFrom(scales, 
+  alpha,
+  rescale
+)
+
+importFrom(circular, 
+  circular,
+  mean.circular,
+  rho.circular,
+  plot.circular,
+  density.circular,
+  axis.circular,
+  arrows.circular
+)
+
+importFrom(RColorBrewer, 
+  brewer.pal
+)
+
+importFrom(plyr, 
+  dlply,
+  ddply,
+  summarise
+)
+
+exportPattern("^[^\\.]")

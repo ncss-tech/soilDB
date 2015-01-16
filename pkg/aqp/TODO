@@ -1,0 +1,75 @@
+Urgent:
+-------
+* add to all functions using data.frame[idx, ] --> data.frame[idx, , drop=FALSE]
+  ## this will return single column data.frame objects as data.frames, instead of coercing to vectors
+
+* ADD to all modules using data.frame, melt, ... ?
+  ## important: change the default behavior of data.frame and melt
+  opt.original <- options(stringsAsFactors = FALSE)
+
+* determine optimal level of checking in validity method for SoilProfileCollection objects
+
+* make slab() faster / more efficient (data.table ? )
+
+* slab() no longer supports weighted-aggregates
+
+* more aggressive checking of ordering / IDs --> use joins instead of implicit ordering
+
+* switch to reshape2? It is faster (PR) [code-fixes required in slab() before we can do this (DEB)]
+
+* S4-cleanup of profile_compare [this would solve several issues related to ordering]
+
+* raster::extract method
+
+* sp::over method
+
+* rgdal::spTransform method
+
+
+Interesting:
+------------
+1. user-defined slices for profile_compare()
+2. sensitivity analysis on profile_compare()
+3. equal-area splines
+
+
+Optimisation of slab()
+-----------------------
+0. investigate use of data.table objects instead of data.frame objects
+1. investigate .slab.fun.numeric.fast() vs. .slab.fun.numeric.default() for large data sets
+2. ideas:
+
+	http://jeromyanglim.blogspot.com/2010/02/case-study-in-optimising-code-in-r.html
+	http://www.noamross.net/blog/2013/4/25/faster-talk.html
+	https://gist.github.com/noamross/5447008
+
+3. Rprof results:
+
+PctTime Stack                                                                                                                                                           
+ 19.160  slab > standardGeneric > slab > aggregate > aggregate.formula > aggregate.data.frame > lapply > FUN > lapply > split > split.default > factor                   
+ 15.350  slab > standardGeneric > slab > aggregate > aggregate.formula > aggregate.data.frame > lapply > FUN > lapply > FUN > hdquantile > outer > FUN > pbeta           
+ 13.064  slab > standardGeneric > slab > slice > standardGeneric > slice > ldply > list_to_dataframe > rbind.fill                                                        
+  4.293  slab > standardGeneric > slab > aggregate > aggregate.formula > eval > eval > model.frame > model.frame.default > sapply > lapply > as.list > as.list.data.frame
+  4.256  slab > standardGeneric > slab > melt > melt.data.frame > do.call > lapply > FUN > data.frame                                                                    
+  3.977  slab > standardGeneric > slab > join > .join_all > cbind > cbind > data.frame                                                                                   
+  2.918  slab > standardGeneric > slab > slice > standardGeneric > slice > join > .join_first > join.keys > id > id_var > sort > sort.default > sort.int                 
+  2.639  slab > standardGeneric > slab > melt > melt.data.frame > do.call > rbind > rbind                                                                                
+  2.602  slab > standardGeneric > slab > aggregate > aggregate.formula > aggregate.data.frame                                                                            
+  2.026  slab > standardGeneric > slab > join > .join_all > cbind > [ > [.data.frame > make.unique                                                                       
+  1.896  slab > standardGeneric > slab > slice > standardGeneric > slice > get.slice > apply > FUN > which                                                               
+  1.821  slab > standardGeneric > slab > aggregate > aggregate.formula > aggregate.data.frame > is.data.frame > [ > [.data.frame > structure                             
+  1.635  slab > standardGeneric > slab > melt > melt.data.frame > [[<- > [[<-.data.frame                                                                                 
+  1.096  slab > standardGeneric > slab > melt > melt.data.frame                                                                                                          
+  0.966  slab > standardGeneric > slab > aggregate > aggregate.formula > aggregate.data.frame > lapply > FUN > lapply > FUN > hdquantile > outer                         
+  0.911  slab > standardGeneric > slab > aggregate > aggregate.formula > aggregate.data.frame > as.factor > factor > unique > unique.default                             
+  0.873  slab > standardGeneric > slab > slice > standardGeneric > slice > [ > [.data.frame > order                                                                      
+  0.799  slab > standardGeneric > slab > slice > standardGeneric > slice > get.slice > apply > FUN                                                                       
+  0.688  slab > standardGeneric > slab > aggregate > aggregate.formula > aggregate.data.frame > lapply > FUN > lapply > FUN > hdquantile                                 
+  0.539  slab > standardGeneric > slab > join > .join_all > join_ids > vapply 
+
+Total Time: 107.62 seconds
+
+
+
+
+

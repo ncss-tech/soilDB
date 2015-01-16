@@ -1,0 +1,161 @@
+## 
+## misc functions used by soilDB
+##
+
+## TODO: consider toggling paralithic contact to FALSE when lithic contact is TRUE
+# convert diagnostic horizon info into wide-formatted, boolean table
+.diagHzLongtoWide <- function(d) {
+	
+	# get unique vector of diagnostic hz
+	d.unique <- na.omit(unique(d$diag_kind))
+	
+	# init list for storing initial FALSE for each peiid / diag kind
+	l <- vector(mode='list')
+	
+	# add unique peiid
+	l[['peiid']] <- unique(d$peiid)
+	
+	# make a vector of FALSE, matching the length of unique peiid
+	f <- rep(FALSE, times=length(l[['peiid']]))
+	
+	# iterate over diagnostic hz kind
+	for(i in d.unique) {
+		# fill this list element with FALSE
+		l[[i]] <- f
+		# lookup those peiid with this feature
+		matching.peiid <- d$peiid[which(d$diag_kind == i)]
+		# toggle FALSE-->TRUE for these pedons
+		l[[i]][which(l[['peiid']] %in% matching.peiid)] <- TRUE
+	}
+	
+	# convert to DF
+	return(as.data.frame(l))
+		
+}
+
+
+## TODO: this may need some review
+## try and pick the best possible taxhistory record
+.pickBestTaxHistory <- function(d) {
+	
+	# add a method field
+	d$selection_method <- NA
+	
+	# try to get the most recent:
+	d.order <- order(d$classdate, decreasing=TRUE)
+	
+	# if there are multiple (unique) dates, return the most recent
+	if(length(unique(d$classdate)) > 1) {
+		d$selection_method <- 'most recent'
+		return(d[d.order[1], ])
+	}
+	
+	# otherwise, return the record with the least number of missing cells
+	# if there are the same number of missing cells, the first record is returned
+	n.na <- apply(d, 1, function(i) length(which(is.na(i))))
+	best.record <- which.min(n.na)
+	
+	d$selection_method <- 'least missing data'
+	return(d[best.record, ])
+}
+
+
+# attempt to format "landform" records into a single string
+# note: there are several assumptions made about the data, 
+# see "short-circuits" used when there are funky data
+.formatLandformString <- function(i.gm, name.sep='|') {
+  # get the current 
+  u.peiid <- unique(i.gm$peiid)
+  
+  # sanity check: this function can only be applied to data from a single pedon
+  if(length(u.peiid) > 1)
+    stop('data are from multiple pedon records')
+  
+  # subset geomorph data to landforms
+  i.gm <- i.gm[which(i.gm$geomftname == 'landform'), ]
+  
+  # allow for NA's
+  if(nrow(i.gm) == 0)
+    return(data.frame(peiid=u.peiid, landform.string=NA, stringsAsFactors=FALSE))
+  
+  # short-circuit: if any geomfeatid are NA, then we don't know the order
+  # string together as-is, in row-order
+  if(any(is.na(i.gm$geomfeatid))) {
+    warning(paste0('Using row-order. NA in geomfeatid:', u.peiid), call.=FALSE)
+    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+  }
+  
+  # get an index to the top-most and bottom-most features
+  # only 1 row should match these criteria
+  top.feature <- which(! i.gm$geomfeatid %in% i.gm$existsonfeat)
+  bottom.feature <- which(! i.gm$existsonfeat %in% i.gm$geomfeatid)
+  
+  # short-circuit: if the exists-on logic is wrong, use row-order
+  if(length(top.feature) > 1 | length(bottom.feature) > 1) {
+    warning(paste0('Using row-order. Incorrect exists-on specification:', u.peiid), call.=FALSE)
+    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+  }
+  
+  # init a vector to store feature names
+  ft.vect <- vector(mode='character', length=nrow(i.gm))
+  # the first feature is the top-most feature
+  this.feature.idx <- top.feature
+  
+  # loop over features, until the bottom-most feature
+  i <- 1
+  while(i <= nrow(i.gm)){
+    # get the current feature
+    f.i <- i.gm$geomfname[this.feature.idx]
+
+    # assign to vector of labels
+    ft.vect[i] <- f.i
+    
+    # jump to the next feature
+    this.feature.idx <- which(i.gm$geomfeatid == i.gm$existsonfeat[this.feature.idx])
+    i <- i + 1
+  }
+  
+  # paste into single string
+  ft.string <- paste(ft.vect, collapse=name.sep)
+  
+  # done!
+  return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+}
+
+
+# attempt to flatten parent material data into 2 strings
+.formatParentMaterialString <- function(i.pm, name.sep='|') {
+  # get the current site
+  u.siteiid <- unique(i.pm$siteiid)
+  
+  # sanity check: this function can only be applied to data from a single site
+  if(length(u.siteiid) > 1)
+    stop('data are from multiple site records')
+  
+  # subset sitepm data to remove any with NA for pm_kind
+  i.pm <- i.pm[which(!is.na(i.pm$pm_kind)), ]
+  
+  # if there is no data, then return a DF formatted as if there were data
+  if(nrow(i.pm) == 0)
+    return(data.frame(siteiid=u.siteiid, pmkind=NA, pmorigin=NA, stringsAsFactors=FALSE))
+  
+  # short-circuit: if any pmorder are NA, then we don't know the order
+  # string together as-is, in row-order
+  if(any(is.na(i.pm$pmorder))) {
+    warning(paste0('Using row-order. NA in pmorder:', u.siteiid), call.=FALSE)
+  }
+  else{
+    # there are no NAs in pmorder --> sort according to pmorder
+    i.pm <- i.pm[order(i.pm$pmorder), ]
+  }
+  
+  # composite strings and return
+  str.kind <- paste(i.pm$pm_kind, collapse=name.sep)
+  str.origin <- paste(unique(i.pm$pm_origin), collapse=name.sep)
+  
+  return(data.frame(siteiid=u.siteiid, pmkind=str.kind, pmorigin=str.origin, stringsAsFactors=FALSE))
+}
+
+

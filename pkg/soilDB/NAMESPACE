@@ -1,0 +1,45 @@
+importFrom(plyr, 
+  ddply,
+  llply,
+  ldply,
+  dlply,
+  join
+)
+
+importFrom(RCurl,
+  getURL,
+  curlOptions,
+  postForm
+)
+
+
+importFrom(sp,
+  spTransform,
+  CRS
+)
+
+
+importFrom(XML,
+  htmlTreeParse,
+  getNodeSet,
+  xmlValue
+)
+
+
+importFrom(Hmisc, 
+  wtd.mean, 
+  wtd.var, 
+  wtd.quantile, 
+  wtd.rank, 
+  wtd.table
+)
+
+importFrom(aqp, 
+  "depths<-", 
+  "site<-",
+  diagnostic_hz,
+  "diagnostic_hz<-",
+  test_hz_logic
+)
+
+exportPattern("^[^\\.]")

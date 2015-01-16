@@ -1,0 +1,377 @@
+-------------------------- aqp 1.7-10 (2015-01-15) --------------------------
+* names() method for SoilProfileCollection objects returns a concatenated vector of horizon + site names
+
+-------------------------- aqp 1.7-8 (2014-12-08) --------------------------
+* texture.triangle.low.rv.high(): new arguments, likely breaking previous usage when method='closest', see manual page for details
+
+-------------------------- aqp 1.7-7 (2014-11-06) --------------------------
+* bug fix c/o José Padarian: SPC objects now understand logical indexing rules
+* removed spatial_subset(): this functionality can be accomplished outside of AQP and removes dependency on rgeos package
+
+-------------------------- aqp 1.7-6 (2014-09-26) --------------------------
+* bug fix c/o José Padarian: when promoting coordiantes from @site, drop=FALSE is required to prevent a single remaining attribute from being down-graded to a vector-- thanks!
+* get.ml.hz() now returns a "pseudo" Brier Score, using the most-likely horizon label as the "correct" value
+* new function rgb2munsell()
+* new function estimateSoilDepth()
+* new function getSoilDepthClass()
+* new documentation / tutorials
+
+-------------------------- aqp 1.6-4 (2014-02-14) --------------------------
+* When applied to a single categorical variable, the results from slab() now contain an attribute 'original.levels'
+  that contains the original factor levels. This is important because when casting from long->wide format, illegal
+  column names are scrubbed by make.names(). This process would convert horizon designations like '2Bt' into 'X2Bt'.
+  You can recover the original horizon names via attr(x, 'original.levels').
+
+-------------------------- aqp 1.6-3 (2014-02-04) --------------------------
+* plotSPC() has a new argument: `label`, used to set site-level attribute containing profile labels
+
+-------------------------- aqp 1.6-2 (2014-01-10) --------------------------
+* plotSPC() now registers plotting parameters in the environment aqp.env
+* new function addVolumeFraction() for annotating profile plots with volumetric information (e.g. rock fragment volume)
+
+-------------------------- aqp 1.6-1 (2013-12-31) --------------------------
+* plotSPC() attempts to guess which column contains horizon designations
+* plotSPC() can now color horizons based on continuous soil properties (e.g. clay content)
+
+-------------------------- aqp 1.6 (2013-12-11) --------------------------
+* rbind.SoilProfileCollection() now re-orders data according to the new set of profile IDs
+  - this fixes several probles associated with assumptions in profile_compare()
+* profile_compare() will be re-written soon to work natively with SPC objects
+
+-------------------------- aqp 1.5-6 (2013-11-25) --------------------------
+* new function addBracket() for annotating profile sketches with depth-brackets; useful for plotting diagnostic features
+
+-------------------------- aqp 1.5-6 (2013-11-15) --------------------------
+* new function missingDataGrid() for graphically describing the presence of missing data in an SPC object
+
+-------------------------- aqp 1.5-2 (2013-04-09) --------------------------
+* panel.depth_function() now prints "contributing fraction" values in the same color as corresponding depth-function lines and shaded areas
+* panel.depth_function() gains an argument 'cf.col' for manually specifying the CF color
+* panel.depth_function() gains an argument 'cf.interval' for manually specifying printed CF depths
+* prepanel.depth_function() now extends x-lim by 5% in either direction for cleaner-looking plots
+* added some details to slab() documentation
+* fixed minor bug in min() and max() methods for SoilProfileCollection objects in the presence of missing data
+* min() and max() methods for SoilProfileCollection objects now have a second argument for checking depth based on the presence of data in that column
+
+-------------------------- aqp 1.5-1 (2013-03-07) --------------------------
+* removed excessive checking in SoilProfileCollection init code, this may speed things up
+  - previously identified horizonation errors may no longer result in ERRORS; be sure to test
+* test_hz_logic() now more useful:
+  - always checks for NA and overlapping horizons
+  - no longer called with initialization of SoilProfileCollection objects
+  - note that default behavior has changed since version 1.5
+  - moved related documentation to test_hz_logic manual page
+* new mini-vignette on dealing with bad data (dealing-with-bad-data.html)
+* better documentation for slice()
+* new warnings related to missing data in the grouping variable passed to slab()
+
+-------------------------- aqp 1.5 (2013-02-24) --------------------------
+* profileApply() can now return arbitrary objects = new subsetting/transformation possibilities
+  - see ?profileApply for examples
+* panel.depth_function() can now display contributing fraction values with grouped data
+  - see multi-variate example in ?slab
+
+-------------------------- aqp 1.4-7 (2013-01-24) --------------------------
+* HTML version of all documentation (including images) auto-generated via knitr and available on the r-forge website
+* new function: texture.triangle.low.rv.high() plots texture data with low-high range defined by quantiles
+
+-------------------------- aqp 1.4-6 (2013-01-03) --------------------------
+* updated documentation and SoilProfileCollection tutorial here:
+  - https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/aqp/aqp-intro.html?root=aqp
+* plans laid for parallel processing in slab() and profileApply() via 'parallel' package
+* plotSPC() gets a 'density' argument for shaded coloring of horizons
+
+-------------------------- aqp 1.4-5 (2012-12-29) --------------------------
+* slab() re-written from scratch, resulting in reduced memory footprint and quicker running time
+  ! older code based on slab() is likely to now broken- sorry, it won't happen again
+  - the new code is much slimmer and based on aggregate() rather than ddply
+  - function arguments have changed so be sure to check the manual page
+  - user-supplied functions are now much simpler to write and rely on vectors rather than data.frames (= faster)
+  - the next major release will contain additional examples of how to use the new features
+
+-------------------------- aqp 1.4 (2012-12-18) --------------------------
+* new function sim() for simulation based on a template soil profile, proper documentation pending...
+
+-------------------------- aqp 1.3-3 (2012-12-06) --------------------------
+* new function subsetProfiles() for simpler subsetting of SoilProfileCollection objects via site or horizon-level attributes
+* get.ml.hz() now returns a 'confidence' for each horizon (as a percent)
+* added experimental 'filter' argument to profile_compare()-- see manual page for usage
+* added new argument to plot.SoilProfileCollection()-- alt.label: used to add secondary labeling via data in @site
+* plot.SoilProfileCollection() will now do a better job of selecting the location for profile IDs based on label length, font size, and figure size
+
+-------------------------- aqp 1.3-2 (2012-11-01) --------------------------
+* minor tweaks to plot.SoilProfileCollection() for improved output with small/large size collections
+* new function get.ml.hz() attempts to determine the most likely horizonation after slabbing
+* fixed bug in profileApply() where further arguments to FUN weren't passed on to FUN
+* missing data report from profile_compare() now only includes horizons with some data (e.g. Cr and R horizons are skipped)
+
+-------------------------- aqp 1.3-1 (2012-10-17) --------------------------
+* speed-bump in profileApply()
+  - splitProfiles() function is no longer defined/used/needed
+* bug fix in SoilProfileCollection subsetting via []
+  - SoilProfiles with a single horizon confused subsetting in the presence of spatial data
+
+-------------------------- aqp 1.3 (2012-10-07) --------------------------
+* added rbind.SoilProfileCollection() for concatenating SPC objects
+  - this function performs basic sanity checks, but cannot combine unlike objects
+
+-------------------------- aqp 1.2-10 (2012-09-05) --------------------------
+* fixed minor bug in prepanel.depth_function() where an error would occur when input data was all NA
+
+-------------------------- aqp 1.2-9 (2012-08-31) --------------------------
+* new 'unique' method for SoilProfileCollection objects, returns indices of unique profiles
+* fixed bug in NAMESPACE that caused an error when 'sp' library wasn't loaded
+* added another sanity check to 'site<-' for cases where duplicates occur in the source data set
+* added some new documentation to package help page see 'help(aqp)' for details
+
+-------------------------- aqp 1.2-8 (2012-08-28) --------------------------
+* the names() method for SoilProfileCollection objects now returns a named list of horizon and site column names
+* improved examples: see ?sp4 and ?ca630
+* fixed minor bug related to subsetting a SoilProfileCollection object, followed by coercion to SpatialPointsDataFrame
+
+-------------------------- aqp 1.2-7 (2012-08-23) --------------------------
+* plot() method for SoilProfileCollection object no longer sets page margins, this will cause some figures to change
+* added demo 'slope_effect_hz_thickness'
+
+-------------------------- aqp 1.2-6 (2012-06-26) --------------------------
+* fixed minor bug in panel.depth_function(): grouping + paneling ignored full suite of colors
+* fixed minor bug in NAMESPACE
+* minor bug fix in unroll(), was not previously respecting the max depth argument
+* minor speed-bump and simplification of profile_compare()
+* documentation updates
+* added helper message related to profile_compare() stopping when any profile contains insufficient data
+* profile_compare() now issues a notice when _some_ data are missing, leading to biased results
+* slice() now computes the fraction of variables within a slice that are missing data
+! bug introduced into slab() when use.wts=TRUE [should have a fix soon]
+
+-------------------------- aqp 1.1 (2012-04-18) --------------------------
+* merged documentation for soil.slot() and slab()
+  - slab() should be used in all places where soil.slot() was used
+  - soil.slot() will dissapear from the package NAMESPACE eventually, so don't use it directly!
+* minor bug fix in panel.depth_function()
+* cleanup of documentation and examples
+* added horizon boundary distinctness code conversions and plotting functionality
+  - see ?sp1 and ?random_profile for new examples
+
+-------------------------- aqp 1.0-2 (2012-03-29) --------------------------
+* More NAMESPACE cleaning
+
+-------------------------- aqp 1.0-1 (2012-03-28) --------------------------
+* Cleaned NAMESPACE and DESCRIPTION
+* removed un-necessary dependencies
+* join added to the plyr imports
+* added scales to the Imports as well, and removed rescaler() in the code, repaced by scales::rescale
+* hack in munsell2rgb to avoid the 'no visible binding for global variable 'munsell' at package R CMD check and make the whole thing more robust (using load and system.file rather than data(...)
+* Dylan is now the only maintainer, as per Uwe request
+* when using plyr **ply function, switched from using the .(foo) interface to "foo" - seems more foolproof
+
+-------------------------- aqp 1.0 (2012-03-26) --------------------------
+* 1.0 release, still missing condensed vignettes- should be ready soon
+* see http://casoilresource.lawr.ucdavis.edu/drupal/taxonomy/term/56 for samples
+* A small bug in profile_compare() was fixed, where slices were evaluated as 'soil' based on the bottom depth of the profile, and NOT on the presence of actual data. See ?profile_compare for details. This change will have a minor affect on profile comparisons in cases where Cr or R horizons (usually missing most characterization data) have been extended down to some arbitrary depth (usually 150 or 200 cm) AND a maximum depth of evaluation (max_d) was set beyond the actual depth of most profiles in the collection.
+
+-------------------------- aqp 0.99-9.8 (2012-03-02) --------------------------
+* profile_compare() will now use site-level attributes if input is a SoilProfileCollection
+  - horizon / site level data currently weighted equally
+  - NOTE: this feature is new, test-first!
+* minor bug fixes in profile_compare() to remove spurious warnings
+* better error check in slice()
+* removed old code and documentation: format_slices() and plot_slices()
+
+-------------------------- aqp 0.99-9.6 (2012-02-21) --------------------------
+* spurious warnings from profile_compare() caused by daisy() now suppressed
+  - warnings were generated when calling daisy() on a matrix of all NA
+    which typically occured when using too-large a lower depth for evaluation of D
+* preliminary support for diagnostic horizons via diagnostic_hz()
+* new examples
+* error and warnings messages cleaned-up
+
+-------------------------- aqp 0.99-9.52 (2012-01-31) --------------------------
+* converting all messages passed to the user from cat() to message() and warning()
+* profile_compare() and slab() now default to _no_ progress bars, see 'progress' argument to adjust
+* profileApply() now provides access to all aspects of the SoilProfileCollection object
+  - that means that:
+    profileApply(SPC, function(x) ... ) 
+    operates on x, which is a soilProfileCollection containing only profile_i
+  !!! note that this may break functionality based on aqp 0.99-9.3
+
+-------------------------- aqp 0.99-9.4 (2012-01-09) --------------------------
+* `site(SCP) <- d` now tries to merge data from SPC@site with 'd' via left join
+  - this means that all new SPC objects will have a single column of @site data, containin profile IDs
+* plot-SoilProfileCollection now tries to guess the best orientation of IDs
+  - override with id.style='top' or id.style='side'
+* slice-SoilProfileCollection now accepts '.' to define all columns should be returned at requested slices
+  - slice(SPC, 1:50 ~ . )   # this means all vars. ID, top, bottom are automatically removed
+
+-------------------------- aqp 0.99-9.1 (2011-12-27) --------------------------
+* pedonPC, NASIS, and SDA functions moved *out* of aqp, and *into* new package: soilDB
+  - removed assocated, suggested packages from aqp
+  - soilDB will be on CRAN shortly
+* new argument to plot(SoilProfileCollection, ..., divide.hz=TRUE|FALSE) tha can optionally suppress 
+  plotting of dividing lines between horizons (suggested by Ludwig Hilger)
+* new function profileApply() for applying functions by profile
+
+-------------------------- aqp 0.99-9 (2011-12-22) --------------------------
+* almost ready for AQP 1.0, vignettes are the last missing piece :)
+* slice(SPC, ...) is now 10-100x faster, scales linearly
+* slice(SPC, ...) can simultaniously slice categorical and continuous variables
+* converted ID column in sample data to character class
+* fixed a bug in slice() where NA would be returned when IDs were factors
+* added test to depths()<- such that factor IDs are converted into character IDs and a warning is issued
+* added join conditions for most functions using plyr::join(), resulting in less chatter on the console 
+
+-------------------------- aqp 0.99-8.58 (2011-12-21) --------------------------
+* WARNING: soil.slot.multiple() renamed to slab()
+* fixed minor bug in slice(), when numerical IDs are used: ddply() and cast() implicitly re-order data...
+* added `strict` argument to many functions, to gracefully account for bad horizon data
+  - enforce quality control with strict=TRUE
+* munsell2rgb() is now 100x faster thanks to plyr::join()
+  - note that factors cannot be used in the conversion, see: https://github.com/hadley/plyr/issues/43
+    + there is a check and conversion within the function that should prevent segfaults
+* documentation updates, demo(aqp) updates, more examples
+* bug fix in slice(), now works with numeric OR categorical vars, but NOT both...
+* matrix-style subsetting functional:
+  - s[i, j] ---> i is the profile index, and j is the horizon/slice index
+  - s[i, ] returns a SoilProfileCollection
+  - s[, j] returns a SpatialPointsDataFrame when a single slice is used
+* spatial_subset() can be used to extract members of a SoilProfileCollection with a geometry (uses rgeos)
+* smarter $<- methods so that site/horizon data slots are auto-selected
+
+-------------------------- aqp 0.99-8.50 (2011-11-29) --------------------------
+* added "site(SoilProfileCollection) <-" method for data.frame
+* started VERY basic AQP Introduction vignette... still experimental
+* adding coercion methods for common objects and sp-class objects
+* matrix-style subsetting almost works:
+  - s[i, j] ---> i is the profile index, and j is the horizon/slice index
+* added a 'slice' method for SoilProfileCollection objects
+  - returns selected variables along depth slice(s) (i.e. no aggregation)
+* added NAMESPACE file for R >= 2.14 compatibility
+* stabilized S4 class, working on S4-izing all related functions
+* preliminary documentation on the new S4 classes/methods
+* logistic power peak (LPP) can now be used to generate synthetic depth functions
+* added contributing fraction annotation in panel.depth_function()
+
+-------------------------- aqp 0.99-8.4 (2011-10-04) --------------------------
+* minor bug fixes and enhancements in PedonPC function
+* S4 interface to soil.slot.multiple()
+
+-------------------------- aqp 0.99-8.2 (2011-09-21) --------------------------
+* added S4 class/methods for `SoilProfileCollection`
+  - this supercedes the (now removed) S3 `SoilProfileList` classes
+  - basic accessors/settors are in place, subject to change
+* profile_plot() now uses the `SoilProfileCollection` class
+! initSoilProfileList() is no longer supported; see depths() for similar functionality
+! expect some tumultous times ahead in the API... should be ironed out by 1.0 release
+
+-------------------------- aqp 0.99-8 (2011-09-14) --------------------------
+* soil.slot() will now accept boundaries defining a 'slab' over which aggregates are computed
+* soil.slot.multiple() now cleanly wraps soil.slot(), accepting all arguments
+  - these two changes make it possible to ask: 
+    "what is the wt. mean value of some property within this slab, and among these groups?"
+  - soil.slot.multiple() now uses a formula interface: NOTE that this will break existing scripts (sorry)
+    
+-------------------------- aqp 0.99-7 (2011-09-01) --------------------------
+* new functions for getting data out of PedonPC (MS Access) databases [windows only for now]
+  - get_site_data_from_pedon_db() : site and pedon aggregate data
+  - get_hz_data_from_pedon_db() : horizon level data
+  - get_colors_from_pedon_db() : formats and mixes multiple colors / horizon
+  + implemented in mix_and_clean_colors()
+
+* test_hz_logic() : basic function for testing horizon logic, returns TRUE/FALSE by ID
+* parallel operations now NON-functional, while we wait for plyr to support doSMP...
+* new ID plotting style for profile_plot() : handy when plotting large collections and/or long IDs
+
+-------------------------- aqp 0.99-4 (2011-08-15) --------------------------
+* code and documentation clean-up
+* Soil Sata Access (SDA) query functions have been added
+  - mapunit_geom_by_ll_bbox() : get map unit geometry by bounding box
+  - MUKEYS_by_ll_bbox() : get map unit keys by bounding box
+  - SDA_query() : retrieve soil tabular data via query written in SQL
+* additional customizations added to profile_plot
+* two new sample data sets + examples
+
+-------------------------- aqp 0.99-1 (2011-01-26) --------------------------
+* soil.slot() and profile_compare() now have support for parallel computation thanks to bug-fixes in plyr 1.4
+  - plyr >= 1.4, foreach, and doMC packages are required
+  - specific examples are not yet documented, but should be soon
+  - this feature is still experimental! testing is advised
+* profile_compare() now calculates slice-wise dissimilarity matrices in 1/3 the time (thanks llply!)
+
+-------------------------- aqp 0.98-4 (2010-12-15) --------------------------
+* fixed minor bug in soil.slot() when computing probabilities from profiles that had
+  missing horizons and that had only a single class within the variable to be aggregated
+
+-------------------------- aqp 0.98-1 (2010-11-23) --------------------------
+* added basic demo: demo(aqp)
+* soil.slot() now computes aggregate probabilities over user-defined segments
+* re-write of weighted profile aggregation functions
+  - aqp package now requires Hmisc package
+  - using Hmisc::wtd.{mean,var,quantile} to compute values
+	+ better adjustment of weights when computing weighted SD
+	+ fixes long-standing bugs with wt. mean/SD when NA present in x_i and not in wt_i
+	+ weighted quantiles now computed
+* addition of new (experimental) S4 classes and methods
+  - these are now in the aqp_S4 branch
+* added n.depth.ticks option to profile_plot()
+* profile_compare() algorithm stabilized, new default settings
+* removed code in profile_compare() that is now obsolete
+  - note that this will cause changes to numerical classification of soil profiles
+
+-------------------------- aqp 0.97-1 (2010-10-06) --------------------------
+* verified that weighted standard deviations are correct when seg_size > 1
+* removed notices about possible problems with sd calculations
+
+-------------------------- aqp 0.97 (2010-09-22) --------------------------
+* soil.slot() streamlined and functionality restored to pre-0.95 condition
+
+-------------------------- aqp 0.96-1 (2010-09-21) --------------------------
+* fixed weighted mean / SD calculation when using 1 unit segments in soil.slot()
+  - wt. mean / SD still disabled for user-defined segment sizes
+
+-------------------------- aqp 0.96 (2010-09-20) --------------------------
+* temporarily disabled parallel computation, will be re-added in next release
+* bug fixes in panel.depth_function where 'groups' was not defined
+* bug fixes and major re-factoring of soil.slot() when called with user-defined 
+  segment size, or segmenting vector:
+  - SD values are probably too low due to an inflated 'n' in the calculation
+  - calculation of weighted mean and sd is currently disabled
+
+-------------------------- aqp 0.95 (2010-09-15) --------------------------
+* added VERY experimental support for parallel processing based on the latest versions
+  of plyr, doMC, and foreach packages
+* updated vignette with technical details on aggregation and dissimilarity computation
+* new options to profile_plot()
+
+-------------------------- aqp 0.94 (2010-08-11) --------------------------
+* fixed bug in soil.slot() when aggregating a categorical variable,
+  with a user-supplied segmenting vector
+* soil.slot() now requires that categorical variables be encoded as factors
+
+-------------------------- aqp 0.93 (2010-08-07) --------------------------
+* bug fixes, new documentation + examples
+* AQP now requires R >= 2.9.0
+
+-------------------------- aqp 0.92 (2010-08-03) --------------------------
+* including a new column in the results from soil.slot(), 
+  denoting number of profiles used in slice-wise aggregation
+* added note to soil.slot() manual page highlighting possible problems with SD calculation
+
+-------------------------- aqp 0.90 (2010-07-13) --------------------------
+* better error checking on profile aggregation and classification functions
+* most functions now require that horizon depths are integers
+
+-------------------------- aqp 0.89 (2010-07-10) --------------------------
+* added plot_distance_graph() function for visualizing between-profile dissimilarity
+* updated documentation: extended manual is now accessible as a vignette
+* major improvements in profile_compare() when add_soil_flag=TRUE and replace_na=TRUE
+| appears to create much more realistic groupings when there are both shallow and
+| deep soils in the collection
++---> new functionality requires further testing
+* plotting under dendrograms generated by ape::plot.phylo() may need some manual adjustments
+
+
+-------------------------- aqp 0.88 (2010-07-06) --------------------------
+* new version of plyr (1.0) should speed up most functions in aqp pacakge 
+* added support for user-defined aggregate functions in soil.slot and soil.slot.multiple
+* planning addition of PCA by depth slice
+* planning addition of equal-area spline fitting
