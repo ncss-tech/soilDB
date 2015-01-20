@@ -1,5 +1,6 @@
--------------------------- soilDB 1.4-4 (2015-01-15) ----------------------------
+-------------------------- soilDB 1.4-5 (2015-01-20) ----------------------------
 * mix_and_clean_colors() now returns back-transformed, mixed, munsell colors
+* added psctopdepth and pscbotdepth back to extended NASIS query (particle size control section depths)
 
 
 -------------------------- soilDB 1.4-3 (2015-01-12) ----------------------------

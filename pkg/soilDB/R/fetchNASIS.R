@@ -104,7 +104,7 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=FALSE) {
             ), stringsAsFactors=FALSE)
   }
   
-	site(h) <-sfs
+	site(h) <- sfs
 	
 	# load diagnostic horizons into @diagnostic:
 	diagnostic_hz(h) <- extended_data$diagnostic

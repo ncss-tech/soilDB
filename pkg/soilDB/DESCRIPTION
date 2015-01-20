@@ -1,9 +1,9 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 1.4-4
-Date: 2015-01-15
-Packaged: 2015-01-15; dylan
+Version: 1.4-5
+Date: 2015-01-20
+Packaged: 2015-01-20; dylan
 Author: D.E. Beaudette and J.M. Skovlin
 Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
