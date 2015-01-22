@@ -2,7 +2,7 @@
 
 
 # this loads and packages the data into a list of objects
-fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', start.date=NULL, stop.date=NULL) {
+fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day', start.date=NULL, stop.date=NULL) {
   
   # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)
@@ -30,6 +30,10 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', start.dat
   
   if(!missing(type)) {
     f <- c(f, paste('&type=', type, sep=''))
+  }
+  
+  if(!missing(gran)) {
+    f <- c(f, paste('&gran=', gran, sep=''))
   }
   
   if(!missing(start.date)) {
@@ -64,12 +68,15 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', start.dat
     stop('query returned no data', call.=FALSE)
   }
   
-  # fix date/times
-  soiltemp$date_time <- as.POSIXct(soiltemp$date_time)
+  # convert date/time
+  if(!is.null(soiltemp))
+    soiltemp$date_time <- as.POSIXct(soiltemp$date_time)
   
   # init coordinates
-  coordinates(s) <- ~ wgs84_longitude + wgs84_latitude
-  proj4string(s) <- '+proj=longlat +datum=WGS84'
+  if(!is.null(s)) {
+    coordinates(s) <- ~ wgs84_longitude + wgs84_latitude
+    proj4string(s) <- '+proj=longlat +datum=WGS84'
+  }
   
   # reset options:
   options(opt.original)
