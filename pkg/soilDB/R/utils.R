@@ -66,7 +66,7 @@
 .formatLandformString <- function(i.gm, name.sep='|') {
   # get the current 
   u.peiid <- unique(i.gm$peiid)
-  
+    
   # sanity check: this function can only be applied to data from a single pedon
   if(length(u.peiid) > 1)
     stop('data are from multiple pedon records')
@@ -81,7 +81,7 @@
   # short-circuit: if any geomfeatid are NA, then we don't know the order
   # string together as-is, in row-order
   if(any(is.na(i.gm$geomfeatid))) {
-    warning(paste0('Using row-order. NA in geomfeatid:', u.peiid), call.=FALSE)
+    # warning(paste0('Using row-order. NA in geomfeatid:', u.peiid), call.=FALSE)
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
     return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
   }
@@ -91,9 +91,16 @@
   top.feature <- which(! i.gm$geomfeatid %in% i.gm$existsonfeat)
   bottom.feature <- which(! i.gm$existsonfeat %in% i.gm$geomfeatid)
   
+  ## short-circuit: only 1 row, and exists-on logic is wrong, use row-order
+  if(nrow(i.gm) == 1 & length(top.feature) == length(bottom.feature)) {
+    # warning(paste0('Using row-order. NA in geomfeatid:', u.peiid), call.=FALSE)
+    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+  }
+  
   # short-circuit: if the exists-on logic is wrong, use row-order
   if(length(top.feature) > 1 | length(bottom.feature) > 1) {
-    warning(paste0('Using row-order. Incorrect exists-on specification:', u.peiid), call.=FALSE)
+    # warning(paste0('Using row-order. Incorrect exists-on specification:', u.peiid), call.=FALSE)
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
     return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
   }
