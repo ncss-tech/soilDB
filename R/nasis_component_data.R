@@ -80,7 +80,7 @@ get_copedon_from_NASIS_db <- function() {
   if(!require(RODBC))
     stop('please install the `RODBC` package', call.=FALSE)
   
-  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id
+  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative 
 FROM copedon
 JOIN pedon ON peiidref = peiid
 WHERE rvindicator = 1;
