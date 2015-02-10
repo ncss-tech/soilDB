@@ -32,18 +32,16 @@ pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.
 	
 	# re-combine
 	d <- cbind(d, d.rgb)
-    
+  
+  # add a fake column for storing `sigma`
+  # this is the error associated with the rgb -> munsell transformation
+  d$sigma <- NA
+  
 	# split into dry / moist
 	dry.colors <- d[which(d$colormoistst == 1), ]
 	moist.colors <- d[which(d$colormoistst == 2), ]
 	
-  # add a fake column for storing `sigma`
-  # this is the error associated with the rgb -> munsell transformation
-  if(nrow(dry.colors) > 0)
-    dry.colors$sigma <- NA
-  
-  if(nrow(moist.colors) > 0)
-    moist.colors$sigma <- NA
+  ## there may be cases where there are 0 records of dry or moist colors
   
 	# split-out those data that need color mixing:
 	dry.to.mix <- names(which(table(dry.colors$phiid) > 1))
