@@ -107,7 +107,10 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=FALSE) {
 	site(h) <- sfs
 	
 	# load diagnostic horizons into @diagnostic:
-	diagnostic_hz(h) <- extended_data$diagnostic
+  if(nrow(extended_data$diagnostic) > 0)
+	  diagnostic_hz(h) <- extended_data$diagnostic
+  else
+    diagnostic_hz(h) <- data.frame(peiid=NULL, diag_kind=NULL, featdpt=NULL, featdepb=NULL)
 	
   # join-in landform string
   lf <- ddply(extended_data$geomorph, 'peiid', .formatLandformString, name.sep='|')
