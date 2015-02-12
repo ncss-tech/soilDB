@@ -1,5 +1,6 @@
 \name{fetchSCAN}
 \alias{fetchSCAN}
+\alias{fetchHenry}
 \title{Fetch SCAN Data}
 \description{Query soil/climate data from USDA-NRCS SCAN Stations (experimental)}
 \usage{fetchSCAN(req)}
