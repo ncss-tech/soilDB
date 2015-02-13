@@ -7,7 +7,7 @@
 
 \details{This is a 106x137 grid, cropped from the gSSURGO database. Cell values are map unit keys (mukey), stored as integers. No raster attribute table (RAT) is included with this sample data set. Note that this sample of the gSSURGO data has been modified such that cell values are map unit keys, rather than the gSSURGO integer key.}
 
-\source{\url{http://soils.usda.gov/survey/geography/ssurgo/description_gssurgo.html}}
+\source{\url{http://www.nrcs.usda.gov/wps/portal/nrcs/detail//?cid=nrcs142p2_053628}}
 
 \examples{
 data(gSSURGO.chunk)
