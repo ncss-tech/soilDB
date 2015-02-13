@@ -4,7 +4,7 @@
 fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=FALSE) {
 	
   # must have RODBC installed
-  if(!require(RODBC))
+  if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
 	# test connection

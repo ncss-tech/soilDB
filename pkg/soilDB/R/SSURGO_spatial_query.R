@@ -3,7 +3,7 @@
 SSURGO_spatial_query <- function(bbox=NULL, coords=NULL, what='mapunit', source='soilweb') {
   
   # check for required packages
-  if(!require(jsonlite))
+  if(!requireNamespace('jsonlite'))
     stop('please install the `jsonlite` package', call.=FALSE)
   
   # no factors in resulting DFs
