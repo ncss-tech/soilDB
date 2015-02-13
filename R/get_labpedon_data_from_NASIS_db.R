@@ -1,6 +1,6 @@
 get_labpedon_data_from_NASIS_db <- function() {
   # must have RODBC installed
-  if(!require(RODBC))
+  if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
 
   q.ncsslabpedon <- "SELECT peiidref AS peiid, upedonid, descname, taxonname, taxclname, ncsspedonlabdata_View_1.pedlabsampnum, psctopdepth, pscbotdepth, noncarbclaywtavg, claytotwtavg, le0to100, wf0175wtavgpsc, volfractgt2wtavg, cec7clayratiowtavg, labdatasheeturl, ncsspedonlabdataiid AS labpeiid 

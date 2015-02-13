@@ -8,7 +8,7 @@
 get_site_data_from_pedon_db <- function(dsn) {
   
   # must have RODBC installed
-  if(!require(RODBC))
+  if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
   q <- "SELECT site.siteiid, pedon.peiid, upedonid as pedon_id, site.usiteid as site_id, siteobs.obsdate as obs_date,

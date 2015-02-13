@@ -2,7 +2,7 @@
 # gets all veg records per site ID
 get_veg_from_AK_Site <- function(dsn) {
   # must have RODBC installed
-  if(!require(RODBC))
+  if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
 	# basic query

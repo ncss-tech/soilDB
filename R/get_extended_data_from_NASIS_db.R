@@ -4,7 +4,7 @@
 
 get_extended_data_from_NASIS_db <- function() {
   # must have RODBC installed
-  if(!require(RODBC))
+  if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
   # photo links from PedonPC

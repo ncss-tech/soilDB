@@ -2,7 +2,7 @@
 
 get_colors_from_pedon_db <- function(dsn) {
   # must have RODBC installed
-  if(!require(RODBC))
+  if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
 	# color data... check

@@ -1,7 +1,7 @@
 get_veg_other_from_MT_veg_db <- function(dsn) {
   
   # must have RODBC installed
-  if(!require(RODBC))
+  if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
 	
 	#pull site and plot data and total production value

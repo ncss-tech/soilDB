@@ -36,7 +36,7 @@ cleanSDA <- function(i) {
 # TODO: figure out how to inspect the results and set column classes
 SDA_query <- function(q) {
   # check for required packages
-  if(!require(SSOAP) | !require(XMLSchema))
+  if(!requireNamespace('SSOAP') | !requireNamespace('XMLSchema'))
     stop('please install the `SSOAP` and `XMLSchema` packages', call.=FALSE)
     
   # important: change the default behavior of data.frame

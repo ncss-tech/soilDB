@@ -3,7 +3,7 @@
 # convenience function for loading most commonly used information from local NASIS database
 fetchNASISLabData <- function() {
   # must have RODBC installed
-  if(!require(RODBC))
+  if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
 	# test connection

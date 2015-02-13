@@ -4,7 +4,7 @@
 # dsn <- "H:/GNP_vegetation_data_MR/GlacierNP_vegdata/PLOTS_v32_BE.accdb"
 get_veg_from_NPS_PLOTS_db <- function(dsn) {
   # must have RODBC installed
-  if(!require(RODBC))
+  if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
   q.vegdata <- "SELECT tPlots.Plot_Code AS site_id, tPlotEventSpecies.Stratum, tPlotEventSpecies.Spp_Code, xPLANTS_lu.Sci_Name, xPLANTS_lu.ComName, tPlotEventSpecies.Cover_Code, tPlotEventSpecies.Real_Cover, tPlotEventSpecies.Within_Plot
