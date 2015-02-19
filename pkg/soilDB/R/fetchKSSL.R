@@ -31,6 +31,7 @@ fetchKSSL <- function(series=NULL, bbox=NULL) {
 	hz.url <- url(paste('http://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?what=horizon', f, sep=''))
 	
 	# load pieces
+  # note use quote="" to ignore prime symbols (') in horizon names
 	try(s <- read.table(site.url, header=TRUE, sep='|', stringsAsFactors=FALSE, quote='', comment.char=''), silent=TRUE)
 	try(h <- read.table(hz.url, header=TRUE, sep='|', stringsAsFactors=FALSE, quote='', comment.char=''), silent=TRUE)
   
