@@ -27,10 +27,10 @@ get_hz_data_from_pedon_db <- function(dsn) {
 	ORDER BY pedon.upedonid, phorizon.hzdept ASC;"
   
 	# setup connection to our pedon database
-	channel <- odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
+	channel <- RODBC::odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
 	
 	# exec query
-	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
 	
 	# test for duplicate horizons: due to bugs in our queries that lead to >1 row/hz
 	hz.tab <- table(d$phiid)
@@ -54,7 +54,7 @@ LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_deta
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_detail.domain_id = 192) AS til ON t.lieutex = til.choice_id);"
 	
 	# exec query
-	d.texture <- sqlQuery(channel, q.texture, stringsAsFactors=FALSE)
+	d.texture <- RODBC::sqlQuery(channel, q.texture, stringsAsFactors=FALSE)
 	
 	# concat multiple textures/horizon into a single record
 	d.texture <- aggregate(texture_class ~ phiid, data=d.texture, FUN=function(x) do.call('paste', as.list(x)))
@@ -63,7 +63,7 @@ LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_deta
 	d <- join(d, d.texture, by='phiid', type='left')
 	
 	# close connection
-	odbcClose(channel)
+	RODBC::odbcClose(channel)
 	
 	# done
 	return(d)

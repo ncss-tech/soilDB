@@ -8,7 +8,7 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=FALSE) {
     stop('please install the `RODBC` package', call.=FALSE)
   
 	# test connection
-	if(! 'nasis_local' %in% names(odbcDataSources()))
+	if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
 			stop('Local NASIS ODBC connection has not been setup. Please see the `setup_ODBC_local_NASIS.pdf` document included with this package.')
 	
 	# 1. load data in pieces

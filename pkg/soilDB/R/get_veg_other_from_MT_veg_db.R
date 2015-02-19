@@ -11,13 +11,13 @@ FROM tblSites LEFT JOIN ((tblPlots LEFT JOIN tblESD_DK ON tblPlots.PlotKey = tbl
 	ORDER BY tblESD_DK.PlotKey, tblESD_DK.SpeciesSymbol;"
 
 	# setup connection to our pedon database
-	channel <- odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
+	channel <- RODBC::odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
 	
 	# exec query
-	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
 	
 	# close connection
-	odbcClose(channel)
+	RODBC::odbcClose(channel)
 	
 	# done
 	return(d)

@@ -3,12 +3,16 @@
 # 2011-06-22
 # It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that overlap the bbox.
 mapunit_geom_by_ll_bbox <- function(bbox, source='sda') {
-		
+	
+	# must have rgdal installed
+   if(!requireNamespace('rgdal'))
+    stop('please install the `rgdal` package', call.=FALSE)
+	
 	# parse bbox
 	bbox.text <- paste(bbox, collapse=',')
 	
 	# get available OGR drivers
-	ogr.Drv <- ogrDrivers()$name
+	ogr.Drv <- rgdal::ogrDrivers()$name
 	
 	# getting data from SDA
 	if(source == 'sda') {
@@ -56,7 +60,7 @@ mapunit_geom_by_ll_bbox <- function(bbox, source='sda') {
 	# read in via OGR, into a SPolyDF. 
 	# note hard-coded layer name from within the GML source
 	# disambiguateFIDs=TRUE is required due to sloppy GML from SDA
-	d <- readOGR(dsn=tf.full, layer=file.layer, disambiguateFIDs=TRUE, stringsAsFactors=FALSE)
+	d <- rgdal::readOGR(dsn=tf.full, layer=file.layer, disambiguateFIDs=TRUE, stringsAsFactors=FALSE)
 	
 	# throw-out some garbage columns
 	d$gml_id <- NULL

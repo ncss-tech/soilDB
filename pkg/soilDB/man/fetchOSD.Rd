@@ -13,7 +13,7 @@ fetchOSD(soils)
 \details{the search is case-insensitive}
 \value{a \code{SoilProfileCollection} object}
 \references{
-\url{https://soilseries.sc.egov.usda.gov/}
+\url{http://www.nrcs.usda.gov/wps/portal/nrcs/site/soils/home/}
 }
 \author{D.E. Beaudette}
 \note{SoilWeb maintains a snapshot of the Official Series Description data. Please use the link above for the live data.}

@@ -14,13 +14,13 @@ get_veg_species_from_MT_veg_db <- function(dsn) {
 	ORDER BY tblESD_DK.PlotKey, Production DESC;"
 
 	# setup connection to our pedon database
-	channel <- odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
+	channel <- RODBC::odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
 	
 	# exec query
-	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
 	
 	# close connection
-	odbcClose(channel)
+	RODBC::odbcClose(channel)
 	
 	# done
 	return(d)

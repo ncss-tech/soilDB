@@ -296,21 +296,21 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1309) AS pm
 	
 	
 	# setup connection to our local NASIS database
-	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
+	channel <- RODBC::odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
 	
 	# exec queries
-	d.veg <- sqlQuery(channel, q.veg, stringsAsFactors=FALSE)
-	d.diagnostic <- sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
-	d.rf.summary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
-	d.surf.rf.summary <- sqlQuery(channel, q.surf.rf.summary, stringsAsFactors=FALSE)
-	d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
-	d.geomorph <- sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
-	d.taxhistory <- sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
-  d.photolink <- sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
-	d.sitepm <- sqlQuery(channel, q.sitepm, stringsAsFactors=FALSE)
+	d.veg <- RODBC::sqlQuery(channel, q.veg, stringsAsFactors=FALSE)
+	d.diagnostic <- RODBC::sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
+	d.rf.summary <- RODBC::sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
+	d.surf.rf.summary <- RODBC::sqlQuery(channel, q.surf.rf.summary, stringsAsFactors=FALSE)
+	d.hz.texmod <- RODBC::sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
+	d.geomorph <- RODBC::sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
+	d.taxhistory <- RODBC::sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
+  d.photolink <- RODBC::sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
+	d.sitepm <- RODBC::sqlQuery(channel, q.sitepm, stringsAsFactors=FALSE)
 	
 	# close connection
-	odbcClose(channel)
+	RODBC::odbcClose(channel)
 	
 	# generate wide-formatted, diagnostic boolean summary
 	d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)

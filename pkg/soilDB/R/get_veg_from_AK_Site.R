@@ -13,13 +13,13 @@ get_veg_from_AK_Site <- function(dsn) {
 	ORDER BY VegStop.usiteid ASC;"
   
 	# setup connection to the AK Site database
-	channel <- odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
+	channel <- RODBC::odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
 	
 	# exec query
-	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
 	
 	# close connection
-	odbcClose(channel)
+	RODBC::odbcClose(channel)
 	
 	# done
 	return(d)
