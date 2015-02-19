@@ -1,4 +1,4 @@
-# get the series extent fromSEE pre-cached GeoJSON data and plot on Google Maps
+# get the series extent from SEE pre-cached GeoJSON data and plot on Google Maps
 seriesExtentAsGmap <- function(s, timeout=60, exp=1.25) {
   if(!requireNamespace('dismo') & !requireNamespace('raster') & !requireNamespace('rgdal'))
     stop('please install the `raster`, `rgdal` and `dismo` packages', call.=FALSE)
@@ -7,10 +7,10 @@ seriesExtentAsGmap <- function(s, timeout=60, exp=1.25) {
 	x <- seriesExtent(s, timeout)
 	
 	# make extent object around sites, in geographic coordinates
-	e <- extent(spTransform(x, CRS('+proj=longlat')))
+	e <- raster::extent(spTransform(x, CRS('+proj=longlat')))
 	
 	# grab ref. to google maps
-	g <- gmap(e, exp=exp)
+	g <- dismo::gmap(e, exp=exp)
 	
 	# convert our points to Mercatur projection
 	x.M <- spTransform(x, CRS('+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs'))
@@ -41,7 +41,7 @@ seriesExtent <- function(s, timeout=60) {
   download.file(url=u, destfile=tf.json, extra=c(timeout=timeout), quiet=TRUE)
   
   # load into sp object and clean-up
-  x <- readOGR(dsn=tf.json, layer='OGRGeoJSON', verbose=FALSE)
+  x <- rgdal::readOGR(dsn=tf.json, layer='OGRGeoJSON', verbose=FALSE)
   unlink(tf.json)
   
   # return in WGS84 GCS

@@ -38,7 +38,7 @@ SSURGO_spatial_query <- function(bbox=NULL, coords=NULL, what='mapunit', source=
   
   ## TODO: this isn't robust
   # load data from JSON
-  suppressWarnings(try(res <- fromJSON(the.url), silent=TRUE))
+  suppressWarnings(try(res <- jsonlite::fromJSON(the.url), silent=TRUE))
   
   # report missing data
   if(is.null(res)) {

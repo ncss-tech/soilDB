@@ -43,7 +43,7 @@ SDA_query <- function(q) {
 	opt.original <- options(stringsAsFactors = FALSE)
 	
 	# setup server, action, and xmlns
-	s <- SOAPServer('SDMDataAccess.nrcs.usda.gov', '/Tabular/SDMTabularService.asmx')
+	s <- SSOAP::SOAPServer('SDMDataAccess.nrcs.usda.gov', '/Tabular/SDMTabularService.asmx')
 	a <- I('http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx/RunQuery')
 	x <- c(I("http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx"))
 	
@@ -51,7 +51,7 @@ SDA_query <- function(q) {
 	cat('sending SOAP request...\n')
 	
 	# submit and process the query
-	res <- .SOAP(s, "RunQuery", Query=q, action=a, xmlns=x)
+	res <- SSOAP::.SOAP(s, "RunQuery", Query=q, action=a, xmlns=x)
 	
 	# results are stored in: res$diffgram$NewDataSet
 	

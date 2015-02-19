@@ -12,11 +12,11 @@ FROM xPLANTS_lu RIGHT JOIN (tSpecies RIGHT JOIN (tPlots INNER JOIN (tPlotEvents 
 ORDER BY tPlots.Plot_Code, tPlotEventSpecies.Stratum DESC , tPlotEventSpecies.Real_Cover DESC"
   
   # setup connection to our pedon database 
-  channel <- odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
+  channel <- RODBC::odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
   
   # exec query
-  d <- sqlQuery(channel, q.vegdata, stringsAsFactors=FALSE)
+  d <- RODBC::sqlQuery(channel, q.vegdata, stringsAsFactors=FALSE)
   
   # close connection
-  odbcClose(channel)
+  RODBC::odbcClose(channel)
 }

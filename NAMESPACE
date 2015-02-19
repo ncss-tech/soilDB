@@ -15,7 +15,9 @@ importFrom(RCurl,
 
 importFrom(sp,
   spTransform,
-  CRS
+  CRS,
+  "coordinates<-",
+  "proj4string<-"  
 )
 
 
@@ -39,7 +41,8 @@ importFrom(aqp,
   "site<-",
   diagnostic_hz,
   "diagnostic_hz<-",
-  test_hz_logic
+  test_hz_logic,
+  rgb2munsell
 )
 
 exportPattern("^[^\\.]")
