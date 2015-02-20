@@ -24,7 +24,7 @@ pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.
 	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
 	
 	# close connection
-	odbcClose(channel)
+  RODBC::odbcClose(channel)
 	
 	# convert Munsell to RGB
 	message('converting Munsell to RGB ...')
