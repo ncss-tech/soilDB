@@ -5,7 +5,7 @@
 mapunit_geom_by_ll_bbox <- function(bbox, source='sda') {
 	
 	# must have rgdal installed
-   if(!requireNamespace('rgdal'))
+   if(!requireNamespace('rgdal', quietly=TRUE))
     stop('please install the `rgdal` package', call.=FALSE)
 	
 	# parse bbox

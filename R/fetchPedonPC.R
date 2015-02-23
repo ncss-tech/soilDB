@@ -2,10 +2,6 @@
 
 fetchPedonPC <- function(dsn) {
 	
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
-  
 	# load data in pieces
 	site_data <- get_site_data_from_pedon_db(dsn)
 	hz_data <- get_hz_data_from_pedon_db(dsn)

@@ -3,10 +3,6 @@
 # convenience function for loading most commonly used information from local NASIS database
 fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=FALSE) {
 	
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
-  
 	# test connection
 	if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
 			stop('Local NASIS ODBC connection has not been setup. Please see the `setup_ODBC_local_NASIS.pdf` document included with this package.')
