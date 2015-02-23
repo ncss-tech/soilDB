@@ -1,6 +1,6 @@
 # get the series extent from SEE pre-cached GeoJSON data and plot on Google Maps
 seriesExtentAsGmap <- function(s, timeout=60, exp=1.25) {
-  if(!requireNamespace('dismo') & !requireNamespace('raster') & !requireNamespace('rgdal'))
+  if(!requireNamespace('dismo', quietly=TRUE) & !requireNamespace('raster', quietly=TRUE) & !requireNamespace('rgdal', quietly=TRUE))
     stop('please install the `raster`, `rgdal` and `dismo` packages', call.=FALSE)
   
 	# load series extent data in WGS84 GCS
@@ -24,7 +24,7 @@ seriesExtentAsGmap <- function(s, timeout=60, exp=1.25) {
 
 # get pre-cached series extent GeoJSON from SoilWeb server
 seriesExtent <- function(s, timeout=60) {
-  if(!requireNamespace('rgdal'))
+  if(!requireNamespace('rgdal', quietly=TRUE))
     stop('please install the `rgdal` package', call.=FALSE)
   
   # encode series name
