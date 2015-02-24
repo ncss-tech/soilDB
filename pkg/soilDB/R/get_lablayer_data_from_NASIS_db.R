@@ -10,14 +10,14 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 5103) AS mp
 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 189) AS txcl ON ncsslayerlabdata_View_1.texcl = txcl.ChoiceValue)
 ORDER BY labpeiid, hzdept ASC;"
 
-  # setup connection to our local NASIS database
-	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
+	# setup connection local NASIS
+	channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
 	
 	# exec queries
-	d.lablayer <- sqlQuery(channel, q.ncsslablayer, stringsAsFactors=FALSE)
+	d.lablayer <- RODBC::sqlQuery(channel, q.ncsslablayer, stringsAsFactors=FALSE)
 		
 	# close connection
-	odbcClose(channel)
+	RODBC::odbcClose(channel)
 	
 	# return a list of results
 	return(d.lablayer)
