@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.5-2 (2015-02-24) ----------------------------
+* RODBC temporarily moved from "suggested" package to "imported" package... not a good idea, reverted to "suggested"
+
 -------------------------- soilDB 1.4-5 (2015-01-20) ----------------------------
 * mix_and_clean_colors() now returns back-transformed, mixed, munsell colors
 * added psctopdepth and pscbotdepth back to extended NASIS query (particle size control section depths)

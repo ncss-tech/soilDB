@@ -32,11 +32,11 @@ get_hz_data_from_NASIS_db <- function() {
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1255) AS eff ON phorizon_View_1.effclass = eff.ChoiceValue
   ORDER BY pedon_View_1.upedonid, phorizon_View_1.hzdept ASC;"
 	
-	# setup connection to our NASIS database
-	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y')
+	# setup connection local NASIS
+	channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
 	
 	# exec query
-	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
 	
 	# test for duplicate horizons: due to bugs in our queries that lead to >1 row/hz
 	hz.tab <- table(d$phiid)
@@ -49,7 +49,7 @@ get_hz_data_from_NASIS_db <- function() {
 	}
 	
 	# close connection
-	odbcClose(channel)
+	RODBC::odbcClose(channel)
 	
 	# done
 	return(d)

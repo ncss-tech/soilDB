@@ -6,17 +6,6 @@ importFrom(plyr,
   join
 )
 
-importFrom(RODBC,
-  odbcDriverConnect,         
-  odbcDataSources,
-  odbcConnectAccess2007,
-  odbcConnectAccess,  
-  odbcConnect,
-  sqlQuery,
-  odbcClose
-)
-
-
 importFrom(RCurl,
   getURL,
   curlOptions,
