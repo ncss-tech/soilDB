@@ -46,13 +46,13 @@ WHERE ms.ChoiceName IS NULL OR ms.ChoiceName != 'additional'
 ORDER BY dmudesc, coiid, comppct_r DESC;"
 	
 	# setup connection to our pedon database
-	channel <- RODBC::odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y')
+	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y')
 	
 	# exec query
-	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
 
 	# close connection
-	RODBC::odbcClose(channel)
+	odbcClose(channel)
 	
 	# test for no data
 	if(nrow(d) == 0)
@@ -86,13 +86,13 @@ JOIN pedon ON peiidref = peiid
 WHERE rvindicator = 1;
 "
   # setup connection to our local NASIS database
-  channel <- RODBC::odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
+  channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
   
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
   
   # close connection
-  RODBC::odbcClose(channel)
+  odbcClose(channel)
   
   # done
   return(d)
@@ -110,13 +110,13 @@ get_component_horizon_data_from_NASIS_db <- function() {
 	ORDER BY coiidref, hzdept_r ASC;"
 	
 	# setup connection to our pedon database
-	channel <- RODBC::odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y')
+	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y')
 	
 	# exec query
-	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
 	
 	# close connection
-	RODBC::odbcClose(channel)
+	odbcClose(channel)
 	
 	# done
 	return(d)

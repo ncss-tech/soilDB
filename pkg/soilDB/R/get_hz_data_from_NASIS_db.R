@@ -33,10 +33,10 @@ get_hz_data_from_NASIS_db <- function() {
   ORDER BY pedon_View_1.upedonid, phorizon_View_1.hzdept ASC;"
 	
 	# setup connection to our NASIS database
-	channel <- RODBC::odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y')
+	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y')
 	
 	# exec query
-	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
 	
 	# test for duplicate horizons: due to bugs in our queries that lead to >1 row/hz
 	hz.tab <- table(d$phiid)
@@ -49,7 +49,7 @@ get_hz_data_from_NASIS_db <- function() {
 	}
 	
 	# close connection
-	RODBC::odbcClose(channel)
+	odbcClose(channel)
 	
 	# done
 	return(d)

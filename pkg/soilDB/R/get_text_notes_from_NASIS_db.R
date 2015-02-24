@@ -24,17 +24,17 @@ WHERE textentry IS NOT NULL
 	q.photos <- "SELECT recdate, recauthor, tk.ChoiceName AS textkind, textcat, textsubcat, textentry, siteiidref AS site_id, siteobstextiid FROM ((siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1314) AS tk ON siteobstext_View_1.siteobstextkind = tk.ChoiceValue) WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
 	
 	# setup connection to our local NASIS database
-	channel <- RODBC::odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
+	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
 	
 	# run queries
-	d.petext <- RODBC::sqlQuery(channel, q.petext, stringsAsFactors=FALSE)
-	d.sitetext <- RODBC::sqlQuery(channel, q.sitetext, stringsAsFactors=FALSE)
-	d.siteobstext <- RODBC::sqlQuery(channel, q.siteobstext, stringsAsFactors=FALSE)
-	d.phtext <- RODBC::sqlQuery(channel, q.phtext, stringsAsFactors=FALSE)
-	d.photos <- RODBC::sqlQuery(channel, q.photos, stringsAsFactors=FALSE)
+	d.petext <- sqlQuery(channel, q.petext, stringsAsFactors=FALSE)
+	d.sitetext <- sqlQuery(channel, q.sitetext, stringsAsFactors=FALSE)
+	d.siteobstext <- sqlQuery(channel, q.siteobstext, stringsAsFactors=FALSE)
+	d.phtext <- sqlQuery(channel, q.phtext, stringsAsFactors=FALSE)
+	d.photos <- sqlQuery(channel, q.photos, stringsAsFactors=FALSE)
 	
 	# close connection
-	RODBC::odbcClose(channel)
+	odbcClose(channel)
 		
 	# return a list of results
 	return(list(pedon_text=d.petext,
