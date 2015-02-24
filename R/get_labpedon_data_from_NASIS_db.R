@@ -7,13 +7,13 @@ get_labpedon_data_from_NASIS_db <- function() {
   FROM (ncsspedonlabdata_View_1 LEFT OUTER JOIN pedon_View_1 ON ncsspedonlabdata_View_1.peiidref = pedon_View_1.peiid);"
 
   # setup connection to our local NASIS database
-	channel <- RODBC::odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
+	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
 	
 	# exec queries
-	d.labpedon <- RODBC::sqlQuery(channel, q.ncsslabpedon, stringsAsFactors=FALSE)
+	d.labpedon <- sqlQuery(channel, q.ncsslabpedon, stringsAsFactors=FALSE)
 		
 	# close connection
-	RODBC::odbcClose(channel)
+	odbcClose(channel)
 	
 	# return a list of results
 	return(d.labpedon)

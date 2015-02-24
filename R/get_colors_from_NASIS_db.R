@@ -18,13 +18,13 @@ pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.
 	ORDER BY phiid, phcolor_View_1.colormoistst;"
   
 	# setup connection to our local NASIS database
-	channel <- RODBC::odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
+	channel <- odbcConnect('nasis_local', uid='NasisSqlRO', pwd='nasisRe@d0n1y') 
 	
 	# exec query
-	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
 	
 	# close connection
-  RODBC::odbcClose(channel)
+  odbcClose(channel)
 	
 	# convert Munsell to RGB
 	message('converting Munsell to RGB ...')

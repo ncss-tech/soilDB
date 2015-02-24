@@ -14,13 +14,13 @@ FROM (
 	ORDER BY phorizon.phiid, colormoistst;"
   
 	# setup connection to our pedon database
-	channel <- RODBC::odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
+	channel <- odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
 	
 	# exec query
-	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
 	
 	# close connection
-	RODBC::odbcClose(channel)
+	odbcClose(channel)
 	
 	# convert Munsell to RGB
 	cat('converting Munsell to RGB ...\n')

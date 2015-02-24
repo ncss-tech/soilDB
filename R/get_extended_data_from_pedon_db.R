@@ -116,17 +116,17 @@ FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeom
 	ORDER BY petaxhistory.peiidref;"	
 	
 	# setup connection to our pedon database
-	channel <- RODBC::odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
+	channel <- odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
 	
 	# exec queries
-	d.diagnostic <- RODBC::sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
-	d.rf.summary <- RODBC::sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
-	d.hz.texmod <- RODBC::sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
-	d.geomorph <- RODBC::sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
-	d.taxhistory <- RODBC::sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
+	d.diagnostic <- sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
+	d.rf.summary <- sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
+	d.hz.texmod <- sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
+	d.geomorph <- sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
+	d.taxhistory <- sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
 	
 	# close connection
-	RODBC::odbcClose(channel)
+	odbcClose(channel)
 	
 	# generate wide-formatted, diagnostic boolean summary
 	d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)

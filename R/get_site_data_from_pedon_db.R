@@ -34,13 +34,13 @@ LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 971) AS 
 ORDER BY site.usiteid;"
 
   # setup connection to our pedon database
-  channel <- RODBC::odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
+  channel <- odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
 
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  d <- sqlQuery(channel, q, stringsAsFactors=FALSE)
 
   # close connection
-  RODBC::odbcClose(channel)
+  odbcClose(channel)
   
   # warn if mixed datums
   unique.datums <- unique(na.omit(d$datum))
