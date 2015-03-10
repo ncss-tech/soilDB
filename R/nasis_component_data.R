@@ -135,7 +135,6 @@ fetchNASIS_component_data <- function() {
 	f.chorizon <- get_component_horizon_data_from_NASIS_db()
 	
 	# test for bad horizonation... flag, and remove
-	message('finding horizonation errors ...')
 	f.chorizon.test <- ddply(f.chorizon, 'coiid', test_hz_logic, topcol='hzdept_r', bottomcol='hzdepb_r', strict=TRUE)
 	
 	# which are the good (valid) ones?
@@ -158,7 +157,7 @@ fetchNASIS_component_data <- function() {
 		bad.idx <- which(f.comp$coiid %in% bad.ids)
 		bad.labels <- paste(f.comp[bad.idx, ]$dmudesc, f.comp[bad.idx, ]$compname, sep='-')
 		assign('bad.components', value=cbind(coiid=bad.ids, component=bad.labels), envir=soilDB.env)
-		message("horizon errors detected, use `get('bad.components', envir=soilDB.env)` for a list of pedon IDs")
+		message("*** horizon errors detected, use `get('bad.components', envir=soilDB.env)` for a list of coiid values")
 	}
 	
 	# done, return SPC
