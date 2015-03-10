@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.5-3 (2015-03-10) ----------------------------
+* nullFragsAreZero argument to fetchNASIS() reset to TRUE, new documentation pending
+
 -------------------------- soilDB 1.5-2 (2015-02-24) ----------------------------
 * RODBC temporarily moved from "suggested" package to "imported" package... not a good idea, reverted to "suggested"
 

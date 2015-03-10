@@ -11,17 +11,16 @@
 \description{Fetch commonly used site/horizon data from a PedonPC or local NASIS database, return as a SoilProfileCollection object.}
 
 \usage{
-fetchNASIS(rmHzErrors = TRUE, nullFragsAreZero=FALSE)
+fetchNASIS(rmHzErrors = TRUE, nullFragsAreZero=TRUE)
 fetchNASIS_component_data()
 getHzErrorsNASIS(strict=TRUE)
 }
 
 \arguments{
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: TRUE)}
-  \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: FALSE), see details}
+  \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details}
   \item{strict}{should horizonation by strictly enforced? (TRUE)}
 }
-
 
 \value{a SoilProfileCollection class object}
 \author{D. E. Beaudette and J. M. Skovlin}
@@ -32,12 +31,10 @@ This function attempts to do most of the boilerplate work when extracting site/h
 
 \note{This function currently works only on Windows, and requires a 'nasis_local' ODBC connection.}
 
-
 \examples{
 \dontrun{
 # query depends on some pedon data, queried against the national database
 # note that you must setup this connection ahead of time
-# see inst/doc/setup_ODBC_local_NASIS.pdf
 f <- fetchNASIS()
 
 # plot only those profiles with densic contact

@@ -1,7 +1,7 @@
 # updated to NASIS 6.2
 
 # convenience function for loading most commonly used information from local NASIS database
-fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=FALSE) {
+fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
 	
 	# test connection
 	if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
