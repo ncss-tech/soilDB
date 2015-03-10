@@ -27,7 +27,6 @@ pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.
   RODBC::odbcClose(channel)
 	
 	# convert Munsell to RGB
-	message('converting Munsell to RGB ...')
 	d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, return_triplets=TRUE))
 	
 	# re-combine

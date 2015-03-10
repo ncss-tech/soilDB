@@ -77,7 +77,7 @@ FROM
   ## TODO: this should be removed once we switch to WGS84 coordinates
 	# warn if mixed datums
 	if(length(unique(na.omit(d$datum))) > 1)
-		message('NOTICE: multiple datums present')
+		message('multiple horizontal datums present, consider using WGS84 coordinates (x_std, y_std)')
 	
   ## TODO: this should probably use peiid
 	# are there any duplicate pedon IDs?
@@ -85,14 +85,14 @@ FROM
 	not.unique.pedon_id <- t.pedon_id > 1
 	if(any(not.unique.pedon_id)) {
 		assign('dup.pedon.ids', value=names(t.pedon_id[which(not.unique.pedon_id)]), envir=soilDB.env)
-		message("NOTICE: duplicate pedons: use `get('dup.pedon.ids', envir=soilDB.env)` for a list of peiid values")
+		message("*** duplicate pedons: use `get('dup.pedon.ids', envir=soilDB.env)` for a list of peiid values")
 	}
 	
 	# warn about sites without a matching pedon (records missing peiid)
 	missing.pedon <- which(is.na(d$peiid))
 	if(length(missing.pedon)> 0) {
 		assign('sites.missing.pedons', value=unique(d$site_id[missing.pedon]), envir=soilDB.env)
-		message("NOTICE: sites without pedons: use `get('sites.missing.pedons', envir=soilDB.env)` for a list of site IDs")
+		message("*** sites without pedons: use `get('sites.missing.pedons', envir=soilDB.env)` for a list of usersiteid values")
 	}
 	
 	# done

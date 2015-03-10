@@ -50,7 +50,6 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
 	
 	# optionally test for bad horizonation... flag, and remove
   if(rmHzErrors) {
-    message('finding horizonation errors ...')
     h.test <- ddply(h, 'peiid', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
     
     # which are the good (valid) ones?
@@ -64,7 +63,7 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
     # keep track of those pedons with horizonation errors
     assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
     if(length(bad.pedon.ids) > 0)
-      message("horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for a list of pedon IDs")
+      message("*** horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for a list of userpedonid values")
   }
 	
 	
