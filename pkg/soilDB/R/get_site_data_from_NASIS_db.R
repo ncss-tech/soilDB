@@ -83,17 +83,13 @@ FROM
 	# are there any duplicate pedon IDs?
 	t.pedon_id <- table(d$pedon_id)
 	not.unique.pedon_id <- t.pedon_id > 1
-	if(any(not.unique.pedon_id)) {
+	if(any(not.unique.pedon_id))
 		assign('dup.pedon.ids', value=names(t.pedon_id[which(not.unique.pedon_id)]), envir=soilDB.env)
-		message("*** duplicate pedons: use `get('dup.pedon.ids', envir=soilDB.env)` for a list of peiid values")
-	}
 	
 	# warn about sites without a matching pedon (records missing peiid)
 	missing.pedon <- which(is.na(d$peiid))
-	if(length(missing.pedon)> 0) {
+	if(length(missing.pedon)> 0)
 		assign('sites.missing.pedons', value=unique(d$site_id[missing.pedon]), envir=soilDB.env)
-		message("*** sites without pedons: use `get('sites.missing.pedons', envir=soilDB.env)` for a list of usersiteid values")
-	}
 	
 	# done
 	return(d)

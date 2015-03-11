@@ -2,6 +2,8 @@
 ## misc functions used by soilDB
 ##
 
+## TODO: keep track of funky records in the soilDB.env
+
 ## TODO: consider toggling paralithic contact to FALSE when lithic contact is TRUE
 # convert diagnostic horizon info into wide-formatted, boolean table
 .diagHzLongtoWide <- function(d) {
@@ -81,7 +83,11 @@
   # short-circuit: if any geomfeatid are NA, then we don't know the order
   # string together as-is, in row-order
   if(any(is.na(i.gm$geomfeatid))) {
-    # warning(paste0('Using row-order. NA in geomfeatid:', u.peiid), call.=FALSE)
+    
+    # optional information on which pedons have issues
+    if(getOption('soilDB.verbose', default=FALSE))
+      message(paste0('Using row-order. NA in geomfeatid:', u.peiid))
+    
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
     return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
   }
@@ -93,14 +99,22 @@
   
   ## short-circuit: only 1 row, and exists-on logic is wrong, use row-order
   if(nrow(i.gm) == 1 & length(top.feature) == length(bottom.feature)) {
-    # warning(paste0('Using row-order. NA in geomfeatid:', u.peiid), call.=FALSE)
+    
+    # optional information on which pedons have issues
+    if(getOption('soilDB.verbose', default=FALSE))
+      warning(paste0('Using row-order. NA in geomfeatid:', u.peiid), call.=FALSE)
+    
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
     return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
   }
   
   # short-circuit: if the exists-on logic is wrong, use row-order
   if(length(top.feature) > 1 | length(bottom.feature) > 1) {
-    # warning(paste0('Using row-order. Incorrect exists-on specification:', u.peiid), call.=FALSE)
+    
+    # optional information on which pedons have issues
+    if(getOption('soilDB.verbose', default=FALSE))
+      warning(paste0('Using row-order. Incorrect exists-on specification:', u.peiid), call.=FALSE)
+    
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
     return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
   }
@@ -151,7 +165,9 @@
   # short-circuit: if any pmorder are NA, then we don't know the order
   # string together as-is, in row-order
   if(any(is.na(i.pm$pmorder))) {
-    warning(paste0('Using row-order. NA in pmorder:', u.siteiid), call.=FALSE)
+    # optional information on which sites have issues
+    if(getOption('soilDB.verbose', default=FALSE))
+      warning(paste0('Using row-order. NA in pmorder:', u.siteiid), call.=FALSE)
   }
   else{
     # there are no NAs in pmorder --> sort according to pmorder

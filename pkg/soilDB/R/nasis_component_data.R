@@ -64,8 +64,8 @@ ORDER BY dmudesc, coiid, comppct_r DESC;"
 	dupe.check <- which(table(d$coiid) > 1)
   if(length(dupe.check) > 0) {
     bad.data <- d[d$coiid %in% names(dupe.check), c('musym', 'mustatus', 'dmudesc', 'compname', 'coiid', 'dmuiid', 'muiid')]
-    message('NOTICE: tangled [legend]--[correlation]--[data mapunit] links: ')
-    print(bad.data)  
+    assign('tangled.comp.legend', value=bad.data, envir=soilDB.env)
+    message('tangled [legend]--[correlation]--[data mapunit] links')
   }
   
 	# done
@@ -131,7 +131,7 @@ fetchNASIS_component_data <- function() {
     stop('please install the `RODBC` package', call.=FALSE)
   
 	# load data in pieces
-	f.comp <- get_component_data_from_NASIS_db()
+	f.comp <- suppressWarnings(get_component_data_from_NASIS_db())
 	f.chorizon <- get_component_horizon_data_from_NASIS_db()
 	
 	# test for bad horizonation... flag, and remove
@@ -157,9 +157,15 @@ fetchNASIS_component_data <- function() {
 		bad.idx <- which(f.comp$coiid %in% bad.ids)
 		bad.labels <- paste(f.comp[bad.idx, ]$dmudesc, f.comp[bad.idx, ]$compname, sep='-')
 		assign('bad.components', value=cbind(coiid=bad.ids, component=bad.labels), envir=soilDB.env)
-		message("*** horizon errors detected, use `get('bad.components', envir=soilDB.env)` for a list of coiid values")
 	}
 	
+  # print any messages on possible data quality problems:
+  if(exists('bad.components', envir=soilDB.env))
+    message("-> QC: horizon errors detected, use `get('bad.components', envir=soilDB.env)` for related coiid values")
+  
+  if(exists('tangled.comp.legend', envir=soilDB.env))
+    message("-> QC: tangled [legend]--[correlation]--[data mapunit] links, use `get('bad.components', envir=soilDB.env)` for more information")
+  
 	# done, return SPC
 	return(f.chorizon)
 	
