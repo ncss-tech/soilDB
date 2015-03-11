@@ -8,7 +8,7 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
 			stop('Local NASIS ODBC connection has not been setup. Please see the `setup_ODBC_local_NASIS.pdf` document included with this package.')
 	
 	# 1. load data in pieces
-	site_data <- get_site_data_from_NASIS_db()
+	suppressMessages(site_data <- get_site_data_from_NASIS_db())
 	hz_data <- get_hz_data_from_NASIS_db()
 	color_data <- get_colors_from_NASIS_db()
 	extended_data <- get_extended_data_from_NASIS_db()
@@ -61,9 +61,8 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
     h <- h[which(h$peiid %in% good.ids), ]
     
     # keep track of those pedons with horizonation errors
-    assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
     if(length(bad.pedon.ids) > 0)
-      message("*** horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for a list of userpedonid values")
+      assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
   }
 	
 	
@@ -102,7 +101,7 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
 	site(h) <- sfs
 	
 	# load diagnostic horizons into @diagnostic:
-  diagnostic_hz(h) <- extended_data$diagnostic
+  suppressWarnings(diagnostic_hz(h) <- extended_data$diagnostic)
   
   # join-in landform string
   lf <- ddply(extended_data$geomorph, 'peiid', .formatLandformString, name.sep='|')
@@ -113,6 +112,16 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
   pm <- ddply(extended_data$pm, 'siteiid', .formatParentMaterialString, name.sep='|')
   if(nrow(pm) > 0)
     site(h) <- pm
+  
+  # print any messages on possible data quality problems:
+	if(exists('sites.missing.pedons', envir=soilDB.env))
+	  message("-> QC: sites without pedons: use `get('sites.missing.pedons', envir=soilDB.env)` for related usersiteid values")
+  
+	if(exists('dup.pedon.ids', envir=soilDB.env))
+	  message("-> QC: duplicate pedons: use `get('dup.pedon.ids', envir=soilDB.env)` for related peiid values")
+  
+  if(exists('bad.pedon.ids', envir=soilDB.env))
+	  message("-> QC: horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for related userpedonid values")
   
 	# done
 	return(h)
