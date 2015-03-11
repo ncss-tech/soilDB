@@ -2,6 +2,7 @@
 * nullFragsAreZero argument to fetchNASIS() reset to TRUE, new documentation pending
 * consolidate of messages printed when running fetchNASIS()
 * introduction of new option "soilDB.verbose" (default is FALSE) for increasing the level of QC information printed
+* new tutorial on fetchNASIS()
 
 -------------------------- soilDB 1.5-2 (2015-02-24) ----------------------------
 * RODBC temporarily moved from "suggested" package to "imported" package... not a good idea, reverted to "suggested"
