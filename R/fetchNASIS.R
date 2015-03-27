@@ -5,7 +5,7 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
 	
 	# test connection
 	if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
-			stop('Local NASIS ODBC connection has not been setup. Please see the `setup_ODBC_local_NASIS.pdf` document included with this package.')
+			stop('Local NASIS ODBC connection has not been setup. Please see `https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/setup_local_nasis.html?root=aqp`.')
 	
 	# 1. load data in pieces
 	suppressMessages(site_data <- get_site_data_from_NASIS_db())
