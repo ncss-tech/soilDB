@@ -7,8 +7,8 @@
 \alias{get_component_horizon_data_from_NASIS_db}
 \alias{getHzErrorsNASIS}
 
-\title{Fetch commonly used site/horizon data from a PedonPC database.}
-\description{Fetch commonly used site/horizon data from a PedonPC or local NASIS database, return as a SoilProfileCollection object.}
+\title{Fetch commonly used site/pedon/horizon data from a PedonPC database.}
+\description{Fetch commonly used site/pedon/horizon data from a PedonPC or local NASIS database, return as a SoilProfileCollection object.}
 
 \usage{
 fetchNASIS(rmHzErrors = TRUE, nullFragsAreZero=TRUE)
@@ -27,7 +27,9 @@ getHzErrorsNASIS(strict=TRUE)
 
 \details{The value of \code{nullFragsAreZero} will have a significant impact on the rock fragment fractions returned by \code{fetchNASIS}. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and NULL rock fragment values should be interpretated as NULLs. Set \code{nullFragsAreZero = TRUE} in those cases where NULL rock fragment values should be interpreted as 0.
 
-This function attempts to do most of the boilerplate work when extracting site/horizon data from a local NASIS database. Pedons that have errors in their horizonation are excluded from the returned object, however, their IDs are printed on the console. See \code{\link{getHzErrorsNASIS}} for a simple approach to identifying pedons with problematic horizonation.}
+This function attempts to do most of the boilerplate work when extracting site/pedon/horizon data from a local NASIS database. Pedons that are missing horizon data, or have errors in their horizonation are excluded from the returned object, however, their IDs are printed on the console. Pedons with combination horizons (e.g. B/C) are erroneously marked as errors due to the way in which they are stored in NASIS as two overlapping horizon records.
+
+See \code{\link{getHzErrorsNASIS}} for a simple approach to identifying pedons with problematic horizonation.}
 
 \note{This function currently works only on Windows, and requires a 'nasis_local' ODBC connection.}
 
