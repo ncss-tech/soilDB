@@ -15,7 +15,7 @@ getHzErrorsNASIS <- function(strict=TRUE) {
 	bad.pedon.ids <- as.character(f.test$pedon_id[which(f.test$hz_logic_pass == FALSE)])
 	
 	# now describe the problems
-	b <- f[which(f$pedon_id %in% bad.pedon.ids), c('pedon_id','hzdept','hzdepb','hzname')]
+	b <- f[which(f$pedon_id %in% bad.pedon.ids), c('peiid', 'pedon_id','hzdept','hzdepb','hzname')]
 	
 	return(b) 
 	

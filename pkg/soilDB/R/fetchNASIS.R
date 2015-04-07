@@ -98,9 +98,11 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
             ), stringsAsFactors=FALSE)
   }
   
+  # add surf. frag summary to @site
 	site(h) <- sfs
 	
 	# load diagnostic horizons into @diagnostic:
+  # supress warnings, usually associated with site/pedon data that have been removed due to lack of horizon data
   suppressWarnings(diagnostic_hz(h) <- extended_data$diagnostic)
   
   # join-in landform string
