@@ -5,12 +5,12 @@ get_hz_data_from_NASIS_db <- function() {
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
-	q <- "SELECT peiid, phiid, upedonid as pedon_id,
+  q <- "SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
-  claytotest as clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END as silt, sandtotest as sand, t.texture_class, texture, phfield, eff.ChoiceName AS effervescence, l.labsampnum, fragvoltot as total_frags_pct_cal, f.total_frags_pct AS total_frags_pct
-  FROM ((((
-	pedon_View_1 
-	INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref) 
+  claytotest as clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END as silt, sandtotest as sand, t.texture_class, texture, phfield, eff.ChoiceName AS effervescence, l.labsampnum, fragvoltot as total_frags_pct_cal, f.total_frags_pct AS total_frags_pct, rrd.ChoiceName as rupresblkdry, stick.ChoiceName as stickiness, plast.ChoiceName as plasticity
+  FROM (((((((
+  pedon_View_1 
+  INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref) 
   
 	LEFT OUTER JOIN (
 		SELECT phiidref, SUM(fragvol) as total_frags_pct 
@@ -29,6 +29,10 @@ get_hz_data_from_NASIS_db <- function() {
   
 	LEFT OUTER JOIN (SELECT phiidref, labsampnum FROM phsample_View_1) as l ON phorizon_View_1.phiid = l.phiidref)
   
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE MetadataDomainDetail.DomainID = 1291) AS rrd ON phorizon_View_1.rupresblkdry = rrd.ChoiceValue)
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1299) AS stick ON phorizon_View_1.stickiness = stick.ChoiceValue)
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1280) AS plast ON phorizon_View_1.plasticity = plast.ChoiceValue)
+    
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1255) AS eff ON phorizon_View_1.effclass = eff.ChoiceValue
   ORDER BY pedon_View_1.upedonid, phorizon_View_1.hzdept ASC;"
 	
