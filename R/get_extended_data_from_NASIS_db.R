@@ -13,21 +13,15 @@ get_extended_data_from_NASIS_db <- function() {
   siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) 
   WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
   
-	## TODO: adapt this for SQL server syntax!
-	# returns the first structure defined per horizon
-	q.structure <- "SELECT s.phiid, FIRST(s.structure_grade) as structure_grade, FIRST(s.structure_size) as structure_size, FIRST(s.structure_type) as structure_type
-	FROM
-	(SELECT phstructure.phiidref as phiid, sg.ChoiceName as structure_grade, ss.ChoiceName as structure_size, st.ChoiceName as structure_type, structid, structpartsto
+	# get all structure records / horizon
+	q.structure <- "SELECT phstructure.phiidref as phiid, sg.ChoiceName as structure_grade, ss.ChoiceName as structure_size, st.ChoiceName as structure_type, structid, structpartsto
 	FROM ((
 	phstructure
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1300) AS sg ON phstructure.structgrade = sg.ChoiceValue)
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1302) AS ss ON phstructure.structsize = ss.ChoiceValue)
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1303) AS st ON phstructure.structtype = st.ChoiceValue
 	WHERE structtype IS NOT NULL
-	ORDER BY phstructure.phiidref, structid ASC
-	) as s
-	GROUP BY s.phiid
-	ORDER BY s.phiid;"
+	ORDER BY phstructure.phiidref, structid ASC;"
 	
 	# existing veg
 	q.veg <- "SELECT siteiid, siteexistveg_View_1.seqnum, plantsym, plantsciname, plantnatvernm, vegetationstratalevel, orderofdominance
@@ -308,6 +302,7 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1309) AS pm
 	d.taxhistory <- RODBC::sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
   d.photolink <- RODBC::sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
 	d.sitepm <- RODBC::sqlQuery(channel, q.sitepm, stringsAsFactors=FALSE)
+  d.structure <- RODBC::sqlQuery(channel, q.structure, stringsAsFactors=FALSE)
 	
 	# close connection
 	RODBC::odbcClose(channel)
@@ -325,6 +320,7 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1309) AS pm
 							geomorph=d.geomorph, 
 							taxhistory=d.taxhistory,
 						  photo=d.photolink,
-							pm=d.sitepm))
+							pm=d.sitepm,
+              struct=d.structure))
 }
 
