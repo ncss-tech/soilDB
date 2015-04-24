@@ -91,6 +91,9 @@ FROM
 	if(length(missing.pedon)> 0)
 		assign('sites.missing.pedons', value=unique(d$site_id[missing.pedon]), envir=soilDB.env)
 	
+  # set factor levels, when it makes sense
+  d$hillslope_pos <- factor(d$hillslope_pos, c('Toeslope', 'Footslope', 'Backslope', 'Shoulder', 'Summit'))
+  
 	# done
 	return(d)
 }
