@@ -20,7 +20,7 @@
   fake.datetimes <- as.POSIXct(fake.datetimes, format="%Y %j %H:%M")
   
   # generate DF with missing information
-  fake.data <- data.frame(id=this.id, date_time=fake.datetimes, year=this.year, doy=missing.days)
+  fake.data <- data.frame(id=this.id, date_time=fake.datetimes, year=this.year, doy=missing.days, month=format(fake.datetimes, "%b"))
   
   # splice in missing data via full join
   y <- join(x, fake.data, by='doy', type='full')
@@ -103,6 +103,9 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day
     soiltemp$date_time <- as.POSIXct(soiltemp$date_time)
     soiltemp$year <- as.integer(format(soiltemp$date_time, "%Y"))
     soiltemp$doy <- as.integer(format(soiltemp$date_time, "%j"))
+    soiltemp$month <- format(soiltemp$date_time, "%b")
+    # re-level months
+    soiltemp$month <- factor(soiltemp$month, levels=c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
     
     # optionally pad daily data with NA
     if(gran == 'day' & pad.missing.days) {
