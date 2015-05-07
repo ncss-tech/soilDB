@@ -1,8 +1,38 @@
 ## TODO: better checking of inputs, as the entitre DB could be downloaded by accident!!
 
+# experimental function for padding daily time-series with NA in the presence of missing days
+# must be run on subsets defined by year
+.fill_missing_days <- function(x) {
+  
+  ## TODO this doesn't account for leap-years
+  # ID missing days 
+  missing.days <- which(is.na(match(1:365, x$doy)))
+  
+  if(length(missing.days) < 1)
+    return(x)
+  
+  # get constants
+  this.id <- unique(x$id)
+  
+  # make fake date-times for missing data
+  this.year <- unique(x$year)
+  fake.datetimes <- paste0(this.year, ' ', missing.days, ' 00:00')
+  fake.datetimes <- as.POSIXct(fake.datetimes, format="%Y %j %H:%M")
+  
+  # generate DF with missing information
+  fake.data <- data.frame(id=this.id, date_time=fake.datetimes, year=this.year, doy=missing.days)
+  
+  # splice in missing data via full join
+  y <- join(x, fake.data, by='doy', type='full')
+  
+  # re-order by DOY and return
+  return(y[order(y$doy), ])
+}
+
+
 
 # this loads and packages the data into a list of objects
-fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day', start.date=NULL, stop.date=NULL) {
+fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE) {
   
   # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)
@@ -69,9 +99,18 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day
   }
   
   # convert date/time
-  if(!is.null(soiltemp))
+  if(!is.null(soiltemp)) {
     soiltemp$date_time <- as.POSIXct(soiltemp$date_time)
-  
+    soiltemp$year <- as.integer(format(soiltemp$date_time, "%Y"))
+    soiltemp$doy <- as.integer(format(soiltemp$date_time, "%j"))
+    
+    # optionally pad daily data with NA
+    if(gran == 'day' & pad.missing.days) {
+      soiltemp <- ddply(soiltemp, c('id', 'year'), .fill_missing_days)
+      message(paste0('padded ', length(is.na(soiltemp$sensor_value)), ' missing soil temperature values'))
+    }
+  }
+    
   # init coordinates
   if(!is.null(s)) {
     coordinates(s) <- ~ wgs84_longitude + wgs84_latitude
