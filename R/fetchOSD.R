@@ -25,7 +25,7 @@ fetchOSD <- function(soils) {
 	try(h <- read.csv(url(u.hz), stringsAsFactors=FALSE), silent=TRUE)
 	
 	# report missing data
-	if(all(c(is.null(s), is.null(h)))) {
+	if(any(c(is.null(s), is.null(h)))) {
 		stop('query returned no data', call.=FALSE)
 	}
 	
