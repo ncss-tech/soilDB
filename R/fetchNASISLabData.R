@@ -14,6 +14,8 @@ fetchNASISLabData <- function() {
 	s <- get_labpedon_data_from_NASIS_db()
 	h <- get_lablayer_data_from_NASIS_db()
 	
+  # test to see if the selected set is loaded
+  if (nrow(h) == 0 | nrow(s) == 0) message('your selected set is missing either the lab or site table, please load and try again :)')
 		
 	# fix some common problems
 	# replace missing lower boundaries
