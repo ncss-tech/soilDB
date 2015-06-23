@@ -13,6 +13,9 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
 	color_data <- get_colors_from_NASIS_db()
 	extended_data <- get_extended_data_from_NASIS_db()
 	
+	# test to see if the selected set is loaded
+	if (nrow(hz_data) == 0 | all(unlist(lapply(extended_data, nrow)) == 0)) message('your selected set is missing either the pedon or site table, please load and try again :)')
+  
   # optionally convert NA fragvol to 0
   if(nullFragsAreZero) {
     hz_data$total_frags_pct <- ifelse(is.na(hz_data$total_frags_pct), 0, hz_data$total_frags_pct)
@@ -106,12 +109,12 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
   suppressWarnings(diagnostic_hz(h) <- extended_data$diagnostic)
   
   # join-in landform string
-  lf <- ddply(extended_data$geomorph, 'peiid', .formatLandformString, name.sep='|')
+  lf <- ddply(extended_data$geomorph, 'peiid', .formatLandformString, name.sep=' & ')
   if(nrow(lf) > 0)
     site(h) <- lf
   
   # join-in parent material strings
-  pm <- ddply(extended_data$pm, 'siteiid', .formatParentMaterialString, name.sep='|')
+  pm <- ddply(extended_data$pm, 'siteiid', .formatParentMaterialString, name.sep=' & ')
   if(nrow(pm) > 0)
     site(h) <- pm
   
