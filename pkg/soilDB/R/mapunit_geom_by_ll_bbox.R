@@ -27,7 +27,7 @@ mapunit_geom_by_ll_bbox <- function(bbox, source='sda') {
 		file.extension <- '.gml'
 		
 		# layername for later
-		file.layer <- 'MapunitPoly'
+		file.layer <- 'mapunitpoly'
 	}
 	
 	if(source == 'soilweb') {
