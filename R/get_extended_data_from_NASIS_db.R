@@ -24,14 +24,14 @@ get_extended_data_from_NASIS_db <- function() {
 	ORDER BY phstructure.phiidref, structid ASC;"
 	
 	# existing veg
-  q.veg <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, plotplantinventory_View_1.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass FROM 
-(((((
-  site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref)
-  INNER JOIN vegplot_View_1 ON vegplot_View_1.siteobsiidref = siteobs_View_1.siteobsiid)
-  LEFT JOIN plotplantinventory_View_1 ON vegplot_View_1.vegplotiid = plotplantinventory_View_1.vegplotiidref)
-  LEFT JOIN localplant_View_1 ON plotplantinventory_View_1.plantiidref = localplant_View_1.plantiidref)
-  INNER JOIN plant ON localplant_View_1.plantiidref = plant.plantiid)
-  ORDER BY site_View_1.siteiid, plotplantinventory_View_1.seqnum;"
+  q.veg <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, plotplantinventory.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass
+
+  FROM site_View_1 AS s
+  INNER JOIN siteobs ON siteobs.siteiidref=s.siteiid
+  LEFT JOIN vegplot_View_1 AS v on v.siteobsiidref=siteobs.siteobsiid
+  LEFT JOIN plotplantinventory ON plotplantinventory.vegplotiidref=v.vegplotiid
+  INNER JOIN plant ON plant.plantiid=plotplantinventory.plantiidref;"
+  
   
 	
 	# query diagnostic horizons, usually a 1:many relationship with pedons
