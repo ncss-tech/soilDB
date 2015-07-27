@@ -10,7 +10,8 @@ q.inventory <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacoll
   INNER JOIN siteobs ON siteobs.siteiidref=s.siteiid
   LEFT JOIN vegplot_View_1 AS v on v.siteobsiidref=siteobs.siteobsiid
   LEFT JOIN plotplantinventory ON plotplantinventory.vegplotiidref=v.vegplotiid
-  INNER JOIN plant ON plant.plantiid=plotplantinventory.plantiidref;"
+  INNER JOIN plant ON plant.plantiid=plotplantinventory.plantiidref
+  ORDER BY s.siteiid, plotplantinventory.seqnum;"
 
 # existing veg
 q.transect <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, vegtransectid, vegtransplantsummiid vtpsiid, transectlength, plantsym, plantsciname, plantnatvernm
@@ -20,7 +21,8 @@ q.transect <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacolle
   INNER JOIN vegplot_View_1 AS v on v.siteobsiidref=siteobs.siteobsiid
   LEFT JOIN vegtransect AS vt ON vt.vegplotiidref=v.vegplotiid
   LEFT JOIN vegtransectplantsummary AS vtps ON vtps.vegtransectiidref=vt.vegtransectiid
-  INNER JOIN plant ON plant.plantiid=vtps.plantiidref;"
+  INNER JOIN plant ON plant.plantiid=vtps.plantiidref
+  ORDER BY s.siteiid;"
 
 q.plant <- "SELECT plantiid, plantsym
 
