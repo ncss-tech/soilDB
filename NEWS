@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.5-7 (2015-03-10) ----------------------------
+* updated the `loafercreek` and `gopheridge` sample datasets
+
 -------------------------- soilDB 1.5-3 (2015-03-10) ----------------------------
 * nullFragsAreZero argument to fetchNASIS() reset to TRUE, new documentation pending
 * consolidate of messages printed when running fetchNASIS()
