@@ -6,6 +6,7 @@
 \alias{get_copedon_from_NASIS_db}
 \alias{get_component_horizon_data_from_NASIS_db}
 \alias{getHzErrorsNASIS}
+\alias{get_vegplot_from_NASIS_db}
 
 \title{Fetch commonly used site/pedon/horizon data from a PedonPC database.}
 \description{Fetch commonly used site/pedon/horizon data from a PedonPC or local NASIS database, return as a SoilProfileCollection object.}
