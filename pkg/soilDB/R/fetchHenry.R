@@ -1,5 +1,17 @@
 ## TODO: better checking of inputs, as the entitre DB could be downloaded by accident!!
 
+.month2season <- function(x) {
+  season <- rep(NA, times=length(x))
+  season[x %in% c('Jun', 'Jul', 'Aug')] <- 'Summer'
+  season[x %in% c('Dec', 'Jan', 'Feb')] <- 'Winter'
+  season[x %in% c('Mar', 'Apr', 'May')] <- 'Spring'
+  season[x %in% c('Sep', 'Oct', 'Nov')] <- 'Fall'
+  # fix factor levels for season
+  season <- factor(season, levels=c('Winter', 'Spring', 'Summer', 'Fall'))
+  return(season)
+}
+
+
 # experimental function for padding daily time-series with NA in the presence of missing days
 # must be run on subsets defined by year
 .fill_missing_days <- function(x) {
@@ -106,12 +118,16 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day
     soiltemp$month <- format(soiltemp$date_time, "%b")
     # re-level months
     soiltemp$month <- factor(soiltemp$month, levels=c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
-    
+            
     # optionally pad daily data with NA
     if(gran == 'day' & pad.missing.days) {
       soiltemp <- ddply(soiltemp, c('id', 'year'), .fill_missing_days)
       message(paste0('padded ', length(is.na(soiltemp$sensor_value)), ' missing soil temperature values'))
     }
+    
+    # add-in seasons
+    soiltemp$season <- .month2season(soiltemp$month)
+    
   }
     
   # init coordinates
