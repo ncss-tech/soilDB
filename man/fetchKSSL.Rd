@@ -1,15 +1,16 @@
 \name{fetchKSSL}
 \alias{fetchKSSL}
 \title{Fetch KSSL Data (EXPERIMENTAL)}
-\description{Get KSSL data via BBOX or series query, from the SoilWeb system.}
-\usage{fetchKSSL(series = NULL, bbox = NULL)}
+\description{Get KSSL data via BBOX, MLRA, or series name query, from the SoilWeb system.}
+\usage{fetchKSSL(series = NULL, bbox = NULL, mlra=NULL)}
 
 \arguments{
   \item{series}{a soil series name}
   \item{bbox}{a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}}
+  \item{mlra}{an MLRA ID}
 }
 
-\details{This is an experimental interface to most of the KSSL data as of June 2013. Series-queries are case insensitive. Series name is based on the "correlated as" field (from KSSL snapshot) when present.  The "sampled as" classification was promoted to "correlated as" if the "correlated as" classification was missing.}
+\details{This is an experimental interface to most of the KSSL data as of June 2015. Series-queries are case insensitive. Series name is based on the "correlated as" field (from KSSL snapshot) when present.  The "sampled as" classification was promoted to "correlated as" if the "correlated as" classification was missing.}
 
 \value{a \code{SoilProfileCollection} object}
 
