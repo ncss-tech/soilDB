@@ -32,8 +32,8 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL) {
 	f <- paste(f, collapse='')
 	
 	# build URLs
-	site.url <- URLencode(paste0('http://soilmap2-1.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&what=site', f))
-	hz.url <- URLencode(paste0('http://soilmap2-1.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&what=horizon', f))
+	site.url <- URLencode(paste0('http://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&what=site', f))
+	hz.url <- URLencode(paste0('http://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&what=horizon', f))
 	
   # init temp files
 	tf.site <- tempfile()
