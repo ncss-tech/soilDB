@@ -1,5 +1,6 @@
 -------------------------- soilDB 1.6 (2015-08-19) ----------------------------
-* 
+* soilDB now imports from the `reshape` package, will transition to `reshape2` with soilDB 2.0
+* fetchHenry() officially added, complete with documentation
 
 -------------------------- soilDB 1.5-8 (2015-08-13) ----------------------------
 * fetchKSSL() gets an argument for downloading data by MLRA
