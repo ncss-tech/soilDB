@@ -26,13 +26,13 @@
   d$season <- .month2season(d$month)
   
   # compute unbiased MAST, number of obs, complete records per average no. days in year
-  d.mast <- ddply(d, 'id', plyr::summarize, days.of.data=sum(n), 
+  d.mast <- ddply(d, 'id', .fun=plyr::summarize, days.of.data=sum(n), 
                   functional.yrs=round(sum(n)/365.25, 2), 
                   MAST=round(mean(daily.mean, na.rm=TRUE), 2))
   
   # compute unbiased seasonal averages
   d.seasonal.long <- ddply(d[which(d$season %in% c('Winter', 'Summer')), ], c('season', 'id'), 
-                           summarize, seasonal.mean.temp=round(mean(daily.mean, na.rm=TRUE), 2))
+                           .fun=plyr::summarize, seasonal.mean.temp=round(mean(daily.mean, na.rm=TRUE), 2))
   
   # convert seasonal avgs to wide format
   d.season <- reshape::cast(d.seasonal.long, id ~ season, value = 'seasonal.mean.temp')
