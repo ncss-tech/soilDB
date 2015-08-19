@@ -1,16 +1,16 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 1.5-8
-Date: 2015-08-13
-Packaged: 2015-06-11; dylan
+Version: 1.6
+Date: 2015-08-19
+Packaged: 2015-08-19; dylan
 Author: D.E. Beaudette and J.M. Skovlin
 Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
 License: GPL (>= 2)
 LazyLoad: yes
 Depends: R (>= 2.15.0), aqp
-Imports: plyr, Hmisc, RCurl, XML, sp
+Imports: plyr, Hmisc, RCurl, XML, sp, reshape
 Suggests: lattice, XMLSchema, SSOAP, dismo, raster, rgdal, jsonlite, RODBC
 Repository: CRAN
 Additional_repositories: http://www.omegahat.org/R

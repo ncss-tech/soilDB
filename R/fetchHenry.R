@@ -1,5 +1,52 @@
 ## TODO: better checking of inputs, as the entitre DB could be downloaded by accident!!
 
+
+# summarize daily values via julian day
+.summarizeSoilTemperature <- function(soiltemp.data) {
+  
+  # hacks to make R CMD check --as-cran happy:
+  n <- NULL
+  sensor_value <- NULL
+  non.missing <- NULL
+  daily.mean <- NULL
+  summarize <- NULL
+  
+  # determine number of complete years of data
+  cr.1 <- ddply(soiltemp.data, c('id', 'year'), plyr::summarize, non.missing=length(na.omit(sensor_value)))
+  cr.2 <- ddply(cr.1, 'id', plyr::summarize, complete.yrs=length(which(non.missing >= 365)))
+  
+  # compute summaries by DOY:
+  # n: number of non-NA records
+  # daily.mean: mean of non-NA values
+  d <- ddply(soiltemp.data, c('id', 'doy'), .fun=plyr::summarize, .progress='text', n=length(na.omit(sensor_value)), 
+             daily.mean=mean(sensor_value, na.rm=TRUE))
+  
+  # convert DOY -> month
+  d$month <- format(as.Date(as.character(d$doy), format="%j"), "%b")
+  d$season <- .month2season(d$month)
+  
+  # compute unbiased MAST, number of obs, complete records per average no. days in year
+  d.mast <- ddply(d, 'id', plyr::summarize, days.of.data=sum(n), 
+                  functional.yrs=round(sum(n)/365.25, 2), 
+                  MAST=round(mean(daily.mean, na.rm=TRUE), 2))
+  
+  # compute unbiased seasonal averages
+  d.seasonal.long <- ddply(d[which(d$season %in% c('Winter', 'Summer')), ], c('season', 'id'), 
+                           summarize, seasonal.mean.temp=round(mean(daily.mean, na.rm=TRUE), 2))
+  
+  # convert seasonal avgs to wide format
+  d.season <- reshape::cast(d.seasonal.long, id ~ season, value = 'seasonal.mean.temp')
+  
+  # combine columns
+  d.summary <- join(d.mast, d.season, by = 'id')
+  d.summary <- join(d.summary, cr.2, by='id')
+  
+  # re-shuffle columns and return
+  
+  return(d.summary[, c('id', 'days.of.data', 'functional.yrs', 'complete.yrs', 'MAST', 'Winter', 'Summer')])
+}
+
+
 .month2season <- function(x) {
   season <- rep(NA, times=length(x))
   season[x %in% c('Jun', 'Jul', 'Aug')] <- 'Summer'
@@ -44,7 +91,7 @@
 
 
 # this loads and packages the data into a list of objects
-fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE) {
+fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE, soiltemp.summaries=TRUE) {
   
   # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)
@@ -128,6 +175,33 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day
     # add-in seasons
     soiltemp$season <- .month2season(soiltemp$month)
     
+    # get period of record for each site, not including NA-padding
+    por <- ddply(soiltemp, c('id'), function(i) {
+      idx <- which(!is.na(i$sensor_value))
+      start.date <- min(i$date_time[idx], na.rm=TRUE)
+      end.date <- max(i$date_time[idx], na.rm=TRUE)
+      return(data.frame(start.date, end.date))
+    })
+    
+    # compute days since last visit
+    por$dslv <- round(as.numeric(difftime(Sys.Date(), por$end.date, units='days')))
+    
+    # optionally compute summaries, requires padded NA values and, daily granularity
+    if(soiltemp.summaries & pad.missing.days) {
+      message('computing un-biased soil temperature summaries')
+      
+      if(gran != 'day')
+        stop('soil temperature summaries can only be computed from daily data', call. = FALSE)
+      
+      # compute unbiased estimates of MAST and summer/winter temp
+      soiltemp.summary <- .summarizeSoilTemperature(soiltemp)
+      
+      # combine summaries and join to site data
+      por <- join(por, soiltemp.summary, by='id')
+    }
+    
+    # splice-into site data
+    s <- join(s, por, by='id')
   }
     
   # init coordinates
