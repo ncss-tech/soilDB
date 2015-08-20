@@ -15,10 +15,23 @@
   cr.1 <- ddply(soiltemp.data, c('id', 'year'), plyr::summarize, non.missing=length(na.omit(sensor_value)))
   cr.2 <- ddply(cr.1, 'id', plyr::summarize, complete.yrs=length(which(non.missing >= 365)))
   
+  # determine functional years of data
+  # number of complete years after accounting for overlap
+  fy <- ddply(soiltemp.data, 'id', .fun=function(i) {
+    # convert current sensor's data to wide format, first row is the year
+    w <- cast(i, year ~ doy, value='sensor_value')
+    # on DOY 1-365, count total number of non-NA records over all years
+    non.na.doy <- apply(w[, 2:366], 2, function(j) length(na.omit(j)))
+    # the minimum value is the number of functional years
+    return(data.frame(functional.yrs=min(non.na.doy)))
+  })
+  
   # compute summaries by DOY:
   # n: number of non-NA records
   # daily.mean: mean of non-NA values
-  d <- ddply(soiltemp.data, c('id', 'doy'), .fun=plyr::summarize, .progress='text', n=length(na.omit(sensor_value)), 
+  d <- ddply(soiltemp.data, c('id', 'doy'), .fun=plyr::summarize, .progress='text', 
+             n.total=length(sensor_value),
+             n=length(na.omit(sensor_value)), 
              daily.mean=mean(sensor_value, na.rm=TRUE))
   
   # convert DOY -> month
@@ -26,9 +39,11 @@
   d$season <- .month2season(d$month)
   
   # compute unbiased MAST, number of obs, complete records per average no. days in year
-  d.mast <- ddply(d, 'id', .fun=plyr::summarize, days.of.data=sum(n), 
-                  functional.yrs=round(sum(n)/365.25, 2), 
-                  MAST=round(mean(daily.mean, na.rm=TRUE), 2))
+  d.mast <- ddply(d, 'id', .fun=plyr::summarize, 
+                  gap.index=round(1 - (sum(n) / sum(n.total)), 2),
+                  days.of.data=sum(n), 
+                  MAST=round(mean(daily.mean, na.rm=TRUE), 2)
+                  )
   
   # compute unbiased seasonal averages
   d.seasonal.long <- ddply(d[which(d$season %in% c('Winter', 'Summer')), ], c('season', 'id'), 
@@ -40,10 +55,11 @@
   # combine columns
   d.summary <- join(d.mast, d.season, by = 'id')
   d.summary <- join(d.summary, cr.2, by='id')
+  d.summary <- join(d.summary, fy, by='id')
   
   # re-shuffle columns and return
   
-  return(d.summary[, c('id', 'days.of.data', 'functional.yrs', 'complete.yrs', 'MAST', 'Winter', 'Summer')])
+  return(d.summary[, c('id', 'days.of.data', 'gap.index', 'functional.yrs', 'complete.yrs', 'MAST', 'Winter', 'Summer')])
 }
 
 
