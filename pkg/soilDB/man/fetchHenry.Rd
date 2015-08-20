@@ -19,7 +19,7 @@ pad.missing.days = TRUE, soiltemp.summaries = TRUE)
   \item{soiltemp.summaries}{should soil temperature ("day" granularity only) be summarized? see details}
 }
 
-\details{Filling missing days with NA is useful for computing and index of how complete the data are, and for estimating (mostly) unbiased MAST and seasonal mean soil temperatures. Summaries are computed by first averaging over Julian day, then averaging over all days of the year (MAST) or just those days that occur within "summer" or "winter". This approach makes it possible to estimate summaries in the presence of missing data. The quality of summaries should be weighted by the number of "functional years" (days of data / 365.25) and "complete years" (number of years of data with >= 365 days of non-missing data).}
+\details{Filling missing days with NA is useful for computing and index of how complete the data are, and for estimating (mostly) unbiased MAST and seasonal mean soil temperatures. Summaries are computed by first averaging over Julian day, then averaging over all days of the year (MAST) or just those days that occur within "summer" or "winter". This approach makes it possible to estimate summaries in the presence of missing data. The quality of summaries should be weighted by the number of "functional years" (number of years with non-missing data after combining data by Julian day) and "complete years" (number of years of data with >= 365 days of non-missing data).}
 
 \value{a list containing:
  \item{sites}{a \code{SpatialPointsDataFrame} object containing site-level information}
