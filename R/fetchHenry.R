@@ -43,7 +43,7 @@
     # frigid
     if(mast[i] <= 8) {
       if(mean.summer[i] - mean.winter[i] >= 6) {
-        res[i] <- 'frigid'
+        res[i] <- 'frigid*'
         next
       }
       else {
@@ -93,7 +93,7 @@
   }
   
   # set levels
-  res <- factor(res, levels=c('gelic*', 'cryic*','frigid','isofrigid','mesic','isomesic','thermic','isothermic','hyperthermic','isohyperthermic'))
+  res <- factor(res, levels=c('gelic*', 'cryic*','frigid*','isofrigid','mesic','isomesic','thermic','isothermic','hyperthermic','isohyperthermic'))
   
   # done
   return(res)
