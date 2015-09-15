@@ -225,33 +225,36 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day
   soiltemp <- NULL
   
   # process filter components
-  if(!missing(usersiteid)) {
+  if(!is.null(usersiteid)) {
     f <- c(f, paste('&usersiteid=', usersiteid, sep=''))
   }
   
-  if(!missing(project)) {
+  if(!is.null(project)) {
     project <- paste(project, collapse=',')
     f <- c(f, paste('&project=', project, sep=''))
   }
   
-  if(!missing(type)) {
+  if(!is.null(type)) {
     f <- c(f, paste('&type=', type, sep=''))
   }
   
-  if(!missing(gran)) {
+  if(!is.null(gran)) {
     f <- c(f, paste('&gran=', gran, sep=''))
   }
   
-  if(!missing(start.date)) {
+  if(!is.null(start.date)) {
     f <- c(f, paste('&start=', start.date, sep=''))
   }
   
-  if(!missing(stop.date)) {
+  if(!is.null(stop.date)) {
     f <- c(f, paste('&stop=', stop.date, sep=''))
   }
   
   # combine filters
   f <- paste(f, collapse='')
+  
+  # debugging
+#   print(f)
   
   # build URLs
   site.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?what=site', f, sep=''))
