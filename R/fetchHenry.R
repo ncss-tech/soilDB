@@ -254,8 +254,8 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day
   f <- paste(f, collapse='')
   
   # build URLs
-  site.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/soil_web/henry/query.php?what=site', f, sep=''))
-  soiltemp.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/soil_web/henry/query.php?what=soil_temperature', f, sep=''))
+  site.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?what=site', f, sep=''))
+  soiltemp.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?what=soil_temperature', f, sep=''))
   
   # init temp files
   tf.site <- tempfile()
