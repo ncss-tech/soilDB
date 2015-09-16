@@ -334,7 +334,7 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day
   options(opt.original)
   
   # pack into a list for the user
-  res <- list(sites=s, soiltemp=soiltemp)
+  res <- list(sensors=s, soiltemp=soiltemp)
   res.size <- round(object.size(res) / 1024 / 1024, 2)
   
   # some feedback via message:
