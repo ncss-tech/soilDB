@@ -15,6 +15,11 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   if(!missing(state) & get.vnir)
     stop('VNIR spectra cannot be requested for an entire state', call.=FALSE)
   
+  
+  ## 2015-09-23
+  ## releasing point data for privates lands may be a problem, coordinates are truncated to 2 decimal places
+  message('Site coordinates have been truncated to 2 decimal places, contact the National Soil Survey Center for more detailed coordinates.')
+  
   # init empty filter
   f <- vector()
   
