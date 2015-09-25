@@ -1,4 +1,7 @@
 
+## 2015-09-25: this function is no longer needed, we have spatial support in SDA now
+## re-write as tutorial in SDA help
+
 # 2015-07-02: noticed a change: Typename=mapunitpoly
 
 # http://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&Version=1.0.0&Request=GetFeature&OutputFormat=XmlMukeyList&Typename=MapunitPolyNoGeometry&BBOX=-120.950129388,37.7972571005,-120.677685495,37.9766971606
