@@ -1,30 +1,22 @@
 \name{SDA_query}
 \alias{SDA_query}
-\alias{cleanSDA}
+\alias{.cleanSDA}
+\alias{.oldSDA_query}
 \alias{format_SQL_in_statement}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{Soil Data Access Query}
 \description{Submit a query to the Soil Data Acccess (SDA) website in SQL, get the results as a dataframe.}
 \usage{SDA_query(q)}
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{q}{a text string containing valid SQL}
 }
 \details{The SDA website can be found at \url{http://sdmdataaccess.nrcs.usda.gov} and query examples can be found at \url{http://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx}}
 \value{A dataframe containing the results.}
-\references{http://casoilresource.lawr.ucdavis.edu/}
-\author{Dylan E. Beaudette}
-\note{This function requires the `SSOAP` (\url{http://www.omegahat.org/SSOAP/}), `RCurl` (\url{http://www.omegahat.org/RCurl/}), `XML` (\url{http://www.omegahat.org/RSXML/}), and `XMLSchema` (\url{http://www.omegahat.org/XMLSchema/}) packages. See examples below on how you can easily install `SSOAP` and `XMLSchema` packages.}
+\author{D.E. Beaudette}
+\note{This function requires the `httr`, `jsonlite`, and `XML` packages}
 
 \seealso{\code{\link{MUKEYS_by_ll_bbox}}, \code{\link{mapunit_geom_by_ll_bbox}}}
 \examples{
-# install the required packages
-\dontrun{
-install.packages('RCurl', dep=TRUE)
-install.packages('XML', dep=TRUE)
-install.packages("SSOAP", repos = "http://www.omegahat.org/R", type="source")
-install.packages("XMLSchema", repos = "http://www.omegahat.org/R", type="source")
-}
 
 # SSURGO export metadata:
 \dontrun{
@@ -41,25 +33,6 @@ from component
 where compname = 'yolo' and majcompflag = 'Yes' ")
 }
 
-# get tabular data based on result from spatial query:
-\dontrun{
-# bbox
-b <- c(-120.9,37.7,-120.8,37.8)
-# get map unit keys for this bbox
-m <- MUKEYS_by_ll_bbox(b)
-# make an SQL-compliant "in" statment
-in.statement <- format_SQL_in_statement(m)
-# format query:
-q <- paste("
-SELECT component.cokey, compname, comppct_r, hzdept_r, hzdepb_r, 
-hzname, sandtotal_r, silttotal_r, claytotal_r
-FROM component JOIN chorizon ON component.cokey = chorizon.cokey
-WHERE majcompflag = 'Yes' AND mukey IN ", in.statement, 
-"ORDER BY cokey, comppct_r DESC, hzdept_r ASC", sep="")
-# now get component and horizon-level data for these map unit keys
-res <- SDA_query(q)
-}
-
 # get component-level data for a specific soil survey area (Yolo county, CA)
 \dontrun{
 q <- "SELECT 
@@ -72,6 +45,29 @@ WHERE legend.areasymbol = 'CA113'"
 
 res <- SDA_query(q)
 }
+
+# get tabular data based on result from spatial query:
+# requires raster and rgeos packages
+\dontrun{
+library(raster) # suggested by soilDB
+library(rgeos)  # additional
+
+# text -> bbox -> WKT
+# xmin, xmax, ymin, ymax
+b <- c(-120.9, -120.8, 37.7, 37.8)
+p <- writeWKT(as(extent(b), 'SpatialPolygons'))
+q <- paste0("SELECT mukey, cokey, compname, comppct_r
+            FROM component 
+            WHERE mukey IN (
+            SELECT DISTINCT mukey 
+            FROM SDA_Get_Mukey_from_intersection_with_WktWgs84('", p, "') 
+            )
+            ORDER BY mukey, cokey, comppct_r DESC")
+
+x <- SDA_query(q)
+}
+
+
 
 }
 
