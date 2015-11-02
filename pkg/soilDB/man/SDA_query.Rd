@@ -11,7 +11,7 @@
   \item{q}{a text string containing valid SQL}
 }
 \details{The SDA website can be found at \url{http://sdmdataaccess.nrcs.usda.gov} and query examples can be found at \url{http://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx}}
-\value{A dataframe containing the results.}
+\value{A dataframe containing the results. NULL is retutned when queries result in 0 matches rows.}
 \author{D.E. Beaudette}
 \note{This function requires the `httr`, `jsonlite`, and `XML` packages}
 
