@@ -1,6 +1,6 @@
 
 # currently only queries SoilWeb for mapunit-level data
-SSURGO_spatial_query <- function(bbox=NULL, coords=NULL, what='mapunit', source='soilweb') {
+SoilWeb_spatial_query <- function(bbox=NULL, coords=NULL, what='mapunit', source='soilweb') {
   
   # check for required packages
   if(!requireNamespace('jsonlite', quietly = TRUE))

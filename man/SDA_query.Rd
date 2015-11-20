@@ -1,21 +1,21 @@
 \name{SDA_query}
 \alias{SDA_query}
-\alias{.cleanSDA}
-\alias{.oldSDA_query}
 \alias{format_SQL_in_statement}
 \title{Soil Data Access Query}
 \description{Submit a query to the Soil Data Acccess (SDA) website in SQL, get the results as a dataframe.}
+
 \usage{SDA_query(q)}
 
 \arguments{
-  \item{q}{a text string containing valid SQL}
+  \item{q}{a valid T-SQL query surrounded by double quotes}
 }
+
 \details{The SDA website can be found at \url{http://sdmdataaccess.nrcs.usda.gov} and query examples can be found at \url{http://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx}}
 \value{A dataframe containing the results. NULL is retutned when queries result in 0 matches rows.}
 \author{D.E. Beaudette}
 \note{This function requires the `httr`, `jsonlite`, and `XML` packages}
 
-\seealso{\code{\link{MUKEYS_by_ll_bbox}}, \code{\link{mapunit_geom_by_ll_bbox}}}
+\seealso{\code{\link{mapunit_geom_by_ll_bbox}}}
 \examples{
 
 # SSURGO export metadata:
