@@ -1,3 +1,9 @@
+-------------------------- soilDB 1.6.3 (2015-11-20) ----------------------------
+* new spatial query helper functions for SDA
+* re-named SSURGO_spatial_query() to SoilWeb_spatial_query(), this function may be phased-out due to spatial support now available in SDA
+* removed MUKEYS_by_ll_bbox() function, no longer needed and web-service may be disabled at any time
+* mapunit_geom_by_ll_bbox() will probably be removed in the near future with an SDA-based alternative
+
 -------------------------- soilDB 1.6 (2015-08-19) ----------------------------
 * soilDB now imports from the `reshape` package, will transition to `reshape2` with soilDB 2.0
 * fetchHenry() officially added, complete with documentation

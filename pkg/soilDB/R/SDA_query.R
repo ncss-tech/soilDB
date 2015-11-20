@@ -1,4 +1,66 @@
 
+# i is a single Spatial* object with CRS: WGS84 GCS
+SDA_make_spatial_query <- function(i) {
+  
+  # check for required packages
+  if(!requireNamespace('rgeos', quietly = TRUE))
+    stop('please install the `rgeos` package', call.=FALSE)
+  
+  # convert single feature to WKT
+  i.wkt <- rgeos::writeWKT(i)
+  
+  # programatically generate query
+  q <- paste0("SELECT mukey, muname
+              FROM mapunit
+              WHERE mukey IN (
+              SELECT * from SDA_Get_Mukey_from_intersection_with_WktWgs84('", i.wkt, "')
+              )")
+  
+  # send query
+  res <- SDA_query(q)
+  
+  # check for no data
+  if(is.null(res))
+    res <- NA
+  
+  # done
+  return(res)
+}
+
+# x is a Spatial* object with more than 1 feature
+# id is the name of an attribute that contains a unique ID for each feature
+SDA_query_features <- function(x, id='pedon_id') {
+  
+  # sanity check: ensure that the ID is unique
+  if(length(x[[id]]) != length(unique(x[[id]])))
+    stop('id is not unique')
+  
+  # transform to GCS WGS84
+  x <- spTransform(x, CRS('+proj=longlat +datum=WGS84'))
+  
+  # iterate over features and save to list
+  l <- list()
+  n <- length(x)
+  # setup a progress bar for timing
+  pb <- txtProgressBar(max=n, style=3)
+  for(i in 1:n) {
+    # make query
+    res <- SDA_make_spatial_query(x[i, ])
+    # save results along with an ID
+    res <- cbind(id=x[[id]][i], res, stringsAsFactors = FALSE)
+    names(res) <- c(id, 'mukey', 'muname')
+    l[[i]] <- res
+    setTxtProgressBar(pb, i)
+  }
+  close(pb)
+  
+  # convert to data.frame, there may be > 1 row / feature when using lines / polygons
+  d <- ldply(l)
+  return(d)
+}
+
+
+
 # format vector of values into a string suitable for an SQL `IN` statement
 # currently expects character data only
 format_SQL_in_statement <- function(x) {
@@ -7,8 +69,7 @@ format_SQL_in_statement <- function(x) {
 	return(i)
 }
 
-
-
+## TODO: doesn't close all connections
 ## TODO: requires more testing and error-trapping
 SDA_query <- function(q) {
   # check for required packages
