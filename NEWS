@@ -1,3 +1,9 @@
+-------------------------- soilDB 1.6.4 (2015-11-27) ----------------------------
+* package re-org, getting ready for soilDB 2.0:
+ + dropping use of `RCurl` functions in favor of `httr` alternatives (done)
+ + switch from `reshape` to `reshape2` (pending)
+ + possibly move some packages from SUGGESTS to IMPORTS
+
 -------------------------- soilDB 1.6.3 (2015-11-20) ----------------------------
 * new spatial query helper functions for SDA
 * re-named SSURGO_spatial_query() to SoilWeb_spatial_query(), this function may be phased-out due to spatial support now available in SDA

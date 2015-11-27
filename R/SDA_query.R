@@ -73,8 +73,8 @@ format_SQL_in_statement <- function(x) {
 ## TODO: requires more testing and error-trapping
 SDA_query <- function(q) {
   # check for required packages
-  if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('XML', quietly=TRUE))
-    stop('please install the `httr` and `XML` packages', call.=FALSE)
+  if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('jsonlite', quietly=TRUE))
+    stop('please install the `httr` and `jsonlite` packages', call.=FALSE)
   
   # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)

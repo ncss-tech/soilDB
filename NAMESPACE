@@ -11,12 +11,6 @@ importFrom(plyr,
   join
 )
 
-importFrom(RCurl,
-  getURL,
-  curlOptions,
-  postForm
-)
-
 
 importFrom(sp,
   spTransform,
