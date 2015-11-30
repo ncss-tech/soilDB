@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.6.5 (2015-11-30) ----------------------------
+* bug fix for poorly specified gemomorphic descriptions, caused fetchNASIS() to barf
+
 -------------------------- soilDB 1.6.4 (2015-11-27) ----------------------------
 * package re-org, getting ready for soilDB 2.0:
  + dropping use of `RCurl` functions in favor of `httr` alternatives (done)
