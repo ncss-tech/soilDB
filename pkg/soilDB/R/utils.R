@@ -62,6 +62,7 @@
 }
 
 
+## 2015-11-30: short-circuts could use some work, consider pre-marking mistakes in calling function
 # attempt to format "landform" records into a single string
 # note: there are several assumptions made about the data, 
 # see "short-circuits" used when there are funky data
@@ -92,6 +93,18 @@
     return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
   }
   
+  # short-circuit: if any feature exists on itself, then use row-order
+  # string together as-is, in row-order
+  if(any(na.omit(c(i.gm$geomfeatid == i.gm$existsonfeat), FALSE))) {
+    
+    # optional information on which pedons have issues
+    if(getOption('soilDB.verbose', default=FALSE))
+      message(paste0('Using row-order. Error in exists-on logic:', u.peiid))
+    
+    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+  }
+  
   # get an index to the top-most and bottom-most features
   # only 1 row should match these criteria
   top.feature <- which(! i.gm$geomfeatid %in% i.gm$existsonfeat)
@@ -102,7 +115,7 @@
     
     # optional information on which pedons have issues
     if(getOption('soilDB.verbose', default=FALSE))
-      warning(paste0('Using row-order. NA in geomfeatid:', u.peiid), call.=FALSE)
+      warning(paste0('Using row-order. Single row / error in exists-on logic:', u.peiid), call.=FALSE)
     
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
     return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
@@ -129,7 +142,13 @@
   while(i <= nrow(i.gm)){
     # get the current feature
     f.i <- i.gm$geomfname[this.feature.idx]
-
+    
+    if(length(f.i) == 0) {
+      print(this.feature.idx)
+      print(i.gm)
+    }
+      
+    
     # assign to vector of labels
     ft.vect[i] <- f.i
     

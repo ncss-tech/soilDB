@@ -109,6 +109,7 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
   suppressWarnings(diagnostic_hz(h) <- extended_data$diagnostic)
   
   # join-in landform string
+  ## 2015-11-30: short-circuts could use some work, consider pre-marking mistakes before parsing
   lf <- ddply(extended_data$geomorph, 'peiid', .formatLandformString, name.sep=' & ')
   if(nrow(lf) > 0)
     site(h) <- lf
