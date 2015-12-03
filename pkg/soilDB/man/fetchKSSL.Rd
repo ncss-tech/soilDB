@@ -2,12 +2,16 @@
 \alias{fetchKSSL}
 \title{Fetch KSSL Data (EXPERIMENTAL)}
 \description{Get KSSL data via BBOX, MLRA, or series name query, from the SoilWeb system.}
-\usage{fetchKSSL(series = NULL, bbox = NULL, mlra=NULL)}
+\usage{fetchKSSL(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, 
+pedon_id=NULL, pedon_key=NULL)}
 
 \arguments{
-  \item{series}{a soil series name}
+  \item{series}{a soil series name, case insensitive}
   \item{bbox}{a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}}
   \item{mlra}{an MLRA ID}
+  \item{pedlabsampnum}{KSSL pedon lab sample number}
+  \item{pedon_id}{user pedon ID}
+  \item{pedon_key}{KSSL internal pedon ID}
 }
 
 \details{This is an experimental interface to most of the KSSL data as of June 2015. Series-queries are case insensitive. Series name is based on the "correlated as" field (from KSSL snapshot) when present.  The "sampled as" classification was promoted to "correlated as" if the "correlated as" classification was missing.}

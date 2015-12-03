@@ -1,9 +1,9 @@
 
 # experimental function for getting basic KSSL data from CASRL
-fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL) {
+fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, pedon_id=NULL, pedon_key=NULL) {
 	
 	# sanity-check: user must supply some kind of criteria
-	if(missing(series) & missing(bbox) & missing(mlra))
+	if(missing(series) & missing(bbox) & missing(mlra) & missing(pedlabsampnum) & missing(pedon_id) & missing(pedon_key))
 		stop('you must provide some filtering criteria')
 	
 	# init empty filter
@@ -24,10 +24,21 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL) {
 	}
 	
 	if(!missing(mlra)) {
-	  mlra <- paste(mlra, collapse=',')
 	  f <- c(f, paste('&mlra=', mlra, sep=''))
 	}
   
+	if(!missing(pedlabsampnum)) {
+	  f <- c(f, paste('&pedlabsampnum=', pedlabsampnum, sep=''))
+	}
+	
+	if(!missing(pedon_id)) {
+	  f <- c(f, paste('&pedon_id=', pedon_id, sep=''))
+	}
+	
+	if(!missing(pedon_key)) {
+	  f <- c(f, paste('&pedon_key=', pedon_key, sep=''))
+	}
+	
 	# combine filters
 	f <- paste(f, collapse='')
 	

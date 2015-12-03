@@ -1,5 +1,6 @@
--------------------------- soilDB 1.6.5 (2015-11-30) ----------------------------
+-------------------------- soilDB 1.6.5 (2015-12-03) ----------------------------
 * bug fix for poorly specified gemomorphic descriptions, caused fetchNASIS() to barf
+* fetchKSSL() gains new query filters, see man page
 
 -------------------------- soilDB 1.6.4 (2015-11-27) ----------------------------
 * package re-org, getting ready for soilDB 2.0:
