@@ -1,3 +1,14 @@
+# R 3.3 compatibility:
+importFrom("grDevices", "rgb")
+
+importFrom("graphics", "plot")
+
+importFrom("stats", "aggregate", "complete.cases", "na.omit")
+
+importFrom("utils", "URLencode", "download.file", "object.size",
+             "read.csv", "read.table", "setTxtProgressBar",
+             "txtProgressBar", "write.table")
+
 importFrom(reshape, 
   cast
 )
