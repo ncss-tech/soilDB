@@ -19,7 +19,7 @@ pedon_id=NULL, pedon_key=NULL)}
 \value{a \code{SoilProfileCollection} object}
 
 \author{D.E. Beaudette}
-\note{SoilWeb maintains a snapshot of the KSSL data. Please use the link below for the live data.}
+\note{SoilWeb maintains a snapshot of the KSSL data. The SoilWeb snapshot was developed using methods described here: \url{https://github.com/dylanbeaudette/process-kssl-snapshot}. Please use the link below for the live data.}
 
 \references{
 \url{http://ncsslabdatamart.sc.egov.usda.gov/}
