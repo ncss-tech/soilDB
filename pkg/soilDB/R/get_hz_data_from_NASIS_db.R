@@ -42,14 +42,16 @@ get_hz_data_from_NASIS_db <- function() {
 	# exec query
 	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
 	
-	# test for duplicate horizons: due to bugs in our queries that lead to >1 row/hz
+	# test for duplicate horizons:
+	#  bugs in our queries
+	#   multiple lab samples / genetic horizon
 	hz.tab <- table(d$phiid)
 	dupe.hz <- which(hz.tab > 1)
 	dupe.hz.phiid <- names(hz.tab[dupe.hz])
 	dupe.hz.pedon.ids <- d$pedon_id[d$phiid %in% dupe.hz.phiid]
 	
 	if(length(dupe.hz) > 0) {
-		message(paste('NOTICE: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), sep=''))
+		message(paste('NOTICE: multiple `labsampnum` values / horizons; see pedon IDs:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), sep=''))
 	}
 	
 	# close connection
