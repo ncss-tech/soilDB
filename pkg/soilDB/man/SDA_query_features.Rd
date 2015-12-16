@@ -1,6 +1,8 @@
 \name{SDA_query_features}
 \alias{SDA_make_spatial_query}
 \alias{SDA_query_features}
+\alias{processSDA_WKT}
+
 \title{Soil Data Access Spatial Query}
 \description{Iterate over Spatial* object features and submit spatial queries to the SDA web-service.}
 
