@@ -1,4 +1,43 @@
 
+
+
+# helper function for processing WKT returned by SDA_query()
+# result is an SPDF
+# d: data frame
+# g: column containing WKT
+# p4s: PROJ4 CRS defs
+## TODO: test with geom appearing in different positions within query results
+processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
+  # iterate over features (rows) and convert into list of SPDF
+  p <- list()
+  n <- nrow(d)
+  # pb <- txtProgressBar(style = 3)
+  for(i in seq(1, n)) {
+    # extract the current row in the DF
+    d.i <- d[i, ] 
+    # extract the current feature from WKT
+    p.i <- rgeos::readWKT(d.i[[g]], id = i, p4s = p4s)
+    # remove geom from current row of DF
+    d.i[[g]] <- NULL
+    # compose SPDF, with other attributes
+    s.i <- SpatialPolygonsDataFrame(p.i, data=cbind(data.frame(gid=i, stringsAsFactors = FALSE), d.i), match.ID = FALSE)
+    # fix column names
+    names(s.i) <- c('gid', names(d.i))
+    # save to list
+    p[[i]] <- s.i
+    # setTxtProgressBar(pb, i/n)
+  }
+  # close(pb)
+  
+  # reduce list to single SPDF
+  spdf <- do.call('rbind', p)
+  
+  return(spdf)
+}
+
+
+
+
 # i is a single Spatial* object with CRS: WGS84 GCS
 SDA_make_spatial_query <- function(i) {
   

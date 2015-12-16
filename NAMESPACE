@@ -27,7 +27,8 @@ importFrom(sp,
   spTransform,
   CRS,
   "coordinates<-",
-  "proj4string<-"  
+  "proj4string<-",
+  SpatialPolygonsDataFrame
 )
 
 
