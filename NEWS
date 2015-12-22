@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.6.8 (2015-12-22) ----------------------------
+* added temperature class (temp_class) field from the pedon taxonomic history table (NASIS) [addition suggested by J. Baker]
+
 -------------------------- soilDB 1.6.7 (2015-12-16) ----------------------------
 * experimental function for processing SDA queries that return geometry: processSDA_WKT()
 
