@@ -65,7 +65,7 @@ ORDER BY dmudesc, coiid, comppct_r DESC;"
   if(length(dupe.check) > 0) {
     bad.data <- d[d$coiid %in% names(dupe.check), c('musym', 'mustatus', 'dmudesc', 'compname', 'coiid', 'dmuiid', 'muiid')]
     assign('tangled.comp.legend', value=bad.data, envir=soilDB.env)
-    message('tangled [legend]--[correlation]--[data mapunit] links')
+    message("-> QC: tangled [legend]--[correlation]--[data mapunit] links: >1 representative DMU / MU?  use `get('bad.components', envir=soilDB.env)` for more information")
   }
   
 	# done
@@ -162,9 +162,6 @@ fetchNASIS_component_data <- function() {
   # print any messages on possible data quality problems:
   if(exists('bad.components', envir=soilDB.env))
     message("-> QC: horizon errors detected, use `get('bad.components', envir=soilDB.env)` for related coiid values")
-  
-  if(exists('tangled.comp.legend', envir=soilDB.env))
-    message("-> QC: tangled [legend]--[correlation]--[data mapunit] links, use `get('bad.components', envir=soilDB.env)` for more information")
   
 	# done, return SPC
 	return(f.chorizon)
