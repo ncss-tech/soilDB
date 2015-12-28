@@ -14,7 +14,7 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
 	extended_data <- get_extended_data_from_NASIS_db()
 	
 	# test to see if the selected set is loaded
-	if (nrow(hz_data) == 0 | all(unlist(lapply(extended_data, nrow)) == 0)) message('your selected set is missing either the pedon or site table, please load and try again :)')
+	if (nrow(hz_data) == 0 | all(unlist(lapply(extended_data, nrow)) == 0)) message('your selected set is missing either the pedon or site table, please load and try again')
   
   # optionally convert NA fragvol to 0
   if(nullFragsAreZero) {

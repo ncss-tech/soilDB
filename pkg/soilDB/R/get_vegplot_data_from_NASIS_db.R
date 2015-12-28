@@ -56,7 +56,7 @@ get_vegplot_from_NASIS_db <- function() {
   ORDER BY s.siteiid;" 
   
   
- 
+  
   q.vegplotrhi <- "SELECT siteiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, rhiap.ChoiceLabel as rhiannualprod, rhibg.ChoiceLabel as rhibareground, rhicl.ChoiceLabel as rhicompactionlayer, rhifsg.ChoiceLabel as rhifuncstructgroups, rhier.ChoiceLabel as rhierosionresistance, rhig.ChoiceLabel as rhigullies, rhir.ChoiceLabel as rhirills, rhipt.ChoiceLabel as rhipedastalsterracettes, rhiir.ChoiceLabel as rhiinfilrunoff, rhila.ChoiceLabel as rhilitteramount, rhilm.ChoiceLabel as rhilittermovement, rhipm.ChoiceLabel as rhiplantmortality, rhirc.ChoiceLabel as rhireprodcapability, rhiip.ChoiceLabel as rhiinvasiveplants, rhissd.ChoiceLabel as rhisoilsurfdegradation, rhiwf.ChoiceLabel as rhiwaterflowpatterns, rhiws.ChoiceLabel as rhiwindscourareas, rhiss.ChoiceLabel as rhisoilsitestabsumm, rhibi.ChoiceLabel as rhibioticintegritysumm, rhihf.ChoiceLabel as rhihydrofunctionsumm 
   FROM ((((((((((((((((((((
   site_View_1 AS s
@@ -85,9 +85,9 @@ get_vegplot_from_NASIS_db <- function() {
   LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 5229) AS rhihf ON v.rhihydrofunctionsumm = rhihf.ChoiceValue)
   ORDER BY s.siteiid;" 
   
-
+  
   # plot-level species data from plotplantinventory table - this records species within plot presence/absence - this catches the migrated data from the old siteexistingveg table
-q.vegplotspecies <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, plotplantinventory.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, cc.ChoiceLabel as speciescancovclass
+  q.vegplotspecies <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, plotplantinventory.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, cc.ChoiceLabel as speciescancovclass
   FROM (
   site_View_1 AS s
   INNER JOIN siteobs ON siteobs.siteiidref=s.siteiid
@@ -96,10 +96,10 @@ q.vegplotspecies <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydat
   INNER JOIN plant ON plant.plantiid=plotplantinventory.plantiidref
   LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 5118) AS cc ON speciescancovclass = cc.ChoiceValue)
   ORDER BY s.siteiid, plotplantinventory.orderofdominance, plotplantinventory.seqnum;"
-
-
-# veg transect data - many transects to one vegplot
-q.vegtransect<- "SELECT siteiid, p.peiid, vegplotiidref, vegtransectiid, usiteid as site_id, assocuserpedonid as pedon_id, vegplotid as vegplot_id, vegplotname, vegtransectid as vegtransect_id, obsdate, primarydatacollector, datacollectionpurpose, transectstartlatitude, transectstartlongitude, transectendlatitude, transectendlongitude, transectazimuth, transectlength, transectstartelevation, transectendelevation, dblsampquadratssampled, dblsampquadratsclipped, nestedfreqquadratssampled, freqquadratssampled, dwrquadratssampled, daubenmirequadratssampled, quadratsizedomlegacy, quadratsizeseclegacy, qsdl.ChoiceLabel as quadratshapedomlegacy, qsdl.ChoiceLabel as quadratshapeseclegacy, beltwidth, dblsampannualprod, totharvestannualprod, wtunitannualprod, dwrannualprod, comparativeyieldprod, comparativeyieldranktotal, comparativeyieldrankave, comparativerefclipwtave, abovegroundbiomasstotal, standingherbbiomass, transectbasalcovpct, basalcovpcttotal, basalgapsizemin, canopygapsizemin, gapsmeasuredbetween, canopygaplengthtotal, canopygappcttotal, basalgaplengthtotal, basalgappcttotal, ac.ChoiceLabel as understoryreprodabundance, ac.ChoiceLabel as woodyunderstoryabundance, ac.ChoiceLabel as herbundertoryabundance, ac.ChoiceLabel as lichensunderstoryabundance, cancovpcttotaltrans, cc.ChoiceLabel as cancovtotalclasstrans, am.ChoiceLabel as cancovassessmethod, vt.crowncanclosurepct, am.ChoiceLabel as crowncancloseassessmethod, vt.crowncompfactorlpp, vt.crowncomplppavedbh, overstorycancovpcttrans, cc.ChoiceLabel as overstorycancovclasstrans, am.ChoiceLabel as groundcovassessmethod, groundcovquadratssampled, groundcovpointssampled, am.ChoiceLabel as groundsurfcovassessmethod, groundsurfcovquadratsamp, groundsurfcovpointssamp, lpiobsinterval, totalpointssampledcount, topcanopyhtave, topcanopyhtstddev, totalnumplantsbelt, totalnumspeciesbelt, totalplantdensitybelt
+  
+  
+  # veg transect data - many transects to one vegplot
+  q.vegtransect<- "SELECT siteiid, p.peiid, vegplotiidref, vegtransectiid, usiteid as site_id, assocuserpedonid as pedon_id, vegplotid as vegplot_id, vegplotname, vegtransectid as vegtransect_id, obsdate, primarydatacollector, datacollectionpurpose, transectstartlatitude, transectstartlongitude, transectendlatitude, transectendlongitude, transectazimuth, transectlength, transectstartelevation, transectendelevation, dblsampquadratssampled, dblsampquadratsclipped, nestedfreqquadratssampled, freqquadratssampled, dwrquadratssampled, daubenmirequadratssampled, quadratsizedomlegacy, quadratsizeseclegacy, qsdl.ChoiceLabel as quadratshapedomlegacy, qsdl.ChoiceLabel as quadratshapeseclegacy, beltwidth, dblsampannualprod, totharvestannualprod, wtunitannualprod, dwrannualprod, comparativeyieldprod, comparativeyieldranktotal, comparativeyieldrankave, comparativerefclipwtave, abovegroundbiomasstotal, standingherbbiomass, transectbasalcovpct, basalcovpcttotal, basalgapsizemin, canopygapsizemin, gapsmeasuredbetween, canopygaplengthtotal, canopygappcttotal, basalgaplengthtotal, basalgappcttotal, ac.ChoiceLabel as understoryreprodabundance, ac.ChoiceLabel as woodyunderstoryabundance, ac.ChoiceLabel as herbundertoryabundance, ac.ChoiceLabel as lichensunderstoryabundance, cancovpcttotaltrans, cc.ChoiceLabel as cancovtotalclasstrans, am.ChoiceLabel as cancovassessmethod, vt.crowncanclosurepct, am.ChoiceLabel as crowncancloseassessmethod, vt.crowncompfactorlpp, vt.crowncomplppavedbh, overstorycancovpcttrans, cc.ChoiceLabel as overstorycancovclasstrans, am.ChoiceLabel as groundcovassessmethod, groundcovquadratssampled, groundcovpointssampled, am.ChoiceLabel as groundsurfcovassessmethod, groundsurfcovquadratsamp, groundsurfcovpointssamp, lpiobsinterval, totalpointssampledcount, topcanopyhtave, topcanopyhtstddev, totalnumplantsbelt, totalnumspeciesbelt, totalplantdensitybelt
   FROM ((((
   site_View_1 AS s
   INNER JOIN siteobs ON siteobs.siteiidref=s.siteiid
@@ -111,9 +111,9 @@ q.vegtransect<- "SELECT siteiid, p.peiid, vegplotiidref, vegtransectiid, usiteid
   LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 5116) AS am ON vt.crowncancloseassessmethod = am.ChoiceValue)
   LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 5118) AS cc ON vt.overstorycancovclasstrans = cc.ChoiceValue)
   ORDER BY s.siteiid;"
-
-# veg transect species data - many species to one veg transect
-q.vtps<- "SELECT siteiid, vegtransectiidref as vegtransect_id, vegplotid, vegplotname, obsdate, vegtransplantsummiid as vtpsiid, vtps.seqnum, plantsym, plantsciname, plantnatvernm, pn.ChoiceLabel as plantnativity, ptg.ChoiceLabel as planttypegroup, plantheightcllowerlimit, plantheightclupperlimit, sc.ChoiceLabel as sociabilityclass, specieslivecanhtbotave, specieslivecanhttopave, overstorydbhmin, overstorydbhmax, speciesovercancovpct, cc.ChoiceLabel as speciesovercancovclass, plantprodquadratsize, qs.ChoiceLabel as plantprodquadratshape, nestedfreqquadratsize, qs.ChoiceLabel as nestedfreqquadratshape, frequencyquadratsize, qs.ChoiceLabel as frequencyquadratshape, dwrquadratsize, qs.ChoiceLabel as dwrquadratshape, densityquadratsize, qs.ChoiceLabel as densityquadratshape, speciestotwtclippedest, speciestotwtclippedfresh, speciestotwtclippedairdry, speciestotwtairdry, speciestotwtest, speciestotwtexisting, speciesdrywtpct, speciestotwt, speciesaveyielddblsamp, speciescomppctdblsamp, speciescomppctdaubenmire, speciescomppctlineintercept, speciestraceamtflag, weightconvfactor, dblsampcorrectionfactor, airdrywtadjustment, utilizationadjustment, growthadjustment, weatheradjustment, numberofquadratsin, speciesfreqdaubenmire, dwronetally, dwrtwotally, dwrthreetally, dwrweightedtally, speciescomppctdwr, speciesaveyielddwr, wtunitweight, wtunitcounttotal, speciesaveyieldwtunit, wtunitwtclippedtotal, speciescancovhitcount, speciescancovpct, speciescancovpctavedaub, cc.ChoiceLabel as speciescancovaveclass, speciesfoliarcovhitcount, speciesfoliarcovpctlineint, speciestotfoliarcovlineint, speciesbasalcovhitcount, speciesbasalcovpctlineint, speciestotbasalcovlineint, maturecounttotal, maturedensityave, mdc.ChoiceLabel as maturedensityaveclass, seedlingcounttotal, seedlingdensityave, sdc.ChoiceLabel as seedlingdensityaveclass, speciesgroundcovabundclass, speciescancovportion, speciesbasalarea, am.ChoiceLabel as basalareaassessmethod
+  
+  # veg transect species data - many species to one veg transect
+  q.vtps<- "SELECT siteiid, vegtransectiidref as vegtransect_id, vegplotid, vegplotname, obsdate, vegtransplantsummiid as vtpsiid, vtps.seqnum, plantsym, plantsciname, plantnatvernm, pn.ChoiceLabel as plantnativity, ptg.ChoiceLabel as planttypegroup, plantheightcllowerlimit, plantheightclupperlimit, sc.ChoiceLabel as sociabilityclass, specieslivecanhtbotave, specieslivecanhttopave, overstorydbhmin, overstorydbhmax, speciesovercancovpct, cc.ChoiceLabel as speciesovercancovclass, plantprodquadratsize, qs.ChoiceLabel as plantprodquadratshape, nestedfreqquadratsize, qs.ChoiceLabel as nestedfreqquadratshape, frequencyquadratsize, qs.ChoiceLabel as frequencyquadratshape, dwrquadratsize, qs.ChoiceLabel as dwrquadratshape, densityquadratsize, qs.ChoiceLabel as densityquadratshape, speciestotwtclippedest, speciestotwtclippedfresh, speciestotwtclippedairdry, speciestotwtairdry, speciestotwtest, speciestotwtexisting, speciesdrywtpct, speciestotwt, speciesaveyielddblsamp, speciescomppctdblsamp, speciescomppctdaubenmire, speciescomppctlineintercept, speciestraceamtflag, weightconvfactor, dblsampcorrectionfactor, airdrywtadjustment, utilizationadjustment, growthadjustment, weatheradjustment, numberofquadratsin, speciesfreqdaubenmire, dwronetally, dwrtwotally, dwrthreetally, dwrweightedtally, speciescomppctdwr, speciesaveyielddwr, wtunitweight, wtunitcounttotal, speciesaveyieldwtunit, wtunitwtclippedtotal, speciescancovhitcount, speciescancovpct, speciescancovpctavedaub, cc.ChoiceLabel as speciescancovaveclass, speciesfoliarcovhitcount, speciesfoliarcovpctlineint, speciestotfoliarcovlineint, speciesbasalcovhitcount, speciesbasalcovpctlineint, speciestotbasalcovlineint, maturecounttotal, maturedensityave, mdc.ChoiceLabel as maturedensityaveclass, seedlingcounttotal, seedlingdensityave, sdc.ChoiceLabel as seedlingdensityaveclass, speciesgroundcovabundclass, speciescancovportion, speciesbasalarea, am.ChoiceLabel as basalareaassessmethod
   FROM ((((((((
   site_View_1 AS s
   INNER JOIN siteobs ON siteobs.siteiidref=s.siteiid
@@ -130,25 +130,25 @@ q.vtps<- "SELECT siteiid, vegtransectiidref as vegtransect_id, vegplotid, vegplo
   LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 5113) AS sdc ON seedlingdensityaveclass = sdc.ChoiceValue)
   LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 5116) AS am ON vtps.basalareaassessmethod = am.ChoiceValue)
   ORDER BY s.siteiid;"
-
-
-# setup connection local NASIS
-channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
-
-# exec queries
-d.vegplot <- RODBC::sqlQuery(channel, q.vegplot, stringsAsFactors=FALSE)
-d.vegplotrhi <- RODBC::sqlQuery(channel, q.vegplotrhi, stringsAsFactors=FALSE)
-d.vegplotspecies <- RODBC::sqlQuery(channel, q.vegplotspecies, stringsAsFactors=FALSE)
-d.vegtransect <- RODBC::sqlQuery(channel, q.vegtransect, stringsAsFactors=FALSE)
-d.vegtransplantsum <- RODBC::sqlQuery(channel, q.vtps, stringsAsFactors=FALSE)
-
-# close connection
-RODBC::odbcClose(channel)
-
-# return a list of results
-return(list(vegplot=d.vegplot, 
-	    vegplotrhi=d.vegplotrhi,	
-	    vegplotspecies=d.vegplotspecies,	
-            vegtransect=d.vegtransect,
-      vegtransplantsum=d.vegtransplantsum))
+  
+  
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  
+  # exec queries
+  d.vegplot <- RODBC::sqlQuery(channel, q.vegplot, stringsAsFactors=FALSE)
+  d.vegplotrhi <- RODBC::sqlQuery(channel, q.vegplotrhi, stringsAsFactors=FALSE)
+  d.vegplotspecies <- RODBC::sqlQuery(channel, q.vegplotspecies, stringsAsFactors=FALSE)
+  d.vegtransect <- RODBC::sqlQuery(channel, q.vegtransect, stringsAsFactors=FALSE)
+  d.vegtransplantsum <- RODBC::sqlQuery(channel, q.vtps, stringsAsFactors=FALSE)
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # return a list of results
+  return(list(vegplot=d.vegplot, 
+              vegplotrhi=d.vegplotrhi,	
+              vegplotspecies=d.vegplotspecies,	
+              vegtransect=d.vegtransect,
+              vegtransplantsum=d.vegtransplantsum))
 }
