@@ -120,6 +120,35 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
 
 
 
+# get ESD information for each component
+get_component_esd_data_from_NASIS_db <- function() {
+  # must have RODBC installed
+  if(!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
+  q <- "SELECT coiidref as coiid, ecositeid, ecositenm, ecositeorigin, ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
+  FROM coecosite
+  INNER JOIN ecologicalsite ON ecositeiidref = ecositeiid
+  ORDER BY coiid ;"
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  
+  # exec query
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  
+  # check for more than 1 record / coiid
+  idx <- which(table(d$coiid) > 1)
+  if(length(idx) > 0)
+    message('-> QC: multiple ecosites / component')
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # done
+  return(d)
+}
+
+
 # get linked pedons by peiid and user pedon ID
 # note that there may be >=1 pedons / coiid
 get_copedon_from_NASIS_db <- function() {
@@ -193,7 +222,7 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE) {
     f.chorizon <- f.chorizon[which(f.chorizon$coiid %in% good.ids), ]
     
     # keep track of those components with horizonation errors
-    if(length(bad.co.ids) > 0)
+    if(length(bad.ids) > 0)
       assign('bad.co.ids', value=bad.ids, envir=soilDB.env)
   }
   
@@ -204,19 +233,19 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE) {
   ## TODO: this will fail in the presence of duplicates
   ## TODO: make this error more informative
   # add site data to object
-  res <- try(site(f.chorizon) <- f.comp) # left-join via coiid
+  site(f.chorizon) <- f.comp # left-join via coiid
   
-  # 7. save and mention bad pedons
-  if(length(bad.ids) > 0) {
-    bad.idx <- which(f.comp$coiid %in% bad.ids)
-    bad.labels <- paste(f.comp[bad.idx, ]$dmudesc, f.comp[bad.idx, ]$compname, sep='-')
-    assign('bad.components', value=cbind(coiid=bad.ids, component=bad.labels), envir=soilDB.env)
-  }
+#   # 7. save and mention bad pedons
+#   if(length(bad.ids) > 0) {
+#     bad.idx <- which(f.comp$coiid %in% bad.ids)
+#     bad.labels <- paste(f.comp[bad.idx, ]$dmudesc, f.comp[bad.idx, ]$compname, sep='-')
+#     assign('bad.components', value=cbind(coiid=bad.ids, component=bad.labels), envir=soilDB.env)
+#   }
   
-  # print any messages on possible data quality problems:
-  if(exists('bad.components', envir=soilDB.env))
-    message("-> QC: horizon errors detected, use `get('bad.components', envir=soilDB.env)` for related coiid values")
-  
+#   # print any messages on possible data quality problems:
+#   if(exists('bad.components', envir=soilDB.env))
+#     message("-> QC: horizon errors detected, use `get('bad.components', envir=soilDB.env)` for related coiid values")
+#   
   # done, return SPC
   return(f.chorizon)
   
