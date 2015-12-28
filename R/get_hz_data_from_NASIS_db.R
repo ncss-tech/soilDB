@@ -8,30 +8,30 @@ get_hz_data_from_NASIS_db <- function() {
   q <- "SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
   claytotest as clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END as silt, sandtotest as sand, t.texture_class, texture, phfield, eff.ChoiceName AS effervescence, l.labsampnum, fragvoltot as total_frags_pct_cal, f.total_frags_pct AS total_frags_pct, rrd.ChoiceName as rupresblkdry, stick.ChoiceName as stickiness, plast.ChoiceName as plasticity
-  FROM (((((((
+  FROM
   pedon_View_1 
-  INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref) 
+  INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref
   
 	LEFT OUTER JOIN (
 		SELECT phiidref, SUM(fragvol) as total_frags_pct 
     FROM phfrags_View_1
     GROUP BY phiidref
-	) as f ON phorizon_View_1.phiid = f.phiidref)
+	) as f ON phorizon_View_1.phiid = f.phiidref
 	
 	LEFT OUTER JOIN (
 		SELECT phiidref, min(CASE WHEN tx.ChoiceName IS NULL THEN til.ChoiceName ELSE tx.ChoiceName END) as texture_class
-		FROM ((
+		FROM
 		phtexture_View_1
-		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 189) AS tx ON phtexture_View_1.texcl = tx.ChoiceValue)
-  	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 192) AS til ON phtexture_View_1.lieutex = til.ChoiceValue)
+		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 189) AS tx ON phtexture_View_1.texcl = tx.ChoiceValue
+  	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 192) AS til ON phtexture_View_1.lieutex = til.ChoiceValue
 		GROUP BY phiidref
-	) as t ON phorizon_View_1.phiid = t.phiidref)
+	) as t ON phorizon_View_1.phiid = t.phiidref
   
-	LEFT OUTER JOIN (SELECT phiidref, labsampnum FROM phsample_View_1) as l ON phorizon_View_1.phiid = l.phiidref)
+	LEFT OUTER JOIN (SELECT phiidref, labsampnum FROM phsample_View_1) as l ON phorizon_View_1.phiid = l.phiidref
   
-  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE MetadataDomainDetail.DomainID = 1291) AS rrd ON phorizon_View_1.rupresblkdry = rrd.ChoiceValue)
-  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1299) AS stick ON phorizon_View_1.stickiness = stick.ChoiceValue)
-  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1280) AS plast ON phorizon_View_1.plasticity = plast.ChoiceValue)
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE MetadataDomainDetail.DomainID = 1291) AS rrd ON phorizon_View_1.rupresblkdry = rrd.ChoiceValue
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1299) AS stick ON phorizon_View_1.stickiness = stick.ChoiceValue
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1280) AS plast ON phorizon_View_1.plasticity = plast.ChoiceValue
     
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1255) AS eff ON phorizon_View_1.effclass = eff.ChoiceValue
   ORDER BY pedon_View_1.upedonid, phorizon_View_1.hzdept ASC;"

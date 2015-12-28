@@ -1,3 +1,7 @@
+-------------------------- soilDB 1.6.9 (2015-12-28) ----------------------------
+* clean-up in local NASIS queries, removed extra parens
+* NASIS component query function overhaul: previous code may be broken, details pending
+
 -------------------------- soilDB 1.6.8 (2015-12-22) ----------------------------
 * added temperature class (temp_class) field from the pedon taxonomic history table (NASIS) [addition suggested by J. Baker]
 

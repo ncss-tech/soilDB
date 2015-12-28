@@ -11,9 +11,9 @@ get_colors_from_NASIS_db <- function() {
   
 	# unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
 	q <- "SELECT peiid, phiid, colormoistst, colorpct as pct, mh.ChoiceName AS colorhue, colorvalue, colorchroma
-FROM ((
-pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref)
-	INNER JOIN phcolor_View_1 ON phorizon_View_1.phiid = phcolor_View_1.phiidref)
+FROM
+pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref
+	INNER JOIN phcolor_View_1 ON phorizon_View_1.phiid = phcolor_View_1.phiidref
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1242) AS mh ON phcolor_View_1.colorhue = mh.ChoiceValue
 	ORDER BY phiid, phcolor_View_1.colormoistst;"
   
