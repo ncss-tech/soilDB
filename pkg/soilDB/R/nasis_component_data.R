@@ -119,7 +119,7 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
 
 
 
-
+## TODO: there are still columns that need decoding
 # get ESD information for each component
 get_component_esd_data_from_NASIS_db <- function() {
   # must have RODBC installed
