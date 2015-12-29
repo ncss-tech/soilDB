@@ -50,8 +50,11 @@ get_component_data_from_NASIS_db <- function() {
   
   # test for duplicate coiids
   idx <- which(table(d$coiid) > 1)
-  if(length(idx) > 0)
-    message('-> QC: duplicate coiids, this should not happen')
+  if(length(idx) > 0) {
+    dupes <- names(idx)
+    assign('dupe.coiids', value=dupes, envir=soilDB.env)
+    message("-> QC: duplicate coiids, this should not happen. Use `get('dupe.coiids', envir=soilDB.env)` for related coiid values.")
+  }
   
   # test for no data
   if(nrow(d) == 0)
@@ -105,13 +108,21 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
   
   # check for non-unique MUs
   idx <- which(table(d$muiid) > 1)
-  if(length(idx) > 0)
-    message('-> QC: duplicate muiids, this should not happen')
+  if(length(idx) > 0) {
+    dupes <- names(idx)
+    assign('dupe.muiids', value=dupes, envir=soilDB.env)
+    message("-> QC: duplicate muiids: multiple 'representative' DMU / MU?. Use `get('dupe.muiids', envir=soilDB.env)` for related muiid values.")
+  }
+    
   
   # check for multiple DMUs:
   idx <- which(table(d$dmuiid) > 1)
-  if(length(idx) > 0)
-    message('-> QC: multiple DMUs / MU')
+  if(length(idx) > 0) {
+    dupes <- names(idx)
+    assign('multiple.mu.per.dmu', value=dupes, envir=soilDB.env)
+    message("-> QC: DMUs assigned to multiple MU. Use `get('multiple.mu.per.dmu', envir=soilDB.env)` for related dmuiid values.")
+  }
+    
   
   # done
   return(d)
@@ -126,9 +137,15 @@ get_component_esd_data_from_NASIS_db <- function() {
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
-  q <- "SELECT coiidref as coiid, ecositeid, ecositenm, ecositeorigin, ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
-  FROM coecosite
-  INNER JOIN ecologicalsite ON ecositeiidref = ecositeiid
+  q <- "SELECT coiidref as coiid, ecositeid, ecositenm, 
+  eo.ChoiceName AS ecositeorigin, et.ChoiceName AS ecositetype, em.ChoiceName AS ecositemlra, el.ChoiceName AS ecositelru, ecositenumber, es.ChoiceName AS ecositestate
+  FROM coecosite_View_1
+  INNER JOIN ecologicalsite_View_1 ON ecositeiidref = ecositeiid
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 4913) AS eo ON ecositeorigin = eo.ChoiceValue
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1253) AS et ON ecositetype = et.ChoiceValue
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1252) AS em ON ecositemlra = em.ChoiceValue
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1310) AS el ON ecositelru = el.ChoiceValue
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1298) AS es ON ecositestate = es.ChoiceValue
   ORDER BY coiid ;"
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
@@ -138,8 +155,12 @@ get_component_esd_data_from_NASIS_db <- function() {
   
   # check for more than 1 record / coiid
   idx <- which(table(d$coiid) > 1)
-  if(length(idx) > 0)
-    message('-> QC: multiple ecosites / component')
+  if(length(idx) > 0) {
+    dupes <- names(idx)
+    assign('multiple.ecosite.per.coiid', value=dupes, envir=soilDB.env)
+    message("-> QC: multiple ecosites / component. Use `get('multiple.ecosite.per.coiid', envir=soilDB.env)` for related coiid values.")
+  }
+    
   
   # close connection
   RODBC::odbcClose(channel)
@@ -157,8 +178,8 @@ get_copedon_from_NASIS_db <- function() {
     stop('please install the `RODBC` package', call.=FALSE)
   
   q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative 
-  FROM copedon
-  JOIN pedon ON peiidref = peiid
+  FROM copedon_View_1
+  JOIN pedon_View_1 ON peiidref = peiid
   WHERE rvindicator = 1;
   "
   # setup connection local NASIS
@@ -223,7 +244,7 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE) {
     
     # keep track of those components with horizonation errors
     if(length(bad.ids) > 0)
-      assign('bad.co.ids', value=bad.ids, envir=soilDB.env)
+      assign('component.hz.problems', value=bad.ids, envir=soilDB.env)
   }
   
   
@@ -235,17 +256,11 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE) {
   # add site data to object
   site(f.chorizon) <- f.comp # left-join via coiid
   
-#   # 7. save and mention bad pedons
-#   if(length(bad.ids) > 0) {
-#     bad.idx <- which(f.comp$coiid %in% bad.ids)
-#     bad.labels <- paste(f.comp[bad.idx, ]$dmudesc, f.comp[bad.idx, ]$compname, sep='-')
-#     assign('bad.components', value=cbind(coiid=bad.ids, component=bad.labels), envir=soilDB.env)
-#   }
   
-#   # print any messages on possible data quality problems:
-#   if(exists('bad.components', envir=soilDB.env))
-#     message("-> QC: horizon errors detected, use `get('bad.components', envir=soilDB.env)` for related coiid values")
-#   
+  # print any messages on possible data quality problems:
+  if(exists('component.hz.problems', envir=soilDB.env))
+    message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=soilDB.env)` for related coiid values")
+  
   # done, return SPC
   return(f.chorizon)
   
