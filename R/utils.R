@@ -229,11 +229,9 @@
   }
   
   metadata <- get_metadata()
-  metadata_idx <- which(sapply(metadata$ColumnPhysicalName, function(x) any(x %in% names(df))))
-  metadata_names <- unique(names(metadata_idx))
-  
+
   for (i in seq_along(df)){
-    if (any(names(df[i]) %in% metadata_names)) {
+    if (any(names(df[i]) %in% unique(metadata$ColumnPhysicalName))) {
       sub <- metadata[metadata$ColumnPhysicalName %in% names(df[i]), ]
       df[i] <- factor(df[i], levels = sub$ChoiceValue, labels = sub$ChoiceLabel)
     } else df[i] = df[i]
