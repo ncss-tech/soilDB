@@ -201,3 +201,43 @@
 }
 
 
+.metadata_replace <- function(df){
+  get_metadata <- function() {
+    # must have RODBC installed
+    if(!requireNamespace('RODBC'))
+      stop('please install the `RODBC` package', call.=FALSE)
+    
+    q <- "SELECT mdd.DomainID, DomainName, ChoiceValue, ChoiceLabel, ChoiceDescription, ColumnPhysicalName, ColumnLogicalName
+    
+    FROM MetadataDomainDetail mdd
+    INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
+    INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName FROM MetadataTableColumn GROUP BY DomainID) mtc ON mtc.DomainID = mdd.DomainID
+    
+    ORDER BY DomainID, ChoiceValue"
+    
+    # setup connection local NASIS
+    channel <- RODBC::odbcDriverConnect(connection = "DSN=nasis_local; UID=NasisSqlRO; PWD=nasisRe@d0n1y")
+    
+    # exec query
+    d <- RODBC::sqlQuery(channel, q, stringsAsFactors = FALSE)
+    
+    # close connection
+    RODBC::odbcClose(channel)
+    
+    # done
+    return(d)
+  }
+  
+  metadata <- get_metadata()
+  metadata_idx <- which(sapply(metadata$ColumnPhysicalName, function(x) any(x %in% names(df))))
+  metadata_names <- unique(names(metadata_idx))
+  
+  for (i in seq_along(df)){
+    if (any(names(df[i]) %in% metadata_names)) {
+      sub <- metadata[metadata$ColumnPhysicalName %in% names(df[i]), ]
+      df[i] <- factor(df[i], levels = sub$ChoiceValue, labels = sub$ChoiceLabel)
+    } else df[i] = df[i]
+  }
+  
+  return(df)
+}
