@@ -65,7 +65,8 @@ get_component_data_from_NASIS_db <- function() {
 }
 
 
-# return all rows from correlation -- map unit -- legend map unit -- dmu
+# return all rows from correlation -- map unit -- legend map unit -- dmu / legend -- area
+# note that all of these "target tables" have to be selected
 get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dropNotRepresentative=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
