@@ -72,7 +72,7 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
-  q <- "SELECT areasymbol, muiid, musym, nationalmusym, mapunit_View_1.muname, mk.ChoiceName as mukind, ms.ChoiceName as mustatus, muacres, fc.ChoiceLabel as farmlndcl, repdmu, dmuiid
+  q <- "SELECT muiid, musym, nationalmusym, mapunit_View_1.muname, mk.ChoiceName as mukind, ms.ChoiceName as mustatus, muacres, fc.ChoiceLabel as farmlndcl, repdmu, dmuiid, areasymbol, areaname, ss.ChoiceLabel as survey_status, cordate
   FROM
   mapunit_View_1
   LEFT OUTER JOIN lmapunit_View_1 ON lmapunit_View_1.muiidref = mapunit_View_1.muiid
@@ -83,6 +83,7 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
   LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 118) AS mk ON mukind = mk.ChoiceValue
   LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 138) AS ms ON mustatus = ms.ChoiceValue
   LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 151) AS fc ON farmlndcl = fc.ChoiceValue
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 125) AS ss ON ssastatus = ss.ChoiceValue
   ORDER BY dmuiid;"
   
   # setup connection local NASIS
