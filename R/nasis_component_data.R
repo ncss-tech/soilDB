@@ -101,7 +101,7 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
   
   # optionally drop additional | NA mustatus
   if(dropAdditional) {
-    idx <- which(! (d$mustatus == 'additional' &  is.na(d$mustatus)))
+    idx <- which(! d$mustatus == 'additional')
     d <- d[idx, ]
   }
   
@@ -183,8 +183,7 @@ get_copedon_from_NASIS_db <- function() {
   
   q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative 
   FROM copedon_View_1
-  JOIN pedon_View_1 ON peiidref = peiid
-  WHERE rvindicator = 1;
+  LEFT OUTER JOIN pedon_View_1 ON copedon_View_1.peiidref = pedon_View_1.peiid;
   "
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
