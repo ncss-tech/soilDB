@@ -1,3 +1,5 @@
+## TODO: merge with other vegplot functions
+
 get_vegplot_from_NASIS_db <- function() {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
