@@ -108,6 +108,8 @@ format_SQL_in_statement <- function(x) {
 	return(i)
 }
 
+## TODO: parse multiple record sets, return as list... currently results are combined into a single DF
+##         SDA_query("select top 3 areasymbol from mupoint; select top 2 lkey from mapunit")
 ## TODO: doesn't close all connections
 ## TODO: requires more testing and error-trapping
 SDA_query <- function(q) {
