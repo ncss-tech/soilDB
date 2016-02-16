@@ -133,12 +133,23 @@ SDA_query <- function(q) {
   r <- httr::POST(url="http://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest", body=httr::upload_file(tf.1))
   httr::stop_for_status(r)
   
+  ## httr 1.1.0: content now returns an xml_document
+  # bug fix suggested by Kyle Bocinsky, thanks!
   # extract content as XML
-  r.content <- httr::content(r)
+  r.content <- httr::content(r, as = 'text', encoding = 'UTF-8')
   d <- xmlToDataFrame(r.content, stringsAsFactors = FALSE)
   
-  # first line is garbage
-  d <- d[-1, ]
+  # how many lines of output
+  lines.of.data <- nrow(d)
+  
+  # the first line is garbage, unless there is an error
+  if(lines.of.data > 1)
+    d <- d[-1, ]
+  
+  # error condition
+  if(lines.of.data == 1) {
+    stop(paste0('SDA returned an error: ', unlist(d)), call. = FALSE)
+  }
   
   # check for no returned data, 'd' will be a character object with 0 elements
   if(class(d) == 'character') {
