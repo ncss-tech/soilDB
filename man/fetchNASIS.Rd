@@ -7,13 +7,16 @@
 \alias{get_component_horizon_data_from_NASIS_db}
 \alias{getHzErrorsNASIS}
 \alias{get_vegplot_from_NASIS_db}
+\alias{get_component_correlation_data_from_NASIS_db}
+\alias{get_component_esd_data_from_NASIS_db}
+\alias{get_vegplot_from_NASIS_db2}
 
 \title{Fetch commonly used site/pedon/horizon data from a PedonPC database.}
 \description{Fetch commonly used site/pedon/horizon data from a PedonPC or local NASIS database, return as a SoilProfileCollection object.}
 
 \usage{
 fetchNASIS(rmHzErrors = TRUE, nullFragsAreZero=TRUE)
-fetchNASIS_component_data()
+fetchNASIS_component_data(rmHzErrors=TRUE)
 getHzErrorsNASIS(strict=TRUE)
 }
 
