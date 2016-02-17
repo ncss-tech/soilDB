@@ -58,14 +58,18 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
     # which are the good (valid) ones?
     good.ids <- as.character(h.test$peiid[which(h.test$hz_logic_pass)])
     bad.ids <- as.character(h.test$peiid[which(!h.test$hz_logic_pass)])
+    bad.horizons<- h[which(!h.test$hz_logic_pass), c(1:4,6,7)]
     bad.pedon.ids <- site_data$pedon_id[which(site_data$peiid %in% bad.ids)]
     
     # keep the good ones
     h <- h[which(h$peiid %in% good.ids), ]
     
     # keep track of those pedons with horizonation errors
-    if(length(bad.pedon.ids) > 0)
+    if(length(bad.pedon.ids) > 0) {
       assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
+      assign("bad.horizons", value = data.frame(bad.horizons), envir = soilDB.env)
+    }
+      
   }
 	
 	
@@ -127,7 +131,7 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
 	  message("-> QC: duplicate pedons: use `get('dup.pedon.ids', envir=soilDB.env)` for related peiid values")
   
   if(exists('bad.pedon.ids', envir=soilDB.env))
-	  message("-> QC: horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for related userpedonid values")
+	  message("-> QC: horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for related userpedonid values or `get('bad.horizons', envir=soilDB.env)` for related horizon designations")
   
 	# done
 	return(h)
