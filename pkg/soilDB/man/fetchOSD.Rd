@@ -11,7 +11,7 @@ fetchOSD(soils)
   \item{soils}{a character vector of named soil series}
 }
 \details{the search is case-insensitive}
-\value{a \code{SoilProfileCollection} object}
+\value{a \code{SoilProfileCollection} object containing basic soil morphology and taxonomic information.}
 \references{
 \url{http://www.nrcs.usda.gov/wps/portal/nrcs/site/soils/home/}
 }
@@ -29,6 +29,7 @@ s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz',
 s <- fetchOSD(s.list)
 
 # plot profiles
+# moist soil colors
 par(mar=c(0,0,0,0))
 plot(s, name='hzname', cex.names=0.85, axis.line.offset=-4)
 }
