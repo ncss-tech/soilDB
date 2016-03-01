@@ -1,12 +1,16 @@
 # updated to NASIS 6.2
 
 # convenience function for loading most commonly used information from local NASIS database
-fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
+fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='moist') {
 	
 	# test connection
 	if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
 			stop('Local NASIS ODBC connection has not been setup. Please see `https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/setup_local_nasis.html?root=aqp`.')
 	
+  # sanity check
+  if(! soilColorState %in% c('dry', 'moist'))
+    stop('soilColorState must be either `dry` or `moist`', call. = FALSE)
+  
 	# 1. load data in pieces
 	suppressMessages(site_data <- get_site_data_from_NASIS_db())
 	hz_data <- get_hz_data_from_NASIS_db()
@@ -35,10 +39,20 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE) {
   }
 	
 	
-	# convert colors... in the presence of missing color data
-	h$soil_color <- NA
-	idx <- complete.cases(h$m_r)
-	h$soil_color[idx] <- with(h[idx, ], rgb(m_r, m_g, m_b)) # moist colors
+	## combine R,G,B into R color for plotting
+	# moist colors
+	if(soilColorState == 'moist') {
+	  h$soil_color <- NA
+	  idx <- complete.cases(h$m_r)
+	  h$soil_color[idx] <- with(h[idx, ], rgb(m_r, m_g, m_b)) 
+	}
+	
+	# dry colors
+	if(soilColorState == 'dry') {
+	  h$soil_color <- NA
+	  idx <- complete.cases(h$d_r)
+	  h$soil_color[idx] <- with(h[idx, ], rgb(d_r, d_g, d_b))
+	}
 	
 	# join hz + fragment summary
   hfs <- extended_data$frag_summary
