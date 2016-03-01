@@ -15,7 +15,7 @@
 \description{Fetch commonly used site/pedon/horizon data from a PedonPC or local NASIS database, return as a SoilProfileCollection object.}
 
 \usage{
-fetchNASIS(rmHzErrors = TRUE, nullFragsAreZero=TRUE)
+fetchNASIS(rmHzErrors = TRUE, nullFragsAreZero=TRUE, soilColorState='moist')
 fetchNASIS_component_data(rmHzErrors=TRUE)
 getHzErrorsNASIS(strict=TRUE)
 }
@@ -23,6 +23,7 @@ getHzErrorsNASIS(strict=TRUE)
 \arguments{
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: TRUE)}
   \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details}
+  \item{soilColorState}{which colors should be used to generate the convenience field 'soil_color'? ('moist' | 'dry')}
   \item{strict}{should horizonation by strictly enforced? (TRUE)}
 }
 
