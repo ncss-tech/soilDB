@@ -337,6 +337,10 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day
   res <- list(sensors=s, soiltemp=soiltemp)
   res.size <- round(object.size(res) / 1024 / 1024, 2)
   
+  ## note: this is kind of wasteful, but helps with plotting
+  # copy over sensor name to soiltemp table
+  res$soiltemp$name <- res$sensors$name[match(res$soiltemp$sid, res$sensors$sid)]
+  
   # some feedback via message:
   message(paste(length(unique(s$user_site_id)), ' sites loaded (', res.size, ' Mb transferred)', sep=''))
   
