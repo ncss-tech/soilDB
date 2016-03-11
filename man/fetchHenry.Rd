@@ -3,7 +3,8 @@
 \title{Download Data from the Henry Mount Soil Climate Database (experimental)}
 \description{This function is a front-end to the REST query functionality of the Henry Mount Soil Climate Database.}
 \usage{
-fetchHenry(usersiteid = NULL, project = NULL, type = "soiltemp", gran = "day", 
+fetchHenry(usersiteid = NULL, project = NULL, sso = NULL,
+type = "soiltemp", gran = "day", 
 start.date = NULL, stop.date = NULL, 
 pad.missing.days = TRUE, soiltemp.summaries = TRUE)
 }
@@ -11,6 +12,7 @@ pad.missing.days = TRUE, soiltemp.summaries = TRUE)
 \arguments{
   \item{usersiteid}{(optional) filter results using a NASIS user site ID}
   \item{project}{(optional) filter results using a project ID}
+  \item{sso}{(optional) filter results using a soil survey office code}
   \item{type}{sensor type, currently only "soiltemp" is supported}
   \item{gran}{data granularity: "day", "week", "month", "year"; returned data are averages}
   \item{start.date}{(optional) starting date filter}

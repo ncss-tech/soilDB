@@ -208,13 +208,13 @@
 
 
 # this loads and packages the data into a list of objects
-fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE, soiltemp.summaries=TRUE) {
+fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, type='soiltemp', gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE, soiltemp.summaries=TRUE) {
   
   # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)
   
   # sanity-check: user must supply some kind of criteria
-  if(missing(usersiteid) & missing(project) & missing(type))
+  if(missing(usersiteid) & missing(project) & missing(type) & missing(sso))
     stop('you must provide some filtering criteria', call.=FALSE)
   
   # init empty filter
@@ -232,6 +232,11 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, type='soiltemp', gran='day
   if(!is.null(project)) {
     project <- paste(project, collapse=',')
     f <- c(f, paste('&project=', project, sep=''))
+  }
+  
+  if(!is.null(sso)) {
+    sso <- paste(sso, collapse=',')
+    f <- c(f, paste('&sso=', sso, sep=''))
   }
   
   if(!is.null(type)) {
