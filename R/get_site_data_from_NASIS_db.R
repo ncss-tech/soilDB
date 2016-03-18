@@ -21,7 +21,7 @@ get_site_data_from_NASIS_db <- function() {
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
-	q <- "SELECT siteiid as siteiid, peiid, usiteid as site_id, upedonid as pedon_id, obsdate as obs_date, utmzone, utmeasting, utmnorthing, -(longdegrees + CASE WHEN longminutes IS NULL THEN 0.0 ELSE longminutes / 60.0 END + CASE WHEN longseconds IS NULL THEN 0.0 ELSE longseconds / 60.0 / 60.0 END) as x, latdegrees + CASE WHEN latminutes IS NULL THEN 0.0 ELSE latminutes / 60.0 END + CASE WHEN latseconds IS NULL THEN 0.0 ELSE latseconds / 60.0 / 60.0 END as y, dm.ChoiceName as datum, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, gpspositionalerror, descname as describer, pp.ChoiceName as pedon_purpose, pt.ChoiceName as pedon_type, pedlabsampnum, labdatadescflag, elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, se.ChoiceLabel as coverkind_1, bedrckdepth, br.ChoiceLabel as bedrock_kind, bh.ChoiceLabel as bedrock_hardness, hs.ChoiceLabel as hillslope_pos, sp.ChoiceLabel as slope_position, sa.ChoiceLabel as shapeacross, sd.ChoiceLabel as shapedown, sc.ChoiceLabel as slopecomplex, dc.ChoiceLabel as drainagecl
+	q <- "SELECT siteiid as siteiid, peiid, usiteid as site_id, upedonid as pedon_id, obsdate as obs_date, utmzone, utmeasting, utmnorthing, -(longdegrees + CASE WHEN longminutes IS NULL THEN 0.0 ELSE longminutes / 60.0 END + CASE WHEN longseconds IS NULL THEN 0.0 ELSE longseconds / 60.0 / 60.0 END) as x, latdegrees + CASE WHEN latminutes IS NULL THEN 0.0 ELSE latminutes / 60.0 END + CASE WHEN latseconds IS NULL THEN 0.0 ELSE latseconds / 60.0 / 60.0 END as y, dm.ChoiceName as datum, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, gpspositionalerror, descname as describer, pp.ChoiceName as pedon_purpose, pt.ChoiceName as pedon_type, pedlabsampnum, labdatadescflag, elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, se.ChoiceLabel as coverkind_1, bedrckdepth, br.ChoiceLabel as bedrock_kind, bh.ChoiceLabel as bedrock_hardness, hs.ChoiceLabel as hillslope_pos, sp.ChoiceLabel as slope_position, sa.ChoiceLabel as shapeacross, sd.ChoiceLabel as shapedown, sc.ChoiceLabel as slopecomplex, dc.ChoiceLabel as drainagecl, ghill.ChoiceLabel as geompos_hill, gmtn.ChoiceLabel as geompos_mntn, gflat.ChoiceLabel as geompos_flats
 
 FROM
 	
@@ -56,6 +56,12 @@ FROM
 	
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 971) AS hs ON site_View_1.hillslopeprof = hs.ChoiceValue
 
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 968) AS ghill ON site_View_1.geomposhill = ghill.ChoiceValue
+
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 969) AS gmtn ON site_View_1.geomposmntn = gmtn.ChoiceValue
+
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1092) AS gflat ON site_View_1.geomposflats = gflat.ChoiceValue
+
   WHERE sb.rn IS NULL OR sb.rn = 1
 
 	ORDER BY pedon_View_1.peiid ;"
@@ -69,9 +75,13 @@ FROM
 	# close connection
 	RODBC::odbcClose(channel)
 	
+	# test for an error
+	if(class(d) == 'character')
+	  stop('error in SQL', call. = FALSE)
+	
 	# test for no data
 	if(nrow(d) == 0)
-		stop('there are no pedons in your selected set!')
+		stop('there are no pedons in your selected set!', call. = FALSE)
 	
   ## TODO: this should be removed once we switch to WGS84 coordinates
 	# warn if mixed datums
