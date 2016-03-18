@@ -100,8 +100,32 @@ FROM
 	if(length(missing.pedon)> 0)
 		assign('sites.missing.pedons', value=unique(d$site_id[missing.pedon]), envir=soilDB.env)
 	
-  # set factor levels, when it makes sense
+  ## set factor levels, when it makes sense
+	# hill slope position
   d$hillslope_pos <- factor(d$hillslope_pos, c('Toeslope', 'Footslope', 'Backslope', 'Shoulder', 'Summit'))
+  
+  # surface shape
+  d$shapeacross <- factor(d$shapeacross, levels=c('Concave', 'Linear', 'Convex'))
+  d$shapedown <- factor(d$shapedown, levels=c('Concave', 'Linear', 'Convex'))
+  
+  # create 3D surface shape
+  d$slope_shape <- paste0(d$shapeacross, ' / ', d$shapedown)
+  # make reasonable levels for 3D slope shape
+  ss.grid <- expand.grid(levels(d$shapeacross), levels(d$shapedown))
+  ss.levels <- apply(ss.grid, 1, function(i) { paste(rev(i), collapse = ' / ')})
+  d$slope_shape <- factor(d$slope_shape, levels=ss.levels)
+  
+  # geomcomponent, hills
+  d$geompos_hill <- factor(d$geompos_hill, levels=c('Base Slope', 'Head Slope', 'Side Slope', 'Nose Slope', 'Crest', 'Interfluve', 'Free Face'))
+  
+  # geomcomponent, mountains
+  d$geompos_mntn <- factor(d$geompos_mntn, levels=c('Mountainbase', 'Lower third of mountainflank', 'Center third of mountainflank', 'Mountainflank', 'Upper third of mountainflank', 'Mountaintop', 'Free face'))
+  
+  # geomcomponent, flats
+  d$geompos_flats <- factor(d$geompos_flats, levels=c('Dip', 'Talf', 'Rise'))
+  
+  # drainage class
+  d$drainagecl <- factor(d$drainagecl, levels=c("Very poorly drained", "Poorly drained", "Somewhat poorly drained", "Moderately well drained", "Well drained", "Somewhat excessively drained", "Excessively drained"))
   
 	# done
 	return(d)
