@@ -35,7 +35,7 @@ get_extended_data_from_NASIS_db <- function() {
   	# ecological site
   q.ecosite <- "SELECT siteiidref AS siteiid, ecositenm, ecositecorrdate, classifier As es_classifier
   FROM siteecositehistory_View_1 AS seh
-  INNER JOIN ecologicalsite_View_1 AS es ON es.ecositeiid=seh.ecositeiidref
+  INNER JOIN ecologicalsite AS es ON es.ecositeiid=seh.ecositeiidref
   ORDER BY 'siteiid';"
 
 	
