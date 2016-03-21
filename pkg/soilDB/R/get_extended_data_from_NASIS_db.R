@@ -32,7 +32,12 @@ get_extended_data_from_NASIS_db <- function() {
   LEFT JOIN plotplantinventory ON plotplantinventory.vegplotiidref=v.vegplotiid
   INNER JOIN plant ON plant.plantiid=plotplantinventory.plantiidref;"
   
-  
+  	# ecological site
+  q.ecosite <- "SELECT siteiidref AS siteiid, ecositenm, ecositecorrdate, classifier As es_classifier
+  FROM siteecositehistory_View_1 AS seh
+  INNER JOIN ecologicalsite_View_1 AS es ON es.ecositeiid=seh.ecositeiidref
+  ORDER BY 'siteiid';"
+
 	
 	# query diagnostic horizons, usually a 1:many relationship with pedons
 	q.diagnostic <- "SELECT peiidref as peiid, dfk.ChoiceName as diag_kind, featdept, featdepb
@@ -298,6 +303,7 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1309) AS pm
 	
 	# exec queries
 	d.veg <- RODBC::sqlQuery(channel, q.veg, stringsAsFactors=FALSE)
+	d.ecosite <- RODBC::sqlQuery(channel, q.ecosite, stringsAsFactors=FALSE)
 	d.diagnostic <- RODBC::sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
 	d.rf.summary <- RODBC::sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
 	d.surf.rf.summary <- RODBC::sqlQuery(channel, q.surf.rf.summary, stringsAsFactors=FALSE)
@@ -315,7 +321,7 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1309) AS pm
 	d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)
 	
 	# return a list of results
-	return(list(veg=d.veg,
+	return(list(veg=d.veg, ecositehistory=d.ecosite,
 							diagnostic=d.diagnostic, 
 							diagHzBoolean=d.diag.boolean, 
 							frag_summary=d.rf.summary, 
