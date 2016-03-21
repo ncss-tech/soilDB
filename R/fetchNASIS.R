@@ -105,6 +105,11 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
 	# method is added to the new field called 'selection_method'
 	best.tax.data <- ddply(extended_data$taxhistory, 'peiid', .pickBestTaxHistory)
 	site(h) <- best.tax.data
+
+	# load best-guess optimal records from ecositehistory
+	# method is added to the new field called 'es_selection_method'
+	best.ecosite.data <- ddply(extended_data$ecositehistory, 'siteiid', .pickBestEcosite)
+	site(h) <- best.ecosite.data
 	
 	# add diagnostic boolean data into @site
 	site(h) <- extended_data$diagHzBoolean

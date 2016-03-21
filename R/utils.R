@@ -62,6 +62,31 @@
 }
 
 
+## TODO: this may need some review
+## try and pick the best possible ecosite record
+.pickBestEcosite <- function(d) {
+	
+	# add a method field
+	d$es_selection_method <- NA
+	
+	# try to get the most recent:
+	d.order <- order(d$ecositecorrdate, decreasing=TRUE)
+	
+	# if there are multiple (unique) dates, return the most recent
+	if(length(unique(d$ecositecorrdate)) > 1) {
+		d$es_selection_method <- 'most recent'
+		return(d[d.order[1], ])
+	}
+	
+	# otherwise, return the record with the least number of missing cells
+	# if there are the same number of missing cells, the first record is returned
+	n.na <- apply(d, 1, function(i) length(which(is.na(i))))
+	best.record <- which.min(n.na)
+	
+	d$es_selection_method <- 'least missing data'
+	return(d[best.record, ])
+}
+
 ## 2015-11-30: short-circuts could use some work, consider pre-marking mistakes in calling function
 # attempt to format "landform" records into a single string
 # note: there are several assumptions made about the data, 
