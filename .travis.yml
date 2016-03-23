@@ -13,6 +13,14 @@ notifications:
     on_success: change
     on_failure: change
 
-before_script:
-  - sudo apt-get update
-  - sudo apt-get install -y gdal-bin libgdal-dev libgdal1-dev netcdf-bin libproj-dev libgdal1h r-cran-rodbc
+addons: 
+  apt:
+    sources:
+    - r-packages-precise
+    packages:
+    - r-base-dev
+    - r-cran-odbc
+    - r-recommended
+    - libgdal1-dev
+    - libproj-dev
+  
