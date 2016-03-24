@@ -6,7 +6,7 @@
 
 Install the stable version from CRAN:
 
-`install_packages('soilDB')`
+`install.packages('soilDB')`
 
 Install the development version from Github:
 
