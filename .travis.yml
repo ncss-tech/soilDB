@@ -21,6 +21,7 @@ addons:
     - r-base-dev
     - r-cran-odbc
     - r-recommended
+    - libgdal-dev
     - libgdal1-dev
     - libproj-dev
   
