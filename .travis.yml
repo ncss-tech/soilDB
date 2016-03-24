@@ -9,6 +9,7 @@ before_install:
   - ./configure
   - make
   - sudo make install
+  - ldconfig
   - cd $CURWD
 
 language: r
