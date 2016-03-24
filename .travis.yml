@@ -15,6 +15,6 @@ notifications:
 
 before_script:
   - sudo apt-get update
-  - sudo apt-get install -y gdal-bin libgdal-dev libgdal1-dev netcdf-bin libproj-dev libgdal1h r-cran-rodbc libhdf5-serial-dev
+  - sudo apt-get install -y gdal-bin libgdal-dev libgdal1-dev netcdf-bin libproj-dev libgdal1h libhdf5-dev libhdf5-serial-dev r-cran-rodbc
 
   
