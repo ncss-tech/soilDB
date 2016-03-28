@@ -21,7 +21,7 @@ fetchSCAN <- function(req) {
     stop('please install the `httr` package', call.=FALSE)
   
   # base URL to service
-  uri <- 'http://www.wcc.nrcs.usda.gov/nwcc/view'
+  uri <- 'http://wcc.sc.egov.usda.gov/nwcc/view'
   
   # note: the SCAN form processor checks the refering page and user-agent
   new.headers <- c(
