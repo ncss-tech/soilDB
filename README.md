@@ -6,11 +6,11 @@
 
 Install the stable version from CRAN:
 
-`install.packages('soilDB')`
+`install.packages('soilDB', dep=TRUE)`
 
 Install the development version from Github:
 
-`devtools::install_github("ncss-tech/soilDB")`
+`devtools::install_github("ncss-tech/soilDB", dependencies=FALSE, upgrade_dependencies=FALSE)`
 
 
 # TODO Items (move to issues)
