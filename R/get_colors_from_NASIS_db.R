@@ -9,13 +9,16 @@ get_colors_from_NASIS_db <- function() {
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
+  ## 2016-04-18 BUG FIX: value and chroma have always been coded, but we were not decoding
 	# unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
-	q <- "SELECT peiid, phiid, colormoistst, colorpct as pct, mh.ChoiceName AS colorhue, colorvalue, colorchroma
+  q <- "SELECT peiid, phiid, colormoistst, colorpct as pct, mh.ChoiceName AS colorhue, mv.ChoiceName AS colorvalue, mc.ChoiceName AS colorchroma
 FROM
-pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref
-	INNER JOIN phcolor_View_1 ON phorizon_View_1.phiid = phcolor_View_1.phiidref
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1242) AS mh ON phcolor_View_1.colorhue = mh.ChoiceValue
-	ORDER BY phiid, phcolor_View_1.colormoistst;"
+  pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref
+  INNER JOIN phcolor_View_1 ON phorizon_View_1.phiid = phcolor_View_1.phiidref
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1242) AS mh ON phcolor_View_1.colorhue = mh.ChoiceValue
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1244) AS mv ON phcolor_View_1.colorvalue = mv.ChoiceValue
+  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1241) AS mc ON phcolor_View_1.colorchroma = mc.ChoiceValue
+  ORDER BY phiid, phcolor_View_1.colormoistst;"
   
 	# setup connection local NASIS
 	channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
@@ -34,7 +37,7 @@ pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.
   
   # add a fake column for storing `sigma`
   # this is the error associated with the rgb -> munsell transformation
-  d$sigma <- NA
+	d$sigma <- NA
   
 	# split into dry / moist
 	dry.colors <- d[which(d$colormoistst == 1), ]
