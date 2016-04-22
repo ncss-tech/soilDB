@@ -39,23 +39,19 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
   }
 	
 	
-	## combine R,G,B into R color for plotting
+	## copy pre-computed colors into a convenience field for plotting
 	# moist colors
-	if(soilColorState == 'moist') {
-	  h$soil_color <- NA
-	  idx <- complete.cases(h$m_r)
-	  h$soil_color[idx] <- with(h[idx, ], rgb(m_r, m_g, m_b)) 
-	}
+	if(soilColorState == 'moist')
+	  h$soil_color <- h$moist_soil_color
 	
 	# dry colors
-	if(soilColorState == 'dry') {
-	  h$soil_color <- NA
-	  idx <- complete.cases(h$d_r)
-	  h$soil_color[idx] <- with(h[idx, ], rgb(d_r, d_g, d_b))
-	}
+	if(soilColorState == 'dry')
+	  h$soil_color <- h$dry_soil_color
 	
-	# join hz + fragment summary
+	
+	## join hz + fragment summary
   hfs <- extended_data$frag_summary
+  
   # optionally convert NA fragvol to 0
   if(nullFragsAreZero) {
     hfs <- as.data.frame(

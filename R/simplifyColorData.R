@@ -63,6 +63,17 @@ simplifyColorData <- function(d, id.var='phiid') {
   # merge into single df
   d.final <- join(dry.colors.final, moist.colors.final, by=id.var, type='full')
   
+  # make HEX colors
+  d.final$moist_soil_color <- NA
+  idx <- complete.cases(d.final$m_r)
+  d.final$moist_soil_color[idx] <- with(d.final[idx, ], rgb(m_r, m_g, m_b))
+  
+  d.final$dry_soil_color <- NA
+  idx <- complete.cases(d.final$d_r)
+  d.final$dry_soil_color[idx] <- with(d.final[idx, ], rgb(d_r, d_g, d_b))
+   
+  
+  
   return(d.final)
 }
 

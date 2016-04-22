@@ -1,5 +1,6 @@
 \name{fetchNASIS}
 \alias{get_text_notes_from_NASIS_db}
+\alias{simplifyColorData}
 \alias{fetchNASIS}
 \alias{fetchNASIS_component_data}
 \alias{get_component_data_from_NASIS_db}

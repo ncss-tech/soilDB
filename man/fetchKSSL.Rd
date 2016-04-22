@@ -44,6 +44,16 @@ length(s)
 # plot 
 par(mar=c(0,0,0,0))
 plot(s, name='hzn_desgn', max.depth=150)
+
+# get morphologic data too
+s <- fetchKSSL(series='amador', returnMorphologicData = TRUE)
+
+# extract SPC
+pedons <- s$SPC
+
+# simplify color data
+s.colors <- simplifyColorData(s$morph$phcolor, id.var = 'labsampnum')
+
 }
 }
 
