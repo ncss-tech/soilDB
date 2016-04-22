@@ -1,5 +1,6 @@
-## TODO; more testing required
+## TODO: mix colors in CIE LAB colorspace
 
+# NASIS-specific
 # this function is called by ddply() thus requires a data.frame as the return value
 mix_and_clean_colors <- function(x) {
 	
