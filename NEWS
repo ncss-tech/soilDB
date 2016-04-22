@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.7.7 (2016-04-22) ----------------------------
+* fetchKSSL() can now query basic morphologic data with the argument "returnMorphologicData"
+
 -------------------------- soilDB 1.7 (2016-04-18) ----------------------------
 * bug fix in colors returned by fetchNASIS(), reported by Andy Paolucci
 * bug fix in SDA_query(), due to changes in httr::content. Thanks Kyle Bocinsky for the fix!

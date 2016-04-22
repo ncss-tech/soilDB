@@ -1,6 +1,6 @@
 
 # experimental function for getting basic KSSL data from CASRL
-fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, pedon_id=NULL, pedon_key=NULL) {
+fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, pedon_id=NULL, pedon_key=NULL, returnMorphologicData=FALSE) {
 	
 	# sanity-check: user must supply some kind of criteria
 	if(missing(series) & missing(bbox) & missing(mlra) & missing(pedlabsampnum) & missing(pedon_id) & missing(pedon_key))
@@ -45,6 +45,7 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 	# build URLs
 	site.url <- URLencode(paste0('http://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&what=site', f))
 	hz.url <- URLencode(paste0('http://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&what=horizon', f))
+	morph.url <- URLencode(paste0('http://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=nasis_morphologic', f)) 
 	
   # init temp files
 	tf.site <- tempfile()
@@ -65,17 +66,28 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 		stop('query returned no data', call.=FALSE)
 	}
 	
-  
+	
 	# upgrade to SoilProfileCollection
 	depths(h) <- pedon_key ~ hzn_top + hzn_bot
 	site(h) <- s
 	
-	# pack into a list for the user
-	res.size <- round(object.size(h) / 1024 / 1024, 2)
+	# 2016-04-22: basic morphologic data from NASIS
+	if(returnMorphologicData) {
+	  # check for required packages
+	  if(!requireNamespace('jsonlite', quietly=TRUE))
+	    stop('please install the `jsonlite` packages', call.=FALSE)
+	  # get list of dataframe objects
+	  m <- jsonlite::fromJSON(morph.url)
+	} else m <- NULL
+	
+	# report object size
+	res.size <- round(object.size(h) / 1024 / 1024, 2) + round(object.size(m) / 1024 / 1024, 2)
 	
 	# some feedback via message:
 	message(paste(length(h), ' pedons loaded (', res.size, ' Mb transferred)', sep=''))
   
-	# return assembled SPC
-	return(h)
+	if(returnMorphologicData)
+	  return(list(SPC=h, morph=m))
+	else
+	  return(h)
 }
