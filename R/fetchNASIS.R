@@ -15,14 +15,14 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
 	suppressMessages(site_data <- get_site_data_from_NASIS_db())
 	hz_data <- get_hz_data_from_NASIS_db()
 	color_data <- get_colors_from_NASIS_db()
-	extended_data <- get_extended_data_from_NASIS_db()
+	extended_data <- get_extended_data_from_NASIS_db(nullFragsAreZero)
 	
 	# test to see if the selected set is loaded
 	if (nrow(hz_data) == 0 | all(unlist(lapply(extended_data, nrow)) == 0)) message('your selected set is missing either the pedon or site table, please load and try again')
   
+	## this is the "total fragment volume" per NASIS calculation
   # optionally convert NA fragvol to 0
   if(nullFragsAreZero) {
-    hz_data$total_frags_pct <- ifelse(is.na(hz_data$total_frags_pct), 0, hz_data$total_frags_pct)
     hz_data$total_frags_pct_cal <- ifelse(is.na(hz_data$total_frags_pct_cal), 0, hz_data$total_frags_pct_cal)
   }
   
@@ -48,18 +48,9 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
 	if(soilColorState == 'dry')
 	  h$soil_color <- h$dry_soil_color
 	
-	## TODO: convert to simplifyFragData()
+	
 	## join hz + fragment summary
-  hfs <- extended_data$frag_summary
-  
-  # optionally convert NA fragvol to 0
-  if(nullFragsAreZero) {
-    hfs <- as.data.frame(
-      cbind(hfs[, 1, drop=FALSE], 
-            lapply(hfs[, -1], function(i) ifelse(is.na(i), 0, i))
-      ), stringsAsFactors=FALSE)
-  }
-	h <- join(h, hfs, by='phiid', type='left')
+	h <- join(h, extended_data$frag_summary, by='phiid', type='left')
 	
 	# optionally test for bad horizonation... flag, and remove
   if(rmHzErrors) {
@@ -110,6 +101,8 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
 	# add diagnostic boolean data into @site
 	site(h) <- extended_data$diagHzBoolean
 	
+	
+	## TODO: convert this to simplifyFragmentData
 	# add surface frag summary
   sfs <- extended_data$surf_frag_summary
   # optionally convert NA fragvol to 0

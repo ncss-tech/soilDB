@@ -4,7 +4,7 @@
 \title{Extract accessory tables and summaries from a local NASIS Database}
 \description{Extract accessory tables and summaries from a local NASIS Database.}
 \usage{
-get_extended_data_from_NASIS_db()
+get_extended_data_from_NASIS_db(nullFragsAreZero=TRUE)
 }
 
 \details{This function currently works only on Windows.}

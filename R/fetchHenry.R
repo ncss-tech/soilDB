@@ -118,7 +118,7 @@
   # number of complete years after accounting for overlap
   fy <- ddply(soiltemp.data, 'sid', .fun=function(i) {
     # convert current sensor's data to wide format, first row is the year
-    w <- cast(i, year ~ doy, value='sensor_value')
+    w <- dcast(i, year ~ doy, value.var = 'sensor_value')
     # on DOY 1-365, count total number of non-NA records over all years
     non.na.doy <- apply(w[, 2:366], 2, function(j) length(na.omit(j)))
     # the minimum value is the number of functional years
@@ -149,7 +149,7 @@
                            .fun=plyr::summarize, seasonal.mean.temp=round(mean(daily.mean, na.rm=TRUE), 2))
   
   # convert seasonal avgs to wide format
-  d.season <- reshape::cast(d.seasonal.long, sid ~ season, value = 'seasonal.mean.temp')
+  d.season <- dcast(d.seasonal.long, sid ~ season, value.var = 'seasonal.mean.temp')
   
   # combine columns
   d.summary <- join(d.mast, d.season, by = 'sid')

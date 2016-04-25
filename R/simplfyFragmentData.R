@@ -37,27 +37,33 @@
 # x: raw, un-coded contents of the phfrags table
 .rockFragmentSieve <- function(x) {
   
+  ## assumptions
+  # missing hardness = fragment
+  x$fraghard[which(is.na(x$fraghard))] <- 'Strongly cemented'
+  # missing shape = Nonflat
+  x$fragshp[which(is.na(x$fragshp))] <- 'Nonflat'
+  
   ## split frags / parafrags
-  idx <- which(x$fraghard %in% c('Strongly cemented', 'Very strongly cemented', 'Indurated') | is.na(x$fraghard))
+  idx <- which(x$fraghard %in% c('Strongly cemented', 'Very strongly cemented', 'Indurated'))
   frags <- x[idx, ]
   
-  idx <- which(! x$fraghard %in% c('Strongly cemented', 'Very strongly cemented', 'Indurated') & ! is.na(x$fraghard) )
+  idx <- which(! x$fraghard %in% c('Strongly cemented', 'Very strongly cemented', 'Indurated'))
   parafrags <- x[idx, ]
   
   
   ## split flat / non-flat
   # frags
-  idx <- which(frags$fragshp == 'Nonflat' | is.na(frags$fragshp))
+  idx <- which(frags$fragshp == 'Nonflat')
   frags.nonflat <- frags[idx, ]
   
-  idx <- which(frags$fragshp == 'Flat' & ! is.na(frags$fragshp))
+  idx <- which(frags$fragshp == 'Flat')
   frags.flat <- frags[idx, ]
   
   # parafrags
-  idx <- which(parafrags$fragshp == 'Nonflat' | is.na(parafrags$fragshp))
+  idx <- which(parafrags$fragshp == 'Nonflat')
   parafrags.nonflat <- parafrags[idx, ]
   
-  idx <- which(parafrags$fragshp == 'Flat' & ! is.na(parafrags$fragshp))
+  idx <- which(parafrags$fragshp == 'Flat')
   parafrags.flat <- parafrags[idx, ]
   
   ## sieve
@@ -67,7 +73,7 @@
   
   # non-flat parafragments
   d <- ifelse(is.na(parafrags.nonflat$fragsize_h), parafrags.nonflat$fragsize_r, parafrags.nonflat$fragsize_h)
-  parafrags.nonflat$class <- .sieve(d, flat = TRUE, para = TRUE)
+  parafrags.nonflat$class <- .sieve(d, flat = FALSE, para = TRUE)
   
   # flat fragments
   d <- ifelse(is.na(frags.flat$fragsize_h), frags.flat$fragsize_r, frags.flat$fragsize_h)
@@ -85,22 +91,22 @@
 
 # rf: un-coded contents of the phfrags table
 # id.var: id column name
-# fragClass: fragment class column name
 # convert NA to 0?
-simplfyFragmentData <- function(rf, id.var, fragClass, nullFragsAreZero=TRUE) {
+simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   
   # extract classes
   rf.classes <- .rockFragmentSieve(rf)
   
   ## note: this must include all classes that related functions return
   # set levels of classes
-  rf.classes[[fragClass]] <- factor(rf.classes[[fragClass]], levels=c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones'))
+  rf.classes$class <- factor(rf.classes$class, levels=c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones'))
   
   # sum volume by id and class
-  rf.sums <- ddply(rf.classes, c(id.var, fragClass), plyr::summarise, volume=sum(fragvol, na.rm=TRUE))
+  rf.sums <- ddply(rf.classes, c(id.var, 'class'), plyr::summarise, volume=sum(fragvol, na.rm=TRUE))
   
   # convert to wide format
-  rf.wide <- dcast(rf.sums, labsampnum ~ class, value.var = 'volume', drop = FALSE)
+  fm <- as.formula(paste0(id.var, ' ~ class'))
+  rf.wide <- dcast(rf.sums, fm, value.var = 'volume', DROP = FALSE)
   
   # fix "NA" column name
   if(any(names(rf.wide) == 'NA'))
@@ -114,6 +120,13 @@ simplfyFragmentData <- function(rf, id.var, fragClass, nullFragsAreZero=TRUE) {
       ), stringsAsFactors=FALSE)
   }
  
+  
+  # compute total fragments
+  # trap no frag condition
+  if(ncol(rf.wide) > 1)
+    rf.wide$total_frags_pct <- rowSums(rf.wide[, -1], na.rm=TRUE)
+  
+  # done
   return(rf.wide)
   
 }

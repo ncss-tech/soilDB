@@ -7,16 +7,10 @@ get_hz_data_from_NASIS_db <- function() {
   
   q <- "SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
-  claytotest as clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END as silt, sandtotest as sand, t.texture_class, texture, phfield, eff.ChoiceName AS effervescence, l.labsampnum, fragvoltot as total_frags_pct_cal, f.total_frags_pct AS total_frags_pct, rrd.ChoiceName as rupresblkdry, stick.ChoiceName as stickiness, plast.ChoiceName as plasticity
+  claytotest as clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END as silt, sandtotest as sand, t.texture_class, texture, phfield, eff.ChoiceName AS effervescence, l.labsampnum, fragvoltot as total_frags_pct_cal, rrd.ChoiceName as rupresblkdry, stick.ChoiceName as stickiness, plast.ChoiceName as plasticity
   FROM
   pedon_View_1 
   INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref
-  
-	LEFT OUTER JOIN (
-		SELECT phiidref, SUM(fragvol) as total_frags_pct 
-    FROM phfrags_View_1
-    GROUP BY phiidref
-	) as f ON phorizon_View_1.phiid = f.phiidref
 	
 	LEFT OUTER JOIN (
 		SELECT phiidref, min(CASE WHEN tx.ChoiceName IS NULL THEN til.ChoiceName ELSE tx.ChoiceName END) as texture_class
