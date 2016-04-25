@@ -94,6 +94,9 @@
 # convert NA to 0?
 simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   
+  # nasty hack to trick R CMD check
+  fragvol <- NULL
+  
   # extract classes
   rf.classes <- .rockFragmentSieve(rf)
   

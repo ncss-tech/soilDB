@@ -45,6 +45,8 @@ FROM pediagfeatures_View_1
 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 147) AS dfk ON pediagfeatures_View_1.featkind = dfk.ChoiceValue
 	ORDER BY pediagfeatures_View_1.peiidref, pediagfeatures_View_1.featdept;"
   
+  
+  ### TODO: convert this to simplifyFragmentData
 	q.surf.rf.summary <- "SELECT pedon_View_1.peiid, 
 f1_fgr.gravel as surface_fgravel, 
 f1_gr.gravel as surface_gravel, 
@@ -149,9 +151,14 @@ LEFT OUTER JOIN (
 	
 	ORDER BY pedon_View_1.peiid;"
 	
-
-  q.rf.data <- "SELECT phiidref AS phiid, fragvol, fragsize_l, fragsize_r, fragsize_h, fs.ChoiceLabel AS fragshp, fh.ChoiceLabel AS fraghard
-  FROM phfrags_View_1 
+  
+  # base table is phorizon so that NULL data can be converted to 0s later
+  q.rf.data <- "SELECT p.phiid, fragvol, fragsize_l, fragsize_r, fragsize_h, fs.ChoiceLabel AS fragshp, fh.ChoiceLabel AS fraghard
+  FROM 
+  (
+ 	SELECT DISTINCT phiid FROM phorizon_View_1
+ 	) as p  
+  LEFT OUTER JOIN phfrags_View_1 ON p.phiid = phfrags_View_1.phiidref
   LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 154) AS fs ON fragshp = fs.ChoiceValue
   LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS fh ON fraghard = fh.ChoiceValue
 ;"
