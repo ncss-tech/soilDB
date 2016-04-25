@@ -48,7 +48,7 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
 	if(soilColorState == 'dry')
 	  h$soil_color <- h$dry_soil_color
 	
-	
+	## TODO: convert to simplifyFragData()
 	## join hz + fragment summary
   hfs <- extended_data$frag_summary
   
