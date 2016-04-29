@@ -129,6 +129,11 @@ simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   if(ncol(rf.wide) > 1)
     rf.wide$total_frags_pct <- rowSums(rf.wide[, -1], na.rm=TRUE)
   
+  # corrections:
+  # 1. fine gravel is a subset of gravel, therefore: gravel = gravel + fine_gravel
+  rf.wide$gravel <- rf.wide$gravel + rf.wide$fine_gravel
+  rf.wide$paragravel <- rf.wide$paragravel + rf.wide$parafine_gravel
+  
   # done
   return(rf.wide)
   
