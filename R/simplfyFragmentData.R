@@ -105,7 +105,7 @@ simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   rf.classes$class <- factor(rf.classes$class, levels=c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones'))
   
   # sum volume by id and class
-  rf.sums <- ddply(rf.classes, c(id.var, 'class'), plyr::summarise, volume=sum(fragvol, na.rm=TRUE))
+  rf.sums <- ddply(rf.classes, c(id.var, 'class'), plyr::summarise, volume=sum(fragvol, na.rm=TRUE), .drop=FALSE)
   
   # convert to wide format
   fm <- as.formula(paste0(id.var, ' ~ class'))
