@@ -1,9 +1,10 @@
--------------------------- soilDB 1.7.8 (2016-04-25) ----------------------------
+-------------------------- soilDB 1.8 (2016-04-29) ----------------------------
 * fetchKSSL() can now query basic morphologic data with the argument "returnMorphologicData"
 * two new functions for simplifying NASIS color and fragment data:
  + simplifyFragmentData()
  + simplifyColorData()
 * ^^^ these new functions are now used by fetchNASIS() to summarize color and fragment data (vs. SQL)
+* NOTE: soilDB now uses reshape2::dcast() instead of reshape::cast()
 
 -------------------------- soilDB 1.7 (2016-04-18) ----------------------------
 * bug fix in colors returned by fetchNASIS(), reported by Andy Paolucci
