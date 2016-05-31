@@ -258,8 +258,8 @@
   for (i in seq_along(df)){
     if (any(names(df[i]) %in% unique(metadata$ColumnPhysicalName))) {
       sub <- metadata[metadata$ColumnPhysicalName %in% names(df[i]), ]
-      df[i] <- factor(df[i], levels = sub$ChoiceValue, labels = sub$ChoiceLabel)
-    } else df[i] = df[i]
+      df[, i] <- factor(df[, i], levels = sub$ChoiceValue, labels = sub$ChoiceLabel)
+    } else df[, i] = df[, i]
   }
   
   return(df)
