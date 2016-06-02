@@ -264,3 +264,36 @@
   
   return(df)
 }
+
+
+# function to estimate the thickness of horizons and diagnostic features
+.test_thk <- function(x) {
+  names(x) <- gsub("^hz|^feat", "", names(x))
+  std <- with(x, data.frame(
+    l  = depb_l - dept_h,
+    rv = depb_r - dept_r,
+    h  = depb_h - dept_l
+  ))
+  
+  idx <- std < 0
+  idx[is.na(idx)] <- FALSE
+  
+  if (any(idx)) {
+    std_new <- std
+    std_flip <- with(x, data.frame(
+      l = depb_l - dept_l,
+      rv = depb_r - dept_r,
+      h = depb_h - dept_h
+    ))
+    std_new[idx] <- std_flip[idx]
+  }
+  
+  if (exists("std_new")) {
+    idx2 <- which(std_new$l > std$rv)
+    std_new$l[idx2] <- std$r[idx2]
+    idx3 <- which(std$h < std$rv)
+    std_new$h[idx2] <- std$r[idx2]
+  } else std_new <- std
+  
+  return(std_new)
+}
