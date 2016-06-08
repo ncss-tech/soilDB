@@ -1,4 +1,6 @@
 
+### TODO: re-name these functions with more informative labels
+
 
 
 # helper function for processing WKT returned by SDA_query()
@@ -36,6 +38,61 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 }
 
 
+## TODO: this is likely too slow...
+## TODO: this new function will return intersected geometry data
+# i is a single Spatial* object with CRS: WGS84 GCS
+SDA_make_spatial_query2 <- function(i) {
+  
+  # check for required packages
+  if(!requireNamespace('rgeos', quietly = TRUE))
+    stop('please install the `rgeos` package', call.=FALSE)
+  
+  # convert single feature to WKT
+  i.wkt <- rgeos::writeWKT(i)
+  
+  q <- paste0("
+-- setup aoi from single WKT feature
+~DeclareGeometry(@aoi)~
+select @aoi = geometry::STPolyFromText('", i.wkt, "', 4326)
+
+-- Extract all intersected polygons
+~DeclareIdGeomTable(@intersectedPolygonGeometries)~
+~GetClippedMapunits(@aoi,polygon,geo,@intersectedPolygonGeometries)~
+
+-- Convert geometries to geographies so we can get areas
+~DeclareIdGeogTable(@intersectedPolygonGeographies)~
+
+~GetGeogFromGeomWgs84(@intersectedPolygonGeometries,@intersectedPolygonGeographies)~
+
+-- Return the polygonal geometries
+select * from @intersectedPolygonGeographies where geog.STGeometryType() = 'Polygon';
+
+-- get aggregated areas and associated mukey, musym, nationalmusym, areasymbol, mucertstat (Map Unit Certification Status)
+-- select id, sum(geog.STArea()) as area
+-- into #aggarea from @intersectedPolygonGeographies
+-- group by id;
+
+-- Return the polygons with joined data
+-- select mukey, area, musym, nationalmusym, areasymbol, mucertstat
+-- from #aggarea A, mapunit M, legend L
+-- where A.id = M.mukey and M.lkey = L.lkey
+-- order by id;
+
+-- Return the aggregated area by mukey
+-- select id as mukey, area from #aggarea
+")
+  
+  # send query
+  res <- SDA_query(q)
+  
+  # check for no data
+  if(is.null(res))
+    res <- NA
+  
+  # done
+  return(res)
+}
+
 
 
 # i is a single Spatial* object with CRS: WGS84 GCS
@@ -52,7 +109,7 @@ SDA_make_spatial_query <- function(i) {
   q <- paste0("SELECT mukey, muname
               FROM mapunit
               WHERE mukey IN (
-              SELECT * from SDA_Get_Mukey_from_intersection_with_WktWgs84('", i.wkt, "')
+              SELECT DISTINCT mukey from SDA_Get_Mukey_from_intersection_with_WktWgs84('", i.wkt, "')
               )")
   
   # send query
