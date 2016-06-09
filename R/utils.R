@@ -253,13 +253,21 @@
     return(d)
   }
   
+  # load current metadata table
   metadata <- get_metadata()
-
-  for (i in seq_along(df)){
-    if (any(names(df[i]) %in% unique(metadata$ColumnPhysicalName))) {
-      sub <- metadata[metadata$ColumnPhysicalName %in% names(df[i]), ]
-      df[, i] <- factor(df[, i], levels = sub$ChoiceValue, labels = sub$ChoiceLabel)
-    } else df[, i] = df[, i]
+  # unique set of possible columns that will need replacement
+  possibleReplacements <- unique(metadata$ColumnPhysicalName)
+  # names of raw data
+  nm <- names(df)
+  # index to columns with codes to be replaced
+  columnsToWorkOn.idx <- which(nm %in% possibleReplacements)
+  
+  # iterate over columns with codes
+  for (i in columnsToWorkOn.idx){
+    # get the current metadata
+    sub <- metadata[metadata$ColumnPhysicalName %in% nm[i], ]
+    # replace codes with values
+    df[, i] <- factor(df[, i], levels = sub$ChoiceValue, labels = sub$ChoiceLabel)
   }
   
   return(df)
