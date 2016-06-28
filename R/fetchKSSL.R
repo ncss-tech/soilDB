@@ -63,7 +63,8 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
   
 	# report missing data
 	if(all(c(is.null(s), is.null(h)))) {
-		stop('query returned no data', call.=FALSE)
+		message('query returned no data')
+	  return(NULL)
 	}
 	
 	
