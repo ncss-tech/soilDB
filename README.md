@@ -2,39 +2,74 @@
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/soilDB)](https://cran.r-project.org/package=soilDB)
 [![Total_Downloads](http://cranlogs.r-pkg.org/badges/grand-total/soilDB)](https://cran.r-project.org/package=soilDB)
 
-# soilDB
+## Installation
 
-Install the stable version from CRAN:
+Get the stable version from CRAN:
 
 `install.packages('soilDB', dep=TRUE)`
 
-Install the development version from Github:
+Get the development version from Github:
 
 `devtools::install_github("ncss-tech/soilDB", dependencies=FALSE, upgrade_dependencies=FALSE)`
 
+## Documentation
+http://ncss-tech.github.io/AQP/
 
-# TODO Items (move to issues)
 
-- We need to add some queries to accommodate the new ncss_pedon_lab_data tables...
-	
-- phnaf moved out of phorizon and into phlabresults - need to add a query to the ext_data to pull this in or add a join to the phlabresults table 	to pull it into the phorizon query directly.
-	
-- Add dsp_comparable_layer_id to the phorizon queries....this is our gen_hz field.
+## Examples
+```r
+library(soilDB)
+library(plyr)
+library(reshape2)
 
-- how should multiple textures be dealt with? (2 rows/hz are currently returned)
- + can this be fixed in SQL ?
- +  NASIS: we are keeping only the first record
- +  PedonPC: texture class is ommited from query
+# search by series name
+s <- fetchKSSL(series='auburn')
 
-- how should A/B horizons be dealt with when entered as 2 horizons sharing the same depths?
+# search by bounding-box
+# s <- fetchKSSL(bbox=c(-120, 37, -122, 38))
 
-- soil texture plotting / subsetting / flagging helper function or guidance
+# how many pedons
+length(s)
 
-- finish NASIS component queries and return similar objects as pedon queries
+# plot 
+par(mar=c(0,0,0,0))
+plot(s, name='hzn_desgn', max.depth=150)
 
-- need to check for presence of STD coordinates vs. DMS/datum coordinates, maybe warn users
 
-- figure out data problems: total_frags_pct vs. fragvoltot
+# get morphologic data too
+
+# get lab and morphologic data
+s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE)
+
+# extract SPC
+pedons <- s$SPC
+
+# simplify color data
+s.colors <- simplifyColorData(s$morph$phcolor, id.var = 'labsampnum')
+
+# merge color data into SPC
+h <- horizons(pedons)
+h <- join(h, s.colors, by='labsampnum', type='left', match='first')
+horizons(pedons) <- h
+
+# check
+par(mar=c(0,0,0,0))
+plot(pedons, color='moist_soil_color', print.id=FALSE)
+
+
+# simplify fragment data
+s.frags <- simplfyFragmentData(s$morph$phfrags, id.var='labsampnum')
+
+# merge fragment data into SPC
+h <- horizons(pedons)
+h <- join(h, s.frags, by='labsampnum', type='left', match='first')
+horizons(pedons) <- h
+
+# check
+par(mar=c(0,0,3,0))
+plot(pedons, color='total_frags_pct', print.id=FALSE)
+```
+
 
 ## Related Packages
  * [aqp](https://github.com/ncss-tech/aqp)
