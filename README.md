@@ -36,3 +36,7 @@ Install the development version from Github:
 
 - figure out data problems: total_frags_pct vs. fragvoltot
 
+## Related Packages
+ * [aqp](https://github.com/ncss-tech/aqp)
+ * [sharpshootR](https://github.com/ncss-tech/sharpshootR)
+ 
