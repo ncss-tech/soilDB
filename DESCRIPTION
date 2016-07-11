@@ -12,4 +12,4 @@ Depends: R (>= 3.0.0), aqp
 Imports: grDevices, graphics, stats, utils, plyr, Hmisc, XML, sp, reshape2
 Suggests: lattice, dismo, raster, rgdal, jsonlite, RODBC, httr, rgeos
 Repository: CRAN
-URL: http://aqp.r-forge.r-project.org/
+URL: https://github.com/ncss-tech/soilDB
