@@ -344,10 +344,11 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, type='soiltemp',
   
   ## note: this is kind of wasteful, but helps with plotting
   # copy over sensor name to soiltemp table
-  res$soiltemp$name <- res$sensors$name[match(res$soiltemp$sid, res$sensors$sid)]
+  name.idx <- match(res$soiltemp$sid, res$sensors$sid)
+  res$soiltemp$name <- paste0(res$sensors$name[name.idx], '-', res$sensors$sensor_depth[name.idx])
   
   # some feedback via message:
-  message(paste(length(unique(s$user_site_id)), ' sites loaded (', res.size, ' Mb transferred)', sep=''))
+  message(paste(nrow(s), ' sensors loaded (', res.size, ' Mb transferred)', sep=''))
   
   # done
   return(res)
