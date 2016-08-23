@@ -206,15 +206,40 @@
 }
 
 
+.formatDates <- function(sensor.data, gran, pad.missing.days) {
+  sensor.data$date_time <- as.POSIXct(sensor.data$date_time)
+  sensor.data$year <- as.integer(format(sensor.data$date_time, "%Y"))
+  sensor.data$doy <- as.integer(format(sensor.data$date_time, "%j"))
+  sensor.data$month <- format(sensor.data$date_time, "%b")
+  # re-level months
+  sensor.data$month <- factor(sensor.data$month, levels=c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
+  
+  # optionally pad daily data with NA
+  if(gran == 'day' & pad.missing.days) {
+    sensor.data <- ddply(sensor.data, c('sid', 'year'), .fill_missing_days)
+    # message(paste0('padded ', length(is.na(sensor.data$sensor_value)), ' missing values'))
+  }
+  
+  # add-in seasons
+  sensor.data$season <- .month2season(sensor.data$month)
+  
+  return(sensor.data)
+}
+
+
 
 # this loads and packages the data into a list of objects
-fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, type='soiltemp', gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE, soiltemp.summaries=TRUE) {
+fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE, soiltemp.summaries=TRUE) {
+  
+  # check for required packages
+  if(!requireNamespace('jsonlite', quietly=TRUE))
+    stop('please install the `jsonlite` packages', call.=FALSE)
   
   # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)
   
   # sanity-check: user must supply some kind of criteria
-  if(missing(usersiteid) & missing(project) & missing(type) & missing(sso))
+  if(missing(usersiteid) & missing(project) & missing(sso))
     stop('you must provide some filtering criteria', call.=FALSE)
   
   # init empty filter
@@ -222,7 +247,6 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, type='soiltemp',
   
   # init empty pieces
   s <- NULL
-  soiltemp <- NULL
   
   # process filter components
   if(!is.null(usersiteid)) {
@@ -237,10 +261,6 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, type='soiltemp',
   if(!is.null(sso)) {
     sso <- paste(sso, collapse=',')
     f <- c(f, paste('&sso=', sso, sep=''))
-  }
-  
-  if(!is.null(type)) {
-    f <- c(f, paste('&type=', type, sep=''))
   }
   
   if(!is.null(gran)) {
@@ -262,54 +282,44 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, type='soiltemp',
 #   print(f)
   
   # build URLs
-  site.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?what=site', f, sep=''))
-  soiltemp.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?what=soil_temperature', f, sep=''))
+  json.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?json=1', f, sep=''))
   
-  # init temp files
-  tf.site <- tempfile()
-  tf.soiltemp <- tempfile()
+  # init temp file
+  tf.json <- tempfile()
   
-  # download pieces
-  download.file(url=site.url, destfile=tf.site, mode='wb', quiet=TRUE)
-  download.file(url=soiltemp.url, destfile=tf.soiltemp, mode='wb', quiet=TRUE)
+  # download all data via JSON interface
+  download.file(url=json.url, destfile=tf.json, mode='wb', quiet=FALSE)
   
-  # load pieces
-  try(s <- read.table(gzfile(tf.site), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
-  try(soiltemp <- read.table(gzfile(tf.soiltemp), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
+  ## TODO: check NA handling
+  # parse JSON into list of DF
+  try(s <- jsonlite::fromJSON(gzfile(tf.json)))
+  
   
   # report missing data
-  if(all(c(is.null(s), is.null(soiltemp)))) {
+  if(is.null(s$sensors)) {
     stop('query returned no data', call.=FALSE)
   }
   
+  
+  
+  
+  
   # convert date/time
-  if(!is.null(soiltemp)) {
-    soiltemp$date_time <- as.POSIXct(soiltemp$date_time)
-    soiltemp$year <- as.integer(format(soiltemp$date_time, "%Y"))
-    soiltemp$doy <- as.integer(format(soiltemp$date_time, "%j"))
-    soiltemp$month <- format(soiltemp$date_time, "%b")
-    # re-level months
-    soiltemp$month <- factor(soiltemp$month, levels=c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
-            
-    # optionally pad daily data with NA
-    if(gran == 'day' & pad.missing.days) {
-      soiltemp <- ddply(soiltemp, c('sid', 'year'), .fill_missing_days)
-      message(paste0('padded ', length(is.na(soiltemp$sensor_value)), ' missing soil temperature values'))
-    }
+  if( !is.null(s$soiltemp)) {
     
-    # add-in seasons
-    soiltemp$season <- .month2season(soiltemp$month)
-    
-    # get period of record for each site, not including NA-padding
-    por <- ddply(soiltemp, c('sid'), function(i) {
-      idx <- which(!is.na(i$sensor_value))
-      start.date <- min(i$date_time[idx], na.rm=TRUE)
-      end.date <- max(i$date_time[idx], na.rm=TRUE)
+    # get period of record for each sensor, not including NA-padding
+    por <- ddply(na.omit(rbind(s$soiltemp, s$soilVWC)), c('sid'), function(i) {
+      start.date <- min(i$date_time, na.rm=TRUE)
+      end.date <- max(i$date_time, na.rm=TRUE)
       return(data.frame(start.date, end.date))
     })
     
     # compute days since last visit
     por$dslv <- round(as.numeric(difftime(Sys.Date(), por$end.date, units='days')))
+    
+    # convert dates and add helper column
+    s$soiltemp <- .formatDates(s$soiltemp, gran=gran, pad.missing.days=pad.missing.days)
+    s$soilVWC <- .formatDates(s$soilVWC, gran=gran, pad.missing.days=pad.missing.days)
     
     # optionally compute summaries, requires padded NA values and, daily granularity
     if(soiltemp.summaries & pad.missing.days) {
@@ -319,38 +329,40 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, type='soiltemp',
         stop('soil temperature summaries can only be computed from daily data', call. = FALSE)
       
       # compute unbiased estimates of MAST and summer/winter temp
-      soiltemp.summary <- .summarizeSoilTemperature(soiltemp)
+      soiltemp.summary <- .summarizeSoilTemperature(s$soiltemp)
       
-      # combine summaries and join to site data
+      # combine summaries and join to sensors data
       por <- join(por, soiltemp.summary, by='sid')
     }
     
-    # splice-into site data
-    s <- join(s, por, by='sid')
+    # splice-into sensors data
+    s$sensors <- join(s$sensors, por, by='sid')
   }
-    
+  
+  ## TODO: abstract into more efficient function
+  # copy over sensor name to sensor.data table
+  name.idx <- match(s$soiltemp$sid, s$sensors$sid)
+  s$soiltemp$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
+  
+  name.idx <- match(s$soilVWC$sid, s$sensors$sid)
+  s$soilVWC$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
+  
+  
   # init coordinates
-  if(!is.null(s)) {
-    coordinates(s) <- ~ wgs84_longitude + wgs84_latitude
-    proj4string(s) <- '+proj=longlat +datum=WGS84'
+  if(!is.null(s$sensors)) {
+    coordinates(s$sensors) <- ~ wgs84_longitude + wgs84_latitude
+    proj4string(s$sensors) <- '+proj=longlat +datum=WGS84'
   }
   
   # reset options:
   options(opt.original)
   
-  # pack into a list for the user
-  res <- list(sensors=s, soiltemp=soiltemp)
-  res.size <- round(object.size(res) / 1024 / 1024, 2)
-  
-  ## note: this is kind of wasteful, but helps with plotting
-  # copy over sensor name to soiltemp table
-  name.idx <- match(res$soiltemp$sid, res$sensors$sid)
-  res$soiltemp$name <- paste0(res$sensors$name[name.idx], '-', res$sensors$sensor_depth[name.idx])
+  s.size <- round(object.size(s) / 1024 / 1024, 2)
   
   # some feedback via message:
-  message(paste(nrow(s), ' sensors loaded (', res.size, ' Mb transferred)', sep=''))
+  message(paste(nrow(s$sensors), ' sensors loaded (', s.size, ' Mb transferred)', sep=''))
   
   # done
-  return(res)
+  return(s)
   
 }
