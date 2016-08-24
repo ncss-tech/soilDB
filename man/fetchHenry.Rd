@@ -3,12 +3,13 @@
 \title{Download Data from the Henry Mount Soil Climate Database}
 \description{This function is a front-end to the REST query functionality of the Henry Mount Soil Climate Database.}
 \usage{
-fetchHenry(usersiteid = NULL, project = NULL, sso = NULL,
+fetchHenry(what='all', usersiteid = NULL, project = NULL, sso = NULL,
 gran = "day", start.date = NULL, stop.date = NULL, 
 pad.missing.days = TRUE, soiltemp.summaries = TRUE)
 }
 
 \arguments{
+  \item{what}{type of data to return: 'sensors': sensor metadata only | 'soiltemp': sensor metadata + soil temperature data | 'soilVWC': sensor metadata + soil moisture data | 'airtemp': sensor metadata + air temperature data | 'all': sensor metadata + all soil climate data}
   \item{usersiteid}{(optional) filter results using a NASIS user site ID}
   \item{project}{(optional) filter results using a project ID}
   \item{sso}{(optional) filter results using a soil survey office code}

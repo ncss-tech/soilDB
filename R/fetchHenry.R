@@ -233,7 +233,7 @@
 
 
 # this loads and packages the data into a list of objects
-fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE, soiltemp.summaries=TRUE) {
+fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE, soiltemp.summaries=TRUE) {
   
   # check for required packages
   if(!requireNamespace('jsonlite', quietly=TRUE))
@@ -286,7 +286,7 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, gran='day', star
 #   print(f)
   
   # everything in one URL / JSON package
-  json.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?json=1', f, sep=''))
+  json.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?what=', what, f, sep=''))
   
   # this is a little noisy, but people like to see progress
   tf.json <- tempfile()
