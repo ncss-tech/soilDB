@@ -207,21 +207,25 @@
 
 
 .formatDates <- function(sensor.data, gran, pad.missing.days) {
-  sensor.data$date_time <- as.POSIXct(sensor.data$date_time)
-  sensor.data$year <- as.integer(format(sensor.data$date_time, "%Y"))
-  sensor.data$doy <- as.integer(format(sensor.data$date_time, "%j"))
-  sensor.data$month <- format(sensor.data$date_time, "%b")
-  # re-level months
-  sensor.data$month <- factor(sensor.data$month, levels=c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
-  
-  # optionally pad daily data with NA
-  if(gran == 'day' & pad.missing.days) {
-    sensor.data <- ddply(sensor.data, c('sid', 'year'), .fill_missing_days)
-    # message(paste0('padded ', length(is.na(sensor.data$sensor_value)), ' missing values'))
+  # must have data, otherwise do nothing
+  # when sensor data are missing, sensor.data is a list of length 0
+  if(length(sensor.data) > 0) {
+    sensor.data$date_time <- as.POSIXct(sensor.data$date_time)
+    sensor.data$year <- as.integer(format(sensor.data$date_time, "%Y"))
+    sensor.data$doy <- as.integer(format(sensor.data$date_time, "%j"))
+    sensor.data$month <- format(sensor.data$date_time, "%b")
+    # re-level months
+    sensor.data$month <- factor(sensor.data$month, levels=c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
+    
+    # optionally pad daily data with NA
+    if(gran == 'day' & pad.missing.days) {
+      sensor.data <- ddply(sensor.data, c('sid', 'year'), .fill_missing_days)
+      # message(paste0('padded ', length(is.na(sensor.data$sensor_value)), ' missing values'))
+    }
+    
+    # add-in seasons
+    sensor.data$season <- .month2season(sensor.data$month)
   }
-  
-  # add-in seasons
-  sensor.data$season <- .month2season(sensor.data$month)
   
   return(sensor.data)
 }
@@ -281,34 +285,28 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, gran='day', star
   # debugging
 #   print(f)
   
-  # build URLs
+  # everything in one URL / JSON package
   json.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?json=1', f, sep=''))
   
-  # init temp file
+  # this is a little noisy, but people like to see progress
   tf.json <- tempfile()
-  
-  # download all data via JSON interface
   download.file(url=json.url, destfile=tf.json, mode='wb', quiet=FALSE)
   
   ## TODO: check NA handling
   # parse JSON into list of DF
   try(s <- jsonlite::fromJSON(gzfile(tf.json)))
   
-  
   # report missing data
   if(is.null(s$sensors)) {
     stop('query returned no data', call.=FALSE)
   }
   
-  
-  
-  
-  
-  # convert date/time
+
+  # if we have some data...
   if( !is.null(s$soiltemp)) {
     
     # get period of record for each sensor, not including NA-padding
-    por <- ddply(na.omit(rbind(s$soiltemp, s$soilVWC)), c('sid'), function(i) {
+    por <- ddply(na.omit(rbind(s$soiltemp, s$soilVWC, s$airtemp)), c('sid'), function(i) {
       start.date <- min(i$date_time, na.rm=TRUE)
       end.date <- max(i$date_time, na.rm=TRUE)
       return(data.frame(start.date, end.date))
@@ -320,6 +318,7 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, gran='day', star
     # convert dates and add helper column
     s$soiltemp <- .formatDates(s$soiltemp, gran=gran, pad.missing.days=pad.missing.days)
     s$soilVWC <- .formatDates(s$soilVWC, gran=gran, pad.missing.days=pad.missing.days)
+    s$airtemp <- .formatDates(s$airtemp, gran=gran, pad.missing.days=pad.missing.days)
     
     # optionally compute summaries, requires padded NA values and, daily granularity
     if(soiltemp.summaries & pad.missing.days) {
@@ -339,14 +338,21 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, gran='day', star
     s$sensors <- join(s$sensors, por, by='sid')
   }
   
-  ## TODO: abstract into more efficient function
-  # copy over sensor name to sensor.data table
-  name.idx <- match(s$soiltemp$sid, s$sensors$sid)
-  s$soiltemp$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
+  # copy over sensor name + depth to soiltemp, soilVWC, and airtemp tables--if present
+  if(length(s$soiltemp) > 0) {
+    name.idx <- match(s$soiltemp$sid, s$sensors$sid)
+    s$soiltemp$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
+  }
   
-  name.idx <- match(s$soilVWC$sid, s$sensors$sid)
-  s$soilVWC$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
+  if(length(s$soilVWC) > 0) {
+    name.idx <- match(s$soilVWC$sid, s$sensors$sid)
+    s$soilVWC$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
+  }
   
+  if(length(s$airtemp) > 0) {
+    name.idx <- match(s$airtemp$sid, s$sensors$sid)
+    s$airtemp$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
+  }
   
   # init coordinates
   if(!is.null(s$sensors)) {
@@ -357,12 +363,12 @@ fetchHenry <- function(usersiteid=NULL, project=NULL, sso=NULL, gran='day', star
   # reset options:
   options(opt.original)
   
-  s.size <- round(object.size(s) / 1024 / 1024, 2)
-  
   # some feedback via message:
+  s.size <- round(object.size(s) / 1024 / 1024, 2)
   message(paste(nrow(s$sensors), ' sensors loaded (', s.size, ' Mb transferred)', sep=''))
   
   # done
   return(s)
   
 }
+
