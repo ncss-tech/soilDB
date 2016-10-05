@@ -1,7 +1,7 @@
 ## NOTE: this function assumes that the series name in osd.osd_colors exactly matches seriesname in osd.taxa
 
 # fetch basic OSD data from the SoilWeb snapshot of the SC database
-fetchOSD <- function(soils) {
+fetchOSD <- function(soils, colorState='moist') {
 	
 	# base URLs
 	u.osd_site <- 'http://casoilresource.lawr.ucdavis.edu/soil_web/reflector_api/soils.php?what=osd_site_query&q_string='
@@ -30,10 +30,26 @@ fetchOSD <- function(soils) {
 	}
 	
 	# reformatting and color conversion
-	h$soil_color <- with(h, munsell2rgb(matrix_wet_color_hue, matrix_wet_color_value, matrix_wet_color_chroma))
-	h <- with(h, data.frame(id=series, top, bottom, hzname, soil_color, 
-													hue=matrix_wet_color_hue, value=matrix_wet_color_value, 
-													chroma=matrix_wet_color_chroma, stringsAsFactors=FALSE))
+	if(colorState == 'moist') {
+	  h$soil_color <- with(h, munsell2rgb(matrix_wet_color_hue, matrix_wet_color_value, matrix_wet_color_chroma))
+	  h <- with(h, data.frame(id=series, top, bottom, hzname, soil_color, 
+	                          hue=matrix_wet_color_hue, value=matrix_wet_color_value, 
+	                          chroma=matrix_wet_color_chroma, dry_hue=matrix_dry_color_hue,
+	                          dry_value=matrix_dry_color_value, dry_chroma=matrix_dry_color_chroma,
+	                          narrative=narrative,
+	                          stringsAsFactors=FALSE)) 
+	}
+	
+	if(colorState == 'dry') {
+	  h$soil_color <- with(h, munsell2rgb(matrix_dry_color_hue, matrix_dry_color_value, matrix_dry_color_chroma))
+	  h <- with(h, data.frame(id=series, top, bottom, hzname, soil_color, 
+	                          hue=matrix_dry_color_hue, value=matrix_dry_color_value, 
+	                          chroma=matrix_dry_color_chroma, moist_hue=matrix_wet_color_hue,
+	                          moist_value=matrix_wet_color_value, moist_chroma=matrix_wet_color_chroma,
+	                          narrative=narrative,
+	                          stringsAsFactors=FALSE))
+	}
+	
 	
 	# upgrade to SoilProfileCollection
 	depths(h) <- id ~ top + bottom

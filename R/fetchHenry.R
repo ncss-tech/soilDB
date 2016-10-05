@@ -99,6 +99,28 @@
   return(res)
 }
 
+# # TODO: finish this
+# .summarizeSoilVWC <- function(soilVWC.data) {
+#   
+#   # TODO: strip-out bogus data
+#   
+#   
+#   d <- ddply(soilVWC.data, c('sid', 'year'), .progress='text', .fun = function(i) {
+#     
+#     
+#     i.q <- quantile(i$sensor_value, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), na.rm = TRUE)
+#     days.gt.q.crit <- length(which(i$sensor_value >= i.q['50%']))
+#     days.of.data <- length(na.omit(i$sensor_value))
+#     
+#     # TODO: these summaries are only useful when you have an entire year of data...
+#     res <- data.frame(days.gt.q.crit, days.of.data)
+#     return(res)
+#   })
+#   
+#   return(d)
+# }
+
+
 # summarize daily values via julian day
 .summarizeSoilTemperature <- function(soiltemp.data) {
   
