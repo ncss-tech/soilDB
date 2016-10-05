@@ -8,6 +8,11 @@
 ##      http://www.wcc.nrcs.usda.gov/web_service/AWDB_Web_Service_Reference.htm
 ##      http://www.wcc.nrcs.usda.gov/report_generator/WebReportScripting.htm
 
+##
+## ideas:
+##   https://github.com/gunnarleffler/getSnotel
+##
+
 
 # req is a named vector or list
 fetchSCAN <- function(req) {
