@@ -36,6 +36,7 @@ fetchOSD <- function(soils, colorState='moist') {
 	                          hue=matrix_wet_color_hue, value=matrix_wet_color_value, 
 	                          chroma=matrix_wet_color_chroma, dry_hue=matrix_dry_color_hue,
 	                          dry_value=matrix_dry_color_value, dry_chroma=matrix_dry_color_chroma,
+	                          texture_class=texture_class, cf_class=cf_class, pH=ph, pH_class=ph_class,
 	                          narrative=narrative,
 	                          stringsAsFactors=FALSE)) 
 	}
@@ -46,6 +47,7 @@ fetchOSD <- function(soils, colorState='moist') {
 	                          hue=matrix_dry_color_hue, value=matrix_dry_color_value, 
 	                          chroma=matrix_dry_color_chroma, moist_hue=matrix_wet_color_hue,
 	                          moist_value=matrix_wet_color_value, moist_chroma=matrix_wet_color_chroma,
+	                          texture_class=texture_class, cf_class=cf_class, pH=ph, pH_class=ph_class,
 	                          narrative=narrative,
 	                          stringsAsFactors=FALSE))
 	}
@@ -53,6 +55,15 @@ fetchOSD <- function(soils, colorState='moist') {
 	
 	# upgrade to SoilProfileCollection
 	depths(h) <- id ~ top + bottom
+	
+	## borrowed from OSD parsing code
+	## TODO: merge into aqp
+	textures <- c('coarse sand', 'sand', 'fine sand', 'very fine sand', 'loamy coarse sand', 'loamy sand', 'loamy fine sandy', 'loamy very fine sand', 'coarse sandy loam', 'sandy loam', 'fine sandy loam', 'very fine sandy loam', 'loam', 'silt loam', 'silt', 'sand clay loam', 'clay loam', 'silty clay loam', 'sandy clay', 'silty clay', 'clay')
+	pH_classes <- c('ultra acid', 'extremely acid', 'vert strongly acid', 'strongly acid', 'moderately acid', 'slightly acid', 'neutral', 'slightly alkaline', 'mildly alkaline', 'moderately alkaline', 'strongly alkaline', 'very strongly alkaline')
+	
+	# convert some columns into factors
+	h$texture_class <- factor(h$texture_class, levels=textures, ordered = TRUE)
+	h$pH_class <- factor(h$pH_class, levels=pH_classes, ordered = TRUE)
 	
 	# merge-in site data
 	s$id <- s$seriesname

@@ -1,5 +1,6 @@
--------------------------- soilDB 1.8-3 (2016-10-05) ----------------------------
+-------------------------- soilDB 1.8-3 (2016-10-06) ----------------------------
 * fetchOSD() now returns dry colors and the source "narrative" for each horizon; function gains an argument
+* fetchOSD() now returns texture class, coarse fragment modifier, pH, and pH class
 
 -------------------------- soilDB 1.8 (2016-04-29) ----------------------------
 * fetchKSSL() can now query basic morphologic data with the argument "returnMorphologicData"
