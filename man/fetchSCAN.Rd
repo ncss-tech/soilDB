@@ -2,12 +2,12 @@
 \alias{fetchSCAN}
 \title{Fetch SCAN Data}
 \description{Query soil/climate data from USDA-NRCS SCAN Stations (experimental)}
-\usage{fetchSCAN(req)}
+\usage{fetchSCAN(site.code, year, report='SCAN')}
 
 \arguments{
-  \item{req}{a vector of named characters or list of named characters, e.g. 
-  c(intervalType=' View Historic ', report='STO', timeseries='Daily', 
-format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY')}
+  \item{site.code}{a vector of site codes}
+  \item{year}{a vector of years}
+  \item{report}{report name, single value only}
 }
 \details{An attempt is made to parse the column names from the data returned from the SCAN webservice. The data returned will depend on the report submitted. Column names contain the code (I, D, H): 
 
@@ -24,28 +24,8 @@ See examples, details pending.}
 
 \examples{
 \dontrun{
-# all sensors
-req <- c(intervalType=' View Historic ', report='ALL', timeseries='Daily', 
-format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY')
-
-# standard SCAN report
-req <- c(intervalType=' View Historic ', report='SCAN', timeseries='Daily', 
-format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY')
-
-# soil / air temps
-req <- c(intervalType=' View Historic ', report='STO', timeseries='Daily', 
-format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY')
-
-# soil moisture + precip
-req <- c(intervalType=' View Historic ', report='SMS', timeseries='Daily', 
-format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY')
-
-# soil moisture, hourly: careful, lots of data!
-req <- c(intervalType=' View Historic ', report='SMS', timeseries='Hourly', 
-format='copy', sitenum='2072', interval='YEAR', year='2011', month='CY')
-
-# get data, format into DF
-x <- fetchSCAN(req)
+# get data: new interface
+x <- fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016))
 }
 }
 \keyword{manip}

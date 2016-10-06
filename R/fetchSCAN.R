@@ -61,9 +61,94 @@ SCAN_sensor_metadata <- function(site.code) {
 }
 
 
+# site.code: vector of site codes
+# year: vector of years
+# report: single report type
+fetchSCAN <- function(site.code, year, report='SCAN') {
+  
+  # all possible combinations of site codes and year | single report type
+  g <- expand.grid(s=site.code, y=year, r=report)
+  
+  # get a list of request lists
+  req.list <- mapply(.make_SCAN_req, s=g$s, y=g$y, r=g$r, SIMPLIFY = FALSE)
+  
+  ## TODO: can probably be optimised, processing requires 2 passes
+  # format raw data into a list of lists
+  # indexed by:
+  # sitenum -> year -> sensor cluster
+  d.list <- list()
+  for(i in req.list) {
+    # raw data is messy, reformat
+    d <- .get_SCAN_data(i)
+    
+    # temp list to store results
+    l.data <- list()
+    
+    # current iteration data, parsed into components
+    l.data[['SMS']] <- .formatSCAN(d, code='SMS')
+    l.data[['STO']] <- .formatSCAN(d, code='STO')
+    
+    # current year's worth of data
+    d.list[[as.character(i$sitenum)]][[as.character(i$year)]] <- l.data
+  }
+  
+  # flatten individual sensors over years, by site number
+  d.sms <- .flatten_SCAN_data(d.list, 'SMS')
+  d.sto <- .flatten_SCAN_data(d.list, 'STO')
+  
+  return(list(sms=d.sms, sto=d.sto))
+}
 
+
+## TODO: this seems wastefull...
+.flatten_SCAN_data <- function(datalist, code) {
+  
+  # extract single suite of data and flatten to DF across years
+  res <- lapply(datalist, function(this.site) {
+    r <- ldply(this.site, function(this.year) {
+      this.year[[code]]
+    })
+    # strip .id
+    r$.id <- NULL
+    return(r)
+  })
+  
+  # flatten by site number
+  res <- ldply(res)
+  # strip .id
+  res$.id <- NULL
+  
+  return(res)
+}
+
+# first attempt at unifying formats
+.formatSCAN <- function(d, code) {
+  # locate named columns
+  d.cols <- grep(code, names(d))
+  # convert to long format
+  d.long <- melt(d, id.vars = c('Site', 'Date'), measure.vars = names(d)[d.cols])
+  # extract depths
+  d.depths <- base::strsplit(as.character(d.long$variable), split = '_', fixed = TRUE)
+  d.long$depth <- sapply(d.depths, function(i) as.numeric(i[2]))
+  # convert depths (in) to cm
+  d.long$depth <- round(d.long$depth * 2.54)
+  # format and return
+  return(d.long[, c('Site', 'Date', 'value', 'depth')])
+}
+
+# format a list request for SCAN data
+# s: single site code
+# y: single year
+# r: single report type
+.make_SCAN_req <- function(s, y, r) {
+  req <- list(intervalType=' View Historic ', report=r, timeseries='Daily', format='copy', sitenum=s, interval='YEAR', year=y, month='CY')
+  return(req)
+}
+
+
+## this is an internally used function
 # req is a named vector or list
-fetchSCAN <- function(req) {
+.get_SCAN_data <- function(req) {
   
   # convert to list as needed
   if(class(list) != 'list')
