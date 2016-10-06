@@ -2,12 +2,13 @@
 \alias{fetchSCAN}
 \title{Fetch SCAN Data}
 \description{Query soil/climate data from USDA-NRCS SCAN Stations (experimental)}
-\usage{fetchSCAN(site.code, year, report='SCAN')}
+\usage{fetchSCAN(site.code, year, report='SCAN', req=NULL)}
 
 \arguments{
   \item{site.code}{a vector of site codes}
   \item{year}{a vector of years}
   \item{report}{report name, single value only}
+  \item{req}{list of SCAN request parameters, for backwards-compatibility only}
 }
 \details{An attempt is made to parse the column names from the data returned from the SCAN webservice. The data returned will depend on the report submitted. Column names contain the code (I, D, H): 
 
