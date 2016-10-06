@@ -64,7 +64,15 @@ SCAN_sensor_metadata <- function(site.code) {
 # site.code: vector of site codes
 # year: vector of years
 # report: single report type
-fetchSCAN <- function(site.code, year, report='SCAN') {
+# req: for backwards compatibility
+fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
+  
+  ## backwards compatibility:
+  if(!missing(req)) {
+    message('using old-style interface...')
+    return(.get_SCAN_data(req))
+  }
+  
   
   # all possible combinations of site codes and year | single report type
   g <- expand.grid(s=site.code, y=year, r=report)
@@ -72,57 +80,34 @@ fetchSCAN <- function(site.code, year, report='SCAN') {
   # get a list of request lists
   req.list <- mapply(.make_SCAN_req, s=g$s, y=g$y, r=g$r, SIMPLIFY = FALSE)
   
-  ## TODO: can probably be optimised, processing requires 2 passes
-  # format raw data into a list of lists
-  # indexed by:
-  # sitenum -> year -> sensor cluster
+  # format raw data into a list of lists:
+  # sensor suite -> site number -> year
   d.list <- list()
   for(i in req.list) {
     # raw data is messy, reformat
     d <- .get_SCAN_data(i)
     
-    # temp list to store results
-    l.data <- list()
-    
-    # current iteration data, parsed into components
-    l.data[['SMS']] <- .formatSCAN(d, code='SMS')
-    l.data[['STO']] <- .formatSCAN(d, code='STO')
-    
-    # current year's worth of data
-    d.list[[as.character(i$sitenum)]][[as.character(i$year)]] <- l.data
+    # save: sensor suite -> site number -> year
+    d.list[['SMS']][[as.character(i$sitenum)]][[as.character(i$year)]] <- .formatSCAN_soil_sensor_suites(d, code='SMS')
+    d.list[['STO']][[as.character(i$sitenum)]][[as.character(i$year)]] <- .formatSCAN_soil_sensor_suites(d, code='STO')
   }
   
   # flatten individual sensors over years, by site number
-  d.sms <- .flatten_SCAN_data(d.list, 'SMS')
-  d.sto <- .flatten_SCAN_data(d.list, 'STO')
+  d.sms <- ldply(llply(d.list[['SMS']], ldply))
+  d.sto <- ldply(llply(d.list[['STO']], ldply))
+  
+  # remove .id columns
+  d.sms$.id <- NULL
+  d.sto$.id <- NULL
   
   return(list(sms=d.sms, sto=d.sto))
 }
 
 
-## TODO: this seems wastefull...
-.flatten_SCAN_data <- function(datalist, code) {
-  
-  # extract single suite of data and flatten to DF across years
-  res <- lapply(datalist, function(this.site) {
-    r <- ldply(this.site, function(this.year) {
-      this.year[[code]]
-    })
-    # strip .id
-    r$.id <- NULL
-    return(r)
-  })
-  
-  # flatten by site number
-  res <- ldply(res)
-  # strip .id
-  res$.id <- NULL
-  
-  return(res)
-}
 
-# first attempt at unifying formats
-.formatSCAN <- function(d, code) {
+
+# combine soil sensor suites into stackable format
+.formatSCAN_soil_sensor_suites <- function(d, code) {
   # locate named columns
   d.cols <- grep(code, names(d))
   # convert to long format
