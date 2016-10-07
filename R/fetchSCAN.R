@@ -10,6 +10,10 @@
 #
 ### sensor codes: http://wcc.sc.egov.usda.gov/nwcc/sensors
 
+### TODO: why are there sometimes duplicate above-ground sensors:
+###   station 482
+###
+###  WTEQ.I WTEQ.I-2 PREC.I PREC.I-2 TOBS.I TOBS.I-2 TOBS.I-3 TMAX.D TMIN.D TAVG.D SNWD.I SMS.I_8 STO.I_8
 
 ##
 ## ideas:
@@ -94,6 +98,8 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   for(i in req.list) {
     # raw data is messy, reformat
     d <- .get_SCAN_data(i)
+    
+    ## TODO: sometimes the above ground sensors will match multiple (?) versions
     
     # save: sensor suite -> site number -> year
     sensors <- c('SMS', 'STO', 'SAL', 'TAVG', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')
