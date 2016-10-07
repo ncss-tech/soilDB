@@ -17,7 +17,14 @@
 ##
 
 
+## TODO: this crashes on 32bit R / libraries
+
 SCAN_sensor_metadata <- function(site.code) {
+  
+  # check for 64bit mode
+  if(.Machine$sizeof.pointer != 8)
+    stop("Sorry! For some reason this function crashes in 32bit mode, I don't know why!", call. = FALSE)
+  
   # check for required packages
   if(!requireNamespace('httr', quietly = TRUE) | !requireNamespace('rvest', quietly = TRUE))
     stop('please install the `httr` and `rvest` packages', call.=FALSE)
@@ -47,6 +54,7 @@ SCAN_sensor_metadata <- function(site.code) {
   # get tables
   n.tables <- rvest::html_nodes(r.content, "table")
   
+  ## TODO: this line crashes on 32bit R / libraries
   # the metadata table we want is 5th
   m <- rvest::html_table(n.tables[[5]], header=FALSE)
   
