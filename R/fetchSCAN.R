@@ -88,19 +88,23 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     d <- .get_SCAN_data(i)
     
     # save: sensor suite -> site number -> year
-    d.list[['SMS']][[as.character(i$sitenum)]][[as.character(i$year)]] <- .formatSCAN_soil_sensor_suites(d, code='SMS')
-    d.list[['STO']][[as.character(i$sitenum)]][[as.character(i$year)]] <- .formatSCAN_soil_sensor_suites(d, code='STO')
+    sensors <- c('SMS', 'STO', 'SAL', 'TAVG', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')
+    for(sensor.i in sensors) {
+      d.list[[sensor.i]][[as.character(i$sitenum)]][[as.character(i$year)]] <- .formatSCAN_soil_sensor_suites(d, code=sensor.i)
+    }
+    
   }
   
-  # flatten individual sensors over years, by site number
-  d.sms <- ldply(llply(d.list[['SMS']], ldply))
-  d.sto <- ldply(llply(d.list[['STO']], ldply))
+  # init list to store results
+  res <- list()
+  for(sensor.i in sensors) {
+    # flatten individual sensors over years, by site number
+    r.i <- ldply(llply(d.list[[sensor.i]], ldply))
+    r.i$.id <- NULL
+    res[[sensor.i]] <- r.i
+  }
   
-  # remove .id columns
-  d.sms$.id <- NULL
-  d.sto$.id <- NULL
-  
-  return(list(sms=d.sms, sto=d.sto))
+  return(res)
 }
 
 
@@ -110,6 +114,9 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
 .formatSCAN_soil_sensor_suites <- function(d, code) {
   # locate named columns
   d.cols <- grep(code, names(d))
+  # return NULL if no data
+  if(length(d.cols) == 0)
+    return(NULL)
   # convert to long format
   d.long <- melt(d, id.vars = c('Site', 'Date'), measure.vars = names(d)[d.cols])
   # extract depths
