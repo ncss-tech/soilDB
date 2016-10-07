@@ -1,6 +1,7 @@
--------------------------- soilDB 1.8-3 (2016-10-06) ----------------------------
+-------------------------- soilDB 1.8-4 (2016-10-07) ----------------------------
 * fetchOSD() now returns dry colors and the source "narrative" for each horizon; function gains an argument
 * fetchOSD() now returns texture class, coarse fragment modifier, pH, and pH class
+* fetchSCAN() re-written, see manual pages and http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html 
 
 -------------------------- soilDB 1.8 (2016-04-29) ----------------------------
 * fetchKSSL() can now query basic morphologic data with the argument "returnMorphologicData"
