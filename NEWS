@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.8-5 (2016-11-03) ----------------------------
+* converted all links to SoilWeb servers to HTTPS
+
 -------------------------- soilDB 1.8-4 (2016-10-07) ----------------------------
 * fetchOSD() now returns dry colors and the source "narrative" for each horizon; function gains an argument
 * fetchOSD() now returns texture class, coarse fragment modifier, pH, and pH class

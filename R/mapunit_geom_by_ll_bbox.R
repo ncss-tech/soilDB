@@ -40,7 +40,7 @@ mapunit_geom_by_ll_bbox <- function(bbox, source='sda') {
 			stop('KML support is missing from your GDAL/OGR build.', call.=FALSE)
 		
 		# parse URL
-		u <- paste( 'http://casoilresource.lawr.ucdavis.edu/soil_web/export.php?format=kml&srid=4326&BBOX=', bbox.text, sep='')
+		u <- paste( 'https://casoilresource.lawr.ucdavis.edu/soil_web/export.php?format=kml&srid=4326&BBOX=', bbox.text, sep='')
 		
 		# file extension for later
 		file.extension <- '.kml'

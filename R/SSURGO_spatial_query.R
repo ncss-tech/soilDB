@@ -34,7 +34,7 @@ SoilWeb_spatial_query <- function(bbox=NULL, coords=NULL, what='mapunit', source
   }
   
   # build URL
-  the.url <- paste('http://casoilresource.lawr.ucdavis.edu/soil_web/api/ssurgo.php?what=mapunit', f, sep='')
+  the.url <- paste('https://casoilresource.lawr.ucdavis.edu/soil_web/api/ssurgo.php?what=mapunit', f, sep='')
   
   ## TODO: this isn't robust
   # load data from JSON

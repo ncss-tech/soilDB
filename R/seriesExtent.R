@@ -31,7 +31,7 @@ seriesExtent <- function(s, timeout=60) {
   s <- gsub(pattern=' ', replacement='_', x=tolower(s))
   
   # base URL to cached data
-  u <- URLencode(paste0('http://casoilresource.lawr.ucdavis.edu/series-extent-cache/json/', s, '.json'))
+  u <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/series-extent-cache/json/', s, '.json'))
   
   # init temp files / dirs
   td <- tempdir()

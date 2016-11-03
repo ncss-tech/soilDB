@@ -4,8 +4,8 @@
 fetchOSD <- function(soils, colorState='moist') {
 	
 	# base URLs
-	u.osd_site <- 'http://casoilresource.lawr.ucdavis.edu/soil_web/reflector_api/soils.php?what=osd_site_query&q_string='
-	u.osd_hz <- 'http://casoilresource.lawr.ucdavis.edu/soil_web/reflector_api/soils.php?what=osd_query&q_string='
+	u.osd_site <- 'https://casoilresource.lawr.ucdavis.edu/soil_web/reflector_api/soils.php?what=osd_site_query&q_string='
+	u.osd_hz <- 'https://casoilresource.lawr.ucdavis.edu/soil_web/reflector_api/soils.php?what=osd_query&q_string='
 	
 	# compile URL + requested soil series
   # note: not affected by horizon names with prime (')
