@@ -187,7 +187,7 @@ SDA_query <- function(q) {
   cat(post.data, file=tf.1, sep = '\n')
   
   # submit request
-  r <- httr::POST(url="http://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest", body=httr::upload_file(tf.1))
+  r <- httr::POST(url="https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest", body=httr::upload_file(tf.1))
   httr::stop_for_status(r)
   
   ## httr 1.1.0: content now returns an xml_document

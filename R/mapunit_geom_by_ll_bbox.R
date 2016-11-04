@@ -21,7 +21,7 @@ mapunit_geom_by_ll_bbox <- function(bbox, source='sda') {
 			stop('GML support is missing from your GDAL/OGR build.', call.=FALSE)
 		
 		# compose URL
-		u <- paste( 'http://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&Version=1.0.0&Request=GetFeature&Typename=MapunitPoly&BBOX=', bbox.text, sep='')
+		u <- paste( 'https://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&Version=1.0.0&Request=GetFeature&Typename=MapunitPoly&BBOX=', bbox.text, sep='')
 		
 		# file extension for later
 		file.extension <- '.gml'
