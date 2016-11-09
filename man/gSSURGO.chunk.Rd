@@ -10,7 +10,8 @@
 \source{\url{http://www.nrcs.usda.gov/wps/portal/nrcs/detail//?cid=nrcs142p2_053628}}
 
 \examples{
+\dontrun{
 data(gSSURGO.chunk)
-
+}
 }
 \keyword{datasets}

@@ -12,9 +12,11 @@ importFrom("utils", "URLencode", "download.file", "object.size",
 importFrom(reshape2, 
   dcast,
   melt
-  
 )
 
+importFrom(raster, 
+  extent
+)
 
 importFrom(plyr, 
   ddply,

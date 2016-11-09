@@ -1,13 +1,13 @@
 # get the series extent from SEE pre-cached GeoJSON data and plot on Google Maps
 seriesExtentAsGmap <- function(s, timeout=60, exp=1.25) {
-  if(!requireNamespace('dismo', quietly=TRUE) & !requireNamespace('raster', quietly=TRUE) & !requireNamespace('rgdal', quietly=TRUE))
-    stop('please install the `raster`, `rgdal` and `dismo` packages', call.=FALSE)
+  if(!requireNamespace('dismo', quietly=TRUE)  & !requireNamespace('rgdal', quietly=TRUE))
+    stop('please install the `rgdal` and `dismo` packages', call.=FALSE)
   
 	# load series extent data in WGS84 GCS
 	x <- seriesExtent(s, timeout)
 	
 	# make extent object around sites, in geographic coordinates
-	e <- raster::extent(spTransform(x, CRS('+proj=longlat')))
+	e <- extent(spTransform(x, CRS('+proj=longlat')))
 	
 	# grab ref. to google maps
 	g <- dismo::gmap(e, exp=exp)
