@@ -264,6 +264,10 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)
   
+  # sanity-check: `what` should be within the legal set of options
+  if(! what %in% c('all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp'))
+    stop("`what` must be either: 'all', 'sensors', 'soiltemp', 'soilVWC', or 'airtemp'", call.=FALSE)
+  
   # sanity-check: user must supply some kind of criteria
   if(missing(usersiteid) & missing(project) & missing(sso))
     stop('you must provide some filtering criteria', call.=FALSE)
