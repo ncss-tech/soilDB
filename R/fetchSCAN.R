@@ -22,17 +22,9 @@
 
 
 ## TODO: this crashes on 32bit R / libraries
-
-SCAN_sensor_metadata <- function(site.code) {
-  
-  # check for 64bit mode
-  if(.Machine$sizeof.pointer != 8)
-    stop("Sorry! For some reason this function crashes in 32bit mode, I don't know why!", call. = FALSE)
-  
-  # check for required packages
-  if(!requireNamespace('httr', quietly = TRUE) | !requireNamespace('rvest', quietly = TRUE))
-    stop('please install the `httr` and `rvest` packages', call.=FALSE)
-  
+# helper function for getting a single table of SCAN metadata
+# site.code: a single SCAN site code
+.get_single_SCAN_metadata <- function(site.code) {
   # base URL to service
   uri <- 'http://wcc.sc.egov.usda.gov/nwcc/sensors'
   
@@ -70,6 +62,27 @@ SCAN_sensor_metadata <- function(site.code) {
   names(m) <- h
   
   return(m)
+}
+
+
+
+
+# iterate over a vector of SCAN site codes, returning basic metadata
+# site.code: vector of SCAN site codes
+SCAN_sensor_metadata <- function(site.code) {
+  
+  # check for 64bit mode
+  if(.Machine$sizeof.pointer != 8)
+    stop("Sorry! For some reason this function crashes in 32bit mode, I don't know why!", call. = FALSE)
+  
+  # check for required packages
+  if(!requireNamespace('httr', quietly = TRUE) | !requireNamespace('rvest', quietly = TRUE))
+    stop('please install the `httr` and `rvest` packages', call.=FALSE)
+  
+  # iterate over site codes, returning DF + site.code
+  res <- ddply(data.frame(site.code=site.code), 'site.code', .get_single_SCAN_metadata)
+  
+  return(res)
 }
 
 
