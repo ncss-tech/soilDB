@@ -6,10 +6,12 @@ Date: 2016-11-09
 Author: D.E. Beaudette and J. Skovlin, and S. Roecker
 Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
-License: GPL (>= 2)
+License: GPL (>= 3)
 LazyLoad: yes
+LazyData: true
 Depends: R (>= 3.0.0), aqp
 Imports: grDevices, graphics, stats, utils, plyr, Hmisc, XML, sp, reshape2
 Suggests: lattice, dismo, raster, rgdal, jsonlite, RODBC, httr, rgeos, rvest
 Repository: CRAN
-URL: https://github.com/ncss-tech/soilDB
+URL: http://ncss-tech.github.io/AQP/
+BugReports: https://github.com/ncss-tech/soilDB/issues
