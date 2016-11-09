@@ -5,8 +5,11 @@
 \title{Fetch SCAN Data}
 \description{Query soil/climate data from USDA-NRCS SCAN Stations (experimental)}
 
-\usage{fetchSCAN(site.code, year, report='SCAN', req=NULL)}
-\usage{SCAN_sensor_metadata(site.code)}
+\usage{
+# get SCAN data
+fetchSCAN(site.code, year, report='SCAN', req=NULL)
+# get SCAN station metadata
+SCAN_sensor_metadata(site.code)}
 
 \arguments{
   \item{site.code}{a vector of site codes}
@@ -14,7 +17,9 @@
   \item{report}{report name, single value only}
   \item{req}{list of SCAN request parameters, for backwards-compatibility only}
 }
-\details{See \href{http://rstudio.com}{The fetchSCAN tutorial for details.}}
+\details{See \href{http://rstudio.com}{The fetchSCAN tutorial for details.} These functions require the `httr` and `rvest` libraries.}
+
+\note{\code{SCAN_sensor_metadata()} is known to crash on 32bit R / libraries (Windows).}
 
 \value{a \code{data.frame} object}
 \references{http://www.wcc.nrcs.usda.gov/scan/}
