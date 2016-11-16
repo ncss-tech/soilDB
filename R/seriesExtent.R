@@ -46,6 +46,9 @@ seriesExtent <- function(s, timeout=60) {
   x <- rgdal::readOGR(dsn=tf.json, layer='OGRGeoJSON', verbose=FALSE)
   unlink(tf.json)
   
+  # reset row names in attribute data to series name
+  x <- spChFIDs(x, as.character(x$series))
+  
   # return in WGS84 GCS
   return(x)
 }

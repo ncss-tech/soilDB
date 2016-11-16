@@ -32,7 +32,8 @@ importFrom(sp,
   CRS,
   "coordinates<-",
   "proj4string<-",
-  SpatialPolygonsDataFrame
+  SpatialPolygonsDataFrame,
+  spChFIDs
 )
 
 

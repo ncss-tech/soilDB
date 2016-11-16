@@ -1,6 +1,7 @@
--------------------------- soilDB 1.8-7 (2016-11-09) ----------------------------
+-------------------------- soilDB 1.8-7 (2016-11-16) ----------------------------
 * sanity checks for fetchHenry()
 * SCAN_sensor_metadata() vectorized and documented
+* unique row names in SPDF returned by seriesExtent()
 
 
 -------------------------- soilDB 1.8-6 (2016-11-04) ----------------------------
