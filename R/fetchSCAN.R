@@ -144,6 +144,15 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   # return NULL if no data
   if(length(d.cols) == 0)
     return(NULL)
+  
+  ## temporary hack to inform users that there are multiple sensors / label
+  if(length(d.cols) > 1) {
+    message(paste0('WARNING multiple sensors per site: ', d$Site[1], ' [', paste0(names(d)[d.cols], collapse = ','), '], using first sensor'))
+    # use only the first sensor
+    d.cols <- d.cols[1]
+  }
+    
+    
   # convert to long format
   d.long <- melt(d, id.vars = c('Site', 'Date'), measure.vars = names(d)[d.cols])
   # extract depths
