@@ -147,8 +147,9 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   
   ## https://github.com/ncss-tech/soilDB/issues/14
   ## temporary hack to inform users that there are multiple sensors / label
-  if(length(d.cols) > 1) {
-    message(paste0('WARNING multiple sensors per site: ', d$Site[1], ' [', paste0(names(d)[d.cols], collapse = ','), '], using first sensor'))
+  ## this is only a problem for above-ground sensors
+  if(length(d.cols) > 1 & code %in% c('TAVG', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
+    message(paste0('multiple above-ground sensors per site: ', d$Site[1], ' [', paste0(names(d)[d.cols], collapse = ','), '], using first sensor'))
     # use only the first sensor
     d.cols <- d.cols[1]
   }
