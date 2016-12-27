@@ -26,11 +26,11 @@
 # site.code: a single SCAN site code
 .get_single_SCAN_metadata <- function(site.code) {
   # base URL to service
-  uri <- 'http://wcc.sc.egov.usda.gov/nwcc/sensors'
+  uri <- 'https://wcc.sc.egov.usda.gov/nwcc/sensors'
   
   # note: the SCAN form processor checks the refering page and user-agent
   new.headers <- c(
-    "Referer"="http://www.wcc.nrcs.usda.gov/nwcc/",
+    "Referer"="https://wcc.sc.egov.usda.gov/nwcc/sensors",
     "User-Agent" = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13"
   )
   
@@ -189,11 +189,11 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     stop('please install the `httr` package', call.=FALSE)
   
   # base URL to service
-  uri <- 'http://wcc.sc.egov.usda.gov/nwcc/view'
+  uri <- 'https://wcc.sc.egov.usda.gov/nwcc/view'
   
   # note: the SCAN form processor checks the refering page and user-agent
   new.headers <- c(
-    "Referer"="http://www.wcc.nrcs.usda.gov/nwcc/",
+    "Referer"="https://wcc.sc.egov.usda.gov/nwcc/",
     "User-Agent" = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13"
   )
   

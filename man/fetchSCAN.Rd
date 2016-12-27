@@ -17,12 +17,12 @@ SCAN_sensor_metadata(site.code)}
   \item{report}{report name, single value only}
   \item{req}{list of SCAN request parameters, for backwards-compatibility only}
 }
-\details{See \href{http://rstudio.com}{The fetchSCAN tutorial for details.} These functions require the `httr` and `rvest` libraries.}
+\details{See \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{The fetchSCAN tutorial for details.} These functions require the `httr` and `rvest` libraries.}
 
 \note{\code{SCAN_sensor_metadata()} is known to crash on 32bit R / libraries (Windows).}
 
 \value{a \code{data.frame} object}
-\references{http://www.wcc.nrcs.usda.gov/scan/}
+\references{https://www.wcc.nrcs.usda.gov/index.html}
 \author{D.E. Beaudette}
 
 \examples{
