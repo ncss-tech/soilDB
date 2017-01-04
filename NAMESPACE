@@ -3,7 +3,7 @@ importFrom("grDevices", "rgb")
 
 importFrom("graphics", "plot")
 
-importFrom("stats", "aggregate", "complete.cases", "na.omit", "as.formula")
+importFrom("stats", "aggregate", "complete.cases", "na.omit", "as.formula", "splinefun")
 
 importFrom("utils", "URLencode", "download.file", "object.size",
              "read.csv", "read.table", "setTxtProgressBar",
