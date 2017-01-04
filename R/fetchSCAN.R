@@ -110,6 +110,7 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   d.list <- list()
   for(i in req.list) {
     # raw data is messy, reformat
+    # when there are no data, result is NULL
     d <- .get_SCAN_data(i)
     
     ## TODO: sometimes the above ground sensors will match multiple (?) versions
@@ -227,7 +228,14 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   
   # NOTE: we have already read-in the first 3 lines above, therefore we don't need to skip lines here
   # read as CSV, skipping junk + headers, accomodating white-space and NA values encoded as -99.9
-  x <- read.table(tc, header=FALSE, stringsAsFactors=FALSE, sep=',', quote='', strip.white=TRUE, na.strings='-99.9', comment.char='')
+  x <- try(read.table(tc, header=FALSE, stringsAsFactors=FALSE, sep=',', quote='', strip.white=TRUE, na.strings='-99.9', comment.char=''), silent = TRUE)
+  
+  # catch errors
+  if(class(x) == 'try-error') {
+    close.connection(tc)
+    x <- NULL
+    return(x)
+  }
   
   # the last column is always junk
   x[[names(x)[length(x)]]] <- NULL
