@@ -132,6 +132,11 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     res[[sensor.i]] <- r.i
   }
   
+  # report object size
+  res.size <- round(object.size(res) / 1024 / 1024, 2)
+  res.rows <- sum(sapply(x, nrow), na.rm=TRUE)
+  message(paste(res.rows, ' records (', res.size, ' Mb transferred)', sep=''))
+  
   return(res)
 }
 
