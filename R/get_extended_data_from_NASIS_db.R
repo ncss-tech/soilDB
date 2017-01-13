@@ -333,6 +333,9 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1309) AS pm
 	
 	# generate wide-formatted, diagnostic boolean summary
 	d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)
+
+ 	# parse imagename and imagepath for photo links
+	d.photolink$imagename <- basename(d.photolink$imagepath)
 	
 	# summarize rock fragment data
 	d.rf.summary <- simplfyFragmentData(d.rf.data, 'phiid', nullFragsAreZero = nullFragsAreZero)
