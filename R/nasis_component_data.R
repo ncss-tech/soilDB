@@ -195,8 +195,9 @@ get_comonth_from_NASIS_db <- function(fill=FALSE) {
   d <- .metadata_replace(d)
   
   # fix month factor levels
-  d$month <- months(as.Date(paste0("2016-", d$month, "-01")), abbreviate=FALSE)
-  d$month <- factor(d$month, levels=levels(months(1, abbreviate = FALSE)))
+  # using 3-letter month names
+  d$month <- months(as.Date(paste0("2016-", d$month, "-01")), abbreviate = TRUE)
+  d$month <- factor(d$month, levels=levels(months(1, abbreviate = TRUE)))
   
   # fix other factor levels
   d$flodfreqcl <- factor(d$flodfreqcl, levels=c('None', 'Very rare', 'Rare', 'Occasional', 'Frequent', 'Very frequent'))
