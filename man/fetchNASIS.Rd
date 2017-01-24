@@ -30,7 +30,7 @@ get_comonth_from_NASIS_db(fill=FALSE)
   \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details}
   \item{soilColorState}{which colors should be used to generate the convenience field 'soil_color'? ('moist' | 'dry')}
   \item{strict}{should horizonation by strictly enforced? (TRUE)}
-  \item{fille}{should missing "month" rows in the 'comonth' table be filled with NA (FALSE)}
+  \item{fill}{should missing "month" rows in the comonth table be filled with NA (FALSE)}
 }
 
 \value{a SoilProfileCollection class object}
