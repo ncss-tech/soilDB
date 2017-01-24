@@ -1,6 +1,8 @@
+-------------------------- soilDB 1.8.1 (2017-01-23) ----------------------------
+* new function: get_comonth_from_NASIS_db() see manual page for details
+
 -------------------------- soilDB 1.8-10 (2016-12-27) ----------------------------
 * converting all URLs to 'HTTPS', addressing bugs with fetchSCAN() and associated functions
-
 
 -------------------------- soilDB 1.8-7 (2016-11-16) ----------------------------
 * sanity checks for fetchHenry()

@@ -165,6 +165,83 @@ get_component_esd_data_from_NASIS_db <- function() {
 }
 
 
+get_comonth_from_NASIS_db <- function(fill=FALSE) {
+  # must have RODBC installed
+  if(!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
+  q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid
+  FROM comonth_View_1 AS comonth;"
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  
+  # exec query
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  
+  # optionally fill missing coiids
+  if(fill) {
+    q <- "SELECT coiid
+  FROM component_View_1
+    ORDER BY coiid;"
+    
+    # exec query
+    d.coiid <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  }
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # recode metadata domains
+  d <- .metadata_replace(d)
+  
+  # fix month factor levels
+  d$month <- months(as.Date(paste0("2016-", d$month, "-01")), abbreviate=FALSE)
+  d$month <- factor(d$month, levels=levels(months(1, abbreviate = FALSE)))
+  
+  # fix other factor levels
+  d$flodfreqcl <- factor(d$flodfreqcl, levels=c('None', 'Very rare', 'Rare', 'Occasional', 'Frequent', 'Very frequent'))
+  d$floddurcl <- factor(d$floddurcl, levels=c('Extremely brief (0.1 to 4 hours)', 'Very brief (4 to 48 hours)', 'Brief (2 to 7 days)', 'Long (7 to 30 days)', 'Very long (more than 30 days)'))
+  
+  d$pondfreqcl <- factor(d$pondfreqcl, levels=c('None', 'Rare', 'Occasional', 'Frequent'))
+  d$ponddurcl <- factor(d$ponddurcl, levels=c('Very brief (4 to 48 hours)', 'Brief (2 to 7 days)', 'Long (7 to 30 days)', 'Very long (more than 30 days)'))
+  
+  
+  # optionally fill missing coiids
+  if(fill) {
+    # make a new DF with all coiids and months
+    nd <- expand.grid(coiid=d.coiid$coiid, month=levels(d$month))
+    nd$month <- factor(nd$month, levels=levels(d$month))
+    
+    # join full version to comonth records
+    d <- join(nd, d, by=c('coiid', 'month'), type='left')
+    
+    ## this isn't likely needed, will re-visit after some testing
+    
+    # # add "not-populated" to rows that have been filled
+    # levels(d$flodfreqcl) <- c("not populated", levels(d$flodfreqcl))
+    # d$flodfreqcl[is.na(d$flodfreqcl)] <- 'not populated'
+    # 
+    # levels(d$floddurcl) <- c("not populated", levels(d$floddurcl))
+    # d$floddurcl[is.na(d$floddurcl)] <- 'not populated'
+    # 
+    # levels(d$pondfreqcl) <- c("not populated", levels(d$pondfreqcl))
+    # d$pondfreqcl[is.na(d$pondfreqcl)] <- 'not populated'
+    # 
+    # levels(d$ponddurcl) <- c("not populated", levels(d$ponddurcl))
+    # d$ponddurcl[is.na(d$ponddurcl)] <- 'not populated'
+  }
+  
+  # re-order by coiid, then months
+  d <- d[order(d$coiid, as.numeric(d$month)), ]
+  
+  # done
+  return(d)
+}
+
+
+
+
+
 # get linked pedons by peiid and user pedon ID
 # note that there may be >=1 pedons / coiid
 get_copedon_from_NASIS_db <- function() {
