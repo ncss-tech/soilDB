@@ -15,6 +15,16 @@ ORDER BY labpeiid, hzdept ASC;"
 	
 	# exec queries
 	d.lablayer <- RODBC::sqlQuery(channel, q.ncsslablayer, stringsAsFactors=FALSE)
+	
+	# trim names
+	names(d.lablayer) <- gsub("measured", "", names(d.lablayer))
+	
+	# transform variables
+	d.lablayer <- within(d.lablayer, {
+	  cec7clay = round(cec7 / (claytot - claycarb), 2)
+	  organicmatpct = round(carbonorganicpct * 1.724, 2)
+	  }
+	  )
 		
 	# close connection
 	RODBC::odbcClose(channel)
