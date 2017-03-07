@@ -87,6 +87,31 @@
 	return(d[best.record, ])
 }
 
+## TODO: this may need some review
+## try and pick the best possible ecosite record
+# .pickBestOtherVeg <- function(d) {
+#   
+#   # add a method field
+#   d$es_selection_method <- NA
+#   
+#   # try to get the most recent:
+#   d.order <- order(d$ecositecorrdate, decreasing=TRUE)
+#   
+#   # if there are multiple (unique) dates, return the most recent
+#   if(length(unique(d$ecositecorrdate)) > 1) {
+#     d$es_selection_method <- 'most recent'
+#     return(d[d.order[1], ])
+#   }
+#   
+#   # otherwise, return the record with the least number of missing cells
+#   # if there are the same number of missing cells, the first record is returned
+#   n.na <- apply(d, 1, function(i) length(which(is.na(i))))
+#   best.record <- which.min(n.na)
+#   
+#   d$es_selection_method <- 'least missing data'
+#   return(d[best.record, ])
+# }
+
 ## 2015-11-30: short-circuts could use some work, consider pre-marking mistakes in calling function
 # attempt to format "landform" records into a single string
 # note: there are several assumptions made about the data, 
@@ -224,6 +249,80 @@
   
   return(data.frame(siteiid=u.siteiid, pmkind=str.kind, pmorigin=str.origin, stringsAsFactors=FALSE))
 }
+
+
+# attempt to flatten multiple ecosite entries into 1 string
+.formatEcositeString <- function(i.esd, name.sep='|') {
+  # get the current site
+  u.coiid <- unique(i.esd$coiid)
+  
+  # sanity check: this function can only be applied to data from a single component
+  if(length(u.coiid) > 1)
+    stop('data are from multiple component records')
+  
+  # subset othervegcl data to remove any with NA for othervegclass
+  i.esd <- i.esd[which(!is.na(i.esd$ecositeid)), ]
+  
+  # if there is no data, then return a DF formatted as if there were data
+  if(nrow(i.esd) == 0)
+    return(data.frame(coiid=u.coiid, ecosite_id=NA, ecosite_name=NA, stringsAsFactors=FALSE))
+  
+  # short-circuit: if any otherveg are NA, then we don't know the order
+  # string together as-is, in row-order
+  # if(any(is.na(i.ov$pmorder))) {
+  #   # optional information on which sites have issues
+  #   if(getOption('soilDB.verbose', default=FALSE))
+  #     warning(paste0('Using row-order. NA in pmorder:', u.coiid), call.=FALSE)
+  # }
+  # else{
+  #   # there are no NAs in pmorder --> sort according to pmorder
+  #   i.ov <- i.ov[order(i.ov$pmorder), ]
+  # }
+  
+  # composite strings and return
+  str.ecoid <- paste(i.esd$ecositeid, collapse=name.sep)
+  str.econm <- paste(unique(i.esd$ecositenm), collapse=name.sep)
+  
+  return(data.frame(coiid=u.coiid, ecosite_id=str.ecoid, ecosite_name=str.econm, stringsAsFactors=FALSE))
+}
+
+
+
+# attempt to flatten multiple other veg class entries into 1 string
+.formatOtherVegString <- function(i.ov, name.sep='|') {
+  # get the current site
+  u.coiid <- unique(i.ov$coiid)
+  
+  # sanity check: this function can only be applied to data from a single component
+  if(length(u.coiid) > 1)
+    stop('data are from multiple component records')
+  
+  # subset othervegcl data to remove any with NA for othervegclass
+  i.ov <- i.ov[which(!is.na(i.ov$ovegclid)), ]
+  
+  # if there is no data, then return a DF formatted as if there were data
+  if(nrow(i.ov) == 0)
+    return(data.frame(coiid=u.coiid, othervegid=NA, othervegclass=NA, stringsAsFactors=FALSE))
+  
+  # short-circuit: if any otherveg are NA, then we don't know the order
+  # string together as-is, in row-order
+  # if(any(is.na(i.ov$pmorder))) {
+  #   # optional information on which sites have issues
+  #   if(getOption('soilDB.verbose', default=FALSE))
+  #     warning(paste0('Using row-order. NA in pmorder:', u.coiid), call.=FALSE)
+  # }
+  # else{
+  #   # there are no NAs in pmorder --> sort according to pmorder
+  #   i.ov <- i.ov[order(i.ov$pmorder), ]
+  # }
+  
+  # composite strings and return
+  str.ovegid <- paste(i.ov$ovegclid, collapse=name.sep)
+  str.ovegclnm <- paste(unique(i.ov$ovegclname), collapse=name.sep)
+  
+  return(data.frame(coiid=u.coiid, othervegid=str.ovegid, othervegclass=str.ovegclnm, stringsAsFactors=FALSE))
+}
+
 
 
 .metadata_replace <- function(df){

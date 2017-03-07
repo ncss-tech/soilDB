@@ -164,6 +164,41 @@ get_component_esd_data_from_NASIS_db <- function() {
   return(d)
 }
 
+## TODO: convert any multiple entries into a comma delimited string
+# get OtherVeg information for each component
+get_component_otherveg_data_from_NASIS_db <- function() {
+  # must have RODBC installed
+  if(!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
+  q <- "SELECT coiidref as coiid, ovegclid, ovegclname, coothvegcl.recwlupdated
+  FROM coothvegclass_View_1 coothvegcl
+  INNER JOIN othvegclass ON othvegclass.ovegcliid = coothvegcl.ovegcliidref
+  ORDER BY coiid;"
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  
+  # exec query
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  
+  # check for more than 1 record / coiid
+  idx <- which(table(d$coiid) > 1)
+  if(length(idx) > 0) {
+    dupes <- names(idx)
+    assign('multiple.otherveg.per.coiid', value=dupes, envir=soilDB.env)
+    message("-> QC: multiple othervegclasses / component. Use `get('multiple.otherveg.per.coiid', envir=soilDB.env)` for related coiid values.")
+  }
+  
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # recode metadata domains
+  #d <- .metadata_replace(d)
+  
+  # done
+  return(d)
+}
 
 get_comonth_from_NASIS_db <- function(fill=FALSE) {
   # must have RODBC installed
@@ -308,6 +343,8 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE) {
   # load data in pieces
   f.comp <- get_component_data_from_NASIS_db()
   f.chorizon <- get_component_horizon_data_from_NASIS_db()
+  f.otherveg <- get_component_otherveg_data_from_NASIS_db()
+  f.ecosite <- get_component_esd_data_from_NASIS_db()
   
   # optionally test for bad horizonation... flag, and remove
   if(rmHzErrors) {
@@ -334,6 +371,17 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE) {
   # add site data to object
   site(f.chorizon) <- f.comp # left-join via coiid
   
+  # join-in ecosite string
+  ## 2017-3-06: short-circuts could use some work, consider pre-marking mistakes before parsing
+  es <- ddply(f.ecosite, 'coiid', .formatEcositeString, name.sep=' & ')
+  if(nrow(es) > 0)
+    site(f.chorizon) <- es
+  
+  # join-in othervegclass string
+  ## 2017-3-06: short-circuts could use some work, consider pre-marking mistakes before parsing
+  ov <- ddply(f.otherveg, 'coiid', .formatOtherVegString, name.sep=' & ')
+  if(nrow(ov) > 0)
+    site(f.chorizon) <- ov
   
   # print any messages on possible data quality problems:
   if(exists('component.hz.problems', envir=soilDB.env))
