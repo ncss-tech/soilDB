@@ -15,6 +15,15 @@
 ###
 ###  WTEQ.I WTEQ.I-2 PREC.I PREC.I-2 TOBS.I TOBS.I-2 TOBS.I-3 TMAX.D TMIN.D TAVG.D SNWD.I SMS.I_8 STO.I_8
 
+
+### TODO: there are rarely multiple below-ground sensors:
+###   station 2196
+###
+###  "STO.I-1:-2", "STO.I-1:-4", "STO.I-1:-8", "STO.I-1:-20", "STO.I-1:-40",
+###  "STO.I-2:-2", "STO.I-2:-4", "STO.I-2:-8", "STO.I-2:-20", "STO.I-2:-40"
+
+
+
 ##
 ## ideas:
 ##   https://github.com/gunnarleffler/getSnotel
@@ -113,7 +122,7 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     # when there are no data, result is NULL
     d <- .get_SCAN_data(i)
     
-    ## TODO: sometimes the above ground sensors will match multiple (?) versions
+    ## TODO: sometimes these labels will match multiple sensors
     
     # save: sensor suite -> site number -> year
     sensors <- c('SMS', 'STO', 'SAL', 'TAVG', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')
@@ -153,14 +162,14 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   
   ## https://github.com/ncss-tech/soilDB/issues/14
   ## temporary hack to inform users that there are multiple sensors / label
-  ## this is only a problem for above-ground sensors
+  ## this is (usually) only a problem for above-ground sensors
   if(length(d.cols) > 1 & code %in% c('TAVG', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
     message(paste0('multiple above-ground sensors per site: ', d$Site[1], ' [', paste0(names(d)[d.cols], collapse = ','), '], using first sensor'))
     # use only the first sensor
     d.cols <- d.cols[1]
   }
-    
-    
+  
+  
   # convert to long format
   d.long <- melt(d, id.vars = c('Site', 'Date'), measure.vars = names(d)[d.cols])
   # extract depths
@@ -168,8 +177,27 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   d.long$depth <- sapply(d.depths, function(i) as.numeric(i[2]))
   # convert depths (in) to cm
   d.long$depth <- round(d.long$depth * 2.54)
+  # change 'variable' to 'sensor.id'
+  names(d.long)[which(names(d.long) == 'variable')] <- 'sensor.id'
+  
+  
+  ## https://github.com/ncss-tech/soilDB/issues/14
+  ## there can also be multiple sensors per below-ground label
+  sensors.per.depth <- ddply(d.long, c('sensor.id', 'depth'), summarize, no.na=length(na.omit(value)))
+  most.data <- ddply(sensors.per.depth, 'depth', .fun=function(i) {
+    return(as.character(i$sensor.id[which.max(i$no.na)]))
+  })
+  
+  # check for multiple sensors per depth
+  tab <- table(sensors.per.depth$depth) > 1
+  if(any(tab)) {
+    multiple.sensor.ids <- as.character(sensors.per.depth$sensor.id[which(sensors.per.depth$depth %in% names(tab))])
+    message(paste0('multiple below-ground sensors per depth: ', paste(multiple.sensor.ids, collapse = ', ')))
+  }
+    
+  
   # format and return
-  return(d.long[, c('Site', 'Date', 'value', 'depth')])
+  return(d.long[, c('Site', 'Date', 'value', 'depth', 'sensor.id')])
 }
 
 # format a list request for SCAN data
