@@ -463,7 +463,7 @@
 
 
 
-.metadata_replace <- function(df){
+.metadata_replace <- function(df, invert=FALSE){
   get_metadata <- function() {
     # must have RODBC installed
     if(!requireNamespace('RODBC'))
@@ -503,8 +503,11 @@
   for (i in columnsToWorkOn.idx){
     # get the current metadata
     sub <- metadata[metadata$ColumnPhysicalName %in% nm[i], ]
-    # replace codes with values
-    df[, i] <- factor(df[, i], levels = sub$ChoiceValue, labels = sub$ChoiceLabel)
+    ifelse(invert == FALSE, 
+           # replace codes with values
+           df[, i] <- factor(df[, i], levels = sub$ChoiceValue, labels = sub$ChoiceLabel),
+           # replace values with codes
+           df[, i] <- factor(df[, i], levels = sub$ChoiceLabel, labels = sub$ChoiceValue))
   }
   
   return(df)
