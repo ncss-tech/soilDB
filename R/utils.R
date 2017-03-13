@@ -215,7 +215,7 @@
 }
 
 
-# attempt to flatten parent material data into 2 strings
+# attempt to flatten site parent material data into 2 strings
 .formatParentMaterialString <- function(i.pm, name.sep='|') {
   # get the current site
   u.siteiid <- unique(i.pm$siteiid)
@@ -248,6 +248,144 @@
   str.origin <- paste(unique(i.pm$pm_origin), collapse=name.sep)
   
   return(data.frame(siteiid=u.siteiid, pmkind=str.kind, pmorigin=str.origin, stringsAsFactors=FALSE))
+}
+
+
+# 2017-03-13: attempt to format COMPONENT "landform" records into a single string
+# note: there are several assumptions made about the data, 
+# see "short-circuits" used when there are funky data
+.formatcoLandformString <- function(i.gm, name.sep='|') {
+  # get the current 
+  u.coiid <- unique(i.gm$coiid)
+  
+  # sanity check: this function can only be applied to data from a single pedon
+  if(length(u.coiid) > 1)
+    stop('data are from multiple pedon records')
+  
+  # subset geomorph data to landforms
+  i.gm <- i.gm[which(i.gm$geomftname == 'landform'), ]
+  
+  # allow for NA's
+  if(nrow(i.gm) == 0)
+    return(data.frame(coiid=u.coiid, landform.string=NA, stringsAsFactors=FALSE))
+  
+  # short-circuit: if any geomfeatid are NA, then we don't know the order
+  # string together as-is, in row-order
+  if(any(is.na(i.gm$geomfeatid))) {
+    
+    # optional information on which pedons have issues
+    if(getOption('soilDB.verbose', default=FALSE))
+      message(paste0('Using row-order. NA in geomfeatid:', u.peiid))
+    
+    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    return(data.frame(coiid=u.coiid, landform.string=ft.string, stringsAsFactors=FALSE))
+  }
+  
+  # short-circuit: if any feature exists on itself, then use row-order
+  # string together as-is, in row-order
+  if(any(na.omit(c(i.gm$geomfeatid == i.gm$existsonfeat), FALSE))) {
+    
+    # optional information on which pedons have issues
+    if(getOption('soilDB.verbose', default=FALSE))
+      message(paste0('Using row-order. Error in exists-on logic:', u.coiid))
+    
+    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    return(data.frame(coiid=u.coiid, landform.string=ft.string, stringsAsFactors=FALSE))
+  }
+  
+  # get an index to the top-most and bottom-most features
+  # only 1 row should match these criteria
+  top.feature <- which(! i.gm$geomfeatid %in% i.gm$existsonfeat)
+  bottom.feature <- which(! i.gm$existsonfeat %in% i.gm$geomfeatid)
+  
+  ## short-circuit: only 1 row, and exists-on logic is wrong, use row-order
+  if(nrow(i.gm) == 1 & length(top.feature) == length(bottom.feature)) {
+    
+    # optional information on which pedons have issues
+    if(getOption('soilDB.verbose', default=FALSE))
+      warning(paste0('Using row-order. Single row / error in exists-on logic:', u.coiid), call.=FALSE)
+    
+    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    return(data.frame(coiid=u.coiid, landform.string=ft.string, stringsAsFactors=FALSE))
+  }
+  
+  # short-circuit: if the exists-on logic is wrong, use row-order
+  if(length(top.feature) > 1 | length(bottom.feature) > 1) {
+    
+    # optional information on which pedons have issues
+    if(getOption('soilDB.verbose', default=FALSE))
+      warning(paste0('Using row-order. Incorrect exists-on specification:', u.coiid), call.=FALSE)
+    
+    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    return(data.frame(coiid=u.coiid, landform.string=ft.string, stringsAsFactors=FALSE))
+  }
+  
+  # init a vector to store feature names
+  ft.vect <- vector(mode='character', length=nrow(i.gm))
+  # the first feature is the top-most feature
+  this.feature.idx <- top.feature
+  
+  # loop over features, until the bottom-most feature
+  i <- 1
+  while(i <= nrow(i.gm)){
+    # get the current feature
+    f.i <- i.gm$geomfname[this.feature.idx]
+    
+    if(length(f.i) == 0) {
+      print(this.feature.idx)
+      print(i.gm)
+    }
+    
+    
+    # assign to vector of labels
+    ft.vect[i] <- f.i
+    
+    # jump to the next feature
+    this.feature.idx <- which(i.gm$geomfeatid == i.gm$existsonfeat[this.feature.idx])
+    i <- i + 1
+  }
+  
+  # paste into single string
+  ft.string <- paste(ft.vect, collapse=name.sep)
+  
+  # done!
+  return(data.frame(coiid=u.coiid, landform.string=ft.string, stringsAsFactors=FALSE))
+}
+
+
+# attempt to flatten component parent material data into 2 strings
+.formatcoParentMaterialString <- function(i.pm, name.sep='|') {
+  # get the current site
+  u.coiid <- unique(i.pm$coiid)
+  
+  # sanity check: this function can only be applied to data from a single site
+  if(length(u.coiid) > 1)
+    stop('data are from multiple site records')
+  
+  # subset sitepm data to remove any with NA for pm_kind
+  i.pm <- i.pm[which(!is.na(i.pm$pmkind)), ]
+  
+  # if there is no data, then return a DF formatted as if there were data
+  if(nrow(i.pm) == 0)
+    return(data.frame(coiid=u.coiid, pmkind=NA, pmorigin=NA, stringsAsFactors=FALSE))
+  
+  # short-circuit: if any pmorder are NA, then we don't know the order
+  # string together as-is, in row-order
+  if(any(is.na(i.pm$pmorder))) {
+    # optional information on which sites have issues
+    if(getOption('soilDB.verbose', default=FALSE))
+      warning(paste0('Using row-order. NA in pmorder:', u.coiid), call.=FALSE)
+  }
+  else{
+    # there are no NAs in pmorder --> sort according to pmorder
+    i.pm <- i.pm[order(i.pm$pmorder), ]
+  }
+  
+  # composite strings and return
+  str.kind <- paste(i.pm$pmkind, collapse=name.sep)
+  str.origin <- paste(unique(i.pm$pmorigin), collapse=name.sep)
+  
+  return(data.frame(coiid=u.coiid, pmkind=str.kind, pmorigin=str.origin, stringsAsFactors=FALSE))
 }
 
 

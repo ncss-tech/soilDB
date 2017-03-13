@@ -1,7 +1,7 @@
 ##
 ## December, 2015
 ## D.E. Beaudette
-## J.M. Scovlin
+## J.M. Skovlin
 ## S.M. Roecker
 ## 
 
@@ -122,6 +122,117 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
   return(d)
 }
 
+# get geomorphic desc for each component
+get_component_cogeomorph_data_from_NASIS_db <- function() {
+  # must have RODBC installed
+  if(!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call.=FALSE)	
+  
+  
+  q.cogeomorph <- "SELECT cogeomordesc_View_1.coiidref as coiid, cogeomordesc_View_1.geomfmod, geomorfeat.geomfname, cogeomordesc_View_1.geomfeatid, cogeomordesc_View_1.existsonfeat, cogeomordesc_View_1.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
+  FROM geomorfeattype 
+  RIGHT JOIN geomorfeat 
+  RIGHT JOIN component_View_1 INNER JOIN cogeomordesc_View_1 ON component_View_1.coiid = cogeomordesc_View_1.coiidref
+  ON geomorfeat.geomfiid = cogeomordesc_View_1.geomfiidref
+  ON geomorfeattype.geomftiid = geomorfeat.geomftiidref 
+  ORDER BY coiid, geomfeatid ASC;"
+  
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  
+  # exec query
+  d <- RODBC::sqlQuery(channel, q.cogeomorph, stringsAsFactors=FALSE)
+  
+  # check for more than 1 record / coiid
+  #idx <- which(table(d$coiid) > 1)
+  #if(length(idx) > 0) {
+  #  dupes <- names(idx)
+  #  assign('multiple.otherveg.per.coiid', value=dupes, envir=soilDB.env)
+  #  message("-> QC: multiple othervegclasses / component. Use `get('multiple.otherveg.per.coiid', envir=soilDB.env)` for related coiid values.")
+  #}
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # recode metadata domains
+  #d <- .metadata_replace(d)
+  
+  # done
+  return(d)
+}
+
+
+# get copm for each component where rvindicator is 'yes'
+get_component_copmgrp_data_from_NASIS_db <- function() {
+  # must have RODBC installed
+  if(!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call.=FALSE)	
+  
+  
+  q.copmgrp <- "SELECT copmgrp_View_1.coiidref as coiid, pmgroupname, copmgrp_View_1.seqnum as seqnum, rvindicator, copmgrpiid
+  FROM copmgrp_View_1 
+  WHERE rvindicator = 1
+  ORDER BY coiidref, seqnum, rvindicator, copmgrpiid ASC;" 
+  
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  
+  # exec query
+  d <- RODBC::sqlQuery(channel, q.copmgrp, stringsAsFactors=FALSE)
+  
+  # check for more than 1 record / coiid
+  #if(length(idx) > 0) {
+  #  dupes <- names(idx)
+  #  assign('multiple.otherveg.per.coiid', value=dupes, envir=soilDB.env)
+  #  message("-> QC: multiple othervegclasses / component. Use `get('multiple.otherveg.per.coiid', envir=soilDB.env)` for related coiid values.")
+  #}
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # recode metadata domains
+  d <- .metadata_replace(d)
+  
+  # done
+  return(d[, 1:2])
+}
+
+
+# get copm for each component
+get_component_copm_data_from_NASIS_db <- function() {
+  # must have RODBC installed
+  if(!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call.=FALSE)	
+  
+  
+  q.copm <- "SELECT copmgrp_View_1.coiidref as coiid, copm_View_1.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
+  FROM copm_View_1 
+  RIGHT JOIN copmgrp_View_1 
+  INNER JOIN component_View_1 on copmgrp_View_1.coiidref = component_View_1.coiid on copm_View_1.copmgrpiidref = copmgrp_View_1.copmgrpiid
+  ORDER BY coiidref, seqnum, pmorder, copmgrpiid ASC;" 
+  
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  
+  # exec query
+  d <- RODBC::sqlQuery(channel, q.copm, stringsAsFactors=FALSE)
+  
+  # check for more than 1 record / coiid
+  #if(length(idx) > 0) {
+  #  dupes <- names(idx)
+  #  assign('multiple.otherveg.per.coiid', value=dupes, envir=soilDB.env)
+  #  message("-> QC: multiple othervegclasses / component. Use `get('multiple.otherveg.per.coiid', envir=soilDB.env)` for related coiid values.")
+  #}
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # recode metadata domains
+  d <- .metadata_replace(d)
+  
+  # done
+  return(d)
+}
 
 
 ## TODO: there are still columns that need decoding
@@ -343,12 +454,15 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE) {
   # load data in pieces
   f.comp <- get_component_data_from_NASIS_db()
   f.chorizon <- get_component_horizon_data_from_NASIS_db()
+  f.copmgrp <- get_component_copmgrp_data_from_NASIS_db()
+  f.copm <- get_component_copm_data_from_NASIS_db()
+  f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db()
   f.otherveg <- get_component_otherveg_data_from_NASIS_db()
   f.ecosite <- get_component_esd_data_from_NASIS_db()
   
   # optionally test for bad horizonation... flag, and remove
   if(rmHzErrors) {
-    f.chorizon.test <- ddply(f.chorizon, 'coiid', test_hz_logic, topcol='hzdept_r', bottomcol='hzdepb_r', strict=TRUE)
+    f.chorizon.test <- plyr::ddply(f.chorizon, 'coiid', test_hz_logic, topcol='hzdept_r', bottomcol='hzdepb_r', strict=TRUE)
     
     # which are the good (valid) ones?
     good.ids <- as.character(f.chorizon.test$coiid[which(f.chorizon.test$hz_logic_pass)])
@@ -370,16 +484,29 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE) {
   ## TODO: make this error more informative
   # add site data to object
   site(f.chorizon) <- f.comp # left-join via coiid
+  site(f.chorizon) <- f.copmgrp # left-join via coiid
+  
+  # join-in copm strings
+  ## 2017-3-13: short-circuts need testing, consider pre-marking mistakes before parsing
+  pm <- plyr::ddply(f.copm, 'coiid', .formatcoParentMaterialString, name.sep=' & ')
+  if(nrow(pm) > 0)
+    site(f.chorizon) <- pm
+  
+  # join-in cogeomorph strings
+  ## 2017-3-13: short-circuts need testing, consider pre-marking mistakes before parsing
+  lf <- plyr::ddply(f.cogeomorph, 'coiid', .formatcoLandformString, name.sep=' & ')
+  if(nrow(lf) > 0)
+    site(f.chorizon) <- lf
   
   # join-in ecosite string
-  ## 2017-3-06: short-circuts could use some work, consider pre-marking mistakes before parsing
-  es <- ddply(f.ecosite, 'coiid', .formatEcositeString, name.sep=' & ')
+  ## 2017-3-06: short-circuts need testing, consider pre-marking mistakes before parsing
+  es <- plyr::ddply(f.ecosite, 'coiid', .formatEcositeString, name.sep=' & ')
   if(nrow(es) > 0)
     site(f.chorizon) <- es
   
   # join-in othervegclass string
-  ## 2017-3-06: short-circuts could use some work, consider pre-marking mistakes before parsing
-  ov <- ddply(f.otherveg, 'coiid', .formatOtherVegString, name.sep=' & ')
+  ## 2017-3-06: short-circuts need testing, consider pre-marking mistakes before parsing
+  ov <- plyr::ddply(f.otherveg, 'coiid', .formatOtherVegString, name.sep=' & ')
   if(nrow(ov) > 0)
     site(f.chorizon) <- ov
   
