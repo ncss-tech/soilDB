@@ -265,8 +265,8 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   opt.original <- options(stringsAsFactors = FALSE)
   
   # sanity-check: `what` should be within the legal set of options
-  if(! what %in% c('all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp'))
-    stop("`what` must be either: 'all', 'sensors', 'soiltemp', 'soilVWC', or 'airtemp'", call.=FALSE)
+  if(! what %in% c('all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp', 'waterlevel'))
+    stop("`what` must be either: 'all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp', or 'waterlevel'", call.=FALSE)
   
   # sanity-check: user must supply some kind of criteria
   if(missing(usersiteid) & missing(project) & missing(sso))
@@ -327,12 +327,13 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
     stop('query returned no data', call.=FALSE)
   }
   
-
+  
+  ## TODO: this is not the correct way to check
   # if we have some data...
   if( !is.null(s$soiltemp)) {
     
     # get period of record for each sensor, not including NA-padding
-    por <- ddply(na.omit(rbind(s$soiltemp, s$soilVWC, s$airtemp)), c('sid'), function(i) {
+    por <- ddply(na.omit(rbind(s$soiltemp, s$soilVWC, s$airtemp, s$waterlevel)), c('sid'), function(i) {
       start.date <- min(i$date_time, na.rm=TRUE)
       end.date <- max(i$date_time, na.rm=TRUE)
       return(data.frame(start.date, end.date))
@@ -345,9 +346,10 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
     s$soiltemp <- .formatDates(s$soiltemp, gran=gran, pad.missing.days=pad.missing.days)
     s$soilVWC <- .formatDates(s$soilVWC, gran=gran, pad.missing.days=pad.missing.days)
     s$airtemp <- .formatDates(s$airtemp, gran=gran, pad.missing.days=pad.missing.days)
+    s$waterlevel <- .formatDates(s$waterlevel, gran=gran, pad.missing.days=pad.missing.days)
     
     # optionally compute summaries, requires padded NA values and, daily granularity
-    if(soiltemp.summaries & pad.missing.days) {
+    if(soiltemp.summaries & pad.missing.days & (length(s$soiltemp) > 0)) {
       message('computing un-biased soil temperature summaries')
       
       if(gran != 'day')
@@ -378,6 +380,11 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   if(length(s$airtemp) > 0) {
     name.idx <- match(s$airtemp$sid, s$sensors$sid)
     s$airtemp$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
+  }
+  
+  if(length(s$waterlevel) > 0) {
+    name.idx <- match(s$waterlevel$sid, s$waterlevel$sid)
+    s$waterlevel$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
   }
   
   # init coordinates
