@@ -1,7 +1,7 @@
 \name{fetchHenry}
 \alias{fetchHenry}
-\title{Download Data from the Henry Mount Soil Climate Database}
-\description{This function is a front-end to the REST query functionality of the Henry Mount Soil Climate Database.}
+\title{Download Data from the Henry Mount Soil Temperature and Water Database}
+\description{This function is a front-end to the REST query functionality of the Henry Mount Soil Temperature and Water Database.}
 \usage{
 fetchHenry(what='all', usersiteid = NULL, project = NULL, sso = NULL,
 gran = "day", start.date = NULL, stop.date = NULL, 
@@ -9,7 +9,7 @@ pad.missing.days = TRUE, soiltemp.summaries = TRUE)
 }
 
 \arguments{
-  \item{what}{type of data to return: 'sensors': sensor metadata only | 'soiltemp': sensor metadata + soil temperature data | 'soilVWC': sensor metadata + soil moisture data | 'airtemp': sensor metadata + air temperature data | 'all': sensor metadata + all soil climate data}
+  \item{what}{type of data to return: 'sensors': sensor metadata only | 'soiltemp': sensor metadata + soil temperature data | 'soilVWC': sensor metadata + soil moisture data | 'airtemp': sensor metadata + air temperature data | 'waterlevel': sensor metadata + water level data |'all': sensor metadata + all sensor data}
   \item{usersiteid}{(optional) filter results using a NASIS user site ID}
   \item{project}{(optional) filter results using a project ID}
   \item{sso}{(optional) filter results using a soil survey office code}
@@ -27,6 +27,7 @@ pad.missing.days = TRUE, soiltemp.summaries = TRUE)
  \item{soiltemp}{a \code{data.frame} object containing soil temperature timeseries data}
  \item{soilVWC}{a \code{data.frame} object containing soil moisture timeseries data}
  \item{airtemp}{a \code{data.frame} object containing air temperature timeseries data}
+ \item{waterlevel}{a \code{data.frame} object containing water level timeseries data}
 }
 
 \author{D.E. Beaudette}
