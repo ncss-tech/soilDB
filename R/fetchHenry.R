@@ -379,7 +379,7 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   }
   
   if(length(s$waterlevel) > 0) {
-    name.idx <- match(s$waterlevel$sid, s$waterlevel$sid)
+    name.idx <- match(s$waterlevel$sid, s$sensors$sid)
     s$waterlevel$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
   }
   
