@@ -308,9 +308,6 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   # combine filters
   f <- paste(f, collapse='')
   
-  # debugging
-#   print(f)
-  
   # everything in one URL / JSON package
   json.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?what=', what, f, sep=''))
   
@@ -322,15 +319,14 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   # parse JSON into list of DF
   try(s <- jsonlite::fromJSON(gzfile(tf.json)))
   
-  # report missing data
-  if(is.null(s$sensors)) {
+  # report query that returns no data and stop
+  if( length(s$sensors) == 0 ) {
     stop('query returned no data', call.=FALSE)
   }
   
   
-  ## TODO: this is not the correct way to check
-  # if we have some data...
-  if( !is.null(s$soiltemp)) {
+  # post-process data, if there are some
+  if( length(s$soiltemp) > 0 | length(s$soilVWC) > 0 | length(s$airtemp) > 0 | length(s$waterlevel) > 0 ) {
     
     # get period of record for each sensor, not including NA-padding
     por <- ddply(na.omit(rbind(s$soiltemp, s$soilVWC, s$airtemp, s$waterlevel)), c('sid'), function(i) {
