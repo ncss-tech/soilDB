@@ -160,12 +160,22 @@
   top.feature <- which(! i.gm$geomfeatid %in% i.gm$existsonfeat)
   bottom.feature <- which(! i.gm$existsonfeat %in% i.gm$geomfeatid)
   
+  # short-circut: incorrect data-population, usually duplicate entries with IDs that make no sense: use row-order
+  if(length(top.feature) == 0 & length(bottom.feature) == 0) {
+    # optional information on which pedons have issues
+    if(getOption('soilDB.verbose', default=FALSE))
+      warning(paste0('Using row-order. Error in exists-on logic: ', u.peiid), call.=FALSE)
+    
+    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+  }
+   
   ## short-circuit: only 1 row, and exists-on logic is wrong, use row-order
   if(nrow(i.gm) == 1 & length(top.feature) == length(bottom.feature)) {
     
     # optional information on which pedons have issues
     if(getOption('soilDB.verbose', default=FALSE))
-      warning(paste0('Using row-order. Single row / error in exists-on logic:', u.peiid), call.=FALSE)
+      warning(paste0('Using row-order. Single row / error in exists-on logic: ', u.peiid), call.=FALSE)
     
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
     return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
@@ -176,7 +186,7 @@
     
     # optional information on which pedons have issues
     if(getOption('soilDB.verbose', default=FALSE))
-      warning(paste0('Using row-order. Incorrect exists-on specification:', u.peiid), call.=FALSE)
+      warning(paste0('Using row-order. Incorrect exists-on specification: ', u.peiid), call.=FALSE)
     
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
     return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
