@@ -2,7 +2,8 @@ get_phlabresults_data_from_NASIS_db <- function() {
   # must have RODBC installed
   if (!requireNamespace('RODBC')) stop('please install the `RODBC` package', call.=FALSE)
 
-  q.phlabresults <- " SELECT phiidref, sampledepthtop, sampledepthbottom, claytotmeasured, sandtotmeasured, textureclfieldlab, ph1to1h2o, ph01mcacl2, caco3equivmeasured, sar 
+  q.phlabresults <- "SELECT phiidref, sampledepthtop, sampledepthbottom, claytotmeasured,
+silttotmeasured, sandtotmeasured, siltcomeasured, sandvcmeasured + sandcomeasured AS sandco_vcmeasured, sandvfmeasured, textureclfieldlab, ph1to1h2o, ph01mcacl2, caco3equivmeasured, sar 
   FROM phlabresults_View_1 
   ORDER BY phiidref, sampledepthtop
   ;"
