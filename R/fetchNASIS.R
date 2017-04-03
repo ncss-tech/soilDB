@@ -1,7 +1,7 @@
 # updated to NASIS 6.2
 
 # convenience function for loading most commonly used information from local NASIS database
-fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='moist') {
+fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='moist', lab=FALSE) {
 	
 	# test connection
 	if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
@@ -16,6 +16,9 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
 	hz_data <- get_hz_data_from_NASIS_db()
 	color_data <- get_colors_from_NASIS_db()
 	extended_data <- get_extended_data_from_NASIS_db(nullFragsAreZero)
+	if (lab == TRUE) {
+	  phlabresults <- get_phlabresults_data_from_NASIS_db()
+	}
 	
 	# test to see if the selected set is loaded
 	if (nrow(hz_data) == 0 | all(unlist(lapply(extended_data, nrow)) == 0)) message('your selected set is missing either the pedon or site table, please load and try again')
@@ -73,6 +76,11 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
       
   }
 	
+	
+	## join hz + phlabresults
+	if (lab == TRUE) {
+	  h <- join(h, phlabresults, by = "phiid", type = "left")
+	}
 	
 	# upgrade to SoilProfilecollection
 	depths(h) <- peiid ~ hzdept + hzdepb

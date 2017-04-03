@@ -480,12 +480,12 @@
       stop('please install the `RODBC` package', call.=FALSE)
     
     q <- "SELECT mdd.DomainID, DomainName, ChoiceValue, ChoiceLabel, ChoiceDescription, ColumnPhysicalName, ColumnLogicalName
-    
+  
     FROM MetadataDomainDetail mdd
     INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
-    INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName FROM MetadataTableColumn GROUP BY DomainID) mtc ON mtc.DomainID = mdd.DomainID
+    INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName FROM MetadataTableColumn GROUP BY DomainID, ColumnPhysicalName) mtc ON mtc.DomainID = mdd.DomainID
     
-    ORDER BY DomainID, ChoiceValue"
+    ORDER BY DomainID, ColumnPhysicalName, ChoiceValue;"
     
     # setup connection local NASIS
     channel <- RODBC::odbcDriverConnect(connection = "DSN=nasis_local; UID=NasisSqlRO; PWD=nasisRe@d0n1y")
