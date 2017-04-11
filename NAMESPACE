@@ -23,7 +23,8 @@ importFrom(plyr,
   llply,
   ldply,
   dlply,
-  join
+  join,
+  summarize
 )
 
 

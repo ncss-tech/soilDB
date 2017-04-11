@@ -183,7 +183,7 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   
   ## https://github.com/ncss-tech/soilDB/issues/14
   ## there can also be multiple sensors per below-ground label
-  sensors.per.depth <- ddply(d.long, c('sensor.id', 'depth'), summarize, no.na=length(na.omit(value)))
+  sensors.per.depth <- ddply(d.long, c('sensor.id', 'depth'), plyr::summarize, no.na=length(na.omit(value)))
   most.data <- ddply(sensors.per.depth, 'depth', .fun=function(i) {
     return(as.character(i$sensor.id[which.max(i$no.na)]))
   })
