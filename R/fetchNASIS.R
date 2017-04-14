@@ -5,7 +5,7 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
 	
 	# test connection
 	if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
-			stop('Local NASIS ODBC connection has not been setup. Please see `https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/setup_local_nasis.html?root=aqp`.')
+			stop('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
 	
   # sanity check
   if(! soilColorState %in% c('dry', 'moist'))
