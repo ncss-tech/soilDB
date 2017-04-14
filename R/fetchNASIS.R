@@ -16,7 +16,9 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
 	hz_data <- get_hz_data_from_NASIS_db()
 	color_data <- get_colors_from_NASIS_db()
 	extended_data <- get_extended_data_from_NASIS_db(nullFragsAreZero)
-	if (lab == TRUE) {
+	
+	# optionally load phlabresults table
+	if (lab) {
 	  phlabresults <- get_phlabresults_data_from_NASIS_db()
 	}
 	
@@ -40,7 +42,21 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
     message(paste('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]', sep=''))
     h$hzdepb[missing.lower.depth.idx] <- h$hzdept[missing.lower.depth.idx] + 1
   }
-	
+  
+	# top == bottom ? bottom <- bottom + 1
+	top.eq.bottom.idx <- which(h$hzdept == h$hzdepb)
+	if(length(top.eq.bottom.idx) > 0) {
+	  
+	  # # replacement of bottom depth should only happen when the affected horizon is at the "bottom" of a profile
+	  # peiid.affected <- unique(h$peiid[top.eq.bottom.idx])
+	  # for(this.ID in peiid) {
+	  #   this.profile <- h[which()]
+	  # }
+	  
+	  message(paste('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]', sep=''))
+	  h$hzdepb[top.eq.bottom.idx] <- h$hzdepb[top.eq.bottom.idx] + 1
+	}
+		
 	
 	## copy pre-computed colors into a convenience field for plotting
 	# moist colors
@@ -55,30 +71,28 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
 	## join hz + fragment summary
 	h <- join(h, extended_data$frag_summary, by='phiid', type='left')
 	
-	# optionally test for bad horizonation... flag, and remove
-  if(rmHzErrors) {
-    h.test <- ddply(h, 'peiid', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
+	# test for horizonation inconsistencies... flag, and optionally remove
+  h.test <- ddply(h, 'peiid', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
     
-    # which are the good (valid) ones?
-    good.ids <- as.character(h.test$peiid[which(h.test$hz_logic_pass)])
-    bad.ids <- as.character(h.test$peiid[which(!h.test$hz_logic_pass)])
-    bad.horizons<- h[which(!h.test$hz_logic_pass), c(1:4,6,7)]
-    bad.pedon.ids <- site_data$pedon_id[which(site_data$peiid %in% bad.ids)]
-    
-    # keep the good ones
+  # which are the good (valid) ones?
+  good.ids <- as.character(h.test$peiid[which(h.test$hz_logic_pass)])
+  bad.ids <- as.character(h.test$peiid[which(!h.test$hz_logic_pass)])
+  bad.horizons<- h[which(!h.test$hz_logic_pass), c(1:4,6,7)]
+  bad.pedon.ids <- site_data$pedon_id[which(site_data$peiid %in% bad.ids)]
+  
+  # optionally filter pedons WITH NO horizonation inconsistencies
+  if(rmHzErrors)
     h <- h[which(h$peiid %in% good.ids), ]
-    
-    # keep track of those pedons with horizonation errors
-    if(length(bad.pedon.ids) > 0) {
-      assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
-      assign("bad.horizons", value = data.frame(bad.horizons), envir = soilDB.env)
-    }
-      
+  
+  # keep track of those pedons with horizonation errors
+  if(length(bad.pedon.ids) > 0) {
+    assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
+    assign("bad.horizons", value = data.frame(bad.horizons), envir = soilDB.env)
   }
 	
 	
 	## join hz + phlabresults
-	if (lab == TRUE) {
+	if (lab) {
 	  h <- join(h, phlabresults, by = "phiid", type = "left")
 	}
 	
