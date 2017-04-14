@@ -46,14 +46,8 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
 	# top == bottom ? bottom <- bottom + 1
 	top.eq.bottom.idx <- which(h$hzdept == h$hzdepb)
 	if(length(top.eq.bottom.idx) > 0) {
-	  
-	  # # replacement of bottom depth should only happen when the affected horizon is at the "bottom" of a profile
-	  # peiid.affected <- unique(h$peiid[top.eq.bottom.idx])
-	  # for(this.ID in peiid) {
-	  #   this.profile <- h[which()]
-	  # }
-	  
 	  message(paste('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]', sep=''))
+	  # make the edit
 	  h$hzdepb[top.eq.bottom.idx] <- h$hzdepb[top.eq.bottom.idx] + 1
 	}
 		
