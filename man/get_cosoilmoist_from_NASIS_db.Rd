@@ -47,7 +47,7 @@ ggplot(test) +
                      ymin = dept_l, y = dept_r, ymax = dept_h)) +
   ylim(max(test$depb_r), 0) +
   xlab("month") + ylab("depth (cm)") +
-  facet_wrap(~ paste(compname, comppct_r, "%", mukey, sep = "-")) +
+  facet_wrap(~ paste(compname, comppct_r, "\%", mukey, sep = "-")) +
   ggtitle("Water Table Levels from Component Soil Moisture Month Data")
   }
 }
