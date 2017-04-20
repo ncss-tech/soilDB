@@ -14,7 +14,6 @@
 \alias{get_component_esd_data_from_NASIS_db}
 \alias{get_vegplot_from_NASIS_db2}
 \alias{get_comonth_from_NASIS_db}
-\alias{get_cosoimoist_from_NASIS_db}
 
 \title{Fetch commonly used site/pedon/horizon data from a PedonPC database.}
 \description{Fetch commonly used site/pedon/horizon data from a PedonPC or local NASIS database, return as a SoilProfileCollection object.}
@@ -33,7 +32,6 @@ get_comonth_from_NASIS_db(fill=FALSE)
   \item{lab}{should the phlabresults child table be fetched (default: FALSE)}  
   \item{strict}{should horizonation by strictly enforced? (TRUE)}
   \item{fill}{should missing "month" rows in the comonth table be filled with NA (FALSE)}
-  \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data or the "RV" for numeric data (default: TRUE)}
 }
 
 \value{a SoilProfileCollection class object}
