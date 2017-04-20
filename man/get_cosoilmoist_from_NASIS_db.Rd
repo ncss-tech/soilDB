@@ -43,9 +43,10 @@ ggplot(test) +
                 fill = flodfreqcl)) +
   geom_line(aes(x = as.integer(month), y = dept_r, 
                 lty = status), cex = 1) +
-  geom_linerange(aes(x = as.integer(month), 
-                     ymin = dept_l, ymax = dept_h), cex = 1.3) +
+  geom_pointrange(aes(x = as.integer(month), 
+                     ymin = dept_l, y = dept_r, ymax = dept_h)) +
   ylim(max(test$depb_r), 0) +
+  xlab("month") + ylab("depth (cm)") +
   facet_wrap(~ paste(compname, comppct_r, "%", mukey, sep = "-")) +
   ggtitle("Water Table Levels from Component Soil Moisture Month Data")
   }
