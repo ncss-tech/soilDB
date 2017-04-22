@@ -503,7 +503,7 @@
   # load current metadata table
   if (NASIS == TRUE){
   metadata <- get_metadata()
-  } else metadata <- data(nasis_metadata)
+  } else data(nasis_metadata)
   
   # unique set of possible columns that will need replacement
   possibleReplacements <- unique(metadata$ColumnPhysicalName)
