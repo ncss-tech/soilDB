@@ -473,7 +473,7 @@
 
 
 
-.metadata_replace <- function(df, invert=FALSE){
+.metadata_replace <- function(df, invert=FALSE, NASIS=TRUE){
   get_metadata <- function() {
     # must have RODBC installed
     if(!requireNamespace('RODBC'))
@@ -501,9 +501,13 @@
   }
   
   # load current metadata table
+  if (NASIS == TRUE){
   metadata <- get_metadata()
+  } else metadata <- data(nasis_metadata)
+  
   # unique set of possible columns that will need replacement
   possibleReplacements <- unique(metadata$ColumnPhysicalName)
+  
   # names of raw data
   nm <- names(df)
   # index to columns with codes to be replaced
@@ -513,12 +517,18 @@
   for (i in columnsToWorkOn.idx){
     # get the current metadata
     sub <- metadata[metadata$ColumnPhysicalName %in% nm[i], ]
-    ifelse(invert == FALSE, 
-           # replace codes with values
-           df[, i] <- factor(df[, i], levels = sub$ChoiceValue, labels = sub$ChoiceLabel),
-           # replace values with codes
-           df[, i] <- factor(df[, i], levels = sub$ChoiceLabel, labels = sub$ChoiceValue))
-  }
+    if (NASIS == TRUE) {
+    if (invert == FALSE){
+      # replace codes with values
+      df[, i] <- factor(df[, i], levels = sub$ChoiceValue, labels = sub$ChoiceLabel)
+      # replace values with codes
+      } else df[, i] <- factor(df[, i], levels = sub$ChoiceLabel, labels = sub$ChoiceValue)
+      
+    # convert SDA characters to factors
+    } else {
+      df[, i] <- factor(df[, i], levels = sub$ChoiceLabel)
+      }
+    }
   
   return(df)
 }
