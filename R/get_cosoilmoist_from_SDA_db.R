@@ -1,4 +1,4 @@
-get_cosoimoist_from_SDA_db <- function(mukey, impute = TRUE){
+get_cosoilmoist_from_SDA_db <- function(mukey, impute = TRUE){
   q.cosoilmoist <- paste0("SELECT mu.nationalmusym, mu.mukey, mu.muname, c.compname, c.comppct_r, month, flodfreqcl, pondfreqcl, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat
       
   FROM mapunit mu INNER JOIN
