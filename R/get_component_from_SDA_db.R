@@ -74,11 +74,10 @@ get_chorizon_from_SDA_db <- function(nationalmusym = NULL, areasymbol = NULL) {
   # seriously!, how is their no fragvoltot_r column?
   q.chorizon <- paste("SELECT DISTINCT nationalmusym + '_' + CAST(comppct_r AS VARCHAR) + '_' + compname AS derived_cokey, hzname, hzdept_r, hzdepb_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, texture, om_l, om_r, om_h, dbovendry_r, ksat_r, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h
   
-  FROM chorizon ch INNER JOIN
-       component c ON c.cokey = ch.cokey INNER JOIN
-       mapunit mu ON mu.mukey = c.mukey
-  
-  LEFT OUTER JOIN (SELECT * FROM chtexturegrp WHERE rvindicator = 'TRUE') AS cht ON cht.chkey = ch.chkey",
+  FROM mapunit mu INNER JOIN
+       component c ON c.mukey = mu.mukey INNER JOIN
+       chorizon ch ON ch.cokey = c.cokey LEFT OUTER JOIN
+       chtexturegrp chtg ON chtg.chkey = ch.chkey AND rvindicator = 'YES'",
 
   if (!is.null(areasymbol)) {
     paste0("INNER JOIN legend l ON l.lkey = mu.lkey
