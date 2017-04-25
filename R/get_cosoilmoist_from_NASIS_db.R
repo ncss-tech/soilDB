@@ -35,20 +35,22 @@ get_cosoilmoist_from_NASIS_db <- function(impute = TRUE) {
   
     
   # impute NA freqcl values, default = "not populated"
-  freqcl <- c("None", "Very rare", "Rare", "Occasional", "Frequent", "Very frequent")
-  
   if (impute == TRUE) {
     vars <- c("flodfreqcl", "pondfreqcl")
     missing <- c("Not_Populated")
-    freqcl2 <- c(missing, freqcl)
+    freqcl2 <- c(missing, levels(d.cosoilmoist$flodfreqcl))
     
     d.cosoilmoist <- within(d.cosoilmoist, {
+      
       flodfreqcl = factor(flodfreqcl, levels = freqcl2)
       pondfreqcl = factor(pondfreqcl, levels = freqcl2)
+      
       flodfreqcl[is.na(flodfreqcl)] <- missing
       pondfreqcl[is.na(pondfreqcl)] <- missing
+      
       dept_l = ifelse(!is.na(dept_l), dept_l, dept_r)
       dept_h = ifelse(!is.na(dept_h), dept_h, dept_r)
+      
       depb_l = ifelse(!is.na(depb_l), depb_l, depb_r)
       depb_h = ifelse(!is.na(depb_h), depb_h, depb_r)
       })

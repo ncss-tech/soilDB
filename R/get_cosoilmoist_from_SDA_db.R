@@ -16,6 +16,10 @@ get_cosoilmoist_from_SDA_db <- function(mukey, impute = TRUE){
   d.cosoilmoist <- SDA_query(q.cosoilmoist)
   
   
+  # recode metadata domains
+  d.cosoilmoist <- .metadata_replace(d.cosoilmoist, NASIS = FALSE)
+  
+  
   # cache original column names
   orig_names <- names(d.cosoilmoist)
   
@@ -25,18 +29,8 @@ get_cosoilmoist_from_SDA_db <- function(mukey, impute = TRUE){
   old_names <- "stat"
   new_names <- "status"
   names(d.cosoilmoist)[names(d.cosoilmoist) %in% old_names] <- new_names
-  
-  
-  # Convert to factors
-  freqcl <- c("None", "Very rare", "Rare", "Occasional", "Frequent", "Very frequent")
-  
-  d.cosoilmoist <- within(d.cosoilmoist, {
-    month      = factor(month, levels = month.name)
-    flodfreqcl = factor(flodfreqcl, levels = freqcl)
-    pondfrecl  = factor(pondfreqcl, levels = freqcl)
-    })
-  
-  
+
+
   # reorder data.frame
   d.cosoilmoist  <- with(d.cosoilmoist, 
                          d.cosoilmoist[
@@ -49,18 +43,30 @@ get_cosoilmoist_from_SDA_db <- function(mukey, impute = TRUE){
   if (impute == TRUE) {
     vars <- c("flodfreqcl", "pondfreqcl")
     missing <- c("Not_Populated")
-    freqcl2 <- c(missing, freqcl)
+    freqcl2 <- c(missing, levels(d.cosoilmoist$flodfreqcl))
     
     d.cosoilmoist <- within(d.cosoilmoist, {
+      
       flodfreqcl = factor(flodfreqcl, levels = freqcl2)
       pondfreqcl = factor(pondfreqcl, levels = freqcl2)
+      
       flodfreqcl[is.na(flodfreqcl)] <- missing
       pondfreqcl[is.na(pondfreqcl)] <- missing
+      
       dept_l = ifelse(!is.na(dept_l), dept_l, dept_r)
       dept_h = ifelse(!is.na(dept_h), dept_h, dept_r)
+
       depb_l = ifelse(!is.na(depb_l), depb_l, depb_r)
       depb_h = ifelse(!is.na(depb_h), depb_h, depb_r)
-      })
+      
+      dept_l = ifelse(!is.na(dept_l), dept_l, 201)
+      dept_r = ifelse(!is.na(dept_r), dept_l, 201)
+      dept_h = ifelse(!is.na(dept_h), dept_h, 201)
+      
+      depb_l = ifelse(!is.na(depb_l), depb_l, 201)
+      depb_r = ifelse(!is.na(depb_r), depb_h, 201)
+      depb_h = ifelse(!is.na(depb_h), depb_l, 201)
+    })
     }
   
   

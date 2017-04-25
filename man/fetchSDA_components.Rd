@@ -22,7 +22,7 @@ get_cosoilmoist_from_NASIS_db(impute = TRUE)
   \item{nationalmusym}{nationalmusym used to query Soil Data Access via SDA_query()}
   \item{areasymbol}{areasymbol used to query Soil Data Access via SDA_query()}
   \item{mukey}{mukey used to query Soil Data Access via SDA_query()}
-  \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data or the "RV" for numeric data (default: TRUE)}
+  \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)}
 }
 
 
