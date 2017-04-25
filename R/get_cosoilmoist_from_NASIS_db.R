@@ -35,26 +35,32 @@ get_cosoilmoist_from_NASIS_db <- function(impute = TRUE) {
   
     
   # impute NA freqcl values, default = "not populated"
+  
   if (impute == TRUE) {
     vars <- c("flodfreqcl", "pondfreqcl")
     missing <- c("Not_Populated")
     freqcl2 <- c(missing, levels(d.cosoilmoist$flodfreqcl))
     
     d.cosoilmoist <- within(d.cosoilmoist, {
-      
+      # replace NULL freqcl with "Not_Populated"
       flodfreqcl = factor(flodfreqcl, levels = freqcl2)
       pondfreqcl = factor(pondfreqcl, levels = freqcl2)
       
       flodfreqcl[is.na(flodfreqcl)] <- missing
       pondfreqcl[is.na(pondfreqcl)] <- missing
       
-      dept_l = ifelse(!is.na(dept_l), dept_l, dept_r)
-      dept_h = ifelse(!is.na(dept_h), dept_h, dept_r)
+      # replace NULL RV depths with 201 cm if pondfreqcl or flodqcl is not NULL
+      dept_r[is.na(dept_r) & (!is.na(pondfreqcl) | !is.na(flodfreqcl))] = 201
+      depb_r[is.na(depb_r) & (!is.na(pondfreqcl) | !is.na(flodfreqcl))] = 201
       
-      depb_l = ifelse(!is.na(depb_l), depb_l, depb_r)
-      depb_h = ifelse(!is.na(depb_h), depb_h, depb_r)
-      })
-    }
+      # replace NULL L and H depths with the RV
+      dept_l[is.na(dept_l)] = dept_r
+      dept_h[is.na(dept_h)] = dept_r
+      
+      depb_l[is.na(depb_l)] = depb_r
+      depb_h[is.na(depb_h)] = depb_r
+    })
+  }
 
 
   # close connection
