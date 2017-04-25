@@ -3,7 +3,7 @@
 \alias{code}
 \alias{nasis_metadata}
 \title{Convert coded values returned from NASIS and SDA queries to factors}
-\description{These functions convert the coded values returned from NASIS or SDA to factors (e.g. 1 = Alfisols) using the metadata tables from NASIS. For SDA the metadata is pulled from a static snapshot in the soilDB package (i.e. data(nasis_metadata)}
+\description{These functions convert the coded values returned from NASIS or SDA to factors (e.g. 1 = Alfisols) using the metadata tables from NASIS. For SDA the metadata is pulled from a static snapshot in the soilDB package (i.e. data(nasis_metadata)).}
 \usage{
 uncode(data.frame, invert = FALSE, NASIS = TRUE)
 code(data.frame, invert = TRUE, NASIS = TRUE)

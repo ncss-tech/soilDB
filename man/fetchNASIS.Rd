@@ -3,6 +3,7 @@
 \alias{simplifyColorData}
 \alias{simplfyFragmentData}
 \alias{fetchNASIS}
+\alias{fetchNASIS_pedons}
 \alias{fetchNASIS_component_data}
 \alias{get_extended_data_from_NASIS_db}
 \alias{get_component_data_from_NASIS_db}
