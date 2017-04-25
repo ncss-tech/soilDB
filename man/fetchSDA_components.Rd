@@ -46,7 +46,7 @@ plot(test$spc)
 # query cosoilmoist by mukey
 library(soilDB)
 
-test <- get_cosoimoist_from_SDA_db(c("406339"))
+test <- get_cosoilmoist_from_SDA_db(c("406339"))
 
 # remove depths with NA
 test <- subset(test, !is.na(dept_r))
