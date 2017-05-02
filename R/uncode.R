@@ -4,7 +4,7 @@ uncode <- function(df, invert=FALSE, NASIS=TRUE){
     if(!requireNamespace('RODBC'))
       stop('please install the `RODBC` package', call.=FALSE)
     
-    q <- "SELECT mdd.DomainID, DomainName, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceDescription, ColumnPhysicalName, ColumnLogicalName
+    q <- "SELECT mdd.DomainID, DomainName, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceDescription, ColumnPhysicalName, ColumnLogicalName
     
     FROM MetadataDomainDetail mdd
     INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
@@ -40,8 +40,10 @@ uncode <- function(df, invert=FALSE, NASIS=TRUE){
   
   # iterate over columns with codes
   for (i in columnsToWorkOn.idx){
+    
     # get the current metadata
     sub <- metadata[metadata$ColumnPhysicalName %in% nm[i], ]
+    
     # NASIS == TRUE
     if (NASIS == TRUE) {
       if (invert == FALSE){
@@ -51,14 +53,16 @@ uncode <- function(df, invert=FALSE, NASIS=TRUE){
         # replace values with codes
         df[, i] <- factor(df[, i], levels = sub$ChoiceName, labels = sub$ChoiceValue)}
     }
+    
     # NASIS == FALSE
     if (NASIS == FALSE) {
       if (invert == FALSE){
         # replace codes with values
-        df[, i] <- factor(df[, i], levels = sub$ChoiceValue, labels = sub$ChoiceName)
+        df[, i] <- factor(df[, i], levels = sub$ChoiceLabel)
       } else {
         # replace values with codes
-        df[, i] <- factor(df[, i], levels = sub$ChoiceName, labels = sub$ChoiceValue)}
+        df[, i] <- factor(df[, i], levels = sub$ChoiceLabel, labels = sub$ChoiceValue)
+        }
       }
     }
   
