@@ -2,19 +2,23 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE){
   # SDA is missing soiltempa_r AS mast_r
   # Joining in the fetch on derived_cokey doesn't work but should. There are duplicate components with the same combination of elements.
   # paste0("mu.nationalmusym + '_' + CAST(comppct_r AS VARCHAR) + '_' + compname + '-' + ISNULL(localphase, 'no_phase') AS derived_cokey")
-  q.component <- paste("SELECT mu.nationalmusym, compname, comppct_r, compkind, majcompflag, localphase, slope_r, tfact, wei, weg, drainagecl, elev_r, aspectrep, map_r, airtempa_r AS maat_r, reannualprecip_r, ffd_r, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, cokey
+  q.component <- paste("SELECT", 
+  if (duplicates == FALSE) {"DISTINCT"}
+  , "mu.nationalmusym, compname, comppct_r, compkind, majcompflag, localphase, slope_r, tfact, wei, weg, drainagecl, elev_r, aspectrep, map_r, airtempa_r AS maat_r, reannualprecip_r, ffd_r, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, cokey
       
-  FROM legend l INNER JOIN",
+  FROM legend l INNER JOIN
+       mapunit mu ON mu.lkey = l.lkey INNER JOIN",
        if (duplicates == FALSE) {
-         paste0("(SELECT MIN(nationalmusym) nationalmusym, MIN(MUKEY) mukey, MIN(lkey) lkey
-        FROM mapunit
-        GROUP BY nationalmusym) AS mu")
-         } else "mapunit mu", "ON mu.lkey = l.lkey INNER JOIN
-       component c ON c.mukey = mu.mukey
+         "(SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2 
+          FROM mapunit
+          GROUP BY nationalmusym) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN
+          component c ON c.mukey = mu2.mukey2"
+          } else "component c ON c.mukey = mu.mukey"
+       
           
-  WHERE", WHERE,
+  , "WHERE", WHERE,
   
-  "ORDER BY cokey DESC
+  "ORDER BY cokey, compname, comppct_r DESC
   ;")
   
   
@@ -68,16 +72,19 @@ get_mapunit_from_SDA <- function(WHERE = NULL) {
 
 get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE) {
   # seriously!, how is their no fragvoltot_r column?
-  q.chorizon <- paste("SELECT hzname, hzdept_r, hzdepb_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, texture, om_l, om_r, om_h, dbovendry_r, ksat_r, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, c.cokey
+  q.chorizon <- paste("SELECT", 
+  if (duplicates == FALSE) {"DISTINCT"}
+  , "hzname, hzdept_r, hzdepb_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, texture, om_l, om_r, om_h, dbovendry_r, ksat_r, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, c.cokey
   
-  FROM legend l INNER JOIN",
-       if (duplicates == FALSE) {
-          paste0("(SELECT MIN(nationalmusym) nationalmusym, MIN(MUKEY) mukey, MIN(lkey) lkey
-                   FROM mapunit
-                   GROUP BY nationalmusym) AS mu")
-          } else "mapunit mu", "ON mu.lkey = l.lkey INNER JOIN
-       component c ON c.mukey = mu.mukey INNER JOIN
-       chorizon ch ON ch.cokey = c.cokey LEFT OUTER JOIN
+  FROM legend l INNER JOIN
+       mapunit mu ON mu.lkey = l.lkey INNER JOIN",
+                      if (duplicates == FALSE) {
+                        "(SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2 
+                        FROM mapunit
+                        GROUP BY nationalmusym) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN
+                        component c ON c.mukey = mu2.mukey2 INNER JOIN"
+                      } else "component c ON c.mukey = mu.mukey INNER JOIN"
+       ,"chorizon ch ON ch.cokey = c.cokey LEFT OUTER JOIN
        chtexturegrp chtg ON chtg.chkey = ch.chkey AND rvindicator = 'YES'
                       
   WHERE", WHERE,
