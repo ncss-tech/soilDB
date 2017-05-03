@@ -57,16 +57,16 @@ test <- subset(test, !is.na(dept_r))
 # plot annual water table
 library(ggplot2)
 
-ggplot(test) +
+ggplot(test, aes(x = as.integer(month), y = dept_r, lty = status)) +
   geom_rect(aes(xmin = as.integer(month), xmax = as.integer(month) + 1,
                 ymin = 0, ymax = max(test$depb_r),
                 fill = flodfreqcl)) +
-  geom_line(aes(x = as.integer(month), y = dept_r, 
-                lty = status), cex = 1) +
-  geom_pointrange(aes(x = as.integer(month), 
-                     ymin = dept_l, y = dept_r, ymax = dept_h)) +
+  geom_line(cex = 1) +
+  geom_point() +
+  geom_ribbon(aes(ymin = dept_l, ymax = dept_h), alpha = 0.2) +
   ylim(max(test$depb_r), 0) +
   xlab("month") + ylab("depth (cm)") +
+  scale_x_continuous(breaks = 1:12, labels = month.abb, name="Month") +
   facet_wrap(~ paste(compname, comppct_r, "pct", mukey, sep = "-")) +
   ggtitle("Water Table Levels from Component Soil Moisture Month Data")
   }
