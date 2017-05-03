@@ -1,5 +1,5 @@
-\name{fetchSDA_components}
-\alias{fetchSDA_components}
+\name{fetchSDA_component}
+\alias{fetchSDA_component}
 \alias{get_mapunit_from_SDA}
 \alias{get_component_from_SDA}
 \alias{get_chorizon_from_SDA}
@@ -9,10 +9,10 @@
 \title{Extract component tables from a local NASIS Database or Soil Data Access}
 \description{Get, format, impute, and return component tables.}
 \usage{
-fetchSDA_componets(WHERE = NULL, duplicates = FALSE)
-get_mapunits_from_SDA(WHERE = NULL)
-get_components_from_SDA(WHERE = NULL, duplicates = FALSE)
-get_chorizons_from_SDA(WHERE = NULL, duplicates = FALSE)
+fetchSDA_component(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE)
+get_mapunit_from_SDA(WHERE = NULL)
+get_component_from_SDA(WHERE = NULL, duplicates = FALSE)
+get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE)
 get_cosoilmoist_from_SDA_db(mukey, impute = TRUE)
 get_cosoilmoist_from_NASIS_db(impute = TRUE)
 }
@@ -21,6 +21,7 @@ get_cosoilmoist_from_NASIS_db(impute = TRUE)
 \arguments{
   \item{WHERE}{text string formated as an SQL WHERE clause (default: FALSE)}
   \item{duplicates}{logical; if TRUE duplicate nationalmusym are returned}
+  \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: FALSE)}
   \item{mukey}{mukey used to query Soil Data Access via SDA_query()}
   \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)}
 }
@@ -41,7 +42,7 @@ The function get_cosoilmoist_from_NASIS_db() only works only on Windows , and re
 \examples{
 \dontrun{
 # query component by nationalmusym
-test = fetchSDA_components(WHERE = "nationalmusym = '2vzcp'")
+test = fetchSDA_component(WHERE = "nationalmusym = '2vzcp'")
 plot(test$spc)
 
 
@@ -56,16 +57,16 @@ test <- subset(test, !is.na(dept_r))
 # plot annual water table
 library(ggplot2)
 
-ggplot(test, aes(x = as.integer(month), y = dept_r, lty = status)) +
+ggplot(test) +
   geom_rect(aes(xmin = as.integer(month), xmax = as.integer(month) + 1,
                 ymin = 0, ymax = max(test$depb_r),
                 fill = flodfreqcl)) +
-  geom_line(cex = 1) +
-  geom_point() +
-  geom_ribbon(aes(ymin = dept_l, ymax = dept_h), alpha = 0.2) +
+  geom_line(aes(x = as.integer(month), y = dept_r, 
+                lty = status), cex = 1) +
+  geom_pointrange(aes(x = as.integer(month), 
+                     ymin = dept_l, y = dept_r, ymax = dept_h)) +
   ylim(max(test$depb_r), 0) +
   xlab("month") + ylab("depth (cm)") +
-  scale_x_continuous(breaks = 1:12, labels = month.abb, name="Month") +
   facet_wrap(~ paste(compname, comppct_r, "pct", mukey, sep = "-")) +
   ggtitle("Water Table Levels from Component Soil Moisture Month Data")
   }

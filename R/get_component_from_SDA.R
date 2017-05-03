@@ -113,7 +113,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE) {
 }
 
 
-fetchSDA_components <- function(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE) {
+fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE) {
 
   # load data in pieces
   f.component <- get_component_from_SDA(WHERE, duplicates)

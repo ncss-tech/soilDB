@@ -28,7 +28,7 @@ uncode <- function(df, invert=FALSE, NASIS=TRUE){
   # load current metadata table
   if (NASIS == TRUE){
     metadata <- get_metadata()
-  } else data(nasis_metadata)
+  } else data(nasis_metadata, package = "soilDB")
   
   # unique set of possible columns that will need replacement
   possibleReplacements <- unique(metadata$ColumnPhysicalName)

@@ -1,6 +1,5 @@
 \name{loafercreek}
 \alias{loafercreek}
-\alias{nasis_metadata}
 \alias{andic.subset}
 \alias{gopheridge}
 \alias{cisne}
