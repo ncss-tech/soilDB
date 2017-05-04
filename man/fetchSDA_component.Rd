@@ -13,7 +13,7 @@ fetchSDA_component(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE)
 get_mapunit_from_SDA(WHERE = NULL)
 get_component_from_SDA(WHERE = NULL, duplicates = FALSE)
 get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE)
-get_cosoilmoist_from_SDA_db(mukey, impute = TRUE)
+get_cosoilmoist_from_SDA_db(WHERE = NULL, duplicates = FALSE, impute = TRUE)
 get_cosoilmoist_from_NASIS_db(impute = TRUE)
 }
 
@@ -49,7 +49,7 @@ plot(test$spc)
 # query cosoilmoist by mukey
 library(soilDB)
 
-test <- get_cosoilmoist_from_SDA_db(c("406339"))
+test <- get_cosoilmoist_from_SDA_db(WHERE = "mukey = '406339'")
 
 # remove depths with NA
 test <- subset(test, !is.na(dept_r))
@@ -67,7 +67,7 @@ ggplot(test, aes(x = as.integer(month), y = dept_r, lty = status)) +
   ylim(max(test$depb_r), 0) +
   xlab("month") + ylab("depth (cm)") +
   scale_x_continuous(breaks = 1:12, labels = month.abb, name="Month") +
-  facet_wrap(~ paste(compname, comppct_r, "pct", mukey, sep = "-")) +
+  facet_wrap(~ paste(compname, comppct_r, "pct", nationalmusym, sep = "-")) +
   ggtitle("Water Table Levels from Component Soil Moisture Month Data")
   }
 }
