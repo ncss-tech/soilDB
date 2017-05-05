@@ -59,11 +59,11 @@ get_cosoilmoist_from_SDA_db <- function(WHERE = NULL, duplicates = FALSE, impute
       depb_r[is.na(depb_r) & (!is.na(pondfreqcl) | !is.na(flodfreqcl))] = 201
       
       # replace NULL L and H depths with the RV
-      dept_l[is.na(dept_l)] = dept_r
-      dept_h[is.na(dept_h)] = dept_r
+      dept_l = ifelse(is.na(dept_l), dept_r, dept_l)
+      dept_h = ifelse(is.na(dept_h), dept_r, dept_h)
       
-      depb_l[is.na(depb_l)] = depb_r
-      depb_h[is.na(depb_h)] = depb_r
+      depb_l = ifelse(is.na(depb_l), depb_r, depb_l)
+      depb_h = ifelse(is.na(depb_h), depb_r, depb_h)
       
       # replace NULL freqcl with "Not_Populated"
       flodfreqcl = factor(flodfreqcl, levels = freqcl2)
