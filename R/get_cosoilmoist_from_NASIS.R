@@ -1,4 +1,4 @@
-get_cosoilmoist_from_NASIS_db <- function(impute = TRUE) {
+get_cosoilmoist_from_NASIS <- function(impute = TRUE) {
   # must have RODBC installed
   if (!requireNamespace('RODBC')) stop('please install the `RODBC` package', call.=FALSE)
   

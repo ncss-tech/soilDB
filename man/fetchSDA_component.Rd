@@ -3,8 +3,8 @@
 \alias{get_mapunit_from_SDA}
 \alias{get_component_from_SDA}
 \alias{get_chorizon_from_SDA}
-\alias{get_cosoilmoist_from_SDA_db}
-\alias{get_cosoilmoist_from_NASIS_db}
+\alias{get_cosoilmoist_from_SDA}
+\alias{get_cosoilmoist_from_NASIS}
 
 \title{Extract component tables from a local NASIS Database or Soil Data Access}
 \description{Get, format, impute, and return component tables.}
@@ -13,8 +13,8 @@ fetchSDA_component(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE)
 get_mapunit_from_SDA(WHERE = NULL)
 get_component_from_SDA(WHERE = NULL, duplicates = FALSE)
 get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE)
-get_cosoilmoist_from_SDA_db(WHERE = NULL, duplicates = FALSE, impute = TRUE)
-get_cosoilmoist_from_NASIS_db(impute = TRUE)
+get_cosoilmoist_from_SDA(WHERE = NULL, duplicates = FALSE, impute = TRUE)
+get_cosoilmoist_from_NASIS(impute = TRUE)
 }
 
 
@@ -49,7 +49,7 @@ plot(test$spc)
 # query cosoilmoist by mukey
 library(soilDB)
 
-test <- get_cosoilmoist_from_SDA_db(WHERE = "mukey = '406339'")
+test <- get_cosoilmoist_from_SDA(WHERE = "mukey = '406339'")
 
 # remove depths with NA
 test <- subset(test, !is.na(dept_r))

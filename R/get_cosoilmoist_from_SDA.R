@@ -1,4 +1,4 @@
-get_cosoilmoist_from_SDA_db <- function(WHERE = NULL, duplicates = FALSE, impute = TRUE){
+get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = TRUE){
   q.cosoilmoist <- paste("SELECT", 
   if (duplicates == FALSE) {"DISTINCT"}
 , "nationalmusym, muname, c.compname, c.comppct_r, month, flodfreqcl, pondfreqcl, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat
