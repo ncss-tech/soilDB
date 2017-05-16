@@ -8,7 +8,7 @@ get_cosoilmoist_from_NASIS <- function(impute = TRUE) {
        comonth com ON com.coiidref = co.coiid LEFT OUTER JOIN
        cosoilmoist cosm ON cosm.comonthiidref = com.comonthiid
   
-  ORDER BY dmuiid, compname, comppct_r, month, soimoistdept_r
+  ORDER BY dmuiid, comppct_r DESC, compname, month, soimoistdept_r
   ;"
   
   
@@ -21,7 +21,8 @@ get_cosoilmoist_from_NASIS <- function(impute = TRUE) {
   
   
   # recode metadata domains
-  d.cosoilmoist <- .metadata_replace(d.cosoilmoist)
+  d.cosoilmoist <- uncode(d.cosoilmoist, NASIS = TRUE)
+  
   
   # cache original column names
   orig_names <- names(d.cosoilmoist)
@@ -32,13 +33,14 @@ get_cosoilmoist_from_NASIS <- function(impute = TRUE) {
   old_names <- "stat"
   new_names <- "status"
   names(d.cosoilmoist)[names(d.cosoilmoist) %in% old_names] <- new_names
+
   
-    
   # impute NA freqcl values, default = "not populated"
   if (impute == TRUE) {
     vars <- c("flodfreqcl", "pondfreqcl")
-    missing <- c("Not_Populated")
+    missing <- "Not_Populated"
     freqcl2 <- c(missing, levels(d.cosoilmoist$flodfreqcl))
+    status2 <- c(missing, levels(d.cosoilmoist$status))
     
     d.cosoilmoist <- within(d.cosoilmoist, {
       # replace NULL RV depths with 201 cm if pondfreqcl or flodqcl is not NULL
@@ -53,17 +55,16 @@ get_cosoilmoist_from_NASIS <- function(impute = TRUE) {
       depb_h = ifelse(is.na(depb_h), depb_r, depb_h)
       
       # replace NULL freqcl with "Not_Populated"
+      status = factor(status, levels = status2)
       flodfreqcl = factor(flodfreqcl, levels = freqcl2)
       pondfreqcl = factor(pondfreqcl, levels = freqcl2)
       
+      status[is.na(status)]         <- missing
       flodfreqcl[is.na(flodfreqcl)] <- missing
       pondfreqcl[is.na(pondfreqcl)] <- missing
-      })
+    })
   }
-
-
-  # close connection
-  RODBC::odbcClose(channel)
+  
   
   
   # done

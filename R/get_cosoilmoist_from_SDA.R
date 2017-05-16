@@ -40,18 +40,12 @@ get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = 
   names(d.cosoilmoist)[names(d.cosoilmoist) %in% old_names] <- new_names
 
 
-  # reorder data.frame
-  d.cosoilmoist  <- with(d.cosoilmoist, 
-                         d.cosoilmoist[
-                           order(muname, - comppct_r, - xtfrm(compname), month, dept_r),
-                           ])
-
-  
   # impute NA freqcl values, default = "not populated"
   if (impute == TRUE) {
     vars <- c("flodfreqcl", "pondfreqcl")
-    missing <- c("Not_Populated")
+    missing <- "Not_Populated"
     freqcl2 <- c(missing, levels(d.cosoilmoist$flodfreqcl))
+    status2 <- c(missing, levels(d.cosoilmoist$status))
     
     d.cosoilmoist <- within(d.cosoilmoist, {
       # replace NULL RV depths with 201 cm if pondfreqcl or flodqcl is not NULL
@@ -66,14 +60,15 @@ get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = 
       depb_h = ifelse(is.na(depb_h), depb_r, depb_h)
       
       # replace NULL freqcl with "Not_Populated"
+      status = factor(status, levels = status2)
       flodfreqcl = factor(flodfreqcl, levels = freqcl2)
       pondfreqcl = factor(pondfreqcl, levels = freqcl2)
       
+      status[is.na(status)]         <- missing
       flodfreqcl[is.na(flodfreqcl)] <- missing
       pondfreqcl[is.na(pondfreqcl)] <- missing
     })
   }
-  
   
   
   # done
