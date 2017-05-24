@@ -319,7 +319,10 @@ SDA_query2 <- function(q) {
 .post_process_SDA_result_set <- function(i) {
   # the first line is always the colnames
   i.header <- i[1, ]
-  i <- i[-1, ]
+  
+  # remove the first line
+  # Arrg! the dreaded sing-row indexing bug: drop=FALSE ensures result is a matrix
+  i <- i[-1, , drop=FALSE]
   
   i.tf <- tempfile() # work-around for all data encoded as char
   
