@@ -231,58 +231,110 @@ SDA_query <- function(q) {
 }
 
 
-### this is the old-style interface, now depreciated ###
-# 
-# # clean-up results from SDA SOAP query, and return as DF
-# .cleanSDA <- function(i) {
-#   # remove left-overs from SOAP result
-#   i$.attrs <- NULL
-#   
-#   # convert NULL in NA
-#   i[which(sapply(i, is.null))] <- NA
-#   
-#   # convert list to DF
-#   return(as.data.frame(i, stringsAsFactors=FALSE))
-# }
-# 
-# .oldSDA_query <- function(q) {
-#   # check for required packages
-#   if(!requireNamespace('SSOAP', quietly=TRUE) | !requireNamespace('XMLSchema', quietly=TRUE))
-#     stop('please install the `SSOAP` and `XMLSchema` packages', call.=FALSE)
-#     
-#   # important: change the default behavior of data.frame
-# 	opt.original <- options(stringsAsFactors = FALSE)
-# 	
-# 	# setup server, action, and xmlns
-# 	s <- SSOAP::SOAPServer('SDMDataAccess.nrcs.usda.gov', '/Tabular/SDMTabularService.asmx')
-# 	a <- I('http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx/RunQuery')
-# 	x <- c(I("http://SDMDataAccess.nrcs.usda.gov/Tabular/SDMTabularService.asmx"))
-# 	
-# 	# feedback:
-# 	cat('sending SOAP request...\n')
-# 	
-# 	# submit and process the query
-# 	res <- SSOAP::.SOAP(s, "RunQuery", Query=q, action=a, xmlns=x)
-# 	
-# 	# results are stored in: res$diffgram$NewDataSet
-# 	
-# 	# clean the results, convert to DF
-# 	cat('processing results...\n')
-# 	
-# 	df <- ldply(res$diffgram$NewDataSet, .fun=.cleanSDA, .progress='text')
-# 	df$.id <- NULL
-# 	
-# 	# temp hack: everything is read-in as character data!!
-# 	# write out to tempfile, and read back in
-# 	f <- tempfile()
-# 	write.table(df, file=f, col.names=TRUE, row.names=FALSE, quote=FALSE, sep='|')
-# 	df <- read.table(f, header=TRUE, sep='|', quote='', comment.char='')
-# 	
-# 	# reset options:
-# 	options(opt.original)
-# 	
-# 	# done
-# 	return(df)
-# }
+
+## TODO: parse multiple record sets, return as list... currently results are combined into a single DF
+##         SDA_query("select top 3 areasymbol from mupoint; select top 2 lkey from mapunit")
+## TODO: doesn't close all connections
+## TODO: requires more testing and error-trapping
+
+## JSON, no more XML processing
+
+SDA_query2 <- function(q) {
+  # check for required packages
+  if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('jsonlite', quietly=TRUE))
+    stop('please install the `httr` and `jsonlite` packages', call.=FALSE)
+  
+  # important: change the default behavior of data.frame
+  opt.original <- options(stringsAsFactors = FALSE)
+  
+  # temp place to keep json-style post args
+  tf <- tempfile() 
+  
+  # compute json post args and save to temp file
+  # result is JSON with first-line as column names
+  # this means result is a character matrix
+  post.data <- jsonlite::toJSON(list(query=q, format='JSON+COLUMNNAME'), auto_unbox = TRUE)
+  cat(post.data, file=tf, sep = '\n')
+  
+  # submit request
+  r <- httr::POST(url="https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest", body=httr::upload_file(tf))
+  
+  # trap errors, likely related to SQL syntax errors
+  request.status <- try(httr::stop_for_status(r), silent = TRUE)
+  
+  if(class(request.status) == 'try-error'){
+    # get the request response, this will contain an error message
+    r.content <- httr::content(r, as = 'parsed', encoding = 'UTF-8')
+    # parse the XML to get the error message
+    error.msg <- xmlToList(xmlParse(r.content))$ServiceException
+    
+    ## TODO: error or message?
+    stop(error.msg)
+  }
+  
+  
+  # the result is JSON:
+  # list of character matrix, one for each "Table" returned
+  r.content <- httr::content(r, as = 'text', encoding = 'UTF-8')
+  d <- jsonlite::fromJSON(r.content)
+  
+  # number of results
+  n.tables <- length(d)
+  
+  # no results, terminate here
+  if(n.tables < 1) {
+    message('empty result set')
+    return(NULL)
+  }
+  
+  # process list of tables
+  d <- lapply(d, .post_process_SDA_result_set)
+  
+  # keep track of SDA result set IDs
+  SDA.ids <- names(d)
+  for(i in 1:n.tables) {
+    attr(d[[i]], 'SDA_id') <- SDA.ids[i]
+  }
+  
+  # reset options
+  options(opt.original)
+  
+  if(n.tables > 1) {
+    message('multi-part result set, returning a list')
+    return(d)
+  } else {
+    # single result set, returng data.frame
+    message('single result set, returning a data.frame')
+    return(d[[1]])
+  }
+    
+  
+  
+  
+  
+}
+
+
+# convert the raw results from SDA into a proper data.frame
+.post_process_SDA_result_set <- function(i) {
+  # the first line is always the colnames
+  i.header <- i[1, ]
+  i <- i[-1, ]
+  
+  i.tf <- tempfile() # work-around for all data encoded as char
+  
+  # save to file / re-load to guess column classes
+  write.table(i, file=i.tf, col.names=TRUE, row.names=FALSE, quote=FALSE, sep='|')
+  df <- read.table(i.tf, header=TRUE, sep='|', quote='', comment.char='', na.strings = '', stringsAsFactors = FALSE)
+ 
+  # add colnames from original header
+  names(df) <- i.header
+  
+  ## error checking?
+  
+  # done
+  return(df)
+}
+
 
 

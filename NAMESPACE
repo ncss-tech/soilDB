@@ -39,7 +39,9 @@ importFrom(sp,
 
 
 importFrom(XML,
+  xmlParse,
   xmlToDataFrame,
+  xmlToList,
   htmlTreeParse,
   getNodeSet,
   xmlValue

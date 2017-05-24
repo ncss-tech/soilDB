@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.8.5 (2017-05-24) ----------------------------
+* re-write of SDA_query(), better error handling, support for multi-part result sets
+
 -------------------------- soilDB 1.8.2 (2017-03-24) ----------------------------
 * fetchHenry() can now access water level data, see manual page
 
