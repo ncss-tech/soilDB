@@ -41,12 +41,32 @@ The function get_cosoilmoist_from_NASIS_db() only works only on Windows , and re
 
 \examples{
 \dontrun{
-# query component by nationalmusym
-test = fetchSDA_component(WHERE = "nationalmusym = '2vzcp'")
-plot(test$spc)
+library(soilDB)
+library(ggplot2)
+
+# query soil components by areasymbol and musym
+MnpB2 = fetchSDA_component(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
+ 
+# profile plot
+plot(MnpB2$spc)
+
+# convert the data for depth plot
+MnpB2_slice = slice(MnpB2$spc, 0:200 ~ claytotal_l + claytotal_r + claytotal_h)
+h = horizons(MnpB2_slice)
+h = merge(h, site(MnpB2$spc)[c("cokey", "compname", "comppct_r")], by = "cokey", all.x = TRUE)
+
+# depth plot of clay content by soil component
+ggplot(h) +
+  geom_line(aes(y = claytotal_r, x = hzdept_r)) +
+  geom_ribbon(aes(ymin = claytotal_l, ymax = claytotal_h, x = hzdept_r), alpha = 0.2) +
+  xlim(200, 0) +
+  xlab("depth (cm)") + ylab("clay content (%)") +
+  ggtitle("Depth Plots of Clay Content by Soil Component") +
+  facet_wrap(~ paste(compname, comppct_r, "%")) +
+  coord_flip()
 
 
-# query cosoilmoist by mukey
+# query cosoilmoist (e.g. water table data) by mukey
 library(soilDB)
 
 test <- get_cosoilmoist_from_SDA(WHERE = "mukey = '406339'")
