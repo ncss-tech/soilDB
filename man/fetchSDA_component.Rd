@@ -45,25 +45,40 @@ library(soilDB)
 library(ggplot2)
 
 # query soil components by areasymbol and musym
-MnpB2 = fetchSDA_component(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
- 
+test = fetchSDA_component(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
+test = test$spc
+
 # profile plot
-plot(MnpB2$spc)
+plot(test)
 
 # convert the data for depth plot
-MnpB2_slice = slice(MnpB2$spc, 0:200 ~ claytotal_l + claytotal_r + claytotal_h)
-h = horizons(MnpB2_slice)
-h = merge(h, site(MnpB2$spc)[c("cokey", "compname", "comppct_r")], by = "cokey", all.x = TRUE)
+clay_slice = horizons(slice(test, 0:200 ~ claytotal_l + claytotal_r + claytotal_h))
+names(clay_slice) <- gsub("claytotal_", "", names(clay_slice))
+
+om_slice = horizons(slice(test, 0:200 ~ om_l + om_r + om_h))
+names(om_slice) = gsub("om_", "", names(om_slice))
+
+test2 = rbind(data.frame(clay_slice, var = "clay"),
+              data.frame(om_slice, var = "om")
+              )
+
+h = merge(test2, site(test)[c("nationalmusym", "cokey", "compname", "comppct_r")], by = "cokey", all.x = TRUE)
 
 # depth plot of clay content by soil component
-ggplot(h) +
-  geom_line(aes(y = claytotal_r, x = hzdept_r)) +
-  geom_ribbon(aes(ymin = claytotal_l, ymax = claytotal_h, x = hzdept_r), alpha = 0.2) +
+gg_comp <- function(x) {
+  ggplot(x) +
+  geom_line(aes(y = r, x = hzdept_r)) +
+  geom_line(aes(y = r, x = hzdept_r)) +
+  geom_ribbon(aes(ymin = l, ymax = h, x = hzdept_r), alpha = 0.2) +
   xlim(200, 0) +
-  xlab("depth (cm)") + ylab("clay content (%)") +
-  ggtitle("Depth Plots of Clay Content by Soil Component") +
-  facet_wrap(~ paste(compname, comppct_r, "%")) +
+  xlab("depth (cm)") +
+  facet_grid(var ~ nationalmusym + paste(compname, comppct_r)) +
   coord_flip()
+  }
+g1 <- gg_comp(subset(h, var == "clay"))
+g2 <- gg_comp(subset(h, var == "om"))
+
+grid.arrange(g1, g2)
 
 
 # query cosoilmoist (e.g. water table data) by mukey
