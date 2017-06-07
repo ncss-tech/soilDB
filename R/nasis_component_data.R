@@ -470,7 +470,7 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE, fill = FALSE) {
   
   # load data in pieces
   f.comp <- get_component_data_from_NASIS_db()
-  f.chorizon <- get_component_horizon_data_from_NASIS_db()
+  f.chorizon <- get_component_horizon_data_from_NASIS_db(fill)
   # f.copmgrp <- get_component_copmgrp_data_from_NASIS_db()
   f.copm <- get_component_copm_data_from_NASIS_db()
   f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db()
