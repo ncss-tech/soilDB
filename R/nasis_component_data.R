@@ -91,7 +91,7 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
   
   # optionally drop additional | NA mustatus
   if(dropAdditional) {
-    idx <- which(! d$mustatus == 'additional')
+    idx <- which(! d$mustatus == 'Additional')
     d <- d[idx, ]
   }
   
