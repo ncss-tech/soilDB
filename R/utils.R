@@ -503,10 +503,7 @@
   # load current metadata table
   if (NASIS == TRUE){
     metadata <- get_metadata()
-  } else {
-    # use a saved copy from soilDB
-    data(nasis_metadata, package = 'soilDB')
-  }
+    }
   
   # unique set of possible columns that will need replacement
   possibleReplacements <- unique(metadata$ColumnPhysicalName)

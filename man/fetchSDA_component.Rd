@@ -21,9 +21,9 @@ get_cosoilmoist_from_NASIS(impute = TRUE)
 \arguments{
   \item{WHERE}{text string formated as an SQL WHERE clause (default: FALSE)}
   \item{duplicates}{logical; if TRUE duplicate nationalmusym are returned}
-  \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: FALSE)}
-  \item{mukey}{mukey used to query Soil Data Access via SDA_query()}
   \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)}
+  \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: FALSE)}
+
 }
 
 
@@ -62,7 +62,10 @@ test2 = rbind(data.frame(clay_slice, var = "clay"),
               data.frame(om_slice, var = "om")
               )
 
-h = merge(test2, site(test)[c("nationalmusym", "cokey", "compname", "comppct_r")], by = "cokey", all.x = TRUE)
+h = merge(test2, site(test)[c("nationalmusym", "cokey", "compname", "comppct_r")],
+          by = "cokey", 
+          all.x = TRUE
+          )
 
 # depth plot of clay content by soil component
 gg_comp <- function(x) {

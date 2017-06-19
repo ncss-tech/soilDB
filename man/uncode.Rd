@@ -1,9 +1,8 @@
 \name{uncode}
 \alias{uncode}
 \alias{code}
-\alias{nasis_metadata}
 \title{Convert coded values returned from NASIS and SDA queries to factors}
-\description{These functions convert the coded values returned from NASIS or SDA to factors (e.g. 1 = Alfisols) using the metadata tables from NASIS. For SDA the metadata is pulled from a static snapshot in the soilDB package (i.e. data(nasis_metadata)).}
+\description{These functions convert the coded values returned from NASIS or SDA to factors (e.g. 1 = Alfisols) using the metadata tables from NASIS. For SDA the metadata is pulled from a static snapshot in the soilDB package.}
 \usage{
 uncode(df, invert = FALSE, NASIS = TRUE)
 code(df, invert = TRUE, NASIS = TRUE)
@@ -12,9 +11,10 @@ code(df, invert = TRUE, NASIS = TRUE)
 \arguments{
   \item{df}{data.frame}
   \item{invert}{converts the code labels back to their coded values()}
-  \item{NASIS}{a logical argument indicating whether or not to query the metadata from NASIS or use the static snapshot data(nasis_metadata) (default: TRUE)}
+  \item{NASIS}{a logical argument indicating whether or not to query the metadata from NASIS or use the static snapshot}
+  }
+\details{These functions convert the coded values returned from NASIS or SDA to factors using the metadata tables from NASIS. For SDA the metadata is pulled from a static snapshot in the soilDB package.
 }
-\details{These functions convert the coded values returned from NASIS or SDA to factors using the metadata tables from NASIS. For SDA the metadata is pulled from a static snapshot in the soilDB package (i.e. data(nasis_metadata)).}
 \value{A dataframe with the results.}
 \author{Stephen Roecker}
 \examples{

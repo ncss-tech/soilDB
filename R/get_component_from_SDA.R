@@ -98,9 +98,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE) {
   # exec query
   d.chorizon <- SDA_query(q.chorizon)
 
-  # load metadata
-  data(nasis_metadata, package = "soilDB")
-  
+
   # transform variables and metadata
   d.chorizon <- within(d.chorizon, {
     nationalmusym = NULL

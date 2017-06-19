@@ -1,28 +1,33 @@
 \name{fetchNASIS}
-\alias{get_text_notes_from_NASIS_db}
+\alias{fetchNASIS}
+\alias{get_extended_data_from_NASIS_db}
+\alias{getHzErrorsNASIS}
 \alias{simplifyColorData}
 \alias{simplfyFragmentData}
-\alias{fetchNASIS}
 \alias{fetchNASIS_pedons}
+\alias{get_phorizon_from_NASIS_db}
 \alias{fetchNASIS_component_data}
-\alias{get_extended_data_from_NASIS_db}
+\alias{get_component_copm_data_from_NASIS_db}
 \alias{get_component_data_from_NASIS_db}
-\alias{get_copedon_from_NASIS_db}
 \alias{get_component_horizon_data_from_NASIS_db}
-\alias{getHzErrorsNASIS}
-\alias{get_vegplot_from_NASIS_db}
 \alias{get_component_correlation_data_from_NASIS_db}
+\alias{get_component_copm_data_from_NASIS_db}
+\alias{get_component_cogeomorph_data_from_NASIS_db}
 \alias{get_component_esd_data_from_NASIS_db}
-\alias{get_vegplot_from_NASIS_db2}
+\alias{get_component_otherveg_data_from_NASIS_db}
+\alias{get_copedon_from_NASIS_db}
 \alias{get_comonth_from_NASIS_db}
+\alias{get_vegplot_from_NASIS_db}
+\alias{get_vegplot_from_NASIS_db2}
 \alias{get_projectmapunit_from_NASIS}
+\alias{get_text_notes_from_NASIS_db}
 
 \title{Fetch commonly used site/pedon/horizon data from a PedonPC database.}
 \description{Fetch commonly used site/pedon/horizon data from a PedonPC or local NASIS database, return as a SoilProfileCollection object.}
 
 \usage{
 fetchNASIS(rmHzErrors = TRUE, nullFragsAreZero=TRUE, soilColorState='moist', lab='FALSE')
-fetchNASIS_component_data(rmHzErrors=TRUE)
+fetchNASIS_component_data(rmHzErrors=TRUE, fill = FALSE)
 getHzErrorsNASIS(strict=TRUE)
 get_comonth_from_NASIS_db(fill=FALSE)
 }
