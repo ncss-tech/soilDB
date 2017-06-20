@@ -30,6 +30,8 @@ get_projectmapunit_from_NASIS <- function() {
   # exec query
   d.project <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
   
+  # test is selected set is empty
+  if (nrow(d.project) == 0) message("your selected set is missing the project table, please load it and try again")
   
   # uncode metadata domains
   d.project <- uncode(d.project)
