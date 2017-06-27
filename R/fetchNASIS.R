@@ -33,7 +33,6 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
     hz_data$total_frags_pct_cal <- ifelse(is.na(hz_data$total_frags_pct_cal), 0, hz_data$total_frags_pct_cal)
   }
   
-  
 	# join horizon + hz color: all horizons
 	h <- join(hz_data, color_data, by='phiid', type='left')
 	
@@ -95,7 +94,6 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
     assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
     assign("bad.horizons", value = data.frame(bad.horizons), envir = soilDB.env)
   }
-	
 	
 	## join hz + phlabresults
 	if (lab) {

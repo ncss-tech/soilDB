@@ -122,12 +122,16 @@ simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
             lapply(rf.wide[, -1], function(i) ifelse(is.na(i), 0, i))
       ), stringsAsFactors=FALSE)
   }
- 
   
   # compute total fragments
   # trap no frag condition
-  if(ncol(rf.wide) > 1)
-    rf.wide$total_frags_pct <- rowSums(rf.wide[, -1], na.rm=TRUE)
+  if(ncol(rf.wide) > 1) {
+    #calculate another column for total RF, ignoring parafractions
+    rf.wide$total_frags_pct_nopf <- rowSums(rf.wide[,c(FALSE,!grepl(levels(rf.classes$class),pattern="para"))], na.rm=TRUE)
+    
+    #calculate total fragments (including para)
+    rf.wide$total_frags_pct <- rowSums(rf.wide[, -c(1,length(names(rf.wide)))], na.rm=TRUE)
+  }
   
   # corrections:
   # 1. fine gravel is a subset of gravel, therefore: gravel = gravel + fine_gravel
