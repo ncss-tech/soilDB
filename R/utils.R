@@ -508,7 +508,7 @@
   if (NASIS == TRUE){
     metadata <- get_metadata()
   } else {
-    load(system.file("data/munsell.rda", package="soilDB")[1])
+    load(system.file("data/metadata.rda", package="soilDB")[1])
   }
   
   
