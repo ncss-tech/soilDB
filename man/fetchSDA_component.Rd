@@ -99,7 +99,8 @@ ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
   xlab("month") + ylab("depth (cm)") +
   scale_x_continuous(breaks = 1:12, labels = month.abb, name="Month") +
   facet_wrap(~ paste0(compname, ' (', comppct_r , '%)')) +
-  ggtitle(paste0(x$nationalmusym[1], ': Water Table Levels from Component Soil Moisture Month Data'))
+  ggtitle(paste0(x$nationalmusym[1], 
+  ': Water Table Levels from Component Soil Moisture Month Data'))
 
   }
 }

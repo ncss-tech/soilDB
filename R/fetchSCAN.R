@@ -154,6 +154,10 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
 
 # combine soil sensor suites into stackable format
 .formatSCAN_soil_sensor_suites <- function(d, code) {
+  
+  # hacks to make R CMD check --as-cran happy:
+  value <- NULL
+  
   # locate named columns
   d.cols <- grep(code, names(d))
   # return NULL if no data

@@ -265,6 +265,10 @@
 # note: there are several assumptions made about the data, 
 # see "short-circuits" used when there are funky data
 .formatcoLandformString <- function(i.gm, name.sep='|') {
+  
+  # hacks to make R CMD check --as-cran happy:
+  u.peiid <- NULL
+  
   # get the current 
   u.coiid <- unique(i.gm$coiid)
   

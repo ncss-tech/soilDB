@@ -1,4 +1,11 @@
 get_lablayer_data_from_NASIS_db <- function() {
+  
+  # hacks to make R CMD check --as-cran happy:
+  cec7 <- NULL
+  claytot <- NULL
+  claycarb <- NULL
+  carbonorganicpct <- NULL
+  
   # must have RODBC installed
   if(!requireNamespace('RODBC')) {
     stop('please install the `RODBC` package', call.=FALSE)

@@ -1,4 +1,11 @@
 get_phlabresults_data_from_NASIS_db <- function() {
+  
+  # hacks to make R CMD check --as-cran happy:
+  sampledepthbottom <- NULL
+  sampledepthtop <- NULL
+  phiidref <- NULL
+  test_ph <- NULL
+  
   # must have RODBC installed
   if (!requireNamespace('RODBC')) stop('please install the `RODBC` package', call.=FALSE)
 
@@ -45,7 +52,7 @@ silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasur
     num_vars <- names(d.dups)[! grepl("ph1to1h2o|ph01mcacl2", names(d.dups)) &
                           sapply(d.dups, is.numeric)]
     d.dups_num <- d.dups[num_vars]
-    d.dups_num <- plyr::ddply(d.dups_num, .(phiidref), function(x) {
+    d.dups_num <- plyr::ddply(d.dups_num, 'phiidref', function(x) {
       sapply(x[2:ncol(x)], function(x2) Hmisc::wtd.mean(x2, weights = x$hzthk, na.rm = TRUE))
       }
       )
@@ -53,7 +60,7 @@ silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasur
     char_vars <- names(d.dups)[names(d.dups) %in% c("phiidref", "hzthk") |
                                  sapply(d.dups, function(x) is.character(x) | is.factor(x))]
     d.dups_char <- d.dups[char_vars]
-    d.dups_char <- plyr::ddply(d.dups_char, .(phiidref), function(x) {
+    d.dups_char <- plyr::ddply(d.dups_char, 'phiidref', function(x) {
       sapply(x[2:ncol(x)], function(x2) x2[which.max(x$hzthk)])
       }
       )
@@ -63,7 +70,7 @@ silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasur
     num_ph <- names(d.dups)[names(d.dups) %in% c("phiidref", "hzthk") |
                           grepl("ph1to1h2o|ph01mcacl2", names(d.dups))]
     d.dups_ph <- d.dups[num_ph]
-    d.dups_ph <- plyr::ddply(d.dups_ph, .(phiidref), function(x) {
+    d.dups_ph <- plyr::ddply(d.dups_ph, 'phiidref', function(x) {
       sapply(x[2:ncol(x)], function(x2) -log10(Hmisc::wtd.mean(1/10^x2, weights = x$hzthk, na.rm = TRUE)))
       }
       )

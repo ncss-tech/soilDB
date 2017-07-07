@@ -1,4 +1,5 @@
 \name{uncode}
+\alias{metadata}
 \alias{uncode}
 \alias{code}
 \title{Convert coded values returned from NASIS and SDA queries to factors}
