@@ -28,6 +28,8 @@ uncode <- function(df, invert=FALSE, NASIS=TRUE){
   # load current metadata table
   if (NASIS == TRUE){
     metadata <- get_metadata()
+  } else {
+    load(system.file("data/munsell.rda", package="soilDB")[1])
   }
   
   # unique set of possible columns that will need replacement
