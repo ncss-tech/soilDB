@@ -478,6 +478,8 @@
 
 
 .metadata_replace <- function(df, invert=FALSE, NASIS=TRUE){
+  
+  ## TODO: can this be combined with a similar version in uncode()
   get_metadata <- function() {
     # must have RODBC installed
     if(!requireNamespace('RODBC'))
