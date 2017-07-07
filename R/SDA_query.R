@@ -247,6 +247,7 @@ SDA_query <- function(q) {
 }
 
 
+# note: empty strings and 'NA' are converted into <NA>
 # convert the raw results from SDA into a proper data.frame
 .post_process_SDA_result_set <- function(i) {
   # the first line is always the colnames
@@ -260,7 +261,7 @@ SDA_query <- function(q) {
   
   # save to file / re-load to guess column classes
   write.table(i, file=i.tf, col.names=TRUE, row.names=FALSE, quote=FALSE, sep='|')
-  df <- read.table(i.tf, header=TRUE, sep='|', quote='', comment.char='', na.strings = '', stringsAsFactors = FALSE)
+  df <- read.table(i.tf, header=TRUE, sep='|', quote='', comment.char='', na.strings = c('', 'NA'), stringsAsFactors = FALSE)
  
   # add colnames from original header
   names(df) <- i.header

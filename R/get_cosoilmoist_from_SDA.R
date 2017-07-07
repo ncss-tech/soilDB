@@ -20,18 +20,14 @@ get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = 
   "ORDER BY mu.muname, comppct_r DESC, compname DESC, month, soimoistdept_r ASC
   ;")
   
-  
   # exec query
   d.cosoilmoist <- SDA_query(q.cosoilmoist)
   
-  
-  # recode metadata domains
+  # set factor levels according to metadata domains
   d.cosoilmoist <- uncode(d.cosoilmoist, NASIS = FALSE)
-  
   
   # cache original column names
   orig_names <- names(d.cosoilmoist)
-  
   
   # relabel names
   names(d.cosoilmoist) <- gsub("^soimoist", "", names(d.cosoilmoist))

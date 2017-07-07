@@ -85,28 +85,22 @@ grid.arrange(g1, g2)
 
 
 # query cosoilmoist (e.g. water table data) by mukey
-library(soilDB)
+# NA depths are interpreted as (???) with impute=TRUE argument
+x <- get_cosoilmoist_from_SDA(WHERE = "mukey = '1395352'", impute = TRUE)
 
-test <- get_cosoilmoist_from_SDA(WHERE = "mukey = '406339'")
-
-# remove depths with NA
-test <- subset(test, !is.na(dept_r))
-
-# plot annual water table
-library(ggplot2)
-
-ggplot(test, aes(x = as.integer(month), y = dept_r, lty = status)) +
+ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
   geom_rect(aes(xmin = as.integer(month), xmax = as.integer(month) + 1,
-                ymin = 0, ymax = max(test$depb_r),
+                ymin = 0, ymax = max(x$depb_r),
                 fill = flodfreqcl)) +
   geom_line(cex = 1) +
   geom_point() +
   geom_ribbon(aes(ymin = dept_l, ymax = dept_h), alpha = 0.2) +
-  ylim(max(test$depb_r), 0) +
+  ylim(max(x$depb_r), 0) +
   xlab("month") + ylab("depth (cm)") +
   scale_x_continuous(breaks = 1:12, labels = month.abb, name="Month") +
-  facet_wrap(~ paste(compname, comppct_r, "pct", nationalmusym, sep = "-")) +
-  ggtitle("Water Table Levels from Component Soil Moisture Month Data")
+  facet_wrap(~ paste0(compname, ' (', comppct_r , '%)')) +
+  ggtitle(paste0(x$nationalmusym[1], ': Water Table Levels from Component Soil Moisture Month Data'))
+
   }
 }
 
