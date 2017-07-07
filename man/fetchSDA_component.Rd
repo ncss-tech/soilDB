@@ -43,6 +43,7 @@ The function get_cosoilmoist_from_NASIS_db() only works only on Windows , and re
 \dontrun{
 library(soilDB)
 library(ggplot2)
+library(gridExtra)
 
 # query soil components by areasymbol and musym
 test = fetchSDA_component(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
@@ -98,7 +99,7 @@ ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
   ylim(max(x$depb_r), 0) +
   xlab("month") + ylab("depth (cm)") +
   scale_x_continuous(breaks = 1:12, labels = month.abb, name="Month") +
-  facet_wrap(~ paste0(compname, ' (', comppct_r , '%)')) +
+  facet_wrap(~ paste0(compname, ' (', comppct_r , ')')) +
   ggtitle(paste0(x$nationalmusym[1], 
   ': Water Table Levels from Component Soil Moisture Month Data'))
 
