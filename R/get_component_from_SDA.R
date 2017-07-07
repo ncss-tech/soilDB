@@ -97,7 +97,12 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE) {
   
   # exec query
   d.chorizon <- SDA_query(q.chorizon)
-
+  
+  ## TODO: might be nice to abstract this into a new function
+  # hacks to make R CMD check --as-cran happy:
+  metadata <- NULL
+  # load local copy of metadata
+  load(system.file("data/metadata.rda", package="soilDB")[1])
 
   # transform variables and metadata
   d.chorizon <- within(d.chorizon, {
