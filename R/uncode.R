@@ -71,4 +71,5 @@ uncode <- function(df, invert=FALSE, NASIS=TRUE){
   return(df)
 }
 
+# convenient, inverted version of uncode()
 code <- function(df, invert = TRUE, NASIS = TRUE) {uncode(df, invert, NASIS)}
