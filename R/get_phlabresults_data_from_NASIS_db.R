@@ -82,7 +82,6 @@ silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasur
     
     d.phlabresults <- rbind(d.phlabresults[-dup_idx, ], d.nodups)
     
-    return(d.phlabresults)
     }
 
     
