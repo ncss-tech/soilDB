@@ -4,7 +4,7 @@ get_phlabresults_data_from_NASIS_db <- function() {
   sampledepthbottom <- NULL
   sampledepthtop <- NULL
   phiidref <- NULL
-  test_ph <- NULL
+  # test_ph <- NULL
   
   # must have RODBC installed
   if (!requireNamespace('RODBC')) stop('please install the `RODBC` package', call.=FALSE)
@@ -25,7 +25,7 @@ silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasur
   
   
   # recode metadata domains
-  d.phlabresults <- .metadata_replace(d.phlabresults)
+  d.phlabresults <- uncode(d.phlabresults)
   
   
   # compute thickness
@@ -65,7 +65,7 @@ silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasur
       }
       )
     d.dups_char$hzthk <- NULL
-    d.dups_char <- .metadata_replace(d.dups_char)
+    d.dups_char <- uncode(d.dups_char)
     
     num_ph <- names(d.dups)[names(d.dups) %in% c("phiidref", "hzthk") |
                           grepl("ph1to1h2o|ph01mcacl2", names(d.dups))]
@@ -77,7 +77,7 @@ silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasur
     d.dups_ph$hzthk <- NULL
     
     d.nodups <- join(d.dups_num, d.dups_char, by  = "phiidref", type = "left")
-    d.nodups <- join(d.nodups, test_ph, by = "phiidref", type = "left")
+    d.nodups <- join(d.nodups, d.dups_ph, by = "phiidref", type = "left")
     d.nodups <- d.nodups[orig_names]
     
     d.phlabresults <- rbind(d.phlabresults[-dup_idx, ], d.nodups)
