@@ -1,7 +1,7 @@
 
 
 # This function heavily biased towared NASIS-specific data structures and assumptions
-# d: data.frame with color data from horizon-color table
+# d: data.frame with color data from horizon-color table: expects "colorhue", "colorvalue", "colorchroma"
 # id.var: name of the column with unique horizon IDs
 # ...: further arguments passed to mix_and_clean_colors()
 simplifyColorData <- function(d, id.var='phiid', ...) {

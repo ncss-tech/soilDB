@@ -1,5 +1,5 @@
 # R 3.3 compatibility:
-importFrom("grDevices", "rgb")
+importFrom("grDevices", "rgb", "convertColor")
 
 importFrom("graphics", "plot")
 
