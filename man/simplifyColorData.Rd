@@ -25,9 +25,7 @@ The \code{simplifyColorData} function can be applied to data sources other than 
 
 The \code{mix_and_clean_colors} funcion can be applied to arbitrary data sources as long as \code{x} contains sRGB coordinates in columns named "r", "g", and "b". This function should be applied to chunks of rows within which color mixtures make sense.
 
-There are some examples of \code{simplifyColordata} applied to KSSL data in \href{http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html}{this tutorial}.
-
-
+There are examples in \href{http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html}{the KSSL data tutorial} and \href{http://ncss-tech.github.io/AQP/soilDB/mixing-soil-color-data.html}{the soil color mixing tutorial}.
 }
 
 
