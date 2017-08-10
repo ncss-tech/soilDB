@@ -29,8 +29,8 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
   ## there may be cases where there are 0 records of dry or moist colors
   
   # split-out those data that need color mixing:
-  dry.to.mix <- names(which(table(dry.colors$phiid) > 1))
-  moist.to.mix <- names(which(table(moist.colors$phiid) > 1))
+  dry.to.mix <- names(which(table(dry.colors[[id.var]]) > 1))
+  moist.to.mix <- names(which(table(moist.colors[[id.var]]) > 1))
   
   # names of those columns to retain
   vars.to.keep <- c(id.var, "r", "g", "b", "colorhue", "colorvalue", "colorchroma", 'sigma')
@@ -40,7 +40,7 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
     message(paste('mixing dry colors ... [', length(dry.to.mix), ' of ', nrow(dry.colors), ' horizons]', sep=''))
     
     # filter out and mix only colors with >1 color / horizon
-    dry.mix.idx <- which(dry.colors$phiid %in% dry.to.mix)
+    dry.mix.idx <- which(dry.colors[[id.var]] %in% dry.to.mix)
     mixed.dry <- ddply(dry.colors[dry.mix.idx, ], id.var, mix_and_clean_colors, ...)
     
     # combine original[-horizons to be mixed] + mixed horizons
@@ -57,7 +57,7 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
     message(paste('mixing moist colors ... [', length(moist.to.mix), ' of ', nrow(moist.colors), ' horizons]', sep=''))
     
     # filter out and mix only colors with >1 color / horizon
-    moist.mix.idx <- which(moist.colors$phiid %in% moist.to.mix)
+    moist.mix.idx <- which(moist.colors[[id.var]] %in% moist.to.mix)
     mixed.moist <- ddply(moist.colors[moist.mix.idx, ], id.var, mix_and_clean_colors, ...)
     
     # combine original[-horizons to be mixed] + mixed horizons
