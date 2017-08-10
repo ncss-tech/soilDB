@@ -30,8 +30,15 @@ FROM
 	# close connection
   RODBC::odbcClose(channel)
 	
-  # mix colors as-needed
-  d.final <- simplifyColorData(d)
+  # sanity check, only attempt to simplify colors if there are > 1 rows
+  if(nrow(d) > 1) {
+    # mix colors as-needed
+    d.final <- simplifyColorData(d)
+  } else {
+    # TODO: this could lead to problems due to assumed column presence
+    # do nothing
+    d.final <- d
+  }
   
 	# done
 	return(d.final)

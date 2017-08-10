@@ -3,6 +3,13 @@
 # This function is NASIS-specific
 simplifyColorData <- function(d, id.var='phiid') {
   
+  # sanity check: must contain 1 row
+  if(nrow(d) < 1) {
+    warning('0 rows of colors data, doing nothing', call. = FALSE)
+    return(d)
+  }
+    
+  
   # convert Munsell to RGB
   d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, return_triplets=TRUE))
   
