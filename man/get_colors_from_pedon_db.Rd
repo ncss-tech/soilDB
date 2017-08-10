@@ -1,6 +1,6 @@
 \name{get_colors_from_pedon_db}
 \alias{get_colors_from_pedon_db}
-\alias{mix_and_clean_colors}
+
 
 \title{Extract Soil Color Data from a PedonPC Database}
 \description{Get, format, mix, and return color data from a PedonPC database.}

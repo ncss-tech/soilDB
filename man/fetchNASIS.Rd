@@ -2,7 +2,6 @@
 \alias{fetchNASIS}
 \alias{get_extended_data_from_NASIS_db}
 \alias{getHzErrorsNASIS}
-\alias{simplifyColorData}
 \alias{simplfyFragmentData}
 \alias{fetchNASIS_pedons}
 \alias{get_phorizon_from_NASIS_db}

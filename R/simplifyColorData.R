@@ -11,7 +11,6 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
     warning('0 rows of colors data, doing nothing', call. = FALSE)
     return(d)
   }
-    
   
   # convert Munsell to RGB
   d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, return_triplets=TRUE))
