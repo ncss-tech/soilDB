@@ -123,9 +123,10 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     d <- .get_SCAN_data(i)
     
     ## TODO: sometimes these labels will match multiple sensors
+    ## TODO: this is wasteful as then entire year's worth of data is passed around for each sensor code
     
     # save: sensor suite -> site number -> year
-    sensors <- c('SMS', 'STO', 'SAL', 'TAVG', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')
+    sensors <- c('SMS', 'STO', 'SAL', 'TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')
     for(sensor.i in sensors) {
       d.list[[sensor.i]][[as.character(i$sitenum)]][[as.character(i$year)]] <- .formatSCAN_soil_sensor_suites(d, code=sensor.i)
     }
@@ -167,7 +168,7 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   ## https://github.com/ncss-tech/soilDB/issues/14
   ## temporary hack to inform users that there are multiple sensors / label
   ## this is (usually) only a problem for above-ground sensors
-  if(length(d.cols) > 1 & code %in% c('TAVG', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
+  if(length(d.cols) > 1 & code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
     message(paste0('multiple above-ground sensors per site: ', d$Site[1], ' [', paste0(names(d)[d.cols], collapse = ','), '], using first sensor'))
     # use only the first sensor
     d.cols <- d.cols[1]
@@ -185,6 +186,7 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   names(d.long)[which(names(d.long) == 'variable')] <- 'sensor.id'
   
   
+  ## NOTE: this doesn't work when applied to above-ground sensors
   ## https://github.com/ncss-tech/soilDB/issues/14
   ## there can also be multiple sensors per below-ground label
   sensors.per.depth <- ddply(d.long, c('sensor.id', 'depth'), plyr::summarize, no.na=length(na.omit(value)))
@@ -199,6 +201,22 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     message(paste0('multiple below-ground sensors per depth: ', paste(multiple.sensor.ids, collapse = ', ')))
   }
     
+  
+  ## BUG in the data output from SCAN!
+  # multiple rows on Sept 30th of each year
+  # https://github.com/ncss-tech/soilDB/issues/26
+  
+  # locate duplicate records
+  idx <- which(format(d.long$Date, "%b-%d") == 'Sep-30')
+  
+  # if there are 2 matching records
+  # then the second record is usually the "wrong" one
+  # remove it
+  if(length(idx) > 1) {
+    d.long <- d.long[-idx[2], ]
+  }
+  
+  ## BUG ^^^^
   
   # format and return
   return(d.long[, c('Site', 'Date', 'value', 'depth', 'sensor.id')])
