@@ -1,3 +1,6 @@
+-------------------------- soilDB 1.8.11 (2017-08-17) ----------------------------
+* temporary bug-fix related to SCAN data (https://github.com/ncss-tech/soilDB/issues/26)
+
 -------------------------- soilDB 1.8.10 (2017-08-10) ----------------------------
 * re-write of mix_and_clean_colors() so that color mixing happens in CIE LAB space
 
