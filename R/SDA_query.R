@@ -194,6 +194,7 @@ SDA_query <- function(q) {
   # trap errors, likely related to SQL syntax errors
   request.status <- try(httr::stop_for_status(r), silent = TRUE)
   
+  ## TODO: use JSON parsing of the result
   if(class(request.status) == 'try-error'){
     # get the request response, this will contain an error message
     r.content <- httr::content(r, as = 'parsed', encoding = 'UTF-8')
