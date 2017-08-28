@@ -3,19 +3,19 @@ get_projectmapunit_from_NASIS <- function() {
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
-  q <- paste("SELECT p.projectiid, p.uprojectid, p.projectname, a2.areasymbol, lmu.musym, lmu.lmapunitiid AS mukey, mu.nationalmusym, mutype, muname, muacres
+  q <- paste("SELECT p.projectiid, p.uprojectid, p.projectname, pmu.seqnum pmu_seqnum, a2.areasymbol, lmu.musym, lmu.lmapunitiid AS mukey, mu.nationalmusym, mutype, muname, muacres
              
              FROM 
-             project_View_1 p LEFT OUTER JOIN
-             projectmapunit pmu ON pmu.projectiidref = p.projectiid LEFT OUTER JOIN 
+             project_View_1 p INNER JOIN
+             projectmapunit_View_1 pmu ON pmu.projectiidref = p.projectiid LEFT OUTER JOIN 
              mapunit mu ON mu.muiid = pmu.muiidref LEFT OUTER JOIN
              lmapunit lmu ON lmu.muiidref = mu.muiid LEFT OUTER JOIN
              legend l ON l.liid = lmu.liidref
              
              INNER JOIN 
-             area a ON a.areaiid = p.mlrassoareaiidref
+               area a ON a.areaiid = p.mlrassoareaiidref
              LEFT OUTER JOIN
-             area a2 ON a2.areaiid = l.areaiidref
+               area a2 ON a2.areaiid = l.areaiidref
              
              WHERE l.legendsuituse != 1 OR l.legendsuituse IS NULL
              
