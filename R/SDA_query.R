@@ -262,7 +262,14 @@ SDA_query <- function(q) {
   
   # save to file / re-load to guess column classes
   write.table(i, file=i.tf, col.names=TRUE, row.names=FALSE, quote=FALSE, sep='|')
+  
+  ## https://github.com/ncss-tech/soilDB/issues/28
+  ## this breaks when there are multi-line records
   df <- read.table(i.tf, header=TRUE, sep='|', quote='', comment.char='', na.strings = c('', 'NA'), stringsAsFactors = FALSE)
+  
+  ## not quite there...
+  # tmp <- scan(file=i.tf, multi.line = TRUE, blank.lines.skip = TRUE, what=list(rep(character(), times=length(i.header))), sep='\n', quote='', comment.char='', quiet = TRUE, na.strings = c('', 'NA'), skip=1)
+  
  
   # add colnames from original header
   names(df) <- i.header
