@@ -116,6 +116,7 @@ fetchNASIS <- function(rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='m
 	### TODO: consider moving this into the extended data function ###
 	# load best-guess optimal records from taxhistory
 	# method is added to the new field called 'selection_method'
+	# assumes that classdate is a datetime class object!
 	best.tax.data <- ddply(extended_data$taxhistory, 'peiid', .pickBestTaxHistory)
 	site(h) <- best.tax.data
 

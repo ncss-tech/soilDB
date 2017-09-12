@@ -43,7 +43,14 @@
 	# add a method field
 	d$selection_method <- NA
 	
-	# try to get the most recent:
+	# short-circuit: 1 row
+	if(nrow(d) < 2) {
+	  d$selection_method <- 'single record'
+	  return(d)
+	}
+	
+	## TODO: this must be a POSIXct / Date class object, if not results will be incorrect
+	# try to get the most recent
 	d.order <- order(d$classdate, decreasing=TRUE)
 	
 	# if there are multiple (unique) dates, return the most recent
