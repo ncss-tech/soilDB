@@ -327,6 +327,7 @@ get_comonth_from_NASIS_db <- function(fill=FALSE) {
   
   q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid
   FROM comonth_View_1 AS comonth;"
+  
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
@@ -351,8 +352,8 @@ get_comonth_from_NASIS_db <- function(fill=FALSE) {
   
   # fix month factor levels
   # using 3-letter month names
-  d$month <- months(as.Date(paste0("2016-", d$month, "-01")), abbreviate = TRUE)
-  d$month <- factor(d$month, levels=levels(months(1, abbreviate = TRUE)))
+  d$month <- months(as.Date(paste0("2016-", d$month, "-01"), format="%Y-%B-%d"), abbreviate = TRUE)
+  d$month <- factor(d$month, levels=c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
   
   # fix other factor levels
   d$flodfreqcl <- factor(d$flodfreqcl, levels=c('None', 'Very rare', 'Rare', 'Occasional', 'Frequent', 'Very frequent'))
