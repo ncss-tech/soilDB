@@ -61,17 +61,17 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
-  q <- "SELECT mu.muiid, musym, nationalmusym, mu.muname, mukind, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
+  q <- "SELECT mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
   
   FROM  mapunit_View_1 mu
   
-  LEFT OUTER JOIN lmapunit ON lmapunit.muiidref = mu.muiid
-  LEFT OUTER JOIN legend ON legend.liid = lmapunit.liidref
-  LEFT OUTER JOIN area ON area.areaiid = legend.areaiidref
-  LEFT OUTER JOIN correlation ON correlation.muiidref = mu.muiid 
-  LEFT OUTER JOIN datamapunit ON correlation.dmuiidref = datamapunit.dmuiid
+  LEFT OUTER JOIN correlation_View_1 ON correlation_View_1.muiidref = mu.muiid
+  LEFT OUTER JOIN datamapunit_View_1 ON correlation_View_1.dmuiidref = datamapunit_View_1.dmuiid  
+  LEFT OUTER JOIN lmapunit_View_1 ON lmapunit_View_1.muiidref = mu.muiid
+  LEFT OUTER JOIN legend_View_1 ON legend_View_1.liid = lmapunit_View_1.liidref
+  LEFT OUTER JOIN area_View_1 ON area_View_1.areaiid = legend_View_1.areaiidref
   
-  ORDER BY dmuiid;"
+  ORDER BY nationalmusym, dmuiid;"
   
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
@@ -91,8 +91,10 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
   
   # optionally drop additional | NA mustatus
   if(dropAdditional) {
-    idx <- which(! d$mustatus == 'Additional')
-    d <- d[idx, ]
+    idx <- which(d$mustatus == 'Additional')
+    if(length(idx) > 0) {
+      d <- d[-idx, ] 
+    }
   }
   
   # optionally drop not-representative
