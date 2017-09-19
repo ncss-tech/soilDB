@@ -474,7 +474,6 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE, fill = FALSE) {
   # load data in pieces
   f.comp <- get_component_data_from_NASIS_db()
   f.chorizon <- get_component_horizon_data_from_NASIS_db(fill)
-  # f.copmgrp <- get_component_copmgrp_data_from_NASIS_db()
   f.copm <- get_component_copm_data_from_NASIS_db()
   f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db()
   f.otherveg <- get_component_otherveg_data_from_NASIS_db()
@@ -504,7 +503,6 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE, fill = FALSE) {
   ## TODO: make this error more informative
   # add site data to object
   site(f.chorizon) <- f.comp # left-join via coiid
-  # site(f.chorizon) <- f.copmgrp # left-join via coiid
   
   # join-in copm strings
   ## 2017-3-13: short-circuts need testing, consider pre-marking mistakes before parsing
