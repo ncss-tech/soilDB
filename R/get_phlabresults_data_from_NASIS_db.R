@@ -2,8 +2,8 @@ get_phlabresults_data_from_NASIS_db <- function() {
   
   # hacks to make R CMD check --as-cran happy:
   sampledepthbottom <- NULL
-  sampledepthtop <- NULL
-  phiidref <- NULL
+  sampledepthtop    <- NULL
+  phiidref          <- NULL
   # test_ph <- NULL
   
   # must have RODBC installed
@@ -52,32 +52,55 @@ silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasur
     num_vars <- names(d.dups)[! grepl("ph1to1h2o|ph01mcacl2", names(d.dups)) &
                           sapply(d.dups, is.numeric)]
     d.dups_num <- d.dups[num_vars]
-    d.dups_num <- plyr::ddply(d.dups_num, 'phiidref', function(x) {
-      sapply(x[2:ncol(x)], function(x2) Hmisc::wtd.mean(x2, weights = x$hzthk, na.rm = TRUE))
-      }
+    
+    var <- "phiidref"
+    d.dups_num <- do.call(
+      "rbind",
+      by(d.dups_num, d.dups_num[var], function(x) { data.frame(
+        x[var][1, , drop = FALSE],
+        lapply(x[2:ncol(x)], function(x2) weighted.mean(x2, w = x$hzthk, na.rm =TRUE))
+        )})
       )
+    # d.dups_num <- plyr::ddply(d.dups_num, 'phiidref', function(x) {
+    #   sapply(x[2:ncol(x)], function(x2) Hmisc::wtd.mean(x2, weights = x$hzthk, na.rm = TRUE))
+    #   })
     
     char_vars <- names(d.dups)[names(d.dups) %in% c("phiidref", "hzthk") |
                                  sapply(d.dups, function(x) is.character(x) | is.factor(x))]
     d.dups_char <- d.dups[char_vars]
-    d.dups_char <- plyr::ddply(d.dups_char, 'phiidref', function(x) {
-      sapply(x[2:ncol(x)], function(x2) x2[which.max(x$hzthk)])
-      }
+    
+    d.dups_char <- do.call(
+      "rbind", 
+      by(d.dups_char, d.dups_char[var], function(x) { data.frame(
+        x[var][1, , drop = FALSE],
+        lapply(x[2:ncol(x)], function(x2) x2[which.max(x$hzthk)])
+        )})
       )
+    
+    # d.dups_char <- plyr::ddply(d.dups_char, 'phiidref', function(x) {
+    #   sapply(x[2:ncol(x)], function(x2) x2[which.max(x$hzthk)])
+    #   })
     d.dups_char$hzthk <- NULL
-    d.dups_char <- uncode(d.dups_char)
+    #d.dups_char <- uncode(d.dups_char) # only necessary when using plyr
     
     num_ph <- names(d.dups)[names(d.dups) %in% c("phiidref", "hzthk") |
                           grepl("ph1to1h2o|ph01mcacl2", names(d.dups))]
     d.dups_ph <- d.dups[num_ph]
-    d.dups_ph <- plyr::ddply(d.dups_ph, 'phiidref', function(x) {
-      sapply(x[2:ncol(x)], function(x2) -log10(Hmisc::wtd.mean(1/10^x2, weights = x$hzthk, na.rm = TRUE)))
-      }
+    
+    d.dups_ph <- do.call(
+      "rbind", 
+      by(d.dups_ph, d.dups_ph[var], function(x) { data.frame(
+        x[var][1, , drop = FALSE],
+        lapply(x[2:ncol(x)], function(x2) -log10(weighted.mean(1/10^x2, weights = x$hzthk, na.rm = TRUE)))
+        )})
       )
+    # d.dups_ph <- plyr::ddply(d.dups_ph, 'phiidref', function(x) {
+    #   sapply(x[2:ncol(x)], function(x2) -log10(Hmisc::wtd.mean(1/10^x2, weights = x$hzthk, na.rm = TRUE)))
+    #   })
     d.dups_ph$hzthk <- NULL
     
-    d.nodups <- join(d.dups_num, d.dups_char, by  = "phiidref", type = "left")
-    d.nodups <- join(d.nodups, d.dups_ph, by = "phiidref", type = "left")
+    d.nodups <- merge(d.dups_num, d.dups_char, by  = "phiidref", all.x = TRUE)
+    d.nodups <- merge(d.nodups, d.dups_ph, by = "phiidref", all.x = TRUE)
     d.nodups <- d.nodups[orig_names]
     
     d.phlabresults <- rbind(d.phlabresults[-dup_idx, ], d.nodups)
@@ -103,4 +126,4 @@ silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasur
   
   # done
   return(d.phlabresults)
-  }
+}
