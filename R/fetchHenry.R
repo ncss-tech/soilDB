@@ -269,8 +269,11 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
     stop("`what` must be either: 'all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp', or 'waterlevel'", call.=FALSE)
   
   # sanity-check: user must supply some kind of criteria
-  if(missing(usersiteid) & missing(project) & missing(sso))
-    stop('you must provide some filtering criteria', call.=FALSE)
+  if(what != 'sensors') {
+    if(missing(usersiteid) & missing(project) & missing(sso))
+      stop('you must provide some filtering criteria', call.=FALSE)
+  }
+  
   
   # init empty filter
   f <- vector()
