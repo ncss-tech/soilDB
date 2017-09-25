@@ -19,9 +19,9 @@ get_component_data_from_NASIS_db <- function() {
   q.component <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, pmgroupname, elev_r, slope_l, slope_r, slope_h, aspectrep, map_r, airtempa_r as maat_r, soiltempa_r as mast_r, reannualprecip_r, ffd_r, tfact, wei, weg, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
   
   FROM 
-  datamapunit_View_1 dmu INNER JOIN
-  component co ON co.dmuiidref = dmu.dmuiid LEFT OUTER JOIN
-  copmgrp ON copmgrp.coiidref = co.coiid AND copmgrp.rvindicator = 1
+  datamapunit_View_1 dmu 
+  INNER JOIN component co ON co.dmuiidref = dmu.dmuiid 
+  LEFT OUTER JOIN copmgrp ON copmgrp.coiidref = co.coiid AND copmgrp.rvindicator = 1
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC;"
   
@@ -133,12 +133,12 @@ get_component_cogeomorph_data_from_NASIS_db <- function() {
   
   q.cogeomorph <- "SELECT cogeomordesc_View_1.coiidref as coiid, cogeomordesc_View_1.geomfmod, geomorfeat.geomfname, cogeomordesc_View_1.geomfeatid, cogeomordesc_View_1.existsonfeat, cogeomordesc_View_1.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
   
-  FROM geomorfeattype 
-  RIGHT JOIN geomorfeat 
-  RIGHT JOIN component_View_1 INNER JOIN cogeomordesc_View_1 ON component_View_1.coiid = cogeomordesc_View_1.coiidref
-  ON geomorfeat.geomfiid = cogeomordesc_View_1.geomfiidref
-  ON geomorfeattype.geomftiid = geomorfeat.geomftiidref 
-  
+  FROM 
+  component_View_1
+  INNER JOIN cogeomordesc_View_1 ON component_View_1.coiid = cogeomordesc_View_1.coiidref
+  INNER JOIN geomorfeat ON geomorfeat.geomfiid = cogeomordesc_View_1.geomfiidref  
+  INNER JOIN geomorfeattype ON geomorfeattype.geomftiid = geomorfeat.geomftiidref 
+
   ORDER BY coiid, geomfeatid ASC;"
   
   # setup connection local NASIS
@@ -147,62 +147,12 @@ get_component_cogeomorph_data_from_NASIS_db <- function() {
   # exec query
   d <- RODBC::sqlQuery(channel, q.cogeomorph, stringsAsFactors=FALSE)
   
-  # check for more than 1 record / coiid
-  #idx <- which(table(d$coiid) > 1)
-  #if(length(idx) > 0) {
-  #  dupes <- names(idx)
-  #  assign('multiple.otherveg.per.coiid', value=dupes, envir=soilDB.env)
-  #  message("-> QC: multiple othervegclasses / component. Use `get('multiple.otherveg.per.coiid', envir=soilDB.env)` for related coiid values.")
-  #}
-  
   # close connection
   RODBC::odbcClose(channel)
-  
-  # recode metadata domains
-  #d <- .metadata_replace(d)
   
   # done
   return(d)
 }
-
-
-# # get copm for each component where rvindicator is 'yes'
-# get_component_copmgrp_data_from_NASIS_db <- function() {
-#   # must have RODBC installed
-#   if(!requireNamespace('RODBC'))
-#     stop('please install the `RODBC` package', call.=FALSE)	
-#   
-#   
-#   q.copmgrp <- "SELECT copmgrp_View_1.coiidref as coiid, pmgroupname, copmgrp_View_1.seqnum as seqnum, rvindicator, copmgrpiid
-#   
-#   FROM copmgrp_View_1 
-#   
-#   WHERE rvindicator = 1
-#   
-#   ORDER BY coiidref, seqnum, rvindicator, copmgrpiid ASC;" 
-#   
-#   # setup connection local NASIS
-#   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
-#   
-#   # exec query
-#   d <- RODBC::sqlQuery(channel, q.copmgrp, stringsAsFactors=FALSE)
-#   
-#   # check for more than 1 record / coiid
-#   #if(length(idx) > 0) {
-#   #  dupes <- names(idx)
-#   #  assign('multiple.otherveg.per.coiid', value=dupes, envir=soilDB.env)
-#   #  message("-> QC: multiple othervegclasses / component. Use `get('multiple.otherveg.per.coiid', envir=soilDB.env)` for related coiid values.")
-#   #}
-#   
-#   # close connection
-#   RODBC::odbcClose(channel)
-#   
-#   # recode metadata domains
-#   d <- .metadata_replace(d)
-#   
-#   # done
-#   return(d[, 1:2])
-# }
 
 
 # get copm for each component
