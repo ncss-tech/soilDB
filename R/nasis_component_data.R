@@ -164,9 +164,10 @@ get_component_copm_data_from_NASIS_db <- function() {
   
   q.copm <- "SELECT copmgrp_View_1.coiidref as coiid, copm_View_1.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
   
-  FROM copm_View_1 
-  RIGHT JOIN copmgrp_View_1 
-  INNER JOIN component_View_1 on copmgrp_View_1.coiidref = component_View_1.coiid on copm_View_1.copmgrpiidref = copmgrp_View_1.copmgrpiid
+  FROM 
+  component_View_1
+  INNER JOIN copmgrp_View_1 ON copmgrp_View_1.coiidref = component_View_1.coiid
+  INNER JOIN copm_View_1 ON copm_View_1.copmgrpiidref = copmgrp_View_1.copmgrpiid
   
   ORDER BY coiidref, seqnum, pmorder, copmgrpiid ASC;" 
   
@@ -175,13 +176,6 @@ get_component_copm_data_from_NASIS_db <- function() {
   
   # exec query
   d <- RODBC::sqlQuery(channel, q.copm, stringsAsFactors=FALSE)
-  
-  # check for more than 1 record / coiid
-  #if(length(idx) > 0) {
-  #  dupes <- names(idx)
-  #  assign('multiple.otherveg.per.coiid', value=dupes, envir=soilDB.env)
-  #  message("-> QC: multiple othervegclasses / component. Use `get('multiple.otherveg.per.coiid', envir=soilDB.env)` for related coiid values.")
-  #}
   
   # close connection
   RODBC::odbcClose(channel)
