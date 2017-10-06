@@ -3,14 +3,15 @@ Type: Package
 Title: Soil Database Interface
 Version: 1.8.12
 Date: 2017-09-19
-Author: D.E. Beaudette and J. Skovlin, and S. Roecker
+Author: D.E. Beaudette and J. Skovlin, and S.M. Roecker
 Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
 License: GPL (>= 3)
 LazyLoad: yes
 Depends: R (>= 3.0.0), aqp
 Imports: grDevices, graphics, stats, utils, plyr, Hmisc, XML, sp, reshape2, raster
-Suggests: lattice, dismo, rgdal, jsonlite, RODBC, httr, rgeos, rvest
+Suggests: lattice, dismo, rgdal, jsonlite, RODBC, httr, RCurl, rgeos, rvest
 Repository: CRAN
 URL: http://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues
+RoxygenNote: 6.0.1

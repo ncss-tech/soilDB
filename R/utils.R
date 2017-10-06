@@ -581,3 +581,8 @@
   
   return(std_new)
 }
+
+# fix column classes, for some reason all the data is getting imported as characters
+.fix_class <- function(x) {
+  if (class(x) == "character" & any(!is.na(as.numeric(x)))) {as.numeric(x)} else x
+  }

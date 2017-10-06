@@ -1,39 +1,51 @@
 \name{fetchSDA_component}
 \alias{fetchSDA_component}
+\alias{fetchLIMS_component}
 \alias{get_mapunit_from_SDA}
+\alias{get_mapunit_from_LIMS}
 \alias{get_component_from_SDA}
+\alias{get_component_from_LIMS}
 \alias{get_chorizon_from_SDA}
+\alias{get_chorizon_from_LIMS}
 \alias{get_cosoilmoist_from_SDA}
+\alias{get_cosoilmoist_from_LIMS}
 \alias{get_cosoilmoist_from_NASIS}
 
 \title{Extract component tables from a local NASIS Database or Soil Data Access}
 \description{Get, format, impute, and return component tables.}
 \usage{
 fetchSDA_component(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE)
+fetchLIMS_component(uprojectid, rmHzErrors = FALSE, fill = FALSE)
 get_mapunit_from_SDA(WHERE = NULL)
+get_mapunit_from_LIMS(uprojectid)
 get_component_from_SDA(WHERE = NULL, duplicates = FALSE)
+get_component_from_LIMS(uprojectid)
 get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE)
+get_chorizon_from_LIMS(uprojectid, fill = FALSE)
 get_cosoilmoist_from_SDA(WHERE = NULL, duplicates = FALSE, impute = TRUE)
+get_cosoilmoist_from_LIMS(uprojectid, impute = TRUE)
 get_cosoilmoist_from_NASIS(impute = TRUE)
 }
 
 
 \arguments{
   \item{WHERE}{text string formated as an SQL WHERE clause (default: FALSE)}
+  \item{uprojectid}{text string value identifying the user project inserted into a SQL WHERE clause (default: NA)}
   \item{duplicates}{logical; if TRUE duplicate nationalmusym are returned}
   \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)}
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: FALSE)}
-
+  \item{fill}{should rows with missing component ids be removed NA (FALSE)}
 }
 
 
-\details{The function SDA get and fetch functions require an internet connection and a WHERE clause.
+\details{The SDA and LIMS functions can get and fetch data with an internet connection and a WHERE clause.
 
 If the duplicates argument is set to TRUE, duplicate components are returned. This is not necessary with data returned from NASIS, which has one unique national map unit. SDA has duplicate map national map units, one for each legend it exists in.
 
 The function get_cosoilmoist_from_NASIS_db() only works only on Windows , and requires a 'nasis_local' ODBC connection. See the \href{http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html}{NASIS ODBC Setup tutorial} for instructions. }
 \value{A dataframe or list with the results.}
 \author{Stephen Roecker}
+\note{This LIMS function requires the `RCurl`, and `XML` packages}
 
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
