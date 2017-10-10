@@ -21,19 +21,8 @@ parseWebReport(url, args, index = 1)
 
 \keyword{ IO }
 
+\note{Most web reports are for internal use only.}
 
 \examples{
-\dontrun{
-# report URL
-url <- 'https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-PROPERY-COMPONENT_property'
-
-# compile argument list
-# prop_id: property ID
-# cokey: component record ID, can be a comma-delim list
-args <- list(prop_id='10083', cokey='1842387')
-
-# get the first table as a data.frame
-parseWebReport(url, args, index=1)
-}
-
+# pending
 }
