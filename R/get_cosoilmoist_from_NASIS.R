@@ -21,7 +21,7 @@ get_cosoilmoist_from_NASIS <- function(impute = TRUE) {
   
   
   # recode metadata domains
-  d.cosoilmoist <- uncode(d.cosoilmoist, NASIS = TRUE)
+  d.cosoilmoist <- uncode(d.cosoilmoist)
   
   
   # cache original column names

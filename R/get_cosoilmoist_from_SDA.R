@@ -24,7 +24,7 @@ get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = 
   d.cosoilmoist <- SDA_query(q.cosoilmoist)
   
   # set factor levels according to metadata domains
-  d.cosoilmoist <- uncode(d.cosoilmoist, NASIS = FALSE)
+  d.cosoilmoist <- uncode(d.cosoilmoist, db = "SDA")
   
   # cache original column names
   orig_names <- names(d.cosoilmoist)

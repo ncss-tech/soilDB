@@ -1,4 +1,4 @@
-uncode <- function(df, invert=FALSE, NASIS=TRUE){
+uncode <- function(df, invert = FALSE, db = "NASIS"){
   get_metadata <- function() {
     # must have RODBC installed
     if(!requireNamespace('RODBC'))
@@ -26,11 +26,11 @@ uncode <- function(df, invert=FALSE, NASIS=TRUE){
   }
   
   # load current metadata table
-  if (NASIS == TRUE){
+  if (db == "NASIS"){
     metadata <- get_metadata()
-  } else {
-    load(system.file("data/metadata.rda", package="soilDB")[1])
-  }
+    } else {
+      load(system.file("data/metadata.rda", package="soilDB")[1])
+      }
   
   # unique set of possible columns that will need replacement
   possibleReplacements <- unique(metadata$ColumnPhysicalName)
@@ -46,8 +46,8 @@ uncode <- function(df, invert=FALSE, NASIS=TRUE){
     # get the current metadata
     sub <- metadata[metadata$ColumnPhysicalName %in% nm[i], ]
     
-    # NASIS == TRUE
-    if (NASIS == TRUE) {
+    # NASIS or LIMS
+    if (db %in% c("NASIS", "LIMS")) {
       if (invert == FALSE){
         # replace codes with values
         df[, i] <- factor(df[, i], levels = sub$ChoiceValue, labels = sub$ChoiceName)
@@ -56,8 +56,8 @@ uncode <- function(df, invert=FALSE, NASIS=TRUE){
         df[, i] <- factor(df[, i], levels = sub$ChoiceName, labels = sub$ChoiceValue)}
     }
     
-    # NASIS == FALSE
-    if (NASIS == FALSE) {
+    # SDA
+    if (db == "SDA") {
       if (invert == FALSE){
         # replace codes with values
         df[, i] <- factor(df[, i], levels = sub$ChoiceLabel)
@@ -72,4 +72,4 @@ uncode <- function(df, invert=FALSE, NASIS=TRUE){
 }
 
 # convenient, inverted version of uncode()
-code <- function(df, invert = TRUE, NASIS = TRUE) {uncode(df, invert, NASIS)}
+code <- function(df, invert = TRUE, db = "NASIS") {uncode(df, invert, db)}

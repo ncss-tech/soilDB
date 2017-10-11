@@ -28,7 +28,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE){
 
   
   # recode metadata domains
-  d.component <- uncode(d.component, NASIS = FALSE)
+  d.component <- uncode(d.component, db = "SDA")
   
   
   # cache original column names
@@ -58,7 +58,7 @@ get_mapunit_from_SDA <- function(WHERE = NULL) {
 
   
   # recode metadata domains
-  d.mapunit <- uncode(d.mapunit, NASIS = FALSE)
+  d.mapunit <- uncode(d.mapunit, db = "SDA")
   
   
   # cache original column names
@@ -76,7 +76,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE) {
   q.chorizon <- paste("
   SELECT", 
   if (duplicates == FALSE) {"DISTINCT"}
-  , "hzname, hzdept_r, hzdepb_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, texture, om_l, om_r, om_h, dbovendry_r, ksat_r, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, c.cokey
+  , "hzname, hzdept_r, hzdepb_r, texture, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbovendry_r, ksat_r, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, c.cokey
 
   FROM legend l INNER JOIN
        mapunit mu ON mu.lkey = l.lkey INNER JOIN",

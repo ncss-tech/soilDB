@@ -1,53 +1,26 @@
-get_component_from_LIMS <- function(uprojectid) {
+get_component_from_LIMS <- function(projectname) {
   
-  # check for required packages
-  if (!requireNamespace('RCurl', quietly=TRUE))
-    stop('please install the `RCurl` package', call.=FALSE)
+  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-component_by_projectname"
   
-  url <- paste0("https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-component_by_uprojectid&p_uprojectid=", uprojectid)
+  args <- list(p_projectname = projectname)
   
-  report_html <- RCurl::getURLContent(url, ssl.verifypeer = FALSE)
-  report_list <- XML::readHTMLTable(report_html, stringsAsFactors = FALSE)
-  
-  d.component <- do.call("rbind", report_list)
-  
-  # data.frame names
-  row.names(d.component) <- 1:nrow(d.component)
-  names(d.component) <- gsub("\n", "", names(d.component))
-  names(d.component) <- tolower(names(d.component))
-  
-  orig_names <- names(d.component)
+  d.component <- parseWebReport(url, args)
   
   # set factor levels according to metadata domains
-  d.component <- uncode(d.component, NASIS = FALSE)
-  
-  # fix column classes, for some reason all the data is getting imported as characters
-  d.component <- suppressWarnings(data.frame(lapply(d.component, .fix_class), stringsAsFactors = FALSE))
+  d.component <- uncode(d.component, db = "LIMS")
   
   # return data.frame
   return(d.component)
   }
 
 
-get_chorizon_from_LIMS <- function(uprojectid, fill = FALSE) {
+get_chorizon_from_LIMS <- function(projectname, fill = FALSE) {
   
-  # check for required packages
-  if (!requireNamespace('RCurl', quietly=TRUE))
-    stop('please install the `RCurl` package', call.=FALSE)
+  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-chorizon_by_projectname"
   
-  url <- paste0("https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-chorizon_by_uprojectid&p_uprojectid=", uprojectid)
+  args <- list(p_projectname = projectname)
   
-  report_html <- RCurl::getURLContent(url, ssl.verifypeer = FALSE)
-  report_list <- XML::readHTMLTable(report_html, stringsAsFactors = FALSE)
-  
-  d.chorizon <- do.call("rbind", report_list)
-  
-  # data.frame names
-  row.names(d.chorizon) <- 1:nrow(d.chorizon)
-  names(d.chorizon) <- gsub("\n", "", names(d.chorizon))
-  names(d.chorizon) <- tolower(names(d.chorizon))
-  
-  orig_names <- names(d.chorizon)
+  d.chorizon <- parseWebReport(url, args)
   
   ## TODO: might be nice to abstract this into a new function
   # hacks to make R CMD check --as-cran happy:
@@ -61,14 +34,6 @@ get_chorizon_from_LIMS <- function(uprojectid, fill = FALSE) {
     texture = factor(texture, levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"])
     })
   
-  # fix column classes, for some reason all the data is getting imported as characters
-  fix_class = function(x) {
-    if (class(x) == "character" & any(!is.na(as.numeric(x)))) {as.numeric(x)} else x
-    }
-  
-  # fix column classes, for some reason all the data is getting imported as characters
-  d.chorizon <- suppressWarnings(data.frame(lapply(d.chorizon, fix_class), stringsAsFactors = FALSE))
-  
   # fill
   if (fill == FALSE) {
     d.chorizon <- d.chorizon[!is.na(d.chorizon$chiid), ]
@@ -80,47 +45,27 @@ get_chorizon_from_LIMS <- function(uprojectid, fill = FALSE) {
   }
 
 
-get_mapunit_from_LIMS <- function(uprojectid) {
+get_mapunit_from_LIMS <- function(projectname) {
   
-  # check for required packages
-  if (!requireNamespace('RCurl', quietly=TRUE))
-    stop('please install the `RCurl` package', call.=FALSE)
+  url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-mapunit_by_projectname"
   
-  url <- paste0("https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-mapunit_by_uprojectid&p_uprojectid=", uprojectid)
+  args <- list(p_projectname = projectname)
   
-  report_html <- RCurl::getURLContent(url, ssl.verifypeer = FALSE)
-  report_list <- XML::readHTMLTable(report_html, stringsAsFactors = FALSE)
-  
-  d.mapunit <- do.call("rbind", report_list)
-  
-  # data.frame names
-  row.names(d.mapunit) <- 1:nrow(d.mapunit)
-  names(d.mapunit) <- gsub("\n", "", names(d.mapunit))
-  names(d.mapunit) <- tolower(names(d.mapunit))
-  
-  orig_names <- names(d.mapunit)
+  d.mapunit <- parseWebReport(url, args)
   
   # set factor levels according to metadata domains
-  d.mapunit <- uncode(d.mapunit, NASIS = FALSE)
-  
-  # fix column classes, for some reason all the data is getting imported as characters
-  d.mapunit <- suppressWarnings(data.frame(lapply(d.mapunit, .fix_class), stringsAsFactors = FALSE))
+  d.mapunit <- uncode(d.mapunit, db = "LIMS")
   
   # return data.frame
   return(d.mapunit)
-}
+  }
 
-fetchLIMS_component <- function(uprojectid, rmHzErrors = FALSE, fill = FALSE) {
-  
-  # check for required packages
-  if (!requireNamespace('RCurl', quietly=TRUE))
-    stop('please install the `RCurl` package', call.=FALSE)
-  
+fetchLIMS_component <- function(projectname, rmHzErrors = FALSE, fill = FALSE) {
   
   # load data in pieces
-  f.mapunit <- get_mapunit_from_LIMS(uprojectid)
-  f.component <- get_component_from_LIMS(uprojectid)
-  f.chorizon <- get_chorizon_from_LIMS(uprojectid, fill)
+  f.mapunit <- get_mapunit_from_LIMS(projectname)
+  f.component <- get_component_from_LIMS(projectname)
+  f.chorizon <- get_chorizon_from_LIMS(projectname, fill)
   
   # optionally test for bad horizonation... flag, and remove
   if (rmHzErrors) {
@@ -146,7 +91,6 @@ fetchLIMS_component <- function(uprojectid, rmHzErrors = FALSE, fill = FALSE) {
   ## TODO: make this error more informative
   # add site data to object
   site(f.chorizon) <- f.component # left-join via cokey
-  
   
   # print any messages on possible data quality problems:
   if (exists('component.hz.problems', envir=soilDB.env))

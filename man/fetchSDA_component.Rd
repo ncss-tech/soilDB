@@ -15,22 +15,22 @@
 \description{Get, format, impute, and return component tables.}
 \usage{
 fetchSDA_component(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE)
-fetchLIMS_component(uprojectid, rmHzErrors = FALSE, fill = FALSE)
+fetchLIMS_component(projectname, rmHzErrors = FALSE, fill = FALSE)
 get_mapunit_from_SDA(WHERE = NULL)
-get_mapunit_from_LIMS(uprojectid)
+get_mapunit_from_LIMS(projectname)
 get_component_from_SDA(WHERE = NULL, duplicates = FALSE)
-get_component_from_LIMS(uprojectid)
+get_component_from_LIMS(projectname)
 get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE)
-get_chorizon_from_LIMS(uprojectid, fill = FALSE)
+get_chorizon_from_LIMS(projectname, fill = FALSE)
 get_cosoilmoist_from_SDA(WHERE = NULL, duplicates = FALSE, impute = TRUE)
-get_cosoilmoist_from_LIMS(uprojectid, impute = TRUE)
+get_cosoilmoist_from_LIMS(projectname, impute = TRUE)
 get_cosoilmoist_from_NASIS(impute = TRUE)
 }
 
 
 \arguments{
   \item{WHERE}{text string formated as an SQL WHERE clause (default: FALSE)}
-  \item{uprojectid}{text string value identifying the user project inserted into a SQL WHERE clause (default: NA)}
+  \item{projectname}{text string value identifying the project name inserted into a SQL WHERE clause (default: NA)}
   \item{duplicates}{logical; if TRUE duplicate nationalmusym are returned}
   \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)}
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: FALSE)}
@@ -45,7 +45,6 @@ If the duplicates argument is set to TRUE, duplicate components are returned. Th
 The function get_cosoilmoist_from_NASIS_db() only works only on Windows , and requires a 'nasis_local' ODBC connection. See the \href{http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html}{NASIS ODBC Setup tutorial} for instructions. }
 \value{A dataframe or list with the results.}
 \author{Stephen Roecker}
-\note{This LIMS function requires the `RCurl`, and `XML` packages}
 
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

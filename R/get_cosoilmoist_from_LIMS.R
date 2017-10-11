@@ -1,25 +1,14 @@
-get_cosoilmoist_from_LIMS <- function(uprojectid, impute = TRUE) {
+get_cosoilmoist_from_LIMS <- function(projectname, impute = TRUE) {
   
   # check for required packages
-  if (!requireNamespace('RCurl', quietly=TRUE))
-    stop('please install the `RCurl` package', call.=FALSE)
+  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-cosoimoist_by_projectname"
   
-  url <- paste0("https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-cosoimoist_by_uprojectid&p_uprojectid=", uprojectid)
+  args <- list(p_projectname = projectname)
   
-  report_html <- RCurl::getURLContent(url, ssl.verifypeer = FALSE)
-  report_list <- XML::readHTMLTable(report_html, stringsAsFactors = FALSE)
-  
-  d.cosoilmoist <- do.call("rbind", report_list)
-  
-  # column names
-  row.names(d.cosoilmoist) <- 1:nrow(d.cosoilmoist)
-  names(d.cosoilmoist) <- gsub("\n", "", names(d.cosoilmoist))
-  names(d.cosoilmoist) <- tolower(names(d.cosoilmoist))
-  
-  orig_names <- names(d.cosoilmoist)
+  d.cosoilmoist <- parseWebReport(url, args)
   
   # set factor levels according to metadata domains
-  d.cosoilmoist <- uncode(d.cosoilmoist, NASIS = FALSE)
+  d.cosoilmoist <- uncode(d.cosoilmoist, db = "LIMS")
   
   # relabel names
   names(d.cosoilmoist) <- gsub("^soimoist", "", names(d.cosoilmoist))
