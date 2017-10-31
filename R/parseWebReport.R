@@ -34,11 +34,11 @@ parseWebReport <- function(url, args, index=1) {
   # this happens when asking for many web reports in a row (5-10% of the time for 150+ calls)
   # solution: use a while() loop and n-iterations until there is no error, or i > n
   x <- tryCatch(
-    xml2::read_html(curl::curl(url,  handle = curl::new_handle(verbose=FALSE, useragent = "Mozilla/5.0", CONNECTTIMEOUT = 60)))
+    read_html(curl(url,  handle = new_handle(verbose=FALSE, useragent = "Mozilla/5.0", CONNECTTIMEOUT = 60)))
     , error = function(e) {
       print(e)
       return(NULL)
-      }
+    }
   )
   
   # catch (likely) HTTP errors here
@@ -57,7 +57,7 @@ parseWebReport <- function(url, args, index=1) {
     d <- d[[index]]
   }
   
-  # TODO: col names aren't legal data.frame names
+  # note: col names aren't legal data.frame names
   
   # done
   return(d)

@@ -166,11 +166,7 @@ format_SQL_in_statement <- function(x) {
 }
 
 
-## TODO: doesn't close all connections
-## TODO: requires more testing and error-trapping
-
-## JSON, no more XML processing
-
+# 
 SDA_query <- function(q) {
   # check for required packages
   if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('jsonlite', quietly=TRUE))
@@ -194,12 +190,12 @@ SDA_query <- function(q) {
   # trap errors, likely related to SQL syntax errors
   request.status <- try(httr::stop_for_status(r), silent = TRUE)
   
-  ## TODO: use JSON parsing of the result
+  # error message is encapsulated in XML, use xml2 library functions to extract
   if(class(request.status) == 'try-error'){
     # get the request response, this will contain an error message
     r.content <- httr::content(r, as = 'parsed', encoding = 'UTF-8')
     # parse the XML to get the error message
-    error.msg <- xmlToList(xmlParse(r.content))$ServiceException
+    error.msg <- xml_text(r.content)
     
     ## TODO: error or message?
     stop(error.msg)
@@ -282,71 +278,3 @@ SDA_query <- function(q) {
 
 
 
-### this is the old version, pending removal ###
-
-
-
-# ## TODO: parse multiple record sets, return as list... currently results are combined into a single DF
-# ##         SDA_query("select top 3 areasymbol from mupoint; select top 2 lkey from mapunit")
-# ## TODO: doesn't close all connections
-# ## TODO: requires more testing and error-trapping
-# SDA_query <- function(q) {
-#   # check for required packages
-#   if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('jsonlite', quietly=TRUE))
-#     stop('please install the `httr` and `jsonlite` packages', call.=FALSE)
-#   
-#   # important: change the default behavior of data.frame
-#   opt.original <- options(stringsAsFactors = FALSE)
-#   
-#   # need 2 temp files
-#   tf.1 <- tempfile() # json-style post args
-#   tf.2 <- tempfile() # work-around for all data encoded as char
-#   
-#   # compute json post args and save to temp file
-#   # note: asking for data to be returned as XML... JSON version doesn't include column names
-#   post.data <- jsonlite::toJSON(list(query=q, format='xml'), auto_unbox = TRUE)
-#   cat(post.data, file=tf.1, sep = '\n')
-#   
-#   # submit request
-#   r <- httr::POST(url="https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest", body=httr::upload_file(tf.1))
-#   httr::stop_for_status(r)
-#   
-#   ## httr 1.1.0: content now returns an xml_document
-#   # bug fix suggested by Kyle Bocinsky, thanks!
-#   # extract content as XML
-#   r.content <- httr::content(r, as = 'text', encoding = 'UTF-8')
-#   d <- xmlToDataFrame(r.content, stringsAsFactors = FALSE)
-#   
-#   # how many lines of output
-#   lines.of.data <- nrow(d)
-#   
-#   # the first line is garbage, unless there is an error
-#   if(lines.of.data > 1)
-#     d <- d[-1, ]
-#   
-#   # error condition
-#   if(lines.of.data == 1) {
-#     stop(paste0('SDA returned an error: ', unlist(d)), call. = FALSE)
-#   }
-#   
-#   # check for no returned data, 'd' will be a character object with 0 elements
-#   if(class(d) == 'character') {
-#     message('query returned 0 rows')
-#     return(NULL)
-#   }
-#   
-#   # first column is garbage
-#   d$element <- NULL
-#   
-#   # save to file / re-load to guess column classes
-#   write.table(d, file=tf.2, col.names=TRUE, row.names=FALSE, quote=FALSE, sep='|')
-#   df <- try(read.table(tf.2, header=TRUE, sep='|', quote='', comment.char='', na.strings = ''), silent=TRUE)
-#   
-#   if(class(df) == 'try-error')
-#     stop('invalid query')
-#   
-#   # reset options:
-#   options(opt.original)
-#   
-#   return(df)
-# }

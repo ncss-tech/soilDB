@@ -1,15 +1,15 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 1.8.13
-Date: 2017-10-10
+Version: 1.8.14
+Date: 2017-10-31
 Author: D.E. Beaudette and J. Skovlin, and S.M. Roecker
 Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
 License: GPL (>= 3)
 LazyLoad: yes
 Depends: R (>= 3.0.0), aqp
-Imports: grDevices, graphics, stats, utils, plyr, Hmisc, XML, sp, reshape2, raster
+Imports: grDevices, graphics, stats, utils, plyr, Hmisc, xml2, sp, reshape2, raster, curl
 Suggests: lattice, dismo, rgdal, jsonlite, RODBC, httr, rgeos, rvest
 Repository: CRAN
 URL: http://ncss-tech.github.io/AQP/
