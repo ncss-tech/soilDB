@@ -87,7 +87,7 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
     stop('there are no records in your selected set!')
   
   # recode metadata domains
-  d <- .metadata_replace(d)
+  d <- uncode(d)
   
   # optionally drop additional | NA mustatus
   if(dropAdditional) {
@@ -181,7 +181,7 @@ get_component_copm_data_from_NASIS_db <- function() {
   RODBC::odbcClose(channel)
   
   # recode metadata domains
-  d <- .metadata_replace(d)
+  d <- uncode(d)
   
   # done
   return(d)
@@ -222,7 +222,7 @@ get_component_esd_data_from_NASIS_db <- function() {
   RODBC::odbcClose(channel)
   
   # recode metadata domains
-  d <- .metadata_replace(d)
+  d <- uncode(d)
   
   # done
   return(d)
@@ -258,7 +258,7 @@ get_component_otherveg_data_from_NASIS_db <- function() {
   RODBC::odbcClose(channel)
   
   # recode metadata domains
-  #d <- .metadata_replace(d)
+  #d <- uncode(d)
   
   # done
   return(d)
@@ -292,7 +292,7 @@ get_comonth_from_NASIS_db <- function(fill=FALSE) {
   RODBC::odbcClose(channel)
   
   # recode metadata domains
-  d <- .metadata_replace(d)
+  d <- uncode(d)
   
   # fix month factor levels
   # using 3-letter month names
