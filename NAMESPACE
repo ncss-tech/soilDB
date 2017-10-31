@@ -44,7 +44,7 @@ importFrom(curl,
 
 importFrom(xml2,
   read_html,
-  xml_text,
+  xml_text
 )
 
 
