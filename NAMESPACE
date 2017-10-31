@@ -39,7 +39,8 @@ importFrom(sp,
 
 
 importFrom(curl,
-  curl
+  curl,
+  new_handle
 )
 
 importFrom(xml2,
