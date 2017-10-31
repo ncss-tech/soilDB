@@ -19,9 +19,10 @@ get_component_data_from_NASIS_db <- function() {
   q.component <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, pmgroupname, elev_r, slope_l, slope_r, slope_h, aspectrep, map_r, airtempa_r as maat_r, soiltempa_r as mast_r, reannualprecip_r, ffd_r, tfact, wei, weg, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
   
   FROM 
-  datamapunit_View_1 dmu 
-  INNER JOIN component co ON co.dmuiidref = dmu.dmuiid 
-  LEFT OUTER JOIN copmgrp ON copmgrp.coiidref = co.coiid AND copmgrp.rvindicator = 1
+  datamapunit_View_1 AS dmu 
+  INNER JOIN component_View_1 AS co ON co.dmuiidref = dmu.dmuiid 
+  LEFT OUTER JOIN copmgrp_View_1 ON copmgrp_View_1.coiidref = co.coiid 
+  WHERE copmgrp_View_1.rvindicator = 1
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC;"
   
@@ -198,9 +199,9 @@ get_component_esd_data_from_NASIS_db <- function() {
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm, 
   ecositeorigin, ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
   
-  FROM coecosite_View_1 coecosite
+  FROM coecosite_View_1 AS coecosite
   
-  INNER JOIN ecologicalsite ON ecologicalsite.ecositeiid = coecosite.ecositeiidref
+  INNER JOIN ecologicalsite_View_1 ON ecologicalsite_View_1.ecositeiid = coecosite.ecositeiidref
   
   ORDER BY coiid;"
   # setup connection local NASIS
