@@ -1,5 +1,5 @@
 -------------------------- soilDB 1.8.12 (2017-09-19) ----------------------------
-* bug fix in fetchHenry(), it is now possible to qwuery just sensor metadata
+* bug fix in fetchHenry(), it is now possible to query only sensor metadata
 
 -------------------------- soilDB 1.8.11 (2017-08-17) ----------------------------
 * temporary bug-fix related to SCAN data (https://github.com/ncss-tech/soilDB/issues/26)
