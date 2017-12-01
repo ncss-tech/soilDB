@@ -365,25 +365,34 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
     s$sensors <- join(s$sensors, por, by='sid')
   }
   
-  # copy over sensor name + depth to soiltemp, soilVWC, and airtemp tables--if present
+  # copy over sensor name + depth to all sensor tables--if present
+  # "name" is the sensor name - depth for plotting
   if(length(s$soiltemp) > 0) {
     name.idx <- match(s$soiltemp$sid, s$sensors$sid)
     s$soiltemp$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
+    s$soiltemp$sensor_name <- s$sensors$name[name.idx]
+    s$soiltemp$sensor_depth <- s$sensors$sensor_depth[name.idx]
   }
   
   if(length(s$soilVWC) > 0) {
     name.idx <- match(s$soilVWC$sid, s$sensors$sid)
     s$soilVWC$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
+    s$soilVWC$sensor_name <- s$sensors$name[name.idx]
+    s$soilVWC$sensor_depth <- s$sensors$sensor_depth[name.idx]
   }
   
   if(length(s$airtemp) > 0) {
     name.idx <- match(s$airtemp$sid, s$sensors$sid)
     s$airtemp$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
+    s$airtemp$sensor_name <- s$sensors$name[name.idx]
+    s$airtemp$sensor_depth <- s$sensors$sensor_depth[name.idx]
   }
   
   if(length(s$waterlevel) > 0) {
     name.idx <- match(s$waterlevel$sid, s$sensors$sid)
     s$waterlevel$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
+    s$waterlevel$sensor_name <- s$sensors$name[name.idx]
+    s$waterlevel$sensor_depth <- s$sensors$sensor_depth[name.idx]
   }
   
   # init coordinates
