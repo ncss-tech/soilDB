@@ -384,10 +384,13 @@ get_component_horizon_data_from_NASIS_db <- function(fill = FALSE) {
   chorizon ch ON ch.coiidref = co.coiid LEFT OUTER JOIN
   chtexturegrp cht ON cht.chiidref = ch.chiid AND cht.rvindicator = 1
 
+  INNER JOIN
+    datamapunit dmu ON dmu.dmuiid = co.dmuiidref
+
   LEFT OUTER JOIN
     chstructgrp chs ON chs.chiidref = ch.chiid AND chs.rvindicator = 1
 
-  ORDER BY coiidref, hzdept_r ASC;"
+  ORDER BY dmudesc, comppct_r DESC, compname ASC, hzdept_r ASC;"
   
   
   # setup connection local NASIS
@@ -476,6 +479,10 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE, fill = FALSE) {
   # print any messages on possible data quality problems:
   if(exists('component.hz.problems', envir=soilDB.env))
     message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=soilDB.env)` for related coiid values")
+  
+  # sort naturally
+  
+  
   
   # done, return SPC
   return(f.chorizon)

@@ -1,6 +1,6 @@
 get_component_from_LIMS <- function(projectname) {
   
-  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-component_by_projectname"
+  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_component_from_LIMS"
   
   args <- list(p_projectname = projectname)
   
@@ -11,12 +11,13 @@ get_component_from_LIMS <- function(projectname) {
   
   # return data.frame
   return(d.component)
+  
   }
 
 
 get_chorizon_from_LIMS <- function(projectname, fill = FALSE) {
   
-  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-chorizon_by_projectname"
+  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_chorizon_from_LIMS"
   
   args <- list(p_projectname = projectname)
   
@@ -47,7 +48,7 @@ get_chorizon_from_LIMS <- function(projectname, fill = FALSE) {
 
 get_mapunit_from_LIMS <- function(projectname) {
   
-  url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-mapunit_by_projectname"
+  url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit_from_LIMS"
   
   args <- list(p_projectname = projectname)
   
@@ -58,7 +59,43 @@ get_mapunit_from_LIMS <- function(projectname) {
   
   # return data.frame
   return(d.mapunit)
+  
   }
+
+
+get_project_from_LIMS <- function(mlrassoarea, fiscalyear) {
+  
+  url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_project_from_LIMS"
+  
+  args <- list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear)
+  
+  d.project <- parseWebReport(url, args)
+  
+  # set factor levels according to metadata domains
+  d.project <- uncode(d.project, db = "LIMS")
+  
+  # return data.frame
+  return(d.project)
+  
+  }
+
+
+get_progress_from_LIMS <- function(mlrassoarea, fiscalyear, projecttypename) {
+  
+  url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_progress_from_LIMS"
+  
+  args <- list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projecttypename = projecttypename)
+  
+  d.progress <- parseWebReport(url, args)
+  
+  # set factor levels according to metadata domains
+  d.progress <- uncode(d.progress, db = "LIMS")
+  
+  # return data.frame
+  return(d.progress)
+  
+}
+
 
 fetchLIMS_component <- function(projectname, rmHzErrors = FALSE, fill = FALSE) {
   
@@ -73,7 +110,7 @@ fetchLIMS_component <- function(projectname, rmHzErrors = FALSE, fill = FALSE) {
     
     # which are the good (valid) ones?
     good.ids <- as.character(f.chorizon.test$cokey[which(f.chorizon.test$hz_logic_pass)])
-    bad.ids <- as.character(f.chorizon.test$cokey[which(! f.chorizon.test$hz_logic_pass)])
+    bad.ids  <- as.character(f.chorizon.test$cokey[which(! f.chorizon.test$hz_logic_pass)])
     
     # keep the good ones
     f.chorizon <- f.chorizon[which(f.chorizon$cokey %in% good.ids), ]

@@ -1,36 +1,35 @@
-\name{fetchSDA_component}
-\alias{fetchSDA_component}
-\alias{get_mapunit_from_SDA}
-\alias{get_component_from_SDA}
-\alias{get_chorizon_from_SDA}
-\alias{get_cosoilmoist_from_SDA}
-\alias{get_cosoilmoist_from_NASIS}
+\name{fetchLIMS_component}
+\alias{fetchLIMS_component}
+\alias{get_project_from_LIMS}
+\alias{get_progress_from_LIMS}
+\alias{get_mapunit_from_LIMS}
+\alias{get_component_from_LIMS}
+\alias{get_chorizon_from_LIMS}
+\alias{get_cosoilmoist_from_LIMS}
 
-\title{Extract component tables from Soil Data Access}
+\title{Extract component tables from a the Laboratory Information Management System}
 \description{Get, format, impute, and return component tables.}
 \usage{
-fetchSDA_component(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE)
-get_mapunit_from_SDA(WHERE = NULL)
-get_component_from_SDA(WHERE = NULL, duplicates = FALSE)
-get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE)
-get_cosoilmoist_from_SDA(WHERE = NULL, duplicates = FALSE, impute = TRUE)
-get_cosoilmoist_from_NASIS(impute = TRUE)
+fetchLIMS_component(projectname, rmHzErrors = FALSE, fill = FALSE)
+get_project_from_LIMS(mlrassoarea, fiscalyear)
+get_mapunit_from_LIMS(projectname)
+get_component_from_LIMS(projectname)
+get_chorizon_from_LIMS(projectname, fill = FALSE)
+get_cosoilmoist_from_LIMS(projectname, impute = TRUE)
 }
 
 
 \arguments{
-  \item{WHERE}{text string formated as an SQL WHERE clause (default: FALSE)}
-  \item{duplicates}{logical; if TRUE duplicate nationalmusym are returned}
+  \item{projectname}{text string value identifying the project name inserted into a SQL WHERE clause (default: NA)}
+  \item{mlrassoarea}{text string value identifying the mlra soil survey office areasymbol symbol inserted into a SQL WHERE clause (default: NA)}
+  \item{fiscalyear}{text string value identifying the fiscal year inserted into a SQL WHERE clause (default: NA)}
+  \item{projecttypename}{text string value identifying the project type name inserted into a SQL WHERE clause (default: NA)}
   \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)}
+  \item{fill}{should rows with missing component ids be removed NA (FALSE)}
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: FALSE)}
-  }
+}
 
 
-\details{The SDA functions can get and fetch data with an internet connection and a WHERE clause.
-
-If the duplicates argument is set to TRUE, duplicate components are returned. This is not necessary with data returned from NASIS, which has one unique national map unit. SDA has duplicate map national map units, one for each legend it exists in.
-
-The function get_cosoilmoist_from_NASIS_db() only works only on Windows , and requires a 'nasis_local' ODBC connection. See the \href{http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html}{NASIS ODBC Setup tutorial} for instructions. }
 \value{A dataframe or list with the results.}
 \author{Stephen Roecker}
 
@@ -44,8 +43,10 @@ library(soilDB)
 library(ggplot2)
 library(gridExtra)
 
-# query soil components by areasymbol and musym
-test = fetchSDA_component(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
+# query soil components by projectname
+test = fetchLIMS_component(
+"EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"
+)
 test = test$spc
 
 # profile plot
@@ -62,8 +63,8 @@ test2 = rbind(data.frame(clay_slice, var = "clay"),
               data.frame(om_slice, var = "om")
               )
 
-h = merge(test2, site(test)[c("nationalmusym", "cokey", "compname", "comppct_r")],
-          by = "cokey", 
+h = merge(test2, site(test)[c("dmuiid", "coiid", "compname", "comppct_r")],
+          by = "coiid", 
           all.x = TRUE
           )
 
@@ -75,7 +76,7 @@ gg_comp <- function(x) {
   geom_ribbon(aes(ymin = l, ymax = h, x = hzdept_r), alpha = 0.2) +
   xlim(200, 0) +
   xlab("depth (cm)") +
-  facet_grid(var ~ nationalmusym + paste(compname, comppct_r)) +
+  facet_grid(var ~ dmuiid + paste(compname, comppct_r)) +
   coord_flip()
   }
 g1 <- gg_comp(subset(h, var == "clay"))
@@ -86,7 +87,9 @@ grid.arrange(g1, g2)
 
 # query cosoilmoist (e.g. water table data) by mukey
 # NA depths are interpreted as (???) with impute=TRUE argument
-x <- get_cosoilmoist_from_SDA(WHERE = "mukey = '1395352'", impute = TRUE)
+x <- get_cosoilmoist_from_LIMS(
+"EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"
+)
 
 ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
   geom_rect(aes(xmin = as.integer(month), xmax = as.integer(month) + 1,
