@@ -2,6 +2,7 @@
 \alias{fetchLIMS_component}
 \alias{get_project_from_LIMS}
 \alias{get_progress_from_LIMS}
+\alias{get_reverse_correlation_from_LIMS}
 \alias{get_mapunit_from_LIMS}
 \alias{get_component_from_LIMS}
 \alias{get_chorizon_from_LIMS}
@@ -11,7 +12,9 @@
 \description{Get, format, impute, and return component tables.}
 \usage{
 fetchLIMS_component(projectname, rmHzErrors = FALSE, fill = FALSE)
+get_progress_from_LIMS(mlrassoarea, fiscalyear, projecttypename)
 get_project_from_LIMS(mlrassoarea, fiscalyear)
+get_reverse_correlation_from_LIMS(areasymbol, fiscalyear, projectname)
 get_mapunit_from_LIMS(projectname)
 get_component_from_LIMS(projectname)
 get_chorizon_from_LIMS(projectname, fill = FALSE)
@@ -22,6 +25,7 @@ get_cosoilmoist_from_LIMS(projectname, impute = TRUE)
 \arguments{
   \item{projectname}{text string value identifying the project name inserted into a SQL WHERE clause (default: NA)}
   \item{mlrassoarea}{text string value identifying the mlra soil survey office areasymbol symbol inserted into a SQL WHERE clause (default: NA)}
+  \item{areasymbol}{text string value identifying the non-mlra soil survey area areasymbol symbol inserted into a SQL WHERE clause (default: NA)}
   \item{fiscalyear}{text string value identifying the fiscal year inserted into a SQL WHERE clause (default: NA)}
   \item{projecttypename}{text string value identifying the project type name inserted into a SQL WHERE clause (default: NA)}
   \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)}

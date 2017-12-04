@@ -97,6 +97,20 @@ get_progress_from_LIMS <- function(mlrassoarea, fiscalyear, projecttypename) {
 }
 
 
+get_reverse_correlation_from_LIMS <- function(areasymbol, fiscalyear, projectname) {
+  
+  url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_reverse_correlation_from_LIMS"
+  
+  args <- list(p_areasymbol = areasymbol, p_fy = fiscalyear, p_projectname = projectname)
+  
+  d.progress <- parseWebReport(url, args)
+  
+  # return data.frame
+  return(d.progress)
+  
+  }
+
+
 fetchLIMS_component <- function(projectname, rmHzErrors = FALSE, fill = FALSE) {
   
   # load data in pieces
