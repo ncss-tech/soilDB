@@ -46,11 +46,11 @@ get_chorizon_from_LIMS <- function(projectname, fill = FALSE) {
   }
 
 
-get_mapunit_from_LIMS <- function(projectname) {
+get_mapunit_from_LIMS <- function(mlrassoarea, fiscalyear, projectname) {
   
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit_from_LIMS"
   
-  args <- list(p_projectname = projectname)
+  args <- list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)
   
   d.mapunit <- parseWebReport(url, args)
   
@@ -97,11 +97,11 @@ get_progress_from_LIMS <- function(mlrassoarea, fiscalyear, projecttypename) {
 }
 
 
-get_reverse_correlation_from_LIMS <- function(areasymbol, fiscalyear, projectname) {
+get_reverse_correlation_from_LIMS <- function(mlrassoarea, fiscalyear, projectname) {
   
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_reverse_correlation_from_LIMS"
   
-  args <- list(p_areasymbol = areasymbol, p_fy = fiscalyear, p_projectname = projectname)
+  args <- list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)
   
   d.progress <- parseWebReport(url, args)
   
