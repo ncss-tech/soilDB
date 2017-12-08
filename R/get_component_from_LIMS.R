@@ -46,11 +46,11 @@ get_chorizon_from_LIMS <- function(projectname, fill = FALSE) {
   }
 
 
-get_mapunit_from_LIMS <- function(mlrassoarea, fiscalyear, projectname) {
+get_mapunit_from_LIMS <- function(projectname) {
   
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit_from_LIMS"
   
-  args <- list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)
+  args <- list(p_projectname = projectname)
   
   d.mapunit <- parseWebReport(url, args)
   
