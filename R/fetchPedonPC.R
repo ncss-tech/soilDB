@@ -2,6 +2,9 @@
 
 fetchPedonPC <- function(dsn) {
 	
+  # not in parity with NASIS functions
+  warning("Loading data from PedonPC will return slightly different data structures than fetchNASIS().", call. = FALSE)
+  
 	# load data in pieces
 	site_data <- get_site_data_from_pedon_db(dsn)
 	hz_data <- get_hz_data_from_pedon_db(dsn)
