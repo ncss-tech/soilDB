@@ -53,3 +53,24 @@ get_cosoilmoist_from_LIMS <- function(projectname, impute = TRUE) {
   return(d.cosoilmoist)
   }
 
+
+get_sitesoilmoist_from_LIMS <- function(usiteid) {
+  
+  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_sitesoilmoist_from_LIMS"
+  
+  args <- list(p_usiteid = usiteid)
+  
+  d.sitesoilmoist <- parseWebReport(url,args)
+  
+  # set factor levels according to metadata domains
+  d.sitesoilmoist <- uncode(d.sitesoilmoist, db="LIMS")
+  
+  # relabel names
+  names(d.sitesoilmoist) <- gsub("^soimoist", "", names(d.sitesoilmoist))
+  old_names <- "ten"
+  new_names <- "tension"
+  names(d.sitesoilmoist)[names(d.sitesoilmoist) %in% old_names] <- new_names
+  
+  return(d.sitesoilmoist)
+
+  }
