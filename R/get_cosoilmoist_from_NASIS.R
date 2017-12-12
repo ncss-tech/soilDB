@@ -5,8 +5,8 @@ get_cosoilmoist_from_NASIS <- function(impute = TRUE) {
   q.cosoilmoist <- "SELECT dmuiidref AS dmuiid, coiid, compname, comppct_r, month, flodfreqcl, pondfreqcl, cosoilmoistiid, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat
   
   FROM component_View_1 co LEFT OUTER JOIN
-       comonth com ON com.coiidref = co.coiid LEFT OUTER JOIN
-       cosoilmoist cosm ON cosm.comonthiidref = com.comonthiid
+       comonth_View_1 com ON com.coiidref = co.coiid LEFT OUTER JOIN
+       cosoilmoist_View_1 cosm ON cosm.comonthiidref = com.comonthiid
   
   ORDER BY dmuiid, comppct_r DESC, compname, month, soimoistdept_r
   ;"

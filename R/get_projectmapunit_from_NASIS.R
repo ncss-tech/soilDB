@@ -8,9 +8,9 @@ get_projectmapunit_from_NASIS <- function() {
              FROM 
              project_View_1 p INNER JOIN
              projectmapunit_View_1 pmu ON pmu.projectiidref = p.projectiid LEFT OUTER JOIN 
-             mapunit mu ON mu.muiid = pmu.muiidref LEFT OUTER JOIN
-             lmapunit lmu ON lmu.muiidref = mu.muiid LEFT OUTER JOIN
-             legend l ON l.liid = lmu.liidref
+             mapunit_View_1 mu ON mu.muiid = pmu.muiidref LEFT OUTER JOIN
+             lmapunit_View_1 lmu ON lmu.muiidref = mu.muiid LEFT OUTER JOIN
+             legend_View_1 l ON l.liid = lmu.liidref
              
              INNER JOIN 
                area a ON a.areaiid = p.mlrassoareaiidref

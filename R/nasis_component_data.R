@@ -355,7 +355,7 @@ get_copedon_from_NASIS_db <- function() {
   
   FROM copedon_View_1 copedon
   
-  LEFT OUTER JOIN pedon ON pedon.peiid = copedon.peiidref;
+  LEFT OUTER JOIN pedon_View_1 p ON p.peiid = copedon.peiidref;
   "
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
@@ -381,14 +381,14 @@ get_component_horizon_data_from_NASIS_db <- function(fill = FALSE) {
   
   FROM
   component_View_1 co LEFT OUTER JOIN
-  chorizon ch ON ch.coiidref = co.coiid LEFT OUTER JOIN
-  chtexturegrp cht ON cht.chiidref = ch.chiid AND cht.rvindicator = 1
+  chorizon_View_1 ch ON ch.coiidref = co.coiid LEFT OUTER JOIN
+  chtexturegrp_View_1 cht ON cht.chiidref = ch.chiid AND cht.rvindicator = 1
 
   INNER JOIN
-    datamapunit dmu ON dmu.dmuiid = co.dmuiidref
+    datamapunit_View_1 dmu ON dmu.dmuiid = co.dmuiidref
 
   LEFT OUTER JOIN
-    chstructgrp chs ON chs.chiidref = ch.chiid AND chs.rvindicator = 1
+    chstructgrp_View_1 chs ON chs.chiidref = ch.chiid AND chs.rvindicator = 1
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC, hzdept_r ASC;"
   
