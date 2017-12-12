@@ -2,24 +2,23 @@
 
 ## TODO: multiple records / site in siteobs are possible and will result in duplicate data
 
+## TODO_JS: incorporated the use of uncode() for some of these queries, could probably do more.....
+# need to trace back to the util functions such as .diagHzLongtoWide(d.diagnostic)
+
 get_extended_data_from_NASIS_db <- function(nullFragsAreZero=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
-  # photo links from PedonPC
+  # photo links from PedonPC stored as sitetext notes
   q.photolink <- "SELECT siteobs_View_1.siteiidref AS siteiid, siteobstext_View_1.recdate, siteobstext_View_1.textcat, siteobstext_View_1.textentry AS imagepath
   FROM
   siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref
   WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
   
 	# get all structure records / horizon
-	q.structure <- "SELECT phstructure.phiidref as phiid, sg.ChoiceName as structure_grade, ss.ChoiceName as structure_size, st.ChoiceName as structure_type, structid, structpartsto
-	FROM
-	phstructure
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1300) AS sg ON phstructure.structgrade = sg.ChoiceValue
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1302) AS ss ON phstructure.structsize = ss.ChoiceValue
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1303) AS st ON phstructure.structtype = st.ChoiceValue
+	q.structure <- "SELECT phstructure.phiidref as phiid, structgrade, structsize, structtype, structid, structpartsto
+	FROM phstructure
 	WHERE structtype IS NOT NULL
 	ORDER BY phstructure.phiidref, structid ASC;"
 	
@@ -283,32 +282,16 @@ FROM geomorfeattype
   ORDER BY peiid, geomfeatid ASC;"
 	
    
-q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, tk.ChoiceName as class_type, taxonname, tk.ChoiceName as taxon_kind, ss.ChoiceName as series_status, ps.ChoiceName as part_size_class, tord.ChoiceName as tax_order, tso.ChoiceName as tax_suborder, tgg.ChoiceName as tax_grtgroup, ts.ChoiceName as tax_subgroup, te.ChoiceName as tax_edition, osdtypelocflag, mcl.ChoiceName as tax_moistureclass, tcl.ChoiceName as temp_class, txo.ChoiceName as tax_fam_other, psctopdepth, pscbotdepth
+q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, classtype, taxonname, taxonkind, seriesstatus, taxpartsize, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, soiltaxedition, osdtypelocflag, taxmoistcl, taxtempregime, taxfamother, psctopdepth, pscbotdepth
   	FROM
     petaxhistory_View_1 LEFT OUTER JOIN petaxhistmoistcl_View_1 ON petaxhistory_View_1.petaxhistoryiid = petaxhistmoistcl_View_1.pedtaxhistoryiidref
     LEFT OUTER JOIN petxhistfmother_View_1 ON petaxhistory_View_1.petaxhistoryiid = petxhistfmother_View_1.pedtaxhistoryiidref
-		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 127) AS ps ON petaxhistory_View_1.taxpartsize = ps.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 187) AS ts ON petaxhistory_View_1.taxsubgrp = ts.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 102) AS tk ON petaxhistory_View_1.taxonkind = tk.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 4956) AS ss ON petaxhistory_View_1.seriesstatus = ss.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 2030) AS te ON petaxhistory_View_1.soiltaxedition = te.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 4942) AS cl ON petaxhistory_View_1.classtype = cl.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 132) AS tord ON petaxhistory_View_1.taxorder = tord.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 134) AS tso ON petaxhistory_View_1.taxsuborder = tso.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 130) AS tgg ON petaxhistory_View_1.taxgrtgroup = tgg.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 186) AS mcl ON petaxhistmoistcl_View_1.taxmoistcl = mcl.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 184) AS txo ON petxhistfmother_View_1.taxfamother = txo.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 188) AS tcl ON petaxhistory_View_1.taxtempregime = tcl.ChoiceValue
 ORDER BY petaxhistory_View_1.peiidref;"
 
 
-q.sitepm <- "SELECT siteiidref as siteiid, seqnum, pmorder, pmdept, pmdepb, pmm.ChoiceName as pm_modifier, pmgenmod, pmk.ChoiceName as pm_kind, pmo.ChoiceName as pm_origin, pmw.ChoiceName as pm_weathering 
+q.sitepm <- "SELECT siteiidref as siteiid, seqnum, pmorder, pmdept, pmdepb, pmmodifier, pmgenmod, pmkind, pmorigin, pmweathering 
 FROM
-sitepm_View_1 INNER JOIN site_View_1 on sitepm_View_1.siteiidref = site_View_1.siteiid
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 516 ) AS pmm ON sitepm_View_1.pmmodifier = pmm.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 515) AS pmk ON sitepm_View_1.pmkind = pmk.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 2587) AS pmo ON sitepm_View_1.pmorigin = pmo.ChoiceValue
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1309) AS pmw ON sitepm_View_1.pmweathering = pmw.ChoiceValue;"
+sitepm_View_1 INNER JOIN site_View_1 on sitepm_View_1.siteiidref = site_View_1.siteiid;"
 
 
 	
@@ -324,9 +307,15 @@ LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1309) AS pm
 	d.hz.texmod <- RODBC::sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
 	d.geomorph <- RODBC::sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
 	d.taxhistory <- RODBC::sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
-  d.photolink <- RODBC::sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
+  	d.photolink <- RODBC::sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
 	d.sitepm <- RODBC::sqlQuery(channel, q.sitepm, stringsAsFactors=FALSE)
-  d.structure <- RODBC::sqlQuery(channel, q.structure, stringsAsFactors=FALSE)
+  	d.structure <- RODBC::sqlQuery(channel, q.structure, stringsAsFactors=FALSE)
+
+	## uncode the one that need that here
+	d.taxhistory <- uncode(d.taxhistory)
+	d.sitepm <- uncode(d.sitepm)
+	d.structure <- uncode(d.structure)
+
 	
 	# close connection
 	RODBC::odbcClose(channel)

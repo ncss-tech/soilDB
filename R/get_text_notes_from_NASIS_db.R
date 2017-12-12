@@ -4,24 +4,23 @@ get_text_notes_from_NASIS_db <- function() {
     stop('please install the `RODBC` package', call.=FALSE)
   
 	# petext
-	q.petext <- "SELECT recdate, recauthor, tk.ChoiceName AS textkind, textcat, textsubcat, textentry, peiidref AS peiid, petextiid FROM (petext_View_1 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1311) AS tk ON petext_View_1.pedontextkind = tk.ChoiceValue);"
+	q.petext <- "SELECT recdate, recauthor, pedontextkind, textcat, textsubcat, textentry, peiidref AS peiid, petextiid FROM petext_View_1;"
 	
 	# sitetext
-	q.sitetext <- "SELECT recdate, recauthor, tk.ChoiceName AS textkind, textcat, textsubcat, textentry, siteiidref AS siteiid, sitetextiid FROM (sitetext_View_1 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1313) AS tk ON sitetext_View_1.sitetextkind = tk.ChoiceValue);"
+	q.sitetext <- "SELECT recdate, recauthor, sitetextkind, textcat, textsubcat, textentry, siteiidref AS siteiid, sitetextiid FROM sitetext_View_1;"
 	
 	# siteobstext
-	q.siteobstext <- "SELECT recdate, recauthor, tk.ChoiceName AS textkind, textcat, textsubcat, textentry, siteiidref AS site_id, siteobstextiid FROM ((
+	q.siteobstext <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, textentry, siteiidref AS site_id, siteobstextiid FROM ((
 siteobs_View_1 LEFT OUTER JOIN 
 siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) 
-LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1314) AS tk ON siteobstext_View_1.siteobstextkind = tk.ChoiceValue)
-WHERE textentry IS NOT NULL
-	ORDER BY siteobstext_View_1.siteobstextkind;"
+WHERE textentry IS NOT NULL 
+ORDER BY siteobstext_View_1.siteobstextkind;"
 	
 	# phtext
-	q.phtext <- "SELECT recdate, recauthor, tk.ChoiceName AS textkind, textcat, textsubcat, textentry, phiidref AS phiid, phtextiid FROM (phtext_View_1 LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1312) AS tk ON phtext_View_1.phorizontextkind = tk.ChoiceValue);"
+	q.phtext <- "SELECT recdate, recauthor, phorizontextkind, textcat, textsubcat, textentry, phiidref AS phiid, phtextiid FROM phtext_View_1;"
 	
 	# photo links
-	q.photos <- "SELECT recdate, recauthor, tk.ChoiceName AS textkind, textcat, textsubcat, textentry, siteiidref AS site_id, siteobstextiid FROM ((siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1314) AS tk ON siteobstext_View_1.siteobstextkind = tk.ChoiceValue) WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
+	q.photos <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, textentry, siteiidref AS site_id, siteobstextiid FROM (siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
 	
 	# setup connection local NASIS
 	channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
@@ -32,6 +31,13 @@ WHERE textentry IS NOT NULL
 	d.siteobstext <- RODBC::sqlQuery(channel, q.siteobstext, stringsAsFactors=FALSE)
 	d.phtext <- RODBC::sqlQuery(channel, q.phtext, stringsAsFactors=FALSE)
 	d.photos <- RODBC::sqlQuery(channel, q.photos, stringsAsFactors=FALSE)
+
+	# uncode domained columns
+	d.petext <- uncode(d.petext)
+	d.sitetext <- uncode(d.sitetext)
+	d.siteobstext <- uncode(d.siteobstext)
+	d.phtext <- uncode(d.phtext)
+	d.photos <- uncode(d.photos)
 	
 	# close connection
 	RODBC::odbcClose(channel)

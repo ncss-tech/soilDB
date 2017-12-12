@@ -9,7 +9,7 @@
 .diagHzLongtoWide <- function(d) {
 	
 	# get unique vector of diagnostic hz
-	d.unique <- na.omit(unique(d$diag_kind))
+	d.unique <- na.omit(unique(d$featkind))
 	
 	# init list for storing initial FALSE for each peiid / diag kind
 	l <- vector(mode='list')
@@ -25,7 +25,7 @@
 		# fill this list element with FALSE
 		l[[i]] <- f
 		# lookup those peiid with this feature
-		matching.peiid <- d$peiid[which(d$diag_kind == i)]
+		matching.peiid <- d$peiid[which(d$featkind == i)]
 		# toggle FALSE-->TRUE for these pedons
 		l[[i]][which(l[['peiid']] %in% matching.peiid)] <- TRUE
 	}
@@ -242,7 +242,7 @@
     stop('data are from multiple site records')
   
   # subset sitepm data to remove any with NA for pm_kind
-  i.pm <- i.pm[which(!is.na(i.pm$pm_kind)), ]
+  i.pm <- i.pm[which(!is.na(i.pm$pmkind)), ]
   
   # if there is no data, then return a DF formatted as if there were data
   if(nrow(i.pm) == 0)
@@ -261,7 +261,7 @@
   }
   
   # composite strings and return
-  str.kind <- paste(i.pm$pm_kind, collapse=name.sep)
+  str.kind <- paste(i.pm$pmkind, collapse=name.sep)
   str.origin <- paste(unique(i.pm$pm_origin), collapse=name.sep)
   
   return(data.frame(siteiid=u.siteiid, pmkind=str.kind, pmorigin=str.origin, stringsAsFactors=FALSE))

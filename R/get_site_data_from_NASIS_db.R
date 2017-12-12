@@ -15,52 +15,22 @@
 
 ## TODO: multiple records / site in siteobs are possible and will result in duplicate data
 
+## TODO: bug within RODBC - converts site_id == 056E916010 to an exponent
 
-get_site_data_from_NASIS_db <- function() {
+
+get_site_data_from_NASIS_db_new <- function() {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
-	q <- "SELECT siteiid as siteiid, peiid, usiteid as site_id, upedonid as pedon_id, obsdate as obs_date, utmzone, utmeasting, utmnorthing, -(longdegrees + CASE WHEN longminutes IS NULL THEN 0.0 ELSE longminutes / 60.0 END + CASE WHEN longseconds IS NULL THEN 0.0 ELSE longseconds / 60.0 / 60.0 END) as x, latdegrees + CASE WHEN latminutes IS NULL THEN 0.0 ELSE latminutes / 60.0 END + CASE WHEN latseconds IS NULL THEN 0.0 ELSE latseconds / 60.0 / 60.0 END as y, dm.ChoiceName as datum, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, gpspositionalerror, descname as describer, pp.ChoiceName as pedon_purpose, pt.ChoiceName as pedon_type, pedlabsampnum, labdatadescflag, elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, se.ChoiceLabel as coverkind_1, pedon_View_1.earthcovkind1, erocl, bedrckdepth, br.ChoiceLabel as bedrock_kind, bh.ChoiceLabel as bedrock_hardness, hs.ChoiceLabel as hillslope_pos, sp.ChoiceLabel as slope_position, sa.ChoiceLabel as shapeacross, sd.ChoiceLabel as shapedown, sc.ChoiceLabel as slopecomplex, dc.ChoiceLabel as drainagecl, ghill.ChoiceLabel as geompos_hill, gmtn.ChoiceLabel as geompos_mntn, gflat.ChoiceLabel as geompos_flats
+	q <- "SELECT siteiid as siteiid, peiid, CAST(usiteid AS varchar(60)) as site_id, CAST(upedonid AS varchar(60)) as pedon_id, obsdate as obs_date, utmzone, utmeasting, utmnorthing, -(longdegrees + CASE WHEN longminutes IS NULL THEN 0.0 ELSE longminutes / 60.0 END + CASE WHEN longseconds IS NULL THEN 0.0 ELSE longseconds / 60.0 / 60.0 END) as x, latdegrees + CASE WHEN latminutes IS NULL THEN 0.0 ELSE latminutes / 60.0 END + CASE WHEN latseconds IS NULL THEN 0.0 ELSE latseconds / 60.0 / 60.0 END as y, horizdatnm, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, gpspositionalerror, descname as describer, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag, elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, siteobs_View_1.earthcovkind1, pedon_View_1.earthcovkind1, erocl, bedrckdepth, bedrckkind, bedrckhardness, hillslopeprof, geomslopeseg, shapeacross, shapedown, slopecomplex, drainagecl, geomposhill, geomposmntn, geomposflats
 
-FROM
-	
-	site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref
+FROM site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref
 	LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
 	LEFT OUTER JOIN (
       SELECT siteiidref, bedrckdepth, bedrckkind, bedrckhardness, ROW_NUMBER() OVER(PARTITION BY siteiidref ORDER BY bedrckdepth ASC) as rn
       FROM sitebedrock_View_1
     ) as sb ON site_View_1.siteiid = sb.siteiidref
-	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1261) AS dm ON site_View_1.horizdatnm = dm.ChoiceValue
-	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 517) AS br ON sb.bedrckkind = br.ChoiceValue
-	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1247) AS bh ON sb.bedrckhardness = bh.ChoiceValue
-	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1271) AS pp ON pedon_View_1.pedonpurpose = pp.ChoiceValue
-	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1273) AS pt ON pedon_View_1.pedontype = pt.ChoiceValue
-	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1296) AS sp ON site_View_1.geomslopeseg = sp.ChoiceValue
-	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 975) AS sa ON site_View_1.shapeacross = sa.ChoiceValue
-	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 975) AS sd ON site_View_1.shapedown = sd.ChoiceValue
-	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1295) AS sc ON site_View_1.slopecomplex = sc.ChoiceValue
-	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 148) AS dc ON site_View_1.drainagecl = dc.ChoiceValue
-
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 149) AS se ON siteobs_View_1.earthcovkind1 = se.ChoiceValue
-	
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 971) AS hs ON site_View_1.hillslopeprof = hs.ChoiceValue
-
-  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 968) AS ghill ON site_View_1.geomposhill = ghill.ChoiceValue
-
-  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 969) AS gmtn ON site_View_1.geomposmntn = gmtn.ChoiceValue
-
-  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 1092) AS gflat ON site_View_1.geomposflats = gflat.ChoiceValue
 
   WHERE sb.rn IS NULL OR sb.rn = 1
 
@@ -102,7 +72,7 @@ FROM
 	
   ## set factor levels, when it makes sense
 	# hill slope position
-  d$hillslope_pos <- factor(d$hillslope_pos, c('Toeslope', 'Footslope', 'Backslope', 'Shoulder', 'Summit'))
+  d$hillslopepos <- factor(d$hillslopepos, c('Toeslope', 'Footslope', 'Backslope', 'Shoulder', 'Summit'))
   
   # surface shape
   d$shapeacross <- factor(d$shapeacross, levels=c('Concave', 'Linear', 'Convex'))
@@ -113,26 +83,22 @@ FROM
   # make reasonable levels for 3D slope shape
   ss.grid <- expand.grid(levels(d$shapeacross), levels(d$shapedown))
   ss.levels <- apply(ss.grid, 1, function(i) { paste(rev(i), collapse = ' / ')})
-  d$slope_shape <- factor(d$slope_shape, levels=ss.levels)
+  d$slopeshape <- factor(d$slopeshape, levels=ss.levels)
   
   # geomcomponent, hills
-  d$geompos_hill <- factor(d$geompos_hill, levels=c('Base Slope', 'Head Slope', 'Side Slope', 'Nose Slope', 'Crest', 'Interfluve', 'Free Face'))
+  d$geomposhill <- factor(d$geomposhill, levels=c('Base Slope', 'Head Slope', 'Side Slope', 'Nose Slope', 'Crest', 'Interfluve', 'Free Face'))
   
   # geomcomponent, mountains
-  d$geompos_mntn <- factor(d$geompos_mntn, levels=c('Mountainbase', 'Lower third of mountainflank', 'Center third of mountainflank', 'Mountainflank', 'Upper third of mountainflank', 'Mountaintop', 'Free face'))
+  d$geomposmntn <- factor(d$geomposmntn, levels=c('Mountainbase', 'Lower third of mountainflank', 'Center third of mountainflank', 'Mountainflank', 'Upper third of mountainflank', 'Mountaintop', 'Free face'))
   
   # geomcomponent, flats
-  d$geompos_flats <- factor(d$geompos_flats, levels=c('Dip', 'Talf', 'Rise'))
+  d$geomposflats <- factor(d$geomposflats, levels=c('Dip', 'Talf', 'Rise'))
   
   # drainage class
   d$drainagecl <- factor(d$drainagecl, levels=c("Very poorly drained", "Poorly drained", "Somewhat poorly drained", "Moderately well drained", "Well drained", "Somewhat excessively drained", "Excessively drained"))
   
-  # recode metadata domains
-  vars <- c("earthcovkind1", "erocl")
-  d[vars] <- uncode(d[vars])
-  d$coverkind_1 <- ifelse(is.na(d$coverkind_1), 
-                         as.character(d$earthcovkind1), d$coverkind_1)
-  d$earthcovkind1 <- NULL
+  # uncode domain columns
+  d <- uncode(d)
   
 	# done
 	return(d)
