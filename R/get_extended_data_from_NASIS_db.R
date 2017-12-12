@@ -2,8 +2,7 @@
 
 ## TODO: multiple records / site in siteobs are possible and will result in duplicate data
 
-## TODO_JS: incorporated the use of uncode() for some of these queries, could probably do more.....
-# need to trace back to the util functions such as .diagHzLongtoWide(d.diagnostic)
+## TODO_JS: incorporated the use of uncode() into all except the fragment queries, which I think are best left as they are.
 
 get_extended_data_from_NASIS_db <- function(nullFragsAreZero=TRUE) {
   # must have RODBC installed
@@ -39,9 +38,8 @@ get_extended_data_from_NASIS_db <- function(nullFragsAreZero=TRUE) {
 
 	
 	# query diagnostic horizons, usually a 1:many relationship with pedons
-	q.diagnostic <- "SELECT peiidref as peiid, dfk.ChoiceName as diag_kind, featdept, featdepb
+	q.diagnostic <- "SELECT peiidref as peiid, featkind, featdept, featdepb
 FROM pediagfeatures_View_1 
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 147) AS dfk ON pediagfeatures_View_1.featkind = dfk.ChoiceValue
 	ORDER BY pediagfeatures_View_1.peiidref, pediagfeatures_View_1.featdept;"
   
   
@@ -152,15 +150,12 @@ LEFT OUTER JOIN (
 	
   
   # base table is phorizon so that NULL data can be converted to 0s later
-  q.rf.data <- "SELECT p.phiid, fragvol, fragsize_l, fragsize_r, fragsize_h, fs.ChoiceLabel AS fragshp, fh.ChoiceLabel AS fraghard
+  q.rf.data <- "SELECT p.phiid, fragvol, fragsize_l, fragsize_r, fragsize_h, fragshp, fraghard
   FROM 
   (
  	SELECT DISTINCT phiid FROM phorizon_View_1
  	) as p  
-  LEFT OUTER JOIN phfrags_View_1 ON p.phiid = phfrags_View_1.phiidref
-  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 154) AS fs ON fragshp = fs.ChoiceValue
-  LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS fh ON fraghard = fh.ChoiceValue
-;"
+  LEFT OUTER JOIN phfrags_View_1 ON p.phiid = phfrags_View_1.phiidref;"
 
 # 	## not using this anymore
 # 	# query rock-fragment summary by horizon
@@ -264,11 +259,10 @@ LEFT OUTER JOIN (
 #   
 
 	# get horizon texture modifiers
-	q.hz.texmod <- "SELECT phorizon_View_1.peiidref AS peiid, phorizon_View_1.phiid AS phiid, phtexture_View_1.phtiid AS phtiid, phtexturemod_View_1.seqnum, tmod.ChoiceName as texture_modifier 
+	q.hz.texmod <- "SELECT phorizon_View_1.peiidref AS peiid, phorizon_View_1.phiid AS phiid, phtexture_View_1.phtiid AS phtiid, phtexturemod_View_1.seqnum, texmod 
   FROM
 	phorizon_View_1 INNER JOIN phtexture_View_1 ON phorizon_View_1.phiid = phtexture_View_1.phiidref
-	LEFT OUTER JOIN phtexturemod_View_1 ON phtexture_View_1.phtiid = phtexturemod_View_1.phtiidref
-	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 190) AS tmod ON phtexturemod_View_1.texmod = tmod.ChoiceValue;"
+	LEFT OUTER JOIN phtexturemod_View_1 ON phtexture_View_1.phtiid = phtexturemod_View_1.phtiidref;"
 	
 	# get geomorphic features
 	q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod, geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid, sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
@@ -312,6 +306,9 @@ sitepm_View_1 INNER JOIN site_View_1 on sitepm_View_1.siteiidref = site_View_1.s
   	d.structure <- RODBC::sqlQuery(channel, q.structure, stringsAsFactors=FALSE)
 
 	## uncode the one that need that here
+	d.diagnostic <- uncode(d.diagnostic)
+	d.rf.data <- uncode(d.rf.data)
+	d.hz.texmod <- uncode(d.hz.texmod)
 	d.taxhistory <- uncode(d.taxhistory)
 	d.sitepm <- uncode(d.sitepm)
 	d.structure <- uncode(d.structure)

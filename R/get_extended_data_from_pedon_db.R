@@ -1,12 +1,14 @@
+# TODO: does not have parity with extended data function pulling from NASIS
+# missing queries for veg, ecosite, rf.data, surf.rf.summary, photolink, sitepm, structure
+
 get_extended_data_from_pedon_db <- function(dsn) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
 	# query diagnostic horizons, usually a 1:many relationship with pedons
-	q.diagnostic <- "SELECT peiidref as peiid, dfk.choice as diag_kind, featdept, featdepb
+	q.diagnostic <- "SELECT peiidref as peiid, dfk.choice as featkind, featdept, featdepb
 FROM pediagfeatures
-	LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 147) AS dfk ON pediagfeatures.featkind = dfk.choice_id
 	ORDER BY pediagfeatures.peiidref, pediagfeatures.featdept;"
 	
 	
@@ -88,11 +90,10 @@ LEFT OUTER JOIN (
 
 	
 	# get horizon texture modifiers
-	q.hz.texmod <- "SELECT phorizon.peiidref, phorizon.phiid, phtexture.phtiid, phtexturemod.seqnum, tmod.choice as texture_modifier 
-  FROM (
-	(phorizon INNER JOIN phtexture ON phorizon.phiid = phtexture.phiidref) 
-	LEFT OUTER JOIN phtexturemod ON phtexture.phtiid = phtexturemod.phtiidref) 
-	LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_detail.domain_id = 190) AS tmod ON phtexturemod.texmod =   tmod.choice_id;"
+	q.hz.texmod <- "SELECT phorizon.peiidref, phorizon.phiid, phtexture.phtiid, phtexturemod.seqnum, texmod 
+  FROM 
+	phorizon INNER JOIN phtexture ON phorizon.phiid = phtexture.phiidref 
+	LEFT OUTER JOIN phtexturemod ON phtexture.phtiid = phtexturemod.phtiidref;"
 
 	
 	# get geomorphic features
@@ -102,17 +103,8 @@ FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeom
 	
 
 	# get petaxhistory data 
-	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, cl.choice_label as class_type, taxonname, tk.choice_label as taxon_kind, ss.choice_label as series_status, ps.choice_label as part_size_class, tord.choice_label as tax_order, tso.choice_label as tax_suborder, tgg.choice_label as tax_grtgroup, ts.choice_label as tax_subgroup, te.choice_label as tax_edition, osdtypelocflag
-  	FROM (((((((((petaxhistory 
-		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 127) AS ps ON petaxhistory.taxpartsize = ps.choice_id)
-  		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 187) AS ts ON petaxhistory.taxsubgrp = ts.choice_id)
-  		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 102) AS tk ON petaxhistory.taxonkind = tk.choice_id)
-		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 4956) AS ss ON petaxhistory.seriesstatus = ss.choice_id)
-		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 2030) AS te ON petaxhistory.soiltaxedition = te.choice_id)
-		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 4942) AS cl ON petaxhistory.classtype = cl.choice_id)
-		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 132) AS tord ON petaxhistory.taxorder = tord.choice_id)
-		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 134) AS tso ON petaxhistory.taxsuborder = tso.choice_id)
-		LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE domain_id = 130) AS tgg ON petaxhistory.taxgrtgroup = tgg.choice_id)		
+	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, classtype, taxonname, taxonkind, seriesstatus, taxpartsize, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, soiltaxedition, osdtypelocflag
+  	FROM petaxhistory 
 	ORDER BY petaxhistory.peiidref;"	
 	
 	# setup connection to our pedon database
@@ -127,6 +119,13 @@ FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeom
 	
 	# close connection
 	RODBC::odbcClose(channel)
+
+	## uncode the one that need that here
+	d.diagnostic <- uncode(d.diagnostic)
+	d.hz.texmod <- uncode(d.hz.texmod)
+	d.taxhistory <- uncode(d.taxhistory)
+	d.sitepm <- uncode(d.sitepm)
+	d.structure <- uncode(d.structure)
 	
 	# generate wide-formatted, diagnostic boolean summary
 	d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)
