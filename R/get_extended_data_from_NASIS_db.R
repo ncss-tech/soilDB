@@ -4,7 +4,7 @@
 
 ## TODO_JS: incorporated the use of uncode() into all except the fragment queries, which I think are best left as they are.
 
-get_extended_data_from_NASIS_db <- function(nullFragsAreZero=TRUE) {
+get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)

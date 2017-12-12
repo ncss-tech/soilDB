@@ -18,7 +18,7 @@
 ## TODO: bug within RODBC - converts site_id == 056E916010 to an exponent
 
 
-get_site_data_from_NASIS_db_new <- function() {
+get_site_data_from_NASIS_db_new <- function(SS=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)

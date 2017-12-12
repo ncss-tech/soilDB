@@ -1,12 +1,11 @@
 ## 2013-01-08: now much faster since we only mix/clean data with > 1 color / horizon
 
 # results can be referenced via phiid (horizon-level ID)
-get_colors_from_NASIS_db <- function() {
+get_colors_from_NASIS_db <- function(SS=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
-  ## 2016-04-18 BUG FIX: value and chroma have always been coded, but we were not decoding
 	# unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
   q <- "SELECT peiid, phiid, colormoistst, colorpct as pct, colorhue, colorvalue, colorchroma
 FROM
