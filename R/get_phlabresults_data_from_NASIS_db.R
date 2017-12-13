@@ -19,6 +19,10 @@ silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasur
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.phlabresults <- gsub(pattern = '_View_1', replacement = '', x = q.phlabresults, fixed = TRUE)
+  }
   
   # exec query
   d.phlabresults <- RODBC::sqlQuery(channel, q.phlabresults, stringsAsFactors = FALSE)

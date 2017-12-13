@@ -8,14 +8,20 @@ get_colors_from_NASIS_db <- function(SS=TRUE) {
   
 	# unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
   q <- "SELECT peiid, phiid, colormoistst, colorpct as pct, colorhue, colorvalue, colorchroma
-FROM
-  pedon_View_1 INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref
+  FROM
+  pedon_View_1 
+  INNER JOIN phorizon_View_1 ON pedon_View_1.peiid = phorizon_View_1.peiidref
   INNER JOIN phcolor_View_1 ON phorizon_View_1.phiid = phcolor_View_1.phiidref
   ORDER BY phiid, colormoistst;"
   
 	# setup connection local NASIS
 	channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
 	
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
 	# exec query
 	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
 	

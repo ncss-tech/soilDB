@@ -12,35 +12,65 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE) {
   # photo links from PedonPC stored as sitetext notes
   q.photolink <- "SELECT siteobs_View_1.siteiidref AS siteiid, siteobstext_View_1.recdate, siteobstext_View_1.textcat, siteobstext_View_1.textentry AS imagepath
   FROM
-  siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref
-  WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
+  siteobs_View_1 
+  LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref
+  WHERE siteobstext_View_1.textcat LIKE 'Photo%' 
+  ORDER BY siteobstext_View_1.siteobstextkind;"
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.photolink <- gsub(pattern = '_View_1', replacement = '', x = q.photolink, fixed = TRUE)
+  }
+  
   
   # get all structure records / horizon
-  q.structure <- "SELECT phstructure.phiidref as phiid, structgrade, structsize, structtype, structid, structpartsto
+  q.structure <- "SELECT phiidref as phiid, structgrade, structsize, structtype, structid, structpartsto
 	FROM phstructure_View_1
 	WHERE structtype IS NOT NULL
-	ORDER BY phstructure.phiidref, structid ASC;"
+	ORDER BY phiidref, structid ASC;"
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.structure <- gsub(pattern = '_View_1', replacement = '', x = q.structure, fixed = TRUE)
+  }
+  
+  ## does this require tables that standard site/pedons queries don't hit?
+  # https://github.com/ncss-tech/soilDB/issues/49
   # existing veg
-  q.veg <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, plotplantinventory.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass
+  q.veg <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, ppi.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass
 
   FROM site_View_1 AS s
-  INNER JOIN siteobs ON siteobs.siteiidref=s.siteiid
-  LEFT JOIN vegplot_View_1 AS v on v.siteobsiidref=siteobs.siteobsiid
-  LEFT JOIN plotplantinventory ON plotplantinventory.vegplotiidref=v.vegplotiid
-  INNER JOIN plant ON plant.plantiid=plotplantinventory.plantiidref;"
+  INNER JOIN siteobs_View_1 AS so ON so.siteiidref = s.siteiid
+  LEFT JOIN vegplot_View_1 AS v on v.siteobsiidref = so.siteobsiid
+  LEFT JOIN plotplantinventory_View_1 AS ppi ON ppi.vegplotiidref = v.vegplotiid
+  LEFT OUTER JOIN plant ON plant.plantiid = ppi.plantiidref;"
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.veg <- gsub(pattern = '_View_1', replacement = '', x = q.veg, fixed = TRUE)
+  }
   
   # ecological site
   q.ecosite <- "SELECT siteiidref AS siteiid, ecositeid, ecositenm, ecositecorrdate, classifier As es_classifier
   FROM siteecositehistory_View_1 AS seh
-  INNER JOIN ecologicalsite AS es ON es.ecositeiid=seh.ecositeiidref
+  LEFT OUTER JOIN ecologicalsite_View_1 AS es ON es.ecositeiid=seh.ecositeiidref
   ORDER BY 'siteiid';"
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.ecosite <- gsub(pattern = '_View_1', replacement = '', x = q.ecosite, fixed = TRUE)
+  }
   
   
   # query diagnostic horizons, usually a 1:many relationship with pedons
   q.diagnostic <- "SELECT peiidref as peiid, featkind, featdept, featdepb
-FROM pediagfeatures_View_1 
-	ORDER BY pediagfeatures_View_1.peiidref, pediagfeatures_View_1.featdept;"
+  FROM pediagfeatures_View_1 AS pdf
+	ORDER BY pdf.peiidref, pdf.featdept;"
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.diagnostic <- gsub(pattern = '_View_1', replacement = '', x = q.diagnostic, fixed = TRUE)
+  }
   
   
   # TODO: convert this to simplifyFragmentData
@@ -149,6 +179,11 @@ LEFT OUTER JOIN (
 	ORDER BY pedon_View_1.peiid;"
 
 
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.surf.rf.summary <- gsub(pattern = '_View_1', replacement = '', x = q.surf.rf.summary, fixed = TRUE)
+  }
+
   # base table is phorizon so that NULL data can be converted to 0s later
   q.rf.data <- "SELECT p.phiid, fragvol, fragsize_l, fragsize_r, fragsize_h, fragshp, fraghard
   FROM 
@@ -156,16 +191,31 @@ LEFT OUTER JOIN (
  	SELECT DISTINCT phiid FROM phorizon_View_1
  	) as p  
   LEFT OUTER JOIN phfrags_View_1 ON p.phiid = phfrags_View_1.phiidref;"
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.rf.data <- gsub(pattern = '_View_1', replacement = '', x = q.rf.data, fixed = TRUE)
+  }
 
   # get horizon texture modifiers
-  q.hz.texmod <- "SELECT phorizon_View_1.peiidref AS peiid, phorizon_View_1.phiid AS phiid, phtexture_View_1.phtiid AS phtiid, phtexturemod_View_1.seqnum, texmod 
+  q.hz.texmod <- "SELECT phz.peiidref AS peiid, phz.phiid AS phiid, pht.phtiid AS phtiid, phtm.seqnum, texmod 
   FROM
-	phorizon_View_1 INNER JOIN phtexture_View_1 ON phorizon_View_1.phiid = phtexture_View_1.phiidref
-	LEFT OUTER JOIN phtexturemod_View_1 ON phtexture_View_1.phtiid = phtexturemod_View_1.phtiidref;"
-
+	phorizon_View_1 AS phz
+  INNER JOIN phtexture_View_1 AS pht ON phz.phiid = pht.phiidref
+	LEFT OUTER JOIN phtexturemod_View_1 AS phtm ON pht.phtiid = phtm.phtiidref;"
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.hz.texmod <- gsub(pattern = '_View_1', replacement = '', x = q.hz.texmod, fixed = TRUE)
+  }
+  
+  
+  ## TODO: joins without a join condition!
+  # https://github.com/ncss-tech/soilDB/issues/48
   # get geomorphic features
   q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod, geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid, sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
-FROM geomorfeattype 
+  
+  FROM geomorfeattype 
   RIGHT JOIN geomorfeat 
   RIGHT JOIN site_View_1 INNER JOIN sitegeomordesc_View_1 ON site_View_1.siteiid = sitegeomordesc_View_1.siteiidref
   INNER JOIN siteobs_View_1 INNER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
@@ -174,18 +224,35 @@ FROM geomorfeattype
   ON geomorfeattype.geomftiid = geomorfeat.geomftiidref 
   ORDER BY peiid, geomfeatid ASC;"
 
-
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.geomorph <- gsub(pattern = '_View_1', replacement = '', x = q.geomorph, fixed = TRUE)
+  }
+  
+  
   q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, classtype, taxonname, taxonkind, seriesstatus, taxpartsize, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, soiltaxedition, osdtypelocflag, taxmoistcl, taxtempregime, taxfamother, psctopdepth, pscbotdepth
   	FROM
-    petaxhistory_View_1 LEFT OUTER JOIN petaxhistmoistcl_View_1 ON petaxhistory_View_1.petaxhistoryiid = petaxhistmoistcl_View_1.pedtaxhistoryiidref
-    LEFT OUTER JOIN petxhistfmother_View_1 ON petaxhistory_View_1.petaxhistoryiid = petxhistfmother_View_1.pedtaxhistoryiidref
-ORDER BY petaxhistory_View_1.peiidref;"
+    petaxhistory_View_1 AS pth
+    LEFT OUTER JOIN petaxhistmoistcl_View_1 AS pthm ON pth.petaxhistoryiid = pthm.pedtaxhistoryiidref
+    LEFT OUTER JOIN petxhistfmother_View_1 AS ptho ON pth.petaxhistoryiid = ptho.pedtaxhistoryiidref
+    ORDER BY pth.peiidref;"
 
-
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.taxhistory <- gsub(pattern = '_View_1', replacement = '', x = q.taxhistory, fixed = TRUE)
+  }
+  
+  
   q.sitepm <- "SELECT siteiidref as siteiid, seqnum, pmorder, pmdept, pmdepb, pmmodifier, pmgenmod, pmkind, pmorigin, pmweathering 
-FROM
-sitepm_View_1 INNER JOIN site_View_1 on sitepm_View_1.siteiidref = site_View_1.siteiid;"
+  FROM
+  sitepm_View_1 AS spm
+  INNER JOIN site_View_1 AS s ON spm.siteiidref = s.siteiid;"
 
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.sitepm <- gsub(pattern = '_View_1', replacement = '', x = q.sitepm, fixed = TRUE)
+  }
 
 	
 	# setup connection local NASIS

@@ -5,17 +5,22 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE) {
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
-  q.phorizon <- "SELECT peiid, phiid, upedonid as pedon_id,
+  q <- "SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
   claytotest AS clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END AS silt, 
   sandtotest AS sand, fragvoltot, texture, texcl, phfield, effclass, phs.labsampnum, rupresblkdry, stickiness, plasticity
   
-  FROM pedon_View_1 p INNER JOIN 
-  phorizon ph ON ph.peiidref = p.peiid LEFT OUTER JOIN
-  phsample phs ON phs.phiidref = ph.phiid
-  
+  FROM 
+
+  pedon_View_1 p 
+  INNER JOIN phorizon_View_1 ph ON ph.peiidref = p.peiid 
+  LEFT OUTER JOIN phsample_View_1 phs ON phs.phiidref = ph.phiid
   LEFT OUTER JOIN 
-  (SELECT phiidref, MIN(texcl) AS texcl FROM phtexture GROUP BY phiidref) AS pht ON pht.phiidref = ph.phiid
+  (
+  SELECT phiidref, MIN(texcl) AS texcl 
+  FROM phtexture_View_1 
+  GROUP BY phiidref
+  ) AS pht ON pht.phiidref = ph.phiid
   
   ORDER BY p.upedonid, ph.hzdept ASC;"
   
@@ -23,9 +28,14 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE) {
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
   
   # exec query
-  d <- RODBC::sqlQuery(channel, q.phorizon, stringsAsFactors=FALSE)
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
   
   
   # recode metadata domains
