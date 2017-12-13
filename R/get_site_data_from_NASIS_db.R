@@ -49,12 +49,14 @@ FROM site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View
 	if(class(d) == 'character')
 	  stop('error in SQL', call. = FALSE)
 	
-	# test for no data
-	if(nrow(d) == 0)
-		stop('there are no pedons in your selected set!', call. = FALSE)
-	
 	# uncode domain columns
 	d <- uncode(d)
+	
+	# short-circuit: 0 rows means nothing in the selected set and thus we stop here
+	if(nrow(d) == 0) {
+	  return(d)
+	}
+	  
 	
   ## TODO: this should be removed once we switch to WGS84 coordinates
 	# warn if mixed datums

@@ -15,13 +15,13 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE) {
   siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref
   WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
   
-	# get all structure records / horizon
-	q.structure <- "SELECT phstructure.phiidref as phiid, structgrade, structsize, structtype, structid, structpartsto
-	FROM phstructure
+  # get all structure records / horizon
+  q.structure <- "SELECT phstructure.phiidref as phiid, structgrade, structsize, structtype, structid, structpartsto
+	FROM phstructure_View_1
 	WHERE structtype IS NOT NULL
 	ORDER BY phstructure.phiidref, structid ASC;"
-	
-	# existing veg
+  
+  # existing veg
   q.veg <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, plotplantinventory.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass
 
   FROM site_View_1 AS s
@@ -30,21 +30,21 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE) {
   LEFT JOIN plotplantinventory ON plotplantinventory.vegplotiidref=v.vegplotiid
   INNER JOIN plant ON plant.plantiid=plotplantinventory.plantiidref;"
   
-  	# ecological site
+  # ecological site
   q.ecosite <- "SELECT siteiidref AS siteiid, ecositeid, ecositenm, ecositecorrdate, classifier As es_classifier
   FROM siteecositehistory_View_1 AS seh
   INNER JOIN ecologicalsite AS es ON es.ecositeiid=seh.ecositeiidref
   ORDER BY 'siteiid';"
-
-	
-	# query diagnostic horizons, usually a 1:many relationship with pedons
-	q.diagnostic <- "SELECT peiidref as peiid, featkind, featdept, featdepb
+  
+  
+  # query diagnostic horizons, usually a 1:many relationship with pedons
+  q.diagnostic <- "SELECT peiidref as peiid, featkind, featdept, featdepb
 FROM pediagfeatures_View_1 
 	ORDER BY pediagfeatures_View_1.peiidref, pediagfeatures_View_1.featdept;"
   
   
-  ### TODO: convert this to simplifyFragmentData
-	q.surf.rf.summary <- "SELECT pedon_View_1.peiid, 
+  # TODO: convert this to simplifyFragmentData
+  q.surf.rf.summary <- "SELECT pedon_View_1.peiid, 
 f1_fgr.gravel as surface_fgravel, 
 f1_gr.gravel as surface_gravel, 
 f2_cb.cobbles as surface_cobbles, 
@@ -147,8 +147,8 @@ LEFT OUTER JOIN (
 	) as f6 ON p.siteobsiidref = f6.siteobsiidref
 	
 	ORDER BY pedon_View_1.peiid;"
-	
-  
+
+
   # base table is phorizon so that NULL data can be converted to 0s later
   q.rf.data <- "SELECT p.phiid, fragvol, fragsize_l, fragsize_r, fragsize_h, fragshp, fraghard
   FROM 
@@ -157,115 +157,14 @@ LEFT OUTER JOIN (
  	) as p  
   LEFT OUTER JOIN phfrags_View_1 ON p.phiid = phfrags_View_1.phiidref;"
 
-# 	## not using this anymore
-# 	# query rock-fragment summary by horizon
-# 	q.rf.summary <- "SELECT p.phiid, 
-# 
-#   f1_fgr.gravel as fine_gravel,
-#   f1_gr.gravel as gravel, 
-# 	f2_cb.cobbles as cobbles,
-# 	f3.stones as stones, 
-# 	f4.boulders as boulders,
-# 	f1_pgr.gravel as paragravel,
-# 	f2_pcb.cobbles as paracobbles,
-# 	f5.channers as channers, 
-# 	f6.flagstones as flagstones
-# 	
-# 	FROM
-# 	(
-# 	SELECT DISTINCT phiid FROM phorizon_View_1
-# 	) as p
-# 	
-#   LEFT OUTER JOIN (
-# 	SELECT phiidref, Sum(fragvol) AS gravel
-# 	FROM phfrags_View_1
-#   LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
-#   WHERE (fragsize_r <= 5 OR fragsize_h <= 5) AND (fragshp != 1 OR fragshp IS NULL)
-#   AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
-#   GROUP BY phiidref
-#   ) as f1_fgr ON p.phiid = f1_fgr.phiidref
-# 
-#   LEFT OUTER JOIN (
-# 	SELECT phiidref, Sum(fragvol) AS gravel
-# 	FROM phfrags_View_1
-# 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
-# 	WHERE (fragsize_r <= 76 OR fragsize_h <= 76) AND (fragshp != 1 OR fragshp IS NULL)
-# 	AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
-# 	GROUP BY phiidref
-# 	) as f1_gr ON p.phiid = f1_gr.phiidref
-# 	
-# 	LEFT OUTER JOIN (
-# 	SELECT phiidref, Sum(fragvol) AS gravel
-# 	FROM phfrags_View_1
-# 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
-# 	WHERE (fragsize_r <= 76 OR fragsize_h <= 76) AND (fragshp != 1 OR fragshp IS NULL)
-# 	AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
-# 	GROUP BY phiidref
-# 	) as f1_pgr ON p.phiid = f1_pgr.phiidref
-# 	
-# 	LEFT OUTER JOIN (
-# 	SELECT phiidref, Sum(fragvol) AS cobbles
-# 	FROM phfrags_View_1
-# 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
-# 	WHERE (fragsize_r >= 76 OR fragsize_l >= 76) AND (fragsize_r <= 250 OR fragsize_h <= 250) AND (fragshp != 1 OR fragshp IS NULL)
-# 	AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
-# 	GROUP BY phiidref
-# 	) as f2_cb ON p.phiid = f2_cb.phiidref
-# 	
-# 	LEFT OUTER JOIN (
-# 	SELECT phiidref, Sum(fragvol) AS cobbles
-# 	FROM phfrags_View_1
-# 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
-# 	WHERE (fragsize_r >= 76 OR fragsize_l >= 76) AND (fragsize_r <= 250 OR fragsize_h <= 250) AND (fragshp != 1 OR fragshp IS NULL)
-# 	AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
-# 	GROUP BY phiidref
-# 	) as f2_pcb ON p.phiid = f2_pcb.phiidref
-# 	
-# 	LEFT OUTER JOIN (
-# 	SELECT phiidref, Sum(fragvol) AS stones
-# 	FROM phfrags_View_1
-# 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
-# 	WHERE (fragsize_r >= 250 OR fragsize_l >= 250) AND (fragsize_r <= 600 OR fragsize_h <= 600) AND (fragshp != 1 OR fragshp IS NULL)
-# 	GROUP BY phiidref
-# 	) as f3 ON p.phiid = f3.phiidref
-# 	
-# 	LEFT OUTER JOIN (
-# 	SELECT phiidref, Sum(fragvol) AS boulders
-# 	FROM phfrags_View_1
-# 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
-# 	WHERE fragsize_r >= 600 OR fragsize_l >= 600
-# 	GROUP BY phiidref
-# 	) as f4 ON p.phiid = f4.phiidref
-# 	
-# 	LEFT OUTER JOIN (
-# 	SELECT phiidref, Sum(fragvol) AS channers
-# 	FROM phfrags_View_1
-# 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
-# 	WHERE (fragsize_r <= 76 OR fragsize_h <= 76) AND fragshp = 1
-# 	AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
-# 	GROUP BY phiidref
-# 	) as f5 ON p.phiid = f5.phiidref
-# 	
-# 	LEFT OUTER JOIN (
-# 	SELECT phiidref, Sum(fragvol) AS flagstones
-# 	FROM phfrags_View_1
-# 	LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON fraghard = m.ChoiceValue
-# 	WHERE (fragsize_r >= 150 OR fragsize_l >= 150) AND (fragsize_r <= 380 OR fragsize_h <= 380) AND fragshp = 1
-# 	AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
-# 	GROUP BY phiidref
-# 	) as f6 ON p.phiid = f6.phiidref
-# 	
-# 	ORDER BY p.phiid;"
-#   
-
-	# get horizon texture modifiers
-	q.hz.texmod <- "SELECT phorizon_View_1.peiidref AS peiid, phorizon_View_1.phiid AS phiid, phtexture_View_1.phtiid AS phtiid, phtexturemod_View_1.seqnum, texmod 
+  # get horizon texture modifiers
+  q.hz.texmod <- "SELECT phorizon_View_1.peiidref AS peiid, phorizon_View_1.phiid AS phiid, phtexture_View_1.phtiid AS phtiid, phtexturemod_View_1.seqnum, texmod 
   FROM
 	phorizon_View_1 INNER JOIN phtexture_View_1 ON phorizon_View_1.phiid = phtexture_View_1.phiidref
 	LEFT OUTER JOIN phtexturemod_View_1 ON phtexture_View_1.phtiid = phtexturemod_View_1.phtiidref;"
-	
-	# get geomorphic features
-	q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod, geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid, sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
+
+  # get geomorphic features
+  q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod, geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid, sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
 FROM geomorfeattype 
   RIGHT JOIN geomorfeat 
   RIGHT JOIN site_View_1 INNER JOIN sitegeomordesc_View_1 ON site_View_1.siteiid = sitegeomordesc_View_1.siteiidref
@@ -274,16 +173,16 @@ FROM geomorfeattype
   ON geomorfeat.geomfiid = sitegeomordesc_View_1.geomfiidref
   ON geomorfeattype.geomftiid = geomorfeat.geomftiidref 
   ORDER BY peiid, geomfeatid ASC;"
-	
-   
-q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, classtype, taxonname, taxonkind, seriesstatus, taxpartsize, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, soiltaxedition, osdtypelocflag, taxmoistcl, taxtempregime, taxfamother, psctopdepth, pscbotdepth
+
+
+  q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, classtype, taxonname, taxonkind, seriesstatus, taxpartsize, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, soiltaxedition, osdtypelocflag, taxmoistcl, taxtempregime, taxfamother, psctopdepth, pscbotdepth
   	FROM
     petaxhistory_View_1 LEFT OUTER JOIN petaxhistmoistcl_View_1 ON petaxhistory_View_1.petaxhistoryiid = petaxhistmoistcl_View_1.pedtaxhistoryiidref
     LEFT OUTER JOIN petxhistfmother_View_1 ON petaxhistory_View_1.petaxhistoryiid = petxhistfmother_View_1.pedtaxhistoryiidref
 ORDER BY petaxhistory_View_1.peiidref;"
 
 
-q.sitepm <- "SELECT siteiidref as siteiid, seqnum, pmorder, pmdept, pmdepb, pmmodifier, pmgenmod, pmkind, pmorigin, pmweathering 
+  q.sitepm <- "SELECT siteiidref as siteiid, seqnum, pmorder, pmdept, pmdepb, pmmodifier, pmgenmod, pmkind, pmorigin, pmweathering 
 FROM
 sitepm_View_1 INNER JOIN site_View_1 on sitepm_View_1.siteiidref = site_View_1.siteiid;"
 
@@ -313,18 +212,32 @@ sitepm_View_1 INNER JOIN site_View_1 on sitepm_View_1.siteiidref = site_View_1.s
 	d.sitepm <- uncode(d.sitepm)
 	d.structure <- uncode(d.structure)
 
-	
 	# close connection
 	RODBC::odbcClose(channel)
 	
-	# generate wide-formatted, diagnostic boolean summary
-	d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)
-
- 	# parse imagename and imagepath for photo links
-	d.photolink$imagename <- basename(d.photolink$imagepath)
 	
-	# summarize rock fragment data
-	d.rf.summary <- simplfyFragmentData(d.rf.data, 'phiid', nullFragsAreZero = nullFragsAreZero)
+	## the following steps will not work when data are missing from local DB or SS
+	# return NULL in those cases
+	
+	if(nrow(d.diagnostic) > 0) {
+	  # generate wide-formatted, diagnostic boolean summary
+	  d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)
+	} else {
+	  d.diag.boolean <- NULL
+	}
+	
+	if(nrow(d.photolink) > 0) {
+	  # parse imagename and imagepath for photo links
+	  d.photolink$imagename <- basename(d.photolink$imagepath)
+	}
+
+	if(nrow(d.rf.data) > 0) {
+	  # summarize rock fragment data
+	  d.rf.summary <- simplfyFragmentData(d.rf.data, 'phiid', nullFragsAreZero = nullFragsAreZero)
+	} else {
+	  d.rf.summary <- NULL
+	}
+	
 	
 	# return a list of results
 	return(list(veg=d.veg, ecositehistory=d.ecosite,

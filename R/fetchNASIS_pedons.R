@@ -11,24 +11,26 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   if(! soilColorState %in% c('dry', 'moist'))
     stop('soilColorState must be either `dry` or `moist`', call. = FALSE)
   
-  # 1. load data in pieces
+  ## load data in pieces
+  # these fail gracefully when no data in local DB | selected set
   site_data <- get_site_data_from_NASIS_db(SS=SS)
   hz_data <- get_hz_data_from_NASIS_db(SS=SS)
   color_data <- get_colors_from_NASIS_db(SS=SS)
   
-  ## TODO: this is quite slow
+  ## ensure there are enough data to create an SPC object
+  if (nrow(hz_data) == 0) {
+    stop('No site/pedons objects in local NASIS DB or selected set.', call. = FALSE)
+  }
+  
+  ## TODO: improve efficiency
+  # data that don't flatten well
   extended_data <- get_extended_data_from_NASIS_db(SS=SS, nullFragsAreZero=nullFragsAreZero)
   
   ## TODO: this doesn't work as expected
-  ## 
+  ## https://github.com/ncss-tech/soilDB/issues/44
   # optionally load phlabresults table
   if (lab) {
     phlabresults <- get_phlabresults_data_from_NASIS_db(SS=SS)
-  }
-  
-  # test to see if the selected set is loaded
-  if (nrow(hz_data) == 0 | all(unlist(lapply(extended_data, nrow)) == 0)) {
-    stop('No pedons in local NASIS DB.', call. = FALSE)
   }
   
   ## this is the "total fragment volume" per NASIS calculation
