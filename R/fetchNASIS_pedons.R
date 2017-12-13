@@ -19,18 +19,22 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   ## TODO: this is quite slow
   extended_data <- get_extended_data_from_NASIS_db(SS=SS, nullFragsAreZero=nullFragsAreZero)
   
+  ## TODO: this doesn't work as expected
+  ## 
   # optionally load phlabresults table
   if (lab) {
     phlabresults <- get_phlabresults_data_from_NASIS_db(SS=SS)
   }
   
   # test to see if the selected set is loaded
-  if (nrow(hz_data) == 0 | all(unlist(lapply(extended_data, nrow)) == 0)) message('your selected set is missing either the pedon or site table, please load and try again')
+  if (nrow(hz_data) == 0 | all(unlist(lapply(extended_data, nrow)) == 0)) {
+    stop('No pedons in local NASIS DB.', call. = FALSE)
+  }
   
   ## this is the "total fragment volume" per NASIS calculation
   # optionally convert NA fragvol to 0
   if(nullFragsAreZero) {
-    hz_data$total_frags_pct_cal <- ifelse(is.na(hz_data$total_frags_pct_cal), 0, hz_data$total_frags_pct_cal)
+    hz_data$fragvoltot <- ifelse(is.na(hz_data$fragvoltot), 0, hz_data$fragvoltot)
   }
   
   # join horizon + hz color: all horizons
