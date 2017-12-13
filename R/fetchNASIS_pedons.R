@@ -150,7 +150,7 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   site(h) <- sfs
   
   # load diagnostic horizons into @diagnostic:
-  # supress warnings, usually associated with site/pedon data that have been removed due to lack of horizon data
+  # supress warnings: diagnostic_hz() <- is noisy when not all profiles have diagnostic hz data
   suppressWarnings(diagnostic_hz(h) <- extended_data$diagnostic)
   
   # join-in landform string

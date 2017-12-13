@@ -45,9 +45,10 @@ FROM site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View
 	# close connection
 	RODBC::odbcClose(channel)
 	
+	## this shouldn't happen, retain for debugging
 	# test for an error
 	if(class(d) == 'character')
-	  stop('error in SQL', call. = FALSE)
+	  stop('error in SQL')
 	
 	# uncode domain columns
 	d <- uncode(d)
@@ -58,12 +59,11 @@ FROM site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View
 	}
 	  
 	
-  ## TODO: this should be removed once we switch to WGS84 coordinates
+  # https://github.com/ncss-tech/soilDB/issues/41
 	# warn if mixed datums
-	if(length(unique(na.omit(d$datum))) > 1)
+	if(length(na.omit(unique(d$horizdatnm))) > 1)
 		message('multiple horizontal datums present, consider using WGS84 coordinates (x_std, y_std)')
 	
-  ## TODO: this should probably use peiid
 	# are there any duplicate pedon IDs?
 	t.pedon_id <- table(d$pedon_id)
 	not.unique.pedon_id <- t.pedon_id > 1
@@ -84,11 +84,11 @@ FROM site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View
   
   # create 3D surface shape
   d$slope_shape <- paste0(d$shapeacross, ' / ', d$shapedown)
+  
   # make reasonable levels for 3D slope shape
   ss.grid <- expand.grid(na.omit(unique(d$shapeacross)), na.omit(unique(d$shapedown)))
   ss.levels <- apply(ss.grid, 1, function(i) { paste(rev(i), collapse = ' / ')})
   d$slope_shape <- factor(d$slope_shape, levels=ss.levels)
-  
   
 	# done
 	return(d)

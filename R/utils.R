@@ -119,6 +119,8 @@
 #   return(d[best.record, ])
 # }
 
+
+## TODO: https://github.com/ncss-tech/soilDB/issues/47
 ## 2015-11-30: short-circuts could use some work, consider pre-marking mistakes in calling function
 # attempt to format "landform" records into a single string
 # note: there are several assumptions made about the data, 
