@@ -18,7 +18,7 @@
 ## TODO: bug within RODBC - converts site_id == 056E916010 to an exponent
 
 
-get_site_data_from_NASIS_db_new <- function(SS=TRUE) {
+get_site_data_from_NASIS_db <- function(SS=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -53,6 +53,9 @@ FROM site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View
 	if(nrow(d) == 0)
 		stop('there are no pedons in your selected set!', call. = FALSE)
 	
+	# uncode domain columns
+	d <- uncode(d)
+	
   ## TODO: this should be removed once we switch to WGS84 coordinates
 	# warn if mixed datums
 	if(length(unique(na.omit(d$datum))) > 1)
@@ -71,34 +74,19 @@ FROM site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View
 		assign('sites.missing.pedons', value=unique(d$site_id[missing.pedon]), envir=soilDB.env)
 	
   ## set factor levels, when it makes sense
-	# hill slope position
-  d$hillslopepos <- factor(d$hillslopepos, c('Toeslope', 'Footslope', 'Backslope', 'Shoulder', 'Summit'))
-  
+	# most of these are done via uncode()
+	
   # surface shape
-  d$shapeacross <- factor(d$shapeacross, levels=c('Concave', 'Linear', 'Convex'))
-  d$shapedown <- factor(d$shapedown, levels=c('Concave', 'Linear', 'Convex'))
+  d$shapeacross <- factor(d$shapeacross, levels=c('concave', 'linear', 'convex', 'undulating', 'complex'))
+  d$shapedown <- factor(d$shapedown, levels=c('concave', 'linear', 'convex', 'undulating', 'complex'))
   
   # create 3D surface shape
   d$slope_shape <- paste0(d$shapeacross, ' / ', d$shapedown)
   # make reasonable levels for 3D slope shape
-  ss.grid <- expand.grid(levels(d$shapeacross), levels(d$shapedown))
+  ss.grid <- expand.grid(na.omit(unique(d$shapeacross)), na.omit(unique(d$shapedown)))
   ss.levels <- apply(ss.grid, 1, function(i) { paste(rev(i), collapse = ' / ')})
-  d$slopeshape <- factor(d$slopeshape, levels=ss.levels)
+  d$slope_shape <- factor(d$slope_shape, levels=ss.levels)
   
-  # geomcomponent, hills
-  d$geomposhill <- factor(d$geomposhill, levels=c('Base Slope', 'Head Slope', 'Side Slope', 'Nose Slope', 'Crest', 'Interfluve', 'Free Face'))
-  
-  # geomcomponent, mountains
-  d$geomposmntn <- factor(d$geomposmntn, levels=c('Mountainbase', 'Lower third of mountainflank', 'Center third of mountainflank', 'Mountainflank', 'Upper third of mountainflank', 'Mountaintop', 'Free face'))
-  
-  # geomcomponent, flats
-  d$geomposflats <- factor(d$geomposflats, levels=c('Dip', 'Talf', 'Rise'))
-  
-  # drainage class
-  d$drainagecl <- factor(d$drainagecl, levels=c("Very poorly drained", "Poorly drained", "Somewhat poorly drained", "Moderately well drained", "Well drained", "Somewhat excessively drained", "Excessively drained"))
-  
-  # uncode domain columns
-  d <- uncode(d)
   
 	# done
 	return(d)

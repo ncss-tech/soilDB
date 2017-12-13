@@ -25,6 +25,12 @@ FROM
 	# uncode domained columns
 	d <- uncode(d)
 	
+	# convert back to characters / numeric
+	d$colormoistst <- as.character(d$colormoistst)
+	d$colorhue <- as.character(d$colorhue)
+	d$colorvalue <- as.numeric(d$colorvalue)
+	d$colorchroma <- as.numeric(d$colorchroma)
+	
   # sanity check, only attempt to simplify colors if there are > 1 rows
   if(nrow(d) > 1) {
     # mix colors as-needed, mixing done in CIE LAB space

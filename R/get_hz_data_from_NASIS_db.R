@@ -1,6 +1,6 @@
 ## note: when multiple textures have been defined, only the first one is returned (alphabetical ?)
 
-get_phorizon_from_NASIS_db <- function() {
+get_hz_data_from_NASIS_db <- function(SS=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -25,20 +25,20 @@ get_phorizon_from_NASIS_db <- function() {
   
   
   # exec query
-  d.phorizon <- RODBC::sqlQuery(channel, q.phorizon, stringsAsFactors=FALSE)
+  d <- RODBC::sqlQuery(channel, q.phorizon, stringsAsFactors=FALSE)
   
   
   # recode metadata domains
-  d.phorizon <- uncode(d.phorizon)
+  d <- uncode(d)
   
   
   # test for duplicate horizons:
   #  bugs in our queries
   #   multiple lab samples / genetic horizon
-  hz.tab <- table(d.phorizon$phiid)
+  hz.tab <- table(d$phiid)
   dupe.hz <- which(hz.tab > 1)
   dupe.hz.phiid <- names(hz.tab[dupe.hz])
-  dupe.hz.pedon.ids <- d.phorizon$pedon_id[d.phorizon$phiid %in% dupe.hz.phiid]
+  dupe.hz.pedon.ids <- d$pedon_id[d$phiid %in% dupe.hz.phiid]
   
   if (length(dupe.hz) > 0) {
     message(paste('NOTICE: multiple `labsampnum` values / horizons; see pedon IDs:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), sep=''))
@@ -48,6 +48,6 @@ get_phorizon_from_NASIS_db <- function() {
   RODBC::odbcClose(channel)
   
   # done
-  return(d.phorizon)
+  return(d)
 }
 

@@ -301,9 +301,9 @@ sitepm_View_1 INNER JOIN site_View_1 on sitepm_View_1.siteiidref = site_View_1.s
 	d.hz.texmod <- RODBC::sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
 	d.geomorph <- RODBC::sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
 	d.taxhistory <- RODBC::sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
-  	d.photolink <- RODBC::sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
+	d.photolink <- RODBC::sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
 	d.sitepm <- RODBC::sqlQuery(channel, q.sitepm, stringsAsFactors=FALSE)
-  	d.structure <- RODBC::sqlQuery(channel, q.structure, stringsAsFactors=FALSE)
+	d.structure <- RODBC::sqlQuery(channel, q.structure, stringsAsFactors=FALSE)
 
 	## uncode the one that need that here
 	d.diagnostic <- uncode(d.diagnostic)

@@ -12,7 +12,7 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
     stop('soilColorState must be either `dry` or `moist`', call. = FALSE)
   
   # 1. load data in pieces
-  suppressMessages(site_data <- get_site_data_from_NASIS_db(SS=SS))
+  site_data <- get_site_data_from_NASIS_db(SS=SS)
   hz_data <- get_hz_data_from_NASIS_db(SS=SS)
   color_data <- get_colors_from_NASIS_db(SS=SS)
   

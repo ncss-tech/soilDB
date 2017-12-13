@@ -22,9 +22,12 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
   # this is the error associated with the rgb -> munsell transformation
   d$sigma <- NA
   
+  # perform lower-case comparison, values differ based on interpretation of NASIS metadata
+  d$colormoistst <- tolower(d$colormoistst)
+  
   # split into dry / moist
-  dry.colors <- d[which(d$colormoistst == 'Dry'), ]
-  moist.colors <- d[which(d$colormoistst == 'Moist'), ]
+  dry.colors <- d[which(d$colormoistst == 'dry'), ]
+  moist.colors <- d[which(d$colormoistst == 'moist'), ]
   
   ## there may be cases where there are 0 records of dry or moist colors
   
