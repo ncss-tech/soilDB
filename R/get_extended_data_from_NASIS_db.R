@@ -10,12 +10,12 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE) {
     stop('please install the `RODBC` package', call.=FALSE)
   
   # photo links from PedonPC stored as sitetext notes
-  q.photolink <- "SELECT siteobs.siteiidref AS siteiid, siteobstext.recdate, siteobstext.textcat, siteobstext.textentry AS imagepath
+  q.photolink <- "SELECT so.siteiidref AS siteiid, sot.recdate, sot.textcat, sot.textentry AS imagepath
   FROM
-  siteobs_View_1 
-  LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref
-  WHERE siteobstext_View_1.textcat LIKE 'Photo%' 
-  ORDER BY siteobstext_View_1.siteobstextkind;"
+  siteobs_View_1 AS so
+  LEFT OUTER JOIN siteobstext_View_1 AS sot ON so.siteobsiid = sot.siteobsiidref
+  WHERE sot.textcat LIKE 'Photo%' 
+  ORDER BY sot.siteobstextkind;"
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {
