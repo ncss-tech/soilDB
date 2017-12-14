@@ -32,9 +32,8 @@
 }
 
 
-# TODO: generalize this to any data
-# NOTE: this is NASIS-specific for now
-# x: raw, un-coded contents of the phfrags table
+## TODO: this is NASIS-specific for now, generalize this to any data
+# x: uncoded contents of the phfrags table
 .rockFragmentSieve <- function(x) {
   
   # convert to lower case: NASIS metadata usese upper for labels, lower for values
@@ -42,19 +41,18 @@
   x$fragshp <- tolower(x$fragshp)
   
   ## assumptions
-  # missing hardness = fragment
+  # missing hardness = rock fragment
   x$fraghard[which(is.na(x$fraghard))] <- 'strongly cemented'
   # missing shape = Nonflat
   x$fragshp[which(is.na(x$fragshp))] <- 'nonflat'
   
-  
-  ## TODO: missing some classes
-  ## https://github.com/ncss-tech/soilDB/issues/42
   ## split frags / parafrags
-  idx <- which(x$fraghard %in% c('strongly cemented', 'very strongly cemented', 'indurated'))
+  # frags: >= strongly cemented
+  # this should generalize across old / modern codes
+  idx <- grep('strong|indurated', x$fraghard, ignore.case = TRUE)
   frags <- x[idx, ]
   
-  idx <- which(! x$fraghard %in% c('strongly cemented', 'very strongly cemented', 'indurated'))
+  idx <- grep('strong|indurated', x$fraghard, ignore.case = TRUE, invert = TRUE)
   parafrags <- x[idx, ]
   
   
@@ -99,7 +97,7 @@
 ## TODO: https://github.com/ncss-tech/soilDB/issues/43
 # rf: un-coded contents of the phfrags table
 # id.var: id column name
-# convert NA to 0?
+# nullFragsAreZero: convert NA to 0?
 simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   
   # nasty hack to trick R CMD check
