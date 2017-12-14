@@ -1,22 +1,18 @@
 ##
-## December, 2015
+## December, 2017
 ## D.E. Beaudette
 ## J.M. Skovlin
 ## S.M. Roecker
 ## 
 
-##
-## re-boot of previous functionality
-##
-
 
 ## just the components
-get_component_data_from_NASIS_db <- function() {
+get_component_data_from_NASIS_db <- function(SS=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
-  q.component <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, pmgroupname, elev_r, slope_l, slope_r, slope_h, aspectrep, map_r, airtempa_r as maat_r, soiltempa_r as mast_r, reannualprecip_r, ffd_r, tfact, wei, weg, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
+  q <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, pmgroupname, elev_r, slope_l, slope_r, slope_h, aspectrep, map_r, airtempa_r as maat_r, soiltempa_r as mast_r, reannualprecip_r, ffd_r, tfact, wei, weg, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
   
   FROM 
   datamapunit_View_1 AS dmu 
@@ -29,14 +25,19 @@ get_component_data_from_NASIS_db <- function() {
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
   # exec query
-  d.component <- RODBC::sqlQuery(channel, q.component, stringsAsFactors=FALSE)
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
   
   # close connection
   RODBC::odbcClose(channel)
   
   # test for duplicate coiids
-  idx <- which(table(d.component$coiid) > 1)
+  idx <- which(table(d$coiid) > 1)
   if(length(idx) > 0) {
     dupes <- names(idx)
     assign('dupe.coiids', value=dupes, envir=soilDB.env)
@@ -44,38 +45,43 @@ get_component_data_from_NASIS_db <- function() {
   }
   
   # test for no data
-  if(nrow(d.component) == 0)
+  if(nrow(d) == 0)
     stop('there are no NASIS components in your selected set!')
   
-  # recode metadata domains
-  d.component <- uncode(d.component)
+  # uncode metadata domains
+  d <- uncode(d)
   
   # done
-  return(d.component)
+  return(d)
 }
 
 
 # return all rows from correlation -- map unit -- legend map unit -- dmu / legend -- area
 # note that all of these "target tables" have to be selected
-get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dropNotRepresentative=TRUE) {
+get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional=TRUE, dropNotRepresentative=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
   q <- "SELECT mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
   
-  FROM  mapunit_View_1 mu
+  FROM  mapunit_View_1 AS mu
   
-  LEFT OUTER JOIN correlation_View_1 ON correlation_View_1.muiidref = mu.muiid
-  LEFT OUTER JOIN datamapunit_View_1 ON correlation_View_1.dmuiidref = datamapunit_View_1.dmuiid  
-  LEFT OUTER JOIN lmapunit_View_1 ON lmapunit_View_1.muiidref = mu.muiid
-  LEFT OUTER JOIN legend_View_1 ON legend_View_1.liid = lmapunit_View_1.liidref
-  LEFT OUTER JOIN area_View_1 ON area_View_1.areaiid = legend_View_1.areaiidref
+  LEFT OUTER JOIN correlation_View_1 AS cor ON cor.muiidref = mu.muiid
+  LEFT OUTER JOIN datamapunit_View_1 AS dmu ON cor.dmuiidref = dmu.dmuiid  
+  LEFT OUTER JOIN lmapunit_View_1 AS lm ON lm.muiidref = mu.muiid
+  LEFT OUTER JOIN legend_View_1 AS leg ON leg.liid = lm.liidref
+  LEFT OUTER JOIN area_View_1 AS a ON a.areaiid = leg.areaiidref
   
   ORDER BY nationalmusym, dmuiid;"
   
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
   
   # exec query
   d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
@@ -92,7 +98,7 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
   
   # optionally drop additional | NA mustatus
   if(dropAdditional) {
-    idx <- which(d$mustatus == 'Additional')
+    idx <- which(d$mustatus == 'additional')
     if(length(idx) > 0) {
       d <- d[-idx, ] 
     }
@@ -126,18 +132,18 @@ get_component_correlation_data_from_NASIS_db <- function(dropAdditional=TRUE, dr
 }
 
 # get geomorphic desc for each component
-get_component_cogeomorph_data_from_NASIS_db <- function() {
+get_component_cogeomorph_data_from_NASIS_db <- function(SS=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)	
   
   
-  q.cogeomorph <- "SELECT cogeomordesc_View_1.coiidref as coiid, cogeomordesc_View_1.geomfmod, geomorfeat.geomfname, cogeomordesc_View_1.geomfeatid, cogeomordesc_View_1.existsonfeat, cogeomordesc_View_1.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
+  q <- "SELECT cogeo.coiidref as coiid, cogeo.geomfmod, geomorfeat.geomfname, cogeo.geomfeatid, cogeo.existsonfeat, cogeo.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
   
   FROM 
-  component_View_1
-  INNER JOIN cogeomordesc_View_1 ON component_View_1.coiid = cogeomordesc_View_1.coiidref
-  INNER JOIN geomorfeat ON geomorfeat.geomfiid = cogeomordesc_View_1.geomfiidref  
+  component_View_1 AS co
+  INNER JOIN cogeomordesc_View_1 AS cogeo ON co.coiid = cogeo.coiidref
+  INNER JOIN geomorfeat ON geomorfeat.geomfiid = cogeo.geomfiidref  
   INNER JOIN geomorfeattype ON geomorfeattype.geomftiid = geomorfeat.geomftiidref 
 
   ORDER BY coiid, geomfeatid ASC;"
@@ -145,8 +151,13 @@ get_component_cogeomorph_data_from_NASIS_db <- function() {
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
   # exec query
-  d <- RODBC::sqlQuery(channel, q.cogeomorph, stringsAsFactors=FALSE)
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
   
   # close connection
   RODBC::odbcClose(channel)
@@ -157,31 +168,36 @@ get_component_cogeomorph_data_from_NASIS_db <- function() {
 
 
 # get copm for each component
-get_component_copm_data_from_NASIS_db <- function() {
+get_component_copm_data_from_NASIS_db <- function(SS=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)	
   
   
-  q.copm <- "SELECT copmgrp_View_1.coiidref as coiid, copm_View_1.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
+  q <- "SELECT cpmg.coiidref as coiid, cpm.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
   
   FROM 
-  component_View_1
-  INNER JOIN copmgrp_View_1 ON copmgrp_View_1.coiidref = component_View_1.coiid
-  INNER JOIN copm_View_1 ON copm_View_1.copmgrpiidref = copmgrp_View_1.copmgrpiid
+  component_View_1 AS co
+  INNER JOIN copmgrp_View_1 AS cpmg ON cpmg.coiidref = co.coiid
+  INNER JOIN copm_View_1 AS cpm ON cpm.copmgrpiidref = cpmg.copmgrpiid
   
   ORDER BY coiidref, seqnum, pmorder, copmgrpiid ASC;" 
   
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
   # exec query
-  d <- RODBC::sqlQuery(channel, q.copm, stringsAsFactors=FALSE)
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
   
   # close connection
   RODBC::odbcClose(channel)
   
-  # recode metadata domains
+  # uncode metadata domains
   d <- uncode(d)
   
   # done
@@ -189,9 +205,9 @@ get_component_copm_data_from_NASIS_db <- function() {
 }
 
 
-## TODO: there are still columns that need decoding
+
 # get ESD information for each component
-get_component_esd_data_from_NASIS_db <- function() {
+get_component_esd_data_from_NASIS_db <- function(SS=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -201,14 +217,23 @@ get_component_esd_data_from_NASIS_db <- function() {
   
   FROM coecosite_View_1 AS coecosite
   
-  INNER JOIN ecologicalsite_View_1 ON ecologicalsite_View_1.ecositeiid = coecosite.ecositeiidref
+  INNER JOIN ecologicalsite_View_1 AS es ON es.ecositeiid = coecosite.ecositeiidref
   
   ORDER BY coiid;"
+  
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
   # exec query
   d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  
+  # close connection
+  RODBC::odbcClose(channel)
   
   # check for more than 1 record / coiid
   idx <- which(table(d$coiid) > 1)
@@ -217,12 +242,8 @@ get_component_esd_data_from_NASIS_db <- function() {
     assign('multiple.ecosite.per.coiid', value=dupes, envir=soilDB.env)
     message("-> QC: multiple ecosites / component. Use `get('multiple.ecosite.per.coiid', envir=soilDB.env)` for related coiid values.")
   }
-    
   
-  # close connection
-  RODBC::odbcClose(channel)
-  
-  # recode metadata domains
+  # uncode metadata domains
   d <- uncode(d)
   
   # done
@@ -231,20 +252,29 @@ get_component_esd_data_from_NASIS_db <- function() {
 
 ## TODO: convert any multiple entries into a comma delimited string
 # get OtherVeg information for each component
-get_component_otherveg_data_from_NASIS_db <- function() {
+get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
   q <- "SELECT coiidref as coiid, ovegclid, ovegclname, coothvegcl.recwlupdated
   FROM coothvegclass_View_1 coothvegcl
-  INNER JOIN othvegclass ON othvegclass.ovegcliid = coothvegcl.ovegcliidref
+  INNER JOIN othvegclass_View_1 as ovc ON ovc.ovegcliid = coothvegcl.ovegcliidref
   ORDER BY coiid;"
+  
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
   # exec query
   d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  
+  # close connection
+  RODBC::odbcClose(channel)
   
   # check for more than 1 record / coiid
   idx <- which(table(d$coiid) > 1)
@@ -254,18 +284,14 @@ get_component_otherveg_data_from_NASIS_db <- function() {
     message("-> QC: multiple othervegclasses / component. Use `get('multiple.otherveg.per.coiid', envir=soilDB.env)` for related coiid values.")
   }
   
-  
-  # close connection
-  RODBC::odbcClose(channel)
-  
-  # recode metadata domains
+  # uncode metadata domains
   #d <- uncode(d)
   
   # done
   return(d)
 }
 
-get_comonth_from_NASIS_db <- function(fill=FALSE) {
+get_comonth_from_NASIS_db <- function(SS=TRUE, fill=FALSE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -276,14 +302,27 @@ get_comonth_from_NASIS_db <- function(fill=FALSE) {
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
   # exec query
   d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  
+  # uncode metadata domains
+  d <- uncode(d)
   
   # optionally fill missing coiids
   if(fill) {
     q <- "SELECT coiid
-  FROM component_View_1
+    FROM component_View_1
     ORDER BY coiid;"
+    
+    # toggle selected set vs. local DB
+    if(SS == FALSE) {
+      q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+    }
     
     # exec query
     d.coiid <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
@@ -292,20 +331,17 @@ get_comonth_from_NASIS_db <- function(fill=FALSE) {
   # close connection
   RODBC::odbcClose(channel)
   
-  # recode metadata domains
-  d <- uncode(d)
-  
   # fix month factor levels
   # using 3-letter month names
   d$month <- months(as.Date(paste0("2016-", d$month, "-01"), format="%Y-%B-%d"), abbreviate = TRUE)
   d$month <- factor(d$month, levels=c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
   
   # fix other factor levels
-  d$flodfreqcl <- factor(d$flodfreqcl, levels=c('None', 'Very rare', 'Rare', 'Occasional', 'Frequent', 'Very frequent'))
-  d$floddurcl <- factor(d$floddurcl, levels=c('Extremely brief (0.1 to 4 hours)', 'Very brief (4 to 48 hours)', 'Brief (2 to 7 days)', 'Long (7 to 30 days)', 'Very long (more than 30 days)'))
+  d$flodfreqcl <- factor(d$flodfreqcl, levels=c('none', 'very rare', 'rare', 'occasional', 'common', 'frequent', 'very frequent'))
+  d$floddurcl <- factor(d$floddurcl, levels=c('extremely brief', 'very brief', 'brief', 'long', 'very long'), labels=c('Extremely brief (0.1 to 4 hours)', 'Very brief (4 to 48 hours)', 'Brief (2 to 7 days)', 'Long (7 to 30 days)', 'Very long (more than 30 days)'))
   
-  d$pondfreqcl <- factor(d$pondfreqcl, levels=c('None', 'Rare', 'Occasional', 'Frequent'))
-  d$ponddurcl <- factor(d$ponddurcl, levels=c('Very brief (4 to 48 hours)', 'Brief (2 to 7 days)', 'Long (7 to 30 days)', 'Very long (more than 30 days)'))
+  d$pondfreqcl <- factor(d$pondfreqcl, levels=c('none', 'rare', 'occasional', 'common', 'frequent'))
+  d$ponddurcl <- factor(d$ponddurcl, levels=c('very brief', 'brief', 'long', 'very long'), labels=c('Very brief (4 to 48 hours)', 'Brief (2 to 7 days)', 'Long (7 to 30 days)', 'Very long (more than 30 days)'))
   
   
   # optionally fill missing coiids
@@ -315,6 +351,7 @@ get_comonth_from_NASIS_db <- function(fill=FALSE) {
     nd$month <- factor(nd$month, levels=levels(d$month))
     
     # join full version to comonth records
+    # nd contains the full set of component records IDs
     d <- join(nd, d, by=c('coiid', 'month'), type='left')
     
     ## this isn't likely needed, will re-visit after some testing
@@ -346,7 +383,7 @@ get_comonth_from_NASIS_db <- function(fill=FALSE) {
 
 # get linked pedons by peiid and user pedon ID
 # note that there may be >=1 pedons / coiid
-get_copedon_from_NASIS_db <- function() {
+get_copedon_from_NASIS_db <- function(SS=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -360,35 +397,44 @@ get_copedon_from_NASIS_db <- function() {
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
   # exec query
   d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
   
   # close connection
   RODBC::odbcClose(channel)
   
+  # missing pedon ID suggests records not in the selected set or local database
+  if(nrow(d) > 0 & any(is.na(d$pedon_id))) {
+    message('some linked pedons not in selected set or local database')
+  }
+  
   # done
   return(d)
 }
 
 
-
-get_component_horizon_data_from_NASIS_db <- function(fill = FALSE) {
+## TODO: better documentation for "fill" argument
+# https://github.com/ncss-tech/soilDB/issues/50
+get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
-  q.chorizon <- "SELECT coiid, chiid, hzname, hzdept_r, hzdepb_r, texture, fragvoltot_l, fragvoltot_r, fragvoltot_h, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, structgrpname, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h
+  q <- "SELECT coiid, chiid, hzname, hzdept_r, hzdepb_r, texture, fragvoltot_l, fragvoltot_r, fragvoltot_h, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, structgrpname, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h
   
   FROM
-  component_View_1 co LEFT OUTER JOIN
-  chorizon_View_1 ch ON ch.coiidref = co.coiid LEFT OUTER JOIN
-  chtexturegrp_View_1 cht ON cht.chiidref = ch.chiid AND cht.rvindicator = 1
+  component_View_1 co 
+  LEFT OUTER JOIN chorizon_View_1 ch ON ch.coiidref = co.coiid 
+  LEFT OUTER JOIN chtexturegrp_View_1 cht ON cht.chiidref = ch.chiid AND cht.rvindicator = 1
+  LEFT OUTER JOIN chstructgrp_View_1 chs ON chs.chiidref = ch.chiid AND chs.rvindicator = 1
 
-  INNER JOIN
-    datamapunit_View_1 dmu ON dmu.dmuiid = co.dmuiidref
-
-  LEFT OUTER JOIN
-    chstructgrp_View_1 chs ON chs.chiidref = ch.chiid AND chs.rvindicator = 1
+  -- why is this here?
+  INNER JOIN datamapunit_View_1 dmu ON dmu.dmuiid = co.dmuiidref
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC, hzdept_r ASC;"
   
@@ -396,36 +442,45 @@ get_component_horizon_data_from_NASIS_db <- function(fill = FALSE) {
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
   # exec query
-  d.chorizon <- RODBC::sqlQuery(channel, q.chorizon, stringsAsFactors=FALSE)
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
   
   # close connection
   RODBC::odbcClose(channel)
   
-  # fill
+  ## TODO: better documentation for "fill" argument
+  # https://github.com/ncss-tech/soilDB/issues/50
+  # remove records what are missing horizon data
   if (fill == FALSE) {
-    d.chorizon <- d.chorizon[!is.na(d.chorizon$chiid), ]
+    d <- d[!is.na(d$chiid), ]
   }
   
   # done
-  return(d.chorizon)
+  return(d)
 }
 
 
+## TODO: better documentation for "fill" argument
+# https://github.com/ncss-tech/soilDB/issues/50
 ## TODO: this will not ID horizons with no depths
 ## TODO: better error checking / reporting is needed: coiid, dmu id, component name
-fetchNASIS_component_data <- function(rmHzErrors=TRUE, fill = FALSE) {
+fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
   # load data in pieces
-  f.comp <- get_component_data_from_NASIS_db()
-  f.chorizon <- get_component_horizon_data_from_NASIS_db(fill)
-  f.copm <- get_component_copm_data_from_NASIS_db()
-  f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db()
-  f.otherveg <- get_component_otherveg_data_from_NASIS_db()
-  f.ecosite <- get_component_esd_data_from_NASIS_db()
+  f.comp <- get_component_data_from_NASIS_db(SS=SS)
+  f.chorizon <- get_component_horizon_data_from_NASIS_db(SS=SS, fill=fill)
+  f.copm <- get_component_copm_data_from_NASIS_db(SS=SS)
+  f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db(SS=SS)
+  f.otherveg <- get_component_otherveg_data_from_NASIS_db(SS=SS)
+  f.ecosite <- get_component_esd_data_from_NASIS_db(SS=SS)
   
   # optionally test for bad horizonation... flag, and remove
   if(rmHzErrors) {
@@ -479,9 +534,6 @@ fetchNASIS_component_data <- function(rmHzErrors=TRUE, fill = FALSE) {
   # print any messages on possible data quality problems:
   if(exists('component.hz.problems', envir=soilDB.env))
     message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=soilDB.env)` for related coiid values")
-  
-  # sort naturally
-  
   
   
   # done, return SPC
