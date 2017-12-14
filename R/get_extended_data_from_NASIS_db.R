@@ -10,7 +10,7 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE) {
     stop('please install the `RODBC` package', call.=FALSE)
   
   # photo links from PedonPC stored as sitetext notes
-  q.photolink <- "SELECT siteobs_View_1.siteiidref AS siteiid, siteobstext_View_1.recdate, siteobstext_View_1.textcat, siteobstext_View_1.textentry AS imagepath
+  q.photolink <- "SELECT siteobs.siteiidref AS siteiid, siteobstext.recdate, siteobstext.textcat, siteobstext.textentry AS imagepath
   FROM
   siteobs_View_1 
   LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref
@@ -34,23 +34,7 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE) {
     q.structure <- gsub(pattern = '_View_1', replacement = '', x = q.structure, fixed = TRUE)
   }
   
-  ## does this require tables that standard site/pedons queries don't hit?
-  # https://github.com/ncss-tech/soilDB/issues/49
-  # existing veg
-  q.veg <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, ppi.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass
 
-  FROM site_View_1 AS s
-  INNER JOIN siteobs_View_1 AS so ON so.siteiidref = s.siteiid
-  LEFT JOIN vegplot_View_1 AS v on v.siteobsiidref = so.siteobsiid
-  LEFT JOIN plotplantinventory_View_1 AS ppi ON ppi.vegplotiidref = v.vegplotiid
-  -- note: plant table not managed by SS
-  LEFT OUTER JOIN plant ON plant.plantiid = ppi.plantiidref;"
-  
-  # toggle selected set vs. local DB
-  if(SS == FALSE) {
-    q.veg <- gsub(pattern = '_View_1', replacement = '', x = q.veg, fixed = TRUE)
-  }
-  
   # ecological site
   q.ecosite <- "SELECT siteiidref AS siteiid, ecositeid, ecositenm, ecositecorrdate, classifier As es_classifier
   FROM siteecositehistory_View_1 AS seh
@@ -261,7 +245,6 @@ LEFT OUTER JOIN (
 	channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
 	
 	# exec queries
-	d.veg <- RODBC::sqlQuery(channel, q.veg, stringsAsFactors=FALSE)
 	d.ecosite <- RODBC::sqlQuery(channel, q.ecosite, stringsAsFactors=FALSE)
 	d.diagnostic <- RODBC::sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
 	d.rf.data <- RODBC::sqlQuery(channel, q.rf.data, stringsAsFactors=FALSE)
@@ -273,7 +256,7 @@ LEFT OUTER JOIN (
 	d.sitepm <- RODBC::sqlQuery(channel, q.sitepm, stringsAsFactors=FALSE)
 	d.structure <- RODBC::sqlQuery(channel, q.structure, stringsAsFactors=FALSE)
 
-	## uncode the one that need that here
+	## uncode the ones that need that here
 	d.diagnostic <- uncode(d.diagnostic)
 	d.rf.data <- uncode(d.rf.data)
 	d.hz.texmod <- uncode(d.hz.texmod)
@@ -309,7 +292,7 @@ LEFT OUTER JOIN (
 	
 	
 	# return a list of results
-	return(list(veg=d.veg, ecositehistory=d.ecosite,
+	return(list(ecositehistory=d.ecosite,
 							diagnostic=d.diagnostic, 
 							diagHzBoolean=d.diag.boolean, 
 							frag_summary=d.rf.summary, 
