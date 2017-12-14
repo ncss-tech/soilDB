@@ -1,5 +1,5 @@
-## note: when multiple textures have been defined, only the first one is returned (alphabetical ?)
-
+## TODO: when multiple textures have been defined, only the first one is returned (alphabetical ?)
+# 
 get_hz_data_from_NASIS_db <- function(SS=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
@@ -8,7 +8,7 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE) {
   q <- "SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
   claytotest AS clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END AS silt, 
-  sandtotest AS sand, fragvoltot, texture, texcl, phfield, effclass, phs.labsampnum, rupresblkdry, stickiness, plasticity
+  sandtotest AS sand, fragvoltot, texture, texcl, lieutex, phfield, effclass, phs.labsampnum, rupresblkdry, stickiness, plasticity
   
   FROM 
 
@@ -17,7 +17,7 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE) {
   LEFT OUTER JOIN phsample_View_1 phs ON phs.phiidref = ph.phiid
   LEFT OUTER JOIN 
   (
-  SELECT phiidref, MIN(texcl) AS texcl 
+  SELECT phiidref, MIN(texcl) AS texcl, MIN(lieutex) as lieutex
   FROM phtexture_View_1 
   GROUP BY phiidref
   ) AS pht ON pht.phiidref = ph.phiid
@@ -37,10 +37,11 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE) {
   # exec query
   d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
   
-  
-  # recode metadata domains
+  # uncode metadata domains
   d <- uncode(d)
   
+  # re-implement texture_class column, with lieutex in cases where texcl is missing
+  d$texture_class <- ifelse(is.na(d$texcl) & ! is.na(d$lieutex), as.character(d$lieutex), as.character(d$texcl))
   
   # test for duplicate horizons:
   #  bugs in our queries
