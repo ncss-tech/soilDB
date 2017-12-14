@@ -34,8 +34,10 @@ get_colors_from_NASIS_db <- function(SS=TRUE) {
 	# convert back to characters / numeric
 	d$colormoistst <- as.character(d$colormoistst)
 	d$colorhue <- as.character(d$colorhue)
-	d$colorvalue <- as.numeric(d$colorvalue)
-	d$colorchroma <- as.numeric(d$colorchroma)
+	# careful!
+	# uncode creates factors, so we have to convert to character first
+	d$colorvalue <- as.numeric(as.character(d$colorvalue))
+	d$colorchroma <- as.numeric(as.character(d$colorchroma))
 	
   # sanity check, only attempt to simplify colors if there are > 1 rows
   if(nrow(d) > 1) {
