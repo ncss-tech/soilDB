@@ -43,6 +43,7 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE) {
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref = s.siteiid
   LEFT JOIN vegplot_View_1 AS v on v.siteobsiidref = so.siteobsiid
   LEFT JOIN plotplantinventory_View_1 AS ppi ON ppi.vegplotiidref = v.vegplotiid
+  -- note: plant table not managed by SS
   LEFT OUTER JOIN plant ON plant.plantiid = ppi.plantiidref;"
   
   # toggle selected set vs. local DB
@@ -53,7 +54,8 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE) {
   # ecological site
   q.ecosite <- "SELECT siteiidref AS siteiid, ecositeid, ecositenm, ecositecorrdate, classifier As es_classifier
   FROM siteecositehistory_View_1 AS seh
-  LEFT OUTER JOIN ecologicalsite_View_1 AS es ON es.ecositeiid=seh.ecositeiidref
+  -- note: ecologicalsite table not managed by SS
+  LEFT OUTER JOIN ecologicalsite AS es ON es.ecositeiid=seh.ecositeiidref
   ORDER BY 'siteiid';"
   
   # toggle selected set vs. local DB
