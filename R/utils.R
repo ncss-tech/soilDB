@@ -256,15 +256,14 @@
     # optional information on which sites have issues
     if(getOption('soilDB.verbose', default=FALSE))
       warning(paste0('Using row-order. NA in pmorder:', u.siteiid), call.=FALSE)
-  }
-  else{
+  } else {
     # there are no NAs in pmorder --> sort according to pmorder
     i.pm <- i.pm[order(i.pm$pmorder), ]
   }
   
   # composite strings and return
   str.kind <- paste(i.pm$pmkind, collapse=name.sep)
-  str.origin <- paste(unique(i.pm$pm_origin), collapse=name.sep)
+  str.origin <- paste(unique(i.pm$pmorigin), collapse=name.sep)
   
   return(data.frame(siteiid=u.siteiid, pmkind=str.kind, pmorigin=str.origin, stringsAsFactors=FALSE))
 }
