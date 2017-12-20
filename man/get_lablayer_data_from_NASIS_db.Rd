@@ -8,7 +8,7 @@
 \value{A dataframe.}
 \author{Jay M. Skovlin and Dylan E. Beaudette}
 \details{This function currently works only on Windows, and requires a 'nasis_local' ODBC connection.}
-\note{This fuction queries KSSL laboratory site/horizon data from a local NASIS database from the lab layer data table.}
+\note{This function queries KSSL laboratory site/horizon data from a local NASIS database from the lab layer data table.}
 
 \seealso{
 \code{\link{get_labpedon_data_from_NASIS_db}} 
