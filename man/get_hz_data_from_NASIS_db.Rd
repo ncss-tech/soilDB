@@ -4,7 +4,7 @@
 \title{Extract Horizon Data from a local NASIS Database}
 \description{Get horizon-level data from a local NASIS database.}
 \usage{
-get_hz_data_from_NASIS_db()
+get_hz_data_from_NASIS_db(SS = TRUE)
 }
 \arguments{
   \item{SS}{fetch data from Selected Set in NASIS or from the entire local database (default: TRUE)}	

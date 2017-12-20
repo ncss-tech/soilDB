@@ -3,7 +3,7 @@
 
 \title{Extract Site Data from a local NASIS Database}
 \description{Get site-level data from a local NASIS database.}
-\usage{get_site_data_from_NASIS_db()}
+\usage{get_site_data_from_NASIS_db(SS = TRUE)}
 \arguments{
   \item{SS}{fetch data from Selected Set in NASIS or from the entire local database (default: TRUE)}	
 }

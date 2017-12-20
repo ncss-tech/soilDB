@@ -4,7 +4,7 @@
 \title{Extract text note data from a local NASIS Database}
 \description{Extract text note data from a local NASIS Database.}
 \usage{
-get_text_notes_from_NASIS_db()
+get_text_notes_from_NASIS_db(SS = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
