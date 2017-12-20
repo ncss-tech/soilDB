@@ -138,7 +138,7 @@
   
   # allow for NA's
   if(nrow(i.gm) == 0)
-    return(data.frame(peiid=u.peiid, landform.string=NA, stringsAsFactors=FALSE))
+    return(data.frame(peiid=u.peiid, landform_string=NA, stringsAsFactors=FALSE))
   
   # short-circuit: if any geomfeatid are NA, then we don't know the order
   # string together as-is, in row-order
@@ -149,7 +149,7 @@
       message(paste0('Using row-order. NA in geomfeatid:', u.peiid))
     
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
-    return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+    return(data.frame(peiid=u.peiid, landform_string=ft.string, stringsAsFactors=FALSE))
   }
   
   # short-circuit: if any feature exists on itself, then use row-order
@@ -161,7 +161,7 @@
       message(paste0('Using row-order. Error in exists-on logic:', u.peiid))
     
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
-    return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+    return(data.frame(peiid=u.peiid, landform_string=ft.string, stringsAsFactors=FALSE))
   }
   
   # get an index to the top-most and bottom-most features
@@ -176,7 +176,7 @@
       warning(paste0('Using row-order. Error in exists-on logic: ', u.peiid), call.=FALSE)
     
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
-    return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+    return(data.frame(peiid=u.peiid, landform_string=ft.string, stringsAsFactors=FALSE))
   }
    
   ## short-circuit: only 1 row, and exists-on logic is wrong, use row-order
@@ -187,7 +187,7 @@
       warning(paste0('Using row-order. Single row / error in exists-on logic: ', u.peiid), call.=FALSE)
     
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
-    return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+    return(data.frame(peiid=u.peiid, landform_string=ft.string, stringsAsFactors=FALSE))
   }
   
   # short-circuit: if the exists-on logic is wrong, use row-order
@@ -198,7 +198,7 @@
       warning(paste0('Using row-order. Incorrect exists-on specification: ', u.peiid), call.=FALSE)
     
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
-    return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+    return(data.frame(peiid=u.peiid, landform_string=ft.string, stringsAsFactors=FALSE))
   }
   
   # init a vector to store feature names
@@ -230,7 +230,7 @@
   ft.string <- paste(ft.vect, collapse=name.sep)
   
   # done!
-  return(data.frame(peiid=u.peiid, landform.string=ft.string, stringsAsFactors=FALSE))
+  return(data.frame(peiid=u.peiid, landform_string=ft.string, stringsAsFactors=FALSE))
 }
 
 
