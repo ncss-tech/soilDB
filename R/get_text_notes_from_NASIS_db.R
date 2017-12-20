@@ -10,11 +10,9 @@ get_text_notes_from_NASIS_db <- function(SS=TRUE) {
 	q.sitetext <- "SELECT recdate, recauthor, sitetextkind, textcat, textsubcat, textentry, siteiidref AS siteiid, sitetextiid FROM sitetext_View_1;"
 	
 	# siteobstext
-	q.siteobstext <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, textentry, siteiidref AS site_id, siteobstextiid FROM ((
+	q.siteobstext <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, textentry, siteiidref AS site_id, siteobstextiid FROM (
 siteobs_View_1 LEFT OUTER JOIN 
-siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) 
-WHERE textentry IS NOT NULL 
-ORDER BY siteobstext_View_1.siteobstextkind;"
+siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref);"
 	
 	# phtext
 	q.phtext <- "SELECT recdate, recauthor, phorizontextkind, textcat, textsubcat, textentry, phiidref AS phiid, phtextiid FROM phtext_View_1;"
