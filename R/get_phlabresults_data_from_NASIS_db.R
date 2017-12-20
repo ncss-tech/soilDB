@@ -1,4 +1,4 @@
-get_phlabresults_data_from_NASIS_db <- function(SS=TRUE) {
+get_phlabresults_data_from_NASIS_db <- function() {
   
   # hacks to make R CMD check --as-cran happy:
   sampledepthbottom <- NULL
@@ -9,8 +9,7 @@ get_phlabresults_data_from_NASIS_db <- function(SS=TRUE) {
   # must have RODBC installed
   if (!requireNamespace('RODBC')) stop('please install the `RODBC` package', call.=FALSE)
 
-  q.phlabresults <- "SELECT phiidref, sampledepthtop, sampledepthbottom, claytotmeasured,
-silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasured, sandfinemeasured, sandmedmeasured, sandcomeasured, sandvcmeasured, textureclfieldlab, ph1to1h2o, ph01mcacl2, caco3equivmeasured, sar 
+  q.phlabresults <- "SELECT phiidref, seqnum, sampledepthtop, sampledepthbottom, sampleid, datacollector, claytotmeasured, claycarbmeasured, silttotmeasured, siltfinemeasured, siltcomeasured, sandtotmeasured, sandtotmethod, sandvcmeasured, sandcomeasured, sandmedmeasured, sandfinemeasured, sandvfmeasured, sandvfmethod, textureclfieldlab, fiberrubbedpct, fiberunrubbedpct, ph1to1h2o, ph01mcacl2, phnaf, phoxidized, phdeltah2o2, liquidlimitmeasured, plasticlimitmeasured, pi, atterbergsampcond, cole, esttotpotacidityetpa, camgmeh2, potassiummeh2, camgsatpaste, extractaciditykcl, basesatmeh2, cec7, cec82, ecec, phosphatephos, nitratenitrogen, ecmeasured, ecdeterminemeth, ec15, caco3equivmeasured, gypsumequiv, sodium, sar, gypsumreq, humiccolor, fulviccolor, humicfulviccolor, alummeasured, pyrophoshue, pyrophosvalue, pyrophoschroma, melanicindex
   FROM phlabresults_View_1 
   ORDER BY phiidref, sampledepthtop
   ;"
@@ -19,10 +18,6 @@ silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasur
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
-  # toggle selected set vs. local DB
-  if(SS == FALSE) {
-    q.phlabresults <- gsub(pattern = '_View_1', replacement = '', x = q.phlabresults, fixed = TRUE)
-  }
   
   # exec query
   d.phlabresults <- RODBC::sqlQuery(channel, q.phlabresults, stringsAsFactors = FALSE)
@@ -122,6 +117,10 @@ silttotmeasured, sandtotmeasured, siltfinemeasured, siltcomeasured, sandvfmeasur
   names(d.phlabresults)[idx] <- c("phiid")
   
   names(d.phlabresults)[!idx] <- paste0(names(d.phlabresults)[!idx], "_lab")
+
+  # TODO: final cleaning of duplicate rows - dups exist in NASIS for some reason, so should this happen first
+  # to eliminate extra rows with no data? Not sure what is causing this on the NASIS side
+  d.phlabresults <-  d.phlabresults[rowSums(is.na(d.phlabresults))<(length(d.phlabresults)-1),]
   
   
   # close connection
