@@ -1,8 +1,8 @@
 \name{get_text_notes_from_NASIS_db}
 \alias{get_text_notes_from_NASIS_db}
 
-\title{Extract accessory tables and summaries from a local NASIS Database}
-\description{Extract accessory tables and summaries from a local NASIS Database.}
+\title{Extract text note data from a local NASIS Database}
+\description{Extract text note data from a local NASIS Database.}
 \usage{
 get_text_notes_from_NASIS_db()
 }
@@ -25,11 +25,11 @@ get_text_notes_from_NASIS_db()
 # query text note data
 t <- get_text_notes_from_NASIS_db()
 
-# show contents of various text note data
+# show contents text note data, includes: siteobs, site, pedon, horizon level text notes data.
 str(t)
 
-# get URL for photos linked to sites
-
+# view text categories for site text notes
+table(t$site_text$textcat)
 
 }
 }
