@@ -6,6 +6,9 @@
 \usage{
 get_hz_data_from_NASIS_db()
 }
+\arguments{
+  \item{SS}{fetch data from Selected Set in NASIS or from the entire local database (default: TRUE)}	
+}
 \details{This function currently works only on Windows.}
 \value{A dataframe.}
 
