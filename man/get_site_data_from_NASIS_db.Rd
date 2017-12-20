@@ -39,7 +39,7 @@ get_site_data_from_NASIS_db
 
 ## this is not universally appropriate!
 # assume missing is NAD83 
-s$datum[is.na(s$horizdatnm)] <- 'NAD83'
+s$horizdatnm[is.na(s$horizdatnm)] <- 'NAD83'
 
 # check: OK
 table(s$horizdatnm, useNA='always')
