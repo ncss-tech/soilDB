@@ -45,7 +45,7 @@ s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE)
 pedons <- s$SPC
 
 # simplify color data
-s.colors <- simplifyColorData(s$morph$phcolor, id.var = 'labsampnum')
+s.colors <- simplifyColorData(s$morph$phcolor, id.var = 'labsampnum', wt='colorpct')
 
 # merge color data into SPC
 h <- horizons(pedons)
@@ -54,8 +54,7 @@ horizons(pedons) <- h
 
 # check
 par(mar=c(0,0,0,0))
-plot(pedons, color='moist_soil_color', print.id=FALSE)
-
+plot(pedons, color='moist_soil_color', print.id=FALSE, name='hzn_desgn')
 
 # simplify fragment data
 s.frags <- simplfyFragmentData(s$morph$phfrags, id.var='labsampnum')
@@ -67,7 +66,8 @@ horizons(pedons) <- h
 
 # check
 par(mar=c(0,0,3,0))
-plot(pedons, color='total_frags_pct', print.id=FALSE)
+plot(pedons, color='total_frags_pct', print.id=FALSE, name='hzn_desgn')
+addVolumeFraction(pedons, 'total_frags_pct', pch=1, cex.min=0.25, cex.max = 0.5)
 ```
 
 
