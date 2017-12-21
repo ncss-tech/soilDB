@@ -4,7 +4,7 @@
 \title{Extract component data from a local NASIS Database}
 \description{Extract component data from a local NASIS Database.}
 \usage{
-get_component_data_from_NASIS_db(SS = TRUE, fill = FALSE)
+get_component_data_from_NASIS_db(SS = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
