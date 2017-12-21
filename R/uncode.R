@@ -4,7 +4,7 @@ uncode <- function(df, invert = FALSE, db = "NASIS"){
     if(!requireNamespace('RODBC'))
       stop('please install the `RODBC` package', call.=FALSE)
     
-    q <- "SELECT mdd.DomainID, DomainName, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceDescription, ColumnPhysicalName, ColumnLogicalName
+    q <- "SELECT mdd.DomainID, DomainName, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceDescription, ColumnPhysicalName, ColumnLogicalName, ChoiceObsolete
     
     FROM MetadataDomainDetail mdd
     INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
