@@ -37,13 +37,13 @@ seriesExtent <- function(s, timeout=60) {
   
   # init temp files / dirs
   td <- tempdir()
-  tf.json <- tempfile(fileext='json')
+  tf.json <- tempfile(fileext='.json')
   
   # download GeoJSON file
   download.file(url=u, destfile=tf.json, extra=c(timeout=timeout), quiet=TRUE)
   
   # load into sp object and clean-up
-  x <- rgdal::readOGR(dsn=tf.json, layer='OGRGeoJSON', verbose=FALSE)
+  x <- rgdal::readOGR(dsn=tf.json, verbose=FALSE)
   unlink(tf.json)
   
   # reset row names in attribute data to series name
