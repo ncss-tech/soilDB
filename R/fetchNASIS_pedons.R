@@ -26,7 +26,6 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   # data that don't flatten well
   extended_data <- get_extended_data_from_NASIS_db(SS=SS, nullFragsAreZero=nullFragsAreZero)
   
-  ## TODO: this doesn't work as expected
   ## https://github.com/ncss-tech/soilDB/issues/44
   # optionally load phlabresults table
   if (lab) {

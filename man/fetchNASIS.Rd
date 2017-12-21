@@ -1,7 +1,6 @@
 \name{fetchNASIS}
 \alias{fetchNASIS}
 \alias{getHzErrorsNASIS}
-\alias{simplfyFragmentData}
 \alias{fetchNASIS_pedons}
 \alias{get_phorizon_from_NASIS_db}
 \alias{fetchNASIS_components}
