@@ -523,3 +523,14 @@
 .fix_class <- function(x) {
   if (class(x) == "character" & any(!is.na(as.numeric(x)))) {as.numeric(x)} else x
   }
+
+
+# replace blanks with NA, problem with LIMS reports
+.na_replace <- function(df) {
+  
+  idx <- unlist(lapply(df, is.character))
+  df[idx] <- lapply(df[idx], function(x) ifelse(x == "", NA, x))
+  
+  return(df)
+  
+  }
