@@ -1,4 +1,4 @@
-get_phlabresults_data_from_NASIS_db <- function() {
+get_phlabresults_data_from_NASIS_db <- function(SS=TRUE) {
   
   # hacks to make R CMD check --as-cran happy:
   sampledepthbottom <- NULL
@@ -9,7 +9,7 @@ get_phlabresults_data_from_NASIS_db <- function() {
   # must have RODBC installed
   if (!requireNamespace('RODBC')) stop('please install the `RODBC` package', call.=FALSE)
 
-  q.phlabresults <- "SELECT phiidref, seqnum, sampledepthtop, sampledepthbottom, sampleid, datacollector, claytotmeasured, claycarbmeasured, silttotmeasured, siltfinemeasured, siltcomeasured, sandtotmeasured, sandtotmethod, sandvcmeasured, sandcomeasured, sandmedmeasured, sandfinemeasured, sandvfmeasured, sandvfmethod, textureclfieldlab, fiberrubbedpct, fiberunrubbedpct, ph1to1h2o, ph01mcacl2, phnaf, phoxidized, phdeltah2o2, liquidlimitmeasured, plasticlimitmeasured, pi, atterbergsampcond, cole, esttotpotacidityetpa, camgmeh2, potassiummeh2, camgsatpaste, extractaciditykcl, basesatmeh2, cec7, cec82, ecec, phosphatephos, nitratenitrogen, ecmeasured, ecdeterminemeth, ec15, caco3equivmeasured, gypsumequiv, sodium, sar, gypsumreq, humiccolor, fulviccolor, humicfulviccolor, alummeasured, pyrophoshue, pyrophosvalue, pyrophoschroma, melanicindex
+  q <- "SELECT phiidref, seqnum, sampledepthtop, sampledepthbottom, sampleid, datacollector, claytotmeasured, claycarbmeasured, silttotmeasured, siltfinemeasured, siltcomeasured, sandtotmeasured, sandtotmethod, sandvcmeasured, sandcomeasured, sandmedmeasured, sandfinemeasured, sandvfmeasured, sandvfmethod, textureclfieldlab, fiberrubbedpct, fiberunrubbedpct, ph1to1h2o, ph01mcacl2, phnaf, phoxidized, phdeltah2o2, liquidlimitmeasured, plasticlimitmeasured, pi, atterbergsampcond, cole, esttotpotacidityetpa, camgmeh2, potassiummeh2, camgsatpaste, extractaciditykcl, basesatmeh2, cec7, cec82, ecec, phosphatephos, nitratenitrogen, ecmeasured, ecdeterminemeth, ec15, caco3equivmeasured, gypsumequiv, sodium, sar, gypsumreq, humiccolor, fulviccolor, humicfulviccolor, alummeasured, pyrophoshue, pyrophosvalue, pyrophoschroma, melanicindex
   FROM phlabresults_View_1 
   ORDER BY phiidref, sampledepthtop
   ;"
@@ -18,9 +18,14 @@ get_phlabresults_data_from_NASIS_db <- function() {
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
   
   # exec query
-  d.phlabresults <- RODBC::sqlQuery(channel, q.phlabresults, stringsAsFactors = FALSE)
+  d.phlabresults <- RODBC::sqlQuery(channel, q, stringsAsFactors = FALSE)
   
   
   # recode metadata domains

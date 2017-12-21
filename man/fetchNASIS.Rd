@@ -24,10 +24,10 @@
 \description{Fetch commonly used site/pedon/horizon data or component from a local NASIS database, return as a SoilProfileCollection object.}
 
 \usage{
-  \item{fetchNASIS(what = 'pedons', SS = TRUE, rmHzErrors = TRUE, nullFragsAreZero=TRUE, soilColorState='moist', lab='FALSE')}
-  \item{fetchNASIS(what = 'components', rmHzErrors=TRUE, fill = FALSE)}
-  \item{getHzErrorsNASIS(strict=TRUE)}
-  \item{get_comonth_from_NASIS_db(fill=FALSE)}
+fetchNASIS(what = 'pedons', SS = TRUE, rmHzErrors = TRUE, nullFragsAreZero=TRUE, soilColorState='moist', lab='FALSE')
+fetchNASIS(what = 'components', rmHzErrors=TRUE, fill = FALSE)
+getHzErrorsNASIS(strict=TRUE)
+get_comonth_from_NASIS_db(fill=FALSE)
 }
 
 \arguments{
