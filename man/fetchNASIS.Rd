@@ -1,13 +1,11 @@
 \name{fetchNASIS}
 \alias{fetchNASIS}
-\alias{get_extended_data_from_NASIS_db}
 \alias{getHzErrorsNASIS}
 \alias{simplfyFragmentData}
 \alias{fetchNASIS_pedons}
 \alias{get_phorizon_from_NASIS_db}
-\alias{fetchNASIS_component}
+\alias{fetchNASIS_components}
 \alias{get_component_copm_data_from_NASIS_db}
-\alias{get_component_data_from_NASIS_db}
 \alias{get_component_horizon_data_from_NASIS_db}
 \alias{get_component_correlation_data_from_NASIS_db}
 \alias{get_component_copm_data_from_NASIS_db}
@@ -15,24 +13,27 @@
 \alias{get_component_esd_data_from_NASIS_db}
 \alias{get_component_otherveg_data_from_NASIS_db}
 \alias{get_copedon_from_NASIS_db}
-\alias{get_comonth_from_NASIS_db}
 \alias{get_vegplot_from_NASIS_db}
 \alias{get_projectmapunit_from_NASIS}
-\alias{get_text_notes_from_NASIS_db}
 
 \title{Fetch commonly used site/pedon/horizon or component data from a local NASIS database.}
 \description{Fetch commonly used site/pedon/horizon data or component from a local NASIS database, return as a SoilProfileCollection object.}
 
 \usage{
-fetchNASIS(what = 'pedons', SS = TRUE, rmHzErrors = TRUE, nullFragsAreZero=TRUE, soilColorState='moist', lab='FALSE')
-fetchNASIS(what = 'components', rmHzErrors=TRUE, fill = FALSE)
+fetchNASIS(what = 'pedons', ...)
+
+fetchNASIS_pedons(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, 
+soilColorState='moist', lab=FALSE)
+
+fetchNASIS_components(SS=TRUE, rmHzErrors=TRUE, fill = FALSE)
+
 getHzErrorsNASIS(strict=TRUE)
-get_comonth_from_NASIS_db(fill=FALSE)
 }
 
 \arguments{
   \item{what}{determines what objects should fetched? ('pedons' | 'components')}
-  \item{SS}{fetch data from the currently loaded Selected Set in NASIS or from the entire local database (default: TRUE)}	
+  \item{\dots}{arguments passed to \code{fetchNASIS_pedons()} or \code{fetchNASIS_components()}}
+  \item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)}	
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: TRUE)}
   \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details}
   \item{soilColorState}{which colors should be used to generate the convenience field 'soil_color'? ('moist' | 'dry')}

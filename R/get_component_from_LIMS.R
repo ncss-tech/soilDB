@@ -114,6 +114,10 @@ get_progress_from_LIMS <- function(mlrassoarea, fiscalyear, projecttypename) {
 
 get_reverse_correlation_from_LIMS <- function(mlrassoarea, fiscalyear, projectname) {
   
+  # nasty hack to trick R CMD check
+  musym <- NULL
+  new_musym <- NULL
+  
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_reverse_correlation_from_LIMS"
   
   args <- list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)

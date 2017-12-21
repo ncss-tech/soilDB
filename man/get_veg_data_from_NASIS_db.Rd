@@ -14,11 +14,6 @@ get_veg_data_from_NASIS_db(SS = TRUE)
 \value{A list with the results.}
 \author{Jay M. Skovlin and Dylan E. Beaudette}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-\code{\link{}}, \code{\link{}}
-}
 
 \examples{
 \dontrun{

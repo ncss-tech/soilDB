@@ -20,7 +20,7 @@ get_comonth_from_NASIS_db(SS = TRUE, fill = FALSE)
 
 
 \seealso{
-\code{\link{fetchNASIS()}}, \code{\link{fetchNASIS_components()}}
+\code{\link{fetchNASIS}}, \code{\link{fetchNASIS_components}}
 }
 
 \examples{

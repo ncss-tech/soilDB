@@ -18,7 +18,7 @@ get_extended_data_from_NASIS_db(SS = TRUE, nullFragsAreZero = TRUE)
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{get_hz_data_from_NASIS_db}}, \code{\link{get_site_data_from_NASIS}}
+\code{\link{get_hz_data_from_NASIS_db}}, \code{\link{get_site_data_from_NASIS_db}}
 }
 
 \examples{

@@ -4,7 +4,11 @@
 \title{Extract phlabresults table from a local NASIS Database}
 \description{Get, format, aggregate, and return phlabresults table from a NASIS database.}
 \usage{
-get_phlabresults_data_from_NASIS_db()
+get_phlabresults_data_from_NASIS_db(SS=TRUE)
+}
+
+\arguments{
+  \item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)}	
 }
 
 \details{This function currently works only on Windows.}

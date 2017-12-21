@@ -2,20 +2,24 @@
 \alias{metadata}
 \alias{uncode}
 \alias{code}
+
 \title{Convert coded values returned from NASIS and SDA queries to factors}
 \description{These functions convert the coded values returned from NASIS or SDA to factors (e.g. 1 = Alfisols) using the metadata tables from NASIS. For SDA the metadata is pulled from a static snapshot in the soilDB package (/data/metadata.rda).}
 \usage{
 uncode(df, invert = FALSE, db = "NASIS")
-code(df, invert = TRUE, db = "NASIS")
+code(df, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{df}{data.frame}
-  \item{invert}{converts the code labels back to their coded values()}
-  \item{db}{a string value specifying the soil database the data is coming from, which indicates whether or not to query metadata from NASIS or use soilDB-local snapshot}
+  \item{invert}{converts the code labels back to their coded values (FALSE)}
+  \item{db}{label specifying the soil database the data is coming from, which indicates whether or not to query metadata from local NASIS database ("NASIS") or use soilDB-local snapshot ("LIMS" or "SDA")}
+  \item{\dots}{arguments passed on to \code{uncode}}
   }
+  
 \details{These functions convert the coded values returned from NASIS into plaintext representation. The converted values from NASIS, or sourced from SDA, are upgraded to specifically-leveled factors using the metadata tables from NASIS. For SDA the metadata is pulled from a static snapshot in the soilDB package.
 }
+
 \value{A dataframe with the results.}
 \author{Stephen Roecker}
 \examples{
