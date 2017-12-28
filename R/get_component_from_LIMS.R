@@ -9,9 +9,6 @@ get_component_from_LIMS <- function(projectname) {
   # set factor levels according to metadata domains
   d.component <- uncode(d.component, db = "LIMS")
   
-  # replace blanks with NA
-  d.component <- .na_replace(d.component)
-  
   # return data.frame
   return(d.component)
   
@@ -38,9 +35,6 @@ get_chorizon_from_LIMS <- function(projectname, fill = FALSE) {
     texture = factor(texture, levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"])
     })
   
-  # replace blanks with NA
-  d.chorizon <- .na_replace(d.chorizon)
-
   # fill
   if (fill == FALSE) {
     d.chorizon <- d.chorizon[!is.na(d.chorizon$chiid), ]
@@ -63,9 +57,6 @@ get_mapunit_from_LIMS <- function(projectname) {
   # set factor levels according to metadata domains
   d.mapunit <- uncode(d.mapunit, db = "LIMS")
   
-  # replace blanks with NA
-  d.mapunit <- .na_replace(d.mapunit)
-
   # return data.frame
   return(d.mapunit)
   
@@ -83,9 +74,6 @@ get_project_from_LIMS <- function(mlrassoarea, fiscalyear) {
   # set factor levels according to metadata domains
   d.project <- uncode(d.project, db = "LIMS")
   
-  # replace blanks with NA
-  d.project <- .na_replace(d.project)
-
   # return data.frame
   return(d.project)
   
@@ -103,9 +91,6 @@ get_progress_from_LIMS <- function(mlrassoarea, fiscalyear, projecttypename) {
   # set factor levels according to metadata domains
   d.progress <- uncode(d.progress, db = "LIMS")
   
-  # replace blanks with NA
-  d.progress <- .na_replace(d.progress)
-
   # return data.frame
   return(d.progress)
   
@@ -123,9 +108,6 @@ get_reverse_correlation_from_LIMS <- function(mlrassoarea, fiscalyear, projectna
   args <- list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)
   
   d.rcor <- parseWebReport(url, args)
-  
-  # replace blanks with NA
-  d.rcor <- .na_replace(d.rcor)
   
   # compute musym_orig for additional lmapunits, necessary to catch changes to the original musym, due to a constraint on the lmapunit table that prevents duplicate musym for additional mapunits 
   d.rcor <- within(d.rcor, {
