@@ -1,4 +1,4 @@
-uncode <- function(df, invert = FALSE, db = "NASIS"){
+uncode <- function(df, invert = FALSE, db = "NASIS", stringsAsFactors = default.stringsAsFactors()){
   get_metadata <- function() {
     # must have RODBC installed
     if(!requireNamespace('RODBC'))
@@ -67,6 +67,12 @@ uncode <- function(df, invert = FALSE, db = "NASIS"){
         }
       }
     }
+  
+  # convert factors to strings
+  if (stringsAsFactors == FALSE) {
+    idx <- unlist(lapply(df, is.factor))
+    df[idx] <- lapply(df[idx], as.character)
+  }
   
   return(df)
 }
