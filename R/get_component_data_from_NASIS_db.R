@@ -7,7 +7,7 @@
 
 
 ## just the components
-get_component_data_from_NASIS_db <- function(SS=TRUE) {
+get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -49,7 +49,7 @@ get_component_data_from_NASIS_db <- function(SS=TRUE) {
     stop('there are no NASIS components in your selected set!')
   
   # uncode metadata domains
-  d <- uncode(d)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors)
   
   # done
   return(d)
@@ -58,7 +58,7 @@ get_component_data_from_NASIS_db <- function(SS=TRUE) {
 
 # return all rows from correlation -- map unit -- legend map unit -- dmu / legend -- area
 # note that all of these "target tables" have to be selected
-get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional=TRUE, dropNotRepresentative=TRUE) {
+get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional=TRUE, dropNotRepresentative=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -94,7 +94,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
     stop('there are no records in your selected set!')
   
   # recode metadata domains
-  d <- uncode(d)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors)
   
   # optionally drop additional | NA mustatus
   if(dropAdditional) {
@@ -168,7 +168,7 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS=TRUE) {
 
 
 # get copm for each component
-get_component_copm_data_from_NASIS_db <- function(SS=TRUE) {
+get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)	
@@ -198,7 +198,7 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE) {
   RODBC::odbcClose(channel)
   
   # uncode metadata domains
-  d <- uncode(d)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors)
   
   # done
   return(d)
@@ -207,7 +207,7 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE) {
 
 
 # get ESD information for each component
-get_component_esd_data_from_NASIS_db <- function(SS=TRUE) {
+get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -244,7 +244,7 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE) {
   }
   
   # uncode metadata domains
-  d <- uncode(d)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors)
   
   # done
   return(d)
@@ -291,7 +291,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE) {
   return(d)
 }
 
-get_comonth_from_NASIS_db <- function(SS=TRUE, fill=FALSE) {
+get_comonth_from_NASIS_db <- function(SS=TRUE, fill=FALSE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -311,7 +311,7 @@ get_comonth_from_NASIS_db <- function(SS=TRUE, fill=FALSE) {
   d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
   
   # uncode metadata domains
-  d <- uncode(d)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors)
   
   # optionally fill missing coiids
   if(fill) {

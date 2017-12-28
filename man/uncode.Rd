@@ -18,7 +18,7 @@ code(df, ...)
   \item{\dots}{arguments passed on to \code{uncode}}
   }
   
-\details{These functions convert the coded values returned from NASIS into plaintext representation. The converted values from NASIS, or sourced from SDA, are upgraded to specifically-leveled factors using the metadata tables from NASIS. For SDA the metadata is pulled from a static snapshot in the soilDB package.
+\details{These functions convert the coded values returned from NASIS into their plaintext representation. The converted values from NASIS, or sourced from SDA, are upgraded to specifically-leveled factors using the metadata tables from NASIS. For SDA the metadata is pulled from a static snapshot in the soilDB package.
 }
 
 \value{A dataframe with the results.}

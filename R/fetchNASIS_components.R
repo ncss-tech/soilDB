@@ -2,18 +2,18 @@
 # https://github.com/ncss-tech/soilDB/issues/50
 ## TODO: this will not ID horizons with no depths
 ## TODO: better error checking / reporting is needed: coiid, dmu id, component name
-fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE) {
+fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
   # load data in pieces
-  f.comp <- get_component_data_from_NASIS_db(SS=SS)
-  f.chorizon <- get_component_horizon_data_from_NASIS_db(SS=SS, fill=fill)
-  f.copm <- get_component_copm_data_from_NASIS_db(SS=SS)
+  f.comp       <- get_component_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
+  f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS=SS, fill=fill)
+  f.copm       <- get_component_copm_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
   f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db(SS=SS)
-  f.otherveg <- get_component_otherveg_data_from_NASIS_db(SS=SS)
-  f.ecosite <- get_component_esd_data_from_NASIS_db(SS=SS)
+  f.otherveg   <- get_component_otherveg_data_from_NASIS_db(SS=SS)
+  f.ecosite    <- get_component_esd_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
   
   # optionally test for bad horizonation... flag, and remove
   if(rmHzErrors) {
