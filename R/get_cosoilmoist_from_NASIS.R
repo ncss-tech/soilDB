@@ -1,4 +1,4 @@
-get_cosoilmoist_from_NASIS <- function(impute = TRUE) {
+get_cosoilmoist_from_NASIS <- function(impute = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if (!requireNamespace('RODBC')) stop('please install the `RODBC` package', call.=FALSE)
   
@@ -11,61 +11,20 @@ get_cosoilmoist_from_NASIS <- function(impute = TRUE) {
   ORDER BY dmuiid, comppct_r DESC, compname, month, soimoistdept_r
   ;"
   
-  
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
-  
   
   # exec query
   d.cosoilmoist <- RODBC::sqlQuery(channel, q.cosoilmoist, stringsAsFactors = FALSE)
   
+  # close connection
+  RODBC::odbcClose(channel)
   
   # recode metadata domains
-  d.cosoilmoist <- uncode(d.cosoilmoist)
+  d.cosoilmoist <- uncode(d.cosoilmoist, stringsAsFactors = stringsAsFactors)
   
-  
-  # cache original column names
-  orig_names <- names(d.cosoilmoist)
-  
-  
-  # relabel names
-  names(d.cosoilmoist) <- gsub("^soimoist", "", names(d.cosoilmoist))
-  old_names <- "stat"
-  new_names <- "status"
-  names(d.cosoilmoist)[names(d.cosoilmoist) %in% old_names] <- new_names
-
-  
-  # impute NA freqcl values, default = "not populated"
-  if (impute == TRUE) {
-    vars <- c("flodfreqcl", "pondfreqcl")
-    missing <- "Not_Populated"
-    freqcl2 <- c(missing, levels(d.cosoilmoist$flodfreqcl))
-    status2 <- c(missing, levels(d.cosoilmoist$status))
-    
-    d.cosoilmoist <- within(d.cosoilmoist, {
-      # replace NULL RV depths with 201 cm if pondfreqcl or flodqcl is not NULL
-      dept_r[is.na(dept_r) & (!is.na(pondfreqcl) | !is.na(flodfreqcl))] = 201
-      depb_r[is.na(depb_r) & (!is.na(pondfreqcl) | !is.na(flodfreqcl))] = 201
-      
-      # replace NULL L and H depths with the RV
-      dept_l = ifelse(is.na(dept_l), dept_r, dept_l)
-      dept_h = ifelse(is.na(dept_h), dept_r, dept_h)
-      
-      depb_l = ifelse(is.na(depb_l), depb_r, depb_l)
-      depb_h = ifelse(is.na(depb_h), depb_r, depb_h)
-      
-      # replace NULL freqcl with "Not_Populated"
-      status = factor(status, levels = status2)
-      flodfreqcl = factor(flodfreqcl, levels = freqcl2)
-      pondfreqcl = factor(pondfreqcl, levels = freqcl2)
-      
-      status[is.na(status)]         <- missing
-      flodfreqcl[is.na(flodfreqcl)] <- missing
-      pondfreqcl[is.na(pondfreqcl)] <- missing
-    })
-  }
-  
-  
+  # prep dataset: rename columns, impute empty values, stringsAsFactors
+  d.cosoilmoist <- .cosoilmoist_prep(d.cosoilmoist, impute = impute, stringsAsFactors = stringsAsFactors)
   
   # done
   return(d.cosoilmoist)

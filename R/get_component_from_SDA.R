@@ -1,4 +1,4 @@
-get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE){
+get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFactors = default.stringsAsFactors()){
   # SDA is missing soiltempa_r AS mast_r
   # Joining in the fetch on derived_cokey doesn't work but should. There are duplicate components with the same combination of elements.
   # paste0("mu.nationalmusym + '_' + CAST(comppct_r AS VARCHAR) + '_' + compname + '-' + ISNULL(localphase, 'no_phase') AS derived_cokey")
@@ -19,7 +19,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE){
           
   , "WHERE", WHERE,
   
-  "ORDER BY cokey, compname, comppct_r DESC
+  "ORDER BY nationalmusym, comppct_r DESC, compname
   ;")
   
   
@@ -28,12 +28,14 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE){
 
   
   # recode metadata domains
-  d.component <- uncode(d.component, db = "SDA")
+  d.component <- uncode(d.component, db = "SDA", stringsAsFactors = stringsAsFactors)
   
   
   # cache original column names
   orig_names <- names(d.component)
-
+  
+  # reorder columns
+  # d.component <- with(d.component, { d.component[order(nationalmusym, - comppct_r, compname), ]})
   
   # done
   return(d.component)
@@ -41,7 +43,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE){
 
 
 
-get_mapunit_from_SDA <- function(WHERE = NULL) {
+get_mapunit_from_SDA <- function(WHERE = NULL, stringsAsFactors = default.stringsAsFactors()) {
 
   q.mapunit <- paste("SELECT areasymbol, areaname, ssastatus, cordate, nationalmusym, mukey, musym, muname, mukind, mustatus, muacres, farmlndcl
   
@@ -58,7 +60,7 @@ get_mapunit_from_SDA <- function(WHERE = NULL) {
 
   
   # recode metadata domains
-  d.mapunit <- uncode(d.mapunit, db = "SDA")
+  d.mapunit <- uncode(d.mapunit, db = "SDA", stringsAsFactors = stringsAsFactors)
   
   
   # cache original column names
@@ -120,12 +122,14 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE) {
 }
 
 
-fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE) {
+fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE, 
+                               stringsAsFactors = default.stringsAsFactors()
+                               ) {
 
   # load data in pieces
-  f.component <- get_component_from_SDA(WHERE, duplicates)
-  f.mapunit <- get_mapunit_from_SDA(WHERE)
-  f.chorizon <- get_chorizon_from_SDA(WHERE, duplicates)
+  f.component <- get_component_from_SDA(WHERE, duplicates, stringsAsFactors = stringsAsFactors)
+  f.mapunit   <- get_mapunit_from_SDA(WHERE, stringsAsFactors = stringsAsFactors)
+  f.chorizon  <- get_chorizon_from_SDA(WHERE, duplicates)
   
   # optionally test for bad horizonation... flag, and remove
   if (rmHzErrors) {
@@ -133,7 +137,7 @@ fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, rmHzErrors = FA
     
     # which are the good (valid) ones?
     good.ids <- as.character(f.chorizon.test$cokey[which(f.chorizon.test$hz_logic_pass)])
-    bad.ids <- as.character(f.chorizon.test$cokey[which(! f.chorizon.test$hz_logic_pass)])
+    bad.ids  <- as.character(f.chorizon.test$cokey[which(! f.chorizon.test$hz_logic_pass)])
     
     # keep the good ones
     f.chorizon <- f.chorizon[which(f.chorizon$cokey %in% good.ids), ]

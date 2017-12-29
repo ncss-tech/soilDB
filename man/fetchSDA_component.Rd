@@ -9,12 +9,18 @@
 \title{Extract component tables from Soil Data Access}
 \description{Get, format, impute, and return component tables.}
 \usage{
-fetchSDA_component(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE)
-get_mapunit_from_SDA(WHERE = NULL)
-get_component_from_SDA(WHERE = NULL, duplicates = FALSE)
+fetchSDA_component(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE, 
+                   stringsAsFactors = default.stringsAsFactors()
+                   )
+get_mapunit_from_SDA(WHERE = NULL, stringsAsFactors = default.stringsAsFactors())
+get_component_from_SDA(WHERE = NULL, duplicates = FALSE, 
+                       stringsAsFactors = default.stringsAsFactors()
+                       )
 get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE)
-get_cosoilmoist_from_SDA(WHERE = NULL, duplicates = FALSE, impute = TRUE)
-get_cosoilmoist_from_NASIS(impute = TRUE)
+get_cosoilmoist_from_SDA(WHERE = NULL, duplicates = FALSE, impute = TRUE, 
+                         stringsAsFactors = default.stringsAsFactors()
+                         )
+get_cosoilmoist_from_NASIS(impute = TRUE, stringsAsFactors = default.stringsAsFactors())
 }
 
 
@@ -23,6 +29,8 @@ get_cosoilmoist_from_NASIS(impute = TRUE)
   \item{duplicates}{logical; if TRUE duplicate nationalmusym are returned}
   \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)}
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: FALSE)}
+  UE)	
+  \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
   }
 
 
