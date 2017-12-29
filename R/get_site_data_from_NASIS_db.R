@@ -18,7 +18,7 @@
 ## TODO: bug within RODBC - converts site_id == 056E916010 to an exponent
 
 
-get_site_data_from_NASIS_db <- function(SS=TRUE) {
+get_site_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -60,7 +60,7 @@ ORDER BY pedon_View_1.peiid ;"
 	  stop('error in SQL')
 	
 	# uncode domain columns
-	d <- uncode(d)
+	d <- uncode(d, stringsAsFactors = stringsAsFactors)
 	
 	# short-circuit: 0 rows means nothing in the selected set and thus we stop here
 	if(nrow(d) == 0) {
@@ -98,6 +98,12 @@ ORDER BY pedon_View_1.peiid ;"
   ss.grid <- expand.grid(na.omit(unique(d$shapeacross)), na.omit(unique(d$shapedown)))
   ss.levels <- apply(ss.grid, 1, function(i) { paste(rev(i), collapse = ' / ')})
   d$slope_shape <- factor(d$slope_shape, levels=ss.levels)
+  
+  # convert factors to strings
+  idx <- unlist(lapply(df, is.factor))
+  if (stringsAsFactors == FALSE & any(idx)) {
+    df[idx] <- lapply(df[idx], as.character)
+  }
   
 	# done
 	return(d)

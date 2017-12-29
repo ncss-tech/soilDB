@@ -22,12 +22,12 @@
 fetchNASIS(what = 'pedons', ...)
 
 fetchNASIS_pedons(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, 
-soilColorState='moist', lab=FALSE)
-
+                  soilColorState='moist', lab=FALSE, 
+                  stringsAsFactors = default.stringsAsFactors()
+                  )
 fetchNASIS_components(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, 
                       stringsAsFactors = default.stringsAsFactors()
                       )
-
 getHzErrorsNASIS(strict=TRUE)
 }
 
@@ -35,7 +35,7 @@ getHzErrorsNASIS(strict=TRUE)
   \item{what}{determines what objects should fetched? ('pedons' | 'components')}
   \item{\dots}{arguments passed to \code{fetchNASIS_pedons()} or \code{fetchNASIS_components()}}
   \item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)}	
-  \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
+  \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have been set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: TRUE)}
   \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details}
   \item{soilColorState}{which colors should be used to generate the convenience field 'soil_color'? ('moist' | 'dry')}

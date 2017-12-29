@@ -1,7 +1,7 @@
 
 
 # get NASIS site/pedon/horizon/diagnostic feature data
-fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='moist', lab=FALSE) {
+fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='moist', lab=FALSE, stringsAsFactors = default.stringsAsFactors()) {
   
   # test connection
   if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
@@ -13,8 +13,8 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   
   ## load data in pieces
   # these fail gracefully when no data in local DB | selected set
-  site_data <- get_site_data_from_NASIS_db(SS=SS)
-  hz_data <- get_hz_data_from_NASIS_db(SS=SS)
+  site_data  <- get_site_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
+  hz_data    <- get_hz_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
   color_data <- get_colors_from_NASIS_db(SS=SS)
   
   ## ensure there are enough data to create an SPC object
@@ -24,7 +24,7 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   
   ## TODO: improve efficiency
   # data that don't flatten well
-  extended_data <- get_extended_data_from_NASIS_db(SS=SS, nullFragsAreZero=nullFragsAreZero)
+  extended_data <- get_extended_data_from_NASIS_db(SS=SS, nullFragsAreZero=nullFragsAreZero, stringsAsFactors = stringsAsFactors)
   
   ## https://github.com/ncss-tech/soilDB/issues/44
   # optionally load phlabresults table

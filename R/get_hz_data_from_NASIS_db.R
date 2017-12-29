@@ -1,6 +1,6 @@
 ## TODO: when multiple textures have been defined, only the first one is returned (alphabetical ?)
 # 
-get_hz_data_from_NASIS_db <- function(SS=TRUE) {
+get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -38,7 +38,7 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE) {
   d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
   
   # uncode metadata domains
-  d <- uncode(d)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors)
   
   # re-implement texture_class column, with lieutex in cases where texcl is missing
   d$texture_class <- ifelse(is.na(d$texcl) & ! is.na(d$lieutex), as.character(d$lieutex), as.character(d$texcl))

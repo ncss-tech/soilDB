@@ -1,4 +1,4 @@
-get_projectmapunit_from_NASIS <- function() {
+get_projectmapunit_from_NASIS <- function(stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -34,7 +34,7 @@ get_projectmapunit_from_NASIS <- function() {
   if (nrow(d.project) == 0) message("your selected set is missing the project table, please load it and try again")
   
   # uncode metadata domains
-  d.project <- uncode(d.project)
+  d.project <- uncode(d.project, stringsAsFactors = stringsAsFactors)
   
   
   # close connection

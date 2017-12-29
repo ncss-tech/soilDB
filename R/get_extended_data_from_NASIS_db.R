@@ -4,7 +4,7 @@
 
 ## TODO_JS: incorporated the use of uncode() into all except the fragment queries, which I think are best left as they are.
 
-get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE) {
+get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -257,12 +257,12 @@ LEFT OUTER JOIN (
 	d.structure <- RODBC::sqlQuery(channel, q.structure, stringsAsFactors=FALSE)
 
 	## uncode the ones that need that here
-	d.diagnostic <- uncode(d.diagnostic)
-	d.rf.data <- uncode(d.rf.data)
-	d.hz.texmod <- uncode(d.hz.texmod)
-	d.taxhistory <- uncode(d.taxhistory)
-	d.sitepm <- uncode(d.sitepm)
-	d.structure <- uncode(d.structure)
+	d.diagnostic <- uncode(d.diagnostic, stringsAsFactors = stringsAsFactors)
+	d.rf.data    <- uncode(d.rf.data, stringsAsFactors = stringsAsFactors)
+	d.hz.texmod  <- uncode(d.hz.texmod, stringsAsFactors = stringsAsFactors)
+	d.taxhistory <- uncode(d.taxhistory, stringsAsFactors = stringsAsFactors)
+	d.sitepm     <- uncode(d.sitepm, stringsAsFactors = stringsAsFactors)
+	d.structure  <- uncode(d.structure, stringsAsFactors = stringsAsFactors)
 
 	# close connection
 	RODBC::odbcClose(channel)
