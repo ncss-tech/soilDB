@@ -12,13 +12,17 @@
 \title{Extract component tables from a the Laboratory Information Management System}
 \description{Get, format, impute, and return component tables.}
 \usage{
-fetchLIMS_component(projectname, rmHzErrors = FALSE, fill = FALSE)
+fetchLIMS_component(projectname, rmHzErrors = FALSE, fill = FALSE,
+                    stringsAsFactors = default.stringsAsFactors()
+                    )
 get_progress_from_LIMS(mlrassoarea, fiscalyear, projecttypename)
 get_project_from_LIMS(mlrassoarea, fiscalyear)
 get_reverse_correlation_from_LIMS(mlrassoarea, fiscalyear, projectname)
-get_mapunit_from_LIMS(projectname)
-get_component_from_LIMS(projectname)
-get_chorizon_from_LIMS(projectname, fill = FALSE)
+get_mapunit_from_LIMS(projectname, stringsAsFactors = default.stringsAsFactors())
+get_component_from_LIMS(projectname, stringsAsFactors = default.stringsAsFactors())
+get_chorizon_from_LIMS(projectname, fill = FALSE, 
+                       stringsAsFactors = default.stringsAsFactors()
+                       )
 get_cosoilmoist_from_LIMS(projectname, impute = TRUE, 
                          stringsAsFactors = default.stringsAsFactors()
                          )

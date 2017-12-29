@@ -16,7 +16,9 @@ get_mapunit_from_SDA(WHERE = NULL, stringsAsFactors = default.stringsAsFactors()
 get_component_from_SDA(WHERE = NULL, duplicates = FALSE, 
                        stringsAsFactors = default.stringsAsFactors()
                        )
-get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE)
+get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE, 
+                      stringsAsFactors = default.stringsAsFactors()
+                      )
 get_cosoilmoist_from_SDA(WHERE = NULL, duplicates = FALSE, impute = TRUE, 
                          stringsAsFactors = default.stringsAsFactors()
                          )

@@ -73,7 +73,7 @@ get_mapunit_from_SDA <- function(WHERE = NULL, stringsAsFactors = default.string
 
 
 
-get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE) {
+get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFactors = default.stringsAsFactors()) {
   # seriously!, how is their no fragvoltot_r column?
   q.chorizon <- paste("
   SELECT", 
@@ -110,7 +110,9 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE) {
   d.chorizon <- within(d.chorizon, {
     nationalmusym = NULL
     texture = tolower(texture)
-    texture = factor(texture, levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"])
+    if (stringsAsFactors == TRUE) {
+      texture = factor(texture, levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"])
+    }
   })
   
   # Note: only chtexturegrp$texdesc from SDA matches metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"] in metadata
