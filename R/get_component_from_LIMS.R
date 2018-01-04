@@ -73,6 +73,12 @@ get_project_from_LIMS <- function(mlrassoarea, fiscalyear) {
   
   d.project <- parseWebReport(url, args)
   
+  # prep
+  idx <- unlist(lapply(names(d.project), function(x) grepl("date_", x)))
+  if (any(idx)) {
+    d.project[idx] <- lapply(d.project[idx], function(x) as.Date(x, format = "%Y/%m/%d"))
+  }
+  
   # return data.frame
   return(d.project)
   
