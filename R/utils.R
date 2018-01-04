@@ -37,6 +37,38 @@
 
 
 ## TODO: this may need some review
+## convert horizon designation pieces info into wide-formatted, boolean table
+.hzSuffixLongtoWide <- function(d) {
+	
+	# get unique vector of all hzdesgnsuffix
+	d.unique <- na.omit(unique(d$desgnsuffix))
+	
+	# init list for storing initial FALSE for each phiid / desgnsuffix
+	l <- vector(mode='list')
+	
+	# add unique phiid
+	l[['phiid']] <- unique(d$phiid)
+	
+	# make a vector of FALSE, matching the length of unique phiid
+	f <- rep(FALSE, times=length(l[['phiid']]))
+	
+	# iterate over hzdesgnsuffix
+	for(i in d.unique) {
+		# fill this list element with FALSE
+		l[[i]] <- f
+		# lookup those phiid with this horizon suffix
+		matching.phiid <- d$phiid[which(d$desgnsuffix == i)]
+		# toggle FALSE-->TRUE for these horizons
+		l[[i]][which(l[['phiid']] %in% matching.phiid)] <- TRUE
+	}
+	
+	# convert to DF
+	return(as.data.frame(l))
+		
+}
+
+
+## TODO: this may need some review
 ## try and pick the best possible taxhistory record
 .pickBestTaxHistory <- function(d) {
 	
