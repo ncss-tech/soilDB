@@ -40,7 +40,6 @@ getHzErrorsNASIS(strict=TRUE)
   \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details}
   \item{soilColorState}{which colors should be used to generate the convenience field 'soil_color'? ('moist' | 'dry')}
   \item{lab}{should the phlabresults child table be fetched with site/pedon/horizon data (default: FALSE)}  
-  \item{strict}{should horizonation by strictly enforced? (TRUE)}
   \item{fill}{should missing "month" rows in the comonth table be filled with NA (FALSE)}
 }
 
