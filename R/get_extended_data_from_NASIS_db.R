@@ -240,6 +240,25 @@ LEFT OUTER JOIN (
     q.sitepm <- gsub(pattern = '_View_1', replacement = '', x = q.sitepm, fixed = TRUE)
   }
 
+  q.hz.desgn <- "SELECT phiid, seqnum, hzname, hzdept, hzdepb, desgndisc, desgnmaster, desgnmasterprime, desgnvert 
+  FROM phorizon_View_1 AS ph 
+  ORDER BY phiid;" 
+
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.hz.desgn <- gsub(pattern = '_View_1', replacement = '', x = q.hz.desgn, fixed = TRUE)
+  }
+
+  q.hz.dessuf <- "SELECT phiidref AS phiid, phs.seqnum, desgnsuffix 
+  FROM phdesgnsuffix_View_1 AS phs 
+  ORDER BY phiidref, seqnum ASC;"
+
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.hz.dessuf <- gsub(pattern = '_View_1', replacement = '', x = q.hz.dessuf, fixed = TRUE)
+  }
+	
+
 	
 	# setup connection local NASIS
 	channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
@@ -255,6 +274,8 @@ LEFT OUTER JOIN (
 	d.photolink <- RODBC::sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
 	d.sitepm <- RODBC::sqlQuery(channel, q.sitepm, stringsAsFactors=FALSE)
 	d.structure <- RODBC::sqlQuery(channel, q.structure, stringsAsFactors=FALSE)
+	d.hz.desgn <- RODBC::sqlQuery(channel, q.hz.desgn, stringsAsFactors=FALSE)
+  	d.hz.dessuf <- RODBC::sqlQuery(channel, q.hz.dessuf, stringsAsFactors=FALSE)
 
 	## uncode the ones that need that here
 	d.diagnostic <- uncode(d.diagnostic, stringsAsFactors = stringsAsFactors)
@@ -263,6 +284,8 @@ LEFT OUTER JOIN (
 	d.taxhistory <- uncode(d.taxhistory, stringsAsFactors = stringsAsFactors)
 	d.sitepm     <- uncode(d.sitepm, stringsAsFactors = stringsAsFactors)
 	d.structure  <- uncode(d.structure, stringsAsFactors = stringsAsFactors)
+	d.hz.desgn <- uncode(d.hz.desgn)
+	d.hz.dessuf <- uncode(d.hz.dessuf)
 
 	# close connection
 	RODBC::odbcClose(channel)
@@ -276,6 +299,14 @@ LEFT OUTER JOIN (
 	  d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)
 	} else {
 	  d.diag.boolean <- NULL
+	}
+
+	if(nrow(d.hz.dessuf) > 0) {
+	  # generate wide-formatted, diagnostic boolean summary
+	  d.hzdesgnsuf.boolean <- .hzSuffixLongtoWide(d.hz.dessuf)
+	  d.hz.desgn <- join(d.hz.desgn, d.hzdesgnsuf.boolean, by = 'phiid', type = 'left')	
+	} else {
+	  d.hz.desgn <- NULL
 	}
 	
 	if(nrow(d.photolink) > 0) {
@@ -300,8 +331,9 @@ LEFT OUTER JOIN (
 							texmodifier=d.hz.texmod, 
 							geomorph=d.geomorph, 
 							taxhistory=d.taxhistory,
-						  photo=d.photolink,
+						  	photo=d.photolink,
 							pm=d.sitepm,
-              struct=d.structure))
+              						struct=d.structure,
+							hzdesgn=d.hz.desgn))
 }
 
