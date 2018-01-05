@@ -31,7 +31,7 @@ get_sitesoilmoist_from_LIMS(usiteid)
 
 
 \arguments{
-  \item{projectname}{text string value identifying the project name inserted into a SQL WHERE clause (default: NA)}
+  \item{projectname}{text string vector of project names to be inserted into a SQL WHERE clause (default: NA)}
   \item{mlrassoarea}{text string value identifying the mlra soil survey office areasymbol symbol inserted into a SQL WHERE clause (default: NA)}
   \item{fiscalyear}{text string value identifying the fiscal year inserted into a SQL WHERE clause (default: NA)}
   \item{projecttypename}{text string value identifying the project type name inserted into a SQL WHERE clause (default: NA)}

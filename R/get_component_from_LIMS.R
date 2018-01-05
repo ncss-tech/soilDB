@@ -2,9 +2,11 @@ get_component_from_LIMS <- function(projectname, stringsAsFactors = default.stri
   
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_component_from_LIMS"
   
-  args <- list(p_projectname = projectname)
-  
-  d.component <- parseWebReport(url, args)
+  d.component <- lapply(projectname, function(x) {
+    args = list(p_projectname = x)
+    d    =  parseWebReport(url, args)
+  })
+  d.component <- do.call("rbind", d.component)
   
   # set factor levels according to metadata domains
   d.component <- uncode(d.component, db = "LIMS", stringsAsFactors = stringsAsFactors)
@@ -19,10 +21,12 @@ get_chorizon_from_LIMS <- function(projectname, fill = FALSE, stringsAsFactors =
   
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_chorizon_from_LIMS"
   
-  args <- list(p_projectname = projectname)
-  
-  d.chorizon <- parseWebReport(url, args)
-  
+  d.chorizon <- lapply(projectname, function(x) {
+    args = list(p_projectname = x)
+    d    =  parseWebReport(url, args)
+  })
+  d.chorizon <- do.call("rbind", d.chorizon)
+
   ## TODO: might be nice to abstract this into a new function
   # hacks to make R CMD check --as-cran happy:
   metadata <- NULL
@@ -52,9 +56,12 @@ get_mapunit_from_LIMS <- function(projectname, stringsAsFactors = default.string
   
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit_from_LIMS"
   
-  args <- list(p_projectname = projectname)
   
-  d.mapunit <- parseWebReport(url, args)
+  d.mapunit <- lapply(projectname, function(x) {
+    args = list(p_projectname = x)
+    d    =  parseWebReport(url, args)
+    })
+  d.mapunit <- do.call("rbind", d.mapunit)
   
   # set factor levels according to metadata domains
   d.mapunit <- uncode(d.mapunit, db = "LIMS", stringsAsFactors = stringsAsFactors)
