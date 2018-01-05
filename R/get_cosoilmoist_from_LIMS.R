@@ -2,11 +2,13 @@ get_cosoilmoist_from_LIMS <- function(projectname, impute = TRUE, stringsAsFacto
   
   # check for required packages
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-cosoimoist_by_projectname"
-  
-  args <- list(p_projectname = projectname)
-  
-  d.cosoilmoist <- parseWebReport(url, args)
-  
+
+  d.cosoilmoist <- lapply(projectname, function(x) {
+    args = list(p_projectname = x)
+    d    =  parseWebReport(url, args)
+  })
+  d.cosoilmoist <- do.call("rbind", d.cosoilmoist)
+
   # set factor levels according to metadata domains
   d.cosoilmoist <- uncode(d.cosoilmoist, db = "LIMS", stringsAsFactors = stringsAsFactors)
   
