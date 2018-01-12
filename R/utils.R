@@ -570,7 +570,7 @@
   if (impute == TRUE) {
     vars <- c("flodfreqcl", "pondfreqcl")
     missing <- "not_populated"
-    freqcl2 <- c(missing, "none", "very rare", "rare", "common", "occassional", "frequent", "very frequent")
+    freqcl2 <- c(missing, "none", "very rare", "rare", "common", "occasional", "frequent", "very frequent")
     status2 <- c(missing, levels(df$status))
     
     df <- within(df, {
@@ -590,7 +590,7 @@
       flodfreqcl = factor(flodfreqcl, levels = freqcl2)
       pondfreqcl = factor(pondfreqcl, levels = freqcl2)
       
-      status[is.na(status)]         <- missing
+      status[is.na(status)] <- missing
       flodfreqcl[is.na(flodfreqcl)] <- missing
       pondfreqcl[is.na(pondfreqcl)] <- missing
     })
