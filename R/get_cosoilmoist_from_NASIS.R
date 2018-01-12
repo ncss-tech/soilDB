@@ -2,7 +2,7 @@ get_cosoilmoist_from_NASIS <- function(impute = TRUE, stringsAsFactors = default
   # must have RODBC installed
   if (!requireNamespace('RODBC')) stop('please install the `RODBC` package', call.=FALSE)
   
-  q.cosoilmoist <- "SELECT dmuiidref AS dmuiid, coiid, compname, comppct_r, month, flodfreqcl, pondfreqcl, cosoilmoistiid, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat
+  q.cosoilmoist <- "SELECT dmuiidref AS dmuiid, coiid, compname, comppct_r, drainagecl, month, flodfreqcl, pondfreqcl, cosoilmoistiid, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat
   
   FROM component_View_1 co LEFT OUTER JOIN
        comonth_View_1 com ON com.coiidref = co.coiid LEFT OUTER JOIN

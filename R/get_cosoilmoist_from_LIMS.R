@@ -1,7 +1,7 @@
 get_cosoilmoist_from_LIMS <- function(projectname, impute = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   
   # check for required packages
-  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-cosoimoist_by_projectname"
+  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_cosoimoist_from_LIMS"
 
   d.cosoilmoist <- lapply(projectname, function(x) {
     args = list(p_projectname = x)
