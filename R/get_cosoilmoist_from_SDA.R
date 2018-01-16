@@ -11,8 +11,8 @@ get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = 
           "(SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2 
           FROM mapunit
           GROUP BY nationalmusym) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN
-          (SELECT compname, comppct_r, cokey, mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu2.mukey2"
-          } else {"(SELECT compname, comppct_r, cokey, mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu.mukey"}
+          (SELECT compname, comppct_r, drainagecl, cokey, mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu2.mukey2"
+          } else {"(SELECT compname, comppct_r, drainagecl, cokey, mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu.mukey"}
        , "LEFT OUTER JOIN
        comonth cm ON cm.cokey = c.cokey LEFT OUTER JOIN
        cosoilmoist csm ON csm.comonthkey = cm.comonthkey
