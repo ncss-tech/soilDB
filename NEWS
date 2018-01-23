@@ -1,5 +1,5 @@
 -------------------------- soilDB 2.0-1 (2018-01-23) ----------------------------
-* updated `gopheridge` sample dataset and manual page to reflect latest fetchNASIS
+* updated `loafercreek` and `gopheridge` sample datasets and manual page to reflect latest fetchNASIS
 
 -------------------------- soilDB 2.0 (2017-12-23) ------------------------------
 * bug fixes, manual page updates, and stabilization of NASIS interaction
