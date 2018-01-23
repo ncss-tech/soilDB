@@ -1,3 +1,10 @@
+-------------------------- soilDB 2.0-1 (2018-01-23) ----------------------------
+* updated `gopheridge` sample dataset and manual page to reflect latest fetchNASIS
+
+-------------------------- soilDB 2.0 (2017-12-23) ------------------------------
+* bug fixes, manual page updates, and stabilization of NASIS interaction
+* released to CRAN
+
 -------------------------- soilDB 1.8.12 (2017-09-19) ----------------------------
 * bug fix in fetchHenry(), it is now possible to query only sensor metadata
 
