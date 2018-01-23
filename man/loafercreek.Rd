@@ -172,7 +172,7 @@ Formal class 'SoilProfileCollection' [package "aqp"] with 7 slots
 \examples{
 \dontrun{
 # load example dataset
-data(gopheridge)
+data("gopheridge")
 
 # what kind of object is this?
 class(gopheridge)
@@ -206,6 +206,17 @@ addVolumeFraction(gopheridge[1:10, ], colname='total_frags_pct')
 
 # add diagnostic horizons
 addDiagnosticBracket(gopheridge[1:10, ], kind='argillic horizon', col='red', offset=-0.4)
+
+## loafercreek
+data("loafercreek")
+# plot first 10 profiles
+plot(loafercreek[1:10, ], name='hzname', color='soil_color', label='pedon_id', id.style='side')
+
+# add rock fragment data to plot:
+addVolumeFraction(loafercreek[1:10, ], colname='total_frags_pct')
+
+# add diagnostic horizons
+addDiagnosticBracket(loafercreek[1:10, ], kind='argillic horizon', col='red', offset=-0.4)
 }
 }
 
