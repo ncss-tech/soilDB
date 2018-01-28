@@ -12,7 +12,7 @@ Get the development version from Github:
 
 `devtools::install_github("ncss-tech/soilDB", dependencies=FALSE, upgrade_dependencies=FALSE)`
 
-## Documentation
+## Website
 http://ncss-tech.github.io/AQP/
 
 
