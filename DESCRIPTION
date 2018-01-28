@@ -3,7 +3,8 @@ Type: Package
 Title: Soil Database Interface
 Version: 2.0-1
 Date: 2018-01-23
-Author: D.E. Beaudette and J. Skovlin, and S.M. Roecker
+Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut", "cre"), email = "dylan.beaudette@ca.usda.gov"), person(given="Jay", family="Skovlin", role = c("aut", "cre")), person(given="Stephen", family="Roecker", role = c("aut", "cre")) )
+Author: Dylan Beaudette [aut, cre], Jay Skovlin [aut, cre], Stephen Roecker [aut, cre]
 Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
 License: GPL (>= 3)
@@ -15,3 +16,5 @@ Repository: CRAN
 URL: http://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues
 RoxygenNote: 6.0.1
+
+
