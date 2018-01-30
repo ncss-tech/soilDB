@@ -132,10 +132,10 @@ simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   # compute total fragments
   # trap no frag condition
   if(ncol(rf.wide) > 1) {
-    #calculate another column for total RF, ignoring parafractions
-    rf.wide$total_frags_pct_nopf <- rowSums(rf.wide[,c(FALSE,!grepl(levels(rf.classes$class),pattern="para"))], na.rm=TRUE)
+    # calculate another column for total RF, ignoring parafractions
+    rf.wide$total_frags_pct_nopf <- rowSums(rf.wide[, c(FALSE, !grepl(levels(rf.classes$class), pattern="para"))], na.rm=TRUE)
     
-    #calculate total fragments (including para)
+    # calculate total fragments (including para)
     rf.wide$total_frags_pct <- rowSums(rf.wide[, -c(1,length(names(rf.wide)))], na.rm=TRUE)
   }
   
@@ -143,6 +143,18 @@ simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   # 1. fine gravel is a subset of gravel, therefore: gravel = gravel + fine_gravel
   rf.wide$gravel <- rf.wide$gravel + rf.wide$fine_gravel
   rf.wide$paragravel <- rf.wide$paragravel + rf.wide$parafine_gravel
+  
+  # final sanity check: are there any fractions or the total >= 100%
+  gt.100 <- sapply(rf.wide[, -1], function(i) i >= 100)
+  
+  # check each column and report labsampnum if there are any
+  if(any(apply(gt.100, 2, any))) {
+    # row-wise test to locate IDs
+    idx <- which(apply(gt.100, 1, any))
+    flagged.ids <- rf.wide$labsampnum[idx]
+    
+    warning(sprintf("fragment volume >= 100%%\nlabsampnum:\n%s", paste(flagged.ids, collapse = "\n")), call. = FALSE)
+  }
   
   # done
   return(rf.wide)
