@@ -1,8 +1,8 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 2.0-1
-Date: 2018-01-23
+Version: 2.0-2
+Date: 2018-01-29
 Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut", "cre"), email = "dylan.beaudette@ca.usda.gov"), person(given="Jay", family="Skovlin", role = c("aut", "cre")), person(given="Stephen", family="Roecker", role = c("aut", "cre")) )
 Author: Dylan Beaudette [aut, cre], Jay Skovlin [aut, cre], Stephen Roecker [aut, cre]
 Maintainer: D.E. Beaudette <dylan.beaudette@ca.usda.gov>
