@@ -2,6 +2,7 @@
 \alias{loafercreek}
 \alias{andic.subset}
 \alias{gopheridge}
+\alias{mineralKing}
 \alias{cisne}
 
 \docType{data}
@@ -10,6 +11,7 @@
 \usage{
 data(loafercreek)
 data(gopheridge)
+data(mineralKing)
 }
 \format{
 \preformatted{
