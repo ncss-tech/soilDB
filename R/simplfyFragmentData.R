@@ -147,13 +147,13 @@ simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   # final sanity check: are there any fractions or the total >= 100%
   gt.100 <- sapply(rf.wide[, -1], function(i) i >= 100)
   
-  # check each column and report labsampnum if there are any
+  # check each column and report id.var if there are any
   if(any(apply(gt.100, 2, any))) {
     # row-wise test to locate IDs
     idx <- which(apply(gt.100, 1, any))
-    flagged.ids <- rf.wide$labsampnum[idx]
+    flagged.ids <- rf.wide[[id.var]][idx]
     
-    warning(sprintf("fragment volume >= 100%%\nlabsampnum:\n%s", paste(flagged.ids, collapse = "\n")), call. = FALSE)
+    warning(sprintf("fragment volume >= 100%%\n%s:\n%s", id.var, paste(flagged.ids, collapse = "\n")), call. = FALSE)
   }
   
   # done
