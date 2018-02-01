@@ -568,10 +568,11 @@
   
   # impute NA freqcl values, default = "not populated"
   if (impute == TRUE) {
-    vars <- c("flodfreqcl", "pondfreqcl")
-    missing <- "not_populated"
-    freqcl2 <- c(missing, "none", "very rare", "rare", "common", "occasional", "frequent", "very frequent")
-    status2 <- c(missing, levels(df$status))
+    
+    missing <- "Not populated"
+    lev_flodfreqcl <- c(missing, levels(df$flodfreqcl))
+    lev_pondfreqcl <- c(missing, levels(df$pondfreqcl))
+    lev_status <- c(missing, levels(df$status))
     
     df <- within(df, {
       # replace NULL RV depths with 201 cm if pondfreqcl or flodqcl is not NULL
@@ -586,9 +587,9 @@
       depb_h = ifelse(is.na(depb_h), depb_r, depb_h)
       
       # replace NULL freqcl with "Not_Populated"
-      status = factor(status, levels = status2)
-      flodfreqcl = factor(flodfreqcl, levels = freqcl2)
-      pondfreqcl = factor(pondfreqcl, levels = freqcl2)
+      status = factor(levels(status)[status], levels = lev_status)
+      flodfreqcl = factor(levels(flodfreqcl)[flodfreqcl], levels = lev_flodfreqcl)
+      pondfreqcl = factor(levels(pondfreqcl)[pondfreqcl], levels = lev_flodfreqcl)
       
       status[is.na(status)] <- missing
       flodfreqcl[is.na(flodfreqcl)] <- missing
