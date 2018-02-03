@@ -87,9 +87,9 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFac
   FROM mapunit
   GROUP BY nationalmusym) AS 
   mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN
-  (SELECT compname, comppct_r, cokey, mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu2.mukey2")
+  (SELECT compname, comppct_r, majcompflag, cokey, mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu2.mukey2")
   } else {paste("
-    (SELECT compname, comppct_r, cokey, mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu.mukey")}, "INNER JOIN
+    (SELECT compname, comppct_r, majcompflag, cokey, mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu.mukey")}, "INNER JOIN
   chorizon ch ON ch.cokey = c.cokey LEFT OUTER JOIN
   chtexturegrp chtg ON chtg.chkey = ch.chkey AND rvindicator = 'YES'
   
@@ -130,7 +130,7 @@ fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, rmHzErrors = FA
 
   # load data in pieces
   f.component <- get_component_from_SDA(WHERE, duplicates, stringsAsFactors = stringsAsFactors)
-  f.mapunit   <- get_mapunit_from_SDA(WHERE, stringsAsFactors = stringsAsFactors)
+  # f.mapunit   <- get_mapunit_from_SDA(WHERE, stringsAsFactors = stringsAsFactors)
   f.chorizon  <- get_chorizon_from_SDA(WHERE, duplicates)
   
   # optionally test for bad horizonation... flag, and remove
@@ -165,6 +165,6 @@ fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, rmHzErrors = FA
     message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=soilDB.env)` for related cokey values")
   
   # done, return SPC
-  return(list(spc = f.chorizon, mapunit = f.mapunit))
+  return(f.chorizon)
   
 }

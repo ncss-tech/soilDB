@@ -56,7 +56,6 @@ library(gridExtra)
 
 # query soil components by areasymbol and musym
 test = fetchSDA_component(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
-test = test$spc
 
 # profile plot
 plot(test)
