@@ -72,6 +72,23 @@ get_mapunit_from_LIMS <- function(projectname, stringsAsFactors = default.string
   }
 
 
+get_projectmapunit_from_LIMS <- function(mlrassoarea, fiscalyear, projectname, stringsAsFactors = default.stringsAsFactors()) {
+  
+  url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit2_from_LIMS"
+  
+  
+  args = list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)
+  d.mapunit    =  parseWebReport(url, args)
+  
+  # set factor levels according to metadata domains
+  d.mapunit <- uncode(d.mapunit, db = "LIMS", stringsAsFactors = stringsAsFactors)
+  
+  # return data.frame
+  return(d.mapunit)
+  
+}
+
+
 get_project_from_LIMS <- function(mlrassoarea, fiscalyear) {
   
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_project_from_LIMS"

@@ -4,6 +4,7 @@
 \alias{get_progress_from_LIMS}
 \alias{get_reverse_correlation_from_LIMS}
 \alias{get_mapunit_from_LIMS}
+\alias{get_projectmapunit_from_LIMS}
 \alias{get_component_from_LIMS}
 \alias{get_chorizon_from_LIMS}
 \alias{get_cosoilmoist_from_LIMS}
@@ -19,6 +20,9 @@ get_progress_from_LIMS(mlrassoarea, fiscalyear, projecttypename)
 get_project_from_LIMS(mlrassoarea, fiscalyear)
 get_reverse_correlation_from_LIMS(mlrassoarea, fiscalyear, projectname)
 get_mapunit_from_LIMS(projectname, stringsAsFactors = default.stringsAsFactors())
+get_projectmapunit_from_LIMS(mlrassoarea, fiscalyear, projectname, 
+                             stringsAsFactors = default.stringsAsFactors()
+                             )
 get_component_from_LIMS(projectname, stringsAsFactors = default.stringsAsFactors())
 get_chorizon_from_LIMS(projectname, fill = FALSE, 
                        stringsAsFactors = default.stringsAsFactors()
