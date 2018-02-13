@@ -106,22 +106,24 @@ simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   # extract classes
   rf.classes <- .rockFragmentSieve(rf)
   
-  ## note: this must include all classes that related functions return
-  # set levels of classes
-  rf.classes$class <- factor(rf.classes$class, levels=c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones'))
-  
+  ## NOTE: this is performed on the data, as-is: not over all possible classes as enforced by factor levels
   # sum volume by id and class
-  rf.sums <- ddply(rf.classes, c(id.var, 'class'), plyr::summarise, volume=sum(fragvol, na.rm=TRUE), .drop=FALSE)
+  rf.sums <- ddply(rf.classes, c(id.var, 'class'), plyr::summarise, volume=sum(fragvol, na.rm=TRUE))
+  
+  ## NOTE: we set factor levels here because the reshaping (long->wide) needs to account for all possible classes
+  ## NOTE: this must include all classes that related functions return
+  # set levels of classes
+  rf.sums$class <- factor(rf.sums$class, levels=c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones'))
   
   # convert to wide format
   fm <- as.formula(paste0(id.var, ' ~ class'))
-  rf.wide <- dcast(rf.sums, fm, value.var = 'volume', DROP = FALSE)
+  rf.wide <- reshape2::dcast(rf.sums, fm, value.var = 'volume', drop = FALSE)
   
   # fix "NA" column name
   if(any(names(rf.wide) == 'NA'))
     names(rf.wide)[which(names(rf.wide) == 'NA')] <- 'unspecified'
   
-  # convert NULL frags -> 0
+  # optionally convert NULL frags -> 0
   if(nullFragsAreZero & ncol(rf.wide) > 1) {
     rf.wide <- as.data.frame(
       cbind(rf.wide[, 1, drop=FALSE], 
@@ -129,6 +131,20 @@ simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
       ), stringsAsFactors=FALSE)
   }
   
+  # final sanity check: are there any fractions or the total >= 100%
+  gt.100 <- sapply(rf.wide[, -1], function(i) i >= 100)
+  
+  # check each column and report id.var if there are any
+  if(any(apply(gt.100, 2, any, na.rm=TRUE))) {
+    # row-wise test to locate IDs
+    idx <- which(apply(gt.100, 1, any, na.rm=TRUE))
+    flagged.ids <- rf.wide[[id.var]][idx]
+    
+    warning(sprintf("fragment volume >= 100%%\n%s:\n%s", id.var, paste(flagged.ids, collapse = "\n")), call. = FALSE)
+  }
+  
+  ## TODO: 0 is returned when all NA and nullFragsAreZero=FALSE
+  ## https://github.com/ncss-tech/soilDB/issues/57
   # compute total fragments
   # trap no frag condition
   if(ncol(rf.wide) > 1) {
@@ -139,26 +155,15 @@ simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
     rf.wide$total_frags_pct <- rowSums(rf.wide[, -c(1,length(names(rf.wide)))], na.rm=TRUE)
   }
   
+  ## TODO: 0 is returned when all NA and nullFragsAreZero=FALSE
+  ## https://github.com/ncss-tech/soilDB/issues/57
   # corrections:
   # 1. fine gravel is a subset of gravel, therefore: gravel = gravel + fine_gravel
-  rf.wide$gravel <- rf.wide$gravel + rf.wide$fine_gravel
-  rf.wide$paragravel <- rf.wide$paragravel + rf.wide$parafine_gravel
-  
-  # final sanity check: are there any fractions or the total >= 100%
-  gt.100 <- sapply(rf.wide[, -1], function(i) i >= 100)
-  
-  # check each column and report id.var if there are any
-  if(any(apply(gt.100, 2, any))) {
-    # row-wise test to locate IDs
-    idx <- which(apply(gt.100, 1, any))
-    flagged.ids <- rf.wide[[id.var]][idx]
-    
-    warning(sprintf("fragment volume >= 100%%\n%s:\n%s", id.var, paste(flagged.ids, collapse = "\n")), call. = FALSE)
-  }
+  rf.wide$gravel <- rowSums(cbind(rf.wide$gravel, rf.wide$fine_gravel), na.rm = TRUE)
+  rf.wide$paragravel <- rowSums(cbind(rf.wide$paragravel, rf.wide$parafine_gravel), na.rm=TRUE)
   
   # done
   return(rf.wide)
-  
 }
 
 
