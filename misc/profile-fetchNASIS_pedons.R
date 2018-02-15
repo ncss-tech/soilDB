@@ -1,6 +1,12 @@
 library(proftools)
 library(soilDB)
 
+# https://github.com/ncss-tech/soilDB/issues/55
+
+## note: it is not clear if unexported functions like .formatLandformString() are named in the results
+
+
+
 ## profile
 ## http://adv-r.had.co.nz/Profiling.html#measure-perf
 ## https://cran.r-project.org/web/packages/proftools/index.html

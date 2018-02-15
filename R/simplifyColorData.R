@@ -1,4 +1,6 @@
 
+## TODO: this function is a large time sink when number of pedons > ~ 500.
+## https://github.com/ncss-tech/soilDB/issues/55
 
 # This function heavily biased towared NASIS-specific data structures and assumptions
 # d: data.frame with color data from horizon-color table: expects "colorhue", "colorvalue", "colorchroma"
