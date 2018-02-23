@@ -134,7 +134,7 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   site(h) <- best.ecosite.data
   
   ## TODO: NA in diagnostic boolean columns are related to pedons with no diagnostic features
-  ## 
+  ## https://github.com/ncss-tech/soilDB/issues/59
   # add diagnostic boolean data into @site
   site(h) <- extended_data$diagHzBoolean
   
