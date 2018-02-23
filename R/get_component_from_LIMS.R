@@ -70,6 +70,24 @@ get_component_from_LIMS <- function(projectname, stringsAsFactors = default.stri
     d.component$trce <- droplevels(d.component$trce)
   }
   
+  # parent material
+  d.component <- within(d.component, {
+    lacustrine = NA
+    alluvium = NA
+    colluvium = NA
+    loess = NA
+    outwash = NA
+    till = NA
+    residuum = NA
+    
+    lacustrine = grepl("lacustrine" , pmgroupname)
+    alluvium   = grepl("alluvium"   , pmgroupname)
+    colluvium  = grepl("colluvium"  , pmgroupname)
+    loess      = grepl("outwash|glacial fluvial"    , pmgroupname)
+    outwash    = grepl("outwash"    , pmgroupname)
+    till       = grepl("till"       , pmgroupname)
+    residuum   = grepl("residuum"   , pmgroupname)
+    })
   
   # return data.frame
   return(d.component)
