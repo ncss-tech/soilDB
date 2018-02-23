@@ -108,17 +108,20 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   # upgrade to SoilProfilecollection
   depths(h) <- peiid ~ hzdept + hzdepb
   
-  ## TODO: this is slow
   # move pedon_id into @site
   site(h) <- ~ pedon_id
   
   ## TODO: this will fail in the presence of duplicates
   # add site data to object
-  site_data$pedon_id <- NULL # remove 'pedon_id' column from site_data
-  site(h) <- site_data # left-join via peiid
+  # remove 'pedon_id' column from site_data
+  site_data$pedon_id <- NULL
+  
+  # left-join via peiid
+  site(h) <- site_data
   
   
   ### TODO: consider moving this into the extended data function ###
+  ## TODO: slow
   # load best-guess optimal records from taxhistory
   # method is added to the new field called 'selection_method'
   # assumes that classdate is a datetime class object!
@@ -130,6 +133,8 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   best.ecosite.data <- ddply(extended_data$ecositehistory, 'siteiid', .pickBestEcosite)
   site(h) <- best.ecosite.data
   
+  ## TODO: NA in diagnostic boolean columns are related to pedons with no diagnostic features
+  ## 
   # add diagnostic boolean data into @site
   site(h) <- extended_data$diagHzBoolean
   
