@@ -17,10 +17,59 @@ get_component_from_LIMS <- function(projectname, stringsAsFactors = default.stri
   idx <- which(names(d.component) %in% vars)
   names(d.component)[idx] <- new_names 
   
-  # add geompos
-  d.component$geompos <- with(d.component, gsub("NA,|,NA|NA", "", paste(mntn, hill, trce, flats, sep = ",")))
-  d.component$geompos[d.component$geompos == ""] <- NA
+  # combine geompos and shapes
+  d.component <- within(d.component, {
+    geompos = NA
+    geompos = gsub("NA,|,NA|NA", "", paste(mntn, hill, trce, flats, sep = ","))
+    geompos[geompos == ""] = NA
+    
+    ssa = NA
+    ssd = NA
+    slopeshape = NA
+    
+    ssa = gsub("Concave", "C", shapeacross)
+    ssa = gsub("Linear",  "L", ssa)
+    ssa = gsub("Convex",  "V", ssa)
+    
+    ssd = gsub("Concave", "C", shapedown)
+    ssd = gsub("Linear",  "L", ssd)
+    ssd = gsub("Convex",  "V", ssd)
+    
+    slopeshape = gsub("NA", "", paste0(ssd, ssa, sep = ""))
+    slopeshape[slopeshape == ""] = NA
+    })
+  d.component[c("ssa", "ssd")] <- NULL
+  
+  ss_vars <- c("CC", "CV", "CL", "LC", "LL", "LV", "VL", "VC", "VV")
+  if (all(d.component$slopeshape[!is.na(d.component$slopeshape)] %in% ss_vars)) {
+    d.component$slopeshape <- factor(d.component$slopeshape, levels = ss_vars)
+    d.component$slopeshape <- droplevels(d.component$slopeshape)
+  }
+  
+  hs_vars <- c("Toeslope", "Footslope", "Backslope", "Shoulder", "Summit")
+  if (all(d.component$hillslopeprof[!is.na(d.component$hillslopeprof)] %in% hs_vars)) {
+    d.component$hillslopeprof <- factor(d.component$hillslopeprof, levels = hs_vars)
+    d.component$hillslopeprof <- droplevels(d.component$hillslopeprof)
+  }
 
+  hill_vars <- c("Base Slope", "Head Slope", "Side Slope", "Free Face", "Nose Slope", "Crest", "Interfluve")
+  if (all(d.component$hill[!is.na(d.component$hill)] %in% hill_vars)) {
+    d.component$hill <- factor(d.component$hill, levels = hill_vars)
+    d.component$hill <- droplevels(d.component$hill)
+  }
+
+  flats_vars <- c("Dip", "Talf", "Rise")
+  if (all(d.component$flats[!is.na(d.component$flats)] %in% flats_vars)) {
+    d.component$flats <- factor(d.component$flats, levels = flats_vars)
+    d.component$flats <- droplevels(d.component$flats)
+  }
+  
+  trce_vars <- c("Tread", "Riser")
+  if (all(d.component$trce[!is.na(d.component$trce)] %in% trce_vars)) {
+    d.component$trce <- factor(d.component$trce, levels = trce_vars)
+    d.component$trce <- droplevels(d.component$trce)
+  }
+  
   
   # return data.frame
   return(d.component)
