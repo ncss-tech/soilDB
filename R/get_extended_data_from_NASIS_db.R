@@ -48,9 +48,12 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stri
   }
   
   
+  # include all peiid from pedon table so that there are no NA in the boolean summary
   # query diagnostic horizons, usually a 1:many relationship with pedons
   q.diagnostic <- "SELECT peiidref as peiid, featkind, featdept, featdepb
-  FROM pediagfeatures_View_1 AS pdf
+  FROM 
+  pedon_View_1 AS p
+  LEFT JOIN pediagfeatures_View_1 AS pdf ON p.peiid = pdf.peiidref 
 	ORDER BY pdf.peiidref, pdf.featdept;"
   
   # toggle selected set vs. local DB
