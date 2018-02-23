@@ -11,6 +11,17 @@ get_component_from_LIMS <- function(projectname, stringsAsFactors = default.stri
   # set factor levels according to metadata domains
   d.component <- uncode(d.component, db = "LIMS", stringsAsFactors = stringsAsFactors)
   
+  # rename columns
+  vars <- c("gc_mntn", "gc_hill", "gc_trce", "gc_flats", "hs_hillslopeprof", "ss_shapeacross", "ss_shapedown")
+  new_names <- c("mntn", "hill", "trce", "flats", "hillslopeprof", "shapeacross", "shapedown")
+  idx <- which(names(d.component) %in% vars)
+  names(d.component)[idx] <- new_names 
+  
+  # add geompos
+  d.component$geompos <- with(d.component, gsub("NA,|,NA|NA", "", paste(mntn, hill, trce, flats, sep = ",")))
+  d.component$geompos[d.component$geompos == ""] <- NA
+
+  
   # return data.frame
   return(d.component)
   
