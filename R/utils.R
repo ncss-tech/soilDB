@@ -9,7 +9,7 @@
 .diagHzLongtoWide <- function(d) {
 	
 	# get unique vector of diagnostic hz
-	d.unique <- na.omit(unique(d$featkind))
+	d.unique <- na.omit(unique(as.character(d$featkind)))
 	
 	# init list for storing initial FALSE for each peiid / diag kind
 	l <- vector(mode='list')
