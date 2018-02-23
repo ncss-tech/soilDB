@@ -48,12 +48,12 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stri
   }
   
   
-  # include all peiid from pedon table so that there are no NA in the boolean summary
+  ## TODO: include all peiid from pedon table so that there are no NA in the boolean summary
+  ## https://github.com/ncss-tech/soilDB/issues/59
   # query diagnostic horizons, usually a 1:many relationship with pedons
   q.diagnostic <- "SELECT peiidref as peiid, featkind, featdept, featdepb
   FROM 
-  pedon_View_1 AS p
-  LEFT JOIN pediagfeatures_View_1 AS pdf ON p.peiid = pdf.peiidref 
+  pediagfeatures_View_1 AS pdf
 	ORDER BY pdf.peiidref, pdf.featdept;"
   
   # toggle selected set vs. local DB
