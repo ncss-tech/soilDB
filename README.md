@@ -16,6 +16,18 @@ Get the development version from Github:
 http://ncss-tech.github.io/AQP/
 
 
+## Important changes in soilDB-2.0
+
+### NASIS
+
+ * low-level functions return empty `data.frame` objects when local database (or selected set) is empty
+ * fetchNASIS() is now a wrapper around pedon and component "fetch" functions
+ * uncode() is now used in all queries to local NASIS database
+ * many (coded) column names in pedon @site and @horizons have changed
+ * lower cases is used for all un-coded data
+ 
+ 
+
 ## Examples
 ```r
 library(soilDB)
