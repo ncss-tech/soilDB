@@ -80,14 +80,22 @@ get_component_from_LIMS <- function(projectname, stringsAsFactors = default.stri
     till = NA
     residuum = NA
     
-    lacustrine = grepl("lacustrine" , pmgroupname)
-    alluvium   = grepl("alluvium"   , pmgroupname)
-    colluvium  = grepl("colluvium"  , pmgroupname)
     loess      = grepl("outwash|glacial fluvial"    , pmgroupname)
+    colluvium  = grepl("colluvium"  , pmgroupname)
+    alluvium   = grepl("alluvium"   , pmgroupname)
     outwash    = grepl("outwash"    , pmgroupname)
     till       = grepl("till"       , pmgroupname)
+    lacustrine = grepl("lacustrine" , pmgroupname)
     residuum   = grepl("residuum"   , pmgroupname)
     })
+  
+  d.component <- within(d.component, {
+    pm = NA
+    pm[loess]     = "loess"
+    pm[colluvium] = paste("colluvium", sep = ", ")
+    pm[alluvium] = paste("alluvium", sep = ", ")
+    
+  })
   
   # return data.frame
   return(d.component)

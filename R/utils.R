@@ -605,3 +605,150 @@
   
   return(df)
 }
+
+
+
+# Prep of the component geomorphic description
+# flatten multiple records into 1 cokey
+.copm_prep <- function(df, db = NULL) {
+  
+  if (db == "SDA") {
+    
+    # flatten
+    idx <- duplicated(df$cokey)
+    
+    if (any(idx)) {
+      dups_idx <- df$cokey %in% df[idx, "cokey"]
+      dups     <- df[dups_idx, ]
+      nodups   <- df[!dups_idx, ]
+      
+      dups_clean <- {
+        split(dups, dups$cokey, drop = TRUE) ->.
+        lapply(., function(x) { data.frame(
+          x[1, c("cokey", "pmgroupname")],
+          pmorigin = paste(x$pmorigin[order(x$pmorder)], collapse = " over "),
+          pmkind   = paste(x$pmkind[order(x$pmorder)],   collapse = " over ")
+          )}) ->.
+        do.call("rbind", .) ->.
+      }
+      nodups[c("copmgrpkey", "pmorder")] <- NULL
+      
+      df <- rbind(nodups, dups_clean)  
+      df <- df[order(df$cokey), ]
+      row.names(df) <- 1:nrow(df)
+      }
+    
+    df <- within(df, {
+      pmorigin = gsub("NA over NA|^NA over | over NA$", "", pmorigin)
+      pmkind   = gsub("NA over NA|^NA over | over NA$", "", pmkind)
+      })
+    
+    # replace "" with NA
+    vars <- c("pmorigin", "pmkind")
+    idx <- unlist(lapply(df, is.character))
+    idx <- names(df) %in% vars & idx
+    df[, idx] <- lapply(df[, idx], function(x) ifelse(x == "", NA, x))
+    }
+  }
+
+
+
+# Prep of the component geomorphic description
+# flatten multiple records into 1 cokey
+.cogmd_prep <- function(df, db = NULL) {
+  
+  if (db == "SDA") {
+    
+    # flatten
+    idx <- duplicated(df$cokey)
+    
+    if (any(idx)) {
+      dups_idx <- df$cokey %in% df[idx, "cokey"]
+      dups     <- df[dups_idx, ]
+      nodups   <- df[!dups_idx, ]
+      
+      dups_clean <- {
+        split(dups, dups$cokey, drop = TRUE) ->.
+        lapply(., function(x) { data.frame(
+          cokey = x$cokey[1],
+          landscape     = paste(unique(x$landscape),           collapse = " and "),
+          landform      = paste(unique(x$landform),            collapse = " on  "),
+          mntn          = paste(sort(unique(x$mntn)),          collapse = ", "   ),
+          hill          = paste(sort(unique(x$hill)),          collapse = ", "   ),
+          trce          = paste(sort(unique(x$trce)),          collapse = ", "   ),
+          flats         = paste(sort(unique(x$flats)),         collapse = ", "   ),
+          shapeacross   = paste(sort(unique(x$shapeacross)),   collapse = ", "   ),
+          shapedown     = paste(sort(unique(x$shapedown)),     collapse = ", "   ),
+          hillslopeprof = paste(sort(unique(x$hillslopeprof)), collapse = ", ")
+        )}) ->.
+        do.call("rbind", .) ->.
+      }
+      nodups[c("geomfeatid", "existsonfeat")] <- NULL
+      
+      df <- rbind(nodups, dups_clean)  
+      df <- df[order(df$cokey), ]
+      row.names(df) <- 1:nrow(df)
+      }
+    }
+  
+  
+  vars <- c("landscape", "landform", "mntn", "hill", "trce", "flats")
+  idx <- unlist(lapply(df, is.character))
+  idx <- names(df) %in% vars & idx
+  df[, idx] <- lapply(df[, idx], function(x) ifelse(x == "NA", NA, x))
+  
+  # combine geompos and shapes
+  df <- within(df, {
+    geompos = NA
+    geompos = gsub("NA,|,NA|NA|^,|^,,|^,,,|,$|,,$|,,,$", "", paste(mntn, hill, trce, flats, sep = ","))
+    geompos[geompos == ""] = NA
+    
+    ssa = NA # slope shape across
+    ssd = NA # slope shape down
+    slopeshape = NA
+    
+    ssa = gsub("Concave", "C", shapeacross)
+    ssa = gsub("Linear",  "L", ssa)
+    ssa = gsub("Convex",  "V", ssa)
+    
+    ssd = gsub("Concave", "C", shapedown)
+    ssd = gsub("Linear",  "L", ssd)
+    ssd = gsub("Convex",  "V", ssd)
+    
+    slopeshape = gsub("NA", "", paste0(ssd, ssa, sep = ""))
+    slopeshape[slopeshape == ""] = NA
+  })
+  df[c("ssa", "ssd")] <- NULL
+  
+  ss_vars <- c("CC", "CV", "CL", "LC", "LL", "LV", "VL", "VC", "VV")
+  if (all(df$slopeshape[!is.na(df$slopeshape)] %in% ss_vars)) {
+    df$slopeshape <- factor(df$slopeshape, levels = ss_vars)
+    df$slopeshape <- droplevels(df$slopeshape)
+  }
+  
+  hs_vars <- c("Toeslope", "Footslope", "Backslope", "Shoulder", "Summit")
+  if (all(df$hillslopeprof[!is.na(df$hillslopeprof)] %in% hs_vars)) {
+    df$hillslopeprof <- factor(df$hillslopeprof, levels = hs_vars)
+    df$hillslopeprof <- droplevels(df$hillslopeprof)
+  }
+  
+  hill_vars <- c("Base Slope", "Head Slope", "Side Slope", "Free Face", "Nose Slope", "Crest", "Interfluve")
+  if (all(df$hill[!is.na(df$hill)] %in% hill_vars)) {
+    df$hill <- factor(df$hill, levels = hill_vars)
+    df$hill <- droplevels(df$hill)
+  }
+  
+  flats_vars <- c("Dip", "Talf", "Rise")
+  if (all(df$flats[!is.na(df$flats)] %in% flats_vars)) {
+    df$flats <- factor(df$flats, levels = flats_vars)
+    df$flats <- droplevels(df$flats)
+  }
+  
+  trce_vars <- c("Tread", "Riser")
+  if (all(df$trce[!is.na(df$trce)] %in% trce_vars)) {
+    df$trce <- factor(df$trce, levels = trce_vars)
+    df$trce <- droplevels(df$trce)
+  }
+
+  return(df)
+  }

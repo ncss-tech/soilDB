@@ -1,7 +1,9 @@
 get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFactors = default.stringsAsFactors()){
+  
   # SDA is missing soiltempa_r AS mast_r
   # Joining in the fetch on derived_cokey doesn't work but should. There are duplicate components with the same combination of elements.
   # paste0("mu.nationalmusym + '_' + CAST(comppct_r AS VARCHAR) + '_' + compname + '-' + ISNULL(localphase, 'no_phase') AS derived_cokey")
+  
   c.vars <- "compname, comppct_r, compkind, majcompflag, localphase, slope_r, tfact, wei, weg, drainagecl, elev_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, cokey"
   q.component <- paste("
   SELECT", 
@@ -25,17 +27,77 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFa
   
   # exec query
   d.component <- SDA_query(q.component)
-
+  
   
   # recode metadata domains
   d.component <- uncode(d.component, db = "SDA", stringsAsFactors = stringsAsFactors)
+
+  
+  # parent material
+  q.pm <- paste0(
+    "SELECT co.cokey, pmg.copmgrpkey, pmgroupname, pmorder, pmkind, pmorigin
+    
+    FROM
+    component co                                        LEFT OUTER JOIN
+    copmgrp   pmg ON pmg.cokey         = co.cokey AND
+                       pmg.rvindicator = 'Yes'          LEFT OUTER JOIN
+    copm      pm  ON pm.copmgrpkey     = pmg.copmgrpkey
+
+    WHERE co.cokey IN (", paste0(d.component$cokey, collapse = ", "), ")
+    
+    ORDER BY co.cokey, pmg.copmgrpkey, pmorder"
+    )
+  
+  # exec query
+  d.pm <- SDA_query(q.pm)
+  
+  # prep
+  d.pm <- .copm_prep(d.pm, db = "SDA")
+  
+  # merge
+  d.component <- merge(d.component, d.pm, by = "cokey", all.x = TRUE)
   
   
-  # cache original column names
-  orig_names <- names(d.component)
   
-  # reorder columns
-  # d.component <- with(d.component, { d.component[order(nationalmusym, - comppct_r, compname), ]})
+  # landform
+  q.lf <- paste0(
+    "SELECT co.cokey, ls.geomfname landscape, lf.geomfname landform, lf.geomfeatid, lf.existsonfeat,
+            geomposmntn mntn, geomposhill hill, geompostrce trce, geomposflats flats,
+            shapeacross, shapedown,
+            hillslopeprof
+    
+    FROM
+    component co
+
+    LEFT OUTER JOIN
+        cogeomordesc ls ON ls.cokey       = co.cokey   AND
+                           ls.rvindicator = 'Yes'      AND
+                           ls.geomftname  = 'Landscape'
+    LEFT OUTER JOIN
+        cogeomordesc lf ON lf.cokey       = co.cokey   AND
+                           lf.rvindicator = 'Yes'      AND
+                           lf.geomftname  = 'Landform'
+    LEFT OUTER JOIN 
+        cosurfmorphgc  lf_3d ON lf_3d.cogeomdkey = lf.cogeomdkey
+    LEFT OUTER JOIN
+        cosurfmorphss  lf_ss ON lf_ss.cogeomdkey = lf.cogeomdkey
+    LEFT OUTER JOIN
+        cosurfmorphhpp lf_2d ON lf_2d.cogeomdkey = lf.cogeomdkey
+
+    WHERE co.cokey IN (", paste0(d.component$cokey, collapse = ", "), ")
+    
+    ORDER BY cokey, ls.geomftname, ls.geomfeatid, ls.existsonfeat, lf.geomftname, lf.geomfeatid, lf.existsonfeat"
+    )
+  
+  # exec query
+  d.cogmd <- SDA_query(q.lf)
+  
+  # prep
+  d.cogmd <- .cogmd_prep(d.cogmd, db = "SDA")
+  
+  # merge
+  d.component <- merge(d.component, d.cogmd, by = "cokey", all.x = TRUE)
+  
   
   # done
   return(d.component)
