@@ -649,6 +649,8 @@
     idx <- names(df) %in% vars & idx
     df[, idx] <- lapply(df[, idx], function(x) ifelse(x == "", NA, x))
     }
+  
+  return(df)
   }
 
 
