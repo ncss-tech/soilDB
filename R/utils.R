@@ -622,14 +622,22 @@
       dups     <- df[dups_idx, ]
       nodups   <- df[!dups_idx, ]
       
+      # hack to make CRAN check happy
+      pmorigin = NA; pmkind = NA;
+      
       dups_clean <- {
-        split(dups, dups$cokey, drop = TRUE) ->.
+        transform(dups, 
+                  idx_pmo = !is.na(pmorigin),
+                  idx_pmk = !is.na(pmkind)
+                  ) ->.;
+        split(., .$cokey, drop = TRUE) ->.
         lapply(., function(x) { data.frame(
           x[1, c("cokey", "pmgroupname")],
-          pmorigin = paste(x$pmorigin[order(x$pmorder)], collapse = " over "),
-          pmkind   = paste(x$pmkind[order(x$pmorder)],   collapse = " over ")
+          pmkind   = paste(x[x$idx_pmk, "pmkind"  ][order(x[x$idx_pmk, "pmorder"])],   collapse = " over "),
+          pmorigin = paste(x[x$idx_pmo, "pmorigin"][order(x[x$idx_pmo, "pmorder"])], collapse = " over "),
+          stringsAsFactors = FALSE
           )}) ->.
-        do.call("rbind", .) ->.
+        do.call("rbind", .) ->.;
       }
       nodups[c("copmgrpkey", "pmorder")] <- NULL
       
@@ -638,10 +646,6 @@
       row.names(df) <- 1:nrow(df)
       }
     
-    df <- within(df, {
-      pmorigin = gsub("NA over NA|^NA over | over NA$", "", pmorigin)
-      pmkind   = gsub("NA over NA|^NA over | over NA$", "", pmkind)
-      })
     
     # replace "" with NA
     vars <- c("pmorigin", "pmkind")
@@ -659,6 +663,38 @@
 # flatten multiple records into 1 cokey
 .cogmd_prep <- function(df, db = NULL) {
   
+  # rename LIMS columns and sort comma separated lists
+  if (db == "LIMS") {
+    # rename columns
+    vars <- c("pmkind_grp", "pmorigin_grp", "gc_mntn", "gc_hill", "gc_trce", "gc_flats", "hs_hillslopeprof", "ss_shapeacross", "ss_shapedown")
+    new_names <- c("pmkind", "pmorigin", "mntn", "hill", "trce", "flats", "hillslopeprof", "shapeacross", "shapedown")
+    idx <- which(names(df) %in% vars)
+    names(df)[idx] <- new_names
+    
+    # hack to make CRAN check happy
+    mntn = NA; hill = NA; trce = NA; flats = NA; hillslopeprof = NA;
+    
+    df <- within(df, {
+      if (class(mntn) == "character") {
+        mntn  = sapply(mntn,  function(x) paste(sort(unlist(strsplit(x, ", "))), collapse = ", "))
+        }
+      if (class(hill) == "character") {
+        hill  = sapply(hill,  function(x) paste(sort(unlist(strsplit(x, ", "))), collapse = ", "))
+        }
+      if (class(trce) == "character") {
+        trce  = sapply(trce,  function(x) paste(sort(unlist(strsplit(x, ", "))), collapse = ", "))
+        }
+      if (class(flats) == "character") {
+        flats = sapply(flats, function(x) paste(sort(unlist(strsplit(x, ", "))), collapse = ", "))
+        }
+      if (class(hillslopeprof) == "character") {
+        hillslopeprof = sapply(hillslopeprof, function(x) paste(sort(unlist(strsplit(x, ", "))), collapse = ", "))
+        }
+      })
+    }
+  
+  
+  # flatten the SDA results to 1 cokey
   if (db == "SDA") {
     
     # flatten
@@ -681,7 +717,8 @@
           flats         = paste(sort(unique(x$flats)),         collapse = ", "   ),
           shapeacross   = paste(sort(unique(x$shapeacross)),   collapse = ", "   ),
           shapedown     = paste(sort(unique(x$shapedown)),     collapse = ", "   ),
-          hillslopeprof = paste(sort(unique(x$hillslopeprof)), collapse = ", ")
+          hillslopeprof = paste(sort(unique(x$hillslopeprof)), collapse = ", "),
+          stringsAsFactors = TRUE
         )}) ->.
         do.call("rbind", .) ->.
       }
@@ -693,32 +730,37 @@
       }
     }
   
-  
-  vars <- c("landscape", "landform", "mntn", "hill", "trce", "flats")
+  vars <- c("landscape", "landform", "mntn", "hill", "trce", "flats", "hillslopeprof")
   idx <- unlist(lapply(df, is.character))
   idx <- names(df) %in% vars & idx
-  df[, idx] <- lapply(df[, idx], function(x) ifelse(x == "NA", NA, x))
+  df[, idx] <- lapply(df[, idx], function(x) ifelse(x %in% c("", "NA"), NA, x))
+  
+  # hack to make CRAN check happy
+  mntn = NA; hill = NA; trce = NA; flats = NA; shapeacross = NA; shapedown = NA;
   
   # combine geompos and shapes
   df <- within(df, {
     geompos = NA
-    geompos = gsub("NA,|,NA|NA|^,|^,,|^,,,|,$|,,$|,,,$", "", paste(mntn, hill, trce, flats, sep = ","))
+    geompos = paste(mntn, hill, trce, flats, sep = ", ")
+    geompos = gsub("NA", "", geompos)
+    geompos = gsub("^, |^, , |^, , , |, $|, , $|, , , $", "", geompos)
+    geompos = gsub(", , ", ", ", geompos)
     geompos[geompos == ""] = NA
     
     ssa = NA # slope shape across
     ssd = NA # slope shape down
     slopeshape = NA
-    
+
     ssa = gsub("Concave", "C", shapeacross)
     ssa = gsub("Linear",  "L", ssa)
     ssa = gsub("Convex",  "V", ssa)
-    
+
     ssd = gsub("Concave", "C", shapedown)
     ssd = gsub("Linear",  "L", ssd)
     ssd = gsub("Convex",  "V", ssd)
-    
-    slopeshape = gsub("NA", "", paste0(ssd, ssa, sep = ""))
-    slopeshape[slopeshape == ""] = NA
+
+    slopeshape = paste0(ssd, ssa, sep = "")
+    slopeshape[slopeshape %in% c("NANA", "")] = NA
   })
   df[c("ssa", "ssd")] <- NULL
   

@@ -3,6 +3,7 @@ get_component_from_LIMS <- function(projectname, stringsAsFactors = default.stri
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_component_from_LIMS"
   
   d.component <- lapply(projectname, function(x) {
+    cat("getting project '", x, "' from LIMS \n", sep = "")
     args = list(p_projectname = x)
     d    =  parseWebReport(url, args)
   })
@@ -11,91 +12,10 @@ get_component_from_LIMS <- function(projectname, stringsAsFactors = default.stri
   # set factor levels according to metadata domains
   d.component <- uncode(d.component, db = "LIMS", stringsAsFactors = stringsAsFactors)
   
-  # rename columns
-  vars <- c("gc_mntn", "gc_hill", "gc_trce", "gc_flats", "hs_hillslopeprof", "ss_shapeacross", "ss_shapedown")
-  new_names <- c("mntn", "hill", "trce", "flats", "hillslopeprof", "shapeacross", "shapedown")
-  idx <- which(names(d.component) %in% vars)
-  names(d.component)[idx] <- new_names 
   
-  # combine geompos and shapes
-  d.component <- within(d.component, {
-    geompos = NA
-    geompos = gsub("NA,|,NA|NA", "", paste(mntn, hill, trce, flats, sep = ","))
-    geompos[geompos == ""] = NA
-    
-    ssa = NA
-    ssd = NA
-    slopeshape = NA
-    
-    ssa = gsub("Concave", "C", shapeacross)
-    ssa = gsub("Linear",  "L", ssa)
-    ssa = gsub("Convex",  "V", ssa)
-    
-    ssd = gsub("Concave", "C", shapedown)
-    ssd = gsub("Linear",  "L", ssd)
-    ssd = gsub("Convex",  "V", ssd)
-    
-    slopeshape = gsub("NA", "", paste0(ssd, ssa, sep = ""))
-    slopeshape[slopeshape == ""] = NA
-    })
-  d.component[c("ssa", "ssd")] <- NULL
+  # prep
+  d.component <- .cogmd_prep(d.component, db = "LIMS")
   
-  ss_vars <- c("CC", "CV", "CL", "LC", "LL", "LV", "VL", "VC", "VV")
-  if (all(d.component$slopeshape[!is.na(d.component$slopeshape)] %in% ss_vars)) {
-    d.component$slopeshape <- factor(d.component$slopeshape, levels = ss_vars)
-    d.component$slopeshape <- droplevels(d.component$slopeshape)
-  }
-  
-  hs_vars <- c("Toeslope", "Footslope", "Backslope", "Shoulder", "Summit")
-  if (all(d.component$hillslopeprof[!is.na(d.component$hillslopeprof)] %in% hs_vars)) {
-    d.component$hillslopeprof <- factor(d.component$hillslopeprof, levels = hs_vars)
-    d.component$hillslopeprof <- droplevels(d.component$hillslopeprof)
-  }
-
-  hill_vars <- c("Base Slope", "Head Slope", "Side Slope", "Free Face", "Nose Slope", "Crest", "Interfluve")
-  if (all(d.component$hill[!is.na(d.component$hill)] %in% hill_vars)) {
-    d.component$hill <- factor(d.component$hill, levels = hill_vars)
-    d.component$hill <- droplevels(d.component$hill)
-  }
-
-  flats_vars <- c("Dip", "Talf", "Rise")
-  if (all(d.component$flats[!is.na(d.component$flats)] %in% flats_vars)) {
-    d.component$flats <- factor(d.component$flats, levels = flats_vars)
-    d.component$flats <- droplevels(d.component$flats)
-  }
-  
-  trce_vars <- c("Tread", "Riser")
-  if (all(d.component$trce[!is.na(d.component$trce)] %in% trce_vars)) {
-    d.component$trce <- factor(d.component$trce, levels = trce_vars)
-    d.component$trce <- droplevels(d.component$trce)
-  }
-  
-  # parent material
-  d.component <- within(d.component, {
-    lacustrine = NA
-    alluvium = NA
-    colluvium = NA
-    loess = NA
-    outwash = NA
-    till = NA
-    residuum = NA
-    
-    loess      = grepl("outwash|glacial fluvial"    , pmgroupname)
-    colluvium  = grepl("colluvium"  , pmgroupname)
-    alluvium   = grepl("alluvium"   , pmgroupname)
-    outwash    = grepl("outwash"    , pmgroupname)
-    till       = grepl("till"       , pmgroupname)
-    lacustrine = grepl("lacustrine" , pmgroupname)
-    residuum   = grepl("residuum"   , pmgroupname)
-    })
-  
-  d.component <- within(d.component, {
-    pm = NA
-    pm[loess]     = "loess"
-    pm[colluvium] = paste("colluvium", sep = ", ")
-    pm[alluvium] = paste("alluvium", sep = ", ")
-    
-  })
   
   # return data.frame
   return(d.component)
