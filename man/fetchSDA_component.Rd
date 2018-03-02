@@ -114,6 +114,40 @@ ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
   }
 }
 
+
+# query all Miami major components
+s <- get_component_from_SDA(WHERE = "compname = 'Miami' AND majcompflag = 'Yes'")
+
+# landform vs 3-D morphometry
+test <- {
+  subset(s, ! is.na(landform) | ! is.na(geompos)) ->.;
+  split(., .$drainagecl, drop = TRUE) ->.;
+  lapply(., function(x) {
+    test = data.frame()
+    test = as.data.frame(table(x$landform, x$geompos))
+    test$compname   = x$compname[1]
+    test$drainagecl = x$drainagecl[1]
+    names(test)[1:2] <- c("landform", "geompos")
+    return(test)
+    }) ->.;
+  do.call("rbind", .) ->.;
+  .[.$Freq > 0, ] ->.;
+  within(., {
+    landform = reorder(factor(landform), Freq, max)
+    geompos  = reorder(factor(geompos),  Freq, max)
+    geompos  = factor(geompos, levels = rev(levels(geompos)))
+  }) ->.;
+  }
+test$Freq2 <- cut(test$Freq, 
+                  breaks = c(0, 5, 10, 25, 50, 100, 150),
+                  labels = c("<5", "5-10", "10-25", "25-50", "50-100", "100-150")
+                  )
+ggplot(test, aes(x = geompos, y = landform, fill = Freq2)) + 
+  geom_tile(alpha = 0.5) + facet_wrap(~ paste0(compname, "\n", drainagecl)) +
+  viridis::scale_fill_viridis(discrete = T) +
+  theme(aspect.ratio = 1, axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
+  ggtitle("Landform vs 3-D Morphometry for Miami Major Components on SDA")
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{manip}
