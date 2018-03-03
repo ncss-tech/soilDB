@@ -672,23 +672,23 @@
     names(df)[idx] <- new_names
     
     # hack to make CRAN check happy
-    mntn = NA; hill = NA; trce = NA; flats = NA; hillslopeprof = NA;
+    mntn = NULL; hill = NULL; trce = NULL; flats = NULL; hillslopeprof = NULL;
     
     df <- within(df, {
       if (class(mntn) == "character") {
-        mntn  = sapply(mntn,  function(x) paste(sort(unlist(strsplit(x, ", "))), collapse = ", "))
+        mntn  = sapply(strsplit(mntn, ", "),  function(x) paste(sort(unlist(x)), collapse = ", "))
         }
       if (class(hill) == "character") {
-        hill  = sapply(hill,  function(x) paste(sort(unlist(strsplit(x, ", "))), collapse = ", "))
+        hill  = sapply(strsplit(hill, ", "),  function(x) paste(sort(unlist(x)), collapse = ", "))
         }
       if (class(trce) == "character") {
-        trce  = sapply(trce,  function(x) paste(sort(unlist(strsplit(x, ", "))), collapse = ", "))
+        trce  = sapply(strsplit(trce, ", "),  function(x) paste(sort(unlist(x)), collapse = ", "))
         }
       if (class(flats) == "character") {
-        flats = sapply(flats, function(x) paste(sort(unlist(strsplit(x, ", "))), collapse = ", "))
+        flats = sapply(strsplit(flats, ", "), function(x) paste(sort(unlist(x)), collapse = ", "))
         }
       if (class(hillslopeprof) == "character") {
-        hillslopeprof = sapply(hillslopeprof, function(x) paste(sort(unlist(strsplit(x, ", "))), collapse = ", "))
+        hillslopeprof = sapply(strsplit(hillslopeprof, ", "), function(x) paste(sort(unlist(x)), collapse = ", "))
         }
       })
     }
