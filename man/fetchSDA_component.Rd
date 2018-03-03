@@ -111,8 +111,6 @@ ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
   ggtitle(paste0(x$nationalmusym[1], 
   ': Water Table Levels from Component Soil Moisture Month Data'))
 
-  }
-}
 
 
 # query all Miami major components
@@ -148,6 +146,8 @@ ggplot(test, aes(x = geompos, y = landform, fill = Freq2)) +
   theme(aspect.ratio = 1, axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
   ggtitle("Landform vs 3-D Morphometry for Miami Major Components on SDA")
 
+  }
+}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{manip}
