@@ -269,7 +269,9 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   tc <- textConnection(r.content)
   
   # attempt to read column headers, after skipping the first two lines of data
-  h <- unlist(read.table(tc, nrows=1, skip=2, header=FALSE, stringsAsFactors=FALSE, sep=',', quote='', strip.white=TRUE, na.strings='-99.9', comment.char=''))
+  # note: this moves the text connection cursor forward 3 lines
+  # 2018-03-06 DEB: results have an extra line up top, now need to skip 3 lines
+  h <- unlist(read.table(tc, nrows=1, skip=3, header=FALSE, stringsAsFactors=FALSE, sep=',', quote='', strip.white=TRUE, na.strings='-99.9', comment.char=''))
   
   # the last header is junk (NA)
   h <- as.vector(na.omit(h))

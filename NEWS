@@ -1,3 +1,6 @@
+-------------------------- soilDB 2.0-4 (2018-03-06) ----------------------------
+* bug fix for subtle change in how SCAN data are returned from webservice
+
 -------------------------- soilDB 2.0-3 (2018-02-13) ----------------------------
 * bug fix for simplfyFragmentData(, nullFragsAreZero=FALSE), still more work to do
 
