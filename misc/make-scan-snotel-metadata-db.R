@@ -7,6 +7,9 @@ x <- read.csv('scan-snotel-metadata.csv', stringsAsFactors = FALSE)
 # fix HUC formatting
 x$HUC <- as.character(as.numeric(x$HUC))
 
+# re-name ID
+names(x)[2] <- 'Site'
+
 # check: OK
 str(x)
 

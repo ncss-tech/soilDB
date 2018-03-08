@@ -102,7 +102,7 @@ SCAN_sensor_metadata <- function(site.code) {
 }
 
 
-## implement this !
+
 ## https://github.com/ncss-tech/soilDB/issues/61
 # site.code: vector of SCAN site codes
 SCAN_site_metadata <- function(site.code) {
@@ -113,7 +113,10 @@ SCAN_site_metadata <- function(site.code) {
   # cached copy available in soilDB::SCAN_SNOTEL_metadata
   load(system.file("data/SCAN_SNOTEL_metadata.rda", package="soilDB")[1])
   
-  # finish this ...
+  # subset requested codes
+  res <- SCAN_SNOTEL_metadata[which(SCAN_SNOTEL_metadata$Site %in% site.code), ]
+  
+  return(res)
 }
 
 
@@ -130,6 +133,12 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     return(.get_SCAN_data(req))
   }
   
+  # init list to store results
+  res <- list()
+  
+  # add metadata from cached table in soilDB
+  m <- SCAN_site_metadata(site.code)
+  res[['metadata']] <- m
   
   # all possible combinations of site codes and year | single report type
   g <- expand.grid(s=site.code, y=year, r=report)
@@ -156,8 +165,7 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     
   }
   
-  # init list to store results
-  res <- list()
+  # iterate over sensors
   for(sensor.i in sensors) {
     # flatten individual sensors over years, by site number
     r.i <- ldply(llply(d.list[[sensor.i]], ldply))
@@ -169,9 +177,6 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   res.size <- round(object.size(res) / 1024 / 1024, 2)
   res.rows <- sum(sapply(res, nrow), na.rm=TRUE)
   message(paste(res.rows, ' records (', res.size, ' Mb transferred)', sep=''))
-  
-  ## TODO combine site metadata into results
-  # m <- SCAN_site_metadata(site.code)
   
   return(res)
 }
