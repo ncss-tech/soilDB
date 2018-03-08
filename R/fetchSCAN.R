@@ -29,6 +29,13 @@
 ##   https://github.com/gunnarleffler/getSnotel
 ##
 
+## site images:
+## https://www.wcc.nrcs.usda.gov/siteimages/462.jpg
+## 
+## site notes: 
+## https://wcc.sc.egov.usda.gov/nwcc/sitenotes?sitenum=462
+##
+
 
 ## TODO: this crashes on 32bit R / libraries
 # helper function for getting a single table of SCAN metadata
@@ -95,6 +102,22 @@ SCAN_sensor_metadata <- function(site.code) {
 }
 
 
+## implement this !
+## https://github.com/ncss-tech/soilDB/issues/61
+# site.code: vector of SCAN site codes
+SCAN_site_metadata <- function(site.code) {
+
+  # hack to please R CMD check
+  SCAN_SNOTEL_metadata <- NULL
+  
+  # cached copy available in soilDB::SCAN_SNOTEL_metadata
+  load(system.file("data/SCAN_SNOTEL_metadata.rda", package="soilDB")[1])
+  
+  # finish this ...
+}
+
+
+
 # site.code: vector of site codes
 # year: vector of years
 # report: single report type
@@ -146,6 +169,9 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   res.size <- round(object.size(res) / 1024 / 1024, 2)
   res.rows <- sum(sapply(res, nrow), na.rm=TRUE)
   message(paste(res.rows, ' records (', res.size, ' Mb transferred)', sep=''))
+  
+  ## TODO combine site metadata into results
+  # m <- SCAN_site_metadata(site.code)
   
   return(res)
 }
