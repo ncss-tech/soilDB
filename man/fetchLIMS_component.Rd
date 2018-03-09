@@ -20,10 +20,10 @@ fetchLIMS_component(projectname, rmHzErrors = FALSE, fill = FALSE,
 get_progress_from_LIMS(mlrassoarea, fiscalyear, projecttypename)
 get_project_from_LIMS(mlrassoarea, fiscalyear)
 get_project_correlation_from_LIMS(mlrassoarea, fiscalyear, projectname)
-get_projectmapunit_from_LIMS(mlrassoarea, fiscalyear, projectname, 
+get_projectmapunit_from_LIMS(projectname, stringsAsFactors = default.stringsAsFactors())
+get_projectmapunit2_from_LIMS(mlrassoarea, fiscalyear, projectname, 
                              stringsAsFactors = default.stringsAsFactors()
                              )
-get_projectmapunit2_from_LIMS(projectname, stringsAsFactors = default.stringsAsFactors())
 get_mapunit_from_LIMS(areasymbol, stringsAsFactors = default.stringsAsFactors())
 get_component_from_LIMS(projectname, stringsAsFactors = default.stringsAsFactors())
 get_chorizon_from_LIMS(projectname, fill = FALSE, 
