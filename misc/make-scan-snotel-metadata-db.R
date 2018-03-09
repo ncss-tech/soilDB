@@ -34,7 +34,7 @@ names(p)[1] <- 'Site'
 str(p)
 
 
-## combine
+## combine site metadata and pedon links
 SCAN_SNOTEL_metadata <- join(x, p, by='Site', type='left')
 
 # check for possible errors via station name comparison
