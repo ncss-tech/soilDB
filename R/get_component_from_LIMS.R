@@ -63,7 +63,7 @@ get_mapunit_from_LIMS <- function(areasymbol, stringsAsFactors = default.strings
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_mapunit_from_LIMS"
   
   d.mapunit <- lapply(areasymbol, function(x) {
-    cat("getting project '", x, "' from LIMS \n", sep = "")
+    cat("getting map units for '", x, "' from LIMS \n", sep = "")
     args = list(p_areasymbol = x)
     d    =  parseWebReport(url, args)
   })
