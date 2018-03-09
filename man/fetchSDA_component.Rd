@@ -29,6 +29,7 @@ get_cosoilmoist_from_NASIS(impute = TRUE, stringsAsFactors = default.stringsAsFa
 \arguments{
   \item{WHERE}{text string formated as an SQL WHERE clause (default: FALSE)}
   \item{duplicates}{logical; if TRUE duplicate nationalmusym are returned}
+  \item{childs}{logical; if FALSE parent material and geomorphic child tables are not flattened and appended}
   \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)}
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: FALSE)}
   UE)	

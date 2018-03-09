@@ -1,4 +1,4 @@
-get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFactors = default.stringsAsFactors()){
+get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, stringsAsFactors = default.stringsAsFactors()){
   
   # SDA is missing soiltempa_r AS mast_r
   # Joining in the fetch on derived_cokey doesn't work but should. There are duplicate components with the same combination of elements.
@@ -48,14 +48,19 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFa
     ORDER BY co.cokey, pmg.copmgrpkey, pmorder"
     )
   
-  # exec query
-  d.pm <- SDA_query(q.pm)
   
-  # prep
-  d.pm <- .copm_prep(d.pm, db = "SDA")
-  
-  # merge
-  d.component <- merge(d.component, d.pm, by = "cokey", all.x = TRUE)
+  # append child tables
+  if (childs == TRUE) {
+    
+    # exec query
+    d.pm <- SDA_query(q.pm)
+    
+    # prep
+    d.pm <- .copm_prep(d.pm, db = "SDA")
+    
+    # merge
+    d.component <- merge(d.component, d.pm, by = "cokey", all.x = TRUE)
+    }
   
   
   
@@ -89,18 +94,53 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFa
     ORDER BY cokey, ls.geomftname, ls.geomfeatid, ls.existsonfeat, lf.geomftname, lf.geomfeatid, lf.existsonfeat"
     )
   
-  # exec query
-  d.cogmd <- SDA_query(q.lf)
   
-  # prep
-  d.cogmd <- .cogmd_prep(d.cogmd, db = "SDA")
-  
-  # merge
-  d.component <- merge(d.component, d.cogmd, by = "cokey", all.x = TRUE)
+  # append child tables
+  if (childs == TRUE) {
+    
+    # exec query
+    d.cogmd <- SDA_query(q.lf)
+    
+    # prep
+    d.cogmd <- .cogmd_prep(d.cogmd, db = "SDA")
+    
+    # merge
+    d.component <- merge(d.component, d.cogmd, by = "cokey", all.x = TRUE)
+    }
   
   
   # done
   return(d.component)
+  }
+
+
+
+get_cointerp_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFactors = default.stringsAsFactors()) {
+  
+  d.component <- get_component_from_SDA(WHERE = WHERE, duplicates = duplicates, childs = FALSE, 
+                                        stringsAsFactors = stringsAsFactors
+  )
+  
+  q.cointerp <- paste0("
+
+  SELECT 
+  co.cokey, mrulename, ruledesign, ruledepth, coi.seqnum, interpll, interpllc, interplr, interplrc, interphh, interphr, interphrc
+  
+  FROM 
+  component co                          LEFT OUTER JOIN
+  cointerp  coi ON coi.cokey = co.cokey
+  
+  WHERE co.cokey IN ('", paste0(d.component$cokey, collapse = "', '"), "')
+  
+  ORDER BY co.cokey ASC;"
+  )
+  
+  d.cointerp <- SDA_query(q.cointerp)
+  
+  # recode metadata domains
+  d.cointerp <- uncode(d.cointerp, db = "SDA", stringsAsFactors = stringsAsFactors)
+  
+  return(d.cointerp)
   }
 
 
