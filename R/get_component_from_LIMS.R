@@ -198,7 +198,7 @@ fetchLIMS_component <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
                                 ) {
   
   # load data in pieces
-  f.mapunit   <- get_mapunit_from_LIMS(projectname, stringsAsFactors = stringsAsFactors)
+  f.mapunit   <- get_projectmapunit_from_LIMS(projectname, stringsAsFactors = stringsAsFactors)
   f.component <- get_component_from_LIMS(projectname, stringsAsFactors = stringsAsFactors)
   f.chorizon  <- get_chorizon_from_LIMS(projectname, fill, stringsAsFactors = stringsAsFactors)
   
