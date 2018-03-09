@@ -107,7 +107,11 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFa
 
 get_mapunit_from_SDA <- function(WHERE = NULL, stringsAsFactors = default.stringsAsFactors()) {
 
-  q.mapunit <- paste("SELECT areasymbol, areaname, ssastatus, cordate, nationalmusym, mukey, musym, muname, mukind, mustatus, muacres, farmlndcl
+  q.mapunit <- paste("
+  SELECT 
+  mlraoffice, areasymbol, areaname, areaacrees, ssastatus, cordate, 
+  projectscale, cordate, 
+  mukey, nationalmusym, musym, muname, mukind, mustatus, muacres, farmlndcl
   
   FROM  mapunit mu INNER JOIN
         legend l ON l.lkey = mu.lkey
