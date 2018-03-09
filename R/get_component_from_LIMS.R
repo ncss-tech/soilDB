@@ -83,9 +83,9 @@ get_mapunit_from_LIMS <- function(areasymbol, stringsAsFactors = default.strings
 }
 
 
-get_projectmapunit2_from_LIMS <- function(projectname, stringsAsFactors = default.stringsAsFactors()) {
+get_projectmapunit_from_LIMS <- function(projectname, stringsAsFactors = default.stringsAsFactors()) {
   
-  url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit2_from_LIMS"
+  url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit_from_LIMS"
   
   
   d.mapunit <- lapply(projectname, function(x) {
@@ -103,9 +103,9 @@ get_projectmapunit2_from_LIMS <- function(projectname, stringsAsFactors = defaul
   }
 
 
-get_projectmapunit_from_LIMS <- function(mlrassoarea, fiscalyear, projectname, stringsAsFactors = default.stringsAsFactors()) {
+get_projectmapunit2_from_LIMS <- function(mlrassoarea, fiscalyear, projectname, stringsAsFactors = default.stringsAsFactors()) {
   
-  url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit_from_LIMS"
+  url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit2_from_LIMS"
   
   
   args = list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)
