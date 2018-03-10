@@ -124,13 +124,23 @@ get_cointerp_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFac
   q.cointerp <- paste0("
 
   SELECT 
-  co.cokey, mrulename, ruledesign, ruledepth, coi.seqnum, interpll, interpllc, interplr, interplrc, interphh, interphr, interphrc
+  co.cokey, mrulename, max_seqnum, interpll, interplr, interphr, interphh, interpllc, interplrc, interphrc, interphhc
   
   FROM 
   component co                          LEFT OUTER JOIN
   cointerp  coi ON coi.cokey = co.cokey
+
+  INNER JOIN
+      (SELECT co2.cokey, coi2.mrulekey, MAX(seqnum) max_seqnum
+       FROM 
+       component co2                       LEFT OUTER JOIN
+       cointerp  coi2 ON coi2.cokey = co2.cokey
+       WHERE co2.cokey IN ('", paste0(d.component$cokey, collapse = "', '"), "')
+       GROUP BY co2.cokey, coi2.mrulekey
+      ) coi22 ON coi22.cokey = co.cokey AND coi22.mrulekey = coi.mrulekey
   
-  WHERE co.cokey IN ('", paste0(d.component$cokey, collapse = "', '"), "')
+  WHERE co.cokey IN ('", paste0(d.component$cokey, collapse = "', '"), "') AND
+        mrulename = rulename
   
   ORDER BY co.cokey ASC;"
   )
