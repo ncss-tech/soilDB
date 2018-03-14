@@ -23,7 +23,7 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
   ORDER BY dmudesc, comppct_r DESC, compname ASC;"
   
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {
@@ -76,7 +76,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
   ORDER BY nationalmusym, dmuiid;"
   
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {
@@ -149,7 +149,7 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS=TRUE) {
   ORDER BY coiid, geomfeatid ASC;"
   
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {
@@ -184,7 +184,7 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
   ORDER BY coiidref, seqnum, pmorder, copmgrpiid ASC;" 
   
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {
@@ -222,7 +222,7 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
   ORDER BY coiid;"
   
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {
@@ -263,7 +263,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE) {
   ORDER BY coiid;"
   
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {
@@ -300,7 +300,7 @@ get_comonth_from_NASIS_db <- function(SS=TRUE, fill=FALSE, stringsAsFactors = de
   FROM comonth_View_1 AS comonth;"
   
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {
@@ -395,7 +395,7 @@ get_copedon_from_NASIS_db <- function(SS=TRUE) {
   LEFT OUTER JOIN pedon_View_1 p ON p.peiid = copedon.peiidref;
   "
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {
@@ -440,7 +440,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE) {
   
   
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {

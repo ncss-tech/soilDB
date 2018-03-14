@@ -15,7 +15,7 @@ get_colors_from_NASIS_db <- function(SS=TRUE) {
   ORDER BY phiid, colormoistst;"
   
 	# setup connection local NASIS
-	channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+	channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
 	
   # toggle selected set vs. local DB
   if(SS == FALSE) {

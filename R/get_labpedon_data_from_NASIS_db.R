@@ -7,7 +7,7 @@ get_labpedon_data_from_NASIS_db <- function() {
   FROM (ncsspedonlabdata_View_1 LEFT OUTER JOIN pedon_View_1 ON ncsspedonlabdata_View_1.peiidref = pedon_View_1.peiid);"
 
   # setup connection local NASIS
-	channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+	channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
 	
 	# exec queries
 	d.labpedon <- RODBC::sqlQuery(channel, q.ncsslabpedon, stringsAsFactors=FALSE)

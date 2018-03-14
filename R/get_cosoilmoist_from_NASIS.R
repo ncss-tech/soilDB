@@ -12,7 +12,7 @@ get_cosoilmoist_from_NASIS <- function(impute = TRUE, stringsAsFactors = default
   ;"
   
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # exec query
   d.cosoilmoist <- RODBC::sqlQuery(channel, q.cosoilmoist, stringsAsFactors = FALSE)

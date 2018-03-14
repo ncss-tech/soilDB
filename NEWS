@@ -1,3 +1,6 @@
+-------------------------- soilDB 2.1 (2018-03-12) ------------------------------
+* generalized local NASIS ODBC authentication, should work on windows 7, 8, 10 https://github.com/ncss-tech/soilDB/issues/54
+
 -------------------------- soilDB 2.0-4 (2018-03-06) ----------------------------
 * bug fix for subtle change in how SCAN data are returned from webservice
 
