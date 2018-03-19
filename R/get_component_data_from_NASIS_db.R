@@ -6,7 +6,7 @@
 ## 
 
 
-## just the components
+## just the component records, nothing above or below
 get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
@@ -17,7 +17,6 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
   FROM 
   datamapunit_View_1 AS dmu 
   INNER JOIN component_View_1 AS co ON co.dmuiidref = dmu.dmuiid 
-  LEFT OUTER JOIN copmgrp_View_1 ON copmgrp_View_1.coiidref = co.coiid 
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC;"
   
