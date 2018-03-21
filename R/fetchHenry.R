@@ -3,7 +3,7 @@
 ## TODO: export function to namespace
 ## TODO: graphical eval
 # vectors of MAST, summer mean, winter mean all in Deg C
-.estimateSTR <- function(mast, mean.summer, mean.winter) {
+.estimateSTR <- function(mast, mean.summer, mean.winter, O.hz=NA, saturated=NA) {
   
   # check to make sure that the lengths of vectors are the same
   if(! all.equal(length(mast), length(mean.summer), length(mean.winter)))
@@ -34,15 +34,91 @@
     
     
     # possibly cryic, because we don't know saturation and O hz status
-    if(mast[i] <= 8) {
-      if(mean.summer[i] <= 8) {
-        res[i] <- 'cryic*'
-        next
+    if(mast[i] < 8) {
+      
+      # no additional information
+      # assume: saturated during part of summer & no O horizon
+      if( is.na(saturated[i] & is.na(O.hz[i]))) {
+        # otherwise it is just an estimate: 
+        if(mean.summer[i] < 13) {
+          res[i] <- 'cryic*'
+          next
+        }
       }
+      
+      
+      # O horizon information only
+      # assume: saturated during part of summer
+      if(!is.na(O.hz[i])) {
+        
+        # no O horizon
+        if(! O.hz[i]) {
+          if(mean.summer[i] > 0 & mean.summer[i] < 13) {
+            res[i] <- 'cryic*'
+            next
+          }
+        }
+        
+        # O horizon
+        if(O.hz[i]) {
+          if(mean.summer[i] > 0 & mean.summer[i] < 6) {
+            res[i] <- 'cryic*'
+            next
+          }
+        }
+        
+      }
+      
+      # if we have both saturation and O hz information we can be sure
+      if(! is.na(saturated[i]) & ! is.na(O.hz[i])) {
+        
+        # not saturated
+        if(! saturated[i]) {
+          
+          # no O horizon
+          if(! O.hz[i]) {
+            if(mean.summer[i] > 0 & mean.summer[i] < 15) {
+              res[i] <- 'cryic'
+              next
+            }
+          }
+          
+          # O horizon
+          if(O.hz[i]) {
+            if(mean.summer[i] > 0 & mean.summer[i] < 8) {
+              res[i] <- 'cryic'
+              next
+            }
+          }
+        }
+        
+        # saturated
+        if(saturated[i]) {
+          
+          # no O horizon
+          if(! O.hz[i]) {
+            if(mean.summer[i] > 0 & mean.summer[i] < 13) {
+              res[i] <- 'cryic'
+              next
+            }
+          }
+          
+          # O horizon
+          if(O.hz[i]) {
+            if(mean.summer[i] > 0 & mean.summer[i] < 6) {
+              res[i] <- 'cryic'
+              next
+            }
+          }
+        }
+        
+      } 
+      
     }
     
-    # frigid
-    if(mast[i] <= 8) {
+    
+    ## frigid
+    if(mast[i] < 8) {
       if(mean.summer[i] - mean.winter[i] >= 6) {
         res[i] <- 'frigid*'
         next
