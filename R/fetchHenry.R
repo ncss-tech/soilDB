@@ -1,6 +1,7 @@
 ## TODO: better checking of inputs, as the entitre DB could be downloaded by accident!!
 
-## TODO: vectorize
+## TODO: export function to namespace
+## TODO: graphical eval
 # vectors of MAST, summer mean, winter mean all in Deg C
 .estimateSTR <- function(mast, mean.summer, mean.winter) {
   
