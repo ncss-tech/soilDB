@@ -1,9 +1,9 @@
 ## TODO: better checking of inputs, as the entitre DB could be downloaded by accident!!
 
-## TODO: export function to namespace
+
 ## TODO: graphical eval
 # vectors of MAST, summer mean, winter mean all in Deg C
-.estimateSTR <- function(mast, mean.summer, mean.winter, O.hz=NA, saturated=NA) {
+estimateSTR <- function(mast, mean.summer, mean.winter, O.hz=NA, saturated=NA) {
   
   # check to make sure that the lengths of vectors are the same
   if(! all.equal(length(mast), length(mean.summer), length(mean.winter)))
@@ -255,8 +255,9 @@
   d.summary <- join(d.summary, cr.2, by='sid')
   d.summary <- join(d.summary, fy, by='sid')
   
-  # estimate STR, note that gelic / cryic assignment is problematic
-  d.summary$STR <- .estimateSTR(d.summary$MAST, d.summary$Summer, d.summary$Winter)
+  # estimate STR
+  # note that gelic / cryic assignment is problematic when missing O horizon / saturation details
+  d.summary$STR <- estimateSTR(d.summary$MAST, d.summary$Summer, d.summary$Winter)
   
   # re-shuffle columns and return
   return(d.summary[, c('sid', 'days.of.data', 'gap.index', 'functional.yrs', 'complete.yrs', 'MAST', 'Winter', 'Summer', 'STR')])
