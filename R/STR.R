@@ -1,5 +1,5 @@
 
-
+#
 STRplot <- function(mast, msst, mwst, O.hz, saturated, pt.cex=2.75, leg.cex=0.85) {
   
   # make a row of rectangles with colors based on STR
