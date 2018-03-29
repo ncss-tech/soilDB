@@ -159,7 +159,7 @@ get_mapunit_from_SDA <- function(WHERE = NULL, stringsAsFactors = default.string
 
   q.mapunit <- paste("
   SELECT 
-  mlraoffice, areasymbol, areaname, areaacrees, ssastatus, cordate, 
+  mlraoffice, areasymbol, areaname, areaacres, ssastatus, cordate, 
   projectscale, cordate, 
   mukey, nationalmusym, musym, muname, mukind, mustatus, muacres, farmlndcl
   
