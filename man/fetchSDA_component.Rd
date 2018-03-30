@@ -9,11 +9,11 @@
 \title{Extract component tables from Soil Data Access}
 \description{Get, format, impute, and return component tables.}
 \usage{
-fetchSDA_component(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE, 
+fetchSDA_component(WHERE = NULL, duplicates = FALSE, childs = TRUE, rmHzErrors = FALSE, 
                    stringsAsFactors = default.stringsAsFactors()
                    )
 get_mapunit_from_SDA(WHERE = NULL, stringsAsFactors = default.stringsAsFactors())
-get_component_from_SDA(WHERE = NULL, duplicates = FALSE, 
+get_component_from_SDA(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                        stringsAsFactors = default.stringsAsFactors()
                        )
 get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE, 

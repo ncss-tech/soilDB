@@ -240,12 +240,12 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFac
 }
 
 
-fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, rmHzErrors = FALSE, 
+fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, rmHzErrors = FALSE, 
                                stringsAsFactors = default.stringsAsFactors()
                                ) {
 
   # load data in pieces
-  f.component <- get_component_from_SDA(WHERE, duplicates, stringsAsFactors = stringsAsFactors)
+  f.component <- get_component_from_SDA(WHERE, duplicates, childs, stringsAsFactors = stringsAsFactors)
   # f.mapunit   <- get_mapunit_from_SDA(WHERE, stringsAsFactors = stringsAsFactors)
   f.chorizon  <- get_chorizon_from_SDA(WHERE, duplicates)
   
