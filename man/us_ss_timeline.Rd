@@ -1,13 +1,17 @@
 \name{us_ss_timeline}
 \alias{us_ss_timeline}
 \docType{data}
+
 \title{
 Timeline of US Published Soil Surveys
 }
+
 \description{
 This dataset contains the years of each US Soil Survey was published.
 }
+
 \usage{data("us_ss_timeline")}
+
 \format{
   A data frame with 5209 observations on the following 5 variables.
   \describe{
@@ -17,15 +21,15 @@ This dataset contains the years of each US Soil Survey was published.
     \item{\code{state}}{State abbrevation, a character vector}
   }
 }
+
 \details{
 This data was web scraped from the NRCS Soils Website. The scraping procedure and a example plot are included in the examples section below.
 }
+
 \source{
 https://www.nrcs.usda.gov/wps/portal/nrcs/soilsurvey/soils/survey/state/
 }
-\references{
-%%  ~~ possibly secondary sources and usages ~~
-}
+
 \examples{
 \dontrun{
 library(XML)
