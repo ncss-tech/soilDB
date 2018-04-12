@@ -5,6 +5,7 @@
 \alias{get_chorizon_from_SDA}
 \alias{get_cosoilmoist_from_SDA}
 \alias{get_cosoilmoist_from_NASIS}
+\alias{get_cointerp_from_SDA}
 
 \title{Extract component tables from Soil Data Access}
 \description{Get, format, impute, and return component tables.}
@@ -12,16 +13,21 @@
 fetchSDA_component(WHERE = NULL, duplicates = FALSE, childs = TRUE, rmHzErrors = FALSE, 
                    stringsAsFactors = default.stringsAsFactors()
                    )
+                   
 get_mapunit_from_SDA(WHERE = NULL, stringsAsFactors = default.stringsAsFactors())
+
 get_component_from_SDA(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                        stringsAsFactors = default.stringsAsFactors()
                        )
+                       
 get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE, 
                       stringsAsFactors = default.stringsAsFactors()
                       )
+                      
 get_cosoilmoist_from_SDA(WHERE = NULL, duplicates = FALSE, impute = TRUE, 
                          stringsAsFactors = default.stringsAsFactors()
                          )
+                         
 get_cosoilmoist_from_NASIS(impute = TRUE, stringsAsFactors = default.stringsAsFactors())
 }
 
