@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract cover composition data from a Montana RangeDB database — get_veg_other_from_MT_veg_db • soilDB</title>
+<title>Estimate Soil Temperature Regime — estimateSTR • soilDB</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,9 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Extract cover composition data from a Montana RangeDB database — get_veg_other_from_MT_veg_db" />
+<meta property="og:title" content="Estimate Soil Temperature Regime — estimateSTR" />
 
-<meta property="og:description" content="Get cover composition data from a Montana RangeDB database." />
+<meta property="og:description" content="Estimate soil temperature regime (STR) based on mean annual soil temperature (MAST), mean summer temperature (MSST), mean winter soil temperature (MWST), presence of O horizons, saturated conditions, and presence of permafrost. Several assumptions are made when O horizon  or saturation are undefined." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -88,39 +88,69 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract cover composition data from a Montana RangeDB database</h1>
+    <h1>Estimate Soil Temperature Regime</h1>
     
-    <div class="hidden name"><code>get_veg_other_from_MT_veg_db.Rd</code></div>
+    <div class="hidden name"><code>estimateSTR.Rd</code></div>
     </div>
 
     
-    <p>Get cover composition data from a Montana RangeDB database.</p>
+    <p>Estimate soil temperature regime (STR) based on mean annual soil temperature (MAST), mean summer temperature (MSST), mean winter soil temperature (MWST), presence of O horizons, saturated conditions, and presence of permafrost. Several assumptions are made when O horizon  or saturation are undefined.</p>
     
 
-    <pre class="usage"><span class='fu'>get_veg_other_from_MT_veg_db</span>(<span class='no'>dsn</span>)</pre>
+    <pre class="usage"><span class='fu'>estimateSTR</span>(<span class='no'>mast</span>, <span class='no'>mean.summer</span>, <span class='no'>mean.winter</span>, <span class='kw'>O.hz</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>saturated</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>permafrost</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dsn</th>
-      <td><p>The name of the Montana RangeDB front-end database connection (see details).</p></td>
+      <th>mast</th>
+      <td><p>vector of mean annual soil temperature (deg C)</p></td>
+    </tr>
+    <tr>
+      <th>mean.summer</th>
+      <td><p>vector of mean summer soil temperature (deg C)</p></td>
+    </tr>
+    <tr>
+      <th>mean.winter</th>
+      <td><p>vector of mean winter soil temperature (deg C)</p></td>
+    </tr>
+    <tr>
+      <th>O.hz</th>
+      <td><p>logical vector of O horizon presence / absense</p></td>
+    </tr>
+    <tr>
+      <th>saturated</th>
+      <td><p>logical vector of seasonal saturation</p></td>
+    </tr>
+    <tr>
+      <th>permafrost</th>
+      <td><p>logical vector of permafrost presence / absense</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function currently works only on Windows.</p>
+    <p>Pending.</p>
+<p><a href='http://ncss-tech.github.io/AQP/soilDB/STR-eval.html'>Related tutorial</a>.</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe.</p>
+    <p>Vector of soil temperature regimes.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Soil Survey Staff. 2015. Illustrated guide to soil taxonomy. U.S. Department of Agriculture, Natural Resources Conservation Service, National Soil Survey Center, Lincoln, Nebraska.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='get_veg_from_MT_veg_db.html'>get_veg_from_MT_veg_db</a></code>, <code><a href='get_veg_species_from_MT_veg_db.html'>get_veg_species_from_MT_veg_db</a></code></p></div>
+    <div class='dont-index'><p><code><a href='STRplot.html'>STRplot</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># simple example</span>
+<span class='fu'>estimateSTR</span>(<span class='kw'>mast</span><span class='kw'>=</span><span class='fl'>17</span>, <span class='kw'>mean.summer</span> <span class='kw'>=</span> <span class='fl'>22</span>, <span class='kw'>mean.winter</span> <span class='kw'>=</span> <span class='fl'>12</span>)</div><div class='output co'>#&gt; [1] thermic
+#&gt; 10 Levels: gelic cryic frigid isofrigid mesic isomesic thermic ... isohyperthermic</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -131,11 +161,15 @@
 
       <li><a href="#value">Value</a></li>
 
+      <li><a href="#references">References</a></li>
+
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
     <h2>Author</h2>
-    Jay M. Skovlin
+    D.E. Beaudette
   </div>
 </div>
 

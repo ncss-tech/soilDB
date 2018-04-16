@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract cover composition data from a Montana RangeDB database — get_veg_other_from_MT_veg_db • soilDB</title>
+<title>SCAN and SNOTEL Station Metadata — SCAN_SNOTEL_metadata • soilDB</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,9 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Extract cover composition data from a Montana RangeDB database — get_veg_other_from_MT_veg_db" />
+<meta property="og:title" content="SCAN and SNOTEL Station Metadata — SCAN_SNOTEL_metadata" />
 
-<meta property="og:description" content="Get cover composition data from a Montana RangeDB database." />
+<meta property="og:description" content="SCAN and SNOTEL station metadata, a work in progress." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -88,54 +88,49 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract cover composition data from a Montana RangeDB database</h1>
+    <h1>SCAN and SNOTEL Station Metadata</h1>
     
-    <div class="hidden name"><code>get_veg_other_from_MT_veg_db.Rd</code></div>
+    <div class="hidden name"><code>SCAN_SNOTEL_metadata.Rd</code></div>
     </div>
 
     
-    <p>Get cover composition data from a Montana RangeDB database.</p>
+    <p>SCAN and SNOTEL station metadata, a work in progress.</p>
     
 
-    <pre class="usage"><span class='fu'>get_veg_other_from_MT_veg_db</span>(<span class='no'>dsn</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>dsn</th>
-      <td><p>The name of the Montana RangeDB front-end database connection (see details).</p></td>
-    </tr>
-    </table>
+    <pre class="usage"><span class='fu'>data</span>(<span class='st'>"SCAN_SNOTEL_metadata"</span>)</pre>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>A data frame with 1092 observations on the following 12 variables.</p><dl class='dl-horizontal'>
+    <dt><code>Name</code></dt><dd><p>station name</p></dd>
+    <dt><code>Site</code></dt><dd><p>station ID</p></dd>
+    <dt><code>State</code></dt><dd><p>state</p></dd>
+    <dt><code>Network</code></dt><dd><p>sensor network: SCAN / SNOTEL</p></dd>
+    <dt><code>County</code></dt><dd><p>county</p></dd>
+    <dt><code>Elevation_ft</code></dt><dd><p>station elevation in feet</p></dd>
+    <dt><code>Latitude</code></dt><dd><p>latitude of station</p></dd>
+    <dt><code>Longitude</code></dt><dd><p>longitude of station</p></dd>
+    <dt><code>HUC</code></dt><dd><p>associated watershed</p></dd>
+    <dt><code>climstanm</code></dt><dd><p>climate station name (TODO: remove this column)</p></dd>
+    <dt><code>upedonid</code></dt><dd><p>associated user pedon ID</p></dd>
+    <dt><code>pedlabsampnum</code></dt><dd><p>associated lab sample ID</p></dd>
+  </dl>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function currently works only on Windows.</p>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A dataframe.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='get_veg_from_MT_veg_db.html'>get_veg_from_MT_veg_db</a></code>, <code><a href='get_veg_species_from_MT_veg_db.html'>get_veg_species_from_MT_veg_db</a></code></p></div>
+    <p>These data have been compiled from several sources and represent a progressive effort to organize SCAN/SNOTEL station metadata. Therefore, some records may be missing or incorrect. Details on this effort can be found at the associated GH issue page: <a href='https://github.com/ncss-tech/soilDB/issues/61'>https://github.com/ncss-tech/soilDB/issues/61</a>.</p>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#format">Format</a></li>
+
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
           </ul>
 
-    <h2>Author</h2>
-    Jay M. Skovlin
   </div>
 </div>
 

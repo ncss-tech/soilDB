@@ -18,13 +18,16 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Function reference" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -32,6 +35,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
 
 
   </head>
@@ -47,8 +52,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">soilDB</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">soilDB</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -65,6 +74,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -72,292 +82,311 @@
       
       </header>
 
-      <div class="row">
-  <div class="col-md-9">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;2.0-1</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    <table class="ref-index">
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <colgroup>
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fetchHenry.html">fetchHenry</a></code> </p>
-          </td>
-          <td><p>Download Data from the Henry Mount Soil Temperature and Water Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fetchKSSL.html">fetchKSSL</a></code> </p>
-          </td>
-          <td><p>Fetch KSSL Data (EXPERIMENTAL)</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fetchLIMS_component.html">fetchLIMS_component</a></code> <code><a href="fetchLIMS_component.html">get_progress_from_LIMS</a></code> <code><a href="fetchLIMS_component.html">get_project_from_LIMS</a></code> <code><a href="fetchLIMS_component.html">get_reverse_correlation_from_LIMS</a></code> <code><a href="fetchLIMS_component.html">get_mapunit_from_LIMS</a></code> <code><a href="fetchLIMS_component.html">get_component_from_LIMS</a></code> <code><a href="fetchLIMS_component.html">get_chorizon_from_LIMS</a></code> <code><a href="fetchLIMS_component.html">get_cosoilmoist_from_LIMS</a></code> <code><a href="fetchLIMS_component.html">get_sitesoilmoist_from_LIMS</a></code> </p>
-          </td>
-          <td><p>Extract component tables from a the Laboratory Information Management System</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fetchNASIS.html">fetchNASIS</a></code> <code><a href="fetchNASIS.html">fetchNASIS_pedons</a></code> <code><a href="fetchNASIS.html">fetchNASIS_components</a></code> <code><a href="fetchNASIS.html">getHzErrorsNASIS</a></code> </p>
-          </td>
-          <td><p>Fetch commonly used site/pedon/horizon or component data from a local NASIS database.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fetchNASISLabData.html">fetchNASISLabData</a></code> </p>
-          </td>
-          <td><p>Fetch lab data used site/horizon data from a PedonPC database.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fetchOSD.html">fetchOSD</a></code> </p>
-          </td>
-          <td><p>Fetch Official Series Description (OSD) Data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fetchPedonPC.html">fetchPedonPC</a></code> <code><a href="fetchPedonPC.html">getHzErrorsPedonPC</a></code> </p>
-          </td>
-          <td><p>Fetch commonly used site/horizon data from a PedonPC v.5 database.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fetchRaCA.html">fetchRaCA</a></code> </p>
-          </td>
-          <td><p>Fetch KSSL Data (EXPERIMENTAL)</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fetchSCAN.html">fetchSCAN</a></code> <code><a href="fetchSCAN.html">SCAN_sensor_metadata</a></code> </p>
-          </td>
-          <td><p>Fetch SCAN Data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fetchSDA_component.html">fetchSDA_component</a></code> <code><a href="fetchSDA_component.html">get_mapunit_from_SDA</a></code> <code><a href="fetchSDA_component.html">get_component_from_SDA</a></code> <code><a href="fetchSDA_component.html">get_chorizon_from_SDA</a></code> <code><a href="fetchSDA_component.html">get_cosoilmoist_from_SDA</a></code> <code><a href="fetchSDA_component.html">get_cosoilmoist_from_NASIS</a></code> </p>
-          </td>
-          <td><p>Extract component tables from Soil Data Access</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_colors_from_NASIS_db.html">get_colors_from_NASIS_db</a></code> </p>
-          </td>
-          <td><p>Extract Soil Color Data from a local NASIS Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_colors_from_pedon_db.html">get_colors_from_pedon_db</a></code> </p>
-          </td>
-          <td><p>Extract Soil Color Data from a PedonPC Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_comonth_from_NASIS_db.html">get_comonth_from_NASIS_db</a></code> </p>
-          </td>
-          <td><p>Extract component month data from a local NASIS Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_component_data_from_NASIS_db.html">get_component_data_from_NASIS_db</a></code> </p>
-          </td>
-          <td><p>Extract component data from a local NASIS Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_extended_data_from_NASIS.html">get_extended_data_from_NASIS_db</a></code> </p>
-          </td>
-          <td><p>Extract accessory tables and summaries from a local NASIS Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_extended_data_from_pedon_db.html">get_extended_data_from_pedon_db</a></code> </p>
-          </td>
-          <td><p>Extract accessory tables and summaries from a local pedonPC Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db</a></code> </p>
-          </td>
-          <td><p>Extract Horizon Data from a local NASIS Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_hz_data_from_pedon_db.html">get_hz_data_from_pedon_db</a></code> </p>
-          </td>
-          <td><p>Extract Horizon Data from a PedonPC Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_lablayer_data_from_NASIS_db.html">get_lablayer_data_from_NASIS_db</a></code> </p>
-          </td>
-          <td><p>Extract lab pedon layer data from a local NASIS Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_labpedon_data_from_NASIS_db.html">get_labpedon_data_from_NASIS_db</a></code> </p>
-          </td>
-          <td><p>Extract lab pedon data from a local NASIS Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_phlabresults_data_from_NASIS_db.html">get_phlabresults_data_from_NASIS_db</a></code> </p>
-          </td>
-          <td><p>Extract phlabresults table from a local NASIS Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db</a></code> </p>
-          </td>
-          <td><p>Extract Site Data from a local NASIS Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_site_data_from_pedon_db.html">get_site_data_from_pedon_db</a></code> </p>
-          </td>
-          <td><p>Extract Site Data from a PedonPC Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_text_notes_from_NASIS_db.html">get_text_notes_from_NASIS_db</a></code> </p>
-          </td>
-          <td><p>Extract text note data from a local NASIS Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_veg_data_from_NASIS_db.html">get_veg_data_from_NASIS_db</a></code> </p>
-          </td>
-          <td><p>Extract veg data from a local NASIS Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_veg_from_AK_Site.html">get_veg_from_AK_Site</a></code> </p>
-          </td>
-          <td><p>Retrieve Vegetation Data from an AK Site Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_veg_from_MT_veg_db.html">get_veg_from_MT_veg_db</a></code> </p>
-          </td>
-          <td><p>Extract Site and Plot-level Data from a Montana RangeDB database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_veg_from_NPS_PLOTS_db.html">get_veg_from_NPS_PLOTS_db</a></code> </p>
-          </td>
-          <td><p>Retrieve Vegetation Data from an NPS PLOTS Database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_veg_other_from_MT_veg_db.html">get_veg_other_from_MT_veg_db</a></code> </p>
-          </td>
-          <td><p>Extract cover composition data from a Montana RangeDB database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_veg_species_from_MT_veg_db.html">get_veg_species_from_MT_veg_db</a></code> </p>
-          </td>
-          <td><p>Extract species-level Data from a Montana RangeDB database</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="gSSURGO.chunk.html">data</a></code> </p>
-          </td>
-          <td><p>Gridded SSURGO Chunk</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="KSSL_VG_model.html">KSSL_VG_model</a></code> </p>
-          </td>
-          <td><p>Develop a Water Retention Curve from KSSL Data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="loafercreek.html">data</a></code> </p>
-          </td>
-          <td><p>Example SoilProfilecollection Objects Returned by fetchNASIS().</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="mapunit_geom_by_ll_bbox.html">mapunit_geom_by_ll_bbox</a></code> </p>
-          </td>
-          <td><p>Fetch Map Unit Geometry from SDA</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="parseWebReport.html">parseWebReport</a></code> </p>
-          </td>
-          <td><p>Parse contents of a web report, based on suplied arguments.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="SDA_query_features.html">SDA_query_features</a></code> <code><a href="SDA_query_features.html">processSDA_WKT</a></code> </p>
-          </td>
-          <td><p>Soil Data Access Spatial Query</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="SDA_query.html">SDA_query</a></code> </p>
-          </td>
-          <td><p>Soil Data Access Query</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="seriesExtent.html">seriesExtent</a></code> <code><a href="seriesExtent.html">seriesExtentAsGmap</a></code> </p>
-          </td>
-          <td><p>Get/Display Soil Series Extent</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="simplfyFragmentData.html">simplfyFragmentData</a></code> </p>
-          </td>
-          <td><p>Simplify Coarse Fraction Data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="simplifyColorData.html">simplifyColorData</a></code> <code><a href="simplifyColorData.html">mix_and_clean_colors</a></code> </p>
-          </td>
-          <td><p>Simplify Color Data by ID</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="soilDB-package.html">soilDB-package</a></code> </p>
-          </td>
-          <td><p>Soil Database Interface</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="SSURGO_spatial_query.html">SoilWeb_spatial_query</a></code> </p>
-          </td>
-          <td><p>Get SSURGO Data via Spatial Query</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="uncode.html">uncode</a></code> <code><a href="uncode.html">code</a></code> </p>
-          </td>
-          <td><p>Convert coded values returned from NASIS and SDA queries to factors</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        <!--  -->
+        <td>
+          <p><code><a href="KSSL_VG_model.html">KSSL_VG_model()</a></code> </p>
+        </td>
+        <td><p>Develop a Water Retention Curve from KSSL Data</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="SCAN_SNOTEL_metadata.html">SCAN_SNOTEL_metadata</a></code> </p>
+        </td>
+        <td><p>SCAN and SNOTEL Station Metadata</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="SDA_query.html">SDA_query()</a></code> </p>
+        </td>
+        <td><p>Soil Data Access Query</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="SDA_query_features.html">SDA_query_features()</a></code> <code><a href="SDA_query_features.html">processSDA_WKT()</a></code> </p>
+        </td>
+        <td><p>Soil Data Access Spatial Query</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="SSURGO_spatial_query.html">SoilWeb_spatial_query()</a></code> </p>
+        </td>
+        <td><p>Get SSURGO Data via Spatial Query</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="STRplot.html">STRplot()</a></code> </p>
+        </td>
+        <td><p>Graphical Description of US Soil Taxonomy Soil Temperature Regimes</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="estimateSTR.html">estimateSTR()</a></code> </p>
+        </td>
+        <td><p>Estimate Soil Temperature Regime</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="fetchHenry.html">fetchHenry()</a></code> </p>
+        </td>
+        <td><p>Download Data from the Henry Mount Soil Temperature and Water Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="fetchKSSL.html">fetchKSSL()</a></code> </p>
+        </td>
+        <td><p>Fetch KSSL Data (EXPERIMENTAL)</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="fetchLIMS_component.html">fetchLIMS_component()</a></code> <code><a href="fetchLIMS_component.html">get_progress_from_LIMS()</a></code> <code><a href="fetchLIMS_component.html">get_project_from_LIMS()</a></code> <code><a href="fetchLIMS_component.html">get_project_correlation_from_LIMS()</a></code> <code><a href="fetchLIMS_component.html">get_projectmapunit_from_LIMS()</a></code> <code><a href="fetchLIMS_component.html">get_projectmapunit2_from_LIMS()</a></code> <code><a href="fetchLIMS_component.html">get_mapunit_from_LIMS()</a></code> <code><a href="fetchLIMS_component.html">get_component_from_LIMS()</a></code> <code><a href="fetchLIMS_component.html">get_chorizon_from_LIMS()</a></code> <code><a href="fetchLIMS_component.html">get_cosoilmoist_from_LIMS()</a></code> <code><a href="fetchLIMS_component.html">get_sitesoilmoist_from_LIMS()</a></code> </p>
+        </td>
+        <td><p>Extract component tables from a the Laboratory Information Management System</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="fetchNASIS.html">fetchNASIS()</a></code> <code><a href="fetchNASIS.html">fetchNASIS_pedons()</a></code> <code><a href="fetchNASIS.html">fetchNASIS_components()</a></code> <code><a href="fetchNASIS.html">getHzErrorsNASIS()</a></code> </p>
+        </td>
+        <td><p>Fetch commonly used site/pedon/horizon or component data from a local NASIS database.</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="fetchNASISLabData.html">fetchNASISLabData()</a></code> </p>
+        </td>
+        <td><p>Fetch lab data used site/horizon data from a PedonPC database.</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="fetchOSD.html">fetchOSD()</a></code> </p>
+        </td>
+        <td><p>Fetch Official Series Description (OSD) Data</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="fetchPedonPC.html">fetchPedonPC()</a></code> <code><a href="fetchPedonPC.html">getHzErrorsPedonPC()</a></code> </p>
+        </td>
+        <td><p>Fetch commonly used site/horizon data from a PedonPC v.5 database.</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="fetchRaCA.html">fetchRaCA()</a></code> </p>
+        </td>
+        <td><p>Fetch KSSL Data (EXPERIMENTAL)</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="fetchSCAN.html">fetchSCAN()</a></code> <code><a href="fetchSCAN.html">SCAN_sensor_metadata()</a></code> <code><a href="fetchSCAN.html">SCAN_site_metadata()</a></code> </p>
+        </td>
+        <td><p>Fetch SCAN Data</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="fetchSDA_component.html">fetchSDA_component()</a></code> <code><a href="fetchSDA_component.html">get_mapunit_from_SDA()</a></code> <code><a href="fetchSDA_component.html">get_component_from_SDA()</a></code> <code><a href="fetchSDA_component.html">get_chorizon_from_SDA()</a></code> <code><a href="fetchSDA_component.html">get_cosoilmoist_from_SDA()</a></code> <code><a href="fetchSDA_component.html">get_cosoilmoist_from_NASIS()</a></code> </p>
+        </td>
+        <td><p>Extract component tables from Soil Data Access</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="gSSURGO.chunk.html">gSSURGO.chunk</a></code> </p>
+        </td>
+        <td><p>Gridded SSURGO Chunk</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code> </p>
+        </td>
+        <td><p>Extract Soil Color Data from a local NASIS Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_colors_from_pedon_db.html">get_colors_from_pedon_db()</a></code> </p>
+        </td>
+        <td><p>Extract Soil Color Data from a PedonPC Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_comonth_from_NASIS_db.html">get_comonth_from_NASIS_db()</a></code> </p>
+        </td>
+        <td><p>Extract component month data from a local NASIS Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_component_data_from_NASIS_db.html">get_component_data_from_NASIS_db()</a></code> </p>
+        </td>
+        <td><p>Extract component data from a local NASIS Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_extended_data_from_NASIS.html">get_extended_data_from_NASIS_db()</a></code> </p>
+        </td>
+        <td><p>Extract accessory tables and summaries from a local NASIS Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_extended_data_from_pedon_db.html">get_extended_data_from_pedon_db()</a></code> </p>
+        </td>
+        <td><p>Extract accessory tables and summaries from a local pedonPC Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code> </p>
+        </td>
+        <td><p>Extract Horizon Data from a local NASIS Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_hz_data_from_pedon_db.html">get_hz_data_from_pedon_db()</a></code> </p>
+        </td>
+        <td><p>Extract Horizon Data from a PedonPC Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_lablayer_data_from_NASIS_db.html">get_lablayer_data_from_NASIS_db()</a></code> </p>
+        </td>
+        <td><p>Extract lab pedon layer data from a local NASIS Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_labpedon_data_from_NASIS_db.html">get_labpedon_data_from_NASIS_db()</a></code> </p>
+        </td>
+        <td><p>Extract lab pedon data from a local NASIS Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_phlabresults_data_from_NASIS_db.html">get_phlabresults_data_from_NASIS_db()</a></code> </p>
+        </td>
+        <td><p>Extract phlabresults table from a local NASIS Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code> </p>
+        </td>
+        <td><p>Extract Site Data from a local NASIS Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_site_data_from_pedon_db.html">get_site_data_from_pedon_db()</a></code> </p>
+        </td>
+        <td><p>Extract Site Data from a PedonPC Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_text_notes_from_NASIS_db.html">get_text_notes_from_NASIS_db()</a></code> </p>
+        </td>
+        <td><p>Extract text note data from a local NASIS Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_veg_data_from_NASIS_db.html">get_veg_data_from_NASIS_db()</a></code> </p>
+        </td>
+        <td><p>Extract veg data from a local NASIS Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_veg_from_AK_Site.html">get_veg_from_AK_Site()</a></code> </p>
+        </td>
+        <td><p>Retrieve Vegetation Data from an AK Site Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_veg_from_MT_veg_db.html">get_veg_from_MT_veg_db()</a></code> </p>
+        </td>
+        <td><p>Extract Site and Plot-level Data from a Montana RangeDB database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_veg_from_NPS_PLOTS_db.html">get_veg_from_NPS_PLOTS_db()</a></code> </p>
+        </td>
+        <td><p>Retrieve Vegetation Data from an NPS PLOTS Database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_veg_other_from_MT_veg_db.html">get_veg_other_from_MT_veg_db()</a></code> </p>
+        </td>
+        <td><p>Extract cover composition data from a Montana RangeDB database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="get_veg_species_from_MT_veg_db.html">get_veg_species_from_MT_veg_db()</a></code> </p>
+        </td>
+        <td><p>Extract species-level Data from a Montana RangeDB database</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="loafercreek.html">loafercreek</a></code> <code><a href="loafercreek.html">gopheridge</a></code> <code><a href="loafercreek.html">mineralKing</a></code> </p>
+        </td>
+        <td><p>Example SoilProfilecollection Objects Returned by fetchNASIS().</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="mapunit_geom_by_ll_bbox.html">mapunit_geom_by_ll_bbox()</a></code> </p>
+        </td>
+        <td><p>Fetch Map Unit Geometry from SDA</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="parseWebReport.html">parseWebReport()</a></code> </p>
+        </td>
+        <td><p>Parse contents of a web report, based on suplied arguments.</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="seriesExtent.html">seriesExtent()</a></code> <code><a href="seriesExtent.html">seriesExtentAsGmap()</a></code> </p>
+        </td>
+        <td><p>Get/Display Soil Series Extent</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="simplfyFragmentData.html">simplfyFragmentData()</a></code> </p>
+        </td>
+        <td><p>Simplify Coarse Fraction Data</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="simplifyColorData.html">simplifyColorData()</a></code> <code><a href="simplifyColorData.html">mix_and_clean_colors()</a></code> </p>
+        </td>
+        <td><p>Simplify Color Data by ID</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="soilDB-package.html">soilDB-package</a></code> </p>
+        </td>
+        <td><p>Soil Database Interface</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="uncode.html">uncode()</a></code> <code><a href="uncode.html">code()</a></code> </p>
+        </td>
+        <td><p>Convert coded values returned from NASIS and SDA queries to factors</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="us_ss_timeline.html">us_ss_timeline</a></code> </p>
+        </td>
+        <td><p>Timeline of US Published Soil Surveys</p></td>
+      </tr>
+    </tbody>
+    </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -380,5 +409,8 @@
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

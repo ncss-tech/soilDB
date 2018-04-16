@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Fetch SCAN Data — fetchSCAN" />
+
+<meta property="og:description" content="Query soil/climate data from USDA-NRCS SCAN Stations (experimental)" />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -32,6 +38,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
 
 
   </head>
@@ -47,8 +55,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">soilDB</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">soilDB</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -65,6 +77,7 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -72,10 +85,12 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Fetch SCAN Data</h1>
+    
+    <div class="hidden name"><code>fetchSCAN.Rd</code></div>
     </div>
 
     
@@ -84,10 +99,14 @@
 
     <pre class="usage"><span class='co'># get SCAN data</span>
 <span class='fu'>fetchSCAN</span>(<span class='no'>site.code</span>, <span class='no'>year</span>, <span class='kw'>report</span><span class='kw'>=</span><span class='st'>'SCAN'</span>, <span class='kw'>req</span><span class='kw'>=</span><span class='kw'>NULL</span>)
-<span class='co'># get SCAN station metadata</span>
-<span class='fu'>SCAN_sensor_metadata</span>(<span class='no'>site.code</span>)</pre>
+
+<span class='co'># get sensor metadata for one or more sites</span>
+<span class='fu'>SCAN_sensor_metadata</span>(<span class='no'>site.code</span>)
+
+<span class='co'># get site metadata for one or more sites</span>
+<span class='fu'>SCAN_site_metadata</span>(<span class='no'>site.code</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -110,7 +129,7 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>See <a href='http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html'>The fetchSCAN tutorial for details.</a> These functions require the `httr` and `rvest` libraries.</p>
+    <p>See <a href='http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html'>the fetchSCAN tutorial for details.</a> These functions require the `httr` and `rvest` libraries.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -133,6 +152,9 @@
 
 <span class='co'># get sensor metadata</span>
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'>SCAN_sensor_metadata</span>(<span class='kw'>site.code</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>356</span>, <span class='fl'>2072</span>))
+
+<span class='co'># get site metadata</span>
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'>SCAN_site_metadata</span>(<span class='kw'>site.code</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>356</span>, <span class='fl'>2072</span>))
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -168,5 +190,8 @@
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
