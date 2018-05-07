@@ -14,6 +14,7 @@
 \alias{get_copedon_from_NASIS_db}
 \alias{get_vegplot_from_NASIS_db}
 \alias{get_projectmapunit_from_NASIS}
+\alias{get_projectstaff_from_NASIS}
 
 \title{Fetch commonly used site/pedon/horizon or component data from a local NASIS database.}
 \description{Fetch commonly used site/pedon/horizon data or component from a local NASIS database, return as a SoilProfileCollection object.}
