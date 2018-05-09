@@ -239,7 +239,8 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   # https://github.com/ncss-tech/soilDB/issues/26
   # 
   # solution is simple remove NAs
-  d.long <- na.omit(d.long)
+  idx <- which(!is.na(d.long$value))
+  d.long <- d.long[idx, ]
   
   # format and return
   return(d.long[, c('Site', 'Date', 'value', 'depth', 'sensor.id')])
