@@ -25,7 +25,7 @@
 
 
 # summarize daily values via julian day
-.summarizeSoilTemperature <- function(soiltemp.data) {
+summarizeSoilTemperature <- function(soiltemp.data) {
   
   # hacks to make R CMD check --as-cran happy:
   n <- NULL
@@ -60,7 +60,7 @@
   
   # convert DOY -> month
   d$month <- format(as.Date(as.character(d$doy), format="%j"), "%b")
-  d$season <- .month2season(d$month)
+  d$season <- month2season(d$month)
   
   # compute unbiased MAST, number of obs, complete records per average no. days in year
   d.mast <- ddply(d, 'sid', .fun=plyr::summarize, 
@@ -90,7 +90,7 @@
 }
 
 
-.month2season <- function(x) {
+month2season <- function(x) {
   season <- rep(NA, times=length(x))
   season[x %in% c('Jun', 'Jul', 'Aug')] <- 'Summer'
   season[x %in% c('Dec', 'Jan', 'Feb')] <- 'Winter'
@@ -150,7 +150,7 @@
     }
     
     # add-in seasons
-    sensor.data$season <- .month2season(sensor.data$month)
+    sensor.data$season <- month2season(sensor.data$month)
   }
   
   return(sensor.data)
@@ -259,7 +259,7 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
         stop('soil temperature summaries can only be computed from daily data', call. = FALSE)
       
       # compute unbiased estimates of MAST and summer/winter temp
-      soiltemp.summary <- .summarizeSoilTemperature(s$soiltemp)
+      soiltemp.summary <- summarizeSoilTemperature(s$soiltemp)
       
       # combine summaries and join to sensors data
       por <- join(por, soiltemp.summary, by='sid')
