@@ -234,20 +234,12 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     
   
   ## BUG in the data output from SCAN!
-  # multiple rows on Sept 30th of each year
+  # mulitple rows / day, second row in set has NA in sensor values
+  # this is related to site visits
   # https://github.com/ncss-tech/soilDB/issues/26
-  
-  # locate duplicate records
-  idx <- which(format(d.long$Date, "%b-%d") == 'Sep-30')
-  
-  # if there are 2 matching records
-  # then the second record is usually the "wrong" one
-  # remove it
-  if(length(idx) > 1) {
-    d.long <- d.long[-idx[2], ]
-  }
-  
-  ## BUG ^^^^
+  # 
+  # solution is simple remove NAs
+  d.long <- na.omit(d.long)
   
   # format and return
   return(d.long[, c('Site', 'Date', 'value', 'depth', 'sensor.id')])
