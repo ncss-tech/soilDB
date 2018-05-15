@@ -48,7 +48,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
     stop('please install the `RODBC` package', call.=FALSE)
 
   # query the coordinate, plss description, and site characteristics data for these records from the site table
-  q.plotlocation <- "SELECT s.siteiid, s.usiteid as site_id, v.vegplotid as vegplot_id, vegplotiid, latdegrees, latminutes, latseconds, latdir, longdegrees, longminutes, longseconds, longdir, horizdatnm, locdesc, plsssdetails, plsssection, plsstownship, plssrange, plssmeridian, utmzone, utmnorthing, utmeasting, latstddecimaldegrees, longstddecimaldegrees, geocoordsource, elev, slope, aspect 
+  q.plotlocation <- "SELECT s.siteiid, s.usiteid as site_id, v.vegplotid as vegplot_id, vegplotiid, v.datacollectionpurpose, latdegrees, latminutes, latseconds, latdir, longdegrees, longminutes, longseconds, longdir, horizdatnm, locdesc, plsssdetails, plsssection, plsstownship, plssrange, plssmeridian, utmzone, utmnorthing, utmeasting, latstddecimaldegrees, longstddecimaldegrees, geocoordsource, elev, slope, aspect 
   FROM 
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
