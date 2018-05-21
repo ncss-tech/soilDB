@@ -1,3 +1,6 @@
+-------------------------- soilDB 2.2-1 (2018-05-21) ------------------------------
+* get_mutext_from_NASIS_db() added for extraction of map unit text notes
+
 -------------------------- soilDB 2.2 (2018-05-08) ------------------------------
 * CRAN release
 * better bug-fix for fetchSCAN and missing data (https://github.com/ncss-tech/soilDB/issues/26)

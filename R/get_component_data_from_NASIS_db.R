@@ -6,6 +6,52 @@
 ## 
 
 
+
+## get map unit text from local NASIS
+get_mutext_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE) {
+  # must have RODBC installed
+  if(!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
+  q <- "SELECT mu.muiid, mu.mukind, mu.mutype, mu.muname, mu.nationalmusym,
+  mut.seqnum, mut.recdate, mut. recauthor, mut.mapunittextkind, mut.textcat, mut.textsubcat, mut.textentry
+  
+  FROM 
+  mapunit_View_1 AS mu
+  INNER JOIN mutext_View_1 AS mut ON mu.muiid = mut.muiidref
+  
+  ;
+  "
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
+  # exec query
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # convert codes
+  d <- uncode(d)
+  
+  # optionally convert \r\n -> \n
+  if(fixLineEndings){
+    d$textentry <- gsub(d$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
+  }
+  
+  
+  # done
+  return(d)
+}
+
+
+
+
 ## just the component records, nothing above or below
 get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
