@@ -1,4 +1,4 @@
-get_text_notes_from_NASIS_db <- function(SS=TRUE) {
+get_text_notes_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -30,6 +30,9 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 	d.phtext <- RODBC::sqlQuery(channel, q.phtext, stringsAsFactors=FALSE)
 	d.photos <- RODBC::sqlQuery(channel, q.photos, stringsAsFactors=FALSE)
 
+	# close connection
+	RODBC::odbcClose(channel)
+
 	# uncode domained columns
 	d.petext <- uncode(d.petext)
 	d.sitetext <- uncode(d.sitetext)
@@ -37,8 +40,15 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 	d.phtext <- uncode(d.phtext)
 	d.photos <- uncode(d.photos)
 	
-	# close connection
-	RODBC::odbcClose(channel)
+	# optionally convert \r\n -> \n
+ 	 if(fixLineEndings){
+   	 d.petext$textentry <- gsub(d.petext$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
+	 d.sitetext$textentry <- gsub(d.sitetext$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
+ 	 d.siteobstext$textentry <- gsub(d.siteobstext$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
+	 d.phtext$textentry <- gsub(d.phtext$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
+  	}
+  
+
 		
 	# return a list of results
 	return(list(pedon_text=d.petext,

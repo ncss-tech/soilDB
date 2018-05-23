@@ -16,7 +16,7 @@ fetchVegdata <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors())
 	vegtransplantsum <- get_vegplot_transpecies_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
 	vegsiteindexsum <- get_vegplot_tree_si_summary_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
 	vegsiteindexdet <- get_vegplot_tree_si_details_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
-	vegplottext <- get_vegplot_textnote_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
+	vegplottext <- get_vegplot_textnote_from_NASIS_db(SS=SS, fixLineEndings=TRUE, stringsAsFactors = stringsAsFactors)
 
 
 	# test to see if the selected set is loaded
