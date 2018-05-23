@@ -353,7 +353,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 
 
   # get vegplot textnotes
-  get_vegplot_textnote_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
+  get_vegplot_textnote_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -386,6 +386,11 @@ FROM vegplottext_View_1;"
   
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
+
+  # optionally convert \r\n -> \n
+  if(fixLineEndings){
+    d$textentry <- gsub(d$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
+  }
   
   # done
   return(d)
