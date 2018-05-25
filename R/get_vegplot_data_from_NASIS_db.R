@@ -14,7 +14,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   ORDER BY s.siteiid;"
 
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y") 
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
 
   # exec query
   d.vegplot <- RODBC::sqlQuery(channel, q.vegplot, stringsAsFactors=FALSE)
@@ -56,7 +56,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   ORDER BY s.siteiid;"
 
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y") 
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials')) 
 
   # exec query
   d.plotlocation <- RODBC::sqlQuery(channel, q.plotlocation, stringsAsFactors=FALSE)
@@ -99,7 +99,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   ORDER BY s.siteiid;"
 
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y") 
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials')) 
 
   # exec query
   d.vegplotrhi <- RODBC::sqlQuery(channel, q.vegplotrhi, stringsAsFactors=FALSE)
@@ -142,7 +142,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   ORDER BY s.siteiid, ppi.orderofdominance, ppi.seqnum;"
 
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
 
   # exec query
   d.vegplotspecies <- RODBC::sqlQuery(channel, q.vegplotspecies, stringsAsFactors=FALSE)
@@ -186,7 +186,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   ORDER BY s.siteiid;"
 
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
 
   # exec query
   d.vegtransect <- RODBC::sqlQuery(channel, q.vegtransect, stringsAsFactors=FALSE)
@@ -232,7 +232,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   
   
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # exec query
   d.vegtransplantsum <- RODBC::sqlQuery(channel, q.vtps, stringsAsFactors=FALSE)
@@ -277,7 +277,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   ORDER BY s.siteiid;"
 
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # exec query
   d.vegsiteindexsum <- RODBC::sqlQuery(channel, q.pltsis, stringsAsFactors=FALSE)
@@ -325,7 +325,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 
 
   # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # exec query
   d.vegsiteindexdet <- RODBC::sqlQuery(channel, q.pltsid, stringsAsFactors=FALSE)
@@ -365,7 +365,7 @@ textcat, textsubcat, textentry, vegplottextiid
 FROM vegplottext_View_1;"
 
 # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection="DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # exec query
   d.vegplottext <- RODBC::sqlQuery(channel, q.vegplottext, stringsAsFactors=FALSE)
