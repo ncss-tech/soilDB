@@ -14,7 +14,7 @@ get_mutext_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE) {
     stop('please install the `RODBC` package', call.=FALSE)
   
   q <- "SELECT mu.muiid, mu.mukind, mu.mutype, mu.muname, mu.nationalmusym,
-  mut.seqnum, mut.recdate, mut. recauthor, mut.mapunittextkind, mut.textcat, mut.textsubcat, mut.textentry
+  mut.seqnum, mut.recdate, mut.recauthor, mut.mapunittextkind, mut.textcat, mut.textsubcat, mut.textentry
   
   FROM 
   mapunit_View_1 AS mu
