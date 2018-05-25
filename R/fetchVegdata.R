@@ -23,7 +23,6 @@ fetchVegdata <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors())
 	if (nrow(vegplot) == 0) message('your selected set is missing either the vegplot, pedon or site table, please load and try again :)')
 
 	# done
-	# TODO: add SI queries to this!!!
 	return(list(vegplot=vegplot,
 		vegplotlocation=vegplotlocation,
 		vegplotrhi=vegplotrhi,

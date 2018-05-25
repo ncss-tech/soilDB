@@ -77,6 +77,12 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
+
+  # clean PLSS TRS data 
+  d$plsstownship <- gsub(d$plsstownship, pattern = '\\.', replacement = '', fixed = TRUE)
+  d$plsstownship <- toupper(trimws(d$plsstownship))
+  d$plssrange <- gsub(d$plssrange, pattern = '\\.', replacement = '', fixed = TRUE)
+  d$plssrange <- toupper(trimws(d$plssrange))	
   
   # done
   return(d)
