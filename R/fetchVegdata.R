@@ -3,9 +3,9 @@
 # convenience function for loading most commonly used vegplot information from local NASIS database
 fetchVegdata <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
 	
-	# test connection
-	if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
-			stop('Local NASIS ODBC connection has not been setup. Please see `https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/setup_local_nasis.html?root=aqp`.')
+  # test connection
+  if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
+    stop('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
 	
 	# 1. load data in pieces
 	vegplot <- get_vegplot_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
@@ -34,3 +34,4 @@ fetchVegdata <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors())
 		vegsiteindexdet=vegsiteindexdet,
 		vegplottext=vegplottext))
 }	
+
