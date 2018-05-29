@@ -1,44 +1,44 @@
-\name{fetchNASISWebReports_component}
-\alias{fetchNASISWebReports_component}
-\alias{get_project_from_NASISWebReports}
-\alias{get_progress_from_NASISWebReports}
-\alias{get_project_correlation_from_NASISWebReports}
-\alias{get_mapunit_from_NASISWebReports}
-\alias{get_projectmapunit_from_NASISWebReports}
-\alias{get_projectmapunit2_from_NASISWebReports}
-\alias{get_component_from_NASISWebReports}
-\alias{get_chorizon_from_NASISWebReports}
-\alias{get_cosoilmoist_from_NASISWebReports}
-\alias{get_sitesoilmoist_from_NASISWebReports}
+\name{fetchNASISWebReport}
+\alias{fetchNASISWebReport}
+\alias{get_project_from_NASISWebReport}
+\alias{get_progress_from_NASISWebReport}
+\alias{get_project_correlation_from_NASISWebReport}
+\alias{get_mapunit_from_NASISWebReport}
+\alias{get_projectmapunit_from_NASISWebReport}
+\alias{get_projectmapunit2_from_NASISWebReport}
+\alias{get_component_from_NASISWebReport}
+\alias{get_chorizon_from_NASISWebReport}
+\alias{get_cosoilmoist_from_NASISWebReport}
+\alias{get_sitesoilmoist_from_NASISWebReport}
 
 \title{Extract component tables from a the Laboratory Information Management System}
 \description{Get, format, impute, and return component tables.}
 \usage{
-fetchNASISWebReports_component(projectname, rmHzErrors = FALSE, fill = FALSE,
+fetchNASISWebReport(projectname, rmHzErrors = FALSE, fill = FALSE,
                     stringsAsFactors = default.stringsAsFactors()
                     )
-get_progress_from_NASISWebReports(mlrassoarea, fiscalyear, projecttypename)
-get_project_from_NASISWebReports(mlrassoarea, fiscalyear)
-get_project_correlation_from_NASISWebReports(mlrassoarea, fiscalyear, projectname)
-get_projectmapunit_from_NASISWebReports(projectname, 
+get_progress_from_NASISWebReport(mlrassoarea, fiscalyear, projecttypename)
+get_project_from_NASISWebReport(mlrassoarea, fiscalyear)
+get_project_correlation_from_NASISWebReport(mlrassoarea, fiscalyear, projectname)
+get_projectmapunit_from_NASISWebReport(projectname, 
+                                       stringsAsFactors = default.stringsAsFactors()
+                                       )
+get_projectmapunit2_from_NASISWebReport(mlrassoarea, fiscalyear, projectname, 
                                         stringsAsFactors = default.stringsAsFactors()
                                         )
-get_projectmapunit2_from_NASISWebReports(mlrassoarea, fiscalyear, projectname, 
-                             stringsAsFactors = default.stringsAsFactors()
-                             )
-get_mapunit_from_NASISWebReports(areasymbol, 
+get_mapunit_from_NASISWebReport(areasymbol, 
+                                stringsAsFactors = default.stringsAsFactors()
+                                )
+get_component_from_NASISWebReport(projectname, 
+                                  stringsAsFactors = default.stringsAsFactors()
+                                  )
+get_chorizon_from_NASISWebReport(projectname, fill = FALSE, 
                                  stringsAsFactors = default.stringsAsFactors()
                                  )
-get_component_from_NASISWebReports(projectname, 
-                                   stringsAsFactors = default.stringsAsFactors()
-                                   )
-get_chorizon_from_NASISWebReports(projectname, fill = FALSE, 
-                       stringsAsFactors = default.stringsAsFactors()
-                       )
-get_cosoilmoist_from_NASISWebReports(projectname, impute = TRUE, 
-                         stringsAsFactors = default.stringsAsFactors()
-                         )
-get_sitesoilmoist_from_NASISWebReports(usiteid)
+get_cosoilmoist_from_NASISWebReport(projectname, impute = TRUE, 
+                                    stringsAsFactors = default.stringsAsFactors()
+                                    )
+get_sitesoilmoist_from_NASISWebReport(usiteid)
 }
 
 
@@ -70,7 +70,7 @@ library(ggplot2)
 library(gridExtra)
 
 # query soil components by projectname
-test = fetchNASISWebReports_component(
+test = fetchNASISWebReport_component(
 "EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"
 )
 test = test$spc
@@ -113,7 +113,7 @@ grid.arrange(g1, g2)
 
 # query cosoilmoist (e.g. water table data) by mukey
 # NA depths are interpreted as (???) with impute=TRUE argument
-x <- get_cosoilmoist_from_NASISWebReports(
+x <- get_cosoilmoist_from_NASISWebReport(
 "EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"
 )
 

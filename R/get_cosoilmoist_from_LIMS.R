@@ -1,7 +1,7 @@
-get_cosoilmoist_from_NASISWebReports <- function(projectname, impute = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_cosoilmoist_from_NASISWebReport <- function(projectname, impute = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   
   # check for required packages
-  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_cosoimoist_from_NASISWebReports"
+  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_cosoimoist_from_NASISWebReport"
 
   d.cosoilmoist <- lapply(projectname, function(x) {
     args = list(p_projectname = x)
@@ -20,9 +20,9 @@ get_cosoilmoist_from_NASISWebReports <- function(projectname, impute = TRUE, str
   }
 
 
-get_sitesoilmoist_from_NASISWebReports <- function(usiteid) {
+get_sitesoilmoist_from_NASISWebReport <- function(usiteid) {
   
-  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_sitesoilmoist_from_NASISWebReports"
+  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_sitesoilmoist_from_NASISWebReport"
   
   args <- list(p_usiteid = usiteid)
   
