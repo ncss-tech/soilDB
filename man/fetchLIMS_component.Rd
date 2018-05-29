@@ -1,38 +1,44 @@
-\name{fetchLIMS_component}
-\alias{fetchLIMS_component}
-\alias{get_project_from_LIMS}
-\alias{get_progress_from_LIMS}
-\alias{get_project_correlation_from_LIMS}
-\alias{get_mapunit_from_LIMS}
-\alias{get_projectmapunit_from_LIMS}
-\alias{get_projectmapunit2_from_LIMS}
-\alias{get_component_from_LIMS}
-\alias{get_chorizon_from_LIMS}
-\alias{get_cosoilmoist_from_LIMS}
-\alias{get_sitesoilmoist_from_LIMS}
+\name{fetchNASISWebReports_component}
+\alias{fetchNASISWebReports_component}
+\alias{get_project_from_NASISWebReports}
+\alias{get_progress_from_NASISWebReports}
+\alias{get_project_correlation_from_NASISWebReports}
+\alias{get_mapunit_from_NASISWebReports}
+\alias{get_projectmapunit_from_NASISWebReports}
+\alias{get_projectmapunit2_from_NASISWebReports}
+\alias{get_component_from_NASISWebReports}
+\alias{get_chorizon_from_NASISWebReports}
+\alias{get_cosoilmoist_from_NASISWebReports}
+\alias{get_sitesoilmoist_from_NASISWebReports}
 
 \title{Extract component tables from a the Laboratory Information Management System}
 \description{Get, format, impute, and return component tables.}
 \usage{
-fetchLIMS_component(projectname, rmHzErrors = FALSE, fill = FALSE,
+fetchNASISWebReports_component(projectname, rmHzErrors = FALSE, fill = FALSE,
                     stringsAsFactors = default.stringsAsFactors()
                     )
-get_progress_from_LIMS(mlrassoarea, fiscalyear, projecttypename)
-get_project_from_LIMS(mlrassoarea, fiscalyear)
-get_project_correlation_from_LIMS(mlrassoarea, fiscalyear, projectname)
-get_projectmapunit_from_LIMS(projectname, stringsAsFactors = default.stringsAsFactors())
-get_projectmapunit2_from_LIMS(mlrassoarea, fiscalyear, projectname, 
+get_progress_from_NASISWebReports(mlrassoarea, fiscalyear, projecttypename)
+get_project_from_NASISWebReports(mlrassoarea, fiscalyear)
+get_project_correlation_from_NASISWebReports(mlrassoarea, fiscalyear, projectname)
+get_projectmapunit_from_NASISWebReports(projectname, 
+                                        stringsAsFactors = default.stringsAsFactors()
+                                        )
+get_projectmapunit2_from_NASISWebReports(mlrassoarea, fiscalyear, projectname, 
                              stringsAsFactors = default.stringsAsFactors()
                              )
-get_mapunit_from_LIMS(areasymbol, stringsAsFactors = default.stringsAsFactors())
-get_component_from_LIMS(projectname, stringsAsFactors = default.stringsAsFactors())
-get_chorizon_from_LIMS(projectname, fill = FALSE, 
+get_mapunit_from_NASISWebReports(areasymbol, 
+                                 stringsAsFactors = default.stringsAsFactors()
+                                 )
+get_component_from_NASISWebReports(projectname, 
+                                   stringsAsFactors = default.stringsAsFactors()
+                                   )
+get_chorizon_from_NASISWebReports(projectname, fill = FALSE, 
                        stringsAsFactors = default.stringsAsFactors()
                        )
-get_cosoilmoist_from_LIMS(projectname, impute = TRUE, 
+get_cosoilmoist_from_NASISWebReports(projectname, impute = TRUE, 
                          stringsAsFactors = default.stringsAsFactors()
                          )
-get_sitesoilmoist_from_LIMS(usiteid)
+get_sitesoilmoist_from_NASISWebReports(usiteid)
 }
 
 
@@ -64,7 +70,7 @@ library(ggplot2)
 library(gridExtra)
 
 # query soil components by projectname
-test = fetchLIMS_component(
+test = fetchNASISWebReports_component(
 "EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"
 )
 test = test$spc
@@ -107,7 +113,7 @@ grid.arrange(g1, g2)
 
 # query cosoilmoist (e.g. water table data) by mukey
 # NA depths are interpreted as (???) with impute=TRUE argument
-x <- get_cosoilmoist_from_LIMS(
+x <- get_cosoilmoist_from_NASISWebReports(
 "EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"
 )
 
