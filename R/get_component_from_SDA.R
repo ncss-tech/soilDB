@@ -194,7 +194,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFac
   q.chorizon <- paste("
   SELECT", 
   if (duplicates == FALSE) {"DISTINCT"}
-  , "hzname, hzdept_r, hzdepb_r, texture, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbovendry_r, ksat_r, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, c.cokey
+  , "hzname, hzdept_r, hzdepb_r, texture, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_r, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, c.cokey
 
   FROM legend l INNER JOIN
        mapunit mu ON mu.lkey = l.lkey INNER JOIN",
