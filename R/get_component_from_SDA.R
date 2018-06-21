@@ -4,7 +4,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   # Joining in the fetch on derived_cokey doesn't work but should. There are duplicate components with the same combination of elements.
   # paste0("mu.nationalmusym + '_' + CAST(comppct_r AS VARCHAR) + '_' + compname + '-' + ISNULL(localphase, 'no_phase') AS derived_cokey")
   
-  c.vars <- "compname, comppct_r, compkind, majcompflag, localphase, slope_r, tfact, wei, weg, drainagecl, elev_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, cokey"
+  c.vars <- "compname, comppct_r, compkind, majcompflag, localphase, slope_r, drainagecl, elev_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, earthcovkind1, earthcovkind2, erocl, tfact, wei, weg, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, cokey"
   q.component <- paste("
   SELECT", 
   if (duplicates == FALSE) {"DISTINCT"} else {"mukey,"}
