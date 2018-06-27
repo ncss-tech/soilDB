@@ -261,7 +261,7 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
   
   FROM coecosite_View_1 AS coecosite
   
-  INNER JOIN ecologicalsite_View_1 AS es ON es.ecositeiid = coecosite.ecositeiidref
+  INNER JOIN ecologicalsite AS es ON es.ecositeiid = coecosite.ecositeiidref
   
   ORDER BY coiid;"
   
