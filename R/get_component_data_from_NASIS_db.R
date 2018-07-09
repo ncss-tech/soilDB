@@ -261,7 +261,7 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
   
   FROM coecosite_View_1 AS coecosite
   
-  INNER JOIN ecologicalsite_View_1 AS es ON es.ecositeiid = coecosite.ecositeiidref
+  INNER JOIN ecologicalsite AS es ON es.ecositeiid = coecosite.ecositeiidref
   
   ORDER BY coiid;"
   
@@ -281,9 +281,9 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
   
   # check for more than 1 record / coiid
   idx <- which(table(d$coiid) > 1)
+  dupes <- names(idx)
+  assign('multiple.ecosite.per.coiid', value=dupes, envir=soilDB.env)
   if(length(idx) > 0) {
-    dupes <- names(idx)
-    assign('multiple.ecosite.per.coiid', value=dupes, envir=soilDB.env)
     message("-> QC: multiple ecosites / component. Use `get('multiple.ecosite.per.coiid', envir=soilDB.env)` for related coiid values.")
   }
   
