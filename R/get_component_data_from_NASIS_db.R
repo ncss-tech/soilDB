@@ -39,6 +39,10 @@ get_mutext_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE) {
   # convert codes
   d <- uncode(d)
   
+  # replace tabs with spaces
+  # tabs at the beginning of a line will confuse the MD parser, generating <code><pre> blocks
+  d$textentry <- gsub(d$textentry, pattern = '\t', replacement = ' ', fixed = TRUE)
+  
   # optionally convert \r\n -> \n
   if(fixLineEndings){
     d$textentry <- gsub(d$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
