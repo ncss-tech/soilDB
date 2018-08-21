@@ -172,19 +172,19 @@ get_project_correlation_from_NASISWebReport <- function(mlrassoarea, fiscalyear,
   
   # compute musym_orig for additional lmapunits, necessary to catch changes to the original musym, due to a constraint on the lmapunit table that prevents duplicate musym for additional mapunits 
   d.rcor <- within(d.rcor, {
-    
+
     n         = nchar(musym)
     begin_1   = substr(musym, 2, n)
     end_1     = substr(musym, 1, n - 1)
     end_4     = substr(musym, 1, n - 4)
-      
+
     idx       = musym != new_musym & !is.na(new_musym)
-      
-    orig_musym = ifelse(idx & musym != begin_1 & new_musym == begin_1, begin_1, musym)
+
+    orig_musym = ifelse(idx & musym != begin_1 & (new_musym == begin_1 | substr(musym, 1, 1) == "z"), begin_1, musym)
     # Joe recommended using |\\+${1}, but appears to be legit in some cases
     orig_musym = ifelse(idx & musym != end_1   & new_musym == end_1 , end_1   , orig_musym)
     orig_musym = ifelse(idx & musym != end_4   & new_musym == end_4 , end_4   , orig_musym)
-    })
+  })
   d.rcor[c("n", "begin_1", "end_1", "end_4", "idx")] <- NULL
   
   # return data.frame
