@@ -104,6 +104,60 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 }
 
 
+get_mapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+  # must have RODBC installed
+  if(!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
+  q.mapunit <- paste("
+                     SELECT 
+                     mlraoffice, areasymbol, areaname, areaacres, ssastatus, cordate, 
+                     projectscale, cordate, 
+                     lmapunitiid, nationalmusym, musym, muname, mukind, mustatus, muacres, farmlndcl
+                     
+                     FROM  
+                         area            a                               INNER JOIN 
+                         legend_View_1   l   ON l.areaiidref = a.areaiid INNER JOIN
+                         lmapunit_View_1 lmu ON lmu.liidref = l.liid     INNER JOIN 
+                         mapunit_View_1  mu  ON mu.muiid = lmu.muiidref
+                     INNER JOIN
+                         areatype at  ON at.areatypeiid = areatypeiidref
+                     
+                     WHERE
+                         legendsuituse = 3              AND
+                         mustatus IN (2, 3)             AND
+                         areatypename = 'Non-MLRA Soil Survey Area'
+
+                     ORDER BY mlraoffice, areasymbol, musym
+                     ;")
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.mapunit <- gsub(pattern = '_View_1', replacement = '', x = q.mapunit, fixed = TRUE)
+  }
+  
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  
+  # exec query
+  d.mapunit <- RODBC::sqlQuery(channel, q.mapunit, stringsAsFactors=FALSE)
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # recode metadata domains
+  d.mapunit <- uncode(d.mapunit, db = "NASIS", stringsAsFactors = stringsAsFactors)
+  
+  
+  # cache original column names
+  orig_names <- names(d.mapunit)
+  
+  
+  # done
+  return(d.mapunit)
+}
+
+
 # return all rows from correlation -- map unit -- legend map unit -- dmu / legend -- area
 # note that all of these "target tables" have to be selected
 get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional=TRUE, dropNotRepresentative=TRUE, stringsAsFactors = default.stringsAsFactors()) {

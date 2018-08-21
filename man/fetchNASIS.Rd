@@ -13,6 +13,7 @@
 \alias{get_component_otherveg_data_from_NASIS_db}
 \alias{get_copedon_from_NASIS_db}
 \alias{get_vegplot_from_NASIS_db}
+\alias{get_mapunit_from_NASIS}
 \alias{get_projectmapunit_from_NASIS}
 \alias{get_projectstaff_from_NASIS}
 
