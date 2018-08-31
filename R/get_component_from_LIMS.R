@@ -180,7 +180,7 @@ get_project_correlation_from_NASISWebReport <- function(mlrassoarea, fiscalyear,
 
     idx       = musym != new_musym & !is.na(new_musym)
 
-    orig_musym = ifelse(idx & musym != begin_1 & (new_musym == begin_1 | substr(musym, 1, 1) == "z"), begin_1, musym)
+    orig_musym = ifelse(idx & musym != begin_1 & (new_musym == begin_1 | substr(musym, 1, 1) %in% c("x", "z")), begin_1, musym)
     # Joe recommended using |\\+${1}, but appears to be legit in some cases
     orig_musym = ifelse(idx & musym != end_1   & new_musym == end_1 , end_1   , orig_musym)
     orig_musym = ifelse(idx & musym != end_4   & new_musym == end_4 , end_4   , orig_musym)
