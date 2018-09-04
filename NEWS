@@ -1,3 +1,6 @@
+-------------------------- soilDB 2.2-4 (2018-09-04) ------------------------------
+* numerous bug-fixes in simplifyFragmentData() see (https://github.com/ncss-tech/soilDB/issues/70)
+
 -------------------------- soilDB 2.2-1 (2018-05-21) ------------------------------
 * get_mutext_from_NASIS_db() added for extraction of map unit text notes
 
