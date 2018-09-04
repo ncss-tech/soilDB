@@ -319,7 +319,7 @@ LEFT OUTER JOIN (
 
 	if(nrow(d.rf.data) > 0) {
 	  # summarize rock fragment data
-	  d.rf.summary <- simplfyFragmentData(d.rf.data, 'phiid', nullFragsAreZero = nullFragsAreZero)
+	  d.rf.summary <- simplifyFragmentData(d.rf.data, id.var='phiid', nullFragsAreZero = nullFragsAreZero)
 	} else {
 	  d.rf.summary <- NULL
 	}
