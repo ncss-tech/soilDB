@@ -155,12 +155,18 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   }
   
   # final sanity check: are there any fractions or the total >= 100%
-  gt.100 <- sapply(rf.wide[, -id.col.idx], function(i) i >= 100)
+  # note: sapply() was previously used here
+  #       1 row in rf.wide --> result is a vector
+  #       >1 row in rf.wide --> result is a matrix
+  # solution: keep as a list
+  gt.100 <- lapply(rf.wide[, -id.col.idx, drop=FALSE], FUN=function(i) i >= 100)
   
-  # check each column and report id.var if there are any
-  if(any(apply(gt.100, 2, any, na.rm=TRUE))) {
-    # row-wise test to locate IDs
-    idx <- which(apply(gt.100, 1, any, na.rm=TRUE))
+  # check each size fraction and report id.var if there are any
+  gt.100.matches <- sapply(gt.100, any, na.rm=TRUE)
+  if(any(gt.100.matches)) {
+    # search within each fraction
+    class.idx <- which(gt.100.matches)
+    idx <- unique(unlist(lapply(gt.100[class.idx], which)))
     flagged.ids <- rf.wide[[id.var]][idx]
     
     warning(sprintf("fragment volume >= 100%%\n%s:\n%s", id.var, paste(flagged.ids, collapse = "\n")), call. = FALSE)
