@@ -1,5 +1,6 @@
 
 # internally-used function to test size classes
+# diameter is in mm
 .sieve <- function(diameter, flat=FALSE, para=FALSE) {
   
   # flat fragments

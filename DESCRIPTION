@@ -11,10 +11,9 @@ License: GPL (>= 3)
 LazyLoad: yes
 Depends: R (>= 3.0.0), aqp
 Imports: grDevices, graphics, stats, utils, plyr, Hmisc, xml2, sp, reshape2, raster, curl
-Suggests: lattice, dismo, rgdal, jsonlite, RODBC, httr, rgeos, rvest
+Suggests: lattice, dismo, rgdal, jsonlite, RODBC, httr, rgeos, rvest,
+    testthat
 Repository: CRAN
 URL: http://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues
 RoxygenNote: 6.0.1
-
-
