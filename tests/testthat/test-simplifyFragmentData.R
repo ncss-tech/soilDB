@@ -1,5 +1,12 @@
 context("Simplification of fragment data (from NASIS)")
 
+## related issues
+# https://github.com/ncss-tech/soilDB/issues/43
+# https://github.com/ncss-tech/soilDB/issues/57
+# https://github.com/ncss-tech/soilDB/issues/70
+
+
+
 
 test_that(".seive correctly skips / pads NA", {
   expect_equal(soilDB:::.sieve(diameter = c(NA, 55)), c(NA, 'gravel'))
