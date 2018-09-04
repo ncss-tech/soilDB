@@ -1,6 +1,7 @@
 
 # internally-used function to test size classes
 # diameter is in mm
+# NA diameter results in NA class
 .sieve <- function(diameter, flat=FALSE, para=FALSE) {
   
   # flat fragments
@@ -172,10 +173,17 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   # includes unspecified class
   if(ncol(rf.wide) > 1) {
     # calculate another column for total RF, ignoring parafractions
-    rf.wide$total_frags_pct_nopf <- rowSums(rf.wide[, c(FALSE, !grepl(levels(rf.classes$class), pattern="para"))], na.rm=TRUE)
+    # index of columns to ignore, para*
+    idx.pf <- grep(names(rf.wide), pattern="para")
+    # also remove ID column
+    idx <- c(id.col.idx, idx.pf)
+    # this could result in an error if all fragments are para*
+    rf.wide$total_frags_pct_nopf <- rowSums(rf.wide[, -idx], na.rm=TRUE)
     
     # calculate total fragments (including para)
-    rf.wide$total_frags_pct <- rowSums(rf.wide[, -c(1,length(names(rf.wide)))], na.rm=TRUE)
+    # excluding ID and last columns
+    idx <- c(id.col.idx, length(names(rf.wide)))
+    rf.wide$total_frags_pct <- rowSums(rf.wide[, -idx], na.rm=TRUE)
   }
   
   ## TODO: 0 is returned when all NA and nullFragsAreZero=FALSE
