@@ -26,7 +26,7 @@
     
     # change names if we are working with parafrags
     if(para == TRUE)
-      res <- paste0('para', res)
+      res[no.na.idx] <- paste0('para', res[no.na.idx])
   }
   
   return(res)  
@@ -99,10 +99,20 @@
 # rf: un-coded contents of the phfrags table
 # id.var: id column name
 # nullFragsAreZero: convert NA to 0?
-simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
+simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   
   # nasty hack to trick R CMD check
   fragvol <- NULL
+  
+  # fragment classes used in this function
+  frag.classes <- c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones')
+  
+  # first of all, we can't do anything if the fragment volume is NA
+  # warn the user and remove the offending records
+  if(any(is.na(rf$fragvol))) {
+    warning('some records are missing rock fragment volume, these have been removed', call. = FALSE)
+  }
+  rf <- rf[which(!is.na(rf$fragvol)), ]
   
   # extract classes
   rf.classes <- .rockFragmentSieve(rf)
@@ -114,26 +124,37 @@ simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   ## NOTE: we set factor levels here because the reshaping (long->wide) needs to account for all possible classes
   ## NOTE: this must include all classes that related functions return
   # set levels of classes
-  rf.sums$class <- factor(rf.sums$class, levels=c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones'))
+  rf.sums$class <- factor(rf.sums$class, levels=frag.classes)
   
   # convert to wide format
   fm <- as.formula(paste0(id.var, ' ~ class'))
   rf.wide <- reshape2::dcast(rf.sums, fm, value.var = 'volume', drop = FALSE)
   
-  # fix "NA" column name
+  # must determine the index to the ID column in the wide format
+  id.col.idx <- which(names(rf.wide) == id.var)
+  
+  ## a thought:
+  # what does an NA fragment class mean?
+  # 
+  # typically, fragment size missing
+  # or, worst-case, .sieve() rules are missing criteria 
+  # 
+  # keep track of these for QC in an 'unspecified' column
+  #
   if(any(names(rf.wide) == 'NA'))
     names(rf.wide)[which(names(rf.wide) == 'NA')] <- 'unspecified'
   
-  # optionally convert NULL frags -> 0
+  
+  ## optionally convert NULL frags -> 0
   if(nullFragsAreZero & ncol(rf.wide) > 1) {
     rf.wide <- as.data.frame(
-      cbind(rf.wide[, 1, drop=FALSE], 
-            lapply(rf.wide[, -1], function(i) ifelse(is.na(i), 0, i))
+      cbind(rf.wide[, id.col.idx, drop=FALSE], 
+            lapply(rf.wide[, -id.col.idx], function(i) ifelse(is.na(i), 0, i))
       ), stringsAsFactors=FALSE)
   }
   
   # final sanity check: are there any fractions or the total >= 100%
-  gt.100 <- sapply(rf.wide[, -1], function(i) i >= 100)
+  gt.100 <- sapply(rf.wide[, -id.col.idx], function(i) i >= 100)
   
   # check each column and report id.var if there are any
   if(any(apply(gt.100, 2, any, na.rm=TRUE))) {
@@ -148,6 +169,7 @@ simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   ## https://github.com/ncss-tech/soilDB/issues/57
   # compute total fragments
   # trap no frag condition
+  # includes unspecified class
   if(ncol(rf.wide) > 1) {
     # calculate another column for total RF, ignoring parafractions
     rf.wide$total_frags_pct_nopf <- rowSums(rf.wide[, c(FALSE, !grepl(levels(rf.classes$class), pattern="para"))], na.rm=TRUE)
@@ -167,5 +189,7 @@ simplfyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   return(rf.wide)
 }
 
-
+# crap, backwards compatibility for typo
+# https://github.com/ncss-tech/soilDB/issues/43
+simplfyFragmentData <- simplifyFragmentData
 
