@@ -26,7 +26,8 @@ fetchOSD <- function(soils, colorState='moist') {
 	
 	# report missing data
 	if(any(c(is.null(s), is.null(h)))) {
-		stop('query returned no data', call.=FALSE)
+		message('query returned no data')
+	  return(NULL)
 	}
 	
 	# reformatting and color conversion
