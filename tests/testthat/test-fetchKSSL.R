@@ -39,7 +39,7 @@ test_that("fetchKSSL() returns data associated with named series (sierra)", {
 
 test_that("fetchKSSL() returns NULL with bogus query", {
   
-  # all of the results should contain the search term
+  # a message is printed and NULL returned when no results
   res <- suppressMessages(fetchKSSL(series='XXX'))
   expect_null(res)
   
