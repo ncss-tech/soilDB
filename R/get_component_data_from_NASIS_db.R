@@ -113,16 +113,36 @@ get_mapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.strings
                      SELECT 
                      mlraoffice, areasymbol, areaname, areaacres, ssastatus, cordate, 
                      projectscale, cordate, 
-                     lmapunitiid, nationalmusym, musym, muname, mukind, mustatus, muacres, farmlndcl
+                     lmapunitiid, nationalmusym, musym, muname, mukind, mustatus, muacres, farmlndcl,
+                     pct_hydric, pct_component, n_component, n_majcompflag
                      
                      FROM  
                          area            a                               INNER JOIN 
                          legend_View_1   l   ON l.areaiidref = a.areaiid INNER JOIN
                          lmapunit_View_1 lmu ON lmu.liidref = l.liid     INNER JOIN 
                          mapunit_View_1  mu  ON mu.muiid = lmu.muiidref
-                     INNER JOIN
-                         areatype at  ON at.areatypeiid = areatypeiidref
                      
+                    INNER JOIN
+                         areatype at  ON at.areatypeiid = areatypeiidref
+                    
+                    LEFT OUTER JOIN  
+                    --components
+                    (SELECT 
+                     cor.muiidref cor_muiidref, 
+                     SUM(comppct_r * CASE WHEN hydricrating = 1 THEN 1 ELSE 0 END) pct_hydric,
+                     SUM(comppct_r)                                                 pct_component,
+                     COUNT(*)                                                       n_component,
+                     SUM(CASE WHEN majcompflag  = 1 THEN 1 ELSE 0 END)              n_majcompflag
+   
+                     FROM     
+                         component_View_1   co                                  LEFT OUTER JOIN
+                         datamapunit_View_1 dmu ON dmu.dmuiid    = co.dmuiidref LEFT OUTER JOIN
+                         correlation_View_1 cor ON cor.dmuiidref = dmu.dmuiid   AND
+                                                   cor.repdmu    = 1
+
+                     GROUP BY cor.muiidref
+                    ) co ON co.cor_muiidref = mu.muiid
+
                      WHERE
                          legendsuituse = 3              AND
                          mustatus IN (2, 3)             AND

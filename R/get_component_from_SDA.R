@@ -159,12 +159,24 @@ get_mapunit_from_SDA <- function(WHERE = NULL, stringsAsFactors = default.string
 
   q.mapunit <- paste("
   SELECT 
-  mlraoffice, areasymbol, areaname, areaacres, ssastatus, cordate, 
-  projectscale,
-  mukey, nationalmusym, musym, muname, mukind, mustatus, muacres, farmlndcl
+  mlraoffice, areasymbol, areaname, areaacres, ssastatus, cordate,projectscale,
+  mukey, nationalmusym, musym, muname, mukind, mustatus, muacres, farmlndcl,
+  pct_hydric, pct_component, n_component, n_majcompflag
+
+  FROM
+  legend  l                      INNER JOIN
+  mapunit mu ON mu.lkey = l.lkey LEFT OUTER JOIN
   
-  FROM  mapunit mu INNER JOIN
-        legend l ON l.lkey = mu.lkey
+  --components
+  (SELECT  co.mukey co_mukey, 
+   SUM(comppct_r * CASE WHEN hydricrating = 'Yes' THEN 1 ELSE 0 END) pct_hydric,
+   SUM(comppct_r)                                                    pct_component,
+   COUNT(*)                                                          n_component,
+   SUM(CASE WHEN majcompflag  = 'Yes' THEN 1 ELSE 0 END)             n_majcompflag
+   
+   FROM     component co
+   GROUP BY co.mukey
+  ) co ON co.co_mukey = mu.mukey
                      
   WHERE", WHERE,
   
