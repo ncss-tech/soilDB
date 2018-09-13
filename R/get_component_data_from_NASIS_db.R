@@ -111,9 +111,8 @@ get_mapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.strings
   
   q.mapunit <- paste("
                      SELECT 
-                     mlraoffice, areasymbol, areaname, areaacres, ssastatus, cordate, 
-                     projectscale, cordate, 
-                     lmapunitiid, nationalmusym, musym, muname, mukind, mustatus, muacres, farmlndcl,
+                     mlraoffice, ng.grpname, areasymbol, areaname, areaacres, ssastatus, cordate, projectscale, 
+                     lmapunitiid, nationalmusym, musym, muname, mukind, mutype, mustatus, muacres, farmlndcl,
                      pct_hydric, pct_component, n_component, n_majcompflag
                      
                      FROM  
@@ -124,6 +123,9 @@ get_mapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.strings
                      
                     INNER JOIN
                          areatype at  ON at.areatypeiid = areatypeiidref
+
+                    INNER JOIN 
+                        nasisgroup  ng ON ng.grpiid = mu.grpiidref
                     
                     LEFT OUTER JOIN  
                     --components
