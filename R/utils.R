@@ -329,7 +329,7 @@
     
     # optional information on which pedons have issues
     if(getOption('soilDB.verbose', default=FALSE))
-      message(paste0('Using row-order. NA in geomfeatid:', u.peiid))
+      message(paste0('Using row-order. NA in geomfeatid: ', u.peiid))
     
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
     return(data.frame(coiid=u.coiid, landform_string=ft.string, stringsAsFactors=FALSE))
@@ -341,7 +341,7 @@
     
     # optional information on which pedons have issues
     if(getOption('soilDB.verbose', default=FALSE))
-      message(paste0('Using row-order. Error in exists-on logic:', u.coiid))
+      message(paste0('Using row-order. Error in exists-on logic: ', u.coiid))
     
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
     return(data.frame(coiid=u.coiid, landform_string=ft.string, stringsAsFactors=FALSE))
@@ -357,7 +357,7 @@
     
     # optional information on which pedons have issues
     if(getOption('soilDB.verbose', default=FALSE))
-      warning(paste0('Using row-order. Single row / error in exists-on logic:', u.coiid), call.=FALSE)
+      warning(paste0('Using row-order. Single row / error in exists-on logic: ', u.coiid), call.=FALSE)
     
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
     return(data.frame(coiid=u.coiid, landform_string=ft.string, stringsAsFactors=FALSE))
@@ -368,7 +368,19 @@
     
     # optional information on which pedons have issues
     if(getOption('soilDB.verbose', default=FALSE))
-      warning(paste0('Using row-order. Incorrect exists-on specification:', u.coiid), call.=FALSE)
+      warning(paste0('Using row-order. Incorrect exists-on specification: ', u.coiid), call.=FALSE)
+    
+    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    return(data.frame(coiid=u.coiid, landform_string=ft.string, stringsAsFactors=FALSE))
+  }
+  
+  # short circuit: if there is circularity in the exists-on logic, use row-order
+  # example coiid: 2119838
+  if(length(top.feature) < 1 | length(bottom.feature) < 1) {
+    
+    # optional information on which pedons have issues
+    if(getOption('soilDB.verbose', default=FALSE))
+      warning(paste0('Using row-order. Incorrect exists-on specification: ', u.coiid), call.=FALSE)
     
     ft.string <- paste(i.gm$geomfname, collapse=name.sep)
     return(data.frame(coiid=u.coiid, landform_string=ft.string, stringsAsFactors=FALSE))
@@ -385,6 +397,7 @@
     # get the current feature
     f.i <- i.gm$geomfname[this.feature.idx]
     
+    # likely an error condition, print some debugging info
     if(length(f.i) == 0) {
       print(this.feature.idx)
       print(i.gm)
