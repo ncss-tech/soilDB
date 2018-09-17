@@ -3,7 +3,7 @@ get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = de
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_component_from_NASISWebReport"
   
   d.component <- lapply(projectname, function(x) {
-    cat("getting project '", x, "' from LIMS \n", sep = "")
+    cat("getting project '", x, "' from NasisReportsWebSite \n", sep = "")
     args = list(p_projectname = x)
     d    =  parseWebReport(url, args)
   })
@@ -63,7 +63,7 @@ get_mapunit_from_NASISWebReport <- function(areasymbol, stringsAsFactors = defau
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_mapunit_from_NASISWebReport"
   
   d.mapunit <- lapply(areasymbol, function(x) {
-    cat("getting map units for '", x, "' from LIMS \n", sep = "")
+    cat("getting map units for '", x, "' from NasisReportsWebSite \n", sep = "")
     args = list(p_areasymbol = x)
     d    =  parseWebReport(url, args)
   })
