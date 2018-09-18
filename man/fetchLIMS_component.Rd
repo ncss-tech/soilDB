@@ -11,7 +11,7 @@
 \alias{get_cosoilmoist_from_NASISWebReport}
 \alias{get_sitesoilmoist_from_NASISWebReport}
 
-\title{Extract component tables from a the Laboratory Information Management System}
+\title{Extract component tables from a the NASIS Web Reports}
 \description{Get, format, impute, and return component tables.}
 \usage{
 fetchNASISWebReport(projectname, rmHzErrors = FALSE, fill = FALSE,
