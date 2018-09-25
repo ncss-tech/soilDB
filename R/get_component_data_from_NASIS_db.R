@@ -6,6 +6,36 @@
 ## 
 
 
+## component diagnostic features
+get_component_diaghz_from_NASIS_db <- function(SS=TRUE) {
+  
+  # must have RODBC installed
+  if(!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  
+  # query diagnostic horizons, usually a 1:many relationship with pedons
+  q <- "SELECT coiidref as coiid, featkind, featdept_r, featdepb_r
+  FROM 
+  codiagfeatures_View_1 AS cdf
+  ORDER BY cdf.coiidref, cdf.featdept_r;"
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
+  # exec query
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # convert codes
+  d <- uncode(d)
+}
 
 ## get map unit text from local NASIS
 get_mutext_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE) {

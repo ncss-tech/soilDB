@@ -14,6 +14,7 @@ fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, string
   f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db(SS=SS)
   f.otherveg   <- get_component_otherveg_data_from_NASIS_db(SS=SS)
   f.ecosite    <- get_component_esd_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
+  f.diaghz     <- get_component_diaghz_from_NASIS_db(SS=SS)
   
   # optionally test for bad horizonation... flag, and remove
   if(rmHzErrors) {
@@ -63,6 +64,9 @@ fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, string
   ov <- plyr::ddply(f.otherveg, 'coiid', .formatOtherVegString, name.sep=' & ')
   if(nrow(ov) > 0)
     site(f.chorizon) <- ov
+  
+  # add diagnostic features to SPC
+  diagnostic_hz(f.chorizon) <- f.diaghz
   
   # print any messages on possible data quality problems:
   if(exists('component.hz.problems', envir=soilDB.env))
