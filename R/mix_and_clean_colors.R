@@ -1,6 +1,8 @@
 
 # re-write of previous version, should be more robust to missing weights and generalize to other uses
 # mixing done in CIE LAB by default now
+## TODO: should we use CIE XYZ for mixing?
+## https://github.com/ncss-tech/soilDB/issues/79
 # all colors are mixed, should be applied to groups of related colors
 # x: data.frame, typically from NASIS containing at least 'r', 'g', 'b' colors {0,1} and some kind of weight
 mix_and_clean_colors <- function(x, wt='pct', colorSpace='LAB') {
