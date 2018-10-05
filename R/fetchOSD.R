@@ -1,4 +1,4 @@
-## NOTE: this function assumes that the series name in osd.osd_colors exactly matches seriesname in osd.taxa
+
 
 # fetch basic OSD data from the SoilWeb snapshot of the SC database
 fetchOSD <- function(soils, colorState='moist') {
