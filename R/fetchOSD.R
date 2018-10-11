@@ -1,8 +1,11 @@
 
+## TODO: new API at http://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb/api/soil-series.php?s=amador,pentz&q=site_hz
 
 # fetch basic OSD data from the SoilWeb snapshot of the SC database
 fetchOSD <- function(soils, colorState='moist') {
 	
+  ### NOTE: new API will simplify this  >>>
+  
 	# base URLs
 	u.osd_site <- 'https://casoilresource.lawr.ucdavis.edu/soil_web/reflector_api/soils.php?what=osd_site_query&q_string='
 	u.osd_hz <- 'https://casoilresource.lawr.ucdavis.edu/soil_web/reflector_api/soils.php?what=osd_query&q_string='
@@ -23,6 +26,8 @@ fetchOSD <- function(soils, colorState='moist') {
 	# request data
 	try(s <- read.csv(url(u.site), stringsAsFactors=FALSE), silent=TRUE)
 	try(h <- read.csv(url(u.hz), stringsAsFactors=FALSE), silent=TRUE)
+	
+	### NOTE: new API will simplify this  ^^^^
 	
 	# report missing data
 	if(any(c(is.null(s), is.null(h)))) {
