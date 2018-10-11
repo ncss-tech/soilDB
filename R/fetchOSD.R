@@ -7,6 +7,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
   if( !requireNamespace('jsonlite', quietly=TRUE))
     stop('please install the `jsonlite` package', call.=FALSE)
   
+  ## TODO: URLs will change once API goes live
   # compose query
   if(extended) {
     url <- 'http://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb/api/soil-series.php?q=all&s='

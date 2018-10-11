@@ -1,6 +1,6 @@
 \name{fetchKSSL}
 \alias{fetchKSSL}
-\title{Fetch KSSL Data (EXPERIMENTAL)}
+\title{Fetch KSSL Data}
 \description{Get soil characterization and morphologic data via BBOX, MLRA, or series name query, from the KSSL database.}
 \usage{fetchKSSL(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, 
 pedon_id=NULL, pedon_key=NULL, returnMorphologicData=FALSE)}
@@ -17,7 +17,7 @@ pedon_id=NULL, pedon_key=NULL, returnMorphologicData=FALSE)}
 
 
 
-\details{This is an experimental interface to a subset for the most commonly used data from a snapshot of KSSL (lab characterization) and NASIS (morphologic) data. The snapshots were last updated September 2017 (KSSL / NASIS). 
+\details{This is an experimental interface to a subset for the most commonly used data from a snapshot of KSSL (lab characterization) and NASIS (morphologic) data. The snapshots were last updated September 2018 (KSSL / NASIS). 
 
 Series-queries are case insensitive. Series name is based on the "correlated as" field (from KSSL snapshot) when present.  The "sampled as" classification was promoted to "correlated as" if the "correlated as" classification was missing.
 
