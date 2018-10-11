@@ -1,3 +1,6 @@
+-------------------------- soilDB 2.2-6 (2018-10-11) ------------------------------
+* fetchOSD gets and overhaul, new API and features
+
 -------------------------- soilDB 2.2-5 (2018-10-05) ------------------------------
 * experimental interface to SoillWeh OSD fulltext search: OSDquery()
 
