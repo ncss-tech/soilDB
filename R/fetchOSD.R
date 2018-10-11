@@ -1,5 +1,7 @@
 
-## TODO: new API at http://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb/api/soil-series.php?s=amador,pentz&q=site_hz
+## TODO: 
+# new API http://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb/api/soil-series.php?s=amador,pentz&q=site_hz
+# extended API: http://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb/api/soil-series.php?s=amador,pentz&q=all
 
 # fetch basic OSD data from the SoilWeb snapshot of the SC database
 fetchOSD <- function(soils, colorState='moist') {
