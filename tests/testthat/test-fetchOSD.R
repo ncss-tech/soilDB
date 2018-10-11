@@ -1,6 +1,5 @@
 context("fetchOSD() -- requires internet connection")
 
-
 ## sample data
 x <- fetchOSD(soils = c('sierra', 'cecil'))
 x.extended <- fetchOSD(soils = c('sierra', 'cecil'), extended = TRUE)
