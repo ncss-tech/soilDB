@@ -10,9 +10,9 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
   ## TODO: URLs will change once API goes live
   # compose query
   if(extended) {
-    url <- 'http://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb/api/soil-series.php?q=all&s='
+    url <- 'http://soilmap2-1.lawr.ucdavis.edu/api/soil-series.php?q=all&s='
   } else {
-    url <- 'http://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb/api/soil-series.php?q=site_hz&s='
+    url <- 'http://soilmap2-1.lawr.ucdavis.edu/api/soil-series.php?q=site_hz&s='
   }
   
   # format series list and append to url
