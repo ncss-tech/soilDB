@@ -127,7 +127,8 @@ SDA_make_spatial_query <- function(i) {
               )")
   
   # send query
-  res <- SDA_query(q)
+  # this is usually performed on a collection, so we suppress the standard messages
+  res <- suppressMessages(SDA_query(q))
   
   # check for no data
   if(is.null(res))
