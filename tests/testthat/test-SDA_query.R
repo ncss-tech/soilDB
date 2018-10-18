@@ -9,6 +9,8 @@ x.1 <- suppressMessages(SDA_query(q = "SELECT areasymbol, saverest FROM sacatalo
 # multi-table result
 x.2 <- suppressMessages(SDA_query(q = "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'CA630'; SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'CA664' ;"))
 
+# point with known SSURGO data
+p <- sp::SpatialPoints(cbind(-121.77100, 37.368402), proj4string = sp::CRS('+proj=longlat +datum=WGS84'))
 
 ## tests
 
@@ -43,5 +45,30 @@ test_that("SDA_query() SQL error / no results -> NULL", {
   expect_null(x)
   
 })
+
+
+test_that("SDA_spatialQuery() simple spatial query, tabular results", {
+  
+  res <- SDA_spatialQuery(p, what = 'mukey')
+  
+  # testing known values
+  expect_match(class(res), 'data.frame')
+  expect_equal(nrow(res), 1)
+  expect_match(res$muname, 'Diablo')
+  
+})
+
+
+test_that("SDA_spatialQuery() simple spatial query, spatial results", {
+
+    res <- SDA_spatialQuery(p, what = 'geom')
+  
+  # testing known values
+  expect_match(class(res), 'SpatialPolygonsDataFrame')
+  expect_equal(nrow(res), 1)
+  
+})
+
+
 
 
