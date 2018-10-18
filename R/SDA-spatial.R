@@ -1,7 +1,9 @@
 
+## chunked queries for large number of records:
+# https://github.com/ncss-tech/soilDB/issues/71
 
-
-
+## TODO items summarized here
+# https://github.com/ncss-tech/soilDB/issues/81
 
 
 
@@ -63,7 +65,7 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 # that is fine as we can use sp::over to connect
 # 10-20x speed improvement over SDA_query_features
 # 
-# note a good substitute for small number of features and SDA_query_features()
+# not a good substitute for small number of features and SDA_query_features()
 #
 # geom are converted to GCS WGS84 as needed
 #

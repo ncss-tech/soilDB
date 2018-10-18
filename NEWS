@@ -1,8 +1,11 @@
 -------------------------- soilDB 2.2-6 (2018-10-11) ------------------------------
+* new function for spatial queries: SDA_spatialQuery(), still needs testing and documentation
+
+-------------------------- soilDB 2.2-6 (2018-10-11) ------------------------------
 * fetchOSD gets and overhaul, new API and features
 
 -------------------------- soilDB 2.2-5 (2018-10-05) ------------------------------
-* experimental interface to SoillWeh OSD fulltext search: OSDquery()
+* experimental interface to SoillWeb OSD fulltext search: OSDquery()
 
 -------------------------- soilDB 2.2-4 (2018-09-04) ------------------------------
 * numerous bug-fixes in simplifyFragmentData() see (https://github.com/ncss-tech/soilDB/issues/70)

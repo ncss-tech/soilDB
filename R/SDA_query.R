@@ -7,6 +7,9 @@ format_SQL_in_statement <- function(x) {
 }
 
 
+## chunked queries for large number of records:
+# https://github.com/ncss-tech/soilDB/issues/71
+
 # 
 SDA_query <- function(q) {
   # check for required packages

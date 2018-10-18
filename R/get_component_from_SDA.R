@@ -1,3 +1,8 @@
+## what is causing duplication?
+## STATSGO?
+# https://github.com/ncss-tech/soilDB/issues/38
+# https://github.com/ncss-tech/soilDB/issues/36
+
 get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, stringsAsFactors = default.stringsAsFactors()){
   
   # SDA is missing soiltempa_r AS mast_r
