@@ -54,12 +54,19 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
   return(spdf)
 }
 
-
-# get a SPDF of intersecting MU polygons, in a single query
-# geom are converted to GCS WGS84 
+## Note: this will replace *most* of the functionality in:
+##   SDA_make_spatial_query
+##   SDA_query_features
+#
+# get a SPDF of intersecting MU polygons and mukey, in a single query
+# row-order and number of rows won't always match input
+# that is fine as we can use sp::over to connect
+# 10-20x speed improvement over SDA_query_features
+#
+# geom are converted to GCS WGS84 as needed
 #
 # geom: Spatial* object with valid CRS
-SDA_get_intersecting_polygons <- function(geom) {
+SDA_spatialQuery <- function(geom) {
   
   # check for required packages
   if(!requireNamespace('rgeos', quietly = TRUE))
@@ -88,11 +95,6 @@ SDA_get_intersecting_polygons <- function(geom) {
   res <- suppressMessages(SDA_query(q))
   res <- processSDA_WKT(res)
   
-  # TODO: is this really neccessary?
-  # check for no data
-  if(is.null(res))
-    res <- NA
-  
   return(res)
 }
 
@@ -101,6 +103,9 @@ SDA_get_intersecting_polygons <- function(geom) {
 # this is intended for those cases where a result is required for each feature processed
 # i is a Spatial* object with valid CRS, a single feature or multiple (converted to a geometry collection)
 SDA_make_spatial_query <- function(i) {
+  
+  # mark as depreciated
+  .Deprecated(new = 'SDA_spatialQuery')
   
   # check for required packages
   if(!requireNamespace('rgeos', quietly = TRUE))
@@ -132,6 +137,9 @@ SDA_make_spatial_query <- function(i) {
 # x is a Spatial* object with more than 1 feature
 # id is the name of an attribute that contains a unique ID for each feature
 SDA_query_features <- function(x, id='pedon_id') {
+  
+  # mark as depreciated
+  .Deprecated(new = 'SDA_spatialQuery')
   
   # sanity check: ensure that the ID is unique
   if(length(x[[id]]) != length(unique(x[[id]])))
