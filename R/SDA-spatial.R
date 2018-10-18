@@ -62,38 +62,69 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 # row-order and number of rows won't always match input
 # that is fine as we can use sp::over to connect
 # 10-20x speed improvement over SDA_query_features
+# 
+# note a good substitute for small number of features and SDA_query_features()
 #
 # geom are converted to GCS WGS84 as needed
 #
 # geom: Spatial* object with valid CRS
-SDA_spatialQuery <- function(geom) {
+# what: the type of query 
+# mukey = fast, results include intersecting mukeys
+# geom = slower, results include both intersecting geometry and mukeys
+SDA_spatialQuery <- function(geom, what='mukey') {
   
   # check for required packages
   if(!requireNamespace('rgeos', quietly = TRUE))
     stop('please install the `rgeos` package', call.=FALSE)
   
   # sanity checks
+  if(! what %in% c('mukey', 'geom')) {
+    stop("query type must be either 'mukey' or 'geom'",call. = FALSE)
+  }
   
   # CRS conversion if needed
   prj.4326 <- "+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0"
   if(proj4string(geom) != prj.4326) {
-    geom <- spTransform(geo, CRS(prj.4326))
+    geom <- spTransform(geom, CRS(prj.4326))
   }
   
   # WKT encoding
   # use a geometry collection
   wkt <- rgeos::writeWKT(geom, byid = FALSE)
   
-  # note that row-order / number of rows in results may not match geom
-  q <- sprintf("
+  # slower query, returning geom + mukey
+  # replacement for depreciated SDA_query_features()
+  # 10-30x faster than spatial-returning query by input feature
+  # TODO: this is 15x slower than non-spatial-returning-query in SDA_query_features()
+  if(what == 'geom') {
+    q <- sprintf("
                SELECT 
-               mupolygongeo.STAsText() AS geom, P.mukey
-               FROM mupolygon AS P
-               WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;", wkt)
+                 mupolygongeo.STAsText() AS geom, P.mukey
+                 FROM mupolygon AS P
+                 WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;", wkt)
+    
+    # single query for all of the features
+    # note that row-order / number of rows in results may not match geom
+    res <- suppressMessages(SDA_query(q))
+    res <- processSDA_WKT(res)
+  }
   
-  # single query for all of the features
-  res <- suppressMessages(SDA_query(q))
-  res <- processSDA_WKT(res)
+  # faster query, returning mukey + muname
+  # replacement for depreciated SDA_make_spatial_query()
+  # ~ 3x faster than SDA_query_features()
+  # TODO: how can we link these back with the source data?
+  if(what == 'mukey') {
+    q <- sprintf("SELECT mukey, muname
+                FROM mapunit
+                WHERE mukey IN (
+                SELECT DISTINCT mukey from SDA_Get_Mukey_from_intersection_with_WktWgs84('%s')
+                )", wkt)
+    
+    # single query for all of the features
+    # note that row-order / number of rows in results may not match geom
+    res <- suppressMessages(SDA_query(q))
+  }
+  
   
   return(res)
 }
@@ -103,9 +134,6 @@ SDA_spatialQuery <- function(geom) {
 # this is intended for those cases where a result is required for each feature processed
 # i is a Spatial* object with valid CRS, a single feature or multiple (converted to a geometry collection)
 SDA_make_spatial_query <- function(i) {
-  
-  # mark as depreciated
-  .Deprecated(new = 'SDA_spatialQuery')
   
   # check for required packages
   if(!requireNamespace('rgeos', quietly = TRUE))
@@ -137,9 +165,6 @@ SDA_make_spatial_query <- function(i) {
 # x is a Spatial* object with more than 1 feature
 # id is the name of an attribute that contains a unique ID for each feature
 SDA_query_features <- function(x, id='pedon_id') {
-  
-  # mark as depreciated
-  .Deprecated(new = 'SDA_spatialQuery')
   
   # sanity check: ensure that the ID is unique
   if(length(x[[id]]) != length(unique(x[[id]])))
