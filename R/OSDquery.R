@@ -23,9 +23,9 @@ OSDquery <- function(mlra='', taxonomic_class='', typical_pedon='', brief_narrat
                   geog_assoc_soils=geog_assoc_soils
                   )
   
-  ## TODO: move to load-balanced URL
   # API URL
-  u <- 'http://soilmap2-1.lawr.ucdavis.edu/osd-search/index.php'
+  # note: this is the load-balancer
+  u <- 'https://casoilresource.lawr.ucdavis.edu/osd-search/index.php'
   
   # POST it
   res <- httr::POST(u, body=parameters, encode='form')
