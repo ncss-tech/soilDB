@@ -13,7 +13,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
   if(extended) {
     url <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=all&s='
   } else {
-    url <- 'https://casoilresource.lawr.ucdavis.edu/soil-series.php?q=site_hz&s='
+    url <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=site_hz&s='
   }
   
   # format series list and append to url
