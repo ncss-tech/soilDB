@@ -12,10 +12,25 @@
 \alias{get_component_esd_data_from_NASIS_db}
 \alias{get_component_otherveg_data_from_NASIS_db}
 \alias{get_copedon_from_NASIS_db}
-\alias{get_vegplot_from_NASIS_db}
+
 \alias{get_mapunit_from_NASIS}
 \alias{get_projectmapunit_from_NASIS}
 \alias{get_projectstaff_from_NASIS}
+\alias{get_component_diaghz_from_NASIS_db}
+\alias{get_mutext_from_NASIS_db}
+
+\alias{fetchVegdata}
+\alias{get_vegplot_from_NASIS_db}
+\alias{get_vegplot_location_from_NASIS_db}
+\alias{get_vegplot_species_from_NASIS_db}
+\alias{get_vegplot_textnote_from_NASIS_db}
+\alias{get_vegplot_transect_from_NASIS_db}
+\alias{get_vegplot_transpecies_from_NASIS_db}
+\alias{get_vegplot_tree_si_details_from_NASIS_db}
+\alias{get_vegplot_tree_si_summary_from_NASIS_db}
+\alias{get_vegplot_trhi_from_NASIS_db}
+
+
 
 \title{Fetch commonly used site/pedon/horizon or component data from a local NASIS database.}
 \description{Fetch commonly used site/pedon/horizon data or component from a local NASIS database, return as a SoilProfileCollection object.}

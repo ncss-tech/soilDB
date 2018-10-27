@@ -4,11 +4,12 @@
 \title{Extract text note data from a local NASIS Database}
 \description{Extract text note data from a local NASIS Database.}
 \usage{
-get_text_notes_from_NASIS_db(SS = TRUE)
+get_text_notes_from_NASIS_db(SS = TRUE, fixLineEndings = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{SS}{get data from the currently loaded Selected Set in NASIS or from the entire local database (default: TRUE)}	
+  \item{fixLineEndings}{convert line endings from "\\r\\n" to "\\n"}	
 }
 \details{This function currently works only on Windows.}
 \value{A list with the results.}

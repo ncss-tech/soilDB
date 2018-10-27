@@ -1,6 +1,7 @@
 \name{SDA_query_features}
 \alias{SDA_make_spatial_query2}
 \alias{SDA_make_spatial_query}
+\alias{SDA_spatialQuery}
 \alias{SDA_query_features}
 \alias{processSDA_WKT}
 

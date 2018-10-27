@@ -6,7 +6,7 @@
 \description{This is a rough example of how chunks of text parsed from OSD records can be made search-able with the \href{PostgreSQL fulltext indexing}{https://www.postgresql.org/docs/9.5/static/textsearch.html} and query system (\href{syntax details}{https://www.postgresql.org/docs/9.5/static/datatype-textsearch.html}). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. This is a programatic interface to \href{this webpage}{http://soilmap2-1.lawr.ucdavis.edu/osd-search/index.php}.}
 
 \usage{
-  fetchOSD(mlra='', taxonomic_class='', typical_pedon='', 
+  OSDquery(mlra='', taxonomic_class='', typical_pedon='', 
   brief_narrative='', ric='', use_and_veg='', 
   competing_series='', geog_location='', geog_assoc_soils='')
 }

@@ -1,10 +1,11 @@
-\name{simplfyFragmentData}
+\name{simplifyFragmentData}
+\alias{simplifyFragmentData}
 \alias{simplfyFragmentData}
 
 \title{Simplify Coarse Fraction Data}
 \description{Simplify multiple coarse fraction (>2mm) records by horizon.}
 \usage{
-simplfyFragmentData(rf, id.var, nullFragsAreZero = TRUE)
+simplifyFragmentData(rf, id.var, nullFragsAreZero = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -13,9 +14,9 @@ simplfyFragmentData(rf, id.var, nullFragsAreZero = TRUE)
   \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details}
 }
 \details{
-This function is mainly intended for the processing of NASIS pedon/horizon data which contains multiple coarse fragment descriptions per horizon. \code{simplfyFragmentData} will "sieve out" coarse fragments into the USDA classes, split into hard and para- fragments.
+This function is mainly intended for the processing of NASIS pedon/horizon data which contains multiple coarse fragment descriptions per horizon. \code{simplifyFragmentData} will "sieve out" coarse fragments into the USDA classes, split into hard and para- fragments.
 
-The \code{simplfyFragmentData} function can be applied to data sources other than NASIS by careful use of the \code{id.var} argument. However, \code{rf} must contain coarse fragment volumes in the column "fragvol", fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", and fragment cementation class in "fraghard".
+The \code{simplifyFragmentData} function can be applied to data sources other than NASIS by careful use of the \code{id.var} argument. However, \code{rf} must contain coarse fragment volumes in the column "fragvol", fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", and fragment cementation class in "fraghard".
 
 There are examples in \href{http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html}{the KSSL data tutorial}.
 }

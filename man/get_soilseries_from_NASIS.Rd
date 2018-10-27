@@ -9,12 +9,11 @@
 
 get_soilseries_from_NASIS(stringsAsFactors = default.stringsAsFactors())
 get_soilseries_from_NASISWebReport(soils, 
-                   stringsAsFactors = default.stringsAsFactors()
-                   )
+stringsAsFactors = default.stringsAsFactors())
 }
 
 \arguments{
-  
+  \item{soils}{character vector of soil series names}
   \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
   
 }
