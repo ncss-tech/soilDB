@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fetch Official Series Description (OSD) Data — fetchOSD • soilDB</title>
+<title>Fetch Data by Soil Series Name — fetchOSD • soilDB</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Fetch Official Series Description (OSD) Data — fetchOSD" />
+<meta property="og:title" content="Fetch Data by Soil Series Name — fetchOSD" />
 
-<meta property="og:description" content="This functions fetches a limited subset of horizon and site-level attributes for named soil series, from the SoilWeb system." />
+<meta property="og:description" content="This functions fetches a varity of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2.4</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2.7</span>
       </span>
     </div>
 
@@ -92,43 +92,49 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fetch Official Series Description (OSD) Data</h1>
+    <h1>Fetch Data by Soil Series Name</h1>
     
     <div class="hidden name"><code>fetchOSD.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This functions fetches a limited subset of horizon and site-level attributes for named soil series, from the SoilWeb system.</p>
+    <p>This functions fetches a varity of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>fetchOSD</span>(<span class='no'>soils</span>, <span class='kw'>colorState</span> <span class='kw'>=</span> <span class='st'>'moist'</span>)
-<span class='fu'>get_soilseries_from_NASIS</span>(<span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'>default.stringsAsFactors</span>())
-<span class='fu'>get_soilseries_from_NASISWebReport</span>(<span class='no'>soils</span>,
-                   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'>default.stringsAsFactors</span>()
-                   )</pre>
+    <pre class="usage"><span class='fu'>fetchOSD</span>(<span class='no'>soils</span>, <span class='kw'>colorState</span> <span class='kw'>=</span> <span class='st'>'moist'</span>, <span class='kw'>extended</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>soils</th>
-      <td><p>a character vector of named soil series</p></td>
+      <td><p>a character vector of named soil series, case insensitive</p></td>
     </tr>
     <tr>
       <th>colorState</th>
       <td><p>color state for horizon soil color visualization: "moist" or "dry"</p></td>
     </tr>
     <tr>
-      <th>stringsAsFactors</th>
-      <td><p>logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)</p></td>
+      <th>extended</th>
+      <td><p>if TRUE additional soil series summary data are returned, see details</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>the search is case-insensitive</p>
+    <p>The standard set of "site" and "horizon" data are returned as a <code>SoilProfileCollection</code> object (<code>extended=FALSE</code>. The "extended" suite of summary data can be requested by setting <code>extended=TRUE</code>. The resulting object will be a <code>list</code> with the following elements:)</p>
+<dl class='dl-horizontal'>
+	<dt>SPC</dt><dd><p><code>SoilProfileCollection</code> containing standards "site" and "horizon" data</p></dd>
+	<dt>geomcomp</dt><dd><p>empirical probabilities for geomorphic component, derrived from the current SSURGO snapshot</p></dd>
+	<dt>hillpos</dt><dd><p>empirical probabilities for hillslope position, derrived from the current SSURGO snapshot</p></dd>
+	<dt>mtnpos</dt><dd><p>empirical probabilities for mountain slope position, derrived from the current SSURGO snapshot</p></dd>
+	<dt>pmkind</dt><dd><p>empirical probabilities for parent material kind, derrived from the current SSURGO snapshot</p></dd>
+	<dt>pmorigin</dt><dd><p>empirical probabilities for parent material origin, derrived from the current SSURGO snapshot</p></dd>
+	<dt>mlra</dt><dd><p>empirical MLRA membership values, derrived from the current SSURGO snapshot</p></dd>
+	</dl>
+    <p>Further details pending.</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -136,11 +142,15 @@
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href='http://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587'>http://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587</a></p>
+    <p>USDA-NRCS OSD search tools: <a href='http://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587'>http://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587</a></p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>SoilWeb maintains a snapshot of the Official Series Description data. Please use the link above for the live data.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='OSDquery.html'>OSDquery</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -158,6 +168,15 @@
 <span class='fu'>par</span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>1</span>))
 <span class='fu'>plot</span>(<span class='no'>s.moist</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'hzname'</span>, <span class='kw'>cex.names</span><span class='kw'>=</span><span class='fl'>0.85</span>, <span class='kw'>axis.line.offset</span><span class='kw'>=</span>-<span class='fl'>4</span>)
 <span class='fu'>plot</span>(<span class='no'>s.dry</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'hzname'</span>, <span class='kw'>cex.names</span><span class='kw'>=</span><span class='fl'>0.85</span>, <span class='kw'>axis.line.offset</span><span class='kw'>=</span>-<span class='fl'>4</span>)
+
+<span class='co'># extended mode: return a list with SPC + summary tables</span>
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>fetchOSD</span>(<span class='no'>s.list</span>, <span class='kw'>extended</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>colorState</span> <span class='kw'>=</span> <span class='st'>'dry'</span>)
+
+<span class='fu'>par</span>(<span class='kw'>mar</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
+<span class='fu'>plot</span>(<span class='no'>x</span>$<span class='no'>SPC</span>)
+
+<span class='fu'>str</span>(<span class='no'>x</span>, <span class='fl'>1</span>)
+
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -172,6 +191,8 @@
       <li><a href="#references">References</a></li>
 
       <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

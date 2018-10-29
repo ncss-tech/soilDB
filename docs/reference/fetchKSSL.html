@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fetch KSSL Data (EXPERIMENTAL) — fetchKSSL • soilDB</title>
+<title>Fetch KSSL Data — fetchKSSL • soilDB</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Fetch KSSL Data (EXPERIMENTAL) — fetchKSSL" />
+<meta property="og:title" content="Fetch KSSL Data — fetchKSSL" />
 
 <meta property="og:description" content="Get soil characterization and morphologic data via BBOX, MLRA, or series name query, from the KSSL database." />
 <meta name="twitter:card" content="summary" />
@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2.4</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2.7</span>
       </span>
     </div>
 
@@ -92,7 +92,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fetch KSSL Data (EXPERIMENTAL)</h1>
+    <h1>Fetch KSSL Data</h1>
     
     <div class="hidden name"><code>fetchKSSL.Rd</code></div>
     </div>
@@ -141,7 +141,7 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This is an experimental interface to a subset for the most commonly used data from a snapshot of KSSL (lab characterization) and NASIS (morphologic) data. The snapshots were last updated September 2017 (KSSL / NASIS).</p>
+    <p>This is an experimental interface to a subset for the most commonly used data from a snapshot of KSSL (lab characterization) and NASIS (morphologic) data. The snapshots were last updated September 2018 (KSSL / NASIS).</p>
 <p>Series-queries are case insensitive. Series name is based on the "correlated as" field (from KSSL snapshot) when present.  The "sampled as" classification was promoted to "correlated as" if the "correlated as" classification was missing.</p>
 <p>When <code>returnMorphologicData</code> is TRUE, the resulting object is a list. The standard output from <code>fetchKSSL</code> (<code>SoilProfileCollection</code> object) is stored in the named element "SPC". The additional elements are basic morphologic data: horizon colors, rock fragments, pores, and structure. There is a 1:many relationship between the horizon data in "SPC" and the additional dataframes in <code>morph</code>. See examples for ideas on how to "flatten" these tables.</p>
 <p>Function arguments (<code>series</code>, <code>mlra</code>, etc.) are NOT vectorized: the first element of a vector will be used when supplied as a filter. See the <a href='http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html'>fetchKSSL tutorial</a> for ideas on how to iterate over a set of IDs.

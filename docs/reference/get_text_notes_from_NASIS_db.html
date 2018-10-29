@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2.4</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2.7</span>
       </span>
     </div>
 
@@ -103,7 +103,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_text_notes_from_NASIS_db</span>(<span class='kw'>SS</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_text_notes_from_NASIS_db</span>(<span class='kw'>SS</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>fixLineEndings</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -111,6 +111,10 @@
     <tr>
       <th>SS</th>
       <td><p>get data from the currently loaded Selected Set in NASIS or from the entire local database (default: TRUE)</p></td>
+    </tr>
+    <tr>
+      <th>fixLineEndings</th>
+      <td><p>convert line endings from "\r\n" to "\n"</p></td>
     </tr>
     </table>
     

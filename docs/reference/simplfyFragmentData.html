@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Simplify Coarse Fraction Data — simplfyFragmentData • soilDB</title>
+<title>Simplify Coarse Fraction Data — simplifyFragmentData • soilDB</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Simplify Coarse Fraction Data — simplfyFragmentData" />
+<meta property="og:title" content="Simplify Coarse Fraction Data — simplifyFragmentData" />
 
 <meta property="og:description" content="Simplify multiple coarse fraction (&amp;gt;2mm) records by horizon." />
 <meta name="twitter:card" content="summary" />
@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2.4</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2.7</span>
       </span>
     </div>
 
@@ -103,7 +103,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>simplfyFragmentData</span>(<span class='no'>rf</span>, <span class='no'>id.var</span>, <span class='kw'>nullFragsAreZero</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>simplifyFragmentData</span>(<span class='no'>rf</span>, <span class='no'>id.var</span>, <span class='kw'>nullFragsAreZero</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -124,8 +124,8 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is mainly intended for the processing of NASIS pedon/horizon data which contains multiple coarse fragment descriptions per horizon. <code>simplfyFragmentData</code> will "sieve out" coarse fragments into the USDA classes, split into hard and para- fragments.</p>
-<p>The <code>simplfyFragmentData</code> function can be applied to data sources other than NASIS by careful use of the <code>id.var</code> argument. However, <code>rf</code> must contain coarse fragment volumes in the column "fragvol", fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", and fragment cementation class in "fraghard".</p>
+    <p>This function is mainly intended for the processing of NASIS pedon/horizon data which contains multiple coarse fragment descriptions per horizon. <code>simplifyFragmentData</code> will "sieve out" coarse fragments into the USDA classes, split into hard and para- fragments.</p>
+<p>The <code>simplifyFragmentData</code> function can be applied to data sources other than NASIS by careful use of the <code>id.var</code> argument. However, <code>rf</code> must contain coarse fragment volumes in the column "fragvol", fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", and fragment cementation class in "fraghard".</p>
 <p>There are examples in <a href='http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html'>the KSSL data tutorial</a>.</p>
     
 
