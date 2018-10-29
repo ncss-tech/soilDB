@@ -10,7 +10,7 @@ Get the stable version from CRAN:
 
 Get the development version from Github:
 
-`devtools::install_github("ncss-tech/soilDB", dependencies=FALSE, upgrade_dependencies=FALSE)`
+`remotes::install_github("ncss-tech/soilDB", dependencies=FALSE, upgrade=FALSE, build=FALSE)`
 
 ## Website
 http://ncss-tech.github.io/AQP/
