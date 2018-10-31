@@ -1,4 +1,4 @@
-get_projectmapunit_from_NASIS <- function(stringsAsFactors = default.stringsAsFactors()) {
+get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -22,11 +22,14 @@ get_projectmapunit_from_NASIS <- function(stringsAsFactors = default.stringsAsFa
              ORDER BY p.projectname, a.areasymbol, lmu.musym;"
   )
   
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
   
   # setup connection local NASIS
   channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
-  
-  
+
   # exec query
   d.project <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
   
