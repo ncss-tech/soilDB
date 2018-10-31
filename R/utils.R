@@ -151,7 +151,7 @@
 #   return(d[best.record, ])
 # }
 
-
+## https://github.com/ncss-tech/soilDB/issues/84
 ## TODO: https://github.com/ncss-tech/soilDB/issues/47
 ## 2015-11-30: short-circuts could use some work, consider pre-marking mistakes in calling function
 # attempt to format "landform" records into a single string
@@ -266,6 +266,7 @@
 }
 
 
+## https://github.com/ncss-tech/soilDB/issues/84
 # attempt to flatten site parent material data into 2 strings
 .formatParentMaterialString <- function(i.pm, name.sep='|') {
   # get the current site
@@ -301,6 +302,7 @@
 }
 
 
+## https://github.com/ncss-tech/soilDB/issues/84
 # 2017-03-13: attempt to format COMPONENT "landform" records into a single string
 # note: there are several assumptions made about the data, 
 # see "short-circuits" used when there are funky data
@@ -420,6 +422,7 @@
 }
 
 
+## https://github.com/ncss-tech/soilDB/issues/84
 # attempt to flatten component parent material data into 2 strings
 .formatcoParentMaterialString <- function(i.pm, name.sep='|') {
   # get the current site
@@ -620,8 +623,8 @@
 }
 
 
-
-# Prep of the component geomorphic description
+## https://github.com/ncss-tech/soilDB/issues/84
+# Prep of the component parent material
 # flatten multiple records into 1 cokey
 .copm_prep <- function(df, db = NULL) {
   
@@ -671,7 +674,7 @@
   }
 
 
-
+## https://github.com/ncss-tech/soilDB/issues/84
 # Prep of the component geomorphic description
 # flatten multiple records into 1 cokey
 .cogmd_prep <- function(df, db = NULL) {
