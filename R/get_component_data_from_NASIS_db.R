@@ -124,7 +124,7 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
   
   # test for no data
   if(nrow(d) == 0)
-    stop('there are no NASIS components in your selected set!')
+    stop('there are no NASIS components in your selected set!', call. = FALSE)
   
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
