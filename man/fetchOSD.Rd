@@ -26,6 +26,7 @@ The standard set of "site" and "horizon" data are returned as a \code{SoilProfil
 	\item{pmkind}{empirical probabilities for parent material kind, derrived from the current SSURGO snapshot}
 	\item{pmorigin}{empirical probabilities for parent material origin, derrived from the current SSURGO snapshot}
 	\item{mlra}{empirical MLRA membership values, derrived from the current SSURGO snapshot}
+	\item{climate}{experimental climate summaries from PRISM stack}
 	} 
 
 Further details pending.

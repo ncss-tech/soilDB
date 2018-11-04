@@ -94,7 +94,8 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	    mtnpos=res$mtnpos,
 	    pmkind=res$pmkind,
 	    pmorigin=res$pmorigin,
-	    mlra=res$mlra
+	    mlra=res$mlra,
+	    climate=res$climate
 	  )
 	  
 	  return(data.list)
