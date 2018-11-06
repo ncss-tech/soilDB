@@ -97,6 +97,10 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	    monthly.data$month <- factor(as.numeric(gsub('ppt|pet', '', monthly.data$climate_var)))
 	    monthly.data$variable <- gsub('[0-9]', '', monthly.data$climate_var)
 	    monthly.data$variable <- factor(monthly.data$variable, levels = c('pet', 'ppt'), labels=c('Potential ET (mm)', 'Precipitation (mm)'))
+	    
+	    # fix column names in pmkind and pmorigin tables
+	    names(res$pmkind) <- c('series', 'pmkind', 'n', 'total', 'P')
+	    names(res$pmorigin) <- c('series', 'pmorigin', 'n', 'total', 'P')
 	  }
 	  
 	  # compose into a list
