@@ -41,7 +41,10 @@ test_that("fetchOSD() returns reasonable data", {
 test_that("fetchOSD() returns reasonable data in extended mode", {
   
   # extended request
-  expect_equal(names(x.extended), c("SPC", "geomcomp", "hillpos", "mtnpos", "pmkind", "pmorigin", "mlra", "climate"))
+  expect_equal(
+    names(x.extended), 
+    c("SPC", "geomcomp", "hillpos", "mtnpos", "pmkind", "pmorigin", "mlra", "climate.annual", "climate.monthly")
+    )
   
 })
 

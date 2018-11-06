@@ -86,6 +86,19 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	# standard or extended version?
 	if(extended) {
 	  # extended
+	  # if available, split climate summaries into annual / monthly and add helper columns
+	  # FALSE if missing
+	  if(class(res$climate) == 'data.frame') {
+	    # split annual from monthly climate summaries
+	    annual.data <- res$climate[grep('ppt|pet', res$climate$climate_var, invert = TRUE), ]
+	    monthly.data <- res$climate[grep('ppt|pet', res$climate$climate_var), ]
+	    
+	    # add helper columns to monthly data
+	    monthly.data$month <- factor(as.numeric(gsub('ppt|pet', '', monthly.data$climate_var)))
+	    monthly.data$variable <- gsub('[0-9]', '', monthly.data$climate_var)
+	    monthly.data$variable <- factor(monthly.data$variable, levels = c('pet', 'ppt'), labels=c('Potential ET (mm)', 'Precipitation (mm)'))
+	  }
+	  
 	  # compose into a list
 	  data.list <- list(
 	    SPC=h,
@@ -95,7 +108,8 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	    pmkind=res$pmkind,
 	    pmorigin=res$pmorigin,
 	    mlra=res$mlra,
-	    climate=res$climate
+	    climate.annual=annual.data,
+	    climate.monthly=monthly.data
 	  )
 	  
 	  return(data.list)
