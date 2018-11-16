@@ -4,8 +4,8 @@
 # 2018-11-14
 # return information on soil series that co-occur with `s`
 # component.data: should the component names, kind, percent, etc. be returned as well?
-# recursive: should sibling data be queried for the 1st set of siblings?
-siblings <- function(s, component.data=FALSE, recursive=FALSE) {
+# cousins: return siblings of siblings (cousins)?
+siblings <- function(s, component.data=FALSE, cousins=FALSE) {
   
   # helper functions
   .getSibling <- function(i) {
@@ -51,14 +51,14 @@ siblings <- function(s, component.data=FALSE, recursive=FALSE) {
   
   # optionally get second set of siblings
   # flatten into single DF
-  if(recursive) {
-    second.sib <- lapply(res$sib$sibling, .getSibling)
-    res$second.sib <- do.call('rbind', second.sib)
+  if(cousins) {
+    cousins <- lapply(res$sib$sibling, .getSibling)
+    res$cousins <- do.call('rbind', cousins)
     
     # data too?
     if(component.data) {
-      second.sib.data <- lapply(res$sib$sibling, .getSiblingData)
-      res$second.sib.data <- do.call('rbind', second.sib.data)
+      cousin.data <- lapply(res$sib$sibling, .getSiblingData)
+      res$cousin.data <- do.call('rbind', cousin.data)
     }
   }
   
