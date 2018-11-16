@@ -1,6 +1,4 @@
 
-## TODO: document this!!
-
 # 2018-11-14
 # return information on soil series that co-occur with `s`
 # component.data: should the component names, kind, percent, etc. be returned as well?

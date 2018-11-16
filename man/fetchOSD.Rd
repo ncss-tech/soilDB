@@ -44,7 +44,7 @@ USDA-NRCS OSD search tools: \url{http://www.nrcs.usda.gov/wps/portal/nrcs/detail
 \note{SoilWeb maintains a snapshot of the Official Series Description data. Please use the link above for the live data.}
 
 \seealso{
-\code{\link{OSDquery}}
+\link{OSDquery}, \link{siblings}
 }
 
 \examples{
