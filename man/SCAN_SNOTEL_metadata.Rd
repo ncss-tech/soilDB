@@ -1,5 +1,6 @@
 \name{SCAN_SNOTEL_metadata}
 \alias{SCAN_SNOTEL_metadata}
+\alias{state_FIPS_codes}
 
 \docType{data}
 
