@@ -10,7 +10,7 @@ siblings <- function(s, component.data=FALSE, cousins=FALSE) {
   # helper functions
   .getSibling <- function(i) {
     # these use the new API
-    u <- sprintf('http://soilmap2-1.lawr.ucdavis.edu/api/soil-series.php?q=siblings&s=%s', i)
+    u <- sprintf('https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=siblings&s=%s', i)
     
     # attempt query to API for basic sibling set, result is JSON
     sib <- try(jsonlite::fromJSON(u))[[1]]
@@ -23,7 +23,7 @@ siblings <- function(s, component.data=FALSE, cousins=FALSE) {
   
   .getSiblingData <- function(i) {
     # these use the new API
-    u <- sprintf('http://soilmap2-1.lawr.ucdavis.edu/api/soil-series.php?q=sibling_data&s=%s', i)
+    u <- sprintf('https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=sibling_data&s=%s', i)
     
     # attempt query to API for component data, result is JSON
     sib <- try(jsonlite::fromJSON(u))[[1]]
