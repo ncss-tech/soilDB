@@ -110,7 +110,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	  
 	  # fix column names in competing series
 	  if(class(res$competing) == 'data.frame')
-	    names(res$competing) <- c('series', 'family')
+	    names(res$competing) <- c('series', 'competing', 'family')
 	  
 	  # compose into a list
 	  data.list <- list(
