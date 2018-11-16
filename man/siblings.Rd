@@ -26,6 +26,8 @@ siblings(s, component.data = FALSE, cousins = FALSE)
 
 \references{
 \href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{soilDB Soil Series Query Functionality}
+
+\href{http://ncss-tech.github.io/AQP/soilDB/siblings.html}{Related tutorial.}
 }
 
 \author{

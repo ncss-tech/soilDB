@@ -13,8 +13,7 @@ siblings <- function(s, component.data=FALSE, cousins=FALSE) {
     # attempt query to API for basic sibling set, result is JSON
     sib <- try(jsonlite::fromJSON(u))[[1]]
     
-    # TODO, handle errors
-    
+    # TODO: convert FALSE to NULL
     # result is FALSE if no matching data
     return(sib)
   }
@@ -26,8 +25,7 @@ siblings <- function(s, component.data=FALSE, cousins=FALSE) {
     # attempt query to API for component data, result is JSON
     sib <- try(jsonlite::fromJSON(u))[[1]]
     
-    # TODO, handle errors
-    
+    # TODO: convert FALSE to NULL
     # result is FALSE if no matching data
     return(sib)
   }
