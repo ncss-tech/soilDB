@@ -97,15 +97,25 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	    monthly.data$month <- factor(as.numeric(gsub('ppt|pet', '', monthly.data$climate_var)))
 	    monthly.data$variable <- gsub('[0-9]', '', monthly.data$climate_var)
 	    monthly.data$variable <- factor(monthly.data$variable, levels = c('pet', 'ppt'), labels=c('Potential ET (mm)', 'Precipitation (mm)'))
-	    
-	    # fix column names in pmkind and pmorigin tables
-	    names(res$pmkind) <- c('series', 'pmkind', 'n', 'total', 'P')
-	    names(res$pmorigin) <- c('series', 'pmorigin', 'n', 'total', 'P')
 	  }
+	  
+	  ## must check for data, no data is returned as FALSE
+	  
+	  # fix column names in pmkind and pmorigin tables
+	  if(class(res$pmkind) == 'data.frame')
+	    names(res$pmkind) <- c('series', 'pmkind', 'n', 'total', 'P')
+	  
+	  if(class(res$pmorigin) == 'data.frame')
+	    names(res$pmorigin) <- c('series', 'pmorigin', 'n', 'total', 'P')
+	  
+	  # fix column names in competing series
+	  if(class(res$competing) == 'data.frame')
+	    names(res$competing) <- c('series', 'family')
 	  
 	  # compose into a list
 	  data.list <- list(
 	    SPC=h,
+	    competing=res$competing,
 	    geomcomp=res$geomcomp,
 	    hillpos=res$hillpos,
 	    mtnpos=res$mtnpos,
