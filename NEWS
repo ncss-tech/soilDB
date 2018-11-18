@@ -1,6 +1,9 @@
--------------------------- soilDB 2.2-6 (2018-10-11) ------------------------------
+-------------------------- soilDB 2.3 (2018-11-17) ------------------------------
 * new function for exploring soil series co-occurrence data: siblings()
 * fetchOSD(..., extended=TRUE) gets competing soil series
+* new tests
+* removed old sample gSSURGO chunk and related documentation
+* release to CRAN
 
 -------------------------- soilDB 2.2-6 (2018-10-11) ------------------------------
 * new function for spatial queries: SDA_spatialQuery(), still needs testing and documentation
