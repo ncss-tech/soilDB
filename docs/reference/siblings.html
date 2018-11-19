@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fetch lab data used site/horizon data from a PedonPC database. — fetchNASISLabData • soilDB</title>
+<title>Lookup siblings and cousins for a given soil series. — siblings • soilDB</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Fetch lab data used site/horizon data from a PedonPC database. — fetchNASISLabData" />
+<meta property="og:title" content="Lookup siblings and cousins for a given soil series. — siblings" />
 
-<meta property="og:description" content="Fetch KSSL laboratory pedon/horizon layer data from a local NASIS database, return as a SoilProfileCollection object." />
+<meta property="og:description" content="Lookup siblings and cousins for a given soil series, from the current fiscal year SSURGO snapshot via SoilWeb." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -92,57 +92,76 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fetch lab data used site/horizon data from a PedonPC database.</h1>
+    <h1>Lookup siblings and cousins for a given soil series.</h1>
     
-    <div class="hidden name"><code>fetchNASISLabData.Rd</code></div>
+    <div class="hidden name"><code>siblings.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Fetch KSSL laboratory pedon/horizon layer data from a local NASIS database, return as a SoilProfileCollection object.</p>
+    <p>Lookup siblings and cousins for a given soil series, from the current fiscal year SSURGO snapshot via SoilWeb.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>fetchNASISLabData</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>siblings</span>(<span class='no'>s</span>, <span class='kw'>component.data</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>cousins</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>s</th>
+      <td><p>character vector, the name of a single soil series, case-insensitive.</p></td>
+    </tr>
+    <tr>
+      <th>component.data</th>
+      <td><p>logical, should component data for siblings (and optionally cousins) be returned?</p></td>
+    </tr>
+    <tr>
+      <th>cousins</th>
+      <td><p>logical, should siblings-of-siblings (cousins) be returned?</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function currently works only on Windows, and requires a 'nasis_local' ODBC connection.</p>
+    <p>The siblings of any given soil series are defined as those soil series that share a parent map unit. Cousins are siblings of siblings. Data are sourced from SoilWeb which maintains a copy of the current SSURGO snapshot.</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a SoilProfileCollection class object</p>
     
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+<dl class='dl-horizontal'>
+	<dt>sib</dt><dd><p><code>data.frame</code> containing siblings and number of co-occurrences</p></dd>
+	<dt>sib.data</dt><dd><p><code>data.frame</code> containing sibling component data</p></dd>
+	<dt>cousins</dt><dd><p><code>data.frame</code> containing cousins and number of co-occurrences</p></dd>
+	<dt>cousin.data</dt><dd><p><code>data.frame</code> containing cousin component data</p></dd>
+	</dl> 
 
-    <p>This fuction attempts to do most of the boilerplate work when extracting KSSL laboratory site/horizon data from a local NASIS database. Lab pedons that have errors in their horizonation are excluded from the returned object, however, their IDs are printed on the console. See <code><a href='fetchNASIS.html'>getHzErrorsNASIS</a></code> for a simple approach to identifying pedons with problematic horizonation.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><a href='http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html'>soilDB Soil Series Query Functionality</a></p>
+<p><a href='http://ncss-tech.github.io/AQP/soilDB/siblings.html'>Related tutorial.</a></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='get_labpedon_data_from_NASIS_db.html'>get_labpedon_data_from_NASIS_db</a></code></p></div>
+    <div class='dont-index'><p><a href='OSDquery.html'>OSDquery</a>, siblings, <a href='fetchOSD.html'>fetchOSD</a></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># query depends on some lab data, queried against the national database</span>
-<span class='co'># note that you must setup this connection ahead of time</span>
-<span class='co'># see inst/doc/setup_ODBC_local_NASIS.pdf</span>
-<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'>fetchNASISLabData</span>()
-
-<span class='co'># plot only those profiles with densic contact</span>
-<span class='co'>#plot(f[which(f$densic.contact), ], name='hzname')</span>
-
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>siblings</span>(<span class='st'>'zook'</span>)
+<span class='fu'>str</span>(<span class='no'>x</span>, <span class='fl'>1</span>)</div><div class='output co'>#&gt; List of 1
+#&gt;  $ sib:'data.frame':	38 obs. of  3 variables:</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
 
       <li><a href="#value">Value</a></li>
 
-      <li><a href="#note">Note</a></li>
+      <li><a href="#references">References</a></li>
 
       <li><a href="#see-also">See also</a></li>
       
@@ -150,7 +169,9 @@
     </ul>
 
     <h2>Author</h2>
-    J.M. Skovlin and D.E. Beaudette
+    
+D.E. Beaudette
+
   </div>
 </div>
 

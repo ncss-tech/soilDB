@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2.7</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.3</span>
       </span>
     </div>
 
@@ -127,12 +127,14 @@
     <p>The standard set of "site" and "horizon" data are returned as a <code>SoilProfileCollection</code> object (<code>extended=FALSE</code>. The "extended" suite of summary data can be requested by setting <code>extended=TRUE</code>. The resulting object will be a <code>list</code> with the following elements:)</p>
 <dl class='dl-horizontal'>
 	<dt>SPC</dt><dd><p><code>SoilProfileCollection</code> containing standards "site" and "horizon" data</p></dd>
+	<dt>competing</dt><dd><p>competing soil series from the SC database snapshot</p></dd>
 	<dt>geomcomp</dt><dd><p>empirical probabilities for geomorphic component, derrived from the current SSURGO snapshot</p></dd>
 	<dt>hillpos</dt><dd><p>empirical probabilities for hillslope position, derrived from the current SSURGO snapshot</p></dd>
 	<dt>mtnpos</dt><dd><p>empirical probabilities for mountain slope position, derrived from the current SSURGO snapshot</p></dd>
 	<dt>pmkind</dt><dd><p>empirical probabilities for parent material kind, derrived from the current SSURGO snapshot</p></dd>
 	<dt>pmorigin</dt><dd><p>empirical probabilities for parent material origin, derrived from the current SSURGO snapshot</p></dd>
 	<dt>mlra</dt><dd><p>empirical MLRA membership values, derrived from the current SSURGO snapshot</p></dd>
+	<dt>climate</dt><dd><p>experimental climate summaries from PRISM stack</p></dd>
 	</dl>
     <p>Further details pending.</p>
     
@@ -150,7 +152,7 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='OSDquery.html'>OSDquery</a></code></p></div>
+    <div class='dont-index'><p><a href='OSDquery.html'>OSDquery</a>, <a href='siblings.html'>siblings</a></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

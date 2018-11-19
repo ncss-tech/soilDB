@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2.7</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.3</span>
       </span>
     </div>
 
@@ -154,18 +154,18 @@
 
 <span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='fu'>as.data.frame</span>(<span class='fu'>table</span>(<span class='no'>us_ss_timeline</span>$<span class='no'>year</span>), <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='no'>g1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></span>(<span class='no'>test</span>, <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>as.numeric</span>(<span class='no'>Var1</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Freq</span>)) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_histogram'>geom_histogram</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>xlab</a></span>(<span class='st'>"Year"</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ylab</a></span>(<span class='st'>"Count"</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/theme'>theme</a></span>(<span class='kw'>aspect.ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ggtitle</a></span>(<span class='st'>"Number of Published \n US Soil Surveys by Year"</span>)
-<span class='no'>g2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></span>(<span class='no'>test</span>, <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>as.numeric</span>(<span class='no'>Var1</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'>cumsum</span>(<span class='no'>Freq</span>))) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_histogram'>geom_histogram</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>xlab</a></span>(<span class='st'>"Year"</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ylab</a></span>(<span class='st'>"Count"</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/theme'>theme</a></span>(<span class='kw'>aspect.ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ggtitle</a></span>(<span class='st'>"Cumulative Number of Published \n US Soil Surveys by Year"</span>)
+<span class='no'>g1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='no'>test</span>, <span class='fu'><a href='ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>as.numeric</span>(<span class='no'>Var1</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Freq</span>)) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"Year"</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span>(<span class='st'>"Count"</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/theme.html'>theme</a></span>(<span class='kw'>aspect.ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span>(<span class='st'>"Number of Published \n US Soil Surveys by Year"</span>)
+<span class='no'>g2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='no'>test</span>, <span class='fu'><a href='ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>as.numeric</span>(<span class='no'>Var1</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'>cumsum</span>(<span class='no'>Freq</span>))) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"Year"</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span>(<span class='st'>"Count"</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/theme.html'>theme</a></span>(<span class='kw'>aspect.ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span>(<span class='st'>"Cumulative Number of Published \n US Soil Surveys by Year"</span>)
 <span class='kw pkg'>gridExtra</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob'>grid.arrange</a></span>(<span class='no'>g1</span>, <span class='no'>g2</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 
 <span class='co'># }</span></pre>

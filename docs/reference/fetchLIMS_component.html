@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.2.7</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">2.3</span>
       </span>
     </div>
 
@@ -212,14 +212,14 @@
 
 <span class='co'># depth plot of clay content by soil component</span>
 <span class='no'>gg_comp</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>) {
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></span>(<span class='no'>x</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_path'>geom_line</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes'>aes</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>r</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>hzdept_r</span>)) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_path'>geom_line</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes'>aes</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>r</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>hzdept_r</span>)) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_ribbon'>geom_ribbon</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes'>aes</a></span>(<span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>l</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>h</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>hzdept_r</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.2</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/lims'>xlim</a></span>(<span class='fl'>200</span>, <span class='fl'>0</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>xlab</a></span>(<span class='st'>"depth (cm)"</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/facet_grid'>facet_grid</a></span>(<span class='no'>var</span> ~ <span class='no'>dmuiid</span> + <span class='fu'>paste</span>(<span class='no'>compname</span>, <span class='no'>comppct_r</span>)) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/coord_flip'>coord_flip</a></span>()
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='no'>x</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(<span class='fu'><a href='ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>r</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>hzdept_r</span>)) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(<span class='fu'><a href='ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>r</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>hzdept_r</span>)) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/geom_ribbon.html'>geom_ribbon</a></span>(<span class='fu'><a href='ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>l</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>h</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>hzdept_r</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.2</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/lims.html'>xlim</a></span>(<span class='fl'>200</span>, <span class='fl'>0</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"depth (cm)"</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/facet_grid.html'>facet_grid</a></span>(<span class='no'>var</span> ~ <span class='no'>dmuiid</span> + <span class='fu'>paste</span>(<span class='no'>compname</span>, <span class='no'>comppct_r</span>)) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span>()
   }
 <span class='no'>g1</span> <span class='kw'>&lt;-</span> <span class='fu'>gg_comp</span>(<span class='fu'>subset</span>(<span class='no'>h</span>, <span class='no'>var</span> <span class='kw'>==</span> <span class='st'>"clay"</span>))
 <span class='no'>g2</span> <span class='kw'>&lt;-</span> <span class='fu'>gg_comp</span>(<span class='fu'>subset</span>(<span class='no'>h</span>, <span class='no'>var</span> <span class='kw'>==</span> <span class='st'>"om"</span>))
@@ -233,18 +233,18 @@
 <span class='st'>"EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"</span>
 )
 
-<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></span>(<span class='no'>x</span>, <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>as.integer</span>(<span class='no'>month</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>dept_r</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='no'>status</span>)) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_tile'>geom_rect</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes'>aes</a></span>(<span class='kw'>xmin</span> <span class='kw'>=</span> <span class='fu'>as.integer</span>(<span class='no'>month</span>), <span class='kw'>xmax</span> <span class='kw'>=</span> <span class='fu'>as.integer</span>(<span class='no'>month</span>) + <span class='fl'>1</span>,
+<span class='fu'><a href='ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='no'>x</span>, <span class='fu'><a href='ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>as.integer</span>(<span class='no'>month</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>dept_r</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='no'>status</span>)) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/geom_tile.html'>geom_rect</a></span>(<span class='fu'><a href='ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>xmin</span> <span class='kw'>=</span> <span class='fu'>as.integer</span>(<span class='no'>month</span>), <span class='kw'>xmax</span> <span class='kw'>=</span> <span class='fu'>as.integer</span>(<span class='no'>month</span>) + <span class='fl'>1</span>,
                 <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='fu'>max</span>(<span class='no'>x</span>$<span class='no'>depb_r</span>),
                 <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>flodfreqcl</span>)) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_path'>geom_line</a></span>(<span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_point'>geom_point</a></span>() +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/geom_ribbon'>geom_ribbon</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/aes'>aes</a></span>(<span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>dept_l</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>dept_h</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.2</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/lims'>ylim</a></span>(<span class='fu'>max</span>(<span class='no'>x</span>$<span class='no'>depb_r</span>), <span class='fl'>0</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>xlab</a></span>(<span class='st'>"month"</span>) + <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ylab</a></span>(<span class='st'>"depth (cm)"</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/scale_continuous'>scale_x_continuous</a></span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>12</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>month.abb</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>"Month"</span>) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/facet_wrap'>facet_wrap</a></span>(~ <span class='fu'>paste0</span>(<span class='no'>compname</span>, <span class='st'>' ('</span>, <span class='no'>comppct_r</span> , <span class='st'>')'</span>)) +
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/labs'>ggtitle</a></span>(<span class='fu'>paste0</span>(<span class='no'>x</span>$<span class='no'>nationalmusym</span>[<span class='fl'>1</span>],
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(<span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span>() +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/geom_ribbon.html'>geom_ribbon</a></span>(<span class='fu'><a href='ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>dept_l</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>dept_h</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.2</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/lims.html'>ylim</a></span>(<span class='fu'>max</span>(<span class='no'>x</span>$<span class='no'>depb_r</span>), <span class='fl'>0</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"month"</span>) + <span class='fu'><a href='ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span>(<span class='st'>"depth (cm)"</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>12</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>month.abb</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>"Month"</span>) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span>(~ <span class='fu'>paste0</span>(<span class='no'>compname</span>, <span class='st'>' ('</span>, <span class='no'>comppct_r</span> , <span class='st'>')'</span>)) +
+  <span class='fu'><a href='ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span>(<span class='fu'>paste0</span>(<span class='no'>x</span>$<span class='no'>nationalmusym</span>[<span class='fl'>1</span>],
   <span class='st'>': Water Table Levels from Component Soil Moisture Month Data'</span>))
 
 
