@@ -1,21 +1,36 @@
 
 # 2018-11-14
+## TODO: launder series names, all upper case?
 # return information on soil series that co-occur with `s`
 # component.data: should the component names, kind, percent, etc. be returned as well?
 # cousins: return siblings of siblings (cousins)?
-siblings <- function(s, component.data=FALSE, cousins=FALSE) {
+siblings <- function(s, only.major=FALSE, component.data=FALSE, cousins=FALSE) {
   
   # helper functions
-  .getSibling <- function(i) {
+  .getSibling <- function(i, only.major) {
     # these use the new API
     u <- sprintf('https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=siblings&s=%s', i)
     
     # attempt query to API for basic sibling set, result is JSON
     sib <- try(jsonlite::fromJSON(u))[[1]]
     
-    # TODO: convert FALSE to NULL
-    # result is FALSE if no matching data
-    return(sib)
+    # a data.frame result measn we have data, otherwise return NULL
+    if(class(sib) == 'data.frame') {
+      
+      # convert 'Yes'|'No' -> TRUE|FALSE
+      sib$majcompflag <- ifelse(sib$majcompflag == 'Yes', TRUE, FALSE)
+      
+      # note: there may be both major and minor siblings
+      # optionally cut-down to just major siblings
+      if(only.major)
+        sib <- sib[which(sib$majcompflag), ]
+      
+      return(sib)
+      
+    } else {
+      return(NULL)
+    }
+    
   }
   
   .getSiblingData <- function(i) {
@@ -23,11 +38,15 @@ siblings <- function(s, component.data=FALSE, cousins=FALSE) {
     u <- sprintf('https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=sibling_data&s=%s', i)
     
     # attempt query to API for component data, result is JSON
+    # result is FALSE if no matching data
     sib <- try(jsonlite::fromJSON(u))[[1]]
     
-    # TODO: convert FALSE to NULL
-    # result is FALSE if no matching data
-    return(sib)
+    # a data.frame result measn we have data, otherwise return NULL
+    if(class(sib) == 'data.frame') {
+      return(sib)
+    } else {
+      return(NULL)
+    }
   }
   
   # init output as list
@@ -38,7 +57,7 @@ siblings <- function(s, component.data=FALSE, cousins=FALSE) {
     stop('please install the `jsonlite` package', call.=FALSE)
   
   # get basic data
-  res$sib <- .getSibling(s)
+  res$sib <- .getSibling(s, only.major = only.major)
   
   # optionally get data
   if(component.data) {
@@ -48,7 +67,7 @@ siblings <- function(s, component.data=FALSE, cousins=FALSE) {
   # optionally get second set of siblings
   # flatten into single DF
   if(cousins) {
-    cousins <- lapply(res$sib$sibling, .getSibling)
+    cousins <- lapply(res$sib$sibling, .getSibling, only.major = only.major)
     res$cousins <- do.call('rbind', cousins)
     
     # data too?
