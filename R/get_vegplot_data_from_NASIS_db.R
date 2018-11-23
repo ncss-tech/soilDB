@@ -78,6 +78,16 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
 
+  # add ESIS_id
+  load(system.file("data/state_FIPS_codes.rda", package="soilDB"))
+  fips <- stringr::str_sub(d$site_id, 3, 5)
+  fips_state <- stringr::str_sub(d$site_id, 1, 2)
+  idx <- match(fips_state, state_FIPS_codes$state_alpha)
+  fips_state_num <- state_FIPS_codes$state_fips[idx]
+  year <- stringr::str_sub(d$site_id, 8, 9)
+  sitenum <- stringr::str_sub(d$site_id, 10, 12)
+  d$ESIS_id <- paste(sitenum, year, fips_state_num, fips, sep='')
+
   # clean PLSS TRS data 
   d$plsstownship <- gsub(d$plsstownship, pattern = '\\.', replacement = '', fixed = TRUE)
   d$plsstownship <- toupper(trimws(d$plsstownship))
