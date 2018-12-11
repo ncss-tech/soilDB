@@ -211,26 +211,33 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFac
   q.chorizon <- paste("
   SELECT", 
   if (duplicates == FALSE) {"DISTINCT"}
-  , "hzname, hzdept_r, hzdepb_r, texture, texcl, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, c.cokey
+  , "hzname, hzdept_r, hzdepb_r, texture, texcl, fragvol_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, c.cokey
 
   FROM legend l INNER JOIN
        mapunit mu ON mu.lkey = l.lkey INNER JOIN",
-  if (duplicates == FALSE) {paste("
+  if (duplicates == FALSE) { paste("
   (SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2 
-  FROM mapunit
-  GROUP BY nationalmusym) AS 
-  mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN
-  (SELECT compname, comppct_r, majcompflag, cokey, mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu2.mukey2")
-  } else {
-    "SELECT 
-     compname, comppct_r, majcompflag, cokey, mukey AS mukey2 
+   FROM mapunit
+   GROUP BY nationalmusym) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym
+  ")
+  } else { paste("
+   (SELECT nationalmusym, mukey
+    FROM mapunit) AS mu2 ON mu2.mukey = mu.mukey
+   ")},
+  "INNER JOIN
+   component    c    ON c.mukey      = mu.mukey   INNER JOIN
+   chorizon     ch   ON ch.cokey     = c.cokey    LEFT OUTER JOIN
+   chtexturegrp chtg ON chtg.chkey   = ch.chkey   
+                     AND rvindicator = 'YES'      LEFT OUTER JOIN
+   chtexture    cht  ON cht.chtgkey  = chtg.chkey
 
-     FROM 
-     component    c    ON c.mukey2 = mu.mukey"},   "INNER JOIN
-     chorizon     ch   ON ch.cokey     = c.cokey    LEFT OUTER JOIN
-     chtexturegrp chtg ON chtg.chkey   = ch.chkey   
-                       AND rvindicator = 'YES'      LEFT OUTER JOIN
-     chtexture    cht  ON cht.chtgkey  = chtg.chkey
+   LEFT OUTER JOIN
+       (SELECT SUM(fragvol_r) fragvol_r, ch2.chkey
+        FROM chorizon ch2
+        INNER JOIN chfrags chf ON chf.chkey = ch2.chkey
+        WHERE fraghard IN ('indurated', 'strongly cemented', 'strongly cemented') OR 
+              fraghard IS NULL
+        GROUP BY ch2.chkey) chfrags2  ON chfrags2.chkey = ch.chkey
   
   WHERE", WHERE,
                       
