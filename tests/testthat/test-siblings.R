@@ -23,7 +23,7 @@ test_that("siblings() returns reasonable data", {
   expect_equal(class(x$sib), 'data.frame')
   expect_equal(class(x$sib.data), 'data.frame')
   
-  expect_equal(names(x$sib), c('series', 'sibling', 'n'))
+  expect_equal(names(x$sib), c('series', 'sibling', 'majcompflag', 'n'))
 })
 
 # TODO: test cousins
