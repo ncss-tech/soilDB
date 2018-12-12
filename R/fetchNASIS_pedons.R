@@ -32,14 +32,11 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
     phlabresults <- get_phlabresults_data_from_NASIS_db(SS=SS)
   }
   
-  ## this is the "total fragment volume" per NASIS calculation
-  # optionally convert NA fragvol to 0
-  if(nullFragsAreZero) {
-    hz_data$fragvoltot <- ifelse(is.na(hz_data$fragvoltot), 0, hz_data$fragvoltot)
-  }
-  
-  # join horizon + hz color: all horizons
+  ## join horizon + hz color: all horizons
   h <- join(hz_data, color_data, by='phiid', type='left')
+  
+  ## join hz + fragment summary
+  h <- join(h, extended_data$frag_summary, by='phiid', type='left')
   
   ## fix some common problems
   
@@ -80,10 +77,7 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
     h$soil_color <- h$dry_soil_color
   
   
-  ## join hz + fragment summary
-  h <- join(h, extended_data$frag_summary, by='phiid', type='left')
-  
-  # test for horizonation inconsistencies... flag, and optionally remove
+  ## test for horizonation inconsistencies... flag, and optionally remove
   h.test <- ddply(h, 'peiid', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
   
   # which are the good (valid) ones?
@@ -97,14 +91,25 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
     h <- h[which(h$peiid %in% good.ids), ]
   
   # keep track of those pedons with horizonation errors
-  #if(length(bad.pedon.ids) > 0) { # AGB removed this line of code b/c it prevents updating these values on subsequent error-free calls
   assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
   assign("bad.horizons", value = data.frame(bad.horizons), envir = soilDB.env)
-  #}
   
   ## join hz + phlabresults
   if (lab) {
     h <- join(h, phlabresults, by = "phiid", type = "left")
+  }
+  
+  ## optionally convert NA fragvol to 0
+  if(nullFragsAreZero) {
+    # this is the "total fragment volume" per NASIS calculation
+    h$fragvoltot <- ifelse(is.na(h$fragvoltot), 0, h$fragvoltot)
+    
+    # this is computed by soilDB::simplifyFragmentData()
+    h$total_frags_pct <- ifelse(is.na(h$total_frags_pct), 0, h$total_frags_pct)
+    
+    # this is computed by soilDB::simplifyFragmentData()
+    # no para-frags
+    h$total_frags_pct_nopf <- ifelse(is.na(h$total_frags_pct_nopf), 0, h$total_frags_pct_nopf)
   }
   
   # upgrade to SoilProfilecollection

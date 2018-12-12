@@ -53,6 +53,11 @@ test_that("fetchNASIS(from='pedons') returns reasonable data", {
   expect_equal(idname(x), 'peiid')
   expect_equal(horizonDepths(x), c("hzdept", "hzdepb"))
   
+  # no NA in total fragments using default arguments 
+  expect_equal(any(is.na(x$total_frags_pct)), FALSE)
+  expect_equal(any(is.na(x$total_frags_pct_nopf)), FALSE)
+  expect_equal(any(is.na(x$fragvoltot)), FALSE)
+  
 })
 
 test_that("fetchNASIS(from='components') returns reasonable data", {
