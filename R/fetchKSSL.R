@@ -81,6 +81,8 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 	  # get list of dataframe objects
 	  m <- jsonlite::fromJSON(morph.url)
 	  
+	  ## TODO: consider simplification of fragment data here too
+	  
 	  # try to auto-simplify colors
 	  if(simplifyColors) {
 	    # extract horizon data from SPC
