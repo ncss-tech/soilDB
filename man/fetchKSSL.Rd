@@ -2,8 +2,9 @@
 \alias{fetchKSSL}
 \title{Fetch KSSL Data}
 \description{Get soil characterization and morphologic data via BBOX, MLRA, or series name query, from the KSSL database.}
+
 \usage{fetchKSSL(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, 
-pedon_id=NULL, pedon_key=NULL, returnMorphologicData=FALSE)}
+pedon_id=NULL, pedon_key=NULL, returnMorphologicData=FALSE, simplifyColors=FALSE)}
 
 \arguments{
   \item{series}{a single soil series name, case insensitive}
@@ -13,6 +14,7 @@ pedon_id=NULL, pedon_key=NULL, returnMorphologicData=FALSE)}
   \item{pedon_id}{a single user pedon ID}
   \item{pedon_key}{a single KSSL internal pedon ID}
   \item{returnMorphologicData}{optionally request basic morphologic data, see details section}
+  \item{simplifyColors}{simplify colors (from morphologic data) and join with horizon data}
 }
 
 
@@ -52,8 +54,10 @@ length(s)
 par(mar=c(0,0,0,0))
 plot(s, name='hzn_desgn', max.depth=150)
 
+##
+## morphologic data
+##
 
-# get morphologic data too
 library(soilDB)
 library(plyr)
 library(reshape2)
@@ -65,13 +69,20 @@ s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE)
 # extract SPC
 pedons <- s$SPC
 
-# simplify color data
-s.colors <- simplifyColorData(s$morph$phcolor, id.var = 'labsampnum')
+## simplify color data manually
+s.colors <- simplifyColorData(s$morph$phcolor, id.var = 'labsampnum', wt='colorpct')
 
 # merge color data into SPC
 h <- horizons(pedons)
 h <- join(h, s.colors, by='labsampnum', type='left', match='first')
 horizons(pedons) <- h
+
+# check
+par(mar=c(0,0,0,0))
+plot(pedons, color='moist_soil_color', print.id=FALSE)
+
+## automatically simplify color data
+s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE, simplifyColors=TRUE)
 
 # check
 par(mar=c(0,0,0,0))
