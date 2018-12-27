@@ -1,4 +1,6 @@
-# all SEKI pedons *CA792*
+library(soilDB)
+
+# all SEKI pedons: user site ID ~ %CA792%
 mk <- fetchNASIS(from='pedons')
 
 # cut down to relevant subset with field notes
@@ -9,4 +11,4 @@ mk <- mk[idx, ]
 
 mineralKing <- mk
 
-save(mineralKing, file='mineralKing.rda')
+save(mineralKing, file='../data/mineralKing.rda')
