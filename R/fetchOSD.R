@@ -83,6 +83,12 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	s$seriesname <- NULL
 	site(h) <- s
 	
+	## set metadata
+	h.metadata <- metadata(h)
+	h.metadata$origin <- 'OSD via Soilweb / fetchOSD'
+	metadata(h) <- h.metadata
+	
+	
 	# standard or extended version?
 	if(extended) {
 	  # extended
