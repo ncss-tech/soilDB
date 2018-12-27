@@ -98,6 +98,11 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 	  
 	} else m <- NULL
 	
+	## set metadata
+	m <- metadata(h)
+	m$origin <- 'KSSL via Soilweb / fetchKSSL'
+	metadata(h) <- m
+	
 	# report object size
 	res.size <- round(object.size(h) / 1024 / 1024, 2) + round(object.size(m) / 1024 / 1024, 2)
 	
