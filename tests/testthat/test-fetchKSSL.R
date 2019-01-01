@@ -4,6 +4,7 @@ context("fetchKSSL() -- requires internet connection")
 ## sample data
 x <- fetchKSSL(series='sierra')
 x.morph <- fetchKSSL(series='sierra', returnMorphologicData = TRUE)
+x.morp.simple.colors <- fetchKSSL(series='sierra', returnMorphologicData = TRUE, simplifyColors = TRUE)
 
 test_that("fetchKSSL() returns an SPC or list", {
   
@@ -14,6 +15,9 @@ test_that("fetchKSSL() returns an SPC or list", {
   expect_match(class(x.morph), 'list')
   expect_match(class(x.morph$SPC), 'SoilProfileCollection')
   expect_match(class(x.morph$morph), 'list')
+  
+  # simplified colors, merges into @horizons
+  expect_false(is.null(x.morp.simple.colors$SPC$moist_soil_color))
   
 })
 
