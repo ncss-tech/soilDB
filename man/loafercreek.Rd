@@ -5,8 +5,9 @@
 
 
 \docType{data}
-\title{Example SoilProfilecollection Objects Returned by fetchNASIS().}
-\description{Several examples of soil profile collections returned by fetchNASIS() as SoilProfileCollection objects.}
+\title{Example \code{SoilProfilecollection} Objects Returned by \code{fetchNASIS}.}
+
+\description{Several examples of soil profile collections returned by \code{fetchNASIS(from='pedons')} as \code{SoilProfileCollection} objects.}
 
 \usage{
 data(loafercreek)
