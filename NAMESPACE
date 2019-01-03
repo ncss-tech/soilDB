@@ -66,7 +66,11 @@ importFrom(aqp,
   diagnostic_hz,
   "diagnostic_hz<-",
   test_hz_logic,
-  rgb2munsell
+  rgb2munsell,
+  horizons,
+  "horizons<-",
+  metadata,
+  "metadata<-"
 )
 
 exportPattern("^[^\\.]")

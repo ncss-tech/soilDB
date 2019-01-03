@@ -175,6 +175,11 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   if(nrow(pm) > 0)
     site(h) <- pm
   
+  # set metadata
+  m <- metadata(h)
+  m$origin <- 'NASIS pedons'
+  metadata(h) <- m
+  
   # print any messages on possible data quality problems:
   if(exists('sites.missing.pedons', envir=soilDB.env))
     if(length(get('sites.missing.pedons', envir=soilDB.env)) > 0)

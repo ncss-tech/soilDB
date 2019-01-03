@@ -74,6 +74,11 @@ fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, string
       message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=soilDB.env)` for related coiid values")
   
   
+  # set metadata
+  m <- metadata(h)
+  m$origin <- 'NASIS components'
+  metadata(h) <- m
+  
   # done, return SPC
   return(f.chorizon)
   

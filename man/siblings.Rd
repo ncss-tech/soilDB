@@ -4,7 +4,7 @@
 \title{Lookup siblings and cousins for a given soil series.}
 \description{Lookup siblings and cousins for a given soil series, from the current fiscal year SSURGO snapshot via SoilWeb.}
 \usage{
-siblings(s, component.data = FALSE, cousins = FALSE)
+siblings(s, only.major=FALSE, component.data = FALSE, cousins = FALSE)
 }
 
 \arguments{

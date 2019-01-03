@@ -1,8 +1,8 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 2.3.3
-Date: 2018-12-18
+Version: 2.3.5
+Date: 2019-01-02
 Authors@R: c(person(given="Dylan", family="Beaudette", role = c("cre"), email = "dylan.beaudette@ca.usda.gov"), person(given="Jay", family="Skovlin", role = c("aut")), person(given="Stephen", family="Roecker", role = c("aut")) )
 Author: Dylan Beaudette [cre], Jay Skovlin [aut], Stephen Roecker [aut]
 Maintainer: Dylan Beaudette <dylan.beaudette@ca.usda.gov>
@@ -12,7 +12,7 @@ LazyLoad: yes
 Depends: R (>= 3.0.0), aqp
 Imports: grDevices, graphics, stats, utils, plyr, Hmisc, xml2, sp, reshape2, raster, curl
 Suggests: lattice, dismo, rgdal, jsonlite, RODBC, httr, rgeos, rvest,
-    testthat
+    testthat, stringr
 Repository: CRAN
 URL: http://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues
