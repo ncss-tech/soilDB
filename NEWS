@@ -1,7 +1,8 @@
--------------------------- soilDB 2.3.5 (2019-01-02) ----------------------------
+-------------------------- soilDB 2.3.5 (2019-01-14) ----------------------------
 * NAMESPACE and R CMD check fixes
 * documentation updates
 * soilDB now suggests `stringr`
+* new tests
 * release to CRAN
 
 -------------------------- soilDB 2.3.3 (2018-12-18) ----------------------------

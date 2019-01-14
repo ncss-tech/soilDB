@@ -26,64 +26,89 @@ http://ncss-tech.github.io/AQP/
  * many (coded) column names in pedon @site and @horizons have changed
  * lower cases is used for all un-coded data
  
- 
 
-## Examples
-```r
-library(soilDB)
-library(plyr)
-library(reshape2)
+## Database APIs
+    
+  * SDA
+    + [`SDA_query`](http://ncss-tech.github.io/soilDB/docs/reference/SDA_query.html)
+    + ['SDA_query_features`](http://ncss-tech.github.io/soilDB/docs/reference/SDA_query_features.html)
 
-# search by series name
-s <- fetchKSSL(series='auburn')
+  * SSURGO/KSSL via SoilWeb
+    + [`fetchKSSL`](http://ncss-tech.github.io/soilDB/docs/reference/fetchKSSL.html)
+    + [`fetchOSD`](http://ncss-tech.github.io/soilDB/docs/reference/fetchOSD.html)
+    + [`siblings`](http://ncss-tech.github.io/soilDB/docs/reference/siblings.html)
+    + [`OSDquery`](http://ncss-tech.github.io/soilDB/docs/reference/OSDquery.html) 
+    + [`seriesExtent`](http://ncss-tech.github.io/soilDB/docs/reference/seriesExtent.html)
+    
+  * SCAN/SNOTEL
+    + [`fetchSCAN`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSCAN.html)
+    + [`SCAN_SNOTEL_metadata`](http://ncss-tech.github.io/soilDB/docs/reference/SCAN_SNOTEL_metadata.html)
+    
+  * Henry Mount Soil and Water Database
+    + [`fetchHenry`](http://ncss-tech.github.io/soilDB/docs/reference/fetchHenry.html)
+    
+  * NASIS local database
+    + [`fetchNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/fetchNASIS.html)
+    
+  * NASIS WWW interface
+    + [`parseWebReport`](http://ncss-tech.github.io/soilDB/docs/reference/parseWebReport.html)
+    + [`fetchNASISWebReport`](http://ncss-tech.github.io/soilDB/docs/reference/fetchLIMS_component.html)
 
-# search by bounding-box
-# s <- fetchKSSL(bbox=c(-120, 37, -122, 38))
 
-# how many pedons
-length(s)
+## Utility Functions
 
-# plot 
-par(mar=c(0,0,0,0))
-plot(s, name='hzn_desgn', max.depth=150)
+  * [`estimateSTR`](http://ncss-tech.github.io/soilDB/docs/reference/estimateSTR.html)
+  * [`STRplot`](http://ncss-tech.github.io/soilDB/docs/reference/STRplot.html)
+  * [`KSSL_VG_model`](http://ncss-tech.github.io/soilDB/docs/reference/KSSL_VG_model.html)
+  * [`simplfyFragmentData`](http://ncss-tech.github.io/soilDB/docs/reference/simplfyFragmentData.html)
+  * [`simplifyColorData`](http://ncss-tech.github.io/soilDB/docs/reference/simplifyColorData.html)
+  * [`uncode`](http://ncss-tech.github.io/soilDB/docs/reference/uncode.html)
+  * [`code`](http://ncss-tech.github.io/soilDB/docs/reference/uncode.html)
 
 
-# get morphologic data too
-
-# get lab and morphologic data
-s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE)
-
-# extract SPC
-pedons <- s$SPC
-
-# simplify color data
-s.colors <- simplifyColorData(s$morph$phcolor, id.var = 'labsampnum', wt='colorpct')
-
-# merge color data into SPC
-h <- horizons(pedons)
-h <- join(h, s.colors, by='labsampnum', type='left', match='first')
-horizons(pedons) <- h
-
-# check
-par(mar=c(0,0,0,0))
-plot(pedons, color='moist_soil_color', print.id=FALSE, name='hzn_desgn')
-
-# simplify fragment data
-s.frags <- simplfyFragmentData(s$morph$phfrags, id.var='labsampnum')
-
-# merge fragment data into SPC
-h <- horizons(pedons)
-h <- join(h, s.frags, by='labsampnum', type='left', match='first')
-horizons(pedons) <- h
-
-# check
-par(mar=c(0,0,3,0))
-plot(pedons, color='total_frags_pct', print.id=FALSE, name='hzn_desgn')
-addVolumeFraction(pedons, 'total_frags_pct', pch=1, cex.min=0.25, cex.max = 0.5)
-```
-
+## Related Documentation
+ * [fetchKSSL](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
+ * [SDA_query](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html)
+ * [fetchOSD](http://ncss-tech.github.io/AQP/sharpshootR/OSD-dendrogram.html)
+ * [SCAN/SNOTEL Data](http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html)
 
 ## Related Packages
  * [aqp](https://github.com/ncss-tech/aqp)
  * [sharpshootR](https://github.com/ncss-tech/sharpshootR)
  
+
+## Examples
+```r
+library(soilDB)
+library(sharpshootR)
+library(latticeExtra)
+
+# get morphology + extended summaries
+soils <- c('cecil', 'altavista', 'lloyd', 'wickham', 'wilkes',  'chewacla', 'congaree')
+s <- fetchOSD(soils, extended = TRUE)
+
+# experimental viz of hillslope position, from SSURGO component records
+res <- vizHillslopePosition(s$hillpos)
+print(res$fig)
+
+# profile sketches
+par(mar=c(0,1,0,4), xpd=NA)
+plot(s$SPC, plot.order=res$order, cex.names=1, axis.line.offset = -0.1, width=0.2)
+
+
+# siblings
+s <- 'Amador'
+amador <- siblings(s, only.major = FALSE, component.data = TRUE)
+
+# limit to named soil series
+sib.data <- subset(amador$sib.data, subset= ! compkind %in% c('Miscellaneous area', 'Family', 'Taxon above family'))
+
+# get parsed OSD records
+sibs <- fetchOSD(c(s, unique(amador$sib$sibling)), extended = TRUE)
+
+# order by subgroup taxonomy
+# invert colors
+par(mar=c(0,0,0,0), fg='white', bg='black')
+SoilTaxonomyDendrogram(sibs$SPC, dend.width = 1.5, y.offset = 0.4, scaling.factor = 0.02, width=0.2, cex.taxon.labels = 1, cex.names = 1)
+```
+
