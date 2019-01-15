@@ -112,3 +112,6 @@ par(mar=c(0,0,0,0), fg='white', bg='black')
 SoilTaxonomyDendrogram(sibs$SPC, dend.width = 1.5, y.offset = 0.4, scaling.factor = 0.02, width=0.2, cex.taxon.labels = 1, cex.names = 1)
 ```
 
+## Dependency Graph
+![](https://cran.microsoft.com/packagedata/graphs/soilDB.png)
+
