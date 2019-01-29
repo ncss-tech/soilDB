@@ -36,6 +36,7 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   h <- join(hz_data, color_data, by='phiid', type='left')
   
   ## join hz + fragment summary
+  # there is a record for each phiid
   h <- join(h, extended_data$frag_summary, by='phiid', type='left')
   
   ## fix some common problems
