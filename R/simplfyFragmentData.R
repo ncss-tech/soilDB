@@ -115,6 +115,12 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   }
   rf <- rf[which(!is.na(rf$fragvol)), ]
   
+  # if all fragvol are NA then rf is an empty data.frame and we are done
+  if(nrow(rf) == 0) {
+    warning('all records are missing rock fragment volume, returing NULL', call. = FALSE)
+    return(NULL)
+  }
+  
   # extract classes
   rf.classes <- .rockFragmentSieve(rf)
   

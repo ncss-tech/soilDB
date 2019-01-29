@@ -1,10 +1,7 @@
 context("Simplification of fragment data (from NASIS)")
 
 ## related issues
-# https://github.com/ncss-tech/soilDB/issues/43
 # https://github.com/ncss-tech/soilDB/issues/57
-# https://github.com/ncss-tech/soilDB/issues/70
-
 
 ## some complex data from NASIS phfrags table
 d.single.hz <- structure(
@@ -127,6 +124,8 @@ d.missing.fragvol <- structure(
   class = "data.frame"
 )
 
+# all records are missing data
+d.all.NA.fragvol <- d.missing.fragvol[6, ]
 
 test_that(".seive correctly skips / pads NA", {
   expect_equal(soilDB:::.sieve(diameter = c(NA, 55)), c(NA, 'gravel'))
@@ -311,8 +310,14 @@ test_that("rockFragmentSieve complex sample data from NASIS, single horizon", {
 
 test_that("rockFragmentSieve warning generated when NA in fragvol", {
   
-  expect_warning(soilDB::simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE))
+  expect_warning(simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE), regexp = 'some records are missing rock fragment volume')
   
 })
 
+
+test_that("rockFragmentSieve warning generated when all fragvol are NA", {
+  
+  expect_warning(simplifyFragmentData(d.all.NA.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE), regexp = 'all records are missing rock fragment volume')
+  
+})
 

@@ -319,6 +319,7 @@ LEFT OUTER JOIN (
 
 	if(nrow(d.rf.data) > 0) {
 	  # summarize rock fragment data
+	  # note: if all fragvol are NA then the result is NULL
 	  d.rf.summary <- simplifyFragmentData(d.rf.data, id.var='phiid', nullFragsAreZero = nullFragsAreZero)
 	} else {
 	  d.rf.summary <- NULL
@@ -334,9 +335,9 @@ LEFT OUTER JOIN (
 							texmodifier=d.hz.texmod, 
 							geomorph=d.geomorph, 
 							taxhistory=d.taxhistory,
-						  	photo=d.photolink,
+						  photo=d.photolink,
 							pm=d.sitepm,
-              						struct=d.structure,
+              struct=d.structure,
 							hzdesgn=d.hz.desgn))
 }
 
