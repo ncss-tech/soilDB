@@ -186,6 +186,106 @@ LEFT OUTER JOIN (
     q.rf.data <- gsub(pattern = '_View_1', replacement = '', x = q.rf.data, fixed = TRUE)
   }
 
+  
+  # new phfrags summary SQL
+  q.rf.data.v2 <- "
+  SET NOCOUNT ON
+  
+  -- find fragsize_r
+  CREATE TABLE #RF1 (peiid INT, phiid INT, phfragsiid INT, fragvol REAL,
+  shape CHAR(7), para INT, nonpara INT, fragsize_r2 INT);
+  
+  INSERT INTO  #RF1 (peiid, phiid, phfragsiid, fragvol, shape, para, nonpara, fragsize_r2)
+  SELECT             peiid, phiid, phfragsiid, fragvol,
+  -- shape
+  CASE WHEN fragshp = 2 OR fragshp IS NULL THEN 'nonflat' ELSE 'flat' END shape,
+  -- hardness
+  CASE WHEN fraghard IN (6, 7, 9, 5, 10, 3, 14)                     THEN 1 ELSE NULL END para,
+  CASE WHEN fraghard IN (11, 4, 8, 12, 2, 13)   OR fraghard IS NULL THEN 1 ELSE NULL END nonpara,
+  -- fragsize_r
+  CASE WHEN fragsize_r IS NOT NULL THEN fragsize_r
+  WHEN fragsize_r IS NULL     AND fragsize_h IS NOT NULL AND fragsize_l IS NOT NULL
+  THEN (fragsize_h + fragsize_l) / 2
+  ELSE 10 END
+  fragsize_r2
+  
+  FROM
+  pedon_View_1    pe                           LEFT OUTER JOIN
+  phorizon_View_1 ph ON ph.peiidref = pe.peiid LEFT OUTER JOIN
+  phfrags_View_1  pf ON pf.phiidref = ph.phiid
+  
+  ORDER BY pe.peiid, ph.phiid, pf.phfragsiid;
+  
+  
+  -- compute logicals
+  CREATE TABLE #RF2 (
+  peiid INT, phiid INT, phfragsiid INT, fragvol REAL, para INT, nonpara INT, 
+  fine_gravel INT, gravel INT, cobbles INT, stones INT, boulders INT, channers INT, flagstones INT
+  );
+  INSERT INTO  #RF2 (
+  peiid, phiid, phfragsiid, fragvol, para, nonpara, 
+  fine_gravel, gravel, cobbles, stones, boulders, channers, flagstones
+  )
+  SELECT 
+  peiid, phiid, phfragsiid, fragvol, para, nonpara,
+  -- fragments
+  CASE WHEN   fragsize_r2 >= 2   AND fragsize_r2 < 5   AND shape = 'nonflat' THEN 1 ELSE NULL END fine_gravel,
+  CASE WHEN   fragsize_r2 >= 2   AND fragsize_r2 < 76  AND shape = 'nonflat' THEN 1 ELSE NULL END gravel,
+  CASE WHEN   fragsize_r2 >= 76  AND fragsize_r2 < 250 AND shape = 'nonflat' THEN 1 ELSE NULL END cobbles,
+  CASE WHEN ((fragsize_r2 >= 250 AND fragsize_r2 < 600 AND shape = 'nonflat') OR
+  (fragsize_r2 >= 380 AND fragsize_r2 < 600 AND shape = 'flat'))
+  THEN 1 ELSE NULL END stones,
+  CASE WHEN   fragsize_r2 >= 600 THEN 1 ELSE NULL END boulders,
+  CASE WHEN   fragsize_r2 >= 2   AND fragsize_r2 < 150 AND shape = 'flat' THEN 1 ELSE NULL END channers,
+  CASE WHEN   fragsize_r2 >= 150 AND fragsize_r2 < 380 AND shape = 'flat'    THEN 1 ELSE NULL END flagstones
+  
+  FROM
+  #RF1
+  
+  ORDER BY peiid, phiid, phfragsiid;
+  
+  
+  -- summarize rock fragments
+  SELECT
+  phiid,
+  -- nonpara rock fragments
+  SUM(fragvol * fine_gravel * nonpara)  fine_gravel,
+  SUM(fragvol * gravel      * nonpara)  gravel,
+  SUM(fragvol * cobbles     * nonpara)  cobbles,
+  SUM(fragvol * stones      * nonpara)  stones,
+  SUM(fragvol * boulders    * nonpara)  boulders,
+  SUM(fragvol * channers    * nonpara)  channers,
+  SUM(fragvol * flagstones  * nonpara)  flagstones,
+  -- para rock fragments
+  SUM(fragvol * fine_gravel * para)     parafine_gravel,
+  SUM(fragvol * gravel      * para)     paragravel,
+  SUM(fragvol * cobbles     * para)     paracobbles,
+  SUM(fragvol * stones      * para)     parastones,
+  SUM(fragvol * boulders    * para)     paraboulders,
+  SUM(fragvol * channers    * para)     parachanners,
+  SUM(fragvol * flagstones  * para)     paraflagstones,
+  -- total_frags_pct_para
+  SUM(fragvol               * para)     total_frags_pct_para,
+  -- total_frags_pct
+  SUM(fragvol               * nonpara)  total_frags_pct
+  
+  FROM #RF2
+  
+  GROUP BY peiid, phiid
+  
+  ORDER BY peiid, phiid;
+  
+  
+  -- cleanup
+  DROP TABLE #RF1;
+  DROP TABLE #RF2;
+  "
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.rf.data.v2 <- gsub(pattern = '_View_1', replacement = '', x = q.rf.data.v2, fixed = TRUE)
+  }
+  
+  
   # get horizon texture modifiers
   q.hz.texmod <- "SELECT phz.peiidref AS peiid, phz.phiid AS phiid, pht.phtiid AS phtiid, phtm.seqnum, texmod 
   FROM
@@ -270,6 +370,9 @@ LEFT OUTER JOIN (
 	d.ecosite <- RODBC::sqlQuery(channel, q.ecosite, stringsAsFactors=FALSE)
 	d.diagnostic <- RODBC::sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
 	d.rf.data <- RODBC::sqlQuery(channel, q.rf.data, stringsAsFactors=FALSE)
+	
+	d.rf.data.v2 <- RODBC::sqlQuery(channel, q.rf.data.v2, stringsAsFactors=FALSE)
+	
 	d.surf.rf.summary <- RODBC::sqlQuery(channel, q.surf.rf.summary, stringsAsFactors=FALSE)
 	d.hz.texmod <- RODBC::sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
 	d.geomorph <- RODBC::sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
@@ -348,12 +451,19 @@ LEFT OUTER JOIN (
 	  d.rf.summary <- NULL
 	}
 	
+	# r.rf.data.v2 nullFragsAreZero = TRUE
+	idx <- !names(d.rf.data.v2) %in% "phiid"
+	if (nullFragsAreZero == TRUE) {
+	  d.rf.data.v2[idx] <- lapply(d.rf.data.v2[idx], function(x) ifelse(is.na(x), 0, x))
+	}
+	
 	
 	# return a list of results
 	return(list(ecositehistory=d.ecosite,
 							diagnostic=d.diagnostic, 
 							diagHzBoolean=d.diag.boolean, 
 							frag_summary=d.rf.summary, 
+							frag_summary_v2 = d.rf.data.v2, 
 							surf_frag_summary=d.surf.rf.summary, 
 							texmodifier=d.hz.texmod, 
 							geomorph=d.geomorph, 
