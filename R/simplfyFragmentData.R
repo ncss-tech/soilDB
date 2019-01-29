@@ -96,7 +96,6 @@
 }
 
 
-## TODO: https://github.com/ncss-tech/soilDB/issues/43
 # rf: un-coded contents of the phfrags table
 # id.var: id column name
 # nullFragsAreZero: convert NA to 0?
@@ -208,8 +207,4 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   # done
   return(rf.wide)
 }
-
-# crap, backwards compatibility for typo
-# https://github.com/ncss-tech/soilDB/issues/43
-simplfyFragmentData <- simplifyFragmentData
 

@@ -317,10 +317,33 @@ LEFT OUTER JOIN (
 	  d.photolink$imagename <- basename(d.photolink$imagepath)
 	}
 
+	# summarize rock fragment data
 	if(nrow(d.rf.data) > 0) {
-	  # summarize rock fragment data
+	  
+	  # the results have 1 row / phiid
 	  # note: if all fragvol are NA then the result is NULL
 	  d.rf.summary <- simplifyFragmentData(d.rf.data, id.var='phiid', nullFragsAreZero = nullFragsAreZero)
+	  
+	  # second-pass of replacing NULL frags with 0
+	  # this is required because horizons missing rows in the phfrags table will result in NA
+	  # after subsequent LEFT JOINS
+	  if(nullFragsAreZero) {
+	    # keep track of UNIQUE original phiids so that we can optionally fill NA with 0 in a second pass
+	    all.ids <- unique(d.rf.data[, 'phiid', drop=FALSE])
+	    
+	    # left join and replace NA with 0
+	    d.rf.summary <- join(all.ids, d.rf.summary, by='phiid', type='left')
+	    
+	    # iterate over every column except for the ID
+	    nm <- names(d.rf.summary)
+	    nm <- nm[grep('phiid', nm, fixed = TRUE, invert = TRUE)]
+	    
+	    # a for-loop seems fine
+	    for(v in nm) {
+	      d.rf.summary[[v]] <- ifelse(is.na(d.rf.summary[[v]]), 0, d.rf.summary[[v]])
+	    }
+	  }
+	  
 	} else {
 	  d.rf.summary <- NULL
 	}

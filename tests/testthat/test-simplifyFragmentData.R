@@ -127,6 +127,136 @@ d.missing.fragvol <- structure(
 # all records are missing data
 d.all.NA.fragvol <- d.missing.fragvol[6, ]
 
+
+# no fragment size data, some records are NULL
+d.missing.size <-
+  structure(
+    list(
+      phiid = c(
+        541527L,
+        541528L,
+        541529L,
+        541530L,
+        541543L,
+        541544L,
+        541545L,
+        541546L,
+        541547L,
+        541548L,
+        541549L,
+        541550L
+      ),
+      fragvol = c(20, 30, 20, 8, 2, 2, 3, 5, 4, 4, NA, NA),
+      fragsize_l = c(
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_
+      ),
+      fragsize_r = c(
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_
+      ),
+      fragsize_h = c(
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_,
+        NA_integer_
+      ),
+      fragshp = structure(
+        c(
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_
+        ),
+        .Label = c("flat", "nonflat"),
+        class = "factor"
+      ),
+      fraghard = structure(
+        c(
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_,
+          NA_integer_
+        ),
+        .Label = c(
+          "noncemented",
+          "indurated",
+          "moderately cemented",
+          "strongly cemented",
+          "weakly cemented",
+          "extremely weakly",
+          "very weakly",
+          "very strongly",
+          "weakly",
+          "moderately",
+          "strongly",
+          "extremely strong",
+          "H",
+          "S"
+        ),
+        class = "factor"
+      )
+    ),
+    .Names = c(
+      "phiid",
+      "fragvol",
+      "fragsize_l",
+      "fragsize_r",
+      "fragsize_h",
+      "fragshp",
+      "fraghard"
+    ),
+    row.names = c(NA, 12L),
+    class = "data.frame"
+  )
+
+
+
+
 test_that(".seive correctly skips / pads NA", {
   expect_equal(soilDB:::.sieve(diameter = c(NA, 55)), c(NA, 'gravel'))
 })
@@ -287,7 +417,7 @@ test_that("rockFragmentSieve complex sample data from NASIS, single horizon", {
 })
 
 
-test_that("rockFragmentSieve complex sample data from NASIS, single horizon", {
+test_that("simplifyFragmentData complex sample data from NASIS, single horizon", {
   
   res <- soilDB::simplifyFragmentData(d.single.hz, id.var = 'phiid', nullFragsAreZero = TRUE)
   
@@ -308,14 +438,31 @@ test_that("rockFragmentSieve complex sample data from NASIS, single horizon", {
 
 
 
-test_that("rockFragmentSieve warning generated when NA in fragvol", {
+test_that("simplifyFragmentData when missing fragment sizes, low/rv/high", {
+  
+  # all fragments are coallated into the unspecified column
+  # totals should be correct
+  # some horizons have no fragment records, should generate a warning
+  expect_warning(res <- simplifyFragmentData(d.missing.size, id.var = 'phiid', nullFragsAreZero = TRUE))
+  
+  # rows missing fragvol should be removed from the simplified result
+  expect_true(nrow(d.missing.size) == 12)
+  expect_true(nrow(res) == 10)
+  
+  # unspecified total should match RF sums
+  expect_equal(res$unspecified, res$total_frags_pct_nopf)
+  expect_equal(res$unspecified, res$total_frags_pct)
+})
+
+
+test_that("simplifyFragmentData warning generated when NA in fragvol", {
   
   expect_warning(simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE), regexp = 'some records are missing rock fragment volume')
   
 })
 
 
-test_that("rockFragmentSieve warning generated when all fragvol are NA", {
+test_that("simplifyFragmentData warning generated when all fragvol are NA", {
   
   expect_warning(simplifyFragmentData(d.all.NA.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE), regexp = 'all records are missing rock fragment volume')
   
