@@ -1,4 +1,5 @@
 
+## TODO: generalize, export, and make sieve sizes into an argument
 # internally-used function to test size classes
 # diameter is in mm
 # NA diameter results in NA class

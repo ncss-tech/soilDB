@@ -10,7 +10,9 @@ library(soilDB)
 ## profile
 ## http://adv-r.had.co.nz/Profiling.html#measure-perf
 ## https://cran.r-project.org/web/packages/proftools/index.html
-# profile
+
+# ~ 4k pedons in local database SS => 80 seconds
+# system.time(x <- fetchNASIS(from='pedons'))
 pd <- profileExpr(x <- fetchNASIS(from='pedons'))
 
 hotPaths(pd)
