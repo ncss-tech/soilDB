@@ -10,7 +10,7 @@
   
   # non-flat fragments
   if(flat == FALSE)
-    sieves <- c(fine_gravel=5, gravel=76, cobbles=250, stones=600, boulders=10000000000)
+    sieves <- c(fine_gravel=5, gravel=75, cobbles=250, stones=600, boulders=10000000000)
   
   # test for NA, and filter-out
   res <- vector(mode='character', length = length(diameter))
