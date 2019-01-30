@@ -90,18 +90,18 @@
   d <- ifelse(is.na(parafrags.flat$fragsize_h), parafrags.flat$fragsize_r, parafrags.flat$fragsize_h)
   parafrags.flat$class <- .sieve(d, flat = TRUE, para = TRUE)
   
-  # combine pieces, note contains NA
+  # combine pieces, note may contain  RF classes == NA
   res <- rbind(frags.nonflat, frags.flat, parafrags.nonflat, parafrags.flat)
   
-  # a thought:
+  
   # what does an NA fragment class mean?
   # 
   # typically, fragment size missing
   # or, worst-case, .sieve() rules are missing criteria 
   # 
   # keep track of these for QC in an 'unspecified' column
-  #
-  idx <- which(is.na(res$class))
+  # but only when there is a fragment volume specified
+  idx <- which(is.na(res$class) & !is.na(res$fragvol))
   if( length(idx) > 0 ) {
     res$class[idx] <- 'unspecified'
   }
@@ -120,7 +120,8 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   fragvol <- NULL
   
   # fragment classes used in this function
-  frag.classes <- c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones')
+  # note that we are adding a catch-all for those strange phfrags records missing fragment size
+  frag.classes <- c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones', 'unspecified')
   
   # first of all, we can't do anything if the fragment volume is NA
   # warn the user and remove the offending records

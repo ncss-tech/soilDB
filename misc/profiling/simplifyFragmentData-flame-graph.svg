@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="no"?>
     <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-    <svg version="1.1" width="1200" height="978" onload="init(evt)" viewBox="0 0 1200 978" xmlns="http://www.w3.org/2000/svg" >
+    <svg version="1.1" width="1200" height="258" onload="init(evt)" viewBox="0 0 1200 258" xmlns="http://www.w3.org/2000/svg" >
     <defs >
     <linearGradient id="background" y1="0" y2="1" x1="0" x2="0" >
         <stop stop-color="#eeeeee" offset="5%" />
@@ -19,386 +19,70 @@
     function c() { details.nodeValue = ' '; }
     ]]>
     </script>
-    <rect x="0.0" y="0" width="1200.0" height="978" fill="url(#background)"  />
+    <rect x="0.0" y="0" width="1200.0" height="258" fill="url(#background)"  />
     <text text-anchor="middle" x="600" y="24" font-size="17" font-family="Verdana" font-weight="bold" fill="rgb(0,0,0)"  >Call Graph</text>
-    <text text-anchor="left" x="10" y="962" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Function:</text>
-    <text text-anchor="" x="70" y="962" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" id="details" > </text>
-<rect x="10" y="929" width="1180" height="15.0" fill="#FF0000" rx="2" ry="2" onmouseover="s('simplifyFragmentData (30 samples, 100%)')" onmouseout="c()" />
-<rect x="10" y="913" width="511.29" height="15.0" fill="#FF1600" rx="2" ry="2" onmouseover="s('.rockFragmentSieve (13 samples, 43.33%)')" onmouseout="c()" />
-<rect x="521.33" y="913" width="393.29" height="15.0" fill="#FF2C00" rx="2" ry="2" onmouseover="s('aggregate (10 samples, 33.33%)')" onmouseout="c()" />
-<rect x="914.67" y="913" width="118" height="15.0" fill="#FF4200" rx="2" ry="2" onmouseover="s('reshape2::dcast (3 samples, 10%)')" onmouseout="c()" />
-<rect x="1032.67" y="913" width="78.71" height="15.0" fill="#FF5700" rx="2" ry="2" onmouseover="s('compiler:::tryCmpfun (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="1111.33" y="913" width="39.29" height="15.0" fill="#FF6D00" rx="2" ry="2" onmouseover="s('as.data.frame (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1150.67" y="913" width="39.29" height="15.0" fill="#FF8300" rx="2" ry="2" onmouseover="s('[ (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="10" y="897" width="275.29" height="15.0" fill="#FF9900" rx="2" ry="2" onmouseover="s('.sieve (7 samples, 23.33%)')" onmouseout="c()" />
-<rect x="285.33" y="897" width="157.29" height="15.0" fill="#FFAF00" rx="2" ry="2" onmouseover="s('rbind (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="442.67" y="897" width="39.29" height="15.0" fill="#FF5700" rx="2" ry="2" onmouseover="s('compiler:::tryCmpfun (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="482" y="897" width="39.29" height="15.0" fill="#FF8300" rx="2" ry="2" onmouseover="s('[ (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="521.33" y="897" width="393.29" height="15.0" fill="#FFC500" rx="2" ry="2" onmouseover="s('aggregate.default (10 samples, 33.33%)')" onmouseout="c()" />
-<rect x="914.67" y="897" width="118" height="15.0" fill="#FFDB00" rx="2" ry="2" onmouseover="s('cast (3 samples, 10%)')" onmouseout="c()" />
-<rect x="1032.67" y="897" width="78.71" height="15.0" fill="#FFF000" rx="2" ry="2" onmouseover="s('tryCatch (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="1111.33" y="897" width="39.29" height="15.0" fill="#F8FF00" rx="2" ry="2" onmouseover="s('cbind (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1150.67" y="897" width="39.29" height="15.0" fill="#E2FF00" rx="2" ry="2" onmouseover="s('[.data.frame (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="10" y="881" width="236" height="15.0" fill="#CCFF00" rx="2" ry="2" onmouseover="s('t (6 samples, 20%)')" onmouseout="c()" />
-<rect x="246" y="881" width="39.29" height="15.0" fill="#B6FF00" rx="2" ry="2" onmouseover="s('apply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="881" width="157.29" height="15.0" fill="#FFAF00" rx="2" ry="2" onmouseover="s('rbind (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="442.67" y="881" width="39.29" height="15.0" fill="#FFF000" rx="2" ry="2" onmouseover="s('tryCatch (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="482" y="881" width="39.29" height="15.0" fill="#E2FF00" rx="2" ry="2" onmouseover="s('[.data.frame (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="521.33" y="881" width="393.29" height="15.0" fill="#A0FF00" rx="2" ry="2" onmouseover="s('aggregate.data.frame (10 samples, 33.33%)')" onmouseout="c()" />
-<rect x="914.67" y="881" width="78.71" height="15.0" fill="#FF5700" rx="2" ry="2" onmouseover="s('compiler:::tryCmpfun (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="1032.67" y="881" width="78.71" height="15.0" fill="#8AFF00" rx="2" ry="2" onmouseover="s('tryCatchList (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="1111.33" y="881" width="39.29" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1150.67" y="881" width="39.29" height="15.0" fill="#5FFF00" rx="2" ry="2" onmouseover="s('which (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="10" y="865" width="236" height="15.0" fill="#49FF00" rx="2" ry="2" onmouseover="s('sapply (6 samples, 20%)')" onmouseout="c()" />
-<rect x="246" y="865" width="39.29" height="15.0" fill="#33FF00" rx="2" ry="2" onmouseover="s('vapply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="865" width="157.29" height="15.0" fill="#FF5700" rx="2" ry="2" onmouseover="s('compiler:::tryCmpfun (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="442.67" y="865" width="39.29" height="15.0" fill="#8AFF00" rx="2" ry="2" onmouseover="s('tryCatchList (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="482" y="865" width="39.29" height="15.0" fill="#1DFF00" rx="2" ry="2" onmouseover="s('anyDuplicated (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="521.33" y="865" width="236" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (6 samples, 20%)')" onmouseout="c()" />
-<rect x="757.33" y="865" width="157.29" height="15.0" fill="#FF8300" rx="2" ry="2" onmouseover="s('[ (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="914.67" y="865" width="78.71" height="15.0" fill="#FFF000" rx="2" ry="2" onmouseover="s('tryCatch (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="1032.67" y="865" width="78.71" height="15.0" fill="#07FF00" rx="2" ry="2" onmouseover="s('tryCatchOne (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="1111.33" y="865" width="39.29" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1150.67" y="865" width="39.29" height="15.0" fill="#00FF24" rx="2" ry="2" onmouseover="s('is.na (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="10" y="849" width="236" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (6 samples, 20%)')" onmouseout="c()" />
-<rect x="246" y="849" width="39.29" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="849" width="157.29" height="15.0" fill="#FFF000" rx="2" ry="2" onmouseover="s('tryCatch (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="442.67" y="849" width="39.29" height="15.0" fill="#07FF00" rx="2" ry="2" onmouseover="s('tryCatchOne (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="482" y="849" width="39.29" height="15.0" fill="#00FF3A" rx="2" ry="2" onmouseover="s('anyDuplicated.default (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="521.33" y="849" width="236" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (6 samples, 20%)')" onmouseout="c()" />
-<rect x="757.33" y="849" width="157.29" height="15.0" fill="#E2FF00" rx="2" ry="2" onmouseover="s('[.data.frame (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="914.67" y="849" width="78.71" height="15.0" fill="#8AFF00" rx="2" ry="2" onmouseover="s('tryCatchList (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="1032.67" y="849" width="78.71" height="15.0" fill="#00FF50" rx="2" ry="2" onmouseover="s('doTryCatch (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="1111.33" y="849" width="39.29" height="15.0" fill="#00FF66" rx="2" ry="2" onmouseover="s('ifelse (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="10" y="833" width="236" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (6 samples, 20%)')" onmouseout="c()" />
-<rect x="246" y="833" width="39.29" height="15.0" fill="#00FF7C" rx="2" ry="2" onmouseover="s('names (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="833" width="157.29" height="15.0" fill="#8AFF00" rx="2" ry="2" onmouseover="s('tryCatchList (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="442.67" y="833" width="39.29" height="15.0" fill="#00FF50" rx="2" ry="2" onmouseover="s('doTryCatch (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="521.33" y="833" width="157.29" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="678.67" y="833" width="39.29" height="15.0" fill="#00FF92" rx="2" ry="2" onmouseover="s('as.character (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="718" y="833" width="39.29" height="15.0" fill="#00FFA8" rx="2" ry="2" onmouseover="s('unlist (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="757.33" y="833" width="157.29" height="15.0" fill="#00FFBD" rx="2" ry="2" onmouseover="s('match (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="914.67" y="833" width="78.71" height="15.0" fill="#07FF00" rx="2" ry="2" onmouseover="s('tryCatchOne (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="1032.67" y="833" width="78.71" height="15.0" fill="#00FFD3" rx="2" ry="2" onmouseover="s('cmpfun (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="285.33" y="817" width="157.29" height="15.0" fill="#07FF00" rx="2" ry="2" onmouseover="s('tryCatchOne (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="442.67" y="817" width="39.29" height="15.0" fill="#00FFD3" rx="2" ry="2" onmouseover="s('cmpfun (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="521.33" y="817" width="157.29" height="15.0" fill="#00FFE9" rx="2" ry="2" onmouseover="s('split (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="757.33" y="817" width="157.29" height="15.0" fill="#00FFFF" rx="2" ry="2" onmouseover="s('sort (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="914.67" y="817" width="78.71" height="15.0" fill="#00FF50" rx="2" ry="2" onmouseover="s('doTryCatch (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="1032.67" y="817" width="39.29" height="15.0" fill="#00E9FF" rx="2" ry="2" onmouseover="s('genCode (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1072" y="817" width="39.29" height="15.0" fill="#00D3FF" rx="2" ry="2" onmouseover="s('make.toplevelContext (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="801" width="157.29" height="15.0" fill="#00FF50" rx="2" ry="2" onmouseover="s('doTryCatch (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="442.67" y="801" width="39.29" height="15.0" fill="#00E9FF" rx="2" ry="2" onmouseover="s('genCode (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="521.33" y="801" width="157.29" height="15.0" fill="#00BDFF" rx="2" ry="2" onmouseover="s('split.default (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="757.33" y="801" width="157.29" height="15.0" fill="#00A8FF" rx="2" ry="2" onmouseover="s('sort.default (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="914.67" y="801" width="78.71" height="15.0" fill="#00FFD3" rx="2" ry="2" onmouseover="s('cmpfun (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="1032.67" y="801" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1072" y="801" width="39.29" height="15.0" fill="#007CFF" rx="2" ry="2" onmouseover="s('structure (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="785" width="157.29" height="15.0" fill="#00FFD3" rx="2" ry="2" onmouseover="s('cmpfun (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="442.67" y="785" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="521.33" y="785" width="157.29" height="15.0" fill="#0066FF" rx="2" ry="2" onmouseover="s('as.factor (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="757.33" y="785" width="157.29" height="15.0" fill="#0050FF" rx="2" ry="2" onmouseover="s('sort.int (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="914.67" y="785" width="39.29" height="15.0" fill="#00E9FF" rx="2" ry="2" onmouseover="s('genCode (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="785" width="39.29" height="15.0" fill="#003AFF" rx="2" ry="2" onmouseover="s('make.functionContext (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="785" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1072" y="785" width="39.29" height="15.0" fill="#000FFF" rx="2" ry="2" onmouseover="s('makeCenv (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="769" width="118" height="15.0" fill="#00E9FF" rx="2" ry="2" onmouseover="s('genCode (3 samples, 10%)')" onmouseout="c()" />
-<rect x="403.33" y="769" width="39.29" height="15.0" fill="#003AFF" rx="2" ry="2" onmouseover="s('make.functionContext (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="769" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="521.33" y="769" width="157.29" height="15.0" fill="#0700FF" rx="2" ry="2" onmouseover="s('factor (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="914.67" y="769" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="769" width="39.29" height="15.0" fill="#1D00FF" rx="2" ry="2" onmouseover="s('funEnv (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="769" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1072" y="769" width="39.29" height="15.0" fill="#007CFF" rx="2" ry="2" onmouseover="s('structure (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="753" width="118" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (3 samples, 10%)')" onmouseout="c()" />
-<rect x="403.33" y="753" width="39.29" height="15.0" fill="#1D00FF" rx="2" ry="2" onmouseover="s('funEnv (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="753" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="521.33" y="753" width="157.29" height="15.0" fill="#4900FF" rx="2" ry="2" onmouseover="s('sort.list (4 samples, 13.33%)')" onmouseout="c()" />
-<rect x="914.67" y="753" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="753" width="39.29" height="15.0" fill="#5F00FF" rx="2" ry="2" onmouseover="s('findLocalsList (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="753" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1072" y="753" width="39.29" height="15.0" fill="#8A00FF" rx="2" ry="2" onmouseover="s('frameTypes (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="737" width="118" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (3 samples, 10%)')" onmouseout="c()" />
-<rect x="403.33" y="737" width="39.29" height="15.0" fill="#5F00FF" rx="2" ry="2" onmouseover="s('findLocalsList (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="737" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="914.67" y="737" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="737" width="39.29" height="15.0" fill="#A000FF" rx="2" ry="2" onmouseover="s('findLocalsList1 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="737" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="721" width="118" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (3 samples, 10%)')" onmouseout="c()" />
-<rect x="403.33" y="721" width="39.29" height="15.0" fill="#A000FF" rx="2" ry="2" onmouseover="s('findLocalsList1 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="721" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="914.67" y="721" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="721" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="721" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="705" width="118" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (3 samples, 10%)')" onmouseout="c()" />
-<rect x="403.33" y="705" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="705" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="914.67" y="705" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="705" width="39.29" height="15.0" fill="#00FFA8" rx="2" ry="2" onmouseover="s('unlist (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="705" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="689" width="118" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (3 samples, 10%)')" onmouseout="c()" />
-<rect x="403.33" y="689" width="39.29" height="15.0" fill="#00FFA8" rx="2" ry="2" onmouseover="s('unlist (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="689" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="914.67" y="689" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="689" width="39.29" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="689" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="673" width="118" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (3 samples, 10%)')" onmouseout="c()" />
-<rect x="403.33" y="673" width="39.29" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="673" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="914.67" y="673" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="673" width="39.29" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="673" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="657" width="118" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (3 samples, 10%)')" onmouseout="c()" />
-<rect x="403.33" y="657" width="39.29" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="657" width="39.29" height="15.0" fill="#CC00FF" rx="2" ry="2" onmouseover="s('cmpSymbolAssign (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="914.67" y="657" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="657" width="39.29" height="15.0" fill="#A000FF" rx="2" ry="2" onmouseover="s('findLocalsList1 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="657" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="641" width="118" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (3 samples, 10%)')" onmouseout="c()" />
-<rect x="403.33" y="641" width="39.29" height="15.0" fill="#A000FF" rx="2" ry="2" onmouseover="s('findLocalsList1 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="641" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="914.67" y="641" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="641" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="641" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="625" width="78.71" height="15.0" fill="#E200FF" rx="2" ry="2" onmouseover="s('cmpForBody (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="625" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="625" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="625" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="914.67" y="625" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="625" width="39.29" height="15.0" fill="#00FFA8" rx="2" ry="2" onmouseover="s('unlist (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="625" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="609" width="78.71" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="609" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="609" width="39.29" height="15.0" fill="#00FFA8" rx="2" ry="2" onmouseover="s('unlist (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="609" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="914.67" y="609" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="609" width="39.29" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="609" width="39.29" height="15.0" fill="#F800FF" rx="2" ry="2" onmouseover="s('cmpPrim2 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="593" width="78.71" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="593" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="593" width="39.29" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="593" width="39.29" height="15.0" fill="#FF00F0" rx="2" ry="2" onmouseover="s('getInlineInfo (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="914.67" y="593" width="39.29" height="15.0" fill="#FF00F0" rx="2" ry="2" onmouseover="s('getInlineInfo (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="593" width="39.29" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="593" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="577" width="78.71" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="577" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="577" width="39.29" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="442.67" y="577" width="39.29" height="15.0" fill="#FF00DB" rx="2" ry="2" onmouseover="s('findCenvVar (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="914.67" y="577" width="39.29" height="15.0" fill="#FF00DB" rx="2" ry="2" onmouseover="s('findCenvVar (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="577" width="39.29" height="15.0" fill="#A000FF" rx="2" ry="2" onmouseover="s('findLocalsList1 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="577" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="561" width="78.71" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="561" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="561" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="914.67" y="561" width="39.29" height="15.0" fill="#FF00C5" rx="2" ry="2" onmouseover="s('exists (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="561" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="561" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="545" width="78.71" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="545" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="545" width="39.29" height="15.0" fill="#A000FF" rx="2" ry="2" onmouseover="s('findLocalsList1 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="545" width="39.29" height="15.0" fill="#00FFA8" rx="2" ry="2" onmouseover="s('unlist (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="545" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="529" width="78.71" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="529" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="529" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="529" width="39.29" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="529" width="39.29" height="15.0" fill="#F800FF" rx="2" ry="2" onmouseover="s('cmpPrim2 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="513" width="78.71" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="513" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="513" width="39.29" height="15.0" fill="#00FFA8" rx="2" ry="2" onmouseover="s('unlist (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="513" width="39.29" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="1032.67" y="513" width="39.29" height="15.0" fill="#FF00AF" rx="2" ry="2" onmouseover="s('make.argContext (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="497" width="78.71" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="497" width="39.29" height="15.0" fill="#CC00FF" rx="2" ry="2" onmouseover="s('cmpSymbolAssign (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="497" width="39.29" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="497" width="39.29" height="15.0" fill="#A000FF" rx="2" ry="2" onmouseover="s('findLocalsList1 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="481" width="118" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (3 samples, 10%)')" onmouseout="c()" />
-<rect x="403.33" y="481" width="39.29" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="481" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="465" width="118" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (3 samples, 10%)')" onmouseout="c()" />
-<rect x="403.33" y="465" width="39.29" height="15.0" fill="#A000FF" rx="2" ry="2" onmouseover="s('findLocalsList1 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="465" width="39.29" height="15.0" fill="#00FFA8" rx="2" ry="2" onmouseover="s('unlist (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="449" width="78.71" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="449" width="39.29" height="15.0" fill="#FF0099" rx="2" ry="2" onmouseover="s('cmpCallSymFun (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="449" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="449" width="39.29" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="433" width="78.71" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="433" width="39.29" height="15.0" fill="#FF0083" rx="2" ry="2" onmouseover="s('cmpCallArgs (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="433" width="39.29" height="15.0" fill="#00FFA8" rx="2" ry="2" onmouseover="s('unlist (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="954" y="433" width="39.29" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="417" width="78.71" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="417" width="39.29" height="15.0" fill="#FF006D" rx="2" ry="2" onmouseover="s('cb$putconst (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="417" width="39.29" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="401" width="78.71" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="401" width="39.29" height="15.0" fill="#00E9FF" rx="2" ry="2" onmouseover="s('genCode (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="401" width="39.29" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="385" width="78.71" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (2 samples, 6.67%)')" onmouseout="c()" />
-<rect x="364" y="385" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="385" width="39.29" height="15.0" fill="#A000FF" rx="2" ry="2" onmouseover="s('findLocalsList1 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="369" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="324.67" y="369" width="39.29" height="15.0" fill="#FF00F0" rx="2" ry="2" onmouseover="s('getInlineInfo (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="369" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="369" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="353" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="324.67" y="353" width="39.29" height="15.0" fill="#FF00DB" rx="2" ry="2" onmouseover="s('findCenvVar (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="353" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="353" width="39.29" height="15.0" fill="#00FFA8" rx="2" ry="2" onmouseover="s('unlist (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="337" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="324.67" y="337" width="39.29" height="15.0" fill="#FF00C5" rx="2" ry="2" onmouseover="s('exists (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="337" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="337" width="39.29" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="321" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="321" width="39.29" height="15.0" fill="#00E9FF" rx="2" ry="2" onmouseover="s('genCode (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="321" width="39.29" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="305" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="305" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="305" width="39.29" height="15.0" fill="#A000FF" rx="2" ry="2" onmouseover="s('findLocalsList1 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="289" width="39.29" height="15.0" fill="#E200FF" rx="2" ry="2" onmouseover="s('cmpForBody (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="289" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="289" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="273" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="273" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="273" width="39.29" height="15.0" fill="#00FFA8" rx="2" ry="2" onmouseover="s('unlist (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="257" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="257" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="257" width="39.29" height="15.0" fill="#75FF00" rx="2" ry="2" onmouseover="s('lapply (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="241" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="241" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="241" width="39.29" height="15.0" fill="#00FF0F" rx="2" ry="2" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="225" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="225" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="225" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="209" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="209" width="39.29" height="15.0" fill="#FF0099" rx="2" ry="2" onmouseover="s('cmpCallSymFun (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="209" width="39.29" height="15.0" fill="#A000FF" rx="2" ry="2" onmouseover="s('findLocalsList1 (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="193" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="193" width="39.29" height="15.0" fill="#FF0083" rx="2" ry="2" onmouseover="s('cmpCallArgs (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="403.33" y="193" width="39.29" height="15.0" fill="#B600FF" rx="2" ry="2" onmouseover="s('unique (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="177" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="177" width="39.29" height="15.0" fill="#FF006D" rx="2" ry="2" onmouseover="s('cb$putconst (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="161" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="161" width="39.29" height="15.0" fill="#00E9FF" rx="2" ry="2" onmouseover="s('genCode (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="145" width="39.29" height="15.0" fill="#CC00FF" rx="2" ry="2" onmouseover="s('cmpSymbolAssign (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="145" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="129" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="129" width="39.29" height="15.0" fill="#FF0057" rx="2" ry="2" onmouseover="s('cmpSym (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="113" width="39.29" height="15.0" fill="#0024FF" rx="2" ry="2" onmouseover="s('cmpCall (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="113" width="39.29" height="15.0" fill="#FF0042" rx="2" ry="2" onmouseover="s('findVar (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="97" width="39.29" height="15.0" fill="#3300FF" rx="2" ry="2" onmouseover="s('tryInline (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="97" width="39.29" height="15.0" fill="#FF00DB" rx="2" ry="2" onmouseover="s('findCenvVar (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="81" width="39.29" height="15.0" fill="#7500FF" rx="2" ry="2" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="364" y="81" width="39.29" height="15.0" fill="#FF002C" rx="2" ry="2" onmouseover="s('$ (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="65" width="39.29" height="15.0" fill="#FF0016" rx="2" ry="2" onmouseover="s('cmpSubsetDispatch (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="49" width="39.29" height="15.0" fill="#0092FF" rx="2" ry="2" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" />
-<rect x="285.33" y="33" width="39.29" height="15.0" fill="#FF0057" rx="2" ry="2" onmouseover="s('cmpSym (1 samples, 3.33%)')" onmouseout="c()" />
-<text text-anchor="" x="13" y="939.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('simplifyFragmentData (30 samples, 100%)')" onmouseout="c()" >simplifyFragmentData</text>
-<text text-anchor="" x="13" y="923.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('.rockFragmentSieve (13 samples, 43.33%)')" onmouseout="c()" >.rockFragmentSieve</text>
-<text text-anchor="" x="524.33" y="923.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('aggregate (10 samples, 33.33%)')" onmouseout="c()" >aggregate</text>
-<text text-anchor="" x="1153.67" y="923.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('[ (1 samples, 3.33%)')" onmouseout="c()" >[</text>
-<text text-anchor="" x="13" y="907.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('.sieve (7 samples, 23.33%)')" onmouseout="c()" >.sieve</text>
-<text text-anchor="" x="288.33" y="907.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('rbind (4 samples, 13.33%)')" onmouseout="c()" >rbind</text>
-<text text-anchor="" x="485" y="907.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('[ (1 samples, 3.33%)')" onmouseout="c()" >[</text>
-<text text-anchor="" x="524.33" y="907.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('aggregate.default (10 samples, 33.33%)')" onmouseout="c()" >aggregate.default</text>
-<text text-anchor="" x="917.67" y="907.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cast (3 samples, 10%)')" onmouseout="c()" >cast</text>
-<text text-anchor="" x="13" y="891.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('t (6 samples, 20%)')" onmouseout="c()" >t</text>
-<text text-anchor="" x="288.33" y="891.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('rbind (4 samples, 13.33%)')" onmouseout="c()" >rbind</text>
-<text text-anchor="" x="524.33" y="891.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('aggregate.data.frame (10 samples, 33.33%)')" onmouseout="c()" >aggregate.data.frame</text>
-<text text-anchor="" x="13" y="875.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('sapply (6 samples, 20%)')" onmouseout="c()" >sapply</text>
-<text text-anchor="" x="524.33" y="875.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('lapply (6 samples, 20%)')" onmouseout="c()" >lapply</text>
-<text text-anchor="" x="760.33" y="875.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('[ (4 samples, 13.33%)')" onmouseout="c()" >[</text>
-<text text-anchor="" x="1114.33" y="875.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="13" y="859.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('lapply (6 samples, 20%)')" onmouseout="c()" >lapply</text>
-<text text-anchor="" x="249" y="859.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="288.33" y="859.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('tryCatch (4 samples, 13.33%)')" onmouseout="c()" >tryCatch</text>
-<text text-anchor="" x="524.33" y="859.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (6 samples, 20%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="760.33" y="859.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('[.data.frame (4 samples, 13.33%)')" onmouseout="c()" >[.data.frame</text>
-<text text-anchor="" x="13" y="843.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (6 samples, 20%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="288.33" y="843.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('tryCatchList (4 samples, 13.33%)')" onmouseout="c()" >tryCatchList</text>
-<text text-anchor="" x="524.33" y="843.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('lapply (4 samples, 13.33%)')" onmouseout="c()" >lapply</text>
-<text text-anchor="" x="760.33" y="843.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('match (4 samples, 13.33%)')" onmouseout="c()" >match</text>
-<text text-anchor="" x="1035.67" y="843.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmpfun (2 samples, 6.67%)')" onmouseout="c()" >cmpfun</text>
-<text text-anchor="" x="288.33" y="827.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('tryCatchOne (4 samples, 13.33%)')" onmouseout="c()" >tryCatchOne</text>
-<text text-anchor="" x="524.33" y="827.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('split (4 samples, 13.33%)')" onmouseout="c()" >split</text>
-<text text-anchor="" x="760.33" y="827.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('sort (4 samples, 13.33%)')" onmouseout="c()" >sort</text>
-<text text-anchor="" x="288.33" y="811.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('doTryCatch (4 samples, 13.33%)')" onmouseout="c()" >doTryCatch</text>
-<text text-anchor="" x="524.33" y="811.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('split.default (4 samples, 13.33%)')" onmouseout="c()" >split.default</text>
-<text text-anchor="" x="760.33" y="811.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('sort.default (4 samples, 13.33%)')" onmouseout="c()" >sort.default</text>
-<text text-anchor="" x="917.67" y="811.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmpfun (2 samples, 6.67%)')" onmouseout="c()" >cmpfun</text>
-<text text-anchor="" x="1035.67" y="811.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="795.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmpfun (4 samples, 13.33%)')" onmouseout="c()" >cmpfun</text>
-<text text-anchor="" x="445.67" y="795.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="524.33" y="795.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('as.factor (4 samples, 13.33%)')" onmouseout="c()" >as.factor</text>
-<text text-anchor="" x="760.33" y="795.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('sort.int (4 samples, 13.33%)')" onmouseout="c()" >sort.int</text>
-<text text-anchor="" x="288.33" y="779.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('genCode (3 samples, 10%)')" onmouseout="c()" >genCode</text>
-<text text-anchor="" x="524.33" y="779.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('factor (4 samples, 13.33%)')" onmouseout="c()" >factor</text>
-<text text-anchor="" x="917.67" y="779.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="763.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (3 samples, 10%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="524.33" y="763.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('sort.list (4 samples, 13.33%)')" onmouseout="c()" >sort.list</text>
-<text text-anchor="" x="1035.67" y="763.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="288.33" y="747.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmpCall (3 samples, 10%)')" onmouseout="c()" >cmpCall</text>
-<text text-anchor="" x="445.67" y="747.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="1035.67" y="747.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="731.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('tryInline (3 samples, 10%)')" onmouseout="c()" >tryInline</text>
-<text text-anchor="" x="445.67" y="731.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="917.67" y="731.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="288.33" y="715.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (3 samples, 10%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="917.67" y="715.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="699.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (3 samples, 10%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="1035.67" y="699.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="288.33" y="683.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmpCall (3 samples, 10%)')" onmouseout="c()" >cmpCall</text>
-<text text-anchor="" x="445.67" y="683.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="957" y="683.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="1035.67" y="683.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="667.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('tryInline (3 samples, 10%)')" onmouseout="c()" >tryInline</text>
-<text text-anchor="" x="406.33" y="667.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="917.67" y="667.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="288.33" y="651.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (3 samples, 10%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="445.67" y="651.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="917.67" y="651.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="367" y="635.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="1035.67" y="635.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="288.33" y="619.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (2 samples, 6.67%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="603.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmpCall (2 samples, 6.67%)')" onmouseout="c()" >cmpCall</text>
-<text text-anchor="" x="957" y="603.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="1035.67" y="603.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="367" y="587.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="406.33" y="587.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="288.33" y="571.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (2 samples, 6.67%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="367" y="571.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="555.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (2 samples, 6.67%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="1035.67" y="555.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="288.33" y="539.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmpCall (2 samples, 6.67%)')" onmouseout="c()" >cmpCall</text>
-<text text-anchor="" x="367" y="523.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="957" y="523.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="288.33" y="507.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (2 samples, 6.67%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="288.33" y="491.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (3 samples, 10%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="406.33" y="491.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="288.33" y="475.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmpCall (3 samples, 10%)')" onmouseout="c()" >cmpCall</text>
-<text text-anchor="" x="288.33" y="443.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (2 samples, 6.67%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="957" y="443.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="288.33" y="427.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (2 samples, 6.67%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="411.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmpCall (2 samples, 6.67%)')" onmouseout="c()" >cmpCall</text>
-<text text-anchor="" x="406.33" y="411.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="367" y="395.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="379.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="288.33" y="363.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="367" y="347.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="406.33" y="331.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="288.33" y="315.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="367" y="315.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="283.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="367" y="267.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="367" y="251.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="406.33" y="251.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (1 samples, 3.33%)')" onmouseout="c()" >FUN</text>
-<text text-anchor="" x="288.33" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="288.33" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="367" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="139.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
-<text text-anchor="" x="288.33" y="91.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('h (1 samples, 3.33%)')" onmouseout="c()" >h</text>
-<text text-anchor="" x="367" y="91.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('$ (1 samples, 3.33%)')" onmouseout="c()" >$</text>
-<text text-anchor="" x="288.33" y="59.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cmp (1 samples, 3.33%)')" onmouseout="c()" >cmp</text>
+    <text text-anchor="left" x="10" y="242" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Function:</text>
+    <text text-anchor="" x="70" y="242" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" id="details" > </text>
+<rect x="10" y="209" width="1180" height="15.0" fill="#FF0000" rx="2" ry="2" onmouseover="s('simplifyFragmentData (15 samples, 100%)')" onmouseout="c()" />
+<rect x="10" y="193" width="708" height="15.0" fill="#FF3500" rx="2" ry="2" onmouseover="s('aggregate (9 samples, 60%)')" onmouseout="c()" />
+<rect x="718" y="193" width="393.29" height="15.0" fill="#FF6A00" rx="2" ry="2" onmouseover="s('.rockFragmentSieve (5 samples, 33.33%)')" onmouseout="c()" />
+<rect x="1111.33" y="193" width="78.71" height="15.0" fill="#FF9E00" rx="2" ry="2" onmouseover="s('reshape2::dcast (1 samples, 6.67%)')" onmouseout="c()" />
+<rect x="10" y="177" width="708" height="15.0" fill="#FFD300" rx="2" ry="2" onmouseover="s('aggregate.default (9 samples, 60%)')" onmouseout="c()" />
+<rect x="718" y="177" width="236" height="15.0" fill="#F6FF00" rx="2" ry="2" onmouseover="s('.sieve (3 samples, 20%)')" onmouseout="c()" />
+<rect x="954" y="177" width="78.71" height="15.0" fill="#C1FF00" rx="2" ry="2" onmouseover="s('[ (1 samples, 6.67%)')" onmouseout="c()" />
+<rect x="1032.67" y="177" width="78.71" height="15.0" fill="#8DFF00" rx="2" ry="2" onmouseover="s('tolower (1 samples, 6.67%)')" onmouseout="c()" />
+<rect x="1111.33" y="177" width="78.71" height="15.0" fill="#58FF00" rx="2" ry="2" onmouseover="s('cast (1 samples, 6.67%)')" onmouseout="c()" />
+<rect x="10" y="161" width="708" height="15.0" fill="#23FF00" rx="2" ry="2" onmouseover="s('aggregate.data.frame (9 samples, 60%)')" onmouseout="c()" />
+<rect x="718" y="161" width="157.29" height="15.0" fill="#00FF12" rx="2" ry="2" onmouseover="s('apply (2 samples, 13.33%)')" onmouseout="c()" />
+<rect x="954" y="161" width="78.71" height="15.0" fill="#00FF46" rx="2" ry="2" onmouseover="s('[.data.frame (1 samples, 6.67%)')" onmouseout="c()" />
+<rect x="1111.33" y="161" width="78.71" height="15.0" fill="#00FF7B" rx="2" ry="2" onmouseover="s('mapply (1 samples, 6.67%)')" onmouseout="c()" />
+<rect x="10" y="145" width="393.29" height="15.0" fill="#00FFB0" rx="2" ry="2" onmouseover="s('lapply (5 samples, 33.33%)')" onmouseout="c()" />
+<rect x="403.33" y="145" width="314.71" height="15.0" fill="#C1FF00" rx="2" ry="2" onmouseover="s('[ (4 samples, 26.67%)')" onmouseout="c()" />
+<rect x="954" y="145" width="78.71" height="15.0" fill="#00FFE5" rx="2" ry="2" onmouseover="s('names (1 samples, 6.67%)')" onmouseout="c()" />
+<rect x="1111.33" y="145" width="78.71" height="15.0" fill="#00E5FF" rx="2" ry="2" onmouseover="s('&lt;Anonymous&gt; (1 samples, 6.67%)')" onmouseout="c()" />
+<rect x="10" y="129" width="393.29" height="15.0" fill="#00B0FF" rx="2" ry="2" onmouseover="s('FUN (5 samples, 33.33%)')" onmouseout="c()" />
+<rect x="403.33" y="129" width="314.71" height="15.0" fill="#00FF46" rx="2" ry="2" onmouseover="s('[.data.frame (4 samples, 26.67%)')" onmouseout="c()" />
+<rect x="1111.33" y="129" width="78.71" height="15.0" fill="#007BFF" rx="2" ry="2" onmouseover="s('rev (1 samples, 6.67%)')" onmouseout="c()" />
+<rect x="10" y="113" width="314.71" height="15.0" fill="#00FFB0" rx="2" ry="2" onmouseover="s('lapply (4 samples, 26.67%)')" onmouseout="c()" />
+<rect x="403.33" y="113" width="314.71" height="15.0" fill="#0046FF" rx="2" ry="2" onmouseover="s('match (4 samples, 26.67%)')" onmouseout="c()" />
+<rect x="1111.33" y="113" width="78.71" height="15.0" fill="#0012FF" rx="2" ry="2" onmouseover="s('expand.grid (1 samples, 6.67%)')" onmouseout="c()" />
+<rect x="10" y="97" width="236" height="15.0" fill="#2300FF" rx="2" ry="2" onmouseover="s('split (3 samples, 20%)')" onmouseout="c()" />
+<rect x="403.33" y="97" width="314.71" height="15.0" fill="#5800FF" rx="2" ry="2" onmouseover="s('sort (4 samples, 26.67%)')" onmouseout="c()" />
+<rect x="1111.33" y="97" width="78.71" height="15.0" fill="#8D00FF" rx="2" ry="2" onmouseover="s('paste0 (1 samples, 6.67%)')" onmouseout="c()" />
+<rect x="10" y="81" width="236" height="15.0" fill="#C100FF" rx="2" ry="2" onmouseover="s('split.default (3 samples, 20%)')" onmouseout="c()" />
+<rect x="403.33" y="81" width="314.71" height="15.0" fill="#F600FF" rx="2" ry="2" onmouseover="s('sort.default (4 samples, 26.67%)')" onmouseout="c()" />
+<rect x="10" y="65" width="236" height="15.0" fill="#FF00D3" rx="2" ry="2" onmouseover="s('as.factor (3 samples, 20%)')" onmouseout="c()" />
+<rect x="403.33" y="65" width="314.71" height="15.0" fill="#FF009E" rx="2" ry="2" onmouseover="s('sort.int (4 samples, 26.67%)')" onmouseout="c()" />
+<rect x="10" y="49" width="236" height="15.0" fill="#FF006A" rx="2" ry="2" onmouseover="s('factor (3 samples, 20%)')" onmouseout="c()" />
+<rect x="10" y="33" width="236" height="15.0" fill="#FF0035" rx="2" ry="2" onmouseover="s('sort.list (3 samples, 20%)')" onmouseout="c()" />
+<text text-anchor="" x="13" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('simplifyFragmentData (15 samples, 100%)')" onmouseout="c()" >simplifyFragmentData</text>
+<text text-anchor="" x="13" y="203.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('aggregate (9 samples, 60%)')" onmouseout="c()" >aggregate</text>
+<text text-anchor="" x="721" y="203.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('.rockFragmentSieve (5 samples, 33.33%)')" onmouseout="c()" >.rockFragmentSieve</text>
+<text text-anchor="" x="13" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('aggregate.default (9 samples, 60%)')" onmouseout="c()" >aggregate.default</text>
+<text text-anchor="" x="721" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('.sieve (3 samples, 20%)')" onmouseout="c()" >.sieve</text>
+<text text-anchor="" x="957" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('[ (1 samples, 6.67%)')" onmouseout="c()" >[</text>
+<text text-anchor="" x="1035.67" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('tolower (1 samples, 6.67%)')" onmouseout="c()" >tolower</text>
+<text text-anchor="" x="1114.33" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('cast (1 samples, 6.67%)')" onmouseout="c()" >cast</text>
+<text text-anchor="" x="13" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('aggregate.data.frame (9 samples, 60%)')" onmouseout="c()" >aggregate.data.frame</text>
+<text text-anchor="" x="721" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('apply (2 samples, 13.33%)')" onmouseout="c()" >apply</text>
+<text text-anchor="" x="1114.33" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('mapply (1 samples, 6.67%)')" onmouseout="c()" >mapply</text>
+<text text-anchor="" x="13" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('lapply (5 samples, 33.33%)')" onmouseout="c()" >lapply</text>
+<text text-anchor="" x="406.33" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('[ (4 samples, 26.67%)')" onmouseout="c()" >[</text>
+<text text-anchor="" x="957" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('names (1 samples, 6.67%)')" onmouseout="c()" >names</text>
+<text text-anchor="" x="13" y="139.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('FUN (5 samples, 33.33%)')" onmouseout="c()" >FUN</text>
+<text text-anchor="" x="406.33" y="139.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('[.data.frame (4 samples, 26.67%)')" onmouseout="c()" >[.data.frame</text>
+<text text-anchor="" x="1114.33" y="139.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('rev (1 samples, 6.67%)')" onmouseout="c()" >rev</text>
+<text text-anchor="" x="13" y="123.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('lapply (4 samples, 26.67%)')" onmouseout="c()" >lapply</text>
+<text text-anchor="" x="406.33" y="123.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('match (4 samples, 26.67%)')" onmouseout="c()" >match</text>
+<text text-anchor="" x="13" y="107.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('split (3 samples, 20%)')" onmouseout="c()" >split</text>
+<text text-anchor="" x="406.33" y="107.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('sort (4 samples, 26.67%)')" onmouseout="c()" >sort</text>
+<text text-anchor="" x="1114.33" y="107.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('paste0 (1 samples, 6.67%)')" onmouseout="c()" >paste0</text>
+<text text-anchor="" x="13" y="91.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('split.default (3 samples, 20%)')" onmouseout="c()" >split.default</text>
+<text text-anchor="" x="406.33" y="91.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('sort.default (4 samples, 26.67%)')" onmouseout="c()" >sort.default</text>
+<text text-anchor="" x="13" y="75.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('as.factor (3 samples, 20%)')" onmouseout="c()" >as.factor</text>
+<text text-anchor="" x="406.33" y="75.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('sort.int (4 samples, 26.67%)')" onmouseout="c()" >sort.int</text>
+<text text-anchor="" x="13" y="59.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('factor (3 samples, 20%)')" onmouseout="c()" >factor</text>
+<text text-anchor="" x="13" y="43.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" onmouseover="s('sort.list (3 samples, 20%)')" onmouseout="c()" >sort.list</text>
 
 
     </svg>
