@@ -16,4 +16,4 @@ Suggests: lattice, dismo, rgdal, jsonlite, RODBC, httr, rgeos, rvest,
 Repository: CRAN
 URL: http://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

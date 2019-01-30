@@ -10,7 +10,8 @@
 \title{Extract component tables from Soil Data Access}
 \description{Get, format, impute, and return component tables.}
 \usage{
-fetchSDA_component(WHERE = NULL, duplicates = FALSE, childs = TRUE, rmHzErrors = FALSE, 
+fetchSDA_component(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
+                   nullFragsAreZero = TRUE, rmHzErrors = FALSE, 
                    stringsAsFactors = default.stringsAsFactors()
                    )
                    
@@ -20,7 +21,7 @@ get_component_from_SDA(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                        stringsAsFactors = default.stringsAsFactors()
                        )
                        
-get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE, 
+get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE, nullFragsAreZero = TRUE,
                       stringsAsFactors = default.stringsAsFactors()
                       )
                       
@@ -37,6 +38,7 @@ get_cosoilmoist_from_NASIS(impute = TRUE, stringsAsFactors = default.stringsAsFa
   \item{duplicates}{logical; if TRUE duplicate nationalmusym are returned}
   \item{childs}{logical; if FALSE parent material and geomorphic child tables are not flattened and appended}
   \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)}
+  \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details}
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: FALSE)}
   UE)	
   \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
@@ -47,7 +49,10 @@ get_cosoilmoist_from_NASIS(impute = TRUE, stringsAsFactors = default.stringsAsFa
 
 If the duplicates argument is set to TRUE, duplicate components are returned. This is not necessary with data returned from NASIS, which has one unique national map unit. SDA has duplicate map national map units, one for each legend it exists in.
 
-The function get_cosoilmoist_from_NASIS_db() only works only on Windows , and requires a 'nasis_local' ODBC connection. See the \href{http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html}{NASIS ODBC Setup tutorial} for instructions. }
+The function get_cosoilmoist_from_NASIS_db() only works only on Windows , and requires a 'nasis_local' ODBC connection. See the \href{http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html}{NASIS ODBC Setup tutorial} for instructions. 
+
+The value of \code{nullFragsAreZero} will have a significant impact on the rock fragment fractions returned by \code{fetchSDA_component}. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and NULL rock fragment values should be interpretated as NULLs. Set \code{nullFragsAreZero = TRUE} in those cases where NULL rock fragment values should be interpreted as 0.
+}
 \value{A dataframe or list with the results.}
 \author{Stephen Roecker}
 

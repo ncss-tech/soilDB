@@ -206,12 +206,12 @@ get_mapunit_from_SDA <- function(WHERE = NULL, stringsAsFactors = default.string
 
 
 
-get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFactors = default.stringsAsFactors()) {
+get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, nullFragsAreZero = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # seriously!, how is their no fragvoltot_r column?
   q.chorizon <- paste("
   SELECT", 
   if (duplicates == FALSE) {"DISTINCT"}
-  , "hzname, hzdept_r, hzdepb_r, texture, texcl, fragvol_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, c.cokey
+  , "hzname, hzdept_r, hzdepb_r, texture, texcl, fragvol_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, c.cokey, ch.chkey
 
   FROM legend l INNER JOIN
        mapunit mu ON mu.lkey = l.lkey INNER JOIN",
@@ -235,8 +235,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFac
        (SELECT SUM(fragvol_r) fragvol_r, ch2.chkey
         FROM chorizon ch2
         INNER JOIN chfrags chf ON chf.chkey = ch2.chkey
-        WHERE fraghard IN ('indurated', 'strongly cemented', 'strongly cemented') OR 
-              fraghard IS NULL
+
         GROUP BY ch2.chkey) chfrags2  ON chfrags2.chkey = ch.chkey
   
   WHERE", WHERE,
@@ -265,12 +264,131 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFac
   # # recode metadata domains
   # d.chorizon <- uncode(d.chorizon, NASIS = FALSE)
   
+  if (childs == TRUE) {
+    
+    WHERE = paste0("WHERE co.cokey IN (", paste0(unique(d.chorizon$cokey), collapse = ","), ")")
+    
+    q.chfrags <- paste("
+                          
+                          -- find fragsize_r
+                          CREATE TABLE #RF1 (cokey INT, chkey INT, chfragskey INT, fragvol_r REAL,
+                          shape CHAR(7), para INT, nonpara INT, fragsize_r2 INT);
+                          
+                          INSERT INTO  #RF1 (cokey, chkey, chfragskey, fragvol_r, shape, para, nonpara, fragsize_r2)
+                          SELECT             co.cokey, ch.chkey, chfragskey, fragvol_r,
+                          -- shape
+                          CASE WHEN fragshp = 'Nonflat' OR fragshp IS NULL THEN 'nonflat' ELSE 'flat' END shape,
+                          -- hardness
+                          CASE WHEN fraghard IN ('Extremely weakly cemented', 'Very weakly cemented', 'Weakly cemented', 'Weakly cemented*', 'Moderately cemented', 'Moderately cemented*', 'soft')                     THEN 1 ELSE NULL END para,
+                          CASE WHEN fraghard IN ('Strongly cemented', 'Strongly cemented*', 'Very strongly cemented', 'Extremely strong', 'Indurated', 'hard')   OR fraghard IS NULL THEN 1 ELSE NULL END nonpara,
+                          -- fragsize_r
+                          CASE WHEN fragsize_r IS NOT NULL THEN fragsize_r
+                          WHEN fragsize_r IS NULL     AND fragsize_h IS NOT NULL AND fragsize_l IS NOT NULL 
+                          THEN (fragsize_h + fragsize_l) / 2
+                          WHEN fragsize_h IS NOT NULL THEN fragsize_h
+                          WHEN fragsize_l IS NOT NULL THEN fragsize_l
+                          ELSE NULL END
+                          fragsize_r2
+                          
+                          FROM
+                          component co                        LEFT OUTER JOIN
+                          chorizon  ch ON ch.cokey = co.cokey LEFT OUTER JOIN
+                          chfrags   cf ON cf.chkey = ch.chkey",
+                          
+                          WHERE = WHERE
+                          
+                          ,"
+                          ORDER BY co.cokey, ch.chkey, cf.chfragskey;
+                          
+                          
+                          -- compute logicals
+                          CREATE TABLE #RF2 (
+                          cokey INT, chkey INT, chfragskey INT, fragvol_r REAL, para INT, nonpara INT, 
+                          fine_gravel INT, gravel INT, cobbles INT, stones INT, boulders INT, channers INT, flagstones INT,
+                          unspecified INT
+                          );
+                          INSERT INTO  #RF2 (
+                          cokey, chkey, chfragskey, fragvol_r, para, nonpara, 
+                          fine_gravel, gravel, cobbles, stones, boulders, channers, flagstones,
+                          unspecified
+                          )
+                          SELECT 
+                          cokey, chkey, chfragskey, fragvol_r, para, nonpara,
+                          -- fragments
+                          CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 5   AND shape = 'nonflat' THEN 1 ELSE NULL END fine_gravel,
+                          CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 76  AND shape = 'nonflat' THEN 1 ELSE NULL END gravel,
+                          CASE WHEN   fragsize_r2 > 76  AND fragsize_r2 <= 250 AND shape = 'nonflat' THEN 1 ELSE NULL END cobbles,
+                          CASE WHEN ((fragsize_r2 > 250 AND fragsize_r2 <= 600 AND shape = 'nonflat') OR
+                          (fragsize_r2 >= 380 AND fragsize_r2 < 600 AND shape = 'flat'))
+                          THEN 1 ELSE NULL END stones,
+                          CASE WHEN   fragsize_r2 > 600 THEN 1 ELSE NULL END boulders,
+                          CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 150 AND shape = 'flat' THEN 1 ELSE NULL END channers,
+                          CASE WHEN   fragsize_r2 > 150 AND fragsize_r2 <= 380 AND shape = 'flat' THEN 1 ELSE NULL END flagstones,
+                          CASE WHEN   fragsize_r2 IS NULL                                         THEN 1 ELSE NULL END unspecified 
+                          
+                          FROM
+                          #RF1
+                          
+                          ORDER BY cokey, chkey, chfragskey;
+                          
+                          
+                          -- summarize rock fragments
+                          SELECT
+                          chkey,
+                          -- nonpara rock fragments
+                          SUM(fragvol_r * fine_gravel * nonpara)  fine_gravel,
+                          SUM(fragvol_r * gravel      * nonpara)  gravel,
+                          SUM(fragvol_r * cobbles     * nonpara)  cobbles,
+                          SUM(fragvol_r * stones      * nonpara)  stones,
+                          SUM(fragvol_r * boulders    * nonpara)  boulders,
+                          SUM(fragvol_r * channers    * nonpara)  channers,
+                          SUM(fragvol_r * flagstones  * nonpara)  flagstones,
+                          -- para rock fragments
+                          SUM(fragvol_r * fine_gravel * para)     parafine_gravel,
+                          SUM(fragvol_r * gravel      * para)     paragravel,
+                          SUM(fragvol_r * cobbles     * para)     paracobbles,
+                          SUM(fragvol_r * stones      * para)     parastones,
+                          SUM(fragvol_r * boulders    * para)     paraboulders,
+                          SUM(fragvol_r * channers    * para)     parachanners,
+                          SUM(fragvol_r * flagstones  * para)     paraflagstones,
+                          -- unspecified
+                          SUM(fragvol_r * unspecified)            unspecified,
+                          -- total_frags_pct_para
+                          SUM(fragvol_r               * nonpara)  total_frags_pct_nopf,
+                          -- total_frags_pct
+                          SUM(fragvol_r)                          total_frags_pct
+                          
+                          FROM #RF2
+                          
+                          GROUP BY cokey, chkey
+                          
+                          ORDER BY cokey, chkey;
+                          
+                          
+                          -- cleanup
+                          DROP TABLE #RF1;
+                          DROP TABLE #RF2;
+                          ")
+    
+    d.chfrags  <- SDA_query(q.chfrags)
+    
+    # r.rf.data.v2 nullFragsAreZero = TRUE
+    idx <- !names(d.chfrags) %in% "chkey"
+    if (nullFragsAreZero == TRUE) {
+      d.chfrags[idx] <- lapply(d.chfrags[idx], function(x) ifelse(is.na(x), 0, x))
+    }
+    
+    d.chorizon <- merge(d.chorizon, d.chfrags, all.x = TRUE, by = "chkey")
+    
+  }
+  
   # done
   return(d.chorizon)
 }
 
 
-fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, rmHzErrors = FALSE, 
+fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, nullFragsAreZero = TRUE, 
+                               rmHzErrors = FALSE, 
                                stringsAsFactors = default.stringsAsFactors()
                                ) {
 
