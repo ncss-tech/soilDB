@@ -3,6 +3,8 @@
 ## 
 ##
 
+library(soilDB)
+
 e <- get_extended_data_from_NASIS_db()
 
 ## R-based approach, re-write of original SQL by Dylan and Jay
@@ -34,6 +36,8 @@ horizons(x)
 
 x <- fetchNASIS(nullFragsAreZero=FALSE)
 horizons(x)
+
+
 
 
 
