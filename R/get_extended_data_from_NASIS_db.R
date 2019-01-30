@@ -204,9 +204,11 @@ LEFT OUTER JOIN (
   CASE WHEN fraghard IN (11, 4, 8, 12, 2, 13)   OR fraghard IS NULL THEN 1 ELSE NULL END nonpara,
   -- fragsize_r
   CASE WHEN fragsize_r IS NOT NULL THEN fragsize_r
-  WHEN fragsize_r IS NULL     AND fragsize_h IS NOT NULL AND fragsize_l IS NOT NULL
-  THEN (fragsize_h + fragsize_l) / 2
-  ELSE 10 END
+       WHEN fragsize_r IS NULL     AND fragsize_h IS NOT NULL AND fragsize_l IS NOT NULL 
+       THEN (fragsize_h + fragsize_l) / 2
+       WHEN fragsize_h IS NOT NULL THEN fragsize_h
+       WHEN fragsize_l IS NOT NULL THEN fragsize_l
+       ELSE NULL END
   fragsize_r2
   
   FROM
@@ -220,24 +222,27 @@ LEFT OUTER JOIN (
   -- compute logicals
   CREATE TABLE #RF2 (
   peiid INT, phiid INT, phfragsiid INT, fragvol REAL, para INT, nonpara INT, 
-  fine_gravel INT, gravel INT, cobbles INT, stones INT, boulders INT, channers INT, flagstones INT
+  fine_gravel INT, gravel INT, cobbles INT, stones INT, boulders INT, channers INT, flagstones INT,
+  unspecified INT
   );
   INSERT INTO  #RF2 (
   peiid, phiid, phfragsiid, fragvol, para, nonpara, 
-  fine_gravel, gravel, cobbles, stones, boulders, channers, flagstones
+  fine_gravel, gravel, cobbles, stones, boulders, channers, flagstones,
+  unspecified
   )
   SELECT 
   peiid, phiid, phfragsiid, fragvol, para, nonpara,
   -- fragments
-  CASE WHEN   fragsize_r2 >= 2   AND fragsize_r2 < 5   AND shape = 'nonflat' THEN 1 ELSE NULL END fine_gravel,
-  CASE WHEN   fragsize_r2 >= 2   AND fragsize_r2 < 76  AND shape = 'nonflat' THEN 1 ELSE NULL END gravel,
-  CASE WHEN   fragsize_r2 >= 76  AND fragsize_r2 < 250 AND shape = 'nonflat' THEN 1 ELSE NULL END cobbles,
-  CASE WHEN ((fragsize_r2 >= 250 AND fragsize_r2 < 600 AND shape = 'nonflat') OR
+  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 5   AND shape = 'nonflat' THEN 1 ELSE NULL END fine_gravel,
+  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 76  AND shape = 'nonflat' THEN 1 ELSE NULL END gravel,
+  CASE WHEN   fragsize_r2 > 76  AND fragsize_r2 <= 250 AND shape = 'nonflat' THEN 1 ELSE NULL END cobbles,
+  CASE WHEN ((fragsize_r2 > 250 AND fragsize_r2 <= 600 AND shape = 'nonflat') OR
   (fragsize_r2 >= 380 AND fragsize_r2 < 600 AND shape = 'flat'))
   THEN 1 ELSE NULL END stones,
-  CASE WHEN   fragsize_r2 >= 600 THEN 1 ELSE NULL END boulders,
-  CASE WHEN   fragsize_r2 >= 2   AND fragsize_r2 < 150 AND shape = 'flat' THEN 1 ELSE NULL END channers,
-  CASE WHEN   fragsize_r2 >= 150 AND fragsize_r2 < 380 AND shape = 'flat'    THEN 1 ELSE NULL END flagstones
+  CASE WHEN   fragsize_r2 > 600 THEN 1 ELSE NULL END boulders,
+  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 150 AND shape = 'flat' THEN 1 ELSE NULL END channers,
+  CASE WHEN   fragsize_r2 > 150 AND fragsize_r2 <= 380 AND shape = 'flat' THEN 1 ELSE NULL END flagstones,
+  CASE WHEN   fragsize_r2 IS NULL                                         THEN 1 ELSE NULL END unspecified 
   
   FROM
   #RF1
@@ -264,16 +269,18 @@ LEFT OUTER JOIN (
   SUM(fragvol * boulders    * para)     paraboulders,
   SUM(fragvol * channers    * para)     parachanners,
   SUM(fragvol * flagstones  * para)     paraflagstones,
+  -- unspecified
+  SUM(fragvol * unspecified)            unspecified,
   -- total_frags_pct_para
-  SUM(fragvol               * para)     total_frags_pct_para,
+  SUM(fragvol               * nonpara)  total_frags_pct_nopf,
   -- total_frags_pct
-  SUM(fragvol               * nonpara)  total_frags_pct
+  SUM(fragvol)                          total_frags_pct
   
   FROM #RF2
   
   GROUP BY peiid, phiid
   
-  ORDER BY peiid, phiid;
+  ORDER BY phiid;
   
   
   -- cleanup
