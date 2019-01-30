@@ -23,6 +23,9 @@ d <- uncode(d, stringsAsFactors = FALSE)
 RODBC::odbcClose(channel)
 
 
+system.time(x <- simplifyFragmentData(d, id.var = 'phiid', nullFragsAreZero = TRUE))
+
+
 # profile
 pd <- profileExpr(x <- simplifyFragmentData(d, id.var = 'phiid', nullFragsAreZero = TRUE))
 
