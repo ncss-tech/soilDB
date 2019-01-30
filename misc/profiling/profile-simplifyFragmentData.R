@@ -2,6 +2,7 @@
 ## http://adv-r.had.co.nz/Profiling.html#measure-perf
 ## https://cran.r-project.org/web/packages/proftools/index.html
 
+# https://github.com/ncss-tech/soilDB/issues/55
 
 library(proftools)
 library(soilDB)
@@ -21,6 +22,9 @@ d <- RODBC::sqlQuery(channel, q.rf.data, stringsAsFactors=FALSE)
 d <- uncode(d, stringsAsFactors = FALSE)
 
 RODBC::odbcClose(channel)
+
+
+system.time(x <- simplifyFragmentData(d, id.var = 'phiid', nullFragsAreZero = TRUE))
 
 
 # profile

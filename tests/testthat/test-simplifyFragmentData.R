@@ -329,6 +329,19 @@ test_that("seive returns correct size class, flat, parafragments", {
 
 
 
+## new tests for rockFragmentSieve: missing frag sizes / unspecified class
+test_that("rockFragmentSieve puts fragments without fragsize into 'unspecified' class", {
+  
+  d <- data.frame(fragvol=25, fragsize_l=NA, fragsize_r=NA, fragsize_h=NA, fragshp=NA, fraghard=NA)
+  res <- soilDB:::.rockFragmentSieve(d)
+  
+  expect_equal(res$class, 'unspecified')
+  
+})
+
+
+
+
 test_that("rockFragmentSieve assumptions are applied, results correct", {
   
   d <- data.frame(fragvol=NA, fragsize_l=NA, fragsize_r=50, fragsize_h=NA, fragshp=NA, fraghard=NA)
@@ -364,19 +377,13 @@ test_that("rockFragmentSieve assumptions are applied when all NA", {
   expect_equal(res$fragshp, 'nonflat')
   expect_equal(res$fraghard, 'strongly cemented')
   
-})
-
-test_that("rockFragmentSieve returns NA when missing any fragvol", {
-  
-  d <- data.frame(fragvol=NA, fragsize_l=NA, fragsize_r=NA, fragsize_h=NA, fragshp=NA, fraghard=NA)
-  res <- soilDB:::.rockFragmentSieve(d)
-  
-  # correct class in the absence of fragment shape / hardness
-  expect_equal(res$class, as.character(NA))
+  # class should be NA
+  expect_true(is.na(res$class))
   
 })
 
-test_that("rockFragmentSieve safe fall back from high to rv fragsize", {
+
+test_that("rockFragmentSieve safe fall-back from high to rv fragsize", {
   
   # full specification
   d <- data.frame(fragvol=10, fragsize_l=15, fragsize_r=50, fragsize_h=75, fragshp='nonflat', fraghard='strongly cemented')
@@ -405,10 +412,9 @@ test_that("rockFragmentSieve safe fall back from high to rv fragsize", {
 
 
 
-
-
 test_that("rockFragmentSieve complex sample data from NASIS, single horizon", {
   
+  # pretty common, many fragments specified for a single horizon
   res <- soilDB:::.rockFragmentSieve(d.single.hz)
   
   # correct classes
@@ -419,6 +425,7 @@ test_that("rockFragmentSieve complex sample data from NASIS, single horizon", {
 
 test_that("simplifyFragmentData complex sample data from NASIS, single horizon", {
   
+  # pretty common, many fragments specified for a single horizon
   res <- soilDB::simplifyFragmentData(d.single.hz, id.var = 'phiid', nullFragsAreZero = TRUE)
   
   # correct class totals

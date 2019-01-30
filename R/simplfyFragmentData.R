@@ -90,9 +90,24 @@
   d <- ifelse(is.na(parafrags.flat$fragsize_h), parafrags.flat$fragsize_r, parafrags.flat$fragsize_h)
   parafrags.flat$class <- .sieve(d, flat = TRUE, para = TRUE)
   
+  # combine pieces, note may contain  RF classes == NA
+  res <- rbind(frags.nonflat, frags.flat, parafrags.nonflat, parafrags.flat)
   
-  ## re-combine and return
-  return(rbind(frags.nonflat, frags.flat, parafrags.nonflat, parafrags.flat))
+  
+  # what does an NA fragment class mean?
+  # 
+  # typically, fragment size missing
+  # or, worst-case, .sieve() rules are missing criteria 
+  # 
+  # keep track of these for QC in an 'unspecified' column
+  # but only when there is a fragment volume specified
+  idx <- which(is.na(res$class) & !is.na(res$fragvol))
+  if( length(idx) > 0 ) {
+    res$class[idx] <- 'unspecified'
+  }
+  
+  # done
+  return(res)
 }
 
 
@@ -105,7 +120,8 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   fragvol <- NULL
   
   # fragment classes used in this function
-  frag.classes <- c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones')
+  # note that we are adding a catch-all for those strange phfrags records missing fragment size
+  frag.classes <- c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones', 'unspecified')
   
   # first of all, we can't do anything if the fragment volume is NA
   # warn the user and remove the offending records
@@ -120,12 +136,24 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
     return(NULL)
   }
   
+  
   # extract classes
+  # note: these will put any fragments without fragsize into an 'unspecified' class
   rf.classes <- .rockFragmentSieve(rf)
+  
+  ## this is incredibly slow (~ 5 seconds for 30k records)
+  ## NOTE: this is performed on the data, as-is: not over all possible classes as enforced by factor levels
+  # sum volume by id and class
+  # rf.sums <- ddply(rf.classes, c(id.var, 'class'), plyr::summarise, volume=sum(fragvol, na.rm=TRUE))
   
   ## NOTE: this is performed on the data, as-is: not over all possible classes as enforced by factor levels
   # sum volume by id and class
-  rf.sums <- ddply(rf.classes, c(id.var, 'class'), plyr::summarise, volume=sum(fragvol, na.rm=TRUE))
+  # much faster than ddply
+  # class cannot contain NA
+  rf.sums <- aggregate(rf.classes$fragvol, by=list(rf.classes[[id.var]], rf.classes[['class']]), FUN=sum, na.rm=TRUE)
+  # fix defualt names from aggregate()
+  names(rf.sums) <- c(id.var, 'class', 'volume')
+  
   
   ## NOTE: we set factor levels here because the reshaping (long->wide) needs to account for all possible classes
   ## NOTE: this must include all classes that related functions return
@@ -138,17 +166,6 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   
   # must determine the index to the ID column in the wide format
   id.col.idx <- which(names(rf.wide) == id.var)
-  
-  ## a thought:
-  # what does an NA fragment class mean?
-  # 
-  # typically, fragment size missing
-  # or, worst-case, .sieve() rules are missing criteria 
-  # 
-  # keep track of these for QC in an 'unspecified' column
-  #
-  if(any(names(rf.wide) == 'NA'))
-    names(rf.wide)[which(names(rf.wide) == 'NA')] <- 'unspecified'
   
   
   ## optionally convert NULL frags -> 0
