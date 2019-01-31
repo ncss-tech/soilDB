@@ -16,8 +16,6 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
   
   # convert Munsell to RGB
   d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, return_triplets=TRUE))
-  
-  # re-combine
   d <- cbind(d, d.rgb)
   
   # add a fake column for storing `sigma`
@@ -46,7 +44,24 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
     
     # filter out and mix only colors with >1 color / horizon
     dry.mix.idx <- which(dry.colors[[id.var]] %in% dry.to.mix)
+    
+    ## TODO: convert to split -> lapply -> do.call
+    ## this means moving row.names -> id.var column
+    ## something like this:
+    # dc <- split(dry.colors[dry.mix.idx, ], f = dry.colors[[id.var]][dry.mix.idx])
+    # dc.l <- lapply(dc, mix_and_clean_colors)
+    # mixed.dry <- do.call('rbind', dc.l)
+    # < move id.var -> from rownames to column and fix order >
     mixed.dry <- ddply(dry.colors[dry.mix.idx, ], id.var, mix_and_clean_colors, ...)
+    
+    # back-transform mixture to Munsell
+    m <- rgb2munsell(mixed.dry[, c('r', 'g', 'b')])
+
+    # adjust names to match NASIS
+    names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")
+
+    # combine with mixed sRGB coordinates
+    mixed.dry <- cbind(mixed.dry[, c(id.var, 'r', 'g', 'b')], m)
     
     # combine original[-horizons to be mixed] + mixed horizons
     dry.colors.final <- rbind(dry.colors[-dry.mix.idx, vars.to.keep], mixed.dry)
@@ -63,7 +78,20 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
     
     # filter out and mix only colors with >1 color / horizon
     moist.mix.idx <- which(moist.colors[[id.var]] %in% moist.to.mix)
+    ## TODO: convert to split -> lapply -> do.call
+    ## this means moving row.names -> id.var column
+    ## BUG: for some reason ddply carries over some of the original columns in the result
     mixed.moist <- ddply(moist.colors[moist.mix.idx, ], id.var, mix_and_clean_colors, ...)
+    
+    # back-transform mixture to Munsell
+    m <- rgb2munsell(mixed.moist[, c('r', 'g', 'b')])
+    
+    # adjust names to match NASIS
+    names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")
+    
+    # combine with mixed sRGB coordinates
+    mixed.moist <- cbind(mixed.moist[, c(id.var, 'r', 'g', 'b')], m)
+    
     
     # combine original[-horizons to be mixed] + mixed horizons
     moist.colors.final <- rbind(moist.colors[-moist.mix.idx, vars.to.keep], mixed.moist)

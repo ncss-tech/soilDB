@@ -4,32 +4,53 @@ context("Simplification of color data (from NASIS)")
 ## example data, from NASIS
 
 # single color / horizon
-x.simple <- structure(list(peiid = c(530765L, 530765L), 
-               phiid = c(2362223L, 2362223L), 
-               colormoistst = c("dry", "moist"), 
-               pct = c(NA_integer_, NA_integer_), 
-               colorhue = c("7.5YR", "7.5YR"), 
-               colorvalue = c(3, 2.5), 
-               colorchroma = c(4, 2)
-               ), 
-          .Names = c("peiid", "phiid", "colormoistst", "pct", "colorhue", "colorvalue", "colorchroma"), 
-          row.names = 1:2, 
-          class = "data.frame"
-          )
+x.simple <- structure(
+  list(
+    peiid = c(530765L, 530765L),
+    phiid = c(2362223L, 2362223L),
+    colormoistst = c("dry", "moist"),
+    pct = c(NA_integer_, NA_integer_),
+    colorhue = c("7.5YR", "7.5YR"),
+    colorvalue = c(3, 2.5),
+    colorchroma = c(4, 2)
+  ),
+  .Names = c(
+    "peiid",
+    "phiid",
+    "colormoistst",
+    "pct",
+    "colorhue",
+    "colorvalue",
+    "colorchroma"
+  ),
+  row.names = 1:2,
+  class = "data.frame"
+)
 
 # two colors / horizon
-x.multiple <- structure(list(peiid = c(625874L, 625874L, 625881L, 625881L), 
-                             phiid = c(2889103L, 2889103L, 2889133L, 2889133L), 
-                             colormoistst = c("moist", "moist", "dry", "dry"), 
-                             pct = c(80L, 20L, 75L, 25L), 
-                             colorhue = c("10YR", "7.5YR", "2.5Y", "2.5Y"), 
-                             colorvalue = c(5, 6, 6, 7), 
-                             colorchroma = c(6, 2, 1, 3)
-                             ), 
-                        .Names = c("peiid", "phiid", "colormoistst", "pct", "colorhue", "colorvalue", "colorchroma"), 
-                        row.names = c(344L, 345L, 396L, 397L), 
-                        class = "data.frame"
-                        )
+x.multiple <-
+  structure(
+    list(
+      peiid = c(625874L, 625874L, 625881L, 625881L),
+      phiid = c(2889103L, 2889103L, 2889133L, 2889133L),
+      colormoistst = c("moist", "moist", "dry", "dry"),
+      pct = c(80L, 20L, 75L, 25L),
+      colorhue = c("10YR", "7.5YR", "2.5Y", "2.5Y"),
+      colorvalue = c(5, 6, 6, 7),
+      colorchroma = c(6, 2, 1, 3)
+    ),
+    .Names = c(
+      "peiid",
+      "phiid",
+      "colormoistst",
+      "pct",
+      "colorhue",
+      "colorvalue",
+      "colorchroma"
+    ),
+    row.names = c(344L, 345L, 396L, 397L),
+    class = "data.frame"
+  )
 
 test_that("simplifyColorData: single color / moisture state / horizon", {
   

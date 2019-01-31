@@ -5,7 +5,7 @@
 ## https://github.com/ncss-tech/soilDB/issues/79
 # all colors are mixed, should be applied to groups of related colors
 # x: data.frame, typically from NASIS containing at least 'r', 'g', 'b' colors {0,1} and some kind of weight
-mix_and_clean_colors <- function(x, wt='pct', colorSpace='LAB') {
+mix_and_clean_colors <- function(x, wt='pct', colorSpace='LAB', backTransform=FALSE) {
   
   # sanity check: no NA
   if(any(c(is.na(x$r), is.na(x$g), is.na(x$b))))
@@ -55,17 +55,21 @@ mix_and_clean_colors <- function(x, wt='pct', colorSpace='LAB') {
     mixed.color <- data.frame(r, g, b)
   }
   
-  # back-transform mixture to Munsell
-  m <- rgb2munsell(mixed.color)
+  # optionally back-transform mixture to Munsell
+  if(backTransform) {
+
+    m <- rgb2munsell(mixed.color[, c('r', 'g', 'b')])
+
+    # adjust names to match NASIS
+    names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")
+
+    # combine with mixed sRGB coordinates
+    mixed.color <- cbind(mixed.color, m)
+  }
   
-  # adjust names to match NASIS
-  names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")
-  
-  # composite
-  res <- cbind(mixed.color, m)
   
   # done
-  return(res)
+  return(mixed.color)
   
 }
 

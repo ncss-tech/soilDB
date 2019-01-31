@@ -27,7 +27,8 @@ x$colormoistst <- "Dry"
 # setting a baseline here, there is nothing behind the results apart from anecdotal evidence
 test_that("mix_and_clean_colors basic functionality", {
   
-  res <- mix_and_clean_colors(x)
+  # there is no back-transformation to Munsell by default, request it
+  res <- mix_and_clean_colors(x, backTransform = TRUE)
   
   # should be a single row
   expect_equal(nrow(res), 1)
