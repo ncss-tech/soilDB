@@ -134,7 +134,10 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   # method is added to the new field called 'selection_method'
   # assumes that classdate is a datetime class object!
   # 26 seconds for ~ 4k pedons
-  best.tax.data <- ddply(extended_data$taxhistory, 'peiid', .pickBestTaxHistory)
+  # best.tax.data <- ddply(extended_data$taxhistory, 'peiid', .pickBestTaxHistory)
+  ed.tax <- split(extended_data$taxhistory, extended_data$taxhistory$peiid)
+  ed.tax.flat <- lapply(ed.tax, .pickBestTaxHistory)
+  best.tax.data <- do.call('rbind', ed.tax.flat)
   site(h) <- best.tax.data
   
   # load best-guess optimal records from ecositehistory
