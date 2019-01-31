@@ -388,13 +388,14 @@ LEFT OUTER JOIN (
 	d.sitepm <- RODBC::sqlQuery(channel, q.sitepm, stringsAsFactors=FALSE)
 	d.structure <- RODBC::sqlQuery(channel, q.structure, stringsAsFactors=FALSE)
 	d.hz.desgn <- RODBC::sqlQuery(channel, q.hz.desgn, stringsAsFactors=FALSE)
-  	d.hz.dessuf <- RODBC::sqlQuery(channel, q.hz.dessuf, stringsAsFactors=FALSE)
+  d.hz.dessuf <- RODBC::sqlQuery(channel, q.hz.dessuf, stringsAsFactors=FALSE)
 
 	## uncode the ones that need that here
 	d.diagnostic <- uncode(d.diagnostic, stringsAsFactors = stringsAsFactors)
 	d.rf.data    <- uncode(d.rf.data, stringsAsFactors = stringsAsFactors)
 	d.hz.texmod  <- uncode(d.hz.texmod, stringsAsFactors = stringsAsFactors)
-	d.taxhistory <- uncode(d.taxhistory, stringsAsFactors = stringsAsFactors)
+	# https://github.com/ncss-tech/soilDB/issues/53
+	d.taxhistory <- uncode(d.taxhistory, stringsAsFactors = FALSE)
 	d.sitepm     <- uncode(d.sitepm, stringsAsFactors = stringsAsFactors)
 	d.structure  <- uncode(d.structure, stringsAsFactors = stringsAsFactors)
 	d.hz.desgn <- uncode(d.hz.desgn)
@@ -415,7 +416,7 @@ LEFT OUTER JOIN (
 	}
 
 	if(nrow(d.hz.dessuf) > 0) {
-	  # generate wide-formatted, diagnostic boolean summary
+	  # generate wide-formatted, hz suffix boolean summary
 	  d.hzdesgnsuf.boolean <- .hzSuffixLongtoWide(d.hz.dessuf)
 	  d.hz.desgn <- join(d.hz.desgn, d.hzdesgnsuf.boolean, by = 'phiid', type = 'left')	
 	} else {
