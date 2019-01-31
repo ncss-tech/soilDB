@@ -22,15 +22,8 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
     stop('No site/pedons objects in local NASIS DB or selected set.', call. = FALSE)
   }
   
-  ## TODO: improve efficiency
-  # data that don't flatten well
+  # data that cannot be effectively flattened in SQL
   extended_data <- get_extended_data_from_NASIS_db(SS=SS, nullFragsAreZero=nullFragsAreZero, stringsAsFactors = stringsAsFactors)
-  
-  ## https://github.com/ncss-tech/soilDB/issues/44
-  # optionally load phlabresults table
-  if (lab) {
-    phlabresults <- get_phlabresults_data_from_NASIS_db(SS=SS)
-  }
   
   ## join horizon + hz color: all horizons
   h <- join(hz_data, color_data, by='phiid', type='left')
@@ -79,6 +72,7 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   
   
   ## test for horizonation inconsistencies... flag, and optionally remove
+  # ~ 1.3 seconds / ~ 4k pedons
   h.test <- ddply(h, 'peiid', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
   
   # which are the good (valid) ones?
@@ -95,8 +89,11 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
   assign("bad.horizons", value = data.frame(bad.horizons), envir = soilDB.env)
   
-  ## join hz + phlabresults
+  
+  ## https://github.com/ncss-tech/soilDB/issues/44
+  # optionally load phlabresults table
   if (lab) {
+    phlabresults <- get_phlabresults_data_from_NASIS_db(SS=SS)
     h <- join(h, phlabresults, by = "phiid", type = "left")
   }
   
