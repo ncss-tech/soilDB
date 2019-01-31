@@ -430,6 +430,16 @@ LEFT OUTER JOIN (
 	# summarize rock fragment data
 	if(nrow(d.rf.data) > 0) {
 	  
+	  ## basic checks for problematic data
+	  
+	  # recent NSSH changes to gravel/cobble threshold 76mm -> 75mm
+	  qc.idx <- which(d.rf.data$fragsize_h == 76)
+	  if(length(qc.idx) > 0) {
+	    msg <- sprintf('-> QC: some fragsize_h values == 76mm, may be mis-classified as cobbles [%i / %i records]', length(qc.idx), nrow(d.rf.data))
+	    message(msg)
+	  }
+	  
+	  
 	  # the results have 1 row / phiid
 	  # note: if all fragvol are NA then the result is NULL
 	  d.rf.summary <- simplifyFragmentData(d.rf.data, id.var='phiid', nullFragsAreZero = nullFragsAreZero)
