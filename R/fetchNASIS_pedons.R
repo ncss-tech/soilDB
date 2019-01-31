@@ -133,8 +133,10 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   # load best-guess optimal records from taxhistory
   # method is added to the new field called 'selection_method'
   # assumes that classdate is a datetime class object!
-  # 26 seconds for ~ 4k pedons
+  # ddply: 26 seconds for ~ 4k pedons
   # best.tax.data <- ddply(extended_data$taxhistory, 'peiid', .pickBestTaxHistory)
+  # 
+  # 2019-01-31: converting to base functions
   ed.tax <- split(extended_data$taxhistory, extended_data$taxhistory$peiid)
   ed.tax.flat <- lapply(ed.tax, .pickBestTaxHistory)
   best.tax.data <- do.call('rbind', ed.tax.flat)
@@ -172,8 +174,10 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   
   # join-in landform string
   ## 2015-11-30: short-circuts could use some work, consider pre-marking mistakes before parsing
-  # 3 seconds for ~ 4k pedons
+  # ddply: 3 seconds for ~ 4k pedons
   # lf <- ddply(extended_data$geomorph, 'peiid', .formatLandformString, name.sep=' & ')
+  #
+  # 2019-01-31: converting to base functions
   ed.lf <- split(extended_data$geomorph, extended_data$geomorph$peiid)
   ed.lf.flat <- lapply(ed.lf, .formatLandformString, name.sep=' & ')
   lf <- do.call('rbind', ed.lf.flat)
@@ -181,7 +185,7 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
     site(h) <- lf
   
   # join-in parent material strings
-  # 4 seconds for ~ 4k pedons
+  # ddply: 4 seconds for ~ 4k pedons
   pm <- ddply(extended_data$pm, 'siteiid', .formatParentMaterialString, name.sep=' & ')
   if(nrow(pm) > 0)
     site(h) <- pm

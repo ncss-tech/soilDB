@@ -41,6 +41,6 @@ flameGraph(pd, svgfile = 'fetchNASIS_pedons-flame-graph-time.svg', order = 'time
 # https://cran.r-project.org/web/packages/profmem/vignettes/profmem.html
 
 # hmm, how does this work
-p <- profmem(x <- fetchNASIS(from='pedons'), threshold = 2e5)
+# p <- profmem(x <- fetchNASIS(from='pedons'), threshold = 2e5)
 
 
