@@ -97,6 +97,7 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
     h <- join(h, phlabresults, by = "phiid", type = "left")
   }
   
+  
   ## optionally convert NA fragvol to 0
   if(nullFragsAreZero) {
     # this is the "total fragment volume" per NASIS calculation
@@ -114,7 +115,9 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   depths(h) <- peiid ~ hzdept + hzdepb
   
   # move pedon_id into @site
+  # 1 second for ~ 4k pedons
   site(h) <- ~ pedon_id
+  
   
   ## TODO: this will fail in the presence of duplicates
   # add site data to object
@@ -122,19 +125,21 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   site_data$pedon_id <- NULL
   
   # left-join via peiid
+  # < 0.1 second for ~ 4k pedons
   site(h) <- site_data
   
   
   ### TODO: consider moving this into the extended data function ###
-  ## TODO: slow
   # load best-guess optimal records from taxhistory
   # method is added to the new field called 'selection_method'
   # assumes that classdate is a datetime class object!
+  # 26 seconds for ~ 4k pedons
   best.tax.data <- ddply(extended_data$taxhistory, 'peiid', .pickBestTaxHistory)
   site(h) <- best.tax.data
   
   # load best-guess optimal records from ecositehistory
   # method is added to the new field called 'es_selection_method'
+  # 1.4 seconds for ~ 4k pedons
   best.ecosite.data <- ddply(extended_data$ecositehistory, 'siteiid', .pickBestEcosite)
   site(h) <- best.ecosite.data
   
