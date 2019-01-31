@@ -11,7 +11,8 @@ library(soilDB)
 ## http://adv-r.had.co.nz/Profiling.html#measure-perf
 ## https://cran.r-project.org/web/packages/proftools/index.html
 
-# ~ 4k pedons in local database SS => 80 seconds
+# ~ 4k pedons in local database SS => 80 seconds (slow simplifyColorData)
+# ~ 4k pedons in local database SS => 44 seconds (fast simplifyColorData)
 # system.time(x <- fetchNASIS(from='pedons'))
 pd <- profileExpr(x <- fetchNASIS(from='pedons'))
 

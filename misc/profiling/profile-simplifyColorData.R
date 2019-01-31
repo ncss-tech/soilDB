@@ -43,7 +43,8 @@ d$colorchroma <- as.numeric(as.character(d$colorchroma))
 ####
 
 
-# plyr-based approach: ~ 4k pedons => 45 seconds
+# plyr-based approach, rgb2munsell() inside groups: ~ 4k pedons => 45 seconds
+# plyr-based approach, rgb2munsell() outside groups: ~ 4k pedons => 10 seconds
 system.time(x <- simplifyColorData(d))
 
 
