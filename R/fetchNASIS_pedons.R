@@ -172,11 +172,16 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   
   # join-in landform string
   ## 2015-11-30: short-circuts could use some work, consider pre-marking mistakes before parsing
-  lf <- ddply(extended_data$geomorph, 'peiid', .formatLandformString, name.sep=' & ')
+  # 3 seconds for ~ 4k pedons
+  # lf <- ddply(extended_data$geomorph, 'peiid', .formatLandformString, name.sep=' & ')
+  ed.lf <- split(extended_data$geomorph, extended_data$geomorph$peiid)
+  ed.lf.flat <- lapply(ed.lf, .formatLandformString, name.sep=' & ')
+  lf <- do.call('rbind', ed.lf.flat)
   if(nrow(lf) > 0)
     site(h) <- lf
   
   # join-in parent material strings
+  # 4 seconds for ~ 4k pedons
   pm <- ddply(extended_data$pm, 'siteiid', .formatParentMaterialString, name.sep=' & ')
   if(nrow(pm) > 0)
     site(h) <- pm
