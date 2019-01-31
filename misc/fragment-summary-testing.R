@@ -28,7 +28,7 @@ ed$frag_summary <- ed$frag_summary[order(ed$frag_summary$phiid), ]
 ed$frag_summary_v2 <- ed$frag_summary_v2[order(ed$frag_summary_v2$phiid), ]
 
 test <- diff_data(ed$frag_summary, ed$frag_summary_v2)
-render_diff(test)
+render_diff(test, title='R-based vs. SQL-based fragment summary')
 
 
 checkDiffs <- function(id) {
@@ -44,7 +44,38 @@ checkDiffs <- function(id) {
 checkDiffs('564492')
 checkDiffs('564496')
 
+
+## specific examples
+
+# fragment H of 76 results in CB, should be GR
+checkDiffs('1196586')
+lapply(checkDiffs('1196586'), knitr::kable, row.names=FALSE)
+
+# how many are there like this?
+# ~ 30% of this collection
+length(which(d$fragsize_h == 76)) / length(which(d$fragsize_h == 75))
+
+# ~ 4% with an RV that could be used to infer the correct size class
+length(which(d$fragsize_h == 76 & !is.na(d$fragsize_r))) / length(which(d$fragsize_h == 75))
+
+
+
+# combination 76mm fragsize_h and RV of 5mm: GR vs. fine GR
+checkDiffs('780056')
+lapply(checkDiffs('780056'), knitr::kable, row.names=FALSE)
+
+
+# size range spans multiple classes
+checkDiffs('717529')
+lapply(checkDiffs('717529'), knitr::kable, row.names=FALSE)
+
+
+
+# fragsize RV and H not specified
+# fragshp not specified
+checkDiffs('564492')
 lapply(checkDiffs('564492'), knitr::kable, row.names=FALSE)
+
 
 
 # r-bind and eval differences
