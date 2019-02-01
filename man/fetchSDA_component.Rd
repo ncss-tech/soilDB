@@ -11,17 +11,24 @@
 \description{Get, format, impute, and return component tables.}
 \usage{
 fetchSDA_component(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
-                   nullFragsAreZero = TRUE, rmHzErrors = FALSE, 
+                   nullFragsAreZero = TRUE, rmHzErrors = FALSE,
+                   drop.unused.levels = TRUE,
                    stringsAsFactors = default.stringsAsFactors()
                    )
                    
-get_mapunit_from_SDA(WHERE = NULL, stringsAsFactors = default.stringsAsFactors())
+get_mapunit_from_SDA(WHERE = NULL, 
+                     drop.unused.levels = TRUE,
+                     stringsAsFactors = default.stringsAsFactors()
+                     )
 
 get_component_from_SDA(WHERE = NULL, duplicates = FALSE, childs = TRUE,
+                       drop.unused.levels = TRUE,
                        stringsAsFactors = default.stringsAsFactors()
                        )
                        
-get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE, nullFragsAreZero = TRUE,
+get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE, childs = TRUE,
+                      nullFragsAreZero = TRUE,
+                      drop.unused.levels = TRUE,
                       stringsAsFactors = default.stringsAsFactors()
                       )
                       
@@ -41,6 +48,7 @@ get_cosoilmoist_from_NASIS(impute = TRUE, stringsAsFactors = default.stringsAsFa
   \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details}
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: FALSE)}
   UE)	
+  \item{drop.unused.levels}{logical: indicating whether to drop unused levels in classifying factors. This is useful when a class has large number of unused classes, which can waste space in tables and figures.}
   \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
   }
 

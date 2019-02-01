@@ -3,7 +3,10 @@
 # https://github.com/ncss-tech/soilDB/issues/38
 # https://github.com/ncss-tech/soilDB/issues/36
 
-get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, stringsAsFactors = default.stringsAsFactors()){
+get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
+                                   drop.unused.levels = TRUE,
+                                   stringsAsFactors = default.stringsAsFactors()
+                                   ) {
   
   # SDA is missing soiltempa_r AS mast_r
   # Joining in the fetch on derived_cokey doesn't work but should. There are duplicate components with the same combination of elements.
@@ -35,7 +38,10 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   
   
   # recode metadata domains
-  d.component <- uncode(d.component, db = "SDA", stringsAsFactors = stringsAsFactors)
+  d.component <- uncode(d.component, db = "SDA", 
+                        drop.unused.levels = drop.unused.levels,
+                        stringsAsFactors = stringsAsFactors
+                        )
 
   
   # parent material
@@ -120,11 +126,15 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
 
 
 
-get_cointerp_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFactors = default.stringsAsFactors()) {
+get_cointerp_from_SDA <- function(WHERE = NULL, duplicates = FALSE, 
+                                  drop.unused.levels = TRUE,
+                                  stringsAsFactors = default.stringsAsFactors()
+                                  ) {
   
-  d.component <- get_component_from_SDA(WHERE = WHERE, duplicates = duplicates, childs = FALSE, 
+  d.component <- get_component_from_SDA(WHERE = WHERE, duplicates = duplicates, 
+                                        childs = FALSE,
                                         stringsAsFactors = stringsAsFactors
-  )
+                                        )
   
   q.cointerp <- paste0("
 
@@ -153,14 +163,20 @@ get_cointerp_from_SDA <- function(WHERE = NULL, duplicates = FALSE, stringsAsFac
   d.cointerp <- SDA_query(q.cointerp)
   
   # recode metadata domains
-  d.cointerp <- uncode(d.cointerp, db = "SDA", stringsAsFactors = stringsAsFactors)
+  d.cointerp <- uncode(d.cointerp, db = "SDA", 
+                       drop.unused.levels = drop.unused.levels,
+                       stringsAsFactors = stringsAsFactors
+                       )
   
   return(d.cointerp)
   }
 
 
 
-get_mapunit_from_SDA <- function(WHERE = NULL, stringsAsFactors = default.stringsAsFactors()) {
+get_mapunit_from_SDA <- function(WHERE = NULL, 
+                                 drop.unused.levels = TRUE,
+                                 stringsAsFactors = default.stringsAsFactors()
+                                 ) {
 
   q.mapunit <- paste("
   SELECT 
@@ -193,7 +209,10 @@ get_mapunit_from_SDA <- function(WHERE = NULL, stringsAsFactors = default.string
 
   
   # recode metadata domains
-  d.mapunit <- uncode(d.mapunit, db = "SDA", stringsAsFactors = stringsAsFactors)
+  d.mapunit <- uncode(d.mapunit, db = "SDA", 
+                      drop.unused.levels = drop.unused.levels,
+                      stringsAsFactors = stringsAsFactors
+                      )
   
   
   # cache original column names
@@ -206,7 +225,12 @@ get_mapunit_from_SDA <- function(WHERE = NULL, stringsAsFactors = default.string
 
 
 
-get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, nullFragsAreZero = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, 
+                                  childs = TRUE, 
+                                  nullFragsAreZero = TRUE, 
+                                  drop.unused.levels = TRUE,
+                                  stringsAsFactors = default.stringsAsFactors()
+                                  ) {
   # seriously!, how is their no fragvoltot_r column?
   q.chorizon <- paste("
   SELECT", 
@@ -257,8 +281,11 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRU
     texture = tolower(texture)
     if (stringsAsFactors == TRUE) {
       texcl = factor(tolower(texcl), levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"])
-    }
-  })
+      }
+    if (drop.unused.levels == drop.unused.levels) {
+      texcl = droplevels(texcl)
+      }
+    })
   
   # Note: only chtexturegrp$texdesc from SDA matches metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"] in metadata
   # # recode metadata domains
@@ -387,15 +414,20 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRU
 }
 
 
-fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, nullFragsAreZero = TRUE, 
-                               rmHzErrors = FALSE, 
+fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
+                               nullFragsAreZero = TRUE, 
+                               rmHzErrors = FALSE,
+                               drop.unused.levels = TRUE,
                                stringsAsFactors = default.stringsAsFactors()
                                ) {
 
   # load data in pieces
-  f.component <- get_component_from_SDA(WHERE, duplicates, childs, stringsAsFactors = stringsAsFactors)
+  f.component <- get_component_from_SDA(WHERE, duplicates, childs, 
+                                        drop.unused.levels,
+                                        stringsAsFactors = stringsAsFactors
+                                        )
   # f.mapunit   <- get_mapunit_from_SDA(WHERE, stringsAsFactors = stringsAsFactors)
-  f.chorizon  <- get_chorizon_from_SDA(WHERE, duplicates)
+  f.chorizon  <- get_chorizon_from_SDA(WHERE, duplicates, drop.unused.levels)
   
   # optionally test for bad horizonation... flag, and remove
   if (rmHzErrors) {

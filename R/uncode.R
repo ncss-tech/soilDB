@@ -1,4 +1,9 @@
-uncode <- function(df, invert = FALSE, db = "NASIS", stringsAsFactors = default.stringsAsFactors()){
+uncode <- function(df, 
+                   invert = FALSE, 
+                   db = "NASIS", 
+                   drop.unused.levels = FALSE, 
+                   stringsAsFactors = default.stringsAsFactors()
+                   ) {
   get_metadata <- function() {
     # must have RODBC installed
     if(!requireNamespace('RODBC'))
@@ -67,6 +72,12 @@ uncode <- function(df, invert = FALSE, db = "NASIS", stringsAsFactors = default.
         }
       }
     }
+  
+  # drop unused levels
+  if (drop.unused.levels == TRUE) {
+    idx <- columnsToWorkOn.idx
+    df[idx] <- lapply(df[idx], droplevels)
+  }
   
   # convert factors to strings
   if (stringsAsFactors == FALSE) {
