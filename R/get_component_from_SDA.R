@@ -242,7 +242,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
   if (duplicates == FALSE) { paste("
   (SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2 
    FROM mapunit
-   GROUP BY nationalmusym) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym
+   GROUP BY nationalmusym) AS mu2 ON mu2.mukey2 = mu.mukey
   ")
   } else { paste("
    (SELECT nationalmusym, mukey
