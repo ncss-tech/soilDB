@@ -1,5 +1,6 @@
--------------------------- soilDB 2.3.6 (2019-01-30) ----------------------------
+-------------------------- soilDB 2.3.6 (2019-02-12) ----------------------------
 * simplifyFragmentData() and related functions now 4-5x faster
+* fetchOSD() now returns metadata when extended=TRUE
 
 -------------------------- soilDB 2.3.5 (2019-01-14) ----------------------------
 * NAMESPACE and R CMD check fixes

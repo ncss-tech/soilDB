@@ -129,7 +129,8 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	    pmorigin=res$pmorigin,
 	    mlra=res$mlra,
 	    climate.annual=annual.data,
-	    climate.monthly=monthly.data
+	    climate.monthly=monthly.data,
+	    soilweb.metadata=res$metadata
 	  )
 	  
 	  return(data.list)
