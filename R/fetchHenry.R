@@ -24,7 +24,34 @@
 # }
 
 
-# summarize daily values via julian day
+## TODO: split chunks of non-NA
+# basic timeline of data
+# sensor_data: `soiltemp`, `soilVWC`, or related data returned by fetchHenry()
+HenryTimeLine <- function(sensor_data, ...) {
+  
+  # filter NA
+  x.no.na <- na.omit(sensor_data)
+  # compute date ranges by sensor
+  x.range <- ddply(x.no.na, 'sensor_name', .fun = plyr::summarise, start=as.Date(min(date_time)), end=as.Date(max(date_time)))
+  x.range$sensor_name <- factor(x.range$sensor_name)
+  
+  # composite plot
+  p <- segplot(sensor_name ~ start + end, data=x.range,
+               scales=list(alternating=3, x=list(cex=0.85, tick.number=10), y=list(relation='free', cex=0.65, rot=0)),
+               band.height=0.75,
+               xlab='', ylab='',
+               panel = function(...) {
+                 panel.abline(h=1:length(levels(x.range$sensor_name)), col='grey', lty=3)
+                 panel.segplot(...)
+               }, ...
+  )
+  
+  return(p)
+}
+
+
+## TODO: ddply() is likely the bottle-neck here
+# summarize daily values by Julian day
 summarizeSoilTemperature <- function(soiltemp.data) {
   
   # hacks to make R CMD check --as-cran happy:
@@ -151,6 +178,13 @@ month2season <- function(x) {
     
     # add-in seasons
     sensor.data$season <- month2season(sensor.data$month)
+    
+    # water year/day: October 1st -- September 30th
+    w <- sharpshootR::waterDayYear(sensor.data$date_time)
+    
+    # row-order is preserved
+    sensor.data$water_year <- w$wy
+    sensor.data$water_day <- w$wd
   }
   
   return(sensor.data)
@@ -164,6 +198,9 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   # check for required packages
   if(!requireNamespace('jsonlite', quietly=TRUE))
     stop('please install the `jsonlite` packages', call.=FALSE)
+  
+  if(!requireNamespace('sharpshootR', quietly=TRUE))
+    stop('please install the `sharpshootR` packages', call.=FALSE)
   
   # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)

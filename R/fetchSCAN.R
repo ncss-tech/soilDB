@@ -133,6 +133,14 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     return(.get_SCAN_data(req))
   }
   
+  # check for required packages
+  if(!requireNamespace('httr', quietly = TRUE))
+    stop('please install the `httr` package', call.=FALSE)
+  
+  # check for required packages
+  if(!requireNamespace('sharpshootR', quietly = TRUE))
+    stop('please install the `sharpshootR` package', call.=FALSE)
+  
   # init list to store results
   res <- list()
   
@@ -242,8 +250,15 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   idx <- which(!is.na(d.long$value))
   d.long <- d.long[idx, ]
   
+  # water year/day: October 1st -- September 30th
+  w <- sharpshootR::waterDayYear(d.long$Date)
+  
+  # row-order is preserved
+  d.long$water_year <- w$wy
+  d.long$water_day <- w$wd
+  
   # format and return
-  return(d.long[, c('Site', 'Date', 'value', 'depth', 'sensor.id')])
+  return(d.long[, c('Site', 'Date', 'water_year', 'water_day', 'value', 'depth', 'sensor.id')])
 }
 
 # format a list request for SCAN data
@@ -263,10 +278,6 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   # convert to list as needed
   if(class(list) != 'list')
     req <- as.list(req)
-  
-  # check for required packages
-  if(!requireNamespace('httr', quietly = TRUE))
-    stop('please install the `httr` package', call.=FALSE)
   
   # base URL to service
   uri <- 'https://wcc.sc.egov.usda.gov/nwcc/view'

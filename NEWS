@@ -1,3 +1,8 @@
+-------------------------- soilDB 2.3.7 (2019-02-20) ----------------------------
+* sharpshootR added to SUGGESTS
+* fetchHenry() and fetchSCAN() now include water year/day (Oct 1 -- Sep 30)
+* HenryTimeLine() convenience function added
+
 -------------------------- soilDB 2.3.6 (2019-02-12) ----------------------------
 * simplifyFragmentData() and related functions now 4-5x faster
 * fetchOSD() now returns metadata when extended=TRUE
