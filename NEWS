@@ -2,6 +2,7 @@
 * sharpshootR added to SUGGESTS
 * fetchHenry() and fetchSCAN() now include water year/day (Oct 1 -- Sep 30)
 * HenryTimeLine() convenience function added
+* bug fix in fetchOSD(..., extended=TRUE) when no climate data available
 
 -------------------------- soilDB 2.3.6 (2019-02-12) ----------------------------
 * simplifyFragmentData() and related functions now 4-5x faster

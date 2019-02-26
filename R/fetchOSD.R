@@ -103,6 +103,10 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	    monthly.data$month <- factor(as.numeric(gsub('ppt|pet', '', monthly.data$climate_var)))
 	    monthly.data$variable <- gsub('[0-9]', '', monthly.data$climate_var)
 	    monthly.data$variable <- factor(monthly.data$variable, levels = c('pet', 'ppt'), labels=c('Potential ET (mm)', 'Precipitation (mm)'))
+	  } else {
+	    # likely outside of CONUS
+	    annual.data <- FALSE
+	    monthly.data <- FALSE
 	  }
 	  
 	  ## must check for data, no data is returned as FALSE
