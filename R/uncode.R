@@ -76,8 +76,10 @@ uncode <- function(df,
   # drop unused levels
   if (drop.unused.levels == TRUE) {
     idx <- columnsToWorkOn.idx
-    df[idx] <- lapply(df[idx], droplevels)
-  }
+    df[idx] <- lapply(df[idx], function(x) {
+      temp = ifelse(is.factor(x), droplevels(x), x)
+      })
+    }
   
   # convert factors to strings
   if (stringsAsFactors == FALSE) {

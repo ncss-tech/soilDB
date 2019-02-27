@@ -282,7 +282,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
     if (stringsAsFactors == TRUE) {
       texcl = factor(tolower(texcl), levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"])
       }
-    if (drop.unused.levels == drop.unused.levels) {
+    if (drop.unused.levels == drop.unused.levels & is.factor(texcl)) {
       texcl = droplevels(texcl)
       }
     })
@@ -422,12 +422,17 @@ fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                                ) {
 
   # load data in pieces
-  f.component <- get_component_from_SDA(WHERE, duplicates, childs, 
-                                        drop.unused.levels,
+  f.component <- get_component_from_SDA(WHERE, 
+                                        duplicates = duplicates, 
+                                        childs = childs, 
+                                        drop.unused.levels = drop.unused.levels,
                                         stringsAsFactors = stringsAsFactors
                                         )
   # f.mapunit   <- get_mapunit_from_SDA(WHERE, stringsAsFactors = stringsAsFactors)
-  f.chorizon  <- get_chorizon_from_SDA(WHERE, duplicates, drop.unused.levels)
+  f.chorizon  <- get_chorizon_from_SDA(WHERE, 
+                                       duplicates = duplicates, 
+                                       drop.unused.levels = drop.unused.levels
+                                       )
   
   # optionally test for bad horizonation... flag, and remove
   if (rmHzErrors) {
