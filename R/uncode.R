@@ -75,8 +75,8 @@ uncode <- function(df,
   
   # drop unused levels
   if (drop.unused.levels == TRUE) {
-    idx <- nm %in% possibleReplacements & sapply(df, is.factor)
-    df[idx] <- lapply(df[idx], droplevels)
+    idx <- which(! nm %in% possibleReplacements)
+    df <- droplevels(df, except = idx)
     }
   
   # convert factors to strings
