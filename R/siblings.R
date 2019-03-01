@@ -20,6 +20,9 @@ siblings <- function(s, only.major=FALSE, component.data=FALSE, cousins=FALSE) {
       # convert 'Yes'|'No' -> TRUE|FALSE
       sib$majcompflag <- ifelse(sib$majcompflag == 'Yes', TRUE, FALSE)
       
+      # TODO: convert series into title case
+      # https://github.com/ncss-tech/soilDB/issues/95
+      
       # note: there may be both major and minor siblings
       # optionally cut-down to just major siblings
       if(only.major)
