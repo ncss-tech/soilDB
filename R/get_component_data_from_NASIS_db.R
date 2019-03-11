@@ -134,16 +134,74 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 }
 
 
-get_mapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_legend_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+  # must have RODBC installed
+  if(!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
+  q.legend  <- paste("
+                     SELECT
+                     mlraoffice,  
+                     areasymbol, areaname, areatypename, CAST(areaacres AS INTEGER) AS areaacres, ssastatus, 
+                     CAST(projectscale AS INTEGER) projectscale, cordate, 
+                     CAST(liid AS INTEGER) liid, COUNT(lmu.lmapunitiid) n_lmapunitiid
+                     
+                     FROM 
+                     area     a                                  INNER JOIN 
+                     legend   l      ON l.areaiidref = a.areaiid INNER JOIN
+                     lmapunit lmu    ON lmu.liidref = l.liid
+                     
+                     INNER JOIN
+                     areatype at  ON at.areatypeiid = areatypeiidref
+                     
+                     WHERE
+                         legendsuituse = 3  AND
+                         mustatus IN (2, 3) AND
+                         areatypename = 'Non-MLRA Soil Survey Area'
+                     
+                     GROUP BY mlraoffice, areasymbol, areaname, areatypename, areaacres, ssastatus, projectscale, cordate, liid
+                     
+                     ORDER BY mlraoffice, areasymbol
+                     ;")
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.legend <- gsub(pattern = '_View_1', replacement = '', x = q.legend, fixed = TRUE)
+  }
+  
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  
+  # exec query
+  d.legend <- RODBC::sqlQuery(channel, q.legend, stringsAsFactors=FALSE)
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # recode metadata domains
+  d.legend <- uncode(d.legend,
+                     db = "NASIS", 
+                     drop.unused.levels = drop.unused.levels,
+                     stringsAsFactors = stringsAsFactors
+                     )
+
+  
+  # done
+  return(d.legend)
+}
+
+
+
+get_mapunit_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
   
   q.mapunit <- paste("
                      SELECT 
-                     mlraoffice, ng.grpname, areasymbol, areaname, areaacres, ssastatus, cordate, projectscale, 
-                     lmapunitiid, nationalmusym, musym, muname, mukind, mutype, mustatus, muacres, farmlndcl,
-                     pct_hydric, pct_component, n_component, n_majcompflag
+                     ng.grpname, areasymbol, liid, lmapunitiid, 
+                     nationalmusym, muiid, musym, muname, mukind, mutype, mustatus, dmuinvesintens, muacres, 
+                     farmlndcl, dmuiid, pct_component, pct_hydric, n_component, n_majcompflag
                      
                      FROM  
                          area            a                               INNER JOIN 
@@ -160,11 +218,11 @@ get_mapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.strings
                     LEFT OUTER JOIN  
                     --components
                     (SELECT 
-                     cor.muiidref cor_muiidref, 
+                     cor.muiidref cor_muiidref, dmuiid, dmuinvesintens,
+                     SUM(comppct_r)                                                pct_component,
                      SUM(comppct_r * CASE WHEN hydricrating = 1 THEN 1 ELSE 0 END) pct_hydric,
-                     SUM(comppct_r)                                                 pct_component,
-                     COUNT(*)                                                       n_component,
-                     SUM(CASE WHEN majcompflag  = 1 THEN 1 ELSE 0 END)              n_majcompflag
+                     COUNT(*)                                                      n_component,
+                     SUM(CASE WHEN majcompflag  = 1 THEN 1 ELSE 0 END)             n_majcompflag
    
                      FROM     
                          component_View_1   co                                  LEFT OUTER JOIN
@@ -172,7 +230,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.strings
                          correlation_View_1 cor ON cor.dmuiidref = dmu.dmuiid   AND
                                                    cor.repdmu    = 1
 
-                     GROUP BY cor.muiidref
+                     GROUP BY cor.muiidref, dmuiid, dmuinvesintens
                     ) co ON co.cor_muiidref = mu.muiid
 
                      WHERE
@@ -180,7 +238,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.strings
                          mustatus IN (2, 3)             AND
                          areatypename = 'Non-MLRA Soil Survey Area'
 
-                     ORDER BY mlraoffice, areasymbol, musym
+                     ORDER BY areasymbol, musym
                      ;")
   
   # toggle selected set vs. local DB
@@ -196,11 +254,34 @@ get_mapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.strings
   
   # close connection
   RODBC::odbcClose(channel)
-  
+
   # recode metadata domains
-  d.mapunit <- uncode(d.mapunit, db = "NASIS", stringsAsFactors = stringsAsFactors)
+  d.mapunit <- uncode(d.mapunit, 
+                      db = "NASIS", 
+                      drop.unused.levels = drop.unused.levels,
+                      stringsAsFactors = stringsAsFactors
+  )
   
+  # hacks to make R CMD check --as-cran happy:
+  metadata <- NULL
   
+  # load local copy of metadata
+  load(system.file("data/metadata.rda", package="soilDB")[1])
+  
+  # transform variables and metadata
+  d.mapunit <- within(d.mapunit, {
+    farmlndcl = factor(farmlndcl, 
+                       levels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceValue"],
+                       labels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceLabel"]
+    )
+    if (stringsAsFactors == FALSE) {
+      farmlndcl = as.character(farmlndcl)
+    }
+    if (drop.unused.levels == TRUE & is.factor(farmlndcl)) {
+      farmlndcl = droplevels(farmlndcl)
+    }
+  })
+
   # cache original column names
   orig_names <- names(d.mapunit)
   

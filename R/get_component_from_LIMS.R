@@ -59,7 +59,36 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
 
 
 
-get_mapunit_from_NASISWebReport <- function(areasymbol, stringsAsFactors = default.stringsAsFactors()) {
+get_legend_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_legend_from_NASISWebReport"
+  
+  d.legend <- lapply(areasymbol, function(x) {
+    cat("getting legend for '", x, "' from NasisReportsWebSite \n", sep = "")
+    args = list(p_areasymbol = x)
+    d    =  parseWebReport(url, args)
+  })
+  d.legend <- do.call("rbind", d.legend)
+  
+  
+  # set factor levels according to metadata domains
+  # data is coming back uncoded from LIMS so db is set to "SDA"
+  d.legend <- uncode(d.legend, 
+                      db = "SDA",
+                      drop.unused.levels = drop.unused.levels,
+                      stringsAsFactors = stringsAsFactors
+  )
+  
+  # date
+  d.legend$cordate <- as.Date(d.legend$cordate)
+  
+  # return data.frame
+  return(d.legend)
+  
+}
+
+
+
+get_mapunit_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_mapunit_from_NASISWebReport"
   
   d.mapunit <- lapply(areasymbol, function(x) {
@@ -72,10 +101,11 @@ get_mapunit_from_NASISWebReport <- function(areasymbol, stringsAsFactors = defau
   
   # set factor levels according to metadata domains
   # data is coming back uncoded from LIMS so db is set to "SDA"
-  d.mapunit <- uncode(d.mapunit, db = "SDA", stringsAsFactors = stringsAsFactors)
-  
-  # date
-  d.mapunit$cordate <- as.Date(d.mapunit$cordate)
+  d.mapunit <- uncode(d.mapunit, 
+                      db = "SDA",
+                      drop.unused.levels = drop.unused.levels,
+                      stringsAsFactors = stringsAsFactors
+                      )
   
   # return data.frame
   return(d.mapunit)

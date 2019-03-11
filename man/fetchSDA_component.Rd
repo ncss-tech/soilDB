@@ -1,5 +1,6 @@
 \name{fetchSDA_component}
 \alias{fetchSDA_component}
+\alias{get_legend_from_SDA}
 \alias{get_mapunit_from_SDA}
 \alias{get_component_from_SDA}
 \alias{get_chorizon_from_SDA}

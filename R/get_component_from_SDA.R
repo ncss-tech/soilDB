@@ -172,6 +172,39 @@ get_cointerp_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
   }
 
 
+get_legend_from_SDA <- function(WHERE = NULL, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+  q.legend  <- paste("
+                     SELECT
+                     areasymbol, areaname, areatypename, CAST(areaacres AS INTEGER) AS areaacres, ssastatus, 
+                     CAST(projectscale AS INTEGER) projectscale, cordate, 
+                     CAST(l.lkey AS INTEGER) lkey, COUNT(mu.mukey) n_mukey
+                     
+                     FROM       legend  l  
+                     INNER JOIN mapunit mu ON mu.lkey = l.lkey
+                     
+                     WHERE", WHERE,
+                     
+                     "GROUP BY areasymbol, areaname, areatypename, areaacres, ssastatus, projectscale, cordate, l.lkey
+                     
+                     ORDER BY areasymbol
+                     ;")
+  
+  # exec query
+  d.legend <- SDA_query(q.legend)
+  
+  # recode metadata domains
+  d.legend <- uncode(d.legend,
+                     db = "SDA", 
+                     drop.unused.levels = drop.unused.levels,
+                     stringsAsFactors   = stringsAsFactors
+  )
+  
+  
+  # done
+  return(d.legend)
+}
+
+
 
 get_mapunit_from_SDA <- function(WHERE = NULL, 
                                  drop.unused.levels = TRUE,
@@ -180,9 +213,9 @@ get_mapunit_from_SDA <- function(WHERE = NULL,
 
   q.mapunit <- paste("
   SELECT 
-  mlraoffice, areasymbol, areaname, areaacres, ssastatus, cordate, projectscale, invesintens,
-  mukey, nationalmusym, musym, muname, mukind, mustatus, muacres, farmlndcl,
-  pct_hydric, pct_component, n_component, n_majcompflag, l.lkey
+  areasymbol, l.lkey, mukey, nationalmusym, musym, muname,
+  mukind, mustatus, invesintens, muacres, farmlndcl,
+  pct_component, pct_hydric, n_component, n_majcompflag
 
   FROM
   legend  l                      INNER JOIN
@@ -209,9 +242,10 @@ get_mapunit_from_SDA <- function(WHERE = NULL,
 
   
   # recode metadata domains
-  d.mapunit <- uncode(d.mapunit, db = "SDA", 
+  d.mapunit <- uncode(d.mapunit, 
+                      db = "SDA", 
                       drop.unused.levels = drop.unused.levels,
-                      stringsAsFactors = stringsAsFactors
+                      stringsAsFactors   = stringsAsFactors
                       )
   
   

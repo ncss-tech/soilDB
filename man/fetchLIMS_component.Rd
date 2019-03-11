@@ -3,6 +3,7 @@
 \alias{get_project_from_NASISWebReport}
 \alias{get_progress_from_NASISWebReport}
 \alias{get_project_correlation_from_NASISWebReport}
+\alias{get_legend_from_NASISWebReport}
 \alias{get_mapunit_from_NASISWebReport}
 \alias{get_projectmapunit_from_NASISWebReport}
 \alias{get_projectmapunit2_from_NASISWebReport}
@@ -26,7 +27,12 @@ get_projectmapunit_from_NASISWebReport(projectname,
 get_projectmapunit2_from_NASISWebReport(mlrassoarea, fiscalyear, projectname, 
                                         stringsAsFactors = default.stringsAsFactors()
                                         )
-get_mapunit_from_NASISWebReport(areasymbol, 
+get_legend_from_NASISWebReport(areasymbol,
+                               drop.unused.levels = TRUE,
+                               stringsAsFactors = default.stringsAsFactors()
+                               )
+get_mapunit_from_NASISWebReport(areasymbol,
+                                drop.unused.levels = TRUE,
                                 stringsAsFactors = default.stringsAsFactors()
                                 )
 get_component_from_NASISWebReport(projectname, 
