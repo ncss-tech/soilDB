@@ -9,6 +9,10 @@ x.1 <- suppressMessages(SDA_query(q = "SELECT areasymbol, saverest FROM sacatalo
 # multi-table result
 x.2 <- suppressMessages(SDA_query(q = "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'CA630'; SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'CA664' ;"))
 
+# table with multiple data types
+x.3 <- suppressMessages(SDA_query(q = "SELECT TOP 100 mukey, cokey, compkind, comppct_r, majcompflag, elev_r, slope_r, wei, weg FROM component ;"))
+
+
 # point with known SSURGO data
 p <- sp::SpatialPoints(cbind(-121.77100, 37.368402), proj4string = sp::CRS('+proj=longlat +datum=WGS84'))
 
@@ -68,6 +72,22 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   expect_equal(nrow(res), 1)
   
 })
+
+test_that("SDA_query() interprets data type correctly", {
+  
+  # x.3 is from the component table
+  expect_equal(class(x.3$mukey), 'integer')
+  expect_equal(class(x.3$cokey), 'integer')
+  expect_equal(class(x.3$compkind), 'character')
+  expect_equal(class(x.3$comppct_r), 'integer')
+  expect_equal(class(x.3$majcompflag), 'character')
+  expect_equal(class(x.3$elev_r), 'integer')
+  expect_equal(class(x.3$slope_r), 'numeric')
+  expect_equal(class(x.3$wei), 'integer')
+  expect_equal(class(x.3$weg), 'character')
+  
+})
+
 
 
 

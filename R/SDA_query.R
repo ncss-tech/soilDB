@@ -16,9 +16,6 @@ SDA_query <- function(q) {
   if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('jsonlite', quietly=TRUE))
     stop('please install the `httr` and `jsonlite` packages', call.=FALSE)
   
-  # important: change the default behavior of data.frame
-  opt.original <- options(stringsAsFactors = FALSE)
-  
   # temp place to keep json-style post args
   tf <- tempfile() 
   
@@ -48,6 +45,8 @@ SDA_query <- function(q) {
   
   # the result is JSON:
   # list of character matrix, one for each "Table" returned
+  # note: the data returned by SDA/JSON are all character class
+  #       we "fix" this later on
   r.content <- httr::content(r, as = 'text', encoding = 'UTF-8')
   d <- jsonlite::fromJSON(r.content)
   
@@ -61,6 +60,9 @@ SDA_query <- function(q) {
   }
   
   # process list of tables
+  # * consistent encoding of NA
+  # * type conversion via read.table() 
+  # * no conversion strings -> factors: do this on your own
   d <- lapply(d, .post_process_SDA_result_set)
   
   # keep track of SDA result set IDs
@@ -69,8 +71,6 @@ SDA_query <- function(q) {
     attr(d[[i]], 'SDA_id') <- SDA.ids[i]
   }
   
-  # reset options
-  options(opt.original)
   
   if(n.tables > 1) {
     message('multi-part result set, returning a list')
@@ -90,6 +90,7 @@ SDA_query <- function(q) {
 
 # note: empty strings and 'NA' are converted into <NA>
 # convert the raw results from SDA into a proper data.frame
+# no conversion of strings -> factors
 .post_process_SDA_result_set <- function(i) {
   # the first line is always the colnames
   i.header <- i[1, ]
@@ -98,23 +99,19 @@ SDA_query <- function(q) {
   # Arrg! the dreaded sing-row indexing bug: drop=FALSE ensures result is a matrix
   i <- i[-1, , drop=FALSE]
   
-  i.tf <- tempfile() # work-around for all data encoded as char
-  
+  # work-around for all data encoded as char
   # save to file / re-load to guess column classes
+  i.tf <- tempfile()
   write.table(i, file=i.tf, col.names=TRUE, row.names=FALSE, quote=FALSE, sep='|')
   
   ## https://github.com/ncss-tech/soilDB/issues/28
   ## this breaks when there are multi-line records
   df <- read.table(i.tf, header=TRUE, sep='|', quote='', comment.char='', na.strings = c('', 'NA'), stringsAsFactors = FALSE)
-  
-  ## not quite there...
-  # tmp <- scan(file=i.tf, multi.line = TRUE, blank.lines.skip = TRUE, what=list(rep(character(), times=length(i.header))), sep='\n', quote='', comment.char='', quiet = TRUE, na.strings = c('', 'NA'), skip=1)
-  
  
   # add colnames from original header
   names(df) <- i.header
   
-  ## error checking?
+  ## TODO further error checking?
   
   # done
   return(df)
