@@ -59,7 +59,7 @@ getHzErrorsNASIS(strict=TRUE)
   \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details}
   \item{soilColorState}{which colors should be used to generate the convenience field 'soil_color'? ('moist' | 'dry')}
   \item{lab}{should the phlabresults child table be fetched with site/pedon/horizon data (default: FALSE)}  
-  \item{fill}{toggle inclusion of components that are missing horizon data  (FALSE)}
+  \item{fill}{(fetchNASIS_components only: include components without horizon data? (default: FALSE)}
   \item{strict}{how strict should horizon boundaries be checked for consistency: TRUE=more | FALSE=less}
 }
 

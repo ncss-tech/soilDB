@@ -7,6 +7,10 @@ fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, string
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
 
+  # ensure that any old hz errors are cleared
+  if(exists('component.hz.problems', envir=soilDB.env))
+    assign('component.hz.problems', value=character(0), envir=soilDB.env)
+  
   # load data in pieces
   f.comp       <- get_component_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
   f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS=SS, fill=fill)
@@ -17,7 +21,7 @@ fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, string
   f.diaghz     <- get_component_diaghz_from_NASIS_db(SS=SS)
 
   # optionally test for bad horizonation... flag, and remove
-  if(rmHzErrors) {
+  if(rmHzErrors & nrow(f.chorizon)) {
     f.chorizon.test <- plyr::ddply(f.chorizon, 'coiid', test_hz_logic, topcol='hzdept_r', bottomcol='hzdepb_r', strict=TRUE)
 
     # which are the good (valid) ones?
@@ -30,14 +34,15 @@ fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, string
     # keep track of those components with horizonation errors
     #if(length(bad.ids) > 0) # AGB removed this line of code b/c it prevents update of 'component.hz.problems' on subsequent error-free calls
     assign('component.hz.problems', value=bad.ids, envir=soilDB.env)
+  } 
+  
+  if(nrow(f.chorizon)) {
+    # upgrade to SoilProfilecollection
+    depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
+  } else {
+    stop("No horizon data in NASIS component query result.")
   }
-
-
-  # upgrade to SoilProfilecollection
-  depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
-
-  ## TODO: this will fail in the presence of duplicates
-  ## TODO: make this error more informative
+  
   # add site data to object
   site(f.chorizon) <- f.comp # left-join via coiid
 
@@ -72,8 +77,7 @@ fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, string
   if(exists('component.hz.problems', envir=soilDB.env))
     if(length(get("component.hz.problems", envir = soilDB.env)) > 0)
       message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=soilDB.env)` for related coiid values")
-
-
+  
   # set metadata
   m <- metadata(f.chorizon)
   m$origin <- 'NASIS components'
