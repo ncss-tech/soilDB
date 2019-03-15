@@ -17,10 +17,7 @@ get_component_diaghz_from_NASIS_db <- function(SS=TRUE) {
   channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
   
   # query diagnostic horizons, usually a 1:many relationship with pedons
-  q <- "SELECT coiidref as coiid, featkind, featdept_r, featdepb_r
-  FROM 
-  codiagfeatures_View_1 AS cdf
-  ORDER BY cdf.coiidref, cdf.featdept_r;"
+  q <- "SELECT coiidref as coiid, featkind, featdept_l, featdept_r, featdept_h, featdepb_l, featdepb_r, featdepb_h, featthick_l, featthick_r, featthick_h FROM codiagfeatures_View_1 AS cdf ORDER BY cdf.coiidref, cdf.featdept_r;"
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {
