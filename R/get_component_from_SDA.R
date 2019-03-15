@@ -105,7 +105,6 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
     ORDER BY cokey, ls.geomftname, ls.geomfeatid, ls.existsonfeat, lf.geomftname, lf.geomfeatid, lf.existsonfeat"
     )
   
-  
   # append child tables
   if (childs == TRUE) {
     
@@ -117,12 +116,12 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
     
     # merge
     d.component <- merge(d.component, d.cogmd, by = "cokey", all.x = TRUE)
-    }
+  }
   
   
   # done
   return(d.component)
-  }
+}
 
 
 
@@ -448,6 +447,12 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 }
 
 
+get_diagnostics_from_SDA <- function(target_cokeys) {
+  # query SDA to get corresponding codiagfeatures
+  q <- paste0('SELECT * FROM codiagfeatures WHERE cokey IN ', format_SQL_in_statement(target_cokeys), ";")
+  return(SDA_query(q))
+}
+
 fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
                                nullFragsAreZero = TRUE, 
                                rmHzErrors = FALSE,
@@ -467,6 +472,9 @@ fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                                        duplicates = duplicates, 
                                        drop.unused.levels = drop.unused.levels
                                        )
+  
+  # diagnostic features  
+  f.diag <- get_diagnostics_from_SDA(f.component$cokey)
   
   # optionally test for bad horizonation... flag, and remove
   if (rmHzErrors) {
@@ -494,6 +502,8 @@ fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
   # add site data to object
   site(f.chorizon) <- f.component # left-join via cokey
 
+  # add diagnostics
+  diagnostic_hz(f.chorizon) <- f.diag
 
   # print any messages on possible data quality problems:
   if (exists('component.hz.problems', envir=soilDB.env))
