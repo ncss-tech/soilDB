@@ -37,6 +37,7 @@ importFrom(sp,
   "proj4string<-",
   SpatialPolygonsDataFrame,
   SpatialPointsDataFrame,
+  SpatialPoints,
   spChFIDs
 )
 
@@ -63,14 +64,24 @@ importFrom(Hmisc,
 importFrom(aqp, 
   "depths<-", 
   "site<-",
+  site,
+  idname,
+  parseMunsell,
   diagnostic_hz,
+  horizonDepths,
   "diagnostic_hz<-",
   test_hz_logic,
+  munsell2rgb,
   rgb2munsell,
   horizons,
   "horizons<-",
   metadata,
   "metadata<-"
 )
+
+importMethodsFrom(aqp, "plot")
+importClassesFrom(aqp, "SoilProfileCollection")
+
+
 
 exportPattern("^[^\\.]")

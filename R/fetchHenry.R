@@ -23,7 +23,7 @@
 #   return(d)
 # }
 
-
+## TODO: move to sharpshootR
 ## TODO: split chunks of non-NA
 # basic timeline of data
 # sensor_data: `soiltemp`, `soilVWC`, or related data returned by fetchHenry()
