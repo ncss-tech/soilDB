@@ -61,6 +61,7 @@ plot(s, name='hzn_desgn', max.depth=150)
 ##
 
 library(soilDB)
+library(aqp)
 library(plyr)
 library(reshape2)
 
@@ -92,7 +93,7 @@ plot(pedons, color='moist_soil_color', print.id=FALSE)
 
 
 # simplify fragment data
-s.frags <- simplfyFragmentData(s$morph$phfrags, id.var='labsampnum')
+s.frags <- simplifyFragmentData(s$morph$phfrags, id.var='labsampnum')
 
 # merge fragment data into SPC
 h <- horizons(pedons)
