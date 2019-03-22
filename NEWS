@@ -1,5 +1,6 @@
--------------------------- soilDB 2.3.8 (2019-03-15) ----------------------------
+-------------------------- soilDB 2.3.8 (2019-03-22) ----------------------------
 * loafercreek, gopheridge, and mineralking sample data have been updated with valid place-holder in @sp
+* bug fix for SDA_query() related to multi-line records (https://github.com/ncss-tech/soilDB/issues/28)
 
 -------------------------- soilDB 2.3.7 (2019-03-12) ----------------------------
 * sharpshootR added to SUGGESTS

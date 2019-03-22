@@ -101,12 +101,16 @@ SDA_query <- function(q) {
   
   # work-around for all data encoded as char
   # save to file / re-load to guess column classes
+  # notes:
+  #  * temporary column names are ignored and re-built from original header
+  #  * using "|" for field seperator, unlikely collisions
+  #  * quote all text fields, important for multi-line records
+  #  * use double-quoting in case double quotes are present in the original text
   i.tf <- tempfile()
-  write.table(i, file=i.tf, col.names=TRUE, row.names=FALSE, quote=FALSE, sep='|')
+  write.table(i, file=i.tf, col.names=TRUE, row.names=FALSE, sep='|', quote=TRUE, qmethod = 'double')
   
-  ## https://github.com/ncss-tech/soilDB/issues/28
-  ## this breaks when there are multi-line records
-  df <- read.table(i.tf, header=TRUE, sep='|', quote='', comment.char='', na.strings = c('', 'NA'), stringsAsFactors = FALSE)
+  # re-load and guess column types
+  df <- read.table(i.tf, header=TRUE, sep='|', quote='"', comment.char='', na.strings = c('', 'NA'), stringsAsFactors = FALSE)
  
   # add colnames from original header
   names(df) <- i.header
