@@ -496,15 +496,16 @@ fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
   # upgrade to SoilProfilecollection
   depths(f.chorizon) <- cokey ~ hzdept_r + hzdepb_r
   
-  
   ## TODO: this will fail in the presence of duplicates
   ## TODO: make this error more informative
   # add site data to object
   site(f.chorizon) <- f.component # left-join via cokey
 
   # add diagnostics
-  diagnostic_hz(f.chorizon) <- f.diag
-
+  if(is.data.frame(f.diag)) {
+    diagnostic_hz(f.chorizon) <- f.diag
+  }
+  
   # print any messages on possible data quality problems:
   if (exists('component.hz.problems', envir=soilDB.env))
     message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=soilDB.env)` for related cokey values")
