@@ -48,3 +48,20 @@ test_that("fetchKSSL() returns NULL with bogus query", {
   expect_null(res)
   
 })
+
+
+test_that("fetchKSSL() fails gracefully when morphology data are missing", {
+  
+  # pedon_key 37457 is missing:
+  # * most lab data
+  # * all morphologic data
+  # --> cannot simplify colors, so skip
+  res <- suppressMessages(fetchKSSL(pedon_key=37457, returnMorphologicData = TRUE, simplifyColors = TRUE))
+  expect_false(res$morph$phcolor)
+  expect_false(res$morph$phfrags)
+  expect_false(res$morph$phpores)
+  expect_false(res$morph$phstructure)
+  expect_false(res$morph$pediagfeatures)
+  
+})
+
