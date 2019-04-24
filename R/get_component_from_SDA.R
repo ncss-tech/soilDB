@@ -125,7 +125,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
 
 
 
-get_cointerp_from_SDA <- function(WHERE = NULL, duplicates = FALSE, 
+get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = FALSE, 
                                   drop.unused.levels = TRUE,
                                   stringsAsFactors = default.stringsAsFactors()
                                   ) {
@@ -149,7 +149,8 @@ get_cointerp_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
        FROM 
        component co2                       LEFT OUTER JOIN
        cointerp  coi2 ON coi2.cokey = co2.cokey
-       WHERE co2.cokey IN ('", paste0(d.component$cokey, collapse = "', '"), "')
+       WHERE co2.cokey IN ('", paste0(d.component$cokey, collapse = "', '"), "')",
+                       if (!is.null(mrulename)) paste0(" AND mrulename = '", mrulename), "' 
        GROUP BY co2.cokey, coi2.mrulekey
       ) coi22 ON coi22.cokey = co.cokey AND coi22.mrulekey = coi.mrulekey
   
@@ -268,7 +269,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
   q.chorizon <- paste("
   SELECT", 
   if (duplicates == FALSE) {"DISTINCT"}
-  , "hzname, hzdept_r, hzdepb_r, texture, texcl, fragvol_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, c.cokey, ch.chkey
+  , "hzname, hzdept_r, hzdepb_r, texture, texcl, fragvol_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, kwfact, kffact, c.cokey, ch.chkey
 
   FROM legend l INNER JOIN
        mapunit mu ON mu.lkey = l.lkey INNER JOIN",
