@@ -80,6 +80,8 @@ importFrom(aqp,
 )
 
 importMethodsFrom(aqp, "plot")
+importMethodsFrom(aqp, "length")
+importMethodsFrom(aqp, "nrow")
 importClassesFrom(aqp, "SoilProfileCollection")
 
 
