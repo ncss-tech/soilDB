@@ -3,9 +3,9 @@ Type: Package
 Title: Soil Database Interface
 Version: 2.3.8
 Date: 2019-03-22
-Authors@R: c(person(given="Dylan", family="Beaudette", role = c("cre"), email = "dylan.beaudette@ca.usda.gov"), person(given="Jay", family="Skovlin", role = c("aut")), person(given="Stephen", family="Roecker", role = c("aut")) )
-Author: Dylan Beaudette [cre], Jay Skovlin [aut], Stephen Roecker [aut]
-Maintainer: Dylan Beaudette <dylan.beaudette@ca.usda.gov>
+Authors@R: c(person(given="Dylan", family="Beaudette", role = c("cre", "aut"), email = "dylan.beaudette@usda.gov"), person(given="Jay", family="Skovlin", role = c("aut")), person(given="Stephen", family="Roecker", role = c("aut")) )
+Author: Dylan Beaudette [cre,aut], Jay Skovlin [aut], Stephen Roecker [aut]
+Maintainer: Dylan Beaudette <dylan.beaudette@usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
 License: GPL (>= 3)
 LazyLoad: yes
