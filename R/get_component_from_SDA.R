@@ -13,24 +13,29 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   # paste0("mu.nationalmusym + '_' + CAST(comppct_r AS VARCHAR) + '_' + compname + '-' + ISNULL(localphase, 'no_phase') AS derived_cokey")
   
   c.vars <- "compname, comppct_r, compkind, majcompflag, localphase, slope_r, drainagecl, elev_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, earthcovkind1, earthcovkind2, erocl, tfact, wei, weg, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, cokey"
+  es.vars <- "ecoclassname, ecoclasstypename, ecoclassref, ecoclassid"
+
   q.component <- paste("
   SELECT", 
-  if (duplicates == FALSE) {"DISTINCT"} else {"mukey,"}
-  , "mu.nationalmusym,", c.vars,
+  if (duplicates == FALSE) {"DISTINCT"} else {"mukey, "}
+  , "mu.nationalmusym, cokey, ", c.vars, es.vars,
       
   "FROM legend l INNER JOIN
        mapunit mu ON mu.lkey = l.lkey INNER JOIN",
+  
   if (duplicates == FALSE) {
     paste("(SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2 
-    FROM mapunit
-    GROUP BY nationalmusym) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN
-    (SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu2.mukey2")
-  } else {paste("(SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu.mukey")}
+    FROM mapunit GROUP BY nationalmusym) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN
+    (SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu2.mukey2 INNER JOIN
+          (SELECT", es.vars, ", cokey AS cokey2 FROM coecoclass WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')) AS ces ON c.cokey = ces.cokey2")
+  } else {
+    paste("(SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu.mukey INNER JOIN
+          (SELECT", es.vars, ", cokey AS cokey2 FROM coecoclass WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')) AS ces ON c.cokey = ces.cokey2")
+  }
           
   , "WHERE", WHERE,
   
-  "ORDER BY nationalmusym, comppct_r DESC, compname
-  ;")
+  "ORDER BY nationalmusym, comppct_r DESC, compname;")
   
   
   # exec query
@@ -54,7 +59,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
                        pmg.rvindicator = 'Yes'          LEFT OUTER JOIN
     copm      pm  ON pm.copmgrpkey     = pmg.copmgrpkey
 
-    WHERE co.cokey IN (", paste0(d.component$cokey, collapse = ", "), ")
+    WHERE co.cokey IN (", paste0(d.component$cokey, collapse = ", "), ") 
     
     ORDER BY co.cokey, pmg.copmgrpkey, pmorder"
     )
@@ -117,7 +122,6 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
     # merge
     d.component <- merge(d.component, d.cogmd, by = "cokey", all.x = TRUE)
   }
-  
   
   # done
   return(d.component)
@@ -469,7 +473,7 @@ fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                                         stringsAsFactors = stringsAsFactors
                                         )
   # f.mapunit   <- get_mapunit_from_SDA(WHERE, stringsAsFactors = stringsAsFactors)
-  f.chorizon  <- get_chorizon_from_SDA(WHERE, 
+  f.chorizon  <- get_chorizon_from_SDA(paste0('c.cokey IN', format_SQL_in_statement(unique(f.component$cokey))), 
                                        duplicates = duplicates, 
                                        drop.unused.levels = drop.unused.levels
                                        )
