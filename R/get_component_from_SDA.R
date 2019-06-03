@@ -26,10 +26,10 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   if (duplicates == FALSE) {
     paste("(SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2 
     FROM mapunit GROUP BY nationalmusym) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN
-    (SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu2.mukey2 INNER JOIN
+    (SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu2.mukey2 LEFT OUTER JOIN
           (SELECT", es.vars, ", cokey AS cokey2 FROM coecoclass WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')) AS ces ON c.cokey = ces.cokey2")
   } else {
-    paste("(SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu.mukey INNER JOIN
+    paste("(SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu.mukey LEFT OUTER JOIN
           (SELECT", es.vars, ", cokey AS cokey2 FROM coecoclass WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')) AS ces ON c.cokey = ces.cokey2")
   }
           
@@ -473,6 +473,8 @@ fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                                         stringsAsFactors = stringsAsFactors
                                         )
   # f.mapunit   <- get_mapunit_from_SDA(WHERE, stringsAsFactors = stringsAsFactors)
+  
+  # AGB update: only query component horizon for cokeys in the component result (subject to user-specified WHERE clause)
   f.chorizon  <- get_chorizon_from_SDA(paste0('c.cokey IN', format_SQL_in_statement(unique(f.component$cokey))), 
                                        duplicates = duplicates, 
                                        drop.unused.levels = drop.unused.levels
