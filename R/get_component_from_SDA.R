@@ -15,10 +15,9 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   c.vars <- "cokey, compname, comppct_r, compkind, majcompflag, localphase, slope_r, drainagecl, elev_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, earthcovkind1, earthcovkind2, erocl, tfact, wei, weg, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition"
   es.vars <- "ecoclassname, ecoclasstypename, ecoclassref, ecoclassid"
 
-  q.component <- paste("
-  SELECT", 
+  q.component <- paste("SELECT", 
   if (duplicates == FALSE) {"DISTINCT"} else {"mukey, "}
-  , "mu.nationalmusym, mukey,", c.vars, ",", es.vars,
+  , "mu.nationalmusym,", c.vars, ",", es.vars,
       
   "FROM legend l INNER JOIN
        mapunit mu ON mu.lkey = l.lkey INNER JOIN",
