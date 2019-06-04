@@ -15,21 +15,21 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   c.vars <- "cokey, compname, comppct_r, compkind, majcompflag, localphase, slope_r, drainagecl, elev_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, earthcovkind1, earthcovkind2, erocl, tfact, wei, weg, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition"
   es.vars <- "ecoclassname, ecoclasstypename, ecoclassref, ecoclassid"
 
-  q.component <- paste("SELECT", 
-  if (duplicates == FALSE) {"DISTINCT"} else {"mukey, "}
-  , "mu.nationalmusym,", c.vars, ",", es.vars,
+  q.component <- paste("SELECT", if (duplicates == FALSE) { "DISTINCT" }, "mu.nationalmusym,", 
+                       if (duplicates == FALSE) { "mu2.mukey2 AS mukey," } else { "mu.mukey AS mukey," }, c.vars, ",", es.vars,
       
   "FROM legend l INNER JOIN
        mapunit mu ON mu.lkey = l.lkey INNER JOIN",
   
   if (duplicates == FALSE) {
-    paste("(SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2 
-    FROM mapunit GROUP BY nationalmusym) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN
-    (SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu2.mukey2 LEFT OUTER JOIN
-          (SELECT cokey AS cokey2,", es.vars, "FROM coecoclass WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')) AS ces ON c.cokey = ces.cokey2")
+    paste("
+    (SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2 FROM mapunit GROUP BY nationalmusym) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym 
+      INNER JOIN (SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu2.mukey2 
+      LEFT OUTER JOIN (SELECT cokey AS cokey2,", es.vars, "FROM coecoclass WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')) AS ces ON c.cokey = ces.cokey2")
   } else {
-    paste("(SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey = mu.mukey LEFT OUTER JOIN
-          (SELECT cokey AS cokey2,", es.vars, "FROM coecoclass coeco WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')) AS ces ON c.cokey = ces.cokey2")
+    paste("
+    (SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu.mukey 
+      LEFT OUTER JOIN (SELECT cokey AS cokey2,", es.vars, "FROM coecoclass WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')) AS ces ON c.cokey = ces.cokey2")
   }
           
   , "WHERE", WHERE,
