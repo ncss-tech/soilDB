@@ -27,5 +27,6 @@ test_that("fetchSDA_component() returns expected results", {
   expect_equal(x$nationalmusym, c('kzc4', 'kzc4'))
   expect_equal(site(x)$nationalmusym, c('kzc4', 'kzc4'))
   
+  # test that both components have no NRCS forest/range site assigned
   expect_equal(site(x)$ecoclassid, c(NA,NA))
 })

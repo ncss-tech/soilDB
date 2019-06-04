@@ -15,8 +15,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   c.vars <- "cokey, compname, comppct_r, compkind, majcompflag, localphase, slope_r, drainagecl, elev_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, earthcovkind1, earthcovkind2, erocl, tfact, wei, weg, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition"
   es.vars <- "ecoclassname, ecoclasstypename, ecoclassref, ecoclassid"
 
-  q.component <- paste("SELECT", if (duplicates == FALSE) { "DISTINCT" }, "mu.nationalmusym,", 
-                       if (duplicates == FALSE) { "mu2.mukey2 AS mukey," } else { "mu.mukey AS mukey," }, c.vars, ",", es.vars,
+  q.component <- paste("SELECT", if (duplicates == FALSE) { "DISTINCT" } else { "mu.mukey AS mukey," }, "mu.nationalmusym,", c.vars, ",", es.vars,
       
   "FROM legend l INNER JOIN
        mapunit mu ON mu.lkey = l.lkey INNER JOIN",
@@ -47,6 +46,12 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
                         stringsAsFactors = stringsAsFactors
                         )
 
+  # if mukeys are "flattened" to nmusym, make sure the mukey column _exists_ but is empty (NA)
+  # presence of NA used to make it clear to user whether they need to set the duplicates flag TRUE, 
+  # depending on their use case (i.e. need all unique MUKEYS, set duplicates=TRUE; need unique data? duplicates=FALSE)
+  if(duplicates == FALSE) {
+    d.component$mukey <- NA
+  }
   
   # parent material
   q.pm <- paste0(
