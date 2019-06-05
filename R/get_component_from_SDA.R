@@ -273,11 +273,11 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
                                   drop.unused.levels = TRUE,
                                   stringsAsFactors = default.stringsAsFactors()
                                   ) {
-  # seriously!, how is their no fragvoltot_r column?
+
   q.chorizon <- paste("
   SELECT", 
   if (duplicates == FALSE) {"DISTINCT"}
-  , "hzname, hzdept_r, hzdepb_r, texture, texcl, fragvol_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, kwfact, kffact, c.cokey, ch.chkey
+  , "hzname, hzdept_r, hzdepb_r, texture, texcl, fragvol_l, fragvol_r, fragvol_h, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, kwfact, kffact, c.cokey, ch.chkey
 
   FROM legend l INNER JOIN
        mapunit mu ON mu.lkey = l.lkey INNER JOIN",
@@ -298,7 +298,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
    chtexture    cht  ON cht.chtgkey  = chtg.chkey
 
    LEFT OUTER JOIN
-       (SELECT SUM(fragvol_r) fragvol_r, ch2.chkey
+       (SELECT SUM(fragvol_l) fragvol_l, SUM(fragvol_r) fragvol_r, SUM(fragvol_h) fragvol_h, ch2.chkey
         FROM chorizon ch2
         INNER JOIN chfrags chf ON chf.chkey = ch2.chkey
 
