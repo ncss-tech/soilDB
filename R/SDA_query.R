@@ -16,17 +16,11 @@ SDA_query <- function(q) {
   if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('jsonlite', quietly=TRUE))
     stop('please install the `httr` and `jsonlite` packages', call.=FALSE)
   
-  # temp place to keep json-style post args
-  tf <- tempfile() 
-  
-  # compute json post args and save to temp file
-  # result is JSON with first-line as column names
-  # this means result is a character matrix
-  post.data <- jsonlite::toJSON(list(query=q, format='JSON+COLUMNNAME'), auto_unbox = TRUE)
-  cat(post.data, file=tf, sep = '\n')
-  
-  # submit request
-  r <- httr::POST(url="https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest", body=httr::upload_file(tf))
+   # submit request
+  r <- httr::POST(url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
+                  body = list(query = q,
+                              format = "JSON+COLUMNNAME"),
+                  encode = "form")
   
   # trap errors, likely related to SQL syntax errors
   request.status <- try(httr::stop_for_status(r), silent = TRUE)
