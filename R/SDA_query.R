@@ -87,27 +87,16 @@ SDA_query <- function(q) {
 # no conversion of strings -> factors
 .post_process_SDA_result_set <- function(i) {
   # the first line is always the colnames
-  i.header <- i[1, ]
-  
+  colnames(i) <- i[1, ]
+
   # remove the first line
   # Arrg! the dreaded sing-row indexing bug: drop=FALSE ensures result is a matrix
   i <- i[-1, , drop=FALSE]
-  
-  # work-around for all data encoded as char
-  # save to file / re-load to guess column classes
-  # notes:
-  #  * temporary column names are ignored and re-built from original header
-  #  * using "|" for field seperator, unlikely collisions
-  #  * quote all text fields, important for multi-line records
-  #  * use double-quoting in case double quotes are present in the original text
-  i.tf <- tempfile()
-  write.table(i, file=i.tf, col.names=TRUE, row.names=FALSE, sep='|', quote=TRUE, qmethod = 'double')
-  
-  # re-load and guess column types
-  df <- read.table(i.tf, header=TRUE, sep='|', quote='"', comment.char='', na.strings = c('', 'NA'), stringsAsFactors = FALSE)
- 
-  # add colnames from original header
-  names(df) <- i.header
+
+  df <- as.data.frame(i, stringsAsFactors = FALSE)
+  df <- type.convert(df,
+                     na.strings = c('', 'NA'),
+                     as.is = TRUE)
   
   ## TODO further error checking?
   
