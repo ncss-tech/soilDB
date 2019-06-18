@@ -75,6 +75,17 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   
 })
 
+test_that("SDA_query() interprets column names", {
+  
+  # x.3 is from the component table
+  expect_equal(
+    names(x.3), 
+    c("mukey", "cokey", "compkind", "comppct_r", "majcompflag", "elev_r", "slope_r", "wei", "weg")
+    )
+})
+
+
+
 test_that("SDA_query() interprets data type correctly", {
   
   # x.3 is from the component table

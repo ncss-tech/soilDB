@@ -90,13 +90,16 @@ SDA_query <- function(q) {
   colnames(i) <- i[1, ]
 
   # remove the first line
-  # Arrg! the dreaded sing-row indexing bug: drop=FALSE ensures result is a matrix
+  # Arrg! the dreaded single-row indexing bug: drop=FALSE ensures result is a matrix
   i <- i[-1, , drop=FALSE]
-
+  
+  # keep everything in memory, c/o Kyle Bockinsky
   df <- as.data.frame(i, stringsAsFactors = FALSE)
+  # attempt type conversion, same result as writing to file and reading-in via read.table()
   df <- type.convert(df,
                      na.strings = c('', 'NA'),
-                     as.is = TRUE)
+                     as.is = TRUE
+                     )
   
   ## TODO further error checking?
   
