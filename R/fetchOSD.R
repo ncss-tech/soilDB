@@ -23,6 +23,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
   # using HTTP GET is convenient but comes with limits on the number of chars in the URL
   # limiting to 2048 will likely save some trouble
   if(nchar(final.url) > 2048) {
+    stop('URL too long, consider splitting input vector of soil series with `makeChunks()` and iterating over chunks', call. = FALSE)
   }
   
   # attempt query to API, result is JSON
