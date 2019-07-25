@@ -19,6 +19,12 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
   # format series list and append to url
   final.url <- paste(url, URLencode(paste(soils, collapse=',')), sep='')
   
+  ## TODO: implement HTTP POST + JSON for safer encapsulation
+  # using HTTP GET is convenient but comes with limits on the number of chars in the URL
+  # limiting to 2048 will likely save some trouble
+  if(nchar(final.url) > 2048) {
+  }
+  
   # attempt query to API, result is JSON
   res <- try(jsonlite::fromJSON(final.url))
   

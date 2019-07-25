@@ -1,3 +1,17 @@
+
+# generate chunk labels for splitting data
+# ids: vector of IDs
+# size: chunk size
+makeChunks <- function(ids, size=100) {
+  n <- length(ids)
+  chunk.id <- seq(from=1, to=floor(n / size)+1)
+  chunk.ids <- rep(chunk.id, each=size)
+  chunk.ids <- chunk.ids[1:n]
+  return(chunk.ids)
+}
+
+
+
 # format vector of values into a string suitable for an SQL `IN` statement
 # currently expects character data only
 format_SQL_in_statement <- function(x) {
