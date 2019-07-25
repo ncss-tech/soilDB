@@ -1,5 +1,7 @@
--------------------------- soilDB 2.3.9 (2019-06-18) ----------------------------
+-------------------------- soilDB 2.3.9 (2019-07-25) ----------------------------
 * SDA_query() no longer writes temporary files, c/o suggestion from Kyle Bocinsky (#106 / #108)
+* fetchOSD() gets a sanity check to protect against going over GET request limits
+* makeChunks() added to util functions, useful for splitting data before sending API calls
 
 -------------------------- soilDB 2.3.8 (2019-03-22) ----------------------------
 * loafercreek, gopheridge, and mineralking sample data have been updated with valid place-holder in @sp
