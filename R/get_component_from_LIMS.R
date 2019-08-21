@@ -98,6 +98,7 @@ get_mapunit_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRU
   })
   d.mapunit <- do.call("rbind", d.mapunit)
   
+  d.mapunit$musym = as.character(d.mapunit$musym)
   
   # set factor levels according to metadata domains
   # data is coming back uncoded from LIMS so db is set to "SDA"
@@ -124,6 +125,8 @@ get_projectmapunit_from_NASISWebReport <- function(projectname, stringsAsFactors
     })
   d.mapunit <- do.call("rbind", d.mapunit)
   
+  d.mapunit$musym = as.character(d.mapunit$musym)
+  
   # set factor levels according to metadata domains
   d.mapunit <- uncode(d.mapunit, db = "LIMS", stringsAsFactors = stringsAsFactors)
   
@@ -140,6 +143,8 @@ get_projectmapunit2_from_NASISWebReport <- function(mlrassoarea, fiscalyear, pro
   
   args = list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)
   d.mapunit    =  parseWebReport(url, args)
+  
+  d.mapunit$musym = as.character(d.mapunit$musym)
   
   # set factor levels according to metadata domains
   # data is coming back uncoded from LIMS so db is set to "SDA"
