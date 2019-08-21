@@ -145,9 +145,6 @@ get_projectmapunit2_from_NASISWebReport <- function(mlrassoarea, fiscalyear, pro
   # data is coming back uncoded from LIMS so db is set to "SDA"
   d.mapunit <- uncode(d.mapunit, db = "SDA", stringsAsFactors = stringsAsFactors)
   
-  # date
-  d.mapunit$cordate <- as.Date(d.mapunit$cordate)
-  
   # return data.frame
   return(d.mapunit)
   
