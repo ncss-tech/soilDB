@@ -183,7 +183,7 @@ get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = F
 get_legend_from_SDA <- function(WHERE = NULL, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   q.legend  <- paste("
                      SELECT
-                     areasymbol, areaname, areatypename, CAST(areaacres AS INTEGER) AS areaacres, ssastatus, 
+                     mlraoffice, areasymbol, areaname, areatypename, CAST(areaacres AS INTEGER) AS areaacres, ssastatus, 
                      CAST(projectscale AS INTEGER) projectscale, cordate, 
                      CAST(l.lkey AS INTEGER) lkey, COUNT(mu.mukey) n_mukey
                      
@@ -192,7 +192,7 @@ get_legend_from_SDA <- function(WHERE = NULL, drop.unused.levels = TRUE, strings
                      
                      WHERE", WHERE,
                      
-                     "GROUP BY areasymbol, areaname, areatypename, areaacres, ssastatus, projectscale, cordate, l.lkey
+                     "GROUP BY mlraoffice, areasymbol, areaname, areatypename, areaacres, ssastatus, projectscale, cordate, l.lkey
                      
                      ORDER BY areasymbol
                      ;")
