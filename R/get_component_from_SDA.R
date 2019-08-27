@@ -214,6 +214,49 @@ get_legend_from_SDA <- function(WHERE = NULL, drop.unused.levels = TRUE, strings
 
 
 
+get_lmuaoverlap_from_SDA <- function(WHERE = NULL, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+
+  q <- paste("SELECT
+             legend.areasymbol, legend.areaname, legend.areaacres, 
+             lao.areatypename lao_areatypename, lao.areasymbol lao_areasymbol, lao.areaname lao_areaname, lao.areaovacres lao_areaovacres,
+             mu.mukey, musym, nationalmusym, muname, mustatus, muacres,
+             muao.areaovacres muao_areaovacres
+             
+             FROM 
+             legend                                   INNER JOIN 
+             mapunit     mu ON mu.lkey  = legend.lkey    
+             
+             INNER JOIN             
+                 laoverlap  lao ON lao.lkey       = legend.lkey
+             
+             INNER JOIN
+                 muaoverlap muao ON muao.mukey       = mu.mukey
+                                AND muao.lareaovkey  = lao.lareaovkey
+             
+             WHERE", WHERE, 
+             
+             "ORDER BY legend.areasymbol, mu.musym, legend.areatypename
+             ;"
+  )
+  
+  # exec query
+  d <- SDA_query(q)
+  
+  d$musym = as.character(d$musym)
+  
+  # recode metadata domains
+  d <- uncode(d,
+              db = "NASIS", 
+              drop.unused.levels = drop.unused.levels,
+              stringsAsFactors = stringsAsFactors
+  )
+  
+  # done
+  return(d)
+}
+
+
+
 get_mapunit_from_SDA <- function(WHERE = NULL, 
                                  drop.unused.levels = TRUE,
                                  stringsAsFactors = default.stringsAsFactors()

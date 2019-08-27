@@ -237,11 +237,13 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, str
   # close connection
   RODBC::odbcClose(channel)
   
+  d$musym = as.character(d$musym)
+  
   # recode metadata domains
-  d.legend <- uncode(d,
-                     db = "NASIS", 
-                     drop.unused.levels = drop.unused.levels,
-                     stringsAsFactors = stringsAsFactors
+  d <- uncode(d,
+              db = "NASIS", 
+              drop.unused.levels = drop.unused.levels,
+              stringsAsFactors = stringsAsFactors
   )
   
   # done
