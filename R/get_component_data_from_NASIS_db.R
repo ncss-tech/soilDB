@@ -145,7 +145,7 @@ get_legend_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, stringsA
                      
                      FROM 
                      area     a                                  INNER JOIN 
-                     legend   l      ON l.areaiidref = a.areaiid INNER JOIN
+                     legend_View_1 l ON l.areaiidref = a.areaiid INNER JOIN
                      lmapunit lmu    ON lmu.liidref = l.liid
                      
                      INNER JOIN
@@ -185,6 +185,67 @@ get_legend_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, stringsA
   
   # done
   return(d.legend)
+}
+
+
+
+get_lmuaoverlap_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+  # must have RODBC installed
+  if(!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
+  q <- paste("SELECT
+             a.areasymbol, a.areaname, a.areaacres, 
+             at.areatypename lao_areatypename, a2.areasymbol lao_areasymbol, a2.areaname lao_areaname, lao.areaovacres lao_areaovacres,
+             lmapunitiid, musym, nationalmusym, muname, mustatus, muacres,
+             lmuao.areaovacres lmuao_areaovacres
+             
+             FROM 
+             legend_View_1 l                                             INNER JOIN 
+             lmapunit    lmu   ON lmu.liidref          = l.liid          INNER JOIN 
+             mapunit     mu    ON mu.muiid             = lmu.muiidref    
+             
+             INNER JOIN 
+             area a ON a.areaiid = l.areaiidref
+             
+             INNER JOIN             
+             laoverlap  lao ON lao.liidref    = l.liid         INNER JOIN
+             area       a2  ON a2.areaiid     = lao.areaiidref INNER JOIN
+             areatype   at  ON at.areatypeiid = a2.areatypeiidref
+             
+             LEFT OUTER JOIN
+             lmuaoverlap lmuao ON lmuao.lmapunitiidref = lmu.lmapunitiid
+             AND lmuao.lareaoviidref  = lao.lareaoviid
+             
+             WHERE mustatus = 3
+             
+             ORDER BY a.areasymbol, lmu.musym, at.areatypename
+             ;"
+  )
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  
+  # exec query
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # recode metadata domains
+  d.legend <- uncode(d,
+                     db = "NASIS", 
+                     drop.unused.levels = drop.unused.levels,
+                     stringsAsFactors = stringsAsFactors
+  )
+  
+  # done
+  return(d)
 }
 
 
