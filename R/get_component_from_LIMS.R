@@ -88,6 +88,32 @@ get_legend_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRUE
 
 
 
+get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_lmuaoverlap_from_NASISWebReport"
+  
+  d <- lapply(areasymbol, function(x) {
+    cat("getting legend for '", x, "' from NasisReportsWebSite \n", sep = "")
+    args = list(p_areasymbol = x)
+    d    =  parseWebReport(url, args)
+  })
+  d <- do.call("rbind", d)
+  
+  
+  # set factor levels according to metadata domains
+  # data is coming back uncoded from LIMS so db is set to "SDA"
+  d <- uncode(d, 
+              db = "SDA",
+              drop.unused.levels = drop.unused.levels,
+              stringsAsFactors = stringsAsFactors
+  )
+  
+    # return data.frame
+  return(d)
+  
+}
+
+
+
 get_mapunit_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_mapunit_from_NASISWebReport"
   

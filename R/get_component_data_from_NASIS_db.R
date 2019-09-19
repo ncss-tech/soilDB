@@ -196,7 +196,7 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, str
   
   q <- paste("SELECT
              a.areasymbol, a.areaname, a.areaacres, 
-             at.areatypename lao_areatypename, a2.areasymbol lao_areasymbol, a2.areaname lao_areaname, lao.areaovacres lao_areaovacres,
+             at2.areatypename lao_areatypename, a2.areasymbol lao_areasymbol, a2.areaname lao_areaname, lao.areaovacres lao_areaovacres,
              lmapunitiid, musym, nationalmusym, muname, mustatus, muacres,
              lmuao.areaovacres lmuao_areaovacres
              
@@ -206,20 +206,23 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, str
              mapunit_View_1  mu    ON mu.muiid             = lmu.muiidref    
              
              INNER JOIN 
-             area a ON a.areaiid = l.areaiidref
+                 area     a  ON a.areaiid      = l.areaiidref INNER JOIN
+                 areatype at ON at.areatypeiid = a.areatypeiidref
              
-             INNER JOIN             
-             laoverlap_View_1  lao ON lao.liidref    = l.liid         INNER JOIN
-             area              a2  ON a2.areaiid     = lao.areaiidref INNER JOIN
-             areatype          at  ON at.areatypeiid = a2.areatypeiidref
+             LEFT OUTER JOIN             
+                 laoverlap_View_1  lao ON lao.liidref      = l.liid         INNER JOIN
+                 area              a2  ON a2.areaiid       = lao.areaiidref INNER JOIN
+                 areatype          at2  ON at2.areatypeiid = a2.areatypeiidref
              
              LEFT OUTER JOIN
-             lmuaoverlap_View_1 lmuao ON lmuao.lmapunitiidref = lmu.lmapunitiid
+                 lmuaoverlap_View_1 lmuao ON lmuao.lmapunitiidref = lmu.lmapunitiid
                                      AND lmuao.lareaoviidref  = lao.lareaoviid
              
-             WHERE mustatus = 3
+             WHERE legendsuituse = 3  AND
+                   mustatus IN (2, 3) AND
+                   at.areatypename = 'Non-MLRA Soil Survey Area'
              
-             ORDER BY a.areasymbol, lmu.musym, at.areatypename
+             ORDER BY a.areasymbol, lmu.musym, lao_areatypename
              ;"
   )
   
@@ -237,7 +240,7 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, str
   # close connection
   RODBC::odbcClose(channel)
   
-  d$musym = as.character(d$musym)
+  d$musym <- as.character(d$musym)
   
   # recode metadata domains
   d <- uncode(d,
