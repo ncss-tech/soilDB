@@ -14,7 +14,7 @@ x.3 <- suppressMessages(SDA_query(q = "SELECT TOP 100 mukey, cokey, compkind, co
 
 ## TODO: mukeys change through time, figure out a better way to query a known record
 # table with multi-line records
-# x.4 <- suppressMessages(SDA_query(q = "SELECT * from mutext WHERE mukey = '462528';"))
+x.4 <- suppressMessages(SDA_query(q = "SELECT * from mutext WHERE mukey = '2596937';"))
 
 # point with known SSURGO data
 p <- sp::SpatialPoints(cbind(-121.77100, 37.368402), proj4string = sp::CRS('+proj=longlat +datum=WGS84'))
@@ -104,14 +104,14 @@ test_that("SDA_query() interprets data type correctly", {
 })
 
 
-## crap, need a better way to query records via stable ID!
-# test_that("SDA_query() works with multi-line records", {
-#   
-#   # https://github.com/ncss-tech/soilDB/issues/28
-#   expect_match(class(x.4), 'data.frame')
-#   expect_true(nrow(x.4) == 2)
-#   
-# })
+
+test_that("SDA_query() works with multi-line records", {
+
+  # https://github.com/ncss-tech/soilDB/issues/28
+  expect_match(class(x.4), 'data.frame')
+  expect_true(nrow(x.4) == 6)
+
+})
 
 
 
