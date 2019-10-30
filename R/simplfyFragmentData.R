@@ -4,11 +4,12 @@
 # diameter is in mm
 # NA diameter results in NA class
 .sieve <- function(diameter, flat=FALSE, para=FALSE) {
-  
+
   # flat fragments
   if(flat == TRUE)
     sieves <- c(channers=150, flagstones=380, stones=600, boulders=10000000000)
   
+  ## TODO: if using <=, the gravel/cobble break is 75mm
   # non-flat fragments
   if(flat == FALSE)
     sieves <- c(fine_gravel=5, gravel=76, cobbles=250, stones=600, boulders=10000000000)
