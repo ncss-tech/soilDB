@@ -12,8 +12,9 @@ x.2 <- suppressMessages(SDA_query(q = "SELECT areasymbol, saverest FROM sacatalo
 # table with multiple data types
 x.3 <- suppressMessages(SDA_query(q = "SELECT TOP 100 mukey, cokey, compkind, comppct_r, majcompflag, elev_r, slope_r, wei, weg FROM component ;"))
 
+## TODO: mukeys change through time, figure out a better way to query a known record
 # table with multi-line records
-x.4 <- suppressMessages(SDA_query(q = "SELECT * from mutext WHERE mukey = '462528';"))
+x.4 <- suppressMessages(SDA_query(q = "SELECT * from mutext WHERE mukey = '2596937';"))
 
 # point with known SSURGO data
 p <- sp::SpatialPoints(cbind(-121.77100, 37.368402), proj4string = sp::CRS('+proj=longlat +datum=WGS84'))
@@ -67,7 +68,7 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
 
 test_that("SDA_spatialQuery() simple spatial query, spatial results", {
 
-    res <- SDA_spatialQuery(p, what = 'geom')
+  res <- SDA_spatialQuery(p, what = 'geom')
   
   # testing known values
   expect_match(class(res), 'SpatialPolygonsDataFrame')
@@ -82,6 +83,7 @@ test_that("SDA_query() interprets column names", {
     names(x.3), 
     c("mukey", "cokey", "compkind", "comppct_r", "majcompflag", "elev_r", "slope_r", "wei", "weg")
     )
+
 })
 
 
@@ -97,16 +99,18 @@ test_that("SDA_query() interprets data type correctly", {
   expect_equal(class(x.3$elev_r), 'integer')
   expect_equal(class(x.3$slope_r), 'numeric')
   expect_equal(class(x.3$wei), 'integer')
-  expect_equal(class(x.3$weg), 'character')
+  expect_equal(class(x.3$weg), 'integer')
   
 })
 
+
+
 test_that("SDA_query() works with multi-line records", {
-  
+
   # https://github.com/ncss-tech/soilDB/issues/28
   expect_match(class(x.4), 'data.frame')
-  expect_true(nrow(x.4) == 2)
-  
+  expect_true(nrow(x.4) == 6)
+
 })
 
 

@@ -14,6 +14,7 @@
 \alias{get_copedon_from_NASIS_db}
 
 \alias{get_legend_from_NASIS}
+\alias{get_lmuaoverlap_from_NASIS}
 \alias{get_mapunit_from_NASIS}
 \alias{get_projectmapunit_from_NASIS}
 \alias{get_projectstaff_from_NASIS}

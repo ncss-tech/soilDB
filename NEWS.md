@@ -1,0 +1,337 @@
+# soilDB 2.3.9 (2019-07-25)
+   * SDA_query() no longer writes temporary files, c/o suggestion from Kyle Bocinsky (#106 / #108)
+   * fetchOSD() gets a sanity check to protect against going over GET request limits
+   * makeChunks() added to util functions, useful for splitting data before sending API calls
+
+# soilDB 2.3.8 (2019-03-22)
+   * loafercreek, gopheridge, and mineralking sample data have been updated with valid place-holder in @sp
+   * bug fix for SDA_query() related to multi-line records (https://github.com/ncss-tech/soilDB/issues/28)
+
+# soilDB 2.3.7 (2019-03-12)
+   * sharpshootR added to SUGGESTS
+   * fetchHenry() and fetchSCAN() now include water year/day (Oct 1 -- Sep 30)
+   * HenryTimeLine() convenience function added
+   * bug fix in fetchOSD(..., extended=TRUE) when no climate data available
+   * bug fix in SDA_query()
+
+# soilDB 2.3.6 (2019-02-12)
+   * simplifyFragmentData() and related functions now 4-5x faster
+   * fetchOSD() now returns metadata when extended=TRUE
+
+# soilDB 2.3.5 (2019-01-14)
+   * NAMESPACE and R CMD check fixes
+   * documentation updates
+   * soilDB now suggests `stringr`
+   * new tests
+   * release to CRAN
+
+# soilDB 2.3.3 (2018-12-18)
+   * bug fix in fetchNASIS() related to conversion of NULL fragment volume to 0
+   * fetchKSSL() can now automatically simplify colors with `simplifyColors = TRUE`
+
+# soilDB 2.3 (2018-11-17)
+   * new function for exploring soil series co-occurrence data: siblings()
+   * fetchOSD(..., extended=TRUE) gets competing soil series
+   * new tests
+   * removed old sample gSSURGO chunk and related documentation
+   * release to CRAN
+
+# soilDB 2.2-6 (2018-10-11)
+   * new function for spatial queries: SDA_spatialQuery(), still needs testing and documentation
+
+# soilDB 2.2-6 (2018-10-11)
+   * fetchOSD gets an overhaul, new API and features
+
+# soilDB 2.2-5 (2018-10-05)
+   * experimental interface to SoillWeb OSD fulltext search: OSDquery()
+
+# soilDB 2.2-4 (2018-09-04)
+   * numerous bug-fixes in simplifyFragmentData() see (https://github.com/ncss-tech/soilDB/issues/70)
+
+# soilDB 2.2-1 (2018-05-21)
+   * get_mutext_from_NASIS_db() added for extraction of map unit text notes
+
+# soilDB 2.2 (2018-05-08)
+   * CRAN release
+   * better bug-fix for fetchSCAN and missing data (https://github.com/ncss-tech/soilDB/issues/26)
+   * exposing some of the internal functionality used by fetchHenry
+
+# soilDB 2.1-1 (2018-03-29)
+   * added more SCAN/SNOTEL metadata (https://github.com/ncss-tech/soilDB/issues/61)
+
+# soilDB 2.1 (2018-03-12)
+   * generalized local NASIS ODBC authentication, should work on windows 7, 8, 10 https://github.com/ncss-tech/soilDB/issues/54
+
+# soilDB 2.0-4 (2018-03-06)
+   * bug fix for subtle change in how SCAN data are returned from webservice
+
+# soilDB 2.0-3 (2018-02-13)
+   * bug fix for simplfyFragmentData(, nullFragsAreZero=FALSE), still more work to do
+
+# soilDB 2.0-2 (2018-01-29)
+   * bug fix for simplfyFragmentData() when fragment volume > 100%
+
+# soilDB 2.0-1 (2018-01-23)
+   * updated `loafercreek` and `gopheridge` sample datasets and manual page to reflect latest fetchNASIS
+
+# soilDB 2.0 (2017-12-23)
+   * bug fixes, manual page updates, and stabilization of NASIS interaction
+   * released to CRAN
+
+# soilDB 1.8.12 (2017-09-19)
+   * bug fix in fetchHenry(), it is now possible to query only sensor metadata
+
+# soilDB 1.8.11 (2017-08-17)
+   * temporary bug-fix related to SCAN data (https://github.com/ncss-tech/soilDB/issues/26)
+
+# soilDB 1.8.10 (2017-08-10)
+   * re-write of mix_and_clean_colors() so that color mixing happens in CIE LAB space
+
+# soilDB 1.8.5 (2017-05-24)
+   * re-write of SDA_query(), better error handling, support for multi-part result sets
+
+# soilDB 1.8.2 (2017-03-24)
+   * fetchHenry() can now access water level data, see manual page
+
+# soilDB 1.8.1 (2017-01-23)
+   * new function: get_comonth_from_NASIS_db() see manual page for details
+
+# soilDB 1.8-10 (2016-12-27)
+   * converting all URLs to 'HTTPS', addressing bugs with fetchSCAN() and associated functions
+
+# soilDB 1.8-7 (2016-11-16)
+   * sanity checks for fetchHenry()
+   * SCAN_sensor_metadata() vectorized and documented
+   * unique row names in SPDF returned by seriesExtent()
+
+# soilDB 1.8-6 (2016-11-04)
+   * converted all links to SoilWeb servers to HTTPS
+   * converted all NRCS web-service links to HTTPS
+
+# soilDB 1.8-4 (2016-10-07)
+   * fetchOSD() now returns dry colors and the source "narrative" for each horizon; function gains an argument
+   * fetchOSD() now returns texture class, coarse fragment modifier, pH, and pH class
+   * fetchSCAN() re-written, see manual pages and http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html 
+
+# soilDB 1.8 (2016-04-29)
+   * fetchKSSL() can now query basic morphologic data with the argument "returnMorphologicData"
+   * two new functions for simplifying NASIS color and fragment data:
+      + simplifyFragmentData()
+      + simplifyColorData()
+   * ^^^ these new functions are now used by fetchNASIS() to summarize color and fragment data (vs. SQL)
+   * NOTE: soilDB now uses reshape2::dcast() instead of reshape::cast()
+
+# soilDB 1.7 (2016-04-18)
+   * bug fix in colors returned by fetchNASIS(), reported by Andy Paolucci
+   * bug fix in SDA_query(), due to changes in httr::content. Thanks Kyle Bocinsky for the fix!
+   * SDA_query() now returns SQL errors generated by SDA
+   * new columns from NASIS site table returned by fetchNASIS()
+   * NASIS pedon ecosite data now returned by fetchNASIS() (c/o J. Skovlin)
+
+# soilDB 1.6.9 (2015-12-28)
+   * clean-up in local NASIS queries, removed extra parens
+   * NASIS component query function overhaul: previous code may be broken, details pending
+
+# soilDB 1.6.8 (2015-12-22)
+   * added temperature class (temp_class) field from the pedon taxonomic history table (NASIS) [addition suggested by J. Baker]
+
+# soilDB 1.6.7 (2015-12-16)
+   * experimental function for processing SDA queries that return geometry: processSDA_WKT()
+
+# soilDB 1.6.5 (2015-12-03)
+   * bug fix for poorly specified gemomorphic descriptions, caused fetchNASIS() to barf
+   * fetchKSSL() gains new query filters, see man page
+
+# soilDB 1.6.4 (2015-11-27)
+   * package re-org, getting ready for soilDB 2.0:
+      + dropping use of `RCurl` functions in favor of `httr` alternatives (done)
+      + switch from `reshape` to `reshape2` (pending)
+      + possibly move some packages from SUGGESTS to IMPORTS
+
+# soilDB 1.6.3 (2015-11-20)
+   * new spatial query helper functions for SDA
+   * re-named SSURGO_spatial_query() to SoilWeb_spatial_query(), this function may be phased-out due to spatial support now available in SDA
+   * removed MUKEYS_by_ll_bbox() function, no longer needed and web-service may be disabled at any time
+   * mapunit_geom_by_ll_bbox() will probably be removed in the near future with an SDA-based alternative
+   * KSSL data updated (server-side) to June 2015 snapshot, "site_id" column removed from fetchKSSL() results
+
+# soilDB 1.6 (2015-08-19)
+   * soilDB now imports from the `reshape` package, will transition to `reshape2` with soilDB 2.0
+   * fetchHenry() officially added, complete with documentation
+   * SDA_query() undergoing some upgrades, no longer requies SSOAP / XMLSchema packages
+   * SSOAP / XMLSchema packages no longer in 'suggests' list
+
+# soilDB 1.5-8 (2015-08-13)
+   * fetchKSSL() gets an argument for downloading data by MLRA
+
+# soilDB 1.5-7 (2015-03-10)
+   * updated the `loafercreek` and `gopheridge` sample datasets
+
+# soilDB 1.5-3 (2015-03-10)
+   * nullFragsAreZero argument to fetchNASIS() reset to TRUE, new documentation pending
+   * consolidate of messages printed when running fetchNASIS()
+   * introduction of new option "soilDB.verbose" (default is FALSE) for increasing the level of QC information printed
+   * new tutorial on fetchNASIS()
+
+# soilDB 1.5-2 (2015-02-24)
+   * RODBC temporarily moved from "suggested" package to "imported" package... not a good idea, reverted to "suggested"
+
+# soilDB 1.4-5 (2015-01-20)
+   * mix_and_clean_colors() now returns back-transformed, mixed, munsell colors
+   * added psctopdepth and pscbotdepth back to extended NASIS query (particle size control section depths)
+
+# soilDB 1.4-3 (2015-01-12)
+   * get_hz_data_from_NASIS_db() no longer assumes fragment volume of NULL = 0
+   * get_extended_data_from_NASIS_db() no longer assumes fragment volume of NULL = 0
+   * fetchNASIS() has a new argument, nullFragsAreZero=FALSE; set to TRUE for past NULL -> 0 conversion
+
+# soilDB 1.4-2 (2014-12-23)
+   * new internally-used function .formatLandformString() for flattening NASIS/PedonPC "landform" records
+   * new internally-used function .formatParentMaterialString() for flattening NASIS/PedonPC "parent material" records
+   * fetchNASIS() incorporates the results of these two new functions
+   * new function SSURGO_spatial_query() queries SSURGO data from SoilWeb (see manual page for details)
+
+# soilDB 1.4 (2014-11-13)
+   * moving most of the hard-to-install packages into `suggests`, and checking for package availability at function runtime. this will make soilDB more portable, as not every user will want or need all functionality.
+
+# soilDB 1.3-6 (2014-10-27)
+   * fetchNASIS() gains argument rmHzErrors to optionally retain pedons with horizonation errors. use with caution.
+
+# soilDB 1.3-5 (2014-09-25)
+   * loafercreek sample dataset re-created from new data
+   * seriesExtent() now utilizes pre-cached GeoJSON files from [http://casoilresource.lawr.ucdavis.edu/see/]
+
+# soilDB 1.3 (2014-02-26)
+   * Changes made to fetch functions to accommodate changes implemented in the NASIS 6.3 data structure
+   * get_site_data_from_NASIS_db(): in cases where multiple records in site-bedrock exist, retain only the most shallow
+   * fetchRaCA() has a new argument for querying data by rcasiteid
+
+# soilDB 1.2-9 (2014-01-06)
+   * SOC concentration and stock values are temporarily disabled in fetchRaCA() 
+      + waiting for new estimates from the Soil Survey Center...
+
+# soilDB 1.2-6 (2013-12-05)
+   * added new function contributed by J.M. Skovlin: get_veg_from_NPS_PLOTS_db()
+   * bugfixes in get_extended_data_from_NASIS_db(): results from geomorph tables are now returned
+
+# soilDB 1.2-3 (2013-10-25)
+   * added new function fetchSCAN() for downloading soil/climate data from USDA-NRCS SCAN stations (still experimental!)
+
+# soilDB 1.2-1 (2013-09-12)
+   * bug fixing in fetchRaCA(): 
+      + "#" characters no longer cause errors
+      + duplicate IDs in source data have been fixed
+
+# soilDB 1.2 (2013-08-13)
+   * fetchRaCA() function now stable, ready for general usage
+   * fixed bug in fetchRaCA() function where the presence of single-quote character in horizon designation would throw and error
+
+# soilDB 1.1-3 (2013-07-30)
+   * new function get_copedon_from_NASIS_db(): returns basic information associated with pedons linked to component data in NASIS
+   * new function fetchRaCA(): gets data from the Rapid Carbon Assessment project [work in progress]
+
+# soilDB 1.1 (2013-06-27)
+   * get_site_data_from_NASIS_db() no longer has problems when more than 1 site bedrock kind is defined; only the shallowest row is returned
+
+# soilDB 1.0 (2013-04-04)
+   * fetchNASIS() is now much more efficient: faster / less memory used
+   * new function! fetchKSSL(): experimental interface to (most of) the KSSL data
+      + queries can be performed by series name or GCS bounding box
+      + data are delivered via CA Soil Resource Lab server
+
+# soilDB 0.9-8 (2013-04-03)
+   * fetchOSD() now immune to queries for non-soils
+   * improved efficiency in fetch* functions
+   * NASIS-DMU fetching functions now return more information, still not as complete as pedon-queries
+
+# soilDB 0.9-7 (2013-03-01)
+   * NASIS query functions now return only records from the selected set, please test older code!
+
+# soilDB 0.9-6 (2013-02-26)
+   * new function get_text_notes_from_NASIS_db() -- still needs proper documentation
+   * bug fixes to PedonPC and NASIS queries, new data elements returned by extended query functions
+   * SoilWeb queries via URL are now URL-encoded to allow for spaces in soil series names
+
+# soilDB 0.9-4 (2013-01-31)
+   * new function: fetchOSD() returns basic OSD data as a SoilProfileCollection
+
+# soilDB 0.9-3 (2013-01-08)
+   * speed-bump in color-fetching functions from NASIS/pedonPC
+   * fetchNASIS() now attempts to correct for >1 pedon/site by appending peiid to pedon_id
+
+# soilDB 0.9-2 (2012-12-18)
+   * new functions for getting / plotting the geographic extent of a soil series, using the SoilWeb query service:
+      +seriesExtent() : fetches extent as a SpatialPolygonDataFrame
+      +seriesExtentAsGmap() : fetches extent and plots on Google Maps (requires dismo package)
+
+# soilDB 0.9-1 (2012-11-27)
+   * updated functionality in fetchNASIS_component_data() pulls mapunit-level data as well as component-level data
+   * Munsell 'value' is now returned from PedonPC/NASIS fetching functions
+
+# soilDB 0.9 (2012-10-24)
+   * added a surface fragment summary "surf_frag_summary" to the results of get_extended_data_from_NASIS()
+      + note: this has not been ported to the related PedonPC queries
+   * integrated surf_frag_summary data into data returned from fetchNASIS(), stored in @site
+      + note: this has not been ported to the related PedonPC queries
+   * minor bug-fix in horizon-level rock fragment summary SQL which previously mis-classified BD as ST in some, rare cases
+      + note: this has not been ported to the related PedonPC queries
+
+# soilDB 0.8-3 (2012-09-28)
+   * site-level data: {elev, slope, aspect} are now named {elev_field, slope_field, aspect_field}
+      + this affects the data returned by fetchNASIS() and fetchPedonPC()
+
+# soilDB 0.8-2 (2012-08-23)
+   * compatible with NASIS 6.2
+   * bug fixes
+   * taxhistory selection method is preserved in the results
+   * 'taxonname' is used instead of 'sampled_as' / 'correlated_as, **seems to work, but needs further testing**
+
+# soilDB 0.8 (2012-08-20)
+   * updating for PedonPC 5.0 and NASIS 6.2
+      + site data contains the best-guessed corresponding row from the taxhistory table, based on:
+		1) most recent record, or 2) record with the least amount of missing data
+      + taxhistory data are now included in the output from get_extended_data_from_pedon_db()
+   * package is now partially compatible with NASIS 6.2
+
+# soilDB 0.6 (2012-06-19)
+   * tidying up documentation, package dependencies, and NAMESPACE
+
+# soilDB 0.5-6 (2012-04-16)
+   * adding preimlinary functions for querying component data from local NASIS
+   * fixed minor bug in SDA_query() and added some links to related documentation
+
+# soilDB 0.5-1 (2012-02-22)
+   * fetchNASIS() and fetchPedonPC() now integrate `extended' data
+   * warning and error messages cleaned-up
+   * multiple textures no longer cause duplicate HZ rows (NASIS only)
+   * exteded queries now split frags/para-frags
+   * silt fraction is estimated from 100-(sand+clay) when possible
+   * added local NASIS ODBC connection vignette (thanks JMS)
+   * removed dsn argument from NASIS functions as it should always be 'nasis_local'
+   * new wide-formatted, boolean representation of diagnostic horizon data
+   * queries standardized between NASIS/PedonPC
+   * new fetchNASIS() function for 1-line access to local NASIS data
+   * new sample data set 'loafercreek'
+   * basic vignette added, switching to knitr-style vignettes
+
+# soilDB 0.3-3 (2012-01-10)
+   * SDA_query() now functional on MacOS/UNIX-like OSes with (SSOAP 0.8-1, XMLSchema 0.6-0, and XML 3.7-1), thanks to D.T. Lang for the updates!
+   * moving hard to find packages to 'suggested' status: SSOAP, RCurl, XML, rgdal
+   * new wrapper function fetchPedonPC() for typical site/pedon/hz queries
+   * new function getHzErrorsPedonPC() for ID-ing pedons with problem horizonation
+   * NOTE: hz data queries will return 2 rows/hz (error) when multiple texture 
+  classes are assigned to a single horizon- this is a bug, not a feature!
+
+# soilDB 0.3-2 (2011-12-30)
+   * NASIS/pedonPC queries synced
+   * minor bug fixes and documentation updates
+   * updated query structure, switching over to native NASIS/PedonPC IDs
+   * extended summaries added: NASIS only
+
+# soilDB 0.2 (2011-12-27)
+   * moved functions out of aqp package
+   * basic query functionality from local NASIS DB (Jay)
+
+# soilDB 0.1 (2011-12-23)
+   * initial version on r-forge
+   * functions still exist in aqp package... need to move over completely
