@@ -71,6 +71,7 @@ get_sitesoilmoist_from_NASISWebReport(usiteid)
 
 \examples{
 \dontrun{
+\donttest{
 library(soilDB)
 library(ggplot2)
 library(gridExtra)
@@ -137,7 +138,8 @@ ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
   ggtitle(paste0(x$nationalmusym[1], 
   ': Water Table Levels from Component Soil Moisture Month Data'))
 
-  }
+}
+}
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

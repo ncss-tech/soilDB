@@ -79,6 +79,7 @@ See the \href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html}{N
 
 \examples{
 \dontrun{
+\donttest{
 # query depends on some pedon data, queried against the national database
 # note that you must setup this connection ahead of time
 f <- fetchNASIS(from = 'pedons')
@@ -89,6 +90,7 @@ plot(f[which(f$densic.contact), ], name='hzname')
 # get basic component data from local NASIS, after performing a 
 # DMU-* query against the national database
 fc <- fetchNASIS(from = 'components')
+}
 }
 }
 

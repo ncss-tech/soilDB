@@ -24,6 +24,7 @@ seriesExtentAsGmap(s, timeout=60, exp=1.25)
 
 \examples{
 \dontrun{
+\donttest{
 # fetch series extent for the 'Amador' soil series
 s <- seriesExtent('amador')
 plot(s)
@@ -31,7 +32,7 @@ plot(s)
 # fetch then plot the extent of the 'Amador' soil series
 seriesExtentAsGmap('amador')
 }
-	 
+}
 }
 
 \keyword{manip}

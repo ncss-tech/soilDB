@@ -26,12 +26,13 @@ get_component_data_from_NASIS_db(SS = TRUE, stringsAsFactors = default.stringsAs
 
 \examples{
 \dontrun{
+\donttest{
 # query text note data
 fc <- get_component_data_from_NASIS_db()
 
 # show structure of component data returned
 str(fc)
-
+}
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

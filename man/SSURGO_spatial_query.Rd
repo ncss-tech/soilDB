@@ -24,11 +24,15 @@ SoilWeb_spatial_query(bbox = NULL, coords = NULL, what = "mapunit", source = "so
 \author{D.E. Beaudette}
 
 \examples{
+\dontrun{
+\donttest{
 # query by bbox
-\dontrun{SoilWeb_spatial_query(bbox=c(-122.05, 37, -122, 37.05))}
+SoilWeb_spatial_query(bbox=c(-122.05, 37, -122, 37.05))
 
 # query by coordinate pair
-\dontrun{SoilWeb_spatial_query(coords=c(-121, 38))}
+SoilWeb_spatial_query(coords=c(-121, 38))
+}
+}
 }
 
 \keyword{manip}

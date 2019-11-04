@@ -35,6 +35,7 @@ SCAN_site_metadata(site.code)
 
 \examples{
 \dontrun{
+\donttest{
 # get data: new interface
 x <- fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016))
 str(x)
@@ -44,6 +45,7 @@ m <- SCAN_sensor_metadata(site.code=c(356, 2072))
 
 # get site metadata
 m <- SCAN_site_metadata(site.code=c(356, 2072))
+}
 }
 }
 \keyword{manip}

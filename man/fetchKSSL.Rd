@@ -43,6 +43,7 @@ Function arguments (\code{series}, \code{mlra}, etc.) are NOT vectorized: the fi
 \seealso{\code{\link{fetchOSD}}}
 \examples{
 \dontrun{
+\donttest{
 # search by series name
 s <- fetchKSSL(series='auburn')
 
@@ -105,7 +106,7 @@ horizons(pedons) <- h
 par(mar=c(0,0,3,0))
 plot(pedons, color='total_frags_pct', print.id=FALSE)
 
-
+}
 }
 }
 
