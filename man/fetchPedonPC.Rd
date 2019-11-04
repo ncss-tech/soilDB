@@ -22,7 +22,6 @@ getHzErrorsPedonPC(dsn, strict=TRUE)
 
 \seealso{\code{\link{get_hz_data_from_pedon_db}}}
 \examples{
-\dontrun{
 \donttest{
 # path to local PedonPC back-end DB
 dsn <- "S:/Service_Center/NRCS/pedon/pedon.accdb"
@@ -32,7 +31,6 @@ f <- fetchPedonPC(dsn)
 
 # plot only those profiles with densic contact
 plot(f[which(f$densic.contact), ], name='hzname')
-}
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -15,7 +15,6 @@
 
 \seealso{\code{\link{get_labpedon_data_from_NASIS_db}}}
 \examples{
-\dontrun{
 \donttest{
 # query depends on some lab data, queried against the national database
 # note that you must setup this connection ahead of time
@@ -24,7 +23,6 @@ f <- fetchNASISLabData()
 
 # plot only those profiles with densic contact
 #plot(f[which(f$densic.contact), ], name='hzname')
-}
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

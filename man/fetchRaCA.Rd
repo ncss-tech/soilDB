@@ -33,7 +33,6 @@
 
 \seealso{\code{\link{fetchOSD}}}
 \examples{
-\dontrun{
 \donttest{
   # search by series name
   s <- fetchRaCA(series='auburn')
@@ -53,7 +52,6 @@
   # plot 
   par(mar=c(0,0,0,0))
   plot(p, name='hzn_desgn', max.depth=150)
-}
 }
 }
 

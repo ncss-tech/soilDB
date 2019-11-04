@@ -40,7 +40,6 @@ D.E. Beaudette
 }
 
 \examples{
-\dontrun{
 \donttest{
 # basic usage
 x <- siblings('zook')
@@ -50,7 +49,6 @@ x$sib
 # e.g. the most likely siblings
 x <- siblings('zook', only.major = TRUE)
 x$sib
-}
 }
 }
 

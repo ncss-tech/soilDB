@@ -31,7 +31,6 @@ https://www.nrcs.usda.gov/wps/portal/nrcs/soilsurvey/soils/survey/state/
 }
 
 \examples{
-\dontrun{
 \donttest{
 library(XML)
 library(RCurl)
@@ -76,5 +75,5 @@ g2 <- ggplot(test, aes(x = as.numeric(Var1), y = cumsum(Freq))) +
   ggtitle("Cumulative Number of Published \n US Soil Surveys by Year")
 gridExtra::grid.arrange(g1, g2, ncol = 2)
 
-}}}
+}}
 \keyword{datasets}

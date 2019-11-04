@@ -16,7 +16,6 @@ get_veg_data_from_NASIS_db(SS = TRUE)
 
 
 \examples{
-\dontrun{
 \donttest{
 # query text note data
 v <- get_veg_from_NASIS_db()
@@ -24,7 +23,6 @@ v <- get_veg_from_NASIS_db()
 # show contents veg data returned
 str(v)
 
-}
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

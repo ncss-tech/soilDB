@@ -49,7 +49,6 @@ USDA-NRCS OSD search tools: \url{http://www.nrcs.usda.gov/wps/portal/nrcs/detail
 }
 
 \examples{
-\dontrun{
 \donttest{
 # soils of interest
 s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz', 
@@ -72,7 +71,6 @@ par(mar=c(0,0,1,1))
 plot(x$SPC)
 
 str(x, 1)
-}
 }
 }
 

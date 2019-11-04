@@ -57,7 +57,6 @@
 }
 
 \examples{
-\dontrun{
 \donttest{
 library(aqp)
 # find all series that list Pardee as a geographically associated soil.
@@ -67,7 +66,6 @@ x <- fetchOSD(s$series, extended = TRUE, colorState = 'dry')
 # simple figure
 par(mar=c(0,0,1,1))
 plot(x$SPC)
-}
 }
 }
 

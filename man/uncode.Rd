@@ -28,14 +28,12 @@ code(df, ...)
 \value{A dataframe with the results.}
 \author{Stephen Roecker}
 \examples{
-\dontrun{
 \donttest{
 # query component by nationalmusym
 comp = fetchSDA_component(WHERE = "nationalmusym = '2vzcp'")
 s = site(comp$spc)
 s = uncode(s, NASIS = FALSE)
 levels(s$taxorder)
-}
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

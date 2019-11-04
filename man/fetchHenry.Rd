@@ -38,7 +38,6 @@ pad.missing.days = TRUE, soiltemp.summaries = TRUE)
 
 \seealso{\code{\link{fetchSCAN}}}
 \examples{
-\dontrun{
 \donttest{
 library(lattice)
 
@@ -51,7 +50,6 @@ data=x$soiltemp, col.regions=c('grey', 'RoyalBlue'), cuts=1,
 colorkey=FALSE, as.table=TRUE, scales=list(alternating=3), 
 par.strip.text=list(cex=0.75), strip=strip.custom(bg='yellow'), 
 xlab='Julian Day', ylab='Year')
-}
 }
 }
 

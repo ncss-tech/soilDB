@@ -71,7 +71,6 @@ The value of \code{nullFragsAreZero} will have a significant impact on the rock 
 
 
 \examples{
-\dontrun{
 \donttest{
 library(soilDB)
 library(ggplot2)
@@ -168,7 +167,6 @@ ggplot(test, aes(x = geompos, y = landform, fill = Freq2)) +
   viridis::scale_fill_viridis(discrete = T) +
   theme(aspect.ratio = 1, axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
   ggtitle("Landform vs 3-D Morphometry for Miami Major Components on SDA")
-}
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

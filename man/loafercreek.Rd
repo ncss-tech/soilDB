@@ -17,7 +17,7 @@ data(mineralKing)
 
 
 \examples{
-\dontrun{
+\donttest{
 # load example dataset
 data("gopheridge")
 

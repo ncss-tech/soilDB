@@ -27,14 +27,12 @@ get_comonth_from_NASIS_db(SS = TRUE, fill = FALSE,
 }
 
 \examples{
-\dontrun{
 \donttest{
 # query text note data
 cm <- get_comonth_from_NASIS_db()
 
 # show structure of component month data
 str(cm)
-}
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

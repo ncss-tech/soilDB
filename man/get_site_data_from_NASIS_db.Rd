@@ -18,8 +18,6 @@
 }
 
 \examples{
-
-\dontrun{
 \donttest{
 ## Example: export / convert DMS coordinates from NASIS and save to DD import file
 
@@ -74,7 +72,7 @@ std.coordinates.update.data <- unique(cbind(s[, c('siteiid', 'y.new', 'x.new')],
 # save to file
 write.table(std.coordinates.update.data, 
 file='c:/data/sgeoref.txt', col.names=FALSE, row.names=FALSE, sep='|')
-}}}
+}}
 
 \keyword{manip}
 

@@ -78,7 +78,6 @@ See the \href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html}{N
 \note{This function currently works only on Windows, and requires a 'nasis_local' ODBC connection.}
 
 \examples{
-\dontrun{
 \donttest{
 # query depends on some pedon data, queried against the national database
 # note that you must setup this connection ahead of time
@@ -90,7 +89,6 @@ plot(f[which(f$densic.contact), ], name='hzname')
 # get basic component data from local NASIS, after performing a 
 # DMU-* query against the national database
 fc <- fetchNASIS(from = 'components')
-}
 }
 }
 

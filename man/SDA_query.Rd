@@ -29,8 +29,8 @@ SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are sto
 \note{This function requires the `httr`, `jsonlite`, and `XML` packages}
 
 \seealso{\code{\link{mapunit_geom_by_ll_bbox}}}
+
 \examples{
-\dontrun{
 \donttest{
 
 ## get SSURGO export date for all soil survey areas in California
@@ -94,7 +94,6 @@ q <- paste0("SELECT mukey, cokey, compname, comppct_r
 
 x <- SDA_query(q)
 str(x)
-}
 }
 }
 
