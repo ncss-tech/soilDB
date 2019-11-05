@@ -57,10 +57,6 @@ importFrom(xml2,
 )
 
 
-importFrom(Hmisc, 
-  wtd.mean
-)
-
 importFrom(aqp, 
   "depths<-", 
   "site<-",
