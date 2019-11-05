@@ -29,20 +29,30 @@
 # sensor_data: `soiltemp`, `soilVWC`, or related data returned by fetchHenry()
 HenryTimeLine <- function(sensor_data, ...) {
   
+  # must have latticeExtra installed
+  if(!requireNamespace('latticeExtra'))
+    stop('please install the `latticeExtra` package', call.=FALSE)
+  
+  # hack for R CMD check
+  date_time <- NULL
+  
+  
   # filter NA
   x.no.na <- na.omit(sensor_data)
+  
+  ## TODO: convert to base
   # compute date ranges by sensor
   x.range <- ddply(x.no.na, 'sensor_name', .fun = plyr::summarise, start=as.Date(min(date_time)), end=as.Date(max(date_time)))
   x.range$sensor_name <- factor(x.range$sensor_name)
   
   # composite plot
-  p <- segplot(sensor_name ~ start + end, data=x.range,
+  p <- latticeExtra::segplot(sensor_name ~ start + end, data=x.range,
                scales=list(alternating=3, x=list(cex=0.85, tick.number=10), y=list(relation='free', cex=0.65, rot=0)),
                band.height=0.75,
                xlab='', ylab='',
                panel = function(...) {
                  panel.abline(h=1:length(levels(x.range$sensor_name)), col='grey', lty=3)
-                 panel.segplot(...)
+                 latticeExtra::panel.segplot(...)
                }, ...
   )
   

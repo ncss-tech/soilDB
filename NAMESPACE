@@ -8,7 +8,7 @@ importFrom("stats", "aggregate", "complete.cases", "na.omit", "as.formula", "spl
 
 importFrom("utils", "URLencode", "download.file", "object.size",
              "read.csv", "read.table", "setTxtProgressBar",
-             "txtProgressBar", "write.table")
+             "txtProgressBar", "write.table", "type.convert")
 
 importFrom(reshape2, 
   dcast,
@@ -17,6 +17,10 @@ importFrom(reshape2,
 
 importFrom(raster, 
   extent
+)
+
+importFrom(lattice, 
+  panel.abline
 )
 
 importFrom(plyr, 
@@ -54,11 +58,7 @@ importFrom(xml2,
 
 
 importFrom(Hmisc, 
-  wtd.mean, 
-  wtd.var, 
-  wtd.quantile, 
-  wtd.rank, 
-  wtd.table
+  wtd.mean
 )
 
 importFrom(aqp, 

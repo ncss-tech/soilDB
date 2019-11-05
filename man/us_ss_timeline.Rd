@@ -35,6 +35,7 @@ https://www.nrcs.usda.gov/wps/portal/nrcs/soilsurvey/soils/survey/state/
 library(XML)
 library(RCurl)
 library(ggplot2)
+library(gridExtra)
 
 data(state)
 st <- paste0(c(state.abb, "PR", "DC", "VI", "PB"))
@@ -73,7 +74,8 @@ g2 <- ggplot(test, aes(x = as.numeric(Var1), y = cumsum(Freq))) +
   ylab("Count") +
   theme(aspect.ratio = 1) +
   ggtitle("Cumulative Number of Published \n US Soil Surveys by Year")
-gridExtra::grid.arrange(g1, g2, ncol = 2)
+
+grid.arrange(g1, g2, ncol = 2)
 
 }}
 \keyword{datasets}

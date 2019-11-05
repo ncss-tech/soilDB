@@ -11,6 +11,7 @@
 \alias{get_chorizon_from_NASISWebReport}
 \alias{get_cosoilmoist_from_NASISWebReport}
 \alias{get_sitesoilmoist_from_NASISWebReport}
+\alias{get_lmuaoverlap_from_NASISWebReport}
 
 \title{Extract component tables from a the NASIS Web Reports}
 \description{Get, format, impute, and return component tables.}
@@ -59,6 +60,7 @@ get_sitesoilmoist_from_NASISWebReport(usiteid)
   \item{fill}{should rows with missing component ids be removed NA (FALSE)}
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: FALSE)}
   \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have been set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
+  \item{drop.unused.levels}{logical: indicating whether to drop unused levels in classifying factors. This is useful when a class has large number of unused classes, which can waste space in tables and figures.}
 }
 
 

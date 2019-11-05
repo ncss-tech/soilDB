@@ -8,6 +8,7 @@
 \alias{get_cosoilmoist_from_SDA}
 \alias{get_cosoilmoist_from_NASIS}
 \alias{get_cointerp_from_SDA}
+\alias{get_diagnostics_from_SDA}
 
 \title{Extract component tables from Soil Data Access}
 \description{Get, format, impute, and return component tables.}
@@ -75,6 +76,7 @@ The value of \code{nullFragsAreZero} will have a significant impact on the rock 
 library(soilDB)
 library(ggplot2)
 library(gridExtra)
+library(viridis)
 
 # query soil components by areasymbol and musym
 test = fetchSDA_component(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
@@ -164,7 +166,7 @@ test$Freq2 <- cut(test$Freq,
                   )
 ggplot(test, aes(x = geompos, y = landform, fill = Freq2)) + 
   geom_tile(alpha = 0.5) + facet_wrap(~ paste0(compname, "\n", drainagecl)) +
-  viridis::scale_fill_viridis(discrete = T) +
+  scale_fill_viridis(discrete = T) +
   theme(aspect.ratio = 1, axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
   ggtitle("Landform vs 3-D Morphometry for Miami Major Components on SDA")
 }
