@@ -26,7 +26,7 @@
 }
 
 \details{
-  See \href{this webpage}{http://soilmap2-1.lawr.ucdavis.edu/osd-search/index.php} for more information.
+  See \href{http://soilmap2-1.lawr.ucdavis.edu/osd-search/index.php}{this webpage} for more information.
   
   \describe{
     \item{}{family level taxa are derived from SC database, not parsed OSD records}
