@@ -4,7 +4,7 @@ Title: Soil Database Interface
 Version: 2.4
 Date: 2019-11-04
 Authors@R: c(person(given="Dylan", family="Beaudette", role = c("cre", "aut"), email = "dylan.beaudette@usda.gov"), person(given="Jay", family="Skovlin", role = c("aut")), person(given="Stephen", family="Roecker", role = c("aut")) )
-Author: Dylan Beaudette [cre,aut], Jay Skovlin [aut], Stephen Roecker [aut]
+Author: Dylan Beaudette [cre, aut], Jay Skovlin [aut], Stephen Roecker [aut]
 Maintainer: Dylan Beaudette <dylan.beaudette@usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
 License: GPL (>= 3)
@@ -12,7 +12,8 @@ LazyLoad: yes
 Depends: R (>= 3.0.0)
 Imports: aqp, grDevices, graphics, stats, utils, plyr, xml2, sp, reshape2, raster, curl, lattice
 Suggests: dismo, rgdal, jsonlite, RODBC, httr, rgeos, rvest,
-    testthat, stringr, sharpshootR, latticeExtra
+    testthat, stringr, sharpshootR, latticeExtra,
+    RCurl, XML, ggplot2, gridExtra, viridis
 Repository: CRAN
 URL: http://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues

@@ -73,102 +73,111 @@ The value of \code{nullFragsAreZero} will have a significant impact on the rock 
 
 \examples{
 \donttest{
-library(soilDB)
-library(ggplot2)
-library(gridExtra)
-library(viridis)
 
-# query soil components by areasymbol and musym
-test = fetchSDA_component(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
 
-# profile plot
-plot(test)
-
-# convert the data for depth plot
-clay_slice = horizons(slice(test, 0:200 ~ claytotal_l + claytotal_r + claytotal_h))
-names(clay_slice) <- gsub("claytotal_", "", names(clay_slice))
-
-om_slice = horizons(slice(test, 0:200 ~ om_l + om_r + om_h))
-names(om_slice) = gsub("om_", "", names(om_slice))
-
-test2 = rbind(data.frame(clay_slice, var = "clay"),
-              data.frame(om_slice, var = "om")
-              )
-
-h = merge(test2, site(test)[c("nationalmusym", "cokey", "compname", "comppct_r")],
-          by = "cokey", 
-          all.x = TRUE
-          )
-
-# depth plot of clay content by soil component
-gg_comp <- function(x) {
-  ggplot(x) +
-  geom_line(aes(y = r, x = hzdept_r)) +
-  geom_line(aes(y = r, x = hzdept_r)) +
-  geom_ribbon(aes(ymin = l, ymax = h, x = hzdept_r), alpha = 0.2) +
-  xlim(200, 0) +
-  xlab("depth (cm)") +
-  facet_grid(var ~ nationalmusym + paste(compname, comppct_r)) +
-  coord_flip()
+if (
+  requireNamespace("soilDB", quietly = TRUE) & 
+  requireNamespace("ggplot2", quietly = TRUE) & 
+  requireNamespace("gridExtra", quietly = TRUE) & 
+  requireNamespace("viridis", quietly = TRUE)
+) {
+  # query soil components by areasymbol and musym
+  test = fetchSDA_component(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
+  
+  # profile plot
+  plot(test)
+  
+  # convert the data for depth plot
+  clay_slice = horizons(slice(test, 0:200 ~ claytotal_l + claytotal_r + claytotal_h))
+  names(clay_slice) <- gsub("claytotal_", "", names(clay_slice))
+  
+  om_slice = horizons(slice(test, 0:200 ~ om_l + om_r + om_h))
+  names(om_slice) = gsub("om_", "", names(om_slice))
+  
+  test2 = rbind(data.frame(clay_slice, var = "clay"),
+                data.frame(om_slice, var = "om")
+  )
+  
+  h = merge(test2, site(test)[c("nationalmusym", "cokey", "compname", "comppct_r")],
+            by = "cokey", 
+            all.x = TRUE
+  )
+  
+  # depth plot of clay content by soil component
+  gg_comp <- function(x) {
+    ggplot(x) +
+      geom_line(aes(y = r, x = hzdept_r)) +
+      geom_line(aes(y = r, x = hzdept_r)) +
+      geom_ribbon(aes(ymin = l, ymax = h, x = hzdept_r), alpha = 0.2) +
+      xlim(200, 0) +
+      xlab("depth (cm)") +
+      facet_grid(var ~ nationalmusym + paste(compname, comppct_r)) +
+      coord_flip()
   }
-g1 <- gg_comp(subset(h, var == "clay"))
-g2 <- gg_comp(subset(h, var == "om"))
-
-grid.arrange(g1, g2)
-
-
-# query cosoilmoist (e.g. water table data) by mukey
-# NA depths are interpreted as (???) with impute=TRUE argument
-x <- get_cosoilmoist_from_SDA(WHERE = "mukey = '1395352'", impute = TRUE)
-
-ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
-  geom_rect(aes(xmin = as.integer(month), xmax = as.integer(month) + 1,
-                ymin = 0, ymax = max(x$depb_r),
-                fill = flodfreqcl)) +
-  geom_line(cex = 1) +
-  geom_point() +
-  geom_ribbon(aes(ymin = dept_l, ymax = dept_h), alpha = 0.2) +
-  ylim(max(x$depb_r), 0) +
-  xlab("month") + ylab("depth (cm)") +
-  scale_x_continuous(breaks = 1:12, labels = month.abb, name="Month") +
-  facet_wrap(~ paste0(compname, ' (', comppct_r , ')')) +
-  ggtitle(paste0(x$nationalmusym[1], 
-  ': Water Table Levels from Component Soil Moisture Month Data'))
-
-
-
-# query all Miami major components
-s <- get_component_from_SDA(WHERE = "compname = 'Miami' AND majcompflag = 'Yes'")
-
-# landform vs 3-D morphometry
-test <- {
-  subset(s, ! is.na(landform) | ! is.na(geompos)) ->.;
-  split(., .$drainagecl, drop = TRUE) ->.;
-  lapply(., function(x) {
-    test = data.frame()
-    test = as.data.frame(table(x$landform, x$geompos))
-    test$compname   = x$compname[1]
-    test$drainagecl = x$drainagecl[1]
-    names(test)[1:2] <- c("landform", "geompos")
-    return(test)
+  g1 <- gg_comp(subset(h, var == "clay"))
+  g2 <- gg_comp(subset(h, var == "om"))
+  
+  grid.arrange(g1, g2)
+  
+  
+  # query cosoilmoist (e.g. water table data) by mukey
+  # NA depths are interpreted as (???) with impute=TRUE argument
+  x <- get_cosoilmoist_from_SDA(WHERE = "mukey = '1395352'", impute = TRUE)
+  
+  ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
+    geom_rect(aes(xmin = as.integer(month), xmax = as.integer(month) + 1,
+                  ymin = 0, ymax = max(x$depb_r),
+                  fill = flodfreqcl)) +
+    geom_line(cex = 1) +
+    geom_point() +
+    geom_ribbon(aes(ymin = dept_l, ymax = dept_h), alpha = 0.2) +
+    ylim(max(x$depb_r), 0) +
+    xlab("month") + ylab("depth (cm)") +
+    scale_x_continuous(breaks = 1:12, labels = month.abb, name="Month") +
+    facet_wrap(~ paste0(compname, ' (', comppct_r , ')')) +
+    ggtitle(paste0(x$nationalmusym[1], 
+                   ': Water Table Levels from Component Soil Moisture Month Data'))
+  
+  
+  
+  # query all Miami major components
+  s <- get_component_from_SDA(WHERE = "compname = 'Miami' AND majcompflag = 'Yes'")
+  
+  # landform vs 3-D morphometry
+  test <- {
+    subset(s, ! is.na(landform) | ! is.na(geompos)) ->.;
+    split(., .$drainagecl, drop = TRUE) ->.;
+    lapply(., function(x) {
+      test = data.frame()
+      test = as.data.frame(table(x$landform, x$geompos))
+      test$compname   = x$compname[1]
+      test$drainagecl = x$drainagecl[1]
+      names(test)[1:2] <- c("landform", "geompos")
+      return(test)
     }) ->.;
-  do.call("rbind", .) ->.;
-  .[.$Freq > 0, ] ->.;
-  within(., {
-    landform = reorder(factor(landform), Freq, max)
-    geompos  = reorder(factor(geompos),  Freq, max)
-    geompos  = factor(geompos, levels = rev(levels(geompos)))
-  }) ->.;
+    do.call("rbind", .) ->.;
+    .[.$Freq > 0, ] ->.;
+    within(., {
+      landform = reorder(factor(landform), Freq, max)
+      geompos  = reorder(factor(geompos),  Freq, max)
+      geompos  = factor(geompos, levels = rev(levels(geompos)))
+    }) ->.;
   }
-test$Freq2 <- cut(test$Freq, 
-                  breaks = c(0, 5, 10, 25, 50, 100, 150),
-                  labels = c("<5", "5-10", "10-25", "25-50", "50-100", "100-150")
-                  )
-ggplot(test, aes(x = geompos, y = landform, fill = Freq2)) + 
-  geom_tile(alpha = 0.5) + facet_wrap(~ paste0(compname, "\n", drainagecl)) +
-  scale_fill_viridis(discrete = T) +
-  theme(aspect.ratio = 1, axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
-  ggtitle("Landform vs 3-D Morphometry for Miami Major Components on SDA")
+  test$Freq2 <- cut(test$Freq, 
+                    breaks = c(0, 5, 10, 25, 50, 100, 150),
+                    labels = c("<5", "5-10", "10-25", "25-50", "50-100", "100-150")
+  )
+  ggplot(test, aes(x = geompos, y = landform, fill = Freq2)) + 
+    geom_tile(alpha = 0.5) + facet_wrap(~ paste0(compname, "\n", drainagecl)) +
+    scale_fill_viridis(discrete = T) +
+    theme(aspect.ratio = 1, axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
+    ggtitle("Landform vs 3-D Morphometry for Miami Major Components on SDA")
+  
+  
+}
+
+
+
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
