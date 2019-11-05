@@ -1,3 +1,7 @@
+# soilDB 2.4 (2019-11-05)
+   * CRAN release (https://github.com/ncss-tech/soilDB/releases/tag/2.4)
+   * documentation updates
+
 # soilDB 2.3.9 (2019-07-25)
    * SDA_query() no longer writes temporary files, c/o suggestion from Kyle Bocinsky (#106 / #108)
    * fetchOSD() gets a sanity check to protect against going over GET request limits
