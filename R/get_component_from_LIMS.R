@@ -43,7 +43,10 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
   d.chorizon <- within(d.chorizon, {
     texture = tolower(texture)
     if (stringsAsFactors == TRUE) {
-      texture = factor(texture, levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"])
+      texcl = factor(texcl, 
+                     levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceValue"],
+                     labels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"]
+                     )
     }
     })
   
