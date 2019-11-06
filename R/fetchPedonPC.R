@@ -69,6 +69,9 @@ fetchPedonPC <- function(dsn) {
   if(nrow(lf) > 0)
     site(h) <- lf
   
+  # set PedonPC/NASIS-specific horizon identifier
+  hzidname(h) <- 'phiid'
+  
 	# 7. save and mention bad pedons
 	assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
 	if(length(bad.pedon.ids) > 0)

@@ -126,6 +126,9 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   s$region <- substr(s$rcasiteid, 2, 3)
   s$soilgroup <- substr(s$rcasiteid, 2, 5)
   
+  # set NASIS-specific horizon identifier
+  hzidname(h) <- 'phiid'
+  
   # merge-in site data
   site(h) <- s
   

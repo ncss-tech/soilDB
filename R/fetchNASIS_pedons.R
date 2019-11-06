@@ -195,6 +195,9 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   m$origin <- 'NASIS pedons'
   metadata(h) <- m
   
+  # set NASIS-specific horizon identifier
+  hzidname(h) <- 'phiid'
+  
   # print any messages on possible data quality problems:
   if(exists('sites.missing.pedons', envir=soilDB.env))
     if(length(get('sites.missing.pedons', envir=soilDB.env)) > 0)

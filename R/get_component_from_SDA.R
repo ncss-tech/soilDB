@@ -556,7 +556,10 @@ fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
   ## TODO: make this error more informative
   # add site data to object
   site(f.chorizon) <- f.component # left-join via cokey
-
+  
+  # set SDA/SSURGO-specific horizon identifier
+  hzidname(f.chorizon) <- 'chkey'
+  
   # add diagnostics
   if(is.data.frame(f.diag)) {
     diagnostic_hz(f.chorizon) <- f.diag

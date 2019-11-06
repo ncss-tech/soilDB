@@ -100,6 +100,9 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 	  
 	} else m <- NULL
 	
+	# set KSSL-specific horizon identifier
+	hzidname(h) <- "labsampnum"
+	
 	## set metadata
 	h.metadata <- metadata(h)
 	h.metadata$origin <- 'KSSL via Soilweb / fetchKSSL'
