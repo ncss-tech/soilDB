@@ -72,7 +72,9 @@ importFrom(aqp,
   horizons,
   "horizons<-",
   metadata,
-  "metadata<-"
+  "metadata<-",
+  hzidname,
+  "hzidname<-" 
 )
 
 importMethodsFrom(aqp, "plot")
