@@ -6,7 +6,6 @@ context("fetchNASIS() -- requires local NASIS and ODBC connection")
 # * NASIS on the local machine
 # * pedons / component missing from local database
 
-library(aqp)
 
 check_local_NASIS <- function() {
   # check for connection

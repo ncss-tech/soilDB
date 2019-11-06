@@ -1,6 +1,5 @@
 context("fetchOSD() -- requires internet connection")
 
-library(aqp)
 
 ## sample data
 x <- fetchOSD(soils = c('sierra', 'cecil'))

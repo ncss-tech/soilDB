@@ -1,7 +1,5 @@
 context("fetchKSSL() -- requires internet connection")
 
-library(aqp)
-
 ## sample data
 x <- fetchKSSL(series='sierra')
 x.morph <- fetchKSSL(series='sierra', returnMorphologicData = TRUE)
