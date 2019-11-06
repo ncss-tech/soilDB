@@ -1,5 +1,6 @@
 context("fetchKSSL() -- requires internet connection")
 
+library(aqp)
 
 ## sample data
 x <- fetchKSSL(series='sierra')
