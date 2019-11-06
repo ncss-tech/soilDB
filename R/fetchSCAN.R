@@ -137,10 +137,6 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   if(!requireNamespace('httr', quietly = TRUE))
     stop('please install the `httr` package', call.=FALSE)
   
-  # check for required packages
-  if(!requireNamespace('sharpshootR', quietly = TRUE))
-    stop('please install the `sharpshootR` package', call.=FALSE)
-  
   # init list to store results
   res <- list()
   
@@ -251,7 +247,7 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   d.long <- d.long[idx, ]
   
   # water year/day: October 1st -- September 30th
-  w <- sharpshootR::waterDayYear(d.long$Date)
+  w <- waterDayYear(d.long$Date)
   
   # row-order is preserved
   d.long$water_year <- w$wy

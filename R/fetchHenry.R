@@ -190,7 +190,7 @@ month2season <- function(x) {
     sensor.data$season <- month2season(sensor.data$month)
     
     # water year/day: October 1st -- September 30th
-    w <- sharpshootR::waterDayYear(sensor.data$date_time)
+    w <- waterDayYear(sensor.data$date_time)
     
     # row-order is preserved
     sensor.data$water_year <- w$wy
@@ -208,9 +208,6 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   # check for required packages
   if(!requireNamespace('jsonlite', quietly=TRUE))
     stop('please install the `jsonlite` packages', call.=FALSE)
-  
-  if(!requireNamespace('sharpshootR', quietly=TRUE))
-    stop('please install the `sharpshootR` packages', call.=FALSE)
   
   # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)

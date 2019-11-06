@@ -12,7 +12,7 @@ LazyLoad: yes
 Depends: R (>= 3.0.0)
 Imports: aqp, grDevices, graphics, stats, utils, plyr, xml2, sp, reshape2, raster, curl, lattice
 Suggests: dismo, rgdal, jsonlite, RODBC, httr, rgeos, rvest,
-    testthat, stringr, sharpshootR, latticeExtra,
+    testthat, stringr, latticeExtra,
     RCurl, XML, ggplot2, gridExtra, viridis
 Repository: CRAN
 URL: http://ncss-tech.github.io/AQP/
