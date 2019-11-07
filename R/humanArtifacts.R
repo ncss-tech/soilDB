@@ -1,27 +1,5 @@
 # code for dealing with human artifacts
 
-get_phhuart_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = FALSE) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
-
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
-  
-  # define query
-  q <- paste0("SELECT phiidref, seqnum, huartvol, huartsize_l, huartsize_r, huartsize_h,
-              huartkind, huartco, huartshp, huartrnd, huartpen, huartsafety, huartper, 
-              recwlupdated, recuseriidref, phhuartiid 
-              FROM phhuarts", ifelse(SS, "_View_1",""), ";")
-  
-  # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-  
-  # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
-  return(d)
-}
-
 .artifactSieve <- function(x) {
   # convert to lower case: NASIS metadata usese upper for labels, lower for values
   x$huartco <- tolower(x$huartco)
@@ -69,7 +47,7 @@ get_phhuart_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = FALSE) {
   return(res)
 }
 
-simplifyArtifactData <- function(art, id.var, nullFragsAreZero=TRUE) {
+simplifyArtifactData <- function(art, id.var, nullFragsAreZero = nullFragsAreZero) {
   
   # nasty hack to trick R CMD check
   huartvol <- NULL
@@ -78,18 +56,27 @@ simplifyArtifactData <- function(art, id.var, nullFragsAreZero=TRUE) {
   # note that we are adding a catch-all for those strange phfrags records missing fragment size
   art.classes <- c('art_fgr', 'art_gr', 'art_cb', 'art_st', 'art_by', 'art_ch', 'art_fl', 'art_unspecified')
   
+  result.columns <- c('phiid', art.classes, "total_art_pct",  "huartvol_cohesive","huartvol_penetrable", "huartvol_innocuous", "huartvol_persistent")
+  
   # first of all, we can't do anything if the fragment volume is NA
   # warn the user and remove the offending records
   if(any(is.na(art$huartvol))) {
     warning('some records are missing artifact volume, these have been removed', call. = FALSE)
   }
-  art <- art[which(!is.na(art$huartvol)), ]
   
   # if all fragvol are NA then rf is an empty data.frame and we are done
-  if(nrow(art) == 0) {
-    warning('all records are missing artifact volume, returing NULL', call. = FALSE)
-    return(NULL)
+  if(nrow(art[which(!is.na(art$huartvol)), ]) == 0) {
+    warning('all records are missing artifact volume (NULL). buffering result with NA. will be converted to zero if nullFragsAreZero = TRUE.', call. = FALSE)
+    dat <- as.data.frame(t(rep(NA, length(result.columns))))
+    for(i in 1:length(art$phiid)) {
+      dat[i,] <- dat[1,]
+      dat[i,which(result.columns == "phiid")] <- art$phiid[i]
+    }
+    colnames(dat) <- result.columns
+    return(dat)
   }
+  
+  art <- art[which(!is.na(art$huartvol)), ]
   
   
   # extract classes

@@ -449,13 +449,9 @@ LEFT OUTER JOIN (
 	    message(msg)
 	  }
 	  
-	  
 	  # the results have 1 row / phiid
 	  # note: if all fragvol are NA then the result is NULL
 	  d.rf.summary <- simplifyFragmentData(d.rf.data, id.var='phiid', nullFragsAreZero = nullFragsAreZero)
-	  
-	  # artifact summary
-	  d.art.summary <- simplifyArtifactData(d.art.data, id.var='phiid', nullFragsAreZero = nullFragsAreZero)
 	  
 	  # second-pass of replacing NULL frags with 0
 	  # this is required because horizons missing rows in the phfrags table will result in NA
@@ -475,24 +471,43 @@ LEFT OUTER JOIN (
 	    for(v in nm) {
 	      d.rf.summary[[v]] <- ifelse(is.na(d.rf.summary[[v]]), 0, d.rf.summary[[v]])
 	    }
-	    
-	    # do artifacts too
-	    # left join and replace NA with 0
-	    d.art.summary <- join(all.ids, d.art.summary, by='phiid', type='left')
-	    
-	    # iterate over every column except for the ID
-	    nm <- names(d.art.summary)
-	    nm <- nm[grep('phiid', nm, fixed = TRUE, invert = TRUE)]
-	    
-	    # a for-loop seems fine
-	    for(v in nm) {
-	      d.art.summary[[v]] <- ifelse(is.na(d.art.summary[[v]]), 0, d.art.summary[[v]])
-	    }
 	  }
 	  
 	} else {
 	  d.rf.summary <- NULL
 	}
+	
+	if(nrow(d.art.data) > 0) {	  
+	  
+	  art.all.ids <- unique(d.art.data[, 'phiid', drop=FALSE])
+	  
+	  # recent NSSH changes to gravel/cobble threshold 76mm -> 75mm
+	  qc.idx <- which(d.art.data$huartsize_h == 76)
+	  if(length(qc.idx) > 0) {
+	    msg <- sprintf('-> QC: some huartsize_h values == 76mm, may be mis-classified as cobbles [%i / %i records]', length(qc.idx), nrow(d.art.data))
+	    message(msg)
+	  }
+	  
+	  # artifact summary
+	  d.art.summary <- simplifyArtifactData(d.art.data, id.var='phiid', nullFragsAreZero = nullFragsAreZero)
+	  
+	  if(nullFragsAreZero) {
+  	  # do artifacts too
+  	  # left join and replace NA with 0
+  	  d.art.summary <- join(art.all.ids, d.art.summary, by='phiid', type='left')
+  	  
+  	  # iterate over every column except for the ID
+  	  nm <- names(d.art.summary)
+  	  nm <- nm[grep('phiid', nm, fixed = TRUE, invert = TRUE)]
+  	  
+  	  # a for-loop seems fine
+  	  for(v in nm) {
+  	    d.art.summary[[v]] <- ifelse(is.na(d.art.summary[[v]]), 0, d.art.summary[[v]])
+  	  }
+	  }
+  } else {
+    d.art.summary <- NULL
+  }
 	
 	# r.rf.data.v2 nullFragsAreZero = TRUE
 	idx <- !names(d.rf.data.v2) %in% "phiid"
