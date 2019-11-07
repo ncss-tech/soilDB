@@ -3,7 +3,7 @@
 # internally-used function to test size classes
 # diameter is in mm
 # NA diameter results in NA class
-.sieve <- function(diameter, flat=FALSE, para=FALSE) {
+.sieve <- function(diameter, flat=FALSE, para=FALSE, new.names = NULL) {
 
   # flat fragments
   if(flat == TRUE)
@@ -13,6 +13,9 @@
   # non-flat fragments
   if(flat == FALSE)
     sieves <- c(fine_gravel=5, gravel=76, cobbles=250, stones=600, boulders=10000000000)
+  
+  if(!is.null(new.names))
+    names(sieves) <- new.names
   
   # test for NA, and filter-out
   res <- vector(mode='character', length = length(diameter))
