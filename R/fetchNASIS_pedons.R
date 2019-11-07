@@ -32,6 +32,9 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   # there is a record for each phiid
   h <- join(h, extended_data$frag_summary, by='phiid', type='left')
   
+  # join hz + artifact
+  h <- join(h, extended_data$art_summary, by='phiid', type='left')
+  
   ## fix some common problems
   
   # replace missing lower boundaries
@@ -109,6 +112,9 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
     # this is computed by soilDB::simplifyFragmentData()
     # no para-frags
     h$total_frags_pct_nopf <- ifelse(is.na(h$total_frags_pct_nopf), 0, h$total_frags_pct_nopf)
+    
+    # this is computed by soilDB::simplifyArtifactData()
+    h$total_art_pct <- ifelse(is.na(h$total_art_pct), 0, h$total_art_pct)
   }
   
   # upgrade to SoilProfilecollection

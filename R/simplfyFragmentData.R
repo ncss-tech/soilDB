@@ -3,7 +3,7 @@
 # internally-used function to test size classes
 # diameter is in mm
 # NA diameter results in NA class
-.sieve <- function(diameter, flat=FALSE, para=FALSE) {
+.sieve <- function(diameter, flat=FALSE, para=FALSE, new.names = NULL) {
 
   # flat fragments
   if(flat == TRUE)
@@ -13,6 +13,9 @@
   # non-flat fragments
   if(flat == FALSE)
     sieves <- c(fine_gravel=5, gravel=76, cobbles=250, stones=600, boulders=10000000000)
+  
+  if(!is.null(new.names))
+    names(sieves) <- new.names
   
   # test for NA, and filter-out
   res <- vector(mode='character', length = length(diameter))
@@ -125,19 +128,27 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   # note that we are adding a catch-all for those strange phfrags records missing fragment size
   frag.classes <- c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones', 'unspecified')
   
+  result.columns <- c('phiid', frag.classes, "total_frags_pct", "total_frags_pct_nopf")
+  
   # first of all, we can't do anything if the fragment volume is NA
   # warn the user and remove the offending records
   if(any(is.na(rf$fragvol))) {
     warning('some records are missing rock fragment volume, these have been removed', call. = FALSE)
   }
-  rf <- rf[which(!is.na(rf$fragvol)), ]
   
   # if all fragvol are NA then rf is an empty data.frame and we are done
-  if(nrow(rf) == 0) {
-    warning('all records are missing rock fragment volume, returing NULL', call. = FALSE)
-    return(NULL)
+  if(nrow(rf[which(!is.na(rf$fragvol)),]) == 0) {
+    warning('all records are missing rock fragment volume (NULL). buffering result with NA. will be converted to zero if nullFragsAreZero = TRUE.', call. = FALSE)
+    dat <- as.data.frame(t(rep(NA, length(result.columns))))
+    for(i in 1:length(rf$phiid)) {
+      dat[i,] <- dat[1,]
+      dat[i,which(result.columns == "phiid")] <- rf$phiid[i]
+    }
+    colnames(dat) <- result.columns
+    return(dat)
   }
   
+  rf <- rf[which(!is.na(rf$fragvol)), ]
   
   # extract classes
   # note: these will put any fragments without fragsize into an 'unspecified' class

@@ -185,7 +185,14 @@ LEFT OUTER JOIN (
   if(SS == FALSE) {
     q.rf.data <- gsub(pattern = '_View_1', replacement = '', x = q.rf.data, fixed = TRUE)
   }
-
+  
+  q.art.data <- paste0("SELECT p.phiid, huartvol, huartsize_l, huartsize_r, huartsize_h,
+              huartkind, huartco, huartshp, huartrnd, huartpen, huartsafety, huartper, 
+                       recwlupdated, recuseriidref, phhuartiid 
+                       FROM (
+                       SELECT DISTINCT phiid FROM phorizon_View_1
+                       ) as p LEFT OUTER JOIN phhuarts ", ifelse(SS, "_View_1","") , 
+                       " ON p.phiid = phiidref;")
   
   # new phfrags summary SQL
   q.rf.data.v2 <- "
@@ -380,6 +387,8 @@ LEFT OUTER JOIN (
 	
 	d.rf.data.v2 <- RODBC::sqlQuery(channel, q.rf.data.v2, stringsAsFactors=FALSE)
 	
+	d.art.data <- uncode(RODBC::sqlQuery(channel, q.art.data, stringsAsFactors=FALSE))
+	
 	d.surf.rf.summary <- RODBC::sqlQuery(channel, q.surf.rf.summary, stringsAsFactors=FALSE)
 	d.hz.texmod <- RODBC::sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
 	d.geomorph <- RODBC::sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
@@ -440,7 +449,6 @@ LEFT OUTER JOIN (
 	    message(msg)
 	  }
 	  
-	  
 	  # the results have 1 row / phiid
 	  # note: if all fragvol are NA then the result is NULL
 	  d.rf.summary <- simplifyFragmentData(d.rf.data, id.var='phiid', nullFragsAreZero = nullFragsAreZero)
@@ -469,6 +477,38 @@ LEFT OUTER JOIN (
 	  d.rf.summary <- NULL
 	}
 	
+	if(nrow(d.art.data) > 0) {	  
+	  
+	  art.all.ids <- unique(d.art.data[, 'phiid', drop=FALSE])
+	  
+	  # recent NSSH changes to gravel/cobble threshold 76mm -> 75mm
+	  qc.idx <- which(d.art.data$huartsize_h == 76)
+	  if(length(qc.idx) > 0) {
+	    msg <- sprintf('-> QC: some huartsize_h values == 76mm, may be mis-classified as cobbles [%i / %i records]', length(qc.idx), nrow(d.art.data))
+	    message(msg)
+	  }
+	  
+	  # artifact summary
+	  d.art.summary <- simplifyArtifactData(d.art.data, id.var='phiid', nullFragsAreZero = nullFragsAreZero)
+	  
+	  if(nullFragsAreZero) {
+  	  # do artifacts too
+  	  # left join and replace NA with 0
+  	  d.art.summary <- join(art.all.ids, d.art.summary, by='phiid', type='left')
+  	  
+  	  # iterate over every column except for the ID
+  	  nm <- names(d.art.summary)
+  	  nm <- nm[grep('phiid', nm, fixed = TRUE, invert = TRUE)]
+  	  
+  	  # a for-loop seems fine
+  	  for(v in nm) {
+  	    d.art.summary[[v]] <- ifelse(is.na(d.art.summary[[v]]), 0, d.art.summary[[v]])
+  	  }
+	  }
+  } else {
+    d.art.summary <- NULL
+  }
+	
 	# r.rf.data.v2 nullFragsAreZero = TRUE
 	idx <- !names(d.rf.data.v2) %in% "phiid"
 	if (nullFragsAreZero == TRUE) {
@@ -482,6 +522,7 @@ LEFT OUTER JOIN (
 							diagHzBoolean=d.diag.boolean, 
 							frag_summary=d.rf.summary, 
 							frag_summary_v2 = d.rf.data.v2, 
+							art_summary=d.art.summary,
 							surf_frag_summary=d.surf.rf.summary, 
 							texmodifier=d.hz.texmod, 
 							geomorph=d.geomorph, 
