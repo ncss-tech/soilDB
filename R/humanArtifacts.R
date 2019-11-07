@@ -38,7 +38,7 @@
   # 
   # keep track of these for QC in an 'unspecified' column
   # but only when there is a fragment volume specified
-  idx <- which(is.na(res$class) & !is.na(res$fragvol))
+  idx <- which(is.na(res$class) & !is.na(res$huartvol))
   if( length(idx) > 0 ) {
     res$class[idx] <- 'art_unspecified'
   }
