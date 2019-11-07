@@ -1,27 +1,28 @@
 context("SDA_query() -- requires internet connection")
 
 
-## sample data
-
-# single-table result
-x.1 <- suppressMessages(SDA_query(q = "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'CA630' ; "))
-
-# multi-table result
-x.2 <- suppressMessages(SDA_query(q = "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'CA630'; SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'CA664' ;"))
-
-# table with multiple data types
-x.3 <- suppressMessages(SDA_query(q = "SELECT TOP 100 mukey, cokey, compkind, comppct_r, majcompflag, elev_r, slope_r, wei, weg FROM component ;"))
-
-## TODO: mukeys change through time, figure out a better way to query a known record
-# table with multi-line records
-x.4 <- suppressMessages(SDA_query(q = "SELECT * from mutext WHERE mukey = '2596937';"))
-
-# point with known SSURGO data
-p <- sp::SpatialPoints(cbind(-121.77100, 37.368402), proj4string = sp::CRS('+proj=longlat +datum=WGS84'))
-
-## tests
-
-test_that("SDA_query() returns a data.frame or list", {
+test_that("SDA_query() works", {
+  
+  skip_if_offline()
+  
+  ## sample data
+  
+  # single-table result
+  x.1 <<- suppressMessages(SDA_query(q = "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'CA630' ; "))
+  
+  # multi-table result
+  x.2 <<- suppressMessages(SDA_query(q = "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'CA630'; SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'CA664' ;"))
+  
+  # table with multiple data types
+  x.3 <<- suppressMessages(SDA_query(q = "SELECT TOP 100 mukey, cokey, compkind, comppct_r, majcompflag, elev_r, slope_r, wei, weg FROM component ;"))
+  
+  ## TODO: mukeys change through time, figure out a better way to query a known record
+  # table with multi-line records
+  x.4 <<- suppressMessages(SDA_query(q = "SELECT * from mutext WHERE mukey = '2596937';"))
+  
+  # point with known SSURGO data
+  p <<- sp::SpatialPoints(cbind(-121.77100, 37.368402), proj4string = sp::CRS('+proj=longlat +datum=WGS84'))
+  
   
   # standard request
   expect_match(class(x.1), 'data.frame')
@@ -30,6 +31,8 @@ test_that("SDA_query() returns a data.frame or list", {
 })
 
 test_that("SDA_query() returns expected result", {
+  
+  skip_if_offline()
   
   # table dimensions
   expect_equal(nrow(x.1), 1)
@@ -44,6 +47,8 @@ test_that("SDA_query() returns expected result", {
 
 test_that("SDA_query() SQL error / no results -> NULL", {
   
+  skip_if_offline()
+  
   # bad SQL should result in a local error
   expect_error(SDA_query("SELECT this from that"))
   
@@ -55,6 +60,8 @@ test_that("SDA_query() SQL error / no results -> NULL", {
 
 
 test_that("SDA_spatialQuery() simple spatial query, tabular results", {
+  
+  skip_if_offline()
   
   res <- SDA_spatialQuery(p, what = 'mukey')
   
@@ -68,6 +75,8 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
 
 test_that("SDA_spatialQuery() simple spatial query, spatial results", {
 
+  skip_if_offline()
+  
   res <- SDA_spatialQuery(p, what = 'geom')
   
   # testing known values
@@ -77,6 +86,8 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
 })
 
 test_that("SDA_query() interprets column names", {
+  
+  skip_if_offline()
   
   # x.3 is from the component table
   expect_equal(
@@ -89,6 +100,8 @@ test_that("SDA_query() interprets column names", {
 
 
 test_that("SDA_query() interprets data type correctly", {
+  
+  skip_if_offline()
   
   # x.3 is from the component table
   expect_equal(class(x.3$mukey), 'integer')
@@ -107,6 +120,8 @@ test_that("SDA_query() interprets data type correctly", {
 
 test_that("SDA_query() works with multi-line records", {
 
+  skip_if_offline()
+  
   # https://github.com/ncss-tech/soilDB/issues/28
   expect_match(class(x.4), 'data.frame')
   expect_true(nrow(x.4) == 6)

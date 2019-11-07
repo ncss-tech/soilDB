@@ -12,7 +12,6 @@ test_that("fetchOSD() works", {
   # standard request
   expect_match(class(x), 'SoilProfileCollection')
   
-  
 })
 
 

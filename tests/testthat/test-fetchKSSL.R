@@ -9,15 +9,16 @@ test_that("fetchKSSL() works", {
   x.morph <<- fetchKSSL(series='sierra', returnMorphologicData = TRUE)
   x.morp.simple.colors <<- fetchKSSL(series='sierra', returnMorphologicData = TRUE, simplifyColors = TRUE)
   
+  # standard request
+  expect_match(class(x), 'SoilProfileCollection')
+  
+  
 })
 
 
 test_that("fetchKSSL() returns an SPC or list", {
   
   skip_if_offline()
-  
-  # standard request
-  expect_match(class(x), 'SoilProfileCollection')
   
   # SPC + morphologic data
   expect_match(class(x.morph), 'list')

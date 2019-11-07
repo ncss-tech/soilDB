@@ -1,10 +1,20 @@
 context("OSDquery() -- requires internet connection")
 
-## sample data
-x <- OSDquery(geog_assoc_soils = 'pardee')
+test_that("OSDquery() works", {
+  
+  skip_if_offline()
+  
+  # a message is printed and NULL returned when no results
+  
+  # standard request
+  expect_match(class(res), 'data.frame')
+  
+})
 
 
 test_that("OSDquery() returns NULL with bogus query", {
+  
+  skip_if_offline()
   
   # a message is printed and NULL returned when no results
   res <- suppressMessages(OSDquery(geog_assoc_soils = 'XXX'))
@@ -12,10 +22,4 @@ test_that("OSDquery() returns NULL with bogus query", {
   
 })
 
-test_that("OSDquery() returns a data.frame", {
-  
-  # standard request
-  expect_match(class(x), 'data.frame')
-  
-})
 

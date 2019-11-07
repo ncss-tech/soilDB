@@ -2,22 +2,33 @@ context("fetchSDA_component() -- requires internet connection")
 
 ## sample data: these should run in < 3 seconds
 
-# single component
-x <- suppressMessages(fetchSDA_component(WHERE="nationalmusym = 'kzc4'"))
 
+test_that("fetchSDA_component() works", {
+  
+  skip_if_offline()
+  
+  # single component
+  x <<- suppressMessages(fetchSDA_component(WHERE="nationalmusym = 'kzc4'"))
+  
+  # basic test
+  expect_match(class(x), 'SoilProfileCollection')
+})
 
 ## tests
 
 test_that("fetchSDA_component() returns an SPC", {
   
+  skip_if_offline()
+  
   # SPC integrity and expected IDs / hz depths
-  expect_match(class(x), 'SoilProfileCollection')
   expect_equal(idname(x), 'cokey')
   expect_equal(horizonDepths(x), c('hzdept_r', 'hzdepb_r'))
   
 })
 
 test_that("fetchSDA_component() returns expected results", {
+  
+  skip_if_offline()
   
   # there should be 2 components nad 10 horizons
   expect_equal(length(x), 2)
