@@ -1,8 +1,8 @@
 context("Simplification of artifact data (from NASIS)")
 
 ## some complex data from NASIS phhuart table
-d.single.hz <- structure(list(phiid = c(10101, 10101, 10101), 
-                              huartvol = c(4, 5, 6), 
+d.single.hz <- structure(list(phiid = c(10101, 10101, 10102), 
+                              huartvol = c(10, 5, 95), 
                               huartsize_l = c(2, 76, 2), 
                               huartsize_r = c(39, 163, 39), 
                               huartsize_h = c(75, 250, 75), 
@@ -112,27 +112,27 @@ test_that("simplifyArtifactData complex sample data from NASIS, single horizon",
   res <- soilDB::simplifyArtifactData(d.single.hz, id.var = 'phiid', nullFragsAreZero = TRUE)
   
   # correct class totals
-  expect_equal(res$art_fgr, 0)
-  expect_equal(res$art_gr, 4)
-  expect_equal(res$art_cb, 5)
-  expect_equal(res$art_ch, 6)
-  expect_equal(res$art_fl, 0)
-  expect_equal(res$art_st, 0)
+  expect_equal(res$art_fgr, c(0,0))
+  expect_equal(res$art_gr, c(10,0))
+  expect_equal(res$art_cb, c(5,0))
+  expect_equal(res$art_ch, c(0,95))
+  expect_equal(res$art_fl, c(0,0))
+  expect_equal(res$art_st, c(0,0))
   
   # correct total 
-  expect_equal(res$total_art_pct, 15)
+  expect_equal(res$total_art_pct, c(15,95))
   
   # correct subtotal cohesive
-  expect_equal(res$huartvol_cohesive, 9)  
+  expect_equal(res$huartvol_cohesive, c(15, 0))  
   
   # correct subtotal penetrable
-  expect_equal(res$huartvol_penetrable, 6)  
+  expect_equal(res$huartvol_penetrable,  c(0,95))  
   
-  # correct subtotal innocuous
-  expect_equal(res$huartvol_innocuous, 15)
+  # correct subtotal noxious
+  expect_equal(res$huartvol_noxious, c(0,0))
   
   # correct subtotal persistent
-  expect_equal(res$huartvol_persistent, 15)
+  expect_equal(res$huartvol_persistent, c(15,95))
   
 })
 
@@ -152,10 +152,18 @@ test_that("simplifyArtifactData when missing fragment sizes, low/rv/high", {
   
   # rows missing fragvol should be removed from the simplified result
   expect_true(nrow(d.missing.size) == 4)
-  expect_true(nrow(res) == 1)
+  expect_true(nrow(res) == 2)
   
   # unspecified total should match RF sums
   expect_equal(res$art_unspecified, res$total_art_pct)
+  
+  # totals lesss than or equal to 100
+  expect_equal(all(res$total_art_pct <= 100), TRUE)
+  expect_equal(all(res$huartvol_cohesive <= 100), TRUE)  
+  expect_equal(all(res$huartvol_penetrable <= 100), TRUE)  
+  expect_equal(all(res$huartvol_noxious <= 100), TRUE)
+  expect_equal(all(res$huartvol_persistent <= 100), TRUE)
+  
 })
 
 
