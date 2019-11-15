@@ -101,7 +101,8 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 	} else m <- NULL
 	
 	# set KSSL-specific horizon identifier
-	hzidname(h) <- "labsampnum"
+	## WHOOPS -- turns out this is nonunique 0.1% of the time AGB 2019/11/14
+	#hzidname(h) <- "labsampnum"
 	
 	## set metadata
 	h.metadata <- metadata(h)
