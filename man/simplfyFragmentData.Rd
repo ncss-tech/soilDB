@@ -1,6 +1,7 @@
 \name{simplifyFragmentData}
 \alias{simplifyFragmentData}
 \alias{simplfyFragmentData}
+\alias{simplifyArtifactData}
 
 \title{Simplify Coarse Fraction Data}
 \description{Simplify multiple coarse fraction (>2mm) records by horizon.}

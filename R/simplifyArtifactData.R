@@ -1,3 +1,5 @@
+## TODO: convert commentary from source material (fragments) and add manual page, thanks
+
 # code for dealing with human artifacts
 
 .artifactSieve <- function(x) {
