@@ -690,6 +690,7 @@
     # hack to make CRAN check happy
     mntn = NULL; hill = NULL; trce = NULL; flats = NULL; hillslopeprof = NULL;
     
+    ## TODO: consider using is(x, 'character')
     df <- within(df, {
       if (class(mntn) == "character") {
         mntn  = sapply(strsplit(mntn, ", "),  function(x) paste(sort(unlist(x)), collapse = ", "))

@@ -61,7 +61,7 @@ ORDER BY pedon_View_1.peiid ;"
 	
 	## this shouldn't happen, retain for debugging
 	# test for an error
-	if(class(d) == 'character')
+	if(inherits(d, 'character'))
 	  stop('error in SQL')
 	
 	# uncode domain columns

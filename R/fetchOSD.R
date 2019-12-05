@@ -101,7 +101,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	  # extended
 	  # if available, split climate summaries into annual / monthly and add helper columns
 	  # FALSE if missing
-	  if(class(res$climate) == 'data.frame') {
+	  if(inherits(res$climate, 'data.frame')) {
 	    # split annual from monthly climate summaries
 	    annual.data <- res$climate[grep('ppt|pet', res$climate$climate_var, invert = TRUE), ]
 	    monthly.data <- res$climate[grep('ppt|pet', res$climate$climate_var), ]
@@ -119,15 +119,19 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	  ## must check for data, no data is returned as FALSE
 	  
 	  # fix column names in pmkind and pmorigin tables
-	  if(class(res$pmkind) == 'data.frame')
+	  if(inherits(res$pmkind, 'data.frame')) {
 	    names(res$pmkind) <- c('series', 'pmkind', 'n', 'total', 'P')
+	  }
+	    
 	  
-	  if(class(res$pmorigin) == 'data.frame')
+	  if(inherits(res$pmorigin, 'data.frame')) {
 	    names(res$pmorigin) <- c('series', 'pmorigin', 'n', 'total', 'P')
-	  
+	  }
+	    
 	  # fix column names in competing series
-	  if(class(res$competing) == 'data.frame')
+	  if(inherits(res$competing, 'data.frame')) {
 	    names(res$competing) <- c('series', 'competing', 'family')
+	  }
 	  
 	  # compose into a list
 	  data.list <- list(

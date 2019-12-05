@@ -10,7 +10,7 @@ test_that("fetchOSD() works", {
   x.extended <<- fetchOSD(soils = c('sierra', 'cecil'), extended = TRUE)
   
   # standard request
-  expect_match(class(x), 'SoilProfileCollection')
+  expect_true(inherits(x, 'SoilProfileCollection'))
   
 })
 
@@ -33,8 +33,8 @@ test_that("fetchOSD() returns a list + SPC in extended mode", {
   skip_if_offline()
   
   # extended request
-  expect_match(class(x.extended), 'list')
-  expect_match(class(x.extended$SPC), 'SoilProfileCollection')
+  expect_true(inherits(x.extended, 'list'))
+  expect_true(inherits(x.extended$SPC, 'SoilProfileCollection'))
   
 })
 

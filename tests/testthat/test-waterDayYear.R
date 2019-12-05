@@ -26,7 +26,7 @@ test_that("works as expected", {
   expect_equal(res$wd, c(50,  140))
   
   # structural integrity
-  expect_true(class(res) == 'data.frame')
+  expect_true(inherits(res, 'data.frame'))
   expect_true(length(x) == nrow(res))
   
 })

@@ -10,7 +10,7 @@ test_that("estimateSTR() basic functionality", {
   
   # vector of factors
   x <- estimateSTR(mast=17, mean.summer = 22, mean.winter = 12)
-  expect_match(class(x), 'factor')
+  expect_true(inherits(x, 'factor'))
   expect_equal(levels(x), expected.str.levels)
   
 })

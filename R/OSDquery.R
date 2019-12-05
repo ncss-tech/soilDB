@@ -42,7 +42,7 @@ OSDquery <- function(mlra='', taxonomic_class='', typical_pedon='', brief_narrat
   # results will either be: data.frame, empty list, or NULL
   
   # ensure result is either data.frame or NULL
-  if(class(d) == 'list' & length(d) < 1)
+  if(inherits(d, 'list') & length(d) < 1)
     return(NULL)
   
   return(d)

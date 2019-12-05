@@ -86,7 +86,7 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 	  ## TODO: consider simplification of fragment data here too
 	  
 	  # try to auto-simplify colors
-	  if(simplifyColors & class(m$phcolor) == 'data.frame') {
+	  if(simplifyColors & inherits(m$phcolor, 'data.frame')) {
 	    # extract horizon data from SPC
 	    hh <- horizons(h)
 	    

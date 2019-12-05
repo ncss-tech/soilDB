@@ -8,7 +8,7 @@ test_that("OSDquery() works", {
   res <- suppressMessages(OSDquery(geog_assoc_soils = 'pardee'))
   
   # standard request
-  expect_match(class(res), 'data.frame')
+  expect_true(inherits(res, 'data.frame'))
   
 })
 

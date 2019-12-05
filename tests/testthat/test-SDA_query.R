@@ -25,8 +25,8 @@ test_that("SDA_query() works", {
   
   
   # standard request
-  expect_match(class(x.1), 'data.frame')
-  expect_match(class(x.2), 'list')
+  expect_true(inherits(x.1, 'data.frame'))
+  expect_true(inherits(x.2, 'list'))
 
 })
 
@@ -66,7 +66,7 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
   res <- SDA_spatialQuery(p, what = 'mukey')
   
   # testing known values
-  expect_match(class(res), 'data.frame')
+  expect_true(inherits(res, 'data.frame'))
   expect_equal(nrow(res), 1)
   expect_match(res$muname, 'Diablo')
   
@@ -80,7 +80,7 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   res <- SDA_spatialQuery(p, what = 'geom')
   
   # testing known values
-  expect_match(class(res), 'SpatialPolygonsDataFrame')
+  expect_true(inherits(res, 'SpatialPolygonsDataFrame'))
   expect_equal(nrow(res), 1)
   
 })
@@ -104,15 +104,15 @@ test_that("SDA_query() interprets data type correctly", {
   skip_if_offline()
   
   # x.3 is from the component table
-  expect_equal(class(x.3$mukey), 'integer')
-  expect_equal(class(x.3$cokey), 'integer')
-  expect_equal(class(x.3$compkind), 'character')
-  expect_equal(class(x.3$comppct_r), 'integer')
-  expect_equal(class(x.3$majcompflag), 'character')
-  expect_equal(class(x.3$elev_r), 'integer')
-  expect_equal(class(x.3$slope_r), 'numeric')
-  expect_equal(class(x.3$wei), 'integer')
-  expect_equal(class(x.3$weg), 'integer')
+  expect_true(inherits(x.3$mukey, 'integer'))
+  expect_true(inherits(x.3$cokey, 'integer'))
+  expect_true(inherits(x.3$compkind, 'character'))
+  expect_true(inherits(x.3$comppct_r, 'integer'))
+  expect_true(inherits(x.3$majcompflag, 'character'))
+  expect_true(inherits(x.3$elev_r, 'integer'))
+  expect_true(inherits(x.3$slope_r, 'numeric'))
+  expect_true(inherits(x.3$wei, 'integer'))
+  expect_true(inherits(x.3$weg, 'integer'))
   
 })
 
@@ -123,7 +123,7 @@ test_that("SDA_query() works with multi-line records", {
   skip_if_offline()
   
   # https://github.com/ncss-tech/soilDB/issues/28
-  expect_match(class(x.4), 'data.frame')
+  expect_true(inherits(x.4, 'data.frame'))
   expect_true(nrow(x.4) == 6)
 
 })

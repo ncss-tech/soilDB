@@ -15,7 +15,7 @@ siblings <- function(s, only.major=FALSE, component.data=FALSE, cousins=FALSE) {
     sib <- try(jsonlite::fromJSON(u))[[1]]
     
     # a data.frame result measn we have data, otherwise return NULL
-    if(class(sib) == 'data.frame') {
+    if(inherits(sib, 'data.frame')) {
       
       # convert 'Yes'|'No' -> TRUE|FALSE
       sib$majcompflag <- ifelse(sib$majcompflag == 'Yes', TRUE, FALSE)
@@ -44,8 +44,8 @@ siblings <- function(s, only.major=FALSE, component.data=FALSE, cousins=FALSE) {
     # result is FALSE if no matching data
     sib <- try(jsonlite::fromJSON(u))[[1]]
     
-    # a data.frame result measn we have data, otherwise return NULL
-    if(class(sib) == 'data.frame') {
+    # a data.frame result means we have data, otherwise return NULL
+    if(inherits(sib, 'data.frame')) {
       return(sib)
     } else {
       return(NULL)

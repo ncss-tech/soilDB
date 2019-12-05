@@ -47,7 +47,7 @@ test_that("fetchNASIS(from='pedons') returns reasonable data", {
   x <- suppressWarnings(fetchNASIS(from='pedons'))
   
   # expected outcomes
-  expect_match(class(x), 'SoilProfileCollection')
+  expect_true(inherits(x, 'SoilProfileCollection'))
   expect_equal(nrow(site(x)) > 0, TRUE)
   expect_equal(nrow(horizons(x)) > 0, TRUE)
   expect_equal(idname(x), 'peiid')
@@ -71,7 +71,7 @@ test_that("fetchNASIS(from='components') returns reasonable data", {
   x <- suppressWarnings(fetchNASIS(from='components'))
   
   # expected outcomes
-  expect_match(class(x), 'SoilProfileCollection')
+  expect_true(inherits(x, 'SoilProfileCollection'))
   expect_equal(nrow(site(x)) > 0, TRUE)
   expect_equal(nrow(horizons(x)) > 0, TRUE)
   expect_equal(idname(x), 'coiid')

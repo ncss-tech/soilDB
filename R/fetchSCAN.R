@@ -272,7 +272,7 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
 .get_SCAN_data <- function(req) {
   
   # convert to list as needed
-  if(class(list) != 'list')
+  if( ! inherits(req, 'list'))
     req <- as.list(req)
   
   # base URL to service

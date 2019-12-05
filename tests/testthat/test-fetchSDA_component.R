@@ -11,7 +11,7 @@ test_that("fetchSDA_component() works", {
   x <<- suppressMessages(fetchSDA_component(WHERE="nationalmusym = 'kzc4'"))
   
   # basic test
-  expect_match(class(x), 'SoilProfileCollection')
+  expect_true(inherits(x, 'SoilProfileCollection'))
 })
 
 ## tests
