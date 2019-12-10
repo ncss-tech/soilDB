@@ -3,15 +3,22 @@ get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = de
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_component_from_NASISWebReport"
   
   d.component <- lapply(projectname, function(x) {
-    cat("getting project '", x, "' from NasisReportsWebSite \n", sep = "")
+    message("getting project '", x, "' from NasisReportsWebSite \n", sep = "")
     args = list(p_projectname = x)
-    d    =  parseWebReport(url, args)
+    d    =  tryCatch(parseWebReport(url, args), 
+                     error = function(e) {
+                                message(e)
+                                return(NULL)
+                              })
   })
+  
   d.component <- do.call("rbind", d.component)
+  
+  if(is.null(d.component))
+    return(NULL)  
   
   # set factor levels according to metadata domains
   d.component <- uncode(d.component, db = "LIMS", stringsAsFactors = stringsAsFactors)
-  
   
   # prep
   d.component <- .cogmd_prep(d.component, db = "LIMS")
@@ -68,7 +75,7 @@ get_legend_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRUE
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_legend_from_NASISWebReport"
   
   d.legend <- lapply(areasymbol, function(x) {
-    cat("getting legend for '", x, "' from NasisReportsWebSite \n", sep = "")
+    message("getting legend for '", x, "' from NasisReportsWebSite \n", sep = "")
     args = list(p_areasymbol = x)
     d    =  parseWebReport(url, args)
   })
@@ -97,7 +104,7 @@ get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, drop.unused.levels =
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_lmuaoverlap_from_NASISWebReport"
   
   d <- lapply(areasymbol, function(x) {
-    cat("getting legend for '", x, "' from NasisReportsWebSite \n", sep = "")
+    message("getting legend for '", x, "' from NasisReportsWebSite \n", sep = "")
     args = list(p_areasymbol = x)
     d    =  parseWebReport(url, args)
   })
@@ -123,7 +130,7 @@ get_mapunit_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRU
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_mapunit_from_NASISWebReport"
   
   d.mapunit <- lapply(areasymbol, function(x) {
-    cat("getting map units for '", x, "' from NasisReportsWebSite \n", sep = "")
+    message("getting map units for '", x, "' from NasisReportsWebSite \n", sep = "")
     args = list(p_areasymbol = x)
     d    =  parseWebReport(url, args)
   })
@@ -265,16 +272,23 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
   f.component <- get_component_from_NASISWebReport(projectname, stringsAsFactors = stringsAsFactors)
   f.chorizon  <- get_chorizon_from_NASISWebReport(projectname, fill, stringsAsFactors = stringsAsFactors)
   
+  # return NULL if one of the required pieces is missing
+  if(is.null(f.mapunit) | is.null(f.component) | is.null(f.chorizon)) {
+    message("One or more inputs for fetchNASISWebReport (mapunit, component, or horizon) is NULL, returning NULL.")
+    return(NULL)
+  }
+     
+  
   # optionally test for bad horizonation... flag, and remove
   if (rmHzErrors) {
-    f.chorizon.test <- plyr::ddply(f.chorizon, 'cokey', test_hz_logic, topcol='hzdept_r', bottomcol='hzdepb_r', strict=TRUE)
+    f.chorizon.test <- plyr::ddply(f.chorizon, 'coiid', test_hz_logic, topcol='hzdept_r', bottomcol='hzdepb_r', strict=TRUE)
     
     # which are the good (valid) ones?
-    good.ids <- as.character(f.chorizon.test$cokey[which(f.chorizon.test$hz_logic_pass)])
-    bad.ids  <- as.character(f.chorizon.test$cokey[which(! f.chorizon.test$hz_logic_pass)])
+    good.ids <- as.character(f.chorizon.test$coiid[which(f.chorizon.test$hz_logic_pass)])
+    bad.ids  <- as.character(f.chorizon.test$coiid[which(! f.chorizon.test$hz_logic_pass)])
     
     # keep the good ones
-    f.chorizon <- f.chorizon[which(f.chorizon$cokey %in% good.ids), ]
+    f.chorizon <- f.chorizon[which(f.chorizon$coiid %in% good.ids), ]
     
     # keep track of those components with horizonation errors
     if(length(bad.ids) > 0)
@@ -288,10 +302,10 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
   ## TODO: this will fail in the presence of duplicates
   ## TODO: make this error more informative
   # add site data to object
-  site(f.chorizon) <- f.component # left-join via cokey
+  site(f.chorizon) <- f.component # left-join via coiid
   
-  # set SDA/SSURGO-specific horizon identifier
-  # hzidname(f.chorizon) <- 'chkey'
+  # set NASIS-specific horizon identifier
+  hzidname(f.chorizon) <- 'chiid'
   
   # print any messages on possible data quality problems:
   if (exists('component.hz.problems', envir=soilDB.env))
