@@ -291,7 +291,7 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
   site(f.chorizon) <- f.component # left-join via cokey
   
   # set SDA/SSURGO-specific horizon identifier
-  hzidname(f.chorizon) <- 'chkey'
+  # hzidname(f.chorizon) <- 'chkey'
   
   # print any messages on possible data quality problems:
   if (exists('component.hz.problems', envir=soilDB.env))
