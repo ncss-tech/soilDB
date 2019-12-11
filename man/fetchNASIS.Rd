@@ -51,7 +51,7 @@ getHzErrorsNASIS(strict=TRUE)
 }
 
 \arguments{
-  \item{from}{determines what objects should fetched? ('pedons' | 'components')}
+  \item{from}{determines what objects should fetched? ('pedons' | 'components' | 'temp')}
   \item{\dots}{arguments passed to \code{fetchNASIS_pedons()} or \code{fetchNASIS_components()}}
   \item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)}
   \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have been set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
@@ -88,6 +88,11 @@ plot(f[which(f$densic.contact), ], name='hzname')
 # get basic component data from local NASIS, after performing a 
 # DMU-* query against the national database
 fc <- fetchNASIS(from = 'components')
+
+# run NASIS the fetchNASIS report against the national database
+# the report will automatically be opened and saved as fetchNASIS.txt in the NASIS Temp folder
+f <- fetchNASIS(from = 'temp')
+
 }
 }
 

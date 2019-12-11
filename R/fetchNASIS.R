@@ -6,7 +6,7 @@ fetchNASIS <- function(from='pedons', ...) {
   res <- NULL
   
   # sanity check
-  if(! from %in% c('pedons', 'components')) {
+  if(! from %in% c('pedons', 'components', 'temp')) {
     stop('Must specify: pedons or components', call. = FALSE)
   }
   
@@ -18,6 +18,11 @@ fetchNASIS <- function(from='pedons', ...) {
   if(from == 'components') {
     # pass arguments through
     res <- fetchNASIS_components(...)
+  }
+  
+  if(from == 'temp') {
+    # pass arguments through
+    res <- .fetchNASIS_temp(...)
   }
   
   return(res)
