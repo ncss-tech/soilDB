@@ -63,6 +63,25 @@
 
 # temp <- .fetchNASISTemp()
 
+.get_site_from_NASISTemp <- function(stringsAsFactors = default.stringsAsFactors()
+) {
+  
+  temp = readLines("C:/ProgramData/USDA/NASIS/Temp/get_site2_from_NASIS.txt")
+  
+  temp = read.csv(
+    textConnection(
+      readLines("C:/ProgramData/USDA/NASIS/Temp/get_site2_from_NASIS.txt")
+      ), 
+    sep = "|", 
+    quote = "", 
+    stringsAsFactors = stringsAsFactors
+    )
+  temp = temp[, - ncol(temp)]
+  temp = uncode(temp)
+  
+  }
+
+
 
 ## move these to utils.R after more testing
 ## fix some common problems
