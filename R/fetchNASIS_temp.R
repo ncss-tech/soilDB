@@ -66,7 +66,7 @@
 .get_site_from_NASISTemp <- function(stringsAsFactors = default.stringsAsFactors()
 ) {
   
-  temp = readLines("C:/ProgramData/USDA/NASIS/Temp/get_site2_from_NASIS.txt")
+  temp = readLines("C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt")
   
   temp = read.csv(
     textConnection(
