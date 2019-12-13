@@ -5,10 +5,17 @@
                              stringsAsFactors = default.stringsAsFactors()
                              ) {
   
+  tf = "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
+  
   # sanity check
   .checks$soilColorState(soilColorState)
   
-  temp = readLines("C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt")
+  # check if temp file exists
+  if (!file.exists(tf)) {
+    stop("the temp file ", tf, "\n doesn't exist, please run the fetchNASIS report from NASIS")
+  }
+  
+  temp = readLines(tf)
   
   be   = data.frame(table = c("site", "phorizon", "phcolor"), 
                     begin = grep("@begin", temp), 
@@ -18,7 +25,10 @@
   lapply(., function(x) {
     x2 = temp[seq(x$begin + 1, x$end - 1)]
     x2 = read.csv(textConnection(x2), sep = "|", quote = "", stringsAsFactors = stringsAsFactors)
-    x2 = x2[, - ncol(x2)]
+    # aggregate NASIS returns empty rows
+    # NASIS text reports return empty columns
+    # remove
+    x2 = x2[!is.na(x2$peiid), - ncol(x2)]
     x2 = uncode(x2)
     }) ->.;
   names(.) <- c("phcolor", "phorizon", "site")
@@ -66,16 +76,34 @@
 .get_site_from_NASISTemp <- function(stringsAsFactors = default.stringsAsFactors()
 ) {
   
+  tf <- "C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt"
+  
+  # check if temp file exists
+  if (!file.exists(tf)) {
+    stop("the temp file ", tf, "\n doesn't exist, please run the get_site_from_NASIS report from NASIS")
+    }
+  
   temp = read.csv(
     textConnection(
-      readLines("C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt")
+      readLines(tf)
       ), 
     sep = "|", 
     quote = "", 
     stringsAsFactors = stringsAsFactors
     )
-  temp = temp[, - ncol(temp)]
+  # aggregate NASIS returns empty rows
+  # NASIS text reports return empty columns
+  # remove
+  temp = temp[!is.na(temp$peiid), - ncol(temp)]
   temp = uncode(temp)
+  temp = within(temp, {
+    obsdate   = as.Date(as.character(obsdate))
+    classdate = as.Date(as.character(classdate))
+  })
+  
+  
+  # impute missing x_std & y_std if utm are present
+  # idx <- with(temp, ! complete.cases(x_std, y_std) & complete.cases(utmzone, utmeasting, utmnorthing, horizdatnm))
   
   }
 
