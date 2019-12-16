@@ -1,11 +1,14 @@
 
-.fetchNASIS_temp <- function(rmHzErrors       = TRUE,
+.fetchNASIS_temp <- function(url = NULL,
+                             rmHzErrors       = TRUE,
                              nullFragsAreZero = TRUE, 
                              soilColorState   = "moist", 
                              stringsAsFactors = default.stringsAsFactors()
                              ) {
   
-  tf = "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
+  if (is.null(url)) {
+      tf = "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
+  } else tf = url
   
   # sanity check
   .checks$soilColorState(soilColorState)
@@ -17,9 +20,10 @@
   
   temp = readLines(tf)
   
-  be   = data.frame(table = c("site", "phorizon", "phcolor"), 
+  be   = data.frame(table = c("site", "pediagfeatures", "phorizon", "phcolor"), 
                     begin = grep("@begin", temp), 
-                    end = grep("@end", temp)
+                    end = grep("@end", temp),
+                    stringsAsFactors = stringsAFactors
                     )
   split(be, be$table) ->.;
   lapply(., function(x) {
@@ -31,7 +35,7 @@
     x2 = x2[!is.na(x2$peiid), - ncol(x2)]
     x2 = uncode(x2)
     }) ->.;
-  names(.) <- c("phcolor", "phorizon", "site")
+  names(.) <- c("pediagfeatures", "phcolor", "phorizon", "site")
   
   
   # simplify colors
@@ -57,6 +61,7 @@
   # left-join via peiid
   # < 0.1 second for ~ 4k pedons
   site(h) <- .$site
+  site(h) <- .$pediagfeatures
   
   # set metadata
   m <- metadata(h)
@@ -96,10 +101,10 @@
   # remove
   temp = temp[!is.na(temp$peiid), - ncol(temp)]
   temp = uncode(temp)
-  temp = within(temp, {
-    obsdate   = as.Date(as.character(obsdate))
-    classdate = as.Date(as.character(classdate))
-  })
+  # temp = within(temp, {
+  #   obsdate   = as.Date(as.character(obsdate))
+  #   classdate = as.Date(as.character(classdate))
+  # })
   
   
   # impute missing x_std & y_std if utm are present
@@ -107,6 +112,37 @@
   
   }
 
+
+
+.get_pediagfeatures_from_NASISTemp <- function(stringsAsFactors = default.stringsAsFactors()
+) {
+  
+  tf <- "C:/ProgramData/USDA/NASIS/Temp/get_pediagfeatures_from_NASIS.txt"
+  
+  # check if temp file exists
+  if (!file.exists(tf)) {
+    stop("the temp file ", tf, "\n doesn't exist, please run the get_pediagfeatures_from_NASIS report from NASIS")
+  }
+  
+  temp = read.csv(
+    textConnection(
+      readLines(tf)
+    ), 
+    sep = "|", 
+    quote = "", 
+    stringsAsFactors = stringsAsFactors
+  )
+  # aggregate NASIS returns empty rows
+  # NASIS text reports return empty columns
+  # remove
+  temp = temp[!is.na(temp$peiid), - ncol(temp)]
+  temp = uncode(temp)
+  # temp = within(temp, {
+  #   obsdate   = as.Date(as.character(obsdate))
+  #   classdate = as.Date(as.character(classdate))
+  # })
+
+}
 
 
 ## move these to utils.R after more testing
