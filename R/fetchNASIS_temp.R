@@ -6,15 +6,14 @@
                              stringsAsFactors = default.stringsAsFactors()
                              ) {
   
-  if (is.null(url)) {
-      tf = "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
-  } else tf = url
+  tf = "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
+  if (!is.null(url)) tf = url
   
   # sanity check
   .checks$soilColorState(soilColorState)
   
   # check if temp file exists
-  if (!file.exists(tf)) {
+  if (!file.exists(tf) & is.null(url)) {
     stop("the temp file ", tf, "\n doesn't exist, please run the fetchNASIS report from NASIS")
   }
   
@@ -23,7 +22,7 @@
   be   = data.frame(table = c("site", "pediagfeatures", "phorizon", "phcolor"), 
                     begin = grep("@begin", temp), 
                     end = grep("@end", temp),
-                    stringsAsFactors = stringsAFactors
+                    stringsAsFactors = stringsAsFactors
                     )
   split(be, be$table) ->.;
   lapply(., function(x) {
