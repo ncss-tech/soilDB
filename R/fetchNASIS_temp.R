@@ -32,7 +32,9 @@
     # NASIS text reports return empty columns
     # remove
     x2 = x2[!is.na(x2$peiid), - ncol(x2)]
-    x2 = uncode(x2)
+    idx  = names(x2) %in% c("pmkind", "pmorigin")
+    x2[!idx] = uncode(x2[!idx])
+    return(x2)
     }) ->.;
   names(.) <- c("pediagfeatures", "phcolor", "phorizon", "site")
   
@@ -53,7 +55,7 @@
                               )
   
   # upgrade to SoilProfilecollection
-  h <- .$phorizon
+  h <- join(.$phorizon, .$phcolor, by = "phiid", type = "left")
   depths(h) <- peiid ~ hzdept + hzdepb
   
   
@@ -77,15 +79,17 @@
 
 # temp <- .fetchNASISTemp()
 
-.get_site_from_NASISTemp <- function(stringsAsFactors = default.stringsAsFactors()
+.get_site_from_NASISTemp <- function(url = NULL, stringsAsFactors = default.stringsAsFactors()
 ) {
   
-  tf <- "C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt"
+  tf = "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
+  if (!is.null(url)) tf = url
   
   # check if temp file exists
-  if (!file.exists(tf)) {
-    stop("the temp file ", tf, "\n doesn't exist, please run the get_site_from_NASIS report from NASIS")
-    }
+  if (!file.exists(tf) & is.null(url)) {
+    stop("the temp file ", tf, "\n doesn't exist, please run the fetchNASIS report from NASIS")
+  }
+
   
   temp = read.csv(
     textConnection(
@@ -99,7 +103,8 @@
   # NASIS text reports return empty columns
   # remove
   temp = temp[!is.na(temp$peiid), - ncol(temp)]
-  temp = uncode(temp)
+  idx  = names(temp) %in% c("pmkind", "pmorigin")
+  temp[!idx] = uncode(temp[!idx])
   # temp = within(temp, {
   #   obsdate   = as.Date(as.character(obsdate))
   #   classdate = as.Date(as.character(classdate))
@@ -108,6 +113,7 @@
   
   # impute missing x_std & y_std if utm are present
   # idx <- with(temp, ! complete.cases(x_std, y_std) & complete.cases(utmzone, utmeasting, utmnorthing, horizdatnm))
+  return(temp)
   
   }
 
@@ -188,6 +194,7 @@
   if (soilColorState == "dry")
     df$soil_color <- df$dry_soil_color
   
+  return(df)
 }
 
 
