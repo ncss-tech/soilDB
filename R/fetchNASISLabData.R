@@ -48,7 +48,7 @@ fetchNASISLabData <- function() {
 	site(h) <- s # left-join via labpeiid
 	
 	# set NASIS-specific horizon identifier
-	hzidname(h) <- 'phiid'
+	hzidname(h) <- 'labphiid'
   
 	# 7. save and mention bad pedons
 	assign('bad.labpedon.ids', value=bad.pedon.ids, envir=soilDB.env)
