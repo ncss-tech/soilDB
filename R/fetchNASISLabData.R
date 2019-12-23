@@ -14,8 +14,9 @@ fetchNASISLabData <- function() {
 	s <- get_labpedon_data_from_NASIS_db()
 	h <- get_lablayer_data_from_NASIS_db()
 	
-  # test to see if the selected set is loaded
-  if (nrow(h) == 0 | nrow(s) == 0) message('your selected set is missing either the lab or site table, please load and try again :)')
+  # stop if selected set is not loaded
+  if (nrow(h) == 0 | nrow(s) == 0) 
+    stop('your selected set is missing either the lab or site table, please load and try again :)')
 		
 	# fix some common problems
 	# replace missing lower boundaries
@@ -24,7 +25,6 @@ fetchNASISLabData <- function() {
     message(paste('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]', sep=''))
     h$hzdepb[missing.lower.depth.idx] <- h$hzdept[missing.lower.depth.idx] + 1
   }
-	
 	
   ## TODO: what to do with multiple samples / hz?
 	# test for bad horizonation... flag
@@ -35,9 +35,6 @@ fetchNASISLabData <- function() {
 	good.ids <- as.character(h.test$labpeiid[which(h.test$hz_logic_pass)])
 	bad.ids <- as.character(h.test$labpeiid[which(!h.test$hz_logic_pass)])
   bad.pedon.ids <- s$upedonid[which(s$labpeiid %in% bad.ids)]
-	
-  # subset ?
-  
 	
 	# upgrade to SoilProfilecollection
 	depths(h) <- labpeiid ~ hzdept + hzdepb
