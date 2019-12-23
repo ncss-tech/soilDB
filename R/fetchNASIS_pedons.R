@@ -178,6 +178,10 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   # supress warnings: diagnostic_hz() <- is noisy when not all profiles have diagnostic hz data
   suppressWarnings(diagnostic_hz(h) <- extended_data$diagnostic)
   
+  # add restrictions to SPC
+  # TODO: requires new setter in aqp SPC object
+  #suppressWarnings(restrictions(h) <- extended_data$restriction)
+  
   # join-in landform string
   ## 2015-11-30: short-circuts could use some work, consider pre-marking mistakes before parsing
   # ddply: 3 seconds for ~ 4k pedons

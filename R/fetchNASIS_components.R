@@ -19,6 +19,7 @@ fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, string
   f.otherveg   <- get_component_otherveg_data_from_NASIS_db(SS=SS)
   f.ecosite    <- get_component_esd_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
   f.diaghz     <- get_component_diaghz_from_NASIS_db(SS=SS)
+  f.restrict   <- get_component_restrictions_from_NASIS_db(SS=SS)
 
   # optionally test for bad horizonation... flag, and remove
   if(rmHzErrors & nrow(f.chorizon)) {
@@ -72,6 +73,10 @@ fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, string
 
   # add diagnostic features to SPC
   diagnostic_hz(f.chorizon) <- f.diaghz
+  
+  # add restrictions to SPC
+  # TODO: requires new setter in aqp SPC object
+  # restrictions(f.chorizon) <- f.restrict
 
   # print any messages on possible data quality problems:
   if(exists('component.hz.problems', envir=soilDB.env))

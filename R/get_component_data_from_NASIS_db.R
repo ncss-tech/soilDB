@@ -34,6 +34,34 @@ get_component_diaghz_from_NASIS_db <- function(SS=TRUE) {
   d <- uncode(d)
 }
 
+## component diagnostic features
+get_component_restrictions_from_NASIS_db <- function(SS = TRUE) {
+  
+  # must have RODBC installed
+  if(!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call.=FALSE)
+  
+  # setup connection local NASIS
+  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  
+  # query restrictions, can be 1:many relationship with pedons
+  q <- "SELECT coiidref as coiid, reskind, resdept_l, resdept_r, resdept_h, resdepb_l, resdepb_r, resdepb_h, resthk_l, resthk_r, resthk_h, reskind, reshard FROM corestrictions_View_1 AS cr ORDER BY cr.coiidref, cr.resdept_r;"
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
+  # exec query
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # convert codes
+  return(uncode(d))
+}
+
 ## get map unit text from local NASIS
 get_mutext_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE) {
   # must have RODBC installed

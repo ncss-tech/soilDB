@@ -61,6 +61,14 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stri
     q.diagnostic <- gsub(pattern = '_View_1', replacement = '', x = q.diagnostic, fixed = TRUE)
   }
   
+  q.restriction <- "SELECT peiidref as peiid, resdept, resdepb, resthk_l, resthk_r, resthk_h, reskind, reshard
+FROM perestrictions_View_1 As prf
+	ORDER BY prf.peiidref, prf.resdept;"
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q.restriction <- gsub(pattern = '_View_1', replacement = '', x = q.restriction, fixed = TRUE)
+  }
   
   # TODO: convert this to simplifyFragmentData
   q.surf.rf.summary <- "SELECT pedon_View_1.peiid, 
@@ -383,10 +391,10 @@ LEFT OUTER JOIN (
 	# exec queries
 	d.ecosite <- RODBC::sqlQuery(channel, q.ecosite, stringsAsFactors=FALSE)
 	d.diagnostic <- RODBC::sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
+	d.restriction <- RODBC::sqlQuery(channel, q.restriction, stringsAsFactors=FALSE)
+
 	d.rf.data <- RODBC::sqlQuery(channel, q.rf.data, stringsAsFactors=FALSE)
-	
 	d.rf.data.v2 <- RODBC::sqlQuery(channel, q.rf.data.v2, stringsAsFactors=FALSE)
-	
 	d.art.data <- uncode(RODBC::sqlQuery(channel, q.art.data, stringsAsFactors=FALSE))
 	
 	d.surf.rf.summary <- RODBC::sqlQuery(channel, q.surf.rf.summary, stringsAsFactors=FALSE)
@@ -519,7 +527,8 @@ LEFT OUTER JOIN (
 	# return a list of results
 	return(list(ecositehistory=d.ecosite,
 							diagnostic=d.diagnostic, 
-							diagHzBoolean=d.diag.boolean, 
+							diagHzBoolean=d.diag.boolean,
+							restriction=d.restriction,
 							frag_summary=d.rf.summary, 
 							frag_summary_v2 = d.rf.data.v2, 
 							art_summary=d.art.summary,
