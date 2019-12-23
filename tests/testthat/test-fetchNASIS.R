@@ -18,18 +18,41 @@ check_local_NASIS <- function() {
 check_local_NASIS_pedons_available <- function() {
   
   # attempt to load pedons
-  res <- try(suppressWarnings(fetchNASIS(from='pedons')), silent = TRUE)
-  if(class(res) == 'try-error'){
-    skip("no pedons in local NASIS database")
+  res1 <- try(suppressWarnings(get_site_data_from_NASIS_db()), silent = TRUE)
+  res2 <- try(suppressWarnings(get_hz_data_from_NASIS_db()), silent = TRUE)
+  
+  # res <- try(suppressWarnings(fetchNASIS(from='pedons')), silent = TRUE)
+  # note: this was too broad of a test -- any error in fetchNASIS will result in skipping the test!
+  #if(class(res) == 'try-error'){
+  if(nrow(res1) == 0) {
+    skip("no Site/Pedon records in local NASIS database")
+  }
+  if(nrow(res2) == 0) {
+    skip("no Pedon Horizon records in local NASIS database")
   }
 }
 
 check_local_NASIS_components_available <- function() {
   
+  # attempt to load components
+  # res <- try(suppressWarnings(fetchNASIS(from='components')), silent = TRUE)
+  # note: this is too broad of a test -- any error in fetchNASIS will result in skipping the test!
+  # if(class(res) == 'try-error'){
+  #   skip("no components in local NASIS database")
+  # }
   # attempt to load pedons
-  res <- try(suppressWarnings(fetchNASIS(from='components')), silent = TRUE)
-  if(class(res) == 'try-error'){
-    skip("no components in local NASIS database")
+  res1 <- try(suppressWarnings(get_component_data_from_NASIS_db()), silent = TRUE)
+  res2 <- try(suppressWarnings(get_component_horizon_data_from_NASIS_db()), silent = TRUE)
+  
+  # res <- try(suppressWarnings(fetchNASIS(from='pedons')), silent = TRUE)
+  # note: this was too broad of a test -- any error in fetchNASIS will result in skipping the test!
+  #if(class(res) == 'try-error'){
+  if(nrow(res1) == 0) {
+    skip("no Component records in local NASIS database")
+  }
+  
+  if(nrow(res2) == 0) {
+    skip("no Component Horizon records in local NASIS database")
   }
 }
 

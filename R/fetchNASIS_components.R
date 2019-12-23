@@ -75,8 +75,8 @@ fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, string
   diagnostic_hz(f.chorizon) <- f.diaghz
   
   # add restrictions to SPC
-  # TODO: requires new setter in aqp SPC object
-  # restrictions(f.chorizon) <- f.restrict
+  # required new setter in aqp SPC object (AGB added 2019/12/23)
+  restrictions(f.chorizon) <- f.restrict
 
   # print any messages on possible data quality problems:
   if(exists('component.hz.problems', envir=soilDB.env))
