@@ -409,6 +409,7 @@ LEFT OUTER JOIN (
 
 	## uncode the ones that need that here
 	d.diagnostic <- uncode(d.diagnostic, stringsAsFactors = stringsAsFactors)
+	d.restriction <- uncode(d.restriction, stringsAsFactors = stringsAsFactors)
 	d.rf.data    <- uncode(d.rf.data, stringsAsFactors = stringsAsFactors)
 	d.hz.texmod  <- uncode(d.hz.texmod, stringsAsFactors = stringsAsFactors)
 	# https://github.com/ncss-tech/soilDB/issues/53
