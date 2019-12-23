@@ -1,4 +1,4 @@
-get_lablayer_data_from_NASIS_db <- function() {
+get_lablayer_data_from_NASIS_db <- function(SS = TRUE) {
   
   # hacks to make R CMD check --as-cran happy:
   cec7 <- NULL
@@ -20,7 +20,10 @@ ORDER BY labpeiid, hzdept ASC;")
 	# setup connection local NASIS
 	channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
 	
-
+	# handle Views/selected set argument
+  if(!SS)
+    q.ncsslablayer <- gsub(q.ncsslablayer, pattern = "_View_1", replacement = "")
+	
 	# exec queries
 	d.lablayer <- RODBC::sqlQuery(channel, q.ncsslablayer, stringsAsFactors=FALSE)
 

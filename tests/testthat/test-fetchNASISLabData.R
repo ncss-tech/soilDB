@@ -18,9 +18,9 @@ check_local_NASIS <- function() {
 check_local_NASIS_labdata_available <- function() {
   
   # attempt to load pedons
-  res <- try(suppressWarnings(fetchNASISLabData()), silent = TRUE)
+  res <- try(suppressWarnings(fetchNASISLabData(SS = FALSE)), silent = TRUE)
   if(class(res) == 'try-error'){
-    skip("no pedons in local NASIS database")
+    skip("no NCSS Lab Data in local NASIS database")
   }
 }
 
@@ -35,7 +35,7 @@ test_that("fetchNASISLabData returns reasonable data", {
   
   # get data
   # ignore warnings for now
-  x <- suppressWarnings(fetchNASISLabData())
+  x <- suppressWarnings(fetchNASISLabData(SS = FALSE))
   
   # expected outcomes
   expect_true(inherits(x, 'SoilProfileCollection'))

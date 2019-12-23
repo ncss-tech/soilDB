@@ -3,8 +3,10 @@
 
 \title{Extract lab pedon data from a local NASIS Database}
 \description{Get lab pedon-level data from a local NASIS database.}
-\usage{get_labpedon_data_from_NASIS_db()}
-
+\usage{get_labpedon_data_from_NASIS_db(SS = TRUE)}
+\arguments{
+  \item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)}
+}
 \value{A dataframe.}
 \author{Jay M. Skovlin and Dylan E. Beaudette}
 \details{This function currently works only on Windows, and requires a 'nasis_local' ODBC connection.}

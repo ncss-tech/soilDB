@@ -1,4 +1,4 @@
-get_labpedon_data_from_NASIS_db <- function() {
+get_labpedon_data_from_NASIS_db <- function(SS = TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -8,7 +8,11 @@ get_labpedon_data_from_NASIS_db <- function() {
 
   # setup connection local NASIS
 	channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
-	
+  
+  # handle Views/selected set argument
+  if(!SS)
+    q.ncsslabpedon <- gsub(q.ncsslabpedon, pattern = "_View_1", replacement = "")	
+  
 	# exec queries
 	d.labpedon <- RODBC::sqlQuery(channel, q.ncsslabpedon, stringsAsFactors=FALSE)
 		

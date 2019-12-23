@@ -1,7 +1,5 @@
-# updated to NASIS 6.3
-
 # convenience function for loading most commonly used information from local NASIS database
-fetchNASISLabData <- function() {
+fetchNASISLabData <- function(SS = TRUE) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -11,12 +9,12 @@ fetchNASISLabData <- function() {
 			stop('Local NASIS ODBC connection has not been setup. Please see the `setup_ODBC_local_NASIS.pdf` document included with this package.')
 	
 	# 1. load data in pieces, results are DF objects
-	s <- get_labpedon_data_from_NASIS_db()
-	h <- get_lablayer_data_from_NASIS_db()
+	s <- get_labpedon_data_from_NASIS_db(SS)
+	h <- get_lablayer_data_from_NASIS_db(SS)
 	
   # stop if selected set is not loaded
   if (nrow(h) == 0 | nrow(s) == 0) 
-    stop('your selected set is missing either the lab or site table, please load and try again :)')
+    stop('Selected set is missing either the Pedon or Layer NCSS Lab Data table, please load and try again :)')
 		
 	# fix some common problems
 	# replace missing lower boundaries
@@ -38,7 +36,6 @@ fetchNASISLabData <- function() {
 	
 	# upgrade to SoilProfilecollection
 	depths(h) <- labpeiid ~ hzdept + hzdepb
-	
 	
 	## TODO: this will fail in the presence of duplicates
 	# add site data to object
