@@ -1,3 +1,8 @@
+# soilDB 2.4.3 (2019-12-30)
+  * surface water depth added to `fetchNASIS_pedons()`
+  * `fetchNASIS()` has @restrictions set automaticlly if data are populated
+  
+
 # soilDB 2.4 (2019-11-05)
    * CRAN release (https://github.com/ncss-tech/soilDB/releases/tag/2.4)
    * documentation updates
@@ -9,18 +14,18 @@
 
 # soilDB 2.3.8 (2019-03-22)
    * loafercreek, gopheridge, and mineralking sample data have been updated with valid place-holder in @sp
-   * bug fix for SDA_query() related to multi-line records (https://github.com/ncss-tech/soilDB/issues/28)
+   * bug fix for `SDA_query()` related to multi-line records (https://github.com/ncss-tech/soilDB/issues/28)
 
 # soilDB 2.3.7 (2019-03-12)
-   * sharpshootR added to SUGGESTS
-   * fetchHenry() and fetchSCAN() now include water year/day (Oct 1 -- Sep 30)
-   * HenryTimeLine() convenience function added
-   * bug fix in fetchOSD(..., extended=TRUE) when no climate data available
-   * bug fix in SDA_query()
+   * `sharpshootR` added to SUGGESTS
+   * `fetchHenry()` and fetchSCAN() now include water year/day (Oct 1 -- Sep 30)
+   * `HenryTimeLine()` convenience function added
+   * bug fix in `fetchOSD(..., extended=TRUE)` when no climate data available
+   * bug fix in `SDA_query()`
 
 # soilDB 2.3.6 (2019-02-12)
-   * simplifyFragmentData() and related functions now 4-5x faster
-   * fetchOSD() now returns metadata when extended=TRUE
+   * `simplifyFragmentData()` and related functions now 4-5x faster
+   * `fetchOSD()` now returns metadata when extended=TRUE
 
 # soilDB 2.3.5 (2019-01-14)
    * NAMESPACE and R CMD check fixes
@@ -30,12 +35,12 @@
    * release to CRAN
 
 # soilDB 2.3.3 (2018-12-18)
-   * bug fix in fetchNASIS() related to conversion of NULL fragment volume to 0
-   * fetchKSSL() can now automatically simplify colors with `simplifyColors = TRUE`
+   * bug fix in `fetchNASIS()` related to conversion of NULL fragment volume to 0
+   * `fetchKSSL()` can now automatically simplify colors with `simplifyColors = TRUE`
 
 # soilDB 2.3 (2018-11-17)
-   * new function for exploring soil series co-occurrence data: siblings()
-   * fetchOSD(..., extended=TRUE) gets competing soil series
+   * new function for exploring soil series co-occurrence data: `siblings()`
+   * `fetchOSD(..., extended=TRUE)` gets competing soil series
    * new tests
    * removed old sample gSSURGO chunk and related documentation
    * release to CRAN
@@ -44,10 +49,10 @@
    * new function for spatial queries: SDA_spatialQuery(), still needs testing and documentation
 
 # soilDB 2.2-6 (2018-10-11)
-   * fetchOSD gets an overhaul, new API and features
+   * `fetchOSD()` gets an overhaul, new API and features
 
 # soilDB 2.2-5 (2018-10-05)
-   * experimental interface to SoillWeb OSD fulltext search: OSDquery()
+   * experimental interface to SoillWeb OSD fulltext search: `OSDquery()`
 
 # soilDB 2.2-4 (2018-09-04)
    * numerous bug-fixes in simplifyFragmentData() see (https://github.com/ncss-tech/soilDB/issues/70)
