@@ -147,12 +147,10 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
     message("-> QC: duplicate coiids, this should not happen. Use `get('dupe.coiids', envir=soilDB.env)` for related coiid values.")
   }
   
-  # test for no data
-  if(nrow(d) == 0)
-    stop('there are no NASIS components in your selected set!', call. = FALSE)
-  
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  if(nrow(d) > 0) {
+    d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  }
   
   # done
   return(d)
@@ -413,6 +411,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
   # close connection
   RODBC::odbcClose(channel)
   
+  ## TODO: is this a good idea?
   # test for no data
   if(nrow(d) == 0)
     stop('there are no records in your selected set!')
