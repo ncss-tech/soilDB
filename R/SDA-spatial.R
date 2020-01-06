@@ -85,9 +85,9 @@ SDA_spatialQuery <- function(geom, what='mukey') {
   }
   
   # CRS conversion if needed
-  prj.4326 <- "+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0"
-  if(proj4string(geom) != prj.4326) {
-    geom <- spTransform(geom, CRS(prj.4326))
+  target.prj <- "+proj=longlat +datum=WGS84"
+  if(proj4string(geom) != target.prj) {
+    geom <- spTransform(geom, CRS(target.prj))
   }
   
   # WKT encoding
@@ -173,21 +173,21 @@ SDA_query_features <- function(x, id='pedon_id') {
     stop('id is not unique')
   
   # transform to GCS WGS84 if needed
-  prj.4326 <- "+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0"
-  if(proj4string(x) != prj.4326) {
-    geom <- spTransform(x, CRS(prj.4326))
+  target.prj <- "+proj=longlat +datum=WGS84"
+  if(proj4string(x) != target.prj) {
+    geom <- spTransform(x, CRS(target.prj))
   }
   
   # iterate over features and save to list
   l <- list()
-  n <- length(x)
+  n <- length(geom)
   # setup a progress bar for timing
   pb <- txtProgressBar(max=n, style=3)
   for(i in 1:n) {
     # make query
-    res <- SDA_make_spatial_query(x[i, ])
+    res <- SDA_make_spatial_query(geom[i, ])
     # save results along with an ID
-    res <- cbind(id=x[[id]][i], res, stringsAsFactors = FALSE)
+    res <- cbind(id=geom[[id]][i], res, stringsAsFactors = FALSE)
     names(res) <- c(id, 'mukey', 'muname')
     l[[i]] <- res
     setTxtProgressBar(pb, i)
