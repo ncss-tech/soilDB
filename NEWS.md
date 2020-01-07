@@ -1,8 +1,8 @@
-# soilDB 2.4.3 (2019-12-30)
+# soilDB 2.4.3 (2020-01-07)
   * surface water depth added to `fetchNASIS_pedons()`
   * `fetchNASIS()` has @restrictions set automaticlly if data are populated
+  * new function for accessing pedon RMF in local NASIS DB: `get_RMF_from_NASIS_db()`
   
-
 # soilDB 2.4 (2019-11-05)
    * CRAN release (https://github.com/ncss-tech/soilDB/releases/tag/2.4)
    * documentation updates
