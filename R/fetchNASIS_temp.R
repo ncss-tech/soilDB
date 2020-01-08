@@ -27,13 +27,15 @@
   split(be, be$table) ->.;
   lapply(., function(x) {
     x2 = temp[seq(x$begin + 1, x$end - 1)]
-    x2 = read.csv(textConnection(x2), sep = "|", quote = "", stringsAsFactors = stringsAsFactors)
+    x2 = read.csv(textConnection(x2), sep = "|", quote = "", stringsAsFactors = FALSE)
     # aggregate NASIS returns empty rows
     # NASIS text reports return empty columns
     # remove
     x2 = x2[!is.na(x2$peiid), - ncol(x2)]
     idx  = names(x2) %in% c("pmkind", "pmorigin")
     x2[!idx] = uncode(x2[!idx])
+    idx  = sapply(x2, is.character)
+    x2[idx] = lapply(x2[idx], function(x) ifelse(x == "", NA, x))
     return(x2)
     }) ->.;
   names(.) <- c("pediagfeatures", "phcolor", "phorizon", "site")
@@ -82,7 +84,7 @@
 .get_site_from_NASISTemp <- function(url = NULL, stringsAsFactors = default.stringsAsFactors()
 ) {
   
-  tf = "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
+  tf = "C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt"
   if (!is.null(url)) tf = url
   
   # check if temp file exists
@@ -97,7 +99,7 @@
       ), 
     sep = "|", 
     quote = "", 
-    stringsAsFactors = stringsAsFactors
+    stringsAsFactors = FALSE
     )
   # aggregate NASIS returns empty rows
   # NASIS text reports return empty columns
@@ -105,6 +107,8 @@
   temp = temp[!is.na(temp$peiid), - ncol(temp)]
   idx  = names(temp) %in% c("pmkind", "pmorigin")
   temp[!idx] = uncode(temp[!idx])
+  idx  = sapply(temp, is.character)
+  temp[idx] = lapply(temp[idx], function(x) ifelse(x == "", NA, x))
   # temp = within(temp, {
   #   obsdate   = as.Date(as.character(obsdate))
   #   classdate = as.Date(as.character(classdate))
@@ -244,9 +248,10 @@
   
   # 3 - test for horizonation inconsistencies... flag, and optionally remove
   # ~ 1.3 seconds / ~ 4k pedons
-  h.test <- ddply(hz_data, pedon_id, test_hz_logic, 
-                  topcol    = hzdept, 
-                  bottomcol = hzdepb, 
+  #system.time(
+  h.test <- ddply(hz_data, pedon_id, test_hz_logic,
+                  topcol    = hzdept,
+                  bottomcol = hzdepb,
                   strict    = TRUE
   )
   
