@@ -133,6 +133,7 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   # first of all, we can't do anything if the fragment volume is NA
   # warn the user and remove the offending records
   if(any(is.na(rf$fragvol))) {
+    rf <- rf[which(!is.na(rf$fragvol)), ]
     warning('some records are missing rock fragment volume, these have been removed', call. = FALSE)
   }
   
@@ -147,8 +148,6 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
     colnames(dat) <- result.columns
     return(dat)
   }
-  
-  rf <- rf[which(!is.na(rf$fragvol)), ]
   
   # extract classes
   # note: these will put any fragments without fragsize into an 'unspecified' class

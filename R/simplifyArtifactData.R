@@ -63,6 +63,7 @@ simplifyArtifactData <- function(art, id.var, nullFragsAreZero = nullFragsAreZer
   # first of all, we can't do anything if the fragment volume is NA
   # warn the user and remove the offending records
   if(any(is.na(art$huartvol))) {
+    art <- art[which(!is.na(art$huartvol)), ]
     warning('some records are missing artifact volume, these have been removed', call. = FALSE)
   }
   
@@ -78,8 +79,7 @@ simplifyArtifactData <- function(art, id.var, nullFragsAreZero = nullFragsAreZer
     return(dat)
   }
   
-  art <- art[which(!is.na(art$huartvol)), ]
-  
+
   
   # extract classes
   # note: these will put any fragments without fragsize into an 'unspecified' class
