@@ -28,9 +28,16 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   ## join horizon + hz color: all horizons
   h <- join(hz_data, color_data, by='phiid', type='left')
   
+  # check for empty artifact summary and nullFragsAreZero
+  if(nullFragsAreZero & all(is.na(unique(extended_data$frag_summary$phiid))))
+    extended_data$frag_summary <- cbind(unique(h$phiid), extended_data$frag_summary[,-1])
+  
   ## join hz + fragment summary
-  # there is a record for each phiid
   h <- join(h, extended_data$frag_summary, by='phiid', type='left')
+  
+  # check for empty artifact summary and nullFragsAreZero
+  if(nullFragsAreZero & all(is.na(unique(extended_data$art_summary$phiid))))
+    extended_data$art_summary <- cbind(unique(h$phiid), extended_data$art_summary[,-1])
   
   # join hz + artifact
   h <- join(h, extended_data$art_summary, by='phiid', type='left')
@@ -205,9 +212,6 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   m$origin <- 'NASIS pedons'
   metadata(h) <- m
   
-  # set NASIS-specific horizon identifier
-  hzidname(h) <- 'phiid'
-  
   # print any messages on possible data quality problems:
   if(exists('sites.missing.pedons', envir=soilDB.env))
     if(length(get('sites.missing.pedons', envir=soilDB.env)) > 0)
@@ -216,6 +220,14 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   if(exists('dup.pedon.ids', envir=soilDB.env))
     if(length(get('dup.pedon.ids', envir=soilDB.env)) > 0)
       message("-> QC: duplicate pedons: use `get('dup.pedon.ids', envir=soilDB.env)` for related peiid values")
+  
+  # set NASIS-specific horizon identifier
+  tryCatch(hzidname(h) <- 'phiid', error = function(e) {
+    if(grepl(e$message, pattern="not unique$") & !rmHzErrors) {
+      # if rmHzErrors = TRUE, keep unique integer assigned ID to all records automatically
+      message("-> QC: duplicate horizons are present with rmHzErrors=FALSE! defaulting to `hzID` as unique horizon ID.")
+    }
+  })  
   
   if(exists('bad.pedon.ids', envir=soilDB.env))
     if(length(get('bad.pedon.ids', envir=soilDB.env)) > 0)

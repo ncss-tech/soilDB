@@ -58,7 +58,7 @@ simplifyArtifactData <- function(art, id.var, nullFragsAreZero = nullFragsAreZer
   # note that we are adding a catch-all for those strange phfrags records missing fragment size
   art.classes <- c('art_fgr', 'art_gr', 'art_cb', 'art_st', 'art_by', 'art_ch', 'art_fl', 'art_unspecified')
   
-  result.columns <- c('phiid', art.classes, "total_art_pct",  "huartvol_cohesive","huartvol_penetrable", "huartvol_innocuous", "huartvol_persistent")
+  result.columns <- c(id.var, art.classes, "total_art_pct",  "huartvol_cohesive","huartvol_penetrable", "huartvol_innocuous", "huartvol_persistent")
   
   # first of all, we can't do anything if the fragment volume is NA
   # warn the user and remove the offending records
@@ -70,9 +70,9 @@ simplifyArtifactData <- function(art, id.var, nullFragsAreZero = nullFragsAreZer
   if(nrow(art[which(!is.na(art$huartvol)), ]) == 0) {
     warning('all records are missing artifact volume (NULL). buffering result with NA. will be converted to zero if nullFragsAreZero = TRUE.', call. = FALSE)
     dat <- as.data.frame(t(rep(NA, length(result.columns))))
-    for(i in 1:length(art$phiid)) {
+    for(i in 1:length(art[[id.var]])) {
       dat[i,] <- dat[1,]
-      dat[i,which(result.columns == "phiid")] <- art$phiid[i]
+      dat[i,which(result.columns == id.var)] <- art[[id.var]][i]
     }
     colnames(dat) <- result.columns
     return(dat)

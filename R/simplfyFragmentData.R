@@ -142,7 +142,7 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
     dat <- as.data.frame(t(rep(NA, length(result.columns))))
     for(i in 1:length(rf$phiid)) {
       dat[i,] <- dat[1,]
-      dat[i,which(result.columns == "phiid")] <- rf$phiid[i]
+      dat[i,which(result.columns == id.var)] <- rf[[id.var]][i]
     }
     colnames(dat) <- result.columns
     return(dat)
