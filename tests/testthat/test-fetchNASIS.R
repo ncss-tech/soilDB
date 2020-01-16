@@ -76,6 +76,22 @@ test_that("fetchNASIS(from='pedons') returns reasonable data", {
   
 })
 
+test_that("fetchNASIS(from='pedons') nullFragsAreZero works as expected", {
+  
+  # test for conditions permitting this test to run
+  check_local_NASIS()
+  check_local_NASIS_pedons_available()
+  
+  # get data
+  # ignore warnings for now
+  x <- suppressWarnings(fetchNASIS(from='pedons'))
+  y <- suppressWarnings(fetchNASIS(from='pedons', nullFragsAreZero=FALSE))
+  
+  # no NA in total fragments using default arguments 
+  expect_true(all(horizons(x)[is.na(y$total_frags_pct),'total_frags_pct'] ==0))
+  expect_true(all(horizons(x)[is.na(y$total_art_pct),'total_art_pct'] ==0))
+})
+
 test_that("fetchNASIS(from='components') returns reasonable data", {
   
   # test for conditions permitting this test to run
