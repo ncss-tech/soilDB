@@ -223,9 +223,13 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   
   # set NASIS-specific horizon identifier
   tryCatch(hzidname(h) <- 'phiid', error = function(e) {
-    if(grepl(e$message, pattern="not unique$") & !rmHzErrors) {
-      # if rmHzErrors = TRUE, keep unique integer assigned ID to all records automatically
-      message("-> QC: duplicate horizons are present with rmHzErrors=FALSE! defaulting to `hzID` as unique horizon ID.")
+    if(grepl(e$message, pattern="not unique$")) {
+       if(!rmHzErrors) {
+        # if rmHzErrors = FALSE, keep unique integer assigned ID to all records automatically
+        message("-> QC: duplicate horizons are present with rmHzErrors=FALSE! defaulting to `hzID` as unique horizon ID.")
+       } else {
+         stop(e)
+       }
     }
   })  
   
