@@ -6,13 +6,16 @@
 # d: data.frame with color data from horizon-color table: expects "colorhue", "colorvalue", "colorchroma"
 # id.var: name of the column with unique horizon IDs
 # ...: further arguments passed to mix_and_clean_colors()
-simplifyColorData <- function(d, id.var='phiid', ...) {
+simplifyColorData <- function(d, id.var='phiid', colorSpace = 'CIE2000', ...) {
   
   # sanity check: must contain 1 row
   if(nrow(d) < 1) {
-    warning('0 rows of colors data, doing nothing', call. = FALSE)
+    warning('simplifyColorData: 0 rows of colors data, doing nothing', call. = FALSE)
     return(d)
   }
+  
+  if(!colorSpace %in% c("CIE2000","LAB","sRGB"))
+    stop('colorSpace must be either: CIE2000, LAB or sRGB')
   
   # convert Munsell to RGB
   d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, return_triplets=TRUE))
@@ -55,7 +58,7 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
     mixed.dry <- ddply(dry.colors[dry.mix.idx, ], id.var, mix_and_clean_colors, ...)
     
     # back-transform mixture to Munsell
-    m <- rgb2munsell(mixed.dry[, c('r', 'g', 'b')])
+    m <- rgb2munsell(mixed.dry[, c('r', 'g', 'b')], colorSpace = colorSpace)
 
     # adjust names to match NASIS
     names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")
@@ -84,7 +87,7 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
     mixed.moist <- ddply(moist.colors[moist.mix.idx, ], id.var, mix_and_clean_colors, ...)
     
     # back-transform mixture to Munsell
-    m <- rgb2munsell(mixed.moist[, c('r', 'g', 'b')])
+    m <- rgb2munsell(mixed.moist[, c('r', 'g', 'b')], colorSpace = colorSpace)
     
     # adjust names to match NASIS
     names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")

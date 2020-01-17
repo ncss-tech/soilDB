@@ -15,7 +15,7 @@ mix_and_clean_colors(x, wt='pct', colorSpace='LAB', backTransform=FALSE)
   \item{\dots}{further arguments passed on to \code{mix_and_clean_colors()}, see details}
   \item{x}{a \code{data.frame} object containing sRGB cordinates associated with a group of colors to mix}
   \item{wt}{a character vector with the name of the column containing color weights for mixing}
-  \item{colorSpace}{a character vector with the name of color space in which mixing is performed ("LAB" or "sRGB")}
+  \item{colorSpace}{the name of color space to use for conversion of aggregate colors to Munsell; either CIE2000, LAB, or sRGB. Default for simplifyColorData = 'CIE2000'. Default for mix_and_clean_colors = 'LAB'}
   \item{backTransform}{logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips?}
 }
 
