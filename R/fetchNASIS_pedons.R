@@ -104,7 +104,8 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   # optionally load phlabresults table
   if (lab) {
     phlabresults <- get_phlabresults_data_from_NASIS_db(SS=SS)
-    h <- join(h, phlabresults, by = "phiid", type = "left")
+    horizons(h) <- phlabresults
+    #h <- join(h, phlabresults, by = "phiid", type = "left")
   }
   
   
