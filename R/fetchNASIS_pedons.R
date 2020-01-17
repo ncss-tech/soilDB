@@ -122,14 +122,6 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   # 1 second for ~ 4k pedons
   site(h) <- ~ pedon_id
   
-  ## https://github.com/ncss-tech/soilDB/issues/44
-  # optionally load phlabresults table
-  if (lab) {
-    phlabresults <- get_phlabresults_data_from_NASIS_db(SS=SS)
-    horizons(h) <- phlabresults
-    #h <- join(h, phlabresults, by = "phiid", type = "left")
-  }
-  
   ## TODO: this will fail in the presence of duplicates
   # add site data to object
   # remove 'pedon_id' column from site_data
@@ -242,6 +234,14 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   if(exists('top.bottom.equal', envir=soilDB.env))
     if(length(get('top.bottom.equal', envir=soilDB.env)) > 0)
       message("-> QC: equal hz top and bottom depths: use `get('top.bottom.equal', envir=soilDB.env)` for related pedon IDs")
+  
+  ## https://github.com/ncss-tech/soilDB/issues/44
+  # optionally load phlabresults table
+  if (lab) {
+    phlabresults <- get_phlabresults_data_from_NASIS_db(SS=SS)
+    horizons(h) <- phlabresults
+    #h <- join(h, phlabresults, by = "phiid", type = "left")
+  }
   
   # done
   return(h)
