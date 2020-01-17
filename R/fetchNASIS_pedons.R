@@ -99,16 +99,6 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
   assign("bad.horizons", value = data.frame(bad.horizons), envir = soilDB.env)
   
-  
-  ## https://github.com/ncss-tech/soilDB/issues/44
-  # optionally load phlabresults table
-  if (lab) {
-    phlabresults <- get_phlabresults_data_from_NASIS_db(SS=SS)
-    horizons(h) <- phlabresults
-    #h <- join(h, phlabresults, by = "phiid", type = "left")
-  }
-  
-  
   ## optionally convert NA fragvol to 0
   if(nullFragsAreZero) {
     # this is the "total fragment volume" per NASIS calculation
@@ -132,6 +122,13 @@ fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, s
   # 1 second for ~ 4k pedons
   site(h) <- ~ pedon_id
   
+  ## https://github.com/ncss-tech/soilDB/issues/44
+  # optionally load phlabresults table
+  if (lab) {
+    phlabresults <- get_phlabresults_data_from_NASIS_db(SS=SS)
+    horizons(h) <- phlabresults
+    #h <- join(h, phlabresults, by = "phiid", type = "left")
+  }
   
   ## TODO: this will fail in the presence of duplicates
   # add site data to object
