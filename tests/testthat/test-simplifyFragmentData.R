@@ -475,3 +475,11 @@ test_that("simplifyFragmentData warning generated when all fragvol are NA", {
   
 })
 
+test_that("simplifyFragmentData nullFragsAreZero works as expected", {
+  expect_warning(a <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = FALSE))
+  expect_warning(b <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE))
+  expect_equal(as.logical(is.na(a)), 
+               c(FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, 
+                           FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE))
+  expect_true(all(!is.na(b)))
+})

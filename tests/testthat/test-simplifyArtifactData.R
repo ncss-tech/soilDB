@@ -1,7 +1,7 @@
 context("Simplification of artifact data (from NASIS)")
 
 ## some complex data from NASIS phhuart table
-d.single.hz <- structure(list(phiid = c(10101, 10101, 10102), 
+d.artifact.hz <- structure(list(phiid = c(10101, 10101, 10102), 
                               huartvol = c(10, 5, 95), 
                               huartsize_l = c(2, 76, 2), 
                               huartsize_r = c(39, 163, 39), 
@@ -98,7 +98,7 @@ test_that("artifactSieve safe fall-back from high to rv fragsize", {
 test_that("artifactSieve complex sample data from NASIS, single horizon", {
   
   # pretty common, many fragments specified for a single horizon
-  res <- soilDB:::.artifactSieve(d.single.hz)
+  res <- soilDB:::.artifactSieve(d.artifact.hz)
   
   # correct classes
   expect_equal(res$class, c('art_gr', 'art_cb', 'art_ch'))
@@ -109,7 +109,7 @@ test_that("artifactSieve complex sample data from NASIS, single horizon", {
 test_that("simplifyArtifactData complex sample data from NASIS, single horizon", {
   
   # pretty common, many fragments specified for a single horizon
-  res <- soilDB::simplifyArtifactData(d.single.hz, id.var = 'phiid', nullFragsAreZero = TRUE)
+  res <- soilDB::simplifyArtifactData(d.artifact.hz, id.var = 'phiid', nullFragsAreZero = TRUE)
   
   # correct class totals
   expect_equal(res$art_fgr, c(0,0))
@@ -143,7 +143,7 @@ test_that("simplifyArtifactData when missing fragment sizes, low/rv/high", {
   # all fragments are coallated into the unspecified column
   # totals should be correct
   # some horizons have no fragment records, should generate a warning
-  d.missing.size <- d.single.hz
+  d.missing.size <- d.artifact.hz
   d.missing.size[,c("huartsize_l", "huartsize_r", "huartsize_h")] <- NA
   d.missing.size[4,] <- d.missing.size[3,]
   d.missing.size[4,] <- NA
@@ -168,7 +168,7 @@ test_that("simplifyArtifactData when missing fragment sizes, low/rv/high", {
 
 
 test_that("simplifyArtifactData warning generated when NA in huartvol", {
-  d.missing.artvol <- d.single.hz
+  d.missing.artvol <- d.artifact.hz
   d.missing.artvol$huartvol <- NA
   d.missing.artvol[1,'huartvol'] <- 10
   expect_warning(simplifyArtifactData(d.missing.artvol, id.var = 'phiid', nullFragsAreZero = TRUE), regexp = 'some records are missing artifact volume, these have been removed')
@@ -176,8 +176,19 @@ test_that("simplifyArtifactData warning generated when NA in huartvol", {
 
 
 test_that("simplifyArtifactData warning generated when all fragvol are NA", {
-  d.all.NA.artvol <- d.single.hz
+  d.all.NA.artvol <- d.artifact.hz
   d.all.NA.artvol$huartvol <- NA
-  expect_warning(simplifyFragmentData(d.all.NA.artvol, id.var = 'phiid', nullFragsAreZero = TRUE), regexp = 'all records are missing rock fragment volume')
+  expect_warning(simplifyArtifactData(d.all.NA.artvol, id.var = 'phiid', nullFragsAreZero = TRUE), regexp = 'all records are missing artifact volume')
 })
 
+test_that("simplifyArtifactData nullFragsAreZero works as expected", {
+  d.missing.artvol <- d.artifact.hz
+  a <- simplifyArtifactData(d.missing.artvol, id.var = 'phiid', nullFragsAreZero = FALSE)
+  b <- simplifyArtifactData(d.missing.artvol, id.var = 'phiid', nullFragsAreZero = TRUE)
+  expect_equal(as.logical(is.na(a)), 
+               c(FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, TRUE, 
+                 TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, 
+                 FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE
+               ))
+  expect_true(dput(!all(as.logical(is.na(b)))))
+})
