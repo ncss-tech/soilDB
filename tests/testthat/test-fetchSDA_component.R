@@ -1,14 +1,14 @@
-context("fetchSDA_component() -- requires internet connection")
+context("fetchSDA() -- requires internet connection")
 
 ## sample data: these should run in < 3 seconds
 
 
-test_that("fetchSDA_component() works", {
+test_that("fetchSDA() works", {
   
   skip_if_offline()
   
   # single component
-  x <<- suppressMessages(fetchSDA_component(WHERE="nationalmusym = 'kzc4'"))
+  x <<- suppressMessages(fetchSDA(WHERE="nationalmusym = 'kzc4'"))
   
   # basic test
   expect_true(inherits(x, 'SoilProfileCollection'))
@@ -16,7 +16,7 @@ test_that("fetchSDA_component() works", {
 
 ## tests
 
-test_that("fetchSDA_component() returns an SPC", {
+test_that("fetchSDA() returns an SPC", {
   
   skip_if_offline()
   
@@ -26,7 +26,7 @@ test_that("fetchSDA_component() returns an SPC", {
   
 })
 
-test_that("fetchSDA_component() returns expected results", {
+test_that("fetchSDA() returns expected results", {
   
   skip_if_offline()
   

@@ -1,10 +1,10 @@
 
 .fetchNASIS_report <- function(url = NULL,
-                                rmHzErrors       = TRUE,
-                                nullFragsAreZero = TRUE, 
-                                soilColorState   = "moist", 
-                                stringsAsFactors = default.stringsAsFactors()
-                                ) {
+                               rmHzErrors       = TRUE,
+                               nullFragsAreZero = TRUE, 
+                               soilColorState   = "moist", 
+                               stringsAsFactors = default.stringsAsFactors()
+                               ) {
   
   tf = "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
   if (!is.null(url)) tf = url
