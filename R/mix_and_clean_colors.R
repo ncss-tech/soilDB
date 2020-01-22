@@ -1,12 +1,11 @@
 
-# re-write of previous version, should be more robust to missing weights and generalize to other uses
-# mixing done in CIELAB by default now: roughly linear in terms of avg. human perception of color
-# note: this isn't real mixing, relfectance curves and kubella-monk modeling required for that
-# all colors are mixed, should be applied to groups of related colors
+## re-write of previous version, should be more robust to missing weights and generalize to other uses
+## note: this isn't real mixing, relfectance curves and kubella-monk modeling required for that
+## all colors are mixed, should be applied to groups of related colors
+
 # x: data.frame, typically from NASIS containing at least 'r', 'g', 'b' colors {0,1} and some kind of weight
 # wt: fractional weights, usually area of hz face
-# colorSpace: LAB or sRGB
-mix_and_clean_colors <- function(x, wt='pct', colorSpace='LAB', backTransform=FALSE) {
+mix_and_clean_colors <- function(x, wt='pct', backTransform=FALSE) {
   
   # sanity check: no NA
   if(any(c(is.na(x$r), is.na(x$g), is.na(x$b))))
@@ -27,36 +26,27 @@ mix_and_clean_colors <- function(x, wt='pct', colorSpace='LAB', backTransform=FA
     x[[wt]][which(missing.wts)] <- est.wt
   }
   
-  # default: mixing is done in CIE LAB space
-  if(colorSpace == 'LAB') {
-    
-    # convert sRGB -> LAB
-    lab.cols <- data.frame(convertColor(x[, c('r', 'g', 'b')], from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65'))
-    names(lab.cols) <- c('L', 'A', 'B')
-    
-    # copy over weights, typically a percent by area
-    lab.cols$pct <- x[[wt]]
-    
-    # compute weighted mixtures in LAB space
-    # 2019-11-04 DEB: dropping Hmisc import
-    L <- with(lab.cols, weighted.mean(L, w=pct, na.rm = TRUE))
-    A <- with(lab.cols, weighted.mean(A, w=pct, na.rm = TRUE))
-    B <- with(lab.cols, weighted.mean(B, w=pct, na.rm = TRUE))
-    
-    # back to sRGB
-    mixed.color <- data.frame(convertColor(cbind(L, A, B), from='Lab', to='sRGB', from.ref.white='D65', to.ref.white = 'D65'))
-    names(mixed.color) <- c('r', 'g', 'b')
-  } else {
-    # there is usually no reason to use sRGB other than for demonstrations
-    # use sRGB space
-    
-    # compute weighted mixtures in sRGB space
-    r <- with(x, weighted.mean(r, w=pct, na.rm = TRUE))
-    g <- with(x, weighted.mean(g, w=pct, na.rm = TRUE))
-    b <- with(x, weighted.mean(b, w=pct, na.rm = TRUE))
-    
-    mixed.color <- data.frame(r, g, b)
-  }
+  ## 2020-01-22 DEB: mixing always in CIELAB, roughly linear in terms of avg. human perception of color
+  ## simulate mixture via weighted average
+  # convert sRGB -> LAB
+  lab.cols <- data.frame(
+    convertColor(x[, c('r', 'g', 'b')], from='sRGB', to='Lab', from.ref.white='D65', to.ref.white = 'D65')
+  )
+  # simpler names
+  names(lab.cols) <- c('L', 'A', 'B')
+  
+  # copy over weights, typically a percent by area
+  lab.cols$pct <- x[[wt]]
+  
+  # compute weighted mixtures in LAB space
+  # 2019-11-04 DEB: dropping Hmisc import
+  L <- with(lab.cols, weighted.mean(L, w=pct, na.rm = TRUE))
+  A <- with(lab.cols, weighted.mean(A, w=pct, na.rm = TRUE))
+  B <- with(lab.cols, weighted.mean(B, w=pct, na.rm = TRUE))
+  
+  # back to sRGB
+  mixed.color <- data.frame(convertColor(cbind(L, A, B), from='Lab', to='sRGB', from.ref.white='D65', to.ref.white = 'D65'))
+  names(mixed.color) <- c('r', 'g', 'b')
   
   # optionally back-transform mixture to Munsell
   if(backTransform) {

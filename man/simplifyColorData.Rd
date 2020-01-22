@@ -6,7 +6,7 @@
 \description{Simplify multiple Munsell color observations associated with each horizon.}
 \usage{
 simplifyColorData(d, id.var = "phiid", ...)
-mix_and_clean_colors(x, wt='pct', colorSpace='LAB', backTransform=FALSE)
+mix_and_clean_colors(x, wt='pct', backTransform=FALSE)
 }
 
 \arguments{
@@ -15,8 +15,7 @@ mix_and_clean_colors(x, wt='pct', colorSpace='LAB', backTransform=FALSE)
   \item{\dots}{further arguments passed on to \code{mix_and_clean_colors()}, see details}
   \item{x}{a \code{data.frame} object containing sRGB cordinates associated with a group of colors to mix}
   \item{wt}{a character vector with the name of the column containing color weights for mixing}
-  \item{colorSpace}{the name of color space to use for conversion of aggregate colors to Munsell; LAB, or sRGB. LAB is the most appropriate, sRGB should not be used for anything other than a demonstration of poor color averaging.}
-  \item{backTransform}{logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips?}
+  \item{backTransform}{logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by \code{aqp::rgb2Munsell}}
 }
 
 \details{

@@ -5,9 +5,8 @@
 # This function heavily biased towared NASIS-specific data structures and assumptions
 # d: data.frame with color data from horizon-color table: expects "colorhue", "colorvalue", "colorchroma"
 # id.var: name of the column with unique horizon IDs
-# colorSpace: color space used to mix colors, LAB is the most appropriate
 # ...: further arguments passed to mix_and_clean_colors()
-simplifyColorData <- function(d, id.var='phiid', colorSpace = 'LAB', ...) {
+simplifyColorData <- function(d, id.var='phiid', ...) {
   
   # sanity check: must contain 1 row
   if(nrow(d) < 1) {
@@ -15,15 +14,12 @@ simplifyColorData <- function(d, id.var='phiid', colorSpace = 'LAB', ...) {
     return(d)
   }
   
-  if(!colorSpace %in% c("LAB", "sRGB"))
-    stop('colorSpace must be either: LAB or sRGB')
-  
   # convert Munsell to RGB
   d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, return_triplets=TRUE))
   d <- cbind(d, d.rgb)
   
   # add a fake column for storing `sigma`
-  # this is the error associated with the rgb -> munsell transformation
+  # this is the error associated with the sRGB -> munsell transformation
   d$sigma <- NA
   
   # perform lower-case comparison, values differ based on interpretation of NASIS metadata
@@ -56,7 +52,7 @@ simplifyColorData <- function(d, id.var='phiid', colorSpace = 'LAB', ...) {
     # dc.l <- lapply(dc, mix_and_clean_colors)
     # mixed.dry <- do.call('rbind', dc.l)
     # < move id.var -> from rownames to column and fix order >
-    mixed.dry <- ddply(dry.colors[dry.mix.idx, ], id.var, mix_and_clean_colors, colorSpace=colorSpace, ...)
+    mixed.dry <- ddply(dry.colors[dry.mix.idx, ], id.var, mix_and_clean_colors, ...)
     
     # back-transform mixture to Munsell using best-available method
     m <- rgb2munsell(mixed.dry[, c('r', 'g', 'b')])
@@ -85,7 +81,7 @@ simplifyColorData <- function(d, id.var='phiid', colorSpace = 'LAB', ...) {
     ## TODO: convert to split -> lapply -> do.call
     ## this means moving row.names -> id.var column
     ## BUG: for some reason ddply carries over some of the original columns in the result
-    mixed.moist <- ddply(moist.colors[moist.mix.idx, ], id.var, mix_and_clean_colors, colorSpace=colorSpace, ...)
+    mixed.moist <- ddply(moist.colors[moist.mix.idx, ], id.var, mix_and_clean_colors, ...)
     
     # back-transform mixture to Munsell using best-available metric
     m <- rgb2munsell(mixed.moist[, c('r', 'g', 'b')])

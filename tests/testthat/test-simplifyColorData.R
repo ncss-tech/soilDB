@@ -74,29 +74,22 @@ test_that("simplifyColorData: single color / moisture state / horizon", {
   expect_equal(res$m_g, res.rgb$g[2])
   expect_equal(res$m_b, res.rgb$b[2])
   
-  # TODO: ???
-  
 })
 
 
-test_that("simplifyColorData (colorSpace CIE2000 & LAB): two colors / moisture state, color percentages provided", {
+test_that("simplifyColorData: two colors / moisture state, color percentages provided", {
   
   # two colors / moisture state, color percentages provided
-  res <- simplifyColorData(x.multiple)
-  res2 <- simplifyColorData(x.multiple, colorSpace = 'LAB')
+  suppressMessages(res <- simplifyColorData(x.multiple))
   
   # should be 2 rows
   expect_equal(nrow(res), 2)
-  expect_equal(nrow(res2), 2)
   
   # check dry color mixture, should be ~ 2.5Y 6/2
   # dry colors first
   expect_equal(res$d_hue[1], '2.5Y')
   expect_equal(res$d_value[1], 6)
   expect_equal(res$d_chroma[1], 2)
-  expect_equal(res2$d_hue[1], '2.5Y')
-  expect_equal(res2$d_value[1], 6)
-  expect_equal(res2$d_chroma[1], 2)
   
   # check moist color mixture, should be ~ 10YR 5/5
   # moist colors second
@@ -104,31 +97,5 @@ test_that("simplifyColorData (colorSpace CIE2000 & LAB): two colors / moisture s
   expect_equal(res$m_value[2], 5)
   expect_equal(res$m_chroma[2], 5)
   
-  expect_equal(res2$m_hue[2], '10YR')
-  expect_equal(res2$m_value[2], 5)
-  expect_equal(res2$m_chroma[2], 5)
-  
 })
 
-test_that("simplifyColorData (colorSpace sRGB) two colors / moisture state, color percentages provided", {
-  
-  # single color / moisture state / horizon
-  res <- simplifyColorData(x.multiple, colorSpace = 'sRGB')
-  
-  # should be 2 rows
-  expect_equal(nrow(res), 2)
-  
-  # check dry color mixture, should be ~ 2.5Y 6/2; but sRGB is offset
-  # dry colors first
-  expect_equal(res$d_hue[1], '10YR')
-  expect_equal(res$d_value[1], 6)
-  expect_equal(res$d_chroma[1], 1)
-  
-  # check moist color mixture, should be ~ 10YR 5/5; but sRGB is offset
-  # moist colors second
-  expect_equal(res$m_hue[2], '7.5YR')
-  expect_equal(res$m_value[2], 5)
-  expect_equal(res$m_chroma[2], 5)
-  
-  
-})

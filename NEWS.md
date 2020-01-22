@@ -1,3 +1,7 @@
+# soilDB 2.5 (2020-01-22)
+  * CRAN release
+  * `simplifyColorData` and `mix_and_clean_colors` always use CIELAB colorspace for weighted averages, and best-available metric for transformation to Munsell notation
+
 # soilDB 2.4.3 (2020-01-07)
   * surface water depth added to `fetchNASIS_pedons()`
   * `fetchNASIS()` has @restrictions set automaticlly if data are populated
