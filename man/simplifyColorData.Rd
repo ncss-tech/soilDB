@@ -15,12 +15,14 @@ mix_and_clean_colors(x, wt='pct', colorSpace='LAB', backTransform=FALSE)
   \item{\dots}{further arguments passed on to \code{mix_and_clean_colors()}, see details}
   \item{x}{a \code{data.frame} object containing sRGB cordinates associated with a group of colors to mix}
   \item{wt}{a character vector with the name of the column containing color weights for mixing}
-  \item{colorSpace}{the name of color space to use for conversion of aggregate colors to Munsell; either CIE2000, LAB, or sRGB. Default for simplifyColorData = 'CIE2000'. Default for mix_and_clean_colors = 'LAB'}
+  \item{colorSpace}{the name of color space to use for conversion of aggregate colors to Munsell; LAB, or sRGB. LAB is the most appropriate, sRGB should not be used for anything other than a demonstration of poor color averaging.}
   \item{backTransform}{logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips?}
 }
 
 \details{
-This function is mainly intended for the processing of NASIS pedon/horizon data which may or may not contain multiple colors per horizon/moisture status combination. \code{simplifyColorData} will "mix" multiple colors associated with horizons in \code{d}, according to IDs specified by \code{id.var}, using "weights" (area percentages) specified by the \code{wt} argument to \code{mix_and_clean_colors}. Mixing is performed in the CIE LAB color space by default.
+This function is mainly intended for the processing of NASIS pedon/horizon data which may or may not contain multiple colors per horizon/moisture status combination. \code{simplifyColorData} will "mix" multiple colors associated with horizons in \code{d}, according to IDs specified by \code{id.var}, using "weights" (area percentages) specified by the \code{wt} argument to \code{mix_and_clean_colors}.
+
+Note that this function doesn't actually simulate the mixture of pigments on a surface, rather, "mixing" is approximated via weighted average in the CIELAB colorspace.
 
 The \code{simplifyColorData} function can be applied to data sources other than NASIS by careful use of the \code{id.var} and \code{wt} arguments. However, \code{d} must contain Munsell colors split into columns named "colorhue", "colorvalue", and "colorchroma". In addition, the moisture state ("Dry" or "Moist") must be specified in a column named "colormoistst".
 
