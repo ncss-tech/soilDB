@@ -7,7 +7,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
                                    drop.unused.levels = TRUE,
                                    stringsAsFactors = default.stringsAsFactors()
                                    ) {
-  if(!duplicates & grepl(WHERE, pattern = "mukey"))
+  if(!duplicates & grepl(WHERE, pattern = "mukey")[1])
     warning("duplicates is set to FALSE and 'mukey' is in WHERE clause. Note: 'mukey' omitted from result.", call.=FALSE)
   
   # SDA is missing soiltempa_r AS mast_r
