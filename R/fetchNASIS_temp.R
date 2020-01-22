@@ -1,10 +1,10 @@
 
-.fetchNASIS_temp <- function(url = NULL,
-                             rmHzErrors       = TRUE,
-                             nullFragsAreZero = TRUE, 
-                             soilColorState   = "moist", 
-                             stringsAsFactors = default.stringsAsFactors()
-                             ) {
+.fetchNASIS_report <- function(url = NULL,
+                                rmHzErrors       = TRUE,
+                                nullFragsAreZero = TRUE, 
+                                soilColorState   = "moist", 
+                                stringsAsFactors = default.stringsAsFactors()
+                                ) {
   
   tf = "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
   if (!is.null(url)) tf = url
@@ -56,6 +56,7 @@
                               soilColorState = soilColorState
                               )
   
+  
   # upgrade to SoilProfilecollection
   h <- join(.$phorizon, .$phcolor, by = "phiid", type = "left")
   depths(h) <- peiid ~ hzdept + hzdepb
@@ -64,7 +65,33 @@
   # left-join via peiid
   # < 0.1 second for ~ 4k pedons
   site(h) <- .$site
-  site(h) <- .$pediagfeatures
+  
+  
+  # tidy .$pediagfeatures
+  pediagfeatures <- .$pediagfeatures
+  pediagfeatures[-1] <- lapply(pediagfeatures[-1], function(x) {
+    ifelse(!is.na(x), TRUE, FALSE)
+  })
+  # pediagfeatures[!is.na(.$pediagfeatures)] <- TRUE
+  site(h) <- pediagfeatures
+  
+  vars <- names(.$pediagfeatures)[-1]
+  pediagfeatures <- stats::reshape(.$pediagfeatures,
+                            direction = "long",
+                            timevar = "featkind", times = vars,
+                            v.names = "featdep", varying = vars
+                            )
+  pediagfeatures <- pediagfeatures[! is.na(pediagfeatures$featdep), ]
+  featdep <- {
+    x <- strsplit(pediagfeatures$featdep, "-")
+    featdept <- unlist(lapply(x, function(x) as.integer(x[1])))
+    suppressWarnings(featdepb <- unlist(lapply(x, function(x) as.integer(x[2]))))
+    data.frame(featdept, featdepb)
+  }
+  pediagfeatures <- cbind(pediagfeatures[c("peiid", "featkind")], featdep)  
+  
+  diagnostic_hz(h) <- pediagfeatures
+  
   
   # set metadata
   m <- metadata(h)
@@ -72,7 +99,16 @@
   metadata(h) <- m
   
   # set NASIS-specific horizon identifier
-  hzidname(h) <- "phiid"
+  tryCatch(hzidname(h) <- 'phiid', error = function(e) {
+    if(grepl(e$message, pattern="not unique$")) {
+      if(!rmHzErrors) {
+        # if rmHzErrors = FALSE, keep unique integer assigned ID to all records automatically
+        message("-> QC: duplicate horizons are present with rmHzErrors=FALSE! defaulting to `hzID` as unique horizon ID.")
+      } else {
+        stop(e)
+      }
+    }
+  }) 
   
   # done
   return(h)
@@ -81,7 +117,7 @@
 
 # temp <- .fetchNASISTemp()
 
-.get_site_from_NASISTemp <- function(url = NULL, stringsAsFactors = default.stringsAsFactors()
+.get_site_from_NASISReport <- function(url = NULL, stringsAsFactors = default.stringsAsFactors()
 ) {
   
   tf = "C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt"
