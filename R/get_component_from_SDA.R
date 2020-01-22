@@ -500,18 +500,18 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 }
 
 
-get_diagnostics_from_SDA <- function(target_cokeys) {
+.get_diagnostics_from_SDA <- function(target_cokeys) {
   # query SDA to get corresponding codiagfeatures
   q <- paste0('SELECT * FROM codiagfeatures WHERE cokey IN ', format_SQL_in_statement(target_cokeys), ";")
   return(SDA_query(q))
 }
 
-fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
-                               nullFragsAreZero = TRUE, 
-                               rmHzErrors = FALSE,
-                               drop.unused.levels = TRUE,
-                               stringsAsFactors = default.stringsAsFactors()
-                               ) {
+fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
+                     nullFragsAreZero = TRUE, 
+                     rmHzErrors = FALSE,
+                     drop.unused.levels = TRUE,
+                     stringsAsFactors = default.stringsAsFactors()
+                     ) {
 
   # load data in pieces
   f.component <- get_component_from_SDA(WHERE, 
@@ -529,7 +529,7 @@ fetchSDA_component <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                                        )
   
   # diagnostic features  
-  f.diag <- get_diagnostics_from_SDA(f.component$cokey)
+  f.diag <- .get_diagnostics_from_SDA(f.component$cokey)
   
   # optionally test for bad horizonation... flag, and remove
   if (rmHzErrors) {

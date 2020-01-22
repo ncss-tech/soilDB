@@ -23,7 +23,7 @@ get_component_restrictions_from_NASIS_db(SS = TRUE)
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{fetchNASIS}}, \code{\link{fetchNASIS_components}}
+\code{\link{fetchNASIS}}
 }
 
 \examples{

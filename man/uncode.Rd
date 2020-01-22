@@ -30,7 +30,7 @@ code(df, ...)
 \examples{
 \donttest{
 # query component by nationalmusym
-comp = fetchSDA_component(WHERE = "nationalmusym = '2vzcp'")
+comp = fetchSDA(WHERE = "nationalmusym = '2vzcp'")
 s = site(comp$spc)
 s = uncode(s, NASIS = FALSE)
 levels(s$taxorder)

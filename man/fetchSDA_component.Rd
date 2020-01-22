@@ -1,5 +1,5 @@
-\name{fetchSDA_component}
-\alias{fetchSDA_component}
+\name{fetchSDA}
+\alias{fetchSDA}
 \alias{get_legend_from_SDA}
 \alias{get_lmuaoverlap_from_SDA}
 \alias{get_mapunit_from_SDA}
@@ -8,16 +8,15 @@
 \alias{get_cosoilmoist_from_SDA}
 \alias{get_cosoilmoist_from_NASIS}
 \alias{get_cointerp_from_SDA}
-\alias{get_diagnostics_from_SDA}
 
 \title{Extract component tables from Soil Data Access}
 \description{Get, format, impute, and return component tables.}
 \usage{
-fetchSDA_component(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
-                   nullFragsAreZero = TRUE, rmHzErrors = FALSE,
-                   drop.unused.levels = TRUE,
-                   stringsAsFactors = default.stringsAsFactors()
-                   )
+fetchSDA(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
+         nullFragsAreZero = TRUE, rmHzErrors = FALSE,
+         drop.unused.levels = TRUE,
+         stringsAsFactors = default.stringsAsFactors()
+         )
                    
 get_mapunit_from_SDA(WHERE = NULL, 
                      drop.unused.levels = TRUE,
@@ -62,7 +61,7 @@ If the duplicates argument is set to TRUE, duplicate components are returned. Th
 
 The function get_cosoilmoist_from_NASIS_db() only works only on Windows , and requires a 'nasis_local' ODBC connection. See the \href{http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html}{NASIS ODBC Setup tutorial} for instructions. 
 
-The value of \code{nullFragsAreZero} will have a significant impact on the rock fragment fractions returned by \code{fetchSDA_component}. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and NULL rock fragment values should be interpretated as NULLs. Set \code{nullFragsAreZero = TRUE} in those cases where NULL rock fragment values should be interpreted as 0.
+The value of \code{nullFragsAreZero} will have a significant impact on the rock fragment fractions returned by \code{fetchSDA}. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and NULL rock fragment values should be interpretated as NULLs. Set \code{nullFragsAreZero = TRUE} in those cases where NULL rock fragment values should be interpreted as 0.
 }
 \value{A dataframe or list with the results.}
 \author{Stephen Roecker}
@@ -82,7 +81,7 @@ if (
   requireNamespace("viridis", quietly = TRUE)
 ) {
   # query soil components by areasymbol and musym
-  test = fetchSDA_component(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
+  test = fetchSDA(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
   
   # profile plot
   plot(test)

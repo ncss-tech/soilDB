@@ -1,9 +1,7 @@
 \name{fetchNASIS}
 \alias{fetchNASIS}
 \alias{getHzErrorsNASIS}
-\alias{fetchNASIS_pedons}
 \alias{get_phorizon_from_NASIS_db}
-\alias{fetchNASIS_components}
 \alias{get_component_copm_data_from_NASIS_db}
 \alias{get_component_horizon_data_from_NASIS_db}
 \alias{get_component_correlation_data_from_NASIS_db}
@@ -17,7 +15,6 @@
 \alias{get_lmuaoverlap_from_NASIS}
 \alias{get_mapunit_from_NASIS}
 \alias{get_projectmapunit_from_NASIS}
-\alias{get_projectstaff_from_NASIS}
 \alias{get_component_diaghz_from_NASIS_db}
 \alias{get_mutext_from_NASIS_db}
 
@@ -38,22 +35,17 @@
 \description{Fetch commonly used site/pedon/horizon data or component from NASIS, returned as a SoilProfileCollection object.}
 
 \usage{
-fetchNASIS(from = 'pedons', url = NULL, ...)
-
-fetchNASIS_pedons(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, 
-                  soilColorState='moist', lab=FALSE, 
+fetchNASIS(from = 'pedons', url = NULL, SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, 
+                  soilColorState='moist', lab=FALSE, fill = FALSE,
                   stringsAsFactors = default.stringsAsFactors()
                   )
-fetchNASIS_components(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, 
-                      stringsAsFactors = default.stringsAsFactors()
-                      )
+
 getHzErrorsNASIS(strict=TRUE)
 }
 
 \arguments{
   \item{from}{determines what objects should fetched? ('pedons' | 'components' | 'pedon_report')}
   \item{url}{string specifying the url for the NASIS pedon_report (default: NULL)}
-  \item{\dots}{arguments passed to \code{fetchNASIS_pedons()} or \code{fetchNASIS_components()}}
   \item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)}
   \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have been set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: TRUE)}
