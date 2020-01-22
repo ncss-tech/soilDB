@@ -2,9 +2,6 @@ context("mixing and cleaning colors")
 
 ## mixing done in CIE LAB by default now
 
-## TODO: should we use CIE XYZ for mixing?
-## https://github.com/ncss-tech/soilDB/issues/79
-
 
 ## example data
 # http://ncss-tech.github.io/AQP/soilDB/mixing-soil-color-data.html

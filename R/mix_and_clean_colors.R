@@ -4,6 +4,8 @@
 # note: this isn't real mixing, relfectance curves and kubella-monk modeling required for that
 # all colors are mixed, should be applied to groups of related colors
 # x: data.frame, typically from NASIS containing at least 'r', 'g', 'b' colors {0,1} and some kind of weight
+# wt: fractional weights, usually area of hz face
+# colorSpace: LAB or sRGB
 mix_and_clean_colors <- function(x, wt='pct', colorSpace='LAB', backTransform=FALSE) {
   
   # sanity check: no NA
@@ -58,7 +60,8 @@ mix_and_clean_colors <- function(x, wt='pct', colorSpace='LAB', backTransform=FA
   
   # optionally back-transform mixture to Munsell
   if(backTransform) {
-
+    
+    # convert with best available metric
     m <- rgb2munsell(mixed.color[, c('r', 'g', 'b')])
 
     # adjust names to match NASIS
