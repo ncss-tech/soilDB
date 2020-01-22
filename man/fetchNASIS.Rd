@@ -34,11 +34,11 @@
 
 
 
-\title{Fetch commonly used site/pedon/horizon or component data from a local NASIS database.}
-\description{Fetch commonly used site/pedon/horizon data or component from a local NASIS database, return as a SoilProfileCollection object.}
+\title{Fetch commonly used site/pedon/horizon or component data from NASIS.}
+\description{Fetch commonly used site/pedon/horizon data or component from NASIS, returned as a SoilProfileCollection object.}
 
 \usage{
-fetchNASIS(from = 'pedons', ...)
+fetchNASIS(from = 'pedons', url = NULL, ...)
 
 fetchNASIS_pedons(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, 
                   soilColorState='moist', lab=FALSE, 
@@ -51,7 +51,8 @@ getHzErrorsNASIS(strict=TRUE)
 }
 
 \arguments{
-  \item{from}{determines what objects should fetched? ('pedons' | 'components' | 'temp')}
+  \item{from}{determines what objects should fetched? ('pedons' | 'components' | 'pedon_report')}
+  \item{url}{string specifying the url for the NASIS pedon_report (default: NULL)}
   \item{\dots}{arguments passed to \code{fetchNASIS_pedons()} or \code{fetchNASIS_components()}}
   \item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)}
   \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have been set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
@@ -64,9 +65,11 @@ getHzErrorsNASIS(strict=TRUE)
 }
 
 \value{a SoilProfileCollection class object}
-\author{D. E. Beaudette and J. M. Skovlin}
+\author{D. E. Beaudette, J. M. Skovlin, and S.M. Roecker}
 
-\details{The value of \code{nullFragsAreZero} will have a significant impact on the rock fragment fractions returned by \code{fetchNASIS}. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and NULL rock fragment values should be interpretated as NULLs. Set \code{nullFragsAreZero = TRUE} in those cases where NULL rock fragment values should be interpreted as 0.
+\details{This function imports data from NASIS into R as a S3 R object specified by the aqp R package, known as a soil profile collection object. It flattens NASIS's pedon and component tables, including their various child tables, into several more easily managable data frames. Primarily these functions access the local NASIS database using an ODBC connection. However using the fetchNASIS() argument from = "pedon_report", data can be read from the NASIS Report 'fetchNASIS', as either a txt file or url. The primary purpose of fetchNASIS(from = "pedon_report") is to faclitate importing datasets larger than 8000+ pedons/components.
+
+The value of \code{nullFragsAreZero} will have a significant impact on the rock fragment fractions returned by \code{fetchNASIS}. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and NULL rock fragment values should be interpretated as NULLs. Set \code{nullFragsAreZero = TRUE} in those cases where NULL rock fragment values should be interpreted as 0.
 
 This function attempts to do most of the boilerplate work when extracting site/pedon/horizon or component data from a local NASIS database. Pedons that are missing horizon data, or have errors in their horizonation are excluded from the returned object, however, their IDs are printed on the console. Pedons with combination horizons (e.g. B/C) are erroneously marked as errors due to the way in which they are stored in NASIS as two overlapping horizon records.
 
@@ -74,7 +77,6 @@ See \code{\link{getHzErrorsNASIS}} for a simple approach to identifying pedons w
 
 See the \href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html}{NASIS component tutorial}, and \href{http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.html}{NASIS pedon tutorial} for more information.}
 
-\note{This function currently works only on Windows, and requires a 'nasis_local' ODBC connection.}
 
 \examples{
 \donttest{
@@ -89,9 +91,9 @@ plot(f[which(f$densic.contact), ], name='hzname')
 # DMU-* query against the national database
 fc <- fetchNASIS(from = 'components')
 
-# run NASIS the fetchNASIS report against the national database
+# run the NASIS report 'fetchNASIS' against the national database
 # the report will automatically be opened and saved as fetchNASIS.txt in the NASIS Temp folder
-f <- fetchNASIS(from = 'temp')
+f <- fetchNASIS(from = 'pedon_report')
 
 }
 }

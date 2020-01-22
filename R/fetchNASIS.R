@@ -1,13 +1,13 @@
 # convenient interface to local NASIS data
 # from: pedons | components | lab | ???
 # ... : arguments passed on to helper functions
-fetchNASIS <- function(from='pedons', ...) {
+fetchNASIS <- function(from='pedons', url = NULL, ...) {
 	
   res <- NULL
   
   # sanity check
-  if(! from %in% c('pedons', 'components', 'temp')) {
-    stop('Must specify: pedons or components', call. = FALSE)
+  if(! from %in% c('pedons', 'components', 'pedon_report')) {
+    stop('Must specify: pedons, components or pedon_report', call. = FALSE)
   }
   
   if(from == 'pedons') {
@@ -20,9 +20,9 @@ fetchNASIS <- function(from='pedons', ...) {
     res <- fetchNASIS_components(...)
   }
   
-  if(from == 'temp') {
+  if(from == 'pedon_report') {
     # pass arguments through
-    res <- .fetchNASIS_temp(...)
+    res <- .fetchNASIS_report(url = url, ...)
   }
   
   return(res)
