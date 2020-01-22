@@ -22,10 +22,16 @@ code(df, ...)
   \item{\dots}{arguments passed on to \code{uncode}}
   }
   
-\details{These functions convert the coded values returned from NASIS into their plaintext representation. The converted values from NASIS, or sourced from SDA, are upgraded to specifically-leveled factors using the metadata tables from NASIS. For SDA the metadata is pulled from a static snapshot in the soilDB package.
+\details{These functions convert the coded values returned from NASIS into their plain text representation. It duplicates the functionality of the CODELABEL function found in NASIS. This function is primarily intended to be used internally by other soilDB R functions, in order to minimizes the need to manually convert values. 
+
+The function works by iterating through the column names in a data frame and looking up whether they match any of the ColumnPhysicalNames found in the metadata domain tables. If matches are found then the columns coded values are converted to their corresponding factor levels. Therefore it is not advisable to reuse column names from NASIS unless the contents match the range of values and format found in NASIS. Otherwise uncode() will convert their values to NA.
+
+When data is being imported from NASIS, the metadata tables are sourced directly from NASIS. When data is being imported from SDA or the NASIS Web Reports, the metadata is pulled from a static snapshot in the soilDB package.
+
+Beware the default is to return the values as factors rather than strings. While strings are generally preferable, factors make plotting more convenient. Generally the factor level ordering returned by uncode() follows the naturally ordering of categories that would be expected (e.g. sand, silt, clay).
 }
 
-\value{A dataframe with the results.}
+\value{A data frame with the results.}
 \author{Stephen Roecker}
 \examples{
 \donttest{
