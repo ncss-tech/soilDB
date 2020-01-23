@@ -6,8 +6,9 @@
                                stringsAsFactors = default.stringsAsFactors()
                                ) {
   
-  tf = "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
-  if (!is.null(url)) tf = url
+  tf <- "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
+  if (!is.null(url)) 
+    tf <- url
   
   # sanity check
   .checks$soilColorState(soilColorState)
@@ -17,29 +18,36 @@
     stop("the temp file ", tf, "\n doesn't exist, please run the fetchNASIS report from NASIS")
   }
   
-  temp = readLines(tf)
+  temp <- readLines(tf)
   
-  be   = data.frame(table = c("site", "pediagfeatures", "phorizon", "phcolor"), 
+  be <- data.frame(table = c("site", "pediagfeatures", "phorizon", "phcolor"), 
                     begin = grep("@begin", temp), 
                     end = grep("@end", temp),
                     stringsAsFactors = stringsAsFactors
                     )
+  
+  # check to see if there is any data
+  diff.idx <- be$end - be$begin
+  
+  if(all(diff.idx == 1))
+    stop("empty result set -- check parameters used to run `fetchNASIS` export report.", call.=FALSE)
+  
   split(be, be$table) ->.;
   lapply(., function(x) {
-    x2 = temp[seq(x$begin + 1, x$end - 1)]
-    x2 = read.csv(textConnection(x2), sep = "|", quote = "", stringsAsFactors = FALSE)
-    # aggregate NASIS returns empty rows
-    # NASIS text reports return empty columns
-    # remove
-    x2 = x2[!is.na(x2$peiid), - ncol(x2)]
-    idx  = names(x2) %in% c("pmkind", "pmorigin")
-    x2[!idx] = uncode(x2[!idx])
-    idx  = sapply(x2, is.character)
-    x2[idx] = lapply(x2[idx], function(x) ifelse(x == "", NA, x))
-    return(x2)
-    }) ->.;
+      x2 <- temp[seq(x$begin + 1, x$end - 1)]
+      x2 <- read.csv(textConnection(x2), sep = "|", quote = "", stringsAsFactors = FALSE)
+      # aggregate NASIS returns empty rows
+      # NASIS text reports return empty columns
+      # remove
+      x2 <- x2[!is.na(x2$peiid), - ncol(x2)]
+      idx <- names(x2) %in% c("pmkind", "pmorigin")
+      x2[!idx] <- uncode(x2[!idx])
+      idx <- sapply(x2, is.character)
+      x2[idx] <- lapply(x2[idx], function(x) ifelse(x == "", NA, x))
+      return(x2)
+  }) ->.;
   names(.) <- c("pediagfeatures", "phcolor", "phorizon", "site")
-  
+
   
   # simplify colors
   .$phcolor <- .color(.$phcolor, soilColorState = soilColorState)
