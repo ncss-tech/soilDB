@@ -76,7 +76,11 @@ importFrom(aqp,
   metadata,
   "metadata<-",
   hzidname,
-  "hzidname<-" 
+  "hzidname<-",
+  hzdesgnname,
+  'hzdesgnname<-',
+  hztexclname,
+  'hztexclname<-'
 )
 
 importMethodsFrom(aqp, "plot")
