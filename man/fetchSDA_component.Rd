@@ -6,11 +6,10 @@
 \alias{get_component_from_SDA}
 \alias{get_chorizon_from_SDA}
 \alias{get_cosoilmoist_from_SDA}
-\alias{get_cosoilmoist_from_NASIS}
 \alias{get_cointerp_from_SDA}
 
-\title{Extract component tables from Soil Data Access}
-\description{Get, format, impute, and return component tables.}
+\title{Download and Flatten Data from Soil Data Access}
+\description{Functions to download and flatten commonly used tables and from Soil Data Access, and create soil profile collection objects (SPC).}
 \usage{
 fetchSDA(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
          nullFragsAreZero = TRUE, rmHzErrors = FALSE,
@@ -37,8 +36,7 @@ get_chorizon_from_SDA(WHERE = NULL, duplicates = FALSE, childs = TRUE,
 get_cosoilmoist_from_SDA(WHERE = NULL, duplicates = FALSE, impute = TRUE, 
                          stringsAsFactors = default.stringsAsFactors()
                          )
-                         
-get_cosoilmoist_from_NASIS(impute = TRUE, stringsAsFactors = default.stringsAsFactors())
+
 }
 
 
@@ -49,25 +47,29 @@ get_cosoilmoist_from_NASIS(impute = TRUE, stringsAsFactors = default.stringsAsFa
   \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)}
   \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details}
   \item{rmHzErrors}{should pedons with horizonation errors be removed from the results? (default: FALSE)}
-  UE)	
   \item{droplevels}{logical: indicating whether to drop unused levels in classifying factors. This is useful when a class has large number of unused classes, which can waste space in tables and figures.}
   \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
   }
 
 
-\details{The SDA functions can get and fetch data with an internet connection and a WHERE clause.
+\details{These functions return data from Soil Data Access with the use of a simple text string that formated as an SQL WHERE clause (e.g. \code{WHERE = "areasymbol = 'IN001'"}. All functions are SQL querys that wrap around \code{SDAquery()} and format the data for analysis.
+
+Beware SDA includes the data for both SSURGO and STATSGO2. The \code{areasymbol} for STATSGO2 is \code{US}. Therefore if data from just SSURGO is desired, set \code{WHERE = "areareasymbol != 'US'"}.
 
 If the duplicates argument is set to TRUE, duplicate components are returned. This is not necessary with data returned from NASIS, which has one unique national map unit. SDA has duplicate map national map units, one for each legend it exists in.
 
-The function get_cosoilmoist_from_NASIS_db() only works only on Windows , and requires a 'nasis_local' ODBC connection. See the \href{http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html}{NASIS ODBC Setup tutorial} for instructions. 
-
 The value of \code{nullFragsAreZero} will have a significant impact on the rock fragment fractions returned by \code{fetchSDA}. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and NULL rock fragment values should be interpretated as NULLs. Set \code{nullFragsAreZero = TRUE} in those cases where NULL rock fragment values should be interpreted as 0.
+
 }
-\value{A dataframe or list with the results.}
+\value{A dataframe or soil profile collection object.}
 \author{Stephen Roecker}
 
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
+
+\seealso{
+\link{SDA_query}
+}
 
 
 \examples{
@@ -79,12 +81,16 @@ if (
   requireNamespace("ggplot2", quietly = TRUE) & 
   requireNamespace("gridExtra", quietly = TRUE) & 
   requireNamespace("viridis", quietly = TRUE)
-) {
+  ) {
+  
+  
   # query soil components by areasymbol and musym
   test = fetchSDA(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
   
+  
   # profile plot
   plot(test)
+  
   
   # convert the data for depth plot
   clay_slice = horizons(slice(test, 0:200 ~ claytotal_l + claytotal_r + claytotal_h))
@@ -120,8 +126,7 @@ if (
   
   
   # query cosoilmoist (e.g. water table data) by mukey
-  # NA depths are interpreted as (???) with impute=TRUE argument
-  x <- get_cosoilmoist_from_SDA(WHERE = "mukey = '1395352'", impute = TRUE)
+  x <- get_cosoilmoist_from_SDA(WHERE = "mukey = '1395352'")
   
   ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
     geom_rect(aes(xmin = as.integer(month), xmax = as.integer(month) + 1,
@@ -140,7 +145,8 @@ if (
   
   
   # query all Miami major components
-  s <- get_component_from_SDA(WHERE = "compname = 'Miami' AND majcompflag = 'Yes'")
+  s <- get_component_from_SDA(WHERE = "compname = 'Miami' AND majcompflag = 'Yes' AND areasymbol != 'US'")
+  
   
   # landform vs 3-D morphometry
   test <- {
