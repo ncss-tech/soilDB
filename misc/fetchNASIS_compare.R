@@ -32,8 +32,8 @@ site_daff <- diff_data(site(f_l)[idx_r], site(f_r)[idx_r])
 render_diff(site_daff) # f_l parent material is all lower change
 
 
-xtabs(~ f_l$earthcovkind1, drop.unused.levels = TRUE) # has less counts, pulling from the siteobs table
-xtabs(~ f_r$earthcovkind1, drop.unused.levels = TRUE) # has more counts, pulling from the pedon table
+xtabs(~ f_l$earthcovkind1, droplevels = TRUE) # has less counts, pulling from the siteobs table
+xtabs(~ f_r$earthcovkind1, droplevels = TRUE) # has more counts, pulling from the pedon table
 
 test = merge(site(f_l)[c("peiid", "taxsubgrp")], site(f_r)[c("peiid", "taxsubgrp")], by = "peiid", all.x = TRUE)
 View(subset(test, taxsubgrp.x != taxsubgrp.y)) # when the dates match f_l is pulling the 'sampled as' instead of the 'correlated' pedon taxonomic history

@@ -4,7 +4,7 @@
 # https://github.com/ncss-tech/soilDB/issues/36
 
 get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
-                                   drop.unused.levels = TRUE,
+                                   droplevels = TRUE,
                                    stringsAsFactors = default.stringsAsFactors()
                                    ) {
   if(!duplicates & grepl(WHERE, pattern = "mukey")[1])
@@ -44,7 +44,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   
   # recode metadata domains
   d.component <- uncode(d.component, db = "SDA", 
-                        drop.unused.levels = drop.unused.levels,
+                        droplevels = droplevels,
                         stringsAsFactors = stringsAsFactors
                         )
 
@@ -136,7 +136,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
 
 
 get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = FALSE, 
-                                  drop.unused.levels = TRUE,
+                                  droplevels = TRUE,
                                   stringsAsFactors = default.stringsAsFactors()
                                   ) {
   
@@ -174,7 +174,7 @@ get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = F
   
   # recode metadata domains
   d.cointerp <- uncode(d.cointerp, db = "SDA", 
-                       drop.unused.levels = drop.unused.levels,
+                       droplevels = droplevels,
                        stringsAsFactors = stringsAsFactors
                        )
   
@@ -182,7 +182,7 @@ get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = F
   }
 
 
-get_legend_from_SDA <- function(WHERE = NULL, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_legend_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   q.legend  <- paste("
                      SELECT
                      mlraoffice, areasymbol, areaname, areatypename, CAST(areaacres AS INTEGER) AS areaacres, ssastatus, 
@@ -205,7 +205,7 @@ get_legend_from_SDA <- function(WHERE = NULL, drop.unused.levels = TRUE, strings
   # recode metadata domains
   d.legend <- uncode(d.legend,
                      db = "SDA", 
-                     drop.unused.levels = drop.unused.levels,
+                     droplevels = droplevels,
                      stringsAsFactors   = stringsAsFactors
   )
   
@@ -216,7 +216,7 @@ get_legend_from_SDA <- function(WHERE = NULL, drop.unused.levels = TRUE, strings
 
 
 
-get_lmuaoverlap_from_SDA <- function(WHERE = NULL, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_lmuaoverlap_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
 
   q <- paste("SELECT
              legend.areasymbol, legend.areaname, legend.areaacres, 
@@ -249,7 +249,7 @@ get_lmuaoverlap_from_SDA <- function(WHERE = NULL, drop.unused.levels = TRUE, st
   # recode metadata domains
   d <- uncode(d,
               db = "NASIS", 
-              drop.unused.levels = drop.unused.levels,
+              droplevels = droplevels,
               stringsAsFactors = stringsAsFactors
   )
   
@@ -260,7 +260,7 @@ get_lmuaoverlap_from_SDA <- function(WHERE = NULL, drop.unused.levels = TRUE, st
 
 
 get_mapunit_from_SDA <- function(WHERE = NULL, 
-                                 drop.unused.levels = TRUE,
+                                 droplevels = TRUE,
                                  stringsAsFactors = default.stringsAsFactors()
                                  ) {
 
@@ -298,7 +298,7 @@ get_mapunit_from_SDA <- function(WHERE = NULL,
   # recode metadata domains
   d.mapunit <- uncode(d.mapunit, 
                       db = "SDA", 
-                      drop.unused.levels = drop.unused.levels,
+                      droplevels = droplevels,
                       stringsAsFactors   = stringsAsFactors
                       )
   
@@ -316,7 +316,7 @@ get_mapunit_from_SDA <- function(WHERE = NULL,
 get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE, 
                                   childs = TRUE, 
                                   nullFragsAreZero = TRUE, 
-                                  drop.unused.levels = TRUE,
+                                  droplevels = TRUE,
                                   stringsAsFactors = default.stringsAsFactors()
                                   ) {
 
@@ -370,7 +370,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
     if (stringsAsFactors == TRUE) {
       texcl = factor(tolower(texcl), levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"])
       }
-    if (drop.unused.levels == drop.unused.levels & is.factor(texcl)) {
+    if (droplevels == droplevels & is.factor(texcl)) {
       texcl = droplevels(texcl)
       }
     })
@@ -511,7 +511,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
                      nullFragsAreZero = TRUE, 
                      rmHzErrors = FALSE,
-                     drop.unused.levels = TRUE,
+                     droplevels = TRUE,
                      stringsAsFactors = default.stringsAsFactors()
                      ) {
 
@@ -519,7 +519,7 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
   f.component <- get_component_from_SDA(WHERE, 
                                         duplicates = duplicates, 
                                         childs = childs, 
-                                        drop.unused.levels = drop.unused.levels,
+                                        droplevels = droplevels,
                                         stringsAsFactors = stringsAsFactors
                                         )
   # f.mapunit   <- get_mapunit_from_SDA(WHERE, stringsAsFactors = stringsAsFactors)
@@ -527,7 +527,7 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
   # AGB update: only query component horizon for cokeys in the component result (subject to user-specified WHERE clause)
   f.chorizon  <- get_chorizon_from_SDA(paste0('c.cokey IN', format_SQL_in_statement(unique(f.component$cokey))), 
                                        duplicates = duplicates, 
-                                       drop.unused.levels = drop.unused.levels
+                                       droplevels = droplevels
                                        )
   
   # diagnostic features  

@@ -157,7 +157,7 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 }
 
 
-get_legend_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -204,7 +204,7 @@ get_legend_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, stringsA
   # recode metadata domains
   d.legend <- uncode(d.legend,
                      db = "NASIS", 
-                     drop.unused.levels = drop.unused.levels,
+                     droplevels = droplevels,
                      stringsAsFactors = stringsAsFactors
                      )
 
@@ -215,7 +215,7 @@ get_legend_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, stringsA
 
 
 
-get_lmuaoverlap_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -271,7 +271,7 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, str
   # recode metadata domains
   d <- uncode(d,
               db = "NASIS", 
-              drop.unused.levels = drop.unused.levels,
+              droplevels = droplevels,
               stringsAsFactors = stringsAsFactors
   )
   
@@ -281,7 +281,7 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, str
 
 
 
-get_mapunit_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -345,7 +345,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, strings
   # recode metadata domains
   d.mapunit <- uncode(d.mapunit, 
                       db = "NASIS", 
-                      drop.unused.levels = drop.unused.levels,
+                      droplevels = droplevels,
                       stringsAsFactors = stringsAsFactors
   )
   
@@ -364,7 +364,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, drop.unused.levels = TRUE, strings
     if (stringsAsFactors == FALSE) {
       farmlndcl = as.character(farmlndcl)
     }
-    if (drop.unused.levels == TRUE & is.factor(farmlndcl)) {
+    if (droplevels == TRUE & is.factor(farmlndcl)) {
       farmlndcl = droplevels(farmlndcl)
     }
   })

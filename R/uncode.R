@@ -1,7 +1,7 @@
 uncode <- function(df, 
                    invert = FALSE, 
                    db = "NASIS", 
-                   drop.unused.levels = FALSE, 
+                   droplevels = FALSE, 
                    stringsAsFactors = default.stringsAsFactors()
                    ) {
   get_metadata <- function() {
@@ -74,7 +74,7 @@ uncode <- function(df,
     }
   
   # drop unused levels
-  if (drop.unused.levels == TRUE) {
+  if (droplevels == TRUE) {
     idx <- which(! nm %in% possibleReplacements)
     df <- droplevels(df, except = idx)
     }

@@ -71,7 +71,7 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
 
 
 
-get_legend_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_legend_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_legend_from_NASISWebReport"
   
   d.legend <- lapply(areasymbol, function(x) {
@@ -86,7 +86,7 @@ get_legend_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRUE
   # data is coming back uncoded from LIMS so db is set to "SDA"
   d.legend <- uncode(d.legend, 
                      db = "SDA",
-                     drop.unused.levels = drop.unused.levels,
+                     droplevels = droplevels,
                      stringsAsFactors = stringsAsFactors
   )
   
@@ -100,7 +100,7 @@ get_legend_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRUE
 
 
 
-get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_lmuaoverlap_from_NASISWebReport"
   
   d <- lapply(areasymbol, function(x) {
@@ -115,7 +115,7 @@ get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, drop.unused.levels =
   # data is coming back uncoded from LIMS so db is set to "SDA"
   d <- uncode(d, 
               db = "SDA",
-              drop.unused.levels = drop.unused.levels,
+              droplevels = droplevels,
               stringsAsFactors = stringsAsFactors
   )
   
@@ -126,7 +126,7 @@ get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, drop.unused.levels =
 
 
 
-get_mapunit_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_mapunit_from_NASISWebReport"
   
   d.mapunit <- lapply(areasymbol, function(x) {
@@ -142,7 +142,7 @@ get_mapunit_from_NASISWebReport <- function(areasymbol, drop.unused.levels = TRU
   # data is coming back uncoded from LIMS so db is set to "SDA"
   d.mapunit <- uncode(d.mapunit, 
                       db = "SDA",
-                      drop.unused.levels = drop.unused.levels,
+                      droplevels = droplevels,
                       stringsAsFactors = stringsAsFactors
   )
   
