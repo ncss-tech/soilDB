@@ -190,5 +190,5 @@ test_that("simplifyArtifactData nullFragsAreZero works as expected", {
                  TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, 
                  FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE
                ))
-  expect_true(dput(!all(as.logical(is.na(b)))))
+  expect_true(!all(as.logical(is.na(b))))
 })
