@@ -129,6 +129,10 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   # set NASIS-specific horizon identifier
   hzidname(h) <- 'phiid'
   
+  # set optional hz designation and texture slots
+  hzdesgnname(h) <- "hzname"
+  hztexclname(h) <- "texture_class"
+  
   # merge-in site data
   site(h) <- s
   

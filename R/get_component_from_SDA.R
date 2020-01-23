@@ -562,6 +562,10 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
   # set SDA/SSURGO-specific horizon identifier
   hzidname(f.chorizon) <- 'chkey'
   
+  # set optional hz designation and texture slots
+  hzdesgnname(f.chorizon) <- "hzname"
+  hztexclname(f.chorizon) <- "texture"
+  
   # add diagnostics
   if(is.data.frame(f.diag)) {
     diagnostic_hz(f.chorizon) <- f.diag

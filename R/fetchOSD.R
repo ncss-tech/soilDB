@@ -95,6 +95,9 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	h.metadata$origin <- 'OSD via Soilweb / fetchOSD'
 	metadata(h) <- h.metadata
 	
+	# set optional hz designation and texture slots
+	hzdesgnname(h) <- "hzname"
+	hztexclname(h) <- "texture_class"
 	
 	# standard or extended version?
 	if(extended) {

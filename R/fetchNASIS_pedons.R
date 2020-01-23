@@ -223,6 +223,11 @@
     }
   })  
   
+  # set hz designation and texture fields -- NB: chose to use calculated texture -- more versatile
+  # functions designed to use hztexclname() should handle presence of in-lieu, modifiers, etc.
+  hzdesgnname(h) <- "hzname"
+  hztexclname(h) <- "texture"
+  
   if(exists('bad.pedon.ids', envir=soilDB.env))
     if(length(get('bad.pedon.ids', envir=soilDB.env)) > 0)
       message("-> QC: horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for related userpedonid values or `get('bad.horizons', envir=soilDB.env)` for related horizon designations")

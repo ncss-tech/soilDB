@@ -95,7 +95,7 @@
   
   # set metadata
   m <- metadata(h)
-  m$origin <- "NASIS pedons"
+  m$origin <- "NASIS pedons (export)"
   metadata(h) <- m
   
   # set NASIS-specific horizon identifier
@@ -109,6 +109,10 @@
       }
     }
   }) 
+  
+  # set optional hz designation and texture slots
+  hzdesgnname(h) <- "hzname"
+  hztexclname(h) <- "texture"
   
   # done
   return(h)

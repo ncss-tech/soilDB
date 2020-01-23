@@ -90,7 +90,11 @@
   m <- metadata(f.chorizon)
   m$origin <- 'NASIS components'
   metadata(f.chorizon) <- m
-
+  
+  # set optional hz designation and texture slots
+  hzdesgnname(f.chorizon) <- "hzname"
+  hztexclname(f.chorizon) <- "texture"
+  
   # done, return SPC
   return(f.chorizon)
 

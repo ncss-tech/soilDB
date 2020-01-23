@@ -104,6 +104,10 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 	## WHOOPS -- turns out this is nonunique 0.1% of the time AGB 2019/11/14
 	#hzidname(h) <- "labsampnum"
 	
+	# set KSSL-specific hzdesgn/hztexcl fields
+	hzdesgnname(h) <- "hzn_desgn"
+	hztexclname(h) <- "lab_texture_class"
+	
 	## set metadata
 	h.metadata <- metadata(h)
 	h.metadata$origin <- 'KSSL via Soilweb / fetchKSSL'
