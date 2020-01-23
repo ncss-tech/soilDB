@@ -53,9 +53,10 @@ s <- fetchKSSL(series='auburn')
 length(s)
 
 # plot 
-par(mar=c(0,0,0,0))
-plot(s, name='hzn_desgn', max.depth=150)
-
+if(requireNamespace("sp")) {
+  par(mar=c(0,0,0,0))
+  sp::plot(s, name='hzn_desgn', max.depth=150)
+}
 ##
 ## morphologic data
 ##
