@@ -243,7 +243,7 @@
   ## https://github.com/ncss-tech/soilDB/issues/44
   # optionally load phlabresults table
   if (lab) {
-    phlabresults <- get_phlabresults_data_from_NASIS_db(SS=SS)
+    phlabresults <- .get_phlabresults_data_from_NASIS_db(SS=SS)
     horizons(h) <- phlabresults
     #h <- join(h, phlabresults, by = "phiid", type = "left")
   }

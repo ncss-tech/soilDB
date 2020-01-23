@@ -1,4 +1,4 @@
-get_phlabresults_data_from_NASIS_db <- function(SS=TRUE) {
+.get_phlabresults_data_from_NASIS_db <- function(SS=TRUE) {
   
   # hacks to make R CMD check --as-cran happy:
   sampledepthbottom <- NULL
