@@ -67,6 +67,9 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method='feature',
                       point='mupolygongeo.STPointOnSurface().STAsText()'
                       )
   
+  # feedback:
+  message(sprintf("working with %s chunks...", length(unique(mukey.chunk))))
+  
   for(i in 1:length(mukey.chunk)) {
     idx <- which(mukey.chunk == mukey.chunk[i])
       
