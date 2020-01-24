@@ -24,9 +24,11 @@ get_cosoilmoist_from_NASIS(impute = TRUE, stringsAsFactors = default.stringsAsFa
 \examples{
 \donttest{
 # load cosoilmoist (e.g. water table data)
-test <- get_cosoilmoist_from_NASIS()
+test <- try(get_cosoilmoist_from_NASIS())
 
-aggregate(dept_r ~ month + status, subset = x$status == "wet", data = x, mean, na.rm = TRUE)
+# if any components are wet, get mean depth to "wet" by month
+if(!inherits(test, 'try-error') & any(test$status == "wet"))
+  aggregate(dept_r ~ month + status, subset = test$status == "wet", data = test, mean, na.rm = TRUE)
 }}
 \keyword{manip}
 

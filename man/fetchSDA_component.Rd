@@ -144,7 +144,8 @@ if (
   
   
   # query all Miami major components
-  s <- get_component_from_SDA(WHERE = "compname = 'Miami' AND majcompflag = 'Yes' AND areasymbol != 'US'")
+  s <- get_component_from_SDA(WHERE = "compname = 'Miami' \n
+                AND majcompflag = 'Yes' AND areasymbol != 'US'")
   
   
   # landform vs 3-D morphometry
