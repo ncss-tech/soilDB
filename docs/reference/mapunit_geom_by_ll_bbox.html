@@ -168,10 +168,8 @@
     <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SDA_query.html'>SDA_query</a></span>(<span class='no'>q</span>)
   } <span class='kw'>else</span> {
     <span class='fu'><a href='https://rdrr.io/r/base/message.html'>message</a></span>(<span class='st'>'could not download XML result from SDA'</span>)
-  }</div><div class='output co'>#&gt; OGR data source with driver: GML 
-#&gt; Source: "C:\Users\Dylan.Beaudette\Documents\RtmpgbqL6F\file341c928233e.gml", layer: "mapunitpoly"
-#&gt; with 197 features
-#&gt; It has 8 fields</div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='img'><img src='mapunit_geom_by_ll_bbox-1.png' alt='' width='700' height='433' /></div><div class='input'># }
+  }</div><div class='output co'>#&gt; <span class='warning'>Warning: InternetOpenUrl failed: 'The server returned an invalid or unrecognized response'</span></div><div class='output co'>#&gt; Error in download.file(url = u, destfile = tf.full, quiet = FALSE) : 
+#&gt;   cannot open URL 'https://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&amp;Version=1.0.0&amp;Request=GetFeature&amp;Typename=MapunitPoly&amp;BBOX=-120.54,38.61,-120.41,38.7'</div><div class='output co'>#&gt; <span class='error'>Error in rect(b[1], b[2], b[3], b[4], border = "red", lwd = 2): plot.new has not been called yet</span></div><div class='input'># }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -30,8 +30,10 @@ http://ncss-tech.github.io/AQP/
 ## Database APIs
     
   * SDA
+    + [`fetchSDA`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSDA_component.html)
+    + [`fetchSDA_spatial`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSDA_spatial.html)
     + [`SDA_query`](http://ncss-tech.github.io/soilDB/docs/reference/SDA_query.html)
-    + ['SDA_query_features`](http://ncss-tech.github.io/soilDB/docs/reference/SDA_query_features.html)
+    + [`SDA_query_features`](http://ncss-tech.github.io/soilDB/docs/reference/SDA_query_features.html)
 
   * SSURGO/KSSL via SoilWeb
     + [`fetchKSSL`](http://ncss-tech.github.io/soilDB/docs/reference/fetchKSSL.html)
