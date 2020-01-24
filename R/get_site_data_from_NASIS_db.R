@@ -44,8 +44,7 @@ WHERE sb.rn IS NULL OR sb.rn = 1
 
 ORDER BY pedon_View_1.peiid ;"
 	
-	# setup connection local NASIS
-	channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  channel <- .openNASISchannel()
 	
 	# toggle selected set vs. local DB
 	if(SS == FALSE) {

@@ -17,8 +17,7 @@ FROM ncsslayerlabdata_View_1
 ORDER BY labpeiid, hzdept ASC;")
 
 
-	# setup connection local NASIS
-	channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  channel <- .openNASISchannel()
 	
 	# handle Views/selected set argument
   if(!SS)

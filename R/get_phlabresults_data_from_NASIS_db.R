@@ -16,8 +16,7 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
   ORDER BY peiidref, phiid, sampledepthtop;"
   
   
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  channel <- .openNASISchannel()
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {

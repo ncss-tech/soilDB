@@ -40,48 +40,45 @@ if (
   require("gridExtra")
 ) {
   
-  data(state)
-  st <- paste0(c(state.abb, "PR", "DC", "VI", "PB"))
-  us_ss_timeline <- {
-    lapply(st, function(x) {
-      cat("getting", x, "\n")
-      url <- getURL(paste0(
-        "https://www.nrcs.usda.gov/wps/portal/nrcs/surveylist/soils/survey/state/?stateId=", x)
-      )
-      df  <- readHTMLTable(url, which = 22, stringsAsFactors = FALSE)
-      df$state <- x
-      return(df)
-    }) ->.;
-    do.call("rbind", .) ->.;
-    names(.) <- c("ssa", "year", "pdf", "wss", "state")
-    .[.$year != "current", ] ->.;
-  }
-  us_ss_timeline <- within(us_ss_timeline, {
-    ssa  = sapply(ssa, function(x) strsplit(x, "\\r")[[1]][1])
-    year = as.numeric(year)
-    pdf  = ifelse(pdf == "Yes", TRUE, FALSE)
-    wss  = NULL
-  })
-  
-  test <- as.data.frame(table(us_ss_timeline$year), stringsAsFactors = FALSE)
-  
-  g1 <- ggplot(test, aes(x = as.numeric(Var1), y = Freq)) +
-    geom_histogram(stat = "identity") + 
-    xlab("Year") + 
-    ylab("Count") +
-    theme(aspect.ratio = 1) + 
-    ggtitle("Number of Published \n US Soil Surveys by Year")
-  g2 <- ggplot(test, aes(x = as.numeric(Var1), y = cumsum(Freq))) +
-    geom_histogram(stat = "identity") + 
-    xlab("Year") + 
-    ylab("Count") +
-    theme(aspect.ratio = 1) +
-    ggtitle("Cumulative Number of Published \n US Soil Surveys by Year")
-  
-  grid.arrange(g1, g2, ncol = 2)
-  
+data(state)
+st <- paste0(c(state.abb, "PR", "DC", "VI", "PB"))
+us_ss_timeline <- {
+  lapply(st, function(x) {
+    cat("getting", x, "\n")
+    url <- getURL(paste0(
+      "https://www.nrcs.usda.gov/wps/portal/nrcs/surveylist/soils/survey/state/?stateId=", x)
+    )
+    df  <- readHTMLTable(url, which = 22, stringsAsFactors = FALSE)
+    df$state <- x
+    return(df)
+  }) ->.;
+  do.call("rbind", .) ->.;
+  names(.) <- c("ssa", "year", "pdf", "wss", "state")
+  .[!grepl(.$year, pattern="current"), ] ->.;
 }
+us_ss_timeline <- within(us_ss_timeline, {
+  ssa  = sapply(ssa, function(x) strsplit(x, "\r")[[1]][1])
+  year = as.numeric(substr(year, 3,6))
+  pdf  = ifelse(pdf == "Yes", TRUE, FALSE)
+  wss  = NULL
+})
 
+test <- as.data.frame(table(us_ss_timeline$year), stringsAsFactors = FALSE)
 
-}}
+g1 <- ggplot(data = test, aes(x = Var1, y = Freq)) +
+  geom_histogram(stat = "identity") + 
+  xlab("Year") + 
+  ylab("Count") +
+  theme(aspect.ratio = 1) + 
+  ggtitle("Number of Published \n US Soil Surveys by Year")
+g2 <- ggplot(test, aes(x = Var1, y = cumsum(Freq))) +
+  geom_histogram(stat = "identity") + 
+  xlab("Year") + 
+  ylab("Count") +
+  theme(aspect.ratio = 1) +
+  ggtitle("Cumulative Number of Published \n US Soil Surveys by Year")
+
+grid.arrange(g1, g2, ncol = 2)
+
+}}}
 \keyword{datasets}

@@ -25,8 +25,7 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   ORDER BY p.upedonid, ph.hzdept ASC;"
   
   
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  channel <- .openNASISchannel()
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {

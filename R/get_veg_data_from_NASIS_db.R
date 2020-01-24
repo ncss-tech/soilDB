@@ -54,8 +54,7 @@ q.vegtransect <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydataco
 #q.plant <- "SELECT plantiid, plantsym
 #  FROM plant_View_1;"
 
-# setup connection local NASIS
-channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+channel <- .openNASISchannel()
 
 # exec queries
 d.veg <- RODBC::sqlQuery(channel, q.veg, stringsAsFactors=FALSE)
