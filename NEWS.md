@@ -1,6 +1,8 @@
-# soilDB 2.5 (2020-01-22)
+# soilDB 2.5 (2020-01-23)
   * CRAN release
   * `simplifyColorData` and `mix_and_clean_colors` always use CIELAB colorspace for weighted averages, and best-available metric for transformation to Munsell notation
+  * `fetchSDA_spatial` - new fetch function that simplifies getting spatial data associated with a vector of `mukey` or `nationalmusym`. The function has options for customizing result attribute table and is designed to automatically use `makeChunks()` to prevent timeout on large queries.
+  * `aqp::test_hz_logic` is now deprecated -- refactored affected fetch functions
 
 # soilDB 2.4.3 (2020-01-07)
   * surface water depth added to `fetchNASIS_pedons()`
