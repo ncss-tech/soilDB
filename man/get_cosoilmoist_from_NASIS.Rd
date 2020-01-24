@@ -26,9 +26,10 @@ get_cosoilmoist_from_NASIS(impute = TRUE, stringsAsFactors = default.stringsAsFa
 # load cosoilmoist (e.g. water table data)
 test <- try(get_cosoilmoist_from_NASIS())
 
-# summarize moisture status depth by month + status
-if(!inherits(test, 'try-error'))
-    aggregate(dept_r ~ month + status, data = test, mean, na.rm = TRUE)
+# inspect
+if(!inherits(test, 'try-error')) {
+  head(test)
+}
 }}
 \keyword{manip}
 
