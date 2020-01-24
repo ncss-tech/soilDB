@@ -17,7 +17,7 @@ get_cosoilmoist_from_NASIS(impute = TRUE, stringsAsFactors = default.stringsAsFa
 \note{This function currently works only on Windows.}
 
 \seealso{
-\link{fetchNASIS}, \link{get_cosoilmoist_from_NASISWebReport}, \link{get_cosoilmoist_from_SDA}, \link{get_comonth_from_SDA}
+\link{fetchNASIS}, \link{get_cosoilmoist_from_NASISWebReport}, \link{get_cosoilmoist_from_SDA}, \code{get_comonth_from_SDA}
 } 
 
 
