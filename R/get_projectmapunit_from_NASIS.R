@@ -27,9 +27,8 @@ get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
   
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
-
+  channel <- .openNASISchannel()
+  
   # exec query
   d.project <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
   

@@ -19,8 +19,7 @@ get_RMF_from_NASIS_db <- function(SS=TRUE) {
   FROM phredoxfcolor_View_1
   ORDER BY phrdxfiidref, colormoistst;"
   
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  channel <- .openNASISchannel()
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {

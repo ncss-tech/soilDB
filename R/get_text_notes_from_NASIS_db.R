@@ -20,8 +20,8 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 	# photo links
 	q.photos <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, textentry, siteiidref AS site_id, siteobstextiid FROM (siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
 	
-	# setup connection local NASIS
-	channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+	# check for RODBC, NASIS credential options, and successful connection
+	channel <- .openNASISchannel()
 	
 	# run queries
 	d.petext <- RODBC::sqlQuery(channel, q.petext, stringsAsFactors=FALSE)

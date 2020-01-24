@@ -17,9 +17,8 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   LEFT OUTER JOIN pedon_View_1 AS p ON p.siteobsiidref=so.siteobsiid
   ORDER BY s.siteiid;"
 
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
-
+  channel <- .openNASISchannel()
+  
   # exec query
   d.vegplot <- RODBC::sqlQuery(channel, q.vegplot, stringsAsFactors=FALSE)
 

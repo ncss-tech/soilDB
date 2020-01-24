@@ -14,8 +14,7 @@ get_colors_from_NASIS_db <- function(SS=TRUE) {
   INNER JOIN phcolor_View_1 ON phorizon_View_1.phiid = phcolor_View_1.phiidref
   ORDER BY phiid, colormoistst;"
   
-	# setup connection local NASIS
-	channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  channel <- .openNASISchannel()
 	
   # toggle selected set vs. local DB
   if(SS == FALSE) {

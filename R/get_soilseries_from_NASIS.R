@@ -19,8 +19,7 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
   # LEFT OUTER JOIN
   #     soilseriestaxmineralogy sstm ON sstm.soilseriesiidref = ss.soilseriesiid
   
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  channel <- .openNASISchannel()
   
   # exec query
   d.soilseries <- RODBC::sqlQuery(channel, q.soilseries, stringsAsFactors = FALSE)
