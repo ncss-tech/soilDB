@@ -1,10 +1,11 @@
-#' @title Horizon Color Indices
+#' @title Query SDA and Return Spatial Data
 #' @description This is a high-level fetch method that facilitates making spatial queries to Soil Data Access (SDA) based on `mukey` or `nationalmusym`. A typical SDA spatial query is made returning geometry and key identifying information about the mapunit. Additional columns from the mapunit table can be included using `add.fields` argument. 
 #' 
 #' This function automatically "chunks" the input vector (using `soilDB::makeChunks`) of mapunit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the `chunk.size` setting and the length of your input vector. If you are working with many mapunits and/or large extents, you may need to decrease this number in order to have more chunks.
 #' @param x A vector of MUKEYs or national mapunit symbols.
 #' @param by.col Column name containing mapunit identifier ("mukey" or "nmusym"); default: "mukey"
-#' @param add.fields Column names from `SDA_Get_MupolygonWktWgs84_from_Mukey(mapunit.mukey)` result `mapunit` table to add to result. Must specify table name prefix as either `G` or `mapunit`.
+#' @param method geometry result type: 'feature' returns polygons, 'bbox' returns the bounding box of each polygon, and 'point' returns a single point within each polygon.
+#' @param add.fields Column names from `mapunit` table to add to result. Must specify table name prefix as either `G` or `mapunit`.
 #' @param chunk.size How many queries should spatial request be divided into? Necessary for large extents. Default: 10
 #' @return A SpatialPolygonsDataFrame corresponding to SDA spatial data for all MUKEYs / nmusyms requested. Default result contains MupolygonWktWgs84-derived geometry with attribute table containing `gid`, `mukey` and `nationalmusym`, additional fields in result are specified with `add.fields`.
 #' @author Andrew G. Brown.
@@ -17,9 +18,9 @@
 #' full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by = "nmusym")
 #' 
 #' # compare extent of nmusym to single mukey within it
-#' if(requireNamespace('sp')) {
-#'  sp::plot(full.extent.nmusym, col = "RED",border=0)
-#'  sp::plot(single.mukey, add = TRUE, col = "BLUE", border=0)
+#' if(require(sp)) {
+#'  plot(full.extent.nmusym, col = "RED",border=0)
+#'  plot(single.mukey, add = TRUE, col = "BLUE", border=0)
 #' }
 #' 
 #' # demo adding a field (`muname`) to attribute table of result
@@ -27,8 +28,14 @@
 #' }
 #' @rdname fetchSDA_spatial
 #' @export fetchSDA_spatial
-fetchSDA_spatial <- function(x, by.col = "mukey", 
+fetchSDA_spatial <- function(x, by.col = "mukey", method='feature',
                              add.fields = NULL, chunk.size = 10) {
+  
+  # sanity check: method must be one of:
+  if(! method %in% c('feature', 'bbox', 'point')) {
+    stop('method must be one of: `feature`, `bbox`, or `point`.', call. = FALSE)
+  }
+  
   # remove any redundancy in input off the top -- this is important
   # in case x is not ordered and contains duplicates which will possibly
   # be in different chunks
@@ -52,16 +59,34 @@ fetchSDA_spatial <- function(x, by.col = "mukey",
   
   mukey.chunk <- soilDB::makeChunks(mukey.list, chunk.size)
   s <- NULL
-    
+  
+  # select method
+  geom.type <- switch(method, 
+                      feature='mupolygongeo.STAsText()',
+                      bbox='mupolygongeo.STEnvelope().STAsText()',
+                      point='mupolygongeo.STPointOnSurface().STAsText()'
+                      )
+  
   for(i in 1:length(mukey.chunk)) {
     idx <- which(mukey.chunk == mukey.chunk[i])
       
-    q <- paste0("SELECT G.MupolygonWktWgs84 as geom, mapunit.mukey, mapunit.nationalmusym FROM mapunit CROSS APPLY SDA_Get_MupolygonWktWgs84_from_Mukey(mapunit.mukey) as G WHERE mukey IN ", 
-                format_SQL_in_statement(mukey.list[idx]))
+    # q <- paste0("SELECT G.MupolygonWktWgs84 as geom, mapunit.mukey, mapunit.nationalmusym FROM mapunit CROSS APPLY SDA_Get_MupolygonWktWgs84_from_Mukey(mapunit.mukey) as G WHERE mukey IN ", 
+                # format_SQL_in_statement(mukey.list[idx]))
+    
+    q <- sprintf(
+      "SELECT 
+        %s AS geom, 
+        P.mukey, mapunit.nationalmusym
+        FROM mupolygon AS P
+        INNER JOIN mapunit ON P.mukey = mapunit.mukey
+        WHERE mapunit.mukey IN %s",
+      geom.type,
+      format_SQL_in_statement(mukey.list[idx])
+      )
     
     # add any additional fields from G or mapunit
     if(!is.null(add.fields)) {
-      q <- gsub(q, pattern = "FROM mapunit", replacement=paste0(", ", paste0(add.fields, collapse=", "), " FROM mapunit"))
+      q <- gsub(q, pattern = "FROM mupolygon", replacement=paste0(", ", paste0(add.fields, collapse=", "), " FROM mupolygon"))
     }
     
     sp.res.sub <- suppressMessages(soilDB::SDA_query(q))

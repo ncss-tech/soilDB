@@ -2,16 +2,24 @@
 % Please edit documentation in R/fetchSDA_spatial.R
 \name{fetchSDA_spatial}
 \alias{fetchSDA_spatial}
-\title{Horizon Color Indices}
+\title{Query SDA and Return Spatial Data}
 \usage{
-fetchSDA_spatial(x, by.col = "mukey", add.fields = NULL, chunk.size = 10)
+fetchSDA_spatial(
+  x,
+  by.col = "mukey",
+  method = "feature",
+  add.fields = NULL,
+  chunk.size = 10
+)
 }
 \arguments{
 \item{x}{A vector of MUKEYs or national mapunit symbols.}
 
 \item{by.col}{Column name containing mapunit identifier ("mukey" or "nmusym"); default: "mukey"}
 
-\item{add.fields}{Column names from `SDA_Get_MupolygonWktWgs84_from_Mukey(mapunit.mukey)` result `mapunit` table to add to result. Must specify table name prefix as either `G` or `mapunit`.}
+\item{method}{geometry result type: 'feature' returns polygons, 'bbox' returns the bounding box of each polygon, and 'point' returns a single point within each polygon.}
+
+\item{add.fields}{Column names from `mapunit` table to add to result. Must specify table name prefix as either `G` or `mapunit`.}
 
 \item{chunk.size}{How many queries should spatial request be divided into? Necessary for large extents. Default: 10}
 }
@@ -32,9 +40,9 @@ single.mukey <- fetchSDA_spatial(x = "2924882")
 full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by = "nmusym")
 
 # compare extent of nmusym to single mukey within it
-if(requireNamespace('sp')) {
- sp::plot(full.extent.nmusym, col = "RED",border=0)
- sp::plot(single.mukey, add = TRUE, col = "BLUE", border=0)
+if(require(sp)) {
+ plot(full.extent.nmusym, col = "RED",border=0)
+ plot(single.mukey, add = TRUE, col = "BLUE", border=0)
 }
 
 # demo adding a field (`muname`) to attribute table of result
