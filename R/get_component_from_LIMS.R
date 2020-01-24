@@ -281,7 +281,10 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
   
   # optionally test for bad horizonation... flag, and remove
   if (rmHzErrors) {
-    f.chorizon.test <- plyr::ddply(f.chorizon, 'coiid', test_hz_logic, topcol='hzdept_r', bottomcol='hzdepb_r', strict=TRUE)
+    f.chorizon.test <- plyr::ddply(f.chorizon, 'coiid', function(d) {
+      res <- aqp::hzDepthTests(top=d[['hzdept_r']], bottom=d[['hzdepb_r']])
+      return(data.frame(hz_logic_pass=all(!res)))
+    })
     
     # which are the good (valid) ones?
     good.ids <- as.character(f.chorizon.test$coiid[which(f.chorizon.test$hz_logic_pass)])

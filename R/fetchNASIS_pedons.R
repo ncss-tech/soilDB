@@ -83,7 +83,10 @@
   
   ## test for horizonation inconsistencies... flag, and optionally remove
   # ~ 1.3 seconds / ~ 4k pedons
-  h.test <- ddply(h, 'peiid', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
+  h.test <- ddply(h, 'peiid', function(d) {
+    res <- aqp::hzDepthTests(top=d[['hzdept']], bottom=d[['hzdepb']])
+    return(data.frame(hz_logic_pass=all(!res)))
+  })
   
   # which are the good (valid) ones?
   good.ids <- as.character(h.test$peiid[which(h.test$hz_logic_pass)])

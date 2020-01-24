@@ -297,11 +297,10 @@
   # 3 - test for horizonation inconsistencies... flag, and optionally remove
   # ~ 1.3 seconds / ~ 4k pedons
   #system.time(
-  h.test <- ddply(hz_data, pedon_id, test_hz_logic,
-                  topcol    = hzdept,
-                  bottomcol = hzdepb,
-                  strict    = TRUE
-  )
+  h.test <- ddply(hz_data, pedon_id, function(d) {
+    res <- aqp::hzDepthTests(top=d[['hzdept']], bottom=d[['hzdepb']])
+    return(data.frame(hz_logic_pass=all(!res)))
+  })
   
   # which are the good (valid) ones?
   good.ids      <- as.character(h.test[[pedon_id]][which(h.test$hz_logic_pass)])

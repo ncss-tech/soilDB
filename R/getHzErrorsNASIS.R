@@ -9,7 +9,10 @@ getHzErrorsNASIS <- function(strict=TRUE) {
 	f <- join(hz_data, site_data, by='peiid', type='inner')
 	
 	# ignore missing lower boundary
-	f.test <- ddply(f, 'pedon_id', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=strict)
+	f.test <- ddply(f, 'pedon_id', function(d) {
+	  res <- aqp::hzDepthTests(top=d[['hzdept']], bottom=d[['hzdepb']])
+	  return(data.frame(hz_logic_pass=all(!res)))
+	})
 	
 	# find bad ones
 	bad.pedon.ids <- as.character(f.test$pedon_id[which(f.test$hz_logic_pass == FALSE)])

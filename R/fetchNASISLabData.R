@@ -27,7 +27,10 @@ fetchNASISLabData <- function(SS = TRUE) {
   ## TODO: what to do with multiple samples / hz?
 	# test for bad horizonation... flag
 	message('finding horizonation errors ...')
-	h.test <- ddply(h, 'labpeiid', test_hz_logic, topcol='hzdept', bottomcol='hzdepb', strict=TRUE)
+	h.test <-	ddply(h, 'labpeiid', function(d) {
+	  res <- aqp::hzDepthTests(top=d[['hzdept']], bottom=d[['hzdepb']])
+	  return(data.frame(hz_logic_pass=all(!res)))
+	})
 	
 	# which are the good (valid) ones?
 	good.ids <- as.character(h.test$labpeiid[which(h.test$hz_logic_pass)])
