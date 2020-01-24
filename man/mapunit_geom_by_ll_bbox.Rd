@@ -29,22 +29,29 @@ mapunit_geom_by_ll_bbox(bbox, source = 'sda')
 # (-120.54, 38.61) --------------+
 
 \donttest{
-# basic usage
-b <- c(-120.54,38.61,-120.41,38.70)
-x <- mapunit_geom_by_ll_bbox(b) # about 20 seconds
+if(require(sp) & require(rgdal)) {
 
-# note that the returned geometry is everything overlapping the bbox
-# and not an intersection... why?
-plot(x)
-rect(b[1], b[2], b[3], b[4], border='red', lwd=2)
-
-
-# get map unit data for matching map unit keys
-in.statement <- format_SQL_in_statement(unique(x$MUKEY))
-q <- paste("SELECT mukey, muname FROM mapunit WHERE mukey IN ", in.statement, sep="")
-res <- SDA_query(q)
+  # basic usage
+  b <- c(-120.54,38.61,-120.41,38.70)
+  x <- try(mapunit_geom_by_ll_bbox(b)) # about 20 seconds
+  
+  if(!inherits(x,'try-error'))
+    # note that the returned geometry is everything overlapping the bbox
+    # and not an intersection... why?
+    plot(x)
+    rect(b[1], b[2], b[3], b[4], border='red', lwd=2)
+    
+    
+    # get map unit data for matching map unit keys
+    in.statement <- format_SQL_in_statement(unique(x$MUKEY))
+    q <- paste("SELECT mukey, muname FROM mapunit WHERE mukey IN ", in.statement, sep="")
+    res <- SDA_query(q)
+  } else {
+    message('could not download XML result from SDA')
+  }
 }
 }
+
 
 \keyword{manip}
 

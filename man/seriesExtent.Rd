@@ -26,11 +26,12 @@ seriesExtentAsGmap(s, timeout=60, exp=1.25)
 \donttest{
 # fetch series extent for the 'Amador' soil series
 s <- seriesExtent('amador')
-plot(s)
- 
-# fetch then plot the extent of the 'Amador' soil series
-seriesExtentAsGmap('amador')
-}
-}
 
+# plot SpatialPolygonsDataFrame
+if(require(sp))
+  plot(s)
+
+# removed seriesExtentAsGmap example -- this function is broken now 
+}
+}
 \keyword{manip}

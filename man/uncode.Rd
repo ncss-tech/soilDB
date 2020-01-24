@@ -35,11 +35,15 @@ Beware the default is to return the values as factors rather than strings. While
 \author{Stephen Roecker}
 \examples{
 \donttest{
-# query component by nationalmusym
-comp = fetchSDA(WHERE = "nationalmusym = '2vzcp'")
-s = site(comp$spc)
-s = uncode(s, NASIS = FALSE)
-levels(s$taxorder)
+if(require(aqp)) {
+  # query component by nationalmusym
+  comp <- fetchSDA(WHERE = "nationalmusym = '2vzcp'")
+  s <- site(comp)
+  
+  # use SDA uncoding domain via db argument
+  s <- uncode(s,  db="SDA")
+  levels(s$taxorder)
+}
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

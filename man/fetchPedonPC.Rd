@@ -23,14 +23,22 @@ getHzErrorsPedonPC(dsn, strict=TRUE)
 \seealso{\code{\link{get_hz_data_from_pedon_db}}}
 \examples{
 \donttest{
-# path to local PedonPC back-end DB
-dsn <- "S:/Service_Center/NRCS/pedon/pedon.accdb"
-
-# get routinely used soil data SoilProfileCollection object
-f <- fetchPedonPC(dsn)
-
-# plot only those profiles with densic contact
-plot(f[which(f$densic.contact), ], name='hzname')
+if(require(aqp)) {
+  # path to local PedonPC back-end DB
+  dsn <- "S:/Service_Center/NRCS/pedon/pedon.accdb"
+  
+    if(file.exists(dsn)) {
+      # get routinely used soil data SoilProfileCollection object
+      f <- fetchPedonPC(dsn)
+      
+      # determine which profiles have densic contacts
+      idx <- which(f$densic.contact)
+      
+      # plot only those profiles with densic contact
+      if(length(idx))
+        plot(f[idx, ], name='hzname')
+    }
+}
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

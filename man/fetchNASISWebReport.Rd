@@ -76,9 +76,9 @@ get_sitesoilmoist_from_NASISWebReport(usiteid)
 
 
 if (
-  requireNamespace("soilDB", quietly = TRUE) & 
-  requireNamespace("ggplot2", quietly = TRUE) & 
-  requireNamespace("gridExtra", quietly = TRUE)
+  require("aqp") &
+  require("ggplot2") & 
+  require("gridExtra")
 ) {
   # query soil components by projectname
   test = fetchNASISWebReport(

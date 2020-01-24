@@ -34,24 +34,26 @@
 \seealso{\code{\link{fetchOSD}}}
 \examples{
 \donttest{
-  # search by series name
-  s <- fetchRaCA(series='auburn')
-  
-  # search by bounding-box
-  # s <- fetchRaCA(bbox=c(-120, 37, -122, 38))
-  
-  # check structure
-  str(s, 1)
-  
-  # extract pedons
-  p <- s$pedons
-  
-  # how many pedons
-  length(p)
-  
-  # plot 
-  par(mar=c(0,0,0,0))
-  plot(p, name='hzn_desgn', max.depth=150)
+if(require(aqp)) {
+    # search by series name
+    s <- fetchRaCA(series='auburn')
+    
+    # search by bounding-box
+    # s <- fetchRaCA(bbox=c(-120, 37, -122, 38))
+    
+    # check structure
+    str(s, 1)
+    
+    # extract pedons
+    p <- s$pedons
+    
+    # how many pedons
+    length(p)
+    
+    # plot 
+    par(mar=c(0,0,0,0))
+    plot(p, name='hzn_desgn', max.depth=150)
+}
 }
 }
 

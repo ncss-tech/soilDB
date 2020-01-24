@@ -74,11 +74,11 @@ The value of \code{nullFragsAreZero} will have a significant impact on the rock 
 \donttest{
 
 
-if (
-  requireNamespace("soilDB", quietly = TRUE) & 
-  requireNamespace("ggplot2", quietly = TRUE) & 
-  requireNamespace("gridExtra", quietly = TRUE) & 
-  requireNamespace("viridis", quietly = TRUE)
+if ( 
+  require(aqp) &
+  require("ggplot2") & 
+  require("gridExtra") & 
+  require("viridis")
 ) {
   # query soil components by areasymbol and musym
   test = fetchSDA(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
@@ -168,7 +168,7 @@ if (
   )
   ggplot(test, aes(x = geompos, y = landform, fill = Freq2)) + 
     geom_tile(alpha = 0.5) + facet_wrap(~ paste0(compname, "\n", drainagecl)) +
-    scale_fill_viridis(discrete = T) +
+    scale_fill_viridis(discrete = TRUE) +
     theme(aspect.ratio = 1, axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
     ggtitle("Landform vs 3-D Morphometry for Miami Major Components on SDA")
   

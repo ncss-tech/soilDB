@@ -60,16 +60,18 @@ s.dry <- fetchOSD(s.list, colorState='dry')
 
 # plot profiles
 # moist soil colors
-par(mar=c(0,0,0,0), mfrow=c(2,1))
-plot(s.moist, name='hzname', cex.names=0.85, axis.line.offset=-4)
-plot(s.dry, name='hzname', cex.names=0.85, axis.line.offset=-4)
+if(require("aqp")) {
 
-# extended mode: return a list with SPC + summary tables
-x <- fetchOSD(s.list, extended = TRUE, colorState = 'dry')
+  par(mar=c(0,0,0,0), mfrow=c(2,1))
+  plot(s.moist, name='hzname', cex.names=0.85, axis.line.offset=-4)
+  plot(s.dry, name='hzname', cex.names=0.85, axis.line.offset=-4)
 
-par(mar=c(0,0,1,1))
-plot(x$SPC)
+  # extended mode: return a list with SPC + summary tables
+  x <- fetchOSD(s.list, extended = TRUE, colorState = 'dry')
 
+  par(mar=c(0,0,1,1))
+  plot(x$SPC)
+}
 str(x, 1)
 }
 }

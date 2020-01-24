@@ -24,13 +24,14 @@ get_text_notes_from_NASIS_db(SS = TRUE, fixLineEndings = TRUE)
 \examples{
 \donttest{
 # query text note data
-t <- get_text_notes_from_NASIS_db()
+t <- try(get_text_notes_from_NASIS_db())
 
 # show contents text note data, includes: siteobs, site, pedon, horizon level text notes data.
 str(t)
 
 # view text categories for site text notes
-table(t$site_text$textcat)
+if(!inherits(t, 'try-error'))
+  table(t$site_text$textcat)
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

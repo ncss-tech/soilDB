@@ -29,7 +29,7 @@ get_component_restrictions_from_NASIS_db(SS = TRUE)
 \examples{
 \donttest{
 # query text note data
-fc <- get_component_data_from_NASIS_db()
+fc <- try(get_component_data_from_NASIS_db())
 
 # show structure of component data returned
 str(fc)

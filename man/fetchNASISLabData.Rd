@@ -17,13 +17,31 @@
 \seealso{\code{\link{get_labpedon_data_from_NASIS_db}}}
 \examples{
 \donttest{
-# query depends on some lab data, queried against the national database
-# note that you must setup this connection ahead of time
-# see inst/doc/setup_ODBC_local_NASIS.pdf
-f <- fetchNASISLabData()
+  # check required packages
+  if(require(aqp) & requireNamespace("RODBC")) {
 
-# plot only those profiles with densic contact
-#plot(f[which(f$densic.contact), ], name='hzname')
+    # test that NASIS db connection is set up
+    # note that you must setup this connection ahead of time
+    # see inst/doc/setup_ODBC_local_NASIS.pdf
+    if(any(grepl(names(RODBC::odbcDataSources()), pattern="nasis_local"))) {
+      
+      # query depends on some lab data, queried against the national database
+      f <- try(fetchNASISLabData())
+      # note: wrap in try in case no lab data in selected set
+    
+      # plot only those profiles with densic contact
+      if(!inherits(f,'try-error')) {
+      
+        # which pedons have densic.contact==TRUE
+        idx <- which(f$densic.contact)
+        
+        # if there are any pedons with densic contacts, plot them
+        if(length(idx))
+          plot(f[idx, ], name='hzname')
+    
+      } else { message(f[1]) }
+    }
+  }
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

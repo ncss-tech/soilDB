@@ -34,10 +34,10 @@ https://www.nrcs.usda.gov/wps/portal/nrcs/soilsurvey/soils/survey/state/
 \donttest{
 
 if (
-  requireNamespace("XML", quietly = TRUE) & 
-  requireNamespace("RCurl", quietly = TRUE) &
-  requireNamespace("ggplot2", quietly = TRUE) & 
-  requireNamespace("gridExtra", quietly = TRUE)
+  require("XML") & 
+  require("RCurl") &
+  require("ggplot2") & 
+  require("gridExtra")
 ) {
   
   data(state)

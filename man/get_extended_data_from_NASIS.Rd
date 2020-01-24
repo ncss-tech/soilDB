@@ -27,7 +27,7 @@ get_extended_data_from_NASIS_db(SS = TRUE, nullFragsAreZero = TRUE,
 \examples{
 \donttest{
 # query extended data
-e <- get_extended_data_from_NASIS_db()
+e <- try(get_extended_data_from_NASIS_db())
 
 # show contents of extended data
 str(e)
