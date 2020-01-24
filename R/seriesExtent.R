@@ -1,26 +1,32 @@
-# get the series extent from SEE pre-cached GeoJSON data and plot on Google Maps
-seriesExtentAsGmap <- function(s, timeout=60, exp=1.25) {
-  if(!requireNamespace('dismo', quietly=TRUE)  & !requireNamespace('rgdal', quietly=TRUE))
-    stop('please install the `rgdal` and `dismo` packages', call.=FALSE)
-  
-	# load series extent data in WGS84 GCS
-	x <- seriesExtent(s, timeout)
-	
-	# make extent object around sites, in geographic coordinates
-	e <- raster::extent(sp::spTransform(x, sp::CRS('+proj=longlat')))
-	
-	# grab ref. to google maps
-	g <- dismo::gmap(e, exp=exp)
-	
-	# convert our points to Mercatur projection
-	x.M <- sp::spTransform(x, sp::CRS('+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs'))
-	
-	# plot google map, and our point of interest
-	# note: have to use special plot methods
-	# http://stackoverflow.com/questions/38818682/self-authored-package-load-plot-method-for-spatialpolygonsdataframe
-	raster::plot(g, interpolate=TRUE)
-	sp::plot(x.M, col=rgb(1, 0, 0, alpha=0.5), add=TRUE)
-}
+
+## this isn't going to work anymore, unless you have a GM API key
+# # get the series extent from SEE pre-cached GeoJSON data and plot on Google Maps
+# seriesExtentAsGmap <- function(s, timeout=60, exp=1.25) {
+#   .Deprecated(msg = 'Google API no longer accepting requests without an API key. Consider using mapview::mapview().')
+#   
+#   return(FALSE)
+#   
+#   if(!requireNamespace('dismo', quietly=TRUE)  & !requireNamespace('rgdal', quietly=TRUE))
+#     stop('please install the `rgdal` and `dismo` packages', call.=FALSE)
+#   
+# 	# load series extent data in WGS84 GCS
+# 	x <- seriesExtent(s, timeout)
+# 	
+# 	# make extent object around sites, in geographic coordinates
+# 	e <- raster::extent(sp::spTransform(x, sp::CRS('+proj=longlat')))
+# 	
+# 	# grab ref. to google maps
+# 	g <- dismo::gmap(e, exp=exp)
+# 	
+# 	# convert our points to Mercatur projection
+# 	x.M <- sp::spTransform(x, sp::CRS('+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs'))
+# 	
+# 	# plot google map, and our point of interest
+# 	# note: have to use special plot methods
+# 	# http://stackoverflow.com/questions/38818682/self-authored-package-load-plot-method-for-spatialpolygonsdataframe
+# 	raster::plot(g, interpolate=TRUE)
+# 	sp::plot(x.M, col=rgb(1, 0, 0, alpha=0.5), add=TRUE)
+# }
 
 
 
