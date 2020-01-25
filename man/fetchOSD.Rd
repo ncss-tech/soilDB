@@ -50,29 +50,35 @@ USDA-NRCS OSD search tools: \url{http://www.nrcs.usda.gov/wps/portal/nrcs/detail
 
 \examples{
 \donttest{
-# soils of interest
-s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz', 
-'reiff', 'san joaquin', 'montpellier', 'grangeville', 'pollasky', 'ramona')
-
-# fetch and convert data into an SPC
-s.moist <- fetchOSD(s.list, colorState='moist')
-s.dry <- fetchOSD(s.list, colorState='dry')
-
-# plot profiles
-# moist soil colors
-if(require("aqp")) {
-
-  par(mar=c(0,0,0,0), mfrow=c(2,1))
-  plot(s.moist, name='hzname', cex.names=0.85, axis.line.offset=-4)
-  plot(s.dry, name='hzname', cex.names=0.85, axis.line.offset=-4)
-
-  # extended mode: return a list with SPC + summary tables
-  x <- fetchOSD(s.list, extended = TRUE, colorState = 'dry')
-
-  par(mar=c(0,0,1,1))
-  plot(x$SPC)
+if(requireNamespace("curl") &
+    curl::has_internet()) {
+        
+    # soils of interest
+    s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz', 
+    'reiff', 'san joaquin', 'montpellier', 'grangeville', 'pollasky', 'ramona')
+    
+    # fetch and convert data into an SPC
+    s.moist <- fetchOSD(s.list, colorState='moist')
+    s.dry <- fetchOSD(s.list, colorState='dry')
+    
+    # plot profiles
+    # moist soil colors
+    if(require("aqp")) {
+    
+      par(mar=c(0,0,0,0), mfrow=c(2,1))
+      plot(s.moist, name='hzname', 
+           cex.names=0.85, axis.line.offset=-4)
+      plot(s.dry, name='hzname', 
+           cex.names=0.85, axis.line.offset=-4)
+    
+      # extended mode: return a list with SPC + summary tables
+      x <- fetchOSD(s.list, extended = TRUE, colorState = 'dry')
+    
+      par(mar=c(0,0,1,1))
+      plot(x$SPC)
+      str(x, 1)
+    }
 }
-str(x, 1)
 }
 }
 

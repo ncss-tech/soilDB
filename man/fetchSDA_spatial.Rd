@@ -4,13 +4,8 @@
 \alias{fetchSDA_spatial}
 \title{Query SDA and Return Spatial Data}
 \usage{
-fetchSDA_spatial(
-  x,
-  by.col = "mukey",
-  method = "feature",
-  add.fields = NULL,
-  chunk.size = 10
-)
+fetchSDA_spatial(x, by.col = "mukey", method = "feature",
+  add.fields = NULL, chunk.size = 10)
 }
 \arguments{
 \item{x}{A vector of MUKEYs or national mapunit symbols.}
@@ -19,12 +14,12 @@ fetchSDA_spatial(
 
 \item{method}{geometry result type: 'feature' returns polygons, 'bbox' returns the bounding box of each polygon, and 'point' returns a single point within each polygon.}
 
-\item{add.fields}{Column names from `mapunit` table to add to result. Must specify table name prefix as either `G` or `mapunit`.}
+\item{add.fields}{Column names from `mapunit` table to add to result. Must specify table name prefix `mapunit` before column name (e.g. `mapunit.muname`).}
 
-\item{chunk.size}{How many queries should spatial request be divided into? Necessary for large extents. Default: 10}
+\item{chunk.size}{How many queries should spatial request be divided into? Necessary for large results. Default: 10}
 }
 \value{
-A SpatialPolygonsDataFrame corresponding to SDA spatial data for all MUKEYs / nmusyms requested. Default result contains MupolygonWktWgs84-derived geometry with attribute table containing `gid`, `mukey` and `nationalmusym`, additional fields in result are specified with `add.fields`.
+A Spatial*DataFrame corresponding to SDA spatial data for all MUKEYs / nmusyms requested. Default result contains mapunit delineation geometry with attribute table containing `gid`, `mukey` and `nationalmusym`, plus additional fields in result specified with `add.fields`.
 }
 \description{
 This is a high-level fetch method that facilitates making spatial queries to Soil Data Access (SDA) based on `mukey` or `nationalmusym`. A typical SDA spatial query is made returning geometry and key identifying information about the mapunit. Additional columns from the mapunit table can be included using `add.fields` argument. 
@@ -33,20 +28,24 @@ This function automatically "chunks" the input vector (using `soilDB::makeChunks
 }
 \examples{
 \donttest{
-# get spatial data for a single mukey
-single.mukey <- fetchSDA_spatial(x = "2924882")
+if(requireNamespace("curl") &
+   curl::has_internet()) {
 
-# demonstrate fetching full extent (multi-mukey) of national musym
-full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by = "nmusym")
-
-# compare extent of nmusym to single mukey within it
-if(require(sp)) {
- plot(full.extent.nmusym, col = "RED",border=0)
- plot(single.mukey, add = TRUE, col = "BLUE", border=0)
+   # get spatial data for a single mukey
+    single.mukey <- fetchSDA_spatial(x = "2924882")
+    
+    # demonstrate fetching full extent (multi-mukey) of national musym
+    full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by = "nmusym")
+    
+    # compare extent of nmusym to single mukey within it
+    if(require(sp)) {
+     plot(full.extent.nmusym, col = "RED",border=0)
+     plot(single.mukey, add = TRUE, col = "BLUE", border=0)
+    }
+    
+    # demo adding a field (`muname`) to attribute table of result
+    head(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname"))
 }
-
-# demo adding a field (`muname`) to attribute table of result
-head(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname"))
 }
 }
 \author{

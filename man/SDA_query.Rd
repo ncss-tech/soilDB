@@ -32,7 +32,9 @@ SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are sto
 
 \examples{
 \donttest{
-
+if(requireNamespace("curl") &
+    curl::has_internet()) {
+    
   ## get SSURGO export date for all soil survey areas in California
   # there is no need to filter STATSGO 
   # because we are filtering on SSURGO areasymbols
@@ -87,6 +89,7 @@ SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are sto
     x <- SDA_query(q)
     str(x)
   }
+}
 }
 }
 

@@ -75,10 +75,11 @@ get_sitesoilmoist_from_NASISWebReport(usiteid)
 \donttest{
 
 
-if (
-  require("aqp") &
-  require("ggplot2") & 
-  require("gridExtra")
+if (requireNamespace("curl") &
+    curl::has_internet() &
+    require("aqp") &
+    require("ggplot2") & 
+    require("gridExtra")
 ) {
   # query soil components by projectname
   test = fetchNASISWebReport(

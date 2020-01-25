@@ -21,13 +21,16 @@ seriesExtent(s, timeout=60)
 
 \examples{
 \donttest{
-# fetch series extent for the 'Amador' soil series
-s <- seriesExtent('amador')
-
-# plot SpatialPolygonsDataFrame
-if(require(sp))
-  plot(s)
-
+if(requireNamespace("curl") &
+    curl::has_internet()) {
+    
+    # fetch series extent for the 'Amador' soil series
+    s <- seriesExtent('amador')
+    
+    # plot SpatialPolygonsDataFrame
+    if(require(sp))
+      plot(s)
+}
 }
 }
 \keyword{manip}

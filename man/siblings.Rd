@@ -41,14 +41,18 @@ D.E. Beaudette
 
 \examples{
 \donttest{
-# basic usage
-x <- siblings('zook')
-x$sib
-
-# restrict to siblings that are major components
-# e.g. the most likely siblings
-x <- siblings('zook', only.major = TRUE)
-x$sib
+if(requireNamespace("curl") &
+    curl::has_internet()) {
+    
+    # basic usage
+    x <- siblings('zook')
+    x$sib
+    
+    # restrict to siblings that are major components
+    # e.g. the most likely siblings
+    x <- siblings('zook', only.major = TRUE)
+    x$sib
+}
 }
 }
 

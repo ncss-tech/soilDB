@@ -32,12 +32,12 @@ https://www.nrcs.usda.gov/wps/portal/nrcs/soilsurvey/soils/survey/state/
 
 \examples{
 \donttest{
-
-if (
-  require("XML") & 
-  require("RCurl") &
-  require("ggplot2") & 
-  require("gridExtra")
+if (requireNamespace("curl") &
+    curl::has_internet() &
+    require("XML") & 
+    require("RCurl") &
+    require("ggplot2") & 
+    require("gridExtra")
 ) {
   
 data(state)

@@ -29,7 +29,10 @@ mapunit_geom_by_ll_bbox(bbox, source = 'sda')
 # (-120.54, 38.61) --------------+
 
 \donttest{
-if(require(sp) & require(rgdal)) {
+if(requireNamespace("curl") &
+    curl::has_internet() &
+    require(sp) & 
+    require(rgdal)) {
 
   # basic usage
   b <- c(-120.54,38.61,-120.41,38.70)

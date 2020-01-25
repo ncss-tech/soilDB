@@ -25,11 +25,15 @@ SoilWeb_spatial_query(bbox = NULL, coords = NULL, what = "mapunit", source = "so
 
 \examples{
 \donttest{
-# query by bbox
-SoilWeb_spatial_query(bbox=c(-122.05, 37, -122, 37.05))
-
-# query by coordinate pair
-SoilWeb_spatial_query(coords=c(-121, 38))
+if(requireNamespace("curl") &
+    curl::has_internet()) {
+    
+    # query by bbox
+    SoilWeb_spatial_query(bbox=c(-122.05, 37, -122, 37.05))
+    
+    # query by coordinate pair
+    SoilWeb_spatial_query(coords=c(-121, 38))
+}
 }
 }
 

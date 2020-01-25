@@ -76,7 +76,8 @@ The value of \code{nullFragsAreZero} will have a significant impact on the rock 
 \donttest{
 
 
-if ( 
+if (requireNamespace("curl") &
+  curl::has_internet() &
   require(aqp) &
   require("ggplot2") & 
   require("gridExtra") & 
@@ -185,6 +186,4 @@ if (
 
 }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{manip}

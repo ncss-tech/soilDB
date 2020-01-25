@@ -5,26 +5,30 @@
 #' @param x A vector of MUKEYs or national mapunit symbols.
 #' @param by.col Column name containing mapunit identifier ("mukey" or "nmusym"); default: "mukey"
 #' @param method geometry result type: 'feature' returns polygons, 'bbox' returns the bounding box of each polygon, and 'point' returns a single point within each polygon.
-#' @param add.fields Column names from `mapunit` table to add to result. Must specify table name prefix as either `G` or `mapunit`.
-#' @param chunk.size How many queries should spatial request be divided into? Necessary for large extents. Default: 10
-#' @return A SpatialPolygonsDataFrame corresponding to SDA spatial data for all MUKEYs / nmusyms requested. Default result contains MupolygonWktWgs84-derived geometry with attribute table containing `gid`, `mukey` and `nationalmusym`, additional fields in result are specified with `add.fields`.
+#' @param add.fields Column names from `mapunit` table to add to result. Must specify table name prefix `mapunit` before column name (e.g. `mapunit.muname`).
+#' @param chunk.size How many queries should spatial request be divided into? Necessary for large results. Default: 10
+#' @return A Spatial*DataFrame corresponding to SDA spatial data for all MUKEYs / nmusyms requested. Default result contains mapunit delineation geometry with attribute table containing `gid`, `mukey` and `nationalmusym`, plus additional fields in result specified with `add.fields`.
 #' @author Andrew G. Brown.
 #' @examples 
 #' \donttest{
-#' # get spatial data for a single mukey
-#' single.mukey <- fetchSDA_spatial(x = "2924882")
-#' 
-#' # demonstrate fetching full extent (multi-mukey) of national musym
-#' full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by = "nmusym")
-#' 
-#' # compare extent of nmusym to single mukey within it
-#' if(require(sp)) {
-#'  plot(full.extent.nmusym, col = "RED",border=0)
-#'  plot(single.mukey, add = TRUE, col = "BLUE", border=0)
+#' if(requireNamespace("curl") &
+#'    curl::has_internet()) {
+#'
+#'    # get spatial data for a single mukey
+#'     single.mukey <- fetchSDA_spatial(x = "2924882")
+#'     
+#'     # demonstrate fetching full extent (multi-mukey) of national musym
+#'     full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by = "nmusym")
+#'     
+#'     # compare extent of nmusym to single mukey within it
+#'     if(require(sp)) {
+#'      plot(full.extent.nmusym, col = "RED",border=0)
+#'      plot(single.mukey, add = TRUE, col = "BLUE", border=0)
+#'     }
+#'     
+#'     # demo adding a field (`muname`) to attribute table of result
+#'     head(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname"))
 #' }
-#' 
-#' # demo adding a field (`muname`) to attribute table of result
-#' head(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname"))
 #' }
 #' @rdname fetchSDA_spatial
 #' @export fetchSDA_spatial

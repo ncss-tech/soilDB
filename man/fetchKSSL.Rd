@@ -43,69 +43,72 @@ Function arguments (\code{series}, \code{mlra}, etc.) are NOT vectorized: the fi
 \seealso{\code{\link{fetchOSD}}}
 \examples{
 \donttest{
-# search by series name
-s <- fetchKSSL(series='auburn')
-
-# search by bounding-box
-# s <- fetchKSSL(bbox=c(-120, 37, -122, 38))
-
-# how many pedons
-length(s)
-
-# plot 
-if(requireNamespace("sp")) {
-  par(mar=c(0,0,0,0))
-  sp::plot(s, name='hzn_desgn', max.depth=150)
+if(requireNamespace("curl") &
+    curl::has_internet()) {
+    
+    # search by series name
+    s <- fetchKSSL(series='auburn')
+    
+    # search by bounding-box
+    # s <- fetchKSSL(bbox=c(-120, 37, -122, 38))
+    
+    # how many pedons
+    length(s)
+    
+    # plot 
+    if(requireNamespace("sp")) {
+      par(mar=c(0,0,0,0))
+      sp::plot(s, name='hzn_desgn', max.depth=150)
+    }
+    ##
+    ## morphologic data
+    ##
+    
+    library(soilDB)
+    library(aqp)
+    library(plyr)
+    library(reshape2)
+    
+    
+    # get lab and morphologic data
+    s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE)
+    
+    # extract SPC
+    pedons <- s$SPC
+    
+    ## simplify color data manually
+    s.colors <- simplifyColorData(s$morph$phcolor, id.var = 'labsampnum', wt='colorpct')
+    
+    # merge color data into SPC
+    h <- horizons(pedons)
+    h <- join(h, s.colors, by='labsampnum', type='left', match='first')
+    horizons(pedons) <- h
+    
+    # check
+    par(mar=c(0,0,0,0))
+    plot(pedons, color='moist_soil_color', print.id=FALSE)
+    
+    ## automatically simplify color data
+    s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE, simplifyColors=TRUE)
+    
+    # check
+    par(mar=c(0,0,0,0))
+    plot(pedons, color='moist_soil_color', print.id=FALSE)
+    
+    
+    # simplify fragment data
+    s.frags <- simplifyFragmentData(s$morph$phfrags, id.var='labsampnum')
+    
+    # merge fragment data into SPC
+    h <- horizons(pedons)
+    h <- join(h, s.frags, by='labsampnum', type='left', match='first')
+    horizons(pedons) <- h
+    
+    
+    # check
+    par(mar=c(0,0,3,0))
+    plot(pedons, color='total_frags_pct', print.id=FALSE)
 }
-##
-## morphologic data
-##
-
-library(soilDB)
-library(aqp)
-library(plyr)
-library(reshape2)
-
-
-# get lab and morphologic data
-s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE)
-
-# extract SPC
-pedons <- s$SPC
-
-## simplify color data manually
-s.colors <- simplifyColorData(s$morph$phcolor, id.var = 'labsampnum', wt='colorpct')
-
-# merge color data into SPC
-h <- horizons(pedons)
-h <- join(h, s.colors, by='labsampnum', type='left', match='first')
-horizons(pedons) <- h
-
-# check
-par(mar=c(0,0,0,0))
-plot(pedons, color='moist_soil_color', print.id=FALSE)
-
-## automatically simplify color data
-s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE, simplifyColors=TRUE)
-
-# check
-par(mar=c(0,0,0,0))
-plot(pedons, color='moist_soil_color', print.id=FALSE)
-
-
-# simplify fragment data
-s.frags <- simplifyFragmentData(s$morph$phfrags, id.var='labsampnum')
-
-# merge fragment data into SPC
-h <- horizons(pedons)
-h <- join(h, s.frags, by='labsampnum', type='left', match='first')
-horizons(pedons) <- h
-
-
-# check
-par(mar=c(0,0,3,0))
-plot(pedons, color='total_frags_pct', print.id=FALSE)
-
 }
 }
 

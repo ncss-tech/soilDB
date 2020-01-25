@@ -42,17 +42,21 @@ pad.missing.days = TRUE, soiltemp.summaries = TRUE)
 \seealso{\code{\link{fetchSCAN}}}
 \examples{
 \donttest{
-library(lattice)
+if(requireNamespace("curl") &
+    curl::has_internet() &
+    require(lattice)) {
+    
+  # get CA630 data as daily averages
+  x <- fetchHenry(project='CA630', gran = 'day')
+  
+  # inspect data gaps
+  levelplot(factor(!is.na(sensor_value)) ~ doy * factor(year) | name, 
+  data=x$soiltemp, col.regions=c('grey', 'RoyalBlue'), cuts=1, 
+  colorkey=FALSE, as.table=TRUE, scales=list(alternating=3), 
+  par.strip.text=list(cex=0.75), strip=strip.custom(bg='yellow'), 
+  xlab='Julian Day', ylab='Year')
 
-# get CA630 data as daily averages
-x <- fetchHenry(project='CA630', gran = 'day')
-
-# inspect data gaps
-levelplot(factor(!is.na(sensor_value)) ~ doy * factor(year) | name, 
-data=x$soiltemp, col.regions=c('grey', 'RoyalBlue'), cuts=1, 
-colorkey=FALSE, as.table=TRUE, scales=list(alternating=3), 
-par.strip.text=list(cex=0.75), strip=strip.custom(bg='yellow'), 
-xlab='Julian Day', ylab='Year')
+}
 }
 }
 
