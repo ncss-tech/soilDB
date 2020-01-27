@@ -18,3 +18,14 @@
   
   return(channel)
 }
+
+# check for presence of `nasis_local` ODBC data source
+# primarily used in test suite
+.local_NASIS_defined <- function() {
+  # check for user-defined
+  if('nasis_local' %in% names(RODBC::odbcDataSources())) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+}

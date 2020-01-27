@@ -7,13 +7,6 @@ context("fetchNASISLabData() -- requires local NASIS and ODBC connection")
 # * pedons / component missing from local database
 
 
-check_local_NASIS <- function() {
-  # check for connection
-  if(! 'nasis_local' %in% names(RODBC::odbcDataSources())) {
-    skip("local NASIS database not available")
-  }
-}
-
 
 check_local_NASIS_labdata_available <- function() {
   
@@ -30,7 +23,11 @@ check_local_NASIS_labdata_available <- function() {
 test_that("fetchNASISLabData returns reasonable data", {
   
   # test for conditions permitting this test to run
-  check_local_NASIS()
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("local NASIS database not available")
+  }
+  
+  # test for lab data to check
   check_local_NASIS_labdata_available()
   
   # get data

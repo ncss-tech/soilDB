@@ -4,6 +4,12 @@ test_that("fetchSDA_spatial() works", {
   
   skip_if_offline()
   
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
+  
   # expect 3, relatively nonextensive join delineations
   single.mukey <- fetchSDA_spatial(x = "2924882")
   expect_equal(nrow(single.mukey), 3)

@@ -7,6 +7,12 @@ test_that("fetchSDA() works", {
   
   skip_if_offline()
   
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
+  
   # single component
   x <<- suppressMessages(fetchSDA(WHERE="nationalmusym = 'kzc4'"))
   
@@ -20,6 +26,12 @@ test_that("fetchSDA() returns an SPC", {
   
   skip_if_offline()
   
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
+  
   # SPC integrity and expected IDs / hz depths
   expect_equal(idname(x), 'cokey')
   expect_equal(horizonDepths(x), c('hzdept_r', 'hzdepb_r'))
@@ -29,6 +41,12 @@ test_that("fetchSDA() returns an SPC", {
 test_that("fetchSDA() returns expected results", {
   
   skip_if_offline()
+  
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
   
   # there should be 2 components nad 10 horizons
   expect_equal(length(x), 2)

@@ -5,6 +5,12 @@ test_that("siblings() returns reasonable data", {
   
   skip_if_offline()
   
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
+  
   x <- siblings('amador', component.data = TRUE)
   
   # standard request
@@ -22,6 +28,12 @@ test_that("siblings() returns reasonable data", {
 test_that("siblings() returns skeleton with bogus query", {
   
   skip_if_offline()
+  
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
   
   # a skeleton list should be returned
   res <- siblings('XXX')

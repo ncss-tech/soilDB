@@ -5,6 +5,12 @@ test_that("SDA_query() works", {
   
   skip_if_offline()
   
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
+  
   ## sample data
   
   # single-table result
@@ -34,6 +40,12 @@ test_that("SDA_query() returns expected result", {
   
   skip_if_offline()
   
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
+  
   # table dimensions
   expect_equal(nrow(x.1), 1)
   expect_equal(ncol(x.1), 2)
@@ -49,6 +61,12 @@ test_that("SDA_query() SQL error / no results -> NULL", {
   
   skip_if_offline()
   
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
+  
   # bad SQL should result in a local error
   expect_error(SDA_query("SELECT this from that"))
   
@@ -62,6 +80,12 @@ test_that("SDA_query() SQL error / no results -> NULL", {
 test_that("SDA_spatialQuery() simple spatial query, tabular results", {
   
   skip_if_offline()
+  
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
   
   res <- SDA_spatialQuery(p, what = 'mukey')
   
@@ -77,6 +101,12 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
 
   skip_if_offline()
   
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
+  
   res <- SDA_spatialQuery(p, what = 'geom')
   
   # testing known values
@@ -88,6 +118,12 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
 test_that("SDA_query() interprets column names", {
   
   skip_if_offline()
+  
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
   
   # x.3 is from the component table
   expect_equal(
@@ -102,6 +138,12 @@ test_that("SDA_query() interprets column names", {
 test_that("SDA_query() interprets data type correctly", {
   
   skip_if_offline()
+  
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
   
   # x.3 is from the component table
   expect_true(inherits(x.3$mukey, 'integer'))
@@ -121,6 +163,12 @@ test_that("SDA_query() interprets data type correctly", {
 test_that("SDA_query() works with multi-line records", {
 
   skip_if_offline()
+  
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
   
   # https://github.com/ncss-tech/soilDB/issues/28
   expect_true(inherits(x.4, 'data.frame'))

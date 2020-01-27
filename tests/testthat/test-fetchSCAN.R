@@ -4,6 +4,12 @@ test_that("fetchSCAN() works", {
   
   skip_if_offline()
   
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
+  
   ## sample data
   x <<- fetchSCAN(site.code=2001, year=c(2014))
   
@@ -15,6 +21,12 @@ test_that("fetchSCAN() works", {
 test_that("fetchSCAN() returns the right kind of data", {
   
   skip_if_offline()
+  
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
   
   # metadata + some sensor data
   expect_true(inherits(x, 'list'))

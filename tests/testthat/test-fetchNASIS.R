@@ -7,14 +7,6 @@ context("fetchNASIS() -- requires local NASIS and ODBC connection")
 # * pedons / component missing from local database
 
 
-check_local_NASIS <- function() {
-  # check for connection
-  if(! 'nasis_local' %in% names(RODBC::odbcDataSources())) {
-    skip("local NASIS database not available")
-  }
-}
-
-
 check_local_NASIS_pedons_available <- function() {
   
   # attempt to load pedons
@@ -55,7 +47,11 @@ check_local_NASIS_components_available <- function() {
 test_that("fetchNASIS(from='pedons') returns reasonable data", {
   
   # test for conditions permitting this test to run
-  check_local_NASIS()
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("local NASIS database not available")
+  }
+  
+  # pedons must be present for tests
   check_local_NASIS_pedons_available()
   
   # get data
@@ -79,7 +75,11 @@ test_that("fetchNASIS(from='pedons') returns reasonable data", {
 test_that("fetchNASIS(from='pedons') nullFragsAreZero works as expected", {
   
   # test for conditions permitting this test to run
-  check_local_NASIS()
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("local NASIS database not available")
+  }
+  
+  # components must be present for tests
   check_local_NASIS_pedons_available()
   
   # get data
@@ -94,8 +94,13 @@ test_that("fetchNASIS(from='pedons') nullFragsAreZero works as expected", {
 
 test_that("fetchNASIS(from='components') returns reasonable data", {
   
-  # test for conditions permitting this test to run
-  check_local_NASIS()
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if(! soilDB:::.local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
+  
+  # must have components to complete test
   check_local_NASIS_components_available()
   
   # get data
