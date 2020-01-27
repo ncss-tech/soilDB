@@ -3,9 +3,9 @@
 # get NASIS site/pedon/horizon/diagnostic feature data
 .fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='moist', lab=FALSE, stringsAsFactors = default.stringsAsFactors()) {
   
-  # test connection, should not be required, can be used if from = "pedon_report"
+  # test connection
   if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
-    warning('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
+    stop('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
   
   # sanity check
   if(! soilColorState %in% c('dry', 'moist'))
