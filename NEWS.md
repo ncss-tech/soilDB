@@ -1,3 +1,6 @@
+# soilDB 2.5.1 (2020-01-29)
+  * bugfix for `fetchNASIS(from='components', fill=TRUE, rmHzErrors=TRUE)` in context of new `::hzDepthTests()` and non-unique `chiid` due to `NA` values introduced by `fill`
+  
 # soilDB 2.5 (2020-01-23)
   * CRAN release
   * `simplifyColorData` and `mix_and_clean_colors` always use CIELAB colorspace for weighted averages, and best-available metric for transformation to Munsell notation

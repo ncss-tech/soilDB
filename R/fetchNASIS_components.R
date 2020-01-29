@@ -28,10 +28,26 @@
       return(data.frame(hz_logic_pass=all(!res)))
     })
 
+    # fill=TRUE adds horizons with NA chiid will have NA depths -- will not pass hzDepthTests
+    # therefore, only way to use fill effectively was with rmHzErrors=FALSE
+    # which runs the risk of duplication in the case of data entry errors or other many:1 issues in comp
+    filled.idx <- which(is.na(f.chorizon$chiid))
+    filled.ids <- character(0)
+    if(length(filled.idx)) {
+      filled.ids <- as.character(f.chorizon$coiid[filled.idx])
+      #print(dput(filled.ids))
+    }
+      
+    
     # which are the good (valid) ones?
     good.ids <- as.character(f.chorizon.test$coiid[which(f.chorizon.test$hz_logic_pass)])
-    bad.ids <- as.character(f.chorizon.test$coiid[which(! f.chorizon.test$hz_logic_pass)])
+    bad.ids <- as.character(f.chorizon.test$coiid[which(!f.chorizon.test$hz_logic_pass)])
 
+    if(length(filled.ids)) {
+      good.ids <- unique(c(good.ids, filled.ids))
+      bad.ids <- unique(bad.ids[!bad.ids %in% filled.ids])
+    }
+    
     # keep the good ones
     f.chorizon <- f.chorizon[which(f.chorizon$coiid %in% good.ids), ]
 
@@ -87,7 +103,11 @@
       message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=soilDB.env)` for related coiid values")
   
   # set NASIS component specific horizon identifier
-  hzidname(f.chorizon) <- 'chiid'
+  if(!fill & !length(filled.ids)) {
+    hzidname(f.chorizon) <- 'chiid'
+  } else {
+    warning("cannot set `chiid` as unique component horizon key - NA introduced by fill=TRUE", call.=F)
+  }
   
   # set metadata
   m <- metadata(f.chorizon)
