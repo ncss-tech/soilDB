@@ -105,9 +105,11 @@
   # set NASIS component specific horizon identifier
   if(!fill & !length(filled.ids)) {
     res <- try(hzidname(f.chorizon) <- 'chiid')
-    if(inherits(res, 'try-error') & !rmHzErrors) {
-      warning("cannot set `chiid` as unique component horizon key -- duplicate horizons present with rmHzErrors=FALSE")
-    } else warning("cannot set `chiid` as unique component horizon key -- defaulting to `hzID`")
+    if(inherits(res, 'try-error')) {
+      if(!rmHzErrors) {
+        warning("cannot set `chiid` as unique component horizon key -- duplicate horizons present with rmHzErrors=FALSE")
+      } else warning("cannot set `chiid` as unique component horizon key -- defaulting to `hzID`")
+    } 
   } else {
     warning("cannot set `chiid` as unique component horizon key - `NA` introduced by fill=TRUE", call.=F)
   }
