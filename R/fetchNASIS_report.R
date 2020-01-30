@@ -72,6 +72,7 @@
   
   # left-join via peiid
   # < 0.1 second for ~ 4k pedons
+  .$site = .fix_site_problems(.$site, nullFragsAreZero = nullFragsAreZero)
   site(h) <- .$site
   
   
@@ -129,7 +130,7 @@
 
 # temp <- .fetchNASISTemp()
 
-.get_site_from_NASISReport <- function(url = NULL, stringsAsFactors = default.stringsAsFactors()
+.get_site_from_NASISReport <- function(url = NULL, nullFragsAreZero = TRUE, stringsAsFactors = default.stringsAsFactors()
 ) {
   
   tf = "C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt"
@@ -162,6 +163,7 @@
   #   classdate = as.Date(as.character(classdate))
   # })
   
+  temp = .fix_site_problems(temp, nullFragsAreZero = nullFragsAreZero)
   
   # impute missing x_std & y_std if utm are present
   # idx <- with(temp, ! complete.cases(x_std, y_std) & complete.cases(utmzone, utmeasting, utmnorthing, horizdatnm))
@@ -337,3 +339,16 @@
 }
 
 
+
+.fix_site_problems <- function(site_data, nullFragsAreZero = nullFragsAreZero) {
+  
+  if (nullFragsAreZero == TRUE) {
+    idx <- grep("fragvol|frags_|gravel|cobbles|stones|boulders|channers|unspecified", names(site_data))
+    vars <- names(site_data)[idx]
+    site_data[idx] <-lapply(site_data[idx], function(x) {
+      ifelse(is.na(x), 0, x)
+      })
+  } else site_data
+  
+  return(site_data)
+}

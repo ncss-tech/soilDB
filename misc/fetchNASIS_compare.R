@@ -37,3 +37,23 @@ xtabs(~ f_r$earthcovkind1, droplevels = TRUE) # has more counts, pulling from th
 
 test = merge(site(f_l)[c("peiid", "taxsubgrp")], site(f_r)[c("peiid", "taxsubgrp")], by = "peiid", all.x = TRUE)
 View(subset(test, taxsubgrp.x != taxsubgrp.y)) # when the dates match f_l is pulling the 'sampled as' instead of the 'correlated' pedon taxonomic history
+
+
+
+# rock fragments
+vars <- c("peiid", "phiid", "fragvoltot", "total_frags_pct_nopf", "total_frags_pct", "fine_gravel", "gravel", "cobbles", "stones", "boulders", "channers", "flagstones", "parafine_gravel", "paragravel", "paracobbles", "parastones", "paraboulders", "unspecified")
+
+frags_l <- horizons(f_l)[vars]
+idx <- table(frags_l$phiid) > 1
+idx <- names(idx)[!idx]
+frags_l <- frags_l[frags_l$phiid %in% idx, ]
+frags_r <- horizons(f_r)[vars]
+
+idx <- frags_l$phiid[frags_l$phiid %in% frags_r$phiid]
+idx2 <- frags_l[which(frags_l$phiid %in% idx), ] != frags_r[frags_r$phiid %in% idx, ]
+idx2 <- apply(idx2, 1, any)
+idx2 <- frags_l$phiid[idx2]
+frags_daff <- diff_data(frags_l[frags_l$phiid %in% idx2, ], frags_r[frags_r$phiid %in% idx2, ])
+render_diff(frags_daff)
+# Out of 5112 records with > 0 frags, 291 or 5% are different. Like the comparison of NASIS-phfrags-testing.R their is some difference in the sorting between classes. The primary differences are that pedon_report is returning frags with the RV size = NULL as unspecified. This is as expected since pedon_report doesn't use the L and H, since NASIS SQL is limited. It also appears that from = "pedons" is misclassifying weakly cemented frags as nonpara. Lots of fragvoltot = 0 even though total_frags_pct != 0, which means fragvoltot has not been calculated. Should write an error check to flag and check when total_frag_pct != fragment modifers (e.g. 16% and non-gravelly). Check could also warn about unspecified rock fragments.
+# Overall the rock fragment code is working.
