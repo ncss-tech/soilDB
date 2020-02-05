@@ -19,7 +19,7 @@ get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
   FROM phconccolor_View_1
   ORDER BY phconceniidref, colormoistst;"
   
-  channel <- soilDB:::.openNASISchannel()
+  channel <- .openNASISchannel()
   
   # toggle selected set vs. local DB
   if(SS == FALSE) {
