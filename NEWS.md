@@ -1,3 +1,6 @@
+# soilDB 2.5.2 (2020-02-05)
+  * add `get_concentrations_from_NASIS_db()` and `get_phfmp_from_NASIS_db()` for fetching Pedon Horizon Concentrations and Field Measured Properties from NASIS local database
+  
 # soilDB 2.5.1 (2020-01-29)
   * bugfix for `fetchNASIS(from='components', fill=TRUE, rmHzErrors=TRUE)` in context of new `::hzDepthTests()` and non-unique `chiid` due to `NA` values introduced by `fill`
   

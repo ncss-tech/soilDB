@@ -17,7 +17,9 @@
 \alias{get_projectmapunit_from_NASIS}
 \alias{get_component_diaghz_from_NASIS_db}
 \alias{get_mutext_from_NASIS_db}
+\alias{get_phfmp_from_NASIS_db}
 \alias{get_RMF_from_NASIS_db}
+\alias{get_concentrations_from_NASIS_db}
 
 \alias{fetchVegdata}
 \alias{get_vegplot_from_NASIS_db}
