@@ -93,9 +93,9 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 	    # simplify color data: 1 row / horizon, from morphologic data tables
 	    x.colors <- simplifyColorData(m$phcolor, id.var = 'labsampnum', wt='colorpct')
 	    
-	    # merge color data into SPC
+	    # replace horizon data in h
 	    hh <- join(hh, x.colors, by='labsampnum', type='left', match='first')
-	    horizons(h) <- hh
+	    slot(h, 'horizons') <- hh
 	  }
 	  
 	} else m <- NULL
