@@ -6,7 +6,7 @@ test_that("fetchKSSL() works", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') )  {
     skip("in-house testing only")
   }
   
@@ -28,7 +28,7 @@ test_that("fetchKSSL() returns an SPC or list", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') )  {
     skip("in-house testing only")
   }
   
@@ -49,7 +49,7 @@ test_that("fetchKSSL() returns reasonable data", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') )  {
     skip("in-house testing only")
   }
   
@@ -67,7 +67,7 @@ test_that("fetchKSSL() returns data associated with named series (sierra)", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') )  {
     skip("in-house testing only")
   }
   
@@ -84,7 +84,7 @@ test_that("fetchKSSL() returns NULL with bogus query", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') )  {
     skip("in-house testing only")
   }
   
@@ -101,7 +101,7 @@ test_that("fetchKSSL() fails gracefully when morphology data are missing", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') )  {
     skip("in-house testing only")
   }
   

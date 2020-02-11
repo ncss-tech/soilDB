@@ -7,7 +7,7 @@ test_that("SDA_query() works", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') )  {
     skip("in-house testing only")
   }
   
@@ -42,7 +42,7 @@ test_that("SDA_query() returns expected result", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') ) {
     skip("in-house testing only")
   }
   
@@ -63,7 +63,7 @@ test_that("SDA_query() SQL error / no results -> NULL", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') ) {
     skip("in-house testing only")
   }
   
@@ -83,7 +83,7 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') ) {
     skip("in-house testing only")
   }
   
@@ -103,7 +103,7 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') ) {
     skip("in-house testing only")
   }
   
@@ -121,7 +121,7 @@ test_that("SDA_query() interprets column names", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') ) {
     skip("in-house testing only")
   }
   
@@ -141,7 +141,7 @@ test_that("SDA_query() interprets data type correctly", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') ) {
     skip("in-house testing only")
   }
   
@@ -166,7 +166,7 @@ test_that("SDA_query() works with multi-line records", {
   
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(! soilDB:::.local_NASIS_defined()) {
+  if( ! getOption('.soilDB_testNetworkFunctions') ) {
     skip("in-house testing only")
   }
   
