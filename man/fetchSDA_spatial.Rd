@@ -4,8 +4,13 @@
 \alias{fetchSDA_spatial}
 \title{Query SDA and Return Spatial Data}
 \usage{
-fetchSDA_spatial(x, by.col = "mukey", method = "feature",
-  add.fields = NULL, chunk.size = 10)
+fetchSDA_spatial(
+  x,
+  by.col = "mukey",
+  method = "feature",
+  add.fields = NULL,
+  chunk.size = 10
+)
 }
 \arguments{
 \item{x}{A vector of MUKEYs or national mapunit symbols.}
