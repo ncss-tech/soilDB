@@ -4,6 +4,12 @@ soilDB.env <- new.env(hash=TRUE, parent = parent.frame())
 
 # safely register some options at package load time
 .onLoad <- function(libname, pkgname) {
+  
+  ## TODO: normalize these option names
+  # set to FALSE at CRAN submission time: do not test APIs, this protects from API failures
+  # set to TRUE for testing non-NASIS components on machines that don't have local ODBC connection setup
+  options(.soilDB_testNetworkFunctions=TRUE)
+  
   # function verbosity
   options(soilDB.verbose=FALSE)
   
