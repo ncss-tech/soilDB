@@ -10,6 +10,8 @@ importFrom("utils", "URLencode", "download.file", "object.size",
              "read.csv", "read.table", "setTxtProgressBar",
              "txtProgressBar", "write.table", "type.convert")
 
+importFrom("methods", "slot<-")
+
 importFrom(reshape2, 
   dcast,
   melt
