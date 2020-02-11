@@ -21,27 +21,6 @@ getHzErrorsPedonPC(dsn, strict=TRUE)
 \note{This fuction attempts to do most of the boilerplate work when extracting site/horizon data from a PedonPC or local NASIS database. Pedons that have errors in their horizonation are excluded from the returned object, however, their IDs are printed on the console. See \code{\link{getHzErrorsPedonPC}} for a simple approach to identifying pedons with problematic horizonation. Records from the 'taxhistory' table are selected based on 1) most recent record, or 2) record with the least amount of missing data.}
 
 \seealso{\code{\link{get_hz_data_from_pedon_db}}}
-\examples{
-\donttest{
-if(require(aqp)) {
-  # path to local PedonPC back-end DB
-  dsn <- "S:/Service_Center/NRCS/pedon/pedon.accdb"
-  
-    if(file.exists(dsn)) {
-      # get routinely used soil data SoilProfileCollection object
-      f <- fetchPedonPC(dsn)
-      
-      # determine which profiles have densic contacts
-      idx <- which(f$densic.contact)
-      
-      # plot only those profiles with densic contact
-      if(length(idx))
-        plot(f[idx, ], name='hzname')
-    }
-}
-}
-}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
+
 \keyword{manip}
 

@@ -72,53 +72,7 @@ See \code{\link{getHzErrorsNASIS}} for a simple approach to identifying pedons w
 
 See the \href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html}{NASIS component tutorial}, and \href{http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.html}{NASIS pedon tutorial} for more information.}
 
-\examples{
-\donttest{
-# check required packages
-if(require("aqp") & requireNamespace("RODBC")) {
 
-  # test that NASIS db connection is set up
-  # note that you must setup this connection ahead of time
-  # see inst/doc/setup_ODBC_local_NASIS.pdf
-  if(any(grepl(names(RODBC::odbcDataSources()), pattern="nasis_local"))) {
-  
-    ## 1. fetchNASIS(from='pedon') NASIS setup
-    # query depends on some pedon data in your selected set
-    
-    f <- try(fetchNASIS(from = 'pedons'))
-    # note: wrap in try() to capture error in case of empty selected set
-    
-    # plot only those profiles with densic contact
-    if(!inherits(f,'try-error')) {
-    
-      # which pedons have densic.contact==TRUE
-      idx <- which(f$densic.contact)
-      
-      # if there are any pedons with densic contacts, plot them
-      if(length(idx))
-        plot(f[idx, ], name='hzname')
-  
-    } else { message(f[1]) }
-    
-    ## 2. fetchNASIS(from='component') NASIS setup:
-    # perform a DMU-* query against the national database
-    
-    fc <- try(fetchNASIS(from = 'components'))
-    # note: wrap in try() to capture error in case of empty selected set
-    
-    ## 3. fetchNASIS(from='pedon_report') NASIS setup:
-    # run the 11-IND NASIS report 'fetchNASIS' against the national database
-    # the result will automatically be opened and saved as fetchNASIS.txt
-    # in NASIS Temp folder
-    
-    # the fetchNASIS.txt fileis read by fetchNASIS(from = 'pedon_report')
-    # alternate: run offline against national db and supply `url` argument
-    try(f <- fetchNASIS(from = 'pedon_report'))
-    # note: wrap in try() to capture error in case of empty selected set
-  }
-}
-}
-}
   
 
 \keyword{manip}
