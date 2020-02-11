@@ -46,6 +46,10 @@ Function arguments (\code{series}, \code{mlra}, etc.) are NOT vectorized: the fi
 if(requireNamespace("curl") &
     curl::has_internet()) {
     
+    library(aqp)
+    library(plyr)
+    library(reshape2)
+    
     # search by series name
     s <- fetchKSSL(series='auburn')
     
@@ -56,19 +60,11 @@ if(requireNamespace("curl") &
     length(s)
     
     # plot 
-    if(requireNamespace("sp")) {
-      par(mar=c(0,0,0,0))
-      sp::plot(s, name='hzn_desgn', max.depth=150)
-    }
+    plotSPC(s, name='hzn_desgn', max.depth=150)
+    
     ##
     ## morphologic data
     ##
-    
-    library(soilDB)
-    library(aqp)
-    library(plyr)
-    library(reshape2)
-    
     
     # get lab and morphologic data
     s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE)
