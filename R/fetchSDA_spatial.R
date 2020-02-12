@@ -106,7 +106,7 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method='feature',
       }
     } else {
       message("no spatial data found for: ", 
-              paste0(mukey.list[idx], collapse=""),  call.=FALSE)
+              paste0(mukey.list[idx], collapse=","))
     }
       
   }
