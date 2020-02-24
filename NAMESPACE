@@ -17,8 +17,6 @@ importFrom(reshape2,
   melt
 )
 
-import(rgdal)
-
 importFrom(raster, 
   extent
 )
