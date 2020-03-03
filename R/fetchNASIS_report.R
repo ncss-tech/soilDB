@@ -97,7 +97,8 @@
     suppressWarnings(featdepb <- unlist(lapply(x, function(x) as.integer(x[2]))))
     data.frame(featdept, featdepb)
   }
-  pediagfeatures <- cbind(pediagfeatures[c("peiid", "featkind")], featdep)  
+  pediagfeatures <- cbind(pediagfeatures[c("peiid", "featkind")], featdep)
+  pediagfeatures$featkind <- gsub("\\.", " ", pediagfeatures$featkind)
   
   diagnostic_hz(h) <- pediagfeatures
   
