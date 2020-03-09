@@ -23,7 +23,7 @@ get_mapunit_from_SDA(WHERE = NULL,
                      )
 
 get_component_from_SDA(WHERE = NULL, duplicates = FALSE, childs = TRUE,
-                       droplevels = TRUE,
+                       droplevels = TRUE, nullFragsAreZero = TRUE,
                        stringsAsFactors = default.stringsAsFactors()
                        )
                        

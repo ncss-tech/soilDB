@@ -4,7 +4,7 @@
 # https://github.com/ncss-tech/soilDB/issues/36
 
 get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE, 
-                                   droplevels = TRUE,
+                                   droplevels = TRUE, nullFragsAreZero = TRUE,
                                    stringsAsFactors = default.stringsAsFactors()
                                    ) {
   if(!duplicates & grepl(WHERE, pattern = "mukey")[1])
@@ -17,19 +17,35 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   c.vars <- "cokey, compname, comppct_r, compkind, majcompflag, localphase, slope_r, drainagecl, hydricrating, elev_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, earthcovkind1, earthcovkind2, erocl, tfact, wei, weg, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition"
   es.vars <- "ecoclassname, ecoclasstypename, ecoclassref, ecoclassid"
 
-  q.component <- paste("SELECT", if (duplicates == FALSE) { "DISTINCT" } else { "mu.mukey AS mukey," }, "mu.nationalmusym,", c.vars, ",", es.vars,
-      
-  "FROM legend l INNER JOIN
-       mapunit mu ON mu.lkey = l.lkey INNER JOIN",
-  
-  if (duplicates == FALSE) {
-    paste("
-    (SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2 FROM mapunit GROUP BY nationalmusym) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym 
-      INNER JOIN (SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu2.mukey2 
-      LEFT OUTER JOIN (SELECT cokey AS cokey2,", es.vars, "FROM coecoclass WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')) AS ces ON c.cokey = ces.cokey2")
-  } else {
-    paste("
-    (SELECT", c.vars, ", mukey AS mukey2 FROM component) AS c ON c.mukey2 = mu.mukey 
+  q.component <- paste(
+    
+    "SELECT", 
+    if (duplicates == FALSE) { 
+      "DISTINCT" } else {"mu.mukey AS mukey," }, 
+    "mu.nationalmusym,", c.vars, ",", es.vars,
+    
+    "FROM 
+     legend  l                      INNER JOIN
+     mapunit mu ON mu.lkey = l.lkey INNER JOIN",
+    
+    if (duplicates == FALSE) { paste("
+    (SELECT nationalmusym AS nationalmusym2, MIN(mukey) AS mukey2 
+     
+     FROM mapunit 
+     GROUP BY nationalmusym
+     ) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN 
+     (SELECT", c.vars, ", mukey AS mukey2 
+      FROM component
+     ) AS c ON c.mukey2 = mu2.mukey2                   LEFT OUTER JOIN 
+     (SELECT cokey AS cokey2,", es.vars, 
+     "FROM coecoclass 
+      WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')
+     ) AS ces ON c.cokey = ces.cokey2")
+    } else {
+      paste("
+    (SELECT", c.vars, ", mukey AS mukey2 
+     FROM component
+    ) AS c ON c.mukey2 = mu.mukey 
       LEFT OUTER JOIN (SELECT cokey AS cokey2,", es.vars, "FROM coecoclass WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')) AS ces ON c.cokey = ces.cokey2")
   }
           
@@ -69,21 +85,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
     
     ORDER BY co.cokey, pmg.copmgrpkey, pmorder"
     )
-  
-  
-  # append child tables
-  if (childs == TRUE) {
-    
-    # exec query
-    d.pm <- SDA_query(q.pm)
-    
-    # prep
-    d.pm <- .copm_prep(d.pm, db = "SDA")
-    
-    # merge
-    d.component <- merge(d.component, d.pm, by = "cokey", all.x = TRUE)
-    }
-  
+
   
   
   # landform
@@ -120,17 +122,151 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   if (childs == TRUE) {
     
     # exec query
+    d.pm    <- SDA_query(q.pm)
     d.cogmd <- SDA_query(q.lf)
+    d.cosrf <- .get_cosurffrags_from_SDA(unique(d.component$cokey), nullFragsAreZero = nullFragsAreZero)
     
     # prep
+    d.pm    <- .copm_prep(d.pm, db = "SDA")
     d.cogmd <- .cogmd_prep(d.cogmd, db = "SDA")
     
     # merge
+    d.component <- merge(d.component, d.pm,    by = "cokey", all.x = TRUE)
     d.component <- merge(d.component, d.cogmd, by = "cokey", all.x = TRUE)
+    d.component <- merge(d.component, d.cosrf, by = "cokey", all.x = TRUE)
+    
+    # r.rf.data.v2 nullFragsAreZero = TRUE
+    idx <- grepl("surface_", names(d.component))
+    if (nullFragsAreZero == nullFragsAreZero) {
+      d.component[idx] <- lapply(d.component[idx], function(x) ifelse(is.na(x), 0, x))
+    }
+    
   }
   
+
   # done
   return(d.component)
+}
+
+
+
+.get_cosurffrags_from_SDA <- function(cokey, nullFragsAreZero = nullFragsAreZero) {
+  
+  q <- paste("
+  
+  -- find sfragsize_r
+  CREATE TABLE #RF1 (cokey INT, cosurffragskey INT, sfragcov_r REAL, 
+                     shape CHAR(7), para INT, nonpara INT, fragsize_r2 INT);
+  
+  INSERT INTO  #RF1 (cokey, cosurffragskey, sfragcov_r, shape, para, nonpara, fragsize_r2)
+  
+  SELECT
+  cokey, cosurffragskey, sfragcov_r,
+  -- shape
+  CASE WHEN sfragshp = 'Nonflat' OR sfragshp IS NULL THEN 'nonflat' ELSE 'flat' END shape,
+  -- hardness
+  CASE WHEN sfraghard IN ('Extremely weakly cemented', 'Very weakly cemented', 'Weakly cemented', 'Weakly cemented*', 'Moderately cemented', 'Moderately cemented*', 'soft')             THEN 1 ELSE NULL END para,
+  CASE WHEN sfraghard IN ('Strongly cemented', 'Strongly cemented*', 'Very strongly cemented', 'Extremely strong', 'Indurated', 'hard')
+       OR sfraghard IS NULL 
+       THEN 1 ELSE NULL END nonpara,
+  -- sfragsize_r
+  CASE WHEN sfragsize_r IS NOT NULL THEN sfragsize_r
+       WHEN sfragsize_r IS NULL     AND sfragsize_h IS NOT NULL AND sfragsize_l IS NOT NULL
+       THEN (sfragsize_h + sfragsize_l) / 2
+       WHEN sfragsize_h IS NOT NULL THEN sfragsize_h
+       WHEN sfragsize_l IS NOT NULL THEN sfragsize_l
+       ELSE NULL END
+       sfragsize_r2
+       
+  FROM cosurffrags
+  
+  WHERE cokey IN (", paste0(cokey, collapse = ", "), ")
+  
+  ORDER BY cokey, cosurffragskey;
+  
+  
+  -- compute logicals
+  CREATE TABLE #RF2 (cokey INT, cosurffragskey INT, sfragcov_r REAL, para INT, nonpara INT,                      fine_gravel INT, gravel INT, cobbles INT, stones INT, boulders INT,                        channers INT, flagstones INT, unspecified INT
+                     );
+  INSERT INTO  #RF2 (cokey, cosurffragskey, sfragcov_r, para, nonpara, 
+                     fine_gravel, gravel, cobbles, stones, boulders, channers, flagstones,
+                     unspecified
+                     )
+  SELECT 
+  cokey, cosurffragskey, sfragcov_r, para, nonpara,
+  -- fragments
+  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 5   AND shape = 'nonflat' 
+       THEN 1 ELSE NULL 
+       END fine_gravel,
+  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 76  AND shape = 'nonflat' 
+       THEN 1 ELSE NULL 
+       END gravel,
+  CASE WHEN   fragsize_r2 > 76  AND fragsize_r2 <= 250 AND shape = 'nonflat' 
+       THEN 1 ELSE NULL 
+       END cobbles,
+  CASE WHEN ((fragsize_r2 > 250 AND fragsize_r2 <= 600 AND shape = 'nonflat') OR
+            (fragsize_r2 >= 380 AND fragsize_r2 < 600 AND shape = 'flat'))
+       THEN 1 ELSE NULL END stones,
+  CASE WHEN   fragsize_r2 > 600 
+       THEN 1 ELSE NULL 
+       END boulders,
+  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 150 AND shape = 'flat' 
+       THEN 1 ELSE NULL 
+       END channers,
+  CASE WHEN   fragsize_r2 > 150 AND fragsize_r2 <= 380 AND shape = 'flat' 
+       THEN 1 ELSE NULL 
+       END flagstones,
+  CASE WHEN   fragsize_r2 IS NULL
+       THEN 1 ELSE NULL 
+       END unspecified 
+  
+  FROM #RF1
+                          
+  ORDER BY cokey, cosurffragskey;
+  
+  
+  -- summarize rock fragments
+  SELECT
+  cokey,
+  -- nonpara rock fragments
+  SUM(sfragcov_r * fine_gravel * nonpara)  surface_fine_gravel,
+  SUM(sfragcov_r * gravel      * nonpara)  surface_gravel,
+  SUM(sfragcov_r * cobbles     * nonpara)  surface_cobbles,
+  SUM(sfragcov_r * stones      * nonpara)  surface_stones,
+  SUM(sfragcov_r * boulders    * nonpara)  surface_boulders,
+  SUM(sfragcov_r * channers    * nonpara)  surface_channers,
+  SUM(sfragcov_r * flagstones  * nonpara)  surface_flagstones,
+  -- para rock fragments
+  SUM(sfragcov_r * fine_gravel * para)     surface_parafine_gravel,
+  SUM(sfragcov_r * gravel      * para)     surface_paragravel,
+  SUM(sfragcov_r * cobbles     * para)     surface_paracobbles,
+  SUM(sfragcov_r * stones      * para)     surface_parastones,
+  SUM(sfragcov_r * boulders    * para)     surface_paraboulders,
+  SUM(sfragcov_r * channers    * para)     surface_parachanners,
+  SUM(sfragcov_r * flagstones  * para)     surface_paraflagstones,
+  -- unspecified
+  SUM(sfragcov_r * unspecified)            surface_unspecified,
+  -- total_frags_pct_para
+  SUM(sfragcov_r               * nonpara)  surface_total_frags_pct_nopf,
+  -- total_frags_pct
+  SUM(sfragcov_r)                          surface_total_frags_pct
+  
+  FROM #RF2
+  
+  GROUP BY cokey
+  
+  ORDER BY cokey;
+  
+  -- cleanup
+  DROP TABLE #RF1;
+  DROP TABLE #RF2;
+  ")
+  
+  d <- SDA_query(q)
+  
+
+  return(d)
+  
 }
 
 
@@ -310,6 +446,7 @@ get_mapunit_from_SDA <- function(WHERE = NULL,
   # done
   return(d.mapunit)
 }
+
 
 
 
@@ -520,6 +657,7 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                                         duplicates = duplicates, 
                                         childs = childs, 
                                         droplevels = droplevels,
+                                        nullFragsAreZero = TRUE,
                                         stringsAsFactors = stringsAsFactors
                                         )
   # f.mapunit   <- get_mapunit_from_SDA(WHERE, stringsAsFactors = stringsAsFactors)
