@@ -47,6 +47,10 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 	hz.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&what=horizon', f))
 	morph.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=nasis_morphologic', f)) 
 	
+	## still experimental and pointing to the DEV version
+	extended.url <- URLencode(paste0('https://soilmap2-1.lawr.ucdavis.edu/dylan/soilweb/soil_web/kssl/query.php?gzip=1&format=json&what=extended', f))
+	
+	
   # init temp files
 	tf.site <- tempfile()
 	tf.hz <- tempfile()
