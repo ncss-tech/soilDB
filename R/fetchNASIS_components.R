@@ -37,7 +37,6 @@
       filled.ids <- as.character(f.chorizon$coiid[filled.idx])
       #print(dput(filled.ids))
     }
-      
     
     # which are the good (valid) ones?
     good.ids <- as.character(f.chorizon.test$coiid[which(f.chorizon.test$hz_logic_pass)])
@@ -60,7 +59,7 @@
     # upgrade to SoilProfilecollection
     depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
   } else {
-    warning("No horizon data in NASIS component query result.", call.=FALSE)
+    stop("No horizon data in NASIS component query result.", call.=FALSE)
   }
   
   # add site data to object
