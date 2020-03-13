@@ -14,6 +14,7 @@ pedon_id=NULL, pedon_key=NULL, returnMorphologicData=FALSE, simplifyColors=FALSE
   \item{pedon_id}{a single user pedon ID}
   \item{pedon_key}{a single KSSL internal pedon ID}
   \item{returnMorphologicData}{optionally request basic morphologic data, see details section}
+  \item{returnGeochemicalData}{optionally request geochemical, optical and XRD/thermal data, see details section}
   \item{simplifyColors}{simplify colors (from morphologic data) and join with horizon data}
 }
 
@@ -24,6 +25,8 @@ pedon_id=NULL, pedon_key=NULL, returnMorphologicData=FALSE, simplifyColors=FALSE
 Series-queries are case insensitive. Series name is based on the "correlated as" field (from KSSL snapshot) when present.  The "sampled as" classification was promoted to "correlated as" if the "correlated as" classification was missing.
 
 When \code{returnMorphologicData} is TRUE, the resulting object is a list. The standard output from \code{fetchKSSL} (\code{SoilProfileCollection} object) is stored in the named element "SPC". The additional elements are basic morphologic data: horizon colors, rock fragments, pores, and structure. There is a 1:many relationship between the horizon data in "SPC" and the additional dataframes in \code{morph}. See examples for ideas on how to "flatten" these tables.
+
+When \code{returnGeochemicalData} is TRUE, the resulting object is a list. The standard output from \code{fetchKSSL} (\code{SoilProfileCollection} object) is stored in the named element "SPC". The additional elements are geochemical and mineralogy analysis tables, specifically: geochemical/elemental analyses "geochem", optical mineralogy "optical", and X-ray diffraction / thermal "xrd_thermal". \code{returnGeochemicalData} will include additional dataframes \code{geochem}, \code{optical}, and \code{xrd_thermal} in list result. 
 
 Setting \code{simplifyColors=TRUE} will automatically flatten the soil color data and join to horizon level attributes.
 

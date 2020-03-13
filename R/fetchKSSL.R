@@ -1,6 +1,6 @@
 
 # experimental function for getting basic KSSL data from CASRL
-fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, pedon_id=NULL, pedon_key=NULL, returnMorphologicData=FALSE, simplifyColors=FALSE) {
+fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, pedon_id=NULL, pedon_key=NULL, returnMorphologicData=FALSE, returnGeochemicalData=FALSE, simplifyColors=FALSE) {
 	
 	# sanity-check: user must supply some kind of criteria
 	if(missing(series) & missing(bbox) & missing(mlra) & missing(pedlabsampnum) & missing(pedon_id) & missing(pedon_key))
@@ -77,6 +77,7 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 	site(h) <- s
 	
 	# 2016-04-22: basic morphologic data from NASIS
+	m <- NULL
 	if(returnMorphologicData) {
 	  # check for required packages
 	  if(!requireNamespace('jsonlite', quietly=TRUE))
@@ -102,7 +103,25 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 	    slot(h, 'horizons') <- hh
 	  }
 	  
-	} else m <- NULL
+	}
+	
+	geochem <- NULL
+	optical <- NULL
+	xrd_thermal <- NULL
+	# get geochemical, optical and XRD data from extended query
+	if(returnGeochemicalData) {
+	  # check for required packages
+	  if(!requireNamespace('jsonlite', quietly=TRUE))
+	    stop('please install the `jsonlite` packages', call.=FALSE)
+	  
+	  
+	  ## note: missing data are returned as FALSE
+	  # get list of dataframe objects
+	  ext <- jsonlite::fromJSON(extended.url)
+	  geochem <- ext$geochem
+	  optical <- ext$optical
+	  xrd_thermal <- ext$xrd_thermal
+	}
 	
 	# set KSSL-specific horizon identifier
 	## WHOOPS -- turns out this is nonunique 0.1% of the time AGB 2019/11/14
@@ -123,7 +142,11 @@ fetchKSSL <- function(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, ped
 	# some feedback via message:
 	message(paste(length(h), ' pedons loaded (', res.size, ' Mb transferred)', sep=''))
   
-	if(returnMorphologicData)
+	if(returnMorphologicData & returnGeochemicalData)
+	  return(list(SPC=h, morph=m, geochem=geochem, optical=optical, xrd_thermal=xrd_thermal))	
+	else if(returnGeochemicalData)
+	  return(list(SPC=h, geochem=geochem, optical=optical, xrd_thermal=xrd_thermal))
+	else if(returnMorphologicData)
 	  return(list(SPC=h, morph=m))
 	else
 	  return(h)
