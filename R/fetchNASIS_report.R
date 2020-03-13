@@ -54,8 +54,8 @@
   
   
   # fix problems
-  .$phorizon <- .fix_problems(site_data  = .$site,
-                              hz_data    = .$phorizon,
+  .$phorizon <- .fix_problems(hz_data    = .$phorizon,
+                              site_data  = .$site,
                               pedon_id   = "peiid",
                               hzdept     = "hzdept",
                               hzdepb     = "hzdepb",
@@ -312,8 +312,9 @@
   bad.pedon.ids <- site_data[[pedon_id]][which(site_data[[pedon_id]] %in% bad.ids)]
   
   # optionally filter pedons WITH NO horizonation inconsistencies
-  if (rmHzErrors)
+  if (rmHzErrors) {
     hz_data <- hz_data[which(hz_data[[pedon_id]] %in% good.ids), ]
+  }
   
   # keep track of those pedons with horizonation errors
   assign('bad.pedon.ids', 
