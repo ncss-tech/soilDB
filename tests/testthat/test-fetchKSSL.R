@@ -118,3 +118,30 @@ test_that("fetchKSSL() fails gracefully when morphology data are missing", {
   
 })
 
+test_that("fetchKSSL() geochem result", {
+  
+  # handy code snippet where res is KSSL data from mlra 17
+  # dput(site(res$SPC)[unique(horizons(res$SPC)[horizons(res$SPC)$labsampnum %in% filter_geochem(res$geochem, 
+  #                    major_element_method = "4H1b", trace_element_method = "4H1a")$labsampnum,]$pedon_key) %in%
+  #                      site(res$SPC)$pedon_key,]$pedlabsampnum)
+  
+  skip_if_offline()
+  
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if( ! getOption('.soilDB_testNetworkFunctions') )  {
+    skip("in-house testing only")
+  }
+  # get geochemical data for a single pedlabsampnum, do some basic filtering
+  res <- fetchKSSL(pedlabsampnum = c("93P0249"), returnGeochemicalData = TRUE)
+  
+  expect_true(all(filter_geochem(res$geochem, prep_code='S')$prep_code == 'S'))
+  
+  expect_true(all(na.omit(filter_geochem(res$geochem, prep_code='S', 
+                                         major_element_method = "4H1b", 
+                                         trace_element_method = "4H1a")$prep_code == "S")))
+  
+  expect_true(all(na.omit(filter_geochem(res$geochem, 
+                                          major_element_method = "4H1b", 
+                                          trace_element_method = "4H1a")$prep_code == "S")))
+})
