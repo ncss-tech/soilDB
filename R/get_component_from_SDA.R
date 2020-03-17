@@ -264,7 +264,32 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   
   d <- SDA_query(q)
   
-
+  if (is.null(d)) {
+    d <- data.frame(
+      cokey = cokey[1], 
+      surface_fine_gravel = as.integer(NA), 
+      surface_gravel      = as.integer(NA), 
+      surface_cobbles     = as.integer(NA), 
+      surface_stones      = as.integer(NA), 
+      surface_boulders    = as.integer(NA), 
+      surface_channers    = as.integer(NA), 
+      surface_flagstones  = as.integer(NA),
+      surface_parafine_gravel = as.integer(NA), 
+      surface_paragravel      = as.integer(NA), 
+      surface_paracobbles     = as.integer(NA), 
+      surface_parastones      = as.integer(NA), 
+      surface_paraboulders    = as.integer(NA), 
+      surface_parachanners    = as.integer(NA), 
+      surface_paraflagstones  = as.integer(NA),
+      surface_unspecified     = as.integer(NA), 
+      surface_total_frags_pct_nopf = as.integer(NA), 
+      surface_total_frags_pct      = as.integer(NA))
+  }
+  
+  # set NA values as integer NA
+  idx <- sapply(d, function(x) all(is.na(x)))
+  d[idx] <- lapply(d[idx], function(x) x = as.integer(NA))
+  
   return(d)
   
 }
