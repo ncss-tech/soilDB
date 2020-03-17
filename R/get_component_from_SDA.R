@@ -296,7 +296,7 @@ get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = F
        component co2                       LEFT OUTER JOIN
        cointerp  coi2 ON coi2.cokey = co2.cokey
        WHERE co2.cokey IN ('", paste0(d.component$cokey, collapse = "', '"), "')",
-                       if (!is.null(mrulename)) paste0(" AND mrulename = '", mrulename), " 
+                       if (!is.null(mrulename)) paste0(" AND mrulename = '", mrulename, "'"), " 
        GROUP BY co2.cokey, coi2.mrulekey
       ) coi22 ON coi22.cokey = co.cokey AND coi22.mrulekey = coi.mrulekey
   
