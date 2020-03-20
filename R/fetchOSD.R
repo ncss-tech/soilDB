@@ -44,7 +44,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	# report missing data
   # no data condition: s == FALSE | h == FALSE
   # otherwise both will be a data.frame
-	if( (is.logical(s) & length(s) == 1) | (is.logical(h) & length(s) == 1)) {
+	if( (is.logical(s) & length(s) == 1) | (is.logical(h) & length(h) == 1)) {
 		message('query returned no data')
 	  return(NULL)
 	}
