@@ -102,6 +102,16 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	# standard or extended version?
 	if(extended) {
 	  # extended
+	  
+	  ## TODO: finish this and decide: report or filter
+	  # https://github.com/ncss-tech/soilDB/issues/128
+	  # check for series names missing from either SPC or extended data
+	  # unlist(
+	  #   lapply(res, function(i) { 
+	  #     if(inherits(i, 'data.frame')) i[['series']] 
+	  #   })
+	  # )
+	  
 	  # if available, split climate summaries into annual / monthly and add helper columns
 	  # FALSE if missing
 	  if(inherits(res$climate, 'data.frame')) {
