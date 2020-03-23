@@ -1,3 +1,6 @@
+# soilDB 2.5.3 (2020-03-22)
+ * `fetchKSSL` is now fully vectorized and builds on new SoilWeb JSON API
+
 # soilDB 2.5.2 (2020-02-05)
   * add `get_concentrations_from_NASIS_db()` and `get_phfmp_from_NASIS_db()` for fetching Pedon Horizon Concentrations and Field Measured Properties from NASIS local database
   
