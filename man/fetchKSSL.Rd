@@ -3,16 +3,17 @@
 \title{Fetch KSSL Data}
 \description{Get soil characterization and morphologic data via BBOX, MLRA, or series name query, from the KSSL database.}
 
-\usage{fetchKSSL(series=NULL, bbox=NULL, mlra=NULL, pedlabsampnum=NULL, 
-pedon_id=NULL, pedon_key=NULL, returnMorphologicData=FALSE, simplifyColors=FALSE)}
+\usage{fetchKSSL(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, 
+pedon_id=NA, pedon_key=NA, returnMorphologicData=FALSE, returnGeochemicalData=FALSE,
+simplifyColors=FALSE)}
 
 \arguments{
-  \item{series}{a single soil series name, case insensitive}
+  \item{series}{vector of soil series names, case insensitive}
   \item{bbox}{a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}}
-  \item{mlra}{a single MLRA ID, e.g. "18" or "22A"}
-  \item{pedlabsampnum}{a single KSSL pedon lab sample number}
-  \item{pedon_id}{a single user pedon ID}
-  \item{pedon_key}{a single KSSL internal pedon ID}
+  \item{mlra}{vector of MLRA IDs, e.g. "18" or "22A"}
+  \item{pedlabsampnum}{vector of KSSL pedon lab sample number}
+  \item{pedon_id}{vector of user pedon ID}
+  \item{pedon_key}{vector of KSSL internal pedon ID}
   \item{returnMorphologicData}{optionally request basic morphologic data, see details section}
   \item{returnGeochemicalData}{optionally request geochemical, optical and XRD/thermal data, see details section}
   \item{simplifyColors}{simplify colors (from morphologic data) and join with horizon data}
@@ -20,7 +21,7 @@ pedon_id=NULL, pedon_key=NULL, returnMorphologicData=FALSE, simplifyColors=FALSE
 
 
 
-\details{This is an experimental interface to a subset for the most commonly used data from a snapshot of KSSL (lab characterization) and NASIS (morphologic) data. The snapshots were last updated September 2018 (KSSL / NASIS). 
+\details{This is an experimental interface to a subset for the most commonly used data from a snapshot of KSSL (lab characterization) and NASIS (morphologic) data. 
 
 Series-queries are case insensitive. Series name is based on the "correlated as" field (from KSSL snapshot) when present.  The "sampled as" classification was promoted to "correlated as" if the "correlated as" classification was missing.
 
@@ -30,13 +31,12 @@ When \code{returnGeochemicalData} is TRUE, the resulting object is a list. The s
 
 Setting \code{simplifyColors=TRUE} will automatically flatten the soil color data and join to horizon level attributes.
 
-Function arguments (\code{series}, \code{mlra}, etc.) are NOT vectorized: the first element of a vector will be used when supplied as a filter. See the \href{http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html}{fetchKSSL tutorial} for ideas on how to iterate over a set of IDs.
-)
+Function arguments (\code{series}, \code{mlra}, etc.) are fully vectorized.
 }
 
 \value{a \code{SoilProfileCollection} object when \code{returnMorphologicData} is FALSE, otherwise a list.}
 
-\author{D.E. Beaudette}
+\author{D.E. Beaudette and A.G. Brown}
 \note{SoilWeb maintains a snapshot of these KSSL and NASIS data. The SoilWeb snapshot was developed using methods described here: \url{https://github.com/dylanbeaudette/process-kssl-snapshot}. Please use the link below for the live data.}
 
 \references{

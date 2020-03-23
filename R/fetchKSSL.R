@@ -153,7 +153,7 @@
 
 
 
-
+# fully vectorized
 fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA, pedon_key=NA, returnMorphologicData=FALSE, returnGeochemicalData=FALSE, simplifyColors=FALSE) {
   
   if(!requireNamespace('jsonlite', quietly=TRUE))
