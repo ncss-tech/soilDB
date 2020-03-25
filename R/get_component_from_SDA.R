@@ -139,10 +139,40 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
     idx <- grepl("surface_", names(d.component))
     if (nullFragsAreZero == nullFragsAreZero) {
       d.component[idx] <- lapply(d.component[idx], function(x) ifelse(is.na(x), 0, x))
+      }
+    }
+  
+  
+  # fix for multiple ecosites linked to 1 component
+  idx <- table(d.component$cokey) > 1
+  
+  if (any(idx)) {
+    
+    cokeys <- as.integer(names(idx[idx == TRUE]))
+    idx    <- d.component$cokey %in% cokeys
+    
+    assign('component.ecosite.problems', value = cokeys, envir = soilDB.env)
+    message("-> QC: multiple ecosites linked to 1 component use `get('component.ecosite.problems', envir = soilDB.env)` for related cokey values")
+    
+    nodups <- {
+      d.component[idx, ] ->.;
+      split(., .$cokey)  ->.;
+      lapply(., function(x) {
+        temp                  = x[1, ]
+        temp$ecoclassname     = paste0(x$ecoclassname, collapse = ", ")
+        temp$ecoclasstypename = paste0(x$ecoclasstypename, collapse = ", ")
+        temp$ecoclassref      = paste0(x$ecoclassref,  collapse = ", ")
+        temp$ecoclassid       = paste0(x$ecoclassid,   collapse = ", ")
+        return(temp)
+      }) ->.;
+      do.call("rbind", .) ->.;
+    }
+    d.component <- rbind(d.component[! idx, ], nodups)
+    d.component <- with(d.component, 
+                        d.component[order(nationalmusym, - comppct_r, compname), ]
+                        )
     }
     
-  }
-  
 
   # done
   return(d.component)
