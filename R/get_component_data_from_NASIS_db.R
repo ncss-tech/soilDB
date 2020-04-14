@@ -558,7 +558,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE) {
   
   q <- "SELECT coiidref as coiid, ovegclid, ovegclname, coothvegcl.recwlupdated
   FROM coothvegclass_View_1 coothvegcl
-  INNER JOIN othvegclass_View_1 as ovc ON ovc.ovegcliid = coothvegcl.ovegcliidref
+  INNER JOIN othvegclass as ovc ON ovc.ovegcliid = coothvegcl.ovegcliidref
   ORDER BY coiid;"
   
   # setup connection local NASIS
