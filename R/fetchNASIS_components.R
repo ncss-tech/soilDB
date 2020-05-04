@@ -20,6 +20,8 @@
   f.ecosite    <- get_component_esd_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
   f.diaghz     <- get_component_diaghz_from_NASIS_db(SS=SS)
   f.restrict   <- get_component_restrictions_from_NASIS_db(SS=SS)
+  
+  filled.ids <- character(0)
 
   # optionally test for bad horizonation... flag, and remove
   if(rmHzErrors & nrow(f.chorizon) > 0) {
@@ -32,8 +34,7 @@
     # therefore, only way to use fill effectively was with rmHzErrors=FALSE
     # which runs the risk of duplication in the case of data entry errors or other many:1 issues in comp
     filled.idx <- which(is.na(f.chorizon$chiid))
-    filled.ids <- character(0)
-    if(length(filled.idx)) {
+    if(length(filled.idx) > 0) {
       filled.ids <- as.character(f.chorizon$coiid[filled.idx])
       #print(dput(filled.ids))
     }
@@ -42,7 +43,7 @@
     good.ids <- as.character(f.chorizon.test$coiid[which(f.chorizon.test$hz_logic_pass)])
     bad.ids <- as.character(f.chorizon.test$coiid[which(!f.chorizon.test$hz_logic_pass)])
 
-    if(length(filled.ids)) {
+    if(length(filled.ids) > 0) {
       good.ids <- unique(c(good.ids, filled.ids))
       bad.ids <- unique(bad.ids[!bad.ids %in% filled.ids])
     }
@@ -55,7 +56,7 @@
     assign('component.hz.problems', value=bad.ids, envir=soilDB.env)
   } 
   
-  if(nrow(f.chorizon)) {
+  if(nrow(f.chorizon) > 0) {
     # upgrade to SoilProfilecollection
     depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
   } else {
@@ -102,12 +103,14 @@
       message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=soilDB.env)` for related coiid values")
   
   # set NASIS component specific horizon identifier
-  if(!fill & !length(filled.ids)) {
+  if(!fill & length(filled.ids) == 0) {
     res <- try(hzidname(f.chorizon) <- 'chiid')
     if(inherits(res, 'try-error')) {
       if(!rmHzErrors) {
         warning("cannot set `chiid` as unique component horizon key -- duplicate horizons present with rmHzErrors=FALSE")
-      } else warning("cannot set `chiid` as unique component horizon key -- defaulting to `hzID`")
+      } else {
+        warning("cannot set `chiid` as unique component horizon key -- defaulting to `hzID`")
+      }
     } 
   } else {
     warning("cannot set `chiid` as unique component horizon key - `NA` introduced by fill=TRUE", call.=F)
