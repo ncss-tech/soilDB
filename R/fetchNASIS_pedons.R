@@ -28,18 +28,18 @@
   ## join horizon + hz color: all horizons
   h <- join(hz_data, color_data, by='phiid', type='left')
   
-  # check for empty artifact summary and nullFragsAreZero
+  # check for empty fragment summary and nullFragsAreZero
   if(nullFragsAreZero & all(is.na(unique(extended_data$frag_summary$phiid))))
-    extended_data$frag_summary <- cbind(unique(h$phiid), extended_data$frag_summary[,-1])
+    extended_data$frag_summary <- cbind(phiid = unique(h$phiid), extended_data$frag_summary[,-1])
   
   ## join hz + fragment summary
   h <- join(h, extended_data$frag_summary, by='phiid', type='left')
   
   # check for empty artifact summary and nullFragsAreZero
   if(nullFragsAreZero & all(is.na(unique(extended_data$art_summary$phiid))))
-    extended_data$art_summary <- cbind(unique(h$phiid), extended_data$art_summary[,-1])
+    extended_data$art_summary <- cbind(phiid = unique(h$phiid), extended_data$art_summary[,-1])
   
-  # join hz + artifact
+  # join hz + artifact summary
   h <- join(h, extended_data$art_summary, by='phiid', type='left')
   
   ## fix some common problems
