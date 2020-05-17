@@ -629,9 +629,15 @@ get_comonth_from_NASIS_db <- function(SS=TRUE, fill=FALSE, stringsAsFactors = de
   # close connection
   RODBC::odbcClose(channel)
   
-  # fix month factor levels
-  # using 3-letter month names
-  d$month <- months(as.Date(paste0("2016-", d$month, "-01"), format="%Y-%B-%d"), abbreviate = TRUE)
+  # re-format month names
+  # only if > 0 rows of data
+  if(nrow(d) > 0) {
+    # using 3-letter month names
+    d$month <- months(as.Date(paste0("2016-", d$month, "-01"), format="%Y-%B-%d"), abbreviate = TRUE)
+  }
+  
+  ## these degrade gracefully when comonth data are missing
+  # calendar order 
   d$month <- factor(d$month, levels=c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
   
   # fix other factor levels
