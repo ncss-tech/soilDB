@@ -28,17 +28,6 @@ get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = 
   # set factor levels according to metadata domains
   d.cosoilmoist <- uncode(d.cosoilmoist, db = "SDA", stringsAsFactors = TRUE)
   
-  # refactoring frequency levels, not sure why these aren't sorted naturally
-  flod_lev <- levels(d.cosoilmoist$flodfreqcl)
-  pond_lev <- levels(d.cosoilmoist$pondfreqcl)
-  idx      <- c(1, 5, 2, 7, 3, 4, 6)
-  d.cosoilmoist <- within(d.cosoilmoist, {
-    flodfreqcl = levels(flodfreqcl)[as.integer(flodfreqcl)]
-    flodfreqcl = factor(flodfreqcl, levels = flod_lev[idx])
-    pondfreqcl = levels(pondfreqcl)[as.integer(pondfreqcl)]
-    pondfreqcl = factor(pondfreqcl, levels = pond_lev[idx])
-  })
-  
   # prep dataset: rename columns, impute empty values, stringsAsFactors
   d.cosoilmoist <- .cosoilmoist_prep(d.cosoilmoist, impute = impute, stringsAsFactors = stringsAsFactors)
   
