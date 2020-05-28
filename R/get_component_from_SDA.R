@@ -14,42 +14,39 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   # Joining in the fetch on derived_cokey doesn't work but should. There are duplicate components with the same combination of elements.
   # paste0("mu.nationalmusym + '_' + CAST(comppct_r AS VARCHAR) + '_' + compname + '-' + ISNULL(localphase, 'no_phase') AS derived_cokey")
   
-  c.vars <- "cokey, compname, comppct_r, compkind, majcompflag, localphase, slope_r, drainagecl, hydricrating, elev_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, earthcovkind1, earthcovkind2, erocl, tfact, wei, weg, nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, frostact, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition"
-  es.vars <- "ecoclassname, ecoclasstypename, ecoclassref, ecoclassid"
-
+  es.vars <- "ecoclasstypename, ecoclassref, ecoclassid, ecoclassname"
+  co.vars <- "cokey, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, erocl, earthcovkind1, earthcovkind2, elev_r, slope_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, hydgrp,  nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, tfact, wei, weg, corcon, corsteel, frostact, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition"
+  vars    <- paste0(unlist(strsplit(co.vars, "earthcovkind2,")), collapse = paste0("earthcovkind2, ", es.vars, ","))
+  
   q.component <- paste(
     
+    # excluding mukey conditionally and DISTINCT are necessary, otherwise querying on states like CA% exceed SDAs record limit
     "SELECT", 
-    if (duplicates == FALSE) { 
-      "DISTINCT" } else {"mu.mukey AS mukey," }, 
-    "mu.nationalmusym,", c.vars, ",", es.vars,
+    if (duplicates == FALSE) "DISTINCT" else "mu.mukey AS mukey,", 
+    "mu.nationalmusym,", vars,
     
     "FROM 
      legend  l                      INNER JOIN
      mapunit mu ON mu.lkey = l.lkey INNER JOIN",
     
-    if (duplicates == FALSE) { paste("
-    (SELECT nationalmusym AS nationalmusym2, MIN(mukey) AS mukey2 
-     
-     FROM mapunit 
-     GROUP BY nationalmusym
-     ) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN 
-     (SELECT", c.vars, ", mukey AS mukey2 
+    if (duplicates == FALSE) {
+    "(SELECT nationalmusym AS nationalmusym2, MIN(mukey) AS mukey2 
+      FROM mapunit 
+      GROUP BY nationalmusym
+     ) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN"
+      } else "",
+    
+    "(SELECT", co.vars, ", mukey AS mukey2 
       FROM component
-     ) AS c ON c.mukey2 = mu2.mukey2                   LEFT OUTER JOIN 
+      ) AS co ON co.mukey2 =", if (duplicates == FALSE) "mu2.mukey2" else "mu.mukey",
+    
+    "LEFT OUTER JOIN 
      (SELECT cokey AS cokey2,", es.vars, 
      "FROM coecoclass 
       WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')
-     ) AS ces ON c.cokey = ces.cokey2")
-    } else {
-      paste("
-    (SELECT", c.vars, ", mukey AS mukey2 
-     FROM component
-    ) AS c ON c.mukey2 = mu.mukey 
-      LEFT OUTER JOIN (SELECT cokey AS cokey2,", es.vars, "FROM coecoclass WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')) AS ces ON c.cokey = ces.cokey2")
-  }
-          
-  , "WHERE", WHERE,
+      ) AS ces ON ces.cokey2 = co.cokey
+    
+   WHERE", WHERE,
   
   "ORDER BY nationalmusym, comppct_r DESC, compname;")
   
@@ -68,7 +65,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   # presence of NA used to make it clear to user whether they need to set the duplicates flag TRUE, 
   # depending on their use case (i.e. need all unique MUKEYS, set duplicates=TRUE; need unique data? duplicates=FALSE)
   if(duplicates == FALSE) {
-    d.component$mukey <- NA
+    d.component <- cbind(mukey = NA, d.component)
   }
   
   # parent material
