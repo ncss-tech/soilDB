@@ -393,7 +393,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
   ## TODO: is this a good idea?
   # test for no data
   if(nrow(d) == 0)
-    stop('there are no records in your selected set!')
+    warning('there are no records in your selected set!', call. = FALSE)
   
   # recode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
