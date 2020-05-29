@@ -690,10 +690,15 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
   return(d.chorizon)
 }
 
-
 .get_diagnostics_from_SDA <- function(target_cokeys) {
   # query SDA to get corresponding codiagfeatures
   q <- paste0('SELECT * FROM codiagfeatures WHERE cokey IN ', format_SQL_in_statement(target_cokeys), ";")
+  return(SDA_query(q))
+}
+
+.get_restrictions_from_SDA <- function(target_cokeys) {
+  # query SDA to get corresponding corestrictions
+  q <- paste0('SELECT * FROM corestrictions WHERE cokey IN ', format_SQL_in_statement(target_cokeys), ";")
   return(SDA_query(q))
 }
 
@@ -720,8 +725,9 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                                        droplevels = droplevels
                                        )
   
-  # diagnostic features  
+  # diagnostic features & restrictions
   f.diag <- .get_diagnostics_from_SDA(f.component$cokey)
+  f.restr <- .get_restrictions_from_SDA(f.component$cokey)
   
   # optionally test for bad horizonation... flag, and remove
   if (rmHzErrors) {
@@ -762,6 +768,10 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
   # add diagnostics
   if(is.data.frame(f.diag)) {
     diagnostic_hz(f.chorizon) <- f.diag
+  }
+  # add restrictions
+  if(is.data.frame(f.restr)) {
+    restrictions(f.chorizon) <- f.restr
   }
   
   # print any messages on possible data quality problems:
