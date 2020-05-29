@@ -51,6 +51,7 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method='feature',
     
   # a convenience interface is by nmusym -- may have several mukey per nmusym
   } else if(by.col == "nmusym" | by.col == "nationalmusym") {
+    
     # do additional query to determine mapping of nmusym:mukey
     q.mukey <- paste0("SELECT nationalmusym, mukey FROM mapunit WHERE nationalmusym IN ",format_SQL_in_statement(x),";")
     suppressMessages(res <- SDA_query(q.mukey))
@@ -66,12 +67,10 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method='feature',
   
   # select method
   geom.type <- switch(method, 
-                      feature='mupolygongeo.STAsText()',
-                      bbox='mupolygongeo.STEnvelope().STAsText()',
-                      point='mupolygongeo.STPointOnSurface().STAsText()'
-                      )
+                      feature = 'mupolygongeo.STAsText()',
+                      bbox = 'mupolygongeo.STEnvelope().STAsText()',
+                      point = 'mupolygongeo.STPointOnSurface().STAsText()')
   
-  # feedback:
   message(sprintf("working with %s chunks...", length(unique(mukey.chunk))))
   
   for(i in 1:length(mukey.chunk)) {
@@ -104,9 +103,11 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method='feature',
       } else {
         s <- rbind(s, s.sub)
       }
+      message("chunk #",i," completed (n_mukey = ",
+              length(mukey.list[idx]), ")")
     } else {
       message("no spatial data found for: ", 
-              paste0(mukey.list[idx], collapse=","))
+              paste0(mukey.list[idx], collapse = ","))
     }
       
   }
