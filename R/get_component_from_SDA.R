@@ -54,6 +54,8 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   # exec query
   d.component <- SDA_query(q.component)
   
+  if(length(d.component) == 0)
+    return(d.component)
   
   # recode metadata domains
   d.component <- uncode(d.component, db = "SDA", 
