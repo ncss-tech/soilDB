@@ -582,6 +582,18 @@
   names(df)[names(df) %in% old_names] <- new_names
   
   
+  # refactoring frequency levels, not sure why these aren't sorted naturally
+  flod_lev <- levels(df$flodfreqcl)
+  pond_lev <- levels(df$pondfreqcl)
+  idx      <- c(1, 5, 2, 7, 3, 4, 6)
+  df <- within(df, {
+    flodfreqcl = levels(flodfreqcl)[as.integer(flodfreqcl)]
+    flodfreqcl = factor(flodfreqcl, levels = flod_lev[idx])
+    pondfreqcl = levels(pondfreqcl)[as.integer(pondfreqcl)]
+    pondfreqcl = factor(pondfreqcl, levels = pond_lev[idx])
+  })
+  
+  
   # impute NA freqcl values, default = "not populated"
   if (impute == TRUE) {
     
