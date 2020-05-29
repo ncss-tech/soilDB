@@ -15,7 +15,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   # paste0("mu.nationalmusym + '_' + CAST(comppct_r AS VARCHAR) + '_' + compname + '-' + ISNULL(localphase, 'no_phase') AS derived_cokey")
   
   es.vars <- "ecoclasstypename, ecoclassref, ecoclassid, ecoclassname"
-  co.vars <- "cokey, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, erocl, earthcovkind1, earthcovkind2, elev_r, slope_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, hydgrp,  nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, tfact, wei, weg, corcon, corsteel, frostact, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition"
+  co.vars <- "co.cokey, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, erocl, earthcovkind1, earthcovkind2, elev_r, slope_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, hydgrp,  nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, tfact, wei, weg, corcon, corsteel, frostact, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition"
   vars    <- paste0(unlist(strsplit(co.vars, "earthcovkind2,")), collapse = paste0("earthcovkind2, ", es.vars, ","))
   
   q.component <- paste(
@@ -36,17 +36,14 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
      ) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN"
       } else "",
     
-    "(SELECT", co.vars, ", mukey AS mukey2 
-      FROM component
+    "(SELECT", vars, ", mukey AS mukey2 
+      FROM 
+      component  co                        LEFT OUTER JOIN
+      coecoclass ce ON ce.cokey = co.cokey AND
+                       ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')
       ) AS co ON co.mukey2 =", if (duplicates == FALSE) "mu2.mukey2" else "mu.mukey",
     
-    "LEFT OUTER JOIN 
-     (SELECT cokey AS cokey2,", es.vars, 
-     "FROM coecoclass 
-      WHERE ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')
-      ) AS ces ON ces.cokey2 = co.cokey
-    
-   WHERE", WHERE,
+   "WHERE", WHERE,
   
   "ORDER BY nationalmusym, comppct_r DESC, compname;")
   
