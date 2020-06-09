@@ -125,11 +125,12 @@ get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken)
           stationid,
           startdate,
           enddate), datatypeid.url), add_headers(token = apitoken))
-
+    
     # retrieve content
     r.content <- httr::content(r, as = "text", encoding = "UTF-8")
     
     # convert JSON to data.frame
+
     d <- jsonlite::fromJSON(r.content)  
     
     if(nrow(d$results) == 1000)
