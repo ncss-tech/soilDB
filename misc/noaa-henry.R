@@ -125,7 +125,7 @@ get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken)
           stationid,
           startdate,
           enddate), datatypeid.url), add_headers(token = apitoken))
-    
+
     # retrieve content
     r.content <- httr::content(r, as = "text", encoding = "UTF-8")
     
@@ -134,7 +134,7 @@ get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken)
     
     if(nrow(d$results) == 1000)
       message("maximum record limit reached (n = 1000) -- try using only one or two datatypeids")
-    
+
     return(d$results)
   }
 
