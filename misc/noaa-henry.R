@@ -107,7 +107,11 @@ get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1) {
   return(stations)
 }
 
+<<<<<<< HEAD
 get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken) {
+=======
+get_NOAA_GHCND_by_stationyear <- function(stationid, year, apitoken) {
+>>>>>>> 29d047ba09262deb6b7f1a0426096ce451af52a9
     # generate ISO format start/end date from year
     startdate <- sprintf("%s-01-01", year)
     enddate <- sprintf("%s-12-31", year)
@@ -115,6 +119,7 @@ get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken)
     message(sprintf('Downloading GHCND data for %s over interval %s to %s', 
                     stationid, startdate, enddate))
     
+<<<<<<< HEAD
     # build multi-datatype URL
     datatypeids <- sprintf("&datatypeid=%s", datatypeid)
     datatypeid.url <- paste0(datatypeids, collapse="&")
@@ -125,16 +130,29 @@ get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken)
           stationid,
           startdate,
           enddate), datatypeid.url), add_headers(token = apitoken))
+=======
+    # construct GET request
+    r <- httr::GET(url = sprintf(
+          "https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND&stationid=%s&startdate=%s&enddate=%s&limit=1000",
+          stationid,
+          startdate,
+          enddate
+        ), add_headers(token = apitoken))
+>>>>>>> 29d047ba09262deb6b7f1a0426096ce451af52a9
     
     # retrieve content
     r.content <- httr::content(r, as = "text", encoding = "UTF-8")
     
     # convert JSON to data.frame
+<<<<<<< HEAD
     d <- jsonlite::fromJSON(r.content)  
     
     if(nrow(d$results) == 1000)
       message("maximum record limit reached (n = 1000) -- try using only one or two datatypeids")
     
+=======
+    d <- jsonlite::fromJSON(r.content)
+>>>>>>> 29d047ba09262deb6b7f1a0426096ce451af52a9
     return(d$results)
   }
 
@@ -191,7 +209,10 @@ year.seq <- as.character(first.year:last.year)
 res <- do.call('rbind', lapply(year.seq, function(year) {
   get_NOAA_GHCND_by_stationyear(noaa.station$id,
                                 year = year,
+<<<<<<< HEAD
                                 datatypeid = "PRCP",
+=======
+>>>>>>> 29d047ba09262deb6b7f1a0426096ce451af52a9
                                 apitoken = noaa_api_token)
 }))
 
