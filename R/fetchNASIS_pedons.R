@@ -118,6 +118,10 @@
     h$total_art_pct <- ifelse(is.na(h$total_art_pct), 0, h$total_art_pct)
   }
   
+  # convert pedon and horizon unique ID to character
+  h$peiid <- as.character(h$peiid)
+  h$phiid <- as.character(h$phiid)
+  
   # upgrade to SoilProfilecollection
   depths(h) <- peiid ~ hzdept + hzdepb
   
