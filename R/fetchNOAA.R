@@ -54,26 +54,6 @@ get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1) {
   return(d$results)
 }
 
-#' Get Global Historical Climatology Network Daily (GHCND) data from NOAA API for given datatype(s), stationid and year.
-#' @description Obtain daily summary data for a single station ID and year for one or more datatypes. Note that results from the NOAA API, even with an API token, are limited to 1000 records. Obtaining yearly daily summaries by this method can generally only obtain two data types at a time, for a single year and station, in a single query (e.g. \code{2*365 < 1000}).
-#' 
-#'   In order to use this function, you must obtain an API token from this website: https://www.ncdc.noaa.gov/cdo-web/token
-#'
-#' @param stationid Station ID (e.g. \code{GHCND:USC00388786})
-#' @param year A single year (e.g. 2018)
-#' @param datatypeid One or more NOAA GHCND data type IDs (e.g \code{c("PRCP","SNOW")})
-#' @param apitoken API key token for NOAA NCDC web services ()
-#'
-#' @return A data.frame containing the GHCND data requested (limit 1000 records)
-#' @export get_NOAA_GHCND_by_stationyear
-#'
-#' @examples
-#' 
-#' #' ## in order to use this function, you must obtain an API token from this website:
-#' ##  https://www.ncdc.noaa.gov/cdo-web/token
-#
-#' # get_NOAA_GHCND_by_stationyear(GHCND:USC00388786, year = 2017, datatypeid = "PRCP", apitoken = "yourtokenhere")
-#' 
 get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken) {
   
   # generate ISO format start/end date from year
@@ -92,7 +72,7 @@ get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken)
     "https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND&stationid=%s&startdate=%s&enddate=%s&limit=1000",
     stationid,
     startdate,
-    enddate), datatypeid.url), add_headers(token = apitoken))
+    enddate), datatypeid.url), httr::add_headers(token = apitoken))
   
   # retrieve content
   r.content <- httr::content(r, as = "text", encoding = "UTF-8")
@@ -100,8 +80,46 @@ get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken)
   # convert JSON to data.frame
   d <- jsonlite::fromJSON(r.content)  
   
-  if(nrow(d$results) == 1000)
-    message("maximum record limit reached (n = 1000) -- try using a maximum of two data type IDs for year-long daily summaries")
+  if (length(d$results) == 0) {
+    message("empty result set")
+    return(NULL)
+  }
+  
+  if (nrow(d$results) == 1000)
+    message("maximum record limit reached (n = 1000)")
   
   return(d$results)
+}
+
+#' Get Global Historical Climatology Network Daily (GHCND) data from NOAA API for given datatype(s), station IDs and years.
+#' 
+#' @description Obtain daily climatic summary data for a set of station IDs, years, and datatypes. 
+#' 
+#' Note that typically results from the NOAA API are limited to 1000 records. However, by "chunking" up data into individual station*year*datatypeid combinations, record results generally do not exceed 365 records for daily summaries.
+#' 
+#' In order to use this function, you must obtain an API token from this website: https://www.ncdc.noaa.gov/cdo-web/token
+#'
+#' @param stationid Station ID (e.g. \code{GHCND:USC00388786})
+#' @param year One or more years (e.g. 2017:2020)
+#' @param datatypeid One or more NOAA GHCND data type IDs (e.g \code{c("PRCP","SNOW")})
+#' @param apitoken API key token for NOAA NCDC web services (https://www.ncdc.noaa.gov/cdo-web/token)
+#'
+#' @return A data.frame containing the GHCND data requested (limit 1000 records)
+#' @export get_NOAA_GHCND_by_stationyear
+#'
+#' @examples
+#' 
+#' #' ## in order to use this function, you must obtain an API token from this website:
+#' ##  https://www.ncdc.noaa.gov/cdo-web/token
+#'
+#'  get_NOAA_GHCND(c("GHCND:USC00388786", "GHCND:USC00388787"),
+#'                 year = 2017:2020, 
+#'                 datatypeid = c("PRCP","SNOW"), 
+#'                 apitoken = "AfspVryNsnCvWICnittoaiKTzTdWUVob")
+#' 
+get_NOAA_GHCND <- function(stations, years, datatypeids, apitoken) {
+  do.call('rbind', lapply(stations, function(s)
+    do.call('rbind', lapply(years, function(y)
+      do.call('rbind', lapply(datatypeids, function(d)
+       get_NOAA_GHCND_by_stationyear(s, y, d, apitoken)))))))
 }
