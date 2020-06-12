@@ -1,5 +1,8 @@
 context("fetchOSD() -- requires internet connection")
 
+## these are the elements of the list returned when extended=TRUE
+## update here as-needed
+extended.table.names <<- c("SPC", "competing", "geomcomp", "hillpos", "mtnpos", "pmkind", "pmorigin", "mlra", "climate.annual", "climate.monthly", "soilweb.metadata")
 
 test_that("fetchOSD() works", {
   
@@ -56,6 +59,9 @@ test_that("fetchOSD() returns a list + SPC in extended mode", {
   
 })
 
+
+
+
 test_that("fetchOSD() returns reasonable data", {
   
   skip_if_offline()
@@ -74,6 +80,7 @@ test_that("fetchOSD() returns reasonable data", {
   
 })
 
+
 test_that("fetchOSD() returns reasonable data in extended mode", {
   
   skip_if_offline()
@@ -86,11 +93,35 @@ test_that("fetchOSD() returns reasonable data in extended mode", {
   
   # extended request
   expect_equal(
-    names(x.extended), 
-    c("SPC", "competing", "geomcomp", "hillpos", "mtnpos", "pmkind", "pmorigin", "mlra", "climate.annual", "climate.monthly", "soilweb.metadata")
+    names(x.extended), extended.table.names
     )
   
 })
+
+
+# https://github.com/ncss-tech/soilDB/issues/128
+test_that("fetchOSD() returns warning in extended mode, when active + inactive series specified", {
+  
+  skip_if_offline()
+  
+  # hack for in-house testing only
+  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  if( ! getOption('.soilDB_testNetworkFunctions') )  {
+    skip("in-house testing only")
+  }
+  
+  # warning added in response to #128
+  expect_warning(
+    xx <- fetchOSD(soils = c('sierra', 'Breadsprings', 'Hagerwest', 'Tintero'), extended = TRUE)
+  )
+  
+  # extended request components
+  expect_equal(
+    names(xx), extended.table.names
+  )
+  
+})
+
 
 test_that("fetchOSD() returns data associated with named series (sierra|cecil)", {
   

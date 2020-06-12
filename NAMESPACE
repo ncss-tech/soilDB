@@ -83,7 +83,8 @@ importFrom(aqp,
   hzdesgnname,
   'hzdesgnname<-',
   hztexclname,
-  'hztexclname<-'
+  'hztexclname<-',
+  profile_id
 )
 
 importMethodsFrom(aqp, "plot")

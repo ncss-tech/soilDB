@@ -12,10 +12,21 @@ fetchOSD(soils, colorState = 'moist', extended=FALSE)
 \arguments{
   \item{soils}{a character vector of named soil series, case insensitive}
   \item{colorState}{color state for horizon soil color visualization: "moist" or "dry"}
-  \item{extended}{if TRUE additional soil series summary data are returned, see details}
+  \item{extended}{if \code{TRUE} additional soil series summary data are returned, see details}
 }
 
 \details{
+
+Related documentation can be found in the following tutorials
+\itemize{
+  \item{\href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}}
+  
+	\item{\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}}
+	
+	\item{\href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}}
+	}
+
+
 The standard set of "site" and "horizon" data are returned as a \code{SoilProfileCollection} object (\code{extended=FALSE}. The "extended" suite of summary data can be requested by setting \code{extended=TRUE}. The resulting object will be a \code{list} with the following elements:)
 
 \describe{
@@ -31,7 +42,20 @@ The standard set of "site" and "horizon" data are returned as a \code{SoilProfil
 	\item{metadata}{metadata associated with SoilWeb cached summaries}
 	} 
 
-Further details pending.
+
+When using `extended=TRUE`, there are a couple of scenarios in which series morphology contained in `SPC` do not fully match records in the associated series summaries (e.g. `competing`).
+
+\describe{
+	\item{A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{Climate summaries are empty \code{data.frames} becuase these summaries are currently generated from PRISM. We are working on a solution.}
+	
+	\item{A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
+	
+	\item{A query for multiple soil series, with one more more listed as "inactive" (e.g. BREADSPRINGS).}{Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
+	
+	} 
+
+These last two cases are problematic for analysis that makes use of morphology and extended data, such as outlined in this tutorial on \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}.
+
 }
 
 \value{a \code{SoilProfileCollection} object containing basic soil morphology and taxonomic information.}

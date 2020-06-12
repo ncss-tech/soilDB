@@ -3,7 +3,7 @@
 
 \title{Full text searching of the USDA-NRCS Official Series Descriptions}
 
-\description{This is a rough example of how chunks of text parsed from OSD records can be made search-able with the \href{https://www.postgresql.org/docs/9.5/textsearch.html}{PostgreSQL fulltext indexing} and query system (\href{https://www.postgresql.org/docs/9.5/datatype-textsearch.html}{syntax details}). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. This is a programatic interface to \href{https://soilmap2-1.lawr.ucdavis.edu/osd-search/index.php}{this webpage}.}
+\description{This is a rough example of how chunks of text parsed from OSD records can be made search-able with the \href{https://www.postgresql.org/docs/9.5/textsearch.html}{PostgreSQL fulltext indexing} and query system (\href{https://www.postgresql.org/docs/9.5/datatype-textsearch.html}{syntax details}). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. This is a programatic interface to \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage}.}
 
 \usage{
   OSDquery(mlra='', taxonomic_class='', typical_pedon='', 
@@ -26,7 +26,7 @@
 }
 
 \details{
-  See \href{http://soilmap2-1.lawr.ucdavis.edu/osd-search/index.php}{this webpage} for more information.
+  See \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage} for more information.
   
   \describe{
     \item{}{family level taxa are derived from SC database, not parsed OSD records}
@@ -38,6 +38,16 @@
     \item{}{search terms with spaces need doubled single quotes: ''san joaquin''}
     \item{}{combine search terms into a single expression: (grano:* | granite)}
   } 
+  
+  Related documentation can be found in the following tutorials
+\itemize{
+  \item{\href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}}
+  
+	\item{\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}}
+	
+	\item{\href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}}
+	}
+
   
 }
 

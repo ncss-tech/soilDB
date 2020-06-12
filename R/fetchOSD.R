@@ -99,18 +99,36 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	hzdesgnname(h) <- "hzname"
 	hztexclname(h) <- "texture_class"
 	
-	# standard or extended version?
+	# mode: standard (SPC returned) or extended (list returned)
 	if(extended) {
-	  # extended
+	  
 	  
 	  ## TODO: finish this and decide: report or filter
 	  # https://github.com/ncss-tech/soilDB/issues/128
-	  # check for series names missing from either SPC or extended data
-	  # unlist(
-	  #   lapply(res, function(i) { 
-	  #     if(inherits(i, 'data.frame')) i[['series']] 
-	  #   })
-	  # )
+	  
+	  # profile IDs for reference, done outside of loop for efficiency
+	  pIDs <- profile_id(h)
+	  # iterate over extended tables
+	  # finding all cases where a series is missing from SPC
+	  missing.series <- unique(
+	    as.vector(
+	      unlist(
+	        lapply(res, function(i) {
+	          if(inherits(i, 'data.frame')) {
+	            setdiff(unique(i[['series']]), pIDs)
+	          }
+	        })
+	      )
+	    )
+	  )
+	  
+	  
+	  # generate a warning if there is a difference between profile IDs in SPC
+	  if(length(missing.series) > 0) {
+	    msg <- sprintf("%s missing from SPC, see ?fetchOSD for suggestions", paste(missing.series, collapse = ','))
+	    warning(msg, call. = FALSE)
+	  }
+	  
 	  
 	  # if available, split climate summaries into annual / monthly and add helper columns
 	  # FALSE if missing
