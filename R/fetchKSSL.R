@@ -15,8 +15,8 @@
     f <- c(f, paste('&series=', series, sep=''))
   }
   
+  # note: bbox has already been converted into text representation, suitable for URL
   if(!is.na(bbox)) {
-    bbox <- paste(bbox, collapse=',')
     f <- c(f, paste('&bbox=', bbox, sep=''))
   }
   
@@ -153,11 +153,17 @@
 
 
 
+## requires new tests to ensure fixes are reasonable, see https://github.com/ncss-tech/soilDB/issues/103
+
 # fully vectorized
 fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA, pedon_key=NA, returnMorphologicData=FALSE, returnGeochemicalData=FALSE, simplifyColors=FALSE) {
   
   if(!requireNamespace('jsonlite', quietly=TRUE))
     stop('please install the `jsonlite` packages', call.=FALSE)
+  
+  ## TODO: this is not vectorized
+  # convert BBOX into text representation
+  bbox <- paste(bbox, collapse=',')
   
   # create argument matrix
   arg <- expand.grid(
