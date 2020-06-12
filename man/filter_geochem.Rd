@@ -13,6 +13,8 @@ filter_geochem(
 )
 }
 \arguments{
+\item{geochem}{geochemical data, as returned by fetchKSSL}
+
 \item{columns}{Column name(s) to include in result}
 
 \item{prep_code}{Character vector of prep code(s) to include in result.}

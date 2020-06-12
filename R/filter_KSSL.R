@@ -2,6 +2,7 @@
 # 
 #' @title Filter KSSL Geochemical Table
 #' @description A function to subset KSSL "geochem" / elemental analysis result table to obtain rows/columns based on: column name, preparation code, major / trace element method.
+#' @param geochem geochemical data, as returned by fetchKSSL
 #' @param columns Column name(s) to include in result
 #' @param prep_code Character vector of prep code(s) to include in result.
 #' @param major_element_method Character vector of major element method(s) to include in result.
