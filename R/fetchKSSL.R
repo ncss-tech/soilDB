@@ -155,15 +155,25 @@
 
 ## requires new tests to ensure fixes are reasonable, see https://github.com/ncss-tech/soilDB/issues/103
 
-# fully vectorized
+# fully vectorized in all arguments except BBOX
 fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA, pedon_key=NA, returnMorphologicData=FALSE, returnGeochemicalData=FALSE, simplifyColors=FALSE) {
   
   if(!requireNamespace('jsonlite', quietly=TRUE))
     stop('please install the `jsonlite` packages', call.=FALSE)
   
-  ## TODO: this is not vectorized
   # convert BBOX into text representation
-  bbox <- paste(bbox, collapse=',')
+  if(!missing(bbox)) {
+    
+    # invalid BBOX
+    if( length(bbox) != 4) {
+      stop('invalid BBOX')
+    }
+    
+    # convert BBOX into text representation
+    # not vectorized, would require a different kind of input
+    bbox <- paste(bbox, collapse=',')
+  }
+  
   
   # create argument matrix
   arg <- expand.grid(
@@ -175,12 +185,16 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
     pedon_key=pedon_key
   )
   
+  # number of unique arguments
   n.args <- nrow(arg)
   
   # list to store results
   res <- vector(mode = 'list', length = n.args)
   
+  ## TODO: allow toggling of progress bar, and disable when n.args < 1
+  
   # iterate over argument set
+  pb <- txtProgressBar(min = 0, max = n.args, style = 3)
   for(i in 1:n.args) {
     # build single URL filter
     f <- with(
@@ -189,15 +203,27 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
     )
     
     # process a single request
-    res[[i]] <- .fetchSingle_KSSL(f, returnMorphologicData, returnGeochemicalData)
+    req.i <- .fetchSingle_KSSL(f, returnMorphologicData, returnGeochemicalData)
+    
+    # setting a list element to NULL effectively removes it
+    if(!is.null(req.i)) {
+      res[[i]] <- req.i
+    }
+    
+    setTxtProgressBar(pb, i)
   }
   
+  close(pb)
+  rm(pb)
+  
+  
+  ## TODO: enforce unique-ness in results, simple for SPC, not so much for related tables
   
   ## make composite SPC and optionally additional parts
   
   # simple request, result is a list of SPCs
   if(!returnMorphologicData & !returnGeochemicalData) {
-    h <- aqp::union(res)
+    suppressWarnings(h <- aqp::union(res))
     
     # NO site/hz data, stop here
     if(is.null(h)) {
@@ -208,7 +234,7 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
   } else {
     # complex request, result is a list of lists
     # SPC
-    h <- aqp::union(lapply(res, '[[', 'SPC'))
+    suppressWarnings(h <- aqp::union(lapply(res, '[[', 'SPC')))
     
     # NO site/hz data, stop here
     if(is.null(h)) {
