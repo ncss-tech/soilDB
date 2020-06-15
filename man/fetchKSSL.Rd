@@ -1,7 +1,7 @@
 \name{fetchKSSL}
 \alias{fetchKSSL}
 \title{Fetch KSSL Data}
-\description{Get soil characterization and morphologic data via BBOX, MLRA, or series name query, from the KSSL database.}
+\description{Download soil characterization and morphologic data via BBOX, MLRA, or soil series name query, from the KSSL database.}
 
 \usage{fetchKSSL(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, 
 pedon_id=NA, pedon_key=NA, returnMorphologicData=FALSE, returnGeochemicalData=FALSE,
@@ -9,7 +9,7 @@ simplifyColors=FALSE)}
 
 \arguments{
   \item{series}{vector of soil series names, case insensitive}
-  \item{bbox}{a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}}
+  \item{bbox}{a single bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}}
   \item{mlra}{vector of MLRA IDs, e.g. "18" or "22A"}
   \item{pedlabsampnum}{vector of KSSL pedon lab sample number}
   \item{pedon_id}{vector of user pedon ID}
@@ -31,7 +31,7 @@ When \code{returnGeochemicalData} is TRUE, the resulting object is a list. The s
 
 Setting \code{simplifyColors=TRUE} will automatically flatten the soil color data and join to horizon level attributes.
 
-Function arguments (\code{series}, \code{mlra}, etc.) are fully vectorized.
+Function arguments (\code{series}, \code{mlra}, etc.) are fully vectorized except for \code{bbox}.
 }
 
 \value{a \code{SoilProfileCollection} object when \code{returnMorphologicData} is FALSE, otherwise a list.}
