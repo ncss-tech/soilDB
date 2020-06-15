@@ -217,7 +217,7 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
   rm(pb)
   
   
-  ## TODO: enforce unique-ness in results, simple for SPC, not so much for related tables
+  ## TODO: enforce unique-ness in results: unique.SPC and unique.data.frame on extended data
   
   ## make composite SPC and optionally additional parts
   
@@ -242,6 +242,8 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
       return(NULL)
     }
     
+    ## TODO enforce unique-ness on SPC here
+    
     ## NOTE: simpler with purrr::transpose()
     # morph
     if(returnMorphologicData) {
@@ -251,6 +253,8 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
       # iterate over tables and unwind - rbind - store
       for(i in v) {
         m[[i]] <- do.call('rbind', lapply(res, function(j) j$morph[[i]]))
+        
+        ## TODO enforce unique-ness on data.frames here
       }
     }
     
@@ -259,6 +263,8 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
       geochem <- do.call('rbind', lapply(res, '[[', 'geochem'))
       optical <- do.call('rbind', lapply(res, '[[', 'optical'))
       xrd_thermal <- do.call('rbind', lapply(res, '[[', 'xrd_thermal'))
+      
+      ## TODO enforce unique-ness on data.frames here
     }
     
   }
