@@ -1,3 +1,6 @@
+# soilDB 2.5.6 (2020-06-16)
+ * bug fixes in `fetchKSSL` related to vectorization, all arguments vectorized except for `bbox`
+
 # soilDB 2.5.3 (2020-03-22)
  * `fetchKSSL` is now fully vectorized and builds on new SoilWeb JSON API
 

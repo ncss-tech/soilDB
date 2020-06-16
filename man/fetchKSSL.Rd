@@ -5,7 +5,7 @@
 
 \usage{fetchKSSL(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, 
 pedon_id=NA, pedon_key=NA, returnMorphologicData=FALSE, returnGeochemicalData=FALSE,
-simplifyColors=FALSE)}
+simplifyColors=FALSE, progress=TRUE)}
 
 \arguments{
   \item{series}{vector of soil series names, case insensitive}
@@ -14,11 +14,11 @@ simplifyColors=FALSE)}
   \item{pedlabsampnum}{vector of KSSL pedon lab sample number}
   \item{pedon_id}{vector of user pedon ID}
   \item{pedon_key}{vector of KSSL internal pedon ID}
-  \item{returnMorphologicData}{optionally request basic morphologic data, see details section}
-  \item{returnGeochemicalData}{optionally request geochemical, optical and XRD/thermal data, see details section}
-  \item{simplifyColors}{simplify colors (from morphologic data) and join with horizon data}
+  \item{returnMorphologicData}{logical, optionally request basic morphologic data, see details section}
+  \item{returnGeochemicalData}{logical, optionally request geochemical, optical and XRD/thermal data, see details section}
+  \item{simplifyColors}{logical, simplify colors (from morphologic data) and join with horizon data}
+  \item{progress}{logical, optionally give progress when iterating over multiple requests}
 }
-
 
 
 \details{This is an experimental interface to a subset for the most commonly used data from a snapshot of KSSL (lab characterization) and NASIS (morphologic) data. 

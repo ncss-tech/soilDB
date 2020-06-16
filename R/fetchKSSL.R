@@ -153,10 +153,8 @@
 
 
 
-## requires new tests to ensure fixes are reasonable, see https://github.com/ncss-tech/soilDB/issues/103
-
 # fully vectorized in all arguments except BBOX
-fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA, pedon_key=NA, returnMorphologicData=FALSE, returnGeochemicalData=FALSE, simplifyColors=FALSE) {
+fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA, pedon_key=NA, returnMorphologicData=FALSE, returnGeochemicalData=FALSE, simplifyColors=FALSE, progress=TRUE) {
   
   if(!requireNamespace('jsonlite', quietly=TRUE))
     stop('please install the `jsonlite` packages', call.=FALSE)
@@ -191,10 +189,17 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
   # list to store results
   res <- vector(mode = 'list', length = n.args)
   
-  ## TODO: allow toggling of progress bar, and disable when n.args < 1
+  # disable progres bar when n.args < 1
+  if(n.args < 2) {
+    progress <- FALSE
+  }
+  
+  # allow toggling of progress bar
+  if(progress) {
+    pb <- txtProgressBar(min = 0, max = n.args, style = 3)
+  }
   
   # iterate over argument set
-  pb <- txtProgressBar(min = 0, max = n.args, style = 3)
   for(i in 1:n.args) {
     # build single URL filter
     f <- with(
@@ -210,11 +215,15 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
       res[[i]] <- req.i
     }
     
-    setTxtProgressBar(pb, i)
+    if(progress) {
+      setTxtProgressBar(pb, i)
+    }
   }
   
-  close(pb)
-  rm(pb)
+  if(progress) {
+    close(pb)
+    rm(pb)
+  }
   
   
   ## TODO: enforce unique-ness in results: unique.SPC and unique.data.frame on extended data
