@@ -9,8 +9,8 @@ KSSL_VG_model(VG_params, phi_min = 10^-6, phi_max = 10^8, pts = 100)
 
 \arguments{
   \item{VG_params}{a data.frame or list object with the parameters of the van Genuchten model, see details}
-  \item{phi_min}{lower limit for water potential in KPa}
-  \item{phi_max}{upper limit for water potential in KPa}
+  \item{phi_min}{lower limit for water potential in kPa}
+  \item{phi_max}{upper limit for water potential in kPa}
   \item{pts}{number of points to include in estimated water retention curve}
 }
 
@@ -26,8 +26,9 @@ KSSL_VG_model(VG_params, phi_min = 10^-6, phi_max = 10^8, pts = 100)
 
 \value{A list with the following components:
 \describe{
- \item{VG_curve}{estimated water retention curve: paired estimates of water potential and water content}
- \item{VG_inverse_function}{function for converting measured water content (theta, units of percent, range: \{0, 1\}) to estimated water potential (phi, units of KPa)}
+ \item{VG_curve}{estimated water retention curve: paired estimates of water potential (phi) and water content (theta)}
+ \item{VG_function}{spline function for converting water potential (phi, units of kPa) to estimated volumetric water content (theta, units of percent, range: \{0, 1\})}
+ \item{VG_inverse_function}{spline function for converting volumetric water content (theta, units of percent, range: \{0, 1\}) to estimated water potential (phi, units of kPa)}
 }
 }
 
