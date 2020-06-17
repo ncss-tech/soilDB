@@ -24,7 +24,8 @@
 #' ## in order to use this function, you must obtain an API token from this website:
 #' ##  https://www.ncdc.noaa.gov/cdo-web/token
 #' 
-#' # stations <- get_NOAA_stations_nearXY(lat = 37, lng = -120, apitoken = "yourtokenhere")
+#' # stations <- get_NOAA_stations_nearXY(lat = 37, lng = -120, 
+#' #                                      apitoken = "yourtokenhere")
 #' 
 get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1) {
   
@@ -112,10 +113,10 @@ get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken)
 #' #' ## in order to use this function, you must obtain an API token from this website:
 #' ##  https://www.ncdc.noaa.gov/cdo-web/token
 #'
-#'  get_NOAA_GHCND(c("GHCND:USC00388786", "GHCND:USC00388787"),
-#'                 year = 2017:2020, 
-#'                 datatypeid = c("PRCP","SNOW"), 
-#'                 apitoken = "AfspVryNsnCvWICnittoaiKTzTdWUVob")
+#' # get_NOAA_GHCND(c("GHCND:USC00388786", "GHCND:USC00388787"),
+#' #                year = 2017:2020,
+#' #                datatypeid = c("PRCP","SNOW"),
+#' #                apitoken = "yourtokenhere")
 #' 
 get_NOAA_GHCND <- function(stations, years, datatypeids, apitoken) {
   do.call('rbind', lapply(stations, function(s)
