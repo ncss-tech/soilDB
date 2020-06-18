@@ -1,36 +1,36 @@
 # Plot Henry waterlevel data with precipitation data from nearest NOAA weather station
 #
-# @purpose: Show use of two new experimental soilDB-type functions for the NOAA API
+# @purpose: Show use of two new experimental soilDB functions for the NOAA API. You will need a recent version of soilDB off of GitHub to use this functionality.
 #
 #            - get_NOAA_stations_nearXY() - find all stations near a specified lat/lng and bounding box (limit 1000)
 #
-#            - get_NOAA_GHCND_by_stationyear() - get GHCND data (daily summaries) by station ID and year (limit 1000)
+#            - get_NOAA_GHCND() - get GHCND data (daily summaries) by station ID(s), years(s) and datatypeid(s)
 #
 #           Note that using the NOAA API requires an API token specified as argument to above two functions.
 #           A token can be obtained for free at the following link: https://www.ncdc.noaa.gov/cdo-web/token
 #
-# @last_update: 2020/06/05
+# @last_update: 2020/06/18
 #
 # @authors: Andrew Brown, Dylan Beaudette
+#
 #           based on fetchHenry/fetchSCAN "Water Level and Precipitation" demo by Dylan E. Beaudette
 #           (http://ncss-tech.github.io/AQP/soilDB/Henry-demo.html)
 
 ##### SETUP #####
 
 # 1.  You will need your own API Token: https://www.ncdc.noaa.gov/cdo-web/token
-noaa_api_token <- "GITYEROWNDANGTOKEN"
+noaa_api_token <- "yourtokenhere"
 
 # # 2. You will need a Henry project/siteid/sso + water level sensor name + type
 
 # this example is one of ben marshall's waterlevel sensors in Maryland
-# henry_project <- "MD021" # modify the fetchHenry call to use usersiteid, sso, etc.
-# henry_sensor_name <- "Hatboro"
-# henry_sensor_type <- "waterlevel"
+henry_project <- "MD021" # modify the fetchHenry call to use usersiteid, sso, etc.
+henry_sensor_name <- "Hatboro"
+henry_sensor_type <- "waterlevel"
 
-# this example is from wisconsin
-henry_project <- "DSP - MLRA 95 - Water Table"
-henry_sensor_name <- "Ionia"
-henry_sensor_type <- "waterlevel" 
+# this parameter is used to convert to UTM for distance calculation in meters
+utm_proj4 <- "+proj=utm +zone=18" 
+use_metric <- TRUE # distance/depth/rainfall in km/cm or mi/in?
 
 #################
 
@@ -39,8 +39,6 @@ library(sp)
 library(dplyr)
 
 # API queries to HENRY and NOAA GHCND
-library(httr)
-library(jsonlite)
 library(soilDB)
 
 # plots
@@ -68,77 +66,6 @@ henry_coords <- data.frame(id = henry_sensor_name,
 coordinates(henry_coords) <- ~ wgs84_longitude + wgs84_latitude
 proj4string(henry_coords) <- "+proj=longlat +datum=WGS84"
 
-### define some new functions
-
-# query the NOAA API to get station data for a bounding box around a lat/lng (limit 1000 records)
-#  default is +/- 0.5 degree latitude and longitude (bbox = 1)
-get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1) {
-  coord <- data.frame(lat = lat, lng = lng)
-  coordinates(coord) <- ~ lng + lat
-  
-  # use raster::extent trick to build a 0.5 degree bounding box (bbox=1)
-  #  around the target latitude/longitude. this is possibly more than is needed, 
-  #  but seems to generally get us in under 1000 station limit. adjust as needed.
-  #  this is such a fun trick, but if i put this function in soilDB ill have to code it myself... :(
-  ext <- raster::extent(coord) + bbox
-  
-  # determine dimension in each direction to build bbox
-  bdim <- bbox / 2
-  
-  # build Google Maps API V3 LatLngBounds.toUrlValue string
-  ext_string <- sprintf("%s,%s,%s,%s", lat - bdim, lng - bdim, lat + bdim, lng + bdim)
-  
-  # construct GET request
-  r <- httr::GET(url = sprintf(
-        "https://www.ncdc.noaa.gov/cdo-web/api/v2/stations?extent=%s&limit=1000",
-        ext_string
-      ), add_headers(token = apitoken))
-  
-  # retrieve content
-  r.content <- httr::content(r, as = "text", encoding = "UTF-8")
-  
-  # convert JSON to data.frame
-  d <- jsonlite::fromJSON(r.content)
-  stations <- d$results
-  
-  if(nrow(stations) == 1000)
-    message("maximum record limit reached (n = 1000) -- try a smaller bbox value")
-  
-  return(stations)
-}
-
-get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken) {
-    # generate ISO format start/end date from year
-    startdate <- sprintf("%s-01-01", year)
-    enddate <- sprintf("%s-12-31", year)
-    
-    message(sprintf('Downloading GHCND data for %s over interval %s to %s', 
-                    stationid, startdate, enddate))
-    
-    # build multi-datatype URL
-    datatypeids <- sprintf("&datatypeid=%s", datatypeid)
-    datatypeid.url <- paste0(datatypeids, collapse="&")
-    
-    # construct GET request
-    r <- httr::GET(url = paste0(sprintf(
-          "https://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND&stationid=%s&startdate=%s&enddate=%s&limit=1000",
-          stationid,
-          startdate,
-          enddate), datatypeid.url), add_headers(token = apitoken))
-    
-    # retrieve content
-    r.content <- httr::content(r, as = "text", encoding = "UTF-8")
-    
-    # convert JSON to data.frame
-
-    d <- jsonlite::fromJSON(r.content)  
-    
-    if(nrow(d$results) == 1000)
-      message("maximum record limit reached (n = 1000) -- try using only one or two datatypeids")
-
-    return(d$results)
-  }
-
 # download all the stations within a half-degree lat/lng of the henry coordinates
 #  using get_NOAA_stations_nearXY()
 stations <- get_NOAA_stations_nearXY(
@@ -158,8 +85,12 @@ stations.sp <- stations[, c("id", "longitude", "latitude")]
 coordinates(stations.sp) <- ~ longitude + latitude
 proj4string(stations.sp) <- "+proj=longlat +datum=WGS84"
 
+stations.sp <- spTransform(stations.sp, CRS(utm_proj4))
+henry_coords <- spTransform(henry_coords, CRS(utm_proj4))
+
 # calculate spatial distance between all stations and the coordinates of Henry site
-dmat <- sp::spDistsN1(stations.sp, henry_coords, longlat = TRUE)
+dmat <- sp::spDistsN1(stations.sp, henry_coords)
+stations$distance_km <- dmat / 1000
 
 # determine the 10 nearest stations (could also set a distance threshold -- in degrees)
 idx.nearest <- order(dmat)[1:10]
@@ -189,18 +120,26 @@ last.year <- as.numeric(max(format(as.Date(date.axis), "%Y")))
 year.seq <- as.character(first.year:last.year)
 
 # now, loop through each year and download the GHCND data (daily summaries)
-res <- do.call('rbind', lapply(year.seq, function(year) {
-  get_NOAA_GHCND_by_stationyear(noaa.station$id,
-                                year = year,
-                                datatypeid = "PRCP",
-                                apitoken = noaa_api_token)
-}))
+res <- get_NOAA_GHCND(stations = noaa.station$id, years = year.seq, 
+                      datatypeid = "PRCP", apitoken = noaa_api_token)
 
-# filter result to get precipitation data
+# filter result to get JUST precipitation data
 res.precip <- filter(res, datatype == "PRCP")
 
 # convert 10ths of millimeters (integer storage of decimal) to centimeters
 res.precip$value <- res.precip$value / 100
+
+ylabel1 <- 'Water Level (cm)'
+ylabel2 <- 'Precipitation (cm)'
+
+# if use_metric == FALSE, convert precip and water level from cm to inches
+if(!use_metric) {
+  res.precip$value <- res.precip$value / 2.54
+  x.sub$sensor_value <- x.sub$sensor_value / 2.54
+  
+  ylabel1 <- 'Water Level (in)'
+  ylabel2 <- 'Precipitation (in)'
+}
 
 # convert date to Date object for plotting
 res.precip$date <- as.Date(res.precip$date)
@@ -210,7 +149,7 @@ p.1 <- xyplot(sensor_value ~ date_time,
     data = x.sub,
     type = c('l', 'g'),
     cex = 0.75,
-    ylab = 'Water Level (cm)',
+    ylab = ylabel1,
     xlab = '',
     scales = list(
       x = list(at = date.axis, format = "%b\n%Y"),
@@ -226,15 +165,22 @@ p.2 <- xyplot(value ~ date,
               type = c('h'),
               strip = strip.custom(bg = grey(0.80)),
               scales = list(x = list(at = date.axis, format = "%b\n%Y")),
-              ylab = 'Precipitation (cm)')
+              ylab = ylabel2)
 
 # combine plots into panels (latticeExtra feature)
 p.3 <- c(p.1, p.2, layout = c(1, 2), x.same = TRUE)
 
+# calculate distance value to show
+distshow <- ifelse(use_metric, 
+                         paste(round(noaa.station$distance_km, 1), 'km'),
+                         paste(round(noaa.station$distance_km / 1.609, 1), 'mi'))
+
+# make combined plot
 update(p.3,
   scales = list(alternating = 3, y = list(rot = 0)),
-  ylab = c('Water Level (cm)', 'Precipitation (cm)'),
-  main = 'Daily Values',
+  ylab = c(ylabel1, ylabel2),
+  main = sprintf('Water Level (HENRY: %s)\nPrecipitation (NOAA: %s)\nDistance: %s',
+                henry_sensor_name, noaa.station$name, distshow),
   xlim = c(start.date, stop.date),
   panel = function(...) {
     panel.xyplot(...)
