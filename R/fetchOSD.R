@@ -57,6 +57,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	                          chroma=matrix_wet_color_chroma, dry_hue=matrix_dry_color_hue,
 	                          dry_value=matrix_dry_color_value, dry_chroma=matrix_dry_color_chroma,
 	                          texture_class=texture_class, cf_class=cf_class, pH=ph, pH_class=ph_class,
+	                          distinctness=distinctness, topography=topography,
 	                          narrative=narrative,
 	                          stringsAsFactors=FALSE)) 
 	}
@@ -68,6 +69,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	                          chroma=matrix_dry_color_chroma, moist_hue=matrix_wet_color_hue,
 	                          moist_value=matrix_wet_color_value, moist_chroma=matrix_wet_color_chroma,
 	                          texture_class=texture_class, cf_class=cf_class, pH=ph, pH_class=ph_class,
+	                          distinctness=distinctness, topography=topography,
 	                          narrative=narrative,
 	                          stringsAsFactors=FALSE))
 	}
