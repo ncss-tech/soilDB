@@ -28,9 +28,7 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
     # merge
     co <- merge(co, pm,    by = "cokey", all.x = TRUE, sort = FALSE)
     co <- merge(co, cogmd, by = "cokey", all.x = TRUE, sort = FALSE)
-    
-    }
-  
+  }
   
   # recode metadata domains
   co <- uncode(co,
@@ -91,7 +89,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   qry <- paste0("SELECT * FROM mapunit WHERE ", WHERE)
   mu  <- read_sf(dsn = dsn, layer = "mapunit", query = qry)
   
-  qry <- paste0("SELECT * FROM legend WHERE lkey IN ('", paste0(le$lkey, collapse = "', '"), "')")
+  qry <- paste0("SELECT * FROM legend WHERE lkey IN ('", paste0(unique(mu$lkey), collapse = "', '"), "')")
   le <- read_sf(dsn = dsn, layer = "legend", query = qry)
   
   mu <- merge(mu, le, by = "lkey", all.x = TRUE, sort = FALSE)
@@ -249,12 +247,11 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
     cogmd <- merge(cogmd, lf_2d, by = "cogeomdkey", all.x = TRUE, sort = FALSE)
     cogmd$cogeomdkey <- NULL
 
-    
   return(cogmd)
 }
 
 
-.get_chorizon_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", co, droplevels = TRUE) {
+.get_chorizon_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", co, droplevels = TRUE, stringsAsFactors = TRUE) {
   
   # chorizon
   qry <- paste0(
@@ -267,41 +264,49 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   ch  <- read_sf(dsn = dsn, layer = "chorizon", query = qry, as_tibble = FALSE)
   
   
-  
-  idx <- c(0, rep(4993, 10) * 1:10)
-  ch$idx <- as.character(cut(1:nrow(ch), breaks = idx))
-  
   # iterate over the threshold
-  temp <- by(ch, ch$idx, function(x) {
-    # chtexturegrp
-    qry  <- paste0("SELECT * FROM chtexturegrp WHERE rvindicator = 'Yes' AND chkey IN ('", paste0(x$chkey, collapse = "', '"), "')")
-    chtg <- read_sf(dsn = dsn, layer = "chtexturegrp", query = qry, as_tibble = FALSE)
-    chtg <- aggregate(texture ~ chkey + chtgkey, data = chtg, paste0, collapse = " ")
+  if (nrow(ch) > 0) { 
     
-    # chtexture
-    qry  <- paste0("SELECT * FROM chtexture WHERE chtgkey IN ('", paste0(chtg$chtgkey, collapse = "', '"), "')")
-    cht <- read_sf(dsn = dsn, layer = "chtexture", query = qry, as_tibble = FALSE)
-    cht <- aggregate(texcl   ~ chtgkey, data = cht, paste0, collapse = " ")
+    idx <- c(0, rep(4000, 10) * 1:10)
+    ch$idx <- as.character(cut(1:nrow(ch), breaks = idx))
     
-    # merge
-    ch <- merge(x, chtg, by = "chkey",   all.x = TRUE, sort = FALSE)
-    ch <- merge(ch, cht,  by = "chtgkey", all.x = TRUE, sort = FALSE)
+    temp <- by(ch, ch$idx, function(x) {
+      # chtexturegrp
+      qry  <- paste0("SELECT * FROM chtexturegrp WHERE rvindicator = 'Yes' AND chkey IN ('", paste0(x$chkey, collapse = "', '"), "')")
+      chtg <- read_sf(dsn = dsn, layer = "chtexturegrp", query = qry, as_tibble = FALSE)
+      
+      # chtexture
+      qry  <- paste0("SELECT * FROM chtexture WHERE chtgkey IN ('", paste0(chtg$chtgkey, collapse = "', '"), "')")
+      cht <- read_sf(dsn = dsn, layer = "chtexture", query = qry, as_tibble = FALSE)
+      
+      # aggregate
+      chtg <- aggregate(texture ~ chkey + chtgkey, data = chtg, paste0, collapse = ", ")
+      cht  <- aggregate(texcl   ~ chtgkey, data = cht, paste0, collapse = ", ")
+      
+      # merge
+      ch <- merge(x, chtg, by = "chkey",   all.x = TRUE, sort = FALSE)
+      ch <- merge(ch, cht,  by = "chtgkey", all.x = TRUE, sort = FALSE)
     
-    vars <- c("cokey", "chkey", "hzname", "hzdept_r", "hzdepb_r", "texture", "texcl", "sandtotal_l", "sandtotal_r", "sandtotal_h", "silttotal_l", "silttotal_r", "silttotal_h", "claytotal_l", "claytotal_r", "claytotal_h", "om_l", "om_r", "om_h", "dbthirdbar_l", "dbthirdbar_r", "dbthirdbar_h", "ksat_l", "ksat_r", "ksat_h", "awc_l", "awc_r", "awc_h", "lep_r", "sar_r", "ec_r", "cec7_r", "sumbases_r", "ph1to1h2o_l", "ph1to1h2o_r", "ph1to1h2o_h", "caco3_l", "caco3_r", "caco3_h", "kwfact", "kffact")
-    ch <- ch[vars]
     
-    return(ch)
-  })
-  ch <- do.call("rbind", temp)
+      vars <- c("cokey", "chkey", "hzname", "hzdept_r", "hzdepb_r", "texture", "texcl", "sandtotal_l", "sandtotal_r", "sandtotal_h", "silttotal_l", "silttotal_r", "silttotal_h", "claytotal_l", "claytotal_r", "claytotal_h", "om_l", "om_r", "om_h", "dbthirdbar_l", "dbthirdbar_r", "dbthirdbar_h", "ksat_l", "ksat_r", "ksat_h", "awc_l", "awc_r", "awc_h", "lep_r", "sar_r", "ec_r", "cec7_r", "sumbases_r", "ph1to1h2o_l", "ph1to1h2o_r", "ph1to1h2o_h", "caco3_l", "caco3_r", "caco3_h", "kwfact", "kffact")
+      ch <- ch[vars]
+    
+      return(ch)
+      })
+    ch <- do.call("rbind", temp)
+    ch$idx <- NULL
+    } else {
+      idx <- which(names(ch) == "hzdepb_r")
+      ch  <- cbind(ch[1:idx], texture = as.character(NULL), texcl = as.character(NULL), ch[(idx + 1):ncol(ch)])
+    }
   
   ch <- uncode(ch,
                db = "SDA",
                droplevels = droplevels,
-               stringsAsFactors = TRUE
+               stringsAsFactors = stringsAsFactors
   )
 
   return(ch)
-  
 }
 
 
@@ -312,9 +317,6 @@ fetchGDB <- function(dsn = "D:/geodata/soils/gNATSGO_CONUS.gdb",
                      stringsAsFactors = TRUE
 ) {
   
-  WHERE <- gsub("mukey", "", WHERE)
-  
-  
   # target legend table
   le_vars <- c("mlraoffice|areasymbol|areaname|areatypename|areaacres|ssastatus|projectscale|cordate|lkey")
   idx <- grepl(le_vars, WHERE)
@@ -323,9 +325,10 @@ fetchGDB <- function(dsn = "D:/geodata/soils/gNATSGO_CONUS.gdb",
     
     qry <- paste0("lkey IN ('", paste(le$lkey, collapse = "', '"), "')")
     mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = qry)
+    mu <- mu[order(mu$areasymbol), ]
     
-    temp <- by(mu, mu$lkey, function(x) {
-      message("getting components from areasymbol = '", le[le$lkey %in% unique(x$lkey), "areasymbol"], "'")
+    temp <- by(mu, mu$areasymbol, function(x) {
+      message("getting components and horizons from areasymbol = '", unique(x$areasymbol), "'")
       qry <- paste0("mukey IN ('", paste0(x$mukey, collapse = "', '"), "')") 
       co  <- suppressMessages(get_component_from_GDB(dsn = dsn, WHERE = qry, childs = childs, droplevels = droplevels, stringsAsFactors = stringsAsFactors))
       
@@ -333,11 +336,12 @@ fetchGDB <- function(dsn = "D:/geodata/soils/gNATSGO_CONUS.gdb",
       
       return(list(co =  co, h = h))
       })
-    co <- do.call("rbind", lapply(temp, function(x) x$co))
-    h  <- do.call("rbind", lapply(temp, function(x) x$h))
   }
   
-  f <- h
+  co <- do.call("rbind", lapply(temp, function(x) x$co))
+  h  <- do.call("rbind", lapply(temp, function(x) x$h))
+  
+  f <- merge(co["cokey"], h, by = "cokey", all.x = TRUE, sort = FALSE)
   f <- f[order(f$cokey), ]
   depths(f) <- cokey ~ hzdept_r + hzdepb_r
   site(f) <- co
