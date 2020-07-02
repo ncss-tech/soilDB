@@ -19,13 +19,21 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
     
     # exec sub query
     pm    <- .get_copmgrp_from_GDB(dsn = dsn, co)
-    cogmd <- .get_cogeomordesc_from_GDB(dsn = dsn, co)
+    
+    idx <- c(0, rep(1500, 10) * 1:10)
+    co$idx <- as.character(cut(1:nrow(co), breaks = idx))
+    
+    cogmd <- by(co, co$idx, function(x) {
+       temp <- .get_cogeomordesc_from_GDB(dsn = dsn, x)
+    })
+    cogmd <- do.call("rbind", cogmd)
     
     # prep
     pm    <- .copm_prep(pm, db = "SDA")
     cogmd <- .cogmd_prep(cogmd, db = "SDA")
       
     # merge
+    co$idx <- NULL
     co <- merge(co, pm,    by = "cokey", all.x = TRUE, sort = FALSE)
     co <- merge(co, cogmd, by = "cokey", all.x = TRUE, sort = FALSE)
   }
@@ -267,7 +275,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   # iterate over the threshold
   if (nrow(ch) > 0) { 
     
-    idx <- c(0, rep(4000, 10) * 1:10)
+    idx <- c(0, rep(3000, 10) * 1:10)
     ch$idx <- as.character(cut(1:nrow(ch), breaks = idx))
     
     temp <- by(ch, ch$idx, function(x) {
