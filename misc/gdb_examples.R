@@ -5,6 +5,7 @@ library(sf)
 dsn <- "D:/geodata/soils/gNATSGO_CONUS.gdb"
 
 le <- get_legend_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE '%'")
+le <- le[order(le$areasymbol), ]
 
 mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = "muname LIKE 'Miami%'")
 
@@ -14,10 +15,13 @@ f_in <- fetchGDB(dsn, WHERE = "areasymbol LIKE 'IN%'")
 f_ca <- fetchGDB(dsn, WHERE = "areasymbol LIKE 'CA%'")
 f_mi <- fetchGDB(dsn, WHERE = "areasymbol LIKE 'MI%'")
 
-le <- le[order(le$areasymbol), ]
-f_us <- lapply(le$areasymbol[2313:nrow(le)], function(x) {
+
+f_us <- lapply(sample(le$areasymbol, 30), function(x) {
     WHERE <- paste0("areasymbol = '", x, "'")
   f <- fetchGDB(dsn, WHERE = WHERE)
 })
+f_us <- aqp::union(f_us)
+length(f_us)
 
-test <- fetchGDB(dsn, WHERE = "areasymbol = 'OR649'")
+
+test <- fetchGDB(dsn, WHERE = "areasymbol IN ('OR649', 'US')")

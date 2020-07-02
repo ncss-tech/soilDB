@@ -262,23 +262,30 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 .get_chorizon_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", co, droplevels = TRUE, stringsAsFactors = TRUE) {
   
   # chorizon
-  qry <- paste0(
+  idx <- c(0, rep(3000, 10) * 1:10)
+  co$idx <- as.character(cut(1:nrow(co), breaks = idx))
+  
+  ch <- by(co, co$idx, function(x) {
+    qry <- paste0(
   "SELECT cokey, chkey, hzname, hzdept_r, hzdepb_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, kwfact, kffact
   
-  FROM chorizon
+    FROM chorizon
   
-  WHERE cokey IN ('", paste0(co$cokey, collapse = "', '"), "')" 
-  )
-  ch  <- read_sf(dsn = dsn, layer = "chorizon", query = qry, as_tibble = FALSE)
+    WHERE cokey IN ('", paste0(x$cokey, collapse = "', '"), "')" 
+    )
+    ch  <- read_sf(dsn = dsn, layer = "chorizon", query = qry, as_tibble = FALSE)
+  })
+  ch <- do.call("rbind", ch)
   
   
   # iterate over the threshold
   if (nrow(ch) > 0) { 
     
     idx <- c(0, rep(3000, 10) * 1:10)
-    ch$idx <- as.character(cut(1:nrow(ch), breaks = idx))
+    ch$idx <- as.character(cut(1:nrow(ch), breaks = idx, labels = 1:10))
     
     temp <- by(ch, ch$idx, function(x) {
+      
       # chtexturegrp
       qry  <- paste0("SELECT * FROM chtexturegrp WHERE rvindicator = 'Yes' AND chkey IN ('", paste0(x$chkey, collapse = "', '"), "')")
       chtg <- read_sf(dsn = dsn, layer = "chtexturegrp", query = qry, as_tibble = FALSE)
@@ -288,17 +295,20 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
       cht <- read_sf(dsn = dsn, layer = "chtexture", query = qry, as_tibble = FALSE)
       
       # aggregate
-      chtg <- aggregate(texture ~ chkey + chtgkey, data = chtg, paste0, collapse = ", ")
-      cht  <- aggregate(texcl   ~ chtgkey, data = cht, paste0, collapse = ", ")
+      if (nrow(chtg) > 0) {
+        chtg <- aggregate(texture ~ chkey + chtgkey, data = chtg, paste0, collapse = ", ")
+      } else chtg <- chtg[c("chkey", "chtgkey", "texture")]
+      if (nrow(cht) > 0) {
+        cht  <- aggregate(texcl   ~ chtgkey,         data = cht,  paste0, collapse = ", ")
+      } else cht <- cht[c("chtgkey", "texcl")]
       
       # merge
-      ch <- merge(x, chtg, by = "chkey",   all.x = TRUE, sort = FALSE)
+      ch <- merge(x, chtg, by = "chkey",    all.x = TRUE, sort = FALSE)
       ch <- merge(ch, cht,  by = "chtgkey", all.x = TRUE, sort = FALSE)
-    
-    
+      
       vars <- c("cokey", "chkey", "hzname", "hzdept_r", "hzdepb_r", "texture", "texcl", "sandtotal_l", "sandtotal_r", "sandtotal_h", "silttotal_l", "silttotal_r", "silttotal_h", "claytotal_l", "claytotal_r", "claytotal_h", "om_l", "om_r", "om_h", "dbthirdbar_l", "dbthirdbar_r", "dbthirdbar_h", "ksat_l", "ksat_r", "ksat_h", "awc_l", "awc_r", "awc_h", "lep_r", "sar_r", "ec_r", "cec7_r", "sumbases_r", "ph1to1h2o_l", "ph1to1h2o_r", "ph1to1h2o_h", "caco3_l", "caco3_r", "caco3_h", "kwfact", "kffact")
       ch <- ch[vars]
-    
+      
       return(ch)
       })
     ch <- do.call("rbind", temp)
@@ -337,14 +347,43 @@ fetchGDB <- function(dsn = "D:/geodata/soils/gNATSGO_CONUS.gdb",
     
     temp <- by(mu, mu$areasymbol, function(x) {
       message("getting components and horizons from areasymbol = '", unique(x$areasymbol), "'")
-      qry <- paste0("mukey IN ('", paste0(x$mukey, collapse = "', '"), "')") 
-      co  <- suppressMessages(get_component_from_GDB(dsn = dsn, WHERE = qry, childs = childs, droplevels = droplevels, stringsAsFactors = stringsAsFactors))
       
-      h   <- .get_chorizon_from_GDB(dsn = dsn, co)
+      # components
+      idx <- c(0, rep(400, 10) * 1:10)
+      x$idx <- as.character(cut(1:nrow(x), breaks = idx))
+      co <- by(x, x$idx, function(x2) {
+        qry <- paste0("mukey IN ('", paste0(x2$mukey, collapse = "', '"), "')")
+        tryCatch({
+          co  <- suppressMessages(get_component_from_GDB(
+            dsn        = dsn, 
+            WHERE      = qry, 
+            childs     = childs, 
+            droplevels = droplevels, 
+            stringsAsFactors = stringsAsFactors
+            ))
+          },
+          error = function(err) {
+            print(paste("Error occured: ", err))
+            return(NULL)
+            }
+          )
+        })
+      co <- do.call("rbind", co)
+      co$idx <- NULL
+      
+      # horizons
+      tryCatch({
+        h   <- .get_chorizon_from_GDB(dsn = dsn, co)
+        },
+        error = function(err) {
+          print(paste("Error occured: ", err))
+          return(NULL)
+          }
+        )
       
       return(list(co =  co, h = h))
       })
-  }
+  } else message("query columns not found in the legend table")
   
   co <- do.call("rbind", lapply(temp, function(x) x$co))
   h  <- do.call("rbind", lapply(temp, function(x) x$h))
