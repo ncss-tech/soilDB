@@ -16,12 +16,9 @@ f_ca <- fetchGDB(dsn, WHERE = "areasymbol LIKE 'CA%'")
 f_mi <- fetchGDB(dsn, WHERE = "areasymbol LIKE 'MI%'")
 
 
-f_us <- lapply(sample(le$areasymbol, 30), function(x) {
-    WHERE <- paste0("areasymbol = '", x, "'")
-  f <- fetchGDB(dsn, WHERE = WHERE)
-})
-f_us <- aqp::union(f_us)
-length(f_us)
+f <- fetchGDB(dsn, WHERE = "areasymbol LIKE '%'")
+save(f_us, file = "gnatsgo.RData")
 
 
-test <- fetchGDB(dsn, WHERE = "areasymbol IN ('OR649', 'US')")
+WHERE <- paste0("areasymbol IN ('", paste0(le2, collapse = "', '"), "')")
+system.time(test <- fetchGDB(dsn, WHERE = WHERE))

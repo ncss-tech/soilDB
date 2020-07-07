@@ -8,10 +8,10 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
     FROM component
     
     WHERE", WHERE
-    )
+  )
   co <- read_sf(dsn = dsn, layer = "component", query = qry, as_tibble = FALSE)
-    
-    
+  
+  
   # childs
   if (childs == TRUE) {
     
@@ -24,14 +24,14 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
     co$idx <- as.character(cut(1:nrow(co), breaks = idx))
     
     cogmd <- by(co, co$idx, function(x) {
-       temp <- .get_cogeomordesc_from_GDB(dsn = dsn, x)
+      temp <- .get_cogeomordesc_from_GDB(dsn = dsn, x)
     })
     cogmd <- do.call("rbind", cogmd)
     
     # prep
     pm    <- .copm_prep(pm, db = "SDA")
     cogmd <- .cogmd_prep(cogmd, db = "SDA")
-      
+    
     # merge
     co$idx <- NULL
     co <- merge(co, pm,    by = "cokey", all.x = TRUE, sort = FALSE)
@@ -114,10 +114,10 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
          FROM component 
           
          WHERE mukey IN ('", paste0(x$mukey, collapse = "', '"), "')"
-        )
+      )
       message("getting components from ", unique(x$areasymbol))
       read_sf(dsn = dsn, layer = "component", query = qry)
-      })
+    })
     co <- do.call("rbind", co)
     
     co <- {
@@ -127,7 +127,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
                           n_component   = as.integer(0),
                           n_majcompflag = as.integer(0),
                           stringsAsFactors = FALSE
-                          )
+      )
       split(co, co$mukey, drop = TRUE) ->.;
       lapply(., function(x) {
         df               = x$df[1, ]
@@ -144,13 +144,13 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   }
   
   
-
+  
   # recode metadata domains
   mu <- uncode(mu,
                db = "SDA",
                droplevels = droplevels,
                stringsAsFactors = stringsAsFactors
-               )
+  )
   
   vars <- c("areasymbol", "lkey", "mukey", "musym", "muname", "mukind", "mustatus", "invesintens", "muacres", "farmlndcl", "pct_component", "pct_hydric", "n_component", "n_majcompflag")
   
@@ -161,13 +161,13 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   
   # done
   return(mu)
-
+  
 }
 
 
 .get_copmgrp_from_GDB <- function(dsn = dsn, co) {
   
- # message("getting ", unique(substr(x$areasymbol, 1, 2)))
+  # message("getting ", unique(substr(x$areasymbol, 1, 2)))
   qry <- paste0(
     "SELECT cokey, copmgrpkey, pmgroupname
     
@@ -175,16 +175,16 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
     
      WHERE rvindicator = 'Yes' AND
           cokey IN ('", paste0(co$cokey, collapse = "', '"), "')"
-    )
+  )
   pmg <- read_sf(dsn = dsn, layer = "copmgrp", query = qry, as_tibble = FALSE)
-    
+  
   qry <- paste0(
     "SELECT copmgrpkey, pmorder, pmkind, pmorigin
       
      FROM copm
       
      WHERE copmgrpkey IN ('", paste0(pmg$copmgrpkey, collapse = "', '"), "')"
-    )
+  )
   pm <- read_sf(dsn = dsn, layer = "copm", query = qry, as_tibble = FALSE)
   
   pm <- merge(pmg, pm, by = "copmgrpkey", all.x = TRUE, sort = FALSE)
@@ -198,63 +198,63 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 .get_cogeomordesc_from_GDB <- function(dsn = dsn, co) {
   
   qry <- paste0(
-      "SELECT cokey, geomftname, geomfname, geomfeatid, existsonfeat, cogeomdkey
+    "SELECT cokey, geomftname, geomfname, geomfeatid, existsonfeat, cogeomdkey
       
       FROM cogeomordesc
       
       WHERE rvindicator = 'Yes' AND 
             cokey IN ('", paste0(co$cokey, collapse = "', '"), "')"
-    )
-    cogmd    <- read_sf(dsn, layer = "cogeomordesc", query = qry, as_tibble = FALSE)
-    cogmd_ls <- cogmd[cogmd$geomftname == "Landscape", ]
-    cogmd_lf <- cogmd[cogmd$geomftname == "Landform",  ]
-    cogmd_lf$geomftname <- NULL
-    
-    names(cogmd_ls)[names(cogmd_ls) == "geomfname"] <- "landscape"
-    names(cogmd_lf)[names(cogmd_lf) == "geomfname"] <- "landform"
-    
-    
-    # geomorphic components
-    qry <- paste0(
-      "SELECT geomposmntn, geomposhill, geompostrce, geomposflats, cogeomdkey
+  )
+  cogmd    <- read_sf(dsn, layer = "cogeomordesc", query = qry, as_tibble = FALSE)
+  cogmd_ls <- cogmd[cogmd$geomftname == "Landscape", ]
+  cogmd_lf <- cogmd[cogmd$geomftname == "Landform",  ]
+  cogmd_lf$geomftname <- NULL
+  
+  names(cogmd_ls)[names(cogmd_ls) == "geomfname"] <- "landscape"
+  names(cogmd_lf)[names(cogmd_lf) == "geomfname"] <- "landform"
+  
+  
+  # geomorphic components
+  qry <- paste0(
+    "SELECT geomposmntn, geomposhill, geompostrce, geomposflats, cogeomdkey
       
       FROM cosurfmorphgc
       
       WHERE cogeomdkey IN ('", paste0(cogmd_lf$cogeomdkey, collapse = "', '"), "')"
-    )
-    lf_3d <- read_sf(dsn, layer = "cosurfmorphgc", query = qry, as_tibble = FALSE)
-    names(lf_3d)[1:4] <- gsub("geompos", "", names(lf_3d)[1:4])
-    
-    
-    # slope shape
-    qry <- paste0(
-      "SELECT shapeacross, shapedown, cogeomdkey
+  )
+  lf_3d <- read_sf(dsn, layer = "cosurfmorphgc", query = qry, as_tibble = FALSE)
+  names(lf_3d)[1:4] <- gsub("geompos", "", names(lf_3d)[1:4])
+  
+  
+  # slope shape
+  qry <- paste0(
+    "SELECT shapeacross, shapedown, cogeomdkey
       
       FROM cosurfmorphss
       
       WHERE cogeomdkey IN ('", paste0(cogmd_lf$cogeomdkey, collapse = "', '"), "')"
-    )
-    lf_ss <- read_sf(dsn, layer = "cosurfmorphgc", query = qry, as_tibble = FALSE)
-    
-    
-    # hillslope position
-    qry <- paste0(
-      "SELECT hillslopeprof, cogeomdkey
+  )
+  lf_ss <- read_sf(dsn, layer = "cosurfmorphgc", query = qry, as_tibble = FALSE)
+  
+  
+  # hillslope position
+  qry <- paste0(
+    "SELECT hillslopeprof, cogeomdkey
       
       FROM cosurfmorphhpp
       
       WHERE cogeomdkey IN ('", paste0(cogmd_lf$cogeomdkey, collapse = "', '"), "')"
-    )
-    lf_2d <- read_sf(dsn, layer = "cosurfmorphhpp", query = qry, as_tibble = FALSE)
-    
-    
-    # merge results
-    cogmd <- merge(cogmd_ls[c("cokey", "landscape")], cogmd_lf, by = "cokey", all.x = TRUE, sort = FALSE)
-    cogmd <- merge(cogmd, lf_3d, by = "cogeomdkey", all.x = TRUE, sort = FALSE)
-    cogmd <- merge(cogmd, lf_ss, by = "cogeomdkey", all.x = TRUE, sort = FALSE)
-    cogmd <- merge(cogmd, lf_2d, by = "cogeomdkey", all.x = TRUE, sort = FALSE)
-    cogmd$cogeomdkey <- NULL
-
+  )
+  lf_2d <- read_sf(dsn, layer = "cosurfmorphhpp", query = qry, as_tibble = FALSE)
+  
+  
+  # merge results
+  cogmd <- merge(cogmd_ls[c("cokey", "landscape")], cogmd_lf, by = "cokey", all.x = TRUE, sort = FALSE)
+  cogmd <- merge(cogmd, lf_3d, by = "cogeomdkey", all.x = TRUE, sort = FALSE)
+  cogmd <- merge(cogmd, lf_ss, by = "cogeomdkey", all.x = TRUE, sort = FALSE)
+  cogmd <- merge(cogmd, lf_2d, by = "cogeomdkey", all.x = TRUE, sort = FALSE)
+  cogmd$cogeomdkey <- NULL
+  
   return(cogmd)
 }
 
@@ -267,7 +267,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   
   ch <- by(co, co$idx, function(x) {
     qry <- paste0(
-  "SELECT cokey, chkey, hzname, hzdept_r, hzdepb_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, kwfact, kffact
+      "SELECT cokey, chkey, hzname, hzdept_r, hzdepb_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, kwfact, kffact
   
     FROM chorizon
   
@@ -310,20 +310,20 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
       ch <- ch[vars]
       
       return(ch)
-      })
+    })
     ch <- do.call("rbind", temp)
     ch$idx <- NULL
-    } else {
-      idx <- which(names(ch) == "hzdepb_r")
-      ch  <- cbind(ch[1:idx], texture = as.character(NULL), texcl = as.character(NULL), ch[(idx + 1):ncol(ch)])
-    }
+  } else {
+    idx <- which(names(ch) == "hzdepb_r")
+    ch  <- cbind(ch[1:idx], texture = as.character(NULL), texcl = as.character(NULL), ch[(idx + 1):ncol(ch)])
+  }
   
   ch <- uncode(ch,
                db = "SDA",
                droplevels = droplevels,
                stringsAsFactors = stringsAsFactors
   )
-
+  
   return(ch)
 }
 
@@ -335,18 +335,47 @@ fetchGDB <- function(dsn = "D:/geodata/soils/gNATSGO_CONUS.gdb",
                      stringsAsFactors = TRUE
 ) {
   
+  
+  le_vars <- "mlraoffice|areasymbol|areaname|areatypename|areaacres|ssastatus|projectscale|cordate|lkey"
+  mu_vars <- "mukey|musym|muname|mukind|mustatus|invesintens|muacres|farmlndcl"
+  co_vars <- "comppct_l|comppct_r|comppct_h|compname|compkind|majcompflag|otherph|localphase|slope_l|slope_r|slope_h|slopelenusle_l|slopelenusle_r|slopelenusle_h|runoff|tfact|wei|weg|erocl|earthcovkind1|earthcovkind2|hydricon|hydricrating|drainagecl|elev_l|elev_r|elev_h|aspectccwise|aspectrep|aspectcwise|geomdesc|albedodry_l|albedodry_r|albedodry_h|airtempa_l|airtempa_r|airtempa_h|map_l|map_r|map_h|reannualprecip_l|reannualprecip_r|reannualprecip_h|ffd_l|ffd_r|ffd_h|nirrcapcl|nirrcapscl|nirrcapunit|irrcapcl|irrcapscl|irrcapunit|cropprodindex|constreeshrubgrp|wndbrksuitgrp|rsprod_l|rsprod_r|rsprod_h|foragesuitgrpid|wlgrain|wlgrass|wlherbaceous|wlshrub|wlconiferous|wlhardwood|wlwetplant|wlshallowwat|wlrangeland|wlopenland|wlwoodland|wlwetland|soilslippot|frostact|initsub_l|initsub_r|initsub_h|totalsub_l|totalsub_r|totalsub_h|hydgrp|corcon|corsteel|taxclname|taxorder|taxsuborder|taxgrtgroup|taxsubgrp|taxpartsize|taxpartsizemod|taxceactcl|taxreaction|taxtempcl|taxmoistscl|taxtempregime|soiltaxedition|castorieindex|flecolcomnum|flhe|flphe|flsoilleachpot|flsoirunoffpot|fltemik2use|fltriumph2use|indraingrp|innitrateleachi|misoimgmtgrp|vasoimgtgrp|cokey"
+  
+  le_idx <- grepl(le_vars, WHERE)
+  mu_idx <- grepl(mu_vars, WHERE)
+  co_idx <- grepl(co_vars, WHERE)
+  
+  if (le_idx & mu_idx & co_idx | le_idx & mu_idx | le_idx & co_idx | mu_idx & co_idx) {
+    stop("WHERE can only target 1 table at a time")
+  }
+  
+  
   # target legend table
-  le_vars <- c("mlraoffice|areasymbol|areaname|areatypename|areaacres|ssastatus|projectscale|cordate|lkey")
-  idx <- grepl(le_vars, WHERE)
-  if (idx) {
+  if (le_idx) {
     le <- get_legend_from_GDB(dsn = dsn, WHERE = WHERE, stats = FALSE)
     
     qry <- paste0("lkey IN ('", paste(le$lkey, collapse = "', '"), "')")
     mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = qry)
     mu <- mu[order(mu$areasymbol), ]
+  }
+  
+  # target mapunit table
+  if (mu_idx) {
+    mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = WHERE)
+    mu <- mu[order(mu$areasymbol), ]
+  }
+  
+  
+  # get components
+  if (le_idx | mu_idx) {
     
-    temp <- by(mu, mu$areasymbol, function(x) {
-      message("getting components and horizons from areasymbol = '", unique(x$areasymbol), "'")
+    if (le_idx) mu$idx <- mu$areasymbol
+    if (mu_idx) mu$idx <- "1"
+    
+    temp <- by(mu, mu$idx, function(x) {
+      
+      if (le_idx) {
+        message("getting components and horizons from areasymbol = '", unique(x$idx), "'")
+      } else message("getting components and horizons from ", WHERE)
       
       # components
       idx <- c(0, rep(400, 10) * 1:10)
@@ -360,33 +389,63 @@ fetchGDB <- function(dsn = "D:/geodata/soils/gNATSGO_CONUS.gdb",
             childs     = childs, 
             droplevels = droplevels, 
             stringsAsFactors = stringsAsFactors
-            ))
-          },
-          error = function(err) {
-            print(paste("Error occured: ", err))
-            return(NULL)
-            }
-          )
-        })
+          ))
+        },
+        error = function(err) {
+          print(paste("Error occured: ", err))
+          return(NULL)
+        }
+        )
+      })
       co <- do.call("rbind", co)
       co$idx <- NULL
       
       # horizons
       tryCatch({
         h   <- .get_chorizon_from_GDB(dsn = dsn, co)
-        },
-        error = function(err) {
-          print(paste("Error occured: ", err))
-          return(NULL)
-          }
-        )
+      },
+      error = function(err) {
+        print(paste("Error occured: ", err))
+        return(NULL)
+      }
+      )
       
-      return(list(co =  co, h = h))
-      })
-  } else message("query columns not found in the legend table")
+      return(list(co = co, h = h))
+    })
+    
+    co <- do.call("rbind", lapply(temp, function(x) x$co))
+    h  <- do.call("rbind", lapply(temp, function(x) x$h))
+    
+  } else {
+    
+    message("getting components and horizons from ", WHERE)
+    
+    # target component table
+    tryCatch({
+      co  <- suppressMessages(get_component_from_GDB(
+        dsn        = dsn, 
+        WHERE      = WHERE, 
+        childs     = childs, 
+        droplevels = droplevels, 
+        stringsAsFactors = stringsAsFactors
+      ))
+    },
+    error = function(err) {
+      print(paste("Error occured: ", err))
+      return(NULL)
+    }
+    )
+    # horizons
+    tryCatch({
+      h   <- .get_chorizon_from_GDB(dsn = dsn, co)
+    },
+    error = function(err) {
+      print(paste("Error occured: ", err))
+      return(NULL)
+    }
+    )
+  }
   
-  co <- do.call("rbind", lapply(temp, function(x) x$co))
-  h  <- do.call("rbind", lapply(temp, function(x) x$h))
   
   f <- merge(co["cokey"], h, by = "cokey", all.x = TRUE, sort = FALSE)
   f <- f[order(f$cokey), ]
