@@ -9,7 +9,7 @@ Maintainer: Andrew Brown <andrew.g.brown@usda.gov>
 Description: A collection of functions for reading data from USDA-NCSS soil databases.
 License: GPL (>= 3)
 LazyLoad: yes
-Depends: R (>= 3.0.0)
+Depends: R (>= 3.5.0)
 Imports: aqp, grDevices, graphics, stats, utils, plyr, xml2, sp, reshape2, raster, curl, lattice, methods
 Suggests: rgdal, jsonlite, RODBC, httr, sf, rgeos, rvest,
     testthat, stringr, latticeExtra,

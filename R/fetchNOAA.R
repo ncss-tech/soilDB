@@ -29,6 +29,9 @@
 #' 
 get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1) {
   
+  if(!requireNamespace("httr"))
+    stop("package `httr` is required")
+  
   # determine dimension in each direction to build bbox
   coord <- data.frame(lat = lat, lng = lng)
   coordinates(coord) <- ~ lng + lat
@@ -41,7 +44,7 @@ get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1) {
   r <- httr::GET(url = sprintf(
     "https://www.ncdc.noaa.gov/cdo-web/api/v2/stations?extent=%s&limit=1000",
     ext_string
-  ), add_headers(token = apitoken))
+  ), httr::add_headers(token = apitoken))
   
   # retrieve content
   r.content <- httr::content(r, as = "text", encoding = "UTF-8")
@@ -55,7 +58,10 @@ get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1) {
   return(d$results)
 }
 
-get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken) {
+.get_NOAA_GHCND_by_stationyear <- function(stationid, year, datatypeid, apitoken) {
+  
+  if(!requireNamespace("httr"))
+    stop("package `httr` is required")
   
   # generate ISO format start/end date from year
   startdate <- sprintf("%s-01-01", year)
@@ -122,5 +128,5 @@ get_NOAA_GHCND <- function(stations, years, datatypeids, apitoken) {
   do.call('rbind', lapply(stations, function(s)
     do.call('rbind', lapply(years, function(y)
       do.call('rbind', lapply(datatypeids, function(d)
-       get_NOAA_GHCND_by_stationyear(s, y, d, apitoken)))))))
+       .get_NOAA_GHCND_by_stationyear(s, y, d, apitoken)))))))
 }

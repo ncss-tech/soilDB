@@ -47,9 +47,6 @@ importFrom(sp,
   spChFIDs
 )
 
-importFrom(httr,
-           add_headers)
-
 importFrom(curl,
   curl,
   new_handle
