@@ -7,7 +7,7 @@
 \title{Load and Flatten Data from SSURGO file geodatabases}
 \description{Functions to load and flatten commonly used tables and from SSURGO file geodatabases, and create soil profile collection objects (SPC).}
 \usage{
-fetchSDA(dsn = "D:/geodata/soils/gNATSGO_CONUS.gdb",
+fetchGDB(dsn = "D:/geodata/soils/gNATSGO_CONUS.gdb",
          WHERE = NULL, 
          childs = TRUE, 
          droplevels = TRUE,
@@ -15,21 +15,25 @@ fetchSDA(dsn = "D:/geodata/soils/gNATSGO_CONUS.gdb",
          )
                    
                      
-get_legend_from_SDA(WHERE = NULL, 
+get_legend_from_GDB(dsn = "D:/geodata/soils/gNATSGO_CONUS.gdb",
+                    WHERE = NULL, 
                     droplevels = TRUE,
                     stringsAsFactors = TRUE,
                     stats = FALSE
                     )
 
-get_mapunit_from_SDA(WHERE = NULL, 
+get_mapunit_from_GDB(dsn = "D:/geodata/soils/gNATSGO_CONUS.gdb",
+                     WHERE = NULL, 
                      droplevels = TRUE,
                      stringsAsFactors = TRUE,
                      stats = FALSE
                      )
 
-get_component_from_SDA(WHERE = NULL, duplicates = FALSE, childs = TRUE,
-                       droplevels = TRUE, nullFragsAreZero = TRUE,
-                       stringsAsFactors = default.stringsAsFactors()
+get_component_from_GDB(dsn = "D:/geodata/soils/gNATSGO_CONUS.gdb",
+                       WHERE = NULL, 
+                       childs = TRUE,
+                       droplevels = TRUE,
+                       stringsAsFactors = TRUE
                        )
 
 }
