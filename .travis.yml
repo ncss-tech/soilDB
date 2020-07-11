@@ -12,10 +12,8 @@ before_install:
   - sudo ldconfig
   - cd $CURWD
 
-before_script:
-  - echo "install.packages('remotes')" > rcalls.R
-  - echo "remotes::install_github('ncss-tech/aqp', dependencies = FALSE, build = FALSE)" >> rcalls.R
-  - Rscript rcalls.R
+r_github_packages:
+ - ncss-tech/aqp
 
 language: r
 sudo: required
