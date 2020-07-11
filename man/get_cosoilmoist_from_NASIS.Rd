@@ -18,17 +18,19 @@ get_cosoilmoist_from_NASIS(impute = TRUE, stringsAsFactors = default.stringsAsFa
 
 \seealso{
 \link{fetchNASIS}, \link{get_cosoilmoist_from_NASISWebReport}, \link{get_cosoilmoist_from_SDA}, \code{get_comonth_from_SDA}
-} 
+}
 
 
 \examples{
 \donttest{
-# load cosoilmoist (e.g. water table data)
-test <- try(get_cosoilmoist_from_NASIS())
+if(local_NASIS_defined()) {
+ # load cosoilmoist (e.g. water table data)
+ test <- try(get_cosoilmoist_from_NASIS())
 
-# inspect
-if(!inherits(test, 'try-error')) {
-  head(test)
+ # inspect
+ if(!inherits(test, 'try-error')) {
+   head(test)
+ }
 }
 }}
 \keyword{manip}

@@ -2,14 +2,14 @@ context("fetchNASISLabData() -- requires local NASIS and ODBC connection")
 
 ## helper functions used to skip tests that rely on special conditions
 # http://r-pkgs.had.co.nz/tests.html
-# 
+#
 # * NASIS on the local machine
 # * pedons / component missing from local database
 
 
 
 check_local_NASIS_labdata_available <- function() {
-  
+
   # attempt to load pedons
   res <- try(suppressWarnings(fetchNASISLabData(SS = FALSE)), silent = TRUE)
   if(class(res) == 'try-error'){
@@ -21,19 +21,19 @@ check_local_NASIS_labdata_available <- function() {
 ## tests
 
 test_that("fetchNASISLabData returns reasonable data", {
-  
+
   # test for conditions permitting this test to run
-  if(! soilDB:::.local_NASIS_defined()) {
+  if(!local_NASIS_defined()) {
     skip("local NASIS database not available")
   }
-  
+
   # test for lab data to check
   check_local_NASIS_labdata_available()
-  
+
   # get data
   # ignore warnings for now
   x <- suppressWarnings(fetchNASISLabData(SS = FALSE))
-  
+
   # expected outcomes
   expect_true(inherits(x, 'SoilProfileCollection'))
   expect_equal(nrow(site(x)) > 0, TRUE)

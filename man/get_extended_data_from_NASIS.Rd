@@ -4,7 +4,7 @@
 \title{Extract accessory tables and summaries from a local NASIS Database}
 \description{Extract accessory tables and summaries from a local NASIS Database.}
 \usage{
-get_extended_data_from_NASIS_db(SS = TRUE, nullFragsAreZero = TRUE, 
+get_extended_data_from_NASIS_db(SS = TRUE, nullFragsAreZero = TRUE,
                                 stringsAsFactors = default.stringsAsFactors()
                                 )
 }
@@ -26,11 +26,15 @@ get_extended_data_from_NASIS_db(SS = TRUE, nullFragsAreZero = TRUE,
 
 \examples{
 \donttest{
-# query extended data
-e <- try(get_extended_data_from_NASIS_db())
 
-# show contents of extended data
-str(e)
+if(local_NASIS_defined()) {
+ # query extended data
+ e <- try(get_extended_data_from_NASIS_db())
+
+ # show contents of extended data
+ str(e)
+}
+
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

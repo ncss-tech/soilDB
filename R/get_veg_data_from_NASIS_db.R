@@ -5,7 +5,7 @@ get_veg_data_from_NASIS_db <- function(SS=TRUE) {
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
 
-# warning to use NASIS query to load related vegplot data for this to work 
+# warning to use NASIS query to load related vegplot data for this to work
 warning("In order to query this data you'll need to load all related vegplots to your sites and pedons in NASIS.", call. = FALSE)
 
   ## does this require tables that standard site/pedons queries don't hit?
@@ -19,12 +19,12 @@ warning("In order to query this data you'll need to load all related vegplots to
   LEFT JOIN plotplantinventory_View_1 AS ppi ON ppi.vegplotiidref = v.vegplotiid
   -- note: plant table not managed by SS
   LEFT OUTER JOIN plant ON plant.plantiid = ppi.plantiidref;"
-  
+
   # toggle selected set vs. local DB
   if(SS == FALSE) {
     q.veg <- gsub(pattern = '_View_1', replacement = '', x = q.veg, fixed = TRUE)
   }
-  
+
   # existing veg
 #q.inventory <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, #plotplantinventory.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass
 #
@@ -55,6 +55,8 @@ q.vegtransect <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydataco
 #  FROM plant_View_1;"
 
 channel <- .openNASISchannel()
+if (channel == -1)
+  return(data.frame())
 
 # exec queries
 d.veg <- RODBC::sqlQuery(channel, q.veg, stringsAsFactors=FALSE)
@@ -65,6 +67,6 @@ RODBC::odbcClose(channel)
 
 
 # return a list of results
-return(list(veg=d.veg, 
+return(list(veg=d.veg,
             vegtransect=d.vegtransect))
 }
