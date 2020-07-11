@@ -1,2 +1,5 @@
 man/.Rhistory
 docs/reference/*.pdf
+*.Rproj*
+.Rproj.user
+.Rhistory
