@@ -7,19 +7,19 @@
 get_NOAA_GHCND(stations, years, datatypeids, apitoken)
 }
 \arguments{
+\item{stations}{Station ID (e.g. \code{GHCND:USC00388786})}
+
+\item{years}{One or more years (e.g. 2017:2020)}
+
+\item{datatypeids}{One or more NOAA GHCND data type IDs (e.g \code{c("PRCP","SNOW")})}
+
 \item{apitoken}{API key token for NOAA NCDC web services (https://www.ncdc.noaa.gov/cdo-web/token)}
-
-\item{stationid}{Station ID (e.g. \code{GHCND:USC00388786})}
-
-\item{year}{One or more years (e.g. 2017:2020)}
-
-\item{datatypeid}{One or more NOAA GHCND data type IDs (e.g \code{c("PRCP","SNOW")})}
 }
 \value{
 A data.frame containing the GHCND data requested (limit 1000 records)
 }
 \description{
-Obtain daily climatic summary data for a set of station IDs, years, and datatypes. 
+Obtain daily climatic summary data for a set of station IDs, years, and datatypes.
 
 Note that typically results from the NOAA API are limited to 1000 records. However, by "chunking" up data into individual station*year*datatypeid combinations, record results generally do not exceed 365 records for daily summaries.
 
@@ -30,9 +30,9 @@ In order to use this function, you must obtain an API token from this website: h
 #' ## in order to use this function, you must obtain an API token from this website:
 ##  https://www.ncdc.noaa.gov/cdo-web/token
 
- get_NOAA_GHCND(c("GHCND:USC00388786", "GHCND:USC00388787"),
-                year = 2017:2020, 
-                datatypeid = c("PRCP","SNOW"), 
-                apitoken = "AfspVryNsnCvWICnittoaiKTzTdWUVob")
+# get_NOAA_GHCND(c("GHCND:USC00388786", "GHCND:USC00388787"),
+#                years = 2017:2020,
+#                datatypeids = c("PRCP","SNOW"),
+#                apitoken = "yourtokenhere")
 
 }
