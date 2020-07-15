@@ -73,8 +73,11 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method='feature',
   
   message(sprintf("working with %s chunks...", length(unique(mukey.chunk))))
   
-  for(i in 1:length(mukey.chunk)) {
-    idx <- which(mukey.chunk == mukey.chunk[i])
+  # discussion / testing related to optimal number ofgroups
+  # https://github.com/ncss-tech/soilDB/issues/126
+  # thanks Kevin Wolz for pointing out the bug in chunk indexing
+  for(i in unique(mukey.chunk)) {
+    idx <- which(mukey.chunk == i)
       
     # q <- paste0("SELECT G.MupolygonWktWgs84 as geom, mapunit.mukey, mapunit.nationalmusym FROM mapunit CROSS APPLY SDA_Get_MupolygonWktWgs84_from_Mukey(mapunit.mukey) as G WHERE mukey IN ", 
                 # format_SQL_in_statement(mukey.list[idx]))

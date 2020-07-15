@@ -11,12 +11,13 @@ test_that("fetchSDA_spatial() works", {
   }
   
   # expect 3, relatively nonextensive join delineations
-  single.mukey <- fetchSDA_spatial(x = "2924882")
+  single.mukey <- fetchSDA_spatial(x = "2924882", by.col = 'mukey')
   expect_equal(nrow(single.mukey), 3)
   
-  # expect 48 delineations for whole nmusymn
-  full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by = "nmusym")
-  expect_equal(nrow(full.extent.nmusym), 144)
+  # there are currently 3 MUKEY associated with this national musym
+  # expect 48 delineations for this nmusymn
+  full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by.col = "nmusym")
+  expect_equal(nrow(full.extent.nmusym), 48)
   
   # mukey value from single result is in full extent result
   expect_true(unique(single.mukey$mukey) %in% unique(full.extent.nmusym$mukey))
