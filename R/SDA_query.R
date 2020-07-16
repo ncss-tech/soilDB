@@ -26,9 +26,10 @@ format_SQL_in_statement <- function(x) {
 
 # 
 SDA_query <- function(q) {
+  
   # check for required packages
-  if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('jsonlite', quietly=TRUE))
-    stop('please install the `httr` and `jsonlite` packages', call.=FALSE)
+  if (!requireNamespace('httr', quietly = TRUE) | !requireNamespace('jsonlite', quietly = TRUE))
+    stop('please install the `httr` and `jsonlite` packages', call. = FALSE)
   
    # submit request
   r <- httr::POST(url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
@@ -40,9 +41,11 @@ SDA_query <- function(q) {
   request.status <- try(httr::stop_for_status(r), silent = TRUE)
   
   # error message is encapsulated in XML, use xml2 library functions to extract
-  if (class(request.status) == 'try-error'){
+  if (class(request.status) == 'try-error') {
+    
     # get the request response, this will contain an error message
     r.content <- httr::content(r, as = 'parsed', encoding = 'UTF-8')
+    
     # parse the XML to get the error message
     error.msg <- xml_text(r.content)
     
@@ -53,37 +56,43 @@ SDA_query <- function(q) {
     return(request.status)
   }
   
-  
   # the result is JSON:
   # list of character matrix, one for each "Table" returned
   # note: the data returned by SDA/JSON are all character class
   #       we "fix" this later on
-  r.content <- httr::content(r, as = 'text', encoding = 'UTF-8')
-  d <- jsonlite::fromJSON(r.content)
+  r.content <- try(httr::content(r, as = 'text', encoding = 'UTF-8'))
+  
+  if (inherits(r.content,'try-error'))
+      return(r.content)
+  
+  d <- try(jsonlite::fromJSON(r.content))
+  
+  if (inherits(d, 'try-error'))
+    return(d)
   
   # number of results
   n.tables <- length(d)
   
   # no results, terminate here
-  if(n.tables < 1) {
+  if (n.tables < 1) {
     message('empty result set')
     return(NULL)
   }
   
   # process list of tables
-  # * consistent encoding of NA
-  # * type conversion via read.table() 
-  # * no conversion strings -> factors: do this on your own
-  d <- lapply(d, .post_process_SDA_result_set)
+  d <- try(lapply(d, .post_process_SDA_result_set))
+  
+  if (inherits(d, 'try-error'))
+    return(d)
   
   # keep track of SDA result set IDs
   SDA.ids <- names(d)
-  for(i in 1:n.tables) {
+  for (i in 1:n.tables) {
     attr(d[[i]], 'SDA_id') <- SDA.ids[i]
   }
   
   
-  if(n.tables > 1) {
+  if (n.tables > 1) {
     message('multi-part result set, returning a list')
     return(d)
   } else {
@@ -92,10 +101,6 @@ SDA_query <- function(q) {
     return(d[[1]])
   }
     
-  
-  
-  
-  
 }
 
 
@@ -108,10 +113,11 @@ SDA_query <- function(q) {
 
   # remove the first line
   # Arrg! the dreaded single-row indexing bug: drop=FALSE ensures result is a matrix
-  i <- i[-1, , drop=FALSE]
+  i <- i[-1, , drop = FALSE]
   
   # keep everything in memory, c/o Kyle Bockinsky
   df <- as.data.frame(i, stringsAsFactors = FALSE)
+  
   # attempt type conversion, same result as writing to file and reading-in via read.table()
   df <- type.convert(df,
                      na.strings = c('', 'NA'),

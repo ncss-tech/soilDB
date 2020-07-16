@@ -68,7 +68,12 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method = 'feature',
     # do additional query to determine mapping of nmusym:mukey
     q.mukey <- paste0("SELECT nationalmusym, mukey FROM mapunit WHERE nationalmusym IN ",
                       format_SQL_in_statement(x),";")
+    
     suppressMessages( {res <- SDA_query(q.mukey)} )
+    
+    if (inherits(res, 'try-error'))
+      stop("fetchSDA_spatial: fatal error in national mapunit -> mukey conversion.", call. = FALSE)
+    
     mukey.list <- unique(res$mukey)
     
   # currently only mukey and nmusym are supported
@@ -106,11 +111,20 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method = 'feature',
     # retry -- do each mukey individually
     if (inherits(chunk.res$result, 'try-error')) {
       # bad chunk 
-      subchunk.res <- lapply(mukeys, .fetchSDA_spatial, geom.type, add.fields, verbose, paste0(i,"_sub"))
+      subchunk.res <- lapply(mukeys, function(x) {
+        sub.res <- .fetchSDA_spatial(x, geom.type, add.fields, verbose, paste0(i,"_sub"))
+        
+        if (inherits(sub.res, 'try-error')) {
+          # explicit handling for a hypothetical unqueryable single mukey
+          warning("MUKEY ", x, " dropped from result due to error! This MUKEY may exceed the JSON serialization limit or have other topologic problems.")
+          return(NULL)
+        }
+        return(sub.res)
+      })
       
       # re-create full chunk from unit subchunks
-      chunk.res$result <- do.call('rbind',  lapply(subchunk.res, function(x) x$result))
-      chunk.res$time <- sum(unlist(lapply(subchunk.res, function(x) x$time)), na.rm = TRUE)
+      chunk.res$result <- do.call('rbind',  lapply(subchunk.res, function(x) if (!is.null(x)) x$result))
+      chunk.res$time <- sum(unlist(lapply(subchunk.res, function(x) if (!is.null(x)) x$time)), na.rm = TRUE)
     }
     
     times[i] <- chunk.res$time
