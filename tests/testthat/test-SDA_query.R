@@ -67,8 +67,8 @@ test_that("SDA_query() SQL error / no results -> NULL", {
     skip("in-house testing only")
   }
 
-  # bad SQL should result in a local error
-  expect_error(SDA_query("SELECT this from that"))
+  # bad SQL should result in a warning and try-error result.
+  expect_true(inherits(expect_warning(SDA_query("SELECT this from that")), 'try-error'))
 
   # queries that result in 0 rows should return NULL
   x <- suppressMessages(SDA_query("SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'xxx';"))
