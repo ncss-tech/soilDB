@@ -25,7 +25,7 @@ res6 <- test_fun(30, idx) # Done in 1.65 mins; mean/chunk: 24.8 secs; mean/mukey
 res7 <- test_fun(60, idx) # Done in 1.52 mins; mean/chunk: 45.7 secs; mean/mukey: 0.76 secs.
 res9 <- test_fun(80, idx) # Done in 1.4 mins; mean/chunk: 42.1 secs; mean/mukey: 0.7 secs.
 res10 <- test_fun(90, idx) # previously error; now done in 3.52 mins; mean/chunk: 101.3 secs; mean/mukey: 1.76 secs.
-res10 <- test_fun(100, idx)# these will now error on first chunk, and then do each mukey individually for that chunk
+# res10 <- test_fun(100, idx)# these will now error on first chunk, and then do each mukey individually for that chunk
 res8 <- test_fun(120, idx) # "
 
 # how many mukeys total to try?

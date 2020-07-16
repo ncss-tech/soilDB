@@ -111,12 +111,12 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method = 'feature',
     # retry -- do each mukey individually
     if (inherits(chunk.res$result, 'try-error')) {
       # bad chunk 
-      subchunk.res <- lapply(mukeys, function(x) {
-        sub.res <- .fetchSDA_spatial(x, geom.type, add.fields, verbose, paste0(i,"_sub"))
+      subchunk.res <- lapply(mukeys, function(xx) {
+        sub.res <- .fetchSDA_spatial(xx, geom.type, add.fields, verbose, paste0(i,"_",xx))
         
         if (inherits(sub.res, 'try-error')) {
           # explicit handling for a hypothetical unqueryable single mukey
-          warning("MUKEY ", x, " dropped from result due to error! This MUKEY may exceed the JSON serialization limit or have other topologic problems.")
+          warning("MUKEY ", xx, " dropped from result due to error! This MUKEY may exceed the JSON serialization limit or have other topologic problems.")
           return(NULL)
         }
         return(sub.res)

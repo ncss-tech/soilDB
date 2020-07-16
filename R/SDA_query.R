@@ -1,7 +1,19 @@
-
-# generate chunk labels for splitting data
-# ids: vector of IDs
-# size: chunk size
+#' Generate chunk labels for splitting data
+#'
+#' @param ids vector of IDs
+#' @param size chunk (group) size
+#'
+#' @return A numeric vector
+#' @export makeChunks
+#'
+#' @examples
+#' 
+#' # split the lowercase alphabet into 2 chunks
+#'
+#' aggregate(letters, 
+#'           by = list(makeChunks(letters, size=13)), 
+#'           FUN = paste0, collapse=",")
+#' 
 makeChunks <- function(ids, size=100) {
   n <- length(ids)
   chunk.id <- seq(from=1, to=floor(n / size)+1)
@@ -10,21 +22,143 @@ makeChunks <- function(ids, size=100) {
   return(chunk.ids)
 }
 
-
-
-# format vector of values into a string suitable for an SQL `IN` statement
-# currently expects character data only
+#' Format vector of values into a string suitable for an SQL `IN` statement
+#' 
+#' @description Concatenate a vector to SQL \code{IN}-compatible syntax: \code{letters[1:3]} becomes \code{('a','b','c')}. Note: only \code{character} output is supported.
+#' 
+#' @param x A character vector.
+#'
+#' @return A character vector (unit length) containing concatenated group syntax for use in SQL \code{IN}.
+#' @export format_SQL_in_statement
+#'
+#' @examples
+#' 
+#' \donttest{
+#' 
+#' library(aqp)
+#' 
+#' # get some mukeys
+#' q <- "select top(2) mukey from mapunit;"
+#' mukeys <- SDA_query(q)
+#' 
+#' # format for use in an SQL IN statement
+#' mukey.inst <- format_SQL_in_statement(mukeys$mukey)
+#' mukey.inst
+#' 
+#' # make a more specific query: for component+horizon data, just for those mukeys
+#' q2 <- sprintf("SELECT * FROM mapunit
+#'                INNER JOIN component ON mapunit.mukey = component.mukey
+#'                INNER JOIN chorizon ON component.cokey = chorizon.cokey
+#'                WHERE mapunit.mukey IN %s;", mukey.inst)
+#' # do the query                
+#' res <- SDA_query(q2) 
+#' 
+#' # build a SoilProfileCollection from horizon-level records
+#' depths(res) <- cokey ~ hzdept_r + hzdepb_r
+#' 
+#' # normalize mapunit/component level attributes to site-level for plot
+#' site(res) <- ~ muname + mukey + compname + comppct_r + taxclname
+#'
+#' # make a nice label
+#' res$labelname <- sprintf("%s (%s%s)", res$compname, res$comppct_r, "%")
+#' 
+#' # major components only
+#' res <- filter(res, comppct_r >= 85)
+#' 
+#' # inspect plot of result
+#' par(mar=c(0,0,0,0))
+#' groupedProfilePlot(res, groups = "mukey", color = "hzname", cex.names=0.8,
+#'                    id.style = "side", label = "labelname")
+#'}
+#' 
+#'    
 format_SQL_in_statement <- function(x) {
-	i <- paste(x, collapse="','")
-	i <- paste("('", i, "')", sep='')
+	i <- paste(x, collapse = "','")
+	i <- paste("('", i, "')", sep = '')
 	return(i)
 }
-
 
 ## chunked queries for large number of records:
 # https://github.com/ncss-tech/soilDB/issues/71
 
 # 
+#' Soil Data Access Query
+#'
+#' @param q A valid T-SQL query surrounded by double quotes
+#' 
+#' @description Submit a query to the Soil Data Acccess (SDA) website in SQL, get the results as a data.frame. There is a 100,000 record limit per query. High query complexity may result in intractable query plans. 
+#' 
+#' @details The SDA website can be found at \url{http://sdmdataaccess.nrcs.usda.gov} and query examples can be found at \url{http://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx}. A library of query examples can be found at \url{https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home}.
+#' 
+#' SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
+#' 
+#' @note This function requires the `httr`, `jsonlite`, and `XML` packages
+#' @return a data.frame result (\code{NULL} if empty, try-error on error)
+#' @export
+#' @author D.E. Beaudette
+#' @seealso \code{\link{mapunit_geom_by_ll_bbox}}
+#' @keywords manip
+#' @examples
+#' \donttest{
+#' if(requireNamespace("curl") &
+#'    curl::has_internet()) {
+#'   
+#'   ## get SSURGO export date for all soil survey areas in California
+#'   # there is no need to filter STATSGO 
+#'   # because we are filtering on SSURGO areasymbols
+#'   q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA%';"
+#'   x <- SDA_query(q)
+#'   head(x)
+#'   
+#'   
+#'   ## get SSURGO component data associated with the 
+#'   ## Amador series / major component only
+#'   # this query must explicitly filter out STATSGO data
+#'   q <- "SELECT cokey, compname, comppct_r FROM legend
+#'     INNER JOIN mapunit mu ON mu.lkey = legend.lkey
+#'     INNER JOIN component co ON mu.mukey = co.mukey
+#'     WHERE legend.areasymbol != 'US' AND compname = 'Amador';"
+#'   
+#'   res <- SDA_query(q)
+#'   str(res)
+#'   
+#'   
+#'   ## get component-level data for a specific soil survey area (Yolo county, CA)
+#'   # there is no need to filter STATSGO because the query contains
+#'   # an implicit selection of SSURGO data by areasymbol
+#'   q <- "SELECT 
+#'     component.mukey, cokey, comppct_r, compname, taxclname, 
+#'     taxorder, taxsuborder, taxgrtgroup, taxsubgrp 
+#'     FROM legend 
+#'     INNER JOIN mapunit ON mapunit.lkey = legend.lkey 
+#'     LEFT OUTER JOIN component ON component.mukey = mapunit.mukey 
+#'     WHERE legend.areasymbol = 'CA113' ;"
+#'   
+#'   res <- SDA_query(q)
+#'   str(res)
+#'   
+#'   ## get tabular data based on result from spatial query
+#'   # there is no need to filter STATSGO because
+#'   # SDA_Get_Mukey_from_intersection_with_WktWgs84() implies SSURGO
+#'   #
+#'   # requires raster and rgeos packages because raster is suggested
+#'   # and rgeos is additional
+#'   if(require(raster) & require(rgeos)) {
+#'     # text -> bbox -> WKT
+#'     # xmin, xmax, ymin, ymax
+#'     b <- c(-120.9, -120.8, 37.7, 37.8)
+#'     p <- writeWKT(as(extent(b), 'SpatialPolygons'))
+#'     q <- paste0("SELECT mukey, cokey, compname, comppct_r FROM component 
+#'       WHERE mukey IN (SELECT DISTINCT mukey FROM
+#'       SDA_Get_Mukey_from_intersection_with_WktWgs84('", p, 
+#'        "')) ORDER BY mukey, cokey, comppct_r DESC")
+#'     
+#'     x <- SDA_query(q)
+#'     str(x)
+#'   }
+#'  }
+#' }
+
 SDA_query <- function(q) {
   
   # check for required packages
