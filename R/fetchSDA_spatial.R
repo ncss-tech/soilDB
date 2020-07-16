@@ -123,15 +123,21 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method = 'feature',
       })
       
       # re-create full chunk from unit subchunks
-      chunk.res$result <- do.call('rbind',  lapply(subchunk.res, function(x) if (!is.null(x)) x$result))
+      sub.res.res <- lapply(subchunk.res, function(x) if (!is.null(x)) x$result)
+      sub.res.res.nul <- which(unlist(lapply(sub.res.res, is.null)))
+      chunk.res$result <- do.call('rbind',  sub.res.res[sub.res.res.nul])
       chunk.res$time <- sum(unlist(lapply(subchunk.res, function(x) if (!is.null(x)) x$time)), na.rm = TRUE)
     }
     
     times[i] <- chunk.res$time
-    if (is.null(s)) {
-      s <- chunk.res$result
-    } else {
-      s <- rbind(s, chunk.res$result)
+    
+    # handle empty result
+    if (!is.null(chunk.res$result)) {
+      if (is.null(s)) {
+         s <- chunk.res$result
+      } else {
+         s <- rbind(s, chunk.res$result)
+      }
     }
   }
   
@@ -180,6 +186,7 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method = 'feature',
     return(list(result = sp.res.sub, time = NA))
   }
   
+  s <- NULL
   if (!is.null(sp.res.sub)) {
     
     s <- soilDB::processSDA_WKT(sp.res.sub)
