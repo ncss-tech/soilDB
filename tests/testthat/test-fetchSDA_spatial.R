@@ -16,7 +16,8 @@ test_that("fetchSDA_spatial() works", {
   
   # there are currently 3 MUKEY associated with this national musym
   # expect 48 delineations for this nmusymn
-  full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by.col = "nmusym")
+  # also test verbose argument
+  expect_silent(full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by.col = "nmusym", verbose = FALSE))
   expect_equal(nrow(full.extent.nmusym), 48)
   
   # mukey value from single result is in full extent result

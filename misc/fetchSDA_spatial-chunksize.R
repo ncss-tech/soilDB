@@ -3,8 +3,8 @@ library(soilDB)
 q <- "select top(100000) mukey from mapunit;"
 the.keys <- SDA_query(q)
 
-test_fun <- function(n, mukeys) {
-  foo <- try(fetchSDA_spatial(mukeys, chunk.size = n))
+test_fun <- function(n, mukeys, ...) {
+  foo <- try(fetchSDA_spatial(mukeys, chunk.size = n, ...))
   good <- !inherits(foo, 'try-error')
   return(list(result = foo, status = good))
 }
@@ -24,9 +24,9 @@ res5 <- test_fun(20, idx) # Done in 1.88 mins; mean/chunk: 18.8 secs; mean/mukey
 res6 <- test_fun(30, idx) # Done in 1.65 mins; mean/chunk: 24.8 secs; mean/mukey: 0.83 secs.
 res7 <- test_fun(60, idx) # Done in 1.52 mins; mean/chunk: 45.7 secs; mean/mukey: 0.76 secs.
 res9 <- test_fun(80, idx) # Done in 1.4 mins; mean/chunk: 42.1 secs; mean/mukey: 0.7 secs.
-res10 <- test_fun(90, idx) # Error
-res10 <- test_fun(100, idx) # Error
-res8 <- test_fun(120, idx) # Error
+res10 <- test_fun(90, idx) # previously error; now done in 3.52 mins; mean/chunk: 101.3 secs; mean/mukey: 1.76 secs.
+res10 <- test_fun(100, idx)# these will now error on first chunk, and then do each mukey individually for that chunk
+res8 <- test_fun(120, idx) # "
 
 # how many mukeys total to try?
 n.tot <- 1200
@@ -37,8 +37,8 @@ idx <- the.keys[sample(1:nrow(the.keys), n.tot, replace = FALSE),]
 # incrementally larger chunk sizes for same "task"
 res3_2 <- test_fun(60, idx) # Error 2/20th chunk
 res2_2 <- test_fun(30, idx) # Done in 20.8 mins; mean/chunk: 31.2 secs; mean/mukey: 1.04 secs.
-res1_2 <- test_fun(20, idx) # TODO: fill these in when they finish
-res0_2 <- test_fun(10, idx) #        "
+res1_2 <- test_fun(20, idx) # Done in 23.32 mins; mean/chunk: 23.3 secs; mean/mukey: 1.17 secs.
+res0_2 <- test_fun(10, idx) # Done in 31.04 mins; mean/chunk: 15.5 secs; mean/mukey: 1.55 secs.      
 
 #### Setting a baseline with a big set of MUKEYs gathered "naively" and chunked in order
 #

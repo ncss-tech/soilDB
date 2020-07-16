@@ -15,6 +15,8 @@
 #' @param method geometry result type: 'feature' returns polygons, 'bbox' returns the bounding box of each polygon, and 'point' returns a single point within each polygon.
 #' @param add.fields Column names from `mapunit` table to add to result. Must specify table name prefix `mapunit` before column name (e.g. `mapunit.muname`).
 #' @param chunk.size How many queries should spatial request be divided into? Necessary for large results. Default: 10
+#' @param verbose Print messages?
+#' 
 #' @return A Spatial*DataFrame corresponding to SDA spatial data for all MUKEYs / nmusyms requested. Default result contains mapunit delineation geometry with attribute table containing `gid`, `mukey` and `nationalmusym`, plus additional fields in result specified with `add.fields`.
 #' 
 #' @author Andrew G. Brown
@@ -43,7 +45,7 @@
 #' @rdname fetchSDA_spatial
 #' @export fetchSDA_spatial
 fetchSDA_spatial <- function(x, by.col = "mukey", method = 'feature',
-                             add.fields = NULL, chunk.size = 10) {
+                             add.fields = NULL, chunk.size = 10, verbose = TRUE) {
   tstart <- Sys.time()
   
   # sanity check: method must be one of:
@@ -83,62 +85,50 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method = 'feature',
                       bbox = 'mupolygongeo.STEnvelope().STAsText()',
                       point = 'mupolygongeo.STPointOnSurface().STAsText()')
   
-  message(sprintf("Using %s chunks...", length(unique(mukey.chunk))))
+  if (verbose)
+    message(sprintf("Using %s chunks...", length(unique(mukey.chunk))))
   
-  # discussion / testing related to optimal number ofgroups
-  # https://github.com/ncss-tech/soilDB/issues/126
-  # thanks Kevin Wolz for pointing out the bug in chunk indexing
   times <- vector(mode = "numeric", length = max(mukey.chunk))
   
+  # discussion / testing related to optimal number ofgroups
+  # https://github.com/ncss-tech/soilDB/issues/126  
+  
   for (i in unique(mukey.chunk)) {
+    
+    # thanks Kevin Wolz for pointing out the bug in chunk indexing
     idx <- which(mukey.chunk == i)
+    mukeys <- mukey.list[idx]
+    
+    # SDA_query may generate a warning + try-error result
+    chunk.res <- suppressWarnings(.fetchSDA_spatial(mukeys, geom.type, add.fields, verbose, i))
+    
+    # this almost always is because the query was too big
+    # retry -- do each mukey individually
+    if (inherits(chunk.res$result, 'try-error')) {
+      # bad chunk 
+      subchunk.res <- lapply(mukeys, .fetchSDA_spatial, geom.type, add.fields, verbose, paste0(i,"_sub"))
       
-    # q <- paste0("SELECT G.MupolygonWktWgs84 as geom, mapunit.mukey, mapunit.nationalmusym FROM mapunit CROSS APPLY SDA_Get_MupolygonWktWgs84_from_Mukey(mapunit.mukey) as G WHERE mukey IN ", 
-                # format_SQL_in_statement(mukey.list[idx]))
-    
-    q <- sprintf(
-      "SELECT 
-        %s AS geom, 
-        P.mukey, mapunit.nationalmusym
-        FROM mupolygon AS P
-        INNER JOIN mapunit ON P.mukey = mapunit.mukey
-        WHERE mapunit.mukey IN %s",
-      geom.type,
-      format_SQL_in_statement(mukey.list[idx])
-      )
-    
-    # add any additional fields from mapunit
-    if (!is.null(add.fields)) {
-      q <- gsub(q, pattern = "FROM mupolygon", 
-                replacement = paste0(", ", paste0(add.fields, collapse = ", "), " FROM mupolygon"))
+      # re-create full chunk from unit subchunks
+      chunk.res$result <- do.call('rbind',  lapply(subchunk.res, function(x) x$result))
+      chunk.res$time <- sum(unlist(lapply(subchunk.res, function(x) x$time)), na.rm = TRUE)
     }
-    t1 <- Sys.time()
-    sp.res.sub <- suppressMessages(soilDB::SDA_query(q))
-    if (!is.null(sp.res.sub)) {
-      s.sub <- soilDB::processSDA_WKT(sp.res.sub)
-      if (is.null(s)) {
-        s <- s.sub
-      } else {
-        s <- rbind(s, s.sub)
-      }
-      t2 <- Sys.time()
-      tdif <- difftime(t2, t1, "secs")
-      message("Chunk #",i," completed (n_mukey = ",
-              length(mukey.list[idx]), "; ", round(as.numeric(tdif),1), " secs)")
-      times[i] <- as.numeric(tdif, units = "secs")
+    
+    times[i] <- chunk.res$time
+    if (is.null(s)) {
+      s <- chunk.res$result
     } else {
-      times[i] <- NA
-      message("No spatial data found for: ", 
-              paste0(mukey.list[idx], collapse = ","))
+      s <- rbind(s, chunk.res$result)
     }
   }
+  
   tstop <- Sys.time()
   ttotdif <- difftime(tstop, tstart) # variable units
   mintime <- as.numeric(ttotdif, units = "mins") # minutes
   chunk.mean <- round(mean(times, na.rm = TRUE), 1) # seconds
   mukey.mean <- round(mintime * 60 / length(mukey.list), 2) # seconds
   
-  message("Done in ", round(ttotdif, ifelse(attr(ttotdif,"units") == "secs", 1, 2)), " ", 
+  if (verbose)
+    message("Done in ", round(ttotdif, ifelse(attr(ttotdif,"units") == "secs", 1, 2)), " ", 
           attr(ttotdif, "units"), "; mean/chunk: ", chunk.mean, " secs; ", 
           "mean/mukey: ", mukey.mean, " secs", ".")
   
@@ -150,3 +140,53 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method = 'feature',
   return(s)
 }
 
+.fetchSDA_spatial <- function(mukey.list, geom.type, add.fields, verbose, .parentchunk = NA) {
+  q <- sprintf(
+    "SELECT 
+          %s AS geom, 
+          P.mukey, mapunit.nationalmusym
+          FROM mupolygon AS P
+          INNER JOIN mapunit ON P.mukey = mapunit.mukey
+          WHERE mapunit.mukey IN %s",
+    geom.type,
+    format_SQL_in_statement(mukey.list)
+  )
+  
+  # add any additional fields from mapunit
+  if (!is.null(add.fields)) {
+    q <- gsub(q, pattern = "FROM mupolygon", 
+              replacement = paste0(", ", paste0(add.fields, collapse = ", "), " FROM mupolygon"))
+  }
+  t1 <- Sys.time()
+  
+  sp.res.sub <- try(suppressMessages(soilDB::SDA_query(q)))
+  
+  if (inherits(sp.res.sub, 'try-error')) {
+    message("Bad chunk encountered. Querying each MUKEY individually...")
+    return(list(result = sp.res.sub, time = NA))
+  }
+  
+  if (!is.null(sp.res.sub)) {
+    
+    s <- soilDB::processSDA_WKT(sp.res.sub)
+
+    
+    t2 <- Sys.time()
+    tdif <- difftime(t2, t1, "secs")
+    
+    if (verbose)
+      message("Chunk #",.parentchunk," completed (n_mukey = ",
+              length(mukey.list), "; ", round(as.numeric(tdif),1), " secs)")
+    
+    times <- as.numeric(tdif, units = "secs")
+    
+  } else {
+    
+    times <- NA
+    
+    if (verbose)
+      message("No spatial data found for: ", 
+              paste0(mukey.list, collapse = ","))
+  }
+  return(list(result = s, time = times))
+}
