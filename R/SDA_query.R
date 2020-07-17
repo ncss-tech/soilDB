@@ -78,15 +78,13 @@ format_SQL_in_statement <- function(x) {
 	return(i)
 }
 
-## chunked queries for large number of records:
-# https://github.com/ncss-tech/soilDB/issues/71
 
 # 
 #' Soil Data Access Query
 #'
 #' @param q A valid T-SQL query surrounded by double quotes
 #' 
-#' @description Submit a query to the Soil Data Acccess (SDA) website in SQL, get the results as a data.frame. There is a 100,000 record limit per query. High query complexity may result in intractable query plans. 
+#' @description Submit a query to the Soil Data Acccess (SDA) REST/JSON web-service and return the results as a data.frame. There is a 100,000 record limit and 32Mb JSON serializer limit, per query. Queries should contain a WHERE statement or JOIN condition to limit the number of rows affected / returned. Consider wrapping calls to \code{SDA_query} in a function that can iterate over logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function \code{makeChunks} can help with such iteration.
 #' 
 #' @details The SDA website can be found at \url{http://sdmdataaccess.nrcs.usda.gov} and query examples can be found at \url{http://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx}. A library of query examples can be found at \url{https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home}.
 #' 
