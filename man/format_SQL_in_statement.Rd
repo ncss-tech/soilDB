@@ -17,6 +17,8 @@ Concatenate a vector to SQL \code{IN}-compatible syntax: \code{letters[1:3]} bec
 }
 \examples{
 
+\donttest{
+
 library(aqp)
 
 # get some mukeys
@@ -51,7 +53,7 @@ res <- filter(res, comppct_r >= 85)
 par(mar=c(0,0,0,0))
 groupedProfilePlot(res, groups = "mukey", color = "hzname", cex.names=0.8,
                    id.style = "side", label = "labelname")
-
+}
 
    
 }
