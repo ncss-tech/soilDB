@@ -2,16 +2,28 @@ library(soilDB)
 library(sf)
 
 # new GDB examples
-dsn <- "D:/geodata/soils/gSSURGO_CONUS.gdb"
+dsn <- "D:/geodata/soils/gNATSGO_CONUS.gdb"
 
-le <- get_legend_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE '%'")
+le <- get_legend_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE '%'", stats = TRUE)
 le <- le[order(le$areasymbol), ]
 
+# mapunit
+mu <- get_mapunit_from_GDB(dsn = dsn)
+mu <- get_mapunit_from_GDB(dsn = dsn, stats = TRUE)
 mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = "muname LIKE 'Miami%'")
+mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = "muname LIKE 'Miami%'", stats = TRUE)
+mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE 'IN%'")
+mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE 'IN%'", stats = TRUE)
+mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = "compname = 'Miami'")
+mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = "muname LIKE 'Miami%' AND areasymbol = 'IN001'")
 
-co <- get_component_from_GDB(dsn, WHERE = "compname = 'Miami' AND majcompflag = 'Yes'", childs = FALSE)
+
+
+co <- get_component_from_GDB(dsn, WHERE = "compname = 'Miami" AND majcompflag = 'Yes'", childs = FALSE)
 
 f_in001 <- fetchGDB(dsn, WHERE = "areasymbol = 'IN001'")
+f_sda <- fetchSDA(WHERE = "areasymbol = 'IN001'")
+
 f_cokey <- fetchGDB(dsn, WHERE = "cokey = '18224902'")
 f_mi    <- fetchGDB(dsn, WHERE = "areasymbol LIKE 'MI%'")
 
