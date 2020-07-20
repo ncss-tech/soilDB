@@ -88,15 +88,14 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	h$texture_class <- factor(h$texture_class, levels=textures, ordered = TRUE)
 	h$pH_class <- factor(h$pH_class, levels=pH_classes, ordered = TRUE)
 	
-	# merge-in site data
+	# safely LEFT JOIN to @site
 	s$id <- s$seriesname
 	s$seriesname <- NULL
 	site(h) <- s
 	
-	## set metadata
-	h.metadata <- metadata(h)
-	h.metadata$origin <- 'OSD via Soilweb / fetchOSD'
-	metadata(h) <- h.metadata
+	## safely set metadata
+	# TODO: check before clobbering / consider standard var name
+	metadata(h)$origin <- 'OSD via Soilweb / fetchOSD'
 	
 	# set optional hz designation and texture slots
 	hzdesgnname(h) <- "hzname"
@@ -185,7 +184,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	  return(data.list)
 	  
 	} else {
-	  # standard
+	  # extended = FALSE, return SPC
 	  return(h) 
 	}
 
