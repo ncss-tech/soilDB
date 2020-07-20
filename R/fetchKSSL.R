@@ -288,24 +288,20 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
   hztexclname(h) <- "lab_texture_class"
   
   ## set metadata
-  h.metadata <- metadata(h)
-  h.metadata$origin <- 'KSSL via Soilweb / fetchKSSL'
-  metadata(h) <- h.metadata
+  # TODO: check before clobbering / consider standard var name
+  metadata(h)$origin <- 'KSSL via Soilweb / fetchKSSL'
   
   
   # cleaning up the results
   if(returnMorphologicData & simplifyColors) {
     
     if(inherits(m$phcolor, 'data.frame')) {
-      # extract horizon data from SPC
-      hh <- horizons(h)
       
       # simplify color data: 1 row / horizon, from morphologic data tables
       x.colors <- simplifyColorData(m$phcolor, id.var = 'labsampnum', wt='colorpct')
       
-      # replace horizon data in h
-      hh <- merge(hh, x.colors, by='labsampnum', all.x=TRUE, sort=FALSE)
-      slot(h, 'horizons') <- hh 
+      # safely LEFT JOIN with @horizons   
+      suppressMessages(horizons(h) <- x.colors)
     }
   }
   
