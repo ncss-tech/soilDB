@@ -9,7 +9,7 @@
 # This function is heavily biased towared NASIS-specific data structures and assumptions
 # d: data.frame with color data from horizon-color table: expects "colorhue", "colorvalue", "colorchroma"
 # id.var: name of the column with unique horizon IDs
-simplifyColorData2 <- function(d, id.var='phiid', wt='colorpct', bt=FALSE) {
+simplifyColorData <- function(d, id.var='phiid', wt='colorpct', bt=FALSE) {
   
   # sanity check: must contain 1 row
   if(nrow(d) < 1) {
