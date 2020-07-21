@@ -144,7 +144,7 @@ fetchSDA_spatial <- function(x, by.col = "mukey", method = 'feature',
   tstop <- Sys.time()
   ttotdif <- difftime(tstop, tstart) # variable units
   mintime <- as.numeric(ttotdif, units = "mins") # minutes
-  chunk.mean <- round(as.numeric(mean(times, na.rm = TRUE), units = "secs"), 1) # seconds
+  chunk.mean <- round(mean(as.numeric(times, units = "secs"), na.rm = TRUE), 1) # seconds
   mukey.mean <- round(as.numeric(mintime * 60 / length(mukey.list), units = "secs"), 2)
   
   if (verbose)
