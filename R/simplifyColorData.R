@@ -2,7 +2,7 @@
 
 ## TODO:
 # deprecate mix_and_clean_colors
-# finish tests
+# check usage in fetchNASIS 
 # convert to roxygen / update docs
 # fix tutorials
 

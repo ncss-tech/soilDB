@@ -43,7 +43,7 @@ get_colors_from_NASIS_db <- function(SS=TRUE) {
   # sanity check, only attempt to simplify colors if there are > 1 rows
   if(nrow(d) > 1) {
     # mix colors as-needed, mixing done in CIE LAB space
-    d.final <- simplifyColorData(d)
+    d.final <- simplifyColorData(d, id.var = 'phiid', wt = 'pct')
   } else {
     # TODO: this could lead to problems due to assumed column presence
     # do nothing

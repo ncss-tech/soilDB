@@ -1,4 +1,4 @@
-context("mixing and cleaning colors")
+context("estimating color mixtures")
 
 ## mixing done in CIE LAB by default now
 
@@ -8,10 +8,10 @@ context("mixing and cleaning colors")
 colors <- c('10YR 5/6', '7.5YR 6/2')
 weights <- c(80, 20)
 
-# re-make the data expected by mix_and_clean_colors()
+# re-make the data expected by estimateColorMixture()
 x <- cbind(
   parseMunsell(colors, convertColors=FALSE),
-  parseMunsell(colors, return_triplets=TRUE),
+  parseMunsell(colors, return_triplets=TRUE, returnLAB=TRUE),
   pct=weights,
   col=parseMunsell(colors, convertColors=TRUE)
 ) 
@@ -22,10 +22,10 @@ x$colormoistst <- "Dry"
 
 
 # setting a baseline here, there is nothing behind the results apart from anecdotal evidence
-test_that("mix_and_clean_colors basic functionality", {
+test_that("estimateColorMixture basic functionality", {
   
   # there is no back-transformation to Munsell by default, request it
-  res <- mix_and_clean_colors(x, backTransform = TRUE)
+  res <- estimateColorMixture(x, backTransform = TRUE)
   
   # should be a single row
   expect_equal(nrow(res), 1)

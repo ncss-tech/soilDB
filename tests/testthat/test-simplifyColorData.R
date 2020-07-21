@@ -1,4 +1,4 @@
-context("Simplification of color data (from NASIS)")
+context("Simplification of color data (from NASIS/KSSL)")
 
 
 ## example data, from NASIS
@@ -55,11 +55,11 @@ x.multiple <-
 test_that("simplifyColorData: single color / moisture state / horizon", {
   
   # single color / moisture state / horizon
-  res <- simplifyColorData(x.simple)
+  res <- simplifyColorData(x.simple, id.var = 'phiid', wt = 'pct')
   
   # perform conversion manually
   # dry is first row
-  res.rgb <- munsell2rgb(x.simple$colorhue, x.simple$colorvalue, x.simple$colorchroma, return_triplets = TRUE)
+  res.rgb <- munsell2rgb(x.simple$colorhue, x.simple$colorvalue, x.simple$colorchroma, return_triplets = TRUE, returnLAB = TRUE)
   
   # should be a single row
   expect_equal(nrow(res), 1)
@@ -80,7 +80,7 @@ test_that("simplifyColorData: single color / moisture state / horizon", {
 test_that("simplifyColorData: two colors / moisture state, color percentages provided", {
   
   # two colors / moisture state, color percentages provided
-  suppressMessages(res <- simplifyColorData(x.multiple))
+  suppressMessages(res <- simplifyColorData(x.multiple, id.var = 'phiid', wt = 'pct'))
   
   # should be 2 rows
   expect_equal(nrow(res), 2)
