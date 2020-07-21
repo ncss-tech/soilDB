@@ -25,3 +25,30 @@ dc <- split(dry.colors[dry.mix.idx, ], f = dry.colors[[id.var]][dry.mix.idx])
 dc.l <- lapply(dc, mix_and_clean_colors)
 mixed.dry <- do.call('rbind', dc.l)
 
+
+
+library(soilDB)
+library(aqp)
+library(microbenchmark)
+library(daff)
+
+
+
+microbenchmark(
+  old = simplifyColorData(x$morph$phcolor, id.var = 'labsampnum', wt = 'colorpct'),
+  new = simplifyColorData2(x$morph$phcolor, id.var = 'labsampnum', wt = 'colorpct'),
+  times = 10
+  )
+
+
+## differences?
+cd1 <- simplifyColorData(x$morph$phcolor, id.var = 'labsampnum', wt = 'colorpct')
+cd2 <- simplifyColorData2(x$morph$phcolor, id.var = 'labsampnum', wt = 'colorpct')
+
+# only differences are due to sorting rules
+d <- diff_data(cd1, cd2)
+render_diff(d)
+
+
+
+

@@ -1,12 +1,15 @@
+## 2020-07-20: re-write / replacement of previous interface which depeneded on plyr
 
-## TODO: this function is a large time sink when number of pedons > ~ 500.
-## https://github.com/ncss-tech/soilDB/issues/55
+## TODO:
+# deprecate mix_and_clean_colors
+# finish tests
+# convert to roxygen / update docs
+# fix tutorials
 
-# This function heavily biased towared NASIS-specific data structures and assumptions
+# This function is heavily biased towared NASIS-specific data structures and assumptions
 # d: data.frame with color data from horizon-color table: expects "colorhue", "colorvalue", "colorchroma"
 # id.var: name of the column with unique horizon IDs
-# ...: further arguments passed to mix_and_clean_colors()
-simplifyColorData <- function(d, id.var='phiid', ...) {
+simplifyColorData2 <- function(d, id.var='phiid', wt='colorpct', bt=FALSE) {
   
   # sanity check: must contain 1 row
   if(nrow(d) < 1) {
@@ -14,12 +17,12 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
     return(d)
   }
   
-  # convert Munsell to RGB
-  d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, return_triplets=TRUE))
-  d <- cbind(d, d.rgb)
+  # convert Munsell -> CIELAB + sRGB
+  d.lab <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, returnLAB = TRUE, return_triplets = TRUE))
+  d <- cbind(d, d.lab)
   
   # add a fake column for storing `sigma`
-  # this is the error associated with the sRGB -> munsell transformation
+  # this is the error associated with the CIELAB -> munsell transformation
   d$sigma <- NA
   
   # perform lower-case comparison, values differ based on interpretation of NASIS metadata
@@ -35,8 +38,12 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
   dry.to.mix <- names(which(table(dry.colors[[id.var]]) > 1))
   moist.to.mix <- names(which(table(moist.colors[[id.var]]) > 1))
   
-  # names of those columns to retain
+  # variables to retain before / after mixing
+  # note: CIELAB only used internally
   vars.to.keep <- c(id.var, "r", "g", "b", "colorhue", "colorvalue", "colorchroma", 'sigma')
+  
+  # variables required for mixing
+  mix.vars <- c(wt, 'L', 'A', 'B')
   
   # mix/combine if there are any horizons that need mixing
   if(length(dry.to.mix) > 0) {
@@ -45,21 +52,23 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
     # filter out and mix only colors with >1 color / horizon
     dry.mix.idx <- which(dry.colors[[id.var]] %in% dry.to.mix)
     
-    ## TODO: convert to split -> lapply -> do.call
-    ## this means moving row.names -> id.var column
-    ## something like this:
-    # dc <- split(dry.colors[dry.mix.idx, ], f = dry.colors[[id.var]][dry.mix.idx])
-    # dc.l <- lapply(dc, mix_and_clean_colors)
-    # mixed.dry <- do.call('rbind', dc.l)
-    # < move id.var -> from rownames to column and fix order >
-    mixed.dry <- ddply(dry.colors[dry.mix.idx, ], id.var, mix_and_clean_colors, ...)
+    # split by horizon ID
+    # note: split will re-order IDs
+    dc <- split(dry.colors[dry.mix.idx, mix.vars], f = dry.colors[[id.var]][dry.mix.idx])
+    
+    # final vesion
+    mixed.dry <- lapply(dc, estimateColorMixture, wt = wt, backTransform = bt)
+    
+    # flatten and copy id.var from rownames
+    mixed.dry <- do.call('rbind', mixed.dry)
+    mixed.dry[[id.var]] <- row.names(mixed.dry)
     
     # back-transform mixture to Munsell using best-available method
     m <- rgb2munsell(mixed.dry[, c('r', 'g', 'b')])
-
+    
     # adjust names to match NASIS
     names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")
-
+    
     # combine with mixed sRGB coordinates
     mixed.dry <- cbind(mixed.dry[, c(id.var, 'r', 'g', 'b')], m)
     
@@ -78,12 +87,19 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
     
     # filter out and mix only colors with >1 color / horizon
     moist.mix.idx <- which(moist.colors[[id.var]] %in% moist.to.mix)
-    ## TODO: convert to split -> lapply -> do.call
-    ## this means moving row.names -> id.var column
-    ## BUG: for some reason ddply carries over some of the original columns in the result
-    mixed.moist <- ddply(moist.colors[moist.mix.idx, ], id.var, mix_and_clean_colors, ...)
     
-    # back-transform mixture to Munsell using best-available metric
+    # split by horizon ID
+    # note: split will re-order IDs
+    mc <- split(moist.colors[moist.mix.idx, mix.vars], f = moist.colors[[id.var]][moist.mix.idx])
+    
+    # final vesion
+    mixed.moist <- lapply(mc, estimateColorMixture, wt = wt, backTransform = bt)
+    
+    # flatten and copy id.var from rownames
+    mixed.moist <- do.call('rbind', mixed.moist)
+    mixed.moist[[id.var]] <- row.names(mixed.moist)
+    
+    # back-transform mixture to Munsell using best-available method
     m <- rgb2munsell(mixed.moist[, c('r', 'g', 'b')])
     
     # adjust names to match NASIS
@@ -91,7 +107,6 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
     
     # combine with mixed sRGB coordinates
     mixed.moist <- cbind(mixed.moist[, c(id.var, 'r', 'g', 'b')], m)
-    
     
     # combine original[-horizons to be mixed] + mixed horizons
     moist.colors.final <- rbind(moist.colors[-moist.mix.idx, vars.to.keep], mixed.moist)
@@ -102,10 +117,11 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
     names(moist.colors.final) <- c(id.var, 'm_r', 'm_g', 'm_b', 'm_hue', 'm_value', 'm_chroma', 'm_sigma')
   }
   
-  # merge into single df
-  d.final <- join(dry.colors.final, moist.colors.final, by=id.var, type='full')
+  # FULL JOIN dry + moist colors
+  d.final <- merge(dry.colors.final, moist.colors.final, by=id.var, all.x=TRUE, all.y=TRUE, sort=FALSE)
   
   # make HEX colors
+  # safely account for NA, rgb() will not accept NA input
   d.final$moist_soil_color <- NA
   idx <- complete.cases(d.final$m_r)
   d.final$moist_soil_color[idx] <- with(d.final[idx, ], rgb(m_r, m_g, m_b))
@@ -116,4 +132,8 @@ simplifyColorData <- function(d, id.var='phiid', ...) {
   
   return(d.final)
 }
+
+
+
+
 
