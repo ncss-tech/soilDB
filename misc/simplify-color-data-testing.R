@@ -33,6 +33,7 @@ library(microbenchmark)
 library(daff)
 
 
+x <- fetchKSSL(mlra=c(18, 17), returnMorphologicData = TRUE)
 
 microbenchmark(
   old = simplifyColorData(x$morph$phcolor, id.var = 'labsampnum', wt = 'colorpct'),
