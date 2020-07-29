@@ -113,7 +113,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   # tests
   if (!is.null(WHERE)) {
     
-    le_vars <- "mlraoffice|areasymbol|areaname|areatypename|areaacres|ssastatus|projectscale|cordate|lkey"
+    le_vars <- "mlraoffice|areasymbol|areaname|areatypename|areaacres|ssastatus|projectscale|cordate"
     le_idx <- grepl(le_vars, WHERE, ignore.case = TRUE)
     
     mu_vars <- "lkey|mukey|musym|muname|mukind|mustatus|invesintens|muacres|farmlndcl"
