@@ -416,13 +416,13 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
     le <- get_legend_from_GDB(dsn = dsn, WHERE = WHERE, stats = FALSE)
 
     qry <- paste0("lkey IN ('", paste(le$lkey, collapse = "', '"), "')")
-    mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = qry)
+    mu <- suppressMessages(get_mapunit_from_GDB(dsn = dsn, WHERE = qry))
     mu <- mu[order(mu$areasymbol), ]
   }
 
   # target mapunit table
   if (mu_idx) {
-    mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = WHERE)
+    mu <- suppressMessages(get_mapunit_from_GDB(dsn = dsn, WHERE = WHERE))
     mu <- mu[order(mu$areasymbol), ]
   }
 
