@@ -20,7 +20,15 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
     WHERE", WHERE
   )
   co <- sf::read_sf(dsn = dsn, layer = "component", query = qry, as_tibble = FALSE)
-
+  
+  
+  # recode metadata domains
+  co <- uncode(co,
+               db = "SDA",
+               droplevels = droplevels,
+               stringsAsFactors = stringsAsFactors
+  )
+  
 
   # childs
   if (childs == TRUE) {
@@ -48,16 +56,9 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
     co <- merge(co, cogmd, by = "cokey", all.x = TRUE, sort = FALSE)
   }
 
-  # recode metadata domains
-  co <- uncode(co,
-               db = "SDA",
-               droplevels = droplevels,
-               stringsAsFactors = stringsAsFactors
-  )
-
+  
   # done
   return(co)
-
 }
 
 
