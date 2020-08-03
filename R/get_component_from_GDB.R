@@ -344,8 +344,8 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   # iterate over the threshold
   if (nrow(ch) > 0) {
 
-    idx <- c(0, rep(3000, 10) * 1:10)
-    ch$idx <- as.character(cut(1:nrow(ch), breaks = idx, labels = 1:10))
+    idx <- c(0, rep(3000, 50) * 1:50)
+    ch$idx <- as.character(cut(1:nrow(ch), breaks = idx, labels = paste0("i", 1:50)))
 
     temp <- by(ch, ch$idx, function(x) {
 
@@ -441,7 +441,7 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
       } else message("getting components and horizons from ", WHERE)
 
       # components
-      idx <- c(0, rep(375, 10) * 1:10)
+      idx <- c(0, rep(375, 15) * 1:15)
       x$idx <- as.character(cut(1:nrow(x), breaks = idx))
       co <- by(x, x$idx, function(x2) {
         qry <- paste0("mukey IN ('", paste0(x2$mukey, collapse = "', '"), "')")
