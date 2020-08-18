@@ -73,7 +73,8 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 # what: the type of query 
 # mukey = fast, results include intersecting mukeys
 # geom = slower, results include both intersecting geometry and mukeys
-SDA_spatialQuery <- function(geom, what='mukey') {
+# geomIntersection: return geom|MU poly intersection (slower)
+SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE) {
   
   # check for required packages
   if(!requireNamespace('rgeos', quietly = TRUE))
@@ -99,11 +100,21 @@ SDA_spatialQuery <- function(geom, what='mukey') {
   # 10-30x faster than spatial-returning query by input feature
   # TODO: this is 15x slower than non-spatial-returning-query in SDA_query_features()
   if(what == 'geom') {
-    q <- sprintf("
+    
+    if(geomIntersection) {
+      q <- sprintf("
+               SELECT 
+                 mupolygongeo.STIntersection( geometry::STGeomFromText('%s', 4326) ).STAsText() AS geom, P.mukey
+                 FROM mupolygon AS P
+                 WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;", wkt, wkt)
+    } else {
+      q <- sprintf("
                SELECT 
                  mupolygongeo.STAsText() AS geom, P.mukey
                  FROM mupolygon AS P
                  WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;", wkt)
+    }
+    
     
     # single query for all of the features
     # note that row-order / number of rows in results may not match geom
