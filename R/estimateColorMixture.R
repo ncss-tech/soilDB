@@ -2,8 +2,18 @@
 ## note: this isn't real mixing, relfectance curves and kubella-monk modeling required for that
 ## all colors are mixed, should be applied to groups of related colors
 
-# x: data.frame, typically from NASIS containing at least CIE LAB ('L', 'A', 'B') and some kind of weight
-# wt: fractional weights, usually area of hz face
+# x: 
+# wt:
+
+#' Title
+#'
+#' @param x data.frame, typically from NASIS containing at least CIE LAB ('L', 'A', 'B') and some kind of weight
+#' @param wt  fractional weights, usually area of hz face
+#' @param backTransform logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by aqp::rgb2Munsell default: \code{FALSE}
+#'
+#' @return A data.frame containing estimated color mixture
+#' @export estimateColorMixture
+#'
 estimateColorMixture <- function(x, wt='pct', backTransform=FALSE) {
   
   ## TODO: account for backtransform == TRUE, different return structure

@@ -5,16 +5,16 @@
 \title{Simplify Color Data by ID}
 \description{Simplify multiple Munsell color observations associated with each horizon.}
 \usage{
-simplifyColorData(d, id.var = "phiid", ...)
-mix_and_clean_colors(x, wt='pct', backTransform=FALSE)
+simplifyColorData(d, id.var = "phiid", wt = "colorpct", bt = FALSE)
+mix_and_clean_colors(x, wt='pct', backTransform = FALSE)
 }
 
 \arguments{
   \item{d}{a \code{data.frame} object, typically returned from NASIS, see details}
   \item{id.var}{character vector with the name of the column containing an ID that is unique among all horizons in \code{d}}
-  \item{\dots}{further arguments passed on to \code{mix_and_clean_colors()}, see details}
   \item{x}{a \code{data.frame} object containing sRGB cordinates associated with a group of colors to mix}
   \item{wt}{a character vector with the name of the column containing color weights for mixing}
+  \item{bt}{logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by \code{aqp::rgb2Munsell}}  
   \item{backTransform}{logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by \code{aqp::rgb2Munsell}}
 }
 
