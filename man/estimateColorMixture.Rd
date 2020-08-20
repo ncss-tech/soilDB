@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimateColorMixture.R
 \name{estimateColorMixture}
 \alias{estimateColorMixture}
-\title{Title}
+\title{Estimate color mixture using L, A, B color coordinates and weights}
 \usage{
 estimateColorMixture(x, wt = "pct", backTransform = FALSE)
 }
@@ -17,5 +17,5 @@ estimateColorMixture(x, wt = "pct", backTransform = FALSE)
 A data.frame containing estimated color mixture
 }
 \description{
-Title
+Estimate color mixture using L, A, B color coordinates and weights
 }

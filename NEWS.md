@@ -1,3 +1,11 @@
+# soilDB 2.5.7 (2020-08-20)
+ * add `fetchGDB` for querying tabular data from SSURGO/gNATSGO/STATSGO File Geodatabases
+ * add `fetchSoilGrids` for point data queries to SoilGrids v2 API with SoilProfileCollection output
+ * add `get_NOAA_GHCND()` and `get_NOAA_stations_nearXY()` for batch queries of NOAA Daily Climate Data (requires free API token) 
+ * bugfix for `fetchSDA_spatial` with `chunk.size` > 1 resulting in duplicate data in result
+ * major improvements to `fetchSDA_spatial` to handle queries that exceed JSON Serialization Limit
+ * new import: `data.table`; beginning to implement _data.table_-aware methods in _aqp_ and _soilDB_
+ 
 # soilDB 2.5.6 (2020-06-16)
  * bug fixes in `fetchKSSL` related to vectorization, all arguments vectorized except for `bbox`
  * `KSSL_VG_model` output cleaned-up, now returns phi -> theta function

@@ -7,7 +7,7 @@
 fetchSoilGrids(locations, loc.names = c("id", "lat", "lon"))
 }
 \arguments{
-\item{locations}{A data.frame containing 3 columns referring to site ID, latitude and longitude.}
+\item{locations}{A \code{data.frame} containing 3 columns referring to site ID, latitude and longitude.}
 
 \item{loc.names}{Optional: Column names referring to site ID, latitude and longitude. Default: \code{c("id","lat","lon")}}
 }

@@ -5,7 +5,7 @@
 # x: 
 # wt:
 
-#' Title
+#' Estimate color mixture using L, A, B color coordinates and weights
 #'
 #' @param x data.frame, typically from NASIS containing at least CIE LAB ('L', 'A', 'B') and some kind of weight
 #' @param wt  fractional weights, usually area of hz face
