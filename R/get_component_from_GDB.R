@@ -165,8 +165,13 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 
 
   if (stats == TRUE) {
-
-    co <- by(mu, mu$areasymbol, function(x) {
+    
+    if (nrow(mu) > 3000) {
+      idx <- c(0, rep(3000, 10) * 1:10)
+      mu$idx <- as.character(cut(1:nrow(mu), breaks = idx))
+    } else mu$idx <- mu$areasymbol
+    
+    co <- by(mu, mu$idx, function(x) {
 
       qry <- paste(
         "SELECT mukey, cokey, comppct_r, majcompflag, hydricrating
@@ -175,7 +180,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 
          WHERE mukey IN ('", paste0(x$mukey, collapse = "', '"), "')"
       )
-      message("getting components from ", unique(x$areasymbol))
+      message("getting components from ", substr(paste0(unique(x$areasymbol), collapse = ", "), 1, 100), "...")
       sf::read_sf(dsn = dsn, layer = "component", query = qry)
     })
     co <- do.call("rbind", co)
