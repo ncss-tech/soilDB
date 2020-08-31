@@ -56,7 +56,9 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
   return(spdf)
 }
 
-## Note: this will replace *most* of the functionality in:
+
+
+## TODO: this will replace *most* of the functionality in:
 ##   SDA_make_spatial_query
 ##   SDA_query_features
 #
@@ -64,16 +66,74 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 # row-order and number of rows won't always match input
 # that is fine as we can use sp::over to connect
 # 10-20x speed improvement over SDA_query_features
-# 
-# not a good substitute for small number of features and SDA_query_features()
-#
-# geom are converted to GCS WGS84 as needed
-#
-# geom: Spatial* object with valid CRS
-# what: the type of query 
-# mukey = fast, results include intersecting mukeys
-# geom = slower, results include both intersecting geometry and mukeys
-# geomIntersection: return geom|MU poly intersection (slower)
+
+
+#' @title SDA Spatial Query
+#' 
+#' @description Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersectionion of `geom` + SSURGO polygons can be returned. See details.
+#' 
+#' @param geom a Spatial* object, with valid CRS. May contain multiple features.
+#' @param what a character vector specifting what to return. `mukey`: `data.frame` with intersecting map unit keys and names, `geom` overlapping or intersecting map unit polygons
+#' @param geomIntersection logical; FALSE: overlapping map unit polygons returned, TRUE: intersection of `geom` + map unit polygons is returned.
+#' 
+#' @return A `data.frame` if `what` is 'mukey', otherwise `SpatialPolygonsDataFrame` object.
+#' 
+#' @author D.E. Beaudette
+#' @seealso \code{\link{SDA_query}}
+#' @keywords manip
+#' 
+#' @note Row-order is not preserved across features in `geom` and returned object. Use `sp::over()` or similar functionality to extract from results.
+#' 
+#' @details Queries for map unit keys are always more efficient vs. queries for overlapping or intersecting (i.e. least efficient) features. `geom` is converted to GCS / WGS84 as needed.
+#' 
+#' There is a 100,000 record limit and 32Mb JSON serializer limit, per query.
+#' 
+#' SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
+#' 
+#' 
+#' @examples
+#' \donttest{
+#' if(requireNamespace("curl") &
+#'    curl::has_internet() & 
+#'    requireNamespace("sp")) {
+#' 
+#'    library(aqp)
+#'    library(sp)
+#' 
+#' # example point
+#' p <- SpatialPoints(cbind(x=-119.72330, y = 36.92204), proj4string = CRS('+proj=longlat +datum=WGS84'))
+#' 
+#' # query map unit records at this point
+#' res <- SDA_spatialQuery(p, what = 'mukey')
+#' 
+#' # convert results into an SQL "IN" statement
+#' # useful when there are multiple intersecting records
+#' mu.is <- format_SQL_in_statement(res$mukey)
+#' 
+#' # composite SQL WHERE clause
+#' sql <- sprintf("mukey IN %s", mu.is)
+#' 
+#' # get commonly used map unit / component / chorizon records
+#' # as a SoilProfileCollection object
+#' # confusing but essential: request that results contain `mukey`
+#' # with `duplicates = TRUE`
+#' x <- fetchSDA(sql, duplicates = TRUE)
+#' 
+#' # safely set texture class factor levels
+#' # by making a copy of this column
+#' # this will save in lieu of textures in the original
+#' # `texture` column
+#' horizons(x)$texture.class <- factor(x$texture, levels = SoilTextureLevels())
+#' 
+#' # graphical depiction of the result
+#' plotSPC(x, color='texture.class', label='compname', 
+#'         name='hzname', cex.names = 1, width=0.25, 
+#'         plot.depth.axis=FALSE, hz.depths=TRUE, 
+#'         name.style='center-center'
+#' )
+#'    
+#'  }
+#' }
 SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE) {
   
   # check for required packages
@@ -83,6 +143,16 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE) {
   # sanity checks
   if(! what %in% c('mukey', 'geom')) {
     stop("query type must be either 'mukey' or 'geom'",call. = FALSE)
+  }
+  
+  # geom must be an sp object
+  if(! inherits(geom, 'Spatial')) {
+    stop('`geom` must be a Spatial* object', call. = FALSE)
+  }
+  
+  # geom must have a valid CRS
+  if(is.na(proj4string(geom))) {
+    stop('`geom` must have a valid CRS', call. = FALSE)
   }
   
   # CRS conversion if needed
@@ -101,6 +171,7 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE) {
   # TODO: this is 15x slower than non-spatial-returning-query in SDA_query_features()
   if(what == 'geom') {
     
+    # return intersection
     if(geomIntersection) {
       q <- sprintf("
                SELECT 
@@ -108,6 +179,7 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE) {
                  FROM mupolygon AS P
                  WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;", wkt, wkt)
     } else {
+      # return overlapping
       q <- sprintf("
                SELECT 
                  mupolygongeo.STAsText() AS geom, P.mukey

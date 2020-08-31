@@ -18,14 +18,27 @@ A SoilProfileCollection
 This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes. The depth intervals returned are: \code{"0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"} and the properties returned are \code{"bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc"} -- each with 5th, 50th, 95th, mean and uncertainty values. Point data requests are made through \code{properties/query} endpoint of the the SoilGrids v2.0 REST API: https://rest.soilgrids.org/soilgrids/v2.0/docs
 }
 \examples{
+\donttest{
+if(requireNamespace("curl") &
+   curl::has_internet()) {
 
-library(aqp)
+   library(aqp)
 
-your.points <- data.frame(id = c("A", "B"), 
-                          lat = c(37.9, 38.1), 
-                          lon = c(-120.3, -121.5), stringsAsFactors = FALSE)
-                          
-plot(fetchSoilGrids(your.points), color = "socQ50")
+   your.points <- data.frame(id = c("A", "B"), 
+                             lat = c(37.9, 38.1), 
+                             lon = c(-120.3, -121.5), 
+                             stringsAsFactors = FALSE
+                             )
+
+   # this may take ~30 seconds
+   x <- fetchSoilGrids(your.points)
+                      
+   # these have no horizon designation
+   # suppress via `name = NA`
+   plotSPC(x, name = NA, color = "socQ50")
+   
+ }
+}
 
 }
 \author{

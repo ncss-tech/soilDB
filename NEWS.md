@@ -1,4 +1,5 @@
-# soilDB 2.5.7 (2020-08-20)
+# soilDB 2.5.7 (2020-08-21)
+ * add `SDA_spatialQuery` for querying tabular / spatial records via SDA given `Spatial*` class input features
  * add `fetchGDB` for querying tabular data from SSURGO/gNATSGO/STATSGO File Geodatabases
  * add `fetchSoilGrids` for point data queries to SoilGrids v2 API with SoilProfileCollection output
  * add `get_NOAA_GHCND()` and `get_NOAA_stations_nearXY()` for batch queries of NOAA Daily Climate Data (requires free API token) 

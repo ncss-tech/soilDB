@@ -11,14 +11,27 @@
 #' @author Andrew G. Brown
 #' 
 #' @examples
+#' \donttest{
+#' if(requireNamespace("curl") &
+#'    curl::has_internet()) {
 #' 
-#' library(aqp)
+#'    library(aqp)
 #' 
-#' your.points <- data.frame(id = c("A", "B"), 
-#'                           lat = c(37.9, 38.1), 
-#'                           lon = c(-120.3, -121.5), stringsAsFactors = FALSE)
-#'                           
-#' plot(fetchSoilGrids(your.points), color = "socQ50")
+#'    your.points <- data.frame(id = c("A", "B"), 
+#'                              lat = c(37.9, 38.1), 
+#'                              lon = c(-120.3, -121.5), 
+#'                              stringsAsFactors = FALSE
+#'                              )
+#'
+#'    # this may take ~30 seconds
+#'    x <- fetchSoilGrids(your.points)
+#'                       
+#'    # these have no horizon designation
+#'    # suppress via `name = NA`
+#'    plotSPC(x, name = NA, color = "socQ50")
+#'    
+#'  }
+#' }
 #' 
 fetchSoilGrids <- function(locations, loc.names = c("id","lat","lon")) {
   
