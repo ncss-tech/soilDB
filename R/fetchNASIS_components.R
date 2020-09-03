@@ -65,7 +65,9 @@
   
   # add site data to object
   site(f.chorizon) <- f.comp # left-join via coiid
-
+  
+  ## TODO: convert all ddply() calls into split() -> lapply() -> do.call('rbind')
+  
   # join-in copm strings
   ## 2017-3-13: short-circuts need testing, consider pre-marking mistakes before parsing
   pm <- plyr::ddply(f.copm, 'coiid', .formatcoParentMaterialString, name.sep=' & ')
