@@ -27,6 +27,9 @@ test_that("fetchSoilGrids() works as expected", {
   expect_equal(ncol(site(res)), 1)
   expect_equal(ncol(horizons(res)), 2*25)
   
+  # data conversion works
+  expect_equal(res$claymean[1], 18.7)
+  
   # default names kick in
   expect_silent( {res <- fetchSoilGrids(your.points, loc.names = NULL)} )
   

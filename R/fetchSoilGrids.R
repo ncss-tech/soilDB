@@ -12,27 +12,21 @@
 #' 
 #' @examples
 #' \donttest{
-#' if(requireNamespace("curl") &
+#'  if(requireNamespace("curl") &
 #'    curl::has_internet()) {
+#'   
+#'   library(aqp)
 #' 
-#'    library(aqp)
-#' 
-#'    your.points <- data.frame(id = c("A", "B"), 
-#'                              lat = c(37.9, 38.1), 
-#'                              lon = c(-120.3, -121.5), 
-#'                              stringsAsFactors = FALSE
-#'                              )
+#'   your.points <- data.frame(id  = c("A", "B"), 
+#'                            lat = c(37.9, 38.1), 
+#'                            lon = c(-120.3, -121.5), 
+#'                            stringsAsFactors = FALSE)
 #'
-#'    # this may take ~30 seconds
-#'    x <- fetchSoilGrids(your.points)
-#'                       
-#'    # these have no horizon designation
-#'    # suppress via `name = NA`
-#'    plotSPC(x, name = NA, color = "socQ50")
-#'    
+#'   x <- fetchSoilGrids(your.points)
+#'  
+#'   plotSPC(x, name = NA, color = "socQ50")
 #'  }
 #' }
-#' 
 fetchSoilGrids <- function(locations, loc.names = c("id","lat","lon")) {
   
   if (is.null(loc.names))
@@ -55,10 +49,13 @@ fetchSoilGrids <- function(locations, loc.names = c("id","lat","lon")) {
     depth.intervals <-  c("0-5", "5-15", "15-30", "30-60", "60-100", "100-200")
     hz.data <- data.frame(id = id, latitude = lat, longitude = lon, label = depth.intervals, stringsAsFactors = FALSE)
 
+    # values returned for each layer include the following properties
     data.types <- c("bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc")
+    # numeric values are returned as integers that need to be scaled to match typical measurement units
+    data.factor <- c(0.01, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)
     
-    for (d in data.types)
-      hz.data <- merge(hz.data, .extractSGLayerProperties(res, d), by = "label")
+    for (d in 1:length(data.types))
+      hz.data <- merge(hz.data, .extractSGLayerProperties(res, data.types[d], data.factor[d]), by = "label")
     
     rownames(hz.data) <- NULL
     
@@ -85,8 +82,11 @@ fetchSoilGrids <- function(locations, loc.names = c("id","lat","lon")) {
   return(spc)
 }
 
-.extractSGLayerProperties <- function(jsonres, x) {
+.extractSGLayerProperties <- function(jsonres, x, scaling.factor = 1) {
   out <-  jsonres$properties$layers[jsonres$properties$layers$name == x,]$depths[[1]]
+  
+  # rescale integer values to common scales
+  out[["values"]] <- out[,"values"] * scaling.factor
   
   # fix names and labels for downstream
   out <- out[,colnames(out)[grep("range", colnames(out), invert = TRUE)]]
@@ -94,6 +94,7 @@ fetchSoilGrids <- function(locations, loc.names = c("id","lat","lon")) {
   colnames(out) <- gsub("\\.Q0\\.", "Q", colnames(out))
   colnames(out) <- gsub("Q5", "Q50", colnames(out))
   colnames(out) <- gsub("values", x, colnames(out))
+  colnames(out) <- gsub("\\.", "", colnames(out))
   
   return(out)
 }

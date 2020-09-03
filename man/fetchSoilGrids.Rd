@@ -19,27 +19,21 @@ This function obtains SoilGrids properties information (250m raster resolution) 
 }
 \examples{
 \donttest{
-if(requireNamespace("curl") &
+ if(requireNamespace("curl") &
    curl::has_internet()) {
+  
+  library(aqp)
 
-   library(aqp)
+  your.points <- data.frame(id  = c("A", "B"), 
+                           lat = c(37.9, 38.1), 
+                           lon = c(-120.3, -121.5), 
+                           stringsAsFactors = FALSE)
 
-   your.points <- data.frame(id = c("A", "B"), 
-                             lat = c(37.9, 38.1), 
-                             lon = c(-120.3, -121.5), 
-                             stringsAsFactors = FALSE
-                             )
-
-   # this may take ~30 seconds
-   x <- fetchSoilGrids(your.points)
-                      
-   # these have no horizon designation
-   # suppress via `name = NA`
-   plotSPC(x, name = NA, color = "socQ50")
-   
+  x <- fetchSoilGrids(your.points)
+ 
+  plotSPC(x, name = NA, color = "socQ50")
  }
 }
-
 }
 \author{
 Andrew G. Brown
