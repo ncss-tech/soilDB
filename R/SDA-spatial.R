@@ -101,7 +101,8 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 #'    library(sp)
 #' 
 #' # example point
-#' p <- SpatialPoints(cbind(x=-119.72330, y = 36.92204), proj4string = CRS('+proj=longlat +datum=WGS84'))
+#' p <- SpatialPoints(cbind(x = -119.72330, y = 36.92204), 
+#'                          proj4string = CRS('+proj=longlat +datum=WGS84'))
 #' 
 #' # query map unit records at this point
 #' res <- SDA_spatialQuery(p, what = 'mukey')
