@@ -4,7 +4,7 @@
 \alias{SDA_spatialQuery}
 \title{SDA Spatial Query}
 \usage{
-SDA_spatialQuery(geom, what = "mukey", geomIntersection = FALSE)
+SDA_spatialQuery(geom, what = "mukey", geomIntersection = FALSE, db = c("SSURGO", "STATSGO"))
 }
 \arguments{
 \item{geom}{a Spatial* object, with valid CRS. May contain multiple features.}
@@ -12,6 +12,10 @@ SDA_spatialQuery(geom, what = "mukey", geomIntersection = FALSE)
 \item{what}{a character vector specifting what to return. `mukey`: `data.frame` with intersecting map unit keys and names, `geom` overlapping or intersecting map unit polygons}
 
 \item{geomIntersection}{logical; FALSE: overlapping map unit polygons returned, TRUE: intersection of `geom` + map unit polygons is returned.}
+
+\item{db}{a character vector identifying the Soil Geographic Databases
+  (`SSURGO` or `STATSGO`) to query. Option `STATSGO` currently works only
+  in combination with `what = "geom"`}
 }
 \value{
 A `data.frame` if `what` is 'mukey', otherwise `SpatialPolygonsDataFrame` object.
