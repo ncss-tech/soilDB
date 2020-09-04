@@ -197,7 +197,7 @@ SDA_query <- function(q) {
   # list of character matrix, one for each "Table" returned
   # note: the data returned by SDA/JSON are all character class
   #       we "fix" this later on
-  r.content <- try(httr::content(r, as = 'text', encoding = 'UTF-8'))
+  r.content <- try(httr::content(r, as = 'text', encoding = 'UTF-8'), silent = TRUE)
   
   if (inherits(r.content,'try-error'))
       return(r.content)
@@ -217,7 +217,7 @@ SDA_query <- function(q) {
   }
   
   # process list of tables
-  d <- try(lapply(d, .post_process_SDA_result_set))
+  d <- try(lapply(d, .post_process_SDA_result_set), silent = TRUE)
   
   if (inherits(d, 'try-error'))
     return(d)
