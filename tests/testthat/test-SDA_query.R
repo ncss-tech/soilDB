@@ -107,11 +107,21 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
     skip("in-house testing only")
   }
 
+  # test with default db = "SSURGO"
   res <- suppressWarnings(SDA_spatialQuery(p, what = 'geom'))
 
   # testing known values
   expect_true(inherits(res, 'SpatialPolygonsDataFrame'))
   expect_equal(nrow(res), 1)
+
+
+  # test with db = "STATSGO"
+  res <- suppressWarnings(SDA_spatialQuery(p, what = 'geom', db = "STATSGO"))
+
+  # testing known values
+  expect_true(inherits(res, 'SpatialPolygonsDataFrame'))
+  res_mukey <- unique(as.data.frame(res)[, "mukey"])
+  expect_equal(length(res_mukey), 1)
 
 })
 

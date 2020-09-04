@@ -75,7 +75,10 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 #' @param geom a Spatial* object, with valid CRS. May contain multiple features.
 #' @param what a character vector specifting what to return. `mukey`: `data.frame` with intersecting map unit keys and names, `geom` overlapping or intersecting map unit polygons
 #' @param geomIntersection logical; FALSE: overlapping map unit polygons returned, TRUE: intersection of `geom` + map unit polygons is returned.
-#' 
+#' @param db a character vector identifying the Soil Geographic Databases
+#'   (`SSURGO` or `STATSGO`) to query. Option \var{STATSGO} currently works
+#'   only in combination with \code{what = "geom"}.
+#'
 #' @return A `data.frame` if `what` is 'mukey', otherwise `SpatialPolygonsDataFrame` object.
 #' 
 #' @author D.E. Beaudette
@@ -135,8 +138,9 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 #'    
 #'  }
 #' }
-SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE) {
-  
+SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE,
+  db = c("SSURGO", "STATSGO")) {
+
   # check for required packages
   if(!requireNamespace('rgeos', quietly = TRUE))
     stop('please install the `rgeos` package', call.=FALSE)
@@ -145,7 +149,13 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE) {
   if(! what %in% c('mukey', 'geom')) {
     stop("query type must be either 'mukey' or 'geom'",call. = FALSE)
   }
-  
+
+  db <- match.arg(db)
+
+  if (what == "mukey" && db == "STATSGO") {
+    stop("query type 'mukey' for 'STATSGO' is not supported", call. = FALSE)
+  }
+
   # geom must be an sp object
   if(! inherits(geom, 'Spatial')) {
     stop('`geom` must be a Spatial* object', call. = FALSE)
@@ -172,20 +182,27 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE) {
   # TODO: this is 15x slower than non-spatial-returning-query in SDA_query_features()
   if(what == 'geom') {
     
+
+    db_table <- switch(db, SSURGO = "mupolygon", STATSGO = "gsmmupolygon")
+
     # return intersection
     if(geomIntersection) {
       q <- sprintf("
                SELECT 
                  mupolygongeo.STIntersection( geometry::STGeomFromText('%s', 4326) ).STAsText() AS geom, P.mukey
-                 FROM mupolygon AS P
-                 WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;", wkt, wkt)
+                 FROM %s AS P
+                 WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;",
+        wkt, db_table, wkt
+      )
     } else {
       # return overlapping
       q <- sprintf("
                SELECT 
                  mupolygongeo.STAsText() AS geom, P.mukey
-                 FROM mupolygon AS P
-                 WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;", wkt)
+                 FROM %s AS P
+                 WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;",
+        db_table, wkt
+      )
     }
     
     
