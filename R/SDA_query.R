@@ -22,13 +22,15 @@ makeChunks <- function(ids, size=100) {
   return(chunk.ids)
 }
 
-#' Format vector of values into a string suitable for an SQL `IN` statement
+#' @title Format vector of values into a string suitable for an SQL `IN` statement.
 #' 
-#' @description Concatenate a vector to SQL \code{IN}-compatible syntax: \code{letters[1:3]} becomes \code{('a','b','c')}. Note: only \code{character} output is supported.
+#' @description Concatenate a vector to SQL \code{IN}-compatible syntax: \code{letters[1:3]} becomes \code{('a','b','c')}. Values in \code{x} are first passed through \code{unique()}.
+#' 
+#' @note Only \code{character} output is supported.
 #' 
 #' @param x A character vector.
 #'
-#' @return A character vector (unit length) containing concatenated group syntax for use in SQL \code{IN}.
+#' @return A character vector (unit length) containing concatenated group syntax for use in SQL \code{IN}, with unique value found in \code{x}.
 #' @export format_SQL_in_statement
 #'
 #' @examples
@@ -73,6 +75,9 @@ makeChunks <- function(ids, size=100) {
 #' 
 #'    
 format_SQL_in_statement <- function(x) {
+  # there is no reason to preserve duplicates
+  # and, plenty safe to perform a second time, in case this was done outside of the function call
+  x <- unique(x)
 	i <- paste(x, collapse = "','")
 	i <- paste("('", i, "')", sep = '')
 	return(i)
