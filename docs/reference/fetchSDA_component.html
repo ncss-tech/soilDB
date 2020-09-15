@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Download and Flatten Data from Soil Data Access — fetchSDA" />
 <meta property="og:description" content="Functions to download and flatten commonly used tables and from Soil Data Access, and create soil profile collection objects (SPC)." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
       </span>
     </div>
 
@@ -89,7 +92,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/ncss-tech/soilDB/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -112,30 +120,30 @@
     <p>Functions to download and flatten commonly used tables and from Soil Data Access, and create soil profile collection objects (SPC).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetchSDA</span>(<span class='kw'>WHERE</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>duplicates</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>childs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-         <span class='kw'>nullFragsAreZero</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>rmHzErrors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-         <span class='kw'>droplevels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-         <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
+    <pre class="usage"><span class='fu'>fetchSDA</span>(WHERE = <span class='kw'>NULL</span>, duplicates = <span class='fl'>FALSE</span>, childs = <span class='fl'>TRUE</span>, 
+         nullFragsAreZero = <span class='fl'>TRUE</span>, rmHzErrors = <span class='fl'>FALSE</span>,
+         droplevels = <span class='fl'>TRUE</span>,
+         stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
          )
-
-<span class='fu'>get_mapunit_from_SDA</span>(<span class='kw'>WHERE</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-                     <span class='kw'>droplevels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                     <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
+                   
+<span class='fu'>get_mapunit_from_SDA</span>(WHERE = <span class='kw'>NULL</span>, 
+                     droplevels = <span class='fl'>TRUE</span>,
+                     stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
                      )
 
-<span class='fu'>get_component_from_SDA</span>(<span class='kw'>WHERE</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>duplicates</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>childs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                       <span class='kw'>droplevels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                       <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
+<span class='fu'>get_component_from_SDA</span>(WHERE = <span class='kw'>NULL</span>, duplicates = <span class='fl'>FALSE</span>, childs = <span class='fl'>TRUE</span>,
+                       droplevels = <span class='fl'>TRUE</span>, nullFragsAreZero = <span class='fl'>TRUE</span>,
+                       stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
                        )
-
-<span class='fu'>get_chorizon_from_SDA</span>(<span class='kw'>WHERE</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>duplicates</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>childs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                      <span class='kw'>nullFragsAreZero</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                      <span class='kw'>droplevels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                      <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
+                       
+<span class='fu'>get_chorizon_from_SDA</span>(WHERE = <span class='kw'>NULL</span>, duplicates = <span class='fl'>FALSE</span>, childs = <span class='fl'>TRUE</span>,
+                      nullFragsAreZero = <span class='fl'>TRUE</span>,
+                      droplevels = <span class='fl'>TRUE</span>,
+                      stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
                       )
-
-<span class='fu'>get_cosoilmoist_from_SDA</span>(<span class='kw'>WHERE</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>duplicates</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>impute</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-                         <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
+                      
+<span class='fu'>get_cosoilmoist_from_SDA</span>(WHERE = <span class='kw'>NULL</span>, duplicates = <span class='fl'>FALSE</span>, impute = <span class='fl'>TRUE</span>, 
+                         stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
                          )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -184,6 +192,9 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A dataframe or soil profile collection object.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Stephen Roecker</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='SDA_query.html'>SDA_query</a></p></div>
@@ -192,138 +203,132 @@
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 
 
-<span class='kw'>if</span> (
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>aqp</span>) <span class='kw'>&amp;</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"ggplot2"</span>) <span class='kw'>&amp;</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"gridExtra"</span>) <span class='kw'>&amp;</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"viridis"</span>)
+<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
+  <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>() <span class='op'>&amp;</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span>) <span class='op'>&amp;</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='http://ggplot2.tidyverse.org'>"ggplot2"</a></span>) <span class='op'>&amp;</span> 
+  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"gridExtra"</span>) <span class='op'>&amp;</span> 
+  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/sjmgarnier/viridis'>"viridis"</a></span>)
 ) {
 
   <span class='co'># query soil components by areasymbol and musym</span>
-  <span class='no'>test</span> <span class='kw'>=</span> <span class='fu'>fetchSDA</span>(<span class='kw'>WHERE</span> <span class='kw'>=</span> <span class='st'>"areasymbol = 'IN005' AND musym = 'MnpB2'"</span>)
-
-
+  <span class='kw'>test</span> <span class='op'>=</span> <span class='fu'>fetchSDA</span>(WHERE = <span class='st'>"areasymbol = 'IN005' AND musym = 'MnpB2'"</span>)
+  
+  
   <span class='co'># profile plot</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-plotting.html'>plot</a></span>(<span class='no'>test</span>)
-
-
+  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>test</span>)
+  
+  
   <span class='co'># convert the data for depth plot</span>
-  <span class='no'>clay_slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-utils.html'>horizons</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-slice-methods.html'>slice</a></span>(<span class='no'>test</span>, <span class='fl'>0</span>:<span class='fl'>200</span> ~ <span class='no'>claytotal_l</span> + <span class='no'>claytotal_r</span> + <span class='no'>claytotal_h</span>))
-  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-class.html'>names</a></span>(<span class='no'>clay_slice</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span>(<span class='st'>"claytotal_"</span>, <span class='st'>""</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-class.html'>names</a></span>(<span class='no'>clay_slice</span>))
-
-  <span class='no'>om_slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-utils.html'>horizons</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-slice-methods.html'>slice</a></span>(<span class='no'>test</span>, <span class='fl'>0</span>:<span class='fl'>200</span> ~ <span class='no'>om_l</span> + <span class='no'>om_r</span> + <span class='no'>om_h</span>))
-  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-class.html'>names</a></span>(<span class='no'>om_slice</span>) <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span>(<span class='st'>"om_"</span>, <span class='st'>""</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-class.html'>names</a></span>(<span class='no'>om_slice</span>))
-
-  <span class='no'>test2</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>clay_slice</span>, <span class='kw'>var</span> <span class='kw'>=</span> <span class='st'>"clay"</span>),
-                <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>om_slice</span>, <span class='kw'>var</span> <span class='kw'>=</span> <span class='st'>"om"</span>)
+  <span class='kw'>clay_slice</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/horizons.html'>horizons</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-slice-methods.html'>slice</a></span>(<span class='kw'>test</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>200</span> <span class='op'>~</span> <span class='kw'>claytotal_l</span> <span class='op'>+</span> <span class='kw'>claytotal_r</span> <span class='op'>+</span> <span class='kw'>claytotal_h</span>))
+  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span>(<span class='kw'>clay_slice</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span>(<span class='st'>"claytotal_"</span>, <span class='st'>""</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span>(<span class='kw'>clay_slice</span>))
+  
+  <span class='kw'>om_slice</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/horizons.html'>horizons</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-slice-methods.html'>slice</a></span>(<span class='kw'>test</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>200</span> <span class='op'>~</span> <span class='kw'>om_l</span> <span class='op'>+</span> <span class='kw'>om_r</span> <span class='op'>+</span> <span class='kw'>om_h</span>))
+  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span>(<span class='kw'>om_slice</span>) <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span>(<span class='st'>"om_"</span>, <span class='st'>""</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span>(<span class='kw'>om_slice</span>))
+  
+  <span class='kw'>test2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>clay_slice</span>, var = <span class='st'>"clay"</span>),
+                <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>om_slice</span>, var = <span class='st'>"om"</span>)
   )
-
-  <span class='no'>h</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span>(<span class='no'>test2</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-utils.html'>site</a></span>(<span class='no'>test</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"nationalmusym"</span>, <span class='st'>"cokey"</span>, <span class='st'>"compname"</span>, <span class='st'>"comppct_r"</span>)],
-            <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"cokey"</span>,
-            <span class='kw'>all.x</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  
+  <span class='kw'>h</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span>(<span class='kw'>test2</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/site.html'>site</a></span>(<span class='kw'>test</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"nationalmusym"</span>, <span class='st'>"cokey"</span>, <span class='st'>"compname"</span>, <span class='st'>"comppct_r"</span>)],
+            by = <span class='st'>"cokey"</span>, 
+            all.x = <span class='fl'>TRUE</span>
   )
-
+  
   <span class='co'># depth plot of clay content by soil component</span>
-  <span class='no'>gg_comp</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x</span>) {
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='no'>x</span>) +
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>r</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>hzdept_r</span>)) +
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>r</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>hzdept_r</span>)) +
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_ribbon.html'>geom_ribbon</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>l</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>h</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>hzdept_r</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.2</span>) +
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>xlim</a></span>(<span class='fl'>200</span>, <span class='fl'>0</span>) +
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"depth (cm)"</span>) +
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_grid.html'>facet_grid</a></span>(<span class='no'>var</span> ~ <span class='no'>nationalmusym</span> + <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>compname</span>, <span class='no'>comppct_r</span>)) +
+  <span class='kw'>gg_comp</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>x</span>) {
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='kw'>x</span>) <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(y = <span class='kw'>r</span>, x = <span class='kw'>hzdept_r</span>)) <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(y = <span class='kw'>r</span>, x = <span class='kw'>hzdept_r</span>)) <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_ribbon.html'>geom_ribbon</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(ymin = <span class='kw'>l</span>, ymax = <span class='kw'>h</span>, x = <span class='kw'>hzdept_r</span>), alpha = <span class='fl'>0.2</span>) <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>xlim</a></span>(<span class='fl'>200</span>, <span class='fl'>0</span>) <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"depth (cm)"</span>) <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_grid.html'>facet_grid</a></span>(<span class='kw'>var</span> <span class='op'>~</span> <span class='kw'>nationalmusym</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='kw'>compname</span>, <span class='kw'>comppct_r</span>)) <span class='op'>+</span>
       <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span>()
   }
-  <span class='no'>g1</span> <span class='kw'>&lt;-</span> <span class='fu'>gg_comp</span>(<span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>h</span>, <span class='no'>var</span> <span class='kw'>==</span> <span class='st'>"clay"</span>))
-  <span class='no'>g2</span> <span class='kw'>&lt;-</span> <span class='fu'>gg_comp</span>(<span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>h</span>, <span class='no'>var</span> <span class='kw'>==</span> <span class='st'>"om"</span>))
-
-  <span class='fu'><a href='https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html'>grid.arrange</a></span>(<span class='no'>g1</span>, <span class='no'>g2</span>)
-
-
+  <span class='kw'>g1</span> <span class='op'>&lt;-</span> <span class='fu'>gg_comp</span>(<span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='kw'>h</span>, <span class='kw'>var</span> <span class='op'>==</span> <span class='st'>"clay"</span>))
+  <span class='kw'>g2</span> <span class='op'>&lt;-</span> <span class='fu'>gg_comp</span>(<span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='kw'>h</span>, <span class='kw'>var</span> <span class='op'>==</span> <span class='st'>"om"</span>))
+  
+  <span class='fu'><a href='https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html'>grid.arrange</a></span>(<span class='kw'>g1</span>, <span class='kw'>g2</span>)
+  
+  
   <span class='co'># query cosoilmoist (e.g. water table data) by mukey</span>
-  <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>get_cosoilmoist_from_SDA</span>(<span class='kw'>WHERE</span> <span class='kw'>=</span> <span class='st'>"mukey = '1395352'"</span>)
-
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='no'>x</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='no'>month</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>dept_r</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='no'>status</span>)) +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_rect</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>xmin</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='no'>month</span>), <span class='kw'>xmax</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='no'>month</span>) + <span class='fl'>1</span>,
-                  <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='no'>x</span>$<span class='no'>depb_r</span>),
-                  <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>flodfreqcl</span>)) +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(<span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>) +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span>() +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_ribbon.html'>geom_ribbon</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>ymin</span> <span class='kw'>=</span> <span class='no'>dept_l</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='no'>dept_h</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.2</span>) +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>ylim</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='no'>x</span>$<span class='no'>depb_r</span>), <span class='fl'>0</span>) +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"month"</span>) + <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span>(<span class='st'>"depth (cm)"</span>) +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>12</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>month.abb</span>, <span class='kw'>name</span><span class='kw'>=</span><span class='st'>"Month"</span>) +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span>(~ <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>compname</span>, <span class='st'>' ('</span>, <span class='no'>comppct_r</span> , <span class='st'>')'</span>)) +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>x</span>$<span class='no'>nationalmusym</span>[<span class='fl'>1</span>],
+  <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>get_cosoilmoist_from_SDA</span>(WHERE = <span class='st'>"mukey = '1395352'"</span>)
+  
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='kw'>x</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(x = <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='kw'>month</span>), y = <span class='kw'>dept_r</span>, lty = <span class='kw'>status</span>)) <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_rect</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(xmin = <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='kw'>month</span>), xmax = <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='kw'>month</span>) <span class='op'>+</span> <span class='fl'>1</span>,
+                  ymin = <span class='fl'>0</span>, ymax = <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/max.html'>max</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>depb_r</span>),
+                  fill = <span class='kw'>flodfreqcl</span>)) <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(cex = <span class='fl'>1</span>) <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span>() <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_ribbon.html'>geom_ribbon</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(ymin = <span class='kw'>dept_l</span>, ymax = <span class='kw'>dept_h</span>), alpha = <span class='fl'>0.2</span>) <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>ylim</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/max.html'>max</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>depb_r</span>), <span class='fl'>0</span>) <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"month"</span>) <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span>(<span class='st'>"depth (cm)"</span>) <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span>(breaks = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>, labels = <span class='kw'>month.abb</span>, name=<span class='st'>"Month"</span>) <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span>(<span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='kw'>compname</span>, <span class='st'>' ('</span>, <span class='kw'>comppct_r</span> , <span class='st'>')'</span>)) <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>nationalmusym</span>[<span class='fl'>1</span>], 
                    <span class='st'>': Water Table Levels from Component Soil Moisture Month Data'</span>))
-
-
-
+  
+  
+  
   <span class='co'># query all Miami major components</span>
-  <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>get_component_from_SDA</span>(<span class='kw'>WHERE</span> <span class='kw'>=</span> <span class='st'>"compname = 'Miami' \n
+  <span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'>get_component_from_SDA</span>(WHERE = <span class='st'>"compname = 'Miami' \n
                 AND majcompflag = 'Yes' AND areasymbol != 'US'"</span>)
-
-
+  
+  
   <span class='co'># landform vs 3-D morphometry</span>
-  <span class='no'>test</span> <span class='kw'>&lt;-</span> {
-    <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>s</span>, ! <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>landform</span>) <span class='kw'>|</span> ! <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>geompos</span>)) <span class='kw'>-&gt;</span><span class='no'>.</span>;
-    <span class='fu'><a href='https://rdrr.io/r/base/split.html'>split</a></span>(<span class='no'>.</span>, <span class='no'>.</span>$<span class='no'>drainagecl</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='kw'>-&gt;</span><span class='no'>.</span>;
-    <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='no'>.</span>, <span class='kw'>function</span>(<span class='no'>x</span>) {
-      <span class='no'>test</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>()
-      <span class='no'>test</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>x</span>$<span class='no'>landform</span>, <span class='no'>x</span>$<span class='no'>geompos</span>))
-      <span class='no'>test</span>$<span class='no'>compname</span>   <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>compname</span>[<span class='fl'>1</span>]
-      <span class='no'>test</span>$<span class='no'>drainagecl</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>drainagecl</span>[<span class='fl'>1</span>]
-      <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-class.html'>names</a></span>(<span class='no'>test</span>)[<span class='fl'>1</span>:<span class='fl'>2</span>] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"landform"</span>, <span class='st'>"geompos"</span>)
-      <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='no'>test</span>)
-    }) <span class='kw'>-&gt;</span><span class='no'>.</span>;
-    <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='st'>"rbind"</span>, <span class='no'>.</span>) <span class='kw'>-&gt;</span><span class='no'>.</span>;
-    <span class='no'>.</span>[<span class='no'>.</span>$<span class='no'>Freq</span> <span class='kw'>&gt;</span> <span class='fl'>0</span>, ] <span class='kw'>-&gt;</span><span class='no'>.</span>;
-    <span class='fu'><a href='https://rdrr.io/r/base/with.html'>within</a></span>(<span class='no'>.</span>, {
-      <span class='no'>landform</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/reorder.factor.html'>reorder</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>landform</span>), <span class='no'>Freq</span>, <span class='no'>max</span>)
-      <span class='no'>geompos</span>  <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/reorder.factor.html'>reorder</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>geompos</span>),  <span class='no'>Freq</span>, <span class='no'>max</span>)
-      <span class='no'>geompos</span>  <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>geompos</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>geompos</span>)))
-    }) <span class='kw'>-&gt;</span><span class='no'>.</span>;
+  <span class='kw'>test</span> <span class='op'>&lt;-</span> {
+    <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='kw'>s</span>, <span class='op'>!</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>landform</span>) <span class='op'>|</span> <span class='op'>!</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>geompos</span>)) <span class='op'>-&gt;</span><span class='kw'>.</span>;
+    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-split-methods.html'>split</a></span>(<span class='kw'>.</span>, <span class='kw'>.</span><span class='op'>$</span><span class='kw'>drainagecl</span>, drop = <span class='fl'>TRUE</span>) <span class='op'>-&gt;</span><span class='kw'>.</span>;
+    <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='kw'>.</span>, <span class='fu'>function</span>(<span class='kw'>x</span>) {
+      <span class='kw'>test</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>()
+      <span class='kw'>test</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>landform</span>, <span class='kw'>x</span><span class='op'>$</span><span class='kw'>geompos</span>))
+      <span class='kw'>test</span><span class='op'>$</span><span class='kw'>compname</span>   <span class='op'>=</span> <span class='kw'>x</span><span class='op'>$</span><span class='kw'>compname</span>[<span class='fl'>1</span>]
+      <span class='kw'>test</span><span class='op'>$</span><span class='kw'>drainagecl</span> <span class='op'>=</span> <span class='kw'>x</span><span class='op'>$</span><span class='kw'>drainagecl</span>[<span class='fl'>1</span>]
+      <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span>(<span class='kw'>test</span>)[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>] <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"landform"</span>, <span class='st'>"geompos"</span>)
+      <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='kw'>test</span>)
+    }) <span class='op'>-&gt;</span><span class='kw'>.</span>;
+    <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='st'>"rbind"</span>, <span class='kw'>.</span>) <span class='op'>-&gt;</span><span class='kw'>.</span>;
+    <span class='kw'>.</span>[<span class='kw'>.</span><span class='op'>$</span><span class='kw'>Freq</span> <span class='op'>&gt;</span> <span class='fl'>0</span>, ] <span class='op'>-&gt;</span><span class='kw'>.</span>;
+    <span class='fu'><a href='https://rdrr.io/r/base/with.html'>within</a></span>(<span class='kw'>.</span>, {
+      <span class='kw'>landform</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/reorder.factor.html'>reorder</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>landform</span>), <span class='kw'>Freq</span>, <span class='kw'>max</span>)
+      <span class='kw'>geompos</span>  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/reorder.factor.html'>reorder</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>geompos</span>),  <span class='kw'>Freq</span>, <span class='kw'>max</span>)
+      <span class='kw'>geompos</span>  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='kw'>geompos</span>, levels = <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='kw'>geompos</span>)))
+    }) <span class='op'>-&gt;</span><span class='kw'>.</span>;
   }
-  <span class='no'>test</span>$<span class='no'>Freq2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span>(<span class='no'>test</span>$<span class='no'>Freq</span>,
-                    <span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>100</span>, <span class='fl'>150</span>),
-                    <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"&lt;5"</span>, <span class='st'>"5-10"</span>, <span class='st'>"10-25"</span>, <span class='st'>"25-50"</span>, <span class='st'>"50-100"</span>, <span class='st'>"100-150"</span>)
+  <span class='kw'>test</span><span class='op'>$</span><span class='kw'>Freq2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span>(<span class='kw'>test</span><span class='op'>$</span><span class='kw'>Freq</span>, 
+                    breaks = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>100</span>, <span class='fl'>150</span>),
+                    labels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"&lt;5"</span>, <span class='st'>"5-10"</span>, <span class='st'>"10-25"</span>, <span class='st'>"25-50"</span>, <span class='st'>"50-100"</span>, <span class='st'>"100-150"</span>)
   )
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='no'>test</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>geompos</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>landform</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Freq2</span>)) +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_tile</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.5</span>) + <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span>(~ <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>compname</span>, <span class='st'>"\n"</span>, <span class='no'>drainagecl</span>)) +
-    <span class='fu'><a href='https://rdrr.io/pkg/viridis/man/scale_viridis.html'>scale_fill_viridis</a></span>(<span class='kw'>discrete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span>(<span class='kw'>aspect.ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>axis.text.x</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span>(<span class='kw'>angle</span> <span class='kw'>=</span> <span class='fl'>45</span>, <span class='kw'>hjust</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>vjust</span> <span class='kw'>=</span> <span class='fl'>1</span>)) +
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='kw'>test</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(x = <span class='kw'>geompos</span>, y = <span class='kw'>landform</span>, fill = <span class='kw'>Freq2</span>)) <span class='op'>+</span> 
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_tile</a></span>(alpha = <span class='fl'>0.5</span>) <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span>(<span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='kw'>compname</span>, <span class='st'>"\n"</span>, <span class='kw'>drainagecl</span>)) <span class='op'>+</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/viridis/man/scale_viridis.html'>scale_fill_viridis</a></span>(discrete = <span class='fl'>TRUE</span>) <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span>(aspect.ratio = <span class='fl'>1</span>, axis.text.x = <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span>(angle = <span class='fl'>45</span>, hjust = <span class='fl'>1</span>, vjust = <span class='fl'>1</span>)) <span class='op'>+</span>
     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span>(<span class='st'>"Landform vs 3-D Morphometry for Miami Major Components on SDA"</span>)
+  
+  
+}
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: viridis</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: viridisLite</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chkey` to character</span></div><div class='img'><img src='fetchSDA_component-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='img'><img src='fetchSDA_component-2.png' alt='' width='700' height='433' /></div><div class='img'><img src='fetchSDA_component-3.png' alt='' width='700' height='433' /></div><div class='input'>
 
 
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: viridis</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'viridis' was built under R version 3.5.3</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: viridisLite</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'viridisLite' was built under R version 3.5.3</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>guessing horizon designations are stored in `hzname`</span></div><div class='img'><img src='fetchSDA_component-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='img'><img src='fetchSDA_component-2.png' alt='' width='700' height='433' /></div><div class='img'><img src='fetchSDA_component-3.png' alt='' width='700' height='433' /></div><div class='input'>
-
-
-# }
+<span class='co'># }</span>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Stephen Roecker</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker.</p>
+  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

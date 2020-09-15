@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Fetch commonly used site/pedon/horizon or component data from NASIS. — fetchNASIS" />
 <meta property="og:description" content="Fetch commonly used site/pedon/horizon data or component from NASIS, returned as a SoilProfileCollection object." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
       </span>
     </div>
 
@@ -89,7 +92,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/ncss-tech/soilDB/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -112,12 +120,12 @@
     <p>Fetch commonly used site/pedon/horizon data or component from NASIS, returned as a SoilProfileCollection object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetchNASIS</span>(<span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>'pedons'</span>, <span class='kw'>url</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>SS</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>rmHzErrors</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>nullFragsAreZero</span><span class='kw'>=</span><span class='fl'>TRUE</span>,
-                  <span class='kw'>soilColorState</span><span class='kw'>=</span><span class='st'>'moist'</span>, <span class='kw'>lab</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-                  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
+    <pre class="usage"><span class='fu'>fetchNASIS</span>(from = <span class='st'>'pedons'</span>, url = <span class='kw'>NULL</span>, SS=<span class='fl'>TRUE</span>, rmHzErrors=<span class='fl'>TRUE</span>, nullFragsAreZero=<span class='fl'>TRUE</span>, 
+                  soilColorState=<span class='st'>'moist'</span>, lab=<span class='fl'>FALSE</span>, fill = <span class='fl'>FALSE</span>,
+                  stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
                   )
 
-<span class='fu'>getHzErrorsNASIS</span>(<span class='kw'>strict</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</pre>
+<span class='fu'>getHzErrorsNASIS</span>(strict=<span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,6 +175,9 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a SoilProfileCollection class object</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D. E. Beaudette, J. M. Skovlin, and S.M. Roecker</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function imports data from NASIS into R as a S3 R object specified by the aqp R package, known as a soil profile collection object. It flattens NASIS's pedon and component tables, including their various child tables, into several more easily managable data frames. Primarily these functions access the local NASIS database using an ODBC connection. However using the fetchNASIS() argument from = "pedon_report", data can be read from the NASIS Report 'fetchNASIS', as either a txt file or url. The primary purpose of fetchNASIS(from = "pedon_report") is to faclitate importing datasets larger than 8000+ pedons/components.</p>
@@ -175,80 +186,22 @@
 <p>See <code>getHzErrorsNASIS</code> for a simple approach to identifying pedons with problematic horizonation.</p>
 <p>See the <a href='http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html'>NASIS component tutorial</a>, and <a href='http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.html'>NASIS pedon tutorial</a> for more information.</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'># check required packages</span>
-<span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"aqp"</span>) <span class='kw'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"RODBC"</span>)) {
-
-  <span class='co'># test that NASIS db connection is set up</span>
-  <span class='co'># note that you must setup this connection ahead of time</span>
-  <span class='co'># see inst/doc/setup_ODBC_local_NASIS.pdf</span>
-  <span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/any.html'>any</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grepl</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-class.html'>names</a></span>(<span class='kw pkg'>RODBC</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RODBC/man/odbcDataSources.html'>odbcDataSources</a></span>()), <span class='kw'>pattern</span><span class='kw'>=</span><span class='st'>"nasis_local"</span>))) {
-
-    <span class='co'>## 1. fetchNASIS(from='pedon') NASIS setup</span>
-    <span class='co'># query depends on some pedon data in your selected set</span>
-
-    <span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>fetchNASIS</span>(<span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>'pedons'</span>))
-    <span class='co'># note: wrap in try() to capture error in case of empty selected set</span>
-
-    <span class='co'># plot only those profiles with densic contact</span>
-    <span class='kw'>if</span>(!<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>f</span>,<span class='st'>'try-error'</span>)) {
-
-      <span class='co'># which pedons have densic.contact==TRUE</span>
-      <span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>f</span>$<span class='no'>densic.contact</span>)
-
-      <span class='co'># if there are any pedons with densic contacts, plot them</span>
-      <span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>idx</span>))
-        <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-plotting.html'>plot</a></span>(<span class='no'>f</span>[<span class='no'>idx</span>, ], <span class='kw'>name</span><span class='kw'>=</span><span class='st'>'hzname'</span>)
-
-    } <span class='kw'>else</span> { <span class='fu'><a href='https://rdrr.io/r/base/message.html'>message</a></span>(<span class='no'>f</span>[<span class='fl'>1</span>]) }
-
-    <span class='co'>## 2. fetchNASIS(from='component') NASIS setup:</span>
-    <span class='co'># perform a DMU-* query against the national database</span>
-
-    <span class='no'>fc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>fetchNASIS</span>(<span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>'components'</span>))
-    <span class='co'># note: wrap in try() to capture error in case of empty selected set</span>
-
-    <span class='co'>## 3. fetchNASIS(from='pedon_report') NASIS setup:</span>
-    <span class='co'># run the 11-IND NASIS report 'fetchNASIS' against the national database</span>
-    <span class='co'># the result will automatically be opened and saved as fetchNASIS.txt</span>
-    <span class='co'># in NASIS Temp folder</span>
-
-    <span class='co'># the fetchNASIS.txt fileis read by fetchNASIS(from = 'pedon_report')</span>
-    <span class='co'># alternate: run offline against national db and supply `url` argument</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'>fetchNASIS</span>(<span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>'pedon_report'</span>))
-    <span class='co'># note: wrap in try() to capture error in case of empty selected set</span>
-  }
-}</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: RODBC</span></div><div class='output co'>#&gt; <span class='message'>multiple horizontal datums present, consider using WGS84 coordinates (x_std, y_std)</span></div><div class='output co'>#&gt; <span class='message'>NOTICE: multiple `labsampnum` values / horizons; see pedon IDs:</span>
-#&gt; <span class='message'>1981IL115059,1990IL203027,77KY047001,C1805P01-1,S2003IL111005,S2006SC085002,S2011MI117102,V1985-VA023-309,V1985-VA023-311,V1985-VA023-312,V1985-VA023-314,V1985-VA023-317,V1985-VA023-319,V1985-VA161-328,V1985-VA161-332,V1985-VA161-334,V1985-VA163-321,V1985-VA163-322,V1985-VA163-326,V1985-VA173-337,V1985-VA173-339,V1985-VA173-342,V1985-VA173-343,V1985-VA173-345,V1985-VA173-346,V1985-VA191-349,V1985-VA191-350,V1985-VA191-356,V1985-VA197-341,V1985-VA197-360,V1985-VA197-361,V1985-VA770-329,V1985-VA770-333,V1985-VA775-335</span></div><div class='output co'>#&gt; <span class='message'>mixing dry colors ... [10 of 387 horizons]</span></div><div class='output co'>#&gt; <span class='message'>mixing moist colors ... [319 of 3436 horizons]</span></div><div class='output co'>#&gt; <span class='warning'>Warning: some records are missing rock fragment volume, these have been removed</span></div><div class='output co'>#&gt; <span class='message'>-&gt; QC: some fragsize_h values == 76mm, may be mis-classified as cobbles [91 / 3505 records]</span></div><div class='output co'>#&gt; <span class='warning'>Warning: some records are missing artifact volume, these have been removed</span></div><div class='output co'>#&gt; <span class='warning'>Warning: all records are missing artifact volume (NULL). buffering result with NA. will be converted to zero if nullFragsAreZero = TRUE.</span></div><div class='output co'>#&gt; <span class='message'>replacing missing lower horizon depths with top depth + 1cm ... [20 horizons]</span></div><div class='output co'>#&gt; <span class='message'>top/bottom depths equal, adding 1cm to bottom depth ... [11 horizons]</span></div><div class='output co'>#&gt; <span class='message'>-&gt; QC: sites without pedons: use `get('sites.missing.pedons', envir=soilDB.env)` for related usersiteid values</span></div><div class='output co'>#&gt; <span class='message'>-&gt; QC: duplicate pedons: use `get('dup.pedon.ids', envir=soilDB.env)` for related peiid values</span></div><div class='output co'>#&gt; <span class='message'>-&gt; QC: horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for related userpedonid values or `get('bad.horizons', envir=soilDB.env)` for related horizon designations</span></div><div class='output co'>#&gt; <span class='message'>-&gt; QC: pedons missing bottom hz depths: use `get('missing.bottom.depths', envir=soilDB.env)` for related pedon IDs</span></div><div class='output co'>#&gt; <span class='message'>-&gt; QC: equal hz top and bottom depths: use `get('top.bottom.equal', envir=soilDB.env)` for related pedon IDs</span></div><div class='output co'>#&gt; <span class='warning'>Warning: No horizon data in NASIS component query result.</span></div><div class='img'><img src='fetchNASIS-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; Error in (function (classes, fdef, mtable)  : 
-#&gt;   unable to find an inherited method for function 'site&lt;-' for signature '"data.frame"'
-#&gt; Error in .fetchNASIS_report(url = url, rmHzErrors = rmHzErrors, nullFragsAreZero = nullFragsAreZero,  : 
-#&gt;   the temp file C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt
-#&gt;  doesn't exist, please run the fetchNASIS report from NASIS</div><div class='input'># }
-</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>D. E. Beaudette, J. M. Skovlin, and S.M. Roecker</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker.</p>
+  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

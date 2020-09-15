@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Read and Flatten the Component Soil Moisture Tables — get_cosoilmoist_from_NASIS" />
 <meta property="og:description" content="Read and flatten the component soil moisture month tables from a local NASIS Database." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
       </span>
     </div>
 
@@ -89,7 +92,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/ncss-tech/soilDB/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -112,7 +120,7 @@
     <p>Read and flatten the component soil moisture month tables from a local NASIS Database.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_cosoilmoist_from_NASIS</span>(<span class='kw'>impute</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>())</pre>
+    <pre class="usage"><span class='fu'>get_cosoilmoist_from_NASIS</span>(impute = <span class='fl'>TRUE</span>, stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>())</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,6 +138,9 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A dataframe.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>S.M. Roecker</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The component soil moisture tables within NASIS house monthly data on flooding, ponding, and soil moisture status. The soil moisture status is used to specify the water table depth for components (e.g. <code>status == "Moist"</code>).</p>
@@ -138,46 +149,56 @@
     <p>This function currently works only on Windows.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='fetchNASIS.html'>fetchNASIS</a>, <a href='fetchNASISWebReport.html'>get_cosoilmoist_from_NASISWebReport</a>, <a href='fetchSDA_component.html'>get_cosoilmoist_from_SDA</a>, <code>get_comonth_from_SDA</code></p></div>
+    <div class='dont-index'><p><a href='fetchNASIS.html'>fetchNASIS</a>, <a href='fetchNASISWebReport.html'>get_cosoilmoist_from_NASISWebReport</a>, <a href='fetchSDA.html'>get_cosoilmoist_from_SDA</a>, <code>get_comonth_from_SDA</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'># load cosoilmoist (e.g. water table data)</span>
-<span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>get_cosoilmoist_from_NASIS</span>())
+<span class='co'>if</span>(<span class='fu'><a href='local_NASIS_defined.html'>local_NASIS_defined</a></span>()) {
+ <span class='co'># load cosoilmoist (e.g. water table data)</span>
+ <span class='kw'>test</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>get_cosoilmoist_from_NASIS</span>())
 
-<span class='co'># inspect</span>
-<span class='kw'>if</span>(!<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>test</span>, <span class='st'>'try-error'</span>)) {
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>test</span>)
-}</div><div class='output co'>#&gt;  [1] dmuiid         coiid          compname       comppct_r      drainagecl    
-#&gt;  [6] month          flodfreqcl     pondfreqcl     cosoilmoistiid dept_l        
-#&gt; [11] dept_r         dept_h         depb_l         depb_r         depb_h        
-#&gt; [16] status        
-#&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'># }</div></pre>
+ <span class='co'># inspect</span>
+ <span class='co'>if</span>(<span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='kw'>test</span>, <span class='st'>'try-error'</span>)) {
+   <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>test</span>)
+ }
+}
+</div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt;   dmuiid  coiid compname comppct_r      drainagecl month    flodfreqcl
+#&gt; 1 316001 694666   Adinot        80 moderately well   jan Not populated
+#&gt; 2 316001 694666   Adinot        80 moderately well   jan Not populated
+#&gt; 3 316001 694666   Adinot        80 moderately well   jan Not populated
+#&gt; 4 316001 694666   Adinot        80 moderately well   feb Not populated
+#&gt; 5 316001 694666   Adinot        80 moderately well   feb Not populated
+#&gt; 6 316001 694666   Adinot        80 moderately well   feb Not populated
+#&gt;   floddurcl    pondfreqcl ponddurcl cosoilmoistiid dept_l dept_r dept_h depb_l
+#&gt; 1      &lt;NA&gt; Not populated      &lt;NA&gt;        2070790      0      0      0      0
+#&gt; 2      &lt;NA&gt; Not populated      &lt;NA&gt;        2070791      0     15     30     37
+#&gt; 3      &lt;NA&gt; Not populated      &lt;NA&gt;        2070789     37     43     52    183
+#&gt; 4      &lt;NA&gt; Not populated      &lt;NA&gt;        2070787      0      0      0      0
+#&gt; 5      &lt;NA&gt; Not populated      &lt;NA&gt;        2070788      0     15     30     37
+#&gt; 6      &lt;NA&gt; Not populated      &lt;NA&gt;        2070786     37     43     52    183
+#&gt;   depb_r depb_h status
+#&gt; 1     15     30   &lt;NA&gt;
+#&gt; 2     43     52   &lt;NA&gt;
+#&gt; 3    183    183   &lt;NA&gt;
+#&gt; 4     15     30   &lt;NA&gt;
+#&gt; 5     43     52   &lt;NA&gt;
+#&gt; 6    183    183   &lt;NA&gt;</div><div class='input'><span class='co'># }</span></div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>S.M. Roecker</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker.</p>
+  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -53,7 +57,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -67,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
       </span>
     </div>
 
@@ -87,7 +91,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/ncss-tech/soilDB/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -119,12 +128,29 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
+        
+        <td>
+          <p><code><a href="estimateColorMixture.html">estimateColorMixture()</a></code> </p>
+        </td>
+        <td><p>Estimate color mixture using L, A, B color coordinates and weights</p></td>
+      </tr><tr>
         
         <td>
           <p><code><a href="estimateSTR.html">estimateSTR()</a></code> </p>
         </td>
         <td><p>Estimate Soil Temperature Regime</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="fetchGDB.html">fetchGDB()</a></code> <code><a href="fetchGDB.html">get_legend_from_GDB()</a></code> <code><a href="fetchGDB.html">get_mapunit_from_GDB()</a></code> <code><a href="fetchGDB.html">get_component_from_GDB()</a></code> </p>
+        </td>
+        <td><p>Load and Flatten Data from SSURGO file geodatabases</p></td>
       </tr><tr>
         
         <td>
@@ -194,6 +220,24 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="fetchSoilGrids.html">fetchSoilGrids()</a></code> </p>
+        </td>
+        <td><p>Fetch SoilGrids 250m properties information from point locations</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="filter_geochem.html">filter_geochem()</a></code> </p>
+        </td>
+        <td><p>Filter KSSL Geochemical Table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="format_SQL_in_statement.html">format_SQL_in_statement()</a></code> </p>
+        </td>
+        <td><p>Format vector of values into a string suitable for an SQL `IN` statement.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code> </p>
         </td>
         <td><p>Extract Soil Color Data from a local NASIS Database</p></td>
@@ -257,6 +301,18 @@
           <p><code><a href="get_labpedon_data_from_NASIS_db.html">get_labpedon_data_from_NASIS_db()</a></code> </p>
         </td>
         <td><p>Extract lab pedon data from a local NASIS Database</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_NOAA_GHCND.html">get_NOAA_GHCND()</a></code> </p>
+        </td>
+        <td><p>Get Global Historical Climatology Network Daily (GHCND) data from NOAA API for given datatype(s), station IDs and years.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_NOAA_stations_nearXY.html">get_NOAA_stations_nearXY()</a></code> </p>
+        </td>
+        <td><p>Query the NOAA API to get station data near a given latitude and longitude</p></td>
       </tr><tr>
         
         <td>
@@ -332,6 +388,18 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="local_NASIS_defined.html">local_NASIS_defined()</a></code> </p>
+        </td>
+        <td><p>Check for presence of `nasis_local` ODBC data source</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="makeChunks.html">makeChunks()</a></code> </p>
+        </td>
+        <td><p>Generate chunk labels for splitting data</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="mapunit_geom_by_ll_bbox.html">mapunit_geom_by_ll_bbox()</a></code> </p>
         </td>
         <td><p>Fetch Map Unit Geometry from SDA</p></td>
@@ -350,21 +418,27 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="processSDA_WKT.html">processSDA_WKT()</a></code> </p>
+        </td>
+        <td><p>Post-process WKT returned from SDA.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="SCAN_SNOTEL_metadata.html">SCAN_SNOTEL_metadata</a></code> </p>
         </td>
         <td><p>SCAN and SNOTEL Station Metadata</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="SDA_query.html">SDA_query()</a></code> <code><a href="SDA_query.html">makeChunks()</a></code> <code><a href="SDA_query.html">format_SQL_in_statement()</a></code> </p>
+          <p><code><a href="SDA_query.html">SDA_query()</a></code> </p>
         </td>
         <td><p>Soil Data Access Query</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="SDA_query_features.html">SDA_query_features()</a></code> <code><a href="SDA_query_features.html">processSDA_WKT()</a></code> </p>
+          <p><code><a href="SDA_spatialQuery.html">SDA_spatialQuery()</a></code> </p>
         </td>
-        <td><p>Soil Data Access Spatial Query</p></td>
+        <td><p>SDA Spatial Query</p></td>
       </tr><tr>
         
         <td>
@@ -430,22 +504,21 @@
     </table>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
-    </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker.</p>
+  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

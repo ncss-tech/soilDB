@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -36,8 +40,7 @@
 
 
 <meta property="og:title" content="Soil Data Access Query — SDA_query" />
-<meta property="og:description" content="Submit a query to the Soil Data Acccess (SDA) website in SQL, get the results as a dataframe." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:description" content="Submit a query to the Soil Data Acccess (SDA) REST/JSON web-service and return the results as a data.frame. There is a 100,000 record limit and 32Mb JSON serializer limit, per query. Queries should contain a WHERE statement or JOIN condition to limit the number of rows affected / returned. Consider wrapping calls to SDA_query in a function that can iterate over logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function makeChunks can help with such iteration." />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
       </span>
     </div>
 
@@ -89,7 +92,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/ncss-tech/soilDB/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -104,161 +112,144 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Soil Data Access Query</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/SDA_query.R'><code>R/SDA_query.R</code></a></small>
     <div class="hidden name"><code>SDA_query.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Submit a query to the Soil Data Acccess (SDA) website in SQL, get the results as a dataframe.</p>
+    <p>Submit a query to the Soil Data Acccess (SDA) REST/JSON web-service and return the results as a data.frame. There is a 100,000 record limit and 32Mb JSON serializer limit, per query. Queries should contain a WHERE statement or JOIN condition to limit the number of rows affected / returned. Consider wrapping calls to <code>SDA_query</code> in a function that can iterate over logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function <code>makeChunks</code> can help with such iteration.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>SDA_query</span>(<span class='no'>q</span>)
-<span class='fu'>makeChunks</span>(<span class='no'>ids</span>, <span class='kw'>size</span><span class='kw'>=</span><span class='fl'>100</span>)
-<span class='fu'>format_SQL_in_statement</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>SDA_query</span>(<span class='kw'>q</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>q</th>
-      <td><p>a valid T-SQL query surrounded by double quotes</p></td>
-    </tr>
-    <tr>
-      <th>ids</th>
-      <td><p>vector of IDs for chunking, contents aren't used just length</p></td>
-    </tr>
-    <tr>
-      <th>size</th>
-      <td><p>target chunk size</p></td>
-    </tr>
-    <tr>
-      <th>x</th>
-      <td><p>character vector to be packed into an SQL `IN` statement</p></td>
+      <td><p>A valid T-SQL query surrounded by double quotes</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a data.frame result (<code>NULL</code> if empty, try-error on error)</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The SDA website can be found at <a href='http://sdmdataaccess.nrcs.usda.gov'>http://sdmdataaccess.nrcs.usda.gov</a> and query examples can be found at <a href='http://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx'>http://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx</a>. A library of query examples can be found at <a href='https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home'>https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home</a>.</p>
 <p>SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the <a href='http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html'>SDA Tutorial</a> for details.</p>
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A dataframe containing the results. NULL is retutned when queries result in 0 matches rows.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This function requires the `httr`, `jsonlite`, and `XML` packages</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='mapunit_geom_by_ll_bbox.html'>mapunit_geom_by_ll_bbox</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-
+<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
+   <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>()) {
+  
   <span class='co'>## get SSURGO export date for all soil survey areas in California</span>
   <span class='co'># there is no need to filter STATSGO </span>
   <span class='co'># because we are filtering on SSURGO areasymbols</span>
-  <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='st'>"SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA%';"</span>
-  <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>SDA_query</span>(<span class='no'>q</span>)</div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='input'>  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;   areasymbol              saverest
-#&gt; 1      CA011  9/16/2019 7:09:53 PM
-#&gt; 2      CA013 9/17/2019 12:03:38 AM
-#&gt; 3      CA021  9/16/2019 7:40:41 PM
-#&gt; 4      CA031  9/16/2019 7:46:42 PM
-#&gt; 5      CA033  9/16/2019 7:55:27 PM
-#&gt; 6      CA041  9/16/2019 7:56:58 PM</div><div class='input'>
-
+  <span class='kw'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA%';"</span>
+  <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span>(<span class='kw'>q</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/raster/man/headtail.html'>head</a></span>(<span class='kw'>x</span>)
+  
+  
   <span class='co'>## get SSURGO component data associated with the </span>
   <span class='co'>## Amador series / major component only</span>
   <span class='co'># this query must explicitly filter out STATSGO data</span>
-  <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='st'>"SELECT cokey, compname, comppct_r FROM legend\n
-    INNER JOIN mapunit mu ON mu.lkey = legend.lkey\n
-    INNER JOIN component co ON mu.mukey = co.mukey\n
+  <span class='kw'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT cokey, compname, comppct_r FROM legend
+    INNER JOIN mapunit mu ON mu.lkey = legend.lkey
+    INNER JOIN component co ON mu.mukey = co.mukey
     WHERE legend.areasymbol != 'US' AND compname = 'Amador';"</span>
-
-  <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>SDA_query</span>(<span class='no'>q</span>)</div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='input'>  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; 'data.frame':	54 obs. of  3 variables:
-#&gt;  $ cokey    : int  17596519 17596830 17596961 17597155 17597159 17616756 17616750 17605873 17619646 17619657 ...
-#&gt;  $ compname : chr  "Amador" "Amador" "Amador" "Amador" ...
-#&gt;  $ comppct_r: int  45 3 3 7 25 76 10 3 45 3 ...
-#&gt;  - attr(*, "SDA_id")= chr "Table"</div><div class='input'>
-
+  
+  <span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span>(<span class='kw'>q</span>)
+  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>res</span>)
+  
+  
   <span class='co'>## get component-level data for a specific soil survey area (Yolo county, CA)</span>
   <span class='co'># there is no need to filter STATSGO because the query contains</span>
   <span class='co'># an implicit selection of SSURGO data by areasymbol</span>
-  <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='st'>"SELECT \n
-    component.mukey, cokey, comppct_r, compname, taxclname, \n
-    taxorder, taxsuborder, taxgrtgroup, taxsubgrp \n
-    FROM legend \n
-    INNER JOIN mapunit ON mapunit.lkey = legend.lkey \n
-    LEFT OUTER JOIN component ON component.mukey = mapunit.mukey \n
+  <span class='kw'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT 
+    component.mukey, cokey, comppct_r, compname, taxclname, 
+    taxorder, taxsuborder, taxgrtgroup, taxsubgrp 
+    FROM legend 
+    INNER JOIN mapunit ON mapunit.lkey = legend.lkey 
+    LEFT OUTER JOIN component ON component.mukey = mapunit.mukey 
     WHERE legend.areasymbol = 'CA113' ;"</span>
-
-  <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'>SDA_query</span>(<span class='no'>q</span>)</div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='input'>  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; 'data.frame':	608 obs. of  9 variables:
-#&gt;  $ mukey      : int  757748 757748 757748 757748 757749 757749 757749 757749 757749 757750 ...
-#&gt;  $ cokey      : int  17678670 17678671 17678672 17678673 17678674 17678675 17678676 17678677 17678678 17678679 ...
-#&gt;  $ comppct_r  : int  80 2 8 10 80 1 5 10 4 80 ...
-#&gt;  $ compname   : chr  "Scribner" "Unnamed" "Corbiere" "Vina" ...
-#&gt;  $ taxclname  : chr  "Fine-loamy, mixed, superactive, thermic Cumulic Endoaquolls" NA "Fine, mixed, superactive, thermic Cumulic Vertic Endoaquolls" "Coarse-loamy, mixed, superactive, thermic Pachic Haploxerolls" ...
-#&gt;  $ taxorder   : chr  "Mollisols" NA "Mollisols" "Mollisols" ...
-#&gt;  $ taxsuborder: chr  "Aquolls" NA "Aquolls" "Xerolls" ...
-#&gt;  $ taxgrtgroup: chr  "Endoaquolls" NA "Endoaquolls" "Haploxerolls" ...
-#&gt;  $ taxsubgrp  : chr  "Cumulic Endoaquolls" NA "Cumulic Vertic Endoaquolls" "Pachic Haploxerolls" ...
-#&gt;  - attr(*, "SDA_id")= chr "Table"</div><div class='input'>
-
+  
+  <span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span>(<span class='kw'>q</span>)
+  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>res</span>)
+  
   <span class='co'>## get tabular data based on result from spatial query</span>
   <span class='co'># there is no need to filter STATSGO because</span>
   <span class='co'># SDA_Get_Mukey_from_intersection_with_WktWgs84() implies SSURGO</span>
   <span class='co'>#</span>
   <span class='co'># requires raster and rgeos packages because raster is suggested</span>
   <span class='co'># and rgeos is additional</span>
-  <span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>raster</span>) <span class='kw'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>rgeos</span>)) {
+  <span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://rspatial.org/raster'>raster</a></span>) <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://r-forge.r-project.org/projects/rgeos'>rgeos</a></span>)) {
     <span class='co'># text -&gt; bbox -&gt; WKT</span>
     <span class='co'># xmin, xmax, ymin, ymax</span>
-    <span class='no'>b</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>120.9</span>, -<span class='fl'>120.8</span>, <span class='fl'>37.7</span>, <span class='fl'>37.8</span>)
-    <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/rgeos/man/wkt-functions.html'>writeWKT</a></span>(<span class='fu'>as</span>(<span class='fu'><a href='https://rdrr.io/pkg/raster/man/extent.html'>extent</a></span>(<span class='no'>b</span>), <span class='st'>'SpatialPolygons'</span>))
-    <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"SELECT mukey, cokey, compname, comppct_r FROM component \n
-      WHERE mukey IN (SELECT DISTINCT mukey FROM\n
-      SDA_Get_Mukey_from_intersection_with_WktWgs84('"</span>
-      , <span class='no'>p</span>, <span class='st'>"')) ORDER BY mukey, cokey, comppct_r DESC"</span>)
-
-    <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>SDA_query</span>(<span class='no'>q</span>)
-    <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>x</span>)
-  }</div><div class='output co'>#&gt; <span class='message'>Loading required package: raster</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'raster' was built under R version 3.5.3</span></div><div class='output co'>#&gt; <span class='message'></span>
+    <span class='kw'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>120.9</span>, <span class='op'>-</span><span class='fl'>120.8</span>, <span class='fl'>37.7</span>, <span class='fl'>37.8</span>)
+    <span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/rgeos/man/wkt-functions.html'>writeWKT</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/coercion-methods.html'>as</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/raster/man/extent.html'>extent</a></span>(<span class='kw'>b</span>), <span class='st'>'SpatialPolygons'</span>))
+    <span class='kw'>q</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"SELECT mukey, cokey, compname, comppct_r FROM component 
+      WHERE mukey IN (SELECT DISTINCT mukey FROM
+      SDA_Get_Mukey_from_intersection_with_WktWgs84('"</span>, <span class='kw'>p</span>, 
+       <span class='st'>"')) ORDER BY mukey, cokey, comppct_r DESC"</span>)
+    
+    <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span>(<span class='kw'>q</span>)
+    <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>x</span>)
+  }
+ }
+</div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; 'data.frame':	54 obs. of  3 variables:
+#&gt;  $ cokey    : int  19800652 19800738 19800351 19800808 19800598 19824821 19825077 19572244 19605737 19605740 ...
+#&gt;  $ compname : chr  "Amador" "Amador" "Amador" "Amador" ...
+#&gt;  $ comppct_r: int  45 3 3 7 25 76 10 3 45 3 ...
+#&gt;  - attr(*, "SDA_id")= chr "Table"</div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; 'data.frame':	608 obs. of  9 variables:
+#&gt;  $ mukey      : int  459154 459204 459205 459208 459208 459208 459208 459209 459209 459209 ...
+#&gt;  $ cokey      : int  19804521 19804396 19804203 19804274 19804275 19804276 19804277 19804438 19804439 19804440 ...
+#&gt;  $ comppct_r  : int  100 100 100 85 5 5 5 3 5 85 ...
+#&gt;  $ compname   : chr  "Water" "Gravel pits" "Water" "Balcom" ...
+#&gt;  $ taxclname  : chr  NA NA NA "Fine-loamy, mixed, thermic Calcixerollic Xerochrepts" ...
+#&gt;  $ taxorder   : chr  NA NA NA "Inceptisols" ...
+#&gt;  $ taxsuborder: chr  NA NA NA "Ochrepts" ...
+#&gt;  $ taxgrtgroup: chr  NA NA NA "Xerochrepts" ...
+#&gt;  $ taxsubgrp  : chr  NA NA NA "Calcixerollic Xerochrepts" ...
+#&gt;  - attr(*, "SDA_id")= chr "Table"</div><div class='output co'>#&gt; <span class='message'>Loading required package: raster</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: 'raster'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:aqp':</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    metadata, metadata&lt;-</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'rgeos' was built under R version 3.5.3</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.5-2, (SVN revision 621)</span>
-#&gt; <span class='message'> GEOS runtime version: 3.6.1-CAPI-1.10.1 </span>
-#&gt; <span class='message'> Linking to sp version: 1.3-2 </span>
+#&gt; <span class='message'>    metadata, metadata&lt;-</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.5-5, (SVN revision 640)</span>
+#&gt; <span class='message'> GEOS runtime version: 3.8.0-CAPI-1.13.1 </span>
+#&gt; <span class='message'> Linking to sp version: 1.4-2 </span>
 #&gt; <span class='message'> Polygon checking: TRUE </span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; 'data.frame':	337 obs. of  4 variables:
 #&gt;  $ mukey    : int  462527 462527 462527 462541 462541 462541 462541 462554 462554 462554 ...
-#&gt;  $ cokey    : int  17625717 17625718 17625719 17625770 17625771 17625772 17625773 17625815 17625816 17625817 ...
-#&gt;  $ compname : chr  "Alamo" "Madera" "San Joaquin" "Chualar" ...
-#&gt;  $ comppct_r: int  85 10 5 85 5 5 5 85 5 10 ...
-#&gt;  - attr(*, "SDA_id")= chr "Table"</div><div class='input'># }
+#&gt;  $ cokey    : int  19673167 19673168 19673169 19673431 19673432 19673433 19673434 19673195 19673196 19673197 ...
+#&gt;  $ compname : chr  "Madera" "Alamo" "San Joaquin" "Chualar" ...
+#&gt;  $ comppct_r: int  10 85 5 85 5 5 5 5 10 85 ...
+#&gt;  - attr(*, "SDA_id")= chr "Table"</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>D.E. Beaudette</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker.</p>
+  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Lookup siblings and cousins for a given soil series. — siblings" />
 <meta property="og:description" content="Lookup siblings and cousins for a given soil series, from the current fiscal year SSURGO snapshot via SoilWeb." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
       </span>
     </div>
 
@@ -89,7 +92,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/ncss-tech/soilDB/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -112,7 +120,7 @@
     <p>Lookup siblings and cousins for a given soil series, from the current fiscal year SSURGO snapshot via SoilWeb.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>siblings</span>(<span class='no'>s</span>, <span class='kw'>only.major</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>component.data</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>cousins</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>siblings</span>(<span class='kw'>s</span>, only.major=<span class='fl'>FALSE</span>, component.data = <span class='fl'>FALSE</span>, cousins = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,7 +149,7 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     
-<dl class='dl-horizontal'>
+<dl>
 	<dt>sib</dt><dd><p><code>data.frame</code> containing siblings, major component flag, and number of co-occurrences</p></dd>
 	<dt>sib.data</dt><dd><p><code>data.frame</code> containing sibling component data</p></dd>
 	<dt>cousins</dt><dd><p><code>data.frame</code> containing cousins, major component flag, and number of co-occurrences</p></dd>
@@ -153,15 +161,28 @@
 
     <p><a href='http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html'>soilDB Soil Series Query Functionality</a></p>
 <p><a href='http://ncss-tech.github.io/AQP/soilDB/siblings.html'>Related tutorial.</a></p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='OSDquery.html'>OSDquery</a>, siblings, <a href='fetchOSD.html'>fetchOSD</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'># basic usage</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>siblings</span>(<span class='st'>'zook'</span>)
-<span class='no'>x</span>$<span class='no'>sib</span></div><div class='output co'>#&gt;    series      sibling majcompflag  n
+<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
+    <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>()) {
+    
+    <span class='co'># basic usage</span>
+    <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>siblings</span>(<span class='st'>'zook'</span>)
+    <span class='kw'>x</span><span class='op'>$</span><span class='kw'>sib</span>
+    
+    <span class='co'># restrict to siblings that are major components</span>
+    <span class='co'># e.g. the most likely siblings</span>
+    <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>siblings</span>(<span class='st'>'zook'</span>, only.major = <span class='fl'>TRUE</span>)
+    <span class='kw'>x</span><span class='op'>$</span><span class='kw'>sib</span>
+}
+</div><div class='output co'>#&gt;    series      sibling majcompflag  n
 #&gt; 1    zook       Olmitz        TRUE 15
 #&gt; 2    zook        Vigar        TRUE 12
 #&gt; 3    zook       Vesser        TRUE 10
@@ -171,85 +192,28 @@
 #&gt; 7    zook      Nodaway        TRUE  5
 #&gt; 8    zook          Zoe        TRUE  3
 #&gt; 9    zook Mt. Sterling        TRUE  3
-#&gt; 10   zook        Clamo        TRUE  2
-#&gt; 11   zook        Kezan        TRUE  2
+#&gt; 10   zook        Kezan        TRUE  2
+#&gt; 11   zook        Clamo        TRUE  2
 #&gt; 12   zook     Humeston        TRUE  1
-#&gt; 13   zook       Quiver        TRUE  1
-#&gt; 14   zook         Klum        TRUE  1
-#&gt; 15   zook       Wabash       FALSE 64
-#&gt; 16   zook         Colo       FALSE 56
-#&gt; 17   zook     Chequest       FALSE 46
-#&gt; 18   zook      Nodaway       FALSE 44
-#&gt; 19   zook     Humeston       FALSE 27
-#&gt; 20   zook       Arbela       FALSE 23
-#&gt; 21   zook      Ackmore       FALSE 18
-#&gt; 22   zook       Bremer       FALSE 16
-#&gt; 23   zook      Dockery       FALSE 16
-#&gt; 24   zook         Lamo       FALSE 15
-#&gt; 25   zook       Landes       FALSE 13
-#&gt; 26   zook         Napa       FALSE 12
-#&gt; 27   zook     Kennebec       FALSE 12
-#&gt; 28   zook        Shell       FALSE 12
-#&gt; 29   zook       Olmitz       FALSE 10
-#&gt; 30   zook       Coland       FALSE 10
-#&gt; 31   zook      Sawmill       FALSE  9
-#&gt; 32   zook       Vesser       FALSE  7
-#&gt; 33   zook       Nishna       FALSE  5
-#&gt; 34   zook     Blackoar       FALSE  5
-#&gt; 35   zook       Judson       FALSE  2
-#&gt; 36   zook        Calco       FALSE  2
-#&gt; 37   zook       Quiver       FALSE  2
-#&gt; 38   zook        Chase       FALSE  2
-#&gt; 39   zook      Reading       FALSE  2
-#&gt; 40   zook   Toolesboro       FALSE  1
-#&gt; 41   zook     Clarinda       FALSE  1
-#&gt; 42   zook       Eudora       FALSE  1
-#&gt; 43   zook         Muir       FALSE  1
-#&gt; 44   zook          Ely       FALSE  1</div><div class='input'>
-<span class='co'># restrict to siblings that are major components</span>
-<span class='co'># e.g. the most likely siblings</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>siblings</span>(<span class='st'>'zook'</span>, <span class='kw'>only.major</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>x</span>$<span class='no'>sib</span></div><div class='output co'>#&gt;    series      sibling majcompflag  n
-#&gt; 1    zook       Olmitz        TRUE 15
-#&gt; 2    zook        Vigar        TRUE 12
-#&gt; 3    zook          Ely        TRUE 10
-#&gt; 4    zook       Vesser        TRUE 10
-#&gt; 5    zook      Excello        TRUE  9
-#&gt; 6    zook         Colo        TRUE  8
-#&gt; 7    zook      Nodaway        TRUE  5
-#&gt; 8    zook Mt. Sterling        TRUE  3
-#&gt; 9    zook          Zoe        TRUE  3
-#&gt; 10   zook        Clamo        TRUE  2
-#&gt; 11   zook        Kezan        TRUE  2
-#&gt; 12   zook       Quiver        TRUE  1
-#&gt; 13   zook     Humeston        TRUE  1
-#&gt; 14   zook         Klum        TRUE  1</div><div class='input'># }
+#&gt; 13   zook         Klum        TRUE  1
+#&gt; 14   zook       Quiver        TRUE  1</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>D.E. Beaudette</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker.</p>
+  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

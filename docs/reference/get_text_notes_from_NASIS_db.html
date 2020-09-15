@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Extract text note data from a local NASIS Database — get_text_notes_from_NASIS_db" />
 <meta property="og:description" content="Extract text note data from a local NASIS Database." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
       </span>
     </div>
 
@@ -89,7 +92,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/ncss-tech/soilDB/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -112,7 +120,7 @@
     <p>Extract text note data from a local NASIS Database.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_text_notes_from_NASIS_db</span>(<span class='kw'>SS</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>fixLineEndings</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_text_notes_from_NASIS_db</span>(SS = <span class='fl'>TRUE</span>, fixLineEndings = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,112 +141,90 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list with the results.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Dylan E. Beaudette and Jay M. Skovlin</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='get_hz_data_from_pedon_db.html'>get_hz_data_from_pedon_db</a></code>, <code><a href='get_site_data_from_pedon_db.html'>get_site_data_from_pedon_db</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'># query text note data</span>
-<span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>get_text_notes_from_NASIS_db</span>())
+<span class='co'>if</span>(<span class='fu'><a href='local_NASIS_defined.html'>local_NASIS_defined</a></span>()) {
+ <span class='co'># query text note data</span>
+ <span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>get_text_notes_from_NASIS_db</span>())
 
-<span class='co'># show contents text note data, includes: siteobs, site, pedon, horizon level text notes data.</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>t</span>)</div><div class='output co'>#&gt; List of 5
-#&gt;  $ pedon_text  :'data.frame':	409 obs. of  8 variables:
-#&gt;   ..$ recdate      : POSIXct[1:409], format: "2008-04-04 00:00:00" "2012-04-06 00:00:00" ...
-#&gt;   ..$ recauthor    : chr [1:409] "LGH" "Tonie Endres" "Tonie Endres" "LGH" ...
-#&gt;   ..$ pedontextkind: Factor w/ 9 levels "pedon note, formatted",..: 2 3 3 2 3 2 6 6 2 2 ...
-#&gt;   ..$ textcat      : chr [1:409] "editnote" NA NA "editnote" ...
-#&gt;   ..$ textsubcat   : chr [1:409] NA NA NA NA ...
-#&gt;   ..$ textentry    : chr [1:409] "Site and pedon number may be different than number given to original description." "Ownership changed from Illinois 108A_108B Shared to 11-04 Aurora MLRA PO. This will need to be checked to deter"| __truncated__ "Ownership changed from Illinois 108A_108B Shared to 11-04 Aurora MLRA PO. This will need to be checked to deter"| __truncated__ "Site and pedon number may be different than the number given to original description." ...
-#&gt;   ..$ peiid        : int [1:409] 35313 35313 35317 35317 35318 35318 35404 35404 36266 36266 ...
-#&gt;   ..$ petextiid    : int [1:409] 206095 511532 511536 206116 511537 206099 67762 67893 203656 68661 ...
-#&gt;  $ site_text   :'data.frame':	511 obs. of  8 variables:
-#&gt;   ..$ recdate     : POSIXct[1:511], format: "2012-04-06 00:00:00" "2012-04-06 00:00:00" ...
-#&gt;   ..$ recauthor   : chr [1:511] "Tonie Endres" "Tonie Endres" "Tonie Endres" NA ...
-#&gt;   ..$ sitetextkind: Factor w/ 7 levels "site note, formatted",..: 3 3 3 6 5 6 5 2 3 5 ...
-#&gt;   ..$ textcat     : chr [1:511] NA NA NA "Map Unit Symbol/Name" ...
-#&gt;   ..$ textsubcat  : chr [1:511] NA NA NA NA ...
-#&gt;   ..$ textentry   : chr [1:511] "Ownership changed from Illinois 108A_108B Shared to 11-04 Aurora MLRA PO. This will need to be checked to deter"| __truncated__ "Ownership changed from Illinois 108A_108B Shared to 11-04 Aurora MLRA PO. This will need to be checked to deter"| __truncated__ "Ownership changed from Illinois 108A_108B Shared to 11-04 Aurora MLRA PO. This will need to be checked to deter"| __truncated__ "Map Unit Symbol: Wp\nMap Unit Name:   Westland silty clay loam" ...
-#&gt;   ..$ siteiid     : int [1:511] 35362 35366 35367 35458 35458 36322 36322 36322 36322 36387 ...
-#&gt;   ..$ sitetextiid : int [1:511] 495376 495380 495381 69688 69875 71081 71282 276574 495499 71163 ...
-#&gt;  $ siteobs_text:'data.frame':	540 obs. of  8 variables:
-#&gt;   ..$ recdate        : POSIXct[1:540], format: NA NA ...
-#&gt;   ..$ recauthor      : chr [1:540] NA NA NA NA ...
-#&gt;   ..$ siteobstextkind: Factor w/ 8 levels "site observation, formatted",..: NA NA NA NA NA NA NA NA NA NA ...
-#&gt;   ..$ textcat        : chr [1:540] NA NA NA NA ...
-#&gt;   ..$ textsubcat     : chr [1:540] NA NA NA NA ...
-#&gt;   ..$ textentry      : chr [1:540] NA NA NA NA ...
-#&gt;   ..$ site_id        : int [1:540] 35362 35366 35367 35458 36322 36387 36388 37117 38282 38283 ...
-#&gt;   ..$ siteobstextiid : int [1:540] NA NA NA NA NA NA NA NA NA NA ...
-#&gt;  $ horizon_text:'data.frame':	579 obs. of  8 variables:
-#&gt;   ..$ recdate         : POSIXct[1:579], format: "2008-03-25" "2008-02-06" ...
-#&gt;   ..$ recauthor       : chr [1:579] "LGH" "LGH" "LGH" NA ...
-#&gt;   ..$ phorizontextkind: Factor w/ 6 levels "horizon note, formatted",..: 2 3 2 2 2 2 2 2 2 2 ...
-#&gt;   ..$ textcat         : chr [1:579] "editnote" "editnote" "editnote" NA ...
-#&gt;   ..$ textsubcat      : chr [1:579] NA NA NA NA ...
-#&gt;   ..$ textentry       : chr [1:579] "Calculated textural modifier and class in pedon horizon." "Calculated textural modifier and class in pedon horizon." "Calculated textural modifier and class in pedon horizon." "median penetrometer reading of 0.5" ...
-#&gt;   ..$ phiid           : int [1:579] 166850 166896 167033 177763 177764 177793 177796 177797 177855 177856 ...
-#&gt;   ..$ phtextiid       : int [1:579] 248751 244731 245520 18716 18717 18718 18719 18720 18721 18722 ...
-#&gt;  $ photo_links :'data.frame':	0 obs. of  8 variables:
+ <span class='co'># show contents text note data, includes: siteobs, site, pedon, horizon level text notes data.</span>
+ <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>t</span>)
+
+ <span class='co'># view text categories for site text notes</span>
+ <span class='co'>if</span>(<span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='kw'>t</span>, <span class='st'>'try-error'</span>)) {
+  <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='kw'>t</span><span class='op'>$</span><span class='kw'>site_text</span><span class='op'>$</span><span class='kw'>textcat</span>)
+ }
+}
+</div><div class='output co'>#&gt; List of 5
+#&gt;  $ pedon_text  :'data.frame':	0 obs. of  8 variables:
+#&gt;   ..$ recdate      : chr(0) 
+#&gt;   ..$ recauthor    : chr(0) 
+#&gt;   ..$ pedontextkind: chr(0) 
+#&gt;   ..$ textcat      : chr(0) 
+#&gt;   ..$ textsubcat   : chr(0) 
+#&gt;   ..$ textentry    : chr(0) 
+#&gt;   ..$ peiid        : int(0) 
+#&gt;   ..$ petextiid    : int(0) 
+#&gt;  $ site_text   :'data.frame':	0 obs. of  8 variables:
+#&gt;   ..$ recdate     : chr(0) 
+#&gt;   ..$ recauthor   : chr(0) 
+#&gt;   ..$ sitetextkind: chr(0) 
+#&gt;   ..$ textcat     : chr(0) 
+#&gt;   ..$ textsubcat  : chr(0) 
+#&gt;   ..$ textentry   : chr(0) 
+#&gt;   ..$ siteiid     : int(0) 
+#&gt;   ..$ sitetextiid : int(0) 
+#&gt;  $ siteobs_text:'data.frame':	0 obs. of  8 variables:
 #&gt;   ..$ recdate        : chr(0) 
 #&gt;   ..$ recauthor      : chr(0) 
-#&gt;   ..$ siteobstextkind: Factor w/ 8 levels "site observation, formatted",..: 
+#&gt;   ..$ siteobstextkind: chr(0) 
 #&gt;   ..$ textcat        : chr(0) 
 #&gt;   ..$ textsubcat     : chr(0) 
 #&gt;   ..$ textentry      : chr(0) 
 #&gt;   ..$ site_id        : int(0) 
-#&gt;   ..$ siteobstextiid : int(0) </div><div class='input'>
-<span class='co'># view text categories for site text notes</span>
-<span class='kw'>if</span>(!<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>t</span>, <span class='st'>'try-error'</span>))
-  <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>t</span>$<span class='no'>site_text</span>$<span class='no'>textcat</span>)</div><div class='output co'>#&gt; 
-#&gt;                          associated soils           assocsoils 
-#&gt;                   70                   10                   11 
-#&gt;              Caption           edit notes             editnote 
-#&gt;                    4                    1                    7 
-#&gt;                edits                GA259                GA639 
-#&gt;                    4                    2                    1 
-#&gt;                IL143             landform             Landform 
-#&gt;                    2                   14                   12 
-#&gt;             location             Location Map Unit Symbol/Name 
-#&gt;                   21                   21                   36 
-#&gt;         mini profile        not converted               noteid 
-#&gt;                    1                    3                    6 
-#&gt;     old pedon number    Pedon Description         Physiography 
-#&gt;                    1                    1                    1 
-#&gt;      quad correction                 RaCA              Site ID 
-#&gt;                    6                    2                    1 
-#&gt;                slope     soil macro fauna               Update 
-#&gt;                   19                    1                    1 
-#&gt;                   US                VA023                VA173 
-#&gt;                    1                    4                    1 
-#&gt;           vegetation 
-#&gt;                    3 </div><div class='input'># }
+#&gt;   ..$ siteobstextiid : int(0) 
+#&gt;  $ horizon_text:'data.frame':	0 obs. of  8 variables:
+#&gt;   ..$ recdate         : chr(0) 
+#&gt;   ..$ recauthor       : chr(0) 
+#&gt;   ..$ phorizontextkind: chr(0) 
+#&gt;   ..$ textcat         : chr(0) 
+#&gt;   ..$ textsubcat      : chr(0) 
+#&gt;   ..$ textentry       : chr(0) 
+#&gt;   ..$ phiid           : int(0) 
+#&gt;   ..$ phtextiid       : int(0) 
+#&gt;  $ photo_links :'data.frame':	0 obs. of  8 variables:
+#&gt;   ..$ recdate        : chr(0) 
+#&gt;   ..$ recauthor      : chr(0) 
+#&gt;   ..$ siteobstextkind: chr(0) 
+#&gt;   ..$ textcat        : chr(0) 
+#&gt;   ..$ textsubcat     : chr(0) 
+#&gt;   ..$ textentry      : chr(0) 
+#&gt;   ..$ site_id        : int(0) 
+#&gt;   ..$ siteobstextiid : int(0) </div><div class='output co'>#&gt; &lt; table of extent 0 &gt;</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Dylan E. Beaudette and Jay M. Skovlin</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker.</p>
+  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

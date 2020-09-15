@@ -6,19 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Soil Database Interface • soilDB</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
+<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Soil Database Interface">
 <meta property="og:description" content="A collection of functions for reading data from USDA-NCSS soil databases.">
-<meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
       </span>
     </div>
 
@@ -50,7 +50,14 @@
   <a href="news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/ncss-tech/soilDB/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -70,16 +77,16 @@
 <p>Get the stable version from CRAN:</p>
 <p><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages('soilDB', dep=TRUE)</a></code></p>
 <p>Get the development version from Github:</p>
-<p><code><a href="https://rdrr.io/pkg/remotes/man/install_github.html">remotes::install_github("ncss-tech/soilDB", dependencies=FALSE, upgrade=FALSE, build=FALSE)</a></code></p>
+<p><code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("ncss-tech/soilDB", dependencies=FALSE, upgrade=FALSE, build=FALSE)</a></code></p>
 </div>
 <div id="website" class="section level2">
 <h2 class="hasAnchor">
 <a href="#website" class="anchor"></a>Website</h2>
 <p><a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a></p>
 </div>
-<div id="important-changes-in-soildb-2-0" class="section level2">
+<div id="important-changes-in-soildb-20" class="section level2">
 <h2 class="hasAnchor">
-<a href="#important-changes-in-soildb-2-0" class="anchor"></a>Important changes in soilDB-2.0</h2>
+<a href="#important-changes-in-soildb-20" class="anchor"></a>Important changes in soilDB-2.0</h2>
 <div id="nasis" class="section level3">
 <h3 class="hasAnchor">
 <a href="#nasis" class="anchor"></a>NASIS</h3>
@@ -171,37 +178,39 @@
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(soilDB)
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sharpshootR)
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(latticeExtra)
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://ncss-tech.github.io/AQP">soilDB</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/ncss-tech/aqp">sharpshootR</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://latticeextra.r-forge.r-project.org">latticeExtra</a></span>)
 
 <span class="co"># get morphology + extended summaries</span>
-soils &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'cecil'</span>, <span class="st">'altavista'</span>, <span class="st">'lloyd'</span>, <span class="st">'wickham'</span>, <span class="st">'wilkes'</span>,  <span class="st">'chewacla'</span>, <span class="st">'congaree'</span>)
-s &lt;-<span class="st"> </span><span class="kw"><a href="reference/fetchOSD.html">fetchOSD</a></span>(soils, <span class="dt">extended =</span> <span class="ot">TRUE</span>)
+<span class="kw">soils</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'cecil'</span>, <span class="st">'altavista'</span>, <span class="st">'lloyd'</span>, <span class="st">'wickham'</span>, <span class="st">'wilkes'</span>,  <span class="st">'chewacla'</span>, <span class="st">'congaree'</span>)
+<span class="kw">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetchOSD.html">fetchOSD</a></span>(<span class="kw">soils</span>, extended = <span class="fl">TRUE</span>)
 
 <span class="co"># experimental viz of hillslope position, from SSURGO component records</span>
-res &lt;-<span class="st"> </span><span class="kw">vizHillslopePosition</span>(s<span class="op">$</span>hillpos)
-<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(res<span class="op">$</span>fig)
+<span class="kw">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/vizHillslopePosition.html">vizHillslopePosition</a></span>(<span class="kw">s</span><span class="op">$</span><span class="kw">hillpos</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw">res</span><span class="op">$</span><span class="kw">fig</span>)
 
 <span class="co"># profile sketches</span>
-<span class="kw"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="dt">mar=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">4</span>), <span class="dt">xpd=</span><span class="ot">NA</span>)
-<span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(s<span class="op">$</span>SPC, <span class="dt">plot.order=</span>res<span class="op">$</span>order, <span class="dt">cex.names=</span><span class="dv">1</span>, <span class="dt">axis.line.offset =</span> <span class="op">-</span><span class="fl">0.1</span>, <span class="dt">width=</span><span class="fl">0.2</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mar=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">4</span>), xpd=<span class="fl">NA</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">s</span><span class="op">$</span><span class="kw">SPC</span>, plot.order=<span class="kw">res</span><span class="op">$</span><span class="kw">order</span>, cex.names=<span class="fl">1</span>, axis.line.offset = <span class="op">-</span><span class="fl">0.1</span>, width=<span class="fl">0.2</span>)
 
 
 <span class="co"># siblings</span>
-s &lt;-<span class="st"> 'Amador'</span>
-amador &lt;-<span class="st"> </span><span class="kw"><a href="reference/siblings.html">siblings</a></span>(s, <span class="dt">only.major =</span> <span class="ot">FALSE</span>, <span class="dt">component.data =</span> <span class="ot">TRUE</span>)
+<span class="kw">s</span> <span class="op">&lt;-</span> <span class="st">'Amador'</span>
+<span class="kw">amador</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/siblings.html">siblings</a></span>(<span class="kw">s</span>, only.major = <span class="fl">FALSE</span>, component.data = <span class="fl">TRUE</span>)
 
 <span class="co"># limit to named soil series</span>
-sib.data &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(amador<span class="op">$</span>sib.data, <span class="dt">subset=</span> <span class="op">!</span><span class="st"> </span>compkind <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Miscellaneous area'</span>, <span class="st">'Family'</span>, <span class="st">'Taxon above family'</span>))
+<span class="kw">sib.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="kw">amador</span><span class="op">$</span><span class="kw">sib.data</span>, subset= <span class="op">!</span> <span class="kw">compkind</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Miscellaneous area'</span>, <span class="st">'Family'</span>, <span class="st">'Taxon above family'</span>))
 
 <span class="co"># get parsed OSD records</span>
-sibs &lt;-<span class="st"> </span><span class="kw"><a href="reference/fetchOSD.html">fetchOSD</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(s, <span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(amador<span class="op">$</span>sib<span class="op">$</span>sibling)), <span class="dt">extended =</span> <span class="ot">TRUE</span>)
+<span class="kw">sibs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetchOSD.html">fetchOSD</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">s</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw">amador</span><span class="op">$</span><span class="kw">sib</span><span class="op">$</span><span class="kw">sibling</span>)), extended = <span class="fl">TRUE</span>)
 
 <span class="co"># order by subgroup taxonomy</span>
 <span class="co"># invert colors</span>
-<span class="kw"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="dt">mar=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="dt">fg=</span><span class="st">'white'</span>, <span class="dt">bg=</span><span class="st">'black'</span>)
-<span class="kw">SoilTaxonomyDendrogram</span>(sibs<span class="op">$</span>SPC, <span class="dt">dend.width =</span> <span class="fl">1.5</span>, <span class="dt">y.offset =</span> <span class="fl">0.4</span>, <span class="dt">scaling.factor =</span> <span class="fl">0.02</span>, <span class="dt">width=</span><span class="fl">0.2</span>, <span class="dt">cex.taxon.labels =</span> <span class="dv">1</span>, <span class="dt">cex.names =</span> <span class="dv">1</span>)</code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mar=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>), fg=<span class="st">'white'</span>, bg=<span class="st">'black'</span>)
+<span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/SoilTaxonomyDendrogram.html">SoilTaxonomyDendrogram</a></span>(<span class="kw">sibs</span><span class="op">$</span><span class="kw">SPC</span>, dend.width = <span class="fl">1.5</span>, y.offset = <span class="fl">0.4</span>, scaling.factor = <span class="fl">0.02</span>, width=<span class="fl">0.2</span>, cex.taxon.labels = <span class="fl">1</span>, cex.names = <span class="fl">1</span>)
+</pre></div>
 </div>
 <div id="dependency-graph" class="section level2">
 <h2 class="hasAnchor">
@@ -211,11 +220,13 @@ sibs &lt;-<span class="st"> </span><span class="kw"><a href="reference/fetchOSD.
 
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=soilDB">https://​cloud.r-project.org/​package=soilDB</a>
+</li>
+<li>Browse source code at <br><a href="https://github.com/ncss-tech/soilDB/">https://​github.com/​ncss-tech/​soilDB/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/ncss-tech/soilDB/issues">https://​github.com/​ncss-tech/​soilDB/​issues</a>
 </li>
@@ -233,6 +244,7 @@ sibs &lt;-<span class="st"> </span><span class="kw"><a href="reference/fetchOSD.
 <li>Dylan Beaudette <br><small class="roles"> Maintainer, author </small>  </li>
 <li>Jay Skovlin <br><small class="roles"> Author </small>  </li>
 <li>Stephen Roecker <br><small class="roles"> Author </small>  </li>
+<li>Andrew Brown <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
@@ -249,11 +261,11 @@ sibs &lt;-<span class="st"> </span><span class="kw"><a href="reference/fetchOSD.
 
 
       <footer><div class="copyright">
-  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker.</p>
+  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Get SSURGO Data via Spatial Query — SoilWeb_spatial_query" />
 <meta property="og:description" content="Get SSURGO Data via Spatial Query to SoilWeb" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
       </span>
     </div>
 
@@ -89,7 +92,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/ncss-tech/soilDB/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -112,7 +120,7 @@
     <p>Get SSURGO Data via Spatial Query to SoilWeb</p>
     </div>
 
-    <pre class="usage"><span class='fu'>SoilWeb_spatial_query</span>(<span class='kw'>bbox</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"mapunit"</span>, <span class='kw'>source</span> <span class='kw'>=</span> <span class='st'>"soilweb"</span>)</pre>
+    <pre class="usage"><span class='fu'>SoilWeb_spatial_query</span>(bbox = <span class='kw'>NULL</span>, coords = <span class='kw'>NULL</span>, what = <span class='st'>"mapunit"</span>, source = <span class='st'>"soilweb"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,192 +145,47 @@
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>This function should be considered experimental; arguments, results, and side-effects could change at any time. SDA now supports spatial queries, consider using <code><a href='SDA_query_features.html'>SDA_query_features</a></code> instead.</p>
+    <p>This function should be considered experimental; arguments, results, and side-effects could change at any time. SDA now supports spatial queries, consider using <code>SDA_query_features</code> instead.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Data are currently available from SoilWeb. These data are a snapshot of the "official" data. The snapshot date is encoded in the "soilweb_last_update" column in the function return value. Planned updates to this function will include a switch to determine the data source: "official" data via USDA-NRCS servers, or a "snapshot" via SoilWeb.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The data returned from this function will depend on the query style. See examples below.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'># query by bbox</span>
-<span class='fu'>SoilWeb_spatial_query</span>(<span class='kw'>bbox</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>122.05</span>, <span class='fl'>37</span>, -<span class='fl'>122</span>, <span class='fl'>37.05</span>))</div><div class='output co'>#&gt;    area_ac areasymbol   mukey musym
-#&gt; 1   1123.9      ca087  455958   182
-#&gt; 2    749.0      ca087  455891   115
-#&gt; 3    586.7      ca087  455889   113
-#&gt; 4    523.9      ca087  455920   144
-#&gt; 5    459.8      ca087  455934   158
-#&gt; 6    267.7      ca087  455935   159
-#&gt; 7    231.4      ca087  455921   145
-#&gt; 8    175.0      ca087  455947   171
-#&gt; 9    165.9      ca087  455894   118
-#&gt; 10   150.3      ca087  455909   133
-#&gt; 11   149.7      ca087  455918   142
-#&gt; 12   131.9      ca087  455955   179
-#&gt; 13   117.3      ca087  455919   143
-#&gt; 14   107.1      ca087  455953   177
-#&gt; 15    84.9      ca087  455936   160
-#&gt; 16    83.8      ca087  455893   117
-#&gt; 17    83.8      ca087  455927   151
-#&gt; 18    73.9      ca087  455940   164
-#&gt; 19    73.0      ca087  455886   110
-#&gt; 20    72.3      ca087  455960   184
-#&gt; 21    66.2      ca087  455950   174
-#&gt; 22    57.3      ca087  455949   173
-#&gt; 23    54.5      ca087  455959   183
-#&gt; 24    47.2      ca087  455951   175
-#&gt; 25    43.7      ca087 2833423   130
-#&gt; 26    43.2      ca087  455892   116
-#&gt; 27    37.4      ca087 2833403   131
-#&gt; 28    33.6      ca087  455924   148
-#&gt; 29    31.2      ca087  455882   106
-#&gt; 30    28.2      ca087  455877   101
-#&gt; 31    26.6      ca087  455881   105
-#&gt; 32    25.6      ca087  455876   100
-#&gt; 33    25.3      ca087  455901   125
-#&gt; 34    22.2      ca087  455954   178
-#&gt; 35    19.8      ca087  455874   185
-#&gt; 36    19.1      ca087  455933   157
-#&gt; 37    17.2      ca087  455912   136
-#&gt; 38    16.8      ca087  455890   114
-#&gt; 39    15.4      ca087  455911   135
-#&gt; 40    14.2      ca087  455880   104
-#&gt; 41    11.7      ca087  455887   111
-#&gt; 42     7.0      ca087  455915   139
-#&gt; 43     5.9      ca087  455946   170
-#&gt; 44     5.0      ca087  455922   146
-#&gt; 45     4.7      ca087  455956   180
-#&gt; 46     3.5      ca087  455910   134
-#&gt; 47     3.0      ca087  455941   165
-#&gt; 48     1.4      ca087  455948   172
-#&gt;                                                                          muname
-#&gt; 1                                   Zayante coarse sand, 5 to 30 percent slopes
-#&gt; 2                            Ben Lomond-Felton complex, 50 to 75 percent slopes
-#&gt; 3                       Ben Lomond-Catelli-Sur complex, 30 to 75 percent slopes
-#&gt; 4                      Lompico-Felton complex, 50 to 75 percent slopes, MLRA 4B
-#&gt; 5                                 Nisene-Aptos complex, 50 to 75 percent slopes
-#&gt; 6                         Pfeiffer gravelly sandy loam, 15 to 30 percent slopes
-#&gt; 7                                  Lompico variant loam, 5 to 30 percent slopes
-#&gt; 8                                            Soquel loam, 2 to 9 percent slopes
-#&gt; 9                       Bonnydoon-Rock outcrop complex, 50 to 85 percent slopes
-#&gt; 10                                    Elkhorn sandy loam, 2 to 9 percent slopes
-#&gt; 11                               Lompico-Felton complex, 5 to 30 percent slopes
-#&gt; 12                      Watsonville loam, thick surface, 2 to 15 percent slopes
-#&gt; 13                     Lompico-Felton complex, 30 to 50 percent slopes, MLRA 4B
-#&gt; 14                                     Watsonville loam, 2 to 15 percent slopes
-#&gt; 15                        Pfeiffer gravelly sandy loam, 30 to 50 percent slopes
-#&gt; 16                                      Bonnydoon loam, 30 to 50 percent slopes
-#&gt; 17                                   Maymen stony loam, 30 to 75 percent slopes
-#&gt; 18                                                           Pits-Dumps complex
-#&gt; 19                                Ben Lomond sandy loam, 5 to 15 percent slopes
-#&gt; 20                        Zayante-Rock outcrop complex, 15 to 75 percent slopes
-#&gt; 21                          Tierra-Watsonville complex, 15 to 30 percent slopes
-#&gt; 22                                 Sur-Catelli complex, 50 to 75 percent slopes
-#&gt; 23                                 Zayante coarse sand, 30 to 50 percent slopes
-#&gt; 24                          Tierra-Watsonville complex, 30 to 50 percent slopes
-#&gt; 25                             Elder sandy loam, 2 to 9 percent slopes, MLRA 14
-#&gt; 26                              Bonnydoon loam, 5 to 50 percent slopes, MLRA 4B
-#&gt; 27                            Elder sandy loam, 9 to 15 percent slopes, MLRA 14
-#&gt; 28                                Los Osos loam, 30 to 50 percent slopes, moist
-#&gt; 29                                  Baywood loamy sand, 15 to 30 percent slopes
-#&gt; 30                                    Aptos loam, warm, 30 to 50 percent slopes
-#&gt; 31                                   Baywood loamy sand, 2 to 15 percent slopes
-#&gt; 32                                    Aptos loam, warm, 15 to 30 percent slopes
-#&gt; 33                                         Danville loam, 2 to 9 percent slopes
-#&gt; 34                       Watsonville loam, thick surface, 0 to 2 percent slopes
-#&gt; 35                                                                        Water
-#&gt; 36                                Nisene-Aptos complex, 30 to 50 percent slopes
-#&gt; 37                            Elkhorn-Pfeiffer complex, 30 to 50 percent slopes
-#&gt; 38                           Ben Lomond-Felton complex, 30 to 50 percent slopes
-#&gt; 39                                  Elkhorn sandy loam, 15 to 30 percent slopes
-#&gt; 40                                    Baywood loamy sand, 0 to 2 percent slopes
-#&gt; 41                               Ben Lomond sandy loam, 15 to 50 percent slopes
-#&gt; 42 Fluvaquentic Haploxerolls-Aquic Xerofluvents complex, 0 to 15 percent slopes
-#&gt; 43                                           Soquel loam, 0 to 2 percent slopes
-#&gt; 44                                        Los Osos loam, 5 to 15 percent slopes
-#&gt; 45                    Watsonville loam, thick surface, 15 to 30 percent slope s
-#&gt; 46                                   Elkhorn sandy loam, 9 to 15 percent slopes
-#&gt; 47                                                                    Riverwash
-#&gt; 48                                          Soquel loam, 9 to 15 percent slopes
-#&gt;    soilweb_last_update
-#&gt; 1           2019-09-16
-#&gt; 2           2019-09-16
-#&gt; 3           2019-09-16
-#&gt; 4           2019-09-16
-#&gt; 5           2019-09-16
-#&gt; 6           2019-09-16
-#&gt; 7           2019-09-16
-#&gt; 8           2019-09-16
-#&gt; 9           2019-09-16
-#&gt; 10          2019-09-16
-#&gt; 11          2019-09-16
-#&gt; 12          2019-09-16
-#&gt; 13          2019-09-16
-#&gt; 14          2019-09-16
-#&gt; 15          2019-09-16
-#&gt; 16          2019-09-16
-#&gt; 17          2019-09-16
-#&gt; 18          2019-09-16
-#&gt; 19          2019-09-16
-#&gt; 20          2019-09-16
-#&gt; 21          2019-09-16
-#&gt; 22          2019-09-16
-#&gt; 23          2019-09-16
-#&gt; 24          2019-09-16
-#&gt; 25          2019-09-16
-#&gt; 26          2019-09-16
-#&gt; 27          2019-09-16
-#&gt; 28          2019-09-16
-#&gt; 29          2019-09-16
-#&gt; 30          2019-09-16
-#&gt; 31          2019-09-16
-#&gt; 32          2019-09-16
-#&gt; 33          2019-09-16
-#&gt; 34          2019-09-16
-#&gt; 35          2019-09-16
-#&gt; 36          2019-09-16
-#&gt; 37          2019-09-16
-#&gt; 38          2019-09-16
-#&gt; 39          2019-09-16
-#&gt; 40          2019-09-16
-#&gt; 41          2019-09-16
-#&gt; 42          2019-09-16
-#&gt; 43          2019-09-16
-#&gt; 44          2019-09-16
-#&gt; 45          2019-09-16
-#&gt; 46          2019-09-16
-#&gt; 47          2019-09-16
-#&gt; 48          2019-09-16</div><div class='input'>
-<span class='co'># query by coordinate pair</span>
-<span class='fu'>SoilWeb_spatial_query</span>(<span class='kw'>coords</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>121</span>, <span class='fl'>38</span>))</div><div class='output co'>#&gt;   ogc_fid areasymbol musym  mukey soilweb_last_update dist_meters
-#&gt; 1 1479018      ca077   220 462112          2019-09-16 92.17456302</div><div class='input'># }
+<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
+    <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>()) {
+    
+    <span class='co'># query by bbox</span>
+    <span class='fu'>SoilWeb_spatial_query</span>(bbox=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>122.05</span>, <span class='fl'>37</span>, <span class='op'>-</span><span class='fl'>122</span>, <span class='fl'>37.05</span>))
+    
+    <span class='co'># query by coordinate pair</span>
+    <span class='fu'>SoilWeb_spatial_query</span>(coords=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>121</span>, <span class='fl'>38</span>))
+}
+</div><div class='output co'>#&gt;   ogc_fid areasymbol musym  mukey soilweb_last_update dist_meters
+#&gt; 1 1484974      ca077   220 462112          2020-05-29 92.17456302</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>D.E. Beaudette</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker.</p>
+  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

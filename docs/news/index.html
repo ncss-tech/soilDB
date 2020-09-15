@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -53,7 +57,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -67,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
       </span>
     </div>
 
@@ -87,7 +91,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/ncss-tech/soilDB/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -101,27 +110,81 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="soildb-2-5-2020-01-23" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-5-2020-01-23" class="anchor"></a>soilDB 2.5 (2020-01-23)<small> Unreleased </small>
+    <div id="soildb-257-2020-09-04" class="section level1">
+<h1 class="page-header" data-toc-text="2.5.7">
+<a href="#soildb-257-2020-09-04" class="anchor"></a>soilDB 2.5.7 (2020-09-04)<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<code>SDA_spatialQuery</code> can now retrieve SSURGO and STATSGO geometry c/o <a href="https://github.com/dschlaep">dschlaep</a> (<a href="https://github.com/ncss-tech/soilDB/issues/141" class="uri">https://github.com/ncss-tech/soilDB/issues/141</a>)</li>
+<li>add <code>SDA_spatialQuery</code> for querying tabular / spatial records via SDA given <code>Spatial*</code> class input features</li>
+<li>add <code>fetchGDB</code> for querying tabular data from SSURGO/gNATSGO/STATSGO File Geodatabases</li>
+<li>add <code>fetchSoilGrids</code> for point data queries to SoilGrids v2 API with SoilProfileCollection output</li>
+<li>add <code><a href="../reference/get_NOAA_GHCND.html">get_NOAA_GHCND()</a></code> and <code><a href="../reference/get_NOAA_stations_nearXY.html">get_NOAA_stations_nearXY()</a></code> for batch queries of NOAA Daily Climate Data (requires free API token)</li>
+<li>bugfix for <code>fetchSDA_spatial</code> with <code>chunk.size</code> &gt; 1 resulting in duplicate data in result</li>
+<li>major improvements to <code>fetchSDA_spatial</code> to handle queries that exceed JSON Serialization Limit</li>
+<li>new import: <code>data.table</code>; beginning to implement <em>data.table</em>-aware methods in <em>aqp</em> and <em>soilDB</em>
+</li>
+</ul>
+</div>
+    <div id="soildb-256-2020-06-16" class="section level1">
+<h1 class="page-header" data-toc-text="2.5.6">
+<a href="#soildb-256-2020-06-16" class="anchor"></a>soilDB 2.5.6 (2020-06-16)<small> Unreleased </small>
+</h1>
+<ul>
+<li>bug fixes in <code>fetchKSSL</code> related to vectorization, all arguments vectorized except for <code>bbox</code>
+</li>
+<li>
+<code>KSSL_VG_model</code> output cleaned-up, now returns phi -&gt; theta function</li>
+</ul>
+</div>
+    <div id="soildb-253-2020-03-22" class="section level1">
+<h1 class="page-header" data-toc-text="2.5.3">
+<a href="#soildb-253-2020-03-22" class="anchor"></a>soilDB 2.5.3 (2020-03-22)<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<code>fetchKSSL</code> is now fully vectorized and builds on new SoilWeb JSON API</li>
+</ul>
+</div>
+    <div id="soildb-252-2020-02-05" class="section level1">
+<h1 class="page-header" data-toc-text="2.5.2">
+<a href="#soildb-252-2020-02-05" class="anchor"></a>soilDB 2.5.2 (2020-02-05)<small> Unreleased </small>
+</h1>
+<ul>
+<li>add <code><a href="../reference/fetchNASIS.html">get_concentrations_from_NASIS_db()</a></code> and <code><a href="../reference/fetchNASIS.html">get_phfmp_from_NASIS_db()</a></code> for fetching Pedon Horizon Concentrations and Field Measured Properties from NASIS local database</li>
+</ul>
+</div>
+    <div id="soildb-251-2020-01-29" class="section level1">
+<h1 class="page-header" data-toc-text="2.5.1">
+<a href="#soildb-251-2020-01-29" class="anchor"></a>soilDB 2.5.1 (2020-01-29)<small> Unreleased </small>
+</h1>
+<ul>
+<li>bugfix for <code><a href="../reference/fetchNASIS.html">fetchNASIS(from='components', fill=TRUE, rmHzErrors=TRUE)</a></code> in context of new <code>::hzDepthTests()</code> and non-unique <code>chiid</code> due to <code>NA</code> values introduced by <code>fill</code>
+</li>
+</ul>
+</div>
+    <div id="soildb-25-2020-01-23" class="section level1">
+<h1 class="page-header" data-toc-text="2.5">
+<a href="#soildb-25-2020-01-23" class="anchor"></a>soilDB 2.5 (2020-01-23)<small> 2020-01-28 </small>
 </h1>
 <ul>
 <li>CRAN release</li>
 <li>
 <code>simplifyColorData</code> and <code>mix_and_clean_colors</code> always use CIELAB colorspace for weighted averages, and best-available metric for transformation to Munsell notation</li>
 <li>
-<code>fetchSDA_spatial</code> - new fetch function that simplifies getting spatial data associated with a vector of <code>mukey</code> or <code>nationalmusym</code>. The function has options for customizing result attribute table and is designed to automatically use <code><a href="../reference/SDA_query.html">makeChunks()</a></code> to prevent timeout on large queries.</li>
+<code>fetchSDA_spatial</code> - new fetch function that simplifies getting spatial data associated with a vector of <code>mukey</code> or <code>nationalmusym</code>. The function has options for customizing result attribute table and is designed to automatically use <code><a href="../reference/makeChunks.html">makeChunks()</a></code> to prevent timeout on large queries.</li>
 <li>
 <code><a href="https://rdrr.io/pkg/aqp/man/checkHzDepthLogic.html">aqp::test_hz_logic</a></code> is now deprecated – refactored affected fetch functions</li>
 </ul>
 </div>
-    <div id="soildb-2-4-3-2020-01-07" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-4-3-2020-01-07" class="anchor"></a>soilDB 2.4.3 (2020-01-07)<small> Unreleased </small>
+    <div id="soildb-243-2020-01-07" class="section level1">
+<h1 class="page-header" data-toc-text="2.4.3">
+<a href="#soildb-243-2020-01-07" class="anchor"></a>soilDB 2.4.3 (2020-01-07)<small> Unreleased </small>
 </h1>
 <ul>
 <li>surface water depth added to <code>fetchNASIS_pedons()</code>
@@ -132,37 +195,37 @@
 </li>
 </ul>
 </div>
-    <div id="soildb-2-4-2019-11-05" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-4-2019-11-05" class="anchor"></a>soilDB 2.4 (2019-11-05)<small> Unreleased </small>
+    <div id="soildb-24-2019-11-05" class="section level1">
+<h1 class="page-header" data-toc-text="2.4">
+<a href="#soildb-24-2019-11-05" class="anchor"></a>soilDB 2.4 (2019-11-05)<small> Unreleased </small>
 </h1>
 <ul>
 <li>CRAN release (<a href="https://github.com/ncss-tech/soilDB/releases/tag/2.4" class="uri">https://github.com/ncss-tech/soilDB/releases/tag/2.4</a>)</li>
 <li>documentation updates</li>
 </ul>
 </div>
-    <div id="soildb-2-3-9-2019-07-25" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-3-9-2019-07-25" class="anchor"></a>soilDB 2.3.9 (2019-07-25)<small> Unreleased </small>
+    <div id="soildb-239-2019-07-25" class="section level1">
+<h1 class="page-header" data-toc-text="2.3.9">
+<a href="#soildb-239-2019-07-25" class="anchor"></a>soilDB 2.3.9 (2019-07-25)<small> Unreleased </small>
 </h1>
 <ul>
-<li>SDA_query() no longer writes temporary files, c/o suggestion from Kyle Bocinsky (#106 / #108)</li>
+<li>SDA_query() no longer writes temporary files, c/o suggestion from Kyle Bocinsky (<a href='https://github.com/ncss-tech/soilDB/issues/106'>#106</a> / <a href='https://github.com/ncss-tech/soilDB/issues/108'>#108</a>)</li>
 <li>fetchOSD() gets a sanity check to protect against going over GET request limits</li>
 <li>makeChunks() added to util functions, useful for splitting data before sending API calls</li>
 </ul>
 </div>
-    <div id="soildb-2-3-8-2019-03-22" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-3-8-2019-03-22" class="anchor"></a>soilDB 2.3.8 (2019-03-22)<small> Unreleased </small>
+    <div id="soildb-238-2019-03-22" class="section level1">
+<h1 class="page-header" data-toc-text="2.3.8">
+<a href="#soildb-238-2019-03-22" class="anchor"></a>soilDB 2.3.8 (2019-03-22)<small> Unreleased </small>
 </h1>
 <ul>
 <li>loafercreek, gopheridge, and mineralking sample data have been updated with valid place-holder in <a href='https://github.com/sp'>@sp</a></li>
 <li>bug fix for <code><a href="../reference/SDA_query.html">SDA_query()</a></code> related to multi-line records (<a href="https://github.com/ncss-tech/soilDB/issues/28" class="uri">https://github.com/ncss-tech/soilDB/issues/28</a>)</li>
 </ul>
 </div>
-    <div id="soildb-2-3-7-2019-03-12" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-3-7-2019-03-12" class="anchor"></a>soilDB 2.3.7 (2019-03-12)<small> Unreleased </small>
+    <div id="soildb-237-2019-03-12" class="section level1">
+<h1 class="page-header" data-toc-text="2.3.7">
+<a href="#soildb-237-2019-03-12" class="anchor"></a>soilDB 2.3.7 (2019-03-12)<small> Unreleased </small>
 </h1>
 <ul>
 <li>
@@ -176,20 +239,20 @@
 </li>
 </ul>
 </div>
-    <div id="soildb-2-3-6-2019-02-12" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-3-6-2019-02-12" class="anchor"></a>soilDB 2.3.6 (2019-02-12)<small> Unreleased </small>
+    <div id="soildb-236-2019-02-12" class="section level1">
+<h1 class="page-header" data-toc-text="2.3.6">
+<a href="#soildb-236-2019-02-12" class="anchor"></a>soilDB 2.3.6 (2019-02-12)<small> Unreleased </small>
 </h1>
 <ul>
 <li>
-<code><a href="../reference/simplfyFragmentData.html">simplifyFragmentData()</a></code> and related functions now 4-5x faster</li>
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code> and related functions now 4-5x faster</li>
 <li>
 <code><a href="../reference/fetchOSD.html">fetchOSD()</a></code> now returns metadata when extended=TRUE</li>
 </ul>
 </div>
-    <div id="soildb-2-3-5-2019-01-14" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-3-5-2019-01-14" class="anchor"></a>soilDB 2.3.5 (2019-01-14)<small> 2019-01-14 </small>
+    <div id="soildb-235-2019-01-14" class="section level1">
+<h1 class="page-header" data-toc-text="2.3.5">
+<a href="#soildb-235-2019-01-14" class="anchor"></a>soilDB 2.3.5 (2019-01-14)<small> 2019-01-14 </small>
 </h1>
 <ul>
 <li>NAMESPACE and R CMD check fixes</li>
@@ -200,9 +263,9 @@
 <li>release to CRAN</li>
 </ul>
 </div>
-    <div id="soildb-2-3-3-2018-12-18" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-3-3-2018-12-18" class="anchor"></a>soilDB 2.3.3 (2018-12-18)<small> Unreleased </small>
+    <div id="soildb-233-2018-12-18" class="section level1">
+<h1 class="page-header" data-toc-text="2.3.3">
+<a href="#soildb-233-2018-12-18" class="anchor"></a>soilDB 2.3.3 (2018-12-18)<small> Unreleased </small>
 </h1>
 <ul>
 <li>bug fix in <code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> related to conversion of NULL fragment volume to 0</li>
@@ -211,9 +274,9 @@
 </li>
 </ul>
 </div>
-    <div id="soildb-2-3-2018-11-17" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-3-2018-11-17" class="anchor"></a>soilDB 2.3 (2018-11-17)<small> 2018-11-19 </small>
+    <div id="soildb-23-2018-11-17" class="section level1">
+<h1 class="page-header" data-toc-text="2.3">
+<a href="#soildb-23-2018-11-17" class="anchor"></a>soilDB 2.3 (2018-11-17)<small> 2018-11-19 </small>
 </h1>
 <ul>
 <li>new function for exploring soil series co-occurrence data: <code><a href="../reference/siblings.html">siblings()</a></code>
@@ -225,51 +288,51 @@
 <li>release to CRAN</li>
 </ul>
 </div>
-    <div id="soildb-2-2-6-2018-10-11" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-2-6-2018-10-11" class="anchor"></a>soilDB 2.2-6 (2018-10-11)<small> Unreleased </small>
+    <div id="soildb-22-6-2018-10-11" class="section level1">
+<h1 class="page-header" data-toc-text="2.2-6">
+<a href="#soildb-22-6-2018-10-11" class="anchor"></a>soilDB 2.2-6 (2018-10-11)<small> Unreleased </small>
 </h1>
 <ul>
 <li>new function for spatial queries: SDA_spatialQuery(), still needs testing and documentation</li>
 </ul>
 </div>
-    <div id="soildb-2-2-6-2018-10-11-1" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-2-6-2018-10-11-1" class="anchor"></a>soilDB 2.2-6 (2018-10-11)<small> Unreleased </small>
+    <div id="soildb-22-6-2018-10-11-1" class="section level1">
+<h1 class="page-header" data-toc-text="2.2-6">
+<a href="#soildb-22-6-2018-10-11-1" class="anchor"></a>soilDB 2.2-6 (2018-10-11)<small> Unreleased </small>
 </h1>
 <ul>
 <li>
 <code><a href="../reference/fetchOSD.html">fetchOSD()</a></code> gets an overhaul, new API and features</li>
 </ul>
 </div>
-    <div id="soildb-2-2-5-2018-10-05" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-2-5-2018-10-05" class="anchor"></a>soilDB 2.2-5 (2018-10-05)<small> Unreleased </small>
+    <div id="soildb-22-5-2018-10-05" class="section level1">
+<h1 class="page-header" data-toc-text="2.2-5">
+<a href="#soildb-22-5-2018-10-05" class="anchor"></a>soilDB 2.2-5 (2018-10-05)<small> Unreleased </small>
 </h1>
 <ul>
 <li>experimental interface to SoillWeb OSD fulltext search: <code><a href="../reference/OSDquery.html">OSDquery()</a></code>
 </li>
 </ul>
 </div>
-    <div id="soildb-2-2-4-2018-09-04" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-2-4-2018-09-04" class="anchor"></a>soilDB 2.2-4 (2018-09-04)<small> Unreleased </small>
+    <div id="soildb-22-4-2018-09-04" class="section level1">
+<h1 class="page-header" data-toc-text="2.2-4">
+<a href="#soildb-22-4-2018-09-04" class="anchor"></a>soilDB 2.2-4 (2018-09-04)<small> Unreleased </small>
 </h1>
 <ul>
 <li>numerous bug-fixes in simplifyFragmentData() see (<a href="https://github.com/ncss-tech/soilDB/issues/70" class="uri">https://github.com/ncss-tech/soilDB/issues/70</a>)</li>
 </ul>
 </div>
-    <div id="soildb-2-2-1-2018-05-21" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-2-1-2018-05-21" class="anchor"></a>soilDB 2.2-1 (2018-05-21)<small> Unreleased </small>
+    <div id="soildb-22-1-2018-05-21" class="section level1">
+<h1 class="page-header" data-toc-text="2.2-1">
+<a href="#soildb-22-1-2018-05-21" class="anchor"></a>soilDB 2.2-1 (2018-05-21)<small> Unreleased </small>
 </h1>
 <ul>
 <li>get_mutext_from_NASIS_db() added for extraction of map unit text notes</li>
 </ul>
 </div>
-    <div id="soildb-2-2-2018-05-08" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-2-2018-05-08" class="anchor"></a>soilDB 2.2 (2018-05-08)<small> Unreleased </small>
+    <div id="soildb-22-2018-05-08" class="section level1">
+<h1 class="page-header" data-toc-text="2.2">
+<a href="#soildb-22-2018-05-08" class="anchor"></a>soilDB 2.2 (2018-05-08)<small> Unreleased </small>
 </h1>
 <ul>
 <li>CRAN release</li>
@@ -277,123 +340,123 @@
 <li>exposing some of the internal functionality used by fetchHenry</li>
 </ul>
 </div>
-    <div id="soildb-2-1-1-2018-03-29" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-1-1-2018-03-29" class="anchor"></a>soilDB 2.1-1 (2018-03-29)<small> Unreleased </small>
+    <div id="soildb-21-1-2018-03-29" class="section level1">
+<h1 class="page-header" data-toc-text="2.1-1">
+<a href="#soildb-21-1-2018-03-29" class="anchor"></a>soilDB 2.1-1 (2018-03-29)<small> Unreleased </small>
 </h1>
 <ul>
 <li>added more SCAN/SNOTEL metadata (<a href="https://github.com/ncss-tech/soilDB/issues/61" class="uri">https://github.com/ncss-tech/soilDB/issues/61</a>)</li>
 </ul>
 </div>
-    <div id="soildb-2-1-2018-03-12" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-1-2018-03-12" class="anchor"></a>soilDB 2.1 (2018-03-12)<small> Unreleased </small>
+    <div id="soildb-21-2018-03-12" class="section level1">
+<h1 class="page-header" data-toc-text="2.1">
+<a href="#soildb-21-2018-03-12" class="anchor"></a>soilDB 2.1 (2018-03-12)<small> Unreleased </small>
 </h1>
 <ul>
 <li>generalized local NASIS ODBC authentication, should work on windows 7, 8, 10 <a href="https://github.com/ncss-tech/soilDB/issues/54" class="uri">https://github.com/ncss-tech/soilDB/issues/54</a>
 </li>
 </ul>
 </div>
-    <div id="soildb-2-0-4-2018-03-06" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-0-4-2018-03-06" class="anchor"></a>soilDB 2.0-4 (2018-03-06)<small> Unreleased </small>
+    <div id="soildb-20-4-2018-03-06" class="section level1">
+<h1 class="page-header" data-toc-text="2.0-4">
+<a href="#soildb-20-4-2018-03-06" class="anchor"></a>soilDB 2.0-4 (2018-03-06)<small> Unreleased </small>
 </h1>
 <ul>
 <li>bug fix for subtle change in how SCAN data are returned from webservice</li>
 </ul>
 </div>
-    <div id="soildb-2-0-3-2018-02-13" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-0-3-2018-02-13" class="anchor"></a>soilDB 2.0-3 (2018-02-13)<small> Unreleased </small>
+    <div id="soildb-20-3-2018-02-13" class="section level1">
+<h1 class="page-header" data-toc-text="2.0-3">
+<a href="#soildb-20-3-2018-02-13" class="anchor"></a>soilDB 2.0-3 (2018-02-13)<small> Unreleased </small>
 </h1>
 <ul>
 <li>bug fix for simplfyFragmentData(, nullFragsAreZero=FALSE), still more work to do</li>
 </ul>
 </div>
-    <div id="soildb-2-0-2-2018-01-29" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-0-2-2018-01-29" class="anchor"></a>soilDB 2.0-2 (2018-01-29)<small> Unreleased </small>
+    <div id="soildb-20-2-2018-01-29" class="section level1">
+<h1 class="page-header" data-toc-text="2.0-2">
+<a href="#soildb-20-2-2018-01-29" class="anchor"></a>soilDB 2.0-2 (2018-01-29)<small> Unreleased </small>
 </h1>
 <ul>
 <li>bug fix for simplfyFragmentData() when fragment volume &gt; 100%</li>
 </ul>
 </div>
-    <div id="soildb-2-0-1-2018-01-23" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-0-1-2018-01-23" class="anchor"></a>soilDB 2.0-1 (2018-01-23)<small> 2018-01-23 </small>
+    <div id="soildb-20-1-2018-01-23" class="section level1">
+<h1 class="page-header" data-toc-text="2.0-1">
+<a href="#soildb-20-1-2018-01-23" class="anchor"></a>soilDB 2.0-1 (2018-01-23)<small> 2018-01-23 </small>
 </h1>
 <ul>
 <li>updated <code>loafercreek</code> and <code>gopheridge</code> sample datasets and manual page to reflect latest fetchNASIS</li>
 </ul>
 </div>
-    <div id="soildb-2-0-2017-12-23" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-2-0-2017-12-23" class="anchor"></a>soilDB 2.0 (2017-12-23)<small> 2018-01-11 </small>
+    <div id="soildb-20-2017-12-23" class="section level1">
+<h1 class="page-header" data-toc-text="2.0">
+<a href="#soildb-20-2017-12-23" class="anchor"></a>soilDB 2.0 (2017-12-23)<small> 2018-01-11 </small>
 </h1>
 <ul>
 <li>bug fixes, manual page updates, and stabilization of NASIS interaction</li>
 <li>released to CRAN</li>
 </ul>
 </div>
-    <div id="soildb-1-8-12-2017-09-19" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-8-12-2017-09-19" class="anchor"></a>soilDB 1.8.12 (2017-09-19)<small> Unreleased </small>
+    <div id="soildb-1812-2017-09-19" class="section level1">
+<h1 class="page-header" data-toc-text="1.8.12">
+<a href="#soildb-1812-2017-09-19" class="anchor"></a>soilDB 1.8.12 (2017-09-19)<small> Unreleased </small>
 </h1>
 <ul>
 <li>bug fix in fetchHenry(), it is now possible to query only sensor metadata</li>
 </ul>
 </div>
-    <div id="soildb-1-8-11-2017-08-17" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-8-11-2017-08-17" class="anchor"></a>soilDB 1.8.11 (2017-08-17)<small> Unreleased </small>
+    <div id="soildb-1811-2017-08-17" class="section level1">
+<h1 class="page-header" data-toc-text="1.8.11">
+<a href="#soildb-1811-2017-08-17" class="anchor"></a>soilDB 1.8.11 (2017-08-17)<small> Unreleased </small>
 </h1>
 <ul>
 <li>temporary bug-fix related to SCAN data (<a href="https://github.com/ncss-tech/soilDB/issues/26" class="uri">https://github.com/ncss-tech/soilDB/issues/26</a>)</li>
 </ul>
 </div>
-    <div id="soildb-1-8-10-2017-08-10" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-8-10-2017-08-10" class="anchor"></a>soilDB 1.8.10 (2017-08-10)<small> Unreleased </small>
+    <div id="soildb-1810-2017-08-10" class="section level1">
+<h1 class="page-header" data-toc-text="1.8.10">
+<a href="#soildb-1810-2017-08-10" class="anchor"></a>soilDB 1.8.10 (2017-08-10)<small> Unreleased </small>
 </h1>
 <ul>
 <li>re-write of mix_and_clean_colors() so that color mixing happens in CIE LAB space</li>
 </ul>
 </div>
-    <div id="soildb-1-8-5-2017-05-24" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-8-5-2017-05-24" class="anchor"></a>soilDB 1.8.5 (2017-05-24)<small> Unreleased </small>
+    <div id="soildb-185-2017-05-24" class="section level1">
+<h1 class="page-header" data-toc-text="1.8.5">
+<a href="#soildb-185-2017-05-24" class="anchor"></a>soilDB 1.8.5 (2017-05-24)<small> Unreleased </small>
 </h1>
 <ul>
 <li>re-write of SDA_query(), better error handling, support for multi-part result sets</li>
 </ul>
 </div>
-    <div id="soildb-1-8-2-2017-03-24" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-8-2-2017-03-24" class="anchor"></a>soilDB 1.8.2 (2017-03-24)<small> Unreleased </small>
+    <div id="soildb-182-2017-03-24" class="section level1">
+<h1 class="page-header" data-toc-text="1.8.2">
+<a href="#soildb-182-2017-03-24" class="anchor"></a>soilDB 1.8.2 (2017-03-24)<small> Unreleased </small>
 </h1>
 <ul>
 <li>fetchHenry() can now access water level data, see manual page</li>
 </ul>
 </div>
-    <div id="soildb-1-8-1-2017-01-23" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-8-1-2017-01-23" class="anchor"></a>soilDB 1.8.1 (2017-01-23)<small> Unreleased </small>
+    <div id="soildb-181-2017-01-23" class="section level1">
+<h1 class="page-header" data-toc-text="1.8.1">
+<a href="#soildb-181-2017-01-23" class="anchor"></a>soilDB 1.8.1 (2017-01-23)<small> Unreleased </small>
 </h1>
 <ul>
 <li>new function: get_comonth_from_NASIS_db() see manual page for details</li>
 </ul>
 </div>
-    <div id="soildb-1-8-10-2016-12-27" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-8-10-2016-12-27" class="anchor"></a>soilDB 1.8-10 (2016-12-27)<small> Unreleased </small>
+    <div id="soildb-18-10-2016-12-27" class="section level1">
+<h1 class="page-header" data-toc-text="1.8-10">
+<a href="#soildb-18-10-2016-12-27" class="anchor"></a>soilDB 1.8-10 (2016-12-27)<small> Unreleased </small>
 </h1>
 <ul>
 <li>converting all URLs to ‘HTTPS’, addressing bugs with fetchSCAN() and associated functions</li>
 </ul>
 </div>
-    <div id="soildb-1-8-7-2016-11-16" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-8-7-2016-11-16" class="anchor"></a>soilDB 1.8-7 (2016-11-16)<small> 2016-11-10 </small>
+    <div id="soildb-18-7-2016-11-16" class="section level1">
+<h1 class="page-header" data-toc-text="1.8-7">
+<a href="#soildb-18-7-2016-11-16" class="anchor"></a>soilDB 1.8-7 (2016-11-16)<small> 2016-11-10 </small>
 </h1>
 <ul>
 <li>sanity checks for fetchHenry()</li>
@@ -401,18 +464,18 @@
 <li>unique row names in SPDF returned by seriesExtent()</li>
 </ul>
 </div>
-    <div id="soildb-1-8-6-2016-11-04" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-8-6-2016-11-04" class="anchor"></a>soilDB 1.8-6 (2016-11-04)<small> Unreleased </small>
+    <div id="soildb-18-6-2016-11-04" class="section level1">
+<h1 class="page-header" data-toc-text="1.8-6">
+<a href="#soildb-18-6-2016-11-04" class="anchor"></a>soilDB 1.8-6 (2016-11-04)<small> Unreleased </small>
 </h1>
 <ul>
 <li>converted all links to SoilWeb servers to HTTPS</li>
 <li>converted all NRCS web-service links to HTTPS</li>
 </ul>
 </div>
-    <div id="soildb-1-8-4-2016-10-07" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-8-4-2016-10-07" class="anchor"></a>soilDB 1.8-4 (2016-10-07)<small> Unreleased </small>
+    <div id="soildb-18-4-2016-10-07" class="section level1">
+<h1 class="page-header" data-toc-text="1.8-4">
+<a href="#soildb-18-4-2016-10-07" class="anchor"></a>soilDB 1.8-4 (2016-10-07)<small> Unreleased </small>
 </h1>
 <ul>
 <li>fetchOSD() now returns dry colors and the source “narrative” for each horizon; function gains an argument</li>
@@ -421,9 +484,9 @@
 </li>
 </ul>
 </div>
-    <div id="soildb-1-8-2016-04-29" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-8-2016-04-29" class="anchor"></a>soilDB 1.8 (2016-04-29)<small> 2016-04-29 </small>
+    <div id="soildb-18-2016-04-29" class="section level1">
+<h1 class="page-header" data-toc-text="1.8">
+<a href="#soildb-18-2016-04-29" class="anchor"></a>soilDB 1.8 (2016-04-29)<small> 2016-04-29 </small>
 </h1>
 <ul>
 <li>fetchKSSL() can now query basic morphologic data with the argument “returnMorphologicData”</li>
@@ -437,9 +500,9 @@
 <li>NOTE: soilDB now uses reshape2::dcast() instead of reshape::cast()</li>
 </ul>
 </div>
-    <div id="soildb-1-7-2016-04-18" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-7-2016-04-18" class="anchor"></a>soilDB 1.7 (2016-04-18)<small> 2016-02-16 </small>
+    <div id="soildb-17-2016-04-18" class="section level1">
+<h1 class="page-header" data-toc-text="1.7">
+<a href="#soildb-17-2016-04-18" class="anchor"></a>soilDB 1.7 (2016-04-18)<small> 2016-02-16 </small>
 </h1>
 <ul>
 <li>bug fix in colors returned by fetchNASIS(), reported by Andy Paolucci</li>
@@ -449,43 +512,43 @@
 <li>NASIS pedon ecosite data now returned by fetchNASIS() (c/o J. Skovlin)</li>
 </ul>
 </div>
-    <div id="soildb-1-6-9-2015-12-28" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-6-9-2015-12-28" class="anchor"></a>soilDB 1.6.9 (2015-12-28)<small> Unreleased </small>
+    <div id="soildb-169-2015-12-28" class="section level1">
+<h1 class="page-header" data-toc-text="1.6.9">
+<a href="#soildb-169-2015-12-28" class="anchor"></a>soilDB 1.6.9 (2015-12-28)<small> Unreleased </small>
 </h1>
 <ul>
 <li>clean-up in local NASIS queries, removed extra parens</li>
 <li>NASIS component query function overhaul: previous code may be broken, details pending</li>
 </ul>
 </div>
-    <div id="soildb-1-6-8-2015-12-22" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-6-8-2015-12-22" class="anchor"></a>soilDB 1.6.8 (2015-12-22)<small> Unreleased </small>
+    <div id="soildb-168-2015-12-22" class="section level1">
+<h1 class="page-header" data-toc-text="1.6.8">
+<a href="#soildb-168-2015-12-22" class="anchor"></a>soilDB 1.6.8 (2015-12-22)<small> Unreleased </small>
 </h1>
 <ul>
 <li>added temperature class (temp_class) field from the pedon taxonomic history table (NASIS) [addition suggested by J. Baker]</li>
 </ul>
 </div>
-    <div id="soildb-1-6-7-2015-12-16" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-6-7-2015-12-16" class="anchor"></a>soilDB 1.6.7 (2015-12-16)<small> Unreleased </small>
+    <div id="soildb-167-2015-12-16" class="section level1">
+<h1 class="page-header" data-toc-text="1.6.7">
+<a href="#soildb-167-2015-12-16" class="anchor"></a>soilDB 1.6.7 (2015-12-16)<small> Unreleased </small>
 </h1>
 <ul>
 <li>experimental function for processing SDA queries that return geometry: processSDA_WKT()</li>
 </ul>
 </div>
-    <div id="soildb-1-6-5-2015-12-03" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-6-5-2015-12-03" class="anchor"></a>soilDB 1.6.5 (2015-12-03)<small> Unreleased </small>
+    <div id="soildb-165-2015-12-03" class="section level1">
+<h1 class="page-header" data-toc-text="1.6.5">
+<a href="#soildb-165-2015-12-03" class="anchor"></a>soilDB 1.6.5 (2015-12-03)<small> Unreleased </small>
 </h1>
 <ul>
 <li>bug fix for poorly specified gemomorphic descriptions, caused fetchNASIS() to barf</li>
 <li>fetchKSSL() gains new query filters, see man page</li>
 </ul>
 </div>
-    <div id="soildb-1-6-4-2015-11-27" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-6-4-2015-11-27" class="anchor"></a>soilDB 1.6.4 (2015-11-27)<small> Unreleased </small>
+    <div id="soildb-164-2015-11-27" class="section level1">
+<h1 class="page-header" data-toc-text="1.6.4">
+<a href="#soildb-164-2015-11-27" class="anchor"></a>soilDB 1.6.4 (2015-11-27)<small> Unreleased </small>
 </h1>
 <ul>
 <li>package re-org, getting ready for soilDB 2.0:
@@ -497,9 +560,9 @@
 </li>
 </ul>
 </div>
-    <div id="soildb-1-6-3-2015-11-20" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-6-3-2015-11-20" class="anchor"></a>soilDB 1.6.3 (2015-11-20)<small> Unreleased </small>
+    <div id="soildb-163-2015-11-20" class="section level1">
+<h1 class="page-header" data-toc-text="1.6.3">
+<a href="#soildb-163-2015-11-20" class="anchor"></a>soilDB 1.6.3 (2015-11-20)<small> Unreleased </small>
 </h1>
 <ul>
 <li>new spatial query helper functions for SDA</li>
@@ -509,9 +572,9 @@
 <li>KSSL data updated (server-side) to June 2015 snapshot, “site_id” column removed from fetchKSSL() results</li>
 </ul>
 </div>
-    <div id="soildb-1-6-2015-08-19" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-6-2015-08-19" class="anchor"></a>soilDB 1.6 (2015-08-19)<small> Unreleased </small>
+    <div id="soildb-16-2015-08-19" class="section level1">
+<h1 class="page-header" data-toc-text="1.6">
+<a href="#soildb-16-2015-08-19" class="anchor"></a>soilDB 1.6 (2015-08-19)<small> Unreleased </small>
 </h1>
 <ul>
 <li>soilDB now imports from the <code>reshape</code> package, will transition to <code>reshape2</code> with soilDB 2.0</li>
@@ -520,25 +583,25 @@
 <li>SSOAP / XMLSchema packages no longer in ‘suggests’ list</li>
 </ul>
 </div>
-    <div id="soildb-1-5-8-2015-08-13" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-5-8-2015-08-13" class="anchor"></a>soilDB 1.5-8 (2015-08-13)<small> Unreleased </small>
+    <div id="soildb-15-8-2015-08-13" class="section level1">
+<h1 class="page-header" data-toc-text="1.5-8">
+<a href="#soildb-15-8-2015-08-13" class="anchor"></a>soilDB 1.5-8 (2015-08-13)<small> Unreleased </small>
 </h1>
 <ul>
 <li>fetchKSSL() gets an argument for downloading data by MLRA</li>
 </ul>
 </div>
-    <div id="soildb-1-5-7-2015-03-10" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-5-7-2015-03-10" class="anchor"></a>soilDB 1.5-7 (2015-03-10)<small> Unreleased </small>
+    <div id="soildb-15-7-2015-03-10" class="section level1">
+<h1 class="page-header" data-toc-text="1.5-7">
+<a href="#soildb-15-7-2015-03-10" class="anchor"></a>soilDB 1.5-7 (2015-03-10)<small> Unreleased </small>
 </h1>
 <ul>
 <li>updated the <code>loafercreek</code> and <code>gopheridge</code> sample datasets</li>
 </ul>
 </div>
-    <div id="soildb-1-5-3-2015-03-10" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-5-3-2015-03-10" class="anchor"></a>soilDB 1.5-3 (2015-03-10)<small> Unreleased </small>
+    <div id="soildb-15-3-2015-03-10" class="section level1">
+<h1 class="page-header" data-toc-text="1.5-3">
+<a href="#soildb-15-3-2015-03-10" class="anchor"></a>soilDB 1.5-3 (2015-03-10)<small> Unreleased </small>
 </h1>
 <ul>
 <li>nullFragsAreZero argument to fetchNASIS() reset to TRUE, new documentation pending</li>
@@ -547,26 +610,26 @@
 <li>new tutorial on fetchNASIS()</li>
 </ul>
 </div>
-    <div id="soildb-1-5-2-2015-02-24" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-5-2-2015-02-24" class="anchor"></a>soilDB 1.5-2 (2015-02-24)<small> 2015-02-25 </small>
+    <div id="soildb-15-2-2015-02-24" class="section level1">
+<h1 class="page-header" data-toc-text="1.5-2">
+<a href="#soildb-15-2-2015-02-24" class="anchor"></a>soilDB 1.5-2 (2015-02-24)<small> 2015-02-25 </small>
 </h1>
 <ul>
 <li>RODBC temporarily moved from “suggested” package to “imported” package… not a good idea, reverted to “suggested”</li>
 </ul>
 </div>
-    <div id="soildb-1-4-5-2015-01-20" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-4-5-2015-01-20" class="anchor"></a>soilDB 1.4-5 (2015-01-20)<small> Unreleased </small>
+    <div id="soildb-14-5-2015-01-20" class="section level1">
+<h1 class="page-header" data-toc-text="1.4-5">
+<a href="#soildb-14-5-2015-01-20" class="anchor"></a>soilDB 1.4-5 (2015-01-20)<small> Unreleased </small>
 </h1>
 <ul>
 <li>mix_and_clean_colors() now returns back-transformed, mixed, munsell colors</li>
 <li>added psctopdepth and pscbotdepth back to extended NASIS query (particle size control section depths)</li>
 </ul>
 </div>
-    <div id="soildb-1-4-3-2015-01-12" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-4-3-2015-01-12" class="anchor"></a>soilDB 1.4-3 (2015-01-12)<small> Unreleased </small>
+    <div id="soildb-14-3-2015-01-12" class="section level1">
+<h1 class="page-header" data-toc-text="1.4-3">
+<a href="#soildb-14-3-2015-01-12" class="anchor"></a>soilDB 1.4-3 (2015-01-12)<small> Unreleased </small>
 </h1>
 <ul>
 <li>get_hz_data_from_NASIS_db() no longer assumes fragment volume of NULL = 0</li>
@@ -574,9 +637,9 @@
 <li>fetchNASIS() has a new argument, nullFragsAreZero=FALSE; set to TRUE for past NULL -&gt; 0 conversion</li>
 </ul>
 </div>
-    <div id="soildb-1-4-2-2014-12-23" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-4-2-2014-12-23" class="anchor"></a>soilDB 1.4-2 (2014-12-23)<small> Unreleased </small>
+    <div id="soildb-14-2-2014-12-23" class="section level1">
+<h1 class="page-header" data-toc-text="1.4-2">
+<a href="#soildb-14-2-2014-12-23" class="anchor"></a>soilDB 1.4-2 (2014-12-23)<small> Unreleased </small>
 </h1>
 <ul>
 <li>new internally-used function .formatLandformString() for flattening NASIS/PedonPC “landform” records</li>
@@ -585,34 +648,34 @@
 <li>new function SSURGO_spatial_query() queries SSURGO data from SoilWeb (see manual page for details)</li>
 </ul>
 </div>
-    <div id="soildb-1-4-2014-11-13" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-4-2014-11-13" class="anchor"></a>soilDB 1.4 (2014-11-13)<small> Unreleased </small>
+    <div id="soildb-14-2014-11-13" class="section level1">
+<h1 class="page-header" data-toc-text="1.4">
+<a href="#soildb-14-2014-11-13" class="anchor"></a>soilDB 1.4 (2014-11-13)<small> Unreleased </small>
 </h1>
 <ul>
 <li>moving most of the hard-to-install packages into <code>suggests</code>, and checking for package availability at function runtime. this will make soilDB more portable, as not every user will want or need all functionality.</li>
 </ul>
 </div>
-    <div id="soildb-1-3-6-2014-10-27" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-3-6-2014-10-27" class="anchor"></a>soilDB 1.3-6 (2014-10-27)<small> Unreleased </small>
+    <div id="soildb-13-6-2014-10-27" class="section level1">
+<h1 class="page-header" data-toc-text="1.3-6">
+<a href="#soildb-13-6-2014-10-27" class="anchor"></a>soilDB 1.3-6 (2014-10-27)<small> Unreleased </small>
 </h1>
 <ul>
 <li>fetchNASIS() gains argument rmHzErrors to optionally retain pedons with horizonation errors. use with caution.</li>
 </ul>
 </div>
-    <div id="soildb-1-3-5-2014-09-25" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-3-5-2014-09-25" class="anchor"></a>soilDB 1.3-5 (2014-09-25)<small> Unreleased </small>
+    <div id="soildb-13-5-2014-09-25" class="section level1">
+<h1 class="page-header" data-toc-text="1.3-5">
+<a href="#soildb-13-5-2014-09-25" class="anchor"></a>soilDB 1.3-5 (2014-09-25)<small> Unreleased </small>
 </h1>
 <ul>
 <li>loafercreek sample dataset re-created from new data</li>
 <li>seriesExtent() now utilizes pre-cached GeoJSON files from [<a href="http://casoilresource.lawr.ucdavis.edu/see/" class="uri">http://casoilresource.lawr.ucdavis.edu/see/</a>]</li>
 </ul>
 </div>
-    <div id="soildb-1-3-2014-02-26" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-3-2014-02-26" class="anchor"></a>soilDB 1.3 (2014-02-26)<small> Unreleased </small>
+    <div id="soildb-13-2014-02-26" class="section level1">
+<h1 class="page-header" data-toc-text="1.3">
+<a href="#soildb-13-2014-02-26" class="anchor"></a>soilDB 1.3 (2014-02-26)<small> Unreleased </small>
 </h1>
 <ul>
 <li>Changes made to fetch functions to accommodate changes implemented in the NASIS 6.3 data structure</li>
@@ -620,9 +683,9 @@
 <li>fetchRaCA() has a new argument for querying data by rcasiteid</li>
 </ul>
 </div>
-    <div id="soildb-1-2-9-2014-01-06" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-2-9-2014-01-06" class="anchor"></a>soilDB 1.2-9 (2014-01-06)<small> Unreleased </small>
+    <div id="soildb-12-9-2014-01-06" class="section level1">
+<h1 class="page-header" data-toc-text="1.2-9">
+<a href="#soildb-12-9-2014-01-06" class="anchor"></a>soilDB 1.2-9 (2014-01-06)<small> Unreleased </small>
 </h1>
 <ul>
 <li>SOC concentration and stock values are temporarily disabled in fetchRaCA()
@@ -632,26 +695,26 @@
 </li>
 </ul>
 </div>
-    <div id="soildb-1-2-6-2013-12-05" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-2-6-2013-12-05" class="anchor"></a>soilDB 1.2-6 (2013-12-05)<small> 2013-12-17 </small>
+    <div id="soildb-12-6-2013-12-05" class="section level1">
+<h1 class="page-header" data-toc-text="1.2-6">
+<a href="#soildb-12-6-2013-12-05" class="anchor"></a>soilDB 1.2-6 (2013-12-05)<small> 2013-12-17 </small>
 </h1>
 <ul>
 <li>added new function contributed by J.M. Skovlin: get_veg_from_NPS_PLOTS_db()</li>
 <li>bugfixes in get_extended_data_from_NASIS_db(): results from geomorph tables are now returned</li>
 </ul>
 </div>
-    <div id="soildb-1-2-3-2013-10-25" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-2-3-2013-10-25" class="anchor"></a>soilDB 1.2-3 (2013-10-25)<small> Unreleased </small>
+    <div id="soildb-12-3-2013-10-25" class="section level1">
+<h1 class="page-header" data-toc-text="1.2-3">
+<a href="#soildb-12-3-2013-10-25" class="anchor"></a>soilDB 1.2-3 (2013-10-25)<small> Unreleased </small>
 </h1>
 <ul>
 <li>added new function fetchSCAN() for downloading soil/climate data from USDA-NRCS SCAN stations (still experimental!)</li>
 </ul>
 </div>
-    <div id="soildb-1-2-1-2013-09-12" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-2-1-2013-09-12" class="anchor"></a>soilDB 1.2-1 (2013-09-12)<small> Unreleased </small>
+    <div id="soildb-12-1-2013-09-12" class="section level1">
+<h1 class="page-header" data-toc-text="1.2-1">
+<a href="#soildb-12-1-2013-09-12" class="anchor"></a>soilDB 1.2-1 (2013-09-12)<small> Unreleased </small>
 </h1>
 <ul>
 <li>bug fixing in fetchRaCA():
@@ -662,35 +725,35 @@
 </li>
 </ul>
 </div>
-    <div id="soildb-1-2-2013-08-13" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-2-2013-08-13" class="anchor"></a>soilDB 1.2 (2013-08-13)<small> Unreleased </small>
+    <div id="soildb-12-2013-08-13" class="section level1">
+<h1 class="page-header" data-toc-text="1.2">
+<a href="#soildb-12-2013-08-13" class="anchor"></a>soilDB 1.2 (2013-08-13)<small> Unreleased </small>
 </h1>
 <ul>
 <li>fetchRaCA() function now stable, ready for general usage</li>
 <li>fixed bug in fetchRaCA() function where the presence of single-quote character in horizon designation would throw and error</li>
 </ul>
 </div>
-    <div id="soildb-1-1-3-2013-07-30" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-1-3-2013-07-30" class="anchor"></a>soilDB 1.1-3 (2013-07-30)<small> Unreleased </small>
+    <div id="soildb-11-3-2013-07-30" class="section level1">
+<h1 class="page-header" data-toc-text="1.1-3">
+<a href="#soildb-11-3-2013-07-30" class="anchor"></a>soilDB 1.1-3 (2013-07-30)<small> Unreleased </small>
 </h1>
 <ul>
 <li>new function get_copedon_from_NASIS_db(): returns basic information associated with pedons linked to component data in NASIS</li>
 <li>new function fetchRaCA(): gets data from the Rapid Carbon Assessment project [work in progress]</li>
 </ul>
 </div>
-    <div id="soildb-1-1-2013-06-27" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-1-2013-06-27" class="anchor"></a>soilDB 1.1 (2013-06-27)<small> Unreleased </small>
+    <div id="soildb-11-2013-06-27" class="section level1">
+<h1 class="page-header" data-toc-text="1.1">
+<a href="#soildb-11-2013-06-27" class="anchor"></a>soilDB 1.1 (2013-06-27)<small> Unreleased </small>
 </h1>
 <ul>
 <li>get_site_data_from_NASIS_db() no longer has problems when more than 1 site bedrock kind is defined; only the shallowest row is returned</li>
 </ul>
 </div>
-    <div id="soildb-1-0-2013-04-04" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-1-0-2013-04-04" class="anchor"></a>soilDB 1.0 (2013-04-04)<small> 2013-04-18 </small>
+    <div id="soildb-10-2013-04-04" class="section level1">
+<h1 class="page-header" data-toc-text="1.0">
+<a href="#soildb-10-2013-04-04" class="anchor"></a>soilDB 1.0 (2013-04-04)<small> 2013-04-18 </small>
 </h1>
 <ul>
 <li>fetchNASIS() is now much more efficient: faster / less memory used</li>
@@ -702,9 +765,9 @@
 </li>
 </ul>
 </div>
-    <div id="soildb-0-9-8-2013-04-03" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-9-8-2013-04-03" class="anchor"></a>soilDB 0.9-8 (2013-04-03)<small> Unreleased </small>
+    <div id="soildb-09-8-2013-04-03" class="section level1">
+<h1 class="page-header" data-toc-text="0.9-8">
+<a href="#soildb-09-8-2013-04-03" class="anchor"></a>soilDB 0.9-8 (2013-04-03)<small> Unreleased </small>
 </h1>
 <ul>
 <li>fetchOSD() now immune to queries for non-soils</li>
@@ -712,17 +775,17 @@
 <li>NASIS-DMU fetching functions now return more information, still not as complete as pedon-queries</li>
 </ul>
 </div>
-    <div id="soildb-0-9-7-2013-03-01" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-9-7-2013-03-01" class="anchor"></a>soilDB 0.9-7 (2013-03-01)<small> Unreleased </small>
+    <div id="soildb-09-7-2013-03-01" class="section level1">
+<h1 class="page-header" data-toc-text="0.9-7">
+<a href="#soildb-09-7-2013-03-01" class="anchor"></a>soilDB 0.9-7 (2013-03-01)<small> Unreleased </small>
 </h1>
 <ul>
 <li>NASIS query functions now return only records from the selected set, please test older code!</li>
 </ul>
 </div>
-    <div id="soildb-0-9-6-2013-02-26" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-9-6-2013-02-26" class="anchor"></a>soilDB 0.9-6 (2013-02-26)<small> 2013-02-28 </small>
+    <div id="soildb-09-6-2013-02-26" class="section level1">
+<h1 class="page-header" data-toc-text="0.9-6">
+<a href="#soildb-09-6-2013-02-26" class="anchor"></a>soilDB 0.9-6 (2013-02-26)<small> 2013-02-28 </small>
 </h1>
 <ul>
 <li>new function get_text_notes_from_NASIS_db() – still needs proper documentation</li>
@@ -730,43 +793,43 @@
 <li>SoilWeb queries via URL are now URL-encoded to allow for spaces in soil series names</li>
 </ul>
 </div>
-    <div id="soildb-0-9-4-2013-01-31" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-9-4-2013-01-31" class="anchor"></a>soilDB 0.9-4 (2013-01-31)<small> Unreleased </small>
+    <div id="soildb-09-4-2013-01-31" class="section level1">
+<h1 class="page-header" data-toc-text="0.9-4">
+<a href="#soildb-09-4-2013-01-31" class="anchor"></a>soilDB 0.9-4 (2013-01-31)<small> Unreleased </small>
 </h1>
 <ul>
 <li>new function: fetchOSD() returns basic OSD data as a SoilProfileCollection</li>
 </ul>
 </div>
-    <div id="soildb-0-9-3-2013-01-08" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-9-3-2013-01-08" class="anchor"></a>soilDB 0.9-3 (2013-01-08)<small> 2013-01-10 </small>
+    <div id="soildb-09-3-2013-01-08" class="section level1">
+<h1 class="page-header" data-toc-text="0.9-3">
+<a href="#soildb-09-3-2013-01-08" class="anchor"></a>soilDB 0.9-3 (2013-01-08)<small> 2013-01-10 </small>
 </h1>
 <ul>
 <li>speed-bump in color-fetching functions from NASIS/pedonPC</li>
 <li>fetchNASIS() now attempts to correct for &gt;1 pedon/site by appending peiid to pedon_id</li>
 </ul>
 </div>
-    <div id="soildb-0-9-2-2012-12-18" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-9-2-2012-12-18" class="anchor"></a>soilDB 0.9-2 (2012-12-18)<small> Unreleased </small>
+    <div id="soildb-09-2-2012-12-18" class="section level1">
+<h1 class="page-header" data-toc-text="0.9-2">
+<a href="#soildb-09-2-2012-12-18" class="anchor"></a>soilDB 0.9-2 (2012-12-18)<small> Unreleased </small>
 </h1>
 <ul>
 <li>new functions for getting / plotting the geographic extent of a soil series, using the SoilWeb query service: +seriesExtent() : fetches extent as a SpatialPolygonDataFrame +seriesExtentAsGmap() : fetches extent and plots on Google Maps (requires dismo package)</li>
 </ul>
 </div>
-    <div id="soildb-0-9-1-2012-11-27" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-9-1-2012-11-27" class="anchor"></a>soilDB 0.9-1 (2012-11-27)<small> Unreleased </small>
+    <div id="soildb-09-1-2012-11-27" class="section level1">
+<h1 class="page-header" data-toc-text="0.9-1">
+<a href="#soildb-09-1-2012-11-27" class="anchor"></a>soilDB 0.9-1 (2012-11-27)<small> Unreleased </small>
 </h1>
 <ul>
 <li>updated functionality in fetchNASIS_component_data() pulls mapunit-level data as well as component-level data</li>
 <li>Munsell ‘value’ is now returned from PedonPC/NASIS fetching functions</li>
 </ul>
 </div>
-    <div id="soildb-0-9-2012-10-24" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-9-2012-10-24" class="anchor"></a>soilDB 0.9 (2012-10-24)<small> Unreleased </small>
+    <div id="soildb-09-2012-10-24" class="section level1">
+<h1 class="page-header" data-toc-text="0.9">
+<a href="#soildb-09-2012-10-24" class="anchor"></a>soilDB 0.9 (2012-10-24)<small> Unreleased </small>
 </h1>
 <ul>
 <li>added a surface fragment summary “surf_frag_summary” to the results of get_extended_data_from_NASIS()
@@ -786,9 +849,9 @@
 </li>
 </ul>
 </div>
-    <div id="soildb-0-8-3-2012-09-28" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-8-3-2012-09-28" class="anchor"></a>soilDB 0.8-3 (2012-09-28)<small> 2012-10-10 </small>
+    <div id="soildb-08-3-2012-09-28" class="section level1">
+<h1 class="page-header" data-toc-text="0.8-3">
+<a href="#soildb-08-3-2012-09-28" class="anchor"></a>soilDB 0.8-3 (2012-09-28)<small> 2012-10-10 </small>
 </h1>
 <ul>
 <li>site-level data: {elev, slope, aspect} are now named {elev_field, slope_field, aspect_field}
@@ -798,9 +861,9 @@
 </li>
 </ul>
 </div>
-    <div id="soildb-0-8-2-2012-08-23" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-8-2-2012-08-23" class="anchor"></a>soilDB 0.8-2 (2012-08-23)<small> Unreleased </small>
+    <div id="soildb-08-2-2012-08-23" class="section level1">
+<h1 class="page-header" data-toc-text="0.8-2">
+<a href="#soildb-08-2-2012-08-23" class="anchor"></a>soilDB 0.8-2 (2012-08-23)<small> Unreleased </small>
 </h1>
 <ul>
 <li>compatible with NASIS 6.2</li>
@@ -810,9 +873,9 @@
 </li>
 </ul>
 </div>
-    <div id="soildb-0-8-2012-08-20" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-8-2012-08-20" class="anchor"></a>soilDB 0.8 (2012-08-20)<small> Unreleased </small>
+    <div id="soildb-08-2012-08-20" class="section level1">
+<h1 class="page-header" data-toc-text="0.8">
+<a href="#soildb-08-2012-08-20" class="anchor"></a>soilDB 0.8 (2012-08-20)<small> Unreleased </small>
 </h1>
 <ul>
 <li>updating for PedonPC 5.0 and NASIS 6.2
@@ -824,26 +887,26 @@
 <li>package is now partially compatible with NASIS 6.2</li>
 </ul>
 </div>
-    <div id="soildb-0-6-2012-06-19" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-6-2012-06-19" class="anchor"></a>soilDB 0.6 (2012-06-19)<small> Unreleased </small>
+    <div id="soildb-06-2012-06-19" class="section level1">
+<h1 class="page-header" data-toc-text="0.6">
+<a href="#soildb-06-2012-06-19" class="anchor"></a>soilDB 0.6 (2012-06-19)<small> Unreleased </small>
 </h1>
 <ul>
 <li>tidying up documentation, package dependencies, and NAMESPACE</li>
 </ul>
 </div>
-    <div id="soildb-0-5-6-2012-04-16" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-5-6-2012-04-16" class="anchor"></a>soilDB 0.5-6 (2012-04-16)<small> Unreleased </small>
+    <div id="soildb-05-6-2012-04-16" class="section level1">
+<h1 class="page-header" data-toc-text="0.5-6">
+<a href="#soildb-05-6-2012-04-16" class="anchor"></a>soilDB 0.5-6 (2012-04-16)<small> Unreleased </small>
 </h1>
 <ul>
 <li>adding preimlinary functions for querying component data from local NASIS</li>
 <li>fixed minor bug in SDA_query() and added some links to related documentation</li>
 </ul>
 </div>
-    <div id="soildb-0-5-1-2012-02-22" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-5-1-2012-02-22" class="anchor"></a>soilDB 0.5-1 (2012-02-22)<small> Unreleased </small>
+    <div id="soildb-05-1-2012-02-22" class="section level1">
+<h1 class="page-header" data-toc-text="0.5-1">
+<a href="#soildb-05-1-2012-02-22" class="anchor"></a>soilDB 0.5-1 (2012-02-22)<small> Unreleased </small>
 </h1>
 <ul>
 <li>fetchNASIS() and fetchPedonPC() now integrate `extended’ data</li>
@@ -860,9 +923,9 @@
 <li>basic vignette added, switching to knitr-style vignettes</li>
 </ul>
 </div>
-    <div id="soildb-0-3-3-2012-01-10" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-3-3-2012-01-10" class="anchor"></a>soilDB 0.3-3 (2012-01-10)<small> 2012-01-16 </small>
+    <div id="soildb-03-3-2012-01-10" class="section level1">
+<h1 class="page-header" data-toc-text="0.3-3">
+<a href="#soildb-03-3-2012-01-10" class="anchor"></a>soilDB 0.3-3 (2012-01-10)<small> 2012-01-16 </small>
 </h1>
 <ul>
 <li>SDA_query() now functional on MacOS/UNIX-like OSes with (SSOAP 0.8-1, XMLSchema 0.6-0, and XML 3.7-1), thanks to D.T. Lang for the updates!</li>
@@ -872,9 +935,9 @@
 <li>NOTE: hz data queries will return 2 rows/hz (error) when multiple texture classes are assigned to a single horizon- this is a bug, not a feature!</li>
 </ul>
 </div>
-    <div id="soildb-0-3-2-2011-12-30" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-3-2-2011-12-30" class="anchor"></a>soilDB 0.3-2 (2011-12-30)<small> 2012-01-03 </small>
+    <div id="soildb-03-2-2011-12-30" class="section level1">
+<h1 class="page-header" data-toc-text="0.3-2">
+<a href="#soildb-03-2-2011-12-30" class="anchor"></a>soilDB 0.3-2 (2011-12-30)<small> 2012-01-03 </small>
 </h1>
 <ul>
 <li>NASIS/pedonPC queries synced</li>
@@ -883,18 +946,18 @@
 <li>extended summaries added: NASIS only</li>
 </ul>
 </div>
-    <div id="soildb-0-2-2011-12-27" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-2-2011-12-27" class="anchor"></a>soilDB 0.2 (2011-12-27)<small> Unreleased </small>
+    <div id="soildb-02-2011-12-27" class="section level1">
+<h1 class="page-header" data-toc-text="0.2">
+<a href="#soildb-02-2011-12-27" class="anchor"></a>soilDB 0.2 (2011-12-27)<small> Unreleased </small>
 </h1>
 <ul>
 <li>moved functions out of aqp package</li>
 <li>basic query functionality from local NASIS DB (Jay)</li>
 </ul>
 </div>
-    <div id="soildb-0-1-2011-12-23" class="section level1">
-<h1 class="page-header">
-<a href="#soildb-0-1-2011-12-23" class="anchor"></a>soilDB 0.1 (2011-12-23)<small> Unreleased </small>
+    <div id="soildb-01-2011-12-23" class="section level1">
+<h1 class="page-header" data-toc-text="0.1">
+<a href="#soildb-01-2011-12-23" class="anchor"></a>soilDB 0.1 (2011-12-23)<small> Unreleased </small>
 </h1>
 <ul>
 <li>initial version on r-forge</li>
@@ -903,91 +966,10 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#soildb-2-5-2020-01-23">2.5</a></li>
-        <li><a href="#soildb-2-4-3-2020-01-07">2.4.3</a></li>
-        <li><a href="#soildb-2-4-2019-11-05">2.4</a></li>
-        <li><a href="#soildb-2-3-9-2019-07-25">2.3.9</a></li>
-        <li><a href="#soildb-2-3-8-2019-03-22">2.3.8</a></li>
-        <li><a href="#soildb-2-3-7-2019-03-12">2.3.7</a></li>
-        <li><a href="#soildb-2-3-6-2019-02-12">2.3.6</a></li>
-        <li><a href="#soildb-2-3-5-2019-01-14">2.3.5</a></li>
-        <li><a href="#soildb-2-3-3-2018-12-18">2.3.3</a></li>
-        <li><a href="#soildb-2-3-2018-11-17">2.3</a></li>
-        <li><a href="#soildb-2-2-6-2018-10-11">2.2-6</a></li>
-        <li><a href="#soildb-2-2-6-2018-10-11-1">2.2-6</a></li>
-        <li><a href="#soildb-2-2-5-2018-10-05">2.2-5</a></li>
-        <li><a href="#soildb-2-2-4-2018-09-04">2.2-4</a></li>
-        <li><a href="#soildb-2-2-1-2018-05-21">2.2-1</a></li>
-        <li><a href="#soildb-2-2-2018-05-08">2.2</a></li>
-        <li><a href="#soildb-2-1-1-2018-03-29">2.1-1</a></li>
-        <li><a href="#soildb-2-1-2018-03-12">2.1</a></li>
-        <li><a href="#soildb-2-0-4-2018-03-06">2.0-4</a></li>
-        <li><a href="#soildb-2-0-3-2018-02-13">2.0-3</a></li>
-        <li><a href="#soildb-2-0-2-2018-01-29">2.0-2</a></li>
-        <li><a href="#soildb-2-0-1-2018-01-23">2.0-1</a></li>
-        <li><a href="#soildb-2-0-2017-12-23">2.0</a></li>
-        <li><a href="#soildb-1-8-12-2017-09-19">1.8.12</a></li>
-        <li><a href="#soildb-1-8-11-2017-08-17">1.8.11</a></li>
-        <li><a href="#soildb-1-8-10-2017-08-10">1.8.10</a></li>
-        <li><a href="#soildb-1-8-5-2017-05-24">1.8.5</a></li>
-        <li><a href="#soildb-1-8-2-2017-03-24">1.8.2</a></li>
-        <li><a href="#soildb-1-8-1-2017-01-23">1.8.1</a></li>
-        <li><a href="#soildb-1-8-10-2016-12-27">1.8-10</a></li>
-        <li><a href="#soildb-1-8-7-2016-11-16">1.8-7</a></li>
-        <li><a href="#soildb-1-8-6-2016-11-04">1.8-6</a></li>
-        <li><a href="#soildb-1-8-4-2016-10-07">1.8-4</a></li>
-        <li><a href="#soildb-1-8-2016-04-29">1.8</a></li>
-        <li><a href="#soildb-1-7-2016-04-18">1.7</a></li>
-        <li><a href="#soildb-1-6-9-2015-12-28">1.6.9</a></li>
-        <li><a href="#soildb-1-6-8-2015-12-22">1.6.8</a></li>
-        <li><a href="#soildb-1-6-7-2015-12-16">1.6.7</a></li>
-        <li><a href="#soildb-1-6-5-2015-12-03">1.6.5</a></li>
-        <li><a href="#soildb-1-6-4-2015-11-27">1.6.4</a></li>
-        <li><a href="#soildb-1-6-3-2015-11-20">1.6.3</a></li>
-        <li><a href="#soildb-1-6-2015-08-19">1.6</a></li>
-        <li><a href="#soildb-1-5-8-2015-08-13">1.5-8</a></li>
-        <li><a href="#soildb-1-5-7-2015-03-10">1.5-7</a></li>
-        <li><a href="#soildb-1-5-3-2015-03-10">1.5-3</a></li>
-        <li><a href="#soildb-1-5-2-2015-02-24">1.5-2</a></li>
-        <li><a href="#soildb-1-4-5-2015-01-20">1.4-5</a></li>
-        <li><a href="#soildb-1-4-3-2015-01-12">1.4-3</a></li>
-        <li><a href="#soildb-1-4-2-2014-12-23">1.4-2</a></li>
-        <li><a href="#soildb-1-4-2014-11-13">1.4</a></li>
-        <li><a href="#soildb-1-3-6-2014-10-27">1.3-6</a></li>
-        <li><a href="#soildb-1-3-5-2014-09-25">1.3-5</a></li>
-        <li><a href="#soildb-1-3-2014-02-26">1.3</a></li>
-        <li><a href="#soildb-1-2-9-2014-01-06">1.2-9</a></li>
-        <li><a href="#soildb-1-2-6-2013-12-05">1.2-6</a></li>
-        <li><a href="#soildb-1-2-3-2013-10-25">1.2-3</a></li>
-        <li><a href="#soildb-1-2-1-2013-09-12">1.2-1</a></li>
-        <li><a href="#soildb-1-2-2013-08-13">1.2</a></li>
-        <li><a href="#soildb-1-1-3-2013-07-30">1.1-3</a></li>
-        <li><a href="#soildb-1-1-2013-06-27">1.1</a></li>
-        <li><a href="#soildb-1-0-2013-04-04">1.0</a></li>
-        <li><a href="#soildb-0-9-8-2013-04-03">0.9-8</a></li>
-        <li><a href="#soildb-0-9-7-2013-03-01">0.9-7</a></li>
-        <li><a href="#soildb-0-9-6-2013-02-26">0.9-6</a></li>
-        <li><a href="#soildb-0-9-4-2013-01-31">0.9-4</a></li>
-        <li><a href="#soildb-0-9-3-2013-01-08">0.9-3</a></li>
-        <li><a href="#soildb-0-9-2-2012-12-18">0.9-2</a></li>
-        <li><a href="#soildb-0-9-1-2012-11-27">0.9-1</a></li>
-        <li><a href="#soildb-0-9-2012-10-24">0.9</a></li>
-        <li><a href="#soildb-0-8-3-2012-09-28">0.8-3</a></li>
-        <li><a href="#soildb-0-8-2-2012-08-23">0.8-2</a></li>
-        <li><a href="#soildb-0-8-2012-08-20">0.8</a></li>
-        <li><a href="#soildb-0-6-2012-06-19">0.6</a></li>
-        <li><a href="#soildb-0-5-6-2012-04-16">0.5-6</a></li>
-        <li><a href="#soildb-0-5-1-2012-02-22">0.5-1</a></li>
-        <li><a href="#soildb-0-3-3-2012-01-10">0.3-3</a></li>
-        <li><a href="#soildb-0-3-2-2011-12-30">0.3-2</a></li>
-        <li><a href="#soildb-0-2-2011-12-27">0.2</a></li>
-        <li><a href="#soildb-0-1-2011-12-23">0.1</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
@@ -995,11 +977,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker.</p>
+  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

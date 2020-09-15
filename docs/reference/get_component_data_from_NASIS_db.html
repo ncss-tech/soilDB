@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Extract component data from a local NASIS Database — get_component_data_from_NASIS_db" />
 <meta property="og:description" content="Extract component data from a local NASIS Database." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
       </span>
     </div>
 
@@ -89,7 +92,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/ncss-tech/soilDB/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -112,8 +120,8 @@
     <p>Extract component data from a local NASIS Database.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_component_data_from_NASIS_db</span>(<span class='kw'>SS</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>())
-<span class='fu'>get_component_restrictions_from_NASIS_db</span>(<span class='kw'>SS</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_component_data_from_NASIS_db</span>(SS = <span class='fl'>TRUE</span>, stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>())
+<span class='fu'>get_component_restrictions_from_NASIS_db</span>(SS = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,99 +142,97 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list with the results.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Dylan E. Beaudette, Stephen Roecker, and Jay M. Skovlin</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='fetchNASIS.html'>fetchNASIS</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'># query text note data</span>
-<span class='no'>fc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>get_component_data_from_NASIS_db</span>())
+<span class='co'>if</span>(<span class='fu'><a href='local_NASIS_defined.html'>local_NASIS_defined</a></span>()) {
+ <span class='co'># query text note data</span>
+ <span class='kw'>fc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>get_component_data_from_NASIS_db</span>())
 
-<span class='co'># show structure of component data returned</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>fc</span>)</div><div class='output co'>#&gt; 'data.frame':	0 obs. of  57 variables:
-#&gt;  $ dmudesc         : chr 
-#&gt;  $ compname        : chr 
-#&gt;  $ comppct_r       : int 
-#&gt;  $ compkind        : int 
-#&gt;  $ majcompflag     : chr 
-#&gt;  $ localphase      : chr 
-#&gt;  $ drainagecl      : int 
-#&gt;  $ hydricrating    : int 
-#&gt;  $ elev_l          : num 
-#&gt;  $ elev_r          : num 
-#&gt;  $ elev_h          : num 
-#&gt;  $ slope_l         : num 
-#&gt;  $ slope_r         : num 
-#&gt;  $ slope_h         : num 
-#&gt;  $ aspectccwise    : int 
-#&gt;  $ aspectrep       : int 
-#&gt;  $ aspectcwise     : int 
-#&gt;  $ map_l           : int 
-#&gt;  $ map_r           : int 
-#&gt;  $ map_h           : int 
-#&gt;  $ maat_l          : num 
-#&gt;  $ maat_r          : num 
-#&gt;  $ maat_h          : num 
-#&gt;  $ mast_r          : num 
-#&gt;  $ reannualprecip_r: int 
-#&gt;  $ ffd_l           : int 
-#&gt;  $ ffd_r           : int 
-#&gt;  $ ffd_h           : int 
-#&gt;  $ tfact           : int 
-#&gt;  $ wei             : int 
-#&gt;  $ weg             : int 
-#&gt;  $ nirrcapcl       : int 
-#&gt;  $ nirrcapscl      : int 
-#&gt;  $ nirrcapunit     : int 
-#&gt;  $ irrcapcl        : int 
-#&gt;  $ irrcapscl       : int 
-#&gt;  $ irrcapunit      : int 
-#&gt;  $ frostact        : int 
-#&gt;  $ hydricrating.1  : int 
-#&gt;  $ hydgrp          : int 
-#&gt;  $ corcon          : int 
-#&gt;  $ corsteel        : int 
-#&gt;  $ taxclname       : chr 
-#&gt;  $ taxorder        : int 
-#&gt;  $ taxsuborder     : int 
-#&gt;  $ taxgrtgroup     : int 
-#&gt;  $ taxsubgrp       : int 
-#&gt;  $ taxpartsize     : int 
-#&gt;  $ taxpartsizemod  : int 
-#&gt;  $ taxceactcl      : int 
-#&gt;  $ taxreaction     : int 
-#&gt;  $ taxtempcl       : int 
-#&gt;  $ taxmoistscl     : int 
-#&gt;  $ taxtempregime   : int 
-#&gt;  $ soiltaxedition  : int 
-#&gt;  $ coiid           : int 
-#&gt;  $ dmuiid          : int </div><div class='input'># }
+ <span class='co'># show structure of component data returned</span>
+ <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>fc</span>)
+}
+</div><div class='output co'>#&gt; 'data.frame':	1226 obs. of  57 variables:
+#&gt;  $ dmudesc         : chr  "604101" "604101" "604101" "604101" ...
+#&gt;  $ compname        : chr  "Adinot" "Bieber" "Daphnedale" "Deven" ...
+#&gt;  $ comppct_r       : int  80 5 5 5 3 2 80 5 5 5 ...
+#&gt;  $ compkind        : chr  "series" NA NA NA ...
+#&gt;  $ majcompflag     : int  1 0 0 0 0 0 1 0 0 0 ...
+#&gt;  $ localphase      : chr  NA NA NA NA ...
+#&gt;  $ drainagecl      : chr  "moderately well" NA NA NA ...
+#&gt;  $ hydricrating    : chr  "no" "no" "no" "no" ...
+#&gt;  $ elev_l          : num  1219 NA NA NA NA ...
+#&gt;  $ elev_r          : num  1372 NA NA NA NA ...
+#&gt;  $ elev_h          : num  1524 NA NA NA NA ...
+#&gt;  $ slope_l         : num  2 NA NA NA NA NA 2 NA NA NA ...
+#&gt;  $ slope_r         : num  9 NA NA NA NA NA 9 NA NA NA ...
+#&gt;  $ slope_h         : num  15 NA NA NA NA NA 15 NA NA NA ...
+#&gt;  $ aspectccwise    : int  203 NA NA NA NA NA 158 NA NA NA ...
+#&gt;  $ aspectrep       : int  293 NA NA NA NA NA 225 NA NA NA ...
+#&gt;  $ aspectcwise     : int  23 NA NA NA NA NA 293 NA NA NA ...
+#&gt;  $ map_l           : int  305 NA NA NA NA NA 305 NA NA NA ...
+#&gt;  $ map_r           : int  356 NA NA NA NA NA 356 NA NA NA ...
+#&gt;  $ map_h           : int  406 NA NA NA NA NA 406 NA NA NA ...
+#&gt;  $ maat_l          : num  9 NA NA NA NA NA 9 NA NA NA ...
+#&gt;  $ maat_r          : num  10 NA NA NA NA NA 10 NA NA NA ...
+#&gt;  $ maat_h          : num  10 NA NA NA NA NA 10 NA NA NA ...
+#&gt;  $ mast_r          : num  NA NA NA NA NA NA NA NA NA NA ...
+#&gt;  $ reannualprecip_r: int  NA NA NA NA NA NA NA NA NA NA ...
+#&gt;  $ ffd_l           : int  100 NA NA NA NA NA 100 NA NA NA ...
+#&gt;  $ ffd_r           : int  110 NA NA NA NA NA 110 NA NA NA ...
+#&gt;  $ ffd_h           : int  120 NA NA NA NA NA 120 NA NA NA ...
+#&gt;  $ tfact           : int  1 NA NA NA NA NA 1 NA NA NA ...
+#&gt;  $ wei             : chr  "48" NA NA NA ...
+#&gt;  $ weg             : chr  "6" NA NA NA ...
+#&gt;  $ nirrcapcl       : chr  "7" NA NA NA ...
+#&gt;  $ nirrcapscl      : chr  "s" NA NA NA ...
+#&gt;  $ nirrcapunit     : int  NA NA NA NA NA NA NA NA NA NA ...
+#&gt;  $ irrcapcl        : chr  NA NA NA NA ...
+#&gt;  $ irrcapscl       : chr  NA NA NA NA ...
+#&gt;  $ irrcapunit      : int  NA NA NA NA NA NA NA NA NA NA ...
+#&gt;  $ frostact        : chr  "moderate" NA NA NA ...
+#&gt;  $ hydricrating.1  : int  2 2 2 2 2 2 2 2 2 2 ...
+#&gt;  $ hydgrp          : chr  "d" NA NA NA ...
+#&gt;  $ corcon          : chr  "low" NA NA NA ...
+#&gt;  $ corsteel        : chr  "high" NA NA NA ...
+#&gt;  $ taxclname       : chr  "Loamy, mixed, superactive, mesic Lithic Argixerolls" NA NA NA ...
+#&gt;  $ taxorder        : chr  "mollisols" NA NA NA ...
+#&gt;  $ taxsuborder     : chr  "xerolls" NA NA NA ...
+#&gt;  $ taxgrtgroup     : chr  "argixerolls" NA NA NA ...
+#&gt;  $ taxsubgrp       : chr  "lithic argixerolls" NA NA NA ...
+#&gt;  $ taxpartsize     : chr  "loamy" NA NA NA ...
+#&gt;  $ taxpartsizemod  : chr  NA NA NA NA ...
+#&gt;  $ taxceactcl      : chr  "superactive" NA NA NA ...
+#&gt;  $ taxreaction     : chr  "not used" NA NA NA ...
+#&gt;  $ taxtempcl       : chr  "mesic" NA NA NA ...
+#&gt;  $ taxmoistscl     : chr  NA NA NA NA ...
+#&gt;  $ taxtempregime   : chr  "mesic" NA NA NA ...
+#&gt;  $ soiltaxedition  : chr  NA NA NA NA ...
+#&gt;  $ coiid           : int  694666 1687856 1687855 1687854 1687853 1687852 694667 1687887 1687888 1687889 ...
+#&gt;  $ dmuiid          : int  316001 316001 316001 316001 316001 316001 316002 316002 316002 316002 ...</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Dylan E. Beaudette, Stephen Roecker, and Jay M. Skovlin</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker.</p>
+  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -36,8 +40,7 @@
 
 
 <meta property="og:title" content="Fetch Map Unit Geometry from SDA — mapunit_geom_by_ll_bbox" />
-<meta property="og:description" content="Fetch map unit geometry from the SDA website by WGS84 bounding box." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:description" content="Fetch map unit geometry from the SDA website by WGS84 bounding box. There is a limit on the amount of data returned as serialized JSON (~32Mb) and a total record limit of 100,000." />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
       </span>
     </div>
 
@@ -89,7 +92,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/ncss-tech/soilDB/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -104,15 +112,15 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Fetch Map Unit Geometry from SDA</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/mapunit_geom_by_ll_bbox.R'><code>R/mapunit_geom_by_ll_bbox.R</code></a></small>
     <div class="hidden name"><code>mapunit_geom_by_ll_bbox.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Fetch map unit geometry from the SDA website by WGS84 bounding box.</p>
+    <p>Fetch map unit geometry from the SDA website by WGS84 bounding box. There is a limit on the amount of data returned as serialized JSON (~32Mb) and a total record limit of 100,000.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mapunit_geom_by_ll_bbox</span>(<span class='no'>bbox</span>, <span class='kw'>source</span> <span class='kw'>=</span> <span class='st'>'sda'</span>)</pre>
+    <pre class="usage"><span class='fu'>mapunit_geom_by_ll_bbox</span>(<span class='kw'>bbox</span>, source = <span class='st'>"sda"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -127,75 +135,84 @@
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The SDA website can be found at <a href='http://sdmdataaccess.nrcs.usda.gov'>http://sdmdataaccess.nrcs.usda.gov</a>. See examples for bounding box formatting.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A SpatialPolygonsDataFrame of map unit polygons, in WGS84 (long,lat) coordinates.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>http://casoilresource.lawr.ucdavis.edu/</p>
+    <p>The SDA website can be found at http://sdmdataaccess.nrcs.usda.gov. See examples for bounding box formatting.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that are completely within the bounding box / overlap with the bbox. This function requires the `rgdal` package.</p>
+    <p>It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that are completely within the bounding box / overlap with the bbox. This function requires the 'rgdal' package.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Dylan E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># fetch map unit geometry from a bounding-box:</span>
+    <pre class="examples"><div class='input'><span class='co'>## fetch map unit geometry from a bounding-box:</span>
 <span class='co'># </span>
 <span class='co'>#         +------------- (-120.41, 38.70)</span>
 <span class='co'>#         |                     |</span>
 <span class='co'>#         |                     |</span>
 <span class='co'># (-120.54, 38.61) --------------+</span>
-
+<span class='co'># </span>
 <span class='co'># \donttest{</span>
-<span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>sp</span>) <span class='kw'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>rgdal</span>)) {
-
-  <span class='co'># basic usage</span>
-  <span class='no'>b</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>120.54</span>,<span class='fl'>38.61</span>,-<span class='fl'>120.41</span>,<span class='fl'>38.70</span>)
-  <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>mapunit_geom_by_ll_bbox</span>(<span class='no'>b</span>)) <span class='co'># about 20 seconds</span>
-
-  <span class='kw'>if</span>(!<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>x</span>,<span class='st'>'try-error'</span>))
-    <span class='co'># note that the returned geometry is everything overlapping the bbox</span>
-    <span class='co'># and not an intersection... why?</span>
-    <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>)
-    <span class='fu'><a href='https://rdrr.io/r/graphics/rect.html'>rect</a></span>(<span class='no'>b</span>[<span class='fl'>1</span>], <span class='no'>b</span>[<span class='fl'>2</span>], <span class='no'>b</span>[<span class='fl'>3</span>], <span class='no'>b</span>[<span class='fl'>4</span>], <span class='kw'>border</span><span class='kw'>=</span><span class='st'>'red'</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>2</span>)
-
-
+<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
+<span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>() <span class='op'>&amp;</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://github.com/edzer/sp'>sp</a></span>) <span class='op'>&amp;</span> 
+  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='http://rgdal.r-forge.r-project.org'>rgdal</a></span>)) {
+    
+    <span class='co'># basic usage</span>
+    <span class='kw'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>120.54</span>,<span class='fl'>38.61</span>,<span class='op'>-</span><span class='fl'>120.41</span>,<span class='fl'>38.70</span>)
+    <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>mapunit_geom_by_ll_bbox</span>(<span class='kw'>b</span>)) <span class='co'># about 20 seconds</span>
+    
+    <span class='co'>if</span>(<span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='kw'>x</span>,<span class='st'>'try-error'</span>)) {
+      <span class='co'># note that the returned geometry is everything overlapping the bbox</span>
+      <span class='co'># and not an intersection... why?</span>
+      <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>x</span>)
+    <span class='fu'><a href='https://rdrr.io/r/graphics/rect.html'>rect</a></span>(<span class='kw'>b</span>[<span class='fl'>1</span>], <span class='kw'>b</span>[<span class='fl'>2</span>], <span class='kw'>b</span>[<span class='fl'>3</span>], <span class='kw'>b</span>[<span class='fl'>4</span>], border=<span class='st'>'red'</span>, lwd=<span class='fl'>2</span>)
+    
+    
     <span class='co'># get map unit data for matching map unit keys</span>
-    <span class='no'>in.statement</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SDA_query.html'>format_SQL_in_statement</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>x</span>$<span class='no'>MUKEY</span>))
-    <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"SELECT mukey, muname FROM mapunit WHERE mukey IN "</span>, <span class='no'>in.statement</span>, <span class='kw'>sep</span><span class='kw'>=</span><span class='st'>""</span>)
-    <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SDA_query.html'>SDA_query</a></span>(<span class='no'>q</span>)
-  } <span class='kw'>else</span> {
+    <span class='kw'>in.statement</span> <span class='op'>&lt;-</span> <span class='fu'><a href='format_SQL_in_statement.html'>format_SQL_in_statement</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/unique.html'>unique</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>mukey</span>))
+    
+    <span class='kw'>q</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"SELECT mukey, muname FROM mapunit WHERE mukey IN "</span>, <span class='kw'>in.statement</span>, sep=<span class='st'>""</span>)
+    <span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='SDA_query.html'>SDA_query</a></span>(<span class='kw'>q</span>)
+    
+    <span class='co'>#inspect</span>
+    <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>res</span>)
+  } <span class='co'>else</span> {
     <span class='fu'><a href='https://rdrr.io/r/base/message.html'>message</a></span>(<span class='st'>'could not download XML result from SDA'</span>)
-  }</div><div class='output co'>#&gt; <span class='warning'>Warning: InternetOpenUrl failed: 'The server returned an invalid or unrecognized response'</span></div><div class='output co'>#&gt; Error in download.file(url = u, destfile = tf.full, quiet = FALSE) : 
-#&gt;   cannot open URL 'https://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&amp;Version=1.0.0&amp;Request=GetFeature&amp;Typename=MapunitPoly&amp;BBOX=-120.54,38.61,-120.41,38.7'</div><div class='output co'>#&gt; <span class='error'>Error in rect(b[1], b[2], b[3], b[4], border = "red", lwd = 2): plot.new has not been called yet</span></div><div class='input'># }
+  }
+ }
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: rgdal</span></div><div class='output co'>#&gt; <span class='message'>rgdal: version: 1.5-16, (SVN revision 1050)</span>
+#&gt; <span class='message'>Geospatial Data Abstraction Library extensions to R successfully loaded</span>
+#&gt; <span class='message'>Loaded GDAL runtime: GDAL 3.0.4, released 2020/01/28</span>
+#&gt; <span class='message'>Path to GDAL shared files: C:/Users/Dylan.Beaudette/Documents/R/win-library/3.6/rgdal/gdal</span>
+#&gt; <span class='message'>GDAL binary built with GEOS: TRUE </span>
+#&gt; <span class='message'>Loaded PROJ runtime: Rel. 6.3.1, February 10th, 2020, [PJ_VERSION: 631]</span>
+#&gt; <span class='message'>Path to PROJ shared files: C:/Users/Dylan.Beaudette/Documents/R/win-library/3.6/rgdal/proj</span>
+#&gt; <span class='message'>Linking to sp version:1.4-2</span>
+#&gt; <span class='message'>To mute warnings of possible GDAL/OSR exportToProj4() degradation,</span>
+#&gt; <span class='message'>use options("rgdal_show_exportToProj4_warnings"="none") before loading rgdal.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot open URL 'https://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&amp;Version=1.0.0&amp;Request=GetFeature&amp;Typename=MapunitPoly&amp;BBOX=-120.54,38.61,-120.41,38.7': HTTP status was '500 Internal Server Error'</span></div><div class='output co'>#&gt; Error in download.file(url = u, destfile = tf.full, quiet = FALSE) : 
+#&gt;   cannot open URL 'https://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&amp;Version=1.0.0&amp;Request=GetFeature&amp;Typename=MapunitPoly&amp;BBOX=-120.54,38.61,-120.41,38.7'</div><div class='output co'>#&gt; <span class='message'>could not download XML result from SDA</span></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Dylan E Beaudette</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
 
       <footer>
       <div class="copyright">
-  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker.</p>
+  <p>Developed by Dylan Beaudette, Jay Skovlin, Stephen Roecker, Andrew Brown.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
