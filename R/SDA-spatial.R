@@ -287,6 +287,9 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE,
   # use a geometry collection
   wkt <- rgeos::writeWKT(geom, byid = FALSE)
   
+  ## dang it! STATSGO geometry is duplicated, why?
+  # https://github.com/ncss-tech/soilDB/issues/143
+  
   # slower query, returning geom + mukey
   # replacement for depreciated SDA_query_features()
   # 10-30x faster than spatial-returning query by input feature
