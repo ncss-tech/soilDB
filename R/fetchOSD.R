@@ -1,4 +1,45 @@
 
+## tabulte the number of records within each geomorphic table
+## there could be some cases where there are no records, resulting in FALSE
+# x: object returned by fetchOSD
+.tabulateGeomorphRecords <- function(x) {
+  
+  vars <- c('series', 'n')
+  
+  ## TODO: [] style indexing will break when a table is empty (FALSE)
+  ## temporary short-circuit
+  ## consider returning empty tables in fetchOSD()
+  if(
+    any(
+      isFALSE(x$hillpos) | 
+      isFALSE(x$geomcomp) | 
+      isFALSE(x$terrace) |
+      isFALSE(x$flats)
+      )
+  ) {
+    return(NULL)
+  }
+  
+  m1 <- merge(x$hillpos[, vars], x$geomcomp[, vars], by = 'series', all.x = TRUE, all.y = TRUE, sort = FALSE)
+  names(m1)[2:3] <- c('hillpos.records', 'geomcomp.records')
+  
+  m2 <- merge(m1, x$terrace[, vars], by = 'series', all.x = TRUE, all.y = TRUE, sort = FALSE)
+  names(m2)[4] <- 'terrace.records'
+  
+  m3 <- merge(m2, x$flats[, vars], by = 'series', all.x = TRUE, all.y = TRUE, sort = FALSE)
+  names(m3)[5] <- 'flats.records'
+  
+  m4 <- lapply(m3, function(i) {
+    ifelse(is.na(i), 0, i)
+  })
+  
+  m5 <- as.data.frame(m4, stringsAsFactors = FALSE)
+  
+  return(m5)
+}
+
+
+
 # 2018-10-11: updated to new API, URL subject to change
 # fetch basic OSD, SC, and SoilWeb summaries from new API
 fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
