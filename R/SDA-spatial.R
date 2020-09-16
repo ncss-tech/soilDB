@@ -84,16 +84,16 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 
 #' @title SDA Spatial Query
 #' 
-#' @description Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersectionion of `geom` + SSURGO / STATSGO polygons can be returned. See details.
+#' @description Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersectionion of \code{geom} + SSURGO / STATSGO polygons can be returned. See details.
 #' 
 #' @param geom a Spatial* object, with valid CRS. May contain multiple features.
-#' @param what a character vector specifting what to return. `mukey`: `data.frame` with intersecting map unit keys and names, `geom` overlapping or intersecting map unit polygons
-#' @param geomIntersection logical; FALSE: overlapping map unit polygons returned, TRUE: intersection of `geom` + map unit polygons is returned.
+#' @param what a character vector specifting what to return. 'mukey': \code{data.frame} with intersecting map unit keys and names, \code{geom} overlapping or intersecting map unit polygons
+#' @param geomIntersection logical; \code{FALSE}: overlapping map unit polygons returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is returned.
 #' @param db a character vector identifying the Soil Geographic Databases
-#'   (`SSURGO` or `STATSGO`) to query. Option \var{STATSGO} currently works
+#'   ('SSURGO' or 'STATSGO') to query. Option \var{STATSGO} currently works
 #'   only in combination with \code{what = "geom"}.
 #'
-#' @return A `data.frame` if `what` is 'mukey', otherwise `SpatialPolygonsDataFrame` object.
+#' @return A \code{data.frame} if \code{what = 'mukey'}, otherwise \code{SpatialPolygonsDataFrame} object.
 #' 
 #' @author D.E. Beaudette, A.G. Brown, D.R. Schlaepfer
 #' @seealso \code{\link{SDA_query}}
@@ -101,9 +101,10 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 #' 
 #' @aliases SDA_make_spatial_query,SDA_query_features
 #' 
-#' @note Row-order is not preserved across features in `geom` and returned object. Use `sp::over()` or similar functionality to extract from results.
+#' @note Row-order is not preserved across features in \code{geom} and returned object. Use \code{sp::over()} or similar functionality to extract from results. Polygon area in acres is computed server-side when \code{what = 'geom'} and \code{geomIntersection = TRUE}.
 #' 
-#' @details Queries for map unit keys are always more efficient vs. queries for overlapping or intersecting (i.e. least efficient) features. `geom` is converted to GCS / WGS84 as needed. Map unit keys are always returned when using \code{what = "geom"}.
+#' 
+#' @details Queries for map unit keys are always more efficient vs. queries for overlapping or intersecting (i.e. least efficient) features. \code{geom} is converted to GCS / WGS84 as needed. Map unit keys are always returned when using \code{what = "geom"}.
 #' 
 #' There is a 100,000 record limit and 32Mb JSON serializer limit, per query.
 #' 
@@ -295,13 +296,21 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE,
 
     db_table <- switch(db, SSURGO = "mupolygon", STATSGO = "gsmmupolygon")
 
-    # return intersection
+    # return intersection + area
     if(geomIntersection) {
       q <- sprintf("
-               SELECT 
-                 mupolygongeo.STIntersection( geometry::STGeomFromText('%s', 4326) ).STAsText() AS geom, P.mukey
-                 FROM %s AS P
-                 WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;",
+WITH geom_data (geom, mukey) AS (
+  SELECT 
+  mupolygongeo.STIntersection( geometry::STGeomFromText('%s', 4326) ) AS geom, P.mukey
+  FROM %s AS P
+  WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1
+)
+SELECT 
+geom.STAsText() AS geom, mukey,
+GEOGRAPHY::STGeomFromWKB(
+    geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).STArea() * 0.000247105 AS area_ac
+FROM geom_data;
+      ",
         wkt, db_table, wkt
       )
     } else {
