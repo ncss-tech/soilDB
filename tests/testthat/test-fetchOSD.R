@@ -2,7 +2,7 @@ context("fetchOSD() -- requires internet connection")
 
 ## these are the elements of the list returned when extended=TRUE
 ## update here as-needed
-extended.table.names <<- c("SPC", "competing", "geomcomp", "hillpos", "mtnpos", "pmkind", "pmorigin", "mlra", "climate.annual", "climate.monthly", "soilweb.metadata")
+extended.table.names <<- c("SPC", "competing", "geomcomp", "hillpos", "mtnpos", "terrace", "flats", "pmkind", "pmorigin", "mlra", "climate.annual", "climate.monthly", "soilweb.metadata")
 
 test_that("fetchOSD() works", {
   

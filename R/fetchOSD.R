@@ -78,10 +78,9 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	# upgrade to SoilProfileCollection
 	depths(h) <- id ~ top + bottom
 	
-	## borrowed from OSD parsing code
-	## TODO: set levels with aqp::soilTextureLevels, in aqp 1.20
-	##
-	textures <- c('coarse sand', 'sand', 'fine sand', 'very fine sand', 'loamy coarse sand', 'loamy sand', 'loamy fine sandy', 'loamy very fine sand', 'coarse sandy loam', 'sandy loam', 'fine sandy loam', 'very fine sandy loam', 'loam', 'silt loam', 'silt', 'sandy clay loam', 'clay loam', 'silty clay loam', 'sandy clay', 'silty clay', 'clay')
+	# texture clases, in order
+	textures <- SoilTextureLevels(which = 'names')
+	
 	pH_classes <- c('ultra acid', 'extremely acid', 'very strongly acid', 'strongly acid', 'moderately acid', 'slightly acid', 'neutral', 'slightly alkaline', 'mildly alkaline', 'moderately alkaline', 'strongly alkaline', 'very strongly alkaline')
 	
 	# convert some columns into factors
@@ -173,6 +172,8 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	    geomcomp=res$geomcomp,
 	    hillpos=res$hillpos,
 	    mtnpos=res$mtnpos,
+	    terrace=res$terrace,
+	    flats=res$flats,
 	    pmkind=res$pmkind,
 	    pmorigin=res$pmorigin,
 	    mlra=res$mlra,
