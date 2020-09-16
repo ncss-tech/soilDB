@@ -69,7 +69,7 @@ importFrom(aqp,
   "diagnostic_hz<-",
   restrictions,
   "restrictions<-",
-  #test_hz_logic, #deprecated, use aqp::hzDepthTests internally
+  SoilTextureLevels,
   hzDepthTests, 
   munsell2rgb,
   rgb2munsell,
