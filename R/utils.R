@@ -302,6 +302,24 @@
 }
 
 
+## TODO add .formatcoLandscapeString
+# g <- split(geo, geo$coiid)
+# 
+# gg <- lapply(g, function(i) {
+#   
+#   idx <- which(i$geomftname == 'landscape')
+#   id <- i$coiid[1]
+#   
+#   res <- data.frame(
+#     coiid = id,
+#     geomfname = paste(i$geomfname[idx], collapse = '/'),
+#     stringsAsFactors = FALSE
+#   )
+#   
+#   return(res)
+# })
+
+
 ## https://github.com/ncss-tech/soilDB/issues/84
 # 2017-03-13: attempt to format COMPONENT "landform" records into a single string
 # note: there are several assumptions made about the data, 
@@ -314,9 +332,9 @@
   # get the current 
   u.coiid <- unique(i.gm$coiid)
   
-  # sanity check: this function can only be applied to data from a single pedon
+  # sanity check: this function can only be applied to data from a single component
   if(length(u.coiid) > 1)
-    stop('data are from multiple pedon records')
+    stop('data are from multiple component records')
   
   # subset geomorph data to landforms
   i.gm <- i.gm[which(i.gm$geomftname == 'landform'), ]
