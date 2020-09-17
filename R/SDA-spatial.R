@@ -287,7 +287,7 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE,
   # use a geometry collection
   wkt <- rgeos::writeWKT(geom, byid = FALSE)
   
-  ## dang it! STATSGO geometry is duplicated, why?
+  ## dang it! STATSGO geometry is duplicated: US and state versions stored together
   # https://github.com/ncss-tech/soilDB/issues/143
   
   # slower query, returning geom + mukey
@@ -334,6 +334,7 @@ FROM geom_data;
     res <- processSDA_WKT(res)
   }
   
+  # SSURGO only
   # faster query, returning mukey + muname
   # replacement for depreciated SDA_make_spatial_query()
   # ~ 3x faster than SDA_query_features()
