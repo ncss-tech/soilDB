@@ -48,7 +48,7 @@
 #' 
 #' @note This function requires the \code{rgdal} package. Warning messages about the proj4 CRS spefication may be printed dependinng on your version of \code{rgdal}. This should be resolved soon.
 #' 
-#'  @examples
+#' @examples
 #'   
 #' \donttest{
 #' if(requireNamespace("curl") &

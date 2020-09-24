@@ -18,8 +18,8 @@ This function downloads a generalized representations of a soil series extent fr
 }
 \note{
 This function requires the \code{rgdal} package. Warning messages about the proj4 CRS spefication may be printed dependinng on your version of \code{rgdal}. This should be resolved soon.
-
- @examples
+}
+\examples{
   
 \donttest{
 if(requireNamespace("curl") &
@@ -53,6 +53,7 @@ if(requireNamespace("curl") &
   
 }
 }
+
 }
 \references{
 \href{https://casoilresource.lawr.ucdavis.edu/see}{Soil Series Extent Explorer}
