@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="SDA Spatial Query — SDA_spatialQuery" />
-<meta property="og:description" content="Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersectionion of `geom` + SSURGO / STATSGO polygons can be returned. See details." />
+<meta property="og:description" content="Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersectionion of geom + SSURGO / STATSGO polygons can be returned. See details." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.8</span>
       </span>
     </div>
 
@@ -117,7 +117,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersectionion of `geom` + SSURGO / STATSGO polygons can be returned. See details.</p>
+    <p>Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersectionion of <code>geom</code> + SSURGO / STATSGO polygons can be returned. See details.</p>
     </div>
 
     <pre class="usage"><span class='fu'>SDA_spatialQuery</span>(
@@ -136,31 +136,31 @@
     </tr>
     <tr>
       <th>what</th>
-      <td><p>a character vector specifting what to return. `mukey`: `data.frame` with intersecting map unit keys and names, `geom` overlapping or intersecting map unit polygons</p></td>
+      <td><p>a character vector specifting what to return. 'mukey': <code>data.frame</code> with intersecting map unit keys and names, <code>geom</code> overlapping or intersecting map unit polygons</p></td>
     </tr>
     <tr>
       <th>geomIntersection</th>
-      <td><p>logical; FALSE: overlapping map unit polygons returned, TRUE: intersection of `geom` + map unit polygons is returned.</p></td>
+      <td><p>logical; <code>FALSE</code>: overlapping map unit polygons returned, <code>TRUE</code>: intersection of <code>geom</code> + map unit polygons is returned.</p></td>
     </tr>
     <tr>
       <th>db</th>
       <td><p>a character vector identifying the Soil Geographic Databases
-(`SSURGO` or `STATSGO`) to query. Option <var>STATSGO</var> currently works
+('SSURGO' or 'STATSGO') to query. Option <var>STATSGO</var> currently works
 only in combination with <code>what = "geom"</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A `data.frame` if `what` is 'mukey', otherwise `SpatialPolygonsDataFrame` object.</p>
+    <p>A <code>data.frame</code> if <code>what = 'mukey'</code>, otherwise <code>SpatialPolygonsDataFrame</code> object.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Queries for map unit keys are always more efficient vs. queries for overlapping or intersecting (i.e. least efficient) features. `geom` is converted to GCS / WGS84 as needed. Map unit keys are always returned when using <code>what = "geom"</code>.</p>
+    <p>Queries for map unit keys are always more efficient vs. queries for overlapping or intersecting (i.e. least efficient) features. <code>geom</code> is converted to GCS / WGS84 as needed. Map unit keys are always returned when using <code>what = "geom"</code>.</p>
 <p>There is a 100,000 record limit and 32Mb JSON serializer limit, per query.</p>
 <p>SSURGO (detailed soil survey, typicall 1:24,000 scale) and STATSGO (generalized soil survey, 1:250,000 scale) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the <a href='http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html'>SDA Tutorial</a> for details.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Row-order is not preserved across features in `geom` and returned object. Use `sp::over()` or similar functionality to extract from results.</p>
+    <p>Row-order is not preserved across features in <code>geom</code> and returned object. Use <code><a href='https://rdrr.io/pkg/sp/man/over.html'>sp::over()</a></code> or similar functionality to extract from results. Polygon area in acres is computed server-side when <code>what = 'geom'</code> and <code>geomIntersection = TRUE</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='SDA_query.html'>SDA_query</a></code></p></div>
@@ -251,8 +251,8 @@ only in combination with <code>what = "geom"</code>.</p></td>
 <span class='co'># inspect results</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>1</span>))
 <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>ssurgo.geom</span>, border = <span class='st'>'royalblue'</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='kw'>statsgo.geom</span>, lwd = <span class='fl'>2</span>, col = <span class='st'>'firebrick'</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='kw'>bbox.sp</span>, lwd = <span class='fl'>3</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>statsgo.geom</span>, lwd = <span class='fl'>2</span>, border = <span class='st'>'firebrick'</span>, add = <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>bbox.sp</span>, lwd = <span class='fl'>3</span>, add = <span class='fl'>TRUE</span>)
 <span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(
   x = <span class='st'>'top'</span>, 
   legend = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'BBOX'</span>, <span class='st'>'STATSGO'</span>, <span class='st'>'SSURGO'</span>), 

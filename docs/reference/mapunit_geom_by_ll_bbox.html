@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.8</span>
       </span>
     </div>
 
@@ -194,8 +194,16 @@
 #&gt; <span class='message'>Path to PROJ shared files: C:/Users/Dylan.Beaudette/Documents/R/win-library/3.6/rgdal/proj</span>
 #&gt; <span class='message'>Linking to sp version:1.4-2</span>
 #&gt; <span class='message'>To mute warnings of possible GDAL/OSR exportToProj4() degradation,</span>
-#&gt; <span class='message'>use options("rgdal_show_exportToProj4_warnings"="none") before loading rgdal.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot open URL 'https://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&amp;Version=1.0.0&amp;Request=GetFeature&amp;Typename=MapunitPoly&amp;BBOX=-120.54,38.61,-120.41,38.7': HTTP status was '500 Internal Server Error'</span></div><div class='output co'>#&gt; Error in download.file(url = u, destfile = tf.full, quiet = FALSE) : 
-#&gt;   cannot open URL 'https://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&amp;Version=1.0.0&amp;Request=GetFeature&amp;Typename=MapunitPoly&amp;BBOX=-120.54,38.61,-120.41,38.7'</div><div class='output co'>#&gt; <span class='message'>could not download XML result from SDA</span></div><div class='input'><span class='co'># }</span>
+#&gt; <span class='message'>use options("rgdal_show_exportToProj4_warnings"="none") before loading rgdal.</span></div><div class='output co'>#&gt; OGR data source with driver: GML 
+#&gt; Source: "C:\Users\Dylan.Beaudette\Documents\RtmpoFsVRc\file2f502f425127.gml", layer: "mapunitpoly"
+#&gt; with 197 features
+#&gt; It has 8 fields</div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='img'><img src='mapunit_geom_by_ll_bbox-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;    mukey                                                      muname
+#&gt; 1 462183          Aiken loam, 2 to 9 percent slopes, C Lower Montane
+#&gt; 2 462188                   Aiken cobbly loam, 3 to 30 percent slopes
+#&gt; 3 462193                               Argonaut loam, seeped variant
+#&gt; 4 462215 Chaix very rocky coarse sandy loam, 50 to 70 percent slopes
+#&gt; 5 462219         Cohasset loam, summits, 2 to 20 percent slopes, dry
+#&gt; 6 462220       Cohasset loam, shoulders, 3 to 20 percent slopes, dry</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
