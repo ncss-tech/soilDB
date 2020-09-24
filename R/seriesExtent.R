@@ -30,35 +30,62 @@
 
 
 
-# get pre-cached series extent GeoJSON from SoilWeb server
-seriesExtent <- function(s, timeout=60) {
-  if(!requireNamespace('rgdal', quietly=TRUE))
-    stop('please install the `rgdal` package', call.=FALSE)
+# get pre-cached series extent GeoJSON or GeoTiff from SoilWeb server
+seriesExtent <- function(s, type = c('vector', 'raster'), timeout=60) {
+  if(!requireNamespace('rgdal', quietly=TRUE) | !requireNamespace('raster', quietly=TRUE))
+    stop('please install the `rgdal` and `raster` packages', call.=FALSE)
+  
+  type <- match.arg(type)
   
   # encode series name
   s <- gsub(pattern=' ', replacement='_', x=tolower(s))
   
+  res <- switch(
+    type,
+    vector = {.vector_extent(s, timeout = timeout)},
+    raster = {.raster_extent(s, timeout = timeout)}
+  )
+  
+  return(res)
+}
+
+.vector_extent <- function(s, timeout) {
   # base URL to cached data
   u <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/series-extent-cache/json/', s, '.json'))
   
-  # init temp files / dirs
-  td <- tempdir()
-  tf.json <- tempfile(fileext='.json')
+  # init temp files
+  tf <- tempfile(fileext='.json')
   
   # download GeoJSON file
-  download.file(url=u, destfile=tf.json, extra=c(timeout=timeout), quiet=TRUE)
+  download.file(url=u, destfile=tf, extra=c(timeout=timeout), quiet=TRUE)
   
   # load into sp object and clean-up
-  x <- rgdal::readOGR(dsn=tf.json, verbose=FALSE)
-  unlink(tf.json)
+  x <- rgdal::readOGR(dsn=tf, verbose=FALSE)
+  unlink(tf)
   
   # reset row names in attribute data to series name
   x <- spChFIDs(x, as.character(x$series))
   
-  # return in WGS84 GCS
+  # GCS WGS84
   return(x)
 }
 
-
-
+.raster_extent <- function(s, timeout) {
+  # base URL to cached data
+  u <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/series-extent-cache/grid/', s, '.tif'))
+  
+  # init temp files
+  tf <- tempfile(fileext='.tif')
+  
+  # download GeoJSON file
+  download.file(url=u, destfile=tf, extra=c(timeout=timeout), quiet=TRUE)
+  
+  # load into sp object and clean-up
+  x <- raster::raster(tf, verbose=FALSE)
+  x <- readAll(x)
+  unlink(tf)
+  
+  # CONUS AEA
+  return(x)
+}
 
