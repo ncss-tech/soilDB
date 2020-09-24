@@ -120,6 +120,9 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   # reset row names in attribute data to series name
   x <- spChFIDs(x, as.character(x$series))
   
+  # possibly fix CRS here, likely needs to be re-defined on the server
+  # https://github.com/ncss-tech/soilDB/issues/144
+  
   # GCS WGS84
   return(x)
 }
@@ -140,6 +143,9 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   x <- raster(tf, verbose=FALSE)
   x <- readAll(x)
   unlink(tf)
+  
+  # possibly fix CRS here, likely needs to be re-defined on the server
+  # https://github.com/ncss-tech/soilDB/issues/144
   
   # CONUS AEA
   return(x)
