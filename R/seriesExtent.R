@@ -30,16 +30,70 @@
 
 
 
-# get pre-cached series extent GeoJSON or GeoTiff from SoilWeb server
-seriesExtent <- function(s, type = c('vector', 'raster'), timeout=60) {
-  if(!requireNamespace('rgdal', quietly=TRUE) | !requireNamespace('raster', quietly=TRUE))
-    stop('please install the `rgdal` and `raster` packages', call.=FALSE)
+
+
+#' @title Retrieve Soil Series Extent Maps from SoilWeb
+#' 
+#' @description This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{SpatialPolygonsDataFrame} object) or gridded representation of area proportion falling within 800m cells (\code{raster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representartions are returned with an albers equal area / NAD83 corrdinate reference system.
+#' 
+#' @param s a soil series name, case-insensitive
+#' 
+#' @param type series extent representation, \code{vector} results in a \code{SpatialPolygonsDataFrame} object and \code{raster} results in a \code{raster} object
+#' 
+#' @param timeout time that we are willing to wait for a response, in seconds
+#' 
+#' @references \href{https://casoilresource.lawr.ucdavis.edu/see}{Soil Series Extent Explorer}
+#' 
+#' @author D.E. Beaudette
+#' 
+#' @note This function requires the \code{rgdal} package. Warning messages about the proj4 CRS spefication may be printed dependinng on your version of \code{rgdal}. This should be resolved soon.
+#' 
+#'  @examples
+#'   
+#' \donttest{
+#' if(requireNamespace("curl") &
+#'    curl::has_internet()) {
+#'   
+#'   # required packages
+#'   library(sp)
+#'   library(raster)
+#'   library(rgdal)
+#'   
+#'   # specify a soil series name
+#'   s <- 'magnor'
+#'   
+#'   # return as SpatialPolygonsDataFrame
+#'   x <- seriesExtent(s, type = 'vector')
+#'   # return as raster
+#'   y <- seriesExtent(s, type = 'raster')
+#'   
+#'   # note that CRS are different
+#'   proj4string(x)
+#'   projection(y)
+#'   
+#'   # transform vector representation to CRS of raster
+#'   x <- spTransform(x, CRS(projection(y)))
+#'   
+#'   # graphical comparison
+#'   par(mar = c(1, 1 , 1, 3))
+#'   plot(y, axes = FALSE)
+#'   plot(x, add = TRUE)
+#'   
+#'   
+#' }
+#' }
+#' 
+
+seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
+  if(!requireNamespace('rgdal', quietly=TRUE))
+    stop('please install the `rgdal` package', call.=FALSE)
   
   type <- match.arg(type)
   
-  # encode series name
-  s <- gsub(pattern=' ', replacement='_', x=tolower(s))
+  # encode series name: spaces -> underscores
+  s <- gsub(pattern=' ', replacement='_', x = tolower(s))
   
+  # select type of output
   res <- switch(
     type,
     vector = {.vector_extent(s, timeout = timeout)},
@@ -77,11 +131,13 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout=60) {
   # init temp files
   tf <- tempfile(fileext='.tif')
   
-  # download GeoJSON file
-  download.file(url=u, destfile=tf, extra=c(timeout=timeout), quiet=TRUE)
+  # download GeoTiff file
+  # Mac / Linux: file automatically downloaded via binary transfer
+  # Windows: must manually specify binary transfrer
+  download.file(url=u, destfile=tf, extra=c(timeout=timeout), quiet=TRUE, mode = 'wb')
   
   # load into sp object and clean-up
-  x <- raster::raster(tf, verbose=FALSE)
+  x <- raster(tf, verbose=FALSE)
   x <- readAll(x)
   unlink(tf)
   

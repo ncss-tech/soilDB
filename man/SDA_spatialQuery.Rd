@@ -122,8 +122,8 @@ statsgo.geom <- SDA_spatialQuery(
 # inspect results
 par(mar = c(0,0,3,1))
 plot(ssurgo.geom, border = 'royalblue')
-lines(statsgo.geom, lwd = 2, col = 'firebrick')
-lines(bbox.sp, lwd = 3)
+plot(statsgo.geom, lwd = 2, border = 'firebrick', add = TRUE)
+plot(bbox.sp, lwd = 3, add = TRUE)
 legend(
   x = 'top', 
   legend = c('BBOX', 'STATSGO', 'SSURGO'), 

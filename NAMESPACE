@@ -17,7 +17,9 @@ importFrom(reshape2,
   melt
 )
 
-importFrom(raster, 
+importFrom(raster,
+  readAll,
+  raster,
   extent
 )
 
