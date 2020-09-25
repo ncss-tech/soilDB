@@ -110,9 +110,20 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   # init temp files
   tf <- tempfile(fileext='.json')
   
-  # download GeoJSON file
-  download.file(url=u, destfile=tf, extra=c(timeout=timeout), quiet=TRUE)
-  
+  # safely download GeoJSON file
+  res <- tryCatch(
+    suppressWarnings(
+      download.file(url=u, destfile=tf, extra=c(timeout = timeout), quiet=TRUE)
+    ),
+    error = function(e) {e}
+  )
+
+  # trap errors
+  if(inherits(res, 'error')){
+    message('no data returned')
+    return(NULL)
+  }
+    
   # load into sp object and clean-up
   x <- rgdal::readOGR(dsn=tf, verbose=FALSE)
   unlink(tf)
@@ -134,14 +145,29 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   # init temp files
   tf <- tempfile(fileext='.tif')
   
-  # download GeoTiff file
+  # safely download GeoTiff file
   # Mac / Linux: file automatically downloaded via binary transfer
   # Windows: must manually specify binary transfrer
-  download.file(url=u, destfile=tf, extra=c(timeout=timeout), quiet=TRUE, mode = 'wb')
+  res <- tryCatch(
+    suppressWarnings(
+      download.file(url = u, destfile = tf, extra = c(timeout = timeout), quiet=TRUE, mode = 'wb')  
+    ),
+    error = function(e) {e}
+  )
   
-  # load into sp object and clean-up
+  # trap errors
+  if(inherits(res, 'error')){
+    message('no data returned')
+    return(NULL)
+  }
+  
+  # load raster object into memory
   x <- raster(tf, verbose=FALSE)
   x <- readAll(x)
+  # transfer layer name
+  names(x) <- s
+  
+  # cleanup
   unlink(tf)
   
   # possibly fix CRS here, likely needs to be re-defined on the server
