@@ -26,6 +26,45 @@ This function downloads a generalized representation of the geographic extent of
 \note{
 This is a work in progress.
 }
+\examples{
+\donttest{
+
+if(requireNamespace("curl") &
+   curl::has_internet()) {
+  
+  library(raster)
+  library(rasterVis)
+  library(viridis)
+  library(soilDB)
+  library(mapview)
+  
+  taxa <- 'vertisols'
+  x <- taxaExtent(taxa, level = 'order')
+  a <- aggregate(x, fact = 5)
+  
+  taxa <- 'ustalfs'
+  x <- taxaExtent(taxa, level = 'suborder')
+  a <- aggregate(x, fact = 5)
+  
+  taxa <- 'haplohumults'
+  x <- taxaExtent(taxa, level = 'greatgroup')
+  a <- aggregate(x, fact = 5)
+  
+  taxa <- 'Typic Haploxerepts'
+  x <- taxaExtent(taxa, level = 'subgroup')
+  a <- aggregate(x, fact = 5)
+  
+  
+  levelplot(a, margin = FALSE, scales = list(draw = FALSE), col.regions = viridis, main = names(a))
+  
+  mapview(a, col.regions = viridis, na.color = NA, use.layer.names = TRUE)
+  
+  
+}
+
+}
+
+}
 \author{
 D.E. Beaudette
 }
