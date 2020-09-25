@@ -91,7 +91,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   type <- match.arg(type)
   
   # encode series name: spaces -> underscores
-  s <- gsub(pattern=' ', replacement='_', x = tolower(s))
+  s <- gsub(pattern=' ', replacement='_', x = tolower(s), fixed = TRUE)
   
   # select type of output
   res <- switch(
@@ -165,7 +165,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   x <- raster(tf, verbose=FALSE)
   x <- readAll(x)
   # transfer layer name
-  names(x) <- s
+  names(x) <- gsub(pattern='_', replacement=' ', x = s, fixed = TRUE)
   
   # cleanup
   unlink(tf)

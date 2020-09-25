@@ -20,7 +20,7 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   level <- match.arg(level)
   
   # encode taxa name: spaces -> underscores
-  x <- gsub(pattern=' ', replacement='_', x = tolower(x))
+  x <- gsub(pattern=' ', replacement='_', x = tolower(x), fixed = TRUE)
   
   # convert taxa level to path
   subdir <- switch(
@@ -63,7 +63,7 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   r <- raster(tf, verbose=FALSE)
   r <- readAll(r)
   # transfer layer name
-  names(r) <- x
+  names(r) <- gsub(pattern='_', replacement=' ', x = x, fixed = TRUE)
   
   # cleanup
   unlink(tf)
