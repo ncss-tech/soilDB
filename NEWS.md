@@ -1,4 +1,6 @@
 # soilDB 2.5.7 (2020-09-04)
+ * new function `taxaExtent` returns 800m gridded taxonomic grids for CONUS
+ * `seriesExtent` can now return 800m gridded series extents for CONUS
  * `SDA_spatialQuery` can now retrieve SSURGO and STATSGO geometry c/o [dschlaep](https://github.com/dschlaep) (https://github.com/ncss-tech/soilDB/issues/141)
  * add `SDA_spatialQuery` for querying tabular / spatial records via SDA given `Spatial*` class input features
  * add `fetchGDB` for querying tabular data from SSURGO/gNATSGO/STATSGO File Geodatabases
