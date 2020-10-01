@@ -387,7 +387,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 
   # vegplot textnotes
   q.vegplottext <- "SELECT vegplotiidref as vegplotiid, seqnum, recdate, recauthor, vegplottextkind,
-textcat, textsubcat, textentry, vegplottextiid
+textcat, textsubcat, CAST(textentry AS ntext) AS textentry, vegplottextiid
 FROM vegplottext_View_1;"
 
 # setup connection local NASIS
