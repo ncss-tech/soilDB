@@ -33,31 +33,43 @@ if(requireNamespace("curl") &
    curl::has_internet()) {
   
   library(raster)
-  library(rasterVis)
-  library(viridis)
-  library(soilDB)
-  library(mapview)
   
+  # try a couple of different examples
+  
+  # soil order
   taxa <- 'vertisols'
   x <- taxaExtent(taxa, level = 'order')
   a <- aggregate(x, fact = 5)
   
+  # suborder
   taxa <- 'ustalfs'
   x <- taxaExtent(taxa, level = 'suborder')
   a <- aggregate(x, fact = 5)
   
+  # greatgroup
   taxa <- 'haplohumults'
   x <- taxaExtent(taxa, level = 'greatgroup')
   a <- aggregate(x, fact = 5)
   
+  # subgroup
   taxa <- 'Typic Haploxerepts'
   x <- taxaExtent(taxa, level = 'subgroup')
   a <- aggregate(x, fact = 5)
   
+  # quick evaluation of the result
+  if(requireNamespace("rasterVis") & requireNamespace('viridis')) {
+    levelplot(a, 
+      margin = FALSE, scales = list(draw = FALSE), 
+      col.regions = viridis, 
+      main = names(a)
+    )
+  }
   
-  levelplot(a, margin = FALSE, scales = list(draw = FALSE), col.regions = viridis, main = names(a))
+  # slippy map
+  if(requireNamespace("mapview")) {
+    mapview(a, col.regions = viridis, na.color = NA, use.layer.names = TRUE)
+  }
   
-  mapview(a, col.regions = viridis, na.color = NA, use.layer.names = TRUE)
   
   
 }

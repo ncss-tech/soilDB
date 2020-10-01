@@ -257,7 +257,7 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
     # morph
     if(returnMorphologicData) {
       # add new tables here
-      v <- c("phcolor", "phfrags", "phpores", "phstructure", "pediagfeatures")
+      v <- c("phcolor", "phfrags", "phpores", "phstructure", "pediagfeatures", "rmf")
       m <- vector(mode = 'list')
       # iterate over tables and unwind - rbind - store
       for(i in v) {
