@@ -10,7 +10,7 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stri
     stop('please install the `RODBC` package', call.=FALSE)
 
   # photo links from PedonPC stored as sitetext notes
-  q.photolink <- "SELECT so.siteiidref AS siteiid, sot.recdate, sot.textcat,  CAST(sot.textentry AS ntext) AS AS imagepath
+  q.photolink <- "SELECT so.siteiidref AS siteiid, sot.recdate, sot.textcat,  CAST(sot.textentry AS ntext) AS imagepath
   FROM
   siteobs_View_1 AS so
   LEFT OUTER JOIN siteobstext_View_1 AS sot ON so.siteobsiid = sot.siteobsiidref
