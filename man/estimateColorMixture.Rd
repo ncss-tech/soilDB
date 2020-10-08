@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimateColorMixture.R
 \name{estimateColorMixture}
 \alias{estimateColorMixture}
-\title{Estimate color mixture using L, A, B color coordinates and weights}
+\title{Estimate color mixtures using weighted average of CIELAB color coordinates}
 \usage{
 estimateColorMixture(x, wt = "pct", backTransform = FALSE)
 }
@@ -17,5 +17,11 @@ estimateColorMixture(x, wt = "pct", backTransform = FALSE)
 A data.frame containing estimated color mixture
 }
 \description{
-Estimate color mixture using L, A, B color coordinates and weights
+Estimate color mixtures using weighted average of CIELAB color coordinates
+}
+\note{
+See \code{\link[aqp]{mixMunsell}} for a more realstic (but slower) simulation of subtractive mixing of pigments.
+}
+\author{
+D.E. Beaudette
 }

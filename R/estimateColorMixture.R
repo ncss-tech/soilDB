@@ -1,11 +1,13 @@
 ## re-write of previous version, should be more robust to missing weights and generalize to other uses
-## note: this isn't real mixing, relfectance curves and kubella-monk modeling required for that
+## note: this isn't real mixing, relfectance curves and / or Kubella-Monk modeling required for that
 ## all colors are mixed, should be applied to groups of related colors
 
-# x: 
-# wt:
 
-#' Estimate color mixture using L, A, B color coordinates and weights
+#' @title Estimate color mixtures using weighted average of CIELAB color coordinates
+#'
+#' @note See \code{\link[aqp]{mixMunsell}} for a more realstic (but slower) simulation of subtractive mixing of pigments.
+#' 
+#' @author D.E. Beaudette
 #'
 #' @param x data.frame, typically from NASIS containing at least CIE LAB ('L', 'A', 'B') and some kind of weight
 #' @param wt  fractional weights, usually area of hz face
@@ -35,8 +37,11 @@ estimateColorMixture <- function(x, wt='pct', backTransform=FALSE) {
   }
   
   
-  ## 2020-01-22 DEB: mixing always in CIELAB, roughly linear in terms of avg. human perception of color
-  # 2019-11-04 DEB: dropping Hmisc import
+  ## consider weighted geometric mean:
+  ## https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf
+  ## http://en.wikipedia.org/wiki/Weighted_geometric_mean
+  
+  # 2020-01-22 DEB: mixing always in CIELAB, roughly linear in terms of avg. human perception of color
   L <- weighted.mean(x[['L']], w=x[[wt]], na.rm = TRUE)
   A <- weighted.mean(x[['A']], w=x[[wt]], na.rm = TRUE)
   B <- weighted.mean(x[['B']], w=x[[wt]], na.rm = TRUE)
@@ -45,10 +50,8 @@ estimateColorMixture <- function(x, wt='pct', backTransform=FALSE) {
   mixed.color <- data.frame(convertColor(cbind(L, A, B), from='Lab', to='sRGB', from.ref.white='D65', to.ref.white = 'D65'))
   names(mixed.color) <- c('r', 'g', 'b')
   
-  
-  ## TODO: this will return different data
-  ## this is probably slower
   # optionally back-transform mixture to Munsell
+  # performance penalty due to color distance eval against entire munsell library
   if(backTransform) {
     
     # convert with best available metric
