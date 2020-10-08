@@ -72,6 +72,81 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 
 
 
+# select the right query for SSURGO / STATSGO geometry filters submitted to SDA
+# this is important because STATSGO features require the additional
+# AND CLIPAREASYMBOL = 'US'
+.SDA_geometrySelector <- function(db, method) {
+ 
+  res <- switch(db,
+    SSURGO = {
+      switch(method,
+             intersection = {
+               "
+  WITH geom_data (geom, mukey) AS (
+  SELECT 
+  mupolygongeo.STIntersection( geometry::STGeomFromText('%s', 4326) ) AS geom, P.mukey
+  FROM mupolygon AS P
+  WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1
+)
+SELECT 
+geom.STAsText() AS geom, mukey,
+GEOGRAPHY::STGeomFromWKB(
+    geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).STArea() * 0.000247105 AS area_ac
+FROM geom_data;
+  "
+             },
+             
+             overlap = {
+               "
+  SELECT 
+  mupolygongeo.STAsText() AS geom, P.mukey
+  FROM mupolygon AS P
+  WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;
+"
+             }
+             )
+    },
+    
+    STATSGO = {
+      switch(method,
+             intersection = {
+               "
+  WITH geom_data (geom, mukey) AS (
+  SELECT 
+  mupolygongeo.STIntersection( geometry::STGeomFromText('%s', 4326) ) AS geom, P.mukey
+  FROM gsmmupolygon AS P
+  WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1
+  AND CLIPAREASYMBOL = 'US'
+)
+SELECT 
+geom.STAsText() AS geom, mukey,
+GEOGRAPHY::STGeomFromWKB(
+    geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).STArea() * 0.000247105 AS area_ac
+FROM geom_data;
+  "
+             },
+             
+             overlap = {
+               "
+  SELECT 
+  mupolygongeo.STAsText() AS geom, P.mukey
+  FROM gsmmupolygon AS P
+  WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1
+  AND CLIPAREASYMBOL = 'US' ;
+"
+               
+             }
+      )
+    }
+  )
+  
+  return(res)
+
+}
+
+
+
+
 ## TODO: this will replace *most* of the functionality in:
 ##   SDA_make_spatial_query
 ##   SDA_query_features
@@ -197,13 +272,12 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 #' plot(statsgo.geom, lwd = 2, border = 'firebrick', add = TRUE)
 #' plot(bbox.sp, lwd = 3, add = TRUE)
 #' legend(
-#'   x = 'top', 
+#'   x = 'topright', 
 #'   legend = c('BBOX', 'STATSGO', 'SSURGO'), 
 #'   lwd = c(3, 2, 1),
 #'   col = c('black', 'firebrick', 'royalblue'),
-#'   horiz = TRUE, 
-#'   bty = 'n'
 #' )
+#' 
 #' 
 #' # quick reminder that STATSGO map units often contain many components
 #' # format an SQL IN statement using the first STATSGO mukey
@@ -287,44 +361,25 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE,
   # use a geometry collection
   wkt <- rgeos::writeWKT(geom, byid = FALSE)
   
-  ## dang it! STATSGO geometry is duplicated: US and state versions stored together
-  # https://github.com/ncss-tech/soilDB/issues/143
-  
   # slower query, returning geom + mukey
   # replacement for depreciated SDA_query_features()
   # 10-30x faster than spatial-returning query by input feature
   # TODO: this is 15x slower than non-spatial-returning-query in SDA_query_features()
   if(what == 'geom') {
-    
-
-    db_table <- switch(db, SSURGO = "mupolygon", STATSGO = "gsmmupolygon")
 
     # return intersection + area
     if(geomIntersection) {
-      q <- sprintf("
-WITH geom_data (geom, mukey) AS (
-  SELECT 
-  mupolygongeo.STIntersection( geometry::STGeomFromText('%s', 4326) ) AS geom, P.mukey
-  FROM %s AS P
-  WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1
-)
-SELECT 
-geom.STAsText() AS geom, mukey,
-GEOGRAPHY::STGeomFromWKB(
-    geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).STArea() * 0.000247105 AS area_ac
-FROM geom_data;
-      ",
-        wkt, db_table, wkt
-      )
+      
+      # select the appropriate query
+      .template <- .SDA_geometrySelector(db = db, method = 'intersection')
+      q <- sprintf(.template, wkt, wkt)
+                   
     } else {
       # return overlapping
-      q <- sprintf("
-               SELECT 
-                 mupolygongeo.STAsText() AS geom, P.mukey
-                 FROM %s AS P
-                 WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;",
-        db_table, wkt
-      )
+      
+      # select the appropriate query
+      .template <- .SDA_geometrySelector(db = db, method = 'overlap')
+      q <- sprintf(.template, wkt)
     }
     
     

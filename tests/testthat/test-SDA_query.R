@@ -120,8 +120,7 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
 
   # testing known values
   expect_true(inherits(res, 'SpatialPolygonsDataFrame'))
-  res_mukey <- unique(as.data.frame(res)[, "mukey"])
-  expect_equal(length(res_mukey), 1)
+  expect_equal(nrow(res), 1)
 
 })
 

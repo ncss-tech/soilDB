@@ -125,13 +125,12 @@ plot(ssurgo.geom, border = 'royalblue')
 plot(statsgo.geom, lwd = 2, border = 'firebrick', add = TRUE)
 plot(bbox.sp, lwd = 3, add = TRUE)
 legend(
-  x = 'top', 
+  x = 'topright', 
   legend = c('BBOX', 'STATSGO', 'SSURGO'), 
   lwd = c(3, 2, 1),
   col = c('black', 'firebrick', 'royalblue'),
-  horiz = TRUE, 
-  bty = 'n'
 )
+
 
 # quick reminder that STATSGO map units often contain many components
 # format an SQL IN statement using the first STATSGO mukey
