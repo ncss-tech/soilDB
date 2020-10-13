@@ -162,11 +162,6 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   # note: these will put any fragments without fragsize into an 'unspecified' class
   rf.classes <- .rockFragmentSieve(rf)
   
-  ## this is incredibly slow (~ 5 seconds for 30k records)
-  ## NOTE: this is performed on the data, as-is: not over all possible classes as enforced by factor levels
-  # sum volume by id and class
-  # rf.sums <- ddply(rf.classes, c(id.var, 'class'), plyr::summarise, volume=sum(fragvol, na.rm=TRUE))
-  
   ## NOTE: this is performed on the data, as-is: not over all possible classes as enforced by factor levels
   # sum volume by id and class
   # much faster than ddply

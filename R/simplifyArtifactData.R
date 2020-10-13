@@ -13,6 +13,16 @@
   # missing shape = Nonflat
   x$huartshp[which(is.na(x$huartshp))] <- 'irregular'
   
+  ## the RV size is likely the safest estimate, 
+  ## given the various upper bounds for GR (74mm, 75mm, 76mm)
+  # calculate if missing
+  x$huartsize_r <- ifelse(
+    is.na(x$huartsize_r), 
+    (x$huartsize_l + x$huartsize_h) / 2,
+    x$huartsize_r
+  )
+  
+  
   ## split flat/nonflat
   idx <- grep('^flat', x$huartshp, ignore.case = TRUE, invert=TRUE)
   arts <- x[idx, ]
@@ -20,15 +30,13 @@
   idx <- grep('^flat', x$huartshp, ignore.case = TRUE)
   farts <- x[idx, ]
   
-  ## sieve
+  ## sieve using RV sizes
   # non-flat fragments
-  d <- ifelse(is.na(arts$huartsize_h), arts$huartsize_r, arts$huartsize_h)
-  arts$class <- .sieve(d, new.names = c('art_fgr', 'art_gr', 'art_cb', 
+  arts$class <- .sieve(arts$huartsize_r, new.names = c('art_fgr', 'art_gr', 'art_cb', 
                                         'art_st', 'art_by'))
   
   # flat artifacts
-  d <- ifelse(is.na(farts$huartsize_h), farts$huartsize_r, farts$huartsize_h)
-  farts$class <- .sieve(d, flat = TRUE, new.names = c('art_ch','art_fl', 'art_st', 'art_by'))
+  farts$class <- .sieve(farts$huartsize_r, flat = TRUE, new.names = c('art_ch','art_fl', 'art_st', 'art_by'))
   
   # combine pieces, note may contain  RF classes == NA
   res <- rbind(arts, farts)
