@@ -1,5 +1,9 @@
 
 ## TODO: generalize, export, and make sieve sizes into an argument
+
+# latest NSSH part 618
+# https://directives.sc.egov.usda.gov/OpenNonWebContent.aspx?content=44371.wba
+
 # internally-used function to test size classes
 # diameter is in mm
 # NA diameter results in NA class
@@ -9,10 +13,9 @@
   if(flat == TRUE)
     sieves <- c(channers=150, flagstones=380, stones=600, boulders=10000000000)
   
-  ## TODO: if using <=, the gravel/cobble break is 75mm
   # non-flat fragments
   if(flat == FALSE)
-    sieves <- c(fine_gravel=5, gravel=76, cobbles=250, stones=600, boulders=10000000000)
+    sieves <- c(fine_gravel=5, gravel=75, cobbles=250, stones=600, boulders=10000000000)
   
   if(!is.null(new.names))
     names(sieves) <- new.names
@@ -25,7 +28,8 @@
   # only assign classes to non-NA diameters
   if(length(no.na.idx) > 0) {
     # pass diameters "through" sieves
-    classes <- t(sapply(diameter[no.na.idx], function(i) i <= sieves))
+    # 2020: latest part 618 uses '<' for all upper values of class range
+    classes <- t(sapply(diameter[no.na.idx], function(i) i < sieves))
     
     # determine largest passing sieve name
     res[no.na.idx] <- names(sieves)[apply(classes, 1, which.max)]
@@ -52,6 +56,15 @@
   x$fraghard[which(is.na(x$fraghard))] <- 'strongly cemented'
   # missing shape = Nonflat
   x$fragshp[which(is.na(x$fragshp))] <- 'nonflat'
+  
+  ## the RV fragment size is likely the safest estimate, 
+  ## given the various upper bounds for GR (74mm, 75mm, 76mm)
+  # calculate if missing
+  x$fragsize_r <- ifelse(
+    is.na(x$fragsize_r), 
+    (x$fragsize_l + x$fragsize_h) / 2,
+    x$fragsize_r
+  )
   
   ## split frags / parafrags
   # frags: >= strongly cemented
@@ -80,20 +93,16 @@
   
   ## sieve
   # non-flat fragments
-  d <- ifelse(is.na(frags.nonflat$fragsize_h), frags.nonflat$fragsize_r, frags.nonflat$fragsize_h)
-  frags.nonflat$class <- .sieve(d, flat = FALSE)
+  frags.nonflat$class <- .sieve(frags.nonflat$fragsize_r, flat = FALSE)
   
   # non-flat parafragments
-  d <- ifelse(is.na(parafrags.nonflat$fragsize_h), parafrags.nonflat$fragsize_r, parafrags.nonflat$fragsize_h)
-  parafrags.nonflat$class <- .sieve(d, flat = FALSE, para = TRUE)
+  parafrags.nonflat$class <- .sieve(parafrags.nonflat$fragsize_r, flat = FALSE, para = TRUE)
   
   # flat fragments
-  d <- ifelse(is.na(frags.flat$fragsize_h), frags.flat$fragsize_r, frags.flat$fragsize_h)
-  frags.flat$class <- .sieve(d, flat = TRUE)
+  frags.flat$class <- .sieve(frags.flat$fragsize_r, flat = TRUE)
   
   # flat parafragments
-  d <- ifelse(is.na(parafrags.flat$fragsize_h), parafrags.flat$fragsize_r, parafrags.flat$fragsize_h)
-  parafrags.flat$class <- .sieve(d, flat = TRUE, para = TRUE)
+  parafrags.flat$class <- .sieve(parafrags.flat$fragsize_r, flat = TRUE, para = TRUE)
   
   # combine pieces, note may contain  RF classes == NA
   res <- rbind(frags.nonflat, frags.flat, parafrags.nonflat, parafrags.flat)
