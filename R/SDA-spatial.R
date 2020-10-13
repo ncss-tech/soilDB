@@ -174,7 +174,7 @@ FROM geom_data;
 #' @seealso \code{\link{SDA_query}}
 #' @keywords manip
 #' 
-#' @aliases SDA_make_spatial_query,SDA_query_features
+#' @aliases SDA_make_spatial_query SDA_query_features
 #' 
 #' @note Row-order is not preserved across features in \code{geom} and returned object. Use \code{sp::over()} or similar functionality to extract from results. Polygon area in acres is computed server-side when \code{what = 'geom'} and \code{geomIntersection = TRUE}.
 #' 

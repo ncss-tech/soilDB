@@ -2,7 +2,8 @@
 % Please edit documentation in R/SDA-spatial.R
 \name{SDA_spatialQuery}
 \alias{SDA_spatialQuery}
-\alias{SDA_make_spatial_query,SDA_query_features}
+\alias{SDA_make_spatial_query}
+\alias{SDA_query_features}
 \title{SDA Spatial Query}
 \usage{
 SDA_spatialQuery(

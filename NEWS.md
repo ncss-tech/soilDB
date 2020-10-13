@@ -1,4 +1,5 @@
-# soilDB 2.5.7 (2020-09-04)
+# soilDB 2.5.7 (2020-10-13)
+ * `fetchNASIS` / `soilDB:::.rockFragmentSieve` now uses fragment RV, `soilDB:::.sieve` uses `<` operator (https://github.com/ncss-tech/soilDB/issues/1)
  * `fetchKSSL(..., returnMorphologicData=TRUE)` now returns redoximorphic features by horizon
  * new function `taxaExtent` returns 800m gridded taxonomic grids for CONUS
  * `seriesExtent` can now return 800m gridded series extents for CONUS
