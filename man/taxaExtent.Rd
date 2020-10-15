@@ -39,28 +39,28 @@ if(requireNamespace("curl") &
   # soil order
   taxa <- 'vertisols'
   x <- taxaExtent(taxa, level = 'order')
-  a <- aggregate(x, fact = 5)
+  a <- raster::aggregate(x, fact = 5)
   
   # suborder
   taxa <- 'ustalfs'
   x <- taxaExtent(taxa, level = 'suborder')
-  a <- aggregate(x, fact = 5)
+  a <- raster::aggregate(x, fact = 5)
   
   # greatgroup
   taxa <- 'haplohumults'
   x <- taxaExtent(taxa, level = 'greatgroup')
-  a <- aggregate(x, fact = 5)
+  a <- raster::aggregate(x, fact = 5)
   
   # subgroup
   taxa <- 'Typic Haploxerepts'
   x <- taxaExtent(taxa, level = 'subgroup')
-  a <- aggregate(x, fact = 5)
+  a <- raster::aggregate(x, fact = 5)
   
   # quick evaluation of the result
   if(requireNamespace("rasterVis") & requireNamespace('viridis')) {
-    levelplot(a, 
+    rasterVis::levelplot(a, 
       margin = FALSE, scales = list(draw = FALSE), 
-      col.regions = viridis, 
+      col.regions = viridis::viridis, 
       main = names(a)
     )
   }
