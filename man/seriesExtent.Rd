@@ -56,7 +56,7 @@ if(requireNamespace("curl") &
 
 }
 \references{
-\href{https://casoilresource.lawr.ucdavis.edu/see}{Soil Series Extent Explorer}
+\url{https://casoilresource.lawr.ucdavis.edu/see/}
 }
 \author{
 D.E. Beaudette
