@@ -67,7 +67,7 @@ if(requireNamespace("curl") &
   
   # slippy map
   if(requireNamespace("mapview")) {
-    mapview(a, col.regions = viridis, na.color = NA, use.layer.names = TRUE)
+    mapview::mapview(a, col.regions = viridis::viridis, na.color = NA, use.layer.names = TRUE)
   }
   
   
