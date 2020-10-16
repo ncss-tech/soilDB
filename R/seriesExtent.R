@@ -42,7 +42,7 @@
 #' 
 #' @param timeout time that we are willing to wait for a response, in seconds
 #' 
-#' @references \href{https://casoilresource.lawr.ucdavis.edu/see}{Soil Series Extent Explorer}
+#' @references \url{https://casoilresource.lawr.ucdavis.edu/see}
 #' 
 #' @author D.E. Beaudette
 #' 
