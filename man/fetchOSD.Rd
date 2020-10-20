@@ -52,11 +52,11 @@ When using `extended=TRUE`, there are a couple of scenarios in which series morp
 
 \describe{
 
-  \item{A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{Climate summaries are empty \code{data.frames} becuase these summaries are currently generated from PRISM. We are working on a solution.}
+  \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} becuase these summaries are currently generated from PRISM. We are working on a solution.}
   
-  \item{A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
+  \item{2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{ - Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
   
-  \item{A query for multiple soil series, with one more more listed as "inactive" (e.g. BREADSPRINGS).}{Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
+  \item{3. A query for multiple soil series, with one more more listed as "inactive" (e.g. BREADSPRINGS).}{ - Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
   
 } 
 

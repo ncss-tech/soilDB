@@ -42,7 +42,7 @@
 # fetch basic OSD, SC, and SoilWeb summaries from new API
 #' Fetch Official Series Descriptions and summaries from SoilWeb API
 #' 
-#' @description This functions fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.
+#' @description This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.
 #' 
 #' @param soils a character vector of named soil series; case insensitive
 #' @param colorState color state for horizon soil color visualization: "moist" or "dry"
@@ -80,11 +80,11 @@
 #' 
 #' \describe{
 #' 
-#'   \item{A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{Climate summaries are empty \code{data.frames} becuase these summaries are currently generated from PRISM. We are working on a solution.}
+#'   \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} becuase these summaries are currently generated from PRISM. We are working on a solution.}
 #'   
-#'   \item{A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
+#'   \item{2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{ - Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
 #'   
-#'   \item{A query for multiple soil series, with one more more listed as "inactive" (e.g. BREADSPRINGS).}{Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
+#'   \item{3. A query for multiple soil series, with one more more listed as "inactive" (e.g. BREADSPRINGS).}{ - Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
 #'   
 #' } 
 #' 
