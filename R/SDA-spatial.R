@@ -10,47 +10,28 @@
 #' representation of geometry
 #' @param g name of column in \code{d} containing WKT geometry
 #' @param p4s PROJ4 CRS definition, typically GCS WGS84
+#' 
+#' @details The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}. See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for detailed examples.
+#' 
+#' @note This function requires the `httr`, `jsonlite`, `XML` ,  and `sf` packages.
+#' 
+#' @author D.E. Beaudette
+#'
 #' @return A \code{Spatial*} object.
 #' @note This function requires the \code{httr}, \code{jsonlite}, \code{XML},
 #' and \code{rgeos} packages.
 #' @author D.E. Beaudette
 #' @export processSDA_WKT
 processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
-  # iterate over features (rows) and convert into list of SPDF
-  p <- list()
-  n <- nrow(d)
   
-  # points or polygons?
-  # looking at the first feature for efficiency, all others should be the same
-  g.type <- class(rgeos::readWKT(d[1, g]))
+  # SDA is always this CRS; proj4string approach obsolete
+  stopifnot(g == 'geom', p4s == '+proj=longlat +datum=WGS84')
   
-  for(i in seq(1, n)) {
-    # extract the current row in the DF
-    d.i <- d[i, ] 
-    # extract the current feature from WKT
-    p.i <- rgeos::readWKT(d.i[[g]], id = i, p4s = p4s)
-    # remove geom from current row of DF
-    d.i[[g]] <- NULL
-    
-    # compose SpatialPointsDataFrame, with other attributes
-    if(g.type == 'SpatialPoints')
-      s.i <- SpatialPointsDataFrame(p.i, data=cbind(data.frame(gid=i, stringsAsFactors = FALSE), d.i), match.ID = FALSE)
-    
-    # compose SpatialPolygonsDataFrame, with other attributes
-    if(g.type == 'SpatialPolygons')
-      s.i <- SpatialPolygonsDataFrame(p.i, data=cbind(data.frame(gid=i, stringsAsFactors = FALSE), d.i), match.ID = FALSE)
-    
-    
-    # fix column names
-    names(s.i) <- c('gid', names(d.i))
-    # save to list
-    p[[i]] <- s.i
-  }
-  
-  # reduce list to single SPDF
-  spdf <- do.call('rbind', p)
-  
-  return(spdf)
+  # convert wkt to SPDF
+  d[[g]] <- sf::st_as_sfc(wk::as_wkt(d[,g]))
+  sfobj <- sf::st_as_sf(d)
+  sfobj <- sf::st_set_crs(sfobj, sf::st_crs(4326))
+  return(sf::as_Spatial(sfobj))
 }
 
 
@@ -354,8 +335,8 @@ SDA_spatialQuery <- function(geom,
   }
   
   # check for required packages
-  if (!requireNamespace('rgeos', quietly = TRUE))
-    stop('please install the `rgeos` package', call.=FALSE)
+  if (!requireNamespace('wk', quietly = TRUE))
+    stop('please install the `wk` package', call.=FALSE)
   
   # sanity checks
   if (!what %in% c('mukey', 'mupolygon', 'areasymbol', 'sapolygon')) {
@@ -395,24 +376,24 @@ SDA_spatialQuery <- function(geom,
   
   # WKT encoding
   # use a geometry collection
-  wkt <- rgeos::writeWKT(geom, byid = FALSE)
+  wkt <- wk::as_wkt(sf::st_as_sf(geom)$geometry)
   
   # returning geom + mukey or geom + areasymbol
   if (what %in% c('mupolygon', 'sapolygon')) {
 
     # return intersection + area
-    if(geomIntersection) {
+    if (geomIntersection) {
       
       # select the appropriate query
       .template <- .SDA_geometrySelector(db = db, method = 'intersection')
-      q <- sprintf(.template, wkt, wkt)
+      q <- sprintf(.template, as.character(wkt), as.character(wkt))
                    
     } else {
       # return overlapping
       
       # select the appropriate query
       .template <- .SDA_geometrySelector(db = db, method = 'overlap')
-      q <- sprintf(.template, wkt)
+      q <- sprintf(.template, as.character(wkt))
     }
     
     if (query_string) {
@@ -465,4 +446,3 @@ SDA_spatialQuery <- function(geom,
   
   return(res)
 }
-
