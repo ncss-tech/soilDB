@@ -7,7 +7,7 @@
 fetchOSD(soils, colorState = "moist", extended = FALSE)
 }
 \arguments{
-\item{soils}{a character vector of named soil series; case insensitive}
+\item{soils}{a character vector of named soil series; case-insensitive}
 
 \item{colorState}{color state for horizon soil color visualization: "moist" or "dry"}
 
@@ -17,7 +17,7 @@ fetchOSD(soils, colorState = "moist", extended = FALSE)
 a \code{SoilProfileCollection} object containing basic soil morphology and taxonomic information.
 }
 \description{
-This functions fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.
+This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.
 }
 \details{
 {
@@ -35,14 +35,14 @@ The standard set of "site" and "horizon" data are returned as a \code{SoilProfil
 \describe{
   \item{SPC}{\code{SoilProfileCollection} containing standards "site" and "horizon" data}
   \item{competing}{competing soil series from the SC database snapshot}
-  \item{geomcomp}{empirical probabilities for geomorphic component, derrived from the current SSURGO snapshot}
-  \item{hillpos}{empirical probabilities for hillslope position, derrived from the current SSURGO snapshot}
-  \item{mtnpos}{empirical probabilities for mountain slope position, derrived from the current SSURGO snapshot}
-  \item{terrace}{empirical probabilities for river terrace position, derrived from the current SSURGO snapshot}
-  \item{flats}{empirical probabilities for flat landscapes, derrived from the current SSURGO snapshot}
-  \item{pmkind}{empirical probabilities for parent material kind, derrived from the current SSURGO snapshot}
-  \item{pmorigin}{empirical probabilities for parent material origin, derrived from the current SSURGO snapshot}
-  \item{mlra}{empirical MLRA membership values, derrived from the current SSURGO snapshot}
+  \item{geomcomp}{empirical probabilities for geomorphic component, derived from the current SSURGO snapshot}
+  \item{hillpos}{empirical probabilities for hillslope position, derived from the current SSURGO snapshot}
+  \item{mtnpos}{empirical probabilities for mountain slope position, derived from the current SSURGO snapshot}
+  \item{terrace}{empirical probabilities for river terrace position, derived from the current SSURGO snapshot}
+  \item{flats}{empirical probabilities for flat landscapes, derived from the current SSURGO snapshot}
+  \item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
+  \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
+  \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
   \item{climate}{experimental climate summaries from PRISM stack}
   \item{metadata}{metadata associated with SoilWeb cached summaries}
 } 
@@ -52,7 +52,7 @@ When using `extended=TRUE`, there are a couple of scenarios in which series morp
 
 \describe{
 
-  \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} becuase these summaries are currently generated from PRISM. We are working on a solution.}
+  \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} because these summaries are currently generated from PRISM. We are working on a solution.}
   
   \item{2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{ - Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
   

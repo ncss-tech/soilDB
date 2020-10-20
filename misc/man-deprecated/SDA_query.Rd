@@ -4,7 +4,7 @@
 \alias{format_SQL_in_statement}
 
 \title{Soil Data Access Query}
-\description{Submit a query to the Soil Data Acccess (SDA) website in SQL, get the results as a dataframe.}
+\description{Submit a query to the Soil Data Access (SDA) website in SQL, get the results as a dataframe.}
 
 \usage{
 SDA_query(q)

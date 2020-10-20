@@ -3,9 +3,9 @@
 
 #' Get Rapid Carbon Assessment (RaCA) data
 #' @description Get Rapid Carbon Assessment (RaCA) data via state, geographic bounding-box, RaCA site ID, or series query from the SoilWeb API.
-#' @param series a soil series name; case insensitive
+#' @param series a soil series name; case-insensitive
 #' @param bbox a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}, constrained to a 5-degree block
-#' @param state a two-letter US state abbreviation; case insensitive
+#' @param state a two-letter US state abbreviation; case-insensitive
 #' @param rcasiteid a RaCA site id (e.g. 'C1609C01')
 #' @param get.vnir logical, should associated VNIR spectra be downloaded? (see details)
 #' @details The VNIR spectra associated with RaCA data are quite large [each gzip-compressed VNIR spectra record is about 6.6kb], so requests for these data are disabled by default. Note that VNIR spectra can only be queried by soil series or geographic BBOX.

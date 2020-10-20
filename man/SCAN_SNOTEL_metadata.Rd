@@ -28,7 +28,7 @@
   }
 }
 
-\details{These data have been compiled from several sources and represent a progressive effort to organize SCAN/SNOTEL station metadata. Therefore, some records may be missing or incorrect. Details on this effort can be found at the associated GH issue page: \url{https://github.com/ncss-tech/soilDB/issues/61}.}
+\details{These data have been compiled from several sources and represent a progressive effort to organize SCAN/SNOTEL station metadata. Therefore, some records may be missing or incorrect. Details on this effort can be found at the associated GitHub issue page: \url{https://github.com/ncss-tech/soilDB/issues/61}.}
 
 
 \keyword{datasets}

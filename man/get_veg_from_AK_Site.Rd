@@ -11,7 +11,7 @@ get_veg_from_AK_Site(dsn)
   \item{dsn}{file path the the AK Site access database}
 }
 
-\value{A dataframe with vegetation data in long format, linked to site ID.}
+\value{A data.frame with vegetation data in long format, linked to site ID.}
 \author{Dylan E. Beaudette}
 \note{This function currently works only on Windows.}
 

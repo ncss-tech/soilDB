@@ -22,7 +22,7 @@
 #' 
 #' @param d \code{data.frame} returned by \code{SDA_query}, containing WKT representation of geometry
 #' @param g name of column in \code{d} containing WKT geometry
-#' @param p4s PROJ4 CRS defintion, typically GCS WGS84
+#' @param p4s PROJ4 CRS definition, typically GCS WGS84
 #' 
 #' @details The SDA website can be found at \url{http://sdmdataaccess.nrcs.usda.gov}. See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for detailed examples.
 #' 
@@ -159,10 +159,10 @@ FROM geom_data;
 
 #' @title SDA Spatial Query
 #' 
-#' @description Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersectionion of \code{geom} + SSURGO / STATSGO polygons can be returned. See details.
+#' @description Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersection of \code{geom} + SSURGO / STATSGO polygons can be returned. See details.
 #' 
 #' @param geom a Spatial* object, with valid CRS. May contain multiple features.
-#' @param what a character vector specifting what to return. 'mukey': \code{data.frame} with intersecting map unit keys and names, \code{geom} overlapping or intersecting map unit polygons
+#' @param what a character vector specifying what to return. 'mukey': \code{data.frame} with intersecting map unit keys and names, \code{geom} overlapping or intersecting map unit polygons
 #' @param geomIntersection logical; \code{FALSE}: overlapping map unit polygons returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is returned.
 #' @param db a character vector identifying the Soil Geographic Databases
 #'   ('SSURGO' or 'STATSGO') to query. Option \var{STATSGO} currently works
@@ -183,7 +183,7 @@ FROM geom_data;
 #' 
 #' There is a 100,000 record limit and 32Mb JSON serializer limit, per query.
 #' 
-#' SSURGO (detailed soil survey, typicall 1:24,000 scale) and STATSGO (generalized soil survey, 1:250,000 scale) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
+#' SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO (generalized soil survey, 1:250,000 scale) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
 #' 
 #' 
 #' @examples

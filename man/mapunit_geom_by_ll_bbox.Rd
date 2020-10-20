@@ -21,7 +21,7 @@ Fetch map unit geometry from the SDA website by WGS84 bounding box. There is a l
 The SDA website can be found at http://sdmdataaccess.nrcs.usda.gov. See examples for bounding box formatting.
 }
 \note{
-It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that are completely within the bounding box / overlap with the bbox. This function requires the 'rgdal' package.
+SDA does not return the spatial intersection of map unit polygons and bounding box. Rather, just those polygons that are completely within the bounding box / overlap with the bbox. This function requires the 'rgdal' package.
 }
 \examples{
 ## fetch map unit geometry from a bounding-box:

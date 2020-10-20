@@ -18,7 +18,7 @@ This dataset contains the years of each US Soil Survey was published.
     \item{\code{ssa}}{Soil Survey name, a character vector}
     \item{\code{year}}{year of publication, a numeric vector}
     \item{\code{pdf}}{does a pdf exists, a logical vector}
-    \item{\code{state}}{State abbrevation, a character vector}
+    \item{\code{state}}{State abbreviation, a character vector}
   }
 }
 

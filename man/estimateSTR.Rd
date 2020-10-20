@@ -12,13 +12,12 @@ estimateSTR(mast, mean.summer, mean.winter, O.hz = NA, saturated = NA, permafros
   \item{mast}{vector of mean annual soil temperature (deg C)}
   \item{mean.summer}{vector of mean summer soil temperature (deg C)}
   \item{mean.winter}{vector of mean winter soil temperature (deg C)}
-  \item{O.hz}{logical vector of O horizon presence / absense}
+  \item{O.hz}{logical vector of O horizon presence / absence}
   \item{saturated}{logical vector of seasonal saturation}
-  \item{permafrost}{logical vector of permafrost presence / absense}
+  \item{permafrost}{logical vector of permafrost presence / absence}
 }
 
-\details{Pending.
-
+\details{
 \href{http://ncss-tech.github.io/AQP/soilDB/STR-eval.html}{Related tutorial}.
 }
 

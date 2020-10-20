@@ -7,7 +7,7 @@
 \arguments{
   \item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)}
 }
-\value{A dataframe.}
+\value{A data.frame.}
 \author{Jay M. Skovlin and Dylan E. Beaudette}
 \details{This function currently works only on Windows, and requires a 'nasis_local' ODBC connection.}
 \note{This function queries KSSL laboratory site/horizon data from a local NASIS database from the lab layer data table.}

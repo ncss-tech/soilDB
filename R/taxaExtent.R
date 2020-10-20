@@ -1,7 +1,7 @@
 
 #' @title Retrieve Soil Taxonomy Membership Grids
 #' 
-#' @description This function downloads a generalized representation of the geographic extent of any single taxa from the top 4 tiers of Soil Taxonomy. Data are provided by SoilWeb, ultimately sourced from from the current SSURGO snapshot. Data are returned as \code{raster} objects representing area proportion falling within 800m cells. Data are only available in CONUS and returned using an albers equal area / NAD83 corrdinate reference system.
+#' @description This function downloads a generalized representation of the geographic extent of any single taxa from the top 4 tiers of Soil Taxonomy. Data are provided by SoilWeb, ultimately sourced from from the current SSURGO snapshot. Data are returned as \code{raster} objects representing area proportion falling within 800m cells. Data are only available in CONUS and returned using an Albers Equal Area / NAD83 coordinate reference system.
 #' 
 #' @param x single taxa name, case-insensitive
 #' 

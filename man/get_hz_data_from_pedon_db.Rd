@@ -11,10 +11,10 @@ get_hz_data_from_pedon_db(dsn)
   \item{dsn}{The path to a 'pedon.mdb' database.}
 }
 \details{This function currently works only on Windows.}
-\value{A dataframe.}
+\value{A data.frame.}
 
 \author{Dylan E. Beaudette and Jay M. Skovlin}
-\note{NULL total rock fragment values are assumed to represent an _absense_ of rock fragments, and set to 0.}
+\note{NULL total rock fragment values are assumed to represent an _absence_ of rock fragments, and set to 0.}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 

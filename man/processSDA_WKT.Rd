@@ -11,7 +11,7 @@ processSDA_WKT(d, g = "geom", p4s = "+proj=longlat +datum=WGS84")
 
 \item{g}{name of column in \code{d} containing WKT geometry}
 
-\item{p4s}{PROJ4 CRS defintion, typically GCS WGS84}
+\item{p4s}{PROJ4 CRS definition, typically GCS WGS84}
 }
 \value{
 A \code{Spatial*} object.

@@ -11,7 +11,7 @@ get_veg_species_from_MT_veg_db(dsn)
   \item{dsn}{The name of the Montana RangeDB front-end database connection (see details).}
 }
 \details{This function currently works only on Windows.}
-\value{A dataframe.}
+\value{A data.frame.}
 \author{Jay M. Skovlin}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

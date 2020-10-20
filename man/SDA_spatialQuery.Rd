@@ -16,7 +16,7 @@ SDA_spatialQuery(
 \arguments{
 \item{geom}{a Spatial* object, with valid CRS. May contain multiple features.}
 
-\item{what}{a character vector specifting what to return. 'mukey': \code{data.frame} with intersecting map unit keys and names, \code{geom} overlapping or intersecting map unit polygons}
+\item{what}{a character vector specifying what to return. 'mukey': \code{data.frame} with intersecting map unit keys and names, \code{geom} overlapping or intersecting map unit polygons}
 
 \item{geomIntersection}{logical; \code{FALSE}: overlapping map unit polygons returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is returned.}
 
@@ -28,14 +28,14 @@ only in combination with \code{what = "geom"}.}
 A \code{data.frame} if \code{what = 'mukey'}, otherwise \code{SpatialPolygonsDataFrame} object.
 }
 \description{
-Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersectionion of \code{geom} + SSURGO / STATSGO polygons can be returned. See details.
+Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersection of \code{geom} + SSURGO / STATSGO polygons can be returned. See details.
 }
 \details{
 Queries for map unit keys are always more efficient vs. queries for overlapping or intersecting (i.e. least efficient) features. \code{geom} is converted to GCS / WGS84 as needed. Map unit keys are always returned when using \code{what = "geom"}.
 
 There is a 100,000 record limit and 32Mb JSON serializer limit, per query.
 
-SSURGO (detailed soil survey, typicall 1:24,000 scale) and STATSGO (generalized soil survey, 1:250,000 scale) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
+SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO (generalized soil survey, 1:250,000 scale) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
 }
 \note{
 Row-order is not preserved across features in \code{geom} and returned object. Use \code{sp::over()} or similar functionality to extract from results. Polygon area in acres is computed server-side when \code{what = 'geom'} and \code{geomIntersection = TRUE}.

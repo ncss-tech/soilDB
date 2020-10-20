@@ -44,5 +44,5 @@ test_that("estimateColorMixture basic functionality", {
 
 ## TODO: many more examples of colors + resulting mixutres
 
-## TODO: test mixing in the absense of color percentages
+## TODO: test mixing in the absence of color percentages
 

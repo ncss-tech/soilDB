@@ -12,7 +12,7 @@ STRplot(mast, msst, mwst, permafrost = FALSE, pt.cex = 2.75, leg.cex = 0.85)
   \item{mast}{single value or vector of mean annual soil temperature (deg C)}
   \item{msst}{single value or vector of mean summer soil temperature (deg C)}
   \item{mwst}{single value of mean winter soil temperature (deg C)}
-  \item{permafrost}{logical: permafrost presence / absense}
+  \item{permafrost}{logical: permafrost presence / absence}
   \item{pt.cex}{symbol size}
   \item{leg.cex}{legend size}
 }

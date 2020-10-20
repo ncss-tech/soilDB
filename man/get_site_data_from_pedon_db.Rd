@@ -11,7 +11,7 @@ get_site_data_from_pedon_db(dsn)
   \item{dsn}{The path to a 'pedon.mdb' database.}
 }
 
-\value{A dataframe.}
+\value{A data.frame.}
 
 \author{Dylan E. Beaudette and Jay M. Skovlin}
 \note{This function currently works only on Windows.}

@@ -10,7 +10,7 @@ get_colors_from_NASIS_db(SS = TRUE)
   \item{SS}{fetch data from Selected Set in NASIS or from the entire local database (default: TRUE)}	
 }
 \details{This function currently works only on Windows.}
-\value{A dataframe with the results.}
+\value{A data.frame with the results.}
 \author{Jay M. Skovlin and Dylan E. Beaudette}
 
 

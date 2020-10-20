@@ -41,7 +41,7 @@ get_cosoilmoist_from_SDA(WHERE = NULL, duplicates = FALSE, impute = TRUE,
 
 
 \arguments{
-  \item{WHERE}{text string formated as an SQL WHERE clause (default: FALSE)}
+  \item{WHERE}{text string formatted as an SQL WHERE clause (default: FALSE)}
   \item{duplicates}{logical; if TRUE a record is returned for each unique mukey (may be many per nationalmusym)}
   \item{childs}{logical; if FALSE parent material and geomorphic child tables are not flattened and appended}
   \item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)}
@@ -51,17 +51,16 @@ get_cosoilmoist_from_SDA(WHERE = NULL, duplicates = FALSE, impute = TRUE,
   \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
   }
 
+\details{These functions return data from Soil Data Access with the use of a simple text string that formatted as an SQL WHERE clause (e.g. \code{WHERE = "areasymbol = 'IN001'"}. All functions are SQL queries that wrap around \code{SDAquery()} and format the data for analysis.
 
-\details{These functions return data from Soil Data Access with the use of a simple text string that formated as an SQL WHERE clause (e.g. \code{WHERE = "areasymbol = 'IN001'"}. All functions are SQL querys that wrap around \code{SDAquery()} and format the data for analysis.
-
-Beware SDA includes the data for both SSURGO and STATSGO2. The \code{areasymbol} for STATSGO2 is \code{US}. Therefore if data from just SSURGO is desired, set \code{WHERE = "areareasymbol != 'US'"}.
+Beware SDA includes the data for both SSURGO and STATSGO2. The \code{areasymbol} for STATSGO2 is \code{US}. For just SSURGO, include \code{WHERE = "areareasymbol != 'US'"}.
 
 If the duplicates argument is set to TRUE, duplicate components are returned. This is not necessary with data returned from NASIS, which has one unique national map unit. SDA has duplicate map national map units, one for each legend it exists in.
 
-The value of \code{nullFragsAreZero} will have a significant impact on the rock fragment fractions returned by \code{fetchSDA}. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and NULL rock fragment values should be interpretated as NULLs. Set \code{nullFragsAreZero = TRUE} in those cases where NULL rock fragment values should be interpreted as 0.
+The value of \code{nullFragsAreZero} will have a significant impact on the rock fragment fractions returned by \code{fetchSDA}. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and NULL rock fragment values should be interpreted as NULLs. Set \code{nullFragsAreZero = TRUE} in those cases where NULL rock fragment values should be interpreted as 0.
 
 }
-\value{A dataframe or soil profile collection object.}
+\value{A data.frame or SoilProfileCollection object.}
 \author{Stephen Roecker}
 
 

@@ -3,7 +3,7 @@
 \alias{get_soilseries_from_NASISWebReport}
 
 \title{Get records from the Soil Classification (SC) database}
-\description{These functions return records from the Soil Classification database, either from the local NASIS datbase (all series) or via web report (named series only).}
+\description{These functions return records from the Soil Classification database, either from the local NASIS database (all series) or via web report (named series only).}
 
 \usage{
 

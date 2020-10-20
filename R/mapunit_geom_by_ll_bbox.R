@@ -1,7 +1,7 @@
 
 
 # 2011-06-22
-# It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that overlap the bbox.
+# It appears that SDA does not actually return the spatial intersection of map unit polygons and bounding box. Rather, just those polygons that overlap the bbox.
 #' Fetch Map Unit Geometry from SDA
 #' 
 #' @description Fetch map unit geometry from the SDA website by WGS84 bounding box. There is a limit on the amount of data returned as serialized JSON (~32Mb) and a total record limit of 100,000.
@@ -10,7 +10,8 @@
 #' @param source the source database, currently limited to soil data access (SDA)
 #' @details The SDA website can be found at http://sdmdataaccess.nrcs.usda.gov. See examples for bounding box formatting.
 #' @return A SpatialPolygonsDataFrame of map unit polygons, in WGS84 (long,lat) coordinates.
-#' @note It appears that SDA does not actually return the spatial intersecion of map unit polygons and bounding box. Rather, just those polygons that are completely within the bounding box / overlap with the bbox. This function requires the 'rgdal' package.
+#' @note SDA does not return the spatial intersection of map unit polygons and bounding box. Rather, just those polygons that are completely within the bounding box / overlap with the bbox. This function requires the 'rgdal' package.
+#' 
 #' @author Dylan E. Beaudette
 #' @export
 #'

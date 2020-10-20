@@ -13,11 +13,11 @@ fetchRaCA(
 )
 }
 \arguments{
-\item{series}{a soil series name; case insensitive}
+\item{series}{a soil series name; case-insensitive}
 
 \item{bbox}{a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}, constrained to a 5-degree block}
 
-\item{state}{a two-letter US state abbreviation; case insensitive}
+\item{state}{a two-letter US state abbreviation; case-insensitive}
 
 \item{rcasiteid}{a RaCA site id (e.g. 'C1609C01')}
 

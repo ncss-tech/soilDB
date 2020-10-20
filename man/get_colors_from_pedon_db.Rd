@@ -12,7 +12,7 @@ get_colors_from_pedon_db(dsn)
   \item{dsn}{The path to a 'pedon.mdb' database.}
 }
 \details{This function currently works only on Windows.}
-\value{A dataframe with the results.}
+\value{A data.frame with the results.}
 \author{Dylan E. Beaudette and Jay M. Skovlin}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

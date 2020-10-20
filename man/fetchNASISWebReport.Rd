@@ -64,7 +64,7 @@ get_sitesoilmoist_from_NASISWebReport(usiteid)
 }
 
 
-\value{A dataframe or list with the results.}
+\value{A data.frame or list with the results.}
 \author{Stephen Roecker}
 
 

@@ -5,7 +5,7 @@
 
 #' @title Estimate color mixtures using weighted average of CIELAB color coordinates
 #'
-#' @note See \code{\link[aqp]{mixMunsell}} for a more realstic (but slower) simulation of subtractive mixing of pigments.
+#' @note See \code{\link[aqp]{mixMunsell}} for a more realistic (but slower) simulation of subtractive mixing of pigments.
 #' 
 #' @author D.E. Beaudette
 #'

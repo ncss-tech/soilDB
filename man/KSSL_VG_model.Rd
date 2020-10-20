@@ -18,8 +18,8 @@ KSSL_VG_model(VG_params, phi_min = 10^-6, phi_max = 10^8, pts = 100)
 \describe{
  \item{theta_r}{saturated water content, values should be in the range of \{0, 1\}}
  \item{theta_s}{residual water content, values should be in the range of \{0, 1\}}
- \item{alpha}{related to the inverse of the air entry suction, function expects log10-tranformed values with units of cm}
- \item{npar}{index of pore size distribution, function expects log10-tranformed values with units of 1/cm}
+ \item{alpha}{related to the inverse of the air entry suction, function expects log10-transformed values with units of cm}
+ \item{npar}{index of pore size distribution, function expects log10-transformed values with units of 1/cm}
 }
 
 }

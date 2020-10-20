@@ -11,7 +11,7 @@
   \item{dsn}{file path to the NPS PLOTS access database on your system.}
 }
 
-\value{A dataframe with vegetation data in a long format with linkage to NRCS soil pedon data via the site_id key field.}
+\value{A data.frame with vegetation data in a long format with linkage to NRCS soil pedon data via the site_id key field.}
 
 \author{Jay M. Skovlin}
 

@@ -9,7 +9,7 @@
 # soilDB 2.5.7 (2020-09-03) 
  * add `fetchGDB` for querying tabular data from SSURGO/gNATSGO/STATSGO File Geodatabases
  * add `get_NOAA_GHCND()` and `get_NOAA_stations_nearXY()` for batch queries of NOAA Daily Climate Data (requires free API token) 
- * bugfix for `fetchSDA_spatial` with `chunk.size` > 1 resulting in duplicate data in result
+ * bug fix for `fetchSDA_spatial` with `chunk.size` > 1 resulting in duplicate data in result
  * major improvements to `fetchSDA_spatial` to handle queries that exceed JSON Serialization Limit
  * add `fetchSoilGrids` for point data queries to SoilGrids v2 API with SoilProfileCollection output
  
@@ -24,7 +24,7 @@
   * add `get_concentrations_from_NASIS_db()` and `get_phfmp_from_NASIS_db()` for fetching Pedon Horizon Concentrations and Field Measured Properties from NASIS local database
   
 # soilDB 2.5.1 (2020-01-29)
-  * bugfix for `fetchNASIS(from='components', fill=TRUE, rmHzErrors=TRUE)` in context of new `::hzDepthTests()` and non-unique `chiid` due to `NA` values introduced by `fill`
+  * bug fix for `fetchNASIS(from='components', fill=TRUE, rmHzErrors=TRUE)` in context of new `::hzDepthTests()` and non-unique `chiid` due to `NA` values introduced by `fill`
   
 # soilDB 2.5 (2020-01-23)
   * CRAN release
@@ -34,7 +34,7 @@
 
 # soilDB 2.4.3 (2020-01-07)
   * surface water depth added to `fetchNASIS_pedons()`
-  * `fetchNASIS()` has @restrictions set automaticlly if data are populated
+  * `fetchNASIS()` has @restrictions set automatically if data are populated
   * new function for accessing pedon RMF in local NASIS DB: `get_RMF_from_NASIS_db()`
   
 # soilDB 2.4 (2019-11-05)
@@ -109,10 +109,10 @@
    * bug fix for subtle change in how SCAN data are returned from webservice
 
 # soilDB 2.0-3 (2018-02-13)
-   * bug fix for simplfyFragmentData(, nullFragsAreZero=FALSE), still more work to do
+   * bug fix for simplifyFragmentData(, nullFragsAreZero=FALSE), still more work to do
 
 # soilDB 2.0-2 (2018-01-29)
-   * bug fix for simplfyFragmentData() when fragment volume > 100%
+   * bug fix for simplifyFragmentData() when fragment volume > 100%
 
 # soilDB 2.0-1 (2018-01-23)
    * updated `loafercreek` and `gopheridge` sample datasets and manual page to reflect latest fetchNASIS
@@ -172,7 +172,7 @@
    * NASIS pedon ecosite data now returned by fetchNASIS() (c/o J. Skovlin)
 
 # soilDB 1.6.9 (2015-12-28)
-   * clean-up in local NASIS queries, removed extra parens
+   * clean-up in local NASIS queries, removed extra parentheses
    * NASIS component query function overhaul: previous code may be broken, details pending
 
 # soilDB 1.6.8 (2015-12-22)
@@ -182,7 +182,7 @@
    * experimental function for processing SDA queries that return geometry: processSDA_WKT()
 
 # soilDB 1.6.5 (2015-12-03)
-   * bug fix for poorly specified gemomorphic descriptions, caused fetchNASIS() to barf
+   * bug fix for poorly specified geomorphic descriptions, caused fetchNASIS() to barf
    * fetchKSSL() gains new query filters, see man page
 
 # soilDB 1.6.4 (2015-11-27)
@@ -201,7 +201,7 @@
 # soilDB 1.6 (2015-08-19)
    * soilDB now imports from the `reshape` package, will transition to `reshape2` with soilDB 2.0
    * fetchHenry() officially added, complete with documentation
-   * SDA_query() undergoing some upgrades, no longer requies SSOAP / XMLSchema packages
+   * SDA_query() undergoing some upgrades, no longer requires SSOAP / XMLSchema packages
    * SSOAP / XMLSchema packages no longer in 'suggests' list
 
 # soilDB 1.5-8 (2015-08-13)
@@ -255,7 +255,7 @@
 
 # soilDB 1.2-6 (2013-12-05)
    * added new function contributed by J.M. Skovlin: get_veg_from_NPS_PLOTS_db()
-   * bugfixes in get_extended_data_from_NASIS_db(): results from geomorph tables are now returned
+   * bug fixes in get_extended_data_from_NASIS_db(): results from geomorph tables are now returned
 
 # soilDB 1.2-3 (2013-10-25)
    * added new function fetchSCAN() for downloading soil/climate data from USDA-NRCS SCAN stations (still experimental!)
@@ -340,14 +340,14 @@
    * tidying up documentation, package dependencies, and NAMESPACE
 
 # soilDB 0.5-6 (2012-04-16)
-   * adding preimlinary functions for querying component data from local NASIS
+   * adding preliminary functions for querying component data from local NASIS
    * fixed minor bug in SDA_query() and added some links to related documentation
 
 # soilDB 0.5-1 (2012-02-22)
    * fetchNASIS() and fetchPedonPC() now integrate `extended' data
    * warning and error messages cleaned-up
    * multiple textures no longer cause duplicate HZ rows (NASIS only)
-   * exteded queries now split frags/para-frags
+   * extended queries now split frags/para-frags
    * silt fraction is estimated from 100-(sand+clay) when possible
    * added local NASIS ODBC connection vignette (thanks JMS)
    * removed dsn argument from NASIS functions as it should always be 'nasis_local'
