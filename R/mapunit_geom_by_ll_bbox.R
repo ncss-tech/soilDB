@@ -8,7 +8,7 @@
 #' 
 #' @param bbox 	a bounding box in WGS coordinates
 #' @param source the source database, currently limited to soil data access (SDA)
-#' @details The SDA website can be found at http://sdmdataaccess.nrcs.usda.gov. See examples for bounding box formatting.
+#' @details The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}. See examples for bounding box formatting.
 #' @return A SpatialPolygonsDataFrame of map unit polygons, in WGS84 (long,lat) coordinates.
 #' @note SDA does not return the spatial intersection of map unit polygons and bounding box. Rather, just those polygons that are completely within the bounding box / overlap with the bbox. This function requires the 'rgdal' package.
 #' 

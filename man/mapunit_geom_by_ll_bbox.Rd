@@ -18,7 +18,7 @@ A SpatialPolygonsDataFrame of map unit polygons, in WGS84 (long,lat) coordinates
 Fetch map unit geometry from the SDA website by WGS84 bounding box. There is a limit on the amount of data returned as serialized JSON (~32Mb) and a total record limit of 100,000.
 }
 \details{
-The SDA website can be found at http://sdmdataaccess.nrcs.usda.gov. See examples for bounding box formatting.
+The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}. See examples for bounding box formatting.
 }
 \note{
 SDA does not return the spatial intersection of map unit polygons and bounding box. Rather, just those polygons that are completely within the bounding box / overlap with the bbox. This function requires the 'rgdal' package.

@@ -20,7 +20,7 @@ A \code{Spatial*} object.
 This is a helper function, commonly used with \code{SDA_query} to extract WKT (well-known text) representation of geometry to an sp-class object.
 }
 \details{
-The SDA website can be found at \url{http://sdmdataaccess.nrcs.usda.gov}. See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for detailed examples.
+The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}. See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for detailed examples.
 }
 \note{
 This function requires the `httr`, `jsonlite`, `XML`, and `rgeos` packages.

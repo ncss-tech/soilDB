@@ -63,7 +63,7 @@ These last two cases are problematic for analysis that makes use of morphology a
 \value{a \code{SoilProfileCollection} object containing basic soil morphology and taxonomic information.}
 
 \references{
-USDA-NRCS OSD search tools: \url{http://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587}
+USDA-NRCS OSD search tools: \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587}
 }
 
 \author{D.E. Beaudette}

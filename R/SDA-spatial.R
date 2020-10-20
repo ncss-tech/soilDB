@@ -24,7 +24,7 @@
 #' @param g name of column in \code{d} containing WKT geometry
 #' @param p4s PROJ4 CRS definition, typically GCS WGS84
 #' 
-#' @details The SDA website can be found at \url{http://sdmdataaccess.nrcs.usda.gov}. See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for detailed examples.
+#' @details The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}. See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for detailed examples.
 #' 
 #' @note This function requires the `httr`, `jsonlite`, `XML`, and `rgeos` packages.
 #' 

@@ -54,8 +54,7 @@
 \value{a \code{data.frame} object containing soil series names that match patterns supplied as arguments.}
 
 \references{
-  
-  \url{http://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587}
+  \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587}
 }
 
 \author{D.E. Beaudette}

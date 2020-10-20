@@ -12,6 +12,7 @@
  * bug fix for `fetchSDA_spatial` with `chunk.size` > 1 resulting in duplicate data in result
  * major improvements to `fetchSDA_spatial` to handle queries that exceed JSON Serialization Limit
  * add `fetchSoilGrids` for point data queries to SoilGrids v2 API with SoilProfileCollection output
+ * `fetchKSSL(..., returnGeochemicalData=TRUE)` now returns geochemical, optical and XRD/thermal data
  
 # soilDB 2.5.6 (2020-06-16)
  * bug fixes in `fetchKSSL` related to vectorization, all arguments vectorized except for `bbox`
