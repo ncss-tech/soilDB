@@ -1,16 +1,17 @@
-# soilDB 2.5.7 (2020-10-13)
+# soilDB 2.5.8 (2020-10-20)
  * `fetchNASIS` / `soilDB:::.rockFragmentSieve` now uses fragment RV, `soilDB:::.sieve` uses `<` operator (https://github.com/ncss-tech/soilDB/issues/1)
  * `fetchKSSL(..., returnMorphologicData=TRUE)` now returns redoximorphic features by horizon
  * new function `taxaExtent` returns 800m gridded taxonomic grids for CONUS
  * `seriesExtent` can now return 800m gridded series extents for CONUS
  * `SDA_spatialQuery` can now retrieve SSURGO and STATSGO geometry c/o [dschlaep](https://github.com/dschlaep) (https://github.com/ncss-tech/soilDB/issues/141)
- * add `SDA_spatialQuery` for querying tabular / spatial records via SDA given `Spatial*` class input features
+ * new import: `data.table`; beginning to implement _data.table_-aware methods in _aqp_ and _soilDB_
+
+# soilDB 2.5.7 (2020-09-03) 
  * add `fetchGDB` for querying tabular data from SSURGO/gNATSGO/STATSGO File Geodatabases
- * add `fetchSoilGrids` for point data queries to SoilGrids v2 API with SoilProfileCollection output
  * add `get_NOAA_GHCND()` and `get_NOAA_stations_nearXY()` for batch queries of NOAA Daily Climate Data (requires free API token) 
  * bugfix for `fetchSDA_spatial` with `chunk.size` > 1 resulting in duplicate data in result
  * major improvements to `fetchSDA_spatial` to handle queries that exceed JSON Serialization Limit
- * new import: `data.table`; beginning to implement _data.table_-aware methods in _aqp_ and _soilDB_
+ * add `fetchSoilGrids` for point data queries to SoilGrids v2 API with SoilProfileCollection output
  
 # soilDB 2.5.6 (2020-06-16)
  * bug fixes in `fetchKSSL` related to vectorization, all arguments vectorized except for `bbox`
