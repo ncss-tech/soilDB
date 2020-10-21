@@ -136,7 +136,7 @@
     </tr>
     <tr>
       <th>x</th>
-      <td><p>a <code>data.frame</code> object containing sRGB cordinates associated with a group of colors to mix</p></td>
+      <td><p>a <code>data.frame</code> object containing sRGB coordinates associated with a group of colors to mix</p></td>
     </tr>
     <tr>
       <th>wt</th>
@@ -157,7 +157,7 @@
     <p>This function is mainly intended for the processing of NASIS pedon/horizon data which may or may not contain multiple colors per horizon/moisture status combination. <code>simplifyColorData</code> will "mix" multiple colors associated with horizons in <code>d</code>, according to IDs specified by <code>id.var</code>, using "weights" (area percentages) specified by the <code>wt</code> argument to <code>mix_and_clean_colors</code>.</p>
 <p>Note that this function doesn't actually simulate the mixture of pigments on a surface, rather, "mixing" is approximated via weighted average in the CIELAB colorspace.</p>
 <p>The <code>simplifyColorData</code> function can be applied to data sources other than NASIS by careful use of the <code>id.var</code> and <code>wt</code> arguments. However, <code>d</code> must contain Munsell colors split into columns named "colorhue", "colorvalue", and "colorchroma". In addition, the moisture state ("Dry" or "Moist") must be specified in a column named "colormoistst".</p>
-<p>The <code>mix_and_clean_colors</code> funcion can be applied to arbitrary data sources as long as <code>x</code> contains sRGB coordinates in columns named "r", "g", and "b". This function should be applied to chunks of rows within which color mixtures make sense.</p>
+<p>The <code>mix_and_clean_colors</code> function can be applied to arbitrary data sources as long as <code>x</code> contains sRGB coordinates in columns named "r", "g", and "b". This function should be applied to chunks of rows within which color mixtures make sense.</p>
 <p>There are examples in <a href='http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html'>the KSSL data tutorial</a> and <a href='http://ncss-tech.github.io/AQP/soilDB/mixing-soil-color-data.html'>the soil color mixing tutorial</a>.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 

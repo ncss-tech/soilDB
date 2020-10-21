@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Soil Data Access Query — SDA_query" />
-<meta property="og:description" content="Submit a query to the Soil Data Acccess (SDA) REST/JSON web-service and return the results as a data.frame. There is a 100,000 record limit and 32Mb JSON serializer limit, per query. Queries should contain a WHERE statement or JOIN condition to limit the number of rows affected / returned. Consider wrapping calls to SDA_query in a function that can iterate over logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function makeChunks can help with such iteration." />
+<meta property="og:description" content="Submit a query to the Soil Data Access (SDA) REST/JSON web-service and return the results as a data.frame. There is a 100,000 record limit and 32Mb JSON serializer limit, per query. Queries should contain a WHERE statement or JOIN condition to limit the number of rows affected / returned. Consider wrapping calls to SDA_query in a function that can iterate over logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function makeChunks can help with such iteration." />
 
 
 
@@ -117,7 +117,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Submit a query to the Soil Data Acccess (SDA) REST/JSON web-service and return the results as a data.frame. There is a 100,000 record limit and 32Mb JSON serializer limit, per query. Queries should contain a WHERE statement or JOIN condition to limit the number of rows affected / returned. Consider wrapping calls to <code>SDA_query</code> in a function that can iterate over logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function <code>makeChunks</code> can help with such iteration.</p>
+    <p>Submit a query to the Soil Data Access (SDA) REST/JSON web-service and return the results as a data.frame. There is a 100,000 record limit and 32Mb JSON serializer limit, per query. Queries should contain a WHERE statement or JOIN condition to limit the number of rows affected / returned. Consider wrapping calls to <code>SDA_query</code> in a function that can iterate over logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function <code>makeChunks</code> can help with such iteration.</p>
     </div>
 
     <pre class="usage"><span class='fu'>SDA_query</span>(<span class='kw'>q</span>)</pre>
@@ -136,7 +136,7 @@
     <p>a data.frame result (<code>NULL</code> if empty, try-error on error)</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The SDA website can be found at <a href='http://sdmdataaccess.nrcs.usda.gov'>http://sdmdataaccess.nrcs.usda.gov</a> and query examples can be found at <a href='http://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx'>http://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx</a>. A library of query examples can be found at <a href='https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home'>https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home</a>.</p>
+    <p>The SDA website can be found at <a href='https://sdmdataaccess.nrcs.usda.gov'>https://sdmdataaccess.nrcs.usda.gov</a> and query examples can be found at <a href='https://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx'>https://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx</a>. A library of query examples can be found at <a href='https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home'>https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home</a>.</p>
 <p>SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the <a href='http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html'>SDA Tutorial</a> for details.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 

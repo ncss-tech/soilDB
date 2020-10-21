@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate color mixture using L, A, B color coordinates and weights — estimateColorMixture • soilDB</title>
+<title>Estimate color mixtures using weighted average of CIELAB color coordinates — estimateColorMixture • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Estimate color mixture using L, A, B color coordinates and weights — estimateColorMixture" />
-<meta property="og:description" content="Estimate color mixture using L, A, B color coordinates and weights" />
+<meta property="og:title" content="Estimate color mixtures using weighted average of CIELAB color coordinates — estimateColorMixture" />
+<meta property="og:description" content="Estimate color mixtures using weighted average of CIELAB color coordinates" />
 
 
 
@@ -111,13 +111,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate color mixture using L, A, B color coordinates and weights</h1>
+    <h1>Estimate color mixtures using weighted average of CIELAB color coordinates</h1>
     <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/estimateColorMixture.R'><code>R/estimateColorMixture.R</code></a></small>
     <div class="hidden name"><code>estimateColorMixture.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Estimate color mixture using L, A, B color coordinates and weights</p>
+    <p>Estimate color mixtures using weighted average of CIELAB color coordinates</p>
     </div>
 
     <pre class="usage"><span class='fu'>estimateColorMixture</span>(<span class='kw'>x</span>, wt = <span class='st'>"pct"</span>, backTransform = <span class='fl'>FALSE</span>)</pre>
@@ -142,6 +142,12 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data.frame containing estimated color mixture</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>See <code><a href='https://rdrr.io/pkg/aqp/man/mixMunsell.html'>mixMunsell</a></code> for a more realistic (but slower) simulation of subtractive mixing of pigments.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

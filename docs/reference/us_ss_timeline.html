@@ -129,7 +129,7 @@
     <dt><code>ssa</code></dt><dd><p>Soil Survey name, a character vector</p></dd>
     <dt><code>year</code></dt><dd><p>year of publication, a numeric vector</p></dd>
     <dt><code>pdf</code></dt><dd><p>does a pdf exists, a logical vector</p></dd>
-    <dt><code>state</code></dt><dd><p>State abbrevation, a character vector</p></dd>
+    <dt><code>state</code></dt><dd><p>State abbreviation, a character vector</p></dd>
   
 </dl>
 
@@ -140,57 +140,6 @@
 
     <p>https://www.nrcs.usda.gov/wps/portal/nrcs/soilsurvey/soils/survey/state/</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
-    <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>() <span class='op'>&amp;</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='http://www.omegahat.net/RSXML'>"XML"</a></span>) <span class='op'>&amp;</span> 
-    <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"RCurl"</span>) <span class='op'>&amp;</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='http://ggplot2.tidyverse.org'>"ggplot2"</a></span>) <span class='op'>&amp;</span> 
-    <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"gridExtra"</span>)
-) {
-  
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>state</span>)
-<span class='kw'>st</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>state.abb</span>, <span class='st'>"PR"</span>, <span class='st'>"DC"</span>, <span class='st'>"VI"</span>, <span class='st'>"PB"</span>))
-<span class='kw'>us_ss_timeline</span> <span class='op'>&lt;-</span> {
-  <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='kw'>st</span>, <span class='fu'>function</span>(<span class='kw'>x</span>) {
-    <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='st'>"getting"</span>, <span class='kw'>x</span>, <span class='st'>"\n"</span>)
-    <span class='kw'>url</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/RCurl/man/getURL.html'>getURL</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(
-      <span class='st'>"https://www.nrcs.usda.gov/wps/portal/nrcs/surveylist/soils/survey/state/?stateId="</span>, <span class='kw'>x</span>)
-    )
-    <span class='kw'>df</span>  <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/XML/man/readHTMLTable.html'>readHTMLTable</a></span>(<span class='kw'>url</span>, which = <span class='fl'>22</span>, stringsAsFactors = <span class='fl'>FALSE</span>)
-    <span class='kw'>df</span><span class='op'>$</span><span class='kw'>state</span> <span class='op'>&lt;-</span> <span class='kw'>x</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='kw'>df</span>)
-  }) <span class='op'>-&gt;</span><span class='kw'>.</span>;
-  <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span>(<span class='st'>"rbind"</span>, <span class='kw'>.</span>) <span class='op'>-&gt;</span><span class='kw'>.</span>;
-  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span>(<span class='kw'>.</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ssa"</span>, <span class='st'>"year"</span>, <span class='st'>"pdf"</span>, <span class='st'>"wss"</span>, <span class='st'>"state"</span>)
-  <span class='kw'>.</span>[<span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grepl</a></span>(<span class='kw'>.</span><span class='op'>$</span><span class='kw'>year</span>, pattern=<span class='st'>"current"</span>), ] <span class='op'>-&gt;</span><span class='kw'>.</span>;
-}
-<span class='kw'>us_ss_timeline</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>within</a></span>(<span class='kw'>us_ss_timeline</span>, {
-  <span class='kw'>ssa</span>  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='kw'>ssa</span>, <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/strsplit.html'>strsplit</a></span>(<span class='kw'>x</span>, <span class='st'>"\r"</span>)[[<span class='fl'>1</span>]][<span class='fl'>1</span>])
-  <span class='kw'>year</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/substr.html'>substr</a></span>(<span class='kw'>year</span>, <span class='fl'>3</span>,<span class='fl'>6</span>))
-  <span class='kw'>pdf</span>  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='kw'>pdf</span> <span class='op'>==</span> <span class='st'>"Yes"</span>, <span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>)
-  <span class='kw'>wss</span>  <span class='op'>=</span> <span class='kw'>NULL</span>
-})
-
-<span class='kw'>test</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/raster/man/as.data.frame.html'>as.data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='kw'>us_ss_timeline</span><span class='op'>$</span><span class='kw'>year</span>), stringsAsFactors = <span class='fl'>FALSE</span>)
-
-<span class='kw'>g1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(data = <span class='kw'>test</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(x = <span class='kw'>Var1</span>, y = <span class='kw'>Freq</span>)) <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span>(stat = <span class='st'>"identity"</span>) <span class='op'>+</span> 
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"Year"</span>) <span class='op'>+</span> 
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span>(<span class='st'>"Count"</span>) <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span>(aspect.ratio = <span class='fl'>1</span>) <span class='op'>+</span> 
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span>(<span class='st'>"Number of Published \n US Soil Surveys by Year"</span>)
-<span class='kw'>g2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='kw'>test</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(x = <span class='kw'>Var1</span>, y = <span class='fu'><a href='https://rdrr.io/r/base/cumsum.html'>cumsum</a></span>(<span class='kw'>Freq</span>))) <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span>(stat = <span class='st'>"identity"</span>) <span class='op'>+</span> 
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"Year"</span>) <span class='op'>+</span> 
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span>(<span class='st'>"Count"</span>) <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span>(aspect.ratio = <span class='fl'>1</span>) <span class='op'>+</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span>(<span class='st'>"Cumulative Number of Published \n US Soil Surveys by Year"</span>)
-
-<span class='fu'><a href='https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html'>grid.arrange</a></span>(<span class='kw'>g1</span>, <span class='kw'>g2</span>, ncol = <span class='fl'>2</span>)
-
-}<span class='co'># }</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: XML</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: RCurl</span></div><div class='output co'>#&gt; getting AL </div><div class='output co'>#&gt; <span class='error'>Error in function (type, msg, asError = TRUE) {    if (!is.character(type)) {        i = match(type, CURLcodeValues)        typeName = if (is.na(i))             character()        else names(CURLcodeValues)[i]    }    typeName = gsub("^CURLE_", "", typeName)    fun = (if (asError)         stop    else warning)    fun(structure(list(message = msg, call = sys.call()), class = c(typeName,         "GenericCurlError", "error", "condition")))}(35L, "error:1407742E:SSL routines:SSL23_GET_SERVER_HELLO:tlsv1 alert protocol version",     TRUE): error:1407742E:SSL routines:SSL23_GET_SERVER_HELLO:tlsv1 alert protocol version</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

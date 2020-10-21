@@ -170,13 +170,13 @@
 <span class='kw'>res</span><span class='op'>$</span><span class='kw'>labelname</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"%s (%s%s)"</span>, <span class='kw'>res</span><span class='op'>$</span><span class='kw'>compname</span>, <span class='kw'>res</span><span class='op'>$</span><span class='kw'>comppct_r</span>, <span class='st'>"%"</span>)
 
 <span class='co'># major components only</span>
-<span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/filter.html'>filter</a></span>(<span class='kw'>res</span>, <span class='kw'>comppct_r</span> <span class='op'>&gt;=</span> <span class='fl'>85</span>)
+<span class='kw'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html'>filter</a></span>(<span class='kw'>res</span>, <span class='kw'>comppct_r</span> <span class='op'>&gt;=</span> <span class='fl'>85</span>)
 
 <span class='co'># inspect plot of result</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>))
 <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/groupedProfilePlot.html'>groupedProfilePlot</a></span>(<span class='kw'>res</span>, groups = <span class='st'>"mukey"</span>, color = <span class='st'>"hzname"</span>, cex.names=<span class='fl'>0.8</span>,
                    id.style = <span class='st'>"side"</span>, label = <span class='st'>"labelname"</span>)
-</div><div class='img'><img src='format_SQL_in_statement-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+</div><div class='img'><img src='format_SQL_in_statement-1.png' alt='' width='768' height='475' /></div><div class='input'><span class='co'># }</span>
 
    
 </div></pre>

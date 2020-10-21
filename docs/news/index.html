@@ -114,24 +114,36 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="soildb-257-2020-09-04" class="section level1">
-<h1 class="page-header" data-toc-text="2.5.7">
-<a href="#soildb-257-2020-09-04" class="anchor"></a>soilDB 2.5.7 (2020-09-04)<small> Unreleased </small>
+    <div id="soildb-258-2020-10-20" class="section level1">
+<h1 class="page-header" data-toc-text="2.5.8">
+<a href="#soildb-258-2020-10-20" class="anchor"></a>soilDB 2.5.8 (2020-10-20)<small> 2020-10-21 </small>
 </h1>
 <ul>
+<li>
+<code>fetchNASIS</code> / <code>soilDB:::.rockFragmentSieve</code> now uses fragment RV, <code>soilDB:::.sieve</code> uses <code><a href="https://rdrr.io/r/base/Comparison.html">&lt;</a></code> operator (<a href="https://github.com/ncss-tech/soilDB/issues/1" class="uri">https://github.com/ncss-tech/soilDB/issues/1</a>)</li>
+<li>
+<code><a href="../reference/fetchKSSL.html">fetchKSSL(..., returnMorphologicData=TRUE)</a></code> now returns redoximorphic features by horizon</li>
 <li>new function <code>taxaExtent</code> returns 800m gridded taxonomic grids for CONUS</li>
 <li>
 <code>seriesExtent</code> can now return 800m gridded series extents for CONUS</li>
 <li>
 <code>SDA_spatialQuery</code> can now retrieve SSURGO and STATSGO geometry c/o <a href="https://github.com/dschlaep">dschlaep</a> (<a href="https://github.com/ncss-tech/soilDB/issues/141" class="uri">https://github.com/ncss-tech/soilDB/issues/141</a>)</li>
-<li>add <code>SDA_spatialQuery</code> for querying tabular / spatial records via SDA given <code>Spatial*</code> class input features</li>
-<li>add <code>fetchGDB</code> for querying tabular data from SSURGO/gNATSGO/STATSGO File Geodatabases</li>
-<li>add <code>fetchSoilGrids</code> for point data queries to SoilGrids v2 API with SoilProfileCollection output</li>
-<li>add <code><a href="../reference/get_NOAA_GHCND.html">get_NOAA_GHCND()</a></code> and <code><a href="../reference/get_NOAA_stations_nearXY.html">get_NOAA_stations_nearXY()</a></code> for batch queries of NOAA Daily Climate Data (requires free API token)</li>
-<li>bugfix for <code>fetchSDA_spatial</code> with <code>chunk.size</code> &gt; 1 resulting in duplicate data in result</li>
-<li>major improvements to <code>fetchSDA_spatial</code> to handle queries that exceed JSON Serialization Limit</li>
 <li>new import: <code>data.table</code>; beginning to implement <em>data.table</em>-aware methods in <em>aqp</em> and <em>soilDB</em>
 </li>
+</ul>
+</div>
+    <div id="soildb-257-2020-09-03" class="section level1">
+<h1 class="page-header" data-toc-text="2.5.7">
+<a href="#soildb-257-2020-09-03" class="anchor"></a>soilDB 2.5.7 (2020-09-03)<small> Unreleased </small>
+</h1>
+<ul>
+<li>add <code>fetchGDB</code> for querying tabular data from SSURGO/gNATSGO/STATSGO File Geodatabases</li>
+<li>add <code><a href="../reference/get_NOAA_GHCND.html">get_NOAA_GHCND()</a></code> and <code><a href="../reference/get_NOAA_stations_nearXY.html">get_NOAA_stations_nearXY()</a></code> for batch queries of NOAA Daily Climate Data (requires free API token)</li>
+<li>bug fix for <code>fetchSDA_spatial</code> with <code>chunk.size</code> &gt; 1 resulting in duplicate data in result</li>
+<li>major improvements to <code>fetchSDA_spatial</code> to handle queries that exceed JSON Serialization Limit</li>
+<li>add <code>fetchSoilGrids</code> for point data queries to SoilGrids v2 API with SoilProfileCollection output</li>
+<li>
+<code><a href="../reference/fetchKSSL.html">fetchKSSL(..., returnGeochemicalData=TRUE)</a></code> now returns geochemical, optical and XRD/thermal data</li>
 </ul>
 </div>
     <div id="soildb-256-2020-06-16" class="section level1">
@@ -167,7 +179,7 @@
 <a href="#soildb-251-2020-01-29" class="anchor"></a>soilDB 2.5.1 (2020-01-29)<small> Unreleased </small>
 </h1>
 <ul>
-<li>bugfix for <code><a href="../reference/fetchNASIS.html">fetchNASIS(from='components', fill=TRUE, rmHzErrors=TRUE)</a></code> in context of new <code>::hzDepthTests()</code> and non-unique <code>chiid</code> due to <code>NA</code> values introduced by <code>fill</code>
+<li>bug fix for <code><a href="../reference/fetchNASIS.html">fetchNASIS(from='components', fill=TRUE, rmHzErrors=TRUE)</a></code> in context of new <code>::hzDepthTests()</code> and non-unique <code>chiid</code> due to <code>NA</code> values introduced by <code>fill</code>
 </li>
 </ul>
 </div>
@@ -193,7 +205,7 @@
 <li>surface water depth added to <code>fetchNASIS_pedons()</code>
 </li>
 <li>
-<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> has <a href='https://github.com/restrictions'>@restrictions</a> set automaticlly if data are populated</li>
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> has <a href='https://github.com/restrictions'>@restrictions</a> set automatically if data are populated</li>
 <li>new function for accessing pedon RMF in local NASIS DB: <code><a href="../reference/fetchNASIS.html">get_RMF_from_NASIS_db()</a></code>
 </li>
 </ul>
@@ -373,7 +385,7 @@
 <a href="#soildb-20-3-2018-02-13" class="anchor"></a>soilDB 2.0-3 (2018-02-13)<small> Unreleased </small>
 </h1>
 <ul>
-<li>bug fix for simplfyFragmentData(, nullFragsAreZero=FALSE), still more work to do</li>
+<li>bug fix for simplifyFragmentData(, nullFragsAreZero=FALSE), still more work to do</li>
 </ul>
 </div>
     <div id="soildb-20-2-2018-01-29" class="section level1">
@@ -381,7 +393,7 @@
 <a href="#soildb-20-2-2018-01-29" class="anchor"></a>soilDB 2.0-2 (2018-01-29)<small> Unreleased </small>
 </h1>
 <ul>
-<li>bug fix for simplfyFragmentData() when fragment volume &gt; 100%</li>
+<li>bug fix for simplifyFragmentData() when fragment volume &gt; 100%</li>
 </ul>
 </div>
     <div id="soildb-20-1-2018-01-23" class="section level1">
@@ -520,7 +532,7 @@
 <a href="#soildb-169-2015-12-28" class="anchor"></a>soilDB 1.6.9 (2015-12-28)<small> Unreleased </small>
 </h1>
 <ul>
-<li>clean-up in local NASIS queries, removed extra parens</li>
+<li>clean-up in local NASIS queries, removed extra parentheses</li>
 <li>NASIS component query function overhaul: previous code may be broken, details pending</li>
 </ul>
 </div>
@@ -545,7 +557,7 @@
 <a href="#soildb-165-2015-12-03" class="anchor"></a>soilDB 1.6.5 (2015-12-03)<small> Unreleased </small>
 </h1>
 <ul>
-<li>bug fix for poorly specified gemomorphic descriptions, caused fetchNASIS() to barf</li>
+<li>bug fix for poorly specified geomorphic descriptions, caused fetchNASIS() to barf</li>
 <li>fetchKSSL() gains new query filters, see man page</li>
 </ul>
 </div>
@@ -582,7 +594,7 @@
 <ul>
 <li>soilDB now imports from the <code>reshape</code> package, will transition to <code>reshape2</code> with soilDB 2.0</li>
 <li>fetchHenry() officially added, complete with documentation</li>
-<li>SDA_query() undergoing some upgrades, no longer requies SSOAP / XMLSchema packages</li>
+<li>SDA_query() undergoing some upgrades, no longer requires SSOAP / XMLSchema packages</li>
 <li>SSOAP / XMLSchema packages no longer in ‘suggests’ list</li>
 </ul>
 </div>
@@ -704,7 +716,7 @@
 </h1>
 <ul>
 <li>added new function contributed by J.M. Skovlin: get_veg_from_NPS_PLOTS_db()</li>
-<li>bugfixes in get_extended_data_from_NASIS_db(): results from geomorph tables are now returned</li>
+<li>bug fixes in get_extended_data_from_NASIS_db(): results from geomorph tables are now returned</li>
 </ul>
 </div>
     <div id="soildb-12-3-2013-10-25" class="section level1">
@@ -903,7 +915,7 @@
 <a href="#soildb-05-6-2012-04-16" class="anchor"></a>soilDB 0.5-6 (2012-04-16)<small> Unreleased </small>
 </h1>
 <ul>
-<li>adding preimlinary functions for querying component data from local NASIS</li>
+<li>adding preliminary functions for querying component data from local NASIS</li>
 <li>fixed minor bug in SDA_query() and added some links to related documentation</li>
 </ul>
 </div>
@@ -915,7 +927,7 @@
 <li>fetchNASIS() and fetchPedonPC() now integrate `extended’ data</li>
 <li>warning and error messages cleaned-up</li>
 <li>multiple textures no longer cause duplicate HZ rows (NASIS only)</li>
-<li>exteded queries now split frags/para-frags</li>
+<li>extended queries now split frags/para-frags</li>
 <li>silt fraction is estimated from 100-(sand+clay) when possible</li>
 <li>added local NASIS ODBC connection vignette (thanks JMS)</li>
 <li>removed dsn argument from NASIS functions as it should always be ‘nasis_local’</li>

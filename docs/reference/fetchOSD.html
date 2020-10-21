@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fetch Data by Soil Series Name — fetchOSD • soilDB</title>
+<title>Fetch Official Series Descriptions and summaries from SoilWeb API — fetchOSD • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Fetch Data by Soil Series Name — fetchOSD" />
-<meta property="og:description" content="This functions fetches a varity of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb." />
+<meta property="og:title" content="Fetch Official Series Descriptions and summaries from SoilWeb API — fetchOSD" />
+<meta property="og:description" content="This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb." />
 
 
 
@@ -111,23 +111,23 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fetch Data by Soil Series Name</h1>
-    
+    <h1>Fetch Official Series Descriptions and summaries from SoilWeb API</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/fetchOSD.R'><code>R/fetchOSD.R</code></a></small>
     <div class="hidden name"><code>fetchOSD.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This functions fetches a varity of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.</p>
+    <p>This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetchOSD</span>(<span class='kw'>soils</span>, colorState = <span class='st'>'moist'</span>, extended=<span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>fetchOSD</span>(<span class='kw'>soils</span>, colorState = <span class='st'>"moist"</span>, extended = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>soils</th>
-      <td><p>a character vector of named soil series, case insensitive</p></td>
+      <td><p>a character vector of named soil series; case-insensitive</p></td>
     </tr>
     <tr>
       <th>colorState</th>
@@ -139,95 +139,70 @@
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-
-<p>Related documentation can be found in the following tutorials</p><ul>
-<li><p><a href='http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html'>overview of all soil series query functions</a></p></li>
-<li><p><a href='https://ncss-tech.github.io/AQP/soilDB/competing-series.html'>competing soil series</a></p></li>
-<li><p><a href='https://ncss-tech.github.io/AQP/soilDB/siblings.html'>siblings</a></p></li>
-</ul>
-
-
-<p>The standard set of "site" and "horizon" data are returned as a <code>SoilProfileCollection</code> object (<code>extended=FALSE</code>. The "extended" suite of summary data can be requested by setting <code>extended=TRUE</code>. The resulting object will be a <code>list</code> with the following elements:)</p>
-<dl>
-	<dt>SPC</dt><dd><p><code>SoilProfileCollection</code> containing standards "site" and "horizon" data</p></dd>
-	<dt>competing</dt><dd><p>competing soil series from the SC database snapshot</p></dd>
-	<dt>geomcomp</dt><dd><p>empirical probabilities for geomorphic component, derrived from the current SSURGO snapshot</p></dd>
-	<dt>hillpos</dt><dd><p>empirical probabilities for hillslope position, derrived from the current SSURGO snapshot</p></dd>
-	<dt>mtnpos</dt><dd><p>empirical probabilities for mountain slope position, derrived from the current SSURGO snapshot</p></dd>
-	<dt>terrace</dt><dd><p>empirical probabilities for river terrace position, derrived from the current SSURGO snapshot</p></dd>
-	<dt>flats</dt><dd><p>empirical probabilities for flat landscapes, derrived from the current SSURGO snapshot</p></dd>
-	<dt>pmkind</dt><dd><p>empirical probabilities for parent material kind, derrived from the current SSURGO snapshot</p></dd>
-	<dt>pmorigin</dt><dd><p>empirical probabilities for parent material origin, derrived from the current SSURGO snapshot</p></dd>
-	<dt>mlra</dt><dd><p>empirical MLRA membership values, derrived from the current SSURGO snapshot</p></dd>
-	<dt>climate</dt><dd><p>experimental climate summaries from PRISM stack</p></dd>
-	<dt>metadata</dt><dd><p>metadata associated with SoilWeb cached summaries</p></dd>
-	
-</dl> 
-
-
-<p>When using `extended=TRUE`, there are a couple of scenarios in which series morphology contained in `SPC` do not fully match records in the associated series summaries (e.g. `competing`).</p>
-<dl>
-	<dt>A query for soil series that exist entirely outside of CONUS (e.g. PALAU).</dt><dd><p>Climate summaries are empty <code>data.frames</code> becuase these summaries are currently generated from PRISM. We are working on a solution.</p></dd>
-	
-	<dt>A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).</dt><dd><p>Extended summaries are present but morphology missing from `SPC`. A warning is issued.</p></dd>
-	
-	<dt>A query for multiple soil series, with one more more listed as "inactive" (e.g. BREADSPRINGS).</dt><dd><p>Extended summaries are present but morphology missing from `SPC`. A warning is issued.</p></dd>
-	
-	
-</dl> 
-
-<p>These last two cases are problematic for analysis that makes use of morphology and extended data, such as outlined in this tutorial on <a href='https://ncss-tech.github.io/AQP/soilDB/competing-series.html'>competing soil series</a>.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a <code>SoilProfileCollection</code> object containing basic soil morphology and taxonomic information.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p><ul>
+<li><p><a href='https://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html'>overview of all soil series query functions</a></p></li>
+<li><p><a href='https://ncss-tech.github.io/AQP/soilDB/competing-series.html'>competing soil series</a></p></li>
+<li><p><a href='https://ncss-tech.github.io/AQP/soilDB/siblings.html'>siblings</a></p></li>
+</ul>The standard set of "site" and "horizon" data are returned as a <code>SoilProfileCollection</code> object (<code>extended=FALSE</code>. The "extended" suite of summary data can be requested by setting <code>extended=TRUE</code>. The resulting object will be a <code>list</code> with the following elements:)<dl>
+  <dt>SPC</dt><dd><p><code>SoilProfileCollection</code> containing standards "site" and "horizon" data</p></dd>
+  <dt>competing</dt><dd><p>competing soil series from the SC database snapshot</p></dd>
+  <dt>geomcomp</dt><dd><p>empirical probabilities for geomorphic component, derived from the current SSURGO snapshot</p></dd>
+  <dt>hillpos</dt><dd><p>empirical probabilities for hillslope position, derived from the current SSURGO snapshot</p></dd>
+  <dt>mtnpos</dt><dd><p>empirical probabilities for mountain slope position, derived from the current SSURGO snapshot</p></dd>
+  <dt>terrace</dt><dd><p>empirical probabilities for river terrace position, derived from the current SSURGO snapshot</p></dd>
+  <dt>flats</dt><dd><p>empirical probabilities for flat landscapes, derived from the current SSURGO snapshot</p></dd>
+  <dt>pmkind</dt><dd><p>empirical probabilities for parent material kind, derived from the current SSURGO snapshot</p></dd>
+  <dt>pmorigin</dt><dd><p>empirical probabilities for parent material origin, derived from the current SSURGO snapshot</p></dd>
+  <dt>mlra</dt><dd><p>empirical MLRA membership values, derived from the current SSURGO snapshot</p></dd>
+  <dt>climate</dt><dd><p>experimental climate summaries from PRISM stack</p></dd>
+  <dt>metadata</dt><dd><p>metadata associated with SoilWeb cached summaries</p></dd></dl> When using `extended=TRUE`, there are a couple of scenarios in which series morphology contained in `SPC` do not fully match records in the associated series summaries (e.g. `competing`).<dl>  <dt>1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).</dt><dd><p>- Climate summaries are empty <code>data.frames</code> because these summaries are currently generated from PRISM. We are working on a solution.</p></dd>  <dt>2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).</dt><dd><p>- Extended summaries are present but morphology missing from `SPC`. A warning is issued.</p></dd>  <dt>3. A query for multiple soil series, with one more more listed as "inactive" (e.g. BREADSPRINGS).</dt><dd><p>- Extended summaries are present but morphology missing from `SPC`. A warning is issued.</p></dd></dl> These last two cases are problematic for analysis that makes use of morphology and extended data, such as outlined in this tutorial on <a href='https://ncss-tech.github.io/AQP/soilDB/competing-series.html'>competing soil series</a>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>USDA-NRCS OSD search tools: <a href='http://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587'>http://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587</a></p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>D.E. Beaudette</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>SoilWeb maintains a snapshot of the Official Series Description data. Please use the link above for the live data.</p>
+    <p>USDA-NRCS OSD search tools: <a href='https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587'>https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='OSDquery.html'>OSDquery</a>, <a href='siblings.html'>siblings</a></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
-    <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>()) {
-        
-    <span class='co'># soils of interest</span>
-    <span class='kw'>s.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'musick'</span>, <span class='st'>'cecil'</span>, <span class='st'>'drummer'</span>, <span class='st'>'amador'</span>, <span class='st'>'pentz'</span>, 
-    <span class='st'>'reiff'</span>, <span class='st'>'san joaquin'</span>, <span class='st'>'montpellier'</span>, <span class='st'>'grangeville'</span>, <span class='st'>'pollasky'</span>, <span class='st'>'ramona'</span>)
+   <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>()) {
+  
+  <span class='co'># soils of interest</span>
+  <span class='kw'>s.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'musick'</span>, <span class='st'>'cecil'</span>, <span class='st'>'drummer'</span>, <span class='st'>'amador'</span>, <span class='st'>'pentz'</span>, 
+              <span class='st'>'reiff'</span>, <span class='st'>'san joaquin'</span>, <span class='st'>'montpellier'</span>, <span class='st'>'grangeville'</span>, <span class='st'>'pollasky'</span>, <span class='st'>'ramona'</span>)
+  
+  <span class='co'># fetch and convert data into an SPC</span>
+  <span class='kw'>s.moist</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span>(<span class='kw'>s.list</span>, colorState=<span class='st'>'moist'</span>)
+  <span class='kw'>s.dry</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span>(<span class='kw'>s.list</span>, colorState=<span class='st'>'dry'</span>)
+  
+  <span class='co'># plot profiles</span>
+  <span class='co'># moist soil colors</span>
+  <span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/ncss-tech/aqp'>"aqp"</a></span>)) {
     
-    <span class='co'># fetch and convert data into an SPC</span>
-    <span class='kw'>s.moist</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span>(<span class='kw'>s.list</span>, colorState=<span class='st'>'moist'</span>)
-    <span class='kw'>s.dry</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span>(<span class='kw'>s.list</span>, colorState=<span class='st'>'dry'</span>)
+    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>), mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>))
+    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>s.moist</span>, name=<span class='st'>'hzname'</span>, 
+         cex.names=<span class='fl'>0.85</span>, axis.line.offset=<span class='op'>-</span><span class='fl'>4</span>)
+    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>s.dry</span>, name=<span class='st'>'hzname'</span>, 
+         cex.names=<span class='fl'>0.85</span>, axis.line.offset=<span class='op'>-</span><span class='fl'>4</span>)
     
-    <span class='co'># plot profiles</span>
-    <span class='co'># moist soil colors</span>
-    <span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/ncss-tech/aqp'>"aqp"</a></span>)) {
+    <span class='co'># extended mode: return a list with SPC + summary tables</span>
+    <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span>(<span class='kw'>s.list</span>, extended = <span class='fl'>TRUE</span>, colorState = <span class='st'>'dry'</span>)
     
-      <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>), mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>))
-      <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>s.moist</span>, name=<span class='st'>'hzname'</span>, 
-           cex.names=<span class='fl'>0.85</span>, axis.line.offset=<span class='op'>-</span><span class='fl'>4</span>)
-      <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>s.dry</span>, name=<span class='st'>'hzname'</span>, 
-           cex.names=<span class='fl'>0.85</span>, axis.line.offset=<span class='op'>-</span><span class='fl'>4</span>)
-    
-      <span class='co'># extended mode: return a list with SPC + summary tables</span>
-      <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span>(<span class='kw'>s.list</span>, extended = <span class='fl'>TRUE</span>, colorState = <span class='st'>'dry'</span>)
-    
-      <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
-      <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>SPC</span>)
-      <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>x</span>, <span class='fl'>1</span>)
-    }
+    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
+    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>SPC</span>)
+    <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>x</span>, <span class='fl'>1</span>)
+  }
 }
-</div><div class='img'><img src='fetchOSD-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; List of 13
+</div><div class='img'><img src='fetchOSD-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; List of 13
 #&gt;  $ SPC             :Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots
 #&gt;  $ competing       :'data.frame':	84 obs. of  3 variables:
 #&gt;  $ geomcomp        :'data.frame':	11 obs. of  9 variables:
@@ -240,8 +215,8 @@
 #&gt;  $ mlra            :'data.frame':	52 obs. of  4 variables:
 #&gt;  $ climate.annual  :'data.frame':	88 obs. of  12 variables:
 #&gt;  $ climate.monthly :'data.frame':	264 obs. of  14 variables:
-#&gt;  $ soilweb.metadata:'data.frame':	17 obs. of  2 variables:</div><div class='input'><span class='co'># }</span>
-</div><div class='img'><img src='fetchOSD-2.png' alt='' width='700' height='433' /></div></pre>
+#&gt;  $ soilweb.metadata:'data.frame':	15 obs. of  2 variables:</div><div class='input'><span class='co'># }</span>
+</div><div class='img'><img src='fetchOSD-2.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

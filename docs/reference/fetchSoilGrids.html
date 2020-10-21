@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Fetch SoilGrids 250m properties information from point locations — fetchSoilGrids" />
-<meta property="og:description" content="This function obtains SoilGrids properties information (250m raster resolution) given a data.frame containing site IDs, latitudes and longitudes. The depth intervals returned are: &quot;0-5cm&quot;, &quot;5-15cm&quot;, &quot;15-30cm&quot;, &quot;30-60cm&quot;, &quot;60-100cm&quot;, &quot;100-200cm&quot; and the properties returned are &quot;bdod&quot;, &quot;cec&quot;, &quot;cfvo&quot;, &quot;clay&quot;, &quot;nitrogen&quot;, &quot;phh2o&quot;, &quot;sand&quot;, &quot;silt&quot;, &quot;soc&quot; -- each with 5th, 50th, 95th, mean and uncertainty values. Point data requests are made through properties/query endpoint of the the SoilGrids v2.0 REST API: https://rest.soilgrids.org/soilgrids/v2.0/docs" />
+<meta property="og:description" content="This function obtains SoilGrids properties information (250m raster resolution) given a data.frame containing site IDs, latitudes and longitudes." />
 
 
 
@@ -117,7 +117,7 @@
     </div>
 
     <div class="ref-description">
-    <p>This function obtains SoilGrids properties information (250m raster resolution) given a <code>data.frame</code> containing site IDs, latitudes and longitudes. The depth intervals returned are: <code>"0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"</code> and the properties returned are <code>"bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc"</code> -- each with 5th, 50th, 95th, mean and uncertainty values. Point data requests are made through <code>properties/query</code> endpoint of the the SoilGrids v2.0 REST API: https://rest.soilgrids.org/soilgrids/v2.0/docs</p>
+    <p>This function obtains SoilGrids properties information (250m raster resolution) given a <code>data.frame</code> containing site IDs, latitudes and longitudes.</p>
     </div>
 
     <pre class="usage"><span class='fu'>fetchSoilGrids</span>(<span class='kw'>locations</span>, loc.names = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"id"</span>, <span class='st'>"lat"</span>, <span class='st'>"lon"</span>))</pre>
@@ -138,6 +138,9 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A SoilProfileCollection</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The depth intervals returned are: <code>"0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"</code> and the properties returned are <code>"bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc"</code> -- each with 5th, 50th, 95th, mean and uncertainty values. Point data requests are made through <code>properties/query</code> endpoint of the SoilGrids v2.0 REST API: https://rest.soilgrids.org/soilgrids/v2.0/docs</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown</p>
@@ -158,7 +161,7 @@
  
   <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plotSPC</a></span>(<span class='kw'>x</span>, name = <span class='fl'>NA</span>, color = <span class='st'>"socQ50"</span>)
  }
-</div><div class='img'><img src='fetchSoilGrids-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+</div><div class='img'><img src='fetchSoilGrids-1.png' alt='' width='768' height='475' /></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fetch KSSL Data (EXPERIMENTAL) — fetchRaCA • soilDB</title>
+<title>Get Rapid Carbon Assessment (RaCA) data — fetchRaCA • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Fetch KSSL Data (EXPERIMENTAL) — fetchRaCA" />
-<meta property="og:description" content="Get Rapid Carbon Assessment (RaCA) data via state, geographic bounding-box, RaCA site ID, or series query from the SoilWeb system." />
+<meta property="og:title" content="Get Rapid Carbon Assessment (RaCA) data — fetchRaCA" />
+<meta property="og:description" content="Get Rapid Carbon Assessment (RaCA) data via state, geographic bounding-box, RaCA site ID, or series query from the SoilWeb API." />
 
 
 
@@ -111,23 +111,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fetch KSSL Data (EXPERIMENTAL)</h1>
-    
+    <h1>Get Rapid Carbon Assessment (RaCA) data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/fetchRaCA.R'><code>R/fetchRaCA.R</code></a></small>
     <div class="hidden name"><code>fetchRaCA.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get Rapid Carbon Assessment (RaCA) data via state, geographic bounding-box, RaCA site ID, or series query from the SoilWeb system.</p>
+    <p>Get Rapid Carbon Assessment (RaCA) data via state, geographic bounding-box, RaCA site ID, or series query from the SoilWeb API.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetchRaCA</span>(series = <span class='kw'>NULL</span>, bbox = <span class='kw'>NULL</span>, state = <span class='kw'>NULL</span>, rcasiteid = <span class='kw'>NULL</span>, get.vnir = <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>fetchRaCA</span>(
+  series = <span class='kw'>NULL</span>,
+  bbox = <span class='kw'>NULL</span>,
+  state = <span class='kw'>NULL</span>,
+  rcasiteid = <span class='kw'>NULL</span>,
+  get.vnir = <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>series</th>
-      <td><p>a soil series name, case insensitive</p></td>
+      <td><p>a soil series name; case-insensitive</p></td>
     </tr>
     <tr>
       <th>bbox</th>
@@ -135,70 +141,67 @@
     </tr>
     <tr>
       <th>state</th>
-      <td><p>a two-letter US state abbreviation, case insensitive</p></td>
+      <td><p>a two-letter US state abbreviation; case-insensitive</p></td>
     </tr>
     <tr>
       <th>rcasiteid</th>
-      <td><p>an RaCA site id (e.g. 'C1609C01')</p></td>
+      <td><p>a RaCA site id (e.g. 'C1609C01')</p></td>
     </tr>
     <tr>
       <th>get.vnir</th>
-      <td><p>boolean, should associated VNIR spectra be downloaded? (see details)</p></td>
+      <td><p>logical, should associated VNIR spectra be downloaded? (see details)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p></p><dl>
-    <dt><code>pedons</code>:</dt><dd><p>a <code>SoilProfileCollection</code> object containing site/pedon/horizon data</p></dd>
-    <dt><code>trees</code>:</dt><dd><p>a <code>data.frame</code> object containing tree DBH and height</p></dd>
-    <dt><code>veg</code>:</dt><dd><p>a <code>data.frame</code> object containing plant species</p></dd>
-    <dt><code>stock</code>:</dt><dd><p>a <code>data.frame</code> object containing carbon quantities (stocks) at standardized depths</p></dd>
-    <dt><code>sample</code>:</dt><dd><p>a <code>data.frame</code> object containing sample-level bulk density and soil organic carbon values</p></dd>
-    <dt><code>spectra</code>:</dt><dd><p>a numeric <code>matrix</code> containing VNIR reflectance spectra from 350--2500 nm</p></dd>
-  
-</dl>
-
+    <p><dl>
+<dt><code>pedons</code>:</dt><dd><p>a <code>SoilProfileCollection</code> object containing site/pedon/horizon data</p></dd>
+<dt><code>trees</code>:</dt><dd><p>a <code>data.frame</code> object containing tree DBH and height</p></dd>
+<dt><code>veg</code>:</dt><dd><p>a <code>data.frame</code> object containing plant species</p></dd>
+<dt><code>stock</code>:</dt><dd><p>a <code>data.frame</code> object containing carbon quantities (stocks) at standardized depths</p></dd>
+<dt><code>sample</code>:</dt><dd><p>a <code>data.frame</code> object containing sample-level bulk density and soil organic carbon values</p></dd>
+<dt><code>spectra</code>:</dt><dd><p>a numeric <code>matrix</code> containing VNIR reflectance spectra from 350--2500 nm</p></dd></dl></p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The VNIR spectra associated with RaCA data are quite large [each gzip-compressed VNIR spectra record is about 6.6kb], so requests for these data are disabled by default. Note that VNIR spectra can only be queried by soil series or geographic BBOX.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href='http://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164'>http://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164</a>
+    <p><a href='https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164'>https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164</a>
   <a href='https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/RaCA-demo.html?root=aqp'>fetchRaCA() Tutorial</a></p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>D.E. Beaudette, USDA-NRCS staff</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='fetchOSD.html'>fetchOSD</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette, USDA-NRCS staff</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
-    <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>()) {
+   <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>()) {
+  
+  <span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span>)) {
     
-    <span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span>)) {
+    <span class='co'># search by series name</span>
+    <span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'>fetchRaCA</span>(series=<span class='st'>'auburn'</span>)
     
-        <span class='co'># search by series name</span>
-        <span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'>fetchRaCA</span>(series=<span class='st'>'auburn'</span>)
-        
-        <span class='co'># search by bounding-box</span>
-        <span class='co'># s &lt;- fetchRaCA(bbox=c(-120, 37, -122, 38))</span>
-        
-        <span class='co'># check structure</span>
-        <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>s</span>, <span class='fl'>1</span>)
-        
-        <span class='co'># extract pedons</span>
-        <span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='kw'>s</span><span class='op'>$</span><span class='kw'>pedons</span>
-        
-        <span class='co'># how many pedons</span>
-        <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/length.html'>length</a></span>(<span class='kw'>p</span>)
-        
-        <span class='co'># plot </span>
-        <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>))
-        <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>p</span>, name=<span class='st'>'hzn_desgn'</span>, max.depth=<span class='fl'>150</span>)
-}
+    <span class='co'># search by bounding-box</span>
+    <span class='co'># s &lt;- fetchRaCA(bbox=c(-120, 37, -122, 38))</span>
+    
+    <span class='co'># check structure</span>
+    <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>s</span>, <span class='fl'>1</span>)
+    
+    <span class='co'># extract pedons</span>
+    <span class='kw'>p</span> <span class='op'>&lt;-</span> <span class='kw'>s</span><span class='op'>$</span><span class='kw'>pedons</span>
+    
+    <span class='co'># how many pedons</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/length.html'>length</a></span>(<span class='kw'>p</span>)
+    
+    <span class='co'># plot </span>
+    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>))
+    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>p</span>, name=<span class='st'>'hzn_desgn'</span>, max.depth=<span class='fl'>150</span>)
+  }
 }
 </div><div class='output co'>#&gt; <span class='message'>Site coordinates have been truncated to 2 decimal places, contact the National Soil Survey Center for more detailed coordinates.</span></div><div class='output co'>#&gt; <span class='message'>Carbon concentration and stock values are probably wrong, or at least suspect. USE WITH CAUTION.</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `phiid` to character</span></div><div class='output co'>#&gt; <span class='message'>4 RaCA sites loaded (0.07 Mb transferred)</span></div><div class='output co'>#&gt; List of 6
 #&gt;  $ pedons :Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots
@@ -206,7 +209,7 @@
 #&gt;  $ veg    :'data.frame':	4 obs. of  6 variables:
 #&gt;  $ stock  :'data.frame':	20 obs. of  13 variables:
 #&gt;  $ sample :'data.frame':	76 obs. of  16 variables:
-#&gt;  $ spectra: NULL</div><div class='img'><img src='fetchRaCA-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+#&gt;  $ spectra: NULL</div><div class='img'><img src='fetchRaCA-1.png' alt='' width='768' height='475' /></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

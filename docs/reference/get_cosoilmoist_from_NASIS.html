@@ -137,7 +137,7 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe.</p>
+    <p>A data.frame.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>S.M. Roecker</p>
@@ -162,11 +162,27 @@
    <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>test</span>)
  }
 }
-</div><div class='output co'>#&gt;  [1] dmuiid         coiid          compname       comppct_r      drainagecl    
-#&gt;  [6] month          flodfreqcl     floddurcl      pondfreqcl     ponddurcl     
-#&gt; [11] cosoilmoistiid dept_l         dept_r         dept_h         depb_l        
-#&gt; [16] depb_r         depb_h         status        
-#&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'><span class='co'># }</span></div></pre>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt;   dmuiid  coiid compname comppct_r drainagecl month    flodfreqcl floddurcl
+#&gt; 1  69416 146851     Colo        50     poorly   jan Not populated      &lt;NA&gt;
+#&gt; 2  69416 146851     Colo        50     poorly   jan Not populated      &lt;NA&gt;
+#&gt; 3  69416 146851     Colo        50     poorly   feb Not populated     brief
+#&gt; 4  69416 146851     Colo        50     poorly   feb Not populated     brief
+#&gt; 5  69416 146851     Colo        50     poorly   mar Not populated     brief
+#&gt; 6  69416 146851     Colo        50     poorly   mar Not populated     brief
+#&gt;      pondfreqcl ponddurcl cosoilmoistiid dept_l dept_r dept_h depb_l depb_r
+#&gt; 1 Not populated      &lt;NA&gt;         276625      0      0      0     30     61
+#&gt; 2 Not populated      &lt;NA&gt;        4539792      0     23     46    183    183
+#&gt; 3 Not populated      &lt;NA&gt;         276623      0      0      0     30     61
+#&gt; 4 Not populated      &lt;NA&gt;        4539814      0     23     46    183    183
+#&gt; 5 Not populated      &lt;NA&gt;         276631      0      0      0     30     61
+#&gt; 6 Not populated      &lt;NA&gt;        4539815      0     23     46    183    183
+#&gt;   depb_h status
+#&gt; 1     91   &lt;NA&gt;
+#&gt; 2    183   &lt;NA&gt;
+#&gt; 3     91   &lt;NA&gt;
+#&gt; 4    183   &lt;NA&gt;
+#&gt; 5     91   &lt;NA&gt;
+#&gt; 6    183   &lt;NA&gt;</div><div class='input'><span class='co'># }</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

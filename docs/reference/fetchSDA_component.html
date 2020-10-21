@@ -151,7 +151,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>WHERE</th>
-      <td><p>text string formated as an SQL WHERE clause (default: FALSE)</p></td>
+      <td><p>text string formatted as an SQL WHERE clause (default: FALSE)</p></td>
     </tr>
     <tr>
       <th>duplicates</th>
@@ -185,13 +185,13 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>These functions return data from Soil Data Access with the use of a simple text string that formated as an SQL WHERE clause (e.g. <code>WHERE = "areasymbol = 'IN001'"</code>. All functions are SQL querys that wrap around <code>SDAquery()</code> and format the data for analysis.</p>
-<p>Beware SDA includes the data for both SSURGO and STATSGO2. The <code>areasymbol</code> for STATSGO2 is <code>US</code>. Therefore if data from just SSURGO is desired, set <code>WHERE = "areareasymbol != 'US'"</code>.</p>
+    <p>These functions return data from Soil Data Access with the use of a simple text string that formatted as an SQL WHERE clause (e.g. <code>WHERE = "areasymbol = 'IN001'"</code>. All functions are SQL queries that wrap around <code>SDAquery()</code> and format the data for analysis.</p>
+<p>Beware SDA includes the data for both SSURGO and STATSGO2. The <code>areasymbol</code> for STATSGO2 is <code>US</code>. For just SSURGO, include <code>WHERE = "areareasymbol != 'US'"</code>.</p>
 <p>If the duplicates argument is set to TRUE, duplicate components are returned. This is not necessary with data returned from NASIS, which has one unique national map unit. SDA has duplicate map national map units, one for each legend it exists in.</p>
-<p>The value of <code>nullFragsAreZero</code> will have a significant impact on the rock fragment fractions returned by <code>fetchSDA</code>. Set <code>nullFragsAreZero = FALSE</code> in those cases where there are many data-gaps and NULL rock fragment values should be interpretated as NULLs. Set <code>nullFragsAreZero = TRUE</code> in those cases where NULL rock fragment values should be interpreted as 0.</p>
+<p>The value of <code>nullFragsAreZero</code> will have a significant impact on the rock fragment fractions returned by <code>fetchSDA</code>. Set <code>nullFragsAreZero = FALSE</code> in those cases where there are many data-gaps and NULL rock fragment values should be interpreted as NULLs. Set <code>nullFragsAreZero = TRUE</code> in those cases where NULL rock fragment values should be interpreted as 0.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe or soil profile collection object.</p>
+    <p>A data.frame or SoilProfileCollection object.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Stephen Roecker</p>
@@ -246,8 +246,8 @@
       <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_grid.html'>facet_grid</a></span>(<span class='kw'>var</span> <span class='op'>~</span> <span class='kw'>nationalmusym</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='kw'>compname</span>, <span class='kw'>comppct_r</span>)) <span class='op'>+</span>
       <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span>()
   }
-  <span class='kw'>g1</span> <span class='op'>&lt;-</span> <span class='fu'>gg_comp</span>(<span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='kw'>h</span>, <span class='kw'>var</span> <span class='op'>==</span> <span class='st'>"clay"</span>))
-  <span class='kw'>g2</span> <span class='op'>&lt;-</span> <span class='fu'>gg_comp</span>(<span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='kw'>h</span>, <span class='kw'>var</span> <span class='op'>==</span> <span class='st'>"om"</span>))
+  <span class='kw'>g1</span> <span class='op'>&lt;-</span> <span class='fu'>gg_comp</span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html'>subset</a></span>(<span class='kw'>h</span>, <span class='kw'>var</span> <span class='op'>==</span> <span class='st'>"clay"</span>))
+  <span class='kw'>g2</span> <span class='op'>&lt;-</span> <span class='fu'>gg_comp</span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html'>subset</a></span>(<span class='kw'>h</span>, <span class='kw'>var</span> <span class='op'>==</span> <span class='st'>"om"</span>))
   
   <span class='fu'><a href='https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html'>grid.arrange</a></span>(<span class='kw'>g1</span>, <span class='kw'>g2</span>)
   
@@ -278,8 +278,8 @@
   
   <span class='co'># landform vs 3-D morphometry</span>
   <span class='kw'>test</span> <span class='op'>&lt;-</span> {
-    <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='kw'>s</span>, <span class='op'>!</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>landform</span>) <span class='op'>|</span> <span class='op'>!</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>geompos</span>)) <span class='op'>-&gt;</span><span class='kw'>.</span>;
-    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-split-methods.html'>split</a></span>(<span class='kw'>.</span>, <span class='kw'>.</span><span class='op'>$</span><span class='kw'>drainagecl</span>, drop = <span class='fl'>TRUE</span>) <span class='op'>-&gt;</span><span class='kw'>.</span>;
+    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html'>subset</a></span>(<span class='kw'>s</span>, <span class='op'>!</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>landform</span>) <span class='op'>|</span> <span class='op'>!</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>geompos</span>)) <span class='op'>-&gt;</span><span class='kw'>.</span>;
+    <span class='fu'><a href='https://rdrr.io/r/base/split.html'>split</a></span>(<span class='kw'>.</span>, <span class='kw'>.</span><span class='op'>$</span><span class='kw'>drainagecl</span>, drop = <span class='fl'>TRUE</span>) <span class='op'>-&gt;</span><span class='kw'>.</span>;
     <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='kw'>.</span>, <span class='fu'>function</span>(<span class='kw'>x</span>) {
       <span class='kw'>test</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>()
       <span class='kw'>test</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>landform</span>, <span class='kw'>x</span><span class='op'>$</span><span class='kw'>geompos</span>))
@@ -308,7 +308,7 @@
   
   
 }
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: viridis</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: viridisLite</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chkey` to character</span></div><div class='img'><img src='fetchSDA_component-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='img'><img src='fetchSDA_component-2.png' alt='' width='700' height='433' /></div><div class='img'><img src='fetchSDA_component-3.png' alt='' width='700' height='433' /></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: viridis</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: viridisLite</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chkey` to character</span></div><div class='img'><img src='fetchSDA_component-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='img'><img src='fetchSDA_component-2.png' alt='' width='768' height='475' /></div><div class='img'><img src='fetchSDA_component-3.png' alt='' width='768' height='475' /></div><div class='input'>
 
 
 <span class='co'># }</span>

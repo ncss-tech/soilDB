@@ -173,7 +173,7 @@ simplifyColors=<span class='fl'>FALSE</span>, progress=<span class='fl'>TRUE</sp
 
     <p>This is an experimental interface to a subset for the most commonly used data from a snapshot of KSSL (lab characterization) and NASIS (morphologic) data.</p>
 <p>Series-queries are case insensitive. Series name is based on the "correlated as" field (from KSSL snapshot) when present.  The "sampled as" classification was promoted to "correlated as" if the "correlated as" classification was missing.</p>
-<p>When <code>returnMorphologicData</code> is TRUE, the resulting object is a list. The standard output from <code>fetchKSSL</code> (<code>SoilProfileCollection</code> object) is stored in the named element "SPC". The additional elements are basic morphologic data: horizon colors, rock fragments, pores, and structure. There is a 1:many relationship between the horizon data in "SPC" and the additional dataframes in <code>morph</code>. See examples for ideas on how to "flatten" these tables.</p>
+<p>When <code>returnMorphologicData</code> is TRUE, the resulting object is a list. The standard output from <code>fetchKSSL</code> (<code>SoilProfileCollection</code> object) is stored in the named element "SPC". The additional elements are basic morphologic data: soil color, rock fragment volume, pores, structure, and redoximorphic features. There is a 1:many relationship between the horizon data in "SPC" and the additional dataframes in <code>morph</code>. See examples for ideas on how to "flatten" these tables.</p>
 <p>When <code>returnGeochemicalData</code> is TRUE, the resulting object is a list. The standard output from <code>fetchKSSL</code> (<code>SoilProfileCollection</code> object) is stored in the named element "SPC". The additional elements are geochemical and mineralogy analysis tables, specifically: geochemical/elemental analyses "geochem", optical mineralogy "optical", and X-ray diffraction / thermal "xrd_thermal". <code>returnGeochemicalData</code> will include additional dataframes <code>geochem</code>, <code>optical</code>, and <code>xrd_thermal</code> in list result.</p>
 <p>Setting <code>simplifyColors=TRUE</code> will automatically flatten the soil color data and join to horizon level attributes.</p>
 <p>Function arguments (<code>series</code>, <code>mlra</code>, etc.) are fully vectorized except for <code>bbox</code>.</p>
@@ -232,15 +232,13 @@ simplifyColors=<span class='fl'>FALSE</span>, progress=<span class='fl'>TRUE</sp
     <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>pedons</span>, color=<span class='st'>'moist_soil_color'</span>, print.id=<span class='fl'>FALSE</span>)
     
 }
-</div><div class='output co'>#&gt; <span class='message'>This is aqp 1.24</span></div><div class='output co'>#&gt; <span class='message'></span>
+</div><div class='output co'>#&gt; <span class='message'>This is aqp 1.25</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: 'aqp'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:stats':</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    filter</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    split, union</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: 'plyr'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:aqp':</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    mutate, summarize</span></div><div class='output co'>#&gt; <span class='message'>14 pedons loaded (0.06 Mb transferred)</span></div><div class='output co'>#&gt; <span class='message'>14 pedons loaded (0.09 Mb transferred)</span></div><div class='output co'>#&gt; <span class='message'>mixing dry colors ... [2 of 53 horizons]</span></div><div class='output co'>#&gt; <span class='message'>mixing moist colors ... [4 of 52 horizons]</span></div><div class='output co'>#&gt; <span class='message'>14 pedons loaded (0.09 Mb transferred)</span></div><div class='img'><img src='fetchKSSL-1.png' alt='' width='700' height='433' /></div><div class='img'><img src='fetchKSSL-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+#&gt; <span class='message'>    mutate, summarize</span></div><div class='output co'>#&gt; <span class='message'>14 pedons loaded (0.06 Mb transferred)</span></div><div class='output co'>#&gt; <span class='message'>14 pedons loaded (0.09 Mb transferred)</span></div><div class='output co'>#&gt; <span class='message'>mixing dry colors ... [2 of 53 horizons]</span></div><div class='output co'>#&gt; <span class='message'>mixing moist colors ... [4 of 52 horizons]</span></div><div class='output co'>#&gt; <span class='message'>14 pedons loaded (0.09 Mb transferred)</span></div><div class='img'><img src='fetchKSSL-1.png' alt='' width='768' height='475' /></div><div class='img'><img src='fetchKSSL-2.png' alt='' width='768' height='475' /></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
