@@ -71,15 +71,13 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
 
 
 
-get_legend_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+  
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_legend_from_NASISWebReport"
   
-  d.legend <- lapply(areasymbol, function(x) {
-    message("getting legend for '", x, "' from NasisReportsWebSite \n", sep = "")
-    args = list(p_areasymbol = x)
-    d    =  parseWebReport(url, args)
-  })
-  d.legend <- do.call("rbind", d.legend)
+  args <- list(p_mlraoffice = mlraoffice, p_areasymbol = areasymbol)
+  
+  d.legend <- parseWebReport(url, args)
   
   
   # set factor levels according to metadata domains

@@ -28,7 +28,8 @@ get_projectmapunit_from_NASISWebReport(projectname,
 get_projectmapunit2_from_NASISWebReport(mlrassoarea, fiscalyear, projectname, 
                                         stringsAsFactors = default.stringsAsFactors()
                                         )
-get_legend_from_NASISWebReport(areasymbol,
+get_legend_from_NASISWebReport(mlraoffice,
+                               areasymbol,
                                droplevels = TRUE,
                                stringsAsFactors = default.stringsAsFactors()
                                )
@@ -51,7 +52,8 @@ get_sitesoilmoist_from_NASISWebReport(usiteid)
 
 \arguments{
   \item{projectname}{text string vector of project names to be inserted into a SQL WHERE clause (default: NA)}
-  \item{mlrassoarea}{text string value identifying the mlra soil survey office areasymbol symbol inserted into a SQL WHERE clause (default: NA)}
+  \item{mlraoffice}{text string value identifying the MLRA Regional Soil Survey Office group name inserted into a SQL WHERE clause (default: NA)}
+  \item{mlrassoarea}{text string value identifying the MLRA Soil Survey Office areasymbol symbol inserted into a SQL WHERE clause (default: NA)}
   \item{fiscalyear}{text string value identifying the fiscal year inserted into a SQL WHERE clause (default: NA)}
   \item{projecttypename}{text string value identifying the project type name inserted into a SQL WHERE clause (default: NA)}
   \item{areasymbol}{text string value identifying the area symbol (e.g. "IN001" or "IN\%") inserted into a SQL WHERE clause (default: NA)}
