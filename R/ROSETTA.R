@@ -21,6 +21,7 @@
 #' }
 #' 
 
+# TODO: add chunk parameter to balance CPU time vs number of requests, see fetchSDA_spatial.R
 
 ROSETTA <- function(x, v = c('1', '3'), conf = NULL) {
   
