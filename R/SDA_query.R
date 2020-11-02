@@ -168,7 +168,7 @@ SDA_query <- function(q) {
   if (!requireNamespace('httr', quietly = TRUE) | !requireNamespace('jsonlite', quietly = TRUE))
     stop('please install the `httr` and `jsonlite` packages', call. = FALSE)
   
-   # submit request
+  # submit request
   r <- httr::POST(url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
                   body = list(query = q,
                               format = "JSON+COLUMNNAME"),
