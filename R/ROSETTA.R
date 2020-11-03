@@ -12,11 +12,11 @@
 #' 
 #' \describe{
 #' 
-#'  \item{theta_r: }{residual volumetric water content}
-#'  \item{theta_s: }{saturated volumetric water content}
+#'  \item{theta_r: }{residual volumetric water content (cm^3/cm^3)}
+#'  \item{theta_s: }{saturated volumetric water content (cm^3/cm^3)}
 #'  \item{alpha:}{related to the inverse of the air entry suction, log10-tranformed values with units of cm}
 #'  \item{npar: }{index of pore size distribution, log10-tranformed values with units of 1/cm}
-#'  \item{ksat: }{saturated hydraulic conductivity with units of cm/day}
+#'  \item{ksat: }{saturated hydraulic conductivity, log10-transformed values with units of cm/day}
 #'  
 #' }
 #' 
@@ -47,11 +47,6 @@ ROSETTA <- function(x, v = c('1', '3'), conf = NULL) {
     stop('x must contain only numeric values')
   }
   
-  # for now, no NA allowed
-  if(any(is.na(x))) {
-    stop('x may not contain NA')
-  }
-  
   # generate model code
   m <- ncol(x) - 1
   
@@ -59,7 +54,7 @@ ROSETTA <- function(x, v = c('1', '3'), conf = NULL) {
   u <- sprintf("http://www.handbook60.org/api/v1/rosetta/%s/model/%s", v, m)
   
   # submit request
-  # note:
+  # note: JSON is composed at function eval time
   r <- httr::POST(
     url = u,
     body = list(X = x),
@@ -83,9 +78,7 @@ ROSETTA <- function(x, v = c('1', '3'), conf = NULL) {
     return(r.content)
   
   # convert JSON -> list(van_genuchten_params = [numeric matrix])
-  # note that NA / errors will result in 'NaN'
-  # TODO: as far as I can tell there is no way to interpret 'Nan' as NA
-  # TODO: asking Todd to change NaN -> null, that is correctly interpreted as NA
+  # note that NA / errors will result in 'null' -> translated to NA by fromJSON()
   d <- try(jsonlite::fromJSON(r.content))
   
   # error trapping
@@ -96,10 +89,6 @@ ROSETTA <- function(x, v = c('1', '3'), conf = NULL) {
   d <- as.data.frame(d[[1]])
   # names
   names(d) <- c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat')
-  
-  # convert to familiar representation: alpha and npar are log10-transformed
-  d$alpha <- log(d$alpha, base = 10)
-  d$npar <- log(d$npar, base = 10)
   
   return(d)
 }

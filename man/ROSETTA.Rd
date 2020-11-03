@@ -18,11 +18,11 @@ a \code{data.frame} object with estimated water retention curve parameters and s
 
 \describe{
 
- \item{theta_r: }{residual volumetric water content}
- \item{theta_s: }{saturated volumetric water content}
+ \item{theta_r: }{residual volumetric water content (cm^3/cm^3)}
+ \item{theta_s: }{saturated volumetric water content (cm^3/cm^3)}
  \item{alpha:}{related to the inverse of the air entry suction, log10-tranformed values with units of cm}
  \item{npar: }{index of pore size distribution, log10-tranformed values with units of 1/cm}
- \item{ksat: }{saturated hydraulic conductivity with units of cm/day}
+ \item{ksat: }{saturated hydraulic conductivity, log10-transformed values with units of cm/day}
  
 }
 }
