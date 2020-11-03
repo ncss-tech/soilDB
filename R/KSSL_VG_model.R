@@ -1,3 +1,7 @@
+## TODO: convert to roxygen and add links / citations
+
+
+
 # define van Genuchten model as a function
 # https://en.wikipedia.org/wiki/Water_retention_curve
 .vg <- function(phi, theta_r, theta_s, alpha, n) {

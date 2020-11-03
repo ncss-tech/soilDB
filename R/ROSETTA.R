@@ -1,16 +1,66 @@
+# TODO: 
+# * generalize interface so that data with varying levels of detail (3, 4, 5, 6 properties) can be split 
+#   into chunks and submitted as separate requests (e.g. different models)
+#   then merged back together
+#   this is important for those cases where propertites beyond SSC are _sometimes_ available
+#
+# TODO: add chunk parameter to balance CPU time vs number of requests, see fetchSDA_spatial.R
+#
+
+
+
 #' @title ROSETTA Model Versions 1 and 3 API
-#' @description A simple interface to the ROSETTA model for predicting hydraulic parameters from soil properties. Access is via API and still a work in progress.
+#' @description A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017).
 #' 
-#' @param x a \code{data.frame} or \code{matrix} of soil properties, may not contain NA, see details
+#' @param x a \code{data.frame} of required soil properties, may contain other columns, see details
 #' @param v single character of '1' or '3', this is the model version number
-#' @param conf configuration passed to code{httr::POST()}.
+#' @param conf configuration passed to \code{httr::POST()}.
 #' 
-#' @details ...
+#' @details 
+#' 
+#' TODO: finish this
+#' 
+#' The ROSETTA model relies on: 3-6 soil properties: 
+#'  \itemize{
+#'    \item{sand, silt, clay: }{USDA soil texture separates (percentages) that sum to 100\%}
+#'    \item{bulk density (method?): }{units of gm/cm3}
+#'    \item{VWC at 33 kPa: }{water retention}
+#'    \item{VWC at 1500 kPa: }{water retention}
+#'  }
+#' 
+#' @references 
+#' Consider using the interactive version, with copy/paste functionality at: \url{https://www.handbook60.org/rosetta}.
+#' 
+#' Rosetta Model Home Page: \url{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}.
+#' 
+#' Python ROSETTA model: \url{http://www.u.arizona.edu/~ygzhang/download.html}.
+#' 
+#' Yonggen Zhang, Marcel G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology. 547: 39-53. \url{https://doi.org/10.1016/j.jhydrol.2017.01.004}.
+#' 
+#' Kosugi, K. 1999. General model for unsaturated hydraulic conductivity for soils with lognormal pore-size distribution. Soil Sci. Soc. Am. J. 63:270-277.
+#' 
+#' Mualem, Y. 1976. A new model predicting the hydraulic conductivity of unsaturated porous media. Water Resour. Res. 12:513-522.
+#' 
+#' Schaap, M.G. and W. Bouten. 1996. Modeling water retention curves of sandy soils using neural networks. Water Resour. Res. 32:3033-3040.
+#' 
+#' Schaap, M.G., Leij F.J. and van Genuchten M.Th. 1998. Neural network analysis for hierarchical prediction of soil water retention and saturated hydraulic conductivity. Soil Sci. Soc. Am. J. 62:847-855.
+#' 
+#' Schaap, M.G., and F.J. Leij, 1998. Database Related Accuracy and Uncertainty of Pedotransfer Functions, Soil Science 163:765-779.
+#' 
+#' Schaap, M.G., F.J. Leij and M. Th. van Genuchten. 1999. A bootstrap-neural network approach to predict soil hydraulic parameters. In: van Genuchten, M.Th., F.J. Leij, and L. Wu (eds), Proc. Int. Workshop, Characterization and Measurements of the Hydraulic Properties of Unsaturated Porous Media, pp 1237-1250, University of California, Riverside, CA.
+#' 
+#' Schaap, M.G., F.J. Leij, 1999, Improved prediction of unsaturated hydraulic conductivity with the Mualem-van Genuchten, Submitted to Soil Sci. Soc. Am. J.
+#' 
+#' van Genuchten, M.Th. 1980. A closed-form equation for predicting the hydraulic conductivity of unsaturated soils. Soil Sci. Am. J. 44:892-898.
+#' 
+#' 
 #' 
 #' 
 #' @return a \code{data.frame} object with estimated water retention curve parameters and saturated hydraulic conductivity:
 #' 
 #' \describe{
+#' 
+#'  \item{... }{all columns present in \code{x}}
 #' 
 #'  \item{theta_r: }{residual volumetric water content (cm^3/cm^3)}
 #'  \item{theta_s: }{saturated volumetric water content (cm^3/cm^3)}
@@ -21,9 +71,9 @@
 #' }
 #' 
 
-# TODO: add chunk parameter to balance CPU time vs number of requests, see fetchSDA_spatial.R
 
-ROSETTA <- function(x, v = c('1', '3'), conf = NULL) {
+
+ROSETTA <- function(x, vars, v = c('1', '3'), conf = NULL) {
   
   # check for required packages
   if (!requireNamespace('httr', quietly = TRUE) | !requireNamespace('jsonlite', quietly = TRUE))
@@ -32,15 +82,28 @@ ROSETTA <- function(x, v = c('1', '3'), conf = NULL) {
   # argument check
   v <- match.arg(v)
   
-  if( ! inherits(x, c('data.frame', 'matrix')) ) {
-    stop('x must be a data.frame or matrix')
+  if( ! inherits(x, c('data.frame')) ) {
+    stop('x must be a data.frame')
   }
   
-  
-  # convert x to a matrix as needed
-  if( inherits(x, 'data.frame') ) {
-    x <- as.matrix(x)
+  # check that vars exist in x
+  if(! all(vars %in% names(x))) {
+    stop('vars must match columns in x')
   }
+  
+  # split data from IDs if present
+  x.orig <- x
+  x <- x[, vars, drop = FALSE]
+  
+  # 2020-11-03: all NA causes Internal Server Error (HTTP 500)
+  # keep track of NA positions for later
+  complete.idx <- which(complete.cases(x))
+  
+  # filter NA
+  x <- x[complete.idx, ]
+  
+  # convert x to a matrix
+  x <- as.matrix(x)
   
   # must be numeric
   if( ! is.numeric(x) ) {
@@ -88,7 +151,23 @@ ROSETTA <- function(x, v = c('1', '3'), conf = NULL) {
   # extract first list element and convert to DF
   d <- as.data.frame(d[[1]])
   # names
-  names(d) <- c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat')
+  return.vars <- c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat')
+  names(d) <- return.vars 
   
-  return(d)
+  # empty DF to store padded results
+  d.full <- data.frame(trash = 1:nrow(x.orig), stringsAsFactors = FALSE)
+  
+  # fill with returned data while padding NA
+  for(i in return.vars) {
+    d.full[[i]] <- NA
+    d.full[[i]][complete.idx] <- d[[i]]
+  }
+  
+  # remove trash
+  d.full$trash <- NULL
+  
+  # combine with original data
+  res <- cbind(x.orig, d.full)
+  
+  return(res)
 }
