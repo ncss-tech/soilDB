@@ -120,6 +120,10 @@
   s <- sh[['site']]
   h <- sh[['horizon']]
   
+  # sometimes columns containing all NA are treated as logical, they are not
+  logical.idx <- which(sapply(h, is.logical))
+  for(i in logical.idx) { h[[i]] <- as.numeric(h[[i]]) }
+  
   # upgrade to SoilProfileCollection
   suppressMessages(depths(h) <- pedon_key ~ hzn_top + hzn_bot)
   site(h) <- s
