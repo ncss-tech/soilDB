@@ -13,20 +13,39 @@
 #' @description A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017).
 #' 
 #' @param x a \code{data.frame} of required soil properties, may contain other columns, see details
+#' @param vars character vector of soil properties in \code{x} containing relevant soil property values, see details
 #' @param v single character of '1' or '3', this is the model version number
 #' @param conf configuration passed to \code{httr::POST()}.
 #' 
 #' @details 
 #' 
-#' TODO: finish this
+#' Soil properties supplied in \code{x} must be described, in order, via \code{vars} argument. The column names are irrelevant but must follow the ordering: sand, silt, clay, bulk density, volumetric water content at 33kPa, and volumetric water content at 1500kPa. 
 #' 
-#' The ROSETTA model relies on: 3-6 soil properties: 
+#' The ROSETTA model relies on a minimum of 3 soil properties, with increasing (expected) accuracy as additional properties are included:
 #'  \itemize{
-#'    \item{sand, silt, clay: }{USDA soil texture separates (percentages) that sum to 100\%}
-#'    \item{bulk density (method?): }{units of gm/cm3}
-#'    \item{VWC at 33 kPa: }{water retention}
-#'    \item{VWC at 1500 kPa: }{water retention}
+#'    \item{required, sand, silt, clay: }{USDA soil texture separates (percentages) that sum to 100\%}
+#'    \item{optional, bulk density (method?): }{mass per volume afte accounting for >2mm fragments, units of gm/cm3}
+#'    \item{optional, volumetric water content at 33 kPa: }{roughly "field capacity" for most soils, units of cm^3/cm^3}
+#'    \item{optional, volumetric water content at 1500 kPa: }{roughly "permanent wilting point" for most plants, units of cm^3/cm^3}
 #'  }
+#' 
+#' 
+#' 
+#' @return a \code{data.frame} object with estimated water retention curve parameters and saturated hydraulic conductivity:
+#' 
+#' \describe{
+#' 
+#'  \item{... }{all columns present in \code{x}}
+#' 
+#'  \item{theta_r: }{residual volumetric water content (cm^3/cm^3)}
+#'  \item{theta_s: }{saturated volumetric water content (cm^3/cm^3)}
+#'  \item{alpha:}{related to the inverse of the air entry suction, log10-tranformed values with units of cm}
+#'  \item{npar: }{index of pore size distribution, log10-tranformed values with units of 1/cm}
+#'  \item{ksat: }{saturated hydraulic conductivity, log10-transformed values with units of cm/day}
+#'  
+#' }
+#' 
+#' 
 #' 
 #' @references 
 #' Consider using the interactive version, with copy/paste functionality at: \url{https://www.handbook60.org/rosetta}.
@@ -56,20 +75,7 @@
 #' 
 #' 
 #' 
-#' @return a \code{data.frame} object with estimated water retention curve parameters and saturated hydraulic conductivity:
-#' 
-#' \describe{
-#' 
-#'  \item{... }{all columns present in \code{x}}
-#' 
-#'  \item{theta_r: }{residual volumetric water content (cm^3/cm^3)}
-#'  \item{theta_s: }{saturated volumetric water content (cm^3/cm^3)}
-#'  \item{alpha:}{related to the inverse of the air entry suction, log10-tranformed values with units of cm}
-#'  \item{npar: }{index of pore size distribution, log10-tranformed values with units of 1/cm}
-#'  \item{ksat: }{saturated hydraulic conductivity, log10-transformed values with units of cm/day}
-#'  
-#' }
-#' 
+
 
 
 

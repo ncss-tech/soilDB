@@ -132,7 +132,8 @@
 <span class='fu'>get_projectmapunit2_from_NASISWebReport</span>(<span class='kw'>mlrassoarea</span>, <span class='kw'>fiscalyear</span>, <span class='kw'>projectname</span>, 
                                         stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
                                         )
-<span class='fu'>get_legend_from_NASISWebReport</span>(<span class='kw'>areasymbol</span>,
+<span class='fu'>get_legend_from_NASISWebReport</span>(<span class='kw'>mlraoffice</span>,
+                               <span class='kw'>areasymbol</span>,
                                droplevels = <span class='fl'>TRUE</span>,
                                stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
                                )
@@ -159,8 +160,12 @@
       <td><p>text string vector of project names to be inserted into a SQL WHERE clause (default: NA)</p></td>
     </tr>
     <tr>
+      <th>mlraoffice</th>
+      <td><p>text string value identifying the MLRA Regional Soil Survey Office group name inserted into a SQL WHERE clause (default: NA)</p></td>
+    </tr>
+    <tr>
       <th>mlrassoarea</th>
-      <td><p>text string value identifying the mlra soil survey office areasymbol symbol inserted into a SQL WHERE clause (default: NA)</p></td>
+      <td><p>text string value identifying the MLRA Soil Survey Office areasymbol symbol inserted into a SQL WHERE clause (default: NA)</p></td>
     </tr>
     <tr>
       <th>fiscalyear</th>
