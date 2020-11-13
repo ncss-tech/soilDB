@@ -84,13 +84,63 @@ str(r)
 summary(r)
 
 
+## Todd will implement server-side
 
-
-
-
-
-
-
+# 
+# # 
+# # model.2 <- which(complete.cases(s[,  c('sandtotal_r', 'silttotal_r', 'claytotal_r')]))
+# # model.3 <- which(complete.cases(s[,  c('sandtotal_r', 'silttotal_r', 'claytotal_r', 'dbthirdbar_r')]))
+# # model.4 <- which(complete.cases(s[,  c('sandtotal_r', 'silttotal_r', 'claytotal_r', 'dbthirdbar_r', 'wthirdbar_decimal')]))
+# # model.5 <- which(complete.cases(s[,  c('sandtotal_r', 'silttotal_r', 'claytotal_r', 'dbthirdbar_r', 'wthirdbar_decimal', 'wfifteenbar_decimal')]))
+# 
+# 
+# 
+# ## split into model chunks
+# na.res <- sapply(s[, vars], is.na)
+# head(na.res)
+# nrow(na.res)
+# 
+# # required fields: sand, silt, clay
+# ssc.eval <- ! apply(
+#   na.res[, c('sandtotal_r', 'silttotal_r', 'claytotal_r')], 
+#   1,
+#   all
+#   )
+# 
+# model.2 <- which(
+#   ssc.eval & 
+#     (na.res[, 'dbthirdbar_r'] | na.res[, 'wthirdbar_decimal'] | na.res[, 'wfifteenbar_decimal'] )
+#   )
+# 
+# 
+# model.3 <- which(
+#   ssc.eval & 
+#     (na.res[, 'wthirdbar_decimal'] | na.res[, 'wfifteenbar_decimal'] )
+# )
+# 
+# 
+# model.5 <- which(apply(na.res, 1, all))
+# 
+# length(model.2)
+# length(model.3)
+# length(model.4)
+# length(model.5)
+# 
+# sum(
+#   c(
+#     length(model.2),
+#     length(model.3),
+#     length(model.4),
+#     length(model.5)
+#   )
+# )
+# 
+# nrow(s)
+# 
+# # s[model.2,]
+# 
+# 
+# 
 
 
 
