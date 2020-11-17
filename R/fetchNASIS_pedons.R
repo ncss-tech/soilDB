@@ -1,7 +1,8 @@
 
 
 # get NASIS site/pedon/horizon/diagnostic feature data
-.fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, soilColorState='moist', lab=FALSE, stringsAsFactors = default.stringsAsFactors()) {
+.fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, 
+                               soilColorState='moist', lab=FALSE, stringsAsFactors = default.stringsAsFactors()) {
   
   # test connection
   if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
@@ -26,21 +27,21 @@
   extended_data <- get_extended_data_from_NASIS_db(SS=SS, nullFragsAreZero=nullFragsAreZero, stringsAsFactors = stringsAsFactors)
   
   ## join horizon + hz color: all horizons
-  h <- join(hz_data, color_data, by='phiid', type='left')
+  h <- merge(hz_data, color_data, by='phiid', all.x=TRUE, sort=FALSE)
   
   # check for empty fragment summary and nullFragsAreZero
   if(nullFragsAreZero & all(is.na(unique(extended_data$frag_summary$phiid))))
     extended_data$frag_summary <- cbind(phiid = unique(h$phiid), extended_data$frag_summary[,-1])
   
   ## join hz + fragment summary
-  h <- join(h, extended_data$frag_summary, by='phiid', type='left')
+  h <- merge(h, extended_data$frag_summary, by='phiid', all.x=TRUE, sort=FALSE)
   
   # check for empty artifact summary and nullFragsAreZero
   if(nullFragsAreZero & all(is.na(unique(extended_data$art_summary$phiid))))
     extended_data$art_summary <- cbind(phiid = unique(h$phiid), extended_data$art_summary[,-1])
   
   # join hz + artifact summary
-  h <- join(h, extended_data$art_summary, by='phiid', type='left')
+  h <- merge(h, extended_data$art_summary, by='phiid', all.x=TRUE, sort=FALSE)
   
   ## fix some common problems
   
@@ -83,10 +84,10 @@
   
   ## test for horizonation inconsistencies... flag, and optionally remove
   # ~ 1.3 seconds / ~ 4k pedons
-  h.test <- ddply(h, 'peiid', function(d) {
+  h.test <- do.call('rbind', lapply(split(h, h$peiid), function(d) {
     res <- aqp::hzDepthTests(top=d[['hzdept']], bottom=d[['hzdepb']])
-    return(data.frame(hz_logic_pass=all(!res)))
-  })
+    return(data.frame(peiid = d$peiid, hz_logic_pass=all(!res)))
+  }))
   
   # which are the good (valid) ones?
   good.ids <- as.character(h.test$peiid[which(h.test$hz_logic_pass)])
@@ -143,26 +144,21 @@
   # load best-guess optimal records from taxhistory
   # method is added to the new field called 'selection_method'
   # assumes that classdate is a datetime class object!
-  # ddply: 26 seconds for ~ 4k pedons
-  # best.tax.data <- ddply(extended_data$taxhistory, 'peiid', .pickBestTaxHistory)
-  # 
   # 2019-01-31: converting to base functions
   ed.tax <- split(extended_data$taxhistory, extended_data$taxhistory$peiid)
-  ed.tax.flat <- lapply(ed.tax, .pickBestTaxHistory)
-  best.tax.data <- do.call('rbind', ed.tax.flat)
+  best.tax.data <- do.call('rbind', lapply(ed.tax, .pickBestTaxHistory))
   site(h) <- best.tax.data
   
   # load best-guess optimal records from ecositehistory
   # method is added to the new field called 'es_selection_method'
-  # 1.4 seconds for ~ 4k pedons
-  best.ecosite.data <- ddply(extended_data$ecositehistory, 'siteiid', .pickBestEcosite)
+  ed.es <- split(extended_data$ecositehistory, extended_data$siteiid)
+  best.ecosite.data <- do.call('rbind', lapply(ed.es, .pickBestEcosite))
   site(h) <- best.ecosite.data
   
   ## TODO: NA in diagnostic boolean columns are related to pedons with no diagnostic features
   ## https://github.com/ncss-tech/soilDB/issues/59
   # add diagnostic boolean data into @site
   site(h) <- extended_data$diagHzBoolean
-  
   
   ## TODO: convert this to simplifyFragmentData
   # add surface frag summary
@@ -187,22 +183,14 @@
   suppressWarnings(restrictions(h) <- extended_data$restriction)
   
   # join-in landform string
-  ## 2015-11-30: short-circuts could use some work, consider pre-marking mistakes before parsing
-  # ddply: 3 seconds for ~ 4k pedons
-  # lf <- ddply(extended_data$geomorph, 'peiid', .formatLandformString, name.sep=' & ')
-  #
-  # 2019-01-31: converting to base functions
   ed.lf <- split(extended_data$geomorph, extended_data$geomorph$peiid)
-  ed.lf.flat <- lapply(ed.lf, .formatLandformString, name.sep=' & ')
-  lf <- do.call('rbind', ed.lf.flat)
-  if(nrow(lf) > 0)
-    site(h) <- lf
+  lf <- do.call('rbind', lapply(ed.lf, .formatLandformString, name.sep=' & '))
+  site(h) <- lf
   
   # join-in parent material strings
-  # ddply: 4 seconds for ~ 4k pedons
-  pm <- ddply(extended_data$pm, 'siteiid', .formatParentMaterialString, name.sep=' & ')
-  if(nrow(pm) > 0)
-    site(h) <- pm
+  ed.pm <- split(extended_data$pm, extended_data$siteiid)
+  pm <- do.call('rbind', lapply(ed.pm, .formatParentMaterialString, name.sep=' & '))
+  site(h) <- pm
   
   # set metadata
   m <- metadata(h)
