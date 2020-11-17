@@ -6,6 +6,21 @@ library(rgdal)
 library(soilDB)
 library(mapview)
 
+library(spData) 
+library(sf) 
+
+# CRS defs used by SEE grids
+crs_lower48 <- "+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+
+data("us_states")
+us_states <- as(us_states, 'Spatial')
+us_states <- spTransform(us_states, CRS(crs_lower48))
+
+# get a bbox for CONUS and expand by 100km = 100,000m
+b <- bbox(us_states)
+x.lim <- c(b[1, 1] - 1e5, b[1, 2] + 1e5)
+y.lim <- c(b[2, 1] - 1e5, b[2, 2] + 1e5)
+
 
 fm <- raster('E:/temp/psamm.tif')
 
@@ -20,25 +35,72 @@ levelplot(
 mapview(fm, col.regions = viridis, na.color = NA, use.layer.names = TRUE)
 
 
+## 2020-11-17: not all soil order grids are available, must convert to tiled rasterization
+## 2020-11-17: finish formative element grids
+
+
+taxa <- 'haplustolls'
+x <- taxaExtent(taxa, level = 'greatgroup')
+a <- aggregate(x, fact = 5)
 
 taxa <- 'vertisols'
 x <- taxaExtent(taxa, level = 'order')
 a <- aggregate(x, fact = 5)
 
-taxa <- 'ustalfs'
+taxa <- 'xeralfs'
 x <- taxaExtent(taxa, level = 'suborder')
 a <- aggregate(x, fact = 5)
 
-taxa <- 'haplohumults'
+taxa <- 'durixeralfs'
 x <- taxaExtent(taxa, level = 'greatgroup')
 a <- aggregate(x, fact = 5)
 
-taxa <- 'Xeric Haplohumults'
+taxa <- 'cumulic haplustolls'
 x <- taxaExtent(taxa, level = 'subgroup')
 a <- aggregate(x, fact = 5)
 
 
-levelplot(a, margin = FALSE, scales = list(draw = FALSE), col.regions = viridis, main = names(a))
+taxa <- 'abruptic durixeralfs'
+x <- taxaExtent(taxa, level = 'subgroup')
+a <- aggregate(x, fact = 5)
+
+
+
+## cropped to raster extent
+levelplot(
+  a,
+  # maxpixels = 1e5,
+  main = taxa,
+  margin = FALSE, 
+  # xlim = x.lim, ylim = y.lim,
+  scales = list(draw = FALSE), 
+  col.regions = viridis,
+  panel = function(...) {
+    panel.levelplot(...)
+    sp.polygons(us_states, col = 'black', lwd = 2)
+  }
+)
+
+
+
+## CONUS + states
+## cropped to CONUS
+levelplot(
+  a,
+  # maxpixels = 1e5,
+  main = names(a),
+  margin = FALSE, 
+  xlim = x.lim, ylim = y.lim,
+  scales = list(draw = FALSE), 
+  col.regions = viridis,
+  panel = function(...) {
+    panel.levelplot(...)
+    sp.polygons(us_states, col = 'black', lwd = 2)
+  }
+)
+
+
+
 
 mapview(a, col.regions = viridis, na.color = NA, use.layer.names = TRUE)
 
