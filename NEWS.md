@@ -1,3 +1,6 @@
+# soilDB 2.5.9 (2020-11-19)
+ * new function `ROSETTA` for accessing the new ROSETTA model API (c/o Todd Skaggs, USDA-ARS)
+
 # soilDB 2.5.8 (2020-10-20)
  * `fetchNASIS` / `soilDB:::.rockFragmentSieve` now uses fragment RV, `soilDB:::.sieve` uses `<` operator (https://github.com/ncss-tech/soilDB/issues/1)
  * `fetchKSSL(..., returnMorphologicData=TRUE)` now returns redoximorphic features by horizon

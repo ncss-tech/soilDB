@@ -4,23 +4,27 @@
 \alias{ROSETTA}
 \title{ROSETTA Model Versions 1 and 3 API}
 \usage{
-ROSETTA(x, vars, v = c("1", "3"), conf = NULL)
+ROSETTA(x, vars, v = c("1", "3"), m = "0", chunkSize = 10000, conf = NULL)
 }
 \arguments{
 \item{x}{a \code{data.frame} of required soil properties, may contain other columns, see details}
 
-\item{vars}{character vector of soil properties in \code{x} containing relevant soil property values, see details}
+\item{vars}{character vector of column names in \code{x} containing relevant soil property values, see details}
 
-\item{v}{single character of '1' or '3', this is the model version number}
+\item{v}{ROSETTA model version number: '1' or '3'}
 
-\item{conf}{configuration passed to \code{httr::POST()}.}
+\item{m}{ROSETTA model type: '0' (automatic, best model selection), '2' (sand, silt, clay), '3' (sand, silt, clay, Db), '4' (sand, silt, clay, Db, 33kPa WT), or '5' (sand, silt, clay, Db, 33kPa WT, 1500kPa WT). Model type '0' is usually the best approach as the most appropriate model (e.g. in light of potential missing values) is selected by the API.}
+
+\item{chunkSize}{number of records per API call}
+
+\item{conf}{configuration passed to \code{httr::POST()} such as \code{verbose()}.}
 }
 \value{
-a \code{data.frame} object with estimated water retention curve parameters and saturated hydraulic conductivity:
+a \code{data.frame} object:
 
 \describe{
 
- \item{... }{all columns present in \code{x}}
+ \item{... }{other columns present in \code{x}}
 
  \item{theta_r: }{residual volumetric water content (cm^3/cm^3)}
  \item{theta_s: }{saturated volumetric water content (cm^3/cm^3)}
@@ -34,7 +38,7 @@ a \code{data.frame} object with estimated water retention curve parameters and s
 A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017).
 }
 \details{
-Soil properties supplied in \code{x} must be described, in order, via \code{vars} argument. The column names are irrelevant but must follow the ordering: sand, silt, clay, bulk density, volumetric water content at 33kPa, and volumetric water content at 1500kPa. 
+Soil properties supplied in \code{x} must be described, in order, via \code{vars} argument. The API does not use the names but column ordering must follow: sand, silt, clay, bulk density, volumetric water content at 33kPa (1/3 bar), and volumetric water content at 1500kPa (15 bar). 
 
 The ROSETTA model relies on a minimum of 3 soil properties, with increasing (expected) accuracy as additional properties are included:
  \itemize{
@@ -43,6 +47,11 @@ The ROSETTA model relies on a minimum of 3 soil properties, with increasing (exp
    \item{optional, volumetric water content at 33 kPa: }{roughly "field capacity" for most soils, units of cm^3/cm^3}
    \item{optional, volumetric water content at 1500 kPa: }{roughly "permanent wilting point" for most plants, units of cm^3/cm^3}
  }
+ 
+ Column names not specified in \code{vars} are retained in the output.
+}
+\note{
+Input data should not contain columns names that will conflict with the ROSETTA API results: `theta_r`, `theta_s`, `alpha`, `npar`, `ksat`.
 }
 \references{
 Consider using the interactive version, with copy/paste functionality at: \url{https://www.handbook60.org/rosetta}.
