@@ -226,21 +226,5 @@ ROSETTA <- function(x, vars, v = c('1', '3'), m = '0', chunkSize = 10000, conf =
   # remove chunkID
   res[['.chunk']] <- NULL
   
-  ## 2020-11-19: this is no longer neccessary
-  # # empty DF to store padded results
-  # d.full <- data.frame(trash = 1:nrow(x.orig), stringsAsFactors = FALSE)
-  # 
-  # # fill with returned data while padding NA
-  # for(i in return.vars) {
-  #   d.full[[i]] <- NA
-  #   d.full[[i]][complete.idx] <- d[[i]]
-  # }
-  # 
-  # # remove trash
-  # d.full$trash <- NULL
-  # 
-  # # combine with original data
-  # res <- cbind(x.orig, d.full)
-  
   return(res)
 }
