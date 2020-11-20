@@ -59,7 +59,7 @@ x <- data.frame(
   clay = 33
 )
 
-ROSETTA(x, vars = c('sand', 'silt', 'clay'), v = "1", m = "2")
+ROSETTA(x, vars = c('sand', 'silt', 'clay'), v = "1")
 
 ROSETTA(x, vars = c('sand', 'silt', 'clay'), v = "3")
 
@@ -77,8 +77,8 @@ ROSETTA(x, vars = c('sand', 'silt', 'clay'))
 # try using class centroids
 x <- texcl_to_ssc(SoilTextureLevels())
 
-ROSETTA(x, vars = c('sand', 'silt', 'clay'), m = "2")
-ROSETTA(x, vars = c('sand', 'silt', 'clay'), m = "2", chunkSize = 10)
+ROSETTA(x, vars = c('sand', 'silt', 'clay'))
+ROSETTA(x, vars = c('sand', 'silt', 'clay'), chunkSize = 10)
 
 
 ROSETTA(x, vars = c('sand', 'silt', 'clay'), conf = httr::verbose())
