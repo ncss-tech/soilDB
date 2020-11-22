@@ -35,6 +35,7 @@ The standard set of "site" and "horizon" data are returned as a \code{SoilProfil
 \describe{
   \item{SPC}{\code{SoilProfileCollection} containing standards "site" and "horizon" data}
   \item{competing}{competing soil series from the SC database snapshot}
+  \item{geog_assoc_soils}{geographically associated soils, extracted from named section in the OSD}
   \item{geomcomp}{empirical probabilities for geomorphic component, derived from the current SSURGO snapshot}
   \item{hillpos}{empirical probabilities for hillslope position, derived from the current SSURGO snapshot}
   \item{mtnpos}{empirical probabilities for mountain slope position, derived from the current SSURGO snapshot}
