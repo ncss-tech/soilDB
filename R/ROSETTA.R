@@ -166,9 +166,7 @@
 # 2020-11-19: 
 # * NA are handled safely by the API now
 # * model selection is automatic when model code = 0
-
-
-
+# * work with Todd to determin the optimal request / record count trade-off
 ROSETTA <- function(x, vars, v = c('1', '3'), m = '0', chunkSize = 10000, conf = NULL) {
   
   # check for required packages
