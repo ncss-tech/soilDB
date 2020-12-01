@@ -165,7 +165,8 @@ fetchSDA_spatial <- function(x,
 
         if (inherits(sub.res$result, 'try-error')) {
           # explicit handling for a hypothetical unqueryable single mukey
-          warning("Symbol ", xx, " dropped from result due to error! May exceed the JSON serialization limit or have other topologic problems.")
+          warning("Symbol ", xx, " dropped from result due to error! May exceed the JSON serialization limit or have other topologic problems.", 
+                  call. = FALSE)
           return(NULL)
         }
         return(sub.res)
