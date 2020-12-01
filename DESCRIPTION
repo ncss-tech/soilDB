@@ -1,8 +1,8 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 2.5.8
-Date: 2020-11-19
+Version: 2.5.9
+Date: 2020-11-30
 Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut"), email = "dylan.beaudette@usda.gov"),
              person(given="Jay", family="Skovlin", role = c("aut")), 
              person(given="Stephen", family="Roecker", role = c("aut")), 
