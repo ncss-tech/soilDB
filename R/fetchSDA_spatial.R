@@ -163,7 +163,7 @@ fetchSDA_spatial <- function(x,
                                      use_statsgo, add.fields,
                                      verbose, paste0(i,"_",xx))
 
-        if (inherits(sub.res, 'try-error')) {
+        if (inherits(sub.res$result, 'try-error')) {
           # explicit handling for a hypothetical unqueryable single mukey
           warning("Symbol ", xx, " dropped from result due to error! May exceed the JSON serialization limit or have other topologic problems.")
           return(NULL)
@@ -200,12 +200,13 @@ fetchSDA_spatial <- function(x,
     message("Done in ", round(ttotdif, ifelse(attr(ttotdif,"units") == "secs", 1, 2)), " ",
           attr(ttotdif, "units"), "; mean/chunk: ", chunk.mean, " secs; ",
           "mean/symbol: ", mukey.mean, " secs", ".")
-
-  # store in result
-  attr(s, "total.time") <- mintime
-  attr(s, "mukey.mean") <- mukey.mean
-  attr(s, "chunk.mean") <- chunk.mean
-
+  if (!is.null(s)) {
+    # store in result
+    attr(s, "total.time") <- mintime
+    attr(s, "mukey.mean") <- mukey.mean
+    attr(s, "chunk.mean") <- chunk.mean
+  }
+  
   return(s)
 }
 
