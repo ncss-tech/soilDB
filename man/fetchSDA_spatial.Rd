@@ -9,6 +9,7 @@ fetchSDA_spatial(
   by.col = "mukey",
   method = "feature",
   geom.src = "mupolygon",
+  db = "SSURGO",
   add.fields = NULL,
   chunk.size = 10,
   verbose = TRUE
@@ -23,6 +24,8 @@ fetchSDA_spatial(
 
 \item{geom.src}{Either \code{mupolygon} or \code{sapolygon}}
 
+\item{db}{Default: SSURGO. When \code{geom.src} is \code{mupolygon}, use STATSGO polygon geometry instead of SSURGO by setting \code{db = "STATSGO"}}
+
 \item{add.fields}{Column names from \code{mapunit} or \code{legend} table to add to result. Must specify parent table name as the prefix \code{mapunit} before column name e.g. \code{mapunit.muname}.}
 
 \item{chunk.size}{How many queries should spatial request be divided into? Necessary for large results. Default: 10}
@@ -30,12 +33,12 @@ fetchSDA_spatial(
 \item{verbose}{Print messages?}
 }
 \value{
-A Spatial*DataFrame corresponding to SDA spatial data for all MUKEYs / nmusyms requested. Default result contains mapunit delineation geometry with attribute table containing `gid`, `mukey` and `nationalmusym`, plus additional fields in result specified with `add.fields`.
+A Spatial*DataFrame corresponding to SDA spatial data for all symbols requested. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with `add.fields`.
 }
 \description{
 This is a high-level "fetch" method to facilitate spatial queries to Soil Data Access (SDA) based on mapunit key (\code{mukey}) and national mapunit symbol (\code{nationalmusym}) for \code{mupolygon} geometry OR legend key (\code{lkey}) and area symbols (\code{areasymbol}) for \code{sapolygon} geometry).
 
-A Soil Data Access spatial query is made returning geometry and key identifying information about the mapunit or area of interest. Additional columns from the mapunit or legend table can be included using \code{add.fields} argument. 
+A Soil Data Access spatial query is made returning geometry and key identifying information about the mapunit or area of interest. Additional columns from the mapunit or legend table can be included using \code{add.fields} argument.
 
 This function automatically "chunks" the input vector (using \code{soilDB::makeChunks}) of mapunit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the \code{chunk.size} setting and the length of your input vector. If you are working with many mapunits and/or large extents, you may need to decrease this number in order to have more chunks.
 
@@ -48,16 +51,16 @@ if(requireNamespace("curl") &
 
    # get spatial data for a single mukey
     single.mukey <- fetchSDA_spatial(x = "2924882")
-    
+
     # demonstrate fetching full extent (multi-mukey) of national musym
     full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by = "nmusym")
-    
+
     # compare extent of nmusym to single mukey within it
     if(require(sp)) {
      plot(full.extent.nmusym, col = "RED",border=0)
      plot(single.mukey, add = TRUE, col = "BLUE", border=0)
     }
-    
+
     # demo adding a field (`muname`) to attribute table of result
     head(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname"))
 }

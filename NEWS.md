@@ -2,6 +2,7 @@
  * new function `ROSETTA` for accessing the new ROSETTA model API (c/o Todd Skaggs, USDA-ARS)
  * `fetchOSD(..., extended=TRUE)` gains geographically associated soils, parsed from OSD (thanks AGB)
  * `fetchSDA_spatial` now can return soil survey area polygons using `geom.src = "sapolygon"` with `x` as a vector of area symbols (`areasymbol`) or legend keys (`lkey`). For `sapolygon` results, the `method` and `add.field` arguments work the same as for `mupolygon`, only now both geometries can be returned with fields from the `legend` table.
+ * `fetchSDA_spatial` now can return STATSGO `gsmmupolygon` geometry with `db = "STATSGO"`; these data are linked to `mapunit` and (national) `legend` just like `mupolygon`.
  
 # soilDB 2.5.8 (2020-10-20)
  * `fetchNASIS` / `soilDB:::.rockFragmentSieve` now uses fragment RV, `soilDB:::.sieve` uses `<` operator (https://github.com/ncss-tech/soilDB/issues/1)
