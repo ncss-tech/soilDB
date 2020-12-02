@@ -1,8 +1,5 @@
 # internal method for opening a connection to local nasis database using credentials
-.openNASISchannel <- function(use_sqlite = FALSE) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call. = FALSE)
+.openNASISchannel <- function(use_sqlite = TRUE) {
 
   if (is.null(getOption('soilDB.NASIS.credentials')))
     stop("soilDB.NASIS.credentials not set")

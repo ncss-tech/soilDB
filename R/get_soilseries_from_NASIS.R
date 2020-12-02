@@ -1,6 +1,4 @@
 get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC')) stop('please install the `RODBC` package', call.=FALSE)
 
   q.soilseries <- "
   SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, statsgoflag, mlraoffice, areasymbol, areatypename, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, originyear, establishedyear, soiltaxclasslastupdated, soilseriesiid

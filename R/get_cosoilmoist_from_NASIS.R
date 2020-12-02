@@ -1,6 +1,4 @@
 get_cosoilmoist_from_NASIS <- function(impute = TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC')) stop('please install the `RODBC` package', call.=FALSE)
 
   q.cosoilmoist <- "SELECT dmuiidref AS dmuiid, coiid, compname, comppct_r, drainagecl, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, cosoilmoistiid, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat
 
