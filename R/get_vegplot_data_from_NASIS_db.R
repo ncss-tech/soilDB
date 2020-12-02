@@ -17,26 +17,24 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   LEFT OUTER JOIN pedon_View_1 AS p ON p.siteobsiidref=so.siteobsiid
   ORDER BY s.siteiid;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
     return(data.frame())
-
+  
   # exec query
-  d.vegplot <- RODBC::sqlQuery(channel, q.vegplot, stringsAsFactors=FALSE)
+  d.vegplot <- dbQueryNASIS(channel, q.vegplot)
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-
-  # close connection
-  RODBC::odbcClose(channel)
 
   d <- uncode(d.vegplot)
 
   # test for no data
-  if(nrow(d) == 0)
-  stop('there are no NASIS vegplots in your selected set!')
+  if (nrow(d) == 0)
+    stop('there are no NASIS vegplots in your selected set!')
 
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
@@ -46,10 +44,10 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 }
 
 
-  # get location data from the corresponding record in the site table
-  get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
+# get location data from the corresponding record in the site table
+get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
-  if(!requireNamespace('RODBC'))
+  if (!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
 
   # query the coordinate, plss description, and site characteristics data for these records from the site table
@@ -60,32 +58,31 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
   ORDER BY s.siteiid;"
 
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
-
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
   # exec query
-  d.plotlocation <- RODBC::sqlQuery(channel, q.plotlocation, stringsAsFactors=FALSE)
+  d.plotlocation <- dbQueryNASIS(channel, q.plotlocation, stringsAsFactors=FALSE)
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-
-  # close connection
-  RODBC::odbcClose(channel)
 
   d <- uncode(d.plotlocation)
 
   # test for no data
-  if(nrow(d) == 0)
-  stop('there are no NASIS vegplots in your selected set!')
+  if (nrow(d) == 0)
+    stop('there are no NASIS vegplots in your selected set!')
 
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
 
-
   # hack for CRAN check
   state_FIPS_codes <- NULL
+  
   # load FIPS codes from local package data
   load(system.file("data/state_FIPS_codes.rda", package="soilDB"))
 
@@ -110,10 +107,10 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 
 
 
-  # get Rangeland Health Indicator(RHI) associated fields in the vegplot table
-  get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
+# get Rangeland Health Indicator(RHI) associated fields in the vegplot table
+get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
-  if(!requireNamespace('RODBC'))
+  if (!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
 
   q.vegplotrhi <- "SELECT siteiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, rhiannualprod, rhibareground, rhicompactionlayer, rhifuncstructgroups, rhierosionresistance, rhigullies, rhirills, rhipedastalsterracettes, rhiinfilrunoff, rhilitteramount, rhilittermovement, rhiplantmortality, rhireprodcapability, rhiinvasiveplants, rhisoilsurfdegradation, rhiwaterflowpatterns, rhiwindscourareas, rhisoilsitestabsumm, rhibioticintegritysumm, rhihydrofunctionsumm
@@ -124,25 +121,24 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   LEFT OUTER JOIN pedon_View_1 AS p ON p.siteobsiidref=so.siteobsiid
   ORDER BY s.siteiid;"
 
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
-
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
   # exec query
-  d.vegplotrhi <- RODBC::sqlQuery(channel, q.vegplotrhi, stringsAsFactors=FALSE)
+  d.vegplotrhi <- dbQueryNASIS(channel, q.vegplotrhi)
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-
-  # close connection
-  RODBC::odbcClose(channel)
 
   d <- uncode(d.vegplotrhi)
 
   # test for no data
-  if(nrow(d) == 0)
-  stop('there are no NASIS vegplots in your selected set!')
+  if (nrow(d) == 0)
+    stop('there are no NASIS vegplots in your selected set!')
 
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
@@ -152,11 +148,11 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 }
 
 
-  # get vegplot species - this is a reconstruction of a site existing species list
-  get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
+# get vegplot species - this is a reconstruction of a site existing species list
+get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+  if (!requireNamespace('RODBC'))
+    stop('please install the `RODBC` package', call. = FALSE)
 
   q.vegplotspecies <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, ppi.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass
   FROM
@@ -166,20 +162,19 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   LEFT JOIN plotplantinventory_View_1 AS ppi ON ppi.vegplotiidref=v.vegplotiid
   INNER JOIN plant ON plant.plantiid=ppi.plantiidref
   ORDER BY s.siteiid, ppi.orderofdominance, ppi.seqnum;"
-
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
-
+ 
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
   # exec query
-  d.vegplotspecies <- RODBC::sqlQuery(channel, q.vegplotspecies, stringsAsFactors=FALSE)
+  d.vegplotspecies <- dbQueryNASIS(channel, q.vegplotspecies)
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-
-  # close connection
-  RODBC::odbcClose(channel)
 
   d <- uncode(d.vegplotspecies)
 
@@ -195,14 +190,14 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 }
 
 
-  # get vegplot transect data
-  get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
+# get vegplot transect data
+get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
-  if(!requireNamespace('RODBC'))
+  if (!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
 
   # veg transect data - many transects to one vegplot
-  q.vegtransect<- "SELECT siteiid, p.peiid, vegplotiidref, vegtransectiid, usiteid as site_id, assocuserpedonid as pedon_id, vegplotid as vegplot_id, vegplotname, vegtransectid as vegtransect_id, obsdate, primarydatacollector, datacollectionpurpose, transectstartlatitude, transectstartlongitude, transectendlatitude, transectendlongitude, transectazimuth, transectlength, transectstartelevation, transectendelevation, dblsampquadratssampled, dblsampquadratsclipped, nestedfreqquadratssampled, freqquadratssampled, dwrquadratssampled, daubenmirequadratssampled, quadratsizedomlegacy, quadratsizeseclegacy, quadratshapedomlegacy, quadratshapeseclegacy, beltwidth, dblsampannualprod, totharvestannualprod, wtunitannualprod, dwrannualprod, comparativeyieldprod, comparativeyieldranktotal, comparativeyieldrankave, comparativerefclipwtave, abovegroundbiomasstotal, standingherbbiomass, transectbasalcovpct, basalcovpcttotal, basalgapsizemin, canopygapsizemin, gapsmeasuredbetween, canopygaplengthtotal, canopygappcttotal, basalgaplengthtotal, basalgappcttotal, vt.understoryreprodabundance, vt.woodyunderstoryabundance, vt.herbundertoryabundance, vt.lichensunderstoryabundance, cancovpcttotaltrans, cancovtotalclasstrans, cancovassessmethod, vt.crowncanclosurepct, vt.crowncancloseassessmethod, vt.crowncompfactorlpp, vt.crowncomplppavedbh, overstorycancovpcttrans, overstorycancovclasstrans, groundcovassessmethod, groundcovquadratssampled, groundcovpointssampled, groundsurfcovassessmethod, groundsurfcovquadratsamp, groundsurfcovpointssamp, lpiobsinterval, totalpointssampledcount, topcanopyhtave, topcanopyhtstddev, totalnumplantsbelt, totalnumspeciesbelt, totalplantdensitybelt
+  q.vegtransect <- "SELECT siteiid, p.peiid, vegplotiidref, vegtransectiid, usiteid as site_id, assocuserpedonid as pedon_id, vegplotid as vegplot_id, vegplotname, vegtransectid as vegtransect_id, obsdate, primarydatacollector, datacollectionpurpose, transectstartlatitude, transectstartlongitude, transectendlatitude, transectendlongitude, transectazimuth, transectlength, transectstartelevation, transectendelevation, dblsampquadratssampled, dblsampquadratsclipped, nestedfreqquadratssampled, freqquadratssampled, dwrquadratssampled, daubenmirequadratssampled, quadratsizedomlegacy, quadratsizeseclegacy, quadratshapedomlegacy, quadratshapeseclegacy, beltwidth, dblsampannualprod, totharvestannualprod, wtunitannualprod, dwrannualprod, comparativeyieldprod, comparativeyieldranktotal, comparativeyieldrankave, comparativerefclipwtave, abovegroundbiomasstotal, standingherbbiomass, transectbasalcovpct, basalcovpcttotal, basalgapsizemin, canopygapsizemin, gapsmeasuredbetween, canopygaplengthtotal, canopygappcttotal, basalgaplengthtotal, basalgappcttotal, vt.understoryreprodabundance, vt.woodyunderstoryabundance, vt.herbundertoryabundance, vt.lichensunderstoryabundance, cancovpcttotaltrans, cancovtotalclasstrans, cancovassessmethod, vt.crowncanclosurepct, vt.crowncancloseassessmethod, vt.crowncompfactorlpp, vt.crowncomplppavedbh, overstorycancovpcttrans, overstorycancovclasstrans, groundcovassessmethod, groundcovquadratssampled, groundcovpointssampled, groundsurfcovassessmethod, groundsurfcovquadratsamp, groundsurfcovpointssamp, lpiobsinterval, totalpointssampledcount, topcanopyhtave, topcanopyhtstddev, totalnumplantsbelt, totalnumspeciesbelt, totalplantdensitybelt
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
@@ -211,25 +206,24 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   LEFT JOIN vegtransect_View_1 AS vt ON vt.vegplotiidref=v.vegplotiid
   ORDER BY s.siteiid;"
 
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
 
   # exec query
-  d.vegtransect <- RODBC::sqlQuery(channel, q.vegtransect, stringsAsFactors=FALSE)
+  d.vegtransect <- dbQueryNASIS(channel, q.vegtransect)
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-
-  # close connection
-  RODBC::odbcClose(channel)
-
+  
   d <- uncode(d.vegtransect)
 
   # test for no data
-  if(nrow(d) == 0)
-  stop('there are no NASIS vegplots transects in your selected set!')
+  if (nrow(d) == 0)
+    stop('there are no NASIS vegplots transects in your selected set!')
 
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
@@ -239,14 +233,14 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 }
 
 
-  # get vegplot transect species data
-  get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
+# get vegplot transect species data
+get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
-  if(!requireNamespace('RODBC'))
+  if (!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
 
   # veg transect species data - many species to one veg transect
-  q.vtps<- "SELECT siteiid, vegtransectiidref as vegtransect_id, vegplotid, vegplotname, obsdate, vegtransplantsummiid as vtpsiid, vtps.seqnum, plantsym, plantsciname, plantnatvernm, plantnativity, planttypegroup, plantheightcllowerlimit, plantheightclupperlimit, sociabilityclass, specieslivecanhtbotave, specieslivecanhttopave, overstorydbhmin, overstorydbhmax, speciesovercancovpct, speciesovercancovclass, plantprodquadratsize, plantprodquadratshape, nestedfreqquadratsize, nestedfreqquadratshape, frequencyquadratsize, frequencyquadratshape, dwrquadratsize, dwrquadratshape, densityquadratsize, densityquadratshape, speciestotwtclippedest, speciestotwtclippedfresh, speciestotwtclippedairdry, speciestotwtairdry, speciestotwtest, speciestotwtexisting, speciesdrywtpct, speciestotwt, speciesaveyielddblsamp, speciescomppctdblsamp, speciescomppctdaubenmire, speciescomppctlineintercept, speciestraceamtflag, weightconvfactor, dblsampcorrectionfactor, airdrywtadjustment, utilizationadjustment, growthadjustment, weatheradjustment, numberofquadratsin, speciesfreqdaubenmire, dwronetally, dwrtwotally, dwrthreetally, dwrweightedtally, speciescomppctdwr, speciesaveyielddwr, wtunitweight, wtunitcounttotal, speciesaveyieldwtunit, wtunitwtclippedtotal, speciescancovhitcount, speciescancovpct, speciescancovpctavedaub, speciescancovaveclass, speciesfoliarcovhitcount, speciesfoliarcovpctlineint, speciestotfoliarcovlineint, speciesbasalcovhitcount, speciesbasalcovpctlineint, speciestotbasalcovlineint, maturecounttotal, maturedensityave, maturedensityaveclass, seedlingcounttotal, seedlingdensityave, seedlingdensityaveclass, speciesgroundcovabundclass, speciescancovportion, speciesbasalarea, vtps.basalareaassessmethod
+  q.vtps <- "SELECT siteiid, vegtransectiidref as vegtransect_id, vegplotid, vegplotname, obsdate, vegtransplantsummiid as vtpsiid, vtps.seqnum, plantsym, plantsciname, plantnatvernm, plantnativity, planttypegroup, plantheightcllowerlimit, plantheightclupperlimit, sociabilityclass, specieslivecanhtbotave, specieslivecanhttopave, overstorydbhmin, overstorydbhmax, speciesovercancovpct, speciesovercancovclass, plantprodquadratsize, plantprodquadratshape, nestedfreqquadratsize, nestedfreqquadratshape, frequencyquadratsize, frequencyquadratshape, dwrquadratsize, dwrquadratshape, densityquadratsize, densityquadratshape, speciestotwtclippedest, speciestotwtclippedfresh, speciestotwtclippedairdry, speciestotwtairdry, speciestotwtest, speciestotwtexisting, speciesdrywtpct, speciestotwt, speciesaveyielddblsamp, speciescomppctdblsamp, speciescomppctdaubenmire, speciescomppctlineintercept, speciestraceamtflag, weightconvfactor, dblsampcorrectionfactor, airdrywtadjustment, utilizationadjustment, growthadjustment, weatheradjustment, numberofquadratsin, speciesfreqdaubenmire, dwronetally, dwrtwotally, dwrthreetally, dwrweightedtally, speciescomppctdwr, speciesaveyielddwr, wtunitweight, wtunitcounttotal, speciesaveyieldwtunit, wtunitwtclippedtotal, speciescancovhitcount, speciescancovpct, speciescancovpctavedaub, speciescancovaveclass, speciesfoliarcovhitcount, speciesfoliarcovpctlineint, speciestotfoliarcovlineint, speciesbasalcovhitcount, speciesbasalcovpctlineint, speciestotbasalcovlineint, maturecounttotal, maturedensityave, maturedensityaveclass, seedlingcounttotal, seedlingdensityave, seedlingdensityaveclass, speciesgroundcovabundclass, speciescancovportion, speciesbasalarea, vtps.basalareaassessmethod
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
@@ -256,26 +250,24 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   INNER JOIN plant ON plant.plantiid=vtps.plantiidref
   ORDER BY s.siteiid;"
 
-
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
 
   # exec query
-  d.vegtransplantsum <- RODBC::sqlQuery(channel, q.vtps, stringsAsFactors=FALSE)
+  d.vegtransplantsum <- dbQueryNASIS(channel, q.vtps)
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-
-  # close connection
-  RODBC::odbcClose(channel)
 
   d <- uncode(d.vegtransplantsum)
 
   # test for no data
-  if(nrow(d) == 0)
-  stop('there are no NASIS vegplots transect species in your selected set!')
+  if (nrow(d) == 0)
+    stop('there are no NASIS vegplots transect species in your selected set!')
 
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
@@ -284,11 +276,10 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   return(d)
 }
 
-
-  # get vegplot tree site index summary data
-  get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
+# get vegplot tree site index summary data
+get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
+# must have RODBC installed
+  if (!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
 
   # plot tree site index summary data
@@ -302,25 +293,24 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   INNER JOIN plant ON plant.plantiid=pltsis.plantiidref
   ORDER BY s.siteiid;"
 
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
 
   # exec query
-  d.vegsiteindexsum <- RODBC::sqlQuery(channel, q.pltsis, stringsAsFactors=FALSE)
+  d.vegsiteindexsum <- dbQueryNASIS(channel, q.pltsis)
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-
-  # close connection
-  RODBC::odbcClose(channel)
 
   d <- uncode(d.vegsiteindexsum)
 
   # test for no data
-  if(nrow(d) == 0)
-  stop('there are no NASIS vegplots tree site index data in your selected set!')
+  if (nrow(d) == 0)
+    stop('there are no NASIS vegplots tree site index data in your selected set!')
 
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
@@ -330,14 +320,14 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 }
 
 
-  # get vegplot tree site index details data
-  get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
+# get vegplot tree site index details data
+get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
-  if(!requireNamespace('RODBC'))
+  if (!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
 
   # plot tree site index detail data
-  q.pltsid<- "SELECT plottreesiteindsumiidref, pltsid.seqnum, plantsym, plantsciname, plantnatvernm, treenumber, crownclass, reproductionsource, treediameterbreastheight, tenyeargrowthradius, growthringcount, growthringcountheight, growthringcountage, treeage, treecanopyhtbottom, treecanopyhttop, plottreesiteinddetailsiid
+  q.pltsid <- "SELECT plottreesiteindsumiidref, pltsid.seqnum, plantsym, plantsciname, plantnatvernm, treenumber, crownclass, reproductionsource, treediameterbreastheight, tenyeargrowthradius, growthringcount, growthringcountheight, growthringcountage, treeage, treecanopyhtbottom, treecanopyhttop, plottreesiteinddetailsiid
 
   FROM
   site_View_1 AS s
@@ -349,20 +339,18 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   INNER JOIN plant ON plant.plantiid=pltsis.plantiidref
   ORDER BY s.siteiid;"
 
-
-  # setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
-
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
   # exec query
-  d.vegsiteindexdet <- RODBC::sqlQuery(channel, q.pltsid, stringsAsFactors=FALSE)
+  d.vegsiteindexdet <- dbQueryNASIS(channel, q.pltsid)
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-
-  # close connection
-  RODBC::odbcClose(channel)
 
   d <- uncode(d.vegsiteindexdet)
 
@@ -378,10 +366,10 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 }
 
 
-  # get vegplot textnotes
-  get_vegplot_textnote_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, stringsAsFactors = default.stringsAsFactors()) {
+# get vegplot textnotes
+get_vegplot_textnote_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
-  if(!requireNamespace('RODBC'))
+  if (!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
 
 
@@ -390,31 +378,30 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 textcat, textsubcat, CAST(textentry AS ntext) AS textentry, vegplottextiid
 FROM vegplottext_View_1;"
 
-# setup connection local NASIS
-  channel <- RODBC::odbcDriverConnect(connection=getOption('soilDB.NASIS.credentials'))
-
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
   # exec query
-  d.vegplottext <- RODBC::sqlQuery(channel, q.vegplottext, stringsAsFactors=FALSE)
+  d.vegplottext <- dbQueryNASIS(channel, q.vegplottext)
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-
-  # close connection
-  RODBC::odbcClose(channel)
 
   d <- uncode(d.vegplottext)
 
   # test for no data
-  if(nrow(d) == 0)
-  stop('there are no NASIS vegplots textnotes in your selected set!')
+  if (nrow(d) == 0)
+   stop('there are no NASIS vegplots textnotes in your selected set!')
 
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
 
   # optionally convert \r\n -> \n
-  if(fixLineEndings){
+  if (fixLineEndings) {
     d$textentry <- gsub(d$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
   }
 

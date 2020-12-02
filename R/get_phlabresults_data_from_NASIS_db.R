@@ -15,9 +15,9 @@ phorizon_View_1 ph
 LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
   ORDER BY peiidref, phiid, sampledepthtop;"
 
-
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
@@ -27,16 +27,15 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
 
 
   # exec query
-  d.phlabresults <- RODBC::sqlQuery(channel, q, stringsAsFactors = FALSE)
-
-
+  d.phlabresults <- dbQueryNASIS(channel, q)  
+  
   # recode metadata domains
   d.phlabresults <- uncode(d.phlabresults)
 
 
   # compute thickness
   d.phlabresults <- within(d.phlabresults, {
-    hzthk = sampledepthbottom - sampledepthtop
+     hzthk = sampledepthbottom - sampledepthtop
     })
 
 
@@ -128,11 +127,6 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
   # TODO: final cleaning of duplicate rows - dups exist in NASIS for some reason, so should this happen first
   # to eliminate extra rows with no data? Not sure what is causing this on the NASIS side
   d.phlabresults <-  d.phlabresults[rowSums(is.na(d.phlabresults))<(length(d.phlabresults)-1),]
-
-
-  # close connection
-  RODBC::odbcClose(channel)
-
 
   # done
   return(d.phlabresults)

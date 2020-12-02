@@ -16,6 +16,17 @@ importFrom(data.table,
            data.table,
            as.data.table)
 
+importFrom(DBI, 
+  dbGetQuery,
+  dbConnect,
+  dbSendQuery,
+  dbFetch
+)
+
+importFrom(odbc, odbc)
+
+importFrom(RSQLite, SQLite)
+
 importFrom(reshape2, 
   dcast,
   melt

@@ -14,21 +14,19 @@ get_colors_from_NASIS_db <- function(SS=TRUE) {
   INNER JOIN phcolor_View_1 ON phorizon_View_1.phiid = phcolor_View_1.phiidref
   ORDER BY phiid, colormoistst;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
     return(data.frame())
-
+  
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-
-	# exec query
-	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-	# close connection
-  RODBC::odbcClose(channel)
-
+  
+  # exec query
+  d <- dbQueryNASIS(channel, q)  
+  
 	# uncode domained columns
 	d <- uncode(d)
 
@@ -41,7 +39,7 @@ get_colors_from_NASIS_db <- function(SS=TRUE) {
 	d$colorchroma <- as.numeric(as.character(d$colorchroma))
 
   # sanity check, only attempt to simplify colors if there are > 1 rows
-  if(nrow(d) > 1) {
+  if (nrow(d) > 1) {
     # mix colors as-needed, mixing done in CIE LAB space
     d.final <- simplifyColorData(d, id.var = 'phiid', wt = 'pct')
   } else {

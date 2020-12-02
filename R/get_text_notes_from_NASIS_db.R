@@ -21,19 +21,17 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 	q.photos <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, CAST(textentry AS ntext) AS textentry, siteiidref AS site_id, siteobstextiid FROM (siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
 
 	# check for RODBC, NASIS credential options, and successful connection
-	channel <- .openNASISchannel()
-	if (channel == -1)
+	channel <- dbConnectNASIS()
+	
+	if (inherits(channel, 'try-error'))
 	  return(data.frame())
 
 	# run queries
-	d.petext <- RODBC::sqlQuery(channel, q.petext, stringsAsFactors=FALSE)
-	d.sitetext <- RODBC::sqlQuery(channel, q.sitetext, stringsAsFactors=FALSE)
-	d.siteobstext <- RODBC::sqlQuery(channel, q.siteobstext, stringsAsFactors=FALSE)
-	d.phtext <- RODBC::sqlQuery(channel, q.phtext, stringsAsFactors=FALSE)
-	d.photos <- RODBC::sqlQuery(channel, q.photos, stringsAsFactors=FALSE)
-
-	# close connection
-	RODBC::odbcClose(channel)
+	d.petext <- dbQueryNASIS(channel, q.petext)
+	d.sitetext <- dbQueryNASIS(channel, q.sitetext)
+	d.siteobstext <- dbQueryNASIS(channel, q.siteobstext)
+	d.phtext <- dbQueryNASIS(channel, q.phtext)
+	d.photos <- dbQueryNASIS(channel, q.photos)
 
 	# uncode domained columns
 	d.petext <- uncode(d.petext)
@@ -43,18 +41,18 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 	d.photos <- uncode(d.photos)
 
 	# optionally convert \r\n -> \n
- 	 if(fixLineEndings){
+ 	if (fixLineEndings) {
    	 d.petext$textentry <- gsub(d.petext$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
    	 d.sitetext$textentry <- gsub(d.sitetext$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
    	 d.siteobstext$textentry <- gsub(d.siteobstext$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
    	 d.phtext$textentry <- gsub(d.phtext$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
-  	}
+  }
 
 	# return a list of results
-	return(list(pedon_text=d.petext,
-							site_text=d.sitetext,
-							siteobs_text=d.siteobstext,
-							horizon_text=d.phtext,
-							photo_links=d.photos))
+	return(list(pedon_text = d.petext,
+							site_text = d.sitetext,
+							siteobs_text = d.siteobstext,
+							horizon_text = d.phtext,
+							photo_links = d.photos))
 
 }

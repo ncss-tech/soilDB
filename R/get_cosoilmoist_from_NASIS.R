@@ -11,16 +11,14 @@ get_cosoilmoist_from_NASIS <- function(impute = TRUE, stringsAsFactors = default
   ORDER BY dmuiid, comppct_r DESC, compname, month, soimoistdept_r
   ;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
     return(data.frame())
-
+  
   # exec query
-  d.cosoilmoist <- RODBC::sqlQuery(channel, q.cosoilmoist, stringsAsFactors = FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
-
+  d.cosoilmoist <- dbQueryNASIS(channel, q.cosoilmoist)  
+  
   # recode metadata domains
   d.cosoilmoist <- uncode(d.cosoilmoist, stringsAsFactors = stringsAsFactors)
 

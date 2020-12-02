@@ -1,3 +1,6 @@
+# soilDB 2.6.0 (2020-12-02)
+ * Connections to the local NASIS database now use `DBI` and `odbc` instead of `RODBC`. Two new methods `dbConnectNASIS` and `dbQueryNASIS` facilitate access with read-only credentials, submission of queries/fetching of results, and closing the DBI connection upon completion.
+ 
 # soilDB 2.5.9 (2020-11-30)
  * new function `ROSETTA` for accessing the new ROSETTA model API (c/o Todd Skaggs, USDA-ARS)
  * `fetchOSD(..., extended=TRUE)` gains geographically associated soils, parsed from OSD (thanks AGB)
