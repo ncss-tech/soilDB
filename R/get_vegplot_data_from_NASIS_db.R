@@ -46,9 +46,6 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 
 # get location data from the corresponding record in the site table
 get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   # query the coordinate, plss description, and site characteristics data for these records from the site table
   q.plotlocation <- "SELECT s.siteiid, s.usiteid as site_id, v.vegplotid as vegplot_id, vegplotiid, so.obsdate, v.datacollectionpurpose, latdegrees, latminutes, latseconds, latdir, longdegrees, longminutes, longseconds, longdir, horizdatnm, locdesc, plsssdetails, plsssection, plsstownship, plssrange, plssmeridian, utmzone, utmnorthing, utmeasting, latstddecimaldegrees, longstddecimaldegrees, geocoordsource, elev, slope, aspect
@@ -109,9 +106,6 @@ get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
 
 # get Rangeland Health Indicator(RHI) associated fields in the vegplot table
 get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   q.vegplotrhi <- "SELECT siteiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, rhiannualprod, rhibareground, rhicompactionlayer, rhifuncstructgroups, rhierosionresistance, rhigullies, rhirills, rhipedastalsterracettes, rhiinfilrunoff, rhilitteramount, rhilittermovement, rhiplantmortality, rhireprodcapability, rhiinvasiveplants, rhisoilsurfdegradation, rhiwaterflowpatterns, rhiwindscourareas, rhisoilsitestabsumm, rhibioticintegritysumm, rhihydrofunctionsumm
   FROM
@@ -150,9 +144,6 @@ get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.s
 
 # get vegplot species - this is a reconstruction of a site existing species list
 get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call. = FALSE)
 
   q.vegplotspecies <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, ppi.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass
   FROM
@@ -192,9 +183,6 @@ get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defaul
 
 # get vegplot transect data
 get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   # veg transect data - many transects to one vegplot
   q.vegtransect <- "SELECT siteiid, p.peiid, vegplotiidref, vegtransectiid, usiteid as site_id, assocuserpedonid as pedon_id, vegplotid as vegplot_id, vegplotname, vegtransectid as vegtransect_id, obsdate, primarydatacollector, datacollectionpurpose, transectstartlatitude, transectstartlongitude, transectendlatitude, transectendlongitude, transectazimuth, transectlength, transectstartelevation, transectendelevation, dblsampquadratssampled, dblsampquadratsclipped, nestedfreqquadratssampled, freqquadratssampled, dwrquadratssampled, daubenmirequadratssampled, quadratsizedomlegacy, quadratsizeseclegacy, quadratshapedomlegacy, quadratshapeseclegacy, beltwidth, dblsampannualprod, totharvestannualprod, wtunitannualprod, dwrannualprod, comparativeyieldprod, comparativeyieldranktotal, comparativeyieldrankave, comparativerefclipwtave, abovegroundbiomasstotal, standingherbbiomass, transectbasalcovpct, basalcovpcttotal, basalgapsizemin, canopygapsizemin, gapsmeasuredbetween, canopygaplengthtotal, canopygappcttotal, basalgaplengthtotal, basalgappcttotal, vt.understoryreprodabundance, vt.woodyunderstoryabundance, vt.herbundertoryabundance, vt.lichensunderstoryabundance, cancovpcttotaltrans, cancovtotalclasstrans, cancovassessmethod, vt.crowncanclosurepct, vt.crowncancloseassessmethod, vt.crowncompfactorlpp, vt.crowncomplppavedbh, overstorycancovpcttrans, overstorycancovclasstrans, groundcovassessmethod, groundcovquadratssampled, groundcovpointssampled, groundsurfcovassessmethod, groundsurfcovquadratsamp, groundsurfcovpointssamp, lpiobsinterval, totalpointssampledcount, topcanopyhtave, topcanopyhtstddev, totalnumplantsbelt, totalnumspeciesbelt, totalplantdensitybelt
@@ -235,9 +223,6 @@ get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
 
 # get vegplot transect species data
 get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   # veg transect species data - many species to one veg transect
   q.vtps <- "SELECT siteiid, vegtransectiidref as vegtransect_id, vegplotid, vegplotname, obsdate, vegtransplantsummiid as vtpsiid, vtps.seqnum, plantsym, plantsciname, plantnatvernm, plantnativity, planttypegroup, plantheightcllowerlimit, plantheightclupperlimit, sociabilityclass, specieslivecanhtbotave, specieslivecanhttopave, overstorydbhmin, overstorydbhmax, speciesovercancovpct, speciesovercancovclass, plantprodquadratsize, plantprodquadratshape, nestedfreqquadratsize, nestedfreqquadratshape, frequencyquadratsize, frequencyquadratshape, dwrquadratsize, dwrquadratshape, densityquadratsize, densityquadratshape, speciestotwtclippedest, speciestotwtclippedfresh, speciestotwtclippedairdry, speciestotwtairdry, speciestotwtest, speciestotwtexisting, speciesdrywtpct, speciestotwt, speciesaveyielddblsamp, speciescomppctdblsamp, speciescomppctdaubenmire, speciescomppctlineintercept, speciestraceamtflag, weightconvfactor, dblsampcorrectionfactor, airdrywtadjustment, utilizationadjustment, growthadjustment, weatheradjustment, numberofquadratsin, speciesfreqdaubenmire, dwronetally, dwrtwotally, dwrthreetally, dwrweightedtally, speciescomppctdwr, speciesaveyielddwr, wtunitweight, wtunitcounttotal, speciesaveyieldwtunit, wtunitwtclippedtotal, speciescancovhitcount, speciescancovpct, speciescancovpctavedaub, speciescancovaveclass, speciesfoliarcovhitcount, speciesfoliarcovpctlineint, speciestotfoliarcovlineint, speciesbasalcovhitcount, speciesbasalcovpctlineint, speciestotbasalcovlineint, maturecounttotal, maturedensityave, maturedensityaveclass, seedlingcounttotal, seedlingdensityave, seedlingdensityaveclass, speciesgroundcovabundclass, speciescancovportion, speciesbasalarea, vtps.basalareaassessmethod
@@ -278,9 +263,6 @@ get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
 
 # get vegplot tree site index summary data
 get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-# must have RODBC installed
-  if (!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   # plot tree site index summary data
   q.pltsis<- "SELECT vegplotiidref AS vegplotiid, pltsis.seqnum, plantiidref, plantsym, plantsciname, plantnatvernm, plantnativity, siteindexbase, speciestreecount, siteindexplotave, speciesdbhaverage, treeageave, treecanopyhttopave, plottreesiteindsumiid
@@ -322,9 +304,6 @@ get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
 
 # get vegplot tree site index details data
 get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   # plot tree site index detail data
   q.pltsid <- "SELECT plottreesiteindsumiidref, pltsid.seqnum, plantsym, plantsciname, plantnatvernm, treenumber, crownclass, reproductionsource, treediameterbreastheight, tenyeargrowthradius, growthringcount, growthringcountheight, growthringcountage, treeage, treecanopyhtbottom, treecanopyhttop, plottreesiteinddetailsiid
@@ -368,10 +347,6 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
 
 # get vegplot textnotes
 get_vegplot_textnote_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
-
 
   # vegplot textnotes
   q.vegplottext <- "SELECT vegplotiidref as vegplotiid, seqnum, recdate, recauthor, vegplottextkind,

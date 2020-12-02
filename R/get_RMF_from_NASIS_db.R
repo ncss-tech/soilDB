@@ -1,7 +1,4 @@
 get_RMF_from_NASIS_db <- function(SS=TRUE) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   # RMF
   # unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)

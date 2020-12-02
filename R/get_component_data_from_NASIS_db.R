@@ -681,9 +681,6 @@ get_comonth_from_NASIS_db <- function(SS=TRUE, fill=FALSE, stringsAsFactors = de
 # get linked pedons by peiid and user pedon ID
 # note that there may be >=1 pedons / coiid
 get_copedon_from_NASIS_db <- function(SS=TRUE) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative
 

@@ -6,10 +6,7 @@ uncode <- function(df,
                    ) {
   
   get_metadata <- function() {
-    # must have RODBC installed
-    if (!requireNamespace('RODBC'))
-      stop('please install the `RODBC` package', call.=FALSE)
-    
+
     q <- "SELECT mdd.DomainID, DomainName, ChoiceSequence, ChoiceValue, ChoiceName, 
                  ChoiceLabel, ColumnPhysicalName, ColumnLogicalName, ChoiceObsolete, ChoiceDescription
           FROM MetadataDomainDetail mdd

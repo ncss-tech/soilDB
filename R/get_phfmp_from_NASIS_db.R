@@ -1,7 +1,5 @@
 get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if (!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+
 
   # because of alias with fetchNASIS cannot allow setting attr
   # also, attr is a free-form field, so not terribly useful -- consider SQL LIKE?
