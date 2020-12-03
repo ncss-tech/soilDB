@@ -16,9 +16,12 @@
   
   ## load data in pieces
   # these fail gracefully when no data in local DB | selected set
-  site_data  <- get_site_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors)
-  hz_data    <- get_hz_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors)
-  color_data <- get_colors_from_NASIS_db(SS = SS)
+  site_data  <- get_site_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, 
+                                            sqlite_path = sqlite_path)
+  hz_data    <- get_hz_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, 
+                                          sqlite_path = sqlite_path)
+  color_data <- get_colors_from_NASIS_db(SS = SS, 
+                                         sqlite_path = sqlite_path)
   
   ## ensure there are enough data to create an SPC object
   if (nrow(hz_data) == 0) {
@@ -26,7 +29,7 @@
   }
   
   # data that cannot be effectively flattened in SQL
-  extended_data <- get_extended_data_from_NASIS_db(SS = SS, nullFragsAreZero = nullFragsAreZero, stringsAsFactors = stringsAsFactors)
+  extended_data <- get_extended_data_from_NASIS_db(SS = SS, nullFragsAreZero = nullFragsAreZero, stringsAsFactors = stringsAsFactors, sqlite_path = sqlite_path)
   
   ## join horizon + hz color: all horizons
   h <- merge(hz_data, color_data, by='phiid', all.x=TRUE, sort=FALSE)

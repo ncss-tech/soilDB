@@ -2,8 +2,8 @@ uncode <- function(df,
                    invert = FALSE, 
                    db = "NASIS", 
                    droplevels = FALSE, 
-                   stringsAsFactors = default.stringsAsFactors()
-                   ) {
+                   stringsAsFactors = default.stringsAsFactors(),
+                   sqlite_path = NULL) {
   
   get_metadata <- function() {
 
@@ -15,7 +15,7 @@ uncode <- function(df,
                         FROM MetadataTableColumn GROUP BY DomainID, ColumnPhysicalName) mtc ON mtc.DomainID = mdd.DomainID
           ORDER BY DomainID, ColumnPhysicalName, ChoiceValue;"
     
-    channel <- dbConnectNASIS()
+    channel <- dbConnectNASIS(sqlite_path)
     
     if (inherits(channel, 'try-error'))
       return(data.frame())
