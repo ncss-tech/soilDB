@@ -1,10 +1,7 @@
 ## 2013-01-08: now much faster since we only mix/clean data with > 1 color / horizon
 
 # results can be referenced via phiid (horizon-level ID)
-get_colors_from_NASIS_db <- function(SS=TRUE) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+get_colors_from_NASIS_db <- function(SS=TRUE, sqlite_path = NULL) {
 
 	# unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
   q <- "SELECT peiid, phiid, colormoistst, colorpct as pct, colorhue, colorvalue, colorchroma
@@ -14,7 +11,7 @@ get_colors_from_NASIS_db <- function(SS=TRUE) {
   INNER JOIN phcolor_View_1 ON phorizon_View_1.phiid = phcolor_View_1.phiidref
   ORDER BY phiid, colormoistst;"
 
-  channel <- dbConnectNASIS()
+  channel <- dbConnectNASIS(sqlite_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())

@@ -1,7 +1,4 @@
-get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
 
   # concentrations
   # unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
@@ -19,7 +16,7 @@ get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
   FROM phconccolor_View_1
   ORDER BY phconceniidref, colormoistst;"
   
-  channel <- dbConnectNASIS()
+  channel <- dbConnectNASIS(sqlite_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
