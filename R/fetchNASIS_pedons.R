@@ -188,7 +188,7 @@
   site(h) <- lf
   
   # join-in parent material strings
-  ed.pm <- split(extended_data$pm, extended_data$siteiid)
+  ed.pm <- split(extended_data$pm, extended_data$pm$siteiid)
   pm <- do.call('rbind', lapply(ed.pm, .formatParentMaterialString, name.sep=' & '))
   site(h) <- pm
   
