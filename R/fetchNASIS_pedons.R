@@ -2,7 +2,9 @@
 
 # get NASIS site/pedon/horizon/diagnostic feature data
 .fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, 
-                               soilColorState='moist', lab=FALSE, stringsAsFactors = default.stringsAsFactors()) {
+                               soilColorState='moist', lab=FALSE, 
+                               stringsAsFactors = default.stringsAsFactors(), 
+                               sqlite_path = NULL) {
   
   # test connection
   if (!'nasis_local' %in% names(RODBC::odbcDataSources()))

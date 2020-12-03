@@ -1,18 +1,23 @@
-## TODO: this isn't really needed any more
-getHzErrorsNASIS <- function(strict=TRUE) {
+#' Check pedon horizon table for logic errors
+#'
+#' @param strict how strict should horizon boundaries be checked for consistency: TRUE=more | FALSE=less
+#'
+#' @return A data.frame containing problematic records with columns: 'peiid','pedon_id','hzdept','hzdepb','hzname' 
+#' @export
+#'
+getHzErrorsNASIS <- function(strict = TRUE) {
 	
 	# get data
 	site_data <- get_site_data_from_NASIS_db()
 	hz_data <- get_hz_data_from_NASIS_db()
 	
 	# combine pieces
-	f <- join(hz_data, site_data, by='peiid', type='inner')
+	f <- merge(hz_data, site_data, by = 'peiid', all.x = TRUE, sort = FALSE)
 	
-	# ignore missing lower boundary
-	f.test <- ddply(f, 'pedon_id', function(d) {
-	  res <- aqp::hzDepthTests(top=d[['hzdept']], bottom=d[['hzdepb']])
-	  return(data.frame(hz_logic_pass=all(!res)))
-	})
+	f.test <- do.call('rbind', lapply(split(f, f$pedon_id), function(d) {
+	  res <- aqp::hzDepthTests(top = d[['hzdept']], bottom = d[['hzdepb']])
+	  return(data.frame(pedon_id = d$pedon_id, hz_logic_pass = all(!res)))
+	}))
 	
 	# find bad ones
 	bad.pedon.ids <- as.character(f.test$pedon_id[which(f.test$hz_logic_pass == FALSE)])
