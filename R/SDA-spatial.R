@@ -72,6 +72,7 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
 
 
 
+## TODO consider adding an 'identity' method for more generic use
 # select the right query for SSURGO / STATSGO geometry filters submitted to SDA
 # this is important because STATSGO features require the additional
 # AND CLIPAREASYMBOL = 'US'
