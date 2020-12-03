@@ -31,6 +31,9 @@ f <- read.table(text = "R/fetchNASIS.R
                         # man/getHzErrorsNASIS.Rd
                         # misc/man-deprecated/fetchNASIS.Rd
                         # 
+# # you want the version of soilDB you are testing to be installed
+# devtools::install()
+
 library(soilDB)
 
 fnames <- sapply(f, function(x) { 

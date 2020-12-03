@@ -1,4 +1,4 @@
-get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactors()) {
+get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
 
   q.soilseries <- "
   SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, statsgoflag, mlraoffice, areasymbol, areatypename, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, originyear, establishedyear, soiltaxclasslastupdated, soilseriesiid
@@ -17,7 +17,7 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
   # LEFT OUTER JOIN
   #     soilseriestaxmineralogy sstm ON sstm.soilseriesiidref = ss.soilseriesiid
 
-  channel <- dbConnectNASIS()
+  channel <- dbConnectNASIS(sqlite_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
