@@ -20,6 +20,8 @@
   # AOI and image calculations in native CRS
   e.native <- extent(p)
   
+  ## TODO: there must be a better way to ensure the target resolution
+  
   # create BBOX used for WMS
   # xmin, ymin, xmax, ymax
   aoi.native <- round(c(e.native[1], e.native[3], e.native[2], e.native[4]))

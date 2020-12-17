@@ -138,3 +138,191 @@ names(rs) <- c('ISSR-800', 'gNATSGO')
 levelplot(rs, margin = FALSE, main = '1:1 H2O pH 0-5cm', scales = list(draw = FALSE), maxpixels = 1e6)
 
 
+
+
+
+
+
+
+##
+## notes
+##
+
+# https://www.mapserver.org/ogc/wcs_server.html?highlight=web%20coverage%20service#configuring-your-mapfile-to-serve-wcs-layers
+
+# https://mapserver.org/mapfile/projection.html
+
+
+# https://cran.r-project.org/web/packages/slga/vignettes/slga.html
+
+# construct URLs and compute image dimensions:
+# https://github.com/obrl-soil/slga/blob/master/R/url_generate.R
+# https://github.com/obrl-soil/slga/tree/master/R
+
+
+# ISSR-800 / gNATSGO CRS may be EPSG:6350
+# https://www.fisheries.noaa.gov/inport/help/components/crs/1044
+#
+# BBOX from WGS84 are ~ 1m offset vs. +proj=aea ... init
+
+
+# # ISSR-800 native CRS
+# prepareAOI(c(-121,37,-120,38), res = 800)
+# 
+# # gNATSGO native CRS
+# # height is slightly larger than Mapserver default
+# 
+# prepareAOI(c(-121,37,-120,38), res = 30)
+
+## TODO: after I define a new EPSG code the WCS will 
+#        be able to skip the server-side raster warping
+#        and resampling
+
+# 
+# ## tempoary interface
+# # raster warping / resampling done server-side for now (not ideal!)
+# # var: raster data source name
+# # aoi: BBOX in WGS84 GCS ~ c(-121,37,-120,38)
+# # fmt: datatype
+# # res: resolution in GCS (... yes I know this is dumb)
+# # crs: EPSG code for BBOX coordinates and resulting image 
+# WCS.demo <- function(var, aoi, fmt, res = 0.002, crs = '4326') {
+#   
+#   ## TODO: make sure this is correct in general
+#   ## TODO: think about resampling issues
+#   ## TODO: data should be stored so that resampling / warping is not neccessary
+#   # compute image dimensions 
+#   w <- round(abs(aoi[3] - aoi[1]) / res)
+#   h <- round(abs(aoi[4] - aoi[2]) / res)
+#   
+#   ## possible formats: 
+#   # GEOTIFF_BYTE (8bit unsigned integers)
+#   # GEOTIFF_16 (16bit signed integers)
+#   # GEOTIFF_FLOAT (32bit floating point)
+#   
+#   # base URL + parameters
+#   # double-check version spec 1.0.0?
+#   u <- sprintf(
+#     'https://soilmap2-1.lawr.ucdavis.edu/cgi-bin/mapserv?map=/soilmap2/website/wcs/mukey-WCS.map&SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage&CRS=EPSG:%s&coverage=%s&FORMAT=%s&BBOX=%s&WIDTH=%s&HEIGHT=%s',
+#     crs, var, fmt, paste(aoi, collapse = ','), w, h
+#   )
+#   
+#   
+#   # make space for the resulting GeoTiff
+#   tf <- tempfile()
+#   download.file(u, destfile = tf, mode = 'wb')
+#   
+#   # load pointer to file and return
+#   res <- raster(tf)
+#   
+#   ## TODO: this isn't correct for all data (e.g. SAR), how do we set this server-side?
+#   # specification of NODATA
+#   NAvalue(res) <- 0
+#   
+#   return(res)
+# }
+
+
+## try it out with a couple of demo raster data sources
+
+# 1 minute = 1 degree / 60 (minutes / degree) = 0.01666 degree
+# 1 second = 1 second / 60 / 60 = 0.0002777778 degree
+#
+# 1 arc-second DEM are roughly 30m res
+# 30m res ~ 0.0002777778 degree
+# this translates to roughly 3600x3600px for a 1x1 degree block (~50Mb file)
+
+# res = 0.002 degrees ~ 300m
+# 
+# # pH 0-5cm ISSR-800
+# pH_05cm <- WCS.demo(var = 'ph_05cm', fmt = 'GEOTIFF_FLOAT', aoi = c(-121,37,-120,38), res = 0.002)
+# 
+# 
+# 
+# # survey type ISSR-800
+# survey.type <- WCS.demo(var = 'survey_type', fmt = 'GEOTIFF_BYTE', aoi = c(-121,37,-120,38), res = 0.004)
+# 
+# # WEG ISSR-800
+# weg <- WCS.demo(var = 'weg', fmt = 'GEOTIFF_BYTE', aoi = c(-121,37,-120,38), res = 0.002)
+# 
+# ## I made a small subset 
+# # map unit keys
+# # file is downloaded as floating point values, must be converted to integers
+# gNATSGO_mukey <- WCS.demo(var = 'gnatsgo', fmt = 'GEOTIFF_FLOAT', aoi = c(-121,37,-120,38), res = 0.002)
+# 
+# # attempt in AEA (~62Mb)
+# # it works, resolution is close to 30m
+# gNATSGO_mukey.aea <- WCS.demo(var = 'gnatsgo', fmt = 'GEOTIFF_32', aoi = prepareAOI(c(-121,37,-120,38), res = 30)$aoi, res = 30, crs = '6350')
+# 
+# # read into memory
+# pH_05cm <- readAll(pH_05cm)
+# pH_05cm.aea <- readAll(pH_05cm.aea)
+# 
+# survey.type <- readAll(survey.type)
+# weg <- readAll(weg)
+# gNATSGO_mukey <- readAll(gNATSGO_mukey)
+# 
+# # check AEA version
+# # resolution is a little funky
+# pH_05cm.aea
+# 
+# 
+# # convert categorical data -> integer-keyed values (RAT)
+# survey.type <- ratify(survey.type)
+# weg <- ratify(weg)
+# gNATSGO_mukey <- ratify(gNATSGO_mukey)
+# 
+# # looks good
+# levelplot(pH_05cm, margin = FALSE)
+# 
+# # artifacts?
+# levelplot(pH_05cm.aea, margin = FALSE)
+# 
+# # looks good
+# levelplot(weg, att = 'ID', margin = FALSE)
+# 
+# # integer map unit keys, colors don't mean anything
+# levelplot(gNATSGO_mukey, att = 'ID', margin = FALSE, colorkey = FALSE)
+# 
+# # all SSURGO
+# # "holes" are small water features which have been back-filled with STATSGO, not ideal
+# levelplot(survey.type, att = 'ID', margin = FALSE, colorkey = FALSE)
+# 
+# # these are SSURGO / STATSGO map unit keys
+# ll <- levels(gNATSGO_mukey)[[1]]
+# head(ll, 10)
+# nrow(ll)
+
+# use SDA + SSURGO aggregation engine (SQL mostly) to aggregate data
+# link aggregated data to RAT
+# convert to grid of values
+# done!
+
+
+## alternatively, use SOD SQL:
+# https://github.com/ncss-tech/ssurgoOnDemand/blob/master/SOD/SDA_Properties.py
+
+# manual aggregation = large requests / results from SDA
+
+##
+## Dylan's notes for later
+##
+
+# 
+# library(raster)
+# 
+# x <- raster('E:/gis_data/MapunitRaster_30m.tif')
+# x
+# 
+# # INT4U should suffice
+# dataType(x)
+# 
+# # ~ 9Mb
+# file.size('E:/gis_data/MapunitRaster_30m.tif') / 1024 / 1024
+# 
+# projectExtent(x, '+proj=longlat +datum=NAD83')
+# 
+# # BBOX=minx,miny,maxx,maxy: Bounding box corners (lower left, upper right)
+# 
+# 
+
