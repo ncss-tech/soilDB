@@ -151,7 +151,7 @@
   
   # load best-guess optimal records from ecositehistory
   # method is added to the new field called 'es_selection_method'
-  ed.es <- split(extended_data$ecositehistory, extended_data$siteiid)
+  ed.es <- split(extended_data$ecositehistory, extended_data$ecositehistory$siteiid)
   best.ecosite.data <- do.call('rbind', lapply(ed.es, .pickBestEcosite))
   site(h) <- best.ecosite.data
   
