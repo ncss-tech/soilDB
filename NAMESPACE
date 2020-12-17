@@ -10,7 +10,7 @@ importFrom("utils", "URLencode", "download.file", "object.size",
              "read.csv", "read.table", "setTxtProgressBar",
              "txtProgressBar", "write.table", "type.convert")
 
-importFrom("methods", "slot<-")
+importFrom("methods", "slot<-", "as")
 
 importFrom(data.table, 
            data.table,
@@ -24,7 +24,9 @@ importFrom(reshape2,
 importFrom(raster,
   readAll,
   raster,
-  extent
+  extent,
+  ratify,
+  "NAvalue<-"
 )
 
 importFrom(lattice, 

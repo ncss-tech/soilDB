@@ -1,17 +1,17 @@
 
-#' @title ISSR-800 Web Coverage Service Interface
+#' @title gNATSGO / gSSURGO Web Coverage Service Interface
 #'
 #' @param var variable label
 #' @param aoi area of interest as WGS84 coordinates c(-121, 37, -120, 38) (xmin, ymin, xmax, ymax)
-#' @param res grid cell resolution (units specific to \code{crs}), typically 800 (meters), the native resolution of ISSR-800
+#' @param res grid cell resolution (units specific to \code{crs}), typically 30 (meters), the native resolution of gNATSGO and gSSURGO
 #' @param crs coordinate reference specification in the form `EPSG:6350`, must contain a valid EPSG code
 #' 
 #' @note This is an experimental interface that can change at any time.
 #'
-#' @return \code{raster} object
+#' @return \code{raster} object containing indexed map unit keys and associated raster attribute table
 #' @export
 #'
-ISSR800.wcs <- function(var, aoi, res = 800, crs = 'EPSG:6350') {
+mukey.wcs <- function(var = 'gnatsgo', aoi, res = 30, crs = 'EPSG:6350') {
   
   if(!requireNamespace('rgdal', quietly=TRUE))
     stop('please install the `rgdal` package', call.=FALSE)
@@ -22,13 +22,13 @@ ISSR800.wcs <- function(var, aoi, res = 800, crs = 'EPSG:6350') {
   # WCS request errors
   # ???
   
-  var.spec <- .ISSR800.spec[[var]]
+  var.spec <- .mukey.spec[[var]]
   
   wcs.geom <- .prepare_AEA_AOI_fromWGS84(aoi, res = res, targetCRS = crs)
   
   # base URL + parameters
   base.url <- 'https://soilmap2-1.lawr.ucdavis.edu/cgi-bin/mapserv?'
-  service.url <- 'map=/soilmap2/website/wcs/issr800.map&SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage'
+  service.url <- 'map=/soilmap2/website/wcs/mukey.map&SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage'
   
   ## I'm pretty sure this is right
   # native CRS is 'EPSG:6350'
@@ -53,7 +53,7 @@ ISSR800.wcs <- function(var, aoi, res = 800, crs = 'EPSG:6350') {
   # load pointer to file and return
   r <- raster(tf)
   
-  ## TODO: this isn't correct for all data (e.g. SAR), how do we set this server-side?
+  ## TODO: how do we set this server-side?
   # specification of NODATA
   NAvalue(r) <- 0
   
@@ -65,27 +65,11 @@ ISSR800.wcs <- function(var, aoi, res = 800, crs = 'EPSG:6350') {
   # and as an attribute
   attr(r, 'layer name') <- var.spec$desc
   
-  # optional processing of RAT
-  if(! is.null(var.spec$rat)) {
-    
-    # get rat
-    rat <- read.csv(var.spec$rat, stringsAsFactors = FALSE)
-    
-    # rename ID column
-    names(rat)[2] <- 'ID'
-    
-    # convert to RAT-enabled raster
-    r <- ratify(r)
-    
-    # get / merge codes
-    ll <- levels(r)[[1]]
-    ll <- merge(ll, rat, by = 'ID', sort = FALSE, all.x = TRUE)
-    levels(r) <- ll
-  }
+  # init RAT
+  r <- ratify(r)
+  
+  # optional joining of data from SDA?
   
   return(r)
 }
-
-
-
 
