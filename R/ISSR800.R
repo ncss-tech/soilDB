@@ -23,9 +23,27 @@ ISSR800.wcs <- function(var, aoi, res = 800, crs = 'EPSG:6350') {
   # WCS request errors
   # ???
   
+  # limits set in the MAPFILE
+  max.img.dim <- 5000 
+  
+  # get layer specs
   var.spec <- .ISSR800.spec[[var]]
   
+  # compute BBOX / IMG geometry in native CRS
   wcs.geom <- .prepare_AEA_AOI_fromWGS84(aoi, res = res, targetCRS = crs)
+  
+  # check image size > max.img.dim
+  if(wcs.geom$height > max.img.dim | wcs.geom$width > max.img.dim) {
+    msg <- sprintf(
+      'AOI is too large: %sx%s pixels requested (%sx%s pixels max)', 
+      wcs.geom$width, 
+      wcs.geom$height, 
+      max.img.dim,
+      max.img.dim
+    )
+    
+    stop(msg, call. = FALSE)
+  }
   
   # base URL + parameters
   base.url <- 'https://soilmap2-1.lawr.ucdavis.edu/cgi-bin/mapserv?'
