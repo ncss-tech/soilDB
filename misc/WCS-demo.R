@@ -14,6 +14,8 @@ library(rasterVis)
 # BBOX in WGS84 coordinates
 a <- c(-121,37,-120,38)
 
+a <- c(-114.16,47.65,-114.08,47.68)
+
 # attempt in AEA ~ 800m
 
 # floating point grids
@@ -79,6 +81,7 @@ gn.30m <- mukey.wcs(var = 'gnatsgo', aoi = a, res = 30)
 # AEA
 levelplot(gn.300m, att = 'ID', margin = FALSE, colorkey = FALSE)
 
+levelplot(gn.30m, att = 'ID', margin = FALSE, colorkey = FALSE)
 
 ## overly-simplistic aggregation of tabular data from SDA which must be generalized / abstracted
 ## this will eventually be available as a macro / stored procedure in SDA

@@ -26,7 +26,7 @@
   
   # create BBOX used for WMS
   # xmin, ymin, xmax, ymax
-  aoi.native <- round(c(e.native[1], e.native[3], e.native[2], e.native[4]))
+  aoi.native <- c(e.native[1], e.native[3], e.native[2], e.native[4])
   
   ## TODO: these aren't required if we specify the resolution in WCS request
   
