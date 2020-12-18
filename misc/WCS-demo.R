@@ -6,6 +6,9 @@ library(sp)
 library(raster)
 library(rasterVis)
 
+
+## TODO: check missing data in gNATSGO derived thematic maps
+
 # note that grid resolution isn't quite right
 
 # BBOX in WGS84 coordinates
@@ -115,11 +118,16 @@ s <- merge(s, w, by = 'cokey', sort = FALSE)
 # i <- i <- l[['660849']]
 
 ## TODO: generalize
-wt.mean.component <- function(i, var) {
-  # remove NA first
-  i <- na.omit(i)
+wt.mean.component <- function(i, var, wt = 'comppct_r') {
+  
+  # remove NA in target variable
+  idx <- which(is.na(i[[var]]) | is.na(i[[wt]]))
+  if(length(idx) > 0) {
+    i <- i[-idx, ] 
+  }
+  
   # weighted mean
-  wm <- sum(i[[var]]* i$comppct_r) / sum(i$comppct_r)
+  wm <- sum(i[[var]] * i[[wt]]) / sum(i[[wt]])
   
   # pack results
   res <- data.frame(
@@ -133,7 +141,6 @@ wt.mean.component <- function(i, var) {
   
   return(res)
 }
-
 
 # component percentage weighted mean
 ss <- split(s, s$mukey)
