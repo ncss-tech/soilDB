@@ -95,7 +95,7 @@ x <- fetchSDA(WHERE = ws, duplicates = TRUE, droplevels = TRUE, stringsAsFactors
 x.a <- slab(x, cokey ~ ph1to1h2o_r + claytotal_r, slab.structure = c(0, 5, 30, 60), slab.fun = mean, na.rm = TRUE)
 
 # remove 5-30cm interval
-x.a <- x.a[x.a$top != 5 & x.a$bottom != 30, ]
+x.a <- x.a[which(x.a$top != 5 & x.a$bottom != 30), ]
 
 # make an ID for reshaping
 x.a$variable.id <- sprintf("%s%s%s", x.a$variable, x.a$top, x.a$bottom)
