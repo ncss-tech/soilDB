@@ -48,6 +48,7 @@ levelplot(weg.gcs, margin = FALSE)
 ## gNATSGO
 ##
 
+# note: this is not real aggregation
 # resampled to ~300m (643kb)
 gn.300m <- mukey.wcs(var = 'gnatsgo', aoi = a, res = 300)
 

@@ -26,7 +26,8 @@ importFrom(raster,
   raster,
   extent,
   ratify,
-  "NAvalue<-"
+  "NAvalue<-",
+  levels
 )
 
 importFrom(lattice, 
