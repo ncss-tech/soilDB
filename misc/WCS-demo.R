@@ -12,15 +12,29 @@ library(rasterVis)
 a <- c(-121,37,-120,38)
 
 # attempt in AEA ~ 800m
+
+# floating point grids
 pH_05cm <- ISSR800.wcs(var = 'ph_05cm', aoi = a)
 pH_3060cm <- ISSR800.wcs(var = 'ph_3060cm', aoi = a)
 
 clay_05cm <- ISSR800.wcs(var = 'clay_05cm', aoi = a)
 clay_3060cm <- ISSR800.wcs(var = 'clay_3060cm', aoi = a)
 
+silt_3060cm <- ISSR800.wcs(var = 'silt_3060cm', aoi = a)
+sand_3060cm <- ISSR800.wcs(var = 'sand_3060cm', aoi = a)
+
+# compositional data may lose some fidelity due to marginal aggregation
+z <- sand_3060cm + silt_3060cm + clay_3060cm
+levelplot(z - 100)
+
+# 16bit integer grids
+wei <- ISSR800.wcs(var = 'wei', aoi = a)
+
+# 8bit unsigned (BYTE) grids with RAT
 drainage_class <- ISSR800.wcs(var = 'drainage_class', aoi = a)
 weg <- ISSR800.wcs(var = 'weg', aoi = a)
 str <- ISSR800.wcs(var = 'str', aoi = a)
+
 
 # attempt in GCS ~ 600m
 pH_05cm.gcs <- ISSR800.wcs(var = 'ph_05cm', aoi = a, res = 0.004, crs = 'EPSG:4326')
@@ -33,6 +47,10 @@ weg.gcs <- ISSR800.wcs(var = 'weg', aoi = a, res = 0.004, crs = 'EPSG:4326')
 levelplot(stack(pH_05cm, pH_3060cm), margin = FALSE)
 
 levelplot(stack(clay_05cm, clay_3060cm), margin = FALSE)
+
+levelplot(stack(sand_3060cm, silt_3060cm, clay_3060cm), margin = FALSE)
+
+levelplot(wei, margin = FALSE)
 
 levelplot(drainage_class, margin = FALSE)
 levelplot(weg, margin = FALSE)
@@ -171,6 +189,10 @@ names(rs) <- c('ISSR-800', 'gNATSGO')
 
 levelplot(rs, margin = FALSE, main = '1:1 H2O pH 0-5cm', scales = list(draw = FALSE), maxpixels = 1e6)
 
+
+## example with muaggatt table
+
+## example with value1 table
 
 
 

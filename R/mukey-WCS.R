@@ -6,7 +6,7 @@
 #' @param res grid cell resolution (units specific to \code{crs}), typically 30 (meters), the native resolution of gNATSGO and gSSURGO
 #' @param crs coordinate reference specification in the form `EPSG:6350`, must contain a valid EPSG code
 #' 
-#' @note This is an experimental interface that can change at any time.
+#' @note This is an experimental interface that can change at any time. gNATSGO also includes raster soil survey mukeys which are not in SDA.
 #'
 #' @return \code{raster} object containing indexed map unit keys and associated raster attribute table
 #' @export

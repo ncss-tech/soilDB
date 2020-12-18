@@ -45,6 +45,7 @@
 }
 
 
+# ISSR-800 layers and basic metadata
 .ISSR800.spec <- list(
   
   'ph_05cm' = list(
@@ -103,7 +104,61 @@
     rat = NULL
   ),
   
+  'sand_05cm' = list(
+    dsn = 'sand_05cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'sand 0-5cm depth',
+    rat = NULL
+  ),
   
+  'sand_025cm' = list(
+    dsn = 'sand_025cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'sand 5-25cm depth',
+    rat = NULL
+  ),
+  
+  'sand_2550cm' = list(
+    dsn = 'sand_2550cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'sand 25-50cm depth',
+    rat = NULL
+  ),
+  
+  'sand_3060cm' = list(
+    dsn = 'sand_3060cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'sand 30-60cm depth',
+    rat = NULL
+  ),
+  
+  'silt_05cm' = list(
+    dsn = 'silt_05cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'silt 0-5cm depth',
+    rat = NULL
+  ),
+  
+  'silt_025cm' = list(
+    dsn = 'silt_025cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'silt 5-25cm depth',
+    rat = NULL
+  ),
+  
+  'silt_2550cm' = list(
+    dsn = 'silt_2550cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'silt 25-50cm depth',
+    rat = NULL
+  ),
+  
+  'silt_3060cm' = list(
+    dsn = 'silt_3060cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'silt 30-60cm depth',
+    rat = NULL
+  ),
   
   'drainage_class' = list(
     dsn = 'drainage_class',
@@ -117,6 +172,13 @@
     type = 'GEOTIFF_BYTE',
     desc = 'Wind Erodibility Group',
     rat = 'https://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/weg.csv'
+  ),
+  
+  'wei' = list(
+    dsn = 'wei',
+    type = 'GEOTIFF_16',
+    desc = 'Wind Erodibility Index',
+    rat = NULL
   ),
   
   'str' = list(

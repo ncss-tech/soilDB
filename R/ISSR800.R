@@ -6,7 +6,7 @@
 #' @param res grid cell resolution (units specific to \code{crs}), typically 800 (meters), the native resolution of ISSR-800
 #' @param crs coordinate reference specification in the form `EPSG:6350`, must contain a valid EPSG code
 #' 
-#' @note This is an experimental interface that can change at any time. gNATSGO also includes raster soil survey mukeys which are not in SDA.
+#' @note This is an experimental interface that can change at any time.
 #'
 #' @return \code{raster} object
 #' @export
@@ -19,6 +19,7 @@ ISSR800.wcs <- function(var, aoi, res = 800, crs = 'EPSG:6350') {
   ## TODO: 
   # sanity checks
   # error trapping
+  # CRS specification / warnings
   # WCS request errors
   # ???
   
