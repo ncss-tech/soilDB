@@ -33,7 +33,7 @@ ISSR800.wcs <- function(var, aoi, res = 800, crs = 'EPSG:6350') {
   ## I'm pretty sure this is right
   # native CRS is 'EPSG:6350'
   
-  # compile full URL
+  # compile full URL using BBOX, RESX, RESY
   u <- paste0(
     base.url,
     service.url,
@@ -41,8 +41,8 @@ ISSR800.wcs <- function(var, aoi, res = 800, crs = 'EPSG:6350') {
     '&coverage=', var.spec$dsn,
     '&FORMAT=', var.spec$type,
     '&BBOX=', paste(wcs.geom$bbox, collapse = ','),
-    '&WIDTH=', wcs.geom$width,
-    '&HEIGHT=', wcs.geom$height
+    '&RESX=', res,
+    '&RESY=', res
   )
   
   
@@ -68,18 +68,19 @@ ISSR800.wcs <- function(var, aoi, res = 800, crs = 'EPSG:6350') {
   # optional processing of RAT
   if(! is.null(var.spec$rat)) {
     
+    # convert to RAT-enabled raster
+    r <- ratify(r)
+    
     # get rat
     rat <- read.csv(var.spec$rat, stringsAsFactors = FALSE)
     
     # rename ID column
     names(rat)[2] <- 'ID'
     
-    # convert to RAT-enabled raster
-    r <- ratify(r)
-    
     # get / merge codes
-    ll <- levels(r)[[1]]
-    ll <- merge(ll, rat, by = 'ID', sort = FALSE, all.x = TRUE)
+    ll <- raster::levels(r)[[1]]
+    
+    ll <- base::merge(ll, rat, by = 'ID', sort = FALSE, all.x = TRUE)
     levels(r) <- ll
   }
   

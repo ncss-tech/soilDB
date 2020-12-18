@@ -52,7 +52,7 @@ levelplot(weg.gcs, margin = FALSE)
 gn.300m <- mukey.wcs(var = 'gnatsgo', aoi = a, res = 300)
 
 # native ~ 30m (64Mb)
-# gn.30m <- mukey.wcs(var = 'gnatsgo', aoi = a, res = 30)
+gn.30m <- mukey.wcs(var = 'gnatsgo', aoi = a, res = 30)
 
 # AEA
 levelplot(gn.300m, att = 'ID', margin = FALSE, colorkey = FALSE)

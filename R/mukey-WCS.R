@@ -34,6 +34,19 @@ mukey.wcs <- function(var = 'gnatsgo', aoi, res = 30, crs = 'EPSG:6350') {
   # native CRS is 'EPSG:6350'
   
   # compile full URL
+
+    # u <- paste0(
+  #   base.url,
+  #   service.url,
+  #   '&CRS=', crs,
+  #   '&coverage=', var.spec$dsn,
+  #   '&FORMAT=', var.spec$type,
+  #   '&BBOX=', paste(wcs.geom$bbox, collapse = ','),
+  #   '&WIDTH=', wcs.geom$width,
+  #   '&HEIGHT=', wcs.geom$height
+  # )
+  # 
+  
   u <- paste0(
     base.url,
     service.url,
@@ -41,10 +54,9 @@ mukey.wcs <- function(var = 'gnatsgo', aoi, res = 30, crs = 'EPSG:6350') {
     '&coverage=', var.spec$dsn,
     '&FORMAT=', var.spec$type,
     '&BBOX=', paste(wcs.geom$bbox, collapse = ','),
-    '&WIDTH=', wcs.geom$width,
-    '&HEIGHT=', wcs.geom$height
+    '&RESX=', res,
+    '&RESY=', res
   )
-  
   
   # get data
   tf <- tempfile()

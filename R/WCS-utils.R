@@ -1,4 +1,6 @@
 
+## TODO: let Mapserver compute image dimensions from BBOX, RESX, RESY
+
 # aoi.wgs84: BBOX in WGS84 GCS ~ c(-121,37,-120,38)
 # res: grid resolution in native CRS (meters) [ISSR-800: 800, gNATSGO: 30]
 .prepare_AEA_AOI_fromWGS84 <- function(aoi.wgs84, res, targetCRS) {
@@ -25,6 +27,8 @@
   # create BBOX used for WMS
   # xmin, ymin, xmax, ymax
   aoi.native <- round(c(e.native[1], e.native[3], e.native[2], e.native[4]))
+  
+  ## TODO: these aren't required if we specify the resolution in WCS request
   
   # xmax - xmin
   w <- round(abs(e.native[2] - e.native[1]) / res)
