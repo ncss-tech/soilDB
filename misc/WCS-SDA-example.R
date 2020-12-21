@@ -38,3 +38,10 @@ levelplot(
     sp.lines(p, col = 'white')
   }
 )
+
+## next steps
+# robust / complete / fast approach for getting / aggregating / linking via SDA
+
+
+
+
