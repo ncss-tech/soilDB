@@ -16,6 +16,9 @@ a <- c(-114.16, 47.65, -114.08, 47.68)
 # fetch gNATSGO map unit keys at native resolution
 x <- mukey.wcs(var = 'gnatsgo', aoi = a)
 
+# fetch gSSURGO map unit keys at native resolution 
+# x <- mukey.wcs(var = 'gssurgo', aoi = a)
+
 # OK
 levelplot(x, att = 'ID', margin = FALSE, colorkey = FALSE, col.regions = viridis)
 
