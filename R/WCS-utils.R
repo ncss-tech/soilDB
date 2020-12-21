@@ -28,8 +28,7 @@
   # xmin, ymin, xmax, ymax
   aoi.native <- c(e.native[1], e.native[3], e.native[2], e.native[4])
   
-  ## TODO: these aren't required if we specify the resolution in WCS request
-  
+  # these are useful for testing image dimensions > allowed image dimensions
   # xmax - xmin
   w <- round(abs(e.native[2] - e.native[1]) / res)
   # ymax - ymin
@@ -197,7 +196,14 @@
   'gnatsgo' = list(
     dsn = 'gnatsgo',
     type = 'GEOTIFF_FLOAT',
-    desc = 'gnatsgo map unit keys',
+    desc = 'gNATSGO map unit keys',
+    rat = NULL
+  ),
+  
+  'gssurgo' = list(
+    dsn = 'gssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'gSSURGO map unit keys',
     rat = NULL
   )
 )
