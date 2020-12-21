@@ -46,7 +46,7 @@ ISSR800.wcs <- function(var, aoi, res = 800, crs = 'EPSG:6350') {
   }
   
   # base URL + parameters
-  base.url <- 'https://soilmap2-1.lawr.ucdavis.edu/cgi-bin/mapserv?'
+  base.url <- 'http://soilmap2-1.lawr.ucdavis.edu/cgi-bin/mapserv?'
   service.url <- 'map=/soilmap2/website/wcs/issr800.map&SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage'
   
   ## I'm pretty sure this is right

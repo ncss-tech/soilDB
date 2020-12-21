@@ -27,7 +27,7 @@ mukey.wcs <- function(var = 'gnatsgo', aoi, res = 30, crs = 'EPSG:6350') {
   wcs.geom <- .prepare_AEA_AOI_fromWGS84(aoi, res = res, targetCRS = crs)
   
   # base URL + parameters
-  base.url <- 'https://soilmap2-1.lawr.ucdavis.edu/cgi-bin/mapserv?'
+  base.url <- 'http://soilmap2-1.lawr.ucdavis.edu/cgi-bin/mapserv?'
   service.url <- 'map=/soilmap2/website/wcs/mukey.map&SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage'
   
   ## I'm pretty sure this is right

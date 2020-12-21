@@ -163,14 +163,14 @@
     dsn = 'drainage_class',
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Drainage Class',
-    rat = 'https://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/drainage_class.csv'
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/drainage_class.csv'
   ),
   
   'weg' = list(
     dsn = 'weg',
     type = 'GEOTIFF_BYTE',
     desc = 'Wind Erodibility Group',
-    rat = 'https://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/weg.csv'
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/weg.csv'
   ),
   
   'wei' = list(
@@ -184,7 +184,7 @@
     dsn = 'str',
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Temperature Regime',
-    rat = 'https://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/str.csv'
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/str.csv'
   )
   
   
