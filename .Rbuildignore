@@ -6,3 +6,5 @@ README.md
 ^docs$
 ^misc$
 ^\.github$
+README.Rmd
+^README_files$
