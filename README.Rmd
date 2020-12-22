@@ -90,7 +90,8 @@ Get the development version from Github:
 ## Examples
 
 ```{r setup, warning = FALSE, message = FALSE, include = FALSE}
-knitr::opts_chunk$set(warning = FALSE, message = FALSE, fig.width=14, fig.height=8)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+                      fig.width = 14, fig.height = 8, fig.path = ".github/images/", fig.retina = 3)
 ```
 
 ```{r packages}

@@ -105,13 +105,13 @@ Examples
     res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
     print(res$fig)
 
-![](README_files/figure-markdown_strict/hillslope-1.png)
+<img src=".github/images/hillslope-1.png" width="1056" />
 
     # profile sketches
     par(mar=c(0,1,0,4), xpd=NA)
     plot(s$SPC, plot.order=res$order, cex.names=1, axis.line.offset = -0.1, width=0.2)
 
-![](README_files/figure-markdown_strict/sketches-1.png)
+<img src=".github/images/sketches-1.png" width="1344" />
 
     # siblings
     s <- 'Amador'
@@ -131,7 +131,7 @@ Examples
                            scaling.factor = 0.02, width = 0.2, 
                            cex.taxon.labels = 1, cex.names = 1)
 
-![](README_files/figure-markdown_strict/dendrogram-1.png)
+<img src=".github/images/dendrogram-1.png" width="1344" />
 
 Dependency Graph
 ----------------
