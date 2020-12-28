@@ -1,15 +1,15 @@
 
 
-# obj: list or Spatial* object
+# obj: list(aoi, crs) or Spatial* object
 # res: grid resolution in native CRS (meters) [ISSR-800: 800, gNATSGO: 30]
 .prepare_AEA_AOI <- function(obj, res) {
   
   # simple AOI object, a list(aoi, crs)
   # convert to SpatialPolygons object and assign CRS
   if(!inherits(obj, 'Spatial')) {
-    # a list containing aoi and CRS
     
     # note that vector is re-arranged to form a legal extent: xmin, xmax, ymin, ymax
+    # craft an extent object
     e <- extent(
       obj$aoi[1], 
       obj$aoi[3], 
@@ -29,6 +29,7 @@
   
   
   # ISSR-800 and gNATSGO CRS
+  # EPSG:6350
   crs <- '+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'
   
   # double-check, likely a better approach
@@ -36,8 +37,6 @@
   
   # AOI and image calculations in native CRS
   e.native <- extent(p)
-  
-  ## TODO: there must be a better way to ensure the target resolution
   
   # create BBOX used for WMS
   # xmin, ymin, xmax, ymax

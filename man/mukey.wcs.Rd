@@ -2,25 +2,35 @@
 % Please edit documentation in R/mukey-WCS.R
 \name{mukey.wcs}
 \alias{mukey.wcs}
-\title{gNATSGO / gSSURGO Web Coverage Service Interface}
+\title{gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)}
 \usage{
-mukey.wcs(var = "gnatsgo", aoi, res = 30, crs = "EPSG:6350")
+mukey.wcs(db = c("gnatsgo", "gssurgo"), aoi, res = 30, quiet = FALSE)
 }
 \arguments{
-\item{var}{variable label}
+\item{db}{name of the gridded map unit key grid to access, should be either 'gnatsgo' or 'gssurgo'}
 
-\item{aoi}{area of interest as WGS84 coordinates c(-121, 37, -120, 38) (xmin, ymin, xmax, ymax)}
+\item{aoi}{area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details}
 
-\item{res}{grid cell resolution (units specific to \code{crs}), typically 30 (meters), the native resolution of gNATSGO and gSSURGO}
+\item{res}{grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m.}
 
-\item{crs}{coordinate reference specification in the form `EPSG:6350`, must contain a valid EPSG code}
+\item{quiet}{logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.}
 }
 \value{
 \code{raster} object containing indexed map unit keys and associated raster attribute table
 }
 \description{
-gNATSGO / gSSURGO Web Coverage Service Interface
+gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)
+}
+\details{
+\code{aoi} should be specified as either a \code{Spatial*} object or a \code{list} containing:
+
+\describe{
+  \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
+  \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=EPSG:4326'}
+}
+
+The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the gNATSGO / gSSURGO grid.
 }
 \note{
-This is an experimental interface that can change at any time.
+This is an experimental interface that can change at any time. The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
 }

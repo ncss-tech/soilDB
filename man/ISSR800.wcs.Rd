@@ -22,5 +22,5 @@ ISSR800.wcs(var, aoi, res = 800, crs = "EPSG:6350")
 ISSR-800 Web Coverage Service Interface
 }
 \note{
-This is an experimental interface that can change at any time. gNATSGO also includes raster soil survey mukeys which are not in SDA.
+This is an experimental interface that can change at any time.
 }

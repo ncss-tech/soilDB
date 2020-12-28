@@ -14,16 +14,16 @@ a <- list(
 )
 
 # too big for SDA geometry (>32Mb WKT serialization)
+# but will work just fine with WCS
+
 # a <- list(
 #   aoi = c(-114.5, 47, -114, 47.5),
 #   crs = '+init=EPSG:4326'
 # )
 
-# fetch gNATSGO map unit keys at native resolution
-x <- mukey.wcs(db = 'gnatsgo', aoi = a)
-
-# fetch gSSURGO map unit keys at native resolution 
-# x <- mukey.wcs(db = 'gssurgo', aoi = a)
+# fetch gNATSGO map unit keys at native resolution (30m)
+# get gSSURGO grid with db = 'gssurgo'
+(x <- mukey.wcs(db = 'gnatsgo', aoi = a))
 
 # OK
 levelplot(x, att = 'ID', margin = FALSE, colorkey = FALSE, col.regions = viridis)
