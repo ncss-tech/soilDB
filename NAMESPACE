@@ -27,6 +27,7 @@ importFrom(raster,
   extent,
   ratify,
   "NAvalue<-",
+  "dataType<-",
   levels
 )
 
