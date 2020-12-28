@@ -40,7 +40,7 @@
   
   # create BBOX used for WMS
   # xmin, ymin, xmax, ymax
-  aoi.native <- c(e.native[1], e.native[3], e.native[2], e.native[4])
+  aoi.native <- round(c(e.native[1], e.native[3], e.native[2], e.native[4]))
   
   # these are useful for testing image dimensions > allowed image dimensions
   # xmax - xmin
@@ -65,6 +65,7 @@
     dsn = 'ph_05cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'pH 0-5cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -72,6 +73,7 @@
     dsn = 'ph_025cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'pH 5-25cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -79,6 +81,7 @@
     dsn = 'ph_2550cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'pH 25-50cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -86,6 +89,7 @@
     dsn = 'ph_3060cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'pH 30-60cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -93,6 +97,7 @@
     dsn = 'clay_05cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'clay 0-5cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -100,6 +105,7 @@
     dsn = 'clay_025cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'clay 5-25cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -107,6 +113,7 @@
     dsn = 'clay_2550cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'clay 25-50cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -114,6 +121,7 @@
     dsn = 'clay_3060cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'clay 30-60cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -121,6 +129,7 @@
     dsn = 'sand_05cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'sand 0-5cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -128,6 +137,7 @@
     dsn = 'sand_025cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'sand 5-25cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -135,6 +145,7 @@
     dsn = 'sand_2550cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'sand 25-50cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -142,6 +153,7 @@
     dsn = 'sand_3060cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'sand 30-60cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -149,6 +161,7 @@
     dsn = 'silt_05cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'silt 0-5cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -156,6 +169,7 @@
     dsn = 'silt_025cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'silt 5-25cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -163,6 +177,7 @@
     dsn = 'silt_2550cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'silt 25-50cm depth',
+    na = -9999,
     rat = NULL
   ),
   
@@ -170,6 +185,15 @@
     dsn = 'silt_3060cm',
     type = 'GEOTIFF_FLOAT',
     desc = 'silt 30-60cm depth',
+    na = -9999,
+    rat = NULL
+  ),
+  
+  'sar' = list(
+    dsn = 'sar',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'SAR, entire profile',
+    na = -9999,
     rat = NULL
   ),
   
@@ -177,6 +201,7 @@
     dsn = 'drainage_class',
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Drainage Class',
+    na = 0,
     rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/drainage_class.csv'
   ),
   
@@ -184,12 +209,14 @@
     dsn = 'weg',
     type = 'GEOTIFF_BYTE',
     desc = 'Wind Erodibility Group',
+    na = 0,
     rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/weg.csv'
   ),
   
   'wei' = list(
     dsn = 'wei',
     type = 'GEOTIFF_16',
+    na = 0,
     desc = 'Wind Erodibility Index',
     rat = NULL
   ),
@@ -198,6 +225,7 @@
     dsn = 'str',
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Temperature Regime',
+    na = 0,
     rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/str.csv'
   )
   
@@ -211,6 +239,7 @@
     dsn = 'gnatsgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'gNATSGO map unit keys',
+    na = 2147483647,
     rat = NULL
   ),
   
@@ -218,6 +247,7 @@
     dsn = 'gssurgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'gSSURGO map unit keys',
+    na = 2147483647,
     rat = NULL
   )
 )
