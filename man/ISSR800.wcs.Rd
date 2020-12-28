@@ -2,24 +2,34 @@
 % Please edit documentation in R/ISSR800.R
 \name{ISSR800.wcs}
 \alias{ISSR800.wcs}
-\title{ISSR-800 Web Coverage Service Interface}
+\title{ISSR-800 Web Coverage Service (WCS)}
 \usage{
-ISSR800.wcs(var, aoi, res = 800, crs = "EPSG:6350")
+ISSR800.wcs(var, aoi, res = 800, quiet = FALSE)
 }
 \arguments{
-\item{var}{variable label}
+\item{var}{ISSR-800 grid name, see details}
 
-\item{aoi}{area of interest as WGS84 coordinates c(-121, 37, -120, 38) (xmin, ymin, xmax, ymax)}
+\item{aoi}{area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details}
 
-\item{res}{grid cell resolution (units specific to \code{crs}), typically 800 (meters), the native resolution of ISSR-800}
+\item{res}{grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.}
 
-\item{crs}{coordinate reference specification in the form `EPSG:6350`, must contain a valid EPSG code}
+\item{quiet}{logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.}
 }
 \value{
-\code{raster} object
+\code{raster} object containing indexed map unit keys and associated raster attribute table
 }
 \description{
-ISSR-800 Web Coverage Service Interface
+ISSR-800 Web Coverage Service (WCS)
+}
+\details{
+\code{aoi} should be specified as either a \code{Spatial*} object or a \code{list} containing:
+
+\describe{
+  \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
+  \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=EPSG:4326'}
+}
+
+The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the ISSR-800 grids.
 }
 \note{
 This is an experimental interface that can change at any time.

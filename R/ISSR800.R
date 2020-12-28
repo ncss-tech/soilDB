@@ -1,41 +1,53 @@
 
-## TODO: convert this over to WCS 2.0
-
-## TODO: abstract as much as possible to share code with gSSURGO interface
-
-
-#' @title ISSR-800 Web Coverage Service Interface
+#' @title ISSR-800 Web Coverage Service (WCS)
 #'
-#' @param var variable label
-#' @param aoi area of interest as WGS84 coordinates c(-121, 37, -120, 38) (xmin, ymin, xmax, ymax)
-#' @param res grid cell resolution (units specific to \code{crs}), typically 800 (meters), the native resolution of ISSR-800
-#' @param crs coordinate reference specification in the form `EPSG:6350`, must contain a valid EPSG code
+#' @param var ISSR-800 grid name, see details
+#' 
+#' @param aoi area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details
+#' 
+#' @param res grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.
+#' 
+#' @param quiet logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.
 #' 
 #' @note This is an experimental interface that can change at any time.
-#'
-#' @return \code{raster} object
+#' 
+#' @details \code{aoi} should be specified as either a \code{Spatial*} object or a \code{list} containing:
+#' 
+#' \describe{
+#'   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
+#'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=EPSG:4326'}
+#' }
+#' 
+#' The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the ISSR-800 grids.
+#' 
+#' @return \code{raster} object containing indexed map unit keys and associated raster attribute table
+#' 
 #' @export
-#'
-ISSR800.wcs <- function(var, aoi, res = 800, crs = 'EPSG:6350') {
+ISSR800.wcs <- function(var, aoi, res = 800, quiet = FALSE) {
   
   if(!requireNamespace('rgdal', quietly=TRUE))
     stop('please install the `rgdal` package', call.=FALSE)
   
-  ## TODO: 
-  # sanity checks
-  # error trapping
-  # CRS specification / warnings
-  # WCS request errors
-  # ???
+  # sanity check: aoi specification
+  if(!inherits(aoi, c('list', 'Spatial'))) {
+    stop('invalid `aoi` specification', call. = FALSE)
+  }
   
-  # limits set in the MAPFILE
-  max.img.dim <- 5000 
+  # reasonable resolution
+  if(res < 400 | res > 1600) {
+    stop('`res` should be within 400 <= res <= 1600 meters')
+  }
+  
   
   # get layer specs
   var.spec <- .ISSR800.spec[[var]]
   
   # compute BBOX / IMG geometry in native CRS
-  wcs.geom <- .prepare_AEA_AOI_fromWGS84(aoi, res = res, targetCRS = crs)
+  wcs.geom <- .prepare_AEA_AOI(aoi, res = res)
+  
+  # sanity check: keep output images within a reasonable limit
+  # limits set in the MAPFILE
+  max.img.dim <- 5000
   
   # check image size > max.img.dim
   if(wcs.geom$height > max.img.dim | wcs.geom$width > max.img.dim) {
@@ -52,33 +64,56 @@ ISSR800.wcs <- function(var, aoi, res = 800, crs = 'EPSG:6350') {
   
   # base URL + parameters
   base.url <- 'http://soilmap2-1.lawr.ucdavis.edu/cgi-bin/mapserv?'
-  service.url <- 'map=/soilmap2/website/wcs/issr800.map&SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage'
+  service.url <- 'map=/soilmap2/website/wcs/issr800.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage'
   
-  ## I'm pretty sure this is right
-  # native CRS is 'EPSG:6350'
+  # unpack BBOX for WCS 2.0
+  xmin <- wcs.geom$bbox[1]
+  xmax <- wcs.geom$bbox[3]
+  ymin <- wcs.geom$bbox[2]
+  ymax <- wcs.geom$bbox[4]
   
-  # compile full URL using BBOX, RESX, RESY
+  # compile WCS 2.0 style URL
   u <- paste0(
     base.url,
     service.url,
-    '&CRS=', crs,
-    '&coverage=', var.spec$dsn,
+    '&COVERAGEID=', var.spec$dsn,
+    '&FORMAT=image/tiff',
+    '&GEOTIFF:COMPRESSION=Deflate',
+    '&SUBSETTINGCRS=EPSG:6350',
     '&FORMAT=', var.spec$type,
-    '&BBOX=', paste(wcs.geom$bbox, collapse = ','),
-    '&RESX=', res,
-    '&RESY=', res
+    '&SUBSET=x(', xmin, ',', xmax,')',
+    '&SUBSET=y(', ymin, ',', ymax,')',
+    '&RESOLUTION=x(', res, ')',
+    '&RESOLUTION=y(', res, ')'
   )
-  
   
   # get data
   tf <- tempfile()
-  download.file(u, destfile = tf, mode = 'wb')
+  dl.try <- try(
+    suppressWarnings(
+      download.file(u, destfile = tf, mode = 'wb', quiet = quiet)
+    ),
+    silent = TRUE
+  )
+  
+  if(inherits(dl.try, 'try-error')) {
+    stop('bad WCS request', call. = FALSE) 
+  }
   
   # load pointer to file and return
-  r <- raster(tf)
+  r <- try(
+    raster(tf),
+    silent = TRUE
+  )
   
-  ## TODO: this isn't correct for all data (e.g. SAR), how do we set this server-side?
-  # specification of NODATA
+  if(inherits(r, 'try-error')) {
+    stop('result is not a valid GeoTiff, why?', call. = FALSE)
+  }
+  
+  ## TODO: this isn't quite right... '0' is returned by the WCS sometimes
+  # TODO: how can this be set server-side?
+  # specification of NODATA using local definitions
+  # NAvalue(r) <- var.spec$na
   NAvalue(r) <- 0
   
   ## TODO: should probably save to a file and return a pointer

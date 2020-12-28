@@ -43,11 +43,6 @@ mukey.wcs <- function(db = c('gnatsgo', 'gssurgo'), aoi, res = 30, quiet = FALSE
     stop('`res` should be within 30 <= res <= 3000 meters')
   }
   
-  ## TODO: 
-  # sanity checks
-  # error trapping
-  # WCS request errors
-  # native CRS is 'EPSG:6350'
   
   # prepare WCS details
   var.spec <- .mukey.spec[[db]]
@@ -91,6 +86,7 @@ mukey.wcs <- function(db = c('gnatsgo', 'gssurgo'), aoi, res = 30, quiet = FALSE
     '&FORMAT=image/tiff',
     '&GEOTIFF:COMPRESSION=Deflate',
     '&SUBSETTINGCRS=EPSG:6350',
+    '&FORMAT=GEOTIFF_FLOAT',
     '&SUBSET=x(', xmin, ',', xmax,')',
     '&SUBSET=y(', ymin, ',', ymax,')',
     '&RESOLUTION=x(', res, ')',
@@ -124,6 +120,7 @@ mukey.wcs <- function(db = c('gnatsgo', 'gssurgo'), aoi, res = 30, quiet = FALSE
   # converted to FLOAT32 by WCS
   dataType(r) <- 'INT4U'
   
+  ## TODO: this isn't quite right... '0' is returned by the WCS sometimes
   # specification of NODATA
   # this doesn't seem to make it through the WCS
   # value is derived from the original UINT32 grid
