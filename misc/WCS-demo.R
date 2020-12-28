@@ -22,6 +22,10 @@ a <- list(
   crs = '+init=EPSG:4326'
 )
 
+# native resolution
+gn.30m.1 <- mukey.wcs(db = 'gnatsgo', aoi = a, res = 30)
+
+
 # option 2: sp object with defined CRS
 # note that BBOX is re-arranged to form a legal extent: xmin, xmax, ymin, ymax
 aoi.wgs84 <- c(-114.16, 47.65, -114.08, 47.68)
@@ -31,12 +35,16 @@ e <- extent(aoi.wgs84[1], aoi.wgs84[3], aoi.wgs84[2], aoi.wgs84[4])
 a <- as(e, 'SpatialPolygons')
 proj4string(a) <- '+init=EPSG:4326'
 
+# native resolution
+gn.30m.2 <- mukey.wcs(db = 'gnatsgo', aoi = a, res = 30)
 
-# native ~ 30m (64Mb)
-gn.30m <- mukey.wcs(db = 'gnatsgo', aoi = a, res = 30)
+
+# results are the same
+all.equal(gn.30m.1, gn.30m.2)
 
 
-levelplot(gn.30m, att = 'ID', margin = FALSE, colorkey = FALSE)
+# quick visual of mukeys
+levelplot(gn.30m.1, att = 'ID', margin = FALSE, colorkey = FALSE)
 
 
 

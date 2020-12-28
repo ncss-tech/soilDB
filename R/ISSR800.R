@@ -1,4 +1,9 @@
 
+## TODO: convert this over to WCS 2.0
+
+## TODO: abstract as much as possible to share code with gSSURGO interface
+
+
 #' @title ISSR-800 Web Coverage Service Interface
 #'
 #' @param var variable label
