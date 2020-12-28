@@ -8,16 +8,22 @@ library(viridis)
 
 # AOI corners in WGS84 GCS
 # xmin, ymin, xmax, ymax
-a <- c(-114.16, 47.65, -114.08, 47.68)
+a <- list(
+  aoi = c(-114.16, 47.65, -114.08, 47.68),
+  crs = '+init=EPSG:4326'
+)
 
 # too big for SDA geometry (>32Mb WKT serialization)
-# a <- c(-114.5, 47, -114, 47.5)
+# a <- list(
+#   aoi = c(-114.5, 47, -114, 47.5),
+#   crs = '+init=EPSG:4326'
+# )
 
 # fetch gNATSGO map unit keys at native resolution
-x <- mukey.wcs(var = 'gnatsgo', aoi = a)
+x <- mukey.wcs(db = 'gnatsgo', aoi = a)
 
 # fetch gSSURGO map unit keys at native resolution 
-# x <- mukey.wcs(var = 'gssurgo', aoi = a)
+# x <- mukey.wcs(db = 'gssurgo', aoi = a)
 
 # OK
 levelplot(x, att = 'ID', margin = FALSE, colorkey = FALSE, col.regions = viridis)
@@ -48,7 +54,7 @@ levelplot(
 
 # get unique mukeys fromgrid
 ll <- levels(x)[[1]]
-# convert into an SQL "ID" statement
+# convert into an SQL "IN" statement
 IS <- format_SQL_in_statement(ll$ID)
 
 # query SDA by mukey

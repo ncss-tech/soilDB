@@ -1,20 +1,35 @@
 
-## TODO: let Mapserver compute image dimensions from BBOX, RESX, RESY
 
-# aoi.wgs84: BBOX in WGS84 GCS ~ c(-121,37,-120,38)
+# obj: list or Spatial* object
 # res: grid resolution in native CRS (meters) [ISSR-800: 800, gNATSGO: 30]
-.prepare_AEA_AOI_fromWGS84 <- function(aoi.wgs84, res, targetCRS) {
-  # manage extent
-  # note that BBOX is re-arranged to form a legal extent: xmin, xmax, ymin, ymax
-  e <- extent(aoi.wgs84[1], aoi.wgs84[3], aoi.wgs84[2], aoi.wgs84[4])
+.prepare_AEA_AOI <- function(obj, res) {
   
-  # convert to BBOX polygon and set CRS
-  p <- as(e, 'SpatialPolygons')
-  proj4string(p) <- '+proj=longlat +datum=WGS84'
+  # simple AOI object, a list(aoi, crs)
+  # convert to SpatialPolygons object and assign CRS
+  if(!inherits(obj, 'Spatial')) {
+    # a list containing aoi and CRS
+    
+    # note that vector is re-arranged to form a legal extent: xmin, xmax, ymin, ymax
+    e <- extent(
+      obj$aoi[1], 
+      obj$aoi[3], 
+      obj$aoi[2], 
+      obj$aoi[4]
+      )
+    
+    # convert to BBOX polygon and set CRS
+    p <- as(e, 'SpatialPolygons')
+    proj4string(p) <- obj$crs
+    
+  } else {
+    # re-name for simpler code
+    p <- obj
+    rm(obj)
+  }
+  
   
   # ISSR-800 and gNATSGO CRS
-  # crs <- '+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'
-  crs <- paste0('+init=', targetCRS)
+  crs <- '+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'
   
   # double-check, likely a better approach
   p <- suppressWarnings(spTransform(p, crs))

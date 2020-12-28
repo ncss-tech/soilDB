@@ -6,15 +6,42 @@ library(sp)
 library(raster)
 library(rasterVis)
 
+## TODO: exact grid resolution isn't returned
 
-## TODO: check missing data in gNATSGO derived thematic maps
-
-# note that grid resolution isn't quite right
 
 # BBOX in WGS84 coordinates
-a <- c(-121,37,-120,38)
 
-a <- c(-114.16,47.65,-114.08,47.68)
+# option 1: list of BBOX + CRS
+# a <- list(
+#   aoi = c(-121, 37, -120, 38),
+#   crs = '+init=EPSG:4326'
+# )
+
+a <- list(
+  aoi = c(-114.16, 47.65, -114.08, 47.68),
+  crs = '+init=EPSG:4326'
+)
+
+# option 2: sp object with defined CRS
+# note that BBOX is re-arranged to form a legal extent: xmin, xmax, ymin, ymax
+aoi.wgs84 <- c(-114.16, 47.65, -114.08, 47.68)
+e <- extent(aoi.wgs84[1], aoi.wgs84[3], aoi.wgs84[2], aoi.wgs84[4])
+
+# convert to BBOX polygon and set CRS
+a <- as(e, 'SpatialPolygons')
+proj4string(a) <- '+init=EPSG:4326'
+
+
+# native ~ 30m (64Mb)
+gn.30m <- mukey.wcs(db = 'gnatsgo', aoi = a, res = 30)
+
+
+levelplot(gn.30m, att = 'ID', margin = FALSE, colorkey = FALSE)
+
+
+
+
+## TODO: finish updating these to WCS 2.0
 
 # attempt in AEA ~ 800m
 
@@ -41,12 +68,6 @@ weg <- ISSR800.wcs(var = 'weg', aoi = a)
 str <- ISSR800.wcs(var = 'str', aoi = a)
 
 
-# attempt in GCS ~ 600m
-pH_05cm.gcs <- ISSR800.wcs(var = 'ph_05cm', aoi = a, res = 0.004, crs = 'EPSG:4326')
-drainage_class.gcs <- ISSR800.wcs(var = 'drainage_class', aoi = a, res = 0.004, crs = 'EPSG:4326')
-weg.gcs <- ISSR800.wcs(var = 'weg', aoi = a, res = 0.004, crs = 'EPSG:4326')
-
-
 
 # AEA
 levelplot(stack(pH_05cm, pH_3060cm), margin = FALSE)
@@ -61,11 +82,6 @@ levelplot(drainage_class, margin = FALSE)
 levelplot(weg, margin = FALSE)
 levelplot(str, margin = FALSE)
 
-# GCS
-levelplot(pH_05cm.gcs, margin = FALSE)
-levelplot(drainage_class.gcs, margin = FALSE)
-levelplot(weg.gcs, margin = FALSE)
-
 
 ##
 ## gNATSGO
@@ -73,10 +89,10 @@ levelplot(weg.gcs, margin = FALSE)
 
 # note: this is not real aggregation
 # resampled to ~300m (643kb)
-gn.300m <- mukey.wcs(var = 'gnatsgo', aoi = a, res = 300)
+gn.300m <- mukey.wcs(db = 'gnatsgo', aoi = a, res = 300)
 
 # native ~ 30m (64Mb)
-gn.30m <- mukey.wcs(var = 'gnatsgo', aoi = a, res = 30)
+gn.30m <- mukey.wcs(db = 'gnatsgo', aoi = a, res = 30)
 
 # AEA
 levelplot(gn.300m, att = 'ID', margin = FALSE, colorkey = FALSE)
