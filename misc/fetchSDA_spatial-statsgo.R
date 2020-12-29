@@ -16,12 +16,13 @@ statsgo.overlap <- SDA_spatialQuery(by.areasym.bbox,
                                     db = "STATSGO")
 
 # get unique mukey from overlap, and query their full extent
-full.extent <- fetchSDA_spatial(x = unique(statsgo.overlap$mukey), 
+full.extent <- fetchSDA_spatial(x = unique(statsgo.overlap$mukey[1]), 
                                 db = 'STATSGO', chunk.size = 1,
                                 add.fields = "legend.areaname")
 # compare
 par(mar=c(0,0,0,0))
 plot(full.extent)
+
 plot(statsgo.overlap, col="blue", add=T)
 plot(by.areasym.bbox, lty=2, lwd=3, border="red", add=T)
 

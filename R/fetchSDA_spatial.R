@@ -1,6 +1,6 @@
 #' @title Query Soil Data Access and Return Spatial Data
 #'
-#' @description This is a high-level "fetch" method to facilitate spatial queries to Soil Data Access (SDA) based on mapunit key (\code{mukey}) and national mapunit symbol (\code{nationalmusym}) for \code{mupolygon} geometry OR legend key (\code{lkey}) and area symbols (\code{areasymbol}) for \code{sapolygon} geometry).
+#' @description This is a high-level "fetch" method to facilitate spatial queries to Soil Data Access (SDA) based on mapunit key (\code{mukey}) and national mapunit symbol (\code{nationalmusym}) for \code{mupolygon} (SSURGO) or \code{gsmmupolygon} (STATSGO) geometry OR legend key (\code{lkey}) and area symbols (\code{areasymbol}) for \code{sapolygon} (Soil Survey Area; SSA) geometry).
 #'
 #' A Soil Data Access spatial query is made returning geometry and key identifying information about the mapunit or area of interest. Additional columns from the mapunit or legend table can be included using \code{add.fields} argument.
 #'
@@ -25,6 +25,8 @@
 #' @param verbose Print messages?
 #'
 #' @return A Spatial*DataFrame corresponding to SDA spatial data for all symbols requested. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with `add.fields`.
+#' 
+#' @details Note that STATSGO data are fetched using \code{CLIPAREASYMBOL = 'US'} to avoid duplicating state and national subsets of the geometry.
 #'
 #' @author Andrew G. Brown
 #'
@@ -220,10 +222,11 @@ fetchSDA_spatial <- function(x,
       FROM %s AS P
         INNER JOIN mapunit ON P.mukey = mapunit.mukey
         INNER JOIN legend ON mapunit.lkey = legend.lkey
-      WHERE P.mukey IN %s",
+      WHERE P.mukey IN %s %s",
       geom.type,
       ifelse(use_statsgo, "gsmmupolygon", "mupolygon"),
-      format_SQL_in_statement(mukey.list)
+      format_SQL_in_statement(mukey.list),
+      ifelse(use_statsgo, "AND CLIPAREASYMBOL = 'US'","")
     )
   } else if (geom.src == "sapolygon") {
     q <- sprintf(

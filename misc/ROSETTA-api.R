@@ -139,4 +139,113 @@ str(r)
 
 
 
+##
+## compare models version 1 and 3
+##
+
+library(latticeExtra)
+library(hexbin)
+library(viridis)
+
+# lots of data, some with missing values
+qq <- "SELECT TOP 25000 
+compname, hzname, hzdept_r, hzdepb_r, 
+sandtotal_r, silttotal_r, claytotal_r, dbthirdbar_r, wthirdbar_r/100 AS wthirdbar_decimal, wfifteenbar_r/100 AS wfifteenbar_decimal 
+FROM component AS co 
+LEFT JOIN chorizon AS ch ON co.cokey = ch.cokey ;"
+
+s <- SDA_query(qq)
+
+str(s)
+
+
+vars <- c('sandtotal_r', 'silttotal_r', 'claytotal_r', 'dbthirdbar_r', 'wthirdbar_decimal', 'wfifteenbar_decimal')
+
+# run data through both versions
+r1 <- ROSETTA(s, vars = vars, m = "0", v = "1")
+r3 <- ROSETTA(s, vars = vars, m = "0", v = "3")
+
+
+g <- make.groups(v1 = r1, v3 = r3)
+
+v <- c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat')
+w1 <- r1[, v]
+w3 <- r3[, v]
+
+names(w1) <- sprintf("%s.1", names(w1))
+names(w3) <- sprintf("%s.3", names(w3))
+
+w <- cbind(w1, w3)
+
+hexbinplot(
+  theta_r.1 ~ theta_r.3, 
+  data = w, 
+  asp=1, xbins=60,
+  xlab = 'Model v3', ylab = 'Model v1',
+  main = 'theta_r',
+  colramp=viridis, trans=log, inv=exp, colorkey=FALSE,
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.hexbinplot(...)
+    panel.abline(a = 0, b = 1, lwd = 2)
+  }
+)
+
+hexbinplot(
+  theta_s.1 ~ theta_s.3, 
+  data = w, 
+  asp=1, xbins=60,
+  xlab = 'Model v3', ylab = 'Model v1',
+  main = 'theta_r',
+  colramp=viridis, trans=log, inv=exp, colorkey=FALSE,
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.hexbinplot(...)
+    panel.abline(a = 0, b = 1, lwd = 2)
+  }
+)
+
+hexbinplot(
+  alpha.1 ~ alpha.3, 
+  data = w, 
+  asp=1, xbins=60,
+  xlab = 'Model v3', ylab = 'Model v1',
+  main = 'theta_r',
+  colramp=viridis, trans=log, inv=exp, colorkey=FALSE,
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.hexbinplot(...)
+    panel.abline(a = 0, b = 1, lwd = 2)
+  }
+)
+
+hexbinplot(
+  npar.1 ~ npar.3, 
+  data = w, 
+  asp=1, xbins=60,
+  xlab = 'Model v3', ylab = 'Model v1',
+  main = 'theta_r',
+  colramp=viridis, trans=log, inv=exp, colorkey=FALSE,
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.hexbinplot(...)
+    panel.abline(a = 0, b = 1, lwd = 2)
+  }
+)
+
+
+hexbinplot(
+  ksat.1 ~ ksat.3, 
+  data = w, 
+  asp=1, xbins=60,
+  xlab = 'Model v3', ylab = 'Model v1',
+  main = 'theta_r',
+  colramp=viridis, trans=log, inv=exp, colorkey=FALSE,
+  panel = function(...) {
+    panel.grid(-1, -1)
+    panel.hexbinplot(...)
+    panel.abline(a = 0, b = 1, lwd = 2)
+    
+  }
+)
 

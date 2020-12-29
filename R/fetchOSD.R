@@ -38,6 +38,12 @@
   return(m5)
 }
 
+
+
+## TODO: consider adding an argument for "growing" very thin bottom R|Cr|Cd horizons
+# https://github.com/ncss-tech/aqp/issues/173
+
+
 # 2018-10-11: updated to new API, URL subject to change
 # fetch basic OSD, SC, and SoilWeb summaries from new API
 #' Fetch Official Series Descriptions and summaries from SoilWeb API
