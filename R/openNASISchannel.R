@@ -1,15 +1,15 @@
 # internal method for opening a connection to local nasis database using credentials
-.openNASISchannel <- function(use_sqlite = TRUE) {
+.openNASISchannel <- function(use_sqlite = FALSE) {
 
   if (is.null(getOption('soilDB.NASIS.credentials')))
     stop("soilDB.NASIS.credentials not set")
-  
+
   if (!use_sqlite) {
     # setup connection local NASIS
     #suppressWarnings(RODBC::odbcDriverConnect(connection = getOption('soilDB.NASIS.credentials')))
     credentials <- gsub("^.*\\=(.*)","\\1", strsplit(getOption('soilDB.NASIS.credentials'), ";")[[1]])
-    channel <- try(DBI::dbConnect(odbc::odbc(), 
-                                  DSN = credentials[1], 
+    channel <- try(DBI::dbConnect(odbc::odbc(),
+                                  DSN = credentials[1],
                                   UID = credentials[2],
                                   PWD = credentials[3]))
   } else {
@@ -25,7 +25,7 @@
     warning("no local NASIS database available", call. = FALSE)
     # channel <- -1
   }
-  
+
   return(channel)
 }
 
