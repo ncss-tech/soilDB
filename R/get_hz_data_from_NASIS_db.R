@@ -9,7 +9,7 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
   bounddistinct, boundtopo,
   claytotest AS clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END AS silt,
-  sandtotest AS sand, fragvoltot, texture, texcl, lieutex, phfield, effclass, phs.labsampnum, rupresblkdry, stickiness, plasticity, ksatpedon
+  sandtotest AS sand, fragvoltot, texture, texcl, lieutex, phfield, effclass, phs.labsampnum, rupresblkdry, rupresblkmst, rupresblkcem, stickiness, plasticity, ksatpedon
 
   FROM
 
