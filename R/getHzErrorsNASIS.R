@@ -9,14 +9,17 @@ getHzErrorsNASIS <- function(strict = TRUE) {
 	
 	# get data
 	site_data <- get_site_data_from_NASIS_db()
+	site_data$pedon_id <- NULL
 	hz_data <- get_hz_data_from_NASIS_db()
 	
 	# combine pieces
-	f <- merge(hz_data, site_data, by = 'peiid', all.x = TRUE, sort = FALSE)
+	f <- merge(hz_data, site_data, by = "peiid", all.x = TRUE, sort = FALSE)
 	
-	f.test <- do.call('rbind', lapply(split(f, f$pedon_id), function(d) {
+	f.test <- do.call('rbind', lapply(split(f, f$peiid), function(d) {
 	  res <- aqp::hzDepthTests(top = d[['hzdept']], bottom = d[['hzdepb']])
-	  return(data.frame(pedon_id = d$pedon_id, hz_logic_pass = all(!res)))
+	  if (length(res) > 0)
+	    return(data.frame(pedon_id = d$pedon_id, hz_logic_pass = all(!res)))
+	  return(data.frame(pedon_id = character(0), hz_logic_pass = logical(0)))
 	}))
 	
 	# find bad ones
