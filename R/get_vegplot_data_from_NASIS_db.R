@@ -48,7 +48,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
 
   # query the coordinate, plss description, and site characteristics data for these records from the site table
-  q.plotlocation <- "SELECT s.siteiid, s.usiteid as site_id, v.vegplotid as vegplot_id, vegplotiid, so.obsdate, v.datacollectionpurpose, latdegrees, latminutes, latseconds, latdir, longdegrees, longminutes, longseconds, longdir, horizdatnm, locdesc, plsssdetails, plsssection, plsstownship, plssrange, plssmeridian, utmzone, utmnorthing, utmeasting, latstddecimaldegrees, longstddecimaldegrees, geocoordsource, elev, slope, aspect
+  q.plotlocation <- "SELECT s.siteiid, s.usiteid as site_id, v.vegplotid as vegplot_id, vegplotiid, so.obsdate, v.datacollectionpurpose, latdegrees, latminutes, latseconds, latdir, longdegrees, longminutes, longseconds, longdir, horizdatnm, plsssection, plsstownship, plssrange, plssmeridian, utmzone, utmnorthing, utmeasting, latstddecimaldegrees, longstddecimaldegrees, geocoordsource, elev, slope, aspect, CAST(plsssdetails AS ntext) AS plsssdetails, CAST(locdesc AS ntext) AS locdesc
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
@@ -350,7 +350,7 @@ get_vegplot_textnote_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, str
 
   # vegplot textnotes
   q.vegplottext <- "SELECT vegplotiidref as vegplotiid, seqnum, recdate, recauthor, vegplottextkind,
-textcat, textsubcat, CAST(textentry AS ntext) AS textentry, vegplottextiid
+textcat, textsubcat, vegplottextiid, CAST(textentry AS ntext) AS textentry
 FROM vegplottext_View_1;"
 
   channel <- dbConnectNASIS()
