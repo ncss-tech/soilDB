@@ -13,17 +13,15 @@
                                   UID = credentials[2],
                                   PWD = credentials[3]))
   } else {
+    # TODO: pass through URL as argument, or method to set option
     channel <- try(DBI::dbConnect(RSQLite::SQLite(), "C:/Geodata/soils/NASIS-data.sqlite"))
   }
 
   # every method that uses .openNASISchannel must handle possibility of
   # not having NASIS db for themselves. most return empty data.frame.
   # hypothetically a more complex empty structure could be returned
-  # if  (channel == -1)
-  #   warning("no local NASIS database available", call.=FALSE)
   if (inherits(channel, 'try-error')) {
     warning("no local NASIS database available", call. = FALSE)
-    # channel <- -1
   }
 
   return(channel)
@@ -41,12 +39,10 @@
 #' } else {
 #'   message('could not find `nasis_local` ODBC data source')
 #' }
-#'
+#' @importFrom odbc odbcListDataSources
+#' 
 local_NASIS_defined <- function() {
-  # check for user-defined
-  if(!requireNamespace("RODBC"))
-    stop("package `RODBC` is required", call. = FALSE)
-  if('nasis_local' %in% names(RODBC::odbcDataSources())) {
+  if ('nasis_local' %in% odbc::odbcListDataSources()$name) {
     return(TRUE)
   } else {
     return(FALSE)

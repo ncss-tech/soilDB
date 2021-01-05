@@ -19,5 +19,4 @@ if(local_NASIS_defined()) {
 } else {
   message('could not find `nasis_local` ODBC data source')
 }
-
 }
