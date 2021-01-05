@@ -1,4 +1,7 @@
 # soilDB 2.5.9 (2020-11-30)
+ * `HenryTimeLine` moved to {sharpshootR} package
+ * new functions for hitting experimental WCS interfaces to gSSURGO, gNATSGO, and ISSR-800 grids:
+   + `mukey.wcs()` and `ISSR800.wcs()`
  * new function `ROSETTA` for accessing the new ROSETTA model API (c/o Todd Skaggs, USDA-ARS)
  * `fetchOSD(..., extended=TRUE)` gains geographically associated soils, parsed from OSD (thanks AGB)
  * `fetchSDA_spatial` now can return soil survey area polygons using `geom.src = "sapolygon"` with `x` as a vector of area symbols (`areasymbol`) or legend keys (`lkey`). For `sapolygon` results, the `method` and `add.field` arguments work the same as for `mupolygon`, only now both geometries can be returned with fields from the `legend` table.

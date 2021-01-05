@@ -2,7 +2,6 @@
 \alias{fetchHenry}
 \alias{month2season}
 \alias{summarizeSoilTemperature}
-\alias{HenryTimeLine}
 
 \title{Download Data from the Henry Mount Soil Temperature and Water Database}
 

@@ -31,10 +31,6 @@ importFrom(raster,
   levels
 )
 
-importFrom(lattice, 
-  panel.abline
-)
-
 importFrom(plyr, 
   ddply,
   llply,
