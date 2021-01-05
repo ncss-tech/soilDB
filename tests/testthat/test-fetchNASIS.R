@@ -116,4 +116,14 @@ test_that("fetchNASIS(from='components') returns reasonable data", {
 
 })
 
+test_that("get_text_notes_from_NASIS_db works", {
+  expect_silent({get_text_notes_from_NASIS_db()})
+})
+
+test_that("getHzErrorsNASIS works", {
+  expect_silent({suppressMessages(getHzErrorsNASIS())})
+})
+
+
+
 
