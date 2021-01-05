@@ -117,10 +117,16 @@ test_that("fetchNASIS(from='components') returns reasonable data", {
 })
 
 test_that("get_text_notes_from_NASIS_db works", {
+  if (!local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
   expect_silent({get_text_notes_from_NASIS_db()})
 })
 
-test_that("getHzErrorsNASIS works", {
+test_that("getHzErrorsNASIS works", { 
+  if (!local_NASIS_defined()) {
+    skip("in-house testing only")
+  }
   expect_silent({suppressMessages(getHzErrorsNASIS())})
 })
 

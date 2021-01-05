@@ -6,11 +6,25 @@
 #' @export
 #'
 getHzErrorsNASIS <- function(strict = TRUE) {
-	
+  
+  # test connection
+  if (!'nasis_local' %in% names(RODBC::odbcDataSources()))
+    stop('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
+  
 	# get data
 	site_data <- get_site_data_from_NASIS_db()
 	site_data$pedon_id <- NULL
 	hz_data <- get_hz_data_from_NASIS_db()
+	
+	if (nrow(site_data) == 0) {
+	  message("No Site records in NASIS database")
+  	return(data.frame(pedon_id = character(0), hz_logic_pass = logical(0)))
+	}
+	
+	if (nrow(hz_data) == 0) {
+	  message("No Pedon Horizon records in NASIS database")
+	  return(data.frame(pedon_id = character(0), hz_logic_pass = logical(0)))
+	}
 	
 	# combine pieces
 	f <- merge(hz_data, site_data, by = "peiid", all.x = TRUE, sort = FALSE)
