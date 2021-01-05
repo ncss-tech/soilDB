@@ -23,7 +23,10 @@ importFrom(DBI,
   dbFetch
 )
 
-importFrom(odbc, odbc)
+importFrom(odbc, 
+  odbc,
+  odbcListDataSources
+)
 
 importFrom(RSQLite, SQLite)
 

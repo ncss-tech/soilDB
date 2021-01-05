@@ -4,7 +4,7 @@
 fetchVegdata <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
 	
   # test connection
-  if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
+  if (!local_NASIS_defined())
     stop('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
 	
 	# 1. load data in pieces
