@@ -101,7 +101,7 @@ str(s)
 
 vars <- c('sandtotal_r', 'silttotal_r', 'claytotal_r', 'dbthirdbar_r', 'wthirdbar_decimal', 'wfifteenbar_decimal')
 
-# automatic model selection: 50k records: ~ 43 seconds
+# automatic model selection: 50k records: ~ 39 seconds
 system.time(r <- ROSETTA(s, vars = vars, m = "0"))
 
 str(r)
@@ -129,7 +129,7 @@ nrow(s)
 head(s)
 
 
-# 82 seconds for 84k records
+# 64 seconds for 84k records
 # ~ 1 second per 1k records
 system.time(r <- ROSETTA(s, vars = vars))
 

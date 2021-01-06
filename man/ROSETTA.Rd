@@ -4,16 +4,14 @@
 \alias{ROSETTA}
 \title{ROSETTA Model Versions 1 and 3 API}
 \usage{
-ROSETTA(x, vars, v = c("1", "3"), m = "0", chunkSize = 10000, conf = NULL)
+ROSETTA(x, vars, v = c("1", "2", "3"), chunkSize = 10000, conf = NULL)
 }
 \arguments{
 \item{x}{a \code{data.frame} of required soil properties, may contain other columns, see details}
 
 \item{vars}{character vector of column names in \code{x} containing relevant soil property values, see details}
 
-\item{v}{ROSETTA model version number: '1' or '3'}
-
-\item{m}{ROSETTA model type: '0' (automatic, best model selection), '2' (sand, silt, clay), '3' (sand, silt, clay, Db), '4' (sand, silt, clay, Db, 33kPa WT), or '5' (sand, silt, clay, Db, 33kPa WT, 1500kPa WT). Model type '0' is usually the best approach as the most appropriate model (e.g. in light of potential missing values) is selected by the API.}
+\item{v}{ROSETTA model version number: '1', '2', or '3', see details and references.}
 
 \item{chunkSize}{number of records per API call}
 
@@ -32,6 +30,20 @@ a \code{data.frame} object:
  \item{npar: }{index of pore size distribution, log10-tranformed values with units of 1/cm}
  \item{ksat: }{saturated hydraulic conductivity, log10-transformed values with units of cm/day}
  
+ \item{.rosetta.model}{}
+ 
+ 
+}
+
+Three versions of the ROSETTA model are available, selected using \code{v = 1}, \code{v = 2}, or \code{v = 3}. 
+
+\describe{
+
+\item{version 1}{Schaap, M.G., F.J. Leij, and M.Th. van Genuchten. 2001. ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions. Journal of Hydrology 251(3–4): 163–176. doi: 10.1016/S0022-1694(01)00466-8.}
+
+\item{version 2}{Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils. Vadose Zone Journal 3(4): 1455–1463. doi: https://doi.org/10.2136/vzj2004.1455.}
+
+\item{version 3}{Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39–53. doi: 10.1016/j.jhydrol.2017.01.004.}
 }
 }
 \description{
@@ -77,4 +89,10 @@ Schaap, M.G., F.J. Leij and M. Th. van Genuchten. 1999. A bootstrap-neural netwo
 Schaap, M.G., F.J. Leij, 1999, Improved prediction of unsaturated hydraulic conductivity with the Mualem-van Genuchten, Submitted to Soil Sci. Soc. Am. J.
 
 van Genuchten, M.Th. 1980. A closed-form equation for predicting the hydraulic conductivity of unsaturated soils. Soil Sci. Am. J. 44:892-898.
+
+Schaap, M.G., F.J. Leij, and M.Th. van Genuchten. 2001. ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions. Journal of Hydrology 251(3–4): 163–176. doi: 10.1016/S0022-1694(01)00466-8.
+
+Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils. Vadose Zone Journal 3(4): 1455–1463. doi: https://doi.org/10.2136/vzj2004.1455.
+
+Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39–53. doi: 10.1016/j.jhydrol.2017.01.004.
 }
