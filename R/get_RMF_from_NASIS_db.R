@@ -1,4 +1,4 @@
-get_RMF_from_NASIS_db <- function(SS=TRUE, sqlite_path = NULL) {
+get_RMF_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
 
   # RMF
   # unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
@@ -16,7 +16,7 @@ get_RMF_from_NASIS_db <- function(SS=TRUE, sqlite_path = NULL) {
   FROM phredoxfcolor_View_1
   ORDER BY phrdxfiidref, colormoistst;"
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())

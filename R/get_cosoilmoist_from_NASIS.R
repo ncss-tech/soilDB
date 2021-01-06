@@ -1,4 +1,4 @@
-get_cosoilmoist_from_NASIS <- function(impute = TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_cosoilmoist_from_NASIS <- function(impute = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
   q.cosoilmoist <- "SELECT dmuiidref AS dmuiid, coiid, compname, comppct_r, drainagecl, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, cosoilmoistiid, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat
 
@@ -9,7 +9,7 @@ get_cosoilmoist_from_NASIS <- function(impute = TRUE, stringsAsFactors = default
   ORDER BY dmuiid, comppct_r DESC, compname, month, soimoistdept_r
   ;"
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())

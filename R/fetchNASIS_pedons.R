@@ -4,7 +4,7 @@
 .fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, 
                                soilColorState='moist', lab=FALSE, 
                                stringsAsFactors = default.stringsAsFactors(), 
-                               sqlite_path = NULL) {
+                               static_path = NULL) {
   
   # test connection
   if (!local_NASIS_defined())
@@ -17,11 +17,10 @@
   ## load data in pieces
   # these fail gracefully when no data in local DB | selected set
   site_data  <- get_site_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, 
-                                            sqlite_path = sqlite_path)
+                                            static_path = static_path)
   hz_data    <- get_hz_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, 
-                                          sqlite_path = sqlite_path)
-  color_data <- get_colors_from_NASIS_db(SS = SS, 
-                                         sqlite_path = sqlite_path)
+                                          static_path = static_path)
+  color_data <- get_colors_from_NASIS_db(SS = SS, static_path = static_path)
   
   h <- hz_data
   ## ensure there are enough data to create an SPC object
@@ -30,32 +29,12 @@
   }
   
   # data that cannot be effectively flattened in SQL
-<<<<<<< HEAD
+
   extended_data <- get_extended_data_from_NASIS_db(SS = SS,
                                                    nullFragsAreZero = nullFragsAreZero,
-                                                   stringsAsFactors = stringsAsFactors)
-
-=======
-  extended_data <- get_extended_data_from_NASIS_db(SS = SS, nullFragsAreZero = nullFragsAreZero, stringsAsFactors = stringsAsFactors, sqlite_path = sqlite_path)
+                                                   stringsAsFactors = stringsAsFactors,
+                                                   static_path = static_path)
   
-  ## join horizon + hz color: all horizons
-  h <- merge(hz_data, color_data, by='phiid', all.x=TRUE, sort=FALSE)
-  
-  # check for empty fragment summary and nullFragsAreZero
-  if (nullFragsAreZero & all(is.na(unique(extended_data$frag_summary$phiid))))
-    extended_data$frag_summary <- cbind(phiid = unique(h$phiid), extended_data$frag_summary[,-1])
-  
-  ## join hz + fragment summary
-  h <- merge(h, extended_data$frag_summary, by = 'phiid', all.x = TRUE, sort = FALSE)
-  
-  # check for empty artifact summary and nullFragsAreZero
-  if (nullFragsAreZero & all(is.na(unique(extended_data$art_summary$phiid))))
-    extended_data$art_summary <- cbind(phiid = unique(h$phiid), extended_data$art_summary[,-1])
-  
-  # join hz + artifact summary
-  h <- merge(h, extended_data$art_summary, by = 'phiid', all.x = TRUE, sort = FALSE)
-  
->>>>>>> c264bf7... cherry-pick: make a proper interface to sqlite NASIS queries
   ## fix some common problems
   
   # replace missing lower boundaries
