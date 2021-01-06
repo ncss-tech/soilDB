@@ -4,7 +4,7 @@
 
 ## TODO_JS: incorporated the use of uncode() into all except the fragment queries, which I think are best left as they are.
 
-get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
   # photo links from PedonPC stored as sitetext notes
   q.photolink <- "SELECT so.siteiidref AS siteiid, sot.recdate, sot.textcat,  CAST(sot.textentry AS ntext) AS imagepath
@@ -380,7 +380,7 @@ LEFT OUTER JOIN (
     q.hz.dessuf <- gsub(pattern = '_View_1', replacement = '', x = q.hz.dessuf, fixed = TRUE)
   }
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())

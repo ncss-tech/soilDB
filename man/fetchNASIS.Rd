@@ -42,7 +42,7 @@ fetchNASIS(
   lab = FALSE,
   fill = FALSE,
   stringsAsFactors = default.stringsAsFactors(),
-  sqlite_path = NULL
+  static_path = NULL
 )
 }
 \arguments{
@@ -64,7 +64,7 @@ fetchNASIS(
 
 \item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have been set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
 
-\item{sqlite_path}{Optional: path to local SQLite database containing NASIS table structure; default: NULL}
+\item{static_path}{Optional: path to local SQLite database containing NASIS table structure; default: NULL}
 }
 \value{
 A SoilProfileCollection object

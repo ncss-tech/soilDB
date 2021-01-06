@@ -23,10 +23,10 @@ library(soilDB)
 # DBI::dbDisconnect(con)
 
 # extended_data <- get_extended_data_from_NASIS_db(SS = SS,
-#                                                  sqlite_path = nasislite_path,
+#                                                  static_path = nasislite_path,
 #                                                  nullFragsAreZero = nullFragsAreZero,
 #                                                  stringsAsFactors = stringsAsFactors)
-# f <- fetchNASIS(SS = SS, sqlite_path = nasislite_path)
+# f <- fetchNASIS(SS = SS, static_path = nasislite_path)
 # 
 # library(aqp)
 # aqp_df_class(f) <- "data.table"

@@ -1,4 +1,4 @@
-get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
   # concentrations
   # unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
@@ -16,7 +16,7 @@ get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
   FROM phconccolor_View_1
   ORDER BY phconceniidref, colormoistst;"
   
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())

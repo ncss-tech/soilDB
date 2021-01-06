@@ -4,7 +4,7 @@
 .fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, 
                                soilColorState='moist', lab=FALSE, 
                                stringsAsFactors = default.stringsAsFactors(), 
-                               sqlite_path = NULL) {
+                               static_path = NULL) {
   
   # test connection
   if (!local_NASIS_defined())
@@ -17,11 +17,11 @@
   ## load data in pieces
   # these fail gracefully when no data in local DB | selected set
   site_data  <- get_site_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, 
-                                            sqlite_path = sqlite_path)
+                                            static_path = static_path)
   hz_data    <- get_hz_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, 
-                                          sqlite_path = sqlite_path)
+                                          static_path = static_path)
   color_data <- get_colors_from_NASIS_db(SS = SS, 
-                                         sqlite_path = sqlite_path)
+                                         static_path = static_path)
   
   ## ensure there are enough data to create an SPC object
   if (nrow(hz_data) == 0) {
@@ -29,7 +29,7 @@
   }
   
   # data that cannot be effectively flattened in SQL
-  extended_data <- get_extended_data_from_NASIS_db(SS = SS, nullFragsAreZero = nullFragsAreZero, stringsAsFactors = stringsAsFactors, sqlite_path = sqlite_path)
+  extended_data <- get_extended_data_from_NASIS_db(SS = SS, nullFragsAreZero = nullFragsAreZero, stringsAsFactors = stringsAsFactors, static_path = static_path)
   
   ## join horizon + hz color: all horizons
   h <- merge(hz_data, color_data, by='phiid', all.x=TRUE, sort=FALSE)

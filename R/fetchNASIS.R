@@ -12,7 +12,7 @@
 #' @param lab should the phlabresults child table be fetched with site/pedon/horizon data (default: FALSE)
 #' @param fill (fetchNASIS(from='components') only: include component records without horizon data in result? (default: FALSE)
 #' @param stringsAsFactors logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have been set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)
-#' @param sqlite_path Optional: path to local SQLite database containing NASIS table structure; default: NULL
+#' @param static_path Optional: path to local SQLite database containing NASIS table structure; default: NULL
 #'
 #' @details This function imports data from NASIS into R as a \code{SoilProfileCollection} object. It "flattens" NASIS pedon and component tables, including their child tables, into several more easily manageable data frames. Primarily these functions access the local NASIS database using an ODBC connection. However using the \code{fetchNASIS()} argument \code{from = "pedon_report"}, data can be read from the NASIS Report 'fetchNASIS', as either a txt file or url. The primary purpose of \code{fetchNASIS(from = "pedon_report")} is to facilitate importing datasets larger than 8000+ pedons/components.
 #' 
@@ -38,7 +38,7 @@ fetchNASIS <- function(from='pedons',
                        lab = FALSE, 
                        fill = FALSE,
                        stringsAsFactors = default.stringsAsFactors(),
-                       sqlite_path = NULL) {
+                       static_path = NULL) {
 	
   res <- NULL
   
@@ -47,7 +47,7 @@ fetchNASIS <- function(from='pedons',
   #       to specify the selected set for a SQLite database, and I suppose the convention 
   #       should be for those tables to be there, even if empty
   
-  # if (!is.null(sqlite_path))
+  # if (!is.null(static_path))
   #   SS <- FALSE
  
   # sanity check
@@ -63,7 +63,7 @@ fetchNASIS <- function(from='pedons',
                               soilColorState = soilColorState, 
                               lab = lab,
                               stringsAsFactors = stringsAsFactors,
-                              sqlite_path)
+                              static_path)
   }
   
   if (from == 'components') {

@@ -1,6 +1,6 @@
 ## TODO: merge with other vegplot functions
 
-get_veg_data_from_NASIS_db <- function(SS=TRUE, sqlite_path = NULL) {
+get_veg_data_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
 
 # warning to use NASIS query to load related vegplot data for this to work
 warning("In order to query this data you'll need to load all related vegplots to your sites and pedons in NASIS.", call. = FALSE)
@@ -51,7 +51,7 @@ warning("In order to query this data you'll need to load all related vegplots to
   #q.plant <- "SELECT plantiid, plantsym
   #  FROM plant_View_1;"
   
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())

@@ -4,10 +4,10 @@
 \alias{dbConnectNASIS}
 \title{Create a connection to a local NASIS database}
 \usage{
-dbConnectNASIS(sqlite_path = NULL)
+dbConnectNASIS(static_path = NULL)
 }
 \arguments{
-\item{sqlite_path}{Optional: path to SQLite database containing NASIS table structure; Default: \code{NULL}}
+\item{static_path}{Optional: path to SQLite database containing NASIS table structure; Default: \code{NULL}}
 }
 \value{
 A \code{DBIConnection} object, as returned by \code{DBI::dbConnect()}.

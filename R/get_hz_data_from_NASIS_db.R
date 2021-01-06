@@ -1,6 +1,6 @@
 ## TODO: when multiple textures have been defined, only the first one is returned (alphabetical ?)
 #
-get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
   q <- "SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
@@ -22,7 +22,7 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 
   ORDER BY p.upedonid, ph.hzdept ASC;"
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())

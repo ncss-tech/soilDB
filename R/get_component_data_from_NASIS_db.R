@@ -7,9 +7,9 @@
 
 
 ## component diagnostic features
-get_component_diaghz_from_NASIS_db <- function(SS=TRUE, sqlite_path = NULL) {
+get_component_diaghz_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -30,9 +30,9 @@ get_component_diaghz_from_NASIS_db <- function(SS=TRUE, sqlite_path = NULL) {
 }
 
 ## component diagnostic features
-get_component_restrictions_from_NASIS_db <- function(SS = TRUE, sqlite_path = NULL) {
+get_component_restrictions_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -53,7 +53,7 @@ get_component_restrictions_from_NASIS_db <- function(SS = TRUE, sqlite_path = NU
 }
 
 ## get map unit text from local NASIS
-get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, sqlite_path = NULL) {
+get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_path = NULL) {
 
   q <- "SELECT mu.muiid, mu.mukind, mu.mutype, mu.muname, mu.nationalmusym,
   mut.seqnum, mut.recdate, mut.recauthor, mut.mapunittextkind, mut.textcat, mut.textsubcat, CAST(mut.textentry AS ntext) AS textentry
@@ -62,7 +62,7 @@ get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, sqlite_pa
   mapunit_View_1 AS mu
   INNER JOIN mutext_View_1 AS mut ON mu.muiid = mut.muiidref;"
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -96,7 +96,7 @@ get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, sqlite_pa
 
 
 ## just the component records, nothing above or below
-get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path= NULL) {
+get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path= NULL) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -109,7 +109,7 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC;"
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -140,7 +140,7 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 }
 
 
-get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -175,7 +175,7 @@ get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors
     q.legend <- gsub(pattern = '_View_1', replacement = '', x = q.legend, fixed = TRUE)
   }
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -197,7 +197,7 @@ get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors
 
 
 
-get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -239,7 +239,7 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFa
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -261,7 +261,7 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFa
 
 
 
-get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -313,7 +313,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
     q.mapunit <- gsub(pattern = '_View_1', replacement = '', x = q.mapunit, fixed = TRUE)
   }
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -359,7 +359,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
 
 # return all rows from correlation -- map unit -- legend map unit -- dmu / legend -- area
 # note that all of these "target tables" have to be selected
-get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional=TRUE, dropNotRepresentative=TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional=TRUE, dropNotRepresentative=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -376,7 +376,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
 
   ORDER BY nationalmusym, dmuiid;"
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -432,7 +432,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
 }
 
 # get geomorphic desc for each component
-get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, sqlite_path = NULL) {
+get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -448,7 +448,7 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, sqlite_path =
 
   ORDER BY coiid, geomfeatid ASC;"
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -466,7 +466,7 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, sqlite_path =
 
 
 # get copm for each component
-get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
   # must have RODBC installed
   if (!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -480,7 +480,7 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
 
   ORDER BY coiidref, seqnum, pmorder, copmgrpiid ASC;"
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -500,7 +500,7 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
 }
 
 # get ESD information for each component
-get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
   
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
@@ -515,7 +515,7 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
 
   ORDER BY coiid;"
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -544,7 +544,7 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
 
 ## TODO: convert any multiple entries into a comma delimited string
 # get OtherVeg information for each component
-get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, sqlite_path = NULL) {
+get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -555,7 +555,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, sqlite_path = NUL
   ORDER BY coiid;"
 
   # setup connection local NASIS
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -582,7 +582,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, sqlite_path = NUL
   return(d)
 }
 
-get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -590,7 +590,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors 
   q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid
   FROM comonth_View_1 AS comonth;"
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -679,7 +679,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors 
 
 # get linked pedons by peiid and user pedon ID
 # note that there may be >=1 pedons / coiid
-get_copedon_from_NASIS_db <- function(SS=TRUE, sqlite_path = NULL) {
+get_copedon_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
 
   q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative
 
@@ -688,7 +688,7 @@ get_copedon_from_NASIS_db <- function(SS=TRUE, sqlite_path = NULL) {
   LEFT OUTER JOIN pedon_View_1 p ON p.peiid = copedon.peiidref;
   "
   
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -713,7 +713,7 @@ get_copedon_from_NASIS_db <- function(SS=TRUE, sqlite_path = NULL) {
 
 ## TODO: better documentation for "fill" argument
 # https://github.com/ncss-tech/soilDB/issues/50
-get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE, sqlite_path = NULL) {
+get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE, static_path = NULL) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
@@ -731,7 +731,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE, sqli
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC, hzdept_r ASC;"
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
