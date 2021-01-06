@@ -1,4 +1,4 @@
-get_lablayer_data_from_NASIS_db <- function(SS = TRUE, sqlite_path = NULL) {
+get_lablayer_data_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
 
   # hacks to make R CMD check --as-cran happy:
   cec7 <- NULL
@@ -16,7 +16,7 @@ FROM ncsslayerlabdata_View_1
 
 ORDER BY labpeiid, hzdept ASC;")
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())

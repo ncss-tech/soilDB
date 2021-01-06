@@ -1,4 +1,4 @@
-get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
   q <- paste("SELECT p.projectiid, p.uprojectid, p.projectname, pmu.seqnum pmu_seqnum, a2.areasymbol, lmu.musym, lmu.lmapunitiid AS mukey, mu.nationalmusym, mutype, lmu.mustatus, muname, muacres
 
@@ -24,7 +24,7 @@ get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())

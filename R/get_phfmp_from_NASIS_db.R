@@ -1,4 +1,4 @@
-get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors(), sqlite_path = NULL) {
+get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
 
   # because of alias with fetchNASIS cannot allow setting attr
@@ -11,7 +11,7 @@ get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = default.string
     q <- "SELECT * FROM phfmp_View_1;"
   #}
 
-  channel <- dbConnectNASIS(sqlite_path)
+  channel <- dbConnectNASIS(static_path)
     
   if (inherits(channel, 'try-error'))
     return(data.frame())

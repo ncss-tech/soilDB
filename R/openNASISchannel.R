@@ -1,8 +1,8 @@
 # internal method for opening a connection to local nasis database using credentials
 
-.openNASISchannel <- function(sqlite_path = NULL) {
+.openNASISchannel <- function(static_path = NULL) {
 
-  use_sqlite <- !is.null(sqlite_path)
+  use_sqlite <- !is.null(static_path)
   
   if (is.null(getOption('soilDB.NASIS.credentials')))
     stop("soilDB.NASIS.credentials not set")
@@ -16,7 +16,7 @@
                                   UID = credentials[2],
                                   PWD = credentials[3]))
   } else {
-    channel <- try(DBI::dbConnect(RSQLite::SQLite(), sqlite_path))
+    channel <- try(DBI::dbConnect(RSQLite::SQLite(), static_path))
   }
 
   # every method that uses .openNASISchannel must handle possibility of
