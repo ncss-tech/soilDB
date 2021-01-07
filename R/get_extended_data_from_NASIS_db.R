@@ -317,20 +317,18 @@ LEFT OUTER JOIN (
     q.hz.texmod <- gsub(pattern = '_View_1', replacement = '', x = q.hz.texmod, fixed = TRUE)
   }
 
-
-  ## TODO: joins without a join condition!
-  # https://github.com/ncss-tech/soilDB/issues/48
-  # get geomorphic features
-  q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod, geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid, sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
-
-  FROM geomorfeattype
-  RIGHT JOIN geomorfeat
-  RIGHT JOIN site_View_1 INNER JOIN sitegeomordesc_View_1 ON site_View_1.siteiid = sitegeomordesc_View_1.siteiidref
-  INNER JOIN siteobs_View_1 INNER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
-  ON site_View_1.siteiid = siteobs_View_1.siteiidref
-  ON geomorfeat.geomfiid = sitegeomordesc_View_1.geomfiidref
-  ON geomorfeattype.geomftiid = geomorfeat.geomftiidref
-  ORDER BY peiid, geomfeatid ASC;"
+  # get geomorphic features (sqlite safe -- no RIGHT JOIN 2020/12/02)
+  q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod, 
+                         geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid, 
+                         sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref, 
+                         lower(geomorfeattype.geomftname) as geomftname
+                  FROM pedon_View_1
+                    INNER JOIN siteobs_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
+                    INNER JOIN site_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref
+                    INNER JOIN sitegeomordesc_View_1 ON site_View_1.siteiid = sitegeomordesc_View_1.siteiidref
+                    INNER JOIN geomorfeat ON  geomorfeat.geomfiid = sitegeomordesc_View_1.geomfiidref
+                    INNER JOIN geomorfeattype ON geomorfeattype.geomftiid = geomorfeat.geomftiidref
+                  ORDER BY peiid, geomfeatid ASC;"
 
 
   # toggle selected set vs. local DB
@@ -391,7 +389,7 @@ LEFT OUTER JOIN (
   d.restriction <- dbQueryNASIS(channel, q.restriction, close = FALSE)
   
   d.rf.data <- dbQueryNASIS(channel, q.rf.data, close = FALSE)
-  d.rf.data.v2 <- dbQueryNASIS(channel, q.rf.data.v2, close = FALSE)
+  # d.rf.data.v2 <- dbQueryNASIS(channel, q.rf.data.v2, close = FALSE)
   d.art.data <- dbQueryNASIS(channel, q.art.data, close = FALSE)
   
   d.surf.rf.summary <- dbQueryNASIS(channel, q.surf.rf.summary, close = FALSE)
@@ -499,10 +497,10 @@ LEFT OUTER JOIN (
 	}
 
 	# r.rf.data.v2 nullFragsAreZero = TRUE
-	idx <- !names(d.rf.data.v2) %in% "phiid"
-	if (nullFragsAreZero == TRUE) {
-	  d.rf.data.v2[idx] <- lapply(d.rf.data.v2[idx], function(x) ifelse(is.na(x), 0, x))
-	}
+	# idx <- !names(d.rf.data.v2) %in% "phiid"
+	# if (nullFragsAreZero == TRUE) {
+	#   d.rf.data.v2[idx] <- lapply(d.rf.data.v2[idx], function(x) ifelse(is.na(x), 0, x))
+	# }
 
 
 	# return a list of results
@@ -511,7 +509,7 @@ LEFT OUTER JOIN (
 							diagHzBoolean = d.diag.boolean,
 							restriction = d.restriction,
 							frag_summary = d.rf.summary,
-							frag_summary_v2 = d.rf.data.v2,
+							# frag_summary_v2 = d.rf.data.v2,
 							art_summary = d.art.summary,
 							surf_frag_summary = d.surf.rf.summary,
 							texmodifier = d.hz.texmod,
