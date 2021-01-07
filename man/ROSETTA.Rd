@@ -30,7 +30,8 @@ a \code{data.frame} object:
  \item{npar: }{index of pore size distribution, log10-tranformed values with units of 1/cm}
  \item{ksat: }{saturated hydraulic conductivity, log10-transformed values with units of cm/day}
  
- \item{.rosetta.model}{}
+ \item{.rosetta.model}{best-available model selection}
+ \item{.rosetta.version}{ROSETTA algorithm version, selected via function argument \code{v}}
  
  
 }
