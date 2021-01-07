@@ -81,7 +81,11 @@ levelplot(
   main = 'gNATSGO WCS + SDA',
   margin = FALSE, 
   scales = list(draw = FALSE), 
-  col.regions = viridis
+  col.regions = viridis,
+  panel = function(...) {
+    panel.levelplot(...)
+    sp.lines(p, col = 'white')
+  }
   )
 
 
