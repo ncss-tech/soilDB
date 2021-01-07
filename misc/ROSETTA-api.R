@@ -44,7 +44,7 @@ rr$.rosetta.model[3] == 4
 # no records missing -> model 5
 all(rr$.rosetta.model[4:8] == 5)
 
-# missing sand -> NA
+# missing sand -> NA | no model = -1
 is.na(rr$theta_r[9]) & (rr$.rosetta.model[9] == -1)
 
 # all NA
@@ -102,7 +102,7 @@ str(s)
 vars <- c('sandtotal_r', 'silttotal_r', 'claytotal_r', 'dbthirdbar_r', 'wthirdbar_decimal', 'wfifteenbar_decimal')
 
 # automatic model selection: 50k records: ~ 39 seconds
-system.time(r <- ROSETTA(s, vars = vars, m = "0"))
+system.time(r <- ROSETTA(s, vars = vars))
 
 str(r)
 summary(r)
@@ -129,7 +129,7 @@ nrow(s)
 head(s)
 
 
-# 64 seconds for 84k records
+# 60 seconds for 84k records
 # ~ 1 second per 1k records
 system.time(r <- ROSETTA(s, vars = vars))
 
@@ -162,20 +162,23 @@ str(s)
 vars <- c('sandtotal_r', 'silttotal_r', 'claytotal_r', 'dbthirdbar_r', 'wthirdbar_decimal', 'wfifteenbar_decimal')
 
 # run data through both versions
-r1 <- ROSETTA(s, vars = vars, m = "0", v = "1")
-r3 <- ROSETTA(s, vars = vars, m = "0", v = "3")
+r1 <- ROSETTA(s, vars = vars, v = "1")
+r2 <- ROSETTA(s, vars = vars, v = "2")
+r3 <- ROSETTA(s, vars = vars, v = "3")
 
 
-g <- make.groups(v1 = r1, v3 = r3)
+g <- make.groups(v1 = r1, v2 = r2, v3 = r3)
 
 v <- c('theta_r', 'theta_s', 'alpha', 'npar', 'ksat')
 w1 <- r1[, v]
+w2 <- r2[, v]
 w3 <- r3[, v]
 
 names(w1) <- sprintf("%s.1", names(w1))
+names(w2) <- sprintf("%s.2", names(w2))
 names(w3) <- sprintf("%s.3", names(w3))
 
-w <- cbind(w1, w3)
+w <- cbind(w1, w2, w3)
 
 hexbinplot(
   theta_r.1 ~ theta_r.3, 
@@ -249,3 +252,39 @@ hexbinplot(
   }
 )
 
+
+hexplom(
+  w[, c('theta_r.1', 'theta_r.2', 'theta_r.3')], 
+  trans = log, 
+  colramp = viridis, 
+  upper.panel = panel.hexboxplot,
+  main = 'ROSETTA Evaluation: theta_r',
+  xlab = ''
+)
+
+hexplom(
+  w[, c('theta_s.1', 'theta_s.2', 'theta_s.3')], 
+  trans = log, 
+  colramp = viridis, 
+  upper.panel = panel.hexboxplot,
+  main = 'ROSETTA Evaluation: theta_s',
+  xlab = ''
+)
+
+hexplom(
+  w[, c('alpha.1', 'alpha.2', 'alpha.3')], 
+  trans = log, 
+  colramp = viridis, 
+  upper.panel = panel.hexboxplot,
+  main = 'ROSETTA Evaluation: alpha',
+  xlab = ''
+)
+
+hexplom(
+  w[, c('npar.1', 'npar.2', 'npar.3')], 
+  trans = log, 
+  colramp = viridis, 
+  upper.panel = panel.hexboxplot,
+  main = 'ROSETTA Evaluation: npar',
+  xlab = ''
+)

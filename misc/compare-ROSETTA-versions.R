@@ -1,4 +1,5 @@
 library(aqp)
+library(soilDB)
 library(latticeExtra)
 library(tactile)
 
@@ -9,9 +10,10 @@ x <- texcl_to_ssc(tex)
 x <- cbind(x, tex)
 
 r1 <- ROSETTA(x, vars = c('sand', 'silt', 'clay'), v = '1')
+r2 <- ROSETTA(x, vars = c('sand', 'silt', 'clay'), v = '2')
 r3 <- ROSETTA(x, vars = c('sand', 'silt', 'clay'), v = '3')
 
-r <- rbind(r1, r3)
+r <- rbind(r1, r2, r3)
 
 # iterate over results and generate VG model curve
 awc <- lapply(1:nrow(r), function(i) {
@@ -59,11 +61,6 @@ res <- lapply(1:nrow(r), function(i) {
 res <- do.call('rbind', res)
 
 
-knitr::kable(round(sort(tapply(awc$awc, awc$texture, diff), decreasing = TRUE), 3))
-
-
-
-
 tps <- tactile.theme(
   plot.line=list(col='royalblue', lwd = 2) 
 )
@@ -84,8 +81,8 @@ dotplot(
 xyplot(
   phi ~ theta | texture, data = res, groups = .rosetta.version,
   type = c('l', 'g'), 
-  auto.key = list(lines = TRUE, points = FALSE, columns = 2),
-  scales = list(alternating=3, x=list(tick.number=6), y=list(log=10, tick.number=6)), 
+  auto.key = list(lines = TRUE, points = FALSE, columns = 3),
+  scales = list(alternating=3, x=list(tick.number=6, cex = 0.75), y=list(log=10, tick.number=6)), 
   yscale.components = yscale.components.logpower, 
   ylab = expression(Matric~~Potential~~(-kPa)), 
   xlab = expression(Volumetric~Water~Content~~(cm^3/cm^3)), 
