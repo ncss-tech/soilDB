@@ -7,7 +7,7 @@
                                static_path = NULL) {
   
   # test connection
-  if (!local_NASIS_defined())
+  if (!local_NASIS_defined(static_path))
     stop('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
   
   # sanity check

@@ -4,7 +4,7 @@
 \alias{local_NASIS_defined}
 \title{Check for presence of `nasis_local` ODBC data source}
 \usage{
-local_NASIS_defined()
+local_NASIS_defined(static_path = NULL)
 }
 \value{
 logical

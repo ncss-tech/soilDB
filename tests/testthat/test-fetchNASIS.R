@@ -1,5 +1,8 @@
 context("fetchNASIS() -- requires local NASIS and ODBC connection")
 
+# TODO: develop minimal test set for NASIS data, stored as static SQLite DB
+static_path <- NULL
+
 ## helper functions used to skip tests that rely on special conditions
 # http://r-pkgs.had.co.nz/tests.html
 #
@@ -7,36 +10,36 @@ context("fetchNASIS() -- requires local NASIS and ODBC connection")
 # * pedons / component missing from local database
 
 
-check_local_NASIS_pedons_available <- function() {
+check_local_NASIS_pedons_available <- function(static_path = NULL) {
 
   # attempt to load pedons
   # these functions will return empty data.frame objects when there are no data in the SS
-  res1 <- try(suppressWarnings(get_site_data_from_NASIS_db()), silent = TRUE)
-  res2 <- try(suppressWarnings(get_hz_data_from_NASIS_db()), silent = TRUE)
+  res1 <- try(suppressWarnings(get_site_data_from_NASIS_db(static_path = static_path)), silent = TRUE)
+  res2 <- try(suppressWarnings(get_hz_data_from_NASIS_db(static_path = static_path)), silent = TRUE)
 
-  if(nrow(res1) == 0) {
+  if (nrow(res1) == 0) {
     skip("no Site/Pedon records in local NASIS database")
   }
-  if(nrow(res2) == 0) {
+  if (nrow(res2) == 0) {
     skip("no Pedon Horizon records in local NASIS database")
   }
 }
 
-check_local_NASIS_components_available <- function() {
+check_local_NASIS_components_available <- function(static_path = NULL) {
 
   # attempt to load components
   # these functions will return empty data.frame objects when there are no data in the SS
-  res1 <- try(suppressWarnings(get_component_data_from_NASIS_db()), silent = TRUE)
-  res2 <- try(suppressWarnings(get_component_horizon_data_from_NASIS_db()), silent = TRUE)
+  res1 <- try(suppressWarnings(get_component_data_from_NASIS_db(static_path = static_path)), silent = TRUE)
+  res2 <- try(suppressWarnings(get_component_horizon_data_from_NASIS_db(static_path = static_path)), silent = TRUE)
 
   # res <- try(suppressWarnings(fetchNASIS(from='pedons')), silent = TRUE)
   # note: this was too broad of a test -- any error in fetchNASIS will result in skipping the test!
   #if(class(res) == 'try-error'){
-  if(nrow(res1) == 0) {
+  if (nrow(res1) == 0) {
     skip("no Component records in local NASIS database")
   }
 
-  if(nrow(res2) == 0) {
+  if (nrow(res2) == 0) {
     skip("no Component Horizon records in local NASIS database")
   }
 }
@@ -47,17 +50,17 @@ check_local_NASIS_components_available <- function() {
 test_that("fetchNASIS(from='pedons') returns reasonable data", {
 
   # test for conditions permitting this test to run
-  if(!local_NASIS_defined()) {
+  if (!local_NASIS_defined(static_path = static_path)) {
     skip("local NASIS database not available")
   }
 
   # pedons must be present for tests
-  check_local_NASIS_pedons_available()
+  check_local_NASIS_pedons_available(static_path = static_path)
 
   # get data
   # ignore warnings for now
-  x <- suppressWarnings(fetchNASIS(from='pedons'))
-
+  x <- suppressWarnings(fetchNASIS(from = 'pedons'))
+  
   # expected outcomes
   expect_true(inherits(x, 'SoilProfileCollection'))
   expect_equal(nrow(site(x)) > 0, TRUE)
@@ -75,38 +78,38 @@ test_that("fetchNASIS(from='pedons') returns reasonable data", {
 test_that("fetchNASIS(from='pedons') nullFragsAreZero works as expected", {
 
   # test for conditions permitting this test to run
-  if(!local_NASIS_defined()) {
+  if (!local_NASIS_defined(static_path = static_path)) {
     skip("local NASIS database not available")
   }
 
   # components must be present for tests
-  check_local_NASIS_pedons_available()
+  check_local_NASIS_pedons_available(static_path = static_path)
 
   # get data
   # ignore warnings for now
-  x <- suppressWarnings(fetchNASIS(from='pedons'))
-  y <- suppressWarnings(fetchNASIS(from='pedons', nullFragsAreZero=FALSE))
+  x <- suppressWarnings(fetchNASIS(from = 'pedons'))
+  y <- suppressWarnings(fetchNASIS(from = 'pedons', nullFragsAreZero = FALSE))
 
   # no NA in total fragments using default arguments
-  expect_true(all(horizons(x)[is.na(y$total_frags_pct),'total_frags_pct'] ==0))
-  expect_true(all(horizons(x)[is.na(y$total_art_pct),'total_art_pct'] ==0))
+  expect_true(all(horizons(x)[is.na(y$total_frags_pct),'total_frags_pct'] == 0))
+  expect_true(all(horizons(x)[is.na(y$total_art_pct),'total_art_pct'] == 0))
 })
 
 test_that("fetchNASIS(from='components') returns reasonable data", {
 
   # hack for in-house testing only
   # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if(!local_NASIS_defined()) {
-    skip("in-house testing only")
+  if (!local_NASIS_defined(static_path = static_path)) {
+    skip("local NASIS database not available")
   }
 
   # must have components to complete test
-  check_local_NASIS_components_available()
+  check_local_NASIS_components_available(static_path = static_path)
 
   # get data
   # ignore warnings for now
-  x <- suppressWarnings(fetchNASIS(from='components'))
-
+  x <- suppressWarnings(fetchNASIS(from = 'components'))
+ 
   # expected outcomes
   expect_true(inherits(x, 'SoilProfileCollection'))
   expect_equal(nrow(site(x)) > 0, TRUE)
@@ -117,17 +120,17 @@ test_that("fetchNASIS(from='components') returns reasonable data", {
 })
 
 test_that("get_text_notes_from_NASIS_db works", {
-  if (!local_NASIS_defined()) {
-    skip("in-house testing only")
+  if (!local_NASIS_defined(static_path = static_path)) {
+    skip("local NASIS database not available")
   }
   expect_silent({get_text_notes_from_NASIS_db()})
 })
 
 test_that("getHzErrorsNASIS works", { 
-  if (!local_NASIS_defined()) {
-    skip("in-house testing only")
+  if (!local_NASIS_defined(static_path = static_path)) {
+    skip("local NASIS database not available")
   }
-  expect_silent({suppressMessages(getHzErrorsNASIS())})
+  expect_silent({suppressMessages(getHzErrorsNASIS(static_path = static_path))})
 })
 
 

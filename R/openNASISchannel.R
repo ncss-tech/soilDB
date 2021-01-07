@@ -42,11 +42,15 @@
 #'   message('could not find `nasis_local` ODBC data source')
 #' }
 #' @importFrom odbc odbcListDataSources
-#' 
-local_NASIS_defined <- function() {
-  if ('nasis_local' %in% odbc::odbcListDataSources()$name) {
-    return(TRUE)
-  } else {
-    return(FALSE)
+#' @importFrom RSQLite dbCanConnect SQLite
+local_NASIS_defined <- function(static_path = NULL) {
+  if (is.null(static_path)) {
+    if ('nasis_local' %in% odbc::odbcListDataSources()$name) {
+      return(TRUE)
+    } else {
+      return(FALSE)
+    }
+  } else { 
+    return(RSQLite::dbCanConnect(RSQLite::SQLite(), static_path))
   }
 }
