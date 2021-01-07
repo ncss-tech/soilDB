@@ -97,3 +97,6 @@ Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for I
 
 Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39-53. doi: 10.1016/j.jhydrol.2017.01.004.
 }
+\author{
+D.E. Beaudette, Todd Skags (ARS), Richard Reid
+}

@@ -81,7 +81,8 @@
 #' 
 #' @description A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). See the \href{http://ncss-tech.github.io/AQP/soilDB/ROSETTA-API.html}{related tutorial} for additional examples.
 #'  
-
+#' @author D.E. Beaudette, Todd Skags (ARS), Richard Reid
+#'  
 #' @param x a \code{data.frame} of required soil properties, may contain other columns, see details
 #' 
 #' @param vars character vector of column names in \code{x} containing relevant soil property values, see details
