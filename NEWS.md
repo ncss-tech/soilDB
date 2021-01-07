@@ -1,4 +1,4 @@
-# soilDB 2.5.9 (2020-11-30)
+# soilDB 2.5.9 (2021-01-07)
  * `HenryTimeLine` moved to {sharpshootR} package
  * new functions for hitting experimental WCS interfaces to gSSURGO, gNATSGO, and ISSR-800 grids:
    + `mukey.wcs()` and `ISSR800.wcs()`
