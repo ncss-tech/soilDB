@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.9</span>
       </span>
     </div>
 
@@ -151,6 +151,7 @@
 </ul>The standard set of "site" and "horizon" data are returned as a <code>SoilProfileCollection</code> object (<code>extended=FALSE</code>. The "extended" suite of summary data can be requested by setting <code>extended=TRUE</code>. The resulting object will be a <code>list</code> with the following elements:)<dl>
   <dt>SPC</dt><dd><p><code>SoilProfileCollection</code> containing standards "site" and "horizon" data</p></dd>
   <dt>competing</dt><dd><p>competing soil series from the SC database snapshot</p></dd>
+  <dt>geog_assoc_soils</dt><dd><p>geographically associated soils, extracted from named section in the OSD</p></dd>
   <dt>geomcomp</dt><dd><p>empirical probabilities for geomorphic component, derived from the current SSURGO snapshot</p></dd>
   <dt>hillpos</dt><dd><p>empirical probabilities for hillslope position, derived from the current SSURGO snapshot</p></dd>
   <dt>mtnpos</dt><dd><p>empirical probabilities for mountain slope position, derived from the current SSURGO snapshot</p></dd>
@@ -202,9 +203,10 @@
     <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>x</span>, <span class='fl'>1</span>)
   }
 }
-</div><div class='img'><img src='fetchOSD-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; List of 13
+</div><div class='img'><img src='fetchOSD-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; List of 14
 #&gt;  $ SPC             :Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots
 #&gt;  $ competing       :'data.frame':	84 obs. of  3 variables:
+#&gt;  $ geog_assoc_soils:'data.frame':	77 obs. of  2 variables:
 #&gt;  $ geomcomp        :'data.frame':	11 obs. of  9 variables:
 #&gt;  $ hillpos         :'data.frame':	11 obs. of  8 variables:
 #&gt;  $ mtnpos          :'data.frame':	1 obs. of  9 variables:

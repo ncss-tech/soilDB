@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.9</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Full text searching of the USDA-NRCS Official Series Descriptions</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/OSDquery.R'><code>R/OSDquery.R</code></a></small>
     <div class="hidden name"><code>OSDquery.Rd</code></div>
     </div>
 
@@ -120,16 +120,24 @@
     <p>This is a rough example of how chunks of text parsed from OSD records can be made search-able with the <a href='https://www.postgresql.org/docs/9.5/textsearch.html'>PostgreSQL fulltext indexing</a> and query system (<a href='https://www.postgresql.org/docs/9.5/datatype-textsearch.html'>syntax details</a>). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. This is the R API corresponding to <a href='https://casoilresource.lawr.ucdavis.edu/osd-search/'>this webpage</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>OSDquery</span>(mlra=<span class='st'>''</span>, taxonomic_class=<span class='st'>''</span>, typical_pedon=<span class='st'>''</span>, 
-  brief_narrative=<span class='st'>''</span>, ric=<span class='st'>''</span>, use_and_veg=<span class='st'>''</span>, 
-  competing_series=<span class='st'>''</span>, geog_location=<span class='st'>''</span>, geog_assoc_soils=<span class='st'>''</span>)</pre>
+    <pre class="usage"><span class='fu'>OSDquery</span>(
+  mlra = <span class='st'>""</span>,
+  taxonomic_class = <span class='st'>""</span>,
+  typical_pedon = <span class='st'>""</span>,
+  brief_narrative = <span class='st'>""</span>,
+  ric = <span class='st'>""</span>,
+  use_and_veg = <span class='st'>""</span>,
+  competing_series = <span class='st'>""</span>,
+  geog_location = <span class='st'>""</span>,
+  geog_assoc_soils = <span class='st'>""</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>mlra</th>
-      <td><p>a comma-delimited list of MLRA to search</p></td>
+      <td><p>a comma-delimited list of MLRA to search ('17,18,22A')</p></td>
     </tr>
     <tr>
       <th>taxonomic_class</th>
@@ -153,7 +161,7 @@
     </tr>
     <tr>
       <th>competing_series</th>
-      <td><p>search competing section</p></td>
+      <td><p>search competing series section</p></td>
     </tr>
     <tr>
       <th>geog_location</th>
@@ -165,51 +173,51 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a <code>data.frame</code> object containing soil series names that match patterns supplied as arguments.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>See <a href='https://casoilresource.lawr.ucdavis.edu/osd-search/'>this webpage</a> for more information.</p>  
-<p></p><dl>
-    <dt></dt><dd><p>family level taxa are derived from SC database, not parsed OSD records</p></dd>
-    <dt></dt><dd><p>MLRA are derived via spatial intersection (SSURGO x MLRA polygons)</p></dd>
-    <dt></dt><dd><p>MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)</p></dd>
-    <dt></dt><dd><p>logical AND: &amp;</p></dd>
-    <dt></dt><dd><p>logical OR: |</p></dd>
-    <dt></dt><dd><p>wildcard, e.g. rhy-something rhy:*</p></dd>
-    <dt></dt><dd><p>search terms with spaces need doubled single quotes: ''san joaquin''</p></dd>
-    <dt></dt><dd><p>combine search terms into a single expression: (grano:* | granite)</p></dd>
-  
+    <p>See <a href='https://casoilresource.lawr.ucdavis.edu/osd-search/'>this webpage</a> for more information.</p>
+<dl>
+  <dt></dt><dd><p>family level taxa are derived from SC database, not parsed OSD records</p></dd>
+  <dt></dt><dd><p>MLRA are derived via spatial intersection (SSURGO x MLRA polygons)</p></dd>
+  <dt></dt><dd><p>MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)</p></dd>
+  <dt></dt><dd><p>logical AND: &amp;</p></dd>
+  <dt></dt><dd><p>logical OR: |</p></dd>
+  <dt></dt><dd><p>wildcard, e.g. rhy-something rhy:*</p></dd>
+  <dt></dt><dd><p>search terms with spaces need doubled single quotes: ''san joaquin''</p></dd>
+  <dt></dt><dd><p>combine search terms into a single expression: (grano:* | granite)</p></dd>
+
 </dl> 
-  
+
 <p>Related documentation can be found in the following tutorials</p><ul>
 <li><p><a href='http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html'>overview of all soil series query functions</a></p></li>
 <li><p><a href='https://ncss-tech.github.io/AQP/soilDB/competing-series.html'>competing soil series</a></p></li>
 <li><p><a href='https://ncss-tech.github.io/AQP/soilDB/siblings.html'>siblings</a></p></li>
 </ul>
 
-  
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>a <code>data.frame</code> object containing soil series names that match patterns supplied as arguments.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p><a href='https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587'>https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587</a></p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>SoilWeb maintains a snapshot of the Official Series Description data.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><a href='https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587'>https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='fetchOSD.html'>fetchOSD</a></code></p></div>
+    <div class='dont-index'><p><code><a href='fetchOSD.html'>fetchOSD</a>, <a href='siblings.html'>siblings</a>, <a href='fetchOSD.html'>fetchOSD</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+    <pre class="examples"><div class='input'>
+
+<span class='co'># \donttest{</span>
 <span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
-    <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>() <span class='op'>&amp;</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span>)) {
-    
+   <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>() <span class='op'>&amp;</span>
+   <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span>)) {
+  
   <span class='co'># find all series that list Pardee as a geographically associated soil.</span>
   <span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'>OSDquery</span>(geog_assoc_soils = <span class='st'>'pardee'</span>)
   
@@ -221,6 +229,7 @@
   <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>SPC</span>)
 }
 </div><div class='img'><img src='OSDquery-1.png' alt='' width='768' height='475' /></div><div class='input'><span class='co'># }</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

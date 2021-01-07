@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.9</span>
       </span>
     </div>
 
@@ -114,12 +114,27 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="soildb-259-2020-11-19" class="section level1">
+    <div id="soildb-259-2021-01-07" class="section level1">
 <h1 class="page-header" data-toc-text="2.5.9">
-<a href="#soildb-259-2020-11-19" class="anchor"></a>soilDB 2.5.9 (2020-11-19)<small> Unreleased </small>
+<a href="#soildb-259-2021-01-07" class="anchor"></a>soilDB 2.5.9 (2021-01-07)<small> Unreleased </small>
 </h1>
 <ul>
+<li>
+<code>HenryTimeLine</code> moved to {sharpshootR} package</li>
+<li>new functions for hitting experimental WCS interfaces to gSSURGO, gNATSGO, and ISSR-800 grids:
+<ul>
+<li>
+<code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code> and <code><a href="../reference/ISSR800.wcs.html">ISSR800.wcs()</a></code>
+</li>
+</ul>
+</li>
 <li>new function <code>ROSETTA</code> for accessing the new ROSETTA model API (c/o Todd Skaggs, USDA-ARS)</li>
+<li>
+<code><a href="../reference/fetchOSD.html">fetchOSD(..., extended=TRUE)</a></code> gains geographically associated soils, parsed from OSD (thanks AGB)</li>
+<li>
+<code>fetchSDA_spatial</code> now can return soil survey area polygons using <code>geom.src = "sapolygon"</code> with <code>x</code> as a vector of area symbols (<code>areasymbol</code>) or legend keys (<code>lkey</code>). For <code>sapolygon</code> results, the <code>method</code> and <code>add.field</code> arguments work the same as for <code>mupolygon</code>, only now both geometries can be returned with fields from the <code>legend</code> table.</li>
+<li>
+<code>fetchSDA_spatial</code> now can return STATSGO <code>gsmmupolygon</code> geometry with <code>db = "STATSGO"</code>; these data are linked to <code>mapunit</code> and (national) <code>legend</code> just like <code>mupolygon</code>.</li>
 </ul>
 </div>
     <div id="soildb-258-2020-10-20" class="section level1">
@@ -256,7 +271,7 @@
 <li>
 <code><a href="../reference/fetchHenry.html">fetchHenry()</a></code> and fetchSCAN() now include water year/day (Oct 1 – Sep 30)</li>
 <li>
-<code><a href="../reference/fetchHenry.html">HenryTimeLine()</a></code> convenience function added</li>
+<code>HenryTimeLine()</code> convenience function added</li>
 <li>bug fix in <code><a href="../reference/fetchOSD.html">fetchOSD(..., extended=TRUE)</a></code> when no climate data available</li>
 <li>bug fix in <code><a href="../reference/SDA_query.html">SDA_query()</a></code>
 </li>

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.9</span>
       </span>
     </div>
 
@@ -75,27 +75,31 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Get the stable version from CRAN:</p>
-<p><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages('soilDB', dep=TRUE)</a></code></p>
+<p><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages('soilDB', dependencies = TRUE)</a></code></p>
 <p>Get the development version from Github:</p>
-<p><code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("ncss-tech/soilDB", dependencies=FALSE, upgrade=FALSE, build=FALSE)</a></code></p>
+<p><code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("ncss-tech/soilDB", dependencies = FALSE, upgrade = FALSE, build = FALSE)</a></code></p>
 </div>
 <div id="website" class="section level2">
 <h2 class="hasAnchor">
 <a href="#website" class="anchor"></a>Website</h2>
-<p><a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a></p>
+<ul>
+<li><a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a></li>
+</ul>
 </div>
-<div id="important-changes-in-soildb-20" class="section level2">
+<div id="soildb-20" class="section level2">
 <h2 class="hasAnchor">
-<a href="#important-changes-in-soildb-20" class="anchor"></a>Important changes in soilDB-2.0</h2>
+<a href="#soildb-20" class="anchor"></a>soilDB 2.0</h2>
 <div id="nasis" class="section level3">
 <h3 class="hasAnchor">
 <a href="#nasis" class="anchor"></a>NASIS</h3>
 <ul>
 <li>low-level functions return empty <code>data.frame</code> objects when local database (or selected set) is empty</li>
-<li>fetchNASIS() is now a wrapper around pedon and component “fetch” functions</li>
-<li>uncode() is now used in all queries to local NASIS database</li>
-<li>many (coded) column names in pedon @site and @horizons have changed</li>
-<li>lower cases is used for all un-coded data</li>
+<li>
+<code><a href="reference/fetchNASIS.html">fetchNASIS()</a></code> is now a wrapper around pedon and component “fetch” functions</li>
+<li>
+<code><a href="reference/uncode.html">uncode()</a></code> is now used in all queries to local NASIS database</li>
+<li>many (coded) column names in pedon <code>@site</code> and <code>@horizons</code> have changed</li>
+<li>lower case is used for all un-coded data</li>
 </ul>
 </div>
 </div>
@@ -111,6 +115,22 @@
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/SDA_query_features.html"><code>SDA_query_features</code></a></li>
 </ul>
 </li>
+<li>SSURGO Local Geodatabases
+<ul>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchGDB.html"><code>fetchGDB</code></a></li>
+</ul>
+</li>
+<li>NASIS local database
+<ul>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchNASIS.html"><code>fetchNASIS</code></a></li>
+</ul>
+</li>
+<li>NASIS WWW interface
+<ul>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/parseWebReport.html"><code>parseWebReport</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchLIMS_component.html"><code>fetchNASISWebReport</code></a></li>
+</ul>
+</li>
 <li>SSURGO/KSSL via SoilWeb
 <ul>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchKSSL.html"><code>fetchKSSL</code></a></li>
@@ -118,6 +138,7 @@
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/siblings.html"><code>siblings</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/OSDquery.html"><code>OSDquery</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/seriesExtent.html"><code>seriesExtent</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html"><code>taxaExtent</code></a></li>
 </ul>
 </li>
 <li>SCAN/SNOTEL
@@ -131,15 +152,9 @@
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchHenry.html"><code>fetchHenry</code></a></li>
 </ul>
 </li>
-<li>NASIS local database
+<li>SoilGrids
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchNASIS.html"><code>fetchNASIS</code></a></li>
-</ul>
-</li>
-<li>NASIS WWW interface
-<ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/parseWebReport.html"><code>parseWebReport</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchLIMS_component.html"><code>fetchNASISWebReport</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchSoilGrids.html"><code>fetchSoilGrids</code></a></li>
 </ul>
 </li>
 </ul>
@@ -155,6 +170,7 @@
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/simplifyColorData.html"><code>simplifyColorData</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/uncode.html"><code>uncode</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/uncode.html"><code>code</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/get_NOAA_GHCND.html"><code>get_NOAA_GHCND</code></a></li>
 </ul>
 </div>
 <div id="related-documentation" class="section level2">
@@ -178,39 +194,40 @@
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://ncss-tech.github.io/AQP">soilDB</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/ncss-tech/aqp">sharpshootR</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://latticeextra.r-forge.r-project.org">latticeExtra</a></span>)
-
-<span class="co"># get morphology + extended summaries</span>
-<span class="kw">soils</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'cecil'</span>, <span class="st">'altavista'</span>, <span class="st">'lloyd'</span>, <span class="st">'wickham'</span>, <span class="st">'wilkes'</span>,  <span class="st">'chewacla'</span>, <span class="st">'congaree'</span>)
-<span class="kw">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetchOSD.html">fetchOSD</a></span>(<span class="kw">soils</span>, extended = <span class="fl">TRUE</span>)
-
-<span class="co"># experimental viz of hillslope position, from SSURGO component records</span>
-<span class="kw">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/vizHillslopePosition.html">vizHillslopePosition</a></span>(<span class="kw">s</span><span class="op">$</span><span class="kw">hillpos</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw">res</span><span class="op">$</span><span class="kw">fig</span>)
-
-<span class="co"># profile sketches</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mar=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">4</span>), xpd=<span class="fl">NA</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">s</span><span class="op">$</span><span class="kw">SPC</span>, plot.order=<span class="kw">res</span><span class="op">$</span><span class="kw">order</span>, cex.names=<span class="fl">1</span>, axis.line.offset = <span class="op">-</span><span class="fl">0.1</span>, width=<span class="fl">0.2</span>)
-
-
-<span class="co"># siblings</span>
-<span class="kw">s</span> <span class="op">&lt;-</span> <span class="st">'Amador'</span>
-<span class="kw">amador</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/siblings.html">siblings</a></span>(<span class="kw">s</span>, only.major = <span class="fl">FALSE</span>, component.data = <span class="fl">TRUE</span>)
-
-<span class="co"># limit to named soil series</span>
-<span class="kw">sib.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="kw">amador</span><span class="op">$</span><span class="kw">sib.data</span>, subset= <span class="op">!</span> <span class="kw">compkind</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Miscellaneous area'</span>, <span class="st">'Family'</span>, <span class="st">'Taxon above family'</span>))
-
-<span class="co"># get parsed OSD records</span>
-<span class="kw">sibs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fetchOSD.html">fetchOSD</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">s</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw">amador</span><span class="op">$</span><span class="kw">sib</span><span class="op">$</span><span class="kw">sibling</span>)), extended = <span class="fl">TRUE</span>)
-
-<span class="co"># order by subgroup taxonomy</span>
-<span class="co"># invert colors</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mar=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>), fg=<span class="st">'white'</span>, bg=<span class="st">'black'</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/sharpshootR/man/SoilTaxonomyDendrogram.html">SoilTaxonomyDendrogram</a></span>(<span class="kw">sibs</span><span class="op">$</span><span class="kw">SPC</span>, dend.width = <span class="fl">1.5</span>, y.offset = <span class="fl">0.4</span>, scaling.factor = <span class="fl">0.02</span>, width=<span class="fl">0.2</span>, cex.taxon.labels = <span class="fl">1</span>, cex.names = <span class="fl">1</span>)
-</pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(aqp)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(soilDB)</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(sharpshootR)</a>
+<a class="sourceLine" id="cb1-4" title="4"></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co"># get morphology + extended summaries</span></a>
+<a class="sourceLine" id="cb1-6" title="6">soils &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">'cecil'</span>, <span class="st">'altavista'</span>, <span class="st">'lloyd'</span>, <span class="st">'wickham'</span>, <span class="st">'wilkes'</span>,  <span class="st">'chewacla'</span>, <span class="st">'congaree'</span>)</a>
+<a class="sourceLine" id="cb1-7" title="7">s &lt;-<span class="st"> </span><span class="kw">fetchOSD</span>(soils, <span class="dt">extended =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-8" title="8"></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="co"># viz of hillslope position, from SSURGO component records</span></a>
+<a class="sourceLine" id="cb1-10" title="10">res &lt;-<span class="st"> </span><span class="kw">vizHillslopePosition</span>(s<span class="op">$</span>hillpos, <span class="dt">annotation.cex =</span> <span class="fl">0.9</span>)</a>
+<a class="sourceLine" id="cb1-11" title="11"><span class="kw">print</span>(res<span class="op">$</span>fig)</a></code></pre></div>
+<p><img src=".github/images/hillslope-1.png" width="1056"></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># profile sketches</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">4</span>), <span class="dt">xpd=</span><span class="ot">NA</span>)</a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw">plot</span>(s<span class="op">$</span>SPC, <span class="dt">plot.order=</span>res<span class="op">$</span>order, <span class="dt">cex.names=</span><span class="dv">1</span>, <span class="dt">axis.line.offset =</span> <span class="fl">-0.1</span>, <span class="dt">width=</span><span class="fl">0.2</span>)</a></code></pre></div>
+<p><img src=".github/images/sketches-1.png" width="1344"></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># siblings</span></a>
+<a class="sourceLine" id="cb3-2" title="2">s &lt;-<span class="st"> 'Amador'</span></a>
+<a class="sourceLine" id="cb3-3" title="3">amador &lt;-<span class="st"> </span><span class="kw">siblings</span>(s, <span class="dt">only.major =</span> <span class="ot">FALSE</span>, <span class="dt">component.data =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-4" title="4"></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co"># limit to named soil series</span></a>
+<a class="sourceLine" id="cb3-6" title="6">sib.data &lt;-<span class="st"> </span><span class="kw">subset</span>(amador<span class="op">$</span>sib.data, <span class="op">!</span>compkind <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">'Miscellaneous area'</span>, <span class="st">'Family'</span>, <span class="st">'Taxon above family'</span>))</a>
+<a class="sourceLine" id="cb3-7" title="7"></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co"># get parsed OSD records</span></a>
+<a class="sourceLine" id="cb3-9" title="9">sibs &lt;-<span class="st"> </span><span class="kw">fetchOSD</span>(<span class="kw">c</span>(s, <span class="kw">unique</span>(amador<span class="op">$</span>sib<span class="op">$</span>sibling)), <span class="dt">extended =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb3-10" title="10"></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co"># invert colors</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="dt">fg=</span><span class="st">'white'</span>, <span class="dt">bg=</span><span class="st">'black'</span>)</a>
+<a class="sourceLine" id="cb3-13" title="13"></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="co"># create taxonomy dendrogram</span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="kw">SoilTaxonomyDendrogram</span>(sibs<span class="op">$</span>SPC, <span class="dt">dend.width =</span> <span class="fl">1.5</span>, <span class="dt">y.offset =</span> <span class="fl">0.4</span>, </a>
+<a class="sourceLine" id="cb3-16" title="16">                       <span class="dt">scaling.factor =</span> <span class="fl">0.02</span>, <span class="dt">width =</span> <span class="fl">0.2</span>, </a>
+<a class="sourceLine" id="cb3-17" title="17">                       <span class="dt">cex.taxon.labels =</span> <span class="dv">1</span>, <span class="dt">cex.names =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p><img src=".github/images/dendrogram-1.png" width="1344"></p>
 </div>
 <div id="dependency-graph" class="section level2">
 <h2 class="hasAnchor">
@@ -251,7 +268,7 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/ncss-tech/soilDB"><img src="https://travis-ci.org/ncss-tech/soilDB.svg?branch=master" alt="Travis-CI Build Status"></a></li>
+<li><a href="https://github.com/ncss-tech/soilDB/actions"><img src="https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 <li><a href="https://cran.r-project.org/package=soilDB"><img src="http://www.r-pkg.org/badges/version/soilDB" alt="CRAN_Status_Badge"></a></li>
 <li><a href="https://cran.r-project.org/package=soilDB"><img src="http://cranlogs.r-pkg.org/badges/grand-total/soilDB" alt="Total_Downloads"></a></li>
 </ul>

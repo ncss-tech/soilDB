@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SCAN and SNOTEL Station Metadata — SCAN_SNOTEL_metadata • soilDB</title>
+<title>ISSR-800 Web Coverage Service (WCS) — ISSR800.wcs • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="SCAN and SNOTEL Station Metadata — SCAN_SNOTEL_metadata" />
-<meta property="og:description" content="SCAN and SNOTEL station metadata, a work in progress." />
+<meta property="og:title" content="ISSR-800 Web Coverage Service (WCS) — ISSR800.wcs" />
+<meta property="og:description" content="ISSR-800 Web Coverage Service (WCS)" />
 
 
 
@@ -111,39 +111,54 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>SCAN and SNOTEL Station Metadata</h1>
-    
-    <div class="hidden name"><code>SCAN_SNOTEL_metadata.Rd</code></div>
+    <h1>ISSR-800 Web Coverage Service (WCS)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/ISSR800.R'><code>R/ISSR800.R</code></a></small>
+    <div class="hidden name"><code>ISSR800.wcs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>SCAN and SNOTEL station metadata, a work in progress.</p>
+    <p>ISSR-800 Web Coverage Service (WCS)</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"SCAN_SNOTEL_metadata"</span>)</pre>
+    <pre class="usage"><span class='fu'>ISSR800.wcs</span>(<span class='kw'>var</span>, <span class='kw'>aoi</span>, res = <span class='fl'>800</span>, quiet = <span class='fl'>FALSE</span>)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>var</th>
+      <td><p>ISSR-800 grid name, see details</p></td>
+    </tr>
+    <tr>
+      <th>aoi</th>
+      <td><p>area of interest (AOI) defined using a <code>list</code> or <code>Spatial*</code> object, see details</p></td>
+    </tr>
+    <tr>
+      <th>res</th>
+      <td><p>grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>logical, passed to <code>download.file</code> to enable / suppress URL and progress bar for download.</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame with 1092 observations on the following 12 variables.</p><dl>
-    <dt><code>Name</code></dt><dd><p>station name</p></dd>
-    <dt><code>Site</code></dt><dd><p>station ID</p></dd>
-    <dt><code>State</code></dt><dd><p>state</p></dd>
-    <dt><code>Network</code></dt><dd><p>sensor network: SCAN / SNOTEL</p></dd>
-    <dt><code>County</code></dt><dd><p>county</p></dd>
-    <dt><code>Elevation_ft</code></dt><dd><p>station elevation in feet</p></dd>
-    <dt><code>Latitude</code></dt><dd><p>latitude of station</p></dd>
-    <dt><code>Longitude</code></dt><dd><p>longitude of station</p></dd>
-    <dt><code>HUC</code></dt><dd><p>associated watershed</p></dd>
-    <dt><code>climstanm</code></dt><dd><p>climate station name (TODO: remove this column)</p></dd>
-    <dt><code>upedonid</code></dt><dd><p>associated user pedon ID</p></dd>
-    <dt><code>pedlabsampnum</code></dt><dd><p>associated lab sample ID</p></dd>
-  
-</dl>
-
+    <p><code>raster</code> object containing indexed map unit keys and associated raster attribute table</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>These data have been compiled from several sources and represent a progressive effort to organize SCAN/SNOTEL station metadata. Therefore, some records may be missing or incorrect. Details on this effort can be found at the associated GitHub issue page: <a href='https://github.com/ncss-tech/soilDB/issues/61'>https://github.com/ncss-tech/soilDB/issues/61</a>.</p>
+    <p><code>aoi</code> should be specified as either a <code>Spatial*</code> object or a <code>list</code> containing:</p>
+<dl>
+  <dt><code>aoi</code></dt><dd><p>bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)</p></dd>
+  <dt><code>crs</code></dt><dd><p>coordinate reference system of BBOX, e.g. '+init=EPSG:4326'</p></dd>
+
+</dl>
+
+<p>The WCS query is parameterized using <code><a href='https://rdrr.io/pkg/raster/man/extent.html'>raster::extent</a></code> derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the ISSR-800 grids.</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>This is an experimental interface that can change at any time.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

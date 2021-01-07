@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.9</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>A simple interface to the <a href='https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/'>ROSETTA model</a> for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). See the <a href='http://ncss-tech.github.io/AQP/soilDB/ROSETTA-API.html'>related tutorial</a> for additional examples.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ROSETTA</span>(<span class='kw'>x</span>, <span class='kw'>vars</span>, v = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"1"</span>, <span class='st'>"3"</span>), m = <span class='st'>"0"</span>, chunkSize = <span class='fl'>10000</span>, conf = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>ROSETTA</span>(<span class='kw'>x</span>, <span class='kw'>vars</span>, v = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"3"</span>), chunkSize = <span class='fl'>10000</span>, conf = <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,11 +135,7 @@
     </tr>
     <tr>
       <th>v</th>
-      <td><p>ROSETTA model version number: '1' or '3'</p></td>
-    </tr>
-    <tr>
-      <th>m</th>
-      <td><p>ROSETTA model type: '0' (automatic, best model selection), '2' (sand, silt, clay), '3' (sand, silt, clay, Db), '4' (sand, silt, clay, Db, 33kPa WT), or '5' (sand, silt, clay, Db, 33kPa WT, 1500kPa WT). Model type '0' is usually the best approach as the most appropriate model (e.g. in light of potential missing values) is selected by the API.</p></td>
+      <td><p>ROSETTA model version number: '1', '2', or '3', see details and references.</p></td>
     </tr>
     <tr>
       <th>chunkSize</th>
@@ -164,6 +160,20 @@
  <dt>npar: </dt><dd><p>index of pore size distribution, log10-tranformed values with units of 1/cm</p></dd>
  <dt>ksat: </dt><dd><p>saturated hydraulic conductivity, log10-transformed values with units of cm/day</p></dd>
  
+ <dt>.rosetta.model</dt><dd><p></p></dd>
+ 
+ 
+
+</dl>
+
+<p>Three versions of the ROSETTA model are available, selected using <code>v = 1</code>, <code>v = 2</code>, or <code>v = 3</code>.</p>
+<dl>
+
+<dt>version 1</dt><dd><p>Schaap, M.G., F.J. Leij, and M.Th. van Genuchten. 2001. ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions. Journal of Hydrology 251(3-4): 163-176. doi: 10.1016/S0022-1694(01)00466-8.</p></dd>
+
+<dt>version 2</dt><dd><p>Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils. Vadose Zone Journal 3(4): 1455-1463. doi: https://doi.org/10.2136/vzj2004.1455.</p></dd>
+
+<dt>version 3</dt><dd><p>Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39-53. doi: 10.1016/j.jhydrol.2017.01.004.</p></dd>
 
 </dl>
 
@@ -195,6 +205,9 @@
 <p>Schaap, M.G., F.J. Leij and M. Th. van Genuchten. 1999. A bootstrap-neural network approach to predict soil hydraulic parameters. In: van Genuchten, M.Th., F.J. Leij, and L. Wu (eds), Proc. Int. Workshop, Characterization and Measurements of the Hydraulic Properties of Unsaturated Porous Media, pp 1237-1250, University of California, Riverside, CA.</p>
 <p>Schaap, M.G., F.J. Leij, 1999, Improved prediction of unsaturated hydraulic conductivity with the Mualem-van Genuchten, Submitted to Soil Sci. Soc. Am. J.</p>
 <p>van Genuchten, M.Th. 1980. A closed-form equation for predicting the hydraulic conductivity of unsaturated soils. Soil Sci. Am. J. 44:892-898.</p>
+<p>Schaap, M.G., F.J. Leij, and M.Th. van Genuchten. 2001. ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions. Journal of Hydrology 251(3-4): 163-176. doi: 10.1016/S0022-1694(01)00466-8.</p>
+<p>Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils. Vadose Zone Journal 3(4): 1455-1463. doi: https://doi.org/10.2136/vzj2004.1455.</p>
+<p>Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39-53. doi: 10.1016/j.jhydrol.2017.01.004.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

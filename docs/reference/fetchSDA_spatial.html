@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Query SDA and Return Spatial Data — fetchSDA_spatial • soilDB</title>
+<title>Query Soil Data Access and Return Spatial Data — fetchSDA_spatial • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,10 @@
 
 
 
-<meta property="og:title" content="Query SDA and Return Spatial Data — fetchSDA_spatial" />
-<meta property="og:description" content="This is a high-level &quot;fetch&quot; method to facilitate spatial queries to Soil Data Access (SDA) based on mukey or nationalmusym.
-A SDA spatial query is made returning geometry and key identifying information about the mapunit. Additional columns from the mapunit table can be included using add.fields argument.
+<meta property="og:title" content="Query Soil Data Access and Return Spatial Data — fetchSDA_spatial" />
+<meta property="og:description" content="This is a high-level &quot;fetch&quot; method to facilitate spatial queries to Soil Data Access (SDA) based on mapunit key (mukey) and national mapunit symbol (nationalmusym) for mupolygon (SSURGO) or gsmmupolygon (STATSGO) geometry OR legend key (lkey) and area symbols (areasymbol) for sapolygon (Soil Survey Area; SSA) geometry).
+A Soil Data Access spatial query is made returning geometry and key identifying information about the mapunit or area of interest. Additional columns from the mapunit or legend table can be included using add.fields argument.
 This function automatically &quot;chunks&quot; the input vector (using soilDB::makeChunks) of mapunit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the chunk.size setting and the length of your input vector. If you are working with many mapunits and/or large extents, you may need to decrease this number in order to have more chunks.
-The &quot;sweet-spot&quot; chunk.size should optimize number of queries relative to the typical amount of information in each query. There is a 100,000 record limit per query and the type / complexity of the geometry affects the total result size; there is a ~32Mb JSON serialization limit.
 Querying regions with complex mapping may require smaller chunk.size. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform &quot;poorly&quot; [slow or error] no matter what the chunk size is. Shuffling the order of the inputs using sample may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use muacres as a heuristic to adjust for total acreage within chunks." />
 
 
@@ -76,7 +75,7 @@ Querying regions with complex mapping may require smaller chunk.size. Numericall
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.5.9</span>
       </span>
     </div>
 
@@ -115,16 +114,15 @@ Querying regions with complex mapping may require smaller chunk.size. Numericall
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Query SDA and Return Spatial Data</h1>
+    <h1>Query Soil Data Access and Return Spatial Data</h1>
     <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/fetchSDA_spatial.R'><code>R/fetchSDA_spatial.R</code></a></small>
     <div class="hidden name"><code>fetchSDA_spatial.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is a high-level "fetch" method to facilitate spatial queries to Soil Data Access (SDA) based on <code>mukey</code> or <code>nationalmusym</code>.</p>
-<p>A SDA spatial query is made returning geometry and key identifying information about the mapunit. Additional columns from the mapunit table can be included using <code>add.fields</code> argument.</p>
+    <p>This is a high-level "fetch" method to facilitate spatial queries to Soil Data Access (SDA) based on mapunit key (<code>mukey</code>) and national mapunit symbol (<code>nationalmusym</code>) for <code>mupolygon</code> (SSURGO) or <code>gsmmupolygon</code> (STATSGO) geometry OR legend key (<code>lkey</code>) and area symbols (<code>areasymbol</code>) for <code>sapolygon</code> (Soil Survey Area; SSA) geometry).</p>
+<p>A Soil Data Access spatial query is made returning geometry and key identifying information about the mapunit or area of interest. Additional columns from the mapunit or legend table can be included using <code>add.fields</code> argument.</p>
 <p>This function automatically "chunks" the input vector (using <code><a href='makeChunks.html'>soilDB::makeChunks</a></code>) of mapunit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the <code>chunk.size</code> setting and the length of your input vector. If you are working with many mapunits and/or large extents, you may need to decrease this number in order to have more chunks.</p>
-<p>The "sweet-spot" <code>chunk.size</code> should optimize number of queries relative to the typical amount of information in each query. There is a 100,000 record limit per query and the type / complexity of the geometry affects the total result size; there is a ~32Mb JSON serialization limit.</p>
 <p>Querying regions with complex mapping may require smaller <code>chunk.size</code>. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform "poorly" [slow or error] no matter what the chunk size is. Shuffling the order of the inputs using <code>sample</code> may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use <code>muacres</code> as a heuristic to adjust for total acreage within chunks.</p>
     </div>
 
@@ -132,6 +130,8 @@ Querying regions with complex mapping may require smaller chunk.size. Numericall
   <span class='kw'>x</span>,
   by.col = <span class='st'>"mukey"</span>,
   method = <span class='st'>"feature"</span>,
+  geom.src = <span class='st'>"mupolygon"</span>,
+  db = <span class='st'>"SSURGO"</span>,
   add.fields = <span class='kw'>NULL</span>,
   chunk.size = <span class='fl'>10</span>,
   verbose = <span class='fl'>TRUE</span>
@@ -142,19 +142,27 @@ Querying regions with complex mapping may require smaller chunk.size. Numericall
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A vector of MUKEYs or national mapunit symbols.</p></td>
+      <td><p>A vector of MUKEYs / national mapunit symbols (for mupolygon geometry); OR LKEYs / areasymbols (for sapolygon geometry)</p></td>
     </tr>
     <tr>
       <th>by.col</th>
-      <td><p>Column name containing mapunit identifier ("mukey" or "nmusym"); default: "mukey"</p></td>
+      <td><p>Column name containing mapunit identifier <code>"mukey"</code>, <code>"nmusym"</code>, or <code>"areasymbol"</code> for <code>geom.src</code> <code>sapolygon</code>; default is inferred from <code>is.numeric(x) == TRUE</code> for <code>mukey</code> or <code>lkey</code> and (<code>nationalmusym</code> or <code>areasymbol</code> otherwise.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>geometry result type: 'feature' returns polygons, 'bbox' returns the bounding box of each polygon, and 'point' returns a single point within each polygon.</p></td>
+      <td><p>geometry result type: <code>"feature"</code> returns polygons, <code>"bbox"</code> returns the bounding box of each polygon, and <code>"point"</code> returns a single point within each polygon.</p></td>
+    </tr>
+    <tr>
+      <th>geom.src</th>
+      <td><p>Either <code>mupolygon</code> or <code>sapolygon</code></p></td>
+    </tr>
+    <tr>
+      <th>db</th>
+      <td><p>Default: SSURGO. When <code>geom.src</code> is <code>mupolygon</code>, use STATSGO polygon geometry instead of SSURGO by setting <code>db = "STATSGO"</code></p></td>
     </tr>
     <tr>
       <th>add.fields</th>
-      <td><p>Column names from `mapunit` table to add to result. Must specify table name prefix `mapunit` before column name (e.g. `mapunit.muname`).</p></td>
+      <td><p>Column names from <code>mapunit</code> or <code>legend</code> table to add to result. Must specify parent table name as the prefix <code>mapunit</code> before column name e.g. <code>mapunit.muname</code>.</p></td>
     </tr>
     <tr>
       <th>chunk.size</th>
@@ -168,7 +176,10 @@ Querying regions with complex mapping may require smaller chunk.size. Numericall
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A Spatial*DataFrame corresponding to SDA spatial data for all MUKEYs / nmusyms requested. Default result contains mapunit delineation geometry with attribute table containing `gid`, `mukey` and `nationalmusym`, plus additional fields in result specified with `add.fields`.</p>
+    <p>A Spatial*DataFrame corresponding to SDA spatial data for all symbols requested. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with `add.fields`.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Note that STATSGO data are fetched using <code>CLIPAREASYMBOL = 'US'</code> to avoid duplicating state and national subsets of the geometry.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown</p>
@@ -180,27 +191,27 @@ Querying regions with complex mapping may require smaller chunk.size. Numericall
 
    <span class='co'># get spatial data for a single mukey</span>
     <span class='kw'>single.mukey</span> <span class='op'>&lt;-</span> <span class='fu'>fetchSDA_spatial</span>(x = <span class='st'>"2924882"</span>)
-    
+
     <span class='co'># demonstrate fetching full extent (multi-mukey) of national musym</span>
     <span class='kw'>full.extent.nmusym</span> <span class='op'>&lt;-</span> <span class='fu'>fetchSDA_spatial</span>(x = <span class='st'>"2x8l5"</span>, by = <span class='st'>"nmusym"</span>)
-    
+
     <span class='co'># compare extent of nmusym to single mukey within it</span>
     <span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://github.com/edzer/sp'>sp</a></span>)) {
      <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>full.extent.nmusym</span>, col = <span class='st'>"RED"</span>,border=<span class='fl'>0</span>)
      <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>single.mukey</span>, add = <span class='fl'>TRUE</span>, col = <span class='st'>"BLUE"</span>, border=<span class='fl'>0</span>)
     }
-    
+
     <span class='co'># demo adding a field (`muname`) to attribute table of result</span>
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'>fetchSDA_spatial</span>(x = <span class='st'>"2x8l5"</span>, by=<span class='st'>"nmusym"</span>, add.fields=<span class='st'>"muname"</span>))
 }
-</div><div class='output co'>#&gt; <span class='message'>Using 1 chunks...</span></div><div class='output co'>#&gt; <span class='message'>Chunk #1 completed (n_mukey = 1; 0.4 secs)</span></div><div class='output co'>#&gt; <span class='message'>Done in 0.4 secs; mean/chunk: 0.4 secs; mean/mukey: 0.38 secs.</span></div><div class='output co'>#&gt; <span class='message'>Using 1 chunks...</span></div><div class='output co'>#&gt; <span class='message'>Chunk #1 completed (n_mukey = 3; 1.5 secs)</span></div><div class='output co'>#&gt; <span class='message'>Done in 1.6 secs; mean/chunk: 1.5 secs; mean/mukey: 0.54 secs.</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: sp</span></div><div class='output co'>#&gt; <span class='message'>Using 1 chunks...</span></div><div class='output co'>#&gt; <span class='message'>Chunk #1 completed (n_mukey = 3; 1.1 secs)</span></div><div class='output co'>#&gt; <span class='message'>Done in 1.4 secs; mean/chunk: 1.1 secs; mean/mukey: 0.46 secs.</span></div><div class='img'><img src='fetchSDA_spatial-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; class       : SpatialPolygonsDataFrame 
+</div><div class='output co'>#&gt; <span class='message'>Using 1 chunks...</span></div><div class='output co'>#&gt; <span class='message'>Chunk #1 completed (n = 1; 0.3 secs)</span></div><div class='output co'>#&gt; <span class='message'>Done in 0.3 secs; mean/chunk: 0.3 secs; mean/symbol: 0.33 secs.</span></div><div class='output co'>#&gt; <span class='message'>Using 1 chunks...</span></div><div class='output co'>#&gt; <span class='message'>Chunk #1 completed (n = 3; 1.4 secs)</span></div><div class='output co'>#&gt; <span class='message'>Done in 2 secs; mean/chunk: 1.4 secs; mean/symbol: 0.66 secs.</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: sp</span></div><div class='output co'>#&gt; <span class='message'>Using 1 chunks...</span></div><div class='output co'>#&gt; <span class='message'>Chunk #1 completed (n = 3; 1.3 secs)</span></div><div class='output co'>#&gt; <span class='message'>Done in 1.9 secs; mean/chunk: 1.3 secs; mean/symbol: 0.64 secs.</span></div><div class='img'><img src='fetchSDA_spatial-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; class       : SpatialPolygonsDataFrame 
 #&gt; features    : 6 
 #&gt; extent      : -121.034, -120.9596, 38.01706, 38.24938  (xmin, xmax, ymin, ymax)
 #&gt; crs         : +proj=longlat +datum=WGS84 +no_defs 
-#&gt; variables   : 4
-#&gt; names       : gid,  mukey, nationalmusym,                                        muname 
-#&gt; min values  :   1, 462101,         2x8l5, Pentz-Bellota complex, 2 to 15 percent slopes 
-#&gt; max values  :   6, 462101,         2x8l5, Pentz-Bellota complex, 2 to 15 percent slopes </div><div class='input'><span class='co'># }</span>
+#&gt; variables   : 5
+#&gt; names       : gid,  mukey, areasymbol, nationalmusym,                                        muname 
+#&gt; min values  :   1, 462101,      CA077,         2x8l5, Pentz-Bellota complex, 2 to 15 percent slopes 
+#&gt; max values  :   6, 462101,      CA077,         2x8l5, Pentz-Bellota complex, 2 to 15 percent slopes </div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
