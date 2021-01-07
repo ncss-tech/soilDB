@@ -2,7 +2,7 @@
 % Please edit documentation in R/ROSETTA.R
 \name{ROSETTA}
 \alias{ROSETTA}
-\title{ROSETTA Model Versions 1 and 3 API}
+\title{ROSETTA Model API}
 \usage{
 ROSETTA(x, vars, v = c("1", "2", "3"), chunkSize = 10000, conf = NULL)
 }
