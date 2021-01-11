@@ -4,15 +4,15 @@
 #'
 #' @param db name of the gridded map unit key grid to access, should be either 'gnatsgo' or 'gssurgo'
 #' 
-#' @param aoi area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details
+#' @param aoi area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details.
 #' 
 #' @param res grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m.
 #' 
 #' @param quiet logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.
 #' 
-#' @note This is an experimental interface that can change at any time. The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
+#' @note The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
 #' 
-#' @details \code{aoi} should be specified as either a \code{Spatial*} object or a \code{list} containing:
+#' @details \code{aoi} should be specified as either a \code{Spatial*} object (with defined \code{CRS}) or a \code{list} containing:
 #' 
 #' \describe{
 #'   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
@@ -20,6 +20,8 @@
 #' }
 #' 
 #' The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the gNATSGO / gSSURGO grid.
+#' 
+#' Future versions of this function will accept other spatial data + CRS containers such as {sf} or {wk} objects.
 #' 
 #' @return \code{raster} object containing indexed map unit keys and associated raster attribute table
 #' 
