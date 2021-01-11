@@ -105,7 +105,7 @@
 #'    \item{optional, volumetric water content at 1500 kPa: }{roughly "permanent wilting point" for most plants, units of cm^3/cm^3}
 #'  }
 #'  
-#'  Column names not specified in \code{vars} are retained in the output.
+#' Column names not specified in \code{vars} are retained in the output.
 #' 
 #' Three versions of the ROSETTA model are available, selected using \code{v = 1}, \code{v = 2}, or \code{v = 3}. 
 #' 
