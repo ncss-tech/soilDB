@@ -123,6 +123,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
 }
 
 
+## TODO: assign suggested colors
+
 # ISSR-800 layers and basic metadata
 .ISSR800.spec <- list(
   
@@ -405,6 +407,54 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
     desc = 'Soil Temperature Regime',
     na = 0,
     rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/str.csv'
+  ),
+  
+  'soilorder' = list(
+    dsn = 'soilorder',
+    type = 'GEOTIFF_BYTE',
+    desc = 'Soil Taxonomy: Soil Order',
+    na = 0,
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/soilorder.csv'
+  ),
+  
+  'suborder' = list(
+    dsn = 'suborder',
+    type = 'GEOTIFF_BYTE',
+    desc = 'Soil Taxonomy: Suborder',
+    na = 0,
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/suborder.csv'
+  ),
+  
+  'greatgroup' = list(
+    dsn = 'greatgroup',
+    type = 'GEOTIFF_BYTE',
+    desc = 'Soil Taxonomy: Greatgroup',
+    na = 0,
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/greatgroup.csv'
+  ),
+  
+  'texture_05cm' = list(
+    dsn = 'texture_05cm',
+    type = 'GEOTIFF_BYTE',
+    desc = 'Soil Texture Class, 0-5cm',
+    na = 0,
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/texture_05.csv'
+  ),
+  
+  'texture_025cm' = list(
+    dsn = 'texture_025cm',
+    type = 'GEOTIFF_BYTE',
+    desc = 'Soil Texture Class, 0-25cm',
+    na = 0,
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/texture_025.csv'
+  ),
+  
+  'texture_2550cm' = list(
+    dsn = 'texture_2550cm',
+    type = 'GEOTIFF_BYTE',
+    desc = 'Soil Texture Class, 25-50cm',
+    na = 0,
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/texture_2550.csv'
   )
 
 
