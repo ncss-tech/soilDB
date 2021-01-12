@@ -1,21 +1,19 @@
 
 #' @title ISSR-800 Web Coverage Service (WCS)
 #'
-#' @param aoi area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details
+#' @param aoi area of interest (AOI) defined using a \code{Spatial*}, a \code{sf}, \code{sfc} or \code{bbox} object or a \code{list}, see details
 #' 
 #' @param var ISSR-800 grid name, see details
 #' 
 #' @param res grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.
 #' 
 #' @param quiet logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.
-#' 
-#' @note This is an experimental interface that can change at any time.
-#' 
-#' @details \code{aoi} should be specified as either a \code{Spatial*} object or a \code{list} containing:
+#'  
+#' @details \code{aoi} should be specified as either a \code{Spatial*}, \code{sf}, \code{sfc} or \code{bbox} object or a \code{list} containing:
 #' 
 #' \describe{
 #'   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
-#'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=EPSG:4326'}
+#'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=epsg:4326'}
 #' }
 #' 
 #' The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the ISSR-800 grids.
@@ -31,7 +29,7 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     stop('please install the `rgdal` package', call.=FALSE)
   
   # sanity check: aoi specification
-  if(!inherits(aoi, c('list', 'Spatial'))) {
+  if(!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox'))) { # TODO:  'wk_rct'?
     stop('invalid `aoi` specification', call. = FALSE)
   }
   
