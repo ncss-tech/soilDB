@@ -50,6 +50,12 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
   var.spec <- .mukey.spec[[db]]
   # prepare AOI in native CRS
   wcs.geom <- .prepare_AEA_AOI(obj = aoi, res = res)
+  
+  ## TODO: investigate why this is so
+  # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 
+  if(wcs.geom$width == 1 & wcs.geom$height == 1) {
+    stop('WCS requests for a 1x1 pixel image are not supported, try a smaller resolution', call. = FALSE)
+  }
 
 
   # sanity check: keep output images within a reasonable limit

@@ -45,6 +45,13 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   # compute BBOX / IMG geometry in native CRS
   wcs.geom <- .prepare_AEA_AOI(aoi, res = res)
   
+  ## TODO: investigate why this is so
+  # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 
+  if(wcs.geom$width == 1 & wcs.geom$height == 1) {
+    stop('WCS requests for a 1x1 pixel image are not supported, try a smaller resolution', call. = FALSE)
+  }
+  
+  
   # sanity check: keep output images within a reasonable limit
   # limits set in the MAPFILE
   max.img.dim <- 5000
