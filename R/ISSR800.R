@@ -38,8 +38,11 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     stop('`res` should be within 400 <= res <= 1600 meters')
   }
   
+  # match variable name in catalogue
+  var.cat <- sapply(.ISSR800.spec, '[[', 'dsn')
+  match.arg(var, var.cat)
   
-  # get layer specs
+  # get variable specs
   var.spec <- .ISSR800.spec[[var]]
   
   # compute BBOX / IMG geometry in native CRS

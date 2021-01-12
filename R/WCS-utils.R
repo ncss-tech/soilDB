@@ -2,7 +2,7 @@
 
 #' @title Web Coverage Services Details
 #' 
-#' @description List variables or databases provided by soilDB web coverage service (WCS) abstraction.
+#' @description List variables or databases provided by soilDB web coverage service (WCS) abstraction. These lists will be expanded in future versions.
 #'
 #' @param wcs a WCS label ('mukey' or 'ISSR800')
 #'
@@ -21,6 +21,10 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
                  'mukey' = .mukey.spec,
                  'ISSR800' = .ISSR800.spec
                  )
+  
+  ## TODO: spec names / DSN are assumed to be identical
+  ##       it would be nice to allow for more connotative names
+  # all(names(spec) == sapply(spec, '[[', 'dsn'))
   
   # extract relevant details
   v <- lapply(spec, function(i) {
@@ -121,6 +125,23 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
 
 # ISSR-800 layers and basic metadata
 .ISSR800.spec <- list(
+  
+  
+  'om_kg_sq_m' = list(
+    dsn = 'om_kg_sq_m',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'total soil organic matter (kg/m^2)',
+    na = -9999,
+    rat = NULL
+  ),
+  
+  'caco3_kg_sq_m' = list(
+    dsn = 'caco3_kg_sq_m',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'total CaCO3 (kg/m^2)',
+    na = -9999,
+    rat = NULL
+  ),
   
   'paws' = list(
     dsn = 'paws',
@@ -281,7 +302,24 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
     na = -9999,
     rat = NULL
   ),
-
+  
+  'series_name' = list(
+    dsn = 'series_name',
+    type = 'GEOTIFF_16',
+    desc = 'Soil Series Name',
+    na = 0,
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/series_name.csv'
+  ),
+  
+  'hydgrp' = list(
+    dsn = 'hydgrp',
+    type = 'GEOTIFF_BYTE',
+    desc = 'Hydrologic Soil Group',
+    na = 0,
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/hydgrp.csv'
+  ),
+  
+  
   'drainage_class' = list(
     dsn = 'drainage_class',
     type = 'GEOTIFF_BYTE',
