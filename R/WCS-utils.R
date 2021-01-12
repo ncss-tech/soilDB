@@ -1,5 +1,53 @@
 
 
+#' @title Web Coverage Services Details
+#' 
+#' @description List variables or databases provided by soilDB web coverage service (WCS) abstraction.
+#'
+#' @param wcs a WCS label ('mukey' or 'ISSR800')
+#'
+#' @return a \code{data.frame}
+#' @export
+#'
+#' @examples
+#' 
+#' WCS_details(wcs = 'ISSR800')
+WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
+  
+  # select a WCS
+  wcs <- match.arg(wcs)
+  
+  spec <- switch(wcs,
+                 'mukey' = .mukey.spec,
+                 'ISSR800' = .ISSR800.spec
+                 )
+  
+  # extract relevant details
+  v <- lapply(spec, function(i) {
+    data.frame(
+      var = i[['dsn']],
+      description = i[['desc']],
+      stringsAsFactors = FALSE
+    )
+  })
+  
+  # flatten / re-format
+  v <- do.call('rbind', v)
+  row.names(v) <- as.character(1:nrow(v))
+  
+  # alpha order simpler to use
+  v <- v[order(v[['var']]), ]
+  
+  # ugh, mukey.wcs() uses 'db' vs 'var 
+  if(wcs == 'mukey') {
+    names(v)[1] <- 'db'
+  }
+  
+  return(v)
+}
+
+
+
 # obj: list(aoi, crs) or Spatial*, sf, sfc, bbox object
 # res: grid resolution in native CRS (meters) [ISSR-800: 800, gNATSGO: 30]
 .prepare_AEA_AOI <- function(obj, res) {
@@ -73,7 +121,31 @@
 
 # ISSR-800 layers and basic metadata
 .ISSR800.spec <- list(
-
+  
+  'paws' = list(
+    dsn = 'paws',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'total plant available water storage (cm)',
+    na = -9999,
+    rat = NULL
+  ),
+  
+  'paws_050cm' = list(
+    dsn = 'paws_050cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'plant available water storage 0-50cm depth (cm)',
+    na = -9999,
+    rat = NULL
+  ),
+  
+  'paws_025cm' = list(
+    dsn = 'paws_025cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'plant available water storage 0-25cm depth (cm)',
+    na = -9999,
+    rat = NULL
+  ),
+  
   'ph_05cm' = list(
     dsn = 'ph_05cm',
     type = 'GEOTIFF_FLOAT',
