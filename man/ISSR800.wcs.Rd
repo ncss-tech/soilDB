@@ -4,12 +4,12 @@
 \alias{ISSR800.wcs}
 \title{ISSR-800 Web Coverage Service (WCS)}
 \usage{
-ISSR800.wcs(var, aoi, res = 800, quiet = FALSE)
+ISSR800.wcs(aoi, var, res = 800, quiet = FALSE)
 }
 \arguments{
-\item{var}{ISSR-800 grid name, see details}
-
 \item{aoi}{area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details}
+
+\item{var}{ISSR-800 grid name, see details}
 
 \item{res}{grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.}
 

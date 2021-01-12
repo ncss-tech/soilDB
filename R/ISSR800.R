@@ -1,9 +1,9 @@
 
 #' @title ISSR-800 Web Coverage Service (WCS)
 #'
-#' @param var ISSR-800 grid name, see details
-#' 
 #' @param aoi area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details
+#' 
+#' @param var ISSR-800 grid name, see details
 #' 
 #' @param res grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.
 #' 
@@ -23,7 +23,7 @@
 #' @return \code{raster} object containing indexed map unit keys and associated raster attribute table
 #' 
 #' @export
-ISSR800.wcs <- function(var, aoi, res = 800, quiet = FALSE) {
+ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   
   if(!requireNamespace('rgdal', quietly=TRUE))
     stop('please install the `rgdal` package', call.=FALSE)
