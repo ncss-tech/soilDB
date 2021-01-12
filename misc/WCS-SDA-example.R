@@ -15,7 +15,7 @@ a <- list(
 ### The following are valid (and equivalent to mukey.wcs()) {sf} object based AOIs
 
 # # bbox, with WKT CRS
-# a1 <- sf::st_bbox(c(xmin = -114.16, xmax = -114.08, ymax = 47.65, ymin = 47.68), crs = sf::st_crs(4326))
+# a1 <- sf::st_bbox(c(xmin = -114.16, xmax = -114.08, ymin = 47.65, ymax = 47.68), crs = sf::st_crs(4326))
 
 # # sfc_POLYGON
 # a2 <- sf::st_as_sfc(a1)
