@@ -1,6 +1,8 @@
 test_that("mukey.wcs works", {
 
   x <- NULL
+  
+  expect_true(inherits(WCS_details("mukey"), 'data.frame'))
 
   expect_silent(suppressWarnings({
 
@@ -12,3 +14,4 @@ test_that("mukey.wcs works", {
 
   expect_true(inherits(x, 'RasterLayer'))
 })
+
