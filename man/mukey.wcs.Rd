@@ -26,7 +26,7 @@ gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)
 
 \describe{
   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
-  \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=EPSG:4326'}
+  \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=epsg:4326'}
 }
 
 The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the gNATSGO / gSSURGO grid.

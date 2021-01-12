@@ -10,7 +10,7 @@ library(viridis)
 # xmin, ymin, xmax, ymax
 a <- list(
   aoi = c(-114.16, 47.65, -114.08, 47.68),
-  crs = '+init=EPSG:4326'
+  crs = '+init=epsg:4326'
 )
 
 # too big for SDA geometry (>32Mb WKT serialization)
@@ -18,7 +18,7 @@ a <- list(
 
 # a <- list(
 #   aoi = c(-114.5, 47, -114, 47.5),
-#   crs = '+init=EPSG:4326'
+#   crs = '+init=epsg:4326'
 # )
 
 # fetch gNATSGO map unit keys at native resolution (30m)
@@ -28,7 +28,7 @@ a <- list(
 # OK
 levelplot(x, att = 'ID', margin = FALSE, colorkey = FALSE, col.regions = viridis)
 
-# convert raster extent into vector 
+# convert raster extent into vector
 g <- as(extent(x), 'SpatialPolygons')
 proj4string(g) <- projection(x)
 
@@ -77,10 +77,10 @@ x
 
 # graphical check
 levelplot(
-  aws, 
+  aws,
   main = 'gNATSGO WCS + SDA',
-  margin = FALSE, 
-  scales = list(draw = FALSE), 
+  margin = FALSE,
+  scales = list(draw = FALSE),
   col.regions = viridis,
   panel = function(...) {
     panel.levelplot(...)
