@@ -7,7 +7,7 @@
 mukey.wcs(aoi, db = c("gnatsgo", "gssurgo"), res = 30, quiet = FALSE)
 }
 \arguments{
-\item{aoi}{area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details}
+\item{aoi}{area of interest (AOI) defined using a \code{Spatial*}, a \code{sf}, \code{sfc} or \code{bbox} object or a \code{list}, see details}
 
 \item{db}{name of the gridded map unit key grid to access, should be either 'gnatsgo' or 'gssurgo'}
 
@@ -22,7 +22,7 @@ mukey.wcs(aoi, db = c("gnatsgo", "gssurgo"), res = 30, quiet = FALSE)
 gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)
 }
 \details{
-\code{aoi} should be specified as either a \code{Spatial*} object (with defined \code{CRS}) or a \code{list} containing:
+\code{aoi} should be specified as either a \code{Spatial*}, \code{sf}, \code{sfc} or \code{bbox} object or a \code{list} containing:
 
 \describe{
   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}

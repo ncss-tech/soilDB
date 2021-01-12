@@ -5,13 +5,26 @@ library(raster)
 library(rasterVis)
 library(viridis)
 
-
 # AOI corners in WGS84 GCS
 # xmin, ymin, xmax, ymax
 a <- list(
   aoi = c(-114.16, 47.65, -114.08, 47.68),
   crs = '+init=epsg:4326'
 )
+
+### The following are valid (and equivalent to mukey.wcs()) {sf} object based AOIs
+
+# # bbox, with WKT CRS
+# a1 <- sf::st_bbox(c(xmin = -114.16, xmax = -114.08, ymax = 47.65, ymin = 47.68), crs = sf::st_crs(4326))
+
+# # sfc_POLYGON
+# a2 <- sf::st_as_sfc(a1)
+
+# # sf
+# a3 <- sf::st_as_sf(a2)
+
+### And this is a {sp} SpatialPolygons AOI (created from the sf object)
+# a4 <- sf::as_Spatial(a3)
 
 # too big for SDA geometry (>32Mb WKT serialization)
 # but will work just fine with WCS

@@ -2,7 +2,7 @@
 
 #' @title gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)
 #'
-#' @param aoi area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details
+#' @param aoi area of interest (AOI) defined using a \code{Spatial*}, a \code{sf}, \code{sfc} or \code{bbox} object or a \code{list}, see details
 #'
 #' @param db name of the gridded map unit key grid to access, should be either 'gnatsgo' or 'gssurgo'
 #'
@@ -12,7 +12,7 @@
 #'
 #' @note The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
 #'
-#' @details \code{aoi} should be specified as either a \code{Spatial*} object (with defined \code{CRS}) or a \code{list} containing:
+#' @details \code{aoi} should be specified as either a \code{Spatial*}, \code{sf}, \code{sfc} or \code{bbox} object or a \code{list} containing:
 #'
 #' \describe{
 #'   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
@@ -33,7 +33,7 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
   db <- match.arg(db)
 
   # sanity check: aoi specification
-  if(!inherits(aoi, c('list', 'Spatial'))) {
+  if(!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox'))) { # TODO:  'wk_rct'?
     stop('invalid `aoi` specification', call. = FALSE)
   }
 
