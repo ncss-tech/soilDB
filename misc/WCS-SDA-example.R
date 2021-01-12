@@ -5,30 +5,43 @@ library(raster)
 library(rasterVis)
 library(viridis)
 
-
 # AOI corners in WGS84 GCS
 # xmin, ymin, xmax, ymax
 a <- list(
   aoi = c(-114.16, 47.65, -114.08, 47.68),
-  crs = '+init=EPSG:4326'
+  crs = '+init=epsg:4326'
 )
+
+### The following are valid (and equivalent to mukey.wcs()) {sf} object based AOIs
+
+# # bbox, with WKT CRS
+# a1 <- sf::st_bbox(c(xmin = -114.16, xmax = -114.08, ymax = 47.65, ymin = 47.68), crs = sf::st_crs(4326))
+
+# # sfc_POLYGON
+# a2 <- sf::st_as_sfc(a1)
+
+# # sf
+# a3 <- sf::st_as_sf(a2)
+
+### And this is a {sp} SpatialPolygons AOI (created from the sf object)
+# a4 <- sf::as_Spatial(a3)
 
 # too big for SDA geometry (>32Mb WKT serialization)
 # but will work just fine with WCS
 
 # a <- list(
 #   aoi = c(-114.5, 47, -114, 47.5),
-#   crs = '+init=EPSG:4326'
+#   crs = '+init=epsg:4326'
 # )
 
 # fetch gNATSGO map unit keys at native resolution (30m)
 # get gSSURGO grid with db = 'gssurgo'
-(x <- mukey.wcs(db = 'gnatsgo', aoi = a))
+(x <- mukey.wcs(aoi = a, db = 'gnatsgo'))
 
 # OK
 levelplot(x, att = 'ID', margin = FALSE, colorkey = FALSE, col.regions = viridis)
 
-# convert raster extent into vector 
+# convert raster extent into vector
 g <- as(extent(x), 'SpatialPolygons')
 proj4string(g) <- projection(x)
 
@@ -77,10 +90,10 @@ x
 
 # graphical check
 levelplot(
-  aws, 
+  aws,
   main = 'gNATSGO WCS + SDA',
-  margin = FALSE, 
-  scales = list(draw = FALSE), 
+  margin = FALSE,
+  scales = list(draw = FALSE),
   col.regions = viridis,
   panel = function(...) {
     panel.levelplot(...)
