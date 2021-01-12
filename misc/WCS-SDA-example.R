@@ -23,7 +23,7 @@ a <- list(
 
 # fetch gNATSGO map unit keys at native resolution (30m)
 # get gSSURGO grid with db = 'gssurgo'
-(x <- mukey.wcs(db = 'gnatsgo', aoi = a))
+(x <- mukey.wcs(aoi = a, db = 'gnatsgo'))
 
 # OK
 levelplot(x, att = 'ID', margin = FALSE, colorkey = FALSE, col.regions = viridis)

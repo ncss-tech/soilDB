@@ -2,9 +2,9 @@
 
 #' @title gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)
 #'
-#' @param db name of the gridded map unit key grid to access, should be either 'gnatsgo' or 'gssurgo'
+#' @param aoi area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details
 #'
-#' @param aoi area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details.
+#' @param db name of the gridded map unit key grid to access, should be either 'gnatsgo' or 'gssurgo'
 #'
 #' @param res grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m.
 #'
@@ -24,7 +24,7 @@
 #'
 #' @export
 #'
-mukey.wcs <- function(db = c('gnatsgo', 'gssurgo'), aoi, res = 30, quiet = FALSE) {
+mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE) {
 
   if(!requireNamespace('rgdal', quietly=TRUE))
     stop('please install the `rgdal` package', call.=FALSE)

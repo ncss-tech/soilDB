@@ -4,12 +4,12 @@
 \alias{mukey.wcs}
 \title{gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)}
 \usage{
-mukey.wcs(db = c("gnatsgo", "gssurgo"), aoi, res = 30, quiet = FALSE)
+mukey.wcs(aoi, db = c("gnatsgo", "gssurgo"), res = 30, quiet = FALSE)
 }
 \arguments{
-\item{db}{name of the gridded map unit key grid to access, should be either 'gnatsgo' or 'gssurgo'}
+\item{aoi}{area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details}
 
-\item{aoi}{area of interest (AOI) defined using a \code{list} or \code{Spatial*} object, see details.}
+\item{db}{name of the gridded map unit key grid to access, should be either 'gnatsgo' or 'gssurgo'}
 
 \item{res}{grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m.}
 
@@ -30,8 +30,6 @@ gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)
 }
 
 The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the gNATSGO / gSSURGO grid.
-
-Future versions of this function will accept other spatial data + CRS containers such as {sf} or {wk} objects.
 }
 \note{
 The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
