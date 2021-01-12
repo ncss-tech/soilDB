@@ -126,11 +126,26 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
 # ISSR-800 layers and basic metadata
 .ISSR800.spec <- list(
   
+  'statsgo_pct' = list(
+    dsn = 'statsgo_pct',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'STATSGO data available, fraction of 800x800m grid cell',
+    na = -9999,
+    rat = NULL
+  ),
+  
+  'ssurgo_pct' = list(
+    dsn = 'ssurgo_pct',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'SSURGO data available, fraction of 800x800m grid cell',
+    na = -9999,
+    rat = NULL
+  ),
   
   'om_kg_sq_m' = list(
     dsn = 'om_kg_sq_m',
     type = 'GEOTIFF_FLOAT',
-    desc = 'total soil organic matter (kg/m^2)',
+    desc = 'Total Soil Organic Matter (kg/m^2)',
     na = -9999,
     rat = NULL
   ),
@@ -138,7 +153,47 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'caco3_kg_sq_m' = list(
     dsn = 'caco3_kg_sq_m',
     type = 'GEOTIFF_FLOAT',
-    desc = 'total CaCO3 (kg/m^2)',
+    desc = 'Total CaCO3 (kg/m^2)',
+    na = -9999,
+    rat = NULL
+  ),
+  
+  'ec_05cm' = list(
+    dsn = 'ec_05cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'EC 0-5cm depth (dS/m)',
+    na = -9999,
+    rat = NULL
+  ),
+  
+  'ec_025cm' = list(
+    dsn = 'ec_025cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'EC 0-25cm depth (dS/m)',
+    na = -9999,
+    rat = NULL
+  ),
+  
+  'cec_05cm' = list(
+    dsn = 'cec_05cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'CEC at pH 7 0-5cm depth (cmol[+]/kg)',
+    na = -9999,
+    rat = NULL
+  ),
+  
+  'cec_025cm' = list(
+    dsn = 'cec_025cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'CEC at pH 7 0-25cm depth (cmol[+]/kg)',
+    na = -9999,
+    rat = NULL
+  ),
+  
+  'cec_050cm' = list(
+    dsn = 'cec_050cm',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'CEC at pH 7 0-50cm depth (cmol[+]/kg)',
     na = -9999,
     rat = NULL
   ),
@@ -146,7 +201,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'paws' = list(
     dsn = 'paws',
     type = 'GEOTIFF_FLOAT',
-    desc = 'total plant available water storage (cm)',
+    desc = 'total plant available water storage (cm water)',
     na = -9999,
     rat = NULL
   ),
@@ -154,7 +209,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'paws_050cm' = list(
     dsn = 'paws_050cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'plant available water storage 0-50cm depth (cm)',
+    desc = 'plant available water storage 0-50cm depth (cm water)',
     na = -9999,
     rat = NULL
   ),
@@ -162,7 +217,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'paws_025cm' = list(
     dsn = 'paws_025cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'plant available water storage 0-25cm depth (cm)',
+    desc = 'plant available water storage 0-25cm depth (cm water)',
     na = -9999,
     rat = NULL
   ),
@@ -170,7 +225,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'ph_05cm' = list(
     dsn = 'ph_05cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'pH 0-5cm depth',
+    desc = 'pH 1:1 H2O 0-5cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -178,7 +233,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'ph_025cm' = list(
     dsn = 'ph_025cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'pH 5-25cm depth',
+    desc = 'pH 1:1 H2O 0-25cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -186,7 +241,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'ph_2550cm' = list(
     dsn = 'ph_2550cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'pH 25-50cm depth',
+    desc = 'pH 1:1 H2O 25-50cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -194,7 +249,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'ph_3060cm' = list(
     dsn = 'ph_3060cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'pH 30-60cm depth',
+    desc = 'pH 1:1 H2O 30-60cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -202,7 +257,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'clay_05cm' = list(
     dsn = 'clay_05cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'clay 0-5cm depth',
+    desc = 'clay percent 0-5cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -210,7 +265,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'clay_025cm' = list(
     dsn = 'clay_025cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'clay 5-25cm depth',
+    desc = 'clay percent 0-25cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -218,7 +273,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'clay_2550cm' = list(
     dsn = 'clay_2550cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'clay 25-50cm depth',
+    desc = 'clay percent 25-50cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -226,7 +281,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'clay_3060cm' = list(
     dsn = 'clay_3060cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'clay 30-60cm depth',
+    desc = 'clay percent 30-60cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -234,7 +289,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'sand_05cm' = list(
     dsn = 'sand_05cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'sand 0-5cm depth',
+    desc = 'sand percent 0-5cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -242,7 +297,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'sand_025cm' = list(
     dsn = 'sand_025cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'sand 5-25cm depth',
+    desc = 'sand percent 0-25cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -250,7 +305,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'sand_2550cm' = list(
     dsn = 'sand_2550cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'sand 25-50cm depth',
+    desc = 'sand percent 25-50cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -258,7 +313,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'sand_3060cm' = list(
     dsn = 'sand_3060cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'sand 30-60cm depth',
+    desc = 'sand percent 30-60cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -266,7 +321,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'silt_05cm' = list(
     dsn = 'silt_05cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'silt 0-5cm depth',
+    desc = 'silt percent 0-5cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -274,7 +329,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'silt_025cm' = list(
     dsn = 'silt_025cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'silt 5-25cm depth',
+    desc = 'silt percent 0-25cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -282,7 +337,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'silt_2550cm' = list(
     dsn = 'silt_2550cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'silt 25-50cm depth',
+    desc = 'silt percent 25-50cm depth',
     na = -9999,
     rat = NULL
   ),
@@ -290,7 +345,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   'silt_3060cm' = list(
     dsn = 'silt_3060cm',
     type = 'GEOTIFF_FLOAT',
-    desc = 'silt 30-60cm depth',
+    desc = 'silt percent 30-60cm depth',
     na = -9999,
     rat = NULL
   ),

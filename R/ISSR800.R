@@ -82,13 +82,15 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   ymin <- wcs.geom$bbox[2]
   ymax <- wcs.geom$bbox[4]
   
+  ## TODO: source data are LZW compressed, does it make sense to alter the compression (e.g. Deflate) for delivery?
+  
   # compile WCS 2.0 style URL
   u <- paste0(
     base.url,
     service.url,
     '&COVERAGEID=', var.spec$dsn,
     '&FORMAT=image/tiff',
-    '&GEOTIFF:COMPRESSION=Deflate',
+    '&GEOTIFF:COMPRESSION=LZW',
     '&SUBSETTINGCRS=EPSG:6350',
     '&FORMAT=', var.spec$type,
     '&SUBSET=x(', xmin, ',', xmax,')',

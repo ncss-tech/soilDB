@@ -13,7 +13,7 @@ WCS_details(wcs = c("mukey", "ISSR800"))
 a \code{data.frame}
 }
 \description{
-List variables or databases provided by soilDB web coverage service (WCS) abstraction.
+List variables or databases provided by soilDB web coverage service (WCS) abstraction. These lists will be expanded in future versions.
 }
 \examples{
 
