@@ -108,7 +108,7 @@ format_SQL_in_statement <- function(x) {
 #'   
 #'   ## get SSURGO export date for all soil survey areas in California
 #'   # there is no need to filter STATSGO 
-#'   # because we are filtering on SSURGO areasymbols
+#'   # because we are filtering on SSURGO area symbols
 #'   q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA%';"
 #'   x <- SDA_query(q)
 #'   head(x)

@@ -81,7 +81,7 @@
 #' 
 #' @description A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). See the \href{http://ncss-tech.github.io/AQP/soilDB/ROSETTA-API.html}{related tutorial} for additional examples.
 #'  
-#' @author D.E. Beaudette, Todd Skags (ARS), Richard Reid
+#' @author D.E. Beaudette, Todd Skaggs (ARS), Richard Reid
 #'  
 #' @param x a \code{data.frame} of required soil properties, may contain other columns, see details
 #' 
@@ -128,8 +128,8 @@
 #' 
 #'  \item{theta_r: }{residual volumetric water content (cm^3/cm^3)}
 #'  \item{theta_s: }{saturated volumetric water content (cm^3/cm^3)}
-#'  \item{alpha:}{related to the inverse of the air entry suction, log10-tranformed values with units of cm}
-#'  \item{npar: }{index of pore size distribution, log10-tranformed values with units of 1/cm}
+#'  \item{alpha:}{related to the inverse of the air entry suction, log10-transformed values with units of cm}
+#'  \item{npar: }{index of pore size distribution, log10-transformed values with units of 1/cm}
 #'  \item{ksat: }{saturated hydraulic conductivity, log10-transformed values with units of cm/day}
 #'  
 #'  \item{.rosetta.model}{best-available model selection (-1 signifies that prediction was not possible due to missing values in \code{x})}

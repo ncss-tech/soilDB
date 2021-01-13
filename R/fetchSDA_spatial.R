@@ -8,7 +8,7 @@
 #'
 #' Querying regions with complex mapping may require smaller \code{chunk.size}. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform "poorly" [slow or error] no matter what the chunk size is. Shuffling the order of the inputs using \code{sample} may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use \code{muacres} as a heuristic to adjust for total acreage within chunks.
 #'
-#' @param x A vector of MUKEYs / national mapunit symbols (for mupolygon geometry); OR LKEYs / areasymbols (for sapolygon geometry)
+#' @param x A vector of MUKEYs / national mapunit symbols (for mupolygon geometry); OR legend keys (LKEY) / area symbols (for sapolygon geometry)
 #'
 #' @param by.col Column name containing mapunit identifier \code{"mukey"}, \code{"nmusym"}, or \code{"areasymbol"} for \code{geom.src} \code{sapolygon}; default is inferred from \code{is.numeric(x) == TRUE} for \code{mukey} or \code{lkey} and (\code{nationalmusym} or \code{areasymbol} otherwise.
 #'

@@ -26,8 +26,8 @@ a \code{data.frame} object:
 
  \item{theta_r: }{residual volumetric water content (cm^3/cm^3)}
  \item{theta_s: }{saturated volumetric water content (cm^3/cm^3)}
- \item{alpha:}{related to the inverse of the air entry suction, log10-tranformed values with units of cm}
- \item{npar: }{index of pore size distribution, log10-tranformed values with units of 1/cm}
+ \item{alpha:}{related to the inverse of the air entry suction, log10-transformed values with units of cm}
+ \item{npar: }{index of pore size distribution, log10-transformed values with units of 1/cm}
  \item{ksat: }{saturated hydraulic conductivity, log10-transformed values with units of cm/day}
  
  \item{.rosetta.model}{best-available model selection (-1 signifies that prediction was not possible due to missing values in \code{x})}
@@ -97,5 +97,5 @@ Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for I
 Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39-53. doi: 10.1016/j.jhydrol.2017.01.004.
 }
 \author{
-D.E. Beaudette, Todd Skags (ARS), Richard Reid
+D.E. Beaudette, Todd Skaggs (ARS), Richard Reid
 }

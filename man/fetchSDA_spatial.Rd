@@ -16,7 +16,7 @@ fetchSDA_spatial(
 )
 }
 \arguments{
-\item{x}{A vector of MUKEYs / national mapunit symbols (for mupolygon geometry); OR LKEYs / areasymbols (for sapolygon geometry)}
+\item{x}{A vector of MUKEYs / national mapunit symbols (for mupolygon geometry); OR legend keys (LKEY) / area symbols (for sapolygon geometry)}
 
 \item{by.col}{Column name containing mapunit identifier \code{"mukey"}, \code{"nmusym"}, or \code{"areasymbol"} for \code{geom.src} \code{sapolygon}; default is inferred from \code{is.numeric(x) == TRUE} for \code{mukey} or \code{lkey} and (\code{nationalmusym} or \code{areasymbol} otherwise.}
 
