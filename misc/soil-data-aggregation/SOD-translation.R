@@ -6,6 +6,15 @@
 
 library(soilDB)
 
+## TODO:
+# check use of weights in the presence of missing data
+# compare with other aggregation methods
+# compare with WSS
+# adapt to use mukey | areasymbol
+# multiple properties at the same via self-joins
+# 
+
+
 
 
 areaReq <- format_SQL_in_statement('CA630')
