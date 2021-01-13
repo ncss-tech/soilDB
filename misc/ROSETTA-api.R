@@ -90,19 +90,26 @@ ROSETTA(x, vars = c('sand', 'silt', 'clay'), conf = httr::verbose())
 # lots of data, some with missing values
 qq <- "SELECT TOP 50000 
 compname, hzname, hzdept_r, hzdepb_r, 
-sandtotal_r, silttotal_r, claytotal_r, dbthirdbar_r, wthirdbar_r/100 AS wthirdbar_decimal, wfifteenbar_r/100 AS wfifteenbar_decimal 
+sandtotal_r, silttotal_r, claytotal_r, 
+dbthirdbar_r, 
+wthirdbar_r/100 AS wthirdbar_decimal, 
+wfifteenbar_r/100 AS wfifteenbar_decimal 
 FROM component AS co 
 LEFT JOIN chorizon AS ch ON co.cokey = ch.cokey ;"
 
+# get data from SDA
 s <- SDA_query(qq)
 
-str(s)
+vars <- c(
+  'sandtotal_r', 'silttotal_r', 'claytotal_r', 
+  'dbthirdbar_r', 'wthirdbar_decimal', 'wfifteenbar_decimal'
+)
+
+# automatic model selection: 
+# 50k records: ~ 39 seconds
+r <- ROSETTA(s, vars = vars)
 
 
-vars <- c('sandtotal_r', 'silttotal_r', 'claytotal_r', 'dbthirdbar_r', 'wthirdbar_decimal', 'wfifteenbar_decimal')
-
-# automatic model selection: 50k records: ~ 39 seconds
-system.time(r <- ROSETTA(s, vars = vars))
 
 str(r)
 summary(r)
