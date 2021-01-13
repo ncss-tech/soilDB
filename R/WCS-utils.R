@@ -123,7 +123,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
 }
 
 
-## TODO: assign suggested colors
+## TODO: next release include suggested colors
 
 # ISSR-800 layers and basic metadata
 .ISSR800.spec <- list(
@@ -455,6 +455,22 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
     desc = 'Soil Texture Class, 25-50cm',
     na = 0,
     rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/texture_2550.csv'
+  ),
+  
+  'lcc_irrigated' = list(
+    dsn = 'lcc_irrigated',
+    type = 'GEOTIFF_BYTE',
+    desc = 'Land Capability Class, irrigated',
+    na = 0,
+    rat = NULL
+  ),
+  
+  'lcc_nonirrigated' = list(
+    dsn = 'lcc_nonirrigated',
+    type = 'GEOTIFF_BYTE',
+    desc = 'Land Capability Class, non-irrigated',
+    na = 0,
+    rat = NULL
   )
 
 
