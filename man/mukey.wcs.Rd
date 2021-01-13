@@ -19,7 +19,7 @@ mukey.wcs(aoi, db = c("gnatsgo", "gssurgo"), res = 30, quiet = FALSE)
 \code{raster} object containing indexed map unit keys and associated raster attribute table
 }
 \description{
-gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)
+Download chunks of the gNATSGO or gSSURGO map unit key grid via bounding-box from the SoilWeb WCS.
 }
 \details{
 \code{aoi} should be specified as either a \code{Spatial*}, \code{sf}, \code{sfc} or \code{bbox} object or a \code{list} containing:
@@ -35,4 +35,7 @@ Databases available from this WCS can be queried using \code{WCS_details(wcs = '
 }
 \note{
 The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
+}
+\author{
+D.E. Beaudette and A.G. Brown
 }

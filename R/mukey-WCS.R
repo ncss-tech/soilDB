@@ -1,6 +1,10 @@
 
 
 #' @title gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)
+#' 
+#' @description Download chunks of the gNATSGO or gSSURGO map unit key grid via bounding-box from the SoilWeb WCS.
+#' 
+#' @author D.E. Beaudette and A.G. Brown
 #'
 #' @param aoi area of interest (AOI) defined using a \code{Spatial*}, a \code{sf}, \code{sfc} or \code{bbox} object or a \code{list}, see details
 #'

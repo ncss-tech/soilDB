@@ -1,6 +1,8 @@
 
 #' @title ISSR-800 Web Coverage Service (WCS)
 #' 
+#' @author D.E. Beaudette and A.G. Brown
+#' 
 #' @description Intermediate-scale gridded (800m) soil property and interpretation maps from aggregated SSURGO and STATSGO data. These maps were developed by USDA-NRCS-SPSD staff in collaboration with UCD-LAWR. Originally for educational use and \href{https://casoilresource.lawr.ucdavis.edu/soil-properties/}{interactive thematic maps}, these data are a suitable alternative to gridded STATSGO-derived thematic soil maps. The full size grids can be \href{https://casoilresource.lawr.ucdavis.edu/soil-properties/download.php}{downloaded here}.
 #' 
 #' 
