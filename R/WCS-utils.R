@@ -462,7 +462,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Land Capability Class, irrigated',
     na = 0,
-    rat = NULL
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/lcc.csv'
   ),
   
   'lcc_nonirrigated' = list(
@@ -470,7 +470,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Land Capability Class, non-irrigated',
     na = 0,
-    rat = NULL
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/lcc.csv'
   )
 
 
