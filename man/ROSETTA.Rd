@@ -22,7 +22,7 @@ a \code{data.frame} object:
 
 \describe{
 
- \item{... }{other columns present in \code{x}}
+ \item{... }{columns present in \code{x}}
 
  \item{theta_r: }{residual volumetric water content (cm^3/cm^3)}
  \item{theta_s: }{saturated volumetric water content (cm^3/cm^3)}
@@ -30,9 +30,8 @@ a \code{data.frame} object:
  \item{npar: }{index of pore size distribution, log10-tranformed values with units of 1/cm}
  \item{ksat: }{saturated hydraulic conductivity, log10-transformed values with units of cm/day}
  
- \item{.rosetta.model}{best-available model selection}
+ \item{.rosetta.model}{best-available model selection (-1 signifies that prediction was not possible due to missing values in \code{x})}
  \item{.rosetta.version}{ROSETTA algorithm version, selected via function argument \code{v}}
- 
  
 }
 }

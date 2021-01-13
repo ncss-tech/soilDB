@@ -15,7 +15,7 @@
   ## TODO: may not need to convert to matrix, API will now accept a list of lists
   # x.chunk is a data.frame
   # convert to matrix for proper JSON encoding
-  x.chunk <- as.matrix(x.chunk)
+  x.chunk.mat <- as.matrix(x.chunk)
   
   # API url: version / model code
   u <- sprintf("http://www.handbook60.org/api/v1/rosetta/%s", v)
@@ -24,7 +24,7 @@
   # note: JSON is composed at function eval time
   r <- httr::POST(
     url = u,
-    body = list(X = x.chunk),
+    body = list(X = x.chunk.mat),
     encode = "json", 
     config = conf
   )
@@ -68,8 +68,8 @@
   # add ROSETTA version
   vg[['.rosetta.version']] <- d[['rosetta_version']]
   
-  # combine with original data
-  vg.data <- cbind(x.chunk.other, vg)
+  # original "extra" data + relevant properties + vg parameters
+  vg.data <- cbind(x.chunk.other, x.chunk, vg)
   
   return(vg.data)
 }
@@ -124,7 +124,7 @@
 #' 
 #' \describe{
 #' 
-#'  \item{... }{other columns present in \code{x}}
+#'  \item{... }{columns present in \code{x}}
 #' 
 #'  \item{theta_r: }{residual volumetric water content (cm^3/cm^3)}
 #'  \item{theta_s: }{saturated volumetric water content (cm^3/cm^3)}
@@ -132,9 +132,8 @@
 #'  \item{npar: }{index of pore size distribution, log10-tranformed values with units of 1/cm}
 #'  \item{ksat: }{saturated hydraulic conductivity, log10-transformed values with units of cm/day}
 #'  
-#'  \item{.rosetta.model}{best-available model selection}
+#'  \item{.rosetta.model}{best-available model selection (-1 signifies that prediction was not possible due to missing values in \code{x})}
 #'  \item{.rosetta.version}{ROSETTA algorithm version, selected via function argument \code{v}}
-#'  
 #'  
 #' }
 #' 
