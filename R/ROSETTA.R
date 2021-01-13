@@ -190,6 +190,14 @@ ROSETTA <- function(x, vars, v = c('1', '2', '3'), chunkSize = 10000, conf = NUL
   
   if( ! inherits(x, c('data.frame')) ) {
     stop('x must be a data.frame')
+  } else {
+    # support for data.table (or other) by casting to data.frame for all data.frame subclasses
+    x <- as.data.frame(x)
+  } 
+  
+  # if it inherits from data.frame, nrow is defined
+  if( ! nrow(x) > 0 ) {
+    stop('x must contain more than 0 rows')
   }
   
   # check that vars exist in x
@@ -198,6 +206,7 @@ ROSETTA <- function(x, vars, v = c('1', '2', '3'), chunkSize = 10000, conf = NUL
   }
   
   # soil properties must be numeric
+  # Note: not data.table safe
   if(! all(sapply(x[, vars], is.numeric)) ){
     stop('x must contain only numeric values') 
   }
