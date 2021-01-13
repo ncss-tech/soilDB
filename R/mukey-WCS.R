@@ -21,7 +21,7 @@
 #'
 #' The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the gNATSGO / gSSURGO grid.
 #' 
-#' #' Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.
+#' Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.
 #' 
 #' @return \code{raster} object containing indexed map unit keys and associated raster attribute table
 #'
@@ -134,7 +134,7 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
   # value is derived from the original UINT32 grid
   NAvalue(r) <- 2147483647
 
-  ## TODO: should probably save to a file and return a pointer
+  # read into memory to make NODATA value permanent
   r <- readAll(r)
 
   # set layer name in object

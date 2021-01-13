@@ -31,7 +31,7 @@ gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)
 
 The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the gNATSGO / gSSURGO grid.
 
-#' Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.
+Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.
 }
 \note{
 The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.

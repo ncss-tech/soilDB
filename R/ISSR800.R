@@ -24,6 +24,8 @@
 #' 
 #' Variables available from this WCS can be queried using \code{WCS_details(wcs = 'ISSR800')}.
 #' 
+#' @note There are still some issues to be resolved related to the encoding of NA Variables with a natural zero (e.g. SAR) have 0 set to NA.
+#' 
 #' @return \code{raster} object containing indexed map unit keys and associated raster attribute table
 #' 
 #' @export
@@ -127,12 +129,11 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   }
   
   ## TODO: this isn't quite right... '0' is returned by the WCS sometimes
-  # TODO: how can this be set server-side?
   # specification of NODATA using local definitions
   # NAvalue(r) <- var.spec$na
   NAvalue(r) <- 0
   
-  ## TODO: should probably save to a file and return a pointer
+  # read into memory to make NODATA value permanent
   r <- readAll(r)
   
   # set layer name in object

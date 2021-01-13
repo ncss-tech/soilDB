@@ -33,3 +33,6 @@ The WCS query is parameterized using \code{raster::extent} derived from the abov
 
 Variables available from this WCS can be queried using \code{WCS_details(wcs = 'ISSR800')}.
 }
+\note{
+There are still some issues to be resolved related to the encoding of NA Variables with a natural zero (e.g. SAR) have 0 set to NA.
+}
