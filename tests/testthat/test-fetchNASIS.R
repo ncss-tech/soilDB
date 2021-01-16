@@ -94,10 +94,10 @@ test_that("fetchNASIS(from='pedons') nullFragsAreZero works as expected", {
 
 test_that("fetchNASIS(from='components') returns reasonable data", {
 
-  # hack for in-house testing only
-  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
+  skip_on_cran()
+
   if(!local_NASIS_defined()) {
-    skip("in-house testing only")
+    skip("local NASIS database not available")
   }
 
   # must have components to complete test

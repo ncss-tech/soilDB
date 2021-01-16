@@ -4,9 +4,7 @@ test_that("fetchSDA_spatial basic mupolygon functionality", {
 
   skip_if_offline()
 
-  if (!getOption('.soilDB_testNetworkFunctions') )  {
-    skip("in-house testing only")
-  }
+  skip_on_cran()
 
   # expect 3, relatively nonextensive join delineations
   single.mukey <- fetchSDA_spatial(x = "2924882", by.col = 'mukey')
@@ -31,9 +29,7 @@ test_that("fetchSDA_spatial sapolygon and gsmmupolygon", {
 
   skip_if_offline()
 
-  if (!getOption('.soilDB_testNetworkFunctions'))  {
-    skip("in-house testing only")
-  }
+  skip_on_cran()
 
   # test SSA geometry sapolygon
 
@@ -63,16 +59,16 @@ test_that("fetchSDA_spatial sapolygon and gsmmupolygon", {
                                          "Eastern Stanislaus Area, California",
                                          "Mariposa County Area, California",
                                          "Stanislaus County, California, Northern Part"))
-  
+
   # test STATSGO mupolygon
   statsgo.bbox <- fetchSDA_spatial(660848, db = 'STATSGO', method = "bbox",
                                    add.fields = c("mapunit.muname","legend.areaname"))
   expect_equal(nrow(statsgo.bbox), 5)
-  
+
   # skip_if_not_installed('sf')
   # suppressWarnings(requireNamespace("sf"))
   # suppressWarnings(requireNamespace("lwgeom"))
-  # # test CLIPAREASYMBOL 
+  # # test CLIPAREASYMBOL
   # an_extent <- fetchSDA_spatial(x = 660972, db = 'STATSGO', chunk.size = 1, add.fields = "legend.areaname")
   # tst <- sf::st_as_sf(an_extent)
   # expect_equal(nrow(an_extent), 7)

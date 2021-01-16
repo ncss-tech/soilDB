@@ -5,11 +5,7 @@ test_that("SDA_query() works", {
 
   skip_if_offline()
 
-  # hack for in-house testing only
-  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if( ! getOption('.soilDB_testNetworkFunctions') )  {
-    skip("in-house testing only")
-  }
+  skip_on_cran()
 
   ## sample data
 
@@ -40,11 +36,7 @@ test_that("SDA_query() returns expected result", {
 
   skip_if_offline()
 
-  # hack for in-house testing only
-  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if( ! getOption('.soilDB_testNetworkFunctions') ) {
-    skip("in-house testing only")
-  }
+  skip_on_cran()
 
   # table dimensions
   expect_equal(nrow(x.1), 1)
@@ -61,11 +53,7 @@ test_that("SDA_query() SQL error / no results -> NULL", {
 
   skip_if_offline()
 
-  # hack for in-house testing only
-  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if( ! getOption('.soilDB_testNetworkFunctions') ) {
-    skip("in-house testing only")
-  }
+  skip_on_cran()
 
   # bad SQL should result in a warning and try-error result.
   expect_true(inherits(expect_warning(SDA_query("SELECT this from that")), 'try-error'))
@@ -81,11 +69,7 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
 
   skip_if_offline()
 
-  # hack for in-house testing only
-  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if( ! getOption('.soilDB_testNetworkFunctions') ) {
-    skip("in-house testing only")
-  }
+  skip_on_cran()
 
   res <- suppressWarnings(SDA_spatialQuery(p, what = 'mukey'))
 
@@ -101,11 +85,7 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
 
   skip_if_offline()
 
-  # hack for in-house testing only
-  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if( ! getOption('.soilDB_testNetworkFunctions') ) {
-    skip("in-house testing only")
-  }
+  skip_on_cran()
 
   # test with default db = "SSURGO"
   res <- suppressWarnings(SDA_spatialQuery(p, what = 'geom'))
@@ -128,11 +108,7 @@ test_that("SDA_query() interprets column names", {
 
   skip_if_offline()
 
-  # hack for in-house testing only
-  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if( ! getOption('.soilDB_testNetworkFunctions') ) {
-    skip("in-house testing only")
-  }
+  skip_on_cran()
 
   # x.3 is from the component table
   expect_equal(
@@ -148,11 +124,7 @@ test_that("SDA_query() interprets data type correctly", {
 
   skip_if_offline()
 
-  # hack for in-house testing only
-  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if( ! getOption('.soilDB_testNetworkFunctions') ) {
-    skip("in-house testing only")
-  }
+  skip_on_cran()
 
   # x.3 is from the component table
   expect_true(inherits(x.3$mukey, 'integer'))
@@ -173,11 +145,7 @@ test_that("SDA_query() works with multi-line records", {
 
   skip_if_offline()
 
-  # hack for in-house testing only
-  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if( ! getOption('.soilDB_testNetworkFunctions') ) {
-    skip("in-house testing only")
-  }
+  skip_on_cran()
 
   # https://github.com/ncss-tech/soilDB/issues/28
   expect_true(inherits(x.4, 'data.frame'))
