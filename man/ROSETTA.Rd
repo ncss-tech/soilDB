@@ -29,17 +29,17 @@ a \code{data.frame} object:
  \item{alpha:}{related to the inverse of the air entry suction, log10-transformed values with units of cm}
  \item{npar: }{index of pore size distribution, log10-transformed values with units of 1/cm}
  \item{ksat: }{saturated hydraulic conductivity, log10-transformed values with units of cm/day}
- 
+
  \item{.rosetta.model}{best-available model selection (-1 signifies that prediction was not possible due to missing values in \code{x})}
  \item{.rosetta.version}{ROSETTA algorithm version, selected via function argument \code{v}}
- 
+
 }
 }
 \description{
 A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). See the \href{http://ncss-tech.github.io/AQP/soilDB/ROSETTA-API.html}{related tutorial} for additional examples.
 }
 \details{
-Soil properties supplied in \code{x} must be described, in order, via \code{vars} argument. The API does not use the names but column ordering must follow: sand, silt, clay, bulk density, volumetric water content at 33kPa (1/3 bar), and volumetric water content at 1500kPa (15 bar). 
+Soil properties supplied in \code{x} must be described, in order, via \code{vars} argument. The API does not use the names but column ordering must follow: sand, silt, clay, bulk density, volumetric water content at 33kPa (1/3 bar), and volumetric water content at 1500kPa (15 bar).
 
 The ROSETTA model relies on a minimum of 3 soil properties, with increasing (expected) accuracy as additional properties are included:
  \itemize{
@@ -48,16 +48,17 @@ The ROSETTA model relies on a minimum of 3 soil properties, with increasing (exp
    \item{optional, volumetric water content at 33 kPa: }{roughly "field capacity" for most soils, units of cm^3/cm^3}
    \item{optional, volumetric water content at 1500 kPa: }{roughly "permanent wilting point" for most plants, units of cm^3/cm^3}
  }
- 
+
 Column names not specified in \code{vars} are retained in the output.
 
-Three versions of the ROSETTA model are available, selected using \code{v = 1}, \code{v = 2}, or \code{v = 3}. 
+Three versions of the ROSETTA model are available, selected using \code{v = 1}, \code{v = 2}, or \code{v = 3}.
 
 \describe{
 
 \item{version 1}{Schaap, M.G., F.J. Leij, and M.Th. van Genuchten. 2001. ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions. Journal of Hydrology 251(3-4): 163-176. doi: 10.1016/S0022-1694(01)00466-8.}
 
-\item{version 2}{Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils. Vadose Zone Journal 3(4): 1455-1463. doi: https://doi.org/10.2136/vzj2004.1455.}
+\item{version 2}{Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils. Vadose Zone Journal 3(4): 1455-1463. doi: \doi{10.2136/vzj2004.1455.}}
+
 
 \item{version 3}{Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39-53. doi: 10.1016/j.jhydrol.2017.01.004.}
 }

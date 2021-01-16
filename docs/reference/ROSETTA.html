@@ -159,10 +159,10 @@
  <dt>alpha:</dt><dd><p>related to the inverse of the air entry suction, log10-transformed values with units of cm</p></dd>
  <dt>npar: </dt><dd><p>index of pore size distribution, log10-transformed values with units of 1/cm</p></dd>
  <dt>ksat: </dt><dd><p>saturated hydraulic conductivity, log10-transformed values with units of cm/day</p></dd>
- 
+
  <dt>.rosetta.model</dt><dd><p>best-available model selection (-1 signifies that prediction was not possible due to missing values in <code>x</code>)</p></dd>
  <dt>.rosetta.version</dt><dd><p>ROSETTA algorithm version, selected via function argument <code>v</code></p></dd>
- 
+
 
 </dl>
 
@@ -175,14 +175,15 @@
 <li><p>optional, volumetric water content at 33 kPa: roughly "field capacity" for most soils, units of cm^3/cm^3</p></li>
 <li><p>optional, volumetric water content at 1500 kPa: roughly "permanent wilting point" for most plants, units of cm^3/cm^3</p></li>
 </ul>
- 
+
 <p>Column names not specified in <code>vars</code> are retained in the output.</p>
 <p>Three versions of the ROSETTA model are available, selected using <code>v = 1</code>, <code>v = 2</code>, or <code>v = 3</code>.</p>
 <dl>
 
 <dt>version 1</dt><dd><p>Schaap, M.G., F.J. Leij, and M.Th. van Genuchten. 2001. ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions. Journal of Hydrology 251(3-4): 163-176. doi: 10.1016/S0022-1694(01)00466-8.</p></dd>
 
-<dt>version 2</dt><dd><p>Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils. Vadose Zone Journal 3(4): 1455-1463. doi: https://doi.org/10.2136/vzj2004.1455.</p></dd>
+<dt>version 2</dt><dd><p>Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils. Vadose Zone Journal 3(4): 1455-1463. doi: doi: <a href='https://doi.org/10.2136/vzj2004.1455.'>10.2136/vzj2004.1455.</a></p></dd>
+
 
 <dt>version 3</dt><dd><p>Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39-53. doi: 10.1016/j.jhydrol.2017.01.004.</p></dd>
 
