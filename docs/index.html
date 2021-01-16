@@ -194,39 +194,39 @@
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(aqp)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(soilDB)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(sharpshootR)</a>
-<a class="sourceLine" id="cb1-4" title="4"></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="co"># get morphology + extended summaries</span></a>
-<a class="sourceLine" id="cb1-6" title="6">soils &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">'cecil'</span>, <span class="st">'altavista'</span>, <span class="st">'lloyd'</span>, <span class="st">'wickham'</span>, <span class="st">'wilkes'</span>,  <span class="st">'chewacla'</span>, <span class="st">'congaree'</span>)</a>
-<a class="sourceLine" id="cb1-7" title="7">s &lt;-<span class="st"> </span><span class="kw">fetchOSD</span>(soils, <span class="dt">extended =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-8" title="8"></a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="co"># viz of hillslope position, from SSURGO component records</span></a>
-<a class="sourceLine" id="cb1-10" title="10">res &lt;-<span class="st"> </span><span class="kw">vizHillslopePosition</span>(s<span class="op">$</span>hillpos, <span class="dt">annotation.cex =</span> <span class="fl">0.9</span>)</a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="kw">print</span>(res<span class="op">$</span>fig)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(aqp)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(soilDB)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sharpshootR)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># get morphology + extended summaries</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>soils <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'cecil'</span>, <span class="st">'altavista'</span>, <span class="st">'lloyd'</span>, <span class="st">'wickham'</span>, <span class="st">'wilkes'</span>,  <span class="st">'chewacla'</span>, <span class="st">'congaree'</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">fetchOSD</span>(soils, <span class="at">extended =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># viz of hillslope position, from SSURGO component records</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">vizHillslopePosition</span>(s<span class="sc">$</span>hillpos, <span class="at">annotation.cex =</span> <span class="fl">0.9</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(res<span class="sc">$</span>fig)</span></code></pre></div>
 <p><img src=".github/images/hillslope-1.png" width="1056"></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># profile sketches</span></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">4</span>), <span class="dt">xpd=</span><span class="ot">NA</span>)</a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="kw">plot</span>(s<span class="op">$</span>SPC, <span class="dt">plot.order=</span>res<span class="op">$</span>order, <span class="dt">cex.names=</span><span class="dv">1</span>, <span class="dt">axis.line.offset =</span> <span class="fl">-0.1</span>, <span class="dt">width=</span><span class="fl">0.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># profile sketches</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">4</span>), <span class="at">xpd=</span><span class="cn">NA</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(s<span class="sc">$</span>SPC, <span class="at">plot.order=</span>res<span class="sc">$</span>order, <span class="at">cex.names=</span><span class="dv">1</span>, <span class="at">axis.line.offset =</span> <span class="sc">-</span><span class="fl">0.1</span>, <span class="at">width=</span><span class="fl">0.2</span>)</span></code></pre></div>
 <p><img src=".github/images/sketches-1.png" width="1344"></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># siblings</span></a>
-<a class="sourceLine" id="cb3-2" title="2">s &lt;-<span class="st"> 'Amador'</span></a>
-<a class="sourceLine" id="cb3-3" title="3">amador &lt;-<span class="st"> </span><span class="kw">siblings</span>(s, <span class="dt">only.major =</span> <span class="ot">FALSE</span>, <span class="dt">component.data =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb3-4" title="4"></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="co"># limit to named soil series</span></a>
-<a class="sourceLine" id="cb3-6" title="6">sib.data &lt;-<span class="st"> </span><span class="kw">subset</span>(amador<span class="op">$</span>sib.data, <span class="op">!</span>compkind <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">'Miscellaneous area'</span>, <span class="st">'Family'</span>, <span class="st">'Taxon above family'</span>))</a>
-<a class="sourceLine" id="cb3-7" title="7"></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="co"># get parsed OSD records</span></a>
-<a class="sourceLine" id="cb3-9" title="9">sibs &lt;-<span class="st"> </span><span class="kw">fetchOSD</span>(<span class="kw">c</span>(s, <span class="kw">unique</span>(amador<span class="op">$</span>sib<span class="op">$</span>sibling)), <span class="dt">extended =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb3-10" title="10"></a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="co"># invert colors</span></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="dt">fg=</span><span class="st">'white'</span>, <span class="dt">bg=</span><span class="st">'black'</span>)</a>
-<a class="sourceLine" id="cb3-13" title="13"></a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="co"># create taxonomy dendrogram</span></a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="kw">SoilTaxonomyDendrogram</span>(sibs<span class="op">$</span>SPC, <span class="dt">dend.width =</span> <span class="fl">1.5</span>, <span class="dt">y.offset =</span> <span class="fl">0.4</span>, </a>
-<a class="sourceLine" id="cb3-16" title="16">                       <span class="dt">scaling.factor =</span> <span class="fl">0.02</span>, <span class="dt">width =</span> <span class="fl">0.2</span>, </a>
-<a class="sourceLine" id="cb3-17" title="17">                       <span class="dt">cex.taxon.labels =</span> <span class="dv">1</span>, <span class="dt">cex.names =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># siblings</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="st">'Amador'</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>amador <span class="ot">&lt;-</span> <span class="fu">siblings</span>(s, <span class="at">only.major =</span> <span class="cn">FALSE</span>, <span class="at">component.data =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># limit to named soil series</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>sib.data <span class="ot">&lt;-</span> <span class="fu">subset</span>(amador<span class="sc">$</span>sib.data, <span class="sc">!</span>compkind <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Miscellaneous area'</span>, <span class="st">'Family'</span>, <span class="st">'Taxon above family'</span>))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># get parsed OSD records</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>sibs <span class="ot">&lt;-</span> <span class="fu">fetchOSD</span>(<span class="fu">c</span>(s, <span class="fu">unique</span>(amador<span class="sc">$</span>sib<span class="sc">$</span>sibling)), <span class="at">extended =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># invert colors</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="at">fg=</span><span class="st">'white'</span>, <span class="at">bg=</span><span class="st">'black'</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># create taxonomy dendrogram</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">SoilTaxonomyDendrogram</span>(sibs<span class="sc">$</span>SPC, <span class="at">dend.width =</span> <span class="fl">1.5</span>, <span class="at">y.offset =</span> <span class="fl">0.4</span>, </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                       <span class="at">scaling.factor =</span> <span class="fl">0.02</span>, <span class="at">width =</span> <span class="fl">0.2</span>, </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                       <span class="at">cex.taxon.labels =</span> <span class="dv">1</span>, <span class="at">cex.names =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p><img src=".github/images/dendrogram-1.png" width="1344"></p>
 </div>
 <div id="dependency-graph" class="section level2">
