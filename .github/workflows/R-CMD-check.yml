@@ -44,7 +44,7 @@ jobs:
         run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
 
       - name: Configure git
-        if:  runner.os == 'windows-latest' && github.event_name != 'pull_request'
+        if:  runner.os == 'Windows' && github.event_name != 'pull_request'
         run: |
           git config user.email "github-actions@github.com"
           git config user.name "github-actions"
