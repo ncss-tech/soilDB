@@ -95,7 +95,7 @@ jobs:
       - name: Render README
         if: runner.os == 'Windows' && github.event_name != 'pull_request'
         run: |
-          install.packages(c("rmarkdown","devtools","aqp","sharpshootR"))
+          install.packages(c("rmarkdown","devtools","aqp","soilDB","sharpshootR"))
           remotes::install_github(c("ncss-tech/aqp","ncss-tech/sharpshootR"), dependencies = FALSE)
           devtools::install()
           rmarkdown::render("README.Rmd")
