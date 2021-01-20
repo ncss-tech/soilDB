@@ -120,7 +120,7 @@
     <p>List variables or databases provided by soilDB web coverage service (WCS) abstraction. These lists will be expanded in future versions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>WCS_details</span><span class='op'>(</span>wcs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mukey"</span>, <span class='st'>"ISSR800"</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>WCS_details</span>(wcs = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mukey"</span>, <span class='st'>"ISSR800"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,95 +137,51 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'>WCS_details</span><span class='op'>(</span>wcs <span class='op'>=</span> <span class='st'>'ISSR800'</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                 var
-#&gt; 4     caco3_kg_sq_m
-#&gt; 8         cec_025cm
-#&gt; 9         cec_050cm
-#&gt; 7          cec_05cm
-#&gt; 18       clay_025cm
-#&gt; 17        clay_05cm
-#&gt; 19      clay_2550cm
-#&gt; 20      clay_3060cm
-#&gt; 32   drainage_class
-#&gt; 6          ec_025cm
-#&gt; 5           ec_05cm
-#&gt; 38       greatgroup
-#&gt; 31           hydgrp
-#&gt; 42    lcc_irrigated
-#&gt; 43 lcc_nonirrigated
-#&gt; 3        om_kg_sq_m
-#&gt; 10             paws
-#&gt; 12       paws_025cm
-#&gt; 11       paws_050cm
-#&gt; 14         ph_025cm
-#&gt; 13          ph_05cm
-#&gt; 15        ph_2550cm
-#&gt; 16        ph_3060cm
-#&gt; 22       sand_025cm
-#&gt; 21        sand_05cm
-#&gt; 23      sand_2550cm
-#&gt; 24      sand_3060cm
-#&gt; 29              sar
-#&gt; 30      series_name
-#&gt; 26       silt_025cm
-#&gt; 25        silt_05cm
-#&gt; 27      silt_2550cm
-#&gt; 28      silt_3060cm
-#&gt; 36        soilorder
-#&gt; 2        ssurgo_pct
-#&gt; 1       statsgo_pct
-#&gt; 35              str
-#&gt; 37         suborder
-#&gt; 40    texture_025cm
-#&gt; 39     texture_05cm
-#&gt; 41   texture_2550cm
-#&gt; 33              weg
-#&gt; 34              wei
-#&gt;                                               description
-#&gt; 4                                    Total CaCO3 (kg/m^2)
-#&gt; 8                   CEC at pH 7 0-25cm depth (cmol[+]/kg)
-#&gt; 9                   CEC at pH 7 0-50cm depth (cmol[+]/kg)
-#&gt; 7                    CEC at pH 7 0-5cm depth (cmol[+]/kg)
-#&gt; 18                              clay percent 0-25cm depth
-#&gt; 17                               clay percent 0-5cm depth
-#&gt; 19                             clay percent 25-50cm depth
-#&gt; 20                             clay percent 30-60cm depth
-#&gt; 32                                    Soil Drainage Class
-#&gt; 6                                  EC 0-25cm depth (dS/m)
-#&gt; 5                                   EC 0-5cm depth (dS/m)
-#&gt; 38                              Soil Taxonomy: Greatgroup
-#&gt; 31                                  Hydrologic Soil Group
-#&gt; 42                       Land Capability Class, irrigated
-#&gt; 43                   Land Capability Class, non-irrigated
-#&gt; 3                      Total Soil Organic Matter (kg/m^2)
-#&gt; 10         total plant available water storage (cm water)
-#&gt; 12  plant available water storage 0-25cm depth (cm water)
-#&gt; 11  plant available water storage 0-50cm depth (cm water)
-#&gt; 14                                pH 1:1 H2O 0-25cm depth
-#&gt; 13                                 pH 1:1 H2O 0-5cm depth
-#&gt; 15                               pH 1:1 H2O 25-50cm depth
-#&gt; 16                               pH 1:1 H2O 30-60cm depth
-#&gt; 22                              sand percent 0-25cm depth
-#&gt; 21                               sand percent 0-5cm depth
-#&gt; 23                             sand percent 25-50cm depth
-#&gt; 24                             sand percent 30-60cm depth
-#&gt; 29                                    SAR, entire profile
-#&gt; 30                                       Soil Series Name
-#&gt; 26                              silt percent 0-25cm depth
-#&gt; 25                               silt percent 0-5cm depth
-#&gt; 27                             silt percent 25-50cm depth
-#&gt; 28                             silt percent 30-60cm depth
-#&gt; 36                              Soil Taxonomy: Soil Order
-#&gt; 2   SSURGO data available, fraction of 800x800m grid cell
-#&gt; 1  STATSGO data available, fraction of 800x800m grid cell
-#&gt; 35                                Soil Temperature Regime
-#&gt; 37                                Soil Taxonomy: Suborder
-#&gt; 40                             Soil Texture Class, 0-25cm
-#&gt; 39                              Soil Texture Class, 0-5cm
-#&gt; 41                            Soil Texture Class, 25-50cm
-#&gt; 33                                 Wind Erodibility Group
-#&gt; 34                                 Wind Erodibility Index</div></pre>
+<span class='fu'>WCS_details</span>(wcs = <span class='st'>'ISSR800'</span>)
+</div><div class='output co'>#&gt;                 var                                            description
+#&gt; 4     caco3_kg_sq_m                                   Total CaCO3 (kg/m^2)
+#&gt; 8         cec_025cm                  CEC at pH 7 0-25cm depth (cmol[+]/kg)
+#&gt; 9         cec_050cm                  CEC at pH 7 0-50cm depth (cmol[+]/kg)
+#&gt; 7          cec_05cm                   CEC at pH 7 0-5cm depth (cmol[+]/kg)
+#&gt; 18       clay_025cm                              clay percent 0-25cm depth
+#&gt; 17        clay_05cm                               clay percent 0-5cm depth
+#&gt; 19      clay_2550cm                             clay percent 25-50cm depth
+#&gt; 20      clay_3060cm                             clay percent 30-60cm depth
+#&gt; 32   drainage_class                                    Soil Drainage Class
+#&gt; 6          ec_025cm                                 EC 0-25cm depth (dS/m)
+#&gt; 5           ec_05cm                                  EC 0-5cm depth (dS/m)
+#&gt; 38       greatgroup                              Soil Taxonomy: Greatgroup
+#&gt; 31           hydgrp                                  Hydrologic Soil Group
+#&gt; 42    lcc_irrigated                       Land Capability Class, irrigated
+#&gt; 43 lcc_nonirrigated                   Land Capability Class, non-irrigated
+#&gt; 3        om_kg_sq_m                     Total Soil Organic Matter (kg/m^2)
+#&gt; 10             paws         total plant available water storage (cm water)
+#&gt; 12       paws_025cm  plant available water storage 0-25cm depth (cm water)
+#&gt; 11       paws_050cm  plant available water storage 0-50cm depth (cm water)
+#&gt; 14         ph_025cm                                pH 1:1 H2O 0-25cm depth
+#&gt; 13          ph_05cm                                 pH 1:1 H2O 0-5cm depth
+#&gt; 15        ph_2550cm                               pH 1:1 H2O 25-50cm depth
+#&gt; 16        ph_3060cm                               pH 1:1 H2O 30-60cm depth
+#&gt; 22       sand_025cm                              sand percent 0-25cm depth
+#&gt; 21        sand_05cm                               sand percent 0-5cm depth
+#&gt; 23      sand_2550cm                             sand percent 25-50cm depth
+#&gt; 24      sand_3060cm                             sand percent 30-60cm depth
+#&gt; 29              sar                                    SAR, entire profile
+#&gt; 30      series_name                                       Soil Series Name
+#&gt; 26       silt_025cm                              silt percent 0-25cm depth
+#&gt; 25        silt_05cm                               silt percent 0-5cm depth
+#&gt; 27      silt_2550cm                             silt percent 25-50cm depth
+#&gt; 28      silt_3060cm                             silt percent 30-60cm depth
+#&gt; 36        soilorder                              Soil Taxonomy: Soil Order
+#&gt; 2        ssurgo_pct  SSURGO data available, fraction of 800x800m grid cell
+#&gt; 1       statsgo_pct STATSGO data available, fraction of 800x800m grid cell
+#&gt; 35              str                                Soil Temperature Regime
+#&gt; 37         suborder                                Soil Taxonomy: Suborder
+#&gt; 40    texture_025cm                             Soil Texture Class, 0-25cm
+#&gt; 39     texture_05cm                              Soil Texture Class, 0-5cm
+#&gt; 41   texture_2550cm                            Soil Texture Class, 25-50cm
+#&gt; 33              weg                                 Wind Erodibility Group
+#&gt; 34              wei                                 Wind Erodibility Index</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
