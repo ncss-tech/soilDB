@@ -91,8 +91,10 @@ jobs:
 
       - name: Render README
         if: runner.os == 'windows-latest' && github.event_name != 'pull_request'
-        run: Rscript -e 'install.packages("rmarkdown")'
-        run: Rscript -e 'rmarkdown::render("README.Rmd")'
+        run: |
+          install.packages("rmarkdown")
+          rmarkdown::render("README.Rmd")
+        shell: Rscript {0}
 
       - name: Commit results
         if: runner.os == 'windows-latest' && github.event_name != 'pull_request'
