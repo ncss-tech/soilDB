@@ -93,14 +93,14 @@ jobs:
         shell: Rscript {0}
 
       - name: Render README
-        if: runner.os == 'windows-latest' && github.event_name != 'pull_request'
+        if: runner.os == 'Windows' && github.event_name != 'pull_request'
         run: |
           install.packages("rmarkdown")
           rmarkdown::render("README.Rmd")
         shell: Rscript {0}
 
       - name: Commit results
-        if: runner.os == 'windows-latest' && github.event_name != 'pull_request'
+        if: runner.os == 'Windows' && github.event_name != 'pull_request'
         run: |
           git add .github/images/\*.png
           git add docs/.github/images\*.png
@@ -108,7 +108,7 @@ jobs:
           git commit README.md -m 'Render README.Rmd' || echo "No changes to commit"
 
       - name: Push results
-        if: runner.os == 'windows-latest' && github.event_name != 'pull_request'
+        if: runner.os == 'Windows' && github.event_name != 'pull_request'
         run: |
           git push origin HEAD:${{ env.BRANCH_NAME }} || echo "No changes to commit"
 
