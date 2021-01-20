@@ -95,7 +95,8 @@ jobs:
       - name: Render README
         if: runner.os == 'Windows' && github.event_name != 'pull_request'
         run: |
-          install.packages("rmarkdown")
+          install.packages(c("rmarkdown","devtools"))
+          devtools::install()
           rmarkdown::render("README.Rmd")
         shell: Rscript {0}
 
