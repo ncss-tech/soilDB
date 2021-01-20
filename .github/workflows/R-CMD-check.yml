@@ -80,3 +80,28 @@ jobs:
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
+
+      - name: Configure git
+        if: ${{ runner.os }} == 'windows-latest' && github.event_name != 'pull_request'
+        run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "github-actions"
+          git pull --no-rebase origin ${{ env.BRANCH_NAME }}
+          echo ${{ env.BRANCH_NAME }}
+
+      - name: Render README
+        if: ${{ runner.os }} == 'windows-latest' && github.event_name != 'pull_request'
+        run: Rscript -e 'rmarkdown::render("README.Rmd")'
+
+      - name: Commit results
+        if: ${{ runner.os }} == 'windows-latest' && github.event_name != 'pull_request'
+        run: |
+          git add .github/images/\*.png
+          git add docs/.github/images\*.png
+          git commit -m 'Update README/index images' || echo "No changes to commit"
+          git commit README.md -m 'Render README.Rmd' || echo "No changes to commit"
+
+      - name: Push results
+        if: ${{ runner.os }} == 'windows-latest' && github.event_name != 'pull_request'
+        run: |
+          git push origin HEAD:${{ env.BRANCH_NAME }} || echo "No changes to commit"
