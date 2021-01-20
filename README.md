@@ -28,18 +28,33 @@ Website
 soilDB 2.5.9
 ------------
 
-### NASIS
+### Notices on Database Interfaces
 
--   `SDA_query` returns a `try-error` for queries with invalid syntax or
-    on network error; empty results are an empty `data.frame()`
+#### NASIS
+
 -   low-level functions return empty `data.frame` objects when local
     database (or selected set) is empty
 -   `fetchNASIS()` is now a wrapper around pedon and component “fetch”
     functions
 -   `uncode()` is now used in all queries to local NASIS database
 
-Database APIs
--------------
+#### Soil Data Access (SDA)
+
+-   `SDA_query` returns a `try-error` for queries with invalid syntax or
+    on network error; empty results are an empty `data.frame()`
+-   `fetchSDA_spatial` can return STATSGO `gsmmupolygon` or Soil Survey
+    Area `sapolygon` data; and can join to the `legend` table
+
+#### Other APIs
+
+-   **NEW** functions
+    [`ROSETTA`](http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html),
+    [`taxaExtent`](http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html),
+    [`mukey.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html),
+    [`ISSR800.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html)
+
+Functions by Data Source
+------------------------
 
 -   SDA
     -   [`fetchSDA`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSDA_component.html)
@@ -76,7 +91,7 @@ Database APIs
 -   SoilGrids
     -   [`fetchSoilGrids`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSoilGrids.html)
 
-Miscellaneous Utilities
+Miscellaneous Functions
 -----------------------
 
 -   [`estimateSTR`](http://ncss-tech.github.io/soilDB/docs/reference/estimateSTR.html)
@@ -85,7 +100,7 @@ Miscellaneous Utilities
 -   [`simplfyFragmentData`](http://ncss-tech.github.io/soilDB/docs/reference/simplfyFragmentData.html)
 -   [`simplifyColorData`](http://ncss-tech.github.io/soilDB/docs/reference/simplifyColorData.html)
 -   [`uncode`](http://ncss-tech.github.io/soilDB/docs/reference/uncode.html)
--   [`code`](http://ncss-tech.github.io/soilDB/docs/reference/uncode.html)
+-   [`code`](http://ncss-tech.github.io/soilDB/docs/reference/code.html)
 -   [`get_NOAA_GHCND`](http://ncss-tech.github.io/soilDB/docs/reference/get_NOAA_GHCND.html)
 
 Tutorials and Demonstrations
