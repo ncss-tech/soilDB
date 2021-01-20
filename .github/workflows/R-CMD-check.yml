@@ -82,7 +82,7 @@ jobs:
           path: check
 
       - name: Configure git
-        if: ${{ runner.os }} == 'windows-latest' && github.event_name != 'pull_request'
+        if:  runner.os == 'windows-latest' && github.event_name != 'pull_request'
         run: |
           git config user.email "github-actions@github.com"
           git config user.name "github-actions"
@@ -90,11 +90,12 @@ jobs:
           echo ${{ env.BRANCH_NAME }}
 
       - name: Render README
-        if: ${{ runner.os }} == 'windows-latest' && github.event_name != 'pull_request'
+        if: runner.os == 'windows-latest' && github.event_name != 'pull_request'
+        run: Rscript -e 'install.packages("rmarkdown")'
         run: Rscript -e 'rmarkdown::render("README.Rmd")'
 
       - name: Commit results
-        if: ${{ runner.os }} == 'windows-latest' && github.event_name != 'pull_request'
+        if: runner.os == 'windows-latest' && github.event_name != 'pull_request'
         run: |
           git add .github/images/\*.png
           git add docs/.github/images\*.png
@@ -102,6 +103,6 @@ jobs:
           git commit README.md -m 'Render README.Rmd' || echo "No changes to commit"
 
       - name: Push results
-        if: ${{ runner.os }} == 'windows-latest' && github.event_name != 'pull_request'
+        if: runner.os == 'windows-latest' && github.event_name != 'pull_request'
         run: |
           git push origin HEAD:${{ env.BRANCH_NAME }} || echo "No changes to commit"
