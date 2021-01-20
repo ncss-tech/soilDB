@@ -21,25 +21,22 @@
 #' @details 
 #' See \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage} for more information.
 #'
-#' \describe{
-#'   \item{}{family level taxa are derived from SC database, not parsed OSD records}
-#'   \item{}{MLRA are derived via spatial intersection (SSURGO x MLRA polygons)}
-#'   \item{}{MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)}
-#'   \item{}{logical AND: &}
-#'   \item{}{logical OR: |}
-#'   \item{}{wildcard, e.g. rhy-something rhy:*}
-#'   \item{}{search terms with spaces need doubled single quotes: ''san joaquin''}
-#'   \item{}{combine search terms into a single expression: (grano:* | granite)}
-#' } 
+#' * family level taxa are derived from SC database, not parsed OSD records
+#' * MLRA are derived via spatial intersection (SSURGO x MLRA polygons)
+#' * MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)
+#' * logical AND: `&`
+#' * logical OR: `|`
+#' * wildcard, e.g. rhy-something `rhy:*`
+#' * search terms with spaces need doubled single quotes: `''san joaquin''`
+#' * combine search terms into a single expression: `(grano:* | granite)`
 #' 
 #' Related documentation can be found in the following tutorials
-#' \itemize{
-#'   \item{\href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}}
+#' 
+#' * \href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}
 #'   
-#'   \item{\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}}
+#' * \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}
 #'   
-#'   \item{\href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}}
-#' }
+#' * \href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}
 #' 
 #' @references \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587}
 #' 

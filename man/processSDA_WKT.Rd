@@ -23,7 +23,7 @@ This is a helper function, commonly used with \code{SDA_query} to extract WKT (w
 The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}. See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for detailed examples.
 }
 \note{
-This function requires the `httr`, `jsonlite`, `XML`, and `rgeos` packages.
+This function requires the \code{httr}, \code{jsonlite}, \code{XML}, and \code{rgeos} packages.
 }
 \author{
 D.E. Beaudette

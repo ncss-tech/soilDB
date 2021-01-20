@@ -8,7 +8,7 @@
 #' @param state a two-letter US state abbreviation; case-insensitive
 #' @param rcasiteid a RaCA site id (e.g. 'C1609C01')
 #' @param get.vnir logical, should associated VNIR spectra be downloaded? (see details)
-#' @details The VNIR spectra associated with RaCA data are quite large [each gzip-compressed VNIR spectra record is about 6.6kb], so requests for these data are disabled by default. Note that VNIR spectra can only be queried by soil series or geographic BBOX.
+#' @details The VNIR spectra associated with RaCA data are quite large (each gzip-compressed VNIR spectra record is about 6.6kb), so requests for these data are disabled by default. Note that VNIR spectra can only be queried by soil series or geographic BBOX.
 #' @return {
 #' \describe{
 #' \item{\code{pedons}:}{a \code{SoilProfileCollection} object containing site/pedon/horizon data}

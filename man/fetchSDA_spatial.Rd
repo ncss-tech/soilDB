@@ -33,7 +33,7 @@ fetchSDA_spatial(
 \item{verbose}{Print messages?}
 }
 \value{
-A Spatial*DataFrame corresponding to SDA spatial data for all symbols requested. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with `add.fields`.
+A Spatial*DataFrame corresponding to SDA spatial data for all symbols requested. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with \code{add.fields}.
 }
 \description{
 This is a high-level "fetch" method to facilitate spatial queries to Soil Data Access (SDA) based on mapunit key (\code{mukey}) and national mapunit symbol (\code{nationalmusym}) for \code{mupolygon} (SSURGO) or \code{gsmmupolygon} (STATSGO) geometry OR legend key (\code{lkey}) and area symbols (\code{areasymbol}) for \code{sapolygon} (Soil Survey Area; SSA) geometry).
@@ -42,7 +42,7 @@ A Soil Data Access spatial query is made returning geometry and key identifying 
 
 This function automatically "chunks" the input vector (using \code{soilDB::makeChunks}) of mapunit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the \code{chunk.size} setting and the length of your input vector. If you are working with many mapunits and/or large extents, you may need to decrease this number in order to have more chunks.
 
-Querying regions with complex mapping may require smaller \code{chunk.size}. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform "poorly" [slow or error] no matter what the chunk size is. Shuffling the order of the inputs using \code{sample} may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use \code{muacres} as a heuristic to adjust for total acreage within chunks.
+Querying regions with complex mapping may require smaller \code{chunk.size}. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform "poorly" (slow or error) no matter what the chunk size is. Shuffling the order of the inputs using \code{sample} may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use \code{muacres} as a heuristic to adjust for total acreage within chunks.
 }
 \details{
 Note that STATSGO data are fetched using \code{CLIPAREASYMBOL = 'US'} to avoid duplicating state and national subsets of the geometry.

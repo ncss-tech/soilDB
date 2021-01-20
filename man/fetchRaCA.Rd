@@ -39,7 +39,7 @@ fetchRaCA(
 Get Rapid Carbon Assessment (RaCA) data via state, geographic bounding-box, RaCA site ID, or series query from the SoilWeb API.
 }
 \details{
-The VNIR spectra associated with RaCA data are quite large [each gzip-compressed VNIR spectra record is about 6.6kb], so requests for these data are disabled by default. Note that VNIR spectra can only be queried by soil series or geographic BBOX.
+The VNIR spectra associated with RaCA data are quite large (each gzip-compressed VNIR spectra record is about 6.6kb), so requests for these data are disabled by default. Note that VNIR spectra can only be queried by soil series or geographic BBOX.
 }
 \examples{
 \donttest{
@@ -72,8 +72,8 @@ if(requireNamespace("curl") &
 }
 \references{
 {
-  \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164}
-  \href{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/RaCA-demo.html?root=aqp}{fetchRaCA() Tutorial}
+\url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164}
+\href{https://r-forge.r-project.org/scm/viewvc.php/\emph{checkout}/docs/soilDB/RaCA-demo.html?root=aqp}{fetchRaCA() Tutorial}
 }
 }
 \seealso{

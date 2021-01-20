@@ -6,7 +6,7 @@
 #'
 #' This function automatically "chunks" the input vector (using \code{soilDB::makeChunks}) of mapunit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the \code{chunk.size} setting and the length of your input vector. If you are working with many mapunits and/or large extents, you may need to decrease this number in order to have more chunks.
 #'
-#' Querying regions with complex mapping may require smaller \code{chunk.size}. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform "poorly" [slow or error] no matter what the chunk size is. Shuffling the order of the inputs using \code{sample} may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use \code{muacres} as a heuristic to adjust for total acreage within chunks.
+#' Querying regions with complex mapping may require smaller \code{chunk.size}. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform "poorly" (slow or error) no matter what the chunk size is. Shuffling the order of the inputs using \code{sample} may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use \code{muacres} as a heuristic to adjust for total acreage within chunks.
 #'
 #' @param x A vector of MUKEYs / national mapunit symbols (for mupolygon geometry); OR legend keys (LKEY) / area symbols (for sapolygon geometry)
 #'

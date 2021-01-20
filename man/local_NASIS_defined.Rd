@@ -2,7 +2,7 @@
 % Please edit documentation in R/openNASISchannel.R
 \name{local_NASIS_defined}
 \alias{local_NASIS_defined}
-\title{Check for presence of `nasis_local` ODBC data source}
+\title{Check for presence of \code{nasis_local} ODBC data source}
 \usage{
 local_NASIS_defined(static_path = NULL)
 }
@@ -13,7 +13,7 @@ local_NASIS_defined(static_path = NULL)
 logical
 }
 \description{
-Check for presence of `nasis_local` ODBC data source
+Check for presence of \code{nasis_local} ODBC data source
 }
 \examples{
 

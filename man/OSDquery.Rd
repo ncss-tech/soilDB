@@ -43,25 +43,22 @@ This is a rough example of how chunks of text parsed from OSD records can be mad
 }
 \details{
 See \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage} for more information.
-
-\describe{
-  \item{}{family level taxa are derived from SC database, not parsed OSD records}
-  \item{}{MLRA are derived via spatial intersection (SSURGO x MLRA polygons)}
-  \item{}{MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)}
-  \item{}{logical AND: &}
-  \item{}{logical OR: |}
-  \item{}{wildcard, e.g. rhy-something rhy:*}
-  \item{}{search terms with spaces need doubled single quotes: ''san joaquin''}
-  \item{}{combine search terms into a single expression: (grano:* | granite)}
-} 
+\itemize{
+\item family level taxa are derived from SC database, not parsed OSD records
+\item MLRA are derived via spatial intersection (SSURGO x MLRA polygons)
+\item MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)
+\item logical AND: \code{&}
+\item logical OR: \code{|}
+\item wildcard, e.g. rhy-something \verb{rhy:*}
+\item search terms with spaces need doubled single quotes: \verb{''san joaquin''}
+\item combine search terms into a single expression: \verb{(grano:* | granite)}
+}
 
 Related documentation can be found in the following tutorials
 \itemize{
-  \item{\href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}}
-  
-  \item{\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}}
-  
-  \item{\href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}}
+\item \href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}
+\item \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}
+\item \href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}
 }
 }
 \note{

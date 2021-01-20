@@ -2,7 +2,7 @@
 % Please edit documentation in R/SDA_query.R
 \name{format_SQL_in_statement}
 \alias{format_SQL_in_statement}
-\title{Format vector of values into a string suitable for an SQL `IN` statement.}
+\title{Format vector of values into a string suitable for an SQL \code{IN} statement.}
 \usage{
 format_SQL_in_statement(x)
 }
