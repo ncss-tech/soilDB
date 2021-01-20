@@ -96,6 +96,7 @@ jobs:
         if: runner.os == 'Windows' && github.event_name != 'pull_request'
         run: |
           install.packages(c("rmarkdown","devtools"))
+          remotes::install_github("ncss-tech/sharpshootR")
           devtools::install()
           rmarkdown::render("README.Rmd")
         shell: Rscript {0}
