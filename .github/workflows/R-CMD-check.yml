@@ -33,6 +33,24 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Get branch name (push)
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+
+      - name: Get branch name (pull request)
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
+
+      - name: Configure git
+        if:  runner.os == 'windows-latest' && github.event_name != 'pull_request'
+        run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "github-actions"
+          git pull --no-rebase origin ${{ env.BRANCH_NAME }}
+          echo ${{ env.BRANCH_NAME }}
+
       - uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.config.r }}
@@ -74,21 +92,6 @@ jobs:
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@main
-        with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
-          path: check
-
-      - name: Configure git
-        if:  runner.os == 'windows-latest' && github.event_name != 'pull_request'
-        run: |
-          git config user.email "github-actions@github.com"
-          git config user.name "github-actions"
-          git pull --no-rebase origin ${{ env.BRANCH_NAME }}
-          echo ${{ env.BRANCH_NAME }}
-
       - name: Render README
         if: runner.os == 'windows-latest' && github.event_name != 'pull_request'
         run: |
@@ -108,3 +111,10 @@ jobs:
         if: runner.os == 'windows-latest' && github.event_name != 'pull_request'
         run: |
           git push origin HEAD:${{ env.BRANCH_NAME }} || echo "No changes to commit"
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          path: check
