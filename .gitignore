@@ -3,3 +3,4 @@ docs/reference/*.pdf
 *.Rproj*
 .Rproj.user
 .Rhistory
+README_files
