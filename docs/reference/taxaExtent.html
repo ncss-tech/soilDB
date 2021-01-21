@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/soilDB/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,11 +120,11 @@
     <p>This function downloads a generalized representation of the geographic extent of any single taxa from the top 4 tiers of Soil Taxonomy. Data are provided by SoilWeb, ultimately sourced from from the current SSURGO snapshot. Data are returned as <code>raster</code> objects representing area proportion falling within 800m cells. Data are only available in CONUS and returned using an Albers Equal Area / NAD83 coordinate reference system.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>taxaExtent</span>(
-  <span class='kw'>x</span>,
-  level = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"order"</span>, <span class='st'>"suborder"</span>, <span class='st'>"greatgroup"</span>, <span class='st'>"subgroup"</span>),
-  timeout = <span class='fl'>60</span>
-)</pre>
+    <pre class="usage"><span class='fu'>taxaExtent</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  level <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"order"</span>, <span class='st'>"suborder"</span>, <span class='st'>"greatgroup"</span>, <span class='st'>"subgroup"</span><span class='op'>)</span>,
+  timeout <span class='op'>=</span> <span class='fl'>60</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,50 +156,50 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 
-<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
-   <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>()) {
+<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
+   <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://rspatial.org/raster'>raster</a></span>)
+  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://rspatial.org/raster'>raster</a></span><span class='op'>)</span>
   
   <span class='co'># try a couple of different examples</span>
   
   <span class='co'># soil order</span>
-  <span class='kw'>taxa</span> <span class='op'>&lt;-</span> <span class='st'>'vertisols'</span>
-  <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>taxaExtent</span>(<span class='kw'>taxa</span>, level = <span class='st'>'order'</span>)
-  <span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='kw'>raster</span>::<span class='fu'><a href='https://rdrr.io/pkg/raster/man/aggregate.html'>aggregate</a></span>(<span class='kw'>x</span>, fact = <span class='fl'>5</span>)
+  <span class='va'>taxa</span> <span class='op'>&lt;-</span> <span class='st'>'vertisols'</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>taxaExtent</span><span class='op'>(</span><span class='va'>taxa</span>, level <span class='op'>=</span> <span class='st'>'order'</span><span class='op'>)</span>
+  <span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>raster</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>x</span>, fact <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
   
   <span class='co'># suborder</span>
-  <span class='kw'>taxa</span> <span class='op'>&lt;-</span> <span class='st'>'ustalfs'</span>
-  <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>taxaExtent</span>(<span class='kw'>taxa</span>, level = <span class='st'>'suborder'</span>)
-  <span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='kw'>raster</span>::<span class='fu'><a href='https://rdrr.io/pkg/raster/man/aggregate.html'>aggregate</a></span>(<span class='kw'>x</span>, fact = <span class='fl'>5</span>)
+  <span class='va'>taxa</span> <span class='op'>&lt;-</span> <span class='st'>'ustalfs'</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>taxaExtent</span><span class='op'>(</span><span class='va'>taxa</span>, level <span class='op'>=</span> <span class='st'>'suborder'</span><span class='op'>)</span>
+  <span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>raster</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>x</span>, fact <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
   
   <span class='co'># greatgroup</span>
-  <span class='kw'>taxa</span> <span class='op'>&lt;-</span> <span class='st'>'haplohumults'</span>
-  <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>taxaExtent</span>(<span class='kw'>taxa</span>, level = <span class='st'>'greatgroup'</span>)
-  <span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='kw'>raster</span>::<span class='fu'><a href='https://rdrr.io/pkg/raster/man/aggregate.html'>aggregate</a></span>(<span class='kw'>x</span>, fact = <span class='fl'>5</span>)
+  <span class='va'>taxa</span> <span class='op'>&lt;-</span> <span class='st'>'haplohumults'</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>taxaExtent</span><span class='op'>(</span><span class='va'>taxa</span>, level <span class='op'>=</span> <span class='st'>'greatgroup'</span><span class='op'>)</span>
+  <span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>raster</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>x</span>, fact <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
   
   <span class='co'># subgroup</span>
-  <span class='kw'>taxa</span> <span class='op'>&lt;-</span> <span class='st'>'Typic Haploxerepts'</span>
-  <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>taxaExtent</span>(<span class='kw'>taxa</span>, level = <span class='st'>'subgroup'</span>)
-  <span class='kw'>a</span> <span class='op'>&lt;-</span> <span class='kw'>raster</span>::<span class='fu'><a href='https://rdrr.io/pkg/raster/man/aggregate.html'>aggregate</a></span>(<span class='kw'>x</span>, fact = <span class='fl'>5</span>)
+  <span class='va'>taxa</span> <span class='op'>&lt;-</span> <span class='st'>'Typic Haploxerepts'</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>taxaExtent</span><span class='op'>(</span><span class='va'>taxa</span>, level <span class='op'>=</span> <span class='st'>'subgroup'</span><span class='op'>)</span>
+  <span class='va'>a</span> <span class='op'>&lt;-</span> <span class='fu'>raster</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>x</span>, fact <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
   
   <span class='co'># quick evaluation of the result</span>
-  <span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"rasterVis"</span>) <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>'viridis'</span>)) {
-    <span class='kw'>rasterVis</span>::<span class='fu'><a href='https://rdrr.io/pkg/rasterVis/man/levelplot-methods.html'>levelplot</a></span>(<span class='kw'>a</span>, 
-      margin = <span class='fl'>FALSE</span>, scales = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(draw = <span class='fl'>FALSE</span>), 
-      col.regions = <span class='kw'>viridis</span>::<span class='kw'><a href='https://rdrr.io/pkg/viridisLite/man/viridis.html'>viridis</a></span>, 
-      main = <span class='fu'><a href='https://rdrr.io/pkg/raster/man/names.html'>names</a></span>(<span class='kw'>a</span>)
-    )
-  }
+  <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"rasterVis"</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>'viridis'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='fu'>rasterVis</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/rasterVis/man/levelplot-methods.html'>levelplot</a></span><span class='op'>(</span><span class='va'>a</span>, 
+      margin <span class='op'>=</span> <span class='cn'>FALSE</span>, scales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>draw <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>, 
+      col.regions <span class='op'>=</span> <span class='fu'>viridis</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/viridisLite/man/viridis.html'>viridis</a></span>, 
+      main <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/raster/man/names.html'>names</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>}</span>
   
   <span class='co'># slippy map</span>
-  <span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"mapview"</span>)) {
-    <span class='kw'>mapview</span>::<span class='fu'><a href='https://rdrr.io/pkg/mapview/man/mapView.html'>mapview</a></span>(<span class='kw'>a</span>, col.regions = <span class='kw'>viridis</span>::<span class='kw'><a href='https://rdrr.io/pkg/viridisLite/man/viridis.html'>viridis</a></span>, na.color = <span class='fl'>NA</span>, use.layer.names = <span class='fl'>TRUE</span>)
-  }
+  <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"mapview"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='fu'>mapview</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/mapview/man/mapView.html'>mapview</a></span><span class='op'>(</span><span class='va'>a</span>, col.regions <span class='op'>=</span> <span class='fu'>viridis</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/viridisLite/man/viridis.html'>viridis</a></span>, na.color <span class='op'>=</span> <span class='cn'>NA</span>, use.layer.names <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+  <span class='op'>}</span>
   
   
   
-}
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown based on GRS80 ellipsoid in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown based on GRS80 ellipsoid in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown based on GRS80 ellipsoid in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown based on GRS80 ellipsoid in CRS definition</span></div><div class='output co'>#&gt; <span class='message'>Loading required namespace: rasterVis</span></div><div class='output co'>#&gt; <span class='message'>Loading required namespace: mapview</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded ellps WGS 84 in CRS definition: +proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs +type=crs</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum World Geodetic System 1984 in CRS definition</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded ellps WGS 84 in CRS definition: +proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs +type=crs</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum World Geodetic System 1984 in CRS definition</span></div><div class='input'>
 <span class='co'># }</span>
 

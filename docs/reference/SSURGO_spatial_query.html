@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/soilDB/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@
     <p>Get SSURGO Data via Spatial Query to SoilWeb</p>
     </div>
 
-    <pre class="usage"><span class='fu'>SoilWeb_spatial_query</span>(bbox = <span class='kw'>NULL</span>, coords = <span class='kw'>NULL</span>, what = <span class='st'>"mapunit"</span>, source = <span class='st'>"soilweb"</span>)</pre>
+    <pre class="usage"><span class='fu'>SoilWeb_spatial_query</span><span class='op'>(</span>bbox <span class='op'>=</span> <span class='cn'>NULL</span>, coords <span class='op'>=</span> <span class='cn'>NULL</span>, what <span class='op'>=</span> <span class='st'>"mapunit"</span>, source <span class='op'>=</span> <span class='st'>"soilweb"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,15 +158,15 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
-    <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>()) {
+<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
+    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
     
     <span class='co'># query by bbox</span>
-    <span class='fu'>SoilWeb_spatial_query</span>(bbox=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>122.05</span>, <span class='fl'>37</span>, <span class='op'>-</span><span class='fl'>122</span>, <span class='fl'>37.05</span>))
+    <span class='fu'>SoilWeb_spatial_query</span><span class='op'>(</span>bbox<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>122.05</span>, <span class='fl'>37</span>, <span class='op'>-</span><span class='fl'>122</span>, <span class='fl'>37.05</span><span class='op'>)</span><span class='op'>)</span>
     
     <span class='co'># query by coordinate pair</span>
-    <span class='fu'>SoilWeb_spatial_query</span>(coords=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>121</span>, <span class='fl'>38</span>))
-}
+    <span class='fu'>SoilWeb_spatial_query</span><span class='op'>(</span>coords<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>121</span>, <span class='fl'>38</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt;   ogc_fid areasymbol musym  mukey soilweb_last_update dist_meters
 #&gt; 1 1485651      ca077   220 462112          2020-05-29 92.17456302</div><div class='input'><span class='co'># }</span>
 </div></pre>

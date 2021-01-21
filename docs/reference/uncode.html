@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/soilDB/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,11 +120,11 @@
     <p>These functions convert the coded values returned from NASIS or SDA to factors (e.g. 1 = Alfisols) using the metadata tables from NASIS. For SDA the metadata is pulled from a static snapshot in the soilDB package (/data/metadata.rda).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>uncode</span>(<span class='kw'>df</span>, invert = <span class='fl'>FALSE</span>, db = <span class='st'>"NASIS"</span>, 
-       droplevels = <span class='fl'>FALSE</span>,
-       stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
-       )
-<span class='fu'>code</span>(<span class='kw'>df</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>uncode</span><span class='op'>(</span><span class='va'>df</span>, invert <span class='op'>=</span> <span class='cn'>FALSE</span>, db <span class='op'>=</span> <span class='st'>"NASIS"</span>, 
+       droplevels <span class='op'>=</span> <span class='cn'>FALSE</span>,
+       stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+       <span class='op'>)</span>
+<span class='fu'>code</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,17 +170,17 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
-    <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>() <span class='op'>&amp;</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span>)) {
+<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
+    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;</span>
+    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># query component by nationalmusym</span>
-  <span class='kw'>comp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fetchSDA.html'>fetchSDA</a></span>(WHERE = <span class='st'>"nationalmusym = '2vzcp'"</span>)
-  <span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/site.html'>site</a></span>(<span class='kw'>comp</span>)
+  <span class='va'>comp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fetchSDA.html'>fetchSDA</a></span><span class='op'>(</span>WHERE <span class='op'>=</span> <span class='st'>"nationalmusym = '2vzcp'"</span><span class='op'>)</span>
+  <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/site.html'>site</a></span><span class='op'>(</span><span class='va'>comp</span><span class='op'>)</span>
   
   <span class='co'># use SDA uncoding domain via db argument</span>
-  <span class='kw'>s</span> <span class='op'>&lt;-</span> <span class='fu'>uncode</span>(<span class='kw'>s</span>,  db=<span class='st'>"SDA"</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/raster/man/factor.html'>levels</a></span>(<span class='kw'>s</span><span class='op'>$</span><span class='kw'>taxorder</span>)
-}
+  <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>uncode</span><span class='op'>(</span><span class='va'>s</span>,  db<span class='op'>=</span><span class='st'>"SDA"</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/raster/man/factor.html'>levels</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>taxorder</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chkey` to character</span></div><div class='output co'>#&gt; NULL</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>

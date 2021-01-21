@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/soilDB/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@
     <p>Lookup siblings and cousins for a given soil series, from the current fiscal year SSURGO snapshot via SoilWeb.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>siblings</span>(<span class='kw'>s</span>, only.major=<span class='fl'>FALSE</span>, component.data = <span class='fl'>FALSE</span>, cousins = <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>siblings</span><span class='op'>(</span><span class='va'>s</span>, only.major<span class='op'>=</span><span class='cn'>FALSE</span>, component.data <span class='op'>=</span> <span class='cn'>FALSE</span>, cousins <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,18 +170,18 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
-    <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>()) {
+<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
+    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
     
     <span class='co'># basic usage</span>
-    <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>siblings</span>(<span class='st'>'zook'</span>)
-    <span class='kw'>x</span><span class='op'>$</span><span class='kw'>sib</span>
+    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>siblings</span><span class='op'>(</span><span class='st'>'zook'</span><span class='op'>)</span>
+    <span class='va'>x</span><span class='op'>$</span><span class='va'>sib</span>
     
     <span class='co'># restrict to siblings that are major components</span>
     <span class='co'># e.g. the most likely siblings</span>
-    <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>siblings</span>(<span class='st'>'zook'</span>, only.major = <span class='fl'>TRUE</span>)
-    <span class='kw'>x</span><span class='op'>$</span><span class='kw'>sib</span>
-}
+    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>siblings</span><span class='op'>(</span><span class='st'>'zook'</span>, only.major <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+    <span class='va'>x</span><span class='op'>$</span><span class='va'>sib</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt;    series      sibling majcompflag  n
 #&gt; 1    zook       Olmitz        TRUE 15
 #&gt; 2    zook        Vigar        TRUE 12
@@ -194,8 +194,8 @@
 #&gt; 9    zook Mt. Sterling        TRUE  3
 #&gt; 10   zook        Kezan        TRUE  2
 #&gt; 11   zook        Clamo        TRUE  2
-#&gt; 12   zook     Humeston        TRUE  1
-#&gt; 13   zook         Klum        TRUE  1
+#&gt; 12   zook         Klum        TRUE  1
+#&gt; 13   zook     Humeston        TRUE  1
 #&gt; 14   zook       Quiver        TRUE  1</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>

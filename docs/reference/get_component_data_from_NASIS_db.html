@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/soilDB/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,8 +120,8 @@
     <p>Extract component data from a local NASIS Database.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_component_data_from_NASIS_db</span>(SS = <span class='fl'>TRUE</span>, stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>())
-<span class='fu'>get_component_restrictions_from_NASIS_db</span>(SS = <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_component_data_from_NASIS_db</span><span class='op'>(</span>SS <span class='op'>=</span> <span class='cn'>TRUE</span>, stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>get_component_restrictions_from_NASIS_db</span><span class='op'>(</span>SS <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,71 +151,14 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'>if</span>(<span class='fu'><a href='local_NASIS_defined.html'>local_NASIS_defined</a></span>()) {
+<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='local_NASIS_defined.html'>local_NASIS_defined</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
  <span class='co'># query text note data</span>
- <span class='kw'>fc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>get_component_data_from_NASIS_db</span>())
+ <span class='va'>fc</span> <span class='op'>&lt;-</span> <span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>get_component_data_from_NASIS_db</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
  <span class='co'># show structure of component data returned</span>
- <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>fc</span>)
-}
-</div><div class='output co'>#&gt; 'data.frame':	0 obs. of  57 variables:
-#&gt;  $ dmudesc         : chr 
-#&gt;  $ compname        : chr 
-#&gt;  $ comppct_r       : int 
-#&gt;  $ compkind        : int 
-#&gt;  $ majcompflag     : chr 
-#&gt;  $ localphase      : chr 
-#&gt;  $ drainagecl      : int 
-#&gt;  $ hydricrating    : int 
-#&gt;  $ elev_l          : num 
-#&gt;  $ elev_r          : num 
-#&gt;  $ elev_h          : num 
-#&gt;  $ slope_l         : num 
-#&gt;  $ slope_r         : num 
-#&gt;  $ slope_h         : num 
-#&gt;  $ aspectccwise    : int 
-#&gt;  $ aspectrep       : int 
-#&gt;  $ aspectcwise     : int 
-#&gt;  $ map_l           : int 
-#&gt;  $ map_r           : int 
-#&gt;  $ map_h           : int 
-#&gt;  $ maat_l          : num 
-#&gt;  $ maat_r          : num 
-#&gt;  $ maat_h          : num 
-#&gt;  $ mast_r          : num 
-#&gt;  $ reannualprecip_r: int 
-#&gt;  $ ffd_l           : int 
-#&gt;  $ ffd_r           : int 
-#&gt;  $ ffd_h           : int 
-#&gt;  $ tfact           : int 
-#&gt;  $ wei             : int 
-#&gt;  $ weg             : int 
-#&gt;  $ nirrcapcl       : int 
-#&gt;  $ nirrcapscl      : int 
-#&gt;  $ nirrcapunit     : int 
-#&gt;  $ irrcapcl        : int 
-#&gt;  $ irrcapscl       : int 
-#&gt;  $ irrcapunit      : int 
-#&gt;  $ frostact        : int 
-#&gt;  $ hydricrating.1  : int 
-#&gt;  $ hydgrp          : int 
-#&gt;  $ corcon          : int 
-#&gt;  $ corsteel        : int 
-#&gt;  $ taxclname       : chr 
-#&gt;  $ taxorder        : int 
-#&gt;  $ taxsuborder     : int 
-#&gt;  $ taxgrtgroup     : int 
-#&gt;  $ taxsubgrp       : int 
-#&gt;  $ taxpartsize     : int 
-#&gt;  $ taxpartsizemod  : int 
-#&gt;  $ taxceactcl      : int 
-#&gt;  $ taxreaction     : int 
-#&gt;  $ taxtempcl       : int 
-#&gt;  $ taxmoistscl     : int 
-#&gt;  $ taxtempregime   : int 
-#&gt;  $ soiltaxedition  : int 
-#&gt;  $ coiid           : int 
-#&gt;  $ dmuiid          : int </div><div class='input'><span class='co'># }</span>
+ <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>fc</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -53,7 +53,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/ncss-tech/soilDB/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -89,13 +89,13 @@
 <div id="soildb-259" class="section level2">
 <h2 class="hasAnchor">
 <a href="#soildb-259" class="anchor"></a>soilDB 2.5.9</h2>
-<div id="nasis" class="section level3">
+<div id="notices-on-database-interfaces" class="section level3">
 <h3 class="hasAnchor">
-<a href="#nasis" class="anchor"></a>NASIS</h3>
+<a href="#notices-on-database-interfaces" class="anchor"></a>Notices on Database Interfaces</h3>
+<div id="nasis" class="section level4">
+<h4 class="hasAnchor">
+<a href="#nasis" class="anchor"></a>NASIS</h4>
 <ul>
-<li>
-<code>SDA_query</code> returns a <code>try-error</code> for queries with invalid syntax or on network error; empty results are an empty <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code>
-</li>
 <li>low-level functions return empty <code>data.frame</code> objects when local database (or selected set) is empty</li>
 <li>
 <code><a href="reference/fetchNASIS.html">fetchNASIS()</a></code> is now a wrapper around pedon and component “fetch” functions</li>
@@ -103,10 +103,31 @@
 <code><a href="reference/uncode.html">uncode()</a></code> is now used in all queries to local NASIS database</li>
 </ul>
 </div>
+<div id="soil-data-access-sda" class="section level4">
+<h4 class="hasAnchor">
+<a href="#soil-data-access-sda" class="anchor"></a>Soil Data Access (SDA)</h4>
+<ul>
+<li>
+<code>SDA_query</code> returns a <code>try-error</code> for queries with invalid syntax or on network error; empty results are an empty <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code>
+</li>
+<li>
+<code>fetchSDA_spatial</code> can return STATSGO <code>gsmmupolygon</code> or Soil Survey Area <code>sapolygon</code> data; and can join to the <code>legend</code> table</li>
+</ul>
 </div>
-<div id="database-apis" class="section level2">
+<div id="other-apis" class="section level4">
+<h4 class="hasAnchor">
+<a href="#other-apis" class="anchor"></a>Other APIs</h4>
+<ul>
+<li>
+<strong>NEW</strong> functions <a href="http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html"><code>ROSETTA</code></a>, <a href="http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html"><code>taxaExtent</code></a>, <a href="http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html"><code>mukey.wcs</code></a>, <a href="http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html"><code>ISSR800.wcs</code></a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="functions-by-data-source" class="section level2">
 <h2 class="hasAnchor">
-<a href="#database-apis" class="anchor"></a>Database APIs</h2>
+<a href="#functions-by-data-source" class="anchor"></a>Functions by Data Source</h2>
 <ul>
 <li>SDA
 <ul>
@@ -175,9 +196,9 @@
 </li>
 </ul>
 </div>
-<div id="miscellaneous-utilities" class="section level2">
+<div id="miscellaneous-functions" class="section level2">
 <h2 class="hasAnchor">
-<a href="#miscellaneous-utilities" class="anchor"></a>Miscellaneous Utilities</h2>
+<a href="#miscellaneous-functions" class="anchor"></a>Miscellaneous Functions</h2>
 <ul>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/estimateSTR.html"><code>estimateSTR</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/STRplot.html"><code>STRplot</code></a></li>
@@ -185,7 +206,7 @@
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/simplfyFragmentData.html"><code>simplfyFragmentData</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/simplifyColorData.html"><code>simplifyColorData</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/uncode.html"><code>uncode</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/uncode.html"><code>code</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/code.html"><code>code</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/get_NOAA_GHCND.html"><code>get_NOAA_GHCND</code></a></li>
 </ul>
 </div>
@@ -230,7 +251,7 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># viz of hillslope position, from SSURGO component records</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>res &lt;-<span class="st"> </span><span class="kw">vizHillslopePosition</span>(s<span class="op">$</span>hillpos, <span class="dt">annotation.cex =</span> <span class="fl">0.9</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="kw">print</span>(res<span class="op">$</span>fig)</span></code></pre></div>
-<p><img src=".github/images/hillslope-1.png" width="1056"></p>
+<p><img src="https://i.imgur.com/BIkk17b.png" width="1056"></p>
 </div>
 <div id="make-profile-sketches" class="section level3">
 <h3 class="hasAnchor">
@@ -244,7 +265,7 @@
 <span id="cb6-7"><a href="#cb6-7"></a>  <span class="dt">axis.line.offset =</span> <span class="fl">-0.1</span>,</span>
 <span id="cb6-8"><a href="#cb6-8"></a>  <span class="dt">width =</span> <span class="fl">0.2</span></span>
 <span id="cb6-9"><a href="#cb6-9"></a>)</span></code></pre></div>
-<p><img src=".github/images/sketches-1.png" width="1344"></p>
+<p><img src="https://i.imgur.com/BRglLOy.png" width="1344"></p>
 </div>
 <div id="identify-tabular-siblings" class="section level3">
 <h3 class="hasAnchor">
@@ -275,7 +296,7 @@
 <span id="cb8-12"><a href="#cb8-12"></a>  <span class="dt">cex.taxon.labels =</span> <span class="dv">1</span>,</span>
 <span id="cb8-13"><a href="#cb8-13"></a>  <span class="dt">cex.names =</span> <span class="dv">1</span></span>
 <span id="cb8-14"><a href="#cb8-14"></a>)</span></code></pre></div>
-<p><img src=".github/images/dendrogram-1.png" width="1344"></p>
+<p><img src="https://i.imgur.com/4n37p0N.png" width="1344"></p>
 </div>
 </div>
 <div id="dependency-graph" class="section level2">
@@ -317,10 +338,11 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=soilDB"><img src="http://www.r-pkg.org/badges/version/soilDB" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://github.com/ncss-tech/soilDB/actions"><img src="https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://github.com/ncss-tech/soilDB"><img src="https://img.shields.io/badge/GitHub-2.5.9-yellowgreen" alt="GitHub Development Version"></a></li>
-<li><a href="https://cran.r-project.org/package=soilDB"><img src="http://cranlogs.r-pkg.org/badges/grand-total/soilDB" alt="Total_Downloads"></a></li>
+<li><a href="https://cran.r-project.org/package=soilDB"><img src="http://www.r-pkg.org/badges/version/soilDB" alt="CRAN Version (Stable)"></a></li>
+<li><a href="https://github.com/ncss-tech/soilDB"><img src="https://img.shields.io/badge/GitHub-2.5.9-yellowgreen" alt="GitHub Version (Development)"></a></li>
+<li><a href="https://github.com/ncss-tech/soilDB/actions"><img src="https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg" alt="R-CMD-check Build Status"></a></li>
+<li><a href="https://cran.r-project.org/package=soilDB"><img src="http://cranlogs.r-pkg.org/badges/grand-total/soilDB" alt="Total CRAN Downloads"></a></li>
+<li><a href="https://ncss-tech.github.io/soilDB/docs"><img src="https://img.shields.io/badge/docs-HTML-informational" alt="soilDB Manual"></a></li>
 </ul>
 </div>
 </div>

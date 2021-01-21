@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/soilDB/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,37 +120,37 @@
     <p>Get, format, impute, and return component tables.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetchNASISWebReport</span>(<span class='kw'>projectname</span>, rmHzErrors = <span class='fl'>FALSE</span>, fill = <span class='fl'>FALSE</span>,
-                    stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
-                    )
-<span class='fu'>get_progress_from_NASISWebReport</span>(<span class='kw'>mlrassoarea</span>, <span class='kw'>fiscalyear</span>, <span class='kw'>projecttypename</span>)
-<span class='fu'>get_project_from_NASISWebReport</span>(<span class='kw'>mlrassoarea</span>, <span class='kw'>fiscalyear</span>)
-<span class='fu'>get_project_correlation_from_NASISWebReport</span>(<span class='kw'>mlrassoarea</span>, <span class='kw'>fiscalyear</span>, <span class='kw'>projectname</span>)
-<span class='fu'>get_projectmapunit_from_NASISWebReport</span>(<span class='kw'>projectname</span>, 
-                                       stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
-                                       )
-<span class='fu'>get_projectmapunit2_from_NASISWebReport</span>(<span class='kw'>mlrassoarea</span>, <span class='kw'>fiscalyear</span>, <span class='kw'>projectname</span>, 
-                                        stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
-                                        )
-<span class='fu'>get_legend_from_NASISWebReport</span>(<span class='kw'>mlraoffice</span>,
-                               <span class='kw'>areasymbol</span>,
-                               droplevels = <span class='fl'>TRUE</span>,
-                               stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
-                               )
-<span class='fu'>get_mapunit_from_NASISWebReport</span>(<span class='kw'>areasymbol</span>,
-                                droplevels = <span class='fl'>TRUE</span>,
-                                stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
-                                )
-<span class='fu'>get_component_from_NASISWebReport</span>(<span class='kw'>projectname</span>, 
-                                  stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
-                                  )
-<span class='fu'>get_chorizon_from_NASISWebReport</span>(<span class='kw'>projectname</span>, fill = <span class='fl'>FALSE</span>, 
-                                 stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
-                                 )
-<span class='fu'>get_cosoilmoist_from_NASISWebReport</span>(<span class='kw'>projectname</span>, impute = <span class='fl'>TRUE</span>, 
-                                    stringsAsFactors = <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>()
-                                    )
-<span class='fu'>get_sitesoilmoist_from_NASISWebReport</span>(<span class='kw'>usiteid</span>)</pre>
+    <pre class="usage"><span class='fu'>fetchNASISWebReport</span><span class='op'>(</span><span class='va'>projectname</span>, rmHzErrors <span class='op'>=</span> <span class='cn'>FALSE</span>, fill <span class='op'>=</span> <span class='cn'>FALSE</span>,
+                    stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+                    <span class='op'>)</span>
+<span class='fu'>get_progress_from_NASISWebReport</span><span class='op'>(</span><span class='va'>mlrassoarea</span>, <span class='va'>fiscalyear</span>, <span class='va'>projecttypename</span><span class='op'>)</span>
+<span class='fu'>get_project_from_NASISWebReport</span><span class='op'>(</span><span class='va'>mlrassoarea</span>, <span class='va'>fiscalyear</span><span class='op'>)</span>
+<span class='fu'>get_project_correlation_from_NASISWebReport</span><span class='op'>(</span><span class='va'>mlrassoarea</span>, <span class='va'>fiscalyear</span>, <span class='va'>projectname</span><span class='op'>)</span>
+<span class='fu'>get_projectmapunit_from_NASISWebReport</span><span class='op'>(</span><span class='va'>projectname</span>, 
+                                       stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+                                       <span class='op'>)</span>
+<span class='fu'>get_projectmapunit2_from_NASISWebReport</span><span class='op'>(</span><span class='va'>mlrassoarea</span>, <span class='va'>fiscalyear</span>, <span class='va'>projectname</span>, 
+                                        stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+                                        <span class='op'>)</span>
+<span class='fu'>get_legend_from_NASISWebReport</span><span class='op'>(</span><span class='va'>mlraoffice</span>,
+                               <span class='va'>areasymbol</span>,
+                               droplevels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                               stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+                               <span class='op'>)</span>
+<span class='fu'>get_mapunit_from_NASISWebReport</span><span class='op'>(</span><span class='va'>areasymbol</span>,
+                                droplevels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                                stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+                                <span class='op'>)</span>
+<span class='fu'>get_component_from_NASISWebReport</span><span class='op'>(</span><span class='va'>projectname</span>, 
+                                  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+                                  <span class='op'>)</span>
+<span class='fu'>get_chorizon_from_NASISWebReport</span><span class='op'>(</span><span class='va'>projectname</span>, fill <span class='op'>=</span> <span class='cn'>FALSE</span>, 
+                                 stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+                                 <span class='op'>)</span>
+<span class='fu'>get_cosoilmoist_from_NASISWebReport</span><span class='op'>(</span><span class='va'>projectname</span>, impute <span class='op'>=</span> <span class='cn'>TRUE</span>, 
+                                    stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+                                    <span class='op'>)</span>
+<span class='fu'>get_sitesoilmoist_from_NASISWebReport</span><span class='op'>(</span><span class='va'>usiteid</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -216,77 +216,77 @@
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 
 
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
-    <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>() <span class='op'>&amp;</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/ncss-tech/aqp'>"aqp"</a></span>) <span class='op'>&amp;</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span>) <span class='op'>&amp;</span> 
-    <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"gridExtra"</span>)
-) {
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
+    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;</span>
+    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/ncss-tech/aqp'>"aqp"</a></span><span class='op'>)</span> <span class='op'>&amp;</span>
+    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span><span class='op'>)</span> <span class='op'>&amp;</span> 
+    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"gridExtra"</span><span class='op'>)</span>
+<span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># query soil components by projectname</span>
-  <span class='kw'>test</span> <span class='op'>=</span> <span class='fu'>fetchNASISWebReport</span>(
+  <span class='va'>test</span> <span class='op'>=</span> <span class='fu'>fetchNASISWebReport</span><span class='op'>(</span>
     <span class='st'>"EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"</span>
-  )
-  <span class='kw'>test</span> <span class='op'>=</span> <span class='kw'>test</span><span class='op'>$</span><span class='kw'>spc</span>
+  <span class='op'>)</span>
+  <span class='va'>test</span> <span class='op'>=</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>spc</span>
   
   <span class='co'># profile plot</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>test</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>)</span>
   
   <span class='co'># convert the data for depth plot</span>
-  <span class='kw'>clay_slice</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/horizons.html'>horizons</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-slice-methods.html'>slice</a></span>(<span class='kw'>test</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>200</span> <span class='op'>~</span> <span class='kw'>claytotal_l</span> <span class='op'>+</span> <span class='kw'>claytotal_r</span> <span class='op'>+</span> <span class='kw'>claytotal_h</span>))
-  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span>(<span class='kw'>clay_slice</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span>(<span class='st'>"claytotal_"</span>, <span class='st'>""</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span>(<span class='kw'>clay_slice</span>))
+  <span class='va'>clay_slice</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/horizons.html'>horizons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-slice-methods.html'>slice</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>200</span> <span class='op'>~</span> <span class='va'>claytotal_l</span> <span class='op'>+</span> <span class='va'>claytotal_r</span> <span class='op'>+</span> <span class='va'>claytotal_h</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span><span class='op'>(</span><span class='va'>clay_slice</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"claytotal_"</span>, <span class='st'>""</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span><span class='op'>(</span><span class='va'>clay_slice</span><span class='op'>)</span><span class='op'>)</span>
   
-  <span class='kw'>om_slice</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/horizons.html'>horizons</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-slice-methods.html'>slice</a></span>(<span class='kw'>test</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>200</span> <span class='op'>~</span> <span class='kw'>om_l</span> <span class='op'>+</span> <span class='kw'>om_r</span> <span class='op'>+</span> <span class='kw'>om_h</span>))
-  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span>(<span class='kw'>om_slice</span>) <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span>(<span class='st'>"om_"</span>, <span class='st'>""</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span>(<span class='kw'>om_slice</span>))
+  <span class='va'>om_slice</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/horizons.html'>horizons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SPC-slice-methods.html'>slice</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>200</span> <span class='op'>~</span> <span class='va'>om_l</span> <span class='op'>+</span> <span class='va'>om_r</span> <span class='op'>+</span> <span class='va'>om_h</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span><span class='op'>(</span><span class='va'>om_slice</span><span class='op'>)</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"om_"</span>, <span class='st'>""</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span><span class='op'>(</span><span class='va'>om_slice</span><span class='op'>)</span><span class='op'>)</span>
   
-  <span class='kw'>test2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>clay_slice</span>, var = <span class='st'>"clay"</span>),
-                <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>om_slice</span>, var = <span class='st'>"om"</span>)
-  )
+  <span class='va'>test2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>clay_slice</span>, var <span class='op'>=</span> <span class='st'>"clay"</span><span class='op'>)</span>,
+                <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>om_slice</span>, var <span class='op'>=</span> <span class='st'>"om"</span><span class='op'>)</span>
+  <span class='op'>)</span>
   
-  <span class='kw'>h</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span>(<span class='kw'>test2</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/site.html'>site</a></span>(<span class='kw'>test</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"dmuiid"</span>, <span class='st'>"coiid"</span>, <span class='st'>"compname"</span>, <span class='st'>"comppct_r"</span>)],
-            by = <span class='st'>"coiid"</span>, 
-            all.x = <span class='fl'>TRUE</span>
-  )
+  <span class='va'>h</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>test2</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/site.html'>site</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>)</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"dmuiid"</span>, <span class='st'>"coiid"</span>, <span class='st'>"compname"</span>, <span class='st'>"comppct_r"</span><span class='op'>)</span><span class='op'>]</span>,
+            by <span class='op'>=</span> <span class='st'>"coiid"</span>, 
+            all.x <span class='op'>=</span> <span class='cn'>TRUE</span>
+  <span class='op'>)</span>
   
   <span class='co'># depth plot of clay content by soil component</span>
-  <span class='kw'>gg_comp</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>x</span>) {
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='kw'>x</span>) <span class='op'>+</span>
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(y = <span class='kw'>r</span>, x = <span class='kw'>hzdept_r</span>)) <span class='op'>+</span>
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(y = <span class='kw'>r</span>, x = <span class='kw'>hzdept_r</span>)) <span class='op'>+</span>
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_ribbon.html'>geom_ribbon</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(ymin = <span class='kw'>l</span>, ymax = <span class='kw'>h</span>, x = <span class='kw'>hzdept_r</span>), alpha = <span class='fl'>0.2</span>) <span class='op'>+</span>
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>xlim</a></span>(<span class='fl'>200</span>, <span class='fl'>0</span>) <span class='op'>+</span>
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"depth (cm)"</span>) <span class='op'>+</span>
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_grid.html'>facet_grid</a></span>(<span class='kw'>var</span> <span class='op'>~</span> <span class='kw'>dmuiid</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='kw'>compname</span>, <span class='kw'>comppct_r</span>)) <span class='op'>+</span>
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span>()
-  }
-  <span class='kw'>g1</span> <span class='op'>&lt;-</span> <span class='fu'>gg_comp</span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html'>subset</a></span>(<span class='kw'>h</span>, <span class='kw'>var</span> <span class='op'>==</span> <span class='st'>"clay"</span>))
-  <span class='kw'>g2</span> <span class='op'>&lt;-</span> <span class='fu'>gg_comp</span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html'>subset</a></span>(<span class='kw'>h</span>, <span class='kw'>var</span> <span class='op'>==</span> <span class='st'>"om"</span>))
+  <span class='va'>gg_comp</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>r</span>, x <span class='op'>=</span> <span class='va'>hzdept_r</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>r</span>, x <span class='op'>=</span> <span class='va'>hzdept_r</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_ribbon.html'>geom_ribbon</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>ymin <span class='op'>=</span> <span class='va'>l</span>, ymax <span class='op'>=</span> <span class='va'>h</span>, x <span class='op'>=</span> <span class='va'>hzdept_r</span><span class='op'>)</span>, alpha <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span> <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>xlim</a></span><span class='op'>(</span><span class='fl'>200</span>, <span class='fl'>0</span><span class='op'>)</span> <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='st'>"depth (cm)"</span><span class='op'>)</span> <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_grid.html'>facet_grid</a></span><span class='op'>(</span><span class='va'>var</span> <span class='op'>~</span> <span class='va'>dmuiid</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>compname</span>, <span class='va'>comppct_r</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='op'>}</span>
+  <span class='va'>g1</span> <span class='op'>&lt;-</span> <span class='fu'>gg_comp</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html'>subset</a></span><span class='op'>(</span><span class='va'>h</span>, <span class='va'>var</span> <span class='op'>==</span> <span class='st'>"clay"</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>g2</span> <span class='op'>&lt;-</span> <span class='fu'>gg_comp</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html'>subset</a></span><span class='op'>(</span><span class='va'>h</span>, <span class='va'>var</span> <span class='op'>==</span> <span class='st'>"om"</span><span class='op'>)</span><span class='op'>)</span>
   
-  <span class='fu'><a href='https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html'>grid.arrange</a></span>(<span class='kw'>g1</span>, <span class='kw'>g2</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html'>grid.arrange</a></span><span class='op'>(</span><span class='va'>g1</span>, <span class='va'>g2</span><span class='op'>)</span>
   
   
   <span class='co'># query cosoilmoist (e.g. water table data) by mukey</span>
   <span class='co'># NA depths are interpreted as (???) with impute=TRUE argument</span>
-  <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>get_cosoilmoist_from_NASISWebReport</span>(
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>get_cosoilmoist_from_NASISWebReport</span><span class='op'>(</span>
     <span class='st'>"EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"</span>
-  )
+  <span class='op'>)</span>
   
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='kw'>x</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(x = <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='kw'>month</span>), y = <span class='kw'>dept_r</span>, lty = <span class='kw'>status</span>)) <span class='op'>+</span>
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_rect</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(xmin = <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='kw'>month</span>), xmax = <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='kw'>month</span>) <span class='op'>+</span> <span class='fl'>1</span>,
-                  ymin = <span class='fl'>0</span>, ymax = <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/max.html'>max</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>depb_r</span>),
-                  fill = <span class='kw'>flodfreqcl</span>)) <span class='op'>+</span>
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>(cex = <span class='fl'>1</span>) <span class='op'>+</span>
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span>() <span class='op'>+</span>
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_ribbon.html'>geom_ribbon</a></span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(ymin = <span class='kw'>dept_l</span>, ymax = <span class='kw'>dept_h</span>), alpha = <span class='fl'>0.2</span>) <span class='op'>+</span>
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>ylim</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/aqp/man/max.html'>max</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>depb_r</span>), <span class='fl'>0</span>) <span class='op'>+</span>
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"month"</span>) <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span>(<span class='st'>"depth (cm)"</span>) <span class='op'>+</span>
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span>(breaks = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>, labels = <span class='kw'>month.abb</span>, name=<span class='st'>"Month"</span>) <span class='op'>+</span>
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span>(<span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='kw'>compname</span>, <span class='st'>' ('</span>, <span class='kw'>comppct_r</span> , <span class='st'>')'</span>)) <span class='op'>+</span>
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>nationalmusym</span>[<span class='fl'>1</span>], 
-                   <span class='st'>': Water Table Levels from Component Soil Moisture Month Data'</span>))
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>month</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='va'>dept_r</span>, lty <span class='op'>=</span> <span class='va'>status</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_rect</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>xmin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>month</span><span class='op'>)</span>, xmax <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>month</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span>,
+                  ymin <span class='op'>=</span> <span class='fl'>0</span>, ymax <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/max.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>depb_r</span><span class='op'>)</span>,
+                  fill <span class='op'>=</span> <span class='va'>flodfreqcl</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span>cex <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_ribbon.html'>geom_ribbon</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>ymin <span class='op'>=</span> <span class='va'>dept_l</span>, ymax <span class='op'>=</span> <span class='va'>dept_h</span><span class='op'>)</span>, alpha <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>ylim</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/max.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>depb_r</span><span class='op'>)</span>, <span class='fl'>0</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='st'>"month"</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span><span class='op'>(</span><span class='st'>"depth (cm)"</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span><span class='op'>(</span>breaks <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>, labels <span class='op'>=</span> <span class='va'>month.abb</span>, name<span class='op'>=</span><span class='st'>"Month"</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='va'>compname</span>, <span class='st'>' ('</span>, <span class='va'>comppct_r</span> , <span class='st'>')'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>nationalmusym</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, 
+                   <span class='st'>': Water Table Levels from Component Soil Moisture Month Data'</span><span class='op'>)</span><span class='op'>)</span>
   
   
-}
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package 'ggplot2' was built under R version 4.0.3</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: gridExtra</span></div><div class='output co'>#&gt; <span class='message'></span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: gridExtra</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: 'gridExtra'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:aqp':</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    combine</span></div><div class='output co'>#&gt; <span class='message'>Loading required namespace: rvest</span></div><div class='output co'>#&gt; <span class='message'>getting project 'EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded' from NasisReportsWebSite </span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chiid` to character</span></div><div class='img'><img src='fetchNASISWebReport-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 49 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 49 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 49 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 49 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='img'><img src='fetchNASISWebReport-2.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `x$depb_r` is discouraged. Use `depb_r` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 119 rows containing missing values (geom_rect).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 119 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 119 rows containing missing values (geom_point).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='img'><img src='fetchNASISWebReport-3.png' alt='' width='768' height='475' /></div><div class='input'>

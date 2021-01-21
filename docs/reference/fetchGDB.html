@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/soilDB/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,34 +120,34 @@
     <p>Functions to load and flatten commonly used tables and from SSURGO file geodatabases, and create soil profile collection objects (SPC).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetchGDB</span>(dsn = <span class='st'>"gNATSGO_CONUS.gdb"</span>,
-         WHERE = <span class='kw'>NULL</span>,
-         childs = <span class='fl'>TRUE</span>,
-         droplevels = <span class='fl'>TRUE</span>,
-         stringsAsFactors = <span class='fl'>TRUE</span>
-         )
+    <pre class="usage"><span class='fu'>fetchGDB</span><span class='op'>(</span>dsn <span class='op'>=</span> <span class='st'>"gNATSGO_CONUS.gdb"</span>,
+         WHERE <span class='op'>=</span> <span class='cn'>NULL</span>,
+         childs <span class='op'>=</span> <span class='cn'>TRUE</span>,
+         droplevels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+         stringsAsFactors <span class='op'>=</span> <span class='cn'>TRUE</span>
+         <span class='op'>)</span>
 
 
-<span class='fu'>get_legend_from_GDB</span>(dsn = <span class='st'>"gNATSGO_CONUS.gdb"</span>,
-                    WHERE = <span class='kw'>NULL</span>,
-                    droplevels = <span class='fl'>TRUE</span>,
-                    stringsAsFactors = <span class='fl'>TRUE</span>,
-                    stats = <span class='fl'>FALSE</span>
-                    )
+<span class='fu'>get_legend_from_GDB</span><span class='op'>(</span>dsn <span class='op'>=</span> <span class='st'>"gNATSGO_CONUS.gdb"</span>,
+                    WHERE <span class='op'>=</span> <span class='cn'>NULL</span>,
+                    droplevels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                    stringsAsFactors <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                    stats <span class='op'>=</span> <span class='cn'>FALSE</span>
+                    <span class='op'>)</span>
 
-<span class='fu'>get_mapunit_from_GDB</span>(dsn = <span class='st'>"gNATSGO_CONUS.gdb"</span>,
-                     WHERE = <span class='kw'>NULL</span>,
-                     droplevels = <span class='fl'>TRUE</span>,
-                     stringsAsFactors = <span class='fl'>TRUE</span>,
-                     stats = <span class='fl'>FALSE</span>
-                     )
+<span class='fu'>get_mapunit_from_GDB</span><span class='op'>(</span>dsn <span class='op'>=</span> <span class='st'>"gNATSGO_CONUS.gdb"</span>,
+                     WHERE <span class='op'>=</span> <span class='cn'>NULL</span>,
+                     droplevels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                     stringsAsFactors <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                     stats <span class='op'>=</span> <span class='cn'>FALSE</span>
+                     <span class='op'>)</span>
 
-<span class='fu'>get_component_from_GDB</span>(dsn = <span class='st'>"gNATSGO_CONUS.gdb"</span>,
-                       WHERE = <span class='kw'>NULL</span>,
-                       childs = <span class='fl'>FALSE</span>,
-                       droplevels = <span class='fl'>TRUE</span>,
-                       stringsAsFactors = <span class='fl'>TRUE</span>
-                       )</pre>
+<span class='fu'>get_component_from_GDB</span><span class='op'>(</span>dsn <span class='op'>=</span> <span class='st'>"gNATSGO_CONUS.gdb"</span>,
+                       WHERE <span class='op'>=</span> <span class='cn'>NULL</span>,
+                       childs <span class='op'>=</span> <span class='cn'>FALSE</span>,
+                       droplevels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+                       stringsAsFactors <span class='op'>=</span> <span class='cn'>TRUE</span>
+                       <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

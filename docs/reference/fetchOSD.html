@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ncss-tech/soilDB/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@
     <p>This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetchOSD</span>(<span class='kw'>soils</span>, colorState = <span class='st'>"moist"</span>, extended = <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>fetchOSD</span><span class='op'>(</span><span class='va'>soils</span>, colorState <span class='op'>=</span> <span class='st'>"moist"</span>, extended <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,35 +174,35 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"curl"</span>) <span class='op'>&amp;</span>
-   <span class='kw'>curl</span>::<span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>()) {
+<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
+   <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   
   <span class='co'># soils of interest</span>
-  <span class='kw'>s.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'musick'</span>, <span class='st'>'cecil'</span>, <span class='st'>'drummer'</span>, <span class='st'>'amador'</span>, <span class='st'>'pentz'</span>, 
-              <span class='st'>'reiff'</span>, <span class='st'>'san joaquin'</span>, <span class='st'>'montpellier'</span>, <span class='st'>'grangeville'</span>, <span class='st'>'pollasky'</span>, <span class='st'>'ramona'</span>)
+  <span class='va'>s.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'musick'</span>, <span class='st'>'cecil'</span>, <span class='st'>'drummer'</span>, <span class='st'>'amador'</span>, <span class='st'>'pentz'</span>, 
+              <span class='st'>'reiff'</span>, <span class='st'>'san joaquin'</span>, <span class='st'>'montpellier'</span>, <span class='st'>'grangeville'</span>, <span class='st'>'pollasky'</span>, <span class='st'>'ramona'</span><span class='op'>)</span>
   
   <span class='co'># fetch and convert data into an SPC</span>
-  <span class='kw'>s.moist</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span>(<span class='kw'>s.list</span>, colorState=<span class='st'>'moist'</span>)
-  <span class='kw'>s.dry</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span>(<span class='kw'>s.list</span>, colorState=<span class='st'>'dry'</span>)
+  <span class='va'>s.moist</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span><span class='op'>(</span><span class='va'>s.list</span>, colorState<span class='op'>=</span><span class='st'>'moist'</span><span class='op'>)</span>
+  <span class='va'>s.dry</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span><span class='op'>(</span><span class='va'>s.list</span>, colorState<span class='op'>=</span><span class='st'>'dry'</span><span class='op'>)</span>
   
   <span class='co'># plot profiles</span>
   <span class='co'># moist soil colors</span>
-  <span class='co'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/ncss-tech/aqp'>"aqp"</a></span>)) {
+  <span class='kw'>if</span><span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/ncss-tech/aqp'>"aqp"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
     
-    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>), mfrow=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>))
-    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>s.moist</span>, name=<span class='st'>'hzname'</span>, 
-         cex.names=<span class='fl'>0.85</span>, axis.line.offset=<span class='op'>-</span><span class='fl'>4</span>)
-    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>s.dry</span>, name=<span class='st'>'hzname'</span>, 
-         cex.names=<span class='fl'>0.85</span>, axis.line.offset=<span class='op'>-</span><span class='fl'>4</span>)
+    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span>, mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>s.moist</span>, name<span class='op'>=</span><span class='st'>'hzname'</span>, 
+         cex.names<span class='op'>=</span><span class='fl'>0.85</span>, axis.line.offset<span class='op'>=</span><span class='op'>-</span><span class='fl'>4</span><span class='op'>)</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>s.dry</span>, name<span class='op'>=</span><span class='st'>'hzname'</span>, 
+         cex.names<span class='op'>=</span><span class='fl'>0.85</span>, axis.line.offset<span class='op'>=</span><span class='op'>-</span><span class='fl'>4</span><span class='op'>)</span>
     
     <span class='co'># extended mode: return a list with SPC + summary tables</span>
-    <span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span>(<span class='kw'>s.list</span>, extended = <span class='fl'>TRUE</span>, colorState = <span class='st'>'dry'</span>)
+    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span><span class='op'>(</span><span class='va'>s.list</span>, extended <span class='op'>=</span> <span class='cn'>TRUE</span>, colorState <span class='op'>=</span> <span class='st'>'dry'</span><span class='op'>)</span>
     
-    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mar=<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>))
-    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>SPC</span>)
-    <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='kw'>x</span>, <span class='fl'>1</span>)
-  }
-}
+    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>SPC</span><span class='op'>)</span>
+    <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>1</span><span class='op'>)</span>
+  <span class='op'>}</span>
+<span class='op'>}</span>
 </div><div class='img'><img src='fetchOSD-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; List of 14
 #&gt;  $ SPC             :Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots
 #&gt;  $ competing       :'data.frame':	84 obs. of  3 variables:
@@ -217,7 +217,7 @@
 #&gt;  $ mlra            :'data.frame':	52 obs. of  4 variables:
 #&gt;  $ climate.annual  :'data.frame':	88 obs. of  12 variables:
 #&gt;  $ climate.monthly :'data.frame':	264 obs. of  14 variables:
-#&gt;  $ soilweb.metadata:'data.frame':	19 obs. of  2 variables:</div><div class='input'><span class='co'># }</span>
+#&gt;  $ soilweb.metadata:'data.frame':	17 obs. of  2 variables:</div><div class='input'><span class='co'># }</span>
 </div><div class='img'><img src='fetchOSD-2.png' alt='' width='768' height='475' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
