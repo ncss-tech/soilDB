@@ -109,11 +109,10 @@ remotes::install_github("ncss-tech/soilDB", dependencies = FALSE, upgrade = FALS
 ## Examples
 
 ```{r setup, warning = FALSE, message = FALSE, include = FALSE}
+knitr::opts_knit$set(upload.fun = knitr::imgur_upload, base.url = NULL) 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
                       fig.width = 14, fig.height = 8, 
-                      fig.path = ".github/images/",
                       fig.retina = 3)
-
 ```
 
 ### Load Soil Packages
@@ -184,13 +183,6 @@ SoilTaxonomyDendrogram(
   cex.taxon.labels = 1,
   cex.names = 1
 )
-```
-
-```{r include=FALSE}
-if (!dir.exists("docs/.github/images/"))
-  dir.create("docs/.github/images/", recursive = TRUE)
-
-file.copy(list.files(path = ".github/images/", "png", full.names = TRUE), "docs/.github/images/")
 ```
 
 ## Dependency Graph
