@@ -99,15 +99,15 @@ jobs:
           remotes::install_github(c("ncss-tech/aqp","ncss-tech/sharpshootR"), dependencies = FALSE)
           devtools::install()
           rmarkdown::render("README.Rmd")
+          devtools::build_site()
         shell: Rscript {0}
 
       - name: Commit results
         if: runner.os == 'Windows' && github.event_name != 'pull_request'
         run: |
-          git add .github/images/\*.png
-          git add docs/.github/images\*.png
-          git commit -m 'Update README/index images' || echo "No changes to commit"
           git commit README.md -m 'Render README.Rmd' || echo "No changes to commit"
+          git add docs/\*
+          git commit -m 'Update Docs' || echo "No changes to commit"
 
       - name: Push results
         if: runner.os == 'Windows' && github.event_name != 'pull_request'
