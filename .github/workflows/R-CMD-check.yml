@@ -90,7 +90,7 @@ jobs:
 
       - name: Install aqp off GitHub
         if: matrix.config.r == 'devel'
-        run: remotes::install_packages("ncss-tech/aqp", dependencies = FALSE, build = FALSE)
+        run: remotes::install_github("ncss-tech/aqp", dependencies = FALSE, build = FALSE)
         shell: Rscript {0}
 
       - name: Check
