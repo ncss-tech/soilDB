@@ -1,4 +1,4 @@
-# soilDB 2.5.9 (2021-01-13)
+# soilDB 2.5.9 (2021-01-26)
  * `HenryTimeLine` moved to {sharpshootR} package
  * new functions `mukey.wcs()` and `ISSR800.wcs()` for hitting web coverage service (WCS) for gSSURGO, gNATSGO, and ISSR-800 grids
  * new function `ROSETTA()` for accessing the new ROSETTA model API (c/o Todd Skaggs, USDA-ARS)
