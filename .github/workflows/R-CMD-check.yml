@@ -7,6 +7,8 @@ on:
     branches:
       - main
       - master
+  schedule:
+    - cron: '0 0 * * 6'  # At 00:00 on Saturday
 
 name: R-CMD-check
 
@@ -44,7 +46,7 @@ jobs:
         run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
 
       - name: Configure git
-        if:  runner.os == 'Windows' && github.event_name != 'pull_request'
+        if: runner.os == 'Windows' && github.event_name == 'schedule'
         run: |
           git config user.email "github-actions@github.com"
           git config user.name "github-actions"
@@ -93,7 +95,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Render README
-        if: runner.os == 'Windows' && github.event_name != 'pull_request'
+        if: runner.os == 'Windows' && github.event_name == 'schedule'
         run: |
           install.packages(c("rmarkdown","devtools","pkgdown","aqp","soilDB","sharpshootR","dendextend","latticeExtra"))
           remotes::install_github(c("ncss-tech/aqp","ncss-tech/sharpshootR"), dependencies = FALSE)
@@ -103,14 +105,14 @@ jobs:
         shell: Rscript {0}
 
       - name: Commit results
-        if: runner.os == 'Windows' && github.event_name != 'pull_request'
+        if: runner.os == 'Windows' && github.event_name == 'schedule'
         run: |
           git commit README.md -m 'Render README.Rmd' || echo "No changes to commit"
           git add docs/\*
           git commit -m 'Update Docs' || echo "No changes to commit"
 
       - name: Push results
-        if: runner.os == 'Windows' && github.event_name != 'pull_request'
+        if: runner.os == 'Windows' && github.event_name == 'schedule'
         run: |
           git push origin HEAD:${{ env.BRANCH_NAME }} || echo "No changes to commit"
 
