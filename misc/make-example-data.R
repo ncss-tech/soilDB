@@ -1,14 +1,33 @@
+# make SPC data sets from NASIS
+library(aqp)
 library(soilDB)
 
-# all SEKI pedons: user site ID ~ %CA792%
-mk <- fetchNASIS(from='pedons')
+# load current data sets to fetch peiid
+data("loafercreek", package = "soilDB")
+data("gopheridge", package = "soilDB")
+data("mineralKing", package = "soilDB")
 
-# cut down to relevant subset with field notes
-mk.all <- read.csv(file='L:/NRCS/MLRAShared/CA792/SEKI_spatial support data/elevational gradient documents/elevational_seki_batch_1.txt', stringsAsFactors=FALSE)
+# query CA630 and CA792 w/ R08 PEDON/SITE by SSA ID or similar
 
-idx <- which(mk$pedon_id %in% mk.all$IDENT)
-mk <- mk[idx, ]
+# load target data sets (CA630 and CA792 pedons)
+recent1822a <- fetchNASIS(rmHzErrors = FALSE)
 
-mineralKing <- mk
+# subset and rebuild
+loafercreek2 <- rebuildSPC(subset(recent1822a, profile_id(recent1822a) %in% profile_id(loafercreek)))
+gopheridge2 <- rebuildSPC(subset(recent1822a, profile_id(recent1822a) %in% profile_id(gopheridge)))
+mineralKing2 <- rebuildSPC(subset(recent1822a, profile_id(recent1822a) %in% profile_id(mineralKing)))
 
-save(mineralKing, file='../data/mineralKing.rda')
+# verify completeness
+if(all(profile_id(loafercreek) %in% profile_id(loafercreek2)))
+  loafercreek <- loafercreek2
+
+if(all(profile_id(gopheridge) %in% profile_id(gopheridge2)))
+  gopheridge <- gopheridge2
+
+if(all(profile_id(mineralKing) %in% profile_id(mineralKing2)))
+  mineralKing <- mineralKing2
+
+# save to .rda
+save(loafercreek, file = "data/loafercreek.rda")
+save(gopheridge, file = "data/gopheridge.rda")
+save(mineralKing, file = "data/mineralKing.rda")
