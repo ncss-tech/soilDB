@@ -14,34 +14,20 @@
   
   ## load data in pieces
   # these fail gracefully when no data in local DB | selected set
-  site_data  <- get_site_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
-  hz_data    <- get_hz_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
-  color_data <- get_colors_from_NASIS_db(SS=SS)
+  site_data  <- get_site_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors)
+  hz_data    <- get_hz_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors)
+  color_data <- get_colors_from_NASIS_db(SS = SS)
   
+  h <- hz_data
   ## ensure there are enough data to create an SPC object
   if (nrow(hz_data) == 0) {
     stop('No site/pedons objects in local NASIS DB or selected set.', call. = FALSE)
   }
   
   # data that cannot be effectively flattened in SQL
-  extended_data <- get_extended_data_from_NASIS_db(SS=SS, nullFragsAreZero=nullFragsAreZero, stringsAsFactors = stringsAsFactors)
-  
-  ## join horizon + hz color: all horizons
-  h <- merge(hz_data, color_data, by='phiid', all.x=TRUE, sort=FALSE)
-  
-  # check for empty fragment summary and nullFragsAreZero
-  if(nullFragsAreZero & all(is.na(unique(extended_data$frag_summary$phiid))))
-    extended_data$frag_summary <- cbind(phiid = unique(h$phiid), extended_data$frag_summary[,-1])
-  
-  ## join hz + fragment summary
-  h <- merge(h, extended_data$frag_summary, by='phiid', all.x=TRUE, sort=FALSE)
-  
-  # check for empty artifact summary and nullFragsAreZero
-  if(nullFragsAreZero & all(is.na(unique(extended_data$art_summary$phiid))))
-    extended_data$art_summary <- cbind(phiid = unique(h$phiid), extended_data$art_summary[,-1])
-  
-  # join hz + artifact summary
-  h <- merge(h, extended_data$art_summary, by='phiid', all.x=TRUE, sort=FALSE)
+  extended_data <- get_extended_data_from_NASIS_db(SS = SS,
+                                                   nullFragsAreZero = nullFragsAreZero,
+                                                   stringsAsFactors = stringsAsFactors)
   
   ## fix some common problems
   
@@ -70,29 +56,19 @@
     # make the edit
     h$hzdepb[top.eq.bottom.idx] <- h$hzdepb[top.eq.bottom.idx] + 1
   }
-  
-  
-  ## copy pre-computed colors into a convenience field for plotting
-  # moist colors
-  if(soilColorState == 'moist')
-    h$soil_color <- h$moist_soil_color
-  
-  # dry colors
-  if(soilColorState == 'dry')
-    h$soil_color <- h$dry_soil_color
-  
-  
+
   ## test for horizonation inconsistencies... flag, and optionally remove
   # ~ 1.3 seconds / ~ 4k pedons
   h.test <- do.call('rbind', lapply(split(h, h$peiid), function(d) {
     res <- aqp::hzDepthTests(top=d[['hzdept']], bottom=d[['hzdepb']])
+    # print(res)
     return(data.frame(peiid = d$peiid, hz_logic_pass=all(!res)))
   }))
   
   # which are the good (valid) ones?
   good.ids <- as.character(h.test$peiid[which(h.test$hz_logic_pass)])
   bad.ids <- as.character(h.test$peiid[which(!h.test$hz_logic_pass)])
-  bad.horizons<- h[which(!h.test$hz_logic_pass), c(1:4,6,7)]
+  bad.horizons <- h[which(!h.test$hz_logic_pass), c(1:4,6,7)]
   bad.pedon.ids <- site_data$pedon_id[which(site_data$peiid %in% bad.ids)]
   
   # optionally filter pedons WITH NO horizonation inconsistencies
@@ -102,23 +78,7 @@
   # keep track of those pedons with horizonation errors
   assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
   assign("bad.horizons", value = data.frame(bad.horizons), envir = soilDB.env)
-  
-  ## optionally convert NA fragvol to 0
-  if(nullFragsAreZero) {
-    # this is the "total fragment volume" per NASIS calculation
-    h$fragvoltot <- ifelse(is.na(h$fragvoltot), 0, h$fragvoltot)
-    
-    # this is computed by soilDB::simplifyFragmentData()
-    h$total_frags_pct <- ifelse(is.na(h$total_frags_pct), 0, h$total_frags_pct)
-    
-    # this is computed by soilDB::simplifyFragmentData()
-    # no para-frags
-    h$total_frags_pct_nopf <- ifelse(is.na(h$total_frags_pct_nopf), 0, h$total_frags_pct_nopf)
-    
-    # this is computed by soilDB::simplifyArtifactData()
-    h$total_art_pct <- ifelse(is.na(h$total_art_pct), 0, h$total_art_pct)
-  }
-  
+
   # convert pedon and horizon unique ID to character
   h$peiid <- as.character(h$peiid)
   h$phiid <- as.character(h$phiid)
@@ -130,6 +90,31 @@
   # 1 second for ~ 4k pedons
   site(h) <- ~ pedon_id
   
+  ## copy pre-computed colors into a convenience field for plotting
+  # moist colors
+  if(soilColorState == 'moist')
+    color_data$soil_color <- h$moist_soil_color
+  
+  # dry colors
+  if(soilColorState == 'dry')
+    color_data$soil_color <- h$dry_soil_color
+  
+  horizons(h) <- color_data
+  
+  # check for empty fragment summary and nullFragsAreZero
+  if(nullFragsAreZero & all(is.na(unique(extended_data$frag_summary$phiid))))
+    extended_data$frag_summary <- cbind(phiid = unique(h$phiid), extended_data$frag_summary[,-1])
+  
+  ## join hz + fragment summary
+  horizons(h) <- extended_data$frag_summary
+  
+  # check for empty artifact summary and nullFragsAreZerod
+  if(nullFragsAreZero & all(is.na(unique(extended_data$art_summary$phiid))))
+    extended_data$art_summary <- cbind(phiid = unique(h$phiid), extended_data$art_summary[,-1])
+  
+  # join hz + artifact summary
+  horizons(h) <- extended_data$art_summary
+  
   ## TODO: this will fail in the presence of duplicates
   # add site data to object
   # remove 'pedon_id' column from site_data
@@ -138,7 +123,6 @@
   # left-join via peiid
   # < 0.1 second for ~ 4k pedons
   site(h) <- site_data
-  
   
   ### TODO: consider moving this into the extended data function ###
   # load best-guess optimal records from taxhistory
@@ -159,6 +143,22 @@
   ## https://github.com/ncss-tech/soilDB/issues/59
   # add diagnostic boolean data into @site
   site(h) <- extended_data$diagHzBoolean
+  
+  ## optionally convert NA fragvol to 0
+  if(nullFragsAreZero) {
+    # this is the "total fragment volume" per NASIS calculation
+    h$fragvoltot <- ifelse(is.na(h$fragvoltot), 0, h$fragvoltot)
+    
+    # this is computed by soilDB::simplifyFragmentData()
+    h$total_frags_pct <- ifelse(is.na(h$total_frags_pct), 0, h$total_frags_pct)
+    
+    # this is computed by soilDB::simplifyFragmentData()
+    # no para-frags
+    h$total_frags_pct_nopf <- ifelse(is.na(h$total_frags_pct_nopf), 0, h$total_frags_pct_nopf)
+    
+    # this is computed by soilDB::simplifyArtifactData()
+    h$total_art_pct <- ifelse(is.na(h$total_art_pct), 0, h$total_art_pct)
+  }
   
   ## TODO: convert this to simplifyFragmentData
   # add surface frag summary

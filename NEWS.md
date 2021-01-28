@@ -1,3 +1,6 @@
+# soilDB 2.6.0 (2021-01-28)
+ * `fetchNASIS(..., rmHzErrors=TRUE)` -- spurious removals of data due to missing "extended" records. `fetchNASIS` now uses `aqp::horizons<-` after building a minimal `SoilProfileCollection` from NASIS site and horizon tables. This allows `aqp` integrity methods to trigger where needed--preventing unintentional re-ordering or removals of "valid" horizon data.
+ 
 # soilDB 2.5.9 (2021-01-26)
  * `HenryTimeLine` moved to {sharpshootR} package
  * new functions `mukey.wcs()` and `ISSR800.wcs()` for hitting web coverage service (WCS) for gSSURGO, gNATSGO, and ISSR-800 grids
