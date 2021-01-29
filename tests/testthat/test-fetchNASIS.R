@@ -97,15 +97,9 @@ test_that("fetchNASIS(from='pedons') nullFragsAreZero works as expected", {
 
 test_that("fetchNASIS(from='components') returns reasonable data", {
 
-<<<<<<< HEAD
   skip_on_cran()
 
   if(!local_NASIS_defined()) {
-=======
-  # hack for in-house testing only
-  # WWW services aren't always available and will cause CRAN to drop our package if tests fail
-  if (!local_NASIS_defined(static_path = static_path)) {
->>>>>>> 61c56df... Method for cloning local NASIS tables into static SQLite file (#154)
     skip("local NASIS database not available")
   }
 
