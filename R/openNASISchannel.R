@@ -29,22 +29,26 @@
   return(channel)
 }
 
-#' Check for presence of `nasis_local` ODBC data source
-#'
-#' @param static_path Optional: path to local SQLite database containing NASIS table structure; default: NULL
-#'
+
+
+#' Check for presence of \code{nasis_local} ODBC data source
+#' 
+#' Check for presence of \code{nasis_local} ODBC data source
+#' 
+#' 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: NULL
 #' @return logical
-#' @export local_NASIS_defined
-#'
 #' @examples
-#'
+#' 
+#' 
 #' if(local_NASIS_defined()) {
 #'   # use fetchNASIS or some other lower-level fetch function
 #' } else {
 #'   message('could not find `nasis_local` ODBC data source')
 #' }
-#' @importFrom odbc odbcListDataSources
-#' @importFrom RSQLite dbCanConnect SQLite
+#' 
+#' @export local_NASIS_defined
 local_NASIS_defined <- function(static_path = NULL) {
   if (is.null(static_path)) {
     if ('nasis_local' %in% odbc::odbcListDataSources()$name) {

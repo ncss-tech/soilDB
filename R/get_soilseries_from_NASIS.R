@@ -1,3 +1,21 @@
+#' Get records from the Soil Classification (SC) database
+#' 
+#' These functions return records from the Soil Classification database, either
+#' from the local NASIS database (all series) or via web report (named series
+#' only).
+#' 
+#' 
+#' @aliases get_soilseries_from_NASIS get_soilseries_from_NASISWebReport
+#' @param soils character vector of soil series names
+#' @param stringsAsFactors logical: should character vectors be converted to
+#' factors? This argument is passed to the uncode() function. It does not
+#' convert those vectors that have set outside of uncode() (i.e. hard coded).
+#' The 'factory-fresh' default is TRUE, but this can be changed by setting
+#' options(stringsAsFactors = FALSE)
+#' @return A \code{data.frame}.
+#' @author Stephen Roecker
+#' @keywords manip
+#' @export get_soilseries_from_NASIS
 get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
   q.soilseries <- "

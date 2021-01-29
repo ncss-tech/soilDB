@@ -19,15 +19,20 @@ filter_geochem(
 
 \item{prep_code}{Character vector of prep code(s) to include in result.}
 
-\item{major_element_method}{Character vector of major element method(s) to include in result.}
+\item{major_element_method}{Character vector of major element method(s) to
+include in result.}
 
-\item{trace_element_method}{Character vector of trace element method(s) to include in result.}
+\item{trace_element_method}{Character vector of trace element method(s) to
+include in result.}
 }
 \value{
-A data.frame, subsetted according to the constraints specified in arguments.
+A data.frame, subsetted according to the constraints specified in
+arguments.
 }
 \description{
-A function to subset KSSL "geochem" / elemental analysis result table to obtain rows/columns based on: column name, preparation code, major / trace element method.
+A function to subset KSSL "geochem" / elemental analysis result table to
+obtain rows/columns based on: column name, preparation code, major / trace
+element method.
 }
 \author{
 Andrew G. Brown.

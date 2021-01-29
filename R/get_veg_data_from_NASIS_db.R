@@ -1,5 +1,31 @@
 ## TODO: merge with other vegplot functions
 
+
+
+#' Extract veg data from a local NASIS Database
+#' 
+#' Extract veg data from a local NASIS Database.
+#' 
+#' This function currently works only on Windows.
+#' 
+#' @param SS get data from the currently loaded Selected Set in NASIS or from
+#' the entire local database (default: TRUE)
+#' @return A list with the results.
+#' @author Jay M. Skovlin and Dylan E. Beaudette
+#' @keywords manip
+#' @examples
+#' 
+#' \donttest{
+#' if(local_NASIS_defined()) {
+#'  # query text note data
+#'  v <- try(get_veg_from_NASIS_db())
+#' 
+#'  # show contents veg data returned
+#'  str(v)
+#' }
+#' }
+#' 
+#' @export get_veg_data_from_NASIS_db
 get_veg_data_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
 
 # warning to use NASIS query to load related vegplot data for this to work

@@ -9,6 +9,58 @@
 # This function is heavily biased towared NASIS-specific data structures and assumptions
 # d: data.frame with color data from horizon-color table: expects "colorhue", "colorvalue", "colorchroma"
 # id.var: name of the column with unique horizon IDs
+
+
+#' Simplify Color Data by ID
+#' 
+#' Simplify multiple Munsell color observations associated with each horizon.
+#' 
+#' This function is mainly intended for the processing of NASIS pedon/horizon
+#' data which may or may not contain multiple colors per horizon/moisture
+#' status combination. \code{simplifyColorData} will "mix" multiple colors
+#' associated with horizons in \code{d}, according to IDs specified by
+#' \code{id.var}, using "weights" (area percentages) specified by the \code{wt}
+#' argument to \code{mix_and_clean_colors}.
+#' 
+#' Note that this function doesn't actually simulate the mixture of pigments on
+#' a surface, rather, "mixing" is approximated via weighted average in the
+#' CIELAB colorspace.
+#' 
+#' The \code{simplifyColorData} function can be applied to data sources other
+#' than NASIS by careful use of the \code{id.var} and \code{wt} arguments.
+#' However, \code{d} must contain Munsell colors split into columns named
+#' "colorhue", "colorvalue", and "colorchroma". In addition, the moisture state
+#' ("Dry" or "Moist") must be specified in a column named "colormoistst".
+#' 
+#' The \code{mix_and_clean_colors} function can be applied to arbitrary data
+#' sources as long as \code{x} contains sRGB coordinates in columns named "r",
+#' "g", and "b". This function should be applied to chunks of rows within which
+#' color mixtures make sense.
+#' 
+#' There are examples in
+#' \href{http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.htmlthe KSSL data
+#' tutorial} and
+#' \href{http://ncss-tech.github.io/AQP/soilDB/mixing-soil-color-data.htmlthe
+#' soil color mixing tutorial}.
+#' 
+#' @aliases simplifyColorData mix_and_clean_colors
+#' @param d a \code{data.frame} object, typically returned from NASIS, see
+#' details
+#' @param id.var character vector with the name of the column containing an ID
+#' that is unique among all horizons in \code{d}
+#' @param x a \code{data.frame} object containing sRGB coordinates associated
+#' with a group of colors to mix
+#' @param wt a character vector with the name of the column containing color
+#' weights for mixing
+#' @param bt logical, should the mixed sRGB representation of soil color be
+#' transformed to closest Munsell chips? This is performed by
+#' \code{aqp::rgb2Munsell}
+#' @param backTransform logical, should the mixed sRGB representation of soil
+#' color be transformed to closest Munsell chips? This is performed by
+#' \code{aqp::rgb2Munsell}
+#' @author D.E. Beaudette
+#' @keywords manip
+#' @export simplifyColorData
 simplifyColorData <- function(d, id.var='phiid', wt='colorpct', bt=FALSE) {
   
   # sanity check: must contain 1 row

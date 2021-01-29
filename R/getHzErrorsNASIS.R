@@ -1,11 +1,17 @@
 #' Check pedon horizon table for logic errors
-#'
-#' @param strict how strict should horizon boundaries be checked for consistency: TRUE=more | FALSE=less
-#' @param SS 	fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)
-#' @param static_path Optional: path to local SQLite database containing NASIS table structure; default: NULL
-#' @return A data.frame containing problematic records with columns: 'peiid','pedon_id','hzdept','hzdepb','hzname' 
-#' @export
-#'
+#' 
+#' Check pedon horizon table for logic errors
+#' 
+#' 
+#' @param strict how strict should horizon boundaries be checked for
+#' consistency: TRUE=more | FALSE=less
+#' @param SS fetch data from the currently loaded selected set in NASIS or from
+#' the entire local database (default: TRUE)
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: NULL
+#' @return A data.frame containing problematic records with columns:
+#' 'peiid','pedon_id','hzdept','hzdepb','hzname'
+#' @export getHzErrorsNASIS
 getHzErrorsNASIS <- function(strict = TRUE, SS = TRUE, static_path = NULL) {
   
   if (!local_NASIS_defined(static_path))

@@ -1,4 +1,3 @@
-
 ## TODO: generalize, export, and make sieve sizes into an argument
 
 # latest NSSH part 618
@@ -128,6 +127,37 @@
 # rf: un-coded contents of the phfrags table
 # id.var: id column name
 # nullFragsAreZero: convert NA to 0?
+
+
+#' Simplify Coarse Fraction Data
+#' 
+#' Simplify multiple coarse fraction (>2mm) records by horizon.
+#' 
+#' This function is mainly intended for the processing of NASIS pedon/horizon
+#' data which contains multiple coarse fragment descriptions per horizon.
+#' \code{simplifyFragmentData} will "sieve out" coarse fragments into the USDA
+#' classes, split into hard and para- fragments.
+#' 
+#' The \code{simplifyFragmentData} function can be applied to data sources
+#' other than NASIS by careful use of the \code{id.var} argument. However,
+#' \code{rf} must contain coarse fragment volumes in the column "fragvol",
+#' fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", and
+#' fragment cementation class in "fraghard".
+#' 
+#' There are examples in
+#' \href{http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.htmlthe KSSL data
+#' tutorial}.
+#' 
+#' @aliases simplifyFragmentData simplfyFragmentData simplifyArtifactData
+#' @param rf a \code{data.frame} object, typically returned from NASIS, see
+#' details
+#' @param id.var character vector with the name of the column containing an ID
+#' that is unique among all horizons in \code{rf}
+#' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0?
+#' (default: TRUE), see details
+#' @author D.E. Beaudette
+#' @keywords manip
+#' @export simplifyFragmentData
 simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   
   # nasty hack to trick R CMD check

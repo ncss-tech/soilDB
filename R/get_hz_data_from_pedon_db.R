@@ -6,6 +6,23 @@
 #    - multiple textures defined for a single horizon-- currently texture is not returned, see NASIS version for 50% fix
 #    - multiple lab sample numbers in phsample
 
+
+
+#' Extract Horizon Data from a PedonPC Database
+#' 
+#' Get horizon-level data from a PedonPC database.
+#' 
+#' This function currently works only on Windows.
+#' 
+#' @param dsn The path to a 'pedon.mdb' database.
+#' @return A data.frame.
+#' @note NULL total rock fragment values are assumed to represent an _absence_
+#' of rock fragments, and set to 0.
+#' @author Dylan E. Beaudette and Jay M. Skovlin
+#' @seealso \code{\link{get_colors_from_pedon_db}},
+#' \code{\link{get_site_data_from_pedon_db}}
+#' @keywords manip
+#' @export get_hz_data_from_pedon_db
 get_hz_data_from_pedon_db <- function(dsn) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))

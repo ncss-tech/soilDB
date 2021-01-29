@@ -1,5 +1,20 @@
 # 2013-01-08: now much faster since we only mix/clean data with > 1 color / horizon
 
+
+
+#' Extract Soil Color Data from a PedonPC Database
+#' 
+#' Get, format, mix, and return color data from a PedonPC database.
+#' 
+#' This function currently works only on Windows.
+#' 
+#' @param dsn The path to a 'pedon.mdb' database.
+#' @return A data.frame with the results.
+#' @author Dylan E. Beaudette and Jay M. Skovlin
+#' @seealso \code{\link{get_hz_data_from_pedon_db}},
+#' \code{\link{get_site_data_from_pedon_db}}
+#' @keywords manip
+#' @export get_colors_from_pedon_db
 get_colors_from_pedon_db <- function(dsn) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))

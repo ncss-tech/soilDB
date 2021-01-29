@@ -2,7 +2,8 @@
 % Please edit documentation in R/fetchNOAA.R
 \name{get_NOAA_GHCND}
 \alias{get_NOAA_GHCND}
-\title{Get Global Historical Climatology Network Daily (GHCND) data from NOAA API for given datatype(s), station IDs and years.}
+\title{Get Global Historical Climatology Network Daily (GHCND) data from NOAA API
+for given datatype(s), station IDs and years.}
 \usage{
 get_NOAA_GHCND(stations, years, datatypeids, apitoken)
 }
@@ -11,21 +12,31 @@ get_NOAA_GHCND(stations, years, datatypeids, apitoken)
 
 \item{years}{One or more years (e.g. 2017:2020)}
 
-\item{datatypeids}{One or more NOAA GHCND data type IDs (e.g \code{c("PRCP","SNOW")})}
+\item{datatypeids}{One or more NOAA GHCND data type IDs (e.g
+\code{c("PRCP","SNOW")})}
 
-\item{apitoken}{API key token for NOAA NCDC web services (https://www.ncdc.noaa.gov/cdo-web/token)}
+\item{apitoken}{API key token for NOAA NCDC web services
+(https://www.ncdc.noaa.gov/cdo-web/token)}
 }
 \value{
-A data.frame containing the GHCND data requested (limit 1000 records)
+A data.frame containing the GHCND data requested (limit 1000
+records)
 }
 \description{
-Obtain daily climatic summary data for a set of station IDs, years, and datatypes.
+Obtain daily climatic summary data for a set of station IDs, years, and
+datatypes.
+}
+\details{
+Note that typically results from the NOAA API are limited to 1000 records.
+However, by "chunking" up data into individual station\emph{year}datatypeid
+combinations, record results generally do not exceed 365 records for daily
+summaries.
 
-Note that typically results from the NOAA API are limited to 1000 records. However, by "chunking" up data into individual station\emph{year}datatypeid combinations, record results generally do not exceed 365 records for daily summaries.
-
-In order to use this function, you must obtain an API token from this website: https://www.ncdc.noaa.gov/cdo-web/token
+In order to use this function, you must obtain an API token from this
+website: https://www.ncdc.noaa.gov/cdo-web/token
 }
 \examples{
+
 
 #' ## in order to use this function, you must obtain an API token from this website:
 ##  https://www.ncdc.noaa.gov/cdo-web/token
@@ -34,5 +45,6 @@ In order to use this function, you must obtain an API token from this website: h
 #                years = 2017:2020,
 #                datatypeids = c("PRCP","SNOW"),
 #                apitoken = "yourtokenhere")
+
 
 }

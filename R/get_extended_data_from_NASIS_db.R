@@ -4,6 +4,43 @@
 
 ## TODO_JS: incorporated the use of uncode() into all except the fragment queries, which I think are best left as they are.
 
+
+
+#' Extract accessory tables and summaries from a local NASIS Database
+#' 
+#' Extract accessory tables and summaries from a local NASIS Database.
+#' 
+#' This function currently works only on Windows.
+#' 
+#' @param SS get data from the currently loaded Selected Set in NASIS or from
+#' the entire local database (default: TRUE)
+#' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0?
+#' (default: TRUE), see details
+#' @param stringsAsFactors logical: should character vectors be converted to
+#' factors? This argument is passed to the uncode() function. It does not
+#' convert those vectors that have been set outside of uncode() (i.e. hard
+#' coded). The 'factory-fresh' default is TRUE, but this can be changed by
+#' setting options(stringsAsFactors = FALSE)
+#' @return A list with the results.
+#' @author Jay M. Skovlin and Dylan E. Beaudette
+#' @seealso \code{\link{get_hz_data_from_NASIS_db}},
+#' \code{\link{get_site_data_from_NASIS_db}}
+#' @keywords manip
+#' @examples
+#' 
+#' \donttest{
+#' 
+#' if(local_NASIS_defined()) {
+#'  # query extended data
+#'  e <- try(get_extended_data_from_NASIS_db())
+#' 
+#'  # show contents of extended data
+#'  str(e)
+#' }
+#' 
+#' }
+#' 
+#' @export get_extended_data_from_NASIS_db
 get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
   # photo links from PedonPC stored as sitetext notes

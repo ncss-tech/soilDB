@@ -2,7 +2,8 @@
 % Please edit documentation in R/createStaticNASIS.R
 \name{createStaticNASIS}
 \alias{createStaticNASIS}
-\title{Create a memory or file-based instance of NASIS database (for selected tables)}
+\title{Create a memory or file-based instance of NASIS database (for selected
+tables)}
 \usage{
 createStaticNASIS(
   tables = NULL,
@@ -13,26 +14,35 @@ createStaticNASIS(
 )
 }
 \arguments{
-\item{tables}{Character vector of target tables. Default: \code{NULL} is all tables meeting the following criteria.}
+\item{tables}{Character vector of target tables. Default: \code{NULL} is all
+tables meeting the following criteria.}
 
-\item{SS}{Logical. Include "selected set" tables (ending with suffix \code{"_View1"}). Default: \code{FALSE}}
+\item{SS}{Logical. Include "selected set" tables (ending with suffix
+\code{"_View1"}). Default: \code{FALSE}}
 
-\item{systables}{Logical. Include "system" tables (starting with prefix \code{"system"}). Default: \code{FALSE}}
+\item{systables}{Logical. Include "system" tables (starting with prefix
+\code{"system"}). Default: \code{FALSE}}
 
-\item{static_path}{Optional: path to SQLite database containing NASIS table structure; Default: \code{NULL}}
+\item{static_path}{Optional: path to SQLite database containing NASIS table
+structure; Default: \code{NULL}}
 
-\item{output_path}{Optional: path to new/existing SQLite database to write tables to. Default: \code{NULL} returns table results as named list.}
+\item{output_path}{Optional: path to new/existing SQLite database to write
+tables to. Default: \code{NULL} returns table results as named list.}
 }
 \value{
-A named list of results from calling \code{dbQueryNASIS} for all columns in each NASIS table.
+A named list of results from calling \code{dbQueryNASIS} for all
+columns in each NASIS table.
 }
 \description{
-Create a memory or file-based instance of NASIS database (for selected tables)
+Create a memory or file-based instance of NASIS database (for selected
+tables)
 }
 \examples{
+
 
 \dontrun{
  str(createStaticNASIS(tables = c("calculation","formtext")))
 }
+
 
 }

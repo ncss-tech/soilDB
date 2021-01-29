@@ -1,36 +1,36 @@
-
-
-#' @title gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)
+#' gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)
 #' 
-#' @description Download chunks of the gNATSGO or gSSURGO map unit key grid via bounding-box from the SoilWeb WCS.
+#' Download chunks of the gNATSGO or gSSURGO map unit key grid via bounding-box
+#' from the SoilWeb WCS.
 #' 
+#' \code{aoi} should be specified as either a \code{Spatial*}, \code{sf},
+#' \code{sfc} or \code{bbox} object or a \code{list} containing:
+#' 
+#' \describe{ \item{list("aoi")}{bounding-box specified as (xmin, ymin, xmax,
+#' ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)} \item{list("crs")}{coordinate
+#' reference system of BBOX, e.g. '+init=epsg:4326'} }
+#' 
+#' The WCS query is parameterized using \code{raster::extent} derived from the
+#' above AOI specification, after conversion to the native CRS (EPSG:6350) of
+#' the gNATSGO / gSSURGO grid.
+#' 
+#' Databases available from this WCS can be queried using \code{WCS_details(wcs
+#' = 'mukey')}.
+#' 
+#' @param aoi area of interest (AOI) defined using a \code{Spatial*}, a
+#' \code{sf}, \code{sfc} or \code{bbox} object or a \code{list}, see details
+#' @param db name of the gridded map unit key grid to access, should be either
+#' 'gnatsgo' or 'gssurgo'
+#' @param res grid resolution, units of meters. The native resolution of
+#' gNATSGO and gSSURGO (this WCS) is 30m.
+#' @param quiet logical, passed to \code{download.file} to enable / suppress
+#' URL and progress bar for download.
+#' @return \code{raster} object containing indexed map unit keys and associated
+#' raster attribute table
+#' @note The gNATSGO grid includes raster soil survey map unit keys which are
+#' not in SDA.
 #' @author D.E. Beaudette and A.G. Brown
-#'
-#' @param aoi area of interest (AOI) defined using a \code{Spatial*}, a \code{sf}, \code{sfc} or \code{bbox} object or a \code{list}, see details
-#'
-#' @param db name of the gridded map unit key grid to access, should be either 'gnatsgo' or 'gssurgo'
-#'
-#' @param res grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m.
-#'
-#' @param quiet logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.
-#'
-#' @note The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
-#'
-#' @details \code{aoi} should be specified as either a \code{Spatial*}, \code{sf}, \code{sfc} or \code{bbox} object or a \code{list} containing:
-#'
-#' \describe{
-#'   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
-#'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=epsg:4326'}
-#' }
-#'
-#' The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the gNATSGO / gSSURGO grid.
-#' 
-#' Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.
-#' 
-#' @return \code{raster} object containing indexed map unit keys and associated raster attribute table
-#'
-#' @export
-#'
+#' @export mukey.wcs
 mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE) {
 
   if(!requireNamespace('rgdal', quietly=TRUE))

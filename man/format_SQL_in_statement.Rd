@@ -2,7 +2,8 @@
 % Please edit documentation in R/SDA_query.R
 \name{format_SQL_in_statement}
 \alias{format_SQL_in_statement}
-\title{Format vector of values into a string suitable for an SQL \code{IN} statement.}
+\title{Format vector of values into a string suitable for an SQL \code{IN}
+statement.}
 \usage{
 format_SQL_in_statement(x)
 }
@@ -10,15 +11,19 @@ format_SQL_in_statement(x)
 \item{x}{A character vector.}
 }
 \value{
-A character vector (unit length) containing concatenated group syntax for use in SQL \code{IN}, with unique value found in \code{x}.
+A character vector (unit length) containing concatenated group
+syntax for use in SQL \code{IN}, with unique value found in \code{x}.
 }
 \description{
-Concatenate a vector to SQL \code{IN}-compatible syntax: \code{letters[1:3]} becomes \code{('a','b','c')}. Values in \code{x} are first passed through \code{unique()}.
+Concatenate a vector to SQL \code{IN}-compatible syntax: \code{letters[1:3]}
+becomes \code{('a','b','c')}. Values in \code{x} are first passed through
+\code{unique()}.
 }
 \note{
 Only \code{character} output is supported.
 }
 \examples{
+
 
 \donttest{
 
@@ -59,4 +64,5 @@ groupedProfilePlot(res, groups = "mukey", color = "hzname", cex.names=0.8,
 }
 
    
+
 }

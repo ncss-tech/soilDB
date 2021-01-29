@@ -1,3 +1,35 @@
+#' Extract text note data from a local NASIS Database
+#' 
+#' Extract text note data from a local NASIS Database.
+#' 
+#' This function currently works only on Windows.
+#' 
+#' @param SS get data from the currently loaded Selected Set in NASIS or from
+#' the entire local database (default: TRUE)
+#' @param fixLineEndings convert line endings from "\r\n" to "\n"
+#' @return A list with the results.
+#' @author Dylan E. Beaudette and Jay M. Skovlin
+#' @seealso \code{\link{get_hz_data_from_pedon_db}},
+#' \code{\link{get_site_data_from_pedon_db}}
+#' @keywords manip
+#' @examples
+#' 
+#' \donttest{
+#' if(local_NASIS_defined()) {
+#'  # query text note data
+#'  t <- try(get_text_notes_from_NASIS_db())
+#' 
+#'  # show contents text note data, includes: siteobs, site, pedon, horizon level text notes data.
+#'  str(t)
+#' 
+#'  # view text categories for site text notes
+#'  if(!inherits(t, 'try-error')) {
+#'   table(t$site_text$textcat)
+#'  }
+#' }
+#' }
+#' 
+#' @export get_text_notes_from_NASIS_db
 get_text_notes_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, static_path = NULL) {
 
 	# petext

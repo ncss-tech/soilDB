@@ -125,6 +125,46 @@ SCAN_site_metadata <- function(site.code) {
 # year: vector of years
 # report: single report type
 # req: for backwards compatibility
+
+
+#' Fetch SCAN Data
+#' 
+#' Query soil/climate data from USDA-NRCS SCAN Stations (experimental)
+#' 
+#' See \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.htmlthe
+#' fetchSCAN tutorial for details.} These functions require the `httr` and
+#' `rvest` libraries.
+#' 
+#' @aliases fetchSCAN SCAN_sensor_metadata SCAN_site_metadata
+#' @param site.code a vector of site codes
+#' @param year a vector of years
+#' @param report report name, single value only
+#' @param req list of SCAN request parameters, for backwards-compatibility only
+#' @return a \code{data.frame} object
+#' @note \code{SCAN_sensor_metadata()} is known to crash on 32bit R / libraries
+#' (Windows).
+#' @author D.E. Beaudette
+#' @references https://www.wcc.nrcs.usda.gov/index.html
+#' @keywords manip
+#' @examples
+#' 
+#' \donttest{
+#' if(requireNamespace("curl") &
+#'     curl::has_internet()) {
+#'     
+#'     # get data: new interface
+#'     x <- fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016))
+#'     str(x)
+#'     
+#'     # get sensor metadata
+#'     m <- SCAN_sensor_metadata(site.code=c(356, 2072))
+#'     
+#'     # get site metadata
+#'     m <- SCAN_site_metadata(site.code=c(356, 2072))
+#' }
+#' }
+#' 
+#' @export fetchSCAN
 fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   
   ## backwards compatibility:
