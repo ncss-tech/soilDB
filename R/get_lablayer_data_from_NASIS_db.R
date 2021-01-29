@@ -16,19 +16,18 @@ FROM ncsslayerlabdata_View_1
 
 ORDER BY labpeiid, hzdept ASC;")
 
-
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
 	# handle Views/selected set argument
   if(!SS)
     q.ncsslablayer <- gsub(q.ncsslablayer, pattern = "_View_1", replacement = "")
 
-	# exec queries
-	d.lablayer <- RODBC::sqlQuery(channel, q.ncsslablayer, stringsAsFactors=FALSE)
-
-
+	# exec query
+  d.lablayer <- dbQueryNASIS(channel, q.ncsslablayer)
+  
 	# recode metadata domains
 	d.lablayer <- uncode(d.lablayer)
 
@@ -42,9 +41,6 @@ ORDER BY labpeiid, hzdept ASC;")
 	  cec7clay = round(cec7 / (claytot - claycarb), 2)
 	  organicmatpct = round(carbonorganicpct * 1.724, 2)
 	  })
-
-	# close connection
-	RODBC::odbcClose(channel)
 
 	# return a list of results
 	return(d.lablayer)

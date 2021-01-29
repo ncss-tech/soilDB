@@ -2,7 +2,7 @@
 #
 get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
   # must have RODBC installed
-  if(!requireNamespace('RODBC'))
+  if (!requireNamespace('RODBC'))
     stop('please install the `RODBC` package', call.=FALSE)
 
   q <- "SELECT peiid, phiid, upedonid as pedon_id,
@@ -25,21 +25,22 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 
   ORDER BY p.upedonid, ph.hzdept ASC;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
+  d <- dbQueryNASIS(channel, q)  
+  d2 <- as.data.frame(d)
+  
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d2 <- uncode(d2, stringsAsFactors = stringsAsFactors)
 
   # re-implement texture_class column, with lieutex in cases where texcl is missing
   d$texture_class <- ifelse(is.na(d$texcl) & ! is.na(d$lieutex), as.character(d$lieutex), as.character(d$texcl))
@@ -53,11 +54,9 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   dupe.hz.pedon.ids <- d$pedon_id[d$phiid %in% dupe.hz.phiid]
 
   if (length(dupe.hz) > 0) {
-    message(paste('NOTICE: multiple `labsampnum` values / horizons; see pedon IDs:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), sep=''))
+    message(paste0('NOTICE: multiple `labsampnum` values / horizons; see pedon IDs:\n', 
+                   paste(unique(dupe.hz.pedon.ids), collapse = ',')))
   }
-
-  # close connection
-  RODBC::odbcClose(channel)
 
   # done
   return(d)

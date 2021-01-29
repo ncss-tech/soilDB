@@ -19,15 +19,13 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
   # LEFT OUTER JOIN
   #     soilseriestaxmineralogy sstm ON sstm.soilseriesiidref = ss.soilseriesiid
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS()
+  
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # exec query
-  d.soilseries <- RODBC::sqlQuery(channel, q.soilseries, stringsAsFactors = FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d.soilseries <- dbQueryNASIS(channel, q.soilseries)
 
   # recode metadata domains
   d.soilseries <- uncode(d.soilseries, stringsAsFactors = stringsAsFactors)
@@ -43,7 +41,7 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
 
 get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = default.stringsAsFactors()) {
 
-  url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_soilseries_from_NASISWebReport"
+  url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_soilseries_from_NASISWebReport"
 
   d.ss <- lapply(soils, function(x) {
     args = list(p_soilseriesname = x)
@@ -52,8 +50,11 @@ get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = default
   d.ss <- do.call("rbind", d.ss)
 
   # set factor levels according to metadata domains
-  d.ss[! names(d.ss) %in% c("mlraoffice", "taxminalogy")] <- uncode(d.ss[! names(d.ss) %in% c("mlraoffice", "taxminalogy")], db = "SDA", stringsAsFactors = stringsAsFactors)
-  d.ss[names(d.ss) %in% c("mlraoffice")] <- uncode(d.ss[names(d.ss) %in% c("mlraoffice")], db = "LIMS", stringsAsFactors = stringsAsFactors)
+  d.ss[!names(d.ss) %in% c("mlraoffice", "taxminalogy")] <- uncode(d.ss[!names(d.ss) %in% c("mlraoffice", "taxminalogy")], 
+                                                                   db = "SDA", stringsAsFactors = stringsAsFactors)
+  
+  d.ss[names(d.ss) %in% c("mlraoffice")] <- uncode(d.ss[names(d.ss) %in% c("mlraoffice")], 
+                                                   db = "LIMS", stringsAsFactors = stringsAsFactors)
 
   # return data.frame
   return(d.ss)

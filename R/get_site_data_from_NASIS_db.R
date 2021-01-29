@@ -45,50 +45,47 @@ WHERE sb.rn IS NULL OR sb.rn = 1
 
 ORDER BY pedon_View_1.peiid ;"
 
-      channel <- .openNASISchannel()
-      if (channel == -1)
-        return(data.frame())
-
+  channel <- dbConnectNASIS()
+      
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+      
 	# toggle selected set vs. local DB
-	if(SS == FALSE) {
+	if (SS == FALSE) {
 	  q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
 	}
 
-
 	# exec query
-	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- dbQueryNASIS(channel, q)  
 
-	# close connection
-	RODBC::odbcClose(channel)
-
-	## this shouldn't happen, retain for debugging
-	# test for an error
-	if(inherits(d, 'character'))
+	# ## this shouldn't happen, retain for debugging
+	# # test for an error
+	if (inherits(d, 'try-error'))
 	  stop('error in SQL')
 
 	# uncode domain columns
 	d <- uncode(d, stringsAsFactors = stringsAsFactors)
 
 	# short-circuit: 0 rows means nothing in the selected set and thus we stop here
-	if(nrow(d) == 0) {
+	if (nrow(d) == 0) {
 	  return(d)
 	}
 
 
   # https://github.com/ncss-tech/soilDB/issues/41
 	# warn if mixed datums
-	if(length(na.omit(unique(d$horizdatnm))) > 1)
+	if (length(na.omit(unique(d$horizdatnm))) > 1)
 		message('multiple horizontal datums present, consider using WGS84 coordinates (x_std, y_std)')
 
 	# are there any duplicate pedon IDs?
 	t.pedon_id <- table(d$pedon_id)
 	not.unique.pedon_id <- t.pedon_id > 1
-	if(any(not.unique.pedon_id))
+	if (any(not.unique.pedon_id))
 		assign('dup.pedon.ids', value=names(t.pedon_id[which(not.unique.pedon_id)]), envir=soilDB.env)
 
 	# warn about sites without a matching pedon (records missing peiid)
 	missing.pedon <- which(is.na(d$peiid))
-	if(length(missing.pedon)> 0)
+	if (length(missing.pedon) > 0)
 		assign('sites.missing.pedons', value=unique(d$site_id[missing.pedon]), envir=soilDB.env)
 
   ## set factor levels, when it makes sense

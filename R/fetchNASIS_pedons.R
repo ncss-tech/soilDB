@@ -5,11 +5,11 @@
                                soilColorState='moist', lab=FALSE, stringsAsFactors = default.stringsAsFactors()) {
   
   # test connection
-  if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
+  if (!'nasis_local' %in% names(RODBC::odbcDataSources()))
     stop('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
   
   # sanity check
-  if(! soilColorState %in% c('dry', 'moist'))
+  if (!soilColorState %in% c('dry', 'moist'))
     stop('soilColorState must be either `dry` or `moist`', call. = FALSE)
   
   ## load data in pieces
@@ -28,17 +28,17 @@
   extended_data <- get_extended_data_from_NASIS_db(SS = SS,
                                                    nullFragsAreZero = nullFragsAreZero,
                                                    stringsAsFactors = stringsAsFactors)
-  
+
   ## fix some common problems
   
   # replace missing lower boundaries
   missing.lower.depth.idx <- which(!is.na(h$hzdept) & is.na(h$hzdepb))    
   
   # keep track of affected pedon IDs (if none, this will have zero length)
-  assign('missing.bottom.depths', value=unique(h$pedon_id[missing.lower.depth.idx]), envir=soilDB.env)
+  assign('missing.bottom.depths', value = unique(h$pedon_id[missing.lower.depth.idx]), envir = soilDB.env)
   
-  if(length(missing.lower.depth.idx) > 0) {
-    message(paste('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]', sep=''))
+  if (length(missing.lower.depth.idx) > 0) {
+    message(paste0('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]'))
     
     # make edit
     h$hzdepb[missing.lower.depth.idx] <- h$hzdept[missing.lower.depth.idx] + 1
@@ -48,10 +48,10 @@
   top.eq.bottom.idx <- which(h$hzdept == h$hzdepb)
   
   # keep track of affected pedon IDs (if none, this will have zero length)
-  assign('top.bottom.equal', value=unique(h$pedon_id[	top.eq.bottom.idx]), envir=soilDB.env)
+  assign('top.bottom.equal', value = unique(h$pedon_id[	top.eq.bottom.idx]), envir = soilDB.env)
   
-  if(length(top.eq.bottom.idx) > 0) {
-    message(paste('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]', sep=''))
+  if (length(top.eq.bottom.idx) > 0) {
+    message(paste0('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]'))
     
     # make the edit
     h$hzdepb[top.eq.bottom.idx] <- h$hzdepb[top.eq.bottom.idx] + 1
@@ -72,13 +72,13 @@
   bad.pedon.ids <- site_data$pedon_id[which(site_data$peiid %in% bad.ids)]
   
   # optionally filter pedons WITH NO horizonation inconsistencies
-  if(rmHzErrors)
+  if (rmHzErrors)
     h <- h[which(h$peiid %in% good.ids), ]
   
   # keep track of those pedons with horizonation errors
-  assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
+  assign('bad.pedon.ids', value = bad.pedon.ids, envir = soilDB.env)
   assign("bad.horizons", value = data.frame(bad.horizons), envir = soilDB.env)
-
+  
   # convert pedon and horizon unique ID to character
   h$peiid <- as.character(h$peiid)
   h$phiid <- as.character(h$phiid)
@@ -164,11 +164,11 @@
   # add surface frag summary
   sfs <- extended_data$surf_frag_summary
   # optionally convert NA fragvol to 0
-  if(nullFragsAreZero) {
+  if (nullFragsAreZero) {
     sfs <- as.data.frame(
-      cbind(sfs[, 1, drop=FALSE], 
+      cbind(sfs[, 1, drop = FALSE], 
             lapply(sfs[, -1], function(i) ifelse(is.na(i), 0, i))
-      ), stringsAsFactors=FALSE)
+      ), stringsAsFactors = FALSE)
   }
   
   # add surf. frag summary to @site
@@ -184,12 +184,12 @@
   
   # join-in landform string
   ed.lf <- split(extended_data$geomorph, extended_data$geomorph$peiid)
-  lf <- do.call('rbind', lapply(ed.lf, .formatLandformString, name.sep=' & '))
+  lf <- do.call('rbind', lapply(ed.lf, .formatLandformString, name.sep = ' & '))
   site(h) <- lf
   
   # join-in parent material strings
   ed.pm <- split(extended_data$pm, extended_data$pm$siteiid)
-  pm <- do.call('rbind', lapply(ed.pm, .formatParentMaterialString, name.sep=' & '))
+  pm <- do.call('rbind', lapply(ed.pm, .formatParentMaterialString, name.sep = ' & '))
   site(h) <- pm
   
   # set metadata
@@ -198,18 +198,18 @@
   metadata(h) <- m
   
   # print any messages on possible data quality problems:
-  if(exists('sites.missing.pedons', envir=soilDB.env))
-    if(length(get('sites.missing.pedons', envir=soilDB.env)) > 0)
+  if (exists('sites.missing.pedons', envir = soilDB.env))
+    if (length(get('sites.missing.pedons', envir = soilDB.env)) > 0)
       message("-> QC: sites without pedons: use `get('sites.missing.pedons', envir=soilDB.env)` for related usersiteid values")
   
-  if(exists('dup.pedon.ids', envir=soilDB.env))
-    if(length(get('dup.pedon.ids', envir=soilDB.env)) > 0)
+  if (exists('dup.pedon.ids', envir = soilDB.env))
+    if (length(get('dup.pedon.ids', envir = soilDB.env)) > 0)
       message("-> QC: duplicate pedons: use `get('dup.pedon.ids', envir=soilDB.env)` for related peiid values")
   
   # set NASIS-specific horizon identifier
   tryCatch(hzidname(h) <- 'phiid', error = function(e) {
-    if(grepl(e$message, pattern="not unique$")) {
-       if(!rmHzErrors) {
+    if (grepl(e$message, pattern = "not unique$")) {
+       if (!rmHzErrors) {
         # if rmHzErrors = FALSE, keep unique integer assigned ID to all records automatically
         message("-> QC: duplicate horizons are present with rmHzErrors=FALSE! defaulting to `hzID` as unique horizon ID.")
        } else {
@@ -223,24 +223,23 @@
   hzdesgnname(h) <- "hzname"
   hztexclname(h) <- "texture"
   
-  if(exists('bad.pedon.ids', envir=soilDB.env))
-    if(length(get('bad.pedon.ids', envir=soilDB.env)) > 0)
+  if (exists('bad.pedon.ids', envir = soilDB.env))
+    if (length(get('bad.pedon.ids', envir = soilDB.env)) > 0)
       message("-> QC: horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for related userpedonid values or `get('bad.horizons', envir=soilDB.env)` for related horizon designations")
   
-  if(exists('missing.bottom.depths', envir=soilDB.env))
-    if(length(get('missing.bottom.depths', envir=soilDB.env)) > 0)
+  if (exists('missing.bottom.depths', envir = soilDB.env))
+    if (length(get('missing.bottom.depths', envir = soilDB.env)) > 0)
       message("-> QC: pedons missing bottom hz depths: use `get('missing.bottom.depths', envir=soilDB.env)` for related pedon IDs")
   
-  if(exists('top.bottom.equal', envir=soilDB.env))
-    if(length(get('top.bottom.equal', envir=soilDB.env)) > 0)
+  if (exists('top.bottom.equal', envir = soilDB.env))
+    if (length(get('top.bottom.equal', envir = soilDB.env)) > 0)
       message("-> QC: equal hz top and bottom depths: use `get('top.bottom.equal', envir=soilDB.env)` for related pedon IDs")
   
   ## https://github.com/ncss-tech/soilDB/issues/44
   # optionally load phlabresults table
   if (lab) {
-    phlabresults <- .get_phlabresults_data_from_NASIS_db(SS=SS)
+    phlabresults <- .get_phlabresults_data_from_NASIS_db(SS = SS)
     horizons(h) <- phlabresults
-    #h <- join(h, phlabresults, by = "phiid", type = "left")
   }
   
   # done

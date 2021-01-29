@@ -4,38 +4,38 @@ uncode <- function(df,
                    droplevels = FALSE, 
                    stringsAsFactors = default.stringsAsFactors()
                    ) {
+  
   get_metadata <- function() {
     # must have RODBC installed
-    if(!requireNamespace('RODBC'))
+    if (!requireNamespace('RODBC'))
       stop('please install the `RODBC` package', call.=FALSE)
     
-    q <- "SELECT mdd.DomainID, DomainName, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceDescription, ColumnPhysicalName, ColumnLogicalName, ChoiceObsolete
+    q <- "SELECT mdd.DomainID, DomainName, ChoiceSequence, ChoiceValue, ChoiceName, 
+                 ChoiceLabel, ColumnPhysicalName, ColumnLogicalName, ChoiceObsolete, ChoiceDescription
+          FROM MetadataDomainDetail mdd
+            INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
+            INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName 
+                        FROM MetadataTableColumn GROUP BY DomainID, ColumnPhysicalName) mtc ON mtc.DomainID = mdd.DomainID
+          ORDER BY DomainID, ColumnPhysicalName, ChoiceValue;"
     
-    FROM MetadataDomainDetail mdd
-    INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
-    INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName FROM MetadataTableColumn GROUP BY DomainID, ColumnPhysicalName) mtc ON mtc.DomainID = mdd.DomainID
+    channel <- dbConnectNASIS()
     
-    ORDER BY DomainID, ColumnPhysicalName, ChoiceValue;"
-    
-    # setup connection local NASIS
-    channel <- RODBC::odbcDriverConnect(connection = getOption('soilDB.NASIS.credentials'))
+    if (inherits(channel, 'try-error'))
+      return(data.frame())
     
     # exec query
-    d <- RODBC::sqlQuery(channel, q, stringsAsFactors = FALSE)
-    
-    # close connection
-    RODBC::odbcClose(channel)
+    d <- dbQueryNASIS(channel, q)  
     
     # done
     return(d)
   }
   
   # load current metadata table
-  if (db == "NASIS"){
+  if (db == "NASIS") {
     metadata <- get_metadata()
-    } else {
-      load(system.file("data/metadata.rda", package="soilDB")[1])
-      }
+  } else {
+      load(system.file("data/metadata.rda", package = "soilDB")[1])
+  }
   
   # unique set of possible columns that will need replacement
   possibleReplacements <- unique(metadata$ColumnPhysicalName)
