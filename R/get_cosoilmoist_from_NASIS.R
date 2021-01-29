@@ -1,4 +1,4 @@
-get_cosoilmoist_from_NASIS <- function(impute = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+get_cosoilmoist_from_NASIS <- function(SS = TRUE, impute = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
   q.cosoilmoist <- "SELECT dmuiidref AS dmuiid, coiid, compname, comppct_r, drainagecl, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, cosoilmoistiid, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat
 
@@ -13,6 +13,11 @@ get_cosoilmoist_from_NASIS <- function(impute = TRUE, stringsAsFactors = default
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
+  
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q.cosoilmoist <- gsub(pattern = '_View_1', replacement = '', x = q.cosoilmoist, fixed = TRUE)
+  }
   
   # exec query
   d.cosoilmoist <- dbQueryNASIS(channel, q.cosoilmoist)  

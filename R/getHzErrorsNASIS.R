@@ -1,19 +1,20 @@
 #' Check pedon horizon table for logic errors
 #'
 #' @param strict how strict should horizon boundaries be checked for consistency: TRUE=more | FALSE=less
-#'
+#' @param SS 	fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)
+#' @param static_path Optional: path to local SQLite database containing NASIS table structure; default: NULL
 #' @return A data.frame containing problematic records with columns: 'peiid','pedon_id','hzdept','hzdepb','hzname' 
 #' @export
 #'
-getHzErrorsNASIS <- function(strict = TRUE) {
+getHzErrorsNASIS <- function(strict = TRUE, SS = TRUE, static_path = NULL) {
   
-  if (!local_NASIS_defined())
+  if (!local_NASIS_defined(static_path))
     stop('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
   
 	# get data
-	site_data <- get_site_data_from_NASIS_db()
+	site_data <- get_site_data_from_NASIS_db(SS = SS, static_path = static_path)
 	site_data$pedon_id <- NULL
-	hz_data <- get_hz_data_from_NASIS_db()
+	hz_data <- get_hz_data_from_NASIS_db(SS = SS, static_path = static_path)
 	
 	if (nrow(site_data) == 0) {
 	  message("No Site records in NASIS database")

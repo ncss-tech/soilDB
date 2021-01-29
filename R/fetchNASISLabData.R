@@ -2,7 +2,7 @@
 fetchNASISLabData <- function(SS = TRUE) {
 
 	# test connection
-	if (!local_NASIS_defined())
+	if (!local_NASIS_defined(static_path))
 			stop('Local NASIS ODBC connection has not been setup. Please see the `setup_ODBC_local_NASIS.pdf` document included with this package.')
 	
 	# 1. load data in pieces, results are DF objects

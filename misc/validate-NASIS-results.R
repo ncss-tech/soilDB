@@ -36,6 +36,9 @@ f <- read.table(text = "R/fetchNASIS.R
 
 library(soilDB)
 
+# selected SET?
+selected_set <- FALSE
+
 fnames <- sapply(f, function(x) { 
   spv <- evalSource(x, package = "soilDB")
   # source(x)
@@ -45,7 +48,9 @@ fnames <- sapply(f, function(x) {
 test <- lapply(fnames, function(fname) {
     lapply(fname, function(FUN) {
       message(sprintf("Testing: %s", FUN))
-      try(get(FUN, envir = as.environment("package:soilDB"))())
+      if (FUN == "local_NASIS_defined") try(get(FUN, envir = as.environment("package:soilDB"))(static_path = "testStatic.sqlite"))
+      else try(get(FUN, envir = as.environment("package:soilDB"))(SS = selected_set, static_path = "testStatic.sqlite"))
+      # try(get(FUN, envir = as.environment("package:soilDB"))())
     })
   })
 
@@ -56,6 +61,8 @@ res <- unlist(lapply(names(test), function(x) lapply(seq_along(test[[x]]), funct
     })))
 
 res[which(res)]
+
+# get_vegplot_tree_si_details_from_NASIS_db(SS = FALSE, static_path = "testStatic.sqlite")
 
 # Fixed: Text fields must come at end of query per MSSQL specs
 # get_text_notes_from_NASIS_db()

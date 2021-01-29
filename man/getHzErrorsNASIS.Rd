@@ -4,10 +4,14 @@
 \alias{getHzErrorsNASIS}
 \title{Check pedon horizon table for logic errors}
 \usage{
-getHzErrorsNASIS(strict = TRUE)
+getHzErrorsNASIS(strict = TRUE, SS = TRUE, static_path = NULL)
 }
 \arguments{
 \item{strict}{how strict should horizon boundaries be checked for consistency: TRUE=more | FALSE=less}
+
+\item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)}
+
+\item{static_path}{Optional: path to local SQLite database containing NASIS table structure; default: NULL}
 }
 \value{
 A data.frame containing problematic records with columns: 'peiid','pedon_id','hzdept','hzdepb','hzname'

@@ -3,7 +3,7 @@
 .openNASISchannel <- function(static_path = NULL) {
 
   use_sqlite <- !is.null(static_path)
-  
+
   if (is.null(getOption('soilDB.NASIS.credentials')))
     stop("soilDB.NASIS.credentials not set")
 
@@ -31,6 +31,8 @@
 
 #' Check for presence of `nasis_local` ODBC data source
 #'
+#' @param static_path Optional: path to local SQLite database containing NASIS table structure; default: NULL
+#'
 #' @return logical
 #' @export local_NASIS_defined
 #'
@@ -42,11 +44,15 @@
 #'   message('could not find `nasis_local` ODBC data source')
 #' }
 #' @importFrom odbc odbcListDataSources
-#' 
-local_NASIS_defined <- function() {
-  if ('nasis_local' %in% odbc::odbcListDataSources()$name) {
-    return(TRUE)
+#' @importFrom RSQLite dbCanConnect SQLite
+local_NASIS_defined <- function(static_path = NULL) {
+  if (is.null(static_path)) {
+    if ('nasis_local' %in% odbc::odbcListDataSources()$name) {
+      return(TRUE)
+    } else {
+      return(FALSE)
+    }
   } else {
-    return(FALSE)
+    return(RSQLite::dbCanConnect(RSQLite::SQLite(), static_path))
   }
 }

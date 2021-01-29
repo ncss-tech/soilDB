@@ -3,8 +3,8 @@
 get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
   # must have stringr installed
-  if(!requireNamespace('stringr'))
-    stop('please install the `stringr` package', call.=FALSE)
+  if (!requireNamespace('stringr'))
+    stop('please install the `stringr` package', call. = FALSE)
 
   q.vegplot <- "SELECT siteiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, vegdataorigin, vegplotsize, soilprofileindicator, soil232idlegacy, ahorizondepth, alkalinesalineindicator, alkalineaffected, salinityclass, restrictivelayerdepthlegacy, legacysoilcompname, legacysoilphase, legacylocalsoilphase, legacysoilsurftext, legacysurftextmod, legacyterminlieu, erosionclasslegacy, landformgrouplegacy, cryptogamcovcllegacy, rangelandusehistory, cancovpctplotave, cancovtotalpct, cancovtotalclass, overstorycancontotalpct, overstorycancovtotalclass, dblsampannualprodave, compyieldproductionave, abovegroundbiomasstotave, understoryreprodabundance, woodyunderstoryabundance, herbundertoryabundance, lichensunderstoryabundance, crowncanclosurepct, crowncancloseassessmethod, crowncompfactorlpp, crowncomplppavedbh, basalcoverpctave, basalareaplottotal, basalareaassessmethod, constreeshrubgrp, windbreakrowonedirection, windbreaktrappedsoildepth, windbreaktrappedsoiltexture, understorydescindicator, mensurationdataindicator, vigorclasslegacy, siteconditionlegacy, overstoryspecieslegacy, plantmoiststate, currenttreedensity, currenttreespacing, currentdxspacing, currentplotavedbh, plotbasalareafactor, currentbasalarea, foreststandtype, foreststratainventoried, foreststandregen, foreststandquality, desiredtreedensity, desireddxspacing, desiredbasalarea, excessbasalarea, excesstreedensity, stockingchangepct, treepctgoodcondition, treepctfaircondition, treepctpoorcondition, treecounttotal, treesnagdensityhard, treesnagdensitysoft, pastureforagetype, pasturestanddensityave, pastureplanthtave, pastureprodave, pcidesirableplants, pciplantcover, pciplantdiversity, pcigroundcovresidue, pcistandingdeadforage, pciplantresiduecompscore, pciplantvigor, pcilegumepctclass, pciuseuniformity, pcilivestockconcareas, pcisoilcompaction, pcisheetrillerosion, pciwinderosion, pcistreamshoreerosion, pcigullyerosion, pcierosioncompscore, pcipastureconditionscore, refplantcommunity, repannualprod, totestannualprod, totallowableannualprod, totpalatableannualprod, similarityindex, annualuseableprod, harvesteffpct, takehalfleavehalf, acresperaum, aumperacre, audperacre, desirableplantvigor, desirableseedlingabundance, decadentplantabundance, plantresidueadequacy, undesirableinvadingspecies, majorinvadingspecies, invadingspeciescancovpct, soilsurferosion, soilcrusting, soilcompaction, baregroundpct, gullyrillpresence, soildegradationrating, rangetrendcurrent, rangetrendplanned, qcreviewperson, qcreviewdate, qareviewperson, qareviewdate, swcdlegacy, fieldofficelegacy, nrcsarealegacy, aktotallichencoverpct, aktotallitter1coverpct, aktotallitter2coverpct, aktotalmosscoverpct, aktotalrockcoverpct, aktotalsoilcoverpct, aktotalwatercoverpct, akecologicalsitestatus, aktotalbedrockcoverpct, akfieldecositeid
   FROM
@@ -15,7 +15,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(static_path)
-  
+ 
   if (inherits(channel, 'try-error'))
     return(data.frame())
   
@@ -24,17 +24,15 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 
   # toggle selected set vs. local DB
   if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+    q.vegplot <- gsub(pattern = '_View_1', replacement = '', x = q.vegplot, fixed = TRUE)
   }
 
-  d <- uncode(d.vegplot)
-
   # test for no data
-  if (nrow(d) == 0)
+  if (nrow(d.vegplot) == 0)
     stop('there are no NASIS vegplots in your selected set!')
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d.vegplot, stringsAsFactors = stringsAsFactors)
 
   # done
   return(d)
@@ -57,22 +55,20 @@ get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
   if (inherits(channel, 'try-error'))
     return(data.frame())
   
-  # exec query
-  d.plotlocation <- dbQueryNASIS(channel, q.plotlocation, stringsAsFactors=FALSE)
-
   # toggle selected set vs. local DB
   if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+    q.plotlocation <- gsub(pattern = '_View_1', replacement = '', x = q.plotlocation, fixed = TRUE)
   }
+  
+  # exec query
+  d.plotlocation <- dbQueryNASIS(channel, q.plotlocation, stringsAsFactors = FALSE)
 
-  d <- uncode(d.plotlocation)
-
+  # uncode metadata domains
+  d <- uncode(d.plotlocation, stringsAsFactors = stringsAsFactors)
+  
   # test for no data
   if (nrow(d) == 0)
     stop('there are no NASIS vegplots in your selected set!')
-
-  # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
 
   # hack for CRAN check
   state_FIPS_codes <- NULL
@@ -117,23 +113,22 @@ get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.s
   if (inherits(channel, 'try-error'))
     return(data.frame())
   
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q.vegplotrhi <- gsub(pattern = '_View_1', replacement = '', x = q.vegplotrhi, fixed = TRUE)
+  }
+  
   # exec query
   d.vegplotrhi <- dbQueryNASIS(channel, q.vegplotrhi)
 
-  # toggle selected set vs. local DB
-  if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
-  }
-
-  d <- uncode(d.vegplotrhi)
+  # uncode metadata domains
+  d <- uncode(d.vegplotrhi, stringsAsFactors = stringsAsFactors)
 
   # test for no data
-  if (nrow(d) == 0)
+  if (nrow(d) == 0) {
     stop('there are no NASIS vegplots in your selected set!')
-
-  # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
-
+  }
+  
   # done
   return(d)
 }
@@ -156,22 +151,21 @@ get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defaul
   if (inherits(channel, 'try-error'))
     return(data.frame())
   
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q.vegplotspecies <- gsub(pattern = '_View_1', replacement = '', x = q.vegplotspecies, fixed = TRUE)
+  }
+  
   # exec query
   d.vegplotspecies <- dbQueryNASIS(channel, q.vegplotspecies)
 
-  # toggle selected set vs. local DB
-  if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
-  }
-
-  d <- uncode(d.vegplotspecies)
-
-  # test for no data
-  if(nrow(d) == 0)
-  stop('there are no NASIS vegplots in your selected set!')
-
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d.vegplotspecies, stringsAsFactors = stringsAsFactors)
+  
+  # test for no data
+  if (nrow(d) == 0) {
+    stop('there are no NASIS vegplots in your selected set!', call. = FALSE)
+  }
 
   # done
   return(d)
@@ -195,23 +189,22 @@ get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
-
+  
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q.vegtransect <- gsub(pattern = '_View_1', replacement = '', x = q.vegtransect, fixed = TRUE)
+  }
+  
   # exec query
   d.vegtransect <- dbQueryNASIS(channel, q.vegtransect)
 
-  # toggle selected set vs. local DB
-  if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  # test for no data
+  if (nrow(d.vegtransect) == 0) {
+    stop('there are no NASIS vegplots transects in your selected set!', call. = FALSE)
   }
   
-  d <- uncode(d.vegtransect)
-
-  # test for no data
-  if (nrow(d) == 0)
-    stop('there are no NASIS vegplots transects in your selected set!')
-
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d.vegtransect, stringsAsFactors = stringsAsFactors)
 
   # done
   return(d)
@@ -236,23 +229,21 @@ get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
-
+  
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q.vtps <- gsub(pattern = '_View_1', replacement = '', x = q.vtps, fixed = TRUE)
+  }
+  
   # exec query
   d.vegtransplantsum <- dbQueryNASIS(channel, q.vtps)
 
-  # toggle selected set vs. local DB
-  if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
-  }
-
-  d <- uncode(d.vegtransplantsum)
-
   # test for no data
-  if (nrow(d) == 0)
+  if (nrow(d.vegtransplantsum) == 0)
     stop('there are no NASIS vegplots transect species in your selected set!')
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d.vegtransplantsum, stringsAsFactors = stringsAsFactors)
 
   # done
   return(d)
@@ -262,7 +253,7 @@ get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
 get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
   # plot tree site index summary data
-  q.pltsis<- "SELECT vegplotiidref AS vegplotiid, pltsis.seqnum, plantiidref, plantsym, plantsciname, plantnatvernm, plantnativity, siteindexbase, speciestreecount, siteindexplotave, speciesdbhaverage, treeageave, treecanopyhttopave, plottreesiteindsumiid
+  q.pltsis <- "SELECT vegplotiidref AS vegplotiid, pltsis.seqnum, plantiidref, plantsym, plantsciname, plantnatvernm, plantnativity, siteindexbase, speciestreecount, siteindexplotave, speciesdbhaverage, treeageave, treecanopyhttopave, plottreesiteindsumiid
 
   FROM
   site_View_1 AS s
@@ -276,20 +267,20 @@ get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
   
   if (inherits(channel, 'try-error'))
     return(data.frame())
-
-  # exec query
-  d.vegsiteindexsum <- dbQueryNASIS(channel, q.pltsis)
-
+  
   # toggle selected set vs. local DB
   if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+    q.pltsis <- gsub(pattern = '_View_1', replacement = '', x = q.pltsis, fixed = TRUE)
   }
+  
+  # exec query
+  d.vegsiteindexsum <- dbQueryNASIS(channel, q.pltsis)
 
   d <- uncode(d.vegsiteindexsum)
 
   # test for no data
   if (nrow(d) == 0)
-    stop('there are no NASIS vegplots tree site index data in your selected set!')
+    stop('there are no NASIS vegplots tree site index data in your selected set!', call. = FALSE)
 
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
@@ -320,20 +311,20 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
   if (inherits(channel, 'try-error'))
     return(data.frame())
   
-  # exec query
-  d.vegsiteindexdet <- dbQueryNASIS(channel, q.pltsid)
-
   # toggle selected set vs. local DB
   if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+    q.pltsid <- gsub(pattern = '_View_1', replacement = '', x = q.pltsid, fixed = TRUE)
   }
+  
+  # exec query
+  d.vegsiteindexdet <- dbQueryNASIS(channel, q.pltsid)
 
   d <- uncode(d.vegsiteindexdet)
 
   # test for no data
-  if(nrow(d) == 0)
-  stop('there are no NASIS vegplots tree site index data in your selected set!')
-
+  if (nrow(d) == 0) {
+    stop('there are no NASIS vegplots tree site index data in your selected set!', call. = FALSE)
+  }
   # uncode metadata domains
   d <- uncode(d, stringsAsFactors = stringsAsFactors)
 
@@ -355,22 +346,20 @@ FROM vegplottext_View_1;"
   if (inherits(channel, 'try-error'))
     return(data.frame())
   
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q.vegplottext <- gsub(pattern = '_View_1', replacement = '', x = q.vegplottext, fixed = TRUE)
+  }
+  
   # exec query
   d.vegplottext <- dbQueryNASIS(channel, q.vegplottext)
 
-  # toggle selected set vs. local DB
-  if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
-  }
-
-  d <- uncode(d.vegplottext)
-
   # test for no data
-  if (nrow(d) == 0)
-   stop('there are no NASIS vegplots textnotes in your selected set!')
+  if (nrow(d.vegplottext) == 0)
+   stop('there are no NASIS vegplots textnotes in your selected set!', call. = FALSE)
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d.vegplottext, stringsAsFactors = stringsAsFactors)
 
   # optionally convert \r\n -> \n
   if (fixLineEndings) {
