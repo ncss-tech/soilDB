@@ -111,11 +111,12 @@ NULL
 #' 
 #' @name us_ss_timeline
 #' @docType data
-#' @format A data frame with 5209 observations on the following 5 variables.
-#' \describe{ \item{list("ssa")}{Soil Survey name, a character vector}
-#' \item{list("year")}{year of publication, a numeric vector}
-#' \item{list("pdf")}{does a pdf exists, a logical vector}
-#' \item{list("state")}{State abbreviation, a character vector} }
+#' @format A data.frame with 5209 observations on the following 5 variables.
+#' - `"ssa"`: Soil Survey name, a character vector
+#' - `"year"`: Year of publication, a numeric vector
+#' - `"pdf"`: Does a manuscript PDF document exist? a logical vector
+#' - `"state"`: State abbreviation, a character vector
+#' 
 #' @source https://www.nrcs.usda.gov/wps/portal/nrcs/soilsurvey/soils/survey/state/
 #' @keywords datasets
 NULL

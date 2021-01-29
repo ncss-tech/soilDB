@@ -4,14 +4,17 @@
 \alias{fetchNASISLabData}
 \title{Fetch lab data used site/horizon data from a PedonPC database.}
 \usage{
-fetchNASISLabData(SS = TRUE)
+fetchNASISLabData(SS = TRUE, static_path = NULL)
 }
 \arguments{
 \item{SS}{fetch data from the currently loaded selected set in NASIS or from
-the entire local database (default: TRUE)}
+the entire local database (default: \code{TRUE})#'}
+
+\item{static_path}{Optional: path to local SQLite database containing NASIS
+table structure; default: \code{NULL}}
 }
 \value{
-a SoilProfileCollection class object
+a SoilProfileCollection object
 }
 \description{
 Fetch KSSL laboratory pedon/horizon layer data from a local NASIS database,
@@ -20,14 +23,6 @@ return as a SoilProfileCollection object.
 \details{
 This function currently works only on Windows, and requires a 'nasis_local'
 ODBC connection.
-}
-\note{
-This function attempts to do most of the boilerplate work when
-extracting KSSL laboratory site/horizon data from a local NASIS database.
-Lab pedons that have errors in their horizonation are excluded from the
-returned object, however, their IDs are printed on the console. See
-\code{\link{getHzErrorsNASIS}} for a simple approach to identifying pedons
-with problematic horizonation.
 }
 \seealso{
 \code{\link{get_labpedon_data_from_NASIS_db}}

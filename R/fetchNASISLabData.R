@@ -10,19 +10,17 @@
 #' ODBC connection.
 #' 
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
-#' the entire local database (default: TRUE)
-#' @return a SoilProfileCollection class object
-#' @note This function attempts to do most of the boilerplate work when
-#' extracting KSSL laboratory site/horizon data from a local NASIS database.
-#' Lab pedons that have errors in their horizonation are excluded from the
-#' returned object, however, their IDs are printed on the console. See
-#' \code{\link{getHzErrorsNASIS}} for a simple approach to identifying pedons
-#' with problematic horizonation.
+#' the entire local database (default: `TRUE`)#' 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' 
+#' @return a SoilProfileCollection object
+#' 
 #' @author J.M. Skovlin and D.E. Beaudette
 #' @seealso \code{\link{get_labpedon_data_from_NASIS_db}}
 #' @keywords manip
 #' @export fetchNASISLabData
-fetchNASISLabData <- function(SS = TRUE) {
+fetchNASISLabData <- function(SS = TRUE, static_path = NULL) {
 
 	# test connection
 	if (!local_NASIS_defined(static_path))

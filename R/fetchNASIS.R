@@ -48,13 +48,7 @@
 #' get_legend_from_NASISget_lmuaoverlap_from_NASIS get_mapunit_from_NASIS
 #' get_projectmapunit_from_NASIS get_component_diaghz_from_NASIS_db
 #' get_mutext_from_NASIS_db get_phfmp_from_NASIS_db get_RMF_from_NASIS_db
-#' get_concentrations_from_NASIS_db fetchVegdata get_vegplot_from_NASIS_db
-#' get_vegplot_location_from_NASIS_db get_vegplot_species_from_NASIS_db
-#' get_vegplot_textnote_from_NASIS_db get_vegplot_transect_from_NASIS_db
-#' get_vegplot_transpecies_from_NASIS_db
-#' get_vegplot_tree_si_details_from_NASIS_db
-#' get_vegplot_tree_si_summary_from_NASIS_db get_vegplot_trhi_from_NASIS_db
-#' get_legend_from_NASIS get_lmuaoverlap_from_NASIS
+#' get_concentrations_from_NASIS_db  
 #' @param from determines what objects should fetched? ('pedons' | 'components' | 'pedon_report')
 #' @param url string specifying the url for the NASIS pedon_report (default:
 #' `NULL`)
