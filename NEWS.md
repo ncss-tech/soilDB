@@ -1,18 +1,14 @@
-<<<<<<< HEAD
+# soilDB 2.6.x (DEVELOPMENT)
+ * Connections to the local NASIS database now use `DBI` and `odbc` instead of `RODBC`. 
+ * Two new methods `dbConnectNASIS` and `dbQueryNASIS` facilitate access with read-only credentials, submission of queries/fetching of results, and closing the DBI connection upon completion.
+ 
 # soilDB 2.6.0 (2021-01-28)
  * `fetchNASIS(..., rmHzErrors=TRUE)` -- spurious removals of data due to missing "extended" records. `fetchNASIS` now uses `aqp::horizons<-` after building a minimal `SoilProfileCollection` from NASIS site and horizon tables. This allows `aqp` integrity methods to trigger where needed--preventing unintentional re-ordering or removals of "valid" horizon data.
- 
+
 # soilDB 2.5.9 (2021-01-26)
  * `HenryTimeLine` moved to {sharpshootR} package
  * new functions `mukey.wcs()` and `ISSR800.wcs()` for hitting web coverage service (WCS) for gSSURGO, gNATSGO, and ISSR-800 grids
  * new function `ROSETTA()` for accessing the new ROSETTA model API (c/o Todd Skaggs, USDA-ARS)
-=======
-# soilDB 2.6.0 (2020-12-02)
- * Connections to the local NASIS database now use `DBI` and `odbc` instead of `RODBC`. Two new methods `dbConnectNASIS` and `dbQueryNASIS` facilitate access with read-only credentials, submission of queries/fetching of results, and closing the DBI connection upon completion.
- 
-# soilDB 2.5.9 (2020-11-30)
- * new function `ROSETTA` for accessing the new ROSETTA model API (c/o Todd Skaggs, USDA-ARS)
->>>>>>> f445e89... Convert NASIS-related queries from RODBC->DBI #146
  * `fetchOSD(..., extended=TRUE)` gains geographically associated soils, parsed from OSD (thanks AGB)
  * `fetchSDA_spatial` now can return soil survey area polygons using `geom.src = "sapolygon"` with `x` as a vector of area symbols (`areasymbol`) or legend keys (`lkey`). For `sapolygon` results, the `method` and `add.field` arguments work the same as for `mupolygon`, only now both geometries can be returned with fields from the `legend` table.
  * `fetchSDA_spatial` now can return STATSGO `gsmmupolygon` geometry with `db = "STATSGO"`; these data are linked to `mapunit` and (national) `legend` just like `mupolygon`.
