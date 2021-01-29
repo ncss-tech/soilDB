@@ -103,8 +103,7 @@
 #' 
 #' These last two cases are problematic for analysis that makes use of
 #' morphology and extended data, such as outlined in this tutorial on
-#' \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.htmlcompeting
-#' soil series}.
+#' [competing soil series](https://ncss-tech.github.io/AQP/soilDB/competing-series.html).
 #' 
 #' @param soils a character vector of named soil series; case-insensitive
 #' @param colorState color state for horizon soil color visualization: "moist"

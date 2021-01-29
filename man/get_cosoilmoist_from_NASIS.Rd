@@ -12,15 +12,21 @@ get_cosoilmoist_from_NASIS(
 )
 }
 \arguments{
-\item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for
-categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also
-NULL (default: TRUE)}
+\item{SS}{fetch data from the currently loaded selected set in NASIS or from
+the entire local database (default: \code{TRUE})}
+
+\item{impute}{replace missing (i.e. \code{NULL}) values with \code{"Not_Populated"} for
+categorical data, or the "RV" for numeric data or \code{201} cm if the "RV" is also
+\code{NULL} (default: \code{TRUE})}
 
 \item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the uncode() function. It does not
-convert those vectors that have set outside of uncode() (i.e. hard coded).
+factors? This argument is passed to the \code{uncode()} function. It does not
+convert those vectors that have set outside of \code{uncode()} (i.e. hard coded).
 The 'factory-fresh' default is TRUE, but this can be changed by setting
-options(stringsAsFactors = FALSE)}
+options(\code{stringsAsFactors = FALSE})}
+
+\item{static_path}{Optional: path to local SQLite database containing NASIS
+table structure; default: \code{NULL}}
 }
 \value{
 A data.frame.

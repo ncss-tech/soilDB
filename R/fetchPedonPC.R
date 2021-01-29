@@ -11,7 +11,6 @@
 #' 
 #' @aliases fetchPedonPC getHzErrorsPedonPC
 #' @param dsn The path to a PedonPC version 5.x database
-#' @param strict should horizonation by strictly enforced? (TRUE)
 #' @return a SoilProfileCollection class object
 #' @note This function attempts to do most of the boilerplate work when
 #' extracting site/horizon data from a PedonPC or local NASIS database. Pedons

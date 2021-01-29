@@ -100,19 +100,22 @@ get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
 
 #' Extract component data from a local NASIS Database
 #' 
-#' Extract component data from a local NASIS Database.
-#' 
 #' This function currently works only on Windows.
 #' 
-#' @aliases get_component_data_from_NASIS_db
-#' get_component_restrictions_from_NASIS_db
-#' @param SS get data from the currently loaded Selected Set in NASIS or from
-#' the entire local database (default: TRUE)
+#' @aliases get_component_data_from_NASIS_db get_component_restrictions_from_NASIS_db
+#' 
+#' @param SS fetch data from the currently loaded selected set in NASIS or from
+#' the entire local database (default: `TRUE`)
+#' 
 #' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the uncode() function. It does not
-#' convert those vectors that have set outside of uncode() (i.e. hard coded).
+#' factors? This argument is passed to the `uncode()` function. It does not
+#' convert those vectors that have set outside of `uncode()` (i.e. hard coded).
 #' The 'factory-fresh' default is TRUE, but this can be changed by setting
-#' options(stringsAsFactors = FALSE)
+#' options(`stringsAsFactors = FALSE`)
+#' 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' 
 #' @return A list with the results.
 #' @author Dylan E. Beaudette, Stephen Roecker, and Jay M. Skovlin
 #' @seealso \code{\link{fetchNASIS}}
@@ -628,6 +631,8 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NUL
 #' the entire local database (default: TRUE)
 #' @param fill should missing "month" rows in the comonth table be filled with
 #' NA (FALSE)
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
 #' @param stringsAsFactors logical: should character vectors be converted to
 #' factors? This argument is passed to the uncode() function. It does not
 #' convert those vectors that have set outside of uncode() (i.e. hard coded).

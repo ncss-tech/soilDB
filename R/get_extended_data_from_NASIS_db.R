@@ -8,19 +8,20 @@
 
 #' Extract accessory tables and summaries from a local NASIS Database
 #' 
-#' Extract accessory tables and summaries from a local NASIS Database.
-#' 
-#' This function currently works only on Windows.
-#' 
 #' @param SS get data from the currently loaded Selected Set in NASIS or from
-#' the entire local database (default: TRUE)
+#' the entire local database (default: `TRUE`)
+#' 
 #' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0?
 #' (default: TRUE), see details
+#' 
 #' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the uncode() function. It does not
-#' convert those vectors that have been set outside of uncode() (i.e. hard
-#' coded). The 'factory-fresh' default is TRUE, but this can be changed by
-#' setting options(stringsAsFactors = FALSE)
+#' factors? This argument is passed to the `uncode()` function. It does not
+#' convert those vectors that have been set outside of `uncode()` (i.e. hard
+#' coded). 
+#' 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' 
 #' @return A list with the results.
 #' @author Jay M. Skovlin and Dylan E. Beaudette
 #' @seealso \code{\link{get_hz_data_from_NASIS_db}},
@@ -41,7 +42,11 @@
 #' }
 #' 
 #' @export get_extended_data_from_NASIS_db
-get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+get_extended_data_from_NASIS_db <- function(SS = TRUE,
+                                            nullFragsAreZero = TRUE,
+                                            stringsAsFactors = default.stringsAsFactors(),
+                                            static_path = NULL) {
+    
 
   # photo links from PedonPC stored as sitetext notes
   q.photolink <- "SELECT so.siteiidref AS siteiid, sot.recdate, sot.textcat,  CAST(sot.textentry AS ntext) AS imagepath

@@ -31,18 +31,25 @@
 #' silt, clay).
 #' 
 #' @aliases metadata uncode code
+#' 
 #' @param df data.frame
-#' @param invert converts the code labels back to their coded values (FALSE)
+#' 
+#' @param invert converts the code labels back to their coded values (`FALSE`)
+#' 
 #' @param db label specifying the soil database the data is coming from, which
 #' indicates whether or not to query metadata from local NASIS database
 #' ("NASIS") or use soilDB-local snapshot ("LIMS" or "SDA")
+#' 
 #' @param droplevels logical: indicating whether to drop unused levels in
 #' classifying factors. This is useful when a class has large number of unused
 #' classes, which can waste space in tables and figures.
+#' 
 #' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? The 'factory-fresh' default is TRUE, but this can be changed by
-#' setting options(stringsAsFactors = FALSE)
-#' @param \dots arguments passed on to \code{uncode}
+#' factors? 
+#' 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' 
 #' @return A data frame with the results.
 #' @author Stephen Roecker
 #' @keywords manip

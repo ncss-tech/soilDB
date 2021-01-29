@@ -10,7 +10,9 @@
 #' This function currently works only on Windows.
 #' 
 #' @param SS fetch data from Selected Set in NASIS or from the entire local
-#' database (default: TRUE)
+#' database (default: `TRUE`)
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
 #' @return A data.frame with the results.
 #' @author Jay M. Skovlin and Dylan E. Beaudette
 #' @seealso \code{\link{simplifyColorData}},
@@ -18,7 +20,7 @@
 #' \code{\link{get_site_data_from_NASIS_db}}
 #' @keywords manip
 #' @export get_colors_from_NASIS_db
-get_colors_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
+get_colors_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
 
 	# unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
   q <- "SELECT peiid, phiid, colormoistst, colorpct as pct, colorhue, colorvalue, colorchroma

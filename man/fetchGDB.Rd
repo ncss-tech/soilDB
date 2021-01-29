@@ -36,8 +36,6 @@ factors? This argument is passed to the uncode() function. It does not
 convert those vectors that have set outside of uncode() (i.e. hard coded).
 The 'factory-fresh' default is TRUE, but this can be changed by setting
 options(stringsAsFactors = FALSE)}
-
-\item{stats}{Return extended summary statistics (for legend or mapunit only)}
 }
 \value{
 A \code{data.frame} or \code{SoilProfileCollection} object.

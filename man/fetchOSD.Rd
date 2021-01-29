@@ -77,8 +77,7 @@ morphology missing from \code{SPC}. A warning is issued.}
 
 These last two cases are problematic for analysis that makes use of
 morphology and extended data, such as outlined in this tutorial on
-\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.htmlcompeting
-soil series}.
+\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}.
 }
 \examples{
 

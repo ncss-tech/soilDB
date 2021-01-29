@@ -2,7 +2,6 @@
 % Please edit documentation in R/simplifyColorData.R
 \name{simplifyColorData}
 \alias{simplifyColorData}
-\alias{mix_and_clean_colors}
 \title{Simplify Color Data by ID}
 \usage{
 simplifyColorData(d, id.var = "phiid", wt = "colorpct", bt = FALSE)
@@ -19,13 +18,7 @@ weights for mixing}
 
 \item{bt}{logical, should the mixed sRGB representation of soil color be
 transformed to closest Munsell chips? This is performed by
-\code{aqp::rgb2Munsell}}
-
-\item{x}{a \code{data.frame} object containing sRGB coordinates associated
-with a group of colors to mix}
-
-\item{backTransform}{logical, should the mixed sRGB representation of soil
-color be transformed to closest Munsell chips? This is performed by
+\code{aqp::rgb2Munsell}
 \code{aqp::rgb2Munsell}}
 }
 \description{

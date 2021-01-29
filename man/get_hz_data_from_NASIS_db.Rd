@@ -11,14 +11,15 @@ get_hz_data_from_NASIS_db(
 )
 }
 \arguments{
-\item{SS}{fetch data from Selected Set in NASIS or from the entire local
-database (default: TRUE)}
+\item{SS}{fetch data from Selected Set in NASIS or from the entire local database (default: \code{TRUE})}
 
 \item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the uncode() function. It does not
-convert those vectors that have been set outside of uncode() (i.e. hard
-coded). The 'factory-fresh' default is TRUE, but this can be changed by
-setting options(stringsAsFactors = FALSE)}
+factors? This argument is passed to the \code{uncode()} function. It does not
+convert those vectors that have been set outside of \code{uncode()} (i.e. hard
+coded).}
+
+\item{static_path}{Optional: path to local SQLite database containing NASIS
+table structure; default: \code{NULL}}
 }
 \value{
 A data.frame.
@@ -26,16 +27,11 @@ A data.frame.
 \description{
 Get horizon-level data from a local NASIS database.
 }
-\details{
-This function currently works only on Windows.
-}
 \note{
-NULL total rock fragment values are assumed to represent an \emph{absence}
-of rock fragments, and set to 0.
+\code{NULL} total rock fragment values are assumed to represent an \emph{absence} of rock fragments, and set to 0.
 }
 \seealso{
-\code{\link{get_hz_data_from_NASIS_db}},
-\code{\link{get_site_data_from_NASIS_db}}
+\code{\link{get_hz_data_from_NASIS_db}}, \code{\link{get_site_data_from_NASIS_db}}
 }
 \author{
 Jay M. Skovlin and Dylan E. Beaudette

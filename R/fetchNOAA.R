@@ -11,7 +11,7 @@
 #' 
 #' Query the NOAA API to get station data (limit 1000 records) near a point.
 #' Default extent is plus or minus 0.5 degrees (bounding box) (with \code{bbox
-#' = 1}) around the specified point [lat, lng].
+#' = 1}) around the specified point \[lat, lng].
 #' 
 #' In order to use this function, you must obtain an API token from this
 #' website: https://www.ncdc.noaa.gov/cdo-web/token

@@ -8,7 +8,10 @@ get_colors_from_NASIS_db(SS = TRUE, static_path = NULL)
 }
 \arguments{
 \item{SS}{fetch data from Selected Set in NASIS or from the entire local
-database (default: TRUE)}
+database (default: \code{TRUE})}
+
+\item{static_path}{Optional: path to local SQLite database containing NASIS
+table structure; default: \code{NULL}}
 }
 \value{
 A data.frame with the results.

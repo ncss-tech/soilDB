@@ -8,7 +8,10 @@ get_veg_data_from_NASIS_db(SS = TRUE, static_path = NULL)
 }
 \arguments{
 \item{SS}{get data from the currently loaded Selected Set in NASIS or from
-the entire local database (default: TRUE)}
+the entire local database (default: \code{TRUE})}
+
+\item{static_path}{Optional: path to local SQLite database containing NASIS
+table structure; default: \code{NULL}}
 }
 \value{
 A list with the results.

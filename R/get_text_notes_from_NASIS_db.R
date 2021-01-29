@@ -1,13 +1,14 @@
 #' Extract text note data from a local NASIS Database
 #' 
-#' Extract text note data from a local NASIS Database.
-#' 
-#' This function currently works only on Windows.
-#' 
 #' @param SS get data from the currently loaded Selected Set in NASIS or from
-#' the entire local database (default: TRUE)
-#' @param fixLineEndings convert line endings from "\r\n" to "\n"
-#' @return A list with the results.
+#' the entire local database (default: `TRUE`)
+#' 
+#' @param fixLineEndings convert line endings from `\r\n` to `\n`
+#' 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' 
+#' @return A `list` with the results.
 #' @author Dylan E. Beaudette and Jay M. Skovlin
 #' @seealso \code{\link{get_hz_data_from_pedon_db}},
 #' \code{\link{get_site_data_from_pedon_db}}

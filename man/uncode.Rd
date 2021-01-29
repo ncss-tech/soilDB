@@ -18,7 +18,7 @@ uncode(
 \arguments{
 \item{df}{data.frame}
 
-\item{invert}{converts the code labels back to their coded values (FALSE)}
+\item{invert}{converts the code labels back to their coded values (\code{FALSE})}
 
 \item{db}{label specifying the soil database the data is coming from, which
 indicates whether or not to query metadata from local NASIS database
@@ -29,10 +29,10 @@ classifying factors. This is useful when a class has large number of unused
 classes, which can waste space in tables and figures.}
 
 \item{stringsAsFactors}{logical: should character vectors be converted to
-factors? The 'factory-fresh' default is TRUE, but this can be changed by
-setting options(stringsAsFactors = FALSE)}
+factors?}
 
-\item{\dots}{arguments passed on to \code{uncode}}
+\item{static_path}{Optional: path to local SQLite database containing NASIS
+table structure; default: \code{NULL}}
 }
 \value{
 A data frame with the results.

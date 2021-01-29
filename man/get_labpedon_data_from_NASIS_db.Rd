@@ -9,6 +9,9 @@ get_labpedon_data_from_NASIS_db(SS = TRUE, static_path = NULL)
 \arguments{
 \item{SS}{fetch data from the currently loaded selected set in NASIS or from
 the entire local database (default: TRUE)}
+
+\item{static_path}{Optional: path to local SQLite database containing NASIS
+table structure; default: \code{NULL}}
 }
 \value{
 A data.frame.

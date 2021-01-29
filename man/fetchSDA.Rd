@@ -45,10 +45,6 @@ factors? This argument is passed to the uncode() function. It does not
 convert those vectors that have set outside of uncode() (i.e. hard coded).
 The 'factory-fresh' default is TRUE, but this can be changed by setting
 options(stringsAsFactors = FALSE)}
-
-\item{impute}{replace missing (i.e. NULL) values with "Not_Populated" for
-categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also
-NULL (default: TRUE)}
 }
 \value{
 A data.frame or SoilProfileCollection object.

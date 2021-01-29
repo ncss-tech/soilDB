@@ -7,9 +7,15 @@
 #' 
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: TRUE)
+#' 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' 
 #' @return A data.frame.
+#' 
 #' @note This function queries KSSL laboratory site/horizon data from a local
 #' NASIS database from the lab pedon data table.
+#' 
 #' @author Jay M. Skovlin and Dylan E. Beaudette
 #' @seealso \code{\link{get_lablayer_data_from_NASIS_db}}
 #' @keywords manip

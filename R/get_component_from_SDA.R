@@ -741,9 +741,6 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 #' mukey (may be many per nationalmusym)
 #' @param childs logical; if FALSE parent material and geomorphic child tables
 #' are not flattened and appended
-#' @param impute replace missing (i.e. NULL) values with "Not_Populated" for
-#' categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also
-#' NULL (default: TRUE)
 #' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0?
 #' (default: TRUE), see details
 #' @param rmHzErrors should pedons with horizonation errors be removed from the

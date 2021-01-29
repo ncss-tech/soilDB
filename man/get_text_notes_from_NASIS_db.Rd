@@ -12,18 +12,18 @@ get_text_notes_from_NASIS_db(
 }
 \arguments{
 \item{SS}{get data from the currently loaded Selected Set in NASIS or from
-the entire local database (default: TRUE)}
+the entire local database (default: \code{TRUE})}
 
-\item{fixLineEndings}{convert line endings from "\r\n" to "\n"}
+\item{fixLineEndings}{convert line endings from \verb{\\r\\n} to \verb{\\n}}
+
+\item{static_path}{Optional: path to local SQLite database containing NASIS
+table structure; default: \code{NULL}}
 }
 \value{
-A list with the results.
+A \code{list} with the results.
 }
 \description{
-Extract text note data from a local NASIS Database.
-}
-\details{
-This function currently works only on Windows.
+Extract text note data from a local NASIS Database
 }
 \examples{
 

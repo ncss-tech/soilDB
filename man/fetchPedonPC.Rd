@@ -9,8 +9,6 @@ fetchPedonPC(dsn)
 }
 \arguments{
 \item{dsn}{The path to a PedonPC version 5.x database}
-
-\item{strict}{should horizonation by strictly enforced? (TRUE)}
 }
 \value{
 a SoilProfileCollection class object

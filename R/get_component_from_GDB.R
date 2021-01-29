@@ -426,7 +426,6 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 #' convert those vectors that have set outside of uncode() (i.e. hard coded).
 #' The 'factory-fresh' default is TRUE, but this can be changed by setting
 #' options(stringsAsFactors = FALSE)
-#' @param stats Return extended summary statistics (for legend or mapunit only)
 #' @return A \code{data.frame} or \code{SoilProfileCollection} object.
 #' @author Stephen Roecker
 #' @keywords manip

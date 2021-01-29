@@ -16,52 +16,6 @@ seriesExtent(s, type = c("vector", "raster"), timeout = 60)
 \item{timeout}{time that we are willing to wait for a response, in seconds}
 }
 \description{
-This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{SpatialPolygonsDataFrame} object) or gridded representation of area proportion falling within 800m cells (\code{raster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system.
-}
-\note{
-This function requires the \code{rgdal} package. Warning messages about the proj4 CRS specification may be printed depending on your version of \code{rgdal}. This should be resolved soon.
-
-This function requires the \code{rgdal} package. Warning messages
-about the proj4 CRS specification may be printed depending on your version
-of \code{rgdal}. This should be resolved soon.
-}
-\examples{
-  
-\donttest{
-if(requireNamespace("curl") &
-   curl::has_internet()) {
-  
-  # required packages
-  library(sp)
-  library(raster)
-  library(rgdal)
-  
-  # specify a soil series name
-  s <- 'magnor'
-  
-  # return as SpatialPolygonsDataFrame
-  x <- seriesExtent(s, type = 'vector')
-  # return as raster
-  y <- seriesExtent(s, type = 'raster')
-  
-  # note that CRS are different
-  proj4string(x)
-  projection(y)
-  
-  # transform vector representation to CRS of raster
-  x <- spTransform(x, CRS(projection(y)))
-  
-  # graphical comparison
-  par(mar = c(1, 1 , 1, 3))
-  plot(y, axes = FALSE)
-  plot(x, add = TRUE)
-  
-  
-}
-}
-
-Retrieve Soil Series Extent Maps from SoilWeb
-
 This function downloads a generalized representations of a soil series
 extent from SoilWeb, derived from the current SSURGO snapshot. Data can be
 returned as vector outlines (\code{SpatialPolygonsDataFrame} object) or
@@ -70,8 +24,13 @@ gridded representation of area proportion falling within 800m cells
 CONUS. Vector representations are returned with a GCS/WGS84 coordinate
 reference system and raster representations are returned with an Albers
 Equal Area / NAD83 coordinate reference system.
-
-
+}
+\note{
+This function requires the \code{rgdal} package. Warning messages
+about the proj4 CRS specification may be printed depending on your version
+of \code{rgdal}. This should be resolved soon.
+}
+\examples{
 
   
 \donttest{
@@ -111,11 +70,7 @@ if(requireNamespace("curl") &
 }
 \references{
 \url{https://casoilresource.lawr.ucdavis.edu/see/}
-
-\url{https://casoilresource.lawr.ucdavis.edu/see/}
 }
 \author{
-D.E. Beaudette
-
 D.E. Beaudette
 }

@@ -41,20 +41,15 @@
 #'  - [KSSL data](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
 #'  - [soil color mixing tutorial](http://ncss-tech.github.io/AQP/soilDB/mixing-soil-color-data.html)
 #' 
-#' @aliases simplifyColorData mix_and_clean_colors
 #' @param d a \code{data.frame} object, typically returned from NASIS, see
 #' details
 #' @param id.var character vector with the name of the column containing an ID
 #' that is unique among all horizons in \code{d}
-#' @param x a \code{data.frame} object containing sRGB coordinates associated
-#' with a group of colors to mix
 #' @param wt a character vector with the name of the column containing color
 #' weights for mixing
 #' @param bt logical, should the mixed sRGB representation of soil color be
 #' transformed to closest Munsell chips? This is performed by
 #' \code{aqp::rgb2Munsell}
-#' @param backTransform logical, should the mixed sRGB representation of soil
-#' color be transformed to closest Munsell chips? This is performed by
 #' \code{aqp::rgb2Munsell}
 #' @author D.E. Beaudette
 #' @keywords manip
@@ -141,7 +136,7 @@ simplifyColorData <- function(d, id.var='phiid', wt='colorpct', bt=FALSE) {
     # note: split will re-order IDs
     mc <- split(moist.colors[moist.mix.idx, mix.vars], f = moist.colors[[id.var]][moist.mix.idx])
     
-    # final vesion
+    # final version
     mixed.moist <- lapply(mc, estimateColorMixture, wt = wt, backTransform = bt)
     
     # flatten and copy id.var from rownames

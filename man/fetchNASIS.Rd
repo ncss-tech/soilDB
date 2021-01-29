@@ -49,34 +49,33 @@ fetchNASIS(
 \item{from}{determines what objects should fetched? ('pedons' | 'components' | 'pedon_report')}
 
 \item{url}{string specifying the url for the NASIS pedon_report (default:
-NULL)}
+\code{NULL})}
 
 \item{SS}{fetch data from the currently loaded selected set in NASIS or from
-the entire local database (default: TRUE)}
+the entire local database (default: \code{TRUE})}
 
 \item{rmHzErrors}{should pedons with horizon depth errors be removed from
-the results? (default: TRUE)}
+the results? (default: \code{TRUE})}
 
-\item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0?
-(default: TRUE), see details}
+\item{nullFragsAreZero}{should fragment volumes of \code{NULL} be interpreted as \code{0}?
+(default: \code{TRUE}), see details}
 
 \item{soilColorState}{which colors should be used to generate the
-convenience field 'soil_color'? ('moist' | 'dry')}
+convenience field \code{soil_color}? (\code{'moist'} or \code{'dry'})}
 
-\item{lab}{should the phlabresults child table be fetched with
-site/pedon/horizon data (default: FALSE)}
+\item{lab}{should the \code{phlabresults} child table be fetched with
+site/pedon/horizon data (default: \code{FALSE})}
 
-\item{fill}{(fetchNASIS(from='components') only: include component records
-without horizon data in result? (default: FALSE)}
+\item{fill}{(\code{fetchNASIS(from='components')} only: include component records
+without horizon data in result? (default: \code{FALSE})}
 
 \item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the uncode() function. It does not
-convert those vectors that have been set outside of uncode() (i.e. hard
-coded). The 'factory-fresh' default is TRUE, but this can be changed by
-setting options(stringsAsFactors = FALSE)}
+factors? This argument is passed to the \code{uncode()} function. It does not
+convert those vectors that have been set outside of \code{uncode()} (i.e. hard
+coded).}
 
 \item{static_path}{Optional: path to local SQLite database containing NASIS
-table structure; default: NULL}
+table structure; default: \code{NULL}}
 }
 \value{
 A SoilProfileCollection object

@@ -9,7 +9,11 @@
 #' This function currently works only on Windows.
 #' 
 #' @param SS get data from the currently loaded Selected Set in NASIS or from
-#' the entire local database (default: TRUE)
+#' the entire local database (default: `TRUE`)
+#' 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' 
 #' @return A list with the results.
 #' @author Jay M. Skovlin and Dylan E. Beaudette
 #' @keywords manip

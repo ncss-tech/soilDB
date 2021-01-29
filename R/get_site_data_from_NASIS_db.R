@@ -18,8 +18,6 @@
 ## TODO: bug within RODBC - converts site_id == 056E916010 to an exponent
 
 
-
-
 #' Extract Site Data from a local NASIS Database
 #' 
 #' Get site-level data from a local NASIS database.
@@ -28,20 +26,27 @@
 #' returned by this function.
 #' 
 #' @param SS fetch data from Selected Set in NASIS or from the entire local
-#' database (default: TRUE)
+#' database (default: `TRUE`)
+#' 
 #' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the uncode() function. It does not
-#' convert those vectors that have been set outside of uncode() (i.e. hard
-#' coded). The 'factory-fresh' default is TRUE, but this can be changed by
-#' setting options(stringsAsFactors = FALSE)
-#' @return A data.frame.
-#' @note This function currently works only on Windows.
+#' factors? This argument is passed to the `uncode()` function. It does not
+#' convert those vectors that have been set outside of `uncode()` (i.e. hard
+#' coded). 
+#' 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' 
+#' @return A data.frame
+#' 
 #' @author Jay M. Skovlin and Dylan E. Beaudette
-#' @seealso \code{\link{get_hz_data_from_NASIS_db}},
+#' @seealso \code{\link{get_hz_data_from_NASIS_db}}
 #' @keywords manip
+#' 
 #' @export get_site_data_from_NASIS_db
-get_site_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
-
+get_site_data_from_NASIS_db <- function(SS = TRUE,
+                                        stringsAsFactors = default.stringsAsFactors(),
+                                        static_path = NULL) {
+    
 	q <- "SELECT siteiid as siteiid, peiid, CAST(usiteid AS varchar(60)) as site_id, CAST(upedonid AS varchar(60)) as pedon_id, obsdate as obs_date,
 utmzone, utmeasting, utmnorthing, -(longdegrees + CASE WHEN longminutes IS NULL THEN 0.0 ELSE longminutes / 60.0 END + CASE WHEN longseconds IS NULL THEN 0.0 ELSE longseconds / 60.0 / 60.0 END) as x, latdegrees + CASE WHEN latminutes IS NULL THEN 0.0 ELSE latminutes / 60.0 END + CASE WHEN latseconds IS NULL THEN 0.0 ELSE latseconds / 60.0 / 60.0 END as y, horizdatnm, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std,
 gpspositionalerror, descname as describer, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag,

@@ -23,6 +23,9 @@ factors? This argument is passed to the uncode() function. It does not
 convert those vectors that have set outside of uncode() (i.e. hard coded).
 The 'factory-fresh' default is TRUE, but this can be changed by setting
 options(stringsAsFactors = FALSE)}
+
+\item{static_path}{Optional: path to local SQLite database containing NASIS
+table structure; default: \code{NULL}}
 }
 \value{
 A list with the results.

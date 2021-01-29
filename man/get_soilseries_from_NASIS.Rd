@@ -12,15 +12,14 @@ get_soilseries_from_NASIS(
 }
 \arguments{
 \item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the uncode() function. It does not
-convert those vectors that have set outside of uncode() (i.e. hard coded).
-The 'factory-fresh' default is TRUE, but this can be changed by setting
-options(stringsAsFactors = FALSE)}
+factors? This argument is passed to the \code{uncode()} function. It does not
+convert those vectors that have set outside of \code{uncode()} (i.e. hard coded).}
 
-\item{soils}{character vector of soil series names}
+\item{static_path}{Optional: path to local SQLite database containing NASIS
+table structure; default: \code{NULL}}
 }
 \value{
-A \code{data.frame}.
+A \code{data.frame}
 }
 \description{
 These functions return records from the Soil Classification database, either
