@@ -111,6 +111,7 @@ NULL
 #' 
 #' @name us_ss_timeline
 #' @docType data
+#' 
 #' @format A data.frame with 5209 observations on the following 5 variables.
 #' - `"ssa"`: Soil Survey name, a character vector
 #' - `"year"`: Year of publication, a numeric vector
