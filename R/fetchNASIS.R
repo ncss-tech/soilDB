@@ -31,11 +31,12 @@
 #' excluded from the returned object, however, their IDs are printed on the
 #' console. Pedons with combination horizons (e.g. B/C) are erroneously marked
 #' as errors due to the way in which they are stored in NASIS as two
-#' overlapping horizon records. \itemize{ \item
-#' \href{http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.htmlfetchNASIS
-#' Pedons Tutorial} \item
-#' \href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.htmlfetchNASIS
-#' Components Tutorial} }
+#' overlapping horizon records. 
+#' 
+#' Tutorials:
+#' 
+#'  - [fetchNASIS Pedons Tutorial](http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.html)
+#'  - [fetchNASIS Components Tutorial](http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html)
 #' 
 #' @aliases fetchNASIS get_phorizon_from_NASIS_db
 #' get_component_copm_data_from_NASIS_db
@@ -54,8 +55,7 @@
 #' get_vegplot_tree_si_details_from_NASIS_db
 #' get_vegplot_tree_si_summary_from_NASIS_db get_vegplot_trhi_from_NASIS_db
 #' get_legend_from_NASIS get_lmuaoverlap_from_NASIS
-#' @param from determines what objects should fetched? ('pedons' | 'components'
-#' | 'pedon_report')
+#' @param from determines what objects should fetched? ('pedons' | 'components' | 'pedon_report')
 #' @param url string specifying the url for the NASIS pedon_report (default:
 #' NULL)
 #' @param SS fetch data from the currently loaded selected set in NASIS or from

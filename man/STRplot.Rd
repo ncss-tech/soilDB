@@ -23,7 +23,7 @@ STRplot(mast, msst, mwst, permafrost = FALSE, pt.cex = 2.75, leg.cex = 0.85)
 Graphical Description of US Soil Taxonomy Soil Temperature Regimes
 }
 \details{
-\href{http://ncss-tech.github.io/AQP/soilDB/STR-eval.htmlRelated tutorial}.
+\href{http://ncss-tech.github.io/AQP/soilDB/STR-eval.html}{Soil Temperature Regime Evaluation Tutorial}
 }
 \examples{
 

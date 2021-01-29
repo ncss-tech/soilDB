@@ -31,10 +31,8 @@
 #' @author D.E. Beaudette
 #' @seealso \link{OSDquery}, \link{siblings}, \link{fetchOSD}
 #' @references
-#' \href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.htmlsoilDB
-#' Soil Series Query Functionality}
-#' 
-#' \href{http://ncss-tech.github.io/AQP/soilDB/siblings.htmlRelated tutorial.}
+#'  - [Soil Series Query Functions](http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html)
+#'  - [Soil "Siblings" Tutorial](http://ncss-tech.github.io/AQP/soilDB/siblings.html)
 #' @keywords manip
 #' @examples
 #' 

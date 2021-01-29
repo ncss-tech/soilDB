@@ -1,4 +1,18 @@
-
+#' Soil Database Interface
+#' 
+#' This package provides methods for extracting soils information from local
+#' PedonPC and AK Site databases (MS Access format), local NASIS databases (MS
+#' SQL Server), and the SDA web service. Currently USDA-NCSS data sources are
+#' supported, however, there are plans to develop interfaces to outside systems
+#' such as the Global Soil Mapping project.
+#'  
+#' @name soilDB-package
+#' @aliases soilDB.env soilDB-package soilDB
+#' @docType package
+#' @author J.M. Skovlin, D.E. Beaudette, S.M Roecker, A.G. Brown
+#' @seealso \code{\link{fetchPedonPC}, \link{fetchNASIS}, \link{SDA_query}, \link{loafercreek}}
+#' @keywords package
+NULL
 
 #' Example \code{SoilProfilecollection} Objects Returned by \code{fetchNASIS}.
 #' 
@@ -65,19 +79,13 @@
 #' 
 NULL
 
-
-
-
-
 #' SCAN and SNOTEL Station Metadata
 #' 
 #' SCAN and SNOTEL station metadata, a work in progress.
 #' 
 #' These data have been compiled from several sources and represent a
 #' progressive effort to organize SCAN/SNOTEL station metadata. Therefore, some
-#' records may be missing or incorrect. Details on this effort can be found at
-#' the associated GitHub issue page:
-#' \url{https://github.com/ncss-tech/soilDB/issues/61}.
+#' records may be missing or incorrect. 
 #' 
 #' @name SCAN_SNOTEL_metadata
 #' @aliases SCAN_SNOTEL_metadata state_FIPS_codes
@@ -94,40 +102,6 @@ NULL
 #' @keywords datasets
 NULL
 
-
-
-
-
-#' Soil Database Interface
-#' 
-#' This package provides methods for extracting soils information from local
-#' PedonPC and AK Site databases (MS Access format), local NASIS databases (MS
-#' SQL Server), and the SDA webservice. Currently USDA-NCSS data sources are
-#' supported, however, there are plans to develop interfaces to outside systems
-#' such as the Global Soil Mapping project.
-#' 
-#' It can be difficult to locate all of the dependencies required for
-#' sending/processing SOAP requests, especially on UNIX-like operating systems.
-#' Windows binary packages for the dependencies can be found
-#' \href{http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/2.15/here}. See
-#' \code{\link{fetchPedonPC}} for a simple wrapper function that should suffice
-#' for typical site/pedon/hz queries. An introduction to the soilDB package can
-#' be found
-#' \href{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/soilDB-Intro.html?root=aqphere}.
-#' 
-#' @name soilDB-package
-#' @aliases soilDB.env soilDB-package soilDB
-#' @docType package
-#' @author J.M. Skovlin and D.E. Beaudette
-#' @seealso \code{\link{fetchPedonPC}, \link{fetchNASIS}, \link{SDA_query},
-#' \link{loafercreek}}
-#' @keywords package
-NULL
-
-
-
-
-
 #' Timeline of US Published Soil Surveys
 #' 
 #' This dataset contains the years of each US Soil Survey was published.
@@ -142,10 +116,6 @@ NULL
 #' \item{list("year")}{year of publication, a numeric vector}
 #' \item{list("pdf")}{does a pdf exists, a logical vector}
 #' \item{list("state")}{State abbreviation, a character vector} }
-#' @source
-#' https://www.nrcs.usda.gov/wps/portal/nrcs/soilsurvey/soils/survey/state/
+#' @source https://www.nrcs.usda.gov/wps/portal/nrcs/soilsurvey/soils/survey/state/
 #' @keywords datasets
 NULL
-
-
-

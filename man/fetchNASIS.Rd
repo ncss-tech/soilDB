@@ -46,8 +46,7 @@ fetchNASIS(
 )
 }
 \arguments{
-\item{from}{determines what objects should fetched? ('pedons' | 'components'
-| 'pedon_report')}
+\item{from}{determines what objects should fetched? ('pedons' | 'components' | 'pedon_report')}
 
 \item{url}{string specifying the url for the NASIS pedon_report (default:
 NULL)}
@@ -110,11 +109,13 @@ that are missing horizon data, or have errors in their horizonation are
 excluded from the returned object, however, their IDs are printed on the
 console. Pedons with combination horizons (e.g. B/C) are erroneously marked
 as errors due to the way in which they are stored in NASIS as two
-overlapping horizon records. \itemize{ \item
-\href{http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.htmlfetchNASIS
-Pedons Tutorial} \item
-\href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.htmlfetchNASIS
-Components Tutorial} }
+overlapping horizon records.
+
+Tutorials:
+\itemize{
+\item \href{http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.html}{fetchNASIS Pedons Tutorial}
+\item \href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html}{fetchNASIS Components Tutorial}
+}
 }
 \author{
 D. E. Beaudette, J. M. Skovlin, S.M. Roecker, A.G. Brown

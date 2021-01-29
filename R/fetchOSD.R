@@ -54,15 +54,9 @@
 #' detailed soil survey (SSURGO). These data are periodically updated and made
 #' available via SoilWeb.
 #' 
-#' 
-#' \itemize{
-#' \item\href{https://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.htmloverview
-#' of all soil series query functions}
-#' 
-#' \item\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.htmlcompeting
-#' soil series}
-#' 
-#' \item\href{https://ncss-tech.github.io/AQP/soilDB/siblings.htmlsiblings} }
+#' - [Soil "Siblings" Tutorial](http://ncss-tech.github.io/AQP/soilDB/siblings.html)
+#' - [Competing Soil Series](https://ncss-tech.github.io/AQP/soilDB/competing-series.html)
+#' - [Siblings](https://ncss-tech.github.io/AQP/soilDB/siblings.html)
 #' 
 #' The standard set of "site" and "horizon" data are returned as a
 #' \code{SoilProfileCollection} object (\code{extended=FALSE}. The "extended"

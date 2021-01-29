@@ -36,7 +36,7 @@ presence of O horizons, saturated conditions, and presence of permafrost.
 Several assumptions are made when O horizon or saturation are undefined.
 }
 \details{
-\href{http://ncss-tech.github.io/AQP/soilDB/STR-eval.htmlRelated tutorial}.
+\href{http://ncss-tech.github.io/AQP/soilDB/STR-eval.html}{Soil Temperature Regime Evaluation Tutorial}
 }
 \examples{
 

@@ -23,8 +23,7 @@
 #' WKT (well-known text) representation of geometry to an sp-class object.
 #' 
 #' The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}.
-#' See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.htmlSDA
-#' Tutorial} for detailed examples.
+#' See the [SDA Tutorial](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html) for detailed examples.
 #' 
 #' @param d \code{data.frame} returned by \code{SDA_query}, containing WKT
 #' representation of geometry
@@ -182,7 +181,7 @@ FROM geom_data;
 #' (generalized soil survey, 1:250,000 scale) data are stored together within
 #' SDA. This means that queries that don't specify an area symbol may result in
 #' a mixture of SSURGO and STATSGO records. See the examples below and the
-#' \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.htmlSDA Tutorial}
+#' [SDA Tutorial](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html)
 #' for details.
 #' 
 #' @aliases SDA_spatialQuery SDA_make_spatial_query SDA_query_features

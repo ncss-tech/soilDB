@@ -55,10 +55,10 @@ if(requireNamespace("curl") &
 
 }
 \references{
-\href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.htmlsoilDB
-Soil Series Query Functionality}
-
-\href{http://ncss-tech.github.io/AQP/soilDB/siblings.htmlRelated tutorial.}
+\itemize{
+\item \href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{Soil Series Query Functions}
+\item \href{http://ncss-tech.github.io/AQP/soilDB/siblings.html}{Soil "Siblings" Tutorial}
+}
 }
 \seealso{
 \link{OSDquery}, \link{siblings}, \link{fetchOSD}

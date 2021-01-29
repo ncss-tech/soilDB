@@ -37,11 +37,9 @@
 #' "g", and "b". This function should be applied to chunks of rows within which
 #' color mixtures make sense.
 #' 
-#' There are examples in
-#' \href{http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.htmlthe KSSL data
-#' tutorial} and
-#' \href{http://ncss-tech.github.io/AQP/soilDB/mixing-soil-color-data.htmlthe
-#' soil color mixing tutorial}.
+#' Examples: 
+#'  - [KSSL data](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
+#'  - [soil color mixing tutorial](http://ncss-tech.github.io/AQP/soilDB/mixing-soil-color-data.html)
 #' 
 #' @aliases simplifyColorData mix_and_clean_colors
 #' @param d a \code{data.frame} object, typically returned from NASIS, see

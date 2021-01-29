@@ -3,12 +3,7 @@
 #' Intermediate-scale gridded (800m) soil property and interpretation maps from
 #' aggregated SSURGO and STATSGO data. These maps were developed by
 #' USDA-NRCS-SPSD staff in collaboration with UCD-LAWR. Originally for
-#' educational use and
-#' \href{https://casoilresource.lawr.ucdavis.edu/soil-properties/interactive
-#' thematic maps}, these data are a suitable alternative to gridded
-#' STATSGO-derived thematic soil maps. The full size grids can be
-#' \href{https://casoilresource.lawr.ucdavis.edu/soil-properties/download.phpdownloaded
-#' here}.
+#' educational use and [interactive thematic maps](https://casoilresource.lawr.ucdavis.edu/soil-properties/), these data are a suitable alternative to gridded STATSGO-derived thematic soil maps. The full size grids can be [downloaded here](https://casoilresource.lawr.ucdavis.edu/soil-properties/download.php)
 #' 
 #' \code{aoi} should be specified as either a \code{Spatial*}, \code{sf},
 #' \code{sfc} or \code{bbox} object or a \code{list} containing:

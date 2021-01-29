@@ -40,20 +40,12 @@ a \code{data.frame} object containing soil series names that match
 patterns supplied as arguments.
 }
 \description{
-This is a rough example of how chunks of text parsed from OSD records can be
-made search-able with the
-\href{https://www.postgresql.org/docs/9.5/textsearch.htmlPostgreSQL fulltext
-indexing} and query system
-(\href{https://www.postgresql.org/docs/9.5/datatype-textsearch.htmlsyntax
-details}). Each search field (except for the "brief narrative" and MLRA)
-corresponds with a section header in an OSD. The results may not include
-every OSD due to formatting errors and typos. Results are scored based on
-the number of times search terms match words in associated sections. This is
-the R API corresponding to
-\href{https://casoilresource.lawr.ucdavis.edu/osd-search/this webpage}.
+This is an example of how chunks of text parsed from OSD records can be made search-able with \href{https://www.postgresql.org/docs/9.5/textsearch.html}{PostgreSQL full-text indexing}. This query system utilizes \href{https://www.postgresql.org/docs/9.5/datatype-textsearch.html}{special syntax}.
 }
 \details{
-See \href{https://casoilresource.lawr.ucdavis.edu/osd-search/this webpage}
+Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. This is the R API corresponding to the \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{SoilWeb PostgreSQL OSD full-text search API}
+
+See \url{https://casoilresource.lawr.ucdavis.edu/osd-search/}
 for more information. \itemize{ \item family level taxa are derived from SC
 database, not parsed OSD records \item MLRA are derived via spatial
 intersection (SSURGO x MLRA polygons) \item MLRA-filtering is only possible
@@ -63,20 +55,17 @@ rhy-something \verb{rhy:*} \item search terms with spaces need doubled
 single quotes: \verb{''san joaquin''} \item combine search terms into a
 single expression: \verb{(grano:* | granite)} }
 
-Related documentation can be found in the following tutorials \itemize{
-\item
-\href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.htmloverview
-of all soil series query functions} \item
-\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.htmlcompeting
-soil series} \item
-\href{https://ncss-tech.github.io/AQP/soilDB/siblings.htmlsiblings} }
+Related documentation can be found in the following tutorials:
+\itemize{
+\item \href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{Soil Series Query Functions}
+\item \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{Competing Soil Series}
+\item \href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{Siblings}
+}
 }
 \note{
 SoilWeb maintains a snapshot of the Official Series Description data.
 }
 \examples{
-
-
 
 \donttest{
 if(requireNamespace("curl") &

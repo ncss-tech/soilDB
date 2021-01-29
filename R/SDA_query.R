@@ -111,8 +111,7 @@ format_SQL_in_statement <- function(x) {
 #' SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are
 #' stored together within SDA. This means that queries that don't specify an
 #' area symbol may result in a mixture of SSURGO and STATSGO records. See the
-#' examples below and the
-#' \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.htmlSDA Tutorial}
+#' examples below and the [SDA Tutorial](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html)
 #' for details.
 #' 
 #' @param q A valid T-SQL query surrounded by double quotes

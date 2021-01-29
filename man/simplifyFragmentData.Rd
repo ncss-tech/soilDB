@@ -33,9 +33,10 @@ other than NASIS by careful use of the \code{id.var} argument. However,
 fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", and
 fragment cementation class in "fraghard".
 
-There are examples in
-\href{http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.htmlthe KSSL data
-tutorial}.
+Examples:
+\itemize{
+\item \href{http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html}{KSSL data}
+}
 }
 \author{
 D.E. Beaudette

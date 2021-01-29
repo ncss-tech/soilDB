@@ -27,13 +27,10 @@ available via SoilWeb.
 }
 \details{
 \itemize{
-\item\href{https://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.htmloverview
-of all soil series query functions}
-
-\item\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.htmlcompeting
-soil series}
-
-\item\href{https://ncss-tech.github.io/AQP/soilDB/siblings.htmlsiblings} }
+\item \href{http://ncss-tech.github.io/AQP/soilDB/siblings.html}{Soil "Siblings" Tutorial}
+\item \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{Competing Soil Series}
+\item \href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{Siblings}
+}
 
 The standard set of "site" and "horizon" data are returned as a
 \code{SoilProfileCollection} object (\code{extended=FALSE}. The "extended"

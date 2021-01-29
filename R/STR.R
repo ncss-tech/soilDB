@@ -5,8 +5,8 @@
 #' 
 #' Graphical Description of US Soil Taxonomy Soil Temperature Regimes
 #' 
-#' \href{http://ncss-tech.github.io/AQP/soilDB/STR-eval.htmlRelated tutorial}.
-#' 
+#' [Soil Temperature Regime Evaluation Tutorial](http://ncss-tech.github.io/AQP/soilDB/STR-eval.html)
+#'  
 #' @param mast single value or vector of mean annual soil temperature (deg C)
 #' @param msst single value or vector of mean summer soil temperature (deg C)
 #' @param mwst single value of mean winter soil temperature (deg C)
@@ -160,7 +160,7 @@ STRplot <- function(mast, msst, mwst, permafrost=FALSE, pt.cex=2.75, leg.cex=0.8
 #' presence of O horizons, saturated conditions, and presence of permafrost.
 #' Several assumptions are made when O horizon or saturation are undefined.
 #' 
-#' \href{http://ncss-tech.github.io/AQP/soilDB/STR-eval.htmlRelated tutorial}.
+#' [Soil Temperature Regime Evaluation Tutorial](http://ncss-tech.github.io/AQP/soilDB/STR-eval.html)
 #' 
 #' @param mast vector of mean annual soil temperature (deg C)
 #' @param mean.summer vector of mean summer soil temperature (deg C)

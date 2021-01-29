@@ -144,9 +144,8 @@
 #' fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", and
 #' fragment cementation class in "fraghard".
 #' 
-#' There are examples in
-#' \href{http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.htmlthe KSSL data
-#' tutorial}.
+#' Examples: 
+#'  - [KSSL data](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
 #' 
 #' @aliases simplifyFragmentData simplfyFragmentData simplifyArtifactData
 #' @param rf a \code{data.frame} object, typically returned from NASIS, see

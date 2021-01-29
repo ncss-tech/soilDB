@@ -1,25 +1,13 @@
 # https://www.postgresql.org/docs/9.5/static/textsearch-controls.html
 # these are all parameters expected by the SoilWeb OSD Fulltext search
 
-
-
-
-
 #' Full text searching of the USDA-NRCS Official Series Descriptions
 #' 
-#' This is a rough example of how chunks of text parsed from OSD records can be
-#' made search-able with the
-#' \href{https://www.postgresql.org/docs/9.5/textsearch.htmlPostgreSQL fulltext
-#' indexing} and query system
-#' (\href{https://www.postgresql.org/docs/9.5/datatype-textsearch.htmlsyntax
-#' details}). Each search field (except for the "brief narrative" and MLRA)
-#' corresponds with a section header in an OSD. The results may not include
-#' every OSD due to formatting errors and typos. Results are scored based on
-#' the number of times search terms match words in associated sections. This is
-#' the R API corresponding to
-#' \href{https://casoilresource.lawr.ucdavis.edu/osd-search/this webpage}.
+#' This is an example of how chunks of text parsed from OSD records can be made search-able with [PostgreSQL full-text indexing](https://www.postgresql.org/docs/9.5/textsearch.html). This query system utilizes [special syntax](https://www.postgresql.org/docs/9.5/datatype-textsearch.html). 
 #' 
-#' See \href{https://casoilresource.lawr.ucdavis.edu/osd-search/this webpage}
+#' Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. This is the R API corresponding to the [SoilWeb PostgreSQL OSD full-text search API](https://casoilresource.lawr.ucdavis.edu/osd-search/)
+#' 
+#' See \url{https://casoilresource.lawr.ucdavis.edu/osd-search/}
 #' for more information. \itemize{ \item family level taxa are derived from SC
 #' database, not parsed OSD records \item MLRA are derived via spatial
 #' intersection (SSURGO x MLRA polygons) \item MLRA-filtering is only possible
@@ -29,13 +17,11 @@
 #' single quotes: \verb{''san joaquin''} \item combine search terms into a
 #' single expression: \verb{(grano:* | granite)} }
 #' 
-#' Related documentation can be found in the following tutorials \itemize{
-#' \item
-#' \href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.htmloverview
-#' of all soil series query functions} \item
-#' \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.htmlcompeting
-#' soil series} \item
-#' \href{https://ncss-tech.github.io/AQP/soilDB/siblings.htmlsiblings} }
+#' Related documentation can be found in the following tutorials:
+#' 
+#'  - [Soil Series Query Functions](http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html)
+#'  - [Competing Soil Series](https://ncss-tech.github.io/AQP/soilDB/competing-series.html)
+#'  - [Siblings](https://ncss-tech.github.io/AQP/soilDB/siblings.html)
 #' 
 #' @param mlra a comma-delimited list of MLRA to search ('17,18,22A')
 #' @param taxonomic_class search family level classification
@@ -55,8 +41,6 @@
 #' \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587}
 #' @keywords manip
 #' @examples
-#' 
-#' 
 #' 
 #' \donttest{
 #' if(requireNamespace("curl") &

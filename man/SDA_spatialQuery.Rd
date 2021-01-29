@@ -52,7 +52,7 @@ SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO
 (generalized soil survey, 1:250,000 scale) data are stored together within
 SDA. This means that queries that don't specify an area symbol may result in
 a mixture of SSURGO and STATSGO records. See the examples below and the
-\href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.htmlSDA Tutorial}
+\href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial}
 for details.
 }
 \note{

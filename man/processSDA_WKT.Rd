@@ -23,8 +23,7 @@ WKT (well-known text) representation of geometry to an sp-class object.
 }
 \details{
 The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}.
-See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.htmlSDA
-Tutorial} for detailed examples.
+See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for detailed examples.
 }
 \note{
 This function requires the \code{httr}, \code{jsonlite}, \code{XML},

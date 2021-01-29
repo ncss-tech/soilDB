@@ -24,13 +24,10 @@ a \code{data.frame} object
 Query soil/climate data from USDA-NRCS SCAN Stations (experimental)
 }
 \details{
-See \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.htmlthe
-fetchSCAN tutorial for details.} These functions require the \code{httr} and
-\code{rvest} libraries.
+See  These functions require the \code{httr} and \code{rvest} libraries.
 }
 \note{
-\code{SCAN_sensor_metadata()} is known to crash on 32bit R / libraries
-(Windows).
+\code{SCAN_sensor_metadata()} is known to crash on 32bit R / libraries (Windows).
 }
 \examples{
 

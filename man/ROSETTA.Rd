@@ -48,7 +48,7 @@ prediction was not possible due to missing values in \code{x}) \item
 argument \code{v} }
 }
 \description{
-A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). See the \href{http://ncss-tech.github.io/AQP/soilDB/ROSETTA-API.html}{related tutorial} for additional examples.
+A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of Zhang and Schaap, (2017). See the \href{http://ncss-tech.github.io/AQP/soilDB/ROSETTA-API.html}{ROSETTA API tutorial} for additional examples.
 }
 \details{
 Soil properties supplied in \code{x} must be described, in order, via \code{vars} argument. The API does not use the names but column ordering must follow: sand, silt, clay, bulk density, volumetric water content at 33kPa (1/3 bar), and volumetric water content at 1500 kPa (15 bar).
@@ -110,13 +110,9 @@ Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotran
 
 ROSETTA Model API
 
-A simple interface to the
-\href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/ROSETTA
-model} for predicting hydraulic parameters from soil properties. The ROSETTA
+A simple interface to the \href{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}{ROSETTA model} for predicting hydraulic parameters from soil properties. The ROSETTA
 API was developed by Dr. Todd Skaggs (USDA-ARS) and links to the work of
-Zhang and Schaap, (2017). See the
-\href{http://ncss-tech.github.io/AQP/soilDB/ROSETTA-API.htmlrelated
-tutorial} for additional examples.
+Zhang and Schaap, (2017). See the \href{http://ncss-tech.github.io/AQP/soilDB/ROSETTA-API.html}{ROSETTA API tutorial} for additional examples.
 
 Soil properties supplied in \code{x} must be described, in order, via
 \code{vars} argument. The API does not use the names but column ordering
