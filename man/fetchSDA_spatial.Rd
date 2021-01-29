@@ -16,38 +16,74 @@ fetchSDA_spatial(
 )
 }
 \arguments{
-\item{x}{A vector of MUKEYs / national mapunit symbols (for mupolygon geometry); OR legend keys (LKEY) / area symbols (for sapolygon geometry)}
+\item{x}{A vector of MUKEYs / national mapunit symbols (for mupolygon
+geometry); OR legend keys (LKEY) / area symbols (for sapolygon geometry)}
 
-\item{by.col}{Column name containing mapunit identifier \code{"mukey"}, \code{"nmusym"}, or \code{"areasymbol"} for \code{geom.src} \code{sapolygon}; default is inferred from \code{is.numeric(x) == TRUE} for \code{mukey} or \code{lkey} and (\code{nationalmusym} or \code{areasymbol} otherwise.}
+\item{by.col}{Column name containing mapunit identifier \code{"mukey"},
+\code{"nmusym"}, or \code{"areasymbol"} for \code{geom.src}
+\code{sapolygon}; default is inferred from \code{is.numeric(x) == TRUE} for
+\code{mukey} or \code{lkey} and (\code{nationalmusym} or \code{areasymbol}
+otherwise.}
 
-\item{method}{geometry result type: \code{"feature"} returns polygons, \code{"bbox"} returns the bounding box of each polygon, and \code{"point"} returns a single point within each polygon.}
+\item{method}{geometry result type: \code{"feature"} returns polygons,
+\code{"bbox"} returns the bounding box of each polygon, and \code{"point"}
+returns a single point within each polygon.}
 
 \item{geom.src}{Either \code{mupolygon} or \code{sapolygon}}
 
-\item{db}{Default: SSURGO. When \code{geom.src} is \code{mupolygon}, use STATSGO polygon geometry instead of SSURGO by setting \code{db = "STATSGO"}}
+\item{db}{Default: SSURGO. When \code{geom.src} is \code{mupolygon}, use
+STATSGO polygon geometry instead of SSURGO by setting \code{db = "STATSGO"}}
 
-\item{add.fields}{Column names from \code{mapunit} or \code{legend} table to add to result. Must specify parent table name as the prefix \code{mapunit} before column name e.g. \code{mapunit.muname}.}
+\item{add.fields}{Column names from \code{mapunit} or \code{legend} table to
+add to result. Must specify parent table name as the prefix \code{mapunit}
+before column name e.g. \code{mapunit.muname}.}
 
-\item{chunk.size}{How many queries should spatial request be divided into? Necessary for large results. Default: 10}
+\item{chunk.size}{How many queries should spatial request be divided into?
+Necessary for large results. Default: 10}
 
 \item{verbose}{Print messages?}
 }
 \value{
-A Spatial*DataFrame corresponding to SDA spatial data for all symbols requested. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with \code{add.fields}.
+A Spatial*DataFrame corresponding to SDA spatial data for all
+symbols requested. Default result contains geometry with attribute table
+containing unique feature ID, symbol and area symbol plus additional fields
+in result specified with \code{add.fields}.
 }
 \description{
-This is a high-level "fetch" method to facilitate spatial queries to Soil Data Access (SDA) based on mapunit key (\code{mukey}) and national mapunit symbol (\code{nationalmusym}) for \code{mupolygon} (SSURGO) or \code{gsmmupolygon} (STATSGO) geometry OR legend key (\code{lkey}) and area symbols (\code{areasymbol}) for \code{sapolygon} (Soil Survey Area; SSA) geometry).
-
-A Soil Data Access spatial query is made returning geometry and key identifying information about the mapunit or area of interest. Additional columns from the mapunit or legend table can be included using \code{add.fields} argument.
-
-This function automatically "chunks" the input vector (using \code{soilDB::makeChunks}) of mapunit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the \code{chunk.size} setting and the length of your input vector. If you are working with many mapunits and/or large extents, you may need to decrease this number in order to have more chunks.
-
-Querying regions with complex mapping may require smaller \code{chunk.size}. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform "poorly" (slow or error) no matter what the chunk size is. Shuffling the order of the inputs using \code{sample} may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use \code{muacres} as a heuristic to adjust for total acreage within chunks.
+This is a high-level "fetch" method to facilitate spatial queries to Soil
+Data Access (SDA) based on mapunit key (\code{mukey}) and national mapunit
+symbol (\code{nationalmusym}) for \code{mupolygon} (SSURGO) or
+\code{gsmmupolygon} (STATSGO) geometry OR legend key (\code{lkey}) and area
+symbols (\code{areasymbol}) for \code{sapolygon} (Soil Survey Area; SSA)
+geometry).
 }
 \details{
-Note that STATSGO data are fetched using \code{CLIPAREASYMBOL = 'US'} to avoid duplicating state and national subsets of the geometry.
+A Soil Data Access spatial query is made returning geometry and key
+identifying information about the mapunit or area of interest. Additional
+columns from the mapunit or legend table can be included using
+\code{add.fields} argument.
+
+This function automatically "chunks" the input vector (using
+\code{soilDB::makeChunks}) of mapunit identifiers to minimize the likelihood
+of exceeding the SDA data request size. The number of chunks varies with the
+\code{chunk.size} setting and the length of your input vector. If you are
+working with many mapunits and/or large extents, you may need to decrease
+this number in order to have more chunks.
+
+Querying regions with complex mapping may require smaller \code{chunk.size}.
+Numerically adjacent IDs in the input vector may share common qualities
+(say, all from same soil survey area or region) which could cause specific
+chunks to perform "poorly" (slow or error) no matter what the chunk size is.
+Shuffling the order of the inputs using \code{sample} may help to eliminate
+problems related to this, depending on how you obtained your set of
+MUKEY/nationalmusym to query. One could feasibly use \code{muacres} as a
+heuristic to adjust for total acreage within chunks.
+
+Note that STATSGO data are fetched using \code{CLIPAREASYMBOL = 'US'} to
+avoid duplicating state and national subsets of the geometry.
 }
 \examples{
+
 \donttest{
 if(requireNamespace("curl") &
    curl::has_internet()) {
@@ -68,6 +104,7 @@ if(requireNamespace("curl") &
     head(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname"))
 }
 }
+
 }
 \author{
 Andrew G. Brown

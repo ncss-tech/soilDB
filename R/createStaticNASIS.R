@@ -1,10 +1,13 @@
 #' Method for "dumping" contents of an entire NASIS table
-#'
+#' 
+#' Method for "dumping" contents of an entire NASIS table
+#' 
+#' 
 #' @param table_name Character name of table.
-#' @param static_path Optional: path to SQLite database containing NASIS table structure; Default: \code{NULL}
-#'
+#' @param static_path Optional: path to SQLite database containing NASIS table
+#' structure; Default: \code{NULL}
 #' @return A data.frame or other result of \code{DBI::dbGetQuery}
-#'
+#' @export .dump_NASIS_table
 .dump_NASIS_table <- function(table_name, static_path = NULL) {
   # connect to NASIS, identify columns 
   con <- dbConnectNASIS(static_path) 
@@ -29,26 +32,36 @@
   return(dbQueryNASIS(con, q))
 }
 
-#' Create a memory or file-based instance of NASIS database (for selected tables) 
-#'
-#' @param tables Character vector of target tables. Default: \code{NULL} is all tables meeting the following criteria.
-#' @param SS Logical. Include "selected set" tables (ending with suffix \code{"_View1"}). Default: \code{FALSE}
-#' @param systables Logical. Include "system" tables (starting with prefix \code{"system"}). Default: \code{FALSE}
-#' @param static_path Optional: path to SQLite database containing NASIS table structure; Default: \code{NULL}
-#' @param output_path Optional: path to new/existing SQLite database to write tables to. Default: \code{NULL} returns table results as named list.
-#' @return A named list of results from calling \code{dbQueryNASIS} for all columns in each NASIS table.
-#' @export
+
+
+#' Create a memory or file-based instance of NASIS database (for selected
+#' tables)
 #' 
-#' @importFrom odbc dbListTables 
-#' @importFrom RSQLite dbListTables RSQLite
-#' @importFrom DBI dbConnect dbDisconnect dbWriteTable
+#' Create a memory or file-based instance of NASIS database (for selected
+#' tables)
 #' 
+#' 
+#' @param tables Character vector of target tables. Default: \code{NULL} is all
+#' tables meeting the following criteria.
+#' @param SS Logical. Include "selected set" tables (ending with suffix
+#' \code{"_View1"}). Default: \code{FALSE}
+#' @param systables Logical. Include "system" tables (starting with prefix
+#' \code{"system"}). Default: \code{FALSE}
+#' @param static_path Optional: path to SQLite database containing NASIS table
+#' structure; Default: \code{NULL}
+#' @param output_path Optional: path to new/existing SQLite database to write
+#' tables to. Default: \code{NULL} returns table results as named list.
+#' @return A named list of results from calling \code{dbQueryNASIS} for all
+#' columns in each NASIS table.
 #' @examples
+#' 
 #' 
 #' \dontrun{
 #'  str(createStaticNASIS(tables = c("calculation","formtext")))
 #' }
 #' 
+#' 
+#' @export createStaticNASIS
 createStaticNASIS <- function(tables = NULL, SS = FALSE, systables = FALSE, 
                               static_path = NULL, output_path = NULL)  {
   # can make static DB from another static DB, or default is local NASIS install (static_path=NULL)

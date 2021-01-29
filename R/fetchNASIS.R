@@ -1,34 +1,84 @@
 # convenient interface to local NASIS data
 # from: pedons | components | lab | ???
 # ... : arguments passed on to helper functions
+
+
 #' Fetch commonly used site/pedon/horizon or component data from NASIS.
-#' @description Fetch commonly used site/pedon/horizon data or component from NASIS, returned as a SoilProfileCollection object.
+#' 
+#' Fetch commonly used site/pedon/horizon data or component from NASIS,
+#' returned as a SoilProfileCollection object.
+#' 
+#' This function imports data from NASIS into R as a
+#' \code{SoilProfileCollection} object. It "flattens" NASIS pedon and component
+#' tables, including their child tables, into several more easily manageable
+#' data frames. Primarily these functions access the local NASIS database using
+#' an ODBC connection. However using the \code{fetchNASIS()} argument
+#' \code{from = "pedon_report"}, data can be read from the NASIS Report
+#' 'fetchNASIS', as either a txt file or url. The primary purpose of
+#' \code{fetchNASIS(from = "pedon_report")} is to facilitate importing datasets
+#' larger than 8000+ pedons/components.
+#' 
+#' The value of \code{nullFragsAreZero} will have a significant impact on the
+#' rock fragment fractions returned by fetchNASIS. Set \code{nullFragsAreZero =
+#' FALSE} in those cases where there are many data-gaps and \code{NULL} rock
+#' fragment values should be interpreted as \code{NULL}. Set
+#' \code{nullFragsAreZero = TRUE} in those cases where \code{NULL} rock
+#' fragment values should be interpreted as 0.
+#' 
+#' This function attempts to do most of the boilerplate work when extracting
+#' site/pedon/horizon or component data from a local NASIS database. Pedons
+#' that are missing horizon data, or have errors in their horizonation are
+#' excluded from the returned object, however, their IDs are printed on the
+#' console. Pedons with combination horizons (e.g. B/C) are erroneously marked
+#' as errors due to the way in which they are stored in NASIS as two
+#' overlapping horizon records. 
+#' 
+#' Tutorials:
+#' 
+#'  - [fetchNASIS Pedons Tutorial](http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.html)
+#'  - [fetchNASIS Components Tutorial](http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html)
+#' 
+#' @aliases fetchNASIS get_phorizon_from_NASIS_db
+#' get_component_copm_data_from_NASIS_db
+#' get_component_horizon_data_from_NASIS_db
+#' get_component_correlation_data_from_NASIS_db
+#' get_component_cogeomorph_data_from_NASIS_db
+#' get_component_esd_data_from_NASIS_db
+#' get_component_otherveg_data_from_NASIS_db get_copedon_from_NASIS_db
+#' get_legend_from_NASISget_lmuaoverlap_from_NASIS get_mapunit_from_NASIS
+#' get_projectmapunit_from_NASIS get_component_diaghz_from_NASIS_db
+#' get_mutext_from_NASIS_db get_phfmp_from_NASIS_db get_RMF_from_NASIS_db
+#' get_concentrations_from_NASIS_db fetchVegdata get_vegplot_from_NASIS_db
+#' get_vegplot_location_from_NASIS_db get_vegplot_species_from_NASIS_db
+#' get_vegplot_textnote_from_NASIS_db get_vegplot_transect_from_NASIS_db
+#' get_vegplot_transpecies_from_NASIS_db
+#' get_vegplot_tree_si_details_from_NASIS_db
+#' get_vegplot_tree_si_summary_from_NASIS_db get_vegplot_trhi_from_NASIS_db
+#' get_legend_from_NASIS get_lmuaoverlap_from_NASIS
 #' @param from determines what objects should fetched? ('pedons' | 'components' | 'pedon_report')
-#' @param url string specifying the url for the NASIS pedon_report (default: NULL)
-#' @param SS 	fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)
-#' @param rmHzErrors should pedons with horizon depth errors be removed from the results? (default: TRUE)
-#' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details
-#' @param soilColorState which colors should be used to generate the convenience field 'soil_color'? ('moist' | 'dry')
-#' @param lab should the phlabresults child table be fetched with site/pedon/horizon data (default: FALSE)
-#' @param fill (fetchNASIS(from='components') only: include component records without horizon data in result? (default: FALSE)
-#' @param stringsAsFactors logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have been set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)
-#' @param static_path Optional: path to local SQLite database containing NASIS table structure; default: NULL
-#'
-#' @details This function imports data from NASIS into R as a \code{SoilProfileCollection} object. It "flattens" NASIS pedon and component tables, including their child tables, into several more easily manageable data frames. Primarily these functions access the local NASIS database using an ODBC connection. However using the \code{fetchNASIS()} argument \code{from = "pedon_report"}, data can be read from the NASIS Report 'fetchNASIS', as either a txt file or url. The primary purpose of \code{fetchNASIS(from = "pedon_report")} is to facilitate importing datasets larger than 8000+ pedons/components.
-#' 
-#' The value of \code{nullFragsAreZero} will have a significant impact on the rock fragment fractions returned by fetchNASIS. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and \code{NULL} rock fragment values should be interpreted as \code{NULL}. Set \code{nullFragsAreZero = TRUE} in those cases where \code{NULL} rock fragment values should be interpreted as 0.
-#' 
-#' This function attempts to do most of the boilerplate work when extracting site/pedon/horizon or component data from a local NASIS database. Pedons that are missing horizon data, or have errors in their horizonation are excluded from the returned object, however, their IDs are printed on the console. Pedons with combination horizons (e.g. B/C) are erroneously marked as errors due to the way in which they are stored in NASIS as two overlapping horizon records.
-#' 
-#'  - \href{http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.html}{fetchNASIS Pedons Tutorial}
-#'  
-#'  - \href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html}{fetchNASIS Components Tutorial}
-#' 
+#' @param url string specifying the url for the NASIS pedon_report (default:
+#' `NULL`)
+#' @param SS fetch data from the currently loaded selected set in NASIS or from
+#' the entire local database (default: `TRUE`)
+#' @param rmHzErrors should pedons with horizon depth errors be removed from
+#' the results? (default: `TRUE`)
+#' @param nullFragsAreZero should fragment volumes of `NULL` be interpreted as `0`?
+#' (default: `TRUE`), see details
+#' @param soilColorState which colors should be used to generate the
+#' convenience field `soil_color`? (`'moist'` or `'dry'`)
+#' @param lab should the `phlabresults` child table be fetched with
+#' site/pedon/horizon data (default: `FALSE`)
+#' @param fill (`fetchNASIS(from='components')` only: include component records
+#' without horizon data in result? (default: `FALSE`)
+#' @param stringsAsFactors logical: should character vectors be converted to
+#' factors? This argument is passed to the `uncode()` function. It does not
+#' convert those vectors that have been set outside of `uncode()` (i.e. hard
+#' coded). 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
 #' @return A SoilProfileCollection object
 #' @author D. E. Beaudette, J. M. Skovlin, S.M. Roecker, A.G. Brown
-#' @aliases get_phorizon_from_NASIS_db get_component_copm_data_from_NASIS_db get_component_horizon_data_from_NASIS_db get_component_correlation_data_from_NASIS_db get_component_copm_data_from_NASIS_db get_component_cogeomorph_data_from_NASIS_db get_component_esd_data_from_NASIS_db get_component_otherveg_data_from_NASIS_db get_copedon_from_NASIS_db get_legend_from_NASISget_lmuaoverlap_from_NASIS get_mapunit_from_NASIS get_projectmapunit_from_NASIS get_component_diaghz_from_NASIS_db get_mutext_from_NASIS_db get_phfmp_from_NASIS_db get_RMF_from_NASIS_db get_concentrations_from_NASIS_db fetchVegdata get_vegplot_from_NASIS_db get_vegplot_location_from_NASIS_db get_vegplot_species_from_NASIS_db get_vegplot_textnote_from_NASIS_db get_vegplot_transect_from_NASIS_db get_vegplot_transpecies_from_NASIS_db get_vegplot_tree_si_details_from_NASIS_db get_vegplot_tree_si_summary_from_NASIS_db get_vegplot_trhi_from_NASIS_db get_legend_from_NASIS get_lmuaoverlap_from_NASIS
-#' @export
-#'
+#' @export fetchNASIS
 fetchNASIS <- function(from='pedons', 
                        url = NULL, 
                        SS = TRUE, 

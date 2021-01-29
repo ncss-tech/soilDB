@@ -5,6 +5,21 @@
 # siteiidref key removed from pedon table - use the pedon.siteobsiidref through the siteobs table (siteobs.siteobsiid) as the new linkage	
 
 
+
+
+#' Extract Site Data from a PedonPC Database
+#' 
+#' Get site-level data from a PedonPC database.
+#' 
+#' 
+#' @param dsn The path to a 'pedon.mdb' database.
+#' @return A data.frame.
+#' @note This function currently works only on Windows.
+#' @author Dylan E. Beaudette and Jay M. Skovlin
+#' @seealso \code{\link{get_hz_data_from_pedon_db}},
+#' \code{\link{get_veg_from_AK_Site}},
+#' @keywords manip
+#' @export get_site_data_from_pedon_db
 get_site_data_from_pedon_db <- function(dsn) {
   
   # must have RODBC installed

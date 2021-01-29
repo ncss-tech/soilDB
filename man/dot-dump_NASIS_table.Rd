@@ -9,7 +9,8 @@
 \arguments{
 \item{table_name}{Character name of table.}
 
-\item{static_path}{Optional: path to SQLite database containing NASIS table structure; Default: \code{NULL}}
+\item{static_path}{Optional: path to SQLite database containing NASIS table
+structure; Default: \code{NULL}}
 }
 \value{
 A data.frame or other result of \code{DBI::dbGetQuery}

@@ -1,4 +1,3 @@
-
 ## chunked queries for large number of records:
 # https://github.com/ncss-tech/soilDB/issues/71
 
@@ -16,22 +15,25 @@
 ## TODO: geometry collections are not allowed in sp objects..
 ## TODO: consider moving to sf
 
-#' @title Post-process WKT returned from SDA.
+
+
+#' Post-process WKT returned from SDA.
 #' 
-#' @description This is a helper function, commonly used with \code{SDA_query} to extract WKT (well-known text) representation of geometry to an sp-class object.
+#' This is a helper function, commonly used with \code{SDA_query} to extract
+#' WKT (well-known text) representation of geometry to an sp-class object.
 #' 
-#' @param d \code{data.frame} returned by \code{SDA_query}, containing WKT representation of geometry
+#' The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}.
+#' See the [SDA Tutorial](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html) for detailed examples.
+#' 
+#' @param d \code{data.frame} returned by \code{SDA_query}, containing WKT
+#' representation of geometry
 #' @param g name of column in \code{d} containing WKT geometry
 #' @param p4s PROJ4 CRS definition, typically GCS WGS84
-#' 
-#' @details The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}. See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for detailed examples.
-#' 
-#' @note This function requires the `httr`, `jsonlite`, `XML`, and `rgeos` packages.
-#' 
-#' @author D.E. Beaudette
-#' 
 #' @return A \code{Spatial*} object.
-#' 
+#' @note This function requires the \code{httr}, \code{jsonlite}, \code{XML},
+#' and \code{rgeos} packages.
+#' @author D.E. Beaudette
+#' @export processSDA_WKT
 processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
   # iterate over features (rows) and convert into list of SPDF
   p <- list()
@@ -158,36 +160,53 @@ FROM geom_data;
 # 10-20x speed improvement over SDA_query_features
 
 
-#' @title SDA Spatial Query
+
+
+#' SDA Spatial Query
 #' 
-#' @description Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersection of \code{geom} + SSURGO / STATSGO polygons can be returned. See details.
+#' Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied
+#' geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons
+#' objects with a valid CRS. Map unit keys, overlapping polygons, or the
+#' spatial intersection of \code{geom} + SSURGO / STATSGO polygons can be
+#' returned. See details.
 #' 
-#' @param geom a Spatial* object, with valid CRS. May contain multiple features.
-#' @param what a character vector specifying what to return. 'mukey': \code{data.frame} with intersecting map unit keys and names, \code{geom} overlapping or intersecting map unit polygons
-#' @param geomIntersection logical; \code{FALSE}: overlapping map unit polygons returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is returned.
-#' @param db a character vector identifying the Soil Geographic Databases
-#'   ('SSURGO' or 'STATSGO') to query. Option \var{STATSGO} currently works
-#'   only in combination with \code{what = "geom"}.
-#'
-#' @return A \code{data.frame} if \code{what = 'mukey'}, otherwise \code{SpatialPolygonsDataFrame} object.
-#' 
-#' @author D.E. Beaudette, A.G. Brown, D.R. Schlaepfer
-#' @seealso \code{\link{SDA_query}}
-#' @keywords manip
-#' 
-#' @aliases SDA_make_spatial_query SDA_query_features
-#' 
-#' @note Row-order is not preserved across features in \code{geom} and returned object. Use \code{sp::over()} or similar functionality to extract from results. Polygon area in acres is computed server-side when \code{what = 'geom'} and \code{geomIntersection = TRUE}.
-#' 
-#' 
-#' @details Queries for map unit keys are always more efficient vs. queries for overlapping or intersecting (i.e. least efficient) features. \code{geom} is converted to GCS / WGS84 as needed. Map unit keys are always returned when using \code{what = "geom"}.
+#' Queries for map unit keys are always more efficient vs. queries for
+#' overlapping or intersecting (i.e. least efficient) features. \code{geom} is
+#' converted to GCS / WGS84 as needed. Map unit keys are always returned when
+#' using \code{what = "geom"}.
 #' 
 #' There is a 100,000 record limit and 32Mb JSON serializer limit, per query.
 #' 
-#' SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO (generalized soil survey, 1:250,000 scale) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
+#' SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO
+#' (generalized soil survey, 1:250,000 scale) data are stored together within
+#' SDA. This means that queries that don't specify an area symbol may result in
+#' a mixture of SSURGO and STATSGO records. See the examples below and the
+#' [SDA Tutorial](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html)
+#' for details.
 #' 
-#' 
+#' @aliases SDA_spatialQuery SDA_make_spatial_query SDA_query_features
+#' @param geom a Spatial* object, with valid CRS. May contain multiple
+#' features.
+#' @param what a character vector specifying what to return. 'mukey':
+#' \code{data.frame} with intersecting map unit keys and names, \code{geom}
+#' overlapping or intersecting map unit polygons
+#' @param geomIntersection logical; \code{FALSE}: overlapping map unit polygons
+#' returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is
+#' returned.
+#' @param db a character vector identifying the Soil Geographic Databases
+#' ('SSURGO' or 'STATSGO') to query. Option \var{STATSGO} currently works only
+#' in combination with \code{what = "geom"}.
+#' @return A \code{data.frame} if \code{what = 'mukey'}, otherwise
+#' \code{SpatialPolygonsDataFrame} object.
+#' @note Row-order is not preserved across features in \code{geom} and returned
+#' object. Use \code{sp::over()} or similar functionality to extract from
+#' results. Polygon area in acres is computed server-side when \code{what =
+#' 'geom'} and \code{geomIntersection = TRUE}.
+#' @author D.E. Beaudette, A.G. Brown, D.R. Schlaepfer
+#' @seealso \code{\link{SDA_query}}
+#' @keywords manip
 #' @examples
+#' 
 #' \donttest{
 #' if(requireNamespace("curl") &
 #'    curl::has_internet() & 
@@ -324,6 +343,8 @@ FROM geom_data;
 #'  }
 #' }
 #' 
+#' 
+#' @export SDA_spatialQuery
 SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE,
   db = c("SSURGO", "STATSGO")) {
 

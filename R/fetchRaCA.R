@@ -1,33 +1,51 @@
 ## TODO: need to implement some kind of constraints on geographic queries
 ## NOTE: each VNIR spectra record is 6.6kb of data (compressed, gzip, level 5)
 
+
+
 #' Get Rapid Carbon Assessment (RaCA) data
-#' @description Get Rapid Carbon Assessment (RaCA) data via state, geographic bounding-box, RaCA site ID, or series query from the SoilWeb API.
+#' 
+#' Get Rapid Carbon Assessment (RaCA) data via state, geographic bounding-box,
+#' RaCA site ID, or series query from the SoilWeb API.
+#' 
+#' The VNIR spectra associated with RaCA data are quite large (each
+#' gzip-compressed VNIR spectra record is about 6.6kb), so requests for these
+#' data are disabled by default. Note that VNIR spectra can only be queried by
+#' soil series or geographic BBOX.
+#' 
 #' @param series a soil series name; case-insensitive
-#' @param bbox a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}, constrained to a 5-degree block
+#' @param bbox a bounding box in WGS84 geographic coordinates e.g.
+#' \code{c(-120, 37, -122, 38)}, constrained to a 5-degree block
 #' @param state a two-letter US state abbreviation; case-insensitive
 #' @param rcasiteid a RaCA site id (e.g. 'C1609C01')
-#' @param get.vnir logical, should associated VNIR spectra be downloaded? (see details)
-#' @details The VNIR spectra associated with RaCA data are quite large (each gzip-compressed VNIR spectra record is about 6.6kb), so requests for these data are disabled by default. Note that VNIR spectra can only be queried by soil series or geographic BBOX.
-#' @return {
-#' \describe{
-#' \item{\code{pedons}:}{a \code{SoilProfileCollection} object containing site/pedon/horizon data}
-#' \item{\code{trees}:}{a \code{data.frame} object containing tree DBH and height}
-#' \item{\code{veg}:}{a \code{data.frame} object containing plant species}
-#' \item{\code{stock}:}{a \code{data.frame} object containing carbon quantities (stocks) at standardized depths}
-#' \item{\code{sample}:}{a \code{data.frame} object containing sample-level bulk density and soil organic carbon values}
-#' \item{\code{spectra}:}{a numeric \code{matrix} containing VNIR reflectance spectra from 350--2500 nm}
-#' }
-#' }
+#' @param get.vnir logical, should associated VNIR spectra be downloaded? (see
+#' details)
+#' @return
+#' 
+#' \describe{ \item{list("pedons")}{a \code{SoilProfileCollection} object
+#' containing site/pedon/horizon data}\item{:}{a \code{SoilProfileCollection}
+#' object containing site/pedon/horizon data} \item{list("trees")}{a
+#' \code{data.frame} object containing tree DBH and height}\item{:}{a
+#' \code{data.frame} object containing tree DBH and height}
+#' \item{list("veg")}{a \code{data.frame} object containing plant
+#' species}\item{:}{a \code{data.frame} object containing plant species}
+#' \item{list("stock")}{a \code{data.frame} object containing carbon quantities
+#' (stocks) at standardized depths}\item{:}{a \code{data.frame} object
+#' containing carbon quantities (stocks) at standardized depths}
+#' \item{list("sample")}{a \code{data.frame} object containing sample-level
+#' bulk density and soil organic carbon values}\item{:}{a \code{data.frame}
+#' object containing sample-level bulk density and soil organic carbon values}
+#' \item{list("spectra")}{a numeric \code{matrix} containing VNIR reflectance
+#' spectra from 350--2500 nm}\item{:}{a numeric \code{matrix} containing VNIR
+#' reflectance spectra from 350--2500 nm} }
 #' @author D.E. Beaudette, USDA-NRCS staff
-#' @references {
-#'   \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164}
-#'   \href{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/RaCA-demo.html?root=aqp}{fetchRaCA() Tutorial}
-#' }
 #' @seealso \code{\link{fetchOSD}}
-#' @export
+#' @references
+#' 
+#' \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164}
 #' @keywords utilities
 #' @examples
+#' 
 #' \donttest{
 #' if(requireNamespace("curl") &
 #'    curl::has_internet()) {
@@ -55,6 +73,8 @@
 #'   }
 #' }
 #' }
+#' 
+#' @export fetchRaCA
 fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vnir=FALSE) {
   
   # important: change the default behavior of data.frame

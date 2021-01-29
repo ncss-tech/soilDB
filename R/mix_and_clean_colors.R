@@ -5,6 +5,18 @@
 
 # x: data.frame, typically from NASIS containing at least 'r', 'g', 'b' colors {0,1} and some kind of weight
 # wt: fractional weights, usually area of hz face
+#' Mix and Clean Colors
+#'
+#' Deprecated: only used in PedonPC functionality; use `estimateColorMixture` instead
+#'
+#' @param x a \code{data.frame} object containing sRGB coordinates associated
+#' @param wt a group of colors to mix
+#' wt: fractional weights, usually area of hz face
+#' @param backTransform logical, should the mixed sRGB representation of soil
+#' color be transformed to closest Munsell chips? This is performed by
+#' 
+#' @return A data.frame containing mixed colors
+#' @export
 mix_and_clean_colors <- function(x, wt='pct', backTransform=FALSE) {
   
   ## TODO finish this

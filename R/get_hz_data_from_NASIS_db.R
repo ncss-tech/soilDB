@@ -1,7 +1,34 @@
 ## TODO: when multiple textures have been defined, only the first one is returned (alphabetical ?)
 #
-get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
+
+#' Extract Horizon Data from a local NASIS Database
+#' 
+#' Get horizon-level data from a local NASIS database.
+#' 
+#' @param SS fetch data from Selected Set in NASIS or from the entire local database (default: `TRUE`)
+#' 
+#' @param stringsAsFactors logical: should character vectors be converted to
+#' factors? This argument is passed to the `uncode()` function. It does not
+#' convert those vectors that have been set outside of `uncode()` (i.e. hard
+#' coded).
+#' 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' 
+#' @return A data.frame.
+#' 
+#' @note `NULL` total rock fragment values are assumed to represent an _absence_ of rock fragments, and set to 0.
+#' 
+#' @author Jay M. Skovlin and Dylan E. Beaudette
+#' 
+#' @seealso \code{\link{get_hz_data_from_NASIS_db}}, \code{\link{get_site_data_from_NASIS_db}}
+#' @keywords manip
+#' @export get_hz_data_from_NASIS_db
+get_hz_data_from_NASIS_db <- function(SS = TRUE,
+                                      stringsAsFactors = default.stringsAsFactors(),
+                                      static_path = NULL) {
+    
   q <- "SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
   bounddistinct, boundtopo,

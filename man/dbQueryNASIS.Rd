@@ -7,7 +7,8 @@
 dbQueryNASIS(conn, q, close = TRUE, ...)
 }
 \arguments{
-\item{conn}{A \code{DBIConnection} object, as returned by \code{DBI::dbConnect()}.}
+\item{conn}{A \code{DBIConnection} object, as returned by
+\code{DBI::dbConnect()}.}
 
 \item{q}{A statement to execute using \code{DBI::dbGetQuery}}
 

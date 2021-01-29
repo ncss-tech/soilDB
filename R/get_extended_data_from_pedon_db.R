@@ -1,6 +1,21 @@
 # TODO: does not have parity with extended data function pulling from NASIS
 # missing queries for veg, ecosite, rf.data, surf.rf.summary, photolink, sitepm, structure
 
+
+
+#' Extract accessory tables and summaries from a local pedonPC Database
+#' 
+#' Extract accessory tables and summaries from a local pedonPC Database.
+#' 
+#' This function currently works only on Windows.
+#' 
+#' @param dsn The path to a 'pedon.mdb' database.
+#' @return A list with the results.
+#' @author Jay M. Skovlin and Dylan E. Beaudette
+#' @seealso \code{\link{get_hz_data_from_pedon_db}},
+#' \code{\link{get_site_data_from_pedon_db}}
+#' @keywords manip
+#' @export get_extended_data_from_pedon_db
 get_extended_data_from_pedon_db <- function(dsn) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))

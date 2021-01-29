@@ -1,3 +1,21 @@
+#' Extract lab pedon layer data from a local NASIS Database
+#' 
+#' Get lab pedon layer-level (horizon-level) data from a local NASIS database.
+#' 
+#' @param SS fetch data from the currently loaded selected set in NASIS or from
+#' the entire local database (default: `TRUE`)
+#' 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' 
+#' @return A data.frame.
+#' @note This function queries KSSL laboratory site/horizon data from a local
+#' NASIS database from the lab layer data table.
+#' 
+#' @author Jay M. Skovlin and Dylan E. Beaudette
+#' @seealso \code{\link{get_labpedon_data_from_NASIS_db}}
+#' @keywords manip
+#' @export get_lablayer_data_from_NASIS_db
 get_lablayer_data_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
 
   # hacks to make R CMD check --as-cran happy:

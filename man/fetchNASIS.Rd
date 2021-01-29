@@ -48,36 +48,69 @@ fetchNASIS(
 \arguments{
 \item{from}{determines what objects should fetched? ('pedons' | 'components' | 'pedon_report')}
 
-\item{url}{string specifying the url for the NASIS pedon_report (default: NULL)}
+\item{url}{string specifying the url for the NASIS pedon_report (default:
+\code{NULL})}
 
-\item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)}
+\item{SS}{fetch data from the currently loaded selected set in NASIS or from
+the entire local database (default: \code{TRUE})}
 
-\item{rmHzErrors}{should pedons with horizon depth errors be removed from the results? (default: TRUE)}
+\item{rmHzErrors}{should pedons with horizon depth errors be removed from
+the results? (default: \code{TRUE})}
 
-\item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: TRUE), see details}
+\item{nullFragsAreZero}{should fragment volumes of \code{NULL} be interpreted as \code{0}?
+(default: \code{TRUE}), see details}
 
-\item{soilColorState}{which colors should be used to generate the convenience field 'soil_color'? ('moist' | 'dry')}
+\item{soilColorState}{which colors should be used to generate the
+convenience field \code{soil_color}? (\code{'moist'} or \code{'dry'})}
 
-\item{lab}{should the phlabresults child table be fetched with site/pedon/horizon data (default: FALSE)}
+\item{lab}{should the \code{phlabresults} child table be fetched with
+site/pedon/horizon data (default: \code{FALSE})}
 
-\item{fill}{(fetchNASIS(from='components') only: include component records without horizon data in result? (default: FALSE)}
+\item{fill}{(\code{fetchNASIS(from='components')} only: include component records
+without horizon data in result? (default: \code{FALSE})}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have been set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)}
+\item{stringsAsFactors}{logical: should character vectors be converted to
+factors? This argument is passed to the \code{uncode()} function. It does not
+convert those vectors that have been set outside of \code{uncode()} (i.e. hard
+coded).}
 
-\item{static_path}{Optional: path to local SQLite database containing NASIS table structure; default: NULL}
+\item{static_path}{Optional: path to local SQLite database containing NASIS
+table structure; default: \code{NULL}}
 }
 \value{
 A SoilProfileCollection object
 }
 \description{
-Fetch commonly used site/pedon/horizon data or component from NASIS, returned as a SoilProfileCollection object.
+Fetch commonly used site/pedon/horizon data or component from NASIS,
+returned as a SoilProfileCollection object.
 }
 \details{
-This function imports data from NASIS into R as a \code{SoilProfileCollection} object. It "flattens" NASIS pedon and component tables, including their child tables, into several more easily manageable data frames. Primarily these functions access the local NASIS database using an ODBC connection. However using the \code{fetchNASIS()} argument \code{from = "pedon_report"}, data can be read from the NASIS Report 'fetchNASIS', as either a txt file or url. The primary purpose of \code{fetchNASIS(from = "pedon_report")} is to facilitate importing datasets larger than 8000+ pedons/components.
+This function imports data from NASIS into R as a
+\code{SoilProfileCollection} object. It "flattens" NASIS pedon and component
+tables, including their child tables, into several more easily manageable
+data frames. Primarily these functions access the local NASIS database using
+an ODBC connection. However using the \code{fetchNASIS()} argument
+\code{from = "pedon_report"}, data can be read from the NASIS Report
+'fetchNASIS', as either a txt file or url. The primary purpose of
+\code{fetchNASIS(from = "pedon_report")} is to facilitate importing datasets
+larger than 8000+ pedons/components.
 
-The value of \code{nullFragsAreZero} will have a significant impact on the rock fragment fractions returned by fetchNASIS. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and \code{NULL} rock fragment values should be interpreted as \code{NULL}. Set \code{nullFragsAreZero = TRUE} in those cases where \code{NULL} rock fragment values should be interpreted as 0.
+The value of \code{nullFragsAreZero} will have a significant impact on the
+rock fragment fractions returned by fetchNASIS. Set \code{nullFragsAreZero =
+FALSE} in those cases where there are many data-gaps and \code{NULL} rock
+fragment values should be interpreted as \code{NULL}. Set
+\code{nullFragsAreZero = TRUE} in those cases where \code{NULL} rock
+fragment values should be interpreted as 0.
 
-This function attempts to do most of the boilerplate work when extracting site/pedon/horizon or component data from a local NASIS database. Pedons that are missing horizon data, or have errors in their horizonation are excluded from the returned object, however, their IDs are printed on the console. Pedons with combination horizons (e.g. B/C) are erroneously marked as errors due to the way in which they are stored in NASIS as two overlapping horizon records.
+This function attempts to do most of the boilerplate work when extracting
+site/pedon/horizon or component data from a local NASIS database. Pedons
+that are missing horizon data, or have errors in their horizonation are
+excluded from the returned object, however, their IDs are printed on the
+console. Pedons with combination horizons (e.g. B/C) are erroneously marked
+as errors due to the way in which they are stored in NASIS as two
+overlapping horizon records.
+
+Tutorials:
 \itemize{
 \item \href{http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.html}{fetchNASIS Pedons Tutorial}
 \item \href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html}{fetchNASIS Components Tutorial}

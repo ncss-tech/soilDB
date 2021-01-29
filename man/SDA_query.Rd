@@ -13,17 +13,33 @@ SDA_query(q)
 a data.frame result (\code{NULL} if empty, try-error on error)
 }
 \description{
-Submit a query to the Soil Data Access (SDA) REST/JSON web-service and return the results as a data.frame. There is a 100,000 record limit and 32Mb JSON serializer limit, per query. Queries should contain a WHERE statement or JOIN condition to limit the number of rows affected / returned. Consider wrapping calls to \code{SDA_query} in a function that can iterate over logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function \code{makeChunks} can help with such iteration.
+Submit a query to the Soil Data Access (SDA) REST/JSON web-service and
+return the results as a data.frame. There is a 100,000 record limit and 32Mb
+JSON serializer limit, per query. Queries should contain a WHERE statement
+or JOIN condition to limit the number of rows affected / returned. Consider
+wrapping calls to \code{SDA_query} in a function that can iterate over
+logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function
+\code{makeChunks} can help with such iteration.
 }
 \details{
-The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov} and query examples can be found at \url{https://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx}. A library of query examples can be found at \url{https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home}.
+The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}
+and query examples can be found at
+\url{https://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx}. A library of query
+examples can be found at
+\url{https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home}.
 
-SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
+SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are
+stored together within SDA. This means that queries that don't specify an
+area symbol may result in a mixture of SSURGO and STATSGO records. See the
+examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial}
+for details.
 }
 \note{
-This function requires the \code{httr}, \code{jsonlite}, and \code{XML} packages
+This function requires the \code{httr}, \code{jsonlite}, and
+\code{XML} packages
 }
 \examples{
+
 \donttest{
 if(requireNamespace("curl") &
    curl::has_internet()) {
@@ -83,6 +99,7 @@ if(requireNamespace("curl") &
   }
  }
 }
+
 }
 \seealso{
 \code{\link{mapunit_geom_by_ll_bbox}}

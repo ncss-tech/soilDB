@@ -1,14 +1,15 @@
 #' Send queries to a NASIS DBIConnection
-#'
-#' @param conn A \code{DBIConnection} object, as returned by \code{DBI::dbConnect()}.
+#' 
+#' Send queries to a NASIS DBIConnection
+#' 
+#' 
+#' @param conn A \code{DBIConnection} object, as returned by
+#' \code{DBI::dbConnect()}.
 #' @param q A statement to execute using \code{DBI::dbGetQuery}
 #' @param close Close connection after query? Default: \code{TRUE}
 #' @param ... Additional arguments to \code{DBI::dbGetQuery}
-#'
 #' @return Result of \code{DBI::dbGetQuery}
-#' @export
-#'
-#' @importFrom DBI dbGetQuery, dbDisconnect
+#' @export dbQueryNASIS
 dbQueryNASIS <- function(conn, q, close = TRUE, ...) {
 
   if (inherits(conn, 'try-error'))
@@ -29,14 +30,18 @@ dbQueryNASIS <- function(conn, q, close = TRUE, ...) {
   return(dd)
 }
 
+
+
 #' Create a connection to a local NASIS database
-#'
-#' @param static_path Optional: path to SQLite database containing NASIS table structure; Default: \code{NULL}
-#'
-#' @return A \code{DBIConnection} object, as returned by \code{DBI::dbConnect()}.
 #' 
-#' @export
-#'
+#' Create a connection to a local NASIS database
+#' 
+#' 
+#' @param static_path Optional: path to SQLite database containing NASIS table
+#' structure; Default: \code{NULL}
+#' @return A \code{DBIConnection} object, as returned by
+#' \code{DBI::dbConnect()}.
+#' @export dbConnectNASIS
 dbConnectNASIS <- function(static_path = NULL) {
   # TODO: NASIS sqlite snapshot connection via DBI/RSQLite
   

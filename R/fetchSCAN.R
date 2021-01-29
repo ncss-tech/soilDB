@@ -22,8 +22,6 @@
 ###  "STO.I-1:-2", "STO.I-1:-4", "STO.I-1:-8", "STO.I-1:-20", "STO.I-1:-40",
 ###  "STO.I-2:-2", "STO.I-2:-4", "STO.I-2:-8", "STO.I-2:-20", "STO.I-2:-40"
 
-
-
 ##
 ## ideas:
 ##   https://github.com/gunnarleffler/getSnotel
@@ -35,7 +33,6 @@
 ## site notes: 
 ## https://wcc.sc.egov.usda.gov/nwcc/sitenotes?sitenum=462
 ##
-
 
 ## TODO: this crashes on 32bit R / libraries
 # helper function for getting a single table of SCAN metadata
@@ -80,9 +77,6 @@
   return(m)
 }
 
-
-
-
 # iterate over a vector of SCAN site codes, returning basic metadata
 # site.code: vector of SCAN site codes
 SCAN_sensor_metadata <- function(site.code) {
@@ -101,8 +95,6 @@ SCAN_sensor_metadata <- function(site.code) {
   return(res)
 }
 
-
-
 ## https://github.com/ncss-tech/soilDB/issues/61
 # site.code: vector of SCAN site codes
 SCAN_site_metadata <- function(site.code) {
@@ -119,12 +111,47 @@ SCAN_site_metadata <- function(site.code) {
   return(res)
 }
 
-
-
 # site.code: vector of site codes
 # year: vector of years
 # report: single report type
 # req: for backwards compatibility
+
+
+#' Fetch SCAN Data
+#' 
+#' Query soil/climate data from USDA-NRCS SCAN Stations (experimental)
+#' 
+#' See  These functions require the `httr` and `rvest` libraries.
+#' 
+#' @aliases fetchSCAN SCAN_sensor_metadata SCAN_site_metadata
+#' @param site.code a vector of site codes
+#' @param year a vector of years
+#' @param report report name, single value only
+#' @param req list of SCAN request parameters, for backwards-compatibility only
+#' @return a \code{data.frame} object
+#' @note \code{SCAN_sensor_metadata()} is known to crash on 32bit R / libraries (Windows).
+#' @author D.E. Beaudette
+#' @references https://www.wcc.nrcs.usda.gov/index.html
+#' @keywords manip
+#' @examples
+#' 
+#' \donttest{
+#' if(requireNamespace("curl") &
+#'     curl::has_internet()) {
+#'     
+#'     # get data: new interface
+#'     x <- fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016))
+#'     str(x)
+#'     
+#'     # get sensor metadata
+#'     m <- SCAN_sensor_metadata(site.code=c(356, 2072))
+#'     
+#'     # get site metadata
+#'     m <- SCAN_site_metadata(site.code=c(356, 2072))
+#' }
+#' }
+#' 
+#' @export fetchSCAN
 fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   
   ## backwards compatibility:

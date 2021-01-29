@@ -96,6 +96,43 @@ get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
 
 
 ## just the component records, nothing above or below
+
+
+#' Extract component data from a local NASIS Database
+#' 
+#' This function currently works only on Windows.
+#' 
+#' @aliases get_component_data_from_NASIS_db get_component_restrictions_from_NASIS_db
+#' 
+#' @param SS fetch data from the currently loaded selected set in NASIS or from
+#' the entire local database (default: `TRUE`)
+#' 
+#' @param stringsAsFactors logical: should character vectors be converted to
+#' factors? This argument is passed to the `uncode()` function. It does not
+#' convert those vectors that have set outside of `uncode()` (i.e. hard coded).
+#' The 'factory-fresh' default is TRUE, but this can be changed by setting
+#' options(`stringsAsFactors = FALSE`)
+#' 
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' 
+#' @return A list with the results.
+#' @author Dylan E. Beaudette, Stephen Roecker, and Jay M. Skovlin
+#' @seealso \code{\link{fetchNASIS}}
+#' @keywords manip
+#' @examples
+#' 
+#' \donttest{
+#' if(local_NASIS_defined()) {
+#'  # query text note data
+#'  fc <- try(get_component_data_from_NASIS_db())
+#' 
+#'  # show structure of component data returned
+#'  str(fc)
+#' }
+#' }
+#' 
+#' @export get_component_data_from_NASIS_db
 get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path= NULL) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))
@@ -582,6 +619,42 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NUL
   return(d)
 }
 
+
+
+#' Extract component month data from a local NASIS Database
+#' 
+#' Extract component month data from a local NASIS Database.
+#' 
+#' This function currently works only on Windows.
+#' 
+#' @param SS get data from the currently loaded Selected Set in NASIS or from
+#' the entire local database (default: TRUE)
+#' @param fill should missing "month" rows in the comonth table be filled with
+#' NA (FALSE)
+#' @param static_path Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' @param stringsAsFactors logical: should character vectors be converted to
+#' factors? This argument is passed to the uncode() function. It does not
+#' convert those vectors that have set outside of uncode() (i.e. hard coded).
+#' The 'factory-fresh' default is TRUE, but this can be changed by setting
+#' options(stringsAsFactors = FALSE)
+#' @return A list with the results.
+#' @author Stephen Roecker
+#' @seealso \code{\link{fetchNASIS}}
+#' @keywords manip
+#' @examples
+#' 
+#' \donttest{
+#' if(local_NASIS_defined()) {
+#'   # query text note data
+#'   cm <- try(get_comonth_from_NASIS_db())
+#' 
+#'   # show structure of component month data
+#'   str(cm)
+#' }
+#' }
+#' 
+#' @export get_comonth_from_NASIS_db
 get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))

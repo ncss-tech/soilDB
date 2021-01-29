@@ -2,6 +2,22 @@
 # add as get_veg_from_NPS_PLOTS_db() to soilDB package
 # Jay Skovlin, 12/4/2013
 # dsn <- "H:/GNP_vegetation_data_MR/GlacierNP_vegdata/PLOTS_v32_BE.accdb"
+
+
+#' Retrieve Vegetation Data from an NPS PLOTS Database
+#' 
+#' Used to extract species, stratum, and cover vegetation data from a backend
+#' NPS PLOTS Database.  Currently works for any Microsoft Access database with
+#' an .mdb file format.
+#' 
+#' 
+#' @param dsn file path to the NPS PLOTS access database on your system.
+#' @return A data.frame with vegetation data in a long format with linkage to
+#' NRCS soil pedon data via the site_id key field.
+#' @note This function currently only works on Windows.
+#' @author Jay M. Skovlin
+#' @keywords manip
+#' @export get_veg_from_NPS_PLOTS_db
 get_veg_from_NPS_PLOTS_db <- function(dsn) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))

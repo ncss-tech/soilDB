@@ -1,5 +1,29 @@
 # horizon checking may be too strict
 
+
+
+#' Fetch commonly used site/horizon data from a PedonPC v.5 database.
+#' 
+#' Fetch commonly used site/horizon data from a version 5.x PedonPC database,
+#' return as a SoilProfileCollection object.
+#' 
+#' This function currently works only on Windows.
+#' 
+#' @aliases fetchPedonPC getHzErrorsPedonPC
+#' @param dsn The path to a PedonPC version 5.x database
+#' @return a SoilProfileCollection class object
+#' @note This function attempts to do most of the boilerplate work when
+#' extracting site/horizon data from a PedonPC or local NASIS database. Pedons
+#' that have errors in their horizonation are excluded from the returned
+#' object, however, their IDs are printed on the console. See
+#' \code{\link{getHzErrorsPedonPC}} for a simple approach to identifying pedons
+#' with problematic horizonation. Records from the 'taxhistory' table are
+#' selected based on 1) most recent record, or 2) record with the least amount
+#' of missing data.
+#' @author D. E. Beaudette and J. M. Skovlin
+#' @seealso \code{\link{get_hz_data_from_pedon_db}}
+#' @keywords manip
+#' @export fetchPedonPC
 fetchPedonPC <- function(dsn) {
 	
   # not in parity with NASIS functions
