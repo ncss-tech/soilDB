@@ -78,10 +78,10 @@ This function imports data from NASIS into R as a \code{SoilProfileCollection} o
 The value of \code{nullFragsAreZero} will have a significant impact on the rock fragment fractions returned by fetchNASIS. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and \code{NULL} rock fragment values should be interpreted as \code{NULL}. Set \code{nullFragsAreZero = TRUE} in those cases where \code{NULL} rock fragment values should be interpreted as 0.
 
 This function attempts to do most of the boilerplate work when extracting site/pedon/horizon or component data from a local NASIS database. Pedons that are missing horizon data, or have errors in their horizonation are excluded from the returned object, however, their IDs are printed on the console. Pedons with combination horizons (e.g. B/C) are erroneously marked as errors due to the way in which they are stored in NASIS as two overlapping horizon records.
-
- - \href{http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.html}{fetchNASIS Pedons Tutorial}
- 
- - \href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html}{fetchNASIS Components Tutorial}
+\itemize{
+\item \href{http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.html}{fetchNASIS Pedons Tutorial}
+\item \href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html}{fetchNASIS Components Tutorial}
+}
 }
 \author{
 D. E. Beaudette, J. M. Skovlin, S.M. Roecker, A.G. Brown
