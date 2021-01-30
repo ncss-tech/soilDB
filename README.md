@@ -1,7 +1,7 @@
 [![CRAN Version
 (Stable)](http://www.r-pkg.org/badges/version/soilDB)](https://cran.r-project.org/package=soilDB)
 [![GitHub Version
-(Development)](https://img.shields.io/badge/GitHub-2.5.9-yellowgreen)](https://github.com/ncss-tech/soilDB)
+(Development)](https://img.shields.io/badge/GitHub-2.6.0-yellowgreen)](https://github.com/ncss-tech/soilDB)
 [![R-CMD-check Build
 Status](https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
 [![Total CRAN
@@ -25,7 +25,7 @@ Website
 
 -   <a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a>
 
-soilDB 2.5.9
+soilDB 2.6.0
 ------------
 
 ### Notices on Database Interfaces
@@ -139,7 +139,7 @@ Examples
     res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
     print(res$fig)
 
-<img src="https://i.imgur.com/HEr0C23.png" width="1056" />
+<img src="https://i.imgur.com/fg0kO5w.png" width="1056" />
 
 ### Make Profile Sketches
 
@@ -153,7 +153,7 @@ Examples
       width = 0.2
     )
 
-<img src="https://i.imgur.com/stj1JPI.png" width="1344" />
+<img src="https://i.imgur.com/nSEF8Cm.png" width="1344" />
 
 ### Identify Tabular “Siblings”
 
@@ -183,7 +183,7 @@ Examples
       cex.names = 1
     )
 
-<img src="https://i.imgur.com/flqnej7.png" width="1344" />
+<img src="https://i.imgur.com/PJxxpOI.png" width="1344" />
 
 Dependency Graph
 ----------------
