@@ -1,22 +1,21 @@
-#' Retrieve Soil Taxonomy Membership Grids
+
+#' @title Retrieve Soil Taxonomy Membership Grids
 #' 
-#' This function downloads a generalized representation of the geographic
-#' extent of any single taxa from the top 4 tiers of Soil Taxonomy. Data are
-#' provided by SoilWeb, ultimately sourced from from the current SSURGO
-#' snapshot. Data are returned as \code{raster} objects representing area
-#' proportion falling within 800m cells. Data are only available in CONUS and
-#' returned using an Albers Equal Area / NAD83 coordinate reference system.
-#' 
+#' @description This function downloads a generalized representation of the geographic extent of any single taxa from the top 4 tiers of Soil Taxonomy. Data are provided by SoilWeb, ultimately sourced from from the current SSURGO snapshot. Data are returned as \code{raster} objects representing area proportion falling within 800m cells. Data are only available in CONUS and returned using an Albers Equal Area / NAD83 coordinate reference system.
 #' 
 #' @param x single taxa name, case-insensitive
-#' @param level the taxonomic level within the top 4 tiers of Soil Taxonomy,
-#' one of \code{c('order', 'suborder', 'greatgroup', 'subgroup')}
-#' @param timeout time that we are willing to wait for a response, in seconds
-#' @return a \code{raster} object
-#' @note This is a work in progress.
-#' @author D.E. Beaudette
-#' @examples
 #' 
+#' @param level the taxonomic level within the top 4 tiers of Soil Taxonomy, one of \code{c('order', 'suborder', 'greatgroup', 'subgroup')}
+#' 
+#' @param timeout time that we are willing to wait for a response, in seconds
+#' 
+#' @return a \code{raster} object
+#' 
+#' @author D.E. Beaudette
+#' 
+#' @note This is a work in progress.
+#' 
+#' @examples 
 #' \donttest{
 #' 
 #' if(requireNamespace("curl") &
@@ -66,8 +65,6 @@
 #' 
 #' }
 #' 
-#' 
-#' @export taxaExtent
 taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup'), timeout = 60) {
  
   level <- match.arg(level)

@@ -7,14 +7,11 @@
 estimateColorMixture(x, wt = "pct", backTransform = FALSE)
 }
 \arguments{
-\item{x}{data.frame, typically from NASIS containing at least CIE LAB ('L',
-'A', 'B') and some kind of weight}
+\item{x}{data.frame, typically from NASIS containing at least CIE LAB ('L', 'A', 'B') and some kind of weight}
 
 \item{wt}{fractional weights, usually area of hz face}
 
-\item{backTransform}{logical, should the mixed sRGB representation of soil
-color be transformed to closest Munsell chips? This is performed by
-aqp::rgb2Munsell default: \code{FALSE}}
+\item{backTransform}{logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by aqp::rgb2Munsell default: \code{FALSE}}
 }
 \value{
 A data.frame containing estimated color mixture
@@ -23,8 +20,7 @@ A data.frame containing estimated color mixture
 Estimate color mixtures using weighted average of CIELAB color coordinates
 }
 \note{
-See \code{\link[aqp]{mixMunsell}} for a more realistic (but slower)
-simulation of subtractive mixing of pigments.
+See \code{\link[aqp]{mixMunsell}} for a more realistic (but slower) simulation of subtractive mixing of pigments.
 }
 \author{
 D.E. Beaudette

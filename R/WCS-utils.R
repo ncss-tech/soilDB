@@ -1,17 +1,17 @@
-#' Web Coverage Services Details
+
+
+#' @title Web Coverage Services Details
 #' 
-#' List variables or databases provided by soilDB web coverage service (WCS)
-#' abstraction. These lists will be expanded in future versions.
-#' 
-#' 
+#' @description List variables or databases provided by soilDB web coverage service (WCS) abstraction. These lists will be expanded in future versions.
+#'
 #' @param wcs a WCS label ('mukey' or 'ISSR800')
+#'
 #' @return a \code{data.frame}
+#' @export
+#'
 #' @examples
 #' 
-#' 
 #' WCS_details(wcs = 'ISSR800')
-#' 
-#' @export WCS_details
 WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   
   # select a WCS

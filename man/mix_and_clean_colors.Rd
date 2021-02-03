@@ -7,10 +7,9 @@
 mix_and_clean_colors(x, wt = "pct", backTransform = FALSE)
 }
 \arguments{
-\item{x}{a \code{data.frame} object containing sRGB coordinates associated}
+\item{x}{a \code{data.frame} object containing sRGB coordinates (\code{'r'}, \code{'g'}, \code{'b'}) in [0,1]}
 
-\item{wt}{a group of colors to mix
-wt: fractional weights, usually area of hz face}
+\item{wt}{fractional weights, usually area of hz face}
 
 \item{backTransform}{logical, should the mixed sRGB representation of soil
 color be transformed to closest Munsell chips? This is performed by}

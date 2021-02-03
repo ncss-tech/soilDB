@@ -36,30 +36,29 @@ OSDquery(
 \item{geog_assoc_soils}{search geographically associated soils section}
 }
 \value{
-a \code{data.frame} object containing soil series names that match
-patterns supplied as arguments.
+a \code{data.frame} object containing soil series names that match patterns supplied as arguments.
 }
 \description{
-This is an example of how chunks of text parsed from OSD records can be made search-able with \href{https://www.postgresql.org/docs/9.5/textsearch.html}{PostgreSQL full-text indexing}. This query system utilizes \href{https://www.postgresql.org/docs/9.5/datatype-textsearch.html}{special syntax}.
+This is a rough example of how chunks of text parsed from OSD records can be made search-able with the \href{https://www.postgresql.org/docs/9.5/textsearch.html}{PostgreSQL fulltext indexing} and query system (\href{https://www.postgresql.org/docs/9.5/datatype-textsearch.html}{syntax details}). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. This is the R API corresponding to \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage}.
 }
 \details{
-Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. This is the R API corresponding to the \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{SoilWeb PostgreSQL OSD full-text search API}
-
-See \url{https://casoilresource.lawr.ucdavis.edu/osd-search/}
-for more information. \itemize{ \item family level taxa are derived from SC
-database, not parsed OSD records \item MLRA are derived via spatial
-intersection (SSURGO x MLRA polygons) \item MLRA-filtering is only possible
-for series used in the current SSURGO snapshot (component name) \item
-logical AND: \code{&} \item logical OR: \code{|} \item wildcard, e.g.
-rhy-something \verb{rhy:*} \item search terms with spaces need doubled
-single quotes: \verb{''san joaquin''} \item combine search terms into a
-single expression: \verb{(grano:* | granite)} }
-
-Related documentation can be found in the following tutorials:
+See \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage} for more information.
 \itemize{
-\item \href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{Soil Series Query Functions}
-\item \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{Competing Soil Series}
-\item \href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{Siblings}
+\item family level taxa are derived from SC database, not parsed OSD records
+\item MLRA are derived via spatial intersection (SSURGO x MLRA polygons)
+\item MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)
+\item logical AND: \code{&}
+\item logical OR: \code{|}
+\item wildcard, e.g. rhy-something \verb{rhy:*}
+\item search terms with spaces need doubled single quotes: \verb{san joaquin'}
+\item combine search terms into a single expression: (\verb{grano:* | granite})
+}
+
+Related documentation can be found in the following tutorials
+\itemize{
+\item \href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}
+\item \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}
+\item \href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}
 }
 }
 \note{
@@ -67,23 +66,23 @@ SoilWeb maintains a snapshot of the Official Series Description data.
 }
 \examples{
 
+
 \donttest{
 if(requireNamespace("curl") &
    curl::has_internet() &
    require(aqp)) {
-  
+
   # find all series that list Pardee as a geographically associated soil.
   s <- OSDquery(geog_assoc_soils = 'pardee')
-  
+
   # get data for these series
   x <- fetchOSD(s$series, extended = TRUE, colorState = 'dry')
-  
+
   # simple figure
   par(mar=c(0,0,1,1))
   plot(x$SPC)
 }
 }
-
 
 }
 \references{

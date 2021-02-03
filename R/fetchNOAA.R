@@ -5,36 +5,28 @@
 # TODO: will provide a variety of aggregation and batch application options
 #  -- given Spatial* object, SoilProfileCollection, Coordinates
 
-
-
 #' Query the NOAA API to get station data near a given latitude and longitude
-#' 
-#' Query the NOAA API to get station data (limit 1000 records) near a point.
-#' Default extent is plus or minus 0.5 degrees (bounding box) (with \code{bbox
-#' = 1}) around the specified point \[lat, lng].
-#' 
-#' In order to use this function, you must obtain an API token from this
-#' website: https://www.ncdc.noaa.gov/cdo-web/token
-#' 
-#' 
+#'
+#' @description Query the NOAA API to get station data (limit 1000 records) near a point. Default extent is plus or minus 0.5 degrees (bounding box) (with \code{bbox = 1}) around the specified point \[lat, lng].
+#'
+#' In order to use this function, you must obtain an API token from this website: https://www.ncdc.noaa.gov/cdo-web/token
+#'
 #' @param lat Latitude
 #' @param lng Longitude
 #' @param apitoken API key token for NOAA NCDC web service
-#' @param bbox Optional: Dimension of the bounding box centered at \code{lat},
-#' \code{lng}.
-#' @return data.frame containing station information for all stations within a
-#' bounding box around \code{lat}, \code{lng}.
+#' @param bbox Optional: Dimension of the bounding box centered at \code{lat}, \code{lng}.
+#'
+#' @return data.frame containing station information for all stations within a bounding box around \code{lat}, \code{lng}.
+#' @export
+#'
 #' @examples
-#' 
-#' 
+#'
 #' ## in order to use this function, you must obtain an API token from this website:
 #' ##  https://www.ncdc.noaa.gov/cdo-web/token
-#' 
+#'
 #' # stations <- get_NOAA_stations_nearXY(lat = 37, lng = -120,
 #' #                                      apitoken = "yourtokenhere")
-#' 
-#' 
-#' @export get_NOAA_stations_nearXY
+#'
 get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1) {
 
   if(!requireNamespace("httr"))
@@ -106,44 +98,32 @@ get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1) {
   return(d$results)
 }
 
-
-
-#' Get Global Historical Climatology Network Daily (GHCND) data from NOAA API
-#' for given datatype(s), station IDs and years.
-#' 
-#' Obtain daily climatic summary data for a set of station IDs, years, and
-#' datatypes.
-#' 
-#' Note that typically results from the NOAA API are limited to 1000 records.
-#' However, by "chunking" up data into individual station\emph{year}datatypeid
-#' combinations, record results generally do not exceed 365 records for daily
-#' summaries.
-#' 
-#' In order to use this function, you must obtain an API token from this
-#' website: https://www.ncdc.noaa.gov/cdo-web/token
-#' 
-#' 
+#' Get Global Historical Climatology Network Daily (GHCND) data from NOAA API for given datatype(s), station IDs and years.
+#'
+#' @description Obtain daily climatic summary data for a set of station IDs, years, and datatypes.
+#'
+#' Note that typically results from the NOAA API are limited to 1000 records. However, by "chunking" up data into individual station*year*datatypeid combinations, record results generally do not exceed 365 records for daily summaries.
+#'
+#' In order to use this function, you must obtain an API token from this website: https://www.ncdc.noaa.gov/cdo-web/token
+#'
 #' @param stations Station ID (e.g. \code{GHCND:USC00388786})
 #' @param years One or more years (e.g. 2017:2020)
-#' @param datatypeids One or more NOAA GHCND data type IDs (e.g
-#' \code{c("PRCP","SNOW")})
-#' @param apitoken API key token for NOAA NCDC web services
-#' (https://www.ncdc.noaa.gov/cdo-web/token)
-#' @return A data.frame containing the GHCND data requested (limit 1000
-#' records)
+#' @param datatypeids One or more NOAA GHCND data type IDs (e.g \code{c("PRCP","SNOW")})
+#' @param apitoken API key token for NOAA NCDC web services (https://www.ncdc.noaa.gov/cdo-web/token)
+#'
+#' @return A data.frame containing the GHCND data requested (limit 1000 records)
+#' @export get_NOAA_GHCND
+#'
 #' @examples
-#' 
-#' 
+#'
 #' #' ## in order to use this function, you must obtain an API token from this website:
 #' ##  https://www.ncdc.noaa.gov/cdo-web/token
-#' 
+#'
 #' # get_NOAA_GHCND(c("GHCND:USC00388786", "GHCND:USC00388787"),
 #' #                years = 2017:2020,
 #' #                datatypeids = c("PRCP","SNOW"),
 #' #                apitoken = "yourtokenhere")
-#' 
-#' 
-#' @export get_NOAA_GHCND
+#'
 get_NOAA_GHCND <- function(stations, years, datatypeids, apitoken) {
   do.call('rbind', lapply(stations, function(s)
     do.call('rbind', lapply(years, function(y)
