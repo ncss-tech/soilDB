@@ -28,7 +28,7 @@ utmzone, utmeasting, utmnorthing, -(longdegrees + CASE WHEN longminutes IS NULL 
 gpspositionalerror, descname as describer, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag,
 tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth,
 elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, siteobs_View_1.earthcovkind1, siteobs_View_1.earthcovkind2, erocl, bedrckdepth, bedrckkind, bedrckhardness, hillslopeprof, geomslopeseg, shapeacross, shapedown, slopecomplex, drainagecl,
-flodfreqcl, floddurcl, flodmonthbeg, pondfreqcl, ponddurcl, pondmonthbeg, geomposhill, geomposmntn, geomposflats, swaterdepth
+flodfreqcl, floddurcl, flodmonthbeg, pondfreqcl, ponddurcl, pondmonthbeg, geomposhill, geomposmntn, geompostrce, geomposflats, swaterdepth
 
 FROM
 
