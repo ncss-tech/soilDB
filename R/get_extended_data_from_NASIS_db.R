@@ -480,7 +480,17 @@ LEFT OUTER JOIN (
 
 	if (nrow(d.photolink) > 0) {
 	  # parse imagename and imagepath for photo links
-	  d.photolink$imagename <- basename(d.photolink$imagepath)
+	  ncharpath <- nchar(d.photolink$imagepath)
+	  
+	  # windows max path length is 260 (unless overridden in registry?)
+	  if (any(ncharpath > 260))
+	    warning("some image paths are too long (>260 characters) for basename()")
+	  
+	  bad.idx <- which(ncharpath > 260)
+	  d.photolink$imagepath[bad.idx] <- substr(d.photolink$imagepath[bad.idx],
+	                                           start = ncharpath[bad.idx] - 260,
+	                                           stop = ncharpath[bad.idx])
+	  d.photolink$imagename <- try(basename(d.photolink$imagepath))
 	}
 
 	d.rf.summary <- simplifyFragmentData(d.rf.data, id.var='phiid', nullFragsAreZero = nullFragsAreZero)
