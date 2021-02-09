@@ -1,3 +1,7 @@
+# the following script has been deprecated in favor of 
+#   NASIS-RV-copedon.R
+#   MollicEpipedonThickness.Rmd (SoilTaxonomy/misc/presentations)
+
 # devtools::install()
 
 library(soilDB)
