@@ -2,14 +2,23 @@ library(soilDB)
 library(httr)
 library(jsonlite)
 
+
+qq <- 'peraquic'
+
+qq <- 'flood & plains & toe & slope'
+
+
 # API URL
 u <- 'https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php'
 
 parameters <- list(
   json = 1,
   mlra = '',
-  query = 'peraquic'
+  query = qq
 )
+
+
+
 
 # POST it
 res <- POST(u, body=parameters, encode='form')
