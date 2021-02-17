@@ -1,3 +1,10 @@
+
+## TODO: 
+# * realistic comparisons / case studies
+# * Ksat comparisons
+# * 
+
+
 library(aqp)
 library(soilDB)
 library(latticeExtra)

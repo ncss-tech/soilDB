@@ -102,11 +102,11 @@
   ## copy pre-computed colors into a convenience field for plotting
   # moist colors
   if(soilColorState == 'moist')
-    color_data$soil_color <- hz_data$moist_soil_color
+    color_data$soil_color <- color_data$moist_soil_color
   
   # dry colors
   if(soilColorState == 'dry')
-    color_data$soil_color <- hz_data$dry_soil_color
+    color_data$soil_color <- color_data$dry_soil_color
   
   horizons(hz_data) <- color_data
   
