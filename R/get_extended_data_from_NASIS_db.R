@@ -473,7 +473,8 @@ LEFT OUTER JOIN (
 	if (nrow(d.hz.dessuf) > 0) {
 	  # generate wide-formatted, hz suffix boolean summary
 	  d.hzdesgnsuf.boolean <- .hzSuffixLongtoWide(d.hz.dessuf)
-	  d.hz.desgn <- join(d.hz.desgn, d.hzdesgnsuf.boolean, by = 'phiid', type = 'left')
+	  d.hz.desgn <- merge(d.hz.desgn, d.hzdesgnsuf.boolean, by = 'phiid',
+	                      sort = FALSE, all.x = TRUE, incomparables = NA)
 	} else {
 	  d.hz.desgn <- NULL
 	}
@@ -501,8 +502,8 @@ LEFT OUTER JOIN (
 	  all.ids <- unique(d.rf.data[, 'phiid', drop=FALSE])
 
 	  # left join
-	  d.rf.summary <- join(all.ids, d.rf.summary, by='phiid', type='left')
-
+	  d.rf.summary <- merge(all.ids, d.rf.summary, by = 'phiid',
+	                       sort = FALSE, all.x = TRUE, incomparables = NA)
 	  ## basic checks for problematic data
 
 	  # recent NSSH changes to gravel/cobble threshold 76mm -> 75mm
@@ -531,8 +532,8 @@ LEFT OUTER JOIN (
 	if (nrow(d.art.data) > 0) {
 
 	  art.all.ids <- unique(d.art.data[, 'phiid', drop=FALSE])
-	  d.art.summary <- join(art.all.ids, d.art.summary, by='phiid', type='left')
-
+	  d.art.summary <- merge(art.all.ids, d.art.summary, by = 'phiid',
+	                        sort = FALSE, all.x = TRUE, incomparables = NA)
 	  # recent NSSH changes to gravel/cobble threshold 76mm -> 75mm
 	  qc.idx <- which(d.art.data$huartsize_h == 76)
 	  if (length(qc.idx) > 0) {
