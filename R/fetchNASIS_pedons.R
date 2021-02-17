@@ -1,10 +1,14 @@
 
 
 # get NASIS site/pedon/horizon/diagnostic feature data
-.fetchNASIS_pedons <- function(SS=TRUE, rmHzErrors=TRUE, nullFragsAreZero=TRUE, 
-                               soilColorState='moist', lab=FALSE, 
-                               stringsAsFactors = default.stringsAsFactors(), 
-                               static_path = NULL) {
+.fetchNASIS_pedons <- function(SS = TRUE,
+                               rmHzErrors = TRUE,
+                               nullFragsAreZero = TRUE,
+                               soilColorState = 'moist',
+                               lab = FALSE,
+                               stringsAsFactors = default.stringsAsFactors(),
+                               static_path = NULL
+) {
   
   # test connection
   if (!local_NASIS_defined(static_path))
@@ -129,20 +133,25 @@
   # < 0.1 second for ~ 4k pedons
   site(hz_data) <- site_data
   
-  ### TODO: consider moving this into the extended data function ###
   # load best-guess optimal records from taxhistory
   # method is added to the new field called 'selection_method'
   # assumes that classdate is a datetime class object!
   # 2019-01-31: converting to base functions
-  ed.tax <- split(extended_data$taxhistory, extended_data$taxhistory$peiid)
-  best.tax.data <- do.call('rbind', lapply(ed.tax, .pickBestTaxHistory))
-  site(hz_data) <- best.tax.data
+  # 2020-02-17: converting to data.table
+  
+  .SD <- NULL
+  
+  ed.tax <- data.table::as.data.table(extended_data$taxhistory)
+  best.tax.data <- ed.tax[, .pickBestTaxHistory(.SD),
+                          by = list(peiid = ed.tax$peiid)]
+  site(hz_data) <- as.data.frame(best.tax.data)
   
   # load best-guess optimal records from ecositehistory
   # method is added to the new field called 'es_selection_method'
-  ed.es <- split(extended_data$ecositehistory, extended_data$ecositehistory$siteiid)
-  best.ecosite.data <- do.call('rbind', lapply(ed.es, .pickBestEcosite))
-  site(hz_data) <- best.ecosite.data
+  ed.es <- data.table::as.data.table(extended_data$ecositehistory)
+  best.ecosite.data <- ed.es[, .pickBestEcosite(.SD),
+                             by = list(siteiid = ed.es$siteiid)]
+  site(hz_data) <- as.data.frame(best.ecosite.data)
   
   ## TODO: NA in diagnostic boolean columns are related to pedons with no diagnostic features
   ## https://github.com/ncss-tech/soilDB/issues/59
@@ -187,17 +196,19 @@
   # required new setter in aqp SPC object (AGB added 2019/12/23)
   suppressWarnings(restrictions(hz_data) <- extended_data$restriction)
   
-  # join-in landform string
-  ed.lf <- split(extended_data$geomorph, extended_data$geomorph$peiid)
-  lf <- do.call('rbind', lapply(ed.lf, .formatLandformString, name.sep = ' & '))
-  site(hz_data) <- lf
+  # join-in landform string w/ ampersand as separator for hierarchy
+  ed.lf <- data.table::as.data.table(extended_data$geomorph)
+  lf <- ed.lf[, .formatLandformString(.SD, name.sep = ' & '), 
+              by = list(peiid = ed.lf$peiid)]
+  site(hz_data) <- as.data.frame(lf)
   
-  # join-in parent material strings
-  ed.pm <- split(extended_data$pm, extended_data$pm$siteiid)
-  pm <- do.call('rbind', lapply(ed.pm, .formatParentMaterialString, name.sep = ' & '))
-  site(hz_data) <- pm
+  # join-in parent material strings w/ ampersand as separator for multiple
+  ed.pm <- data.table::as.data.table(extended_data$pm)
+  pm <- ed.pm[, .formatParentMaterialString(.SD, name.sep = ' & '),
+              by = list(siteiid = ed.pm$siteiid)]
+  site(hz_data) <- as.data.frame(pm)
   
-  # set metadata
+# set metadata
   m <- metadata(hz_data)
   m$origin <- 'NASIS pedons'
   metadata(hz_data) <- m
@@ -205,18 +216,18 @@
   # print any messages on possible data quality problems:
   if (exists('sites.missing.pedons', envir = soilDB.env))
     if (length(get('sites.missing.pedons', envir = soilDB.env)) > 0)
-      message("-> QC: sites without pedons: use `get('sites.missing.pedons', envir=soilDB.env)` for related usersiteid values")
+      message("-> QC: sites without pedons: see `get('sites.missing.pedons', envir=soilDB.env)`")
   
   if (exists('dup.pedon.ids', envir = soilDB.env))
     if (length(get('dup.pedon.ids', envir = soilDB.env)) > 0)
-      message("-> QC: duplicate pedons: use `get('dup.pedon.ids', envir=soilDB.env)` for related peiid values")
+      message("-> QC: duplicate pedons: see `get('dup.pedon.ids', envir=soilDB.env)`")
   
   # set NASIS-specific horizon identifier
   tryCatch(hzidname(hz_data) <- 'phiid', error = function(e) {
     if (grepl(e$message, pattern = "not unique$")) {
        if (!rmHzErrors) {
         # if rmHzErrors = FALSE, keep unique integer assigned ID to all records automatically
-        message("-> QC: duplicate horizons are present with rmHzErrors=FALSE! defaulting to `hzID` as unique horizon ID.")
+        message("-> QC: duplicated horizons found! defaulting to `hzID` as unique horizon ID.")
        } else {
          stop(e)
        }

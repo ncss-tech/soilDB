@@ -57,7 +57,11 @@ copedon <- readRDS(copedon_rv_data)
 ### END PATCHES TO PEDON SNAPSHOT for fetchNASIS
 ###
 
-system.time(f <- fetchNASIS(SS = SS, static_path = static_path, rmHzErrors = FALSE))
+system.time(f <- fetchNASIS(
+                SS = SS,
+                static_path = static_path,
+                rmHzErrors = FALSE
+              ))
 # TODO: handle uncoding options
 
 library(aqp)
@@ -66,14 +70,16 @@ f <- rebuildSPC(f)
 save(f, file = "C:/Geodata/soils/fetchNASIS-data-2.rda")
 # load("C:/Geodata/soils/fetchNASIS-data-2.rda")
 
-good.ids <- checkHzDepthLogic(f)
+system.time(good.ids <- checkHzDepthLogic(f, fast = TRUE))
 save(good.ids, file = "C:/Geodata/soils/fetchNASIS-data-goodids-2.rda")
 
 f.sub <- subset(f, good.ids$valid)
 all(good.ids$valid)
+site(f.sub) <- good.ids
+all(f.sub$valid)
 
 ## from full set, you can do subset operations on any site level var
-mollisols <- subset(f, f$taxorder == "Mollisols")
+mollisols <- subset(f, f$taxorder == "mollisols")
 
 ## here, we match peiid against a lookup table of RV component pedon peiids
 f.cp <- subset(f.sub, profile_id(f.sub) %in% unique(copedon$peiid))
