@@ -6,28 +6,27 @@ SS <- FALSE
 nullFragsAreZero <- TRUE
 stringsAsFactors <- FALSE
 
-static_path <- "C:/Geodata/soils/NASIS-data.sqlite"
+static_path <- "C:/Geodata/soils/NASIS-data_patched.sqlite"
 copedon_rv_data <- "C:/Geodata/soils/copedon-data.rds"
 copedon <- readRDS(copedon_rv_data)
 
 ### 
 ### BEGIN -- PATCHES TO THE NASIS-data.sqlite "Pedon Snapshot" for fetchNASIS
 ### 
-
-# res1 <- dbQueryNASIS(soilDB:::.openNASISchannel(nasislite_path),
+# res1 <- dbQueryNASIS(soilDB:::.openNASISchannel(static_path),
 #                      "SELECT geomfname, geomfiid, geomftiidref FROM geomorfeat")
-# res2 <- dbQueryNASIS(soilDB:::.openNASISchannel(nasislite_path),
+# res2 <- dbQueryNASIS(soilDB:::.openNASISchannel(static_path),
 #                      "SELECT geomftname, geomftiid FROM geomorfeattype")
-
-# # get the geomorphic features tables in the SQLite snapshot
+# 
+# # # get the geomorphic features tables in the SQLite snapshot
 # library(DBI)
-# con <- DBI::dbConnect(RSQLite::SQLite(), "C:/Geodata/soils/NASIS-data.sqlite")
+# con <- DBI::dbConnect(RSQLite::SQLite(), static_path)
 # DBI::dbWriteTable(con, "geomorfeat", res1, overwrite = TRUE)
 # DBI::dbWriteTable(con, "geomorfeattype", res2, overwrite = TRUE)
 # DBI::dbDisconnect(con)
 
 # # fix the standard lat/long/gps names truncated to 16 characters 
-# con <- DBI::dbConnect(RSQLite::SQLite(), "C:/Geodata/soils/NASIS-data.sqlite")
+# con <- DBI::dbConnect(RSQLite::SQLite(), static_path)
 # sitetab <- DBI::dbReadTable(con, "site")
 # sitetab$longstddecimaldegrees <- sitetab$longstddecimalde
 # sitetab$latstddecimaldegrees <- sitetab$latstddecimaldeg
@@ -36,7 +35,7 @@ copedon <- readRDS(copedon_rv_data)
 # DBI::dbDisconnect(con)
 
 # # fix the petaxhistory record ID name truncated to 16 characters 
-# con <- DBI::dbConnect(RSQLite::SQLite(), "C:/Geodata/soils/NASIS-data.sqlite")
+# con <- DBI::dbConnect(RSQLite::SQLite(), static_path)
 # petaxmtab <- DBI::dbReadTable(con, "petaxhistmoistcl")
 # petaxmtab$pedtaxhistoryiidref <- petaxmtab$pedtaxhistoryiid
 # DBI::dbWriteTable(con, "petaxhistmoistcl", petaxmtab, overwrite = TRUE)
@@ -46,7 +45,7 @@ copedon <- readRDS(copedon_rv_data)
 # DBI::dbDisconnect(con)
 
 # # fix the different names in MetadataDomainDetail
-# con <- DBI::dbConnect(RSQLite::SQLite(), "C:/Geodata/soils/NASIS-data.sqlite")
+# con <- DBI::dbConnect(RSQLite::SQLite(), static_path)
 # metatab <- DBI::dbReadTable(con, "MetadataDomainDetail")
 # metatab$DomainID <- metatab$domain_id
 # metatab$ChoiceValue <- metatab$choice_id
@@ -58,16 +57,17 @@ copedon <- readRDS(copedon_rv_data)
 ### END PATCHES TO PEDON SNAPSHOT for fetchNASIS
 ###
 
-f <- fetchNASIS(SS = SS, static_path = static_path, rmHzErrors = FALSE)
+system.time(f <- fetchNASIS(SS = SS, static_path = static_path, rmHzErrors = FALSE))
+# TODO: handle uncoding options
 
 library(aqp)
-# aqp_df_class(f) <- "data.table"
-# f <- rebuildSPC(f)
+aqp_df_class(f) <- "data.table"
+f <- rebuildSPC(f)
 save(f, file = "C:/Geodata/soils/fetchNASIS-data-2.rda")
-load("C:/Geodata/soils/fetchNASIS-data-2.rda")
+# load("C:/Geodata/soils/fetchNASIS-data-2.rda")
 
 good.ids <- checkHzDepthLogic(f)
-save(good.ids, file = "C:/Geodata/soils/fetchNASIS-data-goodids.rda")
+save(good.ids, file = "C:/Geodata/soils/fetchNASIS-data-goodids-2.rda")
 
 f.sub <- subset(f, good.ids$valid)
 all(good.ids$valid)
@@ -76,7 +76,7 @@ all(good.ids$valid)
 mollisols <- subset(f, f$taxorder == "Mollisols")
 
 ## here, we match peiid against a lookup table of RV component pedon peiids
-f.cp <- subset(f, profile_id(f) %in% unique(copedon$peiid))
+f.cp <- subset(f.sub, profile_id(f.sub) %in% unique(copedon$peiid))
 
 library(dplyr)
 
