@@ -7,10 +7,9 @@
 dbQueryNASIS(conn, q, close = TRUE, ...)
 }
 \arguments{
-\item{conn}{A \code{DBIConnection} object, as returned by
-\code{DBI::dbConnect()}.}
+\item{conn}{A \code{DBIConnection} object, as returned by \code{DBI::dbConnect()}.}
 
-\item{q}{A statement to execute using \code{DBI::dbGetQuery}}
+\item{q}{A statement to execute using \code{DBI::dbGetQuery}; or a (named) vector containing multiple statements to evaluate separately}
 
 \item{close}{Close connection after query? Default: \code{TRUE}}
 

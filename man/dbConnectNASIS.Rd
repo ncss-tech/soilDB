@@ -2,6 +2,7 @@
 % Please edit documentation in R/dbQueryNASIS.R
 \name{dbConnectNASIS}
 \alias{dbConnectNASIS}
+\alias{NASIS}
 \title{Create a connection to a local NASIS database}
 \usage{
 dbConnectNASIS(static_path = NULL)
@@ -15,5 +16,5 @@ A \code{DBIConnection} object, as returned by
 \code{DBI::dbConnect()}.
 }
 \description{
-Create a connection to a local NASIS database
+Create a connection to a local NASIS database with \code{DBI}
 }
