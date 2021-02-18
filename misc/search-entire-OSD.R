@@ -1,40 +1,22 @@
 library(soilDB)
-library(httr)
-library(jsonlite)
 
 
-qq <- 'peraquic'
-
-qq <- 'flood & plains & toe & slope'
+## outstanding TODO: `everything` API end point returns extra output we don't need
 
 
-# API URL
-u <- 'https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php'
-
-parameters <- list(
-  json = 1,
-  mlra = '',
-  query = qq
-)
+res <- OSDquery(everything = "''Auburn, Alabama'' & plinthite")
+head(res)
 
 
+res <- OSDquery(everything = "flood & plains & toe & slope")
+head(res)
 
 
-# POST it
-res <- POST(u, body=parameters, encode='form')
+## quick check, these should give very similar results
+OSDquery(brief_narrative = 'floodplain', mlra = '18')
 
-# trap errors, likely related to SQL syntax errors
-request.status <- try(stop_for_status(res), silent = TRUE)
-
-# the result is JSON
-# should simplify to data.frame nicely
-r.content <- content(res, as = 'text', encoding = 'UTF-8')
-d <- fromJSON(r.content)
-
-str(d)
+OSDquery(everything = 'floodplain', mlra = '18')
 
 
-## compare with OSDquery()
-# slightly cleaning output
-x <- OSDquery(typical_pedon = 'rhyo:* & tuff:*')
-str(x)
+
+

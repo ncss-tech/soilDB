@@ -6,9 +6,13 @@
 
 #' @title Full text searching of the USDA-NRCS Official Series Descriptions
 #' 
-#' @description This is a rough example of how chunks of text parsed from OSD records can be made search-able with the \href{https://www.postgresql.org/docs/9.5/textsearch.html}{PostgreSQL fulltext indexing} and query system (\href{https://www.postgresql.org/docs/9.5/datatype-textsearch.html}{syntax details}). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. This is the R API corresponding to \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage}.
-#'
-#' @param mlra a comma-delimited list of MLRA to search ('17,18,22A')
+#' @description This is the R interface to \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{OSD search by Section} and \href{https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php}{OSD Search} APIs provided by SoilWeb.
+#' 
+#' OSD records are searched with the \href{https://www.postgresql.org/docs/9.5/textsearch.html}{PostgreSQL fulltext indexing} and query system (\href{https://www.postgresql.org/docs/9.5/datatype-textsearch.html}{syntax details}). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. 
+#' 
+#' 
+#' @param everything search entire OSD text (default is NULL), `mlra` may also be specified, all other arguments are ignored
+#' @param mlra a comma-delimited string of MLRA to search ('17,18,22A')
 #' @param taxonomic_class search family level classification
 #' @param typical_pedon search typical pedon section
 #' @param brief_narrative search brief narrative
@@ -21,16 +25,21 @@
 #' @details 
 #' See \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage} for more information.
 #'
-#' \describe{
-#'   \item{}{family level taxa are derived from SC database, not parsed OSD records}
-#'   \item{}{MLRA are derived via spatial intersection (SSURGO x MLRA polygons)}
-#'   \item{}{MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)}
-#'   \item{}{logical AND: &}
-#'   \item{}{logical OR: |}
-#'   \item{}{wildcard, e.g. rhy-something rhy:*}
-#'   \item{}{search terms with spaces need doubled single quotes: ''san joaquin''}
-#'   \item{}{combine search terms into a single expression: (grano:* | granite)}
-#' } 
+#'  - family level taxa are derived from SC database, not parsed OSD records
+#'  
+#'  - MLRA are derived via spatial intersection (SSURGO x MLRA polygons)
+#'  
+#'  - MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)
+#'  
+#'  - logical AND: &
+#'  
+#'  - logical OR: |
+#'  
+#'  - wildcard, e.g. rhy-something rhy:*
+#'  
+#'  - search terms with spaces need doubled single quotes: ''san joaquin''
+#'  
+#'  - combine search terms into a single expression: (grano:* | granite)
 #' 
 #' Related documentation can be found in the following tutorials
 #' \itemize{
@@ -74,7 +83,7 @@
 #' }
 #' }
 #' 
-OSDquery <- function(mlra='', taxonomic_class='', typical_pedon='', brief_narrative='', ric='', use_and_veg='', competing_series='', geog_location='', geog_assoc_soils='') {
+OSDquery <- function(everything = NULL, mlra='', taxonomic_class='', typical_pedon='', brief_narrative='', ric='', use_and_veg='', competing_series='', geog_location='', geog_assoc_soils='') {
   
   # check for required packages
   if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('jsonlite', quietly=TRUE))
@@ -82,25 +91,49 @@ OSDquery <- function(mlra='', taxonomic_class='', typical_pedon='', brief_narrat
   
   # sanity checks
   
-  # build parameters list
-  parameters=list(json=1,
-                  mlra=mlra,
-                  taxonomic_class=taxonomic_class, 
-                  typical_pedon=typical_pedon, 
-                  brief_narrative=brief_narrative, 
-                  ric=ric, 
-                  use_and_veg=use_and_veg, 
-                  competing_series=competing_series, 
-                  geog_location=geog_location, 
-                  geog_assoc_soils=geog_assoc_soils
-                  )
+  # mode selection
+  if(is.null(everything)) {
+    
+    ## searching by sections
+    
+    # build parameters list
+    parameters=list(
+      json = 1,
+      mlra = mlra,
+      taxonomic_class = taxonomic_class, 
+      typical_pedon = typical_pedon, 
+      brief_narrative = brief_narrative, 
+      ric = ric, 
+      use_and_veg = use_and_veg, 
+      competing_series = competing_series, 
+      geog_location = geog_location, 
+      geog_assoc_soils = geog_assoc_soils
+    )
+    
+    # API URL
+    # note: this is the load-balancer
+    u <- 'https://casoilresource.lawr.ucdavis.edu/osd-search/index.php'
+    
+  } else {
+    
+    ## searching entire OSD text
+    
+    # build parameters list
+    parameters=list(
+      json = 1,
+      query = everything,
+      mlra = mlra
+    )
+    
+    # API URL
+    # note: this is the load-balancer
+    u <- 'https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php'
+  }
   
-  # API URL
-  # note: this is the load-balancer
-  u <- 'https://casoilresource.lawr.ucdavis.edu/osd-search/index.php'
   
-  # POST it
-  res <- httr::POST(u, body=parameters, encode='form')
+  
+  # submit via POST
+  res <- httr::POST(u, body = parameters, encode='form')
   
   # TODO: figure out what an error state looks like
   # trap errors, likely related to SQL syntax errors
