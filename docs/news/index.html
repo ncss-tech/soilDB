@@ -114,11 +114,13 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="soildb-260-2021-01-28" class="section level1">
+    <div id="soildb-260-2021-02-18" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.0">
-<a href="#soildb-260-2021-01-28" class="anchor"></a>soilDB 2.6.0 (2021-01-28)<small> Unreleased </small>
+<a href="#soildb-260-2021-02-18" class="anchor"></a>soilDB 2.6.0 (2021-02-18)<small> Unreleased </small>
 </h1>
 <ul>
+<li>
+<code>OSDquery</code> gets a new argument (<code>everything</code>) for searching the entire document</li>
 <li>
 <code><a href="../reference/fetchNASIS.html">fetchNASIS(..., rmHzErrors=TRUE)</a></code> – spurious removals of data due to missing “extended” records. <code>fetchNASIS</code> now uses <code>aqp::horizons&lt;-</code> after building a minimal <code>SoilProfileCollection</code> from NASIS site and horizon tables. This allows <code>aqp</code> integrity methods to trigger where needed–preventing unintentional re-ordering or removals of “valid” horizon data.</li>
 </ul>
