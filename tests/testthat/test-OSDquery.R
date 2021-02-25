@@ -11,6 +11,13 @@ test_that("OSDquery() works", {
 
   # standard request
   expect_true(inherits(res, 'data.frame'))
+  
+  
+  # search entire OSD text
+  res <- suppressMessages(OSDquery(everything = 'floodplain', mlra = '18'))
+  
+  # standard request
+  expect_true(inherits(res, 'data.frame'))
 
 })
 

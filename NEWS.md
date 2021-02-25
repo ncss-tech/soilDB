@@ -1,8 +1,9 @@
-# soilDB 2.6.x (DEVELOPMENT)
+# soilDB 2.6.1 (2021-02-24)
  * Connections to the local NASIS database now use `DBI` and `odbc` instead of `RODBC`. 
  * Two new methods `dbConnectNASIS` and `dbQueryNASIS` facilitate access with read-only credentials, submission of queries/fetching of results, and closing the DBI connection upon completion.
- 
-# soilDB 2.6.0 (2021-01-28)
+
+# soilDB 2.6.0 (2021-02-18)
+ * `OSDquery` gets a new argument (`everything`) for searching the entire document
  * `fetchNASIS(..., rmHzErrors=TRUE)` -- spurious removals of data due to missing "extended" records. `fetchNASIS` now uses `aqp::horizons<-` after building a minimal `SoilProfileCollection` from NASIS site and horizon tables. This allows `aqp` integrity methods to trigger where needed--preventing unintentional re-ordering or removals of "valid" horizon data.
 
 # soilDB 2.5.9 (2021-01-26)

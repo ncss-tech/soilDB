@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Full text searching of the USDA-NRCS Official Series Descriptions — OSDquery" />
-<meta property="og:description" content="This is a rough example of how chunks of text parsed from OSD records can be made search-able with the PostgreSQL fulltext indexing and query system (syntax details). Each search field (except for the &quot;brief narrative&quot; and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. This is the R API corresponding to this webpage." />
+<meta property="og:description" content="This is the R interface to OSD search by Section and OSD Search APIs provided by SoilWeb.
+OSD records are searched with the PostgreSQL fulltext indexing and query system (syntax details). Each search field (except for the &quot;brief narrative&quot; and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections." />
 
 
 
@@ -117,10 +118,12 @@
     </div>
 
     <div class="ref-description">
-    <p>This is a rough example of how chunks of text parsed from OSD records can be made search-able with the <a href='https://www.postgresql.org/docs/9.5/textsearch.html'>PostgreSQL fulltext indexing</a> and query system (<a href='https://www.postgresql.org/docs/9.5/datatype-textsearch.html'>syntax details</a>). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. This is the R API corresponding to <a href='https://casoilresource.lawr.ucdavis.edu/osd-search/'>this webpage</a>.</p>
+    <p>This is the R interface to <a href='https://casoilresource.lawr.ucdavis.edu/osd-search/'>OSD search by Section</a> and <a href='https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php'>OSD Search</a> APIs provided by SoilWeb.</p>
+<p>OSD records are searched with the <a href='https://www.postgresql.org/docs/9.5/textsearch.html'>PostgreSQL fulltext indexing</a> and query system (<a href='https://www.postgresql.org/docs/9.5/datatype-textsearch.html'>syntax details</a>). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections.</p>
     </div>
 
     <pre class="usage"><span class='fu'>OSDquery</span><span class='op'>(</span>
+  everything <span class='op'>=</span> <span class='cn'>NULL</span>,
   mlra <span class='op'>=</span> <span class='st'>""</span>,
   taxonomic_class <span class='op'>=</span> <span class='st'>""</span>,
   typical_pedon <span class='op'>=</span> <span class='st'>""</span>,
@@ -136,8 +139,12 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>everything</th>
+      <td><p>search entire OSD text (default is NULL), `mlra` may also be specified, all other arguments are ignored</p></td>
+    </tr>
+    <tr>
       <th>mlra</th>
-      <td><p>a comma-delimited list of MLRA to search ('17,18,22A')</p></td>
+      <td><p>a comma-delimited string of MLRA to search ('17,18,22A')</p></td>
     </tr>
     <tr>
       <th>taxonomic_class</th>
@@ -179,18 +186,14 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>See <a href='https://casoilresource.lawr.ucdavis.edu/osd-search/'>this webpage</a> for more information.</p>
-<dl>
-  <dt></dt><dd><p>family level taxa are derived from SC database, not parsed OSD records</p></dd>
-  <dt></dt><dd><p>MLRA are derived via spatial intersection (SSURGO x MLRA polygons)</p></dd>
-  <dt></dt><dd><p>MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)</p></dd>
-  <dt></dt><dd><p>logical AND: &amp;</p></dd>
-  <dt></dt><dd><p>logical OR: |</p></dd>
-  <dt></dt><dd><p>wildcard, e.g. rhy-something rhy:*</p></dd>
-  <dt></dt><dd><p>search terms with spaces need doubled single quotes: ''san joaquin''</p></dd>
-  <dt></dt><dd><p>combine search terms into a single expression: (grano:* | granite)</p></dd>
-
-</dl> 
-
+<p>- family level taxa are derived from SC database, not parsed OSD records</p> 
+<p>- MLRA are derived via spatial intersection (SSURGO x MLRA polygons)</p> 
+<p>- MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)</p> 
+<p>- logical AND: &amp;</p> 
+<p>- logical OR: |</p> 
+<p>- wildcard, e.g. rhy-something rhy:*</p> 
+<p>- search terms with spaces need doubled single quotes: ''san joaquin''</p> 
+<p>- combine search terms into a single expression: (grano:* | granite)</p>
 <p>Related documentation can be found in the following tutorials</p><ul>
 <li><p><a href='http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html'>overview of all soil series query functions</a></p></li>
 <li><p><a href='https://ncss-tech.github.io/AQP/soilDB/competing-series.html'>competing soil series</a></p></li>
