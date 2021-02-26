@@ -1,10 +1,12 @@
 library(soilDB)
+library(rvest)
+library(xml)
 library(plyr)
 
 # https://github.com/ncss-tech/soilDB/issues/61
 
 # attempt to cross-reference a lab ID via pedon ID
-# using a LIMS report and HTML scraping, ick
+# using a LIMS report and HTML scraping
 # about 5 seconds per request
 getLabPedon <- function(pedonID) {
   url <- sprintf('https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=Pedon+Description+html+(userpedid)&pedon_id=%s', pedonID)
@@ -25,9 +27,11 @@ getLabPedon <- Vectorize(getLabPedon)
 ## station list / site information
 ##
 
+# 2021-02-25 DEB update site data from www map
+
 # get these data from SCAN/SNOTEL www map, zoom all the way out and then click on export to CSV
 # there are some trash data in here, trailing tabs
-x <- read.csv('scan-snotel-data/station-metadata.csv', stringsAsFactors = FALSE, colClasses = 'character')
+x <- read.csv('scan-snotel-data/scan-snotel-site-data.csv', stringsAsFactors = FALSE, colClasses = 'character')
 
 # fix formatting
 x$Name <- trimws(x$Name)
@@ -101,7 +105,7 @@ names(p.scan)[-1] <- paste0(names(p.scan)[-1], '-SCAN')
 
 
 ##
-## merge metada from various sources, filling in the missing values with best available data
+## merge metadata from various sources, filling in the missing values with best available data
 ##
 
 # unique set of site IDs
@@ -139,4 +143,8 @@ SCAN_SNOTEL_metadata[idx, c('Site', 'Name', 'climstanm')]
 
 # save as R data file
 save(SCAN_SNOTEL_metadata, file='../data/SCAN_SNOTEL_metadata.rda')
+
+
+
+
 
