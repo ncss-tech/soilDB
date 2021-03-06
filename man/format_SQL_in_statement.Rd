@@ -37,8 +37,8 @@ q2 <- sprintf("SELECT * FROM mapunit
                INNER JOIN component ON mapunit.mukey = component.mukey
                INNER JOIN chorizon ON component.cokey = chorizon.cokey
                WHERE mapunit.mukey IN \%s;", mukey.inst)
-# do the query                
-res <- SDA_query(q2) 
+# do the query
+res <- SDA_query(q2)
 
 # build a SoilProfileCollection from horizon-level records
 depths(res) <- cokey ~ hzdept_r + hzdepb_r
@@ -50,7 +50,7 @@ site(res) <- ~ muname + mukey + compname + comppct_r + taxclname
 res$labelname <- sprintf("\%s (\%s\%s)", res$compname, res$comppct_r, "\%")
 
 # major components only
-res <- filter(res, comppct_r >= 85)
+res <- subset(res, comppct_r >= 85)
 
 # inspect plot of result
 par(mar=c(0,0,0,0))
@@ -58,5 +58,5 @@ groupedProfilePlot(res, groups = "mukey", color = "hzname", cex.names=0.8,
                    id.style = "side", label = "labelname")
 }
 
-   
+
 }
