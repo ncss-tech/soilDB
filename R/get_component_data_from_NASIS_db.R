@@ -99,6 +99,49 @@ get_mutext_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE) {
 }
 
 
+## get component text from local NASIS
+get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE) {
+  
+  q <- "SELECT co.coiid,
+  cot.seqnum, cot.recdate, cot.recauthor, cot.comptextkind, cot.textcat, cot.textsubcat, 
+  CAST(cot.textentry AS ntext) AS textentry
+
+  FROM
+  component_View_1 AS co
+  INNER JOIN cotext_View_1 AS cot ON co.coiid = cot.coiidref;"
+  
+  channel <- .openNASISchannel()
+  if (channel == -1)
+    return(data.frame())
+  
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
+  # exec query
+  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  
+  # close connection
+  RODBC::odbcClose(channel)
+  
+  # convert codes
+  d <- uncode(d)
+  
+  # replace tabs with spaces
+  # tabs at the beginning of a line will confuse the MD parser, generating <code><pre> blocks
+  d$textentry <- gsub(d$textentry, pattern = '\t', replacement = ' ', fixed = TRUE)
+  
+  # optionally convert \r\n -> \n
+  if(fixLineEndings){
+    d$textentry <- gsub(d$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
+  }
+  
+  
+  # done
+  return(d)
+}
+
 
 
 ## just the component records, nothing above or below
