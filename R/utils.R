@@ -6,28 +6,28 @@
 
 ## TODO: consider toggling paralithic contact to FALSE when lithic contact is TRUE
 # convert diagnostic horizon info into wide-formatted, boolean table
-.diagHzLongtoWide <- function(d) {
+.diagHzLongtoWide <- function(d, feature = 'featkind', id = 'peiid') {
 	
 	# get unique vector of diagnostic hz
-	d.unique <- na.omit(unique(as.character(d$featkind)))
+	d.unique <- na.omit(unique(as.character(d[[feature]])))
 	
-	# init list for storing initial FALSE for each peiid / diag kind
+	# init list for storing initial FALSE for each ID / diag kind
 	l <- vector(mode='list')
 	
-	# add unique peiid
-	l[['peiid']] <- unique(d$peiid)
+	# add unique id
+	l[[id]] <- unique(d[[id]])
 	
-	# make a vector of FALSE, matching the length of unique peiid
-	f <- rep(FALSE, times=length(l[['peiid']]))
+	# make a vector of FALSE, matching the length of unique ID
+	f <- rep(FALSE, times=length(l[[id]]))
 	
 	# iterate over diagnostic hz kind
 	for(i in d.unique) {
 		# fill this list element with FALSE
 		l[[i]] <- f
-		# lookup those peiid with this feature
-		matching.peiid <- d$peiid[which(d$featkind == i)]
+		# lookup those ID with this feature
+		matching.id <- d[[id]][which(d[[feature]] == i)]
 		# toggle FALSE-->TRUE for these pedons
-		l[[i]][which(l[['peiid']] %in% matching.peiid)] <- TRUE
+		l[[i]][which(l[[id]] %in% matching.id)] <- TRUE
 	}
 	
 	# convert to DF
