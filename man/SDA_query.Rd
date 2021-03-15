@@ -27,41 +27,41 @@ This function requires the \code{httr}, \code{jsonlite}, and \code{XML} packages
 \donttest{
 if(requireNamespace("curl") &
    curl::has_internet()) {
-  
+
   ## get SSURGO export date for all soil survey areas in California
-  # there is no need to filter STATSGO 
+  # there is no need to filter STATSGO
   # because we are filtering on SSURGO area symbols
   q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA\%';"
   x <- SDA_query(q)
   head(x)
-  
-  
-  ## get SSURGO component data associated with the 
+
+
+  ## get SSURGO component data associated with the
   ## Amador series / major component only
   # this query must explicitly filter out STATSGO data
   q <- "SELECT cokey, compname, comppct_r FROM legend
     INNER JOIN mapunit mu ON mu.lkey = legend.lkey
     INNER JOIN component co ON mu.mukey = co.mukey
     WHERE legend.areasymbol != 'US' AND compname = 'Amador';"
-  
+
   res <- SDA_query(q)
   str(res)
-  
-  
+
+
   ## get component-level data for a specific soil survey area (Yolo county, CA)
   # there is no need to filter STATSGO because the query contains
   # an implicit selection of SSURGO data by areasymbol
-  q <- "SELECT 
-    component.mukey, cokey, comppct_r, compname, taxclname, 
-    taxorder, taxsuborder, taxgrtgroup, taxsubgrp 
-    FROM legend 
-    INNER JOIN mapunit ON mapunit.lkey = legend.lkey 
-    LEFT OUTER JOIN component ON component.mukey = mapunit.mukey 
+  q <- "SELECT
+    component.mukey, cokey, comppct_r, compname, taxclname,
+    taxorder, taxsuborder, taxgrtgroup, taxsubgrp
+    FROM legend
+    INNER JOIN mapunit ON mapunit.lkey = legend.lkey
+    LEFT OUTER JOIN component ON component.mukey = mapunit.mukey
     WHERE legend.areasymbol = 'CA113' ;"
-  
+
   res <- SDA_query(q)
   str(res)
-  
+
   ## get tabular data based on result from spatial query
   # there is no need to filter STATSGO because
   # SDA_Get_Mukey_from_intersection_with_WktWgs84() implies SSURGO
@@ -73,11 +73,11 @@ if(requireNamespace("curl") &
     # xmin, xmax, ymin, ymax
     b <- c(-120.9, -120.8, 37.7, 37.8)
     p <- writeWKT(as(extent(b), 'SpatialPolygons'))
-    q <- paste0("SELECT mukey, cokey, compname, comppct_r FROM component 
+    q <- paste0("SELECT mukey, cokey, compname, comppct_r FROM component
       WHERE mukey IN (SELECT DISTINCT mukey FROM
-      SDA_Get_Mukey_from_intersection_with_WktWgs84('", p, 
+      SDA_Get_Mukey_from_intersection_with_WktWgs84('", p,
        "')) ORDER BY mukey, cokey, comppct_r DESC")
-    
+
     x <- SDA_query(q)
     str(x)
   }

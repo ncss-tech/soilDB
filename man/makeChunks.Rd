@@ -21,8 +21,8 @@ Generate chunk labels for splitting data
 
 # split the lowercase alphabet into 2 chunks
 
-aggregate(letters, 
-          by = list(makeChunks(letters, size=13)), 
+aggregate(letters,
+          by = list(makeChunks(letters, size=13)),
           FUN = paste0, collapse=",")
 
 }
