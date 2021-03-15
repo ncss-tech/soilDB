@@ -128,8 +128,8 @@ if (requireNamespace("curl") &
 ) {
   # query soil components by projectname
   test = fetchNASISWebReport(
-    "EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"
-  )
+    "EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded",
+    stringsAsFactors = TRUE)
   test = test$spc
   
   # profile plot
@@ -171,8 +171,8 @@ if (requireNamespace("curl") &
   # query cosoilmoist (e.g. water table data) by mukey
   # NA depths are interpreted as (???) with impute=TRUE argument
   x <- get_cosoilmoist_from_NASISWebReport(
-    "EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"
-  )
+    "EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded",
+    stringsAsFactors = TRUE)
   
   ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
     geom_rect(aes(xmin = as.integer(month), xmax = as.integer(month) + 1,
