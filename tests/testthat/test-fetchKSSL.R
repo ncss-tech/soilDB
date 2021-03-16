@@ -7,9 +7,16 @@ test_that("fetchKSSL() works", {
   skip_on_cran()
 
   ## sample data
-  x <<- fetchKSSL(series='sierra')
-  x.morph <<- fetchKSSL(series='sierra', returnMorphologicData = TRUE)
-  x.morp.simple.colors <<- fetchKSSL(series='sierra', returnMorphologicData = TRUE, simplifyColors = TRUE)
+  x <<- fetchKSSL(series = 'sierra')
+  
+  x.morph <<- fetchKSSL(series = 'sierra',
+                        returnMorphologicData = TRUE,
+                        progress = FALSE)
+  
+  x.morp.simple.colors <<- fetchKSSL(series = 'sierra',
+                                     returnMorphologicData = TRUE,
+                                     simplifyColors = TRUE,
+                                     progress = FALSE)
 
   # standard request
   expect_true(inherits(x, 'SoilProfileCollection'))
@@ -97,7 +104,7 @@ test_that("fetchKSSL() fails gracefully when morphology data are missing", {
   # * most lab data
   # * all morphologic data
   # --> cannot simplify colors, so skip
-  res <- suppressMessages(fetchKSSL(pedon_key=37457, returnMorphologicData = TRUE, simplifyColors = TRUE))
+  res <- suppressMessages(fetchKSSL(pedon_key=37457, returnMorphologicData = TRUE, simplifyColors = TRUE, progress = FALSE))
   expect_false(res$morph$phcolor)
   expect_false(res$morph$phfrags)
   expect_false(res$morph$phpores)
