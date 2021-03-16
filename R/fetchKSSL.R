@@ -342,7 +342,7 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
   
   # simple request, result is a list of SPCs
   if(!returnMorphologicData & !returnGeochemicalData) {
-    suppressWarnings(h <- aqp::union(res))
+    h <- aqp::pbindlist(res)
     
     # NO site/hz data, stop here
     if(is.null(h)) {
@@ -353,7 +353,7 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
   } else {
     # complex request, result is a list of lists
     # SPC
-    suppressWarnings(h <- aqp::combine(lapply(res, '[[', 'SPC')))
+    h <- aqp::pbindlist(lapply(res, '[[', 'SPC'))
     
     # NO site/hz data, stop here
     if(is.null(h)) {
