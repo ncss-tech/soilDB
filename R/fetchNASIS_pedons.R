@@ -139,6 +139,8 @@
   # 2019-01-31: converting to base functions
   # 2020-02-17: converting to data.table
   
+  # define data.table globals for R CMD CHECK 
+  .BY <- NULL
   .SD <- NULL
   
   ed.tax <- data.table::as.data.table(extended_data$taxhistory)
@@ -198,15 +200,15 @@
   
   # join-in landform string w/ ampersand as separator for hierarchy
   ed.lf <- data.table::as.data.table(extended_data$geomorph)
-  lf <- ed.lf[, .formatLandformString(.SD, name.sep = ' & '), 
+  lf <- ed.lf[, .formatLandformString(.SD, uid = .BY, name.sep = ' & '), 
               by = list(peiid = ed.lf$peiid)]
-  site(hz_data) <- as.data.frame(lf)
+  site(hz_data) <- as.data.frame(lf)[,c("peiid","landform_string")]
   
-  # join-in parent material strings w/ ampersand as separator for multiple
+  
   ed.pm <- data.table::as.data.table(extended_data$pm)
-  pm <- ed.pm[, .formatParentMaterialString(.SD, name.sep = ' & '),
+  pm <- ed.pm[, .formatParentMaterialString(.SD, uid = .BY, name.sep = ' & '),
               by = list(siteiid = ed.pm$siteiid)]
-  site(hz_data) <- as.data.frame(pm)
+  site(hz_data) <- as.data.frame(pm)[,c("siteiid","pmkind","pmorigin")]
   
 # set metadata
   m <- metadata(hz_data)
