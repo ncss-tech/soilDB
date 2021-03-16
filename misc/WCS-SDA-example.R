@@ -3,7 +3,7 @@ library(sp)
 library(rgdal)
 library(raster)
 library(rasterVis)
-library(viridis)
+library(viridisLite)
 
 # AOI corners in WGS84 GCS
 # xmin, ymin, xmax, ymax

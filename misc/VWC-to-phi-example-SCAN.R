@@ -1,7 +1,7 @@
 library(aqp)
 library(soilDB)
 library(lattice)
-library(viridis)
+library(viridisLite)
 library(tactile)
 library(ragg)
 
