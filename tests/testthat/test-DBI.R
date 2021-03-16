@@ -18,14 +18,16 @@ test_that('tests for NA values (DBI/odbc replacement of RODBC)', {
     skip("no missing aspect values in site table")
   }
   
+  rodbccontest <- RODBC::odbcDriverConnect(connection = getOption('soilDB.NASIS.credentials'))
+  
   # this works as expected
   # expect_equal(
   #   RODBC::sqlQuery(
-  #     RODBC::odbcDriverConnect(connection = getOption('soilDB.NASIS.credentials')),
+  #     rodbccontest,
   #     "SELECT aspect FROM site_View_1"
   #   )$aspect,
   #   RODBC::sqlQuery(
-  #     RODBC::odbcDriverConnect(connection = getOption('soilDB.NASIS.credentials')),
+  #     rodbccontest,
   #     "SELECT * FROM site_View_1"
   #   )$aspect
   # )
@@ -33,8 +35,8 @@ test_that('tests for NA values (DBI/odbc replacement of RODBC)', {
   # built in "whole table" query is equivalent to RODBC
   expect_equal(
     soilDB:::.dump_NASIS_table("site_View_1")$aspect,
-    RODBC::sqlQuery(RODBC::odbcDriverConnect(connection = getOption('soilDB.NASIS.credentials')),
-                    "SELECT * FROM site_View_1")$aspect
+    RODBC::sqlQuery(rodbccontest, "SELECT * FROM site_View_1")$aspect
   )
   
+  RODBC::odbcClose(rodbccontest)
 })
