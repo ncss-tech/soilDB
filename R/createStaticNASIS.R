@@ -102,7 +102,7 @@ createStaticNASIS <- function(tables = NULL, SS = FALSE, systables = FALSE,
   if (is.null(output_path)) {
     
     # return named list of data.frames or try-error (one per table)
-    res <- lapply(nasis_table_names, function(n) try(.dump_NASIS_table, static_path))
+    res <- lapply(nasis_table_names, function(n) try(soilDB:::.dump_NASIS_table(n, static_path = static_path)))
     names(res) <- nasis_table_names
     return(res)
   
