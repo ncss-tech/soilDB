@@ -131,9 +131,9 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
 #'
 #' @examples
 #' 
-#' get_EDIT_classlist(c("018X","022A"))
+#' get_EDIT_ecoclass_by_geoUnit(c("018X","022A"))
 #' 
-get_EDIT_classlist <- function(geoUnit) {
+get_EDIT_ecoclass_by_geoUnit <- function(geoUnit) {
   # essentially vectorized application of make_EDIT_service_URL / read_json and
   # then combine by rows
   data.frame(do.call('rbind', lapply(geoUnit, function(aUnit){
