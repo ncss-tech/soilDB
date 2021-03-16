@@ -17,7 +17,7 @@ Imports: aqp, grDevices, graphics, stats, utils, plyr, xml2, sp, reshape2,
          raster, curl, lattice, methods, data.table
 Suggests: rgdal, jsonlite, RODBC, httr, sf, rgeos, rvest,
           testthat, stringr, latticeExtra, 
-          RCurl, XML, ggplot2, gridExtra, viridis, mapview, rasterVis
+          ggplot2, gridExtra, viridis, mapview, rasterVis
 Repository: CRAN
 URL: http://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues
