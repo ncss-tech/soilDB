@@ -16,7 +16,7 @@ Depends: R (>= 3.5.0)
 Imports: aqp, grDevices, graphics, stats, utils, plyr, xml2, sp, reshape2, 
          raster, curl, lattice, methods, data.table
 Suggests: rgdal, jsonlite, RODBC, httr, sf, rgeos, rvest,
-          testthat, stringr, latticeExtra, 
+          testthat, latticeExtra, 
           ggplot2, gridExtra, viridis, mapview, rasterVis
 Repository: CRAN
 URL: http://ncss-tech.github.io/AQP/
