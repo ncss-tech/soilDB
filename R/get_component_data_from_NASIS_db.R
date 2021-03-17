@@ -112,6 +112,9 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
   # connect to NASIS
   channel <- dbConnectNASIS(static_path)
   
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
   # exec query
   d <- dbQueryNASIS(channel, q)
   
