@@ -861,7 +861,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 #'   )
 #'   ggplot(test, aes(x = geompos, y = landform, fill = Freq2)) + 
 #'     geom_tile(alpha = 0.5) + facet_wrap(~ paste0(compname, "\n", drainagecl)) +
-#'     scale_fill_viridis(discrete = TRUE) +
+#'     discrete_scale("colour", "viridis", function(n) viridisLite::viridis(n)) +
 #'     theme(aspect.ratio = 1, axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
 #'     ggtitle("Landform vs 3-D Morphometry for Miami Major Components on SDA")
 #'   

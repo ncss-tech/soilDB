@@ -18,7 +18,7 @@ OSDquery(
 )
 }
 \arguments{
-\item{everything}{search entire OSD text (default is NULL), `mlra` may also be specified, all other arguments are ignored}
+\item{everything}{search entire OSD text (default is NULL), \code{mlra} may also be specified, all other arguments are ignored}
 
 \item{mlra}{a comma-delimited string of MLRA to search ('17,18,22A')}
 
@@ -48,22 +48,16 @@ OSD records are searched with the \href{https://www.postgresql.org/docs/9.5/text
 }
 \details{
 See \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage} for more information.
-
- - family level taxa are derived from SC database, not parsed OSD records
- 
- - MLRA are derived via spatial intersection (SSURGO x MLRA polygons)
- 
- - MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)
- 
- - logical AND: &
- 
- - logical OR: |
- 
- - wildcard, e.g. rhy-something rhy:*
- 
- - search terms with spaces need doubled single quotes: ''san joaquin''
- 
- - combine search terms into a single expression: (grano:* | granite)
+\itemize{
+\item family level taxa are derived from SC database, not parsed OSD records
+\item MLRA are derived via spatial intersection (SSURGO x MLRA polygons)
+\item MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)
+\item logical AND: &
+\item logical OR: |
+\item wildcard, e.g. rhy-something rhy:*
+\item search terms with spaces need doubled single quotes: ''san joaquin''
+\item combine search terms into a single expression: (grano:* | granite)
+}
 
 Related documentation can be found in the following tutorials
 \itemize{
