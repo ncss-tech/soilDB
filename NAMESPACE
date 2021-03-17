@@ -23,13 +23,6 @@ importFrom(DBI,
   dbFetch
 )
 
-importFrom(odbc, 
-  odbc,
-  odbcListDataSources
-)
-
-importFrom(RSQLite, SQLite)
-
 importFrom(reshape2, 
   dcast,
   melt

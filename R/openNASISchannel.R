@@ -8,6 +8,11 @@
     stop("soilDB.NASIS.credentials not set")
 
   if (!use_sqlite) {
+    
+    # assuming that default connection uses ODBC
+    if (!requireNamespace("odbc"))
+      stop("package `odbc` is required", call. = FALSE)
+    
     # setup connection local NASIS
     #suppressWarnings(RODBC::odbcDriverConnect(connection = getOption('soilDB.NASIS.credentials')))
     credentials <- gsub("^.*\\=(.*)","\\1", strsplit(getOption('soilDB.NASIS.credentials'), ";")[[1]])
@@ -16,6 +21,10 @@
                                   UID = credentials[2],
                                   PWD = credentials[3]))
   } else {
+    
+    if (!requireNamespace("RSQLite"))
+      stop("package `RSQLite` is required", call. = FALSE)
+    
     channel <- try(DBI::dbConnect(RSQLite::SQLite(), static_path))
   }
 
@@ -50,13 +59,23 @@
 #' 
 #' @export local_NASIS_defined
 local_NASIS_defined <- function(static_path = NULL) {
+  
   if (is.null(static_path)) {
+    
+    # assuming that default connection uses ODBC
+    if (!requireNamespace("odbc"))
+      stop("package `odbc` is required ", call. = FALSE)
+    
     if ('nasis_local' %in% odbc::odbcListDataSources()$name) {
       return(TRUE)
     } else {
       return(FALSE)
     }
   } else {
+    
+    if (!requireNamespace("RSQLite"))
+      stop("package `RSQLite` is required", call. = FALSE)
+    
     return(RSQLite::dbCanConnect(RSQLite::SQLite(), static_path))
   }
 }

@@ -14,8 +14,8 @@ License: GPL (>= 3)
 LazyLoad: yes
 Depends: R (>= 3.5.0)
 Imports: aqp, grDevices, graphics, stats, utils, plyr, xml2, sp, reshape2, 
-         raster, curl, lattice, methods, data.table, DBI, odbc, RSQLite
-Suggests: rgdal, jsonlite, RODBC, httr, sf, rgeos, rvest,
+         raster, curl, lattice, methods, data.table, DBI
+Suggests: rgdal, jsonlite, RODBC, httr, sf, rgeos, rvest, odbc, RSQLite,
           testthat, latticeExtra, gridExtra, ggplot2, viridisLite, mapview, rasterVis
 Repository: CRAN
 URL: http://ncss-tech.github.io/AQP/

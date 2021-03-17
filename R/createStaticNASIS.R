@@ -9,12 +9,18 @@
 #' @return A data.frame or other result of \code{DBI::dbGetQuery}
 #' @export .dump_NASIS_table
 .dump_NASIS_table <- function(table_name, static_path = NULL) {
+  
   # connect to NASIS, identify columns
   con <- dbConnectNASIS(static_path)
   allcols <- "*"
 
   # handling for MSSQL/ODBC weirdness
   if (is.null(static_path)) {
+    
+    # assuming that default connection uses ODBC
+    if (!requireNamespace("odbc"))
+      stop("package `odbc` is required ", call. = FALSE)
+    
     columns <- odbc::odbcConnectionColumns(con, table_name)
 
     # re-arrange VARCHAR(MAX) columns
@@ -70,11 +76,20 @@ createStaticNASIS <- function(tables = NULL, SS = FALSE, systables = FALSE,
   nasis_table_names <- NULL
 
   # explicit handling of the connection types currently allowed
-  if (inherits(con, 'OdbcConnection')) nasis_table_names <- odbc::dbListTables(con)
+  if (inherits(con, 'OdbcConnection')) {
+    
+    if (requireNamespace("odbc"))
+      nasis_table_names <- odbc::dbListTables(con)
 
-  # you can read/write from SQLite with this method just as well as ODBC
-  if (inherits(con, 'SQLiteConnection')) nasis_table_names <- RSQLite::dbListTables(con)
-
+  } else if (inherits(con, 'SQLiteConnection')) {
+    
+    if (requireNamespace("RSQLite"))
+      nasis_table_names <- RSQLite::dbListTables(con)
+    
+  } else {
+    stop("Currently only OdbcConnection and SQLiteConnection are supported", call. = FALSE)
+  }
+  
   # must know names of tables in data source
   stopifnot(!is.null(nasis_table_names))
 
@@ -109,7 +124,10 @@ createStaticNASIS <- function(tables = NULL, SS = FALSE, systables = FALSE,
   # otherwise, we are writing SQLite to output_path
   } else {
 
-    # TODO: validation of output_path?
+    
+    # assuming that default connection uses ODBC
+    if (!requireNamespace("RSQLite"))
+      stop("package `RSQLite` is required ", call. = FALSE)
 
     # create sqlite db
     outcon <- DBI::dbConnect(RSQLite::SQLite(), output_path)
