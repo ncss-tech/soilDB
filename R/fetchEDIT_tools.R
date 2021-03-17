@@ -8,10 +8,15 @@
 #' 
 #' Construct a URL for EDIT web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
 #' 
-#' @param src One of: `"descriptions", "downloads", "plant-community-tables", "models", "keys"``
-#' @param catalog Catalog ID; default `"esd"`
-#' @param geoUnit Geographic unit ID e.g. `022A`
-#' @param ecoclass Ecological class ID e.g. `F022AX101CA`
+#' @details See the following official EDIT developer resources to see which endpoints are available for Ecological Site Description (ESD) or Ecological Site Group (ESG) catalogs:
+#' 
+#'  - https://edit.jornada.nmsu.edu/resources/esd
+#'  - https://edit.jornada.nmsu.edu/resources/esg
+#' 
+#' @param src One of: `"descriptions"`, `"downloads"`, `"plant-community-tables"`, `"models"`, `"keys"`
+#' @param catalog Catalog ID. One of: `"esd"` or `"esg"`
+#' @param geoUnit Geographic unit ID. For example: `"022A"`
+#' @param ecoclass Ecological class ID. For example: `"F022AX101CA"`
 #' @param landuse Optional: Used only for `src = "plant-community-tables"`
 #' @param state Optional: Used only for `src = "plant-community-tables"`
 #' @param community Optional: Used only for `src = "plant-community-tables"`
@@ -65,7 +70,7 @@
 make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
                                           "plant-community-tables",
                                           "models", "keys"),
-                                  catalog = "esd",
+                                  catalog = c("esd", "esg"),
                                   geoUnit = NULL,
                                   ecoclass = NULL,
                                   landuse = NULL,
@@ -85,7 +90,7 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
                           "plant-community-tables",
                           "models", "keys"))
   
-  catalog <- match.arg(catalog, c("esd"))
+  catalog <- match.arg(catalog, c("esd", "esg"))
   
   built_url <- file.path(base_url, service_url, src, catalog)
   
@@ -123,12 +128,13 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
 }
 
 
-#' Get data.frame of all ecoclass for multiple EDIT geoUnit
+#' Get data.frame of all ecoclass for multiple EDIT geoUnit in ESD or ESG catalog
 #'
 #' Supply a vector of target `geoUnit`. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd
 #'
 #' @param geoUnit A character vector of `geoUnit` codes e.g. `c("018X","022A")` for MLRAs 18 and 22A.
-#'
+#' @param catalog Catalog ID. One of: `"esd"` or `"esg"`
+#' 
 #' @return A `data.frame` containing: `geoUnit`, `id`, `legacyId`, `name`
 #' 
 #' @export
@@ -137,12 +143,12 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
 #' 
 #' get_EDIT_ecoclass_by_geoUnit(c("018X","022A"))
 #' 
-get_EDIT_ecoclass_by_geoUnit <- function(geoUnit) {
+get_EDIT_ecoclass_by_geoUnit <- function(geoUnit, catalog = c("esd", "esg")) {
   # essentially vectorized application of make_EDIT_service_URL / read_json and
   # then combine by rows
   data.frame(do.call('rbind', lapply(geoUnit, function(aUnit){
     desclist <-  make_EDIT_service_URL(src = "downloads", 
-                                       catalog = "esd", 
+                                       catalog = catalog, 
                                        geoUnit = aUnit,
                                        endpoint = "class-list.json")
     thelist <- jsonlite::read_json(desclist)

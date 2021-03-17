@@ -2,12 +2,14 @@
 % Please edit documentation in R/fetchEDIT_tools.R
 \name{get_EDIT_ecoclass_by_geoUnit}
 \alias{get_EDIT_ecoclass_by_geoUnit}
-\title{Get data.frame of all ecoclass for multiple EDIT geoUnit}
+\title{Get data.frame of all ecoclass for multiple EDIT geoUnit in ESD or ESG catalog}
 \usage{
-get_EDIT_ecoclass_by_geoUnit(geoUnit)
+get_EDIT_ecoclass_by_geoUnit(geoUnit, catalog = c("esd", "esg"))
 }
 \arguments{
 \item{geoUnit}{A character vector of `geoUnit` codes e.g. `c("018X","022A")` for MLRAs 18 and 22A.}
+
+\item{catalog}{Catalog ID. One of: `"esd"` or `"esg"`}
 }
 \value{
 A `data.frame` containing: `geoUnit`, `id`, `legacyId`, `name`

@@ -6,7 +6,7 @@
 \usage{
 make_EDIT_service_URL(
   src = c("descriptions", "downloads", "plant-community-tables", "models", "keys"),
-  catalog = "esd",
+  catalog = c("esd", "esg"),
   geoUnit = NULL,
   ecoclass = NULL,
   landuse = NULL,
@@ -18,13 +18,13 @@ make_EDIT_service_URL(
 )
 }
 \arguments{
-\item{src}{One of: `"descriptions", "downloads", "plant-community-tables", "models", "keys"``}
+\item{src}{One of: `"descriptions"`, `"downloads"`, `"plant-community-tables"`, `"models"`, `"keys"`}
 
-\item{catalog}{Catalog ID; default `"esd"`}
+\item{catalog}{Catalog ID. One of: `"esd"` or `"esg"`}
 
-\item{geoUnit}{Geographic unit ID e.g. `022A`}
+\item{geoUnit}{Geographic unit ID. For example: `"022A"`}
 
-\item{ecoclass}{Ecological class ID e.g. `F022AX101CA`}
+\item{ecoclass}{Ecological class ID. For example: `"F022AX101CA"`}
 
 \item{landuse}{Optional: Used only for `src = "plant-community-tables"`}
 
@@ -43,6 +43,12 @@ A character vector containing URLs with specified parameters. This function is v
 }
 \description{
 Construct a URL for EDIT web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
+}
+\details{
+See the following official EDIT developer resources to see which endpoints are available for Ecological Site Description (ESD) or Ecological Site Group (ESG) catalogs:
+
+ - https://edit.jornada.nmsu.edu/resources/esd
+ - https://edit.jornada.nmsu.edu/resources/esg
 }
 \examples{
 # url for all geoUnit keys as PDF
