@@ -94,7 +94,7 @@ get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
 
 
 ## get component text from local NASIS
-get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE) {
+get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_path = NULL) {
   
   q <- "SELECT co.coiid,
   cot.seqnum, cot.recdate, cot.recauthor, cot.comptextkind, cot.textcat, cot.textsubcat, 
@@ -103,21 +103,17 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE) {
   FROM
   component_View_1 AS co
   INNER JOIN cotext_View_1 AS cot ON co.coiid = cot.coiidref;"
-  
-  channel <- .openNASISchannel()
-  if (channel == -1)
-    return(data.frame())
-  
+
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
   
-  # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  # connect to NASIS
+  channel <- dbConnectNASIS(static_path)
   
-  # close connection
-  RODBC::odbcClose(channel)
+  # exec query
+  d <- dbQueryNASIS(channel, q)
   
   # convert codes
   d <- uncode(d)
@@ -130,7 +126,6 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE) {
   if(fixLineEndings){
     d$textentry <- gsub(d$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
   }
-  
   
   # done
   return(d)
