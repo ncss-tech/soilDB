@@ -5,7 +5,7 @@ library(reshape2)
 library(sp)
 library(raster)
 library(rasterVis)
-library(viridis)
+library(viridisLite)
 
 source('local-functions.R')
 
