@@ -152,7 +152,7 @@ str(r)
 
 library(latticeExtra)
 library(hexbin)
-library(viridis)
+library(viridisLite)
 
 # lots of data, some with missing values
 qq <- "SELECT TOP 25000 

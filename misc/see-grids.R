@@ -1,6 +1,6 @@
 library(raster)
 library(rasterVis)
-library(viridis)
+library(viridisLite)
 library(sp)
 library(rgdal)
 library(soilDB)
