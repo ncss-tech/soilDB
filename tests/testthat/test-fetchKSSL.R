@@ -75,7 +75,7 @@ test_that("fetchKSSL() returns data associated with multiple named series", {
 
   skip_on_cran()
 
-  x.multiple <- fetchKSSL(series=c('sierra', 'amador'))
+  x.multiple <- fetchKSSL(series=c('sierra', 'amador'), progress = FALSE)
   f <- unique(toupper(x.multiple$taxonname)) %in% c('SIERRA', 'AMADOR')
   expect_true(all(f))
 
@@ -122,11 +122,10 @@ test_that("fetchKSSL() geochem result", {
 
   skip_if_offline()
 
-
   skip_on_cran()
 
   # get geochemical data for a single pedlabsampnum, do some basic filtering
-  res <- fetchKSSL(pedlabsampnum = c("93P0249"), returnGeochemicalData = TRUE)
+  res <- fetchKSSL(pedlabsampnum = c("93P0249"), returnGeochemicalData = TRUE, progress = FALSE)
 
   expect_true(all(filter_geochem(res$geochem, prep_code='S')$prep_code == 'S'))
 
