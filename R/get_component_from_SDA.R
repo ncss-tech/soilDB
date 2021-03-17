@@ -708,31 +708,31 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 
 
 #' Download and Flatten Data from Soil Data Access
-#' 
+#'
 #' Functions to download and flatten commonly used tables and from Soil Data
 #' Access, and create soil profile collection objects (SPC).
-#' 
+#'
 #' These functions return data from Soil Data Access with the use of a simple
 #' text string that formatted as an SQL WHERE clause (e.g. \code{WHERE =
 #' "areasymbol = 'IN001'"}. All functions are SQL queries that wrap around
 #' \code{SDAquery()} and format the data for analysis.
-#' 
+#'
 #' Beware SDA includes the data for both SSURGO and STATSGO2. The
 #' \code{areasymbol} for STATSGO2 is \code{US}. For just SSURGO, include
 #' \code{WHERE = "areareasymbol != 'US'"}.
-#' 
+#'
 #' If the duplicates argument is set to TRUE, duplicate components are
 #' returned. This is not necessary with data returned from NASIS, which has one
 #' unique national map unit. SDA has duplicate map national map units, one for
 #' each legend it exists in.
-#' 
+#'
 #' The value of \code{nullFragsAreZero} will have a significant impact on the
 #' rock fragment fractions returned by \code{fetchSDA}. Set
 #' \code{nullFragsAreZero = FALSE} in those cases where there are many
 #' data-gaps and NULL rock fragment values should be interpreted as NULLs. Set
 #' \code{nullFragsAreZero = TRUE} in those cases where NULL rock fragment
 #' values should be interpreted as 0.
-#' 
+#'
 #' @aliases fetchSDA get_legend_from_SDA get_lmuaoverlap_from_SDA
 #' get_mapunit_from_SDA get_component_from_SDA get_chorizon_from_SDA
 #' get_cosoilmoist_from_SDA get_cointerp_from_SDA
@@ -758,42 +758,42 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 #' @seealso \link{SDA_query}
 #' @keywords manip
 #' @examples
-#' 
+#'
 #' \donttest{
-#' 
-#' 
+#'
+#'
 #' if (requireNamespace("curl") &
 #'   curl::has_internet() &
 #'   require(aqp) &
-#'   require("ggplot2") & 
-#'   require("gridExtra") & 
-#'   require("viridis")
+#'   require("ggplot2") &
+#'   require("gridExtra") &
+#'   require("viridisLite")
 #' ) {
-#' 
+#'
 #'   # query soil components by areasymbol and musym
 #'   test = fetchSDA(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
-#'   
-#'   
+#'
+#'
 #'   # profile plot
 #'   plot(test)
-#'   
-#'   
+#'
+#'
 #'   # convert the data for depth plot
 #'   clay_slice = horizons(slice(test, 0:200 ~ claytotal_l + claytotal_r + claytotal_h))
 #'   names(clay_slice) <- gsub("claytotal_", "", names(clay_slice))
-#'   
+#'
 #'   om_slice = horizons(slice(test, 0:200 ~ om_l + om_r + om_h))
 #'   names(om_slice) = gsub("om_", "", names(om_slice))
-#'   
+#'
 #'   test2 = rbind(data.frame(clay_slice, var = "clay"),
 #'                 data.frame(om_slice, var = "om")
 #'   )
-#'   
+#'
 #'   h = merge(test2, site(test)[c("nationalmusym", "cokey", "compname", "comppct_r")],
-#'             by = "cokey", 
+#'             by = "cokey",
 #'             all.x = TRUE
 #'   )
-#'   
+#'
 #'   # depth plot of clay content by soil component
 #'   gg_comp <- function(x) {
 #'     ggplot(x) +
@@ -807,13 +807,13 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 #'   }
 #'   g1 <- gg_comp(subset(h, var == "clay"))
 #'   g2 <- gg_comp(subset(h, var == "om"))
-#'   
+#'
 #'   grid.arrange(g1, g2)
-#'   
-#'   
+#'
+#'
 #'   # query cosoilmoist (e.g. water table data) by mukey
 #'   x <- get_cosoilmoist_from_SDA(WHERE = "mukey = '1395352'")
-#'   
+#'
 #'   ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
 #'     geom_rect(aes(xmin = as.integer(month), xmax = as.integer(month) + 1,
 #'                   ymin = 0, ymax = max(x$depb_r),
@@ -825,16 +825,16 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 #'     xlab("month") + ylab("depth (cm)") +
 #'     scale_x_continuous(breaks = 1:12, labels = month.abb, name="Month") +
 #'     facet_wrap(~ paste0(compname, ' (', comppct_r , ')')) +
-#'     ggtitle(paste0(x$nationalmusym[1], 
+#'     ggtitle(paste0(x$nationalmusym[1],
 #'                    ': Water Table Levels from Component Soil Moisture Month Data'))
-#'   
-#'   
-#'   
+#'
+#'
+#'
 #'   # query all Miami major components
 #'   s <- get_component_from_SDA(WHERE = "compname = 'Miami' \n
 #'                 AND majcompflag = 'Yes' AND areasymbol != 'US'")
-#'   
-#'   
+#'
+#'
 #'   # landform vs 3-D morphometry
 #'   test <- {
 #'     subset(s, ! is.na(landform) | ! is.na(geompos)) ->.;
@@ -855,23 +855,23 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 #'       geompos  = factor(geompos, levels = rev(levels(geompos)))
 #'     }) ->.;
 #'   }
-#'   test$Freq2 <- cut(test$Freq, 
+#'   test$Freq2 <- cut(test$Freq,
 #'                     breaks = c(0, 5, 10, 25, 50, 100, 150),
 #'                     labels = c("<5", "5-10", "10-25", "25-50", "50-100", "100-150")
 #'   )
-#'   ggplot(test, aes(x = geompos, y = landform, fill = Freq2)) + 
+#'   ggplot(test, aes(x = geompos, y = landform, fill = Freq2)) +
 #'     geom_tile(alpha = 0.5) + facet_wrap(~ paste0(compname, "\n", drainagecl)) +
 #'     discrete_scale("colour", "viridis", function(n) viridisLite::viridis(n)) +
 #'     theme(aspect.ratio = 1, axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
 #'     ggtitle("Landform vs 3-D Morphometry for Miami Major Components on SDA")
-#'   
-#'   
+#'
+#'
 #' }
-#' 
-#' 
-#' 
+#'
+#'
+#'
 #' }
-#' 
+#'
 #' @export fetchSDA
 fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                      nullFragsAreZero = TRUE,
@@ -940,7 +940,7 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
   if(is.data.frame(f.diag)) {
     diagnostic_hz(f.chorizon) <- f.diag
   }
-  
+
   # add restrictions
   if(is.data.frame(f.restr)) {
     restrictions(f.chorizon) <- f.restr

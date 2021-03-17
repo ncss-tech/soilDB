@@ -18,6 +18,7 @@
 \alias{get_phfmp_from_NASIS_db}
 \alias{get_RMF_from_NASIS_db}
 \alias{get_concentrations_from_NASIS_db}
+\alias{get_cotext_from_NASIS_db}
 \title{Fetch commonly used site/pedon/horizon or component data from NASIS.}
 \usage{
 fetchNASIS(
