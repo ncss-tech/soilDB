@@ -5,7 +5,9 @@
 ### New function to build a JSON service URL that matches XYZ criteria
 ###
 #' make_EDIT_service_URL
-#'
+#' 
+#' Construct a URL for EDIT web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
+#' 
 #' @param src One of: `"descriptions", "downloads", "plant-community-tables", "models", "keys"``
 #' @param catalog Catalog ID; default `"esd"`
 #' @param geoUnit Geographic unit ID e.g. `022A`
@@ -15,10 +17,12 @@
 #' @param community Optional: Used only for `src = "plant-community-tables"`
 #' @param key Optional: Key number. All keys will be returned if not specified.
 #' @param endpoint Optional: Specific endpoint e.g. `"overview.json"`, `"class-list.json"`
-#' @param querystring Optional: Additional (optional) request parameters for e.g. `/services/downloads/{catalog}/{geoUnit}/class-list.json` endpoint or PDF key output.
+#' @param querystring Optional: Additional (optional) request parameters specified as a query string `?param1=value&param2=value`. Used for `class-list.json` or PDF formatting parameters.
 #'
-#' @return A character vector containing URL
+#' @return A character vector containing URLs with specified parameters. This function is vectorized.
+#' 
 #' @export
+#' 
 #' @examples 
 #' # url for all geoUnit keys as PDF
 #' make_EDIT_service_URL(src = "descriptions", 

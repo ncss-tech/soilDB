@@ -36,13 +36,13 @@ make_EDIT_service_URL(
 
 \item{endpoint}{Optional: Specific endpoint e.g. `"overview.json"`, `"class-list.json"`}
 
-\item{querystring}{Optional: Additional (optional) request parameters for e.g. `/services/downloads/{catalog}/{geoUnit}/class-list.json` endpoint or PDF key output.}
+\item{querystring}{Optional: Additional (optional) request parameters specified as a query string `?param1=value&param2=value`. Used for `class-list.json` or PDF formatting parameters.}
 }
 \value{
-A character vector containing URL
+A character vector containing URLs with specified parameters. This function is vectorized.
 }
 \description{
-make_EDIT_service_URL
+Construct a URL for EDIT web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
 }
 \examples{
 # url for all geoUnit keys as PDF
