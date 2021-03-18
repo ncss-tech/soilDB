@@ -148,11 +148,12 @@
                           by = list(peiid = ed.tax$peiid)]
   site(hz_data) <- as.data.frame(best.tax.data)
   
+  
   # load best-guess optimal records from ecositehistory
   # method is added to the new field called 'es_selection_method'
   ed.es <- data.table::as.data.table(extended_data$ecositehistory)
   best.ecosite.data <- ed.es[, .pickBestEcosite(.SD),
-                             by = list(siteiid = ed.es$siteiid)]
+                               by = list(siteiid = ed.es$siteiid)]
   site(hz_data) <- as.data.frame(best.ecosite.data)
   
   ## TODO: NA in diagnostic boolean columns are related to pedons with no diagnostic features
@@ -179,6 +180,7 @@
   ## TODO: convert this to simplifyFragmentData
   # add surface frag summary
   sfs <- extended_data$surf_frag_summary
+  
   # optionally convert NA fragvol to 0
   if (nullFragsAreZero) {
     sfs <- as.data.frame(
@@ -200,15 +202,14 @@
   
   # join-in landform string w/ ampersand as separator for hierarchy
   ed.lf <- data.table::as.data.table(extended_data$geomorph)
-  lf <- ed.lf[, .formatLandformString(.SD, uid = .BY, name.sep = ' & '), 
+  lf <- ed.lf[, .formatLandformString(.SD, uid = .BY$peiid, name.sep = ' & '), 
               by = list(peiid = ed.lf$peiid)]
-  site(hz_data) <- as.data.frame(lf)[,c("peiid","landform_string")]
-  
+  site(hz_data) <- as.data.frame(lf[,c("peiid","landform_string")])
   
   ed.pm <- data.table::as.data.table(extended_data$pm)
-  pm <- ed.pm[, .formatParentMaterialString(.SD, uid = .BY, name.sep = ' & '),
-              by = list(siteiid = ed.pm$siteiid)]
-  site(hz_data) <- as.data.frame(pm)[,c("siteiid","pmkind","pmorigin")]
+  pm <- ed.pm[, .formatParentMaterialString(.SD, uid = .BY$siteiid, name.sep = ' & '),
+                by = list(siteiid = ed.pm$siteiid)]
+  site(hz_data) <- as.data.frame(pm[,c("siteiid","pmkind","pmorigin")])
   
 # set metadata
   m <- metadata(hz_data)

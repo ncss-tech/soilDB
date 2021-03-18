@@ -291,16 +291,14 @@
   if (length(u.siteiid) > 1)
     stop('data are from multiple site records')
   
-  # subset sitepm data to remove any with NA for pm_kind
+  # subset sitepm data to remove any with NA for pmkind
   i.pm <- i.pm[which(!is.na(i.pm$pmkind)), ]
   
   # if there is no data, then return NULL
   if (nrow(i.pm) == 0) {
-    if(is.null(uid))
-      return(NULL)
-    return(data.frame(siteiid = uid,
-                      pmkind = NA_character_,
-                      pmorigin = NA_character_,
+    return(data.frame(siteiid = u.siteiid,
+                      pmkind = NA_character_[length(u.siteiid)],
+                      pmorigin = NA_character_[length(u.siteiid)],
                       stringsAsFactors = FALSE))
   }
   
