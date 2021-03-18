@@ -39,30 +39,67 @@ library(soilDB)
 # selected SET?
 selected_set <- FALSE
 
-fnames <- sapply(f, function(x) { 
-  spv <- evalSource(x, package = "soilDB")
-  # source(x)
-  names(as.list(spv)) 
-})
+# path to data source (NULL = use ODBC to local nasis, otherwise path to SQLite)
+dsn <- NULL #
 
-test <- lapply(fnames, function(fname) {
-    lapply(fname, function(FUN) {
-      message(sprintf("Testing: %s", FUN))
-      if (FUN == "local_NASIS_defined") try(get(FUN, envir = as.environment("package:soilDB"))(static_path = "testStatic.sqlite"))
-      else try(get(FUN, envir = as.environment("package:soilDB"))(SS = selected_set, static_path = "testStatic.sqlite"))
-      # try(get(FUN, envir = as.environment("package:soilDB"))())
-    })
+test_local_NASIS <- function(SS = FALSE, static_path = NULL) {
+
+  # get package function names
+  fnames <- sapply(f, function(x) { 
+    names(as.list(evalSource(x, package = "soilDB")))
   })
 
-res <- unlist(lapply(names(test), function(x) lapply(seq_along(test[[x]]), function(y) {
-      res <- inherits(test[[x]][[y]], 'try-error')
-      names(res) <- fnames[[x]][y]
-      res
-    })))
+  # iterate over functions by name
+  test <- lapply(fnames, function(fname) {
+    
+      lapply(fname, function(FUN) {
+        
+        message(sprintf("Testing: %s", FUN))
+        
+        # get function out of (installed) soilDB package environment
+        TESTFUN <- get(FUN, envir = as.environment("package:soilDB"))
+        
+        # handle special cases -- all functions tested take an SS argument except local_NASIS_defined 
+        switch (FUN,
+                "local_NASIS_defined" = try(TESTFUN(static_path = static_path)),
+                try(TESTFUN(SS = SS, static_path = static_path)) )
+      })
+    })
+  
+  # which functions error? that is the function result -- in addition to whatever messages/out generated
+  unlist(lapply(names(test), function(x) lapply(seq_along(test[[x]]), function(y) {
+        res <- inherits(test[[x]][[y]], 'try-error')
+        names(res) <- fnames[[x]][y]
+        res
+      })))
+}
+
+# test with selected set
+res <- test_local_NASIS(SS = TRUE, static_path = NULL)
+
+# list names of failed functions; if length 0 all good
+res[which(res)]
+
+# test against whole local database
+res <- test_local_NASIS(SS = FALSE, static_path = NULL)
 
 res[which(res)]
 
-# get_vegplot_tree_si_details_from_NASIS_db(SS = FALSE, static_path = "testStatic.sqlite")
+# RUN IF NEEDED:
+# createStaticNASIS(static_path = NULL, SS = TRUE, output_path = "misc/testStatic.sqlite")
+
+# test with selected set in SQLite instance
+res <- test_local_NASIS(SS = TRUE, static_path = "misc/testStatic.sqlite")
+
+res[which(res)]
+
+# test against whole local database in SQLite instance
+res <- test_local_NASIS(SS = FALSE, static_path = "misc/testStatic.sqlite")
+
+res[which(res)]
+
+
+### prior fixes:
 
 # Fixed: Text fields must come at end of query per MSSQL specs
 # get_text_notes_from_NASIS_db()
