@@ -7,10 +7,11 @@ tables)}
 \usage{
 createStaticNASIS(
   tables = NULL,
-  SS = FALSE,
-  systables = FALSE,
+  SS = TRUE,
+  ignore_pattern = "^sys|_SS|_State|NONDEL|View_0|dm_|xml_",
   static_path = NULL,
-  output_path = NULL
+  output_path = NULL,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -18,16 +19,17 @@ createStaticNASIS(
 tables meeting the following criteria.}
 
 \item{SS}{Logical. Include "selected set" tables (ending with suffix
-\code{"_View1"}). Default: \code{FALSE}}
+\code{"_View_1"}). Default: \code{TRUE}}
 
-\item{systables}{Logical. Include "system" tables (starting with prefix
-\code{"system"}). Default: \code{FALSE}}
+\item{ignore_pattern}{A regular expression identifying tables in NASIS schema to ignore. Default: \code{"^sys|_SS|_State|NONDEL|View_0|dm_"}}
 
 \item{static_path}{Optional: path to SQLite database containing NASIS table
 structure; Default: \code{NULL}}
 
 \item{output_path}{Optional: path to new/existing SQLite database to write
 tables to. Default: \code{NULL} returns table results as named list.}
+
+\item{verbose}{Issue error messages for unqueryable tables?}
 }
 \value{
 A named list of results from calling \code{dbQueryNASIS} for all
