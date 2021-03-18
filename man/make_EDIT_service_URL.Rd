@@ -18,13 +18,13 @@ make_EDIT_service_URL(
 )
 }
 \arguments{
-\item{src}{One of: `"descriptions"`, `"downloads"`, `"plant-community-tables"`, `"models"`, `"keys"`}
+\item{src}{One of: `descriptions`, `downloads`, `plant-community-tables`, `models`, `keys`}
 
-\item{catalog}{Catalog ID. One of: `"esd"` or `"esg"`}
+\item{catalog}{Catalog ID. One of: `esd` or `esg`}
 
-\item{geoUnit}{Geographic unit ID. For example: `"022A"`}
+\item{geoUnit}{Geographic unit ID. For example: `022A`}
 
-\item{ecoclass}{Ecological class ID. For example: `"F022AX101CA"`}
+\item{ecoclass}{Ecological class ID. For example: `F022AX101CA`}
 
 \item{landuse}{Optional: Used only for `src = "plant-community-tables"`}
 
@@ -34,7 +34,7 @@ make_EDIT_service_URL(
 
 \item{key}{Optional: Key number. All keys will be returned if not specified.}
 
-\item{endpoint}{Optional: Specific endpoint e.g. `"overview.json"`, `"class-list.json"`}
+\item{endpoint}{Optional: Specific endpoint e.g. `overview.json`, `class-list.json`}
 
 \item{querystring}{Optional: Additional (optional) request parameters specified as a query string `?param1=value&param2=value`. Used for `class-list.json` or PDF formatting parameters.}
 }
@@ -42,13 +42,14 @@ make_EDIT_service_URL(
 A character vector containing URLs with specified parameters. This function is vectorized.
 }
 \description{
-Construct a URL for EDIT web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
+Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
 }
 \details{
 See the following official EDIT developer resources to see which endpoints are available for Ecological Site Description (ESD) or Ecological Site Group (ESG) catalogs:
 
- - https://edit.jornada.nmsu.edu/resources/esd
- - https://edit.jornada.nmsu.edu/resources/esg
+- \url{https://edit.jornada.nmsu.edu/resources/esd}
+ 
+- \url{https://edit.jornada.nmsu.edu/resources/esg}
 }
 \examples{
 # url for all geoUnit keys as PDF
@@ -89,4 +90,7 @@ desc_wf <- make_EDIT_service_URL(src = "descriptions",
 #overview <- jsonlite::read_json(desc_ov)
 #waterfeature <- jsonlite::read_json(desc_wf)
 
+}
+\seealso{
+get_EDIT_ecoclass_by_geoUnit
 }

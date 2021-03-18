@@ -6,26 +6,28 @@
 ###
 #' make_EDIT_service_URL
 #' 
-#' Construct a URL for EDIT web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
+#' Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
 #' 
 #' @details See the following official EDIT developer resources to see which endpoints are available for Ecological Site Description (ESD) or Ecological Site Group (ESG) catalogs:
 #' 
-#'  - https://edit.jornada.nmsu.edu/resources/esd
-#'  - https://edit.jornada.nmsu.edu/resources/esg
+#' - \url{https://edit.jornada.nmsu.edu/resources/esd}
+#'  
+#' - \url{https://edit.jornada.nmsu.edu/resources/esg}
 #' 
-#' @param src One of: `"descriptions"`, `"downloads"`, `"plant-community-tables"`, `"models"`, `"keys"`
-#' @param catalog Catalog ID. One of: `"esd"` or `"esg"`
-#' @param geoUnit Geographic unit ID. For example: `"022A"`
-#' @param ecoclass Ecological class ID. For example: `"F022AX101CA"`
+#' @param src One of: `descriptions`, `downloads`, `plant-community-tables`, `models`, `keys`
+#' @param catalog Catalog ID. One of: `esd` or `esg`
+#' @param geoUnit Geographic unit ID. For example: `022A`
+#' @param ecoclass Ecological class ID. For example: `F022AX101CA`
 #' @param landuse Optional: Used only for `src = "plant-community-tables"`
 #' @param state Optional: Used only for `src = "plant-community-tables"`
 #' @param community Optional: Used only for `src = "plant-community-tables"`
 #' @param key Optional: Key number. All keys will be returned if not specified.
-#' @param endpoint Optional: Specific endpoint e.g. `"overview.json"`, `"class-list.json"`
+#' @param endpoint Optional: Specific endpoint e.g. `overview.json`, `class-list.json`
 #' @param querystring Optional: Additional (optional) request parameters specified as a query string `?param1=value&param2=value`. Used for `class-list.json` or PDF formatting parameters.
 #'
 #' @return A character vector containing URLs with specified parameters. This function is vectorized.
 #' 
+#' @seealso get_EDIT_ecoclass_by_geoUnit
 #' @export
 #' 
 #' @examples 
