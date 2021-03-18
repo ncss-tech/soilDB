@@ -299,8 +299,8 @@
     if(is.null(uid))
       return(NULL)
     return(data.frame(siteiid = uid,
-                      pmkind = character(0),
-                      pmorigin = character(0),
+                      pmkind = NA_character_,
+                      pmorigin = NA_character_,
                       stringsAsFactors = FALSE))
   }
   
