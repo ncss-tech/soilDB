@@ -49,7 +49,16 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 
 	# photo links
 	q.photos <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, siteiidref AS site_id, siteobstextiid, CAST(textentry AS ntext) AS textentry FROM (siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
-
+	
+	# toggle selected set vs. local DB
+	if (SS == FALSE) {
+	  q.petext <- gsub(pattern = '_View_1', replacement = '', x = q.petext, fixed = TRUE)
+	  q.sitetext <- gsub(pattern = '_View_1', replacement = '', x = q.sitetext, fixed = TRUE)
+	  q.siteobstext <- gsub(pattern = '_View_1', replacement = '', x = q.siteobstext, fixed = TRUE)
+	  q.phtext <- gsub(pattern = '_View_1', replacement = '', x = q.phtext, fixed = TRUE)
+	  q.photos <- gsub(pattern = '_View_1', replacement = '', x = q.photos, fixed = TRUE)
+	}
+	
 	# check for RODBC, NASIS credential options, and successful connection
 	channel <- dbConnectNASIS(static_path)
 	

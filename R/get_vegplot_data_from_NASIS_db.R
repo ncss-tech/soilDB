@@ -15,6 +15,11 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   if (inherits(channel, 'try-error'))
     return(data.frame())
   
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q.vegplot <- gsub(pattern = '_View_1', replacement = '', x = q.vegplot, fixed = TRUE)
+  }
+  
   # exec query
   d.vegplot <- dbQueryNASIS(channel, q.vegplot)
 

@@ -75,7 +75,7 @@ warning("In order to query this data you'll need to load all related vegplots to
   
   # toggle selected set vs. local DB
   if (SS == FALSE) {
-    q.veg <- gsub(pattern = '_View_1', replacement = '', x = q.veg, fixed = TRUE)
+    q.vegtransect <- gsub(pattern = '_View_1', replacement = '', x = q.vegtransect, fixed = TRUE)
   }
   
   #q.plant <- "SELECT plantiid, plantsym
