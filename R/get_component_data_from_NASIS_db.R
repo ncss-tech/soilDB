@@ -175,9 +175,6 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
 #' 
 #' @export get_component_data_from_NASIS_db
 get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path= NULL) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   q <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, reannualprecip_r, ffd_l, ffd_r, ffd_h, tfact, wei, weg, nirrcapcl, nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, frostact, hydricrating, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
 
@@ -219,9 +216,6 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 
 
 get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   q.legend  <- paste("
                      SELECT
@@ -276,9 +270,6 @@ get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors
 
 
 get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   q <- paste("SELECT
              a.areasymbol, a.areaname, a.areaacres,
@@ -340,9 +331,6 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFa
 
 
 get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   q.mapunit <- paste("
                      SELECT
@@ -438,9 +426,6 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
 # return all rows from correlation -- map unit -- legend map unit -- dmu / legend -- area
 # note that all of these "target tables" have to be selected
 get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional=TRUE, dropNotRepresentative=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   q <- "SELECT lmapunitiid, mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
 
@@ -511,10 +496,6 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
 
 # get geomorphic desc for each component
 get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
-
 
   q <- "SELECT cogeo.coiidref as coiid, cogeo.geomfmod, geomorfeat.geomfname, cogeo.geomfeatid, cogeo.existsonfeat, cogeo.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
 
@@ -577,10 +558,6 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
 # get ESD information for each component
 get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
   
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
-
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
   ecositeorigin, ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
 
@@ -620,9 +597,6 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
 ## TODO: convert any multiple entries into a comma delimited string
 # get OtherVeg information for each component
 get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   q <- "SELECT coiidref as coiid, ovegclid, ovegclname, coothvegcl.recwlupdated
   FROM coothvegclass_View_1 coothvegcl
@@ -694,9 +668,6 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NUL
 #' 
 #' @export get_comonth_from_NASIS_db
 get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid
   FROM comonth_View_1 AS comonth;"
@@ -825,9 +796,6 @@ get_copedon_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
 ## TODO: better documentation for "fill" argument
 # https://github.com/ncss-tech/soilDB/issues/50
 get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE, static_path = NULL) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   q <- "SELECT coiid, chiid, hzname, hzdept_r, hzdepb_r, texture, fragvoltot_l, fragvoltot_r, fragvoltot_h, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, structgrpname, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_l, lep_r, lep_h, ll_l, ll_r, ll_h, pi_l, pi_r, pi_h, sieveno4_l, sieveno4_r, sieveno4_h, sieveno10_l, sieveno10_r, sieveno10_h, sieveno40_l, sieveno40_r, sieveno40_h, sieveno200_l, sieveno200_r, sieveno200_h, sar_l, sar_r, sar_h, ec_l, ec_r, ec_h, cec7_l, cec7_r, cec7_h, sumbases_l, sumbases_r, sumbases_h, ecec_l, ecec_r, ecec_h, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, ph01mcacl2_l, ph01mcacl2_r, ph01mcacl2_h, caco3_l, caco3_r, caco3_h, kffact, kwfact, aashind_l, aashind_r, aashind_h
 

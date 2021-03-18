@@ -3,9 +3,6 @@
 ## TODO: this will not ID horizons with no depths
 ## TODO: better error checking / reporting is needed: coiid, dmu id, component name
 .fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
 
   # ensure that any old hz errors are cleared
   if(exists('component.hz.problems', envir=soilDB.env))
@@ -25,6 +22,7 @@
 
   # optionally test for bad horizonation... flag, and remove
   if(rmHzErrors & nrow(f.chorizon) > 0) {
+    # TODO: mirror fetchNASIS_pedons
     f.chorizon.test <- plyr::ddply(f.chorizon, 'coiid', function(d) {
       res <- aqp::hzDepthTests(top=d[['hzdept_r']], bottom=d[['hzdepb_r']])
       return(data.frame(hz_logic_pass=all(!res)))
