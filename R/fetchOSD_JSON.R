@@ -37,15 +37,22 @@ fetchOSD_JSON <- function(series,
   # query, handle errors, return 'tidy' data.frame result
   do.call('rbind', lapply(path, function(p) {
 
-    # warning will be generated for non-existent URL
-    jsp <- jsonlite::read_json(p)
-    res <- try(data.frame(lapply(jsp, function(x) {
-        res <- x[[length(x)]]
-        if (is.null(res))
-          res <- NA
-        res
-      })), silent = FALSE)
+    jsp <- try(jsonlite::read_json(p), silent = TRUE)
 
+    # warning will be generated for non-existent URL
+    if (inherits(jsp, 'try-error'))
+      return(NULL)
+
+    res <- try({
+      data.frame(lapply(jsp, function(x) {
+        res2 <- x[[length(x)]]
+        if (is.null(res2))
+          res2 <- NA
+        res2
+      }))
+    }, silent = FALSE)
+
+    # handles weird cases
     if (inherits(res, 'try-error'))
       return(NULL)
 
