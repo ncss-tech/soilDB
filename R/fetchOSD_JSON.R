@@ -35,7 +35,7 @@ fetchOSD_JSON <- function(series,
   path <- file.path(base_url, firstLetter, paste0(series, ".json"))
 
   # query, handle errors, return 'tidy' data.frame result
-  do.call('rbind', lapply(path, function(p) {
+  data.frame(data.table::rbindlist(lapply(path, function(p) {
 
     jsp <- try(jsonlite::read_json(p), silent = TRUE)
 
@@ -44,7 +44,7 @@ fetchOSD_JSON <- function(series,
       return(NULL)
 
     res <- try({
-      data.frame(lapply(jsp, function(x) {
+      data.table::as.data.table(lapply(jsp, function(x) {
         res2 <- x[[length(x)]]
         if (is.null(res2))
           res2 <- NA
@@ -57,6 +57,6 @@ fetchOSD_JSON <- function(series,
       return(NULL)
 
     return(res)
-  }))
+  })))
 
 }
