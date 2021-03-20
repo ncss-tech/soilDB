@@ -152,41 +152,41 @@
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  
+
   <span class='co'>## get SSURGO export date for all soil survey areas in California</span>
-  <span class='co'># there is no need to filter STATSGO </span>
+  <span class='co'># there is no need to filter STATSGO</span>
   <span class='co'># because we are filtering on SSURGO area symbols</span>
   <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA%';"</span>
   <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/pkg/raster/man/headtail.html'>head</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-  
-  
-  <span class='co'>## get SSURGO component data associated with the </span>
+
+
+  <span class='co'>## get SSURGO component data associated with the</span>
   <span class='co'>## Amador series / major component only</span>
   <span class='co'># this query must explicitly filter out STATSGO data</span>
   <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT cokey, compname, comppct_r FROM legend
     INNER JOIN mapunit mu ON mu.lkey = legend.lkey
     INNER JOIN component co ON mu.mukey = co.mukey
     WHERE legend.areasymbol != 'US' AND compname = 'Amador';"</span>
-  
+
   <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
-  
-  
+
+
   <span class='co'>## get component-level data for a specific soil survey area (Yolo county, CA)</span>
   <span class='co'># there is no need to filter STATSGO because the query contains</span>
   <span class='co'># an implicit selection of SSURGO data by areasymbol</span>
-  <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT 
-    component.mukey, cokey, comppct_r, compname, taxclname, 
-    taxorder, taxsuborder, taxgrtgroup, taxsubgrp 
-    FROM legend 
-    INNER JOIN mapunit ON mapunit.lkey = legend.lkey 
-    LEFT OUTER JOIN component ON component.mukey = mapunit.mukey 
+  <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT
+    component.mukey, cokey, comppct_r, compname, taxclname,
+    taxorder, taxsuborder, taxgrtgroup, taxsubgrp
+    FROM legend
+    INNER JOIN mapunit ON mapunit.lkey = legend.lkey
+    LEFT OUTER JOIN component ON component.mukey = mapunit.mukey
     WHERE legend.areasymbol = 'CA113' ;"</span>
-  
+
   <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
-  
+
   <span class='co'>## get tabular data based on result from spatial query</span>
   <span class='co'># there is no need to filter STATSGO because</span>
   <span class='co'># SDA_Get_Mukey_from_intersection_with_WktWgs84() implies SSURGO</span>
@@ -196,13 +196,13 @@
   <span class='kw'>if</span><span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://rspatial.org/raster'>raster</a></span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://r-forge.r-project.org/projects/rgeos/'>rgeos</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
     <span class='co'># text -&gt; bbox -&gt; WKT</span>
     <span class='co'># xmin, xmax, ymin, ymax</span>
-    <span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>120.9</span>, <span class='op'>-</span><span class='fl'>120.8</span>, <span class='fl'>37.7</span>, <span class='fl'>37.8</span><span class='op'>)</span>
+    <span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>120.9</span>, <span class='op'>-</span><span class='fl'>120.8</span>, <span class='fl'>37.7</span>, <span class='fl'>37.8</span><span class='op'>)</span>
     <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/rgeos/man/wkt-functions.html'>writeWKT</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/coercion-methods.html'>as</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/extent.html'>extent</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span>, <span class='st'>'SpatialPolygons'</span><span class='op'>)</span><span class='op'>)</span>
-    <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"SELECT mukey, cokey, compname, comppct_r FROM component 
+    <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"SELECT mukey, cokey, compname, comppct_r FROM component
       WHERE mukey IN (SELECT DISTINCT mukey FROM
-      SDA_Get_Mukey_from_intersection_with_WktWgs84('"</span>, <span class='va'>p</span>, 
+      SDA_Get_Mukey_from_intersection_with_WktWgs84('"</span>, <span class='va'>p</span>,
        <span class='st'>"')) ORDER BY mukey, cokey, comppct_r DESC"</span><span class='op'>)</span>
-    
+
     <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span>
     <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
   <span class='op'>}</span>

@@ -124,7 +124,7 @@
   <span class='va'>geom</span>,
   what <span class='op'>=</span> <span class='st'>"mukey"</span>,
   geomIntersection <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  db <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SSURGO"</span>, <span class='st'>"STATSGO"</span><span class='op'>)</span>
+  db <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"SSURGO"</span>, <span class='st'>"STATSGO"</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -225,7 +225,7 @@ only in combination with <code>what = "geom"</code>.</p></td>
 <span class='co'>#         |                        |</span>
 <span class='co'>#         |                        |</span>
 <span class='co'>#     (ymin, xmin) ----------------+</span>
-<span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>119.747629</span>, <span class='op'>-</span><span class='fl'>119.67935</span>, <span class='fl'>36.912019</span>, <span class='fl'>36.944987</span><span class='op'>)</span>
+<span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>119.747629</span>, <span class='op'>-</span><span class='fl'>119.67935</span>, <span class='fl'>36.912019</span>, <span class='fl'>36.944987</span><span class='op'>)</span>
 
 <span class='co'># convert bounding box to WKT</span>
 <span class='va'>bbox.sp</span> <span class='op'>&lt;-</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/coercion-methods.html'>as</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/extent.html'>extent</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span>, <span class='st'>'SpatialPolygons'</span><span class='op'>)</span>
@@ -249,15 +249,15 @@ only in combination with <code>what = "geom"</code>.</p></td>
 <span class='op'>)</span>
 
 <span class='co'># inspect results</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>ssurgo.geom</span>, border <span class='op'>=</span> <span class='st'>'royalblue'</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>statsgo.geom</span>, lwd <span class='op'>=</span> <span class='fl'>2</span>, border <span class='op'>=</span> <span class='st'>'firebrick'</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>bbox.sp</span>, lwd <span class='op'>=</span> <span class='fl'>3</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span>
   x <span class='op'>=</span> <span class='st'>'topright'</span>, 
-  legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'BBOX'</span>, <span class='st'>'STATSGO'</span>, <span class='st'>'SSURGO'</span><span class='op'>)</span>, 
-  lwd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span>,
-  col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'black'</span>, <span class='st'>'firebrick'</span>, <span class='st'>'royalblue'</span><span class='op'>)</span>,
+  legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'BBOX'</span>, <span class='st'>'STATSGO'</span>, <span class='st'>'SSURGO'</span><span class='op'>)</span>, 
+  lwd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span>,
+  col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'black'</span>, <span class='st'>'firebrick'</span>, <span class='st'>'royalblue'</span><span class='op'>)</span>,
 <span class='op'>)</span>
 
 
@@ -273,7 +273,7 @@ only in combination with <code>what = "geom"</code>.</p></td>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fetchSDA.html'>fetchSDA</a></span><span class='op'>(</span><span class='va'>sql</span><span class='op'>)</span>
 
 <span class='co'># tighter figure margins</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 
 
 <span class='co'># organize component sketches by national map unit symbol</span>
