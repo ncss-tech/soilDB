@@ -21,7 +21,7 @@ f <- read.table(text = "R/fetchNASIS.R
                         R/get_site_data_from_NASIS_db.R
                         R/get_text_notes_from_NASIS_db.R
                         R/get_veg_data_from_NASIS_db.R
-                        R/get_vegplot_data_from_NASIS_db.R 
+                        R/get_vegplot_data_from_NASIS_db.R
                         R/openNASISchannel.R")$V1
                         # R/dbQueryNASIS.R
                         # R/get_soilseries_from_NASIS.R
@@ -30,42 +30,42 @@ f <- read.table(text = "R/fetchNASIS.R
                         # man/fetchNASIS.Rd
                         # man/getHzErrorsNASIS.Rd
                         # misc/man-deprecated/fetchNASIS.Rd
-                        # 
+                        #
 # # you want the version of soilDB you are testing to be installed
 # devtools::install()
 
 library(soilDB)
 
-# selected SET?
-selected_set <- FALSE
-
-# path to data source (NULL = use ODBC to local nasis, otherwise path to SQLite)
-dsn <- NULL #
+# path to data source (NULL = use ODBC to local nasis,
+#                     otherwise path to SQLite)
+dsn <- NULL # "~/workspace/NASISlite/nasis_local.db" # "misc/testStatic.sqlite"
 
 test_local_NASIS <- function(SS = FALSE, static_path = NULL) {
 
   # get package function names
-  fnames <- sapply(f, function(x) { 
+  fnames <- sapply(f, function(x) {
     names(as.list(evalSource(x, package = "soilDB")))
   })
 
   # iterate over functions by name
   test <- lapply(fnames, function(fname) {
-    
+
       lapply(fname, function(FUN) {
-        
+
+        message("\n")
         message(sprintf("Testing: %s", FUN))
-        
+        message("\n")
+
         # get function out of (installed) soilDB package environment
         TESTFUN <- get(FUN, envir = as.environment("package:soilDB"))
-        
-        # handle special cases -- all functions tested take an SS argument except local_NASIS_defined 
+
+        # handle special cases -- all functions tested take an SS argument except local_NASIS_defined
         switch (FUN,
                 "local_NASIS_defined" = try(TESTFUN(static_path = static_path)),
                 try(TESTFUN(SS = SS, static_path = static_path)) )
       })
     })
-  
+
   # which functions error? that is the function result -- in addition to whatever messages/out generated
   unlist(lapply(names(test), function(x) lapply(seq_along(test[[x]]), function(y) {
         res <- inherits(test[[x]][[y]], 'try-error')
@@ -75,7 +75,7 @@ test_local_NASIS <- function(SS = FALSE, static_path = NULL) {
 }
 
 # test with selected set
-res <- test_local_NASIS(SS = TRUE, static_path = NULL)
+res <- test_local_NASIS(SS = FALSE, static_path = NULL)
 
 # list names of failed functions; if length 0 all good
 res[which(res)]
@@ -86,15 +86,15 @@ res <- test_local_NASIS(SS = FALSE, static_path = NULL)
 res[which(res)]
 
 # RUN IF NEEDED:
-# createStaticNASIS(static_path = NULL, SS = TRUE, output_path = "misc/testStatic.sqlite")
+# createStaticNASIS(static_path = NULL, SS = TRUE, output_path = dsn)
 
 # test with selected set in SQLite instance
-res <- test_local_NASIS(SS = TRUE, static_path = "misc/testStatic.sqlite")
+res <- test_local_NASIS(SS = TRUE, static_path = dsn)
 
 res[which(res)]
 
 # test against whole local database in SQLite instance
-res <- test_local_NASIS(SS = FALSE, static_path = "misc/testStatic.sqlite")
+res <- test_local_NASIS(SS = FALSE, static_path = dsn)
 
 res[which(res)]
 
@@ -107,7 +107,7 @@ res[which(res)]
 # Fixed: same as above
 # get_vegplot_location_from_NASIS_db()
 
-# Fixed: 
+# Fixed:
 # get_vegplot_textnote_from_NASIS_db()
 
 # Relatively rare data  update soon with input from Jay
