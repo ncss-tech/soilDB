@@ -15,12 +15,12 @@ get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
   colorpct, colorhue, colorvalue, colorchroma, colormoistst
   FROM phconccolor_View_1
   ORDER BY phconceniidref, colormoistst;"
-  
+
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
@@ -28,12 +28,12 @@ get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
   }
 
   # exec queries
-  d <- dbQueryNASIS(channel, q, close = FALSE)  
+  d <- dbQueryNASIS(channel, q, close = FALSE)
   d.c <- dbQueryNASIS(channel, q.c)
 
   # uncode domained columns
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
-  d.c <- uncode(d.c, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
+  d.c <- uncode(d.c, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # convert back to characters / numeric
   d.c$colormoistst <- as.character(d.c$colormoistst)

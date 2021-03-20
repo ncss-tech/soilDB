@@ -12,7 +12,7 @@ get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = default.string
   #}
 
   channel <- dbConnectNASIS(static_path)
-    
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
@@ -22,8 +22,8 @@ get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = default.string
   }
 
   # exec query
-  d <- dbQueryNASIS(channel, q)  
+  d <- dbQueryNASIS(channel, q)
 
   # field measured properties, long format
-  return(uncode(d, stringsAsFactors = stringsAsFactors))
+  return(uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path))
 }

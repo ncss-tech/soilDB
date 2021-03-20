@@ -7,46 +7,46 @@
 
 
 #' Extract accessory tables and summaries from a local NASIS Database
-#' 
+#'
 #' @param SS get data from the currently loaded Selected Set in NASIS or from
 #' the entire local database (default: `TRUE`)
-#' 
+#'
 #' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0?
 #' (default: TRUE), see details
-#' 
+#'
 #' @param stringsAsFactors logical: should character vectors be converted to
 #' factors? This argument is passed to the `uncode()` function. It does not
 #' convert those vectors that have been set outside of `uncode()` (i.e. hard
-#' coded). 
-#' 
+#' coded).
+#'
 #' @param static_path Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
-#' 
+#'
 #' @return A list with the results.
 #' @author Jay M. Skovlin and Dylan E. Beaudette
 #' @seealso \code{\link{get_hz_data_from_NASIS_db}},
 #' \code{\link{get_site_data_from_NASIS_db}}
 #' @keywords manip
 #' @examples
-#' 
+#'
 #' \donttest{
-#' 
+#'
 #' if(local_NASIS_defined()) {
 #'  # query extended data
 #'  e <- try(get_extended_data_from_NASIS_db())
-#' 
+#'
 #'  # show contents of extended data
 #'  str(e)
 #' }
-#' 
+#'
 #' }
-#' 
+#'
 #' @export get_extended_data_from_NASIS_db
 get_extended_data_from_NASIS_db <- function(SS = TRUE,
                                             nullFragsAreZero = TRUE,
                                             stringsAsFactors = default.stringsAsFactors(),
                                             static_path = NULL) {
-    
+
 
   # photo links from PedonPC stored as sitetext notes
   q.photolink <- "SELECT so.siteiidref AS siteiid, sot.recdate, sot.textcat,  CAST(sot.textentry AS ntext) AS imagepath
@@ -243,7 +243,7 @@ LEFT OUTER JOIN (
   if (SS == FALSE) {
     q.art.data <- gsub(pattern = '_View_1', replacement = '', x = q.art.data, fixed = TRUE)
   }
-  
+
   # new phfrags summary SQL
   q.rf.data.v2 <- "
   SET NOCOUNT ON
@@ -363,9 +363,9 @@ LEFT OUTER JOIN (
   }
 
   # get geomorphic features (sqlite safe -- no RIGHT JOIN 2020/12/02)
-  q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod, 
-                         geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid, 
-                         sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref, 
+  q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod,
+                         geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid,
+                         sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref,
                          lower(geomorfeattype.geomftname) as geomftname
                   FROM pedon_View_1
                     INNER JOIN siteobs_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
@@ -424,7 +424,7 @@ LEFT OUTER JOIN (
   }
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
@@ -432,11 +432,11 @@ LEFT OUTER JOIN (
   d.ecosite <- dbQueryNASIS(channel, q.ecosite, close = FALSE)
   d.diagnostic <- dbQueryNASIS(channel, q.diagnostic, close = FALSE)
   d.restriction <- dbQueryNASIS(channel, q.restriction, close = FALSE)
-  
+
   d.rf.data <- dbQueryNASIS(channel, q.rf.data, close = FALSE)
   # d.rf.data.v2 <- dbQueryNASIS(channel, q.rf.data.v2, close = FALSE)
   d.art.data <- dbQueryNASIS(channel, q.art.data, close = FALSE)
-  
+
   d.surf.rf.summary <- dbQueryNASIS(channel, q.surf.rf.summary, close = FALSE)
   d.hz.texmod <- dbQueryNASIS(channel, q.hz.texmod, close = FALSE)
   d.geomorph <- dbQueryNASIS(channel, q.geomorph, close = FALSE)
@@ -446,19 +446,19 @@ LEFT OUTER JOIN (
   d.structure <- dbQueryNASIS(channel, q.structure, close = FALSE)
   d.hz.desgn <- dbQueryNASIS(channel, q.hz.desgn, close = FALSE)
   d.hz.dessuf <- dbQueryNASIS(channel, q.hz.dessuf)
-  
+
 	## uncode the ones that need that here
-	d.diagnostic <- uncode(d.diagnostic, stringsAsFactors = stringsAsFactors)
-	d.restriction <- uncode(d.restriction, stringsAsFactors = stringsAsFactors)
-	d.rf.data    <- uncode(d.rf.data, stringsAsFactors = stringsAsFactors)
-	d.art.data  <-  uncode(d.art.data, stringsAsFactors = stringsAsFactors)
-	d.hz.texmod  <- uncode(d.hz.texmod, stringsAsFactors = stringsAsFactors)
+	d.diagnostic <- uncode(d.diagnostic, stringsAsFactors = stringsAsFactors, static_path = static_path)
+	d.restriction <- uncode(d.restriction, stringsAsFactors = stringsAsFactors, static_path = static_path)
+	d.rf.data    <- uncode(d.rf.data, stringsAsFactors = stringsAsFactors, static_path = static_path)
+	d.art.data  <-  uncode(d.art.data, stringsAsFactors = stringsAsFactors, static_path = static_path)
+	d.hz.texmod  <- uncode(d.hz.texmod, stringsAsFactors = stringsAsFactors, static_path = static_path)
 	# https://github.com/ncss-tech/soilDB/issues/53
-	d.taxhistory <- uncode(d.taxhistory, stringsAsFactors = FALSE)
-	d.sitepm     <- uncode(d.sitepm, stringsAsFactors = stringsAsFactors)
-	d.structure  <- uncode(d.structure, stringsAsFactors = stringsAsFactors)
-	d.hz.desgn <- uncode(d.hz.desgn, stringsAsFactors = stringsAsFactors)
-	d.hz.dessuf <- uncode(d.hz.dessuf, stringsAsFactors = stringsAsFactors)
+	d.taxhistory <- uncode(d.taxhistory, stringsAsFactors = FALSE, static_path = static_path)
+	d.sitepm     <- uncode(d.sitepm, stringsAsFactors = stringsAsFactors, static_path = static_path)
+	d.structure  <- uncode(d.structure, stringsAsFactors = stringsAsFactors, static_path = static_path)
+	d.hz.desgn <- uncode(d.hz.desgn, stringsAsFactors = stringsAsFactors, static_path = static_path)
+	d.hz.dessuf <- uncode(d.hz.dessuf, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
 	## the following steps will not work when data are missing from local DB or SS
 	# return NULL in those cases
@@ -482,11 +482,11 @@ LEFT OUTER JOIN (
 	if (nrow(d.photolink) > 0) {
 	  # parse imagename and imagepath for photo links
 	  ncharpath <- nchar(d.photolink$imagepath)
-	  
+
 	  # windows max path length is 260 (unless overridden in registry?)
 	  if (any(ncharpath > 260))
 	    warning("some image paths are too long (>260 characters) for basename()")
-	  
+
 	  bad.idx <- which(ncharpath > 260)
 	  d.photolink$imagepath[bad.idx] <- substr(d.photolink$imagepath[bad.idx],
 	                                           start = ncharpath[bad.idx] - 260,

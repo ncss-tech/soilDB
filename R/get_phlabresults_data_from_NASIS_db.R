@@ -13,7 +13,7 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
   ORDER BY peiidref, phiid, sampledepthtop;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
@@ -24,10 +24,10 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
 
 
   # exec query
-  d.phlabresults <- dbQueryNASIS(channel, q)  
-  
+  d.phlabresults <- dbQueryNASIS(channel, q)
+
   # recode metadata domains
-  d.phlabresults <- uncode(d.phlabresults)
+  d.phlabresults <- uncode(d.phlabresults, static_path = static_path)
 
 
   # compute thickness
@@ -83,7 +83,6 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
     #   sapply(x[2:ncol(x)], function(x2) x2[which.max(x$hzthk)])
     #   })
     d.dups_char$hzthk <- NULL
-    #d.dups_char <- uncode(d.dups_char) # only necessary when using plyr
 
     num_ph <- names(d.dups)[names(d.dups) %in% c("phiidref", "hzthk") |
                           grepl("ph1to1h2o|ph01mcacl2", names(d.dups))]

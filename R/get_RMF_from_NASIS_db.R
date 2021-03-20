@@ -17,10 +17,10 @@ get_RMF_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
   ORDER BY phrdxfiidref, colormoistst;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
@@ -28,17 +28,17 @@ get_RMF_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
   }
 
   # exec queries
-  d <- dbQueryNASIS(channel, q, close = FALSE)  
+  d <- dbQueryNASIS(channel, q, close = FALSE)
   d.c <- dbQueryNASIS(channel, q.c)
 
   # uncode domained columns
-  d <- uncode(d)
-  d.c <- uncode(d.c)
+  d <- uncode(d, static_path = static_path)
+  d.c <- uncode(d.c, static_path = static_path)
 
   # convert back to characters / numeric
   d.c$colormoistst <- as.character(d.c$colormoistst)
   d.c$colorhue <- as.character(d.c$colorhue)
-  
+
   # uncode creates factors, so we have to convert to character first
   d.c$colorvalue <- as.numeric(as.character(d.c$colorvalue))
   d.c$colorchroma <- as.numeric(as.character(d.c$colorchroma))

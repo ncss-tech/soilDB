@@ -25,18 +25,18 @@ get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.
   }
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # exec query
-  d.project <- dbQueryNASIS(channel, q)  
+  d.project <- dbQueryNASIS(channel, q)
 
   # test is selected set is empty
   if (nrow(d.project) == 0) message("your selected set is missing the project table, please load it and try again")
 
   # uncode metadata domains
-  d.project <- uncode(d.project, stringsAsFactors = stringsAsFactors)
+  d.project <- uncode(d.project, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # done
   return(d.project)

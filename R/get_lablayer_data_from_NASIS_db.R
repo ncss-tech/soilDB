@@ -1,17 +1,17 @@
 #' Extract lab pedon layer data from a local NASIS Database
-#' 
+#'
 #' Get lab pedon layer-level (horizon-level) data from a local NASIS database.
-#' 
+#'
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: `TRUE`)
-#' 
+#'
 #' @param static_path Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
-#' 
+#'
 #' @return A data.frame.
 #' @note This function queries KSSL laboratory site/horizon data from a local
 #' NASIS database from the lab layer data table.
-#' 
+#'
 #' @author Jay M. Skovlin and Dylan E. Beaudette
 #' @seealso \code{\link{get_labpedon_data_from_NASIS_db}}
 #' @keywords manip
@@ -31,7 +31,7 @@ FROM ncsslayerlabdata_View_1
 ORDER BY labpeiid, hzdept ASC;")
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
@@ -41,9 +41,9 @@ ORDER BY labpeiid, hzdept ASC;")
 
 	# exec query
   d.lablayer <- dbQueryNASIS(channel, q.ncsslablayer)
-  
+
 	# recode metadata domains
-	d.lablayer <- uncode(d.lablayer)
+	d.lablayer <- uncode(d.lablayer, static_path = static_path)
 
 
 	# trim names

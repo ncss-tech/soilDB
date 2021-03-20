@@ -10,10 +10,10 @@
 get_component_diaghz_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # query diagnostic horizons, usually a 1:many relationship with pedons
   q <- "SELECT coiidref as coiid, featkind, featdept_l, featdept_r, featdept_h, featdepb_l, featdepb_r, featdepb_h, featthick_l, featthick_r, featthick_h FROM codiagfeatures_View_1 AS cdf ORDER BY cdf.coiidref, cdf.featdept_r;"
 
@@ -23,20 +23,21 @@ get_component_diaghz_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
   }
 
   # exec query
-  d <- dbQueryNASIS(channel, q)  
-  
+  d <- dbQueryNASIS(channel, q)
+
   # convert codes
-  d <- uncode(d)
+  d <- uncode(d, static_path = static_path)
+
 }
 
 ## component diagnostic features
 get_component_restrictions_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # query restrictions, can be 1:many relationship with pedons
   q <- "SELECT coiidref as coiid, reskind, resdept_l, resdept_r, resdept_h, resdepb_l, resdepb_r, resdepb_h, resthk_l, resthk_r, resthk_h, reskind, reshard FROM corestrictions_View_1 AS cr ORDER BY cr.coiidref, cr.resdept_r;"
 
@@ -46,10 +47,11 @@ get_component_restrictions_from_NASIS_db <- function(SS = TRUE, static_path = NU
   }
 
   # exec query
-  d <- dbQueryNASIS(channel, q)  
-  
+  d <- dbQueryNASIS(channel, q)
+
   # convert codes
-  return(uncode(d))
+  return(uncode(d, static_path = static_path)
+)
 }
 
 ## get map unit text from local NASIS
@@ -63,20 +65,20 @@ get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
   INNER JOIN mutext_View_1 AS mut ON mu.muiid = mut.muiidref;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   # exec query
-  d <- dbQueryNASIS(channel, q)  
-  
+  d <- dbQueryNASIS(channel, q)
+
   # convert codes
-  d <- uncode(d)
+  d <- uncode(d, static_path = static_path)
 
   # replace tabs with spaces
   # tabs at the beginning of a line will confuse the MD parser, generating <code><pre> blocks
@@ -95,9 +97,9 @@ get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
 
 ## get component text from local NASIS
 get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_path = NULL) {
-  
+
   q <- "SELECT co.coiid,
-  cot.seqnum, cot.recdate, cot.recauthor, cot.comptextkind, cot.textcat, cot.textsubcat, 
+  cot.seqnum, cot.recdate, cot.recauthor, cot.comptextkind, cot.textcat, cot.textsubcat,
   CAST(cot.textentry AS ntext) AS textentry
 
   FROM
@@ -108,28 +110,28 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-  
+
   # connect to NASIS
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # exec query
   d <- dbQueryNASIS(channel, q)
-  
+
   # convert codes
-  d <- uncode(d)
-  
+  d <- uncode(d, static_path = static_path)
+
   # replace tabs with spaces
   # tabs at the beginning of a line will confuse the MD parser, generating <code><pre> blocks
   d$textentry <- gsub(d$textentry, pattern = '\t', replacement = ' ', fixed = TRUE)
-  
+
   # optionally convert \r\n -> \n
   if(fixLineEndings){
     d$textentry <- gsub(d$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
   }
-  
+
   # done
   return(d)
 }
@@ -140,39 +142,39 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
 
 
 #' Extract component data from a local NASIS Database
-#' 
+#'
 #' This function currently works only on Windows.
-#' 
+#'
 #' @aliases get_component_data_from_NASIS_db get_component_restrictions_from_NASIS_db
-#' 
+#'
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: `TRUE`)
-#' 
+#'
 #' @param stringsAsFactors logical: should character vectors be converted to
 #' factors? This argument is passed to the `uncode()` function. It does not
 #' convert those vectors that have set outside of `uncode()` (i.e. hard coded).
 #' The 'factory-fresh' default is TRUE, but this can be changed by setting
 #' options(`stringsAsFactors = FALSE`)
-#' 
+#'
 #' @param static_path Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
-#' 
+#'
 #' @return A list with the results.
 #' @author Dylan E. Beaudette, Stephen Roecker, and Jay M. Skovlin
 #' @seealso \code{\link{fetchNASIS}}
 #' @keywords manip
 #' @examples
-#' 
+#'
 #' \donttest{
 #' if(local_NASIS_defined()) {
 #'  # query text note data
 #'  fc <- try(get_component_data_from_NASIS_db())
-#' 
+#'
 #'  # show structure of component data returned
 #'  str(fc)
 #' }
 #' }
-#' 
+#'
 #' @export get_component_data_from_NASIS_db
 get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path= NULL) {
 
@@ -185,17 +187,17 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
   ORDER BY dmudesc, comppct_r DESC, compname ASC;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   # exec query
-  d <- dbQueryNASIS(channel, q)  
+  d <- dbQueryNASIS(channel, q)
 
   # test for duplicate coiids
   idx <- which(table(d$coiid) > 1)
@@ -207,7 +209,7 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 
   # uncode metadata domains
   if (nrow(d) > 0) {
-    d <- uncode(d, stringsAsFactors = stringsAsFactors)
+    d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
   }
 
   # done
@@ -248,19 +250,19 @@ get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors
   }
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # exec query
-  d.legend <- dbQueryNASIS(channel, q.legend)  
-  
+  d.legend <- dbQueryNASIS(channel, q.legend)
+
   # recode metadata domains
   d.legend <- uncode(d.legend,
                      db = "NASIS",
                      droplevels = droplevels,
-                     stringsAsFactors = stringsAsFactors
-                     )
+                     stringsAsFactors = stringsAsFactors,
+                     static_path = static_path)
 
 
   # done
@@ -309,11 +311,11 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFa
   }
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
-  d <- dbQueryNASIS(channel, q)  
+  d <- dbQueryNASIS(channel, q)
 
   d$musym <- as.character(d$musym)
 
@@ -321,8 +323,8 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFa
   d <- uncode(d,
               db = "NASIS",
               droplevels = droplevels,
-              stringsAsFactors = stringsAsFactors
-  )
+              stringsAsFactors = stringsAsFactors,
+              static_path = static_path)
 
   # done
   return(d)
@@ -380,19 +382,19 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
   }
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # exec query
-  d.mapunit <- dbQueryNASIS(channel, q.mapunit)  
+  d.mapunit <- dbQueryNASIS(channel, q.mapunit)
 
   # recode metadata domains
   d.mapunit <- uncode(d.mapunit,
                       db = "NASIS",
                       droplevels = droplevels,
-                      stringsAsFactors = stringsAsFactors
-  )
+                      stringsAsFactors = stringsAsFactors,
+                      static_path = static_path)
 
   # hacks to make R CMD check --as-cran happy:
   metadata <- NULL
@@ -440,7 +442,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
   ORDER BY nationalmusym, dmuiid;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
@@ -449,7 +451,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-  d <- dbQueryNASIS(channel, q)  
+  d <- dbQueryNASIS(channel, q)
 
   ## TODO: is this a good idea?
   # test for no data
@@ -457,7 +459,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
     warning('there are no records in your selected set!', call. = FALSE)
 
   # recode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # optionally drop additional | NA mustatus
   if(dropAdditional) {
@@ -508,7 +510,7 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, static_path =
   ORDER BY coiid, geomfeatid ASC;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
@@ -516,8 +518,8 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, static_path =
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-  
-  d <- dbQueryNASIS(channel, q)  
+
+  d <- dbQueryNASIS(channel, q)
 
   # done
   return(d)
@@ -537,7 +539,7 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
   ORDER BY coiidref, seqnum, pmorder, copmgrpiid ASC;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
@@ -545,11 +547,11 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-  
-  d <- dbQueryNASIS(channel, q)  
-  
+
+  d <- dbQueryNASIS(channel, q)
+
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # done
   return(d)
@@ -557,7 +559,7 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
 
 # get ESD information for each component
 get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
-  
+
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
   ecositeorigin, ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
 
@@ -568,16 +570,16 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
   ORDER BY coiid;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-  
-  d <- dbQueryNASIS(channel, q)  
+
+  d <- dbQueryNASIS(channel, q)
 
   # check for more than 1 record / coiid
   idx <- which(table(d$coiid) > 1)
@@ -588,7 +590,7 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
   }
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # done
   return(d)
@@ -605,16 +607,16 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NUL
 
   # setup connection local NASIS
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-  
-  d <- dbQueryNASIS(channel, q)  
+
+  d <- dbQueryNASIS(channel, q)
 
   # check for more than 1 record / coiid
   idx <- which(table(d$coiid) > 1)
@@ -625,7 +627,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NUL
   }
 
   # uncode metadata domains
-  #d <- uncode(d)
+  #d <- uncode(d, static_path = static_path)
 
   # done
   return(d)
@@ -634,11 +636,11 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NUL
 
 
 #' Extract component month data from a local NASIS Database
-#' 
+#'
 #' Extract component month data from a local NASIS Database.
-#' 
+#'
 #' This function currently works only on Windows.
-#' 
+#'
 #' @param SS get data from the currently loaded Selected Set in NASIS or from
 #' the entire local database (default: TRUE)
 #' @param fill should missing "month" rows in the comonth table be filled with
@@ -655,17 +657,17 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NUL
 #' @seealso \code{\link{fetchNASIS}}
 #' @keywords manip
 #' @examples
-#' 
+#'
 #' \donttest{
 #' if(local_NASIS_defined()) {
 #'   # query text note data
 #'   cm <- try(get_comonth_from_NASIS_db())
-#' 
+#'
 #'   # show structure of component month data
 #'   str(cm)
 #' }
 #' }
-#' 
+#'
 #' @export get_comonth_from_NASIS_db
 get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
 
@@ -673,20 +675,20 @@ get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors 
   FROM comonth_View_1 AS comonth;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   # exec query
-  d <- dbQueryNASIS(channel, q)  
-  
+  d <- dbQueryNASIS(channel, q)
+
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # optionally fill missing coiids
   if (fill) {
@@ -700,7 +702,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors 
     }
 
     # exec query
-    d.coiid <- dbQueryNASIS(channel, q)  
+    d.coiid <- dbQueryNASIS(channel, q)
   }
 
   # re-format month names
@@ -769,9 +771,9 @@ get_copedon_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
 
   LEFT OUTER JOIN pedon_View_1 p ON p.peiid = copedon.peiidref;
   "
-  
+
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
@@ -779,10 +781,10 @@ get_copedon_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-  
+
   # exec query
-  d <- dbQueryNASIS(channel, q)  
-  
+  d <- dbQueryNASIS(channel, q)
+
   # missing pedon ID suggests records not in the selected set or local database
   if(nrow(d) > 0 & any(is.na(d$pedon_id))) {
     message('some linked pedons not in selected set or local database')
@@ -811,17 +813,17 @@ get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE, stat
   ORDER BY dmudesc, comppct_r DESC, compname ASC, hzdept_r ASC;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   # exec query
-  d <- dbQueryNASIS(channel, q)  
+  d <- dbQueryNASIS(channel, q)
 
   ## TODO: better documentation for "fill" argument
   # https://github.com/ncss-tech/soilDB/issues/50

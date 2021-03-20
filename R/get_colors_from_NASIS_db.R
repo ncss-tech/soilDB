@@ -4,11 +4,11 @@
 
 
 #' Extract Soil Color Data from a local NASIS Database
-#' 
+#'
 #' Get, format, mix, and return color data from a NASIS database.
-#' 
+#'
 #' This function currently works only on Windows.
-#' 
+#'
 #' @param SS fetch data from Selected Set in NASIS or from the entire local
 #' database (default: `TRUE`)
 #' @param static_path Optional: path to local SQLite database containing NASIS
@@ -31,20 +31,20 @@ get_colors_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
   ORDER BY phiid, colormoistst;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-  
+
   # exec query
-  d <- dbQueryNASIS(channel, q)  
-  
+  d <- dbQueryNASIS(channel, q)
+
 	# uncode domained columns
-	d <- uncode(d, stringsAsFactors = FALSE)
+	d <- uncode(d, stringsAsFactors = FALSE, static_path = static_path)
 
 	# convert back to characters / numeric
 	d$colormoistst <- as.character(d$colormoistst)

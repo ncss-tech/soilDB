@@ -11,15 +11,15 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(static_path)
- 
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q.vegplot <- gsub(pattern = '_View_1', replacement = '', x = q.vegplot, fixed = TRUE)
   }
-  
+
   # exec query
   d.vegplot <- dbQueryNASIS(channel, q.vegplot)
 
@@ -33,7 +33,7 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
     stop('there are no NASIS vegplots in your selected set!')
 
   # uncode metadata domains
-  d <- uncode(d.vegplot, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d.vegplot, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # done
   return(d)
@@ -52,28 +52,28 @@ get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q.plotlocation <- gsub(pattern = '_View_1', replacement = '', x = q.plotlocation, fixed = TRUE)
   }
-  
+
   # exec query
   d.plotlocation <- dbQueryNASIS(channel, q.plotlocation, stringsAsFactors = FALSE)
 
   # uncode metadata domains
-  d <- uncode(d.plotlocation, stringsAsFactors = stringsAsFactors)
-  
+  d <- uncode(d.plotlocation, stringsAsFactors = stringsAsFactors, static_path = static_path)
+
   # test for no data
   if (nrow(d) == 0)
     stop('there are no NASIS vegplots in your selected set!')
 
   # hack for CRAN check
   state_FIPS_codes <- NULL
-  
+
   # load FIPS codes from local package data
   load(system.file("data/state_FIPS_codes.rda", package="soilDB"))
 
@@ -110,26 +110,26 @@ get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.s
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q.vegplotrhi <- gsub(pattern = '_View_1', replacement = '', x = q.vegplotrhi, fixed = TRUE)
   }
-  
+
   # exec query
   d.vegplotrhi <- dbQueryNASIS(channel, q.vegplotrhi)
 
   # uncode metadata domains
-  d <- uncode(d.vegplotrhi, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d.vegplotrhi, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # test for no data
   if (nrow(d) == 0) {
     stop('there are no NASIS vegplots in your selected set!')
   }
-  
+
   # done
   return(d)
 }
@@ -146,23 +146,23 @@ get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defaul
   LEFT JOIN plotplantinventory_View_1 AS ppi ON ppi.vegplotiidref=v.vegplotiid
   INNER JOIN plant ON plant.plantiid=ppi.plantiidref
   ORDER BY s.siteiid, ppi.orderofdominance, ppi.seqnum;"
- 
+
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q.vegplotspecies <- gsub(pattern = '_View_1', replacement = '', x = q.vegplotspecies, fixed = TRUE)
   }
-  
+
   # exec query
   d.vegplotspecies <- dbQueryNASIS(channel, q.vegplotspecies)
 
   # uncode metadata domains
-  d <- uncode(d.vegplotspecies, stringsAsFactors = stringsAsFactors)
-  
+  d <- uncode(d.vegplotspecies, stringsAsFactors = stringsAsFactors, static_path = static_path)
+
   # test for no data
   if (nrow(d) == 0) {
     stop('there are no NASIS vegplots in your selected set!', call. = FALSE)
@@ -187,15 +187,15 @@ get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q.vegtransect <- gsub(pattern = '_View_1', replacement = '', x = q.vegtransect, fixed = TRUE)
   }
-  
+
   # exec query
   d.vegtransect <- dbQueryNASIS(channel, q.vegtransect)
 
@@ -203,9 +203,9 @@ get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
   if (nrow(d.vegtransect) == 0) {
     stop('there are no NASIS vegplots transects in your selected set!', call. = FALSE)
   }
-  
+
   # uncode metadata domains
-  d <- uncode(d.vegtransect, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d.vegtransect, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # done
   return(d)
@@ -227,15 +227,15 @@ get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q.vtps <- gsub(pattern = '_View_1', replacement = '', x = q.vtps, fixed = TRUE)
   }
-  
+
   # exec query
   d.vegtransplantsum <- dbQueryNASIS(channel, q.vtps)
 
@@ -244,7 +244,7 @@ get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
     stop('there are no NASIS vegplots transect species in your selected set!')
 
   # uncode metadata domains
-  d <- uncode(d.vegtransplantsum, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d.vegtransplantsum, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # done
   return(d)
@@ -265,26 +265,24 @@ get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q.pltsis <- gsub(pattern = '_View_1', replacement = '', x = q.pltsis, fixed = TRUE)
   }
-  
+
   # exec query
   d.vegsiteindexsum <- dbQueryNASIS(channel, q.pltsis)
 
-  d <- uncode(d.vegsiteindexsum)
-
   # test for no data
-  if (nrow(d) == 0)
+  if (nrow(d.vegsiteindexsum) == 0)
     stop('there are no NASIS vegplots tree site index data in your selected set!', call. = FALSE)
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d.vegsiteindexsum, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # done
   return(d)
@@ -308,26 +306,25 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q.pltsid <- gsub(pattern = '_View_1', replacement = '', x = q.pltsid, fixed = TRUE)
   }
-  
+
   # exec query
   d.vegsiteindexdet <- dbQueryNASIS(channel, q.pltsid)
 
-  d <- uncode(d.vegsiteindexdet)
-
   # test for no data
-  if (nrow(d) == 0) {
+  if (nrow(d.vegsiteindexdet) == 0) {
     stop('there are no NASIS vegplots tree site index data in your selected set!', call. = FALSE)
   }
+
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d.vegsiteindexdet, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # done
   return(d)
@@ -343,15 +340,15 @@ textcat, textsubcat, vegplottextiid, CAST(textentry AS ntext) AS textentry
 FROM vegplottext_View_1;"
 
   channel <- dbConnectNASIS(static_path)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q.vegplottext <- gsub(pattern = '_View_1', replacement = '', x = q.vegplottext, fixed = TRUE)
   }
-  
+
   # exec query
   d.vegplottext <- dbQueryNASIS(channel, q.vegplottext)
 
@@ -360,7 +357,7 @@ FROM vegplottext_View_1;"
    stop('there are no NASIS vegplots textnotes in your selected set!', call. = FALSE)
 
   # uncode metadata domains
-  d <- uncode(d.vegplottext, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d.vegplottext, stringsAsFactors = stringsAsFactors, static_path = static_path)
 
   # optionally convert \r\n -> \n
   if (fixLineEndings) {
