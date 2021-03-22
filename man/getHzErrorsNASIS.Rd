@@ -4,7 +4,7 @@
 \alias{getHzErrorsNASIS}
 \title{Check pedon horizon table for logic errors}
 \usage{
-getHzErrorsNASIS(strict = TRUE, SS = TRUE, static_path = NULL)
+getHzErrorsNASIS(strict = TRUE, SS = TRUE, dsn = NULL)
 }
 \arguments{
 \item{strict}{how strict should horizon boundaries be checked for
@@ -13,7 +13,7 @@ consistency: TRUE=more | FALSE=less}
 \item{SS}{fetch data from the currently loaded selected set in NASIS or from
 the entire local database (default: TRUE)}
 
-\item{static_path}{Optional: path to local SQLite database containing NASIS
+\item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: NULL}
 }
 \value{

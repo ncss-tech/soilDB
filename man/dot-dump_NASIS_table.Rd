@@ -4,12 +4,12 @@
 \alias{.dump_NASIS_table}
 \title{Method for "dumping" contents of an entire NASIS table}
 \usage{
-.dump_NASIS_table(table_name, static_path = NULL)
+.dump_NASIS_table(table_name, dsn = NULL)
 }
 \arguments{
 \item{table_name}{Character name of table.}
 
-\item{static_path}{Optional: path to SQLite database containing NASIS table
+\item{dsn}{Optional: path to SQLite database containing NASIS table
 structure; Default: \code{NULL}}
 }
 \value{

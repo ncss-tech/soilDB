@@ -4,10 +4,10 @@
 \alias{local_NASIS_defined}
 \title{Check for presence of \code{nasis_local} ODBC data source}
 \usage{
-local_NASIS_defined(static_path = NULL)
+local_NASIS_defined(dsn = NULL)
 }
 \arguments{
-\item{static_path}{Optional: path to local SQLite database containing NASIS
+\item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: NULL}
 }
 \value{

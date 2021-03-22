@@ -7,7 +7,7 @@
 \usage{
 get_soilseries_from_NASIS(
   stringsAsFactors = default.stringsAsFactors(),
-  static_path = NULL
+  dsn = NULL
 )
 }
 \arguments{
@@ -15,7 +15,7 @@ get_soilseries_from_NASIS(
 factors? This argument is passed to the \code{uncode()} function. It does not
 convert those vectors that have set outside of \code{uncode()} (i.e. hard coded).}
 
-\item{static_path}{Optional: path to local SQLite database containing NASIS
+\item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}
 }
 \value{

@@ -8,7 +8,7 @@ get_cosoilmoist_from_NASIS(
   SS = TRUE,
   impute = TRUE,
   stringsAsFactors = default.stringsAsFactors(),
-  static_path = NULL
+  dsn = NULL
 )
 }
 \arguments{
@@ -25,7 +25,7 @@ convert those vectors that have set outside of \code{uncode()} (i.e. hard coded)
 The 'factory-fresh' default is TRUE, but this can be changed by setting
 options(\code{stringsAsFactors = FALSE})}
 
-\item{static_path}{Optional: path to local SQLite database containing NASIS
+\item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}
 }
 \value{

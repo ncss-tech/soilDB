@@ -9,7 +9,7 @@ createStaticNASIS(
   tables = NULL,
   SS = TRUE,
   ignore_pattern = "^sys|_SS|_State|NONDEL|View_0|dm_|xml_",
-  static_path = NULL,
+  dsn = NULL,
   output_path = NULL,
   verbose = FALSE
 )
@@ -23,7 +23,7 @@ tables meeting the following criteria.}
 
 \item{ignore_pattern}{A regular expression identifying tables in NASIS schema to ignore. Default: \code{"^sys|_SS|_State|NONDEL|View_0|dm_"}}
 
-\item{static_path}{Optional: path to SQLite database containing NASIS table
+\item{dsn}{Optional: path to SQLite database containing NASIS table
 structure; Default: \code{NULL}}
 
 \item{output_path}{Optional: path to new/existing SQLite database to write

@@ -12,7 +12,7 @@ uncode(
   db = "NASIS",
   droplevels = FALSE,
   stringsAsFactors = default.stringsAsFactors(),
-  static_path = NULL
+  dsn = NULL
 )
 }
 \arguments{
@@ -31,7 +31,7 @@ classes, which can waste space in tables and figures.}
 \item{stringsAsFactors}{logical: should character vectors be converted to
 factors?}
 
-\item{static_path}{Optional: path to local SQLite database containing NASIS
+\item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}
 }
 \value{
@@ -78,7 +78,7 @@ if(requireNamespace("curl") &
   # query component by nationalmusym
   comp <- fetchSDA(WHERE = "nationalmusym = '2vzcp'")
   s <- site(comp)
-  
+
   # use SDA uncoding domain via db argument
   s <- uncode(s,  db="SDA")
   levels(s$taxorder)

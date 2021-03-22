@@ -4,13 +4,13 @@
 \alias{get_colors_from_NASIS_db}
 \title{Extract Soil Color Data from a local NASIS Database}
 \usage{
-get_colors_from_NASIS_db(SS = TRUE, static_path = NULL)
+get_colors_from_NASIS_db(SS = TRUE, dsn = NULL)
 }
 \arguments{
 \item{SS}{fetch data from Selected Set in NASIS or from the entire local
 database (default: \code{TRUE})}
 
-\item{static_path}{Optional: path to local SQLite database containing NASIS
+\item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}
 }
 \value{

@@ -5,10 +5,10 @@
 \alias{NASIS}
 \title{Create a connection to a local NASIS database}
 \usage{
-dbConnectNASIS(static_path = NULL)
+dbConnectNASIS(dsn = NULL)
 }
 \arguments{
-\item{static_path}{Optional: path to SQLite database containing NASIS table
+\item{dsn}{Optional: path to SQLite database containing NASIS table
 structure; Default: \code{NULL}}
 }
 \value{

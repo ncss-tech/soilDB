@@ -4,13 +4,13 @@
 \alias{fetchNASISLabData}
 \title{Fetch lab data used site/horizon data from a PedonPC database.}
 \usage{
-fetchNASISLabData(SS = TRUE, static_path = NULL)
+fetchNASISLabData(SS = TRUE, dsn = NULL)
 }
 \arguments{
 \item{SS}{fetch data from the currently loaded selected set in NASIS or from
 the entire local database (default: \code{TRUE})#'}
 
-\item{static_path}{Optional: path to local SQLite database containing NASIS
+\item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}
 }
 \value{
