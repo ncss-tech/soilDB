@@ -1,4 +1,4 @@
-get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   # concentrations
   # unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
@@ -16,7 +16,7 @@ get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
   FROM phconccolor_View_1
   ORDER BY phconceniidref, colormoistst;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -32,8 +32,8 @@ get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
   d.c <- dbQueryNASIS(channel, q.c)
 
   # uncode domained columns
-  d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
-  d.c <- uncode(d.c, stringsAsFactors = stringsAsFactors, static_path = static_path)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d.c <- uncode(d.c, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # convert back to characters / numeric
   d.c$colormoistst <- as.character(d.c$colormoistst)

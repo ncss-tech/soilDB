@@ -5,7 +5,7 @@
 #'
 #' @param fixLineEndings convert line endings from `\r\n` to `\n`
 #'
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
 #' @return A `list` with the results.
@@ -31,7 +31,7 @@
 #' }
 #'
 #' @export get_text_notes_from_NASIS_db
-get_text_notes_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, static_path = NULL) {
+get_text_notes_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, dsn = NULL) {
 
 	# petext
 	q.petext <- "SELECT recdate, recauthor, pedontextkind, textcat, textsubcat, peiidref AS peiid, petextiid, CAST(textentry AS ntext) AS textentry FROM petext_View_1;"
@@ -60,7 +60,7 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 	}
 
 	# check for RODBC, NASIS credential options, and successful connection
-	channel <- dbConnectNASIS(static_path)
+	channel <- dbConnectNASIS(dsn)
 
 	if (inherits(channel, 'try-error'))
 	  return(data.frame())
@@ -73,11 +73,11 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 	d.photos <- dbQueryNASIS(channel, q.photos)
 
 	# uncode domained columns
-	d.petext <- uncode(d.petext, static_path = static_path)
-	d.sitetext <- uncode(d.sitetext, static_path = static_path)
-	d.siteobstext <- uncode(d.siteobstext, static_path = static_path)
-	d.phtext <- uncode(d.phtext, static_path = static_path)
-	d.photos <- uncode(d.photos, static_path = static_path)
+	d.petext <- uncode(d.petext, dsn = dsn)
+	d.sitetext <- uncode(d.sitetext, dsn = dsn)
+	d.siteobstext <- uncode(d.siteobstext, dsn = dsn)
+	d.phtext <- uncode(d.phtext, dsn = dsn)
+	d.photos <- uncode(d.photos, dsn = dsn)
 
 	# optionally convert \r\n -> \n
  	if (fixLineEndings) {

@@ -4,18 +4,18 @@
 #'
 #'
 #' @param table_name Character name of table.
-#' @param static_path Optional: path to SQLite database containing NASIS table
+#' @param dsn Optional: path to SQLite database containing NASIS table
 #' structure; Default: \code{NULL}
 #' @return A data.frame or other result of \code{DBI::dbGetQuery}
 #' @export .dump_NASIS_table
-.dump_NASIS_table <- function(table_name, static_path = NULL) {
+.dump_NASIS_table <- function(table_name, dsn = NULL) {
   
   # connect to NASIS, identify columns
-  con <- dbConnectNASIS(static_path)
+  con <- dbConnectNASIS(dsn)
   allcols <- "*"
 
   # handling for MSSQL/ODBC weirdness
-  if (is.null(static_path)) {
+  if (is.null(dsn)) {
     
     # assuming that default connection uses ODBC
     if (!requireNamespace("odbc"))
@@ -52,7 +52,7 @@
 #' @param SS Logical. Include "selected set" tables (ending with suffix
 #' \code{"_View_1"}). Default: \code{TRUE}
 #' @param ignore_pattern A regular expression identifying tables in NASIS schema to ignore. Default: \code{"^sys|_SS|_State|NONDEL|View_0|dm_"}
-#' @param static_path Optional: path to SQLite database containing NASIS table
+#' @param dsn Optional: path to SQLite database containing NASIS table
 #' structure; Default: \code{NULL}
 #' @param output_path Optional: path to new/existing SQLite database to write
 #' tables to. Default: \code{NULL} returns table results as named list.
@@ -71,11 +71,11 @@
 #' @export createStaticNASIS
 createStaticNASIS <- function(tables = NULL, SS = TRUE, 
                               ignore_pattern = "^sys|_SS|_State|NONDEL|View_0|dm_|xml_",
-                              static_path = NULL, output_path = NULL,
+                              dsn = NULL, output_path = NULL,
                               verbose = FALSE)  {
   
-  # can make static DB from another static DB, or default is local NASIS install (static_path=NULL)
-  con <- dbConnectNASIS(static_path = static_path)
+  # can make static DB from another static DB, or default is local NASIS install (dsn=NULL)
+  con <- dbConnectNASIS(dsn = dsn)
 
   nasis_table_names <- NULL
 
@@ -121,7 +121,7 @@ createStaticNASIS <- function(tables = NULL, SS = TRUE,
   if (is.null(output_path)) {
 
     # return named list of data.frames or try-error (one per table)
-    res <- lapply(nasis_table_names, function(n) try(.dump_NASIS_table(n, static_path = static_path), 
+    res <- lapply(nasis_table_names, function(n) try(.dump_NASIS_table(n, dsn = dsn), 
                                                      silent = verbose))
     names(res) <- nasis_table_names
     return(res)
@@ -141,7 +141,7 @@ createStaticNASIS <- function(tables = NULL, SS = TRUE,
     return(lapply(nasis_table_names, function(n) {
         return(try({
           DBI::dbWriteTable(conn = outcon, name =  n,
-                            value = .dump_NASIS_table(n, static_path = static_path),
+                            value = .dump_NASIS_table(n, dsn = dsn),
                             overwrite = TRUE)
         }))
     }))

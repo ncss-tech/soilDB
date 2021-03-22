@@ -1,4 +1,4 @@
-get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
 
   # because of alias with fetchNASIS cannot allow setting attr
@@ -11,7 +11,7 @@ get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = default.string
     q <- "SELECT * FROM phfmp_View_1;"
   #}
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -25,5 +25,5 @@ get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = default.string
   d <- dbQueryNASIS(channel, q)
 
   # field measured properties, long format
-  return(uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path))
+  return(uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn))
 }

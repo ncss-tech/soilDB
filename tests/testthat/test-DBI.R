@@ -3,7 +3,7 @@ context("test DBI conversion")
 test_that('tests for NA values (DBI/odbc replacement of RODBC)', {
   
   # test for conditions permitting this test to run
-  if (!local_NASIS_defined(static_path = NULL)) {
+  if (!local_NASIS_defined(dsn = NULL)) {
     skip("local NASIS database not available")
   }
   

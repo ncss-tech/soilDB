@@ -10,7 +10,7 @@
 #' factors? This argument is passed to the `uncode()` function. It does not
 #' convert those vectors that have set outside of `uncode()` (i.e. hard coded).
 #'
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
 #' @return A \code{data.frame}
@@ -21,7 +21,7 @@
 #'
 #' @export get_soilseries_from_NASIS
 get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactors(),
-                                      static_path = NULL) {
+                                      dsn = NULL) {
 
   q.soilseries <- "
   SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, statsgoflag, mlraoffice, areasymbol, areatypename, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, originyear, establishedyear, soiltaxclasslastupdated, soilseriesiid
@@ -40,7 +40,7 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
   # LEFT OUTER JOIN
   #     soilseriestaxmineralogy sstm ON sstm.soilseriesiidref = ss.soilseriesiid
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -49,7 +49,7 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
   d.soilseries <- dbQueryNASIS(channel, q.soilseries)
 
   # recode metadata domains
-  d.soilseries <- uncode(d.soilseries, stringsAsFactors = stringsAsFactors, static_path = static_path)
+  d.soilseries <- uncode(d.soilseries, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # prep
   d.soilseries$soiltaxclasslastupdated <- format(d.soilseries$soiltaxclasslastupdated, "%Y")

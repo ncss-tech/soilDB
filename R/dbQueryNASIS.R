@@ -45,18 +45,18 @@ dbQueryNASIS <- function(conn, q, close = TRUE, ...) {
 #' Create a connection to a local NASIS database with `DBI`
 #' 
 #' @aliases NASIS
-#' @param static_path Optional: path to SQLite database containing NASIS table
+#' @param dsn Optional: path to SQLite database containing NASIS table
 #' structure; Default: \code{NULL}
 #' @return A \code{DBIConnection} object, as returned by
 #' \code{DBI::dbConnect()}.
 #' @export dbConnectNASIS
-dbConnectNASIS <- function(static_path = NULL) {
+dbConnectNASIS <- function(dsn = NULL) {
   # TODO: NASIS sqlite snapshot connection via DBI/RSQLite
   
   # default connection uses DBI/odbc (historically RODBC)
-  res <- .openNASISchannel(static_path)
+  res <- .openNASISchannel(dsn)
   
   return(res)
 }
 
-NASIS <- function(static_path = NULL) dbConnectNASIS(static_path = static_path)
+NASIS <- function(dsn = NULL) dbConnectNASIS(dsn = dsn)

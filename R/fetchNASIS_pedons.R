@@ -7,11 +7,11 @@
                                soilColorState = 'moist',
                                lab = FALSE,
                                stringsAsFactors = default.stringsAsFactors(),
-                               static_path = NULL
+                               dsn = NULL
 ) {
   
   # test connection
-  if (!local_NASIS_defined(static_path))
+  if (!local_NASIS_defined(dsn))
     stop('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
   
   # sanity check
@@ -21,10 +21,10 @@
   ## load data in pieces
   # these fail gracefully when no data in local DB | selected set
   site_data  <- get_site_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, 
-                                            static_path = static_path)
+                                            dsn = dsn)
   hz_data    <- get_hz_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, 
-                                          static_path = static_path)
-  color_data <- get_colors_from_NASIS_db(SS = SS, static_path = static_path)
+                                          dsn = dsn)
+  color_data <- get_colors_from_NASIS_db(SS = SS, dsn = dsn)
   
   ## ensure there are enough data to create an SPC object
   if (nrow(hz_data) == 0) {
@@ -36,7 +36,7 @@
   extended_data <- get_extended_data_from_NASIS_db(SS = SS,
                                                    nullFragsAreZero = nullFragsAreZero,
                                                    stringsAsFactors = stringsAsFactors,
-                                                   static_path = static_path)
+                                                   dsn = dsn)
   
   ## fix some common problems
   

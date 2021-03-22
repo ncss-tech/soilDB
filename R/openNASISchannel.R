@@ -1,8 +1,8 @@
 # internal method for opening a connection to local nasis database using credentials
 
-.openNASISchannel <- function(static_path = NULL) {
+.openNASISchannel <- function(dsn = NULL) {
 
-  use_sqlite <- !is.null(static_path)
+  use_sqlite <- !is.null(dsn)
 
   if (is.null(getOption('soilDB.NASIS.credentials')))
     stop("soilDB.NASIS.credentials not set")
@@ -25,7 +25,7 @@
     if (!requireNamespace("RSQLite"))
       stop("package `RSQLite` is required", call. = FALSE)
     
-    channel <- try(DBI::dbConnect(RSQLite::SQLite(), static_path))
+    channel <- try(DBI::dbConnect(RSQLite::SQLite(), dsn))
   }
 
   # every method that uses .openNASISchannel must handle possibility of
@@ -45,7 +45,7 @@
 #' Check for presence of \code{nasis_local} ODBC data source
 #' 
 #' 
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: NULL
 #' @return logical
 #' @examples
@@ -58,9 +58,9 @@
 #' }
 #' 
 #' @export local_NASIS_defined
-local_NASIS_defined <- function(static_path = NULL) {
+local_NASIS_defined <- function(dsn = NULL) {
   
-  if (is.null(static_path)) {
+  if (is.null(dsn)) {
     
     # assuming that default connection uses ODBC
     if (!requireNamespace("odbc"))
@@ -76,6 +76,6 @@ local_NASIS_defined <- function(static_path = NULL) {
     if (!requireNamespace("RSQLite"))
       stop("package `RSQLite` is required", call. = FALSE)
     
-    return(RSQLite::dbCanConnect(RSQLite::SQLite(), static_path))
+    return(RSQLite::dbCanConnect(RSQLite::SQLite(), dsn))
   }
 }

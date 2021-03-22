@@ -16,30 +16,30 @@
 #' convert those vectors that have been set outside of `uncode()` (i.e. hard
 #' coded). 
 #' 
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
 #' @return A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies", "vegtransect", "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", and  "vegplottext" tables
 #' 
 #' @export
 #'
-fetchVegdata <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+fetchVegdata <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 	
   # test connection
-  if (!local_NASIS_defined(static_path))
+  if (!local_NASIS_defined(dsn))
     stop('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
 	
 	# 1. load data in pieces
-  vegplot <- get_vegplot_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, static_path =  static_path)
-  vegplotlocation <-get_vegplot_location_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, static_path =  static_path)
-  vegplotrhi <-  get_vegplot_trhi_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, static_path =  static_path)
-  vegplotspecies <- get_vegplot_species_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, static_path =  static_path)
-  vegtransect <- get_vegplot_transect_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, static_path =  static_path)
-  vegtransplantsum <- get_vegplot_transpecies_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, static_path =  static_path)
-  vegsiteindexsum <- get_vegplot_tree_si_summary_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, static_path =  static_path)
-  vegsiteindexdet <- get_vegplot_tree_si_details_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, static_path =  static_path)
+  vegplot <- get_vegplot_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn =  dsn)
+  vegplotlocation <-get_vegplot_location_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn =  dsn)
+  vegplotrhi <-  get_vegplot_trhi_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn =  dsn)
+  vegplotspecies <- get_vegplot_species_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn =  dsn)
+  vegtransect <- get_vegplot_transect_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn =  dsn)
+  vegtransplantsum <- get_vegplot_transpecies_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn =  dsn)
+  vegsiteindexsum <- get_vegplot_tree_si_summary_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn =  dsn)
+  vegsiteindexdet <- get_vegplot_tree_si_details_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn =  dsn)
   vegplottext <-  get_vegplot_textnote_from_NASIS_db(SS = SS, fixLineEndings = TRUE, 
-                                                     stringsAsFactors = stringsAsFactors, static_path =  static_path)
+                                                     stringsAsFactors = stringsAsFactors, dsn =  dsn)
 
 
 	# test to see if the selected set is loaded

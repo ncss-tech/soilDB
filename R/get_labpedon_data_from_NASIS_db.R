@@ -8,7 +8,7 @@
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: TRUE)
 #' 
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' 
 #' @return A data.frame.
@@ -20,12 +20,12 @@
 #' @seealso \code{\link{get_lablayer_data_from_NASIS_db}}
 #' @keywords manip
 #' @export get_labpedon_data_from_NASIS_db
-get_labpedon_data_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
+get_labpedon_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
   q.ncsslabpedon <- "SELECT peiidref AS peiid, upedonid, descname, taxonname, taxclname, ncsspedonlabdata_View_1.pedlabsampnum, psctopdepth, pscbotdepth, noncarbclaywtavg, claytotwtavg, le0to100, wf0175wtavgpsc, volfractgt2wtavg, cec7clayratiowtavg, labdatasheeturl, ncsspedonlabdataiid AS labpeiid
   FROM (ncsspedonlabdata_View_1 LEFT OUTER JOIN pedon_View_1 ON ncsspedonlabdata_View_1.peiidref = pedon_View_1.peiid);"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())

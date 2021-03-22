@@ -11,7 +11,7 @@
 #'
 #' @param SS fetch data from Selected Set in NASIS or from the entire local
 #' database (default: `TRUE`)
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' @return A data.frame with the results.
 #' @author Jay M. Skovlin and Dylan E. Beaudette
@@ -20,7 +20,7 @@
 #' \code{\link{get_site_data_from_NASIS_db}}
 #' @keywords manip
 #' @export get_colors_from_NASIS_db
-get_colors_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
+get_colors_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
 	# unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
   q <- "SELECT peiid, phiid, colormoistst, colorpct as pct, colorhue, colorvalue, colorchroma
@@ -30,7 +30,7 @@ get_colors_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
   INNER JOIN phcolor_View_1 ON phorizon_View_1.phiid = phcolor_View_1.phiidref
   ORDER BY phiid, colormoistst;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -44,7 +44,7 @@ get_colors_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
   d <- dbQueryNASIS(channel, q)
 
 	# uncode domained columns
-	d <- uncode(d, stringsAsFactors = FALSE, static_path = static_path)
+	d <- uncode(d, stringsAsFactors = FALSE, dsn = dsn)
 
 	# convert back to characters / numeric
 	d$colormoistst <- as.character(d$colormoistst)

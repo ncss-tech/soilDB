@@ -1,8 +1,8 @@
-static_path <- NULL
+dsn <- NULL
 
 test_that("dbQueryNASIS works", {
   
-  if (!local_NASIS_defined(static_path = static_path)) {
+  if (!local_NASIS_defined(dsn = dsn)) {
     skip("local NASIS database not available")
   }
   

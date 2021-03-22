@@ -6,27 +6,27 @@ SS <- FALSE
 nullFragsAreZero <- TRUE
 stringsAsFactors <- FALSE
 
-static_path <- "C:/Geodata/soils/NASIS-data_patched.sqlite"
+dsn <- "C:/Geodata/soils/NASIS-data_patched.sqlite"
 copedon_rv_data <- "C:/Geodata/soils/copedon-data.rds"
 copedon <- readRDS(copedon_rv_data)
 
 ### 
 ### BEGIN -- PATCHES TO THE NASIS-data.sqlite "Pedon Snapshot" for fetchNASIS
 ### 
-# res1 <- dbQueryNASIS(soilDB:::.openNASISchannel(static_path),
+# res1 <- dbQueryNASIS(soilDB:::.openNASISchannel(dsn),
 #                      "SELECT geomfname, geomfiid, geomftiidref FROM geomorfeat")
-# res2 <- dbQueryNASIS(soilDB:::.openNASISchannel(static_path),
+# res2 <- dbQueryNASIS(soilDB:::.openNASISchannel(dsn),
 #                      "SELECT geomftname, geomftiid FROM geomorfeattype")
 # 
 # # # get the geomorphic features tables in the SQLite snapshot
 # library(DBI)
-# con <- DBI::dbConnect(RSQLite::SQLite(), static_path)
+# con <- DBI::dbConnect(RSQLite::SQLite(), dsn)
 # DBI::dbWriteTable(con, "geomorfeat", res1, overwrite = TRUE)
 # DBI::dbWriteTable(con, "geomorfeattype", res2, overwrite = TRUE)
 # DBI::dbDisconnect(con)
 
 # # fix the standard lat/long/gps names truncated to 16 characters 
-# con <- DBI::dbConnect(RSQLite::SQLite(), static_path)
+# con <- DBI::dbConnect(RSQLite::SQLite(), dsn)
 # sitetab <- DBI::dbReadTable(con, "site")
 # sitetab$longstddecimaldegrees <- sitetab$longstddecimalde
 # sitetab$latstddecimaldegrees <- sitetab$latstddecimaldeg
@@ -35,7 +35,7 @@ copedon <- readRDS(copedon_rv_data)
 # DBI::dbDisconnect(con)
 
 # # fix the petaxhistory record ID name truncated to 16 characters 
-# con <- DBI::dbConnect(RSQLite::SQLite(), static_path)
+# con <- DBI::dbConnect(RSQLite::SQLite(), dsn)
 # petaxmtab <- DBI::dbReadTable(con, "petaxhistmoistcl")
 # petaxmtab$pedtaxhistoryiidref <- petaxmtab$pedtaxhistoryiid
 # DBI::dbWriteTable(con, "petaxhistmoistcl", petaxmtab, overwrite = TRUE)
@@ -45,7 +45,7 @@ copedon <- readRDS(copedon_rv_data)
 # DBI::dbDisconnect(con)
 
 # # fix the different names in MetadataDomainDetail
-# con <- DBI::dbConnect(RSQLite::SQLite(), static_path)
+# con <- DBI::dbConnect(RSQLite::SQLite(), dsn)
 # metatab <- DBI::dbReadTable(con, "MetadataDomainDetail")
 # metatab$DomainID <- metatab$domain_id
 # metatab$ChoiceValue <- metatab$choice_id
@@ -59,7 +59,7 @@ copedon <- readRDS(copedon_rv_data)
 
 system.time(f <- fetchNASIS(
                 SS = SS,
-                static_path = static_path,
+                dsn = dsn,
                 rmHzErrors = FALSE
               ))
 # TODO: handle uncoding options

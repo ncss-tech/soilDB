@@ -69,7 +69,7 @@
 #' factors? This argument is passed to the `uncode()` function. It does not
 #' convert those vectors that have been set outside of `uncode()` (i.e. hard
 #' coded).
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' @return A SoilProfileCollection object
 #' @author D. E. Beaudette, J. M. Skovlin, S.M. Roecker, A.G. Brown
@@ -83,7 +83,7 @@ fetchNASIS <- function(from='pedons',
                        lab = FALSE,
                        fill = FALSE,
                        stringsAsFactors = default.stringsAsFactors(),
-                       static_path = NULL) {
+                       dsn = NULL) {
 
   res <- NULL
 
@@ -92,7 +92,7 @@ fetchNASIS <- function(from='pedons',
   #       to specify the selected set for a SQLite database, and I suppose the convention
   #       should be for those tables to be there, even if empty
 
-  # if (!is.null(static_path))
+  # if (!is.null(dsn))
   #   SS <- FALSE
 
   # sanity check
@@ -108,7 +108,7 @@ fetchNASIS <- function(from='pedons',
                               soilColorState = soilColorState,
                               lab = lab,
                               stringsAsFactors = stringsAsFactors,
-                              static_path)
+                              dsn)
   }
 
   if (from == 'components') {

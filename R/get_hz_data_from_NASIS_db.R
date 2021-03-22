@@ -13,7 +13,7 @@
 #' convert those vectors that have been set outside of `uncode()` (i.e. hard
 #' coded).
 #'
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
 #' @return A data.frame.
@@ -27,7 +27,7 @@
 #' @export get_hz_data_from_NASIS_db
 get_hz_data_from_NASIS_db <- function(SS = TRUE,
                                       stringsAsFactors = default.stringsAsFactors(),
-                                      static_path = NULL) {
+                                      dsn = NULL) {
 
   q <- "SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
@@ -49,7 +49,7 @@ get_hz_data_from_NASIS_db <- function(SS = TRUE,
 
   ORDER BY p.upedonid, ph.hzdept ASC;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -63,7 +63,7 @@ get_hz_data_from_NASIS_db <- function(SS = TRUE,
   d <- dbQueryNASIS(channel, q)
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # re-implement texture_class column, with lieutex in cases where texcl is missing
   d$texture_class <- ifelse(is.na(d$texcl) & ! is.na(d$lieutex), as.character(d$lieutex), as.character(d$texcl))

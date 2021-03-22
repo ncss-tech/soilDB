@@ -33,7 +33,7 @@
 #' convert those vectors that have been set outside of `uncode()` (i.e. hard
 #' coded).
 #'
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
 #' @return A data.frame
@@ -45,7 +45,7 @@
 #' @export get_site_data_from_NASIS_db
 get_site_data_from_NASIS_db <- function(SS = TRUE,
                                         stringsAsFactors = default.stringsAsFactors(),
-                                        static_path = NULL) {
+                                        dsn = NULL) {
 
 	q <- "SELECT siteiid as siteiid, peiid, CAST(usiteid AS varchar(60)) as site_id, CAST(upedonid AS varchar(60)) as pedon_id, obsdate as obs_date,
 utmzone, utmeasting, utmnorthing, -(longdegrees + CASE WHEN longminutes IS NULL THEN 0.0 ELSE longminutes / 60.0 END + CASE WHEN longseconds IS NULL THEN 0.0 ELSE longseconds / 60.0 / 60.0 END) as x, latdegrees + CASE WHEN latminutes IS NULL THEN 0.0 ELSE latminutes / 60.0 END + CASE WHEN latseconds IS NULL THEN 0.0 ELSE latseconds / 60.0 / 60.0 END as y, horizdatnm, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std,
@@ -69,7 +69,7 @@ WHERE sb.rn IS NULL OR sb.rn = 1
 
 ORDER BY pedon_View_1.peiid ;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -88,7 +88,7 @@ ORDER BY pedon_View_1.peiid ;"
 	  stop('error in SQL')
 
 	# uncode domain columns
-	d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
+	d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
 	# short-circuit: 0 rows means nothing in the selected set and thus we stop here
 	if (nrow(d) == 0) {

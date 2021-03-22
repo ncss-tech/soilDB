@@ -18,7 +18,7 @@
 #' convert those vectors that have set outside of `uncode()` (i.e. hard coded).
 #' The 'factory-fresh' default is TRUE, but this can be changed by setting
 #' options(`stringsAsFactors = FALSE`)
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' @return A data.frame.
 #' @note This function currently works only on Windows.
@@ -43,7 +43,7 @@
 get_cosoilmoist_from_NASIS <- function(SS = TRUE,
                                        impute = TRUE,
                                        stringsAsFactors = default.stringsAsFactors(),
-                                       static_path = NULL) {
+                                       dsn = NULL) {
 
 
   q.cosoilmoist <- "SELECT dmuiidref AS dmuiid, coiid, compname, comppct_r, drainagecl, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, cosoilmoistiid, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat
@@ -55,7 +55,7 @@ get_cosoilmoist_from_NASIS <- function(SS = TRUE,
   ORDER BY dmuiid, comppct_r DESC, compname, month, soimoistdept_r
   ;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -69,7 +69,7 @@ get_cosoilmoist_from_NASIS <- function(SS = TRUE,
   d.cosoilmoist <- dbQueryNASIS(channel, q.cosoilmoist)
 
   # recode metadata domains
-  d.cosoilmoist <- uncode(d.cosoilmoist, stringsAsFactors = stringsAsFactors, static_path = static_path)
+  d.cosoilmoist <- uncode(d.cosoilmoist, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # prep dataset: rename columns, impute empty values, stringsAsFactors
   d.cosoilmoist <- .cosoilmoist_prep(d.cosoilmoist, impute = impute, stringsAsFactors = stringsAsFactors)

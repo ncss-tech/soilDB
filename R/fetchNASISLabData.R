@@ -11,7 +11,7 @@
 #' 
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: `TRUE`)#' 
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' 
 #' @return a SoilProfileCollection object
@@ -20,10 +20,10 @@
 #' @seealso \code{\link{get_labpedon_data_from_NASIS_db}}
 #' @keywords manip
 #' @export fetchNASISLabData
-fetchNASISLabData <- function(SS = TRUE, static_path = NULL) {
+fetchNASISLabData <- function(SS = TRUE, dsn = NULL) {
 
 	# test connection
-	if (!local_NASIS_defined(static_path))
+	if (!local_NASIS_defined(dsn))
 			stop('Local NASIS ODBC connection has not been setup. Please see the `setup_ODBC_local_NASIS.pdf` document included with this package.')
 	
 	# 1. load data in pieces, results are DF objects

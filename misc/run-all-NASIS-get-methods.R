@@ -42,8 +42,8 @@ library(soilDB)
 #                     otherwise path to SQLite)
 dsn <- NULL # "~/workspace/NASISlite/nasis_local.db" # "misc/testStatic.sqlite"
 
-# Function to load all function names in package, run them using SS and static_path as specified
-test_local_NASIS <- function(SS = FALSE, static_path = NULL) {
+# Function to load all function names in package, run them using SS and dsn as specified
+test_local_NASIS <- function(SS = FALSE, dsn = NULL) {
 
   # get package function names
   fnames <- sapply(f, function(x) {
@@ -64,8 +64,8 @@ test_local_NASIS <- function(SS = FALSE, static_path = NULL) {
 
         # handle special cases -- all functions tested take an SS argument except local_NASIS_defined
         switch (FUN,
-                "local_NASIS_defined" = try(TESTFUN(static_path = static_path)),
-                try(TESTFUN(SS = SS, static_path = static_path)) )
+                "local_NASIS_defined" = try(TESTFUN(dsn = dsn)),
+                try(TESTFUN(SS = SS, dsn = dsn)) )
       })
     })
 
@@ -78,27 +78,27 @@ test_local_NASIS <- function(SS = FALSE, static_path = NULL) {
 }
 
 # test with selected set
-nasis_ss <- test_local_NASIS(SS = TRUE, static_path = NULL)
+nasis_ss <- test_local_NASIS(SS = TRUE, dsn = NULL)
 
 # list names of failed functions; if length 0 all good
 nasis_ss[which(nasis_ss)]
 
 # test against whole local database
-nasis_all <- test_local_NASIS(SS = FALSE, static_path = NULL)
+nasis_all <- test_local_NASIS(SS = FALSE, dsn = NULL)
 
 nasis_all[which(nasis_all)]
 
 # RUN IF NEEDED:
 dsn <- "misc/testStatic.sqlite"
-createStaticNASIS(static_path = NULL, SS = TRUE, output_path = dsn)
+createStaticNASIS(dsn = NULL, SS = TRUE, output_path = dsn)
 
 # test with selected set in SQLite instance
-nasis_static_ss <- test_local_NASIS(SS = TRUE, static_path = dsn)
+nasis_static_ss <- test_local_NASIS(SS = TRUE, dsn = dsn)
 
 nasis_static_ss[which(nasis_static_ss)]
 
 # test against whole local database in SQLite instance
-nasis_static_all <- test_local_NASIS(SS = FALSE, static_path = dsn)
+nasis_static_all <- test_local_NASIS(SS = FALSE, dsn = dsn)
 
 nasis_static_all[which(nasis_static_all)]
 

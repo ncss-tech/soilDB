@@ -11,7 +11,7 @@
 #' @param SS get data from the currently loaded Selected Set in NASIS or from
 #' the entire local database (default: `TRUE`)
 #' 
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' 
 #' @return A list with the results.
@@ -30,7 +30,7 @@
 #' }
 #' 
 #' @export get_veg_data_from_NASIS_db
-get_veg_data_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
+get_veg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
 # warning to use NASIS query to load related vegplot data for this to work
 warning("In order to query this data you'll need to load all related vegplots to your sites and pedons in NASIS.", call. = FALSE)
@@ -81,7 +81,7 @@ warning("In order to query this data you'll need to load all related vegplots to
   #q.plant <- "SELECT plantiid, plantsym
   #  FROM plant_View_1;"
   
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
   
   if (inherits(channel, 'try-error'))
     return(data.frame())

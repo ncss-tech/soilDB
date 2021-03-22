@@ -1,4 +1,4 @@
-.get_phlabresults_data_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
+.get_phlabresults_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
   # hacks to make R CMD check --as-cran happy:
   sampledepthbottom <- NULL
@@ -12,7 +12,7 @@ phorizon_View_1 ph
 LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
   ORDER BY peiidref, phiid, sampledepthtop;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -27,7 +27,7 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
   d.phlabresults <- dbQueryNASIS(channel, q)
 
   # recode metadata domains
-  d.phlabresults <- uncode(d.phlabresults, static_path = static_path)
+  d.phlabresults <- uncode(d.phlabresults, dsn = dsn)
 
 
   # compute thickness

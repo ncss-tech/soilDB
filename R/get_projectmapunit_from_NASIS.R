@@ -1,4 +1,4 @@
-get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q <- paste("SELECT p.projectiid, p.uprojectid, p.projectname, pmu.seqnum pmu_seqnum, a2.areasymbol, lmu.musym, lmu.lmapunitiid AS mukey, mu.nationalmusym, mutype, lmu.mustatus, muname, muacres
 
@@ -24,7 +24,7 @@ get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -36,7 +36,7 @@ get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.
   if (nrow(d.project) == 0) message("your selected set is missing the project table, please load it and try again")
 
   # uncode metadata domains
-  d.project <- uncode(d.project, stringsAsFactors = stringsAsFactors, static_path = static_path)
+  d.project <- uncode(d.project, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # done
   return(d.project)

@@ -5,7 +5,7 @@
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: `TRUE`)
 #'
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
 #' @return A data.frame.
@@ -16,7 +16,7 @@
 #' @seealso \code{\link{get_labpedon_data_from_NASIS_db}}
 #' @keywords manip
 #' @export get_lablayer_data_from_NASIS_db
-get_lablayer_data_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
+get_lablayer_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
   # hacks to make R CMD check --as-cran happy:
   cec7 <- NULL
@@ -30,7 +30,7 @@ FROM ncsslayerlabdata_View_1
 
 ORDER BY labpeiid, hzdept ASC;")
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -43,7 +43,7 @@ ORDER BY labpeiid, hzdept ASC;")
   d.lablayer <- dbQueryNASIS(channel, q.ncsslablayer)
 
 	# recode metadata domains
-	d.lablayer <- uncode(d.lablayer, static_path = static_path)
+	d.lablayer <- uncode(d.lablayer, dsn = dsn)
 
 
 	# trim names

@@ -1,4 +1,4 @@
-get_RMF_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
+get_RMF_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
   # RMF
   # unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
@@ -16,7 +16,7 @@ get_RMF_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
   FROM phredoxfcolor_View_1
   ORDER BY phrdxfiidref, colormoistst;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -32,8 +32,8 @@ get_RMF_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
   d.c <- dbQueryNASIS(channel, q.c)
 
   # uncode domained columns
-  d <- uncode(d, static_path = static_path)
-  d.c <- uncode(d.c, static_path = static_path)
+  d <- uncode(d, dsn = dsn)
+  d.c <- uncode(d.c, dsn = dsn)
 
   # convert back to characters / numeric
   d.c$colormoistst <- as.character(d.c$colormoistst)

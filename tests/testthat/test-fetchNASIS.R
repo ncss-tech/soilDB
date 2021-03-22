@@ -1,7 +1,7 @@
 context("fetchNASIS() -- requires local NASIS and ODBC connection")
 
 # TODO: develop minimal test set for NASIS data, stored as static SQLite DB
-static_path <- NULL
+dsn <- NULL
 
 ## helper functions used to skip tests that rely on special conditions
 # http://r-pkgs.had.co.nz/tests.html
@@ -10,12 +10,12 @@ static_path <- NULL
 # * pedons / component missing from local database
 
 
-check_local_NASIS_pedons_available <- function(static_path = NULL) {
+check_local_NASIS_pedons_available <- function(dsn = NULL) {
 
   # attempt to load pedons
   # these functions will return empty data.frame objects when there are no data in the SS
-  res1 <- try(suppressWarnings(get_site_data_from_NASIS_db(static_path = static_path)), silent = TRUE)
-  res2 <- try(suppressWarnings(get_hz_data_from_NASIS_db(static_path = static_path)), silent = TRUE)
+  res1 <- try(suppressWarnings(get_site_data_from_NASIS_db(dsn = dsn)), silent = TRUE)
+  res2 <- try(suppressWarnings(get_hz_data_from_NASIS_db(dsn = dsn)), silent = TRUE)
 
   if (nrow(res1) == 0) {
     skip("no Site/Pedon records in local NASIS database")
@@ -25,12 +25,12 @@ check_local_NASIS_pedons_available <- function(static_path = NULL) {
   }
 }
 
-check_local_NASIS_components_available <- function(static_path = NULL) {
+check_local_NASIS_components_available <- function(dsn = NULL) {
 
   # attempt to load components
   # these functions will return empty data.frame objects when there are no data in the SS
-  res1 <- try(suppressWarnings(get_component_data_from_NASIS_db(static_path = static_path)), silent = TRUE)
-  res2 <- try(suppressWarnings(get_component_horizon_data_from_NASIS_db(static_path = static_path)), silent = TRUE)
+  res1 <- try(suppressWarnings(get_component_data_from_NASIS_db(dsn = dsn)), silent = TRUE)
+  res2 <- try(suppressWarnings(get_component_horizon_data_from_NASIS_db(dsn = dsn)), silent = TRUE)
 
   # res <- try(suppressWarnings(fetchNASIS(from='pedons')), silent = TRUE)
   # note: this was too broad of a test -- any error in fetchNASIS will result in skipping the test!
@@ -50,12 +50,12 @@ check_local_NASIS_components_available <- function(static_path = NULL) {
 test_that("fetchNASIS(from='pedons') returns reasonable data", {
 
   # test for conditions permitting this test to run
-  if (!local_NASIS_defined(static_path = static_path)) {
+  if (!local_NASIS_defined(dsn = dsn)) {
     skip("local NASIS database not available")
   }
 
   # pedons must be present for tests
-  check_local_NASIS_pedons_available(static_path = static_path)
+  check_local_NASIS_pedons_available(dsn = dsn)
 
   # get data
   # ignore warnings for now
@@ -78,12 +78,12 @@ test_that("fetchNASIS(from='pedons') returns reasonable data", {
 test_that("fetchNASIS(from='pedons') nullFragsAreZero works as expected", {
 
   # test for conditions permitting this test to run
-  if (!local_NASIS_defined(static_path = static_path)) {
+  if (!local_NASIS_defined(dsn = dsn)) {
     skip("local NASIS database not available")
   }
 
   # components must be present for tests
-  check_local_NASIS_pedons_available(static_path = static_path)
+  check_local_NASIS_pedons_available(dsn = dsn)
 
   # get data
   # ignore warnings for now
@@ -104,7 +104,7 @@ test_that("fetchNASIS(from='components') returns reasonable data", {
   }
 
   # must have components to complete test
-  check_local_NASIS_components_available(static_path = static_path)
+  check_local_NASIS_components_available(dsn = dsn)
 
   # get data
   # ignore warnings for now
@@ -120,14 +120,14 @@ test_that("fetchNASIS(from='components') returns reasonable data", {
 })
 
 test_that("get_text_notes_from_NASIS_db works", {
-  if (!local_NASIS_defined(static_path = static_path)) {
+  if (!local_NASIS_defined(dsn = dsn)) {
     skip("local NASIS database not available")
   }
   expect_silent({get_text_notes_from_NASIS_db()})
 })
 
 test_that("getHzErrorsNASIS works", { 
-  if (!local_NASIS_defined(static_path = static_path)) {
+  if (!local_NASIS_defined(dsn = dsn)) {
     skip("local NASIS database not available")
   }
   expect_silent({suppressMessages(getHzErrorsNASIS(static_path = static_path))})

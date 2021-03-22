@@ -47,7 +47,7 @@
 #' @param stringsAsFactors logical: should character vectors be converted to
 #' factors?
 #'
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
 #' @return A data frame with the results.
@@ -75,7 +75,7 @@ uncode <- function(df,
                    db = "NASIS",
                    droplevels = FALSE,
                    stringsAsFactors = default.stringsAsFactors(),
-                   static_path = NULL) {
+                   dsn = NULL) {
 
   get_metadata <- function() {
 
@@ -87,7 +87,7 @@ uncode <- function(df,
                         FROM MetadataTableColumn GROUP BY DomainID, ColumnPhysicalName) mtc ON mtc.DomainID = mdd.DomainID
           ORDER BY mdd.DomainID, ColumnPhysicalName, ChoiceValue;"
 
-    channel <- dbConnectNASIS(static_path)
+    channel <- dbConnectNASIS(dsn)
 
     if (inherits(channel, 'try-error'))
       return(data.frame())

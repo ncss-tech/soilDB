@@ -19,7 +19,7 @@
 #' convert those vectors that have been set outside of `uncode()` (i.e. hard
 #' coded).
 #'
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
 #' @return A list with the results.
@@ -45,7 +45,7 @@
 get_extended_data_from_NASIS_db <- function(SS = TRUE,
                                             nullFragsAreZero = TRUE,
                                             stringsAsFactors = default.stringsAsFactors(),
-                                            static_path = NULL) {
+                                            dsn = NULL) {
 
 
   # photo links from PedonPC stored as sitetext notes
@@ -423,7 +423,7 @@ LEFT OUTER JOIN (
     q.hz.dessuf <- gsub(pattern = '_View_1', replacement = '', x = q.hz.dessuf, fixed = TRUE)
   }
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -448,17 +448,17 @@ LEFT OUTER JOIN (
   d.hz.dessuf <- dbQueryNASIS(channel, q.hz.dessuf)
 
 	## uncode the ones that need that here
-	d.diagnostic <- uncode(d.diagnostic, stringsAsFactors = stringsAsFactors, static_path = static_path)
-	d.restriction <- uncode(d.restriction, stringsAsFactors = stringsAsFactors, static_path = static_path)
-	d.rf.data    <- uncode(d.rf.data, stringsAsFactors = stringsAsFactors, static_path = static_path)
-	d.art.data  <-  uncode(d.art.data, stringsAsFactors = stringsAsFactors, static_path = static_path)
-	d.hz.texmod  <- uncode(d.hz.texmod, stringsAsFactors = stringsAsFactors, static_path = static_path)
+	d.diagnostic <- uncode(d.diagnostic, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.restriction <- uncode(d.restriction, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.rf.data    <- uncode(d.rf.data, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.art.data  <-  uncode(d.art.data, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.hz.texmod  <- uncode(d.hz.texmod, stringsAsFactors = stringsAsFactors, dsn = dsn)
 	# https://github.com/ncss-tech/soilDB/issues/53
-	d.taxhistory <- uncode(d.taxhistory, stringsAsFactors = FALSE, static_path = static_path)
-	d.sitepm     <- uncode(d.sitepm, stringsAsFactors = stringsAsFactors, static_path = static_path)
-	d.structure  <- uncode(d.structure, stringsAsFactors = stringsAsFactors, static_path = static_path)
-	d.hz.desgn <- uncode(d.hz.desgn, stringsAsFactors = stringsAsFactors, static_path = static_path)
-	d.hz.dessuf <- uncode(d.hz.dessuf, stringsAsFactors = stringsAsFactors, static_path = static_path)
+	d.taxhistory <- uncode(d.taxhistory, stringsAsFactors = FALSE, dsn = dsn)
+	d.sitepm     <- uncode(d.sitepm, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.structure  <- uncode(d.structure, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.hz.desgn <- uncode(d.hz.desgn, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.hz.dessuf <- uncode(d.hz.dessuf, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
 	## the following steps will not work when data are missing from local DB or SS
 	# return NULL in those cases

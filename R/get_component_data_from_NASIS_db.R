@@ -7,9 +7,9 @@
 
 
 ## component diagnostic features
-get_component_diaghz_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
+get_component_diaghz_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -26,14 +26,14 @@ get_component_diaghz_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
   d <- dbQueryNASIS(channel, q)
 
   # convert codes
-  d <- uncode(d, static_path = static_path)
+  d <- uncode(d, dsn = dsn)
 
 }
 
 ## component diagnostic features
-get_component_restrictions_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
+get_component_restrictions_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -50,12 +50,12 @@ get_component_restrictions_from_NASIS_db <- function(SS = TRUE, static_path = NU
   d <- dbQueryNASIS(channel, q)
 
   # convert codes
-  return(uncode(d, static_path = static_path)
+  return(uncode(d, dsn = dsn)
 )
 }
 
 ## get map unit text from local NASIS
-get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_path = NULL) {
+get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NULL) {
 
   q <- "SELECT mu.muiid, mu.mukind, mu.mutype, mu.muname, mu.nationalmusym,
   mut.seqnum, mut.recdate, mut.recauthor, mut.mapunittextkind, mut.textcat, mut.textsubcat, CAST(mut.textentry AS ntext) AS textentry
@@ -64,7 +64,7 @@ get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
   mapunit_View_1 AS mu
   INNER JOIN mutext_View_1 AS mut ON mu.muiid = mut.muiidref;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -78,7 +78,7 @@ get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
   d <- dbQueryNASIS(channel, q)
 
   # convert codes
-  d <- uncode(d, static_path = static_path)
+  d <- uncode(d, dsn = dsn)
 
   # replace tabs with spaces
   # tabs at the beginning of a line will confuse the MD parser, generating <code><pre> blocks
@@ -96,7 +96,7 @@ get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
 
 
 ## get component text from local NASIS
-get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_path = NULL) {
+get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NULL) {
 
   q <- "SELECT co.coiid,
   cot.seqnum, cot.recdate, cot.recauthor, cot.comptextkind, cot.textcat, cot.textsubcat,
@@ -112,7 +112,7 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
   }
 
   # connect to NASIS
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -121,7 +121,7 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
   d <- dbQueryNASIS(channel, q)
 
   # convert codes
-  d <- uncode(d, static_path = static_path)
+  d <- uncode(d, dsn = dsn)
 
   # replace tabs with spaces
   # tabs at the beginning of a line will confuse the MD parser, generating <code><pre> blocks
@@ -156,7 +156,7 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
 #' The 'factory-fresh' default is TRUE, but this can be changed by setting
 #' options(`stringsAsFactors = FALSE`)
 #'
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
 #' @return A list with the results.
@@ -176,7 +176,7 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, static_pa
 #' }
 #'
 #' @export get_component_data_from_NASIS_db
-get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path= NULL) {
+get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn= NULL) {
 
   q <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, reannualprecip_r, ffd_l, ffd_r, ffd_h, tfact, wei, weg, nirrcapcl, nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, frostact, hydricrating, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
 
@@ -186,7 +186,7 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -209,7 +209,7 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 
   # uncode metadata domains
   if (nrow(d) > 0) {
-    d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
+    d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
   }
 
   # done
@@ -217,7 +217,7 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 }
 
 
-get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q.legend  <- paste("
                      SELECT
@@ -249,7 +249,7 @@ get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors
     q.legend <- gsub(pattern = '_View_1', replacement = '', x = q.legend, fixed = TRUE)
   }
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -262,7 +262,7 @@ get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors
                      db = "NASIS",
                      droplevels = droplevels,
                      stringsAsFactors = stringsAsFactors,
-                     static_path = static_path)
+                     dsn = dsn)
 
 
   # done
@@ -271,7 +271,7 @@ get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors
 
 
 
-get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q <- paste("SELECT
              a.areasymbol, a.areaname, a.areaacres,
@@ -310,7 +310,7 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFa
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -324,7 +324,7 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFa
               db = "NASIS",
               droplevels = droplevels,
               stringsAsFactors = stringsAsFactors,
-              static_path = static_path)
+              dsn = dsn)
 
   # done
   return(d)
@@ -332,7 +332,7 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFa
 
 
 
-get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q.mapunit <- paste("
                      SELECT
@@ -381,7 +381,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
     q.mapunit <- gsub(pattern = '_View_1', replacement = '', x = q.mapunit, fixed = TRUE)
   }
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -394,7 +394,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
                       db = "NASIS",
                       droplevels = droplevels,
                       stringsAsFactors = stringsAsFactors,
-                      static_path = static_path)
+                      dsn = dsn)
 
   # hacks to make R CMD check --as-cran happy:
   metadata <- NULL
@@ -427,7 +427,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
 
 # return all rows from correlation -- map unit -- legend map unit -- dmu / legend -- area
 # note that all of these "target tables" have to be selected
-get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional=TRUE, dropNotRepresentative=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional=TRUE, dropNotRepresentative=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q <- "SELECT lmapunitiid, mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
 
@@ -441,7 +441,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
 
   ORDER BY nationalmusym, dmuiid;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -459,7 +459,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
     warning('there are no records in your selected set!', call. = FALSE)
 
   # recode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # optionally drop additional | NA mustatus
   if(dropAdditional) {
@@ -497,7 +497,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
 }
 
 # get geomorphic desc for each component
-get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, static_path = NULL) {
+get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
   q <- "SELECT cogeo.coiidref as coiid, cogeo.geomfmod, geomorfeat.geomfname, cogeo.geomfeatid, cogeo.existsonfeat, cogeo.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
 
@@ -509,7 +509,7 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, static_path =
 
   ORDER BY coiid, geomfeatid ASC;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -527,7 +527,7 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, static_path =
 
 
 # get copm for each component
-get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q <- "SELECT cpmg.coiidref as coiid, cpm.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
 
@@ -538,7 +538,7 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
 
   ORDER BY coiidref, seqnum, pmorder, copmgrpiid ASC;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -551,14 +551,14 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
   d <- dbQueryNASIS(channel, q)
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # done
   return(d)
 }
 
 # get ESD information for each component
-get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
   ecositeorigin, ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
@@ -569,7 +569,7 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
 
   ORDER BY coiid;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -590,7 +590,7 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
   }
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # done
   return(d)
@@ -598,7 +598,7 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
 
 ## TODO: convert any multiple entries into a comma delimited string
 # get OtherVeg information for each component
-get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
+get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
   q <- "SELECT coiidref as coiid, ovegclid, ovegclname, coothvegcl.recwlupdated
   FROM coothvegclass_View_1 coothvegcl
@@ -606,7 +606,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NUL
   ORDER BY coiid;"
 
   # setup connection local NASIS
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -627,7 +627,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NUL
   }
 
   # uncode metadata domains
-  #d <- uncode(d, static_path = static_path)
+  #d <- uncode(d, dsn = dsn)
 
   # done
   return(d)
@@ -645,7 +645,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NUL
 #' the entire local database (default: TRUE)
 #' @param fill should missing "month" rows in the comonth table be filled with
 #' NA (FALSE)
-#' @param static_path Optional: path to local SQLite database containing NASIS
+#' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' @param stringsAsFactors logical: should character vectors be converted to
 #' factors? This argument is passed to the uncode() function. It does not
@@ -669,12 +669,12 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, static_path = NUL
 #' }
 #'
 #' @export get_comonth_from_NASIS_db
-get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors = default.stringsAsFactors(), static_path = NULL) {
+get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid
   FROM comonth_View_1 AS comonth;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -688,7 +688,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors 
   d <- dbQueryNASIS(channel, q)
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors, static_path = static_path)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # optionally fill missing coiids
   if (fill) {
@@ -696,7 +696,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors 
     FROM component_View_1
     ORDER BY coiid;"
 
-    channel <- dbConnectNASIS(static_path)
+    channel <- dbConnectNASIS(dsn)
 
     if (inherits(channel, 'try-error'))
       return(data.frame())
@@ -768,7 +768,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors 
 
 # get linked pedons by peiid and user pedon ID
 # note that there may be >=1 pedons / coiid
-get_copedon_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
+get_copedon_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
   q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative
 
@@ -777,7 +777,7 @@ get_copedon_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
   LEFT OUTER JOIN pedon_View_1 p ON p.peiid = copedon.peiidref;
   "
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
@@ -802,7 +802,7 @@ get_copedon_from_NASIS_db <- function(SS=TRUE, static_path = NULL) {
 
 ## TODO: better documentation for "fill" argument
 # https://github.com/ncss-tech/soilDB/issues/50
-get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE, static_path = NULL) {
+get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE, dsn = NULL) {
 
   q <- "SELECT coiid, chiid, hzname, hzdept_r, hzdepb_r, texture, fragvoltot_l, fragvoltot_r, fragvoltot_h, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, structgrpname, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_l, lep_r, lep_h, ll_l, ll_r, ll_h, pi_l, pi_r, pi_h, sieveno4_l, sieveno4_r, sieveno4_h, sieveno10_l, sieveno10_r, sieveno10_h, sieveno40_l, sieveno40_r, sieveno40_h, sieveno200_l, sieveno200_r, sieveno200_h, sar_l, sar_r, sar_h, ec_l, ec_r, ec_h, cec7_l, cec7_r, cec7_h, sumbases_l, sumbases_r, sumbases_h, ecec_l, ecec_r, ecec_h, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, ph01mcacl2_l, ph01mcacl2_r, ph01mcacl2_h, caco3_l, caco3_r, caco3_h, kffact, kwfact, aashind_l, aashind_r, aashind_h
 
@@ -817,7 +817,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE, stat
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC, hzdept_r ASC;"
 
-  channel <- dbConnectNASIS(static_path)
+  channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
