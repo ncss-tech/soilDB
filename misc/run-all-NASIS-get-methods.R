@@ -5,6 +5,8 @@
 
 f <- read.table(text = "R/fetchNASIS.R
                         R/fetchNASIS_pedons.R
+                        R/fetchNASIS_components.R
+                        R/fetchVegdata.R
                         R/getHzErrorsNASIS.R
                         R/get_RMF_from_NASIS_db.R
                         R/get_colors_from_NASIS_db.R
@@ -40,6 +42,7 @@ library(soilDB)
 #                     otherwise path to SQLite)
 dsn <- NULL # "~/workspace/NASISlite/nasis_local.db" # "misc/testStatic.sqlite"
 
+# Function to load all function names in package, run them using SS and static_path as specified
 test_local_NASIS <- function(SS = FALSE, static_path = NULL) {
 
   # get package function names
@@ -75,29 +78,32 @@ test_local_NASIS <- function(SS = FALSE, static_path = NULL) {
 }
 
 # test with selected set
-res <- test_local_NASIS(SS = FALSE, static_path = NULL)
+nasis_ss <- test_local_NASIS(SS = TRUE, static_path = NULL)
 
 # list names of failed functions; if length 0 all good
-res[which(res)]
+nasis_ss[which(nasis_ss)]
 
 # test against whole local database
-res <- test_local_NASIS(SS = FALSE, static_path = NULL)
+nasis_all <- test_local_NASIS(SS = FALSE, static_path = NULL)
 
-res[which(res)]
+nasis_all[which(nasis_all)]
 
 # RUN IF NEEDED:
-# createStaticNASIS(static_path = NULL, SS = TRUE, output_path = dsn)
+dsn <- "misc/testStatic.sqlite"
+createStaticNASIS(static_path = NULL, SS = TRUE, output_path = dsn)
 
 # test with selected set in SQLite instance
-res <- test_local_NASIS(SS = TRUE, static_path = dsn)
+nasis_static_ss <- test_local_NASIS(SS = TRUE, static_path = dsn)
 
-res[which(res)]
+nasis_static_ss[which(nasis_static_ss)]
 
 # test against whole local database in SQLite instance
-res <- test_local_NASIS(SS = FALSE, static_path = dsn)
+nasis_static_all <- test_local_NASIS(SS = FALSE, static_path = dsn)
 
-res[which(res)]
+nasis_static_all[which(nasis_static_all)]
 
+save(nasis_ss, nasis_all, nasis_static_ss, nasis_static_all, 
+     file = "NASIS-table-results.rda")
 
 ### prior fixes:
 

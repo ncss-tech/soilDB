@@ -3,7 +3,7 @@ library(aqp)
 library(soilDB)
 library(tibble)
 
-static_path <- "~/workspace/NASISlite/nasis_local.db"
+static_path <- NULL #"~/workspace/NASISlite/nasis_local.db"
 SS <- FALSE
 stringsAsFactors <- FALSE
 
