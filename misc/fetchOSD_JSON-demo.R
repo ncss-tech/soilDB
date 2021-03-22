@@ -1,29 +1,33 @@
 library(soilDB)
 library(tibble)
 
+path <- "E:/workspace/SoilKnowledgeBase/inst/extdata/OSD"
+
 # list all
-series <- gsub("(.*).json", "\\1", basename(list.files("~/workspace/SoilKnowledgeBase/inst/extdata/OSD",
-                                                       recursive = TRUE)))
+series <- gsub("(.*).json|(.*log$)", "\\1", basename(list.files(path,
+                                                                recursive = TRUE)))
+series <- series[nchar(series) > 0]
 
-# smaller test example
-#series <- c("Ackwater","Ariel","Neissenberg","Meikle","foo",NA)
-
-# this uses a _local_ cloned instance of SKB rep--fast (base_url = NULL or missing will use GitHub)
-res <- fetchOSD_JSON(series, base_url = "~/workspace/SoilKnowledgeBase/inst/extdata/OSD")
+# this uses a _local_ cloned instance of SKB repo (pretty fast)
+#  - base_url = NULL or missing will use GitHub
+res <- fetchOSD_JSON(series, base_url = path)
 
 # 2023 series are "incomplete" in one or more sections
-tibble(series = series[match(res$SERIES, toupper(series))],
+tibble(series = series[match(res$SERIES, toupper(series))], 
        complete = complete.cases(res))  %>%
   subset(!complete)
+
 
 # tabulate "missing" sections
 apply(res, 2, function(x) sum(is.na(x)))
 
+
 (tibble(res) %>%
-  subset(is.na(TAXONOMIC.CLASS)))$SERIES
+    subset(is.na(TAXONOMIC.CLASS)))$SERIES
 
 (tibble(res) %>%
     subset(is.na(TYPICAL.PEDON)))$SERIES
+
 
 # most common states
 allstates <- table(unlist(strsplit(res$STATES, ",")))
