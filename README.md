@@ -158,7 +158,7 @@ Examples
     res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
     print(res$fig)
 
-<img src="https://i.imgur.com/aw2StGn.png" width="1056" />
+<img src="https://i.imgur.com/FVDqCeB.png" width="1056" />
 
 ### Make Profile Sketches
 
@@ -172,7 +172,7 @@ Examples
       width = 0.2
     )
 
-<img src="https://i.imgur.com/mpwaqGg.png" width="1344" />
+<img src="https://i.imgur.com/WnKNapT.png" width="1344" />
 
 ### Identify Tabular “Siblings”
 
@@ -201,7 +201,8 @@ Examples
       cex.taxon.labels = 1,
       cex.names = 1
     )
-<img src="https://i.imgur.com/yX2Wsp4.png" width="1344" />
+
+<img src="https://i.imgur.com/8nRXmSw.png" width="1344" />
 
 Dependency Graph
 ----------------
