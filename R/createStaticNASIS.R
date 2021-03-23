@@ -140,8 +140,22 @@ createStaticNASIS <- function(tables = NULL, SS = TRUE,
     # returns TRUE, invisibly, or try-error (one per table)
     return(lapply(nasis_table_names, function(n) {
         return(try({
+          
+          newdata <- .dump_NASIS_table(n, dsn = dsn)
+          
+          # pre-processing for data type issues
+          newdata[] <- lapply(newdata, function(x) {
+            
+                          # convert times to character 
+                          # .:. SQLite3 does not have a datetime data type
+                          if (inherits(x, "POSIXct") || inherits(x, "POSIXlt")) 
+                            return(as.character(x))
+                        
+                          return(x)
+                        })
+          
           DBI::dbWriteTable(conn = outcon, name =  n,
-                            value = .dump_NASIS_table(n, dsn = dsn),
+                            value = newdata,
                             overwrite = TRUE)
         }))
     }))
