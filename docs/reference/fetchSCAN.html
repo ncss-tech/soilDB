@@ -172,14 +172,14 @@
     <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
     
     <span class='co'># get data: new interface</span>
-    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>fetchSCAN</span><span class='op'>(</span>site.code<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>356</span>, <span class='fl'>2072</span><span class='op'>)</span>, year<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2015</span>, <span class='fl'>2016</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>fetchSCAN</span><span class='op'>(</span>site.code<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>356</span>, <span class='fl'>2072</span><span class='op'>)</span>, year<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2015</span>, <span class='fl'>2016</span><span class='op'>)</span><span class='op'>)</span>
     <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
     
     <span class='co'># get sensor metadata</span>
-    <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>SCAN_sensor_metadata</span><span class='op'>(</span>site.code<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>356</span>, <span class='fl'>2072</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>SCAN_sensor_metadata</span><span class='op'>(</span>site.code<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>356</span>, <span class='fl'>2072</span><span class='op'>)</span><span class='op'>)</span>
     
     <span class='co'># get site metadata</span>
-    <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>SCAN_site_metadata</span><span class='op'>(</span>site.code<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>356</span>, <span class='fl'>2072</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>SCAN_site_metadata</span><span class='op'>(</span>site.code<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>356</span>, <span class='fl'>2072</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>19336 records (0.83 Mb transferred)</span></div><div class='output co'>#&gt; List of 14
 #&gt;  $ metadata:'data.frame':	2 obs. of  12 variables:

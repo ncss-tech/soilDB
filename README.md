@@ -201,7 +201,6 @@ Examples
       cex.taxon.labels = 1,
       cex.names = 1
     )
-
 <img src="https://i.imgur.com/yX2Wsp4.png" width="1344" />
 
 Dependency Graph

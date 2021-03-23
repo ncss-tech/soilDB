@@ -163,7 +163,7 @@
   <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='http://rgdal.r-forge.r-project.org'>rgdal</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
     
     <span class='co'># basic usage</span>
-    <span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>120.54</span>,<span class='fl'>38.61</span>,<span class='op'>-</span><span class='fl'>120.41</span>,<span class='fl'>38.70</span><span class='op'>)</span>
+    <span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>120.54</span>,<span class='fl'>38.61</span>,<span class='op'>-</span><span class='fl'>120.41</span>,<span class='fl'>38.70</span><span class='op'>)</span>
     <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>mapunit_geom_by_ll_bbox</span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># about 20 seconds</span>
     
     <span class='kw'>if</span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span><span class='op'>(</span><span class='va'>x</span>,<span class='st'>'try-error'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
@@ -196,16 +196,8 @@
 #&gt; <span class='message'>Linking to sp version:1.4-5</span>
 #&gt; <span class='message'>To mute warnings of possible GDAL/OSR exportToProj4() degradation,</span>
 #&gt; <span class='message'>use options("rgdal_show_exportToProj4_warnings"="none") before loading rgdal.</span>
-#&gt; <span class='message'>Overwritten PROJ_LIB was D:/a/_temp/Library/rgdal/proj</span></div><div class='output co'>#&gt; OGR data source with driver: GML 
-#&gt; Source: "C:\Users\runneradmin\AppData\Local\Temp\RtmpWOIk0x\fileb7853df7069.gml", layer: "mapunitpoly"
-#&gt; with 197 features
-#&gt; It has 9 fields</div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='img'><img src='mapunit_geom_by_ll_bbox-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt;    mukey                                                      muname
-#&gt; 1 462183          Aiken loam, 2 to 9 percent slopes, C Lower Montane
-#&gt; 2 462188                   Aiken cobbly loam, 3 to 30 percent slopes
-#&gt; 3 462193                               Argonaut loam, seeped variant
-#&gt; 4 462215 Chaix very rocky coarse sandy loam, 50 to 70 percent slopes
-#&gt; 5 462219         Cohasset loam, summits, 2 to 20 percent slopes, dry
-#&gt; 6 462220       Cohasset loam, shoulders, 3 to 20 percent slopes, dry</div><div class='input'><span class='co'># }</span>
+#&gt; <span class='message'>Overwritten PROJ_LIB was D:/a/_temp/Library/rgdal/proj</span></div><div class='output co'>#&gt; <span class='warning'>Warning: InternetOpenUrl failed: 'The connection with the server was reset'</span></div><div class='output co'>#&gt; Error in download.file(url = u, destfile = tf.full, quiet = FALSE) : 
+#&gt;   cannot open URL 'https://sdmdataaccess.nrcs.usda.gov/Spatial/SDMNAD83Geographic.wfs?Service=WFS&amp;Version=1.0.0&amp;Request=GetFeature&amp;Typename=MapunitPoly&amp;BBOX=-120.54,38.61,-120.41,38.7'</div><div class='output co'>#&gt; <span class='message'>could not download XML result from SDA</span></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

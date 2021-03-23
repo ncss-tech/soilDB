@@ -178,7 +178,7 @@
    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   
   <span class='co'># soils of interest</span>
-  <span class='va'>s.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'musick'</span>, <span class='st'>'cecil'</span>, <span class='st'>'drummer'</span>, <span class='st'>'amador'</span>, <span class='st'>'pentz'</span>, 
+  <span class='va'>s.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>'musick'</span>, <span class='st'>'cecil'</span>, <span class='st'>'drummer'</span>, <span class='st'>'amador'</span>, <span class='st'>'pentz'</span>, 
               <span class='st'>'reiff'</span>, <span class='st'>'san joaquin'</span>, <span class='st'>'montpellier'</span>, <span class='st'>'grangeville'</span>, <span class='st'>'pollasky'</span>, <span class='st'>'ramona'</span><span class='op'>)</span>
   
   <span class='co'># fetch and convert data into an SPC</span>
@@ -189,7 +189,7 @@
   <span class='co'># moist soil colors</span>
   <span class='kw'>if</span><span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/ncss-tech/aqp'>"aqp"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
     
-    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span>, mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span>, mfrow<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
     <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>s.moist</span>, name<span class='op'>=</span><span class='st'>'hzname'</span>, 
          cex.names<span class='op'>=</span><span class='fl'>0.85</span>, axis.line.offset<span class='op'>=</span><span class='op'>-</span><span class='fl'>4</span><span class='op'>)</span>
     <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>s.dry</span>, name<span class='op'>=</span><span class='st'>'hzname'</span>, 
@@ -198,7 +198,7 @@
     <span class='co'># extended mode: return a list with SPC + summary tables</span>
     <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>fetchOSD</span><span class='op'>(</span><span class='va'>s.list</span>, extended <span class='op'>=</span> <span class='cn'>TRUE</span>, colorState <span class='op'>=</span> <span class='st'>'dry'</span><span class='op'>)</span>
     
-    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
     <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>SPC</span><span class='op'>)</span>
     <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>1</span><span class='op'>)</span>
   <span class='op'>}</span>

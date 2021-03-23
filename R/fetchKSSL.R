@@ -285,32 +285,37 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
   
   # create argument matrix
   arg <- expand.grid(
-    series=series, 
-    bbox=bbox, 
-    mlra=mlra, 
-    pedlabsampnum=pedlabsampnum, 
-    pedon_id=pedon_id, 
-    pedon_key=pedon_key
+    series = series,
+    bbox = bbox,
+    mlra = mlra,
+    pedlabsampnum = pedlabsampnum,
+    pedon_id = pedon_id,
+    pedon_key = pedon_key
   )
   
-  # number of unique arguments
-  n.args <- nrow(arg)
+  if (all(is.na(arg))) {
+    stop("must specify series, bbox, mlra, pedlabsampnum, pedon_id, or pedon_key argument",
+         call. = FALSE)
+  }
+  
+  # number of unique argument sets (rows in matrix)
+  n.arg.sets <- nrow(arg)
   
   # list to store results
-  res <- vector(mode = 'list', length = n.args)
+  res <- vector(mode = 'list', length = n.arg.sets)
   
-  # disable progres bar when n.args < 1
-  if(n.args < 2) {
+  # disable progress bar when number of argument sets (calls to .fetchSingle_KSSL) is 1
+  if(n.arg.sets == 1) {
     progress <- FALSE
   }
   
   # allow toggling of progress bar
   if(progress) {
-    pb <- txtProgressBar(min = 0, max = n.args, style = 3)
+    pb <- txtProgressBar(min = 0, max = n.arg.sets, style = 3)
   }
   
   # iterate over argument set
-  for(i in 1:n.args) {
+  for(i in 1:n.arg.sets) {
     # build single URL filter
     f <- with(
       arg[i, ], 
