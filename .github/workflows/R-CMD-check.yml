@@ -47,7 +47,7 @@ jobs:
         run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
 
       - name: Configure git
-        if: runner.os == 'Windows' && github.event_name == 'schedule'
+        if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         run: |
           git config user.email "github-actions@github.com"
           git config user.name "github-actions"
@@ -103,7 +103,7 @@ jobs:
       - name: Render README
         if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         run: |
-          install.packages(c("rmarkdown","devtools","pkgdown","aqp","soilDB","sharpshootR","dendextend","latticeExtra"))
+          install.packages(c("rmarkdown","devtools","pkgdown","aqp","sharpshootR","dendextend","latticeExtra"))
           remotes::install_github(c("ncss-tech/aqp","ncss-tech/sharpshootR"), dependencies = FALSE)
           devtools::install()
           rmarkdown::render("README.Rmd")
