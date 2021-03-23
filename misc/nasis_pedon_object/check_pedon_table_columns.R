@@ -1,5 +1,9 @@
-# first install latest soilDB from nasisDBI branch (unless that is merged when one reads this)
-# remotes::install_github("ncss-tech/soilDB@nasisDBI", dependencies = FALSE)
+# first install latest soilDB
+#remotes::install_github("ncss-tech/soilDB", dependencies = FALSE)
+
+# 'pedon_table_columns.txt' defines a set of columns from a slightly older NASIS data model
+# This script compares those contents with a local NASIS instance.
+
 library(DBI)
 library(soilDB)
 
@@ -35,13 +39,14 @@ f$table[badtidx]
 # what "veg" tables are in NASIS?
 # nasis_tables_all[grep("veg", nasis_tables_all)]
 
-# this uses ncss-tech/soilDB@nasisDBI to create a list of tables queried by name 
-test <- soilDB::createStaticNASIS(tables = f$table) #, output_file = "test.sqlite")
+# create a list of tables queried by name 
+test <- soilDB::createStaticNASIS(f$table)
 
 # check the lookup lists against NASIS (find stuff not in NASIS)
 test.res <- sapply(f$table, function(aTable) {
   any(!cols[[aTable]] %in% colnames(test[[aTable]]))
 })
+# these have one or more columns missing from current nasis
 test.res[sapply(test.res, isTRUE)]
 
 # now check NASIS against lookup list (find new stuff in NASIS)
@@ -50,9 +55,10 @@ test.res2 <- sapply(f$table, function(aTable) {
   testcols <- colnames(test[[aTable]])
   res <- testcols[!testcols %in% c(cols[[aTable]], c("recwlupdated","recuseriidref"))]
 })
+# these have columns in current nasis missing from old def file
 test.res2[sapply(test.res2, length) > 0]
 
-# check tables
+# create a list of comparisons
 chktbls <- names(test.res[test.res])
 chkcols <- lapply(chktbls, function(fixtable) {
   testcols <- cols[[fixtable]]
@@ -62,3 +68,25 @@ chkcols <- lapply(chktbls, function(fixtable) {
 })
 names(chkcols) <- chktbls
 chkcols
+
+# inspect differences as JSON
+# jsonlite::prettify(jsonlite::toJSON(chkcols))
+
+# create a file-based database at this path
+test_dsn <- "test.sqlite"
+
+# what additional tables required to run fetchNASIS?
+meta_tables <- c('MetadataDomainDetail', 
+                 'MetadataDomainMaster', 
+                 'MetadataTableColumn',
+                 'ecologicalsite',
+                 'geomorfeat', 'geomorfeattype')
+
+# write to SQLite file `test_dsn`
+res <- soilDB::createStaticNASIS(tables = c(f$table, 
+                                            meta_tables), 
+                                 SS = TRUE, # SS = TRUE for createStaticNASIS means include (View_1) tables
+                                 output_path = test_dsn)
+
+# fetch from the SQLite file `test_dsn`
+f <- fetchNASIS(dsn = test_dsn, SS = FALSE) # SS = TRUE for fetchNASIS means don't use the View_1 tables
