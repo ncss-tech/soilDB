@@ -42,41 +42,38 @@
 #'  - combine search terms into a single expression: (grano:* | granite)
 #' 
 #' Related documentation can be found in the following tutorials
-#' \itemize{
-#'   \item{\href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}}
-#'   
-#'   \item{\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}}
-#'   
-#'   \item{\href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}}
-#' }
-#' 
+#'  - [overview of all soil series query functions](http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html)
+#'  - [competing soil series](https://ncss-tech.github.io/AQP/soilDB/competing-series.html)
+#'  - [siblings](https://ncss-tech.github.io/AQP/soilDB/siblings.html)
+#'
+#'
 #' @references \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587}
-#' 
+#'
 #' @author D.E. Beaudette
-#' 
+#'
 #' @note SoilWeb maintains a snapshot of the Official Series Description data.
-#' 
+#'
 #' @seealso \code{\link{fetchOSD}, \link{siblings}, \link{fetchOSD}}
-#' 
+#'
 #' @keywords manip
-#' 
+#'
 #' @return a \code{data.frame} object containing soil series names that match patterns supplied as arguments.
 #' @export
 #'
 #' @examples
-#' 
-#' 
+#'
+#'
 #' \donttest{
 #' if(requireNamespace("curl") &
 #'    curl::has_internet() &
 #'    require(aqp)) {
-#'   
+#'
 #'   # find all series that list Pardee as a geographically associated soil.
 #'   s <- OSDquery(geog_assoc_soils = 'pardee')
-#'   
+#'
 #'   # get data for these series
 #'   x <- fetchOSD(s$series, extended = TRUE, colorState = 'dry')
-#'   
+#'
 #'   # simple figure
 #'   par(mar=c(0,0,1,1))
 #'   plot(x$SPC)
@@ -84,11 +81,11 @@
 #' }
 #' 
 OSDquery <- function(everything = NULL, mlra='', taxonomic_class='', typical_pedon='', brief_narrative='', ric='', use_and_veg='', competing_series='', geog_location='', geog_assoc_soils='') {
-  
+ 
   # check for required packages
   if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('jsonlite', quietly=TRUE))
     stop('please install the `httr` and `jsonlite` packages', call.=FALSE)
-  
+
   # sanity checks
   
   # mode selection
@@ -129,27 +126,25 @@ OSDquery <- function(everything = NULL, mlra='', taxonomic_class='', typical_ped
     # note: this is the load-balancer
     u <- 'https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php'
   }
-  
-  
-  
+ 
   # submit via POST
   res <- httr::POST(u, body = parameters, encode='form')
   
   # TODO: figure out what an error state looks like
   # trap errors, likely related to SQL syntax errors
   request.status <- try(httr::stop_for_status(res), silent = TRUE)
-  
+
   # the result is JSON
   # should simplify to data.frame nicely
   r.content <- httr::content(res, as = 'text', encoding = 'UTF-8')
   d <- jsonlite::fromJSON(r.content)
-  
+
   # results will either be: data.frame, empty list, or NULL
-  
+
   # ensure result is either data.frame or NULL
   if(inherits(d, 'list') & length(d) < 1)
     return(NULL)
-  
+
   return(d)
 }
 

@@ -72,8 +72,8 @@
 ## try and pick the best possible taxhistory record
 .pickBestTaxHistory <- function(d) {
 	
-	# add a method field
-	d$selection_method <- NA
+	# add a method field (a character)
+	d$selection_method <- NA_character_
 	
 	# short-circuit: 1 row
 	if(nrow(d) < 2) {
@@ -106,7 +106,7 @@
 .pickBestEcosite <- function(d) {
 	
 	# add a method field
-	d$es_selection_method <- NA
+	d$es_selection_method <- NA_character_
 	
 	# try to get the most recent:
 	d.order <- order(d$ecositecorrdate, decreasing=TRUE)
@@ -157,21 +157,32 @@
 # attempt to format "landform" records into a single string
 # note: there are several assumptions made about the data, 
 # see "short-circuits" used when there are funky data
-.formatLandformString <- function(i.gm, name.sep='|') {
-  # get the current 
-  u.peiid <- unique(i.gm$peiid)
+.formatLandformString <- function(i.gm, uid = NULL, name.sep='|') {
+
+  # get the current group of rows by unique ID (either passed by caller or calculated)
+  if (is.null(uid))
+    u.peiid <- unique(i.gm$peiid)
+  else 
+    u.peiid <- uid
+  
+  if (is.null(u.peiid))
     
   # sanity check: this function can only be applied to data from a single pedon
-  if(length(u.peiid) > 1)
+  if (length(u.peiid) > 1)
     stop('data are from multiple pedon records')
   
   # subset geomorph data to landforms
   i.gm <- i.gm[which(i.gm$geomftname == 'landform'), ]
   
   # allow for NA's
-  if(nrow(i.gm) == 0)
-    return(data.frame(peiid=u.peiid, landform_string=NA, stringsAsFactors=FALSE))
-  
+  if (nrow(i.gm) == 0) {
+    if(is.null(uid))
+      return(NULL)
+    return(data.frame(peiid = uid,
+                      landform_string = NA_character_,
+                      stringsAsFactors = FALSE))
+  }
+
   # short-circuit: if any geomfeatid are NA, then we don't know the order
   # string together as-is, in row-order
   if(any(is.na(i.gm$geomfeatid))) {
@@ -268,24 +279,32 @@
 
 ## https://github.com/ncss-tech/soilDB/issues/84
 # attempt to flatten site parent material data into 2 strings
-.formatParentMaterialString <- function(i.pm, name.sep='|') {
-  # get the current site
-  u.siteiid <- unique(i.pm$siteiid)
+.formatParentMaterialString <- function(i.pm, uid = NULL, name.sep='|') {
+  
+  # get the current group of rows by unique ID (either passed by caller or calculated)
+  if (is.null(uid))
+    u.siteiid <- unique(i.pm$siteiid)
+  else 
+    u.siteiid <- uid
   
   # sanity check: this function can only be applied to data from a single site
-  if(length(u.siteiid) > 1)
+  if (length(u.siteiid) > 1)
     stop('data are from multiple site records')
   
-  # subset sitepm data to remove any with NA for pm_kind
+  # subset sitepm data to remove any with NA for pmkind
   i.pm <- i.pm[which(!is.na(i.pm$pmkind)), ]
   
-  # if there is no data, then return a DF formatted as if there were data
-  if(nrow(i.pm) == 0)
-    return(data.frame(siteiid=u.siteiid, pmkind=NA, pmorigin=NA, stringsAsFactors=FALSE))
+  # if there is no data, then return NULL
+  if (nrow(i.pm) == 0) {
+    return(data.frame(siteiid = u.siteiid,
+                      pmkind = NA_character_[length(u.siteiid)],
+                      pmorigin = NA_character_[length(u.siteiid)],
+                      stringsAsFactors = FALSE))
+  }
   
   # short-circuit: if any pmorder are NA, then we don't know the order
   # string together as-is, in row-order
-  if(any(is.na(i.pm$pmorder))) {
+  if (any(is.na(i.pm$pmorder))) {
     # optional information on which sites have issues
     if(getOption('soilDB.verbose', default=FALSE))
       warning(paste0('Using row-order. NA in pmorder:', u.siteiid), call.=FALSE)

@@ -1,7 +1,7 @@
 [![CRAN Version
 (Stable)](http://www.r-pkg.org/badges/version/soilDB)](https://cran.r-project.org/package=soilDB)
 [![GitHub Version
-(Development)](https://img.shields.io/badge/GitHub-2.6.0-yellowgreen)](https://github.com/ncss-tech/soilDB)
+(Development)](https://img.shields.io/badge/GitHub-2.6.1-yellowgreen)](https://github.com/ncss-tech/soilDB)
 [![R-CMD-check Build
 Status](https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
 [![Total CRAN
@@ -25,18 +25,23 @@ Website
 
 -   <a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a>
 
-soilDB 2.6.0
+soilDB 2.6.1
 ------------
 
 ### Notices on Database Interfaces
 
 #### NASIS
 
--   low-level functions return empty `data.frame` objects when local
-    database (or selected set) is empty
--   `fetchNASIS()` is now a wrapper around pedon and component “fetch”
-    functions
--   `uncode()` is now used in all queries to local NASIS database
+-   all NASIS queries now use {DBI} w/ {odbc} or {RSQLite} as the
+    back-end
+    -   Install required R packages with
+        `install.packages(c("DBI","odbc","RSQLite"), dependencies = TRUE)`
+-   new methods for connecting to NASIS and querying NASIS data allow
+    for `dsn` argument to specify a local “static” SQLite file
+    containing NASIS tables.
+    -   Default argument `dsn = NULL` uses `"nasis_local"` [ODBC
+        connection](http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html)
+        to a local NASIS SQL Server instance
 
 #### Soil Data Access (SDA)
 
@@ -65,6 +70,20 @@ Functions by Data Source
     -   [`fetchGDB`](http://ncss-tech.github.io/soilDB/docs/reference/fetchGDB.html)
 -   NASIS local database
     -   [`fetchNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/fetchNASIS.html)
+    -   <span style="color:red">**NEW:**</span> Argument `dsn` to
+        specify path to connect to alternate (SQLite) data sources with
+        NASIS schema
+    -   <span
+        style="color:red">**NEW:**</span>[`dbConnectNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/dbConnectNASIS.html)
+        (alias `NASIS`) - create a *DBIConnection* to local NASIS
+        database
+    -   <span
+        style="color:red">**NEW:**</span>[`dbQueryNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/dbQueryNASIS.html) -
+        query NASIS local database (and close connection with
+        `close=TRUE`)
+    -   <span
+        style="color:red">**NEW:**</span>[`createStaticNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/createStaticNASIS.html) -
+        create list of NASIS tables or write to SQLite
 -   ROSETTA
     -   <span style="color:red">**NEW:**</span>
         [`ROSETTA`](http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html)
@@ -139,7 +158,7 @@ Examples
     res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
     print(res$fig)
 
-<img src="https://i.imgur.com/GtETZ2S.png" width="1056" />
+<img src="https://i.imgur.com/aw2StGn.png" width="1056" />
 
 ### Make Profile Sketches
 
@@ -153,7 +172,7 @@ Examples
       width = 0.2
     )
 
-<img src="https://i.imgur.com/YJ99fe9.png" width="1344" />
+<img src="https://i.imgur.com/mpwaqGg.png" width="1344" />
 
 ### Identify Tabular “Siblings”
 
@@ -182,8 +201,7 @@ Examples
       cex.taxon.labels = 1,
       cex.names = 1
     )
-
-<img src="https://i.imgur.com/82wdJdx.png" width="1344" />
+<img src="https://i.imgur.com/yX2Wsp4.png" width="1344" />
 
 Dependency Graph
 ----------------

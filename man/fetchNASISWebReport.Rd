@@ -77,38 +77,38 @@ get_project_correlation_from_NASISWebReport(
 }
 \arguments{
 \item{projectname}{text string vector of project names to be inserted into a
-SQL WHERE clause (default: `NA`)}
+SQL WHERE clause (default: \code{NA})}
 
 \item{rmHzErrors}{should pedons with horizonation errors be removed from the
-results? (default: `FALSE`)}
+results? (default: \code{FALSE})}
 
-\item{fill}{should rows with missing component ids be removed (default: `FALSE`)}
+\item{fill}{should rows with missing component ids be removed (default: \code{FALSE})}
 
 \item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the `uncode()` function. It does not
-convert those vectors that have been set outside of `uncode()` (i.e. hard
+factors? This argument is passed to the \code{uncode()} function. It does not
+convert those vectors that have been set outside of \code{uncode()} (i.e. hard
 coded). The 'factory-fresh' default is TRUE, but this can be changed by
-setting options(`stringsAsFactors = FALSE`)}
+setting options(\code{stringsAsFactors = FALSE})}
 
 \item{mlraoffice}{text string value identifying the MLRA Regional Soil
-Survey Office group name inserted into a SQL WHERE clause (default: `NA`)}
+Survey Office group name inserted into a SQL WHERE clause (default: \code{NA})}
 
 \item{areasymbol}{text string value identifying the area symbol (e.g.
-`IN001` or `IN%`) inserted into a SQL WHERE clause (default: `NA`)
-`NULL` (default: `TRUE`)}
+\code{IN001} or \verb{IN\%}) inserted into a SQL WHERE clause (default: \code{NA})
+\code{NULL} (default: \code{TRUE})}
 
 \item{droplevels}{logical: indicating whether to drop unused levels in
 classifying factors. This is useful when a class has large number of unused
 classes, which can waste space in tables and figures.}
 
 \item{mlrassoarea}{text string value identifying the MLRA Soil Survey Office
-areasymbol symbol inserted into a SQL WHERE clause (default: `NA`)}
+areasymbol symbol inserted into a SQL WHERE clause (default: \code{NA})}
 
 \item{fiscalyear}{text string value identifying the fiscal year inserted
-into a SQL WHERE clause (default: `NA`)}
+into a SQL WHERE clause (default: \code{NA})}
 
 \item{projecttypename}{text string value identifying the project type name
-inserted into a SQL WHERE clause (default: `NA`)}
+inserted into a SQL WHERE clause (default: \code{NA})}
 }
 \value{
 A data.frame or list with the results.

@@ -1,5 +1,30 @@
-
 #
+
+
+#' Graphical Description of US Soil Taxonomy Soil Temperature Regimes
+#' 
+#' Graphical Description of US Soil Taxonomy Soil Temperature Regimes
+#' 
+#' [Soil Temperature Regime Evaluation Tutorial](http://ncss-tech.github.io/AQP/soilDB/STR-eval.html)
+#'  
+#' @param mast single value or vector of mean annual soil temperature (deg C)
+#' @param msst single value or vector of mean summer soil temperature (deg C)
+#' @param mwst single value of mean winter soil temperature (deg C)
+#' @param permafrost logical: permafrost presence / absence
+#' @param pt.cex symbol size
+#' @param leg.cex legend size
+#' @author D.E. Beaudette
+#' @seealso \code{\link{estimateSTR}}
+#' @references Soil Survey Staff. 2015. Illustrated guide to soil taxonomy.
+#' U.S. Department of Agriculture, Natural Resources Conservation Service,
+#' National Soil Survey Center, Lincoln, Nebraska.
+#' @keywords hplot
+#' @examples
+#' 
+#' par(mar=c(4,1,0,1))
+#' STRplot(mast = 0:25, msst = 10, mwst = 1)
+#' 
+#' @export STRplot
 STRplot <- function(mast, msst, mwst, permafrost=FALSE, pt.cex=2.75, leg.cex=0.85) {
   
   # make a row of rectangles with colors based on STR
@@ -126,6 +151,37 @@ STRplot <- function(mast, msst, mwst, permafrost=FALSE, pt.cex=2.75, leg.cex=0.8
 
 
 # vectors of MAST, summer mean, winter mean all in Deg C
+
+
+#' Estimate Soil Temperature Regime
+#' 
+#' Estimate soil temperature regime (STR) based on mean annual soil temperature
+#' (MAST), mean summer temperature (MSST), mean winter soil temperature (MWST),
+#' presence of O horizons, saturated conditions, and presence of permafrost.
+#' Several assumptions are made when O horizon or saturation are undefined.
+#' 
+#' [Soil Temperature Regime Evaluation Tutorial](http://ncss-tech.github.io/AQP/soilDB/STR-eval.html)
+#' 
+#' @param mast vector of mean annual soil temperature (deg C)
+#' @param mean.summer vector of mean summer soil temperature (deg C)
+#' @param mean.winter vector of mean winter soil temperature (deg C)
+#' @param O.hz logical vector of O horizon presence / absence
+#' @param saturated logical vector of seasonal saturation
+#' @param permafrost logical vector of permafrost presence / absence
+#' @return Vector of soil temperature regimes.
+#' @author D.E. Beaudette
+#' @seealso \code{\link{STRplot}}
+#' @references Soil Survey Staff. 2015. Illustrated guide to soil taxonomy.
+#' U.S. Department of Agriculture, Natural Resources Conservation Service,
+#' National Soil Survey Center, Lincoln, Nebraska.
+#' @keywords manip
+#' @examples
+#' 
+#' # simple example
+#' estimateSTR(mast=17, mean.summer = 22, mean.winter = 12)
+#' 
+#' 
+#' @export estimateSTR
 estimateSTR <- function(mast, mean.summer, mean.winter, O.hz=NA, saturated=NA, permafrost=FALSE) {
   
   # check to make sure that the lengths of vectors are the same

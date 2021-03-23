@@ -7,7 +7,8 @@
 processSDA_WKT(d, g = "geom", p4s = "+proj=longlat +datum=WGS84")
 }
 \arguments{
-\item{d}{\code{data.frame} returned by \code{SDA_query}, containing WKT representation of geometry}
+\item{d}{\code{data.frame} returned by \code{SDA_query}, containing WKT
+representation of geometry}
 
 \item{g}{name of column in \code{d} containing WKT geometry}
 
@@ -17,13 +18,16 @@ processSDA_WKT(d, g = "geom", p4s = "+proj=longlat +datum=WGS84")
 A \code{Spatial*} object.
 }
 \description{
-This is a helper function, commonly used with \code{SDA_query} to extract WKT (well-known text) representation of geometry to an sp-class object.
+This is a helper function, commonly used with \code{SDA_query} to extract
+WKT (well-known text) representation of geometry to an sp-class object.
 }
 \details{
-The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}. See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for detailed examples.
+The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}.
+See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for detailed examples.
 }
 \note{
-This function requires the `httr`, `jsonlite`, `XML`, and `rgeos` packages.
+This function requires the \code{httr}, \code{jsonlite}, \code{XML},
+and \code{rgeos} packages.
 }
 \author{
 D.E. Beaudette

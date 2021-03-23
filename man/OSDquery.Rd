@@ -18,7 +18,7 @@ OSDquery(
 )
 }
 \arguments{
-\item{everything}{search entire OSD text (default is NULL), `mlra` may also be specified, all other arguments are ignored}
+\item{everything}{search entire OSD text (default is NULL), \code{mlra} may also be specified, all other arguments are ignored}
 
 \item{mlra}{a comma-delimited string of MLRA to search ('17,18,22A')}
 
@@ -48,30 +48,22 @@ OSD records are searched with the \href{https://www.postgresql.org/docs/9.5/text
 }
 \details{
 See \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage} for more information.
-
- - family level taxa are derived from SC database, not parsed OSD records
- 
- - MLRA are derived via spatial intersection (SSURGO x MLRA polygons)
- 
- - MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)
- 
- - logical AND: &
- 
- - logical OR: |
- 
- - wildcard, e.g. rhy-something rhy:*
- 
- - search terms with spaces need doubled single quotes: ''san joaquin''
- 
- - combine search terms into a single expression: (grano:* | granite)
+\itemize{
+\item family level taxa are derived from SC database, not parsed OSD records
+\item MLRA are derived via spatial intersection (SSURGO x MLRA polygons)
+\item MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)
+\item logical AND: &
+\item logical OR: |
+\item wildcard, e.g. rhy-something rhy:*
+\item search terms with spaces need doubled single quotes: ''san joaquin''
+\item combine search terms into a single expression: (grano:* | granite)
+}
 
 Related documentation can be found in the following tutorials
 \itemize{
-  \item{\href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}}
-  
-  \item{\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}}
-  
-  \item{\href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}}
+\item \href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}
+\item \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}
+\item \href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}
 }
 }
 \note{
@@ -84,13 +76,13 @@ SoilWeb maintains a snapshot of the Official Series Description data.
 if(requireNamespace("curl") &
    curl::has_internet() &
    require(aqp)) {
-  
+
   # find all series that list Pardee as a geographically associated soil.
   s <- OSDquery(geog_assoc_soils = 'pardee')
-  
+
   # get data for these series
   x <- fetchOSD(s$series, extended = TRUE, colorState = 'dry')
-  
+
   # simple figure
   par(mar=c(0,0,1,1))
   plot(x$SPC)

@@ -1,4 +1,3 @@
-
 get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, childs = FALSE, droplevels = TRUE, stringsAsFactors = TRUE) {
 
   # check
@@ -396,6 +395,65 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 }
 
 
+
+
+#' Load and Flatten Data from SSURGO file geodatabases
+#' 
+#' Functions to load and flatten commonly used tables and from SSURGO file
+#' geodatabases, and create soil profile collection objects (SPC).
+#' 
+#' These functions return data from SSURGO file geodatabases with the use of a
+#' simple text string that formatted as an SQL WHERE clause (e.g. \code{WHERE =
+#' "areasymbol = 'IN001'"}. Any columns within the target table can be
+#' specified (except for fetchGDB() currently, which only targets the legend
+#' with the WHERE clause).
+#' 
+#' @aliases fetchGDB get_legend_from_GDB get_mapunit_from_GDB
+#' get_component_from_GDB
+#' @param dsn data source name (interpretation varies by driver - for some
+#' drivers, dsn is a file name, but may also be a folder, or contain the name
+#' and access credentials of a database); in case of GeoJSON, dsn may be the
+#' character string holding the geojson data. It can also be an open database
+#' connection.
+#' @param WHERE text string formatted as an SQL WHERE clause (default: FALSE)
+#' @param childs logical; if FALSE parent material and geomorphic child tables
+#' are not flattened and appended
+#' @param droplevels logical: indicating whether to drop unused levels in
+#' classifying factors. This is useful when a class has large number of unused
+#' classes, which can waste space in tables and figures.
+#' @param stringsAsFactors logical: should character vectors be converted to
+#' factors? This argument is passed to the uncode() function. It does not
+#' convert those vectors that have set outside of uncode() (i.e. hard coded).
+#' The 'factory-fresh' default is TRUE, but this can be changed by setting
+#' options(stringsAsFactors = FALSE)
+#' @return A \code{data.frame} or \code{SoilProfileCollection} object.
+#' @author Stephen Roecker
+#' @keywords manip
+#' @examples
+#' 
+#' \donttest{
+#' 
+#' ## replace `dsn` with path to your own geodatabase (SSURGO OR gNATSGO)
+#' ##
+#' ##
+#' ##  download CONUS gNATSGO from here:
+#' ##    https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/geo/?cid=nrcseprd1464625
+#' ##
+#' ##
+#' # dsn <- "D:/geodata/soils/gNATSGO_CONUS.gdb"
+#' 
+#' # le <- get_legend_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE '%'")
+#' 
+#' # mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = "muname LIKE 'Miami%'")
+#' 
+#' # co <- get_component_from_GDB(dsn, WHERE = "compname = 'Miami'
+#' #                              AND majcompflag = 'Yes'", childs = FALSE)
+#' 
+#' # f_in_GDB <- fetchGDB(WHERE = "areasymbol LIKE 'IN%'")
+#' 
+#' }
+#' 
+#' @export fetchGDB
 fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
                      WHERE = NULL,
                      childs = TRUE,

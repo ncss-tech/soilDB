@@ -1,9 +1,33 @@
 ## TODO: when multiple textures have been defined, only the first one is returned (alphabetical ?)
 #
-get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+
+
+#' Extract Horizon Data from a local NASIS Database
+#'
+#' Get horizon-level data from a local NASIS database.
+#'
+#' @param SS fetch data from Selected Set in NASIS or from the entire local database (default: `TRUE`)
+#'
+#' @param stringsAsFactors logical: should character vectors be converted to
+#' factors? This argument is passed to the `uncode()` function. It does not
+#' convert those vectors that have been set outside of `uncode()` (i.e. hard
+#' coded).
+#'
+#' @param dsn Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#'
+#' @return A data.frame.
+#'
+#' @note `NULL` total rock fragment values are assumed to represent an _absence_ of rock fragments, and set to 0.
+#'
+#' @author Jay M. Skovlin and Dylan E. Beaudette
+#'
+#' @seealso \code{\link{get_hz_data_from_NASIS_db}}, \code{\link{get_site_data_from_NASIS_db}}
+#' @keywords manip
+#' @export get_hz_data_from_NASIS_db
+get_hz_data_from_NASIS_db <- function(SS = TRUE,
+                                      stringsAsFactors = default.stringsAsFactors(),
+                                      dsn = NULL) {
 
   q <- "SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
@@ -25,21 +49,21 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 
   ORDER BY p.upedonid, ph.hzdept ASC;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  d <- dbQueryNASIS(channel, q)
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # re-implement texture_class column, with lieutex in cases where texcl is missing
   d$texture_class <- ifelse(is.na(d$texcl) & ! is.na(d$lieutex), as.character(d$lieutex), as.character(d$texcl))
@@ -53,11 +77,9 @@ get_hz_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
   dupe.hz.pedon.ids <- d$pedon_id[d$phiid %in% dupe.hz.phiid]
 
   if (length(dupe.hz) > 0) {
-    message(paste('NOTICE: multiple `labsampnum` values / horizons; see pedon IDs:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), sep=''))
+    message(paste0('NOTICE: multiple `labsampnum` values / horizons; see pedon IDs:\n',
+                   paste(unique(dupe.hz.pedon.ids), collapse = ',')))
   }
-
-  # close connection
-  RODBC::odbcClose(channel)
 
   # done
   return(d)

@@ -1,5 +1,43 @@
-
 # currently only queries SoilWeb for mapunit-level data
+
+
+#' Get SSURGO Data via Spatial Query
+#' 
+#' Get SSURGO Data via Spatial Query to SoilWeb
+#' 
+#' Data are currently available from SoilWeb. These data are a snapshot of the
+#' "official" data. The snapshot date is encoded in the "soilweb_last_update"
+#' column in the function return value. Planned updates to this function will
+#' include a switch to determine the data source: "official" data via USDA-NRCS
+#' servers, or a "snapshot" via SoilWeb.
+#' 
+#' @param bbox a bounding box in WGS84 geographic coordinates, see examples
+#' @param coords a coordinate pair in WGS84 geographic coordinates, see
+#' examples
+#' @param what data to query, currently ignored
+#' @param source the data source, currently ignored
+#' @return The data returned from this function will depend on the query style.
+#' See examples below.
+#' @note This function should be considered experimental; arguments, results,
+#' and side-effects could change at any time. SDA now supports spatial queries,
+#' consider using \code{\link{SDA_query_features}} instead.
+#' @author D.E. Beaudette
+#' @keywords manip
+#' @examples
+#' 
+#' \donttest{
+#' if(requireNamespace("curl") &
+#'     curl::has_internet()) {
+#'     
+#'     # query by bbox
+#'     SoilWeb_spatial_query(bbox=c(-122.05, 37, -122, 37.05))
+#'     
+#'     # query by coordinate pair
+#'     SoilWeb_spatial_query(coords=c(-121, 38))
+#' }
+#' }
+#' 
+#' @export SoilWeb_spatial_query
 SoilWeb_spatial_query <- function(bbox=NULL, coords=NULL, what='mapunit', source='soilweb') {
   
   # check for required packages

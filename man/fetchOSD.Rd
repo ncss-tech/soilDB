@@ -22,44 +22,42 @@ This function fetches a variety of data associated with named soil series, extra
 \details{
 {
 \itemize{
-  \item{\href{https://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}}
-  
-  \item{\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}}
-  
-  \item{\href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}}
-}
+\item{\href{https://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}}
 
+\item{\href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}}
+
+\item{\href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}}
+}
 
 The standard set of "site" and "horizon" data are returned as a \code{SoilProfileCollection} object (\code{extended=FALSE}. The "extended" suite of summary data can be requested by setting \code{extended=TRUE}. The resulting object will be a \code{list} with the following elements:)
 
 \describe{
-  \item{SPC}{\code{SoilProfileCollection} containing standards "site" and "horizon" data}
-  \item{competing}{competing soil series from the SC database snapshot}
-  \item{geog_assoc_soils}{geographically associated soils, extracted from named section in the OSD}
-  \item{geomcomp}{empirical probabilities for geomorphic component, derived from the current SSURGO snapshot}
-  \item{hillpos}{empirical probabilities for hillslope position, derived from the current SSURGO snapshot}
-  \item{mtnpos}{empirical probabilities for mountain slope position, derived from the current SSURGO snapshot}
-  \item{terrace}{empirical probabilities for river terrace position, derived from the current SSURGO snapshot}
-  \item{flats}{empirical probabilities for flat landscapes, derived from the current SSURGO snapshot}
-  \item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
-  \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
-  \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
-  \item{climate}{experimental climate summaries from PRISM stack}
-  \item{metadata}{metadata associated with SoilWeb cached summaries}
-} 
+\item{SPC}{\code{SoilProfileCollection} containing standards "site" and "horizon" data}
+\item{competing}{competing soil series from the SC database snapshot}
+\item{geog_assoc_soils}{geographically associated soils, extracted from named section in the OSD}
+\item{geomcomp}{empirical probabilities for geomorphic component, derived from the current SSURGO snapshot}
+\item{hillpos}{empirical probabilities for hillslope position, derived from the current SSURGO snapshot}
+\item{mtnpos}{empirical probabilities for mountain slope position, derived from the current SSURGO snapshot}
+\item{terrace}{empirical probabilities for river terrace position, derived from the current SSURGO snapshot}
+\item{flats}{empirical probabilities for flat landscapes, derived from the current SSURGO snapshot}
+\item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
+\item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
+\item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
+\item{climate}{experimental climate summaries from PRISM stack}
+\item{metadata}{metadata associated with SoilWeb cached summaries}
+}
 
-
-When using `extended=TRUE`, there are a couple of scenarios in which series morphology contained in `SPC` do not fully match records in the associated series summaries (e.g. `competing`).
+When using \code{extended=TRUE}, there are a couple of scenarios in which series morphology contained in \code{SPC} do not fully match records in the associated series summaries (e.g. \code{competing}).
 
 \describe{
 
-  \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} because these summaries are currently generated from PRISM. We are working on a solution.}
-  
-  \item{2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{ - Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
-  
-  \item{3. A query for multiple soil series, with one more more listed as "inactive" (e.g. BREADSPRINGS).}{ - Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
-  
-} 
+\item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} because these summaries are currently generated from PRISM. We are working on a solution.}
+
+\item{2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{ - Extended summaries are present but morphology missing from \code{SPC}. A warning is issued.}
+
+\item{3. A query for multiple soil series, with one more more listed as "inactive" (e.g. BREADSPRINGS).}{ - Extended summaries are present but morphology missing from \code{SPC}. A warning is issued.}
+
+}
 
 These last two cases are problematic for analysis that makes use of morphology and extended data, such as outlined in this tutorial on \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}.
 
