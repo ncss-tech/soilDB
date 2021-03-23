@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Simplify Color Data by ID</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/simplifyColorData.R'><code>R/simplifyColorData.R</code></a></small>
     <div class="hidden name"><code>simplifyColorData.Rd</code></div>
     </div>
 
@@ -120,45 +120,60 @@
     <p>Simplify multiple Munsell color observations associated with each horizon.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>simplifyColorData</span><span class='op'>(</span><span class='va'>d</span>, id.var <span class='op'>=</span> <span class='st'>"phiid"</span>, wt <span class='op'>=</span> <span class='st'>"colorpct"</span>, bt <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='fu'>mix_and_clean_colors</span><span class='op'>(</span><span class='va'>x</span>, wt<span class='op'>=</span><span class='st'>'pct'</span>, backTransform <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>simplifyColorData</span><span class='op'>(</span><span class='va'>d</span>, id.var <span class='op'>=</span> <span class='st'>"phiid"</span>, wt <span class='op'>=</span> <span class='st'>"colorpct"</span>, bt <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>d</th>
-      <td><p>a <code>data.frame</code> object, typically returned from NASIS, see details</p></td>
+      <td><p>a <code>data.frame</code> object, typically returned from NASIS, see
+details</p></td>
     </tr>
     <tr>
       <th>id.var</th>
-      <td><p>character vector with the name of the column containing an ID that is unique among all horizons in <code>d</code></p></td>
-    </tr>
-    <tr>
-      <th>x</th>
-      <td><p>a <code>data.frame</code> object containing sRGB coordinates associated with a group of colors to mix</p></td>
+      <td><p>character vector with the name of the column containing an ID
+that is unique among all horizons in <code>d</code></p></td>
     </tr>
     <tr>
       <th>wt</th>
-      <td><p>a character vector with the name of the column containing color weights for mixing</p></td>
+      <td><p>a character vector with the name of the column containing color
+weights for mixing</p></td>
     </tr>
     <tr>
       <th>bt</th>
-      <td><p>logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by <code>aqp::rgb2Munsell</code></p></td>
-    </tr>
-    <tr>
-      <th>backTransform</th>
-      <td><p>logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by <code>aqp::rgb2Munsell</code></p></td>
+      <td><p>logical, should the mixed sRGB representation of soil color be
+transformed to closest Munsell chips? This is performed by
+<code>aqp::rgb2Munsell</code>
+<code>aqp::rgb2Munsell</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is mainly intended for the processing of NASIS pedon/horizon data which may or may not contain multiple colors per horizon/moisture status combination. <code>simplifyColorData</code> will "mix" multiple colors associated with horizons in <code>d</code>, according to IDs specified by <code>id.var</code>, using "weights" (area percentages) specified by the <code>wt</code> argument to <code>mix_and_clean_colors</code>.</p>
-<p>Note that this function doesn't actually simulate the mixture of pigments on a surface, rather, "mixing" is approximated via weighted average in the CIELAB colorspace.</p>
-<p>The <code>simplifyColorData</code> function can be applied to data sources other than NASIS by careful use of the <code>id.var</code> and <code>wt</code> arguments. However, <code>d</code> must contain Munsell colors split into columns named "colorhue", "colorvalue", and "colorchroma". In addition, the moisture state ("Dry" or "Moist") must be specified in a column named "colormoistst".</p>
-<p>The <code>mix_and_clean_colors</code> function can be applied to arbitrary data sources as long as <code>x</code> contains sRGB coordinates in columns named "r", "g", and "b". This function should be applied to chunks of rows within which color mixtures make sense.</p>
-<p>There are examples in <a href='http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html'>the KSSL data tutorial</a> and <a href='http://ncss-tech.github.io/AQP/soilDB/mixing-soil-color-data.html'>the soil color mixing tutorial</a>.</p>
+    <p>This function is mainly intended for the processing of NASIS pedon/horizon
+data which may or may not contain multiple colors per horizon/moisture
+status combination. <code>simplifyColorData</code> will "mix" multiple colors
+associated with horizons in <code>d</code>, according to IDs specified by
+<code>id.var</code>, using "weights" (area percentages) specified by the <code>wt</code>
+argument to <code>mix_and_clean_colors</code>.</p>
+<p>Note that this function doesn't actually simulate the mixture of pigments on
+a surface, rather, "mixing" is approximated via weighted average in the
+CIELAB colorspace.</p>
+<p>The <code>simplifyColorData</code> function can be applied to data sources other
+than NASIS by careful use of the <code>id.var</code> and <code>wt</code> arguments.
+However, <code>d</code> must contain Munsell colors split into columns named
+"colorhue", "colorvalue", and "colorchroma". In addition, the moisture state
+("Dry" or "Moist") must be specified in a column named "colormoistst".</p>
+<p>The <code>mix_and_clean_colors</code> function can be applied to arbitrary data
+sources as long as <code>x</code> contains sRGB coordinates in columns named "r",
+"g", and "b". This function should be applied to chunks of rows within which
+color mixtures make sense.</p>
+<p>Examples:</p><ul>
+<li><p><a href='http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html'>KSSL data</a></p></li>
+<li><p><a href='http://ncss-tech.github.io/AQP/soilDB/mixing-soil-color-data.html'>soil color mixing tutorial</a></p></li>
+</ul>
+
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>D.E. Beaudette</p>

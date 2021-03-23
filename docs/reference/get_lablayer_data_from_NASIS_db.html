@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Extract lab pedon layer data from a local NASIS Database — get_lablayer_data_from_NASIS_db" />
-<meta property="og:description" content="Get lab pedon layer-level(horizon-level) data from a local NASIS database." />
+<meta property="og:description" content="Get lab pedon layer-level (horizon-level) data from a local NASIS database." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -112,40 +112,44 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Extract lab pedon layer data from a local NASIS Database</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/get_lablayer_data_from_NASIS_db.R'><code>R/get_lablayer_data_from_NASIS_db.R</code></a></small>
     <div class="hidden name"><code>get_lablayer_data_from_NASIS_db.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get lab pedon layer-level(horizon-level) data from a local NASIS database.</p>
+    <p>Get lab pedon layer-level (horizon-level) data from a local NASIS database.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_lablayer_data_from_NASIS_db</span><span class='op'>(</span>SS <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_lablayer_data_from_NASIS_db</span><span class='op'>(</span>SS <span class='op'>=</span> <span class='cn'>TRUE</span>, dsn <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>SS</th>
-      <td><p>fetch data from the currently loaded selected set in NASIS or from the entire local database (default: TRUE)</p></td>
+      <td><p>fetch data from the currently loaded selected set in NASIS or from
+the entire local database (default: <code>TRUE</code>)</p></td>
+    </tr>
+    <tr>
+      <th>dsn</th>
+      <td><p>Optional: path to local SQLite database containing NASIS
+table structure; default: <code>NULL</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data.frame.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Jay M. Skovlin and Dylan E. Beaudette</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This function currently works only on Windows, and requires a 'nasis_local' ODBC connection.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>This function queries KSSL laboratory site/horizon data from a local NASIS database from the lab layer data table.</p>
+    <p>This function queries KSSL laboratory site/horizon data from a local
+NASIS database from the lab layer data table.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='get_labpedon_data_from_NASIS_db.html'>get_labpedon_data_from_NASIS_db</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Jay M. Skovlin and Dylan E. Beaudette</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Fetch KSSL Data — fetchKSSL" />
-<meta property="og:description" content="Download soil characterization and morphologic data via BBOX, MLRA, or soil series name query, from the KSSL database." />
+<meta property="og:description" content="Download soil characterization and morphologic data via BBOX, MLRA, or soil
+series name query, from the KSSL database." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -112,17 +113,27 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Fetch KSSL Data</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/fetchKSSL.R'><code>R/fetchKSSL.R</code></a></small>
     <div class="hidden name"><code>fetchKSSL.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Download soil characterization and morphologic data via BBOX, MLRA, or soil series name query, from the KSSL database.</p>
+    <p>Download soil characterization and morphologic data via BBOX, MLRA, or soil
+series name query, from the KSSL database.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetchKSSL</span><span class='op'>(</span>series<span class='op'>=</span><span class='cn'>NA</span>, bbox<span class='op'>=</span><span class='cn'>NA</span>, mlra<span class='op'>=</span><span class='cn'>NA</span>, pedlabsampnum<span class='op'>=</span><span class='cn'>NA</span>, 
-pedon_id<span class='op'>=</span><span class='cn'>NA</span>, pedon_key<span class='op'>=</span><span class='cn'>NA</span>, returnMorphologicData<span class='op'>=</span><span class='cn'>FALSE</span>, returnGeochemicalData<span class='op'>=</span><span class='cn'>FALSE</span>,
-simplifyColors<span class='op'>=</span><span class='cn'>FALSE</span>, progress<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>fetchKSSL</span><span class='op'>(</span>
+  series <span class='op'>=</span> <span class='cn'>NA</span>,
+  bbox <span class='op'>=</span> <span class='cn'>NA</span>,
+  mlra <span class='op'>=</span> <span class='cn'>NA</span>,
+  pedlabsampnum <span class='op'>=</span> <span class='cn'>NA</span>,
+  pedon_id <span class='op'>=</span> <span class='cn'>NA</span>,
+  pedon_key <span class='op'>=</span> <span class='cn'>NA</span>,
+  returnMorphologicData <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  returnGeochemicalData <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  simplifyColors <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  progress <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,7 +144,8 @@ simplifyColors<span class='op'>=</span><span class='cn'>FALSE</span>, progress<s
     </tr>
     <tr>
       <th>bbox</th>
-      <td><p>a single bounding box in WGS84 geographic coordinates e.g. <code><a href='https://rdrr.io/r/base/c.html'>c(-120, 37, -122, 38)</a></code></p></td>
+      <td><p>a single bounding box in WGS84 geographic coordinates e.g.
+<code><a href='https://rdrr.io/r/base/c.html'>c(-120, 37, -122, 38)</a></code></p></td>
     </tr>
     <tr>
       <th>mlra</th>
@@ -153,48 +165,77 @@ simplifyColors<span class='op'>=</span><span class='cn'>FALSE</span>, progress<s
     </tr>
     <tr>
       <th>returnMorphologicData</th>
-      <td><p>logical, optionally request basic morphologic data, see details section</p></td>
+      <td><p>logical, optionally request basic morphologic
+data, see details section</p></td>
     </tr>
     <tr>
       <th>returnGeochemicalData</th>
-      <td><p>logical, optionally request geochemical, optical and XRD/thermal data, see details section</p></td>
+      <td><p>logical, optionally request geochemical,
+optical and XRD/thermal data, see details section</p></td>
     </tr>
     <tr>
       <th>simplifyColors</th>
-      <td><p>logical, simplify colors (from morphologic data) and join with horizon data</p></td>
+      <td><p>logical, simplify colors (from morphologic data) and
+join with horizon data</p></td>
     </tr>
     <tr>
       <th>progress</th>
-      <td><p>logical, optionally give progress when iterating over multiple requests</p></td>
+      <td><p>logical, optionally give progress when iterating over
+multiple requests</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This is an experimental interface to a subset for the most commonly used data from a snapshot of KSSL (lab characterization) and NASIS (morphologic) data.</p>
-<p>Series-queries are case insensitive. Series name is based on the "correlated as" field (from KSSL snapshot) when present.  The "sampled as" classification was promoted to "correlated as" if the "correlated as" classification was missing.</p>
-<p>When <code>returnMorphologicData</code> is TRUE, the resulting object is a list. The standard output from <code>fetchKSSL</code> (<code>SoilProfileCollection</code> object) is stored in the named element "SPC". The additional elements are basic morphologic data: soil color, rock fragment volume, pores, structure, and redoximorphic features. There is a 1:many relationship between the horizon data in "SPC" and the additional dataframes in <code>morph</code>. See examples for ideas on how to "flatten" these tables.</p>
-<p>When <code>returnGeochemicalData</code> is TRUE, the resulting object is a list. The standard output from <code>fetchKSSL</code> (<code>SoilProfileCollection</code> object) is stored in the named element "SPC". The additional elements are geochemical and mineralogy analysis tables, specifically: geochemical/elemental analyses "geochem", optical mineralogy "optical", and X-ray diffraction / thermal "xrd_thermal". <code>returnGeochemicalData</code> will include additional dataframes <code>geochem</code>, <code>optical</code>, and <code>xrd_thermal</code> in list result.</p>
-<p>Setting <code>simplifyColors=TRUE</code> will automatically flatten the soil color data and join to horizon level attributes.</p>
-<p>Function arguments (<code>series</code>, <code>mlra</code>, etc.) are fully vectorized except for <code>bbox</code>.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <code>SoilProfileCollection</code> object when <code>returnMorphologicData</code> is FALSE, otherwise a list.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+    <p>a <code>SoilProfileCollection</code> object when
+<code>returnMorphologicData</code> is FALSE, otherwise a list.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>D.E. Beaudette and A.G. Brown</p>
+    <p>This is an experimental interface to a subset for the most commonly used
+data from a snapshot of KSSL (lab characterization) and NASIS (morphologic)
+data.</p>
+<p>Series-queries are case insensitive. Series name is based on the "correlated
+as" field (from KSSL snapshot) when present.  The "sampled as"
+classification was promoted to "correlated as" if the "correlated as"
+classification was missing.</p>
+<p>When <code>returnMorphologicData</code> is TRUE, the resulting object is a list.
+The standard output from <code>fetchKSSL</code> (<code>SoilProfileCollection</code>
+object) is stored in the named element "SPC". The additional elements are
+basic morphologic data: soil color, rock fragment volume, pores, structure,
+and redoximorphic features. There is a 1:many relationship between the
+horizon data in "SPC" and the additional dataframes in <code>morph</code>. See
+examples for ideas on how to "flatten" these tables.</p>
+<p>When <code>returnGeochemicalData</code> is TRUE, the resulting object is a list.
+The standard output from <code>fetchKSSL</code> (<code>SoilProfileCollection</code>
+object) is stored in the named element "SPC". The additional elements are
+geochemical and mineralogy analysis tables, specifically:
+geochemical/elemental analyses "geochem", optical mineralogy "optical", and
+X-ray diffraction / thermal "xrd_thermal". <code>returnGeochemicalData</code> will
+include additional dataframes <code>geochem</code>, <code>optical</code>, and
+<code>xrd_thermal</code> in list result.</p>
+<p>Setting <code>simplifyColors=TRUE</code> will automatically flatten the soil color
+data and join to horizon level attributes.</p>
+<p>Function arguments (<code>series</code>, <code>mlra</code>, etc.) are fully vectorized
+except for <code>bbox</code>.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>SoilWeb maintains a snapshot of these KSSL and NASIS data. The SoilWeb snapshot was developed using methods described here: <a href='https://github.com/dylanbeaudette/process-kssl-snapshot'>https://github.com/dylanbeaudette/process-kssl-snapshot</a>. Please use the link below for the live data.</p>
+    <p>SoilWeb maintains a snapshot of these KSSL and NASIS data. The SoilWeb
+snapshot was developed using methods described here:
+<a href='https://github.com/dylanbeaudette/process-kssl-snapshot'>https://github.com/dylanbeaudette/process-kssl-snapshot</a>. Please use
+the link below for the live data.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='http://ncsslabdatamart.sc.egov.usda.gov/'>http://ncsslabdatamart.sc.egov.usda.gov/</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='fetchOSD.html'>fetchOSD</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette and A.G. Brown</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># \donttest{</span>
 <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
     <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
     
@@ -239,6 +280,7 @@ simplifyColors<span class='op'>=</span><span class='cn'>FALSE</span>, progress<s
 #&gt; <span class='message'>Attaching package: 'plyr'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:aqp':</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    mutate, summarize</span></div><div class='output co'>#&gt; <span class='message'>14 pedons loaded (0.06 Mb transferred)</span></div><div class='output co'>#&gt; <span class='message'>14 pedons loaded (0.09 Mb transferred)</span></div><div class='output co'>#&gt; <span class='message'>mixing dry colors ... [2 of 53 horizons]</span></div><div class='output co'>#&gt; <span class='message'>mixing moist colors ... [4 of 52 horizons]</span></div><div class='output co'>#&gt; <span class='message'>14 pedons loaded (0.09 Mb transferred)</span></div><div class='img'><img src='fetchKSSL-1.png' alt='' width='768' height='475' /></div><div class='img'><img src='fetchKSSL-2.png' alt='' width='768' height='475' /></div><div class='input'><span class='co'># }</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract Site Data from a PedonPC Database — get_site_data_from_pedon_db • soilDB</title>
+<title>Check pedon horizon table for logic errors — getHzErrorsNASIS • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Extract Site Data from a PedonPC Database — get_site_data_from_pedon_db" />
-<meta property="og:description" content="Get site-level data from a PedonPC database." />
+<meta property="og:title" content="Check pedon horizon table for logic errors — getHzErrorsNASIS" />
+<meta property="og:description" content="Check pedon horizon table for logic errors" />
 
 
 
@@ -111,39 +111,41 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract Site Data from a PedonPC Database</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/get_site_data_from_pedon_db.R'><code>R/get_site_data_from_pedon_db.R</code></a></small>
-    <div class="hidden name"><code>get_site_data_from_pedon_db.Rd</code></div>
+    <h1>Check pedon horizon table for logic errors</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/getHzErrorsNASIS.R'><code>R/getHzErrorsNASIS.R</code></a></small>
+    <div class="hidden name"><code>getHzErrorsNASIS.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get site-level data from a PedonPC database.</p>
+    <p>Check pedon horizon table for logic errors</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_site_data_from_pedon_db</span><span class='op'>(</span><span class='va'>dsn</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>getHzErrorsNASIS</span><span class='op'>(</span>strict <span class='op'>=</span> <span class='cn'>TRUE</span>, SS <span class='op'>=</span> <span class='cn'>TRUE</span>, dsn <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>strict</th>
+      <td><p>how strict should horizon boundaries be checked for
+consistency: TRUE=more | FALSE=less</p></td>
+    </tr>
+    <tr>
+      <th>SS</th>
+      <td><p>fetch data from the currently loaded selected set in NASIS or from
+the entire local database (default: TRUE)</p></td>
+    </tr>
+    <tr>
       <th>dsn</th>
-      <td><p>The path to a 'pedon.mdb' database.</p></td>
+      <td><p>Optional: path to local SQLite database containing NASIS
+table structure; default: NULL</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame.</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>This function currently works only on Windows.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='get_hz_data_from_pedon_db.html'>get_hz_data_from_pedon_db</a></code>,
-<code><a href='get_veg_from_AK_Site.html'>get_veg_from_AK_Site</a></code>,</p></div>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Dylan E. Beaudette and Jay M. Skovlin</p>
+    <p>A data.frame containing problematic records with columns:
+'peiid','pedon_id','hzdept','hzdepb','hzname'</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

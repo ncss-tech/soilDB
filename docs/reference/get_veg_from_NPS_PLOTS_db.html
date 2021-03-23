@@ -40,7 +40,9 @@
 
 
 <meta property="og:title" content="Retrieve Vegetation Data from an NPS PLOTS Database — get_veg_from_NPS_PLOTS_db" />
-<meta property="og:description" content="Used to extract species, stratum, and cover vegetation data from a backend NPS PLOTS Database.  Currently works for any Microsoft Access database with an .mdb file format." />
+<meta property="og:description" content="Used to extract species, stratum, and cover vegetation data from a backend
+NPS PLOTS Database.  Currently works for any Microsoft Access database with
+an .mdb file format." />
 
 
 
@@ -72,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -112,12 +114,14 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Retrieve Vegetation Data from an NPS PLOTS Database</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/get_veg_from_NPS_PLOTS_db.R'><code>R/get_veg_from_NPS_PLOTS_db.R</code></a></small>
     <div class="hidden name"><code>get_veg_from_NPS_PLOTS_db.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Used to extract species, stratum, and cover vegetation data from a backend NPS PLOTS Database.  Currently works for any Microsoft Access database with an .mdb file format.</p>
+    <p>Used to extract species, stratum, and cover vegetation data from a backend
+NPS PLOTS Database.  Currently works for any Microsoft Access database with
+an .mdb file format.</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_veg_from_NPS_PLOTS_db</span><span class='op'>(</span><span class='va'>dsn</span><span class='op'>)</span></pre>
@@ -133,13 +137,14 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame with vegetation data in a long format with linkage to NRCS soil pedon data via the site_id key field.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Jay M. Skovlin</p>
+    <p>A data.frame with vegetation data in a long format with linkage to
+NRCS soil pedon data via the site_id key field.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This function currently only works on Windows.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Jay M. Skovlin</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

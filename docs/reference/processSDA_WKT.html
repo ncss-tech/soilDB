@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Post-process WKT returned from SDA. — processSDA_WKT" />
-<meta property="og:description" content="This is a helper function, commonly used with SDA_query to extract WKT (well-known text) representation of geometry to an sp-class object." />
+<meta property="og:description" content="This is a helper function, commonly used with SDA_query to extract
+WKT (well-known text) representation of geometry to an sp-class object." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -117,7 +118,8 @@
     </div>
 
     <div class="ref-description">
-    <p>This is a helper function, commonly used with <code>SDA_query</code> to extract WKT (well-known text) representation of geometry to an sp-class object.</p>
+    <p>This is a helper function, commonly used with <code>SDA_query</code> to extract
+WKT (well-known text) representation of geometry to an sp-class object.</p>
     </div>
 
     <pre class="usage"><span class='fu'>processSDA_WKT</span><span class='op'>(</span><span class='va'>d</span>, g <span class='op'>=</span> <span class='st'>"geom"</span>, p4s <span class='op'>=</span> <span class='st'>"+proj=longlat +datum=WGS84"</span><span class='op'>)</span></pre>
@@ -127,7 +129,8 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>d</th>
-      <td><p><code>data.frame</code> returned by <code>SDA_query</code>, containing WKT representation of geometry</p></td>
+      <td><p><code>data.frame</code> returned by <code>SDA_query</code>, containing WKT
+representation of geometry</p></td>
     </tr>
     <tr>
       <th>g</th>
@@ -144,10 +147,12 @@
     <p>A <code>Spatial*</code> object.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The SDA website can be found at <a href='https://sdmdataaccess.nrcs.usda.gov'>https://sdmdataaccess.nrcs.usda.gov</a>. See the <a href='http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html'>SDA Tutorial</a> for detailed examples.</p>
+    <p>The SDA website can be found at <a href='https://sdmdataaccess.nrcs.usda.gov'>https://sdmdataaccess.nrcs.usda.gov</a>.
+See the <a href='http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html'>SDA Tutorial</a> for detailed examples.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>This function requires the `httr`, `jsonlite`, `XML`, and `rgeos` packages.</p>
+    <p>This function requires the <code>httr</code>, <code>jsonlite</code>, <code>XML</code>,
+and <code>rgeos</code> packages.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>D.E. Beaudette</p>

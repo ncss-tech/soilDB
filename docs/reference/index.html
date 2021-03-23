@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -136,6 +136,31 @@
       <tr>
         
         <td>
+          <p><code><a href="createStaticNASIS.html">createStaticNASIS()</a></code> </p>
+        </td>
+        <td><p>Create a memory or file-based instance of NASIS database (for selected
+tables)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dbConnectNASIS.html">dbConnectNASIS()</a></code> </p>
+        </td>
+        <td><p>Create a connection to a local NASIS database</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dbQueryNASIS.html">dbQueryNASIS()</a></code> </p>
+        </td>
+        <td><p>Send queries to a NASIS DBIConnection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dot-dump_NASIS_table.html">.dump_NASIS_table()</a></code> </p>
+        </td>
+        <td><p>Method for "dumping" contents of an entire NASIS table</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="estimateColorMixture.html">estimateColorMixture()</a></code> </p>
         </td>
         <td><p>Estimate color mixtures using weighted average of CIELAB color coordinates</p></td>
@@ -148,7 +173,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="fetchGDB.html">fetchGDB()</a></code> <code><a href="fetchGDB.html">get_legend_from_GDB()</a></code> <code><a href="fetchGDB.html">get_mapunit_from_GDB()</a></code> <code><a href="fetchGDB.html">get_component_from_GDB()</a></code> </p>
+          <p><code><a href="fetchGDB.html">fetchGDB()</a></code> </p>
         </td>
         <td><p>Load and Flatten Data from SSURGO file geodatabases</p></td>
       </tr><tr>
@@ -166,7 +191,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="fetchNASIS.html">fetchNASIS()</a></code> <code><a href="fetchNASIS.html">getHzErrorsNASIS()</a></code> </p>
+          <p><code><a href="fetchNASIS.html">fetchNASIS()</a></code> </p>
         </td>
         <td><p>Fetch commonly used site/pedon/horizon or component data from NASIS.</p></td>
       </tr><tr>
@@ -190,7 +215,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="fetchPedonPC.html">fetchPedonPC()</a></code> <code><a href="fetchPedonPC.html">getHzErrorsPedonPC()</a></code> </p>
+          <p><code><a href="fetchPedonPC.html">fetchPedonPC()</a></code> </p>
         </td>
         <td><p>Fetch commonly used site/horizon data from a PedonPC v.5 database.</p></td>
       </tr><tr>
@@ -202,13 +227,13 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="fetchSCAN.html">fetchSCAN()</a></code> <code><a href="fetchSCAN.html">SCAN_sensor_metadata()</a></code> <code><a href="fetchSCAN.html">SCAN_site_metadata()</a></code> </p>
+          <p><code><a href="fetchSCAN.html">fetchSCAN()</a></code> </p>
         </td>
         <td><p>Fetch SCAN Data</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="fetchSDA_component.html">fetchSDA()</a></code> <code><a href="fetchSDA_component.html">get_mapunit_from_SDA()</a></code> <code><a href="fetchSDA_component.html">get_component_from_SDA()</a></code> <code><a href="fetchSDA_component.html">get_chorizon_from_SDA()</a></code> <code><a href="fetchSDA_component.html">get_cosoilmoist_from_SDA()</a></code> </p>
+          <p><code><a href="fetchSDA.html">fetchSDA()</a></code> </p>
         </td>
         <td><p>Download and Flatten Data from Soil Data Access</p></td>
       </tr><tr>
@@ -226,6 +251,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="fetchVegdata.html">fetchVegdata()</a></code> </p>
+        </td>
+        <td><p>Load most common vegplot data from local NASIS database</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="filter_geochem.html">filter_geochem()</a></code> </p>
         </td>
         <td><p>Filter KSSL Geochemical Table</p></td>
@@ -234,7 +265,13 @@
         <td>
           <p><code><a href="format_SQL_in_statement.html">format_SQL_in_statement()</a></code> </p>
         </td>
-        <td><p>Format vector of values into a string suitable for an SQL `IN` statement.</p></td>
+        <td><p>Format vector of values into a string suitable for an SQL <code>IN</code> statement.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getHzErrorsNASIS.html">getHzErrorsNASIS()</a></code> </p>
+        </td>
+        <td><p>Check pedon horizon table for logic errors</p></td>
       </tr><tr>
         
         <td>
@@ -256,7 +293,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="get_component_data_from_NASIS_db.html">get_component_data_from_NASIS_db()</a></code> <code><a href="get_component_data_from_NASIS_db.html">get_component_restrictions_from_NASIS_db()</a></code> </p>
+          <p><code><a href="get_component_data_from_NASIS_db.html">get_component_data_from_NASIS_db()</a></code> </p>
         </td>
         <td><p>Extract component data from a local NASIS Database</p></td>
       </tr><tr>
@@ -274,7 +311,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="get_extended_data_from_NASIS.html">get_extended_data_from_NASIS_db()</a></code> </p>
+          <p><code><a href="get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code> </p>
         </td>
         <td><p>Extract accessory tables and summaries from a local NASIS Database</p></td>
       </tr><tr>
@@ -334,7 +371,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code> <code><a href="get_soilseries_from_NASIS.html">get_soilseries_from_NASISWebReport()</a></code> </p>
+          <p><code><a href="get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code> </p>
         </td>
         <td><p>Get records from the Soil Classification (SC) database</p></td>
       </tr><tr>
@@ -394,7 +431,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="loafercreek.html">loafercreek</a></code> <code><a href="loafercreek.html">gopheridge</a></code> <code><a href="loafercreek.html">mineralKing</a></code> </p>
+          <p><code><a href="loafercreek.html">loafercreek</a></code> </p>
         </td>
         <td><p>Example <code>SoilProfilecollection</code> Objects Returned by <code>fetchNASIS</code>.</p></td>
       </tr><tr>
@@ -402,7 +439,7 @@
         <td>
           <p><code><a href="local_NASIS_defined.html">local_NASIS_defined()</a></code> </p>
         </td>
-        <td><p>Check for presence of `nasis_local` ODBC data source</p></td>
+        <td><p>Check for presence of <code>nasis_local</code> ODBC data source</p></td>
       </tr><tr>
         
         <td>
@@ -421,6 +458,12 @@
           <p><code><a href="mapunit_geom_by_ll_bbox.html">mapunit_geom_by_ll_bbox()</a></code> </p>
         </td>
         <td><p>Fetch Map Unit Geometry from SDA</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mix_and_clean_colors.html">mix_and_clean_colors()</a></code> </p>
+        </td>
+        <td><p>Mix and Clean Colors</p></td>
       </tr><tr>
         
         <td>
@@ -484,15 +527,15 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="simplfyFragmentData.html">simplifyFragmentData()</a></code> </p>
+          <p><code><a href="simplifyColorData.html">simplifyColorData()</a></code> </p>
         </td>
-        <td><p>Simplify Coarse Fraction Data</p></td>
+        <td><p>Simplify Color Data by ID</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="simplifyColorData.html">simplifyColorData()</a></code> <code><a href="simplifyColorData.html">mix_and_clean_colors()</a></code> </p>
+          <p><code><a href="simplifyFragmentData.html">simplifyFragmentData()</a></code> </p>
         </td>
-        <td><p>Simplify Color Data by ID</p></td>
+        <td><p>Simplify Coarse Fraction Data</p></td>
       </tr><tr>
         
         <td>
@@ -502,7 +545,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="SSURGO_spatial_query.html">SoilWeb_spatial_query()</a></code> </p>
+          <p><code><a href="SoilWeb_spatial_query.html">SoilWeb_spatial_query()</a></code> </p>
         </td>
         <td><p>Get SSURGO Data via Spatial Query</p></td>
       </tr><tr>
@@ -520,7 +563,7 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="uncode.html">uncode()</a></code> <code><a href="uncode.html">code()</a></code> </p>
+          <p><code><a href="uncode.html">uncode()</a></code> </p>
         </td>
         <td><p>Convert coded values returned from NASIS and SDA queries to factors</p></td>
       </tr><tr>

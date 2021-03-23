@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>SCAN and SNOTEL Station Metadata</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/soilDB-package.R'><code>R/soilDB-package.R</code></a></small>
     <div class="hidden name"><code>SCAN_SNOTEL_metadata.Rd</code></div>
     </div>
 
@@ -120,30 +120,26 @@
     <p>SCAN and SNOTEL station metadata, a work in progress.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"SCAN_SNOTEL_metadata"</span><span class='op'>)</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>A data frame with 1092 observations on the following 12 variables.</p><dl>
-    <dt><code>Name</code></dt><dd><p>station name</p></dd>
-    <dt><code>Site</code></dt><dd><p>station ID</p></dd>
-    <dt><code>State</code></dt><dd><p>state</p></dd>
-    <dt><code>Network</code></dt><dd><p>sensor network: SCAN / SNOTEL</p></dd>
-    <dt><code>County</code></dt><dd><p>county</p></dd>
-    <dt><code>Elevation_ft</code></dt><dd><p>station elevation in feet</p></dd>
-    <dt><code>Latitude</code></dt><dd><p>latitude of station</p></dd>
-    <dt><code>Longitude</code></dt><dd><p>longitude of station</p></dd>
-    <dt><code>HUC</code></dt><dd><p>associated watershed</p></dd>
-    <dt><code>climstanm</code></dt><dd><p>climate station name (TODO: remove this column)</p></dd>
-    <dt><code>upedonid</code></dt><dd><p>associated user pedon ID</p></dd>
-    <dt><code>pedlabsampnum</code></dt><dd><p>associated lab sample ID</p></dd>
-  
+<dt>list("Name")</dt><dd><p>station name</p></dd> <dt>list("Site")</dt><dd><p>station ID</p></dd>
+<dt>list("State")</dt><dd><p>state</p></dd> <dt>list("Network")</dt><dd><p>sensor network: SCAN /
+SNOTEL</p></dd> <dt>list("County")</dt><dd><p>county</p></dd> <dt>list("Elevation_ft")</dt><dd><p>station
+elevation in feet</p></dd> <dt>list("Latitude")</dt><dd><p>latitude of station</p></dd>
+<dt>list("Longitude")</dt><dd><p>longitude of station</p></dd> <dt>list("HUC")</dt><dd><p>associated
+watershed</p></dd> <dt>list("climstanm")</dt><dd><p>climate station name (TODO: remove this
+column)</p></dd> <dt>list("upedonid")</dt><dd><p>associated user pedon ID</p></dd>
+<dt>list("pedlabsampnum")</dt><dd><p>associated lab sample ID</p></dd> 
 </dl>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>These data have been compiled from several sources and represent a progressive effort to organize SCAN/SNOTEL station metadata. Therefore, some records may be missing or incorrect. Details on this effort can be found at the associated GitHub issue page: <a href='https://github.com/ncss-tech/soilDB/issues/61'>https://github.com/ncss-tech/soilDB/issues/61</a>.</p>
+    <p>These data have been compiled from several sources and represent a
+progressive effort to organize SCAN/SNOTEL station metadata. Therefore, some
+records may be missing or incorrect.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

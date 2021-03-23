@@ -40,7 +40,11 @@
 
 
 <meta property="og:title" content="SDA Spatial Query — SDA_spatialQuery" />
-<meta property="og:description" content="Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersection of geom + SSURGO / STATSGO polygons can be returned. See details." />
+<meta property="og:description" content="Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied
+geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons
+objects with a valid CRS. Map unit keys, overlapping polygons, or the
+spatial intersection of geom + SSURGO / STATSGO polygons can be
+returned. See details." />
 
 
 
@@ -72,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -117,7 +121,11 @@
     </div>
 
     <div class="ref-description">
-    <p>Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersection of <code>geom</code> + SSURGO / STATSGO polygons can be returned. See details.</p>
+    <p>Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied
+geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons
+objects with a valid CRS. Map unit keys, overlapping polygons, or the
+spatial intersection of <code>geom</code> + SSURGO / STATSGO polygons can be
+returned. See details.</p>
     </div>
 
     <pre class="usage"><span class='fu'>SDA_spatialQuery</span><span class='op'>(</span>
@@ -132,35 +140,52 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>geom</th>
-      <td><p>a Spatial* object, with valid CRS. May contain multiple features.</p></td>
+      <td><p>a Spatial* object, with valid CRS. May contain multiple
+features.</p></td>
     </tr>
     <tr>
       <th>what</th>
-      <td><p>a character vector specifying what to return. 'mukey': <code>data.frame</code> with intersecting map unit keys and names, <code>geom</code> overlapping or intersecting map unit polygons</p></td>
+      <td><p>a character vector specifying what to return. 'mukey':
+<code>data.frame</code> with intersecting map unit keys and names, <code>geom</code>
+overlapping or intersecting map unit polygons</p></td>
     </tr>
     <tr>
       <th>geomIntersection</th>
-      <td><p>logical; <code>FALSE</code>: overlapping map unit polygons returned, <code>TRUE</code>: intersection of <code>geom</code> + map unit polygons is returned.</p></td>
+      <td><p>logical; <code>FALSE</code>: overlapping map unit polygons
+returned, <code>TRUE</code>: intersection of <code>geom</code> + map unit polygons is
+returned.</p></td>
     </tr>
     <tr>
       <th>db</th>
       <td><p>a character vector identifying the Soil Geographic Databases
-('SSURGO' or 'STATSGO') to query. Option <var>STATSGO</var> currently works
-only in combination with <code>what = "geom"</code>.</p></td>
+('SSURGO' or 'STATSGO') to query. Option <var>STATSGO</var> currently works only
+in combination with <code>what = "geom"</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>data.frame</code> if <code>what = 'mukey'</code>, otherwise <code>SpatialPolygonsDataFrame</code> object.</p>
+    <p>A <code>data.frame</code> if <code>what = 'mukey'</code>, otherwise
+<code>SpatialPolygonsDataFrame</code> object.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Queries for map unit keys are always more efficient vs. queries for overlapping or intersecting (i.e. least efficient) features. <code>geom</code> is converted to GCS / WGS84 as needed. Map unit keys are always returned when using <code>what = "geom"</code>.</p>
+    <p>Queries for map unit keys are always more efficient vs. queries for
+overlapping or intersecting (i.e. least efficient) features. <code>geom</code> is
+converted to GCS / WGS84 as needed. Map unit keys are always returned when
+using <code>what = "geom"</code>.</p>
 <p>There is a 100,000 record limit and 32Mb JSON serializer limit, per query.</p>
-<p>SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO (generalized soil survey, 1:250,000 scale) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the <a href='http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html'>SDA Tutorial</a> for details.</p>
+<p>SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO
+(generalized soil survey, 1:250,000 scale) data are stored together within
+SDA. This means that queries that don't specify an area symbol may result in
+a mixture of SSURGO and STATSGO records. See the examples below and the
+<a href='http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html'>SDA Tutorial</a>
+for details.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Row-order is not preserved across features in <code>geom</code> and returned object. Use <code><a href='https://rdrr.io/pkg/sp/man/over.html'>sp::over()</a></code> or similar functionality to extract from results. Polygon area in acres is computed server-side when <code>what = 'geom'</code> and <code>geomIntersection = TRUE</code>.</p>
+    <p>Row-order is not preserved across features in <code>geom</code> and returned
+object. Use <code><a href='https://rdrr.io/pkg/sp/man/over.html'>sp::over()</a></code> or similar functionality to extract from
+results. Polygon area in acres is computed server-side when <code>what =
+'geom'</code> and <code>geomIntersection = TRUE</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='SDA_query.html'>SDA_query</a></code></p></div>
@@ -169,7 +194,8 @@ only in combination with <code>what = "geom"</code>.</p></td>
     <p>D.E. Beaudette, A.G. Brown, D.R. Schlaepfer</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># \donttest{</span>
 <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;</span> 
    <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"sp"</span><span class='op'>)</span> <span class='op'>&amp;</span>
@@ -304,6 +330,7 @@ only in combination with <code>what = "geom"</code>.</p></td>
 <span class='op'>)</span>
  <span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chkey` to character</span></div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='img'><img src='SDA_spatialQuery-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; <span class='warning'>Warning: duplicates is set to FALSE and 'mukey' is in WHERE clause. Note: 'mukey' omitted from result.</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chkey` to character</span></div><div class='img'><img src='SDA_spatialQuery-2.png' alt='' width='768' height='475' /></div><div class='img'><img src='SDA_spatialQuery-3.png' alt='' width='768' height='475' /></div><div class='input'><span class='co'># }</span>
+
 
 </div></pre>
   </div>

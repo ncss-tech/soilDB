@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract Site Data from a PedonPC Database — get_site_data_from_pedon_db • soilDB</title>
+<title>Send queries to a NASIS DBIConnection — dbQueryNASIS • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Extract Site Data from a PedonPC Database — get_site_data_from_pedon_db" />
-<meta property="og:description" content="Get site-level data from a PedonPC database." />
+<meta property="og:title" content="Send queries to a NASIS DBIConnection — dbQueryNASIS" />
+<meta property="og:description" content="Send queries to a NASIS DBIConnection" />
 
 
 
@@ -111,39 +111,41 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract Site Data from a PedonPC Database</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/get_site_data_from_pedon_db.R'><code>R/get_site_data_from_pedon_db.R</code></a></small>
-    <div class="hidden name"><code>get_site_data_from_pedon_db.Rd</code></div>
+    <h1>Send queries to a NASIS DBIConnection</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/dbQueryNASIS.R'><code>R/dbQueryNASIS.R</code></a></small>
+    <div class="hidden name"><code>dbQueryNASIS.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get site-level data from a PedonPC database.</p>
+    <p>Send queries to a NASIS DBIConnection</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_site_data_from_pedon_db</span><span class='op'>(</span><span class='va'>dsn</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>dbQueryNASIS</span><span class='op'>(</span><span class='va'>conn</span>, <span class='va'>q</span>, close <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dsn</th>
-      <td><p>The path to a 'pedon.mdb' database.</p></td>
+      <th>conn</th>
+      <td><p>A <code>DBIConnection</code> object, as returned by <code><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>DBI::dbConnect()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>q</th>
+      <td><p>A statement to execute using <code><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>DBI::dbGetQuery</a></code>; or a (named) vector containing multiple statements to evaluate separately</p></td>
+    </tr>
+    <tr>
+      <th>close</th>
+      <td><p>Close connection after query? Default: <code>TRUE</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Additional arguments to <code><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>DBI::dbGetQuery</a></code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame.</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>This function currently works only on Windows.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='get_hz_data_from_pedon_db.html'>get_hz_data_from_pedon_db</a></code>,
-<code><a href='get_veg_from_AK_Site.html'>get_veg_from_AK_Site</a></code>,</p></div>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Dylan E. Beaudette and Jay M. Skovlin</p>
+    <p>Result of <code><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>DBI::dbGetQuery</a></code></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

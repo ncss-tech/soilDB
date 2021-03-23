@@ -73,7 +73,7 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -140,7 +140,7 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>everything</th>
-      <td><p>search entire OSD text (default is NULL), `mlra` may also be specified, all other arguments are ignored</p></td>
+      <td><p>search entire OSD text (default is NULL), <code>mlra</code> may also be specified, all other arguments are ignored</p></td>
     </tr>
     <tr>
       <th>mlra</th>
@@ -185,15 +185,17 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
     <p>a <code>data.frame</code> object containing soil series names that match patterns supplied as arguments.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>See <a href='https://casoilresource.lawr.ucdavis.edu/osd-search/'>this webpage</a> for more information.</p>
-<p>- family level taxa are derived from SC database, not parsed OSD records</p> 
-<p>- MLRA are derived via spatial intersection (SSURGO x MLRA polygons)</p> 
-<p>- MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)</p> 
-<p>- logical AND: &amp;</p> 
-<p>- logical OR: |</p> 
-<p>- wildcard, e.g. rhy-something rhy:*</p> 
-<p>- search terms with spaces need doubled single quotes: ''san joaquin''</p> 
-<p>- combine search terms into a single expression: (grano:* | granite)</p>
+    <p>See <a href='https://casoilresource.lawr.ucdavis.edu/osd-search/'>this webpage</a> for more information.</p><ul>
+<li><p>family level taxa are derived from SC database, not parsed OSD records</p></li>
+<li><p>MLRA are derived via spatial intersection (SSURGO x MLRA polygons)</p></li>
+<li><p>MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)</p></li>
+<li><p>logical AND: &amp;</p></li>
+<li><p>logical OR: |</p></li>
+<li><p>wildcard, e.g. rhy-something rhy:*</p></li>
+<li><p>search terms with spaces need doubled single quotes: ''san joaquin''</p></li>
+<li><p>combine search terms into a single expression: (grano:* | granite)</p></li>
+</ul>
+
 <p>Related documentation can be found in the following tutorials</p><ul>
 <li><p><a href='http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html'>overview of all soil series query functions</a></p></li>
 <li><p><a href='https://ncss-tech.github.io/AQP/soilDB/competing-series.html'>competing soil series</a></p></li>
@@ -220,13 +222,13 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
 <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;</span>
    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  
+
   <span class='co'># find all series that list Pardee as a geographically associated soil.</span>
   <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>OSDquery</span><span class='op'>(</span>geog_assoc_soils <span class='op'>=</span> <span class='st'>'pardee'</span><span class='op'>)</span>
-  
+
   <span class='co'># get data for these series</span>
   <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fetchOSD.html'>fetchOSD</a></span><span class='op'>(</span><span class='va'>s</span><span class='op'>$</span><span class='va'>series</span>, extended <span class='op'>=</span> <span class='cn'>TRUE</span>, colorState <span class='op'>=</span> <span class='st'>'dry'</span><span class='op'>)</span>
-  
+
   <span class='co'># simple figure</span>
   <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>SPC</span><span class='op'>)</span>

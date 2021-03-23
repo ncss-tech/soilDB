@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Lookup siblings and cousins for a given soil series. — siblings" />
-<meta property="og:description" content="Lookup siblings and cousins for a given soil series, from the current fiscal year SSURGO snapshot via SoilWeb." />
+<meta property="og:description" content="Lookup siblings and cousins for a given soil series, from the current fiscal
+year SSURGO snapshot via SoilWeb." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -112,30 +113,34 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Lookup siblings and cousins for a given soil series.</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/siblings.R'><code>R/siblings.R</code></a></small>
     <div class="hidden name"><code>siblings.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Lookup siblings and cousins for a given soil series, from the current fiscal year SSURGO snapshot via SoilWeb.</p>
+    <p>Lookup siblings and cousins for a given soil series, from the current fiscal
+year SSURGO snapshot via SoilWeb.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>siblings</span><span class='op'>(</span><span class='va'>s</span>, only.major<span class='op'>=</span><span class='cn'>FALSE</span>, component.data <span class='op'>=</span> <span class='cn'>FALSE</span>, cousins <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>siblings</span><span class='op'>(</span><span class='va'>s</span>, only.major <span class='op'>=</span> <span class='cn'>FALSE</span>, component.data <span class='op'>=</span> <span class='cn'>FALSE</span>, cousins <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>s</th>
-      <td><p>character vector, the name of a single soil series, case-insensitive.</p></td>
+      <td><p>character vector, the name of a single soil series,
+case-insensitive.</p></td>
     </tr>
     <tr>
       <th>only.major</th>
-      <td><p>logical, should only return siblings that are major components</p></td>
+      <td><p>logical, should only return siblings that are major
+components</p></td>
     </tr>
     <tr>
       <th>component.data</th>
-      <td><p>logical, should component data for siblings (and optionally cousins) be returned?</p></td>
+      <td><p>logical, should component data for siblings (and
+optionally cousins) be returned?</p></td>
     </tr>
     <tr>
       <th>cousins</th>
@@ -143,33 +148,42 @@
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The siblings of any given soil series are defined as those soil series (major and minor component) that share a parent map unit with the named series (as a major component). Cousins are siblings of siblings. Data are sourced from SoilWeb which maintains a copy of the current SSURGO snapshot.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     
 <dl>
-	<dt>sib</dt><dd><p><code>data.frame</code> containing siblings, major component flag, and number of co-occurrences</p></dd>
-	<dt>sib.data</dt><dd><p><code>data.frame</code> containing sibling component data</p></dd>
-	<dt>cousins</dt><dd><p><code>data.frame</code> containing cousins, major component flag, and number of co-occurrences</p></dd>
-	<dt>cousin.data</dt><dd><p><code>data.frame</code> containing cousin component data</p></dd>
-	
-</dl> 
+<dt>sib</dt><dd><p><code>data.frame</code> containing siblings, major
+component flag, and number of co-occurrences</p></dd>
+<dt>sib.data</dt><dd><p><code>data.frame</code> containing sibling component data</p></dd>
+<dt>cousins</dt><dd><p><code>data.frame</code> containing cousins, major component flag,
+and number of co-occurrences</p></dd> <dt>cousin.data</dt><dd><p><code>data.frame</code>
+containing cousin component data</p></dd> 
+</dl>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The siblings of any given soil series are defined as those soil series
+(major and minor component) that share a parent map unit with the named
+series (as a major component). Cousins are siblings of siblings. Data are
+sourced from SoilWeb which maintains a copy of the current SSURGO snapshot.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href='http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html'>soilDB Soil Series Query Functionality</a></p>
-<p><a href='http://ncss-tech.github.io/AQP/soilDB/siblings.html'>Related tutorial.</a></p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+    
+<ul>
+<li><p><a href='http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html'>Soil Series Query Functions</a></p></li>
+<li><p><a href='http://ncss-tech.github.io/AQP/soilDB/siblings.html'>Soil "Siblings" Tutorial</a></p></li>
+</ul>
 
-    <p>D.E. Beaudette</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='OSDquery.html'>OSDquery</a>, siblings, <a href='fetchOSD.html'>fetchOSD</a></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># \donttest{</span>
 <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
     <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
     
@@ -194,9 +208,10 @@
 #&gt; 9    zook Mt. Sterling        TRUE  3
 #&gt; 10   zook        Kezan        TRUE  2
 #&gt; 11   zook        Clamo        TRUE  2
-#&gt; 12   zook         Klum        TRUE  1
-#&gt; 13   zook     Humeston        TRUE  1
+#&gt; 12   zook     Humeston        TRUE  1
+#&gt; 13   zook         Klum        TRUE  1
 #&gt; 14   zook       Quiver        TRUE  1</div><div class='input'><span class='co'># }</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
