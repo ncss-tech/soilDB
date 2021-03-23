@@ -17,6 +17,8 @@ s.sub <- soilDB::createStaticNASIS("site_View_1")[["site_View_1"]][, c(
   "aspect"
 )]
 
+s.sub <- subset(s.sub, grepl("^05", usiteid))
+
 # rename some columns to match PLSS2LL() data.frame format
 colnames(s.sub) <- c("id","m","t","r","s","plsssdetails",
                      "elev", "slope", "aspect")
@@ -60,13 +62,13 @@ pts <- st_as_sf(res[complete.cases(res),],
 bdy <- fetchSDA_spatial("CA750", geom.src = "sapolygon")
 
 # get raster of mukeys
-mukeyras <- mukey.wcs(ssa)
+mukeyras <- mukey.wcs(bdy)
 
 # get data from SDA
 ssurgo <- SDA_query(sprintf(
                     "SELECT * FROM legend 
                     INNER JOIN mapunit ON legend.lkey = mapunit.lkey
-                    WHERE mukey IN %s", format_SQL_in_statement(unique(values(ras)))))
+                    WHERE mukey IN %s", format_SQL_in_statement(unique(values(mukeyras)))))
 
 # get just target survey area
 ssurgo.sub <- subset(ssurgo, areasymbol == "CA750")

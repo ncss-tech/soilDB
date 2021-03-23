@@ -84,9 +84,12 @@ meta_tables <- c('MetadataDomainDetail',
 
 # write to SQLite file `test_dsn`
 res <- soilDB::createStaticNASIS(tables = c(f$table, 
+                                            # paste0(f$table, '_View_1'),
                                             meta_tables), 
-                                 SS = TRUE, # SS = TRUE for createStaticNASIS means include (View_1) tables
+                                 SS = TRUE, 
+                                 # SS = TRUE for createStaticNASIS means include (View_1) tables
                                  output_path = test_dsn)
 
 # fetch from the SQLite file `test_dsn`
-f <- fetchNASIS(dsn = test_dsn, SS = FALSE) # SS = TRUE for fetchNASIS means don't use the View_1 tables
+f <- fetchNASIS(dsn = test_dsn, SS = FALSE) # SS = FALSE for fetchNASIS means use the "full" tables
+f <- fetchNASIS(dsn = test_dsn, SS = TRUE) # SS = TRUE for fetchNASIS means use the View_1 tables
