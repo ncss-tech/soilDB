@@ -108,7 +108,7 @@ fetchNASIS <- function(from='pedons',
                               soilColorState = soilColorState,
                               lab = lab,
                               stringsAsFactors = stringsAsFactors,
-                              dsn)
+                              dsn = dsn)
   }
 
   if (from == 'components') {
@@ -116,8 +116,8 @@ fetchNASIS <- function(from='pedons',
     res <- .fetchNASIS_components(SS = TRUE,
                                   rmHzErrors = rmHzErrors,
                                   fill = fill,
-                                  stringsAsFactors = stringsAsFactors
-                                  )
+                                  stringsAsFactors = stringsAsFactors,
+                                  dsn = dsn)
   }
 
   if (from == 'pedon_report') {
