@@ -40,37 +40,21 @@
 
 
 
-#' Create a memory or file-based instance of NASIS database (for selected
-#' tables)
+#' Create a memory or file-based instance of NASIS database 
 #'
-#' Create a memory or file-based instance of NASIS database (for selected
-#' tables)
-#'
-#'
-#' @param tables Character vector of target tables. Default: \code{NULL} is all
-#' tables meeting the following criteria.
-#' @param SS Logical. Include "selected set" tables (ending with suffix
-#' \code{"_View_1"}). Default: \code{TRUE}
-#' @param ignore_pattern A regular expression identifying tables in NASIS schema to ignore. Default: \code{"^sys|_SS|_State|NONDEL|View_0|dm_"}
-#' @param dsn Optional: path to SQLite database containing NASIS table
-#' structure; Default: \code{NULL}
-#' @param output_path Optional: path to new/existing SQLite database to write
-#' tables to. Default: \code{NULL} returns table results as named list.
-#' @param verbose Issue error messages for unqueryable tables?
+#' Create a memory or file-based instance of NASIS database for selected
+#' tables.
 #' 
+#' @param tables Character vector of target tables. Default: \code{NULL} is whatever tables are listed by `DBI::dbListTables` for the connection typ being used.
+#' @param SS Logical. Include "selected set" tables (ending with suffix \code{"_View_1"}). Default: \code{TRUE}
+#' @param dsn Optional: path to SQLite database containing NASIS table structure; Default: \code{NULL}
+#' @param output_path Optional: path to new/existing SQLite database to write tables to. Default: \code{NULL} returns table results as named list.
+#' @param verbose Show error messages from attempts to dump individual tables? Default `FALSE`
 #' @return A named list of results from calling \code{dbQueryNASIS} for all
 #' columns in each NASIS table.
-#' @examples
-#'
-#'
-#' \dontrun{
-#'  str(createStaticNASIS(tables = c("calculation","formtext")))
-#' }
-#'
 #'
 #' @export createStaticNASIS
 createStaticNASIS <- function(tables = NULL, SS = TRUE, 
-                              ignore_pattern = "^sys|_SS|_State|NONDEL|View_0|dm_|xml_",
                               dsn = NULL, output_path = NULL,
                               verbose = FALSE)  {
   
@@ -80,43 +64,43 @@ createStaticNASIS <- function(tables = NULL, SS = TRUE,
   nasis_table_names <- NULL
 
   # explicit handling of the connection types currently allowed
-  if (inherits(con, 'OdbcConnection')) {
-    
-    if (requireNamespace("odbc"))
-      nasis_table_names <- odbc::dbListTables(con)
-
-  } else if (inherits(con, 'SQLiteConnection')) {
-    
-    if (requireNamespace("RSQLite"))
-      nasis_table_names <- RSQLite::dbListTables(con)
-    
-  } else {
-    stop("Currently only OdbcConnection and SQLiteConnection are supported", call. = FALSE)
+  if (missing(tables)) {
+    if (inherits(con, 'OdbcConnection')) {
+  
+      if (requireNamespace("odbc"))
+        nasis_table_names <- odbc::dbListTables(con)
+  
+    } else if (inherits(con, 'SQLiteConnection')) {
+  
+      if (requireNamespace("RSQLite"))
+        nasis_table_names <- RSQLite::dbListTables(con)
+  
+    } else {
+      stop("Currently only OdbcConnection and SQLiteConnection are supported", call. = FALSE)
+    }
   }
   
   # must know names of tables in data source
   stopifnot(!is.null(nasis_table_names))
 
-  # never pull the system table
-  if (!is.null(ignore_pattern)) {
-    systables.idx <- grep(ignore_pattern, nasis_table_names)
-
-    if (length(systables.idx) > 0) {
-      nasis_table_names <- nasis_table_names[-systables.idx]
-    }
-  }
-
   # keep only explicitly listed tables, if any
   if (!is.null(tables) & length(tables) > 0 & is.character(tables)) {
-    nasis_table_names <- nasis_table_names[nasis_table_names %in% tables]
+    nasis_table_names <- tables
+  } else {
+    stop("no tables in database or `tables=` argument", call. = FALSE)
   }
 
-  # remove selected set tables
+  # remove selected set tables if SS is false
   if (!SS) {
     sstables <- nasis_table_names[grep("_View_1$", nasis_table_names)]
     nasis_table_names <- nasis_table_names[!nasis_table_names %in% sstables]
   }
-
+  
+  if (length(nasis_table_names) == 0) {
+    warning("length of vector of table names to query is zero. check `SS` argument")
+    return(NULL)
+  }
+  
   # return list result if no output path
   if (is.null(output_path)) {
 
@@ -141,7 +125,7 @@ createStaticNASIS <- function(tables = NULL, SS = TRUE,
     return(lapply(nasis_table_names, function(n) {
         return(try({
           
-          newdata <- .dump_NASIS_table(n, dsn = dsn)
+          newdata <- try(.dump_NASIS_table(n, dsn = dsn), silent = verbose)
           
           # pre-processing for data type issues
           newdata[] <- lapply(newdata, function(x) {

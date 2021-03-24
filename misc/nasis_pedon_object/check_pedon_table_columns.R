@@ -75,21 +75,63 @@ chkcols
 # create a file-based database at this path
 test_dsn <- "test.sqlite"
 
-# what additional tables required to run fetchNASIS?
-meta_tables <- c('MetadataDomainDetail', 
-                 'MetadataDomainMaster', 
-                 'MetadataTableColumn',
-                 'ecologicalsite',
-                 'geomorfeat', 'geomorfeattype')
+# what additional tables required to run fetchNASIS and other methods?
+meta_tables <- c('MetadataDomainDetail', # metadata needed for uncode()
+                 'MetadataDomainMaster', # metadata needed for uncode()
+                 'MetadataTableColumn', # metadata needed for uncode()
+                                        #
+                 'ecologicalsite', 'plant', # basic code lookup tables 
+                                            # (ES for fetchNASIS, plant for fetchVegdata)
+                                            # 
+                 'geomorfeat', 'geomorfeattype', # basic code lookup tables
+                                                 # geomorphic features and feature types for fetchNASIS
+                                                 # 
+                 'datamapunit', 'datamapunit_View_1',
+                 'component', 'component_View_1',
+                 'chorizon' , 'chorizon_View_1',
+                 'chtexturegrp', 'chtexturegrp_View_1',
+                 'chstructgrp', 'chstructgrp_View_1',
+                 'cogeomordesc', 'cogeomordesc_View_1',
+                 'copmgrp', 'copmgrp_View_1', 'copm', 'copm_View_1',
+                 'coothvegclass', 'coothvegclass_View_1', 'othvegclass',
+                 'coecosite', 'coecosite_View_1',
+                 'codiagfeatures', 'codiagfeatures_View_1',
+                 'corestrictions', 'corestrictions_View_1',
+                 'vegplot', 'vegplot_View_1', # for fetchVegdata
+                 'plotplantinventory', 'plotplantinventory_View_1', # for fetchVegdata
+                 'vegtransect', 'vegtransect_View_1', # for fetchVegdata
+                 'vegplottext', 'vegplottext_View_1', # for fetchVegdata
+                 'vegtransectplantsummary', 'vegtransectplantsummary_View_1', # for fetchVegdata
+                 'plottreesiteindexsummary', 'plottreesiteindexsummary_View_1',# for fetchVegdata
+                 'plottreesiteindexdetails', 'plottreesiteindexdetails_View_1') # for fetchVegdata
 
 # write to SQLite file `test_dsn`
-res <- soilDB::createStaticNASIS(tables = c(f$table, 
+test_con <- soilDB::NASIS(test_dsn)
+regular_con <- soilDB::NASIS()
+
+any("chorizon_View_1" %in% DBI::dbListTables(regular_con))
+any("chorizon_View_1" %in% DBI::dbListTables(test_con))
+
+# reordering but data are same
+daff::render_diff(daff::diff_data(DBI::dbReadTable(test_con, "chorizon_View_1"),
+                 DBI::dbReadTable(regular_con, "chorizon_View_1")))
+
+# add any additonal tables
+res <- soilDB::createStaticNASIS(tables = c(f$table[!f$table %in% DBI::dbListTables(test_con)], 
                                             # paste0(f$table, '_View_1'),
-                                            meta_tables), 
+                                            meta_tables[!meta_tables %in% DBI::dbListTables(test_con)]), 
                                  SS = TRUE, 
                                  # SS = TRUE for createStaticNASIS means include (View_1) tables
                                  output_path = test_dsn)
 
-# fetch from the SQLite file `test_dsn`
-f <- fetchNASIS(dsn = test_dsn, SS = FALSE) # SS = FALSE for fetchNASIS means use the "full" tables
-f <- fetchNASIS(dsn = test_dsn, SS = TRUE) # SS = TRUE for fetchNASIS means use the View_1 tables
+# fetch pedons from the SQLite file `test_dsn`
+# f <- fetchNASIS(dsn = test_dsn, SS = FALSE) # SS = FALSE for fetchNASIS means use the "full" tables
+# f <- fetchNASIS(dsn = test_dsn, SS = TRUE) # SS = TRUE for fetchNASIS means use the View_1 tables
+# 
+# # fetch components
+f <- fetchNASIS(from = "components", dsn = test_dsn, SS = FALSE) # SS = FALSE for fetchNASIS means use the "full" tables
+f <- fetchNASIS(from = "components", dsn = test_dsn, SS = TRUE) # SS = TRUE for fetchNASIS means use the View_1 tables
+
+# fetch vegdata
+v <- fetchVegdata(dsn = test_dsn, SS = FALSE)
+v <- fetchVegdata(dsn = test_dsn, SS = TRUE)

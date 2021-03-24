@@ -2,49 +2,32 @@
 % Please edit documentation in R/createStaticNASIS.R
 \name{createStaticNASIS}
 \alias{createStaticNASIS}
-\title{Create a memory or file-based instance of NASIS database (for selected
-tables)}
+\title{Create a memory or file-based instance of NASIS database}
 \usage{
 createStaticNASIS(
   tables = NULL,
   SS = TRUE,
-  ignore_pattern = "^sys|_SS|_State|NONDEL|View_0|dm_|xml_",
   dsn = NULL,
   output_path = NULL,
   verbose = FALSE
 )
 }
 \arguments{
-\item{tables}{Character vector of target tables. Default: \code{NULL} is all
-tables meeting the following criteria.}
+\item{tables}{Character vector of target tables. Default: \code{NULL} is whatever tables are listed by \code{DBI::dbListTables} for the connection typ being used.}
 
-\item{SS}{Logical. Include "selected set" tables (ending with suffix
-\code{"_View_1"}). Default: \code{TRUE}}
+\item{SS}{Logical. Include "selected set" tables (ending with suffix \code{"_View_1"}). Default: \code{TRUE}}
 
-\item{ignore_pattern}{A regular expression identifying tables in NASIS schema to ignore. Default: \code{"^sys|_SS|_State|NONDEL|View_0|dm_"}}
+\item{dsn}{Optional: path to SQLite database containing NASIS table structure; Default: \code{NULL}}
 
-\item{dsn}{Optional: path to SQLite database containing NASIS table
-structure; Default: \code{NULL}}
+\item{output_path}{Optional: path to new/existing SQLite database to write tables to. Default: \code{NULL} returns table results as named list.}
 
-\item{output_path}{Optional: path to new/existing SQLite database to write
-tables to. Default: \code{NULL} returns table results as named list.}
-
-\item{verbose}{Issue error messages for unqueryable tables?}
+\item{verbose}{Show error messages from attempts to dump individual tables? Default \code{FALSE}}
 }
 \value{
 A named list of results from calling \code{dbQueryNASIS} for all
 columns in each NASIS table.
 }
 \description{
-Create a memory or file-based instance of NASIS database (for selected
-tables)
-}
-\examples{
-
-
-\dontrun{
- str(createStaticNASIS(tables = c("calculation","formtext")))
-}
-
-
+Create a memory or file-based instance of NASIS database for selected
+tables.
 }
