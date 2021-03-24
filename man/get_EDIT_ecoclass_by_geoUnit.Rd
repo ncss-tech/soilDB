@@ -7,15 +7,15 @@
 get_EDIT_ecoclass_by_geoUnit(geoUnit, catalog = c("esd", "esg"))
 }
 \arguments{
-\item{geoUnit}{A character vector of `geoUnit` codes e.g. `c("018X","022A")` for MLRAs 18 and 22A.}
+\item{geoUnit}{A character vector of \code{geoUnit} codes e.g. \code{c("018X","022A")} for MLRAs 18 and 22A.}
 
-\item{catalog}{Catalog ID. One of: `"esd"` or `"esg"`}
+\item{catalog}{Catalog ID. One of: \code{"esd"} or \code{"esg"}}
 }
 \value{
-A `data.frame` containing: `geoUnit`, `id`, `legacyId`, `name`
+A \code{data.frame} containing: \code{geoUnit}, \code{id}, \code{legacyId}, \code{name}
 }
 \description{
-Supply a vector of target `geoUnit`. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd
+Supply a vector of target \code{geoUnit}. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd
 }
 \examples{
 
