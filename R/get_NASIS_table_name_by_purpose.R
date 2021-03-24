@@ -23,10 +23,10 @@
 #' }
 #' 
 .get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", 
-                                                        "site", "pedon", "transect", 
-                                                        "datamapunit", "component", 
-                                                        "vegetation"),
-                                    SS = FALSE) {
+                                                         "site", "pedon", "transect", 
+                                                         "datamapunit", "component", 
+                                                         "vegetation", "project"),
+                                             SS = FALSE) {
   
   # TODO: store as .rda?
   table_groups <- list(
@@ -128,6 +128,26 @@
         "vegtransectplantsummary",
         "plottreesiteindexsummary",
         "plottreesiteindexdetails"
+      ),
+      'project' = c(
+        "project",
+        "projectconcern",
+        "projectconcerntype",
+        "projectcorrelation",
+        "projectdataneed",
+        "projectdatatype",
+        "projectecologicalsite",
+        "projectfieldreview",
+        "projectlandcatbreakdown",
+        "projectmappinggoal",
+        "projectmappingprogress",
+        "projectmapunit",
+        "projectmilestone",
+        "projectmilestoneprogress",
+        "projectproduct",
+        "projectstaff",
+        "projecttext",
+        "projecttype"
       )
     )
   
@@ -138,7 +158,8 @@
                       "transect" = TRUE, 
                       "datamapunit" = TRUE, 
                       "component" = TRUE, 
-                      "vegetation" = TRUE)
+                      "vegetation" = TRUE,
+                      "project" = TRUE)
   
   purpose <- match.arg(purpose, names(table_groups), several.ok = TRUE)
   

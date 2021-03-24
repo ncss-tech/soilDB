@@ -1,16 +1,16 @@
-# build NASIS table column dataset
+# build NASIS table column data set
 
 # or some other vector of table names
 table_names <- soilDB:::.get_NASIS_table_name_by_purpose()
 
-# get all colum names
+# get all column names
 table_colnames <- lapply(table_names, function(x) colnames(soilDB:::.dump_NASIS_table(x)))
 
 # combine
 table_colnames_cmb <- sapply(table_colnames, paste0, collapse = ",")
 
 # identify foreign keys (assuming it comes first in column name order)
-table_fkeys <- gsub("ref", "", sapply(table_colnames, function(x) x[grep("[^d][^b]iid", x)[1]]))
+table_fkeys <- gsub("ref", "", sapply(table_colnames, function(x) x[grep("[^d]?[^b]?iid", x)[1]]))
 
 cardinal_tables <- c(
   "site",
@@ -25,7 +25,11 @@ cardinal_tables <- c(
   "plant",
   "ecologicalsite",
   "othvegclass",
-  "geomorfeattype"
+  "geomorfeattype",
+  "project",
+  "projectdatatype",
+  "projectconcerntype",
+  "projecttype"
 )
 cardinal_fkeys <- c(
   "siteiid",
@@ -40,7 +44,11 @@ cardinal_fkeys <- c(
   "plantiid",
   "ecositeiid",
   "ovegcliid",
-  "geomftiid"
+  "geomftiid",
+  "projectiid",
+  "projectdatatypeiid",
+  "projectconcerntypeiid",
+  "projecttypeiid"
 )
 names(cardinal_fkeys) <- cardinal_tables
 
@@ -73,4 +81,4 @@ which(!cmpr_oldnu)
 
 save(NASIS_table_column_fkey, file = "data/NASIS_table_column_fkey.rda")
 
-# View(NASIS_table_column_fkey)
+View(NASIS_table_column_fkey)
