@@ -78,11 +78,11 @@ createStaticNASIS <- function(tables = NULL, SS = TRUE,
     } else {
       stop("Currently only OdbcConnection and SQLiteConnection are supported", call. = FALSE)
     }
+    
+    # must know names of tables in data source
+    stopifnot(!is.null(nasis_table_names))
   }
   
-  # must know names of tables in data source
-  stopifnot(!is.null(nasis_table_names))
-
   # keep only explicitly listed tables, if any
   if (!is.null(tables) & length(tables) > 0 & is.character(tables)) {
     nasis_table_names <- tables
