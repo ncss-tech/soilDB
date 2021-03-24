@@ -24,6 +24,7 @@ cardinal_tables <- c(
   "component",
   "plant",
   "ecologicalsite",
+  "othvegclass",
   "geomorfeattype"
 )
 cardinal_fkeys <- c(
@@ -38,6 +39,7 @@ cardinal_fkeys <- c(
   "coiid",
   "plantiid",
   "ecositeiid",
+  "ovegcliid",
   "geomftiid"
 )
 names(cardinal_fkeys) <- cardinal_tables
