@@ -10,7 +10,7 @@
 #' @seealso createStaticNASIS
 #'
 #' @examples
-#' 
+#' \dontrun{
 #' # get the "site" table names
 #' .get_NASIS_table_name_by_purpose("site")
 #' 
@@ -20,7 +20,7 @@
 #' # metadata and lookup not affected by SS argument, but site and pedon are
 #' .get_NASIS_table_name_by_purpose(c("metadata", "lookup",
 #'                                    "site", "pedon"), SS = TRUE)
-#' 
+#' }
 #' 
 .get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", 
                                                         "site", "pedon", "transect", 

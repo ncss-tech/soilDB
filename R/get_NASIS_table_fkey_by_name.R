@@ -5,9 +5,9 @@
 #' @return The foreign key column name for the specified table name
 #'
 #' @examples
-#' 
+#' \dontrun{
 #' .get_NASIS_table_fkey_by_name(c("site","phorizon_View_1","not_a_table"))
-#' 
+#' }
 .get_NASIS_table_fkey_by_name <- function(tables) {
   fkeys <- list(
       site = "siteiid",
