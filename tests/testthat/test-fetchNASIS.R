@@ -130,7 +130,7 @@ test_that("getHzErrorsNASIS works", {
   if (!local_NASIS_defined(dsn = dsn)) {
     skip("local NASIS database not available")
   }
-  expect_silent({suppressMessages(getHzErrorsNASIS(static_path = static_path))})
+  expect_silent({suppressMessages(getHzErrorsNASIS(dsn = dsn))})
 })
 
 
