@@ -121,3 +121,13 @@ NULL
 #' @source https://www.nrcs.usda.gov/wps/portal/nrcs/soilsurvey/soils/survey/state/
 #' @keywords datasets
 NULL
+
+#' NASIS 7 Tables, Columns and Foreign Keys
+#' 
+#' This dataset contains NASIS 7 Tables, Columns and Foreign Keys
+#' 
+#' @name NASIS_table_column_fkey
+#' @docType data
+#' 
+#' @keywords datasets
+NULL
