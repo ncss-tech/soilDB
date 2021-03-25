@@ -152,7 +152,7 @@
       'techsoilservice' = c('techsoilservice','techsoilservicetext','techsoilservicesite'),
       'legend' = c('legend', 'ltext', 'lmapunit'),
       'mapunit' = c('mapunit','correlation','mutext'),
-      'datamapunit' = c('datamapunit'),
+      'datamapunit' = c('datamapunit')
     )
   
   uses_View_1 <- list("metadata" = FALSE, 
