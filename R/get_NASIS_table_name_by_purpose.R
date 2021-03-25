@@ -22,10 +22,11 @@
 #'                                    "site", "pedon"), SS = TRUE)
 #' }
 #' 
-.get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", 
-                                                         "site", "pedon", "transect", 
-                                                         "datamapunit", "component", 
-                                                         "vegetation", "project"),
+.get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "site", 
+                                                         "pedon", "transect", "component", 
+                                                         "vegetation", "project", 
+                                                         "techsoilservice", "legend",
+                                                         "mapunit", "datamapunit"),
                                              SS = FALSE) {
   
   # TODO: store as .rda?
@@ -105,7 +106,6 @@
         "phtexturemod"
       ),
       'transect' = c("transect", "transectestcomposition", "transecttext"),
-      'datamapunit' = c('datamapunit'),
       'component' = c(
         "component",
         "chorizon",
@@ -148,7 +148,11 @@
         "projectstaff",
         "projecttext",
         "projecttype"
-      )
+      ),
+      'techsoilservice' = c('techsoilservice','techsoilservicetext','techsoilservicesite'),
+      'legend' = c('legend', 'ltext', 'lmapunit'),
+      'mapunit' = c('mapunit','correlation','mutext'),
+      'datamapunit' = c('datamapunit'),
     )
   
   uses_View_1 <- list("metadata" = FALSE, 
@@ -156,10 +160,13 @@
                       "site" = TRUE, 
                       "pedon" = TRUE, 
                       "transect" = TRUE, 
-                      "datamapunit" = TRUE, 
                       "component" = TRUE, 
                       "vegetation" = TRUE,
-                      "project" = TRUE)
+                      "project" = TRUE,
+                      "techsoilservice" = TRUE, 
+                      "legend" = TRUE, 
+                      "mapunit" = TRUE, 
+                      "datamapunit" = TRUE)
   
   purpose <- match.arg(purpose, names(table_groups), several.ok = TRUE)
   

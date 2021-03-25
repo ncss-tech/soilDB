@@ -5,8 +5,8 @@
 \title{Return NASIS 7 Physical Table Names}
 \usage{
 .get_NASIS_table_name_by_purpose(
-  purpose = c("metadata", "lookup", "site", "pedon", "transect", "datamapunit",
-    "component", "vegetation"),
+  purpose = c("metadata", "lookup", "site", "pedon", "transect", "component",
+    "vegetation", "project", "techsoilservice", "legend", "mapunit", "datamapunit"),
   SS = FALSE
 )
 }

@@ -10,7 +10,13 @@ table_colnames <- lapply(table_names, function(x) colnames(soilDB:::.dump_NASIS_
 table_colnames_cmb <- sapply(table_colnames, paste0, collapse = ",")
 
 # identify foreign keys (assuming it comes first in column name order)
-table_fkeys <- gsub("ref", "", sapply(table_colnames, function(x) x[grep("[^d]?[^b]?iid", x)[1]]))
+table_fkeys <- sapply(table_colnames, function(x) {
+    ldx1 <- grepl("iid", x)
+    ldx2 <- !grepl("dbiid", x)
+    x[which(ldx1 & ldx2)[1]]
+  })
+
+parent_pkeys <- gsub("ref", "", table_fkeys)
 
 cardinal_tables <- c(
   "site",
@@ -21,7 +27,6 @@ cardinal_tables <- c(
   "vegplot",
   "vegtransect",
   "datamapunit",
-  "component",
   "plant",
   "ecologicalsite",
   "othvegclass",
@@ -40,7 +45,6 @@ cardinal_fkeys <- c(
   "vegplotiid",
   "vegtransectiid",
   "dmuiid",
-  "coiid",
   "plantiid",
   "ecositeiid",
   "ovegcliid",
@@ -56,29 +60,34 @@ replace.idx <-  match(cardinal_tables, table_names)
 
 # these are "cardinal" iids, they come last in their respective tables, not first
 table_fkeys[replace.idx] <- cardinal_fkeys
+parent_pkeys[replace.idx] <- cardinal_fkeys
 
 # cross check
 NASIS_table_column_fkey <- data.frame(table = table_names,
                                       column = table_colnames_cmb,
-                                      fkey = table_fkeys)
+                                      fkey = table_fkeys,
+                                      pkeyref = parent_pkeys)
 
-f <- read.table("misc/nasis_pedon_object/pedon_table_columns.txt",
-                sep = ",", header = TRUE)
+# f <- read.table("misc/nasis_pedon_object/pedon_table_columns.txt",
+#                 sep = ",", header = TRUE)
 
-old <- as.list(trimws(f$fkey))
-names(old) <- trimws(f$table)
-nu <- as.list(NASIS_table_column_fkey$fkey)
-names(nu) <- NASIS_table_column_fkey$table
+# old <- as.list(trimws(f$fkey))
+# names(old) <- trimws(f$table)
+# nu <- as.list(NASIS_table_column_fkey$fkey)
+# names(nu) <- NASIS_table_column_fkey$table
 
-cmpr_oldnu <-  sapply(NASIS_table_column_fkey$table,  function(x) {
-      res <- (old[[x]] == nu[[x]])
-      if(length(res) == 0) { 
-        return(NA) 
-      } 
-      return(res)
-    })
-which(!cmpr_oldnu)
+# checks against jay's pedonpc table
+# cmpr_oldnu <-  sapply(NASIS_table_column_fkey$table,  function(x) {
+#       res <- (old[[x]] == nu[[x]])
+#       if(length(res) == 0) { 
+#         return(NA) 
+#       } 
+#       return(res)
+#     })
+# which(!cmpr_oldnu)
 
 save(NASIS_table_column_fkey, file = "data/NASIS_table_column_fkey.rda")
 
-View(NASIS_table_column_fkey)
+# View(NASIS_table_column_fkey)
+
+
