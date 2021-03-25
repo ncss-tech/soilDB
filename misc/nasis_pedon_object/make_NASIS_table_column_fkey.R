@@ -1,4 +1,5 @@
 # build NASIS table column data set
+library(soilDB)
 
 # or some other vector of table names
 table_names <- soilDB:::.get_NASIS_table_name_by_purpose()
@@ -27,6 +28,7 @@ cardinal_tables <- c(
   "vegplot",
   "vegtransect",
   "datamapunit",
+  "mapunit",
   "plant",
   "ecologicalsite",
   "othvegclass",
@@ -34,7 +36,8 @@ cardinal_tables <- c(
   "project",
   "projectdatatype",
   "projectconcerntype",
-  "projecttype"
+  "projecttype",
+  "techsoilservice"
 )
 cardinal_fkeys <- c(
   "siteiid",
@@ -45,6 +48,7 @@ cardinal_fkeys <- c(
   "vegplotiid",
   "vegtransectiid",
   "dmuiid",
+  "muiid",
   "plantiid",
   "ecositeiid",
   "ovegcliid",
@@ -52,7 +56,8 @@ cardinal_fkeys <- c(
   "projectiid",
   "projectdatatypeiid",
   "projectconcerntypeiid",
-  "projecttypeiid"
+  "projecttypeiid",
+  "tssiid"
 )
 names(cardinal_fkeys) <- cardinal_tables
 
@@ -88,6 +93,6 @@ NASIS_table_column_fkey <- data.frame(table = table_names,
 
 save(NASIS_table_column_fkey, file = "data/NASIS_table_column_fkey.rda")
 
-# View(NASIS_table_column_fkey)
+View(NASIS_table_column_fkey)
 
 
