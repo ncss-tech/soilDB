@@ -59,7 +59,7 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 	  q.photos <- gsub(pattern = '_View_1', replacement = '', x = q.photos, fixed = TRUE)
 	}
 
-	# check for RODBC, NASIS credential options, and successful connection
+	# check for datasource, NASIS credential options, and successful connection
 	channel <- dbConnectNASIS(dsn)
 
 	if (inherits(channel, 'try-error'))

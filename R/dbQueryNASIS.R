@@ -23,9 +23,6 @@ dbQueryNASIS <- function(conn, q, close = TRUE, ...) {
   } else {
     ## exec query
     d <- DBI::dbGetQuery(conn, q, ...)
-    # res <- DBI::dbSendQuery(conn, q)
-    # d <- DBI::dbFetch(res)
-    # d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
     
     dd <- data.frame(d)
     
@@ -53,7 +50,7 @@ dbQueryNASIS <- function(conn, q, close = TRUE, ...) {
 dbConnectNASIS <- function(dsn = NULL) {
   # TODO: NASIS sqlite snapshot connection via DBI/RSQLite
   
-  # default connection uses DBI/odbc (historically RODBC)
+  # default connection uses DBI/odbc, alternately RSQLite
   res <- .openNASISchannel(dsn)
   
   return(res)

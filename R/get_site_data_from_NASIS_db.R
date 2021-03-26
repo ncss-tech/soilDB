@@ -15,9 +15,6 @@
 
 ## TODO: multiple records / site in siteobs are possible and will result in duplicate data
 
-## TODO: bug within RODBC - converts site_id == 056E916010 to an exponent
-
-
 #' Extract Site Data from a local NASIS Database
 #'
 #' Get site-level data from a local NASIS database.

@@ -15,9 +15,9 @@
 #' @keywords manip
 #' @export get_veg_from_AK_Site
 get_veg_from_AK_Site <- function(dsn) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+  # must have odbc installed
+  if(!requireNamespace('odbc'))
+    stop('please install the `odbc` package', call.=FALSE)
   
 	# basic query
 	q <- "SELECT VegStop.usiteid as site_id, VegStop.fECOSITE as ecosite, localplant.lplantsym as plantsym, localplant.lplantname as plantname, vegetation.COVER as pct_cover
@@ -26,14 +26,14 @@ get_veg_from_AK_Site <- function(dsn) {
 	INNER JOIN localplant ON vegetation.lplantsym = localplant.lplantuid
 	ORDER BY VegStop.usiteid ASC;"
   
-	# setup connection to the AK Site database
-	channel <- RODBC::odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
+	# setup connection to our pedon database
+	channel <- dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
 	
 	# exec query
-	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- DBI::dbGetQuery(channel, q)
 	
 	# close connection
-	RODBC::odbcClose(channel)
+	DBI::dbDisconnect(channel)
 	
 	# done
 	return(d)

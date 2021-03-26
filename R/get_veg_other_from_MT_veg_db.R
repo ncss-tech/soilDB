@@ -13,11 +13,10 @@
 #' @keywords manip
 #' @export get_veg_other_from_MT_veg_db
 get_veg_other_from_MT_veg_db <- function(dsn) {
+  # must have odbc installed
+  if(!requireNamespace('odbc'))
+    stop('please install the `odbc` package', call.=FALSE)
   
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
-	
 	#pull site and plot data and total production value
 	q <- "SELECT tblESD_DK.PlotKey, tblESD_DK.DKKey, tblSites.SiteID AS site_id, tblESD_DK.SpeciesSymbol, tblESD_DK.LPIPercentBasal, tblESD_DK.CanopyCoverPercent
 FROM tblSites LEFT JOIN ((tblPlots LEFT JOIN tblESD_DK ON tblPlots.PlotKey = tblESD_DK.PlotKey) LEFT JOIN (SELECT * FROM tblSpecies)  AS Spec ON tblESD_DK.SpeciesSymbol = Spec.SpeciesCode) ON tblSites.SiteKey = tblPlots.SiteKey
@@ -25,13 +24,13 @@ FROM tblSites LEFT JOIN ((tblPlots LEFT JOIN tblESD_DK ON tblPlots.PlotKey = tbl
 	ORDER BY tblESD_DK.PlotKey, tblESD_DK.SpeciesSymbol;"
 
 	# setup connection to our pedon database
-	channel <- RODBC::odbcConnectAccess(dsn, readOnlyOptimize=TRUE)
+	channel <- dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
 	
 	# exec query
-	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- DBI::dbGetQuery(channel, q)
 	
 	# close connection
-	RODBC::odbcClose(channel)
+	DBI::dbDisconnect(channel)
 	
 	# done
 	return(d)

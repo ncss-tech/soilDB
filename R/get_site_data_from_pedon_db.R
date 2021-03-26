@@ -21,10 +21,9 @@
 #' @keywords manip
 #' @export get_site_data_from_pedon_db
 get_site_data_from_pedon_db <- function(dsn) {
-  
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+  # must have odbc installed
+  if(!requireNamespace('odbc'))
+    stop('please install the `odbc` package', call.=FALSE)
   
   q <- "SELECT site.siteiid, pedon.peiid, upedonid as pedon_id, site.usiteid as site_id, siteobs.obsdate as obs_date,
   latdegrees + IIF(IsNull(latminutes), 0.0, latminutes/ 60.0) + IIF(IsNULL(latseconds), 0.0, latseconds / 60.0 / 60.0) as y,
@@ -37,13 +36,13 @@ LEFT OUTER JOIN sitebedrock ON site.siteiid = sitebedrock.siteiidref)
 ORDER BY site.usiteid;"
 
   # setup connection to our pedon database
-  channel <- RODBC::odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
-
+  channel <- dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
+  
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
+  d <- DBI::dbGetQuery(channel, q)
+  
   # close connection
-  RODBC::odbcClose(channel)
+  DBI::dbDisconnect(channel)
 
   # uncode domained columns
   d <- uncode(d)	
