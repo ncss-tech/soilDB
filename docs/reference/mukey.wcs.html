@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -120,7 +120,7 @@
     <p>Download chunks of the gNATSGO or gSSURGO map unit key grid via bounding-box from the SoilWeb WCS.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mukey.wcs</span><span class='op'>(</span><span class='va'>aoi</span>, db <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gnatsgo"</span>, <span class='st'>"gssurgo"</span><span class='op'>)</span>, res <span class='op'>=</span> <span class='fl'>30</span>, quiet <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>mukey.wcs</span><span class='op'>(</span><span class='va'>aoi</span>, db <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"gnatsgo"</span>, <span class='st'>"gssurgo"</span><span class='op'>)</span>, res <span class='op'>=</span> <span class='fl'>30</span>, quiet <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,8 +150,8 @@
 
     <p><code>aoi</code> should be specified as either a <code>Spatial*</code>, <code>sf</code>, <code>sfc</code> or <code>bbox</code> object or a <code>list</code> containing:</p>
 <dl>
-  <dt><code>aoi</code></dt><dd><p>bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)</p></dd>
-  <dt><code>crs</code></dt><dd><p>coordinate reference system of BBOX, e.g. '+init=epsg:4326'</p></dd>
+<dt><code>aoi</code></dt><dd><p>bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)</p></dd>
+<dt><code>crs</code></dt><dd><p>coordinate reference system of BBOX, e.g. '+init=epsg:4326'</p></dd>
 
 </dl>
 

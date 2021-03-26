@@ -1,3 +1,17 @@
+#' Extract cover composition data from a Montana RangeDB database
+#' 
+#' Get cover composition data from a Montana RangeDB database.
+#' 
+#' This function currently works only on Windows.
+#' 
+#' @param dsn The name of the Montana RangeDB front-end database connection
+#' (see details).
+#' @return A data.frame.
+#' @author Jay M. Skovlin
+#' @seealso \code{\link{get_veg_from_MT_veg_db}},
+#' \code{\link{get_veg_species_from_MT_veg_db}}
+#' @keywords manip
+#' @export get_veg_other_from_MT_veg_db
 get_veg_other_from_MT_veg_db <- function(dsn) {
   
   # must have RODBC installed

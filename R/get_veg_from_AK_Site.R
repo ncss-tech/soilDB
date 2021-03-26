@@ -1,5 +1,19 @@
-
 # gets all veg records per site ID
+
+
+#' Retrieve Vegetation Data from an AK Site Database
+#' 
+#' Retrieve Vegetation Data from an AK Site Database
+#' 
+#' 
+#' @param dsn file path the the AK Site access database
+#' @return A data.frame with vegetation data in long format, linked to site ID.
+#' @note This function currently works only on Windows.
+#' @author Dylan E. Beaudette
+#' @seealso \code{\link{get_hz_data_from_pedon_db}},
+#' \code{\link{get_site_data_from_pedon_db}}
+#' @keywords manip
+#' @export get_veg_from_AK_Site
 get_veg_from_AK_Site <- function(dsn) {
   # must have RODBC installed
   if(!requireNamespace('RODBC'))

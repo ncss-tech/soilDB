@@ -1,4 +1,3 @@
-
 # create a valid URL filter for SoilWeb API
 # arguments are NA by default
 .buildFilter <- function(series, bbox, mlra, pedlabsampnum, pedon_id, pedon_key) {
@@ -158,6 +157,113 @@
 
 
 # fully vectorized in all arguments except BBOX
+
+
+#' Fetch KSSL Data
+#' 
+#' Download soil characterization and morphologic data via BBOX, MLRA, or soil
+#' series name query, from the KSSL database.
+#' 
+#' This is an experimental interface to a subset for the most commonly used
+#' data from a snapshot of KSSL (lab characterization) and NASIS (morphologic)
+#' data.
+#' 
+#' Series-queries are case insensitive. Series name is based on the "correlated
+#' as" field (from KSSL snapshot) when present.  The "sampled as"
+#' classification was promoted to "correlated as" if the "correlated as"
+#' classification was missing.
+#' 
+#' When \code{returnMorphologicData} is TRUE, the resulting object is a list.
+#' The standard output from \code{fetchKSSL} (\code{SoilProfileCollection}
+#' object) is stored in the named element "SPC". The additional elements are
+#' basic morphologic data: soil color, rock fragment volume, pores, structure,
+#' and redoximorphic features. There is a 1:many relationship between the
+#' horizon data in "SPC" and the additional dataframes in \code{morph}. See
+#' examples for ideas on how to "flatten" these tables.
+#' 
+#' When \code{returnGeochemicalData} is TRUE, the resulting object is a list.
+#' The standard output from \code{fetchKSSL} (\code{SoilProfileCollection}
+#' object) is stored in the named element "SPC". The additional elements are
+#' geochemical and mineralogy analysis tables, specifically:
+#' geochemical/elemental analyses "geochem", optical mineralogy "optical", and
+#' X-ray diffraction / thermal "xrd_thermal". \code{returnGeochemicalData} will
+#' include additional dataframes \code{geochem}, \code{optical}, and
+#' \code{xrd_thermal} in list result.
+#' 
+#' Setting \code{simplifyColors=TRUE} will automatically flatten the soil color
+#' data and join to horizon level attributes.
+#' 
+#' Function arguments (\code{series}, \code{mlra}, etc.) are fully vectorized
+#' except for \code{bbox}.
+#' 
+#' @param series vector of soil series names, case insensitive
+#' @param bbox a single bounding box in WGS84 geographic coordinates e.g.
+#' \code{c(-120, 37, -122, 38)}
+#' @param mlra vector of MLRA IDs, e.g. "18" or "22A"
+#' @param pedlabsampnum vector of KSSL pedon lab sample number
+#' @param pedon_id vector of user pedon ID
+#' @param pedon_key vector of KSSL internal pedon ID
+#' @param returnMorphologicData logical, optionally request basic morphologic
+#' data, see details section
+#' @param returnGeochemicalData logical, optionally request geochemical,
+#' optical and XRD/thermal data, see details section
+#' @param simplifyColors logical, simplify colors (from morphologic data) and
+#' join with horizon data
+#' @param progress logical, optionally give progress when iterating over
+#' multiple requests
+#' @return a \code{SoilProfileCollection} object when
+#' \code{returnMorphologicData} is FALSE, otherwise a list.
+#' @note SoilWeb maintains a snapshot of these KSSL and NASIS data. The SoilWeb
+#' snapshot was developed using methods described here:
+#' \url{https://github.com/dylanbeaudette/process-kssl-snapshot}. Please use
+#' the link below for the live data.
+#' @author D.E. Beaudette and A.G. Brown
+#' @seealso \code{\link{fetchOSD}}
+#' @references \url{http://ncsslabdatamart.sc.egov.usda.gov/}
+#' @keywords utilities
+#' @examples
+#' 
+#' \donttest{
+#' if(requireNamespace("curl") &
+#'     curl::has_internet()) {
+#'     
+#'     library(aqp)
+#'     library(plyr)
+#'     library(reshape2)
+#'     
+#'     # search by series name
+#'     s <- fetchKSSL(series='auburn')
+#'     
+#'     # search by bounding-box
+#'     # s <- fetchKSSL(bbox=c(-120, 37, -122, 38))
+#'     
+#'     # how many pedons
+#'     length(s)
+#'     
+#'     # plot 
+#'     plotSPC(s, name='hzn_desgn', max.depth=150)
+#'     
+#'     ##
+#'     ## morphologic data
+#'     ##
+#'     
+#'     # get lab and morphologic data
+#'     s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE)
+#'     
+#'     # extract SPC
+#'     pedons <- s$SPC
+#'     
+#'     ## automatically simplify color data
+#'     s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE, simplifyColors=TRUE)
+#'     
+#'     # check
+#'     par(mar=c(0,0,0,0))
+#'     plot(pedons, color='moist_soil_color', print.id=FALSE)
+#'     
+#' }
+#' }
+#' 
+#' @export fetchKSSL
 fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA, pedon_key=NA, returnMorphologicData=FALSE, returnGeochemicalData=FALSE, simplifyColors=FALSE, progress=TRUE) {
   
   if(!requireNamespace('jsonlite', quietly=TRUE))

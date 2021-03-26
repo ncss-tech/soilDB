@@ -1,4 +1,4 @@
-.get_phlabresults_data_from_NASIS_db <- function(SS=TRUE) {
+.get_phlabresults_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
   # hacks to make R CMD check --as-cran happy:
   sampledepthbottom <- NULL
@@ -6,18 +6,15 @@
   phiidref          <- NULL
   # test_ph <- NULL
 
-  # must have RODBC installed
-  if (!requireNamespace('RODBC')) stop('please install the `RODBC` package', call.=FALSE)
-
   q <- "SELECT peiidref AS peiid, phiid, phl.seqnum, phl.sampledepthtop, sampledepthbottom, sampleid, datacollector, claytotmeasured, claycarbmeasured, silttotmeasured, siltfinemeasured, siltcomeasured, sandtotmeasured, sandtotmethod, sandvcmeasured, sandcomeasured, sandmedmeasured, sandfinemeasured, sandvfmeasured, sandvfmethod, textureclfieldlab, fiberrubbedpct, fiberunrubbedpct, ph1to1h2o, ph01mcacl2, phnaf, phoxidized, phdeltah2o2, liquidlimitmeasured, plasticlimitmeasured, pi, atterbergsampcond, cole, esttotpotacidityetpa, camgmeh2, potassiummeh2, camgsatpaste, extractaciditykcl, basesatmeh2, cec7, cec82, ecec, phosphatephos, nitratenitrogen, ecmeasured, ecdeterminemeth, ec15, caco3equivmeasured, gypsumequiv, sodium, sar, gypsumreq, humiccolor, fulviccolor, humicfulviccolor, alummeasured, pyrophoshue, pyrophosvalue, pyrophoschroma, melanicindex
 FROM
 phorizon_View_1 ph
 LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
   ORDER BY peiidref, phiid, sampledepthtop;"
 
+  channel <- dbConnectNASIS(dsn)
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
@@ -27,16 +24,15 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
 
 
   # exec query
-  d.phlabresults <- RODBC::sqlQuery(channel, q, stringsAsFactors = FALSE)
-
+  d.phlabresults <- dbQueryNASIS(channel, q)
 
   # recode metadata domains
-  d.phlabresults <- uncode(d.phlabresults)
+  d.phlabresults <- uncode(d.phlabresults, dsn = dsn)
 
 
   # compute thickness
   d.phlabresults <- within(d.phlabresults, {
-    hzthk = sampledepthbottom - sampledepthtop
+     hzthk = sampledepthbottom - sampledepthtop
     })
 
 
@@ -87,7 +83,6 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
     #   sapply(x[2:ncol(x)], function(x2) x2[which.max(x$hzthk)])
     #   })
     d.dups_char$hzthk <- NULL
-    #d.dups_char <- uncode(d.dups_char) # only necessary when using plyr
 
     num_ph <- names(d.dups)[names(d.dups) %in% c("phiidref", "hzthk") |
                           grepl("ph1to1h2o|ph01mcacl2", names(d.dups))]
@@ -128,11 +123,6 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
   # TODO: final cleaning of duplicate rows - dups exist in NASIS for some reason, so should this happen first
   # to eliminate extra rows with no data? Not sure what is causing this on the NASIS side
   d.phlabresults <-  d.phlabresults[rowSums(is.na(d.phlabresults))<(length(d.phlabresults)-1),]
-
-
-  # close connection
-  RODBC::odbcClose(channel)
-
 
   # done
   return(d.phlabresults)

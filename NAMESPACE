@@ -17,7 +17,14 @@ importFrom(data.table,
            data.table,
            as.data.table)
 
-importFrom(reshape2,
+importFrom(DBI, 
+  dbGetQuery,
+  dbConnect,
+  dbSendQuery,
+  dbFetch
+)
+
+importFrom(reshape2, 
   dcast,
   melt
 )

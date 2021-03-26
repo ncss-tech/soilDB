@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -114,6 +114,21 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="soildb-261-2021-03-22" class="section level1">
+<h1 class="page-header" data-toc-text="2.6.1">
+<a href="#soildb-261-2021-03-22" class="anchor"></a>soilDB 2.6.1 (2021-03-22)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Connections to the local NASIS database now use <code>DBI</code> and <code>odbc</code> instead of <code>RODBC</code>
+</li>
+<li>Two new methods <code>dbConnectNASIS</code> and <code>dbQueryNASIS</code> facilitate access with read-only credentials, submission of queries/fetching of results, and closing the DBI connection upon completion</li>
+<li>Use <code>dsn</code> argument to specify a local “static” SQLite file containing NASIS tables
+<ul>
+<li>Default argument <code>dsn = NULL</code> uses <code>"nasis_local"</code> <a href="http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html">ODBC connection</a> to a local NASIS SQL Server instance</li>
+</ul>
+</li>
+</ul>
+</div>
     <div id="soildb-260-2021-02-18" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.0">
 <a href="#soildb-260-2021-02-18" class="anchor"></a>soilDB 2.6.0 (2021-02-18)<small> Unreleased </small>

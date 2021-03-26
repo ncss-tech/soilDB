@@ -40,7 +40,10 @@
 
 
 <meta property="og:title" content="Estimate Soil Temperature Regime — estimateSTR" />
-<meta property="og:description" content="Estimate soil temperature regime (STR) based on mean annual soil temperature (MAST), mean summer temperature (MSST), mean winter soil temperature (MWST), presence of O horizons, saturated conditions, and presence of permafrost. Several assumptions are made when O horizon  or saturation are undefined." />
+<meta property="og:description" content="Estimate soil temperature regime (STR) based on mean annual soil temperature
+(MAST), mean summer temperature (MSST), mean winter soil temperature (MWST),
+presence of O horizons, saturated conditions, and presence of permafrost.
+Several assumptions are made when O horizon or saturation are undefined." />
 
 
 
@@ -72,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -112,15 +115,25 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Estimate Soil Temperature Regime</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/STR.R'><code>R/STR.R</code></a></small>
     <div class="hidden name"><code>estimateSTR.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Estimate soil temperature regime (STR) based on mean annual soil temperature (MAST), mean summer temperature (MSST), mean winter soil temperature (MWST), presence of O horizons, saturated conditions, and presence of permafrost. Several assumptions are made when O horizon  or saturation are undefined.</p>
+    <p>Estimate soil temperature regime (STR) based on mean annual soil temperature
+(MAST), mean summer temperature (MSST), mean winter soil temperature (MWST),
+presence of O horizons, saturated conditions, and presence of permafrost.
+Several assumptions are made when O horizon or saturation are undefined.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>estimateSTR</span><span class='op'>(</span><span class='va'>mast</span>, <span class='va'>mean.summer</span>, <span class='va'>mean.winter</span>, O.hz <span class='op'>=</span> <span class='cn'>NA</span>, saturated <span class='op'>=</span> <span class='cn'>NA</span>, permafrost <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>estimateSTR</span><span class='op'>(</span>
+  <span class='va'>mast</span>,
+  <span class='va'>mean.summer</span>,
+  <span class='va'>mean.winter</span>,
+  O.hz <span class='op'>=</span> <span class='cn'>NA</span>,
+  saturated <span class='op'>=</span> <span class='cn'>NA</span>,
+  permafrost <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,27 +164,31 @@
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><a href='http://ncss-tech.github.io/AQP/soilDB/STR-eval.html'>Related tutorial</a>.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Vector of soil temperature regimes.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p><a href='http://ncss-tech.github.io/AQP/soilDB/STR-eval.html'>Soil Temperature Regime Evaluation Tutorial</a></p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Soil Survey Staff. 2015. Illustrated guide to soil taxonomy. U.S. Department of Agriculture, Natural Resources Conservation Service, National Soil Survey Center, Lincoln, Nebraska.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>D.E. Beaudette</p>
+    <p>Soil Survey Staff. 2015. Illustrated guide to soil taxonomy.
+U.S. Department of Agriculture, Natural Resources Conservation Service,
+National Soil Survey Center, Lincoln, Nebraska.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='STRplot.html'>STRplot</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># simple example</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># simple example</span>
 <span class='fu'>estimateSTR</span><span class='op'>(</span>mast<span class='op'>=</span><span class='fl'>17</span>, mean.summer <span class='op'>=</span> <span class='fl'>22</span>, mean.winter <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] thermic
 #&gt; 10 Levels: gelic cryic frigid isofrigid mesic isomesic thermic ... isohyperthermic</div><div class='input'>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

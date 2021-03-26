@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -86,9 +86,9 @@
 <li><a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a></li>
 </ul>
 </div>
-<div id="soildb-260" class="section level2">
+<div id="soildb-261" class="section level2">
 <h2 class="hasAnchor">
-<a href="#soildb-260" class="anchor"></a>soilDB 2.6.0</h2>
+<a href="#soildb-261" class="anchor"></a>soilDB 2.6.1</h2>
 <div id="notices-on-database-interfaces" class="section level3">
 <h3 class="hasAnchor">
 <a href="#notices-on-database-interfaces" class="anchor"></a>Notices on Database Interfaces</h3>
@@ -96,11 +96,17 @@
 <h4 class="hasAnchor">
 <a href="#nasis" class="anchor"></a>NASIS</h4>
 <ul>
-<li>low-level functions return empty <code>data.frame</code> objects when local database (or selected set) is empty</li>
-<li>
-<code><a href="reference/fetchNASIS.html">fetchNASIS()</a></code> is now a wrapper around pedon and component “fetch” functions</li>
-<li>
-<code><a href="reference/uncode.html">uncode()</a></code> is now used in all queries to local NASIS database</li>
+<li>all NASIS queries now use {DBI} w/ {odbc} or {RSQLite} as the back-end
+<ul>
+<li>Install required R packages with <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages(c("DBI","odbc","RSQLite"), dependencies = TRUE)</a></code>
+</li>
+</ul>
+</li>
+<li>new methods for connecting to NASIS and querying NASIS data allow for <code>dsn</code> argument to specify a local “static” SQLite file containing NASIS tables.
+<ul>
+<li>Default argument <code>dsn = NULL</code> uses <code>"nasis_local"</code> <a href="http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html">ODBC connection</a> to a local NASIS SQL Server instance</li>
+</ul>
+</li>
 </ul>
 </div>
 <div id="soil-data-access-sda" class="section level4">
@@ -145,6 +151,14 @@
 <li>NASIS local database
 <ul>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchNASIS.html"><code>fetchNASIS</code></a></li>
+<li>
+<span style="color:red"><strong>NEW:</strong></span> Argument <code>dsn</code> to specify path to connect to alternate (SQLite) data sources with NASIS schema</li>
+<li>
+<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/docs/reference/dbConnectNASIS.html"><code>dbConnectNASIS</code></a> (alias <code>NASIS</code>) - create a <em>DBIConnection</em> to local NASIS database</li>
+<li>
+<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/docs/reference/dbQueryNASIS.html"><code>dbQueryNASIS</code></a> - query NASIS local database (and close connection with <code>close=TRUE</code>)</li>
+<li>
+<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/docs/reference/createStaticNASIS.html"><code>createStaticNASIS</code></a> - create list of NASIS tables or write to SQLite</li>
 </ul>
 </li>
 <li>ROSETTA
@@ -251,7 +265,7 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># viz of hillslope position, from SSURGO component records</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>res &lt;-<span class="st"> </span><span class="kw">vizHillslopePosition</span>(s<span class="op">$</span>hillpos, <span class="dt">annotation.cex =</span> <span class="fl">0.9</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="kw">print</span>(res<span class="op">$</span>fig)</span></code></pre></div>
-<p><img src="https://i.imgur.com/c2sgWPx.png" width="1056"></p>
+<p><img src="https://i.imgur.com/FVDqCeB.png" width="1056"></p>
 </div>
 <div id="make-profile-sketches" class="section level3">
 <h3 class="hasAnchor">
@@ -265,7 +279,7 @@
 <span id="cb6-7"><a href="#cb6-7"></a>  <span class="dt">axis.line.offset =</span> <span class="fl">-0.1</span>,</span>
 <span id="cb6-8"><a href="#cb6-8"></a>  <span class="dt">width =</span> <span class="fl">0.2</span></span>
 <span id="cb6-9"><a href="#cb6-9"></a>)</span></code></pre></div>
-<p><img src="https://i.imgur.com/cBjQX36.png" width="1344"></p>
+<p><img src="https://i.imgur.com/WnKNapT.png" width="1344"></p>
 </div>
 <div id="identify-tabular-siblings" class="section level3">
 <h3 class="hasAnchor">
@@ -296,7 +310,7 @@
 <span id="cb8-12"><a href="#cb8-12"></a>  <span class="dt">cex.taxon.labels =</span> <span class="dv">1</span>,</span>
 <span id="cb8-13"><a href="#cb8-13"></a>  <span class="dt">cex.names =</span> <span class="dv">1</span></span>
 <span id="cb8-14"><a href="#cb8-14"></a>)</span></code></pre></div>
-<p><img src="https://i.imgur.com/bBBKuVm.png" width="1344"></p>
+<p><img src="https://i.imgur.com/8nRXmSw.png" width="1344"></p>
 </div>
 </div>
 <div id="dependency-graph" class="section level2">
@@ -339,7 +353,7 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://cran.r-project.org/package=soilDB"><img src="http://www.r-pkg.org/badges/version/soilDB" alt="CRAN Version (Stable)"></a></li>
-<li><a href="https://github.com/ncss-tech/soilDB"><img src="https://img.shields.io/badge/GitHub-2.6.0-yellowgreen" alt="GitHub Version (Development)"></a></li>
+<li><a href="https://github.com/ncss-tech/soilDB"><img src="https://img.shields.io/badge/GitHub-2.6.1-yellowgreen" alt="GitHub Version (Development)"></a></li>
 <li><a href="https://github.com/ncss-tech/soilDB/actions"><img src="https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg" alt="R-CMD-check Build Status"></a></li>
 <li><a href="https://cran.r-project.org/package=soilDB"><img src="http://cranlogs.r-pkg.org/badges/grand-total/soilDB" alt="Total CRAN Downloads"></a></li>
 <li><a href="https://ncss-tech.github.io/soilDB/docs"><img src="https://img.shields.io/badge/docs-HTML-informational" alt="soilDB Manual"></a></li>

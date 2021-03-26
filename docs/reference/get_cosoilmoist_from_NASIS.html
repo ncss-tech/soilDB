@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Read and Flatten the Component Soil Moisture Tables — get_cosoilmoist_from_NASIS" />
-<meta property="og:description" content="Read and flatten the component soil moisture month tables from a local NASIS Database." />
+<meta property="og:description" content="Read and flatten the component soil moisture month tables from a local NASIS
+Database." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -112,47 +113,74 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Read and Flatten the Component Soil Moisture Tables</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/get_cosoilmoist_from_NASIS.R'><code>R/get_cosoilmoist_from_NASIS.R</code></a></small>
     <div class="hidden name"><code>get_cosoilmoist_from_NASIS.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Read and flatten the component soil moisture month tables from a local NASIS Database.</p>
+    <p>Read and flatten the component soil moisture month tables from a local NASIS
+Database.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_cosoilmoist_from_NASIS</span><span class='op'>(</span>impute <span class='op'>=</span> <span class='cn'>TRUE</span>, stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_cosoilmoist_from_NASIS</span><span class='op'>(</span>
+  SS <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  impute <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>,
+  dsn <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>SS</th>
+      <td><p>fetch data from the currently loaded selected set in NASIS or from
+the entire local database (default: <code>TRUE</code>)</p></td>
+    </tr>
+    <tr>
       <th>impute</th>
-      <td><p>replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)</p></td>
+      <td><p>replace missing (i.e. <code>NULL</code>) values with <code>"Not_Populated"</code> for
+categorical data, or the "RV" for numeric data or <code>201</code> cm if the "RV" is also
+<code>NULL</code> (default: <code>TRUE</code>)</p></td>
     </tr>
     <tr>
       <th>stringsAsFactors</th>
-      <td><p>logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)</p></td>
+      <td><p>logical: should character vectors be converted to
+factors? This argument is passed to the <code><a href='uncode.html'>uncode()</a></code> function. It does not
+convert those vectors that have set outside of <code><a href='uncode.html'>uncode()</a></code> (i.e. hard coded).
+The 'factory-fresh' default is TRUE, but this can be changed by setting
+options(<code>stringsAsFactors = FALSE</code>)</p></td>
+    </tr>
+    <tr>
+      <th>dsn</th>
+      <td><p>Optional: path to local SQLite database containing NASIS
+table structure; default: <code>NULL</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data.frame.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>S.M. Roecker</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The component soil moisture tables within NASIS house monthly data on flooding, ponding, and soil moisture status. The soil moisture status is used to specify the water table depth for components (e.g. <code>status == "Moist"</code>).</p>
+    <p>The component soil moisture tables within NASIS house monthly data on
+flooding, ponding, and soil moisture status. The soil moisture status is
+used to specify the water table depth for components (e.g. <code>status ==
+"Moist"</code>).</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This function currently works only on Windows.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='fetchNASIS.html'>fetchNASIS</a>, <a href='fetchNASISWebReport.html'>get_cosoilmoist_from_NASISWebReport</a>, <a href='fetchSDA.html'>get_cosoilmoist_from_SDA</a>, <code>get_comonth_from_SDA</code></p></div>
+    <div class='dont-index'><p><a href='fetchNASIS.html'>fetchNASIS</a>, <a href='fetchNASISWebReport.html'>get_cosoilmoist_from_NASISWebReport</a>,
+<a href='fetchSDA.html'>get_cosoilmoist_from_SDA</a>, <code>get_comonth_from_SDA</code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>S.M. Roecker</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># \donttest{</span>
 <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='local_NASIS_defined.html'>local_NASIS_defined</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
  <span class='co'># load cosoilmoist (e.g. water table data)</span>
  <span class='va'>test</span> <span class='op'>&lt;-</span> <span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>get_cosoilmoist_from_NASIS</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
@@ -162,7 +190,8 @@
    <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>)</span>
  <span class='op'>}</span>
 <span class='op'>}</span>
-<span class='co'># }</span></div></pre>
+<span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

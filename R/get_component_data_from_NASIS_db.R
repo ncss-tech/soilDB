@@ -7,35 +7,35 @@
 
 
 ## component diagnostic features
-get_component_diaghz_from_NASIS_db <- function(SS=TRUE) {
+get_component_diaghz_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # query diagnostic horizons, usually a 1:many relationship with pedons
   q <- "SELECT coiidref as coiid, featkind, featdept_l, featdept_r, featdept_h, featdepb_l, featdepb_r, featdepb_h, featthick_l, featthick_r, featthick_h FROM codiagfeatures_View_1 AS cdf ORDER BY cdf.coiidref, cdf.featdept_r;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d <- dbQueryNASIS(channel, q)
 
   # convert codes
-  d <- uncode(d)
+  d <- uncode(d, dsn = dsn)
+
 }
 
 ## component diagnostic features
-get_component_restrictions_from_NASIS_db <- function(SS = TRUE) {
+get_component_restrictions_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # query restrictions, can be 1:many relationship with pedons
@@ -47,17 +47,15 @@ get_component_restrictions_from_NASIS_db <- function(SS = TRUE) {
   }
 
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d <- dbQueryNASIS(channel, q)
 
   # convert codes
-  return(uncode(d))
+  return(uncode(d, dsn = dsn)
+)
 }
 
 ## get map unit text from local NASIS
-get_mutext_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE) {
+get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NULL) {
 
   q <- "SELECT mu.muiid, mu.mukind, mu.mutype, mu.muname, mu.nationalmusym,
   mut.seqnum, mut.recdate, mut.recauthor, mut.mapunittextkind, mut.textcat, mut.textsubcat, CAST(mut.textentry AS ntext) AS textentry
@@ -66,23 +64,21 @@ get_mutext_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE) {
   mapunit_View_1 AS mu
   INNER JOIN mutext_View_1 AS mut ON mu.muiid = mut.muiidref;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d <- dbQueryNASIS(channel, q)
 
   # convert codes
-  d <- uncode(d)
+  d <- uncode(d, dsn = dsn)
 
   # replace tabs with spaces
   # tabs at the beginning of a line will confuse the MD parser, generating <code><pre> blocks
@@ -100,44 +96,42 @@ get_mutext_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE) {
 
 
 ## get component text from local NASIS
-get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE) {
-  
+get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NULL) {
+
   q <- "SELECT co.coiid,
-  cot.seqnum, cot.recdate, cot.recauthor, cot.comptextkind, cot.textcat, cot.textsubcat, 
+  cot.seqnum, cot.recdate, cot.recauthor, cot.comptextkind, cot.textcat, cot.textsubcat,
   CAST(cot.textentry AS ntext) AS textentry
 
   FROM
   component_View_1 AS co
   INNER JOIN cotext_View_1 AS cot ON co.coiid = cot.coiidref;"
-  
-  channel <- .openNASISchannel()
-  if (channel == -1)
-    return(data.frame())
-  
+
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-  
+
+  # connect to NASIS
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-  
-  # close connection
-  RODBC::odbcClose(channel)
-  
+  d <- dbQueryNASIS(channel, q)
+
   # convert codes
-  d <- uncode(d)
-  
+  d <- uncode(d, dsn = dsn)
+
   # replace tabs with spaces
   # tabs at the beginning of a line will confuse the MD parser, generating <code><pre> blocks
   d$textentry <- gsub(d$textentry, pattern = '\t', replacement = ' ', fixed = TRUE)
-  
+
   # optionally convert \r\n -> \n
   if(fixLineEndings){
     d$textentry <- gsub(d$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
   }
-  
-  
+
   # done
   return(d)
 }
@@ -145,10 +139,44 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE) {
 
 
 ## just the component records, nothing above or below
-get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+
+
+#' Extract component data from a local NASIS Database
+#'
+#' This function currently works only on Windows.
+#'
+#' @aliases get_component_data_from_NASIS_db get_component_restrictions_from_NASIS_db
+#'
+#' @param SS fetch data from the currently loaded selected set in NASIS or from
+#' the entire local database (default: `TRUE`)
+#'
+#' @param stringsAsFactors logical: should character vectors be converted to
+#' factors? This argument is passed to the `uncode()` function. It does not
+#' convert those vectors that have set outside of `uncode()` (i.e. hard coded).
+#' The 'factory-fresh' default is TRUE, but this can be changed by setting
+#' options(`stringsAsFactors = FALSE`)
+#'
+#' @param dsn Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#'
+#' @return A list with the results.
+#' @author Dylan E. Beaudette, Stephen Roecker, and Jay M. Skovlin
+#' @seealso \code{\link{fetchNASIS}}
+#' @keywords manip
+#' @examples
+#'
+#' \donttest{
+#' if(local_NASIS_defined()) {
+#'  # query text note data
+#'  fc <- try(get_component_data_from_NASIS_db())
+#'
+#'  # show structure of component data returned
+#'  str(fc)
+#' }
+#' }
+#'
+#' @export get_component_data_from_NASIS_db
+get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn= NULL) {
 
   q <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, reannualprecip_r, ffd_l, ffd_r, ffd_h, tfact, wei, weg, nirrcapcl, nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, frostact, hydricrating, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
 
@@ -158,32 +186,30 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d <- dbQueryNASIS(channel, q)
 
   # test for duplicate coiids
   idx <- which(table(d$coiid) > 1)
-  if(length(idx) > 0) {
+  if (length(idx) > 0) {
     dupes <- names(idx)
     assign('dupe.coiids', value=dupes, envir=soilDB.env)
     message("-> QC: duplicate coiids, this should not happen. Use `get('dupe.coiids', envir=soilDB.env)` for related coiid values.")
   }
 
   # uncode metadata domains
-  if(nrow(d) > 0) {
-    d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  if (nrow(d) > 0) {
+    d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
   }
 
   # done
@@ -191,10 +217,7 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 }
 
 
-get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q.legend  <- paste("
                      SELECT
@@ -226,22 +249,20 @@ get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors
     q.legend <- gsub(pattern = '_View_1', replacement = '', x = q.legend, fixed = TRUE)
   }
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # exec query
-  d.legend <- RODBC::sqlQuery(channel, q.legend, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d.legend <- dbQueryNASIS(channel, q.legend)
 
   # recode metadata domains
   d.legend <- uncode(d.legend,
                      db = "NASIS",
                      droplevels = droplevels,
-                     stringsAsFactors = stringsAsFactors
-                     )
+                     stringsAsFactors = stringsAsFactors,
+                     dsn = dsn)
 
 
   # done
@@ -250,10 +271,7 @@ get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors
 
 
 
-get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q <- paste("SELECT
              a.areasymbol, a.areaname, a.areaacres,
@@ -288,19 +306,16 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFa
   )
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
-  # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d <- dbQueryNASIS(channel, q)
 
   d$musym <- as.character(d$musym)
 
@@ -308,8 +323,8 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFa
   d <- uncode(d,
               db = "NASIS",
               droplevels = droplevels,
-              stringsAsFactors = stringsAsFactors
-  )
+              stringsAsFactors = stringsAsFactors,
+              dsn = dsn)
 
   # done
   return(d)
@@ -317,10 +332,7 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFa
 
 
 
-get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q.mapunit <- paste("
                      SELECT
@@ -365,26 +377,24 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
                      ;")
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.mapunit <- gsub(pattern = '_View_1', replacement = '', x = q.mapunit, fixed = TRUE)
   }
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # exec query
-  d.mapunit <- RODBC::sqlQuery(channel, q.mapunit, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d.mapunit <- dbQueryNASIS(channel, q.mapunit)
 
   # recode metadata domains
   d.mapunit <- uncode(d.mapunit,
                       db = "NASIS",
                       droplevels = droplevels,
-                      stringsAsFactors = stringsAsFactors
-  )
+                      stringsAsFactors = stringsAsFactors,
+                      dsn = dsn)
 
   # hacks to make R CMD check --as-cran happy:
   metadata <- NULL
@@ -417,10 +427,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
 
 # return all rows from correlation -- map unit -- legend map unit -- dmu / legend -- area
 # note that all of these "target tables" have to be selected
-get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional=TRUE, dropNotRepresentative=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional=TRUE, dropNotRepresentative=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q <- "SELECT lmapunitiid, mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
 
@@ -434,20 +441,17 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
 
   ORDER BY nationalmusym, dmuiid;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-  # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d <- dbQueryNASIS(channel, q)
 
   ## TODO: is this a good idea?
   # test for no data
@@ -455,7 +459,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
     warning('there are no records in your selected set!', call. = FALSE)
 
   # recode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # optionally drop additional | NA mustatus
   if(dropAdditional) {
@@ -493,11 +497,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional
 }
 
 # get geomorphic desc for each component
-get_component_cogeomorph_data_from_NASIS_db <- function(SS=TRUE) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
-
+get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
   q <- "SELECT cogeo.coiidref as coiid, cogeo.geomfmod, geomorfeat.geomfname, cogeo.geomfeatid, cogeo.existsonfeat, cogeo.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
 
@@ -509,20 +509,17 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS=TRUE) {
 
   ORDER BY coiid, geomfeatid ASC;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-  # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d <- dbQueryNASIS(channel, q)
 
   # done
   return(d)
@@ -530,11 +527,7 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS=TRUE) {
 
 
 # get copm for each component
-get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
-
+get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q <- "SELECT cpmg.coiidref as coiid, cpm.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
 
@@ -545,35 +538,27 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
 
   ORDER BY coiidref, seqnum, pmorder, copmgrpiid ASC;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-  # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d <- dbQueryNASIS(channel, q)
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # done
   return(d)
 }
 
-
-
 # get ESD information for each component
-get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
   ecositeorigin, ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
@@ -584,31 +569,28 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
 
   ORDER BY coiid;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-  # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d <- dbQueryNASIS(channel, q)
 
   # check for more than 1 record / coiid
   idx <- which(table(d$coiid) > 1)
   dupes <- names(idx)
   assign('multiple.ecosite.per.coiid', value=dupes, envir=soilDB.env)
-  if(length(idx) > 0) {
+  if (length(idx) > 0) {
     message("-> QC: multiple ecosites / component. Use `get('multiple.ecosite.per.coiid', envir=soilDB.env)` for related coiid values.")
   }
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # done
   return(d)
@@ -616,10 +598,7 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
 
 ## TODO: convert any multiple entries into a comma delimited string
 # get OtherVeg information for each component
-get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
   q <- "SELECT coiidref as coiid, ovegclid, ovegclname, coothvegcl.recwlupdated
   FROM coothvegclass_View_1 coothvegcl
@@ -627,80 +606,113 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE) {
   ORDER BY coiid;"
 
   # setup connection local NASIS
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-  # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d <- dbQueryNASIS(channel, q)
 
   # check for more than 1 record / coiid
   idx <- which(table(d$coiid) > 1)
-  if(length(idx) > 0) {
+  if (length(idx) > 0) {
     dupes <- names(idx)
     assign('multiple.otherveg.per.coiid', value=dupes, envir=soilDB.env)
     message("-> QC: multiple othervegclasses / component. Use `get('multiple.otherveg.per.coiid', envir=soilDB.env)` for related coiid values.")
   }
 
   # uncode metadata domains
-  #d <- uncode(d)
+  #d <- uncode(d, dsn = dsn)
 
   # done
   return(d)
 }
 
-get_comonth_from_NASIS_db <- function(SS=TRUE, fill=FALSE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+
+
+#' Extract component month data from a local NASIS Database
+#'
+#' Extract component month data from a local NASIS Database.
+#'
+#' This function currently works only on Windows.
+#'
+#' @param SS get data from the currently loaded Selected Set in NASIS or from
+#' the entire local database (default: TRUE)
+#' @param fill should missing "month" rows in the comonth table be filled with
+#' NA (FALSE)
+#' @param dsn Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' @param stringsAsFactors logical: should character vectors be converted to
+#' factors? This argument is passed to the uncode() function. It does not
+#' convert those vectors that have set outside of uncode() (i.e. hard coded).
+#' The 'factory-fresh' default is TRUE, but this can be changed by setting
+#' options(stringsAsFactors = FALSE)
+#' @return A list with the results.
+#' @author Stephen Roecker
+#' @seealso \code{\link{fetchNASIS}}
+#' @keywords manip
+#' @examples
+#'
+#' \donttest{
+#' if(local_NASIS_defined()) {
+#'   # query text note data
+#'   cm <- try(get_comonth_from_NASIS_db())
+#'
+#'   # show structure of component month data
+#'   str(cm)
+#' }
+#' }
+#'
+#' @export get_comonth_from_NASIS_db
+get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid
   FROM comonth_View_1 AS comonth;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+  d <- dbQueryNASIS(channel, q)
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors)
+  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # optionally fill missing coiids
-  if(fill) {
+  if (fill) {
     q <- "SELECT coiid
     FROM component_View_1
     ORDER BY coiid;"
 
+    channel <- dbConnectNASIS(dsn)
+
+    if (inherits(channel, 'try-error'))
+      return(data.frame())
+
     # toggle selected set vs. local DB
-    if(SS == FALSE) {
+    if (SS == FALSE) {
       q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
     }
 
     # exec query
-    d.coiid <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+    d.coiid <- dbQueryNASIS(channel, q)
   }
-
-  # close connection
-  RODBC::odbcClose(channel)
 
   # re-format month names
   # only if > 0 rows of data
-  if(nrow(d) > 0) {
+  if (nrow(d) > 0) {
     # using 3-letter month names
     d$month <- months(as.Date(paste0("2016-", d$month, "-01"), format="%Y-%B-%d"), abbreviate = TRUE)
   }
@@ -718,14 +730,14 @@ get_comonth_from_NASIS_db <- function(SS=TRUE, fill=FALSE, stringsAsFactors = de
 
 
   # optionally fill missing coiids
-  if(fill) {
+  if (fill) {
     # make a new DF with all coiids and months
-    nd <- expand.grid(coiid=d.coiid$coiid, month=levels(d$month))
-    nd$month <- factor(nd$month, levels=levels(d$month))
+    nd <- expand.grid(coiid = d.coiid$coiid, month = levels(d$month))
+    nd$month <- factor(nd$month, levels = levels(d$month))
 
     # join full version to comonth records
     # nd contains the full set of component records IDs
-    d <- join(nd, d, by=c('coiid', 'month'), type='left')
+    d <- join(nd, d, by=c('coiid', 'month'), type = 'left')
 
     ## this isn't likely needed, will re-visit after some testing
 
@@ -756,10 +768,7 @@ get_comonth_from_NASIS_db <- function(SS=TRUE, fill=FALSE, stringsAsFactors = de
 
 # get linked pedons by peiid and user pedon ID
 # note that there may be >=1 pedons / coiid
-get_copedon_from_NASIS_db <- function(SS=TRUE) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+get_copedon_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
   q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative
 
@@ -767,20 +776,19 @@ get_copedon_from_NASIS_db <- function(SS=TRUE) {
 
   LEFT OUTER JOIN pedon_View_1 p ON p.peiid = copedon.peiidref;
   "
-  channel <- .openNASISchannel()
-  if (channel == -1)
+
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d <- dbQueryNASIS(channel, q)
 
   # missing pedon ID suggests records not in the selected set or local database
   if(nrow(d) > 0 & any(is.na(d$pedon_id))) {
@@ -794,10 +802,7 @@ get_copedon_from_NASIS_db <- function(SS=TRUE) {
 
 ## TODO: better documentation for "fill" argument
 # https://github.com/ncss-tech/soilDB/issues/50
-get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE, dsn = NULL) {
 
   q <- "SELECT coiid, chiid, hzname, hzdept_r, hzdepb_r, texture, fragvoltot_l, fragvoltot_r, fragvoltot_h, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, structgrpname, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_l, lep_r, lep_h, ll_l, ll_r, ll_h, pi_l, pi_r, pi_h, sieveno4_l, sieveno4_r, sieveno4_h, sieveno10_l, sieveno10_r, sieveno10_h, sieveno40_l, sieveno40_r, sieveno40_h, sieveno200_l, sieveno200_r, sieveno200_h, sar_l, sar_r, sar_h, ec_l, ec_r, ec_h, cec7_l, cec7_r, cec7_h, sumbases_l, sumbases_r, sumbases_h, ecec_l, ecec_r, ecec_h, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, ph01mcacl2_l, ph01mcacl2_r, ph01mcacl2_h, caco3_l, caco3_r, caco3_h, kffact, kwfact, aashind_l, aashind_r, aashind_h
 
@@ -812,20 +817,18 @@ get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE) {
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC, hzdept_r ASC;"
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   # exec query
-  d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
-
-  # close connection
-  RODBC::odbcClose(channel)
+  d <- dbQueryNASIS(channel, q)
 
   ## TODO: better documentation for "fill" argument
   # https://github.com/ncss-tech/soilDB/issues/50

@@ -1,7 +1,13 @@
+# soilDB 2.6.1 (2021-03-22)
+ * Connections to the local NASIS database now use `DBI` and `odbc` instead of `RODBC` 
+ * Two new methods `dbConnectNASIS` and `dbQueryNASIS` facilitate access with read-only credentials, submission of queries/fetching of results, and closing the DBI connection upon completion
+ * Use `dsn` argument to specify a local "static" SQLite file containing NASIS tables
+   * Default argument `dsn = NULL` uses `"nasis_local"` [ODBC connection](http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html) to a local NASIS SQL Server instance 
+   
 # soilDB 2.6.0 (2021-02-18)
  * `OSDquery` gets a new argument (`everything`) for searching the entire document
  * `fetchNASIS(..., rmHzErrors=TRUE)` -- spurious removals of data due to missing "extended" records. `fetchNASIS` now uses `aqp::horizons<-` after building a minimal `SoilProfileCollection` from NASIS site and horizon tables. This allows `aqp` integrity methods to trigger where needed--preventing unintentional re-ordering or removals of "valid" horizon data.
- 
+
 # soilDB 2.5.9 (2021-01-26)
  * `HenryTimeLine` moved to {sharpshootR} package
  * new functions `mukey.wcs()` and `ISSR800.wcs()` for hitting web coverage service (WCS) for gSSURGO, gNATSGO, and ISSR-800 grids

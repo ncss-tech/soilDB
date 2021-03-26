@@ -9,6 +9,7 @@ on:
       - master
   schedule:
     - cron: '0 0 * * 6'  # At 00:00 on Saturday
+  workflow_dispatch:
 
 name: R-CMD-check
 
@@ -46,7 +47,7 @@ jobs:
         run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
 
       - name: Configure git
-        if: runner.os == 'Windows' && github.event_name == 'schedule'
+        if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         run: |
           git config user.email "github-actions@github.com"
           git config user.name "github-actions"
@@ -100,9 +101,9 @@ jobs:
         shell: Rscript {0}
 
       - name: Render README
-        if: runner.os == 'Windows' && github.event_name == 'schedule'
+        if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         run: |
-          install.packages(c("rmarkdown","devtools","pkgdown","aqp","soilDB","sharpshootR","dendextend","latticeExtra"))
+          install.packages(c("rmarkdown","devtools","pkgdown","aqp","sharpshootR","dendextend","latticeExtra"))
           remotes::install_github(c("ncss-tech/aqp","ncss-tech/sharpshootR"), dependencies = FALSE)
           devtools::install()
           rmarkdown::render("README.Rmd")
@@ -110,14 +111,14 @@ jobs:
         shell: Rscript {0}
 
       - name: Commit results
-        if: runner.os == 'Windows' && github.event_name == 'schedule'
+        if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         run: |
           git commit README.md -m 'Render README.Rmd' || echo "No changes to commit"
           git add docs/\*
           git commit -m 'Update Docs' || echo "No changes to commit"
 
       - name: Push results
-        if: runner.os == 'Windows' && github.event_name == 'schedule'
+        if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         run: |
           git push origin HEAD:${{ env.BRANCH_NAME }} || echo "No changes to commit"
 

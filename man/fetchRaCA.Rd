@@ -45,25 +45,25 @@ The VNIR spectra associated with RaCA data are quite large [each gzip-compressed
 \donttest{
 if(requireNamespace("curl") &
    curl::has_internet()) {
-  
+
   if(require(aqp)) {
-    
+
     # search by series name
     s <- fetchRaCA(series='auburn')
-    
+
     # search by bounding-box
     # s <- fetchRaCA(bbox=c(-120, 37, -122, 38))
-    
+
     # check structure
     str(s, 1)
-    
+
     # extract pedons
     p <- s$pedons
-    
+
     # how many pedons
     length(p)
-    
-    # plot 
+
+    # plot
     par(mar=c(0,0,0,0))
     plot(p, name='hzn_desgn', max.depth=150)
   }
@@ -72,8 +72,7 @@ if(requireNamespace("curl") &
 }
 \references{
 {
-  \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164}
-  \href{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/RaCA-demo.html?root=aqp}{fetchRaCA() Tutorial}
+\url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164}
 }
 }
 \seealso{

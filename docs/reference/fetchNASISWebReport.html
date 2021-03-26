@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract component tables from a the NASIS Web Reports — fetchNASISWebReport • soilDB</title>
+<title>Extract component tables from NASIS Web Reports — fetchNASISWebReport • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Extract component tables from a the NASIS Web Reports — fetchNASISWebReport" />
-<meta property="og:description" content="Get, format, impute, and return component tables." />
+<meta property="og:title" content="Extract component tables from NASIS Web Reports — fetchNASISWebReport" />
+<meta property="og:description" content="Extract component tables from NASIS Web Reports" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -111,97 +111,130 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract component tables from a the NASIS Web Reports</h1>
-    
+    <h1>Extract component tables from NASIS Web Reports</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/fetchNASISWebReport.R'><code>R/fetchNASISWebReport.R</code></a></small>
     <div class="hidden name"><code>fetchNASISWebReport.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get, format, impute, and return component tables.</p>
+    <p>Extract component tables from NASIS Web Reports</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetchNASISWebReport</span><span class='op'>(</span><span class='va'>projectname</span>, rmHzErrors <span class='op'>=</span> <span class='cn'>FALSE</span>, fill <span class='op'>=</span> <span class='cn'>FALSE</span>,
-                    stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
-                    <span class='op'>)</span>
-<span class='fu'>get_progress_from_NASISWebReport</span><span class='op'>(</span><span class='va'>mlrassoarea</span>, <span class='va'>fiscalyear</span>, <span class='va'>projecttypename</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>fetchNASISWebReport</span><span class='op'>(</span>
+  <span class='va'>projectname</span>,
+  rmHzErrors <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  fill <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'>get_component_from_NASISWebReport</span><span class='op'>(</span>
+  <span class='va'>projectname</span>,
+  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'>get_chorizon_from_NASISWebReport</span><span class='op'>(</span>
+  <span class='va'>projectname</span>,
+  fill <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'>get_legend_from_NASISWebReport</span><span class='op'>(</span>
+  <span class='va'>mlraoffice</span>,
+  <span class='va'>areasymbol</span>,
+  droplevels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'>get_lmuaoverlap_from_NASISWebReport</span><span class='op'>(</span>
+  <span class='va'>areasymbol</span>,
+  droplevels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'>get_mapunit_from_NASISWebReport</span><span class='op'>(</span>
+  <span class='va'>areasymbol</span>,
+  droplevels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'>get_projectmapunit_from_NASISWebReport</span><span class='op'>(</span>
+  <span class='va'>projectname</span>,
+  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'>get_projectmapunit2_from_NASISWebReport</span><span class='op'>(</span>
+  <span class='va'>mlrassoarea</span>,
+  <span class='va'>fiscalyear</span>,
+  <span class='va'>projectname</span>,
+  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
+
 <span class='fu'>get_project_from_NASISWebReport</span><span class='op'>(</span><span class='va'>mlrassoarea</span>, <span class='va'>fiscalyear</span><span class='op'>)</span>
-<span class='fu'>get_project_correlation_from_NASISWebReport</span><span class='op'>(</span><span class='va'>mlrassoarea</span>, <span class='va'>fiscalyear</span>, <span class='va'>projectname</span><span class='op'>)</span>
-<span class='fu'>get_projectmapunit_from_NASISWebReport</span><span class='op'>(</span><span class='va'>projectname</span>, 
-                                       stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
-                                       <span class='op'>)</span>
-<span class='fu'>get_projectmapunit2_from_NASISWebReport</span><span class='op'>(</span><span class='va'>mlrassoarea</span>, <span class='va'>fiscalyear</span>, <span class='va'>projectname</span>, 
-                                        stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
-                                        <span class='op'>)</span>
-<span class='fu'>get_legend_from_NASISWebReport</span><span class='op'>(</span><span class='va'>mlraoffice</span>,
-                               <span class='va'>areasymbol</span>,
-                               droplevels <span class='op'>=</span> <span class='cn'>TRUE</span>,
-                               stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
-                               <span class='op'>)</span>
-<span class='fu'>get_mapunit_from_NASISWebReport</span><span class='op'>(</span><span class='va'>areasymbol</span>,
-                                droplevels <span class='op'>=</span> <span class='cn'>TRUE</span>,
-                                stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
-                                <span class='op'>)</span>
-<span class='fu'>get_component_from_NASISWebReport</span><span class='op'>(</span><span class='va'>projectname</span>, 
-                                  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
-                                  <span class='op'>)</span>
-<span class='fu'>get_chorizon_from_NASISWebReport</span><span class='op'>(</span><span class='va'>projectname</span>, fill <span class='op'>=</span> <span class='cn'>FALSE</span>, 
-                                 stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
-                                 <span class='op'>)</span>
-<span class='fu'>get_cosoilmoist_from_NASISWebReport</span><span class='op'>(</span><span class='va'>projectname</span>, impute <span class='op'>=</span> <span class='cn'>TRUE</span>, 
-                                    stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>
-                                    <span class='op'>)</span>
-<span class='fu'>get_sitesoilmoist_from_NASISWebReport</span><span class='op'>(</span><span class='va'>usiteid</span><span class='op'>)</span></pre>
+
+<span class='fu'>get_progress_from_NASISWebReport</span><span class='op'>(</span><span class='va'>mlrassoarea</span>, <span class='va'>fiscalyear</span>, <span class='va'>projecttypename</span><span class='op'>)</span>
+
+<span class='fu'>get_project_correlation_from_NASISWebReport</span><span class='op'>(</span>
+  <span class='va'>mlrassoarea</span>,
+  <span class='va'>fiscalyear</span>,
+  <span class='va'>projectname</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>projectname</th>
-      <td><p>text string vector of project names to be inserted into a SQL WHERE clause (default: NA)</p></td>
-    </tr>
-    <tr>
-      <th>mlraoffice</th>
-      <td><p>text string value identifying the MLRA Regional Soil Survey Office group name inserted into a SQL WHERE clause (default: NA)</p></td>
-    </tr>
-    <tr>
-      <th>mlrassoarea</th>
-      <td><p>text string value identifying the MLRA Soil Survey Office areasymbol symbol inserted into a SQL WHERE clause (default: NA)</p></td>
-    </tr>
-    <tr>
-      <th>fiscalyear</th>
-      <td><p>text string value identifying the fiscal year inserted into a SQL WHERE clause (default: NA)</p></td>
-    </tr>
-    <tr>
-      <th>projecttypename</th>
-      <td><p>text string value identifying the project type name inserted into a SQL WHERE clause (default: NA)</p></td>
-    </tr>
-    <tr>
-      <th>areasymbol</th>
-      <td><p>text string value identifying the area symbol (e.g. "IN001" or "IN%") inserted into a SQL WHERE clause (default: NA)</p></td>
-    </tr>
-    <tr>
-      <th>usiteid</th>
-      <td><p>text string value identifying the user site id inserted into a SQL WHERE clause (default: NA)</p></td>
-    </tr>
-    <tr>
-      <th>impute</th>
-      <td><p>replace missing (i.e. NULL) values with "Not_Populated" for categorical data, or the "RV" for numeric data or 201 cm if the "RV" is also NULL (default: TRUE)</p></td>
-    </tr>
-    <tr>
-      <th>fill</th>
-      <td><p>should rows with missing component ids be removed NA (FALSE)</p></td>
+      <td><p>text string vector of project names to be inserted into a
+SQL WHERE clause (default: <code>NA</code>)</p></td>
     </tr>
     <tr>
       <th>rmHzErrors</th>
-      <td><p>should pedons with horizonation errors be removed from the results? (default: FALSE)</p></td>
+      <td><p>should pedons with horizonation errors be removed from the
+results? (default: <code>FALSE</code>)</p></td>
+    </tr>
+    <tr>
+      <th>fill</th>
+      <td><p>should rows with missing component ids be removed (default: <code>FALSE</code>)</p></td>
     </tr>
     <tr>
       <th>stringsAsFactors</th>
-      <td><p>logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have been set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)</p></td>
+      <td><p>logical: should character vectors be converted to
+factors? This argument is passed to the <code><a href='uncode.html'>uncode()</a></code> function. It does not
+convert those vectors that have been set outside of <code><a href='uncode.html'>uncode()</a></code> (i.e. hard
+coded). The 'factory-fresh' default is TRUE, but this can be changed by
+setting options(<code>stringsAsFactors = FALSE</code>)</p></td>
+    </tr>
+    <tr>
+      <th>mlraoffice</th>
+      <td><p>text string value identifying the MLRA Regional Soil
+Survey Office group name inserted into a SQL WHERE clause (default: <code>NA</code>)</p></td>
+    </tr>
+    <tr>
+      <th>areasymbol</th>
+      <td><p>text string value identifying the area symbol (e.g.
+<code>IN001</code> or <code>IN%</code>) inserted into a SQL WHERE clause (default: <code>NA</code>)
+<code>NULL</code> (default: <code>TRUE</code>)</p></td>
     </tr>
     <tr>
       <th>droplevels</th>
-      <td><p>logical: indicating whether to drop unused levels in classifying factors. This is useful when a class has large number of unused classes, which can waste space in tables and figures.</p></td>
+      <td><p>logical: indicating whether to drop unused levels in
+classifying factors. This is useful when a class has large number of unused
+classes, which can waste space in tables and figures.</p></td>
+    </tr>
+    <tr>
+      <th>mlrassoarea</th>
+      <td><p>text string value identifying the MLRA Soil Survey Office
+areasymbol symbol inserted into a SQL WHERE clause (default: <code>NA</code>)</p></td>
+    </tr>
+    <tr>
+      <th>fiscalyear</th>
+      <td><p>text string value identifying the fiscal year inserted
+into a SQL WHERE clause (default: <code>NA</code>)</p></td>
+    </tr>
+    <tr>
+      <th>projecttypename</th>
+      <td><p>text string value identifying the project type name
+inserted into a SQL WHERE clause (default: <code>NA</code>)</p></td>
     </tr>
     </table>
 
@@ -213,8 +246,8 @@
     <p>Stephen Roecker</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-
+    <pre class="examples"><div class='input'>
+<span class='co'># \donttest{</span>
 
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
     <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;</span>
@@ -224,8 +257,8 @@
 <span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># query soil components by projectname</span>
   <span class='va'>test</span> <span class='op'>=</span> <span class='fu'>fetchNASISWebReport</span><span class='op'>(</span>
-    <span class='st'>"EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"</span>
-  <span class='op'>)</span>
+    <span class='st'>"EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"</span>,
+    stringsAsFactors <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
   <span class='va'>test</span> <span class='op'>=</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>spc</span>
   
   <span class='co'># profile plot</span>
@@ -242,7 +275,7 @@
                 <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>om_slice</span>, var <span class='op'>=</span> <span class='st'>"om"</span><span class='op'>)</span>
   <span class='op'>)</span>
   
-  <span class='va'>h</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>test2</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/site.html'>site</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>)</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"dmuiid"</span>, <span class='st'>"coiid"</span>, <span class='st'>"compname"</span>, <span class='st'>"comppct_r"</span><span class='op'>)</span><span class='op'>]</span>,
+  <span class='va'>h</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>test2</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/site.html'>site</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>)</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"dmuiid"</span>, <span class='st'>"coiid"</span>, <span class='st'>"compname"</span>, <span class='st'>"comppct_r"</span><span class='op'>)</span><span class='op'>]</span>,
             by <span class='op'>=</span> <span class='st'>"coiid"</span>, 
             all.x <span class='op'>=</span> <span class='cn'>TRUE</span>
   <span class='op'>)</span>
@@ -267,8 +300,8 @@
   <span class='co'># query cosoilmoist (e.g. water table data) by mukey</span>
   <span class='co'># NA depths are interpreted as (???) with impute=TRUE argument</span>
   <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>get_cosoilmoist_from_NASISWebReport</span><span class='op'>(</span>
-    <span class='st'>"EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"</span>
-  <span class='op'>)</span>
+    <span class='st'>"EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"</span>,
+    stringsAsFactors <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
   
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>month</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='va'>dept_r</span>, lty <span class='op'>=</span> <span class='va'>status</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_rect</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>xmin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>month</span><span class='op'>)</span>, xmax <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>month</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span>,
@@ -289,10 +322,11 @@
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: gridExtra</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: 'gridExtra'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:aqp':</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    combine</span></div><div class='output co'>#&gt; <span class='message'>Loading required namespace: rvest</span></div><div class='output co'>#&gt; <span class='message'>getting project 'EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded' from NasisReportsWebSite </span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chiid` to character</span></div><div class='img'><img src='fetchNASISWebReport-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 49 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 49 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 49 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 49 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='img'><img src='fetchNASISWebReport-2.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `x$depb_r` is discouraged. Use `depb_r` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 119 rows containing missing values (geom_rect).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 119 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 119 rows containing missing values (geom_point).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='img'><img src='fetchNASISWebReport-3.png' alt='' width='768' height='475' /></div><div class='input'>
+#&gt; <span class='message'>    combine</span></div><div class='output co'>#&gt; <span class='message'>Loading required namespace: rvest</span></div><div class='output co'>#&gt; <span class='message'>getting project 'EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded' from NasisReportsWebSite </span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chiid` to character</span></div><div class='img'><img src='fetchNASISWebReport-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 49 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 49 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 49 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 49 row(s) containing missing values (geom_path).</span></div><div class='img'><img src='fetchNASISWebReport-2.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `x$depb_r` is discouraged. Use `depb_r` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 119 rows containing missing values (geom_rect).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 119 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 119 rows containing missing values (geom_point).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Position guide is perpendicular to the intended axis. Did you mean to specify a different guide `position`?</span></div><div class='img'><img src='fetchNASISWebReport-3.png' alt='' width='768' height='475' /></div><div class='input'>
 
 
 <span class='co'># }</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

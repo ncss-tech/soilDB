@@ -40,7 +40,9 @@
 
 
 <meta property="og:title" content="Get records from the Soil Classification (SC) database — get_soilseries_from_NASIS" />
-<meta property="og:description" content="These functions return records from the Soil Classification database, either from the local NASIS database (all series) or via web report (named series only)." />
+<meta property="og:description" content="These functions return records from the Soil Classification database, either
+from the local NASIS database (all series) or via web report (named series
+only)." />
 
 
 
@@ -72,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -112,34 +114,40 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get records from the Soil Classification (SC) database</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/get_soilseries_from_NASIS.R'><code>R/get_soilseries_from_NASIS.R</code></a></small>
     <div class="hidden name"><code>get_soilseries_from_NASIS.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>These functions return records from the Soil Classification database, either from the local NASIS database (all series) or via web report (named series only).</p>
+    <p>These functions return records from the Soil Classification database, either
+from the local NASIS database (all series) or via web report (named series
+only).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_soilseries_from_NASIS</span><span class='op'>(</span>stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>get_soilseries_from_NASISWebReport</span><span class='op'>(</span><span class='va'>soils</span>, 
-stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_soilseries_from_NASIS</span><span class='op'>(</span>
+  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>,
+  dsn <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>soils</th>
-      <td><p>character vector of soil series names</p></td>
+      <th>stringsAsFactors</th>
+      <td><p>logical: should character vectors be converted to
+factors? This argument is passed to the <code><a href='uncode.html'>uncode()</a></code> function. It does not
+convert those vectors that have set outside of <code><a href='uncode.html'>uncode()</a></code> (i.e. hard coded).</p></td>
     </tr>
     <tr>
-      <th>stringsAsFactors</th>
-      <td><p>logical: should character vectors be converted to factors? This argument is passed to the uncode() function. It does not convert those vectors that have set outside of uncode() (i.e. hard coded). The 'factory-fresh' default is TRUE, but this can be changed by setting options(stringsAsFactors = FALSE)</p></td>
+      <th>dsn</th>
+      <td><p>Optional: path to local SQLite database containing NASIS
+table structure; default: <code>NULL</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>data.frame</code>.</p>
+    <p>A <code>data.frame</code></p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Stephen Roecker</p>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Parse contents of a web report, based on supplied arguments.</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/parseWebReport.R'><code>R/parseWebReport.R</code></a></small>
     <div class="hidden name"><code>parseWebReport.Rd</code></div>
     </div>
 
@@ -135,27 +135,33 @@
     </tr>
     <tr>
       <th>index</th>
-      <td><p>Integer index specifying the table to return, or, NULL for a list of tables</p></td>
+      <td><p>Integer index specifying the table to return, or, NULL for a
+list of tables</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Report argument names can be inferred by inspection of the HTML source associated with any given web report.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>data.frame</code> object in the case of a single integer passed to <code>index</code>, a <code>list</code> object in the case of an integer vector or NULL passed to <code>index</code>.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+    <p>A <code>data.frame</code> object in the case of a single integer passed to
+<code>index</code>, a <code>list</code> object in the case of an integer vector or NULL
+passed to <code>index</code>.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>D.E. Beaudette and S.M. Roecker</p>
+    <p>Report argument names can be inferred by inspection of the HTML source
+associated with any given web report.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>Most web reports are for internal use only.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D.E. Beaudette and S.M. Roecker</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># \donttest{</span>
 <span class='co'># pending</span>
 <span class='co'># }</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -1,4 +1,3 @@
-
 ## parallel requests?
 # https://cran.r-project.org/web/packages/curl/vignettes/intro.html#async_requests
 
@@ -17,6 +16,32 @@
 # examples:
 # url = 'https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-PROJECT_MUKEY_BY_GOAL_YEAR'
 # args = list(msso='2-MIN', fy='2018', asym='%', proj='0')
+
+
+#' Parse contents of a web report, based on supplied arguments.
+#' 
+#' Parse contents of a web report, based on supplied arguments.
+#' 
+#' Report argument names can be inferred by inspection of the HTML source
+#' associated with any given web report.
+#' 
+#' @param url Base URL to a LIMS/NASIS web report.
+#' @param args List of named arguments to send to report, see details.
+#' @param index Integer index specifying the table to return, or, NULL for a
+#' list of tables
+#' @return A \code{data.frame} object in the case of a single integer passed to
+#' \code{index}, a \code{list} object in the case of an integer vector or NULL
+#' passed to \code{index}.
+#' @note Most web reports are for internal use only.
+#' @author D.E. Beaudette and S.M. Roecker
+#' @keywords IO
+#' @examples
+#' 
+#' \donttest{
+#' # pending
+#' }
+#' 
+#' @export parseWebReport
 parseWebReport <- function(url, args, index=1) {
   
   # sanity check: package requirements

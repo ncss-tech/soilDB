@@ -18,67 +18,67 @@ make_EDIT_service_URL(
 )
 }
 \arguments{
-\item{src}{One of: `descriptions`, `downloads`, `plant-community-tables`, `models`, `keys`}
+\item{src}{One of: \code{descriptions}, \code{downloads}, \code{plant-community-tables}, \code{models}, \code{keys}}
 
-\item{catalog}{Catalog ID. One of: `esd` or `esg`}
+\item{catalog}{Catalog ID. One of: \code{esd} or \code{esg}}
 
-\item{geoUnit}{Geographic unit ID. For example: `022A`}
+\item{geoUnit}{Geographic unit ID. For example: \verb{022A}}
 
-\item{ecoclass}{Ecological class ID. For example: `F022AX101CA`}
+\item{ecoclass}{Ecological class ID. For example: \code{F022AX101CA}}
 
-\item{landuse}{Optional: Used only for `src = "plant-community-tables"`}
+\item{landuse}{Optional: Used only for \code{src = "plant-community-tables"}}
 
-\item{state}{Optional: Used only for `src = "plant-community-tables"`}
+\item{state}{Optional: Used only for \code{src = "plant-community-tables"}}
 
-\item{community}{Optional: Used only for `src = "plant-community-tables"`}
+\item{community}{Optional: Used only for \code{src = "plant-community-tables"}}
 
 \item{key}{Optional: Key number. All keys will be returned if not specified.}
 
-\item{endpoint}{Optional: Specific endpoint e.g. `overview.json`, `class-list.json`}
+\item{endpoint}{Optional: Specific endpoint e.g. \code{overview.json}, \code{class-list.json}}
 
-\item{querystring}{Optional: Additional (optional) request parameters specified as a query string `?param1=value&param2=value`. Used for `class-list.json` or PDF formatting parameters.}
+\item{querystring}{Optional: Additional (optional) request parameters specified as a query string \code{?param1=value&param2=value}. Used for \code{class-list.json} or PDF formatting parameters.}
 }
 \value{
 A character vector containing URLs with specified parameters. This function is vectorized.
 }
 \description{
-Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
+Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web services (\verb{https://edit.jornada.nmsu.edu/services/...}) to return PDF, TXT or JSON results.
 }
 \details{
 See the following official EDIT developer resources to see which endpoints are available for Ecological Site Description (ESD) or Ecological Site Group (ESG) catalogs:
-
-- \url{https://edit.jornada.nmsu.edu/resources/esd}
- 
-- \url{https://edit.jornada.nmsu.edu/resources/esg}
+\itemize{
+\item \url{https://edit.jornada.nmsu.edu/resources/esd}
+\item \url{https://edit.jornada.nmsu.edu/resources/esg}
+}
 }
 \examples{
 # url for all geoUnit keys as PDF
-make_EDIT_service_URL(src = "descriptions", 
-                      catalog = "esd", 
+make_EDIT_service_URL(src = "descriptions",
+                      catalog = "esd",
                       geoUnit = "039X")
 
 # url for a single key within geoUnit as PDF
-make_EDIT_service_URL(src = "descriptions", 
-                      catalog = "esd", 
+make_EDIT_service_URL(src = "descriptions",
+                      catalog = "esd",
                       geoUnit = "039X",
                       key = "1")
 
 # query for "full" description in JSON
-desc <-  make_EDIT_service_URL(src = "descriptions", 
-                               catalog = "esd", 
+desc <-  make_EDIT_service_URL(src = "descriptions",
+                               catalog = "esd",
                                geoUnit = "039X",
                                endpoint = "R039XA109AZ.json")
 
 # query for "overview"
-desc_ov <- make_EDIT_service_URL(src = "descriptions", 
-                                 catalog = "esd", 
+desc_ov <- make_EDIT_service_URL(src = "descriptions",
+                                 catalog = "esd",
                                  geoUnit = "039X",
                                  ecoclass = "R039XA109AZ",
                                  endpoint = "overview.json")
 
 # query for specific section, e.g. "water features"
-desc_wf <- make_EDIT_service_URL(src = "descriptions", 
-                                 catalog = "esd", 
+desc_wf <- make_EDIT_service_URL(src = "descriptions",
+                                 catalog = "esd",
                                  geoUnit = "039X",
                                  ecoclass = "R039XA109AZ",
                                  endpoint = "water-features.json")

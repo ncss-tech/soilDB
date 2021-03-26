@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Fetch commonly used site/horizon data from a PedonPC v.5 database. — fetchPedonPC" />
-<meta property="og:description" content="Fetch commonly used site/horizon data from a version 5.x PedonPC database, return as a SoilProfileCollection object." />
+<meta property="og:description" content="Fetch commonly used site/horizon data from a version 5.x PedonPC database,
+return as a SoilProfileCollection object." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -112,16 +113,16 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Fetch commonly used site/horizon data from a PedonPC v.5 database.</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/fetchPedonPC.R'><code>R/fetchPedonPC.R</code></a></small>
     <div class="hidden name"><code>fetchPedonPC.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Fetch commonly used site/horizon data from a version 5.x PedonPC database, return as a SoilProfileCollection object.</p>
+    <p>Fetch commonly used site/horizon data from a version 5.x PedonPC database,
+return as a SoilProfileCollection object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetchPedonPC</span><span class='op'>(</span><span class='va'>dsn</span><span class='op'>)</span>
-<span class='fu'>getHzErrorsPedonPC</span><span class='op'>(</span><span class='va'>dsn</span>, strict<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>fetchPedonPC</span><span class='op'>(</span><span class='va'>dsn</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,27 +131,30 @@
       <th>dsn</th>
       <td><p>The path to a PedonPC version 5.x database</p></td>
     </tr>
-    <tr>
-      <th>strict</th>
-      <td><p>should horizonation by strictly enforced? (TRUE)</p></td>
-    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This function currently works only on Windows.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a SoilProfileCollection class object</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>D. E. Beaudette and J. M. Skovlin</p>
+    <p>This function currently works only on Windows.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>This function attempts to do most of the boilerplate work when extracting site/horizon data from a PedonPC or local NASIS database. Pedons that have errors in their horizonation are excluded from the returned object, however, their IDs are printed on the console. See <code>getHzErrorsPedonPC</code> for a simple approach to identifying pedons with problematic horizonation. Records from the 'taxhistory' table are selected based on 1) most recent record, or 2) record with the least amount of missing data.</p>
+    <p>This function attempts to do most of the boilerplate work when
+extracting site/horizon data from a PedonPC or local NASIS database. Pedons
+that have errors in their horizonation are excluded from the returned
+object, however, their IDs are printed on the console. See
+<code>getHzErrorsPedonPC</code> for a simple approach to identifying pedons
+with problematic horizonation. Records from the 'taxhistory' table are
+selected based on 1) most recent record, or 2) record with the least amount
+of missing data.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='get_hz_data_from_pedon_db.html'>get_hz_data_from_pedon_db</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>D. E. Beaudette and J. M. Skovlin</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

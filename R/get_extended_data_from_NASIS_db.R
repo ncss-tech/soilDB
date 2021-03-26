@@ -4,10 +4,49 @@
 
 ## TODO_JS: incorporated the use of uncode() into all except the fragment queries, which I think are best left as they are.
 
-get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+
+
+#' Extract accessory tables and summaries from a local NASIS Database
+#'
+#' @param SS get data from the currently loaded Selected Set in NASIS or from
+#' the entire local database (default: `TRUE`)
+#'
+#' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0?
+#' (default: TRUE), see details
+#'
+#' @param stringsAsFactors logical: should character vectors be converted to
+#' factors? This argument is passed to the `uncode()` function. It does not
+#' convert those vectors that have been set outside of `uncode()` (i.e. hard
+#' coded).
+#'
+#' @param dsn Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#'
+#' @return A list with the results.
+#' @author Jay M. Skovlin and Dylan E. Beaudette
+#' @seealso \code{\link{get_hz_data_from_NASIS_db}},
+#' \code{\link{get_site_data_from_NASIS_db}}
+#' @keywords manip
+#' @examples
+#'
+#' \donttest{
+#'
+#' if(local_NASIS_defined()) {
+#'  # query extended data
+#'  e <- try(get_extended_data_from_NASIS_db())
+#'
+#'  # show contents of extended data
+#'  str(e)
+#' }
+#'
+#' }
+#'
+#' @export get_extended_data_from_NASIS_db
+get_extended_data_from_NASIS_db <- function(SS = TRUE,
+                                            nullFragsAreZero = TRUE,
+                                            stringsAsFactors = default.stringsAsFactors(),
+                                            dsn = NULL) {
+
 
   # photo links from PedonPC stored as sitetext notes
   q.photolink <- "SELECT so.siteiidref AS siteiid, sot.recdate, sot.textcat,  CAST(sot.textentry AS ntext) AS imagepath
@@ -18,7 +57,7 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stri
   ORDER BY sot.siteobstextkind;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.photolink <- gsub(pattern = '_View_1', replacement = '', x = q.photolink, fixed = TRUE)
   }
 
@@ -30,7 +69,7 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stri
 	ORDER BY phiidref, structid ASC;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.structure <- gsub(pattern = '_View_1', replacement = '', x = q.structure, fixed = TRUE)
   }
 
@@ -43,7 +82,7 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stri
   ORDER BY 'siteiid';"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.ecosite <- gsub(pattern = '_View_1', replacement = '', x = q.ecosite, fixed = TRUE)
   }
 
@@ -57,7 +96,7 @@ get_extended_data_from_NASIS_db <- function(SS=TRUE, nullFragsAreZero=TRUE, stri
 	ORDER BY pdf.peiidref, pdf.featdept;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.diagnostic <- gsub(pattern = '_View_1', replacement = '', x = q.diagnostic, fixed = TRUE)
   }
 
@@ -66,7 +105,7 @@ FROM perestrictions_View_1 As prf
 	ORDER BY prf.peiidref, prf.resdept;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.restriction <- gsub(pattern = '_View_1', replacement = '', x = q.restriction, fixed = TRUE)
   }
 
@@ -177,7 +216,7 @@ LEFT OUTER JOIN (
 
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.surf.rf.summary <- gsub(pattern = '_View_1', replacement = '', x = q.surf.rf.summary, fixed = TRUE)
   }
 
@@ -190,7 +229,7 @@ LEFT OUTER JOIN (
   LEFT OUTER JOIN phfrags_View_1 ON p.phiid = phfrags_View_1.phiidref;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.rf.data <- gsub(pattern = '_View_1', replacement = '', x = q.rf.data, fixed = TRUE)
   }
 
@@ -201,6 +240,9 @@ LEFT OUTER JOIN (
                        SELECT DISTINCT phiid FROM phorizon_View_1
                        ) as p LEFT OUTER JOIN phhuarts ", ifelse(SS, "_View_1","") ,
                        " ON p.phiid = phiidref;")
+  if (SS == FALSE) {
+    q.art.data <- gsub(pattern = '_View_1', replacement = '', x = q.art.data, fixed = TRUE)
+  }
 
   # new phfrags summary SQL
   q.rf.data.v2 <- "
@@ -303,7 +345,7 @@ LEFT OUTER JOIN (
   DROP TABLE #RF2;
   "
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.rf.data.v2 <- gsub(pattern = '_View_1', replacement = '', x = q.rf.data.v2, fixed = TRUE)
   }
 
@@ -316,28 +358,26 @@ LEFT OUTER JOIN (
 	LEFT OUTER JOIN phtexturemod_View_1 AS phtm ON pht.phtiid = phtm.phtiidref;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.hz.texmod <- gsub(pattern = '_View_1', replacement = '', x = q.hz.texmod, fixed = TRUE)
   }
 
-
-  ## TODO: joins without a join condition!
-  # https://github.com/ncss-tech/soilDB/issues/48
-  # get geomorphic features
-  q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod, geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid, sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
-
-  FROM geomorfeattype
-  RIGHT JOIN geomorfeat
-  RIGHT JOIN site_View_1 INNER JOIN sitegeomordesc_View_1 ON site_View_1.siteiid = sitegeomordesc_View_1.siteiidref
-  INNER JOIN siteobs_View_1 INNER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
-  ON site_View_1.siteiid = siteobs_View_1.siteiidref
-  ON geomorfeat.geomfiid = sitegeomordesc_View_1.geomfiidref
-  ON geomorfeattype.geomftiid = geomorfeat.geomftiidref
-  ORDER BY peiid, geomfeatid ASC;"
+  # get geomorphic features (sqlite safe -- no RIGHT JOIN 2020/12/02)
+  q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod,
+                         geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid,
+                         sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref,
+                         lower(geomorfeattype.geomftname) as geomftname
+                  FROM pedon_View_1
+                    INNER JOIN siteobs_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
+                    INNER JOIN site_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref
+                    INNER JOIN sitegeomordesc_View_1 ON site_View_1.siteiid = sitegeomordesc_View_1.siteiidref
+                    INNER JOIN geomorfeat ON  geomorfeat.geomfiid = sitegeomordesc_View_1.geomfiidref
+                    INNER JOIN geomorfeattype ON geomorfeattype.geomftiid = geomorfeat.geomftiidref
+                  ORDER BY peiid, geomfeatid ASC;"
 
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.geomorph <- gsub(pattern = '_View_1', replacement = '', x = q.geomorph, fixed = TRUE)
   }
 
@@ -350,7 +390,7 @@ LEFT OUTER JOIN (
     ORDER BY pth.peiidref;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.taxhistory <- gsub(pattern = '_View_1', replacement = '', x = q.taxhistory, fixed = TRUE)
   }
 
@@ -361,7 +401,7 @@ LEFT OUTER JOIN (
   INNER JOIN site_View_1 AS s ON spm.siteiidref = s.siteiid;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.sitepm <- gsub(pattern = '_View_1', replacement = '', x = q.sitepm, fixed = TRUE)
   }
 
@@ -370,7 +410,7 @@ LEFT OUTER JOIN (
   ORDER BY phiid;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.hz.desgn <- gsub(pattern = '_View_1', replacement = '', x = q.hz.desgn, fixed = TRUE)
   }
 
@@ -379,82 +419,91 @@ LEFT OUTER JOIN (
   ORDER BY phiidref, seqnum ASC;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q.hz.dessuf <- gsub(pattern = '_View_1', replacement = '', x = q.hz.dessuf, fixed = TRUE)
   }
 
-  channel <- .openNASISchannel()
-  if (channel == -1)
+  channel <- dbConnectNASIS(dsn)
+
+  if (inherits(channel, 'try-error'))
     return(data.frame())
 
 	# exec queries
-	d.ecosite <- RODBC::sqlQuery(channel, q.ecosite, stringsAsFactors=FALSE)
-	d.diagnostic <- RODBC::sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
-	d.restriction <- RODBC::sqlQuery(channel, q.restriction, stringsAsFactors=FALSE)
+  d.ecosite <- dbQueryNASIS(channel, q.ecosite, close = FALSE)
+  d.diagnostic <- dbQueryNASIS(channel, q.diagnostic, close = FALSE)
+  d.restriction <- dbQueryNASIS(channel, q.restriction, close = FALSE)
 
-	d.rf.data <- RODBC::sqlQuery(channel, q.rf.data, stringsAsFactors=FALSE)
-	d.rf.data.v2 <- RODBC::sqlQuery(channel, q.rf.data.v2, stringsAsFactors=FALSE)
-	d.art.data <- uncode(RODBC::sqlQuery(channel, q.art.data, stringsAsFactors=FALSE))
+  d.rf.data <- dbQueryNASIS(channel, q.rf.data, close = FALSE)
+  # d.rf.data.v2 <- dbQueryNASIS(channel, q.rf.data.v2, close = FALSE)
+  d.art.data <- dbQueryNASIS(channel, q.art.data, close = FALSE)
 
-	d.surf.rf.summary <- RODBC::sqlQuery(channel, q.surf.rf.summary, stringsAsFactors=FALSE)
-	d.hz.texmod <- RODBC::sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
-	d.geomorph <- RODBC::sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
-	d.taxhistory <- RODBC::sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
-	d.photolink <- RODBC::sqlQuery(channel, q.photolink, stringsAsFactors=FALSE)
-	d.sitepm <- RODBC::sqlQuery(channel, q.sitepm, stringsAsFactors=FALSE)
-	d.structure <- RODBC::sqlQuery(channel, q.structure, stringsAsFactors=FALSE)
-	d.hz.desgn <- RODBC::sqlQuery(channel, q.hz.desgn, stringsAsFactors=FALSE)
-  d.hz.dessuf <- RODBC::sqlQuery(channel, q.hz.dessuf, stringsAsFactors=FALSE)
+  d.surf.rf.summary <- dbQueryNASIS(channel, q.surf.rf.summary, close = FALSE)
+  d.hz.texmod <- dbQueryNASIS(channel, q.hz.texmod, close = FALSE)
+  d.geomorph <- dbQueryNASIS(channel, q.geomorph, close = FALSE)
+  d.taxhistory <- dbQueryNASIS(channel, q.taxhistory, close = FALSE)
+  d.photolink <- dbQueryNASIS(channel, q.photolink, close = FALSE)
+  d.sitepm <- dbQueryNASIS(channel, q.sitepm, close = FALSE)
+  d.structure <- dbQueryNASIS(channel, q.structure, close = FALSE)
+  d.hz.desgn <- dbQueryNASIS(channel, q.hz.desgn, close = FALSE)
+  d.hz.dessuf <- dbQueryNASIS(channel, q.hz.dessuf)
 
 	## uncode the ones that need that here
-	d.diagnostic <- uncode(d.diagnostic, stringsAsFactors = stringsAsFactors)
-	d.restriction <- uncode(d.restriction, stringsAsFactors = stringsAsFactors)
-	d.rf.data    <- uncode(d.rf.data, stringsAsFactors = stringsAsFactors)
-	d.hz.texmod  <- uncode(d.hz.texmod, stringsAsFactors = stringsAsFactors)
+	d.diagnostic <- uncode(d.diagnostic, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.restriction <- uncode(d.restriction, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.rf.data    <- uncode(d.rf.data, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.art.data  <-  uncode(d.art.data, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.hz.texmod  <- uncode(d.hz.texmod, stringsAsFactors = stringsAsFactors, dsn = dsn)
 	# https://github.com/ncss-tech/soilDB/issues/53
-	d.taxhistory <- uncode(d.taxhistory, stringsAsFactors = FALSE)
-	d.sitepm     <- uncode(d.sitepm, stringsAsFactors = stringsAsFactors)
-	d.structure  <- uncode(d.structure, stringsAsFactors = stringsAsFactors)
-	d.hz.desgn <- uncode(d.hz.desgn)
-	d.hz.dessuf <- uncode(d.hz.dessuf)
-
-	# close connection
-	RODBC::odbcClose(channel)
-
+	d.taxhistory <- uncode(d.taxhistory, stringsAsFactors = FALSE, dsn = dsn)
+	d.sitepm     <- uncode(d.sitepm, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.structure  <- uncode(d.structure, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.hz.desgn <- uncode(d.hz.desgn, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d.hz.dessuf <- uncode(d.hz.dessuf, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
 	## the following steps will not work when data are missing from local DB or SS
 	# return NULL in those cases
 
-	if(nrow(d.diagnostic) > 0) {
+	if (nrow(d.diagnostic) > 0) {
 	  # generate wide-formatted, diagnostic boolean summary
 	  d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)
 	} else {
 	  d.diag.boolean <- NULL
 	}
 
-	if(nrow(d.hz.dessuf) > 0) {
+	if (nrow(d.hz.dessuf) > 0) {
 	  # generate wide-formatted, hz suffix boolean summary
 	  d.hzdesgnsuf.boolean <- .hzSuffixLongtoWide(d.hz.dessuf)
-	  d.hz.desgn <- join(d.hz.desgn, d.hzdesgnsuf.boolean, by = 'phiid', type = 'left')
+	  d.hz.desgn <- merge(d.hz.desgn, d.hzdesgnsuf.boolean, by = 'phiid',
+	                      sort = FALSE, all.x = TRUE, incomparables = NA)
 	} else {
 	  d.hz.desgn <- NULL
 	}
 
-	if(nrow(d.photolink) > 0) {
+	if (nrow(d.photolink) > 0) {
 	  # parse imagename and imagepath for photo links
-	  d.photolink$imagename <- basename(d.photolink$imagepath)
+	  ncharpath <- nchar(d.photolink$imagepath)
+
+	  # windows max path length is 260 (unless overridden in registry?)
+	  if (any(ncharpath > 260))
+	    warning("some image paths are too long (>260 characters) for basename()")
+
+	  bad.idx <- which(ncharpath > 260)
+	  d.photolink$imagepath[bad.idx] <- substr(d.photolink$imagepath[bad.idx],
+	                                           start = ncharpath[bad.idx] - 260,
+	                                           stop = ncharpath[bad.idx])
+	  d.photolink$imagename <- try(basename(d.photolink$imagepath))
 	}
 
 	d.rf.summary <- simplifyFragmentData(d.rf.data, id.var='phiid', nullFragsAreZero = nullFragsAreZero)
 
 	# summarize rock fragment data
-	if(nrow(d.rf.data) > 0) {
+	if (nrow(d.rf.data) > 0) {
 	  # keep track of UNIQUE original phiids so that we can optionally fill NA with 0 in a second pass
 	  all.ids <- unique(d.rf.data[, 'phiid', drop=FALSE])
 
 	  # left join
-	  d.rf.summary <- join(all.ids, d.rf.summary, by='phiid', type='left')
-
+	  d.rf.summary <- merge(all.ids, d.rf.summary, by = 'phiid',
+	                       sort = FALSE, all.x = TRUE, incomparables = NA)
 	  ## basic checks for problematic data
 
 	  # recent NSSH changes to gravel/cobble threshold 76mm -> 75mm
@@ -466,13 +515,13 @@ LEFT OUTER JOIN (
 
 	}
 
-	if(nullFragsAreZero) {
+	if (nullFragsAreZero) {
 	    # iterate over every column except for the ID
 	    nm <- names(d.rf.summary)
 	    nm <- nm[grep('phiid', nm, fixed = TRUE, invert = TRUE)]
 
 	    # a for-loop seems fine
-	    for(v in nm) {
+	    for (v in nm) {
 	      d.rf.summary[[v]] <- ifelse(is.na(d.rf.summary[[v]]), 0, d.rf.summary[[v]])
 	    }
 	}
@@ -480,51 +529,51 @@ LEFT OUTER JOIN (
 	# artifact summary
 	d.art.summary <- simplifyArtifactData(d.art.data, id.var='phiid', nullFragsAreZero = nullFragsAreZero)
 
-	if(nrow(d.art.data) > 0) {
+	if (nrow(d.art.data) > 0) {
 
 	  art.all.ids <- unique(d.art.data[, 'phiid', drop=FALSE])
-	  d.art.summary <- join(art.all.ids, d.art.summary, by='phiid', type='left')
-
+	  d.art.summary <- merge(art.all.ids, d.art.summary, by = 'phiid',
+	                        sort = FALSE, all.x = TRUE, incomparables = NA)
 	  # recent NSSH changes to gravel/cobble threshold 76mm -> 75mm
 	  qc.idx <- which(d.art.data$huartsize_h == 76)
-	  if(length(qc.idx) > 0) {
+	  if (length(qc.idx) > 0) {
 	    msg <- sprintf('-> QC: some huartsize_h values == 76mm, may be mis-classified as cobbles [%i / %i records]', length(qc.idx), nrow(d.art.data))
 	    message(msg)
 	  }
   }
 
-	if(nullFragsAreZero) {
+	if (nullFragsAreZero) {
 	  nm <- names(d.art.summary)
 	  nm <- nm[grep("phiid", nm, fixed = TRUE, invert = TRUE)]
 
 	  # a for-loop seems fine
-	  for(v in nm) {
+	  for (v in nm) {
 	    d.art.summary[[v]] <- ifelse(is.na(d.art.summary[[v]]), 0, d.art.summary[[v]])
 	  }
 	}
 
 	# r.rf.data.v2 nullFragsAreZero = TRUE
-	idx <- !names(d.rf.data.v2) %in% "phiid"
-	if (nullFragsAreZero == TRUE) {
-	  d.rf.data.v2[idx] <- lapply(d.rf.data.v2[idx], function(x) ifelse(is.na(x), 0, x))
-	}
+	# idx <- !names(d.rf.data.v2) %in% "phiid"
+	# if (nullFragsAreZero == TRUE) {
+	#   d.rf.data.v2[idx] <- lapply(d.rf.data.v2[idx], function(x) ifelse(is.na(x), 0, x))
+	# }
 
 
 	# return a list of results
-	return(list(ecositehistory=d.ecosite,
-							diagnostic=d.diagnostic,
-							diagHzBoolean=d.diag.boolean,
-							restriction=d.restriction,
-							frag_summary=d.rf.summary,
-							frag_summary_v2 = d.rf.data.v2,
-							art_summary=d.art.summary,
-							surf_frag_summary=d.surf.rf.summary,
-							texmodifier=d.hz.texmod,
-							geomorph=d.geomorph,
-							taxhistory=d.taxhistory,
-						  photo=d.photolink,
-							pm=d.sitepm,
-              struct=d.structure,
-							hzdesgn=d.hz.desgn))
+	return(list(ecositehistory = d.ecosite,
+							diagnostic = d.diagnostic,
+							diagHzBoolean = d.diag.boolean,
+							restriction = d.restriction,
+							frag_summary = d.rf.summary,
+							# frag_summary_v2 = d.rf.data.v2,
+							art_summary = d.art.summary,
+							surf_frag_summary = d.surf.rf.summary,
+							texmodifier = d.hz.texmod,
+							geomorph = d.geomorph,
+							taxhistory = d.taxhistory,
+						  photo = d.photolink,
+							pm = d.sitepm,
+              struct = d.structure,
+							hzdesgn = d.hz.desgn))
 }
 

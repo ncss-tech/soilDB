@@ -1,11 +1,29 @@
 # convenience function for loading most commonly used information from local NASIS database
-fetchNASISLabData <- function(SS = TRUE) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
-  
+
+
+#' Fetch lab data used site/horizon data from a PedonPC database.
+#' 
+#' Fetch KSSL laboratory pedon/horizon layer data from a local NASIS database,
+#' return as a SoilProfileCollection object.
+#' 
+#' This function currently works only on Windows, and requires a 'nasis_local'
+#' ODBC connection.
+#' 
+#' @param SS fetch data from the currently loaded selected set in NASIS or from
+#' the entire local database (default: `TRUE`)#' 
+#' @param dsn Optional: path to local SQLite database containing NASIS
+#' table structure; default: `NULL`
+#' 
+#' @return a SoilProfileCollection object
+#' 
+#' @author J.M. Skovlin and D.E. Beaudette
+#' @seealso \code{\link{get_labpedon_data_from_NASIS_db}}
+#' @keywords manip
+#' @export fetchNASISLabData
+fetchNASISLabData <- function(SS = TRUE, dsn = NULL) {
+
 	# test connection
-	if(! 'nasis_local' %in% names(RODBC::odbcDataSources()))
+	if (!local_NASIS_defined(dsn))
 			stop('Local NASIS ODBC connection has not been setup. Please see the `setup_ODBC_local_NASIS.pdf` document included with this package.')
 	
 	# 1. load data in pieces, results are DF objects
@@ -19,8 +37,9 @@ fetchNASISLabData <- function(SS = TRUE) {
 	# fix some common problems
 	# replace missing lower boundaries
 	missing.lower.depth.idx <- which(!is.na(h$hzdept) & is.na(h$hzdepb))
-  if(length(missing.lower.depth.idx) > 0) {
-    message(paste('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]', sep=''))
+  if (length(missing.lower.depth.idx) > 0) {
+    message(paste('replacing missing lower horizon depths with top depth + 1cm ... [', 
+                  length(missing.lower.depth.idx), ' horizons]', sep = ''))
     h$hzdepb[missing.lower.depth.idx] <- h$hzdept[missing.lower.depth.idx] + 1
   }
 	
@@ -33,7 +52,7 @@ fetchNASISLabData <- function(SS = TRUE) {
 	})
 	
 	# which are the good (valid) ones?
-	good.ids <- as.character(h.test$labpeiid[which(h.test$hz_logic_pass)])
+	# good.ids <- as.character(h.test$labpeiid[which(h.test$hz_logic_pass)])
 	bad.ids <- as.character(h.test$labpeiid[which(!h.test$hz_logic_pass)])
   bad.pedon.ids <- s$upedonid[which(s$labpeiid %in% bad.ids)]
 	
@@ -48,8 +67,8 @@ fetchNASISLabData <- function(SS = TRUE) {
 	hzidname(h) <- 'labphiid'
   
 	# 7. save and mention bad pedons
-	assign('bad.labpedon.ids', value=bad.pedon.ids, envir=soilDB.env)
-	if(length(bad.pedon.ids) > 0)
+	assign('bad.labpedon.ids', value = bad.pedon.ids, envir = soilDB.env)
+	if (length(bad.pedon.ids) > 0)
 		message("horizon errors detected, use `get('bad.labpedon.ids', envir=soilDB.env)` for a list of pedon IDs")
 	
 	# done

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
       </span>
     </div>
 
@@ -137,7 +137,7 @@
     </tr>
     <tr>
       <th>bbox</th>
-      <td><p>a bounding box in WGS84 geographic coordinates e.g. <code><a href='https://rdrr.io/r/base/c.html'>c(-120, 37, -122, 38)</a></code>, constrained to a 5-degree block</p></td>
+      <td><p>a bounding box in WGS84 geographic coordinates e.g. <code><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c(-120, 37, -122, 38)</a></code>, constrained to a 5-degree block</p></td>
     </tr>
     <tr>
       <th>state</th>
@@ -168,7 +168,7 @@
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164'>https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164</a>
-  <a href='https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/RaCA-demo.html?root=aqp'>fetchRaCA() Tutorial</a></p>
+<a href='https://r-forge.r-project.org/scm/viewvc.php/\emph{checkout}/docs/soilDB/RaCA-demo.html?root=aqp'>fetchRaCA() Tutorial</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='fetchOSD.html'>fetchOSD</a></code></p></div>
@@ -180,26 +180,26 @@
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  
+
   <span class='kw'>if</span><span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    
+
     <span class='co'># search by series name</span>
     <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>fetchRaCA</span><span class='op'>(</span>series<span class='op'>=</span><span class='st'>'auburn'</span><span class='op'>)</span>
-    
+
     <span class='co'># search by bounding-box</span>
     <span class='co'># s &lt;- fetchRaCA(bbox=c(-120, 37, -122, 38))</span>
-    
+
     <span class='co'># check structure</span>
     <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>s</span>, <span class='fl'>1</span><span class='op'>)</span>
-    
+
     <span class='co'># extract pedons</span>
     <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>s</span><span class='op'>$</span><span class='va'>pedons</span>
-    
+
     <span class='co'># how many pedons</span>
     <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/length.html'>length</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
-    
-    <span class='co'># plot </span>
-    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+
+    <span class='co'># plot</span>
+    <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mar<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
     <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>p</span>, name<span class='op'>=</span><span class='st'>'hzn_desgn'</span>, max.depth<span class='op'>=</span><span class='fl'>150</span><span class='op'>)</span>
   <span class='op'>}</span>
 <span class='op'>}</span>

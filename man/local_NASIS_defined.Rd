@@ -2,17 +2,22 @@
 % Please edit documentation in R/openNASISchannel.R
 \name{local_NASIS_defined}
 \alias{local_NASIS_defined}
-\title{Check for presence of `nasis_local` ODBC data source}
+\title{Check for presence of \code{nasis_local} ODBC data source}
 \usage{
-local_NASIS_defined()
+local_NASIS_defined(dsn = NULL)
+}
+\arguments{
+\item{dsn}{Optional: path to local SQLite database containing NASIS
+table structure; default: NULL}
 }
 \value{
 logical
 }
 \description{
-Check for presence of `nasis_local` ODBC data source
+Check for presence of \code{nasis_local} ODBC data source
 }
 \examples{
+
 
 if(local_NASIS_defined()) {
   # use fetchNASIS or some other lower-level fetch function

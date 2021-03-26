@@ -2,29 +2,32 @@
 # https://github.com/ncss-tech/soilDB/issues/50
 ## TODO: this will not ID horizons with no depths
 ## TODO: better error checking / reporting is needed: coiid, dmu id, component name
-.fetchNASIS_components <- function(SS=TRUE, rmHzErrors=TRUE, fill = FALSE, stringsAsFactors = default.stringsAsFactors()) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+.fetchNASIS_components <- function(SS = TRUE,
+                                   rmHzErrors = TRUE,
+                                   fill = FALSE,
+                                   stringsAsFactors = default.stringsAsFactors(),
+                                   dsn = dsn) {
+    
 
   # ensure that any old hz errors are cleared
   if(exists('component.hz.problems', envir=soilDB.env))
     assign('component.hz.problems', value=character(0), envir=soilDB.env)
   
   # load data in pieces
-  f.comp       <- get_component_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
-  f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS=SS, fill=fill)
-  f.copm       <- get_component_copm_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
-  f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db(SS=SS)
-  f.otherveg   <- get_component_otherveg_data_from_NASIS_db(SS=SS)
-  f.ecosite    <- get_component_esd_data_from_NASIS_db(SS=SS, stringsAsFactors = stringsAsFactors)
-  f.diaghz     <- get_component_diaghz_from_NASIS_db(SS=SS)
-  f.restrict   <- get_component_restrictions_from_NASIS_db(SS=SS)
+  f.comp       <- get_component_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn)
+  f.copm       <- get_component_copm_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db(SS = SS, dsn = dsn)
+  f.otherveg   <- get_component_otherveg_data_from_NASIS_db(SS = SS, dsn = dsn)
+  f.ecosite    <- get_component_esd_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  f.diaghz     <- get_component_diaghz_from_NASIS_db(SS = SS, dsn = dsn)
+  f.restrict   <- get_component_restrictions_from_NASIS_db(SS = SS, dsn = dsn)
   
   filled.ids <- character(0)
 
   # optionally test for bad horizonation... flag, and remove
   if(rmHzErrors & nrow(f.chorizon) > 0) {
+    # TODO: mirror fetchNASIS_pedons
     f.chorizon.test <- plyr::ddply(f.chorizon, 'coiid', function(d) {
       res <- aqp::hzDepthTests(top=d[['hzdept_r']], bottom=d[['hzdepb_r']])
       return(data.frame(hz_logic_pass=all(!res)))

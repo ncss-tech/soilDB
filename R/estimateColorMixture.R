@@ -1,5 +1,5 @@
 ## re-write of previous version, should be more robust to missing weights and generalize to other uses
-## note: this isn't real mixing, relfectance curves and / or Kubella-Monk modeling required for that
+## note: this isn't real mixing, reflectance curves and / or Kubella-Monk modeling required for that
 ## all colors are mixed, should be applied to groups of related colors
 
 

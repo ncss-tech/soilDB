@@ -1,47 +1,81 @@
-# this function does all the checking to catch different NASIS errors
-#  before being able to safely run RODBC::sqlQuery
-#  **remember to close with RODBC::odbcClose()
+# internal method for opening a connection to local nasis database using credentials
 
-.openNASISchannel <- function() {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+.openNASISchannel <- function(dsn = NULL) {
 
-  if(is.null(getOption('soilDB.NASIS.credentials')))
+  use_sqlite <- !is.null(dsn)
+
+  if (is.null(getOption('soilDB.NASIS.credentials')))
     stop("soilDB.NASIS.credentials not set")
 
-  # setup connection local NASIS
-  channel <- suppressWarnings(RODBC::odbcDriverConnect(connection = getOption('soilDB.NASIS.credentials')))
+  if (!use_sqlite) {
+    
+    # assuming that default connection uses ODBC
+    if (!requireNamespace("odbc"))
+      stop("package `odbc` is required", call. = FALSE)
+    
+    # setup connection local NASIS
+    #suppressWarnings(RODBC::odbcDriverConnect(connection = getOption('soilDB.NASIS.credentials')))
+    credentials <- gsub("^.*\\=(.*)","\\1", strsplit(getOption('soilDB.NASIS.credentials'), ";")[[1]])
+    channel <- try(DBI::dbConnect(odbc::odbc(),
+                                  DSN = credentials[1],
+                                  UID = credentials[2],
+                                  PWD = credentials[3]))
+  } else {
+    
+    if (!requireNamespace("RSQLite"))
+      stop("package `RSQLite` is required", call. = FALSE)
+    
+    channel <- try(DBI::dbConnect(RSQLite::SQLite(), dsn))
+  }
 
   # every method that uses .openNASISchannel must handle possibility of
   # not having NASIS db for themselves. most return empty data.frame.
   # hypothetically a more complex empty structure could be returned
-  if  (channel == -1)
-    warning("no local NASIS database available", call.=FALSE)
+  if (inherits(channel, 'try-error')) {
+    warning("no local NASIS database available", call. = FALSE)
+  }
 
   return(channel)
 }
 
-#' Check for presence of `nasis_local` ODBC data source
-#'
+
+
+#' Check for presence of \code{nasis_local} ODBC data source
+#' 
+#' Check for presence of \code{nasis_local} ODBC data source
+#' 
+#' 
+#' @param dsn Optional: path to local SQLite database containing NASIS
+#' table structure; default: NULL
 #' @return logical
-#' @export local_NASIS_defined
-#'
 #' @examples
-#'
+#' 
+#' 
 #' if(local_NASIS_defined()) {
 #'   # use fetchNASIS or some other lower-level fetch function
 #' } else {
 #'   message('could not find `nasis_local` ODBC data source')
 #' }
-#'
-local_NASIS_defined <- function() {
-  # check for user-defined
-  if(!requireNamespace("RODBC"))
-    stop("package `RODBC` is required", call. = FALSE)
-  if('nasis_local' %in% names(RODBC::odbcDataSources())) {
-    return(TRUE)
+#' 
+#' @export local_NASIS_defined
+local_NASIS_defined <- function(dsn = NULL) {
+  
+  if (is.null(dsn)) {
+    
+    # assuming that default connection uses ODBC
+    if (!requireNamespace("odbc"))
+      stop("package `odbc` is required ", call. = FALSE)
+    
+    if ('nasis_local' %in% odbc::odbcListDataSources()$name) {
+      return(TRUE)
+    } else {
+      return(FALSE)
+    }
   } else {
-    return(FALSE)
+    
+    if (!requireNamespace("RSQLite"))
+      stop("package `RSQLite` is required", call. = FALSE)
+    
+    return(RSQLite::dbCanConnect(RSQLite::SQLite(), dsn))
   }
 }

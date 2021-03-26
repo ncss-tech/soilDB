@@ -8,7 +8,7 @@
 #' @param state a two-letter US state abbreviation; case-insensitive
 #' @param rcasiteid a RaCA site id (e.g. 'C1609C01')
 #' @param get.vnir logical, should associated VNIR spectra be downloaded? (see details)
-#' @details The VNIR spectra associated with RaCA data are quite large [each gzip-compressed VNIR spectra record is about 6.6kb], so requests for these data are disabled by default. Note that VNIR spectra can only be queried by soil series or geographic BBOX.
+#' @details The VNIR spectra associated with RaCA data are quite large \[each gzip-compressed VNIR spectra record is about 6.6kb], so requests for these data are disabled by default. Note that VNIR spectra can only be queried by soil series or geographic BBOX.
 #' @return {
 #' \describe{
 #' \item{\code{pedons}:}{a \code{SoilProfileCollection} object containing site/pedon/horizon data}
@@ -22,7 +22,6 @@
 #' @author D.E. Beaudette, USDA-NRCS staff
 #' @references {
 #'   \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164}
-#'   \href{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/RaCA-demo.html?root=aqp}{fetchRaCA() Tutorial}
 #' }
 #' @seealso \code{\link{fetchOSD}}
 #' @export
@@ -31,51 +30,51 @@
 #' \donttest{
 #' if(requireNamespace("curl") &
 #'    curl::has_internet()) {
-#'   
+#'
 #'   if(require(aqp)) {
-#'     
+#'
 #'     # search by series name
 #'     s <- fetchRaCA(series='auburn')
-#'     
+#'
 #'     # search by bounding-box
 #'     # s <- fetchRaCA(bbox=c(-120, 37, -122, 38))
-#'     
+#'
 #'     # check structure
 #'     str(s, 1)
-#'     
+#'
 #'     # extract pedons
 #'     p <- s$pedons
-#'     
+#'
 #'     # how many pedons
 #'     length(p)
-#'     
-#'     # plot 
+#'
+#'     # plot
 #'     par(mar=c(0,0,0,0))
 #'     plot(p, name='hzn_desgn', max.depth=150)
 #'   }
 #' }
 #' }
 fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vnir=FALSE) {
-  
+
   # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)
-  
+
   # sanity-check: user must supply some kind of criteria
   if(missing(series) & missing(state) & missing(bbox) & missing(rcasiteid))
     stop('you must provide some filtering criteria', call.=FALSE)
-  
+
   # sanity-check: cannot request VNIR by state
   if(!missing(state) & get.vnir)
     stop('VNIR spectra cannot be requested for an entire state', call.=FALSE)
-  
-  
+
+
   ## 2015-09-23
   ## releasing point data for privates lands may be a problem, coordinates are truncated to 2 decimal places
   message('Site coordinates have been truncated to 2 decimal places, contact the National Soil Survey Center for more detailed coordinates.')
-  
+
   # init empty filter
   f <- vector()
-  
+
   # init empty pieces
   s <- NULL
   h <- NULL
@@ -85,28 +84,28 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   sample <- NULL
   vnir <- NULL
   spectra <- NULL
-  
+
   # process filter components
   if(!missing(series)) {
     f <- c(f, paste('&series=', series, sep=''))
   }
-  
+
   if(!missing(bbox)) {
     bbox <- paste(bbox, collapse=',')
     f <- c(f, paste('&bbox=', bbox, sep=''))
   }
-  
+
   if(!missing(state)) {
     f <- c(f, paste('&state=', state, sep=''))
   }
-  
+
   if(!missing(rcasiteid)) {
     f <- c(f, paste('&rcasiteid=', rcasiteid, sep=''))
   }
-  
+
   # combine filters
   f <- paste(f, collapse='')
-  
+
   # build URLs
   site.url <- URLencode(paste('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=site', f, sep=''))
   hz.url <- URLencode(paste('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=horizon', f, sep=''))
@@ -115,7 +114,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   stock.url <- URLencode(paste('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=stock', f, sep=''))
   sample.url <- URLencode(paste('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=sample', f, sep=''))
   vnir.url <- URLencode(paste('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=vnir', f, sep=''))
-  
+
   # init temp files
   tf.site <- tempfile()
   tf.hz <- tempfile()
@@ -124,7 +123,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   tf.stock <- tempfile()
   tf.sample <- tempfile()
   tf.vnir <- tempfile()
-  
+
   # download pieces
   download.file(url=site.url, destfile=tf.site, mode='wb', quiet=TRUE)
   download.file(url=hz.url, destfile=tf.hz, mode='wb', quiet=TRUE)
@@ -132,32 +131,32 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   download.file(url=veg.url, destfile=tf.veg, mode='wb', quiet=TRUE)
   download.file(url=stock.url, destfile=tf.stock, mode='wb', quiet=TRUE)
   download.file(url=sample.url, destfile=tf.sample, mode='wb', quiet=TRUE)
-  
+
   # load pieces
   try(s <- read.table(gzfile(tf.site), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
   try(h <- read.table(gzfile(tf.hz), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
   try(trees <- read.table(gzfile(tf.trees), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
   try(veg <- read.table(gzfile(tf.veg), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
-  
+
   ### 2014-01-16: data need to be re-generated, offline for now:
   message('Carbon concentration and stock values are probably wrong, or at least suspect. USE WITH CAUTION.')
   try(stock <- read.table(gzfile(tf.stock), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
   try(sample <- read.table(gzfile(tf.sample), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
-  
+
   # optionally load spectra
   if(get.vnir) {
     message('spectra are large, download may take some time...', appendLF=TRUE)
-    
+
     # save the file locally
     download.file(url=vnir.url, destfile=tf.vnir, mode='wb', quiet=TRUE)
     # try to open
     try(vnir <- read.table(gzfile(tf.vnir), header=TRUE, sep='|'), silent=TRUE)
-    
+
     # test for missing data
     if(!is.null(vnir)) {
       # extract and parse the serialized spectra as matrix
       spectra <- as.matrix(read.table(textConnection(vnir$spectra), header=FALSE, sep=','))
-      
+
       # since order is preserved (row-wise and col-wise), we can assign:
       # rownames = sample_id
       # colnames = wavenumber
@@ -165,45 +164,45 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
       dimnames(spectra)[[2]] <- 350:2500
     }
   }
-  
+
   # report missing data
   if(all(c(is.null(s), is.null(h)))) {
     stop('query returned no data', call.=FALSE)
   }
-  
+
   # upgrade to SoilProfileCollection
   depths(h) <- rcapid ~ hzdept + hzdepb
-  
+
   # extract landuse, region, soilgroup as characters
   s$landuse <- substr(s$rcasiteid, 6, 6)
   s$region <- substr(s$rcasiteid, 2, 3)
   s$soilgroup <- substr(s$rcasiteid, 2, 5)
-  
+
   # set NASIS-specific horizon identifier
   hzidname(h) <- 'phiid'
-  
+
   # set optional hz designation and texture slots
   hzdesgnname(h) <- "hzname"
   hztexclname(h) <- "texture_class"
-  
+
   # merge-in site data
   site(h) <- s
-  
+
   # don't init coordinates, as it would be hard for the user to update later
   # coordinates(h) <- ~ x + y
   # proj4string(h) <- '+proj=longlat +datum=WGS84'
-  
+
   # reset options:
   options(opt.original)
-  
+
   # pack into a list for the user
   res <- list(pedons=h, trees=trees, veg=veg, stock=stock, sample=sample, spectra=spectra)
   res.size <- round(object.size(res) / 1024 / 1024, 2)
-  
+
   # some feedback via message:
   message(paste(length(unique(h$rcasiteid)), ' RaCA sites loaded (', res.size, ' Mb transferred)', sep=''))
-  
+
   # done
   return(res)
-  
+
 }
