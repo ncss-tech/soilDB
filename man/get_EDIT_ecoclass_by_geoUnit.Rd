@@ -18,7 +18,10 @@ A \code{data.frame} containing: \code{geoUnit}, \code{id}, \code{legacyId}, \cod
 Supply a vector of target \code{geoUnit}. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd
 }
 \examples{
-
-get_EDIT_ecoclass_by_geoUnit(c("018X","022A"))
-
+\donttest{
+ if(requireNamespace("curl") &
+   curl::has_internet()) {
+   get_EDIT_ecoclass_by_geoUnit(c("018X","022A"))
+ }
+}
 }

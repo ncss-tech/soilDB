@@ -53,32 +53,32 @@ See the following official EDIT developer resources to see which endpoints are a
 }
 \examples{
 # url for all geoUnit keys as PDF
-make_EDIT_service_URL(src = "descriptions", 
-                      catalog = "esd", 
+make_EDIT_service_URL(src = "descriptions",
+                      catalog = "esd",
                       geoUnit = "039X")
 
 # url for a single key within geoUnit as PDF
-make_EDIT_service_URL(src = "descriptions", 
-                      catalog = "esd", 
+make_EDIT_service_URL(src = "descriptions",
+                      catalog = "esd",
                       geoUnit = "039X",
                       key = "1")
 
 # query for "full" description in JSON
-desc <-  make_EDIT_service_URL(src = "descriptions", 
-                               catalog = "esd", 
+desc <-  make_EDIT_service_URL(src = "descriptions",
+                               catalog = "esd",
                                geoUnit = "039X",
                                endpoint = "R039XA109AZ.json")
 
 # query for "overview"
-desc_ov <- make_EDIT_service_URL(src = "descriptions", 
-                                 catalog = "esd", 
+desc_ov <- make_EDIT_service_URL(src = "descriptions",
+                                 catalog = "esd",
                                  geoUnit = "039X",
                                  ecoclass = "R039XA109AZ",
                                  endpoint = "overview.json")
 
 # query for specific section, e.g. "water features"
-desc_wf <- make_EDIT_service_URL(src = "descriptions", 
-                                 catalog = "esd", 
+desc_wf <- make_EDIT_service_URL(src = "descriptions",
+                                 catalog = "esd",
                                  geoUnit = "039X",
                                  ecoclass = "R039XA109AZ",
                                  endpoint = "water-features.json")
