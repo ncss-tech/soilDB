@@ -43,7 +43,7 @@ get_hz_data_from_pedon_db <- function(dsn) {
 	
 	ORDER BY pedon.upedonid, phorizon.hzdept ASC;"
 	# setup connection to our pedon database
-	channel <- dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
+	channel <- DBI::dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
 	
 	# exec query
 	d <- DBI::dbGetQuery(channel, q)
@@ -73,12 +73,15 @@ LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_deta
 	# exec query
 	d.texture <- DBI::dbGetQuery(channel, q.texture)
 	
-	# concat multiple textures/horizon into a single record
-	d.texture <- aggregate(texture_class ~ phiid, data=d.texture, FUN=function(x) do.call('paste', as.list(x)))
-	
-	# join
-	d <- join(d, d.texture, by='phiid', type='left')
-	
+  if (nrow(d.texture) > 0) {
+  	# concat multiple textures/horizon into a single record
+  	d.texture <- aggregate(texture_class ~ phiid, data=d.texture, FUN=function(x) do.call('paste', as.list(x)))
+  	
+  }
+
+  # join
+  d <- join(d, d.texture, by='phiid', type='left')
+
 	# close connection
 	DBI::dbDisconnect(channel)
 	

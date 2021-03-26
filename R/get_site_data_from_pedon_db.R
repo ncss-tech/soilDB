@@ -25,18 +25,45 @@ get_site_data_from_pedon_db <- function(dsn) {
   if(!requireNamespace('odbc'))
     stop('please install the `odbc` package', call.=FALSE)
   
-  q <- "SELECT site.siteiid, pedon.peiid, upedonid as pedon_id, site.usiteid as site_id, siteobs.obsdate as obs_date,
-  latdegrees + IIF(IsNull(latminutes), 0.0, latminutes/ 60.0) + IIF(IsNULL(latseconds), 0.0, latseconds / 60.0 / 60.0) as y,
-  -(longdegrees + IIF(IsNull(longminutes), 0.0, longminutes / 60.0) + IIF(IsNull(longseconds), 0.0, longseconds / 60.0 / 60.0)) as x,
-horizdatnum, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, descname as describer, pedonpurpose, pedontype, pedlabsampnum, psctopdepth, pscbotdepth, elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, siteobs.earthcovkind_1, bedrckdepth, bedrckkind, bedrckhardness, hillslopeprof, geomslopeseg, shapeacross, shapedown, slopecomplex, drainagecl
-FROM (((
-site INNER JOIN siteobs ON site.siteiid = siteobs.siteiidref) 
-LEFT OUTER JOIN pedon ON siteobs.siteobsiid = pedon.siteobsiidref) 
-LEFT OUTER JOIN sitebedrock ON site.siteiid = sitebedrock.siteiidref) 
-ORDER BY site.usiteid;"
+  q <- "SELECT 
+          site.siteiid,
+          pedon.peiid,
+          upedonid as pedon_id,
+          site.usiteid as site_id,
+          siteobs.obsdate as obs_date,
+          latdegrees + IIF(IsNull(latminutes), 0.0, latminutes / 60.0) + IIF(IsNULL(latseconds), 0.0, latseconds / 60.0 / 60.0) as y,
+          -(longdegrees + IIF(IsNull(longminutes), 0.0, longminutes / 60.0) + IIF(IsNull(longseconds), 0.0, longseconds / 60.0 / 60.0)) as x,
+          horizdatnm,
+          longstddecimaldegrees as x_std,
+          latstddecimaldegrees as y_std,
+          descname as describer,
+          pedonpurpose,
+          pedontype,
+          pedlabsampnum,
+          psctopdepth,
+          pscbotdepth,
+          elev as elev_field,
+          slope as slope_field,
+          aspect as aspect_field,
+          plantassocnm,
+          siteobs.earthcovkind1,
+          bedrckdepth,
+          bedrckkind,
+          bedrckhardness,
+          hillslopeprof,
+          geomslopeseg,
+          shapeacross,
+          shapedown,
+          slopecomplex,
+          drainagecl
+        FROM 
+            (((site INNER JOIN siteobs ON site.siteiid = siteobs.siteiidref)
+            LEFT OUTER JOIN pedon ON siteobs.siteobsiid = pedon.siteobsiidref)
+            LEFT OUTER JOIN sitebedrock ON site.siteiid = sitebedrock.siteiidref)
+            ORDER BY site.usiteid"
 
   # setup connection to our pedon database
-  channel <- dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
+  channel <- DBI::dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
   
   # exec query
   d <- DBI::dbGetQuery(channel, q)

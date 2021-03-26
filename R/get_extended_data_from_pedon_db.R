@@ -22,7 +22,7 @@ get_extended_data_from_pedon_db <- function(dsn) {
     stop('please install the `odbc` package', call.=FALSE)
   
 	# query diagnostic horizons, usually a 1:many relationship with pedons
-	q.diagnostic <- "SELECT peiidref as peiid, dfk.choice as featkind, featdept, featdepb
+	q.diagnostic <- "SELECT peiidref as peiid, featkind, featdept, featdepb
 FROM pediagfeatures
 	ORDER BY pediagfeatures.peiidref, pediagfeatures.featdept;"
 	
@@ -107,8 +107,8 @@ LEFT OUTER JOIN (
 	# get horizon texture modifiers
 	q.hz.texmod <- "SELECT phorizon.peiidref, phorizon.phiid, phtexture.phtiid, phtexturemod.seqnum, texmod 
   FROM 
-	phorizon INNER JOIN phtexture ON phorizon.phiid = phtexture.phiidref 
-	LEFT OUTER JOIN phtexturemod ON phtexture.phtiid = phtexturemod.phtiidref;"
+	((phorizon INNER JOIN phtexture ON phorizon.phiid = phtexture.phiidref) 
+	LEFT OUTER JOIN phtexturemod ON phtexture.phtiid = phtexturemod.phtiidref);"
 
 	
 	# get geomorphic features
@@ -123,10 +123,7 @@ FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeom
 	ORDER BY petaxhistory.peiidref;"	
 
 	# setup connection to our pedon database
-	channel <- dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
-	
-	# exec query
-	d <- DBI::dbGetQuery(channel, q)
+	channel <- DBI::dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
 	
 	# exec queries
 	d.diagnostic <- DBI::dbGetQuery(channel, q.diagnostic)
@@ -137,17 +134,13 @@ FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeom
 
 	# close connection
 	DBI::dbDisconnect(channel)
-	
-	# uncode domained columns
-	d <- uncode(d)
-
 
 	## uncode the one that need that here
 	d.diagnostic <- uncode(d.diagnostic)
 	d.hz.texmod <- uncode(d.hz.texmod)
 	d.taxhistory <- uncode(d.taxhistory)
-	d.sitepm <- uncode(d.sitepm)
-	d.structure <- uncode(d.structure)
+	# d.sitepm <- uncode(d.sitepm)
+	# d.structure <- uncode(d.structure)
 	
 	# generate wide-formatted, diagnostic boolean summary
 	d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)

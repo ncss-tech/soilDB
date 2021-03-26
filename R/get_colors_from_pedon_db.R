@@ -28,7 +28,8 @@ FROM (
 	ORDER BY phorizon.phiid, colormoistst;"
   
 	# setup connection to our pedon database
-	channel <- dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
+	channel <- DBI::dbConnect(drv = odbc::odbc(), 
+	                     .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)}; Dbq=", dsn))
 	
 	# exec query
 	d <- DBI::dbGetQuery(channel, q)
