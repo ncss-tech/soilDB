@@ -126,7 +126,7 @@ NULL
 #' 
 #' This dataset contains NASIS 7 Tables, Columns and Foreign Keys
 #' 
-#' @name NASIS_table_column_fkey
+#' @name NASIS_table_column_keys
 #' @docType data
 #' 
 #' @keywords datasets
