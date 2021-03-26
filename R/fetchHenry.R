@@ -216,25 +216,10 @@ month2season <- function(x) {
 #' @author D.E. Beaudette
 #' @seealso \code{\link{fetchSCAN}}
 #' @keywords manip
-#' @examples
 #' 
-#' \donttest{
-#' if(requireNamespace("curl") &
-#'     curl::has_internet() &
-#'     require(lattice)) {
-#'     
-#'   # get CA630 data as daily averages
-#'   x <- fetchHenry(project='CA630', gran = 'day')
-#'   
-#'   # inspect data gaps
-#'   levelplot(factor(!is.na(sensor_value)) ~ doy * factor(year) | name, 
-#'   data=x$soiltemp, col.regions=c('grey', 'RoyalBlue'), cuts=1, 
-#'   colorkey=FALSE, as.table=TRUE, scales=list(alternating=3), 
-#'   par.strip.text=list(cex=0.75), strip=strip.custom(bg='yellow'), 
-#'   xlab='Julian Day', ylab='Year')
-#' 
-#' }
-#' }
+#' @details See: 
+#'  - [Henry Mount Soil Climate Database](http://soilmap2-1.lawr.ucdavis.edu/henry/)
+#'  - [`fetchHenry` Tutorial](http://ncss-tech.github.io/AQP/soilDB/Henry-demo.html)
 #' 
 #' @export fetchHenry
 fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE, soiltemp.summaries=TRUE) {

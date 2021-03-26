@@ -68,31 +68,16 @@ of summaries should be weighted by the number of "functional years" (number
 of years with non-missing data after combining data by Julian day) and
 "complete years" (number of years of data with >= 365 days of non-missing
 data).
+
+See:
+\itemize{
+\item \href{http://soilmap2-1.lawr.ucdavis.edu/henry/}{Henry Mount Soil Climate Database}
+\item \href{http://ncss-tech.github.io/AQP/soilDB/Henry-demo.html}{\code{fetchHenry} Tutorial}
+}
 }
 \note{
 This function and the back-end database are very much a work in
 progress.
-}
-\examples{
-
-\donttest{
-if(requireNamespace("curl") &
-    curl::has_internet() &
-    require(lattice)) {
-    
-  # get CA630 data as daily averages
-  x <- fetchHenry(project='CA630', gran = 'day')
-  
-  # inspect data gaps
-  levelplot(factor(!is.na(sensor_value)) ~ doy * factor(year) | name, 
-  data=x$soiltemp, col.regions=c('grey', 'RoyalBlue'), cuts=1, 
-  colorkey=FALSE, as.table=TRUE, scales=list(alternating=3), 
-  par.strip.text=list(cex=0.75), strip=strip.custom(bg='yellow'), 
-  xlab='Julian Day', ylab='Year')
-
-}
-}
-
 }
 \seealso{
 \code{\link{fetchSCAN}}
