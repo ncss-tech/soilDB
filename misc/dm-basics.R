@@ -1,61 +1,70 @@
 # working with a "static" (non-transactional, not authenticated)
-# instance of the NASIS database with {soilDB}+{dm}
+# instance of the NASIS database schema/tables with {soilDB}+{dm}
 # 
 # a demonstration of building the project data model
-
+# 
+# last update: 2020/03/26
+# andrew g. brown
+# 
+# 
 library(soilDB)
 library(dm)
 library(daff)
 library(dplyr)
 
-# get projects from selected set
-res <- createStaticNASIS(soilDB:::.get_NASIS_table_name_by_purpose("project", 
-                                                                   SS = TRUE))
+# get projects from selected set using createStaticNASIS
+res <- createStaticNASIS(soilDB:::.get_NASIS_table_name_by_purpose("project", SS = TRUE))
+
+# list project related tables manually
+con <- soilDB::NASIS()
+x <- DBI::dbListTables(con)
+DBI::dbDisconnect(con)
 
 # use full join manually
 projects <- left_join(res[["project_View_1"]],
                       by = c("projectiid" = "projectiidref"),
                       res[["projectmapunit_View_1"]])
 
-# use dm to set primary and foreign keys
+# get lookup table for specified tables
+tkey <- soilDB:::.get_NASIS_table_key_by_name(names(res))
+fkeys <- tkey$fkey
+names(fkeys) <- tkey$table
+
+# specify important tables that need primary keys
+tnprj <- c("project_View_1", "projectlandcatbreakdown_View_1", "projectmilestone_View_1")
+tnprj_pkey <- soilDB:::.get_NASIS_pkey_by_name(tnprj)
+
+# determine child tables of each of the above (will have a foreign key)
+project_tables <- subset(tkey, pkeyref == tnprj_pkey[1] & pkeyref != fkey)
+lcb_tables <- subset(tkey, pkeyref == tnprj_pkey[2] & pkeyref != fkey)
+pmilestone_tables <- subset(tkey, pkeyref == tnprj_pkey[3] & pkeyref != fkey)
+
+# use dm to set primary keys
 resdm <- as_dm(res) %>%
-  dm_add_pk("project_View_1", "projectiid") %>% 
-  dm_add_pk("projectmappinggoal_View_1", "projectmappinggoaliid") %>% 
-  dm_add_pk("projectconcern_View_1", "projectconcerniid") %>% 
-  dm_add_pk("projectdataneed_View_1", "projectdataneediid") %>% 
-  dm_add_pk("projectmilestone_View_1", "projectmilestoneiid") 
-  
-fkeys <- soilDB:::.get_NASIS_table_fkey_by_name(names(res))
-pkeys <- soilDB:::.get_NASIS_table_pkey_by_name(names(res))
+  dm_add_pk(!!tnprj[1], !!tnprj_pkey[1]) %>% 
+  dm_add_pk(!!tnprj[2], !!tnprj_pkey[2]) %>% 
+  dm_add_pk(!!tnprj[3], !!tnprj_pkey[3]) 
 
-fkey.sub <- fkeys[which(fkeys == "projectiidref")]
+# use dm to set foreign keys for project table
+#  e.g projectstaff, projectmapunit, projectmilestone are children of project
+fkey.sub <- fkeys[which(fkeys == unique(project_tables$fkey))]
 for(f in seq_along(fkey.sub)) {
   resdm <- resdm %>%
-    dm_add_fk(!!names(fkey.sub)[f], !!fkey.sub[f], ref_table = "project_View_1")
+    dm_add_fk(!!names(fkey.sub)[f], !!fkey.sub[f], ref_table = !!tnprj[1])
 }
 
-fkey.sub <- fkeys[which(fkeys == "projectlandcatbrkdniidref")]
+# set projectmappingprogress child of projectlandcatbreakdown
+fkey.sub <- fkeys[which(fkeys == unique(lcb_tables$fkey))]
 for(f in seq_along(fkey.sub)) {
   resdm <- resdm %>%
-    dm_add_fk(!!names(fkey.sub)[f], !!fkey.sub[f], ref_table = "projectmappinggoal_View_1")
+    dm_add_fk(!!names(fkey.sub)[f], !!fkey.sub[f], ref_table = !!tnprj[2])
 }
 
-fkey.sub <- fkeys[which(fkeys == "projectconcerntypedbiidref")]
+# set projectmilestoneprogress child of projectmilestone
+fkey.sub <- fkeys[which(fkeys == unique(pmilestone_tables$fkey))]
 for(f in seq_along(fkey.sub)) {
   resdm <- resdm %>%
-    dm_add_fk(!!names(fkey.sub)[f], !!fkey.sub[f], ref_table = "projectconcern_View_1")
-}
-
-fkey.sub <- fkeys[which(fkeys == "projectdatatypedbiidref")]
-for(f in seq_along(fkey.sub)) {
-  resdm <- resdm %>%
-    dm_add_fk(!!names(fkey.sub)[f], !!fkey.sub[f], ref_table = "projectdataneed_View_1")
-}
-
-fkey.sub <- fkeys[which(fkeys == "projectmilestoneiidref")]
-for(f in seq_along(fkey.sub)) {
-  resdm <- resdm %>%
-    dm_add_fk(!!names(fkey.sub)[f], !!fkey.sub[f], ref_table = "projectmilestone_View_1")
+    dm_add_fk(!!names(fkey.sub)[f], !!fkey.sub[f], ref_table = !!tnprj[3])
 }
 
 # inspect a wimpy schema (but a fine demo)
