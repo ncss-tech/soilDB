@@ -22,7 +22,6 @@
 #' @author D.E. Beaudette, USDA-NRCS staff
 #' @references {
 #'   \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164}
-#'   \href{https://r-forge.r-project.org/scm/viewvc.php/*checkout*/docs/soilDB/RaCA-demo.html?root=aqp}{fetchRaCA() Tutorial}
 #' }
 #' @seealso \code{\link{fetchOSD}}
 #' @export
