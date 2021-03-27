@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Get data.frame of all ecoclass for multiple EDIT geoUnit in ESD or ESG catalog — get_EDIT_ecoclass_by_geoUnit" />
-<meta property="og:description" content="Supply a vector of target `geoUnit`. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd" />
+<meta property="og:description" content="Supply a vector of target geoUnit. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd" />
 
 
 
@@ -117,7 +117,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Supply a vector of target `geoUnit`. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd</p>
+    <p>Supply a vector of target <code>geoUnit</code>. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_EDIT_ecoclass_by_geoUnit</span><span class='op'>(</span><span class='va'>geoUnit</span>, catalog <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"esd"</span>, <span class='st'>"esg"</span><span class='op'>)</span><span class='op'>)</span></pre>
@@ -127,21 +127,24 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>geoUnit</th>
-      <td><p>A character vector of `geoUnit` codes e.g. `c("018X","022A")` for MLRAs 18 and 22A.</p></td>
+      <td><p>A character vector of <code>geoUnit</code> codes e.g. <code><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c("018X","022A")</a></code> for MLRAs 18 and 22A.</p></td>
     </tr>
     <tr>
       <th>catalog</th>
-      <td><p>Catalog ID. One of: `"esd"` or `"esg"`</p></td>
+      <td><p>Catalog ID. One of: <code>"esd"</code> or <code>"esg"</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A `data.frame` containing: `geoUnit`, `id`, `legacyId`, `name`</p>
+    <p>A <code>data.frame</code> containing: <code>geoUnit</code>, <code>id</code>, <code>legacyId</code>, <code>name</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>get_EDIT_ecoclass_by_geoUnit</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"018X"</span>,<span class='st'>"022A"</span><span class='op'>)</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+ <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
+   <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+   <span class='fu'>get_EDIT_ecoclass_by_geoUnit</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"018X"</span>,<span class='st'>"022A"</span><span class='op'>)</span><span class='op'>)</span>
+ <span class='op'>}</span>
 </div><div class='output co'>#&gt;    geoUnit          id    legacyId
 #&gt; 1     018X R018XI001CA R018XI001CA
 #&gt; 2     018X R018XI002CA R018XI002CA
@@ -265,7 +268,7 @@
 #&gt; 58                                                                   GRAVELLY SLOPE 16+ P.Z.
 #&gt; 59                                                                               SNOW POCKET
 #&gt; 60                                                                      MOIST MOUNTAIN BASIN
-#&gt; 61                                                             MOUNTAIN SHOULDERS 20-30 P.Z.</div><div class='input'>
+#&gt; 61                                                             MOUNTAIN SHOULDERS 20-30 P.Z.</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Download Data from the Henry Mount Soil Temperature and Water Database — fetchHenry • soilDB</title>
+<title>Get a NASIS table key by type and table name — .get_NASIS_table_key_by_name • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Download Data from the Henry Mount Soil Temperature and Water Database — fetchHenry" />
-<meta property="og:description" content="This function is a front-end to the REST query functionality of the Henry
-Mount Soil Temperature and Water Database." />
+<meta property="og:title" content="Get a NASIS table key by type and table name — .get_NASIS_table_key_by_name" />
+<meta property="og:description" content="Get a NASIS table key by type and table name" />
 
 
 
@@ -112,115 +111,42 @@ Mount Soil Temperature and Water Database." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Download Data from the Henry Mount Soil Temperature and Water Database</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/fetchHenry.R'><code>R/fetchHenry.R</code></a></small>
-    <div class="hidden name"><code>fetchHenry.Rd</code></div>
+    <h1>Get a NASIS table key by type and table name</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/get_NASIS_table_key_by_name.R'><code>R/get_NASIS_table_key_by_name.R</code></a></small>
+    <div class="hidden name"><code>dot-get_NASIS_table_key_by_name.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function is a front-end to the REST query functionality of the Henry
-Mount Soil Temperature and Water Database.</p>
+    <p>Get a NASIS table key by type and table name</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetchHenry</span><span class='op'>(</span>
-  what <span class='op'>=</span> <span class='st'>"all"</span>,
-  usersiteid <span class='op'>=</span> <span class='cn'>NULL</span>,
-  project <span class='op'>=</span> <span class='cn'>NULL</span>,
-  sso <span class='op'>=</span> <span class='cn'>NULL</span>,
-  gran <span class='op'>=</span> <span class='st'>"day"</span>,
-  start.date <span class='op'>=</span> <span class='cn'>NULL</span>,
-  stop.date <span class='op'>=</span> <span class='cn'>NULL</span>,
-  pad.missing.days <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  soiltemp.summaries <span class='op'>=</span> <span class='cn'>TRUE</span>
+    <pre class="usage"><span class='fu'>.get_NASIS_table_key_by_name</span><span class='op'>(</span>
+  <span class='va'>tables</span>,
+  keycol <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"fkey"</span>, <span class='st'>"pkeyref"</span>, <span class='st'>"pkey"</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>what</th>
-      <td><p>type of data to return: 'sensors': sensor metadata only |
-'soiltemp': sensor metadata + soil temperature data | 'soilVWC': sensor
-metadata + soil moisture data | 'airtemp': sensor metadata + air temperature
-data | 'waterlevel': sensor metadata + water level data |'all': sensor
-metadata + all sensor data</p></td>
+      <th>tables</th>
+      <td><p>character vector of table names</p></td>
     </tr>
     <tr>
-      <th>usersiteid</th>
-      <td><p>(optional) filter results using a NASIS user site ID</p></td>
-    </tr>
-    <tr>
-      <th>project</th>
-      <td><p>(optional) filter results using a project ID</p></td>
-    </tr>
-    <tr>
-      <th>sso</th>
-      <td><p>(optional) filter results using a soil survey office code</p></td>
-    </tr>
-    <tr>
-      <th>gran</th>
-      <td><p>data granularity: "day", "week", "month", "year"; returned data
-are averages</p></td>
-    </tr>
-    <tr>
-      <th>start.date</th>
-      <td><p>(optional) starting date filter</p></td>
-    </tr>
-    <tr>
-      <th>stop.date</th>
-      <td><p>(optional) ending date filter</p></td>
-    </tr>
-    <tr>
-      <th>pad.missing.days</th>
-      <td><p>should missing data ("day" granularity) be filled
-with NA? see details</p></td>
-    </tr>
-    <tr>
-      <th>soiltemp.summaries</th>
-      <td><p>should soil temperature ("day" granularity only)
-be summarized? see details</p></td>
+      <th>keycol</th>
+      <td><p>One of: "fkey" the foreign key; "pkeyref" the primary key referenced by the foreign key, or "pkey" the primary key.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list containing:</p>
-<dt>sensors</dt><dd><p>a <code>SpatialPointsDataFrame</code>
-object containing site-level information</p></dd> <dt>soiltemp</dt><dd><p>a
-<code>data.frame</code> object containing soil temperature timeseries data</p></dd>
-<dt>soilVWC</dt><dd><p>a <code>data.frame</code> object containing soil moisture
-timeseries data</p></dd> <dt>airtemp</dt><dd><p>a <code>data.frame</code> object containing air
-temperature timeseries data</p></dd> <dt>waterlevel</dt><dd><p>a <code>data.frame</code> object
-containing water level timeseries data</p></dd>
+    <p>The key column name for the specified table name</p>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Filling missing days with NA is useful for computing and index of how
-complete the data are, and for estimating (mostly) unbiased MAST and
-seasonal mean soil temperatures. Summaries are computed by first averaging
-over Julian day, then averaging over all days of the year (MAST) or just
-those days that occur within "summer" or "winter". This approach makes it
-possible to estimate summaries in the presence of missing data. The quality
-of summaries should be weighted by the number of "functional years" (number
-of years with non-missing data after combining data by Julian day) and
-"complete years" (number of years of data with &gt;= 365 days of non-missing
-data).</p>
-<p>See:</p><ul>
-<li><p><a href='http://soilmap2-1.lawr.ucdavis.edu/henry/'>Henry Mount Soil Climate Database</a></p></li>
-<li><p><a href='http://ncss-tech.github.io/AQP/soilDB/Henry-demo.html'><code>fetchHenry</code> Tutorial</a></p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>This function and the back-end database are very much a work in
-progress.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='fetchSCAN.html'>fetchSCAN</a></code></p></div>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>D.E. Beaudette</p>
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>.get_NASIS_table_key_by_name</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"site"</span>,<span class='st'>"phorizon_View_1"</span>,<span class='st'>"not_a_table"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
