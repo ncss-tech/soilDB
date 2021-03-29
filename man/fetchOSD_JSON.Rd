@@ -7,22 +7,27 @@
 fetchOSD_JSON(series, base_url = NULL)
 }
 \arguments{
-\item{series}{A character vector of Official Series names e.g. `"Chewacla"`}
+\item{series}{A character vector of Official Series names e.g. \code{"Chewacla"}}
 
-\item{base_url}{Optional: alternate JSON repository path. Default: `NULL` uses \url{http://github.com/ncss-tech/SoilKnowledgeBase}.}
+\item{base_url}{Optional: alternate JSON repository path. Default: \code{NULL} uses \url{http://github.com/ncss-tech/SoilKnowledgeBase}.}
 }
 \value{
-A `data.frame` with 1 row per series, and 1 column per "section" in the OSD as defined in National Soil Survey Handbook
+A \code{data.frame} with 1 row per series, and 1 column per "section" in the OSD as defined in National Soil Survey Handbook
 }
 \description{
 Fetch Official Series Description Raw Data in JSON format
 }
 \details{
-The default `base_url` is to "raw" JSON files stored in a GitHub repository that is regularly updated from the official source of Series Descriptions. Using format: `https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/{LETTER}/{SERIES}.json`
+The default \code{base_url} is to "raw" JSON files stored in a GitHub repository that is regularly updated from the official source of Series Descriptions. Using format: \verb{https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/\{LETTER\}/\{SERIES\}.json}
 }
 \examples{
 
+\donttest{
+if(requireNamespace("curl") &
+   curl::has_internet()) {
+   
 series <- c("Musick", "Hector", "Chewacla")
 fetchOSD_JSON(series)
-
+}
+}
 }

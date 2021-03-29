@@ -10,9 +10,14 @@
 #'
 #' @examples
 #'
+#' \donttest{
+#' if(requireNamespace("curl") &
+#'    curl::has_internet()) {
+#'    
 #' series <- c("Musick", "Hector", "Chewacla")
 #' fetchOSD_JSON(series)
-#'
+#' }
+#' }
 fetchOSD_JSON <- function(series,
                           base_url = NULL) {
 
