@@ -14,6 +14,14 @@ dbQueryNASIS <- function(conn, q, close = TRUE, ...) {
   if (inherits(conn, 'try-error'))
     stop("Failed to connect to NASIS database!")
 
+  if (close) {
+    # don't close connections we tagged as user-defined
+    isUserDefined <- attr(conn, 'isUserDefined')
+    if(!is.null(isUserDefined) && isUserDefined) {
+      close <- FALSE
+    }
+  }
+  
   # vectorize queries (return a [possibly named] list)
   if(length(q) > 1) {
     # recursively call dbQueryNASIS(close=FALSE)
@@ -48,16 +56,22 @@ dbQueryNASIS <- function(conn, q, close = TRUE, ...) {
 #' @param dsn Optional: path to SQLite database containing NASIS table
 #' structure; Default: \code{NULL}
 #' @return A \code{DBIConnection} object, as returned by
-#' \code{DBI::dbConnect()}.
+#' \code{DBI::dbConnect()}. If `dsn` is a `DBIConnection`, the attribute `isUserDefined` of the result is set to `TRUE`. If the `DBIConnection` is created by the internal NASIS connection process, `isUserDefined` is set to `FALSE.`
 #' @export dbConnectNASIS
 dbConnectNASIS <- function(dsn = NULL) {
+  
   # allow users to set their custom DBI connection with dsn argument
-  if (inherits(dsn, 'DBIConnection'))
+  isUserDefined <- inherits(dsn, 'DBIConnection')
+  
+  if (isUserDefined) {
+    attr(dsn, 'isUserDefined') <- TRUE
     return(dsn)
-
+  }
+  
   # default connection uses DBI/odbc (historically RODBC)
   res <- .openNASISchannel(dsn)
-
+  attr(res, 'isUserDefined') <- FALSE
+  
   return(res)
 }
 
