@@ -52,7 +52,11 @@ outcon <- dbConnect(RPostgres::Postgres(), db = "nasis_local")
 library(soilDB)
 tnames <- soilDB:::.get_NASIS_table_name_by_purpose()
 
-res <- createStaticNASIS(tnames, output_path = outcon, dsn = "~/workspace/NASISlite/nasis_local.db")
+res <- createStaticNASIS(tnames, 
+                         new_names = tolower(tnames), # to not have to modifiy queries
+                         dsn = "~/workspace/NASISlite/nasis_local.db")
+res <- lapply(res, function(x){ colnames(x) <- tolower(colnames(x)); x})
+lapply(names(res), function(x) dbWriteTable(outcon, x, res[[x]], overwrite=TRUE))
 
 DBI::dbListTables(outcon)
 ```
@@ -61,9 +65,10 @@ DBI::dbListTables(outcon)
 
 Since PqConnection is already a DBIConnection, we can short-circuit the normal process of connecting to local NASIS via ODBC, or to a file-based SQLite instance. 
 
-The user sets up their own custom DBIConnection as needed.
+The user sets up their own custom DBIConnection and database as needed.
 
 ```{r}
 get_component_horizon_data_from_NASIS_db(dsn = outcon, SS = F)
-fetchNASIS(dsn = outcon, SS = F)
+get_site_data_from_NASIS_db(dsn=outcon, SS=F)
+fetchNASIS(dsn = outcon, SS = F, )
 ```

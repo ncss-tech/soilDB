@@ -54,7 +54,9 @@
 #' columns in each NASIS table.
 #'
 #' @export createStaticNASIS
-createStaticNASIS <- function(tables = NULL, SS = TRUE,
+createStaticNASIS <- function(tables = NULL,
+                              new_names = NULL,
+                              SS = TRUE,
                               dsn = NULL, output_path = NULL,
                               verbose = FALSE)  {
 
@@ -86,6 +88,12 @@ createStaticNASIS <- function(tables = NULL, SS = TRUE,
   # keep only explicitly listed tables, if any
   if (!is.null(tables) & length(tables) > 0 & is.character(tables)) {
     nasis_table_names <- tables
+
+    if (length(new_names) != length(nasis_table_names))
+      stop(sprintf("new table names have length %s, but found only %s NASIS tables to rename",
+                   length(new_names), length(nasis_table_names)), call. = FALSE)
+
+
   } else {
     stop("no tables in database or `tables=` argument", call. = FALSE)
   }
@@ -107,7 +115,10 @@ createStaticNASIS <- function(tables = NULL, SS = TRUE,
     # return named list of data.frames or try-error (one per table)
     res <- lapply(nasis_table_names, function(n) try(.dump_NASIS_table(n, dsn = dsn),
                                                      silent = verbose))
-    names(res) <- nasis_table_names
+    if(!is.null(new_names))
+      names(res) <- new_names
+    else names(res) <- nasis_table_names
+
     return(res)
 
   # otherwise, we are writing SQLite to output_path
@@ -125,8 +136,13 @@ createStaticNASIS <- function(tables = NULL, SS = TRUE,
     else outcon <- output_path
 
     # returns TRUE, invisibly, or try-error (one per table)
-    return(lapply(nasis_table_names, function(n) {
+    return(lapply(seq_along(nasis_table_names), function(i) {
         return(try({
+          n <- nasis_table_names[i]
+
+          if (!is.null(new_names))
+            newname <- new_names[i]
+          else newname <- n
 
           newdata <- try(.dump_NASIS_table(n, dsn = dsn), silent = verbose)
 
@@ -135,13 +151,14 @@ createStaticNASIS <- function(tables = NULL, SS = TRUE,
 
                           # convert times to character
                           # .:. SQLite3 does not have a datetime data type
-                          if (inherits(x, "POSIXct") || inherits(x, "POSIXlt"))
+                          if (inherits(x, 'SQLiteConnection') & (inherits(x, "POSIXct") || inherits(x, "POSIXlt")))
                             return(as.character(x))
 
                           return(x)
                         })
 
-          DBI::dbWriteTable(conn = outcon, name =  n,
+          DBI::dbWriteTable(conn = outcon,
+                            name =  newname,
                             value = newdata,
                             overwrite = TRUE)
         }))
