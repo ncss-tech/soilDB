@@ -1,7 +1,7 @@
 #' Fetch Official Series Description Raw Data in JSON format
 #'
 #' @param series A character vector of Official Series names e.g. `"Chewacla"`
-#' @param base_url Optional: alternate JSON repository path. Default: `NULL` uses \url{http://github.com/ncss-tech/SoilKnowledgeBase}.
+#' @param base_url Optional: alternate JSON repository path. Default: `NULL` uses \url{https://github.com/ncss-tech/SoilKnowledgeBase}.
 #'
 #' @details The default `base_url` is to "raw" JSON files stored in a GitHub repository that is regularly updated from the official source of Series Descriptions. Using format: `https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/{LETTER}/{SERIES}.json`
 #'

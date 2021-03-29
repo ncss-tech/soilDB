@@ -9,7 +9,7 @@ fetchOSD_JSON(series, base_url = NULL)
 \arguments{
 \item{series}{A character vector of Official Series names e.g. \code{"Chewacla"}}
 
-\item{base_url}{Optional: alternate JSON repository path. Default: \code{NULL} uses \url{http://github.com/ncss-tech/SoilKnowledgeBase}.}
+\item{base_url}{Optional: alternate JSON repository path. Default: \code{NULL} uses \url{https://github.com/ncss-tech/SoilKnowledgeBase}.}
 }
 \value{
 A \code{data.frame} with 1 row per series, and 1 column per "section" in the OSD as defined in National Soil Survey Handbook
