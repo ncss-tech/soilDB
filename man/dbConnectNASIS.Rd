@@ -13,7 +13,7 @@ structure; Default: \code{NULL}}
 }
 \value{
 A \code{DBIConnection} object, as returned by
-\code{DBI::dbConnect()}.
+\code{DBI::dbConnect()}. If \code{dsn} is a \code{DBIConnection}, the attribute \code{isUserDefined} of the result is set to \code{TRUE}. If the \code{DBIConnection} is created by the internal NASIS connection process, \code{isUserDefined} is set to \code{FALSE.}
 }
 \description{
 Create a connection to a local NASIS database with \code{DBI}
