@@ -160,13 +160,14 @@
 .formatLandformString <- function(i.gm, uid = NULL, name.sep='|') {
 
   # get the current group of rows by unique ID (either passed by caller or calculated)
-  if (is.null(uid))
+  if (is.null(uid) | length(uid) == 0)
     u.peiid <- unique(i.gm$peiid)
   else 
     u.peiid <- uid
   
   if (is.null(u.peiid))
-    
+    return(NULL)
+  
   # sanity check: this function can only be applied to data from a single pedon
   if (length(u.peiid) > 1)
     stop('data are from multiple pedon records')
@@ -176,9 +177,7 @@
   
   # allow for NA's
   if (nrow(i.gm) == 0) {
-    if(is.null(uid))
-      return(NULL)
-    return(data.frame(peiid = uid,
+    return(data.frame(peiid = u.peiid,
                       landform_string = NA_character_,
                       stringsAsFactors = FALSE))
   }
@@ -286,6 +285,9 @@
     u.siteiid <- unique(i.pm$siteiid)
   else 
     u.siteiid <- uid
+  
+  if (is.null(u.siteiid))
+    return(NULL)
   
   # sanity check: this function can only be applied to data from a single site
   if (length(u.siteiid) > 1)

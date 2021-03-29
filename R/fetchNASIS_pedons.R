@@ -142,7 +142,8 @@
   # define data.table globals for R CMD CHECK 
   .BY <- NULL
   .SD <- NULL
-  
+  # .pickBestTaxHistory <- soilDB:::.pickBestTaxHistory
+  # .pickBestEcosite <- soilDB:::.pickBestEcosite
   ed.tax <- data.table::as.data.table(extended_data$taxhistory)
   best.tax.data <- ed.tax[, .pickBestTaxHistory(.SD),
                           by = list(peiid = ed.tax$peiid)]
@@ -201,16 +202,21 @@
   suppressWarnings(restrictions(hz_data) <- extended_data$restriction)
   
   # join-in landform string w/ ampersand as separator for hierarchy
+  # .formatLandformString <- soilDB:::.formatLandformString
+  # .formatParentMaterialString <- soilDB:::.formatParentMaterialString
   ed.lf <- data.table::as.data.table(extended_data$geomorph)
   lf <- ed.lf[, .formatLandformString(.SD, uid = .BY$peiid, name.sep = ' & '), 
               by = list(peiid = ed.lf$peiid)]
-  site(hz_data) <- as.data.frame(lf[,c("peiid","landform_string")])
-  
+
+  if (ncol(lf) > 1)
+    site(hz_data) <- as.data.frame(lf[,c("peiid","landform_string")])
+
   ed.pm <- data.table::as.data.table(extended_data$pm)
   pm <- ed.pm[, .formatParentMaterialString(.SD, uid = .BY$siteiid, name.sep = ' & '),
                 by = list(siteiid = ed.pm$siteiid)]
-  site(hz_data) <- as.data.frame(pm[,c("siteiid","pmkind","pmorigin")])
-  
+  if (ncol(pm) > 2)
+    site(hz_data) <- as.data.frame(pm[,c("siteiid","pmkind","pmorigin")])
+
 # set metadata
   m <- metadata(hz_data)
   m$origin <- 'NASIS pedons'
