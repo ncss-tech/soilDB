@@ -81,10 +81,6 @@
 # site.code: vector of SCAN site codes
 SCAN_sensor_metadata <- function(site.code) {
 
-  # check for 64bit mode
-  if(.Machine$sizeof.pointer != 8)
-    stop("Sorry! For some reason this function crashes in 32bit mode, I don't know why!", call. = FALSE)
-
   # check for required packages
   if(!requireNamespace('httr', quietly = TRUE) | !requireNamespace('rvest', quietly = TRUE))
     stop('please install the `httr` and `rvest` packages', call.=FALSE)
