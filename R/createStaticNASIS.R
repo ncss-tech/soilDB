@@ -153,7 +153,7 @@ createStaticNASIS <- function(tables = NULL,
 
                           # convert times to character
                           # .:. SQLite3 does not have a datetime data type
-                          if (inherits(x, 'SQLiteConnection') & (inherits(x, "POSIXct") || inherits(x, "POSIXlt")))
+                          if (inherits(outcon, 'SQLiteConnection') & (inherits(x, "POSIXct") || inherits(x, "POSIXlt")))
                             return(as.character(x))
 
                           return(x)
