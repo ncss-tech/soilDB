@@ -23,16 +23,17 @@ get_veg_from_NPS_PLOTS_db <- function(dsn) {
   if(!requireNamespace('odbc'))
     stop('please install the `odbc` package', call.=FALSE)
   
-  q.vegdata <- "SELECT tPlots.Plot_Code AS site_id, tPlotEventSpecies.Stratum, tPlotEventSpecies.Spp_Code, xPLANTS_lu.Sci_Name, xPLANTS_lu.ComName, tPlotEventSpecies.Cover_Code, tPlotEventSpecies.Real_Cover, tPlotEventSpecies.Within_Plot
+  q <- "SELECT tPlots.Plot_Code AS site_id, tPlotEventSpecies.Stratum, tPlotEventSpecies.Spp_Code, xPLANTS_lu.Sci_Name, xPLANTS_lu.ComName, tPlotEventSpecies.Cover_Code, tPlotEventSpecies.Real_Cover, tPlotEventSpecies.Within_Plot
 FROM xPLANTS_lu RIGHT JOIN (tSpecies RIGHT JOIN (tPlots INNER JOIN (tPlotEvents INNER JOIN tPlotEventSpecies ON tPlotEvents.Plot_Event = tPlotEventSpecies.Plot_Event) ON tPlots.Plot_Code = tPlotEvents.Plot_Code) ON tSpecies.Spp_Code = tPlotEventSpecies.Spp_Code) ON xPLANTS_lu.Plants_Symbol = tSpecies.PLANTS_Symbol
 ORDER BY tPlots.Plot_Code, tPlotEventSpecies.Stratum DESC , tPlotEventSpecies.Real_Cover DESC"
   
   # setup connection to our pedon database
-  channel <- dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
+  channel <- DBI::dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
   
   # exec query
   d <- DBI::dbGetQuery(channel, q)
   
   # close connection
   DBI::dbDisconnect(channel)
+  return(d)
 }

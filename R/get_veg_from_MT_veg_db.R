@@ -26,11 +26,11 @@ get_veg_from_MT_veg_db <- function(dsn) {
 	LEFT OUTER JOIN (SELECT tblESD_DK.PlotKey, SUM(tblESD_DK.Production) as total_production FROM tblESD_DK GROUP BY tblESD_DK.PlotKey) AS TP ON TP.PlotKey =   tblPlots.PlotKey)
 	LEFT OUTER JOIN (SELECT * FROM tblEcolSites) as EScalled ON tblPlots.EcolSite = EScalled.EcolSite)
 	LEFT OUTER JOIN (SELECT * FROM tblEcolSites) as ESkeyed ON tblPlots.EcolSite = ESkeyed.EcolSite)
-	LEFT OUTER JOIN (SELECT * FROM HabitatTypes) as HT ON HT.htcode = tblPlots.EcolSite_Text2
+  LEFT OUTER JOIN (SELECT * FROM HabitatTypes) as HT ON HT.htcode = tblPlots.EcolSite_Text2
 	ORDER BY tblSites.SiteID;"
-  
+	
 	# setup connection to our pedon database
-	channel <- dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
+	channel <- DBI::dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
 	
 	# exec query
 	d <- DBI::dbGetQuery(channel, q)
