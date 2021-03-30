@@ -91,7 +91,7 @@ createStaticNASIS <- function(tables = NULL,
   if (!is.null(tables) & length(tables) > 0 & is.character(tables)) {
     nasis_table_names <- tables
 
-    if (length(new_names) != length(nasis_table_names))
+    if (!is.null(new_names) && length(new_names) != length(nasis_table_names))
       stop(sprintf("new table names have length %s, but found only %s NASIS tables to rename",
                    length(new_names), length(nasis_table_names)), call. = FALSE)
 
