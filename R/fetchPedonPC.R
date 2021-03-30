@@ -40,10 +40,11 @@ fetchPedonPC <- function(dsn) {
 	h <- join(hz_data, color_data, by='phiid', type='left')
 
 	# convert colors... in the presence of missing color data
-	h$soil_color <- NA
-	idx <- complete.cases(h$m_r)
-	h$soil_color[idx] <- with(h[idx, ], rgb(m_r, m_g, m_b)) # moist colors
-
+	if(nrow(h) > 0) {
+	  h$soil_color <- NA
+  	idx <- complete.cases(h$m_r)
+  	h$soil_color[idx] <- with(h[idx, ], rgb(m_r, m_g, m_b)) # moist colors
+  }
 	# replace horizons with hz + fragment summary
 	h <- join(h, extended_data$frag_summary, by='phiid', type='left')
 
@@ -63,7 +64,10 @@ fetchPedonPC <- function(dsn) {
 
 	# keep the good ones
 	h <- h[which(h$peiid %in% good.pedon.ids), ]
-
+	
+  if (nrow(h) == 0)
+    stop("no horizon data in PedonPC database", call. = FALSE)
+	
 	# upgrade to SoilProfilecollection
 	depths(h) <- peiid ~ hzdept + hzdepb
 
