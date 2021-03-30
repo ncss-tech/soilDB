@@ -72,7 +72,7 @@ get_cosoilmoist_from_NASIS <- function(SS = TRUE,
   d.cosoilmoist <- uncode(d.cosoilmoist, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # prep dataset: rename columns, impute empty values, stringsAsFactors
-  d.cosoilmoist <- .cosoilmoist_prep(d.cosoilmoist, impute = impute, stringsAsFactors = stringsAsFactors)
+  d.cosoilmoist <- suppressWarnings(.cosoilmoist_prep(d.cosoilmoist, impute = impute, stringsAsFactors = stringsAsFactors))
 
   # done
   return(d.cosoilmoist)
