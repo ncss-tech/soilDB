@@ -10,7 +10,7 @@
 #' This function currently works only on Windows.
 #'
 #' @aliases fetchPedonPC getHzErrorsPedonPC
-#' @param dsn The path to a PedonPC version 5.x database
+#' @param dsn The path to a PedonPC version 6.x database
 #' @return a SoilProfileCollection class object
 #' @note This function attempts to do most of the boilerplate work when
 #' extracting site/horizon data from a PedonPC or local NASIS database. Pedons
