@@ -6,7 +6,8 @@
 \usage{
 .get_NASIS_table_name_by_purpose(
   purpose = c("metadata", "lookup", "site", "pedon", "transect", "component",
-    "vegetation", "project", "techsoilservice", "legend", "mapunit", "datamapunit"),
+    "vegetation", "project", "techsoilservice", "area", "soilseries", "legend",
+    "mapunit", "datamapunit"),
   SS = FALSE
 )
 }
