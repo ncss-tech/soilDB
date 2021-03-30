@@ -58,7 +58,7 @@ get_component_restrictions_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NULL) {
 
   q <- "SELECT mu.muiid, mu.mukind, mu.mutype, mu.muname, mu.nationalmusym,
-  mut.seqnum, mut.recdate, mut.recauthor, mut.mapunittextkind, mut.textcat, mut.textsubcat, CAST(mut.textentry AS ntext) AS textentry
+  mut.seqnum, mut.recdate, mut.recauthor, mut.mapunittextkind, mut.textcat, mut.textsubcat, CAST(mut.textentry as text) AS textentry
 
   FROM
   mapunit_View_1 AS mu
@@ -100,7 +100,7 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NUL
 
   q <- "SELECT co.coiid,
   cot.seqnum, cot.recdate, cot.recauthor, cot.comptextkind, cot.textcat, cot.textsubcat,
-  CAST(cot.textentry AS ntext) AS textentry
+  CAST(cot.textentry as text) AS textentry
 
   FROM
   component_View_1 AS co

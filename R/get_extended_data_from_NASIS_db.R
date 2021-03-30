@@ -49,7 +49,7 @@ get_extended_data_from_NASIS_db <- function(SS = TRUE,
 
 
   # photo links from PedonPC stored as sitetext notes
-  q.photolink <- "SELECT so.siteiidref AS siteiid, sot.recdate, sot.textcat,  CAST(sot.textentry AS ntext) AS imagepath
+  q.photolink <- "SELECT so.siteiidref AS siteiid, sot.recdate, sot.textcat,  CAST(sot.textentry AS text) AS imagepath
   FROM
   siteobs_View_1 AS so
   LEFT OUTER JOIN siteobstext_View_1 AS sot ON so.siteobsiid = sot.siteobsiidref
@@ -79,7 +79,7 @@ get_extended_data_from_NASIS_db <- function(SS = TRUE,
   FROM siteecositehistory_View_1 AS seh
   -- note: ecologicalsite table not managed by SS
   LEFT OUTER JOIN ecologicalsite AS es ON es.ecositeiid=seh.ecositeiidref
-  ORDER BY 'siteiid';"
+  ORDER BY siteiid;"
 
   # toggle selected set vs. local DB
   if (SS == FALSE) {

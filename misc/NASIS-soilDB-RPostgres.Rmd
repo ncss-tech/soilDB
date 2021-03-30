@@ -1,0 +1,74 @@
+---
+title: "NASIS with soilDB and RPostgres"
+author: "Andrew G. Brown"
+date: "3/28/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval=FALSE)
+```
+
+## Install PostgreSQL
+
+```sh
+sudo apt install postgresql-client-common libpq-dev
+sudo -u postgres psql
+```
+
+## Database Setup
+
+```sql
+CREATE DATABASE nasis_local WITH ENCODING 'UTF8' LC_COLLATE='en_US.UTF-8' LC_CTYPE='en_US.UTF-8';
+```
+
+```sql
+CREATE ROLE andrew WITH LOGIN;
+```
+
+```sql
+GRANT TEMP ON DATABASE nasis_local TO andrew;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO andrew;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO andrew;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO andrew;
+```
+
+## Install DBI, RPostgres Packages
+
+```{r}
+install.packages(c("DBI","RPostgres"))
+```
+
+## Connect to `nasis_local` database
+
+```{r, eval=TRUE}
+library(RPostgres)
+outcon <- dbConnect(RPostgres::Postgres(), db = "nasis_local")
+```
+
+## Transfer contents of file-based SQLite to Postgres
+
+```{r, eval=TRUE}
+library(soilDB)
+tnames <- soilDB:::.get_NASIS_table_name_by_purpose()
+
+res <- createStaticNASIS(tnames, 
+                         new_names = tolower(tnames), # to not have to modifiy queries
+                         dsn = "~/workspace/NASISlite/nasis_local.db")
+res <- lapply(res, function(x){ colnames(x) <- tolower(colnames(x)); x})
+lapply(names(res), function(x) dbWriteTable(outcon, x, res[[x]], overwrite=TRUE))
+
+DBI::dbListTables(outcon)
+```
+
+## Query Postgres database using `dsn` of class _PqConnection_
+
+Since PqConnection is already a DBIConnection, we can short-circuit the normal process of connecting to local NASIS via ODBC, or to a file-based SQLite instance. 
+
+The user sets up their own custom DBIConnection and database as needed.
+
+```{r}
+get_component_horizon_data_from_NASIS_db(dsn = outcon, SS = F)
+get_site_data_from_NASIS_db(dsn=outcon, SS=F)
+fetchNASIS(dsn = outcon, SS = F, )
+```
