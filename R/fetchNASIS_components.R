@@ -7,12 +7,12 @@
                                    fill = FALSE,
                                    stringsAsFactors = default.stringsAsFactors(),
                                    dsn = dsn) {
-    
+
 
   # ensure that any old hz errors are cleared
   if(exists('component.hz.problems', envir=soilDB.env))
     assign('component.hz.problems', value=character(0), envir=soilDB.env)
-  
+
   # load data in pieces
   f.comp       <- get_component_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn)
   f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn)
@@ -22,16 +22,12 @@
   f.ecosite    <- get_component_esd_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn)
   f.diaghz     <- get_component_diaghz_from_NASIS_db(SS = SS, dsn = dsn)
   f.restrict   <- get_component_restrictions_from_NASIS_db(SS = SS, dsn = dsn)
-  
+
   filled.ids <- character(0)
 
   # optionally test for bad horizonation... flag, and remove
   if(rmHzErrors & nrow(f.chorizon) > 0) {
-    # TODO: mirror fetchNASIS_pedons
-    f.chorizon.test <- plyr::ddply(f.chorizon, 'coiid', function(d) {
-      res <- aqp::hzDepthTests(top=d[['hzdept_r']], bottom=d[['hzdepb_r']])
-      return(data.frame(hz_logic_pass=all(!res)))
-    })
+    f.chorizon.test <- aqp::checkHzDepthLogic(f.chorizon, c('hzdept_r', 'hzdepb_r'), idname = 'coiid', fast = TRUE)
 
     # fill=TRUE adds horizons with NA chiid will have NA depths -- will not pass hzDepthTests
     # therefore, only way to use fill effectively was with rmHzErrors=FALSE
@@ -41,36 +37,36 @@
       filled.ids <- as.character(f.chorizon$coiid[filled.idx])
       #print(dput(filled.ids))
     }
-    
+
     # which are the good (valid) ones?
-    good.ids <- as.character(f.chorizon.test$coiid[which(f.chorizon.test$hz_logic_pass)])
-    bad.ids <- as.character(f.chorizon.test$coiid[which(!f.chorizon.test$hz_logic_pass)])
+    good.ids <- as.character(f.chorizon.test$coiid[which(f.chorizon.test$valid)])
+    bad.ids <- as.character(f.chorizon.test$coiid[which(!f.chorizon.test$valid)])
 
     if(length(filled.ids) > 0) {
       good.ids <- unique(c(good.ids, filled.ids))
       bad.ids <- unique(bad.ids[!bad.ids %in% filled.ids])
     }
-    
+
     # keep the good ones
     f.chorizon <- f.chorizon[which(f.chorizon$coiid %in% good.ids), ]
 
     # keep track of those components with horizonation errors
     #if(length(bad.ids) > 0) # AGB removed this line of code b/c it prevents update of 'component.hz.problems' on subsequent error-free calls
     assign('component.hz.problems', value=bad.ids, envir=soilDB.env)
-  } 
-  
+  }
+
   if(nrow(f.chorizon) > 0) {
     # upgrade to SoilProfilecollection
     depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
   } else {
     stop("No horizon data in NASIS component query result.", call.=FALSE)
   }
-  
+
   # add site data to object
   site(f.chorizon) <- f.comp # left-join via coiid
-  
+
   ## TODO: convert all ddply() calls into split() -> lapply() -> do.call('rbind')
-  
+
   # join-in copm strings
   ## 2017-3-13: short-circuts need testing, consider pre-marking mistakes before parsing
   pm <- plyr::ddply(f.copm, 'coiid', .formatcoParentMaterialString, name.sep=' & ')
@@ -97,7 +93,7 @@
 
   # add diagnostic features to SPC
   diagnostic_hz(f.chorizon) <- f.diaghz
-  
+
   # add restrictions to SPC
   # required new setter in aqp SPC object (AGB added 2019/12/23)
   restrictions(f.chorizon) <- f.restrict
@@ -106,7 +102,7 @@
   if(exists('component.hz.problems', envir=soilDB.env))
     if(length(get("component.hz.problems", envir = soilDB.env)) > 0)
       message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=soilDB.env)` for related coiid values")
-  
+
   # set NASIS component specific horizon identifier
   if(!fill & length(filled.ids) == 0) {
     res <- try(hzidname(f.chorizon) <- 'chiid')
@@ -116,20 +112,20 @@
       } else {
         warning("cannot set `chiid` as unique component horizon key -- defaulting to `hzID`")
       }
-    } 
+    }
   } else {
     warning("cannot set `chiid` as unique component horizon key - `NA` introduced by fill=TRUE", call.=F)
   }
-  
+
   # set metadata
   m <- metadata(f.chorizon)
   m$origin <- 'NASIS components'
   metadata(f.chorizon) <- m
-  
+
   # set optional hz designation and texture slots
   hzdesgnname(f.chorizon) <- "hzname"
   hztexclname(f.chorizon) <- "texture"
-  
+
   # done, return SPC
   return(f.chorizon)
 

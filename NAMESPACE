@@ -17,14 +17,14 @@ importFrom(data.table,
            data.table,
            as.data.table)
 
-importFrom(DBI, 
+importFrom(DBI,
   dbGetQuery,
   dbConnect,
   dbSendQuery,
   dbFetch
 )
 
-importFrom(reshape2, 
+importFrom(reshape2,
   dcast,
   melt
 )
@@ -84,7 +84,7 @@ importFrom(aqp,
   restrictions,
   "restrictions<-",
   SoilTextureLevels,
-  hzDepthTests,
+  checkHzDepthLogic,
   munsell2rgb,
   rgb2munsell,
   horizons,
