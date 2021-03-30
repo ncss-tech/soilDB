@@ -8,7 +8,7 @@
 fetchPedonPC(dsn)
 }
 \arguments{
-\item{dsn}{The path to a PedonPC version 5.x database}
+\item{dsn}{The path to a PedonPC version 6.x database}
 }
 \value{
 a SoilProfileCollection class object

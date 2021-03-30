@@ -123,7 +123,7 @@ Extract component tables from NASIS Web Reports
 if (requireNamespace("curl") &
     curl::has_internet() &
     require("aqp") &
-    require("ggplot2") & 
+    require("ggplot2") &
     require("gridExtra")
 ) {
   # query soil components by projectname
@@ -131,26 +131,26 @@ if (requireNamespace("curl") &
     "EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded",
     stringsAsFactors = TRUE)
   test = test$spc
-  
+
   # profile plot
   plot(test)
-  
+
   # convert the data for depth plot
   clay_slice = horizons(slice(test, 0:200 ~ claytotal_l + claytotal_r + claytotal_h))
   names(clay_slice) <- gsub("claytotal_", "", names(clay_slice))
-  
+
   om_slice = horizons(slice(test, 0:200 ~ om_l + om_r + om_h))
   names(om_slice) = gsub("om_", "", names(om_slice))
-  
+
   test2 = rbind(data.frame(clay_slice, var = "clay"),
                 data.frame(om_slice, var = "om")
   )
-  
+
   h = merge(test2, site(test)[c("dmuiid", "coiid", "compname", "comppct_r")],
-            by = "coiid", 
+            by = "coiid",
             all.x = TRUE
   )
-  
+
   # depth plot of clay content by soil component
   gg_comp <- function(x) {
     ggplot(x) +
@@ -164,16 +164,16 @@ if (requireNamespace("curl") &
   }
   g1 <- gg_comp(subset(h, var == "clay"))
   g2 <- gg_comp(subset(h, var == "om"))
-  
+
   grid.arrange(g1, g2)
-  
-  
+
+
   # query cosoilmoist (e.g. water table data) by mukey
   # NA depths are interpreted as (???) with impute=TRUE argument
   x <- get_cosoilmoist_from_NASISWebReport(
     "EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded",
     stringsAsFactors = TRUE)
-  
+
   ggplot(x, aes(x = as.integer(month), y = dept_r, lty = status)) +
     geom_rect(aes(xmin = as.integer(month), xmax = as.integer(month) + 1,
                   ymin = 0, ymax = max(x$depb_r),
@@ -185,10 +185,10 @@ if (requireNamespace("curl") &
     xlab("month") + ylab("depth (cm)") +
     scale_x_continuous(breaks = 1:12, labels = month.abb, name="Month") +
     facet_wrap(~ paste0(compname, ' (', comppct_r , ')')) +
-    ggtitle(paste0(x$nationalmusym[1], 
+    ggtitle(paste0(x$nationalmusym[1],
                    ': Water Table Levels from Component Soil Moisture Month Data'))
-  
-  
+
+
 }
 
 

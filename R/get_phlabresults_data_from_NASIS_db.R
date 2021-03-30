@@ -63,9 +63,6 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
         lapply(x[2:ncol(x)], function(x2) weighted.mean(x2, w = x$hzthk, na.rm =TRUE))
         )})
       )
-    # d.dups_num <- plyr::ddply(d.dups_num, 'phiidref', function(x) {
-    #   sapply(x[2:ncol(x)], function(x2) Hmisc::wtd.mean(x2, weights = x$hzthk, na.rm = TRUE))
-    #   })
 
     char_vars <- names(d.dups)[names(d.dups) %in% c("phiidref", "hzthk") |
                                  sapply(d.dups, function(x) is.character(x) | is.factor(x))]
@@ -79,9 +76,6 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
         )})
       )
 
-    # d.dups_char <- plyr::ddply(d.dups_char, 'phiidref', function(x) {
-    #   sapply(x[2:ncol(x)], function(x2) x2[which.max(x$hzthk)])
-    #   })
     d.dups_char$hzthk <- NULL
 
     num_ph <- names(d.dups)[names(d.dups) %in% c("phiidref", "hzthk") |
@@ -95,9 +89,7 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
         lapply(x[2:ncol(x)], function(x2) -log10(weighted.mean(1/10^x2, weights = x$hzthk, na.rm = TRUE)))
         )})
       )
-    # d.dups_ph <- plyr::ddply(d.dups_ph, 'phiidref', function(x) {
-    #   sapply(x[2:ncol(x)], function(x2) -log10(Hmisc::wtd.mean(1/10^x2, weights = x$hzthk, na.rm = TRUE)))
-    #   })
+
     d.dups_ph$hzthk <- NULL
 
     d.nodups <- merge(d.dups_num, d.dups_char, by  = "phiidref", all.x = TRUE)

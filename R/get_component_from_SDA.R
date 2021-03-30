@@ -902,14 +902,12 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
 
   # optionally test for bad horizonation... flag, and remove
   if (rmHzErrors) {
-    f.chorizon.test <- plyr::ddply(f.chorizon, 'cokey', function(d) {
-      res <- aqp::hzDepthTests(top=d[['hzdept_r']], bottom=d[['hzdepb_r']])
-      return(all(!res))
-    })
+    f.chorizon.test <- aqp::checkHzDepthLogic(f.chorizon, hzdepths = c('hzdept_r', 'hzdepb_r'),
+                                              idname = 'cokey', fast = TRUE)
 
     # which are the good (valid) ones?
-    good.ids <- as.character(f.chorizon.test$cokey[which(f.chorizon.test$hz_logic_pass)])
-    bad.ids  <- as.character(f.chorizon.test$cokey[which(! f.chorizon.test$hz_logic_pass)])
+    good.ids <- as.character(f.chorizon.test$cokey[which(f.chorizon.test$valid)])
+    bad.ids  <- as.character(f.chorizon.test$cokey[which(! f.chorizon.test$valid)])
 
     # keep the good ones
     f.chorizon <- f.chorizon[which(f.chorizon$cokey %in% good.ids), ]
