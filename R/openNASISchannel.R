@@ -13,8 +13,11 @@
     if (!requireNamespace("odbc"))
       stop("package `odbc` is required", call. = FALSE)
     
-    # setup connection local NASIS
-    #suppressWarnings(RODBC::odbcDriverConnect(connection = getOption('soilDB.NASIS.credentials')))
+    # setup connection local NASIS 
+     
+    ## old style connection
+    # suppressWarnings(odbcDriverConnect(connection = getOption('soilDB.NASIS.credentials')))
+    
     credentials <- gsub("^.*\\=(.*)","\\1", strsplit(getOption('soilDB.NASIS.credentials'), ";")[[1]])
     channel <- try(DBI::dbConnect(odbc::odbc(),
                                   DSN = credentials[1],

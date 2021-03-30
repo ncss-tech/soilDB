@@ -17,12 +17,12 @@
 #' @keywords manip
 #' @export get_extended_data_from_pedon_db
 get_extended_data_from_pedon_db <- function(dsn) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+  # must have odbc installed
+  if(!requireNamespace('odbc'))
+    stop('please install the `odbc` package', call.=FALSE)
   
 	# query diagnostic horizons, usually a 1:many relationship with pedons
-	q.diagnostic <- "SELECT peiidref as peiid, dfk.choice as featkind, featdept, featdepb
+	q.diagnostic <- "SELECT peiidref as peiid, featkind, featdept, featdepb
 FROM pediagfeatures
 	ORDER BY pediagfeatures.peiidref, pediagfeatures.featdept;"
 	
@@ -107,8 +107,8 @@ LEFT OUTER JOIN (
 	# get horizon texture modifiers
 	q.hz.texmod <- "SELECT phorizon.peiidref, phorizon.phiid, phtexture.phtiid, phtexturemod.seqnum, texmod 
   FROM 
-	phorizon INNER JOIN phtexture ON phorizon.phiid = phtexture.phiidref 
-	LEFT OUTER JOIN phtexturemod ON phtexture.phtiid = phtexturemod.phtiidref;"
+	((phorizon INNER JOIN phtexture ON phorizon.phiid = phtexture.phiidref) 
+	LEFT OUTER JOIN phtexturemod ON phtexture.phtiid = phtexturemod.phtiidref);"
 
 	
 	# get geomorphic features
@@ -121,26 +121,26 @@ FROM geomorfeattype RIGHT JOIN (geomorfeat RIGHT JOIN ((site INNER JOIN sitegeom
 	q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, classtype, taxonname, taxonkind, seriesstatus, taxpartsize, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, soiltaxedition, osdtypelocflag
   	FROM petaxhistory 
 	ORDER BY petaxhistory.peiidref;"	
-	
+
 	# setup connection to our pedon database
-	channel <- RODBC::odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
+	channel <- DBI::dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
 	
 	# exec queries
-	d.diagnostic <- RODBC::sqlQuery(channel, q.diagnostic, stringsAsFactors=FALSE)
-	d.rf.summary <- RODBC::sqlQuery(channel, q.rf.summary, stringsAsFactors=FALSE)
-	d.hz.texmod <- RODBC::sqlQuery(channel, q.hz.texmod, stringsAsFactors=FALSE)
-	d.geomorph <- RODBC::sqlQuery(channel, q.geomorph, stringsAsFactors=FALSE)
-	d.taxhistory <- RODBC::sqlQuery(channel, q.taxhistory, stringsAsFactors=FALSE)
-	
+	d.diagnostic <- DBI::dbGetQuery(channel, q.diagnostic)
+	d.rf.summary <- DBI::dbGetQuery(channel, q.rf.summary)
+	d.hz.texmod <- DBI::dbGetQuery(channel, q.hz.texmod)
+	d.geomorph <- DBI::dbGetQuery(channel, q.geomorph)
+	d.taxhistory <- DBI::dbGetQuery(channel, q.taxhistory)
+
 	# close connection
-	RODBC::odbcClose(channel)
+	DBI::dbDisconnect(channel)
 
 	## uncode the one that need that here
 	d.diagnostic <- uncode(d.diagnostic)
 	d.hz.texmod <- uncode(d.hz.texmod)
 	d.taxhistory <- uncode(d.taxhistory)
-	d.sitepm <- uncode(d.sitepm)
-	d.structure <- uncode(d.structure)
+	# d.sitepm <- uncode(d.sitepm)
+	# d.structure <- uncode(d.structure)
 	
 	# generate wide-formatted, diagnostic boolean summary
 	d.diag.boolean <- .diagHzLongtoWide(d.diagnostic)

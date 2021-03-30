@@ -24,9 +24,9 @@
 #' @keywords manip
 #' @export get_hz_data_from_pedon_db
 get_hz_data_from_pedon_db <- function(dsn) {
-  # must have RODBC installed
-  if(!requireNamespace('RODBC'))
-    stop('please install the `RODBC` package', call.=FALSE)
+  # must have odbc installed
+  if(!requireNamespace('odbc'))
+    stop('please install the `odbc` package', call.=FALSE)
   
 	q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid as pedon_id, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
   phorizon.claytotest AS clay, IIF(IsNULL(phorizon.silttotest), (100 - (phorizon.sandtotest + phorizon.claytotest)), phorizon.silttotest) AS silt, phorizon.sandtotest AS sand, texture, phfield, phnaf, eff.choice AS effervescence, l.labsampnum, IIF(IsNULL(f.total_frags_pct), 0, f.total_frags_pct) AS total_frags_pct, fragvoltot
@@ -42,12 +42,12 @@ get_hz_data_from_pedon_db <- function(dsn) {
 	LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_detail.domain_id = 1255) AS eff ON phorizon.effclass = eff.choice_id
 	
 	ORDER BY pedon.upedonid, phorizon.hzdept ASC;"
-  
 	# setup connection to our pedon database
-	channel <- RODBC::odbcConnectAccess2007(dsn, readOnlyOptimize=TRUE)
+	channel <- DBI::dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
 	
 	# exec query
-	d <- RODBC::sqlQuery(channel, q, stringsAsFactors=FALSE)
+	d <- DBI::dbGetQuery(channel, q)
+	
 	
 	# test for duplicate horizons: due to bugs in our queries that lead to >1 row/hz
 	hz.tab <- table(d$phiid)
@@ -71,16 +71,19 @@ LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_deta
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_detail.domain_id = 192) AS til ON t.lieutex = til.choice_id);"
 	
 	# exec query
-	d.texture <- RODBC::sqlQuery(channel, q.texture, stringsAsFactors=FALSE)
+	d.texture <- DBI::dbGetQuery(channel, q.texture)
 	
-	# concat multiple textures/horizon into a single record
-	d.texture <- aggregate(texture_class ~ phiid, data=d.texture, FUN=function(x) do.call('paste', as.list(x)))
-	
-	# join
-	d <- join(d, d.texture, by='phiid', type='left')
-	
+  if (nrow(d.texture) > 0) {
+  	# concat multiple textures/horizon into a single record
+  	d.texture <- aggregate(texture_class ~ phiid, data=d.texture, FUN=function(x) do.call('paste', as.list(x)))
+  	
+  }
+
+  # join
+  d <- join(d, d.texture, by='phiid', type='left')
+
 	# close connection
-	RODBC::odbcClose(channel)
+	DBI::dbDisconnect(channel)
 	
 	# done
 	return(d)
