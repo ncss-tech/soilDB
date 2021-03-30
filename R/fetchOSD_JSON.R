@@ -15,10 +15,10 @@
 #'    curl::has_internet()) {
 #'    
 #' series <- c("Musick", "Hector", "Chewacla")
-#' fetchOSD_JSON(series)
+#' get_OSD_JSON(series)
 #' }
 #' }
-fetchOSD_JSON <- function(series,
+get_OSD_JSON <- function(series,
                           base_url = NULL) {
 
   # http://github.com/ncss-tech/SoilKnowledgeBase is default JSON repository path
