@@ -25,7 +25,8 @@
 .get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "site", 
                                                          "pedon", "transect", "component", 
                                                          "vegetation", "project", 
-                                                         "techsoilservice", "legend",
+                                                         "techsoilservice", "area",
+                                                         "soilseries", "legend",
                                                          "mapunit", "datamapunit"),
                                              SS = FALSE) {
   
@@ -184,6 +185,8 @@
       "techsoilservicetext",
       "techsoilservicesite"
     ),
+    area = c("area","areatype"),
+    soilseries = "soilseries",
     legend = c("legend", "ltext", "lmapunit"),
     mapunit = c("mapunit", "correlation", "mutext"),
     datamapunit = "datamapunit"
@@ -198,6 +201,8 @@
                       "vegetation" = TRUE,
                       "project" = TRUE,
                       "techsoilservice" = TRUE, 
+                      "area" = TRUE,
+                      "soilseries" = FALSE,
                       "legend" = TRUE, 
                       "mapunit" = TRUE, 
                       "datamapunit" = TRUE)

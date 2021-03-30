@@ -6,6 +6,7 @@
 f <- read.table(text = "R/fetchNASIS.R
                         R/fetchNASIS_pedons.R
                         R/fetchNASIS_components.R
+                        R/fetchNASISLabData.R
                         R/fetchVegdata.R
                         R/getHzErrorsNASIS.R
                         R/get_RMF_from_NASIS_db.R
@@ -21,18 +22,12 @@ f <- read.table(text = "R/fetchNASIS.R
                         R/get_phlabresults_data_from_NASIS_db.R
                         R/get_projectmapunit_from_NASIS.R
                         R/get_site_data_from_NASIS_db.R
+                        R/get_soilseries_from_NASIS.R
                         R/get_text_notes_from_NASIS_db.R
                         R/get_veg_data_from_NASIS_db.R
                         R/get_vegplot_data_from_NASIS_db.R
                         R/openNASISchannel.R")$V1
-                        # R/dbQueryNASIS.R
-                        # R/get_soilseries_from_NASIS.R
-                        # man/dbConnectNASIS.Rd
-                        # man/dbQueryNASIS.Rd
-                        # man/fetchNASIS.Rd
-                        # man/getHzErrorsNASIS.Rd
-                        # misc/man-deprecated/fetchNASIS.Rd
-                        #
+
 # # you want the version of soilDB you are testing to be installed
 # devtools::install()
 
@@ -65,6 +60,8 @@ test_local_NASIS <- function(SS = FALSE, dsn = NULL) {
         # handle special cases -- all functions tested take an SS argument except local_NASIS_defined
         switch (FUN,
                 "local_NASIS_defined" = try(TESTFUN(dsn = dsn)),
+                "get_soilseries_from_NASIS" = try(TESTFUN(dsn = dsn)),
+                "get_soilseries_from_NASISWebReport" = NULL, 
                 try(TESTFUN(SS = SS, dsn = dsn)) )
       })
     })
