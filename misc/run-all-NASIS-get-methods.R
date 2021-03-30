@@ -90,7 +90,8 @@ nasis_all[which(nasis_all)]
 
 # RUN IF NEEDED:
 dsn <- "misc/testStatic.sqlite"
-createStaticNASIS(dsn = NULL, SS = TRUE, output_path = dsn)
+createStaticNASIS(tables = soilDB:::.get_NASIS_table_name_by_purpose(),
+                  dsn = NULL, SS = TRUE, output_path = dsn)
 
 # test with selected set in SQLite instance
 nasis_static_ss <- test_local_NASIS(SS = TRUE, dsn = dsn)

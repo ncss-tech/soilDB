@@ -6,6 +6,7 @@
 \usage{
 createStaticNASIS(
   tables = NULL,
+  new_names = NULL,
   SS = TRUE,
   dsn = NULL,
   output_path = NULL,
@@ -14,6 +15,8 @@ createStaticNASIS(
 }
 \arguments{
 \item{tables}{Character vector of target tables. Default: \code{NULL} is whatever tables are listed by \code{DBI::dbListTables} for the connection typ being used.}
+
+\item{new_names}{Optional: new table names (should match length of vector of matching \code{tables} in \code{dsn})}
 
 \item{SS}{Logical. Include "selected set" tables (ending with suffix \code{"_View_1"}). Default: \code{TRUE}}
 

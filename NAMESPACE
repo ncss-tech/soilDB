@@ -12,7 +12,8 @@ importFrom("utils", "URLencode", "download.file", "object.size",
 
 importFrom("methods", "slot<-", "as")
 
-importFrom(data.table, 
+importFrom(data.table,
+           rbindlist,
            data.table,
            as.data.table)
 
@@ -38,7 +39,7 @@ importFrom(raster,
   levels
 )
 
-importFrom(plyr, 
+importFrom(plyr,
   ddply,
   llply,
   ldply,
@@ -71,8 +72,8 @@ importFrom(xml2,
 )
 
 
-importFrom(aqp, 
-  "depths<-", 
+importFrom(aqp,
+  "depths<-",
   "site<-",
   site,
   idname,
@@ -83,7 +84,7 @@ importFrom(aqp,
   restrictions,
   "restrictions<-",
   SoilTextureLevels,
-  hzDepthTests, 
+  hzDepthTests,
   munsell2rgb,
   rgb2munsell,
   horizons,

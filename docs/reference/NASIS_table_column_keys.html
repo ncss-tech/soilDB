@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a memory or file-based instance of NASIS database — createStaticNASIS • soilDB</title>
+<title>NASIS 7 Tables, Columns and Foreign Keys — NASIS_table_column_keys • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Create a memory or file-based instance of NASIS database — createStaticNASIS" />
-<meta property="og:description" content="Create a memory or file-based instance of NASIS database for selected
-tables." />
+<meta property="og:title" content="NASIS 7 Tables, Columns and Foreign Keys — NASIS_table_column_keys" />
+<meta property="og:description" content="This dataset contains NASIS 7 Tables, Columns and Foreign Keys" />
 
 
 
@@ -112,53 +111,17 @@ tables." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a memory or file-based instance of NASIS database</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/createStaticNASIS.R'><code>R/createStaticNASIS.R</code></a></small>
-    <div class="hidden name"><code>createStaticNASIS.Rd</code></div>
+    <h1>NASIS 7 Tables, Columns and Foreign Keys</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/soilDB-package.R'><code>R/soilDB-package.R</code></a></small>
+    <div class="hidden name"><code>NASIS_table_column_keys.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create a memory or file-based instance of NASIS database for selected
-tables.</p>
+    <p>This dataset contains NASIS 7 Tables, Columns and Foreign Keys</p>
     </div>
 
-    <pre class="usage"><span class='fu'>createStaticNASIS</span><span class='op'>(</span>
-  tables <span class='op'>=</span> <span class='cn'>NULL</span>,
-  SS <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  dsn <span class='op'>=</span> <span class='cn'>NULL</span>,
-  output_path <span class='op'>=</span> <span class='cn'>NULL</span>,
-  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>tables</th>
-      <td><p>Character vector of target tables. Default: <code>NULL</code> is whatever tables are listed by <code><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>DBI::dbListTables</a></code> for the connection typ being used.</p></td>
-    </tr>
-    <tr>
-      <th>SS</th>
-      <td><p>Logical. Include "selected set" tables (ending with suffix <code>"_View_1"</code>). Default: <code>TRUE</code></p></td>
-    </tr>
-    <tr>
-      <th>dsn</th>
-      <td><p>Optional: path to SQLite database containing NASIS table structure; Default: <code>NULL</code></p></td>
-    </tr>
-    <tr>
-      <th>output_path</th>
-      <td><p>Optional: path to new/existing SQLite database to write tables to. Default: <code>NULL</code> returns table results as named list.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Show error messages from attempts to dump individual tables? Default <code>FALSE</code></p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A named list of results from calling <code>dbQueryNASIS</code> for all
-columns in each NASIS table.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

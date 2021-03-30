@@ -107,7 +107,11 @@ uncode <- function(df,
   }
 
   # unique set of possible columns that will need replacement
-  possibleReplacements <- unique(metadata$ColumnPhysicalName)
+  metadata_col <- names(metadata)[grep("ColumnPhysicalName", names(metadata), ignore.case = TRUE)]
+  name_col <- names(metadata)[grep("ChoiceName", names(metadata), ignore.case = TRUE)]
+  value_col <- names(metadata)[grep("ChoiceValue", names(metadata), ignore.case = TRUE)]
+  label_col <- names(metadata)[grep("ChoiceLabel", names(metadata), ignore.case = TRUE)]
+  possibleReplacements <- unique(metadata[[metadata_col]])
 
   # names of raw data
   nm <- names(df)
@@ -118,26 +122,26 @@ uncode <- function(df,
   for (i in columnsToWorkOn.idx){
 
     # get the current metadata
-    sub <- metadata[metadata$ColumnPhysicalName %in% nm[i], ]
+    sub <- metadata[metadata[[metadata_col]] %in% nm[i], ]
 
     # NASIS or LIMS
     if (db %in% c("NASIS", "LIMS")) {
       if (invert == FALSE){
         # replace codes with values
-        df[, i] <- factor(df[, i], levels = sub$ChoiceValue, labels = sub$ChoiceName)
+        df[, i] <- factor(df[, i], levels = sub[[value_col]], labels = sub[[name_col]])
       } else {
         # replace values with codes
-        df[, i] <- factor(df[, i], levels = sub$ChoiceName, labels = sub$ChoiceValue)}
+        df[, i] <- factor(df[, i], levels = sub[[name_col]], labels = sub[[value_col]])}
     }
 
     # SDA
     if (db == "SDA") {
       if (invert == FALSE){
         # replace codes with values
-        df[, i] <- factor(df[, i], levels = sub$ChoiceLabel)
+        df[, i] <- factor(df[, i], levels = sub[[label_col]])
       } else {
         # replace values with codes
-        df[, i] <- factor(df[, i], levels = sub$ChoiceLabel, labels = sub$ChoiceValue)
+        df[, i] <- factor(df[, i], levels = sub[[label_col]], labels = sub[[value_col]])
         }
       }
     }
