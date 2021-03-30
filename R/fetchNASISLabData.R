@@ -27,8 +27,8 @@ fetchNASISLabData <- function(SS = TRUE, dsn = NULL) {
 			stop('Local NASIS ODBC connection has not been setup. Please see the `setup_ODBC_local_NASIS.pdf` document included with this package.')
 
 	# 1. load data in pieces, results are DF objects
-	s <- get_labpedon_data_from_NASIS_db(SS)
-	h <- get_lablayer_data_from_NASIS_db(SS)
+	s <- get_labpedon_data_from_NASIS_db(SS = SS, dsn = dsn)
+	h <- get_lablayer_data_from_NASIS_db(SS = SS, dsn = dsn)
 
   # stop if selected set is not loaded
   if (nrow(h) == 0 | nrow(s) == 0)
