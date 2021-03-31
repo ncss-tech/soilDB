@@ -32,8 +32,8 @@ soilDB 2.6.1
 
 #### NASIS
 
--   all NASIS queries now use {DBI} w/ {odbc} or {RSQLite} as the
-    back-end
+-   all NASIS queries now use {DBI}, tested to work with {odbc} or
+    {RSQLite} drivers; replacing {RODBC}
     -   Install required R packages with
         `install.packages(c("DBI","odbc","RSQLite"), dependencies = TRUE)`
 -   new methods for connecting to NASIS and querying NASIS data allow
@@ -49,6 +49,11 @@ soilDB 2.6.1
     on network error; empty results are an empty `data.frame()`
 -   `fetchSDA_spatial` can return STATSGO `gsmmupolygon` or Soil Survey
     Area `sapolygon` data; and can join to the `legend` table
+
+#### MS Access
+
+-   AKSite, Montana RangeDB, and PedonPC 6.x get and fetch methods now
+    use {DBI}+{odbc}
 
 #### Other APIs
 
@@ -68,22 +73,6 @@ Functions by Data Source
     -   [`SDA_spatialQuery`](http://ncss-tech.github.io/soilDB/docs/reference/SDA_spatialQuery.html)
 -   SSURGO Local Geodatabases
     -   [`fetchGDB`](http://ncss-tech.github.io/soilDB/docs/reference/fetchGDB.html)
--   NASIS local database
-    -   [`fetchNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/fetchNASIS.html)
-    -   <span style="color:red">**NEW:**</span> Argument `dsn` to
-        specify path to connect to alternate (SQLite) data sources with
-        NASIS schema
-    -   <span
-        style="color:red">**NEW:**</span>[`dbConnectNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/dbConnectNASIS.html)
-        (alias `NASIS`) - create a *DBIConnection* to local NASIS
-        database
-    -   <span
-        style="color:red">**NEW:**</span>[`dbQueryNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/dbQueryNASIS.html) -
-        query NASIS local database (and close connection with
-        `close=TRUE`)
-    -   <span
-        style="color:red">**NEW:**</span>[`createStaticNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/createStaticNASIS.html) -
-        create list of NASIS tables or write to SQLite
 -   ROSETTA
     -   <span style="color:red">**NEW:**</span>
         [`ROSETTA`](http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html)
@@ -107,6 +96,22 @@ Functions by Data Source
     -   [`SCAN_SNOTEL_metadata`](http://ncss-tech.github.io/soilDB/docs/reference/SCAN_SNOTEL_metadata.html)
 -   Henry Mount Soil and Water Database
     -   [`fetchHenry`](http://ncss-tech.github.io/soilDB/docs/reference/fetchHenry.html)
+-   NASIS local database
+    -   [`fetchNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/fetchNASIS.html)
+    -   <span style="color:red">**NEW:**</span> Argument `dsn` to
+        specify path to connect to alternate (SQLite) data sources with
+        NASIS schema
+    -   <span
+        style="color:red">**NEW:**</span>[`dbConnectNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/dbConnectNASIS.html)
+        (alias `NASIS`) - create a *DBIConnection* to local NASIS
+        database
+    -   <span
+        style="color:red">**NEW:**</span>[`dbQueryNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/dbQueryNASIS.html) -
+        query NASIS local database (and close connection with
+        `close=TRUE`)
+    -   <span
+        style="color:red">**NEW:**</span>[`createStaticNASIS`](http://ncss-tech.github.io/soilDB/docs/reference/createStaticNASIS.html) -
+        create list of NASIS tables or write to SQLite
 -   SoilGrids
     -   [`fetchSoilGrids`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSoilGrids.html)
 
@@ -158,7 +163,7 @@ Examples
     res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
     print(res$fig)
 
-<img src="https://i.imgur.com/mIv4nCE.png" width="1056" />
+<img src="https://i.imgur.com/gl2p9OV.png" width="1056" />
 
 ### Make Profile Sketches
 
@@ -172,7 +177,7 @@ Examples
       width = 0.2
     )
 
-<img src="https://i.imgur.com/yFCpCQn.png" width="1344" />
+<img src="https://i.imgur.com/vVPRWm8.png" width="1344" />
 
 ### Identify Tabular “Siblings”
 
@@ -202,7 +207,7 @@ Examples
       cex.names = 1
     )
 
-<img src="https://i.imgur.com/Gpv6smx.png" width="1344" />
+<img src="https://i.imgur.com/vWYaADc.png" width="1344" />
 
 Dependency Graph
 ----------------
