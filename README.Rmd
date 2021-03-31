@@ -25,6 +25,9 @@ remotes::install_github("ncss-tech/soilDB", dependencies = FALSE, upgrade = FALS
 ## Website
  - http://ncss-tech.github.io/AQP/
 
+## Citation
+Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: Soil Database Interface. R package version 2.6.1. https://CRAN.R-project.org/package=soilDB
+
 ## soilDB `r packageVersion("soilDB")`
 
 ### Notices on Database Interfaces
