@@ -16,7 +16,7 @@
 #'
 #' @note The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
 #'
-#' @details \code{aoi} should be specified as either a \code{Spatial*}, \code{sf}, \code{sfc} or \code{bbox} object or a \code{list} containing:
+#' @details \code{aoi} should be specified as either a \code{Spatial*}, \code{sf}, \code{sfc}, \code{bbox} object, or a \code{list} containing:
 #'
 #' \describe{
 #'   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
@@ -39,8 +39,9 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
   # sanity check: db name
   db <- match.arg(db)
 
+  ## TODO: someday add 'wk_rct'
   # sanity check: aoi specification
-  if(!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox'))) { # TODO:  'wk_rct'?
+  if(!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox'))) {
     stop('invalid `aoi` specification', call. = FALSE)
   }
 
@@ -117,10 +118,14 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
   if(inherits(dl.try, 'try-error')) {
    stop('bad WCS request', call. = FALSE)
   }
-
+  
+  ## TODO: suppressWarnings() used to quiet proj4string noise until we have a better solution
+  #        https://stackoverflow.com/questions/63727886/proj4-to-proj6-upgrade-and-discarded-datum-warnings
+  #        also, the source files should be re-made with updated CRS info in the GeoTiff metadata
+  
   # load pointer to file and return
   r <- try(
-    raster(tf),
+    suppressWarnings(raster(tf)),
     silent = TRUE
   )
 

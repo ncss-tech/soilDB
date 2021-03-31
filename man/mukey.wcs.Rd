@@ -22,7 +22,7 @@ mukey.wcs(aoi, db = c("gnatsgo", "gssurgo"), res = 30, quiet = FALSE)
 Download chunks of the gNATSGO or gSSURGO map unit key grid via bounding-box from the SoilWeb WCS.
 }
 \details{
-\code{aoi} should be specified as either a \code{Spatial*}, \code{sf}, \code{sfc} or \code{bbox} object or a \code{list} containing:
+\code{aoi} should be specified as either a \code{Spatial*}, \code{sf}, \code{sfc}, \code{bbox} object, or a \code{list} containing:
 
 \describe{
 \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
