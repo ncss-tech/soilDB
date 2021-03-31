@@ -1,8 +1,9 @@
-# soilDB 2.6.1 (2021-03-22)
- * Connections to the local NASIS database now use `DBI` and `odbc` instead of `RODBC` 
- * Two new methods `dbConnectNASIS` and `dbQueryNASIS` facilitate access with read-only credentials, submission of queries/fetching of results, and closing the DBI connection upon completion
- * Use `dsn` argument to specify a local "static" SQLite file containing NASIS tables
-   * Default argument `dsn = NULL` uses `"nasis_local"` [ODBC connection](http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html) to a local NASIS SQL Server instance 
+# soilDB 2.6.1 (2021-03-30)
+ * Connections to local NASIS and various MS Access databases now use `DBI` and `odbc`, replacing `RODBC`
+ * New methods `dbConnectNASIS` and `dbQueryNASIS` for NASIS access with read-only credentials, fetching query results, and closing the _DBIConnection_ upon completion
+ * NASIS methods use `dsn` argument to specify a local "static" SQLite file containing NASIS tables, or custom _DBIConnection_ to a database with NASIS schema
+   * Default `dsn = NULL` uses `"nasis_local"` [ODBC connection](http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html) to local NASIS SQL Server 
+ * Horizon depth logic checking is now done with `aqp::checkHzDepthLogic()`, powered by {data.table}
    
 # soilDB 2.6.0 (2021-02-18)
  * `OSDquery` gets a new argument (`everything`) for searching the entire document
