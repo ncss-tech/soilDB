@@ -96,7 +96,7 @@
 <h4 class="hasAnchor">
 <a href="#nasis" class="anchor"></a>NASIS</h4>
 <ul>
-<li>all NASIS queries now use {DBI} w/ {odbc} or {RSQLite} as the back-end
+<li>all NASIS queries now use {DBI}, tested to work with {odbc} or {RSQLite} drivers; replacing {RODBC}
 <ul>
 <li>Install required R packages with <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages(c("DBI","odbc","RSQLite"), dependencies = TRUE)</a></code>
 </li>
@@ -118,6 +118,13 @@
 </li>
 <li>
 <code>fetchSDA_spatial</code> can return STATSGO <code>gsmmupolygon</code> or Soil Survey Area <code>sapolygon</code> data; and can join to the <code>legend</code> table</li>
+</ul>
+</div>
+<div id="ms-access" class="section level4">
+<h4 class="hasAnchor">
+<a href="#ms-access" class="anchor"></a>MS Access</h4>
+<ul>
+<li>AKSite, Montana RangeDB, and PedonPC 6.x get and fetch methods now use {DBI}+{odbc}</li>
 </ul>
 </div>
 <div id="other-apis" class="section level4">
@@ -146,19 +153,6 @@
 <li>SSURGO Local Geodatabases
 <ul>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchGDB.html"><code>fetchGDB</code></a></li>
-</ul>
-</li>
-<li>NASIS local database
-<ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchNASIS.html"><code>fetchNASIS</code></a></li>
-<li>
-<span style="color:red"><strong>NEW:</strong></span> Argument <code>dsn</code> to specify path to connect to alternate (SQLite) data sources with NASIS schema</li>
-<li>
-<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/docs/reference/dbConnectNASIS.html"><code>dbConnectNASIS</code></a> (alias <code>NASIS</code>) - create a <em>DBIConnection</em> to local NASIS database</li>
-<li>
-<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/docs/reference/dbQueryNASIS.html"><code>dbQueryNASIS</code></a> - query NASIS local database (and close connection with <code>close=TRUE</code>)</li>
-<li>
-<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/docs/reference/createStaticNASIS.html"><code>createStaticNASIS</code></a> - create list of NASIS tables or write to SQLite</li>
 </ul>
 </li>
 <li>ROSETTA
@@ -201,6 +195,19 @@
 <li>Henry Mount Soil and Water Database
 <ul>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchHenry.html"><code>fetchHenry</code></a></li>
+</ul>
+</li>
+<li>NASIS local database
+<ul>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchNASIS.html"><code>fetchNASIS</code></a></li>
+<li>
+<span style="color:red"><strong>NEW:</strong></span> Argument <code>dsn</code> to specify path to connect to alternate (SQLite) data sources with NASIS schema</li>
+<li>
+<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/docs/reference/dbConnectNASIS.html"><code>dbConnectNASIS</code></a> (alias <code>NASIS</code>) - create a <em>DBIConnection</em> to local NASIS database</li>
+<li>
+<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/docs/reference/dbQueryNASIS.html"><code>dbQueryNASIS</code></a> - query NASIS local database (and close connection with <code>close=TRUE</code>)</li>
+<li>
+<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/docs/reference/createStaticNASIS.html"><code>createStaticNASIS</code></a> - create list of NASIS tables or write to SQLite</li>
 </ul>
 </li>
 <li>SoilGrids
@@ -265,7 +272,7 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># viz of hillslope position, from SSURGO component records</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>res &lt;-<span class="st"> </span><span class="kw">vizHillslopePosition</span>(s<span class="op">$</span>hillpos, <span class="dt">annotation.cex =</span> <span class="fl">0.9</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="kw">print</span>(res<span class="op">$</span>fig)</span></code></pre></div>
-<p><img src="https://i.imgur.com/mIv4nCE.png" width="1056"></p>
+<p><img src="https://i.imgur.com/gl2p9OV.png" width="1056"></p>
 </div>
 <div id="make-profile-sketches" class="section level3">
 <h3 class="hasAnchor">
@@ -279,7 +286,7 @@
 <span id="cb6-7"><a href="#cb6-7"></a>  <span class="dt">axis.line.offset =</span> <span class="fl">-0.1</span>,</span>
 <span id="cb6-8"><a href="#cb6-8"></a>  <span class="dt">width =</span> <span class="fl">0.2</span></span>
 <span id="cb6-9"><a href="#cb6-9"></a>)</span></code></pre></div>
-<p><img src="https://i.imgur.com/yFCpCQn.png" width="1344"></p>
+<p><img src="https://i.imgur.com/vVPRWm8.png" width="1344"></p>
 </div>
 <div id="identify-tabular-siblings" class="section level3">
 <h3 class="hasAnchor">
@@ -310,7 +317,7 @@
 <span id="cb8-12"><a href="#cb8-12"></a>  <span class="dt">cex.taxon.labels =</span> <span class="dv">1</span>,</span>
 <span id="cb8-13"><a href="#cb8-13"></a>  <span class="dt">cex.names =</span> <span class="dv">1</span></span>
 <span id="cb8-14"><a href="#cb8-14"></a>)</span></code></pre></div>
-<p><img src="https://i.imgur.com/Gpv6smx.png" width="1344"></p>
+<p><img src="https://i.imgur.com/vWYaADc.png" width="1344"></p>
 </div>
 </div>
 <div id="dependency-graph" class="section level2">

@@ -135,7 +135,7 @@ structure; Default: <code>NULL</code></p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>DBIConnection</code> object, as returned by
-<code><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>DBI::dbConnect()</a></code>.</p>
+<code><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>DBI::dbConnect()</a></code>. If <code>dsn</code> is a <code>DBIConnection</code>, the attribute <code>isUserDefined</code> of the result is set to <code>TRUE</code>. If the <code>DBIConnection</code> is created by the internal NASIS connection process, <code>isUserDefined</code> is set to <code>FALSE.</code></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

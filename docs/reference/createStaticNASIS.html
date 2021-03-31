@@ -124,6 +124,7 @@ tables.</p>
 
     <pre class="usage"><span class='fu'>createStaticNASIS</span><span class='op'>(</span>
   tables <span class='op'>=</span> <span class='cn'>NULL</span>,
+  new_names <span class='op'>=</span> <span class='cn'>NULL</span>,
   SS <span class='op'>=</span> <span class='cn'>TRUE</span>,
   dsn <span class='op'>=</span> <span class='cn'>NULL</span>,
   output_path <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -136,6 +137,10 @@ tables.</p>
     <tr>
       <th>tables</th>
       <td><p>Character vector of target tables. Default: <code>NULL</code> is whatever tables are listed by <code><a href='https://dbi.r-dbi.org/reference/dbListTables.html'>DBI::dbListTables</a></code> for the connection typ being used.</p></td>
+    </tr>
+    <tr>
+      <th>new_names</th>
+      <td><p>Optional: new table names (should match length of vector of matching <code>tables</code> in <code>dsn</code>)</p></td>
     </tr>
     <tr>
       <th>SS</th>

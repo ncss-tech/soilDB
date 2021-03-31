@@ -114,19 +114,20 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="soildb-261-2021-03-22" class="section level1">
+    <div id="soildb-261-2021-03-30" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.1">
-<a href="#soildb-261-2021-03-22" class="anchor"></a>soilDB 2.6.1 (2021-03-22)<small> Unreleased </small>
+<a href="#soildb-261-2021-03-30" class="anchor"></a>soilDB 2.6.1 (2021-03-30)<small> Unreleased </small>
 </h1>
 <ul>
-<li>Connections to the local NASIS database now use <code>DBI</code> and <code>odbc</code> instead of <code>RODBC</code>
+<li>Connections to local NASIS and various MS Access databases now use <code>DBI</code> and <code>odbc</code>, replacing <code>RODBC</code>
 </li>
-<li>Two new methods <code>dbConnectNASIS</code> and <code>dbQueryNASIS</code> facilitate access with read-only credentials, submission of queries/fetching of results, and closing the DBI connection upon completion</li>
-<li>Use <code>dsn</code> argument to specify a local “static” SQLite file containing NASIS tables
+<li>New methods <code>dbConnectNASIS</code> and <code>dbQueryNASIS</code> for NASIS access with read-only credentials, fetching query results, and closing the <em>DBIConnection</em> upon completion</li>
+<li>NASIS methods use <code>dsn</code> argument to specify a local “static” SQLite file containing NASIS tables, or custom <em>DBIConnection</em> to a database with NASIS schema
 <ul>
-<li>Default argument <code>dsn = NULL</code> uses <code>"nasis_local"</code> <a href="http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html">ODBC connection</a> to a local NASIS SQL Server instance</li>
+<li>Default <code>dsn = NULL</code> uses <code>"nasis_local"</code> <a href="http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html">ODBC connection</a> to local NASIS SQL Server</li>
 </ul>
 </li>
+<li>Horizon depth logic checking is now done with <code><a href="https://rdrr.io/pkg/aqp/man/checkHzDepthLogic.html">aqp::checkHzDepthLogic()</a></code>, powered by {data.table}</li>
 </ul>
 </div>
     <div id="soildb-260-2021-02-18" class="section level1">

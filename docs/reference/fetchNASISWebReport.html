@@ -252,7 +252,7 @@ inserted into a SQL WHERE clause (default: <code>NA</code>)</p></td>
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
     <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;</span>
     <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/ncss-tech/aqp'>"aqp"</a></span><span class='op'>)</span> <span class='op'>&amp;</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span><span class='op'>)</span> <span class='op'>&amp;</span> 
+    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span><span class='op'>)</span> <span class='op'>&amp;</span>
     <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"gridExtra"</span><span class='op'>)</span>
 <span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># query soil components by projectname</span>
@@ -260,26 +260,26 @@ inserted into a SQL WHERE clause (default: <code>NA</code>)</p></td>
     <span class='st'>"EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"</span>,
     stringsAsFactors <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
   <span class='va'>test</span> <span class='op'>=</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>spc</span>
-  
+
   <span class='co'># profile plot</span>
   <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>)</span>
-  
+
   <span class='co'># convert the data for depth plot</span>
   <span class='va'>clay_slice</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/horizons.html'>horizons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/slice-methods.html'>slice</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>200</span> <span class='op'>~</span> <span class='va'>claytotal_l</span> <span class='op'>+</span> <span class='va'>claytotal_r</span> <span class='op'>+</span> <span class='va'>claytotal_h</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span><span class='op'>(</span><span class='va'>clay_slice</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"claytotal_"</span>, <span class='st'>""</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span><span class='op'>(</span><span class='va'>clay_slice</span><span class='op'>)</span><span class='op'>)</span>
-  
+
   <span class='va'>om_slice</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/horizons.html'>horizons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/slice-methods.html'>slice</a></span><span class='op'>(</span><span class='va'>test</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>200</span> <span class='op'>~</span> <span class='va'>om_l</span> <span class='op'>+</span> <span class='va'>om_r</span> <span class='op'>+</span> <span class='va'>om_h</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span><span class='op'>(</span><span class='va'>om_slice</span><span class='op'>)</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"om_"</span>, <span class='st'>""</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/names.html'>names</a></span><span class='op'>(</span><span class='va'>om_slice</span><span class='op'>)</span><span class='op'>)</span>
-  
+
   <span class='va'>test2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>clay_slice</span>, var <span class='op'>=</span> <span class='st'>"clay"</span><span class='op'>)</span>,
                 <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>om_slice</span>, var <span class='op'>=</span> <span class='st'>"om"</span><span class='op'>)</span>
   <span class='op'>)</span>
-  
+
   <span class='va'>h</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span><span class='op'>(</span><span class='va'>test2</span>, <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/site.html'>site</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>)</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"dmuiid"</span>, <span class='st'>"coiid"</span>, <span class='st'>"compname"</span>, <span class='st'>"comppct_r"</span><span class='op'>)</span><span class='op'>]</span>,
-            by <span class='op'>=</span> <span class='st'>"coiid"</span>, 
+            by <span class='op'>=</span> <span class='st'>"coiid"</span>,
             all.x <span class='op'>=</span> <span class='cn'>TRUE</span>
   <span class='op'>)</span>
-  
+
   <span class='co'># depth plot of clay content by soil component</span>
   <span class='va'>gg_comp</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>+</span>
@@ -293,16 +293,16 @@ inserted into a SQL WHERE clause (default: <code>NA</code>)</p></td>
   <span class='op'>}</span>
   <span class='va'>g1</span> <span class='op'>&lt;-</span> <span class='fu'>gg_comp</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html'>subset</a></span><span class='op'>(</span><span class='va'>h</span>, <span class='va'>var</span> <span class='op'>==</span> <span class='st'>"clay"</span><span class='op'>)</span><span class='op'>)</span>
   <span class='va'>g2</span> <span class='op'>&lt;-</span> <span class='fu'>gg_comp</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html'>subset</a></span><span class='op'>(</span><span class='va'>h</span>, <span class='va'>var</span> <span class='op'>==</span> <span class='st'>"om"</span><span class='op'>)</span><span class='op'>)</span>
-  
+
   <span class='fu'><a href='https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html'>grid.arrange</a></span><span class='op'>(</span><span class='va'>g1</span>, <span class='va'>g2</span><span class='op'>)</span>
-  
-  
+
+
   <span class='co'># query cosoilmoist (e.g. water table data) by mukey</span>
   <span class='co'># NA depths are interpreted as (???) with impute=TRUE argument</span>
   <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>get_cosoilmoist_from_NASISWebReport</span><span class='op'>(</span>
     <span class='st'>"EVAL - MLRA 111A - Ross silt loam, 0 to 2 percent slopes, frequently flooded"</span>,
     stringsAsFactors <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-  
+
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>month</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='va'>dept_r</span>, lty <span class='op'>=</span> <span class='va'>status</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>geom_rect</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>xmin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>month</span><span class='op'>)</span>, xmax <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>month</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span>,
                   ymin <span class='op'>=</span> <span class='fl'>0</span>, ymax <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/max.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>depb_r</span><span class='op'>)</span>,
@@ -314,10 +314,10 @@ inserted into a SQL WHERE clause (default: <code>NA</code>)</p></td>
     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='st'>"month"</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span><span class='op'>(</span><span class='st'>"depth (cm)"</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span><span class='op'>(</span>breaks <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>, labels <span class='op'>=</span> <span class='va'>month.abb</span>, name<span class='op'>=</span><span class='st'>"Month"</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='va'>compname</span>, <span class='st'>' ('</span>, <span class='va'>comppct_r</span> , <span class='st'>')'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>nationalmusym</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, 
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>nationalmusym</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,
                    <span class='st'>': Water Table Levels from Component Soil Moisture Month Data'</span><span class='op'>)</span><span class='op'>)</span>
-  
-  
+
+
 <span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: gridExtra</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: 'gridExtra'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:aqp':</span>
