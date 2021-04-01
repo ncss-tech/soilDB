@@ -65,7 +65,12 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
     # create bbox around sf/sfc/bbox, create simple feature collection, cast to Spatial
     p <- sf::as_Spatial(sf::st_as_sfc(sf::st_bbox(obj)))
     rm(obj)
-
+    
+  } else if(inherits(obj, 'RasterLayer'))  {
+    
+    p <- as(raster::extent(obj), 'SpatialPolygons')
+    proj4string(p) <- raster::crs(obj)
+      
   } else if(inherits(obj, 'Spatial'))  {
     # note: the spatial inherits method will bug out with a bbox, so it must come second
 
