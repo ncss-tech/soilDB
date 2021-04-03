@@ -25,6 +25,13 @@ Website
 
 -   <a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a>
 
+Citation
+--------
+
+Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021).
+soilDB: Soil Database Interface. R package version 2.6.1.
+<a href="https://CRAN.R-project.org/package=soilDB" class="uri">https://CRAN.R-project.org/package=soilDB</a>
+
 soilDB 2.6.1
 ------------
 
@@ -163,7 +170,7 @@ Examples
     res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
     print(res$fig)
 
-<img src="https://i.imgur.com/gl2p9OV.png" width="1056" />
+<img src="https://i.imgur.com/DFWYkc9.png" width="1056" />
 
 ### Make Profile Sketches
 
@@ -177,7 +184,7 @@ Examples
       width = 0.2
     )
 
-<img src="https://i.imgur.com/vVPRWm8.png" width="1344" />
+<img src="https://i.imgur.com/UVvfhNP.png" width="1344" />
 
 ### Identify Tabular “Siblings”
 
@@ -207,7 +214,7 @@ Examples
       cex.names = 1
     )
 
-<img src="https://i.imgur.com/vWYaADc.png" width="1344" />
+<img src="https://i.imgur.com/6iKiaKd.png" width="1344" />
 
 Dependency Graph
 ----------------
