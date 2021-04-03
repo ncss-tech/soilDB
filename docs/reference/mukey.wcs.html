@@ -127,7 +127,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>aoi</th>
-      <td><p>area of interest (AOI) defined using a <code>Spatial*</code>, a <code>sf</code>, <code>sfc</code> or <code>bbox</code> object or a <code>list</code>, see details</p></td>
+      <td><p>area of interest (AOI) defined using either a <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code> or <code>bbox</code> object, or a <code>list</code>, see details</p></td>
     </tr>
     <tr>
       <th>db</th>
@@ -148,7 +148,7 @@
     <p><code>raster</code> object containing indexed map unit keys and associated raster attribute table</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>aoi</code> should be specified as either a <code>Spatial*</code>, <code>sf</code>, <code>sfc</code> or <code>bbox</code> object or a <code>list</code> containing:</p>
+    <p><code>aoi</code> should be specified as one of: <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code>, <code>bbox</code> object, or a <code>list</code> containing:</p>
 <dl>
 <dt><code>aoi</code></dt><dd><p>bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)</p></dd>
 <dt><code>crs</code></dt><dd><p>coordinate reference system of BBOX, e.g. '+init=epsg:4326'</p></dd>
