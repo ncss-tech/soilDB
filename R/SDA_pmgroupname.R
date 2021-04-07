@@ -164,9 +164,9 @@ get_SDA_pmgroupname <- function(areasymbols = NULL, mukeys = NULL, simplify = TR
                 q <- sprintf(
                         "SELECT
                      sacatalog.areasymbol AS areasymbol,
-                     mapunit.mukey AS mukey,
-                     mapunit.musym AS musym,
-                     mapunit.muname AS muname,
+                     mu.mukey AS mukey,
+                     mu.musym AS musym,
+                     mu.muname AS muname,
                      compname,
                      comppct_r,
                      pmgroupname
@@ -176,7 +176,7 @@ get_SDA_pmgroupname <- function(areasymbols = NULL, mukeys = NULL, simplify = TR
                      INNER JOIN mapunit mu ON mu.lkey = l.lkey AND %s
                      INNER JOIN component AS c ON c.mukey = mu.mukey AND c.cokey =
                      (SELECT TOP 1 c1.cokey FROM component AS c1
-                     INNER JOIN mapunit AS mu1 ON c1.mukey=mu1.mukey AND c1.mukey=mapunit.mukey ORDER BY c1.comppct_r DESC, c1.cokey )
+                     INNER JOIN mapunit AS mu1 ON c1.mukey=mu1.mukey AND c1.mukey=mu.mukey ORDER BY c1.comppct_r DESC, c1.cokey )
                      INNER JOIN copmgrp ON copmgrp.cokey=c.cokey",
                         where_clause
                 )
