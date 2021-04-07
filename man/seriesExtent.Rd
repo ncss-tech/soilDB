@@ -14,10 +14,10 @@ seriesExtent(s, type = c("vector", "raster"), timeout = 60)
 \item{timeout}{time that we are willing to wait for a response, in seconds}
 }
 \description{
-This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{SpatialPolygonsDataFrame} object) or gridded representation of area proportion falling within 800m cells (\code{raster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system.
+This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{SpatialPolygonsDataFrame} object) or gridded representation of area proportion falling within 800m cells (\code{raster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (EPSG 6350).
 }
 \note{
-This function requires the \code{rgdal} package. Warning messages about the proj4 CRS specification may be printed depending on your version of \code{rgdal}. This should be resolved soon.
+This function requires the \code{rgdal} package.
 }
 \examples{
   

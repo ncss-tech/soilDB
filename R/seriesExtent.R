@@ -1,40 +1,7 @@
 
-## this isn't going to work anymore, unless you have a GM API key
-# # get the series extent from SEE pre-cached GeoJSON data and plot on Google Maps
-# seriesExtentAsGmap <- function(s, timeout=60, exp=1.25) {
-#   .Deprecated(msg = 'Google API no longer accepting requests without an API key. Consider using mapview::mapview().')
-#   
-#   return(FALSE)
-#   
-#   if(!requireNamespace('dismo', quietly=TRUE)  & !requireNamespace('rgdal', quietly=TRUE))
-#     stop('please install the `rgdal` and `dismo` packages', call.=FALSE)
-#   
-# 	# load series extent data in WGS84 GCS
-# 	x <- seriesExtent(s, timeout)
-# 	
-# 	# make extent object around sites, in geographic coordinates
-# 	e <- raster::extent(sp::spTransform(x, sp::CRS('+proj=longlat')))
-# 	
-# 	# grab ref. to google maps
-# 	g <- dismo::gmap(e, exp=exp)
-# 	
-# 	# convert our points to Mercatur projection
-# 	x.M <- sp::spTransform(x, sp::CRS('+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs'))
-# 	
-# 	# plot google map, and our point of interest
-# 	# note: have to use special plot methods
-# 	# http://stackoverflow.com/questions/38818682/self-authored-package-load-plot-method-for-spatialpolygonsdataframe
-# 	raster::plot(g, interpolate=TRUE)
-# 	sp::plot(x.M, col=rgb(1, 0, 0, alpha=0.5), add=TRUE)
-# }
-
-
-
-
-
 #' @title Retrieve Soil Series Extent Maps from SoilWeb
 #' 
-#' @description This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{SpatialPolygonsDataFrame} object) or gridded representation of area proportion falling within 800m cells (\code{raster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system.
+#' @description This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{SpatialPolygonsDataFrame} object) or gridded representation of area proportion falling within 800m cells (\code{raster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (EPSG 6350).
 #' 
 #' @param s a soil series name, case-insensitive
 #' 
@@ -46,7 +13,7 @@
 #' 
 #' @author D.E. Beaudette
 #' 
-#' @note This function requires the \code{rgdal} package. Warning messages about the proj4 CRS specification may be printed depending on your version of \code{rgdal}. This should be resolved soon.
+#' @note This function requires the \code{rgdal} package.
 #' 
 #' @examples
 #'   
@@ -144,7 +111,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   
   # safely download GeoTiff file
   # Mac / Linux: file automatically downloaded via binary transfer
-  # Windows: must manually specify binary transfrer
+  # Windows: must manually specify binary transfer
   res <- tryCatch(
     suppressWarnings(
       download.file(url = u, destfile = tf, extra = c(timeout = timeout), quiet=TRUE, mode = 'wb')  
@@ -158,8 +125,12 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
     return(NULL)
   }
   
+  ## TODO: suppressing CRS-related warnings (not a problem) until we have a better solution
+  # https://github.com/ncss-tech/soilDB/issues/144
   # load raster object into memory
-  x <- raster(tf, verbose=FALSE)
+  x <- suppressWarnings(
+    raster(tf, verbose=FALSE)
+  )
   x <- readAll(x)
   # transfer layer name
   names(x) <- gsub(pattern='_', replacement=' ', x = s, fixed = TRUE)
@@ -167,7 +138,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   # cleanup
   unlink(tf)
   
-  # CONUS AEA
+  # EPSG:6350
   return(x)
 }
 

@@ -1,7 +1,7 @@
 
 #' @title Retrieve Soil Taxonomy Membership Grids
 #' 
-#' @description This function downloads a generalized representation of the geographic extent of any single taxa from the top 4 tiers of Soil Taxonomy. Data are provided by SoilWeb, ultimately sourced from from the current SSURGO snapshot. Data are returned as \code{raster} objects representing area proportion falling within 800m cells. Data are only available in CONUS and returned using an Albers Equal Area / NAD83 coordinate reference system.
+#' @description This function downloads a generalized representation of the geographic extent of any single taxa from the top 4 tiers of Soil Taxonomy. Data are provided by SoilWeb, ultimately sourced from from the current SSURGO snapshot. Data are returned as \code{raster} objects representing area proportion falling within 800m cells. Data are only available in CONUS and returned using an Albers Equal Area / NAD83 coordinate reference system (EPSG 6350).
 #' 
 #' @param x single taxa name, case-insensitive
 #' 
@@ -96,7 +96,7 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   
   # safely download GeoTiff file
   # Mac / Linux: file automatically downloaded via binary transfer
-  # Windows: must manually specify binary transfrer
+  # Windows: must manually specify binary transfer
   res <- tryCatch(
     suppressWarnings(
       download.file(url=u, destfile=tf, extra=c(timeout=timeout), quiet=TRUE, mode = 'wb')
@@ -110,8 +110,10 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
     return(NULL)
   }
  
+  ## TODO: suppressing CRS-related warnings (not a problem) until we have a better solution
+  # https://github.com/ncss-tech/soilDB/issues/144
   # load raster object into memory
-  r <- raster(tf, verbose=FALSE)
+  r <- suppressWarnings(raster(tf, verbose=FALSE))
   r <- readAll(r)
   # transfer layer name
   names(r) <- gsub(pattern='_', replacement=' ', x = x, fixed = TRUE)
@@ -119,10 +121,7 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   # cleanup
   unlink(tf)
   
-  # possibly fix CRS here, likely needs to be re-defined on the server
-  # https://github.com/ncss-tech/soilDB/issues/144
-  
-  # CONUS AEA
+  # EPSG:6350
   return(r)
   
   return(res)
