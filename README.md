@@ -56,6 +56,11 @@ soilDB 2.6.1
     on network error; empty results are an empty `data.frame()`
 -   `fetchSDA_spatial` can return STATSGO `gsmmupolygon` or Soil Survey
     Area `sapolygon` data; and can join to the `legend` table
+-   Added several new SDA query methods based on
+    [ssurgoOnDemand](https://github.com/ncss-tech/ssurgoOnDemand) by
+    Jason Nemecek and Chad Ferguson:
+-   `get_SDA_property`, `get_SDA_interpretation`, `get_SDA_muaggatt`,
+    `get_SDA_hydric`, `get_SDA_pmgroupname`
 
 #### MS Access
 
@@ -170,7 +175,7 @@ Examples
     res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
     print(res$fig)
 
-<img src="https://i.imgur.com/DFWYkc9.png" width="1056" />
+<img src="https://i.imgur.com/HHULrLB.png" width="1056" />
 
 ### Make Profile Sketches
 
@@ -184,7 +189,7 @@ Examples
       width = 0.2
     )
 
-<img src="https://i.imgur.com/UVvfhNP.png" width="1344" />
+<img src="https://i.imgur.com/WBRbhqO.png" width="1344" />
 
 ### Identify Tabular “Siblings”
 
@@ -214,7 +219,7 @@ Examples
       cex.names = 1
     )
 
-<img src="https://i.imgur.com/6iKiaKd.png" width="1344" />
+<img src="https://i.imgur.com/T183HFW.png" width="1344" />
 
 Dependency Graph
 ----------------
