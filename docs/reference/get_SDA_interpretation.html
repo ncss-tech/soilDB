@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ISSR-800 Web Coverage Service (WCS) — ISSR800.wcs • soilDB</title>
+<title>Get map unit interpretations from Soil Data Access by rule name — get_SDA_interpretation • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="ISSR-800 Web Coverage Service (WCS) — ISSR800.wcs" />
-<meta property="og:description" content="Intermediate-scale gridded (800m) soil property and interpretation maps from aggregated SSURGO and STATSGO data. These maps were developed by USDA-NRCS-SPSD staff in collaboration with UCD-LAWR. Originally for educational use and interactive thematic maps, these data are a suitable alternative to gridded STATSGO-derived thematic soil maps. The full size grids can be downloaded here." />
+<meta property="og:title" content="Get map unit interpretations from Soil Data Access by rule name — get_SDA_interpretation" />
+<meta property="og:description" content="Get map unit interpretations from Soil Data Access by rule name" />
 
 
 
@@ -111,56 +111,44 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>ISSR-800 Web Coverage Service (WCS)</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/ISSR800.R'><code>R/ISSR800.R</code></a></small>
-    <div class="hidden name"><code>ISSR800.wcs.Rd</code></div>
+    <h1>Get map unit interpretations from Soil Data Access by rule name</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/SDA_interpretations.R'><code>R/SDA_interpretations.R</code></a></small>
+    <div class="hidden name"><code>get_SDA_interpretation.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Intermediate-scale gridded (800m) soil property and interpretation maps from aggregated SSURGO and STATSGO data. These maps were developed by USDA-NRCS-SPSD staff in collaboration with UCD-LAWR. Originally for educational use and <a href='https://casoilresource.lawr.ucdavis.edu/soil-properties/'>interactive thematic maps</a>, these data are a suitable alternative to gridded STATSGO-derived thematic soil maps. The full size grids can be <a href='https://casoilresource.lawr.ucdavis.edu/soil-properties/download.php'>downloaded here</a>.</p>
+    <p>Get map unit interpretations from Soil Data Access by rule name</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ISSR800.wcs</span><span class='op'>(</span><span class='va'>aoi</span>, <span class='va'>var</span>, res <span class='op'>=</span> <span class='fl'>800</span>, quiet <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_SDA_interpretation</span><span class='op'>(</span><span class='va'>rulename</span>, <span class='va'>method</span>, areasymbols <span class='op'>=</span> <span class='cn'>NULL</span>, mukeys <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>aoi</th>
-      <td><p>area of interest (AOI) defined using a <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code> or <code>bbox</code> object or a <code>list</code>, see details</p></td>
+      <th>rulename</th>
+      <td><p>rule name of interpretation</p></td>
     </tr>
     <tr>
-      <th>var</th>
-      <td><p>ISSR-800 grid name, see details</p></td>
+      <th>method</th>
+      <td><p>aggregation method. One of: "Dominant Component", "Dominant Condition", "Weighted Average"</p></td>
     </tr>
     <tr>
-      <th>res</th>
-      <td><p>grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.</p></td>
+      <th>areasymbols</th>
+      <td><p>vector of soil survey area symbols</p></td>
     </tr>
     <tr>
-      <th>quiet</th>
-      <td><p>logical, passed to <code>download.file</code> to enable / suppress URL and progress bar for download.</p>
-<p>#' @details <code>aoi</code> should be specified as a <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code>, or <code>bbox</code> object or a <code>list</code> containing:</p>
-<dl>
-<dt><code>aoi</code></dt><dd><p>bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)</p></dd>
-<dt><code>crs</code></dt><dd><p>coordinate reference system of BBOX, e.g. '+init=epsg:4326'</p></dd>
-
-</dl>
-
-<p>The WCS query is parameterized using <code><a href='https://rdrr.io/pkg/raster/man/extent.html'>raster::extent</a></code> derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the ISSR-800 grids.</p>
-<p>Variables available from this WCS can be queried using <code><a href='WCS_details.html'>WCS_details(wcs = 'ISSR800')</a></code>.</p></td>
+      <th>mukeys</th>
+      <td><p>vector of map unit keys</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>raster</code> object containing indexed map unit keys and associated raster attribute table</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>There are still some issues to be resolved related to the encoding of NA Variables with a natural zero (e.g. SAR) have 0 set to NA.</p>
+    <p>a data.frame</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>D.E. Beaudette and A.G. Brown</p>
+    <p>Jason Nemecek, Chad Ferguson, Andrew Brown</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

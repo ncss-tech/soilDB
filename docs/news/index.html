@@ -114,9 +114,9 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="soildb-261-2021-03-30" class="section level1">
+    <div id="soildb-261-2021-04-05" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.1">
-<a href="#soildb-261-2021-03-30" class="anchor"></a>soilDB 2.6.1 (2021-03-30)<small> Unreleased </small>
+<a href="#soildb-261-2021-04-05" class="anchor"></a>soilDB 2.6.1 (2021-04-05)<small> Unreleased </small>
 </h1>
 <ul>
 <li>Connections to local NASIS and various MS Access databases now use <code>DBI</code> and <code>odbc</code>, replacing <code>RODBC</code>
@@ -128,6 +128,13 @@
 </ul>
 </li>
 <li>Horizon depth logic checking is now done with <code><a href="https://rdrr.io/pkg/aqp/man/checkHzDepthLogic.html">aqp::checkHzDepthLogic()</a></code>, powered by {data.table}</li>
+<li>Added several new SDA query methods based on <a href="https://github.com/ncss-tech/ssurgoOnDemand" class="uri">https://github.com/ncss-tech/ssurgoOnDemand</a> by <a href='https://github.com/jneme910'>@jneme910</a> and <a href='https://github.com/cferguso'>@cferguso</a>:
+<ul>
+<li>
+<code>get_SDA_property</code>, <code>get_SDA_interpretation</code>, <code>get_SDA_muaggatt</code>, <code>get_SDA_hydric</code>, <code>get_SDA_pmgroupname</code>
+</li>
+</ul>
+</li>
 </ul>
 </div>
     <div id="soildb-260-2021-02-18" class="section level1">
