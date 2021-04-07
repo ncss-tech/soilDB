@@ -99,7 +99,8 @@ importFrom(aqp,
   'hztexclname<-',
   profile_id,
   aqp_df_class,
-  'aqp_df_class<-'
+  'aqp_df_class<-',
+  pbindlist
 )
 
 importMethodsFrom(aqp, "plot")
