@@ -1,4 +1,4 @@
-# soilDB 2.6.1 (2021-04-05)
+# soilDB 2.6.1 (2021-04-07)
  * Connections to local NASIS and various MS Access databases now use `DBI` and `odbc`, replacing `RODBC`
  * New methods `dbConnectNASIS` and `dbQueryNASIS` for NASIS access with read-only credentials, fetching query results, and closing the _DBIConnection_ upon completion
  * NASIS methods use `dsn` argument to specify a local "static" SQLite file containing NASIS tables, or custom _DBIConnection_ to a database with NASIS schema
