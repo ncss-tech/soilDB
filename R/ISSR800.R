@@ -37,7 +37,7 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     stop('please install the `rgdal` package', call.=FALSE)
   
   # sanity check: aoi specification
-  if(!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox'))) { # TODO:  'wk_rct'?
+  if(!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer'))) { 
     stop('invalid `aoi` specification', call. = FALSE)
   }
   
@@ -46,7 +46,7 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     stop('`res` should be within 400 <= res <= 1600 meters')
   }
   
-  # match variable name in catalogue
+  # match variable name in catalog
   var.cat <- sapply(.ISSR800.spec, '[[', 'dsn')
   match.arg(var, var.cat)
   
