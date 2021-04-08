@@ -37,19 +37,19 @@ Taxon labels can be conveniently extracted from the "ST_unique_list" sample data
 
 The following labels are used to access taxa containing the following formative elements (in parenthesis).
 \itemize{
-\item acro: (acro/acr) extreme weathering
+\item acr: (acro/acr) extreme weathering
 \item alb: (alb) presence of an albic horizon
 \item anhy: (anhy) very dry
 \item anthra: (anthra) presence of an anthropic epipedon
-\item aqui: (aqui/aqu) wetness
+\item aqu: (aqui/aqu) wetness
 \item argi: (argi) presence of an argillic horizon
 \item calci: (calci) presence of a calcic horizon
-\item cryo: (cryo/cry) cryic STR
-\item duri: (duri/dur) presence of a duripan
-\item dystro: (dystro/dystr) low base saturation
+\item cry: (cryo/cry) cryic STR
+\item dur: (duri/dur) presence of a duripan
+\item dystr: (dystro/dystr) low base saturation
 \item endo: (endo) ground water table
 \item epi: (epi) perched water table
-\item eutro: (eutro/eutr) high base saturation
+\item eutr: (eutro/eutr) high base saturation
 \item ferr: (ferr) presence of Fe
 \item fibr: (fibr) least decomposed stage
 \item fluv: (fluv) flood plain
@@ -57,42 +57,42 @@ The following labels are used to access taxa containing the following formative 
 \item fragi: (fragi) presence of a fragipan
 \item fragloss: (fragloss) presence of a fragipan and glossic horizon
 \item frasi: (frasi) not salty
-\item fulvi: (fulvi/fulv) dark brown with organic carbon
+\item fulv: (fulvi/fulv) dark brown with organic carbon
 \item glac: (glac) presence of ice lenses
-\item glosso: (glosso/gloss) presence of a glossic horizon
+\item gloss: (glosso/gloss) presence of a glossic horizon
 \item gypsi: (gypsi) presence of a gypsic horizon
 \item hal: (hal) salty
-\item hapl: (hapl/hap) minimum horizon development
+\item hap: (hapl/hap) minimum horizon development
 \item hemi: (hemi) intermediate decomposition
-\item histo: (histo/hist) organic soil material
-\item humi: (humi/hum) presence of organic carbon
-\item hydro: (hydro/hydr) presence of water
+\item hist: (histo/hist) organic soil material
+\item hum: (humi/hum) presence of organic carbon
+\item hydr: (hydro/hydr) presence of water
 \item kandi: (kandi) presence of a kandic horizon
-\item kanhaplo: (kanhaplo/kanhap) thin kandic horizon
+\item kanhap: (kanhaplo/kanhap) thin kandic horizon
 \item luvi: (luvi) illuvial organic material
-\item melano: (melano/melan) presence of a melanic epipedon
-\item molli: (molli/moll) presence of a mollic epipedon
-\item natri: (natri/natr) presence of a natric horizon
+\item melan: (melano/melan) presence of a melanic epipedon
+\item moll: (molli/moll) presence of a mollic epipedon
+\item natr: (natri/natr) presence of a natric horizon
 \item pale: (pale) excessive development
-\item petro: (petro/petr) petrocalcic horizon
+\item petr: (petro/petr) petrocalcic horizon
 \item plac: (plac) presence of a thin pan
 \item plagg: (plagg) presence of a plaggen epipedon
 \item plinth: (plinth) presence of plinthite
-\item psammo: (psammo/psamm) sandy texture
+\item psamm: (psammo/psamm) sandy texture
 \item quartzi: (quartzi) high quartz content
-\item rhodo: (rhodo/rhod) dark red colors
-\item sali: (sali/sal) presence of a salic horizon
+\item rhod: (rhodo/rhod) dark red colors
+\item sal: (sali/sal) presence of a salic horizon
 \item sapr: (sapr) most decomposed stage
 \item sombri: (sombri) presence of a sombric horizon
 \item sphagno: (sphagno) presence of sphagnum moss
-\item sulfo: (sulfo/sulfi/sulf) presence of sulfides or their oxidation products
+\item sulf: (sulfo/sulfi/sulf) presence of sulfides or their oxidation products
 \item torri: (torri) torric/aridic SMR
-\item udi: (udi/ud) udic SMR
-\item umbri: (umbri/umbr) presence of an umbric epipedon
-\item usti: (usti/ust) ustic SMR
+\item ud: (udi/ud) udic SMR
+\item umbr: (umbri/umbr) presence of an umbric epipedon
+\item ust: (usti/ust) ustic SMR
 \item verm: (verm) wormy, or mixed by animals
-\item vitri: (vitri/vitr) presence of glass
-\item xero: (xero/xer) xeric SMR
+\item vitr: (vitri/vitr) presence of glass
+\item xer: (xero/xer) xeric SMR
 }
 }
 
@@ -161,7 +161,7 @@ The following labels are used to access taxa containing the following formative 
 \item sphagnic: (sphagnic) sphagnum organic material
 \item sulfic: (sulfic) presence of sulfides
 \item terric: (terric) mineral substratum within 1 meter
-\item thaptic: (thaptic/thapto) presence of a buried soil horizon
+\item thapto: (thaptic/thapto) presence of a buried soil horizon
 \item turbic: (turbic) evidence of cryoturbation
 \item udic: (udic) more humid than typic subgroup
 \item umbric: (umbric) presence of an umbric epipedon

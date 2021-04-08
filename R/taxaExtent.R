@@ -29,19 +29,19 @@
 #' ### Greatgroup:
 #' The following labels are used to access taxa containing the following formative elements (in parenthesis).
 #' 
-#' * acro: (acro/acr) extreme weathering
+#' * acr: (acro/acr) extreme weathering
 #' * alb: (alb) presence of an albic horizon
 #' * anhy: (anhy) very dry
 #' * anthra: (anthra) presence of an anthropic epipedon
-#' * aqui: (aqui/aqu) wetness
+#' * aqu: (aqui/aqu) wetness
 #' * argi: (argi) presence of an argillic horizon
 #' * calci: (calci) presence of a calcic horizon
-#' * cryo: (cryo/cry) cryic STR
-#' * duri: (duri/dur) presence of a duripan
-#' * dystro: (dystro/dystr) low base saturation
+#' * cry: (cryo/cry) cryic STR
+#' * dur: (duri/dur) presence of a duripan
+#' * dystr: (dystro/dystr) low base saturation
 #' * endo: (endo) ground water table
 #' * epi: (epi) perched water table
-#' * eutro: (eutro/eutr) high base saturation
+#' * eutr: (eutro/eutr) high base saturation
 #' * ferr: (ferr) presence of Fe
 #' * fibr: (fibr) least decomposed stage
 #' * fluv: (fluv) flood plain
@@ -49,42 +49,42 @@
 #' * fragi: (fragi) presence of a fragipan
 #' * fragloss: (fragloss) presence of a fragipan and glossic horizon
 #' * frasi: (frasi) not salty
-#' * fulvi: (fulvi/fulv) dark brown with organic carbon
+#' * fulv: (fulvi/fulv) dark brown with organic carbon
 #' * glac: (glac) presence of ice lenses
-#' * glosso: (glosso/gloss) presence of a glossic horizon
+#' * gloss: (glosso/gloss) presence of a glossic horizon
 #' * gypsi: (gypsi) presence of a gypsic horizon
 #' * hal: (hal) salty
-#' * hapl: (hapl/hap) minimum horizon development
+#' * hap: (hapl/hap) minimum horizon development
 #' * hemi: (hemi) intermediate decomposition
-#' * histo: (histo/hist) organic soil material
-#' * humi: (humi/hum) presence of organic carbon
-#' * hydro: (hydro/hydr) presence of water
+#' * hist: (histo/hist) organic soil material
+#' * hum: (humi/hum) presence of organic carbon
+#' * hydr: (hydro/hydr) presence of water
 #' * kandi: (kandi) presence of a kandic horizon
-#' * kanhaplo: (kanhaplo/kanhap) thin kandic horizon
+#' * kanhap: (kanhaplo/kanhap) thin kandic horizon
 #' * luvi: (luvi) illuvial organic material
-#' * melano: (melano/melan) presence of a melanic epipedon
-#' * molli: (molli/moll) presence of a mollic epipedon
-#' * natri: (natri/natr) presence of a natric horizon
+#' * melan: (melano/melan) presence of a melanic epipedon
+#' * moll: (molli/moll) presence of a mollic epipedon
+#' * natr: (natri/natr) presence of a natric horizon
 #' * pale: (pale) excessive development
-#' * petro: (petro/petr) petrocalcic horizon
+#' * petr: (petro/petr) petrocalcic horizon
 #' * plac: (plac) presence of a thin pan
 #' * plagg: (plagg) presence of a plaggen epipedon
 #' * plinth: (plinth) presence of plinthite
-#' * psammo: (psammo/psamm) sandy texture
+#' * psamm: (psammo/psamm) sandy texture
 #' * quartzi: (quartzi) high quartz content
-#' * rhodo: (rhodo/rhod) dark red colors
-#' * sali: (sali/sal) presence of a salic horizon
+#' * rhod: (rhodo/rhod) dark red colors
+#' * sal: (sali/sal) presence of a salic horizon
 #' * sapr: (sapr) most decomposed stage
 #' * sombri: (sombri) presence of a sombric horizon
 #' * sphagno: (sphagno) presence of sphagnum moss
-#' * sulfo: (sulfo/sulfi/sulf) presence of sulfides or their oxidation products
+#' * sulf: (sulfo/sulfi/sulf) presence of sulfides or their oxidation products
 #' * torri: (torri) torric/aridic SMR
-#' * udi: (udi/ud) udic SMR
-#' * umbri: (umbri/umbr) presence of an umbric epipedon
-#' * usti: (usti/ust) ustic SMR
+#' * ud: (udi/ud) udic SMR
+#' * umbr: (umbri/umbr) presence of an umbric epipedon
+#' * ust: (usti/ust) ustic SMR
 #' * verm: (verm) wormy, or mixed by animals
-#' * vitri: (vitri/vitr) presence of glass
-#' * xero: (xero/xer) xeric SMR
+#' * vitr: (vitri/vitr) presence of glass
+#' * xer: (xero/xer) xeric SMR
 #' 
 #' 
 #' ### Subgroup:
@@ -151,7 +151,7 @@
 #' * sphagnic: (sphagnic) sphagnum organic material
 #' * sulfic: (sulfic) presence of sulfides
 #' * terric: (terric) mineral substratum within 1 meter
-#' * thaptic: (thaptic/thapto) presence of a buried soil horizon
+#' * thapto: (thaptic/thapto) presence of a buried soil horizon
 #' * turbic: (turbic) evidence of cryoturbation
 #' * udic: (udic) more humid than typic subgroup
 #' * umbric: (umbric) presence of an umbric epipedon
