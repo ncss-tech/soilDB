@@ -27,135 +27,139 @@
 #' ## Formative Element Queries
 #' 
 #' ### Greatgroup:
-#' * acro: extreme weathering
-#' * alb: presence of an albic horizon
-#' * anhy: very dry
-#' * anthra: presence of an anthropic epipedon
-#' * aqui: wetness
-#' * argi: presence of an argillic horizon
-#' * calci: presence of a calcic horizon
-#' * cryo: cryic STR
-#' * duri: presence of a duripan
-#' * dystro: low base saturation
-#' * endo: ground water table
-#' * epi: perched water table
-#' * eutro: high base saturation
-#' * ferr: presence of Fe
-#' * fibr: least decomposed stage
-#' * fluv: flood plain
-#' * fol: mass of leaves
-#' * fragi: presence of a fragipan
-#' * fragloss: presence of a fragipan and glossic horizon
-#' * frasi: not salty
-#' * fulvi: dark brown with organic carbon
-#' * glac: presence of ice lenses
-#' * glosso: presence of a glossic horizon
-#' * gypsi: presence of a gypsic horizon
-#' * hal: salty
-#' * hapl: minimum horizon development
-#' * hemi: intermediate decomposition
-#' * histo: organic soil material
-#' * humi: presence of organic carbon
-#' * hydro: presence of water
-#' * kandi: presence of a kandic horizon
-#' * kanhaplo: thin kandic horizon
-#' * luvi: illuvial organic material
-#' * melano: presence of a melanic epipedon
-#' * molli: presence of a mollic epipedon
-#' * natri: presence of a natric horizon
-#' * pale: excessive development
-#' * petro: petrocalcic horizon
-#' * plac: presence of a thin pan
-#' * plagg: presence of a plaggen epipedon
-#' * plinth: presence of plinthite
-#' * psammo: sandy texture
-#' * quartzi: high quartz content
-#' * rhodo: dark red colors
-#' * sali: presence of a salic horizon
-#' * sapr: most decomposed stage
-#' * sombri: presence of a sombric horizon
-#' * sphagno: presence of sphagnum moss
-#' * sulfo: presence of sulfides or their oxidation products
-#' * torri: torric/aridic SMR
-#' * udi: udic SMR
-#' * umbri: presence of an umbric epipedon
-#' * usti: ustic SMR
-#' * verm: wormy, or mixed by animals
-#' * vitri: presence of glass
-#' * xero: xeric SMR
+#' The following labels are used to access taxa containing the following formative elements (in parenthesis).
+#' 
+#' * acro: (acro/acr) extreme weathering
+#' * alb: (alb) presence of an albic horizon
+#' * anhy: (anhy) very dry
+#' * anthra: (anthra) presence of an anthropic epipedon
+#' * aqui: (aqui/aqu) wetness
+#' * argi: (argi) presence of an argillic horizon
+#' * calci: (calci) presence of a calcic horizon
+#' * cryo: (cryo/cry) cryic STR
+#' * duri: (duri/dur) presence of a duripan
+#' * dystro: (dystro/dystr) low base saturation
+#' * endo: (endo) ground water table
+#' * epi: (epi) perched water table
+#' * eutro: (eutro/eutr) high base saturation
+#' * ferr: (ferr) presence of Fe
+#' * fibr: (fibr) least decomposed stage
+#' * fluv: (fluv) flood plain
+#' * fol: (fol) mass of leaves
+#' * fragi: (fragi) presence of a fragipan
+#' * fragloss: (fragloss) presence of a fragipan and glossic horizon
+#' * frasi: (frasi) not salty
+#' * fulvi: (fulvi/fulv) dark brown with organic carbon
+#' * glac: (glac) presence of ice lenses
+#' * glosso: (glosso/gloss) presence of a glossic horizon
+#' * gypsi: (gypsi) presence of a gypsic horizon
+#' * hal: (hal) salty
+#' * hapl: (hapl/hap) minimum horizon development
+#' * hemi: (hemi) intermediate decomposition
+#' * histo: (histo/hist) organic soil material
+#' * humi: (humi/hum) presence of organic carbon
+#' * hydro: (hydro/hydr) presence of water
+#' * kandi: (kandi) presence of a kandic horizon
+#' * kanhaplo: (kanhaplo/kanhap) thin kandic horizon
+#' * luvi: (luvi) illuvial organic material
+#' * melano: (melano/melan) presence of a melanic epipedon
+#' * molli: (molli/moll) presence of a mollic epipedon
+#' * natri: (natri/natr) presence of a natric horizon
+#' * pale: (pale) excessive development
+#' * petro: (petro/petr) petrocalcic horizon
+#' * plac: (plac) presence of a thin pan
+#' * plagg: (plagg) presence of a plaggen epipedon
+#' * plinth: (plinth) presence of plinthite
+#' * psammo: (psammo/psamm) sandy texture
+#' * quartzi: (quartzi) high quartz content
+#' * rhodo: (rhodo/rhod) dark red colors
+#' * sali: (sali/sal) presence of a salic horizon
+#' * sapr: (sapr) most decomposed stage
+#' * sombri: (sombri) presence of a sombric horizon
+#' * sphagno: (sphagno) presence of sphagnum moss
+#' * sulfo: (sulfo/sulfi/sulf) presence of sulfides or their oxidation products
+#' * torri: (torri) torric/aridic SMR
+#' * udi: (udi/ud) udic SMR
+#' * umbri: (umbri/umbr) presence of an umbric epipedon
+#' * usti: (usti/ust) ustic SMR
+#' * verm: (verm) wormy, or mixed by animals
+#' * vitri: (vitri/vitr) presence of glass
+#' * xero: (xero/xer) xeric SMR
 #' 
 #' 
 #' ### Subgroup:
-#' * abruptic: abrupt textural change
-#' * acric: low apparent CEC
-#' * aeric: more aeration than typic subgroup
-#' * albaquic: presence of albic minerals, wetter than typic subgroup
-#' * albic: presence of albic minerals
-#' * alfic: presence of an argillic or kandic horizon
-#' * alic: high extractable Al content
-#' * anionic: low CEC or positively charged
-#' * anthraquic: human controlled flooding as in paddy rice culture
-#' * anthropic: an anthropic epipedon
-#' * aquic: wetter than typic subgroup
-#' * arenic: 50-100cm sandy textured surface
-#' * argic: argillic horizon
-#' * aridic: more aridic than typic subgroup
-#' * calcic: presence of a calcic horizon
-#' * chromic: high chroma colors
-#' * cumulic: thickened epipedon
-#' * duric: presence of a duripan
-#' * durinodic: presence of durinodes
-#' * dystric: lower base saturation percentage
-#' * entic: minimal surface/subsurface development
-#' * eutric: higher base saturation percentage
-#' * fibric: >25cm of fibric material
-#' * fluvaquentic: wetter than typic subgroup, evidence of stratification
-#' * fragiaquic: presence of fragic properties, wetter than typic subgroup
-#' * fragic: presence of fragic properties
-#' * glacic: presence of ice lenses or wedges
-#' * glossaquic: interfingered horizon boundaries, wetter than typic subgroup
-#' * glossic: interfingered horizon boundaries
-#' * grossarenic: >100cm sandy textured surface
-#' * gypsic: presence of gypsic horizon
-#' * halic: salty
-#' * haplic: central theme of subgroup concept
-#' * hemic: >25cm of hemic organic material
-#' * humic: higher organic matter content
-#' * hydric: presence of water
-#' * kandic: low activity clay present
-#' * lamellic: presence of lamellae
-#' * leptic: thinner than typic subgroup
-#' * limnic: presence of a limnic layer
-#' * lithic: shallow lithic contact present
-#' * natric: presence of sodium
-#' * nitric: presence of nitrate salts
-#' * ombroaquic: surface wetness
-#' * oxyaquic: water saturated but not reduced
-#' * pachic: epipedon thicker than typic subgroup
-#' * petrocalcic: presence of a petrocalcic horizon
-#' * petroferric: presence of petroferric contact
-#' * petrogypsic: presence of a petrogypsic horizon
-#' * petronodic: presence of concretions and/or nodules
-#' * placic: presence of a placic horizon
-#' * plinthic: presence of plinthite
-#' * rhodic: darker red colors than typic subgroup
-#' * ruptic: intermittent horizon
-#' * salic: presence of a salic horizon
-#' * sapric: >25cm of sapric organic material
-#' * sodic: high exchangeable Na content
-#' * sombric: presence of a sombric horizon
-#' * sphagnic: sphagnum organic material
-#' * sulfic: presence of sulfides
-#' * terric: mineral substratum within 1 meter
-#' * thaptic: presence of a buried soil horizon
-#' * turbic: evidence of cryoturbation
-#' * udic: more humid than typic subgroup
-#' * umbric: presence of an umbric epipedon
-#' * ustic: more ustic than typic subgroup
-#' * vermic: animal mixed material
-#' * vitric: presence of glassy material
-#' * xanthic: more yellow than typic subgroup
-#' * xeric: more xeric than typic subgroup
+#' The following labels are used to access taxa containing the following formative elements (in parenthesis).
+#' 
+#' * abruptic: (abruptic) abrupt textural change
+#' * acric: (acric) low apparent CEC
+#' * aeric: (aeric) more aeration than typic subgroup
+#' * albaquic: (albaquic) presence of albic minerals, wetter than typic subgroup
+#' * albic: (albic) presence of albic minerals
+#' * alfic: (alfic) presence of an argillic or kandic horizon
+#' * alic: (alic) high extractable Al content
+#' * anionic: (anionic) low CEC or positively charged
+#' * anthraquic: (anthraquic) human controlled flooding as in paddy rice culture
+#' * anthropic: (anthropic) an anthropic epipedon
+#' * aquic: (aquic) wetter than typic subgroup
+#' * arenic: (arenic) 50-100cm sandy textured surface
+#' * argic: (argic) argillic horizon
+#' * aridic: (aridic) more aridic than typic subgroup
+#' * calcic: (calcic) presence of a calcic horizon
+#' * chromic: (chromic) high chroma colors
+#' * cumulic: (cumulic) thickened epipedon
+#' * duric: (duric) presence of a duripan
+#' * durinodic: (durinodic) presence of durinodes
+#' * dystric: (dystric) lower base saturation percentage
+#' * entic: (entic) minimal surface/subsurface development
+#' * eutric: (eutric) higher base saturation percentage
+#' * fibric: (fibric) >25cm of fibric material
+#' * fluvaquentic: (fluvaquentic) wetter than typic subgroup, evidence of stratification
+#' * fragiaquic: (fragiaquic) presence of fragic properties, wetter than typic subgroup
+#' * fragic: (fragic) presence of fragic properties
+#' * glacic: (glacic) presence of ice lenses or wedges
+#' * glossaquic: (glossaquic) interfingered horizon boundaries, wetter than typic subgroup
+#' * glossic: (glossic) interfingered horizon boundaries
+#' * grossarenic: (grossarenic) >100cm sandy textured surface
+#' * gypsic: (gypsic) presence of gypsic horizon
+#' * halic: (halic) salty
+#' * haplic: (haplic) central theme of subgroup concept
+#' * hemic: (hemic) >25cm of hemic organic material
+#' * humic: (humic) higher organic matter content
+#' * hydric: (hydric) presence of water
+#' * kandic: (kandic) low activity clay present
+#' * lamellic: (lamellic) presence of lamellae
+#' * leptic: (leptic) thinner than typic subgroup
+#' * limnic: (limnic) presence of a limnic layer
+#' * lithic: (lithic) shallow lithic contact present
+#' * natric: (natric) presence of sodium
+#' * nitric: (nitric) presence of nitrate salts
+#' * ombroaquic: (ombroaquic) surface wetness
+#' * oxyaquic: (oxyaquic) water saturated but not reduced
+#' * pachic: (pachic) epipedon thicker than typic subgroup
+#' * petrocalcic: (petrocalcic) presence of a petrocalcic horizon
+#' * petroferric: (petroferric) presence of petroferric contact
+#' * petrogypsic: (petrogypsic) presence of a petrogypsic horizon
+#' * petronodic: (petronodic) presence of concretions and/or nodules
+#' * placic: (placic) presence of a placic horizon
+#' * plinthic: (plinthic) presence of plinthite
+#' * rhodic: (rhodic) darker red colors than typic subgroup
+#' * ruptic: (ruptic) intermittent horizon
+#' * salic: (salic) presence of a salic horizon
+#' * sapric: (sapric) >25cm of sapric organic material
+#' * sodic: (sodic) high exchangeable Na content
+#' * sombric: (sombric) presence of a sombric horizon
+#' * sphagnic: (sphagnic) sphagnum organic material
+#' * sulfic: (sulfic) presence of sulfides
+#' * terric: (terric) mineral substratum within 1 meter
+#' * thaptic: (thaptic/thapto) presence of a buried soil horizon
+#' * turbic: (turbic) evidence of cryoturbation
+#' * udic: (udic) more humid than typic subgroup
+#' * umbric: (umbric) presence of an umbric epipedon
+#' * ustic: (ustic) more ustic than typic subgroup
+#' * vermic: (vermic) animal mixed material
+#' * vitric: (vitric) presence of glassy material
+#' * xanthic: (xanthic) more yellow than typic subgroup
+#' * xeric: (xeric) more xeric than typic subgroup
 #' 
 #' @examples 
 #' \donttest{
