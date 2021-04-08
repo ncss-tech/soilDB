@@ -190,6 +190,17 @@
 #'   x <- taxaExtent(taxa, level = 'subgroup')
 #'   a <- raster::aggregate(x, fact = 5)
 #'   
+#'   # greatgroup formative element
+#'   taxa <- 'psamm'
+#'   x <- taxaExtent(taxa, level = 'greatgroup', formativeElement = TRUE)
+#'   a <- raster::aggregate(x, fact = 5)
+#'   
+#'   # subgroup formative element
+#'   taxa <- 'abruptic'
+#'   x <- taxaExtent(taxa, level = 'subgroup', formativeElement = TRUE)
+#'   a <- raster::aggregate(x, fact = 5)
+#'   
+#'   
 #'   # quick evaluation of the result
 #'   if(requireNamespace("rasterVis") & requireNamespace('viridisLite')) {
 #'     rasterVis::levelplot(a, 
