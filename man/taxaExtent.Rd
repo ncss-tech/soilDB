@@ -62,7 +62,6 @@ The following labels are used to access taxa containing the following formative 
 \item gloss: (glosso/gloss) presence of a glossic horizon
 \item gypsi: (gypsi) presence of a gypsic horizon
 \item hal: (hal) salty
-\item hap: (hapl/hap) minimum horizon development
 \item hemi: (hemi) intermediate decomposition
 \item hist: (histo/hist) organic soil material
 \item hum: (humi/hum) presence of organic carbon

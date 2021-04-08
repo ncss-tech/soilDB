@@ -54,7 +54,6 @@
 #' * gloss: (glosso/gloss) presence of a glossic horizon
 #' * gypsi: (gypsi) presence of a gypsic horizon
 #' * hal: (hal) salty
-#' * hap: (hapl/hap) minimum horizon development
 #' * hemi: (hemi) intermediate decomposition
 #' * hist: (histo/hist) organic soil material
 #' * hum: (humi/hum) presence of organic carbon
