@@ -1,5 +1,7 @@
 target_areas <-  c("CA649", "CA630")
-target_area_rows <- 231
+target_area_rows <- 231 # 1:1 with mukey
+target_area_rows_all <- 1085 # 1:1 with component
+target_area_rows_all_chorizon <- 3033 # 1:1 with chorizon
 
 target_mukeys <- c(463263, 463264)
 
@@ -96,4 +98,21 @@ test_that("SDA properties (min/max) works", {
     mukeys = target_mukeys,
     FUN = "MIN"
   )$mukey, target_mukeys)
+})
+
+test_that("SDA properties (no aggregation) works", {
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  # return results 1:1 with component for component properties
+  expect_equal(nrow(get_SDA_property(property = "Taxonomic Suborder",
+                                     method = "NONE",
+                                     areasymbols = target_areas)), target_area_rows_all)
+  
+  
+  # return results 1:1 with chorizon for horizon properties (includes cokey)
+  expect_equal(nrow(get_SDA_property("Total Sand - Rep Value", 
+                    method = "NONE", 
+                    areasymbols = target_areas)), target_area_rows_all_chorizon)
 })

@@ -6,7 +6,8 @@
 \usage{
 get_SDA_property(
   property,
-  method,
+  method = c("Dominant Component (Category)", "Weighted Average", "Min/Max",
+    "Dominant Component (Numeric)", "Dominant Condition", "None"),
   areasymbols = NULL,
   mukeys = NULL,
   top_depth = NULL,
@@ -17,7 +18,7 @@ get_SDA_property(
 \arguments{
 \item{property}{a label or column name from property dictionary}
 
-\item{method}{one of: "Dominant Component (Category)", "Weighted Average", "Min/Max", "Dominant Component (Numeric)", "Dominant Condition"#'}
+\item{method}{one of: "Dominant Component (Category)", "Weighted Average", "Min/Max", "Dominant Component (Numeric)", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.}
 
 \item{areasymbols}{vector of soil survey area symbols}
 
@@ -34,6 +35,93 @@ a data.frame with result
 }
 \description{
 Get map unit properties from Soil Data Access
+}
+\details{
+The \code{property} argument refers to one of the property names or columns specified in the tables below.
+\subsection{Selected Component-level Properties}{\tabular{ll}{
+   \strong{Property (Component)} \tab \strong{Column} \cr
+   Range Production - Favorable Year \tab rsprod_h \cr
+   Range Production - Normal Year \tab rsprod_r \cr
+   Range Production - Unfavorable Year \tab rsprod_l \cr
+   Corrosion of Steel \tab corsteel \cr
+   Corrosion of Concrete \tab corcon \cr
+   Drainage Class \tab drainagecl \cr
+   Hydrologic Group \tab hydgrp \cr
+   Taxonomic Class Name \tab taxclname \cr
+   Taxonomic Order \tab taxorder \cr
+   Taxonomic Suborder \tab taxsuborder \cr
+   Taxonomic Temperature Regime \tab taxtempregime \cr
+   Wind Erodibility Group \tab weg \cr
+   Wind Erodibility Index \tab wei \cr
+   t Factor \tab tfact \cr
+}
+
+}
+
+\subsection{Selected Horizon-level Properties}{\tabular{ll}{
+   \strong{Property (Horizon)} \tab \strong{Column} \cr
+   0.1 bar H2O - Rep Value \tab wtenthbar_r \cr
+   0.33 bar H2O - Rep Value \tab wthirdbar_r \cr
+   15 bar H2O - Rep Value \tab wfifteenbar_r \cr
+   Available Water Capacity - Rep Value \tab awc_r \cr
+   Bray 1 Phosphate - Rep Value \tab pbray1_r \cr
+   Bulk Density 0.1 bar H2O - Rep Value \tab dbtenthbar_r \cr
+   Bulk Density 0.33 bar H2O - Rep Value \tab dbthirdbar_r \cr
+   Bulk Density 15 bar H2O - Rep Value \tab dbfifteenbar_r \cr
+   Bulk Density oven dry - Rep Value \tab dbovendry_r \cr
+   CaCO3 Clay - Rep Value \tab claysizedcarb_r \cr
+   Calcium Carbonate - Rep Value \tab caco3_r \cr
+   Cation Exchange Capcity - Rep Value \tab cec7_r \cr
+   Coarse Sand - Rep Value \tab sandco_r \cr
+   Coarse Silt - Rep Value \tab siltco_r \cr
+   Effective Cation Exchange Capcity - Rep Value \tab ecec_r \cr
+   Electrial Conductivity 1:5 by volume - Rep Value \tab ec15_r \cr
+   Electrical Conductivity - Rep Value \tab ec_r \cr
+   Exchangeable Sodium Percentage - Rep Value \tab esp_r \cr
+   Extract Aluminum - Rep Value \tab extral_r \cr
+   Extractable Acidity - Rep Value \tab extracid_r \cr
+   Fine Sand - Rep Value \tab sandfine_r \cr
+   Fine Silt - Rep Value \tab siltfine_r \cr
+   Free Iron - Rep Value \tab freeiron_r \cr
+   Gypsum - Rep Value \tab gypsum_r \cr
+   Kf \tab kffact \cr
+   Ki \tab kifact \cr
+   Kr \tab krfact \cr
+   Kw \tab kwfact \cr
+   LEP - Rep Value \tab lep_r \cr
+   Liquid Limit - Rep Value \tab ll_r \cr
+   Medium Sand - Rep Value \tab sandmed_r \cr
+   Organic Matter - Rep Value \tab om_r \cr
+   Oxalate Aluminum - Rep Value \tab aloxalate_r \cr
+   Oxalate Iron - Rep Value \tab feoxalate_r \cr
+   Oxalate Phosphate - Rep Value \tab poxalate_r \cr
+   Plasticity Index - Rep Value \tab pi_r \cr
+   Rock Fragments 3 - 10 cm - Rep Value \tab frag3to10_r \cr
+   Rock Fragments > 10 cm - Rep Value \tab fraggt10_r \cr
+   Rubbed Fiber \% - Rep Value \tab fiberrubbedpct_r \cr
+   Satiated H2O - Rep Value \tab wsatiated_r \cr
+   Saturated Hydraulic Conductivity - Rep Value \tab ksat_r \cr
+   Sodium Adsorption Ratio - Rep Value \tab sar_r \cr
+   Sum of Bases - Rep Value \tab sumbases_r \cr
+   Total Clay - Rep Value \tab claytotal_r \cr
+   Total Phosphate - Rep Value \tab ptotal_r \cr
+   Total Rock Fragment Volume - Rep Value \tab fragvoltot \cr
+   Total Sand - Rep Value \tab sandtotal_r \cr
+   Total Silt - Rep Value \tab silttotal_r \cr
+   Unrubbed Fiber \% - Rep Value \tab fiberunrubbedpct_r \cr
+   Very Coarse Sand - Rep Value \tab sandvc_r \cr
+   Very Fine Sand - Rep Value \tab sandvf_r \cr
+   Water Soluble Phosphate - Rep Value \tab ph2osoluble_r \cr
+   no. 10 sieve - Rep Value \tab sieveno10_r \cr
+   no. 200 sieve - Rep Value \tab sieveno200_r \cr
+   no. 4 sieve - Rep Value \tab sieveno4_r \cr
+   no. 40 sieve - Rep Value \tab sieveno40_r \cr
+   pH .01M CaCl2 - Rep Value \tab ph01mcacl2_r \cr
+   pH 1:1 water - Rep Value \tab ph1to1h2o_r \cr
+   pH Oxidized - Rep Value \tab phoxidized_r \cr
+}
+
+}
 }
 \author{
 Jason Nemecek, Chad Ferguson, Andrew Brown
