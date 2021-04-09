@@ -481,12 +481,13 @@ get_SDA_property <-
   "NONE_HORIZON" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey, 
                                    c.cokey AS cokey, ch.chkey AS chkey,
                                    c.compname AS compname, c.comppct_r AS comppct_r,
+                                   ch.hzdept_r AS hzdept_r, ch.hzdepb_r AS hzdepb_r,
                                    ch.%s AS %s
              FROM legend  AS l
               INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
               INNER JOIN component AS c ON c.mukey = mu.mukey
               INNER JOIN chorizon AS ch ON ch.cokey = c.cokey
-              ORDER BY areasymbol, musym, muname, mu.mukey, c.comppct_r DESC, c.cokey",
+              ORDER BY areasymbol, musym, muname, mu.mukey, c.comppct_r DESC, c.cokey, hzdept_r",
             agg_property, agg_property, where_clause)
   )
 
