@@ -4,12 +4,17 @@
 \alias{get_SDA_interpretation}
 \title{Get map unit interpretations from Soil Data Access by rule name}
 \usage{
-get_SDA_interpretation(rulename, method, areasymbols = NULL, mukeys = NULL)
+get_SDA_interpretation(
+  mrulename,
+  method = c("Dominant Component", "Dominant Condition", "Weighted Average", "None"),
+  areasymbols = NULL,
+  mukeys = NULL
+)
 }
 \arguments{
-\item{rulename}{rule name of interpretation}
+\item{mrulename}{rule name of interpretation (matching a \code{mrulename} in \code{cointerp} table)}
 
-\item{method}{aggregation method. One of: "Dominant Component", "Dominant Condition", "Weighted Average"}
+\item{method}{aggregation method. One of: "Dominant Component", "Dominant Condition", "Weighted Average", "None"}
 
 \item{areasymbols}{vector of soil survey area symbols}
 

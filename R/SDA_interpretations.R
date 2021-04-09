@@ -4,18 +4,25 @@
 
 #' Get map unit interpretations from Soil Data Access by rule name
 #'
-#' @param rulename rule name of interpretation
-#' @param method aggregation method. One of: "Dominant Component", "Dominant Condition", "Weighted Average"
+#' @param mrulename rule name of interpretation (matching a `mrulename` in `cointerp` table)
+#' @param method aggregation method. One of: "Dominant Component", "Dominant Condition", "Weighted Average", "None". If "None" is selected one row will be returned per component, otherwise one row will be returned per map unit.
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
+
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
 #' @return a data.frame
 #' @export
 #' @importFrom soilDB format_SQL_in_statement SDA_query
-get_SDA_interpretation <- function(rulename, method, areasymbols = NULL, mukeys = NULL) {
+#' 
+get_SDA_interpretation <- function(mrulename, 
+                                   method = c("Dominant Component", 
+                                              "Dominant Condition", 
+                                              "Weighted Average", 
+                                              "None"),
+                                   areasymbols = NULL, mukeys = NULL) {
   q <- .constructInterpQuery(
       method = method,
-      interp = rulename,
+      interp = mrulename,
       areasymbols = areasymbols,
       mukeys = mukeys
     )
@@ -365,13 +372,15 @@ get_SDA_interpretation <- function(rulename, method, areasymbols = NULL, mukeys 
   # match to one of the available aggregation methods
   labels <- c("Dominant Component",
               "Weighted Average",
-              "Dominant Condition")
+              "Dominant Condition",
+              "None")
   method <- match.arg(toupper(method), toupper(labels))
 
   # determine column name suffix for method
   suffixes <- c('_dom_comp_',
                 '_wtd_avg',
-                '_dom_cond')
+                '_dom_cond',
+                '')
   modifier <- suffixes[match(method, toupper(labels))]
 
   # return list with method and modifier
@@ -489,6 +498,21 @@ get_SDA_interpretation <- function(rulename, method, areasymbols = NULL, mukeys 
                 WHEN design = 'limitation' AND  ROUND ((rating/sum_com),2)  > 0.667 and  ROUND ((rating/sum_com),2)  <=0.999  THEN 'Moderately limited '
                 WHEN design = 'limitation' AND  ROUND ((rating/sum_com),2)  = 1 THEN 'Very limited' END AS class, reason
                 FROM #main
-                DROP TABLE #main", interp, interp, interp, interp, where_clause))
+                DROP TABLE #main", interp, interp, interp, interp, where_clause),
+    
+  "NONE" = sprintf("SELECT areasymbol, musym, muname, mu.mukey AS MUKEY, c.cokey AS cokey, c.compname AS compname, c.comppct_r AS comppct_r,
+                (SELECT interphr FROM component INNER JOIN cointerp ON component.cokey = cointerp.cokey AND component.cokey = c.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as rating,
+                (SELECT interphrc FROM component INNER JOIN cointerp ON component.cokey = cointerp.cokey AND component.cokey = c.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as class,
+                (SELECT DISTINCT SUBSTRING(  (  SELECT ( '; ' + interphrc)
+                FROM mapunit
+                INNER JOIN component ON component.mukey=mu.mukey AND compkind != 'miscellaneous area' AND component.cokey=c.cokey
+                INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
+                AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc, interphr
+                ORDER BY interphr DESC, interphrc
+                FOR XML PATH('') ), 3, 1000) )as reason
+                FROM legend  AS l
+                INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
+                INNER JOIN component AS c ON c.mukey = mu.mukey",
+                     interp, interp, interp, where_clause))
 
 }

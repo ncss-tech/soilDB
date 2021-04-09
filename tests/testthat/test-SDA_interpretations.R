@@ -1,5 +1,6 @@
 target_areas <-  c("CA649", "CA630")
 target_area_rows <- 231
+target_area_rows_all <- 1085
 
 target_mukeys <- c(463263, 463264)
 
@@ -45,4 +46,17 @@ test_that("SDA interpretations (weighted average) works", {
   res <- get_SDA_interpretation("FOR - Potential Seedling Mortality",
                                 method = "Weighted Average", mukeys = target_mukeys)
   expect_equal(sort(res$MUKEY), sort(target_mukeys))
+})
+
+test_that("SDA interpretations (no aggregation) works", {
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  res <- get_SDA_interpretation("FOR - Potential Seedling Mortality",
+                                method = "NONE", 
+                                areasymbols = target_areas)
+  expect_equal(nrow(res), target_area_rows_all)
+  
+  
 })
