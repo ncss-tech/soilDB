@@ -241,9 +241,8 @@ get_SDA_property <-
 .constructPropQuery <- function(method, property,
                                 areasymbols = NULL, mukeys = NULL,
                                 tDep = 0, bDep = 200, mmC = NULL) {
-  # SQL by Jason Nemecek) {
-
-
+  # SQL by Jason Nemecek
+  
   stopifnot(!is.null(areasymbols) | !is.null(mukeys))
 
   if (!is.null(areasymbols))
@@ -257,22 +256,36 @@ get_SDA_property <-
                          "FALSE" = sprintf("l.areasymbol IN %s", areasymbols))
   
   # check property, case insensitive, against dictionary
-  property <- toupper(property)
+  property_up <- toupper(property)
   lut <- .propertyDictionary()
   names(lut) <- toupper(names(lut))
-  agg_property <- lut[[property]]
+  agg_property <- lut[property_up]
   
-  if(is.null(agg_property)) {
-    names(lut) <- toupper(.propertyDictionary())
-    agg_property <- lut[[property]]
-    if(is.null(agg_property))
-      stop("property must be a label or column name from SDA property dictionary (.propertyDictonary())", call. = FALSE)
+  not_in_lut <- sapply(agg_property, is.null)
+  
+  # if they are all not in lookup table, assume user knows what they are doing
+  #  this means you can't mix column name input and readable label input in same call
+  if (all(not_in_lut)) {
+    
+    ## strict: only allow properties from the lookup table
+    # names(lut) <- toupper(.propertyDictionary())
+    # agg_property <- lut[property]
+    # if(any(is.null(agg_property))) stop("property must be a label or column name from SDA property dictionary (.propertyDictonary())", call. = FALSE)
+    
+    ## alternate: just assume they are either all component or all horizon column names 
+    # message('assuming `property` is a vector of component OR horizon-level column names')
+    agg_property <- property
+    
+  } else {
+      
+    # remove non-matching if using lookup table labels
+    agg_property <- agg_property[!not_in_lut]
   }
   
   method <- toupper(method)
   
   if (method == "NONE")
-    if (agg_property %in% colnames(suppressMessages(SDA_query("SELECT TOP 1 * FROM chorizon"))))
+    if (all(agg_property %in% colnames(suppressMessages(SDA_query("SELECT TOP 1 * FROM chorizon")))))
       method <- "NONE_HORIZON"
   
   mmC <- toupper(mmC)
@@ -470,25 +483,28 @@ get_SDA_property <-
     
     # NO AGGREGATION (component properties)
   "NONE" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey, 
-                           c.compname AS compname, c.comppct_r AS comppct_r, c.cokey AS cokey, c.%s AS %s
+                           c.compname AS compname, c.comppct_r AS comppct_r, c.cokey AS cokey, 
+                           %s
              FROM legend AS l
               INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
               INNER JOIN component AS c ON c.mukey = mu.mukey
               ORDER BY areasymbol, musym, muname, mu.mukey, c.comppct_r DESC, c.cokey",
-            agg_property, agg_property, where_clause),
+            paste0(sapply(agg_property, function(x) sprintf("c.%s AS %s", x, x)), collapse = ", "), 
+            where_clause),
   
   # NO AGGREGATION (horizon properties)
   "NONE_HORIZON" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey, 
                                    c.cokey AS cokey, ch.chkey AS chkey,
                                    c.compname AS compname, c.comppct_r AS comppct_r,
                                    ch.hzdept_r AS hzdept_r, ch.hzdepb_r AS hzdepb_r,
-                                   ch.%s AS %s
+                                   %s
              FROM legend  AS l
               INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
               INNER JOIN component AS c ON c.mukey = mu.mukey
               INNER JOIN chorizon AS ch ON ch.cokey = c.cokey
               ORDER BY areasymbol, musym, muname, mu.mukey, c.comppct_r DESC, c.cokey, hzdept_r",
-            agg_property, agg_property, where_clause)
+             paste0(sapply(agg_property, function(x) sprintf("ch.%s AS %s", x, x)), collapse = ", "), 
+             where_clause)
   )
 
 }
