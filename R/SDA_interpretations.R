@@ -1132,18 +1132,24 @@ get_SDA_interpretation <- function(rulename,
                 DROP TABLE #main", interp, interp, interp, interp, where_clause),
     
   "NONE" = sprintf("SELECT areasymbol, musym, muname, mu.mukey AS MUKEY, c.cokey AS cokey, c.compname AS compname, c.comppct_r AS comppct_r,
-                (SELECT interphr FROM component INNER JOIN cointerp ON component.cokey = cointerp.cokey AND component.cokey = c.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as rating,
-                (SELECT interphrc FROM component INNER JOIN cointerp ON component.cokey = cointerp.cokey AND component.cokey = c.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as class,
-                (SELECT DISTINCT SUBSTRING(  (  SELECT ( '; ' + interphrc)
-                FROM mapunit
-                INNER JOIN component ON component.mukey=mu.mukey AND compkind != 'miscellaneous area' AND component.cokey=c.cokey
-                INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
-                AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc, interphr
-                ORDER BY interphr DESC, interphrc
-                FOR XML PATH('') ), 3, 1000) )as reason
+                %s
                 FROM legend  AS l
                 INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
                 INNER JOIN component AS c ON c.mukey = mu.mukey",
-                     interp, interp, interp, where_clause))
-
+           paste0(sapply(interp, function(x) sprintf("(SELECT interphr FROM component INNER JOIN cointerp ON component.cokey = cointerp.cokey AND component.cokey = c.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [rating_%s],
+  (SELECT interphrc FROM component INNER JOIN cointerp ON component.cokey = cointerp.cokey AND component.cokey = c.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [class_%s],
+  (SELECT DISTINCT SUBSTRING(  (  SELECT ( '; ' + interphrc)
+                                  FROM mapunit
+                                  INNER JOIN component ON component.mukey=mu.mukey AND compkind != 'miscellaneous area' AND component.cokey=c.cokey
+                                  INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
+                                  AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc, interphr
+                                  ORDER BY interphr DESC, interphrc
+                                  FOR XML PATH('') ), 3, 1000)) as [reason_%s]", 
+                                                     x, .cleanRuleColumnName(x), 
+                                                     x, .cleanRuleColumnName(x), 
+                                                     x, .cleanRuleColumnName(x))), 
+                  collapse = ", "), where_clause)
+  )
 }
+
+.cleanRuleColumnName <- function(x) gsub("[^A-Za-z0-9]", "", x)
