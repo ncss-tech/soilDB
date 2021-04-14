@@ -7,13 +7,16 @@
 taxaExtent(
   x,
   level = c("order", "suborder", "greatgroup", "subgroup"),
+  formativeElement = FALSE,
   timeout = 60
 )
 }
 \arguments{
-\item{x}{single taxa name, case-insensitive}
+\item{x}{single taxon label (e.g. \code{haploxeralfs}) or formative element (e.g. \code{pale}), case-insensitive}
 
 \item{level}{the taxonomic level within the top 4 tiers of Soil Taxonomy, one of \code{c('order', 'suborder', 'greatgroup', 'subgroup')}}
+
+\item{formativeElement}{logical, search using formative elements instead of taxon label}
 
 \item{timeout}{time that we are willing to wait for a response, in seconds}
 }
@@ -21,10 +24,155 @@ taxaExtent(
 a \code{raster} object
 }
 \description{
-This function downloads a generalized representation of the geographic extent of any single taxa from the top 4 tiers of Soil Taxonomy. Data are provided by SoilWeb, ultimately sourced from from the current SSURGO snapshot. Data are returned as \code{raster} objects representing area proportion falling within 800m cells. Data are only available in CONUS and returned using an Albers Equal Area / NAD83 coordinate reference system (EPSG 6350).
+This function downloads a generalized representation of the geographic extent of any single taxon from the top 4 tiers of Soil Taxonomy, or those taxa matching a given formative element used in greatgroup or subgroup taxa. Data are provided by SoilWeb, ultimately sourced from from the current SSURGO snapshot. Data are returned as \code{raster} objects representing area proportion falling within 800m cells. Currently area proportions are based on major components only. Data are only available in CONUS and returned using an Albers Equal Area / NAD83 coordinate reference system (EPSG 6350).
 }
-\note{
-This is a work in progress.
+\details{
+\subsection{Taxon Queries}{
+
+Taxon labels can be conveniently extracted from the "ST_unique_list" sample data, provided by the \href{https://github.com/ncss-tech/SoilTaxonomy}{SoilTaxonomy package}.
+}
+
+\subsection{Formative Element Queries}{
+\subsection{Greatgroup:}{
+
+The following labels are used to access taxa containing the following formative elements (in parenthesis).
+\itemize{
+\item acr: (acro/acr) extreme weathering
+\item alb: (alb) presence of an albic horizon
+\item anhy: (anhy) very dry
+\item anthra: (anthra) presence of an anthropic epipedon
+\item aqu: (aqui/aqu) wetness
+\item argi: (argi) presence of an argillic horizon
+\item calci: (calci) presence of a calcic horizon
+\item cry: (cryo/cry) cryic STR
+\item dur: (duri/dur) presence of a duripan
+\item dystr: (dystro/dystr) low base saturation
+\item endo: (endo) ground water table
+\item epi: (epi) perched water table
+\item eutr: (eutro/eutr) high base saturation
+\item ferr: (ferr) presence of Fe
+\item fibr: (fibr) least decomposed stage
+\item fluv: (fluv) flood plain
+\item fol: (fol) mass of leaves
+\item fragi: (fragi) presence of a fragipan
+\item fragloss: (fragloss) presence of a fragipan and glossic horizon
+\item frasi: (frasi) not salty
+\item fulv: (fulvi/fulv) dark brown with organic carbon
+\item glac: (glac) presence of ice lenses
+\item gloss: (glosso/gloss) presence of a glossic horizon
+\item gypsi: (gypsi) presence of a gypsic horizon
+\item hal: (hal) salty
+\item hemi: (hemi) intermediate decomposition
+\item hist: (histo/hist) organic soil material
+\item hum: (humi/hum) presence of organic carbon
+\item hydr: (hydro/hydr) presence of water
+\item kandi: (kandi) presence of a kandic horizon
+\item kanhap: (kanhaplo/kanhap) thin kandic horizon
+\item luvi: (luvi) illuvial organic material
+\item melan: (melano/melan) presence of a melanic epipedon
+\item moll: (molli/moll) presence of a mollic epipedon
+\item natr: (natri/natr) presence of a natric horizon
+\item pale: (pale) excessive development
+\item petr: (petro/petr) petrocalcic horizon
+\item plac: (plac) presence of a thin pan
+\item plagg: (plagg) presence of a plaggen epipedon
+\item plinth: (plinth) presence of plinthite
+\item psamm: (psammo/psamm) sandy texture
+\item quartzi: (quartzi) high quartz content
+\item rhod: (rhodo/rhod) dark red colors
+\item sal: (sali/sal) presence of a salic horizon
+\item sapr: (sapr) most decomposed stage
+\item sombri: (sombri) presence of a sombric horizon
+\item sphagno: (sphagno) presence of sphagnum moss
+\item sulf: (sulfo/sulfi/sulf) presence of sulfides or their oxidation products
+\item torri: (torri) torric/aridic SMR
+\item ud: (udi/ud) udic SMR
+\item umbr: (umbri/umbr) presence of an umbric epipedon
+\item ust: (usti/ust) ustic SMR
+\item verm: (verm) wormy, or mixed by animals
+\item vitr: (vitri/vitr) presence of glass
+\item xer: (xero/xer) xeric SMR
+}
+}
+
+\subsection{Subgroup:}{
+
+The following labels are used to access taxa containing the following formative elements (in parenthesis).
+\itemize{
+\item abruptic: (abruptic) abrupt textural change
+\item acric: (acric) low apparent CEC
+\item aeric: (aeric) more aeration than typic subgroup
+\item albaquic: (albaquic) presence of albic minerals, wetter than typic subgroup
+\item albic: (albic) presence of albic minerals
+\item alfic: (alfic) presence of an argillic or kandic horizon
+\item alic: (alic) high extractable Al content
+\item anionic: (anionic) low CEC or positively charged
+\item anthraquic: (anthraquic) human controlled flooding as in paddy rice culture
+\item anthropic: (anthropic) an anthropic epipedon
+\item aquic: (aquic) wetter than typic subgroup
+\item arenic: (arenic) 50-100cm sandy textured surface
+\item argic: (argic) argillic horizon
+\item aridic: (aridic) more aridic than typic subgroup
+\item calcic: (calcic) presence of a calcic horizon
+\item chromic: (chromic) high chroma colors
+\item cumulic: (cumulic) thickened epipedon
+\item duric: (duric) presence of a duripan
+\item durinodic: (durinodic) presence of durinodes
+\item dystric: (dystric) lower base saturation percentage
+\item entic: (entic) minimal surface/subsurface development
+\item eutric: (eutric) higher base saturation percentage
+\item fibric: (fibric) >25cm of fibric material
+\item fluvaquentic: (fluvaquentic) wetter than typic subgroup, evidence of stratification
+\item fragiaquic: (fragiaquic) presence of fragic properties, wetter than typic subgroup
+\item fragic: (fragic) presence of fragic properties
+\item glacic: (glacic) presence of ice lenses or wedges
+\item glossaquic: (glossaquic) interfingered horizon boundaries, wetter than typic subgroup
+\item glossic: (glossic) interfingered horizon boundaries
+\item grossarenic: (grossarenic) >100cm sandy textured surface
+\item gypsic: (gypsic) presence of gypsic horizon
+\item halic: (halic) salty
+\item haplic: (haplic) central theme of subgroup concept
+\item hemic: (hemic) >25cm of hemic organic material
+\item humic: (humic) higher organic matter content
+\item hydric: (hydric) presence of water
+\item kandic: (kandic) low activity clay present
+\item lamellic: (lamellic) presence of lamellae
+\item leptic: (leptic) thinner than typic subgroup
+\item limnic: (limnic) presence of a limnic layer
+\item lithic: (lithic) shallow lithic contact present
+\item natric: (natric) presence of sodium
+\item nitric: (nitric) presence of nitrate salts
+\item ombroaquic: (ombroaquic) surface wetness
+\item oxyaquic: (oxyaquic) water saturated but not reduced
+\item pachic: (pachic) epipedon thicker than typic subgroup
+\item petrocalcic: (petrocalcic) presence of a petrocalcic horizon
+\item petroferric: (petroferric) presence of petroferric contact
+\item petrogypsic: (petrogypsic) presence of a petrogypsic horizon
+\item petronodic: (petronodic) presence of concretions and/or nodules
+\item placic: (placic) presence of a placic horizon
+\item plinthic: (plinthic) presence of plinthite
+\item rhodic: (rhodic) darker red colors than typic subgroup
+\item ruptic: (ruptic) intermittent horizon
+\item salic: (salic) presence of a salic horizon
+\item sapric: (sapric) >25cm of sapric organic material
+\item sodic: (sodic) high exchangeable Na content
+\item sombric: (sombric) presence of a sombric horizon
+\item sphagnic: (sphagnic) sphagnum organic material
+\item sulfic: (sulfic) presence of sulfides
+\item terric: (terric) mineral substratum within 1 meter
+\item thapto: (thaptic/thapto) presence of a buried soil horizon
+\item turbic: (turbic) evidence of cryoturbation
+\item udic: (udic) more humid than typic subgroup
+\item umbric: (umbric) presence of an umbric epipedon
+\item ustic: (ustic) more ustic than typic subgroup
+\item vermic: (vermic) animal mixed material
+\item vitric: (vitric) presence of glassy material
+\item xanthic: (xanthic) more yellow than typic subgroup
+\item xeric: (xeric) more xeric than typic subgroup
+}
+}
+
+}
 }
 \examples{
 \donttest{
@@ -56,6 +204,17 @@ if(requireNamespace("curl") &
   x <- taxaExtent(taxa, level = 'subgroup')
   a <- raster::aggregate(x, fact = 5)
   
+  # greatgroup formative element
+  taxa <- 'psamm'
+  x <- taxaExtent(taxa, level = 'greatgroup', formativeElement = TRUE)
+  a <- raster::aggregate(x, fact = 5)
+  
+  # subgroup formative element
+  taxa <- 'abruptic'
+  x <- taxaExtent(taxa, level = 'subgroup', formativeElement = TRUE)
+  a <- raster::aggregate(x, fact = 5)
+  
+  
   # quick evaluation of the result
   if(requireNamespace("rasterVis") & requireNamespace('viridisLite')) {
     rasterVis::levelplot(a, 
@@ -78,5 +237,5 @@ if(requireNamespace("curl") &
 
 }
 \author{
-D.E. Beaudette
+D.E. Beaudette and Andrew Brown
 }

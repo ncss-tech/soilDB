@@ -382,7 +382,7 @@ LEFT OUTER JOIN (
   }
 
 
-  q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, classtype, taxonname, localphase, taxonkind, seriesstatus, taxpartsize, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, soiltaxedition, osdtypelocflag, taxmoistcl, taxtempregime, taxfamother, psctopdepth, pscbotdepth
+  q.taxhistory <- "SELECT peiidref as peiid, classdate, classifier, classtype, taxonname, localphase, taxonkind, seriesstatus, taxclname, taxpartsize, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, soiltaxedition, osdtypelocflag, taxmoistcl, taxtempregime, taxfamother, psctopdepth, pscbotdepth
   	FROM
     petaxhistory_View_1 AS pth
     LEFT OUTER JOIN petaxhistmoistcl_View_1 AS pthm ON pth.petaxhistoryiid = pthm.pedtaxhistoryiidref
