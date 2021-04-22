@@ -1,3 +1,9 @@
+# soilDB 2.6.2 (2021-04-22)
+ *  Added `formativeElement` argument to `taxaExtent()` (SoilWeb taxon extent function)
+    - "Formative elements" are derived from the dictionary provided by the {SoilTaxonomy} package (https://cran.r-project.org/package=SoilTaxonomy)
+    - For example: `taxaExtent("abruptic", level = 'subgroup', formativeElement = TRUE)` will get an 800m grid (for SSURGO data in CONUS) showing extent of taxa that have "abruptic" in subgroup-level taxon name
+ * `fetchNASIS(from="pedons")` result now contains the `"taxclname"` (full family-level taxon name) field from the NASIS `pedon` table; this value is calculated based on contents of `petaxhistory` child table
+
 # soilDB 2.6.1 (2021-04-07)
  * Connections to local NASIS and various MS Access databases now use `DBI` and `odbc`, replacing `RODBC`
  * New methods `dbConnectNASIS` and `dbQueryNASIS` for NASIS access with read-only credentials, fetching query results, and closing the _DBIConnection_ upon completion
