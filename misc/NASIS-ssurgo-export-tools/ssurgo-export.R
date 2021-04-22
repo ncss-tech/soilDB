@@ -39,26 +39,23 @@ library(soilDB)
 #'                                         method = "NONE", 
 #'                                         areasymbols = c("CA630","CA649"))
 #' 
-#' # result_dominant <- result[result[, .I[comppct_r == max(comppct_r)],by="mukey"]$V1,]
-#' result_dominant <- result
 #' 
-#' x1 <- data.table(mukey = result_dominant$mukey, 
-#'                  compname = result_dominant$compname,
-#'                  rating_new = result_dominant$interphr,
-#'                  rating_class = result_dominant$interphrc,
-#'                  rating_new_reason = result_dominant$Reason)
-#'                  
-#' x2 <- data.table(mukey = result_ssurgo$MUKEY, 
+#' x1 <- data.table(mukey = result$mukey,
+#'                  compname = result$compname,
+#'                  rating_new = result$interphr,
+#'                  rating_class = result$interphrc,
+#'                  rating_new_reason = result$Reason)
+#' 
+#' x2 <- data.table(mukey = result_ssurgo$MUKEY,
 #'                  compname = result_ssurgo$compname,
 #'                  rating_old = result_ssurgo$rating,
 #'                  rating_class = result_ssurgo$class)
-#'                  
+#' 
 #' combined_result <- x2[x1, on = c("mukey","compname")]
 #' 
 #' combined_result$CHECK <- round(combined_result$rating_new, 2) == round(combined_result$rating_old, 2)
 #' 
-#' View(combined_result)       
-#'          
+#' View(combined_result)
 .get_SSURGO_export_interp_reasons_by_mrulename <- function(dsn, mrulename, n = 2) {
   # based on VBA Function in Report Functions module of above .mdb
   # GetInterpReasons(strCokey As String, 
@@ -93,7 +90,7 @@ library(soilDB)
     dbQueryNASIS(NASIS(), sprintf("
       SELECT liid, lmapunitiid, muiid, corriid, dmuiid, coiid, 
              areasymbol, musym, muname, compname, comppct_r 
-        FROM area
+      FROM area
         INNER JOIN legend ON legend.areaiidref = area.areaiid
         INNER JOIN lmapunit ON lmapunit.liidref = legend.liid
         INNER JOIN mapunit ON mapunit.muiid = lmapunit.muiidref
@@ -106,7 +103,7 @@ library(soilDB)
   # get lookup table
   res2 <- .get_SSURGO_export_iid_table(cointerpkey$coiid)
   
-  # extract the "high represenative" rating and class for 0th level rule
+  # extract the "high representative" rating and class for 0th level rule
   high_rep_rating_class <- cointerpbase[,c("lmapunitiid","coiid","interphr","interphrc")]
   colnames(high_rep_rating_class) <- c("lmapunitiid","coiid","interphr","interphrc")
   
