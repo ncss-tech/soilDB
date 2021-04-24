@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.2</span>
       </span>
     </div>
 
@@ -114,9 +114,24 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="soildb-262-2021-04-22" class="section level1">
+<h1 class="page-header" data-toc-text="2.6.2">
+<a href="#soildb-262-2021-04-22" class="anchor"></a>soilDB 2.6.2 (2021-04-22)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Added <code>formativeElement</code> argument to <code><a href="../reference/taxaExtent.html">taxaExtent()</a></code> (SoilWeb taxon extent function)
+<ul>
+<li>“Formative elements” are derived from the dictionary provided by the {SoilTaxonomy} package (<a href="https://cran.r-project.org/package=SoilTaxonomy" class="uri">https://cran.r-project.org/package=SoilTaxonomy</a>)</li>
+<li>For example: <code><a href="../reference/taxaExtent.html">taxaExtent("abruptic", level = 'subgroup', formativeElement = TRUE)</a></code> will get an 800m grid (for SSURGO data in CONUS) showing extent of taxa that have “abruptic” in subgroup-level taxon name</li>
+</ul>
+</li>
+<li>
+<code><a href="../reference/fetchNASIS.html">fetchNASIS(from="pedons")</a></code> result now contains the <code>"taxclname"</code> (full family-level taxon name) field from the NASIS <code>pedon</code> table; this value is calculated based on contents of <code>petaxhistory</code> child table</li>
+</ul>
+</div>
     <div id="soildb-261-2021-04-07" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.1">
-<a href="#soildb-261-2021-04-07" class="anchor"></a>soilDB 2.6.1 (2021-04-07)<small> Unreleased </small>
+<a href="#soildb-261-2021-04-07" class="anchor"></a>soilDB 2.6.1 (2021-04-07)<small> 2021-04-18 </small>
 </h1>
 <ul>
 <li>Connections to local NASIS and various MS Access databases now use <code>DBI</code> and <code>odbc</code>, replacing <code>RODBC</code>
