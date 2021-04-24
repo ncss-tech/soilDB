@@ -1,7 +1,7 @@
 [![CRAN Version
 (Stable)](http://www.r-pkg.org/badges/version/soilDB)](https://cran.r-project.org/package=soilDB)
 [![GitHub Version
-(Development)](https://img.shields.io/badge/GitHub-2.6.1-yellowgreen)](https://github.com/ncss-tech/soilDB)
+(Development)](https://img.shields.io/badge/GitHub-2.6.2-yellowgreen)](https://github.com/ncss-tech/soilDB)
 [![R-CMD-check Build
 Status](https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
 [![Total CRAN
@@ -32,7 +32,7 @@ Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021).
 soilDB: Soil Database Interface. R package version 2.6.1.
 <a href="https://CRAN.R-project.org/package=soilDB" class="uri">https://CRAN.R-project.org/package=soilDB</a>
 
-soilDB 2.6.1
+soilDB 2.6.2
 ------------
 
 ### Notices on Database Interfaces
@@ -175,7 +175,7 @@ Examples
     res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
     print(res$fig)
 
-<img src="https://i.imgur.com/m8ELAnN.png" width="1056" />
+<img src="https://i.imgur.com/AxEU9oa.png" width="1056" />
 
 ### Make Profile Sketches
 
@@ -189,7 +189,7 @@ Examples
       width = 0.2
     )
 
-<img src="https://i.imgur.com/7rw0HCH.png" width="1344" />
+<img src="https://i.imgur.com/maMwyJ7.png" width="1344" />
 
 ### Identify Tabular “Siblings”
 
@@ -219,7 +219,7 @@ Examples
       cex.names = 1
     )
 
-<img src="https://i.imgur.com/P9oWxTn.png" width="1344" />
+<img src="https://i.imgur.com/AC6LhQX.png" width="1344" />
 
 Dependency Graph
 ----------------
