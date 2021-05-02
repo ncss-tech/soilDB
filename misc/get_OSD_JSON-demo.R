@@ -1,7 +1,7 @@
 library(soilDB)
 library(tibble)
 
-path <- "E:/workspace/SoilKnowledgeBase/inst/extdata/OSD"
+path <- "../SoilKnowledgeBase/inst/extdata/OSD"
 
 # list all
 series <- gsub("(.*).json|(.*log$)", "\\1", basename(list.files(path,
@@ -13,7 +13,7 @@ series <- series[nchar(series) > 0]
 res <- get_OSD_JSON(series, base_url = path)
 
 # 2023 series are "incomplete" in one or more sections
-tibble(series = series[match(res$SERIES, toupper(series))], 
+tibble(series = series[match(res$SERIES, toupper(series))],
        complete = complete.cases(res))  %>%
   subset(!complete)
 
@@ -37,3 +37,58 @@ allstates[order(allstates, decreasing = TRUE)]
 
 # proportion by state
 round(prop.table(allstates[order(allstates, decreasing = TRUE)]), 2)
+
+# how many albolls?
+idx <- grep("albolls$", res$TAXONOMIC.CLASS)
+res_albolls <- res[idx,]
+zzx <- lapply(res_albolls$GEOGRAPHIC.SETTING, function(x) {cat("\n\n"); cat(x)})
+
+# examine the geographic setting of albolls
+sum(sapply(res_albolls$GEOGRAPHIC.SETTING, function(x) length(grep("lake|lacustrine", x)) > 0))
+sum(sapply(res_albolls$GEOGRAPHIC.SETTING, function(x) length(grep("plain", x)) > 0))
+sum(sapply(res_albolls$GEOGRAPHIC.SETTING, function(x) length(grep("loess", x)) > 0))
+sum(sapply(res_albolls$GEOGRAPHIC.SETTING, function(x) length(grep("till", x)) > 0))
+sum(sapply(res_albolls$GEOGRAPHIC.SETTING, function(x) length(grep("alluvium|stream|terrace", x)) > 0))
+
+# mollic epipedon thickness in range in characteristics
+
+x <- data.table::rbindlist(lapply(seq_along(res$SERIES), function(i)
+    data.frame(
+      series = res$SERIES[i],
+      ric.content = as.character(strsplit(res$RANGE.IN.CHARACTERISTICS[i], "\\. |\\n")[[1]])
+    )))
+
+x.mollic <- subset(x, grepl('[^n][^o][^t] thick', ric.content, ignore.case = TRUE) &
+                      grepl('mollic epipedon', ric.content, ignore.case = TRUE))
+x.mollic$units <- NA_character_
+x.mollic$numbers <- gsub(".*[ \\-](\\d+ to \\d+) (in|inches|cm|centimeters).*", "\\1;\\2", x.mollic$ric.content)
+
+x.mollic.split <- strsplit(x.mollic$numbers, " to |;")
+names(x.mollic.split) <- x.mollic$series
+
+x.mollic.result <- data.table::rbindlist(lapply(seq_along(x.mollic.split), function(i) {
+  if (length(x.mollic.split[[i]]) == 3)
+    data.frame(series = names(x.mollic.split)[[i]],
+               top = x.mollic.split[[i]][1],
+               bottom = x.mollic.split[[i]][2],
+               units = x.mollic.split[[i]][3])
+  }))
+
+inidx <- x.mollic.result[, .I[units %in% c("in","inches")]]
+
+x.mollic.result$topt <- as.numeric(x.mollic.result$top)
+x.mollic.result$topt[inidx] <- x.mollic.result$topt[inidx]*2.54
+
+x.mollic.result$bottomt <- as.numeric(x.mollic.result$bottom)
+x.mollic.result$bottomt[inidx] <- x.mollic.result$bottomt[inidx]*2.54
+
+plot(density(round(x.mollic.result$topt), na.rm=T))
+sort(table(round(x.mollic.result$topt)), decreasing=TRUE)
+
+min_lt18 <- subset(x.mollic.result, topt < 17.5)
+sort(table(round(x.mollic.result$topt)))
+View(min_lt18)
+
+max_lt25 <- subset(x.mollic.result, bottomt < 25.5)
+sort(table(round(x.mollic.result$bottomt)))
+View(max_lt25)
