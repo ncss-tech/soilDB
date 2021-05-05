@@ -1,3 +1,44 @@
+# There are many analyses that benefit from having direct access to the contents of OSDs parsed by section. 
+# 
+# The following code snippet builds a ~30MB .rda file containing OSD data -- a _data.frame_ with one column per "standard OSD section" and one row per series (n=24379). This is too big to deliver as part of the package but it offers significant capabilities over the SoilWeb Postgres fulltext search (soilDB::OSD_query) when one is interested in the details of the OSD narrative rather than just a vector of series names matching some search.
+# 
+# The parsed OSD table from SoilKnowledgeBase is derived from the set of series specific JSON files in https://github.com/ncss-tech/SoilKnowledgeBase. This dataset gives complementary info to that from the SC database and those derived from series/component names/SSURGO: https://github.com/ncss-tech/SoilTaxonomy/blob/master/inst/extdata/SC-database.csv.gz and https://github.com/ncss-tech/SoilTaxonomy/blob/master/inst/extdata/series-stats.csv.gz. 
+# 
+# I want to consider some avenues for making the FULL OSD data readily available and _queryable_. This is currently possible if one has an instance of SoilKnowledgeBase / JSON files installed locally. 
+# 
+# An interesting new option is https://phiresky.github.io/blog/2021/hosting-sqlite-databases-on-github-pages/ which allows a simple SQLite database to be hosted (read only) via static GitHub Pages. 
+# 
+# library(soilDB)
+# 
+# path <- "../SoilKnowledgeBase/inst/extdata/OSD"
+# 
+# # list all
+# series <- gsub("(.*).json|(.*log$)", "\\1", basename(list.files(path, recursive = TRUE)))
+# series <- series[nchar(series) > 0]
+# 
+# # this uses a _local_ cloned instance of SKB repo (pretty fast) stored in same parent directory as soilDB
+# #  - base_url = NULL or missing will use GitHub
+# res <- soilDB::get_OSD_JSON(series, base_url = path)
+# 
+# ST_series <- res
+# save(ST_series, file = "misc/ST_series.rda")
+# 
+# colnames(ST_series)
+# #>  [1] "SERIES"                          "STATUS"                         
+# #>  [3] "BYREV"                           "REVDATE"                        
+# #>  [5] "STATES"                          "OVERVIEW"                       
+# #>  [7] "TAXONOMIC.CLASS"                 "TYPICAL.PEDON"                  
+# #>  [9] "TYPE.LOCATION"                   "RANGE.IN.CHARACTERISTICS"       
+# #> [11] "COMPETING.SERIES"                "GEOGRAPHIC.SETTING"             
+# #> [13] "GEOGRAPHICALLY.ASSOCIATED.SOILS" "DRAINAGE.AND.PERMEABILITY"      
+# #> [15] "USE.AND.VEGETATION"              "DISTRIBUTION.AND.EXTENT"        
+# #> [17] "REGIONAL.OFFICE"                 "ORIGIN"                         
+# #> [19] "REMARKS" 
+# 
+# nrow(ST_series)
+# #> [1] 24379
+
+
 library(soilDB)
 library(tibble)
 
@@ -11,6 +52,9 @@ series <- series[nchar(series) > 0]
 # this uses a _local_ cloned instance of SKB repo (pretty fast)
 #  - base_url = NULL or missing will use GitHub
 res <- get_OSD_JSON(series, base_url = path)
+
+ST_series <- res
+save(ST_series, file = "misc/ST_series.rda")
 
 # 2023 series are "incomplete" in one or more sections
 tibble(series = series[match(res$SERIES, toupper(series))],
