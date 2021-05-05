@@ -41,6 +41,7 @@
 
 library(soilDB)
 library(tibble)
+library(SoilTaxonomy)
 
 path <- "../SoilKnowledgeBase/inst/extdata/OSD"
 
@@ -99,6 +100,7 @@ sum(sapply(res_albolls$GEOGRAPHIC.SETTING, function(x) length(grep("alluvium|str
 x <- data.table::rbindlist(lapply(seq_along(res$SERIES), function(i)
     data.frame(
       series = res$SERIES[i],
+      taxonomy = res$TAXONOMIC.CLASS[i],
       ric.content = as.character(strsplit(res$RANGE.IN.CHARACTERISTICS[i], "\\. |\\n")[[1]])
     )))
 
@@ -110,15 +112,31 @@ x.mollic$numbers <- gsub(".*[ \\-](\\d+ to \\d+) (in|inches|cm|centimeters).*", 
 x.mollic.split <- strsplit(x.mollic$numbers, " to |;")
 names(x.mollic.split) <- x.mollic$series
 
+taxonfamily <- gsub("TAXONOMIC CLASS: ?", "", x.mollic$taxonomy)
+names(taxonfamily) <- x.mollic$series
+
 x.mollic.result <- data.table::rbindlist(lapply(seq_along(x.mollic.split), function(i) {
-  if (length(x.mollic.split[[i]]) == 3)
-    data.frame(series = names(x.mollic.split)[[i]],
-               top = x.mollic.split[[i]][1],
-               bottom = x.mollic.split[[i]][2],
-               units = x.mollic.split[[i]][3])
+    if (length(x.mollic.split[[i]]) == 3) {
+      aSeries <- names(x.mollic.split)[[i]]
+      data.frame(
+        series = aSeries,
+        taxonomy = taxonfamily[[aSeries]],
+        top = x.mollic.split[[i]][1],
+        bottom = x.mollic.split[[i]][2],
+        units = x.mollic.split[[i]][3]
+      )
+    }
   }))
 
+families <- SoilTaxonomy::parse_family(x.mollic.result$taxonomy)
+families$series <- x.mollic.result$series
+
+x.mollic.result <- merge(x.mollic.result, families, all.x=TRUE, sort=FALSE, incomparables=NA)
+
 inidx <- x.mollic.result[, .I[units %in% c("in","inches")]]
+
+x.mollic.result$classes_split <- NULL
+x.mollic.result$taxonomy <- NULL
 
 x.mollic.result$topt <- as.numeric(x.mollic.result$top)
 x.mollic.result$topt[inidx] <- x.mollic.result$topt[inidx]*2.54
@@ -127,12 +145,52 @@ x.mollic.result$bottomt <- as.numeric(x.mollic.result$bottom)
 x.mollic.result$bottomt[inidx] <- x.mollic.result$bottomt[inidx]*2.54
 
 plot(density(round(x.mollic.result$topt), na.rm=T))
-sort(table(round(x.mollic.result$topt)), decreasing=TRUE)
+plot(density(round(x.mollic.result$bottomt), na.rm=T))
+
+sort(table(round(x.mollic.result$topt)))
+sort(table(round(x.mollic.result$bottomt)))
+  
+parenttaxa <- data.table::rbindlist(lapply(SoilTaxonomy::getParentTaxa(code = x.mollic.result$subgroup_code),
+                                           function(x) {
+                                             if (length(x) == 3) {
+                                               data.frame(order = x[1],
+                                                          suborder = x[2],
+                                                          greatgroup = x[3])
+                                             } else {
+                                               data.frame(order = NA,
+                                                          suborder = NA,
+                                                          greatgroup = NA)
+                                             }
+                                           }),
+                                    fill = TRUE)
+
+x.mollic.result <- cbind(parenttaxa, x.mollic.result)
 
 min_lt18 <- subset(x.mollic.result, topt < 17.5)
-sort(table(round(x.mollic.result$topt)))
-View(min_lt18)
+write.csv(min_lt18, file = "misc/osd_mollic_min_thickness_lt18.csv")
 
-max_lt25 <- subset(x.mollic.result, bottomt < 25.5)
-sort(table(round(x.mollic.result$bottomt)))
-View(max_lt25)
+length(unique(min_lt18$greatgroup)) 
+# [1] 21
+
+sort(table(min_lt18$greatgroup), decreasing = TRUE)[1:5]
+# top 5 affected: 
+# Haplustolls  Argiustolls  Argixerolls Haploxerolls Calcixerolls 
+# 14            7            4            4            2 
+
+max_lt25 <- subset(x.mollic.result, bottomt < 24.5)
+write.csv(max_lt25, file = "misc/osd_mollic_max_thickness_lt25.csv")
+# great groups affected
+length(unique(max_lt25$greatgroup))
+# [1] 13
+
+sort(table(max_lt25$greatgroup), decreasing = TRUE)[1:5]
+# top 5 affected: 
+# Haplustolls Calciustolls  Argixerolls  Calciargids Calcixerolls 
+# 4            2            1            1            1 
+
+min_is18 <- subset(x.mollic.result, round(topt) == 18)
+write.csv(min_is18, file = "misc/osd_mollic_min_thickness_18.csv")
+sort(table(min_is18$greatgroup), decreasing = TRUE)[1:5]
+# top 5 affected: 
+# Argiustolls Haploxerolls  Haplustolls Calciaquolls   Hapludolls 
+# 73           69           64           43           43 
