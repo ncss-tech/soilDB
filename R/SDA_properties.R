@@ -5,20 +5,107 @@
 #' Get map unit properties from Soil Data Access
 #'
 #' @param property a label or column name from property dictionary
-#' @param method one of: "Dominant Component (Category)", "Weighted Average", "Min/Max", "Dominant Component (Numeric)", "Dominant Condition"#'
+#' @param method one of: "Dominant Component (Category)", "Weighted Average", "Min/Max", "Dominant Component (Numeric)", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
 #' @param top_depth Optional: a numeric value for upper boundary (top depth) used for method="weighted average" and "dominant component (numeric)"
 #' @param bottom_depth Optional: a numeric value for lower boundary (bottom depth) used for method="weighted average and "dominant component (numeric)"
 #' @param FUN Optional: character representing SQL aggregation function either "MIN" or "MAX" for method="min/max"
+#' @details 
+#' 
+#' The `property` argument refers to one of the property names or columns specified in the tables below.
+#' 
+#'  ## Selected Component-level Properties
+#'  
+#'  |**Property (Component)**                         |**Column**         |
+#'  |:------------------------------------------------|:------------------|
+#'  |Range Production - Favorable Year                |rsprod_h           |
+#'  |Range Production - Normal Year                   |rsprod_r           |
+#'  |Range Production - Unfavorable Year              |rsprod_l           |
+#'  |Corrosion of Steel                               |corsteel           |
+#'  |Corrosion of Concrete                            |corcon             |
+#'  |Drainage Class                                   |drainagecl         |
+#'  |Hydrologic Group                                 |hydgrp             |
+#'  |Taxonomic Class Name                             |taxclname          |
+#'  |Taxonomic Order                                  |taxorder           |
+#'  |Taxonomic Suborder                               |taxsuborder        |
+#'  |Taxonomic Temperature Regime                     |taxtempregime      |
+#'  |Wind Erodibility Group                           |weg                |
+#'  |Wind Erodibility Index                           |wei                |
+#'  |t Factor                                         |tfact              |
+#'  
+#'  ## Selected Horizon-level Properties
+#'  
+#'  |**Property (Horizon)**                           |**Column**         |
+#'  |:------------------------------------------------|:------------------|
+#'  |0.1 bar H2O - Rep Value                          |wtenthbar_r        |
+#'  |0.33 bar H2O - Rep Value                         |wthirdbar_r        |
+#'  |15 bar H2O - Rep Value                           |wfifteenbar_r      |
+#'  |Available Water Capacity - Rep Value             |awc_r              |
+#'  |Bray 1 Phosphate - Rep Value                     |pbray1_r           |
+#'  |Bulk Density 0.1 bar H2O - Rep Value             |dbtenthbar_r       |
+#'  |Bulk Density 0.33 bar H2O - Rep Value            |dbthirdbar_r       |
+#'  |Bulk Density 15 bar H2O - Rep Value              |dbfifteenbar_r     |
+#'  |Bulk Density oven dry - Rep Value                |dbovendry_r        |
+#'  |CaCO3 Clay - Rep Value                           |claysizedcarb_r    |
+#'  |Calcium Carbonate - Rep Value                    |caco3_r            |
+#'  |Cation Exchange Capcity - Rep Value              |cec7_r             |
+#'  |Coarse Sand - Rep Value                          |sandco_r           |
+#'  |Coarse Silt - Rep Value                          |siltco_r           |
+#'  |Effective Cation Exchange Capcity - Rep Value    |ecec_r             |
+#'  |Electrial Conductivity 1:5 by volume - Rep Value |ec15_r             |
+#'  |Electrical Conductivity - Rep Value              |ec_r               |
+#'  |Exchangeable Sodium Percentage - Rep Value       |esp_r              |
+#'  |Extract Aluminum - Rep Value                     |extral_r           |
+#'  |Extractable Acidity - Rep Value                  |extracid_r         |
+#'  |Fine Sand - Rep Value                            |sandfine_r         |
+#'  |Fine Silt - Rep Value                            |siltfine_r         |
+#'  |Free Iron - Rep Value                            |freeiron_r         |
+#'  |Gypsum - Rep Value                               |gypsum_r           |
+#'  |Kf                                               |kffact             |
+#'  |Ki                                               |kifact             |
+#'  |Kr                                               |krfact             |
+#'  |Kw                                               |kwfact             |
+#'  |LEP - Rep Value                                  |lep_r              |
+#'  |Liquid Limit - Rep Value                         |ll_r               |
+#'  |Medium Sand - Rep Value                          |sandmed_r          |
+#'  |Organic Matter - Rep Value                       |om_r               |
+#'  |Oxalate Aluminum - Rep Value                     |aloxalate_r        |
+#'  |Oxalate Iron - Rep Value                         |feoxalate_r        |
+#'  |Oxalate Phosphate - Rep Value                    |poxalate_r         |
+#'  |Plasticity Index - Rep Value                     |pi_r               |
+#'  |Rock Fragments 3 - 10 cm - Rep Value             |frag3to10_r        |
+#'  |Rock Fragments > 10 cm - Rep Value               |fraggt10_r         |
+#'  |Rubbed Fiber % - Rep Value                       |fiberrubbedpct_r   |
+#'  |Satiated H2O - Rep Value                         |wsatiated_r        |
+#'  |Saturated Hydraulic Conductivity - Rep Value     |ksat_r             |
+#'  |Sodium Adsorption Ratio - Rep Value              |sar_r              |
+#'  |Sum of Bases - Rep Value                         |sumbases_r         |
+#'  |Total Clay - Rep Value                           |claytotal_r        |
+#'  |Total Phosphate - Rep Value                      |ptotal_r           |
+#'  |Total Rock Fragment Volume - Rep Value           |fragvoltot         |
+#'  |Total Sand - Rep Value                           |sandtotal_r        |
+#'  |Total Silt - Rep Value                           |silttotal_r        |
+#'  |Unrubbed Fiber % - Rep Value                     |fiberunrubbedpct_r |
+#'  |Very Coarse Sand - Rep Value                     |sandvc_r           |
+#'  |Very Fine Sand - Rep Value                       |sandvf_r           |
+#'  |Water Soluble Phosphate - Rep Value              |ph2osoluble_r      |
+#'  |no. 10 sieve - Rep Value                         |sieveno10_r        |
+#'  |no. 200 sieve - Rep Value                        |sieveno200_r       |
+#'  |no. 4 sieve - Rep Value                          |sieveno4_r         |
+#'  |no. 40 sieve - Rep Value                         |sieveno40_r        |
+#'  |pH .01M CaCl2 - Rep Value                        |ph01mcacl2_r       |
+#'  |pH 1:1 water - Rep Value                         |ph1to1h2o_r        |
+#'  |pH Oxidized - Rep Value                          |phoxidized_r       |
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
 #' @return a data.frame with result
 #' @export
 #' @importFrom soilDB format_SQL_in_statement SDA_query
 get_SDA_property <-
   function(property, # property -- a label or column name from property dictionary
-           method, # method one of: "Dominant Component (Category)", "Weighted Average",
-                   #                "Min/Max", "Dominant Component (Numeric)", "Dominant Condition"
+           method = c("Dominant Component (Category)", "Weighted Average",
+                      "Min/Max", "Dominant Component (Numeric)", "Dominant Condition", 
+                      "None"),
            areasymbols = NULL, # vector of areasymbols
            mukeys = NULL, # vector of mukeys
            top_depth = NULL, # used for method="weighted average" and "dominant component (numeric)"
@@ -55,15 +142,16 @@ get_SDA_property <-
               "Weighted Average",
               "Min/Max",
               "Dominant Component (Numeric)",
-              "Dominant Condition")
+              "Dominant Condition",
+              "None", "None_Horizon")
   method <- match.arg(toupper(method), toupper(labels))
 
-  # determine column name suffix for method
+  # determine column name prefix/suffix for method
   suffixes <- c('_dom_comp_cat',
                 '_wtd_avg',
                 '_min_max',
                 '_dom_comp_num',
-                '_dom_cond')
+                '_dom_cond', '', 'chorizon_')
   modifier <- suffixes[match(method, toupper(labels))]
 
   # return list with method and modifier
@@ -153,9 +241,8 @@ get_SDA_property <-
 .constructPropQuery <- function(method, property,
                                 areasymbols = NULL, mukeys = NULL,
                                 tDep = 0, bDep = 200, mmC = NULL) {
-  # SQL by Jason Nemecek) {
-
-
+  # SQL by Jason Nemecek
+  
   stopifnot(!is.null(areasymbols) | !is.null(mukeys))
 
   if (!is.null(areasymbols))
@@ -167,8 +254,40 @@ get_SDA_property <-
   where_clause <- switch(as.character(is.null(areasymbols)),
                          "TRUE" = sprintf("mu.mukey IN %s", mukeys),
                          "FALSE" = sprintf("l.areasymbol IN %s", areasymbols))
-
+  
+  # check property, case insensitive, against dictionary
+  property_up <- toupper(property)
+  lut <- .propertyDictionary()
+  names(lut) <- toupper(names(lut))
+  agg_property <- lut[property_up]
+  
+  not_in_lut <- sapply(agg_property, is.null)
+  
+  # if they are all not in lookup table, assume user knows what they are doing
+  #  this means you can't mix column name input and readable label input in same call
+  if (all(not_in_lut)) {
+    
+    ## strict: only allow properties from the lookup table
+    # names(lut) <- toupper(.propertyDictionary())
+    # agg_property <- lut[property]
+    # if(any(is.null(agg_property))) stop("property must be a label or column name from SDA property dictionary (.propertyDictonary())", call. = FALSE)
+    
+    ## alternate: just assume they are either all component or all horizon column names 
+    # message('assuming `property` is a vector of component OR horizon-level column names')
+    agg_property <- property
+    
+  } else {
+      
+    # remove non-matching if using lookup table labels
+    agg_property <- agg_property[!not_in_lut]
+  }
+  
   method <- toupper(method)
+  
+  if (method == "NONE")
+    if (all(agg_property %in% colnames(suppressMessages(SDA_query("SELECT TOP 1 * FROM chorizon")))))
+      method <- "NONE_HORIZON"
+  
   mmC <- toupper(mmC)
 
   # check mmC arg for min max method
@@ -184,19 +303,6 @@ get_SDA_property <-
   }
 
   agg_method <- .propertyAggMethod(method)
-
-  # check property, case insensitive, against dictionary
-  property <- toupper(property)
-  lut <- .propertyDictionary()
-  names(lut) <- toupper(names(lut))
-  agg_property <- lut[[property]]
-
-  if(is.null(agg_property)) {
-    names(lut) <- toupper(.propertyDictionary())
-    agg_property <- lut[[property]]
-    if(is.null(agg_property))
-      stop("property must be a label or column name from SDA property dictionary (.propertyDictonary())", call. = FALSE)
-  }
 
   switch(toupper(agg_method$method),
     # dominant component (category)
@@ -373,7 +479,32 @@ get_SDA_property <-
                                                       ORDER BY c1.comppct_r DESC, c1.cokey)
               GROUP BY areasymbol, musym, muname, mu.mukey, c.cokey,  compname, comppct_r
               ORDER BY areasymbol, musym, muname, mu.mukey, comppct_r DESC, c.cokey",
-              agg_property, agg_property, agg_property, agg_property, where_clause)
+              agg_property, agg_property, agg_property, agg_property, where_clause),
+    
+    # NO AGGREGATION (component properties)
+  "NONE" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey, 
+                           c.compname AS compname, c.comppct_r AS comppct_r, c.cokey AS cokey, 
+                           %s
+             FROM legend AS l
+              INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
+              INNER JOIN component AS c ON c.mukey = mu.mukey
+              ORDER BY areasymbol, musym, muname, mu.mukey, c.comppct_r DESC, c.cokey",
+            paste0(sapply(agg_property, function(x) sprintf("c.%s AS %s", x, x)), collapse = ", "), 
+            where_clause),
+  
+  # NO AGGREGATION (horizon properties)
+  "NONE_HORIZON" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey, 
+                                   c.cokey AS cokey, ch.chkey AS chkey,
+                                   c.compname AS compname, c.comppct_r AS comppct_r,
+                                   ch.hzdept_r AS hzdept_r, ch.hzdepb_r AS hzdepb_r,
+                                   %s
+             FROM legend  AS l
+              INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
+              INNER JOIN component AS c ON c.mukey = mu.mukey
+              INNER JOIN chorizon AS ch ON ch.cokey = c.cokey
+              ORDER BY areasymbol, musym, muname, mu.mukey, c.comppct_r DESC, c.cokey, hzdept_r",
+             paste0(sapply(agg_property, function(x) sprintf("ch.%s AS %s", x, x)), collapse = ", "), 
+             where_clause)
   )
 
 }
