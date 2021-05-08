@@ -122,7 +122,8 @@
 
     <pre class="usage"><span class='fu'>get_SDA_property</span><span class='op'>(</span>
   <span class='va'>property</span>,
-  <span class='va'>method</span>,
+  method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"Dominant Component (Category)"</span>, <span class='st'>"Weighted Average"</span>, <span class='st'>"Min/Max"</span>,
+    <span class='st'>"Dominant Component (Numeric)"</span>, <span class='st'>"Dominant Condition"</span>, <span class='st'>"None"</span><span class='op'>)</span>,
   areasymbols <span class='op'>=</span> <span class='cn'>NULL</span>,
   mukeys <span class='op'>=</span> <span class='cn'>NULL</span>,
   top_depth <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -139,7 +140,7 @@
     </tr>
     <tr>
       <th>method</th>
-      <td><p>one of: "Dominant Component (Category)", "Weighted Average", "Min/Max", "Dominant Component (Numeric)", "Dominant Condition"#'</p></td>
+      <td><p>one of: "Dominant Component (Category)", "Weighted Average", "Min/Max", "Dominant Component (Numeric)", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.</p></td>
     </tr>
     <tr>
       <th>areasymbols</th>
@@ -166,6 +167,97 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a data.frame with result</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The <code>property</code> argument refers to one of the property names or columns specified in the tables below.</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Selected Component-level Properties</h3>
+<table class='table'>
+<tr><td><strong>Property (Component)</strong></td><td><strong>Column</strong></td></tr>
+<tr><td>Range Production - Favorable Year</td><td>rsprod_h</td></tr>
+<tr><td>Range Production - Normal Year</td><td>rsprod_r</td></tr>
+<tr><td>Range Production - Unfavorable Year</td><td>rsprod_l</td></tr>
+<tr><td>Corrosion of Steel</td><td>corsteel</td></tr>
+<tr><td>Corrosion of Concrete</td><td>corcon</td></tr>
+<tr><td>Drainage Class</td><td>drainagecl</td></tr>
+<tr><td>Hydrologic Group</td><td>hydgrp</td></tr>
+<tr><td>Taxonomic Class Name</td><td>taxclname</td></tr>
+<tr><td>Taxonomic Order</td><td>taxorder</td></tr>
+<tr><td>Taxonomic Suborder</td><td>taxsuborder</td></tr>
+<tr><td>Taxonomic Temperature Regime</td><td>taxtempregime</td></tr>
+<tr><td>Wind Erodibility Group</td><td>weg</td></tr>
+<tr><td>Wind Erodibility Index</td><td>wei</td></tr>
+<tr><td>t Factor</td><td>tfact</td></tr>
+</table>
+
+
+
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Selected Horizon-level Properties</h3>
+<table class='table'>
+<tr><td><strong>Property (Horizon)</strong></td><td><strong>Column</strong></td></tr>
+<tr><td>0.1 bar H2O - Rep Value</td><td>wtenthbar_r</td></tr>
+<tr><td>0.33 bar H2O - Rep Value</td><td>wthirdbar_r</td></tr>
+<tr><td>15 bar H2O - Rep Value</td><td>wfifteenbar_r</td></tr>
+<tr><td>Available Water Capacity - Rep Value</td><td>awc_r</td></tr>
+<tr><td>Bray 1 Phosphate - Rep Value</td><td>pbray1_r</td></tr>
+<tr><td>Bulk Density 0.1 bar H2O - Rep Value</td><td>dbtenthbar_r</td></tr>
+<tr><td>Bulk Density 0.33 bar H2O - Rep Value</td><td>dbthirdbar_r</td></tr>
+<tr><td>Bulk Density 15 bar H2O - Rep Value</td><td>dbfifteenbar_r</td></tr>
+<tr><td>Bulk Density oven dry - Rep Value</td><td>dbovendry_r</td></tr>
+<tr><td>CaCO3 Clay - Rep Value</td><td>claysizedcarb_r</td></tr>
+<tr><td>Calcium Carbonate - Rep Value</td><td>caco3_r</td></tr>
+<tr><td>Cation Exchange Capcity - Rep Value</td><td>cec7_r</td></tr>
+<tr><td>Coarse Sand - Rep Value</td><td>sandco_r</td></tr>
+<tr><td>Coarse Silt - Rep Value</td><td>siltco_r</td></tr>
+<tr><td>Effective Cation Exchange Capcity - Rep Value</td><td>ecec_r</td></tr>
+<tr><td>Electrial Conductivity 1:5 by volume - Rep Value</td><td>ec15_r</td></tr>
+<tr><td>Electrical Conductivity - Rep Value</td><td>ec_r</td></tr>
+<tr><td>Exchangeable Sodium Percentage - Rep Value</td><td>esp_r</td></tr>
+<tr><td>Extract Aluminum - Rep Value</td><td>extral_r</td></tr>
+<tr><td>Extractable Acidity - Rep Value</td><td>extracid_r</td></tr>
+<tr><td>Fine Sand - Rep Value</td><td>sandfine_r</td></tr>
+<tr><td>Fine Silt - Rep Value</td><td>siltfine_r</td></tr>
+<tr><td>Free Iron - Rep Value</td><td>freeiron_r</td></tr>
+<tr><td>Gypsum - Rep Value</td><td>gypsum_r</td></tr>
+<tr><td>Kf</td><td>kffact</td></tr>
+<tr><td>Ki</td><td>kifact</td></tr>
+<tr><td>Kr</td><td>krfact</td></tr>
+<tr><td>Kw</td><td>kwfact</td></tr>
+<tr><td>LEP - Rep Value</td><td>lep_r</td></tr>
+<tr><td>Liquid Limit - Rep Value</td><td>ll_r</td></tr>
+<tr><td>Medium Sand - Rep Value</td><td>sandmed_r</td></tr>
+<tr><td>Organic Matter - Rep Value</td><td>om_r</td></tr>
+<tr><td>Oxalate Aluminum - Rep Value</td><td>aloxalate_r</td></tr>
+<tr><td>Oxalate Iron - Rep Value</td><td>feoxalate_r</td></tr>
+<tr><td>Oxalate Phosphate - Rep Value</td><td>poxalate_r</td></tr>
+<tr><td>Plasticity Index - Rep Value</td><td>pi_r</td></tr>
+<tr><td>Rock Fragments 3 - 10 cm - Rep Value</td><td>frag3to10_r</td></tr>
+<tr><td>Rock Fragments &gt; 10 cm - Rep Value</td><td>fraggt10_r</td></tr>
+<tr><td>Rubbed Fiber % - Rep Value</td><td>fiberrubbedpct_r</td></tr>
+<tr><td>Satiated H2O - Rep Value</td><td>wsatiated_r</td></tr>
+<tr><td>Saturated Hydraulic Conductivity - Rep Value</td><td>ksat_r</td></tr>
+<tr><td>Sodium Adsorption Ratio - Rep Value</td><td>sar_r</td></tr>
+<tr><td>Sum of Bases - Rep Value</td><td>sumbases_r</td></tr>
+<tr><td>Total Clay - Rep Value</td><td>claytotal_r</td></tr>
+<tr><td>Total Phosphate - Rep Value</td><td>ptotal_r</td></tr>
+<tr><td>Total Rock Fragment Volume - Rep Value</td><td>fragvoltot</td></tr>
+<tr><td>Total Sand - Rep Value</td><td>sandtotal_r</td></tr>
+<tr><td>Total Silt - Rep Value</td><td>silttotal_r</td></tr>
+<tr><td>Unrubbed Fiber % - Rep Value</td><td>fiberunrubbedpct_r</td></tr>
+<tr><td>Very Coarse Sand - Rep Value</td><td>sandvc_r</td></tr>
+<tr><td>Very Fine Sand - Rep Value</td><td>sandvf_r</td></tr>
+<tr><td>Water Soluble Phosphate - Rep Value</td><td>ph2osoluble_r</td></tr>
+<tr><td>no. 10 sieve - Rep Value</td><td>sieveno10_r</td></tr>
+<tr><td>no. 200 sieve - Rep Value</td><td>sieveno200_r</td></tr>
+<tr><td>no. 4 sieve - Rep Value</td><td>sieveno4_r</td></tr>
+<tr><td>no. 40 sieve - Rep Value</td><td>sieveno40_r</td></tr>
+<tr><td>pH .01M CaCl2 - Rep Value</td><td>ph01mcacl2_r</td></tr>
+<tr><td>pH 1:1 water - Rep Value</td><td>ph1to1h2o_r</td></tr>
+<tr><td>pH Oxidized - Rep Value</td><td>phoxidized_r</td></tr>
+</table>
+
+
+
+
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Jason Nemecek, Chad Ferguson, Andrew Brown</p>
