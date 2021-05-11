@@ -84,7 +84,9 @@ fetchLDM <- function(x, what = "pedlabsampnum", chunk.size = 1000) {
       hz <- as.data.frame(data.table::rbindlist(lapply(unique(chunk.idx),
                                                    function(i) {
                                                      keys <- sites$pedon_key[chunk.idx == i]
-                                                     .get_lab_layer_by_pedon_key(keys)
+                                                     res <- .get_lab_layer_by_pedon_key(keys)
+                                                     if(inherits(res, 'try-error')) return(NULL)
+                                                     res
                                                    })))
     }
     
@@ -106,7 +108,7 @@ fetchLDM <- function(x, what = "pedlabsampnum", chunk.size = 1000) {
 }
 
 .get_lab_layer_by_pedon_key <- function(pedon_key) {
-  SDA_query(sprintf(
+  suppressWarnings(SDA_query(sprintf(
             "SELECT * FROM lab_layer 
               LEFT JOIN lab_physical_properties ON 
                            lab_layer.labsampnum = lab_physical_properties.labsampnum
@@ -121,7 +123,7 @@ fetchLDM <- function(x, what = "pedlabsampnum", chunk.size = 1000) {
               LEFT JOIN lab_calculations_including_estimates_and_default_values ON 
                            lab_layer.labsampnum = lab_calculations_including_estimates_and_default_values.labsampnum
              WHERE pedon_key IN %s", 
-            format_SQL_in_statement(pedon_key)))
+            format_SQL_in_statement(pedon_key))))
             # TODO: rosetta key does not have labsampnum, leave it out for now 
   
 }
