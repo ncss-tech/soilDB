@@ -11,7 +11,11 @@
 #' @param what a single column name from either the `lab_combine_nasis_ncss` or the `lab_area` tables
 #' @param tables a vector of table names; one or more of: `"lab_physical_properties"`, `"lab_mineralogy_glass_count"`, `"lab_chemical_properties"`, `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"`, `"lab_calculations_including_estimates_and_default_values"`, `"lab_rosetta_Key"`
 #' @param chunk.size number of pedons per chunk (for queries that may exceed `maxJsonLength`)
-#'
+#' 
+#' @details If the `chunk.size` parameter is set too large and the Soil Data Access request fails, the algorithm will attempt to halve the `chunk.size` argument up to 3 times, re-trying the query with a smaller chunk. 
+#' 
+#' Currently the `lab_area` tables are joined only for the "Soil Survey Area" related records.
+#' 
 #' @return a `SoilProfileCollection`
 #' @export
 #'
@@ -90,15 +94,24 @@ fetchLDM <- function(x,
     # get data for lab layers within pedon_key returned
     hz <- .get_lab_layer_by_pedon_key(sites$pedon_key)
     
-    if (inherits(hz, 'try-error')) {
-      chunk.idx <- makeChunks(sites$pedon_key, chunk.size)
-      hz <- as.data.frame(data.table::rbindlist(lapply(unique(chunk.idx),
-                                                   function(i) {
-                                                     keys <- sites$pedon_key[chunk.idx == i]
-                                                     res <- .get_lab_layer_by_pedon_key(keys)
-                                                     if(inherits(res, 'try-error')) return(NULL)
-                                                     res
-                                                   })))
+    .do_chunk <- function(size) {
+      chunk.idx <- makeChunks(sites[[bycol]], size)
+      as.data.frame(data.table::rbindlist(lapply(unique(chunk.idx),
+                                                 function(i) {
+                                                   keys <- sites[[bycol]][chunk.idx == i]
+                                                   res <- .get_lab_layer_by_pedon_key(keys)
+                                                   if (inherits(res, 'try-error'))
+                                                     return(NULL)
+                                                   res
+                                                 })))
+    }
+    
+    ntry <- 0
+    while ((inherits(hz, 'try-error') || is.null(hz)) && ntry < 3) {
+      hz <- .do_chunk(chunk.size)
+      # repeat as long as there is a try error/NULL, halving chunk.size with each iteration
+      chunk.size <- floor(chunk.size / 2)
+      ntry <- ntry + 1
     }
     
     if (!is.null(hz) && nrow(hz) > 0) {  
@@ -111,6 +124,7 @@ fetchLDM <- function(x,
       
       return(hz)
     } else {
+      message("no horizon data in result!")
       return(NULL)
     }
     

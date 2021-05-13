@@ -33,6 +33,10 @@ LDM model diagram:
 \itemize{
 \item https://jneme910.github.io/Lab_Data_Mart_Documentation/Documents/SDA_KSSL_Data_model.html
 }
+
+If the \code{chunk.size} parameter is set too large and the Soil Data Access request fails, the algorithm will attempt to halve the \code{chunk.size} argument up to 3 times, re-trying the query with a smaller chunk.
+
+Currently the \code{lab_area} tables are joined only for the "Soil Survey Area" related records.
 }
 \examples{
 
