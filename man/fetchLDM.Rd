@@ -4,12 +4,22 @@
 \alias{fetchLDM}
 \title{Query data from Kellogg Soil Survey Laboratory Data Mart via Soil Data Access}
 \usage{
-fetchLDM(x, what = "pedlabsampnum", chunk.size = 1000)
+fetchLDM(
+  x,
+  what = "pedlabsampnum",
+  tables = c("lab_physical_properties", "lab_mineralogy_glass_count",
+    "lab_chemical_properties", "lab_major_and_trace_elements_and_oxides",
+    "lab_xray_and_thermal", "lab_calculations_including_estimates_and_default_values",
+    "lab_rosetta_Key"),
+  chunk.size = 1000
+)
 }
 \arguments{
 \item{x}{a vector of values to find in column specified by \code{what}}
 
 \item{what}{a single column name from either the \code{lab_combine_nasis_ncss} or the \code{lab_area} tables}
+
+\item{tables}{a vector of table names; one or more of: \code{"lab_physical_properties"}, \code{"lab_mineralogy_glass_count"}, \code{"lab_chemical_properties"}, \code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_xray_and_thermal"}, \code{"lab_calculations_including_estimates_and_default_values"}, \code{"lab_rosetta_Key"}}
 
 \item{chunk.size}{number of pedons per chunk (for queries that may exceed \code{maxJsonLength})}
 }

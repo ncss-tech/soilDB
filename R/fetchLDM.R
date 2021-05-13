@@ -9,6 +9,7 @@
 #'
 #' @param x a vector of values to find in column specified by `what`
 #' @param what a single column name from either the `lab_combine_nasis_ncss` or the `lab_area` tables
+#' @param tables a vector of table names; one or more of: `"lab_physical_properties"`, `"lab_mineralogy_glass_count"`, `"lab_chemical_properties"`, `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"`, `"lab_calculations_including_estimates_and_default_values"`, `"lab_rosetta_Key"`
 #' @param chunk.size number of pedons per chunk (for queries that may exceed `maxJsonLength`)
 #'
 #' @return a `SoilProfileCollection`
@@ -29,7 +30,19 @@
 #' 
 #' @importFrom aqp `depths<-` `site<-`
 #' @importFrom data.table rbindlist
-fetchLDM <- function(x, what = "pedlabsampnum", chunk.size = 1000) {
+fetchLDM <- function(x,
+           what = "pedlabsampnum",
+           tables = c(
+             "lab_physical_properties",
+             "lab_mineralogy_glass_count",
+             "lab_chemical_properties",
+             "lab_major_and_trace_elements_and_oxides",
+             "lab_xray_and_thermal",
+             "lab_calculations_including_estimates_and_default_values",
+             "lab_rosetta_Key"),
+             chunk.size = 1000
+           ) {
+             
   what <- match.arg(what, choices = c("pedon_key", "site_key", "pedlabsampnum", "pedoniid", "upedonid", 
                                       "labdatadescflag", "priority", "priority2", "samp_name", "samp_class_type", 
                                       "samp_classdate", "samp_classification_name", "samp_taxorder", 
@@ -105,23 +118,52 @@ fetchLDM <- function(x, what = "pedlabsampnum", chunk.size = 1000) {
   NULL
 }
 
-.get_lab_layer_by_pedon_key <- function(pedon_key) {
+.get_lab_layer_by_pedon_key <- function(pedon_key, tables = c("lab_physical_properties",
+                                                              "lab_mineralogy_glass_count",
+                                                              "lab_chemical_properties",
+                                                              "lab_major_and_trace_elements_and_oxides",
+                                                              "lab_xray_and_thermal",
+                                                              "lab_calculations_including_estimates_and_default_values",
+                                                              "lab_rosetta_Key")) {
+  
+  tables <- match.arg(tables, several.ok = TRUE,
+    c("lab_physical_properties",
+      "lab_mineralogy_glass_count",
+      "lab_chemical_properties",
+      "lab_major_and_trace_elements_and_oxides",
+      "lab_xray_and_thermal",
+      "lab_calculations_including_estimates_and_default_values",
+      "lab_rosetta_Key"))
+  
+  tablejoincriteria <-
+    c(
+      "lab_physical_properties" = "LEFT JOIN lab_physical_properties ON
+                                   lab_layer.labsampnum = lab_physical_properties.labsampnum",
+      
+      "lab_mineralogy_glass_count" = "LEFT JOIN lab_mineralogy_glass_count ON
+                                      lab_layer.labsampnum = lab_mineralogy_glass_count.labsampnum",
+      
+      "lab_chemical_properties" = "LEFT JOIN lab_chemical_properties ON
+                                   lab_layer.labsampnum = lab_chemical_properties.labsampnum",
+      
+      "lab_major_and_trace_elements_and_oxides" = "LEFT JOIN lab_major_and_trace_elements_and_oxides ON
+                                                   lab_layer.labsampnum = lab_major_and_trace_elements_and_oxides.labsampnum",
+      
+      "lab_xray_and_thermal" = "LEFT JOIN lab_xray_and_thermal ON
+                                lab_layer.labsampnum = lab_xray_and_thermal.labsampnum",
+      
+      "lab_calculations_including_estimates_and_default_values" = "LEFT JOIN lab_calculations_including_estimates_and_default_values ON
+       lab_layer.labsampnum = lab_calculations_including_estimates_and_default_values.labsampnum",
+      
+      "lab_rosetta_Key" = "LEFT JOIN lab_rosetta_Key ON
+                           lab_layer.layer_key = lab_rosetta_Key.layer_key"
+    )
+  
+  join_statements <- paste0(sapply(tables, function(x) tablejoincriteria[[x]]), collapse = "\n")
+  
   suppressWarnings(SDA_query(sprintf(
-            "SELECT * FROM lab_layer 
-              LEFT JOIN lab_physical_properties ON 
-                           lab_layer.labsampnum = lab_physical_properties.labsampnum
-              LEFT JOIN lab_mineralogy_glass_count ON 
-                           lab_layer.labsampnum = lab_mineralogy_glass_count.labsampnum
-              LEFT JOIN lab_chemical_properties ON 
-                           lab_layer.labsampnum = lab_chemical_properties.labsampnum
-              LEFT JOIN lab_major_and_trace_elements_and_oxides ON 
-                           lab_layer.labsampnum = lab_major_and_trace_elements_and_oxides.labsampnum
-              LEFT JOIN lab_xray_and_thermal ON 
-                           lab_layer.labsampnum = lab_xray_and_thermal.labsampnum
-              LEFT JOIN lab_calculations_including_estimates_and_default_values ON 
-                           lab_layer.labsampnum = lab_calculations_including_estimates_and_default_values.labsampnum
-             WHERE pedon_key IN %s", 
+            "SELECT * FROM lab_layer %s WHERE pedon_key IN %s", 
+            join_statements,
             format_SQL_in_statement(pedon_key))))
-            # TODO: rosetta key does not have labsampnum, leave it out for now 
   
 }
