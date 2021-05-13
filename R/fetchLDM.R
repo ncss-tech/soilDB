@@ -50,13 +50,11 @@ fetchLDM <- function(x, what = "pedlabsampnum", chunk.size = 1000) {
                                       "longitude_decimal_degrees", "country_key", "state_key", "county_key", 
                                       "mlra_key", "ssa_key", "npark_key", "nforest_key", "note", "samp_taxfamhahatmatcl", 
                                       "corr_taxfamhahatmatcl", "SSL_taxfamhahatmatcl", "pedobjupdate", 
-                                      "siteobjupdate"))#, 
+                                      "siteobjupdate", "area_key", "area_type", "area_sub_type", "parent_area_key", 
+                                      "parent_org_key", "area_code", "area_name", "area_abbrev", "area_desc"))
   
-# TODO: set up arbitrary area queries by putting area table into groups:
-#       country, state, county, mlra, ssa, npark, nforest
-  
-                                      # "area_key", "area_type", "area_sub_type", "parent_area_key", 
-                                      # "parent_org_key", "area_code", "area_name", "area_abbrev", "area_desc"))
+  # TODO: set up arbitrary area queries by putting area table into groups:
+  #       country, state, county, mlra, ssa, npark, nforest
   
   # get site/pedon/area information
   sites <- SDA_query(sprintf(
