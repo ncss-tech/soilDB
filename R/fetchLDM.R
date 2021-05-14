@@ -150,8 +150,17 @@ fetchLDM <- function(x,
     }
     
     if (!is.null(hz) && nrow(hz) > 0) {  
-      hz <- hz[,unique(colnames(hz))]
+      
+      # local SQLite: sometimes prep_code differs for bulk density with no difference in value
+      #               e.g. pedon_key 10010
+      # prep_code is also repeated across multiple tables
+      hz$prep_code <- NULL
+      
+      # site_key used in multiple tables
       hz$site_key <- NULL
+      
+      # hacks to deal with problems in the various databases
+      hz <- unique(hz[,unique(colnames(hz))])
       
       # build SoilProfileCollection
       depths(hz) <- pedon_key ~ hzn_top + hzn_bot
