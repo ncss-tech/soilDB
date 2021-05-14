@@ -20,18 +20,23 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' 
-#' # fetch by ssa_key
-#' fetchLDM(8297, what = "ssa_key")
+#' if(requireNamespace("curl") &
+#'    curl::has_internet()) {
+#'    
+#'   # fetch by ssa_key
+#'   fetchLDM(8297, what = "ssa_key")
 #' 
-#' # get pedons correlated as taxonomic subgroup "Typic Argialbolls"
-#' fetchLDM("Typic Argialbolls", what = "corr_taxsubgrp")
+#'   # get physical properties for points correlated as taxonomic subgroup "Typic Argialbolls"
+#'   fetchLDM("Typic Argialbolls", what = "corr_taxsubgrp", tables = "lab_physical_properties")
 #'  
-#' # TODO: generalize area_code functionality to include parent areas
+#'   # fetch by area_code (must be a soil survey area code for now; 
+#'   #                      the lowest-level area that is always populated)
+#'   fetchLDM("CA630", what = "area_code")
+#' }
 #' 
-#' ## fetch by area_code (must be a soil survey area code for now; the lowest-level area that is always (?) populated)
-#' # fetchLDM("CA630", what = "area_code")
-#' 
+#' }
 #' @importFrom aqp `depths<-` `site<-`
 #' @importFrom data.table rbindlist
 fetchLDM <- function(x,
