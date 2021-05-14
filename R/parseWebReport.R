@@ -92,5 +92,5 @@ parseWebReport <- function(url, args, index=1) {
   # note: col names aren't legal data.frame names
   
   # done
-  return(d)
+  return(as.data.frame(d))
 }
