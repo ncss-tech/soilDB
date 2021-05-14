@@ -11,8 +11,9 @@
 #' @param what a single column name from either the `lab_combine_nasis_ncss` or the `lab_area` tables
 #' @param tables a vector of table names; one or more of: `"lab_physical_properties"`, `"lab_mineralogy_glass_count"`, `"lab_chemical_properties"`, `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"`, `"lab_calculations_including_estimates_and_default_values"`, `"lab_rosetta_Key"`
 #' @param chunk.size number of pedons per chunk (for queries that may exceed `maxJsonLength`)
-#' 
-#' @details If the `chunk.size` parameter is set too large and the Soil Data Access request fails, the algorithm will attempt to halve the `chunk.size` argument up to 3 times, re-trying the query with a smaller chunk. 
+#' @param ntries number of tries (times to halve `chunk.size`) before returning `NULL`; default `3`
+#'
+#' @details If the `chunk.size` parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) `chunk.size` argument. This will be attempted up to 3 times before returning `NULL`
 #' 
 #' Currently the `lab_area` tables are joined only for the "Soil Survey Area" related records.
 #' 
@@ -49,7 +50,8 @@ fetchLDM <- function(x,
              "lab_xray_and_thermal",
              "lab_calculations_including_estimates_and_default_values",
              "lab_rosetta_Key"),
-             chunk.size = 1000
+             chunk.size = 1000,
+             ntries = 3
            ) {
              
   what <- match.arg(what, choices = c("pedon_key", "site_key", "pedlabsampnum", "pedoniid", "upedonid", 
@@ -112,10 +114,10 @@ fetchLDM <- function(x,
     }
     
     ntry <- 0
-    while ((inherits(hz, 'try-error') || is.null(hz)) && ntry < 3) {
+    while ((inherits(hz, 'try-error') || is.null(hz)) && ntry < ntries) {
       hz <- .do_chunk(chunk.size)
       # repeat as long as there is a try error/NULL, halving chunk.size with each iteration
-      chunk.size <- floor(chunk.size / 2)
+      chunk.size <- pmax(floor(chunk.size / 2), 1)
       ntry <- ntry + 1
     }
     

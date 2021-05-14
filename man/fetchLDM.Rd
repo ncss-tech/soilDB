@@ -11,7 +11,8 @@ fetchLDM(
     "lab_chemical_properties", "lab_major_and_trace_elements_and_oxides",
     "lab_xray_and_thermal", "lab_calculations_including_estimates_and_default_values",
     "lab_rosetta_Key"),
-  chunk.size = 1000
+  chunk.size = 1000,
+  ntries = 3
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ fetchLDM(
 \item{tables}{a vector of table names; one or more of: \code{"lab_physical_properties"}, \code{"lab_mineralogy_glass_count"}, \code{"lab_chemical_properties"}, \code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_xray_and_thermal"}, \code{"lab_calculations_including_estimates_and_default_values"}, \code{"lab_rosetta_Key"}}
 
 \item{chunk.size}{number of pedons per chunk (for queries that may exceed \code{maxJsonLength})}
+
+\item{ntries}{number of tries (times to halve \code{chunk.size}) before returning \code{NULL}; default \code{3}}
 }
 \value{
 a \code{SoilProfileCollection}
