@@ -16,7 +16,7 @@ mukey.wcs(aoi, db = c("gnatsgo", "gssurgo"), res = 30, quiet = FALSE)
 \item{quiet}{logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.}
 }
 \value{
-\code{raster} object containing indexed map unit keys and associated raster attribute table
+\code{raster} object containing indexed map unit keys and associated raster attribute table or a try-error if request fails
 }
 \description{
 Download chunks of the gNATSGO or gSSURGO map unit key grid via bounding-box from the SoilWeb WCS.
