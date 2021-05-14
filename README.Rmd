@@ -50,10 +50,10 @@ Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: S
 
  * AKSite, Montana RangeDB, and PedonPC 6.x get and fetch methods now use {DBI}+{odbc}
  
-#### Other APIs
-
- * **NEW** functions [`ROSETTA`](http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html), [`taxaExtent`](http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html), [`mukey.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html), [`ISSR800.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html)
-  
+#### SoilWeb API
+ 
+ * `ISSR800.wcs` and `mukey.wcs` now return a result that inherits from `try-error` (and a message) if the Web Coverage Service fails
+ 
 ## Functions by Data Source 
     
   * SDA
@@ -66,7 +66,7 @@ Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: S
     + [`fetchGDB`](http://ncss-tech.github.io/soilDB/docs/reference/fetchGDB.html)
 
   * ROSETTA
-    + <span style="color:red">**NEW:**</span> [`ROSETTA`](http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html)
+    + [`ROSETTA`](http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html)
   
   * SSURGO/KSSL via SoilWeb
     + [`fetchKSSL`](http://ncss-tech.github.io/soilDB/docs/reference/fetchKSSL.html)
@@ -74,9 +74,9 @@ Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: S
     + [`siblings`](http://ncss-tech.github.io/soilDB/docs/reference/siblings.html)
     + [`OSDquery`](http://ncss-tech.github.io/soilDB/docs/reference/OSDquery.html) 
     + [`seriesExtent`](http://ncss-tech.github.io/soilDB/docs/reference/seriesExtent.html)
-    + <span style="color:red">**NEW:**</span> [`taxaExtent`](http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html)
-    + <span style="color:red">**NEW:**</span> [`mukey.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html)
-    + <span style="color:red">**NEW:**</span> [`ISSR800.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html)
+    + [`taxaExtent`](http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html)
+    + [`mukey.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html)
+    + [`ISSR800.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html)
   
   * NASIS WWW interface
     + [`parseWebReport`](http://ncss-tech.github.io/soilDB/docs/reference/parseWebReport.html)
