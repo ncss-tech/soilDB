@@ -27,7 +27,7 @@ The WCS query is parameterized using \code{raster::extent} derived from the abov
 Variables available from this WCS can be queried using \code{WCS_details(wcs = 'ISSR800')}.}
 }
 \value{
-\code{raster} object containing indexed map unit keys and associated raster attribute table
+\code{raster} object containing indexed map unit keys and associated raster attribute table or a try-error if request fails
 }
 \description{
 Intermediate-scale gridded (800m) soil property and interpretation maps from aggregated SSURGO and STATSGO data. These maps were developed by USDA-NRCS-SPSD staff in collaboration with UCD-LAWR. Originally for educational use and \href{https://casoilresource.lawr.ucdavis.edu/soil-properties/}{interactive thematic maps}, these data are a suitable alternative to gridded STATSGO-derived thematic soil maps. The full size grids can be \href{https://casoilresource.lawr.ucdavis.edu/soil-properties/download.php}{downloaded here}.

@@ -28,7 +28,7 @@
 #' 
 #' @note There are still some issues to be resolved related to the encoding of NA Variables with a natural zero (e.g. SAR) have 0 set to NA.
 #' 
-#' @return \code{raster} object containing indexed map unit keys and associated raster attribute table
+#' @return \code{raster} object containing indexed map unit keys and associated raster attribute table or a try-error if request fails
 #' 
 #' @export
 ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
@@ -117,7 +117,8 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   )
   
   if(inherits(dl.try, 'try-error')) {
-    stop('bad WCS request', call. = FALSE) 
+    message('bad WCS request')
+    return(dl.try)
   }
   
   # load pointer to file and return

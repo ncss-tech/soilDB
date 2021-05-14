@@ -27,7 +27,7 @@
 #' 
 #' Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.
 #' 
-#' @return \code{raster} object containing indexed map unit keys and associated raster attribute table
+#' @return \code{raster} object containing indexed map unit keys and associated raster attribute table or a try-error if request fails
 #'
 #' @export
 #'
@@ -115,7 +115,8 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
   )
 
   if(inherits(dl.try, 'try-error')) {
-   stop('bad WCS request', call. = FALSE)
+   message('bad WCS request')
+   return(dl.try)
   }
   
   ## TODO: suppressWarnings() used to quiet proj4string noise until we have a better solution
