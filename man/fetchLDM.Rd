@@ -6,7 +6,9 @@
 \usage{
 fetchLDM(
   x,
+  dsn = NULL,
   what = "pedlabsampnum",
+  bycol = "pedon_key",
   tables = c("lab_physical_properties", "lab_mineralogy_glass_count",
     "lab_chemical_properties", "lab_major_and_trace_elements_and_oxides",
     "lab_xray_and_thermal", "lab_calculations_including_estimates_and_default_values",
@@ -18,7 +20,11 @@ fetchLDM(
 \arguments{
 \item{x}{a vector of values to find in column specified by \code{what}}
 
-\item{what}{a single column name from either the \code{lab_combine_nasis_ncss} or the \code{lab_area} tables}
+\item{dsn}{data source name; either a path to a SQLite database, an open DBIConnection or (default) \code{NULL} (to use \code{soilDB::SDA_query})}
+
+\item{what}{a single column name from tables: \code{lab_combine_nasis_ncss}, \code{lab_webmap}, \code{lab_site}, \code{lab_pedon} or \code{lab_area}}
+
+\item{bycol}{a single column name from \code{lab_layer} used for processing chunks; default: \code{"pedon_key"}}
 
 \item{tables}{a vector of table names; one or more of: \code{"lab_physical_properties"}, \code{"lab_mineralogy_glass_count"}, \code{"lab_chemical_properties"}, \code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_xray_and_thermal"}, \code{"lab_calculations_including_estimates_and_default_values"}, \code{"lab_rosetta_Key"}}
 
