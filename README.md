@@ -29,7 +29,7 @@ Citation
 --------
 
 Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021).
-soilDB: Soil Database Interface. R package version 2.6.1.
+soilDB: Soil Database Interface. R package version 2.6.2.
 <a href="https://CRAN.R-project.org/package=soilDB" class="uri">https://CRAN.R-project.org/package=soilDB</a>
 
 soilDB 2.6.2
@@ -67,13 +67,10 @@ soilDB 2.6.2
 -   AKSite, Montana RangeDB, and PedonPC 6.x get and fetch methods now
     use {DBI}+{odbc}
 
-#### Other APIs
+#### SoilWeb API
 
--   **NEW** functions
-    [`ROSETTA`](http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html),
-    [`taxaExtent`](http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html),
-    [`mukey.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html),
-    [`ISSR800.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html)
+-   `ISSR800.wcs` and `mukey.wcs` now return a result that inherits from
+    `try-error` (and a message) if the Web Coverage Service fails
 
 Functions by Data Source
 ------------------------
@@ -86,20 +83,16 @@ Functions by Data Source
 -   SSURGO Local Geodatabases
     -   [`fetchGDB`](http://ncss-tech.github.io/soilDB/docs/reference/fetchGDB.html)
 -   ROSETTA
-    -   <span style="color:red">**NEW:**</span>
-        [`ROSETTA`](http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html)
+    -   [`ROSETTA`](http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html)
 -   SSURGO/KSSL via SoilWeb
     -   [`fetchKSSL`](http://ncss-tech.github.io/soilDB/docs/reference/fetchKSSL.html)
     -   [`fetchOSD`](http://ncss-tech.github.io/soilDB/docs/reference/fetchOSD.html)
     -   [`siblings`](http://ncss-tech.github.io/soilDB/docs/reference/siblings.html)
     -   [`OSDquery`](http://ncss-tech.github.io/soilDB/docs/reference/OSDquery.html)
     -   [`seriesExtent`](http://ncss-tech.github.io/soilDB/docs/reference/seriesExtent.html)
-    -   <span style="color:red">**NEW:**</span>
-        [`taxaExtent`](http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html)
-    -   <span style="color:red">**NEW:**</span>
-        [`mukey.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html)
-    -   <span style="color:red">**NEW:**</span>
-        [`ISSR800.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html)
+    -   [`taxaExtent`](http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html)
+    -   [`mukey.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html)
+    -   [`ISSR800.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html)
 -   NASIS WWW interface
     -   [`parseWebReport`](http://ncss-tech.github.io/soilDB/docs/reference/parseWebReport.html)
     -   [`fetchNASISWebReport`](http://ncss-tech.github.io/soilDB/docs/reference/fetchNASISWebReport.html)
@@ -175,7 +168,7 @@ Examples
     res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
     print(res$fig)
 
-<img src="https://i.imgur.com/66OTgQC.png" width="1056" />
+<img src="https://i.imgur.com/6Dozrg1.png" width="1056" />
 
 ### Make Profile Sketches
 
@@ -189,7 +182,7 @@ Examples
       width = 0.2
     )
 
-<img src="https://i.imgur.com/ZvtxeO0.png" width="1344" />
+<img src="https://i.imgur.com/hc3dqTm.png" width="1344" />
 
 ### Identify Tabular “Siblings”
 
@@ -219,7 +212,7 @@ Examples
       cex.names = 1
     )
 
-<img src="https://i.imgur.com/zwGBtRk.png" width="1344" />
+<img src="https://i.imgur.com/uU2O0h7.png" width="1344" />
 
 Dependency Graph
 ----------------
