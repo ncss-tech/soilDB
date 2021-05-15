@@ -114,9 +114,9 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="soildb-262-2021-05-07" class="section level1">
+    <div id="soildb-262-2021-05-14" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.2">
-<a href="#soildb-262-2021-05-07" class="anchor"></a>soilDB 2.6.2 (2021-05-07)<small> Unreleased </small>
+<a href="#soildb-262-2021-05-14" class="anchor"></a>soilDB 2.6.2 (2021-05-14)<small> Unreleased </small>
 </h1>
 <ul>
 <li>Added <code>formativeElement</code> argument to <code><a href="../reference/taxaExtent.html">taxaExtent()</a></code> (SoilWeb taxon extent function)
@@ -129,6 +129,8 @@
 <code><a href="../reference/fetchNASIS.html">fetchNASIS(from="pedons")</a></code> result now contains the <code>"taxclname"</code> (full family-level taxon name) field from the NASIS <code>pedon</code> table; this value is calculated based on contents of <code>petaxhistory</code> child table</li>
 <li>
 <code>get_SDA_interpretation</code> and <code>get_SDA_property</code> now support aggregation <code>method="NONE"</code> allowing for returning properties, classes and ratings for individual components or horizons (<a href="https://github.com/ncss-tech/soilDB/pull/181" class="uri">https://github.com/ncss-tech/soilDB/pull/181</a>)</li>
+<li>
+<code>ISSR800.wcs</code> and <code>mukey.wcs</code> now return a result that inherits from <code>try-error</code> (and a message) if the Web Coverage Service query fails</li>
 </ul>
 </div>
     <div id="soildb-261-2021-04-07" class="section level1">

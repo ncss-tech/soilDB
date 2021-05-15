@@ -89,7 +89,7 @@
 <div id="citation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#citation" class="anchor"></a>Citation</h2>
-<p>Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: Soil Database Interface. R package version 2.6.1. <a href="https://CRAN.R-project.org/package=soilDB" class="uri">https://CRAN.R-project.org/package=soilDB</a></p>
+<p>Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: Soil Database Interface. R package version 2.6.2. <a href="https://CRAN.R-project.org/package=soilDB" class="uri">https://CRAN.R-project.org/package=soilDB</a></p>
 </div>
 <div id="soildb-262" class="section level2">
 <h2 class="hasAnchor">
@@ -136,13 +136,12 @@
 <li>AKSite, Montana RangeDB, and PedonPC 6.x get and fetch methods now use {DBI}+{odbc}</li>
 </ul>
 </div>
-<div id="other-apis" class="section level4">
+<div id="soilweb-api" class="section level4">
 <h4 class="hasAnchor">
-<a href="#other-apis" class="anchor"></a>Other APIs</h4>
+<a href="#soilweb-api" class="anchor"></a>SoilWeb API</h4>
 <ul>
 <li>
-<strong>NEW</strong> functions <a href="http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html"><code>ROSETTA</code></a>, <a href="http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html"><code>taxaExtent</code></a>, <a href="http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html"><code>mukey.wcs</code></a>, <a href="http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html"><code>ISSR800.wcs</code></a>
-</li>
+<code>ISSR800.wcs</code> and <code>mukey.wcs</code> now return a result that inherits from <code>try-error</code> (and a message) if the Web Coverage Service fails</li>
 </ul>
 </div>
 </div>
@@ -166,9 +165,7 @@
 </li>
 <li>ROSETTA
 <ul>
-<li>
-<span style="color:red"><strong>NEW:</strong></span> <a href="http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html"><code>ROSETTA</code></a>
-</li>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html"><code>ROSETTA</code></a></li>
 </ul>
 </li>
 <li>SSURGO/KSSL via SoilWeb
@@ -178,15 +175,9 @@
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/siblings.html"><code>siblings</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/OSDquery.html"><code>OSDquery</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/docs/reference/seriesExtent.html"><code>seriesExtent</code></a></li>
-<li>
-<span style="color:red"><strong>NEW:</strong></span> <a href="http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html"><code>taxaExtent</code></a>
-</li>
-<li>
-<span style="color:red"><strong>NEW:</strong></span> <a href="http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html"><code>mukey.wcs</code></a>
-</li>
-<li>
-<span style="color:red"><strong>NEW:</strong></span> <a href="http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html"><code>ISSR800.wcs</code></a>
-</li>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html"><code>taxaExtent</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html"><code>mukey.wcs</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html"><code>ISSR800.wcs</code></a></li>
 </ul>
 </li>
 <li>NASIS WWW interface
@@ -281,7 +272,7 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># viz of hillslope position, from SSURGO component records</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>res &lt;-<span class="st"> </span><span class="kw">vizHillslopePosition</span>(s<span class="op">$</span>hillpos, <span class="dt">annotation.cex =</span> <span class="fl">0.9</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="kw">print</span>(res<span class="op">$</span>fig)</span></code></pre></div>
-<p><img src="https://i.imgur.com/66OTgQC.png" width="1056"></p>
+<p><img src="https://i.imgur.com/6Dozrg1.png" width="1056"></p>
 </div>
 <div id="make-profile-sketches" class="section level3">
 <h3 class="hasAnchor">
@@ -295,7 +286,7 @@
 <span id="cb6-7"><a href="#cb6-7"></a>  <span class="dt">axis.line.offset =</span> <span class="fl">-0.1</span>,</span>
 <span id="cb6-8"><a href="#cb6-8"></a>  <span class="dt">width =</span> <span class="fl">0.2</span></span>
 <span id="cb6-9"><a href="#cb6-9"></a>)</span></code></pre></div>
-<p><img src="https://i.imgur.com/ZvtxeO0.png" width="1344"></p>
+<p><img src="https://i.imgur.com/hc3dqTm.png" width="1344"></p>
 </div>
 <div id="identify-tabular-siblings" class="section level3">
 <h3 class="hasAnchor">
@@ -326,7 +317,7 @@
 <span id="cb8-12"><a href="#cb8-12"></a>  <span class="dt">cex.taxon.labels =</span> <span class="dv">1</span>,</span>
 <span id="cb8-13"><a href="#cb8-13"></a>  <span class="dt">cex.names =</span> <span class="dv">1</span></span>
 <span id="cb8-14"><a href="#cb8-14"></a>)</span></code></pre></div>
-<p><img src="https://i.imgur.com/zwGBtRk.png" width="1344"></p>
+<p><img src="https://i.imgur.com/uU2O0h7.png" width="1344"></p>
 </div>
 </div>
 <div id="dependency-graph" class="section level2">
