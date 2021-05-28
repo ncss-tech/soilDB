@@ -8,8 +8,8 @@
 #' @param method one of: "Dominant Component (Category)", "Weighted Average", "Min/Max", "Dominant Component (Numeric)", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
-#' @param top_depth Optional: a numeric value for upper boundary (top depth) used for method="weighted average" and "dominant component (numeric)"
-#' @param bottom_depth Optional: a numeric value for lower boundary (bottom depth) used for method="weighted average and "dominant component (numeric)"
+#' @param top_depth Default: `0` (centimeters); a numeric value for upper boundary (top depth) used only for method="weighted average" and "dominant component (numeric)"
+#' @param bottom_depth Default: `200` (centimeters); a numeric value for lower boundary (bottom depth) used only for method="weighted average" and "dominant component (numeric)"
 #' @param FUN Optional: character representing SQL aggregation function either "MIN" or "MAX" for method="min/max"
 #' @details 
 #' 
@@ -108,8 +108,8 @@ get_SDA_property <-
                       "None"),
            areasymbols = NULL, # vector of areasymbols
            mukeys = NULL, # vector of mukeys
-           top_depth = NULL, # used for method="weighted average" and "dominant component (numeric)"
-           bottom_depth = NULL, # used for method="weighted average and "dominant component (numeric)"
+           top_depth = 0, # used for method="weighted average" and "dominant component (numeric)"
+           bottom_depth = 200, # used for method="weighted average" and "dominant component (numeric)"
            FUN = NULL) # used for method="min/max"
     {
 

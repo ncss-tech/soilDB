@@ -10,8 +10,8 @@ get_SDA_property(
     "Dominant Component (Numeric)", "Dominant Condition", "None"),
   areasymbols = NULL,
   mukeys = NULL,
-  top_depth = NULL,
-  bottom_depth = NULL,
+  top_depth = 0,
+  bottom_depth = 200,
   FUN = NULL
 )
 }
@@ -24,9 +24,9 @@ get_SDA_property(
 
 \item{mukeys}{vector of map unit keys}
 
-\item{top_depth}{Optional: a numeric value for upper boundary (top depth) used for method="weighted average" and "dominant component (numeric)"}
+\item{top_depth}{Default: \code{0} (centimeters); a numeric value for upper boundary (top depth) used only for method="weighted average" and "dominant component (numeric)"}
 
-\item{bottom_depth}{Optional: a numeric value for lower boundary (bottom depth) used for method="weighted average and "dominant component (numeric)"}
+\item{bottom_depth}{Default: \code{200} (centimeters); a numeric value for lower boundary (bottom depth) used only for method="weighted average" and "dominant component (numeric)"}
 
 \item{FUN}{Optional: character representing SQL aggregation function either "MIN" or "MAX" for method="min/max"}
 }
