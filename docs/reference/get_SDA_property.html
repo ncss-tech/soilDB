@@ -126,8 +126,8 @@
     <span class='st'>"Dominant Component (Numeric)"</span>, <span class='st'>"Dominant Condition"</span>, <span class='st'>"None"</span><span class='op'>)</span>,
   areasymbols <span class='op'>=</span> <span class='cn'>NULL</span>,
   mukeys <span class='op'>=</span> <span class='cn'>NULL</span>,
-  top_depth <span class='op'>=</span> <span class='cn'>NULL</span>,
-  bottom_depth <span class='op'>=</span> <span class='cn'>NULL</span>,
+  top_depth <span class='op'>=</span> <span class='fl'>0</span>,
+  bottom_depth <span class='op'>=</span> <span class='fl'>200</span>,
   FUN <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
@@ -152,11 +152,11 @@
     </tr>
     <tr>
       <th>top_depth</th>
-      <td><p>Optional: a numeric value for upper boundary (top depth) used for method="weighted average" and "dominant component (numeric)"</p></td>
+      <td><p>Default: <code>0</code> (centimeters); a numeric value for upper boundary (top depth) used only for method="weighted average" and "dominant component (numeric)"</p></td>
     </tr>
     <tr>
       <th>bottom_depth</th>
-      <td><p>Optional: a numeric value for lower boundary (bottom depth) used for method="weighted average and "dominant component (numeric)"</p></td>
+      <td><p>Default: <code>200</code> (centimeters); a numeric value for lower boundary (bottom depth) used only for method="weighted average" and "dominant component (numeric)"</p></td>
     </tr>
     <tr>
       <th>FUN</th>
