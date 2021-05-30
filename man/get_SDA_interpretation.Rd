@@ -8,17 +8,20 @@ get_SDA_interpretation(
   rulename,
   method = c("Dominant Component", "Dominant Condition", "Weighted Average", "None"),
   areasymbols = NULL,
-  mukeys = NULL
+  mukeys = NULL,
+  query_string = FALSE
 )
 }
 \arguments{
-\item{rulename}{rule name of interpretation (matching a \code{mrulename} in \code{cointerp} table)}
+\item{rulename}{character vector of interpretation rule names (matching \code{mrulename} in \code{cointerp} table)}
 
 \item{method}{aggregation method. One of: "Dominant Component", "Dominant Condition", "Weighted Average", "None". If "None" is selected one row will be returned per component, otherwise one row will be returned per map unit.}
 
 \item{areasymbols}{vector of soil survey area symbols}
 
 \item{mukeys}{vector of map unit keys}
+
+\item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 }
 \value{
 a data.frame
@@ -658,6 +661,21 @@ Get map unit interpretations from Soil Data Access by rule name
 \item WMS - Surface Water Management, System
 }
 }
+}
+\examples{
+\donttest{
+if(requireNamespace("curl") &
+    curl::has_internet()) {
+
+ # get two forestry interpretations for CA630
+ get_SDA_interpretation(c("FOR - Potential Seedling Mortality",
+                          "FOR - Road Suitability (Natural Surface)"),
+                        method = "Dominant Condition",
+                        areasymbols = "CA630")
+}
+}
+
+
 }
 \author{
 Jason Nemecek, Chad Ferguson, Andrew Brown
