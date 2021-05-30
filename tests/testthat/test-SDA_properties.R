@@ -16,7 +16,7 @@ test_that("SDA properties (dominant condition) works", {
                                      method = "Dominant Condition",
                                      areasymbols = target_areas)), target_area_rows)
 
-  expect_equal(get_SDA_property(property = "Taxonomic Suborder",
+  expect_equal(get_SDA_property(property = c("Taxonomic Suborder","Taxonomic Order"),
                                      method = "Dominant Condition",
                                      mukeys = target_mukeys)$mukey, target_mukeys)
 
@@ -30,7 +30,7 @@ test_that("SDA properties (dominant component category) works", {
                                      method = "Dominant Component (Category)",
                                      areasymbols = target_areas)), target_area_rows)
 
-  expect_equal(get_SDA_property(property = "Taxonomic Suborder",
+  expect_equal(get_SDA_property(property = c("Taxonomic Suborder","Taxonomic Order"),
                                      method = "Dominant Component (Category)",
                                      mukeys = target_mukeys)$mukey, target_mukeys)
 })
@@ -49,7 +49,7 @@ test_that("SDA properties (dominant component numeric) works", {
   )), target_area_rows)
 
   expect_equal(get_SDA_property(
-    property = "Very Coarse Sand - Rep Value",
+    property = c("sandvc_l","sandvc_r","sandvc_h"),
     method = "Dominant Component (Numeric)",
     mukeys = target_mukeys,
     top_depth = 25,
@@ -72,7 +72,7 @@ test_that("SDA properties (weighted average) works", {
   )), target_area_rows)
 
   expect_equal(get_SDA_property(
-    property = "Total Clay - Rep Value",
+    property = c("claytotal_l","claytotal_r","claytotal_h"),
     method = "Weighted Average",
     mukeys = target_mukeys,
     top_depth = 25,
@@ -93,7 +93,7 @@ test_that("SDA properties (min/max) works", {
   )), target_area_rows)
 
   expect_equal(get_SDA_property(
-    property = "Saturated Hydraulic Conductivity - Rep Value",
+    property = c("ksat_l","ksat_r","ksat_h"),
     method = "Min/Max",
     mukeys = target_mukeys,
     FUN = "MIN"
@@ -102,17 +102,17 @@ test_that("SDA properties (min/max) works", {
 
 test_that("SDA properties (no aggregation) works", {
   skip_if_offline()
-  
+
   skip_on_cran()
-  
+
   # return results 1:1 with component for component properties
-  expect_equal(nrow(get_SDA_property(property = "Taxonomic Suborder",
+  expect_equal(nrow(get_SDA_property(property = c('rsprod_l','rsprod_r','rsprod_h'),
                                      method = "NONE",
                                      areasymbols = target_areas)), target_area_rows_all)
-  
-  
+
+
   # return results 1:1 with chorizon for horizon properties (includes cokey)
-  expect_equal(nrow(get_SDA_property("Total Sand - Rep Value", 
-                    method = "NONE", 
+  expect_equal(nrow(get_SDA_property(c('sandtotal_l','sandtotal_r','sandtotal_h'),
+                    method = "NONE",
                     areasymbols = target_areas)), target_area_rows_all_chorizon)
 })
