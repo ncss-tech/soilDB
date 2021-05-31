@@ -16,7 +16,7 @@ test_that("SDA interpretations (dominant component) works", {
   res <- get_SDA_interpretation(c("FOR - Potential Seedling Mortality",
                                   "FOR - Road Suitability (Natural Surface)"),
                                 method = "Dominant Component", mukeys = target_mukeys)
-  expect_equal(sort(res$MUKEY), sort(target_mukeys))
+  expect_equal(sort(res$mukey), sort(target_mukeys))
 })
 
 test_that("SDA interpretations (dominant condition) works", {
@@ -32,7 +32,7 @@ test_that("SDA interpretations (dominant condition) works", {
   res <- get_SDA_interpretation(c("FOR - Potential Seedling Mortality",
                                   "FOR - Road Suitability (Natural Surface)"),
                                 method = "Dominant Condition", mukeys = target_mukeys)
-  expect_equal(sort(res$MUKEY), sort(target_mukeys))
+  expect_equal(sort(res$mukey), sort(target_mukeys))
 })
 
 test_that("SDA interpretations (weighted average) works", {
@@ -48,7 +48,7 @@ test_that("SDA interpretations (weighted average) works", {
   res <- get_SDA_interpretation(c("FOR - Potential Seedling Mortality",
                                   "FOR - Road Suitability (Natural Surface)"),
                                 method = "Weighted Average", mukeys = target_mukeys)
-  expect_equal(sort(res$MUKEY), sort(target_mukeys))
+  expect_equal(sort(res$mukey), sort(target_mukeys))
 })
 
 test_that("SDA interpretations (no aggregation) works", {

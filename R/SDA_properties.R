@@ -384,7 +384,7 @@ get_SDA_property <-
             ELSE CAST (CAST (comppct_r AS  decimal (5,2)) / CAST (SUM_COMP_PCT AS decimal (5,2)) AS decimal (5,2)) END AS WEIGHTED_COMP_PCT
             INTO #comp_temp3
             FROM #comp_temp
-            SELECT areasymbol, musym, muname, mu.mukey/1  AS MUKEY, c.cokey AS COKEY, ch.chkey/1 AS CHKEY, compname, hzname, hzdept_r, hzdepb_r, CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS hzdept_r_ADJ,
+            SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey, c.cokey AS cokey, ch.chkey/1 AS chkey, compname, hzname, hzdept_r, hzdepb_r, CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS hzdept_r_ADJ,
             CASE WHEN hzdepb_r > %s  THEN %s ELSE hzdepb_r END AS hzdepb_r_ADJ,
             CAST (CASE WHEN hzdepb_r > %s  THEN %s ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS decimal (5,2)) AS thickness,
             comppct_r,
@@ -416,22 +416,22 @@ get_SDA_property <-
             paste0(sprintf("CAST (ISNULL (%s , 0) AS decimal (5,2)) AS %s", property, property), collapse=", "),
             where_clause,
             top_depth, bottom_depth,
-            sprintf("SELECT #main.areasymbol, #main.musym, #main.muname, #main.MUKEY,
-#main.COKEY, #main.CHKEY, #main.compname, hzname, hzdept_r, hzdepb_r, hzdept_r_ADJ, hzdepb_r_ADJ, thickness, sum_thickness, %s, comppct_r, SUM_COMP_PCT, WEIGHTED_COMP_PCT, %s
+            sprintf("SELECT #main.areasymbol, #main.musym, #main.muname, #main.mukey,
+#main.cokey, #main.chkey, #main.compname, hzname, hzdept_r, hzdepb_r, hzdept_r_ADJ, hzdepb_r_ADJ, thickness, sum_thickness, %s, comppct_r, SUM_COMP_PCT, WEIGHTED_COMP_PCT, %s
                         INTO #comp_temp2
                         FROM #main
                         INNER JOIN #comp_temp3 ON #comp_temp3.cokey=#main.cokey
-                        ORDER BY #main.areasymbol, #main.musym, #main.muname, #main.MUKEY,
-                                 comppct_r DESC,  #main.COKEY,  hzdept_r, hzdepb_r
-                        SELECT #comp_temp2.MUKEY, #comp_temp2.COKEY, %s
+                        ORDER BY #main.areasymbol, #main.musym, #main.muname, #main.mukey,
+                                 comppct_r DESC,  #main.cokey,  hzdept_r, hzdepb_r
+                        SELECT #comp_temp2.mukey, #comp_temp2.cokey, %s
                           INTO #last_step
                           FROM #comp_temp2
-                          GROUP BY #comp_temp2.MUKEY, #comp_temp2.COKEY, WEIGHTED_COMP_PCT, %s
-                          SELECT areasymbol, musym, muname, #kitchensink.mukey, #last_step.COKEY, %s
+                          GROUP BY #comp_temp2.mukey, #comp_temp2.cokey, WEIGHTED_COMP_PCT, %s
+                          SELECT areasymbol, musym, muname, #kitchensink.mukey, #last_step.cokey, %s
                             INTO #last_step2
                             FROM #last_step
                             RIGHT OUTER JOIN #kitchensink ON #kitchensink.mukey = #last_step.mukey
-                            GROUP BY #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname, #kitchensink.mukey, %s, #last_step.COKEY
+                            GROUP BY #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname, #kitchensink.mukey, %s, #last_step.cokey
                             ORDER BY #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname, #kitchensink.mukey
                             SELECT #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
                               FROM #last_step2
@@ -439,7 +439,7 @@ get_SDA_property <-
                                   GROUP BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
                                   ORDER BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s",
 paste0(property, collapse = ", "),
-paste0(sprintf("SUM((thickness/sum_thickness) * %s) OVER (PARTITION BY #main.COKEY) AS DEPTH_WEIGHTED_AVERAGE%s",
+paste0(sprintf("SUM((thickness/sum_thickness) * %s) OVER (PARTITION BY #main.cokey) AS DEPTH_WEIGHTED_AVERAGE%s",
                property, n), collapse = ", "),
 paste0(sprintf("WEIGHTED_COMP_PCT * DEPTH_WEIGHTED_AVERAGE%s AS COMP_WEIGHTED_AVERAGE%s", n, n), collapse = ", "),
 paste0(sprintf("DEPTH_WEIGHTED_AVERAGE%s", n), collapse = ", "),

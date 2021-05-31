@@ -1066,7 +1066,7 @@ get_SDA_interpretation <- function(rulename,
 .cleanRuleColumnName <- function(x) gsub("[^A-Za-z0-9]", "", x)
 
 .interpretation_by_condition <- function(interp, where_clause, dominant = TRUE) {
-  sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS MUKEY,
+  sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey,
   %s
   FROM legend AS l
   INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
@@ -1096,7 +1096,7 @@ get_SDA_interpretation <- function(rulename,
 }
 
 .interpretation_aggregation <- function(interp, where_clause, dominant = FALSE) {
-  sprintf("SELECT areasymbol, musym, muname, mu.mukey AS MUKEY, c.cokey AS cokey, c.compname AS compname, c.comppct_r AS comppct_r,
+  sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey, c.cokey AS cokey, c.compname AS compname, c.comppct_r AS comppct_r,
                 %s
                 FROM legend  AS l
                 INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
@@ -1120,14 +1120,14 @@ get_SDA_interpretation <- function(rulename,
 }
 
 .interpretation_weighted_average <- function(interp, where_clause) {
-  sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS MUKEY,
+  sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey,
                 %s
                 INTO #main
                 FROM legend AS l
                 INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
                 INNER JOIN component AS c ON c.mukey = mu.mukey
                 GROUP BY areasymbol, musym, muname, mu.mukey
-                SELECT areasymbol, musym, muname, MUKEY,
+                SELECT areasymbol, musym, muname, mukey,
                 %s,
                 %s,
                 %s
