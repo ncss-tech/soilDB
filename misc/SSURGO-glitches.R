@@ -4,6 +4,48 @@ library(sf)
 library(rasterVis)
 library(viridisLite)
 
+
+
+# SJQ | Amador Co.
+
+# Amador | Pentz
+# bb <- '-121.1074 38.3756,-121.1074 38.4412,-120.9702 38.4412,-120.9702 38.3756,-121.1074 38.3756'
+
+# Mokelumne | Sed. Rock Land
+# https://casoilresource.lawr.ucdavis.edu/gmap/?loc=38.46643,-121.02565,z14
+bb <- '-121.1099 38.4288,-121.1099 38.4942,-120.9728 38.4942,-120.9728 38.4288,-121.1099 38.4288'
+wkt <- sprintf('POLYGON((%s))', bb)
+
+x <- st_as_sfc(wkt)
+st_crs(x) <- 4326
+
+(mu <- mukey.wcs(aoi = x, db = 'gnatsgo'))
+
+levelplot(mu, att = 'ID', margin = FALSE, colorkey = FALSE, col.regions = viridis)
+
+# get unique mukeys from grid
+ll <- levels(mu)[[1]]
+
+s <- get_SDA_property(property = 'pH 1:1 water - Rep Value', method = 'Weighted Average', mukeys = ll$ID, top_depth = 0, bottom_depth = 25)
+
+## !! what? 0s?
+s[which(s$ph1to1h2o_r == 0), ]
+z <- fetchSDA("mukey = '461915'")
+z$ph1to1h2o_r
+
+# merge pH by mukey into raster attribute table (RAT)
+rat <- merge(ll, s[, c('mukey', 'ph1to1h2o_r')], by.x = 'ID', by.y = 'mukey', sort = FALSE, all.x = TRUE)
+
+# re-pack RAT
+levels(mu) <- rat
+
+ph_025 <- deratify(mu)
+levelplot(ph_025, margin = FALSE, col.regions = viridis, scales = list(draw = FALSE))
+
+# ph_025.800 <- ISSR800.wcs(aoi = x, var = 'ph_025cm')
+# levelplot(ph_025.800, margin = FALSE, col.regions = viridis, scales = list(draw = FALSE))
+
+
 # west side of SJV
 # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=35.80752,-119.55113,z12
 
