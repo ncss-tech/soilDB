@@ -413,7 +413,7 @@ get_SDA_property <-
             top_depth, top_depth,
             bottom_depth, bottom_depth,
             top_depth, top_depth,
-            paste0(sprintf("CAST (ISNULL (%s , 0) AS decimal (5,2)) AS %s", property, property), collapse=", "),
+            paste0(sprintf("CAST (%s AS decimal (5,2)) AS %s", property, property), collapse=", "),
             where_clause,
             top_depth, bottom_depth,
             sprintf("SELECT #main.areasymbol, #main.musym, #main.muname, #main.mukey,
