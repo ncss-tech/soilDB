@@ -667,7 +667,9 @@ get_SDA_interpretation <- function(rulename,
                                               "Weighted Average",
                                               "None"),
                                    areasymbols = NULL,
-                                   mukeys = NULL, query_string = FALSE) {
+                                   mukeys = NULL, 
+                                   query_string = FALSE,
+                                   not_rated_value = NA_real_) {
   q <- .constructInterpQuery(
       method = method,
       interp = rulename,
@@ -685,7 +687,18 @@ get_SDA_interpretation <- function(rulename,
     warnings()
     stop(attr(res, 'condition'))
   }
-
+  
+  # check rating column values
+  ratingcols <- colnames(res)[grep("^rating_", colnames(res))]
+  res[] <- lapply(colnames(res), function(x) {
+    y <- res[[x]]
+    if(x %in% ratingcols) {
+      # SQL will set 99 rating value for class == "Not rated"
+      y[is.na(y) | y == 99] <- not_rated_value
+      return(y)
+    }
+    y
+  })
   return(res)
 }
 
