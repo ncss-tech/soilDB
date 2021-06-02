@@ -104,14 +104,15 @@ x <- data.table::rbindlist(lapply(seq_along(res$SERIES), function(i)
       ric.content = as.character(strsplit(res$RANGE.IN.CHARACTERISTICS[i], "\\. |\\n")[[1]])
     )))
 
-x.mollic <- subset(x, grepl('[^n][^o][^t] thick', ric.content, ignore.case = TRUE) &
-                      grepl('mollic epipedon', ric.content, ignore.case = TRUE))
+x.mollic <- subset(x, grepl('[^n][^o][^t] ?thick', ric.content, ignore.case = TRUE) &
+                      grepl('mollic epipedon', ric.content, ignore.case = TRUE) |
+                      grepl('Thickness of mollic epipedon[ :\\-]*', ric.content, ignore.case = TRUE))
 x.mollic$units <- NA_character_
-x.mollic$numbers <- gsub(".*[ \\-](\\d+ to \\d+) (in|inches|cm|centimeters).*", "\\1;\\2", x.mollic$ric.content)
+x.mollic$numbers <- gsub(".*[ \\-]+(\\d+ to \\d+) (in|inches|cm|centimeters).*", "\\1;\\2", x.mollic$ric.content)
 
 x.mollic.split <- strsplit(x.mollic$numbers, " to |;")
 names(x.mollic.split) <- x.mollic$series
-
+c("HUNTINGTON","TANEY","TILMA") %in% x$series
 taxonfamily <- gsub("TAXONOMIC CLASS: ?", "", x.mollic$taxonomy)
 names(taxonfamily) <- x.mollic$series
 
@@ -197,54 +198,56 @@ sort(table(min_is18$greatgroup), decreasing = TRUE)[1:5]
 # 
 
 # looking at other horizon designations and diagnostics
-chunk.idx <- makeChunks(x.mollic.result$series, 50)
-parsedosd <- aqp::combine(lapply(unique(chunk.idx), function(i) fetchOSD(x.mollic.result$series[chunk.idx == i])))
+# chunk.idx <- makeChunks(x.mollic.result$series, 50)
+# parsedosd <- aqp::combine(lapply(unique(chunk.idx), function(i) fetchOSD(x.mollic.result$series[chunk.idx == i])))
 # save(parsedosd, file = "misc/parsedosds.rda")
 load("misc/parsedosds.rda")
 
 library(aqp)
-# 1907/1984 do not have sandy textures through the upper 25 cm
+# 4153/4377 do not have sandy textures through the upper 25 cm
 parsedosd025 <- trunc(parsedosd, 0, 25)
 parsedosd025$isSandy <- grepl("sand$", as.character(parsedosd025$texture_class)) & 
                         !grepl('very fine', as.character(parsedosd025$texture_class))
 parsedosd025 <- mutate_profile(parsedosd025, any_isSandy = any(isSandy))
 table(parsedosd025$any_isSandy)
 sandy_sub <- subset(site(parsedosd025), !any_isSandy)
+nrow(sandy_sub)
 
-# 1263/1984 - have no secondary carbonates
+# 2753/4377 - have no secondary carbonates
 carbonates_sub <- depthOf(parsedosd, pattern = "k", hzdesgn = "hzname")
 length(unique(carbonates_sub$id[!complete.cases(carbonates_sub)]))
 
-# 1951/1984 - no sec. gypsum
+# 4316/4377 - no sec. gypsum
 gypsum_sub <- depthOf(parsedosd, pattern = "y", hzdesgn = "hzname")
 length(unique(gypsum_sub$id[!complete.cases(gypsum_sub)]))
 
-# no fragipan
+# 4375/4377 - no fragipan
 fragipan_sub <- depthOf(parsedosd, pattern = "x", hzdesgn = "hzname")
 length(unique(fragipan_sub$id[!complete.cases(fragipan_sub)]))
 
-# 1983/1984 - no oxic
+# 3950/4377 - no oxic
 oxic_sub <- depthOf(parsedosd, pattern = "o", hzdesgn = "hzname")
 length(unique(oxic_sub$id[!complete.cases(oxic_sub)]))
 
-# 1953/1984 - no spodic
+# 4376/4377 - no spodic
 spodic_sub <- depthOf(parsedosd, pattern = "h|s", hzdesgn = "hzname")
 length(unique(spodic_sub$id[!complete.cases(spodic_sub)]))
 
-# 1090/1984 no natric/argillic/kandic
+# 2223/4377 no natric/argillic/kandic
 argi_sub <- depthOf(parsedosd, pattern = "t|tn", hzdesgn = "hzname")
 length(unique(argi_sub$id[!complete.cases(argi_sub)]))
 
-# 1165/1984 - no cambic
+# 2894/4377 - no cambic
 cambi_sub <- depthOf(parsedosd, pattern = "w|Bg|B2[^t]*", hzdesgn = "hzname")
 length(unique(cambi_sub$id[!complete.cases(cambi_sub)]))
 
-# 1381/1984 - do not have bedrock, duripan, or densic, or petrocalcic
+# 2795/4377 - do not have bedrock, duripan, or densic, or petrocalcic
 restriction_sub <- depthOf(parsedosd, "Cr|R|Cd|m")
 length(unique(restriction_sub$id[!complete.cases(restriction_sub)]))
 
-# 1792/1984 are not fluv- or cumulic-
+# 3976/4377 are not fluv- or cumulic-
 fluventic_ids <- site(parsedosd)$id[!grepl("fluv|cumulic", parsedosd$subgroup)]
+length(fluventic_ids)
 
 countdiags <- table(c(sandy_sub$id[!complete.cases(sandy_sub)],
                       carbonates_sub$id[!complete.cases(carbonates_sub)], 
@@ -258,3 +261,19 @@ countdiags <- table(c(sandy_sub$id[!complete.cases(sandy_sub)],
 
 nodiags <- subset(x.mollic.result, x.mollic.result$series %in% names(countdiags[countdiags == 9]))
 write.csv(nodiags, "mollic_no_diags.csv")
+
+# series with an OXIC referenced in RIC
+res$SERIES[grep("\\b[Oo]xic\\b", res$RANGE.IN.CHARACTERISTICS)]
+
+idx <- grepl("\\b[Ff]ragipan\\b", res$RANGE.IN.CHARACTERISTICS) &
+  grepl("olls$", res$TAXONOMIC.CLASS)
+
+# taxa with FRAGIPAN referenced in RIC that are mollisols
+fragitaxa <- SoilTaxonomy::parse_family(res$TAXONOMIC.CLASS[idx])
+
+res$RANGE.IN.CHARACTERISTICS[idx]
+fragitaxa$SERIES <- res$SERIES[idx]
+
+fragitaxa[which(getTaxonAtLevel(fragitaxa$subgroup, "order") == "mollisols"),]$SERIES
+
+
