@@ -33,6 +33,14 @@ s[which(s$ph1to1h2o_r == 0), ]
 z <- fetchSDA("mukey = '461915'")
 z$ph1to1h2o_r
 
+### TODO: figure this one out
+## dilution of weighted mean due to weights associated with NULL values
+## document this
+# another issue: weighted averages 
+z <- fetchSDA("mukey = '461984'")
+z$ph1to1h2o_r
+
+
 # merge pH by mukey into raster attribute table (RAT)
 rat <- merge(ll, s[, c('mukey', 'ph1to1h2o_r')], by.x = 'ID', by.y = 'mukey', sort = FALSE, all.x = TRUE)
 
