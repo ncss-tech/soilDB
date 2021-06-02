@@ -194,3 +194,67 @@ sort(table(min_is18$greatgroup), decreasing = TRUE)[1:5]
 # top 5 affected: 
 # Argiustolls Haploxerolls  Haplustolls Calciaquolls   Hapludolls 
 # 73           69           64           43           43 
+# 
+
+# looking at other horizon designations and diagnostics
+chunk.idx <- makeChunks(x.mollic.result$series, 50)
+parsedosd <- aqp::combine(lapply(unique(chunk.idx), function(i) fetchOSD(x.mollic.result$series[chunk.idx == i])))
+# save(parsedosd, file = "misc/parsedosds.rda")
+load("misc/parsedosds.rda")
+
+library(aqp)
+# 1907/1984 do not have sandy textures through the upper 25 cm
+parsedosd025 <- trunc(parsedosd, 0, 25)
+parsedosd025$isSandy <- grepl("sand$", as.character(parsedosd025$texture_class)) & 
+                        !grepl('very fine', as.character(parsedosd025$texture_class))
+parsedosd025 <- mutate_profile(parsedosd025, any_isSandy = any(isSandy))
+table(parsedosd025$any_isSandy)
+sandy_sub <- subset(site(parsedosd025), !any_isSandy)
+
+# 1263/1984 - have no secondary carbonates
+carbonates_sub <- depthOf(parsedosd, pattern = "k", hzdesgn = "hzname")
+length(unique(carbonates_sub$id[!complete.cases(carbonates_sub)]))
+
+# 1951/1984 - no sec. gypsum
+gypsum_sub <- depthOf(parsedosd, pattern = "y", hzdesgn = "hzname")
+length(unique(gypsum_sub$id[!complete.cases(gypsum_sub)]))
+
+# no fragipan
+fragipan_sub <- depthOf(parsedosd, pattern = "x", hzdesgn = "hzname")
+length(unique(fragipan_sub$id[!complete.cases(fragipan_sub)]))
+
+# 1983/1984 - no oxic
+oxic_sub <- depthOf(parsedosd, pattern = "o", hzdesgn = "hzname")
+length(unique(oxic_sub$id[!complete.cases(oxic_sub)]))
+
+# 1953/1984 - no spodic
+spodic_sub <- depthOf(parsedosd, pattern = "h|s", hzdesgn = "hzname")
+length(unique(spodic_sub$id[!complete.cases(spodic_sub)]))
+
+# 1090/1984 no natric/argillic/kandic
+argi_sub <- depthOf(parsedosd, pattern = "t|tn", hzdesgn = "hzname")
+length(unique(argi_sub$id[!complete.cases(argi_sub)]))
+
+# 1165/1984 - no cambic
+cambi_sub <- depthOf(parsedosd, pattern = "w|Bg|B2[^t]*", hzdesgn = "hzname")
+length(unique(cambi_sub$id[!complete.cases(cambi_sub)]))
+
+# 1381/1984 - do not have bedrock, duripan, or densic, or petrocalcic
+restriction_sub <- depthOf(parsedosd, "Cr|R|Cd|m")
+length(unique(restriction_sub$id[!complete.cases(restriction_sub)]))
+
+# 1792/1984 are not fluv- or cumulic-
+fluventic_ids <- site(parsedosd)$id[!grepl("fluv|cumulic", parsedosd$subgroup)]
+
+countdiags <- table(c(sandy_sub$id[!complete.cases(sandy_sub)],
+                      carbonates_sub$id[!complete.cases(carbonates_sub)], 
+                      gypsum_sub$id[!complete.cases(gypsum_sub)], 
+                      oxic_sub$id[!complete.cases(oxic_sub)], 
+                      spodic_sub$id[!complete.cases(spodic_sub)], 
+                      argi_sub$id[!complete.cases(argi_sub)], 
+                      cambi_sub$id[!complete.cases(cambi_sub)], 
+                      restriction_sub$id[!complete.cases(restriction_sub)],
+                      fluventic_ids))
+
+nodiags <- subset(x.mollic.result, x.mollic.result$series %in% names(countdiags[countdiags == 9]))
+write.csv(nodiags, "mollic_no_diags.csv")
