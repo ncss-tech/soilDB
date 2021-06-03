@@ -74,8 +74,9 @@ simplifyColorData <- function(d, id.var='phiid', wt='colorpct', bt=FALSE) {
   d$colormoistst <- tolower(d$colormoistst)
   
   # split into dry / moist
-  dry.colors <- d[which(d$colormoistst == 'dry'), ]
-  moist.colors <- d[which(d$colormoistst == 'moist'), ]
+  .SD <- NULL
+  dry.colors <- data.table::as.data.table(d[grep('dry', d$colormoistst, ignore.case = TRUE), ])
+  moist.colors <- data.table::as.data.table(d[grep('moist', d$colormoistst, ignore.case = TRUE), ])
   
   ## there may be cases where there are 0 records of dry or moist colors
   
@@ -90,6 +91,7 @@ simplifyColorData <- function(d, id.var='phiid', wt='colorpct', bt=FALSE) {
   # variables required for mixing
   mix.vars <- c(wt, 'L', 'A', 'B')
   
+  
   # mix/combine if there are any horizons that need mixing
   if (length(dry.to.mix) > 0) {
     message(paste('mixing dry colors ... [', length(dry.to.mix), ' of ', nrow(dry.colors), ' horizons]', sep=''))
@@ -99,29 +101,32 @@ simplifyColorData <- function(d, id.var='phiid', wt='colorpct', bt=FALSE) {
     
     # split by horizon ID
     # note: split will re-order IDs
-    dc <- split(dry.colors[dry.mix.idx, mix.vars], f = dry.colors[[id.var]][dry.mix.idx])
+    # dc <- split(dry.colors[dry.mix.idx, mix.vars], f = dry.colors[[id.var]][dry.mix.idx])
+    #     # final vesion
+    # mixed.dry <- lapply(dc, estimateColorMixture, wt = wt, backTransform = bt)
+    # 
+    # # flatten and copy id.var from rownames
+    # mixed.dry <- do.call('rbind', mixed.dry)
+    # mixed.dry[[id.var]] <- row.names(mixed.dry)
     
-    # final vesion
-    mixed.dry <- lapply(dc, estimateColorMixture, wt = wt, backTransform = bt)
-    
-    # flatten and copy id.var from rownames
-    mixed.dry <- do.call('rbind', mixed.dry)
-    mixed.dry[[id.var]] <- row.names(mixed.dry)
+    mixed.dry <- dry.colors[dry.mix.idx, .SD, .SDcols =  c(id.var, mix.vars)]
+    mixed.dry <- mixed.dry[, estimateColorMixture(.SD, wt = wt, backTransform = bt), by = id.var]
     
     # back-transform mixture to Munsell using best-available method
-    m <- rgb2munsell(mixed.dry[, c('r', 'g', 'b')])
+    m <- rgb2munsell(as.data.frame(mixed.dry[, .SD, .SDcols = c('r', 'g', 'b')]))
     
     # adjust names to match NASIS
     names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")
     
     # combine with mixed sRGB coordinates
-    mixed.dry <- cbind(mixed.dry[, c(id.var, 'r', 'g', 'b')], m)
+    mixed.dry <- cbind(mixed.dry[, .SD, .SDcols = c(id.var, 'r', 'g', 'b')], m)
     
     # combine original[-horizons to be mixed] + mixed horizons
-    dry.colors.final <- rbind(dry.colors[-dry.mix.idx, vars.to.keep], mixed.dry)
+    dry.colors.final <- rbind(dry.colors[-dry.mix.idx, .SD, .SDcols = vars.to.keep], mixed.dry)
     names(dry.colors.final) <- c(id.var, 'd_r', 'd_g', 'd_b', 'd_hue', 'd_value', 'd_chroma', 'd_sigma')
+    
   } else {# otherwise subset the columns only
-    dry.colors.final <- dry.colors[, vars.to.keep]
+    dry.colors.final <- dry.colors[, .SD, .SDcols =  vars.to.keep]
     names(dry.colors.final) <- c(id.var, 'd_r', 'd_g', 'd_b', 'd_hue', 'd_value', 'd_chroma', 'd_sigma')
   }
   
@@ -132,37 +137,41 @@ simplifyColorData <- function(d, id.var='phiid', wt='colorpct', bt=FALSE) {
     # filter out and mix only colors with >1 color / horizon
     moist.mix.idx <- which(moist.colors[[id.var]] %in% moist.to.mix)
     
-    # split by horizon ID
-    # note: split will re-order IDs
-    mc <- split(moist.colors[moist.mix.idx, mix.vars], f = moist.colors[[id.var]][moist.mix.idx])
-    
-    # final version
-    mixed.moist <- lapply(mc, estimateColorMixture, wt = wt, backTransform = bt)
-    
-    # flatten and copy id.var from rownames
-    mixed.moist <- do.call('rbind', mixed.moist)
-    mixed.moist[[id.var]] <- row.names(mixed.moist)
-    
+    # # split by horizon ID
+    # # note: split will re-order IDs
+    # mc <- split(moist.colors[moist.mix.idx, mix.vars], f = moist.colors[[id.var]][moist.mix.idx])
+    # 
+    # # final version
+    # mixed.moist <- lapply(mc, estimateColorMixture, wt = wt, backTransform = bt)
+    # 
+    # # flatten and copy id.var from rownames
+    # mixed.moist <- do.call('rbind', mixed.moist)
+    # mixed.moist[[id.var]] <- row.names(mixed.moist)
+    mixed.moist <- moist.colors[moist.mix.idx, .SD, .SDcols =  c(id.var, mix.vars)]
+    mixed.moist <- mixed.moist[, estimateColorMixture(.SD, wt = wt, backTransform = bt), by = id.var]
+    # 
     # back-transform mixture to Munsell using best-available method
-    m <- rgb2munsell(mixed.moist[, c('r', 'g', 'b')])
+    m <- rgb2munsell(as.data.frame(mixed.moist[, .SD, .SDcols = c('r', 'g', 'b')]))
     
     # adjust names to match NASIS
     names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")
     
     # combine with mixed sRGB coordinates
-    mixed.moist <- cbind(mixed.moist[, c(id.var, 'r', 'g', 'b')], m)
+    mixed.moist <- cbind(mixed.moist[, .SD, .SDcols = c(id.var, 'r', 'g', 'b')], m)
     
     # combine original[-horizons to be mixed] + mixed horizons
-    moist.colors.final <- rbind(moist.colors[-moist.mix.idx, vars.to.keep], mixed.moist)
+    moist.colors.final <- rbind(moist.colors[-moist.mix.idx, .SD, .SDcols = vars.to.keep],
+                                mixed.moist)
     names(moist.colors.final) <- c(id.var, 'm_r', 'm_g', 'm_b', 'm_hue', 'm_value', 'm_chroma', 'm_sigma')
+    
   } else {# otherwise subset the columns only
-    moist.colors.final <- moist.colors[, vars.to.keep]
+    moist.colors.final <- moist.colors[, .SD, .SDcols =  vars.to.keep]
     names(moist.colors.final) <- c(id.var, 'm_r', 'm_g', 'm_b', 'm_hue', 'm_value', 'm_chroma', 'm_sigma')
   }
   
   # FULL JOIN dry + moist colors
-  d.final <- merge(dry.colors.final, moist.colors.final, by = id.var, 
-                   all.x = TRUE, all.y = TRUE, sort = FALSE)
+  d.final <- as.data.frame(merge(dry.colors.final, moist.colors.final, by = id.var, 
+                   all.x = TRUE, all.y = TRUE, sort = FALSE, incomparables = NA))
   
   # make HEX colors
   # safely account for NA, rgb() will not accept NA input

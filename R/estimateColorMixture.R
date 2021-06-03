@@ -21,7 +21,7 @@ estimateColorMixture <- function(x, wt='pct', backTransform=FALSE) {
   ## TODO: account for backtransform == TRUE, different return structure
   # sanity check: no NA
   if(any(c(is.na(x$L), is.na(x$A), is.na(x$B)))) {
-    return(data.frame(r=NA, g=NA, b=NA))
+    return(data.frame(r = NA_real_, g = NA_real_, b = NA_real_))
   }
   
   # attempt to fill missing weights
