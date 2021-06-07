@@ -10,6 +10,7 @@
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
+#' @param not_rated_value used where rating class is "Not Rated". Default: `NA_real`
 #' @examples
 #' \donttest{
 #' if(requireNamespace("curl") &

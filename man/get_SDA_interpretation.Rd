@@ -9,7 +9,8 @@ get_SDA_interpretation(
   method = c("Dominant Component", "Dominant Condition", "Weighted Average", "None"),
   areasymbols = NULL,
   mukeys = NULL,
-  query_string = FALSE
+  query_string = FALSE,
+  not_rated_value = NA_real_
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ get_SDA_interpretation(
 \item{mukeys}{vector of map unit keys}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
+
+\item{not_rated_value}{used where rating class is "Not Rated". Default: \code{NA_real}}
 }
 \value{
 a data.frame
