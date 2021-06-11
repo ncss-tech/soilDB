@@ -12,11 +12,12 @@ get_SDA_property(
   mukeys = NULL,
   top_depth = 0,
   bottom_depth = 200,
-  FUN = NULL
+  FUN = NULL,
+  query_string = FALSE
 )
 }
 \arguments{
-\item{property}{a label or column name from property dictionary}
+\item{property}{character vector of labels from property dictionary tables (see details) OR physical column names from \code{component} or \code{chorizon} table.}
 
 \item{method}{one of: "Dominant Component (Category)", "Weighted Average", "Min/Max", "Dominant Component (Numeric)", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.}
 
@@ -28,7 +29,9 @@ get_SDA_property(
 
 \item{bottom_depth}{Default: \code{200} (centimeters); a numeric value for lower boundary (bottom depth) used only for method="weighted average" and "dominant component (numeric)"}
 
-\item{FUN}{Optional: character representing SQL aggregation function either "MIN" or "MAX" for method="min/max"}
+\item{FUN}{Optional: character representing SQL aggregation function either "MIN" or "MAX" used only for method="min/max"}
+
+\item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 }
 \value{
 a data.frame with result
@@ -37,7 +40,7 @@ a data.frame with result
 Get map unit properties from Soil Data Access
 }
 \details{
-The \code{property} argument refers to one of the property names or columns specified in the tables below.
+The \code{property} argument refers to one of the property names or columns specified in the tables below. Note that \code{property} can be specified as either a character vector of labeled properties, such as \code{"Bulk Density 0.33 bar H2O - Rep Value"}, OR physical column names such as \code{"dbthirdbar_r"}. To get "low" and "high" values for a particular property, replace the \verb{_r} with \verb{_l} or \verb{_h} in the physical column name; for example \code{property = c("dbthirdbar_l","dbthirdbar_r","dbthirdbar_h")}. You can view exhaustive lists of component and component horizon level properties in the Soil Data Access \href{https://sdmdataaccess.sc.egov.usda.gov/documents/TablesAndColumnsReport.pdf}{"Tables and Columns Report"}.
 \subsection{Selected Component-level Properties}{\tabular{ll}{
    \strong{Property (Component)} \tab \strong{Column} \cr
    Range Production - Favorable Year \tab rsprod_h \cr
@@ -122,6 +125,22 @@ The \code{property} argument refers to one of the property names or columns spec
 }
 
 }
+}
+\examples{
+
+\donttest{
+if(requireNamespace("curl") &
+    curl::has_internet()) {
+
+ # get 1/3 bar bulk density [0,25] centimeter depth weighted average from dominant component
+ get_SDA_property(property = c("dbthirdbar_l","dbthirdbar_r","dbthirdbar_h"),
+                  method = "Dominant Component (Numeric)",
+                  areasymbols = "CA630",
+                  top_depth = 0,
+                  bottom_depth = 25)
+}
+}
+
 }
 \author{
 Jason Nemecek, Chad Ferguson, Andrew Brown

@@ -1,17 +1,34 @@
 # Based on ssurgoOnDemand by chad ferguson and jason nemecek
 # SDA_interpretations.R: translation of SDA_Interps.py into soilDB-style R function by andrew brown
-# last update: 2021/04/03
+# created: 2021/04/03
+# last update: 2021/05/30
 
 #' Get map unit interpretations from Soil Data Access by rule name
 #'
-#' @param rulename rule name of interpretation (matching a `mrulename` in `cointerp` table)
+#' @param rulename character vector of interpretation rule names (matching `mrulename` in `cointerp` table)
 #' @param method aggregation method. One of: "Dominant Component", "Dominant Condition", "Weighted Average", "None". If "None" is selected one row will be returned per component, otherwise one row will be returned per map unit.
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
-#' @details 
-#'  
+#' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
+#' @param not_rated_value used where rating class is "Not Rated". Default: `NA_real`
+#' @examples
+#' \donttest{
+#' if(requireNamespace("curl") &
+#'     curl::has_internet()) {
+#'
+#'  # get two forestry interpretations for CA630
+#'  get_SDA_interpretation(c("FOR - Potential Seedling Mortality",
+#'                           "FOR - Road Suitability (Natural Surface)"),
+#'                         method = "Dominant Condition",
+#'                         areasymbols = "CA630")
+#' }
+#' }
+#'
+#'
+#' @details
+#'
 #' ## Rule Names in `cointerp` table
-#' 
+#'
 #' - AGR-Agronomic Concerns (ND)
 #' - AGR-Available Water Capacity (ND)
 #' - AGR-Natural Fertility (ND)
@@ -639,18 +656,21 @@
 #' - WMS - Surface Drains (TX)
 #' - WMS - Surface Irrigation Intake Family (TX)
 #' - WMS - Surface Water Management, System
-#' 
+#'
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
 #' @return a data.frame
 #' @export
 #' @importFrom soilDB format_SQL_in_statement SDA_query
-#' 
-get_SDA_interpretation <- function(rulename, 
-                                   method = c("Dominant Component", 
-                                              "Dominant Condition", 
-                                              "Weighted Average", 
+#'
+get_SDA_interpretation <- function(rulename,
+                                   method = c("Dominant Component",
+                                              "Dominant Condition",
+                                              "Weighted Average",
                                               "None"),
-                                   areasymbols = NULL, mukeys = NULL) {
+                                   areasymbols = NULL,
+                                   mukeys = NULL, 
+                                   query_string = FALSE,
+                                   not_rated_value = NA_real_) {
   q <- .constructInterpQuery(
       method = method,
       interp = rulename,
@@ -658,15 +678,28 @@ get_SDA_interpretation <- function(rulename,
       mukeys = mukeys
     )
 
+  if (query_string) return(q)
+
   # execute query
-  res <- soilDB::SDA_query(q)
+  res <- suppressMessages(soilDB::SDA_query(q))
 
   # stop if bad
   if (inherits(res, 'try-error')) {
     warnings()
     stop(attr(res, 'condition'))
   }
-
+  
+  # check rating column values
+  ratingcols <- colnames(res)[grep("^rating_", colnames(res))]
+  res[] <- lapply(colnames(res), function(x) {
+    y <- res[[x]]
+    if(x %in% ratingcols) {
+      # SQL will set 99 rating value for class == "Not rated"
+      y[is.na(y) | y == 99] <- not_rated_value
+      return(y)
+    }
+    y
+  })
   return(res)
 }
 
@@ -1037,106 +1070,56 @@ get_SDA_interpretation <- function(rulename,
   agg_method <- .interpretationAggMethod(method)
   areasymbols <- soilDB::format_SQL_in_statement(areasymbols)
   switch(agg_method$method,
-         "DOMINANT COMPONENT" = sprintf("SELECT areasymbol, musym, muname, mu.mukey  AS MUKEY,
-                (SELECT interphr FROM component INNER JOIN cointerp ON component.cokey = cointerp.cokey AND component.cokey = c.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as rating,
-                (SELECT interphrc FROM component INNER JOIN cointerp ON component.cokey = cointerp.cokey AND component.cokey = c.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as class,
-                (SELECT DISTINCT SUBSTRING(  (  SELECT ( '; ' + interphrc)
-                FROM mapunit
-                INNER JOIN component ON component.mukey=mu.mukey AND compkind != 'miscellaneous area' AND component.cokey=c.cokey
-                INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
-                AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc, interphr
-                ORDER BY interphr DESC, interphrc
-                FOR XML PATH('') ), 3, 1000) )as reason
-                FROM legend  AS l
-                INNER JOIN  mapunit AS mu ON mu.lkey = l.lkey AND %s
-                INNER JOIN  component AS c ON c.mukey = mu.mukey  AND c.cokey = (SELECT TOP 1 c1.cokey FROM component AS c1
-                INNER JOIN mapunit ON c.mukey=mapunit.mukey AND c1.mukey=mu.mukey ORDER BY c1.comppct_r DESC, c1.cokey)",
-                                        interp, interp, interp, where_clause),
+         "DOMINANT COMPONENT" = .interpretation_aggregation(interp, where_clause, dominant = TRUE),
+         "DOMINANT CONDITION" = .interpretation_by_condition(interp, where_clause, dominant = TRUE),
+         "WEIGHTED AVERAGE" =   .interpretation_weighted_average(interp, where_clause),
+         "NONE" =               .interpretation_aggregation(interp, where_clause)
+  )
+}
 
-    "DOMINANT CONDITION" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1  AS MUKEY,
-            (SELECT TOP 1 ROUND (AVG(interphr) over(partition by interphrc),2)
-            FROM mapunit
-            INNER JOIN component ON component.mukey=mapunit.mukey
-            INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, interphr
-            ORDER BY SUM (comppct_r) DESC)as rating,
-            (SELECT TOP 1 interphrc
-            FROM mapunit
-            INNER JOIN component ON component.mukey=mapunit.mukey
-            INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
-            GROUP BY interphrc, comppct_r ORDER BY SUM(comppct_r) over(partition by interphrc) DESC) as class,
+.cleanRuleColumnName <- function(x) gsub("[^A-Za-z0-9]", "", x)
 
-            (SELECT DISTINCT SUBSTRING(  (  SELECT ( '; ' + interphrc)
-            FROM mapunit
-            INNER JOIN component ON component.mukey=mapunit.mukey AND compkind != 'miscellaneous area' AND component.cokey=c.cokey
-            INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
+.interpretation_by_condition <- function(interp, where_clause, dominant = TRUE) {
+  sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey,
+  %s
+  FROM legend AS l
+  INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
+  INNER JOIN component AS c ON c.mukey = mu.mukey %s
+  ORDER BY areasymbol, musym, muname, mu.mukey",
+  paste0(sapply(interp, function(x) sprintf("  (SELECT TOP 1 ROUND (AVG(interphr) OVER (PARTITION BY interphrc), 2)
+   FROM mapunit
+   INNER JOIN component ON component.mukey = mapunit.mukey
+   INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, interphr
+   ORDER BY SUM (comppct_r) DESC) AS [rating_%s],
+  (SELECT TOP 1 interphrc
+   FROM mapunit
+   INNER JOIN component ON component.mukey = mapunit.mukey
+   INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
+   GROUP BY interphrc, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY interphrc) DESC) AS [class_%s],
 
-            AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc, interphr
-            ORDER BY interphr DESC, interphrc
-            FOR XML PATH('') ), 3, 1000) )as reason
+  (SELECT DISTINCT SUBSTRING((SELECT('; ' + interphrc)
+                              FROM mapunit
+                              INNER JOIN component ON component.mukey = mapunit.mukey AND compkind != 'miscellaneous area' AND component.cokey = c.cokey
+                              INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
+                              AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc, interphr
+                              ORDER BY interphr DESC, interphrc
+                              FOR XML PATH('') ), 3, 1000)) AS [reason_%s]",
+                              x, .cleanRuleColumnName(x), 
+                              x, .cleanRuleColumnName(x), 
+                              x, .cleanRuleColumnName(x))), 
+         collapse = ", "), where_clause,
+  ifelse(dominant, "AND c.cokey =
+    (SELECT TOP 1 c1.cokey FROM component AS c1
+     INNER JOIN mapunit ON c.mukey = mapunit.mukey AND c1.mukey = mu.mukey ORDER BY c1.comppct_r DESC, c1.cokey)", ""))
+}
 
-
-            FROM legend  AS l
-            INNER JOIN  mapunit AS mu ON mu.lkey = l.lkey AND %s
-            INNER JOIN  component AS c ON c.mukey = mu.mukey AND c.cokey =
-            (SELECT TOP 1 c1.cokey FROM component AS c1
-            INNER JOIN mapunit ON c.mukey=mapunit.mukey AND c1.mukey=mu.mukey ORDER BY c1.comppct_r DESC, c1.cokey)
-            ORDER BY areasymbol, musym, muname, mu.mukey",
-                                   interp, interp, interp, where_clause),
-
-      "WEIGHTED AVERAGE" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1  AS MUKEY,
-                (SELECT TOP 1 CASE WHEN ruledesign = 1 THEN 'limitation'
-                WHEN ruledesign = 2 THEN 'suitability' END
-                FROM mapunit
-                INNER JOIN component ON component.mukey=mapunit.mukey
-                INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
-                GROUP BY mapunit.mukey, ruledesign) as design,
-                ROUND ((SELECT SUM (interphr * comppct_r)
-                FROM mapunit
-                INNER JOIN component ON component.mukey=mapunit.mukey
-                INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
-                GROUP BY mapunit.mukey),2) as rating,
-                ROUND ((SELECT SUM (comppct_r)
-                FROM mapunit
-                INNER JOIN component ON component.mukey=mapunit.mukey
-                INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
-                AND (interphr) IS NOT NULL GROUP BY mapunit.mukey),2) as sum_com,
-                (SELECT DISTINCT SUBSTRING(  (  SELECT ( '; ' + interphrc)
-                FROM mapunit
-                INNER JOIN component ON component.mukey=mapunit.mukey AND compkind != 'miscellaneous area'
-                INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
-
-                AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc
-                ORDER BY interphrc
-                FOR XML PATH('') ), 3, 1000) )as reason
-
-                INTO #main
-                FROM legend  AS l
-                INNER JOIN  mapunit AS mu ON mu.lkey = l.lkey AND %s
-                INNER JOIN  component AS c ON c.mukey = mu.mukey
-                GROUP BY  areasymbol, musym, muname, mu.mukey
-
-                SELECT areasymbol, musym, muname, MUKEY, ISNULL (ROUND ((rating/sum_com),2), 99) AS rating,
-                CASE WHEN rating IS NULL THEN 'Not Rated'
-                WHEN design = 'suitability' AND  ROUND ((rating/sum_com),2) < = 0 THEN 'Not suited'
-                WHEN design = 'suitability' AND  ROUND ((rating/sum_com),2)  > 0.001 and  ROUND ((rating/sum_com),2)  <=0.333 THEN 'Poorly suited'
-                WHEN design = 'suitability' AND  ROUND ((rating/sum_com),2)  > 0.334 and  ROUND ((rating/sum_com),2)  <=0.666  THEN 'Moderately suited'
-                WHEN design = 'suitability' AND  ROUND ((rating/sum_com),2)  > 0.667 and  ROUND ((rating/sum_com),2)  <=0.999  THEN 'Moderately well suited'
-                WHEN design = 'suitability' AND  ROUND ((rating/sum_com),2)   = 1  THEN 'Well suited'
-
-                WHEN design = 'limitation' AND  ROUND ((rating/sum_com),2) < = 0 THEN 'Not limited '
-                WHEN design = 'limitation' AND  ROUND ((rating/sum_com),2)  > 0.001 and  ROUND ((rating/sum_com),2)  <=0.333 THEN 'Slightly limited '
-                WHEN design = 'limitation' AND  ROUND ((rating/sum_com),2)  > 0.334 and  ROUND ((rating/sum_com),2)  <=0.666  THEN 'Somewhat limited '
-                WHEN design = 'limitation' AND  ROUND ((rating/sum_com),2)  > 0.667 and  ROUND ((rating/sum_com),2)  <=0.999  THEN 'Moderately limited '
-                WHEN design = 'limitation' AND  ROUND ((rating/sum_com),2)  = 1 THEN 'Very limited' END AS class, reason
-                FROM #main
-                DROP TABLE #main", interp, interp, interp, interp, where_clause),
-    
-  "NONE" = sprintf("SELECT areasymbol, musym, muname, mu.mukey AS MUKEY, c.cokey AS cokey, c.compname AS compname, c.comppct_r AS comppct_r,
+.interpretation_aggregation <- function(interp, where_clause, dominant = FALSE) {
+  sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey, c.cokey AS cokey, c.compname AS compname, c.comppct_r AS comppct_r,
                 %s
                 FROM legend  AS l
                 INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
-                INNER JOIN component AS c ON c.mukey = mu.mukey",
-           paste0(sapply(interp, function(x) sprintf("(SELECT interphr FROM component INNER JOIN cointerp ON component.cokey = cointerp.cokey AND component.cokey = c.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [rating_%s],
+                INNER JOIN component AS c ON c.mukey = mu.mukey %s",
+                paste0(sapply(interp, function(x) sprintf("(SELECT interphr FROM component INNER JOIN cointerp ON component.cokey = cointerp.cokey AND component.cokey = c.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [rating_%s],
   (SELECT interphrc FROM component INNER JOIN cointerp ON component.cokey = cointerp.cokey AND component.cokey = c.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [class_%s],
   (SELECT DISTINCT SUBSTRING(  (  SELECT ( '; ' + interphrc)
                                   FROM mapunit
@@ -1144,12 +1127,77 @@ get_SDA_interpretation <- function(rulename,
                                   INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
                                   AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc, interphr
                                   ORDER BY interphr DESC, interphrc
-                                  FOR XML PATH('') ), 3, 1000)) as [reason_%s]", 
-                                                     x, .cleanRuleColumnName(x), 
-                                                     x, .cleanRuleColumnName(x), 
-                                                     x, .cleanRuleColumnName(x))), 
-                  collapse = ", "), where_clause)
-  )
+                                  FOR XML PATH('') ), 3, 1000)) as [reason_%s]",
+                                      x, .cleanRuleColumnName(x),
+                                      x, .cleanRuleColumnName(x),
+                                      x, .cleanRuleColumnName(x))),
+                                      collapse = ", "), where_clause,
+  ifelse(dominant, "AND c.cokey = (SELECT TOP 1 c1.cokey FROM component AS c1
+                                   INNER JOIN mapunit ON c.mukey = mapunit.mukey AND c1.mukey = mu.mukey
+                                   ORDER BY c1.comppct_r DESC, c1.cokey)", ""))
 }
 
-.cleanRuleColumnName <- function(x) gsub("[^A-Za-z0-9]", "", x)
+.interpretation_weighted_average <- function(interp, where_clause) {
+  sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey,
+                %s
+                INTO #main
+                FROM legend AS l
+                INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
+                INNER JOIN component AS c ON c.mukey = mu.mukey
+                GROUP BY areasymbol, musym, muname, mu.mukey
+                SELECT areasymbol, musym, muname, mukey,
+                %s,
+                %s,
+                %s
+                FROM #main
+                DROP TABLE #main",
+          paste0(sapply(interp, function(x) sprintf("(SELECT TOP 1 CASE WHEN ruledesign = 1 THEN 'limitation'
+                  WHEN ruledesign = 2 THEN 'suitability' END
+                  FROM mapunit
+                  INNER JOIN component ON component.mukey = mapunit.mukey
+                  INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
+                  GROUP BY mapunit.mukey, ruledesign) AS [design_%s],
+                ROUND ((SELECT SUM (interphr * comppct_r)
+                FROM mapunit
+                INNER JOIN component ON component.mukey = mapunit.mukey
+                INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
+                GROUP BY mapunit.mukey),2) AS [rating_%s],
+                ROUND ((SELECT SUM (comppct_r)
+                FROM mapunit
+                INNER JOIN component ON component.mukey = mapunit.mukey
+                INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
+                AND (interphr) IS NOT NULL GROUP BY mapunit.mukey),2) AS [sum_com_%s],
+                (SELECT DISTINCT SUBSTRING((SELECT ( '; ' + interphrc)
+                  FROM mapunit
+                  INNER JOIN component ON component.mukey = mapunit.mukey AND compkind != 'miscellaneous area'
+                  INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
+                  AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc
+                  ORDER BY interphrc
+                  FOR XML PATH('') ), 3, 1000)) AS [reason_%s]",
+                                                    x, .cleanRuleColumnName(x), 
+                                                    x, .cleanRuleColumnName(x), 
+                                                    x, .cleanRuleColumnName(x), 
+                                                    x, .cleanRuleColumnName(x))), collapse=", "),
+           where_clause,
+          paste0(sapply(interp, 
+                        function(x) sprintf("ISNULL(ROUND(([rating_%s] / [sum_com_%s]),2), 99) AS [rating_%s]", 
+                                            .cleanRuleColumnName(x), .cleanRuleColumnName(x), .cleanRuleColumnName(x))), 
+                 collapse = ", "),
+          paste0(sapply(interp, 
+                        function(x) sprintf(gsub("design", paste0("[design_", .cleanRuleColumnName(x),"]"), 
+                                                 gsub("sum_com", paste0("[sum_com_", .cleanRuleColumnName(x), "]"), 
+                                                      gsub("rating", paste0("[rating_", .cleanRuleColumnName(x), "]"),
+                       "CASE WHEN rating IS NULL THEN 'Not Rated'
+                  WHEN design = 'suitability' AND ROUND((rating/sum_com),2) <= 0 THEN 'Not suited'
+                  WHEN design = 'suitability' AND ROUND((rating/sum_com),2) > 0.001 and ROUND((rating/sum_com),2) <=0.333 THEN 'Poorly suited'
+                  WHEN design = 'suitability' AND ROUND((rating/sum_com),2) > 0.334 and ROUND((rating/sum_com),2) <=0.666  THEN 'Moderately suited'
+                  WHEN design = 'suitability' AND ROUND((rating/sum_com),2) > 0.667 and ROUND((rating/sum_com),2) <=0.999  THEN 'Moderately well suited'
+                  WHEN design = 'suitability' AND ROUND((rating/sum_com),2) = 1 THEN 'Well suited'
+                  WHEN design = 'limitation' AND ROUND((rating/sum_com),2) <= 0 THEN 'Not limited'
+                  WHEN design = 'limitation' AND ROUND((rating/sum_com),2) > 0.001 and ROUND((rating/sum_com),2) <=0.333 THEN 'Slightly limited'
+                  WHEN design = 'limitation' AND ROUND((rating/sum_com),2) > 0.334 and ROUND((rating/sum_com),2) <=0.666 THEN 'Somewhat limited'
+                  WHEN design = 'limitation' AND ROUND((rating/sum_com),2) > 0.667 and ROUND((rating/sum_com),2) <=0.999 THEN 'Moderately limited'
+                  WHEN design = 'limitation' AND ROUND((rating/sum_com),2) = 1 THEN 'Very limited' END AS [class_%s]"))),
+                       .cleanRuleColumnName(x))), 
+                 collapse = ", "), paste0(sapply(interp, function(x) sprintf("[reason_%s]", .cleanRuleColumnName(x))), collapse = ", "))
+}
