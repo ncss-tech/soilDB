@@ -1,3 +1,13 @@
+# soilDB 2.6.3 (2021-06-11)
+ * Updates to `get_SDA_*()` methods 
+   - Extends `get_SDA_property(property = ...)` and `get_SDA_interpretation(rulename = ...)` vectorization over property/rulename to work with any aggregation method. 
+     - Now supports: Dominant Condition, Min/Max, Dominant Component, Weighted Average
+   - Add `query_string` argument (default: `FALSE`). Set as `TRUE` to skip submitting query to SDA returning a string of the query that would have been sent instead of data.frame result
+   - Standardizing MUKEY column name (and other keys) as lowercase in results 
+   - More informative error messages for bad input / arguments inconsistent with specified method
+   - `get_SDA_property`: Remove `ISNULL(x, 0)` logic that affected weighted averages in presence of missing data
+   - `get_SDA_interpretation`: added argument not_rated_value with default value of `NA` to set "not rated"" values across methods/queries. For backwards compatibility with original SQL use `not_rated_value = 99.0`
+ 
 # soilDB 2.6.2 (2021-05-14)
  *  Added `formativeElement` argument to `taxaExtent()` (SoilWeb taxon extent function)
     - "Formative elements" are derived from the dictionary provided by the {SoilTaxonomy} package (https://cran.r-project.org/package=SoilTaxonomy)
