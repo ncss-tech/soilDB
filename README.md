@@ -1,7 +1,7 @@
 [![CRAN Version
 (Stable)](http://www.r-pkg.org/badges/version/soilDB)](https://cran.r-project.org/package=soilDB)
 [![GitHub Version
-(Development)](https://img.shields.io/badge/GitHub-2.6.2-yellowgreen)](https://github.com/ncss-tech/soilDB)
+(Development)](https://img.shields.io/badge/GitHub-2.6.3-yellowgreen)](https://github.com/ncss-tech/soilDB)
 [![R-CMD-check Build
 Status](https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
 [![Total CRAN
@@ -29,10 +29,10 @@ Citation
 --------
 
 Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021).
-soilDB: Soil Database Interface. R package version 2.6.2.
+soilDB: Soil Database Interface. R package version 2.6.3.
 <a href="https://CRAN.R-project.org/package=soilDB" class="uri">https://CRAN.R-project.org/package=soilDB</a>
 
-soilDB 2.6.2
+soilDB 2.6.3
 ------------
 
 ### Notices on Database Interfaces
@@ -80,6 +80,12 @@ Functions by Data Source
     -   [`fetchSDA_spatial`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSDA_spatial.html)
     -   [`SDA_query`](http://ncss-tech.github.io/soilDB/docs/reference/SDA_query.html)
     -   [`SDA_spatialQuery`](http://ncss-tech.github.io/soilDB/docs/reference/SDA_spatialQuery.html)
+    -   “SSURGO On Demand” Queries
+        -   [`get_SDA_hydric`](http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_hydric.html)
+        -   [`get_SDA_interpretation`](http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_interpretation.html)
+        -   [`get_SDA_muaggatt`](http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_muaggatt.html)
+        -   [`get_SDA_pmgroupname`](http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_pmgroupname.html)
+        -   [`get_SDA_property`](http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_property.html)
 -   SSURGO Local Geodatabases
     -   [`fetchGDB`](http://ncss-tech.github.io/soilDB/docs/reference/fetchGDB.html)
 -   ROSETTA
@@ -168,7 +174,7 @@ Examples
     res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
     print(res$fig)
 
-<img src="https://i.imgur.com/kKtOvvg.png" width="1056" />
+<img src="https://i.imgur.com/RMZdxPL.png" width="1056" />
 
 ### Make Profile Sketches
 
@@ -182,7 +188,7 @@ Examples
       width = 0.2
     )
 
-<img src="https://i.imgur.com/fzJI1wK.png" width="1344" />
+<img src="https://i.imgur.com/OVe8Au6.png" width="1344" />
 
 ### Identify Tabular “Siblings”
 
@@ -212,7 +218,7 @@ Examples
       cex.names = 1
     )
 
-<img src="https://i.imgur.com/3Sa1mcp.png" width="1344" />
+<img src="https://i.imgur.com/nh1tp8u.png" width="1344" />
 
 Dependency Graph
 ----------------
