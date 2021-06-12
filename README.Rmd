@@ -61,7 +61,13 @@ Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: S
     + [`fetchSDA_spatial`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSDA_spatial.html)
     + [`SDA_query`](http://ncss-tech.github.io/soilDB/docs/reference/SDA_query.html)
     + [`SDA_spatialQuery`](http://ncss-tech.github.io/soilDB/docs/reference/SDA_spatialQuery.html)
-
+    + "SSURGO On Demand" Queries
+      - [`get_SDA_hydric`](http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_hydric.html)
+      - [`get_SDA_interpretation`](http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_interpretation.html)
+      - [`get_SDA_muaggatt`](http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_muaggatt.html)
+      - [`get_SDA_pmgroupname`](http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_pmgroupname.html)
+      - [`get_SDA_property`](http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_property.html)
+    
   * SSURGO Local Geodatabases
     + [`fetchGDB`](http://ncss-tech.github.io/soilDB/docs/reference/fetchGDB.html)
 
