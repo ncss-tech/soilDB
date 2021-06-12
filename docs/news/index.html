@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.3</span>
       </span>
     </div>
 
@@ -114,6 +114,30 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="soildb-263-2021-06-11" class="section level1">
+<h1 class="page-header" data-toc-text="2.6.3">
+<a href="#soildb-263-2021-06-11" class="anchor"></a>soilDB 2.6.3 (2021-06-11)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Updates to <code>get_SDA_*()</code> methods
+<ul>
+<li>Extends <code><a href="../reference/get_SDA_property.html">get_SDA_property(property = ...)</a></code> and <code><a href="../reference/get_SDA_interpretation.html">get_SDA_interpretation(rulename = ...)</a></code> vectorization over property/rulename to work with any aggregation method.
+<ul>
+<li>Now supports: Dominant Condition, Min/Max, Dominant Component, Weighted Average</li>
+</ul>
+</li>
+<li>Add <code>query_string</code> argument (default: <code>FALSE</code>). Set as <code>TRUE</code> to skip submitting query to SDA returning a string of the query that would have been sent instead of data.frame result</li>
+<li>Standardizing MUKEY column name (and other keys) as lowercase in results</li>
+<li>More informative error messages for bad input / arguments inconsistent with specified method</li>
+<li>
+<code>get_SDA_property</code>: Remove <code>ISNULL(x, 0)</code> logic that affected weighted averages in presence of missing data</li>
+<li>
+<code>get_SDA_interpretation</code>: added argument not_rated_value with default value of <code>NA</code> to set “not rated”" values across methods/queries. For backwards compatibility with original SQL use <code>not_rated_value = 99.0</code>
+</li>
+</ul>
+</li>
+</ul>
+</div>
     <div id="soildb-262-2021-05-14" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.2">
 <a href="#soildb-262-2021-05-14" class="anchor"></a>soilDB 2.6.2 (2021-05-14)<small> 2021-05-16 </small>
