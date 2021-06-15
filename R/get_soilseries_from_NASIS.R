@@ -12,7 +12,9 @@
 #'
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
-#'
+#' 
+#' @param delimiter _character_. Used to collapse `taxminalogy` records where multiple values are used to describe strongly contrasting control sections. Default `" over "` creates combination mineralogy classes as they would be used in the family name.
+#' 
 #' @return A \code{data.frame}
 #'
 #' @author Stephen Roecker
@@ -21,7 +23,7 @@
 #'
 #' @export get_soilseries_from_NASIS
 get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactors(),
-                                      dsn = NULL) {
+                                      dsn = NULL, delimiter = " over ") {
   q.soilseries <- "
   SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, soiltaxclasslastupdated, mlraoffice, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxfamhahatmatcl, originyear, establishedyear, descriptiondateinitial, descriptiondateupdated, statsgoflag, soilseriesedithistory, soilseriesiid, areasymbol, areaname, areaacres, obterm, areatypename
   FROM soilseries ss
@@ -51,7 +53,7 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
   # aggregate mineralogy data (ordered by minorder, combined with "over")
   d.minagg <- aggregate(d.soilseriesmin$taxminalogy, 
                         list(soilseriesiid = d.soilseriesmin$soilseriesiidref), 
-                        paste0, collapse = " over ")
+                        paste0, collapse = delimiter)
   colnames(d.minagg) <- c("soilseriesiid", "taxminalogy")
   
   res <- merge(

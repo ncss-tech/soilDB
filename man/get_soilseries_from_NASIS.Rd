@@ -7,7 +7,8 @@
 \usage{
 get_soilseries_from_NASIS(
   stringsAsFactors = default.stringsAsFactors(),
-  dsn = NULL
+  dsn = NULL,
+  delimiter = " over "
 )
 }
 \arguments{
@@ -17,6 +18,8 @@ convert those vectors that have set outside of \code{uncode()} (i.e. hard coded)
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}
+
+\item{delimiter}{\emph{character}. Used to collapse \code{taxminalogy} records where multiple values are used to describe strongly contrasting control sections. Default \code{" over "} creates combination mineralogy classes as they would be used in the family name.}
 }
 \value{
 A \code{data.frame}
