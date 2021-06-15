@@ -133,6 +133,13 @@ test_that("getHzErrorsNASIS works", {
   expect_silent({suppressMessages(getHzErrorsNASIS(dsn = dsn))})
 })
 
+test_that("get_soilseries_from_NASIS works", { 
+  if (!local_NASIS_defined(dsn = dsn)) {
+    skip("local NASIS database not available")
+  }
+  expect_silent({suppressMessages(get_soilseries_from_NASIS(dsn = dsn))})
+})
+
 
 
 

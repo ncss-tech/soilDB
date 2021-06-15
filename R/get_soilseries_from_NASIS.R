@@ -22,40 +22,55 @@
 #' @export get_soilseries_from_NASIS
 get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactors(),
                                       dsn = NULL) {
-
   q.soilseries <- "
-  SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, statsgoflag, mlraoffice, areasymbol, areatypename, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, originyear, establishedyear, soiltaxclasslastupdated, soilseriesiid
-
-  FROM
-  soilseries ss
-
-  INNER JOIN
-      area       a  ON a.areaiid      = ss.typelocstareaiidref
-  INNER JOIN
-      areatype   at ON at.areatypeiid = ss.typelocstareatypeiidref
-
-  ORDER BY soilseriesname
-  ;"
-
-  # LEFT OUTER JOIN
-  #     soilseriestaxmineralogy sstm ON sstm.soilseriesiidref = ss.soilseriesiid
-
+  SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, soiltaxclasslastupdated, mlraoffice, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxfamhahatmatcl, originyear, establishedyear, descriptiondateinitial, descriptiondateupdated, statsgoflag, soilseriesedithistory, soilseriesiid, areasymbol, areaname, areaacres, obterm, areatypename
+  FROM soilseries ss
+  INNER JOIN area a ON a.areaiid = ss.typelocstareaiidref
+  INNER JOIN areatype at ON at.areatypeiid = ss.typelocstareatypeiidref
+  ORDER BY soilseriesname;"
+  
+  q.min <- "SELECT soilseriesiidref, minorder, taxminalogy FROM soilseriestaxmineralogy 
+            ORDER BY soilseriesiidref, minorder;"
+  
   channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
   # exec query
-  d.soilseries <- dbQueryNASIS(channel, q.soilseries)
-
+  d.soilseries <- dbQueryNASIS(channel, q.soilseries, close = FALSE)
+  d.soilseriesmin <- dbQueryNASIS(channel, q.min)
+  
   # recode metadata domains
   d.soilseries <- uncode(d.soilseries, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d.soilseriesmin <- uncode(d.soilseriesmin, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # prep
   d.soilseries$soiltaxclasslastupdated <- format(d.soilseries$soiltaxclasslastupdated, "%Y")
-
-  # done
-  return(d.soilseries)
+  
+  # aggregate mineralogy data (ordered by minorder, combined with "over")
+  d.minagg <- aggregate(d.soilseriesmin$taxminalogy, 
+                        list(soilseriesiid = d.soilseriesmin$soilseriesiidref), 
+                        paste0, collapse = " over ")
+  colnames(d.minagg) <- c("soilseriesiid", "taxminalogy")
+  
+  res <- merge(
+      d.soilseries,
+      d.minagg,
+      by = "soilseriesiid",
+      all.x = TRUE,
+      incomparables = NA,
+      sort = FALSE
+    )
+  
+  # reorder column names
+  return(res[,c("soilseriesiid", "soilseriesname", "soilseriesstatus", "benchmarksoilflag", 
+                "soiltaxclasslastupdated", "mlraoffice", "taxclname", "taxorder", 
+                "taxsuborder", "taxgrtgroup", "taxsubgrp", "taxpartsize", "taxpartsizemod", 
+                "taxceactcl", "taxreaction", "taxtempcl", "taxminalogy", "taxfamhahatmatcl", 
+                "originyear", "establishedyear", "descriptiondateinitial", "descriptiondateupdated", 
+                "statsgoflag", "soilseriesedithistory", "areasymbol", "areaname", 
+                "areaacres", "obterm", "areatypename")])
 }
 
 get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = default.stringsAsFactors()) {
