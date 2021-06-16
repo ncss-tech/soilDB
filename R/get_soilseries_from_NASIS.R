@@ -13,6 +13,8 @@
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
+#' @param delimiter _character_. Used to collapse `taxminalogy` records where multiple values are used to describe strongly contrasting control sections. Default `" over "` creates combination mineralogy classes as they would be used in the family name.
+#'
 #' @return A \code{data.frame}
 #'
 #' @author Stephen Roecker
@@ -21,24 +23,16 @@
 #'
 #' @export get_soilseries_from_NASIS
 get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactors(),
-                                      dsn = NULL) {
-
+                                      dsn = NULL, delimiter = " over ") {
   q.soilseries <- "
-  SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, statsgoflag, mlraoffice, areasymbol, areatypename, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, originyear, establishedyear, soiltaxclasslastupdated, soilseriesiid
+  SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, soiltaxclasslastupdated, mlraoffice, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxfamhahatmatcl, originyear, establishedyear, descriptiondateinitial, descriptiondateupdated, statsgoflag, soilseriesedithistory, soilseriesiid, areasymbol, areaname, areaacres, obterm, areatypename
+  FROM soilseries ss
+  INNER JOIN area a ON a.areaiid = ss.typelocstareaiidref
+  INNER JOIN areatype at ON at.areatypeiid = ss.typelocstareatypeiidref
+  ORDER BY soilseriesname;"
 
-  FROM
-  soilseries ss
-
-  INNER JOIN
-      area       a  ON a.areaiid      = ss.typelocstareaiidref
-  INNER JOIN
-      areatype   at ON at.areatypeiid = ss.typelocstareatypeiidref
-
-  ORDER BY soilseriesname
-  ;"
-
-  # LEFT OUTER JOIN
-  #     soilseriestaxmineralogy sstm ON sstm.soilseriesiidref = ss.soilseriesiid
+  q.min <- "SELECT soilseriesiidref, minorder, taxminalogy FROM soilseriestaxmineralogy
+            ORDER BY soilseriesiidref, minorder;"
 
   channel <- dbConnectNASIS(dsn)
 
@@ -46,16 +40,39 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
     return(data.frame())
 
   # exec query
-  d.soilseries <- dbQueryNASIS(channel, q.soilseries)
+  d.soilseries <- dbQueryNASIS(channel, q.soilseries, close = FALSE)
+  d.soilseriesmin <- dbQueryNASIS(channel, q.min)
 
   # recode metadata domains
   d.soilseries <- uncode(d.soilseries, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d.soilseriesmin <- uncode(d.soilseriesmin, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # prep
-  d.soilseries$soiltaxclasslastupdated <- format(d.soilseries$soiltaxclasslastupdated, "%Y")
+  d.soilseries$soiltaxclasslastupdated <- format(as.Date.POSIXct(d.soilseries$soiltaxclasslastupdated), "%Y")
 
-  # done
-  return(d.soilseries)
+  # aggregate mineralogy data (ordered by minorder, combined with "over")
+  d.minagg <- aggregate(d.soilseriesmin$taxminalogy,
+                        list(soilseriesiid = d.soilseriesmin$soilseriesiidref),
+                        paste0, collapse = delimiter)
+  colnames(d.minagg) <- c("soilseriesiid", "taxminalogy")
+
+  res <- merge(
+      d.soilseries,
+      d.minagg,
+      by = "soilseriesiid",
+      all.x = TRUE,
+      incomparables = NA,
+      sort = FALSE
+    )
+
+  # reorder column names
+  return(res[,c("soilseriesiid", "soilseriesname", "soilseriesstatus", "benchmarksoilflag",
+                "soiltaxclasslastupdated", "mlraoffice", "taxclname", "taxorder",
+                "taxsuborder", "taxgrtgroup", "taxsubgrp", "taxpartsize", "taxpartsizemod",
+                "taxceactcl", "taxreaction", "taxtempcl", "taxminalogy", "taxfamhahatmatcl",
+                "originyear", "establishedyear", "descriptiondateinitial", "descriptiondateupdated",
+                "statsgoflag", "soilseriesedithistory", "areasymbol", "areaname", 
+                "areaacres", "obterm", "areatypename")])
 }
 
 get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = default.stringsAsFactors()) {

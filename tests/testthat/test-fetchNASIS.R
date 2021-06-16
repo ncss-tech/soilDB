@@ -60,7 +60,7 @@ test_that("fetchNASIS(from='pedons') returns reasonable data", {
   # get data
   # ignore warnings for now
   x <- suppressWarnings(fetchNASIS(from = 'pedons'))
-  
+
   # expected outcomes
   expect_true(inherits(x, 'SoilProfileCollection'))
   expect_equal(nrow(site(x)) > 0, TRUE)
@@ -109,7 +109,7 @@ test_that("fetchNASIS(from='components') returns reasonable data", {
   # get data
   # ignore warnings for now
   x <- suppressWarnings(fetchNASIS(from = 'components'))
- 
+
   # expected outcomes
   expect_true(inherits(x, 'SoilProfileCollection'))
   expect_equal(nrow(site(x)) > 0, TRUE)
@@ -126,11 +126,24 @@ test_that("get_text_notes_from_NASIS_db works", {
   expect_silent({get_text_notes_from_NASIS_db()})
 })
 
-test_that("getHzErrorsNASIS works", { 
+test_that("getHzErrorsNASIS works", {
   if (!local_NASIS_defined(dsn = dsn)) {
     skip("local NASIS database not available")
   }
   expect_silent({suppressMessages(getHzErrorsNASIS(dsn = dsn))})
+})
+
+test_that("get_soilseries_from_NASIS works", {
+  if (!local_NASIS_defined(dsn = dsn)) {
+    skip("local NASIS database not available")
+  }
+  expect_silent({suppressMessages(res <- get_soilseries_from_NASIS(dsn = dsn))})
+
+  # all calculated combined taxminalogy classes exist in corresponding taxclname
+  over.idx <- grep(" over ", res$taxminalogy)
+  expect_true(all(sapply(seq_len(length(over.idx)), function(i)
+    grepl(res$taxminalogy[over.idx[i]], tolower(res$taxclname[over.idx[i]])))))
+
 })
 
 
