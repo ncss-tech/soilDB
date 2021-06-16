@@ -29,7 +29,7 @@ test_that("OSDquery() returns NULL with bogus query", {
   skip_on_cran()
 
   # a message is printed and NULL returned when no results
-  res <- suppressMessages(OSDquery(geog_assoc_soils = 'XXX'))
+  res <- suppressMessages(OSDquery(geog_assoc_soils = 'XXXXXX'))
   expect_null(res)
 
 })
