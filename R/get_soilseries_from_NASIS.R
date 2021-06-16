@@ -12,9 +12,9 @@
 #'
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
-#' 
+#'
 #' @param delimiter _character_. Used to collapse `taxminalogy` records where multiple values are used to describe strongly contrasting control sections. Default `" over "` creates combination mineralogy classes as they would be used in the family name.
-#' 
+#'
 #' @return A \code{data.frame}
 #'
 #' @author Stephen Roecker
@@ -30,10 +30,10 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
   INNER JOIN area a ON a.areaiid = ss.typelocstareaiidref
   INNER JOIN areatype at ON at.areatypeiid = ss.typelocstareatypeiidref
   ORDER BY soilseriesname;"
-  
-  q.min <- "SELECT soilseriesiidref, minorder, taxminalogy FROM soilseriestaxmineralogy 
+
+  q.min <- "SELECT soilseriesiidref, minorder, taxminalogy FROM soilseriestaxmineralogy
             ORDER BY soilseriesiidref, minorder;"
-  
+
   channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
@@ -42,20 +42,20 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
   # exec query
   d.soilseries <- dbQueryNASIS(channel, q.soilseries, close = FALSE)
   d.soilseriesmin <- dbQueryNASIS(channel, q.min)
-  
+
   # recode metadata domains
   d.soilseries <- uncode(d.soilseries, stringsAsFactors = stringsAsFactors, dsn = dsn)
   d.soilseriesmin <- uncode(d.soilseriesmin, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # prep
-  d.soilseries$soiltaxclasslastupdated <- format(d.soilseries$soiltaxclasslastupdated, "%Y")
-  
+  d.soilseries$soiltaxclasslastupdated <- format(as.Date.POSIXct(d.soilseries$soiltaxclasslastupdated), "%Y")
+
   # aggregate mineralogy data (ordered by minorder, combined with "over")
-  d.minagg <- aggregate(d.soilseriesmin$taxminalogy, 
-                        list(soilseriesiid = d.soilseriesmin$soilseriesiidref), 
+  d.minagg <- aggregate(d.soilseriesmin$taxminalogy,
+                        list(soilseriesiid = d.soilseriesmin$soilseriesiidref),
                         paste0, collapse = delimiter)
   colnames(d.minagg) <- c("soilseriesiid", "taxminalogy")
-  
+
   res <- merge(
       d.soilseries,
       d.minagg,
@@ -64,13 +64,13 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
       incomparables = NA,
       sort = FALSE
     )
-  
+
   # reorder column names
-  return(res[,c("soilseriesiid", "soilseriesname", "soilseriesstatus", "benchmarksoilflag", 
-                "soiltaxclasslastupdated", "mlraoffice", "taxclname", "taxorder", 
-                "taxsuborder", "taxgrtgroup", "taxsubgrp", "taxpartsize", "taxpartsizemod", 
-                "taxceactcl", "taxreaction", "taxtempcl", "taxminalogy", "taxfamhahatmatcl", 
-                "originyear", "establishedyear", "descriptiondateinitial", "descriptiondateupdated", 
+  return(res[,c("soilseriesiid", "soilseriesname", "soilseriesstatus", "benchmarksoilflag",
+                "soiltaxclasslastupdated", "mlraoffice", "taxclname", "taxorder",
+                "taxsuborder", "taxgrtgroup", "taxsubgrp", "taxpartsize", "taxpartsizemod",
+                "taxceactcl", "taxreaction", "taxtempcl", "taxminalogy", "taxfamhahatmatcl",
+                "originyear", "establishedyear", "descriptiondateinitial", "descriptiondateupdated",
                 "statsgoflag", "soilseriesedithistory", "areasymbol", "areaname", 
                 "areaacres", "obterm", "areatypename")])
 }
