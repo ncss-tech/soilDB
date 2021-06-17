@@ -50,7 +50,7 @@ outcon <- dbConnect(RPostgres::Postgres(), db = "nasis_local")
 
 ```{r, eval=TRUE}
 library(soilDB)
-tnames <- soilDB:::.get_NASIS_table_name_by_purpose()
+tnames <- get_NASIS_table_name_by_purpose()
 
 res <- createStaticNASIS(tnames, 
                          new_names = tolower(tnames), # to not have to modifiy queries

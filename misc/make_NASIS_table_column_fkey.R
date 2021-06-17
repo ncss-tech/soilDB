@@ -2,10 +2,10 @@
 library(soilDB)
 
 # or some other vector of table names
-table_names <- soilDB:::.get_NASIS_table_name_by_purpose()
+table_names <- get_NASIS_table_name_by_purpose()
 
 # get all column names
-table_colnames <- lapply(table_names, function(x) colnames(soilDB:::.dump_NASIS_table(x)))
+table_colnames <- lapply(table_names, function(x) colnames(.dump_NASIS_table(x)))
 
 # combine
 table_colnames_cmb <- sapply(table_colnames, paste0, collapse = ",")

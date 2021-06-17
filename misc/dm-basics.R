@@ -13,7 +13,7 @@ library(daff)
 library(dplyr)
 
 # get projects from selected set using createStaticNASIS
-res <- createStaticNASIS(soilDB:::.get_NASIS_table_name_by_purpose("project", SS = TRUE))
+res <- createStaticNASIS(get_NASIS_table_name_by_purpose("project", SS = TRUE))
 
 # list project related tables manually
 con <- soilDB::NASIS()
@@ -26,13 +26,13 @@ projects <- left_join(res[["project_View_1"]],
                       res[["projectmapunit_View_1"]])
 
 # get lookup table for specified tables
-tkey <- soilDB:::.get_NASIS_table_key_by_name(names(res))
+tkey <- get_NASIS_table_key_by_name(names(res))
 fkeys <- tkey$fkey
 names(fkeys) <- tkey$table
 
 # specify important tables that need primary keys
 tnprj <- c("project_View_1", "projectlandcatbreakdown_View_1", "projectmilestone_View_1")
-tnprj_pkey <- soilDB:::.get_NASIS_pkey_by_name(tnprj)
+tnprj_pkey <- .get_NASIS_pkey_by_name(tnprj)
 
 # determine child tables of each of the above (will have a foreign key)
 project_tables <- subset(tkey, pkeyref == tnprj_pkey[1] & pkeyref != fkey)

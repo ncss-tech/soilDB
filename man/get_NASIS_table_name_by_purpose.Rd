@@ -25,13 +25,13 @@ Method generalizing concepts of NASIS 7 data model to group tables by "purpose."
 \examples{
 \dontrun{
 # get the "site" table names
-.get_NASIS_table_name_by_purpose("site")
+get_NASIS_table_name_by_purpose("site")
 
 # get the pedon table names
-.get_NASIS_table_name_by_purpose("pedon", SS = TRUE)
+get_NASIS_table_name_by_purpose("pedon", SS = TRUE)
 
 # metadata and lookup not affected by SS argument, but site and pedon are
-.get_NASIS_table_name_by_purpose(c("metadata", "lookup",
+get_NASIS_table_name_by_purpose(c("metadata", "lookup",
                                    "site", "pedon"), SS = TRUE)
 }
 
