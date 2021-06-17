@@ -14,7 +14,7 @@
 #' @param ntries number of tries (times to halve `chunk.size`) before returning `NULL`; default `3`
 #' @param layer_type Default: `"horizon"`, `"layer"`, and `"reporting layer"`
 #' @param prep_code Default: `"S"` and `""`. May also include one or more of: `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
-#' @param analyzed_size_frac Default: `"<2 mm"`. One or more of `"<2 mm"`, `"0.02-0.05 mm"`, `"0.05-0.1 mm"`, `"1-2 mm"`, `"0.5-1 mm"`, `"0.25-0.5 mm"`, `"0.05-2 mm"`, `"0.02-2 mm"`, `"0.1-0.25 mm"`, `"<0.002 mm"`
+#' @param analyzed_size_frac Default: `"<2 mm"` and `""`. May also include one or more of: `"<2 mm"`, `"0.02-0.05 mm"`, `"0.05-0.1 mm"`, `"1-2 mm"`, `"0.5-1 mm"`, `"0.25-0.5 mm"`, `"0.05-2 mm"`, `"0.02-2 mm"`, `"0.1-0.25 mm"`, `"<0.002 mm"`
 #'
 #' @details If the `chunk.size` parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) `chunk.size` argument. This will be attempted up to 3 times before returning `NULL`
 #'
@@ -37,8 +37,8 @@
 #'   # get physical properties for points correlated as taxonomic subgroup "Typic Argialbolls"
 #'   fetchLDM(x= "Typic Argialbolls", what = "corr_taxsubgrp", tables = "lab_physical_properties")
 #'
-#'   # fetch by area_code (must be a soil survey area code for now;
-#'   #                      the lowest-level area that is always populated)
+#'   # fetch by area_code (must be a soil survey area code for now; and be querying against SDA (dsn=NULL)
+#'   #                     SSA is the lowest-level area that is always populated)
 #'   fetchLDM("CA630", what = "area_code")
 #' }
 #'
@@ -60,8 +60,8 @@ fetchLDM <- function(x,
            chunk.size = 1000,
            ntries = 3,
            layer_type = c("horizon","layer","reporting layer"),
-           prep_code = c("S", ''), # , `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
-           analyzed_size_frac = "<2 mm"#  optional: "0.02-0.05 mm", "0.05-0.1 mm", "1-2 mm", "0.5-1 mm", "0.25-0.5 mm", "0.05-2 mm", "0.02-2 mm", "0.1-0.25 mm", "<0.002 mm"
+           prep_code = c("S", ""), # , `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
+           analyzed_size_frac = c("<2 mm", "")#  optional: "0.02-0.05 mm", "0.05-0.1 mm", "1-2 mm", "0.5-1 mm", "0.25-0.5 mm", "0.05-2 mm", "0.02-2 mm", "0.1-0.25 mm", "<0.002 mm"
            ) {
 
   # set up data source connection if needed
@@ -121,11 +121,13 @@ fetchLDM <- function(x,
                                  gsub("\\blab_|\\blab_combine_", "",
                                       gsub("lab_(site|pedon)", "nasis_\\1", site_query))))
   } else {
-
-    # LEFT JOIN lab_area ON
-    # lab_combine_nasis_ncss.ssa_key = lab_area.area_key
-
-    sites <- SDA_query(site_query)
+    # the lab_area table allows for overlap with many different area types
+    # for now we only offer the "ssa" (soil survey area) area_type 
+    site_query_ssaarea <- gsub("WHERE LOWER", 
+                       "LEFT JOIN lab_area ON
+                       lab_combine_nasis_ncss.ssa_key = lab_area.area_key
+                       WHERE LOWER", site_query)
+    sites <- SDA_query(site_query_ssaarea)
   }
 
   if (!inherits(sites, 'try-error')) {
@@ -272,20 +274,23 @@ fetchLDM <- function(x,
     format_SQL_in_statement(layer_type),
     bycol,
     format_SQL_in_statement(x),
-    paste0(paste0(sapply(flattables[flattables %in% tables[tables != "lab_rosetta_Key"]], function(b) paste0("IsNull(",b,".prep_code, '')")), 
-    " IN ", format_SQL_in_statement(prep_code)), collapse= " AND "))
+    paste0(paste0(sapply(flattables[flattables %in% tables[tables != "lab_rosetta_Key"]], 
+                         function(b) paste0("IsNull(",b,".prep_code, '')")), 
+                  " IN ", format_SQL_in_statement(prep_code)), collapse= " AND "))
 
   if (any(tables %in% fractables)) {
     layer_fraction_query <-  sprintf(
-      "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s AND %s IN %s AND %s IN %s AND %s IN %s",
+      "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s AND %s IN %s AND %s AND %s",
       paste0(sapply(fractables[fractables %in% tables], function(a) fractablejoincriteria[[a]]), collapse = "\n"),
       format_SQL_in_statement(layer_type),
       bycol,
       format_SQL_in_statement(x),
-      sapply(fractables[fractables %in% tables], function(b) paste0(b,".prep_code")),
-      format_SQL_in_statement(prep_code),
-      sapply(fractables[fractables %in% tables], function(c) paste0(c,".analyzed_size_frac")),
-      format_SQL_in_statement(analyzed_size_frac))
+      paste0(paste0(sapply(fractables[fractables %in% tables], 
+                           function(b) paste0("IsNull(",b,".prep_code, '')")), 
+                    " IN ", format_SQL_in_statement(prep_code)), collapse= " AND "),
+      paste0(paste0(sapply(fractables[fractables %in% tables], 
+                         function(b) paste0("IsNull(",b,".analyzed_size_frac, '')")), 
+                  " IN ", format_SQL_in_statement(analyzed_size_frac)), collapse= " AND "))
   } else {
     layer_fraction_query <- NULL
   }
@@ -314,5 +319,6 @@ fetchLDM <- function(x,
                          by = "labsampnum", all.x = TRUE, incomparables = NA)
     }
   }
+  layerdata$prep_code[is.na(layerdata$prep_code)] <- ""
   layerdata
 }
