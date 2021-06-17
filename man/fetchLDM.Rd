@@ -7,12 +7,13 @@
 fetchLDM(
   x,
   dsn = NULL,
-  what = "pedlabsampnum",
+  what = "lab_combine_nasis_ncss.pedlabsampnum",
   bycol = "pedon_key",
   tables = c("lab_physical_properties", "lab_chemical_properties",
     "lab_calculations_including_estimates_and_default_values", "lab_rosetta_Key"),
   chunk.size = 1000,
   ntries = 3,
+  layer_type = c("horizon", "layer", "reporting layer"),
   prep_code = c("S", ""),
   analyzed_size_frac = "<2 mm"
 )
@@ -31,6 +32,8 @@ fetchLDM(
 \item{chunk.size}{number of pedons per chunk (for queries that may exceed \code{maxJsonLength})}
 
 \item{ntries}{number of tries (times to halve \code{chunk.size}) before returning \code{NULL}; default \code{3}}
+
+\item{layer_type}{Default: \code{"horizon"}, \code{"layer"}, and \code{"reporting layer"}}
 
 \item{prep_code}{Default: \code{"S"} and \code{""}. May also include one or more of: \code{"F"}, \code{"HM"}, \code{"HM_SK"} \code{"GP"}, \code{"M"}, \code{"N"}, or \code{"S"}}
 
@@ -59,7 +62,7 @@ if(requireNamespace("curl") &
   fetchLDM(8297, what = "ssa_key")
 
   # get physical properties for points correlated as taxonomic subgroup "Typic Argialbolls"
-  fetchLDM("Typic Argialbolls", what = "corr_taxsubgrp", tables = "lab_physical_properties")
+  fetchLDM(x= "Typic Argialbolls", what = "corr_taxsubgrp", tables = "lab_physical_properties")
 
   # fetch by area_code (must be a soil survey area code for now;
   #                      the lowest-level area that is always populated)

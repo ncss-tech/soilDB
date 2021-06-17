@@ -12,6 +12,7 @@
 #' @param tables a vector of table names; Default is `"lab_physical_properties"`, `"lab_chemical_properties"`, `"lab_calculations_including_estimates_and_default_values"`, and `"lab_rosetta_Key"`. May also include one or more of:  `"lab_mineralogy_glass_count"`, `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"` but it will be necessary to select appropriate `prep_code` and `analyzed_size_frac` for your analysis (see _Details_).
 #' @param chunk.size number of pedons per chunk (for queries that may exceed `maxJsonLength`)
 #' @param ntries number of tries (times to halve `chunk.size`) before returning `NULL`; default `3`
+#' @param layer_type Default: `"horizon"`, `"layer"`, and `"reporting layer"`
 #' @param prep_code Default: `"S"` and `""`. May also include one or more of: `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
 #' @param analyzed_size_frac Default: `"<2 mm"`. One or more of `"<2 mm"`, `"0.02-0.05 mm"`, `"0.05-0.1 mm"`, `"1-2 mm"`, `"0.5-1 mm"`, `"0.25-0.5 mm"`, `"0.05-2 mm"`, `"0.02-2 mm"`, `"0.1-0.25 mm"`, `"<0.002 mm"`
 #'
@@ -34,7 +35,7 @@
 #'   fetchLDM(8297, what = "ssa_key")
 #'
 #'   # get physical properties for points correlated as taxonomic subgroup "Typic Argialbolls"
-#'   fetchLDM("Typic Argialbolls", what = "corr_taxsubgrp", tables = "lab_physical_properties")
+#'   fetchLDM(x= "Typic Argialbolls", what = "corr_taxsubgrp", tables = "lab_physical_properties")
 #'
 #'   # fetch by area_code (must be a soil survey area code for now;
 #'   #                      the lowest-level area that is always populated)
@@ -45,9 +46,9 @@
 #' @importFrom aqp `depths<-` `site<-`
 #' @importFrom data.table rbindlist
 fetchLDM <- function(x,
-                     dsn = NULL,
-           what = "pedlabsampnum",
-           bycol = "pedon_key",           
+           dsn = NULL,
+           what = "lab_combine_nasis_ncss.pedlabsampnum",
+           bycol = "pedon_key",
            tables = c(
              "lab_physical_properties",
              "lab_chemical_properties",
@@ -58,6 +59,7 @@ fetchLDM <- function(x,
              "lab_rosetta_Key"),
            chunk.size = 1000,
            ntries = 3,
+           layer_type = c("horizon","layer","reporting layer"),
            prep_code = c("S", ''), # , `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
            analyzed_size_frac = "<2 mm"#  optional: "0.02-0.05 mm", "0.05-0.1 mm", "1-2 mm", "0.5-1 mm", "0.25-0.5 mm", "0.05-2 mm", "0.02-2 mm", "0.1-0.25 mm", "<0.002 mm"
            ) {
@@ -97,7 +99,7 @@ fetchLDM <- function(x,
                                       "corr_taxfamhahatmatcl", "SSL_taxfamhahatmatcl", "pedobjupdate",
                                       "siteobjupdate", "area_key", "area_type", "area_sub_type", "parent_area_key",
                                       "parent_org_key", "area_code", "area_name", "area_abbrev", "area_desc"))
-
+  
   # TODO: set up arbitrary area queries by putting area table into groups:
   #       country, state, county, mlra, ssa, npark, nforest
 
@@ -136,6 +138,7 @@ fetchLDM <- function(x,
                                       con = con,
                                       bycol = bycol,
                                       tables = tables,
+                                      layer_type = layer_type,
                                       prep_code = prep_code,
                                       analyzed_size_frac = analyzed_size_frac)
 
@@ -214,10 +217,14 @@ fetchLDM <- function(x,
                                           "lab_calculations_including_estimates_and_default_values",
                                           "lab_rosetta_Key"
                                         ),
+                                        layer_type = c("horizon", "layer", "reporting layer"),
                                         prep_code = c("GP", "M", "N", "S", "HM"),
-                                        analyzed_size_frac = c("0.02-0.05 mm", "0.05-0.1 mm", "1-2 mm", "0.5-1 mm", "0.25-0.5 mm",
-                                                               "0.05-2 mm", "<2 mm", "0.02-2 mm", "0.1-0.25 mm", "<0.002 mm")) {
+                                        analyzed_size_frac = c("0.02-0.05 mm", "0.05-0.1 mm", "1-2 mm", 
+                                                               "0.5-1 mm", "0.25-0.5 mm", "0.05-2 mm", 
+                                                               "<2 mm", "0.02-2 mm", "0.1-0.25 mm", 
+                                                               "<0.002 mm")) {
 
+  
   flattables <- c(
     "lab_physical_properties",
     "lab_chemical_properties",
@@ -229,8 +236,7 @@ fetchLDM <- function(x,
   fractables <- c("lab_mineralogy_glass_count",
                   "lab_xray_and_thermal")
 
-  tables <- match.arg(tables, several.ok = TRUE,
-                      c(flattables, fractables))
+  tables <- match.arg(tables, c(flattables, fractables), several.ok = TRUE)
 
   fractablejoincriteria <- list(
       "lab_mineralogy_glass_count" = "LEFT JOIN lab_mineralogy_glass_count ON
@@ -257,19 +263,23 @@ fetchLDM <- function(x,
       "lab_rosetta_Key" = "LEFT JOIN lab_rosetta_Key ON
                            lab_layer.layer_key = lab_rosetta_Key.layer_key"
     )
-
+  
+  layer_type <- match.arg(layer_type, c("horizon", "layer", "reporting layer"), several.ok = TRUE)
+  
   layer_query <-  sprintf(
-    "SELECT * FROM lab_layer %s WHERE %s IN %s AND %s",
+    "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s AND %s IN %s AND %s",
     paste0(sapply(flattables[flattables %in% tables], function(a) tablejoincriteria[[a]]), collapse = "\n"),
+    format_SQL_in_statement(layer_type),
     bycol,
     format_SQL_in_statement(x),
-    paste0(paste0(sapply(flattables[flattables %in% tables], function(b) paste0("IsNull(",b,".prep_code, '')")), 
+    paste0(paste0(sapply(flattables[flattables %in% tables[tables != "lab_rosetta_Key"]], function(b) paste0("IsNull(",b,".prep_code, '')")), 
     " IN ", format_SQL_in_statement(prep_code)), collapse= " AND "))
 
   if (any(tables %in% fractables)) {
     layer_fraction_query <-  sprintf(
-      "SELECT * FROM lab_layer %s WHERE %s IN %s AND %s IN %s AND %s IN %s",
+      "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s AND %s IN %s AND %s IN %s AND %s IN %s",
       paste0(sapply(fractables[fractables %in% tables], function(a) fractablejoincriteria[[a]]), collapse = "\n"),
+      format_SQL_in_statement(layer_type),
       bycol,
       format_SQL_in_statement(x),
       sapply(fractables[fractables %in% tables], function(b) paste0(b,".prep_code")),
