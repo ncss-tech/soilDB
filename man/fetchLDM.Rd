@@ -6,31 +6,35 @@
 \usage{
 fetchLDM(
   x,
+  dsn = NULL,
   what = "pedlabsampnum",
-  tables = c("lab_physical_properties", "lab_mineralogy_glass_count",
-    "lab_chemical_properties", "lab_major_and_trace_elements_and_oxides",
-    "lab_xray_and_thermal", "lab_calculations_including_estimates_and_default_values",
-    "lab_rosetta_Key"),
+  bycol = "pedon_key",
+  tables = c("lab_physical_properties", "lab_chemical_properties",
+    "lab_calculations_including_estimates_and_default_values", "lab_rosetta_Key"),
   chunk.size = 1000,
   ntries = 3,
-  prep_code = "S",
+  prep_code = c("S", ""),
   analyzed_size_frac = "<2 mm"
 )
 }
 \arguments{
 \item{x}{a vector of values to find in column specified by \code{what}}
 
-\item{what}{a single column name from either the \code{lab_combine_nasis_ncss} or the \code{lab_area} tables}
+\item{dsn}{data source name; either a path to a SQLite database, an open DBIConnection or (default) \code{NULL} (to use \code{soilDB::SDA_query})}
 
-\item{tables}{a vector of table names; one or more of: \code{"lab_physical_properties"}, \code{"lab_mineralogy_glass_count"}, \code{"lab_chemical_properties"}, \code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_xray_and_thermal"}, \code{"lab_calculations_including_estimates_and_default_values"}, \code{"lab_rosetta_Key"}}
+\item{what}{a single column name from tables: \code{lab_combine_nasis_ncss}, \code{lab_webmap}, \code{lab_site}, \code{lab_pedon} or \code{lab_area}}
+
+\item{bycol}{a single column name from \code{lab_layer} used for processing chunks; default: \code{"pedon_key"}}
+
+\item{tables}{a vector of table names; Default is \code{"lab_physical_properties"}, \code{"lab_chemical_properties"}, \code{"lab_calculations_including_estimates_and_default_values"}, and \code{"lab_rosetta_Key"}. May also include one or more of:  \code{"lab_mineralogy_glass_count"}, \code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_xray_and_thermal"} but it will be necessary to select appropriate \code{prep_code} and \code{analyzed_size_frac} for your analysis (see \emph{Details}).}
 
 \item{chunk.size}{number of pedons per chunk (for queries that may exceed \code{maxJsonLength})}
 
 \item{ntries}{number of tries (times to halve \code{chunk.size}) before returning \code{NULL}; default \code{3}}
 
-\item{prep_code}{Default: \code{"S"}. One or more of \code{NA}, \code{"F"}, \code{"HM"}, \code{"HM_SK"} \code{"GP"}, \code{"M"}, \code{"N"}, or \code{"S"}}
+\item{prep_code}{Default: \code{"S"} and \code{""}. May also include one or more of: \code{"F"}, \code{"HM"}, \code{"HM_SK"} \code{"GP"}, \code{"M"}, \code{"N"}, or \code{"S"}}
 
-\item{analyzed_size_frac}{Default: \code{"<2 mm"}. One or more of \code{"<2 mm"}, \code{"0.02-0.05 mm"}, \code{"0.05-0.1 mm"}, \code{"1-2 mm"}, \code{"0.5-1 mm"}, \code{"0.25-0.5 mm"}, \code{"0.05-2 mm"}, \code{"0.02-2 mm"}, \code{"0.1-0.25 mm"}, \verb{"<0.002 mm}}
+\item{analyzed_size_frac}{Default: \code{"<2 mm"}. One or more of \code{"<2 mm"}, \code{"0.02-0.05 mm"}, \code{"0.05-0.1 mm"}, \code{"1-2 mm"}, \code{"0.5-1 mm"}, \code{"0.25-0.5 mm"}, \code{"0.05-2 mm"}, \code{"0.02-2 mm"}, \code{"0.1-0.25 mm"}, \code{"<0.002 mm"}}
 }
 \value{
 a \code{SoilProfileCollection} for a successful query, a \code{try-error} if no site/pedon locations can be found or \code{NULL} for an empty \code{lab_layer} (within sites/pedons) result
@@ -43,7 +47,7 @@ If the \code{chunk.size} parameter is set too large and the Soil Data Access req
 
 Currently the \code{lab_area} tables are joined only for the "Soil Survey Area" related records.
 
-When requesting data from \code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_mineralogy_glass_count"}, or \code{"lab_xray_and_thermal"} multiple preparation codes (\code{prep_code}) or size fractions (\code{analyzed_size_frac}) are possible. The default behavior of \code{fetchLDM()} is to attempt to return a topologically valid (minimal overlaps) \emph{SoilProfileCollection}. This is achieved by setting \code{prep_code="S"} ("sieved") and \code{analyzed_size_frac="<2 mm"}. You may specify alternate or additional preparation codes or fractions as needed, but note that this may cause "duplication" of some layers where repeated measures were made with different preparation or on fractionated samples
+When requesting data from \code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_mineralogy_glass_count"}, or \code{"lab_xray_and_thermal"} multiple preparation codes (\code{prep_code}) or size fractions (\code{analyzed_size_frac}) are possible. The default behavior of \code{fetchLDM()} is to attempt to return a topologically valid (minimal overlaps) \emph{SoilProfileCollection}. This is achieved by setting \code{prep_code="S"} ("sieved") and \code{analyzed_size_frac="<2 mm"}. You may specify alternate or additional preparation codes or fractions as needed, but note that this may cause "duplication" of some layers where measurements were made with different preparation or on fractionated samples
 }
 \examples{
 \donttest{

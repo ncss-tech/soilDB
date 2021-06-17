@@ -6,18 +6,20 @@
 #' LDM model diagram: \url{https://jneme910.github.io/Lab_Data_Mart_Documentation/Documents/SDA_KSSL_Data_model.html}
 #'
 #' @param x a vector of values to find in column specified by `what`
-#' @param what a single column name from either the `lab_combine_nasis_ncss` or the `lab_area` tables
-#' @param tables a vector of table names; one or more of: `"lab_physical_properties"`, `"lab_mineralogy_glass_count"`, `"lab_chemical_properties"`, `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"`, `"lab_calculations_including_estimates_and_default_values"`, `"lab_rosetta_Key"`
+#' @param dsn data source name; either a path to a SQLite database, an open DBIConnection or (default) `NULL` (to use `soilDB::SDA_query`)
+#' @param what a single column name from tables: `lab_combine_nasis_ncss`, `lab_webmap`, `lab_site`, `lab_pedon` or `lab_area`
+#' @param bycol a single column name from `lab_layer` used for processing chunks; default: `"pedon_key"`
+#' @param tables a vector of table names; Default is `"lab_physical_properties"`, `"lab_chemical_properties"`, `"lab_calculations_including_estimates_and_default_values"`, and `"lab_rosetta_Key"`. May also include one or more of:  `"lab_mineralogy_glass_count"`, `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"` but it will be necessary to select appropriate `prep_code` and `analyzed_size_frac` for your analysis (see _Details_).
 #' @param chunk.size number of pedons per chunk (for queries that may exceed `maxJsonLength`)
 #' @param ntries number of tries (times to halve `chunk.size`) before returning `NULL`; default `3`
-#' @param prep_code Default: `"S"`. One or more of `NA`, `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
-#' @param analyzed_size_frac Default: `"<2 mm"`. One or more of `"<2 mm"`, `"0.02-0.05 mm"`, `"0.05-0.1 mm"`, `"1-2 mm"`, `"0.5-1 mm"`, `"0.25-0.5 mm"`, `"0.05-2 mm"`, `"0.02-2 mm"`, `"0.1-0.25 mm"`, `"<0.002 mm`
+#' @param prep_code Default: `"S"` and `""`. May also include one or more of: `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
+#' @param analyzed_size_frac Default: `"<2 mm"`. One or more of `"<2 mm"`, `"0.02-0.05 mm"`, `"0.05-0.1 mm"`, `"1-2 mm"`, `"0.5-1 mm"`, `"0.25-0.5 mm"`, `"0.05-2 mm"`, `"0.02-2 mm"`, `"0.1-0.25 mm"`, `"<0.002 mm"`
 #'
 #' @details If the `chunk.size` parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) `chunk.size` argument. This will be attempted up to 3 times before returning `NULL`
 #'
 #' Currently the `lab_area` tables are joined only for the "Soil Survey Area" related records.
 #'
-#' When requesting data from `"lab_major_and_trace_elements_and_oxides"`, `"lab_mineralogy_glass_count"`, or `"lab_xray_and_thermal"` multiple preparation codes (`prep_code`) or size fractions (`analyzed_size_frac`) are possible. The default behavior of `fetchLDM()` is to attempt to return a topologically valid (minimal overlaps) _SoilProfileCollection_. This is achieved by setting `prep_code="S"` ("sieved") and `analyzed_size_frac="<2 mm"`. You may specify alternate or additional preparation codes or fractions as needed, but note that this may cause "duplication" of some layers where repeated measures were made with different preparation or on fractionated samples
+#' When requesting data from `"lab_major_and_trace_elements_and_oxides"`, `"lab_mineralogy_glass_count"`, or `"lab_xray_and_thermal"` multiple preparation codes (`prep_code`) or size fractions (`analyzed_size_frac`) are possible. The default behavior of `fetchLDM()` is to attempt to return a topologically valid (minimal overlaps) _SoilProfileCollection_. This is achieved by setting `prep_code="S"` ("sieved") and `analyzed_size_frac="<2 mm"`. You may specify alternate or additional preparation codes or fractions as needed, but note that this may cause "duplication" of some layers where measurements were made with different preparation or on fractionated samples
 #'
 #' @return a `SoilProfileCollection` for a successful query, a `try-error` if no site/pedon locations can be found or `NULL` for an empty `lab_layer` (within sites/pedons) result
 #' @export
@@ -43,18 +45,20 @@
 #' @importFrom aqp `depths<-` `site<-`
 #' @importFrom data.table rbindlist
 fetchLDM <- function(x,
+                     dsn = NULL,
            what = "pedlabsampnum",
+           bycol = "pedon_key",           
            tables = c(
              "lab_physical_properties",
-             "lab_mineralogy_glass_count",
              "lab_chemical_properties",
-             "lab_major_and_trace_elements_and_oxides",
-             "lab_xray_and_thermal",
              "lab_calculations_including_estimates_and_default_values",
+             # "lab_major_and_trace_elements_and_oxides", # remove alternate prep/fractionated data from default set of tables
+             # "lab_mineralogy_glass_count",
+             # "lab_xray_and_thermal",
              "lab_rosetta_Key"),
-             chunk.size = 1000,
-             ntries = 3,
-           prep_code = "S", # optional: GP", "M", "N",
+           chunk.size = 1000,
+           ntries = 3,
+           prep_code = c("S", ''), # , `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
            analyzed_size_frac = "<2 mm"#  optional: "0.02-0.05 mm", "0.05-0.1 mm", "1-2 mm", "0.5-1 mm", "0.25-0.5 mm", "0.05-2 mm", "0.02-2 mm", "0.1-0.25 mm", "<0.002 mm"
            ) {
 
@@ -210,15 +214,15 @@ fetchLDM <- function(x,
                                           "lab_calculations_including_estimates_and_default_values",
                                           "lab_rosetta_Key"
                                         ),
-                                        prep_code = c("GP", "M", "N", "S"),
+                                        prep_code = c("GP", "M", "N", "S", "HM"),
                                         analyzed_size_frac = c("0.02-0.05 mm", "0.05-0.1 mm", "1-2 mm", "0.5-1 mm", "0.25-0.5 mm",
                                                                "0.05-2 mm", "<2 mm", "0.02-2 mm", "0.1-0.25 mm", "<0.002 mm")) {
 
   flattables <- c(
     "lab_physical_properties",
     "lab_chemical_properties",
-    "lab_major_and_trace_elements_and_oxides",
     "lab_calculations_including_estimates_and_default_values",
+    "lab_major_and_trace_elements_and_oxides",
     "lab_rosetta_Key"
   )
 
@@ -231,6 +235,7 @@ fetchLDM <- function(x,
   fractablejoincriteria <- list(
       "lab_mineralogy_glass_count" = "LEFT JOIN lab_mineralogy_glass_count ON
                                       lab_layer.labsampnum = lab_mineralogy_glass_count.labsampnum",
+
       "lab_xray_and_thermal" = "LEFT JOIN lab_xray_and_thermal ON
                                 lab_layer.labsampnum = lab_xray_and_thermal.labsampnum"
     )
@@ -241,12 +246,11 @@ fetchLDM <- function(x,
 
       "lab_chemical_properties" = "LEFT JOIN lab_chemical_properties ON
                                    lab_layer.labsampnum = lab_chemical_properties.labsampnum",
-
+      
       "lab_major_and_trace_elements_and_oxides" = "LEFT JOIN lab_major_and_trace_elements_and_oxides ON
                                                    lab_layer.labsampnum = lab_major_and_trace_elements_and_oxides.labsampnum",
       "lab_xray_and_thermal" = "LEFT JOIN lab_xray_and_thermal ON
                                 lab_layer.labsampnum = lab_xray_and_thermal.labsampnum",
-
       "lab_calculations_including_estimates_and_default_values" = "LEFT JOIN lab_calculations_including_estimates_and_default_values ON
        lab_layer.labsampnum = lab_calculations_including_estimates_and_default_values.labsampnum",
 
@@ -255,17 +259,23 @@ fetchLDM <- function(x,
     )
 
   layer_query <-  sprintf(
-    "SELECT * FROM lab_layer %s WHERE %s IN %s",
+    "SELECT * FROM lab_layer %s WHERE %s IN %s AND %s",
     paste0(sapply(flattables[flattables %in% tables], function(a) tablejoincriteria[[a]]), collapse = "\n"),
     bycol,
-    format_SQL_in_statement(x))
+    format_SQL_in_statement(x),
+    paste0(paste0(sapply(flattables[flattables %in% tables], function(b) paste0("IsNull(",b,".prep_code, '')")), 
+    " IN ", format_SQL_in_statement(prep_code)), collapse= " AND "))
 
   if (any(tables %in% fractables)) {
     layer_fraction_query <-  sprintf(
-      "SELECT * FROM lab_layer %s WHERE %s IN %s",
+      "SELECT * FROM lab_layer %s WHERE %s IN %s AND %s IN %s AND %s IN %s",
       paste0(sapply(fractables[fractables %in% tables], function(a) fractablejoincriteria[[a]]), collapse = "\n"),
       bycol,
-      format_SQL_in_statement(x))
+      format_SQL_in_statement(x),
+      sapply(fractables[fractables %in% tables], function(b) paste0(b,".prep_code")),
+      format_SQL_in_statement(prep_code),
+      sapply(fractables[fractables %in% tables], function(c) paste0(c,".analyzed_size_frac")),
+      format_SQL_in_statement(analyzed_size_frac))
   } else {
     layer_fraction_query <- NULL
   }
@@ -284,11 +294,6 @@ fetchLDM <- function(x,
     layerfracdata <- suppressWarnings(SDA_query(layer_fraction_query))
     layerfracdata <- layerfracdata[,unique(colnames(layerfracdata))]
     if (!inherits(layerdata, 'try-error') && !inherits(layerfracdata, 'try-error')) {
-      # apply filters for analyzed size fraction and prep code on layer data
-      if ("analyzed_size_frac" %in% colnames(layerfracdata))
-        layerfracdata <- layerfracdata[which(layerfracdata$analyzed_size_frac %in% analyzed_size_frac),]
-      if ("prep_code" %in% colnames(layerfracdata))
-        layerfracdata <- layerfracdata[which(layerfracdata$prep_code %in% prep_code),]
 
       if (nrow(layerfracdata) == 0)
         message(sprintf('no fractionated samples found for selected prep_code (%s) and analyzed_size_frac (%s)',
