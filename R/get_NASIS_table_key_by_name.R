@@ -4,12 +4,12 @@
 #' @param keycol One of: "fkey" the foreign key; "pkeyref" the primary key referenced by the foreign key, or "pkey" the primary key.
 #'
 #' @return The key column name for the specified table name
-#' @aliases .get_NASIS_fkey_by_name .get_NASIS_pkeyref_by_name .get_NASIS_pkey_by_name
+#' @aliases get_NASIS_fkey_by_name get_NASIS_pkeyref_by_name get_NASIS_pkey_by_name
 #' @examples
 #' \dontrun{
-#' .get_NASIS_table_key_by_name(c("site","phorizon_View_1","not_a_table"))
+#' get_NASIS_table_key_by_name(c("site","phorizon_View_1","not_a_table"))
 #' }
-.get_NASIS_table_key_by_name <- function(tables, 
+get_NASIS_table_key_by_name <- function(tables, 
                                          keycol = c("all", "fkey", "pkeyref", "pkey")) {
   
   NASIS_table_column_keys <- NULL
@@ -47,16 +47,16 @@
 }
 
 #' @export
-.get_NASIS_fkey_by_name <- function(tables, keycol = "fkey") {
-  .get_NASIS_table_key_by_name(tables, keycol = keycol)
+get_NASIS_fkey_by_name <- function(tables, keycol = "fkey") {
+  get_NASIS_table_key_by_name(tables, keycol = keycol)
 }
 
 #' @export
-.get_NASIS_pkeyref_by_name <- function(tables, keycol = "pkeyref") {
-  .get_NASIS_table_key_by_name(tables, keycol = keycol)
+get_NASIS_pkeyref_by_name <- function(tables, keycol = "pkeyref") {
+  get_NASIS_table_key_by_name(tables, keycol = keycol)
 }
 
 #' @export
-.get_NASIS_pkey_by_name <- function(tables, keycol = "pkey") {
-  .get_NASIS_table_key_by_name(tables, keycol = keycol)
+get_NASIS_pkey_by_name <- function(tables, keycol = "pkey") {
+  get_NASIS_table_key_by_name(tables, keycol = keycol)
 }

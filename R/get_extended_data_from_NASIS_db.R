@@ -238,8 +238,7 @@ LEFT OUTER JOIN (
                        recwlupdated, recuseriidref, phhuartiid
                        FROM (
                        SELECT DISTINCT phiid FROM phorizon_View_1
-                       ) as p LEFT OUTER JOIN phhuarts ", ifelse(SS, "_View_1","") ,
-                       " ON p.phiid = phiidref;")
+                       ) as p LEFT OUTER JOIN phhuarts_View_1 ON p.phiid = phiidref;")
   if (SS == FALSE) {
     q.art.data <- gsub(pattern = '_View_1', replacement = '', x = q.art.data, fixed = TRUE)
   }

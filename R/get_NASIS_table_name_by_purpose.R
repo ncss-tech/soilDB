@@ -1,7 +1,6 @@
 #' Return NASIS 7 Physical Table Names 
 #' 
-#' Draft method generalizing concepts of NASIS 7 data model to group tables by "purpose." Not intended for typical user-level, and not exported at this point. Most of our more complex queries rely on tables from one or more purposes, so individual higher-level functions might call a function like this to identify the relevant tables from some data source.
-#' 
+#' Method generalizing concepts of NASIS 7 data model to group tables by "purpose." Most of our more complex queries rely on tables from one or more purposes, so individual higher-level functions might call a function like this to identify the relevant tables from a data source.
 #' 
 #' @param purpose character. One or more of: "metadata", "lookup", "site", "pedon", "transect", "datamapunit", "component", "vegetation"
 #' @param SS append "_View_1" on appropriate tables? Default: FALSE
@@ -12,17 +11,17 @@
 #' @examples
 #' \dontrun{
 #' # get the "site" table names
-#' .get_NASIS_table_name_by_purpose("site")
+#' get_NASIS_table_name_by_purpose("site")
 #' 
 #' # get the pedon table names
-#' .get_NASIS_table_name_by_purpose("pedon", SS = TRUE)
+#' get_NASIS_table_name_by_purpose("pedon", SS = TRUE)
 #' 
 #' # metadata and lookup not affected by SS argument, but site and pedon are
-#' .get_NASIS_table_name_by_purpose(c("metadata", "lookup",
+#' get_NASIS_table_name_by_purpose(c("metadata", "lookup",
 #'                                    "site", "pedon"), SS = TRUE)
 #' }
 #' 
-.get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "site", 
+get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "site", 
                                                          "pedon", "transect", "component", 
                                                          "vegetation", "project", 
                                                          "techsoilservice", "area",
@@ -220,3 +219,5 @@
   
   return(as.character(unlist(res)))
 }
+
+.get_NASIS_table_name_by_purpose <- get_NASIS_table_name_by_purpose
