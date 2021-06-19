@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get records from the Soil Classification (SC) database — get_soilseries_from_NASIS • soilDB</title>
+<title>Return NASIS 7 Physical Table Names — get_NASIS_table_name_by_purpose • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,8 @@
 
 
 
-<meta property="og:title" content="Get records from the Soil Classification (SC) database — get_soilseries_from_NASIS" />
-<meta property="og:description" content="These functions return records from the Soil Classification database, either
-from the local NASIS database (all series) or via web report (named series
-only)." />
+<meta property="og:title" content="Return NASIS 7 Physical Table Names — get_NASIS_table_name_by_purpose" />
+<meta property="og:description" content="Method generalizing concepts of NASIS 7 data model to group tables by &quot;purpose.&quot; Most of our more complex queries rely on tables from one or more purposes, so individual higher-level functions might call a function like this to identify the relevant tables from a data source." />
 
 
 
@@ -113,50 +111,56 @@ only)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get records from the Soil Classification (SC) database</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/get_soilseries_from_NASIS.R'><code>R/get_soilseries_from_NASIS.R</code></a></small>
-    <div class="hidden name"><code>get_soilseries_from_NASIS.Rd</code></div>
+    <h1>Return NASIS 7 Physical Table Names</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/get_NASIS_table_name_by_purpose.R'><code>R/get_NASIS_table_name_by_purpose.R</code></a></small>
+    <div class="hidden name"><code>get_NASIS_table_name_by_purpose.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>These functions return records from the Soil Classification database, either
-from the local NASIS database (all series) or via web report (named series
-only).</p>
+    <p>Method generalizing concepts of NASIS 7 data model to group tables by "purpose." Most of our more complex queries rely on tables from one or more purposes, so individual higher-level functions might call a function like this to identify the relevant tables from a data source.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_soilseries_from_NASIS</span><span class='op'>(</span>
-  stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>,
-  dsn <span class='op'>=</span> <span class='cn'>NULL</span>,
-  delimiter <span class='op'>=</span> <span class='st'>" over "</span>
+    <pre class="usage"><span class='fu'>get_NASIS_table_name_by_purpose</span><span class='op'>(</span>
+  purpose <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"metadata"</span>, <span class='st'>"lookup"</span>, <span class='st'>"site"</span>, <span class='st'>"pedon"</span>, <span class='st'>"transect"</span>, <span class='st'>"component"</span>,
+    <span class='st'>"vegetation"</span>, <span class='st'>"project"</span>, <span class='st'>"techsoilservice"</span>, <span class='st'>"area"</span>, <span class='st'>"soilseries"</span>, <span class='st'>"legend"</span>,
+    <span class='st'>"mapunit"</span>, <span class='st'>"datamapunit"</span><span class='op'>)</span>,
+  SS <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>stringsAsFactors</th>
-      <td><p>logical: should character vectors be converted to
-factors? This argument is passed to the <code><a href='uncode.html'>uncode()</a></code> function. It does not
-convert those vectors that have set outside of <code><a href='uncode.html'>uncode()</a></code> (i.e. hard coded).</p></td>
+      <th>purpose</th>
+      <td><p>character. One or more of: "metadata", "lookup", "site", "pedon", "transect", "datamapunit", "component", "vegetation"</p></td>
     </tr>
     <tr>
-      <th>dsn</th>
-      <td><p>Optional: path to local SQLite database containing NASIS
-table structure; default: <code>NULL</code></p></td>
-    </tr>
-    <tr>
-      <th>delimiter</th>
-      <td><p><em>character</em>. Used to collapse <code>taxminalogy</code> records where multiple values are used to describe strongly contrasting control sections. Default <code>" over "</code> creates combination mineralogy classes as they would be used in the family name.</p></td>
+      <th>SS</th>
+      <td><p>append "_View_1" on appropriate tables? Default: FALSE</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>data.frame</code></p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+    <p>character vector of table names</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Stephen Roecker</p>
+    <div class='dont-index'><p>createStaticNASIS</p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># get the "site" table names</span>
+<span class='fu'>get_NASIS_table_name_by_purpose</span><span class='op'>(</span><span class='st'>"site"</span><span class='op'>)</span>
+
+<span class='co'># get the pedon table names</span>
+<span class='fu'>get_NASIS_table_name_by_purpose</span><span class='op'>(</span><span class='st'>"pedon"</span>, SS <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='co'># metadata and lookup not affected by SS argument, but site and pedon are</span>
+<span class='fu'>get_NASIS_table_name_by_purpose</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"metadata"</span>, <span class='st'>"lookup"</span>,
+                                   <span class='st'>"site"</span>, <span class='st'>"pedon"</span><span class='op'>)</span>, SS <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
