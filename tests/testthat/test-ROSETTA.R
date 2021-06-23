@@ -62,6 +62,29 @@ test_that("ROSETTA() works", {
 
 })
 
+test_that("bootstrap standard deviation", {
+  
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  # attempting to use all possible soil properties
+  vars <- c('sandtotal_r', 'silttotal_r', 'claytotal_r', 'dbthirdbar_r', 'wthirdbar_decimal', 'wfifteenbar_decimal')
+  
+  # submit request
+  r <- ROSETTA(x, vars = vars, include.sd = TRUE)
+  
+  # correct object
+  expect_true(inherits(r, 'data.frame'))
+  
+  # input / output are conformal
+  expect_true(nrow(r) == nrow(x))
+  
+  # output contains new columns
+  expect_true(all(c('sd_theta_r', 'sd_theta_s', 'sd_alpha', 'sd_npar', 'sd_ksat') %in% names(r)))
+  
+})
+
 test_that("correct model selection in the presence of NA", {
 
   skip_if_offline()

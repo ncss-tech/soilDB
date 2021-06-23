@@ -4,7 +4,14 @@
 \alias{ROSETTA}
 \title{ROSETTA Model API}
 \usage{
-ROSETTA(x, vars, v = c("1", "2", "3"), chunkSize = 10000, conf = NULL)
+ROSETTA(
+  x,
+  vars,
+  v = c("1", "2", "3"),
+  include.sd = FALSE,
+  chunkSize = 10000,
+  conf = NULL
+)
 }
 \arguments{
 \item{x}{a \code{data.frame} of required soil properties, may contain other columns, see details}
@@ -12,6 +19,8 @@ ROSETTA(x, vars, v = c("1", "2", "3"), chunkSize = 10000, conf = NULL)
 \item{vars}{character vector of column names in \code{x} containing relevant soil property values, see details}
 
 \item{v}{ROSETTA model version number: '1', '2', or '3', see details and references.}
+
+\item{include.sd}{logical, include bootstrap standard deviation for estimated parameters}
 
 \item{chunkSize}{number of records per API call}
 

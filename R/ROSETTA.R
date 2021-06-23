@@ -4,7 +4,8 @@
 # vars: column names of those soil propertie passed to API
 # v: model version
 # conf: configuration
-.ROSETTA_request <- function(x.chunk, vars, v, conf) {
+# include.sd: include bootstrapped standard deviation?
+.ROSETTA_request <- function(x.chunk, vars, v, conf, include.sd = FALSE) {
 
   # save a copy of columns not used by API
   x.chunk.other <- x.chunk[, which(!names(x.chunk) %in% vars), drop = FALSE]
@@ -51,9 +52,10 @@
   if (inherits(d, 'try-error'))
     return(d)
 
-  # a valid result will containt a list with the following:
+  # a valid result will contain a list with the following:
   # "model_code" (results from automatic model selection, -1 means no prediction / error)
   # "rosetta_version" (1, 2, 3)
+  # "stdev" (bootstrapped standard deviation)
   # "van_genuchten_params" (standard output)
 
   # extract VG parameters, may include NA
@@ -67,10 +69,20 @@
 
   # add ROSETTA version
   vg[['.rosetta.version']] <- d[['rosetta_version']]
-
-  # original "extra" data + relevant properties + vg parameters
-  vg.data <- cbind(x.chunk.other, x.chunk, vg)
-
+  
+  # optionally return SD
+  if(include.sd) {
+    vg.sd <- as.data.frame(d[['stdev']])
+    names(vg.sd) <- sprintf("sd_%s", vg.names)
+    
+    # original "extra" data + relevant properties + vg parameters + SD
+    vg.data <- cbind(x.chunk.other, x.chunk, vg, vg.sd)
+  } else {
+    # original "extra" data + relevant properties + vg parameters
+    vg.data <- cbind(x.chunk.other, x.chunk, vg)
+  }
+  
+  
   return(vg.data)
 }
 
@@ -88,6 +100,8 @@
 #' @param vars character vector of column names in \code{x} containing relevant soil property values, see details
 #'
 #' @param v ROSETTA model version number: '1', '2', or '3', see details and references.
+#' 
+#' @param include.sd logical, include bootstrap standard deviation for estimated parameters
 #'
 #' @param chunkSize number of records per API call
 #'
@@ -153,7 +167,7 @@
 # * best model (0) is always used, API no longer accepts `model` as a parameter
 # * versions 1,2,3 supported
 
-ROSETTA <- function(x, vars, v = c('1', '2', '3'), chunkSize = 10000, conf = NULL) {
+ROSETTA <- function(x, vars, v = c('1', '2', '3'), include.sd = FALSE, chunkSize = 10000, conf = NULL) {
 
   # check for required packages
   if (!requireNamespace('httr', quietly = TRUE) | !requireNamespace('jsonlite', quietly = TRUE))
@@ -193,7 +207,7 @@ ROSETTA <- function(x, vars, v = c('1', '2', '3'), chunkSize = 10000, conf = NUL
 
   # iterate over chunks
   # results may contain try-errors
-  res <- lapply(x, FUN = .ROSETTA_request, vars = vars, v = v, conf = conf)
+  res <- lapply(x, FUN = .ROSETTA_request, vars = vars, v = v, conf = conf, include.sd = include.sd)
 
   ## TODO: think about error handling...
   # most likely a curl time-out
