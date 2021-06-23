@@ -25,7 +25,7 @@
 get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactors(),
                                       dsn = NULL, delimiter = " over ") {
   q.soilseries <- "
-  SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, soiltaxclasslastupdated, mlraoffice, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxfamhahatmatcl, originyear, establishedyear, descriptiondateinitial, descriptiondateupdated, statsgoflag, soilseriesedithistory, soilseriesiid, areasymbol, areaname, areaacres, obterm, areatypename
+  SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, soiltaxclasslastupdated, mlraoffice, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxfamhahatmatcl, originyear, establishedyear, descriptiondateinitial, descriptiondateupdated, statsgoflag,  soilseriesiid, areasymbol, areaname, areaacres, obterm, areatypename, soilseriesedithistory
   FROM soilseries ss
   INNER JOIN area a ON a.areaiid = ss.typelocstareaiidref
   INNER JOIN areatype at ON at.areatypeiid = ss.typelocstareatypeiidref
