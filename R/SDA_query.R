@@ -249,13 +249,17 @@ SDA_query <- function(q) {
   colnames(i) <- i[1, ]
 
   # remove the first line
-  # Arrg! the dreaded single-row indexing bug: drop=FALSE ensures result is a matrix
   i <- i[-1, , drop = FALSE]
 
   # keep everything in memory, c/o Kyle Bockinsky
   df <- as.data.frame(i, stringsAsFactors = FALSE)
 
-  # attempt type conversion, same result as writing to file and reading-in via read.table()
+  ## strings resembling scientific notation are converted into numeric
+  ## ex: type.convert("8E2") -> 800
+  # https://github.com/ncss-tech/soilDB/issues/190
+  
+  # attempt type conversion
+  # same result as writing to file and reading-in via read.table()
   df <- type.convert(df,
                      na.strings = c('', 'NA'),
                      as.is = TRUE
