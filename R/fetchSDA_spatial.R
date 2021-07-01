@@ -1,20 +1,20 @@
 #' @title Query Soil Data Access and Return Spatial Data
 #'
-#' @description This is a high-level "fetch" method to facilitate spatial queries to Soil Data Access (SDA) based on mapunit key (\code{mukey}) and national mapunit symbol (\code{nationalmusym}) for \code{mupolygon} (SSURGO) or \code{gsmmupolygon} (STATSGO) geometry OR legend key (\code{lkey}) and area symbols (\code{areasymbol}) for \code{sapolygon} (Soil Survey Area; SSA) geometry).
+#' @description This is a high-level "fetch" method to facilitate spatial queries to Soil Data Access (SDA) based on map unit key (\code{mukey}) and national map unit symbol (\code{nationalmusym}) for \code{mupolygon} (SSURGO) or \code{gsmmupolygon} (STATSGO) geometry OR legend key (\code{lkey}) and area symbols (\code{areasymbol}) for \code{sapolygon} (Soil Survey Area; SSA) geometry).
 #'
-#' A Soil Data Access spatial query is made returning geometry and key identifying information about the mapunit or area of interest. Additional columns from the mapunit or legend table can be included using \code{add.fields} argument.
+#' A Soil Data Access spatial query is made returning geometry and key identifying information about the map unit or area of interest. Additional columns from the map unit or legend table can be included using \code{add.fields} argument.
 #'
-#' This function automatically "chunks" the input vector (using \code{soilDB::makeChunks}) of mapunit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the \code{chunk.size} setting and the length of your input vector. If you are working with many mapunits and/or large extents, you may need to decrease this number in order to have more chunks.
+#' This function automatically "chunks" the input vector (using \code{soilDB::makeChunks}) of map unit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the \code{chunk.size} setting and the length of your input vector. If you are working with many map units and/or large extents, you may need to decrease this number in order to have more chunks.
 #'
 #' Querying regions with complex mapping may require smaller \code{chunk.size}. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform "poorly" (slow or error) no matter what the chunk size is. Shuffling the order of the inputs using \code{sample} may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use \code{muacres} as a heuristic to adjust for total acreage within chunks.
 #'
-#' @param x A vector of MUKEYs / national mapunit symbols (for mupolygon geometry); OR legend keys (LKEY) / area symbols (for sapolygon geometry)
+#' @param x A vector of MUKEYs / national map unit symbols (for `mupolygon` geometry); OR legend keys (LKEY) / area symbols (for `sapolygon` geometry)
 #'
-#' @param by.col Column name containing mapunit identifier \code{"mukey"}, \code{"nmusym"}, or \code{"areasymbol"} for \code{geom.src} \code{sapolygon}; default is inferred from \code{is.numeric(x) == TRUE} for \code{mukey} or \code{lkey} and (\code{nationalmusym} or \code{areasymbol} otherwise.
+#' @param by.col Column name containing map unit identifier \code{"mukey"}, \code{"nmusym"}, or \code{"areasymbol"} for \code{geom.src} \code{sapolygon}; default is inferred from \code{is.numeric(x) == TRUE} for \code{mukey} or \code{lkey} and (\code{nationalmusym} or \code{areasymbol} otherwise.
 #'
-#' @param method geometry result type: \code{"feature"} returns polygons, \code{"bbox"} returns the bounding box of each polygon, and \code{"point"} returns a single point within each polygon.
+#' @param method geometry result type: \code{"feature"} returns polygons, \code{"bbox"} returns the bounding box of each polygon (via `STEnvelope()`), and \code{"point"} returns a single point (via `STPointOnSurface()`) within each polygon.
 #'
-#' @param geom.src Either \code{mupolygon} or \code{sapolygon}
+@param geom.src Either `mupolygon` (map unit polygons) or `sapolygon` (soil survey area boundary polygons)
 #'
 #' @param db Default: SSURGO. When \code{geom.src} is \code{mupolygon}, use STATSGO polygon geometry instead of SSURGO by setting \code{db = "STATSGO"}
 #'
@@ -24,7 +24,7 @@
 #'
 #' @param verbose Print messages?
 #'
-#' @return A Spatial*DataFrame corresponding to SDA spatial data for all symbols requested. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with `add.fields`.
+#' @return A `Spatial*DataFrame` corresponding to SDA spatial data for all symbols requested. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with `add.fields`.
 #'
 #' @details Note that STATSGO data are fetched using \code{CLIPAREASYMBOL = 'US'} to avoid duplicating state and national subsets of the geometry.
 #'
