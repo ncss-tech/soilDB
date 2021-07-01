@@ -241,6 +241,8 @@ SDA_query <- function(q) {
 }
 
 
+## See https://github.com/ncss-tech/soilDB/pull/191 for a list of possibly data types
+
 # note: empty strings and 'NA' are converted into <NA>
 # convert the raw results from SDA into a proper data.frame
 # no conversion of strings -> factors
@@ -266,14 +268,19 @@ SDA_query <- function(q) {
     # fall-back to "character" for unknown data types
     switch(dt,
            'DataTypeName=char' = 'character',
+           'DataTypeName=nchar' = 'character',
            'DataTypeName=varchar' = 'character',
            'DataTypeName=nvarchar' = 'character',
            'DataTypeName=text' = 'character',
            'DataTypeName=ntext' = 'character',
            'DataTypeName=datetime' = 'character',
+           'DataTypeName=datetime2' = 'character',
+           'DataTypeName=timestamp' = 'character',
            'DataTypeName=bit' = 'integer',
            'DataTypeName=int' = 'integer',
+           'DataTypeName=bigint' = 'integer',
            'DataTypeName=smallint' = 'integer',
+           'DataTypeName=tinyint' = 'integer',
            'DataTypeName=numeric' = 'numeric',
            'DataTypeName=real' = 'numeric',
            'DataTypeName=float' = 'numeric',
