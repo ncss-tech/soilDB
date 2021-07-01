@@ -262,6 +262,8 @@ SDA_query <- function(q) {
   cc <- sapply(m, function(j) {
     # extract the data type
     dt <- strsplit(j, split = ',', fixed = TRUE)[[1]][8]
+    # known data types in SDA and appropriate classes in R
+    # fall-back to "character" for unknown data types
     switch(dt,
            'DataTypeName=char' = 'character',
            'DataTypeName=varchar' = 'character',
@@ -275,7 +277,8 @@ SDA_query <- function(q) {
            'DataTypeName=numeric' = 'numeric',
            'DataTypeName=real' = 'numeric',
            'DataTypeName=float' = 'numeric',
-           'DataTypeName=decimal' = 'numeric'
+           'DataTypeName=decimal' = 'numeric',
+           'character'
            )
   })
   
