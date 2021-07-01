@@ -14,7 +14,7 @@
 #'
 #' @param method geometry result type: \code{"feature"} returns polygons, \code{"bbox"} returns the bounding box of each polygon (via `STEnvelope()`), and \code{"point"} returns a single point (via `STPointOnSurface()`) within each polygon.
 #'
-@param geom.src Either `mupolygon` (map unit polygons) or `sapolygon` (soil survey area boundary polygons)
+#' @param geom.src Either `mupolygon` (map unit polygons) or `sapolygon` (soil survey area boundary polygons)
 #'
 #' @param db Default: SSURGO. When \code{geom.src} is \code{mupolygon}, use STATSGO polygon geometry instead of SSURGO by setting \code{db = "STATSGO"}
 #'
