@@ -266,9 +266,13 @@ SDA_query <- function(q) {
            'DataTypeName=char' = 'character',
            'DataTypeName=varchar' = 'character',
            'DataTypeName=nvarchar' = 'character',
+           'DataTypeName=text' = 'character',
+           'DataTypeName=ntext' = 'character',
            'DataTypeName=datetime' = 'character',
+           'DataTypeName=bit' = 'integer',
            'DataTypeName=int' = 'integer',
            'DataTypeName=smallint' = 'integer',
+           'DataTypeName=numeric' = 'numeric',
            'DataTypeName=real' = 'numeric',
            'DataTypeName=float' = 'numeric',
            'DataTypeName=decimal' = 'numeric'
