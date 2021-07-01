@@ -16,13 +16,13 @@ fetchSDA_spatial(
 )
 }
 \arguments{
-\item{x}{A vector of MUKEYs / national mapunit symbols (for mupolygon geometry); OR legend keys (LKEY) / area symbols (for sapolygon geometry)}
+\item{x}{A vector of MUKEYs / national map unit symbols (for \code{mupolygon} geometry); OR legend keys (LKEY) / area symbols (for \code{sapolygon} geometry)}
 
-\item{by.col}{Column name containing mapunit identifier \code{"mukey"}, \code{"nmusym"}, or \code{"areasymbol"} for \code{geom.src} \code{sapolygon}; default is inferred from \code{is.numeric(x) == TRUE} for \code{mukey} or \code{lkey} and (\code{nationalmusym} or \code{areasymbol} otherwise.}
+\item{by.col}{Column name containing map unit identifier \code{"mukey"}, \code{"nmusym"}, or \code{"areasymbol"} for \code{geom.src} \code{sapolygon}; default is inferred from \code{is.numeric(x) == TRUE} for \code{mukey} or \code{lkey} and (\code{nationalmusym} or \code{areasymbol} otherwise.}
 
-\item{method}{geometry result type: \code{"feature"} returns polygons, \code{"bbox"} returns the bounding box of each polygon, and \code{"point"} returns a single point within each polygon.}
+\item{method}{geometry result type: \code{"feature"} returns polygons, \code{"bbox"} returns the bounding box of each polygon (via \code{STEnvelope()}), and \code{"point"} returns a single point (via \code{STPointOnSurface()}) within each polygon.}
 
-\item{geom.src}{Either \code{mupolygon} or \code{sapolygon}}
+\item{geom.src}{Either \code{mupolygon} (map unit polygons) or \code{sapolygon} (soil survey area boundary polygons)}
 
 \item{db}{Default: SSURGO. When \code{geom.src} is \code{mupolygon}, use STATSGO polygon geometry instead of SSURGO by setting \code{db = "STATSGO"}}
 
@@ -33,14 +33,14 @@ fetchSDA_spatial(
 \item{verbose}{Print messages?}
 }
 \value{
-A Spatial*DataFrame corresponding to SDA spatial data for all symbols requested. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with \code{add.fields}.
+A \code{Spatial*DataFrame} corresponding to SDA spatial data for all symbols requested. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with \code{add.fields}.
 }
 \description{
-This is a high-level "fetch" method to facilitate spatial queries to Soil Data Access (SDA) based on mapunit key (\code{mukey}) and national mapunit symbol (\code{nationalmusym}) for \code{mupolygon} (SSURGO) or \code{gsmmupolygon} (STATSGO) geometry OR legend key (\code{lkey}) and area symbols (\code{areasymbol}) for \code{sapolygon} (Soil Survey Area; SSA) geometry).
+This is a high-level "fetch" method to facilitate spatial queries to Soil Data Access (SDA) based on map unit key (\code{mukey}) and national map unit symbol (\code{nationalmusym}) for \code{mupolygon} (SSURGO) or \code{gsmmupolygon} (STATSGO) geometry OR legend key (\code{lkey}) and area symbols (\code{areasymbol}) for \code{sapolygon} (Soil Survey Area; SSA) geometry).
 
-A Soil Data Access spatial query is made returning geometry and key identifying information about the mapunit or area of interest. Additional columns from the mapunit or legend table can be included using \code{add.fields} argument.
+A Soil Data Access spatial query is made returning geometry and key identifying information about the map unit or area of interest. Additional columns from the map unit or legend table can be included using \code{add.fields} argument.
 
-This function automatically "chunks" the input vector (using \code{soilDB::makeChunks}) of mapunit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the \code{chunk.size} setting and the length of your input vector. If you are working with many mapunits and/or large extents, you may need to decrease this number in order to have more chunks.
+This function automatically "chunks" the input vector (using \code{soilDB::makeChunks}) of map unit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the \code{chunk.size} setting and the length of your input vector. If you are working with many map units and/or large extents, you may need to decrease this number in order to have more chunks.
 
 Querying regions with complex mapping may require smaller \code{chunk.size}. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform "poorly" (slow or error) no matter what the chunk size is. Shuffling the order of the inputs using \code{sample} may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use \code{muacres} as a heuristic to adjust for total acreage within chunks.
 }

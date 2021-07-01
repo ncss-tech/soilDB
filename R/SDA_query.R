@@ -171,7 +171,7 @@ SDA_query <- function(q) {
   # submit request
   r <- httr::POST(url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
                   body = list(query = q,
-                              format = "JSON+COLUMNNAME"),
+                              format = "json+columnname+metadata"),
                   encode = "form")
 
   # trap errors, likely related to SQL syntax errors
@@ -241,29 +241,72 @@ SDA_query <- function(q) {
 }
 
 
+## See https://github.com/ncss-tech/soilDB/pull/191 for a list of possibly data types
+
 # note: empty strings and 'NA' are converted into <NA>
 # convert the raw results from SDA into a proper data.frame
 # no conversion of strings -> factors
 .post_process_SDA_result_set <- function(i) {
-  # the first line is always the colnames
+  
+  # the first line is always the field names
   colnames(i) <- i[1, ]
+  
+  # the second line contains field metadata
+  m <- unlist(i[2, ])
 
-  # remove the first line
-  i <- i[-1, , drop = FALSE]
+  # remove lines 1:2
+  i <- i[-c(1, 2), , drop = FALSE]
 
   # keep everything in memory, c/o Kyle Bockinsky
   df <- as.data.frame(i, stringsAsFactors = FALSE)
 
+  # parse metadata to create colClasses argument
+  cc <- sapply(m, function(j) {
+    # extract the data type
+    dt <- strsplit(j, split = ',', fixed = TRUE)[[1]][8]
+    # known data types in SDA and appropriate classes in R
+    # fall-back to "character" for unknown data types
+    switch(dt,
+           'DataTypeName=char' = 'character',
+           'DataTypeName=nchar' = 'character',
+           'DataTypeName=varchar' = 'character',
+           'DataTypeName=nvarchar' = 'character',
+           'DataTypeName=text' = 'character',
+           'DataTypeName=ntext' = 'character',
+           'DataTypeName=datetime' = 'character',
+           'DataTypeName=datetime2' = 'character',
+           'DataTypeName=timestamp' = 'character',
+           'DataTypeName=bit' = 'integer',
+           'DataTypeName=int' = 'integer',
+           'DataTypeName=bigint' = 'integer',
+           'DataTypeName=smallint' = 'integer',
+           'DataTypeName=tinyint' = 'integer',
+           'DataTypeName=numeric' = 'numeric',
+           'DataTypeName=real' = 'numeric',
+           'DataTypeName=float' = 'numeric',
+           'DataTypeName=decimal' = 'numeric',
+           'character'
+           )
+  })
+  
+  # convert each column that isn't character
+  idx <- which(cc != 'character')
+  for(f in idx) {
+    df[, f] <- as(df[, f], cc[f])
+  }
+  
+  
   ## strings resembling scientific notation are converted into numeric
   ## ex: type.convert("8E2") -> 800
   # https://github.com/ncss-tech/soilDB/issues/190
   
-  # attempt type conversion
-  # same result as writing to file and reading-in via read.table()
-  df <- type.convert(df,
-                     na.strings = c('', 'NA'),
-                     as.is = TRUE
-                     )
+  # # attempt type conversion
+  # # same result as writing to file and reading-in via read.table()
+  # df <- type.convert(df,
+  #                    na.strings = c('', 'NA'),
+  #                    as.is = TRUE,
+  #                    colClasses = cc
+  #                    )
 
   ## TODO further error checking?
 

@@ -36,7 +36,7 @@ test_that("fetchSDA() returns expected results", {
 
   skip_on_cran()
 
-  # there should be 2 components nad 10 horizons
+  # there should be 2 components and 10 horizons
   expect_equal(length(x), 2)
   expect_equal(nrow(x), 10)
 
@@ -45,5 +45,5 @@ test_that("fetchSDA() returns expected results", {
   expect_equal(site(x)$nationalmusym, c('kzc4', 'kzc4'))
 
   # test that both components have no NRCS forest/range site assigned
-  expect_equal(site(x)$ecoclassid, c(NA,NA))
+  expect_equal(site(x)$ecoclassid, c(NA_character_, NA_character_))
 })

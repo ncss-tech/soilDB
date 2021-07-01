@@ -8,7 +8,7 @@ importFrom("stats", "aggregate", "complete.cases", "na.omit", "as.formula", "spl
 
 importFrom("utils", "URLencode", "download.file", "object.size",
              "read.csv", "read.table", "setTxtProgressBar",
-             "txtProgressBar", "write.table", "type.convert")
+             "txtProgressBar", "write.table")
 
 importFrom("methods", "slot<-", "as")
 

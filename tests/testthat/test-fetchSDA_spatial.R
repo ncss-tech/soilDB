@@ -6,7 +6,7 @@ test_that("fetchSDA_spatial basic mupolygon functionality", {
 
   skip_on_cran()
 
-  # expect 3, relatively nonextensive join delineations
+  # expect 3, relatively non-extensive join delineations
   single.mukey <- fetchSDA_spatial(x = "2924882", by.col = 'mukey')
   expect_equal(nrow(single.mukey), 3)
 

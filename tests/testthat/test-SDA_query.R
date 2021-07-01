@@ -132,10 +132,10 @@ test_that("SDA_query() interprets data type correctly", {
   expect_true(inherits(x.3$compkind, 'character'))
   expect_true(inherits(x.3$comppct_r, 'integer'))
   expect_true(inherits(x.3$majcompflag, 'character'))
-  expect_true(inherits(x.3$elev_r, 'integer'))
-  expect_true(inherits(x.3$slope_r, 'integer'))
-  expect_true(inherits(x.3$wei, 'integer'))
-  expect_true(inherits(x.3$weg, 'integer'))
+  expect_true(inherits(x.3$elev_r, 'numeric'))
+  expect_true(inherits(x.3$slope_r, 'numeric'))
+  expect_true(inherits(x.3$wei, 'character'))
+  expect_true(inherits(x.3$weg, 'character'))
 
 })
 
