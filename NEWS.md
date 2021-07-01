@@ -1,4 +1,7 @@
 # soilDB 2.6.3 (2021-06-16)
+ * `SDA_query()` and all functions that call `SDA_query()` get proper column class handling (related to #190), however:
+   - be careful with the use of CAST(): unknown datatypes may not be correctly interpreted
+   - 
  * Added new columns to soil classification ("SC") table result of `get_soilseries_from_NASIS()`; now including taxonomic mineralogy class which may contain multiple parts for series with strongly contrasting control sections
  * Updates to `get_SDA_*()` methods 
    - Extends `get_SDA_property(property = ...)` and `get_SDA_interpretation(rulename = ...)` vectorization over property/rulename to work with any aggregation method. 
