@@ -1,18 +1,20 @@
 # Based on ssurgoOnDemand by chad ferguson and jason nemecek
 # SDA_properties.R: translation of SDA_Properties.py into soilDB-style R function by andrew brown
 # created: 2021/04/03
-# last update: 2021/05/30
+# last update: 2021/07/01
 
 #' Get map unit properties from Soil Data Access
 #'
 #' @param property character vector of labels from property dictionary tables (see details) OR physical column names from `component` or `chorizon` table.
-#' @param method one of: "Dominant Component (Category)", "Weighted Average", "Min/Max", "Dominant Component (Numeric)", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.
+#' @param method one of: "Dominant Component (Category)", "Dominant Component (Numeric)", "Weighted Average", "MIN", "MAX", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
 #' @param top_depth Default: `0` (centimeters); a numeric value for upper boundary (top depth) used only for method="weighted average" and "dominant component (numeric)"
 #' @param bottom_depth Default: `200` (centimeters); a numeric value for lower boundary (bottom depth) used only for method="weighted average" and "dominant component (numeric)"
-#' @param FUN Optional: character representing SQL aggregation function either "MIN" or "MAX" used only for method="min/max"
+#' @param FUN Optional: character representing SQL aggregation function either "MIN" or "MAX" used only for method="min/max"; this argument is calculated internally if you specify `method="MIN"` or `method="MAX"`
+#' @param miscellaneous_areas Include miscellaneous areas in "Weighted Average", "MIN" or "MAX" results?
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
+#'
 #' @examples
 #'
 #' \donttest{
@@ -129,6 +131,7 @@ get_SDA_property <-
            top_depth = 0, # used for method="weighted average" and "dominant component (numeric)"
            bottom_depth = 200, # used for method="weighted average" and "dominant component (numeric)"
            FUN = NULL,
+           miscellaneous_areas = FALSE,
            query_string = FALSE) # used for method="min/max"
     {
 
@@ -259,7 +262,8 @@ get_SDA_property <-
 
 .constructPropQuery <- function(method, property,
                                 areasymbols = NULL, mukeys = NULL,
-                                top_depth = 0, bottom_depth = 200, FUN = NULL) {
+                                top_depth = 0, bottom_depth = 200, FUN = NULL,
+                                miscellaneous_areas = FALSE) {
   # SQL by Jason Nemecek
 
   # must specify either mukeys or areasymbols
@@ -342,30 +346,34 @@ get_SDA_property <-
   }
 
   # define several helper methods
-  .property_dominant_condition_category <- function(property) {
+  .property_dominant_condition_category <- function(property, miscellaneous_areas = FALSE) {
     sprintf("(SELECT TOP 1 %s FROM mapunit
-          INNER JOIN component ON component.mukey=mapunit.mukey AND mapunit.mukey = mu.mukey
+          INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey %s
           GROUP BY %s, comppct_r ORDER BY SUM(comppct_r) over(partition by %s) DESC) AS %s",
-          property, property, property, property)
+          property, 
+          ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"), 
+          property, property, property)
   }
 
   .property_min_max <- function(property, FUN) {
-    sprintf("(SELECT TOP 1 %s (chm1.%s) FROM component AS cm1
-           INNER JOIN chorizon AS chm1 ON cm1.cokey = chm1.cokey AND
-           cm1.cokey = c.cokey
-           AND CASE
-           WHEN chm1.hzname LIKE '%%O%%' AND hzdept_r <10 THEN 2
-           WHEN chm1.hzname LIKE '%%r%%' THEN 2
-           WHEN chm1.hzname LIKE '%%' THEN 1 ELSE 1 END = 1) AS %s",
-           FUN, property, property)
+    sprintf("(SELECT TOP 1 %s(chm1.%s) FROM component AS cm1
+           INNER JOIN chorizon AS chm1 ON 
+            cm1.cokey = chm1.cokey 
+            AND cm1.cokey = c.cokey 
+            AND CASE
+             WHEN chm1.hzname LIKE '%%O%%' AND hzdept_r <10 THEN 2
+             WHEN chm1.hzname LIKE '%%r%%' THEN 2
+             WHEN chm1.hzname LIKE '%%' THEN 1 ELSE 1 END = 1) AS %s",
+           FUN, property,
+           property)
   }
 
   .property_dominant_component_numeric <- function(property, top_depth, bottom_depth, where_clause) {
     # dominant component numeric is a more specific case of weighted average
-    .property_weighted_average(property, top_depth, bottom_depth, where_clause, dominant = TRUE)
+    .property_weighted_average(property, top_depth, bottom_depth, where_clause, dominant = TRUE, miscellaneous_areas = FALSE)
   }
 
-  .property_weighted_average <- function(property, top_depth, bottom_depth, where_clause, dominant = FALSE) {
+  .property_weighted_average <- function(property, top_depth, bottom_depth, where_clause, dominant = FALSE, miscellaneous_areas = FALSE) {
 
     n <- 1:length(property)
     stopifnot(n > 0)
@@ -373,12 +381,13 @@ get_SDA_property <-
             INTO #kitchensink
             FROM legend  AS lks
             INNER JOIN  mapunit AS muks ON muks.lkey = lks.lkey AND %s
-            SELECT mu1.mukey, cokey, comppct_r,
+            SELECT mu1.mukey, cokey, comppct_r,  
             SUM (comppct_r) over(partition by mu1.mukey ) AS SUM_COMP_PCT
             INTO #comp_temp
             FROM legend  AS l1
             INNER JOIN mapunit AS mu1 ON mu1.lkey = l1.lkey AND %s
             INNER JOIN component AS c1 ON c1.mukey = mu1.mukey AND majcompflag = 'Yes'
+            %s
             %s
             SELECT cokey, SUM_COMP_PCT, CASE WHEN comppct_r = SUM_COMP_PCT THEN 1
             ELSE CAST (CAST (comppct_r AS  decimal (5,2)) / CAST (SUM_COMP_PCT AS decimal (5,2)) AS decimal (5,2)) END AS WEIGHTED_COMP_PCT
@@ -392,8 +401,8 @@ get_SDA_property <-
             %s
             INTO #main
             FROM legend  AS l
-            INNER JOIN  mapunit AS mu ON mu.lkey = l.lkey AND %s
-            INNER JOIN  component AS c ON c.mukey = mu.mukey
+            INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
+            INNER JOIN component AS c ON c.mukey = mu.mukey 
             INNER JOIN chorizon AS ch ON ch.cokey=c.cokey AND hzname NOT LIKE '%%O%%' AND hzname NOT LIKE '%%r%%'
             AND hzdepb_r > %s AND hzdept_r < %s
             INNER JOIN chtexturegrp AS cht ON ch.chkey=cht.chkey  WHERE cht.rvindicator = 'yes' AND  ch.hzdept_r IS NOT NULL
@@ -403,6 +412,7 @@ get_SDA_property <-
             %s",
             gsub("^(l|mu)\\.","\\1ks.", where_clause),
             gsub("^(l|mu)\\.","\\11.", where_clause),
+            ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'"),
             ifelse(dominant, "            AND c1.cokey = (SELECT TOP 1 c2.cokey FROM component AS c2
                             INNER JOIN mapunit AS mm1 ON
                               c2.mukey = mm1.mukey AND c2.mukey = mu1.mukey
@@ -466,19 +476,21 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
             where_clause),
 
     # weighted average (.weighted_average handles vector agg_property)
-    "WEIGHTED AVERAGE" = .property_weighted_average(agg_property, top_depth, bottom_depth, where_clause),
+    "WEIGHTED AVERAGE" = .property_weighted_average(agg_property, top_depth, bottom_depth, where_clause, miscellaneous_areas = miscellaneous_areas),
 
     "MIN/MAX" =
       sprintf("SELECT areasymbol, musym, muname, mu.mukey AS mukey, %s
                FROM legend AS l
                INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
-               INNER JOIN component AS c ON c.mukey = mu.mukey AND
+               LEFT JOIN component AS c ON c.mukey = mu.mukey AND 
                                              c.cokey = (SELECT TOP 1 c1.cokey FROM component AS c1
                                                         INNER JOIN mapunit ON c.mukey = mapunit.mukey AND
                                                                               c1.mukey = mu.mukey
+                                                        %s
                                                         ORDER BY c1.comppct_r DESC, c1.cokey)",
               paste0(sapply(agg_property, function(x) .property_min_max(x, FUN = FUN)), collapse = ", "),
-              where_clause),
+              where_clause,
+              ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'")),
 
     # dominant component (numeric) (.dominant_component_numeric handles vector agg_property)
     "DOMINANT COMPONENT (NUMERIC)" = .property_dominant_component_numeric(agg_property, top_depth, bottom_depth, where_clause),

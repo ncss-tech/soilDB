@@ -2,6 +2,7 @@ target_areas <-  c("CA649", "CA630")
 target_area_rows <- 231 # 1:1 with mukey
 target_area_rows_all <- 1085 # 1:1 with component
 target_area_rows_all_chorizon <- 3033 # 1:1 with chorizon
+n_misc_area_rows <- 9
 
 target_mukeys <- c(463263, 463264)
 
@@ -89,9 +90,17 @@ test_that("SDA properties (min/max) works", {
     property = "Saturated Hydraulic Conductivity - Rep Value",
     method = "Min/Max",
     areasymbols = target_areas,
+    FUN = "MIN",
+    miscellaneous_areas = TRUE
+  )), target_area_rows)
+  
+  expect_equal(nrow(get_SDA_property(
+    property = "Saturated Hydraulic Conductivity - Rep Value",
+    method = "Min/Max",
+    areasymbols = target_areas,
     FUN = "MIN"
   )), target_area_rows)
-
+  
   expect_equal(get_SDA_property(
     property = c("ksat_l","ksat_r","ksat_h"),
     method = "Min/Max",
