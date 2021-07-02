@@ -382,30 +382,29 @@ get_SDA_property <-
             FROM legend  AS lks
             INNER JOIN  mapunit AS muks ON muks.lkey = lks.lkey AND %s
             SELECT mu1.mukey, cokey, comppct_r,  
-            SUM (comppct_r) over(partition by mu1.mukey ) AS SUM_COMP_PCT
+            SUM (comppct_r) OVER (PARTITION BY mu1.mukey) AS SUM_COMP_PCT
             INTO #comp_temp
-            FROM legend  AS l1
+            FROM legend AS l1
             INNER JOIN mapunit AS mu1 ON mu1.lkey = l1.lkey AND %s
             INNER JOIN component AS c1 ON c1.mukey = mu1.mukey AND majcompflag = 'Yes'
             %s
             %s
             SELECT cokey, SUM_COMP_PCT, CASE WHEN comppct_r = SUM_COMP_PCT THEN 1
-            ELSE CAST (CAST (comppct_r AS  decimal (5,2)) / CAST (SUM_COMP_PCT AS decimal (5,2)) AS decimal (5,2)) END AS WEIGHTED_COMP_PCT
+            ELSE CAST (CAST (comppct_r AS decimal (5,2)) / CAST (SUM_COMP_PCT AS decimal (5,2)) AS decimal (5,2)) END AS WEIGHTED_COMP_PCT
             INTO #comp_temp3
             FROM #comp_temp
             SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey, c.cokey AS cokey, ch.chkey/1 AS chkey, compname, hzname, hzdept_r, hzdepb_r, CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS hzdept_r_ADJ,
-            CASE WHEN hzdepb_r > %s  THEN %s ELSE hzdepb_r END AS hzdepb_r_ADJ,
-            CAST (CASE WHEN hzdepb_r > %s  THEN %s ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS decimal (5,2)) AS thickness,
+            CASE WHEN hzdepb_r > %s THEN %s ELSE hzdepb_r END AS hzdepb_r_ADJ,
+            %s, %s,
             comppct_r,
-            CAST (SUM (CASE WHEN hzdepb_r > %s  THEN %s ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END) over(partition by c.cokey) AS decimal (5,2)) AS sum_thickness,
             %s
             INTO #main
-            FROM legend  AS l
+            FROM legend AS l
             INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
             INNER JOIN component AS c ON c.mukey = mu.mukey 
-            INNER JOIN chorizon AS ch ON ch.cokey=c.cokey AND hzname NOT LIKE '%%O%%' AND hzname NOT LIKE '%%r%%'
+            INNER JOIN chorizon AS ch ON ch.cokey = c.cokey AND hzname NOT LIKE '%%O%%' AND hzname NOT LIKE '%%r%%'
             AND hzdepb_r > %s AND hzdept_r < %s
-            INNER JOIN chtexturegrp AS cht ON ch.chkey=cht.chkey  WHERE cht.rvindicator = 'yes' AND  ch.hzdept_r IS NOT NULL
+            INNER JOIN chtexturegrp AS cht ON ch.chkey = cht.chkey  WHERE cht.rvindicator = 'yes' AND  ch.hzdept_r IS NOT NULL
             AND
             texture NOT LIKE '%%PM%%' and texture NOT LIKE '%%DOM' and texture NOT LIKE '%%MPT%%' and texture NOT LIKE '%%MUCK' and texture NOT LIKE '%%PEAT%%' and texture NOT LIKE '%%br%%' and texture NOT LIKE '%%wb%%'
             ORDER BY areasymbol, musym, muname, mu.mukey, comppct_r DESC, cokey,  hzdept_r, hzdepb_r
@@ -419,15 +418,13 @@ get_SDA_property <-
                             ORDER BY c2.comppct_r DESC, c2.cokey)", ""),
             top_depth, top_depth,
             bottom_depth, bottom_depth,
-            bottom_depth, bottom_depth,
-            top_depth, top_depth,
-            bottom_depth, bottom_depth,
-            top_depth, top_depth,
-            paste0(sprintf("CAST (%s AS decimal (5,2)) AS %s", property, property), collapse=", "),
+             paste0(sprintf("CASE WHEN %s is NULL THEN NULL ELSE CAST (CASE WHEN hzdepb_r > %s THEN %s ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS decimal (5,2)) END AS thickness_wt_%s", property, bottom_depth, bottom_depth, top_depth, top_depth, property), collapse=", \n"),
+             paste0(sprintf("CAST (SUM(CAST((CASE WHEN hzdepb_r > %s THEN %s WHEN %s is NULL THEN NULL ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s WHEN %s is NULL THEN NULL ELSE hzdept_r END) AS decimal (5,2))) OVER (PARTITION BY c.cokey) AS decimal (5,2)) AS sum_thickness_%s", bottom_depth, bottom_depth, property, top_depth, top_depth, property, property), collapse=", \n"),
+            paste0(sprintf("CAST(%s AS decimal (5,2)) AS %s", property, property), collapse=", "),
             where_clause,
             top_depth, bottom_depth,
             sprintf("SELECT #main.areasymbol, #main.musym, #main.muname, #main.mukey,
-#main.cokey, #main.chkey, #main.compname, hzname, hzdept_r, hzdepb_r, hzdept_r_ADJ, hzdepb_r_ADJ, thickness, sum_thickness, %s, comppct_r, SUM_COMP_PCT, WEIGHTED_COMP_PCT, %s
+#main.cokey, #main.chkey, #main.compname, hzname, hzdept_r, hzdepb_r, hzdept_r_ADJ, hzdepb_r_ADJ, %s, %s, comppct_r, SUM_COMP_PCT, WEIGHTED_COMP_PCT, %s
                         INTO #comp_temp2
                         FROM #main
                         INNER JOIN #comp_temp3 ON #comp_temp3.cokey=#main.cokey
@@ -448,9 +445,10 @@ get_SDA_property <-
                               LEFT OUTER JOIN #last_step ON #last_step.mukey = #last_step2.mukey
                                   GROUP BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
                                   ORDER BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s",
+paste0(sprintf("thickness_wt_%s, sum_thickness_%s", property, property), collapse = ", "),
 paste0(property, collapse = ", "),
-paste0(sprintf("SUM((thickness/sum_thickness) * %s) OVER (PARTITION BY #main.cokey) AS DEPTH_WEIGHTED_AVERAGE%s",
-               property, n), collapse = ", "),
+paste0(sprintf("SUM((thickness_wt_%s / sum_thickness_%s) * %s) OVER (PARTITION BY #main.cokey) AS DEPTH_WEIGHTED_AVERAGE%s",
+               property, property, property, n), collapse = ", "),
 paste0(sprintf("WEIGHTED_COMP_PCT * DEPTH_WEIGHTED_AVERAGE%s AS COMP_WEIGHTED_AVERAGE%s", n, n), collapse = ", "),
 paste0(sprintf("DEPTH_WEIGHTED_AVERAGE%s", n), collapse = ", "),
 paste0(sprintf("CAST (SUM (COMP_WEIGHTED_AVERAGE%s) OVER (PARTITION BY #kitchensink.mukey) AS decimal(5,2)) AS %s",
