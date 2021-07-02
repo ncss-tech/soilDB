@@ -30,7 +30,21 @@
   if (nrow(hz_data) == 0) {
     stop('No site/pedons objects in local NASIS DB or selected set.', call. = FALSE)
   }
-
+  
+  ## https://github.com/ncss-tech/soilDB/issues/44
+  # optionally load phlabresults table
+  if (lab) {
+    phlabresults <- .get_phlabresults_data_from_NASIS_db(SS = SS, dsn = dsn)
+    
+    # TODO: perform phlabresults aggregation method(s) here
+    
+    hz_data <- merge(hz_data,
+                     phlabresults,
+                     by = c("peiid", "phiid"),
+                     all = TRUE,
+                     sort = FALSE)
+  }
+  
   # data that cannot be effectively flattened in SQL
 
   extended_data <- get_extended_data_from_NASIS_db(SS = SS,
@@ -259,13 +273,6 @@
   if (exists('top.bottom.equal', envir = soilDB.env))
     if (length(get('top.bottom.equal', envir = soilDB.env)) > 0)
       message("-> QC: equal hz top and bottom depths: use `get('top.bottom.equal', envir=soilDB.env)` for related pedon IDs")
-
-  ## https://github.com/ncss-tech/soilDB/issues/44
-  # optionally load phlabresults table
-  if (lab) {
-    phlabresults <- .get_phlabresults_data_from_NASIS_db(SS = SS)
-    horizons(hz_data) <- phlabresults
-  }
 
   # done
   return(hz_data)
