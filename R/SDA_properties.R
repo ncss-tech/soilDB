@@ -350,16 +350,16 @@ get_SDA_property <-
     sprintf("(SELECT TOP 1 %s FROM mapunit
           INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey %s
           GROUP BY %s, comppct_r ORDER BY SUM(comppct_r) over(partition by %s) DESC) AS %s",
-          property,
-          ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
+          property, 
+          ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"), 
           property, property, property)
   }
 
   .property_min_max <- function(property, FUN) {
     sprintf("(SELECT TOP 1 %s(chm1.%s) FROM component AS cm1
-           INNER JOIN chorizon AS chm1 ON
-            cm1.cokey = chm1.cokey
-            AND cm1.cokey = c.cokey
+           INNER JOIN chorizon AS chm1 ON 
+            cm1.cokey = chm1.cokey 
+            AND cm1.cokey = c.cokey 
             AND CASE
              WHEN chm1.hzname LIKE '%%O%%' AND hzdept_r <10 THEN 2
              WHEN chm1.hzname LIKE '%%r%%' THEN 2
@@ -381,7 +381,7 @@ get_SDA_property <-
             INTO #kitchensink
             FROM legend  AS lks
             INNER JOIN  mapunit AS muks ON muks.lkey = lks.lkey AND %s
-            SELECT mu1.mukey, cokey, comppct_r,
+            SELECT mu1.mukey, cokey, comppct_r,  
             SUM (comppct_r) over(partition by mu1.mukey ) AS SUM_COMP_PCT
             INTO #comp_temp
             FROM legend  AS l1
@@ -402,11 +402,12 @@ get_SDA_property <-
             INTO #main
             FROM legend  AS l
             INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
-            INNER JOIN component AS c ON c.mukey = mu.mukey
+            INNER JOIN component AS c ON c.mukey = mu.mukey 
             INNER JOIN chorizon AS ch ON ch.cokey=c.cokey AND hzname NOT LIKE '%%O%%' AND hzname NOT LIKE '%%r%%'
             AND hzdepb_r > %s AND hzdept_r < %s
             INNER JOIN chtexturegrp AS cht ON ch.chkey=cht.chkey  WHERE cht.rvindicator = 'yes' AND  ch.hzdept_r IS NOT NULL
-            AND texture NOT LIKE '%%PM%%' AND texture NOT LIKE '%%DOM' AND texture NOT LIKE '%%MPT%%' AND texture NOT LIKE '%%MUCK' AND texture NOT LIKE '%%PEAT%%' AND texture NOT LIKE '%%br%%' AND texture NOT LIKE '%%wb%%' AND texdesc NOT LIKE '%%indurated%%' AND texture NOT LIKE '%%cem%%'
+            AND
+            texture NOT LIKE '%%PM%%' and texture NOT LIKE '%%DOM' and texture NOT LIKE '%%MPT%%' and texture NOT LIKE '%%MUCK' and texture NOT LIKE '%%PEAT%%' and texture NOT LIKE '%%br%%' and texture NOT LIKE '%%wb%%'
             ORDER BY areasymbol, musym, muname, mu.mukey, comppct_r DESC, cokey,  hzdept_r, hzdepb_r
             %s",
             gsub("^(l|mu)\\.","\\1ks.", where_clause),
@@ -445,8 +446,8 @@ get_SDA_property <-
                             SELECT #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
                               FROM #last_step2
                               LEFT OUTER JOIN #last_step ON #last_step.mukey = #last_step2.mukey
-                              GROUP BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
-                              ORDER BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s",
+                                  GROUP BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
+                                  ORDER BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s",
 paste0(property, collapse = ", "),
 paste0(sprintf("SUM((thickness/sum_thickness) * %s) OVER (PARTITION BY #main.cokey) AS DEPTH_WEIGHTED_AVERAGE%s",
                property, n), collapse = ", "),
@@ -481,7 +482,7 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
       sprintf("SELECT areasymbol, musym, muname, mu.mukey AS mukey, %s
                FROM legend AS l
                INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
-               LEFT JOIN component AS c ON c.mukey = mu.mukey AND
+               LEFT JOIN component AS c ON c.mukey = mu.mukey AND 
                                              c.cokey = (SELECT TOP 1 c1.cokey FROM component AS c1
                                                         INNER JOIN mapunit ON c.mukey = mapunit.mukey AND
                                                                               c1.mukey = mu.mukey
