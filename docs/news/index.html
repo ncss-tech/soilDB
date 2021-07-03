@@ -119,6 +119,13 @@
 <a href="#soildb-263-2021-06-16" class="anchor"></a>soilDB 2.6.3 (2021-06-16)<small> Unreleased </small>
 </h1>
 <ul>
+<li>
+<code><a href="../reference/SDA_query.html">SDA_query()</a></code> and all functions that call <code><a href="../reference/SDA_query.html">SDA_query()</a></code> get proper column class handling (related to <a href='https://github.com/ncss-tech/soilDB/issues/190'>#190</a>), however:
+<ul>
+<li>be careful with the use of CAST(): unknown datatypes may not be correctly interpreted</li>
+<li>previous column classes that were incorrectly guessed by <code><a href="https://rdrr.io/r/utils/type.convert.html">type.convert()</a></code> may have changed (e.g. <code>component.wei</code>)</li>
+</ul>
+</li>
 <li>Added new columns to soil classification (“SC”) table result of <code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code>; now including taxonomic mineralogy class which may contain multiple parts for series with strongly contrasting control sections</li>
 <li>Updates to <code>get_SDA_*()</code> methods
 <ul>
