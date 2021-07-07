@@ -364,11 +364,7 @@ get_SDA_property <-
     sprintf("(SELECT TOP 1 %s(chm1.%s) FROM component AS cm1
            INNER JOIN chorizon AS chm1 ON 
             cm1.cokey = chm1.cokey 
-            AND cm1.cokey = c.cokey 
-            AND CASE
-             WHEN chm1.hzname LIKE '%%O%%' AND hzdept_r < 10 THEN 2
-             WHEN chm1.hzname LIKE '%%r%%' THEN 2
-             WHEN chm1.hzname LIKE '%%' THEN 1 ELSE 1 END = 1) AS %s",
+            AND cm1.cokey = c.cokey) AS %s",
            FUN, property,
            property)
   }
