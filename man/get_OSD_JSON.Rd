@@ -12,7 +12,7 @@ get_OSD_JSON(series, base_url = NULL)
 \item{base_url}{Optional: alternate JSON repository path. Default: \code{NULL} uses \url{https://github.com/ncss-tech/SoilKnowledgeBase}.}
 }
 \value{
-A \code{data.frame} with 1 row per series, and 1 column per "section" in the OSD as defined in National Soil Survey Handbook
+A \code{data.frame} with 1 row per series, and 1 column per "section" in the OSD as defined in National Soil Survey Handbook. Includes two list columns containing \emph{data.frame} \code{SITE} and \code{HORIZONS} parsed from each Typical Pedon narrative.
 }
 \description{
 Fetch Official Series Description Raw Data in JSON format
@@ -25,7 +25,7 @@ The default \code{base_url} is to "raw" JSON files stored in a GitHub repository
 \donttest{
 if(requireNamespace("curl") &
    curl::has_internet()) {
-   
+
 series <- c("Musick", "Hector", "Chewacla")
 get_OSD_JSON(series)
 }
