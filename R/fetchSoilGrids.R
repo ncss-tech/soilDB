@@ -25,9 +25,10 @@
 #'                            lon = c(-120.3, -121.5), 
 #'                            stringsAsFactors = FALSE)
 #'
-#'   x <- fetchSoilGrids(your.points)
+#'   x <- try(fetchSoilGrids(your.points))
 #'  
-#'   plotSPC(x, name = NA, color = "socQ50")
+#'   if (!inherits(x, 'try-error'))
+#'    plotSPC(x, name = NA, color = "socQ50")
 #'  }
 #' }
 fetchSoilGrids <- function(locations, loc.names = c("id","lat","lon")) {

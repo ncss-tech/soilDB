@@ -32,9 +32,10 @@ The depth intervals returned are: \code{"0-5cm", "5-15cm", "15-30cm", "30-60cm",
                            lon = c(-120.3, -121.5), 
                            stringsAsFactors = FALSE)
 
-  x <- fetchSoilGrids(your.points)
+  x <- try(fetchSoilGrids(your.points))
  
-  plotSPC(x, name = NA, color = "socQ50")
+  if (!inherits(x, 'try-error'))
+   plotSPC(x, name = NA, color = "socQ50")
  }
 }
 }
