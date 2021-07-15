@@ -11,7 +11,10 @@ test_that("fetchSoilGrids() works as expected", {
                             lon = c(-120.3, -121.5),
                             stringsAsFactors = FALSE)
 
-  res <- fetchSoilGrids(your.points)
+  res <- try(fetchSoilGrids(your.points), silent = TRUE)
+  
+  if (inherits(res, 'try-error'))
+    skip("SoilGrids API not accessible")
 
   # contents as expected
   expect_true(aqp::spc_in_sync(res)$valid)
