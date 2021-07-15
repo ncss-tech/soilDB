@@ -13,13 +13,15 @@ get_SDA_property(
   top_depth = 0,
   bottom_depth = 200,
   FUN = NULL,
+  include_minors = FALSE,
+  miscellaneous_areas = FALSE,
   query_string = FALSE
 )
 }
 \arguments{
 \item{property}{character vector of labels from property dictionary tables (see details) OR physical column names from \code{component} or \code{chorizon} table.}
 
-\item{method}{one of: "Dominant Component (Category)", "Weighted Average", "Min/Max", "Dominant Component (Numeric)", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.}
+\item{method}{one of: "Dominant Component (Category)", "Dominant Component (Numeric)", "Weighted Average", "MIN", "MAX", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.}
 
 \item{areasymbols}{vector of soil survey area symbols}
 
@@ -29,7 +31,11 @@ get_SDA_property(
 
 \item{bottom_depth}{Default: \code{200} (centimeters); a numeric value for lower boundary (bottom depth) used only for method="weighted average" and "dominant component (numeric)"}
 
-\item{FUN}{Optional: character representing SQL aggregation function either "MIN" or "MAX" used only for method="min/max"}
+\item{FUN}{Optional: character representing SQL aggregation function either "MIN" or "MAX" used only for method="min/max"; this argument is calculated internally if you specify \code{method="MIN"} or \code{method="MAX"}}
+
+\item{include_minors}{Include minor components in "Weighted Average" results?}
+
+\item{miscellaneous_areas}{Include miscellaneous areas  (non-soil components) in "Weighted Average", "MIN" or "MAX" results?}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 }
