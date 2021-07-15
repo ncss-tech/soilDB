@@ -45,10 +45,15 @@ get_OSD <- function(series, base_url = NULL, result = c("json","html","txt"), ve
   
   # get HTML content and strip blank / NA lines
   res <- sapply(.seriesNameToURL(series, base_url = base_url), function(x) {
-    htmlres <- try(rvest::html_text(rvest::read_html(x)), silent = !verbose)
-    
-    if (inherits(htmlres, 'try-error'))
+
+    # if the URL is bad a warning with 404 will be generated
+    u <- suppressWarnings(try(url(x, "rb"), silent = TRUE))
+    if (inherits(u, 'try-error'))
       return(NULL)
+    
+    htmlres <- rvest::html_text(rvest::read_html(u, silent = !verbose))
+    close(u)
+    
     
     .stripOSDContents(readLines(textConnection(htmlres)))
   })
