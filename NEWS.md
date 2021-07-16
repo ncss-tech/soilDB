@@ -1,16 +1,25 @@
-# soilDB 2.6.3 (2021-06-16)
+# soilDB 2.6.3 (2021-07-16)
  * `SDA_query()` and all functions that call `SDA_query()` get proper column class handling (related to #190), however:
    - be careful with the use of CAST(): unknown datatypes may not be correctly interpreted
    - previous column classes that were incorrectly guessed by `type.convert()` may have changed (e.g. `component.wei`)
+ * `SDA_spatialQuery()` can now be used to return soil survey area symbols or geometry using `what="areasymbol"` or `what="sapolygon"`, respectively
  * Added new columns to soil classification ("SC") table result of `get_soilseries_from_NASIS()`; now including taxonomic mineralogy class which may contain multiple parts for series with strongly contrasting control sections
  * Updates to `get_SDA_*()` methods 
    - Extends `get_SDA_property(property = ...)` and `get_SDA_interpretation(rulename = ...)` vectorization over property/rulename to work with any aggregation method. 
-     - Now supports: Dominant Condition, Min/Max, Dominant Component, Weighted Average
-   - Add `query_string` argument (default: `FALSE`). Set as `TRUE` to skip submitting query to SDA returning a string of the query that would have been sent instead of data.frame result
+     - Now supports: Dominant Condition, Min, Max, Dominant Component, Weighted Average
+   - Add `query_string` argument (default: `FALSE`). Set as `TRUE` to skip submitting query to SDA, instead returning a string of the query that would have been sent instead of _data.frame_ result
+   - `get_SDA_property`: better handling of NULL, miscellaneous areas, and property-specific weighting
+     - Remove `ISNULL(x, 0)` logic that affected weighted averages in presence of missing data
+     - Conditional calculation of horizon weights considering NULL values for requested properties (unique weights for each property)
+     - New default argument `include_minors=FALSE` includes only components where `majcompflag = 'Yes'` in result
+     - New default argument `miscellaneous_areas=FALSE` removes miscellaneous land types `compkind` values from result
+     - Organic and bedrock layers are no longer removed from "Weighted Average", "MIN" or "MAX" aggregations
+   - `get_SDA_interpretation`: added argument not_rated_value with default value of `NA` to set "not rated"" values across methods/queries. For backwards compatibility with original SQL use `not_rated_value = 99.0`
    - Standardizing MUKEY column name (and other keys) as lowercase in results 
    - More informative error messages for bad input / arguments inconsistent with specified method
-   - `get_SDA_property`: Remove `ISNULL(x, 0)` logic that affected weighted averages in presence of missing data
-   - `get_SDA_interpretation`: added argument not_rated_value with default value of `NA` to set "not rated"" values across methods/queries. For backwards compatibility with original SQL use `not_rated_value = 99.0`
+ * Thanks to @hammerly who pointed out weighted averaging of NASIS `phlabresults` wasn't working as expected and for highlighting some more improvements (https://github.com/ncss-tech/soilDB/issues/192)
+ * `get_OSD()` TXT and HTML formats now supported (in addition to JSON) through a common function interface
+ * Added `get_NASIS_table_key_by_name()` `get_NASIS_fkey_by_name()`, `get_NASIS_pkeyref_by_name()`, `get_NASIS_pkey_by_name()`, `get_NASIS_table_name_by_purpose()` methods for helping get information on primary/foreign keys and thematic groups of NASIS tables (useful for creating SQLite/external snapshots of NASIS tables)
  
 # soilDB 2.6.2 (2021-05-14)
  *  Added `formativeElement` argument to `taxaExtent()` (SoilWeb taxon extent function)
