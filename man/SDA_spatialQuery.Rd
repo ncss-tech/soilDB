@@ -10,16 +10,18 @@ SDA_spatialQuery(
   geom,
   what = "mukey",
   geomIntersection = FALSE,
-  db = c("SSURGO", "STATSGO")
+  db = c("SSURGO", "STATSGO", "SAPOLYGON")
 )
 }
 \arguments{
 \item{geom}{a Spatial* object, with valid CRS. May contain multiple
 features.}
 
-\item{what}{a character vector specifying what to return. 'mukey':
-\code{data.frame} with intersecting map unit keys and names, \code{geom}
-overlapping or intersecting map unit polygons}
+\item{what}{a character vector specifying what to return. \code{'mukey'}:
+\code{data.frame} with intersecting map unit keys and names, \code{'mupolygon'}
+overlapping or intersecting map unit polygons from selected database, \code{'areasymbol'}:
+\code{data.frame} with intersecting soil survey areas, \code{'sapolygon'}:
+overlapping or intersecting soil survey area polygons (SSURGO only)}
 
 \item{geomIntersection}{logical; \code{FALSE}: overlapping map unit polygons
 returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is
@@ -27,7 +29,7 @@ returned.}
 
 \item{db}{a character vector identifying the Soil Geographic Databases
 ('SSURGO' or 'STATSGO') to query. Option \var{STATSGO} currently works only
-in combination with \code{what = "geom"}.}
+in combination with \code{what = "mupolygon"}.}
 }
 \value{
 A \code{data.frame} if \code{what = 'mukey'}, otherwise
@@ -44,9 +46,7 @@ returned. See details.
 Queries for map unit keys are always more efficient vs. queries for
 overlapping or intersecting (i.e. least efficient) features. \code{geom} is
 converted to GCS / WGS84 as needed. Map unit keys are always returned when
-using \code{what = "geom"}.
-
-There is a 100,000 record limit and 32Mb JSON serializer limit, per query.
+using \code{what = "mupolygon"}.
 
 SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO
 (generalized soil survey, 1:250,000 scale) data are stored together within
