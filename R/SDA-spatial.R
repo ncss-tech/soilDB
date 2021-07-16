@@ -140,7 +140,25 @@ FROM geom_data;
                
              }
       )
-    }
+    },
+    SAPOLYGON = { switch(method,
+                        intersection = "
+  WITH geom_data (geom, mukey) AS (
+  SELECT 
+  sapolygongeo.STIntersection( geometry::STGeomFromText('%s', 4326) ) AS geom, areasymbol
+  FROM sapolygon
+  WHERE sapolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1
+)
+SELECT 
+geom.STAsText() AS geom, mukey,
+GEOGRAPHY::STGeomFromWKB(geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).STArea() * 0.000247105 AS area_ac
+FROM geom_data;
+  ",
+                        
+                        overlap = "SELECT 
+                                     sapolygongeo.STAsText() AS geom, areasymbol
+                                     FROM sapolygon
+                                     WHERE sapolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326) ) = 1")}
   )
   
   return(res)
@@ -173,9 +191,7 @@ FROM geom_data;
 #' Queries for map unit keys are always more efficient vs. queries for
 #' overlapping or intersecting (i.e. least efficient) features. \code{geom} is
 #' converted to GCS / WGS84 as needed. Map unit keys are always returned when
-#' using \code{what = "geom"}.
-#' 
-#' There is a 100,000 record limit and 32Mb JSON serializer limit, per query.
+#' using \code{what = "mupolygon"}.
 #' 
 #' SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO
 #' (generalized soil survey, 1:250,000 scale) data are stored together within
@@ -187,15 +203,17 @@ FROM geom_data;
 #' @aliases SDA_spatialQuery SDA_make_spatial_query SDA_query_features
 #' @param geom a Spatial* object, with valid CRS. May contain multiple
 #' features.
-#' @param what a character vector specifying what to return. 'mukey':
-#' \code{data.frame} with intersecting map unit keys and names, \code{geom}
-#' overlapping or intersecting map unit polygons
+#' @param what a character vector specifying what to return. `'mukey'`:
+#' \code{data.frame} with intersecting map unit keys and names, `'mupolygon'`
+#' overlapping or intersecting map unit polygons from selected database, `'areasymbol'`:
+#' \code{data.frame} with intersecting soil survey areas, `'sapolygon'`:
+#' overlapping or intersecting soil survey area polygons (SSURGO only) 
 #' @param geomIntersection logical; \code{FALSE}: overlapping map unit polygons
 #' returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is
 #' returned.
 #' @param db a character vector identifying the Soil Geographic Databases
 #' ('SSURGO' or 'STATSGO') to query. Option \var{STATSGO} currently works only
-#' in combination with \code{what = "geom"}.
+#' in combination with \code{what = "mupolygon"}. 
 #' @return A \code{data.frame} if \code{what = 'mukey'}, otherwise
 #' \code{SpatialPolygonsDataFrame} object.
 #' @note Row-order is not preserved across features in \code{geom} and returned
@@ -345,24 +363,41 @@ FROM geom_data;
 #' 
 #' 
 #' @export SDA_spatialQuery
-SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE,
-  db = c("SSURGO", "STATSGO")) {
-
+SDA_spatialQuery <- function(geom,
+                             what = 'mukey',
+                             geomIntersection = FALSE,
+                             db = c("SSURGO", "STATSGO", "SAPOLYGON")) {
+  what <- tolower(what)
+ 
+  # backwards compatibility with old value of what argument 
+  if (what == 'geom') {
+    what <- "mupolygon"
+  }
+  
   # check for required packages
-  if(!requireNamespace('rgeos', quietly = TRUE))
+  if (!requireNamespace('rgeos', quietly = TRUE))
     stop('please install the `rgeos` package', call.=FALSE)
   
   # sanity checks
-  if(! what %in% c('mukey', 'geom')) {
-    stop("query type must be either 'mukey' or 'geom'",call. = FALSE)
+  if (!what %in% c('mukey', 'mupolygon', 'areasymbol', 'sapolygon')) {
+    stop("query type (argument `what`) must be either 'mukey' / 'areasymbol' (tabular result) OR 'mupolygon' / 'sapolygon' (geometry result)", call. = FALSE)
   }
 
+  # areasymbol is allowed with db = "SSURGO" (default) and db = "SAPOLYGON"
+  if (what %in% c('areasymbol', 'sapolygon')) {
+    db <- 'SAPOLYGON' # geometry selector uses db argument to specify sapolygon queries
+  }
+  
   db <- match.arg(db)
-
+  
   if (what == "mukey" && db == "STATSGO") {
     stop("query type 'mukey' for 'STATSGO' is not supported", call. = FALSE)
   }
-
+  
+  if (what == 'areasymbol' && db == 'STATSGO') {
+    stop("query type 'areasymbol' for 'STATSGO' is not supported", call. = FALSE)
+  }
+  
   # geom must be an sp object
   if(! inherits(geom, 'Spatial')) {
     stop('`geom` must be a Spatial* object', call. = FALSE)
@@ -383,11 +418,8 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE,
   # use a geometry collection
   wkt <- rgeos::writeWKT(geom, byid = FALSE)
   
-  # slower query, returning geom + mukey
-  # replacement for depreciated SDA_query_features()
-  # 10-30x faster than spatial-returning query by input feature
-  # TODO: this is 15x slower than non-spatial-returning-query in SDA_query_features()
-  if(what == 'geom') {
+  # returning geom + mukey or geom + areasymbol
+  if (what %in% c('mupolygon', 'sapolygon')) {
 
     # return intersection + area
     if(geomIntersection) {
@@ -412,11 +444,7 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE,
   }
   
   # SSURGO only
-  # faster query, returning mukey + muname
-  # replacement for depreciated SDA_make_spatial_query()
-  # ~ 3x faster than SDA_query_features()
-  # TODO: how can we link these back with the source data?
-  if(what == 'mukey') {
+  if (what == 'mukey') {
     q <- sprintf("SELECT mukey, muname
                 FROM mapunit
                 WHERE mukey IN (
@@ -428,6 +456,18 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE,
     res <- suppressMessages(SDA_query(q))
   }
   
+  # SSURGO only
+  if (what == 'areasymbol') {
+    q <- sprintf("SELECT areasymbol
+                FROM sapolygon
+                WHERE sapolygonkey IN (
+                SELECT DISTINCT sapolygonkey from SDA_Get_Sapolygonkey_from_intersection_with_WktWgs84('%s')
+                )", wkt)
+    
+    # single query for all of the features
+    # note that row-order / number of rows in results may not match geom
+    res <- suppressMessages(SDA_query(q))
+  }
   
   return(res)
 }
@@ -435,30 +475,30 @@ SDA_spatialQuery <- function(geom, what='mukey', geomIntersection=FALSE,
 
 ## now deprecated
 SDA_make_spatial_query <- function(i) {
-  
+
   .Deprecated(new = 'SDA_spatialQuery')
-  
+
   # check for required packages
   if(!requireNamespace('rgeos', quietly = TRUE))
     stop('please install the `rgeos` package', call.=FALSE)
-  
+
   # convert single feature to WKT
   i.wkt <- rgeos::writeWKT(i, byid = FALSE)
-  
+
   # programatically generate query
   q <- paste0("SELECT mukey, muname
               FROM mapunit
               WHERE mukey IN (
               SELECT DISTINCT mukey from SDA_Get_Mukey_from_intersection_with_WktWgs84('", i.wkt, "')
               )")
-  
+
   # send query, messages aren't useful here
   res <- suppressMessages(SDA_query(q))
-  
+
   # check for no data
   if(is.null(res))
     res <- NA
-  
+
   # done
   return(res)
 }
@@ -469,19 +509,19 @@ SDA_make_spatial_query <- function(i) {
 # id is the name of an attribute that contains a unique ID for each feature
 ## now deprecated
 SDA_query_features <- function(x, id='pedon_id') {
-  
+
   .Deprecated(new = 'SDA_spatialQuery')
-  
+
   # sanity check: ensure that the ID is unique
   if(length(x[[id]]) != length(unique(x[[id]])))
     stop('id is not unique')
-  
+
   # transform to GCS WGS84 if needed
   target.prj <- "+proj=longlat +datum=WGS84"
   if(proj4string(x) != target.prj) {
     geom <- spTransform(x, CRS(target.prj))
   }
-  
+
   # iterate over features and save to list
   l <- list()
   n <- length(geom)
@@ -497,7 +537,7 @@ SDA_query_features <- function(x, id='pedon_id') {
     setTxtProgressBar(pb, i)
   }
   close(pb)
-  
+
   # convert to data.frame, there may be > 1 row / feature when using lines / polygons
   d <- ldply(l)
   return(d)
