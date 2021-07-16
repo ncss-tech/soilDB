@@ -371,6 +371,7 @@ SDA_spatialQuery <- function(geom,
  
   # backwards compatibility with old value of what argument 
   if (what == 'geom') {
+    message("converting what='geom' to what='mupolygon'")
     what <- "mupolygon"
   }
   
@@ -404,13 +405,13 @@ SDA_spatialQuery <- function(geom,
   }
   
   # geom must have a valid CRS
-  if(is.na(proj4string(geom))) {
+  if (is.na(suppressWarnings(proj4string(geom)))) {
     stop('`geom` must have a valid CRS', call. = FALSE)
   }
   
   # CRS conversion if needed
   target.prj <- "+proj=longlat +datum=WGS84"
-  if(proj4string(geom) != target.prj) {
+  if (suppressWarnings(proj4string(geom)) != target.prj) {
     geom <- spTransform(geom, CRS(target.prj))
   }
   
