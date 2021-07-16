@@ -77,7 +77,13 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
   expect_true(inherits(res, 'data.frame'))
   expect_equal(nrow(res), 1)
   expect_match(res$muname, 'Diablo')
-
+  
+  # test with what = "sapolygon" 
+  res <- suppressWarnings(SDA_spatialQuery(p, what = "areasymbol"))
+  expect_true(inherits(res, 'data.frame'))
+  expect_equal(nrow(res), 1)
+  expect_match(res$areasymbol, 'CA641')
+  
 })
 
 
@@ -98,6 +104,13 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   # test with db = "STATSGO"
   res <- suppressWarnings(SDA_spatialQuery(p, what = 'geom', db = "STATSGO"))
 
+  # testing known values
+  expect_true(inherits(res, 'SpatialPolygonsDataFrame'))
+  expect_equal(nrow(res), 1)
+  
+  # test with what = "sapolygon" 
+  res <- suppressWarnings(SDA_spatialQuery(p, what = "sapolygon"))
+  
   # testing known values
   expect_true(inherits(res, 'SpatialPolygonsDataFrame'))
   expect_equal(nrow(res), 1)
