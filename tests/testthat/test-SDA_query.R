@@ -71,12 +71,17 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
 
   skip_on_cran()
 
-  res <- suppressWarnings(SDA_spatialQuery(p, what = 'mukey'))
-
-  # testing known values
-  expect_true(inherits(res, 'data.frame'))
-  expect_equal(nrow(res), 1)
-  expect_match(res$muname, 'Diablo')
+  # test first using an sf object converted internally to sp
+  skip_if_not_installed("sf")
+  
+  if (requireNamespace("sf")) {
+    res <- suppressWarnings(SDA_spatialQuery(sf::st_as_sf(p), what = 'mukey'))
+  
+    # testing known values
+    expect_true(inherits(res, 'data.frame'))
+    expect_equal(nrow(res), 1)
+    expect_match(res$muname, 'Diablo')
+  }
   
   # test with what = "sapolygon" 
   res <- suppressWarnings(SDA_spatialQuery(p, what = "areasymbol"))

@@ -368,7 +368,17 @@ SDA_spatialQuery <- function(geom,
                              geomIntersection = FALSE,
                              db = c("SSURGO", "STATSGO", "SAPOLYGON")) {
   what <- tolower(what)
- 
+  db <- toupper(db)
+  
+  # sf support
+  return_sf <- FALSE
+  if (inherits(geom, 'sf') || inherits(geom, 'sfc')) {
+    if (requireNamespace("sf")) {
+      geom <- sf::as_Spatial(geom)
+      return_sf <- TRUE
+    }
+  }
+  
   # backwards compatibility with old value of what argument 
   if (what == 'geom') {
     message("converting what='geom' to what='mupolygon'")
@@ -468,6 +478,10 @@ SDA_spatialQuery <- function(geom,
     # single query for all of the features
     # note that row-order / number of rows in results may not match geom
     res <- suppressMessages(SDA_query(q))
+  }
+  
+  if (inherits(res, 'Spatial') && return_sf) {
+    res <- sf::st_as_sf(res)
   }
   
   return(res)
