@@ -132,7 +132,7 @@ returned. See details.</p>
   <span class='va'>geom</span>,
   what <span class='op'>=</span> <span class='st'>"mukey"</span>,
   geomIntersection <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  db <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"SSURGO"</span>, <span class='st'>"STATSGO"</span><span class='op'>)</span>
+  db <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"SSURGO"</span>, <span class='st'>"STATSGO"</span>, <span class='st'>"SAPOLYGON"</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -145,9 +145,11 @@ features.</p></td>
     </tr>
     <tr>
       <th>what</th>
-      <td><p>a character vector specifying what to return. 'mukey':
-<code>data.frame</code> with intersecting map unit keys and names, <code>geom</code>
-overlapping or intersecting map unit polygons</p></td>
+      <td><p>a character vector specifying what to return. <code>'mukey'</code>:
+<code>data.frame</code> with intersecting map unit keys and names, <code>'mupolygon'</code>
+overlapping or intersecting map unit polygons from selected database, <code>'areasymbol'</code>:
+<code>data.frame</code> with intersecting soil survey areas, <code>'sapolygon'</code>:
+overlapping or intersecting soil survey area polygons (SSURGO only)</p></td>
     </tr>
     <tr>
       <th>geomIntersection</th>
@@ -159,7 +161,7 @@ returned.</p></td>
       <th>db</th>
       <td><p>a character vector identifying the Soil Geographic Databases
 ('SSURGO' or 'STATSGO') to query. Option <var>STATSGO</var> currently works only
-in combination with <code>what = "geom"</code>.</p></td>
+in combination with <code>what = "mupolygon"</code>.</p></td>
     </tr>
     </table>
 
@@ -172,8 +174,7 @@ in combination with <code>what = "geom"</code>.</p></td>
     <p>Queries for map unit keys are always more efficient vs. queries for
 overlapping or intersecting (i.e. least efficient) features. <code>geom</code> is
 converted to GCS / WGS84 as needed. Map unit keys are always returned when
-using <code>what = "geom"</code>.</p>
-<p>There is a 100,000 record limit and 32Mb JSON serializer limit, per query.</p>
+using <code>what = "mupolygon"</code>.</p>
 <p>SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO
 (generalized soil survey, 1:250,000 scale) data are stored together within
 SDA. This means that queries that don't specify an area symbol may result in
@@ -329,7 +330,7 @@ results. Polygon area in acres is computed server-side when <code>what =
   font <span class='op'>=</span> <span class='fl'>4</span>
 <span class='op'>)</span>
  <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chkey` to character</span></div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='output co'>#&gt; <span class='warning'>Warning: CRS object has comment, which is lost in output</span></div><div class='img'><img src='SDA_spatialQuery-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; <span class='warning'>Warning: duplicates is set to FALSE and 'mukey' is in WHERE clause. Note: 'mukey' omitted from result.</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chkey` to character</span></div><div class='img'><img src='SDA_spatialQuery-2.png' alt='' width='768' height='475' /></div><div class='img'><img src='SDA_spatialQuery-3.png' alt='' width='768' height='475' /></div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chkey` to character</span></div><div class='output co'>#&gt; <span class='message'>converting what='geom' to what='mupolygon'</span></div><div class='output co'>#&gt; <span class='message'>converting what='geom' to what='mupolygon'</span></div><div class='img'><img src='SDA_spatialQuery-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; <span class='warning'>Warning: duplicates is set to FALSE and 'mukey' is in WHERE clause. Note: 'mukey' omitted from result.</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>empty result set</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>converting profile IDs from integer to character</span></div><div class='output co'>#&gt; <span class='message'>converting horizon IDs in column `chkey` to character</span></div><div class='img'><img src='SDA_spatialQuery-2.png' alt='' width='768' height='475' /></div><div class='img'><img src='SDA_spatialQuery-3.png' alt='' width='768' height='475' /></div><div class='input'><span class='co'># }</span>
 
 
 </div></pre>

@@ -114,9 +114,9 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="soildb-263-2021-06-16" class="section level1">
+    <div id="soildb-263-2021-07-16" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.3">
-<a href="#soildb-263-2021-06-16" class="anchor"></a>soilDB 2.6.3 (2021-06-16)<small> Unreleased </small>
+<a href="#soildb-263-2021-07-16" class="anchor"></a>soilDB 2.6.3 (2021-07-16)<small> Unreleased </small>
 </h1>
 <ul>
 <li>
@@ -126,24 +126,38 @@
 <li>previous column classes that were incorrectly guessed by <code><a href="https://rdrr.io/r/utils/type.convert.html">type.convert()</a></code> may have changed (e.g. <code>component.wei</code>)</li>
 </ul>
 </li>
+<li>
+<code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> can now be used to return soil survey area symbols or geometry using <code>what="areasymbol"</code> or <code>what="sapolygon"</code>, respectively</li>
 <li>Added new columns to soil classification (“SC”) table result of <code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code>; now including taxonomic mineralogy class which may contain multiple parts for series with strongly contrasting control sections</li>
 <li>Updates to <code>get_SDA_*()</code> methods
 <ul>
 <li>Extends <code><a href="../reference/get_SDA_property.html">get_SDA_property(property = ...)</a></code> and <code><a href="../reference/get_SDA_interpretation.html">get_SDA_interpretation(rulename = ...)</a></code> vectorization over property/rulename to work with any aggregation method.
 <ul>
-<li>Now supports: Dominant Condition, Min/Max, Dominant Component, Weighted Average</li>
+<li>Now supports: Dominant Condition, Min, Max, Dominant Component, Weighted Average</li>
 </ul>
 </li>
-<li>Add <code>query_string</code> argument (default: <code>FALSE</code>). Set as <code>TRUE</code> to skip submitting query to SDA returning a string of the query that would have been sent instead of data.frame result</li>
-<li>Standardizing MUKEY column name (and other keys) as lowercase in results</li>
-<li>More informative error messages for bad input / arguments inconsistent with specified method</li>
+<li>Add <code>query_string</code> argument (default: <code>FALSE</code>). Set as <code>TRUE</code> to skip submitting query to SDA, instead returning a string of the query that would have been sent instead of <em>data.frame</em> result</li>
 <li>
-<code>get_SDA_property</code>: Remove <code>ISNULL(x, 0)</code> logic that affected weighted averages in presence of missing data</li>
+<code>get_SDA_property</code>: better handling of NULL, miscellaneous areas, and property-specific weighting
+<ul>
+<li>Remove <code>ISNULL(x, 0)</code> logic that affected weighted averages in presence of missing data</li>
+<li>Conditional calculation of horizon weights considering NULL values for requested properties (unique weights for each property)</li>
+<li>New default argument <code>include_minors=FALSE</code> includes only components where <code>majcompflag = 'Yes'</code> in result</li>
+<li>New default argument <code>miscellaneous_areas=FALSE</code> removes miscellaneous land types <code>compkind</code> values from result</li>
+<li>Organic and bedrock layers are no longer removed from “Weighted Average”, “MIN” or “MAX” aggregations</li>
+</ul>
+</li>
 <li>
 <code>get_SDA_interpretation</code>: added argument not_rated_value with default value of <code>NA</code> to set “not rated”" values across methods/queries. For backwards compatibility with original SQL use <code>not_rated_value = 99.0</code>
 </li>
+<li>Standardizing MUKEY column name (and other keys) as lowercase in results</li>
+<li>More informative error messages for bad input / arguments inconsistent with specified method</li>
 </ul>
 </li>
+<li>Thanks to <a href='https://github.com/hammerly'>@hammerly</a> who pointed out weighted averaging of NASIS <code>phlabresults</code> wasn’t working as expected and for highlighting some more improvements (<a href="https://github.com/ncss-tech/soilDB/issues/192" class="uri">https://github.com/ncss-tech/soilDB/issues/192</a>)</li>
+<li>
+<code><a href="../reference/get_OSD.html">get_OSD()</a></code> TXT and HTML formats now supported (in addition to JSON) through a common function interface</li>
+<li>Added <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_table_key_by_name()</a></code> <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_fkey_by_name()</a></code>, <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_pkeyref_by_name()</a></code>, <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_pkey_by_name()</a></code>, <code><a href="../reference/get_NASIS_table_name_by_purpose.html">get_NASIS_table_name_by_purpose()</a></code> methods for helping get information on primary/foreign keys and thematic groups of NASIS tables (useful for creating SQLite/external snapshots of NASIS tables)</li>
 </ul>
 </div>
     <div id="soildb-262-2021-05-14" class="section level1">

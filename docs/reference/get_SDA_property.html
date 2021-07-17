@@ -129,6 +129,8 @@
   top_depth <span class='op'>=</span> <span class='fl'>0</span>,
   bottom_depth <span class='op'>=</span> <span class='fl'>200</span>,
   FUN <span class='op'>=</span> <span class='cn'>NULL</span>,
+  include_minors <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  miscellaneous_areas <span class='op'>=</span> <span class='cn'>FALSE</span>,
   query_string <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
@@ -141,7 +143,7 @@
     </tr>
     <tr>
       <th>method</th>
-      <td><p>one of: "Dominant Component (Category)", "Weighted Average", "Min/Max", "Dominant Component (Numeric)", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.</p></td>
+      <td><p>one of: "Dominant Component (Category)", "Dominant Component (Numeric)", "Weighted Average", "MIN", "MAX", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.</p></td>
     </tr>
     <tr>
       <th>areasymbols</th>
@@ -161,7 +163,15 @@
     </tr>
     <tr>
       <th>FUN</th>
-      <td><p>Optional: character representing SQL aggregation function either "MIN" or "MAX" used only for method="min/max"</p></td>
+      <td><p>Optional: character representing SQL aggregation function either "MIN" or "MAX" used only for method="min/max"; this argument is calculated internally if you specify <code>method="MIN"</code> or <code>method="MAX"</code></p></td>
+    </tr>
+    <tr>
+      <th>include_minors</th>
+      <td><p>Include minor components in "Weighted Average" results?</p></td>
+    </tr>
+    <tr>
+      <th>miscellaneous_areas</th>
+      <td><p>Include miscellaneous areas  (non-soil components) in "Weighted Average", "MIN" or "MAX" results?</p></td>
     </tr>
     <tr>
       <th>query_string</th>
@@ -545,14 +555,14 @@
 #&gt; 12  2924908         1.37         1.38         1.39
 #&gt; 13  1913607         1.30         1.41         1.52
 #&gt; 14  2425107         1.28         1.39         1.50
-#&gt; 15  2480973         0.80         1.06         1.10
-#&gt; 16  2220266         0.60         0.72         1.00
+#&gt; 15  2480973         0.57         0.75         0.79
+#&gt; 16  2220266         0.39         0.48         0.66
 #&gt; 17  1865918         1.36         1.42         1.49
 #&gt; 18  2450845         1.15         1.31         1.47
 #&gt; 19  2924884         1.33         1.38         1.43
 #&gt; 20  2600460         1.33         1.46         1.58
-#&gt; 21  2220270         0.80         1.06         1.10
-#&gt; 22  2220269         0.60         0.72         1.00
+#&gt; 21  2220270         0.57         0.75         0.79
+#&gt; 22  2220269         0.39         0.48         0.66
 #&gt; 23  2374651         1.42         1.49         1.57
 #&gt; 24  2600527         1.32         1.42         1.52
 #&gt; 25  2600528         1.11         1.36         1.50
@@ -565,21 +575,21 @@
 #&gt; 32  2924887         1.45         1.49         1.53
 #&gt; 33  2600465         1.36         1.47         1.57
 #&gt; 34  2600467         1.35         1.46         1.58
-#&gt; 35  2600469         1.11         1.26         1.41
+#&gt; 35  2600469         0.98         1.12         1.25
 #&gt; 36  2403696         1.51         1.74         1.74
 #&gt; 37  2450478         1.40         1.47         1.53
 #&gt; 38  2766836         1.37         1.42         1.47
 #&gt; 39  2766837         1.37         1.46         1.56
-#&gt; 40  1913590         1.32         1.46         1.60
-#&gt; 41  2924832         1.36         1.44         1.52
-#&gt; 42  1913591         1.36         1.44         1.52
-#&gt; 43  2924831         1.33         1.43         1.54
-#&gt; 44  1913592         1.33         1.43         1.54
+#&gt; 40  1913590         1.14         1.26         1.39
+#&gt; 41  2924832         1.10         1.17         1.24
+#&gt; 42  1913591         1.10         1.17         1.24
+#&gt; 43  2924831         1.22         1.32         1.42
+#&gt; 44  1913592         1.22         1.32         1.42
 #&gt; 45  1900697         1.37         1.45         1.53
-#&gt; 46  2482710         1.27         1.37         1.47
-#&gt; 47  2220273         0.96         0.96         1.22
-#&gt; 48  2220271         0.96         0.96         1.22
-#&gt; 49  2924756         1.43         1.51         1.60
+#&gt; 46  2482710         0.79         0.87         0.94
+#&gt; 47  2220273         0.82         0.82         1.05
+#&gt; 48  2220271         0.82         0.82         1.05
+#&gt; 49  2924756         1.21         1.28         1.36
 #&gt; 50  2924755         1.47         1.50         1.53
 #&gt; 51  2399766         1.37         1.45         1.52
 #&gt; 52  2441253         1.31         1.40         1.49
@@ -589,8 +599,8 @@
 #&gt; 56  2399771         1.33         1.41         1.48
 #&gt; 57  2924701         1.38         1.46         1.54
 #&gt; 58  2924739         1.31         1.41         1.51
-#&gt; 59  2403747         1.29         1.41         1.54
-#&gt; 60  2399773         1.25         1.36         1.49
+#&gt; 59  2403747         1.24         1.36         1.48
+#&gt; 60  2399773         1.15         1.26         1.38
 #&gt; 61  2399774         1.33         1.43         1.53
 #&gt; 62  2399775         1.29         1.42         1.55
 #&gt; 63  2924751         1.28         1.40         1.52
@@ -600,9 +610,9 @@
 #&gt; 67  2450844         1.24         1.37         1.51
 #&gt; 68  2441798         1.33         1.45         1.57
 #&gt; 69  2440240         1.39         1.46         1.53
-#&gt; 70  2440242         1.33         1.41         1.50
-#&gt; 71  1865926         1.37         1.44         1.51
-#&gt; 72  2450843         1.31         1.42         1.54
+#&gt; 70  2440242         1.17         1.25         1.33
+#&gt; 71  1865926         1.31         1.38         1.46
+#&gt; 72  2450843         1.26         1.37         1.48
 #&gt; 73  2426483         1.38         1.44         1.50
 #&gt; 74  1865927         1.29         1.40         1.51
 #&gt; 75  1865928         1.37         1.41         1.45
@@ -619,25 +629,25 @@
 #&gt; 86  1865931         1.36         1.43         1.50
 #&gt; 87  2399780         1.20         1.30         1.41
 #&gt; 88  2924955         1.46         1.52         1.58
-#&gt; 89  2399783         1.35         1.47         1.58
+#&gt; 89  2399783         1.24         1.36         1.46
 #&gt; 90  2924909         1.39         1.46         1.54
-#&gt; 91  1913602         1.32         1.40         1.49
-#&gt; 92  2220301         1.32         1.42         1.51
-#&gt; 93  2452459         1.18         1.30         1.43
+#&gt; 91  1913602         1.07         1.14         1.21
+#&gt; 92  2220301         1.02         1.10         1.17
+#&gt; 93  2452459         1.05         1.16         1.27
 #&gt; 94  2383083         1.30         1.30         1.43
-#&gt; 95  2383084         1.42         1.49         1.58
-#&gt; 96  1913601         1.31         1.41         1.51
+#&gt; 95  2383084         1.31         1.38         1.46
+#&gt; 96  1913601         1.26         1.35         1.45
 #&gt; 97  2424962         1.31         1.38         1.45
-#&gt; 98  2424963         1.23         1.34         1.45
+#&gt; 98  2424963         1.18         1.29         1.39
 #&gt; 99  1913605         1.33         1.40         1.47
 #&gt; 100 1913606         1.32         1.41         1.50
-#&gt; 101 2455490         1.34         1.43         1.52
-#&gt; 102 2483494         1.28         1.41         1.54
-#&gt; 103 2455492         1.25         1.33         1.42
-#&gt; 104 2455495         1.13         1.21         1.42
-#&gt; 105 2455494         1.31         1.46         1.60
+#&gt; 101 2455490         1.29         1.37         1.46
+#&gt; 102 2483494         0.98         1.09         1.20
+#&gt; 103 2455492         1.01         1.08         1.16
+#&gt; 104 2455495         0.79         0.86         1.02
+#&gt; 105 2455494         0.82         0.92         1.02
 #&gt; 106 2436792         1.24         1.34         1.44
-#&gt; 107 2436790         1.16         1.32         1.48
+#&gt; 107 2436790         1.11         1.27         1.42
 #&gt; 108 2403711         1.33         1.44         1.55
 #&gt; 109 2403710           NA           NA           NA
 #&gt; 110 2424959         1.13         1.37         1.48
