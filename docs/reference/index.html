@@ -144,19 +144,13 @@
         <td>
           <p><code><a href="dbConnectNASIS.html">dbConnectNASIS()</a></code> </p>
         </td>
-        <td><p>Create a connection to a local NASIS database</p></td>
+        <td><p>Create local NASIS database connection</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="dbQueryNASIS.html">dbQueryNASIS()</a></code> </p>
         </td>
-        <td><p>Send queries to a NASIS DBIConnection</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dot-dump_NASIS_table.html">.dump_NASIS_table()</a></code> </p>
-        </td>
-        <td><p>Method for "dumping" contents of an entire NASIS table</p></td>
+        <td><p>Query a NASIS DBIConnection</p></td>
       </tr><tr>
         
         <td>
@@ -204,7 +198,7 @@
         <td>
           <p><code><a href="fetchNASISWebReport.html">fetchNASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_component_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_chorizon_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_legend_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_lmuaoverlap_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_mapunit_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_projectmapunit_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_projectmapunit2_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_project_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_progress_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_project_correlation_from_NASISWebReport()</a></code> </p>
         </td>
-        <td><p>Extract component tables from NASIS Web Reports</p></td>
+        <td><p>Get component tables from NASIS Web Reports</p></td>
       </tr><tr>
         
         <td>
@@ -240,7 +234,7 @@
         <td>
           <p><code><a href="fetchSDA_spatial.html">fetchSDA_spatial()</a></code> </p>
         </td>
-        <td><p>Query Soil Data Access and Return Spatial Data</p></td>
+        <td><p>Query Soil Data Access for Spatial Data</p></td>
       </tr><tr>
         
         <td>
@@ -276,25 +270,25 @@
         <td>
           <p><code><a href="get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code> </p>
         </td>
-        <td><p>Extract Soil Color Data from a local NASIS Database</p></td>
+        <td><p>Get Soil Color Data from a local NASIS Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_colors_from_pedon_db.html">get_colors_from_pedon_db()</a></code> </p>
         </td>
-        <td><p>Extract Soil Color Data from a PedonPC Database</p></td>
+        <td><p>Get Soil Color Data from a PedonPC Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_comonth_from_NASIS_db.html">get_comonth_from_NASIS_db()</a></code> </p>
         </td>
-        <td><p>Extract component month data from a local NASIS Database</p></td>
+        <td><p>Get component month data from a local NASIS Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_component_data_from_NASIS_db.html">get_component_data_from_NASIS_db()</a></code> </p>
         </td>
-        <td><p>Extract component data from a local NASIS Database</p></td>
+        <td><p>Get component data from a local NASIS Database</p></td>
       </tr><tr>
         
         <td>
@@ -306,43 +300,45 @@
         <td>
           <p><code><a href="get_EDIT_ecoclass_by_geoUnit.html">get_EDIT_ecoclass_by_geoUnit()</a></code> </p>
         </td>
-        <td><p>Get data.frame of all ecoclass for multiple EDIT geoUnit in ESD or ESG catalog</p></td>
+        <td><p>Get EDIT ecological sites from ESD or ESG catalog by MLRA
+
+Supply a vector of target <code>geoUnit</code>. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code> </p>
         </td>
-        <td><p>Extract accessory tables and summaries from a local NASIS Database</p></td>
+        <td><p>Get accessory tables and summaries from a local NASIS Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_extended_data_from_pedon_db.html">get_extended_data_from_pedon_db()</a></code> </p>
         </td>
-        <td><p>Extract accessory tables and summaries from a local pedonPC Database</p></td>
+        <td><p>Get accessory tables and summaries from a local pedonPC Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code> </p>
         </td>
-        <td><p>Extract Horizon Data from a local NASIS Database</p></td>
+        <td><p>Get Horizon Data from a local NASIS Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_hz_data_from_pedon_db.html">get_hz_data_from_pedon_db()</a></code> </p>
         </td>
-        <td><p>Extract Horizon Data from a PedonPC Database</p></td>
+        <td><p>Get Horizon Data from a PedonPC Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_lablayer_data_from_NASIS_db.html">get_lablayer_data_from_NASIS_db()</a></code> </p>
         </td>
-        <td><p>Extract lab pedon layer data from a local NASIS Database</p></td>
+        <td><p>Get lab pedon layer data from a local NASIS Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_labpedon_data_from_NASIS_db.html">get_labpedon_data_from_NASIS_db()</a></code> </p>
         </td>
-        <td><p>Extract lab pedon data from a local NASIS Database</p></td>
+        <td><p>Get lab pedon data from a local NASIS Database</p></td>
       </tr><tr>
         
         <td>
@@ -408,13 +404,13 @@
         <td>
           <p><code><a href="get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code> </p>
         </td>
-        <td><p>Extract Site Data from a local NASIS Database</p></td>
+        <td><p>Get Site Data from a local NASIS Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_site_data_from_pedon_db.html">get_site_data_from_pedon_db()</a></code> </p>
         </td>
-        <td><p>Extract Site Data from a PedonPC Database</p></td>
+        <td><p>Get Site Data from a PedonPC Database</p></td>
       </tr><tr>
         
         <td>
@@ -426,43 +422,43 @@
         <td>
           <p><code><a href="get_text_notes_from_NASIS_db.html">get_text_notes_from_NASIS_db()</a></code> </p>
         </td>
-        <td><p>Extract text note data from a local NASIS Database</p></td>
+        <td><p>Get text note data from a local NASIS Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_veg_data_from_NASIS_db.html">get_veg_data_from_NASIS_db()</a></code> </p>
         </td>
-        <td><p>Extract veg data from a local NASIS Database</p></td>
+        <td><p>Get veg data from a local NASIS Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_veg_from_AK_Site.html">get_veg_from_AK_Site()</a></code> </p>
         </td>
-        <td><p>Retrieve Vegetation Data from an AK Site Database</p></td>
+        <td><p>Get Vegetation Data from an AK Site Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_veg_from_MT_veg_db.html">get_veg_from_MT_veg_db()</a></code> </p>
         </td>
-        <td><p>Extract Site and Plot-level Data from a Montana RangeDB database</p></td>
+        <td><p>Get Site and Plot-level Data from a Montana RangeDB database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_veg_from_NPS_PLOTS_db.html">get_veg_from_NPS_PLOTS_db()</a></code> </p>
         </td>
-        <td><p>Retrieve Vegetation Data from an NPS PLOTS Database</p></td>
+        <td><p>Get Vegetation Data from an NPS PLOTS Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_veg_other_from_MT_veg_db.html">get_veg_other_from_MT_veg_db()</a></code> </p>
         </td>
-        <td><p>Extract cover composition data from a Montana RangeDB database</p></td>
+        <td><p>Get cover composition data from a Montana RangeDB database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_veg_species_from_MT_veg_db.html">get_veg_species_from_MT_veg_db()</a></code> </p>
         </td>
-        <td><p>Extract species-level Data from a Montana RangeDB database</p></td>
+        <td><p>Get species-level Data from a Montana RangeDB database</p></td>
       </tr><tr>
         
         <td>
@@ -498,7 +494,7 @@
         <td>
           <p><code><a href="make_EDIT_service_URL.html">make_EDIT_service_URL()</a></code> </p>
         </td>
-        <td><p>make_EDIT_service_URL</p></td>
+        <td><p>Make Ecological Dynamics Interpretive Tool (EDIT) web services URL</p></td>
       </tr><tr>
         
         <td>
@@ -564,7 +560,7 @@
         <td>
           <p><code><a href="SDA_spatialQuery.html">SDA_spatialQuery()</a></code> </p>
         </td>
-        <td><p>SDA Spatial Query</p></td>
+        <td><p>Query Soil Data Access via spatial intersection with supplied geometries.</p></td>
       </tr><tr>
         
         <td>
