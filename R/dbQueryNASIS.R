@@ -1,4 +1,4 @@
-#' Send queries to a NASIS DBIConnection
+#' Query a NASIS DBIConnection
 #'
 #' Send queries to a NASIS DBIConnection
 #'
@@ -45,7 +45,7 @@ dbQueryNASIS <- function(conn, q, close = TRUE, ...) {
 
 
 
-#' Create a connection to a local NASIS database
+#' Create local NASIS database connection
 #'
 #' Create a connection to a local NASIS database with `DBI`
 #'
@@ -72,4 +72,6 @@ dbConnectNASIS <- function(dsn = NULL) {
   return(res)
 }
 
+# shorthand
+#' @export
 NASIS <- function(dsn = NULL) dbConnectNASIS(dsn = dsn)

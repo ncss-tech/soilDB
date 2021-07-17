@@ -2,7 +2,7 @@
 
 
 
-#' Extract Soil Color Data from a PedonPC Database
+#' Get Soil Color Data from a PedonPC Database
 #' 
 #' Get, format, mix, and return color data from a PedonPC database.
 #' 

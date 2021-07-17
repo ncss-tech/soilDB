@@ -1,4 +1,4 @@
-#' Extract lab pedon data from a local NASIS Database
+#' Get lab pedon data from a local NASIS Database
 #' 
 #' Get lab pedon-level data from a local NASIS database.
 #' 

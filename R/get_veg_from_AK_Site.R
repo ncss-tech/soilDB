@@ -1,9 +1,9 @@
 # gets all veg records per site ID
 
 
-#' Retrieve Vegetation Data from an AK Site Database
+#' Get Vegetation Data from an AK Site Database
 #' 
-#' Retrieve Vegetation Data from an AK Site Database
+#' Get Vegetation Data from an AK Site Database
 #' 
 #' 
 #' @param dsn file path the the AK Site access database

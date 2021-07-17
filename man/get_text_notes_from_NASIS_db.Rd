@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_text_notes_from_NASIS_db.R
 \name{get_text_notes_from_NASIS_db}
 \alias{get_text_notes_from_NASIS_db}
-\title{Extract text note data from a local NASIS Database}
+\title{Get text note data from a local NASIS Database}
 \usage{
 get_text_notes_from_NASIS_db(SS = TRUE, fixLineEndings = TRUE, dsn = NULL)
 }
@@ -19,7 +19,7 @@ table structure; default: \code{NULL}}
 A \code{list} with the results.
 }
 \description{
-Extract text note data from a local NASIS Database
+Get text note data from a local NASIS Database
 }
 \examples{
 

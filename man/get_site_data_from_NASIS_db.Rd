@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_site_data_from_NASIS_db.R
 \name{get_site_data_from_NASIS_db}
 \alias{get_site_data_from_NASIS_db}
-\title{Extract Site Data from a local NASIS Database}
+\title{Get Site Data from a local NASIS Database}
 \usage{
 get_site_data_from_NASIS_db(
   SS = TRUE,

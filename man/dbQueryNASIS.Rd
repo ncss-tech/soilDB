@@ -2,7 +2,7 @@
 % Please edit documentation in R/dbQueryNASIS.R
 \name{dbQueryNASIS}
 \alias{dbQueryNASIS}
-\title{Send queries to a NASIS DBIConnection}
+\title{Query a NASIS DBIConnection}
 \usage{
 dbQueryNASIS(conn, q, close = TRUE, ...)
 }

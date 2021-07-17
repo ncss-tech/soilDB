@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_veg_from_NPS_PLOTS_db.R
 \name{get_veg_from_NPS_PLOTS_db}
 \alias{get_veg_from_NPS_PLOTS_db}
-\title{Retrieve Vegetation Data from an NPS PLOTS Database}
+\title{Get Vegetation Data from an NPS PLOTS Database}
 \usage{
 get_veg_from_NPS_PLOTS_db(dsn)
 }

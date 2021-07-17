@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_component_data_from_NASIS_db.R
 \name{get_comonth_from_NASIS_db}
 \alias{get_comonth_from_NASIS_db}
-\title{Extract component month data from a local NASIS Database}
+\title{Get component month data from a local NASIS Database}
 \usage{
 get_comonth_from_NASIS_db(
   SS = TRUE,
@@ -31,7 +31,7 @@ table structure; default: \code{NULL}}
 A list with the results.
 }
 \description{
-Extract component month data from a local NASIS Database.
+Get component month data from a local NASIS Database.
 }
 \details{
 This function currently works only on Windows.

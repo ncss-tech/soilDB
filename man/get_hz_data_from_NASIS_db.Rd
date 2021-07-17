@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_hz_data_from_NASIS_db.R
 \name{get_hz_data_from_NASIS_db}
 \alias{get_hz_data_from_NASIS_db}
-\title{Extract Horizon Data from a local NASIS Database}
+\title{Get Horizon Data from a local NASIS Database}
 \usage{
 get_hz_data_from_NASIS_db(
   SS = TRUE,

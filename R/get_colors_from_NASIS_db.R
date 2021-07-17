@@ -3,7 +3,7 @@
 # results can be referenced via phiid (horizon-level ID)
 
 
-#' Extract Soil Color Data from a local NASIS Database
+#' Get Soil Color Data from a local NASIS Database
 #'
 #' Get, format, mix, and return color data from a NASIS database.
 #'

@@ -3,7 +3,7 @@
 \name{get_component_data_from_NASIS_db}
 \alias{get_component_data_from_NASIS_db}
 \alias{get_component_restrictions_from_NASIS_db}
-\title{Extract component data from a local NASIS Database}
+\title{Get component data from a local NASIS Database}
 \usage{
 get_component_data_from_NASIS_db(
   SS = TRUE,

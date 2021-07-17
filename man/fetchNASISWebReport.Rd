@@ -14,7 +14,7 @@
 \alias{get_cosoilmoist_from_NASISWebReport}
 \alias{get_sitesoilmoist_from_NASISWebReport}
 \alias{get_lmuaoverlap_from_NASISWebReport}
-\title{Extract component tables from NASIS Web Reports}
+\title{Get component tables from NASIS Web Reports}
 \usage{
 fetchNASISWebReport(
   projectname,
@@ -114,7 +114,7 @@ inserted into a SQL WHERE clause (default: \code{NA})}
 A data.frame or list with the results.
 }
 \description{
-Extract component tables from NASIS Web Reports
+Get component tables from NASIS Web Reports
 }
 \examples{
 

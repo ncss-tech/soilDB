@@ -1,13 +1,13 @@
-#' Method for "dumping" contents of an entire NASIS table
-#'
-#' Method for "dumping" contents of an entire NASIS table
-#'
-#'
-#' @param table_name Character name of table.
-#' @param dsn Optional: path to SQLite database containing NASIS table
-#' structure; Default: \code{NULL}
-#' @return A data.frame or other result of \code{DBI::dbGetQuery}
-#' @export .dump_NASIS_table
+# Method for "dumping" contents of an entire NASIS table
+#
+# Method for "dumping" contents of an entire NASIS table
+#
+#
+# @param table_name Character name of table.
+# @param dsn Optional: path to SQLite database containing NASIS table
+# structure; Default: \code{NULL}
+# @return A data.frame or other result of \code{DBI::dbGetQuery}
+# @export .dump_NASIS_table
 .dump_NASIS_table <- function(table_name, dsn = NULL) {
 
   # connect to NASIS, identify columns
@@ -37,8 +37,6 @@
   q <- sprintf("SELECT %s FROM %s", paste(allcols, collapse = ", "), table_name)
   return(dbQueryNASIS(con, q))
 }
-
-
 
 #' Create a memory or file-based instance of NASIS database
 #'

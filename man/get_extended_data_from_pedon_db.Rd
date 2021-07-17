@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_extended_data_from_pedon_db.R
 \name{get_extended_data_from_pedon_db}
 \alias{get_extended_data_from_pedon_db}
-\title{Extract accessory tables and summaries from a local pedonPC Database}
+\title{Get accessory tables and summaries from a local pedonPC Database}
 \usage{
 get_extended_data_from_pedon_db(dsn)
 }
@@ -13,7 +13,7 @@ get_extended_data_from_pedon_db(dsn)
 A list with the results.
 }
 \description{
-Extract accessory tables and summaries from a local pedonPC Database.
+Get accessory tables and summaries from a local pedonPC Database.
 }
 \details{
 This function currently works only on Windows.

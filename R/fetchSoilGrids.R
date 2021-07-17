@@ -2,7 +2,7 @@
 #'
 #' This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes. 
 #' 
-#' The depth intervals returned are: \code{"0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"} and the properties returned are \code{"bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc"} -- each with 5th, 50th, 95th, mean and uncertainty values. Point data requests are made through \code{properties/query} endpoint of the SoilGrids v2.0 REST API: https://rest.soilgrids.org/soilgrids/v2.0/docs
+#' The depth intervals returned are: \code{"0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"} and the properties returned are \code{"bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc"} -- each with 5th, 50th, 95th, mean and uncertainty values. Point data requests are made through \code{properties/query} endpoint of the SoilGrids v2.0 REST API: https://rest.isric.org/soilgrids/v2.0/docs/
 #'
 #' @param locations A \code{data.frame} containing 3 columns referring to site ID, latitude and longitude.
 #' 

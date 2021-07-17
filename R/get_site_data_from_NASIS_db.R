@@ -15,7 +15,7 @@
 
 ## TODO: multiple records / site in siteobs are possible and will result in duplicate data
 
-#' Extract Site Data from a local NASIS Database
+#' Get Site Data from a local NASIS Database
 #'
 #' Get site-level data from a local NASIS database.
 #'

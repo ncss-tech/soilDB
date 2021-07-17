@@ -2,9 +2,9 @@
 
 
 
-#' Extract veg data from a local NASIS Database
+#' Get veg data from a local NASIS Database
 #' 
-#' Extract veg data from a local NASIS Database.
+#' Get veg data from a local NASIS Database.
 #' 
 #' This function currently works only on Windows.
 #' 

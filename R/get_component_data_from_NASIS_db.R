@@ -141,7 +141,7 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NUL
 ## just the component records, nothing above or below
 
 
-#' Extract component data from a local NASIS Database
+#' Get component data from a local NASIS Database
 #'
 #' This function currently works only on Windows.
 #'
@@ -635,9 +635,9 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
 
 
-#' Extract component month data from a local NASIS Database
+#' Get component month data from a local NASIS Database
 #'
-#' Extract component month data from a local NASIS Database.
+#' Get component month data from a local NASIS Database.
 #'
 #' This function currently works only on Windows.
 #'

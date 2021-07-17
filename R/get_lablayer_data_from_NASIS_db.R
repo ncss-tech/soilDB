@@ -1,4 +1,4 @@
-#' Extract lab pedon layer data from a local NASIS Database
+#' Get lab pedon layer data from a local NASIS Database
 #'
 #' Get lab pedon layer-level (horizon-level) data from a local NASIS database.
 #'

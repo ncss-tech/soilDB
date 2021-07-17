@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_veg_species_from_MT_veg_db.R
 \name{get_veg_species_from_MT_veg_db}
 \alias{get_veg_species_from_MT_veg_db}
-\title{Extract species-level Data from a Montana RangeDB database}
+\title{Get species-level Data from a Montana RangeDB database}
 \usage{
 get_veg_species_from_MT_veg_db(dsn)
 }

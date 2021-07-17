@@ -1,5 +1,5 @@
 
-#' Extract component tables from NASIS Web Reports
+#' Get component tables from NASIS Web Reports
 #'
 #' @aliases fetchNASISWebReport get_project_from_NASISWebReport
 #' get_progress_from_NASISWebReport get_project_correlation_from_NASISWebReport

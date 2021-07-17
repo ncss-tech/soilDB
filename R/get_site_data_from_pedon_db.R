@@ -7,7 +7,7 @@
 
 
 
-#' Extract Site Data from a PedonPC Database
+#' Get Site Data from a PedonPC Database
 #' 
 #' Get site-level data from a PedonPC database.
 #' 

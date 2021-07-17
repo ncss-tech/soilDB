@@ -2,7 +2,7 @@
 #
 
 
-#' Extract Horizon Data from a local NASIS Database
+#' Get Horizon Data from a local NASIS Database
 #'
 #' Get horizon-level data from a local NASIS database.
 #'

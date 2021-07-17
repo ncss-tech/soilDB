@@ -3,9 +3,9 @@
 
 
 
-#' Extract accessory tables and summaries from a local pedonPC Database
+#' Get accessory tables and summaries from a local pedonPC Database
 #' 
-#' Extract accessory tables and summaries from a local pedonPC Database.
+#' Get accessory tables and summaries from a local pedonPC Database.
 #' 
 #' This function currently works only on Windows.
 #' 

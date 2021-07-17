@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_colors_from_pedon_db.R
 \name{get_colors_from_pedon_db}
 \alias{get_colors_from_pedon_db}
-\title{Extract Soil Color Data from a PedonPC Database}
+\title{Get Soil Color Data from a PedonPC Database}
 \usage{
 get_colors_from_pedon_db(dsn)
 }

@@ -1,4 +1,4 @@
-#' Extract cover composition data from a Montana RangeDB database
+#' Get cover composition data from a Montana RangeDB database
 #' 
 #' Get cover composition data from a Montana RangeDB database.
 #' 

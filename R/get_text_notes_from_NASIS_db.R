@@ -1,4 +1,4 @@
-#' Extract text note data from a local NASIS Database
+#' Get text note data from a local NASIS Database
 #'
 #' @param SS get data from the currently loaded Selected Set in NASIS or from
 #' the entire local database (default: `TRUE`)

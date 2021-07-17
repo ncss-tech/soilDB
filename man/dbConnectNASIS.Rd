@@ -3,7 +3,7 @@
 \name{dbConnectNASIS}
 \alias{dbConnectNASIS}
 \alias{NASIS}
-\title{Create a connection to a local NASIS database}
+\title{Create local NASIS database connection}
 \usage{
 dbConnectNASIS(dsn = NULL)
 }

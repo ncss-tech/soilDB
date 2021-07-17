@@ -1,4 +1,4 @@
-#' Extract species-level Data from a Montana RangeDB database
+#' Get species-level Data from a Montana RangeDB database
 #' 
 #' Get species-level data from a Montana RangeDB database.
 #' 

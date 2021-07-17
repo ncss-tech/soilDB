@@ -4,7 +4,7 @@
 ###
 ### New function to build a JSON service URL that matches XYZ criteria
 ###
-#' make_EDIT_service_URL
+#' Make Ecological Dynamics Interpretive Tool (EDIT) web services URL
 #'
 #' Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
 #'
@@ -129,9 +129,8 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
   built_url
 }
 
-
-#' Get data.frame of all ecoclass for multiple EDIT geoUnit in ESD or ESG catalog
-#'
+#' Get EDIT ecological sites from ESD or ESG catalog by MLRA 
+#'  
 #' Supply a vector of target `geoUnit`. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd
 #'
 #' @param geoUnit A character vector of `geoUnit` codes e.g. `c("018X","022A")` for MLRAs 18 and 22A.

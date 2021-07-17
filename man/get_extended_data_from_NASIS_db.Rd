@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_extended_data_from_NASIS_db.R
 \name{get_extended_data_from_NASIS_db}
 \alias{get_extended_data_from_NASIS_db}
-\title{Extract accessory tables and summaries from a local NASIS Database}
+\title{Get accessory tables and summaries from a local NASIS Database}
 \usage{
 get_extended_data_from_NASIS_db(
   SS = TRUE,
@@ -30,7 +30,7 @@ table structure; default: \code{NULL}}
 A list with the results.
 }
 \description{
-Extract accessory tables and summaries from a local NASIS Database
+Get accessory tables and summaries from a local NASIS Database
 }
 \examples{
 

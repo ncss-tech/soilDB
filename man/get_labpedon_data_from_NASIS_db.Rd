@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_labpedon_data_from_NASIS_db.R
 \name{get_labpedon_data_from_NASIS_db}
 \alias{get_labpedon_data_from_NASIS_db}
-\title{Extract lab pedon data from a local NASIS Database}
+\title{Get lab pedon data from a local NASIS Database}
 \usage{
 get_labpedon_data_from_NASIS_db(SS = TRUE, dsn = NULL)
 }

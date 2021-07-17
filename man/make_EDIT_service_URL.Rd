@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchEDIT_tools.R
 \name{make_EDIT_service_URL}
 \alias{make_EDIT_service_URL}
-\title{make_EDIT_service_URL}
+\title{Make Ecological Dynamics Interpretive Tool (EDIT) web services URL}
 \usage{
 make_EDIT_service_URL(
   src = c("descriptions", "downloads", "plant-community-tables", "models", "keys"),

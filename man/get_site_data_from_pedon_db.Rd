@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_site_data_from_pedon_db.R
 \name{get_site_data_from_pedon_db}
 \alias{get_site_data_from_pedon_db}
-\title{Extract Site Data from a PedonPC Database}
+\title{Get Site Data from a PedonPC Database}
 \usage{
 get_site_data_from_pedon_db(dsn)
 }

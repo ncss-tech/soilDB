@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_hz_data_from_pedon_db.R
 \name{get_hz_data_from_pedon_db}
 \alias{get_hz_data_from_pedon_db}
-\title{Extract Horizon Data from a PedonPC Database}
+\title{Get Horizon Data from a PedonPC Database}
 \usage{
 get_hz_data_from_pedon_db(dsn)
 }

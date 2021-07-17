@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_veg_from_AK_Site.R
 \name{get_veg_from_AK_Site}
 \alias{get_veg_from_AK_Site}
-\title{Retrieve Vegetation Data from an AK Site Database}
+\title{Get Vegetation Data from an AK Site Database}
 \usage{
 get_veg_from_AK_Site(dsn)
 }
@@ -13,7 +13,7 @@ get_veg_from_AK_Site(dsn)
 A data.frame with vegetation data in long format, linked to site ID.
 }
 \description{
-Retrieve Vegetation Data from an AK Site Database
+Get Vegetation Data from an AK Site Database
 }
 \note{
 This function currently works only on Windows.

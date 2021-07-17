@@ -1,4 +1,4 @@
-#' Extract Site and Plot-level Data from a Montana RangeDB database
+#' Get Site and Plot-level Data from a Montana RangeDB database
 #' 
 #' Get Site and Plot-level data from a Montana RangeDB database.
 #' 

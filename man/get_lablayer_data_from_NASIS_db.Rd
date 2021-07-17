@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_lablayer_data_from_NASIS_db.R
 \name{get_lablayer_data_from_NASIS_db}
 \alias{get_lablayer_data_from_NASIS_db}
-\title{Extract lab pedon layer data from a local NASIS Database}
+\title{Get lab pedon layer data from a local NASIS Database}
 \usage{
 get_lablayer_data_from_NASIS_db(SS = TRUE, dsn = NULL)
 }

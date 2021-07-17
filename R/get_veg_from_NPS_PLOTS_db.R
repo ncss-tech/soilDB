@@ -4,7 +4,7 @@
 # dsn <- "H:/GNP_vegetation_data_MR/GlacierNP_vegdata/PLOTS_v32_BE.accdb"
 
 
-#' Retrieve Vegetation Data from an NPS PLOTS Database
+#' Get Vegetation Data from an NPS PLOTS Database
 #' 
 #' Used to extract species, stratum, and cover vegetation data from a backend
 #' NPS PLOTS Database.  Currently works for any Microsoft Access database with
