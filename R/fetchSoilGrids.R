@@ -45,7 +45,7 @@ fetchSoilGrids <- function(locations, loc.names = c("id","lat","lon")) {
     lat <- as.numeric(yd[[loc.names[[2]]]])
     lon <- as.numeric(yd[[loc.names[[3]]]])
     
-    response <- httr::GET(sprintf("https://rest.soilgrids.org/soilgrids/v2.0/properties/query?lat=%s&lon=%s", lat, lon))
+    response <- httr::GET(sprintf("https://rest.isric.org/soilgrids/v2.0/properties/query?lat=%s&lon=%s", lat, lon))
     r.content <- httr::content(response, as = "text", encoding = "UTF-8")
     res <- jsonlite::fromJSON(r.content)
     
