@@ -5,7 +5,7 @@
 #'
 #' LDM model diagram: \url{https://jneme910.github.io/Lab_Data_Mart_Documentation/Documents/SDA_KSSL_Data_model.html}
 #'
-#' @param x a vector of values to find in column specified by `what`
+#' @param x a vector of values to find in column specified by `what`, default `NULL` uses no constraints on `what`
 #' @param dsn data source name; either a path to a SQLite database, an open DBIConnection or (default) `NULL` (to use `soilDB::SDA_query`)
 #' @param what a single column name from tables: `lab_combine_nasis_ncss`, `lab_webmap`, `lab_site`, `lab_pedon` or `lab_area`
 #' @param bycol a single column name from `lab_layer` used for processing chunks; default: `"pedon_key"`
@@ -45,7 +45,7 @@
 #' }
 #' @importFrom aqp `depths<-` `site<-`
 #' @importFrom data.table rbindlist
-fetchLDM <- function(x,
+fetchLDM <- function(x = NULL,
            dsn = NULL,
            what = "lab_combine_nasis_ncss.pedlabsampnum",
            bycol = "pedon_key",
@@ -77,7 +77,8 @@ fetchLDM <- function(x,
     con <- NULL
   }
 
-  what <- match.arg(what, choices = c("pedon_key", "site_key", "pedlabsampnum", "pedoniid", "upedonid",
+  if (!is.null(x)) {
+    what <- match.arg(what, choices = c("pedon_key", "site_key", "pedlabsampnum", "pedoniid", "upedonid",
                                       "labdatadescflag", "priority", "priority2", "samp_name", "samp_class_type",
                                       "samp_classdate", "samp_classification_name", "samp_taxorder",
                                       "samp_taxsuborder", "samp_taxgrtgroup", "samp_taxsubgrp", "samp_taxpartsize",
@@ -99,21 +100,20 @@ fetchLDM <- function(x,
                                       "corr_taxfamhahatmatcl", "SSL_taxfamhahatmatcl", "pedobjupdate",
                                       "siteobjupdate", "area_key", "area_type", "area_sub_type", "parent_area_key",
                                       "parent_org_key", "area_code", "area_name", "area_abbrev", "area_desc"))
-  
+  }
   # TODO: set up arbitrary area queries by putting area table into groups:
   #       country, state, county, mlra, ssa, npark, nforest
 
   # get site/pedon/area information
-  site_query <- sprintf(
+  site_query <- paste0(
     "SELECT * FROM lab_combine_nasis_ncss
               LEFT JOIN lab_webmap ON
                   lab_combine_nasis_ncss.pedon_key = lab_webmap.pedon_key
               LEFT JOIN lab_site ON
                   lab_combine_nasis_ncss.site_key = lab_site.site_key
               LEFT JOIN lab_pedon ON
-                  lab_combine_nasis_ncss.site_key = lab_pedon.site_key
-            WHERE LOWER(%s) IN %s",
-    what, format_SQL_in_statement(tolower(x)))
+                  lab_combine_nasis_ncss.site_key = lab_pedon.site_key ", 
+            ifelse(is.null(x), "", sprintf("WHERE LOWER(%s) IN %s", what, format_SQL_in_statement(tolower(x)))))
 
   if(inherits(con, 'DBIConnection')) {
     # query con using (modified) site_query
@@ -269,11 +269,10 @@ fetchLDM <- function(x,
   layer_type <- match.arg(layer_type, c("horizon", "layer", "reporting layer"), several.ok = TRUE)
   
   layer_query <-  sprintf(
-    "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s AND %s IN %s AND %s",
+    "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s %s AND %s",
     paste0(sapply(flattables[flattables %in% tables], function(a) tablejoincriteria[[a]]), collapse = "\n"),
     format_SQL_in_statement(layer_type),
-    bycol,
-    format_SQL_in_statement(x),
+    ifelse(is.null(x), "", paste0(" AND ", bycol, " IN ", format_SQL_in_statement(x))),
     paste0(paste0(sapply(flattables[flattables %in% tables[tables != "lab_rosetta_Key"]], 
                          function(b) paste0("IsNull(",b,".prep_code, '')")), 
                   " IN ", format_SQL_in_statement(prep_code)), collapse= " AND "))
@@ -296,8 +295,8 @@ fetchLDM <- function(x,
   }
 
   if(inherits(con, 'DBIConnection')) {
-    # query con using (modified) layer_query
-    return(try(DBI::dbGetQuery(con, gsub("\\blab_|\\blab_combine_|_properties|_Key|_including_estimates_and_default_values|_and|mineralogy_|_count", "", gsub("major_and_trace_elements_and_oxides","geochemical",layer_query)))))
+    # query con using (modified) layer_query for SQLite
+     return(try(DBI::dbGetQuery(con, gsub("IsNull", "IFNULL", gsub("\\blab_|\\blab_combine_|_properties|_Key|_including_estimates_and_default_values|_and|mineralogy_|_count", "", gsub("major_and_trace_elements_and_oxides","geochemical", layer_query))))))
   }
 
   layerdata <- suppressWarnings(SDA_query(layer_query))

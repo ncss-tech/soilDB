@@ -5,7 +5,7 @@
 \title{Query data from Kellogg Soil Survey Laboratory Data Mart via Soil Data Access}
 \usage{
 fetchLDM(
-  x,
+  x = NULL,
   dsn = NULL,
   what = "lab_combine_nasis_ncss.pedlabsampnum",
   bycol = "pedon_key",
@@ -19,7 +19,7 @@ fetchLDM(
 )
 }
 \arguments{
-\item{x}{a vector of values to find in column specified by \code{what}}
+\item{x}{a vector of values to find in column specified by \code{what}, default \code{NULL} uses no constraints on \code{what}}
 
 \item{dsn}{data source name; either a path to a SQLite database, an open DBIConnection or (default) \code{NULL} (to use \code{soilDB::SDA_query})}
 
