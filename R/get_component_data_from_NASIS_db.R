@@ -7,7 +7,7 @@
 
 
 ## component diagnostic features
-get_component_diaghz_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
+get_component_diaghz_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
   channel <- dbConnectNASIS(dsn)
 
@@ -159,7 +159,7 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NUL
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
-#' @return A list with the results.
+#' @return a `data.frame`
 #' @author Dylan E. Beaudette, Stephen Roecker, and Jay M. Skovlin
 #' @seealso \code{\link{fetchNASIS}}
 #' @keywords manip
@@ -176,8 +176,10 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NUL
 #' }
 #'
 #' @export get_component_data_from_NASIS_db
-get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn= NULL) {
-
+get_component_data_from_NASIS_db <- function(SS = TRUE,
+                                             stringsAsFactors = default.stringsAsFactors(),
+                                             dsn = NULL) {
+  
   q <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, reannualprecip_r, ffd_l, ffd_r, ffd_h, tfact, wei, weg, nirrcapcl, nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, frostact, hydricrating, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
 
   FROM
@@ -217,14 +219,17 @@ get_component_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
 }
 
 
-get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
+get_legend_from_NASIS <- function(SS = TRUE,
+                                  droplevels = TRUE,
+                                  stringsAsFactors = default.stringsAsFactors(),
+                                  dsn = NULL) {
 
   q.legend  <- paste("
                      SELECT
                      mlraoffice,
                      areasymbol, areaname, areatypename, CAST(areaacres AS INTEGER) AS areaacres, ssastatus,
                      CAST(projectscale AS INTEGER) projectscale, cordate,
-                     CAST(liid AS INTEGER) liid, COUNT(lmu.lmapunitiid) n_lmapunitiid
+                     CAST(liid AS INTEGER) liid, COUNT(lmu.lmapunitiid) n_lmapunitiid, legendsuituse
 
                      FROM
                      area     a                                  INNER JOIN
@@ -235,11 +240,9 @@ get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors
                      areatype at  ON at.areatypeiid = areatypeiidref
 
                      WHERE
-                         legendsuituse = 3  AND
-                         mustatus IN (2, 3) AND
-                         areatypename = 'Non-MLRA Soil Survey Area'
+                         areatypename IN ('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area')
 
-                     GROUP BY mlraoffice, areasymbol, areaname, areatypename, areaacres, ssastatus, projectscale, cordate, liid
+                     GROUP BY mlraoffice, areasymbol, areaname, areatypename, areaacres, ssastatus, projectscale, legendsuituse, cordate, liid
 
                      ORDER BY mlraoffice, areasymbol
                      ;")
@@ -264,16 +267,18 @@ get_legend_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors
                      stringsAsFactors = stringsAsFactors,
                      dsn = dsn)
 
-
   # done
   return(d.legend)
 }
 
 
 
-get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
-  q <- paste("SELECT
+get_lmuaoverlap_from_NASIS <- function(SS = TRUE,
+                                       droplevels = TRUE,
+                                       stringsAsFactors = default.stringsAsFactors(),
+                                       dsn = NULL) {
+  
+  q <- "SELECT
              a.areasymbol, a.areaname, a.areaacres,
              at2.areatypename lao_areatypename, a2.areasymbol lao_areasymbol, a2.areaname lao_areaname, lao.areaovacres lao_areaovacres,
              lmapunitiid, musym, nationalmusym, muname, mustatus, muacres,
@@ -297,13 +302,12 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFa
                  lmuaoverlap_View_1 lmuao ON lmuao.lmapunitiidref = lmu.lmapunitiid
                                      AND lmuao.lareaoviidref  = lao.lareaoviid
 
-             WHERE legendsuituse = 3  AND
-                   mustatus IN (2, 3) AND
-                   at.areatypename = 'Non-MLRA Soil Survey Area'
+             WHERE 
+                 at.areatypename IN ('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area')
 
              ORDER BY a.areasymbol, lmu.musym, lao_areatypename
              ;"
-  )
+  
 
   # toggle selected set vs. local DB
   if (SS == FALSE) {
@@ -336,7 +340,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
 
   q.mapunit <- paste("
                      SELECT
-                     ng.grpname, areasymbol, liid, lmapunitiid,
+                     ng.grpname, areasymbol, areatypename, liid, lmapunitiid,
                      nationalmusym, muiid, musym, muname, mukind, mutype, mustatus, dmuinvesintens, muacres,
                      farmlndcl, dmuiid, pct_component, pct_hydric, n_component, n_majcompflag
 
@@ -371,7 +375,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
                     ) co ON co.cor_muiidref = mu.muiid
 
                      WHERE
-                         areatypename = 'Non-MLRA Soil Survey Area'
+                         areatypename IN ('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area')
 
                      ORDER BY areasymbol, musym
                      ;")
@@ -427,8 +431,12 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
 
 # return all rows from correlation -- map unit -- legend map unit -- dmu / legend -- area
 # note that all of these "target tables" have to be selected
-get_component_correlation_data_from_NASIS_db <- function(SS=TRUE, dropAdditional=TRUE, dropNotRepresentative=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
+get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
+                                                         dropAdditional = TRUE,
+                                                         dropNotRepresentative = TRUE,
+                                                         stringsAsFactors = default.stringsAsFactors(),
+                                                         dsn = NULL) {
+  
   q <- "SELECT lmapunitiid, mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
 
   FROM  mapunit_View_1 AS mu
@@ -527,7 +535,10 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
 
 # get copm for each component
-get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
+get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
+                                                  stringsAsFactors = default.stringsAsFactors(),
+                                                  dsn = NULL) {
+  
 
   q <- "SELECT cpmg.coiidref as coiid, cpm.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
 
@@ -558,8 +569,10 @@ get_component_copm_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
 }
 
 # get ESD information for each component
-get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
+get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
+                                                 stringsAsFactors = default.stringsAsFactors(),
+                                                 dsn = NULL) {
+  
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
   ecositeorigin, ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
 
@@ -598,7 +611,8 @@ get_component_esd_data_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = def
 
 ## TODO: convert any multiple entries into a comma delimited string
 # get OtherVeg information for each component
-get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
+get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
+  
 
   q <- "SELECT coiidref as coiid, ovegclid, ovegclname, coothvegcl.recwlupdated
   FROM coothvegclass_View_1 coothvegcl
@@ -669,7 +683,11 @@ get_component_otherveg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 #' }
 #'
 #' @export get_comonth_from_NASIS_db
-get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
+get_comonth_from_NASIS_db <- function(SS = TRUE,
+                                      fill = FALSE,
+                                      stringsAsFactors = default.stringsAsFactors(),
+                                      dsn = NULL) {
+  
 
   q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid
   FROM comonth_View_1 AS comonth;"
@@ -768,8 +786,8 @@ get_comonth_from_NASIS_db <- function(SS = TRUE, fill = FALSE, stringsAsFactors 
 
 # get linked pedons by peiid and user pedon ID
 # note that there may be >=1 pedons / coiid
-get_copedon_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
-
+get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
+  
   q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative
 
   FROM copedon_View_1 copedon
@@ -799,10 +817,9 @@ get_copedon_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
   return(d)
 }
 
-
-## TODO: better documentation for "fill" argument
-# https://github.com/ncss-tech/soilDB/issues/50
-get_component_horizon_data_from_NASIS_db <- function(SS=TRUE, fill = FALSE, dsn = NULL) {
+get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
+                                                     fill = FALSE,
+                                                     dsn = NULL) {
 
   q <- "SELECT coiid, chiid, hzname, hzdept_r, hzdepb_r, texture, fragvoltot_l, fragvoltot_r, fragvoltot_h, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, structgrpname, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_l, lep_r, lep_h, ll_l, ll_r, ll_h, pi_l, pi_r, pi_h, sieveno4_l, sieveno4_r, sieveno4_h, sieveno10_l, sieveno10_r, sieveno10_h, sieveno40_l, sieveno40_r, sieveno40_h, sieveno200_l, sieveno200_r, sieveno200_h, sar_l, sar_r, sar_h, ec_l, ec_r, ec_h, cec7_l, cec7_r, cec7_h, sumbases_l, sumbases_r, sumbases_h, ecec_l, ecec_r, ecec_h, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, ph01mcacl2_l, ph01mcacl2_r, ph01mcacl2_h, caco3_l, caco3_r, caco3_h, kffact, kwfact, aashind_l, aashind_r, aashind_h
 
