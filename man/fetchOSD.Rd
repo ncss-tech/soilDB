@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchOSD.R
 \name{fetchOSD}
 \alias{fetchOSD}
-\title{Fetch Official Series Descriptions and summaries from SoilWeb API}
+\title{Get Official Series Descriptions and summaries from SoilWeb API}
 \usage{
 fetchOSD(soils, colorState = "moist", extended = FALSE)
 }

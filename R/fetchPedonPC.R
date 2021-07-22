@@ -2,13 +2,9 @@
 
 
 
-#' Fetch commonly used site/horizon data from a PedonPC v.5 database.
+#' Get a SoilProfileCollection from a PedonPC v.5 database
 #'
-#' Fetch commonly used site/horizon data from a version 5.x PedonPC database,
-#' return as a SoilProfileCollection object.
-#'
-#' This function currently works only on Windows.
-#'
+#' Fetch commonly used site/horizon data from a version 5.x PedonPC database, return as a SoilProfileCollection object.
 #' @aliases fetchPedonPC getHzErrorsPedonPC
 #' @param dsn The path to a PedonPC version 6.x database
 #' @return a SoilProfileCollection class object

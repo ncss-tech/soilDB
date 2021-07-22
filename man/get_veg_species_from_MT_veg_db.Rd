@@ -16,9 +16,6 @@ A data.frame.
 \description{
 Get species-level data from a Montana RangeDB database.
 }
-\details{
-This function currently works only on Windows.
-}
 \seealso{
 \code{\link{get_veg_from_MT_veg_db}},
 \code{\link{get_veg_other_from_MT_veg_db}}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/OSDquery.R
 \name{OSDquery}
 \alias{OSDquery}
-\title{Full text searching of the USDA-NRCS Official Series Descriptions}
+\title{Search full text of Official Series Description on SoilWeb}
 \usage{
 OSDquery(
   everything = NULL,

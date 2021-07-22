@@ -46,7 +46,7 @@
 
 # 2018-10-11: updated to new API, URL subject to change
 # fetch basic OSD, SC, and SoilWeb summaries from new API
-#' Fetch Official Series Descriptions and summaries from SoilWeb API
+#' Get Official Series Descriptions and summaries from SoilWeb API
 #' 
 #' @description This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.
 #' 

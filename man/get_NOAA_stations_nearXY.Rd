@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchNOAA.R
 \name{get_NOAA_stations_nearXY}
 \alias{get_NOAA_stations_nearXY}
-\title{Query the NOAA API to get station data near a given latitude and longitude}
+\title{Get NOAA station data near a given latitude and longitude}
 \usage{
 get_NOAA_stations_nearXY(lat, lng, apitoken, bbox = 1)
 }

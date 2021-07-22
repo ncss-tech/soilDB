@@ -3,7 +3,7 @@
 \name{fetchPedonPC}
 \alias{fetchPedonPC}
 \alias{getHzErrorsPedonPC}
-\title{Fetch commonly used site/horizon data from a PedonPC v.5 database.}
+\title{Get a SoilProfileCollection from a PedonPC v.5 database}
 \usage{
 fetchPedonPC(dsn)
 }
@@ -14,11 +14,7 @@ fetchPedonPC(dsn)
 a SoilProfileCollection class object
 }
 \description{
-Fetch commonly used site/horizon data from a version 5.x PedonPC database,
-return as a SoilProfileCollection object.
-}
-\details{
-This function currently works only on Windows.
+Fetch commonly used site/horizon data from a version 5.x PedonPC database, return as a SoilProfileCollection object.
 }
 \note{
 This function attempts to do most of the boilerplate work when

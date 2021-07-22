@@ -14,7 +14,6 @@
 #' 
 #' @param dsn The path to a 'pedon.mdb' database.
 #' @return A data.frame.
-#' @note This function currently works only on Windows.
 #' @author Dylan E. Beaudette and Jay M. Skovlin
 #' @seealso \code{\link{get_hz_data_from_pedon_db}},
 #' \code{\link{get_veg_from_AK_Site}},

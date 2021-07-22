@@ -1,4 +1,4 @@
-#' Fetch Official Series Description Data from JSON, HTML or TXT sources
+#' Get Official Series Description Data from JSON, HTML or TXT sources
 #'
 #' @param series A character vector of Official Series names e.g. `"Chewacla"`
 #' @param result Select `"json"`, `"html"`, or `"txt"` output

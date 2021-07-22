@@ -171,7 +171,7 @@ month2season <- function(x) {
 # this loads and packages the data into a list of objects
 
 
-#' Download Data from the Henry Mount Soil Temperature and Water Database
+#' Get data from Henry Mount Soil Temperature and Water Database
 #' 
 #' This function is a front-end to the REST query functionality of the Henry
 #' Mount Soil Temperature and Water Database.

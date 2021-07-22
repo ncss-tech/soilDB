@@ -19,9 +19,6 @@ A data.frame with the results.
 \description{
 Get, format, mix, and return color data from a NASIS database.
 }
-\details{
-This function currently works only on Windows.
-}
 \seealso{
 \code{\link{simplifyColorData}},
 \code{\link{get_hz_data_from_NASIS_db}},

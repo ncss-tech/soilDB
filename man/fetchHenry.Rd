@@ -4,7 +4,7 @@
 \alias{fetchHenry}
 \alias{month2season}
 \alias{summarizeSoilTemperature}
-\title{Download Data from the Henry Mount Soil Temperature and Water Database}
+\title{Get data from Henry Mount Soil Temperature and Water Database}
 \usage{
 fetchHenry(
   what = "all",

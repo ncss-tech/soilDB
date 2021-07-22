@@ -5,7 +5,7 @@
 # TODO: will provide a variety of aggregation and batch application options
 #  -- given Spatial* object, SoilProfileCollection, Coordinates
 
-#' Query the NOAA API to get station data near a given latitude and longitude
+#' Get NOAA station data near a given latitude and longitude
 #'
 #' @description Query the NOAA API to get station data (limit 1000 records) near a point. Default extent is plus or minus 0.5 degrees (bounding box) (with \code{bbox = 1}) around the specified point \[lat, lng].
 #'
@@ -98,7 +98,7 @@ get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1) {
   return(d$results)
 }
 
-#' Get Global Historical Climatology Network Daily (GHCND) data from NOAA API for given datatype(s), station IDs and years.
+#' Get Global Historical Climatology Network Daily (GHCND) data from NOAA API 
 #'
 #' @description Obtain daily climatic summary data for a set of station IDs, years, and datatypes.
 #'

@@ -4,7 +4,7 @@
 \name{SCAN_SNOTEL_metadata}
 \alias{SCAN_SNOTEL_metadata}
 \alias{state_FIPS_codes}
-\title{SCAN and SNOTEL Station Metadata}
+\title{Get SCAN and SNOTEL Station Metadata}
 \format{
 A data frame with 1092 observations on the following 12 variables.
 \describe{ \item{list("Name")}{station name} \item{list("Site")}{station ID}
@@ -17,9 +17,6 @@ column)} \item{list("upedonid")}{associated user pedon ID}
 \item{list("pedlabsampnum")}{associated lab sample ID} }
 }
 \description{
-SCAN and SNOTEL station metadata, a work in progress.
-}
-\details{
 These data have been compiled from several sources and represent a
 progressive effort to organize SCAN/SNOTEL station metadata. Therefore, some
 records may be missing or incorrect.

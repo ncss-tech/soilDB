@@ -9,7 +9,7 @@
 \alias{get_chorizon_from_SDA}
 \alias{get_cosoilmoist_from_SDA}
 \alias{get_cointerp_from_SDA}
-\title{Download and Flatten Data from Soil Data Access}
+\title{Get SSURGO/STATSGO2 Mapunit Data from Soil Data Access}
 \usage{
 fetchSDA(
   WHERE = NULL,

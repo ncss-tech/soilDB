@@ -19,7 +19,7 @@
 \alias{get_RMF_from_NASIS_db}
 \alias{get_concentrations_from_NASIS_db}
 \alias{get_cotext_from_NASIS_db}
-\title{Fetch commonly used site/pedon/horizon or component data from NASIS.}
+\title{Get a pedon or component data SoilProfileCollection from NASIS}
 \usage{
 fetchNASIS(
   from = "pedons",

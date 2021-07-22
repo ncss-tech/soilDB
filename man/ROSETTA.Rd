@@ -2,7 +2,7 @@
 % Please edit documentation in R/ROSETTA.R
 \name{ROSETTA}
 \alias{ROSETTA}
-\title{ROSETTA Model API}
+\title{Query USDA-ARS ROSETTA Model API}
 \usage{
 ROSETTA(
   x,

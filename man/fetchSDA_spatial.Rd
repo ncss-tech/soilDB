@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchSDA_spatial.R
 \name{fetchSDA_spatial}
 \alias{fetchSDA_spatial}
-\title{Query Soil Data Access for Spatial Data}
+\title{Get Spatial Data from Soil Data Access by \code{mukey}, \code{nationalmusym} or \code{areasymbol}}
 \usage{
 fetchSDA_spatial(
   x,

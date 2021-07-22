@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_NASIS_table_name_by_purpose.R
 \name{get_NASIS_table_name_by_purpose}
 \alias{get_NASIS_table_name_by_purpose}
-\title{Return NASIS 7 Physical Table Names}
+\title{Get NASIS 7 Physical Table Names}
 \usage{
 get_NASIS_table_name_by_purpose(
   purpose = c("metadata", "lookup", "site", "pedon", "transect", "component",

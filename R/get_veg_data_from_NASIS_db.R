@@ -2,11 +2,9 @@
 
 
 
-#' Get veg data from a local NASIS Database
+#' Get vegetation data from a local NASIS Database
 #' 
 #' Get veg data from a local NASIS Database.
-#' 
-#' This function currently works only on Windows.
 #' 
 #' @param SS get data from the currently loaded Selected Set in NASIS or from
 #' the entire local database (default: `TRUE`)

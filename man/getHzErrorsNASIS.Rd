@@ -2,7 +2,7 @@
 % Please edit documentation in R/getHzErrorsNASIS.R
 \name{getHzErrorsNASIS}
 \alias{getHzErrorsNASIS}
-\title{Check pedon horizon table for logic errors}
+\title{Get logic errors in NASIS Pedon Horizon}
 \usage{
 getHzErrorsNASIS(strict = TRUE, SS = TRUE, dsn = NULL)
 }
@@ -21,5 +21,5 @@ A data.frame containing problematic records with columns:
 'peiid','pedon_id','hzdept','hzdepb','hzname'
 }
 \description{
-Check pedon horizon table for logic errors
+Get logic errors in NASIS Pedon Horizon
 }

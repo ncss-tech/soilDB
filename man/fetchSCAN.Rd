@@ -4,7 +4,7 @@
 \alias{fetchSCAN}
 \alias{SCAN_sensor_metadata}
 \alias{SCAN_site_metadata}
-\title{Fetch SCAN Data}
+\title{Get data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations}
 \usage{
 fetchSCAN(site.code, year, report = "SCAN", req = NULL)
 }
@@ -21,7 +21,7 @@ fetchSCAN(site.code, year, report = "SCAN", req = NULL)
 a \code{data.frame} object
 }
 \description{
-Query soil/climate data from USDA-NRCS SCAN Stations (experimental)
+Query soil/climate data from USDA-NRCS SCAN Stations
 }
 \details{
 See \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{the fetchSCAN tutorial for details}. These functions require the \code{httr} and \code{rvest} libraries.

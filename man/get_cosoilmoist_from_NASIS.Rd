@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_cosoilmoist_from_NASIS.R
 \name{get_cosoilmoist_from_NASIS}
 \alias{get_cosoilmoist_from_NASIS}
-\title{Read and Flatten the Component Soil Moisture Tables}
+\title{Get the Component Soil Moisture Tables}
 \usage{
 get_cosoilmoist_from_NASIS(
   SS = TRUE,
@@ -40,9 +40,6 @@ The component soil moisture tables within NASIS house monthly data on
 flooding, ponding, and soil moisture status. The soil moisture status is
 used to specify the water table depth for components (e.g. \code{status ==
 "Moist"}).
-}
-\note{
-This function currently works only on Windows.
 }
 \examples{
 

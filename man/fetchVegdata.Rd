@@ -13,7 +13,7 @@
 \alias{get_vegplot_trhi_from_NASIS_db}
 \alias{get_legend_from_NASIS}
 \alias{get_lmuaoverlap_from_NASIS}
-\title{Load most common vegplot data from local NASIS database}
+\title{Get vegetation plot data from local NASIS database}
 \usage{
 fetchVegdata(
   SS = TRUE,
@@ -36,5 +36,5 @@ table structure; default: \code{NULL}}
 A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies", "vegtransect", "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", and  "vegplottext" tables
 }
 \description{
-Load most common vegplot data from local NASIS database
+Get vegetation plot data from local NASIS database
 }

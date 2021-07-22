@@ -1,11 +1,10 @@
 #' Soil Database Interface
 #' 
+#' A collection of functions for reading data from USDA-NCSS soil databases.
+#' 
 #' This package provides methods for extracting soils information from local
 #' PedonPC and AK Site databases (MS Access format), local NASIS databases (MS
-#' SQL Server), and the SDA web service. Currently USDA-NCSS data sources are
-#' supported, however, there are plans to develop interfaces to outside systems
-#' such as the Global Soil Mapping project.
-#'  
+#' SQL Server), Soil Data Access and various other soil-related web services. 
 #' @name soilDB-package
 #' @aliases soilDB.env soilDB-package soilDB
 #' @docType package
@@ -79,9 +78,7 @@ NULL
 #' 
 NULL
 
-#' SCAN and SNOTEL Station Metadata
-#' 
-#' SCAN and SNOTEL station metadata, a work in progress.
+#' Get SCAN and SNOTEL Station Metadata
 #' 
 #' These data have been compiled from several sources and represent a
 #' progressive effort to organize SCAN/SNOTEL station metadata. Therefore, some

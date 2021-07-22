@@ -1,7 +1,7 @@
 # updated to NASIS 6.2
 
 # convenience function for loading most commonly used vegplot information from local NASIS database
-#' Load most common vegplot data from local NASIS database
+#' Get vegetation plot data from local NASIS database
 #' @aliases get_vegplot_from_NASIS_db
 #' get_vegplot_location_from_NASIS_db get_vegplot_species_from_NASIS_db
 #' get_vegplot_textnote_from_NASIS_db get_vegplot_transect_from_NASIS_db

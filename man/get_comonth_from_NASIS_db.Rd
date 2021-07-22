@@ -33,9 +33,6 @@ A list with the results.
 \description{
 Get component month data from a local NASIS Database.
 }
-\details{
-This function currently works only on Windows.
-}
 \examples{
 
 \donttest{

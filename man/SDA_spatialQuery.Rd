@@ -4,7 +4,7 @@
 \alias{SDA_spatialQuery}
 \alias{SDA_make_spatial_query}
 \alias{SDA_query_features}
-\title{Query Soil Data Access via spatial intersection with supplied geometries.}
+\title{Query Soil Data Access by spatial intersection with supplied geometry}
 \usage{
 SDA_spatialQuery(
   geom,

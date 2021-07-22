@@ -15,9 +15,6 @@ A data.frame.
 \description{
 Get site-level data from a PedonPC database.
 }
-\note{
-This function currently works only on Windows.
-}
 \seealso{
 \code{\link{get_hz_data_from_pedon_db}},
 \code{\link{get_veg_from_AK_Site}},

@@ -1,4 +1,4 @@
-#' Read and Flatten the Component Soil Moisture Tables
+#' Get the Component Soil Moisture Tables
 #'
 #' Read and flatten the component soil moisture month tables from a local NASIS
 #' Database.
@@ -21,7 +21,6 @@
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' @return A data.frame.
-#' @note This function currently works only on Windows.
 #' @author S.M. Roecker
 #' @seealso \link{fetchNASIS}, \link{get_cosoilmoist_from_NASISWebReport},
 #' \link{get_cosoilmoist_from_SDA}, \code{get_comonth_from_SDA}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchKSSL.R
 \name{fetchKSSL}
 \alias{fetchKSSL}
-\title{Fetch KSSL Data}
+\title{Get Kellogg Soil Survey Laboratory Data from SoilWeb snapshot}
 \usage{
 fetchKSSL(
   series = NA,

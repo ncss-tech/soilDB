@@ -1,4 +1,4 @@
-#' @title Query Soil Data Access for Spatial Data
+#' Get Spatial Data from Soil Data Access by `mukey`, `nationalmusym` or `areasymbol`
 #'
 #' @description This method facilitates queries to Soil Data Access (SDA) mapunit and survey area geometry. Queries are generated based on map unit key (`mukey`) and national map unit symbol (`nationalmusym`) for `mupolygon` (SSURGO) or `gsmmupolygon` (STATSGO) geometry OR legend key (`lkey`) and area symbols (`areasymbol`) for `sapolygon` (Soil Survey Area; SSA) geometry).
 #'

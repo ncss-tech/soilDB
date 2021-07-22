@@ -1,4 +1,4 @@
-#' Return NASIS 7 Physical Table Names 
+#' Get NASIS 7 Physical Table Names 
 #' 
 #' Method generalizing concepts of NASIS 7 data model to group tables by "purpose." Most of our more complex queries rely on tables from one or more purposes, so individual higher-level functions might call a function like this to identify the relevant tables from a data source.
 #' 

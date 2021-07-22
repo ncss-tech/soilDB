@@ -15,9 +15,6 @@ A data.frame with the results.
 \description{
 Get, format, mix, and return color data from a PedonPC database.
 }
-\details{
-This function currently works only on Windows.
-}
 \seealso{
 \code{\link{get_hz_data_from_pedon_db}},
 \code{\link{get_site_data_from_pedon_db}}

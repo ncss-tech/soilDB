@@ -1,7 +1,7 @@
 # convenience function for loading most commonly used information from local NASIS database
 
 
-#' Fetch lab data used site/horizon data from a PedonPC database.
+#' Get NCSS Pedon laboratory data from NASIS
 #'
 #' Fetch KSSL laboratory pedon/horizon layer data from a local NASIS database,
 #' return as a SoilProfileCollection object.

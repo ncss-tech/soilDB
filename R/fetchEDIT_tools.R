@@ -4,9 +4,10 @@
 ###
 ### New function to build a JSON service URL that matches XYZ criteria
 ###
+###
 #' Make Ecological Dynamics Interpretive Tool (EDIT) web services URL
 #'
-#' Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
+#' @description Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
 #'
 #' @details See the following official EDIT developer resources to see which endpoints are available for Ecological Site Description (ESD) or Ecological Site Group (ESG) catalogs:
 #'
@@ -22,8 +23,8 @@
 #' @param state Optional: Used only for `src = "plant-community-tables"`
 #' @param community Optional: Used only for `src = "plant-community-tables"`
 #' @param key Optional: Key number. All keys will be returned if not specified.
-#' @param endpoint Optional: Specific endpoint e.g. `overview.json`, `class-list.json`
-#' @param querystring Optional: Additional (optional) request parameters specified as a query string `?param1=value&param2=value`. Used for `class-list.json` or PDF formatting parameters.
+#' @param endpoint Optional: Specific endpoint e.g. `overview.json`, `class-list.json`, `soil-features.json`
+#' @param querystring Optional: Additional request parameters specified as a query string `?param1=value&param2=value`. 
 #'
 #' @return A character vector containing URLs with specified parameters. This function is vectorized.
 #'
@@ -129,9 +130,9 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
   built_url
 }
 
-#' Get EDIT ecological sites from ESD or ESG catalog by MLRA 
+#' Get Ecological Dynamics Information Tool (EDIT) ecological sites by catalog (ESD/ESG) and MLRA 
 #'  
-#' Supply a vector of target `geoUnit`. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd
+#' @description  Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd. `geoUnit` refers to MLRA codes, possibly with a leading zero and trailing "X" for two digit MLRA symbols.
 #'
 #' @param geoUnit A character vector of `geoUnit` codes e.g. `c("018X","022A")` for MLRAs 18 and 22A.
 #' @param catalog Catalog ID. One of: `"esd"` or `"esg"`

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchSoilGrids.R
 \name{fetchSoilGrids}
 \alias{fetchSoilGrids}
-\title{Fetch SoilGrids 250m properties information from point locations}
+\title{Get SoilGrids 250m properties information from point locations}
 \usage{
 fetchSoilGrids(locations, loc.names = c("id", "lat", "lon"))
 }

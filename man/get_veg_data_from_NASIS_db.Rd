@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_veg_data_from_NASIS_db.R
 \name{get_veg_data_from_NASIS_db}
 \alias{get_veg_data_from_NASIS_db}
-\title{Get veg data from a local NASIS Database}
+\title{Get vegetation data from a local NASIS Database}
 \usage{
 get_veg_data_from_NASIS_db(SS = TRUE, dsn = NULL)
 }
@@ -18,9 +18,6 @@ A list with the results.
 }
 \description{
 Get veg data from a local NASIS Database.
-}
-\details{
-This function currently works only on Windows.
 }
 \examples{
 

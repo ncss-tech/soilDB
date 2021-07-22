@@ -34,9 +34,9 @@ make_EDIT_service_URL(
 
 \item{key}{Optional: Key number. All keys will be returned if not specified.}
 
-\item{endpoint}{Optional: Specific endpoint e.g. \code{overview.json}, \code{class-list.json}}
+\item{endpoint}{Optional: Specific endpoint e.g. \code{overview.json}, \code{class-list.json}, \code{soil-features.json}}
 
-\item{querystring}{Optional: Additional (optional) request parameters specified as a query string \code{?param1=value&param2=value}. Used for \code{class-list.json} or PDF formatting parameters.}
+\item{querystring}{Optional: Additional request parameters specified as a query string \code{?param1=value&param2=value}.}
 }
 \value{
 A character vector containing URLs with specified parameters. This function is vectorized.

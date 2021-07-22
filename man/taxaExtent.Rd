@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxaExtent.R
 \name{taxaExtent}
 \alias{taxaExtent}
-\title{Retrieve Soil Taxonomy Membership Grids}
+\title{Get SoilWeb 800m Major Component Soil Taxonomy Grids}
 \usage{
 taxaExtent(
   x,
@@ -24,7 +24,7 @@ taxaExtent(
 a \code{raster} object
 }
 \description{
-This function downloads a generalized representation of the geographic extent of any single taxon from the top 4 tiers of Soil Taxonomy, or those taxa matching a given formative element used in greatgroup or subgroup taxa. Data are provided by SoilWeb, ultimately sourced from from the current SSURGO snapshot. Data are returned as \code{raster} objects representing area proportion falling within 800m cells. Currently area proportions are based on major components only. Data are only available in CONUS and returned using an Albers Equal Area / NAD83 coordinate reference system (EPSG 6350).
+This function downloads a generalized representation of the geographic extent of any single taxon from the top 4 levels of Soil Taxonomy, or taxa matching a given formative element used in Great Group or subgroup taxa. Data are provided by SoilWeb, ultimately sourced from the current SSURGO snapshot. Data are returned as \code{raster} objects representing area proportion falling within 800m cells. Currently area proportions are based on major components only. Data are only available in CONUS and returned using an Albers Equal Area / NAD83(2011) coordinate reference system (EPSG: 6350).
 }
 \details{
 \subsection{Taxon Queries}{
@@ -237,5 +237,5 @@ if(requireNamespace("curl") &
 
 }
 \author{
-D.E. Beaudette and Andrew Brown
+D.E. Beaudette and A.G. Brown
 }

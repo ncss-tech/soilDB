@@ -2,7 +2,7 @@
 % Please edit documentation in R/SDA_query.R
 \name{SDA_query}
 \alias{SDA_query}
-\title{Soil Data Access Query}
+\title{Query Soil Data Access}
 \usage{
 SDA_query(q)
 }

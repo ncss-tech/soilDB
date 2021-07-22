@@ -113,9 +113,9 @@ SCAN_site_metadata <- function(site.code) {
 # req: for backwards compatibility
 
 
-#' Fetch SCAN Data
+#' Get data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations
 #'
-#' Query soil/climate data from USDA-NRCS SCAN Stations (experimental)
+#' Query soil/climate data from USDA-NRCS SCAN Stations
 #'
 #' See \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{the fetchSCAN tutorial for details}. These functions require the `httr` and `rvest` libraries.
 #'

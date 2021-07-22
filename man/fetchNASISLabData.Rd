@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchNASISLabData.R
 \name{fetchNASISLabData}
 \alias{fetchNASISLabData}
-\title{Fetch lab data used site/horizon data from a PedonPC database.}
+\title{Get NCSS Pedon laboratory data from NASIS}
 \usage{
 fetchNASISLabData(SS = TRUE, dsn = NULL)
 }

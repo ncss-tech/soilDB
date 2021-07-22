@@ -84,8 +84,7 @@ format_SQL_in_statement <- function(x) {
 }
 
 
-#
-#' Soil Data Access Query
+#' Query Soil Data Access 
 #'
 #' @param q A valid T-SQL query surrounded by double quotes
 #'

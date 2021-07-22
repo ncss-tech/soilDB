@@ -15,9 +15,6 @@ A list with the results.
 \description{
 Get accessory tables and summaries from a local pedonPC Database.
 }
-\details{
-This function currently works only on Windows.
-}
 \seealso{
 \code{\link{get_hz_data_from_pedon_db}},
 \code{\link{get_site_data_from_pedon_db}}

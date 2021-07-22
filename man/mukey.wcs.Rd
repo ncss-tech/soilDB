@@ -2,7 +2,7 @@
 % Please edit documentation in R/mukey-WCS.R
 \name{mukey.wcs}
 \alias{mukey.wcs}
-\title{gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)}
+\title{Get gNATSGO / gSSURGO Map Unit Key (\code{mukey}) grid from SoilWeb Web Coverage Service (WCS)}
 \usage{
 mukey.wcs(aoi, db = c("gnatsgo", "gssurgo"), res = 30, quiet = FALSE)
 }

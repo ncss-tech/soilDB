@@ -7,8 +7,6 @@
 #'
 #' Get, format, mix, and return color data from a NASIS database.
 #'
-#' This function currently works only on Windows.
-#'
 #' @param SS fetch data from Selected Set in NASIS or from the entire local
 #' database (default: `TRUE`)
 #' @param dsn Optional: path to local SQLite database containing NASIS

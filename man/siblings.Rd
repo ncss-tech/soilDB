@@ -2,7 +2,7 @@
 % Please edit documentation in R/siblings.R
 \name{siblings}
 \alias{siblings}
-\title{Lookup siblings and cousins for a given soil series.}
+\title{Get tabular "siblings" and "cousins" for a soil series}
 \usage{
 siblings(s, only.major = FALSE, component.data = FALSE, cousins = FALSE)
 }
@@ -27,7 +27,7 @@ and number of co-occurrences} \item{cousin.data}{\code{data.frame}
 containing cousin component data} }
 }
 \description{
-Lookup siblings and cousins for a given soil series, from the current fiscal
+Look up siblings and cousins for a given soil series from the current fiscal
 year SSURGO snapshot via SoilWeb.
 }
 \details{

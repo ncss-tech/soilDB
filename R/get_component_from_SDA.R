@@ -707,7 +707,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 
 
 
-#' Download and Flatten Data from Soil Data Access
+#' Get SSURGO/STATSGO2 Mapunit Data from Soil Data Access
 #'
 #' Functions to download and flatten commonly used tables and from Soil Data
 #' Access, and create soil profile collection objects (SPC).

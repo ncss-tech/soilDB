@@ -7,11 +7,12 @@
 \alias{soilDB}
 \title{Soil Database Interface}
 \description{
+A collection of functions for reading data from USDA-NCSS soil databases.
+}
+\details{
 This package provides methods for extracting soils information from local
 PedonPC and AK Site databases (MS Access format), local NASIS databases (MS
-SQL Server), and the SDA web service. Currently USDA-NCSS data sources are
-supported, however, there are plans to develop interfaces to outside systems
-such as the Global Soil Mapping project.
+SQL Server), Soil Data Access and various other soil-related web services.
 }
 \seealso{
 \code{\link{fetchPedonPC}, \link{fetchNASIS}, \link{SDA_query}, \link{loafercreek}}

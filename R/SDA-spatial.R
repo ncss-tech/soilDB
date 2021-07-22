@@ -180,7 +180,7 @@ FROM geom_data;
 
 
 
-#' Query Soil Data Access via spatial intersection with supplied geometries.
+#' Query Soil Data Access by spatial intersection with supplied geometry
 #' 
 #' Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied
 #' geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons

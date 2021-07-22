@@ -397,7 +397,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 
 
 
-#' Load and Flatten Data from SSURGO file geodatabases
+#' Get a SoilProfileCollection from a SSURGO file geodatabase
 #' 
 #' Functions to load and flatten commonly used tables and from SSURGO file
 #' geodatabases, and create soil profile collection objects (SPC).

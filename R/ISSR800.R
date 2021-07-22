@@ -1,5 +1,5 @@
 
-#' @title ISSR-800 Web Coverage Service (WCS)
+#' @title Get 800m gridded soil properties from SoilWeb ISSR-800 Web Coverage Service (WCS)
 #' 
 #' @author D.E. Beaudette and A.G. Brown
 #' 

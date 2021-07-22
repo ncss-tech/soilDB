@@ -2,14 +2,11 @@
 # https://www.postgresql.org/docs/9.5/static/textsearch-controls.html
 # these are all parameters expected by the SoilWeb OSD Fulltext search
 
-
-
-#' @title Full text searching of the USDA-NRCS Official Series Descriptions
+#' Search full text of Official Series Description on SoilWeb 
 #' 
 #' @description This is the R interface to \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{OSD search by Section} and \href{https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php}{OSD Search} APIs provided by SoilWeb.
 #' 
 #' OSD records are searched with the \href{https://www.postgresql.org/docs/9.5/textsearch.html}{PostgreSQL fulltext indexing} and query system (\href{https://www.postgresql.org/docs/9.5/datatype-textsearch.html}{syntax details}). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. 
-#' 
 #' 
 #' @param everything search entire OSD text (default is NULL), `mlra` may also be specified, all other arguments are ignored
 #' @param mlra a comma-delimited string of MLRA to search ('17,18,22A')

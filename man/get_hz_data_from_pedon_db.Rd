@@ -15,9 +15,6 @@ A data.frame.
 \description{
 Get horizon-level data from a PedonPC database.
 }
-\details{
-This function currently works only on Windows.
-}
 \note{
 NULL total rock fragment values are assumed to represent an \emph{absence}
 of rock fragments, and set to 0.

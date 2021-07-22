@@ -25,10 +25,10 @@ options(\code{stringsAsFactors = FALSE})}
 table structure; default: \code{NULL}}
 }
 \value{
-A list with the results.
+a \code{data.frame}
 }
 \description{
-This function currently works only on Windows.
+Get component data from a local NASIS Database
 }
 \examples{
 

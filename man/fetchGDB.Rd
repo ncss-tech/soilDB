@@ -5,7 +5,7 @@
 \alias{get_legend_from_GDB}
 \alias{get_mapunit_from_GDB}
 \alias{get_component_from_GDB}
-\title{Load and Flatten Data from SSURGO file geodatabases}
+\title{Get a SoilProfileCollection from a SSURGO file geodatabase}
 \usage{
 fetchGDB(
   dsn = "gNATSGO_CONUS.gdb",

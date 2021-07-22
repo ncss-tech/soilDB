@@ -1,4 +1,4 @@
-#' Fetch SoilGrids 250m properties information from point locations
+#' Get SoilGrids 250m properties information from point locations
 #'
 #' This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes. 
 #' 

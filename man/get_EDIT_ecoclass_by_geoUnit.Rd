@@ -2,9 +2,7 @@
 % Please edit documentation in R/fetchEDIT_tools.R
 \name{get_EDIT_ecoclass_by_geoUnit}
 \alias{get_EDIT_ecoclass_by_geoUnit}
-\title{Get EDIT ecological sites from ESD or ESG catalog by MLRA
-
-Supply a vector of target \code{geoUnit}. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd}
+\title{Get Ecological Dynamics Information Tool (EDIT) ecological sites by catalog (ESD/ESG) and MLRA}
 \usage{
 get_EDIT_ecoclass_by_geoUnit(geoUnit, catalog = c("esd", "esg"))
 }
@@ -17,9 +15,7 @@ get_EDIT_ecoclass_by_geoUnit(geoUnit, catalog = c("esd", "esg"))
 A \code{data.frame} containing: \code{geoUnit}, \code{id}, \code{legacyId}, \code{name}
 }
 \description{
-Get EDIT ecological sites from ESD or ESG catalog by MLRA
-
-Supply a vector of target \code{geoUnit}. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd
+Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd. \code{geoUnit} refers to MLRA codes, possibly with a leading zero and trailing "X" for two digit MLRA symbols.
 }
 \examples{
 \donttest{

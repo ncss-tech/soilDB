@@ -5,9 +5,9 @@
 # cousins: return siblings of siblings (cousins)?
 
 
-#' Lookup siblings and cousins for a given soil series.
+#' Get tabular "siblings" and "cousins" for a soil series
 #' 
-#' Lookup siblings and cousins for a given soil series, from the current fiscal
+#' Look up siblings and cousins for a given soil series from the current fiscal
 #' year SSURGO snapshot via SoilWeb.
 #' 
 #' The siblings of any given soil series are defined as those soil series

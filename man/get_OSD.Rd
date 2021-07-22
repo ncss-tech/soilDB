@@ -3,7 +3,7 @@
 \name{get_OSD}
 \alias{get_OSD}
 \alias{get_OSD_JSON}
-\title{Fetch Official Series Description Data from JSON, HTML or TXT sources}
+\title{Get Official Series Description Data from JSON, HTML or TXT sources}
 \usage{
 get_OSD(
   series,
@@ -25,7 +25,7 @@ get_OSD(
 For JSON result: A \code{data.frame} with 1 row per series, and 1 column per "section" in the OSD as defined in National Soil Survey Handbook. For TXT or HTML result a list of character vectors containing OSD text with 1 element per series and one value per line.
 }
 \description{
-Fetch Official Series Description Data from JSON, HTML or TXT sources
+Get Official Series Description Data from JSON, HTML or TXT sources
 }
 \details{
 The default \code{base_url} for \code{result="json"} is to JSON files stored in a GitHub repository  that is regularly updated from the official source of Series Descriptions. Using format: \verb{https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/\{LETTER\}/\{SERIES\}.json} for JSON. And \verb{"https://soilseriesdesc.sc.egov.usda.gov/OSD_Docs/\{LETTER\}/\{SERIES\}.html} is for \code{result="html"} (official source).

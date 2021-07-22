@@ -1,8 +1,5 @@
-#' Check pedon horizon table for logic errors
-#'
-#' Check pedon horizon table for logic errors
-#'
-#'
+
+#' Get logic errors in NASIS Pedon Horizon  
 #' @param strict how strict should horizon boundaries be checked for
 #' consistency: TRUE=more | FALSE=less
 #' @param SS fetch data from the currently loaded selected set in NASIS or from

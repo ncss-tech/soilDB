@@ -12,8 +12,6 @@
 #' 
 #' Get horizon-level data from a PedonPC database.
 #' 
-#' This function currently works only on Windows.
-#' 
 #' @param dsn The path to a 'pedon.mdb' database.
 #' @return A data.frame.
 #' @note NULL total rock fragment values are assumed to represent an _absence_

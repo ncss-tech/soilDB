@@ -159,7 +159,7 @@
 # fully vectorized in all arguments except BBOX
 
 
-#' Fetch KSSL Data
+#' Get Kellogg Soil Survey Laboratory Data from SoilWeb snapshot
 #' 
 #' Download soil characterization and morphologic data via BBOX, MLRA, or soil
 #' series name query, from the KSSL database.

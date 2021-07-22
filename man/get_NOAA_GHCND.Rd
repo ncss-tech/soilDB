@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchNOAA.R
 \name{get_NOAA_GHCND}
 \alias{get_NOAA_GHCND}
-\title{Get Global Historical Climatology Network Daily (GHCND) data from NOAA API for given datatype(s), station IDs and years.}
+\title{Get Global Historical Climatology Network Daily (GHCND) data from NOAA API}
 \usage{
 get_NOAA_GHCND(stations, years, datatypeids, apitoken)
 }

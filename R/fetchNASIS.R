@@ -3,7 +3,7 @@
 # ... : arguments passed on to helper functions
 
 
-#' Fetch commonly used site/pedon/horizon or component data from NASIS.
+#' Get a pedon or component data SoilProfileCollection from NASIS
 #'
 #' Fetch commonly used site/pedon/horizon data or component from NASIS,
 #' returned as a SoilProfileCollection object.

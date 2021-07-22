@@ -1,6 +1,6 @@
 
 
-#' @title gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)
+#' @title Get gNATSGO / gSSURGO Map Unit Key (`mukey`) grid from SoilWeb Web Coverage Service (WCS)
 #' 
 #' @description Download chunks of the gNATSGO or gSSURGO map unit key grid via bounding-box from the SoilWeb WCS.
 #' 

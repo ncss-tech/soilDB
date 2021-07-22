@@ -143,8 +143,6 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NUL
 
 #' Get component data from a local NASIS Database
 #'
-#' This function currently works only on Windows.
-#'
 #' @aliases get_component_data_from_NASIS_db get_component_restrictions_from_NASIS_db
 #'
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
@@ -652,8 +650,6 @@ get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' Get component month data from a local NASIS Database
 #'
 #' Get component month data from a local NASIS Database.
-#'
-#' This function currently works only on Windows.
 #'
 #' @param SS get data from the currently loaded Selected Set in NASIS or from
 #' the entire local database (default: TRUE)

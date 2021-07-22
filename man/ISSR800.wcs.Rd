@@ -2,7 +2,7 @@
 % Please edit documentation in R/ISSR800.R
 \name{ISSR800.wcs}
 \alias{ISSR800.wcs}
-\title{ISSR-800 Web Coverage Service (WCS)}
+\title{Get 800m gridded soil properties from SoilWeb ISSR-800 Web Coverage Service (WCS)}
 \usage{
 ISSR800.wcs(aoi, var, res = 800, quiet = FALSE)
 }
