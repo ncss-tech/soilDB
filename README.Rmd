@@ -43,11 +43,12 @@ Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: S
 
  * `SDA_query()` returns a `try-error` for queries with invalid syntax or on network error; empty results are an empty `data.frame()`
 
- * `SDA_spatialQuery()` can return Soil Survey Area sapolygon data
- * 
+ * `SDA_spatialQuery()` can return Soil Survey Area `sapolygon` data
+ 
  * `fetchSDA_spatial()` can return STATSGO `gsmmupolygon` or Soil Survey Area `sapolygon` data; and can join to the `legend` table
  
  *  Added several new SDA query methods based on [ssurgoOnDemand](https://github.com/ncss-tech/ssurgoOnDemand) by Jason Nemecek and Chad Ferguson:
+ 
    * `get_SDA_property()`, `get_SDA_interpretation()`, `get_SDA_muaggatt()`, `get_SDA_hydric()`, `get_SDA_pmgroupname()`
    
 #### MS Access
