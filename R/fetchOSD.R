@@ -78,7 +78,7 @@
 #'   \item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
 #'   \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
 #'   \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
-#'   \item{climate}{experimental climate summaries from PRISM stack}
+#'   \item{climate}{experimental climate summaries from PRISM stack (CONUS only)}
 #'   \item{metadata}{metadata associated with SoilWeb cached summaries}
 #' } 
 #' 
