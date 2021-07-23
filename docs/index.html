@@ -118,15 +118,14 @@
 <h4 class="hasAnchor">
 <a href="#soil-data-access-sda" class="anchor"></a>Soil Data Access (SDA)</h4>
 <ul>
+<li><p><code><a href="reference/SDA_query.html">SDA_query()</a></code> returns a <code>try-error</code> for queries with invalid syntax or on network error; empty results are an empty <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code></p></li>
+<li><p><code><a href="reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> can return Soil Survey Area sapolygon data</p></li>
+<li><ul>
 <li>
-<code>SDA_query</code> returns a <code>try-error</code> for queries with invalid syntax or on network error; empty results are an empty <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code>
-</li>
-<li>
-<code>fetchSDA_spatial</code> can return STATSGO <code>gsmmupolygon</code> or Soil Survey Area <code>sapolygon</code> data; and can join to the <code>legend</code> table</li>
-<li>Added several new SDA query methods based on <a href="https://github.com/ncss-tech/ssurgoOnDemand">ssurgoOnDemand</a> by Jason Nemecek and Chad Ferguson:</li>
-<li>
-<code>get_SDA_property</code>, <code>get_SDA_interpretation</code>, <code>get_SDA_muaggatt</code>, <code>get_SDA_hydric</code>, <code>get_SDA_pmgroupname</code>
-</li>
+<code><a href="reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code> can return STATSGO <code>gsmmupolygon</code> or Soil Survey Area <code>sapolygon</code> data; and can join to the <code>legend</code> table</li>
+</ul></li>
+<li><p>Added several new SDA query methods based on <a href="https://github.com/ncss-tech/ssurgoOnDemand">ssurgoOnDemand</a> by Jason Nemecek and Chad Ferguson:</p></li>
+<li><p><code><a href="reference/get_SDA_property.html">get_SDA_property()</a></code>, <code><a href="reference/get_SDA_interpretation.html">get_SDA_interpretation()</a></code>, <code><a href="reference/get_SDA_muaggatt.html">get_SDA_muaggatt()</a></code>, <code><a href="reference/get_SDA_hydric.html">get_SDA_hydric()</a></code>, <code><a href="reference/get_SDA_pmgroupname.html">get_SDA_pmgroupname()</a></code></p></li>
 </ul>
 </div>
 <div id="ms-access" class="section level4">
@@ -141,7 +140,7 @@
 <a href="#soilweb-api" class="anchor"></a>SoilWeb API</h4>
 <ul>
 <li>
-<code>ISSR800.wcs</code> and <code>mukey.wcs</code> now return a result that inherits from <code>try-error</code> (and a message) if the Web Coverage Service fails</li>
+<code><a href="reference/ISSR800.wcs.html">ISSR800.wcs()</a></code> and <code><a href="reference/mukey.wcs.html">mukey.wcs()</a></code> now return a result that inherits from <code>try-error</code> (and a message) if the Web Coverage Service fails</li>
 </ul>
 </div>
 </div>
@@ -281,7 +280,7 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># viz of hillslope position, from SSURGO component records</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>res &lt;-<span class="st"> </span><span class="kw">vizHillslopePosition</span>(s<span class="op">$</span>hillpos, <span class="dt">annotation.cex =</span> <span class="fl">0.9</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="kw">print</span>(res<span class="op">$</span>fig)</span></code></pre></div>
-<p><img src="https://i.imgur.com/X4FG928.png" width="1056"></p>
+<p><img src="https://i.imgur.com/RQhdWRv.png" width="1056"></p>
 </div>
 <div id="make-profile-sketches" class="section level3">
 <h3 class="hasAnchor">
@@ -295,7 +294,7 @@
 <span id="cb6-7"><a href="#cb6-7"></a>  <span class="dt">axis.line.offset =</span> <span class="fl">-0.1</span>,</span>
 <span id="cb6-8"><a href="#cb6-8"></a>  <span class="dt">width =</span> <span class="fl">0.2</span></span>
 <span id="cb6-9"><a href="#cb6-9"></a>)</span></code></pre></div>
-<p><img src="https://i.imgur.com/H5ZLNyT.png" width="1344"></p>
+<p><img src="https://i.imgur.com/nvn3OFu.png" width="1344"></p>
 </div>
 <div id="identify-tabular-siblings" class="section level3">
 <h3 class="hasAnchor">
@@ -326,7 +325,7 @@
 <span id="cb8-12"><a href="#cb8-12"></a>  <span class="dt">cex.taxon.labels =</span> <span class="dv">1</span>,</span>
 <span id="cb8-13"><a href="#cb8-13"></a>  <span class="dt">cex.names =</span> <span class="dv">1</span></span>
 <span id="cb8-14"><a href="#cb8-14"></a>)</span></code></pre></div>
-<p><img src="https://i.imgur.com/NstdVl7.png" width="1344"></p>
+<p><img src="https://i.imgur.com/S8eL9yj.png" width="1344"></p>
 </div>
 </div>
 <div id="dependency-graph" class="section level2">
