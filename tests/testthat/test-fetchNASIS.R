@@ -72,7 +72,13 @@ test_that("fetchNASIS(from='pedons') returns reasonable data", {
   expect_equal(any(is.na(x$total_frags_pct)), FALSE)
   expect_equal(any(is.na(x$total_frags_pct_nopf)), FALSE)
   expect_equal(any(is.na(x$fragvoltot)), FALSE)
-
+  
+  # make sure fill and rmHzErrors work without error
+  y <- suppressWarnings(fetchNASIS(from = 'pedons', fill = TRUE))
+  expect_true(inherits(y, 'SoilProfileCollection'))
+  
+  z <- suppressWarnings(fetchNASIS(from = 'pedons', fill = TRUE, rmHzErrors = FALSE))
+  expect_true(inherits(z, 'SoilProfileCollection'))
 })
 
 test_that("fetchNASIS(from='pedons') nullFragsAreZero works as expected", {

@@ -2,6 +2,7 @@
 
 # get NASIS site/pedon/horizon/diagnostic feature data
 .fetchNASIS_pedons <- function(SS = TRUE,
+                               fill = FALSE,
                                rmHzErrors = TRUE,
                                nullFragsAreZero = TRUE,
                                soilColorState = 'moist',
@@ -22,7 +23,8 @@
   # these fail gracefully when no data in local DB | selected set
   site_data  <- get_site_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors,
                                             dsn = dsn)
-  hz_data    <- get_hz_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors,
+  hz_data    <- get_hz_data_from_NASIS_db(SS = SS, fill = fill, 
+                                          stringsAsFactors = stringsAsFactors,
                                           dsn = dsn)
   color_data <- get_colors_from_NASIS_db(SS = SS, dsn = dsn)
 
@@ -81,23 +83,37 @@
   }
 
   #  aqp uses data.table for efficient logic checking
+  filled.ids <- character(0)
   if (rmHzErrors) {
 
     # get overall validity (combination of 4 logic tests applied to each peiid)
     h.test <- aqp::checkHzDepthLogic(hz_data, c("hzdept","hzdepb"), "peiid", fast = TRUE)
-
+    
+    # fill=TRUE adds horizons with NA phiid will have NA depths -- will not pass logic check
+    filled.idx <- which(is.na(hz_data$phiid))
+    if(length(filled.idx) > 0) {
+      filled.ids <- as.character(hz_data$peiid[filled.idx])
+      #print(dput(filled.ids))
+    }
+    
     # which are the good (valid) ones?
     good.ids <- as.character(h.test$peiid[which(h.test$valid)])
     bad.ids <- as.character(h.test$peiid[which(!h.test$valid)])
-    bad.horizons <- hz_data[which(!h.test$valid), c("peiid", "phiid",
-                                                    "pedon_id", "hzname",
-                                                    "hzdept", "hzdepb")]
+    bad.horizons <- hz_data[hz_data$peiid %in% h.test$peiid[which(!h.test$valid)], 
+                            c("peiid", "phiid", "pedon_id", "hzname", "hzdept", "hzdepb")]
     bad.pedon.ids <- site_data$pedon_id[which(site_data$peiid %in% bad.ids)]
-
+    
+    # handle fill=TRUE
+    if(length(filled.ids) > 0) {
+      good.ids <- unique(c(good.ids, filled.ids))
+      bad.ids <- unique(bad.ids[!bad.ids %in% filled.ids])
+    }
+    
     # optionally filter pedons WITH NO horizonation inconsistencies
-    if (rmHzErrors)
+    if (rmHzErrors) {
       hz_data <- hz_data[which(hz_data$peiid %in% good.ids), ]
-
+    }
+    
     # keep track of those pedons with horizonation errors
     assign('bad.pedon.ids', value = bad.pedon.ids, envir = soilDB.env)
     assign("bad.horizons", value = data.frame(bad.horizons), envir = soilDB.env)
@@ -245,18 +261,20 @@
     if (length(get('dup.pedon.ids', envir = soilDB.env)) > 0)
       message("-> QC: duplicate pedons: see `get('dup.pedon.ids', envir=soilDB.env)`")
 
-  # set NASIS-specific horizon identifier
-  tryCatch(hzidname(hz_data) <- 'phiid', error = function(e) {
-    if (grepl(e$message, pattern = "not unique$")) {
-       if (!rmHzErrors) {
-        # if rmHzErrors = FALSE, keep unique integer assigned ID to all records automatically
-        message("-> QC: duplicated horizons found! defaulting to `hzID` as unique horizon ID.")
-       } else {
-         stop(e)
-       }
+  # set NASIS component specific horizon identifier
+  if(!fill & length(filled.ids) == 0) {
+    res <- try(hzidname(hz_data) <- 'phiid')
+    if(inherits(res, 'try-error')) {
+      if(!rmHzErrors) {
+        warning("cannot set `phiid` as unique pedon horizon key -- duplicate horizons present with rmHzErrors=FALSE")
+      } else {
+        warning("cannot set `phiid` as unique pedon horizon key -- defaulting to `hzID`")
+      }
     }
-  })
-
+  } else {
+    warning("cannot set `phiid` as unique pedon horizon key - `NA` introduced by fill=TRUE", call.=F)
+  }
+  
   # set hz designation and texture fields -- NB: chose to use calculated texture -- more versatile
   # functions designed to use hztexclname() should handle presence of in-lieu, modifiers, etc.
   hzdesgnname(hz_data) <- "hzname"

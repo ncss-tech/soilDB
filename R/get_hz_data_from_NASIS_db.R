@@ -7,7 +7,9 @@
 #' Get horizon-level data from a local NASIS database.
 #'
 #' @param SS fetch data from Selected Set in NASIS or from the entire local database (default: `TRUE`)
-#'
+#' 
+#' @param fill include pedons without horizon data in result? default: `FALSE`
+#' 
 #' @param stringsAsFactors logical: should character vectors be converted to
 #' factors? This argument is passed to the `uncode()` function. It does not
 #' convert those vectors that have been set outside of `uncode()` (i.e. hard
@@ -26,10 +28,11 @@
 #' @keywords manip
 #' @export get_hz_data_from_NASIS_db
 get_hz_data_from_NASIS_db <- function(SS = TRUE,
+                                      fill = FALSE,
                                       stringsAsFactors = default.stringsAsFactors(),
                                       dsn = NULL) {
 
-  q <- "SELECT peiid, phiid, upedonid as pedon_id,
+  q <- sprintf("SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
   bounddistinct, boundtopo,
   claytotest AS clay, CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END AS silt,
@@ -38,7 +41,7 @@ get_hz_data_from_NASIS_db <- function(SS = TRUE,
   FROM
 
   pedon_View_1 p
-  INNER JOIN phorizon_View_1 ph ON ph.peiidref = p.peiid
+  %s JOIN phorizon_View_1 ph ON ph.peiidref = p.peiid
   LEFT OUTER JOIN phsample_View_1 phs ON phs.phiidref = ph.phiid
   LEFT OUTER JOIN
   (
@@ -47,7 +50,7 @@ get_hz_data_from_NASIS_db <- function(SS = TRUE,
   GROUP BY phiidref
   ) AS pht ON pht.phiidref = ph.phiid
 
-  ORDER BY p.upedonid, ph.hzdept ASC;"
+  ORDER BY p.upedonid, ph.hzdept ASC;", ifelse(fill, "LEFT", "INNER"))
 
   channel <- dbConnectNASIS(dsn)
 

@@ -55,8 +55,7 @@ convenience field \code{soil_color}? (\code{'moist'} or \code{'dry'})}
 \item{lab}{should the \code{phlabresults} child table be fetched with
 site/pedon/horizon data (default: \code{FALSE})}
 
-\item{fill}{(\code{fetchNASIS(from='components')} only: include component records
-without horizon data in result? (default: \code{FALSE})}
+\item{fill}{include pedon or component records without horizon data in result? (default: \code{FALSE})}
 
 \item{stringsAsFactors}{logical: should character vectors be converted to
 factors? This argument is passed to the \code{uncode()} function. It does not
