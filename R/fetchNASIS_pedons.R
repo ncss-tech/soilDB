@@ -83,6 +83,7 @@
   }
 
   #  aqp uses data.table for efficient logic checking
+  filled.ids <- character(0)
   if (rmHzErrors) {
 
     # get overall validity (combination of 4 logic tests applied to each peiid)
@@ -90,7 +91,6 @@
     
     # fill=TRUE adds horizons with NA phiid will have NA depths -- will not pass logic check
     filled.idx <- which(is.na(hz_data$phiid))
-    filled.ids <- character(0)
     if(length(filled.idx) > 0) {
       filled.ids <- as.character(hz_data$peiid[filled.idx])
       #print(dput(filled.ids))
