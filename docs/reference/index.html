@@ -168,31 +168,31 @@
         <td>
           <p><code><a href="fetchGDB.html">fetchGDB()</a></code> </p>
         </td>
-        <td><p>Load and Flatten Data from SSURGO file geodatabases</p></td>
+        <td><p>Get a SoilProfileCollection from a SSURGO file geodatabase</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="fetchHenry.html">fetchHenry()</a></code> </p>
         </td>
-        <td><p>Download Data from the Henry Mount Soil Temperature and Water Database</p></td>
+        <td><p>Get data from Henry Mount Soil Temperature and Water Database</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="fetchKSSL.html">fetchKSSL()</a></code> </p>
         </td>
-        <td><p>Fetch KSSL Data</p></td>
+        <td><p>Get Kellogg Soil Survey Laboratory Data from SoilWeb snapshot</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="fetchNASIS.html">fetchNASIS()</a></code> </p>
         </td>
-        <td><p>Fetch commonly used site/pedon/horizon or component data from NASIS.</p></td>
+        <td><p>Get a pedon or component data SoilProfileCollection from NASIS</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="fetchNASISLabData.html">fetchNASISLabData()</a></code> </p>
         </td>
-        <td><p>Fetch lab data used site/horizon data from a PedonPC database.</p></td>
+        <td><p>Get NCSS Pedon laboratory data from NASIS</p></td>
       </tr><tr>
         
         <td>
@@ -204,13 +204,13 @@
         <td>
           <p><code><a href="fetchOSD.html">fetchOSD()</a></code> </p>
         </td>
-        <td><p>Fetch Official Series Descriptions and summaries from SoilWeb API</p></td>
+        <td><p>Get Official Series Descriptions and summaries from SoilWeb API</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="fetchPedonPC.html">fetchPedonPC()</a></code> </p>
         </td>
-        <td><p>Fetch commonly used site/horizon data from a PedonPC v.5 database.</p></td>
+        <td><p>Get a SoilProfileCollection from a PedonPC v.5 database</p></td>
       </tr><tr>
         
         <td>
@@ -222,31 +222,31 @@
         <td>
           <p><code><a href="fetchSCAN.html">fetchSCAN()</a></code> </p>
         </td>
-        <td><p>Fetch SCAN Data</p></td>
+        <td><p>Get data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="fetchSDA.html">fetchSDA()</a></code> </p>
         </td>
-        <td><p>Download and Flatten Data from Soil Data Access</p></td>
+        <td><p>Get SSURGO/STATSGO2 Mapunit Data from Soil Data Access</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="fetchSDA_spatial.html">fetchSDA_spatial()</a></code> </p>
         </td>
-        <td><p>Query Soil Data Access for Spatial Data</p></td>
+        <td><p>Get Spatial Data from Soil Data Access by <code>mukey</code>, <code>nationalmusym</code> or <code>areasymbol</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="fetchSoilGrids.html">fetchSoilGrids()</a></code> </p>
         </td>
-        <td><p>Fetch SoilGrids 250m properties information from point locations</p></td>
+        <td><p>Get SoilGrids 250m properties information from point locations</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="fetchVegdata.html">fetchVegdata()</a></code> </p>
         </td>
-        <td><p>Load most common vegplot data from local NASIS database</p></td>
+        <td><p>Get vegetation plot data from local NASIS database</p></td>
       </tr><tr>
         
         <td>
@@ -264,7 +264,7 @@
         <td>
           <p><code><a href="getHzErrorsNASIS.html">getHzErrorsNASIS()</a></code> </p>
         </td>
-        <td><p>Check pedon horizon table for logic errors</p></td>
+        <td><p>Get logic errors in NASIS Pedon Horizon</p></td>
       </tr><tr>
         
         <td>
@@ -294,15 +294,13 @@
         <td>
           <p><code><a href="get_cosoilmoist_from_NASIS.html">get_cosoilmoist_from_NASIS()</a></code> </p>
         </td>
-        <td><p>Read and Flatten the Component Soil Moisture Tables</p></td>
+        <td><p>Get the Component Soil Moisture Tables</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_EDIT_ecoclass_by_geoUnit.html">get_EDIT_ecoclass_by_geoUnit()</a></code> </p>
         </td>
-        <td><p>Get EDIT ecological sites from ESD or ESG catalog by MLRA
-
-Supply a vector of target <code>geoUnit</code>. Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd</p></td>
+        <td><p>Get Ecological Dynamics Information Tool (EDIT) ecological sites by catalog (ESD/ESG) and MLRA</p></td>
       </tr><tr>
         
         <td>
@@ -350,25 +348,25 @@ Supply a vector of target <code>geoUnit</code>. Data are accessed via Ecological
         <td>
           <p><code><a href="get_NASIS_table_name_by_purpose.html">get_NASIS_table_name_by_purpose()</a></code> </p>
         </td>
-        <td><p>Return NASIS 7 Physical Table Names</p></td>
+        <td><p>Get NASIS 7 Physical Table Names</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_NOAA_GHCND.html">get_NOAA_GHCND()</a></code> </p>
         </td>
-        <td><p>Get Global Historical Climatology Network Daily (GHCND) data from NOAA API for given datatype(s), station IDs and years.</p></td>
+        <td><p>Get Global Historical Climatology Network Daily (GHCND) data from NOAA API</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_NOAA_stations_nearXY.html">get_NOAA_stations_nearXY()</a></code> </p>
         </td>
-        <td><p>Query the NOAA API to get station data near a given latitude and longitude</p></td>
+        <td><p>Get NOAA station data near a given latitude and longitude</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_OSD.html">get_OSD()</a></code> </p>
         </td>
-        <td><p>Fetch Official Series Description Data from JSON, HTML or TXT sources</p></td>
+        <td><p>Get Official Series Description Data from JSON, HTML or TXT sources</p></td>
       </tr><tr>
         
         <td>
@@ -428,7 +426,7 @@ Supply a vector of target <code>geoUnit</code>. Data are accessed via Ecological
         <td>
           <p><code><a href="get_veg_data_from_NASIS_db.html">get_veg_data_from_NASIS_db()</a></code> </p>
         </td>
-        <td><p>Get veg data from a local NASIS Database</p></td>
+        <td><p>Get vegetation data from a local NASIS Database</p></td>
       </tr><tr>
         
         <td>
@@ -464,7 +462,7 @@ Supply a vector of target <code>geoUnit</code>. Data are accessed via Ecological
         <td>
           <p><code><a href="ISSR800.wcs.html">ISSR800.wcs()</a></code> </p>
         </td>
-        <td><p>ISSR-800 Web Coverage Service (WCS)</p></td>
+        <td><p>Get 800m gridded soil properties from SoilWeb ISSR-800 Web Coverage Service (WCS)</p></td>
       </tr><tr>
         
         <td>
@@ -512,7 +510,7 @@ Supply a vector of target <code>geoUnit</code>. Data are accessed via Ecological
         <td>
           <p><code><a href="mukey.wcs.html">mukey.wcs()</a></code> </p>
         </td>
-        <td><p>gNATSGO / gSSURGO Map Unit Key Web Coverage Service (WCS)</p></td>
+        <td><p>Get gNATSGO / gSSURGO Map Unit Key (<code>mukey</code>) grid from SoilWeb Web Coverage Service (WCS)</p></td>
       </tr><tr>
         
         <td>
@@ -524,7 +522,7 @@ Supply a vector of target <code>geoUnit</code>. Data are accessed via Ecological
         <td>
           <p><code><a href="OSDquery.html">OSDquery()</a></code> </p>
         </td>
-        <td><p>Full text searching of the USDA-NRCS Official Series Descriptions</p></td>
+        <td><p>Search full text of Official Series Description on SoilWeb</p></td>
       </tr><tr>
         
         <td>
@@ -542,25 +540,25 @@ Supply a vector of target <code>geoUnit</code>. Data are accessed via Ecological
         <td>
           <p><code><a href="ROSETTA.html">ROSETTA()</a></code> </p>
         </td>
-        <td><p>ROSETTA Model API</p></td>
+        <td><p>Query USDA-ARS ROSETTA Model API</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="SCAN_SNOTEL_metadata.html">SCAN_SNOTEL_metadata</a></code> </p>
         </td>
-        <td><p>SCAN and SNOTEL Station Metadata</p></td>
+        <td><p>Get SCAN and SNOTEL Station Metadata</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="SDA_query.html">SDA_query()</a></code> </p>
         </td>
-        <td><p>Soil Data Access Query</p></td>
+        <td><p>Query Soil Data Access</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="SDA_spatialQuery.html">SDA_spatialQuery()</a></code> </p>
         </td>
-        <td><p>Query Soil Data Access via spatial intersection with supplied geometries.</p></td>
+        <td><p>Query Soil Data Access by spatial intersection with supplied geometry</p></td>
       </tr><tr>
         
         <td>
@@ -572,7 +570,7 @@ Supply a vector of target <code>geoUnit</code>. Data are accessed via Ecological
         <td>
           <p><code><a href="siblings.html">siblings()</a></code> </p>
         </td>
-        <td><p>Lookup siblings and cousins for a given soil series.</p></td>
+        <td><p>Get tabular "siblings" and "cousins" for a soil series</p></td>
       </tr><tr>
         
         <td>
@@ -608,7 +606,7 @@ Supply a vector of target <code>geoUnit</code>. Data are accessed via Ecological
         <td>
           <p><code><a href="taxaExtent.html">taxaExtent()</a></code> </p>
         </td>
-        <td><p>Retrieve Soil Taxonomy Membership Grids</p></td>
+        <td><p>Get SoilWeb 800m Major Component Soil Taxonomy Grids</p></td>
       </tr><tr>
         
         <td>
