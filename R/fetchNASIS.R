@@ -63,8 +63,7 @@
 #' convenience field `soil_color`? (`'moist'` or `'dry'`)
 #' @param lab should the `phlabresults` child table be fetched with
 #' site/pedon/horizon data (default: `FALSE`)
-#' @param fill (`fetchNASIS(from='components')` only: include component records
-#' without horizon data in result? (default: `FALSE`)
+#' @param fill include pedon or component records without horizon data in result? (default: `FALSE`)
 #' @param stringsAsFactors logical: should character vectors be converted to
 #' factors? This argument is passed to the `uncode()` function. It does not
 #' convert those vectors that have been set outside of `uncode()` (i.e. hard
@@ -74,7 +73,7 @@
 #' @return A SoilProfileCollection object
 #' @author D. E. Beaudette, J. M. Skovlin, S.M. Roecker, A.G. Brown
 #' @export fetchNASIS
-fetchNASIS <- function(from='pedons',
+fetchNASIS <- function(from = 'pedons',
                        url = NULL,
                        SS = TRUE,
                        rmHzErrors = TRUE,
@@ -103,6 +102,7 @@ fetchNASIS <- function(from='pedons',
   if (from == 'pedons') {
     # pass arguments through
     res <- .fetchNASIS_pedons(SS = SS,
+                              fill = fill, 
                               rmHzErrors = rmHzErrors,
                               nullFragsAreZero = nullFragsAreZero,
                               soilColorState = soilColorState,

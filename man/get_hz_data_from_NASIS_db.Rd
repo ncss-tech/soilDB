@@ -6,12 +6,15 @@
 \usage{
 get_hz_data_from_NASIS_db(
   SS = TRUE,
+  fill = FALSE,
   stringsAsFactors = default.stringsAsFactors(),
   dsn = NULL
 )
 }
 \arguments{
 \item{SS}{fetch data from Selected Set in NASIS or from the entire local database (default: \code{TRUE})}
+
+\item{fill}{include pedons without horizon data in result? default: \code{FALSE}}
 
 \item{stringsAsFactors}{logical: should character vectors be converted to
 factors? This argument is passed to the \code{uncode()} function. It does not
