@@ -1,4 +1,4 @@
-# soilDB 2.6.3 (2021-07-16)
+# soilDB 2.6.3 (2021-07-22)
  * `SDA_query()` and all functions that call `SDA_query()` get proper column class handling (related to #190), however:
    - be careful with the use of CAST(): unknown datatypes may not be correctly interpreted
    - previous column classes that were incorrectly guessed by `type.convert()` may have changed (e.g. `component.wei`)
@@ -20,6 +20,7 @@
  * Thanks to @hammerly who pointed out weighted averaging of NASIS `phlabresults` wasn't working as expected and for highlighting some more improvements (https://github.com/ncss-tech/soilDB/issues/192)
  * `get_OSD()` TXT and HTML formats now supported (in addition to JSON) through a common function interface
  * Added `get_NASIS_table_key_by_name()` `get_NASIS_fkey_by_name()`, `get_NASIS_pkeyref_by_name()`, `get_NASIS_pkey_by_name()`, `get_NASIS_table_name_by_purpose()` methods for helping get information on primary/foreign keys and thematic groups of NASIS tables (useful for creating SQLite/external snapshots of NASIS tables)
+ * `get_mapunit_from_NASIS()`, `get_legend_from_NASIS()` and `get_lmuaoverlap_from_NASIS()` now works for "MLRA Survey Area" `areatypename` and no longer is limited by constraints on `legendsuituse` or `mustatus`
  
 # soilDB 2.6.2 (2021-05-14)
  *  Added `formativeElement` argument to `taxaExtent()` (SoilWeb taxon extent function)
