@@ -26,8 +26,8 @@ Get the development version (2.6.4) from GitHub:
 ## Citation
 
 Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021).
-soilDB: Soil Database Interface. R package version 2.6.4.
-<a href="https://CRAN.R-project.org/package=soilDB" class="uri">https://CRAN.R-project.org/package=soilDB</a>
+soilDB: Soil Database Interface. R package version 2.6.3.
+<https://CRAN.R-project.org/package=soilDB>
 
 ## soilDB 2.6.4
 
@@ -171,7 +171,7 @@ soilDB: Soil Database Interface. R package version 2.6.4.
     res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
     print(res$fig)
 
-<img src="https://i.imgur.com/9RuzM6v.png" width="1056" />
+<img src="https://i.imgur.com/de9r9FT.png" width="1056" />
 
 ### Make Profile Sketches
 
@@ -185,7 +185,7 @@ soilDB: Soil Database Interface. R package version 2.6.4.
       width = 0.2
     )
 
-<img src="https://i.imgur.com/yZf5Uxn.png" width="1344" />
+<img src="https://i.imgur.com/MqvbJfI.png" width="1344" />
 
 ### Identify Tabular “Siblings”
 
@@ -215,7 +215,7 @@ soilDB: Soil Database Interface. R package version 2.6.4.
       cex.names = 1
     )
 
-<img src="https://i.imgur.com/c8sXZCQ.png" width="1344" />
+<img src="https://i.imgur.com/8VtD7Yv.png" width="1344" />
 
 ## Dependency Graph
 
