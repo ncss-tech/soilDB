@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.4</span>
       </span>
     </div>
 
@@ -114,9 +114,18 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="soildb-263-2021-07-16" class="section level1">
+    <div id="soildb-264-2021-07-23" class="section level1">
+<h1 class="page-header" data-toc-text="2.6.4">
+<a href="#soildb-264-2021-07-23" class="anchor"></a>soilDB 2.6.4 (2021-07-23)<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<code><a href="../reference/fetchNASIS.html">fetchNASIS(from="pedons")</a></code> now supports <code>fill=TRUE</code> argument just like <code>from="components"</code> to include pedons that have no horizon records</li>
+</ul>
+</div>
+    <div id="soildb-263-2021-07-22" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.3">
-<a href="#soildb-263-2021-07-16" class="anchor"></a>soilDB 2.6.3 (2021-07-16)<small> Unreleased </small>
+<a href="#soildb-263-2021-07-22" class="anchor"></a>soilDB 2.6.3 (2021-07-22)<small> 2021-07-23 </small>
 </h1>
 <ul>
 <li>
@@ -158,6 +167,9 @@
 <li>
 <code><a href="../reference/get_OSD.html">get_OSD()</a></code> TXT and HTML formats now supported (in addition to JSON) through a common function interface</li>
 <li>Added <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_table_key_by_name()</a></code> <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_fkey_by_name()</a></code>, <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_pkeyref_by_name()</a></code>, <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_pkey_by_name()</a></code>, <code><a href="../reference/get_NASIS_table_name_by_purpose.html">get_NASIS_table_name_by_purpose()</a></code> methods for helping get information on primary/foreign keys and thematic groups of NASIS tables (useful for creating SQLite/external snapshots of NASIS tables)</li>
+<li>
+<code><a href="../reference/fetchNASIS.html">get_mapunit_from_NASIS()</a></code>, <code><a href="../reference/fetchVegdata.html">get_legend_from_NASIS()</a></code> and <code><a href="../reference/fetchVegdata.html">get_lmuaoverlap_from_NASIS()</a></code> now works for “MLRA Survey Area” <code>areatypename</code> and no longer is limited by constraints on <code>legendsuituse</code> or <code>mustatus</code>
+</li>
 </ul>
 </div>
     <div id="soildb-262-2021-05-14" class="section level1">

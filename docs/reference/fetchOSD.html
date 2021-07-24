@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.4</span>
       </span>
     </div>
 
@@ -160,7 +160,7 @@
 <dt>pmkind</dt><dd><p>empirical probabilities for parent material kind, derived from the current SSURGO snapshot</p></dd>
 <dt>pmorigin</dt><dd><p>empirical probabilities for parent material origin, derived from the current SSURGO snapshot</p></dd>
 <dt>mlra</dt><dd><p>empirical MLRA membership values, derived from the current SSURGO snapshot</p></dd>
-<dt>climate</dt><dd><p>experimental climate summaries from PRISM stack</p></dd>
+<dt>climate</dt><dd><p>experimental climate summaries from PRISM stack (CONUS only)</p></dd>
 <dt>metadata</dt><dd><p>metadata associated with SoilWeb cached summaries</p></dd></dl>When using <code>extended=TRUE</code>, there are a couple of scenarios in which series morphology contained in <code>SPC</code> do not fully match records in the associated series summaries (e.g. <code>competing</code>).<dl><dt>1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).</dt><dd><p>- Climate summaries are empty <code>data.frames</code> because these summaries are currently generated from PRISM. We are working on a solution.</p></dd><dt>2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).</dt><dd><p>- Extended summaries are present but morphology missing from <code>SPC</code>. A warning is issued.</p></dd><dt>3. A query for multiple soil series, with one more more listed as "inactive" (e.g. BREADSPRINGS).</dt><dd><p>- Extended summaries are present but morphology missing from <code>SPC</code>. A warning is issued.</p></dd></dl>These last two cases are problematic for analysis that makes use of morphology and extended data, such as outlined in this tutorial on <a href='https://ncss-tech.github.io/AQP/soilDB/competing-series.html'>competing soil series</a>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 

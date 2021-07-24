@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.4</span>
       </span>
     </div>
 
@@ -122,6 +122,7 @@
 
     <pre class="usage"><span class='fu'>get_hz_data_from_NASIS_db</span><span class='op'>(</span>
   SS <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  fill <span class='op'>=</span> <span class='cn'>FALSE</span>,
   stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>,
   dsn <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
@@ -132,6 +133,10 @@
     <tr>
       <th>SS</th>
       <td><p>fetch data from Selected Set in NASIS or from the entire local database (default: <code>TRUE</code>)</p></td>
+    </tr>
+    <tr>
+      <th>fill</th>
+      <td><p>include pedons without horizon data in result? default: <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>stringsAsFactors</th>
