@@ -8,15 +8,25 @@ output: md_document
 ![CRAN/METACRAN](https://img.shields.io/cran/l/soilDB)
 [![soilDB Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/soilDB/docs)
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(rvest)
+# get latest release semantic version number for citation
+.getLatestCRANRelease <- function() { 
+  gsub(".*/([0-9\\.]+)$", "\\1", html_text(html_element(html_element(read_html("https://github.com/ncss-tech/soilDB/releases.atom"), "entry"), "id")))
+}
+
+soilDB_CRAN_VERSION <- .getLatestCRANRelease()
+```
+
 ## Installation
 
-Get the stable version from CRAN:
+Get the stable version (`r soilDB_CRAN_VERSION`) from CRAN:
 
 ```r
 install.packages('soilDB', dependencies = TRUE)
 ```
 
-Get the development version from GitHub:
+Get the development version (`r packageVersion("soilDB")`) from GitHub:
 
 ```r
 remotes::install_github("ncss-tech/soilDB", dependencies = FALSE, upgrade = FALSE, build = FALSE)
@@ -26,7 +36,7 @@ remotes::install_github("ncss-tech/soilDB", dependencies = FALSE, upgrade = FALS
  - http://ncss-tech.github.io/AQP/
 
 ## Citation
-Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: Soil Database Interface. R package version `r packageVersion("soilDB")`. https://CRAN.R-project.org/package=soilDB
+Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: Soil Database Interface. R package version `r soilDB_CRAN_VERSION`. [https://CRAN.R-project.org/package=soilDB](https://CRAN.R-project.org/package=soilDB)
 
 ## soilDB `r packageVersion("soilDB")`
 
@@ -49,7 +59,7 @@ Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: S
  
  *  Added several new SDA query methods based on [ssurgoOnDemand](https://github.com/ncss-tech/ssurgoOnDemand) by Jason Nemecek and Chad Ferguson:
  
-   * `get_SDA_property()`, `get_SDA_interpretation()`, `get_SDA_muaggatt()`, `get_SDA_hydric()`, `get_SDA_pmgroupname()`
+     * `get_SDA_property()`, `get_SDA_interpretation()`, `get_SDA_muaggatt()`, `get_SDA_hydric()`, `get_SDA_pmgroupname()`
    
 #### MS Access
 
