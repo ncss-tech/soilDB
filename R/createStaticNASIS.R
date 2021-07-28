@@ -35,7 +35,10 @@
 
   # construct query and return result
   q <- sprintf("SELECT %s FROM %s", paste(allcols, collapse = ", "), table_name)
-  return(dbQueryNASIS(con, q))
+  res <- dbQueryNASIS(con, q)
+  
+  # put back into original order from NASIS
+  return(res[, match(colnames(res), columns$name)])
 }
 
 #' Create a memory or file-based instance of NASIS database
