@@ -1,6 +1,7 @@
 # soilDB 2.6.4 (2021-07-23)
  * `fetchNASIS(from="pedons")` now supports `fill=TRUE` argument just like `from="components"` to include pedons that have no horizon records
-
+ * `createStaticNASIS()`: column order should match NASIS, even if data types require reorder for ODBC driver
+ 
 # soilDB 2.6.3 (2021-07-22)
  * `SDA_query()` and all functions that call `SDA_query()` get proper column class handling (related to #190), however:
    - be careful with the use of CAST(): unknown datatypes may not be correctly interpreted

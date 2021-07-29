@@ -20,7 +20,7 @@ createStaticNASIS(
 
 \item{SS}{Logical. Include "selected set" tables (ending with suffix \code{"_View_1"}). Default: \code{TRUE}}
 
-\item{dsn}{Optional: path to SQLite database containing NASIS table structure; Default: \code{NULL}}
+\item{dsn}{Optional: path to SQLite database containing NASIS table structure; or a \code{DBIConnection}. Default: \code{NULL}}
 
 \item{output_path}{Optional: path to new/existing SQLite database to write tables to. Default: \code{NULL} returns table results as named list.}
 
