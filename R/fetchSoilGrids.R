@@ -184,9 +184,9 @@ fetchSoilGrids <- function(x,
   sgvalues <-  out[, "values"][, c("Q0.05", "Q0.5", "Q0.95", "mean")] * scaling.factor
   
   # uncertainty is always scaled by a factor of 10, even for bdod and nitrogen (whose data are scaled by 100)
-  sguncert <- out[, "values"][, "uncertainty"] * 0.1
+  uncertainty <- out[, "values"][, "uncertainty"] * 0.1
   
-  out[["values"]] <- cbind(sgvalues, sguncert)
+  out[["values"]] <- cbind(sgvalues, uncertainty)
   
   # fix names and labels for downstream
   out <- out[,colnames(out)[grep("range", colnames(out), invert = TRUE)]]
