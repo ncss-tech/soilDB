@@ -1,8 +1,31 @@
 #' Get SoilGrids 250m properties information from point locations
 #'
-#' This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes. 
+#' This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes. SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
 #' 
-#' The depth intervals returned are: \code{"0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"} and the properties returned are \code{"bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc"} -- each with 5th, 50th, 95th, mean and uncertainty values. Point data requests are made through \code{properties/query} endpoint of the SoilGrids v2.0 REST API: https://rest.isric.org/soilgrids/v2.0/docs/
+#' ## Properties
+#' 
+#' |Name     |Description                                                                        |Mapped units   | Conversion factor|Conventional units |
+#' |:--------|:----------------------------------------------------------------------------------|:--------------|-----------------:|:------------------|
+#' |bdod     |Bulk density of the fine earth fraction                                            |cg/cm^3        |               100|kg/dm^3            |
+#' |cec      |Cation Exchange Capacity of the soil                                               |mmol(c)/kg     |                10|cmol(c)/kg         |
+#' |cfvo     |Volumetric fraction of coarse fragments (> 2 mm)                                   |cm^3/dm^3 (vol per mil)  |         10|cm^3/100cm^3 (vol%)|
+#' |clay     |Proportion of clay particles (< 0.002 mm) in the fine earth fraction               |g/kg           |                10|g/100g (%)         |
+#' |nitrogen |Total nitrogen (N)                                                                 |cg/kg          |               100|g/kg               |
+#' |phh2o    |Soil pH                                                                            |pH*10          |                10|pH                 |
+#' |sand     |Proportion of sand particles (> 0.05 mm) in the fine earth fraction                |g/kg           |                10|g/100g (%)         |
+#' |silt     |Proportion of silt particles (= 0.002 mm and = 0.05 mm) in the fine earth fraction |g/kg           |                10|g/100g (%)         |
+#' |soc      |Soil organic carbon content in the fine earth fraction                             |dg/kg          |                10|g/kg               |
+#' |ocd      |Organic carbon density                                                             |hg/m^3         |                10|kg/m^3             |
+#' |ocs      |Organic carbon stocks                                                              |t/ha           |                10|kg/m^2             |
+#' 
+#' SoilGrids predictions are made for the six standard depth intervals specified in the GlobalSoilMap IUSS working group and its specifications. The depth intervals returned are: \code{"0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"} and the properties returned are \code{"bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc"} -- each with 5th, 50th, 95th, mean and uncertainty values. The uncertainty values are the ratio between the inter-quantile range (90% prediction interval width) and the median : `(Q0.95-Q0.05)/Q0.50.` Point data requests are made through \code{properties/query} endpoint of the SoilGrids v2.0 REST API: \url{https://rest.isric.org/soilgrids/v2.0/docs}. 
+#' 
+#' Find out more information about the SoilGrids and GlobalSoilMap products here: 
+#' 
+#'  - \url{https://www.isric.org/explore/soilgrids/faq-soilgrids}
+#'  - \url{https://www.isric.org/sites/default/files/GlobalSoilMap_specifications_december_2015_2.pdf}
+#' 
+#' @references Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217-240, 2021. \doi{https://doi.org/10.5194/soil-7-217-2021}
 #'
 #' @param locations A \code{data.frame} containing 3 columns referring to site ID, latitude and longitude.
 #' 
@@ -55,8 +78,9 @@ fetchSoilGrids <- function(locations, loc.names = c("id","lat","lon")) {
 
     # values returned for each layer include the following properties
     data.types <- c("bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc")
+    
     # numeric values are returned as integers that need to be scaled to match typical measurement units
-    data.factor <- c(0.01, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)
+    data.factor <- c(0.01, 0.1, 0.1, 0.1, 0.01, 0.1, 0.1, 0.1, 0.1)
     
     for (d in 1:length(data.types))
       hz.data <- merge(hz.data, .extractSGLayerProperties(res, data.types[d], data.factor[d]), by = "label")
