@@ -10,11 +10,9 @@ siblings(s, only.major = FALSE, component.data = FALSE, cousins = FALSE)
 \item{s}{character vector, the name of a single soil series,
 case-insensitive.}
 
-\item{only.major}{logical, should only return siblings that are major
-components}
+\item{only.major}{logical, should only return siblings that are major components}
 
-\item{component.data}{logical, should component data for siblings (and
-optionally cousins) be returned?}
+\item{component.data}{logical, should component data for siblings (and optionally cousins) be returned?}
 
 \item{cousins}{logical, should siblings-of-siblings (cousins) be returned?}
 }
@@ -27,14 +25,15 @@ and number of co-occurrences} \item{cousin.data}{\code{data.frame}
 containing cousin component data} }
 }
 \description{
-Look up siblings and cousins for a given soil series from the current fiscal
-year SSURGO snapshot via SoilWeb.
+Look up siblings and cousins for a given soil series from the current fiscal year SSURGO snapshot via SoilWeb.
 }
 \details{
-The siblings of any given soil series are defined as those soil series
-(major and minor component) that share a parent map unit with the named
-series (as a major component). Cousins are siblings of siblings. Data are
-sourced from SoilWeb which maintains a copy of the current SSURGO snapshot.
+The siblings of any given soil series are defined as those soil components (major and minor) that share a parent map unit with the named series (as a major component). Cousins are siblings of siblings. Data are sourced from SoilWeb which maintains a copy of the current SSURGO snapshot. Visualizations of soil "siblings"-related concepts can be found in the "Sibling Summary" tab of Soil Data Explorer app: \url{https://casoilresource.lawr.ucdavis.edu/sde/}
+\itemize{
+\item \href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{Soil Series Query Functions}
+\item \href{http://ncss-tech.github.io/AQP/soilDB/siblings.html}{Soil "Siblings" Tutorial}
+\item \href{http://ncss-tech.github.io/AQP/presentations/beaudette-soil-networks-2019-www.pdf}{SSSA 2019 Presentation - Mapping Soilscapes Using Soil Co-Occurrence Networks}
+}
 }
 \examples{
 
@@ -55,10 +54,7 @@ if(requireNamespace("curl") &
 
 }
 \references{
-\itemize{
-\item \href{http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{Soil Series Query Functions}
-\item \href{http://ncss-tech.github.io/AQP/soilDB/siblings.html}{Soil "Siblings" Tutorial}
-}
+O'Geen, A., Walkinshaw, M. and Beaudette, D. (2017), SoilWeb: A Multifaceted Interface to Soil Survey Information. Soil Science Society of America Journal, 81: 853-862. \doi{https://doi.org/10.2136/sssaj2016.11.0386n}
 }
 \seealso{
 \link{OSDquery}, \link{siblings}, \link{fetchOSD}

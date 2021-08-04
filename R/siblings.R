@@ -4,35 +4,36 @@
 # component.data: should the component names, kind, percent, etc. be returned as well?
 # cousins: return siblings of siblings (cousins)?
 
-
 #' Get tabular "siblings" and "cousins" for a soil series
 #' 
-#' Look up siblings and cousins for a given soil series from the current fiscal
-#' year SSURGO snapshot via SoilWeb.
+#' Look up siblings and cousins for a given soil series from the current fiscal year SSURGO snapshot via SoilWeb.
 #' 
-#' The siblings of any given soil series are defined as those soil series
-#' (major and minor component) that share a parent map unit with the named
-#' series (as a major component). Cousins are siblings of siblings. Data are
-#' sourced from SoilWeb which maintains a copy of the current SSURGO snapshot.
+#' The siblings of any given soil series are defined as those soil components (major and minor) that share a parent map unit with the named series (as a major component). Cousins are siblings of siblings. Data are sourced from SoilWeb which maintains a copy of the current SSURGO snapshot. Visualizations of soil "siblings"-related concepts can be found in the "Sibling Summary" tab of Soil Data Explorer app: \url{https://casoilresource.lawr.ucdavis.edu/sde/}
 #' 
+#'  - [Soil Series Query Functions](http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html)
+#'  - [Soil "Siblings" Tutorial](http://ncss-tech.github.io/AQP/soilDB/siblings.html)
+#'  - [SSSA 2019 Presentation - Mapping Soilscapes Using Soil Co-Occurrence Networks](http://ncss-tech.github.io/AQP/presentations/beaudette-soil-networks-2019-www.pdf)
 #' @param s character vector, the name of a single soil series,
 #' case-insensitive.
-#' @param only.major logical, should only return siblings that are major
-#' components
-#' @param component.data logical, should component data for siblings (and
-#' optionally cousins) be returned?
+#' @param only.major logical, should only return siblings that are major components
+#' 
+#' @param component.data logical, should component data for siblings (and optionally cousins) be returned?
+#' 
 #' @param cousins logical, should siblings-of-siblings (cousins) be returned?
+#' 
 #' @return \describe{ \item{sib}{\code{data.frame} containing siblings, major
 #' component flag, and number of co-occurrences}
 #' \item{sib.data}{\code{data.frame} containing sibling component data}
 #' \item{cousins}{\code{data.frame} containing cousins, major component flag,
 #' and number of co-occurrences} \item{cousin.data}{\code{data.frame}
 #' containing cousin component data} }
+#' 
 #' @author D.E. Beaudette
+#' 
 #' @seealso \link{OSDquery}, \link{siblings}, \link{fetchOSD}
-#' @references
-#'  - [Soil Series Query Functions](http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html)
-#'  - [Soil "Siblings" Tutorial](http://ncss-tech.github.io/AQP/soilDB/siblings.html)
+#' 
+#' @references O'Geen, A., Walkinshaw, M. and Beaudette, D. (2017), SoilWeb: A Multifaceted Interface to Soil Survey Information. Soil Science Society of America Journal, 81: 853-862. \doi{https://doi.org/10.2136/sssaj2016.11.0386n}
+#' 
 #' @keywords manip
 #' @examples
 #' 
