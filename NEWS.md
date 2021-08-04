@@ -1,9 +1,13 @@
 # soilDB 2.6.4 (2021-07-23)
  * `fetchNASIS(from="pedons")` now supports `fill=TRUE` argument just like `from="components"` to include pedons that have no horizon records
  * `createStaticNASIS()`: column order should match NASIS, even if data types require reorder for ODBC driver
- * `fetchSoilGrids()` update metadata and references in documentation
-   * corrected the conversion factor used for estimated nitrogen values conversion from cg/kg to g/kg 
- 
+ * `fetchSoilGrids()` bug fixes, updates to metadata and references in documentation (https://github.com/ncss-tech/soilDB/issues/201)
+   * Corrected the conversion factor used for predicted `nitrogen` values (conversion from cg/kg to g/kg)
+   * Corrected the conversion factor used for uncertainty in `bdod` and `nitrogen` (SoilGrids uncertainty layer always uses factor of 10 to create integers)
+   * Improved error handling
+   * Added `progress` and `verbose` arguments for text progress bar and additional message output
+   * Added support for {sf} and {sp} POINT geometry inputs
+   
 # soilDB 2.6.3 (2021-07-22)
  * `SDA_query()` and all functions that call `SDA_query()` get proper column class handling (related to #190), however:
    - be careful with the use of CAST(): unknown datatypes may not be correctly interpreted

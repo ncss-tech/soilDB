@@ -40,3 +40,20 @@ test_that("fetchSoilGrids() works as expected", {
   expect_error( {res <- fetchSoilGrids(your.points, loc.names = "foo")} )
   expect_silent( {res <- fetchSoilGrids(your.points, loc.names = letters[1:3])} )
 })
+
+test_that("fetchSoilGrids: POINT input", {
+  
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  skip_if_not_installed("sf")
+  
+  your.points <- data.frame(siteid = c("A", "B"),
+                            lat = c(37.9, 38.1),
+                            lon = c(-120.3, -121.5),
+                            stringsAsFactors = FALSE)
+  your.points <- sf::st_as_sf(your.points, coords = c('lon','lat'))
+  res <- try(fetchSoilGrids(your.points), silent = TRUE)
+  
+})

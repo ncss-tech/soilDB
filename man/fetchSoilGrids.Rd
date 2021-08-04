@@ -4,12 +4,21 @@
 \alias{fetchSoilGrids}
 \title{Get SoilGrids 250m properties information from point locations}
 \usage{
-fetchSoilGrids(locations, loc.names = c("id", "lat", "lon"))
+fetchSoilGrids(
+  x,
+  loc.names = c("id", "lat", "lon"),
+  verbose = FALSE,
+  progress = FALSE
+)
 }
 \arguments{
-\item{locations}{A \code{data.frame} containing 3 columns referring to site ID, latitude and longitude.}
+\item{x}{A \code{data.frame} containing 3 columns referring to site ID, latitude and longitude.}
 
 \item{loc.names}{Optional: Column names referring to site ID, latitude and longitude. Default: \code{c("id","lat","lon")}}
+
+\item{verbose}{Print messages? Default: \code{FALSE}}
+
+\item{progress}{logical, give progress when iterating over multiple requests; Default: \code{FALSE}}
 }
 \value{
 A SoilProfileCollection
