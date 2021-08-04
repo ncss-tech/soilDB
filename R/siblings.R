@@ -1,32 +1,29 @@
-# 2018-11-14
-## TODO: launder series names, all upper case?
-# return information on soil series that co-occur with `s`
-# component.data: should the component names, kind, percent, etc. be returned as well?
-# cousins: return siblings of siblings (cousins)?
 
-#' Get tabular "siblings" and "cousins" for a soil series
+#' @title Get "siblings" and "cousins" for a given soil series
 #' 
-#' Look up siblings and cousins for a given soil series from the current fiscal year SSURGO snapshot via SoilWeb.
+#' @description Look up siblings and cousins for a given soil series from the current fiscal year SSURGO snapshot via SoilWeb.
 #' 
-#' The siblings of any given soil series are defined as those soil components (major and minor) that share a parent map unit with the named series (as a major component). Cousins are siblings of siblings. Data are sourced from SoilWeb which maintains a copy of the current SSURGO snapshot. Visualizations of soil "siblings"-related concepts can be found in the "Sibling Summary" tab of Soil Data Explorer app: \url{https://casoilresource.lawr.ucdavis.edu/sde/}
+#' The siblings of any given soil series are defined as those soil components (major and minor) that share a parent map unit with the named series (as a major component). Component names are filtered using a snapshot of the Soil Classification database to ensure that only valid soil series names are included. Cousins are siblings of siblings. Data are sourced from SoilWeb which maintains a copy of the current SSURGO snapshot. Visualizations of soil "siblings"-related concepts can be found in the "Sibling Summary" tab of Soil Data Explorer app: \url{https://casoilresource.lawr.ucdavis.edu/sde/}.
+#' 
+#' Additional resources:
 #' 
 #'  - [Soil Series Query Functions](http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html)
 #'  - [Soil "Siblings" Tutorial](http://ncss-tech.github.io/AQP/soilDB/siblings.html)
 #'  - [SSSA 2019 Presentation - Mapping Soilscapes Using Soil Co-Occurrence Networks](http://ncss-tech.github.io/AQP/presentations/beaudette-soil-networks-2019-www.pdf)
-#' @param s character vector, the name of a single soil series,
-#' case-insensitive.
+#'  
+#' @param s character vector, the name of a single soil series, case-insensitive.
+#' 
 #' @param only.major logical, should only return siblings that are major components
 #' 
 #' @param component.data logical, should component data for siblings (and optionally cousins) be returned?
 #' 
 #' @param cousins logical, should siblings-of-siblings (cousins) be returned?
 #' 
-#' @return \describe{ \item{sib}{\code{data.frame} containing siblings, major
-#' component flag, and number of co-occurrences}
-#' \item{sib.data}{\code{data.frame} containing sibling component data}
-#' \item{cousins}{\code{data.frame} containing cousins, major component flag,
-#' and number of co-occurrences} \item{cousin.data}{\code{data.frame}
-#' containing cousin component data} }
+#' @return A `list` containing:
+#'  * sib: `data.frame` containing siblings, major component flag, and number of co-occurrences
+#'  * sib.data: `data.frame` containing sibling component data (only when `component.data = TRUE`)
+#'  * cousins: `data.frame` containing cousins, major component flag, and number of co-occurrences (only when `cousins = TRUE`)
+#'  * cousin.data: `data.frame` containing cousin component data (only when `cousins = TRUE, component.data = TRUE`)
 #' 
 #' @author D.E. Beaudette
 #' 
@@ -53,7 +50,8 @@
 #' }
 #' 
 #' @export siblings
-siblings <- function(s, only.major=FALSE, component.data=FALSE, cousins=FALSE) {
+#' 
+siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FALSE) {
   
   # helper functions
   .getSibling <- function(i, only.major) {
@@ -63,14 +61,11 @@ siblings <- function(s, only.major=FALSE, component.data=FALSE, cousins=FALSE) {
     # attempt query to API for basic sibling set, result is JSON
     sib <- try(jsonlite::fromJSON(u))[[1]]
     
-    # a data.frame result measn we have data, otherwise return NULL
+    # a data.frame result means we have data, otherwise return NULL
     if(inherits(sib, 'data.frame')) {
       
       # convert 'Yes'|'No' -> TRUE|FALSE
       sib$majcompflag <- ifelse(sib$majcompflag == 'Yes', TRUE, FALSE)
-      
-      # TODO: convert series into title case
-      # https://github.com/ncss-tech/soilDB/issues/95
       
       # note: there may be both major and minor siblings
       # optionally cut-down to just major siblings
@@ -85,6 +80,7 @@ siblings <- function(s, only.major=FALSE, component.data=FALSE, cousins=FALSE) {
     
   }
   
+  # note: this does not launder component names through SC database
   .getSiblingData <- function(i) {
     # these use the new API
     u <- URLencode(sprintf('https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=sibling_data&s=%s', i))
@@ -129,7 +125,7 @@ siblings <- function(s, only.major=FALSE, component.data=FALSE, cousins=FALSE) {
     }
   }
   
-  # TODO: error checking and further sanity checks
+  
   return(res)
 }
 
