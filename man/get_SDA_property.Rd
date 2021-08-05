@@ -80,10 +80,10 @@ The \code{property} argument refers to one of the property names or columns spec
    Bulk Density oven dry - Rep Value \tab dbovendry_r \cr
    CaCO3 Clay - Rep Value \tab claysizedcarb_r \cr
    Calcium Carbonate - Rep Value \tab caco3_r \cr
-   Cation Exchange Capcity - Rep Value \tab cec7_r \cr
+   Cation Exchange Capacity - Rep Value \tab cec7_r \cr
    Coarse Sand - Rep Value \tab sandco_r \cr
    Coarse Silt - Rep Value \tab siltco_r \cr
-   Effective Cation Exchange Capcity - Rep Value \tab ecec_r \cr
+   Effective Cation Exchange Capacity - Rep Value \tab ecec_r \cr
    Electrial Conductivity 1:5 by volume - Rep Value \tab ec15_r \cr
    Electrical Conductivity - Rep Value \tab ec_r \cr
    Exchangeable Sodium Percentage - Rep Value \tab esp_r \cr
@@ -105,8 +105,8 @@ The \code{property} argument refers to one of the property names or columns spec
    Oxalate Iron - Rep Value \tab feoxalate_r \cr
    Oxalate Phosphate - Rep Value \tab poxalate_r \cr
    Plasticity Index - Rep Value \tab pi_r \cr
-   Rock Fragments 3 - 10 cm - Rep Value \tab frag3to10_r \cr
-   Rock Fragments > 10 cm - Rep Value \tab fraggt10_r \cr
+   Rock Fragments 3 - 10 inches - Rep Value \tab frag3to10_r \cr
+   Rock Fragments > 10 inches - Rep Value \tab fraggt10_r \cr
    Rubbed Fiber \% - Rep Value \tab fiberrubbedpct_r \cr
    Satiated H2O - Rep Value \tab wsatiated_r \cr
    Saturated Hydraulic Conductivity - Rep Value \tab ksat_r \cr
@@ -114,7 +114,6 @@ The \code{property} argument refers to one of the property names or columns spec
    Sum of Bases - Rep Value \tab sumbases_r \cr
    Total Clay - Rep Value \tab claytotal_r \cr
    Total Phosphate - Rep Value \tab ptotal_r \cr
-   Total Rock Fragment Volume - Rep Value \tab fragvoltot \cr
    Total Sand - Rep Value \tab sandtotal_r \cr
    Total Silt - Rep Value \tab silttotal_r \cr
    Unrubbed Fiber \% - Rep Value \tab fiberunrubbedpct_r \cr

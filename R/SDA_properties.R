@@ -70,10 +70,10 @@
 #'  |Bulk Density oven dry - Rep Value                |dbovendry_r        |
 #'  |CaCO3 Clay - Rep Value                           |claysizedcarb_r    |
 #'  |Calcium Carbonate - Rep Value                    |caco3_r            |
-#'  |Cation Exchange Capcity - Rep Value              |cec7_r             |
+#'  |Cation Exchange Capacity - Rep Value             |cec7_r             |
 #'  |Coarse Sand - Rep Value                          |sandco_r           |
 #'  |Coarse Silt - Rep Value                          |siltco_r           |
-#'  |Effective Cation Exchange Capcity - Rep Value    |ecec_r             |
+#'  |Effective Cation Exchange Capacity - Rep Value   |ecec_r             |
 #'  |Electrial Conductivity 1:5 by volume - Rep Value |ec15_r             |
 #'  |Electrical Conductivity - Rep Value              |ec_r               |
 #'  |Exchangeable Sodium Percentage - Rep Value       |esp_r              |
@@ -95,8 +95,8 @@
 #'  |Oxalate Iron - Rep Value                         |feoxalate_r        |
 #'  |Oxalate Phosphate - Rep Value                    |poxalate_r         |
 #'  |Plasticity Index - Rep Value                     |pi_r               |
-#'  |Rock Fragments 3 - 10 cm - Rep Value             |frag3to10_r        |
-#'  |Rock Fragments > 10 cm - Rep Value               |fraggt10_r         |
+#'  |Rock Fragments 3 - 10 inches - Rep Value         |frag3to10_r        |
+#'  |Rock Fragments > 10 inches - Rep Value           |fraggt10_r         |
 #'  |Rubbed Fiber % - Rep Value                       |fiberrubbedpct_r   |
 #'  |Satiated H2O - Rep Value                         |wsatiated_r        |
 #'  |Saturated Hydraulic Conductivity - Rep Value     |ksat_r             |
@@ -104,7 +104,6 @@
 #'  |Sum of Bases - Rep Value                         |sumbases_r         |
 #'  |Total Clay - Rep Value                           |claytotal_r        |
 #'  |Total Phosphate - Rep Value                      |ptotal_r           |
-#'  |Total Rock Fragment Volume - Rep Value           |fragvoltot         |
 #'  |Total Sand - Rep Value                           |sandtotal_r        |
 #'  |Total Silt - Rep Value                           |silttotal_r        |
 #'  |Unrubbed Fiber % - Rep Value                     |fiberunrubbedpct_r |
@@ -202,13 +201,13 @@ get_SDA_property <-
     'Bulk Density oven dry - Rep Value' = 'dbovendry_r',
     'CaCO3 Clay - Rep Value' = 'claysizedcarb_r',
     'Calcium Carbonate - Rep Value' = 'caco3_r',
-    'Cation Exchange Capcity - Rep Value' = 'cec7_r',
+    'Cation Exchange Capacity - Rep Value' = 'cec7_r',
     'Coarse Sand - Rep Value' = 'sandco_r',
     'Coarse Silt - Rep Value' = 'siltco_r',
     'Corrosion of Steel' = 'corsteel',
     'Corrosion of Concrete' = 'corcon',
     'Drainage Class' = 'drainagecl',
-    'Effective Cation Exchange Capcity - Rep Value' = 'ecec_r',
+    'Effective Cation Exchange Capacity - Rep Value' = 'ecec_r',
     'Electrical Conductivity 1:5 by volume - Rep Value' = 'ec15_r',
     'Electrical Conductivity - Rep Value' = 'ec_r',
     'Exchangeable Sodium Percentage - Rep Value' = 'esp_r',
@@ -231,8 +230,8 @@ get_SDA_property <-
     'Oxalate Iron - Rep Value' = 'feoxalate_r',
     'Oxalate Phosphate - Rep Value' = 'poxalate_r',
     'Plasticity Index - Rep Value' = 'pi_r',
-    'Rock Fragments 3 - 10 cm - Rep Value' = 'frag3to10_r',
-    'Rock Fragments > 10 cm - Rep Value' = 'fraggt10_r',
+    'Rock Fragments 3 - 10 inches - Rep Value' = 'frag3to10_r',
+    'Rock Fragments > 10 inches - Rep Value' = 'fraggt10_r',
     'Rubbed Fiber % - Rep Value' = 'fiberrubbedpct_r',
     'Satiated H2O - Rep Value' = 'wsatiated_r',
     'Saturated Hydraulic Conductivity - Rep Value' = 'ksat_r',
@@ -244,7 +243,6 @@ get_SDA_property <-
     'Taxonomic Temperature Regime' = 'taxtempregime',
     'Total Clay - Rep Value' = 'claytotal_r',
     'Total Phosphate - Rep Value' = 'ptotal_r',
-    'Total Rock Fragment Volume - Rep Value' = 'fragvoltot',
     'Total Sand - Rep Value' = 'sandtotal_r',
     'Total Silt - Rep Value' = 'silttotal_r',
     'Unrubbed Fiber % - Rep Value' = 'fiberunrubbedpct_r',
