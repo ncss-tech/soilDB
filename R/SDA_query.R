@@ -84,7 +84,7 @@ format_SQL_in_statement <- function(x) {
 }
 
 
-#' Query Soil Data Access 
+#' Query Soil Data Access
 #'
 #' @param q A valid T-SQL query surrounded by double quotes
 #'
@@ -189,7 +189,7 @@ SDA_query <- function(q) {
     warning(error.msg, call. = FALSE)
 
     # return the error object so calling function/user can handle it
-    return(request.status)
+    return(invisible(request.status))
   }
 
   # the result is JSON:
@@ -199,12 +199,12 @@ SDA_query <- function(q) {
   r.content <- try(httr::content(r, as = 'text', encoding = 'UTF-8'), silent = TRUE)
 
   if (inherits(r.content,'try-error'))
-      return(r.content)
+      return(invisible(r.content))
 
   d <- try(jsonlite::fromJSON(r.content))
 
   if (inherits(d, 'try-error'))
-    return(d)
+    return(invisible(d))
 
   # number of results
   n.tables <- length(d)
@@ -219,7 +219,7 @@ SDA_query <- function(q) {
   d <- try(lapply(d, .post_process_SDA_result_set), silent = TRUE)
 
   if (inherits(d, 'try-error'))
-    return(d)
+    return(invisible(d))
 
   # keep track of SDA result set IDs
   SDA.ids <- names(d)
@@ -246,10 +246,10 @@ SDA_query <- function(q) {
 # convert the raw results from SDA into a proper data.frame
 # no conversion of strings -> factors
 .post_process_SDA_result_set <- function(i) {
-  
+
   # the first line is always the field names
   colnames(i) <- i[1, ]
-  
+
   # the second line contains field metadata
   m <- unlist(i[2, ])
 
@@ -287,18 +287,18 @@ SDA_query <- function(q) {
            'character'
            )
   })
-  
+
   # convert each column that isn't character
   idx <- which(cc != 'character')
   for(f in idx) {
     df[, f] <- as(df[, f], cc[f])
   }
-  
-  
+
+
   ## strings resembling scientific notation are converted into numeric
   ## ex: type.convert("8E2") -> 800
   # https://github.com/ncss-tech/soilDB/issues/190
-  
+
   # # attempt type conversion
   # # same result as writing to file and reading-in via read.table()
   # df <- type.convert(df,
