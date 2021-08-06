@@ -40,6 +40,10 @@
 #     "WEB_Stephens_subsidence_frost%20action",
 #     "WEB_Stephens_pedons_linked_to_components"
 #   )
+# lst <- get_NASISWebProjects(msso = "2-SON", fy = 2021, project = "MLRA%")
+# res <- sapply(rpts, get_NASISWebReport, proj_id = 183103)
+# 
+# sapply(res, function(x) print(class(x)))
 
 #' @title Low-level methods for getting projects and tables from NASIS Web Reports
 #' 
@@ -54,6 +58,10 @@
 #' @export
 #' @importFrom rvest read_html, html_node, html_table
 get_NASISWebReport <- function(report_name, proj_id) {
+  
+  if (!requireNamespace("rvest")) {
+    stop("package `rvest` is required", call. = FALSE)
+  }
   
   base.url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx"
   
@@ -75,10 +83,12 @@ get_NASISWebReport <- function(report_name, proj_id) {
 #' @rdname get_NASISWebReport
 #' @export
 #' @importFrom rvest read_html, html_node, html_nodes, html_attr, html_table
-get_NASISWebProjects <- function(report_name = "WEB_Stephens_PROJECT-REPORTS", 
-                                       msso, fy, project) {
+get_NASISWebProjects <- function(msso, fy, project) {
   
-  report_name <- match.arg(report_name[1], c("WEB_Stephens_PROJECT-REPORTS"))
+  if (!requireNamespace("rvest")) {
+    stop("package `rvest` is required", call. = FALSE)
+  }
+  report_name = "WEB_Stephens_PROJECT-REPORTS"
   base.url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx"
   
   message(sprintf("Running report_name=%s for msso=%s, fy=%s, project=%s...", report_name, msso, fy, project))
@@ -104,8 +114,3 @@ get_NASISWebProjects <- function(report_name = "WEB_Stephens_PROJECT-REPORTS",
   res
 }
 
-# lst <- get_NASISWebProjectReports(msso = "2-SON", fy = 2021, project = "MLRA%")
-# 
-# res <- sapply(rpts, get_NASISWebReport, proj_id = 183103)
-# 
-# sapply(res, function(x) print(class(x)))

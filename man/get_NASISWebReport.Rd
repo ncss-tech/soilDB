@@ -7,12 +7,7 @@
 \usage{
 get_NASISWebReport(report_name, proj_id)
 
-get_NASISWebProjects(
-  report_name = "WEB_Stephens_PROJECT-REPORTS",
-  msso,
-  fy,
-  project
-)
+get_NASISWebProjects(msso, fy, project)
 }
 \arguments{
 \item{report_name}{internal report name}
