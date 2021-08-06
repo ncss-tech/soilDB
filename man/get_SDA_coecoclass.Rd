@@ -34,4 +34,6 @@ Get mapunit ecological sites from Soil Data Access
 }
 \details{
 When \code{method="Dominant Condition"} an additional field \code{ecoclasspct_r} is returned in the result with the sum of \code{comppct_r} that have the dominant condition \code{ecoclassid}. The component with the greatest \code{comppct_r} is returned for the \code{component} and \code{coecosite} level information.
+
+Note that if there are multiple \code{coecoclasskey} per \code{ecoclassid} there may be more than one record per component.
 }

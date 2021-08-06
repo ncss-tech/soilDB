@@ -2,6 +2,8 @@
 #' 
 #' @details When `method="Dominant Condition"` an additional field `ecoclasspct_r` is returned in the result with the sum of `comppct_r` that have the dominant condition `ecoclassid`. The component with the greatest `comppct_r` is returned for the `component` and `coecosite` level information. 
 #' 
+#' Note that if there are multiple `coecoclasskey` per `ecoclassid` there may be more than one record per component.
+#' 
 #' @param method aggregation method. One of: "Dominant Component", "Dominant Condition", "None". If "None" is selected one row will be returned per component, otherwise one row will be returned per map unit.
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
