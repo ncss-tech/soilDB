@@ -5,14 +5,16 @@
 \alias{get_NASISWebProjects}
 \title{Low-level methods for getting projects and tables from NASIS Web Reports}
 \usage{
-get_NASISWebReport(report_name, proj_id)
+get_NASISWebReport(report_name, proj_id, verbose = TRUE)
 
-get_NASISWebProjects(msso, fy, project)
+get_NASISWebProjects(msso, fy, project, verbose = TRUE)
 }
 \arguments{
 \item{report_name}{internal report name}
 
 \item{proj_id}{integer; Project record ID}
+
+\item{verbose}{Default: \code{TRUE}; print messages with report name and parameters?}
 
 \item{msso}{MLRA soil survey office e.g. \code{"2-SON"}}
 
@@ -21,10 +23,10 @@ get_NASISWebProjects(msso, fy, project)
 \item{project}{Expression to match in project name e.g. \code{"MLRA 18\%"}}
 }
 \value{
-A data.frame, or try-error if request fails
+A data.frame, or (invisible) try-error if request fails
 }
 \description{
-\code{get_NASISWebReport()}: Gets a table from the "ReportData" section of specified report name.
+\code{get_NASISWebReport()}: Gets a table from the "ReportData" section of specified \code{report_name}
 
 \code{get_NASISWebProjects()}: Gets a table of project name, state, approval statu and project record ID for specified office, fiscal year and project name pattern.
 }

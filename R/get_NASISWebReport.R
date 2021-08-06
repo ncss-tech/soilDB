@@ -47,17 +47,19 @@
 
 #' @title Low-level methods for getting projects and tables from NASIS Web Reports
 #' 
-#' @description `get_NASISWebReport()`: Gets a table from the "ReportData" section of specified report name.
+#' @description `get_NASISWebReport()`: Gets a table from the "ReportData" section of specified `report_name`
 #' 
 #' @param report_name internal report name
-#'
 #' @param proj_id integer; Project record ID
-#'
+#' @param verbose Default: `TRUE`; print messages with report name and parameters?
+#' 
 #' @aliases get_NASISWebProjects
+#' 
 #' @rdname get_NASISWebReport
+#' 
 #' @export
 #' @importFrom rvest read_html, html_node, html_table
-get_NASISWebReport <- function(report_name, proj_id) {
+get_NASISWebReport <- function(report_name, proj_id, verbose = TRUE) {
   
   if (!requireNamespace("rvest")) {
     stop("package `rvest` is required", call. = FALSE)
@@ -65,25 +67,34 @@ get_NASISWebReport <- function(report_name, proj_id) {
   
   base.url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx"
   
-  message(sprintf("Running report_name=%s for proj_id=%s...", report_name, proj_id))
+  if (verbose) {
+    message(sprintf("Running report_name=%s for proj_id=%s...", report_name, proj_id))
+  }
   
   report.url <- paste0(base.url, "?report_name=", report_name)
   report.project.url <- paste0(report.url, "&proj_id=", proj_id)
   
-  try(as.data.frame(rvest::html_table(rvest::html_node(rvest::read_html(report.project.url), 
+  res <- try(as.data.frame(rvest::html_table(rvest::html_node(rvest::read_html(report.project.url), 
                                                    xpath = '//*[@id="ReportData"]'), 
-                                  header = TRUE)), silent = TRUE)
+                                  header = TRUE)), silent = !verbose)
+  if (inherits(res, 'try-error')) {
+    return(invisible(res))
+  }
+  res
 }
 
 #' @description `get_NASISWebProjects()`: Gets a table of project name, state, approval statu and project record ID for specified office, fiscal year and project name pattern.
+#' 
 #' @param msso MLRA soil survey office e.g. `"2-SON"`
 #' @param fy Fiscal year e.g. `2020`
 #' @param project Expression to match in project name e.g. `"MLRA 18%"`
-#' @return A data.frame, or try-error if request fails
+#' 
+#' @return A data.frame, or (invisible) try-error if request fails
+#' 
 #' @rdname get_NASISWebReport
 #' @export
 #' @importFrom rvest read_html, html_node, html_nodes, html_attr, html_table
-get_NASISWebProjects <- function(msso, fy, project) {
+get_NASISWebProjects <- function(msso, fy, project, verbose = TRUE) {
   
   if (!requireNamespace("rvest")) {
     stop("package `rvest` is required", call. = FALSE)
@@ -91,23 +102,30 @@ get_NASISWebProjects <- function(msso, fy, project) {
   report_name = "WEB_Stephens_PROJECT-REPORTS"
   base.url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx"
   
-  message(sprintf("Running report_name=%s for msso=%s, fy=%s, project=%s...", report_name, msso, fy, project))
+  if (verbose) {
+    message(sprintf("Running report_name=%s for msso=%s, fy=%s, project=%s...", report_name, msso, fy, project))
+  }
   
   report.url <- paste0(base.url, "?report_name=", report_name)
   report.project.url <- paste0(report.url, 
                                "&msso=", msso, 
                                "&fy=", fy, 
                                "&project=", URLencode(project))
-  html <- try(rvest::read_html(report.project.url), silent = TRUE)
+  
+  html <- try(rvest::read_html(report.project.url), silent = !verbose)
+  
   if (inherits(html, 'try-error')) {
-    return(html)
+    return(invisible(html))
   }
+  
   nd <- rvest::html_node(html, xpath = '//*[@id="ReportData"]')
   links <- rvest::html_attr(rvest::html_nodes(nd, "a"), "href")
-  res <- try(as.data.frame(rvest::html_table(nd, header = TRUE))[,1:3])
+  res <- try(as.data.frame(rvest::html_table(nd, header = TRUE))[,1:3], silent = !verbose)
+  
   if (inherits(res, 'try-error')) {
-    return(res)
+    return(invisible(res))
   }
+  
   res$proj_id <- unique(as.integer(gsub(".*&proj_id=(.*)$", "\\1", 
                                         links[grepl("&proj_id=(.*)$", links)])))
   colnames(res) <- c("project_name", "states", "approved", "proj_id")
