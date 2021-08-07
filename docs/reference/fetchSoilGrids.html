@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Get SoilGrids 250m properties information from point locations — fetchSoilGrids" />
-<meta property="og:description" content="This function obtains SoilGrids properties information (250m raster resolution) given a data.frame containing site IDs, latitudes and longitudes." />
+<meta property="og:description" content="This function obtains SoilGrids properties information (250m raster resolution) given a data.frame containing site IDs, latitudes and longitudes. SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``" />
 
 
 
@@ -117,21 +117,34 @@
     </div>
 
     <div class="ref-description">
-    <p>This function obtains SoilGrids properties information (250m raster resolution) given a <code>data.frame</code> containing site IDs, latitudes and longitudes.</p>
+    <p>This function obtains SoilGrids properties information (250m raster resolution) given a <code>data.frame</code> containing site IDs, latitudes and longitudes. SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetchSoilGrids</span><span class='op'>(</span><span class='va'>locations</span>, loc.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"id"</span>, <span class='st'>"lat"</span>, <span class='st'>"lon"</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>fetchSoilGrids</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  loc.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"id"</span>, <span class='st'>"lat"</span>, <span class='st'>"lon"</span><span class='op'>)</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  progress <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>locations</th>
+      <th>x</th>
       <td><p>A <code>data.frame</code> containing 3 columns referring to site ID, latitude and longitude.</p></td>
     </tr>
     <tr>
       <th>loc.names</th>
       <td><p>Optional: Column names referring to site ID, latitude and longitude. Default: <code><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c("id","lat","lon")</a></code></p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Print messages? Default: <code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>progress</th>
+      <td><p>logical, give progress when iterating over multiple requests; Default: <code>FALSE</code></p></td>
     </tr>
     </table>
 
@@ -140,7 +153,35 @@
     <p>A SoilProfileCollection</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The depth intervals returned are: <code>"0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"</code> and the properties returned are <code>"bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc"</code> -- each with 5th, 50th, 95th, mean and uncertainty values. Point data requests are made through <code>properties/query</code> endpoint of the SoilGrids v2.0 REST API: https://rest.isric.org/soilgrids/v2.0/docs/</p>
+    
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Properties</h3>
+<table class='table'>
+<tr><td>Name</td><td>Description</td><td>Mapped units</td><td>Conversion factor</td><td>Conventional units</td></tr>
+<tr><td>bdod</td><td>Bulk density of the fine earth fraction</td><td>cg/cm^3</td><td>100</td><td>kg/dm^3</td></tr>
+<tr><td>cec</td><td>Cation Exchange Capacity of the soil</td><td>mmol(c)/kg</td><td>10</td><td>cmol(c)/kg</td></tr>
+<tr><td>cfvo</td><td>Volumetric fraction of coarse fragments (&gt; 2 mm)</td><td>cm^3/dm^3 (vol per mil)</td><td>10</td><td>cm^3/100cm^3 (vol%)</td></tr>
+<tr><td>clay</td><td>Proportion of clay particles (&lt; 0.002 mm) in the fine earth fraction</td><td>g/kg</td><td>10</td><td>g/100g (%)</td></tr>
+<tr><td>nitrogen</td><td>Total nitrogen (N)</td><td>cg/kg</td><td>100</td><td>g/kg</td></tr>
+<tr><td>phh2o</td><td>Soil pH</td><td>pH*10</td><td>10</td><td>pH</td></tr>
+<tr><td>sand</td><td>Proportion of sand particles (&gt; 0.05 mm) in the fine earth fraction</td><td>g/kg</td><td>10</td><td>g/100g (%)</td></tr>
+<tr><td>silt</td><td>Proportion of silt particles (= 0.002 mm and = 0.05 mm) in the fine earth fraction</td><td>g/kg</td><td>10</td><td>g/100g (%)</td></tr>
+<tr><td>soc</td><td>Soil organic carbon content in the fine earth fraction</td><td>dg/kg</td><td>10</td><td>g/kg</td></tr>
+<tr><td>ocd</td><td>Organic carbon density</td><td>hg/m^3</td><td>10</td><td>kg/m^3</td></tr>
+<tr><td>ocs</td><td>Organic carbon stocks</td><td>t/ha</td><td>10</td><td>kg/m^2</td></tr>
+</table>
+
+
+
+<p>SoilGrids predictions are made for the six standard depth intervals specified in the GlobalSoilMap IUSS working group and its specifications. The depth intervals returned are: <code>"0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"</code> and the properties returned are <code>"bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc"</code> -- each with 5th, 50th, 95th, mean and uncertainty values. The uncertainty values are the ratio between the inter-quantile range (90% prediction interval width) and the median : <code>(Q0.95-Q0.05)/Q0.50.</code> Point data requests are made through <code>properties/query</code> endpoint of the SoilGrids v2.0 REST API: <a href='https://rest.isric.org/soilgrids/v2.0/docs'>https://rest.isric.org/soilgrids/v2.0/docs</a>.</p>
+<p>Find out more information about the SoilGrids and GlobalSoilMap products here:</p><ul>
+<li><p><a href='https://www.isric.org/explore/soilgrids/faq-soilgrids'>https://www.isric.org/explore/soilgrids/faq-soilgrids</a></p></li>
+<li><p><a href='https://www.isric.org/sites/default/files/GlobalSoilMap_specifications_december_2015_2.pdf'>https://www.isric.org/sites/default/files/GlobalSoilMap_specifications_december_2015_2.pdf</a></p></li>
+</ul>
+
+
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217-240, 2021. doi: <a href='https://doi.org/10.5194/soil-7-217-2021'>10.5194/soil-7-217-2021</a></p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Andrew G. Brown</p>

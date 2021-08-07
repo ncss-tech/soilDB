@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get tabular "siblings" and "cousins" for a soil series — siblings • soilDB</title>
+<title>Get "siblings" and "cousins" for a given soil series — siblings • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,15 @@
 
 
 
-<meta property="og:title" content="Get tabular "siblings" and "cousins" for a soil series — siblings" />
-<meta property="og:description" content="Look up siblings and cousins for a given soil series from the current fiscal
-year SSURGO snapshot via SoilWeb." />
+<meta property="og:title" content="Get "siblings" and "cousins" for a given soil series — siblings" />
+<meta property="og:description" content="Look up siblings and cousins for a given soil series from the current fiscal year SSURGO snapshot via SoilWeb.
+The siblings of any given soil series are defined as those soil components (major and minor) that share a parent map unit with the named series (as a major component). Component names are filtered using a snapshot of the Soil Classification database to ensure that only valid soil series names are included. Cousins are siblings of siblings. Data are sourced from SoilWeb which maintains a copy of the current SSURGO snapshot. Visualizations of soil &quot;siblings&quot;-related concepts can be found in the &quot;Sibling Summary&quot; tab of Soil Data Explorer app: https://casoilresource.lawr.ucdavis.edu/sde/.
+Additional resources:
+Soil Series Query Functions
+Soil &quot;Siblings&quot; Tutorial
+SSSA 2019 Presentation - Mapping Soilscapes Using Soil Co-Occurrence Networks
+
+" />
 
 
 
@@ -112,14 +118,20 @@ year SSURGO snapshot via SoilWeb." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get tabular "siblings" and "cousins" for a soil series</h1>
+    <h1>Get "siblings" and "cousins" for a given soil series</h1>
     <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/siblings.R'><code>R/siblings.R</code></a></small>
     <div class="hidden name"><code>siblings.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Look up siblings and cousins for a given soil series from the current fiscal
-year SSURGO snapshot via SoilWeb.</p>
+    <p>Look up siblings and cousins for a given soil series from the current fiscal year SSURGO snapshot via SoilWeb.</p>
+<p>The siblings of any given soil series are defined as those soil components (major and minor) that share a parent map unit with the named series (as a major component). Component names are filtered using a snapshot of the Soil Classification database to ensure that only valid soil series names are included. Cousins are siblings of siblings. Data are sourced from SoilWeb which maintains a copy of the current SSURGO snapshot. Visualizations of soil "siblings"-related concepts can be found in the "Sibling Summary" tab of Soil Data Explorer app: <a href='https://casoilresource.lawr.ucdavis.edu/sde/'>https://casoilresource.lawr.ucdavis.edu/sde/</a>.</p>
+<p>Additional resources:</p><ul>
+<li><p><a href='http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html'>Soil Series Query Functions</a></p></li>
+<li><p><a href='http://ncss-tech.github.io/AQP/soilDB/siblings.html'>Soil "Siblings" Tutorial</a></p></li>
+<li><p><a href='http://ncss-tech.github.io/AQP/presentations/beaudette-soil-networks-2019-www.pdf'>SSSA 2019 Presentation - Mapping Soilscapes Using Soil Co-Occurrence Networks</a></p></li>
+</ul>
+
     </div>
 
     <pre class="usage"><span class='fu'>siblings</span><span class='op'>(</span><span class='va'>s</span>, only.major <span class='op'>=</span> <span class='cn'>FALSE</span>, component.data <span class='op'>=</span> <span class='cn'>FALSE</span>, cousins <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
@@ -129,18 +141,15 @@ year SSURGO snapshot via SoilWeb.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>s</th>
-      <td><p>character vector, the name of a single soil series,
-case-insensitive.</p></td>
+      <td><p>character vector, the name of a single soil series, case-insensitive.</p></td>
     </tr>
     <tr>
       <th>only.major</th>
-      <td><p>logical, should only return siblings that are major
-components</p></td>
+      <td><p>logical, should only return siblings that are major components</p></td>
     </tr>
     <tr>
       <th>component.data</th>
-      <td><p>logical, should component data for siblings (and
-optionally cousins) be returned?</p></td>
+      <td><p>logical, should component data for siblings (and optionally cousins) be returned?</p></td>
     </tr>
     <tr>
       <th>cousins</th>
@@ -150,30 +159,16 @@ optionally cousins) be returned?</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    
-<dl>
-<dt>sib</dt><dd><p><code>data.frame</code> containing siblings, major
-component flag, and number of co-occurrences</p></dd>
-<dt>sib.data</dt><dd><p><code>data.frame</code> containing sibling component data</p></dd>
-<dt>cousins</dt><dd><p><code>data.frame</code> containing cousins, major component flag,
-and number of co-occurrences</p></dd> <dt>cousin.data</dt><dd><p><code>data.frame</code>
-containing cousin component data</p></dd> 
-</dl>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The siblings of any given soil series are defined as those soil series
-(major and minor component) that share a parent map unit with the named
-series (as a major component). Cousins are siblings of siblings. Data are
-sourced from SoilWeb which maintains a copy of the current SSURGO snapshot.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    
-<ul>
-<li><p><a href='http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html'>Soil Series Query Functions</a></p></li>
-<li><p><a href='http://ncss-tech.github.io/AQP/soilDB/siblings.html'>Soil "Siblings" Tutorial</a></p></li>
+    <p>A <code>list</code> containing:</p><ul>
+<li><p>sib: <code>data.frame</code> containing siblings, major component flag, and number of co-occurrences</p></li>
+<li><p>sib.data: <code>data.frame</code> containing sibling component data (only when <code>component.data = TRUE</code>)</p></li>
+<li><p>cousins: <code>data.frame</code> containing cousins, major component flag, and number of co-occurrences (only when <code>cousins = TRUE</code>)</p></li>
+<li><p>cousin.data: <code>data.frame</code> containing cousin component data (only when <code>cousins = TRUE, component.data = TRUE</code>)</p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>O'Geen, A., Walkinshaw, M. and Beaudette, D. (2017), SoilWeb: A Multifaceted Interface to Soil Survey Information. Soil Science Society of America Journal, 81: 853-862. doi: <a href='https://doi.org/10.2136/sssaj2016.11.0386n'>10.2136/sssaj2016.11.0386n</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='OSDquery.html'>OSDquery</a>, siblings, <a href='fetchOSD.html'>fetchOSD</a></p></div>

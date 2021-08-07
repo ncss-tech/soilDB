@@ -114,15 +114,26 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="soildb-264-2021-07-23" class="section level1">
+    <div id="soildb-264-2021-08-06" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.4">
-<a href="#soildb-264-2021-07-23" class="anchor"></a>soilDB 2.6.4 (2021-07-23)<small> Unreleased </small>
+<a href="#soildb-264-2021-08-06" class="anchor"></a>soilDB 2.6.4 (2021-08-06)<small> Unreleased </small>
 </h1>
 <ul>
 <li>
 <code><a href="../reference/fetchNASIS.html">fetchNASIS(from="pedons")</a></code> now supports <code>fill=TRUE</code> argument just like <code>from="components"</code> to include pedons that have no horizon records</li>
 <li>
 <code><a href="../reference/createStaticNASIS.html">createStaticNASIS()</a></code>: column order should match NASIS, even if data types require reorder for ODBC driver</li>
+<li>
+<code><a href="../reference/fetchSoilGrids.html">fetchSoilGrids()</a></code> bug fixes, updates to metadata and references in documentation (<a href="https://github.com/ncss-tech/soilDB/issues/201" class="uri">https://github.com/ncss-tech/soilDB/issues/201</a>)
+<ul>
+<li>Corrected the conversion factor used for predicted <code>nitrogen</code> values (conversion from cg/kg to g/kg)</li>
+<li>Corrected the conversion factor used for uncertainty in <code>bdod</code> and <code>nitrogen</code> (SoilGrids uncertainty layer always uses factor of 10 to create integers)</li>
+<li>Improved error handling</li>
+<li>Added <code>progress</code> and <code>verbose</code> arguments for text progress bar and additional message output</li>
+<li>Added support for {sf} and {sp} POINT geometry inputs</li>
+</ul>
+</li>
+<li>Add <code>get_SDA_coecoclass</code> SOD-style method for mapunit/component level summaries of ecological site and other vegetation class information</li>
 </ul>
 </div>
     <div id="soildb-263-2021-07-22" class="section level1">

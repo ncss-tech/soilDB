@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get SSURGO Data via Spatial Query — SoilWeb_spatial_query • soilDB</title>
+<title>Get mapunit ecological sites from Soil Data Access — get_SDA_coecoclass • soilDB</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get SSURGO Data via Spatial Query — SoilWeb_spatial_query" />
-<meta property="og:description" content="Get SSURGO Data via Spatial Query to SoilWeb" />
+<meta property="og:title" content="Get mapunit ecological sites from Soil Data Access — get_SDA_coecoclass" />
+<meta property="og:description" content="Get mapunit ecological sites from Soil Data Access" />
 
 
 
@@ -111,80 +111,63 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get SSURGO Data via Spatial Query</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/SSURGO_spatial_query.R'><code>R/SSURGO_spatial_query.R</code></a></small>
-    <div class="hidden name"><code>SoilWeb_spatial_query.Rd</code></div>
+    <h1>Get mapunit ecological sites from Soil Data Access</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/SDA_coecoclass.R'><code>R/SDA_coecoclass.R</code></a></small>
+    <div class="hidden name"><code>get_SDA_coecoclass.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get SSURGO Data via Spatial Query to SoilWeb</p>
+    <p>Get mapunit ecological sites from Soil Data Access</p>
     </div>
 
-    <pre class="usage"><span class='fu'>SoilWeb_spatial_query</span><span class='op'>(</span>
-  bbox <span class='op'>=</span> <span class='cn'>NULL</span>,
-  coords <span class='op'>=</span> <span class='cn'>NULL</span>,
-  what <span class='op'>=</span> <span class='st'>"mapunit"</span>,
-  source <span class='op'>=</span> <span class='st'>"soilweb"</span>
+    <pre class="usage"><span class='fu'>get_SDA_coecoclass</span><span class='op'>(</span>
+  method <span class='op'>=</span> <span class='st'>"None"</span>,
+  areasymbols <span class='op'>=</span> <span class='cn'>NULL</span>,
+  mukeys <span class='op'>=</span> <span class='cn'>NULL</span>,
+  query_string <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  sources <span class='op'>=</span> <span class='st'>"coecosite"</span>,
+  not_rated_value <span class='op'>=</span> <span class='st'>"Not assigned"</span>,
+  miscellaneous_areas <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>bbox</th>
-      <td><p>a bounding box in WGS84 geographic coordinates, see examples</p></td>
+      <th>method</th>
+      <td><p>aggregation method. One of: "Dominant Component", "Dominant Condition", "None". If "None" is selected one row will be returned per component, otherwise one row will be returned per map unit.</p></td>
     </tr>
     <tr>
-      <th>coords</th>
-      <td><p>a coordinate pair in WGS84 geographic coordinates, see
-examples</p></td>
+      <th>areasymbols</th>
+      <td><p>vector of soil survey area symbols</p></td>
     </tr>
     <tr>
-      <th>what</th>
-      <td><p>data to query, currently ignored</p></td>
+      <th>mukeys</th>
+      <td><p>vector of map unit keys</p></td>
     </tr>
     <tr>
-      <th>source</th>
-      <td><p>the data source, currently ignored</p></td>
+      <th>query_string</th>
+      <td><p>Default: <code>FALSE</code>; if <code>TRUE</code> return a character string containing query that would be sent to SDA via <code>SDA_query</code></p></td>
+    </tr>
+    <tr>
+      <th>sources</th>
+      <td><p>One of more of <code>"coecosite"</code> or <code>"coothvegclass"</code>. If <code>NULL</code> no constraint on <code>sourcesdwtablephysicalname</code> is used in the query.</p></td>
+    </tr>
+    <tr>
+      <th>not_rated_value</th>
+      <td><p>Default: <code>"Not assigned"</code></p></td>
+    </tr>
+    <tr>
+      <th>miscellaneous_areas</th>
+      <td><p>Include miscellaneous areas (non-soil components)?</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>The data returned from this function will depend on the query style.
-See examples below.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Data are currently available from SoilWeb. These data are a snapshot of the
-"official" data. The snapshot date is encoded in the "soilweb_last_update"
-column in the function return value. Planned updates to this function will
-include a switch to determine the data source: "official" data via USDA-NRCS
-servers, or a "snapshot" via SoilWeb.</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+    <p>When <code>method="Dominant Condition"</code> an additional field <code>ecoclasspct_r</code> is returned in the result with the sum of <code>comppct_r</code> that have the dominant condition <code>ecoclassid</code>. The component with the greatest <code>comppct_r</code> is returned for the <code>component</code> and <code>coecosite</code> level information.</p>
+<p>Note that if there are multiple <code>coecoclasskey</code> per <code>ecoclassid</code> there may be more than one record per component.</p>
 
-    <p>This function should be considered experimental; arguments, results,
-and side-effects could change at any time. SDA now supports spatial queries,
-consider using <code><a href='SDA_spatialQuery.html'>SDA_query_features</a></code> instead.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>D.E. Beaudette</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># \donttest{</span>
-<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
-    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/curl/man/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    
-    <span class='co'># query by bbox</span>
-    <span class='fu'>SoilWeb_spatial_query</span><span class='op'>(</span>bbox<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>122.05</span>, <span class='fl'>37</span>, <span class='op'>-</span><span class='fl'>122</span>, <span class='fl'>37.05</span><span class='op'>)</span><span class='op'>)</span>
-    
-    <span class='co'># query by coordinate pair</span>
-    <span class='fu'>SoilWeb_spatial_query</span><span class='op'>(</span>coords<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>121</span>, <span class='fl'>38</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt;   ogc_fid areasymbol musym  mukey soilweb_last_update dist_meters
-#&gt; 1 1484974      ca077   220 462112          2020-05-29 92.17456302</div><div class='input'><span class='co'># }</span>
-
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
