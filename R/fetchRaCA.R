@@ -1,14 +1,24 @@
-## TODO: need to implement some kind of constraints on geographic queries
-## NOTE: each VNIR spectra record is 6.6kb of data (compressed, gzip, level 5)
 
-#' Get Rapid Carbon Assessment (RaCA) data
-#' @description Get Rapid Carbon Assessment (RaCA) data via state, geographic bounding-box, RaCA site ID, or series query from the SoilWeb API.
+#' @title Get Rapid Carbon Assessment (RaCA) data
+#' 
+#' @description Get Rapid Carbon Assessment (RaCA) data by state, geographic bounding-box, RaCA site ID, or soil series query from the SoilWeb API. This interface to the data was an experimental delivery service that does not include the latest soil carbon measurements. 
+#' 
+#' Please use [current RaCA distribution](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164) if you need measured SOC.
+#' 
+#' This interface will be updated sometime calendar year 2021 to include the latest soil morphology, taxonomic classification, and measured SOC values. More detailed coordinates for sample sites should also be available.
+#' 
 #' @param series a soil series name; case-insensitive
-#' @param bbox a bounding box in WGS84 geographic coordinates e.g. \code{c(-120, 37, -122, 38)}, constrained to a 5-degree block
+#' 
+#' @param bbox a bounding box in WGS84 geographic coordinates e.g. `c(-120, 37, -122, 38)`, constrained to a 5-degree block
+#' 
 #' @param state a two-letter US state abbreviation; case-insensitive
+#' 
 #' @param rcasiteid a RaCA site id (e.g. 'C1609C01')
+#' 
 #' @param get.vnir logical, should associated VNIR spectra be downloaded? (see details)
-#' @details The VNIR spectra associated with RaCA data are quite large \[each gzip-compressed VNIR spectra record is about 6.6kb], so requests for these data are disabled by default. Note that VNIR spectra can only be queried by soil series or geographic BBOX.
+#' 
+#' @details The VNIR spectra associated with RaCA data are quite large (each gzip-compressed VNIR spectra record is about 6.6kb), so requests for these data are disabled by default. Note that VNIR spectra can only be queried by soil series or geographic BBOX.
+#' 
 #' @return {
 #' \describe{
 #' \item{\code{pedons}:}{a \code{SoilProfileCollection} object containing site/pedon/horizon data}
@@ -187,10 +197,6 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
 
   # merge-in site data
   site(h) <- s
-
-  # don't init coordinates, as it would be hard for the user to update later
-  # coordinates(h) <- ~ x + y
-  # proj4string(h) <- '+proj=longlat +datum=WGS84'
 
   # reset options:
   options(opt.original)
