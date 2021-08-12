@@ -9,7 +9,7 @@ get_SDA_coecoclass(
   areasymbols = NULL,
   mukeys = NULL,
   query_string = FALSE,
-  sources = "coecosite",
+  ecoclassref = "Ecological Site Description Database",
   not_rated_value = "Not assigned",
   miscellaneous_areas = TRUE
 )
@@ -23,7 +23,7 @@ get_SDA_coecoclass(
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 
-\item{sources}{One of more of \code{"coecosite"} or \code{"coothvegclass"}. If \code{NULL} no constraint on \code{sourcesdwtablephysicalname} is used in the query.}
+\item{ecoclassref}{Default: \code{"Ecological Site Description Database"}. If \code{NULL} no constraint on \code{ecoclassref} is used in the query.}
 
 \item{not_rated_value}{Default: \code{"Not assigned"}}
 

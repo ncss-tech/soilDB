@@ -33,7 +33,7 @@ test_that("get_SDA_coecoclass works", {
   
   res8 <- get_SDA_coecoclass(method = "dominant component", 
                              areasymbols = c("CA077", "CA630"),
-                             sources = "coothvegclass")
+                             ecoclassref = "Ecological Site Description Database")
   expect_equal(length(unique(res8$mukey)), nrow(res8))
   
 })
