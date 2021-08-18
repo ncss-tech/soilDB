@@ -22,7 +22,7 @@ ISSR800.wcs(aoi, var, res = 800, quiet = FALSE)
 \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=epsg:4326'}
 }
 
-The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the ISSR-800 grids.
+The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the ISSR-800 grids.
 
 Variables available from this WCS can be queried using \code{WCS_details(wcs = 'ISSR800')}.}
 }

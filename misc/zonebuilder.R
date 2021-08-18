@@ -14,7 +14,7 @@ x <- fetchSDA_spatial(x = "459314")
 
 x <- st_as_sf(x)
 
-x <- st_transform(x, 6350)
+x <- st_transform(x, 5070)
 
 a <- x[1, ]
 p <- st_point_on_surface(a)

@@ -1,7 +1,7 @@
 
 #' @title Retrieve Soil Series Extent Maps from SoilWeb
 #' 
-#' @description This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{SpatialPolygonsDataFrame} object) or gridded representation of area proportion falling within 800m cells (\code{raster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (EPSG 6350).
+#' @description This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{SpatialPolygonsDataFrame} object) or gridded representation of area proportion falling within 800m cells (\code{raster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (EPSG 5070).
 #' 
 #' @param s a soil series name, case-insensitive
 #' 
@@ -138,7 +138,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   # cleanup
   unlink(tf)
   
-  # EPSG:6350
+  # EPSG:5070
   return(x)
 }
 

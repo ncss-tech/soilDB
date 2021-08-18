@@ -22,7 +22,7 @@
 #'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=epsg:4326'}
 #' }
 #' 
-#' The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:6350) of the ISSR-800 grids.
+#' The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the ISSR-800 grids.
 #' 
 #' Variables available from this WCS can be queried using \code{WCS_details(wcs = 'ISSR800')}.
 #' 
@@ -99,7 +99,7 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     '&COVERAGEID=', var.spec$dsn,
     '&FORMAT=image/tiff',
     '&GEOTIFF:COMPRESSION=LZW',
-    '&SUBSETTINGCRS=EPSG:6350',
+    '&SUBSETTINGCRS=EPSG:5070',
     '&FORMAT=', var.spec$type,
     '&SUBSET=x(', xmin, ',', xmax,')',
     '&SUBSET=y(', ymin, ',', ymax,')',
