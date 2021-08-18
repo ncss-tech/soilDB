@@ -1,3 +1,6 @@
+# soilDB 2.6.5 (2021-08-18)
+ * API calls that return geometry in projected coordinates (AEA/NAD83) now use ESPG:5070 instead of EPSG:6350
+
 # soilDB 2.6.4 (2021-08-06)
  * `fetchNASIS(from="pedons")` now supports `fill=TRUE` argument just like `from="components"` to include pedons that have no horizon records
  * `createStaticNASIS()`: column order should match NASIS, even if data types require reorder for ODBC driver
