@@ -99,7 +99,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   }
 
   # ISSR-800 and gNATSGO CRS
-  # EPSG:6350
+  # EPSG:6350 NAD83 (2011)
+  # EPSG:5070 NAD83
+  # we will use EPSG:5070 for now (https://github.com/ncss-tech/soilDB/issues/205)
   crs <- '+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'
 
   # double-check, likely a better approach
