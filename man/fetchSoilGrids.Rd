@@ -43,7 +43,7 @@ This function obtains SoilGrids properties information (250m raster resolution) 
 }
 
 
-SoilGrids predictions are made for the six standard depth intervals specified in the GlobalSoilMap IUSS working group and its specifications. The depth intervals returned are: \code{"0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"} and the properties returned are \code{"bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc"} -- each with 5th, 50th, 95th, mean and uncertainty values. The uncertainty values are the ratio between the inter-quantile range (90\% prediction interval width) and the median : \code{(Q0.95-Q0.05)/Q0.50.} Point data requests are made through \code{properties/query} endpoint of the SoilGrids v2.0 REST API: \url{https://rest.isric.org/soilgrids/v2.0/docs}.
+SoilGrids predictions are made for the six standard depth intervals specified in the GlobalSoilMap IUSS working group and its specifications. The depth intervals returned are: \code{"0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"} and the properties returned are \code{"bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc"} -- each with 5th, 50th, 95th, mean and uncertainty values. The uncertainty values are the ratio between the inter-quantile range (90\% prediction interval width) and the median : \code{(Q0.95-Q0.05)/Q0.50.} Point data requests are made through \code{properties/query} endpoint of the \href{https://www.isric.org/explore/soilgrids/faq-soilgrids}{SoilGrids v2.0 REST API}. Please check ISRIC's data policy, disclaimer and citation: \url{https://www.isric.org/about/data-policy}.
 
 Find out more information about the SoilGrids and GlobalSoilMap products here:
 \itemize{
