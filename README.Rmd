@@ -59,7 +59,7 @@ Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: S
  
  *  Added several new SDA query methods based on [ssurgoOnDemand](https://github.com/ncss-tech/ssurgoOnDemand) by Jason Nemecek and Chad Ferguson:
  
-     * `get_SDA_property()`, `get_SDA_interpretation()`, `get_SDA_muaggatt()`, `get_SDA_hydric()`, `get_SDA_pmgroupname()`
+     * `get_SDA_property()`, `get_SDA_interpretation()`, `get_SDA_muaggatt()`, `get_SDA_hydric()`, `get_SDA_pmgroupname()`, `get_SDA_coecoclass()`
    
 #### MS Access
 

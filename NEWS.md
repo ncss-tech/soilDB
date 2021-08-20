@@ -1,4 +1,4 @@
-# soilDB 2.6.5 (2021-08-18)
+# soilDB 2.6.5 (2021-08-19)
  * API calls that return geometry in projected coordinates (AEA/NAD83) now use ESPG:5070 instead of EPSG:6350
 
 # soilDB 2.6.4 (2021-08-06)
@@ -10,7 +10,7 @@
    * Improved error handling
    * Added `progress` and `verbose` arguments for text progress bar and additional message output
    * Added support for {sf} and {sp} POINT geometry inputs
- * Add `get_SDA_coecoclass` SOD-style method for mapunit/component level summaries of ecological site and other vegetation class information
+ * Add `get_SDA_coecoclass()` SOD-style method for mapunit/component level summaries of ecological site and other vegetation class information
  
 # soilDB 2.6.3 (2021-07-22)
  * `SDA_query()` and all functions that call `SDA_query()` get proper column class handling (related to #190), however:

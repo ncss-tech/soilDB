@@ -1,7 +1,7 @@
 [![CRAN Version
 (Stable)](http://www.r-pkg.org/badges/version/soilDB)](https://cran.r-project.org/package=soilDB)
 [![GitHub Version
-(Development)](https://img.shields.io/badge/GitHub-2.6.4-yellowgreen)](https://github.com/ncss-tech/soilDB)
+(Development)](https://img.shields.io/badge/GitHub-2.6.5-yellowgreen)](https://github.com/ncss-tech/soilDB)
 [![R-CMD-check Build
 Status](https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
 [![Total CRAN
@@ -9,31 +9,27 @@ Downloads](http://cranlogs.r-pkg.org/badges/grand-total/soilDB)](https://cran.r-
 ![CRAN/METACRAN](https://img.shields.io/cran/l/soilDB) [![soilDB
 Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/soilDB/docs)
 
-Installation
-------------
+## Installation
 
-Get the stable version (2.6.3) from CRAN:
+Get the stable version from CRAN:
 
     install.packages('soilDB', dependencies = TRUE)
 
-Get the development version (2.6.4) from GitHub:
+Get the development version (2.6.5) from GitHub:
 
     remotes::install_github("ncss-tech/soilDB", dependencies = FALSE, upgrade = FALSE, build = FALSE)
 
-Website
--------
+## Website
 
--   <a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a>
+-   <http://ncss-tech.github.io/AQP/>
 
-Citation
---------
+## Citation
 
 Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021).
 soilDB: Soil Database Interface. R package version 2.6.3.
 <https://CRAN.R-project.org/package=soilDB>
 
-soilDB 2.6.4
-------------
+## soilDB 2.6.5
 
 ### Notices on Database Interfaces
 
@@ -66,7 +62,7 @@ soilDB 2.6.4
 
     -   `get_SDA_property()`, `get_SDA_interpretation()`,
         `get_SDA_muaggatt()`, `get_SDA_hydric()`,
-        `get_SDA_pmgroupname()`
+        `get_SDA_pmgroupname()`, `get_SDA_coecoclass()`
 
 #### MS Access
 
@@ -78,8 +74,7 @@ soilDB 2.6.4
 -   `ISSR800.wcs()` and `mukey.wcs()` now return a result that inherits
     from `try-error` (and a message) if the Web Coverage Service fails
 
-Functions by Data Source
-------------------------
+## Functions by Data Source
 
 -   SDA
     -   [`fetchSDA`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSDA_component.html)
@@ -132,8 +127,7 @@ Functions by Data Source
 -   SoilGrids
     -   [`fetchSoilGrids`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSoilGrids.html)
 
-Miscellaneous Functions
------------------------
+## Miscellaneous Functions
 
 -   [`estimateSTR`](http://ncss-tech.github.io/soilDB/docs/reference/estimateSTR.html)
 -   [`STRplot`](http://ncss-tech.github.io/soilDB/docs/reference/STRplot.html)
@@ -144,8 +138,7 @@ Miscellaneous Functions
 -   [`code`](http://ncss-tech.github.io/soilDB/docs/reference/code.html)
 -   [`get_NOAA_GHCND`](http://ncss-tech.github.io/soilDB/docs/reference/get_NOAA_GHCND.html)
 
-Tutorials and Demonstrations
-----------------------------
+## Tutorials and Demonstrations
 
 -   [fetchKSSL](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
 -   [SDA\_query](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html)
@@ -153,14 +146,12 @@ Tutorials and Demonstrations
 -   [SCAN/SNOTEL
     Data](http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html)
 
-Related Packages
-----------------
+## Related Packages
 
 -   [aqp](https://github.com/ncss-tech/aqp)
 -   [sharpshootR](https://github.com/ncss-tech/sharpshootR)
 
-Examples
---------
+## Examples
 
 ### Load Soil Packages
 
@@ -180,7 +171,7 @@ Examples
     res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
     print(res$fig)
 
-<img src="https://i.imgur.com/w5vI4WK.png" width="1056" />
+<img src="https://i.imgur.com/zhgGmGC.png" width="1056" />
 
 ### Make Profile Sketches
 
@@ -194,7 +185,7 @@ Examples
       width = 0.2
     )
 
-<img src="https://i.imgur.com/6hGxaVb.png" width="1344" />
+<img src="https://i.imgur.com/gnqvicc.png" width="1344" />
 
 ### Identify Tabular “Siblings”
 
@@ -224,9 +215,8 @@ Examples
       cex.names = 1
     )
 
-<img src="https://i.imgur.com/NNvCGVQ.png" width="1344" />
+<img src="https://i.imgur.com/yuLJdIi.png" width="1344" />
 
-Dependency Graph
-----------------
+## Dependency Graph
 
 ![](https://cran.microsoft.com/packagedata/graphs/soilDB.png)
