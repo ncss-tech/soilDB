@@ -185,7 +185,7 @@ soilDB: Soil Database Interface. R package version 2.6.3.
       width = 0.2
     )
 
-<img src="https://i.imgur.com/gnqvicc.png" width="1344" />
+<img src="https://i.imgur.com/499KQRL.png" width="1344" />
 
 ### Identify Tabular “Siblings”
 
@@ -214,8 +214,8 @@ soilDB: Soil Database Interface. R package version 2.6.3.
       cex.taxon.labels = 1,
       cex.names = 1
     )
-
-<img src="https://i.imgur.com/yuLJdIi.png" width="1344" />
+  
+<img src="https://i.imgur.com/Pgsk6iN.png" width="1344" />
 
 ## Dependency Graph
 
