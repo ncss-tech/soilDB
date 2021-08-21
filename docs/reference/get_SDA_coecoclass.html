@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.5</span>
       </span>
     </div>
 
@@ -125,7 +125,7 @@
   areasymbols <span class='op'>=</span> <span class='cn'>NULL</span>,
   mukeys <span class='op'>=</span> <span class='cn'>NULL</span>,
   query_string <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  sources <span class='op'>=</span> <span class='st'>"coecosite"</span>,
+  ecoclassref <span class='op'>=</span> <span class='st'>"Ecological Site Description Database"</span>,
   not_rated_value <span class='op'>=</span> <span class='st'>"Not assigned"</span>,
   miscellaneous_areas <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
@@ -150,8 +150,8 @@
       <td><p>Default: <code>FALSE</code>; if <code>TRUE</code> return a character string containing query that would be sent to SDA via <code>SDA_query</code></p></td>
     </tr>
     <tr>
-      <th>sources</th>
-      <td><p>One of more of <code>"coecosite"</code> or <code>"coothvegclass"</code>. If <code>NULL</code> no constraint on <code>sourcesdwtablephysicalname</code> is used in the query.</p></td>
+      <th>ecoclassref</th>
+      <td><p>Default: <code>"Ecological Site Description Database"</code>. If <code>NULL</code> no constraint on <code>ecoclassref</code> is used in the query.</p></td>
     </tr>
     <tr>
       <th>not_rated_value</th>
