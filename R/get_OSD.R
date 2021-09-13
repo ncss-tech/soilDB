@@ -36,6 +36,10 @@ get_OSD <- function(series, base_url = NULL, result = c("json","html","txt"), ve
          "txt" =  { .get_OSD_TXT(series, verbose = verbose)  })
 }
 
+
+## DEB: there are funky white-space characters (a0 created by &nbsp;) between location / state on line 2
+## DEB: there is no new-line between date and "XXX SERIES" because an <H1> element is used to create vertical space
+
 .get_OSD_HTML <- function(series, base_url = NULL, verbose = FALSE) {
   if(!requireNamespace('rvest', quietly=TRUE))
     stop('please install the `rvest` package', call.=FALSE)
@@ -45,20 +49,43 @@ get_OSD <- function(series, base_url = NULL, result = c("json","html","txt"), ve
   
   # get HTML content and strip blank / NA lines
   res <- sapply(.seriesNameToURL(series, base_url = base_url), function(x) {
-
+    
     # if the URL is bad a warning with 404 will be generated
     u <- suppressWarnings(try(url(x, "rb"), silent = TRUE))
     if (inherits(u, 'try-error'))
       return(NULL)
     
-    htmlres <- rvest::html_text(rvest::read_html(u, silent = !verbose))
+    # HTML results as xml_document
+    html.raw <- rvest::read_html(u, silent = !verbose)
+    
+    # close connection
     close(u)
     
+    ## not quite right, this removes the title but is otherwise a better candidate for future
+    # # 2021-09-13: explicit conversion of &nbsp; -> simple white space
+    # textResult <- rvest::html_text2(html.raw, preserve_nbsp = FALSE)
     
-    .stripOSDContents(readLines(textConnection(htmlres)))
+    # NOTE: not enough line-breaks between Date and "<H1>XXX SERIES</H1>", lines are joined
+    textResult <- rvest::html_text(html.raw)
+    
+    # remove extra line-breaks and other cruft
+    textResult <- .stripOSDContents(readLines(textConnection(textResult)))
+    
+    # line 5 does not break after the date: "09/2021FRESNO SERIES"
+    # repair it
+    txt.part <- strsplit(textResult[5], "[0-9]+\\/[0-9]+")[[1]][2]
+    date.part <- gsub(txt.part, '', textResult[5])
+    
+    # correct contents of line 5
+    textResult[5] <- date.part
+    
+    # insert the correct contents of line 6, shift everything forwards
+    c(textResult[1:5], txt.part, textResult[6:length(textResult)])
+    
   })
+  
   names(res) <- toupper(series)
-  res
+  return(res)
 }
 
 .get_OSD_TXT <- function(series, base_url = "", verbose = FALSE) {
@@ -158,5 +185,11 @@ get_OSD_JSON <- function(series, base_url = NULL) {
 .stripOSDContents <- function(x) {
   x <- x[which(x != '')]
   x <- x[which(!is.na(x))]
+  
   gsub('"', ' inches', x)
+  
+  # convert &nbsp; (\ua0) >- ' '
+  res <- gsub('\ua0', ' ', x)
+  
+  return(res)
 }
