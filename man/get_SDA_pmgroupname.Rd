@@ -4,20 +4,33 @@
 \alias{get_SDA_pmgroupname}
 \title{Get map unit parent material group information from Soil Data Access}
 \usage{
-get_SDA_pmgroupname(areasymbols = NULL, mukeys = NULL, simplify = TRUE)
+get_SDA_pmgroupname(
+  areasymbols = NULL,
+  mukeys = NULL,
+  method = "DOMINANT COMPONENT",
+  simplify = TRUE,
+  query_string = FALSE
+)
 }
 \arguments{
 \item{areasymbols}{vector of soil survey area symbols}
 
 \item{mukeys}{vector of map unit keys}
 
+\item{method}{One of: \code{"Dominant Component"}, \code{"Dominant Condition"}, \code{"None"}}
+
 \item{simplify}{logical; group into generalized parent material groups? Default \code{TRUE}}
+
+\item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 }
 \value{
 a data.frame
 }
 \description{
-Uses "Dominant Component" aggregation method.
+Get map unit parent material group information from Soil Data Access
+}
+\details{
+Default \code{method} is \code{"Dominant Component"} to get the dominant component (highest percentage). Use \code{"Dominant Condition"} or dominant parent material condition (similar conditions aggregated across components). Use \code{"None"} for no aggregation (one record per component).
 }
 \author{
 Jason Nemecek, Chad Ferguson, Andrew Brown

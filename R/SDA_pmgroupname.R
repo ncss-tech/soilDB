@@ -4,25 +4,34 @@
 
 #' Get map unit parent material group information from Soil Data Access
 #'
-#' Uses "Dominant Component" aggregation method.
+#'@details Default `method` is `"Dominant Component"` to get the dominant component (highest percentage). Use `"Dominant Condition"` or dominant parent material condition (similar conditions aggregated across components). Use `"None"` for no aggregation (one record per component).
 #'
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
+#' @param method One of: `"Dominant Component"`, `"Dominant Condition"`, `"None"`
 #' @param simplify logical; group into generalized parent material groups? Default `TRUE`
+#' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
 #' @return a data.frame
 #' @export
 #' @importFrom soilDB format_SQL_in_statement SDA_query
-get_SDA_pmgroupname <- function(areasymbols = NULL, mukeys = NULL, simplify = TRUE) {
+get_SDA_pmgroupname <- function(areasymbols = NULL,
+                                mukeys = NULL,
+                                method = "DOMINANT COMPONENT",
+                                simplify = TRUE,
+                                query_string = FALSE) {
+                
+        stopifnot(!is.null(areasymbols) || !is.null(mukeys))
 
-        stopifnot(!is.null(areasymbols) | !is.null(mukeys))
-
-        if (!is.null(areasymbols))
+        method <- match.arg(toupper(method), c("DOMINANT COMPONENT", "DOMINANT CONDITION", "NONE"))
+        
+        if (!is.null(areasymbols)) {
                 areasymbols <- soilDB::format_SQL_in_statement(areasymbols)
-
-        if (!is.null(mukeys))
+        }
+        
+        if (!is.null(mukeys)) {
                 mukeys <- soilDB::format_SQL_in_statement(mukeys)
-
+        }
 
         where_clause <- switch(as.character(is.null(areasymbols)),
                                "TRUE" = sprintf("mu.mukey IN %s", mukeys),
@@ -80,7 +89,6 @@ get_SDA_pmgroupname <- function(areasymbols = NULL, mukeys = NULL, simplify = TR
              WHEN pmgroupname LIKE '%Talus%' THEN 'Mass Movement Deposits'
              WHEN pmgroupname LIKE '%Topple deposits%' THEN 'Mass Movement Deposits'
              WHEN pmgroupname LIKE '%Diamicton%' THEN 'Miscellaneous Deposits'
-             WHEN pmgroupname LIKE '%mixed%' THEN 'Miscellaneous Deposits'
              WHEN pmgroupname LIKE '%Coprogenic material%' THEN 'Organic Deposits'
              WHEN pmgroupname LIKE '%Grassy organic material%' THEN 'Organic Deposits'
              WHEN pmgroupname LIKE '%Herbaceous organic material%' THEN 'Organic Deposits'
@@ -102,6 +110,7 @@ get_SDA_pmgroupname <- function(areasymbols = NULL, mukeys = NULL, simplify = TR
              WHEN pmgroupname LIKE '%tuff%' THEN 'Volcanic Deposits (unconsolidated; eolian and mass movement)'
              WHEN pmgroupname LIKE '%tuff-breccia%' THEN 'Volcanic Deposits (unconsolidated; eolian and mass movement)'
              WHEN pmgroupname LIKE '%Volcanic ash%' THEN 'Volcanic Deposits (unconsolidated; eolian and mass movement)'
+             WHEN pmgroupname LIKE '%alluvium%' THEN 'Waterlaid (or Transported) Deposits'
              WHEN pmgroupname LIKE '%Alluvium%' THEN 'Waterlaid (or Transported) Deposits'
              WHEN pmgroupname LIKE '%Backswamp deposits%' THEN 'Waterlaid (or Transported) Deposits'
              WHEN pmgroupname LIKE '%Beach sand%' THEN 'Waterlaid (or Transported) Deposits'
@@ -137,51 +146,54 @@ get_SDA_pmgroupname <- function(areasymbols = NULL, mukeys = NULL, simplify = TR
              WHEN pmgroupname LIKE '%shale%' THEN 'Miscoded - should be pmorigin'
              WHEN pmgroupname LIKE '%shale-calcareous%' THEN 'Miscoded - should be pmorigin'
              WHEN pmgroupname LIKE '%siltstone%' THEN 'Miscoded - should be pmorigin'
-             WHEN pmgroupname LIKE '%NULL%' THEN 'NULL' ELSE 'NULL' END"
-
-        if (simplify) {
-                q <- sprintf(
-                        "SELECT
-             sacatalog.areasymbol AS areasymbol,
-             mu.mukey AS mukey,
-             mu.musym AS musym,
-             mu.muname AS muname,
-             compname,
-             comppct_r,
-             %s AS pmgroupname
-             FROM sacatalog
-             INNER JOIN legend AS l ON l.areasymbol = sacatalog.areasymbol
-             INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
-             INNER JOIN component AS c ON c.mukey = mu.mukey AND c.cokey =
-             (SELECT TOP 1 c1.cokey FROM component AS c1
-             INNER JOIN mapunit AS mu1 ON c1.mukey=mu1.mukey AND c1.mukey=mu.mukey ORDER BY c1.comppct_r DESC, c1.cokey )
-             INNER JOIN copmgrp ON copmgrp.cokey=c.cokey",
-                        case_pmgroupname,
-                        where_clause
-                )
-
+             WHEN pmgroupname LIKE '%mixed%' THEN 'Miscellaneous Deposits'
+             WHEN pmgroupname LIKE '%NULL%' THEN 'NULL' ELSE 'NULL' END AS pmgroupname"
+        
+        if (!simplify) {
+                case_pmgroupname <- "pmgroupname"
+        }
+        
+        
+        if (method %in% c("DOMINANT COMPONENT", "DOMINANT CONDITION")) {
+                comp_selection <- "AND c.cokey =
+                (SELECT TOP 1 c1.cokey FROM component AS c1
+                 INNER JOIN mapunit AS mu1 ON c1.mukey=mu1.mukey AND c1.mukey=mu.mukey ORDER BY c1.comppct_r DESC, c1.cokey )"
         } else {
-                q <- sprintf(
-                        "SELECT
+                comp_selection <- ""
+        }
+        
+        if (method == "DOMINANT CONDITION") {
+                pm_selection <- "AND pmgroupname = (SELECT TOP 1 pmgroupname FROM mapunit
+                INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
+                INNER JOIN copmgrp ON copmgrp.cokey = c.cokey
+                GROUP BY pmgroupname, comppct_r ORDER BY SUM(comppct_r) over(partition by pmgroupname) DESC)"
+        } else {
+                pm_selection <- ""
+        }
+        
+        q <- sprintf(
+                paste0("SELECT
                      sacatalog.areasymbol AS areasymbol,
                      mu.mukey AS mukey,
                      mu.musym AS musym,
-                     mu.muname AS muname,
-                     compname,
-                     comppct_r,
-                     pmgroupname
-
+                     mu.muname AS muname,",
+                     ifelse(method == "DOMINANT CONDITION", "", "compname, comppct_r,"),
+                     "%s
                      FROM sacatalog
-                     INNER JOIN legend l ON l.areasymbol = sacatalog.areasymbol
-                     INNER JOIN mapunit mu ON mu.lkey = l.lkey AND %s
-                     INNER JOIN component AS c ON c.mukey = mu.mukey AND c.cokey =
-                     (SELECT TOP 1 c1.cokey FROM component AS c1
-                     INNER JOIN mapunit AS mu1 ON c1.mukey=mu1.mukey AND c1.mukey=mu.mukey ORDER BY c1.comppct_r DESC, c1.cokey )
-                     INNER JOIN copmgrp ON copmgrp.cokey=c.cokey",
-                        where_clause
-                )
-        }
-
+                     INNER JOIN legend AS l ON l.areasymbol = sacatalog.areasymbol
+                     INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
+                     INNER JOIN component AS c ON c.mukey = mu.mukey %s
+                     INNER JOIN copmgrp ON copmgrp.cokey = c.cokey %s"),
+                case_pmgroupname,
+                where_clause,
+                comp_selection, 
+                pm_selection
+        )
+        
+   if (query_string) {
+           return(q)
+   }
+        
    # execute query
    res <- soilDB::SDA_query(q)
 
