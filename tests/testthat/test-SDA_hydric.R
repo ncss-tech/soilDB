@@ -9,4 +9,8 @@ test_that("get_SDA_hydric works", {
 
   # by mukey
   expect_equal(nrow(get_SDA_hydric(mukeys = c(461994, 461995))), 2)
+  
+  expect_equal(nrow(get_SDA_hydric(mukeys = c(461994, 461995), method = "none")), 11)
+  expect_equal(nrow(get_SDA_hydric(mukeys = c(461994, 461995), method = "dominant component")), 2)
+  expect_equal(nrow(get_SDA_hydric(mukeys = c(461994, 461995), method = "dominant condition")), 2)
 })
