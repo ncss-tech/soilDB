@@ -31,14 +31,14 @@ The default classes for \code{method="MAPUNIT"} are as follows:
 \itemize{
 \item \code{'Nonhydric'} - no hydric components
 \item \code{'Hydric'} - all hydric components
-\item \code{'Predominantly Hydric'} - 50\% or more of component proportion is hydric
-\item \code{'Partially Hydric'} - some proportion of the MAJOR components are hydric
-\item \code{'Predominantly Nonhydric'} - less than 50\% of component proportion is hydric
+\item \code{'Predominantly Hydric'} - hydric component percentage is 50\% or more
+\item \code{'Partially Hydric'} - one or more of the major components is hydric
+\item \code{'Predominantly Nonhydric'} - hydric component percentage is less than 50\%
 }
 
 The default result will also include the following summaries of component percentages: \code{total_comppct}, \code{hydric_majors} and \code{hydric_inclusions}.
 
-Default \code{method} \code{"Mapunit"} produces aggregate summaries of all components in the mapunit. Use \code{"Dominant Component"}, \code{"Dominant Condition"} to get the dominant component (highest percentage) or dominant hydric condition (similar conditions aggregated across components). Use \code{"None"} for no aggregation (one record per component).
+Default \code{method} \code{"Mapunit"} produces aggregate summaries of all components in the mapunit. Use \code{"Dominant Component"} and \code{"Dominant Condition"} to get the dominant component (highest percentage) or dominant hydric condition (similar conditions aggregated across components), respectively. Use \code{"None"} for no aggregation (one record per component).
 }
 \author{
 Jason Nemecek, Chad Ferguson, Andrew Brown
