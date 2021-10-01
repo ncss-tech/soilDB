@@ -1,3 +1,8 @@
+# soilDB 2.6.6 (2021-09-24)
+ * `get_SDA_pmgroupname()` and `get_SDA_hydric()` now support alternate aggregation methods. 
+   * Default for `get_SDA_pmgroupname()` is `"dominant component"`, now also supports `"dominant condition"` and `"none"`. 
+   * Default for `get_SDA_hydric()` is a map unit level aggregation of components and assigns new classes ; now supports `"dominant component"`, `"dominant condition"` and `"none"`
+
 # soilDB 2.6.5 (2021-08-19)
  * API calls that return geometry in projected coordinates (AEA/NAD83) now use ESPG:5070 instead of EPSG:6350
 

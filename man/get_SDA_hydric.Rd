@@ -4,18 +4,41 @@
 \alias{get_SDA_hydric}
 \title{Get map unit hydric soils information from Soil Data Access}
 \usage{
-get_SDA_hydric(areasymbols = NULL, mukeys = NULL)
+get_SDA_hydric(
+  areasymbols = NULL,
+  mukeys = NULL,
+  method = "MAPUNIT",
+  query_string = FALSE
+)
 }
 \arguments{
 \item{areasymbols}{vector of soil survey area symbols}
 
 \item{mukeys}{vector of map unit keys}
+
+\item{method}{One of: \code{"Mapunit"}, \code{"Dominant Component"}, \code{"Dominant Condition"}, \code{"None"}}
+
+\item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 }
 \value{
 a data.frame
 }
 \description{
-Get map unit hydric soils information from Soil Data Access
+Assess the hydric soils composition of a map unit.
+}
+\details{
+The default classes for \code{method="MAPUNIT"} are as follows:
+\itemize{
+\item \code{'Nonhydric'} - no hydric components
+\item \code{'Hydric'} - all hydric components
+\item \code{'Predominantly Hydric'} - hydric component percentage is 50\% or more
+\item \code{'Partially Hydric'} - one or more of the major components is hydric
+\item \code{'Predominantly Nonhydric'} - hydric component percentage is less than 50\%
+}
+
+The default result will also include the following summaries of component percentages: \code{total_comppct}, \code{hydric_majors} and \code{hydric_inclusions}.
+
+Default \code{method} \code{"Mapunit"} produces aggregate summaries of all components in the mapunit. Use \code{"Dominant Component"} and \code{"Dominant Condition"} to get the dominant component (highest percentage) or dominant hydric condition (similar conditions aggregated across components), respectively. Use \code{"None"} for no aggregation (one record per component).
 }
 \author{
 Jason Nemecek, Chad Ferguson, Andrew Brown
