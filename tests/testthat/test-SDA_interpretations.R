@@ -1,6 +1,6 @@
 target_areas <-  c("CA649", "CA630")
-target_area_rows <- 231
-target_area_rows_all <- 1085
+target_area_rows <- 220
+target_area_rows_all <- 1021
 
 target_mukeys <- c(463263, 463264)
 

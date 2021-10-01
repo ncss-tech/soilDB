@@ -6,11 +6,11 @@ test_that("get_SDA_hydric works", {
 
   # by areasymbol
   x <- get_SDA_hydric(areasymbols = c("CA077", "CA630"))
-  expect_equal(nrow(x), 313)
+  expect_equal(nrow(x), length(unique(x$mukey)))
 
   # check classification of mapunits
   x.nonhydric <- subset(x, x$HYDRIC_RATING == "Nonhydric")
-  expect_equal(nrow(x.nonhydric), 171)
+  expect_equal(nrow(x.nonhydric), 175)
   expect_true(all(x.nonhydric$hydric_majors == 0 & x.nonhydric$hydric_inclusions == 0))
 
   # by mukey

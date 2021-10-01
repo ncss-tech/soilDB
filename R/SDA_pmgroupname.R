@@ -172,7 +172,7 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
         }
         
         q <- sprintf(
-                paste0("SELECT
+                paste0("SELECT DISTINCT
                      sacatalog.areasymbol AS areasymbol,
                      mu.mukey AS mukey,
                      mu.musym AS musym,

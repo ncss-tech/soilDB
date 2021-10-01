@@ -1,7 +1,7 @@
 target_areas <-  c("CA649", "CA630")
-target_area_rows <- 231 # 1:1 with mukey
-target_area_rows_all <- 1085 # 1:1 with component
-target_area_rows_all_chorizon <- 3033 # 1:1 with chorizon
+target_area_rows <- 220 # 1:1 with mukey
+target_area_rows_all <- 1021 # 1:1 with component
+target_area_rows_all_chorizon <- 3178 # 1:1 with chorizon
 n_misc_area_rows <- 9
 
 target_mukeys <- c(463263, 463264)

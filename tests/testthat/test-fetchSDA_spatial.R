@@ -53,12 +53,12 @@ test_that("fetchSDA_spatial sapolygon and gsmmupolygon", {
                                     geom.src = "sapolygon",
                                     add.fields = "legend.areaname")
 
-  expect_equal(by.areasym.pt$areaname, c("Amador Area, California",
+  expect_true(all(by.areasym.pt$areaname %in% c("Amador Area, California",
                                          "Central Sierra Foothills Area, California, Parts of Calaveras and Tuolumne Counties",
                                          "San Joaquin County, California",
                                          "Eastern Stanislaus Area, California",
                                          "Mariposa County Area, California",
-                                         "Stanislaus County, California, Northern Part"))
+                                         "Stanislaus County, California, Northern Part")))
 
   # test STATSGO mupolygon
   statsgo.bbox <- fetchSDA_spatial(660848, db = 'STATSGO', method = "bbox",
