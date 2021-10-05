@@ -79,24 +79,25 @@ test_that("fetchOSD() returns reasonable data in extended mode", {
 })
 
 
-# https://github.com/ncss-tech/soilDB/issues/128
-test_that("fetchOSD() returns warning in extended mode, when active + inactive series specified", {
-
-  skip_if_offline()
-
-  skip_on_cran()
-
-  # warning added in response to #128
-  expect_warning(
-    xx <- fetchOSD(soils = c('sierra', 'Breadsprings', 'Hagerwest', 'Tintero'), extended = TRUE)
-  )
-
-  # extended request components
-  expect_equal(
-    names(xx), extended.table.names
-  )
-
-})
+## pending further investigation due to FY22 changes: inactive series included in soilweb holdings
+# # https://github.com/ncss-tech/soilDB/issues/128
+# test_that("fetchOSD() returns warning in extended mode, when active + inactive series specified", {
+# 
+#   skip_if_offline()
+# 
+#   skip_on_cran()
+# 
+#   # warning added in response to #128
+#   expect_warning(
+#     xx <- fetchOSD(soils = c('sierra', 'Breadsprings', 'Hagerwest', 'Tintero'), extended = TRUE)
+#   )
+# 
+#   # extended request components
+#   expect_equal(
+#     names(xx), extended.table.names
+#   )
+# 
+# })
 
 
 test_that("fetchOSD() returns data associated with named series (sierra|cecil)", {
