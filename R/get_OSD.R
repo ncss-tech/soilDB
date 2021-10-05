@@ -152,9 +152,10 @@ get_OSD_JSON <- function(series, base_url = NULL) {
     res$HORIZONS <- list(data.frame(data.table::rbindlist(lapply(jsp$HORIZONS[[1]], data.frame), fill = TRUE)))
 
     # replace NAs ( from toJSON(na='string') )
-    res[res == "NA"] <- NA_character_
-    res$SITE[[1]][res$SITE[[1]] == "NA"] <- NA_character_
-    res$HORIZONS[[1]][res$HORIZONS[[1]] == "NA"] <- NA_character_
+    # handle type conversion (mixed NA/numerics will be CHARACTER without conversion)
+    res <- type.convert(res, na.strings = "NA", as.is = TRUE)
+    res$SITE[[1]] <- type.convert(res$SITE[[1]], na.strings = "NA", as.is = TRUE)
+    res$HORIZONS[[1]] <- type.convert(res$HORIZONS[[1]], na.strings = "NA", as.is = TRUE)
 
     # handles weird cases
     if (inherits(res, 'try-error'))
