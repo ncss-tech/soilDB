@@ -15,14 +15,11 @@
 #' 
 #' @author D.E. Beaudette and A.G. Brown
 #' 
-#' @details 
+#' @details See the [Geographic Extent of Soil Taxa](https://ncss-tech.github.io/AQP/soilDB/taxa-extent.html) tutorial for more detailed examples.
 #' 
 #' ## Taxon Queries
 #' 
 #' Taxon labels can be conveniently extracted from the "ST_unique_list" sample data, provided by the [SoilTaxonomy package](https://github.com/ncss-tech/SoilTaxonomy).
-#' 
-#' 
-#' 
 #' 
 #' ## Formative Element Queries
 #' 
@@ -161,6 +158,7 @@
 #' * xeric: (xeric) more xeric than typic subgroup
 #' 
 #' @examples 
+#' \dontrun{
 #' \donttest{
 #' 
 #' if(requireNamespace("curl") &
@@ -168,55 +166,36 @@
 #'   
 #'   library(raster)
 #'   
-#'   # try a couple of different examples
-#'   
 #'   # soil order
 #'   taxa <- 'vertisols'
 #'   x <- taxaExtent(taxa, level = 'order')
-#'   a <- raster::aggregate(x, fact = 5)
 #'   
 #'   # suborder
 #'   taxa <- 'ustalfs'
 #'   x <- taxaExtent(taxa, level = 'suborder')
-#'   a <- raster::aggregate(x, fact = 5)
 #'   
 #'   # greatgroup
 #'   taxa <- 'haplohumults'
 #'   x <- taxaExtent(taxa, level = 'greatgroup')
-#'   a <- raster::aggregate(x, fact = 5)
 #'   
 #'   # subgroup
 #'   taxa <- 'Typic Haploxerepts'
 #'   x <- taxaExtent(taxa, level = 'subgroup')
-#'   a <- raster::aggregate(x, fact = 5)
 #'   
 #'   # greatgroup formative element
 #'   taxa <- 'psamm'
 #'   x <- taxaExtent(taxa, level = 'greatgroup', formativeElement = TRUE)
-#'   a <- raster::aggregate(x, fact = 5)
 #'   
 #'   # subgroup formative element
 #'   taxa <- 'abruptic'
 #'   x <- taxaExtent(taxa, level = 'subgroup', formativeElement = TRUE)
+#'   
+#'   # coarsen for faster plotting
 #'   a <- raster::aggregate(x, fact = 5)
 #'   
-#'   
 #'   # quick evaluation of the result
-#'   if(requireNamespace("rasterVis") & requireNamespace('viridisLite')) {
-#'     rasterVis::levelplot(a, 
-#'       margin = FALSE, scales = list(draw = FALSE), 
-#'       col.regions = viridisLite::viridis, 
-#'       main = names(a)
-#'     )
-#'   }
-#'   
-#'   # slippy map
-#'   if(requireNamespace("mapview")) {
-#'     mapview::mapview(a, col.regions = viridisLite::viridis, na.color = NA, use.layer.names = TRUE)
-#'   }
-#'   
-#'   
-#'   
+#'   plot(a, axes = FALSE)
+#' }
 #' }
 #' 
 #' }

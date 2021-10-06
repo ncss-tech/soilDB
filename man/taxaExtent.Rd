@@ -27,6 +27,7 @@ a \code{raster} object
 This function downloads a generalized representation of the geographic extent of any single taxon from the top 4 levels of Soil Taxonomy, or taxa matching a given formative element used in Great Group or subgroup taxa. Data are provided by SoilWeb, ultimately sourced from the current SSURGO snapshot. Data are returned as \code{raster} objects representing area proportion falling within 800m cells. Currently area proportions are based on major components only. Data are only available in CONUS and returned using an Albers Equal Area / NAD83(2011) coordinate reference system (EPSG: 5070).
 }
 \details{
+See the \href{https://ncss-tech.github.io/AQP/soilDB/taxa-extent.html}{Geographic Extent of Soil Taxa} tutorial for more detailed examples.
 \subsection{Taxon Queries}{
 
 Taxon labels can be conveniently extracted from the "ST_unique_list" sample data, provided by the \href{https://github.com/ncss-tech/SoilTaxonomy}{SoilTaxonomy package}.
@@ -175,6 +176,7 @@ The following labels are used to access taxa containing the following formative 
 }
 }
 \examples{
+\dontrun{
 \donttest{
 
 if(requireNamespace("curl") &
@@ -182,55 +184,36 @@ if(requireNamespace("curl") &
   
   library(raster)
   
-  # try a couple of different examples
-  
   # soil order
   taxa <- 'vertisols'
   x <- taxaExtent(taxa, level = 'order')
-  a <- raster::aggregate(x, fact = 5)
   
   # suborder
   taxa <- 'ustalfs'
   x <- taxaExtent(taxa, level = 'suborder')
-  a <- raster::aggregate(x, fact = 5)
   
   # greatgroup
   taxa <- 'haplohumults'
   x <- taxaExtent(taxa, level = 'greatgroup')
-  a <- raster::aggregate(x, fact = 5)
   
   # subgroup
   taxa <- 'Typic Haploxerepts'
   x <- taxaExtent(taxa, level = 'subgroup')
-  a <- raster::aggregate(x, fact = 5)
   
   # greatgroup formative element
   taxa <- 'psamm'
   x <- taxaExtent(taxa, level = 'greatgroup', formativeElement = TRUE)
-  a <- raster::aggregate(x, fact = 5)
   
   # subgroup formative element
   taxa <- 'abruptic'
   x <- taxaExtent(taxa, level = 'subgroup', formativeElement = TRUE)
+  
+  # coarsen for faster plotting
   a <- raster::aggregate(x, fact = 5)
   
-  
   # quick evaluation of the result
-  if(requireNamespace("rasterVis") & requireNamespace('viridisLite')) {
-    rasterVis::levelplot(a, 
-      margin = FALSE, scales = list(draw = FALSE), 
-      col.regions = viridisLite::viridis, 
-      main = names(a)
-    )
-  }
-  
-  # slippy map
-  if(requireNamespace("mapview")) {
-    mapview::mapview(a, col.regions = viridisLite::viridis, na.color = NA, use.layer.names = TRUE)
-  }
-  
-  
-  
+  plot(a, axes = FALSE)
+}
 }
 
 }
