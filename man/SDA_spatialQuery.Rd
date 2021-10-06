@@ -67,6 +67,7 @@ results. Polygon area in acres is computed server-side when \code{what =
 if(requireNamespace("curl") &
    curl::has_internet() & 
    requireNamespace("sp") &
+   requireNamespace("scales") &
    requireNamespace("raster") 
    ) {
 

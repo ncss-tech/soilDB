@@ -229,6 +229,7 @@ FROM geom_data;
 #' if(requireNamespace("curl") &
 #'    curl::has_internet() & 
 #'    requireNamespace("sp") &
+#'    requireNamespace("scales") &
 #'    requireNamespace("raster") 
 #'    ) {
 #' 
