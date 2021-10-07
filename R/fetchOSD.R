@@ -46,7 +46,7 @@
 
 # 2018-10-11: updated to new API, URL subject to change
 # fetch basic OSD, SC, and SoilWeb summaries from new API
-#' Get Official Series Descriptions and summaries from SoilWeb API
+#' @title Get Official Series Descriptions and summaries from SoilWeb API
 #' 
 #' @description This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.
 #' 
@@ -83,15 +83,13 @@
 #' } 
 #' 
 #' 
-#' When using `extended=TRUE`, there are a couple of scenarios in which series morphology contained in `SPC` do not fully match records in the associated series summaries (e.g. `competing`).
+#' When using `extended = TRUE`, there are a couple of scenarios in which series morphology contained in `SPC` do not fully match records in the associated series summaries (e.g. `competing`).
 #' 
 #' \describe{
 #' 
-#'   \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} because these summaries are currently generated from PRISM. We are working on a solution.}
+#'   \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.}
 #'   
 #'   \item{2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{ - Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
-#'   
-#'   \item{3. A query for multiple soil series, with one more more listed as "inactive" (e.g. BREADSPRINGS).}{ - Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
 #'   
 #' } 
 #' 
@@ -103,7 +101,7 @@
 #' 
 #' @references USDA-NRCS OSD search tools: \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587}
 #' 
-#' @author D.E. Beaudette
+#' @author D.E. Beaudette, A.G. Brown
 #' @seealso \link{OSDquery}, \link{siblings}
 #' @export
 #'

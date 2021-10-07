@@ -47,15 +47,13 @@ The standard set of "site" and "horizon" data are returned as a \code{SoilProfil
 \item{metadata}{metadata associated with SoilWeb cached summaries}
 }
 
-When using \code{extended=TRUE}, there are a couple of scenarios in which series morphology contained in \code{SPC} do not fully match records in the associated series summaries (e.g. \code{competing}).
+When using \code{extended = TRUE}, there are a couple of scenarios in which series morphology contained in \code{SPC} do not fully match records in the associated series summaries (e.g. \code{competing}).
 
 \describe{
 
-\item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} because these summaries are currently generated from PRISM. We are working on a solution.}
+\item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.}
 
 \item{2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{ - Extended summaries are present but morphology missing from \code{SPC}. A warning is issued.}
-
-\item{3. A query for multiple soil series, with one more more listed as "inactive" (e.g. BREADSPRINGS).}{ - Extended summaries are present but morphology missing from \code{SPC}. A warning is issued.}
 
 }
 
@@ -103,6 +101,6 @@ USDA-NRCS OSD search tools: \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detai
 \link{OSDquery}, \link{siblings}
 }
 \author{
-D.E. Beaudette
+D.E. Beaudette, A.G. Brown
 }
 \keyword{manip}

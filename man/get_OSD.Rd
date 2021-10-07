@@ -35,7 +35,7 @@ The default \code{base_url} for \code{result="json"} is to JSON files stored in 
 \donttest{
 if(requireNamespace("curl") &
    curl::has_internet()) {
-   
+
 series <- c("Musick", "Hector", "Chewacla")
 get_OSD(series)
 }
