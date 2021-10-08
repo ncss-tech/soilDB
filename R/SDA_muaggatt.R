@@ -1,16 +1,17 @@
 # Based on ssurgoOnDemand by chad ferguson and jason nemecek
 # SDA_muaggatt.R: translation of muaggatt.py into soilDB-style R function by andrew brown
-# last update: 2021/04/03
+# last update: 2021/10/08
 
 #' Get map unit aggregate attribute information from Soil Data Access
 #'
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
+#' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
 #' @return a data.frame
 #' @export
 #' @importFrom soilDB format_SQL_in_statement SDA_query
-get_SDA_muaggatt <- function(areasymbols = NULL, mukeys = NULL) {
+get_SDA_muaggatt <- function(areasymbols = NULL, mukeys = NULL, query_string = FALSE) {
 
   stopifnot(!is.null(areasymbols) | !is.null(mukeys))
 
@@ -33,6 +34,10 @@ get_SDA_muaggatt <- function(areasymbols = NULL, mukeys = NULL) {
         INNER JOIN muaggatt ma ON mu.mukey = ma.mukey
         WHERE %s", where_clause)
 
+  if (query_string) {
+    return(q)
+  }
+  
   # execute query
   res <- soilDB::SDA_query(q)
 

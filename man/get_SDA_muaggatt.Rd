@@ -4,12 +4,14 @@
 \alias{get_SDA_muaggatt}
 \title{Get map unit aggregate attribute information from Soil Data Access}
 \usage{
-get_SDA_muaggatt(areasymbols = NULL, mukeys = NULL)
+get_SDA_muaggatt(areasymbols = NULL, mukeys = NULL, query_string = FALSE)
 }
 \arguments{
 \item{areasymbols}{vector of soil survey area symbols}
 
 \item{mukeys}{vector of map unit keys}
+
+\item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 }
 \value{
 a data.frame
