@@ -114,9 +114,19 @@ get_OSD_JSON <- function(series, base_url = NULL) {
   if (!requireNamespace("jsonlite"))
     stop("package `jsonlite` is required", call. = FALSE)
 
+  ## TODO convert to use .seriesNameToFileName()
+  
   # convert series name to upper case and remove NA
   series <- toupper(na.omit(series))
+  
+  # remove white space on left / right side
+  series <- trimws(series, which = 'both')
+  
+  # convert spaces -> underscore
+  series <- gsub(pattern = ' ', replacement = '_', x = series, fixed = TRUE)
 
+  ## TODO if not using convenience function, don't forget apos.
+  
   # get first letter of each taxon (if any)
   if (length(series) > 0 && all(nchar(series) > 1)) {
     firstLetter <- substr(series, 0, 1)
@@ -179,12 +189,23 @@ get_OSD_JSON <- function(series, base_url = NULL) {
 # prepare a file name and capitalized-first-letter folder based on a series name
 .seriesNameToFileName <- function(s, extension = 'txt') {
 
-  # convert space to _
-  s <- gsub(pattern = ' ', replacement = '_', toupper(s))
+  # remove any accidental wite space
+  s <- trimws(s, which = 'both')
+  
+  # convert single space to underscore
+  s <- gsub(pattern = ' ', replacement = '_', s, fixed = TRUE)
 
+  # caps
+  s <- toupper(s)
+  
   # TODO: convert apostrophe
-
-  sprintf('%s/%s.%s', substr(s, 1, 1), s, extension)
+  
+  res <- file.path(
+    substr(s, 1, 1), 
+    sprintf('%s.%s', s, extension)
+  )
+  
+  return(res)
 }
 
   # remove empty lines and NA strip double quotes by converting to " inches"

@@ -8,17 +8,17 @@ test_that("get_OSD works", {
   
   skip_on_cran()
   
-  series <- c("Musick", "Hector", NA, "Foobar", "Chewacla")
+  series <- c("Musick", "Hector", NA, "Foobar", "Chewacla", "San Joaquin")
   
   # warning: F/FOOBAR.json does not exist
   expect_warning({res1 <- get_OSD(series)})
   
-  # data.frame result w/ 3 existing official series
-  expect_equal(nrow(res1), 3)
+  # data.frame result w/ 4 existing official series
+  expect_equal(nrow(res1), 4)
   
   # same 404 messages with list result="html" output
   res2 <- get_OSD(series, result = "html")
-  expect_equal(length(res2), 5)
+  expect_equal(length(res2), 6)
   expect_null(res2[[4]])
 })
 
