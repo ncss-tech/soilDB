@@ -1,22 +1,3 @@
-## chunked queries for large number of records:
-# https://github.com/ncss-tech/soilDB/issues/71
-
-## TODO items summarized here
-# https://github.com/ncss-tech/soilDB/issues/81
-
-
-
-# helper function for processing WKT returned by SDA_query()
-# result is an SPDF
-# d: data frame
-# g: column containing WKT
-# p4s: PROJ4 CRS defs
-## TODO: test with geom appearing in different positions within query results
-## TODO: geometry collections are not allowed in sp objects..
-## TODO: consider moving to sf
-
-
-
 #' Post-process WKT returned from SDA.
 #' 
 #' This is a helper function, commonly used with \code{SDA_query} to extract
@@ -71,7 +52,6 @@ processSDA_WKT <- function(d, g='geom', p4s='+proj=longlat +datum=WGS84') {
   
   return(spdf)
 }
-
 
 
 ## TODO consider adding an 'identity' method for more generic use
@@ -164,21 +144,6 @@ FROM geom_data;
   return(res)
 
 }
-
-
-
-
-## TODO: this will replace *most* of the functionality in:
-##   SDA_make_spatial_query
-##   SDA_query_features
-#
-# get a SPDF of intersecting MU polygons and mukey, in a single query
-# row-order and number of rows won't always match input
-# that is fine as we can use sp::over to connect
-# 10-20x speed improvement over SDA_query_features
-
-
-
 
 #' Query Soil Data Access by spatial intersection with supplied geometry
 #' 
@@ -486,76 +451,5 @@ SDA_spatialQuery <- function(geom,
   }
   
   return(res)
-}
-
-
-## now deprecated
-SDA_make_spatial_query <- function(i) {
-
-  .Deprecated(new = 'SDA_spatialQuery')
-
-  # check for required packages
-  if(!requireNamespace('rgeos', quietly = TRUE))
-    stop('please install the `rgeos` package', call.=FALSE)
-
-  # convert single feature to WKT
-  i.wkt <- rgeos::writeWKT(i, byid = FALSE)
-
-  # programatically generate query
-  q <- paste0("SELECT mukey, muname
-              FROM mapunit
-              WHERE mukey IN (
-              SELECT DISTINCT mukey from SDA_Get_Mukey_from_intersection_with_WktWgs84('", i.wkt, "')
-              )")
-
-  # send query, messages aren't useful here
-  res <- suppressMessages(SDA_query(q))
-
-  # check for no data
-  if(is.null(res))
-    res <- NA
-
-  # done
-  return(res)
-}
-
-# this is a safe way to query features while preserving IDs
-# note that it is a very slow for large collections
-# x is a Spatial* object with more than 1 feature
-# id is the name of an attribute that contains a unique ID for each feature
-## now deprecated
-SDA_query_features <- function(x, id='pedon_id') {
-
-  .Deprecated(new = 'SDA_spatialQuery')
-
-  # sanity check: ensure that the ID is unique
-  if(length(x[[id]]) != length(unique(x[[id]])))
-    stop('id is not unique')
-
-  # transform to GCS WGS84 if needed
-  target.prj <- "+proj=longlat +datum=WGS84"
-  if(proj4string(x) != target.prj) {
-    geom <- spTransform(x, CRS(target.prj))
-  }
-
-  # iterate over features and save to list
-  l <- list()
-  n <- length(geom)
-  # setup a progress bar for timing
-  pb <- txtProgressBar(max=n, style=3)
-  for(i in 1:n) {
-    # make query
-    res <- SDA_make_spatial_query(geom[i, ])
-    # save results along with an ID
-    res <- cbind(id=geom[[id]][i], res, stringsAsFactors = FALSE)
-    names(res) <- c(id, 'mukey', 'muname')
-    l[[i]] <- res
-    setTxtProgressBar(pb, i)
-  }
-  close(pb)
-
-  # convert to data.frame, there may be > 1 row / feature when using lines / polygons
-  d <- ldply(l)
-  return(d)
 }
 
