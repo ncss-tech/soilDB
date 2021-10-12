@@ -15,7 +15,6 @@
 ###
 ###  WTEQ.I WTEQ.I-2 PREC.I PREC.I-2 TOBS.I TOBS.I-2 TOBS.I-3 TMAX.D TMIN.D TAVG.D SNWD.I SMS.I_8 STO.I_8
 
-
 ### TODO: there are rarely multiple below-ground sensors:
 ###   station 2196
 ###
@@ -34,7 +33,6 @@
 ## https://wcc.sc.egov.usda.gov/nwcc/sitenotes?sitenum=462
 ##
 
-## TODO: this crashes on 32bit R / libraries
 # helper function for getting a single table of SCAN metadata
 # site.code: a single SCAN site code
 .get_single_SCAN_metadata <- function(site.code) {
@@ -42,30 +40,32 @@
   uri <- 'https://wcc.sc.egov.usda.gov/nwcc/sensors'
 
   # note: the SCAN form processor checks the refering page and user-agent
-  new.headers <- c(
-    "Referer"="https://wcc.sc.egov.usda.gov/nwcc/sensors",
-    "User-Agent" = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13"
-  )
+  new.headers <-  c("Referer" = "https://wcc.sc.egov.usda.gov/nwcc/sensors")
 
   # enable follow-location
   # http://stackoverflow.com/questions/25538957/suppressing-302-error-returned-by-httr-post
   # cf <- httr::config(followlocation = 1L, verbose=1L) # debugging
   cf <- httr::config(followlocation = 1L)
 
-  req <- list(sitenum=site.code, report='ALL', interval='DAY', timeseries=" View Daily Sensor Descriptions ")
+  req <- list(
+    sitenum = site.code,
+    report = 'ALL',
+    interval = 'DAY',
+    timeseries = " View Daily Sensor Descriptions "
+  )
 
   # submit request
-  r <- httr::POST(uri, body=req, encode='form', config = cf, httr::add_headers(new.headers))
+  r <- httr::POST(uri, body = req,  encode = 'form', config = cf, httr::add_headers(new.headers))
   httr::stop_for_status(r)
 
   # parsed XML
-  r.content <- httr::content(r, as='parsed')
+  r.content <- httr::content(r, as = 'parsed')
+  
   # get tables
   n.tables <- rvest::html_nodes(r.content, "table")
 
-  ## TODO: this line crashes on 32bit R / libraries
-  # the metadata table we want is 5th
-  m <- rvest::html_table(n.tables[[5]], header=FALSE)
+  # the metadata table we want is the last one
+  m <- rvest::html_table(n.tables[[length(n.tables)]], header=FALSE)
 
   # clean-up table
   # 1st row is header
@@ -74,6 +74,7 @@
   m <- m[-c(1:2), ]
   names(m) <- h
 
+  m$site.code <- site.code
   return(m)
 }
 
@@ -86,9 +87,10 @@ SCAN_sensor_metadata <- function(site.code) {
     stop('please install the `httr` and `rvest` packages', call.=FALSE)
 
   # iterate over site codes, returning DF + site.code
-  res <- ddply(data.frame(site.code=site.code), 'site.code', .get_single_SCAN_metadata)
+  
+  res <- do.call('rbind', lapply(site.code, .get_single_SCAN_metadata))
 
-  return(res)
+  return(as.data.frame(res))
 }
 
 ## https://github.com/ncss-tech/soilDB/issues/61
@@ -112,7 +114,6 @@ SCAN_site_metadata <- function(site.code) {
 # report: single report type
 # req: for backwards compatibility
 
-
 #' Get data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations
 #'
 #' Query soil/climate data from USDA-NRCS SCAN Stations
@@ -125,7 +126,6 @@ SCAN_site_metadata <- function(site.code) {
 #' @param report report name, single value only
 #' @param req list of SCAN request parameters, for backwards-compatibility only
 #' @return a \code{data.frame} object
-#' @note \code{SCAN_sensor_metadata()} is known to crash on 32bit R / libraries (Windows).
 #' @author D.E. Beaudette
 #' @references https://www.wcc.nrcs.usda.gov/index.html
 #' @keywords manip
@@ -150,15 +150,18 @@ SCAN_site_metadata <- function(site.code) {
 #' @export fetchSCAN
 fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
 
-  ## backwards compatibility:
+  ## backwards compatibility
   if(!missing(req)) {
-    message('using old-style interface...')
+    .Deprecated(msg = "`req` argument is deprecated")
     return(.get_SCAN_data(req))
   }
 
   # check for required packages
   if(!requireNamespace('httr', quietly = TRUE))
     stop('please install the `httr` package', call.=FALSE)
+  
+  if(!requireNamespace('data.table', quietly = TRUE))
+    stop('please install the `data.table` package', call.=FALSE)
 
   # init list to store results
   res <- list()
@@ -168,16 +171,15 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   res[['metadata']] <- m
 
   # all possible combinations of site codes and year | single report type
-  g <- expand.grid(s=site.code, y=year, r=report)
+  g <- expand.grid(s = site.code, y = year, r = report)
 
   # get a list of request lists
-  req.list <- mapply(.make_SCAN_req, s=g$s, y=g$y, r=g$r, SIMPLIFY = FALSE)
+  req.list <- mapply(.make_SCAN_req, s = g$s, y = g$y, r = g$r, SIMPLIFY = FALSE)
 
   # format raw data into a list of lists:
   # sensor suite -> site number -> year
   d.list <- list()
   for(i in req.list) {
-    # raw data is messy, reformat
     # when there are no data, result is NULL
     d <- .get_SCAN_data(i)
 
@@ -187,16 +189,20 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     # save: sensor suite -> site number -> year
     sensors <- c('SMS', 'STO', 'SAL', 'TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')
     for(sensor.i in sensors) {
-      d.list[[sensor.i]][[as.character(i$sitenum)]][[as.character(i$year)]] <- .formatSCAN_soil_sensor_suites(d, code=sensor.i)
+      site.i <- as.character(i$sitenum)
+      year.i <- as.character(i$year)
+      d.list[[sensor.i]][[site.i]][[year.i]] <- .formatSCAN_soil_sensor_suites(d, code = sensor.i)
     }
-
   }
 
   # iterate over sensors
   for(sensor.i in sensors) {
     # flatten individual sensors over years, by site number
-    r.i <- ldply(llply(d.list[[sensor.i]], ldply))
-    r.i$.id <- NULL
+    x <- d.list[[sensor.i]]
+
+    r.i <- do.call('rbind', lapply(x, function(y) do.call('rbind', y)))
+    rownames(r.i) <- NULL
+    
     res[[sensor.i]] <- r.i
   }
 
@@ -208,64 +214,56 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   return(res)
 }
 
-
-
-
 # combine soil sensor suites into stackable format
 .formatSCAN_soil_sensor_suites <- function(d, code) {
 
-  # hacks to make R CMD check --as-cran happy:
   value <- NULL
 
   # locate named columns
   d.cols <- grep(code, names(d))
+  
   # return NULL if no data
   if(length(d.cols) == 0)
     return(NULL)
 
   ## https://github.com/ncss-tech/soilDB/issues/14
-  ## temporary hack to inform users that there are multiple sensors / label
-  ## this is (usually) only a problem for above-ground sensors
+  ## there may be multiple above-ground sensors (takes the first)
   if(length(d.cols) > 1 & code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
     message(paste0('multiple above-ground sensors per site: ', d$Site[1], ' [', paste0(names(d)[d.cols], collapse = ','), '], using first sensor'))
     # use only the first sensor
     d.cols <- d.cols[1]
   }
 
-
   # convert to long format
-  d.long <- melt(d, id.vars = c('Site', 'Date'), measure.vars = names(d)[d.cols])
+  d.long <- data.table::melt(data.table::as.data.table(d), id.vars = c('Site', 'Date'), measure.vars = names(d)[d.cols])
+  
   # extract depths
   d.depths <- base::strsplit(as.character(d.long$variable), split = '_', fixed = TRUE)
   d.long$depth <- sapply(d.depths, function(i) as.numeric(i[2]))
+  
   # convert depths (in) to cm
   d.long$depth <- round(d.long$depth * 2.54)
+  
   # change 'variable' to 'sensor.id'
   names(d.long)[which(names(d.long) == 'variable')] <- 'sensor.id'
 
+  ## there can be multiple sensors at below-ground label
+  .SD <- NULL
+  no.na <- NULL
+  sensors.per.depth <- d.long[, list(no.na = sum(complete.cases(.SD))),
+                              by = c('sensor.id', 'depth'), 
+                              .SDcols = c('sensor.id', 'depth', 'value')]
 
-  ## NOTE: this doesn't work when applied to above-ground sensors
-  ## https://github.com/ncss-tech/soilDB/issues/14
-  ## there can also be multiple sensors per below-ground label
-  sensors.per.depth <- ddply(d.long, c('sensor.id', 'depth'), plyr::summarize, no.na=length(na.omit(value)))
-  most.data <- ddply(sensors.per.depth, 'depth', .fun=function(i) {
-    return(as.character(i$sensor.id[which.max(i$no.na)]))
-  })
-
+  most.data <- sensors.per.depth[, .SD[which.max(no.na)], by = 'depth']
+  
   # check for multiple sensors per depth
   tab <- table(sensors.per.depth$depth) > 1
-  if(any(tab)) {
+  if (any(tab)) {
     multiple.sensor.ids <- as.character(sensors.per.depth$sensor.id[which(sensors.per.depth$depth %in% names(tab))])
     message(paste0('multiple below-ground sensors per depth: ', paste(multiple.sensor.ids, collapse = ', ')))
   }
 
-
-  ## BUG in the data output from SCAN!
-  # mulitple rows / day, second row in set has NA in sensor values
-  # this is related to site visits
-  # https://github.com/ncss-tech/soilDB/issues/26
-  #
-  # solution is simple remove NAs
+  # multiple rows / day, remove NA in sensor values
   idx <- which(!is.na(d.long$value))
   d.long <- d.long[idx, ]
 
@@ -277,7 +275,7 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   d.long$water_day <- w$wd
 
   # format and return
-  return(d.long[, c('Site', 'Date', 'water_year', 'water_day', 'value', 'depth', 'sensor.id')])
+  return(as.data.frame(d.long[, c('Site', 'Date', 'water_year', 'water_day', 'value', 'depth', 'sensor.id')]))
 }
 
 # format a list request for SCAN data
@@ -285,27 +283,31 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
 # y: single year
 # r: single report type
 .make_SCAN_req <- function(s, y, r) {
-  req <- list(intervalType=' View Historic ', report=r, timeseries='Daily', format='copy', sitenum=s, interval='YEAR', year=y, month='CY')
+  req <- list(
+    intervalType = ' View Historic ',
+    report = r,
+    timeseries = 'Daily',
+    format = 'copy',
+    sitenum = s,
+    interval = 'YEAR',
+    year = y,
+    month = 'CY'
+  )
   return(req)
 }
 
-
-## this is an internally used function
 # req is a named vector or list
 .get_SCAN_data <- function(req) {
 
   # convert to list as needed
-  if( ! inherits(req, 'list'))
+  if(!inherits(req, 'list'))
     req <- as.list(req)
 
   # base URL to service
   uri <- 'https://wcc.sc.egov.usda.gov/nwcc/view'
 
-  # note: the SCAN form processor checks the refering page and user-agent
-  new.headers <- c(
-    "Referer"="https://wcc.sc.egov.usda.gov/nwcc/",
-    "User-Agent" = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13"
-  )
+  # note: the SCAN form processor checks the referring page and user-agent
+  new.headers <- c("Referer" = "https://wcc.sc.egov.usda.gov/nwcc/")
 
   # enable follow-location
   # http://stackoverflow.com/questions/25538957/suppressing-302-error-returned-by-httr-post
@@ -325,12 +327,23 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   # attempt to read column headers, after skipping the first two lines of data
   # note: this moves the text connection cursor forward 3 lines
   # 2018-03-06 DEB: results have an extra line up top, now need to skip 3 lines
-  h <- unlist(read.table(tc, nrows=1, skip=3, header=FALSE, stringsAsFactors=FALSE, sep=',', quote='', strip.white=TRUE, na.strings='-99.9', comment.char=''))
+  h <- unlist(read.table(
+      tc,
+      nrows = 1,
+      skip = 3,
+      header = FALSE,
+      stringsAsFactors = FALSE,
+      sep = ',',
+      quote = '',
+      strip.white = TRUE,
+      na.strings = '-99.9',
+      comment.char = ''
+    ))
 
   # the last header is junk (NA)
   h <- as.vector(na.omit(h))
 
-  # split colunmn names on white space and keep the first element
+  # split column names on white space and keep the first element
   h <- sapply(strsplit(h, split=' '), function(i) i[[1]])
 
   # clean some more junk
@@ -338,7 +351,7 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   h <- gsub(':-', '_', h)
 
   # NOTE: we have already read-in the first 3 lines above, therefore we don't need to skip lines here
-  # read as CSV, skipping junk + headers, accomodating white-space and NA values encoded as -99.9
+  # read as CSV, skipping junk + headers, accommodating white-space and NA values encoded as -99.9
   x <- try(read.table(tc, header=FALSE, stringsAsFactors=FALSE, sep=',', quote='', strip.white=TRUE, na.strings='-99.9', comment.char=''), silent = TRUE)
 
   # catch errors
