@@ -18,16 +18,13 @@ fetchSCAN(site.code, year, report = "SCAN", req = NULL)
 \item{req}{list of SCAN request parameters, for backwards-compatibility only}
 }
 \value{
-a \code{data.frame} object
+a \code{data.frame} object; \code{NULL} on bad request.
 }
 \description{
 Query soil/climate data from USDA-NRCS SCAN Stations
 }
 \details{
 See \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{the fetchSCAN tutorial for details}. These functions require the \code{httr} and \code{rvest} libraries.
-}
-\note{
-\code{SCAN_sensor_metadata()} is known to crash on 32bit R / libraries (Windows).
 }
 \examples{
 
