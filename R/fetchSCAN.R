@@ -125,7 +125,7 @@ SCAN_site_metadata <- function(site.code) {
 #' @param year a vector of years
 #' @param report report name, single value only
 #' @param req list of SCAN request parameters, for backwards-compatibility only
-#' @return a \code{data.frame} object
+#' @return a \code{data.frame} object; `NULL` on bad request.
 #' @author D.E. Beaudette
 #' @references https://www.wcc.nrcs.usda.gov/index.html
 #' @keywords manip
@@ -183,6 +183,11 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     # when there are no data, result is NULL
     d <- .get_SCAN_data(i)
 
+    # handle timeouts or other bad requests
+    if (is.null(d)) {
+      return(NULL)
+    }
+    
     ## TODO: sometimes these labels will match multiple sensors
     ## TODO: this is wasteful as then entire year's worth of data is passed around for each sensor code
 
@@ -316,7 +321,8 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
 
   # submit request
   r <- httr::POST(uri, body=req, encode='form', config = cf, httr::add_headers(new.headers))
-  httr::stop_for_status(r)
+  res <- try(httr::stop_for_status(r))
+  if (inherits(res, 'try-error')) return(NULL)
 
   # extract content as text, cannot be directly read-in
   r.content <- httr::content(r, as='text')
