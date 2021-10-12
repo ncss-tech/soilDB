@@ -1,6 +1,9 @@
-## TODO: better checking of inputs, as the entitre DB could be downloaded by accident!!
+## TODO: better checking of inputs, as the entire DB could be downloaded by accident!!
 
+## TODO:
 
+# replace ddply -> split/lapply/rbind | data.table
+# replace join -> base::merge(..., sort = FALSE)
 
 # # TODO: finish this
 # .summarizeSoilVWC <- function(soilVWC.data) {
@@ -95,10 +98,12 @@ summarizeSoilTemperature <- function(soiltemp.data) {
 
 month2season <- function(x) {
   season <- rep(NA, times=length(x))
+  
   season[x %in% c('Jun', 'Jul', 'Aug')] <- 'Summer'
   season[x %in% c('Dec', 'Jan', 'Feb')] <- 'Winter'
   season[x %in% c('Mar', 'Apr', 'May')] <- 'Spring'
   season[x %in% c('Sep', 'Oct', 'Nov')] <- 'Fall'
+  
   # fix factor levels for season
   season <- factor(season, levels=c('Winter', 'Spring', 'Summer', 'Fall'))
   return(season)
@@ -139,10 +144,12 @@ month2season <- function(x) {
   # must have data, otherwise do nothing
   # when sensor data are missing, sensor.data is a list of length 0
   if(length(sensor.data) > 0) {
+    
     sensor.data$date_time <- as.POSIXct(sensor.data$date_time)
     sensor.data$year <- as.integer(format(sensor.data$date_time, "%Y"))
     sensor.data$doy <- as.integer(format(sensor.data$date_time, "%j"))
     sensor.data$month <- format(sensor.data$date_time, "%b")
+    
     # re-level months
     sensor.data$month <- factor(sensor.data$month, levels=c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
     
