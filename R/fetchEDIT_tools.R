@@ -137,7 +137,7 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
 #' @param geoUnit A character vector of `geoUnit` codes e.g. `c("018X","022A")` for MLRAs 18 and 22A.
 #' @param catalog Catalog ID. One of: `"esd"` or `"esg"`
 #'
-#' @return A `data.frame` containing: `geoUnit`, `id`, `legacyId`, `name`
+#' @return A `data.frame` containing: `geoUnit`, `id`, `legacyId`, `name`. `NULL` if no result.
 #'
 #' @export
 #'
@@ -156,7 +156,8 @@ get_EDIT_ecoclass_by_geoUnit <- function(geoUnit, catalog = c("esd", "esg")) {
                                        catalog = catalog,
                                        geoUnit = aUnit,
                                        endpoint = "class-list.json")
-    thelist <- jsonlite::read_json(desclist)
+    thelist <- try(jsonlite::read_json(desclist))
+    if (inherits(thelist, 'try-error')) return(NULL)
     do.call('rbind', lapply(thelist[[2]], data.frame))
   })))
 }
