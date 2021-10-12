@@ -40,6 +40,9 @@ test_that("get_EDIT_ecoclass_by_geoUnit works", {
   
   res <- get_EDIT_ecoclass_by_geoUnit(c("018X","022A"))
   
+  # skip on error
+  skip_if(is.null(res))
+  
   # verify data.frame result with 4 columns as specified @ https://edit.jornada.nmsu.edu/resources/esd/
   expect_true(all(colnames(res) %in% c("geoUnit", "id", "legacyId", "name")))
   
