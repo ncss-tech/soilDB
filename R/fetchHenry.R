@@ -73,7 +73,7 @@ summarizeSoilTemperature <- function(soiltemp.data) {
                   gap.index=round(1 - (sum(n) / sum(n.total)), 2),
                   days.of.data=sum(n), 
                   MAST=round(mean(daily.mean, na.rm=TRUE), 2)
-                  )
+  )
   
   # compute unbiased seasonal averages
   d.seasonal.long <- ddply(d[which(d$season %in% c('Winter', 'Summer')), ], c('season', 'sid'), 
@@ -112,6 +112,7 @@ month2season <- function(x) {
 
 # experimental function for padding daily time-series with NA in the presence of missing days
 # must be run on subsets defined by year
+## TODO:
 .fill_missing_days <- function(x) {
   
   ## TODO this doesn't account for leap-years
@@ -130,10 +131,17 @@ month2season <- function(x) {
   fake.datetimes <- as.POSIXct(fake.datetimes, format="%Y %j %H:%M")
   
   # generate DF with missing information
-  fake.data <- data.frame(sid=this.id, date_time=fake.datetimes, year=this.year, doy=missing.days, month=format(fake.datetimes, "%b"))
+  fake.data <- data.frame(
+    sid = this.id, 
+    date_time = fake.datetimes, 
+    year = this.year, 
+    doy = missing.days, 
+    month = format(fake.datetimes, "%b")
+  )
   
+  ## TODO: base::merge() is not a direct replacement, because it doesn't remove duplicate column names
   # splice in missing data via full join
-  y <- join(x, fake.data, by='doy', type='full')
+  y <- join(x, fake.data, by = 'doy', type = 'full')
   
   # re-order by DOY and return
   return(y[order(y$doy), ])
@@ -153,6 +161,7 @@ month2season <- function(x) {
     # re-level months
     sensor.data$month <- factor(sensor.data$month, levels=c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
     
+    ## TODO: convert to base or data.table
     # optionally pad daily data with NA
     if(gran == 'day' & pad.missing.days) {
       sensor.data <- ddply(sensor.data, c('sid', 'year'), .fill_missing_days)
