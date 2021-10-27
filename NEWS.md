@@ -1,3 +1,10 @@
+# soilDB 2.6.7 (2021-10-27)
+ * Removed several packages from Suggests: {gridExtra}, {ggplot2}, {viridisLite}, {mapview}, {rasterVis}
+ * `get_OSD()`: Handle "NA" and type conversion for JSON results an convert spaces to underscores for file names as needed
+ * `fetchSCAN()`: graceful handling of timeout and converted from {plyr} to {data.table}; (https://github.com/ncss-tech/soilDB/issues/161, https://github.com/ncss-tech/soilDB/issues/184)
+ * `get_EDIT_ecoclass_by_geoUnit()`: graceful handling of timeout 
+ * `get_SDA_muaggatt()`: add `query_string` argument for parity with other "SSURGO on demand" / `get_SDA_*()` functions
+ 
 # soilDB 2.6.6 (2021-09-24)
  * `get_SDA_pmgroupname()` and `get_SDA_hydric()` now support alternate aggregation methods. 
    * Default for `get_SDA_pmgroupname()` is `"dominant component"`, now also supports `"dominant condition"` and `"none"`. 
