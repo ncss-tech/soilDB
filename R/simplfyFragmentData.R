@@ -168,16 +168,11 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
 
   result.columns <- c('phiid', frag.classes, "total_frags_pct", "total_frags_pct_nopf")
 
-  # first of all, we can't do anything if the fragment volume is NA
-  # warn the user and remove the offending records
-  if(any(is.na(rf$fragvol))) {
-    rf <- rf[which(!is.na(rf$fragvol)), ]
-    warning('some records are missing rock fragment volume, these have been removed', call. = FALSE)
-  }
-
+  # warn the user and remove the NA records
+  
   # if all fragvol are NA then rf is an empty data.frame and we are done
   if(nrow(rf[which(!is.na(rf$fragvol)),]) == 0) {
-    warning('all records are missing rock fragment volume (NULL). buffering result with NA. will be converted to zero if nullFragsAreZero = TRUE.', call. = FALSE)
+    message('all records are missing rock fragment volume')
     dat <- as.data.frame(t(rep(NA, length(result.columns))))
     for(i in 1:length(rf$phiid)) {
       dat[i,] <- dat[1,]
@@ -185,6 +180,9 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
     }
     colnames(dat) <- result.columns
     return(dat)
+  } else if(any(is.na(rf$fragvol))) {
+    rf <- rf[which(!is.na(rf$fragvol)), ]
+    message('NOTE: some records are missing rock fragment volume')
   }
 
   # extract classes

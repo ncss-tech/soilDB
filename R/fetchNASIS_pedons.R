@@ -255,11 +255,11 @@
   # print any messages on possible data quality problems:
   if (exists('sites.missing.pedons', envir = soilDB.env))
     if (length(get('sites.missing.pedons', envir = soilDB.env)) > 0)
-      message("-> QC: sites without pedons: see `get('sites.missing.pedons', envir=soilDB.env)`")
+      message("-> QC: sites without pedons: \n\tUse `get('sites.missing.pedons', envir=soilDB.env) for site record IDs (siteiid)`")
 
   if (exists('dup.pedon.ids', envir = soilDB.env))
     if (length(get('dup.pedon.ids', envir = soilDB.env)) > 0)
-      message("-> QC: duplicate pedons: see `get('dup.pedon.ids', envir=soilDB.env)`")
+      message("-> QC: duplicate pedons: \n\tUse `get('dup.pedon.ids', envir=soilDB.env) for pedon record IDs (peiid)`")
 
   # set NASIS component specific horizon identifier
   if(!fill & length(filled.ids) == 0) {
@@ -282,15 +282,15 @@
 
   if (exists('bad.pedon.ids', envir = soilDB.env))
     if (length(get('bad.pedon.ids', envir = soilDB.env)) > 0)
-      message("-> QC: horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for related userpedonid values or `get('bad.horizons', envir=soilDB.env)` for related horizon designations")
+      message("-> QC: horizon errors detected:\n\tUse `get('bad.pedon.ids', envir=soilDB.env)` for pedon record IDs (peiid)\n\tUse `get('bad.horizons', envir=soilDB.env)` for horizon designations")
 
   if (exists('missing.bottom.depths', envir = soilDB.env))
     if (length(get('missing.bottom.depths', envir = soilDB.env)) > 0)
-      message("-> QC: pedons missing bottom hz depths: use `get('missing.bottom.depths', envir=soilDB.env)` for related pedon IDs")
+      message("-> QC: pedons missing bottom hz depths:\n\tUse `get('missing.bottom.depths', envir=soilDB.env)` for pedon record IDs (peiid)")
 
   if (exists('top.bottom.equal', envir = soilDB.env))
     if (length(get('top.bottom.equal', envir = soilDB.env)) > 0)
-      message("-> QC: equal hz top and bottom depths: use `get('top.bottom.equal', envir=soilDB.env)` for related pedon IDs")
+      message("-> QC: equal hz top and bottom depths:\n\tUse `get('top.bottom.equal', envir=soilDB.env)` for pedon record IDs (peiid)")
 
   # done
   return(hz_data)

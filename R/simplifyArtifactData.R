@@ -68,16 +68,11 @@ simplifyArtifactData <- function(art, id.var, nullFragsAreZero = nullFragsAreZer
 
   result.columns <- c(id.var, art.classes, "total_art_pct",  "huartvol_cohesive","huartvol_penetrable", "huartvol_innocuous", "huartvol_persistent")
 
-  # first of all, we can't do anything if the fragment volume is NA
-  # warn the user and remove the offending records
-  if(any(is.na(art$huartvol))) {
-    art <- art[which(!is.na(art$huartvol)), ]
-    warning('some records are missing artifact volume, these have been removed', call. = FALSE)
-  }
-
+  # warn the user and remove the NA records
+  
   # if all fragvol are NA then rf is an empty data.frame and we are done
-  if(nrow(art[which(!is.na(art$huartvol)), ]) == 0) {
-    warning('all records are missing artifact volume (NULL). buffering result with NA. will be converted to zero if nullFragsAreZero = TRUE.', call. = FALSE)
+  if (nrow(art[which(!is.na(art$huartvol)),]) == 0) {
+    message('NOTE: all records are missing artifact volume')
     dat <- as.data.frame(t(rep(NA, length(result.columns))))
     for(i in 1:length(art[[id.var]])) {
       dat[i,] <- dat[1,]
@@ -85,6 +80,9 @@ simplifyArtifactData <- function(art, id.var, nullFragsAreZero = nullFragsAreZer
     }
     colnames(dat) <- result.columns
     return(dat)
+  } else if (any(is.na(art$huartvol))) {
+    art <- art[which(!is.na(art$huartvol)), ]
+    message('NOTE: some records are missing artifact volume')
   }
 
   # extract classes
@@ -96,7 +94,6 @@ simplifyArtifactData <- function(art, id.var, nullFragsAreZero = nullFragsAreZer
   art.sums <- aggregate(artifact.classes$huartvol, by=list(artifact.classes[[id.var]], artifact.classes[['class']]), FUN=sum, na.rm=TRUE)
   # fix defualt names from aggregate()
   names(art.sums) <- c(id.var, 'class', 'volume')
-
 
   ## NOTE: we set factor levels here because the reshaping (long->wide) needs to account for all possible classes
   ## NOTE: this must include all classes that related functions return
@@ -141,7 +138,7 @@ simplifyArtifactData <- function(art, id.var, nullFragsAreZero = nullFragsAreZer
   # compute total fragments
   # trap no frag condition
   # includes unspecified class
-  if(ncol(art.wide) > 1) {
+  if (ncol(art.wide) > 1) {
     # calculate another column for total RF, ignoring parafractions
     # index of columns to ignore, para*
     #idx.pf <- grep(names(art.wide), pattern="para")
