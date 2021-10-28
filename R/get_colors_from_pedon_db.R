@@ -1,7 +1,5 @@
 # 2013-01-08: now much faster since we only mix/clean data with > 1 color / horizon
 
-
-
 #' Get Soil Color Data from a PedonPC Database
 #' 
 #' Get, format, mix, and return color data from a PedonPC database.
@@ -60,7 +58,9 @@ FROM (
 	if(length(dry.to.mix) > 0) {
 		# filter out and mix only colors with >1 color / horizon
 		dry.mix.idx <- which(dry.colors$phiid %in% dry.to.mix)
-		mixed.dry <- ddply(dry.colors[dry.mix.idx, ], 'phiid', mix_and_clean_colors)
+		dc <- split(dry.colors[dry.mix.idx, ], f = dry.colors[['phiid']][dry.mix.idx])
+		dc.l <- lapply(dc, mix_and_clean_colors)
+		mixed.dry <- do.call('rbind', dc.l)
 		# combine original[-horizons to be mixed] + mixed horizons
 		dry.colors.final <- rbind(dry.colors[-dry.mix.idx, c("phiid", "r", "g", "b", "colorvalue")], mixed.dry)
 	}
@@ -71,7 +71,10 @@ FROM (
 	if(length(moist.to.mix) > 0) {
 		# filter out and mix only colors with >1 color / horizon
 		moist.mix.idx <- which(moist.colors$phiid %in% moist.to.mix)
-		mixed.moist <- ddply(moist.colors[moist.mix.idx, ], 'phiid', mix_and_clean_colors)
+		mc <- split(moist.colors[moist.mix.idx, ], f = moist.colors[['phiid']][moist.mix.idx])
+		mc.l <- lapply(mc, mix_and_clean_colors)
+		mixed.moist <- do.call('rbind', mc.l)
+		
 		# combine original[-horizons to be mixed] + mixed horizons
 		moist.colors.final <- rbind(moist.colors[-moist.mix.idx, c("phiid", "r", "g", "b", "colorvalue")], mixed.moist)
 	}
@@ -83,7 +86,7 @@ FROM (
 	names(moist.colors.final) <- c('phiid', 'm_r', 'm_g', 'm_b', 'm_value')
 	
 	# merge into single df
-	d.final <- join(dry.colors.final, moist.colors.final, by='phiid', type='full')
+	d.final <- merge(dry.colors.final, moist.colors.final, by='phiid', all.x = TRUE, all.y = TRUE, sort = FALSE)
 	
 	# clean-up
 	rm(d, d.rgb, dry.colors, moist.colors, dry.colors.final, moist.colors.final)

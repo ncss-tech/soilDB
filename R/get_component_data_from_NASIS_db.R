@@ -780,7 +780,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
 
     # join full version to comonth records
     # nd contains the full set of component records IDs
-    d <- join(nd, d, by=c('coiid', 'month'), type = 'left')
+    d <- merge(nd, d, by=c('coiid', 'month'), all.x = TRUE, sort = FALSE)
 
     ## this isn't likely needed, will re-visit after some testing
 

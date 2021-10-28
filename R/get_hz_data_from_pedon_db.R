@@ -78,7 +78,7 @@ LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_deta
   }
 
   # join
-  d <- join(d, d.texture, by='phiid', type='left')
+  d <- merge(d, d.texture, by='phiid', all.x = TRUE, sort = FALSE)
 
 	# close connection
 	DBI::dbDisconnect(channel)
