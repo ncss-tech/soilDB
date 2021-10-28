@@ -65,30 +65,33 @@
   # add site data to object
   site(f.chorizon) <- f.comp # left-join via coiid
 
-  ## TODO: convert all ddply() calls into split() -> lapply() -> do.call('rbind')
-
-  # join-in copm strings
   ## 2017-3-13: short-circuts need testing, consider pre-marking mistakes before parsing
-  pm <- plyr::ddply(f.copm, 'coiid', .formatcoParentMaterialString, name.sep=' & ')
-  if(nrow(pm) > 0)
+  ## 2021-10-28: TODO: harmonize strategies for .formatXXXXString methods and ID variables
+  .SD <- NULL
+  .BY <- NULL
+  
+  # join-in copm strings
+  pm <- data.table::data.table(f.copm)[, .formatParentMaterialString(.SD, uid = .BY$coiid, name.sep=' & '), by = "coiid"]
+  pm$siteiid <- NULL
+  if (nrow(pm) > 0)
     site(f.chorizon) <- pm
 
   # join-in cogeomorph strings
-  ## 2017-3-13: short-circuts need testing, consider pre-marking mistakes before parsing
-  lf <- plyr::ddply(f.cogeomorph, 'coiid', .formatcoLandformString, name.sep=' & ')
-  if(nrow(lf) > 0)
+  lf <- data.table::data.table(f.cogeomorph)[, .formatLandformString(.SD, uid = .BY$coiid, name.sep=' & '), by = "coiid"]
+  pm$peiid <- NULL
+  if (nrow(lf) > 0)
     site(f.chorizon) <- lf
 
   # join-in ecosite string
-  ## 2017-3-06: short-circuts need testing, consider pre-marking mistakes before parsing
-  es <- plyr::ddply(f.ecosite, 'coiid', .formatEcositeString, name.sep=' & ')
-  if(nrow(es) > 0)
+  es <- data.table::data.table(f.ecosite)[, .formatEcositeString(.SD, name.sep=' & '), by = "coiid", .SDcols = colnames(f.ecosite)]
+  es$coiid <- NULL
+  if (nrow(es) > 0)
     site(f.chorizon) <- es
 
   # join-in othervegclass string
-  ## 2017-3-06: short-circuts need testing, consider pre-marking mistakes before parsing
-  ov <- plyr::ddply(f.otherveg, 'coiid', .formatOtherVegString, name.sep=' & ')
-  if(nrow(ov) > 0)
+  ov <- data.table::data.table(f.otherveg)[, .formatOtherVegString(.SD, name.sep=' & '), by = "coiid", .SDcols = colnames(f.otherveg)]
+  ov$coiid <- NULL
+  if (nrow(ov) > 0)
     site(f.chorizon) <- ov
 
   # add diagnostic features to SPC
