@@ -33,7 +33,7 @@ fetchPedonPC <- function(dsn) {
 
 	# join pieces
 	# horizon + hz color: all horizons
-	h <- join(hz_data, color_data, by='phiid', type='left')
+	h <- merge(hz_data, color_data, by='phiid', all.x = TRUE, sort = FALSE)
 
 	# convert colors... in the presence of missing color data
 	if(nrow(h) > 0) {
@@ -42,7 +42,7 @@ fetchPedonPC <- function(dsn) {
   	h$soil_color[idx] <- with(h[idx, ], rgb(m_r, m_g, m_b)) # moist colors
   }
 	# replace horizons with hz + fragment summary
-	h <- join(h, extended_data$frag_summary, by='phiid', type='left')
+	h <- merge(h, extended_data$frag_summary, by='phiid', all.x = TRUE, sort = FALSE)
 
 	# fix some common problems
 	# replace missing lower boundaries

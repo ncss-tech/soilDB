@@ -66,7 +66,7 @@
 
 
   # upgrade to SoilProfilecollection
-  h <- join(.$phorizon, .$phcolor, by = "phiid", type = "left")
+  h <- merge(.$phorizon, .$phcolor, by = "phiid", all.x = TRUE, sort = FALSE)
   depths(h) <- peiid ~ hzdept + hzdepb
 
 
