@@ -32,12 +32,10 @@
 summarizeSoilTemperature <- function(soiltemp.data) {
   
   # hacks to make R CMD check --as-cran happy:
-  n <- NULL
-  n.total <- NULL
   sensor_value <- NULL
-  non.missing <- NULL
-  daily.mean <- NULL
-  summarize <- NULL
+  V1 <- NULL
+  .SD <- NULL
+  season <- NULL
   
   # determine number of complete years of data
   # cr.1.old <- ddply(soiltemp.data, c('sid', 'year'), plyr::summarize, non.missing=length(na.omit(sensor_value)))
@@ -406,15 +404,33 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   # post-process data, if there are some
   if( length(s$soiltemp) > 0 | length(s$soilVWC) > 0 | length(s$airtemp) > 0 | length(s$waterlevel) > 0 ) {
     
-    # get period of record for each sensor, not including NA-padding
-    por <- ddply(na.omit(rbind(s$soiltemp, s$soilVWC, s$airtemp, s$waterlevel)), c('sid'), function(i) {
-      start.date <- min(i$date_time, na.rm=TRUE)
-      end.date <- max(i$date_time, na.rm=TRUE)
-      return(data.frame(start.date, end.date))
-    })
+    # por <- ddply(na.omit(rbind(s$soiltemp, s$soilVWC, s$airtemp, s$waterlevel)), c('sid'), function(i) {
+    #   start.date <- min(i$date_time, na.rm=TRUE)
+    #   end.date <- max(i$date_time, na.rm=TRUE)
+    #   return(data.frame(start.date, end.date))
+    # })
+    # 
+    # # compute days since last visit
+    # por$dslv <- round(as.numeric(difftime(Sys.Date(), por$end.date, units='days')))
+    # 
     
-    # compute days since last visit
-    por$dslv <- round(as.numeric(difftime(Sys.Date(), por$end.date, units='days')))
+    ## TODO: stick to data.table if possible
+    
+    # period of record over all sensors
+    .POR <- function(i) {
+      # date range
+      start.date <- min(i$date_time, na.rm = TRUE)
+      end.date <- max(i$date_time, na.rm = TRUE)
+      # compute days since last visit
+      dslv <- round(as.numeric(difftime(Sys.Date(), end.date, units = 'days')))
+      
+      res <- data.frame(start.date, end.date, dslv)
+      return(res)
+    }
+    
+    por <- as.data.table(na.omit(rbind(s$soiltemp, s$soilVWC, s$airtemp, s$waterlevel)))[, .POR(.SD), by = 'sid']
+    por <- as.data.frame(por)
+    
     
     # convert dates and add helper column
     s$soiltemp <- .formatDates(s$soiltemp, gran=gran, pad.missing.days=pad.missing.days)
