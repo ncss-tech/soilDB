@@ -3,6 +3,18 @@ context("water year/day")
 
 test_that("works as expected", {
   
+  # 2008 is a leap year
+  res.lr <- waterDayYear(as.Date("2008-03-01"))
+  res <- waterDayYear(as.Date("2009-03-01"))
+
+  # check years
+  expect_equal(res.lr$wy, 2008L)
+  expect_equal(res$wy, 2009L)
+  
+  # days are offset by 1
+  expect_equal(res.lr$wd, 153L)
+  expect_equal(res$wd, 152L)
+  
   # first day of water year 2019
   x <- as.Date("2018-10-01")
   res <- waterDayYear(x)
@@ -28,6 +40,16 @@ test_that("works as expected", {
   # structural integrity
   expect_true(inherits(res, 'data.frame'))
   expect_true(length(x) == nrow(res))
+  
+  # text interface, with YYYY-MM-DD hh:mm:ss
+  res <- waterDayYear("2000-12-05 00:00:00")
+  expect_equal(res$wy, 2001L)
+  expect_equal(res$wd, 66L)
+  
+  
+  ## what about time zones... shouldn't matter?
+  # waterDayYear(as.POSIXct("2000-12-05 00:00:00", tz = 'GMT'))
+  
   
 })
 

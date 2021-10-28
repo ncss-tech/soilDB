@@ -510,10 +510,12 @@ test_that(".fill_missing_days() works as expected", {
 
 test_that(".formatDates() works as expected", {
   
+  ## TODO: be careful with timezones
   x <- data.frame(
     sid = c(1L, 2L),
-    date_time = c("2010-02-17 00:00:00", "2021-01-01 00:00:00"),
-    sensor_value = c(40.000, 5.5)
+    date_time = c("2010-02-17 10:00:00", "2021-01-01 10:00:00"),
+    sensor_value = c(40.000, 5.5),
+    stringsAsFactors = FALSE
   )
   
   res <- soilDB:::.formatDates(x, gran = 'day', pad.missing.days = FALSE)

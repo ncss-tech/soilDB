@@ -15,7 +15,9 @@ importFrom("methods", "slot<-", "as")
 importFrom(data.table,
            rbindlist,
            data.table,
-           as.data.table)
+           as.data.table,
+           merge.data.table
+           )
 
 importFrom(DBI,
   dbGetQuery,
