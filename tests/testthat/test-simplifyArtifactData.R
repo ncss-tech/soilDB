@@ -148,7 +148,7 @@ test_that("simplifyArtifactData when missing fragment sizes, low/rv/high", {
   d.missing.size[4,] <- d.missing.size[3,]
   d.missing.size[4,] <- NA
   d.missing.size[4,'phiid'] <- "10102"
-  expect_warning(res <- simplifyArtifactData(d.missing.size, id.var = 'phiid', nullFragsAreZero = TRUE))
+  expect_message(res <- simplifyArtifactData(d.missing.size, id.var = 'phiid', nullFragsAreZero = TRUE))
   
   # rows missing fragvol should be removed from the simplified result
   expect_true(nrow(d.missing.size) == 4)
@@ -171,14 +171,16 @@ test_that("simplifyArtifactData warning generated when NA in huartvol", {
   d.missing.artvol <- d.artifact.hz
   d.missing.artvol$huartvol <- NA
   d.missing.artvol[1,'huartvol'] <- 10
-  expect_warning(simplifyArtifactData(d.missing.artvol, id.var = 'phiid', nullFragsAreZero = TRUE), regexp = 'some records are missing artifact volume, these have been removed')
+  expect_message(simplifyArtifactData(d.missing.artvol, id.var = 'phiid', nullFragsAreZero = TRUE),
+                 regexp = 'some records are missing artifact volume')
 })
 
 
 test_that("simplifyArtifactData warning generated when all fragvol are NA", {
   d.all.NA.artvol <- d.artifact.hz
   d.all.NA.artvol$huartvol <- NA
-  expect_warning(simplifyArtifactData(d.all.NA.artvol, id.var = 'phiid', nullFragsAreZero = TRUE), regexp = 'all records are missing artifact volume')
+  expect_message(simplifyArtifactData(d.all.NA.artvol, id.var = 'phiid', nullFragsAreZero = TRUE),
+                 regexp = 'all records are missing artifact volume')
 })
 
 test_that("simplifyArtifactData nullFragsAreZero works as expected", {

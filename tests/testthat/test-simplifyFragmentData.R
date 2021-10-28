@@ -255,8 +255,6 @@ d.missing.size <-
   )
 
 
-
-
 test_that(".seive correctly skips / pads NA", {
   expect_equal(soilDB:::.sieve(diameter = c(NA, 55)), c(NA, 'gravel'))
 })
@@ -295,7 +293,6 @@ test_that("seive returns correct size class, flat, fragments", {
 })
 
 
-
 test_that("seive returns correct size class, nonflat, parafragments", {
   
   expect_equal(soilDB:::.sieve(diameter = 4, flat = FALSE, para = TRUE), 'parafine_gravel')
@@ -329,7 +326,6 @@ test_that("seive returns correct size class, flat, parafragments", {
 })
 
 
-
 ## new tests for rockFragmentSieve: missing frag sizes / unspecified class
 test_that("rockFragmentSieve puts fragments without fragsize into 'unspecified' class", {
   
@@ -339,8 +335,6 @@ test_that("rockFragmentSieve puts fragments without fragsize into 'unspecified' 
   expect_equal(res$class, 'unspecified')
   
 })
-
-
 
 
 test_that("rockFragmentSieve assumptions are applied, results correct", {
@@ -422,8 +416,6 @@ test_that("rockFragmentSieve always uses the RV, computed when missing", {
 })
 
 
-
-
 test_that("rockFragmentSieve complex sample data from NASIS, single horizon", {
   
   # pretty common, many fragments specified for a single horizon
@@ -456,13 +448,12 @@ test_that("simplifyFragmentData complex sample data from NASIS, single horizon",
 })
 
 
-
 test_that("simplifyFragmentData when missing fragment sizes, low/rv/high", {
   
   # all fragments are coallated into the unspecified column
   # totals should be correct
   # some horizons have no fragment records, should generate a warning
-  expect_warning(res <- simplifyFragmentData(d.missing.size, id.var = 'phiid', nullFragsAreZero = TRUE))
+  expect_message( { res <- simplifyFragmentData(d.missing.size, id.var = 'phiid', nullFragsAreZero = TRUE) } )
   
   # rows missing fragvol should be removed from the simplified result
   expect_true(nrow(d.missing.size) == 12)
@@ -476,20 +467,23 @@ test_that("simplifyFragmentData when missing fragment sizes, low/rv/high", {
 
 test_that("simplifyFragmentData warning generated when NA in fragvol", {
   
-  expect_warning(simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE), regexp = 'some records are missing rock fragment volume')
+  expect_message(simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE), 
+                 regexp = 'some records are missing rock fragment volume')
   
 })
 
 
 test_that("simplifyFragmentData warning generated when all fragvol are NA", {
   
-  expect_warning(simplifyFragmentData(d.all.NA.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE), regexp = 'all records are missing rock fragment volume')
+  expect_message(simplifyFragmentData(d.all.NA.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE), 
+                 regexp = 'all records are missing rock fragment volume')
   
 })
 
+
 test_that("simplifyFragmentData nullFragsAreZero works as expected", {
-  expect_warning(a <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = FALSE))
-  expect_warning(b <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE))
+  expect_message( { a <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = FALSE) } )
+  expect_message( { b <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE) } )
   expect_equal(as.logical(is.na(a)), 
                c(FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, 
                            FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE))

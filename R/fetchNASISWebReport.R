@@ -86,7 +86,7 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
 
   # print any messages on possible data quality problems:
   if (exists('component.hz.problems', envir=soilDB.env))
-    message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=soilDB.env)` for related cokey values")
+    message("-> QC: horizon errors detected:\n\tUse `get('component.hz.problems', envir=soilDB.env)` for component keys (cokey)")
 
   # done, return SPC
   return(list(spc = f.chorizon, mapunit = f.mapunit))
