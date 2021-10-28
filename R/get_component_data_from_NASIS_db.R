@@ -829,7 +829,10 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   INNER JOIN datamapunit_View_1 dmu ON dmu.dmuiid = co.dmuiidref
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC, hzdept_r ASC;"
-
+  
+  q2 <- "SELECT chiidref, fragvol_r AS fragvol, fragsize_r, fragshp, fraghard FROM chfrags_View_1"
+  q3 <- "SELECT chiidref, huartvol_r AS huartvol, huartsize_r, huartco, huartshp, huartrnd, huartpen, huartsafety, huartper FROM chhuarts_View_1"
+  
   channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
@@ -838,10 +841,12 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+    q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
+    q3 <- gsub(pattern = '_View_1', replacement = '', x = q3, fixed = TRUE)
   }
 
   # exec query
-  d <- dbQueryNASIS(channel, q)
+  d <- dbQueryNASIS(channel, q, close = FALSE)
 
   ## TODO: better documentation for "fill" argument
   # https://github.com/ncss-tech/soilDB/issues/50
@@ -850,7 +855,13 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
     d <- d[!is.na(d$chiid), ]
   }
   
+  # "sieving" chfrags, chuarts tables for parity with fetchNASIS("pedons") @horizons slot columns 
+  chf <- simplifyFragmentData(dbQueryNASIS(channel, q2, close = FALSE), id.var = 'chiidref')
+  cha <- simplifyArtifactData(dbQueryNASIS(channel, q3), id.var = 'chiidref')
+  d2 <- merge(d, chf, by.x = "chiid", by.y = "chiidref", all.x = TRUE, sort = FALSE)
+  d3 <- merge(d2, cha, by.x = "chiid", by.y = "chiidref", all.x = TRUE, sort = FALSE)
+  
   # done
-  return(d)
+  return(d3)
 }
 
