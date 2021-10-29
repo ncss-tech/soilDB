@@ -78,7 +78,7 @@
 
   # join-in cogeomorph strings
   lf <- data.table::data.table(f.cogeomorph)[, .formatLandformString(.SD, uid = .BY$coiid, name.sep=' & '), by = "coiid"]
-  pm$peiid <- NULL
+  lf$peiid <- NULL
   if (nrow(lf) > 0)
     site(f.chorizon) <- lf
 
