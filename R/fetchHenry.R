@@ -415,6 +415,7 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
     # 
     
     ## TODO: stick to data.table if possible
+    .SD <- NULL
     
     # period of record over all sensors
     .POR <- function(i) {
