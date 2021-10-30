@@ -181,30 +181,31 @@ with the WHERE clause).</p>
     <p>Stephen Roecker</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># \donttest{</span>
-
-<span class='co'>## replace `dsn` with path to your own geodatabase (SSURGO OR gNATSGO)</span>
-<span class='co'>##</span>
-<span class='co'>##</span>
-<span class='co'>##  download CONUS gNATSGO from here:</span>
-<span class='co'>##    https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/geo/?cid=nrcseprd1464625</span>
-<span class='co'>##</span>
-<span class='co'>##</span>
-<span class='co'># dsn &lt;- "D:/geodata/soils/gNATSGO_CONUS.gdb"</span>
-
-<span class='co'># le &lt;- get_legend_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE '%'")</span>
-
-<span class='co'># mu &lt;- get_mapunit_from_GDB(dsn = dsn, WHERE = "muname LIKE 'Miami%'")</span>
-
-<span class='co'># co &lt;- get_component_from_GDB(dsn, WHERE = "compname = 'Miami'</span>
-<span class='co'>#                              AND majcompflag = 'Yes'", childs = FALSE)</span>
-
-<span class='co'># f_in_GDB &lt;- fetchGDB(WHERE = "areasymbol LIKE 'IN%'")</span>
-
-<span class='co'># }</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## replace `dsn` with path to your own geodatabase (SSURGO OR gNATSGO)</span></span>
+<span class='r-in'><span class='co'>##</span></span>
+<span class='r-in'><span class='co'>##</span></span>
+<span class='r-in'><span class='co'>##  download CONUS gNATSGO from here:</span></span>
+<span class='r-in'><span class='co'>##    https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/geo/?cid=nrcseprd1464625</span></span>
+<span class='r-in'><span class='co'>##</span></span>
+<span class='r-in'><span class='co'>##</span></span>
+<span class='r-in'><span class='co'># dsn &lt;- "D:/geodata/soils/gNATSGO_CONUS.gdb"</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># le &lt;- get_legend_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE '%'")</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># mu &lt;- get_mapunit_from_GDB(dsn = dsn, WHERE = "muname LIKE 'Miami%'")</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># co &lt;- get_component_from_GDB(dsn, WHERE = "compname = 'Miami'</span></span>
+<span class='r-in'><span class='co'>#                              AND majcompflag = 'Yes'", childs = FALSE)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># f_in_GDB &lt;- fetchGDB(WHERE = "areasymbol LIKE 'IN%'")</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># }</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

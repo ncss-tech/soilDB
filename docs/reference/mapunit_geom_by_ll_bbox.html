@@ -149,68 +149,74 @@
     <p>Dylan E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## fetch map unit geometry from a bounding-box:</span>
-<span class='co'># </span>
-<span class='co'>#         +------------- (-120.41, 38.70)</span>
-<span class='co'>#         |                     |</span>
-<span class='co'>#         |                     |</span>
-<span class='co'># (-120.54, 38.61) --------------+</span>
-<span class='co'># </span>
-<span class='co'># \donttest{</span>
-<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
-<span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/curl/man/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/edzer/sp/'>sp</a></span><span class='op'>)</span> <span class='op'>&amp;</span> 
-  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='http://rgdal.r-forge.r-project.org'>rgdal</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    
-    <span class='co'># basic usage</span>
-    <span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>120.54</span>,<span class='fl'>38.61</span>,<span class='op'>-</span><span class='fl'>120.41</span>,<span class='fl'>38.70</span><span class='op'>)</span>
-    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>mapunit_geom_by_ll_bbox</span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># about 20 seconds</span>
-    
-    <span class='kw'>if</span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span><span class='op'>(</span><span class='va'>x</span>,<span class='st'>'try-error'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-      <span class='co'># note that the returned geometry is everything overlapping the bbox</span>
-      <span class='co'># and not an intersection... why?</span>
-      <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-    <span class='fu'><a href='https://rdrr.io/r/graphics/rect.html'>rect</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>b</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>b</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span>, <span class='va'>b</span><span class='op'>[</span><span class='fl'>4</span><span class='op'>]</span>, border<span class='op'>=</span><span class='st'>'red'</span>, lwd<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>
-    
-    
-    <span class='co'># get map unit data for matching map unit keys</span>
-    <span class='va'>in.statement</span> <span class='op'>&lt;-</span> <span class='fu'><a href='format_SQL_in_statement.html'>format_SQL_in_statement</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>mukey</span><span class='op'>)</span><span class='op'>)</span>
-    
-    <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"SELECT mukey, muname FROM mapunit WHERE mukey IN "</span>, <span class='va'>in.statement</span>, sep<span class='op'>=</span><span class='st'>""</span><span class='op'>)</span>
-    <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='SDA_query.html'>SDA_query</a></span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span>
-    
-    <span class='co'>#inspect</span>
-    <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
-  <span class='op'>}</span> <span class='kw'>else</span> <span class='op'>{</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/message.html'>message</a></span><span class='op'>(</span><span class='st'>'could not download XML result from SDA'</span><span class='op'>)</span>
-  <span class='op'>}</span>
- <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: rgdal</span></div><div class='output co'>#&gt; <span class='message'>Please note that rgdal will be retired by the end of 2023,</span>
-#&gt; <span class='message'>plan transition to sf/stars/terra functions using GDAL and PROJ</span>
-#&gt; <span class='message'>at your earliest convenience.</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>rgdal: version: 1.5-27, (SVN revision 1148)</span>
-#&gt; <span class='message'>Geospatial Data Abstraction Library extensions to R successfully loaded</span>
-#&gt; <span class='message'>Loaded GDAL runtime: GDAL 3.2.1, released 2020/12/29</span>
-#&gt; <span class='message'>Path to GDAL shared files: D:/a/_temp/Library/rgdal/gdal</span>
-#&gt; <span class='message'>GDAL binary built with GEOS: TRUE </span>
-#&gt; <span class='message'>Loaded PROJ runtime: Rel. 7.2.1, January 1st, 2021, [PJ_VERSION: 721]</span>
-#&gt; <span class='message'>Path to PROJ shared files: D:/a/_temp/Library/rgdal/proj</span>
-#&gt; <span class='message'>PROJ CDN enabled: FALSE</span>
-#&gt; <span class='message'>Linking to sp version:1.4-5</span>
-#&gt; <span class='message'>To mute warnings of possible GDAL/OSR exportToProj4() degradation,</span>
-#&gt; <span class='message'>use options("rgdal_show_exportToProj4_warnings"="none") before loading sp or rgdal.</span>
-#&gt; <span class='message'>Overwritten PROJ_LIB was D:/a/_temp/Library/rgdal/proj</span></div><div class='output co'>#&gt; OGR data source with driver: GML 
-#&gt; Source: "C:\Users\runneradmin\AppData\Local\Temp\Rtmp8wesYf\file12106425785a.gml", layer: "mapunitpoly"
-#&gt; with 197 features
-#&gt; It has 9 fields</div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='img'><img src='mapunit_geom_by_ll_bbox-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt;    mukey                                                      muname
-#&gt; 1 462183          Aiken loam, 2 to 9 percent slopes, C Lower Montane
-#&gt; 2 462188                   Aiken cobbly loam, 3 to 30 percent slopes
-#&gt; 3 462193                               Argonaut loam, seeped variant
-#&gt; 4 462215 Chaix very rocky coarse sandy loam, 50 to 70 percent slopes
-#&gt; 5 462219         Cohasset loam, summits, 2 to 20 percent slopes, dry
-#&gt; 6 462220       Cohasset loam, shoulders, 3 to 20 percent slopes, dry</div><div class='input'><span class='co'># }</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'>## fetch map unit geometry from a bounding-box:</span></span>
+<span class='r-in'><span class='co'># </span></span>
+<span class='r-in'><span class='co'>#         +------------- (-120.41, 38.70)</span></span>
+<span class='r-in'><span class='co'>#         |                     |</span></span>
+<span class='r-in'><span class='co'>#         |                     |</span></span>
+<span class='r-in'><span class='co'># (-120.54, 38.61) --------------+</span></span>
+<span class='r-in'><span class='co'># </span></span>
+<span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span></span>
+<span class='r-in'><span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/curl/man/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;</span></span>
+<span class='r-in'>  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/edzer/sp/'>sp</a></span><span class='op'>)</span> <span class='op'>&amp;</span> </span>
+<span class='r-in'>  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='http://rgdal.r-forge.r-project.org'>rgdal</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    </span>
+<span class='r-in'>    <span class='co'># basic usage</span></span>
+<span class='r-in'>    <span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>120.54</span>,<span class='fl'>38.61</span>,<span class='op'>-</span><span class='fl'>120.41</span>,<span class='fl'>38.70</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>mapunit_geom_by_ll_bbox</span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># about 20 seconds</span></span>
+<span class='r-in'>    </span>
+<span class='r-in'>    <span class='kw'>if</span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span><span class='op'>(</span><span class='va'>x</span>,<span class='st'>'try-error'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>      <span class='co'># note that the returned geometry is everything overlapping the bbox</span></span>
+<span class='r-in'>      <span class='co'># and not an intersection... why?</span></span>
+<span class='r-in'>      <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/graphics/rect.html'>rect</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>b</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>b</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span>, <span class='va'>b</span><span class='op'>[</span><span class='fl'>4</span><span class='op'>]</span>, border<span class='op'>=</span><span class='st'>'red'</span>, lwd<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'>    </span>
+<span class='r-in'>    </span>
+<span class='r-in'>    <span class='co'># get map unit data for matching map unit keys</span></span>
+<span class='r-in'>    <span class='va'>in.statement</span> <span class='op'>&lt;-</span> <span class='fu'><a href='format_SQL_in_statement.html'>format_SQL_in_statement</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>mukey</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>    </span>
+<span class='r-in'>    <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"SELECT mukey, muname FROM mapunit WHERE mukey IN "</span>, <span class='va'>in.statement</span>, sep<span class='op'>=</span><span class='st'>""</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'><a href='SDA_query.html'>SDA_query</a></span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span></span>
+<span class='r-in'>    </span>
+<span class='r-in'>    <span class='co'>#inspect</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span> <span class='kw'>else</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/base/message.html'>message</a></span><span class='op'>(</span><span class='st'>'could not download XML result from SDA'</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span></span>
+<span class='r-in'> <span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: rgdal</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Please note that rgdal will be retired by the end of 2023,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> plan transition to sf/stars/terra functions using GDAL and PROJ</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> at your earliest convenience.</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> rgdal: version: 1.5-27, (SVN revision 1148)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Geospatial Data Abstraction Library extensions to R successfully loaded</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loaded GDAL runtime: GDAL 3.2.1, released 2020/12/29</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Path to GDAL shared files: D:/a/_temp/Library/rgdal/gdal</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> GDAL binary built with GEOS: TRUE </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loaded PROJ runtime: Rel. 7.2.1, January 1st, 2021, [PJ_VERSION: 721]</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Path to PROJ shared files: D:/a/_temp/Library/rgdal/proj</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> PROJ CDN enabled: FALSE</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Linking to sp version:1.4-5</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> To mute warnings of possible GDAL/OSR exportToProj4() degradation,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> use options("rgdal_show_exportToProj4_warnings"="none") before loading sp or rgdal.</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Overwritten PROJ_LIB was D:/a/_temp/Library/rgdal/proj</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR data source with driver: GML </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Source: "C:\Users\runneradmin\AppData\Local\Temp\RtmpQZx8aI\filed80760e6b42.gml", layer: "mapunitpoly"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> with 197 features</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> It has 8 fields</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> single result set, returning a data.frame</span>
+<span class='r-plt img'><img src='mapunit_geom_by_ll_bbox-1.png' alt='' width='768' height='475' /></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    mukey                                                      muname</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 462183          Aiken loam, 2 to 9 percent slopes, C Lower Montane</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 462188                   Aiken cobbly loam, 3 to 30 percent slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 462193                               Argonaut loam, seeped variant</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 462215 Chaix very rocky coarse sandy loam, 50 to 70 percent slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 462219         Cohasset loam, summits, 2 to 20 percent slopes, dry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6 462220       Cohasset loam, shoulders, 3 to 20 percent slopes, dry</span>
+<span class='r-in'><span class='co'># }</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

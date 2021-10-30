@@ -157,109 +157,111 @@
     <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># \donttest{</span>
-<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
-    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/curl/man/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-
-    <span class='co'># get data: new interface</span>
-    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>fetchSCAN</span><span class='op'>(</span>site.code<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>356</span>, <span class='fl'>2072</span><span class='op'>)</span>, year<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2015</span>, <span class='fl'>2016</span><span class='op'>)</span><span class='op'>)</span>
-    <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-
-    <span class='co'># get sensor metadata</span>
-    <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>SCAN_sensor_metadata</span><span class='op'>(</span>site.code<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>356</span>, <span class='fl'>2072</span><span class='op'>)</span><span class='op'>)</span>
-
-    <span class='co'># get site metadata</span>
-    <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>SCAN_site_metadata</span><span class='op'>(</span>site.code<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>356</span>, <span class='fl'>2072</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>19336 records (0.83 Mb transferred)</span></div><div class='output co'>#&gt; List of 10
-#&gt;  $ metadata:'data.frame':	2 obs. of  12 variables:
-#&gt;   ..$ Name         : chr [1:2] "Blue Lakes" "Eros Data Center"
-#&gt;   ..$ Site         : num [1:2] 356 2072
-#&gt;   ..$ State        : chr [1:2] "California" "South Dakota"
-#&gt;   ..$ Network      : chr [1:2] "SNOTEL" "SCAN"
-#&gt;   ..$ County       : chr [1:2] "Alpine" "Minnehaha"
-#&gt;   ..$ Elevation_ft : num [1:2] 8067 1602
-#&gt;   ..$ Latitude     : num [1:2] 38.6 43.7
-#&gt;   ..$ Longitude    : num [1:2] -119.9 -96.6
-#&gt;   ..$ HUC          : chr [1:2] "180400120101" "101702031402"
-#&gt;   ..$ climstanm    : chr [1:2] NA "Eros Data Center"
-#&gt;   ..$ upedonid     : chr [1:2] NA "S2003SD099001"
-#&gt;   ..$ pedlabsampnum: chr [1:2] NA "03N0688"
-#&gt;  $ SMS     :'data.frame':	5752 obs. of  7 variables:
-#&gt;   ..$ Site      : int [1:5752] 356 356 356 356 356 356 356 356 356 356 ...
-#&gt;   ..$ Date      : Date[1:5752], format: "2015-01-01" "2015-01-02" ...
-#&gt;   ..$ water_year: num [1:5752] 2015 2015 2015 2015 2015 ...
-#&gt;   ..$ water_day : int [1:5752] 93 94 95 96 97 98 99 100 101 102 ...
-#&gt;   ..$ value     : num [1:5752] 0 0 0 0 0 0 0 0 0 0 ...
-#&gt;   ..$ depth     : num [1:5752] 5 5 5 5 5 5 5 5 5 5 ...
-#&gt;   ..$ sensor.id : Factor w/ 5 levels "SMS.I_2","SMS.I_8",..: 1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ STO     :'data.frame':	5843 obs. of  7 variables:
-#&gt;   ..$ Site      : int [1:5843] 356 356 356 356 356 356 356 356 356 356 ...
-#&gt;   ..$ Date      : Date[1:5843], format: "2015-01-01" "2015-01-02" ...
-#&gt;   ..$ water_year: num [1:5843] 2015 2015 2015 2015 2015 ...
-#&gt;   ..$ water_day : int [1:5843] 93 94 95 96 97 98 99 100 101 102 ...
-#&gt;   ..$ value     : num [1:5843] 1.4 1.4 1.3 1.3 1.3 1.3 1.3 1.4 1.4 1.4 ...
-#&gt;   ..$ depth     : num [1:5843] 5 5 5 5 5 5 5 5 5 5 ...
-#&gt;   ..$ sensor.id : Factor w/ 5 levels "STO.I_2","STO.I_8",..: 1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ TAVG    :'data.frame':	1460 obs. of  7 variables:
-#&gt;   ..$ Site      : int [1:1460] 356 356 356 356 356 356 356 356 356 356 ...
-#&gt;   ..$ Date      : Date[1:1460], format: "2015-01-01" "2015-01-02" ...
-#&gt;   ..$ water_year: num [1:1460] 2015 2015 2015 2015 2015 ...
-#&gt;   ..$ water_day : int [1:1460] 93 94 95 96 97 98 99 100 101 102 ...
-#&gt;   ..$ value     : num [1:1460] -13.1 -6.3 -4.6 -1.5 0.5 2 3 2.2 1.2 2.2 ...
-#&gt;   ..$ depth     : num [1:1460] NA NA NA NA NA NA NA NA NA NA ...
-#&gt;   ..$ sensor.id : Factor w/ 1 level "TAVG.D": 1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ TMIN    :'data.frame':	1460 obs. of  7 variables:
-#&gt;   ..$ Site      : int [1:1460] 356 356 356 356 356 356 356 356 356 356 ...
-#&gt;   ..$ Date      : Date[1:1460], format: "2015-01-01" "2015-01-02" ...
-#&gt;   ..$ water_year: num [1:1460] 2015 2015 2015 2015 2015 ...
-#&gt;   ..$ water_day : int [1:1460] 93 94 95 96 97 98 99 100 101 102 ...
-#&gt;   ..$ value     : num [1:1460] -17 -10.9 -12.5 -8.1 -5.2 -4.2 -2.2 -3.8 -5.1 -1.4 ...
-#&gt;   ..$ depth     : num [1:1460] NA NA NA NA NA NA NA NA NA NA ...
-#&gt;   ..$ sensor.id : Factor w/ 1 level "TMIN.D": 1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ TMAX    :'data.frame':	1460 obs. of  7 variables:
-#&gt;   ..$ Site      : int [1:1460] 356 356 356 356 356 356 356 356 356 356 ...
-#&gt;   ..$ Date      : Date[1:1460], format: "2015-01-01" "2015-01-02" ...
-#&gt;   ..$ water_year: num [1:1460] 2015 2015 2015 2015 2015 ...
-#&gt;   ..$ water_day : int [1:1460] 93 94 95 96 97 98 99 100 101 102 ...
-#&gt;   ..$ value     : num [1:1460] -8.9 2 7 9.2 8.1 11.3 13.8 12.5 10.3 6.4 ...
-#&gt;   ..$ depth     : num [1:1460] NA NA NA NA NA NA NA NA NA NA ...
-#&gt;   ..$ sensor.id : Factor w/ 1 level "TMAX.D": 1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ PRCP    :'data.frame':	581 obs. of  7 variables:
-#&gt;   ..$ Site      : int [1:581] 2072 2072 2072 2072 2072 2072 2072 2072 2072 2072 ...
-#&gt;   ..$ Date      : Date[1:581], format: "2015-01-01" "2015-01-02" ...
-#&gt;   ..$ water_year: num [1:581] 2015 2015 2015 2015 2015 ...
-#&gt;   ..$ water_day : int [1:581] 93 94 95 96 97 98 99 100 101 102 ...
-#&gt;   ..$ value     : num [1:581] 0 0 0 0.08 0 0 0 0 0.23 0 ...
-#&gt;   ..$ depth     : num [1:581] NA NA NA NA NA NA NA NA NA NA ...
-#&gt;   ..$ sensor.id : Factor w/ 1 level "PRCP.D": 1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ PREC    :'data.frame':	1316 obs. of  7 variables:
-#&gt;   ..$ Site      : int [1:1316] 356 356 356 356 356 356 356 356 356 356 ...
-#&gt;   ..$ Date      : Date[1:1316], format: "2015-01-01" "2015-01-02" ...
-#&gt;   ..$ water_year: num [1:1316] 2015 2015 2015 2015 2015 ...
-#&gt;   ..$ water_day : int [1:1316] 93 94 95 96 97 98 99 100 101 102 ...
-#&gt;   ..$ value     : num [1:1316] 9.1 9.1 9.1 9.1 9.1 9.1 9.1 9.1 9.1 9.1 ...
-#&gt;   ..$ depth     : num [1:1316] NA NA NA NA NA NA NA NA NA NA ...
-#&gt;   ..$ sensor.id : Factor w/ 1 level "PREC.I": 1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ SNWD    :'data.frame':	731 obs. of  7 variables:
-#&gt;   ..$ Site      : int [1:731] 356 356 356 356 356 356 356 356 356 356 ...
-#&gt;   ..$ Date      : Date[1:731], format: "2015-01-01" "2015-01-02" ...
-#&gt;   ..$ water_year: num [1:731] 2015 2015 2015 2015 2015 ...
-#&gt;   ..$ water_day : int [1:731] 93 94 95 96 97 98 99 100 101 102 ...
-#&gt;   ..$ value     : int [1:731] 21 20 20 20 19 18 18 18 17 17 ...
-#&gt;   ..$ depth     : num [1:731] NA NA NA NA NA NA NA NA NA NA ...
-#&gt;   ..$ sensor.id : Factor w/ 1 level "SNWD.I": 1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ WTEQ    :'data.frame':	731 obs. of  7 variables:
-#&gt;   ..$ Site      : int [1:731] 356 356 356 356 356 356 356 356 356 356 ...
-#&gt;   ..$ Date      : Date[1:731], format: "2015-01-01" "2015-01-02" ...
-#&gt;   ..$ water_year: num [1:731] 2015 2015 2015 2015 2015 ...
-#&gt;   ..$ water_day : int [1:731] 93 94 95 96 97 98 99 100 101 102 ...
-#&gt;   ..$ value     : num [1:731] 6.1 6.1 6.1 6.1 6.1 6.1 6.1 6.1 6.1 6.1 ...
-#&gt;   ..$ depth     : num [1:731] NA NA NA NA NA NA NA NA NA NA ...
-#&gt;   ..$ sensor.id : Factor w/ 1 level "WTEQ.I": 1 1 1 1 1 1 1 1 1 1 ...</div><div class='input'><span class='co'># }</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span></span>
+<span class='r-in'>    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/curl/man/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='co'># get data: new interface</span></span>
+<span class='r-in'>    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>fetchSCAN</span><span class='op'>(</span>site.code<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>356</span>, <span class='fl'>2072</span><span class='op'>)</span>, year<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>2015</span>, <span class='fl'>2016</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='co'># get sensor metadata</span></span>
+<span class='r-in'>    <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>SCAN_sensor_metadata</span><span class='op'>(</span>site.code<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>356</span>, <span class='fl'>2072</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='co'># get site metadata</span></span>
+<span class='r-in'>    <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>SCAN_site_metadata</span><span class='op'>(</span>site.code<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='fl'>356</span>, <span class='fl'>2072</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> 19336 records (0.83 Mb transferred)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> List of 10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ metadata:'data.frame':	2 obs. of  12 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Name         : chr [1:2] "Blue Lakes" "Eros Data Center"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Site         : num [1:2] 356 2072</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ State        : chr [1:2] "California" "South Dakota"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Network      : chr [1:2] "SNOTEL" "SCAN"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ County       : chr [1:2] "Alpine" "Minnehaha"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Elevation_ft : num [1:2] 8067 1602</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Latitude     : num [1:2] 38.6 43.7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Longitude    : num [1:2] -119.9 -96.6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ HUC          : chr [1:2] "180400120101" "101702031402"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ climstanm    : chr [1:2] NA "Eros Data Center"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ upedonid     : chr [1:2] NA "S2003SD099001"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ pedlabsampnum: chr [1:2] NA "03N0688"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ SMS     :'data.frame':	5752 obs. of  7 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Site      : int [1:5752] 356 356 356 356 356 356 356 356 356 356 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Date      : Date[1:5752], format: "2015-01-01" "2015-01-02" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_year: num [1:5752] 2015 2015 2015 2015 2015 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_day : int [1:5752] 93 94 95 96 97 98 99 100 101 102 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ value     : num [1:5752] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ depth     : num [1:5752] 5 5 5 5 5 5 5 5 5 5 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ sensor.id : Factor w/ 5 levels "SMS.I_2","SMS.I_8",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ STO     :'data.frame':	5843 obs. of  7 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Site      : int [1:5843] 356 356 356 356 356 356 356 356 356 356 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Date      : Date[1:5843], format: "2015-01-01" "2015-01-02" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_year: num [1:5843] 2015 2015 2015 2015 2015 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_day : int [1:5843] 93 94 95 96 97 98 99 100 101 102 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ value     : num [1:5843] 1.4 1.4 1.3 1.3 1.3 1.3 1.3 1.4 1.4 1.4 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ depth     : num [1:5843] 5 5 5 5 5 5 5 5 5 5 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ sensor.id : Factor w/ 5 levels "STO.I_2","STO.I_8",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ TAVG    :'data.frame':	1460 obs. of  7 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Site      : int [1:1460] 356 356 356 356 356 356 356 356 356 356 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Date      : Date[1:1460], format: "2015-01-01" "2015-01-02" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_year: num [1:1460] 2015 2015 2015 2015 2015 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_day : int [1:1460] 93 94 95 96 97 98 99 100 101 102 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ value     : num [1:1460] -13.1 -6.3 -4.6 -1.5 0.5 2 3 2.2 1.2 2.2 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ depth     : num [1:1460] NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "TAVG.D": 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ TMIN    :'data.frame':	1460 obs. of  7 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Site      : int [1:1460] 356 356 356 356 356 356 356 356 356 356 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Date      : Date[1:1460], format: "2015-01-01" "2015-01-02" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_year: num [1:1460] 2015 2015 2015 2015 2015 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_day : int [1:1460] 93 94 95 96 97 98 99 100 101 102 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ value     : num [1:1460] -17 -10.9 -12.5 -8.1 -5.2 -4.2 -2.2 -3.8 -5.1 -1.4 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ depth     : num [1:1460] NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "TMIN.D": 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ TMAX    :'data.frame':	1460 obs. of  7 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Site      : int [1:1460] 356 356 356 356 356 356 356 356 356 356 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Date      : Date[1:1460], format: "2015-01-01" "2015-01-02" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_year: num [1:1460] 2015 2015 2015 2015 2015 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_day : int [1:1460] 93 94 95 96 97 98 99 100 101 102 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ value     : num [1:1460] -8.9 2 7 9.2 8.1 11.3 13.8 12.5 10.3 6.4 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ depth     : num [1:1460] NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "TMAX.D": 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ PRCP    :'data.frame':	581 obs. of  7 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Site      : int [1:581] 2072 2072 2072 2072 2072 2072 2072 2072 2072 2072 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Date      : Date[1:581], format: "2015-01-01" "2015-01-02" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_year: num [1:581] 2015 2015 2015 2015 2015 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_day : int [1:581] 93 94 95 96 97 98 99 100 101 102 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ value     : num [1:581] 0 0 0 0.08 0 0 0 0 0.23 0 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ depth     : num [1:581] NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "PRCP.D": 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ PREC    :'data.frame':	1316 obs. of  7 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Site      : int [1:1316] 356 356 356 356 356 356 356 356 356 356 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Date      : Date[1:1316], format: "2015-01-01" "2015-01-02" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_year: num [1:1316] 2015 2015 2015 2015 2015 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_day : int [1:1316] 93 94 95 96 97 98 99 100 101 102 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ value     : num [1:1316] 9.1 9.1 9.1 9.1 9.1 9.1 9.1 9.1 9.1 9.1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ depth     : num [1:1316] NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "PREC.I": 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ SNWD    :'data.frame':	731 obs. of  7 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Site      : int [1:731] 356 356 356 356 356 356 356 356 356 356 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Date      : Date[1:731], format: "2015-01-01" "2015-01-02" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_year: num [1:731] 2015 2015 2015 2015 2015 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_day : int [1:731] 93 94 95 96 97 98 99 100 101 102 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ value     : int [1:731] 21 20 20 20 19 18 18 18 17 17 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ depth     : num [1:731] NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "SNWD.I": 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ WTEQ    :'data.frame':	731 obs. of  7 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Site      : int [1:731] 356 356 356 356 356 356 356 356 356 356 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ Date      : Date[1:731], format: "2015-01-01" "2015-01-02" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_year: num [1:731] 2015 2015 2015 2015 2015 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ water_day : int [1:731] 93 94 95 96 97 98 99 100 101 102 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ value     : num [1:731] 6.1 6.1 6.1 6.1 6.1 6.1 6.1 6.1 6.1 6.1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ depth     : num [1:731] NA NA NA NA NA NA NA NA NA NA ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "WTEQ.I": 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class='r-in'><span class='co'># }</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

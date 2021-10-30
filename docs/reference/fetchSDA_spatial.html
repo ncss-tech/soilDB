@@ -142,7 +142,7 @@ A Soil Data Access query returns geometry and key identifying information about 
     </tr>
     <tr>
       <th>by.col</th>
-      <td><p>Column name containing map unit identifier <code>"mukey"</code>, <code>"nmusym"</code>/<code>"nationalmusym"</code> for <code>geom.src</code> <code>mupolygon</code> OR <code>"areasymbol"</code> for <code>geom.src</code> <code>sapolygon</code>; default is determined by <code><a href='https://rdrr.io/r/base/numeric.html'>is.numeric(x)</a></code> <code>TRUE</code> for <code>mukey</code> or <code>lkey</code> and <code>nationalmusym</code> or <code>areasymbol</code> otherwise.</p></td>
+      <td><p>Column name containing map unit identifier <code>"mukey"</code>, <code>"nmusym"</code>/<code>"nationalmusym"</code> for <code>geom.src</code> <code>mupolygon</code> OR <code>"areasymbol"</code> for <code>geom.src</code> <code>sapolygon</code>; default is determined by <code>is.numeric(x)</code> <code>TRUE</code> for <code>mukey</code> or <code>lkey</code> and <code>nationalmusym</code> or <code>areasymbol</code> otherwise.</p></td>
     </tr>
     <tr>
       <th>method</th>
@@ -183,34 +183,46 @@ A Soil Data Access query returns geometry and key identifying information about 
     <p>Andrew G. Brown, Dylan E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
-   <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/curl/man/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-
-   <span class='co'># get spatial data for a single mukey</span>
-    <span class='va'>single.mukey</span> <span class='op'>&lt;-</span> <span class='fu'>fetchSDA_spatial</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"2924882"</span><span class='op'>)</span>
-
-    <span class='co'># demonstrate fetching full extent (multi-mukey) of national musym</span>
-    <span class='va'>full.extent.nmusym</span> <span class='op'>&lt;-</span> <span class='fu'>fetchSDA_spatial</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"2x8l5"</span>, by <span class='op'>=</span> <span class='st'>"nmusym"</span><span class='op'>)</span>
-
-    <span class='co'># compare extent of nmusym to single mukey within it</span>
-    <span class='kw'>if</span><span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/edzer/sp/'>sp</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-     <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>full.extent.nmusym</span>, col <span class='op'>=</span> <span class='st'>"RED"</span>,border<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span>
-     <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>single.mukey</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span>, col <span class='op'>=</span> <span class='st'>"BLUE"</span>, border<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span>
-    <span class='op'>}</span>
-
-    <span class='co'># demo adding a field (`muname`) to attribute table of result</span>
-    <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>fetchSDA_spatial</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"2x8l5"</span>, by<span class='op'>=</span><span class='st'>"nmusym"</span>, add.fields<span class='op'>=</span><span class='st'>"muname"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Using 1 chunks...</span></div><div class='output co'>#&gt; <span class='message'>Chunk #1 completed (n = 1; 1 secs)</span></div><div class='output co'>#&gt; <span class='message'>Done in 1 secs; mean/chunk: 1 secs; mean/symbol: 0.97 secs.</span></div><div class='output co'>#&gt; <span class='message'>Using 1 chunks...</span></div><div class='output co'>#&gt; <span class='message'>Chunk #1 completed (n = 3; 1.8 secs)</span></div><div class='output co'>#&gt; <span class='message'>Done in 1.9 secs; mean/chunk: 1.8 secs; mean/symbol: 0.64 secs.</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: sp</span></div><div class='output co'>#&gt; <span class='message'>Using 1 chunks...</span></div><div class='output co'>#&gt; <span class='message'>Chunk #1 completed (n = 3; 1.6 secs)</span></div><div class='output co'>#&gt; <span class='message'>Done in 1.7 secs; mean/chunk: 1.6 secs; mean/symbol: 0.58 secs.</span></div><div class='img'><img src='fetchSDA_spatial-1.png' alt='' width='768' height='475' /></div><div class='output co'>#&gt; class       : SpatialPolygonsDataFrame 
-#&gt; features    : 6 
-#&gt; extent      : -121.034, -120.9596, 38.01706, 38.24938  (xmin, xmax, ymin, ymax)
-#&gt; crs         : +proj=longlat +datum=WGS84 +no_defs 
-#&gt; variables   : 5
-#&gt; names       : gid,  mukey, areasymbol, nationalmusym,                                        muname 
-#&gt; min values  :   1, 462101,      CA077,         2x8l5, Pentz-Bellota complex, 2 to 15 percent slopes 
-#&gt; max values  :   6, 462101,      CA077,         2x8l5, Pentz-Bellota complex, 2 to 15 percent slopes </div><div class='input'><span class='co'># }</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span></span>
+<span class='r-in'>   <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/curl/man/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'>   <span class='co'># get spatial data for a single mukey</span></span>
+<span class='r-in'>    <span class='va'>single.mukey</span> <span class='op'>&lt;-</span> <span class='fu'>fetchSDA_spatial</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"2924882"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='co'># demonstrate fetching full extent (multi-mukey) of national musym</span></span>
+<span class='r-in'>    <span class='va'>full.extent.nmusym</span> <span class='op'>&lt;-</span> <span class='fu'>fetchSDA_spatial</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"2x8l5"</span>, by <span class='op'>=</span> <span class='st'>"nmusym"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='co'># compare extent of nmusym to single mukey within it</span></span>
+<span class='r-in'>    <span class='kw'>if</span><span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/edzer/sp/'>sp</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>     <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>full.extent.nmusym</span>, col <span class='op'>=</span> <span class='st'>"RED"</span>,border<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span></span>
+<span class='r-in'>     <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html'>plot</a></span><span class='op'>(</span><span class='va'>single.mukey</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span>, col <span class='op'>=</span> <span class='st'>"BLUE"</span>, border<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='co'># demo adding a field (`muname`) to attribute table of result</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>fetchSDA_spatial</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"2x8l5"</span>, by<span class='op'>=</span><span class='st'>"nmusym"</span>, add.fields<span class='op'>=</span><span class='st'>"muname"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Using 1 chunks...</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Chunk #1 completed (n = 1; 0.8 secs)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Done in 0.8 secs; mean/chunk: 0.8 secs; mean/symbol: 0.82 secs.</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Using 1 chunks...</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Chunk #1 completed (n = 3; 1.7 secs)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Done in 1.9 secs; mean/chunk: 1.7 secs; mean/symbol: 0.63 secs.</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: sp</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Using 1 chunks...</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Chunk #1 completed (n = 3; 1.7 secs)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Done in 1.8 secs; mean/chunk: 1.7 secs; mean/symbol: 0.61 secs.</span>
+<span class='r-plt img'><img src='fetchSDA_spatial-1.png' alt='' width='768' height='475' /></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> class       : SpatialPolygonsDataFrame </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> features    : 6 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> extent      : -121.034, -120.9596, 38.01706, 38.24938  (xmin, xmax, ymin, ymax)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> crs         : +proj=longlat +datum=WGS84 +no_defs </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> variables   : 5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> names       : gid,  mukey, areasymbol, nationalmusym,                                        muname </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> min values  :   1, 462101,      CA077,         2x8l5, Pentz-Bellota complex, 2 to 15 percent slopes </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> max values  :   6, 462101,      CA077,         2x8l5, Pentz-Bellota complex, 2 to 15 percent slopes </span>
+<span class='r-in'><span class='co'># }</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

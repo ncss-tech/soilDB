@@ -153,23 +153,23 @@ table structure; default: <code>NULL</code></p></td>
     <p>Dylan E. Beaudette and Jay M. Skovlin</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># \donttest{</span>
-<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='local_NASIS_defined.html'>local_NASIS_defined</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
- <span class='co'># query text note data</span>
- <span class='va'>t</span> <span class='op'>&lt;-</span> <span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>get_text_notes_from_NASIS_db</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-
- <span class='co'># show contents text note data, includes: siteobs, site, pedon, horizon level text notes data.</span>
- <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span>
-
- <span class='co'># view text categories for site text notes</span>
- <span class='kw'>if</span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='st'>'try-error'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>t</span><span class='op'>$</span><span class='va'>site_text</span><span class='op'>$</span><span class='va'>textcat</span><span class='op'>)</span>
- <span class='op'>}</span>
-<span class='op'>}</span>
-<span class='co'># }</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='local_NASIS_defined.html'>local_NASIS_defined</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'> <span class='co'># query text note data</span></span>
+<span class='r-in'> <span class='va'>t</span> <span class='op'>&lt;-</span> <span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>get_text_notes_from_NASIS_db</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'> <span class='co'># show contents text note data, includes: siteobs, site, pedon, horizon level text notes data.</span></span>
+<span class='r-in'> <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'> <span class='co'># view text categories for site text notes</span></span>
+<span class='r-in'> <span class='kw'>if</span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='st'>'try-error'</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>t</span><span class='op'>$</span><span class='va'>site_text</span><span class='op'>$</span><span class='va'>textcat</span><span class='op'>)</span></span>
+<span class='r-in'> <span class='op'>}</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'><span class='co'># }</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

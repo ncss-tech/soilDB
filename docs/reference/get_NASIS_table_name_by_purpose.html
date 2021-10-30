@@ -148,19 +148,19 @@
     <div class='dont-index'><p>createStaticNASIS</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='co'># get the "site" table names</span>
-<span class='fu'>get_NASIS_table_name_by_purpose</span><span class='op'>(</span><span class='st'>"site"</span><span class='op'>)</span>
-
-<span class='co'># get the pedon table names</span>
-<span class='fu'>get_NASIS_table_name_by_purpose</span><span class='op'>(</span><span class='st'>"pedon"</span>, SS <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='co'># metadata and lookup not affected by SS argument, but site and pedon are</span>
-<span class='fu'>get_NASIS_table_name_by_purpose</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"metadata"</span>, <span class='st'>"lookup"</span>,
-                                   <span class='st'>"site"</span>, <span class='st'>"pedon"</span><span class='op'>)</span>, SS <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='co'># get the "site" table names</span></span>
+<span class='r-in'><span class='fu'>get_NASIS_table_name_by_purpose</span><span class='op'>(</span><span class='st'>"site"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># get the pedon table names</span></span>
+<span class='r-in'><span class='fu'>get_NASIS_table_name_by_purpose</span><span class='op'>(</span><span class='st'>"pedon"</span>, SS <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># metadata and lookup not affected by SS argument, but site and pedon are</span></span>
+<span class='r-in'><span class='fu'>get_NASIS_table_name_by_purpose</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"metadata"</span>, <span class='st'>"lookup"</span>,</span>
+<span class='r-in'>                                   <span class='st'>"site"</span>, <span class='st'>"pedon"</span><span class='op'>)</span>, SS <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -114,6 +114,22 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="soildb-267-2021-10-27" class="section level1">
+<h1 class="page-header" data-toc-text="2.6.7">
+<a href="#soildb-267-2021-10-27" class="anchor"></a>soilDB 2.6.7 (2021-10-27)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Removed several packages from Suggests: {gridExtra}, {ggplot2}, {viridisLite}, {mapview}, {rasterVis}</li>
+<li>
+<code><a href="../reference/get_OSD.html">get_OSD()</a></code>: Handle “NA” and type conversion for JSON results an convert spaces to underscores for file names as needed</li>
+<li>
+<code><a href="../reference/fetchSCAN.html">fetchSCAN()</a></code>: graceful handling of timeout and converted from {plyr} to {data.table}; (<a href="https://github.com/ncss-tech/soilDB/issues/161" class="uri">https://github.com/ncss-tech/soilDB/issues/161</a>, <a href="https://github.com/ncss-tech/soilDB/issues/184" class="uri">https://github.com/ncss-tech/soilDB/issues/184</a>)</li>
+<li>
+<code><a href="../reference/get_EDIT_ecoclass_by_geoUnit.html">get_EDIT_ecoclass_by_geoUnit()</a></code>: graceful handling of timeout</li>
+<li>
+<code><a href="../reference/get_SDA_muaggatt.html">get_SDA_muaggatt()</a></code>: add <code>query_string</code> argument for parity with other “SSURGO on demand” / <code>get_SDA_*()</code> functions</li>
+</ul>
+</div>
     <div id="soildb-266-2021-09-24" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.6">
 <a href="#soildb-266-2021-09-24" class="anchor"></a>soilDB 2.6.6 (2021-09-24)<small> Unreleased </small>
@@ -143,7 +159,7 @@
 </h1>
 <ul>
 <li>
-<code><a href="../reference/fetchNASIS.html">fetchNASIS(from="pedons")</a></code> now supports <code>fill=TRUE</code> argument just like <code>from="components"</code> to include pedons that have no horizon records</li>
+<code>fetchNASIS(from="pedons")</code> now supports <code>fill=TRUE</code> argument just like <code>from="components"</code> to include pedons that have no horizon records</li>
 <li>
 <code><a href="../reference/createStaticNASIS.html">createStaticNASIS()</a></code>: column order should match NASIS, even if data types require reorder for ODBC driver</li>
 <li>
@@ -176,7 +192,7 @@
 <li>Added new columns to soil classification (“SC”) table result of <code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code>; now including taxonomic mineralogy class which may contain multiple parts for series with strongly contrasting control sections</li>
 <li>Updates to <code>get_SDA_*()</code> methods
 <ul>
-<li>Extends <code><a href="../reference/get_SDA_property.html">get_SDA_property(property = ...)</a></code> and <code><a href="../reference/get_SDA_interpretation.html">get_SDA_interpretation(rulename = ...)</a></code> vectorization over property/rulename to work with any aggregation method.
+<li>Extends <code>get_SDA_property(property = ...)</code> and <code>get_SDA_interpretation(rulename = ...)</code> vectorization over property/rulename to work with any aggregation method.
 <ul>
 <li>Now supports: Dominant Condition, Min, Max, Dominant Component, Weighted Average</li>
 </ul>
@@ -216,11 +232,11 @@
 <li>Added <code>formativeElement</code> argument to <code><a href="../reference/taxaExtent.html">taxaExtent()</a></code> (SoilWeb taxon extent function)
 <ul>
 <li>“Formative elements” are derived from the dictionary provided by the {SoilTaxonomy} package (<a href="https://cran.r-project.org/package=SoilTaxonomy" class="uri">https://cran.r-project.org/package=SoilTaxonomy</a>)</li>
-<li>For example: <code><a href="../reference/taxaExtent.html">taxaExtent("abruptic", level = 'subgroup', formativeElement = TRUE)</a></code> will get an 800m grid (for SSURGO data in CONUS) showing extent of taxa that have “abruptic” in subgroup-level taxon name</li>
+<li>For example: <code>taxaExtent("abruptic", level = 'subgroup', formativeElement = TRUE)</code> will get an 800m grid (for SSURGO data in CONUS) showing extent of taxa that have “abruptic” in subgroup-level taxon name</li>
 </ul>
 </li>
 <li>
-<code><a href="../reference/fetchNASIS.html">fetchNASIS(from="pedons")</a></code> result now contains the <code>"taxclname"</code> (full family-level taxon name) field from the NASIS <code>pedon</code> table; this value is calculated based on contents of <code>petaxhistory</code> child table</li>
+<code>fetchNASIS(from="pedons")</code> result now contains the <code>"taxclname"</code> (full family-level taxon name) field from the NASIS <code>pedon</code> table; this value is calculated based on contents of <code>petaxhistory</code> child table</li>
 <li>
 <code>get_SDA_interpretation</code> and <code>get_SDA_property</code> now support aggregation <code>method="NONE"</code> allowing for returning properties, classes and ratings for individual components or horizons (<a href="https://github.com/ncss-tech/soilDB/pull/181" class="uri">https://github.com/ncss-tech/soilDB/pull/181</a>)</li>
 <li>
@@ -258,7 +274,7 @@
 <li>
 <code>OSDquery</code> gets a new argument (<code>everything</code>) for searching the entire document</li>
 <li>
-<code><a href="../reference/fetchNASIS.html">fetchNASIS(..., rmHzErrors=TRUE)</a></code> – spurious removals of data due to missing “extended” records. <code>fetchNASIS</code> now uses <code>aqp::horizons&lt;-</code> after building a minimal <code>SoilProfileCollection</code> from NASIS site and horizon tables. This allows <code>aqp</code> integrity methods to trigger where needed–preventing unintentional re-ordering or removals of “valid” horizon data.</li>
+<code>fetchNASIS(..., rmHzErrors=TRUE)</code> – spurious removals of data due to missing “extended” records. <code>fetchNASIS</code> now uses <code>aqp::horizons&lt;-</code> after building a minimal <code>SoilProfileCollection</code> from NASIS site and horizon tables. This allows <code>aqp</code> integrity methods to trigger where needed–preventing unintentional re-ordering or removals of “valid” horizon data.</li>
 </ul>
 </div>
     <div id="soildb-259-2021-01-26" class="section level1">
@@ -271,7 +287,7 @@
 <li>new functions <code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code> and <code><a href="../reference/ISSR800.wcs.html">ISSR800.wcs()</a></code> for hitting web coverage service (WCS) for gSSURGO, gNATSGO, and ISSR-800 grids</li>
 <li>new function <code><a href="../reference/ROSETTA.html">ROSETTA()</a></code> for accessing the new ROSETTA model API (c/o Todd Skaggs, USDA-ARS)</li>
 <li>
-<code><a href="../reference/fetchOSD.html">fetchOSD(..., extended=TRUE)</a></code> gains geographically associated soils, parsed from OSD (thanks AGB)</li>
+<code>fetchOSD(..., extended=TRUE)</code> gains geographically associated soils, parsed from OSD (thanks AGB)</li>
 <li>
 <code>fetchSDA_spatial</code> now can return soil survey area polygons using <code>geom.src = "sapolygon"</code> with <code>x</code> as a vector of area symbols (<code>areasymbol</code>) or legend keys (<code>lkey</code>). For <code>sapolygon</code> results, the <code>method</code> and <code>add.field</code> arguments work the same as for <code>mupolygon</code>, only now both geometries can be returned with fields from the <code>legend</code> table.</li>
 <li>
@@ -284,9 +300,9 @@
 </h1>
 <ul>
 <li>
-<code>fetchNASIS</code> / <code>soilDB:::.rockFragmentSieve</code> now uses fragment RV, <code>soilDB:::.sieve</code> uses <code><a href="https://rdrr.io/r/base/Comparison.html">&lt;</a></code> operator (<a href="https://github.com/ncss-tech/soilDB/issues/1" class="uri">https://github.com/ncss-tech/soilDB/issues/1</a>)</li>
+<code>fetchNASIS</code> / <code>soilDB:::.rockFragmentSieve</code> now uses fragment RV, <code>soilDB:::.sieve</code> uses <code>&lt;</code> operator (<a href="https://github.com/ncss-tech/soilDB/issues/1" class="uri">https://github.com/ncss-tech/soilDB/issues/1</a>)</li>
 <li>
-<code><a href="../reference/fetchKSSL.html">fetchKSSL(..., returnMorphologicData=TRUE)</a></code> now returns redoximorphic features by horizon</li>
+<code>fetchKSSL(..., returnMorphologicData=TRUE)</code> now returns redoximorphic features by horizon</li>
 <li>new function <code>taxaExtent</code> returns 800m gridded taxonomic grids for CONUS</li>
 <li>
 <code>seriesExtent</code> can now return 800m gridded series extents for CONUS</li>
@@ -307,7 +323,7 @@
 <li>major improvements to <code>fetchSDA_spatial</code> to handle queries that exceed JSON Serialization Limit</li>
 <li>add <code>fetchSoilGrids</code> for point data queries to SoilGrids v2 API with SoilProfileCollection output</li>
 <li>
-<code><a href="../reference/fetchKSSL.html">fetchKSSL(..., returnGeochemicalData=TRUE)</a></code> now returns geochemical, optical and XRD/thermal data</li>
+<code>fetchKSSL(..., returnGeochemicalData=TRUE)</code> now returns geochemical, optical and XRD/thermal data</li>
 </ul>
 </div>
     <div id="soildb-256-2020-06-16" class="section level1">
@@ -343,7 +359,7 @@
 <a href="#soildb-251-2020-01-29" class="anchor"></a>soilDB 2.5.1 (2020-01-29)<small> Unreleased </small>
 </h1>
 <ul>
-<li>bug fix for <code><a href="../reference/fetchNASIS.html">fetchNASIS(from='components', fill=TRUE, rmHzErrors=TRUE)</a></code> in context of new <code>::hzDepthTests()</code> and non-unique <code>chiid</code> due to <code>NA</code> values introduced by <code>fill</code>
+<li>bug fix for <code>fetchNASIS(from='components', fill=TRUE, rmHzErrors=TRUE)</code> in context of new <code>::hzDepthTests()</code> and non-unique <code>chiid</code> due to <code>NA</code> values introduced by <code>fill</code>
 </li>
 </ul>
 </div>
@@ -413,7 +429,7 @@
 <code><a href="../reference/fetchHenry.html">fetchHenry()</a></code> and fetchSCAN() now include water year/day (Oct 1 – Sep 30)</li>
 <li>
 <code>HenryTimeLine()</code> convenience function added</li>
-<li>bug fix in <code><a href="../reference/fetchOSD.html">fetchOSD(..., extended=TRUE)</a></code> when no climate data available</li>
+<li>bug fix in <code>fetchOSD(..., extended=TRUE)</code> when no climate data available</li>
 <li>bug fix in <code><a href="../reference/SDA_query.html">SDA_query()</a></code>
 </li>
 </ul>
@@ -461,7 +477,7 @@
 <li>new function for exploring soil series co-occurrence data: <code><a href="../reference/siblings.html">siblings()</a></code>
 </li>
 <li>
-<code><a href="../reference/fetchOSD.html">fetchOSD(..., extended=TRUE)</a></code> gets competing soil series</li>
+<code>fetchOSD(..., extended=TRUE)</code> gets competing soil series</li>
 <li>new tests</li>
 <li>removed old sample gSSURGO chunk and related documentation</li>
 <li>release to CRAN</li>

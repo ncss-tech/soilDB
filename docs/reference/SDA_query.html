@@ -149,94 +149,106 @@
     <p>D.E. Beaudette</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
-   <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/curl/man/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-
-  <span class='co'>## get SSURGO export date for all soil survey areas in California</span>
-  <span class='co'># there is no need to filter STATSGO</span>
-  <span class='co'># because we are filtering on SSURGO area symbols</span>
-  <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA%';"</span>
-  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/raster/man/headtail.html'>head</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-
-
-  <span class='co'>## get SSURGO component data associated with the</span>
-  <span class='co'>## Amador series / major component only</span>
-  <span class='co'># this query must explicitly filter out STATSGO data</span>
-  <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT cokey, compname, comppct_r FROM legend
-    INNER JOIN mapunit mu ON mu.lkey = legend.lkey
-    INNER JOIN component co ON mu.mukey = co.mukey
-    WHERE legend.areasymbol != 'US' AND compname = 'Amador';"</span>
-
-  <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
-
-
-  <span class='co'>## get component-level data for a specific soil survey area (Yolo county, CA)</span>
-  <span class='co'># there is no need to filter STATSGO because the query contains</span>
-  <span class='co'># an implicit selection of SSURGO data by areasymbol</span>
-  <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT
-    component.mukey, cokey, comppct_r, compname, taxclname,
-    taxorder, taxsuborder, taxgrtgroup, taxsubgrp
-    FROM legend
-    INNER JOIN mapunit ON mapunit.lkey = legend.lkey
-    LEFT OUTER JOIN component ON component.mukey = mapunit.mukey
-    WHERE legend.areasymbol = 'CA113' ;"</span>
-
-  <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
-
-  <span class='co'>## get tabular data based on result from spatial query</span>
-  <span class='co'># there is no need to filter STATSGO because</span>
-  <span class='co'># SDA_Get_Mukey_from_intersection_with_WktWgs84() implies SSURGO</span>
-  <span class='co'>#</span>
-  <span class='co'># requires raster and rgeos packages because raster is suggested</span>
-  <span class='co'># and rgeos is additional</span>
-  <span class='kw'>if</span><span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://rspatial.org/raster'>raster</a></span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://r-forge.r-project.org/projects/rgeos/'>rgeos</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='co'># text -&gt; bbox -&gt; WKT</span>
-    <span class='co'># xmin, xmax, ymin, ymax</span>
-    <span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>120.9</span>, <span class='op'>-</span><span class='fl'>120.8</span>, <span class='fl'>37.7</span>, <span class='fl'>37.8</span><span class='op'>)</span>
-    <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/rgeos/man/wkt-functions.html'>writeWKT</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/coercion-methods.html'>as</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/extent.html'>extent</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span>, <span class='st'>'SpatialPolygons'</span><span class='op'>)</span><span class='op'>)</span>
-    <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"SELECT mukey, cokey, compname, comppct_r FROM component
-      WHERE mukey IN (SELECT DISTINCT mukey FROM
-      SDA_Get_Mukey_from_intersection_with_WktWgs84('"</span>, <span class='va'>p</span>,
-       <span class='st'>"')) ORDER BY mukey, cokey, comppct_r DESC"</span><span class='op'>)</span>
-
-    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span>
-    <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-  <span class='op'>}</span>
- <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; 'data.frame':	54 obs. of  3 variables:
-#&gt;  $ cokey    : int  21097183 21588783 21108405 21128710 21139862 21622626 21830881 21156654 21097182 21096537 ...
-#&gt;  $ compname : chr  "Amador" "Amador" "Amador" "Amador" ...
-#&gt;  $ comppct_r: int  25 10 3 3 1 10 85 5 7 45 ...
-#&gt;  - attr(*, "SDA_id")= chr "Table"</div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; 'data.frame':	608 obs. of  9 variables:
-#&gt;  $ mukey      : int  459208 459208 459208 459208 459209 459209 459209 459209 459209 459210 ...
-#&gt;  $ cokey      : int  21463250 21463251 21463252 21463253 21463254 21463255 21463256 21463257 21463258 21463259 ...
-#&gt;  $ comppct_r  : int  85 5 5 5 85 2 5 5 3 5 ...
-#&gt;  $ compname   : chr  "Balcom" "Positas" "Sehorn" "Corning" ...
-#&gt;  $ taxclname  : chr  "Fine-loamy, mixed, thermic Calcixerollic Xerochrepts" NA NA NA ...
-#&gt;  $ taxorder   : chr  "Inceptisols" NA NA NA ...
-#&gt;  $ taxsuborder: chr  "Ochrepts" NA NA NA ...
-#&gt;  $ taxgrtgroup: chr  "Xerochrepts" NA NA NA ...
-#&gt;  $ taxsubgrp  : chr  "Calcixerollic Xerochrepts" NA NA NA ...
-#&gt;  - attr(*, "SDA_id")= chr "Table"</div><div class='output co'>#&gt; <span class='message'>Loading required package: raster</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'raster'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:aqp':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    metadata, metadata&lt;-</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.5-8, (SVN revision 679)</span>
-#&gt; <span class='message'> GEOS runtime version: 3.9.1-CAPI-1.14.2 </span>
-#&gt; <span class='message'> Please note that rgeos will be retired by the end of 2023,</span>
-#&gt; <span class='message'>plan transition to sf functions using GEOS at your earliest convenience.</span>
-#&gt; <span class='message'> GEOS using OverlayNG</span>
-#&gt; <span class='message'> Linking to sp version: 1.4-5 </span>
-#&gt; <span class='message'> Polygon checking: TRUE </span></div><div class='output co'>#&gt; <span class='message'>single result set, returning a data.frame</span></div><div class='output co'>#&gt; 'data.frame':	337 obs. of  4 variables:
-#&gt;  $ mukey    : int  462527 462527 462527 462541 462541 462541 462541 462554 462554 462554 ...
-#&gt;  $ cokey    : int  21830875 21830876 21830877 21831125 21831126 21831127 21831128 21830903 21830904 21830905 ...
-#&gt;  $ compname : chr  "Madera" "Alamo" "San Joaquin" "Chualar" ...
-#&gt;  $ comppct_r: int  10 85 5 85 5 5 5 5 10 85 ...
-#&gt;  - attr(*, "SDA_id")= chr "Table"</div><div class='input'><span class='co'># }</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span></span>
+<span class='r-in'>   <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/curl/man/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'>## get SSURGO export date for all soil survey areas in California</span></span>
+<span class='r-in'>  <span class='co'># there is no need to filter STATSGO</span></span>
+<span class='r-in'>  <span class='co'># because we are filtering on SSURGO area symbols</span></span>
+<span class='r-in'>  <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA%';"</span></span>
+<span class='r-in'>  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/pkg/raster/man/headtail.html'>head</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'>## get SSURGO component data associated with the</span></span>
+<span class='r-in'>  <span class='co'>## Amador series / major component only</span></span>
+<span class='r-in'>  <span class='co'># this query must explicitly filter out STATSGO data</span></span>
+<span class='r-in'>  <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT cokey, compname, comppct_r FROM legend</span>
+<span class='r-in'>    INNER JOIN mapunit mu ON mu.lkey = legend.lkey</span>
+<span class='r-in'>    INNER JOIN component co ON mu.mukey = co.mukey</span>
+<span class='r-in'>    WHERE legend.areasymbol != 'US' AND compname = 'Amador';"</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'>## get component-level data for a specific soil survey area (Yolo county, CA)</span></span>
+<span class='r-in'>  <span class='co'># there is no need to filter STATSGO because the query contains</span></span>
+<span class='r-in'>  <span class='co'># an implicit selection of SSURGO data by areasymbol</span></span>
+<span class='r-in'>  <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='st'>"SELECT</span>
+<span class='r-in'>    component.mukey, cokey, comppct_r, compname, taxclname,</span>
+<span class='r-in'>    taxorder, taxsuborder, taxgrtgroup, taxsubgrp</span>
+<span class='r-in'>    FROM legend</span>
+<span class='r-in'>    INNER JOIN mapunit ON mapunit.lkey = legend.lkey</span>
+<span class='r-in'>    LEFT OUTER JOIN component ON component.mukey = mapunit.mukey</span>
+<span class='r-in'>    WHERE legend.areasymbol = 'CA113' ;"</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'>## get tabular data based on result from spatial query</span></span>
+<span class='r-in'>  <span class='co'># there is no need to filter STATSGO because</span></span>
+<span class='r-in'>  <span class='co'># SDA_Get_Mukey_from_intersection_with_WktWgs84() implies SSURGO</span></span>
+<span class='r-in'>  <span class='co'>#</span></span>
+<span class='r-in'>  <span class='co'># requires raster and rgeos packages because raster is suggested</span></span>
+<span class='r-in'>  <span class='co'># and rgeos is additional</span></span>
+<span class='r-in'>  <span class='kw'>if</span><span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://rspatial.org/raster'>raster</a></span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://r-forge.r-project.org/projects/rgeos/'>rgeos</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='co'># text -&gt; bbox -&gt; WKT</span></span>
+<span class='r-in'>    <span class='co'># xmin, xmax, ymin, ymax</span></span>
+<span class='r-in'>    <span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>120.9</span>, <span class='op'>-</span><span class='fl'>120.8</span>, <span class='fl'>37.7</span>, <span class='fl'>37.8</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/rgeos/man/wkt-functions.html'>writeWKT</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/methods/as.html'>as</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/extent.html'>extent</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span>, <span class='st'>'SpatialPolygons'</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"SELECT mukey, cokey, compname, comppct_r FROM component</span>
+<span class='r-in'>      WHERE mukey IN (SELECT DISTINCT mukey FROM</span>
+<span class='r-in'>      SDA_Get_Mukey_from_intersection_with_WktWgs84('"</span>, <span class='va'>p</span>,</span>
+<span class='r-in'>       <span class='st'>"')) ORDER BY mukey, cokey, comppct_r DESC"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>SDA_query</span><span class='op'>(</span><span class='va'>q</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span></span>
+<span class='r-in'> <span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> single result set, returning a data.frame</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> single result set, returning a data.frame</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 'data.frame':	54 obs. of  3 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ cokey    : int  21097183 21588783 21108405 21128710 21139752 21622626 21830881 21156654 21097182 21096537 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ compname : chr  "Amador" "Amador" "Amador" "Amador" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ comppct_r: int  25 10 3 3 76 10 85 5 7 45 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - attr(*, "SDA_id")= chr "Table"</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> single result set, returning a data.frame</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 'data.frame':	608 obs. of  9 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ mukey      : int  459208 459208 459208 459208 459209 459209 459209 459209 459209 459210 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ cokey      : int  21463250 21463251 21463252 21463253 21463254 21463255 21463256 21463257 21463258 21463259 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ comppct_r  : int  85 5 5 5 85 2 5 5 3 5 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ compname   : chr  "Balcom" "Positas" "Sehorn" "Corning" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ taxclname  : chr  "Fine-loamy, mixed, thermic Calcixerollic Xerochrepts" NA NA NA ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ taxorder   : chr  "Inceptisols" NA NA NA ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ taxsuborder: chr  "Ochrepts" NA NA NA ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ taxgrtgroup: chr  "Xerochrepts" NA NA NA ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ taxsubgrp  : chr  "Calcixerollic Xerochrepts" NA NA NA ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - attr(*, "SDA_id")= chr "Table"</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: raster</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: 'raster'</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from 'package:aqp':</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     metadata, metadata&lt;-</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: rgeos</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> rgeos version: 0.5-8, (SVN revision 679)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>  GEOS runtime version: 3.9.1-CAPI-1.14.2 </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>  Please note that rgeos will be retired by the end of 2023,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> plan transition to sf functions using GEOS at your earliest convenience.</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>  GEOS using OverlayNG</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>  Linking to sp version: 1.4-5 </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>  Polygon checking: TRUE </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> single result set, returning a data.frame</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 'data.frame':	337 obs. of  4 variables:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ mukey    : int  462527 462527 462527 462541 462541 462541 462541 462554 462554 462554 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ cokey    : int  21830875 21830876 21830877 21831125 21831126 21831127 21831128 21830903 21830904 21830905 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ compname : chr  "Madera" "Alamo" "San Joaquin" "Chualar" ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  $ comppct_r: int  10 85 5 85 5 5 5 5 10 85 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  - attr(*, "SDA_id")= chr "Table"</span>
+<span class='r-in'><span class='co'># }</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

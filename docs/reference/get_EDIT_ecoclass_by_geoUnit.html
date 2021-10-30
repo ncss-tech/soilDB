@@ -127,7 +127,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>geoUnit</th>
-      <td><p>A character vector of <code>geoUnit</code> codes e.g. <code><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c("018X","022A")</a></code> for MLRAs 18 and 22A.</p></td>
+      <td><p>A character vector of <code>geoUnit</code> codes e.g. <code>c("018X","022A")</code> for MLRAs 18 and 22A.</p></td>
     </tr>
     <tr>
       <th>catalog</th>
@@ -140,120 +140,121 @@
     <p>A <code>data.frame</code> containing: <code>geoUnit</code>, <code>id</code>, <code>legacyId</code>, <code>name</code>. <code>NULL</code> if no result.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
- <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span>
-   <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/curl/man/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-   <span class='fu'>get_EDIT_ecoclass_by_geoUnit</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"018X"</span>,<span class='st'>"022A"</span><span class='op'>)</span><span class='op'>)</span>
- <span class='op'>}</span>
-</div><div class='output co'>#&gt;    geoUnit          id    legacyId
-#&gt; 1     018X R018XI002CA R018XI002CA
-#&gt; 2     018X R018XI102CA R018XI102CA
-#&gt; 3     018X R018XI103CA R018XI103CA
-#&gt; 4     022A F022AC001CA F022AC001CA
-#&gt; 5     022A F022AC002CA F022AC002CA
-#&gt; 6     022A F022AC003CA F022AC003CA
-#&gt; 7     022A F022AC004CA F022AC004CA
-#&gt; 8     022A F022AC005CA F022AC005CA
-#&gt; 9     022A F022AC006CA F022AC006CA
-#&gt; 10    022A F022AC007CA F022AC007CA
-#&gt; 11    022A F022AC008CA F022AC008CA
-#&gt; 12    022A F022AE007CA F022AE007CA
-#&gt; 13    022A F022AE008CA F022AE008CA
-#&gt; 14    022A F022AE013CA F022AE013CA
-#&gt; 15    022A F022AE025CA F022AE025CA
-#&gt; 16    022A F022AF001CA F022AF001CA
-#&gt; 17    022A F022AF002CA F022AF002CA
-#&gt; 18    022A F022AF003CA F022AF003CA
-#&gt; 19    022A F022AF004CA F022AF004CA
-#&gt; 20    022A F022AF005CA F022AF005CA
-#&gt; 21    022A F022AF006CA F022AF006CA
-#&gt; 22    022A F022AX100CA F022AX100CA
-#&gt; 23    022A F022AX101CA F022AX101CA
-#&gt; 24    022A R022AA200CA R022AA200CA
-#&gt; 25    022A R022AA201CA R022AA201CA
-#&gt; 26    022A R022AC200CA R022AC200CA
-#&gt; 27    022A R022AE202CA R022AE202CA
-#&gt; 28    022A R022AE213CA R022AE213CA
-#&gt; 29    022A R022AE217CA R022AE217CA
-#&gt; 30    022A R022AX101CA R022AX101CA
-#&gt; 31    022A R022AX102CA R022AX102CA
-#&gt; 32    022A R022AX103CA R022AX103CA
-#&gt; 33    022A R022AX104CA R022AX104CA
-#&gt; 34    022A R022AX105CA R022AX105CA
-#&gt; 35    022A R022AX107CA R022AX107CA
-#&gt; 36    022A R022AZ033CA R022AZ033CA
-#&gt; 37    022A R022AZ036CA R022AZ036CA
-#&gt; 38    022A R022AZ037CA R022AZ037CA
-#&gt; 39    022A R022AZ039CA R022AZ039CA
-#&gt; 40    022A R022AZ041CA R022AZ041CA
-#&gt; 41    022A R022AZ042CA R022AZ042CA
-#&gt; 42    022A R022AZ043CA R022AZ043CA
-#&gt; 43    022A R022AZ044CA R022AZ044CA
-#&gt; 44    022A R022AZ045CA R022AZ045CA
-#&gt; 45    022A R022AZ046CA R022AZ046CA
-#&gt; 46    022A R022AZ048CA R022AZ048CA
-#&gt; 47    022A R022AZ049CA R022AZ049CA
-#&gt; 48    022A R022AZ050CA R022AZ050CA
-#&gt; 49    022A R022AZ051CA R022AZ051CA
-#&gt; 50    022A R022AZ052CA R022AZ052CA
-#&gt; 51    022A R022AZ053CA R022AZ053CA
-#&gt; 52    022A R022AZ054CA R022AZ054CA
-#&gt; 53    022A R022AZ055CA R022AZ055CA
-#&gt;                                                                                         name
-#&gt; 1                                                                                   Granitic
-#&gt; 2  Thermic Ultramafic Foothills Extremely High Magnesium Content (Ca:Mg Ratio Less Than 0.5)
-#&gt; 3      Thermic Ultramafic Foothills Moderately High Magnesium Content (Ca:Mg Ratio 0.5 To 2)
-#&gt; 4                                                                Cryic Sandy Mountain Slopes
-#&gt; 5                                                   Cryic Sandy North Apsect Mountain Slopes
-#&gt; 6                                                                  Frigid-Cryic Sandy Slopes
-#&gt; 7                                                  Cryic Very Gravelly Loamy Mountain Slopes
-#&gt; 8                                               Cryic Sheltered, Moist Sandy Mountain Slopes
-#&gt; 9                                                           Moderately Deep Cryic Sandy Till
-#&gt; 10                                                  North-Facing Cryic Loamy Mountain Slopes
-#&gt; 11                                                            Cryic Volcanic Mountain Slopes
-#&gt; 12                                                  Frigid, Sandy, Moraines And Hill Slopes 
-#&gt; 13                                                               Frigid Loamy Moraine Slopes
-#&gt; 14                                                   Frigid, Loamy, Volcanic Mountain Slopes
-#&gt; 15                                                                       Loamy Moist Outwash
-#&gt; 16                                                  Frigid Sandy Outwash Plain Gentle Slopes
-#&gt; 17                                                           Frigid, Sandy, Or Loamy Outwash
-#&gt; 18                                                          Frigid, Loamy, Fragipan, Outwash
-#&gt; 19                                           Frigid, Shallow To Deep, Sandy Mountain Slopes 
-#&gt; 20                                    Frigid, Deep To Very Deep, Sandy-Loamy Mountain Slopes
-#&gt; 21                                                           Loamy Frigid Metamorphic Slopes
-#&gt; 22                                                         Frigid, Sandy, Moist, Outwash Fan
-#&gt; 23                                                          Moist Colluvial Headwater System
-#&gt; 24                                                                              Alpine Scree
-#&gt; 25                                                      Sandy Shallow Alpine Mountain Slopes
-#&gt; 26                                                   High Elevation Volcanic Mountain Slopes
-#&gt; 27                                                                           Granitic Pocket
-#&gt; 28                                                                        Steep Rubbly Slope
-#&gt; 29                                                                    Frigid Volcanic Slopes
-#&gt; 30                                                                 Frigid Anastomosed System
-#&gt; 31                                                                  Frigid E-C Meadow System
-#&gt; 32                                                                     Cryic E Meadow System
-#&gt; 33                                                                              Sphagnum Fen
-#&gt; 34                                                               Steep Mountain Drainageways
-#&gt; 35                                                                   Frigid C Channel System
-#&gt; 36                                                                                WET WILLOW
-#&gt; 37                                                                             MOIST CLAYPAN
-#&gt; 38                                                                                CLAY BASIN
-#&gt; 39                                                              STONY SOUTH SLOPE 16-30 P.Z.
-#&gt; 40                                                                   ERODED SLOPE 14-20 P.Z.
-#&gt; 41                                                                   SHALLOW LOAM 16-20 P.Z.
-#&gt; 42                                                                    SOUTH SLOPE 14-16 P.Z.
-#&gt; 43                                                                   COARSE LOAMY 16-20 P.Z.
-#&gt; 44                                                           GRAVELLY LOAMY SLOPE 20-30 P.Z.
-#&gt; 45                                                                             ASPEN THICKET
-#&gt; 46                                                           GRANITIC SOUTH SLOPE 14-16 P.Z.
-#&gt; 47                                                                        CLAYPAN 14-16 P.Z.
-#&gt; 48                                                                          CHANNERY MORAINE
-#&gt; 49                                                                                 KRUMMHOLZ
-#&gt; 50                                                                   GRAVELLY SLOPE 16+ P.Z.
-#&gt; 51                                                                               SNOW POCKET
-#&gt; 52                                                                      MOIST MOUNTAIN BASIN
-#&gt; 53                                                             MOUNTAIN SHOULDERS 20-30 P.Z.</div><div class='input'><span class='co'># }</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># \donttest{</span></span>
+<span class='r-in'> <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"curl"</span><span class='op'>)</span> <span class='op'>&amp;</span></span>
+<span class='r-in'>   <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/curl/man/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>   <span class='fu'>get_EDIT_ecoclass_by_geoUnit</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"018X"</span>,<span class='st'>"022A"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'> <span class='op'>}</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    geoUnit          id    legacyId</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     018X R018XI002CA R018XI002CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     018X R018XI102CA R018XI102CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3     018X R018XI103CA R018XI103CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     022A F022AC001CA F022AC001CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5     022A F022AC002CA F022AC002CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6     022A F022AC003CA F022AC003CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7     022A F022AC004CA F022AC004CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8     022A F022AC005CA F022AC005CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9     022A F022AC006CA F022AC006CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10    022A F022AC007CA F022AC007CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11    022A F022AC008CA F022AC008CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12    022A F022AE007CA F022AE007CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13    022A F022AE008CA F022AE008CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14    022A F022AE013CA F022AE013CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15    022A F022AE025CA F022AE025CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16    022A F022AF001CA F022AF001CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 17    022A F022AF002CA F022AF002CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 18    022A F022AF003CA F022AF003CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 19    022A F022AF004CA F022AF004CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20    022A F022AF005CA F022AF005CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21    022A F022AF006CA F022AF006CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22    022A F022AX100CA F022AX100CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23    022A F022AX101CA F022AX101CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24    022A R022AA200CA R022AA200CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 25    022A R022AA201CA R022AA201CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 26    022A R022AC200CA R022AC200CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 27    022A R022AE202CA R022AE202CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 28    022A R022AE213CA R022AE213CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 29    022A R022AE217CA R022AE217CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 30    022A R022AX101CA R022AX101CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 31    022A R022AX102CA R022AX102CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 32    022A R022AX103CA R022AX103CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 33    022A R022AX104CA R022AX104CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 34    022A R022AX105CA R022AX105CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 35    022A R022AX107CA R022AX107CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 36    022A R022AZ033CA R022AZ033CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 37    022A R022AZ036CA R022AZ036CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 38    022A R022AZ037CA R022AZ037CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 39    022A R022AZ039CA R022AZ039CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 40    022A R022AZ041CA R022AZ041CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 41    022A R022AZ042CA R022AZ042CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 42    022A R022AZ043CA R022AZ043CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 43    022A R022AZ044CA R022AZ044CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 44    022A R022AZ045CA R022AZ045CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 45    022A R022AZ046CA R022AZ046CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 46    022A R022AZ048CA R022AZ048CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 47    022A R022AZ049CA R022AZ049CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 48    022A R022AZ050CA R022AZ050CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 49    022A R022AZ051CA R022AZ051CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 50    022A R022AZ052CA R022AZ052CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 51    022A R022AZ053CA R022AZ053CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 52    022A R022AZ054CA R022AZ054CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 53    022A R022AZ055CA R022AZ055CA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                                                         name</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1                                                                                   Granitic</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  Thermic Ultramafic Foothills Extremely High Magnesium Content (Ca:Mg Ratio Less Than 0.5)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3      Thermic Ultramafic Foothills Moderately High Magnesium Content (Ca:Mg Ratio 0.5 To 2)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4                                                                Cryic Sandy Mountain Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5                                                   Cryic Sandy North Apsect Mountain Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6                                                                  Frigid-Cryic Sandy Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7                                                  Cryic Very Gravelly Loamy Mountain Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8                                               Cryic Sheltered, Moist Sandy Mountain Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9                                                           Moderately Deep Cryic Sandy Till</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10                                                  North-Facing Cryic Loamy Mountain Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11                                                            Cryic Volcanic Mountain Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12                                                  Frigid, Sandy, Moraines And Hill Slopes </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13                                                               Frigid Loamy Moraine Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14                                                   Frigid, Loamy, Volcanic Mountain Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15                                                                       Loamy Moist Outwash</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16                                                  Frigid Sandy Outwash Plain Gentle Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 17                                                           Frigid, Sandy, Or Loamy Outwash</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 18                                                          Frigid, Loamy, Fragipan, Outwash</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 19                                           Frigid, Shallow To Deep, Sandy Mountain Slopes </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20                                    Frigid, Deep To Very Deep, Sandy-Loamy Mountain Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 21                                                           Loamy Frigid Metamorphic Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 22                                                         Frigid, Sandy, Moist, Outwash Fan</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 23                                                          Moist Colluvial Headwater System</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 24                                                                              Alpine Scree</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 25                                                      Sandy Shallow Alpine Mountain Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 26                                                   High Elevation Volcanic Mountain Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 27                                                                           Granitic Pocket</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 28                                                                        Steep Rubbly Slope</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 29                                                                    Frigid Volcanic Slopes</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 30                                                                 Frigid Anastomosed System</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 31                                                                  Frigid E-C Meadow System</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 32                                                                     Cryic E Meadow System</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 33                                                                              Sphagnum Fen</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 34                                                               Steep Mountain Drainageways</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 35                                                                   Frigid C Channel System</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 36                                                                                WET WILLOW</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 37                                                                             MOIST CLAYPAN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 38                                                                                CLAY BASIN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 39                                                              STONY SOUTH SLOPE 16-30 P.Z.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 40                                                                   ERODED SLOPE 14-20 P.Z.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 41                                                                   SHALLOW LOAM 16-20 P.Z.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 42                                                                    SOUTH SLOPE 14-16 P.Z.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 43                                                                   COARSE LOAMY 16-20 P.Z.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 44                                                           GRAVELLY LOAMY SLOPE 20-30 P.Z.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 45                                                                             ASPEN THICKET</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 46                                                           GRANITIC SOUTH SLOPE 14-16 P.Z.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 47                                                                        CLAYPAN 14-16 P.Z.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 48                                                                          CHANNERY MORAINE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 49                                                                                 KRUMMHOLZ</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 50                                                                   GRAVELLY SLOPE 16+ P.Z.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 51                                                                               SNOW POCKET</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 52                                                                      MOIST MOUNTAIN BASIN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 53                                                             MOUNTAIN SHOULDERS 20-30 P.Z.</span>
+<span class='r-in'><span class='co'># }</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
