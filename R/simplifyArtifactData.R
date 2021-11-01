@@ -101,7 +101,7 @@ simplifyArtifactData <- function(art, id.var, vol.var = "huartvol", nullFragsAre
   
   # convert to wide format
   fm <- as.formula(paste0(id.var, ' ~ class'))
-  art.wide <- reshape2::dcast(art.sums, fm, value.var = 'volume', drop = FALSE)
+  art.wide <- as.data.frame(data.table::dcast(data.table::data.table(art.sums), fm, value.var = 'volume', drop = FALSE))
 
   # must determine the index to the ID column in the wide format
   id.col.idx <- which(names(art.wide) == id.var)

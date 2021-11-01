@@ -203,7 +203,7 @@ simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", nullFragsAreZe
 
   # convert to wide format
   fm <- as.formula(paste0(id.var, ' ~ class'))
-  rf.wide <- reshape2::dcast(rf.sums, fm, value.var = 'volume', drop = FALSE)
+  rf.wide <- as.data.frame(data.table::dcast(data.table::data.table(rf.sums), fm, value.var = 'volume', drop = FALSE))
 
   # must determine the index to the ID column in the wide format
   id.col.idx <- which(names(rf.wide) == id.var)
