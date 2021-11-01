@@ -4,6 +4,7 @@
 ## TODO: better error checking / reporting is needed: coiid, dmu id, component name
 .fetchNASIS_components <- function(SS = TRUE,
                                    rmHzErrors = TRUE,
+                                   nullFragsAreZero = TRUE,
                                    fill = FALSE,
                                    stringsAsFactors = default.stringsAsFactors(),
                                    dsn = dsn) {
@@ -15,7 +16,7 @@
 
   # load data in pieces
   f.comp       <- get_component_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn)
-  f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn)
+  f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.copm       <- get_component_copm_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn)
   f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db(SS = SS, dsn = dsn)
   f.otherveg   <- get_component_otherveg_data_from_NASIS_db(SS = SS, dsn = dsn)

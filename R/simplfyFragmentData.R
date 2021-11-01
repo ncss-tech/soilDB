@@ -44,7 +44,7 @@
 
 ## TODO: this is NASIS-specific for now, generalize this to any data
 # x: uncoded contents of the phfrags table
-.rockFragmentSieve <- function(x) {
+.rockFragmentSieve <- function(x, vol.var = "fragvol") {
 
   # convert to lower case: NASIS metadata usese upper for labels, lower for values
   x$fraghard <- tolower(x$fraghard)
@@ -114,7 +114,7 @@
   #
   # keep track of these for QC in an 'unspecified' column
   # but only when there is a fragment volume specified
-  idx <- which(is.na(res$class) & !is.na(res$fragvol))
+  idx <- which(is.na(res$class) & !is.na(res[[vol.var]]))
   if( length(idx) > 0 ) {
     res$class[idx] <- 'unspecified'
   }
@@ -140,7 +140,7 @@
 #'
 #' The \code{simplifyFragmentData} function can be applied to data sources
 #' other than NASIS by careful use of the \code{id.var} argument. However,
-#' \code{rf} must contain coarse fragment volumes in the column "fragvol",
+#' \code{rf} must contain coarse fragment volumes in the column "fragvol" (or be specified with `vol.var`),
 #' fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", and
 #' fragment cementation class in "fraghard".
 #'
@@ -152,50 +152,49 @@
 #' details
 #' @param id.var character vector with the name of the column containing an ID
 #' that is unique among all horizons in \code{rf}
+#' @param vol.var character vector with the name of the column containing the coarse fragment volume. Default `"fragvol"`.
 #' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0?
 #' (default: TRUE), see details
 #' @author D.E. Beaudette
 #' @keywords manip
 #' @export simplifyFragmentData
-simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
+simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", nullFragsAreZero = TRUE) {
 
-  # nasty hack to trick R CMD check
   fragvol <- NULL
 
   # fragment classes used in this function
   # note that we are adding a catch-all for those strange phfrags records missing fragment size
   frag.classes <- c('fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones', 'unspecified')
 
-  result.columns <- c('phiid', frag.classes, "total_frags_pct", "total_frags_pct_nopf")
+  result.columns <- c(id.var, frag.classes, "total_frags_pct", "total_frags_pct_nopf")
 
   # warn the user and remove the NA records
   
   # if all fragvol are NA then rf is an empty data.frame and we are done
-  if(nrow(rf[which(!is.na(rf$fragvol)),]) == 0) {
-    message('all records are missing rock fragment volume')
+  if (nrow(rf[which(!is.na(rf[[vol.var]])),]) == 0) {
+    message('NOTE: all records are missing rock fragment volume')
     dat <- as.data.frame(t(rep(NA, length(result.columns))))
-    for(i in 1:length(rf$phiid)) {
+    for(i in 1:length(rf[[id.var]])) {
       dat[i,] <- dat[1,]
       dat[i,which(result.columns == id.var)] <- rf[[id.var]][i]
     }
     colnames(dat) <- result.columns
     return(dat)
-  } else if(any(is.na(rf$fragvol))) {
-    rf <- rf[which(!is.na(rf$fragvol)), ]
+  } else if (any(is.na(rf[[vol.var]]))) {
+    rf <- rf[which(!is.na(rf[[vol.var]])), ]
     message('NOTE: some records are missing rock fragment volume')
   }
 
   # extract classes
   # note: these will put any fragments without fragsize into an 'unspecified' class
-  rf.classes <- .rockFragmentSieve(rf)
+  rf.classes <- .rockFragmentSieve(rf, vol.var = vol.var)
 
   ## NOTE: this is performed on the data, as-is: not over all possible classes as enforced by factor levels
   # sum volume by id and class
   # class cannot contain NA
-  rf.sums <- aggregate(rf.classes$fragvol, by=list(rf.classes[[id.var]], rf.classes[['class']]), FUN=sum, na.rm=TRUE)
+  rf.sums <- aggregate(rf.classes[[vol.var]], by=list(rf.classes[[id.var]], rf.classes[['class']]), FUN=sum, na.rm=TRUE)
   # fix defualt names from aggregate()
   names(rf.sums) <- c(id.var, 'class', 'volume')
-
 
   ## NOTE: we set factor levels here because the reshaping (long->wide) needs to account for all possible classes
   ## NOTE: this must include all classes that related functions return
@@ -214,7 +213,7 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
     rf.wide <- as.data.frame(
       cbind(rf.wide[, id.col.idx, drop=FALSE],
             lapply(rf.wide[, -id.col.idx], function(i) ifelse(is.na(i), 0, i))
-      ), stringsAsFactors=FALSE)
+      ), stringsAsFactors = FALSE)
   }
 
   # final sanity check: are there any fractions or the total >= 100%
@@ -222,7 +221,7 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
   #       1 row in rf.wide --> result is a vector
   #       >1 row in rf.wide --> result is a matrix
   # solution: keep as a list
-  gt.100 <- lapply(rf.wide[, -id.col.idx, drop=FALSE], FUN=function(i) i >= 100)
+  gt.100 <- lapply(rf.wide[, -id.col.idx, drop = FALSE], FUN = function(i) i >= 100)
 
   # check each size fraction and report id.var if there are any
   gt.100.matches <- sapply(gt.100, any, na.rm=TRUE)
@@ -252,7 +251,7 @@ simplifyFragmentData <- function(rf, id.var, nullFragsAreZero=TRUE) {
     # calculate total fragments (including para)
     # excluding ID and last columns
     idx <- c(id.col.idx, length(names(rf.wide)))
-    rf.wide$total_frags_pct <- rowSums(rf.wide[, -idx], na.rm=TRUE)
+    rf.wide$total_frags_pct <- rowSums(rf.wide[, -idx], na.rm = TRUE)
   }
 
   ## TODO: 0 is returned when all NA and nullFragsAreZero=FALSE

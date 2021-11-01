@@ -2,7 +2,7 @@
 
 # code for dealing with human artifacts
 
-.artifactSieve <- function(x) {
+.artifactSieve <- function(x, vol.var = "huartvol") {
   # convert to lower case: NASIS metadata usese upper for labels, lower for values
   x$huartco <- tolower(x$huartco)
   x$huartshp <- tolower(x$huartshp)
@@ -48,7 +48,7 @@
   #
   # keep track of these for QC in an 'unspecified' column
   # but only when there is a fragment volume specified
-  idx <- which(is.na(res$class) & !is.na(res$huartvol))
+  idx <- which(is.na(res$class) & !is.na(res[[vol.var]]))
   if( length(idx) > 0 ) {
     res$class[idx] <- 'art_unspecified'
   }
@@ -57,21 +57,20 @@
   return(res)
 }
 
-simplifyArtifactData <- function(art, id.var, nullFragsAreZero = nullFragsAreZero) {
+simplifyArtifactData <- function(art, id.var, vol.var = "huartvol", nullFragsAreZero = nullFragsAreZero) {
 
-  # nasty hack to trick R CMD check
   huartvol <- NULL
 
   # artifact size classes, using fragment breaks, are used in this function
   # note that we are adding a catch-all for those strange phfrags records missing fragment size
   art.classes <- c('art_fgr', 'art_gr', 'art_cb', 'art_st', 'art_by', 'art_ch', 'art_fl', 'art_unspecified')
 
-  result.columns <- c(id.var, art.classes, "total_art_pct",  "huartvol_cohesive","huartvol_penetrable", "huartvol_innocuous", "huartvol_persistent")
+  result.columns <- c(id.var, art.classes, "total_art_pct", "huartvol_cohesive", "huartvol_penetrable", "huartvol_innocuous", "huartvol_persistent")
 
   # warn the user and remove the NA records
   
   # if all fragvol are NA then rf is an empty data.frame and we are done
-  if (nrow(art[which(!is.na(art$huartvol)),]) == 0) {
+  if (nrow(art[which(!is.na(art[[vol.var]])),]) == 0) {
     message('NOTE: all records are missing artifact volume')
     dat <- as.data.frame(t(rep(NA, length(result.columns))))
     for(i in 1:length(art[[id.var]])) {
@@ -80,26 +79,26 @@ simplifyArtifactData <- function(art, id.var, nullFragsAreZero = nullFragsAreZer
     }
     colnames(dat) <- result.columns
     return(dat)
-  } else if (any(is.na(art$huartvol))) {
-    art <- art[which(!is.na(art$huartvol)), ]
+  } else if (any(is.na(art[[vol.var]]))) {
+    art <- art[which(!is.na(art[[vol.var]])), ]
     message('NOTE: some records are missing artifact volume')
   }
 
   # extract classes
   # note: these will put any fragments without fragsize into an 'unspecified' class
-  artifact.classes <- .artifactSieve(art)
+  artifact.classes <- .artifactSieve(art, vol.var = vol.var)
 
   # sum volume by id and class
   # class cannot contain NA
-  art.sums <- aggregate(artifact.classes$huartvol, by=list(artifact.classes[[id.var]], artifact.classes[['class']]), FUN=sum, na.rm=TRUE)
+  art.sums <- aggregate(artifact.classes[[vol.var]], by=list(artifact.classes[[id.var]], artifact.classes[['class']]), FUN=sum, na.rm=TRUE)
   # fix defualt names from aggregate()
   names(art.sums) <- c(id.var, 'class', 'volume')
 
   ## NOTE: we set factor levels here because the reshaping (long->wide) needs to account for all possible classes
   ## NOTE: this must include all classes that related functions return
   # set levels of classes
-  art.sums$class <- factor(art.sums$class, levels=art.classes)
-
+  art.sums$class <- factor(art.sums$class, levels = art.classes)
+  
   # convert to wide format
   fm <- as.formula(paste0(id.var, ' ~ class'))
   art.wide <- reshape2::dcast(art.sums, fm, value.var = 'volume', drop = FALSE)
@@ -157,16 +156,16 @@ simplifyArtifactData <- function(art, id.var, nullFragsAreZero = nullFragsAreZer
   # now, do some summaries of cohesion, shape, roundess, penetrability, safety and persistence
 
   art.wide$huartvol_cohesive <- as.numeric(lapply(split(art, art[[id.var]]), function(art.sub) {
-    sum(art.sub$huartvol[art.sub$huartco == "cohesive"], na.rm = TRUE)
+    sum(art.sub[[vol.var]][art.sub$huartco == "cohesive"], na.rm = TRUE)
   }))
   art.wide$huartvol_penetrable <- as.numeric(lapply(split(art, art[[id.var]]), function(art.sub) {
-    sum(art.sub$huartvol[art.sub$huartpen == "penetrable"], na.rm = TRUE)
+    sum(art.sub[[vol.var]][art.sub$huartpen == "penetrable"], na.rm = TRUE)
   }))
   art.wide$huartvol_noxious <- as.numeric(lapply(split(art, art[[id.var]]), function(art.sub) {
-    sum(art.sub$huartvol[art.sub$huartsafety == "noxious artifacts"], na.rm = TRUE)
+    sum(art.sub[[vol.var]][art.sub$huartsafety == "noxious artifacts"], na.rm = TRUE)
   }))
   art.wide$huartvol_persistent <- as.numeric(lapply(split(art, art[[id.var]]), function(art.sub) {
-    sum(art.sub$huartvol[art.sub$huartper == "persistent"], na.rm = TRUE)
+    sum(art.sub[[vol.var]][art.sub$huartper == "persistent"], na.rm = TRUE)
   }))
 
   # TODO: somehow summarize shape and roundness? we don't do that for regular frags

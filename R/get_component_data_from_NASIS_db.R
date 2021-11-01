@@ -815,7 +815,8 @@ get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
 get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
                                                      fill = FALSE,
-                                                     dsn = NULL) {
+                                                     dsn = NULL,
+                                                     nullFragsAreZero = TRUE) {
 
   q <- "SELECT coiid, chiid, hzname, hzdept_r, hzdepb_r, texture, fragvoltot_l, fragvoltot_r, fragvoltot_h, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, structgrpname, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_l, lep_r, lep_h, ll_l, ll_r, ll_h, pi_l, pi_r, pi_h, sieveno4_l, sieveno4_r, sieveno4_h, sieveno10_l, sieveno10_r, sieveno10_h, sieveno40_l, sieveno40_r, sieveno40_h, sieveno200_l, sieveno200_r, sieveno200_h, sar_l, sar_r, sar_h, ec_l, ec_r, ec_h, cec7_l, cec7_r, cec7_h, sumbases_l, sumbases_r, sumbases_h, ecec_l, ecec_r, ecec_h, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, ph01mcacl2_l, ph01mcacl2_r, ph01mcacl2_h, caco3_l, caco3_r, caco3_h, kffact, kwfact, aashind_l, aashind_r, aashind_h
 
@@ -830,8 +831,8 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC, hzdept_r ASC;"
   
-  q2 <- "SELECT chiidref, fragvol_r AS fragvol, fragsize_r, fragshp, fraghard FROM chfrags_View_1"
-  q3 <- "SELECT chiidref, huartvol_r AS huartvol, huartsize_r, huartco, huartshp, huartrnd, huartpen, huartsafety, huartper FROM chhuarts_View_1"
+  q2 <- "SELECT chiidref, fragvol_r,  fragsize_r, fragshp, fraghard FROM chfrags_View_1"
+  q3 <- "SELECT chiidref, huartvol_r, huartsize_r, huartco, huartshp, huartrnd, huartpen, huartsafety, huartper FROM chhuarts_View_1"
   
   channel <- dbConnectNASIS(dsn)
 
@@ -856,8 +857,47 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   }
   
   # "sieving" chfrags, chuarts tables for parity with fetchNASIS("pedons") @horizons slot columns 
-  chf <- simplifyFragmentData(dbQueryNASIS(channel, q2, close = FALSE), id.var = 'chiidref')
-  cha <- simplifyArtifactData(dbQueryNASIS(channel, q3), id.var = 'chiidref')
+  chf <- simplifyFragmentData(
+    dbQueryNASIS(channel, q2, close = FALSE),
+    id.var = "chiidref",
+    vol.var = "fragvol_r",
+    nullFragsAreZero = nullFragsAreZero
+  )
+  if (sum(complete.cases(chf)) == 0) {
+    chf <- chf[1:nrow(d),]
+    chf$chiidref <- d$chiid
+  } else {
+    ldx <- !d$chiid %in% chf$chiidref
+    chf_null <- chf[0,][1:sum(ldx),]
+    chf_null$chiidref <- d$chiid[ldx]
+    chf <- rbind(chf, chf_null)
+  }
+  # handle NA for totals
+  if (nullFragsAreZero) {
+    chf[is.na(chf)] <- 0
+  } 
+  
+  cha <- simplifyArtifactData(
+    dbQueryNASIS(channel, q3),
+    id.var = "chiidref",
+    vol.var = "huartvol_r",
+    nullFragsAreZero = nullFragsAreZero
+  )
+  # handle NULL result
+  if (sum(complete.cases(cha)) == 0) {
+    cha <- cha[1:nrow(d),]
+    cha$chiidref <- d$chiid
+  } else {
+    ldx <- !d$chiid %in% cha$chiidref
+    cha_null <- cha[0,][1:sum(ldx),]
+    cha_null$chiidref <- d$chiid[ldx]
+    cha <- rbind(cha, cha_null)
+  }
+  # handle NA for totals
+  if (nullFragsAreZero) {
+    cha[is.na(cha)] <- 0
+  }
+  
   d2 <- merge(d, chf, by.x = "chiid", by.y = "chiidref", all.x = TRUE, sort = FALSE)
   d3 <- merge(d2, cha, by.x = "chiid", by.y = "chiidref", all.x = TRUE, sort = FALSE)
   

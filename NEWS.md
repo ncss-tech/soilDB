@@ -1,3 +1,7 @@
+# soilDB 2.6.8 (2021-11-01)
+ * `fetchNASIS()` upgrades: use data.table and base internally for data aggregation
+ * `fetchNASIS("components")` now "sieves" rock fragments and human artifacts using same routines as for pedons; respects `nullFragsAreZero` argument
+ 
 # soilDB 2.6.7 (2021-10-27)
  * Removed several packages from Suggests: {gridExtra}, {ggplot2}, {viridisLite}, {mapview}, {rasterVis}
  * `get_OSD()`: Handle "NA" and type conversion for JSON results an convert spaces to underscores for file names as needed
