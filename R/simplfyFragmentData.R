@@ -133,16 +133,14 @@
 #'
 #' Simplify multiple coarse fraction (>2mm) records by horizon.
 #'
-#' This function is mainly intended for the processing of NASIS pedon/horizon
+#' This function is mainly intended for processing of NASIS pedon/component
 #' data which contains multiple coarse fragment descriptions per horizon.
-#' \code{simplifyFragmentData} will "sieve out" coarse fragments into the USDA
-#' classes, split into hard and para- fragments.
+#' `simplifyFragmentData` will "sieve out" coarse fragments into the USDA
+#' classes, split into hard and para- fragments. Likweise, `simplifyArtifactData` will sieve out human artifacts, and split total volume into "cohesive", "penetrable", "innocuous", and "persistent".
 #'
-#' The \code{simplifyFragmentData} function can be applied to data sources
-#' other than NASIS by careful use of the \code{id.var} argument. However,
-#' \code{rf} must contain coarse fragment volumes in the column "fragvol" (or be specified with `vol.var`),
-#' fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", and
-#' fragment cementation class in "fraghard".
+#' These functions can be applied to data sources other than NASIS by careful use of the `id.var` and `vol.var` arguments. 
+#'  - \code{rf} must contain rock or other fragment volumes in the column "fragvol" (or be specified with `vol.var`), fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", fragment cementation class in "fraghard" and flat/non-flat in "fragshp".
+#'  - \code{art} must contain artifact volumes in the column "huartvol" (or be specified with `vol.var`), fragment size (mm) in columns "huartsize_l", "huartsize_r", "huartsize_h", artifact cementation class in "huarthard" and flat/non-flat in "huartshp".
 #'
 #' Examples:
 #'  - [KSSL data](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
@@ -152,10 +150,9 @@
 #' details
 #' @param id.var character vector with the name of the column containing an ID
 #' that is unique among all horizons in \code{rf}
-#' @param vol.var character vector with the name of the column containing the coarse fragment volume. Default `"fragvol"`.
-#' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0?
-#' (default: TRUE), see details
-#' @author D.E. Beaudette
+#' @param vol.var character vector with the name of the column containing the coarse fragment volume. Default `"fragvol"` or `"huartvol`".
+#' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0? (default: `TRUE`), see details
+#' @author D.E. Beaudette, A.G Brown
 #' @keywords manip
 #' @export simplifyFragmentData
 simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", nullFragsAreZero = TRUE) {

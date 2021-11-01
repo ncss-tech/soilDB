@@ -57,6 +57,9 @@
   return(res)
 }
 
+#' @param art a \code{data.frame} object, typically returned from NASIS, see details
+#' @rdname simplifyFragmentData
+#' @export simplifyArtifactData
 simplifyArtifactData <- function(art, id.var, vol.var = "huartvol", nullFragsAreZero = nullFragsAreZero) {
 
   huartvol <- NULL
