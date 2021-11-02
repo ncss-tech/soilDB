@@ -1,10 +1,3 @@
-## TODO: better checking of inputs, as the entire DB could be downloaded by accident!!
-
-## TODO:
-
-# replace ddply -> split/lapply/rbind | data.table
-# replace join -> base::merge(..., sort = FALSE)
-
 # # TODO: finish this
 # .summarizeSoilVWC <- function(soilVWC.data) {
 #   
@@ -26,8 +19,6 @@
 #   return(d)
 # }
 
-
-
 # summarize daily values by Julian day
 summarizeSoilTemperature <- function(soiltemp.data) {
   
@@ -38,10 +29,7 @@ summarizeSoilTemperature <- function(soiltemp.data) {
   season <- NULL
   
   # determine number of complete years of data
-  # cr.1.old <- ddply(soiltemp.data, c('sid', 'year'), plyr::summarize, non.missing=length(na.omit(sensor_value)))
-  # cr.2.old <- ddply(cr.1.old, 'sid', plyr::summarize, complete.yrs=length(which(non.missing >= 365)))
-  
-  ## TODO: remove copy once this is tested
+
   # proceed with data.table aggregation / joins
   dd <- as.data.table(soiltemp.data)
   
@@ -50,19 +38,6 @@ summarizeSoilTemperature <- function(soiltemp.data) {
   # complete yrs of real data / site
   cr.2 <- cr.1[, sum(V1 >= 365), by = 'sid']
   names(cr.2)[2] <- 'complete.yrs'
-  
-  
-  
-  # # determine functional years of data
-  # # number of complete years after accounting for overlap
-  # fy <- ddply(soiltemp.data, 'sid', .fun=function(i) {
-  #   # convert current sensor's data to wide format, first row is the year
-  #   w <- dcast(i, year ~ doy, value.var = 'sensor_value')
-  #   # on DOY 1-365, count total number of non-NA records over all years
-  #   non.na.doy <- apply(w[, 2:366], 2, function(j) length(na.omit(j)))
-  #   # the minimum value is the number of functional years
-  #   return(data.frame(functional.yrs=min(non.na.doy)))
-  # })
   
   # determine functional years of data
   # number of complete years after accounting for overlap
@@ -80,16 +55,6 @@ summarizeSoilTemperature <- function(soiltemp.data) {
   
   fy <- dd[, .functionalYrs(.SD), by = 'sid']
   
-  
-  # # compute summaries by DOY:
-  # # n: number of non-NA records
-  # # daily.mean: mean of non-NA values
-  # d <- ddply(soiltemp.data, c('sid', 'doy'), .fun=plyr::summarize, 
-  #            n.total=length(sensor_value),
-  #            n=length(na.omit(sensor_value)), 
-  #            daily.mean=mean(sensor_value, na.rm=TRUE))
-  # 
-  
   # compute summaries by DOY:
   # n: number of non-NA records
   # daily.mean: mean of non-NA values
@@ -104,17 +69,9 @@ summarizeSoilTemperature <- function(soiltemp.data) {
   
   d <- dd[, .doySummary(.SD), by = c('sid', 'doy')]
   
-  
   # convert DOY -> month
   d$month <- format(as.Date(as.character(d$doy), format="%j"), "%b")
   d$season <- month2season(d$month)
-  
-  # # compute unbiased MAST, number of obs, complete records per average no. days in year
-  # d.mast <- ddply(d, 'sid', .fun=plyr::summarize, 
-  #                 gap.index=round(1 - (sum(n) / sum(n.total)), 2),
-  #                 days.of.data=sum(n), 
-  #                 MAST=round(mean(daily.mean, na.rm=TRUE), 2)
-  # )
   
   # compute unbiased MAST, number of obs, complete records per average no. days in year
   .unbiasedMAST <- function(i) {
@@ -128,13 +85,6 @@ summarizeSoilTemperature <- function(soiltemp.data) {
   
   d.mast <- d[, .unbiasedMAST(.SD), by = 'sid']
   
-  
-  # # compute unbiased seasonal averages
-  # d.seasonal.long <- ddply(d[which(d$season %in% c('Winter', 'Summer')), ], c('season', 'sid'), 
-  #                          .fun=plyr::summarize, seasonal.mean.temp=round(mean(daily.mean, na.rm=TRUE), 2))
-  # 
-  # 
-  
   # compute unbiased seasonal averages
   .seasonalMeanTemp <- function(i) {
     res <- data.frame(
@@ -144,7 +94,6 @@ summarizeSoilTemperature <- function(soiltemp.data) {
   }
   
   d.seasonal.long <- d[season %in% c('Winter', 'Summer'), .seasonalMeanTemp(.SD), by = c('season', 'sid')]
-  
   
   # convert seasonal avgs to wide format
   d.season <- data.table::dcast(d.seasonal.long, sid ~ season, value.var = 'seasonal.mean.temp')
@@ -179,12 +128,6 @@ month2season <- function(x) {
   return(season)
 }
 
-
-
-
-## TODO: stuck with data.table interface
-##       awkward syntax because we are referencing grouping variables in a data.table aggregation
-
 ## experimental function for padding daily time-series with NA in the presence of missing days
 ## must be run on subsets defined by year
 .fill_missing_days <- function(x) {
@@ -197,7 +140,6 @@ month2season <- function(x) {
   if(length(missing.days) < 1) {
     return(x)
   }
-    
   
   # get constants
   this.sid <- x$sid[1]
@@ -205,6 +147,9 @@ month2season <- function(x) {
   
   # make fake date-times for missing data
   fake.datetimes <- paste0(this.year, ' ', missing.days, ' 00:00')
+  
+  # TODO: this will result in timezone specific to locale; 
+  #  especially an issue when granularity is less than daily or for large extents
   fake.datetimes <- as.POSIXct(fake.datetimes, format="%Y %j %H:%M")
   
   # generate DF with missing information
@@ -216,9 +161,17 @@ month2season <- function(x) {
     month = format(fake.datetimes, "%b")
   )
   
-  ## TODO: base::merge() is not a direct replacement, because it doesn't remove duplicate column names
-  # splice in missing data via full join
-  y <- join(x, fake.data, by = 'doy', type = 'full')
+  fill.cols <- which(!colnames(x) %in% colnames(fake.data))
+  if (length(fill.cols) > 0) {
+    na.data <- as.data.frame(x)[, fill.cols, drop = FALSE][0,, drop = FALSE][1:nrow(fake.data),, drop = FALSE]
+    fake.data <- cbind(fake.data, na.data)
+  }
+  
+  # make datatypes for time match
+  x$date_time <- as.POSIXct(x$date_time, format="%Y-%m-%d %H:%M:%S")
+  
+  # splice in missing data
+  y <- rbind(x, fake.data)
   
   # re-order by DOY and return
   return(y[order(y$doy), ])
@@ -226,6 +179,9 @@ month2season <- function(x) {
 
 
 .formatDates <- function(sensor.data, gran, pad.missing.days) {
+  
+  .SD <- NULL
+  
   # must have data, otherwise do nothing
   # when sensor data are missing, sensor.data is a list of length 0
   if(length(sensor.data) > 0) {
@@ -238,24 +194,13 @@ month2season <- function(x) {
     # re-level months
     sensor.data$month <- factor(sensor.data$month, levels=c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
     
-    ## TODO: convert to base or data.table
     # optionally pad daily data with NA
     if(gran == 'day' & pad.missing.days) {
-      
-      ## old, reliable, slow
-      # sensor.data.old <- ddply(sensor.data, c('sid', 'year'), .fill_missing_days)
-      
-      ## can't make this work due to self-referncing / modification of .SD
-      # sensor.data <- as.data.table(sensor.data)
-      # sensor.data <- sensor.data[, .fill_missing_days(.SD, this.year = .BY$year), by = c('sid', 'year')]
-      # sensor.data <- as.data.frame(sensor.data)
-      
-      ## fall-back
-      sdl <- lapply(
-        split(sensor.data, list(sensor.data$sid, sensor.data$year)), 
-        FUN = .fill_missing_days
-      )
-      sensor.data <- do.call('rbind', sdl)
+      sensor.data <- as.data.table(sensor.data)
+      cnm <- colnames(sensor.data)
+      sensor.data <- sensor.data[, .fill_missing_days(.SD), by = c('sid', 'year'), .SDcols = cnm]
+      sensor.data <- sensor.data[, .SD, .SDcols = cnm]
+      sensor.data <- as.data.frame(sensor.data)
     }
     
     # add-in seasons
@@ -347,7 +292,6 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
       stop('you must provide some filtering criteria', call.=FALSE)
   }
   
-  
   # init empty filter
   f <- vector()
   
@@ -393,28 +337,18 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   
   ## TODO: check NA handling
   # parse JSON into list of DF
-  try(s <- jsonlite::fromJSON(gzfile(tf.json)))
+  try({
+    s <- jsonlite::fromJSON(gzfile(tf.json))
+  })
   
   # report query that returns no data and stop
   if( length(s$sensors) == 0 ) {
     stop('query returned no data', call.=FALSE)
   }
   
-  
   # post-process data, if there are some
   if( length(s$soiltemp) > 0 | length(s$soilVWC) > 0 | length(s$airtemp) > 0 | length(s$waterlevel) > 0 ) {
     
-    # por <- ddply(na.omit(rbind(s$soiltemp, s$soilVWC, s$airtemp, s$waterlevel)), c('sid'), function(i) {
-    #   start.date <- min(i$date_time, na.rm=TRUE)
-    #   end.date <- max(i$date_time, na.rm=TRUE)
-    #   return(data.frame(start.date, end.date))
-    # })
-    # 
-    # # compute days since last visit
-    # por$dslv <- round(as.numeric(difftime(Sys.Date(), por$end.date, units='days')))
-    # 
-    
-    ## TODO: stick to data.table if possible
     .SD <- NULL
     
     # period of record over all sensors
@@ -450,11 +384,11 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
       soiltemp.summary <- summarizeSoilTemperature(s$soiltemp)
       
       # combine summaries and join to sensors data
-      por <- join(por, soiltemp.summary, by='sid')
+      por <- merge(por, soiltemp.summary, by = 'sid', all.x = TRUE, sort = FALSE)
     }
     
-    # splice-into sensors data
-    s$sensors <- join(s$sensors, por, by='sid')
+    # splice-into sensors data by = 'sid', all.x = TRUE, sort = FALSE)
+    s$sensors <- merge(s$sensors, por, by = 'sid', all.x = TRUE, sort = FALSE)
   }
   
   # copy over sensor name + depth to all sensor tables--if present
