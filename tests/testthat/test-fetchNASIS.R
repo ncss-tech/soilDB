@@ -29,8 +29,8 @@ check_local_NASIS_components_available <- function(dsn = NULL) {
 
   # attempt to load components
   # these functions will return empty data.frame objects when there are no data in the SS
-  res1 <- try(suppressWarnings(get_component_data_from_NASIS_db(dsn = dsn)), silent = TRUE)
-  res2 <- try(suppressWarnings(get_component_horizon_data_from_NASIS_db(dsn = dsn)), silent = TRUE)
+  res1 <- try(suppressWarnings(get_component_data_from_NASIS_db(dsn = dsn)), silent = FALSE)
+  res2 <- try(suppressWarnings(get_component_horizon_data_from_NASIS_db(dsn = dsn)), silent = FALSE)
 
   # res <- try(suppressWarnings(fetchNASIS(from='pedons')), silent = TRUE)
   # note: this was too broad of a test -- any error in fetchNASIS will result in skipping the test!

@@ -175,16 +175,19 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NUL
 #'
 #' @export get_component_data_from_NASIS_db
 get_component_data_from_NASIS_db <- function(SS = TRUE,
+                                             nullFragsAreZero = TRUE,
                                              stringsAsFactors = default.stringsAsFactors(),
                                              dsn = NULL) {
   
-  q <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, reannualprecip_r, ffd_l, ffd_r, ffd_h, tfact, wei, weg, nirrcapcl, nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, frostact, hydricrating, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
+  q1 <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, reannualprecip_r, ffd_l, ffd_r, ffd_h, tfact, wei, weg, nirrcapcl, nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, frostact, hydricrating, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
 
   FROM
   datamapunit_View_1 AS dmu
   INNER JOIN component_View_1 AS co ON co.dmuiidref = dmu.dmuiid
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC;"
+  
+  q2 <- "SELECT * FROM cosurffrags_View_1"
 
   channel <- dbConnectNASIS(dsn)
 
@@ -193,11 +196,12 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
 
   # toggle selected set vs. local DB
   if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+    q1 <- gsub(pattern = '_View_1', replacement = '', x = q1, fixed = TRUE)
+    q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
   }
 
   # exec query
-  d <- dbQueryNASIS(channel, q)
+  d <- dbQueryNASIS(channel, q1, close = FALSE)
 
   # test for duplicate coiids
   idx <- which(table(d$coiid) > 1)
@@ -211,9 +215,34 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
   if (nrow(d) > 0) {
     d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
   }
-
+  
+  # surface fragments
+  chs <- simplifyFragmentData(
+    uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
+    id.var = "coiidref",
+    vol.var = "sfragcov_r",
+    prefix = "sfrag")
+  
+  if (sum(complete.cases(chs)) == 0) {
+    chs <- chs[1:nrow(d),]
+    chs$coiidref <- d$coiid
+  } else {
+    ldx <- !d$coiid %in% chs$coiidref
+    chs_null <- chs[0,][1:sum(ldx),]
+    chs_null$coiidref <- d$coiid[ldx]
+    chs <- rbind(chs, chs_null)
+  }
+  
+  # handle NA for totals
+  if (nullFragsAreZero) {
+    chs[is.na(chs)] <- 0
+  } 
+  colnames(chs) <- paste0("surface_", colnames(chs))
+  colnames(chs)[1] <- "coiidref"
+  d2 <- merge(d, chs, by.x = "coiid", by.y = "coiidref", all.x = TRUE, sort = FALSE)
+  
   # done
-  return(d)
+  return(d2)
 }
 
 
@@ -831,8 +860,8 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC, hzdept_r ASC;"
   
-  q2 <- "SELECT chiidref, fragvol_r,  fragsize_r, fragshp, fraghard FROM chfrags_View_1"
-  q3 <- "SELECT chiidref, huartvol_r, huartsize_r, huartco, huartshp, huartrnd, huartpen, huartsafety, huartper FROM chhuarts_View_1"
+  q2 <- "SELECT * FROM chfrags_View_1"
+  q3 <- "SELECT * FROM chhuarts_View_1"
   
   channel <- dbConnectNASIS(dsn)
 
@@ -857,8 +886,10 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   }
   
   # "sieving" chfrags, chuarts tables for parity with fetchNASIS("pedons") @horizons slot columns 
+  
+  # horizon fragments
   chf <- simplifyFragmentData(
-    dbQueryNASIS(channel, q2, close = FALSE),
+    uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
     id.var = "chiidref",
     vol.var = "fragvol_r",
     nullFragsAreZero = nullFragsAreZero
@@ -876,9 +907,10 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   if (nullFragsAreZero) {
     chf[is.na(chf)] <- 0
   } 
-  
+
+  # human artifacts  
   cha <- simplifyArtifactData(
-    dbQueryNASIS(channel, q3),
+    uncode(dbQueryNASIS(channel, q3, close = FALSE), dsn = dsn),
     id.var = "chiidref",
     vol.var = "huartvol_r",
     nullFragsAreZero = nullFragsAreZero
@@ -898,10 +930,10 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
     cha[is.na(cha)] <- 0
   }
   
+  
   d2 <- merge(d, chf, by.x = "chiid", by.y = "chiidref", all.x = TRUE, sort = FALSE)
   d3 <- merge(d2, cha, by.x = "chiid", by.y = "chiidref", all.x = TRUE, sort = FALSE)
   
-  # done
   return(d3)
 }
 

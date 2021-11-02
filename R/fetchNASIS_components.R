@@ -7,7 +7,7 @@
                                    nullFragsAreZero = TRUE,
                                    fill = FALSE,
                                    stringsAsFactors = default.stringsAsFactors(),
-                                   dsn = dsn) {
+                                   dsn = NULL) {
 
 
   # ensure that any old hz errors are cleared
@@ -15,7 +15,7 @@
     assign('component.hz.problems', value=character(0), envir=soilDB.env)
 
   # load data in pieces
-  f.comp       <- get_component_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  f.comp       <- get_component_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.copm       <- get_component_copm_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn)
   f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db(SS = SS, dsn = dsn)

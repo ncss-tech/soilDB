@@ -168,6 +168,9 @@
   if (is.null(u.peiid))
     return(NULL)
   
+  if (length(u.peiid) > 1)
+    stop('data are from multiple pedon records')
+  
   # sanity check: this function can only be applied to data from a single pedon
   if (length(u.peiid) > 1)
     stop('data are from multiple pedon records')
@@ -353,6 +356,9 @@
   # get the current 
   u.coiid <- unique(i.gm$coiid)
   
+  if(length(u.coiid) == 0)
+    return(data.frame(coiid=NA_integer_, landform_string=NA, stringsAsFactors=FALSE)[0,])
+  
   # sanity check: this function can only be applied to data from a single component
   if(length(u.coiid) > 1)
     stop('data are from multiple component records')
@@ -464,8 +470,14 @@
 ## https://github.com/ncss-tech/soilDB/issues/84
 # attempt to flatten component parent material data into 2 strings
 .formatcoParentMaterialString <- function(i.pm, name.sep='|') {
+  
+  .Deprecated(".formatParentMaterialString")
+  
   # get the current site
   u.coiid <- unique(i.pm$coiid)
+  
+  if(length(u.coiid) == 0)
+    return(data.frame(coiid=NA_integer_, pmkind=NA, pmorigin=NA, stringsAsFactors=FALSE)[0,])
   
   # sanity check: this function can only be applied to data from a single site
   if(length(u.coiid) > 1)
@@ -503,6 +515,9 @@
   # get the current site
   u.coiid <- unique(i.esd$coiid)
   
+  if(length(u.coiid) == 0)
+    return(data.frame(coiid=NA_integer_, ecosite_id=NA, ecosite_name=NA, stringsAsFactors=FALSE)[0,])
+  
   # sanity check: this function can only be applied to data from a single component
   if(length(u.coiid) > 1)
     stop('data are from multiple component records')
@@ -539,6 +554,9 @@
 .formatOtherVegString <- function(i.ov, name.sep='|') {
   # get the current site
   u.coiid <- unique(i.ov$coiid)
+  
+  if(length(u.coiid) == 0)
+    return(data.frame(coiid=NA_integer_, othervegid=NA, othervegclass=NA, stringsAsFactors=FALSE)[0,])
   
   # sanity check: this function can only be applied to data from a single component
   if(length(u.coiid) > 1)

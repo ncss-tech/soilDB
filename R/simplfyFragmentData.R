@@ -44,68 +44,72 @@
 
 ## TODO: this is NASIS-specific for now, generalize this to any data
 # x: uncoded contents of the phfrags table
-.rockFragmentSieve <- function(x, vol.var = "fragvol") {
+.rockFragmentSieve <- function(x, vol.var = "fragvol", prefix = "frag") {
 
-  # convert to lower case: NASIS metadata usese upper for labels, lower for values
-  x$fraghard <- tolower(x$fraghard)
-  x$fragshp <- tolower(x$fragshp)
+  xvar <- vol.var
+  hardvar <- paste0(prefix, "hard")
+  shpvar <- paste0(prefix, "shp")
+  sizevar <- paste0(paste0(prefix, "size"), c("_l","_r","_h"))
+  
+  # convert to lower case: NASIS metadata uses upper for labels, lower for values
+  x[[hardvar]] <- tolower(x[[hardvar]])
+  x[[shpvar]] <- tolower(x[[shpvar]])
 
   ## assumptions
   # missing hardness = rock fragment
-  x$fraghard[which(is.na(x$fraghard))] <- 'strongly cemented'
+  x[[hardvar]][which(is.na(x[[hardvar]]))] <- 'strongly cemented'
   # missing shape = Nonflat
-  x$fragshp[which(is.na(x$fragshp))] <- 'nonflat'
+  x[[shpvar]][which(is.na(x[[shpvar]]))] <- 'nonflat'
 
   ## the RV fragment size is likely the safest estimate,
   ## given the various upper bounds for GR (74mm, 75mm, 76mm)
   # calculate if missing
-  x$fragsize_r <- ifelse(
-    is.na(x$fragsize_r),
-    (x$fragsize_l + x$fragsize_h) / 2,
-    x$fragsize_r
+  x[[sizevar[2]]] <- ifelse(
+    is.na(x[[sizevar[2]]]),
+    (x[[sizevar[1]]] + x[[sizevar[3]]]) / 2,
+    x[[sizevar[2]]]
   )
 
   ## split frags / parafrags
   # frags: >= strongly cemented
   # this should generalize across old / modern codes
-  idx <- grep('strong|indurated', x$fraghard, ignore.case = TRUE)
+  idx <- grep('strong|indurated', x[[hardvar]], ignore.case = TRUE)
   frags <- x[idx, ]
 
-  idx <- grep('strong|indurated', x$fraghard, ignore.case = TRUE, invert = TRUE)
+  idx <- grep('strong|indurated', x[[hardvar]], ignore.case = TRUE, invert = TRUE)
   parafrags <- x[idx, ]
 
 
   ## split flat / non-flat
   # frags
-  idx <- which(frags$fragshp == 'nonflat')
+  idx <- which(frags[[shpvar]] == 'nonflat')
   frags.nonflat <- frags[idx, ]
 
-  idx <- which(frags$fragshp == 'flat')
+  idx <- which(frags[[shpvar]] == 'flat')
   frags.flat <- frags[idx, ]
 
   # parafrags
-  idx <- which(parafrags$fragshp == 'nonflat')
+  idx <- which(parafrags[[shpvar]] == 'nonflat')
   parafrags.nonflat <- parafrags[idx, ]
 
-  idx <- which(parafrags$fragshp == 'flat')
+  idx <- which(parafrags[[shpvar]] == 'flat')
   parafrags.flat <- parafrags[idx, ]
 
   ## sieve
   # non-flat fragments
-  frags.nonflat$class <- .sieve(frags.nonflat$fragsize_r, flat = FALSE)
+  frags.nonflat$class <- .sieve(frags.nonflat[[sizevar[2]]], flat = FALSE)
 
   # non-flat parafragments
-  parafrags.nonflat$class <- .sieve(parafrags.nonflat$fragsize_r, flat = FALSE, para = TRUE)
+  parafrags.nonflat$class <- .sieve(parafrags.nonflat[[sizevar[2]]], flat = FALSE, para = TRUE)
 
   # flat fragments
-  frags.flat$class <- .sieve(frags.flat$fragsize_r, flat = TRUE)
+  frags.flat$class <- .sieve(frags.flat[[sizevar[2]]], flat = TRUE)
 
   # flat parafragments
-  parafrags.flat$class <- .sieve(parafrags.flat$fragsize_r, flat = TRUE, para = TRUE)
+  parafrags.flat$class <- .sieve(parafrags.flat[[sizevar[2]]], flat = TRUE, para = TRUE)
 
   # combine pieces, note may contain  RF classes == NA
   res <- rbind(frags.nonflat, frags.flat, parafrags.nonflat, parafrags.flat)
-
 
   # what does an NA fragment class mean?
   #
@@ -151,11 +155,12 @@
 #' @param id.var character vector with the name of the column containing an ID
 #' that is unique among all horizons in \code{rf}
 #' @param vol.var character vector with the name of the column containing the coarse fragment volume. Default `"fragvol"` or `"huartvol`".
+#' @param prefix a character vector prefix for input
 #' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0? (default: `TRUE`), see details
 #' @author D.E. Beaudette, A.G Brown
 #' @keywords manip
 #' @export simplifyFragmentData
-simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", nullFragsAreZero = TRUE) {
+simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", prefix = "frag", nullFragsAreZero = TRUE) {
 
   fragvol <- NULL
 
@@ -184,7 +189,7 @@ simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", nullFragsAreZe
 
   # extract classes
   # note: these will put any fragments without fragsize into an 'unspecified' class
-  rf.classes <- .rockFragmentSieve(rf, vol.var = vol.var)
+  rf.classes <- .rockFragmentSieve(rf, vol.var = vol.var, prefix = prefix)
 
   ## NOTE: this is performed on the data, as-is: not over all possible classes as enforced by factor levels
   # sum volume by id and class

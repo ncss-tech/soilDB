@@ -39,13 +39,18 @@ test_that(".formatcoParentMaterialString functions correctly", {
   
   # attempt to flatten component parent material data into 2 strings
   # this is run on a single component's set of data
-  res <- soilDB:::.formatcoParentMaterialString(d.copm)
+  res <- suppressWarnings(soilDB:::.formatcoParentMaterialString(d.copm))
+  res2 <- soilDB:::.formatParentMaterialString(d.copm, uid = unique(d.copm$coiid), name.sep = "|")
+  colnames(res2)[1] <- "coiid"
+  
+  # test for equal value
+  expect_equal(res, res2)
   
   # there should only be a single row returned
-  expect_equal(nrow(res), 1)
+  expect_equal(nrow(res2), 1)
   
   # required names
-  expect_equal(names(res), c('coiid', 'pmkind', 'pmorigin'))
+  expect_equal(names(res2), c('coiid', 'pmkind', 'pmorigin'))
   
   # data-check: single pmorigin, two pmkind: COL/RES
   expect_equal(res$pmkind, 'colluvium|residuum')
