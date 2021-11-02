@@ -7,6 +7,7 @@
 \usage{
 get_component_data_from_NASIS_db(
   SS = TRUE,
+  nullFragsAreZero = TRUE,
   stringsAsFactors = default.stringsAsFactors(),
   dsn = NULL
 )
@@ -14,6 +15,8 @@ get_component_data_from_NASIS_db(
 \arguments{
 \item{SS}{fetch data from the currently loaded selected set in NASIS or from
 the entire local database (default: \code{TRUE})}
+
+\item{nullFragsAreZero}{should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)}
 
 \item{stringsAsFactors}{logical: should character vectors be converted to
 factors? This argument is passed to the \code{uncode()} function. It does not

@@ -6,7 +6,13 @@
 \alias{simplifyArtifactData}
 \title{Simplify Coarse Fraction Data}
 \usage{
-simplifyFragmentData(rf, id.var, vol.var = "fragvol", nullFragsAreZero = TRUE)
+simplifyFragmentData(
+  rf,
+  id.var,
+  vol.var = "fragvol",
+  prefix = "frag",
+  nullFragsAreZero = TRUE
+)
 
 simplifyArtifactData(
   art,
@@ -23,6 +29,8 @@ details}
 that is unique among all horizons in \code{rf}}
 
 \item{vol.var}{character vector with the name of the column containing the coarse fragment volume. Default \code{"fragvol"} or \verb{"huartvol}".}
+
+\item{prefix}{a character vector prefix for input}
 
 \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: \code{TRUE}), see details}
 
