@@ -141,6 +141,7 @@ test_that("fetchKSSL() geochem result", {
   res <- fetchKSSL(pedlabsampnum = "05N0025", returnGeochemicalData = TRUE)
   
   # should be a data.frame, even when missing data
+  # it is a 0-length data.frame
   expect_true(inherits(res$geochem, 'data.frame'))
   expect_true(inherits(res$optical, 'data.frame'))
   
