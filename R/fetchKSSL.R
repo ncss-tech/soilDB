@@ -241,8 +241,6 @@
 #'     curl::has_internet()) {
 #'     
 #'     library(aqp)
-#'     library(plyr)
-#'     library(reshape2)
 #'     
 #'     # search by series name
 #'     s <- fetchKSSL(series='auburn')

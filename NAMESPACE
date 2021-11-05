@@ -26,11 +26,6 @@ importFrom(DBI,
   dbFetch
 )
 
-importFrom(reshape2,
-  dcast,
-  melt
-)
-
 importFrom(raster,
   readAll,
   raster,
@@ -40,16 +35,6 @@ importFrom(raster,
   "dataType<-",
   levels
 )
-
-importFrom(plyr,
-  ddply,
-  llply,
-  ldply,
-  dlply,
-  join,
-  summarize
-)
-
 
 importFrom(sp,
   spTransform,
