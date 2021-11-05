@@ -38,14 +38,15 @@ FROM (
 	
 	# convert Munsell to RGB
 	cat('converting Munsell to RGB ...\n')
-	d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, return_triplets=TRUE))
+	d.rgb <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, returnLAB = TRUE, return_triplets=TRUE))
 	
 	# re-combine
 	d <- cbind(d, d.rgb)
 	
-	# split into dry / moist
-	dry.colors <- d[which(d$colormoistst == 1), ]
-	moist.colors <- d[which(d$colormoistst == 2), ]
+	# split into dry / moist 
+	# 2021-11-05: using uncoded color moisture state
+	dry.colors <- d[which(d$colormoistst == "dry"), ]
+	moist.colors <- d[which(d$colormoistst == "moist"), ]
 	
 	# mix and clean colors
 	cat('mixing and cleaning colors ...\n')
@@ -55,31 +56,37 @@ FROM (
 	moist.to.mix <- names(which(table(moist.colors$phiid) > 1))
 	
 	# mix/combine if there are any horizons that need mixing
-	if(length(dry.to.mix) > 0) {
+	if (length(dry.to.mix) > 0) {
 		# filter out and mix only colors with >1 color / horizon
 		dry.mix.idx <- which(dry.colors$phiid %in% dry.to.mix)
 		dc <- split(dry.colors[dry.mix.idx, ], f = dry.colors[['phiid']][dry.mix.idx])
-		dc.l <- lapply(dc, mix_and_clean_colors)
+		dc.l <- lapply(dc, estimateColorMixture, backTransform = TRUE)
 		mixed.dry <- do.call('rbind', dc.l)
+		mixed.dry$phiid <- rownames(mixed.dry)
 		# combine original[-horizons to be mixed] + mixed horizons
-		dry.colors.final <- rbind(dry.colors[-dry.mix.idx, c("phiid", "r", "g", "b", "colorvalue")], mixed.dry)
-	}
-	else # otherwise subset the columns only
+		dry.colors.final <- rbind(dry.colors[-dry.mix.idx, c("phiid", "r", "g", "b", "colorvalue")],
+		                          mixed.dry[,c("phiid", "r", "g", "b", "colorvalue")])
+	}	else {
+	  # otherwise subset the columns only
 		dry.colors.final <- dry.colors[, c("phiid", "r", "g", "b", "colorvalue")]
+	}
 	
 	# mix/combine if there are any horizons that need mixing
-	if(length(moist.to.mix) > 0) {
+	if (length(moist.to.mix) > 0) {
 		# filter out and mix only colors with >1 color / horizon
 		moist.mix.idx <- which(moist.colors$phiid %in% moist.to.mix)
 		mc <- split(moist.colors[moist.mix.idx, ], f = moist.colors[['phiid']][moist.mix.idx])
-		mc.l <- lapply(mc, mix_and_clean_colors)
+		mc.l <- lapply(mc, estimateColorMixture, backTransform = TRUE)
 		mixed.moist <- do.call('rbind', mc.l)
+		mixed.moist$phiid <- rownames(mixed.moist)
 		
 		# combine original[-horizons to be mixed] + mixed horizons
-		moist.colors.final <- rbind(moist.colors[-moist.mix.idx, c("phiid", "r", "g", "b", "colorvalue")], mixed.moist)
-	}
-	else # otherwise subset the columns only
+		moist.colors.final <- rbind(moist.colors[-moist.mix.idx, c("phiid", "r", "g", "b", "colorvalue")], 
+		                            mixed.moist[, c("phiid", "r", "g", "b", "colorvalue")])
+	}	else {
+	  # otherwise subset the columns only
 		moist.colors.final <- moist.colors[, c("phiid", "r", "g", "b", "colorvalue")]
+	}
 	
 	# rename columns
 	names(dry.colors.final) <- c('phiid', 'd_r', 'd_g', 'd_b', 'd_value')
@@ -87,10 +94,6 @@ FROM (
 	
 	# merge into single df
 	d.final <- merge(dry.colors.final, moist.colors.final, by='phiid', all.x = TRUE, all.y = TRUE, sort = FALSE)
-	
-	# clean-up
-	rm(d, d.rgb, dry.colors, moist.colors, dry.colors.final, moist.colors.final)
-	gc()
 	
 	# done
 	return(d.final)
