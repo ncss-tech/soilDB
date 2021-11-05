@@ -19,7 +19,7 @@
 mix_and_clean_colors <- function(x, wt='pct', backTransform=FALSE) {
 
   ## TODO finish this
-  .Deprecated('estimateColorMixture', msg = '')
+  .Deprecated('estimateColorMixture')
 
   # sanity check: no NA
   if(any(c(is.na(x$r), is.na(x$g), is.na(x$b))))
