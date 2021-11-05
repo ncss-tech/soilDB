@@ -207,20 +207,20 @@
     hz_data$total_art_pct <- ifelse(is.na(hz_data$total_art_pct), 0, hz_data$total_art_pct)
   }
 
-  ## TODO: convert this to simplifyFragmentData
-  # add surface frag summary
-  sfs <- extended_data$surf_frag_summary
-
-  # optionally convert NA fragvol to 0
-  if (nullFragsAreZero) {
-    sfs <- as.data.frame(
-      cbind(sfs[, 1, drop = FALSE],
-            lapply(sfs[, -1], function(i) ifelse(is.na(i), 0, i))
-      ), stringsAsFactors = FALSE)
-  }
-
-  # add surf. frag summary to @site
-  site(hz_data) <- sfs
+  ## 2021-11-05: converted surface frag summary to simplifyFragmentData() in get_site_data_from_NASIS_db()
+  # # add surface frag summary
+  # sfs <- extended_data$surf_frag_summary
+  # 
+  # # optionally convert NA fragvol to 0
+  # if (nullFragsAreZero) {
+  #   sfs <- as.data.frame(
+  #     cbind(sfs[, 1, drop = FALSE],
+  #           lapply(sfs[, -1], function(i) ifelse(is.na(i), 0, i))
+  #     ), stringsAsFactors = FALSE)
+  # }
+  # 
+  # # add surf. frag summary to @site
+  # site(hz_data) <- sfs
 
   # load diagnostic horizons into @diagnostic:
   # supress warnings: diagnostic_hz() <- is noisy when not all profiles have diagnostic hz data
