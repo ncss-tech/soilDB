@@ -141,16 +141,17 @@
     optical <- ext$optical
     xrd_thermal <- ext$xrd_thermal
     
-    # cleanly return missing data
-    ul <- sh$horizon$labsampnum
+    # cleanly return missing data as 0-length data.frame
+    # having a 'labsampnum' (character) column for joins
+    ul <- 'dummy.labsampnum'
     if(isFALSE(geochem)) {
-      geochem <- data.frame(labsampnum = ul)
+      geochem <- data.frame(labsampnum = ul)[0, , drop = FALSE]
     }
     if(isFALSE(optical)) {
-      optical <- data.frame(labsampnum = ul)
+      optical <- data.frame(labsampnum = ul)[0, , drop = FALSE]
     }
     if(isFALSE(xrd_thermal)) {
-      xrd_thermal <- data.frame(labsampnum = ul)
+      xrd_thermal <- data.frame(labsampnum = ul)[0, , drop = FALSE]
     }
   }
   
