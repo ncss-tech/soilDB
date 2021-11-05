@@ -49,8 +49,8 @@
   extended.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=extended', f))
   
   ## get data
-  # note: missing data are returned as FALSE
-  # list of dataframe objects
+  # note: missing data are returned as FALSE by the API
+  # when data are available, list of data.frame objects
   ext <- jsonlite::fromJSON(extended.url)
   
   # done  
@@ -136,10 +136,22 @@
   if(returnGeochemicalData) {
     ext <- .getExtended_SoilWeb(f)
     
-    # local copies
+    # local copies, these are FALSE if data are missing
     geochem <- ext$geochem
     optical <- ext$optical
     xrd_thermal <- ext$xrd_thermal
+    
+    # cleanly return missing data
+    ul <- sh$horizon$labsampnum
+    if(isFALSE(geochem)) {
+      geochem <- data.frame(labsampnum = ul)
+    }
+    if(isFALSE(optical)) {
+      optical <- data.frame(labsampnum = ul)
+    }
+    if(isFALSE(xrd_thermal)) {
+      xrd_thermal <- data.frame(labsampnum = ul)
+    }
   }
   
   
@@ -382,11 +394,18 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
       }
     }
     
-    # geochem
+    # geochem: may be missing for a lot of labsampnum
     if(returnGeochemicalData) {
-      geochem <- do.call('rbind', lapply(res, '[[', 'geochem'))
-      optical <- do.call('rbind', lapply(res, '[[', 'optical'))
-      xrd_thermal <- do.call('rbind', lapply(res, '[[', 'xrd_thermal'))
+      
+      # safely combine + fill missing columns
+      geochem <- do.call('rbindlist', args = list(l = lapply(res, '[[', 'geochem'), fill = TRUE))
+      optical <- do.call('rbindlist', args = list(l = lapply(res, '[[', 'optical'), fill = TRUE))
+      xrd_thermal <- do.call('rbindlist', args = list(l = lapply(res, '[[', 'xrd_thermal'), fill = TRUE))
+      
+      # convert back to data.frame
+      geochem <- as.data.frame(geochem)
+      optical <- as.data.frame(optical)
+      xrd_thermal <- as.data.frame(xrd_thermal)
       
       ## TODO enforce unique-ness on data.frames here
     }
@@ -394,8 +413,8 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
   }
   
   
-  # set KSSL-specific horizon identifier
-  ## WHOOPS -- turns out this is nonunique 0.1% of the time AGB 2019/11/14
+  # do NOT set KSSL-specific horizon identifier
+  # labsampnum is NOT unique 0.1% of the time AGB 2019/11/14
   # hzidname(h) <- "labsampnum"
   
   # set KSSL-specific hzdesgn/hztexcl fields

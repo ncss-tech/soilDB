@@ -136,4 +136,12 @@ test_that("fetchKSSL() geochem result", {
   expect_true(all(na.omit(filter_geochem(res$geochem,
                                           major_element_method = "4H1b",
                                           trace_element_method = "4H1a")$prep_code == "S")))
+  
+  # try an ID without geochem data
+  res <- fetchKSSL(pedlabsampnum = "05N0025", returnGeochemicalData = TRUE)
+  
+  # should be a data.frame, even when missing data
+  expect_true(inherits(res$geochem, 'data.frame'))
+  expect_true(inherits(res$optical, 'data.frame'))
+  
 })
