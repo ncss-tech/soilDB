@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.8</span>
       </span>
     </div>
 
@@ -122,6 +122,7 @@
 
     <pre class="usage"><span class='fu'>get_component_data_from_NASIS_db</span><span class='op'>(</span>
   SS <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  nullFragsAreZero <span class='op'>=</span> <span class='cn'>TRUE</span>,
   stringsAsFactors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span><span class='op'>(</span><span class='op'>)</span>,
   dsn <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
@@ -133,6 +134,10 @@
       <th>SS</th>
       <td><p>fetch data from the currently loaded selected set in NASIS or from
 the entire local database (default: <code>TRUE</code>)</p></td>
+    </tr>
+    <tr>
+      <th>nullFragsAreZero</th>
+      <td><p>should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)</p></td>
     </tr>
     <tr>
       <th>stringsAsFactors</th>

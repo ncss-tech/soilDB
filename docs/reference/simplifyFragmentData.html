@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.8</span>
       </span>
     </div>
 
@@ -112,7 +112,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Simplify Coarse Fraction Data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/simplfyFragmentData.R'><code>R/simplfyFragmentData.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/R/simplfyFragmentData.R'><code>R/simplfyFragmentData.R</code></a>, <a href='https://github.com/ncss-tech/soilDB/blob/master/R/simplifyArtifactData.R'><code>R/simplifyArtifactData.R</code></a></small>
     <div class="hidden name"><code>simplifyFragmentData.Rd</code></div>
     </div>
 
@@ -120,7 +120,20 @@
     <p>Simplify multiple coarse fraction (&gt;2mm) records by horizon.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>simplifyFragmentData</span><span class='op'>(</span><span class='va'>rf</span>, <span class='va'>id.var</span>, nullFragsAreZero <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>simplifyFragmentData</span><span class='op'>(</span>
+  <span class='va'>rf</span>,
+  <span class='va'>id.var</span>,
+  vol.var <span class='op'>=</span> <span class='st'>"fragvol"</span>,
+  prefix <span class='op'>=</span> <span class='st'>"frag"</span>,
+  nullFragsAreZero <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
+
+<span class='fu'>simplifyArtifactData</span><span class='op'>(</span>
+  <span class='va'>art</span>,
+  <span class='va'>id.var</span>,
+  vol.var <span class='op'>=</span> <span class='st'>"huartvol"</span>,
+  nullFragsAreZero <span class='op'>=</span> <span class='va'>nullFragsAreZero</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,30 +149,41 @@ details</p></td>
 that is unique among all horizons in <code>rf</code></p></td>
     </tr>
     <tr>
+      <th>vol.var</th>
+      <td><p>character vector with the name of the column containing the coarse fragment volume. Default <code>"fragvol"</code> or <code>"huartvol</code>".</p></td>
+    </tr>
+    <tr>
+      <th>prefix</th>
+      <td><p>a character vector prefix for input</p></td>
+    </tr>
+    <tr>
       <th>nullFragsAreZero</th>
-      <td><p>should fragment volumes of NULL be interpreted as 0?
-(default: TRUE), see details</p></td>
+      <td><p>should fragment volumes of NULL be interpreted as 0? (default: <code>TRUE</code>), see details</p></td>
+    </tr>
+    <tr>
+      <th>art</th>
+      <td><p>a <code>data.frame</code> object, typically returned from NASIS, see details</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is mainly intended for the processing of NASIS pedon/horizon
+    <p>This function is mainly intended for processing of NASIS pedon/component
 data which contains multiple coarse fragment descriptions per horizon.
 <code>simplifyFragmentData</code> will "sieve out" coarse fragments into the USDA
-classes, split into hard and para- fragments.</p>
-<p>The <code>simplifyFragmentData</code> function can be applied to data sources
-other than NASIS by careful use of the <code>id.var</code> argument. However,
-<code>rf</code> must contain coarse fragment volumes in the column "fragvol",
-fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", and
-fragment cementation class in "fraghard".</p>
+classes, split into hard and para- fragments. Likweise, <code>simplifyArtifactData</code> will sieve out human artifacts, and split total volume into "cohesive", "penetrable", "innocuous", and "persistent".</p>
+<p>These functions can be applied to data sources other than NASIS by careful use of the <code>id.var</code> and <code>vol.var</code> arguments.</p><ul>
+<li><p><code>rf</code> must contain rock or other fragment volumes in the column "fragvol" (or be specified with <code>vol.var</code>), fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", fragment cementation class in "fraghard" and flat/non-flat in "fragshp".</p></li>
+<li><p><code>art</code> must contain artifact volumes in the column "huartvol" (or be specified with <code>vol.var</code>), fragment size (mm) in columns "huartsize_l", "huartsize_r", "huartsize_h", artifact cementation class in "huarthard" and flat/non-flat in "huartshp".</p></li>
+</ul>
+
 <p>Examples:</p><ul>
 <li><p><a href='http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html'>KSSL data</a></p></li>
 </ul>
 
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>D.E. Beaudette</p>
+    <p>D.E. Beaudette, A.G Brown</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

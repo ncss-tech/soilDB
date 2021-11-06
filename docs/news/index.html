@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.8</span>
       </span>
     </div>
 
@@ -114,6 +114,19 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="soildb-268-2021-11-05" class="section level1">
+<h1 class="page-header" data-toc-text="2.6.8">
+<a href="#soildb-268-2021-11-05" class="anchor"></a>soilDB 2.6.8 (2021-11-05)<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> upgrades: use data.table and base internally for data aggregation</li>
+<li>
+<code>fetchNASIS("components")</code> now “sieves” rock fragments and human artifacts using same routines as for pedons; respects <code>nullFragsAreZero</code> argument</li>
+<li>
+<code>fetchKSSL(..., returnGeochemicalData = TRUE)</code> safely returns 0-length <code>data.frame</code> when no data available</li>
+</ul>
+</div>
     <div id="soildb-267-2021-10-27" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.7">
 <a href="#soildb-267-2021-10-27" class="anchor"></a>soilDB 2.6.7 (2021-10-27)<small> Unreleased </small>

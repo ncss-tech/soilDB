@@ -73,7 +73,7 @@ series name query, from the KSSL database." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.8</span>
       </span>
     </div>
 
@@ -240,8 +240,6 @@ the link below for the live data.</p>
 <span class='r-in'>    <span class='fu'>curl</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/curl/man/nslookup.html'>has_internet</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
 <span class='r-in'>    </span>
 <span class='r-in'>    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/ncss-tech/aqp'>aqp</a></span><span class='op'>)</span></span>
-<span class='r-in'>    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://had.co.nz/plyr'>plyr</a></span><span class='op'>)</span></span>
-<span class='r-in'>    <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/hadley/reshape'>reshape2</a></span><span class='op'>)</span></span>
 <span class='r-in'>    </span>
 <span class='r-in'>    <span class='co'># search by series name</span></span>
 <span class='r-in'>    <span class='va'>s</span> <span class='op'>&lt;-</span> <span class='fu'>fetchKSSL</span><span class='op'>(</span>series<span class='op'>=</span><span class='st'>'auburn'</span><span class='op'>)</span></span>
@@ -274,11 +272,6 @@ the link below for the live data.</p>
 <span class='r-in'>    </span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> This is aqp 1.33</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: 'plyr'</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from 'package:aqp':</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>     mutate, summarize</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> 14 pedons loaded (0.06 Mb transferred)</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> 14 pedons loaded (0.09 Mb transferred)</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> mixing dry colors ... [2 of 53 horizons]</span>
