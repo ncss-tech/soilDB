@@ -68,9 +68,12 @@ LEFT OUTER JOIN
 WHERE sb.rn IS NULL OR sb.rn = 1
 
 ORDER BY pedon_View_1.peiid ;"
-  q2 <- "SELECT siteiid, sitesurffrags_View_1.* FROM sitesurffrags_View_1 
+      
+  q2 <- "SELECT siteiid, peiid, sitesurffrags_View_1.* FROM sitesurffrags_View_1 
          INNER JOIN siteobs_View_1 ON sitesurffrags_View_1.siteobsiidref = siteobs_View_1.siteobsiid
-         INNER JOIN site_View_1 ON siteobs_View_1.siteiidref = site_View_1.siteiid"
+         INNER JOIN site_View_1 ON siteobs_View_1.siteiidref = site_View_1.siteiid
+         LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
+         ORDER BY pedon_View_1.peiid ;"
 
   channel <- dbConnectNASIS(dsn)
 
@@ -97,18 +100,18 @@ ORDER BY pedon_View_1.peiid ;"
 	# surface fragments
 	phs <- simplifyFragmentData(
 	  uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
-	  id.var = "siteiid",
+	  id.var = "peiid",
 	  vol.var = "sfragcov",
 	  prefix = "sfrag")
 	
-	ldx <- !d$siteiid %in% phs$siteiid
-	if (sum(ldx) == 0) {
-	  phs <- phs[1:nrow(d),]
-	  phs$siteiid <- d$siteiid
-	} else {
+	ldx <- d$peiid %in% phs$peiid
+	if (any(ldx)) {
 	  phs_null <- phs[0,][1:sum(ldx),]
-	  phs_null$siteiid <- d$siteiid[ldx]
+	  phs_null$peiid <- d$peiid[ldx]
 	  phs <- rbind(phs, phs_null)
+	} else {
+	  phs <- phs[1:nrow(d),]
+	  phs$peiid <- d$peiid
 	}
 	
 	# handle NA for totals
@@ -116,8 +119,8 @@ ORDER BY pedon_View_1.peiid ;"
 	  phs[is.na(phs)] <- 0
 	} 
 	colnames(phs) <- paste0("surface_", colnames(phs))
-	colnames(phs)[1] <- "siteiid"
-	d2 <- merge(d, phs, by = "siteiid", all.x = TRUE, sort = FALSE)
+	colnames(phs)[1] <- "peiid"
+	d2 <- merge(d, phs, by = "peiid", all.x = TRUE, sort = FALSE)
 	
 	# short-circuit: 0 rows means nothing in the selected set and thus we stop here
 	if (nrow(d2) == 0) {
