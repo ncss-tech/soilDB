@@ -104,14 +104,14 @@ ORDER BY pedon_View_1.peiid ;"
 	  vol.var = "sfragcov",
 	  prefix = "sfrag")
 	
-	ldx <- d$peiid %in% phs$peiid
-	if (any(ldx)) {
+	ldx <- !d$peiid %in% phs$peiid
+	if (!any(ldx)) {
+	  phs <- phs[1:nrow(d),]
+	  phs$peiid <- d$peiid
+	} else {
 	  phs_null <- phs[0,][1:sum(ldx),]
 	  phs_null$peiid <- d$peiid[ldx]
 	  phs <- rbind(phs, phs_null)
-	} else {
-	  phs <- phs[1:nrow(d),]
-	  phs$peiid <- d$peiid
 	}
 	
 	# handle NA for totals
