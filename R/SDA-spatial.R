@@ -179,6 +179,7 @@ FROM geom_data;
 #' @param db a character vector identifying the Soil Geographic Databases
 #' ('SSURGO' or 'STATSGO') to query. Option \var{STATSGO} currently works only
 #' in combination with \code{what = "mupolygon"}. 
+#' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @return A \code{data.frame} if \code{what = 'mukey'}, otherwise
 #' \code{SpatialPolygonsDataFrame} object.
 #' @note Row-order is not preserved across features in \code{geom} and returned
@@ -332,7 +333,8 @@ FROM geom_data;
 SDA_spatialQuery <- function(geom,
                              what = 'mukey',
                              geomIntersection = FALSE,
-                             db = c("SSURGO", "STATSGO", "SAPOLYGON")) {
+                             db = c("SSURGO", "STATSGO", "SAPOLYGON"),
+                             query_string = FALSE) {
   what <- tolower(what)
   db <- toupper(db)
   
@@ -413,6 +415,9 @@ SDA_spatialQuery <- function(geom,
       q <- sprintf(.template, wkt)
     }
     
+    if (query_string) {
+      return(q)
+    }
     
     # single query for all of the features
     # note that row-order / number of rows in results may not match geom
@@ -428,6 +433,10 @@ SDA_spatialQuery <- function(geom,
                 SELECT DISTINCT mukey from SDA_Get_Mukey_from_intersection_with_WktWgs84('%s')
                 )", wkt)
     
+    if (query_string) {
+      return(q)
+    }
+    
     # single query for all of the features
     # note that row-order / number of rows in results may not match geom
     res <- suppressMessages(SDA_query(q))
@@ -440,6 +449,10 @@ SDA_spatialQuery <- function(geom,
                 WHERE sapolygonkey IN (
                 SELECT DISTINCT sapolygonkey from SDA_Get_Sapolygonkey_from_intersection_with_WktWgs84('%s')
                 )", wkt)
+    
+    if (query_string) {
+      return(q)
+    }
     
     # single query for all of the features
     # note that row-order / number of rows in results may not match geom
