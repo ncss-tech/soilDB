@@ -216,33 +216,35 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
   }
   
-  # surface fragments
-  chs <- simplifyFragmentData(
-    uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
-    id.var = "coiidref",
-    vol.var = "sfragcov_r",
-    prefix = "sfrag")
+  if (nrow(d) > 0) {
+    # surface fragments
+    chs <- simplifyFragmentData(
+      uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
+      id.var = "coiidref",
+      vol.var = "sfragcov_r",
+      prefix = "sfrag")
+    
+    if (sum(complete.cases(chs)) == 0) {
+      chs <- chs[1:nrow(d),]
+      chs$coiidref <- d$coiid
+    } else {
+      ldx <- !d$coiid %in% chs$coiidref
+      chs_null <- chs[0,][1:sum(ldx),]
+      chs_null$coiidref <- d$coiid[ldx]
+      chs <- rbind(chs, chs_null)
+    }
   
-  if (sum(complete.cases(chs)) == 0) {
-    chs <- chs[1:nrow(d),]
-    chs$coiidref <- d$coiid
-  } else {
-    ldx <- !d$coiid %in% chs$coiidref
-    chs_null <- chs[0,][1:sum(ldx),]
-    chs_null$coiidref <- d$coiid[ldx]
-    chs <- rbind(chs, chs_null)
+    # handle NA for totals
+    if (nullFragsAreZero) {
+      chs[is.na(chs)] <- 0
+    } 
+    colnames(chs) <- paste0("surface_", colnames(chs))
+    colnames(chs)[1] <- "coiidref"
+    d <- merge(d, chs, by.x = "coiid", by.y = "coiidref", all.x = TRUE, sort = FALSE)
   }
   
-  # handle NA for totals
-  if (nullFragsAreZero) {
-    chs[is.na(chs)] <- 0
-  } 
-  colnames(chs) <- paste0("surface_", colnames(chs))
-  colnames(chs)[1] <- "coiidref"
-  d2 <- merge(d, chs, by.x = "coiid", by.y = "coiidref", all.x = TRUE, sort = FALSE)
-  
   # done
-  return(d2)
+  return(d)
 }
 
 
@@ -887,53 +889,55 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   
   # "sieving" chfrags, chuarts tables for parity with fetchNASIS("pedons") @horizons slot columns 
   
-  # horizon fragments
-  chf <- simplifyFragmentData(
-    uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
-    id.var = "chiidref",
-    vol.var = "fragvol_r",
-    nullFragsAreZero = nullFragsAreZero
-  )
-  if (sum(complete.cases(chf)) == 0) {
-    chf <- chf[1:nrow(d),]
-    chf$chiidref <- d$chiid
-  } else {
-    ldx <- !d$chiid %in% chf$chiidref
-    chf_null <- chf[0,][1:sum(ldx),]
-    chf_null$chiidref <- d$chiid[ldx]
-    chf <- rbind(chf, chf_null)
-  }
-  # handle NA for totals
-  if (nullFragsAreZero) {
-    chf[is.na(chf)] <- 0
-  } 
-
-  # human artifacts  
-  cha <- simplifyArtifactData(
-    uncode(dbQueryNASIS(channel, q3, close = FALSE), dsn = dsn),
-    id.var = "chiidref",
-    vol.var = "huartvol_r",
-    nullFragsAreZero = nullFragsAreZero
-  )
-  # handle NULL result
-  if (sum(complete.cases(cha)) == 0) {
-    cha <- cha[1:nrow(d),]
-    cha$chiidref <- d$chiid
-  } else {
-    ldx <- !d$chiid %in% cha$chiidref
-    cha_null <- cha[0,][1:sum(ldx),]
-    cha_null$chiidref <- d$chiid[ldx]
-    cha <- rbind(cha, cha_null)
-  }
-  # handle NA for totals
-  if (nullFragsAreZero) {
-    cha[is.na(cha)] <- 0
+  if (nrow(d) > 0){
+    # horizon fragments
+    chf <- simplifyFragmentData(
+      uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
+      id.var = "chiidref",
+      vol.var = "fragvol_r",
+      nullFragsAreZero = nullFragsAreZero
+    )
+    if (sum(complete.cases(chf)) == 0) {
+      chf <- chf[1:nrow(d),]
+      chf$chiidref <- d$chiid
+    } else {
+      ldx <- !d$chiid %in% chf$chiidref
+      chf_null <- chf[0,][1:sum(ldx),]
+      chf_null$chiidref <- d$chiid[ldx]
+      chf <- rbind(chf, chf_null)
+    }
+    # handle NA for totals
+    if (nullFragsAreZero) {
+      chf[is.na(chf)] <- 0
+    } 
+  
+    # human artifacts  
+    cha <- simplifyArtifactData(
+      uncode(dbQueryNASIS(channel, q3, close = FALSE), dsn = dsn),
+      id.var = "chiidref",
+      vol.var = "huartvol_r",
+      nullFragsAreZero = nullFragsAreZero
+    )
+    # handle NULL result
+    if (sum(complete.cases(cha)) == 0) {
+      cha <- cha[1:nrow(d),]
+      cha$chiidref <- d$chiid
+    } else {
+      ldx <- !d$chiid %in% cha$chiidref
+      cha_null <- cha[0,][1:sum(ldx),]
+      cha_null$chiidref <- d$chiid[ldx]
+      cha <- rbind(cha, cha_null)
+    }
+    # handle NA for totals
+    if (nullFragsAreZero) {
+      cha[is.na(cha)] <- 0
+    }
+    
+    
+    d <- merge(d, chf, by.x = "chiid", by.y = "chiidref", all.x = TRUE, sort = FALSE)
+    d <- merge(d, cha, by.x = "chiid", by.y = "chiidref", all.x = TRUE, sort = FALSE)
   }
   
-  
-  d2 <- merge(d, chf, by.x = "chiid", by.y = "chiidref", all.x = TRUE, sort = FALSE)
-  d3 <- merge(d2, cha, by.x = "chiid", by.y = "chiidref", all.x = TRUE, sort = FALSE)
-  
-  return(d3)
+  return(d)
 }
 
