@@ -320,9 +320,9 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   cf <- httr::config(followlocation = 1L)
 
   # submit request
-  r <- httr::POST(uri, body=req, encode='form', config = cf, httr::add_headers(new.headers))
-  res <- try(httr::stop_for_status(r))
-  if (inherits(res, 'try-error')) return(NULL)
+  r <- try(httr::POST(uri, body=req, encode='form', config = cf, httr::add_headers(new.headers)))
+  if (inherits(r, 'try-error')) return(NULL)
+  res <- httr::stop_for_status(r)
 
   # extract content as text, cannot be directly read-in
   r.content <- httr::content(r, as='text')
