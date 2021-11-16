@@ -222,25 +222,25 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   SELECT
   cokey, cosurffragskey, sfragcov_r, para, nonpara,
   -- fragments
-  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 5   AND shape = 'nonflat'
+  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 < 5   AND shape = 'nonflat'
        THEN 1 ELSE NULL
        END fine_gravel,
-  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 76  AND shape = 'nonflat'
+  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 < 75  AND shape = 'nonflat'
        THEN 1 ELSE NULL
        END gravel,
-  CASE WHEN   fragsize_r2 > 76  AND fragsize_r2 <= 250 AND shape = 'nonflat'
+  CASE WHEN   fragsize_r2 >= 75 AND fragsize_r2 < 250 AND shape = 'nonflat'
        THEN 1 ELSE NULL
        END cobbles,
-  CASE WHEN ((fragsize_r2 > 250 AND fragsize_r2 <= 600 AND shape = 'nonflat') OR
-            (fragsize_r2 >= 380 AND fragsize_r2 < 600 AND shape = 'flat'))
+  CASE WHEN ((fragsize_r2 >= 250 AND fragsize_r2 < 600 AND shape = 'nonflat') OR
+             (fragsize_r2 >= 380 AND fragsize_r2 < 600 AND shape = 'flat'))
        THEN 1 ELSE NULL END stones,
-  CASE WHEN   fragsize_r2 > 600
+  CASE WHEN   fragsize_r2 >= 600
        THEN 1 ELSE NULL
        END boulders,
-  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 150 AND shape = 'flat'
+  CASE WHEN   fragsize_r2 >= 2   AND fragsize_r2 < 150 AND shape = 'flat'
        THEN 1 ELSE NULL
        END channers,
-  CASE WHEN   fragsize_r2 > 150 AND fragsize_r2 <= 380 AND shape = 'flat'
+  CASE WHEN   fragsize_r2 >= 150 AND fragsize_r2 < 380 AND shape = 'flat'
        THEN 1 ELSE NULL
        END flagstones,
   CASE WHEN   fragsize_r2 IS NULL
@@ -619,15 +619,15 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
                           SELECT
                           cokey, chkey, chfragskey, fragvol_r, para, nonpara,
                           -- fragments
-                          CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 5   AND shape = 'nonflat' THEN 1 ELSE NULL END fine_gravel,
-                          CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 76  AND shape = 'nonflat' THEN 1 ELSE NULL END gravel,
-                          CASE WHEN   fragsize_r2 > 76  AND fragsize_r2 <= 250 AND shape = 'nonflat' THEN 1 ELSE NULL END cobbles,
-                          CASE WHEN ((fragsize_r2 > 250 AND fragsize_r2 <= 600 AND shape = 'nonflat') OR
-                          (fragsize_r2 >= 380 AND fragsize_r2 < 600 AND shape = 'flat'))
+                          CASE WHEN   fragsize_r2 >= 2   AND fragsize_r2 < 5   AND shape = 'nonflat' THEN 1 ELSE NULL END fine_gravel,
+                          CASE WHEN   fragsize_r2 >= 2   AND fragsize_r2 < 75  AND shape = 'nonflat' THEN 1 ELSE NULL END gravel,
+                          CASE WHEN   fragsize_r2 >= 75  AND fragsize_r2 < 250 AND shape = 'nonflat' THEN 1 ELSE NULL END cobbles,
+                          CASE WHEN ((fragsize_r2 >= 250 AND fragsize_r2 < 600 AND shape = 'nonflat') OR
+                          (fragsize_r2 >= 380 AND fragsize_r2 <= 600 AND shape = 'flat'))
                           THEN 1 ELSE NULL END stones,
-                          CASE WHEN   fragsize_r2 > 600 THEN 1 ELSE NULL END boulders,
-                          CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 150 AND shape = 'flat' THEN 1 ELSE NULL END channers,
-                          CASE WHEN   fragsize_r2 > 150 AND fragsize_r2 <= 380 AND shape = 'flat' THEN 1 ELSE NULL END flagstones,
+                          CASE WHEN   fragsize_r2 >= 600 THEN 1 ELSE NULL END boulders,
+                          CASE WHEN   fragsize_r2 >= 2   AND fragsize_r2 < 150 AND shape = 'flat' THEN 1 ELSE NULL END channers,
+                          CASE WHEN   fragsize_r2 >= 150 AND fragsize_r2 < 380 AND shape = 'flat' THEN 1 ELSE NULL END flagstones,
                           CASE WHEN   fragsize_r2 IS NULL                                         THEN 1 ELSE NULL END unspecified
 
                           FROM
