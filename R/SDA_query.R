@@ -159,6 +159,14 @@ SDA_query <- function(q) {
   if (!requireNamespace('httr', quietly = TRUE) | !requireNamespace('jsonlite', quietly = TRUE))
     stop('please install the `httr` and `jsonlite` packages', call. = FALSE)
 
+  if (length(q) > 1) {
+    stop('Query vector must be length 1')
+  }
+  
+  if (nchar(q, type = "bytes") > 2.5E6) {
+    stop('Query string is too long (>2.5 million bytes), consider soilDB::makeChunks() to split inputs into several smaller queries and iterate', call. = FALSE)    
+  }
+  
   # submit request
   r <- httr::POST(url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
                   body = list(query = q,
