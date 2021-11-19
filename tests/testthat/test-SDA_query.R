@@ -49,6 +49,11 @@ test_that("SDA_query() returns expected result", {
 
 })
 
+test_that("SDA_query() query too long", {
+  q <- paste0("SELECT '1", paste0(rep(0, 1e7), collapse = ""), "' as a;")
+  expect_error(soilDB::SDA_query(q), "Query string is too long")
+})
+
 test_that("SDA_query() SQL error / no results -> NULL", {
 
   skip_if_offline()

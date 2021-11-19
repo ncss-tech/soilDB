@@ -102,7 +102,7 @@ format_SQL_in_statement <- function(x) {
 #' @keywords manip
 #' @examples
 #' \donttest{
-#' if(requireNamespace("curl") &
+#' if(requireNamespace("curl") & requireNamespace("wk") &
 #'    curl::has_internet()) {
 #'
 #'   ## get SSURGO export date for all soil survey areas in California
@@ -142,22 +142,14 @@ format_SQL_in_statement <- function(x) {
 #'   ## get tabular data based on result from spatial query
 #'   # there is no need to filter STATSGO because
 #'   # SDA_Get_Mukey_from_intersection_with_WktWgs84() implies SSURGO
-#'   #
-#'   # requires raster and rgeos packages because raster is suggested
-#'   # and rgeos is additional
-#'   if(require(raster) & require(rgeos)) {
-#'     # text -> bbox -> WKT
-#'     # xmin, xmax, ymin, ymax
-#'     b <- c(-120.9, -120.8, 37.7, 37.8)
-#'     p <- writeWKT(as(extent(b), 'SpatialPolygons'))
-#'     q <- paste0("SELECT mukey, cokey, compname, comppct_r FROM component
+#'   p <- wk::as_wkt(wk::rct(-120.9, 37.7, -120.8, 37.8))
+#'   q <- paste0("SELECT mukey, cokey, compname, comppct_r FROM component 
 #'       WHERE mukey IN (SELECT DISTINCT mukey FROM
 #'       SDA_Get_Mukey_from_intersection_with_WktWgs84('", p,
 #'        "')) ORDER BY mukey, cokey, comppct_r DESC")
-#'
-#'     x <- SDA_query(q)
-#'     str(x)
-#'   }
+#'     
+#'    x <- SDA_query(q)
+#'    str(x)
 #'  }
 #' }
 
@@ -167,6 +159,14 @@ SDA_query <- function(q) {
   if (!requireNamespace('httr', quietly = TRUE) | !requireNamespace('jsonlite', quietly = TRUE))
     stop('please install the `httr` and `jsonlite` packages', call. = FALSE)
 
+  if (length(q) > 1) {
+    stop('Query vector must be length 1')
+  }
+  
+  if (nchar(q, type = "bytes") > 2.5E6) {
+    stop('Query string is too long (>2.5 million bytes), consider soilDB::makeChunks() to split inputs into several smaller queries and iterate', call. = FALSE)    
+  }
+  
   # submit request
   r <- httr::POST(url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
                   body = list(query = q,
