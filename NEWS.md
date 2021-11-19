@@ -1,3 +1,10 @@
+# soilDB 2.6.9 (2021-11-19)
+ * Replaced functionality using {plyr}/{reshape2} with {base}/{data.table}
+ * `processSDA_WKT()`: replaced {rgeos} with {wk} and {sf}
+ * `SDA_spatialQuery()`: added `query_string` argument
+ * `get_SDA_property()`: fixes for MIN/MAX aggregation (https://github.com/ncss-tech/soilDB/issues/219)
+ * `get_component_from_SDA()`: fragment size thresholds now conform with new (clarified) NSSH definitions
+ 
 # soilDB 2.6.8 (2021-11-05)
  * `fetchNASIS()` upgrades: use data.table and base internally for data aggregation
  * `fetchNASIS("components")` now "sieves" rock fragments and human artifacts using same routines as for pedons; respects `nullFragsAreZero` argument
