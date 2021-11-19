@@ -335,6 +335,9 @@ SDA_spatialQuery <- function(geom,
   }
   
   # check for required packages
+  if (!requireNamespace('sf', quietly = TRUE))
+    stop('please install the `sf` package', call.=FALSE)
+  
   if (!requireNamespace('wk', quietly = TRUE))
     stop('please install the `wk` package', call.=FALSE)
   
@@ -376,7 +379,7 @@ SDA_spatialQuery <- function(geom,
   
   # WKT encoding
   # use a geometry collection
-  wkt <- wk::as_wkt(sf::st_as_sf(geom)$geometry)
+  wkt <- wk::as_wkt(sf::st_geometry(sf::st_as_sf(geom)))
   
   # returning geom + mukey or geom + areasymbol
   if (what %in% c('mupolygon', 'sapolygon')) {
