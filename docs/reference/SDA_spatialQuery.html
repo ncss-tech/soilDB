@@ -76,7 +76,7 @@ returned. See details." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.9</span>
       </span>
     </div>
 
@@ -132,7 +132,8 @@ returned. See details.</p>
   <span class='va'>geom</span>,
   what <span class='op'>=</span> <span class='st'>"mukey"</span>,
   geomIntersection <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  db <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"SSURGO"</span>, <span class='st'>"STATSGO"</span>, <span class='st'>"SAPOLYGON"</span><span class='op'>)</span>
+  db <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html'>c</a></span><span class='op'>(</span><span class='st'>"SSURGO"</span>, <span class='st'>"STATSGO"</span>, <span class='st'>"SAPOLYGON"</span><span class='op'>)</span>,
+  query_string <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -162,6 +163,10 @@ returned.</p></td>
       <td><p>a character vector identifying the Soil Geographic Databases
 ('SSURGO' or 'STATSGO') to query. Option <var>STATSGO</var> currently works only
 in combination with <code>what = "mupolygon"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>query_string</th>
+      <td><p>Default: <code>FALSE</code>; if <code>TRUE</code> return a character string containing query that would be sent to SDA via <code>SDA_query</code></p></td>
     </tr>
     </table>
 
@@ -331,6 +336,11 @@ results. Polygon area in acres is computed server-side when <code>what =
 <span class='r-in'>  font <span class='op'>=</span> <span class='fl'>4</span></span>
 <span class='r-in'><span class='op'>)</span></span>
 <span class='r-in'> <span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: 'raster'</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from 'package:aqp':</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     metadata, metadata&lt;-</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> single result set, returning a data.frame</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> single result set, returning a data.frame</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> single result set, returning a data.frame</span>

@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.6.9</span>
       </span>
     </div>
 
@@ -114,6 +114,22 @@
       <small>Source: <a href='https://github.com/ncss-tech/soilDB/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="soildb-269-2021-11-19" class="section level1">
+<h1 class="page-header" data-toc-text="2.6.9">
+<a href="#soildb-269-2021-11-19" class="anchor"></a>soilDB 2.6.9 (2021-11-19)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Replaced functionality using {plyr}/{reshape2} with {base}/{data.table}</li>
+<li>
+<code><a href="../reference/processSDA_WKT.html">processSDA_WKT()</a></code>: replaced {rgeos} with {wk} and {sf}</li>
+<li>
+<code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code>: added <code>query_string</code> argument</li>
+<li>
+<code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code>: fixes for MIN/MAX aggregation (<a href="https://github.com/ncss-tech/soilDB/issues/219" class="uri">https://github.com/ncss-tech/soilDB/issues/219</a>)</li>
+<li>
+<code><a href="../reference/fetchSDA.html">get_component_from_SDA()</a></code>: fragment size thresholds now conform with new (clarified) NSSH definitions</li>
+</ul>
+</div>
     <div id="soildb-268-2021-11-05" class="section level1">
 <h1 class="page-header" data-toc-text="2.6.8">
 <a href="#soildb-268-2021-11-05" class="anchor"></a>soilDB 2.6.8 (2021-11-05)<small> Unreleased </small>
