@@ -127,6 +127,12 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
 
 })
 
+test_that("SDA_spatialQuery() spatial query of MUKEY with multiple features", {
+  x <- st_as_sf(data.frame(x = c(-120,-120,-120), y = c(37,37,38)), coords = c('x','y'), crs=4326)
+  res <- SDA_spatialQuery(x)
+  expect_equal(nrow(res), 2)
+})
+
 test_that("SDA_query() interprets column names", {
 
   skip_if_offline()
