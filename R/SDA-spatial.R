@@ -379,7 +379,7 @@ SDA_spatialQuery <- function(geom,
   
   # WKT encoding
   # use a geometry collection
-  wkt <- wk::as_wkt(sf::st_geometry(sf::st_as_sf(geom)))
+  wkt <- wk::wk_collection(wk::as_wkt(sf::st_as_sf(geom)))
   
   # returning geom + mukey or geom + areasymbol
   if (what %in% c('mupolygon', 'sapolygon')) {
