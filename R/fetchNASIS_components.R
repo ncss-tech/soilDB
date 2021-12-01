@@ -95,12 +95,14 @@
   if (nrow(ov) > 0)
     site(f.chorizon) <- ov
 
+  # 2021-11-30: subset to hide aqp warnings for <- methods
+  
   # add diagnostic features to SPC
-  diagnostic_hz(f.chorizon) <- f.diaghz
+  diagnostic_hz(f.chorizon) <- f.diaghz[which(f.diaghz$coiid %in% f.chorizon$coiid),]
 
   # add restrictions to SPC
   # required new setter in aqp SPC object (AGB added 2019/12/23)
-  restrictions(f.chorizon) <- f.restrict
+  restrictions(f.chorizon) <- f.restrict[which(f.restrict$coiid %in% f.chorizon$coiid),]
 
   # print any messages on possible data quality problems:
   if(exists('component.hz.problems', envir=soilDB.env))
