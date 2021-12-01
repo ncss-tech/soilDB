@@ -229,7 +229,10 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
       chs$coiidref <- d$coiid
     } else {
       ldx <- !d$coiid %in% chs$coiidref
-      chs_null <- chs[0,][1:sum(ldx),]
+      chs_null <- chs[0,]
+      if (any(ldx)) {
+        chs_null <- chs_null[seq(sum(ldx)),]
+      }
       chs_null$coiidref <- d$coiid[ldx]
       chs <- rbind(chs, chs_null)
     }
@@ -902,7 +905,10 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
       chf$chiidref <- d$chiid
     } else {
       ldx <- !d$chiid %in% chf$chiidref
-      chf_null <- chf[0,][1:sum(ldx),]
+      chf_null <- chf[0,]
+      if (any(ldx)) {
+        chf_null <- chf_null[seq(sum(ldx)),]
+      }
       chf_null$chiidref <- d$chiid[ldx]
       chf <- rbind(chf, chf_null)
     }
