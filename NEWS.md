@@ -1,4 +1,4 @@
-# soilDB 2.6.9 (2021-11-19)
+# soilDB 2.6.9 (2021-12-02)
  * Replaced functionality using {plyr}/{reshape2} with {base}/{data.table}
  * `processSDA_WKT()`: replaced {rgeos} with {wk} and {sf}
  * `SDA_spatialQuery()`: added `query_string` argument
