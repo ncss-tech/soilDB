@@ -3,6 +3,9 @@
 
 # git diff --name-only master...nasisDBI | grep -E get\\|NASIS\\|fetch
 
+# for vegplot data that are complete
+#  - VEG - Veg Plots by User Site ID and Vegplot ID for %WY629% 
+
 f <- read.table(text = "R/fetchNASIS.R
                         R/fetchNASIS_pedons.R
                         R/fetchNASIS_components.R
