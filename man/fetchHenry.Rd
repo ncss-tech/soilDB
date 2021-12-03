@@ -15,7 +15,8 @@ fetchHenry(
   start.date = NULL,
   stop.date = NULL,
   pad.missing.days = TRUE,
-  soiltemp.summaries = TRUE
+  soiltemp.summaries = TRUE,
+  tz = ""
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ with NA? see details}
 
 \item{soiltemp.summaries}{should soil temperature ("day" granularity only)
 be summarized? see details}
+
+\item{tz}{Used for custom timezone. Default \code{""} is current locale}
 }
 \value{
 a list containing: \item{sensors}{a \code{SpatialPointsDataFrame}

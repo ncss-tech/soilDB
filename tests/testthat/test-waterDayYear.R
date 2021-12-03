@@ -41,25 +41,13 @@ test_that("works as expected", {
   expect_true(inherits(res, 'data.frame'))
   expect_true(length(x) == nrow(res))
   
-  # # text interface, with YYYY-MM-DD hh:mm:ss
-  # res <- waterDayYear("2000-12-05 00:00:00")
-  # expect_equal(res$wy, 2001L)
-  # 
-  # # NOTE: 00:00:00 is not robust to time zone differences e.g. winbuilder 
-  # #       times are interpreted differently depending on locale
-  # #       resulting in either WD 66 or 65
-  # expect_equal(res$wd, 66L)
-  
   # text interface, with YYYY-MM-DD hh:mm:ss
-  res <- waterDayYear("2000-12-05 12:00:00")
+  # NOTE: waterDayYear and .formatDates involving hh:mm:ss in tests 
+  #       require the optional `tz` argument for consistent conversion across locales
+  res <- waterDayYear("2000-12-05 12:00:00", tz = "GMT")
   expect_equal(res$wy, 2001L)
   
   expect_equal(res$wd, 66L)
-  
-  
-  ## what about time zones... shouldn't matter?
-  # waterDayYear(as.POSIXct("2000-12-05 00:00:00", tz = 'GMT'))
-  
   
 })
 

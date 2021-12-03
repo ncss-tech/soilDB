@@ -9,31 +9,27 @@ Downloads](http://cranlogs.r-pkg.org/badges/grand-total/soilDB)](https://cran.r-
 ![CRAN/METACRAN](https://img.shields.io/cran/l/soilDB) [![soilDB
 Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/soilDB/docs)
 
-Installation
-------------
+## Installation
 
-Get the stable version (2.6.5) from CRAN:
+Get the stable version from CRAN:
 
     install.packages('soilDB', dependencies = TRUE)
 
-Get the development version (2.6.9) from GitHub:
+Get the development version from GitHub:
 
     remotes::install_github("ncss-tech/soilDB", dependencies = FALSE, upgrade = FALSE, build = FALSE)
 
-Website
--------
+## Website
 
--   <a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a>
+-   <http://ncss-tech.github.io/AQP/>
 
-Citation
---------
+## Citation
 
 Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021).
 soilDB: Soil Database Interface. R package version 2.6.5.
 <https://CRAN.R-project.org/package=soilDB>
 
-soilDB 2.6.9
-------------
+## soilDB 2.6.9
 
 ### Notices on Database Interfaces
 
@@ -78,8 +74,7 @@ soilDB 2.6.9
 -   `ISSR800.wcs()` and `mukey.wcs()` now return a result that inherits
     from `try-error` (and a message) if the Web Coverage Service fails
 
-Functions by Data Source
-------------------------
+## Functions by Data Source
 
 -   SDA
     -   [`fetchSDA`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSDA_component.html)
@@ -132,8 +127,7 @@ Functions by Data Source
 -   SoilGrids
     -   [`fetchSoilGrids`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSoilGrids.html)
 
-Miscellaneous Functions
------------------------
+## Miscellaneous Functions
 
 -   [`estimateSTR`](http://ncss-tech.github.io/soilDB/docs/reference/estimateSTR.html)
 -   [`STRplot`](http://ncss-tech.github.io/soilDB/docs/reference/STRplot.html)
@@ -144,8 +138,7 @@ Miscellaneous Functions
 -   [`code`](http://ncss-tech.github.io/soilDB/docs/reference/code.html)
 -   [`get_NOAA_GHCND`](http://ncss-tech.github.io/soilDB/docs/reference/get_NOAA_GHCND.html)
 
-Tutorials and Demonstrations
-----------------------------
+## Tutorials and Demonstrations
 
 -   [fetchKSSL](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
 -   [SDA\_query](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html)
@@ -153,80 +146,11 @@ Tutorials and Demonstrations
 -   [SCAN/SNOTEL
     Data](http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html)
 
-Related Packages
-----------------
+## Related Packages
 
 -   [aqp](https://github.com/ncss-tech/aqp)
 -   [sharpshootR](https://github.com/ncss-tech/sharpshootR)
 
-Examples
---------
-
-### Load Soil Packages
-
-    library(aqp)
-    library(soilDB)
-    library(sharpshootR)
-
-### Get Official Series Description Data
-
-    # get morphology + extended summaries
-    soils <- c('cecil', 'altavista', 'lloyd', 'wickham', 'woodbridge', 'chewacla', 'congaree')
-    s <- fetchOSD(soils, extended = TRUE)
-
-### Visualize Soil-Landscape Relationships
-
-    # viz of hillslope position, from SSURGO component records
-    res <- vizHillslopePosition(s$hillpos, annotation.cex = 0.9)
-    print(res$fig)
-
-<img src="https://i.imgur.com/jGWEG8U.png" width="1056" />
-
-### Make Profile Sketches
-
-    par(mar = c(0, 1, 0, 4), xpd = NA)
-
-    plotSPC(
-      s$SPC,
-      plot.order = res$order,
-      cex.names = 1,
-      axis.line.offset = -0.1,
-      width = 0.2
-    )
-
-<img src="https://i.imgur.com/j0QkOBc.png" width="1344" />
-
-### Identify Tabular “Siblings”
-
-    s <- 'Amador'
-    amador <- siblings(s, only.major = FALSE, component.data = TRUE)
-
-    # limit to named soil series
-    sib.data <- subset(amador$sib.data, !compkind %in% c('Miscellaneous area', 'Family', 'Taxon above family'))
-
-    # get parsed OSD records
-    sibs <- fetchOSD(c(s, unique(amador$sib$sibling)), extended = TRUE)
-
-### Plot Dendrograms with Taxonomic Relationships
-
-    # invert colors
-    par(mar = c(0, 0, 0, 0),
-        fg = 'white',
-        bg = 'black')
-
-    SoilTaxonomyDendrogram(
-      sibs$SPC,
-      dend.width = 1.5,
-      y.offset = 0.4,
-      scaling.factor = 0.02,
-      width = 0.2,
-      cex.taxon.labels = 1,
-      cex.names = 1
-    )
-
-<img src="https://i.imgur.com/4Gh1hJg.png" width="1344" />
-
-Dependency Graph
-----------------
+## Dependency Graph
 
 ![](https://cran.microsoft.com/packagedata/graphs/soilDB.png)

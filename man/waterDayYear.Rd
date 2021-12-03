@@ -4,12 +4,14 @@
 \alias{waterDayYear}
 \title{Compute Water Day and Year}
 \usage{
-waterDayYear(d, end = "09-30")
+waterDayYear(d, end = "09-30", tz = "")
 }
 \arguments{
 \item{d}{anything the can be safely converted to \code{PPOSIXlt}}
 
 \item{end}{"MM-DD" notation for end of water year}
+
+\item{tz}{Used in POSIXlt conversion for custom timezone. Default \code{""} is current locale}
 }
 \value{
 A \code{data.frame} object with the following \item{wy}{the "water

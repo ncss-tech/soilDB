@@ -185,7 +185,8 @@ test_that(".formatDates() works as expected", {
     stringsAsFactors = FALSE
   )
   
-  res <- soilDB:::.formatDates(x, gran = 'day', pad.missing.days = FALSE)
+  # .formatDates tz argument ensures consistency of tests across platforms/locales
+  res <- soilDB:::.formatDates(x, gran = 'day', pad.missing.days = FALSE, tz = "GMT")
   
   # expected structure
   expect_true(nrow(res) == nrow(x))
