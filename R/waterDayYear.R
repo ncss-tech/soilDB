@@ -14,6 +14,7 @@
 #' 
 #' @param d anything the can be safely converted to \code{PPOSIXlt}
 #' @param end "MM-DD" notation for end of water year
+#' @param tz Used in POSIXlt conversion for custom timezone. Default `""` is current locale 
 #' @return A \code{data.frame} object with the following \item{wy}{the "water
 #' year"} \item{wd}{the "water day"}
 #' @author D.E. Beaudette
@@ -27,12 +28,12 @@
 #' waterDayYear('2019-01-01')
 #' 
 #' @export waterDayYear
-waterDayYear <- function(d, end = "09-30") {
+waterDayYear <- function(d, end = "09-30", tz = "") {
   
-  # note: this will assume the current / LOCALE-specific timezone
+  # note: tz = "" will assume the current / LOCALE-specific timezone
   # convert to water year, using Sept
   # ideas from: https://github.com/USGS-R/dataRetrieval/issues/246
-  dLT <- as.POSIXlt(d)
+  dLT <- as.POSIXlt(d, tz = tz)
   
   # add century from epoch
   water_year <- dLT$year + 1900

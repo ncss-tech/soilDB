@@ -1,3 +1,6 @@
+# soilDB 2.6.10 (2021-12-07)
+ * `waterDayYear()` and `.formatDates()` allow optional `tz` argument; used for consistent POSIX time conversion in tests where date/time has granularity finer than one day
+
 # soilDB 2.6.9 (2021-12-02)
  * Replaced functionality using {plyr}/{reshape2} with {base}/{data.table}
  * `processSDA_WKT()`: replaced {rgeos} with {wk} and {sf}
