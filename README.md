@@ -1,7 +1,7 @@
 [![CRAN Version
 (Stable)](http://www.r-pkg.org/badges/version/soilDB)](https://cran.r-project.org/package=soilDB)
 [![GitHub Version
-(Development)](https://img.shields.io/badge/GitHub-2.6.9-yellowgreen)](https://github.com/ncss-tech/soilDB)
+(Development)](https://img.shields.io/badge/GitHub-2.6.10-yellowgreen)](https://github.com/ncss-tech/soilDB)
 [![R-CMD-check Build
 Status](https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
 [![Total CRAN
@@ -9,27 +9,31 @@ Downloads](http://cranlogs.r-pkg.org/badges/grand-total/soilDB)](https://cran.r-
 ![CRAN/METACRAN](https://img.shields.io/cran/l/soilDB) [![soilDB
 Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/soilDB/docs)
 
-## Installation
+Installation
+------------
 
 Get the stable version (2.6.9) from CRAN:
 
     install.packages('soilDB', dependencies = TRUE)
 
-Get the development version from GitHub:
+Get the development version (2.6.10) from GitHub:
 
     remotes::install_github("ncss-tech/soilDB", dependencies = FALSE, upgrade = FALSE, build = FALSE)
 
-## Website
+Website
+-------
 
--   <http://ncss-tech.github.io/AQP/>
+-   <a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a>
 
-## Citation
+Citation
+--------
 
 Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021).
 soilDB: Soil Database Interface. R package version 2.6.9.
 <https://CRAN.R-project.org/package=soilDB>
 
-## soilDB 2.6.9
+soilDB 2.6.10
+-------------
 
 ### Notices on Database Interfaces
 
@@ -74,7 +78,8 @@ soilDB: Soil Database Interface. R package version 2.6.9.
 -   `ISSR800.wcs()` and `mukey.wcs()` now return a result that inherits
     from `try-error` (and a message) if the Web Coverage Service fails
 
-## Functions by Data Source
+Functions by Data Source
+------------------------
 
 -   SDA
     -   [`fetchSDA`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSDA_component.html)
@@ -127,7 +132,8 @@ soilDB: Soil Database Interface. R package version 2.6.9.
 -   SoilGrids
     -   [`fetchSoilGrids`](http://ncss-tech.github.io/soilDB/docs/reference/fetchSoilGrids.html)
 
-## Miscellaneous Functions
+Miscellaneous Functions
+-----------------------
 
 -   [`estimateSTR`](http://ncss-tech.github.io/soilDB/docs/reference/estimateSTR.html)
 -   [`STRplot`](http://ncss-tech.github.io/soilDB/docs/reference/STRplot.html)
@@ -138,7 +144,8 @@ soilDB: Soil Database Interface. R package version 2.6.9.
 -   [`code`](http://ncss-tech.github.io/soilDB/docs/reference/code.html)
 -   [`get_NOAA_GHCND`](http://ncss-tech.github.io/soilDB/docs/reference/get_NOAA_GHCND.html)
 
-## Tutorials and Demonstrations
+Tutorials and Demonstrations
+----------------------------
 
 -   [fetchKSSL](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
 -   [SDA\_query](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html)
@@ -146,11 +153,13 @@ soilDB: Soil Database Interface. R package version 2.6.9.
 -   [SCAN/SNOTEL
     Data](http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html)
 
-## Related Packages
+Related Packages
+----------------
 
 -   [aqp](https://github.com/ncss-tech/aqp)
 -   [sharpshootR](https://github.com/ncss-tech/sharpshootR)
 
 Dependency Graph
+----------------
 
 ![](https://cran.microsoft.com/packagedata/graphs/soilDB.png)
