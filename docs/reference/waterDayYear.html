@@ -18,7 +18,7 @@ season. This is September 30 in California.'><!-- mathjax --><script src="https:
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.10</span>
       </span>
     </div>
 
@@ -55,7 +55,7 @@ season. This is September 30 in California.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">waterDayYear</span><span class="op">(</span><span class="va">d</span>, end <span class="op">=</span> <span class="st">"09-30"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">waterDayYear</span><span class="op">(</span><span class="va">d</span>, end <span class="op">=</span> <span class="st">"09-30"</span>, tz <span class="op">=</span> <span class="st">""</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -64,6 +64,8 @@ season. This is September 30 in California.</p>
 <dd><p>anything the can be safely converted to <code>PPOSIXlt</code></p></dd>
 <dt>end</dt>
 <dd><p>"MM-DD" notation for end of water year</p></dd>
+<dt>tz</dt>
+<dd><p>Used in POSIXlt conversion for custom timezone. Default <code>""</code> is current locale</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
