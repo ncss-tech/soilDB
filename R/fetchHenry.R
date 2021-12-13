@@ -184,7 +184,8 @@ month2season <- function(x) {
 # @param gran granularity, common usage is `'day'`
 # @param pad.missing.days pad missing days with `NA` rows?
 # @param tz Used in POSIXct conversion for custom timezone. Default `""` is current locale 
-.formatDates <- function(sensor.data, gran, pad.missing.days, tz = "") {
+# @param format Used in POSIXct conversion. Default format for Henry date times `"%Y-%m-%d %H:%M:%S"`
+.formatDates <- function(sensor.data, gran, pad.missing.days, tz = "", format = "%Y-%m-%d %H:%M:%S") {
   
   .SD <- NULL
   
@@ -192,7 +193,7 @@ month2season <- function(x) {
   # when sensor data are missing, sensor.data is a list of length 0
   if(length(sensor.data) > 0) {
     
-    sensor.data$date_time <- as.POSIXct(sensor.data$date_time, tz = tz)
+    sensor.data$date_time <- as.POSIXct(sensor.data$date_time, format = format, tz = tz)
     sensor.data$year <- as.integer(format(sensor.data$date_time, "%Y"))
     sensor.data$doy <- as.integer(format(sensor.data$date_time, "%j"))
     sensor.data$month <- format(sensor.data$date_time, "%b")
@@ -253,7 +254,7 @@ month2season <- function(x) {
 #' @param usersiteid (optional) filter results using a NASIS user site ID
 #' @param project (optional) filter results using a project ID
 #' @param sso (optional) filter results using a soil survey office code
-#' @param gran data granularity: "day", "week", "month", "year"; returned data
+#' @param gran data granularity: "hour" (if available), "day", "week", "month", "year"; returned data
 #' are averages
 #' @param start.date (optional) starting date filter
 #' @param stop.date (optional) ending date filter

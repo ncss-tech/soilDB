@@ -32,7 +32,7 @@ metadata + all sensor data}
 
 \item{sso}{(optional) filter results using a soil survey office code}
 
-\item{gran}{data granularity: "day", "week", "month", "year"; returned data
+\item{gran}{data granularity: "hour" (if available), "day", "week", "month", "year"; returned data
 are averages}
 
 \item{start.date}{(optional) starting date filter}
