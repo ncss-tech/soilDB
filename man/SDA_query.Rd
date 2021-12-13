@@ -77,7 +77,7 @@ if(requireNamespace("curl") & requireNamespace("wk") &
 }
 }
 \seealso{
-\code{\link{mapunit_geom_by_ll_bbox}}
+\code{\link{SDA_spatialQuery}}
 }
 \author{
 D.E. Beaudette

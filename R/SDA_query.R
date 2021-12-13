@@ -98,7 +98,7 @@ format_SQL_in_statement <- function(x) {
 #' @return a data.frame result (\code{NULL} if empty, try-error on error)
 #' @export
 #' @author D.E. Beaudette
-#' @seealso \code{\link{mapunit_geom_by_ll_bbox}}
+#' @seealso \code{\link{SDA_spatialQuery}}
 #' @keywords manip
 #' @examples
 #' \donttest{
@@ -152,7 +152,6 @@ format_SQL_in_statement <- function(x) {
 #'    str(x)
 #'  }
 #' }
-
 SDA_query <- function(q) {
 
   # check for required packages

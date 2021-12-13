@@ -36,9 +36,7 @@ include a switch to determine the data source: "official" data via USDA-NRCS
 servers, or a "snapshot" via SoilWeb.
 }
 \note{
-This function should be considered experimental; arguments, results,
-and side-effects could change at any time. SDA now supports spatial queries,
-consider using \code{\link{SDA_query_features}} instead.
+SDA now supports spatial queries, consider using \code{\link{SDA_spatialQuery}} instead.
 }
 \examples{
 
