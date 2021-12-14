@@ -6,6 +6,8 @@
 \title{Create local NASIS database connection}
 \usage{
 dbConnectNASIS(dsn = NULL)
+
+NASIS(dsn = NULL)
 }
 \arguments{
 \item{dsn}{Optional: path to SQLite database containing NASIS table

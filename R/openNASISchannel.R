@@ -4,15 +4,14 @@
 
   use_sqlite <- !is.null(dsn)
 
-  if (is.null(getOption('soilDB.NASIS.credentials')))
-    stop("soilDB.NASIS.credentials not set")
 
   if (!use_sqlite) {
-    
     # assuming that default connection uses ODBC
     if (!requireNamespace("odbc"))
       stop("package `odbc` is required", call. = FALSE)
     
+    if (is.null(getOption('soilDB.NASIS.credentials')))
+      stop("soilDB.NASIS.credentials not set")
     # setup connection local NASIS 
      
     ## old style connection
