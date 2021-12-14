@@ -144,6 +144,8 @@ FROM geom_data;
 #' @param what a character vector specifying what to return. `'mukey'`: `data.frame` with intersecting map unit keys and names, `'mupolygon'` overlapping or intersecting map unit polygons from selected database, `'areasymbol'`: `data.frame` with intersecting soil survey areas, `'sapolygon'`: overlapping or intersecting soil survey area polygons (SSURGO only) 
 #' @param geomIntersection logical; `FALSE`: overlapping map unit polygons returned, `TRUE`: intersection of `geom` + map unit polygons is returned.
 #' @param db a character vector identifying the Soil Geographic Databases (`'SSURGO'` or `'STATSGO'`) to query. Option \var{STATSGO} currently works only in combination with `what = "mupolygon"`. 
+#' @param byFeature Iterate over features, returning a combined data.frame where each feature is uniquely identified by value in `idcol`. Default `FALSE`.
+#' @param idcol Unique IDs used for individual features when `byFeature = TRUE`; Default `"gid"`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @return A `data.frame` if `what = 'mukey'`, otherwise a `SpatialPolygonsDataFrame` or `sf` object.
 #' @note Row-order is not preserved across features in \code{geom} and returned object. Use `sf::st_intersects()` or similar functionality to extract from results. Polygon area in acres is computed server-side when `what = 'mupolygon'` and `geomIntersection = TRUE`.
@@ -284,6 +286,35 @@ FROM geom_data;
 #' }
 #' @export SDA_spatialQuery
 SDA_spatialQuery <- function(geom,
+                             what = 'mukey',
+                             geomIntersection = FALSE,
+                             db = c("SSURGO", "STATSGO", "SAPOLYGON"),
+                             byFeature = FALSE,
+                             idcol = "gid",
+                             query_string = FALSE) {
+  if (byFeature) {
+    res <- do.call('rbind', lapply(1:nrow(geom), function(i) {
+      res2 <- .SDA_spatialQuery(
+        geom = geom[i, ],
+        what = what,
+        geomIntersection = geomIntersection,
+        db = db,
+        query_string = query_string
+      )
+      res2[[idcol]] <- i
+      res2
+    }))
+    return(res)
+  }
+  .SDA_spatialQuery(
+    geom = geom,
+    what = what,
+    geomIntersection = geomIntersection,
+    db = db,
+    query_string = query_string
+  )
+}
+.SDA_spatialQuery <- function(geom,
                              what = 'mukey',
                              geomIntersection = FALSE,
                              db = c("SSURGO", "STATSGO", "SAPOLYGON"),

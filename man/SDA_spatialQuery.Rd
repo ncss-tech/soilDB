@@ -9,6 +9,8 @@ SDA_spatialQuery(
   what = "mukey",
   geomIntersection = FALSE,
   db = c("SSURGO", "STATSGO", "SAPOLYGON"),
+  byFeature = FALSE,
+  idcol = "gid",
   query_string = FALSE
 )
 }
@@ -20,6 +22,10 @@ SDA_spatialQuery(
 \item{geomIntersection}{logical; \code{FALSE}: overlapping map unit polygons returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is returned.}
 
 \item{db}{a character vector identifying the Soil Geographic Databases (\code{'SSURGO'} or \code{'STATSGO'}) to query. Option \var{STATSGO} currently works only in combination with \code{what = "mupolygon"}.}
+
+\item{byFeature}{Iterate over features, returning a combined data.frame where each feature is uniquely identified by value in \code{idcol}. Default \code{FALSE}.}
+
+\item{idcol}{Unique IDs used for individual features when \code{byFeature = TRUE}; Default \code{"gid"}}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 }
