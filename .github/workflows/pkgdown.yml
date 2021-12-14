@@ -1,6 +1,7 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/master/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
+  workflow_dispatch:
   push:
     branches: [main, master]
     paths:
@@ -35,12 +36,12 @@ jobs:
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
 
-      - name: Restore R package cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+      #- name: Restore R package cache
+      #  uses: actions/cache@v2
+      #  with:
+      #    path: ${{ env.R_LIBS_USER }}
+      #    key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
+      #    restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -49,8 +50,10 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+          
       - name: Install dependencies
         run: |
+          install.packages("systemfonts")
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
         
