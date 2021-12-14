@@ -2,8 +2,6 @@
 % Please edit documentation in R/SDA-spatial.R
 \name{SDA_spatialQuery}
 \alias{SDA_spatialQuery}
-\alias{SDA_make_spatial_query}
-\alias{SDA_query_features}
 \title{Query Soil Data Access by spatial intersection with supplied geometry}
 \usage{
 SDA_spatialQuery(
@@ -11,199 +9,172 @@ SDA_spatialQuery(
   what = "mukey",
   geomIntersection = FALSE,
   db = c("SSURGO", "STATSGO", "SAPOLYGON"),
+  byFeature = FALSE,
+  idcol = "gid",
   query_string = FALSE
 )
 }
 \arguments{
-\item{geom}{a Spatial* object, with valid CRS. May contain multiple
-features.}
+\item{geom}{an \code{sf} or \verb{Spatial*} object, with valid CRS. May contain multiple features.}
 
-\item{what}{a character vector specifying what to return. \code{'mukey'}:
-\code{data.frame} with intersecting map unit keys and names, \code{'mupolygon'}
-overlapping or intersecting map unit polygons from selected database, \code{'areasymbol'}:
-\code{data.frame} with intersecting soil survey areas, \code{'sapolygon'}:
-overlapping or intersecting soil survey area polygons (SSURGO only)}
+\item{what}{a character vector specifying what to return. \code{'mukey'}: \code{data.frame} with intersecting map unit keys and names, \code{'mupolygon'} overlapping or intersecting map unit polygons from selected database, \code{'areasymbol'}: \code{data.frame} with intersecting soil survey areas, \code{'sapolygon'}: overlapping or intersecting soil survey area polygons (SSURGO only)}
 
-\item{geomIntersection}{logical; \code{FALSE}: overlapping map unit polygons
-returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is
-returned.}
+\item{geomIntersection}{logical; \code{FALSE}: overlapping map unit polygons returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is returned.}
 
-\item{db}{a character vector identifying the Soil Geographic Databases
-('SSURGO' or 'STATSGO') to query. Option \var{STATSGO} currently works only
-in combination with \code{what = "mupolygon"}.}
+\item{db}{a character vector identifying the Soil Geographic Databases (\code{'SSURGO'} or \code{'STATSGO'}) to query. Option \var{STATSGO} currently works only in combination with \code{what = "mupolygon"}.}
+
+\item{byFeature}{Iterate over features, returning a combined data.frame where each feature is uniquely identified by value in \code{idcol}. Default \code{FALSE}.}
+
+\item{idcol}{Unique IDs used for individual features when \code{byFeature = TRUE}; Default \code{"gid"}}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 }
 \value{
-A \code{data.frame} if \code{what = 'mukey'}, otherwise
-\code{SpatialPolygonsDataFrame} object.
+A \code{data.frame} if \code{what = 'mukey'}, otherwise a \code{SpatialPolygonsDataFrame} or \code{sf} object.
 }
 \description{
-Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied
-geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons
-objects with a valid CRS. Map unit keys, overlapping polygons, or the
-spatial intersection of \code{geom} + SSURGO / STATSGO polygons can be
-returned. See details.
+Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersection of \code{geom} + SSURGO / STATSGO polygons can be returned. See details.
 }
 \details{
-Queries for map unit keys are always more efficient vs. queries for
-overlapping or intersecting (i.e. least efficient) features. \code{geom} is
-converted to GCS / WGS84 as needed. Map unit keys are always returned when
-using \code{what = "mupolygon"}.
+Queries for map unit keys are always more efficient vs. queries for overlapping or intersecting (i.e. least efficient) features. \code{geom} is converted to GCS / WGS84 as needed. Map unit keys are always returned when using \code{what = "mupolygon"}.
 
-SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO
-(generalized soil survey, 1:250,000 scale) data are stored together within
-SDA. This means that queries that don't specify an area symbol may result in
-a mixture of SSURGO and STATSGO records. See the examples below and the
-\href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial}
-for details.
+SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO (generalized soil survey, 1:250,000 scale) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
 }
 \note{
-Row-order is not preserved across features in \code{geom} and returned
-object. Use \code{sp::over()} or similar functionality to extract from
-results. Polygon area in acres is computed server-side when \code{what =
-'geom'} and \code{geomIntersection = TRUE}.
+Row-order is not preserved across features in \code{geom} and returned object. Use \code{sf::st_intersects()} or similar functionality to extract from results. Polygon area in acres is computed server-side when \code{what = 'mupolygon'} and \code{geomIntersection = TRUE}.
 }
 \examples{
-
 \donttest{
-if(requireNamespace("curl") &
-   curl::has_internet() & 
-   requireNamespace("sp") &
-   requireNamespace("scales") &
-   requireNamespace("raster") 
-   ) {
-
-library(aqp)
-library(sp)
-library(raster)
-
-## query at a point
-
-# example point
-p <- SpatialPoints(cbind(x = -119.72330, y = 36.92204), 
-                   proj4string = CRS('+proj=longlat +datum=WGS84'))
-
-# query map unit records at this point
-res <- SDA_spatialQuery(p, what = 'mukey')
-
-# convert results into an SQL "IN" statement
-# useful when there are multiple intersecting records
-mu.is <- format_SQL_in_statement(res$mukey)
-
-# composite SQL WHERE clause
-sql <- sprintf("mukey IN \%s", mu.is)
-
-# get commonly used map unit / component / chorizon records
-# as a SoilProfileCollection object
-# confusing but essential: request that results contain `mukey`
-# with `duplicates = TRUE`
-x <- fetchSDA(sql, duplicates = TRUE)
-
-# safely set texture class factor levels
-# by making a copy of this column
-# this will save in lieu of textures in the original
-# `texture` column
-horizons(x)$texture.class <- factor(x$texture, levels = SoilTextureLevels())
-
-# graphical depiction of the result
-plotSPC(x, color='texture.class', label='compname', 
-        name='hzname', cex.names = 1, width=0.25, 
-        plot.depth.axis=FALSE, hz.depths=TRUE, 
-        name.style='center-center'
-)
-
-
-
-## query mukey + geometry that intersect with a bounding box
-
-# define a bounding box: xmin, xmax, ymin, ymax
-#
-#         +-------------------(ymax, xmax)
-#         |                        |
-#         |                        |
-#     (ymin, xmin) ----------------+
-b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
-
-# convert bounding box to WKT
-bbox.sp <-as(extent(b), 'SpatialPolygons')
-proj4string(bbox.sp) <- '+proj=longlat +datum=WGS84'
-
-# results contain associated map unit keys (mukey)
-# return SSURGO polygons, after intersection with provided BBOX
-ssurgo.geom <- SDA_spatialQuery(
-  bbox.sp, 
-  what = 'geom', 
-  db = 'SSURGO', 
-  geomIntersection = TRUE
-)
-
-# return STATSGO polygons, after intersection with provided BBOX
-statsgo.geom <- SDA_spatialQuery(
-  bbox.sp, 
-  what = 'geom', 
-  db = 'STATSGO', 
-  geomIntersection = TRUE
-)
-
-# inspect results
-par(mar = c(0,0,3,1))
-plot(ssurgo.geom, border = 'royalblue')
-plot(statsgo.geom, lwd = 2, border = 'firebrick', add = TRUE)
-plot(bbox.sp, lwd = 3, add = TRUE)
-legend(
-  x = 'topright', 
-  legend = c('BBOX', 'STATSGO', 'SSURGO'), 
-  lwd = c(3, 2, 1),
-  col = c('black', 'firebrick', 'royalblue'),
-)
-
-
-# quick reminder that STATSGO map units often contain many components
-# format an SQL IN statement using the first STATSGO mukey
-mu.is <- format_SQL_in_statement(statsgo.geom$mukey[1])
-
-# composite SQL WHERE clause
-sql <- sprintf("mukey IN \%s", mu.is)
-
-# get commonly used map unit / component / chorizon records
-# as a SoilProfileCollection object
-x <- fetchSDA(sql)
-
-# tighter figure margins
-par(mar = c(0,0,3,1))
-
-
-# organize component sketches by national map unit symbol
-# color horizons via awc
-# adjust legend title
-# add alternate label (vertical text) containing component percent
-# move horizon names into the profile sketches
-# make profiles wider
-groupedProfilePlot(
-  x, 
-  groups = 'nationalmusym', 
-  label = 'compname', 
-  color = 'awc_r', 
-  col.label = 'Available Water Holding Capacity (cm / cm)',
-  alt.label = 'comppct_r',
-  name.style = 'center-center',
-  width = 0.3
-)
-
-
-mtext(
-  'STATSGO (1:250,000) map units contain a lot of components!', 
-  side = 1, 
-  adj = 0, 
-  line = -1.5, 
-  at = 0.25, 
-  font = 4
-)
- }
+  if (requireNamespace("aqp") && requireNamespace("sf")) {
+    
+    library(aqp)
+    library(sf)
+    
+    ## query at a point
+    
+    # example point
+    p <- sf::st_as_sf(data.frame(x = -119.72330, 
+                                 y = 36.92204),
+                      coords = c('x', 'y'),
+                      crs = 4326)
+    
+    # query map unit records at this point
+    res <- SDA_spatialQuery(p, what = 'mukey')
+    
+    # convert results into an SQL "IN" statement
+    # useful when there are multiple intersecting records
+    mu.is <- format_SQL_in_statement(res$mukey)
+    
+    # composite SQL WHERE clause
+    sql <- sprintf("mukey IN \%s", mu.is)
+    
+    # get commonly used map unit / component / chorizon records
+    # as a SoilProfileCollection object
+    # request that results contain `mukey` with `duplicates = TRUE`
+    x <- fetchSDA(sql, duplicates = TRUE)
+    
+    # safely set texture class factor levels
+    # by making a copy of this column
+    # this will save in lieu of textures in the original
+    # `texture` column
+    horizons(x)$texture.class <- factor(x$texture, levels = SoilTextureLevels())
+    
+    # graphical depiction of the result
+    plotSPC(x,
+            color = 'texture.class',
+            label = 'compname',
+            name = 'hzname',
+            cex.names = 1,
+            width = 0.25,
+            plot.depth.axis = FALSE,
+            hz.depths = TRUE,
+            name.style = 'center-center')
+    
+    ## query mukey + geometry that intersect with a bounding box
+    
+    # define a bounding box: xmin, xmax, ymin, ymax
+    #
+    #         +-------------------(ymax, xmax)
+    #         |                        |
+    #         |                        |
+    #     (ymin, xmin) ----------------+
+    b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
+    
+    # convert bounding box to WKT
+    bbox.sp <- sf::st_as_sf(wk::rct(
+      xmin = b[1], xmax = b[2], ymin = b[3], ymax = b[4],
+      crs = sf::st_crs(4326)
+    ))
+    
+    # results contain associated map unit keys (mukey)
+    # return SSURGO polygons, after intersection with provided BBOX
+    ssurgo.geom <- SDA_spatialQuery(
+      bbox.sp,
+      what = 'mupolygon',
+      db = 'SSURGO',
+      geomIntersection = TRUE
+    )
+    
+    # return STATSGO polygons, after intersection with provided BBOX
+    statsgo.geom <- SDA_spatialQuery(
+      bbox.sp,
+      what = 'mupolygon',
+      db = 'STATSGO',
+      geomIntersection = TRUE
+    )
+    
+    # inspect results
+    par(mar = c(0,0,3,1))
+    plot(sf::st_geometry(ssurgo.geom), border = 'royalblue')
+    plot(sf::st_geometry(statsgo.geom), lwd = 2, border = 'firebrick', add = TRUE)
+    plot(sf::st_geometry(bbox.sp), lwd = 3, add = TRUE)
+    legend(
+      x = 'topright',
+      legend = c('BBOX', 'STATSGO', 'SSURGO'),
+      lwd = c(3, 2, 1),
+      col = c('black', 'firebrick', 'royalblue'),
+    )
+    
+    # quick reminder that STATSGO map units often contain many components
+    # format an SQL IN statement using the first STATSGO mukey
+    mu.is <- format_SQL_in_statement(statsgo.geom$mukey[1])
+    
+    # composite SQL WHERE clause
+    sql <- sprintf("mukey IN \%s", mu.is)
+    
+    # get commonly used map unit / component / chorizon records
+    # as a SoilProfileCollection object
+    x <- fetchSDA(sql)
+    
+    # tighter figure margins
+    par(mar = c(0,0,3,1))
+    
+    # organize component sketches by national map unit symbol
+    # color horizons via awc
+    # adjust legend title
+    # add alternate label (vertical text) containing component percent
+    # move horizon names into the profile sketches
+    # make profiles wider
+    aqp::groupedProfilePlot(x,
+                            groups = 'nationalmusym',
+                            label = 'compname',
+                            color = 'awc_r',
+                            col.label = 'Available Water Holding Capacity (cm / cm)',
+                            alt.label = 'comppct_r',
+                            name.style = 'center-center',
+                            width = 0.3
+    )
+    
+    mtext(
+      'STATSGO (1:250,000) map units contain a lot of components!',
+      side = 1,
+      adj = 0,
+      line = -1.5,
+      at = 0.25,
+      font = 4
+    )
+  }
 }
-
-
 }
 \seealso{
 \code{\link{SDA_query}}

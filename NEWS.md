@@ -1,5 +1,8 @@
-# soilDB 2.6.10 (2021-12-07)
- * `waterDayYear()` and `.formatDates()` allow optional `tz` argument; used for consistent POSIX time conversion in tests where date/time has granularity finer than one day
+# soilDB 2.6.10 (2021-12-13)
+ * `waterDayYear()` and `.formatDates()` allow optional `format` and `tz` argument; used for consistent POSIX time conversion in tests where date/time has granularity finer than one day
+ * `fetchSDA()` extensions for better handling of components with no horizon data
+ * `SDA_spatialQuery()` and `processSDA_WKT()` fully use {sf}, replacing {sp} in these contexts
+ * `SDA_spatialQuery()` gains argument `byFeature` to use multiple single-feature queries and combine the results with a unique feature ID specified by `idcol` argument. This allows for specific feature intersection results without secondary spatial overlay of the polygons (https://github.com/ncss-tech/soilDB/issues/222)
 
 # soilDB 2.6.9 (2021-12-02)
  * Replaced functionality using {plyr}/{reshape2} with {base}/{data.table}

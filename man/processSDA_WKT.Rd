@@ -2,24 +2,27 @@
 % Please edit documentation in R/SDA-spatial.R
 \name{processSDA_WKT}
 \alias{processSDA_WKT}
-\title{Post-process WKT returned from SDA.}
+\title{Post-process Well-Known Text from Soil Data Access}
 \usage{
-processSDA_WKT(d, g = "geom", p4s = "+proj=longlat +datum=WGS84")
+processSDA_WKT(d, g = "geom", crs = 4326, p4s = NULL, as_sf = TRUE)
 }
 \arguments{
-\item{d}{\code{data.frame} returned by \code{SDA_query}, containing WKT
-representation of geometry}
+\item{d}{\code{data.frame} returned by \code{SDA_query}, containing WKT representation of geometry}
 
 \item{g}{name of column in \code{d} containing WKT geometry}
 
-\item{p4s}{PROJ4 CRS definition, typically GCS WGS84}
+\item{crs}{CRS definition (e.g. an EPSG code). Default \code{4326} for WGS84 Geographic Coordinate System}
+
+\item{p4s}{Deprecated: PROJ4 CRS definition}
+
+\item{as_sf}{Return an \code{sf} \code{data.frame}? If \code{FALSE} return a \verb{Spatial*} object.}
 }
 \value{
-A \code{Spatial*} object.
+An \code{sf} object or if \code{as_sf} is \code{FALSE} a \verb{Spatial*} object.
 }
 \description{
-This is a helper function, commonly used with \code{SDA_query} to extract
-WKT (well-known text) representation of geometry to an sp-class object.
+This is a helper function commonly used with \code{SDA_query} to extract
+WKT (well-known text) representation of geometry to an \code{sf} or \code{sp} object.
 }
 \details{
 The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}.
@@ -28,13 +31,10 @@ See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutor
 The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov}. See the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for detailed examples.
 }
 \note{
-This function requires the \code{httr}, \code{jsonlite}, \code{XML} ,  and \code{sf} packages.
-
-This function requires the \code{httr}, \code{jsonlite}, \code{XML},
-and \code{rgeos} packages.
+This function requires the \code{sf} package.
 }
 \author{
-D.E. Beaudette
+D.E. Beaudette, A.G. Brown
 
 D.E. Beaudette
 }
