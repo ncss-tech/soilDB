@@ -6,7 +6,7 @@ output: md_document
 [![R-CMD-check Build Status](https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
 [![Total CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/soilDB)](https://cran.r-project.org/package=soilDB)
 ![CRAN/METACRAN](https://img.shields.io/cran/l/soilDB)
-[![soilDB Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/soilDB/docs)
+[![soilDB Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/soilDB/)
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(rvest)

@@ -3,7 +3,7 @@
 #' A collection of functions for reading data from USDA-NCSS soil databases.
 #' 
 #' This package provides methods for extracting soils information from local
-#' PedonPC and AK Site databases (MS Access format), local NASIS databases (MS
+#' PedonPC and AKSite databases (MS Access format), local NASIS databases (MS
 #' SQL Server), Soil Data Access and various other soil-related web services. 
 #' @name soilDB-package
 #' @aliases soilDB.env soilDB-package soilDB
