@@ -43,7 +43,7 @@ Simplify multiple coarse fraction (>2mm) records by horizon.
 This function is mainly intended for processing of NASIS pedon/component
 data which contains multiple coarse fragment descriptions per horizon.
 \code{simplifyFragmentData} will "sieve out" coarse fragments into the USDA
-classes, split into hard and para- fragments. Likweise, \code{simplifyArtifactData} will sieve out human artifacts, and split total volume into "cohesive", "penetrable", "innocuous", and "persistent".
+classes, split into hard and para- fragments. Likewise, \code{simplifyArtifactData} will sieve out human artifacts, and split total volume into "cohesive", "penetrable", "innocuous", and "persistent".
 
 These functions can be applied to data sources other than NASIS by careful use of the \code{id.var} and \code{vol.var} arguments.
 \itemize{
