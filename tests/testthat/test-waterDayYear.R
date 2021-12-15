@@ -43,8 +43,8 @@ test_that("works as expected", {
   
   # text interface, with YYYY-MM-DD hh:mm:ss
   # NOTE: waterDayYear and .formatDates involving hh:mm:ss in tests 
-  #       require the optional `tz` argument for consistent conversion across locales
-  res <- waterDayYear("2000-12-05 12:00:00", tz = "GMT")
+  #       require `format` and `tz` argument for consistent conversion across locales
+  res <- waterDayYear("2000-12-05 12:00:00", format = "%Y-%m-%d %H:%M:%S", tz = "UTC")
   expect_equal(res$wy, 2001L)
   
   expect_equal(res$wd, 66L)
