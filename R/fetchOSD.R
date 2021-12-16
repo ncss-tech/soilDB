@@ -1,5 +1,5 @@
 
-## tabulte the number of records within each geomorphic table
+## tabulate the number of records within each geomorphic table
 ## there could be some cases where there are no records, resulting in FALSE
 # x: object returned by fetchOSD
 .tabulateGeomorphRecords <- function(x) {
@@ -11,10 +11,12 @@
   ## consider returning empty tables in fetchOSD()
   if(
     any(
-      isFALSE(x$hillpos) | 
-      isFALSE(x$geomcomp) | 
-      isFALSE(x$terrace) |
-      isFALSE(x$flats)
+      isFALSE(x$hillpos)      | 
+      isFALSE(x$geomcomp)     | 
+      isFALSE(x$terrace)      |
+      isFALSE(x$flats)        |
+      isFALSE(x$shape_across) |
+      isFALSE(x$shape_down)
       )
   ) {
     return(NULL)
@@ -75,6 +77,10 @@
 #'   \item{mtnpos}{empirical probabilities for mountain slope position, derived from the current SSURGO snapshot}
 #'   \item{terrace}{empirical probabilities for river terrace position, derived from the current SSURGO snapshot}
 #'   \item{flats}{empirical probabilities for flat landscapes, derived from the current SSURGO snapshot}
+#'   
+#'   \item{shape_across}{empirical probabilities for surface shape (across-slope) from the current SSURGO snapshot}
+#'   \item{shape_down}{empirical probabilities for surface shape (down-slope) from the current SSURGO snapshot}
+#'   
 #'   \item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
 #'   \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
 #'   \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
@@ -344,6 +350,8 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	    mtnpos=res$mtnpos,
 	    terrace=res$terrace,
 	    flats=res$flats,
+	    shape_across=res$shape_across,
+	    shape_down=res$shape_down,
 	    pmkind=res$pmkind,
 	    pmorigin=res$pmorigin,
 	    mlra=res$mlra,

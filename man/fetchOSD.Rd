@@ -40,6 +40,10 @@ The standard set of "site" and "horizon" data are returned as a \code{SoilProfil
 \item{mtnpos}{empirical probabilities for mountain slope position, derived from the current SSURGO snapshot}
 \item{terrace}{empirical probabilities for river terrace position, derived from the current SSURGO snapshot}
 \item{flats}{empirical probabilities for flat landscapes, derived from the current SSURGO snapshot}
+
+\item{shape_across}{empirical probabilities for surface shape (across-slope) from the current SSURGO snapshot}
+\item{shape_down}{empirical probabilities for surface shape (down-slope) from the current SSURGO snapshot}
+
 \item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
 \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
 \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
