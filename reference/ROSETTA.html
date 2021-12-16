@@ -85,6 +85,11 @@
 <li><p>optional, bulk density (any moisture basis): mass per volume after accounting for &gt;2mm fragments, units of gm/cm3</p></li>
 <li><p>optional, volumetric water content at 33 kPa: roughly "field capacity" for most soils, units of cm^3/cm^3</p></li>
 <li><p>optional, volumetric water content at 1500 kPa: roughly "permanent wilting point" for most plants, units of cm^3/cm^3</p></li>
+</ul><p>The Rosetta pedotransfer function predicts five parameters for the van Genuchten model of unsaturated soil hydraulic properties</p><ul><li><p>theta_r : residual volumetric water content</p></li>
+<li><p>theta_s : saturated volumetric water content</p></li>
+<li><p>log10(alpha) : retention shape parameter <code>[log10(1/cm)]</code></p></li>
+<li><p>log10(npar) : retention shape parameter</p></li>
+<li><p>log10(ksat) : saturated hydraulic conductivity <code>[log10(cm/d)]</code></p></li>
 </ul><p>Column names not specified in <code>vars</code> are retained in the output.</p>
 <p>Three versions of the ROSETTA model are available, selected using <code>v = 1</code>, <code>v = 2</code>, or <code>v = 3</code>.</p><ul><li><p>version 1 - Schaap, M.G., F.J. Leij, and M.Th. van Genuchten. 2001. ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions. Journal of Hydrology 251(3-4): 163-176. doi: doi: <a href="https://doi.org/10.1016/S0022-1694(01)00466-8" class="external-link">10.1016/S0022-1694(01)00466-8</a>
 .</p></li>
