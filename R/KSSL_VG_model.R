@@ -3,13 +3,13 @@
 # this is tailored to the parameters stored in our KSSL data
 # https://en.wikipedia.org/wiki/Water_retention_curve
 .vg <- function(phi, theta_r, theta_s, alpha, n) {
-  theta_r + ((theta_s - theta_r) / ((1 + (alpha * phi)^n)^(1-1/n)))
+  theta_r + ((theta_s - theta_r) / ((1 + (alpha * phi) ^ n) ^ (1 - 1 / n)))
 }
 
 
 
 
-## notes: Rosetta units for alpha and npar are cm and 1/cm
+## notes: Rosetta units for alpha and npar are log10(1/cm) and log10([-])
 # VG_params: table of VG parameters from KSSL / Rosetta:  alpha and npar are in log10 form
 # phi_min: lower limit for water potential in kPa
 # phi_max: upper limit for water potential in kPa
@@ -34,8 +34,8 @@
 #' \describe{
 #'   \item{theta_r}{saturated water content, values should be in the range of \{0, 1\}}
 #'   \item{theta_s}{residual water content, values should be in the range of \{0, 1\}}
-#'   \item{alpha}{related to the inverse of the air entry suction, function expects log10-transformed values with units of cm}
-#'   \item{npar}{index of pore size distribution, function expects log10-transformed values with units of 1/cm}
+#'   \item{alpha}{related to the inverse of the air entry suction, function expects log10-transformed values with units of 1/cm}
+#'   \item{npar}{index of pore size distribution, function expects log10-transformed values (dimensionless)}
 #' }
 #'
 #' @return 
@@ -85,12 +85,18 @@ KSSL_VG_model <- function(VG_params, phi_min=10^-6, phi_max=10^8, pts=100) {
   phi <- 10^seq(log(phi_min, base=10), log(phi_max, base=10), length.out = pts)
   m <- data.frame(phi=phi)
   
-  # Rosetta units for alpha and npar are cm and 1/cm
+  # Rosetta units for alpha and npar are 1/cm and [-]
   # convert kPa to cm of H20
   h <- m$phi * 10.19716
   
   # compute theta given measured parameters and sequence of phi
-  m$theta <- .vg(phi= h, theta_r = VG_params$theta_r, theta_s = VG_params$theta_s, alpha = 10^(VG_params$alpha), n = 10^(VG_params$npar))
+  m$theta <- .vg(
+    phi = h,
+    theta_r = VG_params$theta_r,
+    theta_s = VG_params$theta_s,
+    alpha = 10 ^ (VG_params$alpha),
+    n = 10 ^ (VG_params$npar)
+  )
   
   # use splines to fit standard model: phi -> theta
   # scale of theta {0,1}

@@ -114,7 +114,15 @@
 #'  - optional, bulk density (any moisture basis): mass per volume after accounting for >2mm fragments, units of gm/cm3
 #'  - optional, volumetric water content at 33 kPa: roughly "field capacity" for most soils, units of cm^3/cm^3
 #'  - optional, volumetric water content at 1500 kPa: roughly "permanent wilting point" for most plants, units of cm^3/cm^3
-#'
+#'  
+#' The Rosetta pedotransfer function predicts five parameters for the van Genuchten model of unsaturated soil hydraulic properties
+#' 
+#'  - theta_r : residual volumetric water content
+#'  - theta_s : saturated volumetric water content
+#'  - log10(alpha) : retention shape parameter `[log10(1/cm)]`
+#'  - log10(npar) : retention shape parameter
+#'  - log10(ksat) : saturated hydraulic conductivity `[log10(cm/d)]`
+#' 
 #' Column names not specified in \code{vars} are retained in the output.
 #'
 #' Three versions of the ROSETTA model are available, selected using \code{v = 1}, \code{v = 2}, or \code{v = 3}.
