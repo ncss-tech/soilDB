@@ -70,7 +70,7 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Get the stable version (2.6.9) from CRAN:</p>
+<p>Get the stable version (2.6.10) from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">'soilDB'</span>, <span class="dt">dependencies =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>Get the development version (2.6.10) from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"ncss-tech/soilDB"</span>, <span class="dt">dependencies =</span> <span class="ot">FALSE</span>, <span class="dt">upgrade =</span> <span class="ot">FALSE</span>, <span class="dt">build =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
@@ -85,7 +85,7 @@
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<p>Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: Soil Database Interface. R package version 2.6.9. <a href="https://CRAN.R-project.org/package=soilDB" class="external-link uri">https://CRAN.R-project.org/package=soilDB</a></p>
+<p>Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021). soilDB: Soil Database Interface. R package version 2.6.10. <a href="https://CRAN.R-project.org/package=soilDB" class="external-link uri">https://CRAN.R-project.org/package=soilDB</a></p>
 </div>
 <div class="section level2">
 <h2 id="soildb-2610">soilDB 2.6.10<a class="anchor" aria-label="anchor" href="#soildb-2610"></a>
@@ -150,76 +150,77 @@
 <ul>
 <li>SDA
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchSDA_component.html" class="external-link"><code>fetchSDA</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchSDA_spatial.html" class="external-link"><code>fetchSDA_spatial</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/SDA_query.html" class="external-link"><code>SDA_query</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/SDA_spatialQuery.html" class="external-link"><code>SDA_spatialQuery</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSDA_component.html" class="external-link"><code>fetchSDA</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html" class="external-link"><code>fetchSDA_spatial</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/SDA_query.html" class="external-link"><code>SDA_query</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html" class="external-link"><code>SDA_spatialQuery</code></a></li>
 <li>“SSURGO On Demand” Queries
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_hydric.html" class="external-link"><code>get_SDA_hydric</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_interpretation.html" class="external-link"><code>get_SDA_interpretation</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_muaggatt.html" class="external-link"><code>get_SDA_muaggatt</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_pmgroupname.html" class="external-link"><code>get_SDA_pmgroupname</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/get_SDA_property.html" class="external-link"><code>get_SDA_property</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_hydric.html" class="external-link"><code>get_SDA_hydric</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_interpretation.html" class="external-link"><code>get_SDA_interpretation</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_muaggatt.html" class="external-link"><code>get_SDA_muaggatt</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_pmgroupname.html" class="external-link"><code>get_SDA_pmgroupname</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_property.html" class="external-link"><code>get_SDA_property</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_coecosite.html" class="external-link"><code>get_SDA_coecosite</code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li>SSURGO Local Geodatabases
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchGDB.html" class="external-link"><code>fetchGDB</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchGDB.html" class="external-link"><code>fetchGDB</code></a></li>
 </ul>
 </li>
 <li>ROSETTA
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/ROSETTA.html" class="external-link"><code>ROSETTA</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/ROSETTA.html" class="external-link"><code>ROSETTA</code></a></li>
 </ul>
 </li>
 <li>SSURGO/KSSL via SoilWeb
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchKSSL.html" class="external-link"><code>fetchKSSL</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchOSD.html" class="external-link"><code>fetchOSD</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/siblings.html" class="external-link"><code>siblings</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/OSDquery.html" class="external-link"><code>OSDquery</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/seriesExtent.html" class="external-link"><code>seriesExtent</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/taxaExtent.html" class="external-link"><code>taxaExtent</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html" class="external-link"><code>mukey.wcs</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html" class="external-link"><code>ISSR800.wcs</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchKSSL.html" class="external-link"><code>fetchKSSL</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchOSD.html" class="external-link"><code>fetchOSD</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/siblings.html" class="external-link"><code>siblings</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/OSDquery.html" class="external-link"><code>OSDquery</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/seriesExtent.html" class="external-link"><code>seriesExtent</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/taxaExtent.html" class="external-link"><code>taxaExtent</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/mukey.wcs.html" class="external-link"><code>mukey.wcs</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/ISSR800.wcs.html" class="external-link"><code>ISSR800.wcs</code></a></li>
 </ul>
 </li>
 <li>NASIS WWW interface
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/parseWebReport.html" class="external-link"><code>parseWebReport</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchNASISWebReport.html" class="external-link"><code>fetchNASISWebReport</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/parseWebReport.html" class="external-link"><code>parseWebReport</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchNASISWebReport.html" class="external-link"><code>fetchNASISWebReport</code></a></li>
 </ul>
 </li>
 <li>SCAN/SNOTEL
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchSCAN.html" class="external-link"><code>fetchSCAN</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/SCAN_SNOTEL_metadata.html" class="external-link"><code>SCAN_SNOTEL_metadata</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSCAN.html" class="external-link"><code>fetchSCAN</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/SCAN_SNOTEL_metadata.html" class="external-link"><code>SCAN_SNOTEL_metadata</code></a></li>
 </ul>
 </li>
 <li>Henry Mount Soil and Water Database
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchHenry.html" class="external-link"><code>fetchHenry</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchHenry.html" class="external-link"><code>fetchHenry</code></a></li>
 </ul>
 </li>
 <li>NASIS local database
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchNASIS.html" class="external-link"><code>fetchNASIS</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchNASIS.html" class="external-link"><code>fetchNASIS</code></a></li>
 <li>
 <span style="color:red"><strong>NEW:</strong></span> Argument <code>dsn</code> to specify path to connect to alternate (SQLite) data sources with NASIS schema</li>
 <li>
-<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/docs/reference/dbConnectNASIS.html" class="external-link"><code>dbConnectNASIS</code></a> (alias <code>NASIS</code>) - create a <em>DBIConnection</em> to local NASIS database</li>
+<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/reference/dbConnectNASIS.html" class="external-link"><code>dbConnectNASIS</code></a> (alias <code><a href="reference/dbConnectNASIS.html">NASIS()</a></code>) - create a <em>DBIConnection</em> to local NASIS database</li>
 <li>
-<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/docs/reference/dbQueryNASIS.html" class="external-link"><code>dbQueryNASIS</code></a> - query NASIS local database (and close connection with <code>close=TRUE</code>)</li>
+<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/reference/dbQueryNASIS.html" class="external-link"><code>dbQueryNASIS</code></a> - query NASIS local database (and close connection with <code>close=TRUE</code>)</li>
 <li>
-<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/docs/reference/createStaticNASIS.html" class="external-link"><code>createStaticNASIS</code></a> - create list of NASIS tables or write to SQLite</li>
+<span style="color:red"><strong>NEW:</strong></span><a href="http://ncss-tech.github.io/soilDB/reference/createStaticNASIS.html" class="external-link"><code>createStaticNASIS</code></a> - create list of NASIS tables or write to SQLite</li>
 </ul>
 </li>
 <li>SoilGrids
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/fetchSoilGrids.html" class="external-link"><code>fetchSoilGrids</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSoilGrids.html" class="external-link"><code>fetchSoilGrids</code></a></li>
 </ul>
 </li>
 </ul>
@@ -228,14 +229,14 @@
 <h2 id="miscellaneous-functions">Miscellaneous Functions<a class="anchor" aria-label="anchor" href="#miscellaneous-functions"></a>
 </h2>
 <ul>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/estimateSTR.html" class="external-link"><code>estimateSTR</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/STRplot.html" class="external-link"><code>STRplot</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/KSSL_VG_model.html" class="external-link"><code>KSSL_VG_model</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/simplfyFragmentData.html" class="external-link"><code>simplfyFragmentData</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/simplifyColorData.html" class="external-link"><code>simplifyColorData</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/uncode.html" class="external-link"><code>uncode</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/code.html" class="external-link"><code>code</code></a></li>
-<li><a href="http://ncss-tech.github.io/soilDB/docs/reference/get_NOAA_GHCND.html" class="external-link"><code>get_NOAA_GHCND</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/estimateSTR.html" class="external-link"><code>estimateSTR</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/STRplot.html" class="external-link"><code>STRplot</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/KSSL_VG_model.html" class="external-link"><code>KSSL_VG_model</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/simplfyFragmentData.html" class="external-link"><code>simplfyFragmentData</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/simplifyColorData.html" class="external-link"><code>simplifyColorData</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/uncode.html" class="external-link"><code>uncode</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/code.html" class="external-link"><code>code</code></a></li>
+<li><a href="http://ncss-tech.github.io/soilDB/reference/get_NOAA_GHCND.html" class="external-link"><code>get_NOAA_GHCND</code></a></li>
 </ul>
 </div>
 <div class="section level2">
@@ -306,7 +307,7 @@
 <li><a href="https://github.com/ncss-tech/soilDB" class="external-link"><img src="https://img.shields.io/badge/GitHub-2.6.10-yellowgreen" alt="GitHub Version (Development)"></a></li>
 <li><a href="https://github.com/ncss-tech/soilDB/actions" class="external-link"><img src="https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg" alt="R-CMD-check Build Status"></a></li>
 <li><a href="https://cran.r-project.org/package=soilDB" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/grand-total/soilDB" alt="Total CRAN Downloads"></a></li>
-<li><a href="https://ncss-tech.github.io/soilDB/docs" class="external-link"><img src="https://img.shields.io/badge/docs-HTML-informational" alt="soilDB Manual"></a></li>
+<li><a href="https://ncss-tech.github.io/soilDB/"><img src="https://img.shields.io/badge/docs-HTML-informational" alt="soilDB Manual"></a></li>
 </ul>
 </div>
 

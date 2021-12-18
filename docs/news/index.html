@@ -48,9 +48,23 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.6.10" id="soildb-2610-2021-12-07">soilDB 2.6.10 (2021-12-07)<a class="anchor" aria-label="anchor" href="#soildb-2610-2021-12-07"></a></h2>
+<h2 class="page-header" data-toc-text="2.6.11" id="soildb-2611-2021-12-16">soilDB 2.6.11 (2021-12-16)<a class="anchor" aria-label="anchor" href="#soildb-2611-2021-12-16"></a></h2>
 <ul><li>
-<code><a href="../reference/waterDayYear.html">waterDayYear()</a></code> and <code>.formatDates()</code> allow optional <code>tz</code> argument; used for consistent POSIX time conversion in tests where date/time has granularity finer than one day</li>
+<code><a href="../reference/fetchOSD.html">fetchOSD()</a></code> gains surface shape proportions in extended <code>shape_across</code> and <code>shape_down</code> tables</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="2.6.10" id="soildb-2610-2021-12-14">soilDB 2.6.10 (2021-12-14)<small>2021-12-15</small><a class="anchor" aria-label="anchor" href="#soildb-2610-2021-12-14"></a></h2>
+<ul><li>
+<code><a href="../reference/waterDayYear.html">waterDayYear()</a></code> and <code>.formatDates()</code> allow optional <code>format</code> and <code>tz</code> argument; used for consistent POSIX time conversion in tests where date/time has granularity finer than one day</li>
+<li>
+<code><a href="../reference/fetchSDA.html">fetchSDA()</a></code> extensions for better handling of components with no horizon data</li>
+<li>
+<code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> and <code><a href="../reference/processSDA_WKT.html">processSDA_WKT()</a></code> fully use {sf}, replacing {sp} in these contexts</li>
+<li>
+<code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> gains argument <code>byFeature</code> to use multiple single-feature queries and combine the results with a unique feature ID specified by <code>idcol</code> argument. This allows for specific feature intersection results without secondary spatial overlay of the polygons (<a href="https://github.com/ncss-tech/soilDB/issues/222" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/222</a>)</li>
+<li>
+<code><a href="../reference/dbConnectNASIS.html">dbConnectNASIS()</a></code> no longer requires that the NASIS credentials option be set if the <code>dsn</code> argument is specified.</li>
+<li>Rebuilt <code>loafercreek</code>, <code>gopheridge</code> and <code>mineralKing</code> from latest <code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> results.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.6.9" id="soildb-269-2021-12-02">soilDB 2.6.9 (2021-12-02)<small>2021-12-03</small><a class="anchor" aria-label="anchor" href="#soildb-269-2021-12-02"></a></h2>

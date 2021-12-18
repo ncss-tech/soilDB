@@ -91,7 +91,7 @@ that is unique among all horizons in <code>rf</code></p></dd>
     <p>This function is mainly intended for processing of NASIS pedon/component
 data which contains multiple coarse fragment descriptions per horizon.
 <code>simplifyFragmentData</code> will "sieve out" coarse fragments into the USDA
-classes, split into hard and para- fragments. Likweise, <code>simplifyArtifactData</code> will sieve out human artifacts, and split total volume into "cohesive", "penetrable", "innocuous", and "persistent".</p>
+classes, split into hard and para- fragments. Likewise, <code>simplifyArtifactData</code> will sieve out human artifacts, and split total volume into "cohesive", "penetrable", "innocuous", and "persistent".</p>
 <p>These functions can be applied to data sources other than NASIS by careful use of the <code>id.var</code> and <code>vol.var</code> arguments.</p><ul><li><p><code>rf</code> must contain rock or other fragment volumes in the column "fragvol" (or be specified with <code>vol.var</code>), fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", fragment cementation class in "fraghard" and flat/non-flat in "fragshp".</p></li>
 <li><p><code>art</code> must contain artifact volumes in the column "huartvol" (or be specified with <code>vol.var</code>), fragment size (mm) in columns "huartsize_l", "huartsize_r", "huartsize_h", artifact cementation class in "huarthard" and flat/non-flat in "huartshp".</p></li>
 </ul><p>Examples:</p><ul><li><p><a href="http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html" class="external-link">KSSL data</a></p></li>
