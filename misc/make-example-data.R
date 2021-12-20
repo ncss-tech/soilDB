@@ -22,6 +22,14 @@ hzidname(loafercreek2) <- "phiid"
 hzidname(gopheridge2) <- "phiid"
 hzidname(mineralKing2) <- "phiid"
 
+hzdesgnname(loafercreek2) <- "hzname"
+hzdesgnname(gopheridge2) <- "hzname"
+hzdesgnname(mineralKing2) <- "hzname"
+
+hztexclname(loafercreek2) <- "texcl"
+hztexclname(gopheridge2) <- "texcl"
+hztexclname(mineralKing2) <- "texcl"
+
 # verify completeness
 if (all(profile_id(loafercreek) %in% profile_id(loafercreek2)))
   loafercreek <- loafercreek2
