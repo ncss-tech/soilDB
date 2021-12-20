@@ -4,8 +4,12 @@ library(rasterVis)
 library(viridisLite)
 library(sf)
 
+# https://twitter.com/MoreorLoess/status/1471935030746304521
+# https://casoilresource.lawr.ucdavis.edu/gmap/?loc=41.83547,-90.12201,z16
 
-bb <- '-91.6853 36.4617,-91.6853 36.5281,-91.5475 36.5281,-91.5475 36.4617,-91.6853 36.4617'
+## copy / paste from SoilWeb
+## 'b' keypress
+bb <- '-90.1378 41.8273,-90.1378 41.8420,-90.1051 41.8420,-90.1051 41.8273,-90.1378 41.8273'
 wkt <- sprintf('POLYGON((%s))', bb)
 
 x <- st_as_sfc(wkt)

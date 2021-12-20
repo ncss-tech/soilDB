@@ -1,7 +1,10 @@
 library(aqp)
 library(soilDB)
-library(sharpshootR)
 library(sf)
+
+# need latest sharpshootR from GH
+library(sharpshootR)
+
 
 # https://twitter.com/MoreorLoess/status/1471935030746304521
 # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=41.83547,-90.12201,z16
@@ -9,6 +12,13 @@ library(sf)
 ## copy / paste from SoilWeb
 ## 'b' keypress
 bb <- '-90.1378 41.8273,-90.1378 41.8420,-90.1051 41.8420,-90.1051 41.8273,-90.1378 41.8273'
+
+# # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=38.54538,-121.74458,z14
+# bb <- '-121.8100 38.5145,-121.8100 38.5762,-121.6792 38.5762,-121.6792 38.5145,-121.8100 38.5145'
+# 
+# # 
+# bb <- '-120.5453 37.5718,-120.5453 37.5796,-120.5289 37.5796,-120.5289 37.5718,-120.5453 37.5718'
+
 
 ## assemble AOI polygon into WKT
 wkt <- sprintf('POLYGON((%s))', bb)
@@ -56,13 +66,39 @@ SoilTaxonomyDendrogram(
 res <- vizGeomorphicComponent(osd$geomcomp)
 print(res$fig)
 
-## TODO: function should return clustering object 
-# plotProfileDendrogram(osd$SPC, dend.y.scale = 3, scaling.factor = 0.01, clust = res$clust, width = 0.3, name.style = 'center-center', plot.depth.axis = FALSE, hz.depths = TRUE, hz.distinctness.offset = 'hzd')
+# This will fail when geomorphic summary or SPC contain a subset of the other
+nm <- intersect(profile_id(osd$SPC), osd$geomcomp$series)
+
+# keep only those series that exist in both
+sub <- subset(osd$SPC, profile_id(osd$SPC) %in% nm)
+
+# arrange according to clustering of geomorphic component
+plotProfileDendrogram(
+  sub,
+  clust = res$clust,
+  dend.y.scale = 3,
+  scaling.factor = 0.01,
+  width = 0.3,
+  name.style = 'center-center',
+  plot.depth.axis = FALSE,
+  hz.depths = TRUE,
+  hz.distinctness.offset = 'hzd',
+  cex.names = 0.6,
+  cex.id = 0.6
+)
+
 
 ## 2D geomorphic summary
 res <- vizHillslopePosition(osd$hillpos)
 print(res$fig)
 
+# This will fail when geomorphic summary or SPC contain a subset of the other
+nm <- intersect(profile_id(osd$SPC), osd$hillpos$series)
+
+# keep only those series that exist in both
+sub <- subset(osd$SPC, profile_id(osd$SPC) %in% nm)
+
+# arrange according to clustering of hillslope position
 plotProfileDendrogram(
   osd$SPC, 
   clust = res$clust, 
