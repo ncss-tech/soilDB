@@ -1,6 +1,9 @@
-# soilDB 2.6.11 (2021-12-16)
+# soilDB 2.6.11 (2021-12-20) 
  * `fetchOSD()` gains surface shape proportions in extended `shape_across` and `shape_down` tables
-
+ * `SDA_spatialQuery()` `what='mukey'` now works with `db='STATSGO'`
+ * Added metadata to `loafercreek`, `gopheridge` and `mineralKing`
+ * `waterYearDay()` pass through `format` argument for POSIX time conversion
+ 
 # soilDB 2.6.10 (2021-12-14)
  * `waterDayYear()` and `.formatDates()` allow optional `format` and `tz` argument; used for consistent POSIX time conversion in tests where date/time has granularity finer than one day
  * `fetchSDA()` extensions for better handling of components with no horizon data
