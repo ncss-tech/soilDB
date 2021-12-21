@@ -200,7 +200,7 @@ SDA_query <- function(q) {
   if (inherits(r.content,'try-error'))
       return(invisible(r.content))
 
-  d <- try(jsonlite::fromJSON(r.content))
+  d <- try(jsonlite::fromJSON(r.content), silent=TRUE)
 
   if (inherits(d, 'try-error'))
     return(invisible(d))
