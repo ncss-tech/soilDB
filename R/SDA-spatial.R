@@ -411,12 +411,14 @@ SDA_spatialQuery <- function(geom,
                   WHERE mukey IN (
                   SELECT DISTINCT mukey from SDA_Get_Mukey_from_intersection_with_WktWgs84('%s')
                   )", wkt)
-    } else {
+    } else if (db == "STATSGO") {
       q <- sprintf("SELECT DISTINCT P.mukey, mapunit.muname
                     FROM gsmmupolygon AS P
                     INNER JOIN mapunit ON mapunit.mukey = P.mukey
                     WHERE mupolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326) ) = 1 
                       AND CLIPAREASYMBOL = 'US'", wkt)
+    } else {
+      stop("query type 'mukey' for 'SAPOLYGON' is not supported", call. = FALSE)
     }
     
     if (query_string) {
