@@ -139,6 +139,9 @@ test_that("SDA_spatialQuery() spatial query of MUKEY with multiple features", {
   res <- SDA_spatialQuery(x)
   
   expect_equal(nrow(res), 2)
+  
+  res2 <- SDA_spatialQuery(x, db = "STATSGO")
+  expect_equal(nrow(res), 2)
 })
 
 test_that("SDA_query() interprets column names", {

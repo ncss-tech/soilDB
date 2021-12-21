@@ -143,12 +143,12 @@ FROM geom_data;
 #' @param geom an `sf` or `Spatial*` object, with valid CRS. May contain multiple features.
 #' @param what a character vector specifying what to return. `'mukey'`: `data.frame` with intersecting map unit keys and names, `'mupolygon'` overlapping or intersecting map unit polygons from selected database, `'areasymbol'`: `data.frame` with intersecting soil survey areas, `'sapolygon'`: overlapping or intersecting soil survey area polygons (SSURGO only) 
 #' @param geomIntersection logical; `FALSE`: overlapping map unit polygons returned, `TRUE`: intersection of `geom` + map unit polygons is returned.
-#' @param db a character vector identifying the Soil Geographic Databases (`'SSURGO'` or `'STATSGO'`) to query. Option \var{STATSGO} currently works only in combination with `what = "mupolygon"`. 
+#' @param db a character vector identifying the Soil Geographic Databases (`'SSURGO'` or `'STATSGO'`) to query. Option \var{STATSGO} works with `what = "mukey"` and `what = "mupolygon"`. 
 #' @param byFeature Iterate over features, returning a combined data.frame where each feature is uniquely identified by value in `idcol`. Default `FALSE`.
 #' @param idcol Unique IDs used for individual features when `byFeature = TRUE`; Default `"gid"`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @return A `data.frame` if `what = 'mukey'`, otherwise a `SpatialPolygonsDataFrame` or `sf` object.
-#' @note Row-order is not preserved across features in \code{geom} and returned object. Use `sf::st_intersects()` or similar functionality to extract from results. Polygon area in acres is computed server-side when `what = 'mupolygon'` and `geomIntersection = TRUE`.
+#' @note Row-order is not preserved across features in \code{geom} and returned object. Use `byFeature` argument to iterate over features and return results that are 1:1 with the inputs. Polygon area in acres is computed server-side when `what = 'mupolygon'` and `geomIntersection = TRUE`.
 #' @author D.E. Beaudette, A.G. Brown, D.R. Schlaepfer
 #' @seealso \code{\link{SDA_query}}
 #' @keywords manip
@@ -357,10 +357,6 @@ SDA_spatialQuery <- function(geom,
   
   db <- match.arg(db)
   
-  if (what == "mukey" && db == "STATSGO") {
-    stop("query type 'mukey' for 'STATSGO' is not supported", call. = FALSE)
-  }
-  
   if (what == 'areasymbol' && db == 'STATSGO') {
     stop("query type 'areasymbol' for 'STATSGO' is not supported", call. = FALSE)
   }
@@ -408,13 +404,20 @@ SDA_spatialQuery <- function(geom,
     res <- processSDA_WKT(res, as_sf = return_sf)
   }
   
-  # SSURGO only
   if (what == 'mukey') {
-    q <- sprintf("SELECT mukey, muname
-                FROM mapunit
-                WHERE mukey IN (
-                SELECT DISTINCT mukey from SDA_Get_Mukey_from_intersection_with_WktWgs84('%s')
-                )", wkt)
+    if (db == "SSURGO") {
+      q <- sprintf("SELECT mukey, muname
+                  FROM mapunit
+                  WHERE mukey IN (
+                  SELECT DISTINCT mukey from SDA_Get_Mukey_from_intersection_with_WktWgs84('%s')
+                  )", wkt)
+    } else {
+      q <- sprintf("SELECT DISTINCT P.mukey, mapunit.muname
+                    FROM gsmmupolygon AS P
+                    INNER JOIN mapunit ON mapunit.mukey = P.mukey
+                    WHERE mupolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326) ) = 1 
+                      AND CLIPAREASYMBOL = 'US'", wkt)
+    }
     
     if (query_string) {
       return(q)

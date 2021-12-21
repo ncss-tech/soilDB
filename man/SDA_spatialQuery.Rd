@@ -21,7 +21,7 @@ SDA_spatialQuery(
 
 \item{geomIntersection}{logical; \code{FALSE}: overlapping map unit polygons returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is returned.}
 
-\item{db}{a character vector identifying the Soil Geographic Databases (\code{'SSURGO'} or \code{'STATSGO'}) to query. Option \var{STATSGO} currently works only in combination with \code{what = "mupolygon"}.}
+\item{db}{a character vector identifying the Soil Geographic Databases (\code{'SSURGO'} or \code{'STATSGO'}) to query. Option \var{STATSGO} works with \code{what = "mukey"} and \code{what = "mupolygon"}.}
 
 \item{byFeature}{Iterate over features, returning a combined data.frame where each feature is uniquely identified by value in \code{idcol}. Default \code{FALSE}.}
 
@@ -41,7 +41,7 @@ Queries for map unit keys are always more efficient vs. queries for overlapping 
 SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO (generalized soil survey, 1:250,000 scale) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
 }
 \note{
-Row-order is not preserved across features in \code{geom} and returned object. Use \code{sf::st_intersects()} or similar functionality to extract from results. Polygon area in acres is computed server-side when \code{what = 'mupolygon'} and \code{geomIntersection = TRUE}.
+Row-order is not preserved across features in \code{geom} and returned object. Use \code{byFeature} argument to iterate over features and return results that are 1:1 with the inputs. Polygon area in acres is computed server-side when \code{what = 'mupolygon'} and \code{geomIntersection = TRUE}.
 }
 \examples{
 \donttest{
