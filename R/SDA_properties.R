@@ -499,14 +499,15 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
                                                       INNER JOIN mapunit ON c.mukey = mapunit.mukey AND
                                                                             c1.mukey = mu.mukey
                                                       ORDER BY c1.comppct_r DESC, c1.cokey)
-              GROUP BY areasymbol, musym, muname, mu.mukey, c.cokey,  compname, comppct_r
+              GROUP BY areasymbol, musym, muname, mu.mukey, c.cokey, compname, comppct_r
               ORDER BY areasymbol, musym, muname, mu.mukey, comppct_r DESC, c.cokey",
             paste0(sapply(agg_property, .property_dominant_condition_category), collapse = ", "),
             where_clause),
 
     # NO AGGREGATION (component properties)
   "NONE" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey,
-                           c.compname AS compname, c.comppct_r AS comppct_r, c.cokey AS cokey,
+                           c.compname AS compname, c.comppct_r AS comppct_r, c.majcompflag AS majcompflag,
+                           c.cokey AS cokey,
                            %s
              FROM legend AS l
               INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
@@ -518,7 +519,7 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
   # NO AGGREGATION (horizon properties)
   "NONE_HORIZON" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey,
                                    c.cokey AS cokey, ch.chkey AS chkey,
-                                   c.compname AS compname, c.comppct_r AS comppct_r,
+                                   c.compname AS compname, c.comppct_r AS comppct_r, c.majcompflag AS majcompflag,
                                    ch.hzdept_r AS hzdept_r, ch.hzdepb_r AS hzdepb_r,
                                    %s
              FROM legend  AS l

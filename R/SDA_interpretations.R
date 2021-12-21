@@ -1114,7 +1114,7 @@ get_SDA_interpretation <- function(rulename,
 }
 
 .interpretation_aggregation <- function(interp, where_clause, dominant = FALSE) {
-  sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey, c.cokey AS cokey, c.compname AS compname, c.comppct_r AS comppct_r,
+  sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey, c.cokey AS cokey, compname, comppct_r, majcompflag,
                 %s
                 FROM legend  AS l
                 INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
