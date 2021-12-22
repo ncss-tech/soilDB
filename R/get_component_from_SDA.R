@@ -3,6 +3,8 @@
 # https://github.com/ncss-tech/soilDB/issues/38
 # https://github.com/ncss-tech/soilDB/issues/36
 
+#' @export 
+#' @rdname fetchSDA
 get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                                    droplevels = TRUE, nullFragsAreZero = TRUE,
                                    stringsAsFactors = default.stringsAsFactors()
@@ -322,7 +324,9 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
 }
 
 
-
+#' @export 
+#' @rdname fetchSDA
+#' @param mrulename character. Interpretation rule names 
 get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = FALSE,
                                   droplevels = TRUE,
                                   stringsAsFactors = default.stringsAsFactors()
@@ -369,7 +373,8 @@ get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = F
   return(d.cointerp)
   }
 
-
+#' @export 
+#' @rdname fetchSDA
 get_legend_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
   q.legend  <- paste("
                      SELECT
@@ -403,7 +408,8 @@ get_legend_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactor
 }
 
 
-
+#' @export 
+#' @rdname fetchSDA
 get_lmuaoverlap_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
 
   q <- paste("SELECT
@@ -446,7 +452,8 @@ get_lmuaoverlap_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsF
 }
 
 
-
+#' @export 
+#' @rdname fetchSDA
 get_mapunit_from_SDA <- function(WHERE = NULL,
                                  droplevels = TRUE,
                                  stringsAsFactors = default.stringsAsFactors()
@@ -501,7 +508,8 @@ get_mapunit_from_SDA <- function(WHERE = NULL,
 
 
 
-
+#' @export 
+#' @rdname fetchSDA
 get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
                                   childs = TRUE,
                                   nullFragsAreZero = TRUE,
