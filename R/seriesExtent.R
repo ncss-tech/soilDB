@@ -19,27 +19,29 @@
 #'   
 #' \donttest{
 #' if(requireNamespace("curl") &
+#'    requireNamespace("sf") &
+#'    requireNamespace("terra") &
 #'    curl::has_internet()) {
 #'   
 #'   # required packages
-#'   library(sp)
-#'   library(raster)
-#'   library(rgdal)
+#'   library(sf)
+#'   library(terra)
 #'   
 #'   # specify a soil series name
 #'   s <- 'magnor'
 #'   
-#'   # return as SpatialPolygonsDataFrame
+#'   # return an sf object
 #'   x <- seriesExtent(s, type = 'vector')
-#'   # return as raster
+#'   
+#'   # return a terra SpatRasters
 #'   y <- seriesExtent(s, type = 'raster')
 #'   
 #'   # note that CRS are different
-#'   proj4string(x)
-#'   projection(y)
+#'   sf::st_crs(x)
+#'   terra::crs(y)
 #'   
 #'   # transform vector representation to CRS of raster
-#'   x <- spTransform(x, CRS(projection(y)))
+#'   x <- sf::st_transform(x, terra::crs(y))
 #'   
 #'   # graphical comparison
 #'   par(mar = c(1, 1 , 1, 3))
@@ -52,9 +54,7 @@
 #' 
 
 seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
-  if(!requireNamespace('rgdal', quietly=TRUE))
-    stop('please install the `rgdal` package', call.=FALSE)
-  
+
   type <- match.arg(type)
   
   # encode series name: spaces -> underscores
@@ -71,6 +71,10 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
 }
 
 .vector_extent <- function(s, timeout) {
+  
+  if (!requireNamespace("sf")) 
+    stop("package sf is required to return vector series extent grids", call. = FALSE)
+  
   # base URL to cached data
   u <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/series-extent-cache/json/', s, '.json'))
   
@@ -91,18 +95,23 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
     return(NULL)
   }
     
-  # load into sp object and clean-up
-  x <- rgdal::readOGR(dsn=tf, verbose=FALSE)
+  # load into sf object and clean-up
+  # can use terra::vect() also
+  x <- sf::st_read(tf, quiet = TRUE)
   unlink(tf)
   
   # reset row names in attribute data to series name
-  x <- spChFIDs(x, as.character(x$series))
+  rownames(x) <- as.character(x$series)
   
   # GCS WGS84
   return(x)
 }
 
 .raster_extent <- function(s, timeout) {
+  
+  if (!requireNamespace("terra")) 
+    stop("package terra is required to return raster series extent grids", call. = FALSE)
+  
   # base URL to cached data
   u <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/series-extent-cache/grid/', s, '.tif'))
   
@@ -125,13 +134,11 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
     return(NULL)
   }
   
-  ## TODO: suppressing CRS-related warnings (not a problem) until we have a better solution
-  # https://github.com/ncss-tech/soilDB/issues/144
-  # load raster object into memory
-  x <- suppressWarnings(
-    raster(tf, verbose=FALSE)
-  )
-  x <- readAll(x)
+  x <- terra::rast(tf)
+  
+  # load all values into memory
+  terra::values(x) <- terra::values(x)
+  
   # transfer layer name
   names(x) <- gsub(pattern='_', replacement=' ', x = s, fixed = TRUE)
   

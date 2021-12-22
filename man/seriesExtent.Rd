@@ -23,27 +23,29 @@ This function requires the \code{rgdal} package.
   
 \donttest{
 if(requireNamespace("curl") &
+   requireNamespace("sf") &
+   requireNamespace("terra") &
    curl::has_internet()) {
   
   # required packages
-  library(sp)
-  library(raster)
-  library(rgdal)
+  library(sf)
+  library(terra)
   
   # specify a soil series name
   s <- 'magnor'
   
-  # return as SpatialPolygonsDataFrame
+  # return an sf object
   x <- seriesExtent(s, type = 'vector')
-  # return as raster
+  
+  # return a terra SpatRasters
   y <- seriesExtent(s, type = 'raster')
   
   # note that CRS are different
-  proj4string(x)
-  projection(y)
+  sf::st_crs(x)
+  terra::crs(y)
   
   # transform vector representation to CRS of raster
-  x <- spTransform(x, CRS(projection(y)))
+  x <- sf::st_transform(x, terra::crs(y))
   
   # graphical comparison
   par(mar = c(1, 1 , 1, 3))
