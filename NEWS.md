@@ -1,4 +1,9 @@
-# soilDB 2.6.11 (2021-12-20) 
+# soilDB 2.6.11 (2021-12-21)
+ * `fetchSDA()` handle NULL component-level results with an informative error 
+ * `fetchSDA()` now (again) returns mapunit/legend-level information via `get_mapunit_from_NASIS()`
+ * `createStaticNASIS()` and queries to SQLite NASIS snapshots now preserve date/time using RSQLite 2.2.4+ via `extended_types=TRUE` argument to `dbConnect()`
+  * `get_soilseries_from_NASIS()` now returns `soiltaxclasslastupdated` as a date/time and stores the year in calculated column `soiltaxclassyearlastupdated`
+ * Added several tables to thematic groups in `get_NASIS_table_name_by_purpose()`
  * `fetchOSD()` gains surface shape proportions in extended `shape_across` and `shape_down` tables
  * `SDA_spatialQuery()` `what='mukey'` now works with `db='STATSGO'`
  * Added metadata to `loafercreek`, `gopheridge` and `mineralKing`
