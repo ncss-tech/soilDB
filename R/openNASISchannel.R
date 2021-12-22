@@ -27,7 +27,7 @@
     if (!requireNamespace("RSQLite"))
       stop("package `RSQLite` is required", call. = FALSE)
     
-    channel <- try(DBI::dbConnect(RSQLite::SQLite(), dsn))
+    channel <- try(DBI::dbConnect(RSQLite::SQLite(), dsn, extended_types = TRUE))
   }
 
   # every method that uses .openNASISchannel must handle possibility of
@@ -78,6 +78,6 @@ local_NASIS_defined <- function(dsn = NULL) {
     if (!requireNamespace("RSQLite"))
       stop("package `RSQLite` is required", call. = FALSE)
     
-    return(RSQLite::dbCanConnect(RSQLite::SQLite(), dsn))
+    return(RSQLite::dbCanConnect(RSQLite::SQLite(), dsn, extended_types = TRUE))
   }
 }

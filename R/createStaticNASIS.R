@@ -139,9 +139,10 @@ createStaticNASIS <- function(tables = NULL,
       stop("package `RSQLite` is required ", call. = FALSE)
 
     # create sqlite db
-
+    # RSQLite 2.2.4+ supports `extended_types` argument
+    # When TRUE columns of type DATE, DATETIME / TIMESTAMP, and TIME are mapped to corresponding R-classes, c.f. below for details. 
     if (!inherits(output_path, 'DBIConnection'))
-       outcon <- DBI::dbConnect(RSQLite::SQLite(), output_path)
+       outcon <- DBI::dbConnect(RSQLite::SQLite(), output_path, extended_types = TRUE)
     else outcon <- output_path
 
     # returns TRUE, invisibly, or try-error (one per table)
@@ -154,18 +155,9 @@ createStaticNASIS <- function(tables = NULL,
           else newname <- n
 
           newdata <- try(.dump_NASIS_table(n, dsn = dsn), silent = verbose)
-
-          # pre-processing for data type issues
-          newdata[] <- lapply(newdata, function(x) {
-
-                          # convert times to character
-                          # .:. SQLite3 does not have a datetime data type
-                          if (inherits(outcon, 'SQLiteConnection') & (inherits(x, "POSIXct") || inherits(x, "POSIXlt")))
-                            return(as.character(x))
-
-                          return(x)
-                        })
-
+          
+          # previously processed Date/Times -> character for output
+          
           DBI::dbWriteTable(conn = outcon,
                             name =  newname,
                             value = newdata,
