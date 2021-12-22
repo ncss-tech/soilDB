@@ -44,9 +44,9 @@
 #'     full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by = "nmusym")
 #'
 #'     # compare extent of nmusym to single mukey within it
-#'     if(require(sp)) {
-#'      plot(full.extent.nmusym, col = "RED",border=0)
-#'      plot(single.mukey, add = TRUE, col = "BLUE", border=0)
+#'     if (requireNamespace("sf")) {
+#'      plot(sf::st_geometry(full.extent.nmusym), col = "RED", border = 0)
+#'      plot(sf::st_geometry(single.mukey), add = TRUE, col = "BLUE", border = 0)
 #'     }
 #'
 #'     # demo adding a field (`muname`) to attribute table of result
@@ -260,10 +260,8 @@ fetchSDA_spatial <- function(x,
   s <- NULL
   if (!is.null(sp.res.sub)) {
     
-    sp.res.sub$geom <- sf::st_as_sfc(wk::as_wkt(sp.res.sub$geom))
-    sfobj <- sf::st_as_sf(sp.res.sub)
-    sfobj <- sf::st_set_crs(sfobj, sf::st_crs(4326))
-    s <- sf::as_Spatial(sfobj)
+    sp.res.sub$geom <- sf::st_as_sfc(wk::as_wkt(sp.res.sub$geom), crs = 4326)
+    s <- sf::st_as_sf(sp.res.sub) # sf::as_Spatial(sfobj)
     
     t2 <- Sys.time()
     tdif <- difftime(t2, t1, "secs")

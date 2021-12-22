@@ -59,9 +59,9 @@ if(requireNamespace("curl") &
     full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by = "nmusym")
 
     # compare extent of nmusym to single mukey within it
-    if(require(sp)) {
-     plot(full.extent.nmusym, col = "RED",border=0)
-     plot(single.mukey, add = TRUE, col = "BLUE", border=0)
+    if (requireNamespace("sf")) {
+     plot(sf::st_geometry(full.extent.nmusym), col = "RED", border = 0)
+     plot(sf::st_geometry(single.mukey), add = TRUE, col = "BLUE", border = 0)
     }
 
     # demo adding a field (`muname`) to attribute table of result
