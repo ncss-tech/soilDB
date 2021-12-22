@@ -11,11 +11,11 @@
 #'
 #' In order to use this function, you must obtain an API token from this website: https://www.ncdc.noaa.gov/cdo-web/token
 #'
-#' @param lat Latitude
-#' @param lng Longitude
+#' @param lat Latitude or Y coordinate in `crs`
+#' @param lng Longitude or X coordinate in `crs`
 #' @param apitoken API key token for NOAA NCDC web service
 #' @param bbox Optional: Dimension of the bounding box centered at \code{lat}, \code{lng}.
-#'
+#' @param crs Coordinate Reference System. Default `"EPSG:4326"`
 #' @return data.frame containing station information for all stations within a bounding box around \code{lat}, \code{lng}.
 #' @export
 #'
@@ -27,18 +27,18 @@
 #' # stations <- get_NOAA_stations_nearXY(lat = 37, lng = -120,
 #' #                                      apitoken = "yourtokenhere")
 #'
-get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1) {
+get_NOAA_stations_nearXY <- function(lat, lng, apitoken, bbox = 1, crs = "EPSG:4326") {
 
   if(!requireNamespace("httr"))
     stop("package `httr` is required")
 
   # determine dimension in each direction to build bbox
-  coord <- data.frame(lat = lat, lng = lng)
-  coordinates(coord) <- ~ lng + lat
+  coord <- sf::st_as_sf(data.frame(lat = lat, lng = lng), coords = c("lng","lat"), crs = crs)
+  coord <- sf::st_coordinates(sf::st_transform(coord, "EPSG:4326"))
   bdim <- bbox / 2
 
   # build Google Maps API V3 LatLngBounds.toUrlValue string
-  ext_string <- sprintf("%s,%s,%s,%s", lat - bdim, lng - bdim, lat + bdim, lng + bdim)
+  ext_string <- sprintf("%s,%s,%s,%s", coord[,2] - bdim, coord[,1] - bdim, coord[,2] + bdim, coord[,1] + bdim)
 
   # construct GET request
   r <- httr::GET(url = sprintf(
