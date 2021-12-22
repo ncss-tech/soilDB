@@ -48,7 +48,7 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
   d.soilseriesmin <- uncode(d.soilseriesmin, stringsAsFactors = stringsAsFactors, dsn = dsn)
 
   # prep
-  d.soilseries$soiltaxclasslastupdated <- format(as.Date.POSIXct(d.soilseries$soiltaxclasslastupdated), "%Y")
+  d.soilseries$soiltaxclassyearlastupdated <- format(as.Date(d.soilseries$soiltaxclasslastupdated), "%Y")
 
   # aggregate mineralogy data (ordered by minorder, combined with "over")
   d.minagg <- aggregate(d.soilseriesmin$taxminalogy,
