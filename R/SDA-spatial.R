@@ -329,14 +329,32 @@ SDA_spatialQuery <- function(geom,
   what <- tolower(what)
   db <- toupper(db)
   
-  # sp support
   return_sf <- FALSE
-  if (inherits(geom, 'sf') || inherits(geom, 'sfc')) {
+  return_terra <- FALSE
+  
+  # raster support
+  if (inherits(geom, 'RasterLayer') | 
+      inherits(geom, 'RasterBrick') |
+      inherits(geom, 'RasterStack')) {
+    if (!requireNamespace('terra'))
+      stop("packages terra is required", call. = FALSE)
+    geom <- terra::rast(geom)
+  }
+  
+  if(inherits(geom, 'SpatRaster') | inherits(geom, 'SpatVector')) {
+    # terra support
+    return_terra <- TRUE
+    return_sf <- TRUE
+    geom <- terra::as.polygons(terra::ext(geom), 
+                               crs = terra::crs(geom))
+    geom <- sf::st_as_sf(geom)
+  } else if (inherits(geom, 'sf') || inherits(geom, 'sfc')) {
     return_sf <- TRUE
   } else if (inherits(geom, 'Spatial')) {
+    # sp support
     geom <- sf::st_as_sf(geom)
   } else {
-    stop('`geom` must be an sf or Spatial* object', call. = FALSE)
+    stop('`geom` must be an sf, terra, or Spatial* object', call. = FALSE)
   }
   
   # backwards compatibility with old value of what argument 
@@ -402,6 +420,10 @@ SDA_spatialQuery <- function(geom,
     # note that row-order / number of rows in results may not match geom
     res <- suppressMessages(SDA_query(q))
     res <- processSDA_WKT(res, as_sf = return_sf)
+    if (return_terra) {
+      # sf -> terra
+      res <- terra::vect(res)
+    }
   }
   
   if (what == 'mukey') {
