@@ -104,13 +104,17 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "s
       "phfeatcolor",
       "phpvsfcolor",
       "phredoxfcolor",
-      "phtexturemod"
+      "phtexturemod",
+      "ncsspedonlabdata",
+      "ncsslayerlabdata"
     ),
     transect = c("transect", "transectestcomposition",
                  "transecttext"),
     component = c(
       "component",
       "chorizon",
+      "chfrags", 
+      "chhuarts",
       "chtexturegrp",
       "chstructgrp",
       "cogeomordesc",
@@ -184,11 +188,12 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "s
       "techsoilservicetext",
       "techsoilservicesite"
     ),
-    area = c("area","areatype"),
-    soilseries = "soilseries",
-    legend = c("legend", "ltext", "lmapunit"),
+    area = c("area", "areatype"),
+    soilseries = c("soilseries", "soilseriestaxmineralogy"),
+    legend = c("legend", "laoverlap", "ltext", "lmapunit", "lmuaoverlap"),
     mapunit = c("mapunit", "correlation", "mutext"),
-    datamapunit = "datamapunit"
+    datamapunit = "datamapunit",
+    nasis = c("nasisgroup", "nasisuser")
   )
   
   uses_View_1 <- list("metadata" = FALSE, 
