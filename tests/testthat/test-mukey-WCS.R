@@ -11,11 +11,11 @@ test_that("mukey.wcs works", {
   suppressWarnings({
 
     x <- mukey.wcs(aoi = list(aoi = c(-114.16, 47.655, -114.155, 47.66),
-                              crs = '+init=epsg:4326'),
+                              crs = 'EPSG:4326'),
                    db = 'gnatsgo', quiet = TRUE)
 
   })
   
-  expect_true(inherits(x, 'RasterLayer') || inherits(x, 'try-error'))
+  expect_true(inherits(x, 'SpatRaster') || inherits(x, 'try-error'))
 })
 

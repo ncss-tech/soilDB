@@ -15,29 +15,26 @@
 #' 
 #' @param quiet logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.
 #'  
-#'  #' @details \code{aoi} should be specified as a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
+#' @details \code{aoi} should be specified as a \code{Spatial*}, \code{RasterLayer}, \code{SpatRaster}/\code{SpatVector}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
 #' 
 #' \describe{
 #'   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
 #'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=epsg:4326'}
 #' }
 #' 
-#' The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the ISSR-800 grids.
+#' The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the ISSR-800 grids.
 #' 
 #' Variables available from this WCS can be queried using \code{WCS_details(wcs = 'ISSR800')}.
 #' 
 #' @note There are still some issues to be resolved related to the encoding of NA Variables with a natural zero (e.g. SAR) have 0 set to NA.
 #' 
-#' @return \code{raster} object containing indexed map unit keys and associated raster attribute table or a try-error if request fails
+#' @return \code{SpatRaster} object containing indexed map unit keys and associated raster attribute table or a try-error if request fails
 #' 
 #' @export
 ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   
-  if(!requireNamespace('rgdal', quietly=TRUE))
-    stop('please install the `rgdal` package', call.=FALSE)
-  
   # sanity check: aoi specification
-  if(!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer'))) { 
+  if(!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
     stop('invalid `aoi` specification', call. = FALSE)
   }
   
@@ -122,33 +119,32 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   }
   
   # load pointer to file and return
-  r <- try(
-    raster(tf),
-    silent = TRUE
-  )
+  r <- try(terra::rast(tf), silent = TRUE)
   
-  if(inherits(r, 'try-error')) {
-    stop('result is not a valid GeoTiff, why?', call. = FALSE)
+  if (inherits(r, 'try-error')) {
+    message(attr(r, 'condition'))
+    stop('result is not a valid GeoTiff', call. = FALSE)
   }
   
   ## TODO: this isn't quite right... '0' is returned by the WCS sometimes
   # specification of NODATA using local definitions
   # NAvalue(r) <- var.spec$na
-  NAvalue(r) <- 0
+  terra::NAflag(r) <- 0
   
-  # read into memory to make NODATA value permanent
-  r <- readAll(r)
+  # load all values into memory
+  terra::values(r) <- terra::values(r)
+ 
+  # remove tempfile 
+  unlink(tf)
   
   # set layer name in object
   names(r) <- var.spec$desc
+  
   # and as an attribute
   attr(r, 'layer name') <- var.spec$desc
   
   # optional processing of RAT
-  if(! is.null(var.spec$rat)) {
-    
-    # convert to RAT-enabled raster
-    r <- ratify(r)
+  if(!is.null(var.spec$rat)) {
     
     # get rat
     rat <- read.csv(var.spec$rat, stringsAsFactors = FALSE)
@@ -156,11 +152,8 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     # rename ID column
     names(rat)[2] <- 'ID'
     
-    # get / merge codes
-    ll <- raster::levels(r)[[1]]
-    
-    ll <- base::merge(ll, rat, by = 'ID', sort = FALSE, all.x = TRUE)
-    levels(r) <- ll
+    # set categories
+    levels(r) <- rat[,2:1]
   }
   
   return(r)

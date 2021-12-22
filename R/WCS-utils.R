@@ -55,70 +55,87 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
 # obj: list(aoi, crs) or Spatial*, sf, sfc, bbox object
 # res: grid resolution in native CRS (meters) [ISSR-800: 800, gNATSGO: 30]
 .prepare_AEA_AOI <- function(obj, res) {
-
-  # convert AOI to SpatialPolygons object and assign CRS
-  if(inherits(obj, c('sf', 'sfc', 'bbox'))) {
-
+  
+  # pre-processing of classes to terra/sf
+  if(inherits(obj, 'RasterLayer'))  {
+    if (!requireNamespace("terra"))
+      stop("package terra is required to convert RasterLayer objects to an AOI", call. = FALSE)
+    obj <- terra::rast(obj)
+  } else if (inherits(obj, 'bbox')) {
+    # do nothing
+  } else if(inherits(obj, 'Spatial'))  {
+    if (!requireNamespace("sf"))
+      stop("package sf is required to convert Spatial objects to an AOI", call. = FALSE)
+    # note: the spatial inherits method will bug out with a bbox, so it must come second
+    # convert to sf
+    obj <- sf::st_as_sf(obj)
+  }
+  
+  # convert AOI to sf/terra object and assign CRS
+  if(inherits(obj, 'SpatRaster') | inherits(obj, 'SpatVector'))  {
+    
+    if (!requireNamespace("terra"))
+      stop("package terra is required", call. = FALSE)
+    
+    p <- terra::as.polygons(terra::ext(obj), crs = terra::crs(obj))
+    
+  } else {
+    
     if(!requireNamespace("sf"))
       stop("package 'sf' is required to use an sf, sfc or bbox object as an AOI", call. = FALSE)
-
-    # create bbox around sf/sfc/bbox, create simple feature collection, cast to Spatial
-    p <- sf::as_Spatial(sf::st_as_sfc(sf::st_bbox(obj)))
-    rm(obj)
-    
-  } else if(inherits(obj, 'RasterLayer'))  {
-    
-    p <- as(raster::extent(obj), 'SpatialPolygons')
-    proj4string(p) <- raster::crs(obj)
       
-  } else if(inherits(obj, 'Spatial'))  {
-    # note: the spatial inherits method will bug out with a bbox, so it must come second
-
-    # re-name for simpler code
-    p <- obj
-    rm(obj)
-
-  # explicitly check the presence of the two list elements, and length/type of aoi
-  } else if (!is.null(obj$aoi) & !is.null(obj$crs) &
-             is.numeric(obj$aoi) & (length(obj$aoi) == 4)) {
-    # note that vector is re-arranged to form a legal extent: xmin, xmax, ymin, ymax
-    # craft an extent object
-    e <- extent(
-      obj$aoi[1],
-      obj$aoi[3],
-      obj$aoi[2],
-      obj$aoi[4]
-      )
-
-    # convert to BBOX polygon and set CRS
-    p <- as(e, 'SpatialPolygons')
-    proj4string(p) <- obj$crs
-
-  } else {
-   stop('invalid `aoi` specification', call. = FALSE)
+    if(inherits(obj, c('sf', 'sfc', 'bbox'))) {
+      
+      # create bbox around sf/sfc/bbox, create simple feature collection
+      p <- sf::st_as_sfc(sf::st_bbox(obj))
+      rm(obj)
+      
+      # explicitly check the presence of the two list elements, and length/type of aoi
+    } else if (!is.null(obj$aoi) & !is.null(obj$crs) &
+               is.numeric(obj$aoi) & (length(obj$aoi) == 4)) {
+      
+      p <- sf::st_as_sf(wk::rct(
+        xmin = obj$aoi[1],
+        ymin = obj$aoi[2],
+        xmax = obj$aoi[3],
+        ymax = obj$aoi[4],
+        crs = obj$crs
+      ))
+    } else {
+      stop('invalid `aoi` specification', call. = FALSE)
+    }
   }
+  
 
   # ISSR-800 and gNATSGO CRS
   # EPSG:6350 NAD83 (2011)
   # EPSG:5070 NAD83
   # we will use EPSG:5070 for now (https://github.com/ncss-tech/soilDB/issues/205)
   crs <- '+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'
-
-  # double-check, likely a better approach
-  p <- suppressWarnings(spTransform(p, crs))
+  
+  # transform bounding polygon to WCS CRS
+  if (inherits(p, 'sf')){
+    
+    p <- sf::st_transform(p, crs = crs)
+    e.native <- sf::st_bbox(p)
+    
+  } else if(inherits(p, 'SpatVector')) {
+    
+    p <- terra::project(p, crs)
+    e.native <- terra::ext(p)
+  
+  }
 
   # AOI and image calculations in native CRS
-  e.native <- extent(p)
-
   # create BBOX used for WMS
   # xmin, ymin, xmax, ymax
-  aoi.native <- round(c(e.native[1], e.native[3], e.native[2], e.native[4]))
+  aoi.native <- round(e.native)
 
   # these are useful for testing image dimensions > allowed image dimensions
   # xmax - xmin
-  w <- round(abs(e.native[2] - e.native[1]) / res)
+  w <- round(abs(e.native[3] - e.native[1]) / res)
   # ymax - ymin
-  h <- round(abs(e.native[4] - e.native[3]) / res)
+  h <- round(abs(e.native[4] - e.native[2]) / res)
 
   return(
     list(

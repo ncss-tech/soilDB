@@ -23,7 +23,7 @@
 #'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=epsg:4326'}
 #' }
 #'
-#' The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the gNATSGO / gSSURGO grid.
+#' The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the gNATSGO / gSSURGO grid.
 #' 
 #' Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.
 #' 
@@ -33,14 +33,11 @@
 #'
 mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE) {
 
-  if(!requireNamespace('rgdal', quietly=TRUE))
-    stop('please install the `rgdal` package', call.=FALSE)
-
   # sanity check: db name
   db <- match.arg(db)
 
   # sanity check: aoi specification
-  if(!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer'))) {
+  if(!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
     stop('invalid `aoi` specification', call. = FALSE)
   }
 
@@ -119,40 +116,28 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
    return(dl.try)
   }
   
-  ## TODO: suppressWarnings() used to quiet proj4string noise until we have a better solution
-  #        https://stackoverflow.com/questions/63727886/proj4-to-proj6-upgrade-and-discarded-datum-warnings
-  #        also, the source files should be re-made with updated CRS info in the GeoTiff metadata
+  # load pointer to file 
+  r <- try(terra::rast(tf), silent = TRUE)
   
-  # load pointer to file and return
-  r <- try(
-    suppressWarnings(raster(tf)),
-    silent = TRUE
-  )
-
   if(inherits(r, 'try-error')) {
-    stop('result is not a valid GeoTiff, why?', call. = FALSE)
+    message(attr(r, 'condition'))
+    stop('result is not a valid GeoTiff', call. = FALSE)
   }
-
-  # source data are UINT32 (INT4U in raster pkg) data
-  # converted to FLOAT32 by WCS
-  dataType(r) <- 'INT4U'
-
+  
   ## TODO: this isn't quite right... '0' is returned by the WCS sometimes
   # specification of NODATA
   # this doesn't seem to make it through the WCS
   # value is derived from the original UINT32 grid
-  NAvalue(r) <- 2147483647
+  terra::NAflag(r) <- 2147483647
 
-  # read into memory to make NODATA value permanent
-  r <- readAll(r)
+  # load all values into memory
+  terra::values(r) <- terra::values(r)
 
   # set layer name in object
   names(r) <- var.spec$desc
+  
   # and as an attribute
   attr(r, 'layer name') <- var.spec$desc
-
-  # init RAT
-  r <- ratify(r)
 
   return(r)
 }
