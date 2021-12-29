@@ -1,20 +1,20 @@
 #' Get Soil Data Viewer Attribute Information
 #'
-#' @param where WHERE clause for query of Soil Data Access `sdvattribute` table
+#' @param WHERE WHERE clause for query of Soil Data Access `sdvattribute` table
 #' @param alpha transparency value applied in calculation of hexadecimal color. Default: `255` (opaque).
 #' @param notratedcolor Used to add 'Not rated' color entries where applicable. Default: `"#FFFFFF00"` (transparent white).
-#' @param simplify Return a data.frame when `attributekey` is length 1? Default: `TRUE`
+#' @param simplify Return a data.frame when `where` is length 1? Default: `TRUE`
 #'
-#' @return A list with a data.frame element for each input `attributekey` containing `"attributekey"`, `"attributename"`, `"value"`, `"label"`, `"order"`, `"red"`, `"green"`, and `"blue"` columns.
+#' @return A list with a data.frame element for each element of `where` containing `"attributekey"`, `"attributename"`, `"attributetype"`, `"attributetablename"`, `"attributecolumnname"`, `"attributedescription"`, `"nasisrulename"`, `"label"`, `"order"`, `"value"`, `"lower_value"`, `"upper_value"`,`"red"`, `"green"`, `"blue"` and `"hex"` columns.
 #' @export
 #'
 #' @importFrom xml2 read_xml as_list 
-get_SDV_legend_elements <- function(where,
+get_SDV_legend_elements <- function(WHERE,
                                     alpha = 255,
                                     notratedcolor = rgb(1, 1, 1, 0),
                                     simplify = TRUE) {
   
-  y <- lapply(where, function(ak) {
+  y <- lapply(WHERE, function(ak) {
     
     x <- SDA_query(paste0("SELECT attributekey, attributename, attributetype,
                                      attributetablename, attributecolumnname,
@@ -28,6 +28,21 @@ get_SDV_legend_elements <- function(where,
     # just returning the Legend_Elements as a data.frame
     res <- do.call('rbind', lapply(x2$Map_Legend$Legend_Elements, 
                                    function(z){ 
+                                     
+                                     # handle single value labels versus upper/lower bounds
+                                     val <- attr(z, 'value')
+                                     attvalue <- data.frame(
+                                       value = val,
+                                       lower_value = NA[length(val)],
+                                       upper_value = NA[length(val)]
+                                     )
+                                     if (nrow(attvalue) == 0) {
+                                       attvalue <- data.frame(
+                                         value = NA,
+                                         lower_value = attr(z, 'lower_value'),
+                                         upper_value = attr(z, 'upper_value')
+                                       )
+                                     }
                                       d <- data.frame(
                                         attributekey = x$attributekey,
                                         attributename = x$attributename,
@@ -36,21 +51,32 @@ get_SDV_legend_elements <- function(where,
                                         attributecolumnname = x$attributecolumnname,
                                         attributedescription = x$attributedescription,
                                         nasisrulename = x$nasisrulename,
-                                        value = attr(z, 'value'), # Are these ever different?
-                                        label = attr(z, 'label'), # Are these ever different?
-                                        order = attr(z, 'order'),
+                                        label = attr(z, 'label'),
+                                        order = attr(z, 'order'))
+                                      d <- cbind(d, attvalue)
+                                      d2 <- data.frame(
                                         red = attr(z$Color, 'red'),
                                         green = attr(z$Color, 'green'),
                                         blue = attr(z$Color, 'blue')
                                       )
-                                      d$hex <- rgb(
-                                        red = d$red,
-                                        green = d$green,
-                                        blue = d$blue,
-                                        alpha = alpha,
-                                        maxColorValue = 255
-                                      )
-                                      return(d)
+                                      if (nrow(d2) == 0) {
+                                        d2 <- data.frame(red = NA, 
+                                                         green = NA, 
+                                                         blue = NA, 
+                                                         hex = notratedcolor)
+                                      } else {                                      
+                                        newcolor <- rgb(
+                                          red = d2$red,
+                                          green = d2$green,
+                                          blue = d2$blue,
+                                          alpha = alpha,
+                                          maxColorValue = 255
+                                        )
+                                        newcolor <- ifelse(length(newcolor) == 0, NA, newcolor)
+                                        d2$hex <- newcolor
+                                      }
+
+                                      cbind(d, d2)
                                   }))
     if (!is.na(x$notratedphrase) && x$notratedphrase != ""){
       dnr <- res[1,]

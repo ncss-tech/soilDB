@@ -5,23 +5,23 @@
 \title{Get Soil Data Viewer Attribute Information}
 \usage{
 get_SDV_legend_elements(
-  where,
+  WHERE,
   alpha = 255,
   notratedcolor = rgb(1, 1, 1, 0),
   simplify = TRUE
 )
 }
 \arguments{
-\item{where}{WHERE clause for query of Soil Data Access \code{sdvattribute} table}
+\item{WHERE}{WHERE clause for query of Soil Data Access \code{sdvattribute} table}
 
 \item{alpha}{transparency value applied in calculation of hexadecimal color. Default: \code{255} (opaque).}
 
 \item{notratedcolor}{Used to add 'Not rated' color entries where applicable. Default: \code{"#FFFFFF00"} (transparent white).}
 
-\item{simplify}{Return a data.frame when \code{attributekey} is length 1? Default: \code{TRUE}}
+\item{simplify}{Return a data.frame when \code{where} is length 1? Default: \code{TRUE}}
 }
 \value{
-A list with a data.frame element for each input \code{attributekey} containing \code{"attributekey"}, \code{"attributename"}, \code{"value"}, \code{"label"}, \code{"order"}, \code{"red"}, \code{"green"}, and \code{"blue"} columns.
+A list with a data.frame element for each element of \code{where} containing \code{"attributekey"}, \code{"attributename"}, \code{"attributetype"}, \code{"attributetablename"}, \code{"attributecolumnname"}, \code{"attributedescription"}, \code{"nasisrulename"}, \code{"label"}, \code{"order"}, \code{"value"}, \code{"lower_value"}, \code{"upper_value"},\code{"red"}, \code{"green"}, \code{"blue"} and \code{"hex"} columns.
 }
 \description{
 Get Soil Data Viewer Attribute Information
