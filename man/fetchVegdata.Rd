@@ -11,8 +11,6 @@
 \alias{get_vegplot_tree_si_details_from_NASIS_db}
 \alias{get_vegplot_tree_si_summary_from_NASIS_db}
 \alias{get_vegplot_trhi_from_NASIS_db}
-\alias{get_legend_from_NASIS}
-\alias{get_lmuaoverlap_from_NASIS}
 \title{Get vegetation plot data from local NASIS database}
 \usage{
 fetchVegdata(

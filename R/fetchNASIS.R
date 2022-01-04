@@ -39,17 +39,9 @@
 #'  - [fetchNASIS Components Tutorial](http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html)
 #'
 #' @aliases fetchNASIS get_phorizon_from_NASIS_db
-#' get_component_copm_data_from_NASIS_db
-#' get_component_horizon_data_from_NASIS_db
-#' get_component_correlation_data_from_NASIS_db
-#' get_component_cogeomorph_data_from_NASIS_db
-#' get_component_esd_data_from_NASIS_db
-#' get_component_otherveg_data_from_NASIS_db get_copedon_from_NASIS_db
-#' get_legend_from_NASISget_lmuaoverlap_from_NASIS get_mapunit_from_NASIS
-#' get_projectmapunit_from_NASIS get_component_diaghz_from_NASIS_db
-#' get_mutext_from_NASIS_db get_phfmp_from_NASIS_db get_RMF_from_NASIS_db
+#' get_phfmp_from_NASIS_db get_RMF_from_NASIS_db
 #' get_concentrations_from_NASIS_db
-#' get_cotext_from_NASIS_db
+#' 
 #' @param from determines what objects should fetched? ('pedons' | 'components' | 'pedon_report')
 #' @param url string specifying the url for the NASIS pedon_report (default:
 #' `NULL`)
@@ -71,7 +63,9 @@
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' @return A SoilProfileCollection object
+#' @seealso `get_component_data_from_NASIS()`
 #' @author D. E. Beaudette, J. M. Skovlin, S.M. Roecker, A.G. Brown
+#' 
 #' @export fetchNASIS
 fetchNASIS <- function(from = 'pedons',
                        url = NULL,

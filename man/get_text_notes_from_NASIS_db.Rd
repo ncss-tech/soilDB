@@ -2,9 +2,15 @@
 % Please edit documentation in R/get_text_notes_from_NASIS_db.R
 \name{get_text_notes_from_NASIS_db}
 \alias{get_text_notes_from_NASIS_db}
+\alias{get_mutext_from_NASIS_db}
+\alias{get_cotext_from_NASIS_db}
 \title{Get text note data from a local NASIS Database}
 \usage{
 get_text_notes_from_NASIS_db(SS = TRUE, fixLineEndings = TRUE, dsn = NULL)
+
+get_mutext_from_NASIS_db(SS = TRUE, fixLineEndings = TRUE, dsn = NULL)
+
+get_cotext_from_NASIS_db(SS = TRUE, fixLineEndings = TRUE, dsn = NULL)
 }
 \arguments{
 \item{SS}{get data from the currently loaded Selected Set in NASIS or from

@@ -3,22 +3,9 @@
 \name{fetchNASIS}
 \alias{fetchNASIS}
 \alias{get_phorizon_from_NASIS_db}
-\alias{get_component_copm_data_from_NASIS_db}
-\alias{get_component_horizon_data_from_NASIS_db}
-\alias{get_component_correlation_data_from_NASIS_db}
-\alias{get_component_cogeomorph_data_from_NASIS_db}
-\alias{get_component_esd_data_from_NASIS_db}
-\alias{get_component_otherveg_data_from_NASIS_db}
-\alias{get_copedon_from_NASIS_db}
-\alias{get_legend_from_NASISget_lmuaoverlap_from_NASIS}
-\alias{get_mapunit_from_NASIS}
-\alias{get_projectmapunit_from_NASIS}
-\alias{get_component_diaghz_from_NASIS_db}
-\alias{get_mutext_from_NASIS_db}
 \alias{get_phfmp_from_NASIS_db}
 \alias{get_RMF_from_NASIS_db}
 \alias{get_concentrations_from_NASIS_db}
-\alias{get_cotext_from_NASIS_db}
 \title{Get a pedon or component data SoilProfileCollection from NASIS}
 \usage{
 fetchNASIS(
@@ -103,6 +90,9 @@ Tutorials:
 \item \href{http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.html}{fetchNASIS Pedons Tutorial}
 \item \href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html}{fetchNASIS Components Tutorial}
 }
+}
+\seealso{
+\code{get_component_data_from_NASIS()}
 }
 \author{
 D. E. Beaudette, J. M. Skovlin, S.M. Roecker, A.G. Brown

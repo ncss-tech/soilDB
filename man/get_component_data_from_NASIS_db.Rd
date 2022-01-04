@@ -2,7 +2,16 @@
 % Please edit documentation in R/get_component_data_from_NASIS_db.R
 \name{get_component_data_from_NASIS_db}
 \alias{get_component_data_from_NASIS_db}
+\alias{get_component_diaghz_from_NASIS_db}
 \alias{get_component_restrictions_from_NASIS_db}
+\alias{get_component_correlation_data_from_NASIS_db}
+\alias{get_component_cogeomorph_data_from_NASIS_db}
+\alias{get_component_cogeomorph_data_from_NASIS_db2}
+\alias{get_component_copm_data_from_NASIS_db}
+\alias{get_component_esd_data_from_NASIS_db}
+\alias{get_component_otherveg_data_from_NASIS_db}
+\alias{get_copedon_from_NASIS_db}
+\alias{get_component_horizon_data_from_NASIS_db}
 \title{Get component data from a local NASIS Database}
 \usage{
 get_component_data_from_NASIS_db(
@@ -10,6 +19,45 @@ get_component_data_from_NASIS_db(
   nullFragsAreZero = TRUE,
   stringsAsFactors = default.stringsAsFactors(),
   dsn = NULL
+)
+
+get_component_diaghz_from_NASIS_db(SS = TRUE, dsn = NULL)
+
+get_component_restrictions_from_NASIS_db(SS = TRUE, dsn = NULL)
+
+get_component_correlation_data_from_NASIS_db(
+  SS = TRUE,
+  dropAdditional = TRUE,
+  dropNotRepresentative = TRUE,
+  stringsAsFactors = default.stringsAsFactors(),
+  dsn = NULL
+)
+
+get_component_cogeomorph_data_from_NASIS_db(SS = TRUE, dsn = NULL)
+
+get_component_cogeomorph_data_from_NASIS_db2(SS = TRUE, dsn = NULL)
+
+get_component_copm_data_from_NASIS_db(
+  SS = TRUE,
+  stringsAsFactors = default.stringsAsFactors(),
+  dsn = NULL
+)
+
+get_component_esd_data_from_NASIS_db(
+  SS = TRUE,
+  stringsAsFactors = default.stringsAsFactors(),
+  dsn = NULL
+)
+
+get_component_otherveg_data_from_NASIS_db(SS = TRUE, dsn = NULL)
+
+get_copedon_from_NASIS_db(SS = TRUE, dsn = NULL)
+
+get_component_horizon_data_from_NASIS_db(
+  SS = TRUE,
+  fill = FALSE,
+  dsn = NULL,
+  nullFragsAreZero = TRUE
 )
 }
 \arguments{
@@ -26,6 +74,12 @@ options(\code{stringsAsFactors = FALSE})}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}
+
+\item{dropAdditional}{Remove map units with "additional" status? Default: \code{TRUE}}
+
+\item{dropNotRepresentative}{Remove non-representative data map units? Default: \code{TRUE}}
+
+\item{fill}{Return a single minimal (NA-filled) horizon for components with no horizon records? Default \code{FALSE}}
 }
 \value{
 a \code{data.frame}
