@@ -153,7 +153,7 @@
 
 ## https://github.com/ncss-tech/soilDB/issues/84
 ## TODO: https://github.com/ncss-tech/soilDB/issues/47
-## 2015-11-30: short-circuts could use some work, consider pre-marking mistakes in calling function
+## 2015-11-30: short-circuits could use some work, consider pre-marking mistakes in calling function
 # attempt to format "landform" records into a single string
 # note: there are several assumptions made about the data, 
 # see "short-circuits" used when there are funky data
@@ -161,40 +161,65 @@
 
   # get the current group of rows by unique ID (either passed by caller or calculated)
   if (is.null(uid) | length(uid) == 0)
-    u.peiid <- unique(i.gm$peiid)
+    soiliid <- unique(i.gm$peiid) # backwards compatible with hardcoded "peiid"
   else 
-    u.peiid <- uid
+    soiliid <- uid
   
-  if (is.null(u.peiid))
+  if (is.null(soiliid))
     return(NULL)
   
-  if (length(u.peiid) > 1)
+  if (length(soiliid) > 1)
     stop('data are from multiple pedon records')
   
   # sanity check: this function can only be applied to data from a single pedon
-  if (length(u.peiid) > 1)
+  if (length(soiliid) > 1)
     stop('data are from multiple pedon records')
   
   # subset geomorph data to landforms
   i.gm <- i.gm[which(i.gm$geomftname == 'landform'), ]
   
+  # subset geomorph data to RV (or NULL) hillslope position?
+  # i.gm <- i.gm[which(i.gm$cosurfmorphhpprv | is.na(i.gm$cosurfmorphhpprv)), ]
+  
   # allow for NA's
   if (nrow(i.gm) == 0) {
-    return(data.frame(peiid = u.peiid,
+    return(data.frame(peiid = soiliid,
                       landform_string = NA_character_,
+                      hillslopeprof_string = NA_character_,
+                      geompos_string = NA_character_,
+                      surfaceshape_string = NA_character_,
+                      geomicrorelief_string = NA_character_,
                       stringsAsFactors = FALSE))
   }
-
+  
+  hspp <- unique(paste0(i.gm$hillslopeprof, ifelse(i.gm$cosurfmorphhpprv, "*",""))[!is.na(i.gm$hillslopeprof)])
+  surf2d.string <- paste0(hspp, collapse = name.sep)
+  surf3d.string <- paste0(unique(paste0(c(i.gm$geomposmntn[!is.na(i.gm$geomposmntn)], 
+                                        i.gm$geomposhill[!is.na(i.gm$geomposhill)], 
+                                        i.gm$geompostrce[!is.na(i.gm$geompostrce)], 
+                                        i.gm$geomposflats[!is.na(i.gm$geomposflats)])), collapse = name.sep), collapse = name.sep)
+  surfmr.string <- paste0(unique(i.gm$geomicrorelief[!is.na(i.gm$geomicrorelief)]), collapse = name.sep)
+  surfss <- paste0(i.gm$shapeacross[!is.na(i.gm$shapeacross)], "/", i.gm$shapedown[!is.na(i.gm$shapedown)])
+  surfss.string <- paste0(unique(surfss[nchar(surfss) > 1]), collapse = name.sep)
+  
   # short-circuit: if any geomfeatid are NA, then we don't know the order
   # string together as-is, in row-order
   if(any(is.na(i.gm$geomfeatid))) {
     
     # optional information on which pedons have issues
     if(getOption('soilDB.verbose', default=FALSE))
-      message(paste0('Using row-order. NA in geomfeatid:', u.peiid))
+      message(paste0('Using row-order. NA in geomfeatid:', soiliid))
     
-    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
-    return(data.frame(peiid=u.peiid, landform_string=ft.string, stringsAsFactors=FALSE))
+    ft.string <- paste(unique(i.gm$geomfname), collapse = name.sep)
+    return(data.frame(
+      peiid = soiliid,
+      landform_string = ft.string,
+      hillslopeprof_string = surf2d.string,
+      geompos_string = surf3d.string,
+      surfaceshape_string = surfss.string,
+      geomicrorelief_string = surfmr.string,
+      stringsAsFactors = FALSE
+    ))
   }
   
   # short-circuit: if any feature exists on itself, then use row-order
@@ -203,10 +228,18 @@
     
     # optional information on which pedons have issues
     if(getOption('soilDB.verbose', default=FALSE))
-      message(paste0('Using row-order. Error in exists-on logic:', u.peiid))
+      message(paste0('Using row-order. Error in exists-on logic:', soiliid))
     
-    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
-    return(data.frame(peiid=u.peiid, landform_string=ft.string, stringsAsFactors=FALSE))
+    ft.string <- paste(unique(i.gm$geomfname), collapse=name.sep)
+    return(data.frame(
+      peiid = soiliid,
+      landform_string = ft.string,
+      hillslopeprof_string = surf2d.string,
+      geompos_string = surf3d.string,
+      surfaceshape_string = surfss.string,
+      geomicrorelief_string = surfmr.string,
+      stringsAsFactors = FALSE
+    ))
   }
   
   # get an index to the top-most and bottom-most features
@@ -218,10 +251,18 @@
   if(length(top.feature) == 0 & length(bottom.feature) == 0) {
     # optional information on which pedons have issues
     if(getOption('soilDB.verbose', default=FALSE))
-      warning(paste0('Using row-order. Error in exists-on logic: ', u.peiid), call.=FALSE)
+      warning(paste0('Using row-order. Error in exists-on logic: ', soiliid), call.=FALSE)
     
-    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
-    return(data.frame(peiid=u.peiid, landform_string=ft.string, stringsAsFactors=FALSE))
+    ft.string <- paste(unique(i.gm$geomfname), collapse=name.sep)
+    return(data.frame(
+      peiid = soiliid,
+      landform_string = ft.string,
+      hillslopeprof_string = surf2d.string,
+      geompos_string = surf3d.string,
+      surfaceshape_string = surfss.string,
+      geomicrorelief_string = surfmr.string,
+      stringsAsFactors = FALSE
+    ))
   }
    
   ## short-circuit: only 1 row, and exists-on logic is wrong, use row-order
@@ -229,10 +270,18 @@
     
     # optional information on which pedons have issues
     if(getOption('soilDB.verbose', default=FALSE))
-      warning(paste0('Using row-order. Single row / error in exists-on logic: ', u.peiid), call.=FALSE)
+      warning(paste0('Using row-order. Single row / error in exists-on logic: ', soiliid), call.=FALSE)
     
-    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
-    return(data.frame(peiid=u.peiid, landform_string=ft.string, stringsAsFactors=FALSE))
+    ft.string <- paste(unique(i.gm$geomfname), collapse=name.sep)
+    return(data.frame(
+      peiid = soiliid,
+      landform_string = ft.string,
+      hillslopeprof_string = surf2d.string,
+      geompos_string = surf3d.string,
+      surfaceshape_string = surfss.string,
+      geomicrorelief_string = surfmr.string,
+      stringsAsFactors = FALSE
+    ))
   }
   
   # short-circuit: if the exists-on logic is wrong, use row-order
@@ -240,20 +289,28 @@
     
     # optional information on which pedons have issues
     if(getOption('soilDB.verbose', default=FALSE))
-      warning(paste0('Using row-order. Incorrect exists-on specification: ', u.peiid), call.=FALSE)
+      warning(paste0('Using row-order. Incorrect exists-on specification: ', soiliid), call.=FALSE)
     
-    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
-    return(data.frame(peiid=u.peiid, landform_string=ft.string, stringsAsFactors=FALSE))
+    ft.string <- paste(unique(i.gm$geomfname), collapse=name.sep)
+    return(data.frame(
+      peiid = soiliid,
+      landform_string = ft.string,
+      hillslopeprof_string = surf2d.string,
+      geompos_string = surf3d.string,
+      surfaceshape_string = surfss.string,
+      geomicrorelief_string = surfmr.string,
+      stringsAsFactors = FALSE
+    ))
   }
   
   # init a vector to store feature names
-  ft.vect <- vector(mode='character', length=nrow(i.gm))
+  ft.vect <- vector(mode = 'character', length = length(unique(i.gm[, 'geomfname'])))
   # the first feature is the top-most feature
   this.feature.idx <- top.feature
   
   # loop over features, until the bottom-most feature
   i <- 1
-  while(i <= nrow(i.gm)){
+  while(i <= length(ft.vect)){
     # get the current feature
     f.i <- i.gm$geomfname[this.feature.idx]
     
@@ -272,10 +329,18 @@
   }
   
   # paste into single string
-  ft.string <- paste(ft.vect, collapse=name.sep)
+  ft.string <- paste(unique(ft.vect), collapse = name.sep)
   
   # done!
-  return(data.frame(peiid=u.peiid, landform_string=ft.string, stringsAsFactors=FALSE))
+  return(data.frame(
+    peiid = soiliid,
+    landform_string = ft.string,
+    hillslopeprof_string = surf2d.string,
+    geompos_string = surf3d.string,
+    surfaceshape_string = surfss.string,
+    geomicrorelief_string = surfmr.string,
+    stringsAsFactors = FALSE
+  ))
 }
 
 
@@ -378,7 +443,7 @@
     if(getOption('soilDB.verbose', default=FALSE))
       message(paste0('Using row-order. NA in geomfeatid: ', u.peiid))
     
-    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    ft.string <- paste(unique(i.gm$geomfname), collapse=name.sep)
     return(data.frame(coiid=u.coiid, landform_string=ft.string, stringsAsFactors=FALSE))
   }
   
@@ -390,7 +455,7 @@
     if(getOption('soilDB.verbose', default=FALSE))
       message(paste0('Using row-order. Error in exists-on logic: ', u.coiid))
     
-    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    ft.string <- paste(unique(i.gm$geomfname), collapse=name.sep)
     return(data.frame(coiid=u.coiid, landform_string=ft.string, stringsAsFactors=FALSE))
   }
   
@@ -406,7 +471,7 @@
     if(getOption('soilDB.verbose', default=FALSE))
       warning(paste0('Using row-order. Single row / error in exists-on logic: ', u.coiid), call.=FALSE)
     
-    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    ft.string <- paste(unique(i.gm$geomfname), collapse=name.sep)
     return(data.frame(coiid=u.coiid, landform_string=ft.string, stringsAsFactors=FALSE))
   }
   
@@ -417,7 +482,7 @@
     if(getOption('soilDB.verbose', default=FALSE))
       warning(paste0('Using row-order. Incorrect exists-on specification: ', u.coiid), call.=FALSE)
     
-    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    ft.string <- paste(unique(i.gm$geomfname), collapse=name.sep)
     return(data.frame(coiid=u.coiid, landform_string=ft.string, stringsAsFactors=FALSE))
   }
   
@@ -429,7 +494,7 @@
     if(getOption('soilDB.verbose', default=FALSE))
       warning(paste0('Using row-order. Incorrect exists-on specification: ', u.coiid), call.=FALSE)
     
-    ft.string <- paste(i.gm$geomfname, collapse=name.sep)
+    ft.string <- paste(unique(i.gm$geomfname), collapse=name.sep)
     return(data.frame(coiid=u.coiid, landform_string=ft.string, stringsAsFactors=FALSE))
   }
   

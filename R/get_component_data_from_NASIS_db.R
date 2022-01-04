@@ -275,6 +275,39 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   return(d)
 }
 
+# get geomorphic desc for each component
+#' @export
+#' @rdname get_component_data_from_NASIS_db
+get_component_cogeomorph_data_from_NASIS_db2 <- function(SS = TRUE, dsn = NULL) {
+  
+  q <- "SELECT cogeo.coiidref as coiid, cogeo.geomfmod, geomorfeat.geomfname, cogeo.geomfeatid, cogeo.existsonfeat, cogeo.geomfiidref, lower(geomorfeattype.geomftname) as geomftname, cogeo.rvindicator AS cogeomordescrv, hillslopeprof, cosurfmorphhpp.rvindicator AS cosurfmorphhpprv, geomposmntn, geomposhill, geompostrce, geomposflats, shapeacross, shapedown, geomicrorelief
+
+  FROM
+  component_View_1 AS co
+  INNER JOIN cogeomordesc_View_1 AS cogeo ON co.coiid = cogeo.coiidref
+  INNER JOIN geomorfeat ON geomorfeat.geomfiid = cogeo.geomfiidref
+  INNER JOIN geomorfeattype ON geomorfeattype.geomftiid = geomorfeat.geomftiidref
+  LEFT JOIN cosurfmorphhpp ON cosurfmorphhpp.cogeomdiidref = cogeo.cogeomdiid
+  LEFT JOIN cosurfmorphgc ON cosurfmorphgc.cogeomdiidref = cogeo.cogeomdiid
+  LEFT JOIN cosurfmorphmr ON cosurfmorphmr.cogeomdiidref = cogeo.cogeomdiid
+  LEFT JOIN cosurfmorphss ON cosurfmorphss.cogeomdiidref = cogeo.cogeomdiid
+  ORDER BY coiid, geomfeatid ASC;"
+  
+  channel <- dbConnectNASIS(dsn)
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
+  d <- dbQueryNASIS(channel, q)
+  
+  # done
+  return(uncode(d))
+}
 
 # get copm for each component
 #' @export
