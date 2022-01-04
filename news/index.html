@@ -52,7 +52,7 @@
 <ul><li>
 <code><a href="../reference/fetchSDA.html">fetchSDA()</a></code> handle NULL component-level results with an informative error</li>
 <li>
-<code><a href="../reference/fetchSDA.html">fetchSDA()</a></code> now (again) returns mapunit/legend-level information via <code>get_mapunit_from_NASIS()</code>
+<code><a href="../reference/fetchSDA.html">fetchSDA()</a></code> now (again) returns mapunit/legend-level information via <code><a href="../reference/get_mapunit_from_NASIS.html">get_mapunit_from_NASIS()</a></code>
 </li>
 <li>
 <code><a href="../reference/createStaticNASIS.html">createStaticNASIS()</a></code> and queries to SQLite NASIS snapshots now preserve date/time using RSQLite 2.2.4+ via <code>extended_types=TRUE</code> argument to <code>dbConnect()</code>
@@ -182,7 +182,7 @@
 <code><a href="../reference/get_OSD.html">get_OSD()</a></code> TXT and HTML formats now supported (in addition to JSON) through a common function interface</li>
 <li>Added <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_table_key_by_name()</a></code> <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_fkey_by_name()</a></code>, <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_pkeyref_by_name()</a></code>, <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_pkey_by_name()</a></code>, <code><a href="../reference/get_NASIS_table_name_by_purpose.html">get_NASIS_table_name_by_purpose()</a></code> methods for helping get information on primary/foreign keys and thematic groups of NASIS tables (useful for creating SQLite/external snapshots of NASIS tables)</li>
 <li>
-<code>get_mapunit_from_NASIS()</code>, <code>get_legend_from_NASIS()</code> and <code>get_lmuaoverlap_from_NASIS()</code> now works for “MLRA Survey Area” <code>areatypename</code> and no longer is limited by constraints on <code>legendsuituse</code> or <code>mustatus</code>
+<code><a href="../reference/get_mapunit_from_NASIS.html">get_mapunit_from_NASIS()</a></code>, <code><a href="../reference/get_mapunit_from_NASIS.html">get_legend_from_NASIS()</a></code> and <code><a href="../reference/get_mapunit_from_NASIS.html">get_lmuaoverlap_from_NASIS()</a></code> now works for “MLRA Survey Area” <code>areatypename</code> and no longer is limited by constraints on <code>legendsuituse</code> or <code>mustatus</code>
 </li>
 </ul></div>
     <div class="section level2">
