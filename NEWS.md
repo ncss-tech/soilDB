@@ -1,4 +1,5 @@
-# soilDB 2.6.11 (2021-12-21)
+# soilDB 2.6.11 (2022-01-04)
+ * `get_SDA_property()` now works with mixed component and horizon-level properties; thanks to Matthieu Stigler for the bug report
  * `fetchSDA()` handle NULL component-level results with an informative error 
  * `fetchSDA()` now (again) returns mapunit/legend-level information via `get_mapunit_from_NASIS()`
  * `createStaticNASIS()` and queries to SQLite NASIS snapshots now preserve date/time using RSQLite 2.2.4+ via `extended_types=TRUE` argument to `dbConnect()`
