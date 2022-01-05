@@ -93,7 +93,7 @@ get_SDV_legend_elements <- function(WHERE,
     res
   })
   if (length(y) == 1 & simplify) return(y[[1]])
-  y
+  type.convert(y)
 }
        
 
