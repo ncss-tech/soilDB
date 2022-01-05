@@ -1,5 +1,10 @@
-# soilDB 2.6.11 (2022-01-04)
+# soilDB 2.6.12 (2022-01-05)
  * `get_SDA_property()` now works with mixed component and horizon-level properties; thanks to Matthieu Stigler for the bug report
+ *  Added `get_SDV_legend_elements()` for fetching and parsing XML for Soil Data Viewer / Web Soil Survey-style symbol themes for soil interpretations from Soil Data Access
+ * `fetchNASIS()` pedon and component geomorphic summaries now include columns for landscape, microfeature, microrelief, 2D/3D morphometry, and slope shape 
+ * `fetchNASIS('pedons')` now uses `simplifyFragmentData()` for surface fragments
+ 
+# soilDB 2.6.11 (2021-12-21)
  * `fetchSDA()` handle NULL component-level results with an informative error 
  * `fetchSDA()` now (again) returns mapunit/legend-level information via `get_mapunit_from_NASIS()`
  * `createStaticNASIS()` and queries to SQLite NASIS snapshots now preserve date/time using RSQLite 2.2.4+ via `extended_types=TRUE` argument to `dbConnect()`
