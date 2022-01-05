@@ -55,6 +55,7 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_site_data_from_NASIS_db</span><span class="op">(</span>
   SS <span class="op">=</span> <span class="cn">TRUE</span>,
+  nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>,
   stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
   dsn <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
@@ -65,6 +66,8 @@
     <dl><dt>SS</dt>
 <dd><p>fetch data from Selected Set in NASIS or from the entire local
 database (default: <code>TRUE</code>)</p></dd>
+<dt>nullFragsAreZero</dt>
+<dd><p>should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)</p></dd>
 <dt>stringsAsFactors</dt>
 <dd><p>logical: should character vectors be converted to
 factors? This argument is passed to the <code><a href="uncode.html">uncode()</a></code> function. It does not

@@ -58,7 +58,8 @@
   <span class="va">id.var</span>,
   vol.var <span class="op">=</span> <span class="st">"fragvol"</span>,
   prefix <span class="op">=</span> <span class="st">"frag"</span>,
-  nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>
+  nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>,
+  msg <span class="op">=</span> <span class="st">"rock fragment volume"</span>
 <span class="op">)</span>
 
 <span class="fu">simplifyArtifactData</span><span class="op">(</span>
@@ -83,6 +84,8 @@ that is unique among all horizons in <code>rf</code></p></dd>
 <dd><p>a character vector prefix for input</p></dd>
 <dt>nullFragsAreZero</dt>
 <dd><p>should fragment volumes of NULL be interpreted as 0? (default: <code>TRUE</code>), see details</p></dd>
+<dt>msg</dt>
+<dd><p>Identifier of data being summarized. Default is <code>"rock fragment volume"</code> but this routine is also used for <code>"surface fragment cover"</code></p></dd>
 <dt>art</dt>
 <dd><p>a <code>data.frame</code> object, typically returned from NASIS, see details</p></dd>
 </dl></div>
