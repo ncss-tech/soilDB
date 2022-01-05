@@ -221,7 +221,8 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
     id.var = "coiidref",
     vol.var = "sfragcov_r",
-    prefix = "sfrag")
+    prefix = "sfrag",
+    msg = "surface fragment cover")
   
   if (sum(complete.cases(chs)) == 0) {
     chs <- chs[1:nrow(d),]

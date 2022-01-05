@@ -158,7 +158,10 @@
   # add site data to object
   # remove 'pedon_id' column from site_data
   site_data$pedon_id <- NULL
-
+  
+  # TODO: duplicating surface fine gravel column with old name for backward compatibility
+  site_data$surface_fgravel <- site_data$surface_fine_gravel
+  
   # left-join via peiid
   # < 0.1 second for ~ 4k pedons
   site(hz_data) <- site_data

@@ -69,7 +69,7 @@ WHERE sb.rn IS NULL OR sb.rn = 1
 
 ORDER BY pedon_View_1.peiid ;"
       
-  q2 <- "SELECT siteiid, peiid, sitesurffrags_View_1.* FROM sitesurffrags_View_1 
+  q2 <- "SELECT siteiid, peiid, siteobsiid, sitesurffrags_View_1.* FROM sitesurffrags_View_1 
          INNER JOIN siteobs_View_1 ON sitesurffrags_View_1.siteobsiidref = siteobs_View_1.siteobsiid
          INNER JOIN site_View_1 ON siteobs_View_1.siteiidref = site_View_1.siteiid
          LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
@@ -98,11 +98,21 @@ ORDER BY pedon_View_1.peiid ;"
 	d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 	
 	# surface fragments
+	sfr <- dbQueryNASIS(channel, q2, close = FALSE)
+	
+	multi.siteobs <- unique(sfr[, c("siteiid","siteobsiid")])$siteiid
+	if (any(table(multi.siteobs) > 1)) {
+	  message("-> QC: surface fragment records from multiple site observations.\n\tUse `get('multisiteobs.surface', envir=soilDB.env) for site (siteiid) and site observation (siteobsiid)`")
+	  assign("multisiteobs.surface", value = multi.siteobs, envir = soilDB.env)
+	}
+	
 	phs <- simplifyFragmentData(
-	  uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
+	  uncode(sfr, dsn = dsn),
 	  id.var = "peiid",
 	  vol.var = "sfragcov",
-	  prefix = "sfrag")
+	  prefix = "sfrag",
+	  msg = "surface fragment cover"
+	)
 	
 	ldx <- !d$peiid %in% phs$peiid
 	if (!any(ldx)) {
