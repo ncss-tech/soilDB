@@ -176,8 +176,8 @@
     stop('data are from multiple pedon records')
   
   # subset geomorph data to landforms
+  i.ls <- i.gm[which(i.gm$geomftname == 'landscape'), ]
   i.gm <- i.gm[which(i.gm$geomftname == 'landform'), ]
-  
   # subset geomorph data to RV (or NULL) hillslope position?
   # i.gm <- i.gm[which(i.gm$cosurfmorphhpprv | is.na(i.gm$cosurfmorphhpprv)), ]
   
@@ -185,6 +185,7 @@
   if (nrow(i.gm) == 0) {
     return(data.frame(peiid = soiliid,
                       landform_string = NA_character_,
+                      landscape_string = NA_character_,
                       hillslopeprof_string = NA_character_,
                       geompos_string = NA_character_,
                       surfaceshape_string = NA_character_,
@@ -192,6 +193,7 @@
                       stringsAsFactors = FALSE))
   }
   
+  landsc.string <- unique(paste0(i.ls$geomfname, collapse = name.sep))
   hspp <- unique(paste0(i.gm$hillslopeprof, ifelse(i.gm$cosurfmorphhpprv, "*",""))[!is.na(i.gm$hillslopeprof)])
   surf2d.string <- paste0(hspp, collapse = name.sep)
   surf3d.string <- paste0(unique(paste0(c(i.gm$geomposmntn[!is.na(i.gm$geomposmntn)], 
@@ -214,6 +216,7 @@
     return(data.frame(
       peiid = soiliid,
       landform_string = ft.string,
+      landscape_string = landsc.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       surfaceshape_string = surfss.string,
@@ -234,6 +237,7 @@
     return(data.frame(
       peiid = soiliid,
       landform_string = ft.string,
+      landscape_string = landsc.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       surfaceshape_string = surfss.string,
@@ -257,6 +261,7 @@
     return(data.frame(
       peiid = soiliid,
       landform_string = ft.string,
+      landscape_string = landsc.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       surfaceshape_string = surfss.string,
@@ -276,6 +281,7 @@
     return(data.frame(
       peiid = soiliid,
       landform_string = ft.string,
+      landscape_string = landsc.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       surfaceshape_string = surfss.string,
@@ -295,6 +301,7 @@
     return(data.frame(
       peiid = soiliid,
       landform_string = ft.string,
+      landscape_string = landsc.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       surfaceshape_string = surfss.string,
@@ -335,6 +342,7 @@
   return(data.frame(
     peiid = soiliid,
     landform_string = ft.string,
+    landscape_string = landsc.string,
     hillslopeprof_string = surf2d.string,
     geompos_string = surf3d.string,
     surfaceshape_string = surfss.string,
