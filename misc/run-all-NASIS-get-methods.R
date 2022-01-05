@@ -3,6 +3,9 @@
 
 # git diff --name-only master...nasisDBI | grep -E get\\|NASIS\\|fetch
 
+# for vegplot data that are complete
+#  - VEG - Veg Plots by User Site ID and Vegplot ID for %WY629% 
+
 f <- read.table(text = "R/fetchNASIS.R
                         R/fetchNASIS_pedons.R
                         R/fetchNASIS_components.R
@@ -35,7 +38,13 @@ library(soilDB)
 
 # path to data source (NULL = use ODBC to local nasis,
 #                     otherwise path to SQLite)
-dsn <- NULL # "~/workspace/NASISlite/nasis_local.db" # "misc/testStatic.sqlite"
+dsn <- "misc/testStatic.sqlite"
+
+# RUN IF NEEDED:
+# dsn <- "misc/testStatic.sqlite"
+createStaticNASIS(tables = c(get_NASIS_table_name_by_purpose(SS = TRUE),
+                             get_NASIS_table_name_by_purpose(SS = FALSE)),
+                  dsn = NULL, output_path = dsn)
 
 # Function to load all function names in package, run them using SS and dsn as specified
 test_local_NASIS <- function(SS = FALSE, dsn = NULL) {
@@ -85,15 +94,12 @@ nasis_all <- test_local_NASIS(SS = FALSE, dsn = NULL)
 
 nasis_all[which(nasis_all)]
 
-# RUN IF NEEDED:
-# dsn <- "misc/testStatic.sqlite"
-# createStaticNASIS(tables = get_NASIS_table_name_by_purpose(SS = TRUE),
-#                   dsn = NULL, SS = TRUE, output_path = dsn)
-
 # test with selected set in SQLite instance
 nasis_static_ss <- test_local_NASIS(SS = TRUE, dsn = dsn)
 
 nasis_static_ss[which(nasis_static_ss)]
+
+get_soilseries_from_NASIS(dsn = dsn)
 
 # test against whole local database in SQLite instance
 nasis_static_all <- test_local_NASIS(SS = FALSE, dsn = dsn)

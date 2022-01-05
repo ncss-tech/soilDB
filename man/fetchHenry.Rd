@@ -15,7 +15,8 @@ fetchHenry(
   start.date = NULL,
   stop.date = NULL,
   pad.missing.days = TRUE,
-  soiltemp.summaries = TRUE
+  soiltemp.summaries = TRUE,
+  tz = ""
 )
 }
 \arguments{
@@ -31,7 +32,7 @@ metadata + all sensor data}
 
 \item{sso}{(optional) filter results using a soil survey office code}
 
-\item{gran}{data granularity: "day", "week", "month", "year"; returned data
+\item{gran}{data granularity: "hour" (if available), "day", "week", "month", "year"; returned data
 are averages}
 
 \item{start.date}{(optional) starting date filter}
@@ -43,6 +44,8 @@ with NA? see details}
 
 \item{soiltemp.summaries}{should soil temperature ("day" granularity only)
 be summarized? see details}
+
+\item{tz}{Used for custom timezone. Default \code{""} is current locale}
 }
 \value{
 a list containing: \item{sensors}{a \code{SpatialPointsDataFrame}

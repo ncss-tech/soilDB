@@ -27,13 +27,13 @@ get_SDA_property(
 
 \item{mukeys}{vector of map unit keys}
 
-\item{top_depth}{Default: \code{0} (centimeters); a numeric value for upper boundary (top depth) used only for method="weighted average" and "dominant component (numeric)"}
+\item{top_depth}{Default: \code{0} (centimeters); a numeric value for upper boundary (top depth) used only for method="Weighted Average", "Dominant Component (Numeric)", and "MIN/MAX"}
 
-\item{bottom_depth}{Default: \code{200} (centimeters); a numeric value for lower boundary (bottom depth) used only for method="weighted average" and "dominant component (numeric)"}
+\item{bottom_depth}{Default: \code{200} (centimeters); a numeric value for lower boundary (bottom depth) used only for method="Weighted Average", "Dominant Component (Numeric)", and "MIN/MAX"}
 
 \item{FUN}{Optional: character representing SQL aggregation function either "MIN" or "MAX" used only for method="min/max"; this argument is calculated internally if you specify \code{method="MIN"} or \code{method="MAX"}}
 
-\item{include_minors}{Include minor components in "Weighted Average" results?}
+\item{include_minors}{Include minor components in "Weighted Average" or "MIN/MAX" results?}
 
 \item{miscellaneous_areas}{Include miscellaneous areas  (non-soil components) in "Weighted Average", "MIN" or "MAX" results?}
 

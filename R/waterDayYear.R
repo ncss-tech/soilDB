@@ -12,8 +12,10 @@
 #' 
 #' This function doesn't know about leap-years. Probably worth checking.
 #' 
-#' @param d anything the can be safely converted to \code{PPOSIXlt}
+#' @param d anything the can be safely converted to \code{POSIXlt}
 #' @param end "MM-DD" notation for end of water year
+#' @param format Used in POSIXlt conversion. Default `"%Y-%m-%d"`
+#' @param tz Used in POSIXlt conversion for custom timezone. Default `""` is current locale 
 #' @return A \code{data.frame} object with the following \item{wy}{the "water
 #' year"} \item{wd}{the "water day"}
 #' @author D.E. Beaudette
@@ -27,12 +29,12 @@
 #' waterDayYear('2019-01-01')
 #' 
 #' @export waterDayYear
-waterDayYear <- function(d, end = "09-30") {
+waterDayYear <- function(d, end = "09-30", format = "%Y-%m-%d", tz = "") {
   
-  # note: this will assume the current / LOCALE-specific timezone
+  # note: tz = "" will assume the current / LOCALE-specific timezone
   # convert to water year, using Sept
   # ideas from: https://github.com/USGS-R/dataRetrieval/issues/246
-  dLT <- as.POSIXlt(d)
+  dLT <- as.POSIXlt(d, format = format, tz = tz)
   
   # add century from epoch
   water_year <- dLT$year + 1900

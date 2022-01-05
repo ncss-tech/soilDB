@@ -9,10 +9,10 @@
 #' @param method one of: "Dominant Component (Category)", "Dominant Component (Numeric)", "Weighted Average", "MIN", "MAX", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
-#' @param top_depth Default: `0` (centimeters); a numeric value for upper boundary (top depth) used only for method="weighted average" and "dominant component (numeric)"
-#' @param bottom_depth Default: `200` (centimeters); a numeric value for lower boundary (bottom depth) used only for method="weighted average" and "dominant component (numeric)"
+#' @param top_depth Default: `0` (centimeters); a numeric value for upper boundary (top depth) used only for method="Weighted Average", "Dominant Component (Numeric)", and "MIN/MAX"
+#' @param bottom_depth Default: `200` (centimeters); a numeric value for lower boundary (bottom depth) used only for method="Weighted Average", "Dominant Component (Numeric)", and "MIN/MAX"
 #' @param FUN Optional: character representing SQL aggregation function either "MIN" or "MAX" used only for method="min/max"; this argument is calculated internally if you specify `method="MIN"` or `method="MAX"`
-#' @param include_minors Include minor components in "Weighted Average" results?
+#' @param include_minors Include minor components in "Weighted Average" or "MIN/MAX" results?
 #' @param miscellaneous_areas Include miscellaneous areas  (non-soil components) in "Weighted Average", "MIN" or "MAX" results?
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #'
@@ -168,7 +168,7 @@ get_SDA_property <-
               "Min/Max",
               "Dominant Component (Numeric)",
               "Dominant Condition",
-              "None", "None_Horizon")
+              "None")
   method <- match.arg(toupper(method), toupper(labels))
 
   # determine column name prefix/suffix for method
@@ -176,7 +176,7 @@ get_SDA_property <-
                 '_wtd_avg',
                 '_min_max',
                 '_dom_comp_num',
-                '_dom_cond', '', 'chorizon_')
+                '_dom_cond', '')
   modifier <- suffixes[match(method, toupper(labels))]
 
   # return list with method and modifier
@@ -265,7 +265,7 @@ get_SDA_property <-
 .constructPropQuery <- function(method, property,
                                 areasymbols = NULL, mukeys = NULL,
                                 top_depth = 0, bottom_depth = 200, FUN = NULL,
-                                include_minors = FALSE, 
+                                include_minors = FALSE,
                                 miscellaneous_areas = FALSE) {
   # SQL by Jason Nemecek
 
@@ -305,7 +305,7 @@ get_SDA_property <-
 
     ## alternate: just assume they are either all component or all horizon column names
     # message('assuming `property` is a vector of component OR horizon-level column names')
-    agg_property <- property
+    agg_property <- tolower(property)
 
   } else {
 
@@ -318,10 +318,44 @@ get_SDA_property <-
 
   method <- toupper(method)
 
-  if (method == "NONE")
-    if (all(agg_property %in% colnames(suppressMessages(SDA_query("SELECT TOP 1 * FROM chorizon")))))
-      method <- "NONE_HORIZON"
-
+  if (method == "NONE") {
+    # dput(colnames(suppressMessages(SDA_query("SELECT TOP 1 * FROM chorizon")))) # without cokey
+    is_hz <- agg_property %in% c("hzname", "desgndisc", "desgnmaster", "desgnmasterprime", "desgnvert", 
+                                 "hzdept_l", "hzdept_r", "hzdept_h", "hzdepb_l", "hzdepb_r", "hzdepb_h", 
+                                 "hzthk_l", "hzthk_r", "hzthk_h", "fraggt10_l", "fraggt10_r", 
+                                 "fraggt10_h", "frag3to10_l", "frag3to10_r", "frag3to10_h", "sieveno4_l", 
+                                 "sieveno4_r", "sieveno4_h", "sieveno10_l", "sieveno10_r", "sieveno10_h", 
+                                 "sieveno40_l", "sieveno40_r", "sieveno40_h", "sieveno200_l", 
+                                 "sieveno200_r", "sieveno200_h", "sandtotal_l", "sandtotal_r", 
+                                 "sandtotal_h", "sandvc_l", "sandvc_r", "sandvc_h", "sandco_l", 
+                                 "sandco_r", "sandco_h", "sandmed_l", "sandmed_r", "sandmed_h", 
+                                 "sandfine_l", "sandfine_r", "sandfine_h", "sandvf_l", "sandvf_r", 
+                                 "sandvf_h", "silttotal_l", "silttotal_r", "silttotal_h", "siltco_l", 
+                                 "siltco_r", "siltco_h", "siltfine_l", "siltfine_r", "siltfine_h", 
+                                 "claytotal_l", "claytotal_r", "claytotal_h", "claysizedcarb_l", 
+                                 "claysizedcarb_r", "claysizedcarb_h", "om_l", "om_r", "om_h", 
+                                 "dbtenthbar_l", "dbtenthbar_r", "dbtenthbar_h", "dbthirdbar_l", 
+                                 "dbthirdbar_r", "dbthirdbar_h", "dbfifteenbar_l", "dbfifteenbar_r", 
+                                 "dbfifteenbar_h", "dbovendry_l", "dbovendry_r", "dbovendry_h", 
+                                 "partdensity", "ksat_l", "ksat_r", "ksat_h", "awc_l", "awc_r", 
+                                 "awc_h", "wtenthbar_l", "wtenthbar_r", "wtenthbar_h", "wthirdbar_l", 
+                                 "wthirdbar_r", "wthirdbar_h", "wfifteenbar_l", "wfifteenbar_r", 
+                                 "wfifteenbar_h", "wsatiated_l", "wsatiated_r", "wsatiated_h", 
+                                 "lep_l", "lep_r", "lep_h", "ll_l", "ll_r", "ll_h", "pi_l", "pi_r", 
+                                 "pi_h", "aashind_l", "aashind_r", "aashind_h", "kwfact", "kffact", 
+                                 "caco3_l", "caco3_r", "caco3_h", "gypsum_l", "gypsum_r", "gypsum_h", 
+                                 "sar_l", "sar_r", "sar_h", "ec_l", "ec_r", "ec_h", "cec7_l", 
+                                 "cec7_r", "cec7_h", "ecec_l", "ecec_r", "ecec_h", "sumbases_l", 
+                                 "sumbases_r", "sumbases_h", "ph1to1h2o_l", "ph1to1h2o_r", "ph1to1h2o_h", 
+                                 "ph01mcacl2_l", "ph01mcacl2_r", "ph01mcacl2_h", "freeiron_l", 
+                                 "freeiron_r", "freeiron_h", "feoxalate_l", "feoxalate_r", "feoxalate_h", 
+                                 "extracid_l", "extracid_r", "extracid_h", "extral_l", "extral_r", 
+                                 "extral_h", "aloxalate_l", "aloxalate_r", "aloxalate_h", "pbray1_l", 
+                                 "pbray1_r", "pbray1_h", "poxalate_l", "poxalate_r", "poxalate_h", 
+                                 "ph2osoluble_l", "ph2osoluble_r", "ph2osoluble_h", "ptotal_l", 
+                                 "ptotal_r", "ptotal_h", "excavdifcl", "excavdifms", "chkey")
+  }
+  
   FUN <- toupper(FUN)
 
   # check FUN arg for min max method
@@ -353,18 +387,16 @@ get_SDA_property <-
     sprintf("(SELECT TOP 1 %s FROM mapunit
           INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey %s
           GROUP BY %s, comppct_r ORDER BY SUM(comppct_r) over(partition by %s) DESC) AS %s",
-          property, 
-          ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"), 
+          property,
+          ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
           property, property, property)
   }
 
-  .property_min_max <- function(property, FUN) {
+  .property_min_max <- function(property, top_depth, bottom_depth, FUN) {
     sprintf("(SELECT TOP 1 %s(chm1.%s) FROM component AS cm1
-           INNER JOIN chorizon AS chm1 ON 
-            cm1.cokey = chm1.cokey 
-            AND cm1.cokey = c.cokey) AS %s",
-           FUN, property,
-           property)
+             INNER JOIN chorizon AS chm1 ON cm1.cokey = chm1.cokey AND cm1.cokey = c.cokey
+             WHERE chm1.hzdept_r BETWEEN %s AND %s OR chm1.hzdepb_r BETWEEN %s AND %s) AS %s",
+            FUN, property, top_depth, bottom_depth, top_depth, bottom_depth, property)
   }
 
   .property_weighted_average <- function(property, top_depth, bottom_depth, where_clause, dominant = FALSE, include_minors = FALSE, miscellaneous_areas = FALSE) {
@@ -375,7 +407,7 @@ get_SDA_property <-
             INTO #kitchensink
             FROM legend  AS lks
             INNER JOIN  mapunit AS muks ON muks.lkey = lks.lkey AND %s
-            SELECT mu1.mukey, cokey, comppct_r,  
+            SELECT mu1.mukey, cokey, comppct_r,
             SUM (comppct_r) OVER (PARTITION BY mu1.mukey) AS SUM_COMP_PCT
             INTO #comp_temp
             FROM legend AS l1
@@ -395,15 +427,15 @@ get_SDA_property <-
             INTO #main
             FROM legend AS l
             INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
-            INNER JOIN component AS c ON c.mukey = mu.mukey 
+            INNER JOIN component AS c ON c.mukey = mu.mukey
             INNER JOIN chorizon AS ch ON ch.cokey = c.cokey AND hzdepb_r >= %s AND hzdept_r <= %s
-            INNER JOIN chtexturegrp AS cht ON ch.chkey = cht.chkey 
+            INNER JOIN chtexturegrp AS cht ON ch.chkey = cht.chkey
             WHERE cht.rvindicator = 'yes' AND ch.hzdept_r IS NOT NULL
             ORDER BY areasymbol, musym, muname, mu.mukey, comppct_r DESC, cokey, hzdept_r, hzdepb_r
             %s",
             gsub("^(l|mu)\\.","\\1ks.", where_clause),
             gsub("^(l|mu)\\.","\\11.", where_clause),
-            ifelse(include_minors, "", "AND majcompflag = 'Yes'"), 
+            ifelse(include_minors, "", "AND majcompflag = 'Yes'"),
             ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'"),
             ifelse(dominant, "            AND c1.cokey = (SELECT TOP 1 c2.cokey FROM component AS c2
                             INNER JOIN mapunit AS mm1 ON
@@ -456,7 +488,7 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
     # dominant component numeric is a more specific case of weighted average
     .property_weighted_average(property, top_depth, bottom_depth, where_clause, dominant = TRUE, include_minors = FALSE, miscellaneous_areas = FALSE)
   }
-  
+
   # create query based on method
   switch(toupper(agg_method$method),
     # dominant component (category)
@@ -476,17 +508,17 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
 
     "MIN/MAX" =
       sprintf("SELECT areasymbol, musym, muname, mu.mukey AS mukey, %s
-               FROM legend AS l
-               INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
-               LEFT JOIN component AS c ON c.mukey = mu.mukey AND 
-                                             c.cokey = (SELECT TOP 1 c1.cokey FROM component AS c1
-                                                        INNER JOIN mapunit ON c.mukey = mapunit.mukey AND
-                                                                              c1.mukey = mu.mukey
-                                                        %s
-                                                        ORDER BY c1.comppct_r DESC, c1.cokey)",
-              paste0(sapply(agg_property, function(x) .property_min_max(x, FUN = FUN)), collapse = ", "),
+               INTO #funagg
+                    FROM legend AS l
+                    INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
+                    LEFT JOIN component AS c ON c.mukey = mu.mukey %s %s
+               SELECT areasymbol, musym, muname, mukey, %s FROM #funagg
+               GROUP BY areasymbol, musym, muname, mukey",
+              paste0(sapply(agg_property, function(x) .property_min_max(x, top_depth, bottom_depth, FUN = FUN)), collapse = ", "),
               where_clause,
-              ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'")),
+              ifelse(include_minors, ""," AND c.majcompflag = 'Yes'"),
+              ifelse(miscellaneous_areas, ""," AND c.compkind != 'Miscellaneous area'"),
+              paste0(paste0(FUN, "(", agg_property, ") AS ", agg_property), collapse=",")),
 
     # dominant component (numeric) (.dominant_component_numeric handles vector agg_property)
     "DOMINANT COMPONENT (NUMERIC)" = .property_dominant_component_numeric(agg_property, top_depth, bottom_depth, where_clause),
@@ -501,35 +533,29 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
                                                       INNER JOIN mapunit ON c.mukey = mapunit.mukey AND
                                                                             c1.mukey = mu.mukey
                                                       ORDER BY c1.comppct_r DESC, c1.cokey)
-              GROUP BY areasymbol, musym, muname, mu.mukey, c.cokey,  compname, comppct_r
+              GROUP BY areasymbol, musym, muname, mu.mukey, c.cokey, compname, comppct_r
               ORDER BY areasymbol, musym, muname, mu.mukey, comppct_r DESC, c.cokey",
             paste0(sapply(agg_property, .property_dominant_condition_category), collapse = ", "),
             where_clause),
 
-    # NO AGGREGATION (component properties)
+    # NO AGGREGATION 
   "NONE" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey,
-                           c.compname AS compname, c.comppct_r AS comppct_r, c.cokey AS cokey,
-                           %s
+                           c.compname AS compname, c.comppct_r AS comppct_r, c.majcompflag AS majcompflag,
+                           c.cokey AS cokey, %s %s%s %s
              FROM legend AS l
               INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
               INNER JOIN component AS c ON c.mukey = mu.mukey
-              ORDER BY areasymbol, musym, muname, mu.mukey, c.comppct_r DESC, c.cokey",
-            paste0(sapply(agg_property, function(x) sprintf("c.%s AS %s", x, x)), collapse = ", "),
-            where_clause),
-
-  # NO AGGREGATION (horizon properties)
-  "NONE_HORIZON" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey,
-                                   c.cokey AS cokey, ch.chkey AS chkey,
-                                   c.compname AS compname, c.comppct_r AS comppct_r,
-                                   ch.hzdept_r AS hzdept_r, ch.hzdepb_r AS hzdepb_r,
-                                   %s
-             FROM legend  AS l
-              INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
-              INNER JOIN component AS c ON c.mukey = mu.mukey
-              INNER JOIN chorizon AS ch ON ch.cokey = c.cokey
-              ORDER BY areasymbol, musym, muname, mu.mukey, c.comppct_r DESC, c.cokey, hzdept_r",
-             paste0(sapply(agg_property, function(x) sprintf("ch.%s AS %s", x, x)), collapse = ", "),
-             where_clause)
+              %s
+              ORDER BY areasymbol, musym, muname, mu.mukey, c.comppct_r DESC, c.cokey%s",
+            ifelse(any(is_hz), "ch.chkey AS chkey,
+                                   c.compname AS compname, c.comppct_r AS comppct_r, c.majcompflag AS majcompflag,
+                                   ch.hzdept_r AS hzdept_r, ch.hzdepb_r AS hzdepb_r,", ""),
+            paste0(sapply(agg_property[!is_hz], function(x) sprintf("c.%s AS %s", x, x)), collapse = ", "),
+            ifelse(any(is_hz) & !all(is_hz), ",", ""),
+            paste0(sapply(agg_property[is_hz], function(x) sprintf("ch.%s AS %s", x, x)), collapse = ", "),
+            where_clause,
+            ifelse(any(is_hz), "INNER JOIN chorizon AS ch ON ch.cokey = c.cokey", ""),
+            ifelse(any(is_hz), ", hzdept_r", ""))
   )
 
 }

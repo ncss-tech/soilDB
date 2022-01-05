@@ -49,6 +49,11 @@ test_that("SDA_query() returns expected result", {
 
 })
 
+test_that("SDA_query() query too long", {
+  q <- paste0("SELECT '1", paste0(rep(0, 1e7), collapse = ""), "' as a;")
+  expect_error(soilDB::SDA_query(q), "Query string is too long")
+})
+
 test_that("SDA_query() SQL error / no results -> NULL", {
 
   skip_if_offline()
@@ -120,6 +125,23 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   expect_true(inherits(res, 'SpatialPolygonsDataFrame'))
   expect_equal(nrow(res), 1)
 
+})
+
+test_that("SDA_spatialQuery() spatial query of MUKEY with multiple features", {
+  
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  x <- sf::st_as_sf(data.frame(x = c(-120, -120, -120), y = c(37, 37, 38)),
+                coords = c('x', 'y'), crs = 4326)
+  
+  res <- SDA_spatialQuery(x)
+  
+  expect_equal(nrow(res), 2)
+  
+  res2 <- SDA_spatialQuery(x, db = "STATSGO")
+  expect_equal(nrow(res), 2)
 })
 
 test_that("SDA_query() interprets column names", {

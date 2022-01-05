@@ -1,6 +1,9 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 2.0.1
 pkgdown_sha: ~
 articles: {}
-last_built: 2021-10-30T00:51Z
+last_built: 2022-01-01T00:55Z
+urls:
+  reference: https://ncss-tech.github.io/soilDB/reference
+  article: https://ncss-tech.github.io/soilDB/articles
 

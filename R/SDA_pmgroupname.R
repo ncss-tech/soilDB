@@ -177,7 +177,7 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
                      mu.mukey AS mukey,
                      mu.musym AS musym,
                      mu.muname AS muname,",
-                     ifelse(method == "DOMINANT CONDITION", "", "compname, comppct_r,"),
+                     ifelse(method == "DOMINANT CONDITION", "", "compname, comppct_r, majcompflag,"),
                      "%s
                      FROM sacatalog
                      INNER JOIN legend AS l ON l.areasymbol = sacatalog.areasymbol

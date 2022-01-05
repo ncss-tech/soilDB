@@ -18,9 +18,7 @@
 #' @param source the data source, currently ignored
 #' @return The data returned from this function will depend on the query style.
 #' See examples below.
-#' @note This function should be considered experimental; arguments, results,
-#' and side-effects could change at any time. SDA now supports spatial queries,
-#' consider using \code{\link{SDA_query_features}} instead.
+#' @note SDA now supports spatial queries, consider using \code{\link{SDA_spatialQuery}} instead.
 #' @author D.E. Beaudette
 #' @keywords manip
 #' @examples

@@ -178,7 +178,14 @@ month2season <- function(x) {
 }
 
 
-.formatDates <- function(sensor.data, gran, pad.missing.days) {
+# .formatDates
+#
+# @param sensor.data a data.frame containing columns `"sid"` and `"date_time"`
+# @param gran granularity, common usage is `'day'`
+# @param pad.missing.days pad missing days with `NA` rows?
+# @param tz Used in POSIXct conversion for custom timezone. Default `""` is current locale 
+# @param format Used in POSIXct conversion. Default format for Henry date times `"%Y-%m-%d %H:%M:%S"`
+.formatDates <- function(sensor.data, gran, pad.missing.days, tz = "", format = "%Y-%m-%d %H:%M:%S") {
   
   .SD <- NULL
   
@@ -186,7 +193,7 @@ month2season <- function(x) {
   # when sensor data are missing, sensor.data is a list of length 0
   if(length(sensor.data) > 0) {
     
-    sensor.data$date_time <- as.POSIXct(sensor.data$date_time)
+    sensor.data$date_time <- as.POSIXct(sensor.data$date_time, format = format, tz = tz)
     sensor.data$year <- as.integer(format(sensor.data$date_time, "%Y"))
     sensor.data$doy <- as.integer(format(sensor.data$date_time, "%j"))
     sensor.data$month <- format(sensor.data$date_time, "%b")
@@ -207,7 +214,7 @@ month2season <- function(x) {
     sensor.data$season <- month2season(sensor.data$month)
     
     # water year/day: October 1st -- September 30th
-    w <- waterDayYear(sensor.data$date_time)
+    w <- waterDayYear(sensor.data$date_time, tz = tz)
     
     # row-order is preserved
     sensor.data$water_year <- w$wy
@@ -247,7 +254,7 @@ month2season <- function(x) {
 #' @param usersiteid (optional) filter results using a NASIS user site ID
 #' @param project (optional) filter results using a project ID
 #' @param sso (optional) filter results using a soil survey office code
-#' @param gran data granularity: "day", "week", "month", "year"; returned data
+#' @param gran data granularity: "hour" (if available), "day", "week", "month", "year"; returned data
 #' are averages
 #' @param start.date (optional) starting date filter
 #' @param stop.date (optional) ending date filter
@@ -255,6 +262,7 @@ month2season <- function(x) {
 #' with NA? see details
 #' @param soiltemp.summaries should soil temperature ("day" granularity only)
 #' be summarized? see details
+#' @param tz Used for custom timezone. Default `""` is current locale 
 #' @return a list containing: \item{sensors}{a \code{SpatialPointsDataFrame}
 #' object containing site-level information} \item{soiltemp}{a
 #' \code{data.frame} object containing soil temperature timeseries data}
@@ -273,7 +281,7 @@ month2season <- function(x) {
 #'  - [`fetchHenry` Tutorial](http://ncss-tech.github.io/AQP/soilDB/Henry-demo.html)
 #' 
 #' @export fetchHenry
-fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE, soiltemp.summaries=TRUE) {
+fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE, soiltemp.summaries=TRUE, tz='') {
   
   # check for required packages
   if(!requireNamespace('jsonlite', quietly=TRUE))
@@ -368,10 +376,10 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
     
     
     # convert dates and add helper column
-    s$soiltemp <- .formatDates(s$soiltemp, gran=gran, pad.missing.days=pad.missing.days)
-    s$soilVWC <- .formatDates(s$soilVWC, gran=gran, pad.missing.days=pad.missing.days)
-    s$airtemp <- .formatDates(s$airtemp, gran=gran, pad.missing.days=pad.missing.days)
-    s$waterlevel <- .formatDates(s$waterlevel, gran=gran, pad.missing.days=pad.missing.days)
+    s$soiltemp <- .formatDates(s$soiltemp, gran=gran, pad.missing.days=pad.missing.days, tz=tz)
+    s$soilVWC <- .formatDates(s$soilVWC, gran=gran, pad.missing.days=pad.missing.days, tz=tz)
+    s$airtemp <- .formatDates(s$airtemp, gran=gran, pad.missing.days=pad.missing.days, tz=tz)
+    s$waterlevel <- .formatDates(s$waterlevel, gran=gran, pad.missing.days=pad.missing.days, tz=tz)
     
     # optionally compute summaries, requires padded NA values and, daily granularity
     if(soiltemp.summaries & pad.missing.days & (length(s$soiltemp) > 0)) {

@@ -4,15 +4,14 @@
 
   use_sqlite <- !is.null(dsn)
 
-  if (is.null(getOption('soilDB.NASIS.credentials')))
-    stop("soilDB.NASIS.credentials not set")
 
   if (!use_sqlite) {
-    
     # assuming that default connection uses ODBC
     if (!requireNamespace("odbc"))
       stop("package `odbc` is required", call. = FALSE)
     
+    if (is.null(getOption('soilDB.NASIS.credentials')))
+      stop("soilDB.NASIS.credentials not set")
     # setup connection local NASIS 
      
     ## old style connection
@@ -28,7 +27,7 @@
     if (!requireNamespace("RSQLite"))
       stop("package `RSQLite` is required", call. = FALSE)
     
-    channel <- try(DBI::dbConnect(RSQLite::SQLite(), dsn))
+    channel <- try(DBI::dbConnect(RSQLite::SQLite(), dsn, extended_types = TRUE))
   }
 
   # every method that uses .openNASISchannel must handle possibility of
@@ -79,6 +78,6 @@ local_NASIS_defined <- function(dsn = NULL) {
     if (!requireNamespace("RSQLite"))
       stop("package `RSQLite` is required", call. = FALSE)
     
-    return(RSQLite::dbCanConnect(RSQLite::SQLite(), dsn))
+    return(RSQLite::dbCanConnect(RSQLite::SQLite(), dsn, extended_types = TRUE))
   }
 }

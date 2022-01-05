@@ -4,3 +4,4 @@ docs/reference/*.pdf
 .Rproj.user
 .Rhistory
 README_files
+docs

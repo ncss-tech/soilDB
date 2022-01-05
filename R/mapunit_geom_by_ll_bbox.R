@@ -1,5 +1,3 @@
-
-
 # 2011-06-22
 # It appears that SDA does not actually return the spatial intersection of map unit polygons and bounding box. Rather, just those polygons that overlap the bbox.
 #' Fetch Map Unit Geometry from SDA
@@ -14,47 +12,10 @@
 #' 
 #' @author Dylan E. Beaudette
 #' @export
-#'
-#' @examples
-#'## fetch map unit geometry from a bounding-box:
-#'# 
-#'#         +------------- (-120.41, 38.70)
-#'#         |                     |
-#'#         |                     |
-#'# (-120.54, 38.61) --------------+
-#'# 
-#' \donttest{
-#' if(requireNamespace("curl") &
-#' curl::has_internet() &
-#'   require(sp) & 
-#'   require(rgdal)) {
-#'     
-#'     # basic usage
-#'     b <- c(-120.54,38.61,-120.41,38.70)
-#'     x <- try(mapunit_geom_by_ll_bbox(b)) # about 20 seconds
-#'     
-#'     if(!inherits(x,'try-error')) {
-#'       # note that the returned geometry is everything overlapping the bbox
-#'       # and not an intersection... why?
-#'       plot(x)
-#'     rect(b[1], b[2], b[3], b[4], border='red', lwd=2)
-#'     
-#'     
-#'     # get map unit data for matching map unit keys
-#'     in.statement <- format_SQL_in_statement(unique(x$mukey))
-#'     
-#'     q <- paste("SELECT mukey, muname FROM mapunit WHERE mukey IN ", in.statement, sep="")
-#'     res <- SDA_query(q)
-#'     
-#'     #inspect
-#'     head(res)
-#'   } else {
-#'     message('could not download XML result from SDA')
-#'   }
-#'  }
-#'}
 mapunit_geom_by_ll_bbox <- function(bbox, source='sda') {
 	
+  .Deprecated("SDA_spatialQuery", msg = "See ?SDA_spatialQuery for example using a longitude/latitude bounding box")
+  
 	# must have rgdal installed
    if(!requireNamespace('rgdal', quietly=TRUE))
     stop('please install the `rgdal` package', call.=FALSE)

@@ -55,6 +55,7 @@ dbQueryNASIS <- function(conn, q, close = TRUE, ...) {
 #' @return A \code{DBIConnection} object, as returned by
 #' \code{DBI::dbConnect()}. If `dsn` is a `DBIConnection`, the attribute `isUserDefined` of the result is set to `TRUE`. If the `DBIConnection` is created by the internal NASIS connection process, `isUserDefined` is set to `FALSE.`
 #' @export dbConnectNASIS
+#' @rdname dbConnectNASIS
 dbConnectNASIS <- function(dsn = NULL) {
   
   # allow users to set their custom DBI connection with dsn argument
@@ -74,4 +75,5 @@ dbConnectNASIS <- function(dsn = NULL) {
 
 # shorthand
 #' @export
+#' @rdname dbConnectNASIS
 NASIS <- function(dsn = NULL) dbConnectNASIS(dsn = dsn)

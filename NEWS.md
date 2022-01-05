@@ -1,3 +1,30 @@
+# soilDB 2.6.11 (2022-01-04)
+ * `get_SDA_property()` now works with mixed component and horizon-level properties; thanks to Matthieu Stigler for the bug report
+ * `fetchSDA()` handle NULL component-level results with an informative error 
+ * `fetchSDA()` now (again) returns mapunit/legend-level information via `get_mapunit_from_NASIS()`
+ * `createStaticNASIS()` and queries to SQLite NASIS snapshots now preserve date/time using RSQLite 2.2.4+ via `extended_types=TRUE` argument to `dbConnect()`
+  * `get_soilseries_from_NASIS()` now returns `soiltaxclasslastupdated` as a date/time and stores the year in calculated column `soiltaxclassyearlastupdated`
+ * Added several tables to thematic groups in `get_NASIS_table_name_by_purpose()`
+ * `fetchOSD()` gains surface shape proportions in extended `shape_across` and `shape_down` tables
+ * `SDA_spatialQuery()` `what='mukey'` now works with `db='STATSGO'`
+ * Added metadata to `loafercreek`, `gopheridge` and `mineralKing`
+ * `waterYearDay()` pass through `format` argument for POSIX time conversion
+ 
+# soilDB 2.6.10 (2021-12-14)
+ * `waterDayYear()` and `.formatDates()` allow optional `format` and `tz` argument; used for consistent POSIX time conversion in tests where date/time has granularity finer than one day
+ * `fetchSDA()` extensions for better handling of components with no horizon data
+ * `SDA_spatialQuery()` and `processSDA_WKT()` fully use {sf}, replacing {sp} in these contexts
+ * `SDA_spatialQuery()` gains argument `byFeature` to use multiple single-feature queries and combine the results with a unique feature ID specified by `idcol` argument. This allows for specific feature intersection results without secondary spatial overlay of the polygons (https://github.com/ncss-tech/soilDB/issues/222)
+ * `dbConnectNASIS()` no longer requires that the NASIS credentials option be set if the `dsn` argument is specified.
+ * Rebuilt `loafercreek`, `gopheridge` and `mineralKing` from latest `fetchNASIS()` results.
+ 
+# soilDB 2.6.9 (2021-12-02)
+ * Replaced functionality using {plyr}/{reshape2} with {base}/{data.table}
+ * `processSDA_WKT()`: replaced {rgeos} with {wk} and {sf}
+ * `SDA_spatialQuery()`: added `query_string` argument
+ * `get_SDA_property()`: fixes for MIN/MAX aggregation (https://github.com/ncss-tech/soilDB/issues/219)
+ * `get_component_from_SDA()`: fragment size thresholds now conform with new (clarified) NSSH definitions
+ 
 # soilDB 2.6.8 (2021-11-05)
  * `fetchNASIS()` upgrades: use data.table and base internally for data aggregation
  * `fetchNASIS("components")` now "sieves" rock fragments and human artifacts using same routines as for pedons; respects `nullFragsAreZero` argument

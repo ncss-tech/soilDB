@@ -40,6 +40,15 @@ The ROSETTA model relies on a minimum of 3 soil properties, with increasing (exp
 \item optional, volumetric water content at 1500 kPa: roughly "permanent wilting point" for most plants, units of cm^3/cm^3
 }
 
+The Rosetta pedotransfer function predicts five parameters for the van Genuchten model of unsaturated soil hydraulic properties
+\itemize{
+\item theta_r : residual volumetric water content
+\item theta_s : saturated volumetric water content
+\item log10(alpha) : retention shape parameter \verb{[log10(1/cm)]}
+\item log10(npar) : retention shape parameter
+\item log10(ksat) : saturated hydraulic conductivity \verb{[log10(cm/d)]}
+}
+
 Column names not specified in \code{vars} are retained in the output.
 
 Three versions of the ROSETTA model are available, selected using \code{v = 1}, \code{v = 2}, or \code{v = 3}.

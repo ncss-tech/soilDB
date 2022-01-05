@@ -140,7 +140,7 @@
 #' This function is mainly intended for processing of NASIS pedon/component
 #' data which contains multiple coarse fragment descriptions per horizon.
 #' `simplifyFragmentData` will "sieve out" coarse fragments into the USDA
-#' classes, split into hard and para- fragments. Likweise, `simplifyArtifactData` will sieve out human artifacts, and split total volume into "cohesive", "penetrable", "innocuous", and "persistent".
+#' classes, split into hard and para- fragments. Likewise, `simplifyArtifactData` will sieve out human artifacts, and split total volume into "cohesive", "penetrable", "innocuous", and "persistent".
 #'
 #' These functions can be applied to data sources other than NASIS by careful use of the `id.var` and `vol.var` arguments. 
 #'  - \code{rf} must contain rock or other fragment volumes in the column "fragvol" (or be specified with `vol.var`), fragment size (mm) in columns "fragsize_l", "fragsize_r", "fragsize_h", fragment cementation class in "fraghard" and flat/non-flat in "fragshp".

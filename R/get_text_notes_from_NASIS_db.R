@@ -95,3 +95,89 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 							photo_links = d.photos))
 
 }
+
+## get map unit text from local NASIS
+#' @export
+#' @rdname get_text_notes_from_NASIS_db
+get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NULL) {
+  
+  q <- "SELECT mu.muiid, mu.mukind, mu.mutype, mu.muname, mu.nationalmusym,
+  mut.seqnum, mut.recdate, mut.recauthor, mut.mapunittextkind, mut.textcat, mut.textsubcat, CAST(mut.textentry as text) AS textentry
+
+  FROM
+  mapunit_View_1 AS mu
+  INNER JOIN mutext_View_1 AS mut ON mu.muiid = mut.muiidref;"
+  
+  channel <- dbConnectNASIS(dsn)
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
+  # exec query
+  d <- dbQueryNASIS(channel, q)
+  
+  # convert codes
+  d <- uncode(d, dsn = dsn)
+  
+  # replace tabs with spaces
+  # tabs at the beginning of a line will confuse the MD parser, generating <code><pre> blocks
+  d$textentry <- gsub(d$textentry, pattern = '\t', replacement = ' ', fixed = TRUE)
+  
+  # optionally convert \r\n -> \n
+  if(fixLineEndings){
+    d$textentry <- gsub(d$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
+  }
+  
+  
+  # done
+  return(d)
+}
+
+
+## get component text from local NASIS
+#' @export
+#' @rdname get_text_notes_from_NASIS_db
+get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NULL) {
+  
+  q <- "SELECT co.coiid,
+  cot.seqnum, cot.recdate, cot.recauthor, cot.comptextkind, cot.textcat, cot.textsubcat,
+  CAST(cot.textentry as text) AS textentry
+
+  FROM
+  component_View_1 AS co
+  INNER JOIN cotext_View_1 AS cot ON co.coiid = cot.coiidref;"
+  
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
+  # connect to NASIS
+  channel <- dbConnectNASIS(dsn)
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
+  # exec query
+  d <- dbQueryNASIS(channel, q)
+  
+  # convert codes
+  d <- uncode(d, dsn = dsn)
+  
+  # replace tabs with spaces
+  # tabs at the beginning of a line will confuse the MD parser, generating <code><pre> blocks
+  d$textentry <- gsub(d$textentry, pattern = '\t', replacement = ' ', fixed = TRUE)
+  
+  # optionally convert \r\n -> \n
+  if(fixLineEndings){
+    d$textentry <- gsub(d$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
+  }
+  
+  # done
+  return(d)
+}
