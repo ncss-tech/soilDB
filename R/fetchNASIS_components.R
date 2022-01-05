@@ -18,7 +18,7 @@
   f.comp       <- get_component_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.copm       <- get_component_copm_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn)
-  f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db(SS = SS, dsn = dsn)
+  f.cogeomorph <- get_component_cogeomorph_data_from_NASIS_db2(SS = SS, dsn = dsn)
   f.otherveg   <- get_component_otherveg_data_from_NASIS_db(SS = SS, dsn = dsn)
   f.ecosite    <- get_component_esd_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors, dsn = dsn)
   f.diaghz     <- get_component_diaghz_from_NASIS_db(SS = SS, dsn = dsn)
