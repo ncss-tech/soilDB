@@ -171,14 +171,16 @@
   if (length(soiliid) > 1)
     stop('data are from multiple pedon records')
   
-  # sanity check: this function can only be applied to data from a single pedon
+  # sanity check: this functionican only be applied to data from a single pedon
   if (length(soiliid) > 1)
     stop('data are from multiple pedon records')
   
-  # subset geomorph data to landforms
+  # subset geomorph data to landforms, landscape and microfeature
   i.ls <- i.gm[which(i.gm$geomftname == 'landscape'), ]
-  i.gm <- i.gm[which(i.gm$geomftname == 'landform'), ]
-  # subset geomorph data to RV (or NULL) hillslope position?
+  i.mf <- i.gm[which(i.gm$geomftname == 'microfeature'), ]
+  i.gm <- i.gm[which(i.gm$geomftname == 'landform'), ] 
+  
+  # subset landform data to RV (or NULL) hillslope position?
   # i.gm <- i.gm[which(i.gm$cosurfmorphhpprv | is.na(i.gm$cosurfmorphhpprv)), ]
   
   # allow for NA's
@@ -186,23 +188,43 @@
     return(data.frame(peiid = soiliid,
                       landform_string = NA_character_,
                       landscape_string = NA_character_,
+                      microfeature_string = NA_character_,
                       hillslopeprof_string = NA_character_,
                       geompos_string = NA_character_,
                       surfaceshape_string = NA_character_,
-                      geomicrorelief_string = NA_character_,
+                      microrelief_string = NA_character_,
                       stringsAsFactors = FALSE))
   }
   
-  landsc.string <- unique(paste0(i.ls$geomfname, collapse = name.sep))
+  # landscape
+  landsc.string <- paste0(unique(i.ls$geomfname), collapse = name.sep)
+  
+  # microfeature
+  mf.string <- paste0(unique(i.mf$geomfname[!is.na(i.mf$geomfname)]), collapse = name.sep) 
+  
+  # 2d hillslope position
   hspp <- unique(paste0(i.gm$hillslopeprof, ifelse(i.gm$cosurfmorphhpprv, "*",""))[!is.na(i.gm$hillslopeprof)])
   surf2d.string <- paste0(hspp, collapse = name.sep)
+  
+  # 3d geomorphic description
   surf3d.string <- paste0(unique(paste0(c(i.gm$geomposmntn[!is.na(i.gm$geomposmntn)], 
                                         i.gm$geomposhill[!is.na(i.gm$geomposhill)], 
                                         i.gm$geompostrce[!is.na(i.gm$geompostrce)], 
                                         i.gm$geomposflats[!is.na(i.gm$geomposflats)])), collapse = name.sep), collapse = name.sep)
+  
+  # microrelief
   surfmr.string <- paste0(unique(i.gm$geomicrorelief[!is.na(i.gm$geomicrorelief)]), collapse = name.sep)
+  
+  # surface shape
   surfss <- paste0(i.gm$shapeacross[!is.na(i.gm$shapeacross)], "/", i.gm$shapedown[!is.na(i.gm$shapedown)])
   surfss.string <- paste0(unique(surfss[nchar(surfss) > 1]), collapse = name.sep)
+  
+  landsc.string[landsc.string == ""] <- NA
+  mf.string[mf.string == ""] <- NA
+  surf2d.string[surf2d.string == ""] <- NA
+  surf3d.string[surf3d.string == ""] <- NA
+  surfmr.string[surfmr.string == ""] <- NA
+  surfss.string[surfss.string == ""] <- NA
   
   # short-circuit: if any geomfeatid are NA, then we don't know the order
   # string together as-is, in row-order
@@ -217,6 +239,7 @@
       peiid = soiliid,
       landform_string = ft.string,
       landscape_string = landsc.string,
+      microfeature_string = mf.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       surfaceshape_string = surfss.string,
@@ -238,10 +261,11 @@
       peiid = soiliid,
       landform_string = ft.string,
       landscape_string = landsc.string,
+      microfeature_string = mf.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       surfaceshape_string = surfss.string,
-      geomicrorelief_string = surfmr.string,
+      microrelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
   }
@@ -262,10 +286,11 @@
       peiid = soiliid,
       landform_string = ft.string,
       landscape_string = landsc.string,
+      microfeature_string = mf.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       surfaceshape_string = surfss.string,
-      geomicrorelief_string = surfmr.string,
+      microrelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
   }
@@ -282,10 +307,11 @@
       peiid = soiliid,
       landform_string = ft.string,
       landscape_string = landsc.string,
+      microfeature_string = mf.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       surfaceshape_string = surfss.string,
-      geomicrorelief_string = surfmr.string,
+      microrelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
   }
@@ -302,10 +328,11 @@
       peiid = soiliid,
       landform_string = ft.string,
       landscape_string = landsc.string,
+      microfeature_string = mf.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       surfaceshape_string = surfss.string,
-      geomicrorelief_string = surfmr.string,
+      microrelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
   }
@@ -343,10 +370,11 @@
     peiid = soiliid,
     landform_string = ft.string,
     landscape_string = landsc.string,
+    microfeature_string = mf.string,
     hillslopeprof_string = surf2d.string,
     geompos_string = surf3d.string,
     surfaceshape_string = surfss.string,
-    geomicrorelief_string = surfmr.string,
+    microrelief_string = surfmr.string,
     stringsAsFactors = FALSE
   ))
 }

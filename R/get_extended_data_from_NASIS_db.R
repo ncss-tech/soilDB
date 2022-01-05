@@ -362,10 +362,12 @@ LEFT OUTER JOIN (
   }
 
   # get geomorphic features (sqlite safe -- no RIGHT JOIN 2020/12/02)
-  q.geomorph <- "SELECT pedon_View_1.peiid, sitegeomordesc_View_1.geomfmod,
-                         geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid,
-                         sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref,
-                         lower(geomorfeattype.geomftname) as geomftname
+  q.geomorph <- "SELECT pedon_View_1.peiid, 
+                        siteobs_View_1.geomicrorelief, siteobs_View_1.geommicelev,
+                        sitegeomordesc_View_1.geomfmod,
+                        geomorfeat.geomfname, sitegeomordesc_View_1.geomfeatid,
+                        sitegeomordesc_View_1.existsonfeat, sitegeomordesc_View_1.geomfiidref,
+                        lower(geomorfeattype.geomftname) as geomftname
                   FROM pedon_View_1
                     INNER JOIN siteobs_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
                     INNER JOIN site_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref

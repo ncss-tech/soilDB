@@ -6,6 +6,7 @@
 \alias{get_component_restrictions_from_NASIS_db}
 \alias{get_component_correlation_data_from_NASIS_db}
 \alias{get_component_cogeomorph_data_from_NASIS_db}
+\alias{get_component_cogeomorph_data_from_NASIS_db2}
 \alias{get_component_copm_data_from_NASIS_db}
 \alias{get_component_esd_data_from_NASIS_db}
 \alias{get_component_otherveg_data_from_NASIS_db}
@@ -33,6 +34,8 @@ get_component_correlation_data_from_NASIS_db(
 )
 
 get_component_cogeomorph_data_from_NASIS_db(SS = TRUE, dsn = NULL)
+
+get_component_cogeomorph_data_from_NASIS_db2(SS = TRUE, dsn = NULL)
 
 get_component_copm_data_from_NASIS_db(
   SS = TRUE,
