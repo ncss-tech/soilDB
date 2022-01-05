@@ -437,8 +437,10 @@ LEFT OUTER JOIN (
   d.rf.data <- dbQueryNASIS(channel, q.rf.data, close = FALSE)
   # d.rf.data.v2 <- dbQueryNASIS(channel, q.rf.data.v2, close = FALSE)
   d.art.data <- dbQueryNASIS(channel, q.art.data, close = FALSE)
-
+  
+  # 2021-11-05: leaving this in the extended data result for now, but no longer used in fetchNASIS('pedons')
   d.surf.rf.summary <- dbQueryNASIS(channel, q.surf.rf.summary, close = FALSE)
+
   d.hz.texmod <- dbQueryNASIS(channel, q.hz.texmod, close = FALSE)
   d.geomorph <- dbQueryNASIS(channel, q.geomorph, close = FALSE)
   d.taxhistory <- dbQueryNASIS(channel, q.taxhistory, close = FALSE)

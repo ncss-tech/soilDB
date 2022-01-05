@@ -78,26 +78,22 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
   }
   
-  if (nrow(d) > 0) {
-    # surface fragments
-    chs <- simplifyFragmentData(
-      uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
-      id.var = "coiidref",
-      vol.var = "sfragcov_r",
-      prefix = "sfrag")
-    
-    if (sum(complete.cases(chs)) == 0) {
-      chs <- chs[1:nrow(d),]
-      chs$coiidref <- d$coiid
-    } else {
-      ldx <- !d$coiid %in% chs$coiidref
-      chs_null <- chs[0,]
-      if (any(ldx)) {
-        chs_null <- chs_null[seq(sum(ldx)),]
-      }
-      chs_null$coiidref <- d$coiid[ldx]
-      chs <- rbind(chs, chs_null)
-    }
+  # surface fragments
+  chs <- simplifyFragmentData(
+    uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
+    id.var = "coiidref",
+    vol.var = "sfragcov_r",
+    prefix = "sfrag",
+    msg = "surface fragment cover")
+  
+  if (sum(complete.cases(chs)) == 0) {
+    chs <- chs[1:nrow(d),]
+    chs$coiidref <- d$coiid
+  } else {
+    ldx <- !d$coiid %in% chs$coiidref
+    chs_null <- chs[0,][1:sum(ldx),]
+    chs_null$coiidref <- d$coiid[ldx]
+    chs <- rbind(chs, chs_null)
     
     # handle NA for totals
     if (nullFragsAreZero) {

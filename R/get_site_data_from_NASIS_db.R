@@ -24,6 +24,8 @@
 #'
 #' @param SS fetch data from Selected Set in NASIS or from the entire local
 #' database (default: `TRUE`)
+#' 
+#' @param nullFragsAreZero should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)
 #'
 #' @param stringsAsFactors logical: should character vectors be converted to
 #' factors? This argument is passed to the `uncode()` function. It does not
@@ -41,6 +43,7 @@
 #'
 #' @export get_site_data_from_NASIS_db
 get_site_data_from_NASIS_db <- function(SS = TRUE,
+                                        nullFragsAreZero = TRUE,
                                         stringsAsFactors = default.stringsAsFactors(),
                                         dsn = NULL) {
 
@@ -65,6 +68,12 @@ LEFT OUTER JOIN
 WHERE sb.rn IS NULL OR sb.rn = 1
 
 ORDER BY pedon_View_1.peiid ;"
+      
+  q2 <- "SELECT siteiid, peiid, siteobsiid, sitesurffrags_View_1.* FROM sitesurffrags_View_1 
+         INNER JOIN siteobs_View_1 ON sitesurffrags_View_1.siteobsiidref = siteobs_View_1.siteobsiid
+         INNER JOIN site_View_1 ON siteobs_View_1.siteiidref = site_View_1.siteiid
+         LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
+         ORDER BY pedon_View_1.peiid ;"
 
   channel <- dbConnectNASIS(dsn)
 
@@ -74,10 +83,11 @@ ORDER BY pedon_View_1.peiid ;"
 	# toggle selected set vs. local DB
 	if (SS == FALSE) {
 	  q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+	  q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
 	}
 
 	# exec query
-	d <- dbQueryNASIS(channel, q)
+	d <- dbQueryNASIS(channel, q, close = FALSE)
 
 	# ## this shouldn't happen, retain for debugging
 	# # test for an error
@@ -86,51 +96,87 @@ ORDER BY pedon_View_1.peiid ;"
 
 	# uncode domain columns
 	d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
-
-	# short-circuit: 0 rows means nothing in the selected set and thus we stop here
-	if (nrow(d) == 0) {
-	  return(d)
+	
+	# surface fragments
+	sfr <- dbQueryNASIS(channel, q2, close = FALSE)
+	
+	multi.siteobs <- unique(sfr[, c("siteiid","siteobsiid")])$siteiid
+	if (any(table(multi.siteobs) > 1)) {
+	  message("-> QC: surface fragment records from multiple site observations.\n\tUse `get('multisiteobs.surface', envir=soilDB.env) for site (siteiid) and site observation (siteobsiid)`")
+	  assign("multisiteobs.surface", value = multi.siteobs[table(multi.siteobs) > 1, ], envir = soilDB.env)
 	}
-
+	
+	phs <- simplifyFragmentData(
+	  uncode(sfr, dsn = dsn),
+	  id.var = "peiid",
+	  vol.var = "sfragcov",
+	  prefix = "sfrag",
+	  msg = "surface fragment cover"
+	)
+	
+	ldx <- !d$peiid %in% phs$peiid
+	if (!any(ldx)) {
+	  phs <- phs[1:nrow(d),]
+	  phs$peiid <- d$peiid
+	} else {
+	  phs_null <- phs[0,][1:sum(ldx),]
+	  phs_null$peiid <- d$peiid[ldx]
+	  phs <- rbind(phs, phs_null)
+	}
+	
+	# handle NA for totals
+	if (nullFragsAreZero) {
+	  phs[is.na(phs)] <- 0
+	} 
+	colnames(phs) <- paste0("surface_", colnames(phs))
+	colnames(phs)[1] <- "peiid"
+	d2 <- merge(d, phs, by = "peiid", all.x = TRUE, sort = FALSE)
+	
+	# short-circuit: 0 rows means nothing in the selected set and thus we stop here
+	if (nrow(d2) == 0) {
+	  return(d2)
+	}
 
   # https://github.com/ncss-tech/soilDB/issues/41
 	# warn if mixed datums
-	if (length(na.omit(unique(d$horizdatnm))) > 1)
+	if (length(na.omit(unique(d2$horizdatnm))) > 1)
 		message('multiple horizontal datums present, consider using WGS84 coordinates (x_std, y_std)')
 
 	# are there any duplicate pedon IDs?
-	t.pedon_id <- table(d$pedon_id)
+	t.pedon_id <- table(d2$pedon_id)
 	not.unique.pedon_id <- t.pedon_id > 1
 	if (any(not.unique.pedon_id))
 		assign('dup.pedon.ids', value=names(t.pedon_id[which(not.unique.pedon_id)]), envir=soilDB.env)
 
 	# warn about sites without a matching pedon (records missing peiid)
-	missing.pedon <- which(is.na(d$peiid))
+	missing.pedon <- which(is.na(d2$peiid))
 	if (length(missing.pedon) > 0)
-		assign('sites.missing.pedons', value=unique(d$site_id[missing.pedon]), envir=soilDB.env)
+		assign('sites.missing.pedons', value=unique(d2$site_id[missing.pedon]), envir=soilDB.env)
 
   ## set factor levels, when it makes sense
 	# most of these are done via uncode()
 
   # surface shape
-  d$shapeacross <- factor(d$shapeacross, levels=c('concave', 'linear', 'convex', 'undulating', 'complex'))
-  d$shapedown <- factor(d$shapedown, levels=c('concave', 'linear', 'convex', 'undulating', 'complex'))
+  d2$shapeacross <- factor(d2$shapeacross, levels=c('concave', 'linear', 'convex', 'undulating', 'complex'))
+  d2$shapedown <- factor(d2$shapedown, levels=c('concave', 'linear', 'convex', 'undulating', 'complex'))
 
   # create 3D surface shape
-  d$slope_shape <- paste0(d$shapeacross, ' / ', d$shapedown)
+  d2$slope_shape <- paste0(d2$shapeacross, ' / ', d2$shapedown)
 
   # make reasonable levels for 3D slope shape
-  ss.grid <- expand.grid(na.omit(unique(d$shapeacross)), na.omit(unique(d$shapedown)))
+  ss.grid <- expand.grid(na.omit(unique(d2$shapeacross)), na.omit(unique(d2$shapedown)))
   ss.levels <- apply(ss.grid, 1, function(i) { paste(rev(i), collapse = ' / ')})
-  d$slope_shape <- factor(d$slope_shape, levels=ss.levels)
+  d2$slope_shape <- factor(d2$slope_shape, levels = ss.levels)
 
   # convert factors to strings
-  idx <- unlist(lapply(df, is.factor))
-  if (stringsAsFactors == FALSE & any(idx)) {
-    df[idx] <- lapply(df[idx], as.character)
-  }
+  # 2021-11-05: this code was unreachable; "df" not defined
+  
+  # idx <- unlist(lapply(d2, is.factor))
+  # if (stringsAsFactors == FALSE & any(idx)) {
+  #   d2[idx] <- lapply(d2[idx], as.character)
+  # }
 
 	# done
-	return(d)
+	return(d2)
 }
 

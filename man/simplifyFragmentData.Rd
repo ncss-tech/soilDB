@@ -11,7 +11,8 @@ simplifyFragmentData(
   id.var,
   vol.var = "fragvol",
   prefix = "frag",
-  nullFragsAreZero = TRUE
+  nullFragsAreZero = TRUE,
+  msg = "rock fragment volume"
 )
 
 simplifyArtifactData(
@@ -33,6 +34,8 @@ that is unique among all horizons in \code{rf}}
 \item{prefix}{a character vector prefix for input}
 
 \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: \code{TRUE}), see details}
+
+\item{msg}{Identifier of data being summarized. Default is \code{"rock fragment volume"} but this routine is also used for \code{"surface fragment cover"}}
 
 \item{art}{a \code{data.frame} object, typically returned from NASIS, see details}
 }

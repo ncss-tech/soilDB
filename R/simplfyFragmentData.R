@@ -157,10 +157,11 @@
 #' @param vol.var character vector with the name of the column containing the coarse fragment volume. Default `"fragvol"` or `"huartvol`".
 #' @param prefix a character vector prefix for input
 #' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0? (default: `TRUE`), see details
+#' @param msg Identifier of data being summarized. Default is `"rock fragment volume"` but this routine is also used for `"surface fragment cover"`
 #' @author D.E. Beaudette, A.G Brown
 #' @keywords manip
 #' @export simplifyFragmentData
-simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", prefix = "frag", nullFragsAreZero = TRUE) {
+simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", prefix = "frag", nullFragsAreZero = TRUE, msg = "rock fragment volume") {
 
   fragvol <- NULL
 
@@ -174,7 +175,7 @@ simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", prefix = "frag
   
   # if all fragvol are NA then rf is an empty data.frame and we are done
   if (nrow(rf[which(!is.na(rf[[vol.var]])),]) == 0) {
-    message('NOTE: all records are missing rock fragment volume')
+    message(sprintf('NOTE: all records are missing %s', msg))
     dat <- as.data.frame(t(rep(NA, length(result.columns))))
     for(i in 1:length(rf[[id.var]])) {
       dat[i,] <- dat[1,]
@@ -184,7 +185,7 @@ simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", prefix = "frag
     return(dat)
   } else if (any(is.na(rf[[vol.var]]))) {
     rf <- rf[which(!is.na(rf[[vol.var]])), ]
-    message('NOTE: some records are missing rock fragment volume')
+    message(sprintf('NOTE: some records are missing %s', msg))
   }
 
   # extract classes
@@ -233,7 +234,7 @@ simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", prefix = "frag
     idx <- unique(unlist(lapply(gt.100[class.idx], which)))
     flagged.ids <- rf.wide[[id.var]][idx]
 
-    warning(sprintf("fragment volume >= 100%%\n%s:\n%s", id.var, paste(flagged.ids, collapse = "\n")), call. = FALSE)
+    warning(sprintf("%s >= 100%%\n%s:\n%s", msg, id.var, paste(flagged.ids, collapse = "\n")), call. = FALSE)
   }
 
   ## TODO: 0 is returned when all NA and nullFragsAreZero=FALSE
