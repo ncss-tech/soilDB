@@ -191,7 +191,7 @@
                       microfeature_string = NA_character_,
                       hillslopeprof_string = NA_character_,
                       geompos_string = NA_character_,
-                      surfaceshape_string = NA_character_,
+                      slopeshape_string = NA_character_,
                       microrelief_string = NA_character_,
                       stringsAsFactors = FALSE))
   }
@@ -242,7 +242,7 @@
       microfeature_string = mf.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
-      surfaceshape_string = surfss.string,
+      slopeshape_string = surfss.string,
       geomicrorelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
@@ -264,7 +264,7 @@
       microfeature_string = mf.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
-      surfaceshape_string = surfss.string,
+      slopeshape_string = surfss.string,
       microrelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
@@ -289,7 +289,7 @@
       microfeature_string = mf.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
-      surfaceshape_string = surfss.string,
+      slopeshape_string = surfss.string,
       microrelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
@@ -310,7 +310,7 @@
       microfeature_string = mf.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
-      surfaceshape_string = surfss.string,
+      slopeshape_string = surfss.string,
       microrelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
@@ -331,7 +331,7 @@
       microfeature_string = mf.string,
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
-      surfaceshape_string = surfss.string,
+      slopeshape_string = surfss.string,
       microrelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
@@ -373,7 +373,7 @@
     microfeature_string = mf.string,
     hillslopeprof_string = surf2d.string,
     geompos_string = surf3d.string,
-    surfaceshape_string = surfss.string,
+    slopeshape_string = surfss.string,
     microrelief_string = surfmr.string,
     stringsAsFactors = FALSE
   ))
