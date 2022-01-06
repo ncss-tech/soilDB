@@ -90,10 +90,10 @@ get_SDV_legend_elements <- function(WHERE,
       res <- rbind(res, dnr)
     }
     rownames(res) <- NULL
-    res
+    type.convert(res, as.is = TRUE)
   })
   if (length(y) == 1 & simplify) return(y[[1]])
-  type.convert(y)
+  y
 }
        
 
