@@ -32,7 +32,7 @@ get_SDV_legend_elements <- function(WHERE,
     })
   })
 
-  if ((length(y) == 1) && simplify) {
+  if ((length(y) == 1) && length(y[[1]]) == 1 && simplify) {
     return(y[[1]][[1]])
   } else if (simplify) return(do.call('c', y))
   y
