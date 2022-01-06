@@ -31,8 +31,10 @@ get_SDV_legend_elements <- function(WHERE,
                                    notratedcolor = notratedcolor)
     })
   })
-  if (length(y) == 1 && simplify) return(y[[1]])
-  if (simplify) return(do.call('c', y))
+
+  if ((length(y) == 1) && simplify) {
+    return(y[[1]][[1]])
+  } else if (simplify) return(do.call('c', y))
   y
 }
 
