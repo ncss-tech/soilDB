@@ -18,7 +18,7 @@ get_SDV_legend_elements(
 
 \item{notratedcolor}{Used to add 'Not rated' color entries where applicable. Default: \code{"#FFFFFF00"} (transparent white).}
 
-\item{simplify}{Return a data.frame when \code{where} is length 1? Default: \code{TRUE}}
+\item{simplify}{Return a data.frame when \code{WHERE} is length 1? Return a list with 1 element per legend when \code{WHERE} is length > \code{1}? Default: \code{TRUE}}
 }
 \value{
 A list with a data.frame element for each element of \code{where} containing \code{"attributekey"}, \code{"attributename"}, \code{"attributetype"}, \code{"attributetablename"}, \code{"attributecolumnname"}, \code{"attributedescription"}, \code{"nasisrulename"}, \code{"label"}, \code{"order"}, \code{"value"}, \code{"lower_value"}, \code{"upper_value"},\code{"red"}, \code{"green"}, \code{"blue"} and \code{"hex"} columns.
