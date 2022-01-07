@@ -1,4 +1,4 @@
-# soilDB 2.6.12 (2022-01-05)
+# soilDB 2.6.12 (2022-01-07)
  * `get_SDA_property()` now works with mixed component and horizon-level properties; thanks to Matthieu Stigler for the bug report
  *  Added `get_SDV_legend_elements()` for fetching and parsing XML for Soil Data Viewer / Web Soil Survey-style symbol themes for soil interpretations from Soil Data Access
  * `fetchNASIS()` pedon and component geomorphic summaries now include columns for landscape, microfeature, microrelief, 2D/3D morphometry, and slope shape 
