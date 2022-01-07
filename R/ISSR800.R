@@ -15,7 +15,7 @@
 #' 
 #' @param quiet logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.
 #'  
-#'  #' @details \code{aoi} should be specified as a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
+#' @details \code{aoi} should be specified as a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
 #' 
 #' \describe{
 #'   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
