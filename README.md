@@ -1,7 +1,7 @@
 [![CRAN Version
 (Stable)](http://www.r-pkg.org/badges/version/soilDB)](https://cran.r-project.org/package=soilDB)
 [![GitHub Version
-(Development)](https://img.shields.io/badge/GitHub-2.6.11-yellowgreen)](https://github.com/ncss-tech/soilDB)
+(Development)](https://img.shields.io/badge/GitHub-2.6.12-yellowgreen)](https://github.com/ncss-tech/soilDB)
 [![R-CMD-check Build
 Status](https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
 [![Total CRAN
@@ -16,7 +16,7 @@ Get the stable version (2.6.10) from CRAN:
 
     install.packages('soilDB', dependencies = TRUE)
 
-Get the development version (2.6.11) from GitHub:
+Get the development version (2.6.12) from GitHub:
 
     remotes::install_github("ncss-tech/soilDB", dependencies = FALSE, upgrade = FALSE, build = FALSE)
 
@@ -32,7 +32,7 @@ Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021).
 soilDB: Soil Database Interface. R package version 2.6.10.
 <https://CRAN.R-project.org/package=soilDB>
 
-soilDB 2.6.11
+soilDB 2.6.12
 -------------
 
 ### Notices on Database Interfaces
