@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.12</span>
       </span>
     </div>
 
@@ -48,11 +48,21 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="2.6.12" id="soildb-2612-2022-01-05">soilDB 2.6.12 (2022-01-05)<a class="anchor" aria-label="anchor" href="#soildb-2612-2022-01-05"></a></h2>
+<ul><li>
+<code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code> now works with mixed component and horizon-level properties; thanks to Matthieu Stigler for the bug report</li>
+<li>Added <code><a href="../reference/get_SDV_legend_elements.html">get_SDV_legend_elements()</a></code> for fetching and parsing XML for Soil Data Viewer / Web Soil Survey-style symbol themes for soil interpretations from Soil Data Access</li>
+<li>
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> pedon and component geomorphic summaries now include columns for landscape, microfeature, microrelief, 2D/3D morphometry, and slope shape</li>
+<li>
+<code>fetchNASIS('pedons')</code> now uses <code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code> for surface fragments</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="2.6.11" id="soildb-2611-2021-12-21">soilDB 2.6.11 (2021-12-21)<a class="anchor" aria-label="anchor" href="#soildb-2611-2021-12-21"></a></h2>
 <ul><li>
 <code><a href="../reference/fetchSDA.html">fetchSDA()</a></code> handle NULL component-level results with an informative error</li>
 <li>
-<code><a href="../reference/fetchSDA.html">fetchSDA()</a></code> now (again) returns mapunit/legend-level information via <code><a href="../reference/fetchNASIS.html">get_mapunit_from_NASIS()</a></code>
+<code><a href="../reference/fetchSDA.html">fetchSDA()</a></code> now (again) returns mapunit/legend-level information via <code><a href="../reference/get_mapunit_from_NASIS.html">get_mapunit_from_NASIS()</a></code>
 </li>
 <li>
 <code><a href="../reference/createStaticNASIS.html">createStaticNASIS()</a></code> and queries to SQLite NASIS snapshots now preserve date/time using RSQLite 2.2.4+ via <code>extended_types=TRUE</code> argument to <code>dbConnect()</code>
@@ -182,7 +192,7 @@
 <code><a href="../reference/get_OSD.html">get_OSD()</a></code> TXT and HTML formats now supported (in addition to JSON) through a common function interface</li>
 <li>Added <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_table_key_by_name()</a></code> <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_fkey_by_name()</a></code>, <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_pkeyref_by_name()</a></code>, <code><a href="../reference/get_NASIS_table_key_by_name.html">get_NASIS_pkey_by_name()</a></code>, <code><a href="../reference/get_NASIS_table_name_by_purpose.html">get_NASIS_table_name_by_purpose()</a></code> methods for helping get information on primary/foreign keys and thematic groups of NASIS tables (useful for creating SQLite/external snapshots of NASIS tables)</li>
 <li>
-<code><a href="../reference/fetchNASIS.html">get_mapunit_from_NASIS()</a></code>, <code><a href="../reference/fetchVegdata.html">get_legend_from_NASIS()</a></code> and <code><a href="../reference/fetchVegdata.html">get_lmuaoverlap_from_NASIS()</a></code> now works for “MLRA Survey Area” <code>areatypename</code> and no longer is limited by constraints on <code>legendsuituse</code> or <code>mustatus</code>
+<code><a href="../reference/get_mapunit_from_NASIS.html">get_mapunit_from_NASIS()</a></code>, <code><a href="../reference/get_mapunit_from_NASIS.html">get_legend_from_NASIS()</a></code> and <code><a href="../reference/get_mapunit_from_NASIS.html">get_lmuaoverlap_from_NASIS()</a></code> now works for “MLRA Survey Area” <code>areatypename</code> and no longer is limited by constraints on <code>legendsuituse</code> or <code>mustatus</code>
 </li>
 </ul></div>
     <div class="section level2">
