@@ -85,7 +85,7 @@ fetchSDA_spatial <- function(x,
   x <- unique(x)
 
   # lkey and areasymbol are the option for sapolygon
-  if (geom.src == 'sapolygon' & (by.col %in% c("mukey","nmusym","nationalmusym"))) {
+  if (geom.src == 'sapolygon' & (by.col %in% c("mukey", "nmusym", "nationalmusym"))) {
     if (is.numeric(x)) {
       by.col <- "lkey"
     } else {
@@ -115,6 +115,8 @@ fetchSDA_spatial <- function(x,
   } else if (by.col %in% c("areasymbol", "areasym", "areaname", "mlraoffice", "mouagncyresp")) {
     if (by.col == "areasym") by.col <- "areasymbol"
     
+    if (by.col != "areasymbol") add.fields <- unique(c(add.fields, by.col))
+    
     # do additional query to determine mapping of areasymbol:lkey
     q.mukey <- paste0("SELECT areasymbol, lkey FROM legend WHERE ", by.col, " IN ",
                       format_SQL_in_statement(x),";")
@@ -122,7 +124,7 @@ fetchSDA_spatial <- function(x,
     suppressMessages( {res <- SDA_query(q.mukey)} )
 
     if (inherits(res, 'try-error'))
-      stop("fetchSDA_spatial: fatal error in ",by.col," -> lkey conversion.", call. = FALSE)
+      stop("fetchSDA_spatial: fatal error in ", by.col, " -> lkey conversion.", call. = FALSE)
 
     mukey.list <- unique(res$lkey)
   } else {
