@@ -1,3 +1,6 @@
+# soilDB 2.6.13
+ * `fetchSDA_spatial` now supports `by.col` `"areaname"`, `"mlraoffice"`, and `"mouagencyresp"` thanks to suggestion by Jay Skovlin
+ 
 # soilDB 2.6.12 (2022-01-07)
  * `get_SDA_property()` now works with mixed component and horizon-level properties; thanks to Matthieu Stigler for the bug report
  *  Added `get_SDV_legend_elements()` for fetching and parsing XML for Soil Data Viewer / Web Soil Survey-style symbol themes for soil interpretations from Soil Data Access
