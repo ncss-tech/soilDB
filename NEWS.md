@@ -1,5 +1,7 @@
-# soilDB 2.6.13
- * `fetchSDA_spatial` now supports `by.col` `"areaname"`, `"mlraoffice"`, and `"mouagencyresp"` thanks to suggestion by Jay Skovlin
+# soilDB 2.6.13 (2022-01-11)
+ * `fetchSDA_spatial` now supports `by.col` `"areaname"`, `"mlraoffice"`, and `"mouagencyresp"`; thanks to suggestion by Jay Skovlin
+ * `fetchNASIS` fix for multiple site observation records with surface fragments; thanks to bug report from Brianna Wegner
+ * `waterYearDay()` use format and timezone for start date conversion
  
 # soilDB 2.6.12 (2022-01-07)
  * `get_SDA_property()` now works with mixed component and horizon-level properties; thanks to Matthieu Stigler for the bug report

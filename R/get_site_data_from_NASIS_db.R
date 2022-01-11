@@ -103,7 +103,7 @@ ORDER BY pedon_View_1.peiid ;"
 	multi.siteobs <- unique(sfr[, c("siteiid","siteobsiid")])
 	multisite <- table(multi.siteobs$siteiid) 
 	if (any(multisite > 1)) {
-	  message("-> QC: surface fragment records from multiple site observations.\n\tUse `get('multisiteobs.surface', envir=soilDB.env)` for site (siteiid) and site observation (siteobsiid)`")
+	  message("-> QC: surface fragment records from multiple site observations.\n\tUse `get('multisiteobs.surface', envir=soilDB.env)` for site (siteiid) and site observation (siteobsiid)")
 	  assign("multisiteobs.surface", value = multi.siteobs[multi.siteobs$siteiid %in% names(multisite[multisite > 1]),], envir = soilDB.env)
 	}
 	
