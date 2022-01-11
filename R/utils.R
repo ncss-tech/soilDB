@@ -192,7 +192,7 @@
                       hillslopeprof_string = NA_character_,
                       geompos_string = NA_character_,
                       slopeshape_string = NA_character_,
-                      geogeomicrorelief_string = NA_character_,
+                      geomicrorelief_string = NA_character_,
                       stringsAsFactors = FALSE))
   }
   

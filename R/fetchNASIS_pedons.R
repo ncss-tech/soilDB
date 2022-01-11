@@ -241,7 +241,7 @@
               by = list(peiid = ed.lf$peiid)]
 
   if (ncol(lf) > 1)
-    site(hz_data) <- as.data.frame(lf[,c("peiid","landform_string","landscape_string","microfeature_string", "geogeomicrorelief_string")])
+    site(hz_data) <- as.data.frame(lf[,c("peiid","landform_string","landscape_string","microfeature_string", "geomicrorelief_string")])
 
   ed.pm <- data.table::as.data.table(extended_data$pm)
   pm <- ed.pm[, .formatParentMaterialString(.SD, uid = .BY$siteiid, name.sep = ' & '),
