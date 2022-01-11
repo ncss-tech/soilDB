@@ -192,7 +192,7 @@
                       hillslopeprof_string = NA_character_,
                       geompos_string = NA_character_,
                       slopeshape_string = NA_character_,
-                      microrelief_string = NA_character_,
+                      geogeomicrorelief_string = NA_character_,
                       stringsAsFactors = FALSE))
   }
   
@@ -265,15 +265,15 @@
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       slopeshape_string = surfss.string,
-      microrelief_string = surfmr.string,
+      geomicrorelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
   }
   
   # get an index to the top-most and bottom-most features
   # only 1 row should match these criteria
-  top.feature <- which(! i.gm$geomfeatid %in% i.gm$existsonfeat)
-  bottom.feature <- which(! i.gm$existsonfeat %in% i.gm$geomfeatid)
+  top.feature <- which(!i.gm$geomfeatid %in% i.gm$existsonfeat)
+  bottom.feature <- which(!i.gm$existsonfeat %in% i.gm$geomfeatid)
   
   # short-circut: incorrect data-population, usually duplicate entries with IDs that make no sense: use row-order
   if(length(top.feature) == 0 & length(bottom.feature) == 0) {
@@ -290,7 +290,7 @@
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       slopeshape_string = surfss.string,
-      microrelief_string = surfmr.string,
+      geomicrorelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
   }
@@ -311,7 +311,7 @@
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       slopeshape_string = surfss.string,
-      microrelief_string = surfmr.string,
+      geomicrorelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
   }
@@ -332,7 +332,7 @@
       hillslopeprof_string = surf2d.string,
       geompos_string = surf3d.string,
       slopeshape_string = surfss.string,
-      microrelief_string = surfmr.string,
+      geomicrorelief_string = surfmr.string,
       stringsAsFactors = FALSE
     ))
   }
@@ -374,7 +374,7 @@
     hillslopeprof_string = surf2d.string,
     geompos_string = surf3d.string,
     slopeshape_string = surfss.string,
-    microrelief_string = surfmr.string,
+    geomicrorelief_string = surfmr.string,
     stringsAsFactors = FALSE
   ))
 }
