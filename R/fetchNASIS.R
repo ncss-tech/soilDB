@@ -107,7 +107,7 @@ fetchNASIS <- function(from = 'pedons',
 
   if (from == 'components') {
     # pass arguments through
-    res <- .fetchNASIS_components(SS = TRUE,
+    res <- .fetchNASIS_components(SS = SS,
                                   rmHzErrors = rmHzErrors,
                                   nullFragsAreZero = nullFragsAreZero,
                                   fill = fill,
