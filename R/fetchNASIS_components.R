@@ -66,7 +66,7 @@
   # add site data to object
   site(f.chorizon) <- f.comp # left-join via coiid
 
-  ## 2017-3-13: short-circuts need testing, consider pre-marking mistakes before parsing
+  ## 2017-3-13: short-circuits need testing, consider pre-marking mistakes before parsing
   ## 2021-10-28: TODO: harmonize strategies for .formatXXXXString methods and ID variables
   .SD <- NULL
   .BY <- NULL

@@ -72,12 +72,6 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     assign('dupe.coiids', value=dupes, envir=soilDB.env)
     message("-> QC: duplicate coiids, this should not happen.\n\tUse `get('dupe.coiids', envir=soilDB.env)` for component record IDs (coiid)")
   }
-  
-  # uncode metadata domains
-  if (nrow(d) > 0) {
-    d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
-  }
-  
   # surface fragments
   chs <- simplifyFragmentData(
     uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
@@ -86,23 +80,31 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     prefix = "sfrag",
     msg = "surface fragment cover")
   
-  if (sum(complete.cases(chs)) == 0) {
-    chs <- chs[1:nrow(d),]
-    chs$coiidref <- d$coiid
+  # uncode metadata domains
+  if (nrow(d) > 0) {
+    d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  
+    if (sum(complete.cases(chs)) == 0) {
+      chs <- chs[1:nrow(d),]
+      chs$coiidref <- d$coiid
+    } else {
+      ldx <- !d$coiid %in% chs$coiidref
+      chs_null <- chs[0,][1:sum(ldx),]
+      chs_null$coiidref <- d$coiid[ldx]
+      chs <- rbind(chs, chs_null)
+      
+      # handle NA for totals
+      if (nullFragsAreZero) {
+        chs[is.na(chs)] <- 0
+      } 
+      colnames(chs) <- paste0("surface_", colnames(chs))
+      colnames(chs)[1] <- "coiidref"
+      d <- merge(d, chs, by.x = "coiid", by.y = "coiidref", all.x = TRUE, sort = FALSE)
+    }
   } else {
-    ldx <- !d$coiid %in% chs$coiidref
-    chs_null <- chs[0,][1:sum(ldx),]
-    chs_null$coiidref <- d$coiid[ldx]
-    chs <- rbind(chs, chs_null)
-    
-    # handle NA for totals
-    if (nullFragsAreZero) {
-      chs[is.na(chs)] <- 0
-    } 
-    colnames(chs) <- paste0("surface_", colnames(chs))
-    colnames(chs)[1] <- "coiidref"
-    d <- merge(d, chs, by.x = "coiid", by.y = "coiidref", all.x = TRUE, sort = FALSE)
+    d <- cbind(d, chs[0,])
   }
+  
   
   # done
   return(d)

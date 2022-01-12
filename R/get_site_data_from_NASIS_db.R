@@ -115,23 +115,27 @@ ORDER BY pedon_View_1.peiid ;"
 	  msg = "surface fragment cover"
 	)
 	
-	ldx <- !d$peiid %in% phs$peiid
-	if (!any(ldx)) {
-	  phs <- phs[1:nrow(d),]
-	  phs$peiid <- d$peiid
+	if (nrow(d) > 0) {
+  	ldx <- !d$peiid %in% phs$peiid
+  	if (!any(ldx)) {
+  	  phs <- phs[1:nrow(d),]
+  	  phs$peiid <- d$peiid
+  	} else {
+  	  phs_null <- phs[0,][1:sum(ldx),]
+  	  phs_null$peiid <- d$peiid[ldx]
+  	  phs <- rbind(phs, phs_null)
+  	}
+  	
+  	# handle NA for totals
+  	if (nullFragsAreZero) {
+  	  phs[is.na(phs)] <- 0
+  	} 
+  	colnames(phs) <- paste0("surface_", colnames(phs))
+  	colnames(phs)[1] <- "peiid"
+  	d2 <- merge(d, phs, by = "peiid", all.x = TRUE, sort = FALSE)
 	} else {
-	  phs_null <- phs[0,][1:sum(ldx),]
-	  phs_null$peiid <- d$peiid[ldx]
-	  phs <- rbind(phs, phs_null)
+	  d2 <- cbind(d, phs[0,])
 	}
-	
-	# handle NA for totals
-	if (nullFragsAreZero) {
-	  phs[is.na(phs)] <- 0
-	} 
-	colnames(phs) <- paste0("surface_", colnames(phs))
-	colnames(phs)[1] <- "peiid"
-	d2 <- merge(d, phs, by = "peiid", all.x = TRUE, sort = FALSE)
 	
 	# short-circuit: 0 rows means nothing in the selected set and thus we stop here
 	if (nrow(d2) == 0) {
