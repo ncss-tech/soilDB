@@ -18,7 +18,7 @@ fetchSDA_spatial(
 \arguments{
 \item{x}{A vector of map unit keys (\code{mukey}) or national map unit symbols (\code{nmusym}) for \code{mupolygon} geometry OR legend keys (\code{lkey}) or soil survey area symbols (\code{areasymbol}) for \code{sapolygon} geometry}
 
-\item{by.col}{Column name containing map unit identifier \code{"mukey"}, \code{"nmusym"}/\code{"nationalmusym"} for \code{geom.src} \code{mupolygon} OR \code{"areasymbol"} for \code{geom.src} \code{sapolygon}; default is determined by \code{is.numeric(x)} \code{TRUE} for \code{mukey} or \code{lkey} and \code{nationalmusym} or \code{areasymbol} otherwise.}
+\item{by.col}{Column name containing map unit identifier \code{"mukey"}, \code{"nmusym"}/\code{"nationalmusym"} for \code{geom.src} \code{mupolygon} OR \code{"areasymbol"}, \code{"areaname"}, \code{"mlraoffice"}, \code{"mouagncyresp"} for \code{geom.src} \code{sapolygon}; default is determined by \code{is.numeric(x)} \code{TRUE} for \code{mukey} or \code{lkey} and \code{nationalmusym} or \code{areasymbol} otherwise.}
 
 \item{method}{geometry result type: \code{"feature"} returns polygons, \code{"bbox"} returns the bounding box of each polygon (via \code{STEnvelope()}), and \code{"point"} returns a single point (via \code{STPointOnSurface()}) within each polygon.}
 

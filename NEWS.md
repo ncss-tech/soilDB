@@ -1,3 +1,14 @@
+# soilDB 2.6.13 (2022-01-11)
+ * `fetchSDA_spatial` now supports `by.col` `"areaname"`, `"mlraoffice"`, and `"mouagencyresp"`; thanks to suggestion by Jay Skovlin
+ * `fetchNASIS` fix for multiple site observation records with surface fragments; thanks to bug report from Brianna Wegner
+ * `waterYearDay()` use format and timezone for start date conversion
+ 
+# soilDB 2.6.12 (2022-01-07)
+ * `get_SDA_property()` now works with mixed component and horizon-level properties; thanks to Matthieu Stigler for the bug report
+ *  Added `get_SDV_legend_elements()` for fetching and parsing XML for Soil Data Viewer / Web Soil Survey-style symbol themes for soil interpretations from Soil Data Access
+ * `fetchNASIS()` pedon and component geomorphic summaries now include columns for landscape, microfeature, microrelief, 2D/3D morphometry, and slope shape 
+ * `fetchNASIS('pedons')` now uses `simplifyFragmentData()` for surface fragments
+ 
 # soilDB 2.6.11 (2021-12-21)
  * `fetchSDA()` handle NULL component-level results with an informative error 
  * `fetchSDA()` now (again) returns mapunit/legend-level information via `get_mapunit_from_NASIS()`

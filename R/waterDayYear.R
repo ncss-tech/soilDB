@@ -43,7 +43,7 @@ waterDayYear <- function(d, end = "09-30", format = "%Y-%m-%d", tz = "") {
   water_year[which(dLT$mon >= 9)] <- water_year[which(dLT$mon >= 9)] + 1
   
   # dates of prior water year start
-  lastWY <- as.Date(sprintf("%s-%s", water_year - 1, end))
+  lastWY <- as.Date(sprintf("%s-%s", water_year - 1, end), format = "%Y-%m-%d", tz = tz)
   
   # compute water "day" as days since start of water year
   # ideas from: https://stackoverflow.com/questions/48123049/create-day-index-based-on-water-year

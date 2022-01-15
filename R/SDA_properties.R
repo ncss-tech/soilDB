@@ -168,7 +168,7 @@ get_SDA_property <-
               "Min/Max",
               "Dominant Component (Numeric)",
               "Dominant Condition",
-              "None", "None_Horizon")
+              "None")
   method <- match.arg(toupper(method), toupper(labels))
 
   # determine column name prefix/suffix for method
@@ -176,7 +176,7 @@ get_SDA_property <-
                 '_wtd_avg',
                 '_min_max',
                 '_dom_comp_num',
-                '_dom_cond', '', 'chorizon_')
+                '_dom_cond', '')
   modifier <- suffixes[match(method, toupper(labels))]
 
   # return list with method and modifier
@@ -305,7 +305,7 @@ get_SDA_property <-
 
     ## alternate: just assume they are either all component or all horizon column names
     # message('assuming `property` is a vector of component OR horizon-level column names')
-    agg_property <- property
+    agg_property <- tolower(property)
 
   } else {
 
@@ -318,10 +318,44 @@ get_SDA_property <-
 
   method <- toupper(method)
 
-  if (method == "NONE")
-    if (all(agg_property %in% colnames(suppressMessages(SDA_query("SELECT TOP 1 * FROM chorizon")))))
-      method <- "NONE_HORIZON"
-
+  if (method == "NONE") {
+    # dput(colnames(suppressMessages(SDA_query("SELECT TOP 1 * FROM chorizon")))) # without cokey
+    is_hz <- agg_property %in% c("hzname", "desgndisc", "desgnmaster", "desgnmasterprime", "desgnvert", 
+                                 "hzdept_l", "hzdept_r", "hzdept_h", "hzdepb_l", "hzdepb_r", "hzdepb_h", 
+                                 "hzthk_l", "hzthk_r", "hzthk_h", "fraggt10_l", "fraggt10_r", 
+                                 "fraggt10_h", "frag3to10_l", "frag3to10_r", "frag3to10_h", "sieveno4_l", 
+                                 "sieveno4_r", "sieveno4_h", "sieveno10_l", "sieveno10_r", "sieveno10_h", 
+                                 "sieveno40_l", "sieveno40_r", "sieveno40_h", "sieveno200_l", 
+                                 "sieveno200_r", "sieveno200_h", "sandtotal_l", "sandtotal_r", 
+                                 "sandtotal_h", "sandvc_l", "sandvc_r", "sandvc_h", "sandco_l", 
+                                 "sandco_r", "sandco_h", "sandmed_l", "sandmed_r", "sandmed_h", 
+                                 "sandfine_l", "sandfine_r", "sandfine_h", "sandvf_l", "sandvf_r", 
+                                 "sandvf_h", "silttotal_l", "silttotal_r", "silttotal_h", "siltco_l", 
+                                 "siltco_r", "siltco_h", "siltfine_l", "siltfine_r", "siltfine_h", 
+                                 "claytotal_l", "claytotal_r", "claytotal_h", "claysizedcarb_l", 
+                                 "claysizedcarb_r", "claysizedcarb_h", "om_l", "om_r", "om_h", 
+                                 "dbtenthbar_l", "dbtenthbar_r", "dbtenthbar_h", "dbthirdbar_l", 
+                                 "dbthirdbar_r", "dbthirdbar_h", "dbfifteenbar_l", "dbfifteenbar_r", 
+                                 "dbfifteenbar_h", "dbovendry_l", "dbovendry_r", "dbovendry_h", 
+                                 "partdensity", "ksat_l", "ksat_r", "ksat_h", "awc_l", "awc_r", 
+                                 "awc_h", "wtenthbar_l", "wtenthbar_r", "wtenthbar_h", "wthirdbar_l", 
+                                 "wthirdbar_r", "wthirdbar_h", "wfifteenbar_l", "wfifteenbar_r", 
+                                 "wfifteenbar_h", "wsatiated_l", "wsatiated_r", "wsatiated_h", 
+                                 "lep_l", "lep_r", "lep_h", "ll_l", "ll_r", "ll_h", "pi_l", "pi_r", 
+                                 "pi_h", "aashind_l", "aashind_r", "aashind_h", "kwfact", "kffact", 
+                                 "caco3_l", "caco3_r", "caco3_h", "gypsum_l", "gypsum_r", "gypsum_h", 
+                                 "sar_l", "sar_r", "sar_h", "ec_l", "ec_r", "ec_h", "cec7_l", 
+                                 "cec7_r", "cec7_h", "ecec_l", "ecec_r", "ecec_h", "sumbases_l", 
+                                 "sumbases_r", "sumbases_h", "ph1to1h2o_l", "ph1to1h2o_r", "ph1to1h2o_h", 
+                                 "ph01mcacl2_l", "ph01mcacl2_r", "ph01mcacl2_h", "freeiron_l", 
+                                 "freeiron_r", "freeiron_h", "feoxalate_l", "feoxalate_r", "feoxalate_h", 
+                                 "extracid_l", "extracid_r", "extracid_h", "extral_l", "extral_r", 
+                                 "extral_h", "aloxalate_l", "aloxalate_r", "aloxalate_h", "pbray1_l", 
+                                 "pbray1_r", "pbray1_h", "poxalate_l", "poxalate_r", "poxalate_h", 
+                                 "ph2osoluble_l", "ph2osoluble_r", "ph2osoluble_h", "ptotal_l", 
+                                 "ptotal_r", "ptotal_h", "excavdifcl", "excavdifms", "chkey")
+  }
+  
   FUN <- toupper(FUN)
 
   # check FUN arg for min max method
@@ -504,31 +538,24 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
             paste0(sapply(agg_property, .property_dominant_condition_category), collapse = ", "),
             where_clause),
 
-    # NO AGGREGATION (component properties)
+    # NO AGGREGATION 
   "NONE" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey,
                            c.compname AS compname, c.comppct_r AS comppct_r, c.majcompflag AS majcompflag,
-                           c.cokey AS cokey,
-                           %s
+                           c.cokey AS cokey, %s %s%s %s
              FROM legend AS l
               INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
               INNER JOIN component AS c ON c.mukey = mu.mukey
-              ORDER BY areasymbol, musym, muname, mu.mukey, c.comppct_r DESC, c.cokey",
-            paste0(sapply(agg_property, function(x) sprintf("c.%s AS %s", x, x)), collapse = ", "),
-            where_clause),
-
-  # NO AGGREGATION (horizon properties)
-  "NONE_HORIZON" = sprintf("SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey,
-                                   c.cokey AS cokey, ch.chkey AS chkey,
+              %s
+              ORDER BY areasymbol, musym, muname, mu.mukey, c.comppct_r DESC, c.cokey%s",
+            ifelse(any(is_hz), "ch.chkey AS chkey,
                                    c.compname AS compname, c.comppct_r AS comppct_r, c.majcompflag AS majcompflag,
-                                   ch.hzdept_r AS hzdept_r, ch.hzdepb_r AS hzdepb_r,
-                                   %s
-             FROM legend  AS l
-              INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
-              INNER JOIN component AS c ON c.mukey = mu.mukey
-              INNER JOIN chorizon AS ch ON ch.cokey = c.cokey
-              ORDER BY areasymbol, musym, muname, mu.mukey, c.comppct_r DESC, c.cokey, hzdept_r",
-             paste0(sapply(agg_property, function(x) sprintf("ch.%s AS %s", x, x)), collapse = ", "),
-             where_clause)
+                                   ch.hzdept_r AS hzdept_r, ch.hzdepb_r AS hzdepb_r,", ""),
+            paste0(sapply(agg_property[!is_hz], function(x) sprintf("c.%s AS %s", x, x)), collapse = ", "),
+            ifelse(any(is_hz) & !all(is_hz), ",", ""),
+            paste0(sapply(agg_property[is_hz], function(x) sprintf("ch.%s AS %s", x, x)), collapse = ", "),
+            where_clause,
+            ifelse(any(is_hz), "INNER JOIN chorizon AS ch ON ch.cokey = c.cokey", ""),
+            ifelse(any(is_hz), ", hzdept_r", ""))
   )
 
 }

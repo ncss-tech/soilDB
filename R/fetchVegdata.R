@@ -8,7 +8,7 @@
 #' get_vegplot_transpecies_from_NASIS_db
 #' get_vegplot_tree_si_details_from_NASIS_db
 #' get_vegplot_tree_si_summary_from_NASIS_db get_vegplot_trhi_from_NASIS_db
-#' get_legend_from_NASIS get_lmuaoverlap_from_NASIS
+#' 
 #' @param SS fetch data from the currently loaded selected set in NASIS or from the entire local database (default: `TRUE`)
 #' 
 #' @param stringsAsFactors logical: should character vectors be converted to

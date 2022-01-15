@@ -158,7 +158,10 @@
   # add site data to object
   # remove 'pedon_id' column from site_data
   site_data$pedon_id <- NULL
-
+  
+  # TODO: duplicating surface fine gravel column with old name for backward compatibility
+  site_data$surface_fgravel <- site_data$surface_fine_gravel
+  
   # left-join via peiid
   # < 0.1 second for ~ 4k pedons
   site(hz_data) <- site_data
@@ -207,20 +210,20 @@
     hz_data$total_art_pct <- ifelse(is.na(hz_data$total_art_pct), 0, hz_data$total_art_pct)
   }
 
-  ## TODO: convert this to simplifyFragmentData
-  # add surface frag summary
-  sfs <- extended_data$surf_frag_summary
-
-  # optionally convert NA fragvol to 0
-  if (nullFragsAreZero) {
-    sfs <- as.data.frame(
-      cbind(sfs[, 1, drop = FALSE],
-            lapply(sfs[, -1], function(i) ifelse(is.na(i), 0, i))
-      ), stringsAsFactors = FALSE)
-  }
-
-  # add surf. frag summary to @site
-  site(hz_data) <- sfs
+  ## 2021-11-05: converted surface frag summary to simplifyFragmentData() in get_site_data_from_NASIS_db()
+  # # add surface frag summary
+  # sfs <- extended_data$surf_frag_summary
+  # 
+  # # optionally convert NA fragvol to 0
+  # if (nullFragsAreZero) {
+  #   sfs <- as.data.frame(
+  #     cbind(sfs[, 1, drop = FALSE],
+  #           lapply(sfs[, -1], function(i) ifelse(is.na(i), 0, i))
+  #     ), stringsAsFactors = FALSE)
+  # }
+  # 
+  # # add surf. frag summary to @site
+  # site(hz_data) <- sfs
 
   # load diagnostic horizons into @diagnostic:
   # supress warnings: diagnostic_hz() <- is noisy when not all profiles have diagnostic hz data
@@ -238,7 +241,7 @@
               by = list(peiid = ed.lf$peiid)]
 
   if (ncol(lf) > 1)
-    site(hz_data) <- as.data.frame(lf[,c("peiid","landform_string")])
+    site(hz_data) <- as.data.frame(lf[,c("peiid","landform_string","landscape_string","microfeature_string", "geomicrorelief_string")])
 
   ed.pm <- data.table::as.data.table(extended_data$pm)
   pm <- ed.pm[, .formatParentMaterialString(.SD, uid = .BY$siteiid, name.sep = ' & '),

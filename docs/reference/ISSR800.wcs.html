@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.12</span>
       </span>
     </div>
 
@@ -65,8 +65,15 @@
 <dt>res</dt>
 <dd><p>grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.</p></dd>
 <dt>quiet</dt>
-<dd><p>logical, passed to <code>download.file</code> to enable / suppress URL and progress bar for download.</p>
-<p>#' @details <code>aoi</code> should be specified as a <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code>, or <code>bbox</code> object or a <code>list</code> containing:</p>
+<dd><p>logical, passed to <code>download.file</code> to enable / suppress URL and progress bar for download.</p></dd>
+</dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    <p><code>raster</code> object containing indexed map unit keys and associated raster attribute table or a try-error if request fails</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p><code>aoi</code> should be specified as a <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code>, or <code>bbox</code> object or a <code>list</code> containing:</p>
 <dl><dt><code>aoi</code></dt>
 <dd><p>bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)</p></dd>
 
@@ -75,11 +82,7 @@
 
 
 </dl><p>The WCS query is parameterized using <code><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">raster::extent</a></code> derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the ISSR-800 grids.</p>
-<p>Variables available from this WCS can be queried using <code>WCS_details(wcs = 'ISSR800')</code>.</p></dd>
-</dl></div>
-    <div id="value">
-    <h2>Value</h2>
-    <p><code>raster</code> object containing indexed map unit keys and associated raster attribute table or a try-error if request fails</p>
+<p>Variables available from this WCS can be queried using <code>WCS_details(wcs = 'ISSR800')</code>.</p>
     </div>
     <div id="note">
     <h2>Note</h2>

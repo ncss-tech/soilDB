@@ -6,7 +6,7 @@
 #'
 #' @param x A vector of map unit keys (`mukey`) or national map unit symbols (`nmusym`) for `mupolygon` geometry OR legend keys (`lkey`) or soil survey area symbols (`areasymbol`) for `sapolygon` geometry
 #'
-#' @param by.col Column name containing map unit identifier `"mukey"`, `"nmusym"`/`"nationalmusym"` for `geom.src` `mupolygon` OR `"areasymbol"` for `geom.src` `sapolygon`; default is determined by `is.numeric(x)` `TRUE` for `mukey` or `lkey` and `nationalmusym` or `areasymbol` otherwise.
+#' @param by.col Column name containing map unit identifier `"mukey"`, `"nmusym"`/`"nationalmusym"` for `geom.src` `mupolygon` OR `"areasymbol"`, `"areaname"`, `"mlraoffice"`, `"mouagncyresp"` for `geom.src` `sapolygon`; default is determined by `is.numeric(x)` `TRUE` for `mukey` or `lkey` and `nationalmusym` or `areasymbol` otherwise.
 #'
 #' @param method geometry result type: `"feature"` returns polygons, `"bbox"` returns the bounding box of each polygon (via `STEnvelope()`), and `"point"` returns a single point (via `STPointOnSurface()`) within each polygon.
 #'
@@ -85,7 +85,7 @@ fetchSDA_spatial <- function(x,
   x <- unique(x)
 
   # lkey and areasymbol are the option for sapolygon
-  if (geom.src == 'sapolygon' & (by.col %in% c("mukey","nmusym","nationalmusym"))) {
+  if (geom.src == 'sapolygon' & (by.col %in% c("mukey", "nmusym", "nationalmusym"))) {
     if (is.numeric(x)) {
       by.col <- "lkey"
     } else {
@@ -111,17 +111,20 @@ fetchSDA_spatial <- function(x,
 
     mukey.list <- unique(res$mukey)
 
-  # a convenience interface for lkey is by areasymbol
-  } else if (by.col == "areasym" | by.col == "areasymbol") {
-
+  # a convenience interface for lkey is by areasymbol/areaname or other legend column
+  } else if (by.col %in% c("areasymbol", "areasym", "areaname", "mlraoffice", "mouagncyresp")) {
+    if (by.col == "areasym") by.col <- "areasymbol"
+    
+    if (by.col != "areasymbol") add.fields <- unique(c(add.fields, by.col))
+    
     # do additional query to determine mapping of areasymbol:lkey
-    q.mukey <- paste0("SELECT areasymbol, lkey FROM legend WHERE areasymbol IN ",
+    q.mukey <- paste0("SELECT areasymbol, lkey FROM legend WHERE ", by.col, " IN ",
                       format_SQL_in_statement(x),";")
 
     suppressMessages( {res <- SDA_query(q.mukey)} )
 
     if (inherits(res, 'try-error'))
-      stop("fetchSDA_spatial: fatal error in areasymbol -> lkey conversion.", call. = FALSE)
+      stop("fetchSDA_spatial: fatal error in ", by.col, " -> lkey conversion.", call. = FALSE)
 
     mukey.list <- unique(res$lkey)
   } else {

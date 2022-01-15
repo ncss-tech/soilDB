@@ -5,145 +5,7 @@
 ## S.M. Roecker
 ##
 
-
-## component diagnostic features
-get_component_diaghz_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
-
-  channel <- dbConnectNASIS(dsn)
-
-  if (inherits(channel, 'try-error'))
-    return(data.frame())
-
-  # query diagnostic horizons, usually a 1:many relationship with pedons
-  q <- "SELECT coiidref as coiid, featkind, featdept_l, featdept_r, featdept_h, featdepb_l, featdepb_r, featdepb_h, featthick_l, featthick_r, featthick_h FROM codiagfeatures_View_1 AS cdf ORDER BY cdf.coiidref, cdf.featdept_r;"
-
-  # toggle selected set vs. local DB
-  if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
-  }
-
-  # exec query
-  d <- dbQueryNASIS(channel, q)
-
-  # convert codes
-  d <- uncode(d, dsn = dsn)
-
-}
-
-## component diagnostic features
-get_component_restrictions_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
-
-  channel <- dbConnectNASIS(dsn)
-
-  if (inherits(channel, 'try-error'))
-    return(data.frame())
-
-  # query restrictions, can be 1:many relationship with pedons
-  q <- "SELECT coiidref as coiid, reskind, resdept_l, resdept_r, resdept_h, resdepb_l, resdepb_r, resdepb_h, resthk_l, resthk_r, resthk_h, reskind, reshard FROM corestrictions_View_1 AS cr ORDER BY cr.coiidref, cr.resdept_r;"
-
-  # toggle selected set vs. local DB
-  if(SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
-  }
-
-  # exec query
-  d <- dbQueryNASIS(channel, q)
-
-  # convert codes
-  return(uncode(d, dsn = dsn)
-)
-}
-
-## get map unit text from local NASIS
-get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NULL) {
-
-  q <- "SELECT mu.muiid, mu.mukind, mu.mutype, mu.muname, mu.nationalmusym,
-  mut.seqnum, mut.recdate, mut.recauthor, mut.mapunittextkind, mut.textcat, mut.textsubcat, CAST(mut.textentry as text) AS textentry
-
-  FROM
-  mapunit_View_1 AS mu
-  INNER JOIN mutext_View_1 AS mut ON mu.muiid = mut.muiidref;"
-
-  channel <- dbConnectNASIS(dsn)
-
-  if (inherits(channel, 'try-error'))
-    return(data.frame())
-
-  # toggle selected set vs. local DB
-  if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
-  }
-
-  # exec query
-  d <- dbQueryNASIS(channel, q)
-
-  # convert codes
-  d <- uncode(d, dsn = dsn)
-
-  # replace tabs with spaces
-  # tabs at the beginning of a line will confuse the MD parser, generating <code><pre> blocks
-  d$textentry <- gsub(d$textentry, pattern = '\t', replacement = ' ', fixed = TRUE)
-
-  # optionally convert \r\n -> \n
-  if(fixLineEndings){
-    d$textentry <- gsub(d$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
-  }
-
-
-  # done
-  return(d)
-}
-
-
-## get component text from local NASIS
-get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NULL) {
-
-  q <- "SELECT co.coiid,
-  cot.seqnum, cot.recdate, cot.recauthor, cot.comptextkind, cot.textcat, cot.textsubcat,
-  CAST(cot.textentry as text) AS textentry
-
-  FROM
-  component_View_1 AS co
-  INNER JOIN cotext_View_1 AS cot ON co.coiid = cot.coiidref;"
-
-  # toggle selected set vs. local DB
-  if (SS == FALSE) {
-    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
-  }
-
-  # connect to NASIS
-  channel <- dbConnectNASIS(dsn)
-
-  if (inherits(channel, 'try-error'))
-    return(data.frame())
-
-  # exec query
-  d <- dbQueryNASIS(channel, q)
-
-  # convert codes
-  d <- uncode(d, dsn = dsn)
-
-  # replace tabs with spaces
-  # tabs at the beginning of a line will confuse the MD parser, generating <code><pre> blocks
-  d$textentry <- gsub(d$textentry, pattern = '\t', replacement = ' ', fixed = TRUE)
-
-  # optionally convert \r\n -> \n
-  if(fixLineEndings){
-    d$textentry <- gsub(d$textentry, pattern = '\r\n', replacement = '\n', fixed = TRUE)
-  }
-
-  # done
-  return(d)
-}
-
-
-
-## just the component records, nothing above or below
-
-
 #' Get component data from a local NASIS Database
-#'
-#' @aliases get_component_data_from_NASIS_db get_component_restrictions_from_NASIS_db
 #'
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: `TRUE`)
@@ -188,21 +50,21 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
   ORDER BY dmudesc, comppct_r DESC, compname ASC;"
   
   q2 <- "SELECT * FROM cosurffrags_View_1"
-
+  
   channel <- dbConnectNASIS(dsn)
-
+  
   if (inherits(channel, 'try-error'))
     return(data.frame())
-
+  
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q1 <- gsub(pattern = '_View_1', replacement = '', x = q1, fixed = TRUE)
     q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
   }
-
+  
   # exec query
   d <- dbQueryNASIS(channel, q1, close = FALSE)
-
+  
   # test for duplicate coiids
   idx <- which(table(d$coiid) > 1)
   if (length(idx) > 0) {
@@ -210,259 +72,103 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     assign('dupe.coiids', value=dupes, envir=soilDB.env)
     message("-> QC: duplicate coiids, this should not happen.\n\tUse `get('dupe.coiids', envir=soilDB.env)` for component record IDs (coiid)")
   }
-
+  # surface fragments
+  chs <- simplifyFragmentData(
+    uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
+    id.var = "coiidref",
+    vol.var = "sfragcov_r",
+    prefix = "sfrag",
+    msg = "surface fragment cover")
+  
   # uncode metadata domains
   if (nrow(d) > 0) {
     d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
-  }
   
-  if (nrow(d) > 0) {
-    # surface fragments
-    chs <- simplifyFragmentData(
-      uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
-      id.var = "coiidref",
-      vol.var = "sfragcov_r",
-      prefix = "sfrag")
-    
     if (sum(complete.cases(chs)) == 0) {
       chs <- chs[1:nrow(d),]
       chs$coiidref <- d$coiid
     } else {
       ldx <- !d$coiid %in% chs$coiidref
-      chs_null <- chs[0,]
-      if (any(ldx)) {
-        chs_null <- chs_null[seq(sum(ldx)),]
-      }
+      chs_null <- chs[0,][1:sum(ldx),]
       chs_null$coiidref <- d$coiid[ldx]
       chs <- rbind(chs, chs_null)
+      
+      # handle NA for totals
+      if (nullFragsAreZero) {
+        chs[is.na(chs)] <- 0
+      } 
+      colnames(chs) <- paste0("surface_", colnames(chs))
+      colnames(chs)[1] <- "coiidref"
+      d <- merge(d, chs, by.x = "coiid", by.y = "coiidref", all.x = TRUE, sort = FALSE)
     }
-  
-    # handle NA for totals
-    if (nullFragsAreZero) {
-      chs[is.na(chs)] <- 0
-    } 
-    colnames(chs) <- paste0("surface_", colnames(chs))
-    colnames(chs)[1] <- "coiidref"
-    d <- merge(d, chs, by.x = "coiid", by.y = "coiidref", all.x = TRUE, sort = FALSE)
+  } else {
+    d <- cbind(d, chs[0,])
   }
+  
   
   # done
   return(d)
 }
 
 
-get_legend_from_NASIS <- function(SS = TRUE,
-                                  droplevels = TRUE,
-                                  stringsAsFactors = default.stringsAsFactors(),
-                                  dsn = NULL) {
-
-  q.legend  <- paste("
-                     SELECT
-                     mlraoffice,
-                     areasymbol, areaname, areatypename, CAST(areaacres AS INTEGER) AS areaacres, ssastatus,
-                     CAST(projectscale AS INTEGER) projectscale, cordate,
-                     CAST(liid AS INTEGER) liid, COUNT(lmu.lmapunitiid) n_lmapunitiid, legendsuituse
-
-                     FROM
-                     area     a                                  INNER JOIN
-                     legend_View_1   l      ON l.areaiidref = a.areaiid INNER JOIN
-                     lmapunit_View_1 lmu    ON lmu.liidref = l.liid
-
-                     INNER JOIN
-                     areatype at  ON at.areatypeiid = areatypeiidref
-
-                     WHERE
-                         areatypename IN ('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area')
-
-                     GROUP BY mlraoffice, areasymbol, areaname, areatypename, areaacres, ssastatus, projectscale, legendsuituse, cordate, liid
-
-                     ORDER BY mlraoffice, areasymbol
-                     ;")
-
-  # toggle selected set vs. local DB
-  if(SS == FALSE) {
-    q.legend <- gsub(pattern = '_View_1', replacement = '', x = q.legend, fixed = TRUE)
-  }
+## component diagnostic features
+#' @export
+#' @rdname get_component_data_from_NASIS_db
+get_component_diaghz_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
   channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
-  # exec query
-  d.legend <- dbQueryNASIS(channel, q.legend)
-
-  # recode metadata domains
-  d.legend <- uncode(d.legend,
-                     db = "NASIS",
-                     droplevels = droplevels,
-                     stringsAsFactors = stringsAsFactors,
-                     dsn = dsn)
-
-  # done
-  return(d.legend)
-}
-
-
-
-get_lmuaoverlap_from_NASIS <- function(SS = TRUE,
-                                       droplevels = TRUE,
-                                       stringsAsFactors = default.stringsAsFactors(),
-                                       dsn = NULL) {
-  
-  q <- "SELECT
-             a.areasymbol, a.areaname, a.areaacres,
-             at2.areatypename lao_areatypename, a2.areasymbol lao_areasymbol, a2.areaname lao_areaname, lao.areaovacres lao_areaovacres,
-             lmapunitiid, musym, nationalmusym, muname, mustatus, muacres,
-             lmuao.areaovacres lmuao_areaovacres
-
-             FROM
-             legend_View_1   l                                             INNER JOIN
-             lmapunit_View_1 lmu   ON lmu.liidref          = l.liid        INNER JOIN
-             mapunit_View_1  mu    ON mu.muiid             = lmu.muiidref
-
-             INNER JOIN
-                 area     a  ON a.areaiid      = l.areaiidref INNER JOIN
-                 areatype at ON at.areatypeiid = a.areatypeiidref
-
-             LEFT OUTER JOIN
-                 laoverlap_View_1  lao ON lao.liidref      = l.liid         INNER JOIN
-                 area              a2  ON a2.areaiid       = lao.areaiidref INNER JOIN
-                 areatype          at2  ON at2.areatypeiid = a2.areatypeiidref
-
-             LEFT OUTER JOIN
-                 lmuaoverlap_View_1 lmuao ON lmuao.lmapunitiidref = lmu.lmapunitiid
-                                     AND lmuao.lareaoviidref  = lao.lareaoviid
-
-             WHERE 
-                 at.areatypename IN ('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area')
-
-             ORDER BY a.areasymbol, lmu.musym, lao_areatypename
-             ;"
-  
+  # query diagnostic horizons, usually a 1:many relationship with pedons
+  q <- "SELECT coiidref as coiid, featkind, featdept_l, featdept_r, featdept_h, featdepb_l, featdepb_r, featdepb_h, featthick_l, featthick_r, featthick_h FROM codiagfeatures_View_1 AS cdf ORDER BY cdf.coiidref, cdf.featdept_r;"
 
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
-  channel <- dbConnectNASIS(dsn)
-
-  if (inherits(channel, 'try-error'))
-    return(data.frame())
-
+  # exec query
   d <- dbQueryNASIS(channel, q)
 
-  d$musym <- as.character(d$musym)
+  # convert codes
+  d <- uncode(d, dsn = dsn)
 
-  # recode metadata domains
-  d <- uncode(d,
-              db = "NASIS",
-              droplevels = droplevels,
-              stringsAsFactors = stringsAsFactors,
-              dsn = dsn)
-
-  # done
-  return(d)
 }
 
-
-
-get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
-  q.mapunit <- paste("
-                     SELECT
-                     ng.grpname, areasymbol, areatypename, liid, lmapunitiid,
-                     nationalmusym, muiid, musym, muname, mukind, mutype, mustatus, dmuinvesintens, muacres,
-                     farmlndcl, dmuiid, pct_component, pct_hydric, n_component, n_majcompflag
-
-                     FROM
-                         area            a                               INNER JOIN
-                         legend_View_1   l   ON l.areaiidref = a.areaiid INNER JOIN
-                         lmapunit_View_1 lmu ON lmu.liidref = l.liid     INNER JOIN
-                         mapunit_View_1  mu  ON mu.muiid = lmu.muiidref
-
-                    INNER JOIN
-                         areatype at  ON at.areatypeiid = areatypeiidref
-
-                    INNER JOIN
-                        nasisgroup  ng ON ng.grpiid = mu.grpiidref
-
-                    LEFT OUTER JOIN
-                    --components
-                    (SELECT
-                     cor.muiidref cor_muiidref, dmuiid, dmuinvesintens,
-                     SUM(comppct_r)                                                pct_component,
-                     SUM(comppct_r * CASE WHEN hydricrating = 1 THEN 1 ELSE 0 END) pct_hydric,
-                     COUNT(*)                                                      n_component,
-                     SUM(CASE WHEN majcompflag  = 1 THEN 1 ELSE 0 END)             n_majcompflag
-
-                     FROM
-                         component_View_1   co                                  LEFT OUTER JOIN
-                         datamapunit_View_1 dmu ON dmu.dmuiid    = co.dmuiidref LEFT OUTER JOIN
-                         correlation_View_1 cor ON cor.dmuiidref = dmu.dmuiid   AND
-                                                   cor.repdmu    = 1
-
-                     GROUP BY cor.muiidref, dmuiid, dmuinvesintens
-                    ) co ON co.cor_muiidref = mu.muiid
-
-                     WHERE
-                         areatypename IN ('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area')
-
-                     ORDER BY areasymbol, musym
-                     ;")
-
-  # toggle selected set vs. local DB
-  if (SS == FALSE) {
-    q.mapunit <- gsub(pattern = '_View_1', replacement = '', x = q.mapunit, fixed = TRUE)
-  }
+## component diagnostic features
+#' @export
+#' @rdname get_component_data_from_NASIS_db
+get_component_restrictions_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
   channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
 
+  # query restrictions, can be 1:many relationship with pedons
+  q <- "SELECT coiidref as coiid, reskind, resdept_l, resdept_r, resdept_h, resdepb_l, resdepb_r, resdepb_h, resthk_l, resthk_r, resthk_h, reskind, reshard FROM corestrictions_View_1 AS cr ORDER BY cr.coiidref, cr.resdept_r;"
+
+  # toggle selected set vs. local DB
+  if(SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+
   # exec query
-  d.mapunit <- dbQueryNASIS(channel, q.mapunit)
+  d <- dbQueryNASIS(channel, q)
 
-  # recode metadata domains
-  d.mapunit <- uncode(d.mapunit,
-                      db = "NASIS",
-                      droplevels = droplevels,
-                      stringsAsFactors = stringsAsFactors,
-                      dsn = dsn)
-
-  # hacks to make R CMD check --as-cran happy:
-  metadata <- NULL
-
-  # load local copy of metadata
-  load(system.file("data/metadata.rda", package="soilDB")[1])
-
-  # transform variables and metadata
-  d.mapunit <- within(d.mapunit, {
-    farmlndcl = factor(farmlndcl,
-                       levels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceValue"],
-                       labels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceLabel"]
-    )
-    if (stringsAsFactors == FALSE) {
-      farmlndcl = as.character(farmlndcl)
-    }
-    if (droplevels == TRUE & is.factor(farmlndcl)) {
-      farmlndcl = droplevels(farmlndcl)
-    }
-  })
-
-  # cache original column names
-  orig_names <- names(d.mapunit)
-
-
-  # done
-  return(d.mapunit)
+  # convert codes
+  return(uncode(d, dsn = dsn)
+)
 }
-
 
 # return all rows from correlation -- map unit -- legend map unit -- dmu / legend -- area
 # note that all of these "target tables" have to be selected
+#' @export
+#' @param dropAdditional Remove map units with "additional" status? Default: `TRUE`
+#' @param dropNotRepresentative Remove non-representative data map units? Default: `TRUE`
+#' @rdname get_component_data_from_NASIS_db
 get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
                                                          dropAdditional = TRUE,
                                                          dropNotRepresentative = TRUE,
@@ -537,6 +243,8 @@ get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
 }
 
 # get geomorphic desc for each component
+#' @export
+#' @rdname get_component_data_from_NASIS_db
 get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
   q <- "SELECT cogeo.coiidref as coiid, cogeo.geomfmod, geomorfeat.geomfname, cogeo.geomfeatid, cogeo.existsonfeat, cogeo.geomfiidref, lower(geomorfeattype.geomftname) as geomftname
@@ -565,8 +273,43 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   return(d)
 }
 
+# get geomorphic desc for each component
+#' @export
+#' @rdname get_component_data_from_NASIS_db
+get_component_cogeomorph_data_from_NASIS_db2 <- function(SS = TRUE, dsn = NULL) {
+  
+  q <- "SELECT cogeo.coiidref as coiid, cogeo.geomfmod, geomorfeat.geomfname, cogeo.geomfeatid, cogeo.existsonfeat, cogeo.geomfiidref, lower(geomorfeattype.geomftname) as geomftname, cogeo.rvindicator AS cogeomordescrv, hillslopeprof, cosurfmorphhpp.rvindicator AS cosurfmorphhpprv, geomposmntn, geomposhill, geompostrce, geomposflats, shapeacross, shapedown, geomicrorelief
+
+  FROM
+  component_View_1 AS co
+  INNER JOIN cogeomordesc_View_1 AS cogeo ON co.coiid = cogeo.coiidref
+  INNER JOIN geomorfeat ON geomorfeat.geomfiid = cogeo.geomfiidref
+  INNER JOIN geomorfeattype ON geomorfeattype.geomftiid = geomorfeat.geomftiidref
+  LEFT JOIN cosurfmorphhpp ON cosurfmorphhpp.cogeomdiidref = cogeo.cogeomdiid
+  LEFT JOIN cosurfmorphgc ON cosurfmorphgc.cogeomdiidref = cogeo.cogeomdiid
+  LEFT JOIN cosurfmorphmr ON cosurfmorphmr.cogeomdiidref = cogeo.cogeomdiid
+  LEFT JOIN cosurfmorphss ON cosurfmorphss.cogeomdiidref = cogeo.cogeomdiid
+  ORDER BY coiid, geomfeatid ASC;"
+  
+  channel <- dbConnectNASIS(dsn)
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
+  d <- dbQueryNASIS(channel, q)
+  
+  # done
+  return(uncode(d))
+}
 
 # get copm for each component
+#' @export
+#' @rdname get_component_data_from_NASIS_db
 get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
                                                   stringsAsFactors = default.stringsAsFactors(),
                                                   dsn = NULL) {
@@ -601,6 +344,8 @@ get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
 }
 
 # get ESD information for each component
+#' @export
+#' @rdname get_component_data_from_NASIS_db
 get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
                                                  stringsAsFactors = default.stringsAsFactors(),
                                                  dsn = NULL) {
@@ -643,6 +388,8 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
 
 ## TODO: convert any multiple entries into a comma delimited string
 # get OtherVeg information for each component
+#' @export
+#' @rdname get_component_data_from_NASIS_db
 get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
 
@@ -816,6 +563,8 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
 
 # get linked pedons by peiid and user pedon ID
 # note that there may be >=1 pedons / coiid
+#' @export
+#' @rdname get_component_data_from_NASIS_db
 get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
   q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative
@@ -847,6 +596,9 @@ get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   return(d)
 }
 
+#' @export
+#' @param fill Return a single minimal (NA-filled) horizon for components with no horizon records? Default `FALSE`
+#' @rdname get_component_data_from_NASIS_db
 get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
                                                      fill = FALSE,
                                                      dsn = NULL,
