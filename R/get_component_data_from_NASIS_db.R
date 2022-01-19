@@ -40,7 +40,7 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
                                              nullFragsAreZero = TRUE,
                                              stringsAsFactors = default.stringsAsFactors(),
                                              dsn = NULL) {
-  
+
   q1 <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, reannualprecip_r, ffd_l, ffd_r, ffd_h, tfact, wei, weg, nirrcapcl, nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, frostact, hydricrating, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
 
   FROM
@@ -48,23 +48,23 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
   INNER JOIN component_View_1 AS co ON co.dmuiidref = dmu.dmuiid
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC;"
-  
+
   q2 <- "SELECT * FROM cosurffrags_View_1"
-  
+
   channel <- dbConnectNASIS(dsn)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q1 <- gsub(pattern = '_View_1', replacement = '', x = q1, fixed = TRUE)
     q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
   }
-  
+
   # exec query
   d <- dbQueryNASIS(channel, q1, close = FALSE)
-  
+
   # test for duplicate coiids
   idx <- which(table(d$coiid) > 1)
   if (length(idx) > 0) {
@@ -79,11 +79,11 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     vol.var = "sfragcov_r",
     prefix = "sfrag",
     msg = "surface fragment cover")
-  
+
   # uncode metadata domains
   if (nrow(d) > 0) {
     d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
-  
+
     if (sum(complete.cases(chs)) == 0) {
       chs <- chs[1:nrow(d),]
       chs$coiidref <- d$coiid
@@ -92,11 +92,11 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
       chs_null <- chs[0,][1:sum(ldx),]
       chs_null$coiidref <- d$coiid[ldx]
       chs <- rbind(chs, chs_null)
-      
+
       # handle NA for totals
       if (nullFragsAreZero) {
         chs[is.na(chs)] <- 0
-      } 
+      }
       colnames(chs) <- paste0("surface_", colnames(chs))
       colnames(chs)[1] <- "coiidref"
       d <- merge(d, chs, by.x = "coiid", by.y = "coiidref", all.x = TRUE, sort = FALSE)
@@ -104,8 +104,8 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
   } else {
     d <- cbind(d, chs[0,])
   }
-  
-  
+
+
   # done
   return(d)
 }
@@ -174,7 +174,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
                                                          dropNotRepresentative = TRUE,
                                                          stringsAsFactors = default.stringsAsFactors(),
                                                          dsn = NULL) {
-  
+
   q <- "SELECT lmapunitiid, mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
 
   FROM  mapunit_View_1 AS mu
@@ -277,7 +277,7 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' @export
 #' @rdname get_component_data_from_NASIS_db
 get_component_cogeomorph_data_from_NASIS_db2 <- function(SS = TRUE, dsn = NULL) {
-  
+
   q <- "SELECT cogeo.coiidref as coiid, cogeo.geomfmod, geomorfeat.geomfname, cogeo.geomfeatid, cogeo.existsonfeat, cogeo.geomfiidref, lower(geomorfeattype.geomftname) as geomftname, cogeo.rvindicator AS cogeomordescrv, hillslopeprof, cosurfmorphhpp.rvindicator AS cosurfmorphhpprv, geomposmntn, geomposhill, geompostrce, geomposflats, shapeacross, shapedown, geomicrorelief
 
   FROM
@@ -290,21 +290,21 @@ get_component_cogeomorph_data_from_NASIS_db2 <- function(SS = TRUE, dsn = NULL) 
   LEFT JOIN cosurfmorphmr ON cosurfmorphmr.cogeomdiidref = cogeo.cogeomdiid
   LEFT JOIN cosurfmorphss ON cosurfmorphss.cogeomdiidref = cogeo.cogeomdiid
   ORDER BY coiid, geomfeatid ASC;"
-  
+
   channel <- dbConnectNASIS(dsn)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   # toggle selected set vs. local DB
   if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-  
+
   d <- dbQueryNASIS(channel, q)
-  
+
   # done
-  return(uncode(d))
+  return(uncode(d, dsn = dsn))
 }
 
 # get copm for each component
@@ -313,7 +313,7 @@ get_component_cogeomorph_data_from_NASIS_db2 <- function(SS = TRUE, dsn = NULL) 
 get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
                                                   stringsAsFactors = default.stringsAsFactors(),
                                                   dsn = NULL) {
-  
+
 
   q <- "SELECT cpmg.coiidref as coiid, cpm.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
 
@@ -349,7 +349,7 @@ get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
 get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
                                                  stringsAsFactors = default.stringsAsFactors(),
                                                  dsn = NULL) {
-  
+
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
   ecositeorigin, ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
 
@@ -391,7 +391,7 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
 #' @export
 #' @rdname get_component_data_from_NASIS_db
 get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
-  
+
 
   q <- "SELECT coiidref as coiid, ovegclid, ovegclname, coothvegcl.recwlupdated
   FROM coothvegclass_View_1 coothvegcl
@@ -464,7 +464,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
                                       fill = FALSE,
                                       stringsAsFactors = default.stringsAsFactors(),
                                       dsn = NULL) {
-  
+
 
   q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid
   FROM comonth_View_1 AS comonth;"
@@ -566,7 +566,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
 #' @export
 #' @rdname get_component_data_from_NASIS_db
 get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
-  
+
   q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative
 
   FROM copedon_View_1 copedon
@@ -616,10 +616,10 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   INNER JOIN datamapunit_View_1 dmu ON dmu.dmuiid = co.dmuiidref
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC, hzdept_r ASC;"
-  
+
   q2 <- "SELECT * FROM chfrags_View_1"
   q3 <- "SELECT * FROM chhuarts_View_1"
-  
+
   channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
@@ -641,9 +641,9 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   if (fill == FALSE) {
     d <- d[!is.na(d$chiid), ]
   }
-  
-  # "sieving" chfrags, chuarts tables for parity with fetchNASIS("pedons") @horizons slot columns 
-  
+
+  # "sieving" chfrags, chuarts tables for parity with fetchNASIS("pedons") @horizons slot columns
+
   if (nrow(d) > 0){
     # horizon fragments
     chf <- simplifyFragmentData(
@@ -667,9 +667,9 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
     # handle NA for totals
     if (nullFragsAreZero) {
       chf[is.na(chf)] <- 0
-    } 
-  
-    # human artifacts  
+    }
+
+    # human artifacts
     cha <- simplifyArtifactData(
       uncode(dbQueryNASIS(channel, q3, close = FALSE), dsn = dsn),
       id.var = "chiidref",
@@ -690,12 +690,12 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
     if (nullFragsAreZero) {
       cha[is.na(cha)] <- 0
     }
-    
-    
+
+
     d <- merge(d, chf, by.x = "chiid", by.y = "chiidref", all.x = TRUE, sort = FALSE)
     d <- merge(d, cha, by.x = "chiid", by.y = "chiidref", all.x = TRUE, sort = FALSE)
   }
-  
+
   return(d)
 }
 
