@@ -74,7 +74,7 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
   }
   # surface fragments
   chs <- simplifyFragmentData(
-    uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),
+    uncode(dbQueryNASIS(channel, q2), dsn = dsn),
     id.var = "coiidref",
     vol.var = "sfragcov_r",
     prefix = "sfrag",

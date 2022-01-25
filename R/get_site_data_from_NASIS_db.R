@@ -98,7 +98,7 @@ ORDER BY pedon_View_1.peiid ;"
 	d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
 	
 	# surface fragments
-	sfr <- dbQueryNASIS(channel, q2, close = FALSE)
+	sfr <- dbQueryNASIS(channel, q2)
 	
 	multi.siteobs <- unique(sfr[, c("siteiid","siteobsiid")])
 	multisite <- table(multi.siteobs$siteiid) 
