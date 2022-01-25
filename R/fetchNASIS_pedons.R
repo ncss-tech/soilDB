@@ -29,8 +29,12 @@
   color_data <- get_colors_from_NASIS_db(SS = SS, dsn = dsn)
 
   ## ensure there are enough data to create an SPC object
+  ds <- ifelse(SS, "NASIS selected set", "NASIS local database")
+  if (nrow(site_data) == 0) {
+    stop('No site/site observation records in ', ds, call. = FALSE)
+  }
   if (nrow(hz_data) == 0) {
-    stop('No site/pedons objects in local NASIS DB or selected set.', call. = FALSE)
+    stop('No horizon records in ', ds,'. Use `fill = TRUE` to include pedons without horizons.', call. = FALSE)
   }
   
   ## https://github.com/ncss-tech/soilDB/issues/44
