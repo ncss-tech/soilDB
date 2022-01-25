@@ -115,6 +115,9 @@ ORDER BY pedon_View_1.peiid ;"
 	  msg = "surface fragment cover"
 	)
 	
+	colnames(phs) <- paste0("surface_", colnames(phs))
+	colnames(phs)[1] <- "peiid"
+	
 	if (nrow(d) > 0) {
   	ldx <- !d$peiid %in% phs$peiid
   	if (!any(ldx)) {
@@ -130,8 +133,6 @@ ORDER BY pedon_View_1.peiid ;"
   	if (nullFragsAreZero) {
   	  phs[is.na(phs)] <- 0
   	} 
-  	colnames(phs) <- paste0("surface_", colnames(phs))
-  	colnames(phs)[1] <- "peiid"
   	d2 <- merge(d, phs, by = "peiid", all.x = TRUE, sort = FALSE)
 	} else {
 	  d2 <- cbind(d, phs[0,])

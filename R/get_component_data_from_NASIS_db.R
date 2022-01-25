@@ -79,7 +79,10 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     vol.var = "sfragcov_r",
     prefix = "sfrag",
     msg = "surface fragment cover")
-
+  
+  colnames(chs) <- paste0("surface_", colnames(chs))
+  colnames(chs)[1] <- "coiidref"
+  
   # uncode metadata domains
   if (nrow(d) > 0) {
     d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
@@ -96,9 +99,7 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
       # handle NA for totals
       if (nullFragsAreZero) {
         chs[is.na(chs)] <- 0
-      }
-      colnames(chs) <- paste0("surface_", colnames(chs))
-      colnames(chs)[1] <- "coiidref"
+      } 
       d <- merge(d, chs, by.x = "coiid", by.y = "coiidref", all.x = TRUE, sort = FALSE)
     }
   } else {
@@ -159,8 +160,7 @@ get_component_restrictions_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   d <- dbQueryNASIS(channel, q)
 
   # convert codes
-  return(uncode(d, dsn = dsn)
-)
+  return(uncode(d, dsn = dsn))
 }
 
 # return all rows from correlation -- map unit -- legend map unit -- dmu / legend -- area
