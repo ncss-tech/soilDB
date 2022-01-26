@@ -48,6 +48,9 @@ The standard set of "site" and "horizon" data are returned as a \code{SoilProfil
 \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
 \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
 \item{climate}{experimental climate summaries from PRISM stack (CONUS only)}
+
+\item{NCCPI}{select quantiles of NCCPI and Irrigated NCCPI, derived from the current SSURGO snapshot}
+
 \item{metadata}{metadata associated with SoilWeb cached summaries}
 }
 
