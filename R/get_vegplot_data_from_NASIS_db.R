@@ -1,5 +1,7 @@
 ## lower level functions for fetchVegdata()
 
+#' @export
+#' @rdname fetchVegdata
 get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q.vegplot <- "SELECT siteiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, vegdataorigin, vegplotsize, soilprofileindicator, soil232idlegacy, ahorizondepth, alkalinesalineindicator, alkalineaffected, salinityclass, restrictivelayerdepthlegacy, legacysoilcompname, legacysoilphase, legacylocalsoilphase, legacysoilsurftext, legacysurftextmod, legacyterminlieu, erosionclasslegacy, landformgrouplegacy, cryptogamcovcllegacy, rangelandusehistory, cancovpctplotave, cancovtotalpct, cancovtotalclass, overstorycancontotalpct, overstorycancovtotalclass, dblsampannualprodave, compyieldproductionave, abovegroundbiomasstotave, understoryreprodabundance, woodyunderstoryabundance, herbundertoryabundance, lichensunderstoryabundance, crowncanclosurepct, crowncancloseassessmethod, crowncompfactorlpp, crowncomplppavedbh, basalcoverpctave, basalareaplottotal, basalareaassessmethod, constreeshrubgrp, windbreakrowonedirection, windbreaktrappedsoildepth, windbreaktrappedsoiltexture, understorydescindicator, mensurationdataindicator, vigorclasslegacy, siteconditionlegacy, overstoryspecieslegacy, plantmoiststate, currenttreedensity, currenttreespacing, currentdxspacing, currentplotavedbh, plotbasalareafactor, currentbasalarea, foreststandtype, foreststratainventoried, foreststandregen, foreststandquality, desiredtreedensity, desireddxspacing, desiredbasalarea, excessbasalarea, excesstreedensity, stockingchangepct, treepctgoodcondition, treepctfaircondition, treepctpoorcondition, treecounttotal, treesnagdensityhard, treesnagdensitysoft, pastureforagetype, pasturestanddensityave, pastureplanthtave, pastureprodave, pcidesirableplants, pciplantcover, pciplantdiversity, pcigroundcovresidue, pcistandingdeadforage, pciplantresiduecompscore, pciplantvigor, pcilegumepctclass, pciuseuniformity, pcilivestockconcareas, pcisoilcompaction, pcisheetrillerosion, pciwinderosion, pcistreamshoreerosion, pcigullyerosion, pcierosioncompscore, pcipastureconditionscore, refplantcommunity, repannualprod, totestannualprod, totallowableannualprod, totpalatableannualprod, similarityindex, annualuseableprod, harvesteffpct, takehalfleavehalf, acresperaum, aumperacre, audperacre, desirableplantvigor, desirableseedlingabundance, decadentplantabundance, plantresidueadequacy, undesirableinvadingspecies, majorinvadingspecies, invadingspeciescancovpct, soilsurferosion, soilcrusting, soilcompaction, baregroundpct, gullyrillpresence, soildegradationrating, rangetrendcurrent, rangetrendplanned, qcreviewperson, qcreviewdate, qareviewperson, qareviewdate, swcdlegacy, fieldofficelegacy, nrcsarealegacy, aktotallichencoverpct, aktotallitter1coverpct, aktotallitter2coverpct, aktotalmosscoverpct, aktotalrockcoverpct, aktotalsoilcoverpct, aktotalwatercoverpct, akecologicalsitestatus, aktotalbedrockcoverpct, akfieldecositeid
@@ -41,6 +43,8 @@ get_vegplot_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.string
 
 
 # get location data from the corresponding record in the site table
+#' @export
+#' @rdname fetchVegdata
 get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   # query the coordinate, plss description, and site characteristics data for these records from the site table
@@ -99,6 +103,8 @@ get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
 
 
 # get Rangeland Health Indicator(RHI) associated fields in the vegplot table
+#' @export
+#' @rdname fetchVegdata
 get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q.vegplotrhi <- "SELECT siteiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, rhiannualprod, rhibareground, rhicompactionlayer, rhifuncstructgroups, rhierosionresistance, rhigullies, rhirills, rhipedastalsterracettes, rhiinfilrunoff, rhilitteramount, rhilittermovement, rhiplantmortality, rhireprodcapability, rhiinvasiveplants, rhisoilsurfdegradation, rhiwaterflowpatterns, rhiwindscourareas, rhisoilsitestabsumm, rhibioticintegritysumm, rhihydrofunctionsumm
@@ -136,6 +142,8 @@ get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.s
 
 
 # get vegplot species - this is a reconstruction of a site existing species list
+#' @export
+#' @rdname fetchVegdata
 get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   q.vegplotspecies <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, ppi.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass
@@ -174,6 +182,8 @@ get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defaul
 
 
 # get vegplot transect data
+#' @export
+#' @rdname fetchVegdata
 get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   # veg transect data - many transects to one vegplot
@@ -213,6 +223,8 @@ get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
 
 
 # get vegplot transect species data
+#' @export
+#' @rdname fetchVegdata
 get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   # veg transect species data - many species to one veg transect
@@ -251,6 +263,8 @@ get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
 }
 
 # get vegplot tree site index summary data
+#' @export
+#' @rdname fetchVegdata
 get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   # plot tree site index summary data
@@ -290,6 +304,8 @@ get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
 
 
 # get vegplot tree site index details data
+#' @export
+#' @rdname fetchVegdata
 get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   # plot tree site index detail data
@@ -332,6 +348,9 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
 
 
 # get vegplot textnotes
+#' @param fixLineEndings Replace `'\r\n'` with `'\n'`; Default: `TRUE`
+#' @export
+#' @rdname fetchVegdata
 get_vegplot_textnote_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
 
   # vegplot textnotes
