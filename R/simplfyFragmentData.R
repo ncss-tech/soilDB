@@ -203,11 +203,18 @@ simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", prefix = "frag
   ## NOTE: this must include all classes that related functions return
   # set levels of classes
   rf.sums$class <- factor(rf.sums$class, levels=frag.classes)
-
+  
   # convert to wide format
-  fm <- as.formula(paste0(id.var, ' ~ class'))
-  rf.wide <- as.data.frame(data.table::dcast(data.table::data.table(rf.sums), fm, value.var = 'volume', drop = FALSE))
-
+  if (nrow(rf.sums) == 0) {
+    rf.wide <- as.data.frame(rep(list(numeric(0)), length(frag.classes)))
+    colnames(rf.wide) <- frag.classes
+    iddf <- data.frame(character(0))
+    colnames(iddf) <- id.var
+    rf.wide <- cbind(iddf, rf.wide)
+  } else {
+    fm <- as.formula(paste0(id.var, ' ~ class'))
+    rf.wide <- as.data.frame(data.table::dcast(data.table::data.table(rf.sums), fm, value.var = 'volume', drop = FALSE))
+  }
   # must determine the index to the ID column in the wide format
   id.col.idx <- which(names(rf.wide) == id.var)
 
