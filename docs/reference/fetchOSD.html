@@ -88,7 +88,8 @@
 <dd><p>empirical probabilities for parent material kind, derived from the current SSURGO snapshot</p></dd><dt>pmorigin</dt>
 <dd><p>empirical probabilities for parent material origin, derived from the current SSURGO snapshot</p></dd><dt>mlra</dt>
 <dd><p>empirical MLRA membership values, derived from the current SSURGO snapshot</p></dd><dt>climate</dt>
-<dd><p>experimental climate summaries from PRISM stack (CONUS only)</p></dd><dt>metadata</dt>
+<dd><p>experimental climate summaries from PRISM stack (CONUS only)</p></dd><dt>NCCPI</dt>
+<dd><p>select quantiles of NCCPI and Irrigated NCCPI, derived from the current SSURGO snapshot</p></dd><dt>metadata</dt>
 <dd><p>metadata associated with SoilWeb cached summaries</p></dd></dl>When using <code>extended = TRUE</code>, there are a couple of scenarios in which series morphology contained in <code>SPC</code> do not fully match records in the associated series summaries (e.g. <code>competing</code>).<dl><dt>1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).</dt>
 <dd><p>- Climate summaries are empty <code>data.frames</code> because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.</p></dd><dt>2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).</dt>
 <dd><p>- Extended summaries are present but morphology missing from <code>SPC</code>. A warning is issued.</p></dd></dl>These last two cases are problematic for analysis that makes use of morphology and extended data, such as outlined in this tutorial on <a href="https://ncss-tech.github.io/AQP/soilDB/competing-series.html" class="external-link">competing soil series</a>.
@@ -139,7 +140,7 @@
 <span class="r-in">  <span class="op">}</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-plt img"><img src="fetchOSD-1.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> List of 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 17</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ SPC             :Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ competing       :'data.frame':	84 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ geog_assoc_soils:'data.frame':	77 obs. of  2 variables:</span>
@@ -155,7 +156,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ mlra            :'data.frame':	52 obs. of  4 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ climate.annual  :'data.frame':	88 obs. of  12 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ climate.monthly :'data.frame':	264 obs. of  14 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ soilweb.metadata:'data.frame':	20 obs. of  2 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ NCCPI           :'data.frame':	11 obs. of  16 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ soilweb.metadata:'data.frame':	21 obs. of  2 variables:</span>
 <span class="r-in"><span class="co"># }</span></span>
 <span class="r-plt img"><img src="fetchOSD-2.png" alt="" width="768" height="475"></span>
 </code></pre></div>
