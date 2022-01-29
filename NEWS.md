@@ -1,7 +1,11 @@
-# soilDB 2.6.13 (2022-01-11)
+# soilDB 2.6.13 (2022-01-29)
  * `fetchSDA_spatial` now supports `by.col` `"areaname"`, `"mlraoffice"`, and `"mouagencyresp"`; thanks to suggestion by Jay Skovlin
  * `fetchNASIS` fix for multiple site observation records with surface fragments; thanks to bug report from Brianna Wegner
  * `waterYearDay()` use format and timezone for start date conversion
+ * `fetchNASIS` fix for `from="components", SS=FALSE` and queries where no NASIS local database is present (e.g. from SQLite source)
+ * Update to `NASIS_table_column_keys` dataset of NASIS primary and foreign keys by table name to include many more tables
+ * `fetchVegdata()` no longer errors for child table queries unless site/site observation/vegetation plot records are missing
+ * `fetchOSD(extended=TRUE)` now returns an element `"NCCPI"` containing the National Commodity Crop Production Index summaries. The values returned are quantiles at the 1, 5, 25, 50, 75, 95, and 99% levels over all SSURGO components with `compname` matching `series` for irrigated and non-irrigated condition.
  
 # soilDB 2.6.12 (2022-01-07)
  * `get_SDA_property()` now works with mixed component and horizon-level properties; thanks to Matthieu Stigler for the bug report
