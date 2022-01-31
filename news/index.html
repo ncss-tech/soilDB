@@ -48,13 +48,20 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.6.13" id="soildb-2613-2022-01-11">soilDB 2.6.13 (2022-01-11)<a class="anchor" aria-label="anchor" href="#soildb-2613-2022-01-11"></a></h2>
+<h2 class="page-header" data-toc-text="2.6.13" id="soildb-2613-2022-01-29">soilDB 2.6.13 (2022-01-29)<small>2022-01-31</small><a class="anchor" aria-label="anchor" href="#soildb-2613-2022-01-29"></a></h2>
 <ul><li>
 <code>fetchSDA_spatial</code> now supports <code>by.col</code> <code>"areaname"</code>, <code>"mlraoffice"</code>, and <code>"mouagencyresp"</code>; thanks to suggestion by Jay Skovlin</li>
 <li>
 <code>fetchNASIS</code> fix for multiple site observation records with surface fragments; thanks to bug report from Brianna Wegner</li>
 <li>
 <code>waterYearDay()</code> use format and timezone for start date conversion</li>
+<li>
+<code>fetchNASIS</code> fix for <code>from="components", SS=FALSE</code> and queries where no NASIS local database is present (e.g. from SQLite source)</li>
+<li>Update to <code>NASIS_table_column_keys</code> dataset of NASIS primary and foreign keys by table name to include many more tables</li>
+<li>
+<code><a href="../reference/fetchVegdata.html">fetchVegdata()</a></code> no longer errors for child table queries unless site/site observation/vegetation plot records are missing</li>
+<li>
+<code>fetchOSD(extended=TRUE)</code> now returns an element <code>"NCCPI"</code> containing the National Commodity Crop Production Index summaries. The values returned are quantiles at the 1, 5, 25, 50, 75, 95, and 99% levels over all SSURGO components with <code>compname</code> matching <code>series</code> for irrigated and non-irrigated condition.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.6.12" id="soildb-2612-2022-01-07">soilDB 2.6.12 (2022-01-07)<small>2022-01-08</small><a class="anchor" aria-label="anchor" href="#soildb-2612-2022-01-07"></a></h2>
