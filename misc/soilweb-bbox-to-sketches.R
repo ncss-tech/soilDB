@@ -41,6 +41,14 @@ s <- SDA_query(sql)
 ## get OSD morphology + extended summaries 
 osd <- fetchOSD(unique(s$compname), extended = TRUE)
 
+
+## check out results
+str(osd, 1)
+
+
+
+
+
 ## convert horizon boundary distinctness -> vertical distance
 # see manual page
 osd$SPC$hzd <- hzDistinctnessCodeToOffset(
@@ -53,11 +61,11 @@ SoilTaxonomyDendrogram(
   osd$SPC, 
   y.offset = 0.4, 
   scaling.factor = 0.0135, 
-  cex.taxon.labels = 1, 
+  cex.taxon.labels = 0.75, 
+  cex.id = 0.66,
   width = 0.3, 
   name.style = 'center-center', 
-  plot.depth.axis = FALSE, 
-  hz.depths = TRUE, 
+  plot.depth.axis = TRUE, 
   hz.distinctness.offset = 'hzd'
 )
 
