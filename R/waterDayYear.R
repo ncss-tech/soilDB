@@ -47,7 +47,7 @@ waterDayYear <- function(d, end = "09-30", format = "%Y-%m-%d", tz = "") {
   
   # compute water "day" as days since start of water year
   # ideas from: https://stackoverflow.com/questions/48123049/create-day-index-based-on-water-year
-  water_day <- as.integer(difftime(d, lastWY, units = 'days'))
+  water_day <- as.integer(difftime(dLT, lastWY, units = 'days'))
   
   res <- data.frame(
     wy = water_year, 
