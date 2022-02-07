@@ -287,6 +287,7 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
 
   r <- terra::rast(tf)
   
+  ## DEB: not sure why, but resulting objects don't work correctly without this step
   # load raster object into memory
   terra::values(r) <- terra::values(r)
   
@@ -297,7 +298,10 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   # cleanup
   unlink(tf)
   
+  # make CRS explicit
   # EPSG:5070
+  crs(r) <- 'EPSG:5070'
+  
   return(r)
   
 }
