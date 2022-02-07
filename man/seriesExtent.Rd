@@ -50,7 +50,8 @@ if(requireNamespace("curl") &
   # graphical comparison
   par(mar = c(1, 1 , 1, 3))
   plot(y, axes = FALSE)
-  plot(x, add = TRUE)
+  # no fill color
+  plot(x['series'], add = TRUE, col = NA)
   
   
 }

@@ -46,7 +46,8 @@
 #'   # graphical comparison
 #'   par(mar = c(1, 1 , 1, 3))
 #'   plot(y, axes = FALSE)
-#'   plot(x, add = TRUE)
+#'   # no fill color
+#'   plot(x['series'], add = TRUE, col = NA)
 #'   
 #'   
 #' }
@@ -136,6 +137,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   
   x <- terra::rast(tf)
   
+  ## DEB: not sure why, but some terra functions don't work correctly without this step
   # load all values into memory
   terra::values(x) <- terra::values(x)
   
@@ -145,7 +147,9 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   # cleanup
   unlink(tf)
   
-  # EPSG:5070
+  # make CRS explicit
+  crs(x) <- 'EPSG:5070'
+  
   return(x)
 }
 
