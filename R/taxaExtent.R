@@ -300,6 +300,5 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   # EPSG:5070
   return(r)
   
-  return(res)
 }
 
