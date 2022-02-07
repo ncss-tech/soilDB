@@ -150,11 +150,20 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     # get rat
     rat <- read.csv(var.spec$rat, stringsAsFactors = FALSE)
     
-    # rename ID column
+    # the cell value / ID column is always the 2nd colum
+    # name it for reference later
     names(rat)[2] <- 'ID'
     
-    # set categories
-    levels(r) <- rat[,2:1]
+    ## TODO: is it appropriate to set ALL levels, or just those present?
+    ##       * the raster-based version set only existing levels
+    ##       * there may be more than ID, code in the RAT: see texture RATS
+    
+    # re-order columns by name
+    # there may be > 2 columns (hex colors, etc.)
+    col.names <- c('ID', names(rat)[-2])
+    
+    # set categories in new order
+    levels(r) <- rat[, col.names]
   }
   
   return(r)
