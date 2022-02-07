@@ -148,7 +148,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   unlink(tf)
   
   # make CRS explicit
-  crs(x) <- 'EPSG:5070'
+  terra::crs(x) <- 'EPSG:5070'
   
   return(x)
 }

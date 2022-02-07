@@ -299,7 +299,7 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   unlink(tf)
   
   # make CRS explicit
-  crs(r) <- 'EPSG:5070'
+  terra::crs(r) <- 'EPSG:5070'
   
   return(r)
   
