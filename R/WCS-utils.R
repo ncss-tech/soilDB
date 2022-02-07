@@ -114,7 +114,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   crs <- '+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'
   
   # transform bounding polygon to WCS CRS
-  if (inherits(p, 'sf')){
+  # could be either, 
+  # st_bbox is commonly converted to 'sfc'
+  if (inherits(p, 'sfc') | inherits(p, 'sf')){
     
     p <- sf::st_transform(p, crs = crs)
     e.native <- sf::st_bbox(p)
