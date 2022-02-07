@@ -1,4 +1,7 @@
-test_that("mukey.wcs works", {
+context("mukey.wcs() -- requires internet connection")
+
+
+test_that("works as expected", {
   
   skip_if_offline()
   
@@ -9,7 +12,8 @@ test_that("mukey.wcs works", {
   expect_true(inherits(WCS_details("mukey"), 'data.frame'))
 
   suppressWarnings({
-
+    
+    # 30m grid
     x <- mukey.wcs(aoi = list(aoi = c(-114.16, 47.655, -114.155, 47.66),
                               crs = 'EPSG:4326'),
                    db = 'gnatsgo', quiet = TRUE)
@@ -17,5 +21,16 @@ test_that("mukey.wcs works", {
   })
   
   expect_true(inherits(x, 'SpatRaster') || inherits(x, 'try-error'))
+
+  if(inherits(x, 'SpatRaster')) {
+    
+    # expected dimensions
+    expect_true(all(dim(x) == c(20, 16, 1)))
+    
+    # must have a RAT
+    expect_true(!is.null(terra::levels(x)))
+    
+  }
+  
 })
 

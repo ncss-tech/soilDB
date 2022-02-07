@@ -1,4 +1,6 @@
-test_that("ISSR800.wcs works", {
+context("ISSR800.wcs() -- requires internet connection")
+
+test_that("works as expected", {
   
   skip_if_offline()
   
@@ -8,8 +10,8 @@ test_that("ISSR800.wcs works", {
   
   expect_true(inherits(WCS_details("ISSR800"), 'data.frame'))
   
-  x <-
-    ISSR800.wcs(
+  # 800m grid
+  x <- ISSR800.wcs(
       aoi = list(aoi = c(-114.16, 47.6,-114.15, 47.7),
                  crs = 'EPSG:4326'),
       var = 'paws',
@@ -17,18 +19,62 @@ test_that("ISSR800.wcs works", {
     )
   
   expect_true(inherits(x, 'SpatRaster') || inherits(x, 'try-error'))
+  
+  # if it downloaded
+  if(inherits(x, 'SpatRaster')) {
+    
+    # expected dimensions
+    expect_true(all(dim(x) == c(14, 4, 1)))
+    
+    # no RAT
+    expect_true(is.null(terra::cats(x)[[1]]))
+  }
+  
+})
 
-  x2 <- ISSR800.wcs(
+
+test_that("categorical data", {
+  
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  x <- NULL
+    
+  # 800m grid
+  x <- ISSR800.wcs(
       aoi = list(aoi = c(-114.16, 47.6,-114.15, 47.7),
                  crs = 'EPSG:4326'),
-      var = 'suborder',
+      var = 'texture_2550cm',
       quiet = TRUE
     )
   
-  ## DEB: disabling for now, there is no guaranteed result
   
-  # expect_true(inherits(x2, 'SpatRaster') || inherits(x2, 'try-error'))
-  # if (!inherits(x2, 'try-error')) {
-  #   expect_equal(nrow(terra::cats(x2)[[1]]), 66)
-  # }
+  expect_true(inherits(x, 'SpatRaster') || inherits(x, 'try-error'))
+  
+  # if it downloaded
+  if(inherits(x, 'SpatRaster')) {
+    # expected dimensions
+    expect_true(all(dim(x) == c(14, 4, 1)))
+    
+    # there must be a RAT
+    expect_true(!is.null(terra::levels(x)))
+    expect_equal(colnames(terra::cats(x)[[1]]), c('ID','class','hex','names'))
+  }
+  
+  x2 <- ISSR800.wcs(
+    aoi = list(aoi = c(-114.16, 47.6,-114.15, 47.7),
+               crs = 'EPSG:4326'),
+    var = 'suborder',
+    quiet = TRUE
+  )
+  
+  expect_true(inherits(x2, 'SpatRaster') || inherits(x2, 'try-error'))
+  
+  if (!inherits(x2, 'try-error')) {
+    expect_equal(colnames(terra::cats(x2)[[1]]), c('ID', 'suborder'))
+  }
 })
+
+
+
