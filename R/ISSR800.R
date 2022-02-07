@@ -154,16 +154,23 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     # name it for reference later
     names(rat)[2] <- 'ID'
     
-    ## TODO: is it appropriate to set ALL levels, or just those present?
-    ##       * the raster-based version set only existing levels
-    ##       * there may be more than ID, code in the RAT: see texture RATS
+    ## TODO: changes since previous version
+    ##         * the raster-based version set only existing levels
+    ##         * there may be more than ID, code in the RAT: see texture RATS
+    ##         * very large RATs with mostly un-used levels (series name) will be a problem
     
     # re-order columns by name
     # there may be > 2 columns (hex colors, etc.)
     col.names <- c('ID', names(rat)[-2])
     
-    # set categories in new order
-    levels(r) <- rat[, col.names]
+    # unique cell values
+    u.values <- terra::unique(r)[[1]]
+    
+    # index those categories present in r
+    cat.idx <- which(rat$ID %in% u.values)
+    
+    # register categories in new order
+    levels(r) <- rat[cat.idx, col.names]
   }
   
   return(r)
