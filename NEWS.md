@@ -1,3 +1,6 @@
+# soilDB 2.6.14 (2022-02-09)
+ * `fetchNASIS(from = 'pedons')` now correctly returns `earthcovkind1` and `earthcovkind2`
+
 # soilDB 2.6.13 (2022-01-29)
  * `fetchSDA_spatial` now supports `by.col` `"areaname"`, `"mlraoffice"`, and `"mouagencyresp"`; thanks to suggestion by Jay Skovlin
  * `fetchNASIS` fix for multiple site observation records with surface fragments; thanks to bug report from Brianna Wegner
