@@ -37,9 +37,8 @@
 #'   # get physical properties for points correlated as taxonomic subgroup "Typic Argialbolls"
 #'   fetchLDM(x= "Typic Argialbolls", what = "corr_taxsubgrp", tables = "lab_physical_properties")
 #'
-#'   # fetch by area_code (must be a soil survey area code for now; and be querying against SDA (dsn=NULL)
-#'   #                     SSA is the lowest-level area that is always populated)
-#'   fetchLDM("CA630", what = "area_code")
+#'   # fetch by area_code (must be a non-mlra soil survey area code for now)
+#'   #                     SSA is the lowest-level area that is always populated)   fetchLDM("CA630", what = "area_code")
 #' }
 #'
 #' }
