@@ -2,7 +2,11 @@
 library(soilDB)
 
 # or some other vector of table names
-table_names <- get_NASIS_table_name_by_purpose()
+# table_names <- get_NASIS_table_name_by_purpose()
+table_names <- DBI::dbListTables({con <- soilDB::NASIS()})
+table_names <- table_names[grep("_SS|_State|_0|NONDEL|View", table_names, invert = TRUE)]
+table_names <- table_names[1:346]
+DBI::dbDisconnect(con)
 
 # get all column names
 table_colnames <- lapply(table_names, function(x) colnames(.dump_NASIS_table(x)))
@@ -19,7 +23,7 @@ table_fkeys <- sapply(table_colnames, function(x) {
   })
 
 table_pkeys <- sapply(table_colnames, function(x) {
-  idx <- which(grepl("iid$", x) & !grepl("dbiid", x))
+  idx <- which(grepl("iid$", x) & !grepl("dbiid|tbl_", x))
   if(length(idx) == 0) return(NA)
   x[idx[length(idx)]]
 })
@@ -41,7 +45,17 @@ cardinal_tables <- c(
   "othvegclass",
   "geomorfeattype",
   "project",
-  "techsoilservice"
+  "techsoilservice",
+  "calculation", 
+  "customchoicelistset", 
+  "domaingroup", 
+  "editsetup", 
+  "form", 
+  "nasisgroupmember",
+  "othvegclasstype", 
+  "query", 
+  "report",
+  "wsimportmap"
 )
 cardinal_fkeys <- c(
   "siteiid",
@@ -58,10 +72,20 @@ cardinal_fkeys <- c(
   "ovegcliid",
   "geomftiid",
   "projectiid",
-  "tssiid"
+  "tssiid",
+  "calc_iid", 
+  "customchoicelistsetiid", 
+  "domgrpiid", 
+  "edtsuiid", 
+  "formiid", 
+  "nasisgroupmember",
+  "ovegcltypiid", 
+  "qryiid", 
+  "rptiid",
+  "wsimportmapiid"
 )
 names(cardinal_fkeys) <- cardinal_tables
-
+# subset(NASIS_table_column_keys, fkey == "grpiidref") |> View()
 replace.idx <-  match(cardinal_tables, table_names)
 
 # these are "cardinal" iids, they come last in their respective tables, not first

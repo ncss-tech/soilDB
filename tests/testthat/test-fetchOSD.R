@@ -2,7 +2,7 @@ context("fetchOSD() -- requires internet connection")
 
 ## these are the elements of the list returned when extended=TRUE
 ## update here as-needed
-extended.table.names <<- c("SPC", "competing", "geog_assoc_soils" ,"geomcomp", "hillpos", "mtnpos", "terrace", "flats", "shape_across", "shape_down", "pmkind", "pmorigin", "mlra", "climate.annual", "climate.monthly", "soilweb.metadata")
+extended.table.names <<- c("SPC", "competing", "geog_assoc_soils" ,"geomcomp", "hillpos", "mtnpos", "terrace", "flats", "shape_across", "shape_down", "pmkind", "pmorigin", "mlra", "climate.annual", "climate.monthly", "NCCPI", "soilweb.metadata")
 
 test_that("fetchOSD() works", {
 
@@ -16,6 +16,10 @@ test_that("fetchOSD() works", {
 
   # standard request
   expect_true(inherits(x, 'SoilProfileCollection'))
+  
+  # all of the results should contain the search term
+  f <- grepl('sierra|cecil', x$id, ignore.case = TRUE)
+  expect_equal(all(f), TRUE)
 
 })
 
@@ -99,16 +103,4 @@ test_that("fetchOSD() returns reasonable data in extended mode", {
 # 
 # })
 
-
-test_that("fetchOSD() returns data associated with named series (sierra|cecil)", {
-
-  skip_if_offline()
-
-  skip_on_cran()
-
-  # all of the results should contain the search term
-  f <- grepl('sierra|cecil', x$id, ignore.case = TRUE)
-  expect_equal(all(f), TRUE)
-
-})
 

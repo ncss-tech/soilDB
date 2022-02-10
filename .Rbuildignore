@@ -13,3 +13,4 @@ README.Rmd
 ^revdep$
 ^_pkgdown\.yml$
 ^pkgdown$
+^CRAN-SUBMISSION$

@@ -74,6 +74,7 @@ test_that("categorical data", {
   if (!inherits(x2, 'try-error')) {
     expect_equal(colnames(terra::cats(x2)[[1]]), c('ID', 'suborder'))
   }
+
 })
 
 

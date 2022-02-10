@@ -85,6 +85,10 @@
 #'   \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
 #'   \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
 #'   \item{climate}{experimental climate summaries from PRISM stack (CONUS only)}
+#'   
+#'   \item{NCCPI}{select quantiles of NCCPI and Irrigated NCCPI, derived from the current SSURGO snapshot}
+#'   
+#'   
 #'   \item{metadata}{metadata associated with SoilWeb cached summaries}
 #' } 
 #' 
@@ -357,6 +361,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	    mlra=res$mlra,
 	    climate.annual=annual.data,
 	    climate.monthly=monthly.data,
+	    NCCPI = res$nccpi,
 	    soilweb.metadata=res$metadata
 	  )
 	  

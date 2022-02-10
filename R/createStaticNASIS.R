@@ -37,6 +37,9 @@
 
   # construct query and return result
   q <- sprintf("SELECT %s FROM %s", paste(allcols, collapse = ", "), table_name)
+  
+  q <- gsub('\\brule\\b', '\"rule\"', q)
+  
   res <- dbQueryNASIS(con, q)
   
   if (is.null(columns)) {

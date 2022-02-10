@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.14</span>
       </span>
     </div>
 
@@ -44,7 +44,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get vegetation plot data from local NASIS database</h1>
-    <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/fetchVegdata.R" class="external-link"><code>R/fetchVegdata.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/fetchVegdata.R" class="external-link"><code>R/fetchVegdata.R</code></a>, <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/get_vegplot_data_from_NASIS_db.R" class="external-link"><code>R/get_vegplot_data_from_NASIS_db.R</code></a></small>
     <div class="hidden name"><code>fetchVegdata.Rd</code></div>
     </div>
 
@@ -55,6 +55,61 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">fetchVegdata</span><span class="op">(</span>
   SS <span class="op">=</span> <span class="cn">TRUE</span>,
+  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">get_vegplot_from_NASIS_db</span><span class="op">(</span>
+  SS <span class="op">=</span> <span class="cn">TRUE</span>,
+  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">get_vegplot_location_from_NASIS_db</span><span class="op">(</span>
+  SS <span class="op">=</span> <span class="cn">TRUE</span>,
+  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">get_vegplot_trhi_from_NASIS_db</span><span class="op">(</span>
+  SS <span class="op">=</span> <span class="cn">TRUE</span>,
+  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">get_vegplot_species_from_NASIS_db</span><span class="op">(</span>
+  SS <span class="op">=</span> <span class="cn">TRUE</span>,
+  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">get_vegplot_transect_from_NASIS_db</span><span class="op">(</span>
+  SS <span class="op">=</span> <span class="cn">TRUE</span>,
+  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">get_vegplot_transpecies_from_NASIS_db</span><span class="op">(</span>
+  SS <span class="op">=</span> <span class="cn">TRUE</span>,
+  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">get_vegplot_tree_si_summary_from_NASIS_db</span><span class="op">(</span>
+  SS <span class="op">=</span> <span class="cn">TRUE</span>,
+  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">get_vegplot_tree_si_details_from_NASIS_db</span><span class="op">(</span>
+  SS <span class="op">=</span> <span class="cn">TRUE</span>,
+  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">get_vegplot_textnote_from_NASIS_db</span><span class="op">(</span>
+  SS <span class="op">=</span> <span class="cn">TRUE</span>,
+  fixLineEndings <span class="op">=</span> <span class="cn">TRUE</span>,
   stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
   dsn <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
@@ -72,6 +127,8 @@ coded).</p></dd>
 <dt>dsn</dt>
 <dd><p>Optional: path to local SQLite database containing NASIS
 table structure; default: <code>NULL</code></p></dd>
+<dt>fixLineEndings</dt>
+<dd><p>Replace <code>'\r\n'</code> with <code>'\n'</code>; Default: <code>TRUE</code></p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -90,7 +147,7 @@ table structure; default: <code>NULL</code></p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>
