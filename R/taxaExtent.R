@@ -192,10 +192,10 @@
 #'   x <- taxaExtent(taxa, level = 'subgroup', formativeElement = TRUE)
 #'   
 #'   # coarsen for faster plotting
-#'   a <- terra::aggregate(x, fact = 5)
+#'   a <- terra::aggregate(x, fact = 5, na.rm = TRUE)
 #'   
 #'   # quick evaluation of the result
-#'   plot(a, axes = FALSE)
+#'   terra::plot(a, axes = FALSE)
 #' }
 #' }
 #' 
@@ -298,7 +298,7 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   # cleanup
   unlink(tf)
   
-  # make CRS explicit
+  # # make CRS explicit
   terra::crs(r) <- 'EPSG:5070'
   
   return(r)
