@@ -351,13 +351,14 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
                                                  dsn = NULL) {
 
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
-  ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
+  ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate, repecosite, ecositepnm, ecositesnm, ecositetnm, ecositeidnew, ecositelrrnew,
+  ecositemlranew, ecositelrunew, ecositenumbernew, ecositenasisiid
 
   FROM coecosite_View_1 AS coecosite
-
   INNER JOIN ecologicalsite AS es ON es.ecositeiid = coecosite.ecositeiidref
 
   ORDER BY coiid;"
+  #   LEFT JOIN coecositehist_View_1 AS coeh ON coecosite.coecositeiid = coeh.coecositeiidref
 
   channel <- dbConnectNASIS(dsn)
 
