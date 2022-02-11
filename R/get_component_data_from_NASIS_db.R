@@ -351,7 +351,7 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
                                                  dsn = NULL) {
 
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
-  ecositeorigin, ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
+  ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
 
   FROM coecosite_View_1 AS coecosite
 
