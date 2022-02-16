@@ -423,6 +423,20 @@ LEFT OUTER JOIN (
   if (SS == FALSE) {
     q.hz.dessuf <- gsub(pattern = '_View_1', replacement = '', x = q.hz.dessuf, fixed = TRUE)
   }
+  
+  # get siteaoverlap data
+  q.siteaoverlap <- "SELECT siteaoverlap_View_1.siteiidref as siteiid, 
+                        siteaoverlap_View_1.seqnum,                         
+			area.areasymbol, area.areaname, areatype.areatypename
+                  FROM siteaoverlap_View_1
+                    INNER JOIN area ON area.areaiid = siteaoverlap_View_1.areaiidref
+		                INNER JOIN areatype ON areatype.areatypeiid = area.areatypeiidref
+                  ORDER BY siteiidref ASC;"
+  
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q.siteaoverlap <- gsub(pattern = '_View_1', replacement = '', x = q.siteaoverlap, fixed = TRUE)
+  }  
 
   channel <- dbConnectNASIS(dsn)
 
@@ -448,7 +462,8 @@ LEFT OUTER JOIN (
   d.sitepm <- dbQueryNASIS(channel, q.sitepm, close = FALSE)
   d.structure <- dbQueryNASIS(channel, q.structure, close = FALSE)
   d.hz.desgn <- dbQueryNASIS(channel, q.hz.desgn, close = FALSE)
-  d.hz.dessuf <- dbQueryNASIS(channel, q.hz.dessuf)
+  d.hz.dessuf <- dbQueryNASIS(channel, q.hz.dessuf, close = FALSE)
+  d.siteaoverlap <- dbQueryNASIS(channel, q.siteaoverlap, close = FALSE)
 
 	## uncode the ones that need that here
 	d.diagnostic <- uncode(d.diagnostic, stringsAsFactors = stringsAsFactors, dsn = dsn)
@@ -565,6 +580,7 @@ LEFT OUTER JOIN (
 
 	# return a list of results
 	return(list(ecositehistory = d.ecosite,
+	            siteaoverlap = d.siteaoverlap,
 							diagnostic = d.diagnostic,
 							diagHzBoolean = d.diag.boolean,
 							restriction = d.restriction,
