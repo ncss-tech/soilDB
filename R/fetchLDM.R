@@ -75,30 +75,49 @@ fetchLDM <- function(x = NULL,
     # otherwise we are using SDA_query
     con <- NULL
   }
-
+  
+  lab_combine_nasis_ncss <- c("pedon_key", "site_key", "pedlabsampnum", "pedoniid", "upedonid", 
+                              "labdatadescflag", "priority", "priority2", "samp_name", "samp_class_type", 
+                              "samp_classdate", "samp_classification_name", "samp_taxorder", 
+                              "samp_taxsuborder", "samp_taxgrtgroup", "samp_taxsubgrp", "samp_taxpartsize", 
+                              "samp_taxpartsizemod", "samp_taxceactcl", "samp_taxreaction", 
+                              "samp_taxtempcl", "samp_taxmoistscl", "samp_taxtempregime", "samp_taxminalogy", 
+                              "samp_taxother", "samp_osdtypelocflag", "corr_name", "corr_class_type", 
+                              "corr_classdate", "corr_classification_name", "corr_taxorder", 
+                              "corr_taxsuborder", "corr_taxgrtgroup", "corr_taxsubgrp", "corr_taxpartsize", 
+                              "corr_taxpartsizemod", "corr_taxceactcl", "corr_taxreaction", 
+                              "corr_taxtempcl", "corr_taxmoistscl", "corr_taxtempregime", "corr_taxminalogy", 
+                              "corr_taxother", "corr_osdtypelocflag", "SSL_name", "SSL_class_type", 
+                              "SSL_classdate", "SSL_classification_name", "SSL_taxorder", "SSL_taxsuborder", 
+                              "SSL_taxgrtgroup", "SSL_taxsubgrp", "SSL_taxpartsize", "SSL_taxpartsizemod", 
+                              "SSL_taxceactcl", "SSL_taxreaction", "SSL_taxtempcl", "SSL_taxmoistscl", 
+                              "SSL_taxtempregime", "SSL_taxminalogy", "SSL_taxother", "SSL_osdtypelocflag", 
+                              "siteiid", "usiteid", "site_obsdate", "latitude_decimal_degrees", 
+                              "longitude_decimal_degrees", "country_key", "state_key", "county_key", 
+                              "mlra_key", "ssa_key", "npark_key", "nforest_key", "note", "samp_taxfamhahatmatcl", 
+                              "corr_taxfamhahatmatcl", "SSL_taxfamhahatmatcl", "pedobjupdate", 
+                              "siteobjupdate")
+  lab_area <- c("area_key", "area_type", "area_sub_type", "parent_area_key", 
+                "parent_org_key", "area_code", "area_name", "area_abbrev", "area_desc")
+  lab_webmap <- c("wmiid", "Series", "User_pedon_ID", "pedon_Key", "peiid", "Soil_Classification")
+  lab_site <- c("site_key", "user_site_id")
+  lab_pedon <- c("pedon_key", "pedlabsampnum", "observation_date")
   if (!is.null(x)) {
-    what <- match.arg(what, choices = c("pedon_key", "site_key", "pedlabsampnum", "pedoniid", "upedonid",
-                                      "labdatadescflag", "priority", "priority2", "samp_name", "samp_class_type",
-                                      "samp_classdate", "samp_classification_name", "samp_taxorder",
-                                      "samp_taxsuborder", "samp_taxgrtgroup", "samp_taxsubgrp", "samp_taxpartsize",
-                                      "samp_taxpartsizemod", "samp_taxceactcl", "samp_taxreaction",
-                                      "samp_taxtempcl", "samp_taxmoistscl", "samp_taxtempregime", "samp_taxminalogy",
-                                      "samp_taxother", "samp_osdtypelocflag", "corr_name", "corr_class_type",
-                                      "corr_classdate", "corr_classification_name", "corr_taxorder",
-                                      "corr_taxsuborder", "corr_taxgrtgroup", "corr_taxsubgrp", "corr_taxpartsize",
-                                      "corr_taxpartsizemod", "corr_taxceactcl", "corr_taxreaction",
-                                      "corr_taxtempcl", "corr_taxmoistscl", "corr_taxtempregime", "corr_taxminalogy",
-                                      "corr_taxother", "corr_osdtypelocflag", "SSL_name", "SSL_class_type",
-                                      "SSL_classdate", "SSL_classification_name", "SSL_taxorder", "SSL_taxsuborder",
-                                      "SSL_taxgrtgroup", "SSL_taxsubgrp", "SSL_taxpartsize", "SSL_taxpartsizemod",
-                                      "SSL_taxceactcl", "SSL_taxreaction", "SSL_taxtempcl", "SSL_taxmoistscl",
-                                      "SSL_taxtempregime", "SSL_taxminalogy", "SSL_taxother", "SSL_osdtypelocflag",
-                                      "siteiid", "usiteid", "site_obsdate", "latitude_decimal_degrees",
-                                      "longitude_decimal_degrees", "country_key", "state_key", "county_key",
-                                      "mlra_key", "ssa_key", "npark_key", "nforest_key", "note", "samp_taxfamhahatmatcl",
-                                      "corr_taxfamhahatmatcl", "SSL_taxfamhahatmatcl", "pedobjupdate",
-                                      "siteobjupdate", "area_key", "area_type", "area_sub_type", "parent_area_key",
-                                      "parent_org_key", "area_code", "area_name", "area_abbrev", "area_desc"))
+    if (what %in% lab_combine_nasis_ncss)
+      what <- paste0("lab_combine_nasis_ncss.", what)
+    if (what %in% lab_area)
+      what <- paste0("lab_area.", what)
+    if (what %in% lab_webmap)
+      what <- paste0("lab_webmap.", what)
+    if (what %in% lab_site)
+      what <- paste0("lab_site.", what)
+    if (what %in% lab_pedon)
+      what <- paste0("lab_pedon.", what)
+    what <- match.arg(what, choices = c(paste0("lab_combine_nasis_ncss.", lab_combine_nasis_ncss), 
+                                        paste0("lab_area.", lab_area),
+                                        paste0("lab_webmap.", lab_webmap),
+                                        paste0("lab_site.", lab_site),
+                                        paste0("lab_pedon.", lab_pedon)))
   }
   # TODO: set up arbitrary area queries by putting area table into groups:
   #       country, state, county, mlra, ssa, npark, nforest
