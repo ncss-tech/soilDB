@@ -77,33 +77,11 @@ uncode <- function(df,
                    stringsAsFactors = default.stringsAsFactors(),
                    dsn = NULL) {
 
-  get_metadata <- function() {
-
-    q <- "SELECT mdd.DomainID, DomainName, ChoiceSequence, ChoiceValue, ChoiceName,
-                 ChoiceLabel, ColumnPhysicalName, ColumnLogicalName, ChoiceObsolete, ChoiceDescription
-          FROM MetadataDomainDetail mdd
-            INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
-            INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName
-                        FROM MetadataTableColumn GROUP BY DomainID, ColumnPhysicalName) mtc ON mtc.DomainID = mdd.DomainID
-          ORDER BY mdd.DomainID, ColumnPhysicalName, ChoiceValue;"
-
-    channel <- dbConnectNASIS(dsn)
-
-    if (inherits(channel, 'try-error'))
-      return(data.frame())
-
-    # exec query
-    d <- dbQueryNASIS(channel, q)
-
-    # done
-    return(d)
-  }
-
   # load current metadata table
   if (db == "NASIS") {
-    metadata <- get_metadata()
+    metadata <- .get_NASIS_metadata(dsn = dsn)
   } else {
-      load(system.file("data/metadata.rda", package = "soilDB")[1])
+    load(system.file("data/metadata.rda", package = "soilDB")[1])
   }
 
   # unique set of possible columns that will need replacement
@@ -159,6 +137,28 @@ uncode <- function(df,
   }
 
   return(df)
+}
+
+.get_NASIS_metadata <- function(dsn = NULL) {
+  
+  q <- "SELECT mdd.DomainID, DomainName, ChoiceSequence, ChoiceValue, ChoiceName,
+                 ChoiceLabel, ColumnPhysicalName, ColumnLogicalName, ChoiceObsolete, ChoiceDescription
+          FROM MetadataDomainDetail mdd
+            INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
+            INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName
+                        FROM MetadataTableColumn GROUP BY DomainID, ColumnPhysicalName) mtc ON mtc.DomainID = mdd.DomainID
+          ORDER BY mdd.DomainID, ColumnPhysicalName, ChoiceValue;"
+  
+  channel <- dbConnectNASIS(dsn)
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
+  # exec query
+  d <- dbQueryNASIS(channel, q)
+  
+  # done
+  return(d)
 }
 
 # convenient, inverted version of uncode()
