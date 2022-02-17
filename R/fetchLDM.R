@@ -46,7 +46,7 @@
 #' @importFrom data.table rbindlist
 fetchLDM <- function(x = NULL,
            dsn = NULL,
-           what = "lab_combine_nasis_ncss.pedlabsampnum",
+           what = "pedlabsampnum",
            bycol = "pedon_key",
            tables = c(
              "lab_physical_properties",

@@ -7,7 +7,7 @@
 fetchLDM(
   x = NULL,
   dsn = NULL,
-  what = "lab_combine_nasis_ncss.pedlabsampnum",
+  what = "pedlabsampnum",
   bycol = "pedon_key",
   tables = c("lab_physical_properties", "lab_chemical_properties",
     "lab_calculations_including_estimates_and_default_values", "lab_rosetta_Key"),
