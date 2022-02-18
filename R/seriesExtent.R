@@ -139,7 +139,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   x <- terra::rast(tf)
   
   # load all values into memory
-  terra::values(r) <- terra::values(r)
+  terra::values(x) <- terra::values(x)
   
   # remove tempfile 
   unlink(tf)
