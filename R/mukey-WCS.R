@@ -138,10 +138,9 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
 
   # build RAT
   uids <- terra::unique(r)[,1]
-  rat <- data.frame(value = 1:length(uids), 
+  rat <- data.frame(value = uids, 
                     gSSURGO.map.unit.keys = uids,
                     ID = uids)
-  r <- terra::classify(r, as.matrix(data.frame(uids, 1:length(uids))))
   r <- terra::categories(r, layer = 1, rat)
   
   # set layer name in object
