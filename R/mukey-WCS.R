@@ -132,7 +132,15 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
 
   # load all values into memory
   terra::values(r) <- terra::values(r)
+  
+  # remove tempfile 
+  unlink(tf)
 
+  ## something isn't right here..
+  
+  # build RAT
+  r <- terra::categories(r, layer = 1, value = terra::unique(r))
+  
   # set layer name in object
   names(r) <- var.spec$desc
   
