@@ -136,8 +136,13 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   }
   
   # init SpatRaster
-  # leave as a pointer to temp file
   x <- terra::rast(tf)
+  
+  # load all values into memory
+  terra::values(r) <- terra::values(r)
+  
+  # remove tempfile 
+  unlink(tf)
   
   # transfer layer name
   names(x) <- gsub(pattern='_', replacement=' ', x = s, fixed = TRUE)

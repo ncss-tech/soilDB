@@ -286,8 +286,13 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   }
 
   # init SpatRaster
-  # leave as a pointer to temp file
   r <- terra::rast(tf)
+  
+  # load all values into memory
+  terra::values(r) <- terra::values(r)
+  
+  # remove tempfile 
+  unlink(tf)
   
   # transfer layer name
   # conversion of '_' -> ' ' only meaningful in taxon query
