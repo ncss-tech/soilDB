@@ -136,13 +136,16 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
   # remove tempfile 
   unlink(tf)
 
-  ## something isn't right here..
-  
   # build RAT
-  r <- terra::categories(r, layer = 1, value = terra::unique(r))
+  uids <- terra::unique(r)[,1]
+  rat <- data.frame(value = 1:length(uids), 
+                    gSSURGO.map.unit.keys = uids,
+                    ID = uids)
+  r <- terra::classify(r, as.matrix(data.frame(uids, 1:length(uids))))
+  r <- terra::categories(r, layer = 1, rat)
   
   # set layer name in object
-  names(r) <- var.spec$desc
+  names(r) <- 'gSSURGO.map.unit.keys'
   
   # and as an attribute
   attr(r, 'layer name') <- var.spec$desc
