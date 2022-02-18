@@ -1,3 +1,11 @@
+# soilDB 2.6.14 (2022-02-11)
+ * `waterYearDay()` bug fix for more specific (sub-daily) date-time formats
+ * `fetchSCAN()` better handling of empty results in multi-site queries
+ * Updates to queries, metadata and sample datasets for NASIS 7.4.1 Database Model 
+   - `fetchNASIS("pedons")` no longer includes `pmweathering`
+   - `fetchNASIS("components")` no longer includes `ecositeorigin`
+   - New Component Ecological Site attributes added
+ 
 # soilDB 2.6.13 (2022-01-29)
  * `fetchSDA_spatial` now supports `by.col` `"areaname"`, `"mlraoffice"`, and `"mouagencyresp"`; thanks to suggestion by Jay Skovlin
  * `fetchNASIS` fix for multiple site observation records with surface fragments; thanks to bug report from Brianna Wegner

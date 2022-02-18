@@ -86,22 +86,22 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
   # uncode metadata domains
   if (nrow(d) > 0) {
     d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
-
-    if (sum(complete.cases(chs)) == 0) {
+    
+    ldx <- !d$coiid %in% chs$coiidref
+    if (!any(ldx)) {
       chs <- chs[1:nrow(d),]
       chs$coiidref <- d$coiid
     } else {
-      ldx <- !d$coiid %in% chs$coiidref
-      chs_null <- chs[0,][1:sum(ldx),]
+      chs_null <- chs[0, ][1:sum(ldx), ]
       chs_null$coiidref <- d$coiid[ldx]
       chs <- rbind(chs, chs_null)
-
-      # handle NA for totals
-      if (nullFragsAreZero) {
-        chs[is.na(chs)] <- 0
-      } 
-      d <- merge(d, chs, by.x = "coiid", by.y = "coiidref", all.x = TRUE, sort = FALSE)
     }
+    
+    # handle NA for totals
+    if (nullFragsAreZero) {
+      chs[is.na(chs)] <- 0
+    } 
+    d <- merge(d, chs, by.x = "coiid", by.y = "coiidref", all.x = TRUE, sort = FALSE)
   } else {
     d <- cbind(d, chs[0,])
   }
@@ -351,13 +351,14 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
                                                  dsn = NULL) {
 
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
-  ecositeorigin, ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate
+  ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate, repecosite, ecositepnm, ecositesnm, ecositetnm, ecositeidnew, ecositelrrnew,
+  ecositemlranew, ecositelrunew, ecositenumbernew, ecositenasisiid
 
   FROM coecosite_View_1 AS coecosite
-
   INNER JOIN ecologicalsite AS es ON es.ecositeiid = coecosite.ecositeiidref
 
   ORDER BY coiid;"
+  #   LEFT JOIN coecositehist_View_1 AS coeh ON coecosite.coecositeiid = coeh.coecositeiidref
 
   channel <- dbConnectNASIS(dsn)
 

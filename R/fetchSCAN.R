@@ -80,6 +80,8 @@
 
 # iterate over a vector of SCAN site codes, returning basic metadata
 # site.code: vector of SCAN site codes
+#' @rdname fetchSCAN
+#' @export
 SCAN_sensor_metadata <- function(site.code) {
 
   # check for required packages
@@ -95,7 +97,9 @@ SCAN_sensor_metadata <- function(site.code) {
 
 ## https://github.com/ncss-tech/soilDB/issues/61
 # site.code: vector of SCAN site codes
-SCAN_site_metadata <- function(site.code) {
+#' @rdname fetchSCAN
+#' @export
+SCAN_site_metadata <- function(site.code = NULL) {
 
   # hack to please R CMD check
   SCAN_SNOTEL_metadata <- NULL
@@ -103,8 +107,14 @@ SCAN_site_metadata <- function(site.code) {
   # cached copy available in soilDB::SCAN_SNOTEL_metadata
   load(system.file("data/SCAN_SNOTEL_metadata.rda", package="soilDB")[1])
 
+  if (is.null(site.code)) {
+    idx <- 1:nrow(SCAN_SNOTEL_metadata)
+  } else {
+    idx <- which(SCAN_SNOTEL_metadata$Site %in% site.code)
+  }
+  
   # subset requested codes
-  res <- SCAN_SNOTEL_metadata[which(SCAN_SNOTEL_metadata$Site %in% site.code), ]
+  res <- SCAN_SNOTEL_metadata[idx, ]
 
   return(res)
 }
@@ -121,7 +131,7 @@ SCAN_site_metadata <- function(site.code) {
 #' See \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{the fetchSCAN tutorial for details}. These functions require the `httr` and `rvest` libraries.
 #'
 #' @aliases fetchSCAN SCAN_sensor_metadata SCAN_site_metadata
-#' @param site.code a vector of site codes
+#' @param site.code a vector of site codes. If `NULL` `SCAN_site_metadata()` returns metadata for all SCAN sites.
 #' @param year a vector of years
 #' @param report report name, single value only
 #' @param req list of SCAN request parameters, for backwards-compatibility only
@@ -168,7 +178,7 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
 
   # add metadata from cached table in soilDB
   m <- SCAN_site_metadata(site.code)
-  res[['metadata']] <- m
+  site.code <- m$Site
 
   # all possible combinations of site codes and year | single report type
   g <- expand.grid(s = site.code, y = year, r = report)
@@ -196,7 +206,14 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     for(sensor.i in sensors) {
       site.i <- as.character(i$sitenum)
       year.i <- as.character(i$year)
-      d.list[[sensor.i]][[site.i]][[year.i]] <- .formatSCAN_soil_sensor_suites(d, code = sensor.i)
+      if (is.null(d)) {
+        res <- data.frame(Site = integer(0), Date = as.Date(NULL), 
+                          water_year = numeric(0), water_day = integer(0), value = numeric(0), 
+                          depth = numeric(0), sensor.id = integer(0), row.names = integer(0))
+      } else {
+        res <- .formatSCAN_soil_sensor_suites(d, code = sensor.i)
+      }
+      d.list[[sensor.i]][[site.i]][[year.i]] <- res
     }
   }
 
@@ -215,7 +232,8 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   res.size <- round(object.size(res) / 1024 / 1024, 2)
   res.rows <- sum(sapply(res, nrow), na.rm=TRUE)
   message(paste(res.rows, ' records (', res.size, ' Mb transferred)', sep=''))
-
+  
+  res[['metadata']] <- m
   return(res)
 }
 
@@ -358,12 +376,24 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
 
   # NOTE: we have already read-in the first 3 lines above, therefore we don't need to skip lines here
   # read as CSV, skipping junk + headers, accommodating white-space and NA values encoded as -99.9
-  x <- try(read.table(tc, header=FALSE, stringsAsFactors=FALSE, sep=',', quote='', strip.white=TRUE, na.strings='-99.9', comment.char=''), silent = TRUE)
-
+  x <- try(read.table(
+    tc,
+    header = FALSE,
+    stringsAsFactors = FALSE,
+    sep = ',',
+    quote = '',
+    strip.white = TRUE,
+    na.strings = '-99.9',
+    comment.char = ''
+  ), silent = TRUE)
+  
   # catch errors
   if(class(x) == 'try-error') {
     close.connection(tc)
-    x <- NULL
+    
+    message("Error for site: ", req$sitenum, "[", attr(x, 'condition')[["message"]], "]")
+    
+    x <- as.data.frame(matrix(ncol = 12, nrow = 0))
     return(x)
   }
 
