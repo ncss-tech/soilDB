@@ -135,17 +135,12 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
     return(NULL)
   }
   
+  # init SpatRaster
+  # leave as a pointer to temp file
   x <- terra::rast(tf)
-  
-  ## DEB: not sure why, but some terra functions don't work correctly without this step
-  # load all values into memory
-  terra::values(x) <- terra::values(x)
   
   # transfer layer name
   names(x) <- gsub(pattern='_', replacement=' ', x = s, fixed = TRUE)
-  
-  # cleanup
-  unlink(tf)
   
   # make CRS explicit
   terra::crs(x) <- 'EPSG:5070'

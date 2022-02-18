@@ -285,20 +285,15 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
     return(NULL)
   }
 
+  # init SpatRaster
+  # leave as a pointer to temp file
   r <- terra::rast(tf)
-  
-  ## DEB: not sure why, but some terra functions don't work correctly without this step
-  # load raster object into memory
-  terra::values(r) <- terra::values(r)
   
   # transfer layer name
   # conversion of '_' -> ' ' only meaningful in taxon query
   names(r) <- gsub(pattern='_', replacement=' ', x = x, fixed = TRUE)
   
-  # cleanup
-  unlink(tf)
-  
-  # # make CRS explicit
+  # make CRS explicit
   terra::crs(r) <- 'EPSG:5070'
   
   return(r)
