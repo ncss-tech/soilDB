@@ -37,7 +37,7 @@ fetchLDM(
 
 \item{prep_code}{Default: \code{"S"} and \code{""}. May also include one or more of: \code{"F"}, \code{"HM"}, \code{"HM_SK"} \code{"GP"}, \code{"M"}, \code{"N"}, or \code{"S"}}
 
-\item{analyzed_size_frac}{Default: \code{"<2 mm"} and \code{""}. May also include one or more of: \code{"<2 mm"}, \code{"0.02-0.05 mm"}, \code{"0.05-0.1 mm"}, \code{"1-2 mm"}, \code{"0.5-1 mm"}, \code{"0.25-0.5 mm"}, \code{"0.05-2 mm"}, \code{"0.02-2 mm"}, \code{"0.1-0.25 mm"}, \code{"<0.002 mm"}}
+\item{analyzed_size_frac}{Default: \code{"<2 mm"} and \code{""}. May also include one or more of: \code{"<0.002 mm"}, \code{"0.02-0.05 mm"}, \code{"0.05-0.1 mm"}, \code{"0.1-0.25 mm"}, \code{"0.25-0.5 mm"}, \code{"0.5-1 mm"}, \code{"1-2 mm"}, \code{"0.02-2 mm"}, \code{"0.05-2 mm"}}
 }
 \value{
 a \code{SoilProfileCollection} for a successful query, a \code{try-error} if no site/pedon locations can be found or \code{NULL} for an empty \code{lab_layer} (within sites/pedons) result

@@ -14,7 +14,7 @@
 #' @param ntries number of tries (times to halve `chunk.size`) before returning `NULL`; default `3`
 #' @param layer_type Default: `"horizon"`, `"layer"`, and `"reporting layer"`
 #' @param prep_code Default: `"S"` and `""`. May also include one or more of: `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
-#' @param analyzed_size_frac Default: `"<2 mm"` and `""`. May also include one or more of: `"<2 mm"`, `"0.02-0.05 mm"`, `"0.05-0.1 mm"`, `"1-2 mm"`, `"0.5-1 mm"`, `"0.25-0.5 mm"`, `"0.05-2 mm"`, `"0.02-2 mm"`, `"0.1-0.25 mm"`, `"<0.002 mm"`
+#' @param analyzed_size_frac Default: `"<2 mm"` and `""`. May also include one or more of: `"<0.002 mm"`, `"0.02-0.05 mm"`, `"0.05-0.1 mm"`, `"0.1-0.25 mm"`, `"0.25-0.5 mm"`, `"0.5-1 mm"`, `"1-2 mm"`, `"0.02-2 mm"`, `"0.05-2 mm"`
 #'
 #' @details If the `chunk.size` parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) `chunk.size` argument. This will be attempted up to 3 times before returning `NULL`
 #'
@@ -52,7 +52,8 @@ fetchLDM <- function(x = NULL,
              "lab_physical_properties",
              "lab_chemical_properties",
              "lab_calculations_including_estimates_and_default_values",
-             # "lab_major_and_trace_elements_and_oxides", # remove alternate prep/fractionated data from default set of tables
+             # # remove alternate prep/fractionated data from default set of tables
+             # "lab_major_and_trace_elements_and_oxides", 
              # "lab_mineralogy_glass_count",
              # "lab_xray_and_thermal",
              "lab_rosetta_Key"),
@@ -60,7 +61,7 @@ fetchLDM <- function(x = NULL,
            ntries = 3,
            layer_type = c("horizon","layer","reporting layer"),
            prep_code = c("S", ""), # , `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
-           analyzed_size_frac = c("<2 mm", "")#  optional: "0.02-0.05 mm", "0.05-0.1 mm", "1-2 mm", "0.5-1 mm", "0.25-0.5 mm", "0.05-2 mm", "0.02-2 mm", "0.1-0.25 mm", "<0.002 mm"
+           analyzed_size_frac = c("<2 mm", "")#  optional: "<0.002 mm", "0.02-0.05 mm", "0.05-0.1 mm", "0.1-0.25 mm", "0.25-0.5 mm", "0.5-1 mm", "1-2 mm", "0.02-2 mm", "0.05-2 mm"
            ) {
 
   # set up data source connection if needed
