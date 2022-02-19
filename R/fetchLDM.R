@@ -102,6 +102,7 @@ fetchLDM <- function(x = NULL,
   lab_webmap <- c("wmiid", "Series", "User_pedon_ID", "pedon_Key", "peiid", "Soil_Classification")
   lab_site <- c("site_key", "user_site_id")
   lab_pedon <- c("pedon_key", "pedlabsampnum", "observation_date")
+  
   if (!is.null(x)) {
     if (what %in% lab_combine_nasis_ncss)
       what <- paste0("lab_combine_nasis_ncss.", what)
@@ -119,6 +120,7 @@ fetchLDM <- function(x = NULL,
                                         paste0("lab_site.", lab_site),
                                         paste0("lab_pedon.", lab_pedon)))
   }
+  
   # TODO: set up arbitrary area queries by putting area table into groups:
   #       country, state, county, mlra, ssa, npark, nforest
 
@@ -286,15 +288,22 @@ fetchLDM <- function(x = NULL,
   
   layer_type <- match.arg(layer_type, c("horizon", "layer", "reporting layer"), several.ok = TRUE)
   
-  layer_query <-  sprintf(
-    "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s %s AND %s",
-    paste0(sapply(flattables[flattables %in% tables], function(a) tablejoincriteria[[a]]), collapse = "\n"),
-    format_SQL_in_statement(layer_type),
-    ifelse(is.null(x), "", paste0(" AND ", bycol, " IN ", format_SQL_in_statement(x))),
-    paste0(paste0(sapply(flattables[flattables %in% tables[tables != "lab_rosetta_Key"]], 
-                         function(b) paste0("IsNull(",b,".prep_code, '')")), 
-                  " IN ", format_SQL_in_statement(prep_code)), collapse= " AND "))
-
+  if (any(tables %in% flattables)) {
+    layer_query <-  sprintf(
+      "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s %s AND %s",
+      paste0(sapply(flattables[flattables %in% tables], function(a) tablejoincriteria[[a]]), collapse = "\n"),
+      format_SQL_in_statement(layer_type),
+      ifelse(is.null(x), "", paste0(" AND ", bycol, " IN ", format_SQL_in_statement(x))),
+      paste0(paste0(sapply(flattables[flattables %in% tables[tables != "lab_rosetta_Key"]], 
+                           function(b) paste0("IsNull(",b,".prep_code, '')")), 
+                    " IN ", format_SQL_in_statement(prep_code)), collapse= " AND "))
+  } else {
+    layer_query <- sprintf(
+      "SELECT * FROM lab_layer WHERE lab_layer.layer_type IN %s %s",
+      format_SQL_in_statement(layer_type),
+      ifelse(is.null(x), "", paste0(" AND ", bycol, " IN ", format_SQL_in_statement(x))))
+  } 
+  
   if (any(tables %in% fractables)) {
     layer_fraction_query <-  sprintf(
       "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s AND %s IN %s AND %s AND %s",
@@ -322,7 +331,7 @@ fetchLDM <- function(x = NULL,
   # TODO: this shouldn't be needed
   layerdata <- layerdata[,unique(colnames(layerdata))]
 
-  if(!is.null(layer_fraction_query)) {
+  if (!is.null(layer_fraction_query)) {
     layerfracdata <- suppressWarnings(SDA_query(layer_fraction_query))
     layerfracdata <- layerfracdata[,unique(colnames(layerfracdata))]
     if (!inherits(layerdata, 'try-error') && !inherits(layerfracdata, 'try-error')) {
