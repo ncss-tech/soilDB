@@ -97,7 +97,29 @@ if(requireNamespace("curl") &
     par(mar=c(0,0,1,1))
     plot(x$SPC)
     str(x, 1)
+    
+    
+  # use makeChunks() for iteration over larger sequences of soil series
+  s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz', 
+              'reiff', 'san joaquin', 'montpellier', 'grangeville', 'pollasky', 'ramona')
+              
+  # make a vector of chunk IDs, with 2 series / chunk
+  ck <- makeChunks(s.list, size = 2)
+  
+  # split original data by chunk IDs
+  # iterate over resulting list
+  # run fetchOSD() on pieces
+  # result is a list of SoilProfileCollection objects
+  x <- lapply(split(s.list, ck), fetchOSD)
+  
+  # flatten into a single SPC
+  x <- combine(x)
+  
+  # there should be 11 profiles
+  length(x)
   }
+  
+  
 }
 }
 }
