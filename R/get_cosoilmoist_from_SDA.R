@@ -1,6 +1,12 @@
 get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = TRUE, 
-                                     stringsAsFactors = default.stringsAsFactors()
+                                     stringsAsFactors = NULL
                                      ) {
+  
+  if (!missing(stringsAsFactors)) {
+    .Deprecated(msg = "stringsAsFactors argument is deprecated")
+    stringsAsFactors <- FALSE
+  }
+  
   q.cosoilmoist <- paste("SELECT", 
   if (duplicates == FALSE) {"DISTINCT"}
 , "nationalmusym, muname, c.compname, c.comppct_r, drainagecl, month, flodfreqcl, pondfreqcl, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat
@@ -29,7 +35,7 @@ get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = 
   d.cosoilmoist <- uncode(d.cosoilmoist, db = "SDA", stringsAsFactors = TRUE)
   
   # prep dataset: rename columns, impute empty values, stringsAsFactors
-  d.cosoilmoist <- .cosoilmoist_prep(d.cosoilmoist, impute = impute, stringsAsFactors = stringsAsFactors)
+  d.cosoilmoist <- .cosoilmoist_prep(d.cosoilmoist, impute = impute)
   
   # done
   return(d.cosoilmoist)

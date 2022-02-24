@@ -44,8 +44,7 @@
 #' classifying factors. This is useful when a class has large number of unused
 #' classes, which can waste space in tables and figures.
 #'
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors?
+#' @param stringsAsFactors deprecated
 #'
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
@@ -74,9 +73,14 @@ uncode <- function(df,
                    invert = FALSE,
                    db = "NASIS",
                    droplevels = FALSE,
-                   stringsAsFactors = default.stringsAsFactors(),
+                   stringsAsFactors = NULL,
                    dsn = NULL) {
-
+  
+  if (!missing(stringsAsFactors)) {
+    .Deprecated(msg = "stringsAsFactors argument is deprecated")
+    stringsAsFactors <- FALSE
+  }
+  
   # load current metadata table
   if (db == "NASIS") {
     metadata <- .get_NASIS_metadata(dsn = dsn)
@@ -131,11 +135,9 @@ uncode <- function(df,
     }
 
   # convert factors to strings
-  if (stringsAsFactors == FALSE) {
-    idx <- unlist(lapply(df, is.factor))
-    df[idx] <- lapply(df[idx], as.character)
-  }
-
+  idx <- unlist(lapply(df, is.factor))
+  df[idx] <- lapply(df[idx], as.character)
+  
   return(df)
 }
 

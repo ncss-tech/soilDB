@@ -1,4 +1,9 @@
-get_cosoilmoist_from_NASISWebReport <- function(projectname, impute = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_cosoilmoist_from_NASISWebReport <- function(projectname, impute = TRUE, stringsAsFactors = NULL) {
+  
+  if (!missing(stringsAsFactors)) {
+    .Deprecated(msg = "stringsAsFactors argument is deprecated")
+    stringsAsFactors <- FALSE
+  }
   
   # check for required packages
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_cosoimoist_from_NASISWebReport"
@@ -13,7 +18,7 @@ get_cosoilmoist_from_NASISWebReport <- function(projectname, impute = TRUE, stri
   d.cosoilmoist <- uncode(d.cosoilmoist, db = "LIMS", stringsAsFactors = TRUE)
   
   # prep dataset: rename columns, impute empty values, stringsAsFactors
-  d.cosoilmoist <- .cosoilmoist_prep(d.cosoilmoist, impute = impute, stringsAsFactors = stringsAsFactors)
+  d.cosoilmoist <- .cosoilmoist_prep(d.cosoilmoist, impute = impute)
   
   # return data.fram
   return(d.cosoilmoist)

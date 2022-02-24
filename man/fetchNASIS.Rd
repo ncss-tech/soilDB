@@ -17,7 +17,7 @@ fetchNASIS(
   soilColorState = "moist",
   lab = FALSE,
   fill = FALSE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 }
@@ -44,10 +44,7 @@ site/pedon/horizon data (default: \code{FALSE})}
 
 \item{fill}{include pedon or component records without horizon data in result? (default: \code{FALSE})}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the \code{uncode()} function. It does not
-convert those vectors that have been set outside of \code{uncode()} (i.e. hard
-coded).}
+\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

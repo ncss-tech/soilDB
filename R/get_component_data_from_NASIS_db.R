@@ -10,11 +10,7 @@
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: `TRUE`)
 #' @param nullFragsAreZero should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the `uncode()` function. It does not
-#' convert those vectors that have set outside of `uncode()` (i.e. hard coded).
-#' The 'factory-fresh' default is TRUE, but this can be changed by setting
-#' options(`stringsAsFactors = FALSE`)
+#' @param stringsAsFactors deprecated
 #'
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
@@ -38,9 +34,13 @@
 #' @export get_component_data_from_NASIS_db
 get_component_data_from_NASIS_db <- function(SS = TRUE,
                                              nullFragsAreZero = TRUE,
-                                             stringsAsFactors = default.stringsAsFactors(),
+                                             stringsAsFactors = NULL,
                                              dsn = NULL) {
-
+  if (!missing(stringsAsFactors)) {
+    .Deprecated(msg = "stringsAsFactors argument is deprecated")
+    stringsAsFactors <- FALSE
+  }
+  
   q1 <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, reannualprecip_r, ffd_l, ffd_r, ffd_h, tfact, wei, weg, nirrcapcl, nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, frostact, hydricrating, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
 
   FROM
@@ -85,7 +85,7 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
   
   # uncode metadata domains
   if (nrow(d) > 0) {
-    d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
+    d <- uncode(d, dsn = dsn)
     
     ldx <- !d$coiid %in% chs$coiidref
     if (!any(ldx)) {
@@ -172,9 +172,14 @@ get_component_restrictions_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
                                                          dropAdditional = TRUE,
                                                          dropNotRepresentative = TRUE,
-                                                         stringsAsFactors = default.stringsAsFactors(),
+                                                         stringsAsFactors = NULL,
                                                          dsn = NULL) {
 
+  if (!missing(stringsAsFactors)) {
+    .Deprecated(msg = "stringsAsFactors argument is deprecated")
+    stringsAsFactors <- FALSE
+  }
+  
   q <- "SELECT lmapunitiid, mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
 
   FROM  mapunit_View_1 AS mu
@@ -205,7 +210,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
     warning('there are no records in your selected set!', call. = FALSE)
 
   # recode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d, dsn = dsn)
 
   # optionally drop additional | NA mustatus
   if(dropAdditional) {
@@ -311,10 +316,14 @@ get_component_cogeomorph_data_from_NASIS_db2 <- function(SS = TRUE, dsn = NULL) 
 #' @export
 #' @rdname get_component_data_from_NASIS_db
 get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
-                                                  stringsAsFactors = default.stringsAsFactors(),
+                                                  stringsAsFactors = NULL,
                                                   dsn = NULL) {
 
-
+  if (!missing(stringsAsFactors)) {
+    .Deprecated(msg = "stringsAsFactors argument is deprecated")
+    stringsAsFactors <- FALSE
+  }
+  
   q <- "SELECT cpmg.coiidref as coiid, cpm.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
 
   FROM
@@ -337,7 +346,7 @@ get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
   d <- dbQueryNASIS(channel, q)
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d, dsn = dsn)
 
   # done
   return(d)
@@ -347,9 +356,14 @@ get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
 #' @export
 #' @rdname get_component_data_from_NASIS_db
 get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
-                                                 stringsAsFactors = default.stringsAsFactors(),
+                                                 stringsAsFactors = NULL,
                                                  dsn = NULL) {
 
+  if (!missing(stringsAsFactors)) {
+    .Deprecated(msg = "stringsAsFactors argument is deprecated")
+    stringsAsFactors <- FALSE
+  }
+  
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
   ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate, repecosite, ecositepnm, ecositesnm, ecositetnm, ecositeidnew, ecositelrrnew,
   ecositemlranew, ecositelrunew, ecositenumbernew, ecositenasisiid
@@ -381,7 +395,7 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
   }
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d, dsn = dsn)
 
   # done
   return(d)
@@ -439,11 +453,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' NA (FALSE)
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the uncode() function. It does not
-#' convert those vectors that have set outside of uncode() (i.e. hard coded).
-#' The 'factory-fresh' default is TRUE, but this can be changed by setting
-#' options(stringsAsFactors = FALSE)
+#' @param stringsAsFactors deprecated
 #' @return A list with the results.
 #' @author Stephen Roecker
 #' @seealso \code{\link{fetchNASIS}}
@@ -463,9 +473,12 @@ get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' @export get_comonth_from_NASIS_db
 get_comonth_from_NASIS_db <- function(SS = TRUE,
                                       fill = FALSE,
-                                      stringsAsFactors = default.stringsAsFactors(),
+                                      stringsAsFactors = NULL,
                                       dsn = NULL) {
-
+  if (!missing(stringsAsFactors)) {
+    .Deprecated(msg = "stringsAsFactors argument is deprecated")
+    stringsAsFactors <- FALSE
+  }
 
   q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid
   FROM comonth_View_1 AS comonth;"
@@ -484,7 +497,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
   d <- dbQueryNASIS(channel, q)
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d, dsn = dsn)
 
   # optionally fill missing coiids
   if (fill) {

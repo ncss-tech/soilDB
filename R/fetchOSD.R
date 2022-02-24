@@ -200,7 +200,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
   res <- try(jsonlite::fromJSON(final.url), silent = TRUE)
   
   # trap errors
-  if(inherits(res, 'try-error')) {
+  if (inherits(res, 'try-error')) {
     message(res[1])
     return(NULL)
   }

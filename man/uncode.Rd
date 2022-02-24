@@ -11,7 +11,7 @@ uncode(
   invert = FALSE,
   db = "NASIS",
   droplevels = FALSE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 }
@@ -28,8 +28,7 @@ indicates whether or not to query metadata from local NASIS database
 classifying factors. This is useful when a class has large number of unused
 classes, which can waste space in tables and figures.}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to
-factors?}
+\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

@@ -18,7 +18,7 @@ z <- lapply(v$var, function(i) {
 
 names(z) <- v$var
 
-which(sapply(z, function(i) class(i) == 'try-error'))
+which(sapply(z, function(i) inherits(i, 'try-error')))
 
 
 

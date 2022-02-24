@@ -7,7 +7,7 @@
 get_comonth_from_NASIS_db(
   SS = TRUE,
   fill = FALSE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 }
@@ -18,11 +18,7 @@ the entire local database (default: TRUE)}
 \item{fill}{should missing "month" rows in the comonth table be filled with
 NA (FALSE)}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the uncode() function. It does not
-convert those vectors that have set outside of uncode() (i.e. hard coded).
-The 'factory-fresh' default is TRUE, but this can be changed by setting
-options(stringsAsFactors = FALSE)}
+\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

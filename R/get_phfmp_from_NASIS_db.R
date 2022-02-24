@@ -1,6 +1,10 @@
-get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
+get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = NULL, dsn = NULL) {
 
-
+  if (!missing(stringsAsFactors)) {
+    .Deprecated(msg = "stringsAsFactors argument is deprecated")
+    stringsAsFactors <- FALSE
+  }
+  
   # because of alias with fetchNASIS cannot allow setting attr
   # also, attr is a free-form field, so not terribly useful -- consider SQL LIKE?
 
@@ -25,5 +29,5 @@ get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = default.string
   d <- dbQueryNASIS(channel, q)
 
   # field measured properties, long format
-  return(uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn))
+  return(uncode(d, dsn = dsn))
 }

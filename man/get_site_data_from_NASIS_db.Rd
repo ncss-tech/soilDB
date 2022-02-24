@@ -7,7 +7,7 @@
 get_site_data_from_NASIS_db(
   SS = TRUE,
   nullFragsAreZero = TRUE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 }
@@ -17,10 +17,7 @@ database (default: \code{TRUE})}
 
 \item{nullFragsAreZero}{should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the \code{uncode()} function. It does not
-convert those vectors that have been set outside of \code{uncode()} (i.e. hard
-coded).}
+\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

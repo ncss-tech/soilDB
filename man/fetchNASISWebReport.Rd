@@ -20,49 +20,43 @@ fetchNASISWebReport(
   projectname,
   rmHzErrors = FALSE,
   fill = FALSE,
-  stringsAsFactors = default.stringsAsFactors()
+  stringsAsFactors = NULL
 )
 
-get_component_from_NASISWebReport(
-  projectname,
-  stringsAsFactors = default.stringsAsFactors()
-)
+get_component_from_NASISWebReport(projectname, stringsAsFactors = NULL)
 
 get_chorizon_from_NASISWebReport(
   projectname,
   fill = FALSE,
-  stringsAsFactors = default.stringsAsFactors()
+  stringsAsFactors = NULL
 )
 
 get_legend_from_NASISWebReport(
   mlraoffice,
   areasymbol,
   droplevels = TRUE,
-  stringsAsFactors = default.stringsAsFactors()
+  stringsAsFactors = NULL
 )
 
 get_lmuaoverlap_from_NASISWebReport(
   areasymbol,
   droplevels = TRUE,
-  stringsAsFactors = default.stringsAsFactors()
+  stringsAsFactors = NULL
 )
 
 get_mapunit_from_NASISWebReport(
   areasymbol,
   droplevels = TRUE,
-  stringsAsFactors = default.stringsAsFactors()
+  stringsAsFactors = NULL
 )
 
-get_projectmapunit_from_NASISWebReport(
-  projectname,
-  stringsAsFactors = default.stringsAsFactors()
-)
+get_projectmapunit_from_NASISWebReport(projectname, stringsAsFactors = NULL)
 
 get_projectmapunit2_from_NASISWebReport(
   mlrassoarea,
   fiscalyear,
   projectname,
-  stringsAsFactors = default.stringsAsFactors()
+  stringsAsFactors = NULL
 )
 
 get_project_from_NASISWebReport(mlrassoarea, fiscalyear)
@@ -84,11 +78,7 @@ results? (default: \code{FALSE})}
 
 \item{fill}{should rows with missing component ids be removed (default: \code{FALSE})}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the \code{uncode()} function. It does not
-convert those vectors that have been set outside of \code{uncode()} (i.e. hard
-coded). The 'factory-fresh' default is TRUE, but this can be changed by
-setting options(\code{stringsAsFactors = FALSE})}
+\item{stringsAsFactors}{deprecated}
 
 \item{mlraoffice}{text string value identifying the MLRA Regional Soil
 Survey Office group name inserted into a SQL WHERE clause (default: \code{NA})}
