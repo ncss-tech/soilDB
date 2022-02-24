@@ -860,21 +860,20 @@
     # hack to make CRAN check happy
     mntn = NULL; hill = NULL; trce = NULL; flats = NULL; hillslopeprof = NULL;
     
-    ## TODO: consider using is(x, 'character')
     df <- within(df, {
-      if (class(mntn) == "character") {
+      if (is(mntn, "character")) {
         mntn  = sapply(strsplit(mntn, ", "),  function(x) paste(sort(unlist(x)), collapse = ", "))
         }
-      if (class(hill) == "character") {
+      if (is(hill, "character")) {
         hill  = sapply(strsplit(hill, ", "),  function(x) paste(sort(unlist(x)), collapse = ", "))
         }
-      if (class(trce) == "character") {
+      if (is(trce, "character")) {
         trce  = sapply(strsplit(trce, ", "),  function(x) paste(sort(unlist(x)), collapse = ", "))
         }
-      if (class(flats) == "character") {
+      if (is(flats, "character")) {
         flats = sapply(strsplit(flats, ", "), function(x) paste(sort(unlist(x)), collapse = ", "))
         }
-      if (class(hillslopeprof) == "character") {
+      if (is(hillslopeprof, "character")) {
         hillslopeprof = sapply(strsplit(hillslopeprof, ", "), function(x) paste(sort(unlist(x)), collapse = ", "))
         }
       })

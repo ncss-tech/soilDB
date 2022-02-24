@@ -197,12 +197,11 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
   }
   
   # attempt query to API, result is JSON
-  res <- try(jsonlite::fromJSON(final.url))
+  res <- try(jsonlite::fromJSON(final.url), silent = TRUE)
   
-  ## TODO: further testing / message detail required
   # trap errors
-  if(class(res) == 'try-error'){
-    message('error')
+  if(inherits(res, 'try-error')) {
+    message(res[1])
     return(NULL)
   }
   

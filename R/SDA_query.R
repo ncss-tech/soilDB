@@ -176,7 +176,7 @@ SDA_query <- function(q) {
   request.status <- try(httr::stop_for_status(r), silent = TRUE)
 
   # error message is encapsulated in XML, use xml2 library functions to extract
-  if (class(request.status) == 'try-error') {
+  if (inherits(request.status, 'try-error')) {
 
     # get the request response, this will contain an error message
     r.content <- httr::content(r, as = 'parsed', encoding = 'UTF-8')
