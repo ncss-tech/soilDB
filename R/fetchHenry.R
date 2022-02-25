@@ -287,6 +287,9 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   if(!requireNamespace('jsonlite', quietly=TRUE))
     stop('please install the `jsonlite` packages', call.=FALSE)
   
+  # important: backward compatibility R <4.0
+  opt.original <- options(stringsAsFactors = FALSE)
+  
   # sanity-check: `what` should be within the legal set of options
   if(! what %in% c('all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp', 'waterlevel'))
     stop("`what` must be either: 'all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp', or 'waterlevel'", call.=FALSE)
