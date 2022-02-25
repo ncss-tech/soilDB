@@ -10,7 +10,7 @@ importFrom("utils", "URLencode", "download.file", "object.size",
              "read.csv", "read.table", "setTxtProgressBar",
              "txtProgressBar", "write.table", "type.convert")
 
-importFrom("methods", "slot<-", "as")
+importFrom("methods", "slot<-", "as", "is")
 
 importFrom(data.table,
            rbindlist,
