@@ -9,9 +9,9 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
                                    droplevels = TRUE, nullFragsAreZero = TRUE,
                                    stringsAsFactors = NULL) {
                                      
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   if(!duplicates & grepl(WHERE, pattern = "mukey")[1])
@@ -336,9 +336,9 @@ get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = F
                                   stringsAsFactors = NULL
                                   ) {
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   d.component <- get_component_from_SDA(WHERE = WHERE, duplicates = duplicates,
@@ -464,9 +464,9 @@ get_mapunit_from_SDA <- function(WHERE = NULL,
                                  droplevels = TRUE,
                                  stringsAsFactors = NULL
                                  ) {
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   q.mapunit <- paste("
@@ -525,9 +525,9 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
                                   droplevels = TRUE,
                                   stringsAsFactors = NULL
                                   ) {
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
 
   q.chorizon <- paste("
@@ -578,12 +578,12 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
     d.chorizon <- within(d.chorizon, {
       nationalmusym = NULL
       texture = tolower(texture)
-      # if (stringsAsFactors == TRUE) {
-      #   texcl = factor(tolower(texcl), levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"])
-      # }
-      # if (droplevels == droplevels & is.factor(texcl)) {
-      #   texcl = droplevels(texcl)
-      # }
+      if (getOption("stringsAsFactors", default = FALSE)) {
+        texcl = factor(tolower(texcl), levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"])
+      }
+      if (droplevels == droplevels && is.factor(texcl)) {
+        texcl = droplevels(texcl)
+      }
     })
   
     # Note: only chtexturegrp$texdesc from SDA matches metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"] in metadata
@@ -809,9 +809,9 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                      stringsAsFactors = NULL
                      ) {
 
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   # load data in pieces

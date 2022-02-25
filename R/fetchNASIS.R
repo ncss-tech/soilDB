@@ -77,9 +77,9 @@ fetchNASIS <- function(from = 'pedons',
 
   res <- NULL
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   # TODO: do we need _View_1 tables in the sqlite table snapshot? Could be handy for

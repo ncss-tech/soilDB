@@ -1,8 +1,8 @@
 get_cosoilmoist_from_NASISWebReport <- function(projectname, impute = TRUE, stringsAsFactors = NULL) {
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   # check for required packages

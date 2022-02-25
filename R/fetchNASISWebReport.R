@@ -37,9 +37,9 @@
 fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
                                 stringsAsFactors = NULL) {
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   # load data in pieces
@@ -96,9 +96,9 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
 #' @rdname fetchNASISWebReport
 get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = NULL) {
  
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_component_from_NASISWebReport"
@@ -134,9 +134,9 @@ get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = NU
 #' @rdname fetchNASISWebReport
 get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsAsFactors = NULL) {
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_chorizon_from_NASISWebReport"
@@ -157,12 +157,12 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
   if (!all(is.na(d.chorizon$chiid))) {
     d.chorizon <- within(d.chorizon, {
       texture = tolower(texture)
-      # if (stringsAsFactors == TRUE) {
-      #   texcl = factor(texcl,
-      #                  levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceValue"],
-      #                  labels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"]
-      #   )
-      # }
+      if (getOption("stringsAsFactors", default = FALSE)) {
+        texcl = factor(texcl,
+                       levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceValue"],
+                       labels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"]
+        )
+      }
     })
   }
 
@@ -181,9 +181,9 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
 #' @rdname fetchNASISWebReport
 get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = TRUE, stringsAsFactors = NULL) {
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_legend_from_NASISWebReport"
@@ -213,9 +213,9 @@ get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = 
 #' @rdname fetchNASISWebReport
 get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = NULL) {  
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
     
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_lmuaoverlap_from_NASISWebReport"
@@ -245,9 +245,9 @@ get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, s
 #' @rdname fetchNASISWebReport
 get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = NULL) {
 
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_mapunit_from_NASISWebReport"
@@ -277,9 +277,9 @@ get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, strin
 #' @rdname fetchNASISWebReport
 get_projectmapunit_from_NASISWebReport <- function(projectname, stringsAsFactors = NULL) {
 
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit_from_NASISWebReport"
@@ -306,9 +306,9 @@ get_projectmapunit_from_NASISWebReport <- function(projectname, stringsAsFactors
 get_projectmapunit2_from_NASISWebReport <- function(mlrassoarea, fiscalyear, projectname, stringsAsFactors = NULL) {
 
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit2_from_NASISWebReport"

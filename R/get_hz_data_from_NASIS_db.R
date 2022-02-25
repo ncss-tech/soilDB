@@ -28,9 +28,9 @@ get_hz_data_from_NASIS_db <- function(SS = TRUE,
                                       fill = FALSE,
                                       stringsAsFactors = NULL,
                                       dsn = NULL) {
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   q <- sprintf("SELECT peiid, phiid, upedonid as pedon_id,

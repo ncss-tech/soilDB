@@ -2,9 +2,9 @@
 #' @rdname get_mapunit_from_NASIS
 get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = NULL, dsn = NULL) {
 
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   q <- paste("SELECT p.projectiid, p.uprojectid, p.projectname, pmu.seqnum pmu_seqnum, a2.areasymbol, lmu.musym, lmu.lmapunitiid AS mukey, mu.nationalmusym, mutype, lmu.mustatus, muname, muacres

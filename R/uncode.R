@@ -76,9 +76,9 @@ uncode <- function(df,
                    stringsAsFactors = NULL,
                    dsn = NULL) {
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   # load current metadata table
@@ -101,42 +101,44 @@ uncode <- function(df,
   columnsToWorkOn.idx <- which(nm %in% possibleReplacements)
 
   # iterate over columns with codes
-  for (i in columnsToWorkOn.idx){
-
+  for (i in columnsToWorkOn.idx) {
     # get the current metadata
-    sub <- metadata[metadata[[metadata_col]] %in% nm[i], ]
-
+    sub <- metadata[metadata[[metadata_col]] %in% nm[i],]
+    
     # NASIS or LIMS
     if (db %in% c("NASIS", "LIMS")) {
-      if (invert == FALSE){
+      if (invert == FALSE) {
         # replace codes with values
         df[, i] <- factor(df[, i], levels = sub[[value_col]], labels = sub[[name_col]])
       } else {
         # replace values with codes
-        df[, i] <- factor(df[, i], levels = sub[[name_col]], labels = sub[[value_col]])}
+        df[, i] <- factor(df[, i], levels = sub[[name_col]], labels = sub[[value_col]])
+      }
     }
 
     # SDA
     if (db == "SDA") {
-      if (invert == FALSE){
+      if (invert == FALSE) {
         # replace codes with values
         df[, i] <- factor(df[, i], levels = sub[[label_col]])
       } else {
         # replace values with codes
         df[, i] <- factor(df[, i], levels = sub[[label_col]], labels = sub[[value_col]])
-        }
       }
     }
+  }
 
   # drop unused levels
   if (droplevels == TRUE) {
-    idx <- which(! nm %in% possibleReplacements)
+    idx <- which(!nm %in% possibleReplacements)
     df <- droplevels(df, except = idx)
-    }
+  }
 
-  # convert factors to strings
-  idx <- unlist(lapply(df, is.factor))
-  df[idx] <- lapply(df[idx], as.character)
+  # convert factors to strings, check soilDB option first
+  if (!getOption("soilDB.NASIS.NASISDomainsAsFactor", default = FALSE) || !stringsAsFactors){
+    idx <- unlist(lapply(df, is.factor))
+    df[idx] <- lapply(df[idx], as.character)
+  }
   
   return(df)
 }
@@ -169,4 +171,9 @@ code <- function(df, ...) {
   return(res)
 }
 
+NASISDomainsAsFactor <- function(x = FALSE) {
+  options(soilDB.NASIS.DomainsAsFactor = getOption("stringsAsFactors", 
+                                                   default = FALSE) || x)
+  getOption("soilDB.NASIS.DomainsAsFactor", default = FALSE)
+}
 

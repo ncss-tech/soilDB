@@ -36,9 +36,9 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
                                              nullFragsAreZero = TRUE,
                                              stringsAsFactors = NULL,
                                              dsn = NULL) {
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   q1 <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, reannualprecip_r, ffd_l, ffd_r, ffd_h, tfact, wei, weg, nirrcapcl, nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, frostact, hydricrating, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
@@ -175,9 +175,9 @@ get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
                                                          stringsAsFactors = NULL,
                                                          dsn = NULL) {
 
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   q <- "SELECT lmapunitiid, mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
@@ -319,9 +319,9 @@ get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
                                                   stringsAsFactors = NULL,
                                                   dsn = NULL) {
 
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   q <- "SELECT cpmg.coiidref as coiid, cpm.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
@@ -359,9 +359,9 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
                                                  stringsAsFactors = NULL,
                                                  dsn = NULL) {
 
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
@@ -475,9 +475,9 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
                                       fill = FALSE,
                                       stringsAsFactors = NULL,
                                       dsn = NULL) {
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
 
   q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid

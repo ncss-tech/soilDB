@@ -43,9 +43,9 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
                                         nullFragsAreZero = TRUE,
                                         stringsAsFactors = NULL,
                                         dsn = NULL) {
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
 	q <- "SELECT siteiid as siteiid, peiid, CAST(usiteid AS varchar(60)) as site_id, CAST(upedonid AS varchar(60)) as pedon_id, obsdate as obs_date,

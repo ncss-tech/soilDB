@@ -44,9 +44,9 @@ get_extended_data_from_NASIS_db <- function(SS = TRUE,
                                             stringsAsFactors = NULL,
                                             dsn = NULL) {
 
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   # photo links from PedonPC stored as sitetext notes
@@ -473,7 +473,7 @@ LEFT OUTER JOIN (
 	d.art.data  <-  uncode(d.art.data, dsn = dsn)
 	d.hz.texmod  <- uncode(d.hz.texmod, dsn = dsn)
 	# https://github.com/ncss-tech/soilDB/issues/53
-	d.taxhistory <- uncode(d.taxhistory, dsn = dsn)
+	d.taxhistory <- uncode(d.taxhistory, dsn = dsn, stringsAsFactors = FALSE)
 	d.sitepm     <- uncode(d.sitepm, dsn = dsn)
 	d.structure  <- uncode(d.structure, dsn = dsn)
 	d.hz.desgn <- uncode(d.hz.desgn, dsn = dsn)

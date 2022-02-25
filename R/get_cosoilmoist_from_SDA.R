@@ -2,9 +2,9 @@ get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = 
                                      stringsAsFactors = NULL
                                      ) {
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   q.cosoilmoist <- paste("SELECT", 

@@ -41,9 +41,9 @@ get_cosoilmoist_from_NASIS <- function(SS = TRUE,
                                        dsn = NULL) {
 
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   q.cosoilmoist <- "SELECT dmuiidref AS dmuiid, coiid, compname, comppct_r, drainagecl, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, cosoilmoistiid, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat

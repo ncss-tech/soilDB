@@ -6,9 +6,9 @@
                                stringsAsFactors = NULL
                                ) {
 
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   tf <- "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
@@ -137,9 +137,9 @@
 .get_site_from_NASISReport <- function(url = NULL, nullFragsAreZero = TRUE, stringsAsFactors = NULL
 ) {
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
 
   tf = "C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt"
@@ -184,9 +184,9 @@
 
 .get_pediagfeatures_from_NASISTemp <- function(stringsAsFactors = NULL) {
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   tf <- "C:/ProgramData/USDA/NASIS/Temp/get_pediagfeatures_from_NASIS.txt"

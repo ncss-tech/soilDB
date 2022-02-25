@@ -10,9 +10,9 @@
 #' @export
 get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = NULL, dsn = NULL) {
   
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   q.mapunit <- paste("
@@ -111,9 +111,9 @@ get_legend_from_NASIS <- function(SS = TRUE,
                                   droplevels = TRUE,
                                   stringsAsFactors = NULL,
                                   dsn = NULL) {
-  if (!missing(stringsAsFactors)) {
-    .Deprecated(msg = "stringsAsFactors argument is deprecated")
-    stringsAsFactors <- FALSE
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   q.legend  <- paste("
