@@ -7,7 +7,12 @@
 ## see: http://www.wcc.nrcs.usda.gov/web_service/awdb_webservice_announcements.htm
 ##      http://www.wcc.nrcs.usda.gov/web_service/AWDB_Web_Service_Reference.htm
 ##      http://www.wcc.nrcs.usda.gov/report_generator/WebReportScripting.htm
-#
+
+## 5. we will need to address the potential for multiple sensor ID per type/depth
+## examples in:
+## https://github.com/ncss-tech/soilDB/issues/14
+
+
 ### sensor codes: http://wcc.sc.egov.usda.gov/nwcc/sensors
 
 ##
@@ -22,7 +27,8 @@
 ## https://wcc.sc.egov.usda.gov/nwcc/sitenotes?sitenum=462
 ##
 
-# helper function for getting a single table of SCAN metadata
+
+## helper function for getting a single table of SCAN metadata
 # site.code: a single SCAN site code
 .get_single_SCAN_metadata <- function(site.code) {
   # base URL to service
@@ -114,12 +120,9 @@ SCAN_site_metadata <- function(site.code = NULL) {
   return(res)
 }
 
-# site.code: vector of site codes
-# year: vector of years
-# report: single report type
-# req: for backwards compatibility
 
-#' Get daily climate data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations
+
+#' @title Get daily climate data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations
 #'
 #' @description Query soil/climate data from USDA-NRCS SCAN Stations
 #'
