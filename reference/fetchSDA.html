@@ -61,7 +61,7 @@ Access, and create soil profile collection objects (SPC).</p>
   childs <span class="op">=</span> <span class="cn">TRUE</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
   nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
 <span class="fu">get_cointerp_from_SDA</span><span class="op">(</span>
@@ -69,26 +69,18 @@ Access, and create soil profile collection objects (SPC).</p>
   mrulename <span class="op">=</span> <span class="cn">NULL</span>,
   duplicates <span class="op">=</span> <span class="cn">FALSE</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
-<span class="fu">get_legend_from_SDA</span><span class="op">(</span>
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span>
+<span class="fu">get_legend_from_SDA</span><span class="op">(</span>WHERE <span class="op">=</span> <span class="cn">NULL</span>, droplevels <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
 
 <span class="fu">get_lmuaoverlap_from_SDA</span><span class="op">(</span>
   WHERE <span class="op">=</span> <span class="cn">NULL</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
-<span class="fu">get_mapunit_from_SDA</span><span class="op">(</span>
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span>
+<span class="fu">get_mapunit_from_SDA</span><span class="op">(</span>WHERE <span class="op">=</span> <span class="cn">NULL</span>, droplevels <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
 
 <span class="fu">get_chorizon_from_SDA</span><span class="op">(</span>
   WHERE <span class="op">=</span> <span class="cn">NULL</span>,
@@ -96,7 +88,7 @@ Access, and create soil profile collection objects (SPC).</p>
   childs <span class="op">=</span> <span class="cn">TRUE</span>,
   nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
 <span class="fu">fetchSDA</span><span class="op">(</span>
@@ -106,7 +98,7 @@ Access, and create soil profile collection objects (SPC).</p>
   nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>,
   rmHzErrors <span class="op">=</span> <span class="cn">FALSE</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -128,11 +120,7 @@ classes, which can waste space in tables and figures.</p></dd>
 <dd><p>should fragment volumes of NULL be interpreted as 0?
 (default: TRUE), see details</p></dd>
 <dt>stringsAsFactors</dt>
-<dd><p>logical: should character vectors be converted to
-factors? This argument is passed to the uncode() function. It does not
-convert those vectors that have set outside of uncode() (i.e. hard coded).
-The 'factory-fresh' default is TRUE, but this can be changed by setting
-options(stringsAsFactors = FALSE)</p></dd>
+<dd><p>deprecated</p></dd>
 <dt>mrulename</dt>
 <dd><p>character. Interpretation rule names</p></dd>
 <dt>rmHzErrors</dt>

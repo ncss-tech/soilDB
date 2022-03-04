@@ -56,29 +56,25 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_mapunit_from_NASIS</span><span class="op">(</span>
   SS <span class="op">=</span> <span class="cn">TRUE</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,
   dsn <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
 <span class="fu">get_legend_from_NASIS</span><span class="op">(</span>
   SS <span class="op">=</span> <span class="cn">TRUE</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,
   dsn <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
 <span class="fu">get_lmuaoverlap_from_NASIS</span><span class="op">(</span>
   SS <span class="op">=</span> <span class="cn">TRUE</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,
   dsn <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
-<span class="fu">get_projectmapunit_from_NASIS</span><span class="op">(</span>
-  SS <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
-  dsn <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+<span class="fu">get_projectmapunit_from_NASIS</span><span class="op">(</span>SS <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -88,10 +84,7 @@
 <dt>droplevels</dt>
 <dd><p>Drop unused levels from <code>farmlndcl</code> and other factor levels from NASIS domains?</p></dd>
 <dt>stringsAsFactors</dt>
-<dd><p>logical: should character vectors be converted to
-factors? This argument is passed to the <code><a href="uncode.html">uncode()</a></code> function. It does not
-convert those vectors that have been set outside of <code><a href="uncode.html">uncode()</a></code> (i.e. hard
-coded).</p></dd>
+<dd><p>deprecated</p></dd>
 <dt>dsn</dt>
 <dd><p>Optional: path to local SQLite database containing NASIS
 table structure; default: <code>NULL</code></p></dd>

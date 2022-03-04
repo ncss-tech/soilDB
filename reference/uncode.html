@@ -64,7 +64,7 @@ the metadata is pulled from a static snapshot in the soilDB package
   invert <span class="op">=</span> <span class="cn">FALSE</span>,
   db <span class="op">=</span> <span class="st">"NASIS"</span>,
   droplevels <span class="op">=</span> <span class="cn">FALSE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,
   dsn <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -84,8 +84,7 @@ indicates whether or not to query metadata from local NASIS database
 classifying factors. This is useful when a class has large number of unused
 classes, which can waste space in tables and figures.</p></dd>
 <dt>stringsAsFactors</dt>
-<dd><p>logical: should character vectors be converted to
-factors?</p></dd>
+<dd><p>deprecated</p></dd>
 <dt>dsn</dt>
 <dd><p>Optional: path to local SQLite database containing NASIS
 table structure; default: <code>NULL</code></p></dd>
