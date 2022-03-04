@@ -171,6 +171,19 @@ code <- function(df, ...) {
   return(res)
 }
 
+#' Get/Set Options for Encoding NASIS Domains as Factors
+#' 
+#' Set package option `soilDB.NASIS.DomainsAsFactor` for returning coded NASIS domains as factors. 
+#'
+#' @param x logical; default `FALSE`
+#'
+#' @return local, result of `getOption("soilDB.NASIS.DomainsAsFactor")`
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' NASISDomansAsFactor(TRUE)
+#' }
 NASISDomainsAsFactor <- function(x = FALSE) {
   options(soilDB.NASIS.DomainsAsFactor = getOption("stringsAsFactors", 
                                                    default = FALSE) || x)
