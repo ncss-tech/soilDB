@@ -56,7 +56,9 @@ fetchLDM <- function(x = NULL,
              # "lab_major_and_trace_elements_and_oxides", 
              # "lab_mineralogy_glass_count",
              # "lab_xray_and_thermal",
-             "lab_rosetta_Key"),
+             "lab_rosetta_Key"
+             # "lab_mir"
+             ),
            chunk.size = 1000,
            ntries = 3,
            layer_type = c("horizon","layer","reporting layer"),
@@ -138,9 +140,11 @@ fetchLDM <- function(x = NULL,
 
   if(inherits(con, 'DBIConnection')) {
     # query con using (modified) site_query
-    sites <- try(DBI::dbGetQuery(con,
-                                 gsub("\\blab_|\\blab_combine_", "",
-                                      gsub("lab_(site|pedon)", "nasis_\\1", site_query))))
+    # if (FALSE) {
+    #   # fixes for old version of SQLite db
+    #   site_query <- gsub("\\blab_|\\blab_combine_", "", gsub("lab_(site|pedon)", "nasis_\\1", site_query))
+    # }
+    sites <- try(DBI::dbGetQuery(con, site_query))
   } else {
     # the lab_area table allows for overlap with many different area types
     # for now we only offer the "ssa" (soil survey area) area_type 
@@ -212,7 +216,9 @@ fetchLDM <- function(x = NULL,
       
       # build SoilProfileCollection
       depths(hz) <- pedon_key ~ hzn_top + hzn_bot
-      site(hz) <- sites
+      hzn <- aqp::horizonNames(hz)
+      hzn <- hzn[hzn != idname(hz)]
+      site(hz) <- sites[, !colnames(sites) %in% hzn]
 
       return(hz)
     } else {
@@ -238,7 +244,8 @@ fetchLDM <- function(x = NULL,
                                           "lab_major_and_trace_elements_and_oxides",
                                           "lab_xray_and_thermal",
                                           "lab_calculations_including_estimates_and_default_values",
-                                          "lab_rosetta_Key"
+                                          "lab_rosetta_Key",
+                                          "lab_mir"
                                         ),
                                         layer_type = c("horizon", "layer", "reporting layer"),
                                         prep_code = c("GP", "M", "N", "S", "HM"),
@@ -253,7 +260,8 @@ fetchLDM <- function(x = NULL,
     "lab_chemical_properties",
     "lab_calculations_including_estimates_and_default_values",
     "lab_major_and_trace_elements_and_oxides",
-    "lab_rosetta_Key"
+    "lab_rosetta_Key",
+    "lab_mir"
   )
 
   fractables <- c("lab_mineralogy_glass_count",
@@ -284,7 +292,9 @@ fetchLDM <- function(x = NULL,
        lab_layer.labsampnum = lab_calculations_including_estimates_and_default_values.labsampnum",
 
       "lab_rosetta_Key" = "LEFT JOIN lab_rosetta_Key ON
-                           lab_layer.layer_key = lab_rosetta_Key.layer_key"
+                           lab_layer.layer_key = lab_rosetta_Key.layer_key",
+      "lab_mir" = "LEFT JOIN lab_mir ON lab_layer.layer_key = lab_mir.layer_key 
+                   LEFT JOIN lab_mir_wavelength ON lab_mir.d_wavelength_array_id = lab_mir_wavelength.d_wavelength_array_id"
     )
   
   layer_type <- match.arg(layer_type, c("horizon", "layer", "reporting layer"), several.ok = TRUE)
@@ -295,7 +305,7 @@ fetchLDM <- function(x = NULL,
       paste0(sapply(flattables[flattables %in% tables], function(a) tablejoincriteria[[a]]), collapse = "\n"),
       format_SQL_in_statement(layer_type),
       ifelse(is.null(x), "", paste0(" AND ", bycol, " IN ", format_SQL_in_statement(x))),
-      paste0(paste0(sapply(flattables[flattables %in% tables[tables != "lab_rosetta_Key"]], 
+      paste0(paste0(sapply(flattables[flattables %in% tables[!tables %in% c("lab_rosetta_Key", "lab_mir")]], 
                            function(b) paste0("IsNull(",b,".prep_code, '')")), 
                     " IN ", format_SQL_in_statement(prep_code)), collapse= " AND "))
   } else {
@@ -324,11 +334,19 @@ fetchLDM <- function(x = NULL,
 
   if(inherits(con, 'DBIConnection')) {
     # query con using (modified) layer_query for SQLite
-     return(try(DBI::dbGetQuery(con, gsub("IsNull", "IFNULL", gsub("\\blab_|\\blab_combine_|_properties|_Key|_including_estimates_and_default_values|_and|mineralogy_|_count", "", gsub("major_and_trace_elements_and_oxides","geochemical", layer_query))))))
+    # if (FALSE) {
+    #   # fixes for old version of SQLite db
+    #   layer_query <- gsub("\\blab_|\\blab_combine_|_properties|_Key|_including_estimates_and_default_values|_and|mineralogy_|_count", "", gsub("major_and_trace_elements_and_oxides","geochemical", layer_query))
+    # }
+    return(try(DBI::dbGetQuery(con, gsub("IsNull", "IFNULL", layer_query))))
   }
 
   layerdata <- suppressWarnings(SDA_query(layer_query))
-
+  
+  if (inherits(layerdata, 'try-error')) {
+    stop("Layer data query failed", call. = FALSE)
+  }
+  
   # TODO: this shouldn't be needed
   layerdata <- layerdata[,unique(colnames(layerdata))]
 
