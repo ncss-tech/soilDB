@@ -4,7 +4,7 @@
 \alias{NASISDomainsAsFactor}
 \title{Get/Set Options for Encoding NASIS Domains as Factors}
 \usage{
-NASISDomainsAsFactor(x = FALSE)
+NASISDomainsAsFactor(x = NULL)
 }
 \arguments{
 \item{x}{logical; default \code{FALSE}}
