@@ -135,7 +135,8 @@ uncode <- function(df,
   }
 
   # convert factors to strings, check soilDB option first
-  if (!getOption("soilDB.NASIS.NASISDomainsAsFactor", default = FALSE) || !stringsAsFactors){
+  if ((length(stringsAsFactors) > 0 && !stringsAsFactors) ||
+      !getOption("soilDB.NASIS.DomainsAsFactor", default = FALSE)){
     idx <- unlist(lapply(df, is.factor))
     df[idx] <- lapply(df[idx], as.character)
   }
@@ -167,7 +168,7 @@ uncode <- function(df,
 
 # convenient, inverted version of uncode()
 code <- function(df, ...) {
-  res <- uncode(df, invert=TRUE, ...)
+  res <- uncode(df, invert = TRUE, ...)
   return(res)
 }
 
@@ -184,9 +185,10 @@ code <- function(df, ...) {
 #' \dontrun{
 #' NASISDomansAsFactor(TRUE)
 #' }
-NASISDomainsAsFactor <- function(x = FALSE) {
-  options(soilDB.NASIS.DomainsAsFactor = getOption("stringsAsFactors", 
-                                                   default = FALSE) || x)
-  getOption("soilDB.NASIS.DomainsAsFactor", default = FALSE)
+NASISDomainsAsFactor <- function(x = NULL) {
+  if (!is.null(x)) {
+     options(soilDB.NASIS.DomainsAsFactor = (x || getOption("stringsAsFactors", default = FALSE)))
+  }
+  invisible(getOption("soilDB.NASIS.DomainsAsFactor", default = FALSE))
 }
 
