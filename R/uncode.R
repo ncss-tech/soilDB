@@ -44,8 +44,7 @@
 #' classifying factors. This is useful when a class has large number of unused
 #' classes, which can waste space in tables and figures.
 #'
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors?
+#' @param stringsAsFactors deprecated
 #'
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
@@ -74,9 +73,14 @@ uncode <- function(df,
                    invert = FALSE,
                    db = "NASIS",
                    droplevels = FALSE,
-                   stringsAsFactors = default.stringsAsFactors(),
+                   stringsAsFactors = NULL,
                    dsn = NULL) {
-
+  
+  if (!missing(stringsAsFactors) && stringsAsFactors) {
+    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   # load current metadata table
   if (db == "NASIS") {
     metadata <- .get_NASIS_metadata(dsn = dsn)
@@ -97,45 +101,45 @@ uncode <- function(df,
   columnsToWorkOn.idx <- which(nm %in% possibleReplacements)
 
   # iterate over columns with codes
-  for (i in columnsToWorkOn.idx){
-
+  for (i in columnsToWorkOn.idx) {
     # get the current metadata
-    sub <- metadata[metadata[[metadata_col]] %in% nm[i], ]
-
+    sub <- metadata[metadata[[metadata_col]] %in% nm[i],]
+    
     # NASIS or LIMS
     if (db %in% c("NASIS", "LIMS")) {
-      if (invert == FALSE){
+      if (invert == FALSE) {
         # replace codes with values
         df[, i] <- factor(df[, i], levels = sub[[value_col]], labels = sub[[name_col]])
       } else {
         # replace values with codes
-        df[, i] <- factor(df[, i], levels = sub[[name_col]], labels = sub[[value_col]])}
+        df[, i] <- factor(df[, i], levels = sub[[name_col]], labels = sub[[value_col]])
+      }
     }
 
     # SDA
     if (db == "SDA") {
-      if (invert == FALSE){
+      if (invert == FALSE) {
         # replace codes with values
         df[, i] <- factor(df[, i], levels = sub[[label_col]])
       } else {
         # replace values with codes
         df[, i] <- factor(df[, i], levels = sub[[label_col]], labels = sub[[value_col]])
-        }
       }
     }
+  }
 
   # drop unused levels
   if (droplevels == TRUE) {
-    idx <- which(! nm %in% possibleReplacements)
+    idx <- which(!nm %in% possibleReplacements)
     df <- droplevels(df, except = idx)
-    }
+  }
 
-  # convert factors to strings
-  if (stringsAsFactors == FALSE) {
+  # convert factors to strings, check soilDB option first
+  if (!getOption("soilDB.NASIS.NASISDomainsAsFactor", default = FALSE) || !stringsAsFactors){
     idx <- unlist(lapply(df, is.factor))
     df[idx] <- lapply(df[idx], as.character)
   }
-
+  
   return(df)
 }
 
@@ -167,4 +171,22 @@ code <- function(df, ...) {
   return(res)
 }
 
+#' Get/Set Options for Encoding NASIS Domains as Factors
+#' 
+#' Set package option `soilDB.NASIS.DomainsAsFactor` for returning coded NASIS domains as factors. 
+#'
+#' @param x logical; default `FALSE`
+#'
+#' @return local, result of `getOption("soilDB.NASIS.DomainsAsFactor")`
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' NASISDomansAsFactor(TRUE)
+#' }
+NASISDomainsAsFactor <- function(x = FALSE) {
+  options(soilDB.NASIS.DomainsAsFactor = getOption("stringsAsFactors", 
+                                                   default = FALSE) || x)
+  getOption("soilDB.NASIS.DomainsAsFactor", default = FALSE)
+}
 

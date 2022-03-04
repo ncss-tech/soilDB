@@ -17,7 +17,7 @@ get_component_from_SDA(
   childs = TRUE,
   droplevels = TRUE,
   nullFragsAreZero = TRUE,
-  stringsAsFactors = default.stringsAsFactors()
+  stringsAsFactors = NULL
 )
 
 get_cointerp_from_SDA(
@@ -25,26 +25,18 @@ get_cointerp_from_SDA(
   mrulename = NULL,
   duplicates = FALSE,
   droplevels = TRUE,
-  stringsAsFactors = default.stringsAsFactors()
+  stringsAsFactors = NULL
 )
 
-get_legend_from_SDA(
-  WHERE = NULL,
-  droplevels = TRUE,
-  stringsAsFactors = default.stringsAsFactors()
-)
+get_legend_from_SDA(WHERE = NULL, droplevels = TRUE, stringsAsFactors = NULL)
 
 get_lmuaoverlap_from_SDA(
   WHERE = NULL,
   droplevels = TRUE,
-  stringsAsFactors = default.stringsAsFactors()
+  stringsAsFactors = NULL
 )
 
-get_mapunit_from_SDA(
-  WHERE = NULL,
-  droplevels = TRUE,
-  stringsAsFactors = default.stringsAsFactors()
-)
+get_mapunit_from_SDA(WHERE = NULL, droplevels = TRUE, stringsAsFactors = NULL)
 
 get_chorizon_from_SDA(
   WHERE = NULL,
@@ -52,7 +44,7 @@ get_chorizon_from_SDA(
   childs = TRUE,
   nullFragsAreZero = TRUE,
   droplevels = TRUE,
-  stringsAsFactors = default.stringsAsFactors()
+  stringsAsFactors = NULL
 )
 
 fetchSDA(
@@ -62,7 +54,7 @@ fetchSDA(
   nullFragsAreZero = TRUE,
   rmHzErrors = FALSE,
   droplevels = TRUE,
-  stringsAsFactors = default.stringsAsFactors()
+  stringsAsFactors = NULL
 )
 }
 \arguments{
@@ -81,11 +73,7 @@ classes, which can waste space in tables and figures.}
 \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0?
 (default: TRUE), see details}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the uncode() function. It does not
-convert those vectors that have set outside of uncode() (i.e. hard coded).
-The 'factory-fresh' default is TRUE, but this can be changed by setting
-options(stringsAsFactors = FALSE)}
+\item{stringsAsFactors}{deprecated}
 
 \item{mrulename}{character. Interpretation rule names}
 

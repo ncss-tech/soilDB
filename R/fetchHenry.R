@@ -287,7 +287,7 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   if(!requireNamespace('jsonlite', quietly=TRUE))
     stop('please install the `jsonlite` packages', call.=FALSE)
   
-  # important: change the default behavior of data.frame
+  # important: backward compatibility R <4.0
   opt.original <- options(stringsAsFactors = FALSE)
   
   # sanity-check: `what` should be within the legal set of options

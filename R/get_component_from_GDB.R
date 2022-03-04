@@ -1,4 +1,4 @@
-get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, childs = FALSE, droplevels = TRUE, stringsAsFactors = TRUE) {
+get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, childs = FALSE, droplevels = TRUE, stringsAsFactors = NULL) {
 
   # check
   co_vars <- "comppct_l|comppct_r|comppct_h|compname|compkind|majcompflag|otherph|localphase|slope_l|slope_r|slope_h|slopelenusle_l|slopelenusle_r|slopelenusle_h|runoff|tfact|wei|weg|erocl|earthcovkind1|earthcovkind2|hydricon|hydricrating|drainagecl|elev_l|elev_r|elev_h|aspectccwise|aspectrep|aspectcwise|geomdesc|albedodry_l|albedodry_r|albedodry_h|airtempa_l|airtempa_r|airtempa_h|map_l|map_r|map_h|reannualprecip_l|reannualprecip_r|reannualprecip_h|ffd_l|ffd_r|ffd_h|nirrcapcl|nirrcapscl|nirrcapunit|irrcapcl|irrcapscl|irrcapunit|cropprodindex|constreeshrubgrp|wndbrksuitgrp|rsprod_l|rsprod_r|rsprod_h|foragesuitgrpid|wlgrain|wlgrass|wlherbaceous|wlshrub|wlconiferous|wlhardwood|wlwetplant|wlshallowwat|wlrangeland|wlopenland|wlwoodland|wlwetland|soilslippot|frostact|initsub_l|initsub_r|initsub_h|totalsub_l|totalsub_r|totalsub_h|hydgrp|corcon|corsteel|taxclname|taxorder|taxsuborder|taxgrtgroup|taxsubgrp|taxpartsize|taxpartsizemod|taxceactcl|taxreaction|taxtempcl|taxmoistscl|taxtempregime|soiltaxedition|castorieindex|flecolcomnum|flhe|flphe|flsoilleachpot|flsoirunoffpot|fltemik2use|fltriumph2use|indraingrp|innitrateleachi|misoimgmtgrp|vasoimgtgrp|cokey|mukey"
@@ -26,8 +26,7 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
   # recode metadata domains
   co <- uncode(co,
                db = "SDA",
-               droplevels = droplevels,
-               stringsAsFactors = stringsAsFactors
+               droplevels = droplevels
   )
   
 
@@ -64,7 +63,7 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
 
 
 
-get_legend_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, droplevels = TRUE, stringsAsFactors = TRUE, stats = FALSE) {
+get_legend_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, droplevels = TRUE, stringsAsFactors = NULL, stats = FALSE) {
   
   if (!is.null(WHERE)) {
     # check
@@ -93,8 +92,7 @@ get_legend_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, droplev
   # recode metadata domains
   le <- uncode(le,
                db = "SDA",
-               droplevels = droplevels,
-               stringsAsFactors = stringsAsFactors
+               droplevels = droplevels
   )
 
   vars <- c("mlraoffice", "areasymbol", "areaname", "areatypename", "areaacres", "ssastatus", "projectscale", "cordate", "lkey", "n_mukey")
@@ -110,7 +108,7 @@ get_legend_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, droplev
 
 
 
-get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, droplevels = TRUE, stringsAsFactors = TRUE, stats = FALSE) {
+get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, droplevels = TRUE, stringsAsFactors = NULL, stats = FALSE) {
 
   # tests
   if (!is.null(WHERE)) {
@@ -217,8 +215,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   # recode metadata domains
   mu <- uncode(mu,
                db = "SDA",
-               droplevels = droplevels,
-               stringsAsFactors = stringsAsFactors
+               droplevels = droplevels
   )
 
   vars <- c("areasymbol", "lkey", "mukey", "musym", "muname", "mukind", "mustatus", "invesintens", "muacres", "farmlndcl", "pct_component", "pct_hydric", "n_component", "n_majcompflag")
@@ -389,8 +386,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 
   ch <- uncode(ch,
                db = "SDA",
-               droplevels = droplevels,
-               stringsAsFactors = stringsAsFactors
+               droplevels = droplevels
   )
 
   return(ch)
@@ -423,11 +419,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 #' @param droplevels logical: indicating whether to drop unused levels in
 #' classifying factors. This is useful when a class has large number of unused
 #' classes, which can waste space in tables and figures.
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the uncode() function. It does not
-#' convert those vectors that have set outside of uncode() (i.e. hard coded).
-#' The 'factory-fresh' default is TRUE, but this can be changed by setting
-#' options(stringsAsFactors = FALSE)
+#' @param stringsAsFactors deprecated
 #' @return A \code{data.frame} or \code{SoilProfileCollection} object.
 #' @author Stephen Roecker
 #' @keywords manip
@@ -460,7 +452,7 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
                      WHERE = NULL,
                      childs = TRUE,
                      droplevels = TRUE,
-                     stringsAsFactors = TRUE
+                     stringsAsFactors = NULL
 ) {
 
   # checks
@@ -515,8 +507,7 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
             dsn        = dsn,
             WHERE      = qry,
             childs     = childs,
-            droplevels = droplevels,
-            stringsAsFactors = stringsAsFactors
+            droplevels = droplevels
           ))
         },
         error = function(err) {
@@ -553,8 +544,7 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
       dsn        = dsn,
       WHERE      = WHERE,
       childs     = childs,
-      droplevels = droplevels,
-      stringsAsFactors = stringsAsFactors
+      droplevels = droplevels
       ))
 
     # horizons

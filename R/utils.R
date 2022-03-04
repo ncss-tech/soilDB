@@ -785,7 +785,7 @@
   
   # convert factors to strings
   idx <- unlist(lapply(df, is.factor))
-  if (stringsAsFactors == FALSE & any(idx)) {
+  if (any(idx)) {
     df[idx] <- lapply(df[idx], as.character)
   }
   

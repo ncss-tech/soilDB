@@ -12,7 +12,7 @@ fetchGDB(
   WHERE = NULL,
   childs = TRUE,
   droplevels = TRUE,
-  stringsAsFactors = TRUE
+  stringsAsFactors = NULL
 )
 }
 \arguments{
@@ -31,11 +31,7 @@ are not flattened and appended}
 classifying factors. This is useful when a class has large number of unused
 classes, which can waste space in tables and figures.}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the uncode() function. It does not
-convert those vectors that have set outside of uncode() (i.e. hard coded).
-The 'factory-fresh' default is TRUE, but this can be changed by setting
-options(stringsAsFactors = FALSE)}
+\item{stringsAsFactors}{deprecated}
 }
 \value{
 A \code{data.frame} or \code{SoilProfileCollection} object.

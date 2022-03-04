@@ -42,7 +42,7 @@ get_colors_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   d <- dbQueryNASIS(channel, q)
 
 	# uncode domained columns
-	d <- uncode(d, stringsAsFactors = FALSE, dsn = dsn)
+	d <- uncode(d, dsn = dsn)
 
 	# convert back to characters / numeric
 	d$colormoistst <- as.character(d$colormoistst)
