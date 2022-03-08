@@ -44,9 +44,7 @@
       # remove
       x2 <- x2[!is.na(x2$peiid), - ncol(x2)]
       idx <- names(x2) %in% c("pmkind", "pmorigin")
-      x2[!idx] <- suppressWarnings(
-        uncode(x2[!idx], db = "LIMS", stringsAsFactors = stringsAsFactors)
-      )
+      x2[!idx] <- uncode(x2[!idx], db = "LIMS")
       idx <- sapply(x2, is.character)
       x2[idx] <- lapply(x2[idx], function(x) ifelse(x == "", NA, x))
       return(x2)
@@ -166,9 +164,7 @@
   # remove
   temp = temp[!is.na(temp$peiid), - ncol(temp)]
   idx  = names(temp) %in% c("pmkind", "pmorigin")
-  temp[!idx] = suppressWarnings(
-    uncode(temp[!idx], db = "LIMS", stringsAsFactors = stringsAsFactors)
-  )
+  temp[!idx] = uncode(temp[!idx], db = "LIMS")
   idx  = sapply(temp, is.character)
   temp[idx] = lapply(temp[idx], function(x) ifelse(x == "", NA, x))
   # temp = within(temp, {
@@ -211,7 +207,7 @@
   # NASIS text reports return empty columns
   # remove
   temp = temp[!is.na(temp$peiid), - ncol(temp)]
-  temp = uncode(temp, db = "LIMS", stringsAsFactors = stringsAsFactors)
+  temp = uncode(temp, db = "LIMS")
   # temp = within(temp, {
   #   obsdate   = as.Date(as.character(obsdate))
   #   classdate = as.Date(as.character(classdate))
