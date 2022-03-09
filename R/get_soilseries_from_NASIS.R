@@ -20,8 +20,8 @@
 #' @export get_soilseries_from_NASIS
 get_soilseries_from_NASIS <- function(stringsAsFactors = NULL,
                                       dsn = NULL, delimiter = " over ") {
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -78,8 +78,8 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = NULL,
 
 get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = NULL) {
 
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   

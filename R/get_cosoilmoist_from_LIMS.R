@@ -1,7 +1,7 @@
 get_cosoilmoist_from_NASISWebReport <- function(projectname, impute = TRUE, stringsAsFactors = NULL) {
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -15,12 +15,12 @@ get_cosoilmoist_from_NASISWebReport <- function(projectname, impute = TRUE, stri
   d.cosoilmoist <- do.call("rbind", d.cosoilmoist)
 
   # set factor levels according to metadata domains
-  d.cosoilmoist <- uncode(d.cosoilmoist, db = "LIMS", stringsAsFactors = TRUE)
+  d.cosoilmoist <- uncode(d.cosoilmoist, db = "LIMS")
   
   # prep dataset: rename columns, impute empty values, stringsAsFactors
   d.cosoilmoist <- .cosoilmoist_prep(d.cosoilmoist, impute = impute)
   
-  # return data.fram
+  # return data.frame
   return(d.cosoilmoist)
   }
 

@@ -10,7 +10,7 @@ NASISDomainsAsFactor(x = NULL)
 \item{x}{logical; default \code{FALSE}}
 }
 \value{
-local, result of \code{getOption("soilDB.NASIS.DomainsAsFactor")}
+logical, result of \code{getOption("soilDB.NASIS.DomainsAsFactor")}
 }
 \description{
 Set package option \code{soilDB.NASIS.DomainsAsFactor} for returning coded NASIS domains as factors.

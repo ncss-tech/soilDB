@@ -37,8 +37,8 @@
 fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
                                 stringsAsFactors = NULL) {
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -96,8 +96,8 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
 #' @rdname fetchNASISWebReport
 get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = NULL) {
  
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -134,8 +134,8 @@ get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = NU
 #' @rdname fetchNASISWebReport
 get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsAsFactors = NULL) {
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -181,8 +181,8 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
 #' @rdname fetchNASISWebReport
 get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = TRUE, stringsAsFactors = NULL) {
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -213,8 +213,8 @@ get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = 
 #' @rdname fetchNASISWebReport
 get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = NULL) {  
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
     
@@ -245,8 +245,8 @@ get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, s
 #' @rdname fetchNASISWebReport
 get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = NULL) {
 
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -277,8 +277,8 @@ get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, strin
 #' @rdname fetchNASISWebReport
 get_projectmapunit_from_NASISWebReport <- function(projectname, stringsAsFactors = NULL) {
 
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -306,8 +306,8 @@ get_projectmapunit_from_NASISWebReport <- function(projectname, stringsAsFactors
 get_projectmapunit2_from_NASISWebReport <- function(mlrassoarea, fiscalyear, projectname, stringsAsFactors = NULL) {
 
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   

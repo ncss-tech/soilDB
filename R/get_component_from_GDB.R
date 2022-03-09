@@ -325,7 +325,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 }
 
 
-.get_chorizon_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", co, droplevels = TRUE, stringsAsFactors = TRUE) {
+.get_chorizon_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", co, droplevels = TRUE, stringsAsFactors = NULL) {
 
   # chorizon
   idx <- c(0, rep(3000, 10) * 1:10)
@@ -386,8 +386,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 
   ch <- uncode(ch,
                db = "SDA",
-               droplevels = droplevels
-  )
+               droplevels = droplevels)
 
   return(ch)
 }

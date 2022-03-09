@@ -9,8 +9,8 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
                                    droplevels = TRUE, nullFragsAreZero = TRUE,
                                    stringsAsFactors = NULL) {
                                      
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -336,8 +336,8 @@ get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = F
                                   stringsAsFactors = NULL
                                   ) {
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -373,9 +373,7 @@ get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = F
   d.cointerp <- SDA_query(q.cointerp)
 
   # recode metadata domains
-  d.cointerp <- uncode(d.cointerp, db = "SDA",
-                       droplevels = droplevels
-                       )
+  d.cointerp <- uncode(d.cointerp, db = "SDA")
 
   return(d.cointerp)
   }
@@ -405,10 +403,7 @@ get_legend_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactor
   # recode metadata domains
   d.legend <- uncode(d.legend,
                      db = "SDA",
-                     droplevels = droplevels,
-                     stringsAsFactors   = stringsAsFactors
-  )
-
+                     droplevels = droplevels)
 
   # done
   return(d.legend)
@@ -464,8 +459,8 @@ get_mapunit_from_SDA <- function(WHERE = NULL,
                                  droplevels = TRUE,
                                  stringsAsFactors = NULL
                                  ) {
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -525,8 +520,8 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
                                   droplevels = TRUE,
                                   stringsAsFactors = NULL
                                   ) {
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
 
@@ -809,8 +804,8 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                      stringsAsFactors = NULL
                      ) {
 
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   

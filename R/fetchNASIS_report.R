@@ -6,8 +6,8 @@
                                stringsAsFactors = NULL
                                ) {
 
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -137,8 +137,8 @@
 .get_site_from_NASISReport <- function(url = NULL, nullFragsAreZero = TRUE, stringsAsFactors = NULL
 ) {
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
 
@@ -184,8 +184,8 @@
 
 .get_pediagfeatures_from_NASISTemp <- function(stringsAsFactors = NULL) {
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   

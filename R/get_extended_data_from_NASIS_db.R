@@ -44,8 +44,8 @@ get_extended_data_from_NASIS_db <- function(SS = TRUE,
                                             stringsAsFactors = NULL,
                                             dsn = NULL) {
 
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -472,8 +472,9 @@ LEFT OUTER JOIN (
 	d.rf.data    <- uncode(d.rf.data, dsn = dsn)
 	d.art.data  <-  uncode(d.art.data, dsn = dsn)
 	d.hz.texmod  <- uncode(d.hz.texmod, dsn = dsn)
-	# https://github.com/ncss-tech/soilDB/issues/53
-	d.taxhistory <- uncode(d.taxhistory, dsn = dsn, stringsAsFactors = FALSE)
+	# ensure that taxhistory is always character
+	d.taxhistory[] <- lapply(uncode(d.taxhistory, dsn = dsn), 
+	                         function(x) if (is.factor(x)) as.character(x) else x)
 	d.sitepm     <- uncode(d.sitepm, dsn = dsn)
 	d.structure  <- uncode(d.structure, dsn = dsn)
 	d.hz.desgn <- uncode(d.hz.desgn, dsn = dsn)

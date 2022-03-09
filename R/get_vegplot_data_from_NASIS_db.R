@@ -6,8 +6,8 @@ get_vegplot_from_NASIS_db <- function(SS = TRUE,
                                       stringsAsFactors = NULL,
                                       dsn = NULL) {
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -53,11 +53,12 @@ get_vegplot_from_NASIS_db <- function(SS = TRUE,
 # get location data from the corresponding record in the site table
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
-  
+get_vegplot_location_from_NASIS_db <- function(SS = TRUE,
+                                               stringsAsFactors = NULL,
+                                               dsn = NULL) {
 
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -119,10 +120,12 @@ get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NULL,
 # get Rangeland Health Indicator(RHI) associated fields in the vegplot table
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
-
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+get_vegplot_trhi_from_NASIS_db <- function(SS = TRUE,
+                                           stringsAsFactors = NULL,
+                                           dsn = NULL) {
+    
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -163,8 +166,15 @@ get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NULL, dsn
 # get vegplot species - this is a reconstruction of a site existing species list
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
+get_vegplot_species_from_NASIS_db <-  function(SS = TRUE,
+                                               stringsAsFactors = NULL,
+                                               dsn = NULL) {
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   q.vegplotspecies <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, ppi.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass
   FROM
   site_View_1 AS s
@@ -203,10 +213,12 @@ get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defaul
 # get vegplot transect data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
+get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
+                                                stringsAsFactors = NULL,
+                                                dsn = NULL) {
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -249,10 +261,12 @@ get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NULL,
 # get vegplot transect species data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
-
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
+                                                   stringsAsFactors = NULL,
+                                                   dsn = NULL) {
+    
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -294,11 +308,12 @@ get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NU
 # get vegplot tree site index summary data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
-
+get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
+                                                       stringsAsFactors = NULL,
+                                                       dsn = NULL) {
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -341,8 +356,10 @@ get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
 # get vegplot tree site index details data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
+get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE,
+                                                      stringsAsFactors = NULL,
+                                                      dsn = NULL) {
+  
   # plot tree site index detail data
   q.pltsid <- "SELECT plottreesiteindsumiidref, pltsid.seqnum, plantsym, plantsciname, plantnatvernm, treenumber, crownclass, reproductionsource, treediameterbreastheight, tenyeargrowthradius, growthringcount, growthringcountheight, growthringcountage, treeage, treecanopyhtbottom, treecanopyhttop, plottreesiteinddetailsiid
 
@@ -386,10 +403,13 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
 #' @param fixLineEndings Replace `'\r\n'` with `'\n'`; Default: `TRUE`
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_textnote_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, stringsAsFactors = NULL, dsn = NULL) {
+get_vegplot_textnote_from_NASIS_db <- function(SS = TRUE,
+                                               fixLineEndings = TRUE,
+                                               stringsAsFactors = NULL,
+                                               dsn = NULL) {
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   

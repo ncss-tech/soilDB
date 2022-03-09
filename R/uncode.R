@@ -76,8 +76,8 @@ uncode <- function(df,
                    stringsAsFactors = NULL,
                    dsn = NULL) {
   
-  if (!missing(stringsAsFactors) && stringsAsFactors) {
-    .Deprecated(msg = "stringsAsFactors = TRUE argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(TRUE)`")
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
@@ -179,7 +179,7 @@ code <- function(df, ...) {
 #'
 #' @param x logical; default `FALSE`
 #'
-#' @return local, result of `getOption("soilDB.NASIS.DomainsAsFactor")`
+#' @return logical, result of `getOption("soilDB.NASIS.DomainsAsFactor")`
 #' @export
 #'
 #' @examples
