@@ -146,8 +146,9 @@ uncode <- function(df,
 
 .get_NASIS_metadata <- function(dsn = NULL) {
   
-  q <- "SELECT mdd.DomainID, DomainName, ChoiceSequence, ChoiceValue, ChoiceName,
-                 ChoiceLabel, ColumnPhysicalName, ColumnLogicalName, ChoiceObsolete, ChoiceDescription
+  q <- "SELECT mdd.DomainID, DomainName, DomainRanked, DisplayLabel, 
+               ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ChoiceDescription, 
+               ColumnPhysicalName, ColumnLogicalName
           FROM MetadataDomainDetail mdd
             INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
             INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName
