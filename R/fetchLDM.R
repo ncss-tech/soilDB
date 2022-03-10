@@ -160,15 +160,19 @@ fetchLDM <- function(x = NULL,
     # TODO: this shouldn't be needed
     sites <- sites[,unique(colnames(sites))]
 
-    # get data for lab layers within pedon_key returned
-    hz <- .get_lab_layer_by_pedon_key(x = sites[[bycol]],
-                                      con = con,
-                                      bycol = bycol,
-                                      tables = tables,
-                                      layer_type = layer_type,
-                                      prep_code = prep_code,
-                                      analyzed_size_frac = analyzed_size_frac)
-
+    if (is.null(chunk.size) || nrow(sites) < chunk.size){
+      # get data for lab layers within pedon_key returned
+      hz <- .get_lab_layer_by_pedon_key(x = sites[[bycol]],
+                                        con = con,
+                                        bycol = bycol,
+                                        tables = tables,
+                                        layer_type = layer_type,
+                                        prep_code = prep_code,
+                                        analyzed_size_frac = analyzed_size_frac)
+    } else {
+      hz <- try(stop(""), silent = TRUE)
+    }
+    
     .do_chunk <- function(con, size) {
       chunk.idx <- makeChunks(sites[[bycol]], size)
       as.data.frame(data.table::rbindlist(lapply(unique(chunk.idx),
@@ -189,7 +193,10 @@ fetchLDM <- function(x = NULL,
 
     ntry <- 0
     while ((inherits(hz, 'try-error') || is.null(hz)) && ntry < ntries) {
-      hz <- .do_chunk(chunk.size)
+      if (is.null(chunk.size)) {
+        stop("query failed and chunk.size argument is NULL", call.=FALSE)
+      }
+      hz <- .do_chunk(con, chunk.size)
       # repeat as long as there is a try error/NULL, halving chunk.size with each iteration
       chunk.size <- pmax(floor(chunk.size / 2), 1)
       ntry <- ntry + 1
@@ -212,7 +219,7 @@ fetchLDM <- function(x = NULL,
       hz$site_key <- NULL
       
       # hacks to deal with problems in the various databases
-      hz <- unique(hz[,unique(colnames(hz))])
+      # hz <- unique(hz[,unique(colnames(hz))]) 
       
       # build SoilProfileCollection
       depths(hz) <- pedon_key ~ hzn_top + hzn_bot
