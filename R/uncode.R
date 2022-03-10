@@ -24,12 +24,6 @@
 #' Reports, the metadata is pulled from a static snapshot in the soilDB
 #' package.
 #'
-#' Beware the default is to return the values as factors rather than strings.
-#' While strings are generally preferable, factors make plotting more
-#' convenient. Generally the factor level ordering returned by uncode() follows
-#' the naturally ordering of categories that would be expected (e.g. sand,
-#' silt, clay).
-#'
 #' @aliases metadata uncode code
 #'
 #' @param df data.frame
