@@ -30,8 +30,8 @@ Query soil/climate data from USDA-NRCS SCAN Stations
 \details{
 Possible above and below ground sensor types include: 'SMS' (soil moisture), 'STO' (soil temperature), 'SAL' (salinity), 'TAVG' (daily average air temperature), 'TMIN' (daily minimum air temperature), 'TMAX' (daily maximum air temperature), 'PRCP' (daily precipitation), 'PREC' (daily precipitation), 'SNWD' (snow depth), 'WTEQ' (snow water equivalent),'WDIRV' (wind direction), 'WSPDV' (wind speed), 'LRADT' (solar radiation/langley total).
 \itemize{
-\item More on \href{https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/scanSensors}{SCAN sensors}
-\item More on \href{https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/snotelSensors}{SNOTEL sensors}
+\item More on \href{https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/scanSensors/}{SCAN sensors}
+\item More on \href{https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/snotelSensors/}{SNOTEL sensors}
 }
 
 See the \href{https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/}{SCAN and SNOTEL FAQ} for answers to common questions about these data.

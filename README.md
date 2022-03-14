@@ -12,11 +12,11 @@ Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech
 Installation
 ------------
 
-Get the stable version (2.6.13) from CRAN:
+Get the stable version from CRAN:
 
     install.packages('soilDB', dependencies = TRUE)
 
-Get the development version (2.6.14) from GitHub:
+Get the development version from GitHub:
 
     remotes::install_github("ncss-tech/soilDB", dependencies = FALSE, upgrade = FALSE, build = FALSE)
 
@@ -29,7 +29,7 @@ Citation
 --------
 
 Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021).
-soilDB: Soil Database Interface. R package version 2.6.13.
+soilDB: Soil Database Interface. R package version 2.6.14.
 <https://CRAN.R-project.org/package=soilDB>
 
 soilDB 2.6.14

@@ -128,8 +128,8 @@ SCAN_site_metadata <- function(site.code = NULL) {
 #'
 #' @details Possible above and below ground sensor types include: 'SMS' (soil moisture), 'STO' (soil temperature), 'SAL' (salinity), 'TAVG' (daily average air temperature), 'TMIN' (daily minimum air temperature), 'TMAX' (daily maximum air temperature), 'PRCP' (daily precipitation), 'PREC' (daily precipitation), 'SNWD' (snow depth), 'WTEQ' (snow water equivalent),'WDIRV' (wind direction), 'WSPDV' (wind speed), 'LRADT' (solar radiation/langley total).
 #'
-#'  - More on [SCAN sensors](https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/scanSensors)
-#'  - More on [SNOTEL sensors](https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/snotelSensors)
+#'  - More on [SCAN sensors](https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/scanSensors/)
+#'  - More on [SNOTEL sensors](https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/snotelSensors/)
 #'
 #' See the [SCAN and SNOTEL FAQ](https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/) for answers to common questions about these data.
 #'
