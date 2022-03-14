@@ -1,8 +1,8 @@
 # R 3.3 compatibility:
-importFrom("grDevices", "rgb", "convertColor")
+importFrom("grDevices", "rgb", "convertColor", 'col2rgb')
 
 importFrom("graphics", "axis", "legend", "mtext", "rect", "segments",
-             "text", "plot", 'col2rgb')
+             "text", "plot")
 
 importFrom("stats", "aggregate", "complete.cases", "na.omit", "as.formula", "splinefun", "weighted.mean")
 
