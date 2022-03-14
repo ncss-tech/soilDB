@@ -11,39 +11,32 @@
 get_mapunit_from_NASIS(
   SS = TRUE,
   droplevels = TRUE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 
 get_legend_from_NASIS(
   SS = TRUE,
   droplevels = TRUE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 
 get_lmuaoverlap_from_NASIS(
   SS = TRUE,
   droplevels = TRUE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 
-get_projectmapunit_from_NASIS(
-  SS = TRUE,
-  stringsAsFactors = default.stringsAsFactors(),
-  dsn = NULL
-)
+get_projectmapunit_from_NASIS(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
 }
 \arguments{
 \item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: \code{TRUE})}
 
 \item{droplevels}{Drop unused levels from \code{farmlndcl} and other factor levels from NASIS domains?}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the \code{uncode()} function. It does not
-convert those vectors that have been set outside of \code{uncode()} (i.e. hard
-coded).}
+\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

@@ -3,9 +3,14 @@
                                rmHzErrors       = TRUE,
                                nullFragsAreZero = TRUE,
                                soilColorState   = "moist",
-                               stringsAsFactors = default.stringsAsFactors()
+                               stringsAsFactors = NULL
                                ) {
 
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   tf <- "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
   if (!is.null(url))
     tf <- url
@@ -21,10 +26,8 @@
   temp <- readLines(tf)
 
   be <- data.frame(table = c("site", "pediagfeatures", "phorizon", "phcolor"),
-                    begin = grep("@begin", temp),
-                    end = grep("@end", temp),
-                    stringsAsFactors = stringsAsFactors
-                    )
+                   begin = grep("@begin", temp),
+                   end = grep("@end", temp))
 
   # check to see if there is any data
   diff.idx <- be$end - be$begin
@@ -131,8 +134,13 @@
 
 # temp <- .fetchNASISTemp()
 
-.get_site_from_NASISReport <- function(url = NULL, nullFragsAreZero = TRUE, stringsAsFactors = default.stringsAsFactors()
+.get_site_from_NASISReport <- function(url = NULL, nullFragsAreZero = TRUE, stringsAsFactors = NULL
 ) {
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
 
   tf = "C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt"
   if (!is.null(url)) tf = url
@@ -174,9 +182,13 @@
 
 
 
-.get_pediagfeatures_from_NASISTemp <- function(stringsAsFactors = default.stringsAsFactors()
-) {
-
+.get_pediagfeatures_from_NASISTemp <- function(stringsAsFactors = NULL) {
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   tf <- "C:/ProgramData/USDA/NASIS/Temp/get_pediagfeatures_from_NASIS.txt"
 
   # check if temp file exists
@@ -189,8 +201,7 @@
       readLines(tf)
     ),
     sep = "|",
-    quote = "",
-    stringsAsFactors = stringsAsFactors
+    quote = ""
   )
   # aggregate NASIS returns empty rows
   # NASIS text reports return empty columns

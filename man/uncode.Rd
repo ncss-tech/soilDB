@@ -11,7 +11,7 @@ uncode(
   invert = FALSE,
   db = "NASIS",
   droplevels = FALSE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 }
@@ -28,8 +28,7 @@ indicates whether or not to query metadata from local NASIS database
 classifying factors. This is useful when a class has large number of unused
 classes, which can waste space in tables and figures.}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to
-factors?}
+\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}
@@ -62,12 +61,6 @@ When data is being imported from NASIS, the metadata tables are sourced
 directly from NASIS. When data is being imported from SDA or the NASIS Web
 Reports, the metadata is pulled from a static snapshot in the soilDB
 package.
-
-Beware the default is to return the values as factors rather than strings.
-While strings are generally preferable, factors make plotting more
-convenient. Generally the factor level ordering returned by uncode() follows
-the naturally ordering of categories that would be expected (e.g. sand,
-silt, clay).
 }
 \examples{
 

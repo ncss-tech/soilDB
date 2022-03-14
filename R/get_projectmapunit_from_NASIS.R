@@ -1,7 +1,12 @@
 #' @export
 #' @rdname get_mapunit_from_NASIS
-get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
+get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = NULL, dsn = NULL) {
 
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   q <- paste("SELECT p.projectiid, p.uprojectid, p.projectname, pmu.seqnum pmu_seqnum, a2.areasymbol, lmu.musym, lmu.lmapunitiid AS mukey, mu.nationalmusym, mutype, lmu.mustatus, muname, muacres
 
              FROM
@@ -38,7 +43,7 @@ get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = default.
   if (nrow(d.project) == 0) message("your selected set is missing the project table, please load it and try again")
 
   # uncode metadata domains
-  d.project <- uncode(d.project, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d.project <- uncode(d.project, dsn = dsn)
 
   # done
   return(d.project)

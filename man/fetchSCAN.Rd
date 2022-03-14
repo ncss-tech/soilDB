@@ -4,13 +4,13 @@
 \alias{SCAN_sensor_metadata}
 \alias{SCAN_site_metadata}
 \alias{fetchSCAN}
-\title{Get data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations}
+\title{Get daily climate data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations}
 \usage{
 SCAN_sensor_metadata(site.code)
 
 SCAN_site_metadata(site.code = NULL)
 
-fetchSCAN(site.code, year, report = "SCAN", req = NULL)
+fetchSCAN(site.code, year, report = "SCAN", ...)
 }
 \arguments{
 \item{site.code}{a vector of site codes. If \code{NULL} \code{SCAN_site_metadata()} returns metadata for all SCAN sites.}
@@ -19,7 +19,7 @@ fetchSCAN(site.code, year, report = "SCAN", req = NULL)
 
 \item{report}{report name, single value only}
 
-\item{req}{list of SCAN request parameters, for backwards-compatibility only}
+\item{...}{additional arguments (not used)}
 }
 \value{
 a \code{data.frame} object; \code{NULL} on bad request.
@@ -28,7 +28,15 @@ a \code{data.frame} object; \code{NULL} on bad request.
 Query soil/climate data from USDA-NRCS SCAN Stations
 }
 \details{
-See \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{the fetchSCAN tutorial for details}. These functions require the \code{httr} and \code{rvest} libraries.
+Possible above and below ground sensor types include: 'SMS' (soil moisture), 'STO' (soil temperature), 'SAL' (salinity), 'TAVG' (daily average air temperature), 'TMIN' (daily minimum air temperature), 'TMAX' (daily maximum air temperature), 'PRCP' (daily precipitation), 'PREC' (daily precipitation), 'SNWD' (snow depth), 'WTEQ' (snow water equivalent),'WDIRV' (wind direction), 'WSPDV' (wind speed), 'LRADT' (solar radiation/langley total).
+\itemize{
+\item More on \href{https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/scanSensors}{SCAN sensors}
+\item More on \href{https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/snotelSensors}{SNOTEL sensors}
+}
+
+See the \href{https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/}{SCAN and SNOTEL FAQ} for answers to common questions about these data.
+
+See the \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{fetchSCAN tutorial} for additional usage and visualization examples.
 }
 \examples{
 
@@ -36,7 +44,7 @@ See \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{the fetchSC
 if(requireNamespace("curl") &
     curl::has_internet()) {
 
-    # get data: new interface
+    # get data
     x <- fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016))
     str(x)
 
@@ -50,9 +58,9 @@ if(requireNamespace("curl") &
 
 }
 \references{
-https://www.wcc.nrcs.usda.gov/index.html
+https://www.nrcs.usda.gov/wps/portal/wcc/home/
 }
 \author{
-D.E. Beaudette
+D.E. Beaudette, A.G. Brown
 }
 \keyword{manip}

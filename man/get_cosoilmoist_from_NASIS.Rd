@@ -7,7 +7,7 @@
 get_cosoilmoist_from_NASIS(
   SS = TRUE,
   impute = TRUE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 }
@@ -19,11 +19,7 @@ the entire local database (default: \code{TRUE})}
 categorical data, or the "RV" for numeric data or \code{201} cm if the "RV" is also
 \code{NULL} (default: \code{TRUE})}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the \code{uncode()} function. It does not
-convert those vectors that have set outside of \code{uncode()} (i.e. hard coded).
-The 'factory-fresh' default is TRUE, but this can be changed by setting
-options(\code{stringsAsFactors = FALSE})}
+\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

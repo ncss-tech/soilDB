@@ -6,11 +6,17 @@
                                rmHzErrors = TRUE,
                                nullFragsAreZero = TRUE,
                                soilColorState = 'moist',
+                               mixColors = TRUE,
                                lab = FALSE,
-                               stringsAsFactors = default.stringsAsFactors(),
+                               stringsAsFactors = NULL,
                                dsn = NULL
 ) {
-
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   # test connection
   if (!local_NASIS_defined(dsn) & !inherits(dsn, 'DBIConnection'))
     stop('Local NASIS ODBC connection has not been set up. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
@@ -21,12 +27,9 @@
 
   ## load data in pieces
   # these fail gracefully when no data in local DB | selected set
-  site_data  <- get_site_data_from_NASIS_db(SS = SS, stringsAsFactors = stringsAsFactors,
-                                            dsn = dsn)
-  hz_data    <- get_hz_data_from_NASIS_db(SS = SS, fill = fill, 
-                                          stringsAsFactors = stringsAsFactors,
-                                          dsn = dsn)
-  color_data <- get_colors_from_NASIS_db(SS = SS, dsn = dsn)
+  site_data  <- get_site_data_from_NASIS_db(SS = SS, dsn = dsn)
+  hz_data    <- get_hz_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn)
+  color_data <- get_colors_from_NASIS_db(SS = SS, mixColors = mixColors, dsn = dsn)
 
   ## ensure there are enough data to create an SPC object
   ds <- ifelse(SS, "NASIS selected set", "NASIS local database")
@@ -55,7 +58,6 @@
 
   extended_data <- get_extended_data_from_NASIS_db(SS = SS,
                                                    nullFragsAreZero = nullFragsAreZero,
-                                                   stringsAsFactors = stringsAsFactors,
                                                    dsn = dsn)
 
   ## fix some common problems

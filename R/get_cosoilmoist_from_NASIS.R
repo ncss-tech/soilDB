@@ -13,11 +13,7 @@
 #' @param impute replace missing (i.e. `NULL`) values with `"Not_Populated"` for
 #' categorical data, or the "RV" for numeric data or `201` cm if the "RV" is also
 #' `NULL` (default: `TRUE`)
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the `uncode()` function. It does not
-#' convert those vectors that have set outside of `uncode()` (i.e. hard coded).
-#' The 'factory-fresh' default is TRUE, but this can be changed by setting
-#' options(`stringsAsFactors = FALSE`)
+#' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' @return A data.frame.
@@ -41,10 +37,15 @@
 #' @export get_cosoilmoist_from_NASIS
 get_cosoilmoist_from_NASIS <- function(SS = TRUE,
                                        impute = TRUE,
-                                       stringsAsFactors = default.stringsAsFactors(),
+                                       stringsAsFactors = NULL,
                                        dsn = NULL) {
 
-
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   q.cosoilmoist <- "SELECT dmuiidref AS dmuiid, coiid, compname, comppct_r, drainagecl, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, cosoilmoistiid, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat
 
   FROM component_View_1 co LEFT OUTER JOIN
@@ -68,10 +69,10 @@ get_cosoilmoist_from_NASIS <- function(SS = TRUE,
   d.cosoilmoist <- dbQueryNASIS(channel, q.cosoilmoist)
 
   # recode metadata domains
-  d.cosoilmoist <- uncode(d.cosoilmoist, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d.cosoilmoist <- uncode(d.cosoilmoist, dsn = dsn)
 
   # prep dataset: rename columns, impute empty values, stringsAsFactors
-  d.cosoilmoist <- suppressWarnings(.cosoilmoist_prep(d.cosoilmoist, impute = impute, stringsAsFactors = stringsAsFactors))
+  d.cosoilmoist <- suppressWarnings(.cosoilmoist_prep(d.cosoilmoist, impute = impute))
 
   # done
   return(d.cosoilmoist)

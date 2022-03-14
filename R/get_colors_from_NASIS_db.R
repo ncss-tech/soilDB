@@ -9,6 +9,7 @@
 #'
 #' @param SS fetch data from Selected Set in NASIS or from the entire local
 #' database (default: `TRUE`)
+#' @param mixColors should mixed colors be calculated (Default: `TRUE`) where multiple colors are populated for the same moisture state in a horizon? `FALSE` takes the dominant color for each horizon moist/dry state.
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' @return A data.frame with the results.
@@ -18,9 +19,10 @@
 #' \code{\link{get_site_data_from_NASIS_db}}
 #' @keywords manip
 #' @export get_colors_from_NASIS_db
-get_colors_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
+get_colors_from_NASIS_db <- function(SS = TRUE, mixColors = TRUE, dsn = NULL) {
 
 	# unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
+	# TODO: is alias of colorpct necessary?
   q <- "SELECT peiid, phiid, colormoistst, colorpct as pct, colorhue, colorvalue, colorchroma
   FROM
   pedon_View_1
@@ -42,27 +44,46 @@ get_colors_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   d <- dbQueryNASIS(channel, q)
 
 	# uncode domained columns
-	d <- uncode(d, stringsAsFactors = FALSE, dsn = dsn)
+	d <- uncode(d, dsn = dsn)
 
-	# convert back to characters / numeric
+	# convert factors if present back to characters / numeric
 	d$colormoistst <- as.character(d$colormoistst)
 	d$colorhue <- as.character(d$colorhue)
-	# careful!
-	# uncode creates factors, so we have to convert to character first
 	d$colorvalue <- as.numeric(as.character(d$colorvalue))
 	d$colorchroma <- as.numeric(as.character(d$colorchroma))
 
   # sanity check, only attempt to simplify colors if there are > 1 rows
-  if (nrow(d) > 1) {
+  if (nrow(d) > 1 && mixColors) {
     # mix colors as-needed, mixing done in CIE LAB space
     d.final <- simplifyColorData(d, id.var = 'phiid', wt = 'pct')
   } else {
-    # TODO: this could lead to problems due to assumed column presence
-    # do nothing
-    d.final <- d
+    d.final <- .dominantColors(d)
   }
 
 	# done
 	return(d.final)
 }
 
+.dominantColors <- function(d, id.var = 'phiid', moist_state = 'colormoistst', wt = 'pct',
+                            hue = 'colorhue', value = 'colorvalue', chroma = 'colorchroma') {
+  .I <- NULL
+  d[[moist_state]] <- tolower(d[[moist_state]])
+  d <- d[d[[moist_state]] %in% c('dry', 'moist'),]
+  d <- data.table::as.data.table(d)[order(d[[id.var]], d[[moist_state]], d[[wt]], decreasing = TRUE),]
+  dom <- d[, .I[1], by = c(id.var, moist_state)]
+  d$peiid <- NULL; d[[moist_state]] <- NULL; d[[wt]] <- NULL
+  
+  dry <- d[dom[which(dom$colormoistst == "dry"), ]$V1, ]
+  dry$dry_soil_color <- aqp::munsell2rgb(dry[[hue]], dry[[value]], dry[[chroma]])
+  dry <- cbind(dry, t(col2rgb(dry$dry_soil_color) / 255))
+  colnames(dry) <- c(id.var, 'd_hue', 'd_value', 'd_chroma', 'dry_soil_color', 'd_r', 'd_g', 'd_b')
+  dry$d_sigma <- 0
+  
+  moist <- d[dom[which(dom$colormoistst == "moist"), ]$V1, ]
+  moist$moist_soil_color <- aqp::munsell2rgb(moist[[hue]], moist[[value]], moist[[chroma]])
+  moist <- cbind(moist, t(col2rgb(moist$moist_soil_color) / 255))
+  colnames(moist) <- c(id.var, 'm_hue', 'm_value', 'm_chroma', 'moist_soil_color', 'm_r', 'm_g', 'm_b')
+  moist$m_sigma <- 0
+  
+  as.data.frame(dry[moist, on = id.var])
+}

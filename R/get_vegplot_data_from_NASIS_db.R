@@ -3,8 +3,13 @@
 #' @export
 #' @rdname fetchVegdata
 get_vegplot_from_NASIS_db <- function(SS = TRUE,
-                                      stringsAsFactors = default.stringsAsFactors(),
+                                      stringsAsFactors = NULL,
                                       dsn = NULL) {
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
   
   q.vegplot <- "SELECT siteiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, vegdataorigin, vegplotsize, soilprofileindicator, soil232idlegacy, ahorizondepth, alkalinesalineindicator, alkalineaffected, salinityclass, restrictivelayerdepthlegacy, legacysoilcompname, legacysoilphase, legacylocalsoilphase, legacysoilsurftext, legacysurftextmod, legacyterminlieu, erosionclasslegacy, landformgrouplegacy, cryptogamcovcllegacy, rangelandusehistory, cancovpctplotave, cancovtotalpct, cancovtotalclass, overstorycancontotalpct, overstorycancovtotalclass, dblsampannualprodave, compyieldproductionave, abovegroundbiomasstotave, understoryreprodabundance, woodyunderstoryabundance, herbundertoryabundance, lichensunderstoryabundance, crowncanclosurepct, crowncancloseassessmethod, crowncompfactorlpp, crowncomplppavedbh, basalcoverpctave, basalareaplottotal, basalareaassessmethod, constreeshrubgrp, windbreakrowonedirection, windbreaktrappedsoildepth, windbreaktrappedsoiltexture, understorydescindicator, mensurationdataindicator, vigorclasslegacy, siteconditionlegacy, overstoryspecieslegacy, plantmoiststate, currenttreedensity, currenttreespacing, currentdxspacing, currentplotavedbh, plotbasalareafactor, currentbasalarea, foreststandtype, foreststratainventoried, foreststandregen, foreststandquality, desiredtreedensity, desireddxspacing, desiredbasalarea, excessbasalarea, excesstreedensity, stockingchangepct, treepctgoodcondition, treepctfaircondition, treepctpoorcondition, treecounttotal, treesnagdensityhard, treesnagdensitysoft, pastureforagetype, pasturestanddensityave, pastureplanthtave, pastureprodave, pcidesirableplants, pciplantcover, pciplantdiversity, pcigroundcovresidue, pcistandingdeadforage, pciplantresiduecompscore, pciplantvigor, pcilegumepctclass, pciuseuniformity, pcilivestockconcareas, pcisoilcompaction, pcisheetrillerosion, pciwinderosion, pcistreamshoreerosion, pcigullyerosion, pcierosioncompscore, pcipastureconditionscore, refplantcommunity, repannualprod, totestannualprod, totallowableannualprod, totpalatableannualprod, similarityindex, annualuseableprod, harvesteffpct, takehalfleavehalf, acresperaum, aumperacre, audperacre, desirableplantvigor, desirableseedlingabundance, decadentplantabundance, plantresidueadequacy, undesirableinvadingspecies, majorinvadingspecies, invadingspeciescancovpct, soilsurferosion, soilcrusting, soilcompaction, baregroundpct, gullyrillpresence, soildegradationrating, rangetrendcurrent, rangetrendplanned, qcreviewperson, qcreviewdate, qareviewperson, qareviewdate, swcdlegacy, fieldofficelegacy, nrcsarealegacy, aktotallichencoverpct, aktotallitter1coverpct, aktotallitter2coverpct, aktotalmosscoverpct, aktotalrockcoverpct, aktotalsoilcoverpct, aktotalwatercoverpct, akecologicalsitestatus, aktotalbedrockcoverpct, akfieldecositeid
   FROM
@@ -38,7 +43,7 @@ get_vegplot_from_NASIS_db <- function(SS = TRUE,
     stop('No NASIS Site+Vegetation Plot records in ', ds, '!', call. = FALSE)
   }
   # uncode metadata domains
-  d <- uncode(d.vegplot, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d.vegplot, dsn = dsn)
 
   # done
   return(d)
@@ -48,8 +53,15 @@ get_vegplot_from_NASIS_db <- function(SS = TRUE,
 # get location data from the corresponding record in the site table
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
+get_vegplot_location_from_NASIS_db <- function(SS = TRUE,
+                                               stringsAsFactors = NULL,
+                                               dsn = NULL) {
 
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   # query the coordinate, plss description, and site characteristics data for these records from the site table
   q.plotlocation <- "SELECT s.siteiid, s.usiteid as site_id, v.vegplotid as vegplot_id, vegplotiid, so.obsdate, v.datacollectionpurpose, latdegrees, latminutes, latseconds, latdir, longdegrees, longminutes, longseconds, longdir, horizdatnm, plsssection, plsstownship, plssrange, plssmeridian, utmzone, utmnorthing, utmeasting, latstddecimaldegrees, longstddecimaldegrees, geocoordsource, elev, slope, aspect, CAST(plsssdetails as text) AS plsssdetails, CAST(locdesc as text) AS locdesc
   FROM
@@ -69,10 +81,10 @@ get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
   }
 
   # exec query
-  d.plotlocation <- dbQueryNASIS(channel, q.plotlocation, stringsAsFactors = FALSE)
+  d.plotlocation <- dbQueryNASIS(channel, q.plotlocation)
 
   # uncode metadata domains
-  d <- uncode(d.plotlocation, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d.plotlocation, dsn = dsn)
 
   # # test for no data
   # if (nrow(d) == 0)
@@ -108,8 +120,15 @@ get_vegplot_location_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
 # get Rangeland Health Indicator(RHI) associated fields in the vegplot table
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
+get_vegplot_trhi_from_NASIS_db <- function(SS = TRUE,
+                                           stringsAsFactors = NULL,
+                                           dsn = NULL) {
+    
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   q.vegplotrhi <- "SELECT siteiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, rhiannualprod, rhibareground, rhicompactionlayer, rhifuncstructgroups, rhierosionresistance, rhigullies, rhirills, rhipedastalsterracettes, rhiinfilrunoff, rhilitteramount, rhilittermovement, rhiplantmortality, rhireprodcapability, rhiinvasiveplants, rhisoilsurfdegradation, rhiwaterflowpatterns, rhiwindscourareas, rhisoilsitestabsumm, rhibioticintegritysumm, rhihydrofunctionsumm
   FROM
   site_View_1 AS s
@@ -132,7 +151,7 @@ get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.s
   d.vegplotrhi <- dbQueryNASIS(channel, q.vegplotrhi)
 
   # uncode metadata domains
-  d <- uncode(d.vegplotrhi, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d.vegplotrhi, dsn = dsn)
 
   # # test for no data
   # if (nrow(d) == 0) {
@@ -147,8 +166,15 @@ get_vegplot_trhi_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.s
 # get vegplot species - this is a reconstruction of a site existing species list
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
+get_vegplot_species_from_NASIS_db <-  function(SS = TRUE,
+                                               stringsAsFactors = NULL,
+                                               dsn = NULL) {
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   q.vegplotspecies <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, ppi.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass
   FROM
   site_View_1 AS s
@@ -172,7 +198,7 @@ get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defaul
   d.vegplotspecies <- dbQueryNASIS(channel, q.vegplotspecies)
 
   # uncode metadata domains
-  d <- uncode(d.vegplotspecies, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d.vegplotspecies, dsn = dsn)
 
   # # test for no data
   # if (nrow(d) == 0) {
@@ -187,8 +213,15 @@ get_vegplot_species_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defaul
 # get vegplot transect data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
+get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
+                                                stringsAsFactors = NULL,
+                                                dsn = NULL) {
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   # veg transect data - many transects to one vegplot
   q.vegtransect <- "SELECT siteiid, p.peiid, vegplotiidref, vegtransectiid, usiteid as site_id, assocuserpedonid as pedon_id, vegplotid as vegplot_id, vegplotname, vegtransectid as vegtransect_id, obsdate, primarydatacollector, datacollectionpurpose, transectstartlatitude, transectstartlongitude, transectendlatitude, transectendlongitude, transectazimuth, transectlength, transectstartelevation, transectendelevation, dblsampquadratssampled, dblsampquadratsclipped, nestedfreqquadratssampled, freqquadratssampled, dwrquadratssampled, daubenmirequadratssampled, quadratsizedomlegacy, quadratsizeseclegacy, quadratshapedomlegacy, quadratshapeseclegacy, beltwidth, dblsampannualprod, totharvestannualprod, wtunitannualprod, dwrannualprod, comparativeyieldprod, comparativeyieldranktotal, comparativeyieldrankave, comparativerefclipwtave, abovegroundbiomasstotal, standingherbbiomass, transectbasalcovpct, basalcovpcttotal, basalgapsizemin, canopygapsizemin, gapsmeasuredbetween, canopygaplengthtotal, canopygappcttotal, basalgaplengthtotal, basalgappcttotal, vt.understoryreprodabundance, vt.woodyunderstoryabundance, vt.herbundertoryabundance, vt.lichensunderstoryabundance, cancovpcttotaltrans, cancovtotalclasstrans, cancovassessmethod, vt.crowncanclosurepct, vt.crowncancloseassessmethod, vt.crowncompfactorlpp, vt.crowncomplppavedbh, overstorycancovpcttrans, overstorycancovclasstrans, groundcovassessmethod, groundcovquadratssampled, groundcovpointssampled, groundsurfcovassessmethod, groundsurfcovquadratsamp, groundsurfcovpointssamp, lpiobsinterval, totalpointssampledcount, topcanopyhtave, topcanopyhtstddev, totalnumplantsbelt, totalnumspeciesbelt, totalplantdensitybelt
   FROM
@@ -218,7 +251,7 @@ get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
   # }
 
   # uncode metadata domains
-  d <- uncode(d.vegtransect, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d.vegtransect, dsn = dsn)
 
   # done
   return(d)
@@ -228,8 +261,15 @@ get_vegplot_transect_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = defau
 # get vegplot transect species data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
+get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
+                                                   stringsAsFactors = NULL,
+                                                   dsn = NULL) {
+    
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   # veg transect species data - many species to one veg transect
   q.vtps <- "SELECT siteiid, vegtransectiidref as vegtransect_id, vegplotid, vegplotname, obsdate, vegtransplantsummiid as vtpsiid, vtps.seqnum, plantsym, plantsciname, plantnatvernm, plantnativity, planttypegroup, plantheightcllowerlimit, plantheightclupperlimit, sociabilityclass, specieslivecanhtbotave, specieslivecanhttopave, overstorydbhmin, overstorydbhmax, speciesovercancovpct, speciesovercancovclass, plantprodquadratsize, plantprodquadratshape, nestedfreqquadratsize, nestedfreqquadratshape, frequencyquadratsize, frequencyquadratshape, dwrquadratsize, dwrquadratshape, densityquadratsize, densityquadratshape, speciestotwtclippedest, speciestotwtclippedfresh, speciestotwtclippedairdry, speciestotwtairdry, speciestotwtest, speciestotwtexisting, speciesdrywtpct, speciestotwt, speciesaveyielddblsamp, speciescomppctdblsamp, speciescomppctdaubenmire, speciescomppctlineintercept, speciestraceamtflag, weightconvfactor, dblsampcorrectionfactor, airdrywtadjustment, utilizationadjustment, growthadjustment, weatheradjustment, numberofquadratsin, speciesfreqdaubenmire, dwronetally, dwrtwotally, dwrthreetally, dwrweightedtally, speciescomppctdwr, speciesaveyielddwr, wtunitweight, wtunitcounttotal, speciesaveyieldwtunit, wtunitwtclippedtotal, speciescancovhitcount, speciescancovpct, speciescancovpctavedaub, speciescancovaveclass, speciesfoliarcovhitcount, speciesfoliarcovpctlineint, speciestotfoliarcovlineint, speciesbasalcovhitcount, speciesbasalcovpctlineint, speciestotbasalcovlineint, maturecounttotal, maturedensityave, maturedensityaveclass, seedlingcounttotal, seedlingdensityave, seedlingdensityaveclass, speciesgroundcovabundclass, speciescancovportion, speciesbasalarea, vtps.basalareaassessmethod
   FROM
@@ -259,7 +299,7 @@ get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
   #   stop('there are no NASIS vegplots transect species in your selected set!')
 
   # uncode metadata domains
-  d <- uncode(d.vegtransplantsum, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d.vegtransplantsum, dsn = dsn)
 
   # done
   return(d)
@@ -268,8 +308,15 @@ get_vegplot_transpecies_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = de
 # get vegplot tree site index summary data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
+get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
+                                                       stringsAsFactors = NULL,
+                                                       dsn = NULL) {
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   # plot tree site index summary data
   q.pltsis <- "SELECT vegplotiidref AS vegplotiid, pltsis.seqnum, plantiidref, plantsym, plantsciname, plantnatvernm, plantnativity, siteindexbase, speciestreecount, siteindexplotave, speciesdbhaverage, treeageave, treecanopyhttopave, plottreesiteindsumiid
 
@@ -299,7 +346,7 @@ get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
   #   stop('there are no NASIS vegplots tree site index data in your selected set!', call. = FALSE)
 
   # uncode metadata domains
-  d <- uncode(d.vegsiteindexsum, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d.vegsiteindexsum, dsn = dsn)
 
   # done
   return(d)
@@ -309,8 +356,10 @@ get_vegplot_tree_si_summary_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
 # get vegplot tree site index details data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
+get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE,
+                                                      stringsAsFactors = NULL,
+                                                      dsn = NULL) {
+  
   # plot tree site index detail data
   q.pltsid <- "SELECT plottreesiteindsumiidref, pltsid.seqnum, plantsym, plantsciname, plantnatvernm, treenumber, crownclass, reproductionsource, treediameterbreastheight, tenyeargrowthradius, growthringcount, growthringcountheight, growthringcountage, treeage, treecanopyhtbottom, treecanopyhttop, plottreesiteinddetailsiid
 
@@ -343,7 +392,7 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
   # }
 
   # uncode metadata domains
-  d <- uncode(d.vegsiteindexdet, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d.vegsiteindexdet, dsn = dsn)
 
   # done
   return(d)
@@ -354,8 +403,16 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS=TRUE, stringsAsFactors 
 #' @param fixLineEndings Replace `'\r\n'` with `'\n'`; Default: `TRUE`
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_textnote_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
-
+get_vegplot_textnote_from_NASIS_db <- function(SS = TRUE,
+                                               fixLineEndings = TRUE,
+                                               stringsAsFactors = NULL,
+                                               dsn = NULL) {
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   # vegplot textnotes
   q.vegplottext <- "SELECT vegplotiidref as vegplotiid, seqnum, recdate, recauthor, vegplottextkind,
 textcat, textsubcat, vegplottextiid, CAST(textentry as text) AS textentry
@@ -379,7 +436,7 @@ FROM vegplottext_View_1;"
   #  stop('there are no NASIS vegplots textnotes in your selected set!', call. = FALSE)
 
   # uncode metadata domains
-  d <- uncode(d.vegplottext, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d.vegplottext, dsn = dsn)
 
   # optionally convert \r\n -> \n
   if (fixLineEndings) {

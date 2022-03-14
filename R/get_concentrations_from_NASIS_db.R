@@ -1,5 +1,10 @@
-get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
+get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
 
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   # concentrations
   # unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
   q <- "SELECT peiid, phiid,
@@ -32,8 +37,8 @@ get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = default
   d.c <- dbQueryNASIS(channel, q.c)
 
   # uncode domained columns
-  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
-  d.c <- uncode(d.c, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d, dsn = dsn)
+  d.c <- uncode(d.c, dsn = dsn)
 
   # convert back to characters / numeric
   d.c$colormoistst <- as.character(d.c$colormoistst)

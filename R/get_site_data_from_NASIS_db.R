@@ -26,11 +26,8 @@
 #' database (default: `TRUE`)
 #' 
 #' @param nullFragsAreZero should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)
-#'
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the `uncode()` function. It does not
-#' convert those vectors that have been set outside of `uncode()` (i.e. hard
-#' coded).
+
+#' @param stringsAsFactors deprecated
 #'
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
@@ -44,9 +41,13 @@
 #' @export get_site_data_from_NASIS_db
 get_site_data_from_NASIS_db <- function(SS = TRUE,
                                         nullFragsAreZero = TRUE,
-                                        stringsAsFactors = default.stringsAsFactors(),
+                                        stringsAsFactors = NULL,
                                         dsn = NULL) {
-
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
 	q <- "SELECT siteiid as siteiid, peiid, CAST(usiteid AS varchar(60)) as site_id, CAST(upedonid AS varchar(60)) as pedon_id, obsdate as obs_date,
 utmzone, utmeasting, utmnorthing, -(longdegrees + CASE WHEN longminutes IS NULL THEN 0.0 ELSE longminutes / 60.0 END + CASE WHEN longseconds IS NULL THEN 0.0 ELSE longseconds / 60.0 / 60.0 END) as x, latdegrees + CASE WHEN latminutes IS NULL THEN 0.0 ELSE latminutes / 60.0 END + CASE WHEN latseconds IS NULL THEN 0.0 ELSE latseconds / 60.0 / 60.0 END as y, horizdatnm, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std,
 gpspositionalerror, descname as describer, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag,
@@ -95,7 +96,7 @@ ORDER BY pedon_View_1.peiid ;"
 	  stop('error in SQL')
 
 	# uncode domain columns
-	d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
+	d <- uncode(d, dsn = dsn)
 	
 	# surface fragments
 	sfr <- dbQueryNASIS(channel, q2)
@@ -173,14 +174,6 @@ ORDER BY pedon_View_1.peiid ;"
   ss.grid <- expand.grid(na.omit(unique(d2$shapeacross)), na.omit(unique(d2$shapedown)))
   ss.levels <- apply(ss.grid, 1, function(i) { paste(rev(i), collapse = ' / ')})
   d2$slope_shape <- factor(d2$slope_shape, levels = ss.levels)
-
-  # convert factors to strings
-  # 2021-11-05: this code was unreachable; "df" not defined
-  
-  # idx <- unlist(lapply(d2, is.factor))
-  # if (stringsAsFactors == FALSE & any(idx)) {
-  #   d2[idx] <- lapply(d2[idx], as.character)
-  # }
 
 	# done
 	return(d2)

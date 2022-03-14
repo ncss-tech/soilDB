@@ -7,19 +7,13 @@
 ## see: http://www.wcc.nrcs.usda.gov/web_service/awdb_webservice_announcements.htm
 ##      http://www.wcc.nrcs.usda.gov/web_service/AWDB_Web_Service_Reference.htm
 ##      http://www.wcc.nrcs.usda.gov/report_generator/WebReportScripting.htm
-#
+
+## 5. we will need to address the potential for multiple sensor ID per type/depth
+## examples in:
+## https://github.com/ncss-tech/soilDB/issues/14
+
+
 ### sensor codes: http://wcc.sc.egov.usda.gov/nwcc/sensors
-
-### TODO: why are there sometimes duplicate above-ground sensors:
-###   station 482
-###
-###  WTEQ.I WTEQ.I-2 PREC.I PREC.I-2 TOBS.I TOBS.I-2 TOBS.I-3 TMAX.D TMIN.D TAVG.D SNWD.I SMS.I_8 STO.I_8
-
-### TODO: there are rarely multiple below-ground sensors:
-###   station 2196
-###
-###  "STO.I-1:-2", "STO.I-1:-4", "STO.I-1:-8", "STO.I-1:-20", "STO.I-1:-40",
-###  "STO.I-2:-2", "STO.I-2:-4", "STO.I-2:-8", "STO.I-2:-20", "STO.I-2:-40"
 
 ##
 ## ideas:
@@ -33,7 +27,8 @@
 ## https://wcc.sc.egov.usda.gov/nwcc/sitenotes?sitenum=462
 ##
 
-# helper function for getting a single table of SCAN metadata
+
+## helper function for getting a single table of SCAN metadata
 # site.code: a single SCAN site code
 .get_single_SCAN_metadata <- function(site.code) {
   # base URL to service
@@ -55,12 +50,18 @@
   )
 
   # submit request
-  r <- httr::POST(uri, body = req,  encode = 'form', config = cf, httr::add_headers(new.headers))
+  r <- httr::POST(
+    uri,
+    body = req,
+    encode = 'form',
+    config = cf,
+    httr::add_headers(new.headers)
+  )
   httr::stop_for_status(r)
 
   # parsed XML
   r.content <- httr::content(r, as = 'parsed')
-  
+
   # get tables
   n.tables <- rvest::html_nodes(r.content, "table")
 
@@ -89,7 +90,7 @@ SCAN_sensor_metadata <- function(site.code) {
     stop('please install the `httr` and `rvest` packages', call.=FALSE)
 
   # iterate over site codes, returning DF + site.code
-  
+
   res <- do.call('rbind', lapply(site.code, .get_single_SCAN_metadata))
 
   return(as.data.frame(res))
@@ -112,32 +113,36 @@ SCAN_site_metadata <- function(site.code = NULL) {
   } else {
     idx <- which(SCAN_SNOTEL_metadata$Site %in% site.code)
   }
-  
+
   # subset requested codes
   res <- SCAN_SNOTEL_metadata[idx, ]
 
   return(res)
 }
 
-# site.code: vector of site codes
-# year: vector of years
-# report: single report type
-# req: for backwards compatibility
 
-#' Get data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations
+
+#' @title Get daily climate data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations
 #'
-#' Query soil/climate data from USDA-NRCS SCAN Stations
+#' @description Query soil/climate data from USDA-NRCS SCAN Stations
 #'
-#' See \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{the fetchSCAN tutorial for details}. These functions require the `httr` and `rvest` libraries.
+#' @details Possible above and below ground sensor types include: 'SMS' (soil moisture), 'STO' (soil temperature), 'SAL' (salinity), 'TAVG' (daily average air temperature), 'TMIN' (daily minimum air temperature), 'TMAX' (daily maximum air temperature), 'PRCP' (daily precipitation), 'PREC' (daily precipitation), 'SNWD' (snow depth), 'WTEQ' (snow water equivalent),'WDIRV' (wind direction), 'WSPDV' (wind speed), 'LRADT' (solar radiation/langley total).
+#'
+#'  - More on [SCAN sensors](https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/scanSensors)
+#'  - More on [SNOTEL sensors](https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/snotelSensors)
+#'
+#' See the [SCAN and SNOTEL FAQ](https://www.nrcs.usda.gov/wps/portal/wcc/home/dataAccessHelp/faqs/) for answers to common questions about these data.
+#'
+#' See the [fetchSCAN tutorial](http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html) for additional usage and visualization examples.
 #'
 #' @aliases fetchSCAN SCAN_sensor_metadata SCAN_site_metadata
 #' @param site.code a vector of site codes. If `NULL` `SCAN_site_metadata()` returns metadata for all SCAN sites.
 #' @param year a vector of years
 #' @param report report name, single value only
-#' @param req list of SCAN request parameters, for backwards-compatibility only
+#' @param ... additional arguments (not used)
 #' @return a \code{data.frame} object; `NULL` on bad request.
-#' @author D.E. Beaudette
-#' @references https://www.wcc.nrcs.usda.gov/index.html
+#' @author D.E. Beaudette, A.G. Brown
+#' @references https://www.nrcs.usda.gov/wps/portal/wcc/home/
 #' @keywords manip
 #' @examples
 #'
@@ -145,7 +150,7 @@ SCAN_site_metadata <- function(site.code = NULL) {
 #' if(requireNamespace("curl") &
 #'     curl::has_internet()) {
 #'
-#'     # get data: new interface
+#'     # get data
 #'     x <- fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016))
 #'     str(x)
 #'
@@ -158,20 +163,23 @@ SCAN_site_metadata <- function(site.code = NULL) {
 #' }
 #'
 #' @export fetchSCAN
-fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
-
-  ## backwards compatibility
-  if(!missing(req)) {
-    .Deprecated(msg = "`req` argument is deprecated")
-    return(.get_SCAN_data(req))
-  }
+fetchSCAN <- function(site.code, year, report = 'SCAN', ...) {
 
   # check for required packages
   if(!requireNamespace('httr', quietly = TRUE))
     stop('please install the `httr` package', call.=FALSE)
-  
+
   if(!requireNamespace('data.table', quietly = TRUE))
     stop('please install the `data.table` package', call.=FALSE)
+
+  ## backwards compatibility
+  l <- list(...)
+  if (length(l) > 0) {
+    if ("req" %in% names(l)) {
+        .Deprecated(msg = "`req` argument is deprecated")
+        return(.get_SCAN_data(req = l[["req"]]))
+    }
+  }
 
   # init list to store results
   res <- list()
@@ -189,7 +197,9 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   # format raw data into a list of lists:
   # sensor suite -> site number -> year
   d.list <- list()
+
   for(i in req.list) {
+
     # when there are no data, result is NULL
     d <- .get_SCAN_data(i)
 
@@ -197,42 +207,49 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     if (is.null(d)) {
       return(NULL)
     }
-    
-    ## TODO: sometimes these labels will match multiple sensors
-    ## TODO: this is wasteful as then entire year's worth of data is passed around for each sensor code
 
     # save: sensor suite -> site number -> year
-    sensors <- c('SMS', 'STO', 'SAL', 'TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')
+    sensors <- c('SMS', 'STO', 'SAL', 'TAVG', 'TMIN',
+                 'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ',
+                 'WDIRV', 'WSPDV', 'LRADT')
+
     for(sensor.i in sensors) {
+
       site.i <- as.character(i$sitenum)
       year.i <- as.character(i$year)
+
       if (is.null(d)) {
-        res <- data.frame(Site = integer(0), Date = as.Date(NULL), 
-                          water_year = numeric(0), water_day = integer(0), value = numeric(0), 
-                          depth = numeric(0), sensor.id = integer(0), row.names = integer(0))
+        res <- data.frame(Site = integer(0), Date = as.Date(NULL),
+                          water_year = numeric(0), water_day = integer(0),
+                          value = numeric(0), depth = numeric(0),
+                          sensor.id = integer(0), row.names = integer(0))
       } else {
         res <- .formatSCAN_soil_sensor_suites(d, code = sensor.i)
       }
+
       d.list[[sensor.i]][[site.i]][[year.i]] <- res
     }
   }
 
   # iterate over sensors
-  for(sensor.i in sensors) {
-    # flatten individual sensors over years, by site number
-    x <- d.list[[sensor.i]]
+  for (sensor.i in sensors) {
 
-    r.i <- do.call('rbind', lapply(x, function(y) do.call('rbind', y)))
+    # flatten individual sensors over years, by site number
+    r.i <- data.table::rbindlist(lapply(d.list[[sensor.i]], data.table::rbindlist))
     rownames(r.i) <- NULL
-    
-    res[[sensor.i]] <- r.i
+
+    res[[sensor.i]] <- as.data.frame(r.i)
   }
 
   # report object size
-  res.size <- round(object.size(res) / 1024 / 1024, 2)
-  res.rows <- sum(sapply(res, nrow), na.rm=TRUE)
-  message(paste(res.rows, ' records (', res.size, ' Mb transferred)', sep=''))
-  
+  if (length(res) > 0) {
+
+    res.size <- round(object.size(res) / 1024 / 1024, 2)
+    res.rows <- sum(sapply(res, nrow), na.rm = TRUE)
+    message(paste(res.rows, ' records (', res.size, ' Mb transferred)', sep = ''))
+
+  } else message('query returned no data')
+
   res[['metadata']] <- m
   return(res)
 }
@@ -244,29 +261,39 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
 
   # locate named columns
   d.cols <- grep(code, names(d))
-  
+
   # return NULL if no data
   if(length(d.cols) == 0)
     return(NULL)
 
   ## https://github.com/ncss-tech/soilDB/issues/14
   ## there may be multiple above-ground sensors (takes the first)
-  if(length(d.cols) > 1 & code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
-    message(paste0('multiple above-ground sensors per site: ', d$Site[1], ' [', paste0(names(d)[d.cols], collapse = ','), '], using first sensor'))
+  if(length(d.cols) > 1 & code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC',
+                                      'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
+    message(paste0('multiple sensors per site [site ', d$Site[1], '] ',
+                   paste0(names(d)[d.cols], collapse = ',')))
     # use only the first sensor
     d.cols <- d.cols[1]
   }
 
+  # coerce all values to double (avoids data.table warnings)
+  mvars <- names(d)[d.cols]
+  d[mvars] <- lapply(d[mvars], as.double)
+
   # convert to long format
-  d.long <- data.table::melt(data.table::as.data.table(d), id.vars = c('Site', 'Date'), measure.vars = names(d)[d.cols])
-  
+  d.long <- data.table::melt(
+    data.table::as.data.table(d),
+    id.vars = c('Site', 'Date'),
+    measure.vars = mvars
+  )
+
   # extract depths
-  d.depths <- base::strsplit(as.character(d.long$variable), split = '_', fixed = TRUE)
+  d.depths <- strsplit(as.character(d.long$variable), '_', fixed = TRUE)
   d.long$depth <- sapply(d.depths, function(i) as.numeric(i[2]))
-  
-  # convert depths (in) to cm
+
+  # convert depths (in to cm)
   d.long$depth <- round(d.long$depth * 2.54)
-  
+
   # change 'variable' to 'sensor.id'
   names(d.long)[which(names(d.long) == 'variable')] <- 'sensor.id'
 
@@ -274,16 +301,17 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   .SD <- NULL
   no.na <- NULL
   sensors.per.depth <- d.long[, list(no.na = sum(complete.cases(.SD))),
-                              by = c('sensor.id', 'depth'), 
+                              by = c('sensor.id', 'depth'),
                               .SDcols = c('sensor.id', 'depth', 'value')]
 
   most.data <- sensors.per.depth[, .SD[which.max(no.na)], by = 'depth']
-  
+
   # check for multiple sensors per depth
   tab <- table(sensors.per.depth$depth) > 1
   if (any(tab)) {
     multiple.sensor.ids <- as.character(sensors.per.depth$sensor.id[which(sensors.per.depth$depth %in% names(tab))])
-    message(paste0('multiple below-ground sensors per depth: ', paste(multiple.sensor.ids, collapse = ', ')))
+    message(paste0('multiple sensors per depth [site ', d$Site[1], '] ',
+                   paste(multiple.sensor.ids, collapse = ', ')))
   }
 
   # multiple rows / day, remove NA in sensor values
@@ -298,7 +326,8 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   d.long$water_day <- w$wd
 
   # format and return
-  return(as.data.frame(d.long[, c('Site', 'Date', 'water_year', 'water_day', 'value', 'depth', 'sensor.id')]))
+  return(as.data.frame(d.long[, c('Site', 'Date', 'water_year', 'water_day',
+                                  'value', 'depth', 'sensor.id')]))
 }
 
 # format a list request for SCAN data
@@ -323,7 +352,7 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
 .get_SCAN_data <- function(req) {
 
   # convert to list as needed
-  if(!inherits(req, 'list'))
+  if (!inherits(req, 'list'))
     req <- as.list(req)
 
   # base URL to service
@@ -338,8 +367,17 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
   cf <- httr::config(followlocation = 1L)
 
   # submit request
-  r <- try(httr::POST(uri, body=req, encode='form', config = cf, httr::add_headers(new.headers)))
-  if (inherits(r, 'try-error')) return(NULL)
+  r <- try(httr::POST(
+    uri,
+    body = req,
+    encode = 'form',
+    config = cf,
+    httr::add_headers(new.headers)
+  ))
+
+  if (inherits(r, 'try-error'))
+    return(NULL)
+
   res <- httr::stop_for_status(r)
 
   # extract content as text, cannot be directly read-in
@@ -386,13 +424,13 @@ fetchSCAN <- function(site.code, year, report='SCAN', req=NULL) {
     na.strings = '-99.9',
     comment.char = ''
   ), silent = TRUE)
-  
+
   # catch errors
-  if(class(x) == 'try-error') {
+  if (inherits(x, 'try-error')) {
     close.connection(tc)
-    
-    message("Error for site: ", req$sitenum, "[", attr(x, 'condition')[["message"]], "]")
-    
+
+    message("Error [site ", req$sitenum, "]: ", attr(x, 'condition')[["message"]])
+
     x <- as.data.frame(matrix(ncol = 12, nrow = 0))
     return(x)
   }
