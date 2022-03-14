@@ -4,13 +4,13 @@
 \alias{get_colors_from_NASIS_db}
 \title{Get Soil Color Data from a local NASIS Database}
 \usage{
-get_colors_from_NASIS_db(SS = TRUE, mix_colors = TRUE, dsn = NULL)
+get_colors_from_NASIS_db(SS = TRUE, mixColors = TRUE, dsn = NULL)
 }
 \arguments{
 \item{SS}{fetch data from Selected Set in NASIS or from the entire local
 database (default: \code{TRUE})}
 
-\item{mix_colors}{should mixed colors be calculated (Default: \code{TRUE}) where multiple colors are populated for the same moisture state in a horizon? \code{FALSE} takes the dominant color for each horizon moist/dry state.}
+\item{mixColors}{should mixed colors be calculated (Default: \code{TRUE}) where multiple colors are populated for the same moisture state in a horizon? \code{FALSE} takes the dominant color for each horizon moist/dry state.}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

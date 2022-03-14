@@ -2,7 +2,7 @@
 importFrom("grDevices", "rgb", "convertColor")
 
 importFrom("graphics", "axis", "legend", "mtext", "rect", "segments",
-             "text", "plot")
+             "text", "plot", 'col2rgb')
 
 importFrom("stats", "aggregate", "complete.cases", "na.omit", "as.formula", "splinefun", "weighted.mean")
 
