@@ -9,7 +9,7 @@
 #'
 #' @param SS fetch data from Selected Set in NASIS or from the entire local
 #' database (default: `TRUE`)
-#' @param mixColors should mixed colors be calculated (Default: `TRUE`) where multiple colors are populated for the same moisture state in a horizon? `FALSE` takes the dominant color for each horizon moist/dry state.
+#' @param mixColors should mixed colors be calculated (Default: `TRUE`) where multiple colors are populated for the same moisture state in a horizon? `FALSE` takes the dominant color based on `colorpct` or first record based on horizon ID (`phiid`) sorting for "moist" and "dry" state. Pedon Horizon Color records without a moisture state populated are ignored.
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' @return A data.frame with the results.
@@ -66,24 +66,47 @@ get_colors_from_NASIS_db <- function(SS = TRUE, mixColors = TRUE, dsn = NULL) {
 
 .dominantColors <- function(d, id.var = 'phiid', moist_state = 'colormoistst', wt = 'pct',
                             hue = 'colorhue', value = 'colorvalue', chroma = 'colorchroma') {
-  .I <- NULL
+  # use data.table
+  .I <- NULL; .SD <- NULL
+  d <- data.table::as.data.table(d)
+  
+  # calculate table of IDs
+  did <- unique(d[, .SD, .SDcols = id.var])
+  
+  # allow for alternate capitalization of dry/moist in moist_state
   d[[moist_state]] <- tolower(d[[moist_state]])
-  d <- d[d[[moist_state]] %in% c('dry', 'moist'),]
-  d <- data.table::as.data.table(d)[order(d[[id.var]], d[[moist_state]], d[[wt]], decreasing = TRUE),]
-  dom <- d[, .I[1], by = c(id.var, moist_state)]
+  
+  # filter to only target moist_states with at least hue+value
+  d <- d[which(d[[moist_state]] %in% c('dry', 'moist') &
+                 !is.na(d[[hue]]) &
+                 !is.na(d[[value]])),]
+  
+  # sort on ID, moisture state, and weight (% color); NA wt sorted to end
+  d <- d[order(d[[id.var]], d[[moist_state]], d[[wt]], decreasing = TRUE),]
+  
+  # take index of first record in each horizon ID*moist_state combination
+  dom <- d[, list(first_idx = .I[1]), by = c(id.var, moist_state)]
   d$peiid <- NULL; d[[moist_state]] <- NULL; d[[wt]] <- NULL
   
-  dry <- d[dom[which(dom$colormoistst == "dry"), ]$V1, ]
+  # process dry values into d_ H/V/C, hex color and RGB triplet columns
+  dry <- d[dom[which(dom$colormoistst == "dry"), ]$first_idx, ]
   dry$dry_soil_color <- aqp::munsell2rgb(dry[[hue]], dry[[value]], dry[[chroma]])
   dry <- cbind(dry, t(col2rgb(dry$dry_soil_color) / 255))
   colnames(dry) <- c(id.var, 'd_hue', 'd_value', 'd_chroma', 'dry_soil_color', 'd_r', 'd_g', 'd_b')
-  dry$d_sigma <- 0
   
-  moist <- d[dom[which(dom$colormoistst == "moist"), ]$V1, ]
+  # sigma is NA for single color
+  dry$d_sigma <- NA_real_
+  
+  # process moist values into m_ H/V/C, hex color and RGB triplet columns
+  moist <- d[dom[which(dom$colormoistst == "moist"), ]$first_idx, ]
   moist$moist_soil_color <- aqp::munsell2rgb(moist[[hue]], moist[[value]], moist[[chroma]])
   moist <- cbind(moist, t(col2rgb(moist$moist_soil_color) / 255))
   colnames(moist) <- c(id.var, 'm_hue', 'm_value', 'm_chroma', 'moist_soil_color', 'm_r', 'm_g', 'm_b')
-  moist$m_sigma <- 0
+  moist$m_sigma <- NA_real_
   
-  as.data.frame(dry[moist, on = id.var])
+  # dry and moist full outer join on horizon ID
+  res <- merge(dry, moist, all = TRUE)
+  
+  # return data.frame in original order (of source NASIS query) 
+  as.data.frame(res)
 }
