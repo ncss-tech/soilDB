@@ -15,7 +15,7 @@ Depends: R (>= 3.5.0)
 Imports: aqp, grDevices, graphics, stats, utils, xml2, sp, raster, curl, methods, data.table, DBI
 Suggests: rgdal, jsonlite, httr, sf, wk, rvest, odbc, RSQLite, testthat, scales
 Repository: CRAN
-URL: http://ncss-tech.github.io/AQP/
+URL: http://ncss-tech.github.io/soilDB/
 BugReports: https://github.com/ncss-tech/soilDB/issues
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)

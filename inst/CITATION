@@ -1,0 +1,14 @@
+citHeader("To cite soilDB in publications use:")
+
+citEntry(
+  entry = "Manual",
+  title = "soilDB: Soil Database Interface",
+  author = "Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown",
+  note = paste0("R package version ", packageVersion('soilDB')),
+  url = "https://CRAN.R-project.org/package=soilDB",
+  year = format(Sys.time(), "%Y"),
+  textVersion = paste0("Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (",
+                  format(Sys.time(), "%Y"),
+                  "). soilDB: Soil Database Interface. R package version ", 
+                  packageVersion('soilDB'), ". https://CRAN.R-project.org/package=soilDB")
+)
