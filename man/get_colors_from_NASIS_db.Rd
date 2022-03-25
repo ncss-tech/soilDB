@@ -10,7 +10,7 @@ get_colors_from_NASIS_db(SS = TRUE, mixColors = TRUE, dsn = NULL)
 \item{SS}{fetch data from Selected Set in NASIS or from the entire local
 database (default: \code{TRUE})}
 
-\item{mixColors}{should mixed colors be calculated (Default: \code{TRUE}) where multiple colors are populated for the same moisture state in a horizon? \code{FALSE} takes the dominant color for each horizon moist/dry state.}
+\item{mixColors}{should mixed colors be calculated (Default: \code{TRUE}) where multiple colors are populated for the same moisture state in a horizon? \code{FALSE} takes the dominant color based on \code{colorpct} or first record based on horizon ID (\code{phiid}) sorting for "moist" and "dry" state. Pedon Horizon Color records without a moisture state populated are ignored.}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}
