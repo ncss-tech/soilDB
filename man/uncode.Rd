@@ -61,6 +61,8 @@ When data is being imported from NASIS, the metadata tables are sourced
 directly from NASIS. When data is being imported from SDA or the NASIS Web
 Reports, the metadata is pulled from a static snapshot in the soilDB
 package.
+
+Set \code{options(soilDB.NASIS.skip_uncode = TRUE)} to bypass decoding logic; for instance when using soilDB NASIS functions with custom NASIS snapshots that have already been decoded.
 }
 \examples{
 
