@@ -11,24 +11,29 @@ Downloads](http://cranlogs.r-pkg.org/badges/grand-total/soilDB)](https://cran.r-
 ![CRAN/METACRAN](https://img.shields.io/cran/l/soilDB) [![soilDB
 Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/soilDB/)
 
-## Installation
+Installation
+------------
 
 Get the stable version (2.6.14) from CRAN:
 
     install.packages('soilDB', dependencies = TRUE)
 
-Get the development version (2.6.14) from GitHub:
+Get the development version from GitHub:
 
     remotes::install_github("ncss-tech/soilDB", dependencies = FALSE)
 
-## Website
+Website
+-------
 
--   CRAN Package: <https://cran.r-project.org/package=soilDB>
--   Package Manual: <http://ncss-tech.github.io/soilDB/>
+-   CRAN Package:
+    <a href="https://cran.r-project.org/package=soilDB" class="uri">https://cran.r-project.org/package=soilDB</a>
+-   Package Manual:
+    <a href="http://ncss-tech.github.io/soilDB/" class="uri">http://ncss-tech.github.io/soilDB/</a>
 -   Algorithms for Quantitative Pedology (AQP) Project:
-    <http://ncss-tech.github.io/AQP/>
+    <a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a>
 
-## Citation
+Citation
+--------
 
     ## 
     ## To cite soilDB in publications use:
@@ -47,7 +52,8 @@ Get the development version (2.6.14) from GitHub:
     ##     year = {2022},
     ##   }
 
-## soilDB 2.6.14
+soilDB 2.6.14
+-------------
 
 <!-- ### Notices on Database Interfaces -->
 <!-- #### NASIS -->
@@ -55,7 +61,8 @@ Get the development version (2.6.14) from GitHub:
 <!-- #### SoilWeb API -->
 <!-- #### MS Access -->
 
-## Functions by Data Source
+Functions by Data Source
+------------------------
 
 -   SDA
     -   [`fetchSDA`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_component.html)
@@ -99,7 +106,8 @@ Get the development version (2.6.14) from GitHub:
 -   SoilGrids
     -   [`fetchSoilGrids`](http://ncss-tech.github.io/soilDB/reference/fetchSoilGrids.html)
 
-## Miscellaneous Functions
+Miscellaneous Functions
+-----------------------
 
 -   [`estimateSTR`](http://ncss-tech.github.io/soilDB/reference/estimateSTR.html)
 -   [`STRplot`](http://ncss-tech.github.io/soilDB/reference/STRplot.html)
@@ -110,7 +118,8 @@ Get the development version (2.6.14) from GitHub:
 -   [`code`](http://ncss-tech.github.io/soilDB/reference/code.html)
 -   [`get_NOAA_GHCND`](http://ncss-tech.github.io/soilDB/reference/get_NOAA_GHCND.html)
 
-## Tutorials and Demonstrations
+Tutorials and Demonstrations
+----------------------------
 
 -   [fetchKSSL](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
 -   [SDA\_query](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html)
@@ -118,12 +127,14 @@ Get the development version (2.6.14) from GitHub:
 -   [SCAN/SNOTEL
     Data](http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html)
 
-## Related Packages
+Related Packages
+----------------
 
 -   [aqp](https://github.com/ncss-tech/aqp)
 -   [sharpshootR](https://github.com/ncss-tech/sharpshootR)
 -   [SoilTaxonomy](https://github.com/ncss-tech/SoilTaxonomy)
 
-## Dependency Graph
+Dependency Graph
+----------------
 
 ![](https://cran.microsoft.com/packagedata/graphs/soilDB.png)
