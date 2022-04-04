@@ -36,13 +36,13 @@ test_that("estimateColorMixture basic functionality", {
   expect_equal(res$colorchroma, 5)
   
   # check sRGB coordinates
-  expect_equal(res$r, 0.62591)
-  expect_equal(res$g, 0.4755)
-  expect_equal(res$b, 0.27674)
+  expect_equal(res$r, 0.62341)
+  expect_equal(res$g, 0.47357)
+  expect_equal(res$b, 0.27558)
   
 })
 
-## TODO: many more examples of colors + resulting mixutres
+## TODO: many more examples of colors + resulting mixtures
 
 ## TODO: test mixing in the absence of color percentages
 
