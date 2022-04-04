@@ -97,8 +97,8 @@ test_that("simplifyColorData: missing data", {
   
   # check moist color mixture, should be ~ 10YR 5/4 with added neutral hue
   expect_equal(res$m_hue[2], '10YR')
-  expect_equal(res$m_value[2], 5)
-  expect_equal(res$m_chroma[2], 4)
+  expect_equal(res$m_value[2], 4)
+  expect_equal(res$m_chroma[2], 3)
   
 })
 
