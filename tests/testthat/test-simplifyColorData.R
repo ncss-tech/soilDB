@@ -69,16 +69,17 @@ test_that("simplifyColorData: two colors / moisture state, color percentages pro
   expect_equal(nrow(res), 2)
   
   # check dry color mixture, should be ~ 2.5Y 6/2
+  # using wide tolerance, because changes in the Munsell LUT can create errors
   # dry colors first
-  expect_equal(res$d_hue[1], '2.5Y')
-  expect_equal(res$d_value[1], 6)
-  expect_equal(res$d_chroma[1], 2)
+  expect_equal(res$d_r[1], 0.6, tolerance = 0.1)
+  expect_equal(res$d_g[1], 0.6, tolerance = 0.1)
+  expect_equal(res$d_b[1], 0.5, tolerance = 0.1)
   
   # check moist color mixture, should be ~ 10YR 5/5
   # moist colors second
-  expect_equal(res$m_hue[2], '10YR')
-  expect_equal(res$m_value[2], 5)
-  expect_equal(res$m_chroma[2], 5)
+  expect_equal(res$m_r[2], 0.6, tolerance = 0.1)
+  expect_equal(res$m_g[2], 0.4, tolerance = 0.1)
+  expect_equal(res$m_b[2], 0.2, tolerance = 0.1)
   
 })
 
@@ -90,15 +91,17 @@ test_that("simplifyColorData: missing data", {
   # should be 2 rows
   expect_equal(nrow(res), 2)
   
+  # using wide tolerance, because changes in the Munsell LUT can create errors
+  
   # check dry color mixture, should be ~ 2.5Y 6/2
-  expect_equal(res$d_hue[1], '2.5Y')
-  expect_equal(res$d_value[1], 6)
-  expect_equal(res$d_chroma[1], 2)
+  expect_equal(res$d_r[1], 0.6, tolerance = 0.1)
+  expect_equal(res$d_g[1], 0.6, tolerance = 0.1)
+  expect_equal(res$d_b[1], 0.5, tolerance = 0.1)
   
   # check moist color mixture, should be ~ 10YR 5/4 with added neutral hue
-  expect_equal(res$m_hue[2], '10YR')
-  expect_equal(res$m_value[2], 4)
-  expect_equal(res$m_chroma[2], 3)
+  expect_equal(res$m_r[2], 0.4, tolerance = 0.1)
+  expect_equal(res$m_g[2], 0.3, tolerance = 0.1)
+  expect_equal(res$m_b[2], 0.2, tolerance = 0.1)
   
 })
 
@@ -122,3 +125,4 @@ test_that(".dominantColors: missing data", {
   expect_equal(res$m_chroma[idx2], 6)
   
 })
+
