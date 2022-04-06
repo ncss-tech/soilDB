@@ -1,5 +1,7 @@
 context("Simplification of color data (from NASIS/KSSL)")
 
+# tolerance for comparing color RGB components of mixed colors
+.tol <- 0.2
 
 ## example data, from NASIS
 
@@ -63,7 +65,11 @@ test_that("simplifyColorData: single color / moisture state / horizon", {
 test_that("simplifyColorData: two colors / moisture state, color percentages provided", {
   
   # two colors / moisture state, color percentages provided
-  suppressMessages(res <- simplifyColorData(x.multiple, id.var = 'phiid', wt = 'pct'))
+  suppressMessages({
+    res <- simplifyColorData(x.multiple,
+                             id.var = 'phiid',
+                             wt = 'pct')
+  })
   
   # should be 2 rows
   expect_equal(nrow(res), 2)
@@ -71,22 +77,26 @@ test_that("simplifyColorData: two colors / moisture state, color percentages pro
   # check dry color mixture, should be ~ 2.5Y 6/2
   # using wide tolerance, because changes in the Munsell LUT can create errors
   # dry colors first
-  expect_equal(res$d_r[1], 0.6, tolerance = 0.1)
-  expect_equal(res$d_g[1], 0.6, tolerance = 0.1)
-  expect_equal(res$d_b[1], 0.5, tolerance = 0.1)
+  expect_equal(res$d_r[1], 0.6, tolerance = .tol)
+  expect_equal(res$d_g[1], 0.6, tolerance = .tol)
+  expect_equal(res$d_b[1], 0.5, tolerance = .tol)
   
   # check moist color mixture, should be ~ 10YR 5/5
   # moist colors second
-  expect_equal(res$m_r[2], 0.6, tolerance = 0.1)
-  expect_equal(res$m_g[2], 0.4, tolerance = 0.1)
-  expect_equal(res$m_b[2], 0.2, tolerance = 0.1)
+  expect_equal(res$m_r[2], 0.6, tolerance = .tol)
+  expect_equal(res$m_g[2], 0.4, tolerance = .tol)
+  expect_equal(res$m_b[2], 0.2, tolerance = .tol)
   
 })
 
 test_that("simplifyColorData: missing data", {
   
   # two colors / moisture state, color percentages provided
-  suppressMessages(res <- simplifyColorData(x.missing, id.var = 'phiid', wt = 'pct'))
+  suppressMessages({
+    res <- simplifyColorData(x.missing, 
+                             id.var = 'phiid', 
+                             wt = 'pct')
+  })
   
   # should be 2 rows
   expect_equal(nrow(res), 2)
@@ -94,14 +104,14 @@ test_that("simplifyColorData: missing data", {
   # using wide tolerance, because changes in the Munsell LUT can create errors
   
   # check dry color mixture, should be ~ 2.5Y 6/2
-  expect_equal(res$d_r[1], 0.6, tolerance = 0.1)
-  expect_equal(res$d_g[1], 0.6, tolerance = 0.1)
-  expect_equal(res$d_b[1], 0.5, tolerance = 0.1)
+  expect_equal(res$d_r[1], 0.6, tolerance = .tol)
+  expect_equal(res$d_g[1], 0.6, tolerance = .tol)
+  expect_equal(res$d_b[1], 0.5, tolerance = .tol)
   
   # check moist color mixture, should be ~ 10YR 5/4 with added neutral hue
-  expect_equal(res$m_r[2], 0.4, tolerance = 0.1)
-  expect_equal(res$m_g[2], 0.3, tolerance = 0.1)
-  expect_equal(res$m_b[2], 0.2, tolerance = 0.1)
+  expect_equal(res$m_r[2], 0.4, tolerance = .tol)
+  expect_equal(res$m_g[2], 0.3, tolerance = .tol)
+  expect_equal(res$m_b[2], 0.2, tolerance = .tol)
   
 })
 
