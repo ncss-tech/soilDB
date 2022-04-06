@@ -48,7 +48,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.6.14" id="soildb-2614-2022-02-11">soilDB 2.6.14 (2022-02-11)<a class="anchor" aria-label="anchor" href="#soildb-2614-2022-02-11"></a></h2>
+<h2 class="page-header" data-toc-text="2.6.14" id="soildb-2614-2022-03-15">soilDB 2.6.14 (2022-03-15)<small>2022-03-15</small><a class="anchor" aria-label="anchor" href="#soildb-2614-2022-03-15"></a></h2>
 <ul><li>
 <code>waterYearDay()</code> bug fix for more specific (sub-daily) date-time formats</li>
 <li>
@@ -61,6 +61,12 @@
 <code>fetchNASIS("components")</code> no longer includes <code>ecositeorigin</code>
 </li>
 <li>New Component Ecological Site attributes added</li>
+</ul></li>
+<li>
+<code>stringsAsFactors</code> argument to soilDB functions has been deprecated in favor of a package option
+<ul><li>Default behavior for NASIS domains is to return character labels rather than coded factors</li>
+<li>Use <code>NASISDomainsAsFactor(TRUE)</code> to toggle package option <code>soilDB.NASIS.DomainsAsFactor</code>
+</li>
 </ul></li>
 </ul></div>
     <div class="section level2">

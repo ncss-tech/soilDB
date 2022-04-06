@@ -4,7 +4,8 @@
 #' factors (e.g. 1 = Alfisols) using the metadata tables from NASIS. For SDA
 #' the metadata is pulled from a static snapshot in the soilDB package
 #' (/data/metadata.rda).
-#'
+#' 
+#' @details 
 #' These functions convert the coded values returned from NASIS into their
 #' plain text representation. It duplicates the functionality of the CODELABEL
 #' function found in NASIS. This function is primarily intended to be used
@@ -23,6 +24,8 @@
 #' directly from NASIS. When data is being imported from SDA or the NASIS Web
 #' Reports, the metadata is pulled from a static snapshot in the soilDB
 #' package.
+#' 
+#' Set `options(soilDB.NASIS.skip_uncode = TRUE)` to bypass decoding logic; for instance when using soilDB NASIS functions with custom NASIS snapshots that have already been decoded.
 #'
 #' @aliases metadata uncode code
 #'
@@ -69,6 +72,11 @@ uncode <- function(df,
                    droplevels = FALSE,
                    stringsAsFactors = NULL,
                    dsn = NULL) {
+  
+  if (getOption("soilDB.NASIS.skip_uncode", default = FALSE)) {
+    # some static instances of NASIS come pre-decoded
+    return(df)
+  }
   
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
