@@ -1,20 +1,20 @@
 # new tools for querying lab data from SDA Lab Data Mart
 #
 
-#' Query data from Kellogg Soil Survey Laboratory Data Mart via Soil Data Access
+#' Query data from Kellogg Soil Survey Laboratory Data Mart via Soil Data Access or local SQLite snapshot
 #'
 #' LDM model diagram: \url{https://jneme910.github.io/Lab_Data_Mart_Documentation/Documents/SDA_KSSL_Data_model.html}
 #'
-#' @param x a vector of values to find in column specified by `what`, default `NULL` uses no constraints on `what`
-#' @param dsn data source name; either a path to a SQLite database, an open DBIConnection or (default) `NULL` (to use `soilDB::SDA_query`)
-#' @param what a single column name from tables: `lab_combine_nasis_ncss`, `lab_webmap`, `lab_site`, `lab_pedon` or `lab_area`
-#' @param bycol a single column name from `lab_layer` used for processing chunks; default: `"pedon_key"`
-#' @param tables a vector of table names; Default is `"lab_physical_properties"`, `"lab_chemical_properties"`, `"lab_calculations_including_estimates_and_default_values"`, and `"lab_rosetta_Key"`. May also include one or more of:  `"lab_mineralogy_glass_count"`, `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"` but it will be necessary to select appropriate `prep_code` and `analyzed_size_frac` for your analysis (see _Details_).
-#' @param chunk.size number of pedons per chunk (for queries that may exceed `maxJsonLength`)
-#' @param ntries number of tries (times to halve `chunk.size`) before returning `NULL`; default `3`
+#' @param x A vector of values to find in column specified by `what`, default `NULL` uses no constraints on `what`
+#' @param what A single column name from tables: `lab_combine_nasis_ncss`, `lab_webmap`, `lab_site`, `lab_pedon` or `lab_area`
+#' @param bycol A single column name from `lab_layer` used for processing chunks; default: `"pedon_key"`
+#' @param tables A vector of table names; Default is `"lab_physical_properties"`, `"lab_chemical_properties"`, `"lab_calculations_including_estimates_and_default_values"`, and `"lab_rosetta_Key"`. May also include one or more of:  `"lab_mineralogy_glass_count"`, `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"` but it will be necessary to select appropriate `prep_code` and `analyzed_size_frac` for your analysis (see _Details_).
+#' @param chunk.size Number of pedons per chunk (for queries that may exceed `maxJsonLength`)
+#' @param ntries Number of tries (times to halve `chunk.size`) before returning `NULL`; default `3`
 #' @param layer_type Default: `"horizon"`, `"layer"`, and `"reporting layer"`
 #' @param prep_code Default: `"S"` and `""`. May also include one or more of: `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
 #' @param analyzed_size_frac Default: `"<2 mm"` and `""`. May also include one or more of: `"<0.002 mm"`, `"0.02-0.05 mm"`, `"0.05-0.1 mm"`, `"0.1-0.25 mm"`, `"0.25-0.5 mm"`, `"0.5-1 mm"`, `"1-2 mm"`, `"0.02-2 mm"`, `"0.05-2 mm"`
+#' @param dsn Data source name; either a path to a SQLite database, an open DBIConnection or (default) `NULL` (to use `soilDB::SDA_query`)
 #'
 #' @details If the `chunk.size` parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) `chunk.size` argument. This will be attempted up to 3 times before returning `NULL`
 #'
@@ -26,26 +26,27 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'
 #' if(requireNamespace("curl") &
 #'    curl::has_internet()) {
 #'
 #'   # fetch by ssa_key
-#'   fetchLDM(8297, what = "ssa_key")
+#'   res <- fetchLDM(8297, what = "ssa_key")
 #'
-#'   # get physical properties for points correlated as taxonomic subgroup "Typic Argialbolls"
-#'   fetchLDM(x= "Typic Argialbolls", what = "corr_taxsubgrp", tables = "lab_physical_properties")
+#'   # physical properties correlated as taxonomic subgroup "Typic Argialbolls"
+#'   res <- fetchLDM(x = "Typic Argialbolls", 
+#'                   what = "corr_taxsubgrp", 
+#'                   tables = "lab_physical_properties")
 #'
-#'   # fetch by area_code (must be a non-mlra soil survey area code for now)
-#'   #                     SSA is the lowest-level area that is always populated)   fetchLDM("CA630", what = "area_code")
+#'   # fetch by area_code (SSA only)  
+#'   res <- fetchLDM("CA630", what = "area_code")
 #' }
 #'
 #' }
 #' @importFrom aqp `depths<-` `site<-`
 #' @importFrom data.table rbindlist
 fetchLDM <- function(x = NULL,
-           dsn = NULL,
            what = "pedlabsampnum",
            bycol = "pedon_key",
            tables = c(
@@ -63,8 +64,8 @@ fetchLDM <- function(x = NULL,
            ntries = 3,
            layer_type = c("horizon","layer","reporting layer"),
            prep_code = c("S", ""), # , `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
-           analyzed_size_frac = c("<2 mm", "")#  optional: "<0.002 mm", "0.02-0.05 mm", "0.05-0.1 mm", "0.1-0.25 mm", "0.25-0.5 mm", "0.5-1 mm", "1-2 mm", "0.02-2 mm", "0.05-2 mm"
-           ) {
+           analyzed_size_frac = c("<2 mm", ""),#  optional: "<0.002 mm", "0.02-0.05 mm", "0.05-0.1 mm", "0.1-0.25 mm", "0.25-0.5 mm", "0.5-1 mm", "1-2 mm", "0.02-2 mm", "0.05-2 mm"
+           dsn = NULL) {
 
   # set up data source connection if needed
 
