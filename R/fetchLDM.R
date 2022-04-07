@@ -8,7 +8,7 @@
 #' @param x A vector of values to find in column specified by `what`, default `NULL` uses no constraints on `what`
 #' @param what A single column name from tables: `lab_combine_nasis_ncss`, `lab_webmap`, `lab_site`, `lab_pedon` or `lab_area`
 #' @param bycol A single column name from `lab_layer` used for processing chunks; default: `"pedon_key"`
-#' @param tables A vector of table names; Default is `"lab_physical_properties"`, `"lab_chemical_properties"`, `"lab_calculations_including_estimates_and_default_values"`, and `"lab_rosetta_Key"`. May also include one or more of:  `"lab_mineralogy_glass_count"`, `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"` but it will be necessary to select appropriate `prep_code` and `analyzed_size_frac` for your analysis (see _Details_).
+#' @param tables A vector of table names; Default is `"lab_physical_properties"`, `"lab_chemical_properties"`, `"lab_calculations_including_estimates_and_default_values"`, and `"lab_rosetta_Key"`. May also include one or more of: `"lab_mir"`, `"lab_mineralogy_glass_count"`, `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"` but it will be necessary to select appropriate `prep_code` and `analyzed_size_frac` for your analysis (see _Details_).
 #' @param chunk.size Number of pedons per chunk (for queries that may exceed `maxJsonLength`)
 #' @param ntries Number of tries (times to halve `chunk.size`) before returning `NULL`; default `3`
 #' @param layer_type Default: `"horizon"`, `"layer"`, and `"reporting layer"`
