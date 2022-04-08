@@ -90,8 +90,15 @@ get_colors_from_NASIS_db <- function(SS = TRUE, mixColors = TRUE, dsn = NULL) {
   
   # process dry values into d_ H/V/C, hex color and RGB triplet columns
   dry <- d[dom[which(dom$colormoistst == "dry"), ]$first_idx, ]
-  dry$dry_soil_color <- aqp::munsell2rgb(dry[[hue]], dry[[value]], dry[[chroma]])
-  dry <- cbind(dry, t(col2rgb(dry$dry_soil_color) / 255))
+  if (nrow(dry) > 0) {
+    dry$dry_soil_color <- aqp::munsell2rgb(dry[[hue]], dry[[value]], dry[[chroma]])
+    dry <- cbind(dry, t(col2rgb(dry$dry_soil_color) / 255))
+  } else {
+    dry$dry_soil_color <- character()
+    dry$r <- numeric()
+    dry$g <- numeric()
+    dry$b <- numeric()
+  }
   colnames(dry) <- c(id.var, 'd_hue', 'd_value', 'd_chroma', 'dry_soil_color', 'd_r', 'd_g', 'd_b')
   
   # sigma is NA for single color
@@ -99,8 +106,15 @@ get_colors_from_NASIS_db <- function(SS = TRUE, mixColors = TRUE, dsn = NULL) {
   
   # process moist values into m_ H/V/C, hex color and RGB triplet columns
   moist <- d[dom[which(dom$colormoistst == "moist"), ]$first_idx, ]
-  moist$moist_soil_color <- aqp::munsell2rgb(moist[[hue]], moist[[value]], moist[[chroma]])
-  moist <- cbind(moist, t(col2rgb(moist$moist_soil_color) / 255))
+  if (nrow(moist) > 0) {
+    moist$moist_soil_color <- aqp::munsell2rgb(moist[[hue]], moist[[value]], moist[[chroma]])
+    moist <- cbind(moist, t(col2rgb(moist$moist_soil_color) / 255))
+  } else {
+    moist$moist_soil_color <- character()
+    moist$r <- numeric()
+    moist$g <- numeric()
+    moist$b <- numeric()
+  }
   colnames(moist) <- c(id.var, 'm_hue', 'm_value', 'm_chroma', 'moist_soil_color', 'm_r', 'm_g', 'm_b')
   moist$m_sigma <- NA_real_
   
