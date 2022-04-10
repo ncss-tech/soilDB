@@ -91,6 +91,10 @@ jobs:
           remotes::install_local()
         shell: Rscript {0}
 
+      - name: Install soilDBdata off GitHub
+        run: remotes::install_github("brownag/soilDBdata", dependencies = FALSE, build = FALSE)
+        shell: Rscript {0}
+
       - name: Install aqp off GitHub
         if: matrix.config.r == 'devel'
         run: remotes::install_github("ncss-tech/aqp", dependencies = FALSE, build = FALSE)
@@ -115,6 +119,7 @@ jobs:
         if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         run: |
           git commit README.md -m 'Render README.Rmd' || echo "No changes to commit"
+          git add inst/\*
           git add docs/\*
           git commit -m 'Update Docs' || echo "No changes to commit"
 

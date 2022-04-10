@@ -9,11 +9,11 @@ colors <- c('10YR 5/6', '7.5YR 6/2')
 weights <- c(80, 20)
 
 # re-make the data expected by estimateColorMixture()
-x <- cbind(
+x <- data.frame(
   parseMunsell(colors, convertColors=FALSE),
   parseMunsell(colors, return_triplets=TRUE, returnLAB=TRUE),
-  pct=weights,
-  col=parseMunsell(colors, convertColors=TRUE)
+  pct = weights,
+  col = parseMunsell(colors, convertColors=TRUE)
 ) 
 
 names(x)[1:3] <- paste0('color', names(x)[1:3])
@@ -30,19 +30,18 @@ test_that("estimateColorMixture basic functionality", {
   # should be a single row
   expect_equal(nrow(res), 1)
   
-  # check closest Munsell chip, should be ~ 10YR 5/5
-  expect_equal(res$colorhue, '10YR')
-  expect_equal(res$colorvalue, 5)
-  expect_equal(res$colorchroma, 5)
+  # ensure values aren't NA
+  expect_true(all(! sapply(res, is.na)))
   
   # check sRGB coordinates
-  expect_equal(res$r, 0.62591)
-  expect_equal(res$g, 0.4755)
-  expect_equal(res$b, 0.27674)
+  # using wide tolerance, because changes in the Munsell LUT can create errors
+  expect_equal(res$r, 0.6, tolerance = 0.1)
+  expect_equal(res$g, 0.4, tolerance = 0.1)
+  expect_equal(res$b, 0.2, tolerance = 0.1)
   
 })
 
-## TODO: many more examples of colors + resulting mixutres
+## TODO: many more examples of colors + resulting mixtures
 
 ## TODO: test mixing in the absence of color percentages
 

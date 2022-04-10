@@ -15,9 +15,10 @@ fetchNASIS(
   rmHzErrors = TRUE,
   nullFragsAreZero = TRUE,
   soilColorState = "moist",
+  mixColors = TRUE,
   lab = FALSE,
   fill = FALSE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 }
@@ -36,18 +37,16 @@ the results? (default: \code{TRUE})}
 \item{nullFragsAreZero}{should fragment volumes of \code{NULL} be interpreted as \code{0}?
 (default: \code{TRUE}), see details}
 
-\item{soilColorState}{which colors should be used to generate the
-convenience field \code{soil_color}? (\code{'moist'} or \code{'dry'})}
+\item{soilColorState}{Used only for \code{from='pedons'}; which colors should be used to generate the convenience field \code{soil_color}? (\code{'moist'} or \code{'dry'})}
+
+\item{mixColors}{should mixed colors be calculated (Default: \code{TRUE}) where multiple colors are populated for the same moisture state in a horizon? \code{FALSE} takes the dominant color for each horizon moist/dry state.}
 
 \item{lab}{should the \code{phlabresults} child table be fetched with
 site/pedon/horizon data (default: \code{FALSE})}
 
 \item{fill}{include pedon or component records without horizon data in result? (default: \code{FALSE})}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the \code{uncode()} function. It does not
-convert those vectors that have been set outside of \code{uncode()} (i.e. hard
-coded).}
+\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

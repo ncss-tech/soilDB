@@ -25,11 +25,7 @@
 #' @param fill should rows with missing component ids be removed (default: `FALSE`)
 #' @param rmHzErrors should pedons with horizonation errors be removed from the
 #' results? (default: `FALSE`)
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the `uncode()` function. It does not
-#' convert those vectors that have been set outside of `uncode()` (i.e. hard
-#' coded). The 'factory-fresh' default is TRUE, but this can be changed by
-#' setting options(`stringsAsFactors = FALSE`)
+#' @param stringsAsFactors deprecated
 #' @param droplevels logical: indicating whether to drop unused levels in
 #' classifying factors. This is useful when a class has large number of unused
 #' classes, which can waste space in tables and figures.
@@ -39,13 +35,17 @@
 #'
 #' @export fetchNASISWebReport
 fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
-                                stringsAsFactors = default.stringsAsFactors()
-) {
-
+                                stringsAsFactors = NULL) {
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   # load data in pieces
-  f.mapunit   <- get_projectmapunit_from_NASISWebReport(projectname, stringsAsFactors = stringsAsFactors)
-  f.component <- get_component_from_NASISWebReport(projectname, stringsAsFactors = stringsAsFactors)
-  f.chorizon  <- get_chorizon_from_NASISWebReport(projectname, fill, stringsAsFactors = stringsAsFactors)
+  f.mapunit   <- get_projectmapunit_from_NASISWebReport(projectname)
+  f.component <- get_component_from_NASISWebReport(projectname)
+  f.chorizon  <- get_chorizon_from_NASISWebReport(projectname, fill)
 
   # return NULL if one of the required pieces is missing
   if(is.null(f.mapunit) | is.null(f.component) | is.null(f.chorizon)) {
@@ -94,8 +94,13 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
 }
 
 #' @rdname fetchNASISWebReport
-get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = default.stringsAsFactors()) {
-
+get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = NULL) {
+ 
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_component_from_NASISWebReport"
 
   d.component <- lapply(projectname, function(x) {
@@ -114,7 +119,7 @@ get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = de
     return(NULL)
 
   # set factor levels according to metadata domains
-  d.component <- uncode(d.component, db = "LIMS", stringsAsFactors = stringsAsFactors)
+  d.component <- uncode(d.component, db = "LIMS")
 
   # prep
   d.component <- .cogmd_prep(d.component, db = "LIMS")
@@ -127,8 +132,13 @@ get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = de
 
 
 #' @rdname fetchNASISWebReport
-get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsAsFactors = default.stringsAsFactors()) {
-
+get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsAsFactors = NULL) {
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_chorizon_from_NASISWebReport"
 
   d.chorizon <- lapply(projectname, function(x) {
@@ -147,7 +157,7 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
   if (!all(is.na(d.chorizon$chiid))) {
     d.chorizon <- within(d.chorizon, {
       texture = tolower(texture)
-      if (stringsAsFactors == TRUE) {
+      if (getOption("stringsAsFactors", default = FALSE)) {
         texcl = factor(texcl,
                        levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceValue"],
                        labels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"]
@@ -169,8 +179,13 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
 
 
 #' @rdname fetchNASISWebReport
-get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
-
+get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = TRUE, stringsAsFactors = NULL) {
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_legend_from_NASISWebReport"
 
   args <- list(p_mlraoffice = mlraoffice, p_areasymbol = areasymbol)
@@ -182,8 +197,7 @@ get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = 
   # data is coming back uncoded from LIMS so db is set to "SDA"
   d.legend <- uncode(d.legend,
                      db = "SDA",
-                     droplevels = droplevels,
-                     stringsAsFactors = stringsAsFactors
+                     droplevels = droplevels
   )
 
   # date
@@ -197,7 +211,13 @@ get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = 
 
 
 #' @rdname fetchNASISWebReport
-get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = NULL) {  
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+    
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_lmuaoverlap_from_NASISWebReport"
 
   d <- lapply(areasymbol, function(x) {
@@ -212,8 +232,7 @@ get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, s
   # data is coming back uncoded from LIMS so db is set to "SDA"
   d <- uncode(d,
               db = "SDA",
-              droplevels = droplevels,
-              stringsAsFactors = stringsAsFactors
+              droplevels = droplevels
   )
 
   # return data.frame
@@ -224,7 +243,13 @@ get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, s
 
 
 #' @rdname fetchNASISWebReport
-get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, stringsAsFactors = NULL) {
+
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_mapunit_from_NASISWebReport"
 
   d.mapunit <- lapply(areasymbol, function(x) {
@@ -240,8 +265,7 @@ get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, strin
   # data is coming back uncoded from LIMS so db is set to "SDA"
   d.mapunit <- uncode(d.mapunit,
                       db = "SDA",
-                      droplevels = droplevels,
-                      stringsAsFactors = stringsAsFactors
+                      droplevels = droplevels
   )
 
   # return data.frame
@@ -251,8 +275,13 @@ get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, strin
 
 
 #' @rdname fetchNASISWebReport
-get_projectmapunit_from_NASISWebReport <- function(projectname, stringsAsFactors = default.stringsAsFactors()) {
+get_projectmapunit_from_NASISWebReport <- function(projectname, stringsAsFactors = NULL) {
 
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit_from_NASISWebReport"
 
 
@@ -265,7 +294,7 @@ get_projectmapunit_from_NASISWebReport <- function(projectname, stringsAsFactors
   d.mapunit$musym = as.character(d.mapunit$musym)
 
   # set factor levels according to metadata domains
-  d.mapunit <- uncode(d.mapunit, db = "LIMS", stringsAsFactors = stringsAsFactors)
+  d.mapunit <- uncode(d.mapunit, db = "LIMS")
 
   # return data.frame
   return(d.mapunit)
@@ -274,8 +303,14 @@ get_projectmapunit_from_NASISWebReport <- function(projectname, stringsAsFactors
 
 
 #' @rdname fetchNASISWebReport
-get_projectmapunit2_from_NASISWebReport <- function(mlrassoarea, fiscalyear, projectname, stringsAsFactors = default.stringsAsFactors()) {
+get_projectmapunit2_from_NASISWebReport <- function(mlrassoarea, fiscalyear, projectname, stringsAsFactors = NULL) {
 
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit2_from_NASISWebReport"
 
   args = list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)
@@ -285,7 +320,7 @@ get_projectmapunit2_from_NASISWebReport <- function(mlrassoarea, fiscalyear, pro
 
   # set factor levels according to metadata domains
   # data is coming back uncoded from LIMS so db is set to "SDA"
-  d.mapunit <- uncode(d.mapunit, db = "SDA", stringsAsFactors = stringsAsFactors)
+  d.mapunit <- uncode(d.mapunit, db = "SDA")
 
   # return data.frame
   return(d.mapunit)

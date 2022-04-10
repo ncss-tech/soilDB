@@ -46,39 +46,39 @@ Row-order is not preserved across features in \code{geom} and returned object. U
 \examples{
 \donttest{
   if (requireNamespace("aqp") && requireNamespace("sf")) {
-    
+
     library(aqp)
     library(sf)
-    
+
     ## query at a point
-    
+
     # example point
-    p <- sf::st_as_sf(data.frame(x = -119.72330, 
+    p <- sf::st_as_sf(data.frame(x = -119.72330,
                                  y = 36.92204),
                       coords = c('x', 'y'),
                       crs = 4326)
-    
+
     # query map unit records at this point
     res <- SDA_spatialQuery(p, what = 'mukey')
-    
+
     # convert results into an SQL "IN" statement
     # useful when there are multiple intersecting records
     mu.is <- format_SQL_in_statement(res$mukey)
-    
+
     # composite SQL WHERE clause
     sql <- sprintf("mukey IN \%s", mu.is)
-    
+
     # get commonly used map unit / component / chorizon records
     # as a SoilProfileCollection object
     # request that results contain `mukey` with `duplicates = TRUE`
     x <- fetchSDA(sql, duplicates = TRUE)
-    
+
     # safely set texture class factor levels
     # by making a copy of this column
     # this will save in lieu of textures in the original
     # `texture` column
     horizons(x)$texture.class <- factor(x$texture, levels = SoilTextureLevels())
-    
+
     # graphical depiction of the result
     plotSPC(x,
             color = 'texture.class',
@@ -89,9 +89,9 @@ Row-order is not preserved across features in \code{geom} and returned object. U
             plot.depth.axis = FALSE,
             hz.depths = TRUE,
             name.style = 'center-center')
-    
+
     ## query mukey + geometry that intersect with a bounding box
-    
+
     # define a bounding box: xmin, xmax, ymin, ymax
     #
     #         +-------------------(ymax, xmax)
@@ -99,13 +99,13 @@ Row-order is not preserved across features in \code{geom} and returned object. U
     #         |                        |
     #     (ymin, xmin) ----------------+
     b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
-    
+
     # convert bounding box to WKT
     bbox.sp <- sf::st_as_sf(wk::rct(
       xmin = b[1], xmax = b[2], ymin = b[3], ymax = b[4],
       crs = sf::st_crs(4326)
     ))
-    
+
     # results contain associated map unit keys (mukey)
     # return SSURGO polygons, after intersection with provided BBOX
     ssurgo.geom <- SDA_spatialQuery(
@@ -114,7 +114,7 @@ Row-order is not preserved across features in \code{geom} and returned object. U
       db = 'SSURGO',
       geomIntersection = TRUE
     )
-    
+
     # return STATSGO polygons, after intersection with provided BBOX
     statsgo.geom <- SDA_spatialQuery(
       bbox.sp,
@@ -122,7 +122,7 @@ Row-order is not preserved across features in \code{geom} and returned object. U
       db = 'STATSGO',
       geomIntersection = TRUE
     )
-    
+
     # inspect results
     par(mar = c(0,0,3,1))
     plot(sf::st_geometry(ssurgo.geom), border = 'royalblue')
@@ -134,21 +134,21 @@ Row-order is not preserved across features in \code{geom} and returned object. U
       lwd = c(3, 2, 1),
       col = c('black', 'firebrick', 'royalblue'),
     )
-    
+
     # quick reminder that STATSGO map units often contain many components
     # format an SQL IN statement using the first STATSGO mukey
     mu.is <- format_SQL_in_statement(statsgo.geom$mukey[1])
-    
+
     # composite SQL WHERE clause
     sql <- sprintf("mukey IN \%s", mu.is)
-    
+
     # get commonly used map unit / component / chorizon records
     # as a SoilProfileCollection object
     x <- fetchSDA(sql)
-    
+
     # tighter figure margins
     par(mar = c(0,0,3,1))
-    
+
     # organize component sketches by national map unit symbol
     # color horizons via awc
     # adjust legend title
@@ -164,7 +164,7 @@ Row-order is not preserved across features in \code{geom} and returned object. U
                             name.style = 'center-center',
                             width = 0.3
     )
-    
+
     mtext(
       'STATSGO (1:250,000) map units contain a lot of components!',
       side = 1,

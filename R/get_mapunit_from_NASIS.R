@@ -3,15 +3,17 @@
 #'
 #' @param SS fetch data from the currently loaded selected set in NASIS or from the entire local database (default: `TRUE`)
 #' @param droplevels Drop unused levels from `farmlndcl` and other factor levels from NASIS domains?
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the `uncode()` function. It does not
-#' convert those vectors that have been set outside of `uncode()` (i.e. hard
-#' coded).
+#' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' 
 #' @export
-get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors(), dsn = NULL) {
+get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = NULL, dsn = NULL) {
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
   
   q.mapunit <- paste("
                      SELECT
@@ -72,7 +74,6 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
   d.mapunit <- uncode(d.mapunit,
                       db = "NASIS",
                       droplevels = droplevels,
-                      stringsAsFactors = stringsAsFactors,
                       dsn = dsn)
   
   # hacks to make R CMD check --as-cran happy:
@@ -108,8 +109,12 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
 #' @rdname get_mapunit_from_NASIS
 get_legend_from_NASIS <- function(SS = TRUE,
                                   droplevels = TRUE,
-                                  stringsAsFactors = default.stringsAsFactors(),
+                                  stringsAsFactors = NULL,
                                   dsn = NULL) {
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
   
   q.legend  <- paste("
                      SELECT
@@ -151,7 +156,6 @@ get_legend_from_NASIS <- function(SS = TRUE,
   d.legend <- uncode(d.legend,
                      db = "NASIS",
                      droplevels = droplevels,
-                     stringsAsFactors = stringsAsFactors,
                      dsn = dsn)
   
   # done
@@ -164,7 +168,7 @@ get_legend_from_NASIS <- function(SS = TRUE,
 #' @rdname get_mapunit_from_NASIS
 get_lmuaoverlap_from_NASIS <- function(SS = TRUE,
                                        droplevels = TRUE,
-                                       stringsAsFactors = default.stringsAsFactors(),
+                                       stringsAsFactors = NULL,
                                        dsn = NULL) {
   
   q <- "SELECT
@@ -216,7 +220,6 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE,
   d <- uncode(d,
               db = "NASIS",
               droplevels = droplevels,
-              stringsAsFactors = stringsAsFactors,
               dsn = dsn)
   
   # done

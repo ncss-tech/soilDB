@@ -32,9 +32,6 @@ check_local_NASIS_components_available <- function(dsn = NULL) {
   res1 <- try(suppressWarnings(get_component_data_from_NASIS_db(dsn = dsn)), silent = FALSE)
   res2 <- try(suppressWarnings(get_component_horizon_data_from_NASIS_db(dsn = dsn)), silent = FALSE)
 
-  # res <- try(suppressWarnings(fetchNASIS(from='pedons')), silent = TRUE)
-  # note: this was too broad of a test -- any error in fetchNASIS will result in skipping the test!
-  #if(class(res) == 'try-error'){
   if (nrow(res1) == 0) {
     skip("no Component records in local NASIS database")
   }

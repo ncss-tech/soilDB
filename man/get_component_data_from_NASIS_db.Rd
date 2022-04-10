@@ -17,7 +17,7 @@
 get_component_data_from_NASIS_db(
   SS = TRUE,
   nullFragsAreZero = TRUE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 
@@ -29,7 +29,7 @@ get_component_correlation_data_from_NASIS_db(
   SS = TRUE,
   dropAdditional = TRUE,
   dropNotRepresentative = TRUE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 
@@ -39,13 +39,13 @@ get_component_cogeomorph_data_from_NASIS_db2(SS = TRUE, dsn = NULL)
 
 get_component_copm_data_from_NASIS_db(
   SS = TRUE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 
 get_component_esd_data_from_NASIS_db(
   SS = TRUE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = NULL,
   dsn = NULL
 )
 
@@ -66,11 +66,7 @@ the entire local database (default: \code{TRUE})}
 
 \item{nullFragsAreZero}{should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)}
 
-\item{stringsAsFactors}{logical: should character vectors be converted to
-factors? This argument is passed to the \code{uncode()} function. It does not
-convert those vectors that have set outside of \code{uncode()} (i.e. hard coded).
-The 'factory-fresh' default is TRUE, but this can be changed by setting
-options(\code{stringsAsFactors = FALSE})}
+\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

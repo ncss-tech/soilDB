@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.14</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15</span>
       </span>
     </div>
 
@@ -57,49 +57,43 @@
   <span class="va">projectname</span>,
   rmHzErrors <span class="op">=</span> <span class="cn">FALSE</span>,
   fill <span class="op">=</span> <span class="cn">FALSE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
-<span class="fu">get_component_from_NASISWebReport</span><span class="op">(</span>
-  <span class="va">projectname</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span>
+<span class="fu">get_component_from_NASISWebReport</span><span class="op">(</span><span class="va">projectname</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
 
 <span class="fu">get_chorizon_from_NASISWebReport</span><span class="op">(</span>
   <span class="va">projectname</span>,
   fill <span class="op">=</span> <span class="cn">FALSE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
 <span class="fu">get_legend_from_NASISWebReport</span><span class="op">(</span>
   <span class="va">mlraoffice</span>,
   <span class="va">areasymbol</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
 <span class="fu">get_lmuaoverlap_from_NASISWebReport</span><span class="op">(</span>
   <span class="va">areasymbol</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
 <span class="fu">get_mapunit_from_NASISWebReport</span><span class="op">(</span>
   <span class="va">areasymbol</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
-<span class="fu">get_projectmapunit_from_NASISWebReport</span><span class="op">(</span>
-  <span class="va">projectname</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span>
+<span class="fu">get_projectmapunit_from_NASISWebReport</span><span class="op">(</span><span class="va">projectname</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
 
 <span class="fu">get_projectmapunit2_from_NASISWebReport</span><span class="op">(</span>
   <span class="va">mlrassoarea</span>,
   <span class="va">fiscalyear</span>,
   <span class="va">projectname</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span>
 
 <span class="fu">get_project_from_NASISWebReport</span><span class="op">(</span><span class="va">mlrassoarea</span>, <span class="va">fiscalyear</span><span class="op">)</span>
@@ -124,11 +118,7 @@ results? (default: <code>FALSE</code>)</p></dd>
 <dt>fill</dt>
 <dd><p>should rows with missing component ids be removed (default: <code>FALSE</code>)</p></dd>
 <dt>stringsAsFactors</dt>
-<dd><p>logical: should character vectors be converted to
-factors? This argument is passed to the <code><a href="uncode.html">uncode()</a></code> function. It does not
-convert those vectors that have been set outside of <code><a href="uncode.html">uncode()</a></code> (i.e. hard
-coded). The 'factory-fresh' default is TRUE, but this can be changed by
-setting options(<code>stringsAsFactors = FALSE</code>)</p></dd>
+<dd><p>deprecated</p></dd>
 <dt>mlraoffice</dt>
 <dd><p>text string value identifying the MLRA Regional Soil
 Survey Office group name inserted into a SQL WHERE clause (default: <code>NA</code>)</p></dd>

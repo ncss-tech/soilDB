@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.14</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15</span>
       </span>
     </div>
 
@@ -53,7 +53,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_colors_from_NASIS_db</span><span class="op">(</span>SS <span class="op">=</span> <span class="cn">TRUE</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_colors_from_NASIS_db</span><span class="op">(</span>SS <span class="op">=</span> <span class="cn">TRUE</span>, mixColors <span class="op">=</span> <span class="cn">TRUE</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -61,6 +61,8 @@
     <dl><dt>SS</dt>
 <dd><p>fetch data from Selected Set in NASIS or from the entire local
 database (default: <code>TRUE</code>)</p></dd>
+<dt>mixColors</dt>
+<dd><p>should mixed colors be calculated (Default: <code>TRUE</code>) where multiple colors are populated for the same moisture state in a horizon? <code>FALSE</code> takes the dominant color based on <code>colorpct</code> or first record based on horizon ID (<code>phiid</code>) sorting for "moist" and "dry" state. Pedon Horizon Color records without a moisture state populated are ignored.</p></dd>
 <dt>dsn</dt>
 <dd><p>Optional: path to local SQLite database containing NASIS
 table structure; default: <code>NULL</code></p></dd>

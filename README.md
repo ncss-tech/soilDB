@@ -1,7 +1,9 @@
 [![CRAN Version
-(Stable)](http://www.r-pkg.org/badges/version/soilDB)](https://cran.r-project.org/package=soilDB)
-[![GitHub Version
-(Development)](https://img.shields.io/badge/GitHub-2.6.14-yellowgreen)](https://github.com/ncss-tech/soilDB)
+(Stable)](http://www.r-pkg.org/badges/version-ago/soilDB)](https://cran.r-project.org/package=soilDB)
+[![CRAN
+status](https://cranchecks.info/badges/summary/soilDB)](https://cran.r-project.org/web/checks/check_results_soilDB.html)
+[![Development
+Version](https://ncss-tech.r-universe.dev/badges/soilDB)](https://ncss-tech.r-universe.dev/)
 [![R-CMD-check Build
 Status](https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
 [![Total CRAN
@@ -12,71 +14,52 @@ Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech
 Installation
 ------------
 
-Get the stable version (2.6.13) from CRAN:
+Get the stable version (2.6.14) from CRAN:
 
     install.packages('soilDB', dependencies = TRUE)
 
-Get the development version (2.6.14) from GitHub:
+Get the development version from GitHub:
 
-    remotes::install_github("ncss-tech/soilDB", dependencies = FALSE, upgrade = FALSE, build = FALSE)
+    remotes::install_github("ncss-tech/soilDB", dependencies = FALSE)
 
 Website
 -------
 
--   <a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a>
+-   CRAN Package:
+    <a href="https://cran.r-project.org/package=soilDB" class="uri">https://cran.r-project.org/package=soilDB</a>
+-   Package Manual:
+    <a href="http://ncss-tech.github.io/soilDB/" class="uri">http://ncss-tech.github.io/soilDB/</a>
+-   Algorithms for Quantitative Pedology (AQP) Project:
+    <a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a>
 
 Citation
 --------
 
-Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2021).
-soilDB: Soil Database Interface. R package version 2.6.13.
-<https://CRAN.R-project.org/package=soilDB>
+    ## 
+    ## To cite soilDB in publications use:
+    ## 
+    ##   Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown
+    ##   (2022). soilDB: Soil Database Interface. R package version 2.6.14.
+    ##   https://CRAN.R-project.org/package=soilDB
+    ## 
+    ## A BibTeX entry for LaTeX users is
+    ## 
+    ##   @Manual{,
+    ##     title = {soilDB: Soil Database Interface},
+    ##     author = {Dylan Beaudette and Jay Skovlin and Stephen Roecker and Andrew Brown},
+    ##     note = {R package version 2.6.14},
+    ##     url = {https://CRAN.R-project.org/package=soilDB},
+    ##     year = {2022},
+    ##   }
 
-soilDB 2.6.14
+soilDB 2.6.15
 -------------
 
-### Notices on Database Interfaces
-
-#### NASIS
-
--   all NASIS queries now use {DBI}, tested to work with {odbc} or
-    {RSQLite} drivers; replacing {RODBC}
-    -   Install required R packages with
-        `install.packages(c("DBI","odbc","RSQLite"), dependencies = TRUE)`
--   new methods for connecting to NASIS and querying NASIS data allow
-    for `dsn` argument to specify a local “static” SQLite file
-    containing NASIS tables.
-    -   Default argument `dsn = NULL` uses `"nasis_local"` [ODBC
-        connection](http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html)
-        to a local NASIS SQL Server instance
-
-#### Soil Data Access (SDA)
-
--   `SDA_query()` returns a `try-error` for queries with invalid syntax
-    or on network error; empty results are an empty `data.frame()`
-
--   `SDA_spatialQuery()` can return Soil Survey Area `sapolygon` data
-
--   `fetchSDA_spatial()` can return STATSGO `gsmmupolygon` or Soil
-    Survey Area `sapolygon` data; and can join to the `legend` table
-
--   Added several new SDA query methods based on
-    [ssurgoOnDemand](https://github.com/ncss-tech/ssurgoOnDemand) by
-    Jason Nemecek and Chad Ferguson:
-
-    -   `get_SDA_property()`, `get_SDA_interpretation()`,
-        `get_SDA_muaggatt()`, `get_SDA_hydric()`,
-        `get_SDA_pmgroupname()`, `get_SDA_coecoclass()`
-
-#### MS Access
-
--   AKSite, Montana RangeDB, and PedonPC 6.x get and fetch methods now
-    use {DBI}+{odbc}
-
-#### SoilWeb API
-
--   `ISSR800.wcs()` and `mukey.wcs()` now return a result that inherits
-    from `try-error` (and a message) if the Web Coverage Service fails
+<!-- ### Notices on Database Interfaces -->
+<!-- #### NASIS -->
+<!-- #### Soil Data Access (SDA) -->
+<!-- #### SoilWeb API -->
+<!-- #### MS Access -->
 
 Functions by Data Source
 ------------------------
@@ -116,20 +99,10 @@ Functions by Data Source
     -   [`fetchHenry`](http://ncss-tech.github.io/soilDB/reference/fetchHenry.html)
 -   NASIS local database
     -   [`fetchNASIS`](http://ncss-tech.github.io/soilDB/reference/fetchNASIS.html)
-    -   <span style="color:red">**NEW:**</span> Argument `dsn` to
-        specify path to connect to alternate (SQLite) data sources with
-        NASIS schema
-    -   <span
-        style="color:red">**NEW:**</span>[`dbConnectNASIS`](http://ncss-tech.github.io/soilDB/reference/dbConnectNASIS.html)
-        (alias `NASIS()`) - create a *DBIConnection* to local NASIS
-        database
-    -   <span
-        style="color:red">**NEW:**</span>[`dbQueryNASIS`](http://ncss-tech.github.io/soilDB/reference/dbQueryNASIS.html) -
-        query NASIS local database (and close connection with
-        `close=TRUE`)
-    -   <span
-        style="color:red">**NEW:**</span>[`createStaticNASIS`](http://ncss-tech.github.io/soilDB/reference/createStaticNASIS.html) -
-        create list of NASIS tables or write to SQLite
+    -   [`dbConnectNASIS`](http://ncss-tech.github.io/soilDB/reference/dbConnectNASIS.html)
+        (alias `NASIS()`)
+    -   [`dbQueryNASIS`](http://ncss-tech.github.io/soilDB/reference/dbQueryNASIS.html)
+    -   [`createStaticNASIS`](http://ncss-tech.github.io/soilDB/reference/createStaticNASIS.html)
 -   SoilGrids
     -   [`fetchSoilGrids`](http://ncss-tech.github.io/soilDB/reference/fetchSoilGrids.html)
 
@@ -159,6 +132,7 @@ Related Packages
 
 -   [aqp](https://github.com/ncss-tech/aqp)
 -   [sharpshootR](https://github.com/ncss-tech/sharpshootR)
+-   [SoilTaxonomy](https://github.com/ncss-tech/SoilTaxonomy)
 
 Dependency Graph
 ----------------

@@ -1,11 +1,22 @@
-# soilDB 2.6.14 (2022-02-11)
+# soilDB 2.6.15 (2022-04-08) 
+ * `fetchNASIS()`
+   * New `mixColors` argument used to toggle color mixing for pedon horizons with multiple colors per moisture state. 
+     * Default `TRUE` mixes colors based on reported color percentage via `estimateColorMixture()`. `FALSE` returns the dominant color in each moisture state, or first record for cases without `colorpct` populated.
+   * Added `taxreaction` and `taxfamhahatmatcl` to extended taxonomic information 
+   * Added new option (`soilDB.NASIS.skip_uncode`) to bypass `uncode()` in NASIS functions (mostly used for debugging or special database instances that come pre-decoded)
+ * Added `fetchLDM()` function to access Kellogg Soil Survey Lab Data Mart via Soil Data Access or local SQLite snapshot (https://github.com/ncss-tech/soilDB/pull/243)
+   
+# soilDB 2.6.14 (2022-03-15)
  * `waterYearDay()` bug fix for more specific (sub-daily) date-time formats
  * `fetchSCAN()` better handling of empty results in multi-site queries
  * Updates to queries, metadata and sample datasets for NASIS 7.4.1 Database Model 
    - `fetchNASIS("pedons")` no longer includes `pmweathering`
    - `fetchNASIS("components")` no longer includes `ecositeorigin`
    - New Component Ecological Site attributes added
- 
+ * `stringsAsFactors` argument to soilDB functions has been deprecated in favor of a package option
+   - Default behavior for NASIS domains is to return character labels rather than coded factors
+   - Use `NASISDomainsAsFactor(TRUE)` to toggle package option `soilDB.NASIS.DomainsAsFactor`
+   
 # soilDB 2.6.13 (2022-01-29)
  * `fetchSDA_spatial` now supports `by.col` `"areaname"`, `"mlraoffice"`, and `"mouagencyresp"`; thanks to suggestion by Jay Skovlin
  * `fetchNASIS` fix for multiple site observation records with surface fragments; thanks to bug report from Brianna Wegner

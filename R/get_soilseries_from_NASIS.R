@@ -5,11 +5,7 @@
 #' only).
 #'
 #' @aliases get_soilseries_from_NASIS get_soilseries_from_NASISWebReport
-#'
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the `uncode()` function. It does not
-#' convert those vectors that have set outside of `uncode()` (i.e. hard coded).
-#'
+#' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
@@ -22,8 +18,13 @@
 #' @keywords manip
 #'
 #' @export get_soilseries_from_NASIS
-get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactors(),
+get_soilseries_from_NASIS <- function(stringsAsFactors = NULL,
                                       dsn = NULL, delimiter = " over ") {
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   q.soilseries <- "
   SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, soiltaxclasslastupdated, mlraoffice, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxfamhahatmatcl, originyear, establishedyear, descriptiondateinitial, descriptiondateupdated, statsgoflag,  soilseriesiid, areasymbol, areaname, areaacres, obterm, areatypename, soilseriesedithistory
   FROM soilseries ss
@@ -44,8 +45,8 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
   d.soilseriesmin <- dbQueryNASIS(channel, q.min)
 
   # recode metadata domains
-  d.soilseries <- uncode(d.soilseries, stringsAsFactors = stringsAsFactors, dsn = dsn)
-  d.soilseriesmin <- uncode(d.soilseriesmin, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d.soilseries <- uncode(d.soilseries, dsn = dsn)
+  d.soilseriesmin <- uncode(d.soilseriesmin, dsn = dsn)
 
   # prep
   d.soilseries$soiltaxclassyearlastupdated <- format(as.Date(d.soilseries$soiltaxclasslastupdated), "%Y")
@@ -75,8 +76,13 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = default.stringsAsFactor
                 "areaacres", "obterm", "areatypename")])
 }
 
-get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = default.stringsAsFactors()) {
+get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = NULL) {
 
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_soilseries_from_NASISWebReport"
 
   d.ss <- lapply(soils, function(x) {
@@ -87,10 +93,10 @@ get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = default
 
   # set factor levels according to metadata domains
   d.ss[!names(d.ss) %in% c("mlraoffice", "taxminalogy")] <- uncode(d.ss[!names(d.ss) %in% c("mlraoffice", "taxminalogy")],
-                                                                   db = "SDA", stringsAsFactors = stringsAsFactors)
+                                                                   db = "SDA")
 
   d.ss[names(d.ss) %in% c("mlraoffice")] <- uncode(d.ss[names(d.ss) %in% c("mlraoffice")],
-                                                   db = "LIMS", stringsAsFactors = stringsAsFactors)
+                                                   db = "LIMS")
 
   # return data.frame
   return(d.ss)

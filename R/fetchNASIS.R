@@ -51,15 +51,12 @@
 #' the results? (default: `TRUE`)
 #' @param nullFragsAreZero should fragment volumes of `NULL` be interpreted as `0`?
 #' (default: `TRUE`), see details
-#' @param soilColorState which colors should be used to generate the
-#' convenience field `soil_color`? (`'moist'` or `'dry'`)
+#' @param soilColorState Used only for `from='pedons'`; which colors should be used to generate the convenience field `soil_color`? (`'moist'` or `'dry'`)
+#' @param mixColors should mixed colors be calculated (Default: `TRUE`) where multiple colors are populated for the same moisture state in a horizon? `FALSE` takes the dominant color for each horizon moist/dry state.
 #' @param lab should the `phlabresults` child table be fetched with
 #' site/pedon/horizon data (default: `FALSE`)
 #' @param fill include pedon or component records without horizon data in result? (default: `FALSE`)
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the `uncode()` function. It does not
-#' convert those vectors that have been set outside of `uncode()` (i.e. hard
-#' coded).
+#' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' @return A SoilProfileCollection object
@@ -73,13 +70,19 @@ fetchNASIS <- function(from = 'pedons',
                        rmHzErrors = TRUE,
                        nullFragsAreZero = TRUE,
                        soilColorState = 'moist',
+                       mixColors = TRUE,
                        lab = FALSE,
                        fill = FALSE,
-                       stringsAsFactors = default.stringsAsFactors(),
+                       stringsAsFactors = NULL,
                        dsn = NULL) {
 
   res <- NULL
-
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   # TODO: do we need _View_1 tables in the sqlite table snapshot? Could be handy for
   #       specialized selected sets crafted by NASIS/CVIR stuff; currently you are allowed
   #       to specify the selected set for a SQLite database, and I suppose the convention
@@ -100,8 +103,8 @@ fetchNASIS <- function(from = 'pedons',
                               rmHzErrors = rmHzErrors,
                               nullFragsAreZero = nullFragsAreZero,
                               soilColorState = soilColorState,
+                              mixColors = mixColors,
                               lab = lab,
-                              stringsAsFactors = stringsAsFactors,
                               dsn = dsn)
   }
 
@@ -111,7 +114,6 @@ fetchNASIS <- function(from = 'pedons',
                                   rmHzErrors = rmHzErrors,
                                   nullFragsAreZero = nullFragsAreZero,
                                   fill = fill,
-                                  stringsAsFactors = stringsAsFactors,
                                   dsn = dsn)
   }
 
@@ -121,7 +123,6 @@ fetchNASIS <- function(from = 'pedons',
                               rmHzErrors       = rmHzErrors,
                               nullFragsAreZero = nullFragsAreZero,
                               soilColorState   = soilColorState,
-                              stringsAsFactors = stringsAsFactors
                               )
   }
 

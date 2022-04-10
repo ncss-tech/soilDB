@@ -7,8 +7,13 @@
 #' @rdname fetchSDA
 get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                                    droplevels = TRUE, nullFragsAreZero = TRUE,
-                                   stringsAsFactors = default.stringsAsFactors()
-                                   ) {
+                                   stringsAsFactors = NULL) {
+                                     
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   if(!duplicates & grepl(WHERE, pattern = "mukey")[1])
     warning("duplicates is set to FALSE and 'mukey' is in WHERE clause. Note: 'mukey' omitted from result.", call.=FALSE)
 
@@ -59,8 +64,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
 
   # recode metadata domains
   d.component <- uncode(d.component, db = "SDA",
-                        droplevels = droplevels,
-                        stringsAsFactors = stringsAsFactors
+                        droplevels = droplevels
                         )
 
   # if mukeys are "flattened" to nmusym, make sure the mukey column _exists_ but is empty (NA)
@@ -329,12 +333,16 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
 #' @param mrulename character. Interpretation rule names 
 get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = FALSE,
                                   droplevels = TRUE,
-                                  stringsAsFactors = default.stringsAsFactors()
+                                  stringsAsFactors = NULL
                                   ) {
-
+  
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   d.component <- get_component_from_SDA(WHERE = WHERE, duplicates = duplicates,
-                                        childs = FALSE,
-                                        stringsAsFactors = stringsAsFactors
+                                        childs = FALSE
                                         )
 
   q.cointerp <- paste0("
@@ -365,17 +373,14 @@ get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = F
   d.cointerp <- SDA_query(q.cointerp)
 
   # recode metadata domains
-  d.cointerp <- uncode(d.cointerp, db = "SDA",
-                       droplevels = droplevels,
-                       stringsAsFactors = stringsAsFactors
-                       )
+  d.cointerp <- uncode(d.cointerp, db = "SDA")
 
   return(d.cointerp)
   }
 
 #' @export 
 #' @rdname fetchSDA
-get_legend_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_legend_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactors = NULL) {
   q.legend  <- paste("
                      SELECT
                      mlraoffice, areasymbol, areaname, areatypename, CAST(areaacres AS INTEGER) AS areaacres, ssastatus,
@@ -398,10 +403,7 @@ get_legend_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactor
   # recode metadata domains
   d.legend <- uncode(d.legend,
                      db = "SDA",
-                     droplevels = droplevels,
-                     stringsAsFactors   = stringsAsFactors
-  )
-
+                     droplevels = droplevels)
 
   # done
   return(d.legend)
@@ -410,7 +412,7 @@ get_legend_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactor
 
 #' @export 
 #' @rdname fetchSDA
-get_lmuaoverlap_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactors = default.stringsAsFactors()) {
+get_lmuaoverlap_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactors = NULL) {
 
   q <- paste("SELECT
              legend.areasymbol, legend.areaname, legend.areaacres,
@@ -443,8 +445,7 @@ get_lmuaoverlap_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsF
   # recode metadata domains
   d <- uncode(d,
               db = "NASIS",
-              droplevels = droplevels,
-              stringsAsFactors = stringsAsFactors
+              droplevels = droplevels
   )
 
   # done
@@ -456,9 +457,13 @@ get_lmuaoverlap_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsF
 #' @rdname fetchSDA
 get_mapunit_from_SDA <- function(WHERE = NULL,
                                  droplevels = TRUE,
-                                 stringsAsFactors = default.stringsAsFactors()
+                                 stringsAsFactors = NULL
                                  ) {
-
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   q.mapunit <- paste("
   SELECT
   areasymbol, l.lkey, mukey, nationalmusym, musym, muname,
@@ -493,8 +498,7 @@ get_mapunit_from_SDA <- function(WHERE = NULL,
   # recode metadata domains
   d.mapunit <- uncode(d.mapunit,
                       db = "SDA",
-                      droplevels = droplevels,
-                      stringsAsFactors   = stringsAsFactors
+                      droplevels = droplevels
                       )
 
 
@@ -514,8 +518,12 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
                                   childs = TRUE,
                                   nullFragsAreZero = TRUE,
                                   droplevels = TRUE,
-                                  stringsAsFactors = default.stringsAsFactors()
+                                  stringsAsFactors = NULL
                                   ) {
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
 
   q.chorizon <- paste("
   SELECT",
@@ -565,12 +573,12 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
     d.chorizon <- within(d.chorizon, {
       nationalmusym = NULL
       texture = tolower(texture)
-      if (stringsAsFactors == TRUE) {
+      if (getOption("stringsAsFactors", default = FALSE)) {
         texcl = factor(tolower(texcl), levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"])
-        }
-      if (droplevels == droplevels & is.factor(texcl)) {
+      }
+      if (droplevels == droplevels && is.factor(texcl)) {
         texcl = droplevels(texcl)
-        }
+      }
     })
   
     # Note: only chtexturegrp$texdesc from SDA matches metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"] in metadata
@@ -782,11 +790,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 #' @param droplevels logical: indicating whether to drop unused levels in
 #' classifying factors. This is useful when a class has large number of unused
 #' classes, which can waste space in tables and figures.
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the uncode() function. It does not
-#' convert those vectors that have set outside of uncode() (i.e. hard coded).
-#' The 'factory-fresh' default is TRUE, but this can be changed by setting
-#' options(stringsAsFactors = FALSE)
+#' @param stringsAsFactors deprecated
 #' @return A data.frame or SoilProfileCollection object.
 #' @author Stephen Roecker
 #' @seealso \link{SDA_query}
@@ -797,16 +801,20 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                      nullFragsAreZero = TRUE,
                      rmHzErrors = FALSE,
                      droplevels = TRUE,
-                     stringsAsFactors = default.stringsAsFactors()
+                     stringsAsFactors = NULL
                      ) {
 
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   # load data in pieces
   f.component <- get_component_from_SDA(WHERE,
                                         duplicates = duplicates,
                                         childs = childs,
                                         droplevels = droplevels,
-                                        nullFragsAreZero = TRUE,
-                                        stringsAsFactors = stringsAsFactors
+                                        nullFragsAreZero = TRUE
                                         )
   if (is.null(f.component)) {
     stop("WHERE clause returned no components.", call. = FALSE)
@@ -818,7 +826,7 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                                        droplevels = droplevels
                                        )
   # only query mapunit for mukeys in the component result
-  f.mapunit  <- get_mapunit_from_SDA(paste('mu.nationalmusym IN', format_SQL_in_statement(unique(f.component$nationalmusym))), stringsAsFactors = stringsAsFactors)
+  f.mapunit  <- get_mapunit_from_SDA(paste('mu.nationalmusym IN', format_SQL_in_statement(unique(f.component$nationalmusym))))
   
   # diagnostic features and restrictions
   f.diag <- .get_diagnostics_from_SDA(f.component$cokey)

@@ -12,7 +12,7 @@ check_local_NASIS_labdata_available <- function() {
 
   # attempt to load pedons
   res <- try(suppressWarnings(fetchNASISLabData(SS = FALSE)), silent = TRUE)
-  if(class(res) == 'try-error'){
+  if (inherits(res, 'try-error')) {
     skip("no NCSS Lab Data in local NASIS database")
   }
 }

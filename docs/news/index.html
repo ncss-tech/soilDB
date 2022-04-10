@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.14</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15</span>
       </span>
     </div>
 
@@ -48,7 +48,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.6.14" id="soildb-2614-2022-02-11">soilDB 2.6.14 (2022-02-11)<a class="anchor" aria-label="anchor" href="#soildb-2614-2022-02-11"></a></h2>
+<h2 class="page-header" data-toc-text="2.6.15" id="soildb-2615-2022-04-08">soilDB 2.6.15 (2022-04-08)<a class="anchor" aria-label="anchor" href="#soildb-2615-2022-04-08"></a></h2>
+<ul><li>
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code>
+<ul><li>New <code>mixColors</code> argument used to toggle color mixing for pedon horizons with multiple colors per moisture state.
+<ul><li>Default <code>TRUE</code> mixes colors based on reported color percentage via <code><a href="../reference/estimateColorMixture.html">estimateColorMixture()</a></code>. <code>FALSE</code> returns the dominant color in each moisture state, or first record for cases without <code>colorpct</code> populated.</li>
+</ul></li>
+<li>Added <code>taxreaction</code> and <code>taxfamhahatmatcl</code> to extended taxonomic information</li>
+<li>Added new option (<code>soilDB.NASIS.skip_uncode</code>) to bypass <code><a href="../reference/uncode.html">uncode()</a></code> in NASIS functions (mostly used for debugging or special database instances that come pre-decoded)</li>
+</ul></li>
+<li>Added <code><a href="../reference/fetchLDM.html">fetchLDM()</a></code> function to access Kellogg Soil Survey Lab Data Mart via Soil Data Access or local SQLite snapshot (<a href="https://github.com/ncss-tech/soilDB/pull/243" class="external-link uri">https://github.com/ncss-tech/soilDB/pull/243</a>)</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="2.6.14" id="soildb-2614-2022-03-15">soilDB 2.6.14 (2022-03-15)<small>2022-03-15</small><a class="anchor" aria-label="anchor" href="#soildb-2614-2022-03-15"></a></h2>
 <ul><li>
 <code>waterYearDay()</code> bug fix for more specific (sub-daily) date-time formats</li>
 <li>
@@ -61,6 +73,12 @@
 <code>fetchNASIS("components")</code> no longer includes <code>ecositeorigin</code>
 </li>
 <li>New Component Ecological Site attributes added</li>
+</ul></li>
+<li>
+<code>stringsAsFactors</code> argument to soilDB functions has been deprecated in favor of a package option
+<ul><li>Default behavior for NASIS domains is to return character labels rather than coded factors</li>
+<li>Use <code>NASISDomainsAsFactor(TRUE)</code> to toggle package option <code>soilDB.NASIS.DomainsAsFactor</code>
+</li>
 </ul></li>
 </ul></div>
     <div class="section level2">

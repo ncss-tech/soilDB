@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.14</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15</span>
       </span>
     </div>
 
@@ -137,7 +137,29 @@
 <span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">SPC</span><span class="op">)</span></span>
 <span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in">    </span>
+<span class="r-in">    </span>
+<span class="r-in">  <span class="co"># use makeChunks() for iteration over larger sequences of soil series</span></span>
+<span class="r-in">  <span class="va">s.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'musick'</span>, <span class="st">'cecil'</span>, <span class="st">'drummer'</span>, <span class="st">'amador'</span>, <span class="st">'pentz'</span>, </span>
+<span class="r-in">              <span class="st">'reiff'</span>, <span class="st">'san joaquin'</span>, <span class="st">'montpellier'</span>, <span class="st">'grangeville'</span>, <span class="st">'pollasky'</span>, <span class="st">'ramona'</span><span class="op">)</span></span>
+<span class="r-in">              </span>
+<span class="r-in">  <span class="co"># make a vector of chunk IDs, with 2 series / chunk</span></span>
+<span class="r-in">  <span class="va">ck</span> <span class="op">&lt;-</span> <span class="fu"><a href="makeChunks.html">makeChunks</a></span><span class="op">(</span><span class="va">s.list</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in">  </span>
+<span class="r-in">  <span class="co"># split original data by chunk IDs</span></span>
+<span class="r-in">  <span class="co"># iterate over resulting list</span></span>
+<span class="r-in">  <span class="co"># run fetchOSD() on pieces</span></span>
+<span class="r-in">  <span class="co"># result is a list of SoilProfileCollection objects</span></span>
+<span class="r-in">  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">s.list</span>, <span class="va">ck</span><span class="op">)</span>, <span class="va">fetchOSD</span><span class="op">)</span></span>
+<span class="r-in">  </span>
+<span class="r-in">  <span class="co"># flatten into a single SPC</span></span>
+<span class="r-in">  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">combine</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span class="r-in">  </span>
+<span class="r-in">  <span class="co"># there should be 11 profiles</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">}</span></span>
+<span class="r-in">  </span>
+<span class="r-in">  </span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-plt img"><img src="fetchOSD-1.png" alt="" width="768" height="475"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 17</span>
@@ -158,6 +180,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ climate.monthly :'data.frame':	264 obs. of  14 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ NCCPI           :'data.frame':	11 obs. of  16 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ soilweb.metadata:'data.frame':	22 obs. of  2 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 11</span>
 <span class="r-in"><span class="co"># }</span></span>
 <span class="r-plt img"><img src="fetchOSD-2.png" alt="" width="768" height="475"></span>
 </code></pre></div>

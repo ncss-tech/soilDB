@@ -18,7 +18,7 @@ geodatabases, and create soil profile collection objects (SPC)."><!-- mathjax --
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.14</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15</span>
       </span>
     </div>
 
@@ -60,7 +60,7 @@ geodatabases, and create soil profile collection objects (SPC).</p>
   WHERE <span class="op">=</span> <span class="cn">NULL</span>,
   childs <span class="op">=</span> <span class="cn">TRUE</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">TRUE</span>
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -82,11 +82,7 @@ are not flattened and appended</p></dd>
 classifying factors. This is useful when a class has large number of unused
 classes, which can waste space in tables and figures.</p></dd>
 <dt>stringsAsFactors</dt>
-<dd><p>logical: should character vectors be converted to
-factors? This argument is passed to the uncode() function. It does not
-convert those vectors that have set outside of uncode() (i.e. hard coded).
-The 'factory-fresh' default is TRUE, but this can be changed by setting
-options(stringsAsFactors = FALSE)</p></dd>
+<dd><p>deprecated</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

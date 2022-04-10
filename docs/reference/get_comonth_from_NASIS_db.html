@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.14</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15</span>
       </span>
     </div>
 
@@ -56,7 +56,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_comonth_from_NASIS_db</span><span class="op">(</span>
   SS <span class="op">=</span> <span class="cn">TRUE</span>,
   fill <span class="op">=</span> <span class="cn">FALSE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">default.stringsAsFactors</a></span><span class="op">(</span><span class="op">)</span>,
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,
   dsn <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -70,11 +70,7 @@ the entire local database (default: TRUE)</p></dd>
 <dd><p>should missing "month" rows in the comonth table be filled with
 NA (FALSE)</p></dd>
 <dt>stringsAsFactors</dt>
-<dd><p>logical: should character vectors be converted to
-factors? This argument is passed to the uncode() function. It does not
-convert those vectors that have set outside of uncode() (i.e. hard coded).
-The 'factory-fresh' default is TRUE, but this can be changed by setting
-options(stringsAsFactors = FALSE)</p></dd>
+<dd><p>deprecated</p></dd>
 <dt>dsn</dt>
 <dd><p>Optional: path to local SQLite database containing NASIS
 table structure; default: <code>NULL</code></p></dd>

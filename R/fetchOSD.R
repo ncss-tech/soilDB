@@ -144,7 +144,29 @@
 #'     par(mar=c(0,0,1,1))
 #'     plot(x$SPC)
 #'     str(x, 1)
+#'     
+#'     
+#'   # use makeChunks() for iteration over larger sequences of soil series
+#'   s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz', 
+#'               'reiff', 'san joaquin', 'montpellier', 'grangeville', 'pollasky', 'ramona')
+#'               
+#'   # make a vector of chunk IDs, with 2 series / chunk
+#'   ck <- makeChunks(s.list, size = 2)
+#'   
+#'   # split original data by chunk IDs
+#'   # iterate over resulting list
+#'   # run fetchOSD() on pieces
+#'   # result is a list of SoilProfileCollection objects
+#'   x <- lapply(split(s.list, ck), fetchOSD)
+#'   
+#'   # flatten into a single SPC
+#'   x <- combine(x)
+#'   
+#'   # there should be 11 profiles
+#'   length(x)
 #'   }
+#'   
+#'   
 #' }
 #' }
 #' @keywords manip
@@ -167,6 +189,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
   final.url <- paste(url, URLencode(paste(soils, collapse=',')), sep='')
   
   ## TODO: implement HTTP POST + JSON for safer encapsulation
+  ## https://github.com/ncss-tech/soilDB/issues/239
   # using HTTP GET is convenient but comes with limits on the number of chars in the URL
   # limiting to 2048 will likely save some trouble
   if(nchar(final.url) > 2048) {
@@ -174,12 +197,11 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
   }
   
   # attempt query to API, result is JSON
-  res <- try(jsonlite::fromJSON(final.url))
+  res <- try(jsonlite::fromJSON(final.url), silent = TRUE)
   
-  ## TODO: further testing / message detail required
   # trap errors
-  if(class(res) == 'try-error'){
-    message('error')
+  if (inherits(res, 'try-error')) {
+    message(res[1])
     return(NULL)
   }
   

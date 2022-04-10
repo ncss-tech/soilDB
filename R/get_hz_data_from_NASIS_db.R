@@ -9,11 +9,8 @@
 #' @param SS fetch data from Selected Set in NASIS or from the entire local database (default: `TRUE`)
 #' 
 #' @param fill include pedons without horizon data in result? default: `FALSE`
-#' 
-#' @param stringsAsFactors logical: should character vectors be converted to
-#' factors? This argument is passed to the `uncode()` function. It does not
-#' convert those vectors that have been set outside of `uncode()` (i.e. hard
-#' coded).
+
+#' @param stringsAsFactors deprecated
 #'
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
@@ -29,9 +26,13 @@
 #' @export get_hz_data_from_NASIS_db
 get_hz_data_from_NASIS_db <- function(SS = TRUE,
                                       fill = FALSE,
-                                      stringsAsFactors = default.stringsAsFactors(),
+                                      stringsAsFactors = NULL,
                                       dsn = NULL) {
-
+  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
+    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
+    NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
   q <- sprintf("SELECT peiid, phiid, upedonid as pedon_id,
   hzname, dspcomplayerid as genhz, hzdept, hzdepb,
   bounddistinct, boundtopo,
@@ -66,7 +67,7 @@ get_hz_data_from_NASIS_db <- function(SS = TRUE,
   d <- dbQueryNASIS(channel, q)
 
   # uncode metadata domains
-  d <- uncode(d, stringsAsFactors = stringsAsFactors, dsn = dsn)
+  d <- uncode(d, dsn = dsn)
 
   # re-implement texture_class column, with lieutex in cases where texcl is missing
   d$texture_class <- ifelse(is.na(d$texcl) & ! is.na(d$lieutex), as.character(d$lieutex), as.character(d$texcl))
