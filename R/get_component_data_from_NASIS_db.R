@@ -678,6 +678,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
       chf_null$chiidref <- d$chiid[ldx]
       chf <- rbind(chf, chf_null)
     }
+    
     # handle NA for totals
     if (nullFragsAreZero) {
       chf[is.na(chf)] <- 0
@@ -685,11 +686,12 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
 
     # human artifacts
     cha <- simplifyArtifactData(
-      uncode(dbQueryNASIS(channel, q3, close = FALSE), dsn = dsn),
+      uncode(dbQueryNASIS(channel, q3), dsn = dsn),
       id.var = "chiidref",
       vol.var = "huartvol_r",
       nullFragsAreZero = nullFragsAreZero
     )
+    
     # handle NULL result
     if (sum(complete.cases(cha)) == 0) {
       cha <- cha[1:nrow(d),]
