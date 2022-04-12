@@ -668,7 +668,7 @@ get_SDA_interpretation <- function(rulename,
                                               "Weighted Average",
                                               "None"),
                                    areasymbols = NULL,
-                                   mukeys = NULL, 
+                                   mukeys = NULL,
                                    query_string = FALSE,
                                    not_rated_value = NA_real_) {
   q <- .constructInterpQuery(
@@ -688,7 +688,7 @@ get_SDA_interpretation <- function(rulename,
     warnings()
     stop(attr(res, 'condition'))
   }
-  
+
   # check rating column values
   ratingcols <- colnames(res)[grep("^rating_", colnames(res))]
   res[] <- lapply(colnames(res), function(x) {
@@ -1091,6 +1091,11 @@ get_SDA_interpretation <- function(rulename,
    INNER JOIN component ON component.mukey = mapunit.mukey
    INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, interphr
    ORDER BY SUM (comppct_r) DESC) AS [rating_%s],
+  (SELECT TOP 1 SUM(comppct_r)
+   FROM mapunit
+   INNER JOIN component ON component.mukey = mapunit.mukey
+   INNER JOIN cointerp ON component.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
+   GROUP BY interphrc, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY interphrc) DESC) AS [total_comppct_%s],
   (SELECT TOP 1 interphrc
    FROM mapunit
    INNER JOIN component ON component.mukey = mapunit.mukey
@@ -1104,9 +1109,10 @@ get_SDA_interpretation <- function(rulename,
                               AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc, interphr
                               ORDER BY interphr DESC, interphrc
                               FOR XML PATH('') ), 3, 1000)) AS [reason_%s]",
-                              x, .cleanRuleColumnName(x), 
-                              x, .cleanRuleColumnName(x), 
-                              x, .cleanRuleColumnName(x))), 
+                              x, .cleanRuleColumnName(x),
+  x, .cleanRuleColumnName(x),
+                              x, .cleanRuleColumnName(x),
+                              x, .cleanRuleColumnName(x))),
          collapse = ", "), where_clause,
   ifelse(dominant, "AND c.cokey =
     (SELECT TOP 1 c1.cokey FROM component AS c1
@@ -1174,18 +1180,18 @@ get_SDA_interpretation <- function(rulename,
                   AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc
                   ORDER BY interphrc
                   FOR XML PATH('') ), 3, 1000)) AS [reason_%s]",
-                                                    x, .cleanRuleColumnName(x), 
-                                                    x, .cleanRuleColumnName(x), 
-                                                    x, .cleanRuleColumnName(x), 
+                                                    x, .cleanRuleColumnName(x),
+                                                    x, .cleanRuleColumnName(x),
+                                                    x, .cleanRuleColumnName(x),
                                                     x, .cleanRuleColumnName(x))), collapse=", "),
            where_clause,
-          paste0(sapply(interp, 
-                        function(x) sprintf("ISNULL(ROUND(([rating_%s] / [sum_com_%s]),2), 99) AS [rating_%s]", 
-                                            .cleanRuleColumnName(x), .cleanRuleColumnName(x), .cleanRuleColumnName(x))), 
+          paste0(sapply(interp,
+                        function(x) sprintf("ISNULL(ROUND(([rating_%s] / [sum_com_%s]),2), 99) AS [rating_%s]",
+                                            .cleanRuleColumnName(x), .cleanRuleColumnName(x), .cleanRuleColumnName(x))),
                  collapse = ", "),
-          paste0(sapply(interp, 
-                        function(x) sprintf(gsub("design", paste0("[design_", .cleanRuleColumnName(x),"]"), 
-                                                 gsub("sum_com", paste0("[sum_com_", .cleanRuleColumnName(x), "]"), 
+          paste0(sapply(interp,
+                        function(x) sprintf(gsub("design", paste0("[design_", .cleanRuleColumnName(x),"]"),
+                                                 gsub("sum_com", paste0("[sum_com_", .cleanRuleColumnName(x), "]"),
                                                       gsub("rating", paste0("[rating_", .cleanRuleColumnName(x), "]"),
                        "CASE WHEN rating IS NULL THEN 'Not Rated'
                   WHEN design = 'suitability' AND ROUND((rating/sum_com),2) <= 0 THEN 'Not suited'
@@ -1198,6 +1204,6 @@ get_SDA_interpretation <- function(rulename,
                   WHEN design = 'limitation' AND ROUND((rating/sum_com),2) > 0.334 and ROUND((rating/sum_com),2) <=0.666 THEN 'Somewhat limited'
                   WHEN design = 'limitation' AND ROUND((rating/sum_com),2) > 0.667 and ROUND((rating/sum_com),2) <=0.999 THEN 'Moderately limited'
                   WHEN design = 'limitation' AND ROUND((rating/sum_com),2) = 1 THEN 'Very limited' END AS [class_%s]"))),
-                       .cleanRuleColumnName(x))), 
+                       .cleanRuleColumnName(x))),
                  collapse = ", "), paste0(sapply(interp, function(x) sprintf("[reason_%s]", .cleanRuleColumnName(x))), collapse = ", "))
 }
