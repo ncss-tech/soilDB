@@ -1,10 +1,13 @@
-# soilDB 2.6.15 (2022-04-08) 
+# soilDB 2.6.15 (2022-04-13) 
  * `fetchNASIS()`
    * New `mixColors` argument used to toggle color mixing for pedon horizons with multiple colors per moisture state. 
      * Default `TRUE` mixes colors based on reported color percentage via `estimateColorMixture()`. `FALSE` returns the dominant color in each moisture state, or first record for cases without `colorpct` populated.
    * Added `taxreaction` and `taxfamhahatmatcl` to extended taxonomic information 
    * Added new option (`soilDB.NASIS.skip_uncode`) to bypass `uncode()` in NASIS functions (mostly used for debugging or special database instances that come pre-decoded)
+   * An instance in `fetchNASIS(from="components")` where local database connection was left open was fixed
  * Added `fetchLDM()` function to access Kellogg Soil Survey Lab Data Mart via Soil Data Access or local SQLite snapshot (https://github.com/ncss-tech/soilDB/pull/243)
+ * Added `get_SDA_metrics()` for accessing usage metrics for Soil Data Access, Web Soil Survey and the Lab Data Mart. Thanks to Jason Nemecek for submitting the base SQL query
+ * `get_SDA_interpretation(method = "dominant condition")` now includes `total_comppct_*` columns reflecting the summed component percentage of the dominant condition 
    
 # soilDB 2.6.14 (2022-03-15)
  * `waterYearDay()` bug fix for more specific (sub-daily) date-time formats
