@@ -1,3 +1,6 @@
+# soilDB 2.6.16 (unreleased)
+ * Added several new columns from the `plotplantinventory` table to `get_vegplot_species_from_NASIS_db()` result; thanks to Zachary Van Abbema
+
 # soilDB 2.6.15 (2022-04-13) 
  * `fetchNASIS()`
    * New `mixColors` argument used to toggle color mixing for pedon horizons with multiple colors per moisture state. 
