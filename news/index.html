@@ -48,7 +48,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.6.15" id="soildb-2615-2022-04-08">soilDB 2.6.15 (2022-04-08)<a class="anchor" aria-label="anchor" href="#soildb-2615-2022-04-08"></a></h2>
+<h2 class="page-header" data-toc-text="2.6.15" id="soildb-2615-2022-04-13">soilDB 2.6.15 (2022-04-13)<small>2022-04-14</small><a class="anchor" aria-label="anchor" href="#soildb-2615-2022-04-13"></a></h2>
 <ul><li>
 <code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code>
 <ul><li>New <code>mixColors</code> argument used to toggle color mixing for pedon horizons with multiple colors per moisture state.
@@ -56,8 +56,13 @@
 </ul></li>
 <li>Added <code>taxreaction</code> and <code>taxfamhahatmatcl</code> to extended taxonomic information</li>
 <li>Added new option (<code>soilDB.NASIS.skip_uncode</code>) to bypass <code><a href="../reference/uncode.html">uncode()</a></code> in NASIS functions (mostly used for debugging or special database instances that come pre-decoded)</li>
+<li>An instance in <code>fetchNASIS(from="components")</code> where local database connection was left open was fixed</li>
 </ul></li>
 <li>Added <code><a href="../reference/fetchLDM.html">fetchLDM()</a></code> function to access Kellogg Soil Survey Lab Data Mart via Soil Data Access or local SQLite snapshot (<a href="https://github.com/ncss-tech/soilDB/pull/243" class="external-link uri">https://github.com/ncss-tech/soilDB/pull/243</a>)</li>
+<li>Added <code><a href="../reference/get_SDA_metrics.html">get_SDA_metrics()</a></code> for accessing usage metrics for Soil Data Access, Web Soil Survey and the Lab Data Mart. Thanks to Jason Nemecek for submitting the base SQL query</li>
+<li>
+<code>get_SDA_interpretation(method = "dominant condition")</code> now includes <code>total_comppct_*</code> columns reflecting the summed component percentage of the dominant condition</li>
+<li>Updated metadata for SCAN sites that were missing <code>pedlabsampnum</code> (KSSL Pedon Sample ID)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.6.14" id="soildb-2614-2022-03-15">soilDB 2.6.14 (2022-03-15)<small>2022-03-15</small><a class="anchor" aria-label="anchor" href="#soildb-2614-2022-03-15"></a></h2>
