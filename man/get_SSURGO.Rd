@@ -8,6 +8,7 @@ get_SSURGO(
   WHERE,
   destdir,
   exdir = destdir,
+  include_template = FALSE,
   extract = TRUE,
   remove_zip = FALSE,
   overwrite = FALSE,
@@ -15,11 +16,13 @@ get_SSURGO(
 )
 }
 \arguments{
-\item{WHERE}{A \code{WHERE} clause expression to be used to filter records in \code{sacatalog} table. Alternately \code{WHERE} can be an \code{sf} or \code{sp} spatial object defining the target extent.}
+\item{WHERE}{A SQL \code{WHERE} clause expression used to filter records in \code{sacatalog} table. Alternately \code{WHERE} can be an \code{sf} or \code{sp} spatial object defining the target extent.}
 
 \item{destdir}{Directory to download ZIP files into.}
 
 \item{exdir}{Directory to extract ZIP archives into. May be a directory that does not yet exist. Each ZIP file will extract to a folder labeled with \code{areasymbol} in this directory. Default: \code{destdir}}
+
+\item{include_template}{Include the (possibly state-specific) template database? Default: \code{FALSE}.}
 
 \item{extract}{Logical. Extract ZIP files to \code{exdir}? Default: \code{TRUE}}
 
@@ -30,10 +33,10 @@ get_SSURGO(
 \item{quiet}{Logical. Passed to \code{download.file()}.}
 }
 \value{
-character (invisibly) paths to downloaded ZIP files. May not exist if \code{remove_zip = TRUE}.
+Character. Paths to downloaded ZIP files (invisibly). May not exist if \code{remove_zip = TRUE}.
 }
 \description{
-Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with SSURGO format.
+Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with SSURGO format; optionally including the corresponding SSURGO Template Database with \code{include_template=TRUE}.
 }
 \details{
 To specify which Soil Survey Areas you would like to obtain data for, specify a \code{WHERE} clause for query of \code{sacatalog} table such as \code{areasymbol = 'CA067'}, \code{"areasymbol IN ('CA628', 'CA067')"} or  \verb{areasymbol LIKE 'CT\%'}.
