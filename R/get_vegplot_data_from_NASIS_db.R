@@ -175,13 +175,21 @@ get_vegplot_species_from_NASIS_db <-  function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  q.vegplotspecies <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, ppi.seqnum, plantsym, plantsciname, plantnatvernm, orderofdominance, speciescancovpct, speciescancovclass
+  q.vegplotspecies <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, 
+    datacollectionpurpose, assocuserpedonid, ppi.seqnum, plantsym, plantsciname, plantnatvernm,
+    planttypegroup, plantheightcllowerlimit, plantheightclupperlimit, 
+    plantnativity, sociabilityclass, livecanopyhtbottom, livecanopyhttop, overstorydbhmin,
+    overstorydbhmax, speciescancovpct, speciescancovclass, speciescomppct, speciesdbhaverage, 
+    speciescompbywtpct, speciestreecount, speciestraceamtflag, speciesbasalarea, understorygrcovpct,
+    understorygrcovclass, seedlingdensityclass, maturedensityclass, vegetationstratalevel, orderofdominance,
+    outsideplotindicator, estannualprod, esdannualprod, allowableannualprod, palatableannualprod, 
+    akstratumcoverclass, akfunctionalgroup, akstratumcoverclasspct
   FROM
   site_View_1 AS s
-  INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
-  LEFT JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
-  LEFT JOIN plotplantinventory_View_1 AS ppi ON ppi.vegplotiidref=v.vegplotiid
-  INNER JOIN plant ON plant.plantiid=ppi.plantiidref
+  INNER JOIN siteobs_View_1 AS so ON so.siteiidref = s.siteiid
+  LEFT JOIN vegplot_View_1 AS v ON v.siteobsiidref = so.siteobsiid
+  LEFT JOIN plotplantinventory_View_1 AS ppi ON ppi.vegplotiidref = v.vegplotiid
+  INNER JOIN plant ON plant.plantiid = ppi.plantiidref
   ORDER BY s.siteiid, ppi.orderofdominance, ppi.seqnum;"
 
   channel <- dbConnectNASIS(dsn)
@@ -271,7 +279,24 @@ get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
   }
   
   # veg transect species data - many species to one veg transect
-  q.vtps <- "SELECT siteiid, vegtransectiidref as vegtransect_id, vegplotid, vegplotname, obsdate, vegtransplantsummiid as vtpsiid, vtps.seqnum, plantsym, plantsciname, plantnatvernm, plantnativity, planttypegroup, plantheightcllowerlimit, plantheightclupperlimit, sociabilityclass, specieslivecanhtbotave, specieslivecanhttopave, overstorydbhmin, overstorydbhmax, speciesovercancovpct, speciesovercancovclass, plantprodquadratsize, plantprodquadratshape, nestedfreqquadratsize, nestedfreqquadratshape, frequencyquadratsize, frequencyquadratshape, dwrquadratsize, dwrquadratshape, densityquadratsize, densityquadratshape, speciestotwtclippedest, speciestotwtclippedfresh, speciestotwtclippedairdry, speciestotwtairdry, speciestotwtest, speciestotwtexisting, speciesdrywtpct, speciestotwt, speciesaveyielddblsamp, speciescomppctdblsamp, speciescomppctdaubenmire, speciescomppctlineintercept, speciestraceamtflag, weightconvfactor, dblsampcorrectionfactor, airdrywtadjustment, utilizationadjustment, growthadjustment, weatheradjustment, numberofquadratsin, speciesfreqdaubenmire, dwronetally, dwrtwotally, dwrthreetally, dwrweightedtally, speciescomppctdwr, speciesaveyielddwr, wtunitweight, wtunitcounttotal, speciesaveyieldwtunit, wtunitwtclippedtotal, speciescancovhitcount, speciescancovpct, speciescancovpctavedaub, speciescancovaveclass, speciesfoliarcovhitcount, speciesfoliarcovpctlineint, speciestotfoliarcovlineint, speciesbasalcovhitcount, speciesbasalcovpctlineint, speciestotbasalcovlineint, maturecounttotal, maturedensityave, maturedensityaveclass, seedlingcounttotal, seedlingdensityave, seedlingdensityaveclass, speciesgroundcovabundclass, speciescancovportion, speciesbasalarea, vtps.basalareaassessmethod
+  q.vtps <- "SELECT siteiid, vegtransectiidref as vegtransect_id, vegplotid, vegplotname,
+    obsdate, vegtransplantsummiid as vtpsiid, vtps.seqnum, plantsym, plantsciname,
+    plantnatvernm, plantnativity, planttypegroup, 
+    plantheightcllowerlimit, plantheightclupperlimit, sociabilityclass, 
+    specieslivecanhtbotave, specieslivecanhttopave, overstorydbhmin, 
+    overstorydbhmax, speciesovercancovpct, speciesovercancovclass, 
+    plantprodquadratsize, plantprodquadratshape, nestedfreqquadratsize,
+    nestedfreqquadratshape, frequencyquadratsize, frequencyquadratshape,
+    dwrquadratsize, dwrquadratshape, densityquadratsize, densityquadratshape,
+    speciestotwtclippedest, speciestotwtclippedfresh, speciestotwtclippedairdry,
+    speciestotwtairdry, speciestotwtest, speciestotwtexisting, speciesdrywtpct,
+    speciestotwt, speciesaveyielddblsamp, speciescomppctdblsamp, speciescomppctdaubenmire,
+    speciescomppctlineintercept, speciestraceamtflag, weightconvfactor, 
+    dblsampcorrectionfactor, airdrywtadjustment, utilizationadjustment, growthadjustment,
+    weatheradjustment, numberofquadratsin, speciesfreqdaubenmire, dwronetally,
+    dwrtwotally, dwrthreetally, dwrweightedtally, speciescomppctdwr, speciesaveyielddwr,
+    wtunitweight, wtunitcounttotal, speciesaveyieldwtunit, wtunitwtclippedtotal,
+    speciescancovhitcount, speciescancovpct, speciescancovpctavedaub, speciescancovaveclass, speciesfoliarcovhitcount, speciesfoliarcovpctlineint, speciestotfoliarcovlineint, speciesbasalcovhitcount, speciesbasalcovpctlineint, speciestotbasalcovlineint, maturecounttotal, maturedensityave, maturedensityaveclass, seedlingcounttotal, seedlingdensityave, seedlingdensityaveclass, speciesgroundcovabundclass, speciescancovportion, speciesbasalarea, vtps.basalareaassessmethod
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid

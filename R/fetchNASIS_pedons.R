@@ -137,30 +137,33 @@
 
   ## copy pre-computed colors into a convenience field for plotting
   # moist colors
-  if(soilColorState == 'moist')
+  if (soilColorState == 'moist') {
     color_data$soil_color <- color_data$moist_soil_color
-
+  }
+  
   # dry colors
-  if(soilColorState == 'dry')
+  if (soilColorState == 'dry') {
     color_data$soil_color <- color_data$dry_soil_color
-
+  }
+  
   horizons(hz_data) <- color_data
 
   # check for empty fragment summary and nullFragsAreZero
-  if(nullFragsAreZero & all(is.na(unique(extended_data$frag_summary$phiid))))
-    extended_data$frag_summary <- cbind(phiid = unique(hz_data$phiid), extended_data$frag_summary[,-1])
-
+  if(nullFragsAreZero & all(is.na(unique(extended_data$frag_summary$phiid)))) {
+    extended_data$frag_summary <- cbind(phiid = unique(hz_data$phiid), extended_data$frag_summary[, -1])
+  }
+  
   ## join hz + fragment summary
   horizons(hz_data) <- extended_data$frag_summary
 
   # check for empty artifact summary and nullFragsAreZerod
-  if(nullFragsAreZero & all(is.na(unique(extended_data$art_summary$phiid))))
-    extended_data$art_summary <- cbind(phiid = unique(hz_data$phiid), extended_data$art_summary[,-1])
-
+  if (nullFragsAreZero & all(is.na(unique(extended_data$art_summary$phiid)))) {
+    extended_data$art_summary <- cbind(phiid = unique(hz_data$phiid), extended_data$art_summary[, -1])
+  }
+  
   # join hz + artifact summary
   horizons(hz_data) <- extended_data$art_summary
 
-  ## TODO: this will fail in the presence of duplicates
   # add site data to object
   # remove 'pedon_id' column from site_data
   site_data$pedon_id <- NULL
@@ -192,7 +195,7 @@
   # method is added to the new field called 'es_selection_method'
   ed.es <- data.table::as.data.table(extended_data$ecositehistory)
   best.ecosite.data <- ed.es[, .pickBestEcosite(.SD),
-                               by = list(siteiid = ed.es$siteiid)]
+                             by = list(siteiid = ed.es$siteiid)]
   site(hz_data) <- as.data.frame(best.ecosite.data)
 
   ## TODO: NA in diagnostic boolean columns are related to pedons with no diagnostic features
@@ -201,7 +204,7 @@
   site(hz_data) <- extended_data$diagHzBoolean
 
   ## optionally convert NA fragvol to 0
-  if(nullFragsAreZero) {
+  if (nullFragsAreZero) {
     # this is the "total fragment volume" per NASIS calculation
     hz_data$fragvoltot <- ifelse(is.na(hz_data$fragvoltot), 0, hz_data$fragvoltot)
 
@@ -217,19 +220,6 @@
   }
 
   ## 2021-11-05: converted surface frag summary to simplifyFragmentData() in get_site_data_from_NASIS_db()
-  # # add surface frag summary
-  # sfs <- extended_data$surf_frag_summary
-  # 
-  # # optionally convert NA fragvol to 0
-  # if (nullFragsAreZero) {
-  #   sfs <- as.data.frame(
-  #     cbind(sfs[, 1, drop = FALSE],
-  #           lapply(sfs[, -1], function(i) ifelse(is.na(i), 0, i))
-  #     ), stringsAsFactors = FALSE)
-  # }
-  # 
-  # # add surf. frag summary to @site
-  # site(hz_data) <- sfs
 
   # load diagnostic horizons into @diagnostic:
   # supress warnings: diagnostic_hz() <- is noisy when not all profiles have diagnostic hz data
@@ -246,35 +236,40 @@
   lf <- ed.lf[, .formatLandformString(.SD, uid = .BY$peiid, name.sep = ' & '),
               by = list(peiid = ed.lf$peiid)]
 
-  if (ncol(lf) > 1)
-    site(hz_data) <- as.data.frame(lf[,c("peiid","landform_string","landscape_string","microfeature_string", "geomicrorelief_string")])
-
+  if (ncol(lf) > 1) {
+    site(hz_data) <- as.data.frame(lf[, c("peiid", "landform_string", "landscape_string", "microfeature_string", "geomicrorelief_string")])
+  }
+  
   ed.pm <- data.table::as.data.table(extended_data$pm)
   pm <- ed.pm[, .formatParentMaterialString(.SD, uid = .BY$siteiid, name.sep = ' & '),
-                by = list(siteiid = ed.pm$siteiid)]
-
-  if (ncol(pm) > 2)
-    site(hz_data) <- as.data.frame(pm[,c("siteiid","pmkind","pmorigin")])
-
-# set metadata
+              by = list(siteiid = ed.pm$siteiid)]
+  
+  if (ncol(pm) > 2) {
+    site(hz_data) <- as.data.frame(pm[, c("siteiid", "pmkind", "pmorigin")])
+  }
+  
+  # set metadata
   m <- metadata(hz_data)
   m$origin <- 'NASIS pedons'
   metadata(hz_data) <- m
 
   # print any messages on possible data quality problems:
-  if (exists('sites.missing.pedons', envir = soilDB.env))
-    if (length(get('sites.missing.pedons', envir = soilDB.env)) > 0)
-      message("-> QC: sites without pedons: \n\tUse `get('sites.missing.pedons', envir=soilDB.env) for site record IDs (siteiid)`")
-
+  if (exists('sites.missing.pedons', envir = soilDB.env)) {
+    if (length(get('sites.missing.pedons', envir = soilDB.env)) > 0) {
+      message(
+        "-> QC: sites without pedons: \n\tUse `get('sites.missing.pedons', envir=soilDB.env) for site record IDs (siteiid)`"
+      )
+    }
+  }
   if (exists('dup.pedon.ids', envir = soilDB.env))
     if (length(get('dup.pedon.ids', envir = soilDB.env)) > 0)
       message("-> QC: duplicate pedons: \n\tUse `get('dup.pedon.ids', envir=soilDB.env) for pedon record IDs (peiid)`")
 
   # set NASIS component specific horizon identifier
-  if(!fill & length(filled.ids) == 0) {
+  if (!fill & length(filled.ids) == 0) {
     res <- try(hzidname(hz_data) <- 'phiid')
-    if(inherits(res, 'try-error')) {
-      if(!rmHzErrors) {
+    if (inherits(res, 'try-error')) {
+      if (!rmHzErrors) {
         warning("cannot set `phiid` as unique pedon horizon key -- duplicate horizons present with rmHzErrors=FALSE")
       } else {
         warning("cannot set `phiid` as unique pedon horizon key -- defaulting to `hzID`")

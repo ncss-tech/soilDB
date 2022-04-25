@@ -16,9 +16,10 @@
   }
   
   # ensure that any old hz errors are cleared
-  if(exists('component.hz.problems', envir=soilDB.env))
-    assign('component.hz.problems', value=character(0), envir=soilDB.env)
-
+  if (exists('component.hz.problems', envir = soilDB.env)){
+    assign('component.hz.problems', value = character(0), envir = soilDB.env)
+  }
+  
   # load data in pieces
   f.comp       <- get_component_data_from_NASIS_db(SS = SS, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
@@ -41,7 +42,6 @@
     filled.idx <- which(is.na(f.chorizon$chiid))
     if(length(filled.idx) > 0) {
       filled.ids <- as.character(f.chorizon$coiid[filled.idx])
-      #print(dput(filled.ids))
     }
 
     # which are the good (valid) ones?
@@ -65,7 +65,7 @@
     # upgrade to SoilProfilecollection
     depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
   } else {
-    stop("No horizon data in NASIS component query result.", call.=FALSE)
+    stop("No horizon data in NASIS component query result.", call. = FALSE)
   }
 
   # add site data to object
@@ -79,27 +79,29 @@
   # join-in copm strings
   pm <- data.table::data.table(f.copm)[, .formatParentMaterialString(.SD, uid = .BY$coiid, name.sep=' & '), by = "coiid"]
   pm$siteiid <- NULL
-  if (nrow(pm) > 0)
+  if (nrow(pm) > 0) {
     site(f.chorizon) <- pm
-
+  }
+  
   # join-in cogeomorph strings
   lf <- data.table::data.table(f.cogeomorph)[, .formatLandformString(.SD, uid = .BY$coiid, name.sep=' & '), by = "coiid"]
   lf$peiid <- NULL
-  if (nrow(lf) > 0)
+  if (nrow(lf) > 0) {
     site(f.chorizon) <- lf
-
+  }
   # join-in ecosite string
   es <- data.table::data.table(f.ecosite)[, .formatEcositeString(.SD, name.sep=' & '), by = "coiid", .SDcols = colnames(f.ecosite)]
   es$coiid <- NULL
-  if (nrow(es) > 0)
+  
+  if (nrow(es) > 0) {
     site(f.chorizon) <- es
-
+  }
   # join-in othervegclass string
   ov <- data.table::data.table(f.otherveg)[, .formatOtherVegString(.SD, name.sep=' & '), by = "coiid", .SDcols = colnames(f.otherveg)]
   ov$coiid <- NULL
-  if (nrow(ov) > 0)
+  if (nrow(ov) > 0) {
     site(f.chorizon) <- ov
-
+  }
   # 2021-11-30: subset to hide aqp warnings for <- methods
   
   # add diagnostic features to SPC
@@ -110,22 +112,26 @@
   restrictions(f.chorizon) <- f.restrict[which(f.restrict$coiid %in% f.chorizon$coiid),]
 
   # print any messages on possible data quality problems:
-  if(exists('component.hz.problems', envir=soilDB.env))
-    if(length(get("component.hz.problems", envir = soilDB.env)) > 0)
-      message("-> QC: horizon errors detected:\n\tUse `get('component.hz.problems', envir=soilDB.env)` for component record IDs (coiid)")
-
+  if (exists('component.hz.problems', envir = soilDB.env)) {
+    if (length(get("component.hz.problems", envir = soilDB.env)) > 0) {
+      message(
+        "-> QC: horizon errors detected:\n\tUse `get('component.hz.problems', envir=soilDB.env)` for component record IDs (coiid)"
+      )
+    }
+  }
+  
   # set NASIS component specific horizon identifier
-  if(!fill & length(filled.ids) == 0) {
+  if (!fill & length(filled.ids) == 0) {
     res <- try(hzidname(f.chorizon) <- 'chiid')
-    if(inherits(res, 'try-error')) {
-      if(!rmHzErrors) {
-        warning("cannot set `chiid` as unique component horizon key -- duplicate horizons present with rmHzErrors=FALSE")
+    if (inherits(res, 'try-error')) {
+      if (!rmHzErrors) {
+        warning("cannot set `chiid` as unique component horizon key -- duplicate horizons present with rmHzErrors=FALSE", call. = FALSE)
       } else {
-        warning("cannot set `chiid` as unique component horizon key -- defaulting to `hzID`")
+        warning("cannot set `chiid` as unique component horizon key -- defaulting to `hzID`", call. = FALSE)
       }
     }
   } else {
-    warning("cannot set `chiid` as unique component horizon key - `NA` introduced by fill=TRUE", call.=F)
+    warning("cannot set `chiid` as unique component horizon key - `NA` introduced by fill=TRUE", call. = FALSE)
   }
 
   # set metadata

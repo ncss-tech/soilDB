@@ -340,16 +340,13 @@ fetchLDM <- function(x = NULL,
     layer_fraction_query <- NULL
   }
 
-  if(inherits(con, 'DBIConnection')) {
-    # query con using (modified) layer_query for SQLite
-    # if (FALSE) {
-    #   # fixes for old version of SQLite db
-    #   layer_query <- gsub("\\blab_|\\blab_combine_|_properties|_Key|_including_estimates_and_default_values|_and|mineralogy_|_count", "", gsub("major_and_trace_elements_and_oxides","geochemical", layer_query))
-    # }
-    return(try(DBI::dbGetQuery(con, gsub("IsNull", "IFNULL", layer_query))))
+  if (inherits(con, 'DBIConnection')) {
+    layerdata <- try(DBI::dbGetQuery(con, gsub("IsNull", "IFNULL", layer_query)))
+    DBI::dbDisconnect(con)
+  } else {
+    layerdata <- suppressWarnings(SDA_query(layer_query))
   }
 
-  layerdata <- suppressWarnings(SDA_query(layer_query))
   
   if (inherits(layerdata, 'try-error')) {
     stop("Layer data query failed", call. = FALSE)
@@ -367,9 +364,7 @@ fetchLDM <- function(x = NULL,
         message(sprintf('no fractionated samples found for selected prep_code (%s) and analyzed_size_frac (%s)',
                 paste0(prep_code, collapse = ", "), paste0(analyzed_size_frac, collapse=", ")))
 
-      layerdata <- merge(layerdata, layerfracdata[,c("labsampnum",
-                                                     colnames(layerfracdata)[!colnames(layerfracdata) %in% colnames(layerdata)])],
-                         by = "labsampnum", all.x = TRUE, incomparables = NA)
+      layerdata <- merge(layerdata, layerfracdata[,c("labsampnum", colnames(layerfracdata)[!colnames(layerfracdata) %in% colnames(layerdata)])], by = "labsampnum", all.x = TRUE, incomparables = NA)
     }
   }
   layerdata$prep_code[is.na(layerdata$prep_code)] <- ""
