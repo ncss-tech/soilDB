@@ -399,24 +399,29 @@ get_SDA_property <-
             FUN, property, top_depth, bottom_depth, top_depth, bottom_depth, property)
   }
 
-  .property_weighted_average <- function(property, top_depth, bottom_depth, where_clause, dominant = FALSE, include_minors = FALSE, miscellaneous_areas = FALSE) {
-
+  .property_weighted_average <- function(property,
+                                         top_depth,
+                                         bottom_depth,
+                                         where_clause,
+                                         dominant = FALSE,
+                                         include_minors = FALSE,
+                                         miscellaneous_areas = FALSE) {
+    
     n <- 1:length(property)
     stopifnot(n > 0)
+    
     sprintf("SELECT areasymbol, musym, muname, mukey
             INTO #kitchensink
-            FROM legend  AS lks
-            INNER JOIN  mapunit AS muks ON muks.lkey = lks.lkey AND %s
-            SELECT mu1.mukey, cokey, comppct_r,
+            FROM legend AS lks
+            INNER JOIN mapunit AS muks ON muks.lkey = lks.lkey AND %s
+            SELECT mu1.mukey, cokey, comppct_r, compkind, majcompflag,
             SUM (comppct_r) OVER (PARTITION BY mu1.mukey) AS SUM_COMP_PCT
             INTO #comp_temp
             FROM legend AS l1
             INNER JOIN mapunit AS mu1 ON mu1.lkey = l1.lkey AND %s
-            INNER JOIN component AS c1 ON c1.mukey = mu1.mukey %s
-            %s
-            %s
-            SELECT cokey, SUM_COMP_PCT, CASE WHEN comppct_r = SUM_COMP_PCT THEN 1
-            ELSE CAST (CAST (comppct_r AS decimal (5,2)) / CAST (SUM_COMP_PCT AS decimal (5,2)) AS decimal (5,2)) END AS WEIGHTED_COMP_PCT
+            INNER JOIN component AS c1 ON c1.mukey = mu1.mukey %s %s %s
+            SELECT cokey, compkind, majcompflag, SUM_COMP_PCT, CASE WHEN comppct_r = SUM_COMP_PCT THEN 1
+            ELSE CAST((#comp_temp.comppct_r) AS decimal(5,2)) / SUM_COMP_PCT END AS WEIGHTED_COMP_PCT 
             INTO #comp_temp3
             FROM #comp_temp
             SELECT areasymbol, musym, muname, mu.mukey/1 AS mukey, c.cokey AS cokey, ch.chkey/1 AS chkey, compname, hzname, hzdept_r, hzdepb_r, CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS hzdept_r_ADJ,
@@ -430,22 +435,21 @@ get_SDA_property <-
             INNER JOIN component AS c ON c.mukey = mu.mukey
             INNER JOIN chorizon AS ch ON ch.cokey = c.cokey AND hzdepb_r >= %s AND hzdept_r <= %s
             INNER JOIN chtexturegrp AS cht ON ch.chkey = cht.chkey
-            WHERE cht.rvindicator = 'yes' AND ch.hzdept_r IS NOT NULL
+            WHERE cht.rvindicator = 'Yes' AND ch.hzdept_r IS NOT NULL
             ORDER BY areasymbol, musym, muname, mu.mukey, comppct_r DESC, cokey, hzdept_r, hzdepb_r
             %s",
             gsub("^(l|mu)\\.","\\1ks.", where_clause),
             gsub("^(l|mu)\\.","\\11.", where_clause),
-            ifelse(include_minors, "", "AND majcompflag = 'Yes'"),
+            ifelse(include_minors, "", "AND c1.majcompflag = 'Yes'"),
             ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'"),
             ifelse(dominant, "            AND c1.cokey = (SELECT TOP 1 c2.cokey FROM component AS c2
-                            INNER JOIN mapunit AS mm1 ON
-                              c2.mukey = mm1.mukey AND c2.mukey = mu1.mukey
+                            INNER JOIN mapunit AS mm1 ON c2.mukey = mm1.mukey AND c2.mukey = mu1.mukey
                             ORDER BY c2.comppct_r DESC, c2.cokey)", ""),
             top_depth, top_depth,
             bottom_depth, bottom_depth,
-             paste0(sprintf("CASE WHEN %s is NULL THEN NULL ELSE CAST (CASE WHEN hzdepb_r > %s THEN %s ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS decimal (5,2)) END AS thickness_wt_%s", property, bottom_depth, bottom_depth, top_depth, top_depth, property), collapse=", \n"),
-             paste0(sprintf("CAST (SUM(CAST((CASE WHEN hzdepb_r > %s THEN %s WHEN %s is NULL THEN NULL ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s WHEN %s is NULL THEN NULL ELSE hzdept_r END) AS decimal (5,2))) OVER (PARTITION BY c.cokey) AS decimal (5,2)) AS sum_thickness_%s", bottom_depth, bottom_depth, property, top_depth, top_depth, property, property), collapse=", \n"),
-            paste0(sprintf("CAST(%s AS decimal (5,2)) AS %s", property, property), collapse=", "),
+            paste0(sprintf("CASE WHEN %s is NULL THEN NULL ELSE CAST (CASE WHEN hzdepb_r > %s THEN %s ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS decimal (5,2)) END AS thickness_wt_%s", property, bottom_depth, bottom_depth, top_depth, top_depth, property), collapse = ", \n"),
+            paste0(sprintf("CAST (SUM(CAST((CASE WHEN hzdepb_r > %s THEN %s WHEN %s is NULL THEN NULL ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s WHEN %s is NULL THEN NULL ELSE hzdept_r END) AS decimal (5,2))) OVER (PARTITION BY c.cokey) AS decimal (5,2)) AS sum_thickness_%s", bottom_depth, bottom_depth, property, top_depth, top_depth, property, property), collapse = ", \n"),
+            paste0(sprintf("CAST(%s AS decimal (5,2)) AS %s", property, property), collapse = ", "),
             where_clause,
             top_depth, bottom_depth,
             sprintf("SELECT #main.areasymbol, #main.musym, #main.muname, #main.mukey,
@@ -455,15 +459,23 @@ get_SDA_property <-
                         INNER JOIN #comp_temp3 ON #comp_temp3.cokey=#main.cokey
                         ORDER BY #main.areasymbol, #main.musym, #main.muname, #main.mukey,
                                  comppct_r DESC,  #main.cokey,  hzdept_r, hzdepb_r
-                        SELECT #comp_temp2.mukey, #comp_temp2.cokey, %s
+                        SELECT DISTINCT #comp_temp2.mukey, #comp_temp2.cokey, WEIGHTED_COMP_PCT
+                          INTO #weights
+                          FROM #comp_temp2
+                        SELECT DISTINCT #weights.mukey, SUM(WEIGHTED_COMP_PCT) AS RATED_PCT
+                          INTO #weights2
+                          FROM #weights
+                          GROUP BY #weights.mukey
+                        SELECT #comp_temp2.mukey, #comp_temp2.cokey, #weights2.RATED_PCT, %s
                           INTO #last_step
                           FROM #comp_temp2
-                          GROUP BY #comp_temp2.mukey, #comp_temp2.cokey, WEIGHTED_COMP_PCT, %s
-                          SELECT areasymbol, musym, muname, #kitchensink.mukey, #last_step.cokey, %s
+                          INNER JOIN #weights2 ON #weights2.mukey = #comp_temp2.mukey
+                          GROUP BY #comp_temp2.mukey, #comp_temp2.cokey, #weights2.RATED_PCT, WEIGHTED_COMP_PCT, %s
+                          SELECT areasymbol, musym, muname, #kitchensink.mukey, #last_step.cokey, #last_step.RATED_PCT, %s
                             INTO #last_step2
                             FROM #last_step
                             RIGHT OUTER JOIN #kitchensink ON #kitchensink.mukey = #last_step.mukey
-                            GROUP BY #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname, #kitchensink.mukey, %s, #last_step.cokey
+                            GROUP BY #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname, #kitchensink.mukey, #last_step.RATED_PCT, %s, #last_step.cokey
                             ORDER BY #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname, #kitchensink.mukey
                             SELECT #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
                               FROM #last_step2
@@ -476,8 +488,8 @@ paste0(sprintf("SUM((thickness_wt_%s / (CASE WHEN sum_thickness_%s = 0 THEN 1 EL
                property, property, property, property, n), collapse = ", "),
 paste0(sprintf("WEIGHTED_COMP_PCT * DEPTH_WEIGHTED_AVERAGE%s AS COMP_WEIGHTED_AVERAGE%s", n, n), collapse = ", "),
 paste0(sprintf("DEPTH_WEIGHTED_AVERAGE%s", n), collapse = ", "),
-paste0(sprintf("CAST (SUM (COMP_WEIGHTED_AVERAGE%s) OVER (PARTITION BY #kitchensink.mukey) AS decimal(5,2)) AS %s",
-               n, property), collapse= ", "),
+paste0(sprintf("CAST (SUM (COMP_WEIGHTED_AVERAGE%s / RATED_PCT) OVER (PARTITION BY #kitchensink.mukey) AS decimal(5,2)) AS %s",
+               n, property), collapse = ", "),
 paste0(sprintf("COMP_WEIGHTED_AVERAGE%s", n), collapse = ", "),
 paste0(sprintf("#last_step2.%s", property), collapse = ", "),
 paste0(sprintf("#last_step2.%s", property), collapse = ", "),
@@ -505,7 +517,6 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
 
     # weighted average (.weighted_average handles vector agg_property)
     "WEIGHTED AVERAGE" = .property_weighted_average(agg_property, top_depth, bottom_depth, where_clause, include_minors = include_minors, miscellaneous_areas = miscellaneous_areas),
-
     "MIN/MAX" =
       sprintf("SELECT areasymbol, musym, muname, mu.mukey AS mukey, %s
                INTO #funagg
@@ -518,7 +529,7 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
               where_clause,
               ifelse(include_minors, ""," AND c.majcompflag = 'Yes'"),
               ifelse(miscellaneous_areas, ""," AND c.compkind != 'Miscellaneous area'"),
-              paste0(paste0(FUN, "(", agg_property, ") AS ", agg_property), collapse=",")),
+              paste0(paste0(FUN, "(", agg_property, ") AS ", agg_property), collapse = ",")), 
 
     # dominant component (numeric) (.dominant_component_numeric handles vector agg_property)
     "DOMINANT COMPONENT (NUMERIC)" = .property_dominant_component_numeric(agg_property, top_depth, bottom_depth, where_clause),

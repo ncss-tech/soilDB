@@ -113,7 +113,7 @@ test_that("SDA properties (weighted average) works", {
   expect_equal(sum(noagg$compwt * compwtsand), agg$sandtotal_r)
   
   # check previously filtered textures and including minors
-  agg <- soilDB::get_SDA_property(
+  agg <- get_SDA_property(
       property = "om_r",
       method = "Weighted Average",
       mukeys = 286248,
@@ -122,7 +122,7 @@ test_that("SDA properties (weighted average) works", {
       include_minors = TRUE
     )
   
-  noagg <- soilDB::get_SDA_property("om_r", mukeys = 286248, method = "None", include_minors=TRUE)
+  noagg <- get_SDA_property("om_r", mukeys = 286248, method = "None", include_minors = TRUE)
   aqp::depths(noagg) <- cokey ~ hzdept_r + hzdepb_r
   aqp::site(noagg) <- ~ comppct_r
   
@@ -143,6 +143,12 @@ test_that("SDA properties (weighted average) works", {
   noagg$compwt <- noagg$compwt / sum(noagg$compwt)
   
   expect_equal(sum(noagg$compwt * compwtom), agg$om_r)
+  
+  # testing unpopulated minors + significant misc. areas
+  noagg1 <- get_SDA_property("ph1to1h2o_r", mukeys = 466601, method = "weighted average", include_minors = TRUE)
+  noagg2 <- get_SDA_property("ph1to1h2o_r", mukeys = 466601, method = "weighted average", include_minors = FALSE, miscellaneous_areas = TRUE)
+  noagg3 <- get_SDA_property("ph1to1h2o_r", mukeys = 466601, method = "weighted average", include_minors = TRUE, miscellaneous_areas = TRUE)
+  expect_true(all(c(noagg1$ph1to1h2o_r,  noagg2$ph1to1h2o_r, noagg3$ph1to1h2o_r) == 7))
 })
 
 test_that("SDA properties (min/max) works", {
