@@ -52,23 +52,37 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
 # res: grid resolution in native CRS (meters) [ISSR-800: 800, gNATSGO: 30]
 .prepare_AEA_AOI <- function(obj, res) {
   
+  return_class <- 'terra'
+  
   # pre-processing of classes to terra/sf
-  if (inherits(obj, 'RasterLayer'))  {
+  if (inherits(obj, 'RasterLayer') ||
+      inherits(obj, 'RasterStack') ||
+      inherits(obj, 'RasterBrick'))  {
+    
     if (!requireNamespace("terra"))
       stop("package terra is required to convert RasterLayer objects to an AOI", call. = FALSE)
+    
     obj <- terra::rast(obj)
+    return_class <- 'raster'
+    
   } else if (inherits(obj, 'bbox')) {
-    # note: the Spatial inherits method will bug out with a bbox, so it must come second
+    
+    # note: the  inherits(, 'Spatial') will bug out with a bbox, so it must come after
     # do nothing
+    
   } else if (inherits(obj, 'Spatial'))  {
+    
     if (!requireNamespace("sf"))
       stop("package sf is required to convert Spatial objects to an AOI", call. = FALSE)
+    
     # convert to sf
     obj <- sf::st_as_sf(obj)
+    return_class <- 'raster'
+    
   }
   
   # convert AOI to sf/terra object and assign CRS
-  if (inherits(obj, 'SpatRaster') | inherits(obj, 'SpatVector'))  {
+  if (inherits(obj, 'SpatRaster') || inherits(obj, 'SpatVector'))  {
     
     if (!requireNamespace("terra"))
       stop("package terra is required", call. = FALSE)
@@ -87,8 +101,8 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
       rm(obj)
       
       # explicitly check the presence of the two list elements, and length/type of aoi
-    } else if (!is.null(obj$aoi) & !is.null(obj$crs) &
-               is.numeric(obj$aoi) & (length(obj$aoi) == 4)) {
+    } else if (!is.null(obj$aoi) && !is.null(obj$crs) &&
+               is.numeric(obj$aoi) && (length(obj$aoi) == 4)) {
       
       p <- sf::st_as_sf(wk::rct(
         xmin = obj$aoi[1],
@@ -106,38 +120,43 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   # ISSR-800 and gNATSGO CRS
   # NOTE: EPSG:6350 NAD83 (2011) v.s. EPSG:5070 NAD83
   # we use EPSG:5070 (https://github.com/ncss-tech/soilDB/issues/205)
-  # init string more compatible (PROJ<6) than 'EPSG:5070'
-  crs <- '+init=epsg:5070' 
+  # NOTE: +init=epsg:XXXX syntax is deprecated in GDAL. It might return a CRS with a non-EPSG compliant axis order.
+  native_crs <- 'EPSG:5070' 
   
   # transform bounding polygon to WCS CRS
   # could be either, 
   # st_bbox is commonly converted to 'sfc'
   if (inherits(p, 'sfc') || inherits(p, 'sf')) {
-    p <- sf::st_transform(p, crs = crs)
+    p <- sf::st_transform(p, crs = native_crs)
     e.native <- sf::st_bbox(p)
+    
+    # AOI and image calculations in native CRS
+    # create BBOX used for WMS
+    # xmin, ymin, xmax, ymax
+    aoi.native <- e.native
+  
+
   } else if (inherits(p, 'SpatVector')) {
-    p <- terra::project(p, crs)
+    p <- terra::project(p, native_crs)
     e.native <- terra::ext(p)
+    
+    # AOI and image calculations in native CRS
+    # create BBOX used for WMS
+    # xmin, ymin, xmax, ymax
+    aoi.native <- e.native[c(1,3,2,4)]
   }
-
-  # AOI and image calculations in native CRS
-  # create BBOX used for WMS
-  # xmin, ymin, xmax, ymax
-  aoi.native <- e.native
-
-  # these are useful for testing image dimensions > allowed image dimensions
+  
+  # these are used for calculating xmax/ymax for WCS request
   # xmax - xmin
-  w <- round(abs(e.native[3] - e.native[1]) / res)
+  w <- round(abs(aoi.native[3] - aoi.native[1]) / res)
   # ymax - ymin
-  h <- round(abs(e.native[4] - e.native[2]) / res)
+  h <- round(abs(aoi.native[4] - aoi.native[2]) / res)
 
-  return(
-    list(
-      bbox = aoi.native,
-      width = w,
-      height = h
-    )
-  )
+  res <- list(bbox = aoi.native,
+              width = w,
+              height = h)
+  attr(res, '.input_class') <- return_class
+  res
 }
 
 
@@ -513,3 +532,4 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
     rat = NULL
   )
 )
+
