@@ -8,7 +8,7 @@
 #' @param by.col Column name containing map unit identifier `"mukey"`, `"nmusym"`/`"nationalmusym"` for `geom.src` `mupolygon` OR `"areasymbol"`, `"areaname"`, `"mlraoffice"`, `"mouagncyresp"` for `geom.src` `sapolygon`; default is determined by `is.numeric(x)` `TRUE` for `mukey` or `lkey` and `nationalmusym` or `areasymbol` otherwise.
 #' @param method geometry result type: `"feature"` returns polygons, `"bbox"` returns the bounding box of each polygon (via `STEnvelope()`), and `"point"` returns a single point (via `STPointOnSurface()`) within each polygon.
 #' @param geom.src Either `mupolygon` (map unit polygons) or `sapolygon` (soil survey area boundary polygons)
-#' @param db Default: SSURGO. When `geom.src` is `mupolygon`, use STATSGO polygon geometry instead of SSURGO by setting `db = "STATSGO"`
+#' @param db Default: `"SSURGO"`. When `geom.src` is `mupolygon`, use STATSGO polygon geometry instead of SSURGO by setting `db = "STATSGO"`
 #' @param add.fields Column names from `mapunit` or `legend` table to add to result. Must specify parent table name as the prefix before column name e.g. `mapunit.muname`.
 #' @param chunk.size Number of values of `x` to process per query. Necessary for large results. Default: `10`
 #' @param verbose Print messages?

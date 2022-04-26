@@ -25,7 +25,7 @@ fetchSDA_spatial(
 
 \item{geom.src}{Either \code{mupolygon} (map unit polygons) or \code{sapolygon} (soil survey area boundary polygons)}
 
-\item{db}{Default: SSURGO. When \code{geom.src} is \code{mupolygon}, use STATSGO polygon geometry instead of SSURGO by setting \code{db = "STATSGO"}}
+\item{db}{Default: \code{"SSURGO"}. When \code{geom.src} is \code{mupolygon}, use STATSGO polygon geometry instead of SSURGO by setting \code{db = "STATSGO"}}
 
 \item{add.fields}{Column names from \code{mapunit} or \code{legend} table to add to result. Must specify parent table name as the prefix before column name e.g. \code{mapunit.muname}.}
 
