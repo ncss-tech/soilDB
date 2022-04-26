@@ -37,12 +37,12 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
   db <- match.arg(db)
 
   # sanity check: aoi specification
-  if(!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
+  if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
     stop('invalid `aoi` specification', call. = FALSE)
   }
 
   # reasonable resolution
-  if(res < 30 | res > 3000) {
+  if (res < 30 || res > 3000) {
     stop('`res` should be within 30 <= res <= 3000 meters')
   }
 
@@ -52,9 +52,9 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
   # prepare AOI in native CRS
   wcs.geom <- .prepare_AEA_AOI(obj = aoi, res = res)
   
-  ## TODO: investigate why this is so
+  ## TODO: investigate why
   # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 
-  if(wcs.geom$width == 1 & wcs.geom$height == 1) {
+  if (wcs.geom$width == 1 && wcs.geom$height == 1) {
     stop('WCS requests for a 1x1 pixel image are not supported, try a smaller resolution', call. = FALSE)
   }
 
@@ -64,7 +64,7 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
   max.img.dim <- 5000
 
   # check image size > max.img.dim
-  if(wcs.geom$height > max.img.dim | wcs.geom$width > max.img.dim) {
+  if (wcs.geom$height > max.img.dim || wcs.geom$width > max.img.dim) {
     msg <- sprintf(
       'AOI is too large: %sx%s pixels requested (%sx%s pixels max)',
       wcs.geom$width,
@@ -101,7 +101,7 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
     '&RESOLUTION=x(', res, ')',
     '&RESOLUTION=y(', res, ')'
   )
-
+  
   # get data
   tf <- tempfile()
   dl.try <- try(
@@ -111,7 +111,7 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
     silent = TRUE
   )
 
-  if(inherits(dl.try, 'try-error')) {
+  if (inherits(dl.try, 'try-error')) {
    message('bad WCS request')
    return(dl.try)
   }
@@ -119,7 +119,7 @@ mukey.wcs <- function(aoi, db = c('gnatsgo', 'gssurgo'), res = 30, quiet = FALSE
   # load pointer to file 
   r <- try(terra::rast(tf), silent = TRUE)
   
-  if(inherits(r, 'try-error')) {
+  if (inherits(r, 'try-error')) {
     message(attr(r, 'condition'))
     stop('result is not a valid GeoTiff', call. = FALSE)
   }
