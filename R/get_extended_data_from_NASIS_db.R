@@ -464,7 +464,7 @@ LEFT OUTER JOIN (
   d.structure <- dbQueryNASIS(channel, q.structure, close = FALSE)
   d.hz.desgn <- dbQueryNASIS(channel, q.hz.desgn, close = FALSE)
   d.hz.dessuf <- dbQueryNASIS(channel, q.hz.dessuf, close = FALSE)
-  d.siteaoverlap <- dbQueryNASIS(channel, q.siteaoverlap, close = FALSE)
+  d.siteaoverlap <- dbQueryNASIS(channel, q.siteaoverlap)
 
 	## uncode the ones that need that here
 	d.diagnostic <- uncode(d.diagnostic, dsn = dsn)
