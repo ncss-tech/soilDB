@@ -11,7 +11,8 @@ SDA_spatialQuery(
   db = c("SSURGO", "STATSGO", "SAPOLYGON"),
   byFeature = FALSE,
   idcol = "gid",
-  query_string = FALSE
+  query_string = FALSE,
+  as_Spatial = getOption("soilDB.return_Spatial", default = FALSE)
 )
 }
 \arguments{
@@ -28,9 +29,11 @@ SDA_spatialQuery(
 \item{idcol}{Unique IDs used for individual features when \code{byFeature = TRUE}; Default \code{"gid"}}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
+
+\item{as_Spatial}{Return sp classes? e.g. \code{Spatial*DataFrame}. Default: \code{FALSE}.}
 }
 \value{
-A \code{data.frame} if \code{what = 'mukey'}, otherwise a \code{SpatialPolygonsDataFrame} or \code{sf} object.
+A \code{data.frame} if \code{what = 'mukey'}, otherwise an \code{sf} object.
 }
 \description{
 Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersection of \code{geom} + SSURGO / STATSGO polygons can be returned. See details.

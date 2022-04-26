@@ -12,7 +12,8 @@ fetchSDA_spatial(
   db = "SSURGO",
   add.fields = NULL,
   chunk.size = 10,
-  verbose = TRUE
+  verbose = TRUE,
+  as_Spatial = getOption("soilDB.return_Spatial", default = FALSE)
 )
 }
 \arguments{
@@ -31,9 +32,11 @@ fetchSDA_spatial(
 \item{chunk.size}{Number of values of \code{x} to process per query. Necessary for large results. Default: \code{10}}
 
 \item{verbose}{Print messages?}
+
+\item{as_Spatial}{Return sp classes? e.g. \code{Spatial*DataFrame}. Default: \code{FALSE}.}
 }
 \value{
-A \code{Spatial*DataFrame} corresponding to SDA spatial data for all symbols requested. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with \code{add.fields}.
+an \code{sf} data.frame corresponding to SDA spatial data for all symbols requested. If \code{as_Spatial=TRUE} returns a \code{Spatial*DataFrame} from the sp package via \code{sf::as_Spatial()} for backward compatibility. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with \code{add.fields}.
 }
 \description{
 This method facilitates queries to Soil Data Access (SDA) mapunit and survey area geometry. Queries are generated based on map unit key (\code{mukey}) and national map unit symbol (\code{nationalmusym}) for \code{mupolygon} (SSURGO) or \code{gsmmupolygon} (STATSGO) geometry OR legend key (\code{lkey}) and area symbols (\code{areasymbol}) for \code{sapolygon} (Soil Survey Area; SSA) geometry).

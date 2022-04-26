@@ -147,7 +147,8 @@ FROM geom_data;
 #' @param byFeature Iterate over features, returning a combined data.frame where each feature is uniquely identified by value in `idcol`. Default `FALSE`.
 #' @param idcol Unique IDs used for individual features when `byFeature = TRUE`; Default `"gid"`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
-#' @return A `data.frame` if `what = 'mukey'`, otherwise a `SpatialPolygonsDataFrame` or `sf` object.
+#' @param as_Spatial Return sp classes? e.g. `Spatial*DataFrame`. Default: `FALSE`.
+#' @return A `data.frame` if `what = 'mukey'`, otherwise an `sf` object.
 #' @note Row-order is not preserved across features in \code{geom} and returned object. Use `byFeature` argument to iterate over features and return results that are 1:1 with the inputs. Polygon area in acres is computed server-side when `what = 'mupolygon'` and `geomIntersection = TRUE`.
 #' @author D.E. Beaudette, A.G. Brown, D.R. Schlaepfer
 #' @seealso \code{\link{SDA_query}}
@@ -291,7 +292,8 @@ SDA_spatialQuery <- function(geom,
                              db = c("SSURGO", "STATSGO", "SAPOLYGON"),
                              byFeature = FALSE,
                              idcol = "gid",
-                             query_string = FALSE) {
+                             query_string = FALSE,
+                             as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {
   if (byFeature) {
     res <- do.call('rbind', lapply(1:nrow(geom), function(i) {
       res2 <- .SDA_spatialQuery(
@@ -306,25 +308,34 @@ SDA_spatialQuery <- function(geom,
     }))
     return(res)
   }
-  .SDA_spatialQuery(
+  
+  res <- .SDA_spatialQuery(
     geom = geom,
     what = what,
     geomIntersection = geomIntersection,
     db = db,
     query_string = query_string
   )
+
+  # flag for Spatial result
+  if (as_Spatial && requireNamespace("sf")) {
+    res <- sf::as_Spatial(res)
+  }
+  res
 }
+
 .SDA_spatialQuery <- function(geom,
                              what = 'mukey',
                              geomIntersection = FALSE,
                              db = c("SSURGO", "STATSGO", "SAPOLYGON"),
                              query_string = FALSE) {
+  
   # check for required packages
   if (!requireNamespace('sf', quietly = TRUE))
-    stop('please install the `sf` package', call.=FALSE)
-
+    stop('please install the `sf` package', call. = FALSE)
+  
   if (!requireNamespace('wk', quietly = TRUE))
-    stop('please install the `wk` package', call.=FALSE)
+    stop('please install the `wk` package', call. = FALSE)
 
   what <- tolower(what)
   db <- toupper(db)
@@ -341,7 +352,7 @@ SDA_spatialQuery <- function(geom,
     geom <- terra::rast(geom)
   }
   
-  if(inherits(geom, 'SpatRaster') | inherits(geom, 'SpatVector')) {
+  if (inherits(geom, 'SpatRaster') | inherits(geom, 'SpatVector')) {
     # terra support
     return_terra <- TRUE
     return_sf <- TRUE

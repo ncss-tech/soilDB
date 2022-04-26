@@ -184,7 +184,8 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO'), res = 30, quiet = FALSE
 
   input_class <- attr(wcs.geom, '.input_class')
   
-  if (!is.null(input_class) && input_class == "raster") {
+  if ((!is.null(input_class) && input_class == "raster") ||
+      getOption('soilDB.return_Spatial', default = FALSE)) {
     if (requireNamespace("raster")) {
       r <- raster::raster(r)
     }
