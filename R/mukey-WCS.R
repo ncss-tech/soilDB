@@ -174,7 +174,8 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS'), res = 30, quiet 
   # specification of NODATA
   # this doesn't seem to make it through the WCS
   # value is derived from the original UINT32 grid
-  terra::NAflag(r) <- 2147483647
+  # gSSURGO / gNATSGO use a different value vs. RSS
+  terra::NAflag(r) <- var.spec$na
 
   # load all values into memory
   terra::values(r) <- terra::values(r)

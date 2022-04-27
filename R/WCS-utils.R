@@ -520,7 +520,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
     dsn = 'gnatsgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'gNATSGO map unit keys',
-    na = 2147483647,
+    na = 2147483647L,
     res = 30,
     rat = NULL
   ),
@@ -529,7 +529,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
     dsn = 'gssurgo',
     type = 'GEOTIFF_FLOAT',
     desc = 'gSSURGO map unit keys',
-    na = 2147483647,
+    na = 2147483647L,
     res = 30,
     rat = NULL
   ),
@@ -538,7 +538,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
     dsn = 'rss',
     type = 'GEOTIFF_FLOAT',
     desc = 'RSS map unit keys',
-    na = 2147483647,
+    na = 0L,
     res = 10,
     rat = NULL
   )
