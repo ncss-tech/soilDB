@@ -4,14 +4,14 @@
 \alias{mukey.wcs}
 \title{Get gNATSGO / gSSURGO Map Unit Key (\code{mukey}) grid from SoilWeb Web Coverage Service (WCS)}
 \usage{
-mukey.wcs(aoi, db = c("gNATSGO", "gSSURGO"), res = 30, quiet = FALSE)
+mukey.wcs(aoi, db = c("gNATSGO", "gSSURGO", "RSS"), res = 30, quiet = FALSE)
 }
 \arguments{
 \item{aoi}{area of interest (AOI) defined using either a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, or a \code{list}, see details}
 
 \item{db}{name of the gridded map unit key grid to access, should be either 'gNATSGO' or 'gSSURGO' (case insensitive)}
 
-\item{res}{grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m.}
+\item{res}{grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; and Raster Soil Surveys (RSS) are at 10m resolution. If \code{res} is not specified the native resolution of the source is used.}
 
 \item{quiet}{logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.}
 }

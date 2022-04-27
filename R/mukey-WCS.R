@@ -8,7 +8,7 @@
 #'
 #' @param aoi area of interest (AOI) defined using either a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, or a \code{list}, see details
 #' @param db name of the gridded map unit key grid to access, should be either 'gNATSGO' or 'gSSURGO' (case insensitive)
-#' @param res grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m.
+#' @param res grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; and Raster Soil Surveys (RSS) are at 10m resolution. If `res` is not specified the native resolution of the source is used.
 #' @param quiet logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.
 #'
 #' @note The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
@@ -64,28 +64,29 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS'), res = 30, quiet 
   if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
     stop('invalid `aoi` specification', call. = FALSE)
   }
-
+  
+  # prepare WCS details
+  # list-lookup is lower-case
+  var.spec <- .mukey.spec[[db]]
+  
+  ##if a resolution isn't specified, use the data-specific default
+  if (missing(res)) {
+    res <- var.spec$res
+  }
+  
   # reasonable resolution
-  if(db %in% c('gssurgo', 'gnatsgo')) {
+  if (db %in% c('gssurgo', 'gnatsgo')) {
     if (res < 30 || res > 3000) {
       stop('`res` should be within 30 <= res <= 3000 meters')
     }
   }
   
   # reasonable resolution
-  if(db == 'rss') {
+  if (db == 'rss') {
     if (res < 10 || res > 1000) {
       stop('`res` should be within 10 <= res <= 1000 meters')
     }
   }
-  
-
-  # prepare WCS details
-  # list-lookup is lower-case
-  var.spec <- .mukey.spec[[db]]
-  
-  ## TODO: if a resolution isn't specified, use the data-specific default
-  # var.spec$res
   
   # prepare AOI in native CRS
   wcs.geom <- .prepare_AEA_AOI(obj = aoi, res = res)
