@@ -55,10 +55,10 @@
 #' 
 #' plot(res2[['pH1to1_0to25']])
 #' }
-mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO'), res = 30, quiet = FALSE) {
+mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS'), res = 30, quiet = FALSE) {
 
   # sanity check: db name
-  db <- match.arg(tolower(db[1]), choices = c('gnatsgo', 'gssurgo'))
+  db <- match.arg(tolower(db[1]), choices = c('gnatsgo', 'gssurgo', 'rss'))
 
   # sanity check: aoi specification
   if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
@@ -66,12 +66,26 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO'), res = 30, quiet = FALSE
   }
 
   # reasonable resolution
-  if (res < 30 || res > 3000) {
-    stop('`res` should be within 30 <= res <= 3000 meters')
+  if(db %in% c('gssurgo', 'gnatsgo')) {
+    if (res < 30 || res > 3000) {
+      stop('`res` should be within 30 <= res <= 3000 meters')
+    }
   }
+  
+  # reasonable resolution
+  if(db == 'rss') {
+    if (res < 10 || res > 1000) {
+      stop('`res` should be within 10 <= res <= 1000 meters')
+    }
+  }
+  
 
   # prepare WCS details
+  # list-lookup is lower-case
   var.spec <- .mukey.spec[[db]]
+  
+  ## TODO: if a resolution isn't specified, use the data-specific default
+  # var.spec$res
   
   # prepare AOI in native CRS
   wcs.geom <- .prepare_AEA_AOI(obj = aoi, res = res)
@@ -171,13 +185,12 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO'), res = 30, quiet = FALSE
   # build RAT
   uids <- terra::unique(r)[,1]
   rat <- data.frame(value = uids, 
-                    gSSURGO.map.unit.keys = uids,
+                    mukey = uids,
                     ID = uids)
   r <- terra::categories(r, layer = 1, rat)
   
   # set layer name in object
-  # TODO: perhaps this should just be `'mukey'` (breaking change)
-  names(r) <- 'gSSURGO.map.unit.keys'
+  names(r) <- 'mukey'
   
   # and as an attribute
   attr(r, 'layer name') <- var.spec$desc
