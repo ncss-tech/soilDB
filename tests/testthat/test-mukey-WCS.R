@@ -15,24 +15,20 @@ test_that("works as expected", {
     
     # 30m grid
     x <- mukey.wcs(aoi = list(aoi = c(-114.16, 47.655, -114.155, 47.66),
-                              crs = '+init=epsg:4326'),
+                              crs = 'EPSG:4326'),
                    db = 'gnatsgo', quiet = TRUE)
 
   })
   
-  expect_true(inherits(x, 'RasterLayer') || inherits(x, 'try-error'))
-  
-  if(inherits(x, 'RasterLayer')) {
+  expect_true(inherits(x, 'SpatRaster') || inherits(x, 'try-error'))
+
+  if(inherits(x, 'SpatRaster')) {
     
     # expected dimensions
-    expect_true(
-      all(
-        dim(x) == c(20, 16, 1)
-      )
-    )
+    expect_true(all(dim(x) == c(20, 16, 1)))
     
     # must have a RAT
-    expect_true(! is.null(levels(x)))
+    expect_true(!is.null(terra::levels(x)))
     
   }
   

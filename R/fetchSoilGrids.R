@@ -165,9 +165,9 @@ fetchSoilGrids <- function(x,
   depths(spc) <- id ~ hzdept + hzdepb
   
   # move location information to site
-  site(spc) <- ~ longitude + latitude
-  coordinates(spc) <- ~ longitude + latitude
-  proj4string(spc) <- "EPSG:4326"
+  aqp::site(spc) <- ~ longitude + latitude
+  aqp::coordinates(spc) <- ~ longitude + latitude
+  aqp::proj4string(spc) <- "EPSG:4326"
  
   # merge the rest of the sf object into the site table 
   if (spatial_input) {

@@ -4,16 +4,18 @@
 \alias{get_NOAA_stations_nearXY}
 \title{Get NOAA station data near a given latitude and longitude}
 \usage{
-get_NOAA_stations_nearXY(lat, lng, apitoken, bbox = 1)
+get_NOAA_stations_nearXY(lat, lng, apitoken, bbox = 1, crs = "EPSG:4326")
 }
 \arguments{
-\item{lat}{Latitude}
+\item{lat}{Latitude or Y coordinate in \code{crs}}
 
-\item{lng}{Longitude}
+\item{lng}{Longitude or X coordinate in \code{crs}}
 
 \item{apitoken}{API key token for NOAA NCDC web service}
 
 \item{bbox}{Optional: Dimension of the bounding box centered at \code{lat}, \code{lng}.}
+
+\item{crs}{Coordinate Reference System. Default \code{"EPSG:4326"}}
 }
 \value{
 data.frame containing station information for all stations within a bounding box around \code{lat}, \code{lng}.

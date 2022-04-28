@@ -21,7 +21,7 @@ taxaExtent(
 \item{timeout}{time that we are willing to wait for a response, in seconds}
 }
 \value{
-a \code{raster} object
+a \code{SpatRaster} object
 }
 \description{
 This function downloads a generalized representation of the geographic extent of any single taxon from the top 4 levels of Soil Taxonomy, or taxa matching a given formative element used in Great Group or subgroup taxa. Data are provided by SoilWeb, ultimately sourced from the current SSURGO snapshot. Data are returned as \code{raster} objects representing area proportion falling within 800m cells. Currently area proportions are based on major components only. Data are only available in CONUS and returned using an Albers Equal Area / NAD83(2011) coordinate reference system (EPSG: 5070).
@@ -180,9 +180,10 @@ The following labels are used to access taxa containing the following formative 
 \donttest{
 
 if(requireNamespace("curl") &
+   requireNamespace("terra") &
    curl::has_internet()) {
   
-  library(raster)
+  library(terra)
   
   # soil order
   taxa <- 'vertisols'
@@ -209,10 +210,10 @@ if(requireNamespace("curl") &
   x <- taxaExtent(taxa, level = 'subgroup', formativeElement = TRUE)
   
   # coarsen for faster plotting
-  a <- raster::aggregate(x, fact = 5)
+  a <- terra::aggregate(x, fact = 5, na.rm = TRUE)
   
   # quick evaluation of the result
-  plot(a, axes = FALSE)
+  terra::plot(a, axes = FALSE)
 }
 }
 

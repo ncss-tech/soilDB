@@ -26,28 +26,6 @@ importFrom(DBI,
   dbFetch
 )
 
-importFrom(raster,
-  readAll,
-  raster,
-  extent,
-  ratify,
-  "NAvalue<-",
-  "dataType<-",
-  levels
-)
-
-importFrom(sp,
-  spTransform,
-  CRS,
-  proj4string,
-  "coordinates<-",
-  "proj4string<-",
-  SpatialPolygonsDataFrame,
-  SpatialPointsDataFrame,
-  SpatialPoints,
-  spChFIDs
-)
-
 importFrom(curl,
   curl,
   new_handle
@@ -57,7 +35,6 @@ importFrom(xml2,
   read_html,
   xml_text
 )
-
 
 importFrom(aqp,
   "depths<-",

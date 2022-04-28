@@ -11,7 +11,7 @@
 #' 
 #' @param timeout time that we are willing to wait for a response, in seconds
 #' 
-#' @return a \code{raster} object
+#' @return a `SpatRaster` object
 #' 
 #' @author D.E. Beaudette and A.G. Brown
 #' 
@@ -162,9 +162,10 @@
 #' \donttest{
 #' 
 #' if(requireNamespace("curl") &
+#'    requireNamespace("terra") &
 #'    curl::has_internet()) {
 #'   
-#'   library(raster)
+#'   library(terra)
 #'   
 #'   # soil order
 #'   taxa <- 'vertisols'
@@ -191,10 +192,10 @@
 #'   x <- taxaExtent(taxa, level = 'subgroup', formativeElement = TRUE)
 #'   
 #'   # coarsen for faster plotting
-#'   a <- raster::aggregate(x, fact = 5)
+#'   a <- terra::aggregate(x, fact = 5, na.rm = TRUE)
 #'   
 #'   # quick evaluation of the result
-#'   plot(a, axes = FALSE)
+#'   terra::plot(a, axes = FALSE)
 #' }
 #' }
 #' 
@@ -283,23 +284,24 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
     message('no data returned')
     return(NULL)
   }
- 
-  ## TODO: suppressing CRS-related warnings (not a problem) until we have a better solution
-  # https://github.com/ncss-tech/soilDB/issues/144
-  # load raster object into memory
-  r <- suppressWarnings(raster(tf, verbose=FALSE))
-  r <- readAll(r)
+
+  # init SpatRaster
+  r <- terra::rast(tf)
+  
+  # load all values into memory
+  terra::values(r) <- terra::values(r)
+  
+  # remove tempfile 
+  unlink(tf)
   
   # transfer layer name
   # conversion of '_' -> ' ' only meaningful in taxon query
   names(r) <- gsub(pattern='_', replacement=' ', x = x, fixed = TRUE)
   
-  # cleanup
-  unlink(tf)
+  # make CRS explicit
+  terra::crs(r) <- 'EPSG:5070'
   
-  # EPSG:5070
   return(r)
   
-  return(res)
 }
 

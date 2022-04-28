@@ -56,4 +56,5 @@ test_that("fetchSoilGrids: POINT input", {
   your.points <- sf::st_as_sf(your.points, coords = c('lon','lat'))
   res <- try(fetchSoilGrids(your.points), silent = TRUE)
   
+  expect_true(inherits(res, 'SoilProfileCollection'))
 })

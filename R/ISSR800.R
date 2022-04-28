@@ -1,54 +1,54 @@
 
 #' @title Get 800m gridded soil properties from SoilWeb ISSR-800 Web Coverage Service (WCS)
-#' 
 #' @author D.E. Beaudette and A.G. Brown
-#' 
 #' @description Intermediate-scale gridded (800m) soil property and interpretation maps from aggregated SSURGO and STATSGO data. These maps were developed by USDA-NRCS-SPSD staff in collaboration with UCD-LAWR. Originally for educational use and \href{https://casoilresource.lawr.ucdavis.edu/soil-properties/}{interactive thematic maps}, these data are a suitable alternative to gridded STATSGO-derived thematic soil maps. The full size grids can be \href{https://casoilresource.lawr.ucdavis.edu/soil-properties/download.php}{downloaded here}.
-#' 
-#' 
-#' 
-#' @param aoi area of interest (AOI) defined using a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object or a \code{list}, see details
-#' 
-#' @param var ISSR-800 grid name, see details
-#' 
+#' @param aoi area of interest (AOI) defined using a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, OR a \code{list}, see details
+#' @param var ISSR-800 grid name (case insensitive), see details 
 #' @param res grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.
-#' 
 #' @param quiet logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.
 #'  
-#' @details \code{aoi} should be specified as a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
+#' @details \code{aoi} should be specified as a \code{SpatRaster}, \code{Spatial*}, \code{RasterLayer}, \code{SpatRaster}/\code{SpatVector}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
 #' 
 #' \describe{
 #'   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
-#'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. '+init=epsg:4326'}
+#'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)}
 #' }
 #' 
-#' The WCS query is parameterized using \code{raster::extent} derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the ISSR-800 grids.
+#' The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the ISSR-800 grids.
 #' 
 #' Variables available from this WCS can be queried using \code{WCS_details(wcs = 'ISSR800')}.
 #' 
 #' @note There are still some issues to be resolved related to the encoding of NA Variables with a natural zero (e.g. SAR) have 0 set to NA.
 #' 
-#' @return \code{raster} object containing indexed map unit keys and associated raster attribute table or a try-error if request fails
+#' @return A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the `terra` package are returned. If the input object class is from the `raster` or `sp` packages a RasterLayer is returned. 
+#' @examples 
+#' \dontrun{
+#' library(terra)
 #' 
+#' # see WCS_details() for variable options
+#' WCS_details(wcs = 'ISSR800')
+#' 
+#' # get wind erodibility group
+#' res <- ISSR800.wcs(list(aoi = c(-116, 35, -115.5, 35.5), crs = "EPSG:4326"), 
+#'                    var = 'weg', res = 800)
+#' plot(res)
+#' }
 #' @export
 ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   
-  if(!requireNamespace('rgdal', quietly=TRUE))
-    stop('please install the `rgdal` package', call.=FALSE)
-  
   # sanity check: aoi specification
-  if(!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer'))) { 
+  if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
     stop('invalid `aoi` specification', call. = FALSE)
   }
   
   # reasonable resolution
-  if(res < 400 | res > 1600) {
+  if (res < 400 || res > 1600) {
     stop('`res` should be within 400 <= res <= 1600 meters')
   }
   
   # match variable name in catalog
   var.cat <- sapply(.ISSR800.spec, '[[', 'dsn')
-  match.arg(var, var.cat)
+  var <- match.arg(tolower(var), choices = var.cat)
   
   # get variable specs
   var.spec <- .ISSR800.spec[[var]]
@@ -58,17 +58,16 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   
   ## TODO: investigate why this is so
   # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 
-  if(wcs.geom$width == 1 & wcs.geom$height == 1) {
+  if (wcs.geom$width == 1 && wcs.geom$height == 1) {
     stop('WCS requests for a 1x1 pixel image are not supported, try a smaller resolution', call. = FALSE)
   }
-  
   
   # sanity check: keep output images within a reasonable limit
   # limits set in the MAPFILE
   max.img.dim <- 5000
   
   # check image size > max.img.dim
-  if(wcs.geom$height > max.img.dim | wcs.geom$width > max.img.dim) {
+  if (wcs.geom$height > max.img.dim || wcs.geom$width > max.img.dim) {
     msg <- sprintf(
       'AOI is too large: %sx%s pixels requested (%sx%s pixels max)', 
       wcs.geom$width, 
@@ -86,9 +85,15 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   
   # unpack BBOX for WCS 2.0
   xmin <- wcs.geom$bbox[1]
-  xmax <- wcs.geom$bbox[3]
   ymin <- wcs.geom$bbox[2]
-  ymax <- wcs.geom$bbox[4]
+  
+  # xmax and ymax are now calculated from AOI dimensions and resolution
+  # xmax <- wcs.geom$bbox[3]
+  # ymax <- wcs.geom$bbox[4]
+  
+  # recalculate x/ymax based on xmin + resolution multiplied by AOI dims
+  xmax2 <- xmin + res * wcs.geom$width
+  ymax2 <- ymin + res * wcs.geom$height
   
   ## TODO: source data are LZW compressed, does it make sense to alter the compression (e.g. Deflate) for delivery?
   
@@ -101,8 +106,8 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     '&GEOTIFF:COMPRESSION=LZW',
     '&SUBSETTINGCRS=EPSG:5070',
     '&FORMAT=', var.spec$type,
-    '&SUBSET=x(', xmin, ',', xmax,')',
-    '&SUBSET=y(', ymin, ',', ymax,')',
+    '&SUBSET=x(', xmin, ',', xmax2, ')',
+    '&SUBSET=y(', ymin, ',', ymax2, ')',
     '&RESOLUTION=x(', res, ')',
     '&RESOLUTION=y(', res, ')'
   )
@@ -116,51 +121,74 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     silent = TRUE
   )
   
-  if(inherits(dl.try, 'try-error')) {
+  if (inherits(dl.try, 'try-error')) {
     message('bad WCS request')
     return(dl.try)
   }
   
   # load pointer to file and return
-  r <- try(
-    raster(tf),
-    silent = TRUE
-  )
+  r <- try(terra::rast(tf), silent = TRUE)
   
-  if(inherits(r, 'try-error')) {
-    stop('result is not a valid GeoTiff, why?', call. = FALSE)
+  if (inherits(r, 'try-error')) {
+    message(attr(r, 'condition'))
+    stop('result is not a valid GeoTIFF', call. = FALSE)
   }
   
   ## TODO: this isn't quite right... '0' is returned by the WCS sometimes
   # specification of NODATA using local definitions
   # NAvalue(r) <- var.spec$na
-  NAvalue(r) <- 0
+  terra::NAflag(r) <- 0
   
-  # read into memory to make NODATA value permanent
-  r <- readAll(r)
+  # load all values into memory
+  terra::values(r) <- terra::values(r)
+ 
+  # remove tempfile 
+  unlink(tf)
   
   # set layer name in object
   names(r) <- var.spec$desc
+  
   # and as an attribute
   attr(r, 'layer name') <- var.spec$desc
   
   # optional processing of RAT
-  if(! is.null(var.spec$rat)) {
-    
-    # convert to RAT-enabled raster
-    r <- ratify(r)
+  if (!is.null(var.spec$rat)) {
     
     # get rat
     rat <- read.csv(var.spec$rat, stringsAsFactors = FALSE)
     
-    # rename ID column
+    # the cell value / ID column is always the 2nd colum
+    # name it for reference later
     names(rat)[2] <- 'ID'
     
-    # get / merge codes
-    ll <- raster::levels(r)[[1]]
+    ## TODO: changes since previous version
+    ##         * the raster-based version set only existing levels
+    ##         * there may be more than ID, code in the RAT: see texture RATS
+    ##         * very large RATs with mostly un-used levels (series name) will be a problem
     
-    ll <- base::merge(ll, rat, by = 'ID', sort = FALSE, all.x = TRUE)
-    levels(r) <- ll
+    # re-order columns by name
+    # there may be > 2 columns (hex colors, etc.)
+    col.names <- c('ID', names(rat)[-2])
+    
+    # unique cell values
+    u.values <- terra::unique(r)[[1]]
+    
+    # index those categories present in r
+    cat.idx <- which(rat$ID %in% u.values)
+    
+    ## why does this work without terra::categorize?
+    
+    # register categories in new order
+    levels(r) <- rat[cat.idx, col.names]
+  }
+  
+  input_class <- attr(wcs.geom, '.input_class')
+  
+  if ((!is.null(input_class) && input_class == "raster") ||
+      getOption('soilDB.return_Spatial', default = FALSE)) {
+    if (requireNamespace("raster")) {
+      r <- raster::raster(r)
+    }
   }
   
   return(r)

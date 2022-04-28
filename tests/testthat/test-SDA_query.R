@@ -23,7 +23,8 @@ test_that("SDA_query() works", {
   x.4 <<- suppressMessages(SDA_query(q = "SELECT * from mutext WHERE mukey = '2596937';"))
 
   # point with known SSURGO data
-  p <<- sp::SpatialPoints(cbind(-121.77100, 37.368402), proj4string = sp::CRS('+proj=longlat +datum=WGS84'))
+  p <<- sf::st_as_sf(data.frame(x=-121.77100, y=37.368402),  coords=c("x","y"),
+                     crs = "EPSG:4326")
 
 
   # standard request
@@ -107,7 +108,7 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   res <- suppressWarnings(SDA_spatialQuery(p, what = 'geom'))
 
   # testing known values
-  expect_true(inherits(res, 'SpatialPolygonsDataFrame'))
+  expect_true(inherits(res, 'sf'))
   expect_equal(nrow(res), 1)
 
 
@@ -115,14 +116,14 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   res <- suppressWarnings(SDA_spatialQuery(p, what = 'geom', db = "STATSGO"))
 
   # testing known values
-  expect_true(inherits(res, 'SpatialPolygonsDataFrame'))
+  expect_true(inherits(res, 'sf'))
   expect_equal(nrow(res), 1)
   
   # test with what = "sapolygon" 
   res <- suppressWarnings(SDA_spatialQuery(p, what = "sapolygon"))
   
   # testing known values
-  expect_true(inherits(res, 'SpatialPolygonsDataFrame'))
+  expect_true(inherits(res, 'sf'))
   expect_equal(nrow(res), 1)
 
 })

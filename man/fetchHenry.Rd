@@ -48,7 +48,7 @@ be summarized? see details}
 \item{tz}{Used for custom timezone. Default \code{""} is current locale}
 }
 \value{
-a list containing: \item{sensors}{a \code{SpatialPointsDataFrame}
+a list containing: \item{sensors}{a \code{sf} \code{data.frame}
 object containing site-level information} \item{soiltemp}{a
 \code{data.frame} object containing soil temperature timeseries data}
 \item{soilVWC}{a \code{data.frame} object containing soil moisture

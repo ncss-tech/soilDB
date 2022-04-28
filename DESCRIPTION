@@ -1,7 +1,7 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 2.6.15-1
+Version: 2.6.15-2
 Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut"), email = "dylan.beaudette@usda.gov"),
              person(given="Jay", family="Skovlin", role = c("aut")), 
              person(given="Stephen", family="Roecker", role = c("aut")), 
@@ -12,8 +12,8 @@ Description: A collection of functions for reading data from USDA-NCSS soil data
 License: GPL (>= 3)
 LazyLoad: yes
 Depends: R (>= 3.5.0)
-Imports: aqp, grDevices, graphics, stats, utils, xml2, sp, raster, curl, methods, data.table, DBI
-Suggests: rgdal, jsonlite, httr, sf, wk, rvest, odbc, RSQLite, testthat, scales
+Imports: aqp, grDevices, graphics, stats, utils, xml2, curl, methods, data.table, DBI
+Suggests: jsonlite, httr, rvest, sf, wk, terra, raster, odbc, RSQLite, testthat, scales
 Repository: CRAN
 URL: http://ncss-tech.github.io/soilDB/
 BugReports: https://github.com/ncss-tech/soilDB/issues

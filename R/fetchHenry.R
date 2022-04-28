@@ -263,7 +263,7 @@ month2season <- function(x) {
 #' @param soiltemp.summaries should soil temperature ("day" granularity only)
 #' be summarized? see details
 #' @param tz Used for custom timezone. Default `""` is current locale 
-#' @return a list containing: \item{sensors}{a \code{SpatialPointsDataFrame}
+#' @return a list containing: \item{sensors}{a \code{sf} \code{data.frame}
 #' object containing site-level information} \item{soiltemp}{a
 #' \code{data.frame} object containing soil temperature timeseries data}
 #' \item{soilVWC}{a \code{data.frame} object containing soil moisture
@@ -285,7 +285,10 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   
   # check for required packages
   if(!requireNamespace('jsonlite', quietly=TRUE))
-    stop('please install the `jsonlite` packages', call.=FALSE)
+    stop('please install the `jsonlite` package', call.=FALSE)
+  
+  if(!requireNamespace('sf', quietly=TRUE))
+    stop('please install the `sf` package', call.=FALSE)
   
   # important: backward compatibility R <4.0
   opt.original <- options(stringsAsFactors = FALSE)
@@ -431,8 +434,9 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   
   # init coordinates
   if(!is.null(s$sensors)) {
-    coordinates(s$sensors) <- ~ wgs84_longitude + wgs84_latitude
-    proj4string(s$sensors) <- '+proj=longlat +datum=WGS84'
+    s$sensors <- sf::st_as_sf(s$sensors,
+                              coords = c("wgs84_longitude", "wgs84_latitude"),
+                              crs = 'EPSG:4326')
   }
   
   # reset options:
