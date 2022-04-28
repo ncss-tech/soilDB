@@ -5,19 +5,28 @@
 \title{Get Geomorphic/Surface Morphometry Data from Soil Data Access}
 \usage{
 get_SDA_cosurfmorph(
-  WHERE = NULL,
-  by = "compname",
   table = "cosurfmorphgc",
+  by = "compname",
+  areasymbols = NULL,
+  mukeys = NULL,
+  WHERE = NULL,
+  db = c("SSURGO", "STATSGO"),
   dsn = NULL,
   query_string = FALSE
 )
 }
 \arguments{
-\item{WHERE}{WHERE clause added to SQL query. For example: \code{areasymbol = 'CA067'}}
+\item{table}{Target table to summarize. Default: \code{"cosurfmorphgc"} (3D Geomorphic Component). Alternate choices include \code{cosurfmorphhpp} (2D Hillslope Position) and \code{cosurfmorphss} (Surface Shape).}
 
 \item{by}{Grouping variable. Default: \code{"compname"}}
 
-\item{table}{Target table to summarize. Default: \code{"cosurfmorphgc"} (3D Geomorphic Component). Alternate choices include \code{cosurfmorphhpp} (2D Hillslope Position) and \code{cosurfmorphss} (Surface Shape).}
+\item{areasymbols}{A vector of soil survey area symbols (e.g. \code{'CA067'})}
+
+\item{mukeys}{A vector of map unit keys (e.g. \code{466627})}
+
+\item{WHERE}{WHERE clause added to SQL query. For example: \code{areasymbol = 'CA067'}}
+
+\item{db}{Either \code{'SSURGO'} (default) or \code{'STATSGO'}. If \code{'SSURGO'} is specified \code{areasymbol = 'US'} records are excluded. If \code{'STATSGO'} only \code{areasymbol = 'US'} records are included.}
 
 \item{dsn}{Path to local SSURGO database SQLite database. Default \code{NULL} uses Soil Data Access.}
 
@@ -41,16 +50,16 @@ Full component data including surface morphometry summaries at the "site" level 
 \examples{
 \dontrun{
  # Summarize by 3D geomorphic components by component name (default `by='compname'`)
- get_SDA_cosurfmorph("areasymbol = 'CA630'")
+ get_SDA_cosurfmorph(WHERE = "areasymbol = 'CA630'")
  
  # Whole Soil Survey Area summary (using `by = 'areasymbol'`)
- get_SDA_cosurfmorph("areasymbol = 'CA630'", by = 'areasymbol')
+ get_SDA_cosurfmorph(by = 'areasymbol', WHERE = "areasymbol = 'CA630'")
  
  # 2D Hillslope Position summary(using `table = 'cosurfmorphhpp'`)
- get_SDA_cosurfmorph("areasymbol = 'CA630'", table = 'cosurfmorphhpp')
+ get_SDA_cosurfmorph('cosurfmorphhpp', WHERE = "areasymbol = 'CA630'", )
  
  # Surface Shape summary (using `table = 'cosurfmorphss'`)
- get_SDA_cosurfmorph("areasymbol = 'CA630'", table = 'cosurfmorphss')
+ get_SDA_cosurfmorph('cosurfmorphss', WHERE = "areasymbol = 'CA630'", )
 }
 }
 \seealso{

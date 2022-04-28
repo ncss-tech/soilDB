@@ -6,10 +6,13 @@
 #' 
 #' Get Geomorphic/Surface Morphometry Data from Soil Data Access or a local SSURGO data source and summarize by counts and proportions ("probabilities").
 #'
-#' @param WHERE WHERE clause added to SQL query. For example: `areasymbol = 'CA067'`
-#' @param by Grouping variable. Default: `"compname"`
-#' @param dsn Path to local SSURGO database SQLite database. Default `NULL` uses Soil Data Access.
 #' @param table Target table to summarize. Default: `"cosurfmorphgc"` (3D Geomorphic Component). Alternate choices include `cosurfmorphhpp` (2D Hillslope Position) and `cosurfmorphss` (Surface Shape).
+#' @param by Grouping variable. Default: `"compname"`
+#' @param areasymbols A vector of soil survey area symbols (e.g. `'CA067'`)
+#' @param mukeys A vector of map unit keys (e.g. `466627`)
+#' @param WHERE WHERE clause added to SQL query. For example: `areasymbol = 'CA067'`
+#' @param db Either `'SSURGO'` (default) or `'STATSGO'`. If `'SSURGO'` is specified `areasymbol = 'US'` records are excluded. If `'STATSGO'` only `areasymbol = 'US'` records are included.
+#' @param dsn Path to local SSURGO database SQLite database. Default `NULL` uses Soil Data Access.
 #' @param query_string Return query instead of sending to Soil Data Access / local database. Default: `FALSE`.
 #'
 #' @return a `data.frame` containing the grouping variable (`by`) and tabular summaries of counts and proportions of geomorphic records. 
@@ -27,23 +30,39 @@
 #' @examples
 #' \dontrun{
 #'  # Summarize by 3D geomorphic components by component name (default `by='compname'`)
-#'  get_SDA_cosurfmorph("areasymbol = 'CA630'")
+#'  get_SDA_cosurfmorph(WHERE = "areasymbol = 'CA630'")
 #'  
 #'  # Whole Soil Survey Area summary (using `by = 'areasymbol'`)
-#'  get_SDA_cosurfmorph("areasymbol = 'CA630'", by = 'areasymbol')
+#'  get_SDA_cosurfmorph(by = 'areasymbol', WHERE = "areasymbol = 'CA630'")
 #'  
 #'  # 2D Hillslope Position summary(using `table = 'cosurfmorphhpp'`)
-#'  get_SDA_cosurfmorph("areasymbol = 'CA630'", table = 'cosurfmorphhpp')
+#'  get_SDA_cosurfmorph('cosurfmorphhpp', WHERE = "areasymbol = 'CA630'", )
 #'  
 #'  # Surface Shape summary (using `table = 'cosurfmorphss'`)
-#'  get_SDA_cosurfmorph("areasymbol = 'CA630'", table = 'cosurfmorphss')
+#'  get_SDA_cosurfmorph('cosurfmorphss', WHERE = "areasymbol = 'CA630'", )
 #' }
-get_SDA_cosurfmorph <- function(WHERE = NULL,
+get_SDA_cosurfmorph <- function(table = "cosurfmorphgc",
                                 by = "compname",
-                                table = "cosurfmorphgc",
+                                areasymbols = NULL,
+                                mukeys = NULL,
+                                WHERE = NULL,
+                                db = c('SSURGO', 'STATSGO'),
                                 dsn = NULL,
                                 query_string = FALSE) {
 
+  if (is.null(mukeys) && is.null(areasymbols) && is.null(WHERE)) {
+    stop("Please specify one of the following arguments: mukeys, areasymbols, WHERE", call. = FALSE)
+  }
+  
+  if (!is.null(mukeys)) {
+    WHERE <- paste("mapunit.mukey IN", format_SQL_in_statement(mukeys))
+  } else if (!is.null(areasymbols)) {
+    WHERE <- paste("legend.areasymbol IN", format_SQL_in_statement(areasymbols))
+  } 
+  
+  db <- match.arg(toupper(db), choices = c('SSURGO', 'STATSGO'))
+  statsgo_filter <- switch(db, SSURGO = "!=", STATSGO = "=")
+  
   vars <- switch(table,
                  "cosurfmorphgc" = c("geomposmntn", "geomposhill", "geomposflats", "geompostrce"),
                  "cosurfmorphhpp" = "hillslopeprof",
@@ -91,19 +110,19 @@ get_SDA_cosurfmorph <- function(WHERE = NULL,
                  SELECT [BYVAR], 
                  ", .SELECT_STATEMENT1(vars_default), "
                  FROM legend
-                   INNER JOIN mapunit mu ON mu.lkey = legend.lkey
-                   INNER JOIN component AS co ON mu.mukey = co.mukey
-                   LEFT JOIN cogeomordesc ON co.cokey = cogeomordesc.cokey
+                   INNER JOIN mapunit ON mapunit.lkey = legend.lkey
+                   INNER JOIN component ON mapunit.mukey = component.mukey
+                   LEFT JOIN cogeomordesc ON component.cokey = cogeomordesc.cokey
                  ", .JOIN_TABLE(table), "
-                 WHERE legend.areasymbol != 'US'
+                 WHERE legend.areasymbol ", statsgo_filter, " 'US'
                    AND (", .NULL_FILTER(vars_default), ")
                    AND ", WHERE, "
                  GROUP BY [BYVAR], ", paste0(vars_default, collapse = ", "), "
                ) AS a JOIN (SELECT [BYVAR], CAST(count([BYVAR]) AS numeric) AS total
                  FROM legend
-                   INNER JOIN mapunit AS mu ON mu.lkey = legend.lkey
-                   INNER JOIN component AS co ON mu.mukey = co.mukey
-                   LEFT JOIN cogeomordesc ON co.cokey = cogeomordesc.cokey
+                   INNER JOIN mapunit ON mapunit.lkey = legend.lkey
+                   INNER JOIN component ON mapunit.mukey = component.mukey
+                   LEFT JOIN cogeomordesc ON component.cokey = cogeomordesc.cokey
                  ", .JOIN_TABLE(table), "
                  WHERE legend.areasymbol != 'US'
                    AND (", .NULL_FILTER(vars_default), ")
@@ -118,9 +137,23 @@ get_SDA_cosurfmorph <- function(WHERE = NULL,
   if (query_string) {
     return(qsub)
   }
-  
-  # already has a "wide" format
-  res <- SDA_query(qsub)
+  if (!is.null(dsn)) {
+    # if dsn is specified
+    if (inherits(dsn, 'DBIConnection')) {
+      # allow existing connections (don't close them)
+      res <- DBI::dbGetQuery(dsn, qsub)
+    } else {
+      # otherwise create a connection
+      if (requireNamespace("RSQLite")) {
+        con <- dbConnect(RSQLite::SQLite(), dsn)
+        res <- dbGetQuery(con, qsub)
+        RSQLite::dbDisconnect(con)
+      } else stop("package 'RSQLite' is required to query a local data source (`dsn`)", call. = FALSE)
+    }
+  } else {
+    # otherwise query from SDA
+    res <- SDA_query(qsub)
+  }
   
   res
 }
