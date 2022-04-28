@@ -37,17 +37,24 @@ Queries are a generalization of now-deprecated functions from {sharpshootR} by D
 
 Similar summaries of SSURGO component surface morphometry data by series name can be found in \code{fetchOSD(, extended=TRUE)} or downloaded from \url{https://github.com/ncss-tech/SoilWeb-data}
 Full component data including surface morphometry summaries at the "site" level can be obtained with \code{fetchSDA()}.
-
-@seealso \code{fetchSDA()} \code{get_SDA_pmgroupname()}
 }
 \examples{
 \dontrun{
+ # Summarize by 3D geomorphic components by component name (default `by='compname'`)
  get_SDA_cosurfmorph("areasymbol = 'CA630'")
  
+ # Whole Soil Survey Area summary (using `by = 'areasymbol'`)
  get_SDA_cosurfmorph("areasymbol = 'CA630'", by = 'areasymbol')
  
+ # 2D Hillslope Position summary(using `table = 'cosurfmorphhpp'`)
  get_SDA_cosurfmorph("areasymbol = 'CA630'", table = 'cosurfmorphhpp')
+ 
+ # Surface Shape summary (using `table = 'cosurfmorphss'`)
+ get_SDA_cosurfmorph("areasymbol = 'CA630'", table = 'cosurfmorphss')
 }
+}
+\seealso{
+\code{fetchSDA()} \code{get_SDA_pmgroupname()}
 }
 \author{
 Dylan E. Beaudette, Andrew Brown

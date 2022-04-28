@@ -26,11 +26,17 @@
 #' @author Dylan E. Beaudette, Andrew Brown
 #' @examples
 #' \dontrun{
+#'  # Summarize by 3D geomorphic components by component name (default `by='compname'`)
 #'  get_SDA_cosurfmorph("areasymbol = 'CA630'")
 #'  
+#'  # Whole Soil Survey Area summary (using `by = 'areasymbol'`)
 #'  get_SDA_cosurfmorph("areasymbol = 'CA630'", by = 'areasymbol')
 #'  
+#'  # 2D Hillslope Position summary(using `table = 'cosurfmorphhpp'`)
 #'  get_SDA_cosurfmorph("areasymbol = 'CA630'", table = 'cosurfmorphhpp')
+#'  
+#'  # Surface Shape summary (using `table = 'cosurfmorphss'`)
+#'  get_SDA_cosurfmorph("areasymbol = 'CA630'", table = 'cosurfmorphss')
 #' }
 get_SDA_cosurfmorph <- function(WHERE = NULL,
                                 by = "compname",
@@ -41,27 +47,30 @@ get_SDA_cosurfmorph <- function(WHERE = NULL,
   vars <- switch(table,
                  "cosurfmorphgc" = c("geomposmntn", "geomposhill", "geomposflats", "geompostrce"),
                  "cosurfmorphhpp" = "hillslopeprof",
-                 "cosurfmorphss" = c("shapeacross", "shapedown")) 
-                                   # TODO: surfaceshape: CONCAT() with "/" (combined across+down) 
-  
+                 "cosurfmorphss" = c("shapeacross", "shapedown", "surfaceshape")) 
+                 # NOTE: surfaceshape is calculated CONCAT(shapeacross, '/', shapedown)
+                 
   .SELECT_STATEMENT0 <- function(v) {
     paste0(paste0(v, ", ", paste0(v, "_n"), ", ", paste0(paste0("round(", v, "_n / total, 2) AS p_", v)), collapse = ", "))
   }
   
   .SELECT_STATEMENT1 <- function(v) {
     res <- paste0(paste0(v, ", ", paste0(paste0("CAST(COUNT(", v, ") AS numeric) AS ", v, "_n")), collapse = ", "))
-    # TODO:
-    # if (table == "cosurfmorphss") {
-    #   res <- paste0("CONCAT(shapeacross, '/', shapedown) AS surfaceshape, CAST(COUNT(surfaceshape) AS numeric) AS surfaceshape_n, ", res)
-    # }
+
+    # custom calculated column `surfaceshape` and `surfaceshape_n`
+    if (table == "cosurfmorphss") {
+      res <- paste0("CONCAT(shapeacross, '/', shapedown) AS surfaceshape, 
+                     CAST(COUNT(CONCAT(shapeacross, '/', shapedown)) AS numeric) AS surfaceshape_n, ", res)
+    }
+    
     res
   }
   
   .JOIN_TABLE <- function(x) {
     switch(x, 
            "cosurfmorphgc" = "LEFT JOIN cosurfmorphgc ON cogeomordesc.cogeomdkey = cosurfmorphgc.cogeomdkey",
-           "cosurfmorphss" = "LEFT JOIN cosurfmorphss on cogeomordesc.cogeomdkey = cosurfmorphss.cogeomdkey",
-           "cosurfmorphhpp" = "LEFT JOIN cosurfmorphhpp on cogeomordesc.cogeomdkey = cosurfmorphhpp.cogeomdkey") 
+           "cosurfmorphss" = "LEFT JOIN cosurfmorphss ON cogeomordesc.cogeomdkey = cosurfmorphss.cogeomdkey",
+           "cosurfmorphhpp" = "LEFT JOIN cosurfmorphhpp ON cogeomordesc.cogeomdkey = cosurfmorphhpp.cogeomdkey") 
   }
   
   .NULL_FILTER <- function(v) {
@@ -72,21 +81,24 @@ get_SDA_cosurfmorph <- function(WHERE = NULL,
     paste0(paste0(paste0("p_", v), collapse = " DESC, "), " DESC")
   }
   
+  # excludes custom calculated columns (e.g. surfaceshape concatenated from across/down)
+  vars_default <- vars[!grepl("surfaceshape", vars)]
+  
   q <- paste0("SELECT a.[BYVAR], 
                  ", .SELECT_STATEMENT0(vars), ",
                  total
                FROM (
                  SELECT [BYVAR], 
-                 ", .SELECT_STATEMENT1(vars), "
+                 ", .SELECT_STATEMENT1(vars_default), "
                  FROM legend
                    INNER JOIN mapunit mu ON mu.lkey = legend.lkey
                    INNER JOIN component AS co ON mu.mukey = co.mukey
                    LEFT JOIN cogeomordesc ON co.cokey = cogeomordesc.cokey
                  ", .JOIN_TABLE(table), "
                  WHERE legend.areasymbol != 'US'
-                   AND (", .NULL_FILTER(vars), ")
+                   AND (", .NULL_FILTER(vars_default), ")
                    AND ", WHERE, "
-                 GROUP BY [BYVAR], ", paste0(vars, collapse = ", "), "
+                 GROUP BY [BYVAR], ", paste0(vars_default, collapse = ", "), "
                ) AS a JOIN (SELECT [BYVAR], CAST(count([BYVAR]) AS numeric) AS total
                  FROM legend
                    INNER JOIN mapunit AS mu ON mu.lkey = legend.lkey
@@ -94,11 +106,11 @@ get_SDA_cosurfmorph <- function(WHERE = NULL,
                    LEFT JOIN cogeomordesc ON co.cokey = cogeomordesc.cokey
                  ", .JOIN_TABLE(table), "
                  WHERE legend.areasymbol != 'US'
-                   AND (", .NULL_FILTER(vars), ")
+                   AND (", .NULL_FILTER(vars_default), ")
                    AND ", WHERE, "
                  GROUP BY [BYVAR]) AS b
                ON a.[BYVAR] = b.[BYVAR]
-               ORDER BY [BYVAR], ", .ORDER_COLUMNS(vars))
+               ORDER BY [BYVAR], ", .ORDER_COLUMNS(vars_default))
   
   # insert grouping variable
   qsub <- gsub("[BYVAR]", by, q, fixed = TRUE)
@@ -107,13 +119,8 @@ get_SDA_cosurfmorph <- function(WHERE = NULL,
     return(qsub)
   }
   
+  # already has a "wide" format
   res <- SDA_query(qsub)
-  
-  # TODO: convert from long->wide format
-  #   y <- dcast(x, compname ~ q_param, value.var='p', drop=FALSE)
-  
-  # TODO: optionally convert NA to 0
-  #   if(replaceNA) for(i in 1:nrow(y)) y[i, ][which(is.na(y[i, ]))] <- 0
   
   res
 }
