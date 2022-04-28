@@ -1,14 +1,13 @@
-
-#' Get SSURGO ZIP files from Web Soil Survey Download Soils Data
+#' Get SSURGO ZIP files from Web Soil Survey 'Download Soils Data'
 #' 
-#' Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with SSURGO format; optionally including the corresponding SSURGO Template Database with `include_template=TRUE`.
+#' Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with standard SSURGO format; optionally including the corresponding SSURGO Template Database with `include_template=TRUE`.
 #' 
-#' To specify which Soil Survey Areas you would like to obtain data for, specify a `WHERE` clause for query of `sacatalog` table such as `areasymbol = 'CA067'`, `"areasymbol IN ('CA628', 'CA067')"` or  `areasymbol LIKE 'CT%'`.
+#' To specify the Soil Survey Areas you would like to obtain data you use a `WHERE` clause for query of `sacatalog` table such as `areasymbol = 'CA067'`, `"areasymbol IN ('CA628', 'CA067')"` or  `areasymbol LIKE 'CT%'`.
 #'
-#' @param WHERE A SQL `WHERE` clause expression used to filter records in `sacatalog` table. Alternately `WHERE` can be an `sf` or `sp` spatial object defining the target extent.
-#' @param destdir Directory to download ZIP files into.
+#' @param WHERE A SQL `WHERE` clause expression used to filter records in `sacatalog` table. Alternately `WHERE` can be any spatial object supported by `SDA_spatialQuery()` for defining the target extent.
+#' @param destdir Directory to download ZIP files into. Default `tempdir()`.
 #' @param exdir Directory to extract ZIP archives into. May be a directory that does not yet exist. Each ZIP file will extract to a folder labeled with `areasymbol` in this directory. Default: `destdir`
-#' @param include_template Include the (possibly state-specific) template database? Default: `FALSE`.
+#' @param include_template Include the (possibly state-specific) MS Access template database? Default: `FALSE`
 #' @param extract Logical. Extract ZIP files to `exdir`? Default: `TRUE`
 #' @param remove_zip Logical. Remove ZIP files after extracting? Default: `FALSE` 
 #' @param overwrite Logical. Overwrite by re-extracting if directory already exists? Default: `FALSE`
@@ -20,15 +19,14 @@
 #' Several ESRI shapefiles are found in the _/spatial/_ folder extracted from a SSURGO ZIP. These have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
 #' 
 #' @return Character. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip = TRUE`.
-get_SSURGO <- function(WHERE, 
-                       destdir, 
-                       exdir = destdir, 
-                       include_template = FALSE,
-                       extract = TRUE, 
-                       remove_zip = FALSE,
-                       overwrite = FALSE,
-                       quiet = FALSE) {
-  
+downloadSSURGO <- function(WHERE, 
+                           destdir = tempdir(), 
+                           exdir = destdir, 
+                           include_template = FALSE,
+                           extract = TRUE, 
+                           remove_zip = FALSE,
+                           overwrite = FALSE,
+                           quiet = FALSE) {
   if (!is.character(WHERE)) {
     # attempt passing to SDA_spatialQuery
     res <- suppressMessages(SDA_spatialQuery(WHERE, what = 'areasymbol'))
@@ -111,4 +109,17 @@ get_SSURGO <- function(WHERE,
   )
 
   unique(res)
+}
+
+#' Create a SpatiaLite or SQLite database from one or more SSURGO Exports
+#'
+#' @param filename 
+#' @param exdir 
+#' @param pattern Character. Optional regular expression to use to filter subdirectories of `exdir`. Default: `NULL` will search all subdirectories for SSURGO export files.#' @param include_spatial Logical. Include spatial data layers in database? Default: `TRUE`. 
+#'
+#' @return Logical. `TRUE` if all required SSURGO tables are successfully written to `filename`.
+#' @export
+#'
+createSSURGO <- function(filename, exdir, pattern = NULL) {
+  
 }
