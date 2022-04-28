@@ -85,7 +85,15 @@ uncode <- function(df,
   
   # load current metadata table
   if (db == "NASIS") {
-    metadata <- .get_NASIS_metadata(dsn = dsn)
+    
+    # cache NASIS metadata in soilDB.env within an R session
+    if (!exists("NASIS.metadata", envir = soilDB.env)) {
+      metadata <- .get_NASIS_metadata(dsn = dsn)
+      assign('NASIS.metadata', value = metadata, envir = soilDB.env)
+    } else {
+      metadata <- get("NASIS.metadata", envir = soilDB.env)
+    }
+    
   } else {
     load(system.file("data/metadata.rda", package = "soilDB")[1])
   }
@@ -149,7 +157,7 @@ uncode <- function(df,
 .get_NASIS_metadata <- function(dsn = NULL) {
   
   q <- "SELECT mdd.DomainID, DomainName, DomainRanked, DisplayLabel, 
-               ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ChoiceDescription, 
+               ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, 
                ColumnPhysicalName, ColumnLogicalName
           FROM MetadataDomainDetail mdd
             INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
