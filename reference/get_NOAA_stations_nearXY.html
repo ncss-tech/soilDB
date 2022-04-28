@@ -18,7 +18,7 @@ In order to use this function, you must obtain an API token from this website: h
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15-2</span>
       </span>
     </div>
 
@@ -55,19 +55,21 @@ In order to use this function, you must obtain an API token from this website: h
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_NOAA_stations_nearXY</span><span class="op">(</span><span class="va">lat</span>, <span class="va">lng</span>, <span class="va">apitoken</span>, bbox <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_NOAA_stations_nearXY</span><span class="op">(</span><span class="va">lat</span>, <span class="va">lng</span>, <span class="va">apitoken</span>, bbox <span class="op">=</span> <span class="fl">1</span>, crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>lat</dt>
-<dd><p>Latitude</p></dd>
+<dd><p>Latitude or Y coordinate in <code>crs</code></p></dd>
 <dt>lng</dt>
-<dd><p>Longitude</p></dd>
+<dd><p>Longitude or X coordinate in <code>crs</code></p></dd>
 <dt>apitoken</dt>
 <dd><p>API key token for NOAA NCDC web service</p></dd>
 <dt>bbox</dt>
 <dd><p>Optional: Dimension of the bounding box centered at <code>lat</code>, <code>lng</code>.</p></dd>
+<dt>crs</dt>
+<dd><p>Coordinate Reference System. Default <code>"EPSG:4326"</code></p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -98,7 +100,7 @@ In order to use this function, you must obtain an API token from this website: h
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

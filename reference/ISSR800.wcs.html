@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15-2</span>
       </span>
     </div>
 
@@ -59,9 +59,9 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>aoi</dt>
-<dd><p>area of interest (AOI) defined using a <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code> or <code>bbox</code> object or a <code>list</code>, see details</p></dd>
+<dd><p>area of interest (AOI) defined using a <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code> or <code>bbox</code> object, OR a <code>list</code>, see details</p></dd>
 <dt>var</dt>
-<dd><p>ISSR-800 grid name, see details</p></dd>
+<dd><p>ISSR-800 grid name (case insensitive), see details</p></dd>
 <dt>res</dt>
 <dd><p>grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.</p></dd>
 <dt>quiet</dt>
@@ -69,19 +69,19 @@
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>raster</code> object containing indexed map unit keys and associated raster attribute table or a try-error if request fails</p>
+    <p>A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the <code>terra</code> package are returned. If the input object class is from the <code>raster</code> or <code>sp</code> packages a RasterLayer is returned.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p><code>aoi</code> should be specified as a <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code>, or <code>bbox</code> object or a <code>list</code> containing:</p>
+    <p><code>aoi</code> should be specified as a <code>SpatRaster</code>, <code>Spatial*</code>, <code>RasterLayer</code>, <code>SpatRaster</code>/<code>SpatVector</code>, <code>sf</code>, <code>sfc</code>, or <code>bbox</code> object or a <code>list</code> containing:</p>
 <dl><dt><code>aoi</code></dt>
 <dd><p>bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)</p></dd>
 
 <dt><code>crs</code></dt>
-<dd><p>coordinate reference system of BBOX, e.g. '+init=epsg:4326'</p></dd>
+<dd><p>coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)</p></dd>
 
 
-</dl><p>The WCS query is parameterized using <code><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">raster::extent</a></code> derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the ISSR-800 grids.</p>
+</dl><p>The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the ISSR-800 grids.</p>
 <p>Variables available from this WCS can be queried using <code>WCS_details(wcs = 'ISSR800')</code>.</p>
     </div>
     <div id="note">
@@ -93,6 +93,21 @@
     <p>D.E. Beaudette and A.G. Brown</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/terra/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># see WCS_details() for variable options</span></span>
+<span class="r-in"><span class="fu"><a href="WCS_details.html">WCS_details</a></span><span class="op">(</span>wcs <span class="op">=</span> <span class="st">'ISSR800'</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># get wind erodibility group</span></span>
+<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">ISSR800.wcs</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">116</span>, <span class="fl">35</span>, <span class="op">-</span><span class="fl">115.5</span>, <span class="fl">35.5</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span>, </span>
+<span class="r-in">                   var <span class="op">=</span> <span class="st">'weg'</span>, res <span class="op">=</span> <span class="fl">800</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
@@ -105,7 +120,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

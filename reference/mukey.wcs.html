@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15-2</span>
       </span>
     </div>
 
@@ -53,7 +53,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mukey.wcs</span><span class="op">(</span><span class="va">aoi</span>, db <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gnatsgo"</span>, <span class="st">"gssurgo"</span><span class="op">)</span>, res <span class="op">=</span> <span class="fl">30</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mukey.wcs</span><span class="op">(</span><span class="va">aoi</span>, db <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gNATSGO"</span>, <span class="st">"gSSURGO"</span>, <span class="st">"RSS"</span><span class="op">)</span>, res <span class="op">=</span> <span class="fl">30</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -61,27 +61,27 @@
     <dl><dt>aoi</dt>
 <dd><p>area of interest (AOI) defined using either a <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code> or <code>bbox</code> object, or a <code>list</code>, see details</p></dd>
 <dt>db</dt>
-<dd><p>name of the gridded map unit key grid to access, should be either 'gnatsgo' or 'gssurgo'</p></dd>
+<dd><p>name of the gridded map unit key grid to access, should be either 'gNATSGO' or 'gSSURGO' (case insensitive)</p></dd>
 <dt>res</dt>
-<dd><p>grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m.</p></dd>
+<dd><p>grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; and Raster Soil Surveys (RSS) are at 10m resolution. If <code>res</code> is not specified the native resolution of the source is used.</p></dd>
 <dt>quiet</dt>
 <dd><p>logical, passed to <code>download.file</code> to enable / suppress URL and progress bar for download.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>raster</code> object containing indexed map unit keys and associated raster attribute table or a try-error if request fails</p>
+    <p>A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the <code>terra</code> package are returned. If the input object class is from the <code>raster</code> or <code>sp</code> packages a RasterLayer is returned.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p><code>aoi</code> should be specified as one of: <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code>, <code>bbox</code> object, or a <code>list</code> containing:</p>
+    <p><code>aoi</code> should be specified as one of: <code>SpatRaster</code>, <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code>, <code>bbox</code> object, OR a <code>list</code> containing:</p>
 <dl><dt><code>aoi</code></dt>
 <dd><p>bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)</p></dd>
 
 <dt><code>crs</code></dt>
-<dd><p>coordinate reference system of BBOX, e.g. '+init=epsg:4326'</p></dd>
+<dd><p>coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)</p></dd>
 
 
-</dl><p>The WCS query is parameterized using <code><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">raster::extent</a></code> derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the gNATSGO / gSSURGO grid.</p>
+</dl><p>The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the gNATSGO / gSSURGO grid.</p>
 <p>Databases available from this WCS can be queried using <code>WCS_details(wcs = 'mukey')</code>.</p>
     </div>
     <div id="note">
@@ -93,6 +93,37 @@
     <p>D.E. Beaudette and A.G. Brown</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/terra/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">mukey.wcs</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">116.7400</span>, <span class="fl">35.2904</span>, <span class="op">-</span><span class="fl">116.7072</span>, <span class="fl">35.3026</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span>,</span>
+<span class="r-in">                 db <span class="op">=</span> <span class="st">'gNATSGO'</span>, res <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> </span>
+<span class="r-in">  </span>
+<span class="r-in"><span class="va">MUKEY</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">prp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="fu"><a href="get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
+<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ph1to1h2o_r"</span>, <span class="st">"claytotal_r"</span><span class="op">)</span>,</span>
+<span class="r-in">    <span class="st">"weighted average"</span>,</span>
+<span class="r-in">    mukeys <span class="op">=</span> <span class="va">MUKEY</span>,</span>
+<span class="r-in">    top_depth <span class="op">=</span> <span class="fl">0</span>,</span>
+<span class="r-in">    bottom_depth <span class="op">=</span> <span class="fl">25</span>,</span>
+<span class="r-in">    include_minors <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span class="r-in">    miscellaneous_areas <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span class="r-in">  <span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mukey"</span>, <span class="st">"ph1to1h2o_r"</span>, <span class="st">"claytotal_r"</span><span class="op">)</span><span class="op">]</span>,</span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>,    <span class="st">"pH1to1_0to25"</span>, <span class="st">"clay_0to25"</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/terra/man/factors.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">prp</span></span>
+<span class="r-in"><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/catalyze.html" class="external-link">catalyze</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">res2</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res2</span><span class="op">[[</span><span class="st">'pH1to1_0to25'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
@@ -105,7 +136,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15-2</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Get the stable version (2.6.14) from CRAN:</p>
+<p>Get the stable version (2.6.15) from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">'soilDB'</span>, <span class="dt">dependencies =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>Get the development version from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"ncss-tech/soilDB"</span>, <span class="dt">dependencies =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
@@ -94,7 +94,7 @@
 <span id="cb3-2"><a href="#cb3-2"></a><span class="co">## To cite soilDB in publications use:</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="co">## </span></span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="co">##   Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co">##   (2022). soilDB: Soil Database Interface. R package version 2.6.14.</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">##   (2022). soilDB: Soil Database Interface. R package version 2.6.15.</span></span>
 <span id="cb3-6"><a href="#cb3-6"></a><span class="co">##   https://CRAN.R-project.org/package=soilDB</span></span>
 <span id="cb3-7"><a href="#cb3-7"></a><span class="co">## </span></span>
 <span id="cb3-8"><a href="#cb3-8"></a><span class="co">## A BibTeX entry for LaTeX users is</span></span>
@@ -102,32 +102,26 @@
 <span id="cb3-10"><a href="#cb3-10"></a><span class="co">##   @Manual{,</span></span>
 <span id="cb3-11"><a href="#cb3-11"></a><span class="co">##     title = {soilDB: Soil Database Interface},</span></span>
 <span id="cb3-12"><a href="#cb3-12"></a><span class="co">##     author = {Dylan Beaudette and Jay Skovlin and Stephen Roecker and Andrew Brown},</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a><span class="co">##     note = {R package version 2.6.14},</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co">##     note = {R package version 2.6.15},</span></span>
 <span id="cb3-14"><a href="#cb3-14"></a><span class="co">##     url = {https://CRAN.R-project.org/package=soilDB},</span></span>
 <span id="cb3-15"><a href="#cb3-15"></a><span class="co">##     year = {2022},</span></span>
 <span id="cb3-16"><a href="#cb3-16"></a><span class="co">##   }</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="soildb-2615">soilDB 2.6.15<a class="anchor" aria-label="anchor" href="#soildb-2615"></a>
+<h2 id="soildb-26151">soilDB 2.6.15.1<a class="anchor" aria-label="anchor" href="#soildb-26151"></a>
 </h2>
-<!-- ### Notices on Database Interfaces -->
-<!-- #### NASIS -->
-<!-- #### Soil Data Access (SDA) -->
-<!-- #### SoilWeb API -->
-<!-- #### MS Access -->
+<!-- ### Notices on Database Interfaces --><!-- #### NASIS --><!-- #### Soil Data Access (SDA) --><!-- #### SoilWeb API --><!-- #### MS Access -->
 </div>
 <div class="section level2">
 <h2 id="functions-by-data-source">Functions by Data Source<a class="anchor" aria-label="anchor" href="#functions-by-data-source"></a>
 </h2>
 <ul>
-<li>SDA
-<ul>
+<li>SDA<ul>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSDA_component.html" class="external-link"><code>fetchSDA</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html" class="external-link"><code>fetchSDA_spatial</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/SDA_query.html" class="external-link"><code>SDA_query</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html" class="external-link"><code>SDA_spatialQuery</code></a></li>
-<li>“SSURGO On Demand” Queries
-<ul>
+<li>“SSURGO On Demand” Queries<ul>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_hydric.html" class="external-link"><code>get_SDA_hydric</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_interpretation.html" class="external-link"><code>get_SDA_interpretation</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_muaggatt.html" class="external-link"><code>get_SDA_muaggatt</code></a></li>
@@ -138,18 +132,11 @@
 </li>
 </ul>
 </li>
-<li>SSURGO Local Geodatabases
-<ul>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchGDB.html" class="external-link"><code>fetchGDB</code></a></li>
-</ul>
+<li>SSURGO Local Geodatabases<ul><li><a href="http://ncss-tech.github.io/soilDB/reference/fetchGDB.html" class="external-link"><code>fetchGDB</code></a></li></ul>
 </li>
-<li>ROSETTA
-<ul>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/ROSETTA.html" class="external-link"><code>ROSETTA</code></a></li>
-</ul>
+<li>ROSETTA<ul><li><a href="http://ncss-tech.github.io/soilDB/reference/ROSETTA.html" class="external-link"><code>ROSETTA</code></a></li></ul>
 </li>
-<li>SSURGO/KSSL via SoilWeb
-<ul>
+<li>SSURGO/KSSL via SoilWeb<ul>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/fetchKSSL.html" class="external-link"><code>fetchKSSL</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/fetchOSD.html" class="external-link"><code>fetchOSD</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/siblings.html" class="external-link"><code>siblings</code></a></li>
@@ -160,25 +147,19 @@
 <li><a href="http://ncss-tech.github.io/soilDB/reference/ISSR800.wcs.html" class="external-link"><code>ISSR800.wcs</code></a></li>
 </ul>
 </li>
-<li>NASIS WWW interface
-<ul>
+<li>NASIS WWW interface<ul>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/parseWebReport.html" class="external-link"><code>parseWebReport</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/fetchNASISWebReport.html" class="external-link"><code>fetchNASISWebReport</code></a></li>
 </ul>
 </li>
-<li>SCAN/SNOTEL
-<ul>
+<li>SCAN/SNOTEL<ul>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSCAN.html" class="external-link"><code>fetchSCAN</code></a></li>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/SCAN_SNOTEL_metadata.html" class="external-link"><code>SCAN_SNOTEL_metadata</code></a></li>
 </ul>
 </li>
-<li>Henry Mount Soil and Water Database
-<ul>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchHenry.html" class="external-link"><code>fetchHenry</code></a></li>
-</ul>
+<li>Henry Mount Soil and Water Database<ul><li><a href="http://ncss-tech.github.io/soilDB/reference/fetchHenry.html" class="external-link"><code>fetchHenry</code></a></li></ul>
 </li>
-<li>NASIS local database
-<ul>
+<li>NASIS local database<ul>
 <li><a href="http://ncss-tech.github.io/soilDB/reference/fetchNASIS.html" class="external-link"><code>fetchNASIS</code></a></li>
 <li>
 <a href="http://ncss-tech.github.io/soilDB/reference/dbConnectNASIS.html" class="external-link"><code>dbConnectNASIS</code></a> (alias <code><a href="reference/dbConnectNASIS.html">NASIS()</a></code>)</li>
@@ -186,10 +167,7 @@
 <li><a href="http://ncss-tech.github.io/soilDB/reference/createStaticNASIS.html" class="external-link"><code>createStaticNASIS</code></a></li>
 </ul>
 </li>
-<li>SoilGrids
-<ul>
-<li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSoilGrids.html" class="external-link"><code>fetchSoilGrids</code></a></li>
-</ul>
+<li>SoilGrids<ul><li><a href="http://ncss-tech.github.io/soilDB/reference/fetchSoilGrids.html" class="external-link"><code>fetchSoilGrids</code></a></li></ul>
 </li>
 </ul>
 </div>
@@ -292,7 +270,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
