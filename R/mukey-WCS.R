@@ -171,21 +171,31 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS'), res = 30, quiet 
     stop('result is not a valid GeoTIFF', call. = FALSE)
   }
   
-  ## TODO: this isn't quite right... '0' is returned by the WCS sometimes
-  # specification of NODATA
-  # this doesn't seem to make it through the WCS
-  # value is derived from the original UINT32 grid
-  # gSSURGO / gNATSGO use a different value vs. RSS
-  terra::NAflag(r) <- var.spec$na
+  # warn about requested v.s. received grid dimensions
+  if ((ymax2 - ymin) / res != nrow(r)) warning("expected ", (ymax2 - ymin) / res, " rows, received ", nrow(r), "; Y resolution may be affected. Try requesting a smaller extent.", call. = FALSE)
+  if ((xmax2 - xmin) / res != ncol(r)) warning("expected ", (xmax2 - xmin) / res, " columns, received ", ncol(r), "; X resolution may be affected. Try requesting a smaller extent.", call. = FALSE)
+  
+  ## TODO: is this needed?
+  ## '0' is returned by the WCS sometimes -- never valid for MUKEY
+  # r <- terra::classify(r, matrix(c(0,  var.spec$na,
+  #                                  NaN, var.spec$na), ncol = 2, byrow = TRUE), include.lowest = TRUE)
+
 
   # load all values into memory
   terra::values(r) <- terra::values(r)
+  
+  # specification of NODATA
+  # this doesn't make it through the WCS
+  # value in spec is derived from the original UINT32 grid
+  # gSSURGO / gNATSGO use a different value vs. RSS
+  terra::NAflag(r) <- var.spec$na
   
   # remove tempfile 
   unlink(tf)
 
   # build RAT
-  uids <- terra::unique(r)[,1]
+  # NB: unique() takes na.rm argument on terra >1.5-21 <https://github.com/rspatial/terra/issues/561>
+  uids <- na.omit(terra::unique(r)[,1])  
   rat <- data.frame(value = uids, 
                     mukey = uids,
                     ID = uids)
