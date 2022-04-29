@@ -19,6 +19,10 @@ bb <- '-90.1378 41.8273,-90.1378 41.8420,-90.1051 41.8420,-90.1051 41.8273,-90.1
 # # 
 # bb <- '-120.5453 37.5718,-120.5453 37.5796,-120.5289 37.5796,-120.5289 37.5718,-120.5453 37.5718'
 
+# near Ithica, NY
+# bb <- '-76.6811 42.3178,-76.6811 42.3526,-76.5987 42.3526,-76.5987 42.3178,-76.6811 42.3178'
+
+
 
 ## assemble AOI polygon into WKT
 wkt <- sprintf('POLYGON((%s))', bb)
@@ -33,7 +37,7 @@ st_crs(x) <- 4326
 m <- SDA_spatialQuery(x, what = 'mukey')
 
 ## compose SQL to return component details for these map unit keys
-sql <- sprintf("SELECT mukey, cokey, compname, comppct_r FROM component WHERE mukey IN %s AND majcompflag = 'Yes'", format_SQL_in_statement(m$mukey))
+sql <- sprintf("SELECT mukey, cokey, compname, comppct_r FROM component WHERE mukey IN %s AND majcompflag = 'Yes'", format_SQL_in_statement(as.integer(m$mukey)))
 
 ## send to SDA, result is a data.frame
 s <- SDA_query(sql)
@@ -71,8 +75,6 @@ SoilTaxonomyDendrogram(
 
 
 ## 3D geomorphic summary
-res <- vizGeomorphicComponent(osd$geomcomp)
-print(res$fig)
 
 # This will fail when geomorphic summary or SPC contain a subset of the other
 nm <- intersect(profile_id(osd$SPC), osd$geomcomp$series)
@@ -80,7 +82,16 @@ nm <- intersect(profile_id(osd$SPC), osd$geomcomp$series)
 # keep only those series that exist in both
 sub <- subset(osd$SPC, profile_id(osd$SPC) %in% nm)
 
+## inverse problem: extra records in geomcomp summaries
+# subset geomcopm
+geomcomp.sub <- subset(osd$geomcomp, subset = series %in% profile_id(sub))
+
+res <- vizGeomorphicComponent(geomcomp.sub)
+print(res$fig)
+
+
 # arrange according to clustering of geomorphic component
+par(mar = c(0, 0, 0, 0))
 plotProfileDendrogram(
   sub,
   clust = res$clust,
@@ -97,18 +108,23 @@ plotProfileDendrogram(
 
 
 ## 2D geomorphic summary
-res <- vizHillslopePosition(osd$hillpos)
-print(res$fig)
-
 # This will fail when geomorphic summary or SPC contain a subset of the other
 nm <- intersect(profile_id(osd$SPC), osd$hillpos$series)
 
 # keep only those series that exist in both
 sub <- subset(osd$SPC, profile_id(osd$SPC) %in% nm)
 
+## inverse problem: extra records in geomorphic summaries
+# subset hillpos
+hillpos.sub <- subset(osd$hillpos, subset = series %in% profile_id(sub))
+
+res <- vizHillslopePosition(hillpos.sub)
+print(res$fig)
+
+
 # arrange according to clustering of hillslope position
 plotProfileDendrogram(
-  osd$SPC, 
+  sub, 
   clust = res$clust, 
   dend.y.scale = 3, 
   scaling.factor = 0.01, 
@@ -128,14 +144,14 @@ plotProfileDendrogram(
 hp.cols <- RColorBrewer::brewer.pal(n = 5, name = 'Set1')[c(2, 3, 4, 5, 1)]
 
 # re-order hillslope proportions according to clustering
-hp <- osd$hillpos[res$order, ]
+hp <- hillpos.sub[res$order, ]
 nm <- names(hp[, 2:6])
 
 par(mar = c(0.5, 0, 0, 2))
 layout(matrix(c(1,2)), widths = c(1,1), heights = c(2,1))
-plotProfileDendrogram(osd$SPC, res$clust, dend.y.scale = 3, scaling.factor = 0.012, y.offset = 0.2, width = 0.32, name.style = 'center-center', cex.names = 0.7, shrink = TRUE, cex.id = 0.55)
+plotProfileDendrogram(sub, res$clust, dend.y.scale = 3, scaling.factor = 0.012, y.offset = 0.2, width = 0.32, name.style = 'center-center', cex.names = 0.7, shrink = TRUE, cex.id = 0.55)
 
-matplot(y = hp[, 2:6], type = 'b', lty = 1, pch = 16, axes = FALSE, col = hp.cols, xlab = '', ylab = '', xlim = c(0.5, length(osd$SPC) + 1))
+matplot(y = hp[, 2:6], type = 'b', lty = 1, pch = 16, axes = FALSE, col = hp.cols, xlab = '', ylab = '', xlim = c(0.5, length(sub) + 1))
 # grid(nx = 0, ny = NULL)
 axis(side = 4, line = -1, las = 1, cex.axis = 0.7)
 # axis(side = 2, line = -3, las = 1, cex.axis = 0.7)
@@ -146,10 +162,10 @@ mtext('Probability', side = 2, line = -2, font = 2)
 
 par(mar = c(0.5, 0, 0, 2))
 layout(matrix(c(1,2)), widths = c(1,1), heights = c(2,1))
-plotProfileDendrogram(osd$SPC, res$clust, dend.y.scale = 3, scaling.factor = 0.012, y.offset = 0.2, width = 0.32, name.style = 'center-center', cex.names = 0.7, shrink = TRUE, cex.id = 0.55)
+plotProfileDendrogram(sub, res$clust, dend.y.scale = 3, scaling.factor = 0.012, y.offset = 0.2, width = 0.32, name.style = 'center-center', cex.names = 0.7, shrink = TRUE, cex.id = 0.55)
 
-sp <- c(1.5, rep(1, times = length(osd$SPC) - 1))
-barplot(height = t(as.matrix(hp[, 2:6])), beside = FALSE, width = 0.5, space = sp, col = hp.cols,  axes = FALSE, xlab = '', ylab = '', xlim = c(0.5, length(osd$SPC) + 1), ylim = c(0, 1.2))
+sp <- c(1.5, rep(1, times = length(sub) - 1))
+barplot(height = t(as.matrix(hp[, 2:6])), beside = FALSE, width = 0.5, space = sp, col = hp.cols,  axes = FALSE, xlab = '', ylab = '', xlim = c(0.5, length(sub) + 1), ylim = c(0, 1.2))
 
 legend(x = 0.75, y = 1.2, legend = rev(nm), col = rev(hp.cols), pch = 15, bty = 'n', cex = 0.8, pt.cex = 1.25, horiz = TRUE)
 mtext('Probability', side = 2, line = -2, font = 2)

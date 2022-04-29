@@ -1,5 +1,6 @@
+# need latest soilDB from GH
 library(soilDB)
-library(raster)
+library(terra)
 library(rasterVis)
 library(viridisLite)
 library(sf)
@@ -10,23 +11,30 @@ library(sf)
 ## copy / paste from SoilWeb
 ## 'b' keypress
 bb <- '-90.1378 41.8273,-90.1378 41.8420,-90.1051 41.8420,-90.1051 41.8273,-90.1378 41.8273'
+
+# near Ithica, NY
+# bb <- '-76.6811 42.3178,-76.6811 42.3526,-76.5987 42.3526,-76.5987 42.3178,-76.6811 42.3178'
+
+
+# convert to WKT -> sf
 wkt <- sprintf('POLYGON((%s))', bb)
 
 x <- st_as_sfc(wkt)
 st_crs(x) <- 4326
 
-# double-check BBOX: ok
-mapview::mapview(x)
+## double-check BBOX: ok
+# mapview::mapview(x)
 
 
 # get gSSURGO grid here
+# result is a terra SpatRaster
 mu <- mukey.wcs(aoi = x, db = 'gssurgo')
 
-# unique map unit keys
-ll <- levels(mu)[[1]]
+# extract mukeys / RAT for thematic mapping
+rat <- cats(mu)[[1]]
 
 # note SSA boundary
-levelplot(mu, att = 'ID', margin = FALSE, colorkey = FALSE, col.regions = viridis)
+levelplot(mu, att = 'mukey', margin = FALSE, colorkey = FALSE, col.regions = viridis)
 
 # get thematic data from SDA
 # dominant component
@@ -34,20 +42,25 @@ levelplot(mu, att = 'ID', margin = FALSE, colorkey = FALSE, col.regions = viridi
 # sand, silt, clay (RV)
 p <-  get_SDA_property(property = c("sandtotal_r","silttotal_r","claytotal_r"),
                        method = "Dominant Component (Numeric)", 
-                       mukeys = ll$ID,
+                       mukeys = as.integer(rat$mukey),
                        top_depth = 25,
                        bottom_depth = 50)
 
 head(p)
 
 # re-create raster attribute table with aggregate soil properties
-rat <- merge(ll, p, by.x = 'ID', by.y = 'mukey', sort = FALSE, all.x = TRUE)
+rat <- merge(rat, p, by.x = 'mukey', by.y = 'mukey', sort = FALSE, all.x = TRUE)
 
 # re-pack RAT
 levels(mu) <- rat
 
 # convert raster + RAT --> stack of values
-ssc <- deratify(mu, c("sandtotal_r","silttotal_r","claytotal_r"))
+# note this includes extra, ID rasters
+ssc <- catalyze(mu)
+
+# extract specific soil properties
+ssc <- ssc[[c("sandtotal_r","silttotal_r","claytotal_r")]]
+
 
 # graphical check
 # note implicit simplification via maxpixels
@@ -60,6 +73,25 @@ levelplot(
   maxpixels = 1e4
 )
 
+## soil texture class of fine earth fraction
 
+# copy grid, will replace cell values
+ssc.class <- ssc[[1]]
 
+# classify sand, clay fractions
+# retain all possible texture classes
+values(ssc.class) <- ssc_to_texcl(
+  sand = values(ssc[['sandtotal_r']]), 
+  clay = values(ssc[['claytotal_r']]), 
+  droplevels = FALSE
+)
+
+# name for RAT
+names(ssc.class) <- 'soil.texture'
+
+# check
+plot(ssc.class)
+
+# note that all possible texture classes are included in the RAT
+cats(ssc.class)[[1]]
 
