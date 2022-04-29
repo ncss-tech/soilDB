@@ -159,12 +159,12 @@ par(mar = c(0.5, 0, 0, 2))
 layout(matrix(c(1,2)), widths = c(1,1), heights = c(2,1))
 plotProfileDendrogram(sub, res$clust, dend.y.scale = 3, scaling.factor = 0.012, y.offset = 0.2, width = 0.32, name.style = 'center-center', cex.names = 0.7, shrink = TRUE, cex.id = 0.55)
 
-# symbol size is proportional to Shannon entropy
-matplot(y = hp[, 2:6], type = 'b', lty = 1, pch = 16, axes = FALSE, col = hp.cols, xlab = '', ylab = '', xlim = c(0.5, length(sub) + 1), cex = hp$shannon_entropy + 0.2)
+## TODO: encode Shannon entropy: values are computed row-wise, data plotted as columns
+matplot(y = hp[, 2:6], type = 'b', lty = 1, pch = 16, axes = FALSE, col = hp.cols, xlab = '', ylab = '', xlim = c(0.5, length(sub) + 1))
 # grid(nx = 0, ny = NULL)
 axis(side = 4, line = -1, las = 1, cex.axis = 0.7)
 # axis(side = 2, line = -3, las = 1, cex.axis = 0.7)
-legend('topleft', legend = rev(nm), col = rev(hp.cols), pch = 16, bty = 'n', cex = 0.8, pt.cex = 2, horiz = TRUE, inset = c(0.01, 0.01))
+legend('top', legend = rev(nm), col = rev(hp.cols), pch = 16, bty = 'n', cex = 0.8, pt.cex = 2, horiz = TRUE, inset = c(0.01, 0.01))
 mtext('Probability', side = 2, line = -2, font = 2)
 
 
