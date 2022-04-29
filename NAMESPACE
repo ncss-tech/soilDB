@@ -7,7 +7,7 @@ importFrom("graphics", "axis", "legend", "mtext", "rect", "segments",
 importFrom("stats", "aggregate", "complete.cases", "na.omit", "as.formula", "splinefun", "weighted.mean")
 
 importFrom("utils", "URLencode", "download.file", "object.size",
-             "read.csv", "read.table", "setTxtProgressBar",
+             "read.csv", "read.table", "read.delim", "setTxtProgressBar",
              "txtProgressBar", "write.table", "type.convert", "unzip")
 
 importFrom("methods", "slot<-", "as", "is")

@@ -19,6 +19,7 @@
 #' Several ESRI shapefiles are found in the _/spatial/_ folder extracted from a SSURGO ZIP. These have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
 #' 
 #' @return Character. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip = TRUE`.
+
 downloadSSURGO <- function(WHERE, 
                            destdir = tempdir(), 
                            exdir = destdir, 
@@ -27,6 +28,7 @@ downloadSSURGO <- function(WHERE,
                            remove_zip = FALSE,
                            overwrite = FALSE,
                            quiet = FALSE) {
+  
   if (!is.character(WHERE)) {
     # attempt passing to SDA_spatialQuery
     res <- suppressMessages(SDA_spatialQuery(WHERE, what = 'areasymbol'))
@@ -111,15 +113,114 @@ downloadSSURGO <- function(WHERE,
   unique(res)
 }
 
-#' Create a SpatiaLite or SQLite database from one or more SSURGO Exports
+#' Create a SQLite database or GeoPackage from one or more SSURGO Exports
 #'
-#' @param filename 
-#' @param exdir 
+#' @param filename Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`)
+#' @param exdir Path containing containing SSURGO spatial (.shp) and tabular (.txt) files. 
 #' @param pattern Character. Optional regular expression to use to filter subdirectories of `exdir`. Default: `NULL` will search all subdirectories for SSURGO export files.#' @param include_spatial Logical. Include spatial data layers in database? Default: `TRUE`. 
-#'
-#' @return Logical. `TRUE` if all required SSURGO tables are successfully written to `filename`.
+#' @param overwrite Logical. Overwrite existing layers? Default `FALSE` will append to existing tables/layers.
+#' @param ... Additional arguments passed to `write_sf()` for writing spatial layers.
+#' @return Character. Vector of layer/table names in `filename`.
 #' @export
-#'
-createSSURGO <- function(filename, exdir, pattern = NULL) {
+#' @examples
+#' \dontrun{
+#'  downloadSSURGO("areasymbol IN ('CA067', 'CA077', 'CA632')", destdir = "SSURGO_test")
+#'  createSSURGO("test.gpkg", "SSURGO_test")
+#' }
+createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, ...) {
+  f <- list.files(exdir, recursive = TRUE, full.names = TRUE, include.dirs = T)
   
+  if (!requireNamespace("sf"))
+    stop("package `sf` is required to write spatial datasets to SSURGO SQLite databases", call. = FALSE)
+  
+  if (!requireNamespace("RSQLite"))
+    stop("package `RSQLite` is required to write tabular datasets to SSURGO SQLite databases", call. = FALSE)
+  
+  # create and add combined vector datasets:
+  #   "soilmu_a", "soilmu_l", "soilmu_p", "soilsa_a", "soilsf_l", "soilsf_p" 
+  f.shp <- f[grepl(".*\\.shp$", f)]
+  shp.grp <- do.call('rbind', strsplit(gsub(".*soil([musfa]{2})_([apl])_([a-z]{2}\\d{3})\\.shp", "\\1;\\2;\\3", f.shp), ";", fixed = TRUE))
+  f.shp.grp <- split(f.shp, list(feature = shp.grp[,1], geom = shp.grp[,2]))
+  
+  lapply(seq_along(f.shp.grp), function(i) {
+    lapply(seq_along(f.shp.grp[[i]]), function(j){
+      lnm <- gsub(".*(soil[musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j])
+      
+      if (overwrite && j == 1) {
+        sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, overwrite = TRUE, ...)
+      } else sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, append = TRUE, ...)
+      
+      # TODO: check/optimize: GPKG vector data includes R*Tree spatial index
+      
+      NULL
+    })
+  })
+
+  # create and add combined tabular datasets
+  f.txt <- f[grepl(".*\\.txt$", f)]
+  txt.grp <- gsub("\\.txt", "", basename(f.txt))
+  
+  # explicit handling special feature descriptions -> "featdesc" table
+  txt.grp[grepl("soilsf_t_", txt.grp)] <- "featdesc"
+  
+  f.txt.grp <- split(f.txt, txt.grp)
+  
+  # get table, column, index lookup tables
+  mstab <- read.table(f.txt.grp[[which(names(f.txt.grp) == "mstab")]][[1]], sep = "|", stringsAsFactors = FALSE)
+  mstab_lut <- mstab$V1
+  names(mstab_lut) <- mstab$V5
+  mstabcol <- read.table(f.txt.grp[[which(names(f.txt.grp) == "mstabcol")]][[1]], sep = "|", stringsAsFactors = FALSE)
+  msidxdet <- read.table(f.txt.grp[[which(names(f.txt.grp) == "msidxdet")]][[1]], sep = "|", stringsAsFactors = FALSE)
+
+  con <- RSQLite::dbConnect(RSQLite::SQLite(), filename, loadable.extensions = TRUE)  
+  lapply(names(f.txt.grp), function(x) {
+    newnames <- mstabcol$V3[mstabcol$V1 == mstab_lut[x]]
+    indexPK <- na.omit(msidxdet$V4[msidxdet$V1 == mstab_lut[x] & grepl("PK_", msidxdet$V2)])
+    
+    d <- try(as.data.frame(data.table::rbindlist(lapply(seq_along(f.txt.grp[[x]]), function(i) {
+      if (length(readLines(f.txt.grp[[x]][i]))) {
+        
+        y <- read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = FALSE)
+        
+        if (length(y) == 1) {
+          y <- data.frame(content = y)
+        } else colnames(y) <- newnames
+        y
+      }
+    }))), silent = FALSE)
+    
+    if (is.na(mstab_lut[x])) {
+      mstab_lut[x] <- x
+    }
+    
+    if (inherits(d, 'data.frame') && nrow(d) > 0 && !is.na(mstab_lut[x])) {
+      # remove repeated records/metadata
+      if (ncol(d) > 1) {
+        d <- unique(d) 
+      }
+      
+      # write tabular data to file
+      try({
+        if (overwrite) {
+          RSQLite::dbWriteTable(con, mstab_lut[x], d, overwrite = TRUE)
+        } else RSQLite::dbWriteTable(con, mstab_lut[x], d, append = TRUE)
+      }, silent = FALSE)
+      
+      # create pkey indices
+      if (length(indexPK) > 0) {
+        try({
+          RSQLite::dbExecute(con, sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
+                                          paste0('PK_', mstab_lut[x]), mstab_lut[x], paste0(indexPK, collapse = ",")))
+        }, silent = FALSE)
+      }
+      
+      # TODO: other foreign keys/relationships? ALTER TABLE/ADD CONSTRAINT not available in SQLite
+      #  the only way to add a foreign key is via CREATE TABLE which means refactoring above two
+      #  steps into a single SQL statement (create table with primary and foreign keys)
+    }
+  })
+  
+  res <- RSQLite::dbListTables(con)
+  RSQLite::dbDisconnect(con)
+  invisible(res)
 }

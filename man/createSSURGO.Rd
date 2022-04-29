@@ -2,20 +2,30 @@
 % Please edit documentation in R/createSSURGO.R
 \name{createSSURGO}
 \alias{createSSURGO}
-\title{Create a SpatiaLite or SQLite database from one or more SSURGO Exports}
+\title{Create a SQLite database or GeoPackage from one or more SSURGO Exports}
 \usage{
-createSSURGO(filename, exdir, pattern = NULL)
+createSSURGO(filename, exdir, pattern = NULL, overwrite = FALSE, ...)
 }
 \arguments{
-\item{filename}{}
+\item{filename}{Output file name (e.g. \code{'db.sqlite'} or \code{'db.gpkg'})}
 
-\item{exdir}{}
+\item{exdir}{Path containing containing SSURGO spatial (.shp) and tabular (.txt) files.}
 
 \item{pattern}{Character. Optional regular expression to use to filter subdirectories of \code{exdir}. Default: \code{NULL} will search all subdirectories for SSURGO export files.#' @param include_spatial Logical. Include spatial data layers in database? Default: \code{TRUE}.}
+
+\item{overwrite}{Logical. Overwrite existing layers? Default \code{FALSE} will append to existing tables/layers.}
+
+\item{...}{Additional arguments passed to \code{write_sf()} for writing spatial layers.}
 }
 \value{
-Logical. \code{TRUE} if all required SSURGO tables are successfully written to \code{filename}.
+Character. Vector of layer/table names in \code{filename}.
 }
 \description{
-Create a SpatiaLite or SQLite database from one or more SSURGO Exports
+Create a SQLite database or GeoPackage from one or more SSURGO Exports
+}
+\examples{
+\dontrun{
+ downloadSSURGO("areasymbol IN ('CA067', 'CA077', 'CA632')", destdir = "SSURGO_test")
+ createSSURGO("test.gpkg", "SSURGO_test")
+}
 }
