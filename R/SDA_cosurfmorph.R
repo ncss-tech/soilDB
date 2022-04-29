@@ -6,7 +6,7 @@
 #' 
 #' Get Geomorphic/Surface Morphometry Data from Soil Data Access or a local SSURGO data source and summarize by counts and proportions ("probabilities").
 #'
-#' @param table Target table to summarize. Default: `"cosurfmorphgc"` (3D Geomorphic Component). Alternate choices include `cosurfmorphhpp` (2D Hillslope Position) and `cosurfmorphss` (Surface Shape).
+#' @param table Target table to summarize. Default: `"cosurfmorphgc"` (3D Geomorphic Component). Alternate choices include `cosurfmorphhpp` (2D Hillslope Position), `cosurfmorphss` (Surface Shape), and  `cosurfmorphmr` (Microrelief).
 #' @param by Grouping variable. Default: `"compname"`
 #' @param areasymbols A vector of soil survey area symbols (e.g. `'CA067'`)
 #' @param mukeys A vector of map unit keys (e.g. `466627`)
@@ -17,7 +17,7 @@
 #'
 #' @return a `data.frame` containing the grouping variable (`by`) and tabular summaries of counts and proportions of geomorphic records. 
 #' @details Default `table="cosurfmorphgc"` summarizes columns `geomposmntn`, `geomposhill`, `geomposflats`, and `geompostrce`.  
-#'          `table="cosurfmorphhpp"` summarizes `"hillslopeprof"` and `table="cosurfmorphss"` summarizes `shapeacross` and `shapedown`
+#'          `table="cosurfmorphhpp"` summarizes `"hillslopeprof"`,  `table="cosurfmorphss"` summarizes `shapeacross` and `shapedown`, and `table="cosurfmorphmr"` summarizes `geomicrorelief`.
 #' 
 #'  Queries are a generalization of now-deprecated functions from {sharpshootR} by Dylan Beaudette: `geomPosMountainProbability()`, `geomPosHillProbability()`, `surfaceShapeProbability()`, `hillslopeProbability()`
 #'  
@@ -36,12 +36,15 @@
 #'  get_SDA_cosurfmorph(by = 'areasymbol', WHERE = "areasymbol = 'CA630'")
 #'  
 #'  # 2D Hillslope Position summary(using `table = 'cosurfmorphhpp'`)
-#'  get_SDA_cosurfmorph('cosurfmorphhpp', WHERE = "areasymbol = 'CA630'", )
+#'  get_SDA_cosurfmorph('cosurfmorphhpp', WHERE = "areasymbol = 'CA630'")
 #'  
 #'  # Surface Shape summary (using `table = 'cosurfmorphss'`)
-#'  get_SDA_cosurfmorph('cosurfmorphss', WHERE = "areasymbol = 'CA630'", )
+#'  get_SDA_cosurfmorph('cosurfmorphss', WHERE = "areasymbol = 'CA630'")
+#'  
+#'  # Microrelief summary (using `table = 'cosurfmorphmr'`)
+#'  get_SDA_cosurfmorph('cosurfmorphmr', WHERE = "areasymbol = 'CA630'")
 #' }
-get_SDA_cosurfmorph <- function(table = "cosurfmorphgc",
+get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "cosurfmorphss", "cosurfmorphmr"),
                                 by = "compname",
                                 areasymbols = NULL,
                                 mukeys = NULL,
@@ -61,13 +64,15 @@ get_SDA_cosurfmorph <- function(table = "cosurfmorphgc",
   } 
   
   db <- match.arg(toupper(db), choices = c('SSURGO', 'STATSGO'))
+  table <- match.arg(tolower(table), choices = c("cosurfmorphgc", "cosurfmorphhpp", "cosurfmorphss", "cosurfmorphmr"))
   statsgo_filter <- switch(db, SSURGO = "!=", STATSGO = "=")
   
   vars <- switch(table,
                  "cosurfmorphgc" = c("geomposmntn", "geomposhill", "geomposflats", "geompostrce"),
                  "cosurfmorphhpp" = "hillslopeprof",
-                 "cosurfmorphss" = c("shapeacross", "shapedown", "surfaceshape")) 
+                 "cosurfmorphss" = c("shapeacross", "shapedown", "surfaceshape"),
                  # NOTE: surfaceshape is calculated CONCAT(shapeacross, '/', shapedown)
+                 "cosurfmorphmr" = "geomicrorelief") 
                  
   .SELECT_STATEMENT0 <- function(v) {
     paste0(paste0(v, ", ", paste0(v, "_n"), ", ", paste0(paste0("round(", v, "_n / total, 2) AS p_", v)), collapse = ", "))
@@ -86,10 +91,7 @@ get_SDA_cosurfmorph <- function(table = "cosurfmorphgc",
   }
   
   .JOIN_TABLE <- function(x) {
-    switch(x, 
-           "cosurfmorphgc" = "LEFT JOIN cosurfmorphgc ON cogeomordesc.cogeomdkey = cosurfmorphgc.cogeomdkey",
-           "cosurfmorphss" = "LEFT JOIN cosurfmorphss ON cogeomordesc.cogeomdkey = cosurfmorphss.cogeomdkey",
-           "cosurfmorphhpp" = "LEFT JOIN cosurfmorphhpp ON cogeomordesc.cogeomdkey = cosurfmorphhpp.cogeomdkey") 
+    sprintf("LEFT JOIN %s ON cogeomordesc.cogeomdkey = %s.cogeomdkey", x, x)
   }
   
   .NULL_FILTER <- function(v) {

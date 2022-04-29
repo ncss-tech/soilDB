@@ -5,7 +5,7 @@
 \title{Get Geomorphic/Surface Morphometry Data from Soil Data Access}
 \usage{
 get_SDA_cosurfmorph(
-  table = "cosurfmorphgc",
+  table = c("cosurfmorphgc", "cosurfmorphhpp", "cosurfmorphss", "cosurfmorphmr"),
   by = "compname",
   areasymbols = NULL,
   mukeys = NULL,
@@ -16,7 +16,7 @@ get_SDA_cosurfmorph(
 )
 }
 \arguments{
-\item{table}{Target table to summarize. Default: \code{"cosurfmorphgc"} (3D Geomorphic Component). Alternate choices include \code{cosurfmorphhpp} (2D Hillslope Position) and \code{cosurfmorphss} (Surface Shape).}
+\item{table}{Target table to summarize. Default: \code{"cosurfmorphgc"} (3D Geomorphic Component). Alternate choices include \code{cosurfmorphhpp} (2D Hillslope Position), \code{cosurfmorphss} (Surface Shape), and  \code{cosurfmorphmr} (Microrelief).}
 
 \item{by}{Grouping variable. Default: \code{"compname"}}
 
@@ -40,7 +40,7 @@ Get Geomorphic/Surface Morphometry Data from Soil Data Access or a local SSURGO 
 }
 \details{
 Default \code{table="cosurfmorphgc"} summarizes columns \code{geomposmntn}, \code{geomposhill}, \code{geomposflats}, and \code{geompostrce}.
-\code{table="cosurfmorphhpp"} summarizes \code{"hillslopeprof"} and \code{table="cosurfmorphss"} summarizes \code{shapeacross} and \code{shapedown}
+\code{table="cosurfmorphhpp"} summarizes \code{"hillslopeprof"},  \code{table="cosurfmorphss"} summarizes \code{shapeacross} and \code{shapedown}, and \code{table="cosurfmorphmr"} summarizes \code{geomicrorelief}.
 
 Queries are a generalization of now-deprecated functions from {sharpshootR} by Dylan Beaudette: \code{geomPosMountainProbability()}, \code{geomPosHillProbability()}, \code{surfaceShapeProbability()}, \code{hillslopeProbability()}
 
@@ -56,10 +56,13 @@ Full component data including surface morphometry summaries at the "site" level 
  get_SDA_cosurfmorph(by = 'areasymbol', WHERE = "areasymbol = 'CA630'")
  
  # 2D Hillslope Position summary(using `table = 'cosurfmorphhpp'`)
- get_SDA_cosurfmorph('cosurfmorphhpp', WHERE = "areasymbol = 'CA630'", )
+ get_SDA_cosurfmorph('cosurfmorphhpp', WHERE = "areasymbol = 'CA630'")
  
  # Surface Shape summary (using `table = 'cosurfmorphss'`)
- get_SDA_cosurfmorph('cosurfmorphss', WHERE = "areasymbol = 'CA630'", )
+ get_SDA_cosurfmorph('cosurfmorphss', WHERE = "areasymbol = 'CA630'")
+ 
+ # Microrelief summary (using `table = 'cosurfmorphmr'`)
+ get_SDA_cosurfmorph('cosurfmorphmr', WHERE = "areasymbol = 'CA630'")
 }
 }
 \seealso{
