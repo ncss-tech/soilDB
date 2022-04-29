@@ -128,7 +128,7 @@ downloadSSURGO <- function(WHERE,
 #'  createSSURGO("test.gpkg", "SSURGO_test")
 #' }
 createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, ...) {
-  f <- list.files(exdir, recursive = TRUE, full.names = TRUE, include.dirs = T)
+  f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE, include.dirs = T)
   
   if (!requireNamespace("sf"))
     stop("package `sf` is required to write spatial datasets to SSURGO SQLite databases", call. = FALSE)
