@@ -54,7 +54,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_SDA_cosurfmorph</span><span class="op">(</span>
-  table <span class="op">=</span> <span class="st">"cosurfmorphgc"</span>,
+  table <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cosurfmorphgc"</span>, <span class="st">"cosurfmorphhpp"</span>, <span class="st">"cosurfmorphss"</span>, <span class="st">"cosurfmorphmr"</span><span class="op">)</span>,
   by <span class="op">=</span> <span class="st">"compname"</span>,
   areasymbols <span class="op">=</span> <span class="cn">NULL</span>,
   mukeys <span class="op">=</span> <span class="cn">NULL</span>,
@@ -68,7 +68,7 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>table</dt>
-<dd><p>Target table to summarize. Default: <code>"cosurfmorphgc"</code> (3D Geomorphic Component). Alternate choices include <code>cosurfmorphhpp</code> (2D Hillslope Position) and <code>cosurfmorphss</code> (Surface Shape).</p></dd>
+<dd><p>Target table to summarize. Default: <code>"cosurfmorphgc"</code> (3D Geomorphic Component). Alternate choices include <code>cosurfmorphhpp</code> (2D Hillslope Position), <code>cosurfmorphss</code> (Surface Shape), and  <code>cosurfmorphmr</code> (Microrelief).</p></dd>
 <dt>by</dt>
 <dd><p>Grouping variable. Default: <code>"compname"</code></p></dd>
 <dt>areasymbols</dt>
@@ -91,7 +91,7 @@
     <div id="details">
     <h2>Details</h2>
     <p>Default <code>table="cosurfmorphgc"</code> summarizes columns <code>geomposmntn</code>, <code>geomposhill</code>, <code>geomposflats</code>, and <code>geompostrce</code>.
-<code>table="cosurfmorphhpp"</code> summarizes <code>"hillslopeprof"</code> and <code>table="cosurfmorphss"</code> summarizes <code>shapeacross</code> and <code>shapedown</code></p>
+<code>table="cosurfmorphhpp"</code> summarizes <code>"hillslopeprof"</code>,  <code>table="cosurfmorphss"</code> summarizes <code>shapeacross</code> and <code>shapedown</code>, and <code>table="cosurfmorphmr"</code> summarizes <code>geomicrorelief</code>.</p>
 <p>Queries are a generalization of now-deprecated functions from sharpshootR by Dylan Beaudette: <code>geomPosMountainProbability()</code>, <code>geomPosHillProbability()</code>, <code>surfaceShapeProbability()</code>, <code>hillslopeProbability()</code></p>
 <p>Similar summaries of SSURGO component surface morphometry data by series name can be found in <code>fetchOSD(, extended=TRUE)</code> or downloaded from <a href="https://github.com/ncss-tech/SoilWeb-data" class="external-link">https://github.com/ncss-tech/SoilWeb-data</a>
 Full component data including surface morphometry summaries at the "site" level can be obtained with <code><a href="fetchSDA.html">fetchSDA()</a></code>.</p>
@@ -115,10 +115,13 @@ Full component data including surface morphometry summaries at the "site" level 
 <span class="r-in"> <span class="fu">get_SDA_cosurfmorph</span><span class="op">(</span>by <span class="op">=</span> <span class="st">'areasymbol'</span>, WHERE <span class="op">=</span> <span class="st">"areasymbol = 'CA630'"</span><span class="op">)</span></span>
 <span class="r-in"> </span>
 <span class="r-in"> <span class="co"># 2D Hillslope Position summary(using `table = 'cosurfmorphhpp'`)</span></span>
-<span class="r-in"> <span class="fu">get_SDA_cosurfmorph</span><span class="op">(</span><span class="st">'cosurfmorphhpp'</span>, WHERE <span class="op">=</span> <span class="st">"areasymbol = 'CA630'"</span>, <span class="op">)</span></span>
+<span class="r-in"> <span class="fu">get_SDA_cosurfmorph</span><span class="op">(</span><span class="st">'cosurfmorphhpp'</span>, WHERE <span class="op">=</span> <span class="st">"areasymbol = 'CA630'"</span><span class="op">)</span></span>
 <span class="r-in"> </span>
 <span class="r-in"> <span class="co"># Surface Shape summary (using `table = 'cosurfmorphss'`)</span></span>
-<span class="r-in"> <span class="fu">get_SDA_cosurfmorph</span><span class="op">(</span><span class="st">'cosurfmorphss'</span>, WHERE <span class="op">=</span> <span class="st">"areasymbol = 'CA630'"</span>, <span class="op">)</span></span>
+<span class="r-in"> <span class="fu">get_SDA_cosurfmorph</span><span class="op">(</span><span class="st">'cosurfmorphss'</span>, WHERE <span class="op">=</span> <span class="st">"areasymbol = 'CA630'"</span><span class="op">)</span></span>
+<span class="r-in"> </span>
+<span class="r-in"> <span class="co"># Microrelief summary (using `table = 'cosurfmorphmr'`)</span></span>
+<span class="r-in"> <span class="fu">get_SDA_cosurfmorph</span><span class="op">(</span><span class="st">'cosurfmorphmr'</span>, WHERE <span class="op">=</span> <span class="st">"areasymbol = 'CA630'"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>
