@@ -95,11 +95,16 @@ jobs:
         run: remotes::install_github("brownag/soilDBdata", dependencies = FALSE, build = FALSE)
         shell: Rscript {0}
 
-      - name: Install aqp off GitHub
+      - name: Install aqp off GitHub  (devel only)
         if: matrix.config.r == 'devel'
         run: remotes::install_github("ncss-tech/aqp", dependencies = FALSE, build = FALSE)
         shell: Rscript {0}
-
+        
+      - name: Install terra off r-universe (devel only)
+        if: matrix.config.r == 'devel'
+        run: install.packages('terra', repos = 'https://rspatial.r-universe.dev')
+        shell: Rscript {0}
+        
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
