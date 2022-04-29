@@ -6,21 +6,23 @@ library(sf)
 library(sharpshootR)
 
 
-# https://twitter.com/MoreorLoess/status/1471935030746304521
-# https://casoilresource.lawr.ucdavis.edu/gmap/?loc=41.83547,-90.12201,z16
+## copy / paste viewport bounding-box from SoilWeb
+## click somewhere on the map
+## press 'b', BBOX is copied to the clipboard
 
-## copy / paste from SoilWeb
-## 'b' keypress
-bb <- '-90.1378 41.8273,-90.1378 41.8420,-90.1051 41.8420,-90.1051 41.8273,-90.1378 41.8273'
+
+# # https://twitter.com/MoreorLoess/status/1471935030746304521
+# # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=41.83547,-90.12201,z16
+# bb <- '-90.1378 41.8273,-90.1378 41.8420,-90.1051 41.8420,-90.1051 41.8273,-90.1378 41.8273'
 
 # # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=38.54538,-121.74458,z14
 # bb <- '-121.8100 38.5145,-121.8100 38.5762,-121.6792 38.5762,-121.6792 38.5145,-121.8100 38.5145'
-# 
-# # 
+ 
+ 
 # bb <- '-120.5453 37.5718,-120.5453 37.5796,-120.5289 37.5796,-120.5289 37.5718,-120.5453 37.5718'
 
 # near Ithica, NY
-# bb <- '-76.6811 42.3178,-76.6811 42.3526,-76.5987 42.3526,-76.5987 42.3178,-76.6811 42.3178'
+bb <- '-76.6811 42.3178,-76.6811 42.3526,-76.5987 42.3526,-76.5987 42.3178,-76.6811 42.3178'
 
 
 
@@ -29,7 +31,8 @@ wkt <- sprintf('POLYGON((%s))', bb)
 
 ## init sf polygon
 x <- st_as_sfc(wkt)
-# GCS WGS84
+
+# set CRS as GCS WGS84
 st_crs(x) <- 4326
 
 ## get overlapping map unit keys
@@ -67,16 +70,18 @@ SoilTaxonomyDendrogram(
   scaling.factor = 0.0135, 
   cex.taxon.labels = 0.75, 
   cex.id = 0.66,
+  cex.names = 0.66,
   width = 0.3, 
   name.style = 'center-center', 
-  plot.depth.axis = TRUE, 
+  plot.depth.axis = TRUE,
+  axis.line.offset = -3,
   hz.distinctness.offset = 'hzd'
 )
 
 
 ## 3D geomorphic summary
 
-# This will fail when geomorphic summary or SPC contain a subset of the other
+# there may be records missing from SPC / geomorphic component
 nm <- intersect(profile_id(osd$SPC), osd$geomcomp$series)
 
 # keep only those series that exist in both
@@ -86,6 +91,7 @@ sub <- subset(osd$SPC, profile_id(osd$SPC) %in% nm)
 # subset geomcopm
 geomcomp.sub <- subset(osd$geomcomp, subset = series %in% profile_id(sub))
 
+# viz geomorphic proportion summary, results contain clustering object
 res <- vizGeomorphicComponent(geomcomp.sub)
 print(res$fig)
 
@@ -108,21 +114,23 @@ plotProfileDendrogram(
 
 
 ## 2D geomorphic summary
-# This will fail when geomorphic summary or SPC contain a subset of the other
+# there may be records missing from SPC / hill slope position
 nm <- intersect(profile_id(osd$SPC), osd$hillpos$series)
 
 # keep only those series that exist in both
 sub <- subset(osd$SPC, profile_id(osd$SPC) %in% nm)
 
-## inverse problem: extra records in geomorphic summaries
+## inverse problem: extra records in hill slope summaries
 # subset hillpos
 hillpos.sub <- subset(osd$hillpos, subset = series %in% profile_id(sub))
 
+# viz hill slope proportion summary, results contain clustering object
 res <- vizHillslopePosition(hillpos.sub)
 print(res$fig)
 
 
 # arrange according to clustering of hillslope position
+par(mar = c(0, 0, 0, 0))
 plotProfileDendrogram(
   sub, 
   clust = res$clust, 
@@ -151,7 +159,8 @@ par(mar = c(0.5, 0, 0, 2))
 layout(matrix(c(1,2)), widths = c(1,1), heights = c(2,1))
 plotProfileDendrogram(sub, res$clust, dend.y.scale = 3, scaling.factor = 0.012, y.offset = 0.2, width = 0.32, name.style = 'center-center', cex.names = 0.7, shrink = TRUE, cex.id = 0.55)
 
-matplot(y = hp[, 2:6], type = 'b', lty = 1, pch = 16, axes = FALSE, col = hp.cols, xlab = '', ylab = '', xlim = c(0.5, length(sub) + 1))
+# symbol size is proportional to Shannon entropy
+matplot(y = hp[, 2:6], type = 'b', lty = 1, pch = 16, axes = FALSE, col = hp.cols, xlab = '', ylab = '', xlim = c(0.5, length(sub) + 1), cex = hp$shannon_entropy + 0.2)
 # grid(nx = 0, ny = NULL)
 axis(side = 4, line = -1, las = 1, cex.axis = 0.7)
 # axis(side = 2, line = -3, las = 1, cex.axis = 0.7)
@@ -159,7 +168,7 @@ legend('topleft', legend = rev(nm), col = rev(hp.cols), pch = 16, bty = 'n', cex
 mtext('Probability', side = 2, line = -2, font = 2)
 
 
-
+## TODO: encode Shannon entropy
 par(mar = c(0.5, 0, 0, 2))
 layout(matrix(c(1,2)), widths = c(1,1), heights = c(2,1))
 plotProfileDendrogram(sub, res$clust, dend.y.scale = 3, scaling.factor = 0.012, y.offset = 0.2, width = 0.32, name.style = 'center-center', cex.names = 0.7, shrink = TRUE, cex.id = 0.55)
