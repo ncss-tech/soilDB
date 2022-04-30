@@ -52,7 +52,7 @@ Citation
     ##     year = {2022},
     ##   }
 
-soilDB 2.6.15.1
+soilDB 2.6.15.3
 ---------------
 
 <!-- ### Notices on Database Interfaces -->
