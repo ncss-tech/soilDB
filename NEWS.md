@@ -1,5 +1,25 @@
-# soilDB 2.6.16 (unreleased)
- * Added several new columns from the `plotplantinventory` table to `get_vegplot_species_from_NASIS_db()` result; thanks to Zachary Van Abbema
+# soilDB 2.6.15-3 (unreleased)
+ * Added several new columns from the `plotplantinventory` table to `get_vegplot_species_from_NASIS_db()` result; thanks to Zachary Van Abbema for suggestion and feedback
+ * Spatial 
+   - See: <https://github.com/ncss-tech/soilDB/pull/229>
+   - Dropped imports from `sp` and `raster` which means `soilDB` no longer requires the soon-to-retire `rgdal` package.
+   - All spatial data processing has been moved to `sf` and `terra`, which have been added to Suggests. 
+   - (*breaking change*) Spatial functions that take spatial input will return the same class type as the input unless otherwise specified.  `fetchSDA_spatial()` and `SDA_spatialQuery()` gain `as_Spatial` argument; when `TRUE` equivalent (backward compatible) `sp` and `raster` data types are returned. Alternately, you may set `options(soilDB.return_Spatial=TRUE)`
+   - `mukey.wcs()` and `ISSR800.wcs()` bug fix for some instances where the target extent was miscalculated, resulting in slight differences from requested resolution (`res` argument) of result.
+   - `mukey.wcs()` gains a new possible data source `db="RSS"` which accesses a Web Coverage Service containing grids from Raster Soil Surveys in the United States.
+ * NASIS
+   - Local NASIS metadata used for `uncode()` are now cached within an R session which results in faster query processing times for users with a local NASIS database connection set up.
+ 
+ * SSURGO / Soil Data Access
+   * Added `get_SDA_cosurfmorph()`: a new function in "SSURGO On Demand" style. Users can customize the WHERE clause, target tables and the grouping variable used to calculate proportions (default `by="compname"`)
+      * "cosurfmorphgc" summarizes "geomposmntn", "geomposhill", "geomposflats", "geompostrce"
+      * "cosurfmorphhpp" summarizes "hillslopeprof"
+      * "cosurfmorphss" summarizes "shapeacross", "shapedown", and concatenated "surfaceshape"
+   * Several fixes for logic of `get_SDA_property()` with `method="weighted average"` and `include_minors=TRUE`/`miscellaneous_areas=TRUE`, thanks to Andy Paolucci and Dylan Beaudette for testing and providing feedback on the queries.
+   * Added `downloadSSURGO()` for downloading/extraction of the SSURGO data by survey area from Web Soil Survey. 
+   * Added `createSSURGO()` for building of local databases as SQLite/Geopackage from one or more SSURGO exports.
+      * Exports can be obtained via `downloadSSURGO()`, from NASIS or downloaded from other sources such as <https://nrcs.app.box.com/v/soils>. 
+ 
 
 # soilDB 2.6.15 (2022-04-13) 
  * `fetchNASIS()`
