@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15-3</span>
       </span>
     </div>
 
@@ -48,16 +48,33 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.6.16" id="soildb-2616-unreleased">soilDB 2.6.16 (unreleased)<a class="anchor" aria-label="anchor" href="#soildb-2616-unreleased"></a></h2>
-<ul><li>Added several new columns from the <code>plotplantinventory</code> table to <code><a href="../reference/fetchVegdata.html">get_vegplot_species_from_NASIS_db()</a></code> result; thanks to Zachary Van Abbema</li>
+<h2 class="page-header" data-toc-text="2.6.15-3" id="soildb-2615-3-unreleased">soilDB 2.6.15-3 (unreleased)<a class="anchor" aria-label="anchor" href="#soildb-2615-3-unreleased"></a></h2>
+<ul><li>Added several new columns from the <code>plotplantinventory</code> table to <code><a href="../reference/fetchVegdata.html">get_vegplot_species_from_NASIS_db()</a></code> result; thanks to Zachary Van Abbema for suggestion and feedback</li>
+<li>Spatial<ul><li>See: <a href="https://github.com/ncss-tech/soilDB/pull/229" class="external-link uri">https://github.com/ncss-tech/soilDB/pull/229</a>
+</li>
+<li>Dropped imports from <code>sp</code> and <code>raster</code> which means <code>soilDB</code> no longer requires the soon-to-retire <code>rgdal</code> package.</li>
+<li>All spatial data processing has been moved to <code>sf</code> and <code>terra</code>, which have been added to Suggests.</li>
+<li>(<em>breaking change</em>) Spatial functions that take spatial input will return the same class type as the input unless otherwise specified. <code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code> and <code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> gain <code>as_Spatial</code> argument; when <code>TRUE</code> equivalent (backward compatible) <code>sp</code> and <code>raster</code> data types are returned. Alternately, you may set <code>options(soilDB.return_Spatial=TRUE)</code>
+</li>
+<li>
+<code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code> and <code><a href="../reference/ISSR800.wcs.html">ISSR800.wcs()</a></code> bug fix for some instances where the target extent was miscalculated, resulting in slight differences from requested resolution (<code>res</code> argument) of result.</li>
+<li>
+<code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code> gains a new possible data source <code>db="RSS"</code> which accesses a Web Coverage Service containing grids from Raster Soil Surveys in the United States.</li>
+</ul></li>
+<li>NASIS<ul><li>Local NASIS metadata used for <code><a href="../reference/uncode.html">uncode()</a></code> are now cached within an R session which results in faster query processing times for users with a local NASIS database connection set up.</li></ul></li>
+<li>SSURGO / Soil Data Access<ul><li>Added <code><a href="../reference/get_SDA_cosurfmorph.html">get_SDA_cosurfmorph()</a></code>: a new function in “SSURGO On Demand” style. Users can customize the WHERE clause, target tables and the grouping variable used to calculate proportions (default <code>by="compname"</code>)<ul><li>“cosurfmorphgc” summarizes “geomposmntn”, “geomposhill”, “geomposflats”, “geompostrce”</li>
+<li>“cosurfmorphhpp” summarizes “hillslopeprof”</li>
+<li>“cosurfmorphss” summarizes “shapeacross”, “shapedown”, and concatenated “surfaceshape”</li>
+</ul></li>
+<li>Several fixes for logic of <code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code> with <code>method="weighted average"</code> and <code>include_minors=TRUE</code>/<code>miscellaneous_areas=TRUE</code>, thanks to Andy Paolucci and Dylan Beaudette for testing and providing feedback on the queries.</li>
+<li>Added <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> for downloading/extraction of the SSURGO data by survey area from Web Soil Survey.</li>
+<li>Added <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> for building of local databases as SQLite/Geopackage from one or more SSURGO exports.<ul><li>Exports can be obtained via <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code>, from NASIS or downloaded from other sources such as <a href="https://nrcs.app.box.com/v/soils" class="external-link uri">https://nrcs.app.box.com/v/soils</a>.</li></ul></li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.6.15" id="soildb-2615-2022-04-13">soilDB 2.6.15 (2022-04-13)<small>2022-04-14</small><a class="anchor" aria-label="anchor" href="#soildb-2615-2022-04-13"></a></h2>
 <ul><li>
-<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code>
-<ul><li>New <code>mixColors</code> argument used to toggle color mixing for pedon horizons with multiple colors per moisture state.
-<ul><li>Default <code>TRUE</code> mixes colors based on reported color percentage via <code><a href="../reference/estimateColorMixture.html">estimateColorMixture()</a></code>. <code>FALSE</code> returns the dominant color in each moisture state, or first record for cases without <code>colorpct</code> populated.</li>
-</ul></li>
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code><ul><li>New <code>mixColors</code> argument used to toggle color mixing for pedon horizons with multiple colors per moisture state.<ul><li>Default <code>TRUE</code> mixes colors based on reported color percentage via <code><a href="../reference/estimateColorMixture.html">estimateColorMixture()</a></code>. <code>FALSE</code> returns the dominant color in each moisture state, or first record for cases without <code>colorpct</code> populated.</li></ul></li>
 <li>Added <code>taxreaction</code> and <code>taxfamhahatmatcl</code> to extended taxonomic information</li>
 <li>Added new option (<code>soilDB.NASIS.skip_uncode</code>) to bypass <code><a href="../reference/uncode.html">uncode()</a></code> in NASIS functions (mostly used for debugging or special database instances that come pre-decoded)</li>
 <li>An instance in <code>fetchNASIS(from="components")</code> where local database connection was left open was fixed</li>
@@ -74,8 +91,7 @@
 <code>waterYearDay()</code> bug fix for more specific (sub-daily) date-time formats</li>
 <li>
 <code><a href="../reference/fetchSCAN.html">fetchSCAN()</a></code> better handling of empty results in multi-site queries</li>
-<li>Updates to queries, metadata and sample datasets for NASIS 7.4.1 Database Model
-<ul><li>
+<li>Updates to queries, metadata and sample datasets for NASIS 7.4.1 Database Model<ul><li>
 <code>fetchNASIS("pedons")</code> no longer includes <code>pmweathering</code>
 </li>
 <li>
@@ -84,8 +100,7 @@
 <li>New Component Ecological Site attributes added</li>
 </ul></li>
 <li>
-<code>stringsAsFactors</code> argument to soilDB functions has been deprecated in favor of a package option
-<ul><li>Default behavior for NASIS domains is to return character labels rather than coded factors</li>
+<code>stringsAsFactors</code> argument to soilDB functions has been deprecated in favor of a package option<ul><li>Default behavior for NASIS domains is to return character labels rather than coded factors</li>
 <li>Use <code>NASISDomainsAsFactor(TRUE)</code> to toggle package option <code>soilDB.NASIS.DomainsAsFactor</code>
 </li>
 </ul></li>
@@ -191,16 +206,13 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.6.6" id="soildb-266-2021-09-24">soilDB 2.6.6 (2021-09-24)<a class="anchor" aria-label="anchor" href="#soildb-266-2021-09-24"></a></h2>
 <ul><li>
-<code><a href="../reference/get_SDA_pmgroupname.html">get_SDA_pmgroupname()</a></code> and <code><a href="../reference/get_SDA_hydric.html">get_SDA_hydric()</a></code> now support alternate aggregation methods.
-<ul><li>Default for <code><a href="../reference/get_SDA_pmgroupname.html">get_SDA_pmgroupname()</a></code> is <code>"dominant component"</code>, now also supports <code>"dominant condition"</code> and <code>"none"</code>.</li>
+<code><a href="../reference/get_SDA_pmgroupname.html">get_SDA_pmgroupname()</a></code> and <code><a href="../reference/get_SDA_hydric.html">get_SDA_hydric()</a></code> now support alternate aggregation methods.<ul><li>Default for <code><a href="../reference/get_SDA_pmgroupname.html">get_SDA_pmgroupname()</a></code> is <code>"dominant component"</code>, now also supports <code>"dominant condition"</code> and <code>"none"</code>.</li>
 <li>Default for <code><a href="../reference/get_SDA_hydric.html">get_SDA_hydric()</a></code> is a map unit level aggregation of components and assigns new classes ; now supports <code>"dominant component"</code>, <code>"dominant condition"</code> and <code>"none"</code>
 </li>
-</ul></li>
-</ul></div>
+</ul></li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.6.5" id="soildb-265-2021-08-19">soilDB 2.6.5 (2021-08-19)<small>2021-08-21</small><a class="anchor" aria-label="anchor" href="#soildb-265-2021-08-19"></a></h2>
-<ul><li>API calls that return geometry in projected coordinates (AEA/NAD83) now use ESPG:5070 instead of EPSG:6350</li>
-</ul></div>
+<ul><li>API calls that return geometry in projected coordinates (AEA/NAD83) now use ESPG:5070 instead of EPSG:6350</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.6.4" id="soildb-264-2021-08-06">soilDB 2.6.4 (2021-08-06)<a class="anchor" aria-label="anchor" href="#soildb-264-2021-08-06"></a></h2>
 <ul><li>
@@ -208,8 +220,7 @@
 <li>
 <code><a href="../reference/createStaticNASIS.html">createStaticNASIS()</a></code>: column order should match NASIS, even if data types require reorder for ODBC driver</li>
 <li>
-<code><a href="../reference/fetchSoilGrids.html">fetchSoilGrids()</a></code> bug fixes, updates to metadata and references in documentation (<a href="https://github.com/ncss-tech/soilDB/issues/201" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/201</a>)
-<ul><li>Corrected the conversion factor used for predicted <code>nitrogen</code> values (conversion from cg/kg to g/kg)</li>
+<code><a href="../reference/fetchSoilGrids.html">fetchSoilGrids()</a></code> bug fixes, updates to metadata and references in documentation (<a href="https://github.com/ncss-tech/soilDB/issues/201" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/201</a>)<ul><li>Corrected the conversion factor used for predicted <code>nitrogen</code> values (conversion from cg/kg to g/kg)</li>
 <li>Corrected the conversion factor used for uncertainty in <code>bdod</code> and <code>nitrogen</code> (SoilGrids uncertainty layer always uses factor of 10 to create integers)</li>
 <li>Improved error handling</li>
 <li>Added <code>progress</code> and <code>verbose</code> arguments for text progress bar and additional message output</li>
@@ -220,21 +231,16 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.6.3" id="soildb-263-2021-07-22">soilDB 2.6.3 (2021-07-22)<small>2021-07-23</small><a class="anchor" aria-label="anchor" href="#soildb-263-2021-07-22"></a></h2>
 <ul><li>
-<code><a href="../reference/SDA_query.html">SDA_query()</a></code> and all functions that call <code><a href="../reference/SDA_query.html">SDA_query()</a></code> get proper column class handling (related to <a href="https://github.com/ncss-tech/soilDB/issues/190" class="external-link">#190</a>), however:
-<ul><li>be careful with the use of CAST(): unknown datatypes may not be correctly interpreted</li>
+<code><a href="../reference/SDA_query.html">SDA_query()</a></code> and all functions that call <code><a href="../reference/SDA_query.html">SDA_query()</a></code> get proper column class handling (related to <a href="https://github.com/ncss-tech/soilDB/issues/190" class="external-link">#190</a>), however:<ul><li>be careful with the use of CAST(): unknown datatypes may not be correctly interpreted</li>
 <li>previous column classes that were incorrectly guessed by <code><a href="https://rdrr.io/r/utils/type.convert.html" class="external-link">type.convert()</a></code> may have changed (e.g. <code>component.wei</code>)</li>
 </ul></li>
 <li>
 <code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> can now be used to return soil survey area symbols or geometry using <code>what="areasymbol"</code> or <code>what="sapolygon"</code>, respectively</li>
 <li>Added new columns to soil classification (“SC”) table result of <code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code>; now including taxonomic mineralogy class which may contain multiple parts for series with strongly contrasting control sections</li>
-<li>Updates to <code>get_SDA_*()</code> methods
-<ul><li>Extends <code>get_SDA_property(property = ...)</code> and <code>get_SDA_interpretation(rulename = ...)</code> vectorization over property/rulename to work with any aggregation method.
-<ul><li>Now supports: Dominant Condition, Min, Max, Dominant Component, Weighted Average</li>
-</ul></li>
+<li>Updates to <code>get_SDA_*()</code> methods<ul><li>Extends <code>get_SDA_property(property = ...)</code> and <code>get_SDA_interpretation(rulename = ...)</code> vectorization over property/rulename to work with any aggregation method.<ul><li>Now supports: Dominant Condition, Min, Max, Dominant Component, Weighted Average</li></ul></li>
 <li>Add <code>query_string</code> argument (default: <code>FALSE</code>). Set as <code>TRUE</code> to skip submitting query to SDA, instead returning a string of the query that would have been sent instead of <em>data.frame</em> result</li>
 <li>
-<code>get_SDA_property</code>: better handling of NULL, miscellaneous areas, and property-specific weighting
-<ul><li>Remove <code>ISNULL(x, 0)</code> logic that affected weighted averages in presence of missing data</li>
+<code>get_SDA_property</code>: better handling of NULL, miscellaneous areas, and property-specific weighting<ul><li>Remove <code>ISNULL(x, 0)</code> logic that affected weighted averages in presence of missing data</li>
 <li>Conditional calculation of horizon weights considering NULL values for requested properties (unique weights for each property)</li>
 <li>New default argument <code>include_minors=FALSE</code> includes only components where <code>majcompflag = 'Yes'</code> in result</li>
 <li>New default argument <code>miscellaneous_areas=FALSE</code> removes miscellaneous land types <code>compkind</code> values from result</li>
@@ -256,8 +262,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.6.2" id="soildb-262-2021-05-14">soilDB 2.6.2 (2021-05-14)<small>2021-05-16</small><a class="anchor" aria-label="anchor" href="#soildb-262-2021-05-14"></a></h2>
-<ul><li>Added <code>formativeElement</code> argument to <code><a href="../reference/taxaExtent.html">taxaExtent()</a></code> (SoilWeb taxon extent function)
-<ul><li>“Formative elements” are derived from the dictionary provided by the {SoilTaxonomy} package (<a href="https://cran.r-project.org/package=SoilTaxonomy" class="external-link uri">https://cran.r-project.org/package=SoilTaxonomy</a>)</li>
+<ul><li>Added <code>formativeElement</code> argument to <code><a href="../reference/taxaExtent.html">taxaExtent()</a></code> (SoilWeb taxon extent function)<ul><li>“Formative elements” are derived from the dictionary provided by the {SoilTaxonomy} package (<a href="https://cran.r-project.org/package=SoilTaxonomy" class="external-link uri">https://cran.r-project.org/package=SoilTaxonomy</a>)</li>
 <li>For example: <code>taxaExtent("abruptic", level = 'subgroup', formativeElement = TRUE)</code> will get an 800m grid (for SSURGO data in CONUS) showing extent of taxa that have “abruptic” in subgroup-level taxon name</li>
 </ul></li>
 <li>
@@ -272,15 +277,11 @@
 <ul><li>Connections to local NASIS and various MS Access databases now use <code>DBI</code> and <code>odbc</code>, replacing <code>RODBC</code>
 </li>
 <li>New methods <code>dbConnectNASIS</code> and <code>dbQueryNASIS</code> for NASIS access with read-only credentials, fetching query results, and closing the <em>DBIConnection</em> upon completion</li>
-<li>NASIS methods use <code>dsn</code> argument to specify a local “static” SQLite file containing NASIS tables, or custom <em>DBIConnection</em> to a database with NASIS schema
-<ul><li>Default <code>dsn = NULL</code> uses <code>"nasis_local"</code> <a href="http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html" class="external-link">ODBC connection</a> to local NASIS SQL Server</li>
-</ul></li>
+<li>NASIS methods use <code>dsn</code> argument to specify a local “static” SQLite file containing NASIS tables, or custom <em>DBIConnection</em> to a database with NASIS schema<ul><li>Default <code>dsn = NULL</code> uses <code>"nasis_local"</code> <a href="http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html" class="external-link">ODBC connection</a> to local NASIS SQL Server</li></ul></li>
 <li>Horizon depth logic checking is now done with <code><a href="https://rdrr.io/pkg/aqp/man/checkHzDepthLogic.html" class="external-link">aqp::checkHzDepthLogic()</a></code>, powered by {data.table}</li>
-<li>Added several new SDA query methods based on <a href="https://github.com/ncss-tech/ssurgoOnDemand" class="external-link uri">https://github.com/ncss-tech/ssurgoOnDemand</a> by <a href="https://github.com/jneme910" class="external-link">@jneme910</a> and <a href="https://github.com/cferguso" class="external-link">@cferguso</a>:
-<ul><li>
+<li>Added several new SDA query methods based on <a href="https://github.com/ncss-tech/ssurgoOnDemand" class="external-link uri">https://github.com/ncss-tech/ssurgoOnDemand</a> by <a href="https://github.com/jneme910" class="external-link">@jneme910</a> and <a href="https://github.com/cferguso" class="external-link">@cferguso</a>:<ul><li>
 <code>get_SDA_property</code>, <code>get_SDA_interpretation</code>, <code>get_SDA_muaggatt</code>, <code>get_SDA_hydric</code>, <code>get_SDA_pmgroupname</code>
-</li>
-</ul></li>
+</li></ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.6.0" id="soildb-260-2021-02-18">soilDB 2.6.0 (2021-02-18)<a class="anchor" aria-label="anchor" href="#soildb-260-2021-02-18"></a></h2>
@@ -336,17 +337,14 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.5.3" id="soildb-253-2020-03-22">soilDB 2.5.3 (2020-03-22)<a class="anchor" aria-label="anchor" href="#soildb-253-2020-03-22"></a></h2>
 <ul><li>
-<code>fetchKSSL</code> is now fully vectorized and builds on new SoilWeb JSON API</li>
-</ul></div>
+<code>fetchKSSL</code> is now fully vectorized and builds on new SoilWeb JSON API</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.5.2" id="soildb-252-2020-02-05">soilDB 2.5.2 (2020-02-05)<a class="anchor" aria-label="anchor" href="#soildb-252-2020-02-05"></a></h2>
-<ul><li>add <code><a href="../reference/fetchNASIS.html">get_concentrations_from_NASIS_db()</a></code> and <code><a href="../reference/fetchNASIS.html">get_phfmp_from_NASIS_db()</a></code> for fetching Pedon Horizon Concentrations and Field Measured Properties from NASIS local database</li>
-</ul></div>
+<ul><li>add <code><a href="../reference/fetchNASIS.html">get_concentrations_from_NASIS_db()</a></code> and <code><a href="../reference/fetchNASIS.html">get_phfmp_from_NASIS_db()</a></code> for fetching Pedon Horizon Concentrations and Field Measured Properties from NASIS local database</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.5.1" id="soildb-251-2020-01-29">soilDB 2.5.1 (2020-01-29)<a class="anchor" aria-label="anchor" href="#soildb-251-2020-01-29"></a></h2>
 <ul><li>bug fix for <code>fetchNASIS(from='components', fill=TRUE, rmHzErrors=TRUE)</code> in context of new <code>::hzDepthTests()</code> and non-unique <code>chiid</code> due to <code>NA</code> values introduced by <code>fill</code>
-</li>
-</ul></div>
+</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.5" id="soildb-25-2020-01-23">soilDB 2.5 (2020-01-23)<small>2020-01-28</small><a class="anchor" aria-label="anchor" href="#soildb-25-2020-01-23"></a></h2>
 <ul><li>CRAN release</li>
@@ -429,26 +427,21 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.2-6" id="soildb-22-6-2018-10-11">soilDB 2.2-6 (2018-10-11)<a class="anchor" aria-label="anchor" href="#soildb-22-6-2018-10-11"></a></h2>
-<ul><li>new function for spatial queries: SDA_spatialQuery(), still needs testing and documentation</li>
-</ul></div>
+<ul><li>new function for spatial queries: SDA_spatialQuery(), still needs testing and documentation</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.2-6" id="soildb-22-6-2018-10-11-1">soilDB 2.2-6 (2018-10-11)<a class="anchor" aria-label="anchor" href="#soildb-22-6-2018-10-11-1"></a></h2>
 <ul><li>
-<code><a href="../reference/fetchOSD.html">fetchOSD()</a></code> gets an overhaul, new API and features</li>
-</ul></div>
+<code><a href="../reference/fetchOSD.html">fetchOSD()</a></code> gets an overhaul, new API and features</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.2-5" id="soildb-22-5-2018-10-05">soilDB 2.2-5 (2018-10-05)<a class="anchor" aria-label="anchor" href="#soildb-22-5-2018-10-05"></a></h2>
 <ul><li>experimental interface to SoillWeb OSD fulltext search: <code><a href="../reference/OSDquery.html">OSDquery()</a></code>
-</li>
-</ul></div>
+</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.2-4" id="soildb-22-4-2018-09-04">soilDB 2.2-4 (2018-09-04)<a class="anchor" aria-label="anchor" href="#soildb-22-4-2018-09-04"></a></h2>
-<ul><li>numerous bug-fixes in simplifyFragmentData() see (<a href="https://github.com/ncss-tech/soilDB/issues/70" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/70</a>)</li>
-</ul></div>
+<ul><li>numerous bug-fixes in simplifyFragmentData() see (<a href="https://github.com/ncss-tech/soilDB/issues/70" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/70</a>)</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.2-1" id="soildb-22-1-2018-05-21">soilDB 2.2-1 (2018-05-21)<a class="anchor" aria-label="anchor" href="#soildb-22-1-2018-05-21"></a></h2>
-<ul><li>get_mutext_from_NASIS_db() added for extraction of map unit text notes</li>
-</ul></div>
+<ul><li>get_mutext_from_NASIS_db() added for extraction of map unit text notes</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.2" id="soildb-22-2018-05-08">soilDB 2.2 (2018-05-08)<a class="anchor" aria-label="anchor" href="#soildb-22-2018-05-08"></a></h2>
 <ul><li>CRAN release</li>
@@ -457,29 +450,23 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.1-1" id="soildb-21-1-2018-03-29">soilDB 2.1-1 (2018-03-29)<a class="anchor" aria-label="anchor" href="#soildb-21-1-2018-03-29"></a></h2>
-<ul><li>added more SCAN/SNOTEL metadata (<a href="https://github.com/ncss-tech/soilDB/issues/61" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/61</a>)</li>
-</ul></div>
+<ul><li>added more SCAN/SNOTEL metadata (<a href="https://github.com/ncss-tech/soilDB/issues/61" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/61</a>)</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.1" id="soildb-21-2018-03-12">soilDB 2.1 (2018-03-12)<a class="anchor" aria-label="anchor" href="#soildb-21-2018-03-12"></a></h2>
 <ul><li>generalized local NASIS ODBC authentication, should work on windows 7, 8, 10 <a href="https://github.com/ncss-tech/soilDB/issues/54" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/54</a>
-</li>
-</ul></div>
+</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0-4" id="soildb-20-4-2018-03-06">soilDB 2.0-4 (2018-03-06)<a class="anchor" aria-label="anchor" href="#soildb-20-4-2018-03-06"></a></h2>
-<ul><li>bug fix for subtle change in how SCAN data are returned from webservice</li>
-</ul></div>
+<ul><li>bug fix for subtle change in how SCAN data are returned from webservice</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0-3" id="soildb-20-3-2018-02-13">soilDB 2.0-3 (2018-02-13)<a class="anchor" aria-label="anchor" href="#soildb-20-3-2018-02-13"></a></h2>
-<ul><li>bug fix for simplifyFragmentData(, nullFragsAreZero=FALSE), still more work to do</li>
-</ul></div>
+<ul><li>bug fix for simplifyFragmentData(, nullFragsAreZero=FALSE), still more work to do</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0-2" id="soildb-20-2-2018-01-29">soilDB 2.0-2 (2018-01-29)<a class="anchor" aria-label="anchor" href="#soildb-20-2-2018-01-29"></a></h2>
-<ul><li>bug fix for simplifyFragmentData() when fragment volume &gt; 100%</li>
-</ul></div>
+<ul><li>bug fix for simplifyFragmentData() when fragment volume &gt; 100%</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0-1" id="soildb-20-1-2018-01-23">soilDB 2.0-1 (2018-01-23)<small>2018-01-23</small><a class="anchor" aria-label="anchor" href="#soildb-20-1-2018-01-23"></a></h2>
-<ul><li>updated <code>loafercreek</code> and <code>gopheridge</code> sample datasets and manual page to reflect latest fetchNASIS</li>
-</ul></div>
+<ul><li>updated <code>loafercreek</code> and <code>gopheridge</code> sample datasets and manual page to reflect latest fetchNASIS</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.0" id="soildb-20-2017-12-23">soilDB 2.0 (2017-12-23)<small>2018-01-11</small><a class="anchor" aria-label="anchor" href="#soildb-20-2017-12-23"></a></h2>
 <ul><li>bug fixes, manual page updates, and stabilization of NASIS interaction</li>
@@ -487,32 +474,25 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.8.12" id="soildb-1812-2017-09-19">soilDB 1.8.12 (2017-09-19)<a class="anchor" aria-label="anchor" href="#soildb-1812-2017-09-19"></a></h2>
-<ul><li>bug fix in fetchHenry(), it is now possible to query only sensor metadata</li>
-</ul></div>
+<ul><li>bug fix in fetchHenry(), it is now possible to query only sensor metadata</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.8.11" id="soildb-1811-2017-08-17">soilDB 1.8.11 (2017-08-17)<a class="anchor" aria-label="anchor" href="#soildb-1811-2017-08-17"></a></h2>
-<ul><li>temporary bug-fix related to SCAN data (<a href="https://github.com/ncss-tech/soilDB/issues/26" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/26</a>)</li>
-</ul></div>
+<ul><li>temporary bug-fix related to SCAN data (<a href="https://github.com/ncss-tech/soilDB/issues/26" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/26</a>)</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.8.10" id="soildb-1810-2017-08-10">soilDB 1.8.10 (2017-08-10)<a class="anchor" aria-label="anchor" href="#soildb-1810-2017-08-10"></a></h2>
-<ul><li>re-write of mix_and_clean_colors() so that color mixing happens in CIE LAB space</li>
-</ul></div>
+<ul><li>re-write of mix_and_clean_colors() so that color mixing happens in CIE LAB space</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.8.5" id="soildb-185-2017-05-24">soilDB 1.8.5 (2017-05-24)<a class="anchor" aria-label="anchor" href="#soildb-185-2017-05-24"></a></h2>
-<ul><li>re-write of SDA_query(), better error handling, support for multi-part result sets</li>
-</ul></div>
+<ul><li>re-write of SDA_query(), better error handling, support for multi-part result sets</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.8.2" id="soildb-182-2017-03-24">soilDB 1.8.2 (2017-03-24)<a class="anchor" aria-label="anchor" href="#soildb-182-2017-03-24"></a></h2>
-<ul><li>fetchHenry() can now access water level data, see manual page</li>
-</ul></div>
+<ul><li>fetchHenry() can now access water level data, see manual page</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.8.1" id="soildb-181-2017-01-23">soilDB 1.8.1 (2017-01-23)<a class="anchor" aria-label="anchor" href="#soildb-181-2017-01-23"></a></h2>
-<ul><li>new function: get_comonth_from_NASIS_db() see manual page for details</li>
-</ul></div>
+<ul><li>new function: get_comonth_from_NASIS_db() see manual page for details</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.8-10" id="soildb-18-10-2016-12-27">soilDB 1.8-10 (2016-12-27)<a class="anchor" aria-label="anchor" href="#soildb-18-10-2016-12-27"></a></h2>
-<ul><li>converting all URLs to ‘HTTPS’, addressing bugs with fetchSCAN() and associated functions</li>
-</ul></div>
+<ul><li>converting all URLs to ‘HTTPS’, addressing bugs with fetchSCAN() and associated functions</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.8-7" id="soildb-18-7-2016-11-16">soilDB 1.8-7 (2016-11-16)<small>2016-11-10</small><a class="anchor" aria-label="anchor" href="#soildb-18-7-2016-11-16"></a></h2>
 <ul><li>sanity checks for fetchHenry()</li>
@@ -534,8 +514,7 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.8" id="soildb-18-2016-04-29">soilDB 1.8 (2016-04-29)<small>2016-04-29</small><a class="anchor" aria-label="anchor" href="#soildb-18-2016-04-29"></a></h2>
 <ul><li>fetchKSSL() can now query basic morphologic data with the argument “returnMorphologicData”</li>
-<li>two new functions for simplifying NASIS color and fragment data:
-<ul><li>simplifyFragmentData()</li>
+<li>two new functions for simplifying NASIS color and fragment data:<ul><li>simplifyFragmentData()</li>
 <li>simplifyColorData()</li>
 </ul></li>
 <li>^^^ these new functions are now used by fetchNASIS() to summarize color and fragment data (vs. SQL)</li>
@@ -556,12 +535,10 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6.8" id="soildb-168-2015-12-22">soilDB 1.6.8 (2015-12-22)<a class="anchor" aria-label="anchor" href="#soildb-168-2015-12-22"></a></h2>
-<ul><li>added temperature class (temp_class) field from the pedon taxonomic history table (NASIS) [addition suggested by J. Baker]</li>
-</ul></div>
+<ul><li>added temperature class (temp_class) field from the pedon taxonomic history table (NASIS) [addition suggested by J. Baker]</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6.7" id="soildb-167-2015-12-16">soilDB 1.6.7 (2015-12-16)<a class="anchor" aria-label="anchor" href="#soildb-167-2015-12-16"></a></h2>
-<ul><li>experimental function for processing SDA queries that return geometry: processSDA_WKT()</li>
-</ul></div>
+<ul><li>experimental function for processing SDA queries that return geometry: processSDA_WKT()</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6.5" id="soildb-165-2015-12-03">soilDB 1.6.5 (2015-12-03)<a class="anchor" aria-label="anchor" href="#soildb-165-2015-12-03"></a></h2>
 <ul><li>bug fix for poorly specified geomorphic descriptions, caused fetchNASIS() to barf</li>
@@ -569,12 +546,10 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6.4" id="soildb-164-2015-11-27">soilDB 1.6.4 (2015-11-27)<a class="anchor" aria-label="anchor" href="#soildb-164-2015-11-27"></a></h2>
-<ul><li>package re-org, getting ready for soilDB 2.0:
-<ul><li>dropping use of <code>RCurl</code> functions in favor of <code>httr</code> alternatives (done)</li>
+<ul><li>package re-org, getting ready for soilDB 2.0:<ul><li>dropping use of <code>RCurl</code> functions in favor of <code>httr</code> alternatives (done)</li>
 <li>switch from <code>reshape</code> to <code>reshape2</code> (pending)</li>
 <li>possibly move some packages from SUGGESTS to IMPORTS</li>
-</ul></li>
-</ul></div>
+</ul></li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6.3" id="soildb-163-2015-11-20">soilDB 1.6.3 (2015-11-20)<a class="anchor" aria-label="anchor" href="#soildb-163-2015-11-20"></a></h2>
 <ul><li>new spatial query helper functions for SDA</li>
@@ -592,12 +567,10 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.5-8" id="soildb-15-8-2015-08-13">soilDB 1.5-8 (2015-08-13)<a class="anchor" aria-label="anchor" href="#soildb-15-8-2015-08-13"></a></h2>
-<ul><li>fetchKSSL() gets an argument for downloading data by MLRA</li>
-</ul></div>
+<ul><li>fetchKSSL() gets an argument for downloading data by MLRA</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.5-7" id="soildb-15-7-2015-03-10">soilDB 1.5-7 (2015-03-10)<a class="anchor" aria-label="anchor" href="#soildb-15-7-2015-03-10"></a></h2>
-<ul><li>updated the <code>loafercreek</code> and <code>gopheridge</code> sample datasets</li>
-</ul></div>
+<ul><li>updated the <code>loafercreek</code> and <code>gopheridge</code> sample datasets</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.5-3" id="soildb-15-3-2015-03-10">soilDB 1.5-3 (2015-03-10)<a class="anchor" aria-label="anchor" href="#soildb-15-3-2015-03-10"></a></h2>
 <ul><li>nullFragsAreZero argument to fetchNASIS() reset to TRUE, new documentation pending</li>
@@ -607,8 +580,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.5-2" id="soildb-15-2-2015-02-24">soilDB 1.5-2 (2015-02-24)<small>2015-02-25</small><a class="anchor" aria-label="anchor" href="#soildb-15-2-2015-02-24"></a></h2>
-<ul><li>RODBC temporarily moved from “suggested” package to “imported” package… not a good idea, reverted to “suggested”</li>
-</ul></div>
+<ul><li>RODBC temporarily moved from “suggested” package to “imported” package… not a good idea, reverted to “suggested”</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4-5" id="soildb-14-5-2015-01-20">soilDB 1.4-5 (2015-01-20)<a class="anchor" aria-label="anchor" href="#soildb-14-5-2015-01-20"></a></h2>
 <ul><li>mix_and_clean_colors() now returns back-transformed, mixed, munsell colors</li>
@@ -629,12 +601,10 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.4" id="soildb-14-2014-11-13">soilDB 1.4 (2014-11-13)<a class="anchor" aria-label="anchor" href="#soildb-14-2014-11-13"></a></h2>
-<ul><li>moving most of the hard-to-install packages into <code>suggests</code>, and checking for package availability at function runtime. this will make soilDB more portable, as not every user will want or need all functionality.</li>
-</ul></div>
+<ul><li>moving most of the hard-to-install packages into <code>suggests</code>, and checking for package availability at function runtime. this will make soilDB more portable, as not every user will want or need all functionality.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3-6" id="soildb-13-6-2014-10-27">soilDB 1.3-6 (2014-10-27)<a class="anchor" aria-label="anchor" href="#soildb-13-6-2014-10-27"></a></h2>
-<ul><li>fetchNASIS() gains argument rmHzErrors to optionally retain pedons with horizonation errors. use with caution.</li>
-</ul></div>
+<ul><li>fetchNASIS() gains argument rmHzErrors to optionally retain pedons with horizonation errors. use with caution.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3-5" id="soildb-13-5-2014-09-25">soilDB 1.3-5 (2014-09-25)<a class="anchor" aria-label="anchor" href="#soildb-13-5-2014-09-25"></a></h2>
 <ul><li>loafercreek sample dataset re-created from new data</li>
@@ -648,10 +618,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2-9" id="soildb-12-9-2014-01-06">soilDB 1.2-9 (2014-01-06)<a class="anchor" aria-label="anchor" href="#soildb-12-9-2014-01-06"></a></h2>
-<ul><li>SOC concentration and stock values are temporarily disabled in fetchRaCA()
-<ul><li>waiting for new estimates from the Soil Survey Center…</li>
-</ul></li>
-</ul></div>
+<ul><li>SOC concentration and stock values are temporarily disabled in fetchRaCA()<ul><li>waiting for new estimates from the Soil Survey Center…</li></ul></li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2-6" id="soildb-12-6-2013-12-05">soilDB 1.2-6 (2013-12-05)<small>2013-12-17</small><a class="anchor" aria-label="anchor" href="#soildb-12-6-2013-12-05"></a></h2>
 <ul><li>added new function contributed by J.M. Skovlin: get_veg_from_NPS_PLOTS_db()</li>
@@ -659,15 +626,12 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2-3" id="soildb-12-3-2013-10-25">soilDB 1.2-3 (2013-10-25)<a class="anchor" aria-label="anchor" href="#soildb-12-3-2013-10-25"></a></h2>
-<ul><li>added new function fetchSCAN() for downloading soil/climate data from USDA-NRCS SCAN stations (still experimental!)</li>
-</ul></div>
+<ul><li>added new function fetchSCAN() for downloading soil/climate data from USDA-NRCS SCAN stations (still experimental!)</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2-1" id="soildb-12-1-2013-09-12">soilDB 1.2-1 (2013-09-12)<a class="anchor" aria-label="anchor" href="#soildb-12-1-2013-09-12"></a></h2>
-<ul><li>bug fixing in fetchRaCA():
-<ul><li>“#” characters no longer cause errors</li>
+<ul><li>bug fixing in fetchRaCA():<ul><li>“#” characters no longer cause errors</li>
 <li>duplicate IDs in source data have been fixed</li>
-</ul></li>
-</ul></div>
+</ul></li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2" id="soildb-12-2013-08-13">soilDB 1.2 (2013-08-13)<a class="anchor" aria-label="anchor" href="#soildb-12-2013-08-13"></a></h2>
 <ul><li>fetchRaCA() function now stable, ready for general usage</li>
@@ -680,13 +644,11 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1" id="soildb-11-2013-06-27">soilDB 1.1 (2013-06-27)<a class="anchor" aria-label="anchor" href="#soildb-11-2013-06-27"></a></h2>
-<ul><li>get_site_data_from_NASIS_db() no longer has problems when more than 1 site bedrock kind is defined; only the shallowest row is returned</li>
-</ul></div>
+<ul><li>get_site_data_from_NASIS_db() no longer has problems when more than 1 site bedrock kind is defined; only the shallowest row is returned</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0" id="soildb-10-2013-04-04">soilDB 1.0 (2013-04-04)<small>2013-04-18</small><a class="anchor" aria-label="anchor" href="#soildb-10-2013-04-04"></a></h2>
 <ul><li>fetchNASIS() is now much more efficient: faster / less memory used</li>
-<li>new function! fetchKSSL(): experimental interface to (most of) the KSSL data
-<ul><li>queries can be performed by series name or GCS bounding box</li>
+<li>new function! fetchKSSL(): experimental interface to (most of) the KSSL data<ul><li>queries can be performed by series name or GCS bounding box</li>
 <li>data are delivered via CA Soil Resource Lab server</li>
 </ul></li>
 </ul></div>
@@ -698,8 +660,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9-7" id="soildb-09-7-2013-03-01">soilDB 0.9-7 (2013-03-01)<a class="anchor" aria-label="anchor" href="#soildb-09-7-2013-03-01"></a></h2>
-<ul><li>NASIS query functions now return only records from the selected set, please test older code!</li>
-</ul></div>
+<ul><li>NASIS query functions now return only records from the selected set, please test older code!</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9-6" id="soildb-09-6-2013-02-26">soilDB 0.9-6 (2013-02-26)<small>2013-02-28</small><a class="anchor" aria-label="anchor" href="#soildb-09-6-2013-02-26"></a></h2>
 <ul><li>new function get_text_notes_from_NASIS_db() – still needs proper documentation</li>
@@ -708,8 +669,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9-4" id="soildb-09-4-2013-01-31">soilDB 0.9-4 (2013-01-31)<a class="anchor" aria-label="anchor" href="#soildb-09-4-2013-01-31"></a></h2>
-<ul><li>new function: fetchOSD() returns basic OSD data as a SoilProfileCollection</li>
-</ul></div>
+<ul><li>new function: fetchOSD() returns basic OSD data as a SoilProfileCollection</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9-3" id="soildb-09-3-2013-01-08">soilDB 0.9-3 (2013-01-08)<small>2013-01-10</small><a class="anchor" aria-label="anchor" href="#soildb-09-3-2013-01-08"></a></h2>
 <ul><li>speed-bump in color-fetching functions from NASIS/pedonPC</li>
@@ -717,8 +677,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9-2" id="soildb-09-2-2012-12-18">soilDB 0.9-2 (2012-12-18)<a class="anchor" aria-label="anchor" href="#soildb-09-2-2012-12-18"></a></h2>
-<ul><li>new functions for getting / plotting the geographic extent of a soil series, using the SoilWeb query service: +seriesExtent() : fetches extent as a SpatialPolygonDataFrame +seriesExtentAsGmap() : fetches extent and plots on Google Maps (requires dismo package)</li>
-</ul></div>
+<ul><li>new functions for getting / plotting the geographic extent of a soil series, using the SoilWeb query service: +seriesExtent() : fetches extent as a SpatialPolygonDataFrame +seriesExtentAsGmap() : fetches extent and plots on Google Maps (requires dismo package)</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9-1" id="soildb-09-1-2012-11-27">soilDB 0.9-1 (2012-11-27)<a class="anchor" aria-label="anchor" href="#soildb-09-1-2012-11-27"></a></h2>
 <ul><li>updated functionality in fetchNASIS_component_data() pulls mapunit-level data as well as component-level data</li>
@@ -726,22 +685,13 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9" id="soildb-09-2012-10-24">soilDB 0.9 (2012-10-24)<a class="anchor" aria-label="anchor" href="#soildb-09-2012-10-24"></a></h2>
-<ul><li>added a surface fragment summary “surf_frag_summary” to the results of get_extended_data_from_NASIS()
-<ul><li>note: this has not been ported to the related PedonPC queries</li>
-</ul></li>
-<li>integrated surf_frag_summary data into data returned from fetchNASIS(), stored in <a href="https://github.com/site" class="external-link">@site</a>
-<ul><li>note: this has not been ported to the related PedonPC queries</li>
-</ul></li>
-<li>minor bug-fix in horizon-level rock fragment summary SQL which previously mis-classified BD as ST in some, rare cases
-<ul><li>note: this has not been ported to the related PedonPC queries</li>
-</ul></li>
+<ul><li>added a surface fragment summary “surf_frag_summary” to the results of get_extended_data_from_NASIS()<ul><li>note: this has not been ported to the related PedonPC queries</li></ul></li>
+<li>integrated surf_frag_summary data into data returned from fetchNASIS(), stored in <a href="https://github.com/site" class="external-link">@site</a><ul><li>note: this has not been ported to the related PedonPC queries</li></ul></li>
+<li>minor bug-fix in horizon-level rock fragment summary SQL which previously mis-classified BD as ST in some, rare cases<ul><li>note: this has not been ported to the related PedonPC queries</li></ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8-3" id="soildb-08-3-2012-09-28">soilDB 0.8-3 (2012-09-28)<small>2012-10-10</small><a class="anchor" aria-label="anchor" href="#soildb-08-3-2012-09-28"></a></h2>
-<ul><li>site-level data: {elev, slope, aspect} are now named {elev_field, slope_field, aspect_field}
-<ul><li>this affects the data returned by fetchNASIS() and fetchPedonPC()</li>
-</ul></li>
-</ul></div>
+<ul><li>site-level data: {elev, slope, aspect} are now named {elev_field, slope_field, aspect_field}<ul><li>this affects the data returned by fetchNASIS() and fetchPedonPC()</li></ul></li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8-2" id="soildb-08-2-2012-08-23">soilDB 0.8-2 (2012-08-23)<a class="anchor" aria-label="anchor" href="#soildb-08-2-2012-08-23"></a></h2>
 <ul><li>compatible with NASIS 6.2</li>
@@ -752,18 +702,14 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8" id="soildb-08-2012-08-20">soilDB 0.8 (2012-08-20)<a class="anchor" aria-label="anchor" href="#soildb-08-2012-08-20"></a></h2>
-<ul><li>updating for PedonPC 5.0 and NASIS 6.2
-<ul><li>site data contains the best-guessed corresponding row from the taxhistory table, based on:
-<ol style="list-style-type: decimal"><li>most recent record, or 2) record with the least amount of missing data</li>
-</ol></li>
+<ul><li>updating for PedonPC 5.0 and NASIS 6.2<ul><li>site data contains the best-guessed corresponding row from the taxhistory table, based on:<ol style="list-style-type: decimal"><li>most recent record, or 2) record with the least amount of missing data</li></ol></li>
 <li>taxhistory data are now included in the output from get_extended_data_from_pedon_db()</li>
 </ul></li>
 <li>package is now partially compatible with NASIS 6.2</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.6" id="soildb-06-2012-06-19">soilDB 0.6 (2012-06-19)<a class="anchor" aria-label="anchor" href="#soildb-06-2012-06-19"></a></h2>
-<ul><li>tidying up documentation, package dependencies, and NAMESPACE</li>
-</ul></div>
+<ul><li>tidying up documentation, package dependencies, and NAMESPACE</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.5-6" id="soildb-05-6-2012-04-16">soilDB 0.5-6 (2012-04-16)<a class="anchor" aria-label="anchor" href="#soildb-05-6-2012-04-16"></a></h2>
 <ul><li>adding preliminary functions for querying component data from local NASIS</li>
@@ -823,7 +769,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

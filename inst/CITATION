@@ -7,5 +7,5 @@ citEntry(
   note = "R package version 2.6.15",
   url = "https://CRAN.R-project.org/package=soilDB",
   year = "2022",
-  textVersion = "Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2022). soilDB: Soil Database Interface. R package version 2.6.15. https://CRAN.R-project.org/package=soilDB"
+  textVersion = "Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (2022). soilDB: Soil Database Interface. R package version 2.6.15. <https://CRAN.R-project.org/package=soilDB>"
 )

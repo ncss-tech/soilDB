@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15-3</span>
       </span>
     </div>
 
@@ -60,7 +60,8 @@
   db <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SSURGO"</span>, <span class="st">"STATSGO"</span>, <span class="st">"SAPOLYGON"</span><span class="op">)</span>,
   byFeature <span class="op">=</span> <span class="cn">FALSE</span>,
   idcol <span class="op">=</span> <span class="st">"gid"</span>,
-  query_string <span class="op">=</span> <span class="cn">FALSE</span>
+  query_string <span class="op">=</span> <span class="cn">FALSE</span>,
+  as_Spatial <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"soilDB.return_Spatial"</span>, default <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -80,10 +81,12 @@
 <dd><p>Unique IDs used for individual features when <code>byFeature = TRUE</code>; Default <code>"gid"</code></p></dd>
 <dt>query_string</dt>
 <dd><p>Default: <code>FALSE</code>; if <code>TRUE</code> return a character string containing query that would be sent to SDA via <code>SDA_query</code></p></dd>
+<dt>as_Spatial</dt>
+<dd><p>Return sp classes? e.g. <code>Spatial*DataFrame</code>. Default: <code>FALSE</code>.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> if <code>what = 'mukey'</code>, otherwise a <code>SpatialPolygonsDataFrame</code> or <code>sf</code> object.</p>
+    <p>A <code>data.frame</code> if <code>what = 'mukey'</code>, otherwise an <code>sf</code> object.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -279,7 +282,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>
