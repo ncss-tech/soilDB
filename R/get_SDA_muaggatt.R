@@ -20,7 +20,7 @@ get_SDA_muaggatt <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, qu
   }
   
   if (!is.null(mukeys)) {
-    WHERE <- paste("mapunit.mukey IN", format_SQL_in_statement(mukeys))
+    WHERE <- paste("mapunit.mukey IN", format_SQL_in_statement(as.integer(mukeys)))
   } else if (!is.null(areasymbols)) {
     WHERE <- paste("legend.areasymbol IN", format_SQL_in_statement(areasymbols))
   } 

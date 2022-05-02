@@ -41,7 +41,7 @@ get_SDA_coecoclass <- function(method = "None",
   }
   
   if (!is.null(mukeys)) {
-    WHERE <- paste("mapunit.mukey IN", format_SQL_in_statement(mukeys))
+    WHERE <- paste("mapunit.mukey IN", format_SQL_in_statement(as.integer(mukeys)))
   } else if (!is.null(areasymbols)) {
     WHERE <- paste("legend.areasymbol IN", format_SQL_in_statement(areasymbols))
   } 
