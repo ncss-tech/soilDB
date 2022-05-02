@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15-2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.0</span>
       </span>
     </div>
 
@@ -54,7 +54,8 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">downloadSSURGO</span><span class="op">(</span>
-  <span class="va">WHERE</span>,
+  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
+  areasymbols <span class="op">=</span> <span class="cn">NULL</span>,
   destdir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,
   exdir <span class="op">=</span> <span class="va">destdir</span>,
   include_template <span class="op">=</span> <span class="cn">FALSE</span>,
@@ -69,6 +70,8 @@
     <h2>Arguments</h2>
     <dl><dt>WHERE</dt>
 <dd><p>A SQL <code>WHERE</code> clause expression used to filter records in <code>sacatalog</code> table. Alternately <code>WHERE</code> can be any spatial object supported by <code><a href="SDA_spatialQuery.html">SDA_spatialQuery()</a></code> for defining the target extent.</p></dd>
+<dt>areasymbols</dt>
+<dd><p>Character vector of soil survey area symbols e.g. <code>c("CA067", "CA077")</code>. Used in lieu of <code>WHERE</code> arugment.</p></dd>
 <dt>destdir</dt>
 <dd><p>Directory to download ZIP files into. Default <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>.</p></dd>
 <dt>exdir</dt>

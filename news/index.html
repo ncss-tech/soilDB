@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15-2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.0</span>
       </span>
     </div>
 
@@ -48,8 +48,30 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.6.16" id="soildb-2616-unreleased">soilDB 2.6.16 (unreleased)<a class="anchor" aria-label="anchor" href="#soildb-2616-unreleased"></a></h2>
-<ul><li>Added several new columns from the <code>plotplantinventory</code> table to <code><a href="../reference/fetchVegdata.html">get_vegplot_species_from_NASIS_db()</a></code> result; thanks to Zachary Van Abbema</li></ul></div>
+<h2 class="page-header" data-toc-text="2.7.0" id="soildb-270-2022-05-02">soilDB 2.7.0 (2022-05-02)<a class="anchor" aria-label="anchor" href="#soildb-270-2022-05-02"></a></h2>
+<ul><li>Added several new columns from the <code>plotplantinventory</code> table to <code><a href="../reference/fetchVegdata.html">get_vegplot_species_from_NASIS_db()</a></code> result; thanks to Zachary Van Abbema for suggestion and feedback</li>
+<li>Spatial<ul><li>See: <a href="https://github.com/ncss-tech/soilDB/pull/229" class="external-link uri">https://github.com/ncss-tech/soilDB/pull/229</a>
+</li>
+<li>Dropped imports from <code>sp</code> and <code>raster</code> which means <code>soilDB</code> no longer requires the soon-to-retire <code>rgdal</code> package.</li>
+<li>All spatial data processing has been moved to <code>sf</code> and <code>terra</code>, which have been added to Suggests.</li>
+<li>(<em>breaking change</em>) Spatial functions that take spatial input will return the same class type as the input unless otherwise specified. <code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code> and <code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> gain <code>as_Spatial</code> argument; when <code>TRUE</code> equivalent (backward compatible) <code>sp</code> and <code>raster</code> data types are returned. Alternately, you may set <code>options(soilDB.return_Spatial=TRUE)</code>
+</li>
+<li>
+<code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code> and <code><a href="../reference/ISSR800.wcs.html">ISSR800.wcs()</a></code> bug fix for some instances where the target extent was miscalculated, resulting in slight differences from requested resolution (<code>res</code> argument) of result.</li>
+<li>
+<code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code> gains a new possible data source <code>db="RSS"</code> which accesses a Web Coverage Service containing grids from Raster Soil Surveys in the United States.</li>
+</ul></li>
+<li>NASIS<ul><li>Local NASIS metadata used for <code><a href="../reference/uncode.html">uncode()</a></code> are now cached within an R session which results in faster query processing times for users with a local NASIS database connection set up.</li></ul></li>
+<li>SSURGO / Soil Data Access<ul><li>Added <code><a href="../reference/get_SDA_cosurfmorph.html">get_SDA_cosurfmorph()</a></code>: a new function in “SSURGO On Demand” style. Users can customize the WHERE clause, target tables and the grouping variable used to calculate proportions (default <code>by="compname"</code>)<ul><li>“cosurfmorphgc” summarizes “geomposmntn”, “geomposhill”, “geomposflats”, “geompostrce”</li>
+<li>“cosurfmorphhpp” summarizes “hillslopeprof”</li>
+<li>“cosurfmorphss” summarizes “shapeacross”, “shapedown”, and concatenated “surfaceshape”</li>
+</ul></li>
+<li>Several fixes for logic of <code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code> with <code>method="weighted average"</code> and <code>include_minors=TRUE</code>/<code>miscellaneous_areas=TRUE</code>, thanks to Andy Paolucci and Dylan Beaudette for testing and providing feedback on the queries.</li>
+<li>All <code>get_SDA_*()</code> methods (except <code><a href="../reference/get_SDA_metrics.html">get_SDA_metrics()</a></code>) now support input of custom <code>WHERE</code> clause in lieu of <code>mukeys</code>/<code>areasymbols</code> arguments.</li>
+<li>Added <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> for downloading/extraction of the SSURGO data by survey area from Web Soil Survey.</li>
+<li>Added <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> for building of local databases as SQLite/Geopackage from one or more SSURGO exports.<ul><li>Exports can be obtained via <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code>, from NASIS or downloaded from other sources such as <a href="https://nrcs.app.box.com/v/soils" class="external-link uri">https://nrcs.app.box.com/v/soils</a>.</li></ul></li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.6.15" id="soildb-2615-2022-04-13">soilDB 2.6.15 (2022-04-13)<small>2022-04-14</small><a class="anchor" aria-label="anchor" href="#soildb-2615-2022-04-13"></a></h2>
 <ul><li>

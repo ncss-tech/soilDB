@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.6.15-2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.0</span>
       </span>
     </div>
 
@@ -44,7 +44,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get map unit properties from Soil Data Access</h1>
-    <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/SDA_properties.R" class="external-link"><code>R/SDA_properties.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/get_SDA_properties.R" class="external-link"><code>R/get_SDA_properties.R</code></a></small>
     <div class="hidden name"><code>get_SDA_property.Rd</code></div>
     </div>
 
@@ -59,6 +59,7 @@
     <span class="st">"Dominant Component (Numeric)"</span>, <span class="st">"Dominant Condition"</span>, <span class="st">"None"</span><span class="op">)</span>,
   areasymbols <span class="op">=</span> <span class="cn">NULL</span>,
   mukeys <span class="op">=</span> <span class="cn">NULL</span>,
+  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
   top_depth <span class="op">=</span> <span class="fl">0</span>,
   bottom_depth <span class="op">=</span> <span class="fl">200</span>,
   FUN <span class="op">=</span> <span class="cn">NULL</span>,
@@ -78,6 +79,8 @@
 <dd><p>vector of soil survey area symbols</p></dd>
 <dt>mukeys</dt>
 <dd><p>vector of map unit keys</p></dd>
+<dt>WHERE</dt>
+<dd><p>character containing SQL WHERE clause specified in terms of fields in <code>legend</code> or <code>mapunit</code> tables, used in lieu of <code>mukeys</code> or <code>areasymbols</code>. With aggregation method <code>"NONE"</code> the WHERE clause may additionally contain logic for columns from the <code>component</code> and <code>chorizon</code> table.</p></dd>
 <dt>top_depth</dt>
 <dd><p>Default: <code>0</code> (centimeters); a numeric value for upper boundary (top depth) used only for method="Weighted Average", "Dominant Component (Numeric)", and "MIN/MAX"</p></dd>
 <dt>bottom_depth</dt>
