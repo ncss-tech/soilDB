@@ -16,7 +16,7 @@
 #' @param include_minors Include minor components in "Weighted Average" or "MIN/MAX" results?
 #' @param miscellaneous_areas Include miscellaneous areas  (non-soil components) in "Weighted Average", "MIN" or "MAX" results?
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
-#'
+#' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @examples
 #'
 #' \donttest{
@@ -130,15 +130,15 @@ get_SDA_property <-
            areasymbols = NULL, # vector of areasymbols
            mukeys = NULL, # vector of mukeys
            WHERE = NULL,
-           top_depth = 0, # used for method="weighted average" and "dominant component (numeric)"
-           bottom_depth = 200, # used for method="weighted average" and "dominant component (numeric)"
+           top_depth = 0, # used for method="weighted average", "dominant component (numeric)", "min/max"
+           bottom_depth = 200, # used for method="weighted average", "dominant component (numeric)", "min/max"
            FUN = NULL,
            include_minors = FALSE,
            miscellaneous_areas = FALSE,
-           query_string = FALSE) # used for method="min/max"
+           query_string = FALSE,
+           dsn = NULL)
     {
-
-
+    
   q <- .constructPropQuery(method = method,
                            property = property,
                            areasymbols = areasymbols,
@@ -153,8 +153,16 @@ get_SDA_property <-
   if (query_string) return(q)
 
   # execute query
-  res <- suppressMessages(soilDB::SDA_query(q))
-
+  if (is.null(dsn)) {
+    res <- suppressMessages(SDA_query(q))
+  } else {
+    if (!inherits(dsn, 'DBIConnection')) {
+      dsn <- dbConnect(RSQLite::SQLite(), dsn)
+      on.exit(DBI::dbDisconnect(dsn), add = TRUE)
+    } 
+    res <- dbGetQuery(dsn, q)
+  }
+  
   # stop if bad
   if (inherits(res, 'try-error')) {
     warnings()

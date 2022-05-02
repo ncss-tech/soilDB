@@ -12,6 +12,7 @@
 #' @param method One of: `"Dominant Component"`, `"Dominant Condition"`, `"None"`
 #' @param simplify logical; group into generalized parent material groups? Default `TRUE`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
+#' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
 #' @return a data.frame
 #' @export
@@ -21,7 +22,8 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
                                 WHERE = NULL,
                                 method = "DOMINANT COMPONENT",
                                 simplify = TRUE,
-                                query_string = FALSE) {
+                                query_string = FALSE,
+                                dsn = NULL) {
                 
 
         method <- match.arg(toupper(method), c("DOMINANT COMPONENT", "DOMINANT CONDITION", "NONE"))
@@ -193,8 +195,16 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
    }
         
    # execute query
-   res <- soilDB::SDA_query(q)
-
+   if (is.null(dsn)) {
+     res <- suppressMessages(SDA_query(q))
+   } else {
+     if (!inherits(dsn, 'DBIConnection')) {
+       dsn <- dbConnect(RSQLite::SQLite(), dsn)
+       on.exit(DBI::dbDisconnect(dsn), add = TRUE)
+     } 
+     res <- dbGetQuery(dsn, q)
+   }
+   
    # stop if bad
    if (inherits(res, 'try-error')) {
      warnings()

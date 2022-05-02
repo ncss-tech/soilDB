@@ -11,7 +11,8 @@ get_SDA_interpretation(
   mukeys = NULL,
   WHERE = NULL,
   query_string = FALSE,
-  not_rated_value = NA_real_
+  not_rated_value = NA_real_,
+  dsn = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ get_SDA_interpretation(
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 
 \item{not_rated_value}{used where rating class is "Not Rated". Default: \code{NA_real}}
+
+\item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL} (default) use Soil Data Access API via \code{SDA_query()}.}
 }
 \value{
 a data.frame

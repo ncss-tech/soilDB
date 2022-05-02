@@ -12,6 +12,7 @@
 #' @param WHERE character containing SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, or `component` tables, used in lieu of `mukeys` or `areasymbols`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @param not_rated_value used where rating class is "Not Rated". Default: `NA_real`
+#' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #'
 #' @examples
 #' \donttest{
@@ -673,7 +674,8 @@ get_SDA_interpretation <- function(rulename,
                                    mukeys = NULL,
                                    WHERE = NULL,
                                    query_string = FALSE,
-                                   not_rated_value = NA_real_) {
+                                   not_rated_value = NA_real_,
+                                   dsn = NULL) {
   q <- .constructInterpQuery(
       method = method,
       interp = rulename,
@@ -685,7 +687,15 @@ get_SDA_interpretation <- function(rulename,
   if (query_string) return(q)
 
   # execute query
-  res <- suppressMessages(soilDB::SDA_query(q))
+  if (is.null(dsn)) {
+    res <- suppressMessages(SDA_query(q))
+  } else {
+    if (!inherits(dsn, 'DBIConnection')) {
+      dsn <- dbConnect(RSQLite::SQLite(), dsn)
+      on.exit(DBI::dbDisconnect(dsn), add = TRUE)
+    } 
+    res <- dbGetQuery(dsn, q)
+  }
 
   # stop if bad
   if (inherits(res, 'try-error')) {

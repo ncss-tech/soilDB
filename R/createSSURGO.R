@@ -98,7 +98,7 @@ downloadSSURGO <- function(WHERE = NULL,
   # use SDA to get areasymbol and last updated date to build WSS cache urls
   q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol != 'US'"
   q2 <- ifelse(!is.null(WHERE), paste0(q, " AND (", WHERE, ")"), q)
-  sacatalog <- SDA_query(q2)
+  sacatalog <- suppressMessages(SDA_query(q2))
   
   areasymbol <- sacatalog$areasymbol
   saverest <- sacatalog$saverest

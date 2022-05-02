@@ -109,28 +109,28 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
                  ", .SELECT_STATEMENT0(vars), ",
                  total
                FROM (
-                 SELECT [BYVAR], 
+                 SELECT [BYVAR], [BYVAR] AS BYVAR, 
                  ", .SELECT_STATEMENT1(vars_default), "
                  FROM legend
                    INNER JOIN mapunit ON mapunit.lkey = legend.lkey
                    INNER JOIN component ON mapunit.mukey = component.mukey
                    LEFT JOIN cogeomordesc ON component.cokey = cogeomordesc.cokey
-                 ", .JOIN_TABLE(table), "
+                   ", .JOIN_TABLE(table), "
                  WHERE legend.areasymbol ", statsgo_filter, " 'US'
                    AND (", .NULL_FILTER(vars_default), ")
                    AND ", WHERE, "
                  GROUP BY [BYVAR], ", paste0(vars_default, collapse = ", "), "
-               ) AS a JOIN (SELECT [BYVAR], CAST(count([BYVAR]) AS numeric) AS total
+               ) AS a JOIN (SELECT [BYVAR] AS BYVAR, CAST(count([BYVAR]) AS numeric) AS total
                  FROM legend
                    INNER JOIN mapunit ON mapunit.lkey = legend.lkey
                    INNER JOIN component ON mapunit.mukey = component.mukey
                    LEFT JOIN cogeomordesc ON component.cokey = cogeomordesc.cokey
-                 ", .JOIN_TABLE(table), "
+                   ", .JOIN_TABLE(table), "
                  WHERE legend.areasymbol != 'US'
                    AND (", .NULL_FILTER(vars_default), ")
                    AND ", WHERE, "
                  GROUP BY [BYVAR]) AS b
-               ON a.[BYVAR] = b.[BYVAR]
+               ON a.BYVAR = b.BYVAR
                ORDER BY [BYVAR], ", .ORDER_COLUMNS(vars_default))
   
   # insert grouping variable

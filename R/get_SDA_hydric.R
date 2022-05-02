@@ -22,11 +22,12 @@
 #' @param WHERE character containing SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, or `component` tables, used in lieu of `mukeys` or `areasymbols`
 #' @param method One of: `"Mapunit"`, `"Dominant Component"`, `"Dominant Condition"`, `"None"`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
+#' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
 #' @return a data.frame
 #' @export
 #' @importFrom soilDB format_SQL_in_statement SDA_query
-get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, method = "MAPUNIT", query_string = FALSE) {
+get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, method = "MAPUNIT", query_string = FALSE, dsn = NULL) {
 
         method <- match.arg(toupper(method), c("MAPUNIT", "DOMINANT COMPONENT", "DOMINANT CONDITION", "NONE"))
 
@@ -43,38 +44,15 @@ get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, meth
         q <- sprintf("SELECT areasymbol,
         musym,
         mapunit.muname,
-        mapunit.mukey/1 AS mukey,
-        (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit AS mu
-        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey) AS total_comppct,
-        (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit AS mu
-        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
-        AND majcompflag = 'Yes') AS count_maj_comp,
-        (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit AS mu
-        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
-        AND hydricrating = 'Yes' ) AS all_hydric,
-        (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit AS mu
-        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
-        AND majcompflag = 'Yes' AND hydricrating = 'Yes') AS hydric_majors,
-        (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit AS mu
-        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
-        AND majcompflag = 'Yes' AND hydricrating != 'Yes') AS maj_not_hydric,
-         (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit AS mu
-        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
-        AND majcompflag != 'Yes' AND hydricrating  = 'Yes' ) AS hydric_inclusions,
-        (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit AS mu
-        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
-        AND hydricrating != 'Yes') AS all_not_hydric,
-         (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit AS mu
-        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
-        AND hydricrating IS NULL) AS hydric_null
+        mapunit.mukey AS mukey,
+          (SELECT TOP 1 ISNULL(SUM(comppct_r), 0) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey) AS total_comppct,
+          (SELECT TOP 1 ISNULL(SUM(comppct_r), 0) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey AND majcompflag = 'Yes') AS count_maj_comp,
+          (SELECT TOP 1 ISNULL(SUM(comppct_r), 0) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey AND hydricrating = 'Yes') AS all_hydric,
+          (SELECT TOP 1 ISNULL(SUM(comppct_r), 0) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey AND majcompflag = 'Yes' AND hydricrating = 'Yes') AS hydric_majors,
+          (SELECT TOP 1 ISNULL(SUM(comppct_r), 0) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey AND majcompflag = 'Yes' AND hydricrating != 'Yes') AS maj_not_hydric,
+          (SELECT TOP 1 ISNULL(SUM(comppct_r), 0) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey AND majcompflag != 'Yes' AND hydricrating  = 'Yes') AS hydric_inclusions,
+          (SELECT TOP 1 ISNULL(SUM(comppct_r), 0) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey AND hydricrating != 'Yes') AS all_not_hydric,
+          (SELECT TOP 1 ISNULL(SUM(comppct_r), 0) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey AND hydricrating IS NULL) AS hydric_null
         INTO #main_query
         FROM legend
         INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
@@ -105,7 +83,7 @@ get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, meth
                            "AND hydricrating = (SELECT TOP 1 hydricrating FROM mapunit AS mu
                 INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
                 GROUP BY hydricrating, comppct_r
-                ORDER BY SUM(comppct_r) over(partition by hydricrating) DESC)"
+                ORDER BY SUM(comppct_r) OVER (PARTITION BY hydricrating) DESC)"
            }
           
            q <- sprintf(paste0("SELECT areasymbol,
@@ -125,8 +103,17 @@ get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, meth
    }
 
    # execute query
-   res <- soilDB::SDA_query(q)
-
+   if (is.null(dsn)) {
+     res <- suppressMessages(SDA_query(q))
+   } else {
+     if (!inherits(dsn, 'DBIConnection')) {
+       dsn <- dbConnect(RSQLite::SQLite(), dsn)
+       on.exit(DBI::dbDisconnect(dsn), add = TRUE)
+     } 
+     q <- gsub("ISNULL", "IFNULL", gsub("TOP 1 ", "", gsub("\\) AS", " LIMIT 1) AS", q)))
+     res <- dbGetQuery(dsn, q)
+   }
+   
    # stop if bad
    if (inherits(res, 'try-error')) {
     warnings()

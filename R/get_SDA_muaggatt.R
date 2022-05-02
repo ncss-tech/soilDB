@@ -8,11 +8,12 @@
 #' @param mukeys vector of map unit keys
 #' @param WHERE character containing SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, or `muaggatt` tables, used in lieu of `mukeys` or `areasymbols`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
+#' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
 #' @return a data.frame
 #' @export
 #' @importFrom soilDB format_SQL_in_statement SDA_query
-get_SDA_muaggatt <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, query_string = FALSE) {
+get_SDA_muaggatt <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, query_string = FALSE, dsn = NULL) {
 
   
   if (is.null(mukeys) && is.null(areasymbols) && is.null(WHERE)) {
@@ -36,8 +37,16 @@ get_SDA_muaggatt <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, qu
   }
   
   # execute query
-  res <- soilDB::SDA_query(q)
-
+  if (is.null(dsn)) {
+    res <- suppressMessages(SDA_query(q))
+  } else {
+    if (!inherits(dsn, 'DBIConnection')) {
+      dsn <- dbConnect(RSQLite::SQLite(), dsn)
+      on.exit(DBI::dbDisconnect(dsn), add = TRUE)
+    } 
+    res <- dbGetQuery(dsn, q)
+  }
+  
   # stop if bad
   if (inherits(res, 'try-error')) {
     warnings()

@@ -16,7 +16,8 @@ get_SDA_property(
   FUN = NULL,
   include_minors = FALSE,
   miscellaneous_areas = FALSE,
-  query_string = FALSE
+  query_string = FALSE,
+  dsn = NULL
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ get_SDA_property(
 \item{miscellaneous_areas}{Include miscellaneous areas  (non-soil components) in "Weighted Average", "MIN" or "MAX" results?}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
+
+\item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL} (default) use Soil Data Access API via \code{SDA_query()}.}
 }
 \value{
 a data.frame with result
