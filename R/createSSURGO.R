@@ -5,6 +5,7 @@
 #' To specify the Soil Survey Areas you would like to obtain data you use a `WHERE` clause for query of `sacatalog` table such as `areasymbol = 'CA067'`, `"areasymbol IN ('CA628', 'CA067')"` or  `areasymbol LIKE 'CT%'`.
 #'
 #' @param WHERE A SQL `WHERE` clause expression used to filter records in `sacatalog` table. Alternately `WHERE` can be any spatial object supported by `SDA_spatialQuery()` for defining the target extent.
+#' @param areasymbols Character vector of soil survey area symbols e.g. `c("CA067", "CA077")`. Used in lieu of `WHERE` arugment.
 #' @param destdir Directory to download ZIP files into. Default `tempdir()`.
 #' @param exdir Directory to extract ZIP archives into. May be a directory that does not yet exist. Each ZIP file will extract to a folder labeled with `areasymbol` in this directory. Default: `destdir`
 #' @param include_template Include the (possibly state-specific) MS Access template database? Default: `FALSE`
@@ -20,7 +21,8 @@
 #' 
 #' @return Character. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip = TRUE`.
 
-downloadSSURGO <- function(WHERE, 
+downloadSSURGO <- function(WHERE = NULL, 
+                           areasymbols = NULL,
                            destdir = tempdir(), 
                            exdir = destdir, 
                            include_template = FALSE,
@@ -29,8 +31,16 @@ downloadSSURGO <- function(WHERE,
                            overwrite = FALSE,
                            quiet = FALSE) {
   
+  if (is.null(WHERE) && is.null(areasymbols)) {
+    stop('must specify either `WHERE` or `areasymbols` argument', call. = FALSE)
+  }
+    
+  if (is.null(WHERE) && !is.null(areasymbols)) {
+    WHERE <- sprintf("areasymbol IN %s", format_SQL_in_statement(areasymbols))
+  }
+  
   if (!is.character(WHERE)) {
-    # attempt passing to SDA_spatialQuery
+    # attempt passing WHERE to SDA_spatialQuery
     res <- suppressMessages(SDA_spatialQuery(WHERE, what = 'areasymbol'))
     WHERE <- paste("areasymbol IN", format_SQL_in_statement(res$areasymbol))
   }

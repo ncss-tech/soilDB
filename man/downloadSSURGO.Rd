@@ -5,7 +5,8 @@
 \title{Get SSURGO ZIP files from Web Soil Survey 'Download Soils Data'}
 \usage{
 downloadSSURGO(
-  WHERE,
+  WHERE = NULL,
+  areasymbols = NULL,
   destdir = tempdir(),
   exdir = destdir,
   include_template = FALSE,
@@ -17,6 +18,8 @@ downloadSSURGO(
 }
 \arguments{
 \item{WHERE}{A SQL \code{WHERE} clause expression used to filter records in \code{sacatalog} table. Alternately \code{WHERE} can be any spatial object supported by \code{SDA_spatialQuery()} for defining the target extent.}
+
+\item{areasymbols}{Character vector of soil survey area symbols e.g. \code{c("CA067", "CA077")}. Used in lieu of \code{WHERE} arugment.}
 
 \item{destdir}{Directory to download ZIP files into. Default \code{tempdir()}.}
 
