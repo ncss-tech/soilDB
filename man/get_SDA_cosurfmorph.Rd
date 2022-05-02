@@ -69,5 +69,5 @@ Full component data including surface morphometry summaries at the "site" level 
 \code{fetchSDA()} \code{get_SDA_pmgroupname()}
 }
 \author{
-Dylan E. Beaudette, Andrew Brown
+Dylan E. Beaudette, Andrew G. Brown
 }

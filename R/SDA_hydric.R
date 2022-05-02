@@ -19,69 +19,65 @@
 #'
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
+#' @param WHERE character containing SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, or `component` tables, used in lieu of `mukeys` or `areasymbols`
 #' @param method One of: `"Mapunit"`, `"Dominant Component"`, `"Dominant Condition"`, `"None"`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
 #' @return a data.frame
 #' @export
 #' @importFrom soilDB format_SQL_in_statement SDA_query
-get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, method = "MAPUNIT", query_string = FALSE) {
-
-        stopifnot(!is.null(areasymbols) | !is.null(mukeys))
-
-        if (!is.null(areasymbols)) {
-                areasymbols <- soilDB::format_SQL_in_statement(areasymbols)
-        }
-
-        if (!is.null(mukeys)) {
-                mukeys <- soilDB::format_SQL_in_statement(mukeys)
-        }
+get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, method = "MAPUNIT", query_string = FALSE) {
 
         method <- match.arg(toupper(method), c("MAPUNIT", "DOMINANT COMPONENT", "DOMINANT CONDITION", "NONE"))
 
-        where_clause <- switch(as.character(is.null(areasymbols)),
-                               "TRUE" = sprintf("mu.mukey IN %s", mukeys),
-                               "FALSE" = sprintf("l.areasymbol IN %s", areasymbols))
-
+        if (is.null(mukeys) && is.null(areasymbols) && is.null(WHERE)) {
+          stop("Please specify one of the following arguments: mukeys, areasymbols, WHERE", call. = FALSE)
+        }
+        
+        if (!is.null(mukeys)) {
+          WHERE <- paste("mapunit.mukey IN", format_SQL_in_statement(mukeys))
+        } else if (!is.null(areasymbols)) {
+          WHERE <- paste("legend.areasymbol IN", format_SQL_in_statement(areasymbols))
+        } 
+        
         q <- sprintf("SELECT areasymbol,
         musym,
-        muname,
-        mu.mukey/1 AS mukey,
+        mapunit.muname,
+        mapunit.mukey/1 AS mukey,
         (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit
-        INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey) AS total_comppct,
+        FROM mapunit AS mu
+        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey) AS total_comppct,
         (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit
-        INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
+        FROM mapunit AS mu
+        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
         AND majcompflag = 'Yes') AS count_maj_comp,
         (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit
-        INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
+        FROM mapunit AS mu
+        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
         AND hydricrating = 'Yes' ) AS all_hydric,
         (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit
-        INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
+        FROM mapunit AS mu
+        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
         AND majcompflag = 'Yes' AND hydricrating = 'Yes') AS hydric_majors,
         (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit
-        INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
+        FROM mapunit AS mu
+        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
         AND majcompflag = 'Yes' AND hydricrating != 'Yes') AS maj_not_hydric,
          (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit
-        INNER JOIN component ON component.mukey=mapunit.mukey AND mapunit.mukey = mu.mukey
+        FROM mapunit AS mu
+        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
         AND majcompflag != 'Yes' AND hydricrating  = 'Yes' ) AS hydric_inclusions,
         (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit
-        INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
-        AND hydricrating  != 'Yes') AS all_not_hydric,
+        FROM mapunit AS mu
+        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
+        AND hydricrating != 'Yes') AS all_not_hydric,
          (SELECT TOP 1 ISNULL(SUM(comppct_r), 0)
-        FROM mapunit
-        INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
-        AND hydricrating  IS NULL ) AS hydric_null
+        FROM mapunit AS mu
+        INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
+        AND hydricrating IS NULL) AS hydric_null
         INTO #main_query
-        FROM legend AS l
-        INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
-
+        FROM legend
+        INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
         SELECT areasymbol, mukey, musym, muname,
                total_comppct AS total_comppct,
                hydric_majors AS hydric_majors,
@@ -92,40 +88,40 @@ get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, method = "MAPUNIT"
         WHEN hydric_majors > 0 THEN 'Partially Hydric'
         WHEN hydric_majors + hydric_inclusions < total_comppct / 2 THEN 'Predominantly Nonhydric'
         ELSE 'Error' END AS HYDRIC_RATING
-        FROM #main_query", where_clause)
+        FROM #main_query", WHERE)
 
         comp_selection <- ""
         hyd_selection <- ""
         if (method != "MAPUNIT") {
            if (method %in% c("DOMINANT COMPONENT", "DOMINANT CONDITION")) {
-                   comp_selection <- "AND c.cokey =
+                   comp_selection <- "AND component.cokey =
                 (SELECT TOP 1 c1.cokey FROM component AS c1
-                 INNER JOIN mapunit AS mu1 ON c1.mukey = mu1.mukey AND c1.mukey = mu.mukey
+                 INNER JOIN mapunit AS mu1 ON c1.mukey = mu1.mukey AND c1.mukey = mapunit.mukey
                  ORDER BY c1.comppct_r DESC, c1.cokey)"
            }
 
            if (method == "DOMINANT CONDITION") {
                    hyd_selection <-
-                           "AND hydricrating = (SELECT TOP 1 hydricrating FROM mapunit
-                INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
+                           "AND hydricrating = (SELECT TOP 1 hydricrating FROM mapunit AS mu
+                INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey
                 GROUP BY hydricrating, comppct_r
                 ORDER BY SUM(comppct_r) over(partition by hydricrating) DESC)"
            }
-
+          
            q <- sprintf(paste0("SELECT areasymbol,
                    musym,
                    muname,
-                   mu.mukey, ",
+                   mapunit.mukey, ",
                    ifelse(method == "DOMINANT CONDITION", "", "cokey, compname, comppct_r, majcompflag, "),
                    "hydricrating
-                 FROM legend l
-           INNER JOIN mapunit mu ON mu.lkey = l.lkey
-           INNER JOIN component c ON c.mukey = mu.mukey %s %s
-           WHERE %s"), comp_selection, hyd_selection, where_clause)
+                 FROM legend
+           INNER JOIN mapunit ON mapunit.lkey = legend.lkey
+           INNER JOIN component ON component.mukey = mapunit.mukey %s %s
+           WHERE %s"), comp_selection, hyd_selection, WHERE)
    }
 
    if (query_string) {
-           return(q)
+    return(q)
    }
 
    # execute query
@@ -133,8 +129,8 @@ get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, method = "MAPUNIT"
 
    # stop if bad
    if (inherits(res, 'try-error')) {
-     warnings()
-     stop(attr(res, 'condition'))
+    warnings()
+    stop(attr(res, 'condition'))
    }
 
    return(res)

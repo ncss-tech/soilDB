@@ -8,6 +8,7 @@
 #'
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
+#' @param WHERE character containing SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, `component`, or `copmgrp` tables, used in lieu of `mukeys` or `areasymbols`
 #' @param method One of: `"Dominant Component"`, `"Dominant Condition"`, `"None"`
 #' @param simplify logical; group into generalized parent material groups? Default `TRUE`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
@@ -17,25 +18,23 @@
 #' @importFrom soilDB format_SQL_in_statement SDA_query
 get_SDA_pmgroupname <- function(areasymbols = NULL,
                                 mukeys = NULL,
+                                WHERE = NULL,
                                 method = "DOMINANT COMPONENT",
                                 simplify = TRUE,
                                 query_string = FALSE) {
                 
-        stopifnot(!is.null(areasymbols) || !is.null(mukeys))
 
         method <- match.arg(toupper(method), c("DOMINANT COMPONENT", "DOMINANT CONDITION", "NONE"))
-        
-        if (!is.null(areasymbols)) {
-                areasymbols <- soilDB::format_SQL_in_statement(areasymbols)
+  
+        if (is.null(mukeys) && is.null(areasymbols) && is.null(WHERE)) {
+          stop("Please specify one of the following arguments: mukeys, areasymbols, WHERE", call. = FALSE)
         }
         
         if (!is.null(mukeys)) {
-                mukeys <- soilDB::format_SQL_in_statement(mukeys)
-        }
-
-        where_clause <- switch(as.character(is.null(areasymbols)),
-                               "TRUE" = sprintf("mu.mukey IN %s", mukeys),
-                               "FALSE" = sprintf("l.areasymbol IN %s", areasymbols))
+          WHERE <- paste("mapunit.mukey IN", format_SQL_in_statement(mukeys))
+        } else if (!is.null(areasymbols)) {
+          WHERE <- paste("legend.areasymbol IN", format_SQL_in_statement(areasymbols))
+        } 
 
         case_pmgroupname <- "
              CASE WHEN pmgroupname LIKE '%Calcareous loess%' THEN 'Eolian Deposits (nonvolcanic)'
@@ -155,17 +154,17 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
         
         
         if (method %in% c("DOMINANT COMPONENT", "DOMINANT CONDITION")) {
-                comp_selection <- "AND c.cokey =
+                comp_selection <- "AND component.cokey =
                 (SELECT TOP 1 c1.cokey FROM component AS c1
-                 INNER JOIN mapunit AS mu1 ON c1.mukey=mu1.mukey AND c1.mukey=mu.mukey ORDER BY c1.comppct_r DESC, c1.cokey )"
+                 INNER JOIN mapunit AS mu1 ON c1.mukey = mu1.mukey AND c1.mukey = mapunit.mukey ORDER BY c1.comppct_r DESC, c1.cokey )"
         } else {
                 comp_selection <- ""
         }
         
         if (method == "DOMINANT CONDITION") {
-                pm_selection <- "AND pmgroupname = (SELECT TOP 1 pmgroupname FROM mapunit
-                INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
-                INNER JOIN copmgrp ON copmgrp.cokey = c.cokey
+                pm_selection <- "AND pmgroupname = (SELECT TOP 1 pmgroupname FROM mapunit AS mu
+                INNER JOIN component AS c1 ON c1.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
+                INNER JOIN copmgrp ON copmgrp.cokey = component.cokey
                 GROUP BY pmgroupname, comppct_r ORDER BY SUM(comppct_r) over(partition by pmgroupname) DESC)"
         } else {
                 pm_selection <- ""
@@ -173,19 +172,18 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
         
         q <- sprintf(
                 paste0("SELECT DISTINCT
-                     sacatalog.areasymbol AS areasymbol,
-                     mu.mukey AS mukey,
-                     mu.musym AS musym,
-                     mu.muname AS muname,",
-                     ifelse(method == "DOMINANT CONDITION", "", "compname, comppct_r, majcompflag,"),
-                     "%s
-                     FROM sacatalog
-                     INNER JOIN legend AS l ON l.areasymbol = sacatalog.areasymbol
-                     INNER JOIN mapunit AS mu ON mu.lkey = l.lkey AND %s
-                     INNER JOIN component AS c ON c.mukey = mu.mukey %s
-                     INNER JOIN copmgrp ON copmgrp.cokey = c.cokey %s"),
+                         legend.areasymbol AS areasymbol,
+                         mapunit.mukey/1 AS mukey,
+                         mapunit.musym AS musym,
+                         mapunit.muname AS muname,",
+                         ifelse(method == "DOMINANT CONDITION", "", "compname, comppct_r, majcompflag,"),
+                         "%s
+                         FROM legend 
+                         INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
+                         INNER JOIN component ON component.mukey = mapunit.mukey %s
+                         INNER JOIN copmgrp ON copmgrp.cokey = component.cokey %s"),
                 case_pmgroupname,
-                where_clause,
+                WHERE,
                 comp_selection, 
                 pm_selection
         )

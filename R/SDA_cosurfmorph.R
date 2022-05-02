@@ -26,7 +26,7 @@
 #'  
 #' @seealso `fetchSDA()` `get_SDA_pmgroupname()`
 #' @export
-#' @author Dylan E. Beaudette, Andrew Brown
+#' @author Dylan E. Beaudette, Andrew G. Brown
 #' @examples
 #' \dontrun{
 #'  # Summarize by 3D geomorphic components by component name (default `by='compname'`)
