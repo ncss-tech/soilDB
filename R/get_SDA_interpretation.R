@@ -694,6 +694,7 @@ get_SDA_interpretation <- function(rulename,
       dsn <- dbConnect(RSQLite::SQLite(), dsn)
       on.exit(DBI::dbDisconnect(dsn), add = TRUE)
     } 
+    q <- gsub("STRING_AGG(", "GROUP_CONCAT( ", q, fixed = TRUE)
     res <- dbGetQuery(dsn, q)
   }
 
@@ -1108,19 +1109,15 @@ get_SDA_interpretation <- function(rulename,
    INNER JOIN component AS c ON c.mukey = mu.mukey
    INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
    GROUP BY interphrc, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY interphrc) DESC) AS [class_%s],
-
-  (SELECT DISTINCT SUBSTRING((SELECT('; ' + interphrc)
-                              FROM mapunit AS mu
-                              INNER JOIN component AS c ON c.mukey = mu.mukey AND compkind != 'miscellaneous area' AND component.cokey = c.cokey
-                              INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
-                              AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc, interphr
-                              ORDER BY interphr DESC, interphrc
-                              FOR XML PATH('') ), 3, 1000)) AS [reason_%s]",
-                              x, .cleanRuleColumnName(x),
-  x, .cleanRuleColumnName(x),
-                              x, .cleanRuleColumnName(x),
-                              x, .cleanRuleColumnName(x))),
-         collapse = ", "), where_clause,
+  (SELECT STRING_AGG(interphrc, '; ')
+   FROM mapunit AS mu
+   INNER JOIN component AS c ON c.mukey = mu.mukey AND compkind != 'miscellaneous area' AND component.cokey = c.cokey
+   INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
+   AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s') AS [reason_%s]",
+   x, .cleanRuleColumnName(x),
+   x, .cleanRuleColumnName(x),
+   x, .cleanRuleColumnName(x),
+   x, .cleanRuleColumnName(x))), collapse = ", "), where_clause,
   ifelse(dominant, "AND component.cokey =
     (SELECT TOP 1 c1.cokey FROM component AS c1
      INNER JOIN mapunit AS mu ON c1.mukey = mu.mukey AND c1.mukey = mapunit.mukey ORDER BY c1.comppct_r DESC, c1.cokey)", ""))
@@ -1134,13 +1131,11 @@ get_SDA_interpretation <- function(rulename,
                 INNER JOIN component ON component.mukey = mapunit.mukey %s",
                 paste0(sapply(interp, function(x) sprintf("(SELECT interphr FROM component AS c0 INNER JOIN cointerp ON c0.cokey = cointerp.cokey AND component.cokey = c0.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [rating_%s],
   (SELECT interphrc FROM component AS c1 INNER JOIN cointerp ON c1.cokey = cointerp.cokey AND c1.cokey = component.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [class_%s],
-  (SELECT DISTINCT SUBSTRING(  (  SELECT ( '; ' + interphrc)
-                                  FROM mapunit AS mu
-                                  INNER JOIN component AS c ON c.mukey = mapunit.mukey AND compkind != 'miscellaneous area' AND component.cokey = c.cokey
-                                  INNER JOIN cointerp AS coi ON c.cokey = coi.cokey AND mapunit.mukey = mu.mukey
-                                  AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc, interphr
-                                  ORDER BY interphr DESC, interphrc
-                                  FOR XML PATH('') ), 3, 1000)) as [reason_%s]",
+  (SELECT STRING_AGG(interphrc, '; ')
+   FROM mapunit AS mu
+   INNER JOIN component AS c ON c.mukey = mu.mukey AND compkind != 'miscellaneous area' AND component.cokey = c.cokey
+   INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
+   AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s') as [reason_%s]",
                                       x, .cleanRuleColumnName(x),
                                       x, .cleanRuleColumnName(x),
                                       x, .cleanRuleColumnName(x))),
@@ -1180,17 +1175,15 @@ get_SDA_interpretation <- function(rulename,
                   INNER JOIN component AS c ON c.mukey = mu.mukey
                   INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
                   AND (interphr) IS NOT NULL GROUP BY mu.mukey),2) AS [sum_com_%s],
-                  (SELECT DISTINCT SUBSTRING((SELECT ( '; ' + interphrc)
-                    FROM mapunit AS mu
-                    INNER JOIN component AS c ON c.mukey = mu.mukey AND compkind != 'miscellaneous area'
-                    INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
-                    AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s' GROUP BY interphrc
-                    ORDER BY interphrc
-                    FOR XML PATH('') ), 3, 1000)) AS [reason_%s]",
+                  (SELECT STRING_AGG(interphrc, '; ')
+                   FROM mapunit AS mu
+                   INNER JOIN component AS c ON c.mukey = mu.mukey AND compkind != 'miscellaneous area' 
+                   INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
+                   AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s') AS [reason_%s]",
                                                     x, .cleanRuleColumnName(x),
                                                     x, .cleanRuleColumnName(x),
                                                     x, .cleanRuleColumnName(x),
-                x, .cleanRuleColumnName(x))), collapse = ", "), 
+                                                    x, .cleanRuleColumnName(x))), collapse = ", "), 
            where_clause,
           paste0(sapply(interp,
                         function(x) sprintf("ISNULL(ROUND(([rating_%s] / [sum_com_%s]),2), 99) AS [rating_%s]",
