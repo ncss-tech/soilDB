@@ -4,7 +4,14 @@
 \alias{createSSURGO}
 \title{Create a SQLite database or GeoPackage from one or more SSURGO Exports}
 \usage{
-createSSURGO(filename, exdir, pattern = NULL, overwrite = FALSE, ...)
+createSSURGO(
+  filename,
+  exdir,
+  pattern = NULL,
+  overwrite = FALSE,
+  header = FALSE,
+  ...
+)
 }
 \arguments{
 \item{filename}{Output file name (e.g. \code{'db.sqlite'} or \code{'db.gpkg'})}
@@ -14,6 +21,8 @@ createSSURGO(filename, exdir, pattern = NULL, overwrite = FALSE, ...)
 \item{pattern}{Character. Optional regular expression to use to filter subdirectories of \code{exdir}. Default: \code{NULL} will search all subdirectories for SSURGO export files.#' @param include_spatial Logical. Include spatial data layers in database? Default: \code{TRUE}.}
 
 \item{overwrite}{Logical. Overwrite existing layers? Default \code{FALSE} will append to existing tables/layers.}
+
+\item{header}{Logical. Passed to \code{read.delim()} for reading pipe-delimited (\code{|}) text files containing tabular data.}
 
 \item{...}{Additional arguments passed to \code{write_sf()} for writing spatial layers.}
 }
