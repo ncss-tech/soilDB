@@ -24,19 +24,19 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
                                 simplify = TRUE,
                                 query_string = FALSE,
                                 dsn = NULL) {
-                
+
 
         method <- match.arg(toupper(method), c("DOMINANT COMPONENT", "DOMINANT CONDITION", "NONE"))
-  
+
         if (is.null(mukeys) && is.null(areasymbols) && is.null(WHERE)) {
           stop("Please specify one of the following arguments: mukeys, areasymbols, WHERE", call. = FALSE)
         }
-        
+
         if (!is.null(mukeys)) {
           WHERE <- paste("mapunit.mukey IN", format_SQL_in_statement(as.integer(mukeys)))
         } else if (!is.null(areasymbols)) {
           WHERE <- paste("legend.areasymbol IN", format_SQL_in_statement(areasymbols))
-        } 
+        }
 
         case_pmgroupname <- "
              CASE WHEN pmgroupname LIKE '%Calcareous loess%' THEN 'Eolian Deposits (nonvolcanic)'
@@ -149,29 +149,28 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
              WHEN pmgroupname LIKE '%siltstone%' THEN 'Miscoded - should be pmorigin'
              WHEN pmgroupname LIKE '%mixed%' THEN 'Miscellaneous Deposits'
              WHEN pmgroupname LIKE '%NULL%' THEN 'NULL' ELSE 'NULL' END AS pmgroupname"
-        
+
         if (!simplify) {
                 case_pmgroupname <- "pmgroupname"
         }
-        
-        
+
+
         if (method %in% c("DOMINANT COMPONENT", "DOMINANT CONDITION")) {
-                comp_selection <- "AND component.cokey =
-                (SELECT TOP 1 c1.cokey FROM component AS c1
-                 INNER JOIN mapunit AS mu1 ON c1.mukey = mu1.mukey AND c1.mukey = mapunit.mukey ORDER BY c1.comppct_r DESC, c1.cokey )"
+                comp_selection <- sprintf("AND component.cokey = (%s)", .LIMIT_N("SELECT c1.cokey FROM component AS c1
+                 INNER JOIN mapunit AS mu1 ON c1.mukey = mu1.mukey AND c1.mukey = mapunit.mukey ORDER BY c1.comppct_r DESC, c1.cokey ", n = 1, sqlite = !is.null(dsn)))
         } else {
                 comp_selection <- ""
         }
-        
+
         if (method == "DOMINANT CONDITION") {
-                pm_selection <- "AND pmgroupname = (SELECT TOP 1 pmgroupname FROM mapunit AS mu
+                pm_selection <- sprintf("AND pmgroupname = (%s)", .LIMIT_N("SELECT pmgroupname FROM mapunit AS mu
                 INNER JOIN component AS c1 ON c1.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
                 INNER JOIN copmgrp ON copmgrp.cokey = component.cokey
-                GROUP BY pmgroupname, comppct_r ORDER BY SUM(comppct_r) over(partition by pmgroupname) DESC)"
+                GROUP BY pmgroupname, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY pmgroupname) DESC", n = 1, sqlite = !is.null(dsn)))
         } else {
                 pm_selection <- ""
         }
-        
+
         q <- sprintf(
                 paste0("SELECT DISTINCT
                          legend.areasymbol AS areasymbol,
@@ -180,20 +179,20 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
                          mapunit.muname AS muname,",
                          ifelse(method == "DOMINANT CONDITION", "", "compname, comppct_r, majcompflag,"),
                          "%s
-                         FROM legend 
+                         FROM legend
                          INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
                          INNER JOIN component ON component.mukey = mapunit.mukey %s
                          INNER JOIN copmgrp ON copmgrp.cokey = component.cokey %s"),
                 case_pmgroupname,
                 WHERE,
-                comp_selection, 
+                comp_selection,
                 pm_selection
         )
-        
+
    if (query_string) {
            return(q)
    }
-        
+
    # execute query
    if (is.null(dsn)) {
      res <- suppressMessages(SDA_query(q))
@@ -201,10 +200,10 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
      if (!inherits(dsn, 'DBIConnection')) {
        dsn <- dbConnect(RSQLite::SQLite(), dsn)
        on.exit(DBI::dbDisconnect(dsn), add = TRUE)
-     } 
+     }
      res <- dbGetQuery(dsn, q)
    }
-   
+
    # stop if bad
    if (inherits(res, 'try-error')) {
      warnings()
