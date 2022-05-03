@@ -53,7 +53,14 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">createSSURGO</span><span class="op">(</span><span class="va">filename</span>, <span class="va">exdir</span>, pattern <span class="op">=</span> <span class="cn">NULL</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">createSSURGO</span><span class="op">(</span>
+  <span class="va">filename</span>,
+  <span class="va">exdir</span>,
+  pattern <span class="op">=</span> <span class="cn">NULL</span>,
+  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,
+  header <span class="op">=</span> <span class="cn">FALSE</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -66,6 +73,8 @@
 <dd><p>Character. Optional regular expression to use to filter subdirectories of <code>exdir</code>. Default: <code>NULL</code> will search all subdirectories for SSURGO export files.#' @param include_spatial Logical. Include spatial data layers in database? Default: <code>TRUE</code>.</p></dd>
 <dt>overwrite</dt>
 <dd><p>Logical. Overwrite existing layers? Default <code>FALSE</code> will append to existing tables/layers.</p></dd>
+<dt>header</dt>
+<dd><p>Logical. Passed to <code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.delim()</a></code> for reading pipe-delimited (<code>|</code>) text files containing tabular data.</p></dd>
 <dt>...</dt>
 <dd><p>Additional arguments passed to <code><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">write_sf()</a></code> for writing spatial layers.</p></dd>
 </dl></div>
