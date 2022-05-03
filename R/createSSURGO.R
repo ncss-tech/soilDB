@@ -245,7 +245,7 @@ createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, hea
 #' Helper function for getting spatial(vector)/tabular data out of ESRI File Geodatabase (.gdb)
 #' 
 #' @param dsn ESRI File Geodatabase path (ending with `".gdb"`)
-#' @param exdir Directory to extract ZIP archives into. May be a directory that does not yet exist. Each ZIP file will extract to a folder labeled with `areasymbol` in this directory. Default: `destdir`
+#' @param exdir Parent directory to create `"./spatial/"` and `"./tabular/"` folders. May be a directory that does not yet exist. 
 #' @param replace_names Optional. Named character containing replacement names of form: `c("OLD"="NEW")`
 #' @param header Default `TRUE` to include column names read from GDB. `FALSE` will assign column names based on metadata.
 #'
