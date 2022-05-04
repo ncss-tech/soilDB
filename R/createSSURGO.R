@@ -129,7 +129,9 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param exdir Path containing containing SSURGO spatial (.shp) and tabular (.txt) files. 
 #' @param pattern Character. Optional regular expression to use to filter subdirectories of `exdir`. Default: `NULL` will search all subdirectories for SSURGO export files.#' @param include_spatial Logical. Include spatial data layers in database? Default: `TRUE`. 
 #' @param overwrite Logical. Overwrite existing layers? Default `FALSE` will append to existing tables/layers.
+#' @param header Logical. Passed to `read.delim()` for reading pipe-delimited (`|`) text files containing tabular data.
 #' @param ... Additional arguments passed to `write_sf()` for writing spatial layers.
+#'
 #' @return Character. Vector of layer/table names in `filename`.
 #' @export
 #' @examples
@@ -137,7 +139,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #'  downloadSSURGO("areasymbol IN ('CA067', 'CA077', 'CA632')", destdir = "SSURGO_test")
 #'  createSSURGO("test.gpkg", "SSURGO_test")
 #' }
-createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, ...) {
+createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, header = FALSE, ...) {
   f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE, include.dirs = T)
   
   if (!requireNamespace("sf"))
@@ -176,34 +178,36 @@ createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, ...
   f.txt.grp <- split(f.txt, txt.grp)
   
   # get table, column, index lookup tables
-  mstab <- read.table(f.txt.grp[[which(names(f.txt.grp) == "mstab")]][[1]], sep = "|", stringsAsFactors = FALSE)
-  mstab_lut <- mstab$V1
-  names(mstab_lut) <- mstab$V5
-  mstabcol <- read.table(f.txt.grp[[which(names(f.txt.grp) == "mstabcol")]][[1]], sep = "|", stringsAsFactors = FALSE)
-  msidxdet <- read.table(f.txt.grp[[which(names(f.txt.grp) == "msidxdet")]][[1]], sep = "|", stringsAsFactors = FALSE)
+  mstab <- read.delim(f.txt.grp[[which(names(f.txt.grp) %in% c("mstab", "mdstattabs"))[1]]][[1]], sep = "|", stringsAsFactors = FALSE, header = header)
+  mstab_lut <- mstab[[1]]
+  names(mstab_lut) <- mstab[[5]]
+  mstabcol <- read.delim(f.txt.grp[[which(names(f.txt.grp) %in% c("mstabcol", "mdstattabcols"))[1]]][[1]], sep = "|", stringsAsFactors = FALSE, header = header)
+  msidxdet <- read.delim(f.txt.grp[[which(names(f.txt.grp) %in% c("msidxdet", "mdstatidxdet"))[1]]][[1]], sep = "|", stringsAsFactors = FALSE, header = header)
 
   con <- RSQLite::dbConnect(RSQLite::SQLite(), filename, loadable.extensions = TRUE)  
   lapply(names(f.txt.grp), function(x) {
-    newnames <- mstabcol$V3[mstabcol$V1 == mstab_lut[x]]
-    indexPK <- na.omit(msidxdet$V4[msidxdet$V1 == mstab_lut[x] & grepl("PK_", msidxdet$V2)])
+    newnames <- mstabcol[[3]][mstabcol[[1]] == mstab_lut[x]]
+    indexPK <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("PK_", msidxdet[[2]])])
     
     d <- try(as.data.frame(data.table::rbindlist(lapply(seq_along(f.txt.grp[[x]]), function(i) {
-      if (length(readLines(f.txt.grp[[x]][i]))) {
         
-        y <- read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = FALSE)
+        y <- read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header)
         
         if (length(y) == 1) {
           y <- data.frame(content = y)
-        } else colnames(y) <- newnames
+        } else {
+          if (!header) { # preserve headers if present 
+            colnames(y) <- newnames
+          }
+        }
         y
-      }
     }))), silent = FALSE)
     
-    if (is.na(mstab_lut[x])) {
+    if (length(mstab_lut[x]) && is.na(mstab_lut[x])) {
       mstab_lut[x] <- x
     }
     
-    if (inherits(d, 'data.frame') && nrow(d) > 0 && !is.na(mstab_lut[x])) {
+    if (length(mstab_lut[x]) && !is.na(mstab_lut[x]) && inherits(d, 'data.frame') && nrow(d) > 0) {
       # remove repeated records/metadata
       if (ncol(d) > 1) {
         d <- unique(d) 
@@ -233,4 +237,92 @@ createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, ...
   res <- RSQLite::dbListTables(con)
   RSQLite::dbDisconnect(con)
   invisible(res)
+}
+
+
+#' .dumpSSURGOGDB
+#' 
+#' Helper function for getting spatial(vector)/tabular data out of ESRI File Geodatabase (.gdb)
+#' 
+#' @param dsn ESRI File Geodatabase path (ending with `".gdb"`)
+#' @param exdir Parent directory to create `"./spatial/"` and `"./tabular/"` folders. May be a directory that does not yet exist. 
+#' @param replace_names Optional. Named character containing replacement names of form: `c("OLD"="NEW")`
+#' @param header Default `TRUE` to include column names read from GDB. `FALSE` will assign column names based on metadata.
+#'
+#' @return
+#' @keywords internal
+#' @noRd
+.dumpSSURGOGDB <- function(dsn, exdir, replace_names = NULL, header = TRUE) {
+  if (!requireNamespace('sf')) {
+    stop("package `sf` is required to extract tabular and spatial data from a File Geodatabase")
+  }
+  
+  if (!dir.exists(file.path(exdir, "tabular")))
+    dir.create(file.path(exdir, "tabular"), recursive = TRUE)
+  
+  if (!dir.exists(file.path(exdir, "spatial")))
+    dir.create(file.path(exdir, "spatial"), recursive = TRUE)
+  
+  x <- sf::st_layers(dsn)
+  lapply(seq_len(length(x$name)), function(i) {
+    xn <- x$name[i]
+    xg <- x$geomtype[i]
+    d <- sf::read_sf(dsn, xn)
+    if (!is.null(replace_names) && xn %in% names(replace_names)) {
+      xn <- replace_names[xn]
+    }
+    if (is.na(xg)) {
+      write.table(
+        d,
+        file = file.path(exdir, "tabular", paste0(xn, ".txt")),
+        sep = "|",
+        qmethod = "double",
+        col.names = header,
+        row.names = FALSE
+      )
+      d
+    } else {
+      sf::write_sf(d, file.path(exdir, "spatial", paste0(xn, ".shp")))
+    }
+  })
+}
+
+
+#' .prepare_RSS_raster
+#' 
+#' Helper function for trimming raster exported from ESRI File Geodatabase. 
+#' OpenFileGDB driver is not able to export grid data, so other tools will
+#' need to be used to create input TIFF file.
+#' 
+#' @param x Input TIFF file
+#' @param destfile Output TIFF File (default appends "_trim" to input filename)
+#'
+#' @return a trimmed SpatRaster with consistent NODATA (specified as IEEE 754 `NaN`)
+#' @keywords internal
+#' @noRd
+.prepare_RSS_raster <- function(x, destfile = gsub('\\.tif$', '_trim.tif', x)) {
+  
+  if (!requireNamespace('terra'))
+    stop("package `terra` is required to prepare Raster Soil Survey grids", call. = FALSE)
+  
+  r <- terra::rast(x)
+  tf1 <- tempfile(fileext = ".tif")
+  tf2 <- tempfile(fileext = ".tif")
+  tf3 <- tempfile(fileext = ".tif")
+  
+  terra::NAflag(r) <- 0
+  r2 <- terra::trim(r, filename = tf1, overwrite = TRUE)
+  
+  r3 <- terra::classify(r2, matrix(
+    c(-2147483648, 1, 2147483647,
+      2147483647, 2147483648, 2147483647),
+    ncol = 3, byrow = TRUE
+  ), include.lowest = TRUE, filename = tf2, overwrite = TRUE)
+  
+  terra::NAflag(r3) <- 2147483647
+  r4 <- terra::trim(r3, filename = tf3, overwrite = TRUE)
+  
+  res <- terra::writeRaster(r4, filename = destfile, datatype = "INT4U", overwrite = TRUE)
+  unlink(c(tf1, tf2, tf3))
+  res
 }
