@@ -1,3 +1,138 @@
+
+# function to build WSS urls
+.make_WSS_download_url <- function(WHERE = NULL, include_template = FALSE) {
+  
+  # use SDA to get areasymbol and last updated date to build WSS cache urls
+  q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol != 'US'"
+  q2 <- ifelse(!is.null(WHERE), paste0(q, " AND (", WHERE, ")"), q)
+  sacatalog <- suppressMessages(SDA_query(q2))
+  
+  areasymbol <- sacatalog$areasymbol
+  saverest <- sacatalog$saverest
+  statecode <- substr(areasymbol, 0, 2)
+  
+  # handle custom (state-specific) template DBs
+  # TODO: NPS urls cannot be derived from areasymbol alone
+  # NB: no (current) usage of "NPS" template
+  # TODO: authoritative source of release dates of templates?
+  statecode[!statecode %in% c('AK','CT','FL','GA','HI',
+                              'ID','IN','IA','ME','MI',
+                              'MN','MT','NE','NJ','NC',
+                              'OH','OR','PA','SD','UT',
+                              'VT','WA','WV','WI','WY',
+                              'HI','NPS')] <- "US" 
+  res <- paste0(
+    "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/Cache/SSA/wss_SSA_",
+    areasymbol, ifelse(include_template, paste0("_soildb_", statecode, "_2003"), ""), "_[", 
+    as.Date(saverest, format = "%m/%d/%Y %H:%M:%S"), "].zip"
+  )
+  
+  unique(res)
+}
+
+#' .dumpSSURGOGDB
+#' 
+#' Helper function for getting spatial(vector)/tabular data out of ESRI File Geodatabase (.gdb)
+#' 
+#' @param dsn ESRI File Geodatabase path (ending with `".gdb"`)
+#' @param exdir Parent directory to create `"./spatial/"` and `"./tabular/"` folders. May be a directory that does not yet exist. 
+#' @param replace_names Optional. Named character containing replacement names of form: `c("OLD"="NEW")`
+#' @param header Default `TRUE` to include column names read from GDB. `FALSE` will assign column names based on metadata.
+#'
+#' @return list of data.frame or sf object
+#' @keywords internal
+#' @noRd
+.dumpSSURGOGDB <- function(dsn, exdir, replace_names = NULL, header = TRUE) {
+  if (!requireNamespace('sf')) {
+    stop("package `sf` is required to extract tabular and spatial data from a File Geodatabase")
+  }
+  
+  if (!dir.exists(file.path(exdir, "tabular")))
+    dir.create(file.path(exdir, "tabular"), recursive = TRUE)
+  
+  if (!dir.exists(file.path(exdir, "spatial")))
+    dir.create(file.path(exdir, "spatial"), recursive = TRUE)
+  
+  x <- sf::st_layers(dsn)
+  lapply(seq_len(length(x$name)), function(i) {
+    xn <- x$name[i]
+    xg <- x$geomtype[i]
+    d <- sf::read_sf(dsn, xn)
+    if (!is.null(replace_names) && xn %in% names(replace_names)) {
+      xn <- replace_names[xn]
+    }
+    if (is.na(xg)) {
+      write.table(
+        d,
+        file = file.path(exdir, "tabular", paste0(xn, ".txt")),
+        sep = "|",
+        qmethod = "double",
+        col.names = header,
+        row.names = FALSE
+      )
+      d
+    } else {
+      sf::write_sf(d, file.path(exdir, "spatial", paste0(xn, ".shp")))
+    }
+  })
+}
+
+
+#' .prepare_RSS_raster
+#' 
+#' Helper function for trimming raster exported from ESRI File Geodatabase. 
+#' OpenFileGDB driver is not able to export grid data, so other tools will
+#' need to be used to create input TIFF file.
+#' 
+#' @param x Input TIFF file
+#' @param destfile Output TIFF File (default appends "_trim" to input filename)
+#'
+#' @return a trimmed SpatRaster with consistent NODATA (specified as IEEE 754 `NaN`)
+#' @keywords internal
+#' @noRd
+.prepare_RSS_raster <- function(x, destfile = gsub('\\.tif$', '_trim.tif', x)) {
+  
+  if (!requireNamespace('terra'))
+    stop("package `terra` is required to prepare Raster Soil Survey grids", call. = FALSE)
+  
+  r <- terra::rast(x)
+  tf1 <- tempfile(fileext = ".tif")
+  tf2 <- tempfile(fileext = ".tif")
+  tf3 <- tempfile(fileext = ".tif")
+  
+  terra::NAflag(r) <- 0
+  r2 <- terra::trim(r, filename = tf1, overwrite = TRUE)
+  
+  r3 <- terra::classify(r2, matrix(
+    c(-2147483648, 1, 2147483647,
+      2147483647, 2147483648, 2147483647),
+    ncol = 3, byrow = TRUE
+  ), include.lowest = TRUE, filename = tf2, overwrite = TRUE)
+  
+  terra::NAflag(r3) <- 2147483647
+  r4 <- terra::trim(r3, filename = tf3, overwrite = TRUE)
+  
+  res <- terra::writeRaster(r4, filename = destfile, datatype = "INT4U", overwrite = TRUE)
+  unlink(c(tf1, tf2, tf3))
+  res
+} 
+
+# internal function to get the full set of ids from NASIS to alias to export
+.get_SSURGO_export_iid_table <- function(coiids) {  
+  dbQueryNASIS(NASIS(), sprintf("
+      SELECT liid, lmapunitiid, muiid, corriid, dmuiid, coiid, 
+             areasymbol, musym, muname, compname, comppct_r 
+      FROM area
+        INNER JOIN legend ON legend.areaiidref = area.areaiid
+        INNER JOIN lmapunit ON lmapunit.liidref = legend.liid
+        INNER JOIN mapunit ON mapunit.muiid = lmapunit.muiidref
+        INNER JOIN correlation ON correlation.muiidref = mapunit.muiid
+        INNER JOIN datamapunit ON datamapunit.dmuiid = correlation.dmuiidref
+        INNER JOIN component ON component.dmuiidref = datamapunit.dmuiid 
+      WHERE component.coiid IN %s", format_SQL_in_statement(coiids)))
+}
+
+
 #' Fetch data from a custom NASIS SSURGO Export (MS Access)
 #'
 #' To create a custom NASIS SSURGO Export, go to Exports Explorer menu and select "Add New Export..."
@@ -122,21 +257,6 @@
   res$lmapunitiid <- as.integer(gsub("(\\d+):.*", "\\1", res$cokey))
   cointerpbase$coiid <- as.integer(gsub(".*:(\\d+)", "\\1", cointerpbase$cokey))
   res$coiid <- as.integer(gsub(".*:(\\d+)", "\\1", res$cokey))
-  
-  # internal function to get the full set of ids from NASIS to alias to export
-  .get_SSURGO_export_iid_table <- function(coiids) {  
-    dbQueryNASIS(NASIS(), sprintf("
-      SELECT liid, lmapunitiid, muiid, corriid, dmuiid, coiid, 
-             areasymbol, musym, muname, compname, comppct_r 
-      FROM area
-        INNER JOIN legend ON legend.areaiidref = area.areaiid
-        INNER JOIN lmapunit ON lmapunit.liidref = legend.liid
-        INNER JOIN mapunit ON mapunit.muiid = lmapunit.muiidref
-        INNER JOIN correlation ON correlation.muiidref = mapunit.muiid
-        INNER JOIN datamapunit ON datamapunit.dmuiid = correlation.dmuiidref
-        INNER JOIN component ON component.dmuiidref = datamapunit.dmuiid 
-      WHERE component.coiid IN %s", format_SQL_in_statement(coiids)))
-  }
   
   # get lookup table
   res2 <- .get_SSURGO_export_iid_table(cointerpkey$coiid)
