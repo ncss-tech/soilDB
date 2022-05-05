@@ -108,7 +108,7 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
   # excludes custom calculated columns (e.g. surfaceshape concatenated from across/down)
   vars_default <- vars[!grepl("surfaceshape", vars)]
 
-  q <- paste0("SELECT a.[BYVAR],
+  q <- paste0("SELECT a.[BYVARNAME] AS [BYVARNAME],
                  ", .SELECT_STATEMENT0(vars), ",
                  total
                FROM (
@@ -134,10 +134,11 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
                    AND ", WHERE, "
                  GROUP BY [BYVAR]) AS b
                ON a.BYVAR = b.BYVAR
-               ORDER BY [BYVAR], ", .ORDER_COLUMNS(vars_default))
+               ORDER BY [BYVARNAME], ", .ORDER_COLUMNS(vars_default))
 
   # insert grouping variable
-  qsub <- gsub("[BYVAR]", by, q, fixed = TRUE)
+  byname <- gsub("(.*\\.)?(.*)", "\\2", by)
+  qsub <-  gsub("[BYVARNAME]", byname, gsub("[BYVAR]", by, q, fixed = TRUE), fixed = TRUE)
 
   if (query_string) {
     return(qsub)
