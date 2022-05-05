@@ -22,8 +22,12 @@ library(sharpshootR)
 # bb <- '-120.5453 37.5718,-120.5453 37.5796,-120.5289 37.5796,-120.5289 37.5718,-120.5453 37.5718'
 
 # near Ithica, NY
-bb <- '-76.6811 42.3178,-76.6811 42.3526,-76.5987 42.3526,-76.5987 42.3178,-76.6811 42.3178'
+# bb <- '-76.6811 42.3178,-76.6811 42.3526,-76.5987 42.3526,-76.5987 42.3178,-76.6811 42.3178'
 
+
+# WI, problematic misc. areas / series named MARSH
+# https://casoilresource.lawr.ucdavis.edu/gmap/?loc=45.90325,-86.56538,z16
+bb <- '-86.5810 45.8964,-86.5810 45.9107,-86.5481 45.9107,-86.5481 45.8964,-86.5810 45.8964'
 
 
 ## assemble AOI polygon into WKT
@@ -40,10 +44,24 @@ st_crs(x) <- 4326
 m <- SDA_spatialQuery(x, what = 'mukey')
 
 ## compose SQL to return component details for these map unit keys
-sql <- sprintf("SELECT mukey, cokey, compname, comppct_r FROM component WHERE mukey IN %s AND majcompflag = 'Yes'", format_SQL_in_statement(as.integer(m$mukey)))
+# return only:
+# * map units overlapping with BBOX
+# * major components
+# * no misc. areas that might share name with a poorly-named soil series
+sql <- sprintf(
+  "SELECT mukey, cokey, compname, compkind, comppct_r 
+  FROM component 
+  WHERE mukey IN %s 
+  AND majcompflag = 'Yes'
+  AND compkind != 'Miscellaneous area'
+  ", format_SQL_in_statement(as.integer(m$mukey))
+)
 
 ## send to SDA, result is a data.frame
 s <- SDA_query(sql)
+
+s
+
 
 ## get OSD morphology + extended summaries 
 osd <- fetchOSD(unique(s$compname), extended = TRUE)
@@ -101,6 +119,7 @@ par(mar = c(0, 0, 0, 0))
 plotProfileDendrogram(
   sub,
   clust = res$clust,
+  y.offset = 0.2,
   dend.y.scale = 3,
   scaling.factor = 0.01,
   width = 0.3,
@@ -135,6 +154,7 @@ plotProfileDendrogram(
   sub, 
   clust = res$clust, 
   dend.y.scale = 3, 
+  y.offset = 0.2,
   scaling.factor = 0.01, 
   width = 0.3, 
   name.style = 'center-center', 
@@ -164,7 +184,7 @@ matplot(y = hp[, 2:6], type = 'b', lty = 1, pch = 16, axes = FALSE, col = hp.col
 # grid(nx = 0, ny = NULL)
 axis(side = 4, line = -1, las = 1, cex.axis = 0.7)
 # axis(side = 2, line = -3, las = 1, cex.axis = 0.7)
-legend('top', legend = rev(nm), col = rev(hp.cols), pch = 16, bty = 'n', cex = 0.8, pt.cex = 2, horiz = TRUE, inset = c(0.01, 0.01))
+legend('topleft', legend = rev(nm), col = rev(hp.cols), pch = 16, bty = 'n', cex = 0.8, pt.cex = 2, horiz = TRUE, inset = c(0.01, 0.01))
 mtext('Probability', side = 2, line = -2, font = 2)
 
 
