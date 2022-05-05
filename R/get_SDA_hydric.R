@@ -84,7 +84,7 @@ get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, meth
            }
 
            q <- sprintf(paste0("SELECT areasymbol, musym, muname, mapunit.mukey, ",
-                   ifelse(method == "DOMINANT CONDITION", "", "cokey, compname, comppct_r, majcompflag, "),
+                   ifelse(method == "DOMINANT CONDITION", "", "cokey, compname, compkind, comppct_r, majcompflag, "),
                    "hydricrating
                  FROM legend
                  INNER JOIN mapunit ON mapunit.lkey = legend.lkey

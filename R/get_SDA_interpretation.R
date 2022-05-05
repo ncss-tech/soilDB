@@ -1116,7 +1116,7 @@ get_SDA_interpretation <- function(rulename,
 .interpretation_aggregation <- function(interp, where_clause, dominant = FALSE, sqlite = FALSE) {
   aggfun <- "STRING_AGG"
   if (sqlite) aggfun <- "GROUP_CONCAT"
-  sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey, component.cokey AS cokey, compname, comppct_r, majcompflag,
+  sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey, component.cokey AS cokey, compname, compkind, comppct_r, majcompflag,
                 %s
                 FROM legend
                 INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s

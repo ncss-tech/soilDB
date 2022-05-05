@@ -177,7 +177,7 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
                          mapunit.mukey/1 AS mukey,
                          mapunit.musym AS musym,
                          mapunit.muname AS muname,",
-                         ifelse(method == "DOMINANT CONDITION", "", "compname, comppct_r, majcompflag,"),
+                         ifelse(method == "DOMINANT CONDITION", "", "compname, compkind, comppct_r, majcompflag,"),
                          "%s
                          FROM legend
                          INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
