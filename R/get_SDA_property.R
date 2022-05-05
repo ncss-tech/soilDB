@@ -440,6 +440,7 @@ get_SDA_property <-
                         SELECT DISTINCT #comp_temp2.mukey, #comp_temp2.cokey, WEIGHTED_COMP_PCT
                           INTO #weights
                           FROM #comp_temp2
+                          %s
                         SELECT DISTINCT #weights.mukey, SUM(WEIGHTED_COMP_PCT) AS RATED_PCT
                           INTO #weights2
                           FROM #weights
@@ -448,6 +449,7 @@ get_SDA_property <-
                           INTO #last_step
                           FROM #comp_temp2
                           INNER JOIN #weights2 ON #weights2.mukey = #comp_temp2.mukey
+                          %s
                           GROUP BY #comp_temp2.mukey, #comp_temp2.cokey, #weights2.RATED_PCT, WEIGHTED_COMP_PCT, %s
                           SELECT areasymbol, musym, muname, #kitchensink.mukey, #last_step.cokey, #last_step.RATED_PCT, %s
                             INTO #last_step2
@@ -464,7 +466,9 @@ paste0(sprintf("thickness_wt_%s, sum_thickness_%s", property, property), collaps
 paste0(property, collapse = ", "),
 paste0(sprintf("SUM((thickness_wt_%s / (CASE WHEN sum_thickness_%s = 0 THEN 1 ELSE sum_thickness_%s END)) * %s) OVER (PARTITION BY #main.cokey) AS DEPTH_WEIGHTED_AVERAGE%s",
                property, property, property, property, n), collapse = ", "),
+paste0("WHERE ", paste0(sprintf("NOT ISNULL(DEPTH_WEIGHTED_AVERAGE%s, 0) = 0", n), collapse = " AND ")),
 paste0(sprintf("WEIGHTED_COMP_PCT * DEPTH_WEIGHTED_AVERAGE%s AS COMP_WEIGHTED_AVERAGE%s", n, n), collapse = ", "),
+paste0("WHERE ", paste0(sprintf("NOT ISNULL(DEPTH_WEIGHTED_AVERAGE%s, 0) = 0", n), collapse = " AND ")),
 paste0(sprintf("DEPTH_WEIGHTED_AVERAGE%s", n), collapse = ", "),
 paste0(sprintf("CAST (SUM (COMP_WEIGHTED_AVERAGE%s / RATED_PCT) OVER (PARTITION BY #kitchensink.mukey) AS decimal(5,2)) AS %s",
                n, property), collapse = ", "),
