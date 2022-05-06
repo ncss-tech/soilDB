@@ -412,8 +412,7 @@ get_SDA_property <-
             INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
             INNER JOIN component ON component.mukey = mapunit.mukey
             INNER JOIN chorizon ON chorizon.cokey = component.cokey AND hzdepb_r >= %s AND hzdept_r <= %s
-            INNER JOIN chtexturegrp AS cht ON chorizon.chkey = cht.chkey
-            WHERE cht.rvindicator = 'Yes' AND chorizon.hzdept_r IS NOT NULL
+            WHERE chorizon.hzdept_r IS NOT NULL
             ORDER BY areasymbol, musym, muname, mapunit.mukey, comppct_r DESC, cokey, hzdept_r, hzdepb_r
             %s",
             WHERE,
@@ -434,7 +433,7 @@ get_SDA_property <-
 #main.cokey, #main.chkey, #main.compname, #main.compkind, hzname, hzdept_r, hzdepb_r, hzdept_r_ADJ, hzdepb_r_ADJ, %s, %s, comppct_r, SUM_COMP_PCT, WEIGHTED_COMP_PCT, %s
                         INTO #comp_temp2
                         FROM #main
-                        INNER JOIN #comp_temp3 ON #comp_temp3.cokey=#main.cokey
+                        INNER JOIN #comp_temp3 ON #comp_temp3.cokey = #main.cokey
                         ORDER BY #main.areasymbol, #main.musym, #main.muname, #main.mukey,
                                  comppct_r DESC, #main.cokey, hzdept_r, hzdepb_r
                         SELECT DISTINCT #comp_temp2.mukey, #comp_temp2.cokey, WEIGHTED_COMP_PCT
@@ -462,9 +461,9 @@ get_SDA_property <-
                               LEFT OUTER JOIN #last_step ON #last_step.mukey = #last_step2.mukey
                                   GROUP BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
                                   ORDER BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s",
-paste0(sprintf("thickness_wt_%s, sum_thickness_%s", property, property), collapse = ", "),
+paste0(sprintf("ISNULL(thickness_wt_%s, 0) AS thickness_wt_%s, sum_thickness_%s", property, property, property), collapse = ", "),
 paste0(property, collapse = ", "),
-paste0(sprintf("SUM((thickness_wt_%s / (CASE WHEN sum_thickness_%s = 0 THEN 1 ELSE sum_thickness_%s END)) * %s) OVER (PARTITION BY #main.cokey) AS DEPTH_WEIGHTED_AVERAGE%s",
+paste0(sprintf("((thickness_wt_%s / (CASE WHEN sum_thickness_%s = 0 THEN 1 ELSE sum_thickness_%s END)) * %s)  AS DEPTH_WEIGHTED_AVERAGE%s",
                property, property, property, property, n), collapse = ", "),
 paste0("WHERE ", paste0(sprintf("DEPTH_WEIGHTED_AVERAGE%s IS NOT NULL", n), collapse = " AND ")),
 paste0(sprintf("WEIGHTED_COMP_PCT * DEPTH_WEIGHTED_AVERAGE%s AS COMP_WEIGHTED_AVERAGE%s", n, n), collapse = ", "),
