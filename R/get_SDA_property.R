@@ -540,9 +540,7 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
               INNER JOIN mapunit ON mapunit.lkey = legend.lkey
               INNER JOIN component ON component.mukey = mapunit.mukey %s
               ORDER BY areasymbol, musym, muname, mapunit.mukey, component.comppct_r DESC, component.cokey%s",
-            ifelse(any(is_hz), "chorizon.chkey AS chkey,
-                                   component.compname, component.comppct_r, majcompflag,
-                                   chorizon.hzdept_r AS hzdept_r, chorizon.hzdepb_r AS hzdepb_r,", ""),
+            ifelse(any(is_hz), "chorizon.chkey AS chkey, chorizon.hzdept_r AS hzdept_r, chorizon.hzdepb_r AS hzdepb_r,", ""),
             paste0(sapply(agg_property[!is_hz], function(x) sprintf("component.%s AS %s", x, x)), collapse = ", "),
             ifelse(any(is_hz) & !all(is_hz), ",", ""),
             paste0(sapply(agg_property[is_hz], function(x) sprintf("chorizon.%s AS %s", x, x)), collapse = ", "),
