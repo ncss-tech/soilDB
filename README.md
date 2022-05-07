@@ -40,7 +40,7 @@ Citation
     ## 
     ##   Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown
     ##   (2022). soilDB: Soil Database Interface. R package version 2.6.15.
-    ##   https://CRAN.R-project.org/package=soilDB
+    ##   <https://CRAN.R-project.org/package=soilDB>
     ## 
     ## A BibTeX entry for LaTeX users is
     ## 
@@ -52,8 +52,8 @@ Citation
     ##     year = {2022},
     ##   }
 
-soilDB 2.6.15.3
----------------
+soilDB 2.7.0
+------------
 
 <!-- ### Notices on Database Interfaces -->
 <!-- #### NASIS -->
