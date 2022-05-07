@@ -14,14 +14,14 @@
 #' @param verbose Print messages?
 #' @param as_Spatial Return sp classes? e.g. `Spatial*DataFrame`. Default: `FALSE`.
 #' @return an `sf` data.frame corresponding to SDA spatial data for all symbols requested. If `as_Spatial=TRUE` returns a `Spatial*DataFrame` from the sp package via `sf::as_Spatial()` for backward compatibility. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with `add.fields`.
-#' @details 
-#' 
+#' @details
+#'
 #' This function automatically "chunks" the input vector (using `makeChunks()`) of map unit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the `chunk.size` setting and the length of your input vector. If you are working with many map units and/or large extents, you may need to decrease this number in order to have more chunks.
 #'
 #' Querying regions with complex mapping may require smaller `chunk.size`. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform "poorly" (slow or error) no matter what the chunk size is. Shuffling the order of the inputs using `sample()` may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use `muacres` as a heuristic to adjust for total acreage within chunks.
-#' 
+#'
 #' Note that STATSGO data are fetched where `CLIPAREASYMBOL = 'US'` to avoid duplicating state and national subsets of the geometry.
-#' 
+#'
 #' @author Andrew G. Brown, Dylan E. Beaudette
 #'
 #' @examples
@@ -107,9 +107,9 @@ fetchSDA_spatial <- function(x,
   # a convenience interface for lkey is by areasymbol/areaname or other legend column
   } else if (by.col %in% c("areasymbol", "areasym", "areaname", "mlraoffice", "mouagncyresp")) {
     if (by.col == "areasym") by.col <- "areasymbol"
-    
+
     if (by.col != "areasymbol") add.fields <- unique(c(add.fields, by.col))
-    
+
     # do additional query to determine mapping of areasymbol:lkey
     q.mukey <- paste0("SELECT areasymbol, lkey FROM legend WHERE ", by.col, " IN ",
                       format_SQL_in_statement(x),";")
@@ -123,9 +123,9 @@ fetchSDA_spatial <- function(x,
   } else {
     stop(paste0("Unknown mapunit identifier (",by.col,")"), call. = FALSE)
   }
-  
+
   mukey.chunk <- makeChunks(mukey.list, chunk.size)
-  
+
   s <- NULL
 
   # select method
@@ -214,7 +214,7 @@ fetchSDA_spatial <- function(x,
   if (as_Spatial && requireNamespace("sf")) {
     s <- sf::as_Spatial(s)
   }
-  
+
   return(s)
 }
 
@@ -260,10 +260,10 @@ fetchSDA_spatial <- function(x,
 
   s <- NULL
   if (!is.null(sp.res.sub)) {
-    
-    sp.res.sub$geom <- sf::st_as_sfc(wk::as_wkt(sp.res.sub$geom), crs = 4326)
+
+    sp.res.sub$geom <- sf::st_as_sfc(sp.res.sub$geom, crs = 4326)
     s <- sf::st_as_sf(sp.res.sub) # sf::as_Spatial(sfobj)
-    
+
     t2 <- Sys.time()
     tdif <- difftime(t2, t1, "secs")
 

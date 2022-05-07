@@ -30,9 +30,8 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
   }
 
   # convert wkt to sf/SPDF
-  d[[g]] <- sf::st_as_sfc(wk::as_wkt(d[,g]))
+  d[[g]] <- sf::st_as_sfc(d[,g], crs = crs)
   sfobj <- sf::st_as_sf(d)
-  sfobj <- sf::st_set_crs(sfobj, sf::st_crs(crs))
   if (as_sf) {
     return(sfobj)
   }
@@ -308,7 +307,7 @@ SDA_spatialQuery <- function(geom,
     }))
     return(res)
   }
-  
+
   res <- .SDA_spatialQuery(
     geom = geom,
     what = what,
@@ -329,34 +328,34 @@ SDA_spatialQuery <- function(geom,
                              geomIntersection = FALSE,
                              db = c("SSURGO", "STATSGO", "SAPOLYGON"),
                              query_string = FALSE) {
-  
+
   # check for required packages
   if (!requireNamespace('sf', quietly = TRUE))
     stop('please install the `sf` package', call. = FALSE)
-  
+
   if (!requireNamespace('wk', quietly = TRUE))
     stop('please install the `wk` package', call. = FALSE)
 
   what <- tolower(what)
   db <- toupper(db)
-  
+
   return_sf <- FALSE
   return_terra <- FALSE
-  
+
   # raster support
-  if (inherits(geom, 'RasterLayer') | 
+  if (inherits(geom, 'RasterLayer') |
       inherits(geom, 'RasterBrick') |
       inherits(geom, 'RasterStack')) {
     if (!requireNamespace('terra'))
       stop("packages terra is required", call. = FALSE)
     geom <- terra::rast(geom)
   }
-  
+
   if (inherits(geom, 'SpatRaster') | inherits(geom, 'SpatVector')) {
     # terra support
     return_terra <- TRUE
     return_sf <- TRUE
-    geom <- terra::as.polygons(terra::ext(geom), 
+    geom <- terra::as.polygons(terra::ext(geom),
                                crs = terra::crs(geom))
     geom <- sf::st_as_sf(geom)
   } else if (inherits(geom, 'sf') || inherits(geom, 'sfc')) {
