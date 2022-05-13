@@ -65,7 +65,8 @@
   FUN <span class="op">=</span> <span class="cn">NULL</span>,
   include_minors <span class="op">=</span> <span class="cn">FALSE</span>,
   miscellaneous_areas <span class="op">=</span> <span class="cn">FALSE</span>,
-  query_string <span class="op">=</span> <span class="cn">FALSE</span>
+  query_string <span class="op">=</span> <span class="cn">FALSE</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -93,6 +94,8 @@
 <dd><p>Include miscellaneous areas  (non-soil components) in "Weighted Average", "MIN" or "MAX" results?</p></dd>
 <dt>query_string</dt>
 <dd><p>Default: <code>FALSE</code>; if <code>TRUE</code> return a character string containing query that would be sent to SDA via <code>SDA_query</code></p></dd>
+<dt>dsn</dt>
+<dd><p>Path to local SQLite database or a DBIConnection object. If <code>NULL</code> (default) use Soil Data Access API via <code><a href="SDA_query.html">SDA_query()</a></code>.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

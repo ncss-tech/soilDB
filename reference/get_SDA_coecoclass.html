@@ -61,7 +61,8 @@
   query_string <span class="op">=</span> <span class="cn">FALSE</span>,
   ecoclassref <span class="op">=</span> <span class="st">"Ecological Site Description Database"</span>,
   not_rated_value <span class="op">=</span> <span class="st">"Not assigned"</span>,
-  miscellaneous_areas <span class="op">=</span> <span class="cn">TRUE</span>
+  miscellaneous_areas <span class="op">=</span> <span class="cn">TRUE</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -83,6 +84,8 @@
 <dd><p>Default: <code>"Not assigned"</code></p></dd>
 <dt>miscellaneous_areas</dt>
 <dd><p>Include miscellaneous areas (non-soil components)?</p></dd>
+<dt>dsn</dt>
+<dd><p>Path to local SQLite database or a DBIConnection object. If <code>NULL</code> (default) use Soil Data Access API via <code><a href="SDA_query.html">SDA_query()</a></code>.</p></dd>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
