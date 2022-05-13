@@ -10,7 +10,8 @@ get_SDA_pmgroupname(
   WHERE = NULL,
   method = "DOMINANT COMPONENT",
   simplify = TRUE,
-  query_string = FALSE
+  query_string = FALSE,
+  dsn = NULL
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ get_SDA_pmgroupname(
 \item{simplify}{logical; group into generalized parent material groups? Default \code{TRUE}}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
+
+\item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL} (default) use Soil Data Access API via \code{SDA_query()}.}
 }
 \value{
 a data.frame

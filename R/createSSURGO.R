@@ -91,38 +91,7 @@ downloadSSURGO <- function(WHERE = NULL,
   
   invisible(paths2)
 }
-
-# function to build WSS urls
-.make_WSS_download_url <- function(WHERE = NULL, include_template = FALSE) {
-  
-  # use SDA to get areasymbol and last updated date to build WSS cache urls
-  q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol != 'US'"
-  q2 <- ifelse(!is.null(WHERE), paste0(q, " AND (", WHERE, ")"), q)
-  sacatalog <- SDA_query(q2)
-  
-  areasymbol <- sacatalog$areasymbol
-  saverest <- sacatalog$saverest
-  statecode <- substr(areasymbol, 0, 2)
-  
-  # handle custom (state-specific) template DBs
-  # TODO: NPS urls cannot be derived from areasymbol alone
-  # NB: no (current) usage of "NPS" template
-  # TODO: authoritative source of release dates of templates?
-  statecode[!statecode %in% c('AK','CT','FL','GA','HI',
-                              'ID','IN','IA','ME','MI',
-                              'MN','MT','NE','NJ','NC',
-                              'OH','OR','PA','SD','UT',
-                              'VT','WA','WV','WI','WY',
-                              'HI','NPS')] <- "US" 
-  res <- paste0(
-    "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/Cache/SSA/wss_SSA_",
-    areasymbol, ifelse(include_template, paste0("_soildb_", statecode, "_2003"), ""), "_[", 
-    as.Date(saverest, format = "%m/%d/%Y %H:%M:%S"), "].zip"
-  )
-
-  unique(res)
-}
-
+ 
 #' Create a SQLite database or GeoPackage from one or more SSURGO Exports
 #'
 #' @param filename Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`)
@@ -140,7 +109,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #'  createSSURGO("test.gpkg", "SSURGO_test")
 #' }
 createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, header = FALSE, ...) {
-  f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE, include.dirs = T)
+  f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE)
   
   if (!requireNamespace("sf"))
     stop("package `sf` is required to write spatial datasets to SSURGO SQLite databases", call. = FALSE)
@@ -178,16 +147,37 @@ createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, hea
   f.txt.grp <- split(f.txt, txt.grp)
   
   # get table, column, index lookup tables
-  mstab <- read.delim(f.txt.grp[[which(names(f.txt.grp) %in% c("mstab", "mdstattabs"))[1]]][[1]], sep = "|", stringsAsFactors = FALSE, header = header)
-  mstab_lut <- mstab[[1]]
-  names(mstab_lut) <- mstab[[5]]
-  mstabcol <- read.delim(f.txt.grp[[which(names(f.txt.grp) %in% c("mstabcol", "mdstattabcols"))[1]]][[1]], sep = "|", stringsAsFactors = FALSE, header = header)
-  msidxdet <- read.delim(f.txt.grp[[which(names(f.txt.grp) %in% c("msidxdet", "mdstatidxdet"))[1]]][[1]], sep = "|", stringsAsFactors = FALSE, header = header)
-
+  mstabn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstab", "mdstattabs"))[1]]][[1]]
+  mstabcn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstabcol", "mdstattabcols"))[1]]][[1]]
+  msidxdn <- f.txt.grp[[which(names(f.txt.grp) %in% c("msidxdet", "mdstatidxdet"))[1]]][[1]]
+  
+  if (length(mstabn) >= 1) {
+    mstab <- read.delim(mstabn[1], sep = "|", stringsAsFactors = FALSE, header = header)
+    mstab_lut <- mstab[[1]]
+    names(mstab_lut) <- mstab[[5]]
+  } else {
+    mstab_lut <- names(f.txt.grp)
+    names(mstab_lut) <- names(f.txt.grp)
+  }
+  
+  if (length(mstabcn) >= 1) {
+    mstabcol <- read.delim(mstabcn[1], sep = "|", stringsAsFactors = FALSE, header = header)
+  }
+  
+  if (length(msidxdn) >= 1) {
+    msidxdet <- read.delim(msidxdn[1], sep = "|", stringsAsFactors = FALSE, header = header)
+  }
+  
   con <- RSQLite::dbConnect(RSQLite::SQLite(), filename, loadable.extensions = TRUE)  
   lapply(names(f.txt.grp), function(x) {
-    newnames <- mstabcol[[3]][mstabcol[[1]] == mstab_lut[x]]
-    indexPK <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("PK_", msidxdet[[2]])])
+    
+    if (!is.null(mstabcol)) {
+      newnames <- mstabcol[[3]][mstabcol[[1]] == mstab_lut[x]]
+    }
+    
+    if (!is.null(msidxdet)) {
+      indexPK <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("PK_", msidxdet[[2]])])
+    }
     
     d <- try(as.data.frame(data.table::rbindlist(lapply(seq_along(f.txt.grp[[x]]), function(i) {
         
@@ -196,7 +186,7 @@ createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, hea
         if (length(y) == 1) {
           y <- data.frame(content = y)
         } else {
-          if (!header) { # preserve headers if present 
+          if (!is.null(mstab) && !header) { # preserve headers if present 
             colnames(y) <- newnames
           }
         }
@@ -221,7 +211,7 @@ createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, hea
       }, silent = FALSE)
       
       # create pkey indices
-      if (length(indexPK) > 0) {
+      if (!is.null(indexPK) && length(indexPK) > 0) {
         try({
           RSQLite::dbExecute(con, sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
                                           paste0('PK_', mstab_lut[x]), mstab_lut[x], paste0(indexPK, collapse = ",")))

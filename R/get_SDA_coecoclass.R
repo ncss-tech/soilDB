@@ -12,12 +12,14 @@
 #' @param ecoclassref Default: `"Ecological Site Description Database"`. If `NULL` no constraint on `ecoclassref` is used in the query.
 #' @param not_rated_value Default: `"Not assigned"`
 #' @param miscellaneous_areas Include miscellaneous areas (non-soil components)?
+#' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 get_SDA_coecoclass <- function(method = "None",
                                areasymbols = NULL, mukeys = NULL, WHERE = NULL,
                                query_string = FALSE, 
                                ecoclassref = "Ecological Site Description Database",
                                not_rated_value = "Not assigned",
-                               miscellaneous_areas = TRUE) {
+                               miscellaneous_areas = TRUE,
+                               dsn = NULL) {
   method <- match.arg(toupper(method), c('NONE', "DOMINANT COMPONENT", "DOMINANT CONDITION"))
   
   if (!is.null(ecoclassref)) {
@@ -51,7 +53,15 @@ get_SDA_coecoclass <- function(method = "None",
   if (query_string)
     return(q)
   
-  res <- SDA_query(q)
+  if (is.null(dsn)) {
+    res <- SDA_query(q)
+  } else {
+    if (!inherits(dsn, 'DBIConnection')) {
+      dsn <- dbConnect(RSQLite::SQLite(), dsn)
+      on.exit(DBI::dbDisconnect(dsn), add = TRUE)
+    } 
+    res <- dbGetQuery(dsn, q)
+  }
   
   .I <- NULL
   idx <- NULL

@@ -12,7 +12,8 @@ get_SDA_coecoclass(
   query_string = FALSE,
   ecoclassref = "Ecological Site Description Database",
   not_rated_value = "Not assigned",
-  miscellaneous_areas = TRUE
+  miscellaneous_areas = TRUE,
+  dsn = NULL
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ get_SDA_coecoclass(
 \item{not_rated_value}{Default: \code{"Not assigned"}}
 
 \item{miscellaneous_areas}{Include miscellaneous areas (non-soil components)?}
+
+\item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL} (default) use Soil Data Access API via \code{SDA_query()}.}
 }
 \description{
 Get mapunit ecological sites from Soil Data Access

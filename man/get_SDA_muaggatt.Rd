@@ -8,7 +8,8 @@ get_SDA_muaggatt(
   areasymbols = NULL,
   mukeys = NULL,
   WHERE = NULL,
-  query_string = FALSE
+  query_string = FALSE,
+  dsn = NULL
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ get_SDA_muaggatt(
 \item{WHERE}{character containing SQL WHERE clause specified in terms of fields in \code{legend}, \code{mapunit}, or \code{muaggatt} tables, used in lieu of \code{mukeys} or \code{areasymbols}}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
+
+\item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL} (default) use Soil Data Access API via \code{SDA_query()}.}
 }
 \value{
 a data.frame

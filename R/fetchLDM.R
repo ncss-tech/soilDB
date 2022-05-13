@@ -72,7 +72,7 @@ fetchLDM <- function(x = NULL,
   if (inherits(dsn, 'DBIConnection')) {
     # allow any existing DBI connection to be passed via dsn argument
     con <- dsn
-  } else if(!is.null(dsn) && is.character(dsn)) {
+  } else if (!is.null(dsn) && is.character(dsn)) {
     # if it is a path to data source, try to connect with RSQLite
     con <- RSQLite::dbConnect(RSQLite::SQLite(), dsn)
   } else {
@@ -139,7 +139,7 @@ fetchLDM <- function(x = NULL,
                   lab_combine_nasis_ncss.site_key = lab_pedon.site_key ", 
             ifelse(is.null(x), "", sprintf("WHERE LOWER(%s) IN %s", what, format_SQL_in_statement(tolower(x)))))
 
-  if(inherits(con, 'DBIConnection')) {
+  if (inherits(con, 'DBIConnection')) {
     # query con using (modified) site_query
     # if (FALSE) {
     #   # fixes for old version of SQLite db
@@ -161,7 +161,7 @@ fetchLDM <- function(x = NULL,
     # TODO: this shouldn't be needed
     sites <- sites[,unique(colnames(sites))]
 
-    if (is.null(chunk.size) || nrow(sites) < chunk.size){
+    if (is.null(chunk.size) || nrow(sites) < chunk.size) {
       # get data for lab layers within pedon_key returned
       hz <- .get_lab_layer_by_pedon_key(x = sites[[bycol]],
                                         con = con,
@@ -195,7 +195,7 @@ fetchLDM <- function(x = NULL,
     ntry <- 0
     while ((inherits(hz, 'try-error') || is.null(hz)) && ntry < ntries) {
       if (is.null(chunk.size)) {
-        stop("query failed and chunk.size argument is NULL", call.=FALSE)
+        stop("query failed and chunk.size argument is NULL", call. = FALSE)
       }
       hz <- .do_chunk(con, chunk.size)
       # repeat as long as there is a try error/NULL, halving chunk.size with each iteration
@@ -315,7 +315,7 @@ fetchLDM <- function(x = NULL,
       ifelse(is.null(x), "", paste0(" AND ", bycol, " IN ", format_SQL_in_statement(x))),
       paste0(paste0(sapply(flattables[flattables %in% tables[!tables %in% c("lab_rosetta_Key", "lab_mir")]], 
                            function(b) paste0("IsNull(",b,".prep_code, '')")), 
-                    " IN ", format_SQL_in_statement(prep_code)), collapse= " AND "))
+                    " IN ", format_SQL_in_statement(prep_code)), collapse = " AND "))
   } else {
     layer_query <- sprintf(
       "SELECT * FROM lab_layer WHERE lab_layer.layer_type IN %s %s",
@@ -332,10 +332,10 @@ fetchLDM <- function(x = NULL,
       format_SQL_in_statement(x),
       paste0(paste0(sapply(fractables[fractables %in% tables], 
                            function(b) paste0("IsNull(",b,".prep_code, '')")), 
-                    " IN ", format_SQL_in_statement(prep_code)), collapse= " AND "),
+                    " IN ", format_SQL_in_statement(prep_code)), collapse = " AND "),
       paste0(paste0(sapply(fractables[fractables %in% tables], 
                          function(b) paste0("IsNull(",b,".analyzed_size_frac, '')")), 
-                  " IN ", format_SQL_in_statement(analyzed_size_frac)), collapse= " AND "))
+                  " IN ", format_SQL_in_statement(analyzed_size_frac)), collapse = " AND "))
   } else {
     layer_fraction_query <- NULL
   }
@@ -362,7 +362,7 @@ fetchLDM <- function(x = NULL,
 
       if (nrow(layerfracdata) == 0)
         message(sprintf('no fractionated samples found for selected prep_code (%s) and analyzed_size_frac (%s)',
-                paste0(prep_code, collapse = ", "), paste0(analyzed_size_frac, collapse=", ")))
+                paste0(prep_code, collapse = ", "), paste0(analyzed_size_frac, collapse = ", ")))
 
       layerdata <- merge(layerdata, layerfracdata[,c("labsampnum", colnames(layerfracdata)[!colnames(layerfracdata) %in% colnames(layerdata)])], by = "labsampnum", all.x = TRUE, incomparables = NA)
     }

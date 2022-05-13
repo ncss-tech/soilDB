@@ -16,7 +16,7 @@
 #' @param include_minors Include minor components in "Weighted Average" or "MIN/MAX" results?
 #' @param miscellaneous_areas Include miscellaneous areas  (non-soil components) in "Weighted Average", "MIN" or "MAX" results?
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
-#'
+#' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @examples
 #'
 #' \donttest{
@@ -130,15 +130,15 @@ get_SDA_property <-
            areasymbols = NULL, # vector of areasymbols
            mukeys = NULL, # vector of mukeys
            WHERE = NULL,
-           top_depth = 0, # used for method="weighted average" and "dominant component (numeric)"
-           bottom_depth = 200, # used for method="weighted average" and "dominant component (numeric)"
+           top_depth = 0, # used for method="weighted average", "dominant component (numeric)", "min/max"
+           bottom_depth = 200, # used for method="weighted average", "dominant component (numeric)", "min/max"
            FUN = NULL,
            include_minors = FALSE,
            miscellaneous_areas = FALSE,
-           query_string = FALSE) # used for method="min/max"
+           query_string = FALSE,
+           dsn = NULL)
     {
-
-
+    
   q <- .constructPropQuery(method = method,
                            property = property,
                            areasymbols = areasymbols,
@@ -153,8 +153,16 @@ get_SDA_property <-
   if (query_string) return(q)
 
   # execute query
-  res <- suppressMessages(soilDB::SDA_query(q))
-
+  if (is.null(dsn)) {
+    res <- suppressMessages(SDA_query(q))
+  } else {
+    if (!inherits(dsn, 'DBIConnection')) {
+      dsn <- dbConnect(RSQLite::SQLite(), dsn)
+      on.exit(DBI::dbDisconnect(dsn), add = TRUE)
+    } 
+    res <- dbGetQuery(dsn, q)
+  }
+  
   # stop if bad
   if (inherits(res, 'try-error')) {
     warnings()
@@ -394,7 +402,7 @@ get_SDA_property <-
             ELSE CAST((#comp_temp.comppct_r) AS decimal(5,2)) / SUM_COMP_PCT END AS WEIGHTED_COMP_PCT 
             INTO #comp_temp3
             FROM #comp_temp
-            SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey, component.cokey AS cokey, chorizon.chkey/1 AS chkey, compname, hzname, hzdept_r, hzdepb_r, CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS hzdept_r_ADJ,
+            SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey, component.cokey AS cokey, chorizon.chkey/1 AS chkey, compname, compkind, hzname, hzdept_r, hzdepb_r, CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS hzdept_r_ADJ,
             CASE WHEN hzdepb_r > %s THEN %s ELSE hzdepb_r END AS hzdepb_r_ADJ,
             %s, %s,
             comppct_r,
@@ -404,8 +412,7 @@ get_SDA_property <-
             INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
             INNER JOIN component ON component.mukey = mapunit.mukey
             INNER JOIN chorizon ON chorizon.cokey = component.cokey AND hzdepb_r >= %s AND hzdept_r <= %s
-            INNER JOIN chtexturegrp AS cht ON chorizon.chkey = cht.chkey
-            WHERE cht.rvindicator = 'Yes' AND chorizon.hzdept_r IS NOT NULL
+            WHERE chorizon.hzdept_r IS NOT NULL
             ORDER BY areasymbol, musym, muname, mapunit.mukey, comppct_r DESC, cokey, hzdept_r, hzdepb_r
             %s",
             WHERE,
@@ -423,15 +430,16 @@ get_SDA_property <-
             WHERE,
             top_depth, bottom_depth,
             sprintf("SELECT #main.areasymbol, #main.musym, #main.muname, #main.mukey,
-#main.cokey, #main.chkey, #main.compname, hzname, hzdept_r, hzdepb_r, hzdept_r_ADJ, hzdepb_r_ADJ, %s, %s, comppct_r, SUM_COMP_PCT, WEIGHTED_COMP_PCT, %s
+#main.cokey, #main.chkey, #main.compname, #main.compkind, hzname, hzdept_r, hzdepb_r, hzdept_r_ADJ, hzdepb_r_ADJ, %s, %s, comppct_r, SUM_COMP_PCT, WEIGHTED_COMP_PCT, %s
                         INTO #comp_temp2
                         FROM #main
-                        INNER JOIN #comp_temp3 ON #comp_temp3.cokey=#main.cokey
+                        INNER JOIN #comp_temp3 ON #comp_temp3.cokey = #main.cokey
                         ORDER BY #main.areasymbol, #main.musym, #main.muname, #main.mukey,
                                  comppct_r DESC, #main.cokey, hzdept_r, hzdepb_r
                         SELECT DISTINCT #comp_temp2.mukey, #comp_temp2.cokey, WEIGHTED_COMP_PCT
                           INTO #weights
                           FROM #comp_temp2
+                          %s
                         SELECT DISTINCT #weights.mukey, SUM(WEIGHTED_COMP_PCT) AS RATED_PCT
                           INTO #weights2
                           FROM #weights
@@ -440,6 +448,7 @@ get_SDA_property <-
                           INTO #last_step
                           FROM #comp_temp2
                           INNER JOIN #weights2 ON #weights2.mukey = #comp_temp2.mukey
+                          %s
                           GROUP BY #comp_temp2.mukey, #comp_temp2.cokey, #weights2.RATED_PCT, WEIGHTED_COMP_PCT, %s
                           SELECT areasymbol, musym, muname, #kitchensink.mukey, #last_step.cokey, #last_step.RATED_PCT, %s
                             INTO #last_step2
@@ -452,11 +461,13 @@ get_SDA_property <-
                               LEFT OUTER JOIN #last_step ON #last_step.mukey = #last_step2.mukey
                                   GROUP BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
                                   ORDER BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s",
-paste0(sprintf("thickness_wt_%s, sum_thickness_%s", property, property), collapse = ", "),
+paste0(sprintf("ISNULL(thickness_wt_%s, 0) AS thickness_wt_%s, sum_thickness_%s", property, property, property), collapse = ", "),
 paste0(property, collapse = ", "),
-paste0(sprintf("SUM((thickness_wt_%s / (CASE WHEN sum_thickness_%s = 0 THEN 1 ELSE sum_thickness_%s END)) * %s) OVER (PARTITION BY #main.cokey) AS DEPTH_WEIGHTED_AVERAGE%s",
+paste0(sprintf("((thickness_wt_%s / (CASE WHEN sum_thickness_%s = 0 THEN 1 ELSE sum_thickness_%s END)) * %s)  AS DEPTH_WEIGHTED_AVERAGE%s",
                property, property, property, property, n), collapse = ", "),
+paste0("WHERE ", paste0(sprintf("DEPTH_WEIGHTED_AVERAGE%s IS NOT NULL", n), collapse = " AND ")),
 paste0(sprintf("WEIGHTED_COMP_PCT * DEPTH_WEIGHTED_AVERAGE%s AS COMP_WEIGHTED_AVERAGE%s", n, n), collapse = ", "),
+paste0("WHERE ", paste0(sprintf("DEPTH_WEIGHTED_AVERAGE%s IS NOT NULL", n), collapse = " AND ")),
 paste0(sprintf("DEPTH_WEIGHTED_AVERAGE%s", n), collapse = ", "),
 paste0(sprintf("CAST (SUM (COMP_WEIGHTED_AVERAGE%s / RATED_PCT) OVER (PARTITION BY #kitchensink.mukey) AS decimal(5,2)) AS %s",
                n, property), collapse = ", "),
@@ -523,15 +534,13 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
 
     # NO AGGREGATION 
   "NONE" = sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey,
-                           compname, component.comppct_r, majcompflag, component.cokey, 
+                           compname, compkind, component.comppct_r, majcompflag, component.cokey, 
                            %s %s%s %s
              FROM legend
               INNER JOIN mapunit ON mapunit.lkey = legend.lkey
               INNER JOIN component ON component.mukey = mapunit.mukey %s
               ORDER BY areasymbol, musym, muname, mapunit.mukey, component.comppct_r DESC, component.cokey%s",
-            ifelse(any(is_hz), "chorizon.chkey AS chkey,
-                                   component.compname, component.comppct_r, majcompflag,
-                                   chorizon.hzdept_r AS hzdept_r, chorizon.hzdepb_r AS hzdepb_r,", ""),
+            ifelse(any(is_hz), "chorizon.chkey AS chkey, chorizon.hzdept_r AS hzdept_r, chorizon.hzdepb_r AS hzdepb_r,", ""),
             paste0(sapply(agg_property[!is_hz], function(x) sprintf("component.%s AS %s", x, x)), collapse = ", "),
             ifelse(any(is_hz) & !all(is_hz), ",", ""),
             paste0(sapply(agg_property[is_hz], function(x) sprintf("chorizon.%s AS %s", x, x)), collapse = ", "),
