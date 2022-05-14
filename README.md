@@ -64,7 +64,7 @@ soilDB 2.7.0
 Functions by Data Source
 ------------------------
 
--   SDA
+-   Soil Data Access (SDA)
     -   [`fetchSDA`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_component.html)
     -   [`fetchSDA_spatial`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html)
     -   [`SDA_query`](http://ncss-tech.github.io/soilDB/reference/SDA_query.html)
@@ -76,6 +76,8 @@ Functions by Data Source
         -   [`get_SDA_pmgroupname`](http://ncss-tech.github.io/soilDB/reference/get_SDA_pmgroupname.html)
         -   [`get_SDA_property`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.html)
         -   [`get_SDA_coecosite`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecosite.html)
+        -   [`get_SDA_metrics`](http://ncss-tech.github.io/soilDB/reference/get_SDA_metrics.html)
+        -   [`get_SDA_cosurfmorph`](http://ncss-tech.github.io/soilDB/reference/get_SDA_cosurfmorph.html)
 -   SSURGO Local Geodatabases
     -   [`fetchGDB`](http://ncss-tech.github.io/soilDB/reference/fetchGDB.html)
 -   ROSETTA
