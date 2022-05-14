@@ -60,7 +60,8 @@
   mukeys <span class="op">=</span> <span class="cn">NULL</span>,
   WHERE <span class="op">=</span> <span class="cn">NULL</span>,
   query_string <span class="op">=</span> <span class="cn">FALSE</span>,
-  not_rated_value <span class="op">=</span> <span class="cn">NA_real_</span>
+  not_rated_value <span class="op">=</span> <span class="cn">NA_real_</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -80,6 +81,8 @@
 <dd><p>Default: <code>FALSE</code>; if <code>TRUE</code> return a character string containing query that would be sent to SDA via <code>SDA_query</code></p></dd>
 <dt>not_rated_value</dt>
 <dd><p>used where rating class is "Not Rated". Default: <code>NA_real</code></p></dd>
+<dt>dsn</dt>
+<dd><p>Path to local SQLite database or a DBIConnection object. If <code>NULL</code> (default) use Soil Data Access API via <code><a href="SDA_query.html">SDA_query()</a></code>.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -1271,7 +1274,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14                                  Low                                 &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15                                  Low                                 &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 16                                  Low                                 &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                 High             Available water; Wetness</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                 High             Wetness; Available water</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 18                                  Low                                 &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 19                                 High                      Available water</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20                                  Low                      Available water</span>
@@ -1285,7 +1288,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 28                                  Low                                 &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 29                                 High                      Available water</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30                                  Low                                 &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31                                 High             Available water; Wetness</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31                                 High             Wetness; Available water</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 32                                  Low                                 &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 33                                 High                      Available water</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 34                                  Low                                 &lt;NA&gt;</span>
@@ -1779,17 +1782,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                    Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7                                                    Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8                                    Rock fragments; Slope; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                      Low strength; Slope; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                      Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10         Low strength; Stickiness; high plasticity index; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11                                                 Wetness; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12                                            Low strength; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13                                   Rock fragments; Slope; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                                   Slope; Rock fragments; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14                                   Slope; Rock fragments; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15                     Slope; Low strength; Rock fragments; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 16                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 17                        Ponding; Wetness; Rock fragments; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18                     Rock fragments; Slope; Low strength; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                            Dusty; Low strength</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                     Dusty; Slope; Rock fragments; Low strength</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                            Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20                                                          Slope</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21                     Slope; Low strength; Rock fragments; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 22                                                   Slope; Dusty</span>
@@ -1797,7 +1800,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 24                                            Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 26                                     Slope; Low strength; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27                                     Low strength; Slope; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 28                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 29                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30                                     Slope; Low strength; Dusty</span>
@@ -1807,7 +1810,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 34                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 35                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 36                                                   Slope; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37                                     Low strength; Slope; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 38                                                          Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 39                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 40                                   Slope; Rock fragments; Dusty</span>
@@ -1822,7 +1825,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 49                                          Slope; Rock fragments</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 50                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 51                                                          Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52                                     Low strength; Slope; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 53                                                          Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 54                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 55                                     Slope; Low strength; Dusty</span>
@@ -1833,42 +1836,42 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 60                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 61                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 62                                     Slope; Low strength; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63                                     Low strength; Slope; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 64                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 65                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 66                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 67                                   Slope; Rock fragments; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 68                                   Slope; Rock fragments; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 69                          Wetness; Low strength; Ponding; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70                                     Low strength; Slope; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 71                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 72                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 73                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 74                                     Slope; Low strength; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75                     Rock fragments; Slope; Low strength; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75                     Slope; Rock fragments; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 76                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 77                                                   Slope; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78                                   Rock fragments; Slope; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78                                   Slope; Rock fragments; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 79                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 80                                   Slope; Rock fragments; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 81                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 82                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 83                                     Slope; Low strength; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84                                     Low strength; Slope; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 85                                                   Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 86                                     Slope; Low strength; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87                     Rock fragments; Slope; Low strength; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87                     Slope; Rock fragments; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 88                                            Low strength; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89                     Low strength; Rock fragments; Slope; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89                     Slope; Low strength; Rock fragments; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 90                     Slope; Low strength; Rock fragments; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 91                                  Flooding; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 92                                                           &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 93                                                   Slope; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94                                   Low strength; Rock fragments</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95                                     Low strength; Slope; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94                                   Rock fragments; Low strength</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 96                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 97                                     Slope; Low strength; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98                                     Low strength; Slope; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 99                                     Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 100                                                  Slope; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 101                                                  Slope; Dusty</span>
@@ -1880,14 +1883,14 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 107                                    Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 108                                    Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 109                                       Slope; Sandiness; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110                    Rock fragments; Slope; Low strength; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110                    Slope; Rock fragments; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 111                                    Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 112                                    Slope; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 113                                                          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 114                    Slope; Low strength; Rock fragments; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114                    Slope; Rock fragments; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 115                                    Slope; Low strength; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 116                    Slope; Low strength; Rock fragments; Dusty</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 117 Dusty; Low strength; Slope; Stickiness; high plasticity index</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116                    Slope; Rock fragments; Low strength; Dusty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117 Slope; Stickiness; high plasticity index; Low strength; Dusty</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 118                                                          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 119                                                          &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 120                                                          &lt;NA&gt;</span>

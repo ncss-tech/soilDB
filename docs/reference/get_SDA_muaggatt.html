@@ -57,7 +57,8 @@
   areasymbols <span class="op">=</span> <span class="cn">NULL</span>,
   mukeys <span class="op">=</span> <span class="cn">NULL</span>,
   WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  query_string <span class="op">=</span> <span class="cn">FALSE</span>
+  query_string <span class="op">=</span> <span class="cn">FALSE</span>,
+  dsn <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -71,6 +72,8 @@
 <dd><p>character containing SQL WHERE clause specified in terms of fields in <code>legend</code>, <code>mapunit</code>, or <code>muaggatt</code> tables, used in lieu of <code>mukeys</code> or <code>areasymbols</code></p></dd>
 <dt>query_string</dt>
 <dd><p>Default: <code>FALSE</code>; if <code>TRUE</code> return a character string containing query that would be sent to SDA via <code>SDA_query</code></p></dd>
+<dt>dsn</dt>
+<dd><p>Path to local SQLite database or a DBIConnection object. If <code>NULL</code> (default) use Soil Data Access API via <code><a href="SDA_query.html">SDA_query()</a></code>.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

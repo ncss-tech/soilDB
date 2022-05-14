@@ -67,7 +67,7 @@
 <li>“cosurfmorphss” summarizes “shapeacross”, “shapedown”, and concatenated “surfaceshape”</li>
 </ul></li>
 <li>Several fixes for logic of <code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code> with <code>method="weighted average"</code> and <code>include_minors=TRUE</code>/<code>miscellaneous_areas=TRUE</code>, thanks to Andy Paolucci and Dylan Beaudette for testing and providing feedback on the queries.</li>
-<li>All <code>get_SDA_*()</code> methods (except <code><a href="../reference/get_SDA_metrics.html">get_SDA_metrics()</a></code>) now support input of custom <code>WHERE</code> clause in lieu of <code>mukeys</code>/<code>areasymbols</code> arguments.</li>
+<li>All <code>get_SDA_*()</code> methods (except <code><a href="../reference/get_SDA_metrics.html">get_SDA_metrics()</a></code>) now support input of custom <code>WHERE</code> clause in lieu of <code>mukeys</code>/<code>areasymbols</code> arguments and gain a <code>dsn</code> argument for specifying a local SQLite database or DBIConnection.</li>
 <li>Added <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> for downloading/extraction of the SSURGO data by survey area from Web Soil Survey.</li>
 <li>Added <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> for building of local databases as SQLite/Geopackage from one or more SSURGO exports.<ul><li>Exports can be obtained via <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code>, from NASIS or downloaded from other sources such as <a href="https://nrcs.app.box.com/v/soils" class="external-link uri">https://nrcs.app.box.com/v/soils</a>.</li></ul></li>
 </ul></li>
