@@ -30,6 +30,7 @@
   unique(res)
 }
 
+
 #' .dumpSSURGOGDB
 #' 
 #' Helper function for getting spatial(vector)/tabular data out of ESRI File Geodatabase (.gdb)
@@ -39,7 +40,7 @@
 #' @param replace_names Optional. Named character containing replacement names of form: `c("OLD"="NEW")`
 #' @param header Default `TRUE` to include column names read from GDB. `FALSE` will assign column names based on metadata.
 #'
-#' @return list of data.frame or sf object
+#' @return
 #' @keywords internal
 #' @noRd
 .dumpSSURGOGDB <- function(dsn, exdir, replace_names = NULL, header = TRUE) {
@@ -115,7 +116,24 @@
   res <- terra::writeRaster(r4, filename = destfile, datatype = "INT4U", overwrite = TRUE)
   unlink(c(tf1, tf2, tf3))
   res
-} 
+}
+
+.recode_db <- function(dsn, FUN = soilDB::code) {
+  if (requireNamespace("RSQLite")) {
+    con <- RSQLite::dbConnect(RSQLite::SQLite(), dsn)
+    tables <- RSQLite::dbListTables(con)
+    for (tt in tables) {
+      res <- dbGetQuery(con, paste("SELECT * FROM", tt))
+      res <- FUN(res)
+      RSQLite::dbWriteTable(con, tt, res, overwrite = TRUE)
+      message(tt)
+    }
+  }
+}
+
+.decode_db <- function(dsn) {
+  .recode_db(dsn, FUN = soilDB::uncode)
+}
 
 # internal function to get the full set of ids from NASIS to alias to export
 .get_SSURGO_export_iid_table <- function(coiids) {  
