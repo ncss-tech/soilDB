@@ -5,14 +5,14 @@
 \title{Get NASIS 7 Physical Table Names}
 \usage{
 get_NASIS_table_name_by_purpose(
-  purpose = c("metadata", "lookup", "site", "pedon", "transect", "component",
+  purpose = c("metadata", "lookup", "nasis", "site", "pedon", "transect", "component",
     "vegetation", "project", "techsoilservice", "area", "soilseries", "legend",
     "mapunit", "datamapunit"),
   SS = FALSE
 )
 }
 \arguments{
-\item{purpose}{character. One or more of: "metadata", "lookup", "site", "pedon", "transect", "component", "vegetation", "project", "techsoilservice", "area", "soilseries", "legend", "mapunit", "datamapunit"}
+\item{purpose}{character. One or more of: "metadata", "lookup", "nasis", "site", "pedon", "transect", "component", "vegetation", "project", "techsoilservice", "area", "soilseries", "legend", "mapunit", "datamapunit"}
 
 \item{SS}{append "_View_1" on appropriate tables? Default: FALSE}
 }
