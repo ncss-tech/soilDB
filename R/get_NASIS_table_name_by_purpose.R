@@ -34,7 +34,10 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "s
     metadata = c(
       "MetadataDomainDetail",
       "MetadataDomainMaster",
-      "MetadataTableColumn"
+      "MetadataTableColumn", 
+      "MetadataTable", 
+      "MetadataColumnLookup",
+      "MetadataIndexDetail"
     ),
     lookup = c("ecologicalsite", "plant",
                "geomorfeat", "geomorfeattype"),
