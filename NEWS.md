@@ -1,15 +1,17 @@
-# soilDB 2.7.0 (2022-05-02)
- * Added several new columns from the `plotplantinventory` table to `get_vegplot_species_from_NASIS_db()` result; thanks to Zachary Van Abbema for suggestion and feedback
+# soilDB 2.7.0 (2022-05-17)
  * Spatial 
-   - See: <https://github.com/ncss-tech/soilDB/pull/229>
    - Dropped imports from `sp` and `raster` which means `soilDB` no longer requires the soon-to-retire `rgdal` package.
    - All spatial data processing has been moved to `sf` and `terra`, which have been added to Suggests. 
-   - (*breaking change*) Spatial functions that take spatial input will return the same class type as the input unless otherwise specified.  `fetchSDA_spatial()` and `SDA_spatialQuery()` gain `as_Spatial` argument; when `TRUE` equivalent (backward compatible) `sp` and `raster` data types are returned. Alternately, you may set `options(soilDB.return_Spatial=TRUE)`
+     - (*breaking change*) Classes from these packages (e.g. `sf`, `SpatRaster`) will be returned by default rather than `Spatial*DataFrame` or `RasterLayer` from `sp` and `raster`.
+     - (*breaking change*) Spatial functions that take spatial input will return the same class type as the input unless otherwise specified.
+        - `fetchSDA_spatial()` and `SDA_spatialQuery()` gain `as_Spatial` argument; when `TRUE` equivalent (backward compatible) `sp` and `raster` data types are returned. 
+        - Alternately, you may set `options(soilDB.return_Spatial=TRUE)`
    - `mukey.wcs()` and `ISSR800.wcs()` bug fix for some instances where the target extent was miscalculated, resulting in slight differences from requested resolution (`res` argument) of result.
    - `mukey.wcs()` gains a new possible data source `db="RSS"` which accesses a Web Coverage Service containing grids from Raster Soil Surveys in the United States.
+   - See: <https://github.com/ncss-tech/soilDB/pull/229> for more details on what has changed.
  * NASIS
-   - Local NASIS metadata used for `uncode()` are now cached within an R session which results in faster query processing times for users with a local NASIS database connection set up.
- 
+   * Added several new columns from the `plotplantinventory` table to `get_vegplot_species_from_NASIS_db()` result; thanks to Zachary Van Abbema for suggestion and feedback
+   * Local NASIS metadata used for `uncode()` are now cached within an R session which results in faster query processing times for users with a local NASIS database connection set up.
  * SSURGO / Soil Data Access
    * Added `get_SDA_cosurfmorph()`: a new function in "SSURGO On Demand" style. Users can customize the WHERE clause, target tables and the grouping variable used to calculate proportions (default `by="compname"`)
       * "cosurfmorphgc" summarizes "geomposmntn", "geomposhill", "geomposflats", "geompostrce"
