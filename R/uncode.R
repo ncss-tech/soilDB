@@ -88,7 +88,7 @@ uncode <- function(df,
   }
   
   # load current metadata table
-  if (db == "NASIS") {
+  if (local_NASIS_defined(dsn = dsn)) {
     
     # cache NASIS metadata in soilDB.env within an R session
     if (!exists("NASIS.metadata", envir = soilDB.env)) {
