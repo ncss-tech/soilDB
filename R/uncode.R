@@ -74,7 +74,7 @@ uncode <- function(df,
                    dsn = NULL) {
   
   if (!missing(db)) {
-    .Deprecated("passing `db` argument to uncode is no longer necessary, lookups are based on ChoiceName and/or ChoiceLabel")
+    .Deprecated(msg = "passing `db` argument to uncode is no longer necessary, lookups are based on ChoiceName and/or ChoiceLabel")
   }
   
   if (getOption("soilDB.NASIS.skip_uncode", default = FALSE)) {
