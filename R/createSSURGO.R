@@ -121,22 +121,24 @@ createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, hea
   #   "soilmu_a", "soilmu_l", "soilmu_p", "soilsa_a", "soilsf_l", "soilsf_p" 
   f.shp <- f[grepl(".*\\.shp$", f)]
   shp.grp <- do.call('rbind', strsplit(gsub(".*soil([musfa]{2})_([apl])_([a-z]{2}\\d{3})\\.shp", "\\1;\\2;\\3", f.shp), ";", fixed = TRUE))
-  f.shp.grp <- split(f.shp, list(feature = shp.grp[,1], geom = shp.grp[,2]))
-  
-  lapply(seq_along(f.shp.grp), function(i) {
-    lapply(seq_along(f.shp.grp[[i]]), function(j){
-      lnm <- gsub(".*(soil[musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j])
-      
-      if (overwrite && j == 1) {
-        sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, overwrite = TRUE, ...)
-      } else sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, append = TRUE, ...)
-      
-      # TODO: check/optimize: GPKG vector data includes R*Tree spatial index
-      
-      NULL
+  if (length(shp.grp) > 1) {
+    f.shp.grp <- split(f.shp, list(feature = shp.grp[,1], geom = shp.grp[,2]))
+    
+    lapply(seq_along(f.shp.grp), function(i) {
+      lapply(seq_along(f.shp.grp[[i]]), function(j){
+        lnm <- gsub(".*(soil[musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j])
+        
+        if (overwrite && j == 1) {
+          sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, overwrite = TRUE, ...)
+        } else sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, append = TRUE, ...)
+        
+        # TODO: check/optimize: GPKG vector data includes R*Tree spatial index
+        
+        NULL
+      })
     })
-  })
-
+  }
+  
   # create and add combined tabular datasets
   f.txt <- f[grepl(".*\\.txt$", f)]
   txt.grp <- gsub("\\.txt", "", basename(f.txt))
@@ -147,9 +149,9 @@ createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, hea
   f.txt.grp <- split(f.txt, txt.grp)
   
   # get table, column, index lookup tables
-  mstabn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstab", "mdstattabs"))[1]]][[1]]
-  mstabcn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstabcol", "mdstattabcols"))[1]]][[1]]
-  msidxdn <- f.txt.grp[[which(names(f.txt.grp) %in% c("msidxdet", "mdstatidxdet"))[1]]][[1]]
+  mstabn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstab", "mdstattabs", "MetadataTable"))[1]]][[1]]
+  mstabcn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstabcol", "mdstattabcols", "MetadataColumnLookup"))[1]]][[1]]
+  msidxdn <- f.txt.grp[[which(names(f.txt.grp) %in% c("msidxdet", "mdstatidxdet", "MetadataIndexDetail"))[1]]][[1]]
   
   if (length(mstabn) >= 1) {
     mstab <- read.delim(mstabn[1], sep = "|", stringsAsFactors = FALSE, header = header)
