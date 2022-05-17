@@ -40,39 +40,12 @@ Get Rapid Carbon Assessment (RaCA) data by state, geographic bounding-box, RaCA 
 
 Please use \href{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164}{current RaCA distribution} if you need measured SOC.
 
-This interface will be updated sometime calendar year 2021 to include the latest soil morphology, taxonomic classification, and measured SOC values. More detailed coordinates for sample sites should also be available.
+This interface will be updated sometime calendar year 2022 to include the latest soil morphology, taxonomic classification, and measured SOC values. More detailed coordinates for sample sites should also be available.
+
+See https://www.nrcs.usda.gov/Internet/FSE_MANUSCRIPTS/alabama/raca_download/raca_download.zip for direct download of the full dataset.
 }
 \details{
 The VNIR spectra associated with RaCA data are quite large (each gzip-compressed VNIR spectra record is about 6.6kb), so requests for these data are disabled by default. Note that VNIR spectra can only be queried by soil series or geographic BBOX.
-}
-\examples{
-\donttest{
-if(requireNamespace("curl") &
-   curl::has_internet()) {
-
-  if(require(aqp)) {
-
-    # search by series name
-    s <- fetchRaCA(series='auburn')
-
-    # search by bounding-box
-    # s <- fetchRaCA(bbox=c(-120, 37, -122, 38))
-
-    # check structure
-    str(s, 1)
-
-    # extract pedons
-    p <- s$pedons
-
-    # how many pedons
-    length(p)
-
-    # plot
-    par(mar=c(0,0,0,0))
-    plot(p, name='hzn_desgn', max.depth=150)
-  }
-}
-}
 }
 \references{
 {
@@ -85,4 +58,3 @@ if(requireNamespace("curl") &
 \author{
 D.E. Beaudette, USDA-NRCS staff
 }
-\keyword{utilities}

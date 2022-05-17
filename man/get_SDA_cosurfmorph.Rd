@@ -51,16 +51,16 @@ Full component data including surface morphometry summaries at the "site" level 
 \dontrun{
  # Summarize by 3D geomorphic components by component name (default `by='compname'`)
  get_SDA_cosurfmorph(WHERE = "areasymbol = 'CA630'")
- 
+
  # Whole Soil Survey Area summary (using `by = 'areasymbol'`)
  get_SDA_cosurfmorph(by = 'areasymbol', WHERE = "areasymbol = 'CA630'")
- 
+
  # 2D Hillslope Position summary(using `table = 'cosurfmorphhpp'`)
  get_SDA_cosurfmorph('cosurfmorphhpp', WHERE = "areasymbol = 'CA630'")
- 
+
  # Surface Shape summary (using `table = 'cosurfmorphss'`)
  get_SDA_cosurfmorph('cosurfmorphss', WHERE = "areasymbol = 'CA630'")
- 
+
  # Microrelief summary (using `table = 'cosurfmorphmr'`)
  get_SDA_cosurfmorph('cosurfmorphmr', WHERE = "areasymbol = 'CA630'")
 }

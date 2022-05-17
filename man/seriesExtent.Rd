@@ -14,7 +14,7 @@ seriesExtent(s, type = c("vector", "raster"), timeout = 60)
 \item{timeout}{time that we are willing to wait for a response, in seconds}
 }
 \description{
-This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{SpatialPolygonsDataFrame} object) or gridded representation of area proportion falling within 800m cells (\code{raster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (EPSG 5070).
+This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{sf} object) or gridded representation of area proportion falling within 800m cells (\code{SpatRaster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (\code{EPSG:5070}).
 }
 \note{
 This function requires the \code{rgdal} package.
@@ -40,19 +40,21 @@ if(requireNamespace("curl") &
   # return a terra SpatRasters
   y <- seriesExtent(s, type = 'raster')
   
-  # note that CRS are different
-  sf::st_crs(x)
-  terra::crs(y)
+  if (!is.null(x) && !is.null(y)) {
+    # note that CRS are different
+    sf::st_crs(x)
+    terra::crs(y)
   
-  # transform vector representation to CRS of raster
-  x <- sf::st_transform(x, terra::crs(y))
+    # transform vector representation to CRS of raster
+    x <- sf::st_transform(x, terra::crs(y))
   
-  # graphical comparison
-  par(mar = c(1, 1 , 1, 3))
-  plot(y, axes = FALSE)
-  # no fill color
-  plot(x['series'], add = TRUE, col = NA)
-  
+    # graphical comparison
+    par(mar = c(1, 1 , 1, 3))
+    plot(y, axes = FALSE)
+    
+    # no fill color
+    plot(x['series'], add = TRUE, col = NA)
+  }
   
 }
 }
