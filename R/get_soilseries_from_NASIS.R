@@ -92,11 +92,8 @@ get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = NULL) {
   d.ss <- do.call("rbind", d.ss)
 
   # set factor levels according to metadata domains
-  d.ss[!names(d.ss) %in% c("mlraoffice", "taxminalogy")] <- uncode(d.ss[!names(d.ss) %in% c("mlraoffice", "taxminalogy")],
-                                                                   db = "SDA")
-
-  d.ss[names(d.ss) %in% c("mlraoffice")] <- uncode(d.ss[names(d.ss) %in% c("mlraoffice")],
-                                                   db = "LIMS")
+  d.ss[!names(d.ss) %in% c("mlraoffice", "taxminalogy")] <- uncode(d.ss[!names(d.ss) %in% c("mlraoffice", "taxminalogy")])
+  d.ss[names(d.ss) %in% c("mlraoffice")] <- uncode(d.ss[names(d.ss) %in% c("mlraoffice")])
 
   # return data.frame
   return(d.ss)

@@ -15,7 +15,7 @@ get_cosoilmoist_from_NASISWebReport <- function(projectname, impute = TRUE, stri
   d.cosoilmoist <- do.call("rbind", d.cosoilmoist)
 
   # set factor levels according to metadata domains
-  d.cosoilmoist <- uncode(d.cosoilmoist, db = "LIMS")
+  d.cosoilmoist <- uncode(d.cosoilmoist)
   
   # prep dataset: rename columns, impute empty values, stringsAsFactors
   d.cosoilmoist <- .cosoilmoist_prep(d.cosoilmoist, impute = impute)
@@ -34,7 +34,7 @@ get_sitesoilmoist_from_NASISWebReport <- function(usiteid) {
   d.sitesoilmoist <- parseWebReport(url,args)
   
   # set factor levels according to metadata domains
-  d.sitesoilmoist <- uncode(d.sitesoilmoist, db="LIMS")
+  d.sitesoilmoist <- uncode(d.sitesoilmoist)
   
   # relabel names
   names(d.sitesoilmoist) <- gsub("^soimoist", "", names(d.sitesoilmoist))

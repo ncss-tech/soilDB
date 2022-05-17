@@ -11,7 +11,8 @@
    - See: <https://github.com/ncss-tech/soilDB/pull/229> for more details on what has changed.
  * NASIS
    * Added several new columns from the `plotplantinventory` table to `get_vegplot_species_from_NASIS_db()` result; thanks to Zachary Van Abbema for suggestion and feedback
-   * Local NASIS metadata used for `uncode()` are now cached within an R session which results in faster query processing times for users with a local NASIS database connection set up.
+   * Local NASIS metadata used for `uncode()` are now cached within an R session which results in faster query processing times for users with a local NASIS database connection set up. 
+     - The `db` argument to `uncode()` has been deprecated. Now, `code()` and `uncode()` can use `ChoiceName` and/or `ChoiceLabel` in coding and decoding `ChoiceValue` for all data sources.
  * SSURGO / Soil Data Access
    * Added `get_SDA_cosurfmorph()`: a new function in "SSURGO On Demand" style. Users can customize the WHERE clause, target tables and the grouping variable used to calculate proportions (default `by="compname"`)
       * "cosurfmorphgc" summarizes "geomposmntn", "geomposhill", "geomposflats", "geompostrce"

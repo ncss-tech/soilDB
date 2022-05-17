@@ -14,8 +14,8 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  if(!duplicates & grepl(WHERE, pattern = "mukey")[1])
-    warning("duplicates is set to FALSE and 'mukey' is in WHERE clause. Note: 'mukey' omitted from result.", call.=FALSE)
+  if (!duplicates & grepl(WHERE, pattern = "mukey")[1])
+    warning("duplicates is set to FALSE and 'mukey' is in WHERE clause. Note: 'mukey' omitted from result.", call. = FALSE)
 
   # SDA is missing soiltempa_r AS mast_r
   # Joining in the fetch on derived_cokey doesn't work but should. There are duplicate components with the same combination of elements.
@@ -63,9 +63,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
     return(d.component)
 
   # recode metadata domains
-  d.component <- uncode(d.component, db = "SDA",
-                        droplevels = droplevels
-                        )
+  d.component <- uncode(d.component, droplevels = droplevels)
 
   # if mukeys are "flattened" to nmusym, make sure the mukey column _exists_ but is empty (NA)
   # presence of NA used to make it clear to user whether they need to set the duplicates flag TRUE,
@@ -373,7 +371,7 @@ get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = F
   d.cointerp <- SDA_query(q.cointerp)
 
   # recode metadata domains
-  d.cointerp <- uncode(d.cointerp, db = "SDA")
+  d.cointerp <- uncode(d.cointerp)
 
   return(d.cointerp)
   }
@@ -401,9 +399,7 @@ get_legend_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsFactor
   d.legend <- SDA_query(q.legend)
 
   # recode metadata domains
-  d.legend <- uncode(d.legend,
-                     db = "SDA",
-                     droplevels = droplevels)
+  d.legend <- uncode(d.legend, droplevels = droplevels)
 
   # done
   return(d.legend)
@@ -443,10 +439,7 @@ get_lmuaoverlap_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsF
   d$musym = as.character(d$musym)
 
   # recode metadata domains
-  d <- uncode(d,
-              db = "NASIS",
-              droplevels = droplevels
-  )
+  d <- uncode(d, droplevels = droplevels)
 
   # done
   return(d)
@@ -496,10 +489,7 @@ get_mapunit_from_SDA <- function(WHERE = NULL,
   d.mapunit$musym = as.character(d.mapunit$musym)
 
   # recode metadata domains
-  d.mapunit <- uncode(d.mapunit,
-                      db = "SDA",
-                      droplevels = droplevels
-                      )
+  d.mapunit <- uncode(d.mapunit, droplevels = droplevels)
 
 
   # cache original column names

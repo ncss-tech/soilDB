@@ -75,7 +75,7 @@ if(requireNamespace("curl") &
   s <- site(comp)
 
   # use SDA uncoding domain via db argument
-  s <- uncode(s,  db="SDA")
+  s <- uncode(s)
   levels(s$taxorder)
 }
 }

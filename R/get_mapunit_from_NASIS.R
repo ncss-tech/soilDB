@@ -71,10 +71,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
   d.mapunit <- dbQueryNASIS(channel, q.mapunit)
   
   # recode metadata domains
-  d.mapunit <- uncode(d.mapunit,
-                      db = "NASIS",
-                      droplevels = droplevels,
-                      dsn = dsn)
+  d.mapunit <- uncode(d.mapunit, droplevels = droplevels, dsn = dsn)
   
   # hacks to make R CMD check --as-cran happy:
   metadata <- NULL
@@ -153,10 +150,7 @@ get_legend_from_NASIS <- function(SS = TRUE,
   d.legend <- dbQueryNASIS(channel, q.legend)
   
   # recode metadata domains
-  d.legend <- uncode(d.legend,
-                     db = "NASIS",
-                     droplevels = droplevels,
-                     dsn = dsn)
+  d.legend <- uncode(d.legend, droplevels = droplevels, dsn = dsn)
   
   # done
   return(d.legend)
@@ -217,10 +211,7 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE,
   d$musym <- as.character(d$musym)
   
   # recode metadata domains
-  d <- uncode(d,
-              db = "NASIS",
-              droplevels = droplevels,
-              dsn = dsn)
+  d <- uncode(d, droplevels = droplevels, dsn = dsn)
   
   # done
   return(d)

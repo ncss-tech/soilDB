@@ -1,4 +1,5 @@
 context("fetchNASISWebReport() -- requires internet connection")
+x <- NULL
 
 test_that("fetchNASISWebReport() works", {
 
@@ -65,7 +66,7 @@ test_that("fetchNASISWebReport() returns NULL with bogus query", {
   skip_on_cran()
 
   # a message is printed and NULL returned when no results
-  res <- suppressMessages(fetchNASISWebReport(projectname='XXX'))
+  res <- suppressMessages(fetchNASISWebReport(projectname = 'XXX'))
   expect_null(res)
 
 })
