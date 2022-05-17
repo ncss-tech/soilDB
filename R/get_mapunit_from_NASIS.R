@@ -77,25 +77,23 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
   metadata <- NULL
   
   # load local copy of metadata
-  load(system.file("data/metadata.rda", package="soilDB")[1])
+  load(system.file("data/metadata.rda", package = "soilDB")[1])
   
   # transform variables and metadata
-  d.mapunit <- within(d.mapunit, {
-    farmlndcl = factor(farmlndcl,
-                       levels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceValue"],
-                       labels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceLabel"]
-    )
-    if (stringsAsFactors == FALSE) {
-      farmlndcl = as.character(farmlndcl)
-    }
-    if (droplevels == TRUE & is.factor(farmlndcl)) {
-      farmlndcl = droplevels(farmlndcl)
-    }
-  })
+  d.mapunit$farmlndcl <- factor(d.mapunit$farmlndcl,
+                                levels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceValue"],
+                                labels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceLabel"])
+  
+  if (is.null(stringsAsFactors) || stringsAsFactors == FALSE) {
+    d.mapunit$farmlndcl  = as.character(d.mapunit$farmlndcl)
+  }
+  
+  if (droplevels == TRUE & is.factor(d.mapunit$farmlndcl)) {
+    d.mapunit$farmlndcl = droplevels(d.mapunit$farmlndcl)
+  }
   
   # cache original column names
   orig_names <- names(d.mapunit)
-  
   
   # done
   return(d.mapunit)
