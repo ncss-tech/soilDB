@@ -153,7 +153,7 @@ FROM geom_data;
 #' @seealso \code{\link{SDA_query}}
 #' @keywords manip
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'   if (requireNamespace("aqp") && requireNamespace("sf")) {
 #'
 #'     library(aqp)

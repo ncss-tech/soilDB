@@ -38,7 +38,7 @@
 #' @author Andrew G. Brown
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'  if(requireNamespace("curl") &
 #'    curl::has_internet()) {
 #'   
