@@ -53,7 +53,7 @@ Find out more information about the SoilGrids and GlobalSoilMap products here:
 }
 }
 \examples{
-\donttest{
+\dontrun{
  if(requireNamespace("curl") &
    curl::has_internet()) {
   

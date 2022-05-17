@@ -2,7 +2,7 @@
 #' 
 #' Method generalizing concepts of NASIS 7 data model to group tables by "purpose." Most of our more complex queries rely on tables from one or more purposes, so individual higher-level functions might call a function like this to identify the relevant tables from a data source.
 #' 
-#' @param purpose character. One or more of: "metadata", "lookup", "site", "pedon", "transect", "datamapunit", "component", "vegetation"
+#' @param purpose character. One or more of: "metadata", "lookup", "site", "pedon", "transect", "component", "vegetation", "project", "techsoilservice", "area", "soilseries", "legend", "mapunit", "datamapunit"
 #' @param SS append "_View_1" on appropriate tables? Default: FALSE
 #'
 #' @return character vector of table names

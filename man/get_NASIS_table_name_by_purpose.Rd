@@ -12,7 +12,7 @@ get_NASIS_table_name_by_purpose(
 )
 }
 \arguments{
-\item{purpose}{character. One or more of: "metadata", "lookup", "site", "pedon", "transect", "datamapunit", "component", "vegetation"}
+\item{purpose}{character. One or more of: "metadata", "lookup", "site", "pedon", "transect", "component", "vegetation", "project", "techsoilservice", "area", "soilseries", "legend", "mapunit", "datamapunit"}
 
 \item{SS}{append "_View_1" on appropriate tables? Default: FALSE}
 }

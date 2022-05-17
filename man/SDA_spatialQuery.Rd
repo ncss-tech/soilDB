@@ -47,7 +47,7 @@ SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO (generalized
 Row-order is not preserved across features in \code{geom} and returned object. Use \code{byFeature} argument to iterate over features and return results that are 1:1 with the inputs. Polygon area in acres is computed server-side when \code{what = 'mupolygon'} and \code{geomIntersection = TRUE}.
 }
 \examples{
-\donttest{
+\dontrun{
   if (requireNamespace("aqp") && requireNamespace("sf")) {
 
     library(aqp)
