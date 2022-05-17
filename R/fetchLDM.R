@@ -342,7 +342,6 @@ fetchLDM <- function(x = NULL,
 
   if (inherits(con, 'DBIConnection')) {
     layerdata <- try(DBI::dbGetQuery(con, gsub("IsNull", "IFNULL", layer_query)))
-    DBI::dbDisconnect(con)
   } else {
     layerdata <- suppressWarnings(SDA_query(layer_query))
   }
