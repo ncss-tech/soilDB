@@ -26,9 +26,13 @@ get_SDV_legend_elements <- function(WHERE,
       stop(paste0("Invalid WHERE clause: ", ak), call. = FALSE)
     
     lapply(1:nrow(x), function(i) {
-      .process_SDV_legend_elements(x[i, ], 
-                                   alpha = alpha, 
-                                   notratedcolor = notratedcolor)
+      res <- .process_SDV_legend_elements(x[i,],
+                                          alpha = alpha,
+                                          notratedcolor = notratedcolor)
+      if (is.matrix(res) && ncol(res) < 9) {
+        res <- NULL
+      }
+      res
     })
   })
 
