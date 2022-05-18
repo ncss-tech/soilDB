@@ -1,4 +1,4 @@
-# soilDB 2.7.0 (2022-05-17)
+# soilDB 2.7.0 (2022-05-18)
  * Spatial 
    - Dropped imports from `sp` and `raster` which means `soilDB` no longer requires the soon-to-retire `rgdal` package.
    - All spatial data processing has been moved to `sf` and `terra`, which have been added to Suggests. 
@@ -14,6 +14,7 @@
    * Added several new columns from the `plotplantinventory` table to `get_vegplot_species_from_NASIS_db()` result; thanks to Zachary Van Abbema for suggestion and feedback
    * Local NASIS metadata used for `uncode()` are now cached within an R session which results in faster query processing times for users with a local NASIS database connection set up. 
      - The `db` argument to `uncode()` has been deprecated. Now, `code()` and `uncode()` can use `ChoiceName` and/or `ChoiceLabel` in coding and decoding `ChoiceValue` for all data sources.
+   * Rock fragment and artifact sieving now uses <76mm as the upper boundary for gravel fraction, and a related QC message has been removed
  * SSURGO / Soil Data Access
    * Added `get_SDA_cosurfmorph()`: a new function in "SSURGO On Demand" style. Users can customize the WHERE clause, target tables and the grouping variable used to calculate proportions (default `by="compname"`)
       * "cosurfmorphgc" summarizes "geomposmntn", "geomposhill", "geomposflats", "geompostrce"
