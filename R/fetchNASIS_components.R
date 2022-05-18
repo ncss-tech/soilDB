@@ -16,11 +16,13 @@
   }
   
   # ensure that any old hz errors are cleared
-  if (exists('component.hz.problems', envir = soilDB.env)){
+  if (exists('component.hz.problems', envir = soilDB.env)) {
     assign('component.hz.problems', value = character(0), envir = soilDB.env)
   }
   
   # load data in pieces
+  f.lg         <- get_legend_from_NASIS(SS = SS, dsn = dsn)
+  f.mu         <- get_mapunit_from_NASIS(SS = SS, dsn = dsn)
   f.comp       <- get_component_data_from_NASIS_db(SS = SS, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.copm       <- get_component_copm_data_from_NASIS_db(SS = SS, dsn = dsn)
@@ -33,14 +35,14 @@
   filled.ids <- character(0)
 
   # optionally test for bad horizonation... flag, and remove
-  if(rmHzErrors & nrow(f.chorizon) > 0) {
+  if (rmHzErrors & nrow(f.chorizon) > 0) {
     f.chorizon.test <- aqp::checkHzDepthLogic(f.chorizon, c('hzdept_r', 'hzdepb_r'), idname = 'coiid', fast = TRUE)
 
     # fill=TRUE adds horizons with NA chiid will have NA depths -- will not pass hzDepthTests
     # therefore, only way to use fill effectively was with rmHzErrors=FALSE
     # which runs the risk of duplication in the case of data entry errors or other many:1 issues in comp
     filled.idx <- which(is.na(f.chorizon$chiid))
-    if(length(filled.idx) > 0) {
+    if (length(filled.idx) > 0) {
       filled.ids <- as.character(f.chorizon$coiid[filled.idx])
     }
 
@@ -48,7 +50,7 @@
     good.ids <- as.character(f.chorizon.test$coiid[which(f.chorizon.test$valid)])
     bad.ids <- as.character(f.chorizon.test$coiid[which(!f.chorizon.test$valid)])
 
-    if(length(filled.ids) > 0) {
+    if (length(filled.ids) > 0) {
       good.ids <- unique(c(good.ids, filled.ids))
       bad.ids <- unique(bad.ids[!bad.ids %in% filled.ids])
     }
@@ -58,10 +60,10 @@
 
     # keep track of those components with horizonation errors
     #if(length(bad.ids) > 0) # AGB removed this line of code b/c it prevents update of 'component.hz.problems' on subsequent error-free calls
-    assign('component.hz.problems', value=bad.ids, envir=soilDB.env)
+    assign('component.hz.problems', value = bad.ids, envir = soilDB.env)
   }
 
-  if(nrow(f.chorizon) > 0) {
+  if (nrow(f.chorizon) > 0) {
     # upgrade to SoilProfilecollection
     depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
   } else {
@@ -70,6 +72,21 @@
 
   # add site data to object
   site(f.chorizon) <- f.comp # left-join via coiid
+  
+  # add mapunit data to object if any
+  if (!is.null(f.mu) && nrow(f.mu) > 0) {
+    f.mu$mukey <- f.mu$lmapunitiid
+    site(f.chorizon) <- f.mu[,c("liid", "lmapunitiid", "mukey",
+                                "nationalmusym", "muiid", "musym", 
+                                "muname", "mukind", "mutype", 
+                                "mustatus", "dmuinvesintens",
+                                "farmlndcl", "dmuiid")] # left-join via dmuiid
+  }
+  
+  # add legend data to object if any
+  if (!is.null(f.lg) && nrow(f.lg) > 0) {
+    site(f.chorizon) <- f.lg # left-join via liid
+  }
 
   ## 2017-3-13: short-circuits need testing, consider pre-marking mistakes before parsing
   ## 2021-10-28: TODO: harmonize strategies for .formatXXXXString methods and ID variables
@@ -77,27 +94,27 @@
   .BY <- NULL
   
   # join-in copm strings
-  pm <- data.table::data.table(f.copm)[, .formatParentMaterialString(.SD, uid = .BY$coiid, name.sep=' & '), by = "coiid"]
+  pm <- data.table::data.table(f.copm)[, .formatParentMaterialString(.SD, uid = .BY$coiid, name.sep = ' & '), by = "coiid"]
   pm$siteiid <- NULL
   if (nrow(pm) > 0) {
     site(f.chorizon) <- pm
   }
   
   # join-in cogeomorph strings
-  lf <- data.table::data.table(f.cogeomorph)[, .formatLandformString(.SD, uid = .BY$coiid, name.sep=' & '), by = "coiid"]
+  lf <- data.table::data.table(f.cogeomorph)[, .formatLandformString(.SD, uid = .BY$coiid, name.sep = ' & '), by = "coiid"]
   lf$peiid <- NULL
   if (nrow(lf) > 0) {
     site(f.chorizon) <- lf
   }
   # join-in ecosite string
-  es <- data.table::data.table(f.ecosite)[, .formatEcositeString(.SD, name.sep=' & '), by = "coiid", .SDcols = colnames(f.ecosite)]
+  es <- data.table::data.table(f.ecosite)[, .formatEcositeString(.SD, name.sep = ' & '), by = "coiid", .SDcols = colnames(f.ecosite)]
   es$coiid <- NULL
   
   if (nrow(es) > 0) {
     site(f.chorizon) <- es
   }
   # join-in othervegclass string
-  ov <- data.table::data.table(f.otherveg)[, .formatOtherVegString(.SD, name.sep=' & '), by = "coiid", .SDcols = colnames(f.otherveg)]
+  ov <- data.table::data.table(f.otherveg)[, .formatOtherVegString(.SD, name.sep = ' & '), by = "coiid", .SDcols = colnames(f.otherveg)]
   ov$coiid <- NULL
   if (nrow(ov) > 0) {
     site(f.chorizon) <- ov
