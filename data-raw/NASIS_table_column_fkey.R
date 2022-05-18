@@ -24,7 +24,7 @@ table_fkeys <- sapply(table_colnames, function(x) {
 
 table_pkeys <- sapply(table_colnames, function(x) {
   idx <- which(grepl("iid$", x) & !grepl("dbiid|tbl_", x))
-  if(length(idx) == 0) return(NA)
+  if (length(idx) == 0) return(NA)
   x[idx[length(idx)]]
 })
 
@@ -117,8 +117,6 @@ NASIS_table_column_keys <- data.frame(table = table_names,
 #     })
 # which(!cmpr_oldnu)
 
-save(NASIS_table_column_keys, file = "data/NASIS_table_column_keys.rda")
-
-View(NASIS_table_column_keys)
+usethis::use_data(NASIS_table_column_keys, overwrite = TRUE, compress = 'xz')
 
 

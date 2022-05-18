@@ -94,7 +94,7 @@ get_vegplot_location_from_NASIS_db <- function(SS = TRUE,
   state_FIPS_codes <- NULL
 
   # load FIPS codes from local package data
-  load(system.file("data/state_FIPS_codes.rda", package="soilDB"))
+  load(system.file("data/state_FIPS_codes.rda", package = "soilDB"))
 
   # add ESIS_id
   fips <- substr(d$site_id, 3, 5)
@@ -103,7 +103,7 @@ get_vegplot_location_from_NASIS_db <- function(SS = TRUE,
   fips_state_num <- state_FIPS_codes$state_fips[idx]
   year <- substr(d$site_id, 8, 9)
   sitenum <- substr(d$site_id, 10, 12)
-  d$ESIS_id <- paste(sitenum, year, fips_state_num, fips, sep='')
+  d$ESIS_id <- paste(sitenum, year, fips_state_num, fips, sep = '')
 
   # clean PLSS TRS data
   d$plsstownship <- gsub(d$plsstownship, pattern = '\\.', replacement = '', fixed = TRUE)

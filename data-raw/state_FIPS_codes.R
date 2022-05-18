@@ -1,0 +1,25 @@
+## code to prepare `state_FIPS_codes` dataset goes here
+## TODO: FIPS codes for 
+state_FIPS_codes <- data.frame(state_name = c("Alabama", "Alaska", "Arizona",
+                                              "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
+                                              "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho",
+                                              "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
+                                              "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
+                                              "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
+                                              "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota",
+                                              "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island",
+                                              "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah",
+                                              "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin",
+                                              "Wyoming"), 
+                               state_alpha = c("AL", "AK", "AZ", "AR", "CA", "CO",
+                                               "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS",
+                                               "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE",
+                                               "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA",
+                                               "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI",
+                                               "WY"),
+                               state_fips = c(1L, 2L, 4L, 5L, 6L, 8L, 9L, 10L, 11L, 12L,
+                                              13L, 15L, 16L, 17L, 18L, 19L, 20L, 21L, 22L, 23L, 24L, 25L, 26L,
+                                              27L, 28L, 29L, 30L, 31L, 32L, 33L, 34L, 35L, 36L, 37L, 38L, 39L,
+                                              40L, 41L, 42L, 44L, 45L, 46L, 47L, 48L, 49L, 50L, 51L, 53L, 54L,
+                                              55L, 56L))
+usethis::use_data(state_FIPS_codes, overwrite = TRUE)

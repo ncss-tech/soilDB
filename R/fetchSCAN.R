@@ -106,7 +106,7 @@ SCAN_site_metadata <- function(site.code = NULL) {
   SCAN_SNOTEL_metadata <- NULL
 
   # cached copy available in soilDB::SCAN_SNOTEL_metadata
-  load(system.file("data/SCAN_SNOTEL_metadata.rda", package="soilDB")[1])
+  load(system.file("data/SCAN_SNOTEL_metadata.rda", package = "soilDB")[1])
 
   if (is.null(site.code)) {
     idx <- 1:nrow(SCAN_SNOTEL_metadata)
