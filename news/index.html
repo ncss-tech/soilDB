@@ -48,7 +48,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="2.7.0" id="soildb-270-2022-05-17">soilDB 2.7.0 (2022-05-17)<a class="anchor" aria-label="anchor" href="#soildb-270-2022-05-17"></a></h2>
+<h2 class="page-header" data-toc-text="2.7.0" id="soildb-270-2022-05-18">soilDB 2.7.0 (2022-05-18)<a class="anchor" aria-label="anchor" href="#soildb-270-2022-05-18"></a></h2>
 <ul><li>Spatial<ul><li>Dropped imports from <code>sp</code> and <code>raster</code> which means <code>soilDB</code> no longer requires the soon-to-retire <code>rgdal</code> package.</li>
 <li>All spatial data processing has been moved to <code>sf</code> and <code>terra</code>, which have been added to Suggests.<ul><li>(<em>breaking change</em>) Classes from these packages (e.g. <code>sf</code>, <code>SpatRaster</code>) will be returned by default rather than <code>Spatial*DataFrame</code> or <code>RasterLayer</code> from <code>sp</code> and <code>raster</code>.</li>
 <li>(<em>breaking change</em>) Spatial functions that take spatial input will return the same class type as the input unless otherwise specified.<ul><li>
@@ -66,6 +66,7 @@
 <li>NASIS<ul><li>(<em>breaking change</em>) <code>rmHzErrors</code> argument now defaults to <code>FALSE</code>. Please let us know if allowing horizon errors results in unexpected behavior so we can repair various interfaces that rely on no errors being present. See <code><a href="https://rdrr.io/pkg/aqp/man/checkHzDepthLogic.html" class="external-link">aqp::checkHzDepthLogic()</a></code> for more information on the types of things that used to result in profiles being removed from results and for guidelines on how to fix.</li>
 <li>Added several new columns from the <code>plotplantinventory</code> table to <code><a href="../reference/fetchVegdata.html">get_vegplot_species_from_NASIS_db()</a></code> result; thanks to Zachary Van Abbema for suggestion and feedback</li>
 <li>Local NASIS metadata used for <code><a href="../reference/uncode.html">uncode()</a></code> are now cached within an R session which results in faster query processing times for users with a local NASIS database connection set up.<ul><li>The <code>db</code> argument to <code><a href="../reference/uncode.html">uncode()</a></code> has been deprecated. Now, <code><a href="../reference/uncode.html">code()</a></code> and <code><a href="../reference/uncode.html">uncode()</a></code> can use <code>ChoiceName</code> and/or <code>ChoiceLabel</code> in coding and decoding <code>ChoiceValue</code> for all data sources.</li></ul></li>
+<li>Rock fragment and artifact sieving now uses &lt;76mm as the upper boundary for gravel fraction, and a related QC message has been removed</li>
 </ul></li>
 <li>SSURGO / Soil Data Access<ul><li>Added <code><a href="../reference/get_SDA_cosurfmorph.html">get_SDA_cosurfmorph()</a></code>: a new function in “SSURGO On Demand” style. Users can customize the WHERE clause, target tables and the grouping variable used to calculate proportions (default <code>by="compname"</code>)<ul><li>“cosurfmorphgc” summarizes “geomposmntn”, “geomposhill”, “geomposflats”, “geompostrce”</li>
 <li>“cosurfmorphhpp” summarizes “hillslopeprof”</li>
