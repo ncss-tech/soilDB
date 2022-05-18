@@ -23,7 +23,7 @@
    * All  `get_SDA_*()` methods (except `get_SDA_metrics()`) now support input of custom `WHERE` clause in lieu of `mukeys`/`areasymbols` arguments and gain a `dsn` argument for specifying a local SQLite database or DBIConnection.
    * Added `downloadSSURGO()` for downloading/extraction of the SSURGO data by survey area from Web Soil Survey. 
    * Added `createSSURGO()` for building of local databases as SQLite/Geopackage from one or more SSURGO exports.
-      * Exports can be obtained via `downloadSSURGO()`, from NASIS or downloaded from other sources such as <https://nrcs.app.box.com/v/soils>. 
+      * Exports can be obtained via `downloadSSURGO()`, from NASIS or downloaded from other sources such as  <https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx>. 
  
 
 # soilDB 2.6.15 (2022-04-13) 
