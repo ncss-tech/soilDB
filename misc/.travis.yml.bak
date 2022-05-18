@@ -1,8 +1,0 @@
-before_install:
-  - sudo apt-get -y install gdal-bin libgdal-dev libproj-dev r-cran-rodbc libudunits2-dev
-
-r_github_packages:
- - ncss-tech/aqp
-
-language: r
-sudo: required
