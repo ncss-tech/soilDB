@@ -10,7 +10,7 @@
    - `mukey.wcs()` gains a new possible data source `db="RSS"` which accesses a Web Coverage Service containing grids from Raster Soil Surveys in the United States.
    - See: <https://github.com/ncss-tech/soilDB/pull/229> for more details on what has changed.
  * NASIS
-   * (*breaking change*) `rmHzErrors` argument now defaults to `FALSE`. Please let us know allowing horizon errors results in unexpected behavior so we can repair various interfaces that rely on no errors being present. See `aqp::checkHzDepthLogic()` for more information on the types of things that used to result in profiles being removed from results and for guidelines on how to fix.
+   * (*breaking change*) `rmHzErrors` argument now defaults to `FALSE`. Please let us know if allowing horizon errors results in unexpected behavior so we can repair various interfaces that rely on no errors being present. See `aqp::checkHzDepthLogic()` for more information on the types of things that used to result in profiles being removed from results and for guidelines on how to fix.
    * Added several new columns from the `plotplantinventory` table to `get_vegplot_species_from_NASIS_db()` result; thanks to Zachary Van Abbema for suggestion and feedback
    * Local NASIS metadata used for `uncode()` are now cached within an R session which results in faster query processing times for users with a local NASIS database connection set up. 
      - The `db` argument to `uncode()` has been deprecated. Now, `code()` and `uncode()` can use `ChoiceName` and/or `ChoiceLabel` in coding and decoding `ChoiceValue` for all data sources.
