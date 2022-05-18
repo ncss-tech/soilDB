@@ -12,14 +12,16 @@ simplifyFragmentData(
   vol.var = "fragvol",
   prefix = "frag",
   nullFragsAreZero = TRUE,
-  msg = "rock fragment volume"
+  msg = "rock fragment volume",
+  ...
 )
 
 simplifyArtifactData(
   art,
   id.var,
   vol.var = "huartvol",
-  nullFragsAreZero = nullFragsAreZero
+  nullFragsAreZero = nullFragsAreZero,
+  ...
 )
 }
 \arguments{
@@ -36,6 +38,8 @@ that is unique among all horizons in \code{rf}}
 \item{nullFragsAreZero}{should fragment volumes of NULL be interpreted as 0? (default: \code{TRUE}), see details}
 
 \item{msg}{Identifier of data being summarized. Default is \code{"rock fragment volume"} but this routine is also used for \code{"surface fragment cover"}}
+
+\item{...}{Additional arguments passed to sieving function (e.g. \code{sieves} a named numeric containing sieve size thresholds with class name)}
 
 \item{art}{a \code{data.frame} object, typically returned from NASIS, see details}
 }

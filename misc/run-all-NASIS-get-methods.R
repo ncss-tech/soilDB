@@ -38,13 +38,13 @@ library(soilDB)
 
 # path to data source (NULL = use ODBC to local nasis,
 #                     otherwise path to SQLite)
-dsn <- "misc/testStatic.sqlite"
-
-# RUN IF NEEDED:
 # dsn <- "misc/testStatic.sqlite"
-createStaticNASIS(tables = c(get_NASIS_table_name_by_purpose(SS = TRUE),
-                             get_NASIS_table_name_by_purpose(SS = FALSE)),
-                  dsn = NULL, output_path = dsn)
+# 
+# # RUN IF NEEDED:
+# # dsn <- "misc/testStatic.sqlite"
+# createStaticNASIS(tables = c(get_NASIS_table_name_by_purpose(SS = TRUE),
+#                              get_NASIS_table_name_by_purpose(SS = FALSE)),
+#                   dsn = NULL, output_path = dsn)
 
 # Function to load all function names in package, run them using SS and dsn as specified
 test_local_NASIS <- function(SS = FALSE, dsn = NULL) {
@@ -67,11 +67,11 @@ test_local_NASIS <- function(SS = FALSE, dsn = NULL) {
         TESTFUN <- get(FUN, envir = as.environment("package:soilDB"))
 
         # handle special cases -- all functions tested take an SS argument except local_NASIS_defined
-        switch (FUN,
-                "local_NASIS_defined" = try(TESTFUN(dsn = dsn)),
-                "get_soilseries_from_NASIS" = try(TESTFUN(dsn = dsn)),
-                "get_soilseries_from_NASISWebReport" = NULL, 
-                try(TESTFUN(SS = SS, dsn = dsn)) )
+        switch(FUN,
+               "local_NASIS_defined" = try(TESTFUN(dsn = dsn)),
+               "get_soilseries_from_NASIS" = try(TESTFUN(dsn = dsn)),
+               "get_soilseries_from_NASISWebReport" = NULL, 
+               try(TESTFUN(SS = SS, dsn = dsn)) )
       })
     })
 

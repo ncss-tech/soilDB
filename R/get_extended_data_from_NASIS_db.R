@@ -520,19 +520,21 @@ LEFT OUTER JOIN (
 	# summarize rock fragment data
 	if (nrow(d.rf.data) > 0) {
 	  # keep track of UNIQUE original phiids so that we can optionally fill NA with 0 in a second pass
-	  all.ids <- unique(d.rf.data[, 'phiid', drop=FALSE])
+	  all.ids <- unique(d.rf.data[, 'phiid', drop = FALSE])
 
 	  # left join
 	  d.rf.summary <- merge(all.ids, d.rf.summary, by = 'phiid',
 	                       sort = FALSE, all.x = TRUE, incomparables = NA)
 	  ## basic checks for problematic data
 
+	  # 2022/05/18: removed this QC warning, the "change" to 75mm was a typographical error
+	  
 	  # recent NSSH changes to gravel/cobble threshold 76mm -> 75mm
-	  qc.idx <- which(d.rf.data$fragsize_h == 76)
-	  if(length(qc.idx) > 0) {
-	    msg <- sprintf('-> QC: some fragsize_h values == 76mm, may be mis-classified as cobbles [%i / %i records]', length(qc.idx), nrow(d.rf.data))
-	    message(msg)
-	  }
+	  # qc.idx <- which(d.rf.data$fragsize_h == 76)
+	  # if (length(qc.idx) > 0) {
+	  #   msg <- sprintf('-> QC: some fragsize_h values == 75mm, may be mis-classified as cobbles [%i / %i records]', length(qc.idx), nrow(d.rf.data))
+	  #   message(msg)
+	  # }
 
 	}
 
@@ -552,15 +554,9 @@ LEFT OUTER JOIN (
 
 	if (nrow(d.art.data) > 0) {
 
-	  art.all.ids <- unique(d.art.data[, 'phiid', drop=FALSE])
+	  art.all.ids <- unique(d.art.data[, 'phiid', drop = FALSE])
 	  d.art.summary <- merge(art.all.ids, d.art.summary, by = 'phiid',
 	                        sort = FALSE, all.x = TRUE, incomparables = NA)
-	  # recent NSSH changes to gravel/cobble threshold 76mm -> 75mm
-	  qc.idx <- which(d.art.data$huartsize_h == 76)
-	  if (length(qc.idx) > 0) {
-	    msg <- sprintf('-> QC: some huartsize_h values == 76mm, may be mis-classified as cobbles [%i / %i records]', length(qc.idx), nrow(d.art.data))
-	    message(msg)
-	  }
   }
 
 	if (nullFragsAreZero) {
@@ -578,8 +574,7 @@ LEFT OUTER JOIN (
 	# if (nullFragsAreZero == TRUE) {
 	#   d.rf.data.v2[idx] <- lapply(d.rf.data.v2[idx], function(x) ifelse(is.na(x), 0, x))
 	# }
-
-
+	
 	# return a list of results
 	return(list(ecositehistory = d.ecosite,
 	            siteaoverlap = d.siteaoverlap,

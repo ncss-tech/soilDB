@@ -10,13 +10,13 @@ data("mineralKing", package = "soilDB")
 # # create CSVs (requires NASIS setup)
 # # query CA630 and CA792 w/ R08 PEDON/SITE by SSA ID or similar
 # # load source data sets (CA630 and CA792 pedons)
-# nasis_pedons <- fetchNASIS(rmHzErrors = FALSE, SS = FALSE)
-# 
-# p <- rebuildSPC(subset(nasis_pedons, siteiid %in% as.double(c(loafercreek, gopheridge, mineralKing)$siteiid)))
-# write.csv(horizons(p), "data-raw/spc-horizons.csv", row.names = FALSE)
-# write.csv(site(p), "data-raw/spc-site.csv", row.names = FALSE)
-# write.csv(diagnostic_hz(p), "data-raw/spc-diagnostic_hz.csv", row.names = FALSE)
-# write.csv(restrictions(p), "data-raw/spc-restrictions.csv", row.names = FALSE)
+nasis_pedons <- fetchNASIS(rmHzErrors = FALSE, SS = FALSE)
+
+p <- rebuildSPC(subset(nasis_pedons, siteiid %in% as.double(c(loafercreek, gopheridge, mineralKing)$siteiid)))
+write.csv(horizons(p), "data-raw/spc-horizons.csv", row.names = FALSE)
+write.csv(site(p), "data-raw/spc-site.csv", row.names = FALSE)
+write.csv(diagnostic_hz(p), "data-raw/spc-diagnostic_hz.csv", row.names = FALSE)
+write.csv(restrictions(p), "data-raw/spc-restrictions.csv", row.names = FALSE)
 
 recent1822a <- read.csv("data-raw/spc-horizons.csv")
 depths(recent1822a) <- peiid ~ hzdept + hzdepb
