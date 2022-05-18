@@ -3,7 +3,7 @@
 # get NASIS site/pedon/horizon/diagnostic feature data
 .fetchNASIS_pedons <- function(SS = TRUE,
                                fill = FALSE,
-                               rmHzErrors = TRUE,
+                               rmHzErrors = FALSE,
                                nullFragsAreZero = TRUE,
                                soilColorState = 'moist',
                                mixColors = TRUE,

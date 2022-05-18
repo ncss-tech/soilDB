@@ -12,7 +12,7 @@ fetchNASIS(
   from = "pedons",
   url = NULL,
   SS = TRUE,
-  rmHzErrors = TRUE,
+  rmHzErrors = FALSE,
   nullFragsAreZero = TRUE,
   soilColorState = "moist",
   mixColors = TRUE,
@@ -32,7 +32,7 @@ fetchNASIS(
 the entire local database (default: \code{TRUE})}
 
 \item{rmHzErrors}{should pedons with horizon depth errors be removed from
-the results? (default: \code{TRUE})}
+the results? (default: \code{FALSE})}
 
 \item{nullFragsAreZero}{should fragment volumes of \code{NULL} be interpreted as \code{0}?
 (default: \code{TRUE}), see details}

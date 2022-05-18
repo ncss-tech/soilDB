@@ -48,7 +48,7 @@
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: `TRUE`)
 #' @param rmHzErrors should pedons with horizon depth errors be removed from
-#' the results? (default: `TRUE`)
+#' the results? (default: `FALSE`)
 #' @param nullFragsAreZero should fragment volumes of `NULL` be interpreted as `0`?
 #' (default: `TRUE`), see details
 #' @param soilColorState Used only for `from='pedons'`; which colors should be used to generate the convenience field `soil_color`? (`'moist'` or `'dry'`)
@@ -67,7 +67,7 @@
 fetchNASIS <- function(from = 'pedons',
                        url = NULL,
                        SS = TRUE,
-                       rmHzErrors = TRUE,
+                       rmHzErrors = FALSE,
                        nullFragsAreZero = TRUE,
                        soilColorState = 'moist',
                        mixColors = TRUE,

@@ -1,6 +1,6 @@
 
 .fetchNASIS_report <- function(url = NULL,
-                               rmHzErrors       = TRUE,
+                               rmHzErrors       = FALSE,
                                nullFragsAreZero = TRUE,
                                soilColorState   = "moist",
                                stringsAsFactors = NULL
@@ -270,7 +270,7 @@
                           pedon_id,
                           hzdept,
                           hzdepb,
-                          rmHzErrors = TRUE,
+                          rmHzErrors = FALSE,
                           nullFragsAreZero = TRUE,
                           soilColorState = "moist"
 ) {
