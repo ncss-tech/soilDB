@@ -21,10 +21,9 @@ us_ss_timeline <- {
 }
 
 us_ss_timeline <- within(us_ss_timeline, {
-  ssa  = sapply(ssa, function(x) strsplit(x, "\\r")[[1]][1])
+  ssa  = stringi::stri_enc_toascii(sapply(ssa, function(x) strsplit(x, "\\r")[[1]][1]))
   year = as.numeric(year)
   pdf  = ifelse(pdf == "Yes", TRUE, FALSE)
   wss  = NULL
 })
-
 usethis::use_data(us_ss_timeline, overwrite = TRUE)
