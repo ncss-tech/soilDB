@@ -55,6 +55,7 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_mapunit_from_NASIS</span><span class="op">(</span>
   SS <span class="op">=</span> <span class="cn">TRUE</span>,
+  repdmu <span class="op">=</span> <span class="cn">TRUE</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
   stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,
   dsn <span class="op">=</span> <span class="cn">NULL</span>
@@ -80,7 +81,9 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>SS</dt>
-<dd><p>fetch data from the currently loaded selected set in NASIS or from the entire local database (default: <code>TRUE</code>)</p></dd>
+<dd><p>Fetch data from the currently loaded selected set in NASIS or from the entire local database (default: <code>TRUE</code>)</p></dd>
+<dt>repdmu</dt>
+<dd><p>Return only "representative" data mapunits? Default: <code>TRUE</code></p></dd>
 <dt>droplevels</dt>
 <dd><p>Drop unused levels from <code>farmlndcl</code> and other factor levels from NASIS domains?</p></dd>
 <dt>stringsAsFactors</dt>
