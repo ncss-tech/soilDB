@@ -10,6 +10,7 @@
 \usage{
 get_mapunit_from_NASIS(
   SS = TRUE,
+  repdmu = TRUE,
   droplevels = TRUE,
   stringsAsFactors = NULL,
   dsn = NULL
@@ -32,7 +33,9 @@ get_lmuaoverlap_from_NASIS(
 get_projectmapunit_from_NASIS(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
 }
 \arguments{
-\item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: \code{TRUE})}
+\item{SS}{Fetch data from the currently loaded selected set in NASIS or from the entire local database (default: \code{TRUE})}
+
+\item{repdmu}{Return only "representative" data mapunits? Default: \code{TRUE}}
 
 \item{droplevels}{Drop unused levels from \code{farmlndcl} and other factor levels from NASIS domains?}
 

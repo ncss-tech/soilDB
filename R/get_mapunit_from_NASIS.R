@@ -1,25 +1,25 @@
 #' Get Legend, Mapunit and Legend Mapunit Area Overlap Tables
 #' 
 #'
-#' @param SS fetch data from the currently loaded selected set in NASIS or from the entire local database (default: `TRUE`)
+#' @param SS Fetch data from the currently loaded selected set in NASIS or from the entire local database (default: `TRUE`)
+#' @param repdmu Return only "representative" data mapunits? Default: `TRUE`
 #' @param droplevels Drop unused levels from `farmlndcl` and other factor levels from NASIS domains?
 #' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' 
 #' @export
-get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactors = NULL, dsn = NULL) {
+get_mapunit_from_NASIS <- function(SS = TRUE, repdmu = TRUE, droplevels = TRUE, stringsAsFactors = NULL, dsn = NULL) {
   
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  q.mapunit <- paste("
-                     SELECT
+  q.mapunit <- paste("SELECT
                      ng.grpname, areasymbol, areatypename, liid, lmapunitiid,
                      nationalmusym, muiid, musym, muname, mukind, mutype, mustatus, dmuinvesintens, muacres,
-                     farmlndcl, dmuiid, pct_component, pct_hydric, n_component, n_majcompflag
+                     farmlndcl, dmuiid, repdmu, pct_component, pct_hydric, n_component, n_majcompflag
 
                      FROM
                          area            a                               INNER JOIN
@@ -36,7 +36,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
                     LEFT OUTER JOIN
                     --components
                     (SELECT
-                     cor.muiidref cor_muiidref, dmuiid, dmuinvesintens,
+                     cor.muiidref cor_muiidref, dmuiid, repdmu, dmuinvesintens,
                      SUM(comppct_r)                                                pct_component,
                      SUM(comppct_r * CASE WHEN hydricrating = 1 THEN 1 ELSE 0 END) pct_hydric,
                      COUNT(*)                                                      n_component,
@@ -45,10 +45,10 @@ get_mapunit_from_NASIS <- function(SS = TRUE, droplevels = TRUE, stringsAsFactor
                      FROM
                          component_View_1   co                                  LEFT OUTER JOIN
                          datamapunit_View_1 dmu ON dmu.dmuiid    = co.dmuiidref LEFT OUTER JOIN
-                         correlation_View_1 cor ON cor.dmuiidref = dmu.dmuiid   AND
-                                                   cor.repdmu    = 1
+                         correlation_View_1 cor ON cor.dmuiidref = dmu.dmuiid", 
+                    ifelse(repdmu, "AND cor.repdmu = 1", ""), "
 
-                     GROUP BY cor.muiidref, dmuiid, dmuinvesintens
+                     GROUP BY cor.muiidref, dmuiid, repdmu, dmuinvesintens
                     ) co ON co.cor_muiidref = mu.muiid
 
                      WHERE

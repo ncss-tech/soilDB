@@ -22,7 +22,7 @@
   
   # load data in pieces
   f.lg         <- get_legend_from_NASIS(SS = SS, dsn = dsn)
-  f.mu         <- get_mapunit_from_NASIS(SS = SS, dsn = dsn)
+  f.mu         <- get_mapunit_from_NASIS(SS = SS, repdmu = FALSE, dsn = dsn) # include possible results for rep and non-rep DMUS
   f.comp       <- get_component_data_from_NASIS_db(SS = SS, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.copm       <- get_component_copm_data_from_NASIS_db(SS = SS, dsn = dsn)
@@ -80,7 +80,7 @@
                                 "nationalmusym", "muiid", "musym", 
                                 "muname", "mukind", "mutype", 
                                 "mustatus", "dmuinvesintens",
-                                "farmlndcl", "dmuiid")] # left-join via dmuiid
+                                "farmlndcl", "dmuiid", "repdmu")] # left-join via dmuiid
   }
   
   # add legend data to object if any

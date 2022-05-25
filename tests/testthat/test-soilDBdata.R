@@ -13,6 +13,7 @@ test_that("soilDBdata: fetchNASIS", {
   fc <- fetchNASIS(from = "components", dsn = COMPONENT_TEST_DSN, SS = FALSE)
 
   # TODO: test SS=TRUE
+  # TODO: test rmHzErrors
 
   # test fill=TRUE
   expect_warning({
