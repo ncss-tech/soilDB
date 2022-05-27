@@ -1,3 +1,7 @@
+# soilDB 2.7.1 (unreleased)
+   - `fetchNASIS(from="components")` now returns mapunit and legend information (if loaded in local NASIS database); thanks to Nathan Roe
+   - Convert UTF8 strings in `us_ss_timeline` result to ASCII
+
 # soilDB 2.7.0 (2022-05-18)
  * Spatial 
    - Dropped imports from `sp` and `raster` which means `soilDB` no longer requires the soon-to-retire `rgdal` package.
