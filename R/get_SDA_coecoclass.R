@@ -66,6 +66,10 @@ get_SDA_coecoclass <- function(method = "None",
     res <- dbGetQuery(dsn, q)
   }
   
+  if (length(res) == 0) {
+    stop('query returned no results', call. = FALSE)
+  }
+  
   .I <- NULL
   idx <- NULL
   comppct_r <- NULL
