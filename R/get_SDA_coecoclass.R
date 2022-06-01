@@ -26,29 +26,32 @@ get_SDA_coecoclass <- function(method = "None",
     ecoclassref <- soilDB::format_SQL_in_statement(ecoclassref)
   }
   
-  base_query <- "SELECT mapunit.mukey, component.cokey, coecoclasskey, 
-                  comppct_r, majcompflag, compname, compkind, 
-                  ecoclassid, ecoclassname FROM legend
+  base_query <- "SELECT legend.areasymbol, legend.lkey, mapunit.muname, mapunit.mukey, component.cokey, coecoclasskey, 
+                  comppct_r, majcompflag, compname, compkind, ecoclassid, ecoclassname, ecoclassref FROM legend
    LEFT JOIN mapunit ON legend.lkey = mapunit.lkey
    LEFT JOIN component ON mapunit.mukey = component.mukey %s
-   LEFT JOIN coecoclass ON component.cokey = coecoclass.cokey %s
+   LEFT JOIN coecoclass ON component.cokey = coecoclass.cokey
    WHERE %s"
   
   include_misc <- ifelse(miscellaneous_areas, "", " AND compkind != 'miscellaneous area'")
   
-  include_src <- ifelse(is.null(ecoclassref), "", sprintf(" AND ecoclassref IN %s", ecoclassref))
+  include_src <- ifelse(is.null(ecoclassref), "", sprintf("(coecoclass.ecoclassref IS NULL OR coecoclass.ecoclassref IN %s)", ecoclassref))
   
   if (is.null(mukeys) && is.null(areasymbols) && is.null(WHERE)) {
     stop("Please specify one of the following arguments: mukeys, areasymbols, WHERE", call. = FALSE)
   }
-  
+
   if (!is.null(mukeys)) {
     WHERE <- paste("mapunit.mukey IN", format_SQL_in_statement(as.integer(mukeys)))
   } else if (!is.null(areasymbols)) {
     WHERE <- paste("legend.areasymbol IN", format_SQL_in_statement(areasymbols))
   } 
   
-  q <- sprintf(base_query, include_misc, include_src, WHERE)
+  if (include_src != "") {
+    WHERE <- paste(WHERE, "AND", include_src)
+  }
+  
+  q <- sprintf(base_query, include_misc, WHERE)
   
   if (query_string)
     return(q)
@@ -77,8 +80,9 @@ get_SDA_coecoclass <- function(method = "None",
   } 
   
   res$ecoclassid[is.na(res$ecoclassid)] <- not_rated_value
-  
-  
+  res$ecoclassname[is.na(res$ecoclassname)] <- not_rated_value
+  res$ecoclassref[is.na(res$ecoclassref)] <- not_rated_value
+
   idx2 <- data.table::data.table(res)[, list(idx = .I[which.max(comppct_r)],
                                              ecoclasspct_r = sum(comppct_r)), 
                                       by = c("mukey", "ecoclassid")][,
