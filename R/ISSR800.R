@@ -176,8 +176,6 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     # index those categories present in r
     cat.idx <- which(rat$ID %in% u.values)
     
-    ## why does this work without terra::categorize?
-    
     # register categories in new order
     levels(r) <- rat[cat.idx, col.names]
   }

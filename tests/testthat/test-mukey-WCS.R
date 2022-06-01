@@ -22,7 +22,7 @@ test_that("works as expected", {
   
   expect_true(inherits(x, 'SpatRaster') || inherits(x, 'try-error'))
 
-  if(inherits(x, 'SpatRaster')) {
+  if (inherits(x, 'SpatRaster')) {
     
     # expected dimensions
     expect_true(all(dim(x) == c(20, 16, 1)))

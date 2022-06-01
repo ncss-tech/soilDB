@@ -199,7 +199,7 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS'), res = 30, quiet 
   rat <- data.frame(value = uids, 
                     mukey = uids,
                     ID = uids)
-  r <- terra::categories(r, layer = 1, rat)
+  levels(r)[[1]] <- rat
   
   # set layer name in object
   names(r) <- 'mukey'
