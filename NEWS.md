@@ -1,5 +1,5 @@
 # soilDB 2.7.1 (unreleased)
-   - `get_SDA_coecoclass()` better handling of `NULL` `ecoclassref`; `not_assigned_value` now applies to `ecoclassname` and `ecoclassref` columns in addition to `ecoclassid`; Thanks to Andy Paolucci. Also, added additional columns from legend/mapunit tables (`areasymbol`, `lkey`, `muname`).
+   - `get_SDA_coecoclass()` better handling of `NULL` `ecoclassref`; support for filtering on `ecoclasstypename`; `not_assigned_value` now applies to `ecoclassname`, `ecoclasstypename` and `ecoclassref` columns in addition to `ecoclassid`; Thanks to Andy Paolucci and Jason Nemecek. Also, added additional columns from legend/mapunit tables (`areasymbol`, `lkey`, `muname`).
    - `fetchNASIS(from="components")` now returns mapunit and legend information (if loaded in local NASIS database); thanks to Nathan Roe
    - Convert UTF8 strings in `us_ss_timeline` result to ASCII
 

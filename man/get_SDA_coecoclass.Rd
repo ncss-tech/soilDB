@@ -10,6 +10,7 @@ get_SDA_coecoclass(
   mukeys = NULL,
   WHERE = NULL,
   query_string = FALSE,
+  ecoclasstypename = NULL,
   ecoclassref = "Ecological Site Description Database",
   not_rated_value = "Not assigned",
   miscellaneous_areas = TRUE,
@@ -26,6 +27,8 @@ get_SDA_coecoclass(
 \item{WHERE}{character containing SQL WHERE clause specified in terms of fields in \code{legend}, \code{mapunit}, \code{component} or \code{coecosite} tables, used in lieu of \code{mukeys} or \code{areasymbols}}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
+
+\item{ecoclasstypename}{If \code{NULL} no constraint on \code{ecoclasstypename} is used in the query.}
 
 \item{ecoclassref}{Default: \code{"Ecological Site Description Database"}. If \code{NULL} no constraint on \code{ecoclassref} is used in the query.}
 

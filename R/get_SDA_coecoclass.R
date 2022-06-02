@@ -9,6 +9,7 @@
 #' @param mukeys vector of map unit keys
 #' @param WHERE character containing SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, `component` or `coecosite` tables, used in lieu of `mukeys` or `areasymbols`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
+#' @param ecoclasstypename If `NULL` no constraint on `ecoclasstypename` is used in the query.
 #' @param ecoclassref Default: `"Ecological Site Description Database"`. If `NULL` no constraint on `ecoclassref` is used in the query.
 #' @param not_rated_value Default: `"Not assigned"`
 #' @param miscellaneous_areas Include miscellaneous areas (non-soil components)?
@@ -16,6 +17,7 @@
 get_SDA_coecoclass <- function(method = "None",
                                areasymbols = NULL, mukeys = NULL, WHERE = NULL,
                                query_string = FALSE, 
+                               ecoclasstypename = NULL,
                                ecoclassref = "Ecological Site Description Database",
                                not_rated_value = "Not assigned",
                                miscellaneous_areas = TRUE,
@@ -26,8 +28,12 @@ get_SDA_coecoclass <- function(method = "None",
     ecoclassref <- soilDB::format_SQL_in_statement(ecoclassref)
   }
   
+  if (!is.null(ecoclasstypename)) {
+    ecoclasstypename <- soilDB::format_SQL_in_statement(ecoclasstypename)
+  }
+  
   base_query <- "SELECT legend.areasymbol, legend.lkey, mapunit.muname, mapunit.mukey, component.cokey, coecoclasskey, 
-                  comppct_r, majcompflag, compname, compkind, ecoclassid, ecoclassname, ecoclassref FROM legend
+                  comppct_r, majcompflag, compname, compkind, ecoclassid, ecoclassname, ecoclasstypename, ecoclassref FROM legend
    LEFT JOIN mapunit ON legend.lkey = mapunit.lkey
    LEFT JOIN component ON mapunit.mukey = component.mukey %s
    LEFT JOIN coecoclass ON component.cokey = coecoclass.cokey
@@ -36,6 +42,7 @@ get_SDA_coecoclass <- function(method = "None",
   include_misc <- ifelse(miscellaneous_areas, "", " AND compkind != 'miscellaneous area'")
   
   include_src <- ifelse(is.null(ecoclassref), "", sprintf("(coecoclass.ecoclassref IS NULL OR coecoclass.ecoclassref IN %s)", ecoclassref))
+  include_src2 <- ifelse(is.null(ecoclasstypename), "", sprintf("(coecoclass.ecoclasstypename IS NULL OR coecoclass.ecoclasstypename IN %s)", ecoclasstypename))
   
   if (is.null(mukeys) && is.null(areasymbols) && is.null(WHERE)) {
     stop("Please specify one of the following arguments: mukeys, areasymbols, WHERE", call. = FALSE)
@@ -49,6 +56,10 @@ get_SDA_coecoclass <- function(method = "None",
   
   if (include_src != "") {
     WHERE <- paste(WHERE, "AND", include_src)
+  }
+  
+  if (include_src2 != "") {
+    WHERE <- paste(WHERE, "AND", include_src2)
   }
   
   q <- sprintf(base_query, include_misc, WHERE)
@@ -85,6 +96,7 @@ get_SDA_coecoclass <- function(method = "None",
   
   res$ecoclassid[is.na(res$ecoclassid)] <- not_rated_value
   res$ecoclassname[is.na(res$ecoclassname)] <- not_rated_value
+  res$ecoclasstypename[is.na(res$ecoclasstypename)] <- not_rated_value
   res$ecoclassref[is.na(res$ecoclassref)] <- not_rated_value
 
   idx2 <- data.table::data.table(res)[, list(idx = .I[which.max(comppct_r)],
