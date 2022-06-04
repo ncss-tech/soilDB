@@ -50,6 +50,8 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.7.1" id="soildb-271-unreleased">soilDB 2.7.1 (unreleased)<a class="anchor" aria-label="anchor" href="#soildb-271-unreleased"></a></h2>
 <ul><li>
+<code><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass()</a></code> better handling of <code>NULL</code> <code>ecoclassref</code>; support for filtering on <code>ecoclasstypename</code>; <code>not_assigned_value</code> now applies to <code>ecoclassname</code>, <code>ecoclasstypename</code> and <code>ecoclassref</code> columns in addition to <code>ecoclassid</code>; Thanks to Andy Paolucci and Jason Nemecek. Also, added additional columns from legend/mapunit tables (<code>areasymbol</code>, <code>lkey</code>, <code>muname</code>).</li>
+<li>
 <code>fetchNASIS(from="components")</code> now returns mapunit and legend information (if loaded in local NASIS database); thanks to Nathan Roe</li>
 <li>Convert UTF8 strings in <code>us_ss_timeline</code> result to ASCII</li>
 </ul></div>
