@@ -626,7 +626,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   LEFT OUTER JOIN chtexturegrp_View_1 cht ON cht.chiidref = ch.chiid AND cht.rvindicator = 1
   LEFT OUTER JOIN chstructgrp_View_1 chs ON chs.chiidref = ch.chiid AND chs.rvindicator = 1
 
-  -- why is this here?
+  -- why is this here? to order on dmudesc
   INNER JOIN datamapunit_View_1 dmu ON dmu.dmuiid = co.dmuiidref
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC, hzdept_r ASC;"
@@ -658,7 +658,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
 
   # "sieving" chfrags, chuarts tables for parity with fetchNASIS("pedons") @horizons slot columns
 
-  if (nrow(d) > 0){
+  if (nrow(d) > 0) {
     # horizon fragments
     chf <- simplifyFragmentData(
       uncode(dbQueryNASIS(channel, q2, close = FALSE), dsn = dsn),

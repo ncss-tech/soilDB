@@ -20,9 +20,26 @@
     assign('component.hz.problems', value = character(0), envir = soilDB.env)
   }
   
-  # load data in pieces
+  # optionally legend and mapunit information are included if in local DB/selected set
+  #   includes possible results for rep and non-rep DMUs and any mustatus
   f.lg         <- get_legend_from_NASIS(SS = SS, dsn = dsn)
-  f.mu         <- get_mapunit_from_NASIS(SS = SS, repdmu = FALSE, dsn = dsn) # include possible results for rep and non-rep DMUS
+  mu.q <- "SELECT ng.grpname, liid, lmapunitiid, lmapunitiid AS mukey, areatypename,
+           nationalmusym, muiid, musym, muname, mukind, mutype, muacres, mustatus,
+           dmuinvesintens, farmlndcl, dmuiid, repdmu 
+           FROM area a 
+            INNER JOIN areatype at ON at.areatypeiid = a.areatypeiidref
+            INNER JOIN legend_View_1 l ON l.areaiidref = a.areaiid 
+            INNER JOIN lmapunit_View_1 lmu ON lmu.liidref = l.liid 
+            INNER JOIN mapunit_View_1 mu ON mu.muiid = lmu.muiidref
+            INNER JOIN nasisgroup ng ON ng.grpiid = mu.grpiidref
+            INNER JOIN correlation_View_1 cor ON cor.muiidref = mu.muiid
+            INNER JOIN datamapunit_View_1 dmu ON dmu.dmuiid = cor.dmuiidref"
+  if (!SS) {
+    mu.q <- gsub("_View_1", "", mu.q)
+  }
+  f.mu         <- uncode(dbQueryNASIS(NASIS(dsn = dsn), mu.q), dsn = dsn)
+  
+  # load data in pieces
   f.comp       <- get_component_data_from_NASIS_db(SS = SS, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.copm       <- get_component_copm_data_from_NASIS_db(SS = SS, dsn = dsn)
@@ -75,12 +92,7 @@
   
   # add mapunit data to object if any
   if (!is.null(f.mu) && nrow(f.mu) > 0) {
-    f.mu$mukey <- f.mu$lmapunitiid
-    site(f.chorizon) <- f.mu[,c("liid", "lmapunitiid", "mukey",
-                                "nationalmusym", "muiid", "musym", 
-                                "muname", "mukind", "mutype", 
-                                "mustatus", "dmuinvesintens",
-                                "farmlndcl", "dmuiid", "repdmu")] # left-join via dmuiid
+    site(f.chorizon) <- f.mu # left-join via dmuiid
   }
   
   # add legend data to object if any
