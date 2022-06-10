@@ -12,14 +12,18 @@ test_that("SDA properties (dominant condition) works", {
   skip_if_offline()
 
   skip_on_cran()
-
-  expect_equal(nrow(get_SDA_property(property = "Taxonomic Suborder",
-                                     method = "Dominant Condition",
-                                     areasymbols = target_areas)), target_area_rows)
-
-  expect_equal(get_SDA_property(property = c("Taxonomic Suborder","Taxonomic Order"),
-                                     method = "Dominant Condition",
-                                     mukeys = target_mukeys)$mukey, target_mukeys)
+  
+  x <- get_SDA_property(property = "Taxonomic Suborder",
+                        method = "Dominant Condition",
+                        areasymbols = target_areas)
+  skip_if(is.null(x))
+  expect_equal(nrow(x), target_area_rows)
+  
+  x <- get_SDA_property(property = c("Taxonomic Suborder","Taxonomic Order"),
+                   method = "Dominant Condition",
+                   mukeys = target_mukeys)
+  skip_if(is.null(x))
+  expect_equal(x$mukey, target_mukeys)
 
 })
 
@@ -27,13 +31,17 @@ test_that("SDA properties (dominant component category) works", {
   skip_if_offline()
 
   skip_on_cran()
-  expect_equal(nrow(get_SDA_property(property = "Taxonomic Suborder",
-                                     method = "Dominant Component (Category)",
-                                     areasymbols = target_areas)), target_area_rows)
-
-  expect_equal(get_SDA_property(property = c("Taxonomic Suborder","Taxonomic Order"),
-                                     method = "Dominant Component (Category)",
-                                     mukeys = target_mukeys)$mukey, target_mukeys)
+  c <- get_SDA_property(property = "Taxonomic Suborder",
+                   method = "Dominant Component (Category)",
+                   areasymbols = target_areas)
+  skip_if(is.null(x))
+  expect_equal(nrow(x), target_area_rows)
+  
+  x <- get_SDA_property(property = c("Taxonomic Suborder","Taxonomic Order"),
+                        method = "Dominant Component (Category)",
+                        mukeys = target_mukeys)
+  skip_if(is.null(x))
+  expect_equal(x$mukey, target_mukeys)
 })
 
 test_that("SDA properties (dominant component numeric) works", {
@@ -41,21 +49,25 @@ test_that("SDA properties (dominant component numeric) works", {
 
   skip_on_cran()
 
-  expect_equal(nrow(get_SDA_property(
+  x <- get_SDA_property(
     property = "Very Coarse Sand - Rep Value",
     method = "Dominant Component (Numeric)",
     areasymbols = target_areas,
     top_depth = 25,
     bottom_depth = 50
-  )), target_area_rows)
-
-  expect_equal(get_SDA_property(
+  )
+  skip_if(is.null(x))
+  expect_equal(nrow(x), target_area_rows)
+  
+  x <- get_SDA_property(
     property = c("sandvc_l","sandvc_r","sandvc_h"),
     method = "Dominant Component (Numeric)",
     mukeys = target_mukeys,
     top_depth = 25,
     bottom_depth = 50
-  )$mukey, target_mukeys)
+  )
+  skip_if(is.null(x))
+  expect_equal(x$mukey, target_mukeys)
 
 })
 
@@ -63,22 +75,26 @@ test_that("SDA properties (weighted average) works", {
   skip_if_offline()
 
   skip_on_cran()
-
-  expect_equal(nrow(get_SDA_property(
+  x <- get_SDA_property(
     property = "Total Clay - Rep Value",
     method = "Weighted Average",
     areasymbols = target_areas,
     top_depth = 25,
     bottom_depth = 50
-  )), target_area_rows)
+  )
+  skip_if(is.null(x))
+  expect_equal(nrow(x), target_area_rows)
 
-  expect_equal(get_SDA_property(
+  x <- get_SDA_property(
     property = c("claytotal_l","claytotal_r","claytotal_h"),
     method = "Weighted Average",
     mukeys = target_mukeys,
     top_depth = 25,
     bottom_depth = 50
-  )$mukey, target_mukeys)
+  )
+
+  skip_if(is.null(x))
+  expect_equal(x$mukey, target_mukeys)
   
   # check filtering of NULL
   agg <- get_SDA_property(property = c("sandtotal_r","silttotal_r","claytotal_r"),
@@ -91,6 +107,9 @@ test_that("SDA properties (weighted average) works", {
   noagg <- get_SDA_property(property = c("sandtotal_r","silttotal_r","claytotal_r"),
                             method = "None", 
                             mukeys = 545857)
+  skip_if(is.null(agg))
+  skip_if(is.null(noagg))
+  
   aqp::depths(noagg) <- cokey ~ hzdept_r + hzdepb_r
   aqp::site(noagg) <- ~ comppct_r
   
@@ -148,6 +167,11 @@ test_that("SDA properties (weighted average) works", {
   noagg1 <- get_SDA_property("ph1to1h2o_r", mukeys = 466601, method = "weighted average", include_minors = TRUE)
   noagg2 <- get_SDA_property("ph1to1h2o_r", mukeys = 466601, method = "weighted average", include_minors = FALSE, miscellaneous_areas = TRUE)
   noagg3 <- get_SDA_property("ph1to1h2o_r", mukeys = 466601, method = "weighted average", include_minors = TRUE, miscellaneous_areas = TRUE)
+  
+  skip_if(is.null(noagg1))
+  skip_if(is.null(noagg2))
+  skip_if(is.null(noagg3))
+  
   expect_true(all(c(noagg1$ph1to1h2o_r,  noagg2$ph1to1h2o_r, noagg3$ph1to1h2o_r) == 7))
 })
 
@@ -156,27 +180,33 @@ test_that("SDA properties (min/max) works", {
 
   skip_on_cran()
 
-  expect_equal(nrow(get_SDA_property(
+  x <- get_SDA_property(
     property = "Saturated Hydraulic Conductivity - Rep Value",
     method = "Min/Max",
     areasymbols = target_areas,
     FUN = "MIN",
     miscellaneous_areas = TRUE
-  )), target_area_rows)
+  )
+  skip_if(is.null(x))
+  expect_equal(nrow(x), target_area_rows)
   
-  expect_equal(nrow(get_SDA_property(
+  x <- get_SDA_property(
     property = "Saturated Hydraulic Conductivity - Rep Value",
     method = "Min/Max",
     areasymbols = target_areas,
     FUN = "MIN"
-  )), target_area_rows)
+  )
+  skip_if(is.null(x))
+  expect_equal(nrow(x), target_area_rows)
   
-  expect_equal(get_SDA_property(
+  x <- get_SDA_property(
     property = c("ksat_l","ksat_r","ksat_h"),
     method = "Min/Max",
     mukeys = target_mukeys,
     FUN = "MIN"
-  )$mukey, target_mukeys)
+  )
+  skip_if(is.null(x))
+  expect_equal(x$mukey, target_mukeys)
 })
 
 test_that("SDA properties (no aggregation) works", {
@@ -185,13 +215,21 @@ test_that("SDA properties (no aggregation) works", {
   skip_on_cran()
 
   # return results 1:1 with component for component properties
-  expect_equal(nrow(get_SDA_property(property = c('rsprod_l','rsprod_r','rsprod_h'),
-                                     method = "NONE",
-                                     areasymbols = target_areas)), target_area_rows_all)
+  x <- get_SDA_property(
+      property = c('rsprod_l', 'rsprod_r', 'rsprod_h'),
+      method = "NONE",
+      areasymbols = target_areas
+    )
+  skip_if(is.null(x))
+  expect_equal(nrow(x), target_area_rows_all)
 
 
   # return results 1:1 with chorizon for horizon properties (includes cokey)
-  expect_equal(nrow(get_SDA_property(c('sandtotal_l','sandtotal_r','sandtotal_h'),
-                    method = "NONE",
-                    areasymbols = target_areas)), target_area_rows_all_chorizon)
+  x <- get_SDA_property(
+    c('sandtotal_l', 'sandtotal_r', 'sandtotal_h'),
+    method = "NONE",
+    areasymbols = target_areas
+  )
+  skip_if(is.null(x))
+  expect_equal(nrow(x), target_area_rows_all_chorizon)
 })

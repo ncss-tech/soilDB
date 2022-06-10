@@ -26,12 +26,14 @@ test_that("SDA interpretations (dominant condition) works", {
 
   res <- get_SDA_interpretation("FOR - Potential Seedling Mortality",
                                 method = "Dominant Condition", areasymbols = target_areas)
+  skip_if(is.null(res))
   expect_equal(nrow(res), target_area_rows)
 
 
   res <- get_SDA_interpretation(c("FOR - Potential Seedling Mortality",
                                   "FOR - Road Suitability (Natural Surface)"),
                                 method = "Dominant Condition", mukeys = target_mukeys)
+  skip_if(is.null(res))
   expect_equal(sort(res$mukey), sort(target_mukeys))
 })
 
@@ -42,12 +44,14 @@ test_that("SDA interpretations (weighted average) works", {
 
   res <- get_SDA_interpretation("FOR - Potential Seedling Mortality",
                                 method = "Weighted Average", areasymbols = target_areas)
+  skip_if(is.null(res))
   expect_equal(nrow(res), target_area_rows)
 
 
   res <- get_SDA_interpretation(c("FOR - Potential Seedling Mortality",
                                   "FOR - Road Suitability (Natural Surface)"),
                                 method = "Weighted Average", mukeys = target_mukeys)
+  skip_if(is.null(res))
   expect_equal(sort(res$mukey), sort(target_mukeys))
 })
 
@@ -60,6 +64,7 @@ test_that("SDA interpretations (no aggregation) works", {
                                   "FOR - Road Suitability (Natural Surface)"),
                                 method = "NONE",
                                 areasymbols = target_areas)
+  skip_if(is.null(res))
   expect_equal(nrow(res), target_area_rows_all)
 
 
