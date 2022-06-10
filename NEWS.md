@@ -1,7 +1,8 @@
-# soilDB 2.7.1 (unreleased)
+# soilDB 2.7.1 (2022-06-10)
    - `get_SDA_coecoclass()` better handling of `NULL` `ecoclassref`; support for filtering on `ecoclasstypename`; `not_assigned_value` now applies to `ecoclassname`, `ecoclasstypename` and `ecoclassref` columns in addition to `ecoclassid`; Thanks to Andy Paolucci and Jason Nemecek. Also, added additional columns from legend/mapunit tables (`areasymbol`, `lkey`, `muname`).
-   - `fetchNASIS(from="components")` now returns mapunit and legend information (if loaded in local NASIS database); thanks to Nathan Roe
+   - `fetchNASIS(from="components")` now returns mapunit and legend information (if loaded in local NASIS database); results now contain `mustatus` and `repdmu` which can be used to remove components from additional mapunits and non-representative data mapunits; thanks to Nathan Roe
    - Convert UTF8 strings in `us_ss_timeline` result to ASCII
+   - `SDA_query()`: Fixed POST request that could produce unhandled errors on network failure (now returns `try-error` like other error-causing code)
 
 # soilDB 2.7.0 (2022-05-18)
  * Spatial 

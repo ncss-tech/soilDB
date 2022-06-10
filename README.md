@@ -14,7 +14,7 @@ Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech
 Installation
 ------------
 
-Get the stable version (2.7.0) from CRAN:
+Get the stable version from CRAN:
 
     install.packages('soilDB', dependencies = TRUE)
 

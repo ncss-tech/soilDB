@@ -143,11 +143,11 @@ format_SQL_in_statement <- function(x) {
 #'   # there is no need to filter STATSGO because
 #'   # SDA_Get_Mukey_from_intersection_with_WktWgs84() implies SSURGO
 #'   p <- wk::as_wkt(wk::rct(-120.9, 37.7, -120.8, 37.8))
-#'   q <- paste0("SELECT mukey, cokey, compname, comppct_r FROM component 
+#'   q <- paste0("SELECT mukey, cokey, compname, comppct_r FROM component
 #'       WHERE mukey IN (SELECT DISTINCT mukey FROM
 #'       SDA_Get_Mukey_from_intersection_with_WktWgs84('", p,
 #'        "')) ORDER BY mukey, cokey, comppct_r DESC")
-#'     
+#'
 #'    x <- SDA_query(q)
 #'    str(x)
 #'  }
@@ -161,16 +161,21 @@ SDA_query <- function(q) {
   if (length(q) > 1) {
     stop('Query vector must be length 1')
   }
-  
+
   if (nchar(q, type = "bytes") > 2.5E6) {
-    stop('Query string is too long (>2.5 million bytes), consider soilDB::makeChunks() to split inputs into several smaller queries and iterate', call. = FALSE)    
+    stop('Query string is too long (>2.5 million bytes), consider soilDB::makeChunks() to split inputs into several smaller queries and iterate', call. = FALSE)
   }
-  
+
   # submit request
-  r <- httr::POST(url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
+  r <- try(httr::POST(url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
                   body = list(query = q,
                               format = "json+columnname+metadata"),
-                  encode = "form")
+                  encode = "form"), silent = TRUE)
+
+  if (inherits(r, 'try-error')) {
+    message("Soil Data Access POST request failed, returning try-error\n\n", r)
+    return(invisible(r))
+  }
 
   # trap errors, likely related to SQL syntax errors
   request.status <- try(httr::stop_for_status(r), silent = TRUE)

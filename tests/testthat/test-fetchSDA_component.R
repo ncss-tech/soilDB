@@ -49,10 +49,14 @@ test_that("fetchSDA() returns expected results", {
 })
 
 test_that("fetchSDA(duplicates=TRUE) works as expected", {
-  
+
+  skip_if_offline()
+
+  skip_on_cran()
+
   x2 <<- suppressWarnings(suppressMessages(fetchSDA(WHERE="nationalmusym = '22787'")))
   x3 <<- suppressWarnings(suppressMessages(fetchSDA(WHERE="nationalmusym = '22787'", duplicates = TRUE)))
- 
+
   # we get a "duplicate" for each unique mukey within a nationalmusym -- 1 for each legend
   expect_equal(length(x2) * length(unique(x3$mukey)), length(x3))
 })
