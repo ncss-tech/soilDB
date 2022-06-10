@@ -7,7 +7,7 @@
 #'
 #' @return character vector of table names
 #' @seealso createStaticNASIS
-#'
+#' @export
 #' @examples
 #' \dontrun{
 #' # get the "site" table names
@@ -228,5 +228,3 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "n
   
   return(as.character(unlist(res)))
 }
-
-.get_NASIS_table_name_by_purpose <- get_NASIS_table_name_by_purpose
