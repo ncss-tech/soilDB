@@ -66,7 +66,9 @@ the metadata is pulled from a static snapshot in the soilDB package
   droplevels <span class="op">=</span> <span class="cn">FALSE</span>,
   stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,
   dsn <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+<span class="op">)</span>
+
+<span class="fu">code</span><span class="op">(</span><span class="va">df</span>, db <span class="op">=</span> <span class="st">"NASIS"</span>, droplevels <span class="op">=</span> <span class="cn">FALSE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -133,8 +135,7 @@ package.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># convert column name `fraghard` (fragment hardness) codes to labels</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># convert column name `fraghard` (fragment hardness) codes to labels</span></span>
 <span class="r-in"><span class="fu">uncode</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>fraghard <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               fraghard</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          noncemented</span>
@@ -150,10 +151,10 @@ package.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># convert column name `fragshp` (fragment shape) labels to codes</span></span>
 <span class="r-in"><span class="fu">code</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>fragshp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flat"</span>, <span class="st">"nonflat"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>passing `db` argument to uncode is no longer necessary, lookups are based on ChoiceName and/or ChoiceLabel</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   fragshp</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1       1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2       2</span>
-<span class="r-in"></span>
 </code></pre></div>
     </div>
   </div>
