@@ -70,26 +70,45 @@
     <h2>Arguments</h2>
     <dl><dt>WHERE</dt>
 <dd><p>A SQL <code>WHERE</code> clause expression used to filter records in <code>sacatalog</code> table. Alternately <code>WHERE</code> can be any spatial object supported by <code><a href="SDA_spatialQuery.html">SDA_spatialQuery()</a></code> for defining the target extent.</p></dd>
+
+
 <dt>areasymbols</dt>
 <dd><p>Character vector of soil survey area symbols e.g. <code>c("CA067", "CA077")</code>. Used in lieu of <code>WHERE</code> arugment.</p></dd>
+
+
 <dt>destdir</dt>
 <dd><p>Directory to download ZIP files into. Default <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>.</p></dd>
+
+
 <dt>exdir</dt>
 <dd><p>Directory to extract ZIP archives into. May be a directory that does not yet exist. Each ZIP file will extract to a folder labeled with <code>areasymbol</code> in this directory. Default: <code>destdir</code></p></dd>
+
+
 <dt>include_template</dt>
 <dd><p>Include the (possibly state-specific) MS Access template database? Default: <code>FALSE</code></p></dd>
+
+
 <dt>extract</dt>
 <dd><p>Logical. Extract ZIP files to <code>exdir</code>? Default: <code>TRUE</code></p></dd>
+
+
 <dt>remove_zip</dt>
 <dd><p>Logical. Remove ZIP files after extracting? Default: <code>FALSE</code></p></dd>
+
+
 <dt>overwrite</dt>
 <dd><p>Logical. Overwrite by re-extracting if directory already exists? Default: <code>FALSE</code></p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Logical. Passed to <code><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file()</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Character. Paths to downloaded ZIP files (invisibly). May not exist if <code>remove_zip = TRUE</code>.</p>
+    
+
+<p>Character. Paths to downloaded ZIP files (invisibly). May not exist if <code>remove_zip = TRUE</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -110,7 +129,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

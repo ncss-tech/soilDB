@@ -60,16 +60,25 @@
     <h2>Arguments</h2>
     <dl><dt>aoi</dt>
 <dd><p>area of interest (AOI) defined using either a <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code> or <code>bbox</code> object, or a <code>list</code>, see details</p></dd>
+
+
 <dt>db</dt>
 <dd><p>name of the gridded map unit key grid to access, should be either 'gNATSGO' or 'gSSURGO' (case insensitive)</p></dd>
+
+
 <dt>res</dt>
 <dd><p>grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; and Raster Soil Surveys (RSS) are at 10m resolution. If <code>res</code> is not specified the native resolution of the source is used.</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>logical, passed to <code>download.file</code> to enable / suppress URL and progress bar for download.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the <code>terra</code> package are returned. If the input object class is from the <code>raster</code> or <code>sp</code> packages a RasterLayer is returned.</p>
+    
+
+<p>A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the <code>terra</code> package are returned. If the input object class is from the <code>raster</code> or <code>sp</code> packages a RasterLayer is returned.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -136,7 +145,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -74,36 +74,59 @@ returned as a SoilProfileCollection object.</p>
     <h2>Arguments</h2>
     <dl><dt>from</dt>
 <dd><p>determines what objects should fetched? ('pedons' | 'components' | 'pedon_report')</p></dd>
+
+
 <dt>url</dt>
 <dd><p>string specifying the url for the NASIS pedon_report (default:
 <code>NULL</code>)</p></dd>
+
+
 <dt>SS</dt>
 <dd><p>fetch data from the currently loaded selected set in NASIS or from
 the entire local database (default: <code>TRUE</code>)</p></dd>
+
+
 <dt>rmHzErrors</dt>
 <dd><p>should pedons with horizon depth errors be removed from
 the results? (default: <code>FALSE</code>)</p></dd>
+
+
 <dt>nullFragsAreZero</dt>
 <dd><p>should fragment volumes of <code>NULL</code> be interpreted as <code>0</code>?
 (default: <code>TRUE</code>), see details</p></dd>
+
+
 <dt>soilColorState</dt>
 <dd><p>Used only for <code>from='pedons'</code>; which colors should be used to generate the convenience field <code>soil_color</code>? (<code>'moist'</code> or <code>'dry'</code>)</p></dd>
+
+
 <dt>mixColors</dt>
 <dd><p>should mixed colors be calculated (Default: <code>TRUE</code>) where multiple colors are populated for the same moisture state in a horizon? <code>FALSE</code> takes the dominant color for each horizon moist/dry state.</p></dd>
+
+
 <dt>lab</dt>
 <dd><p>should the <code>phlabresults</code> child table be fetched with
 site/pedon/horizon data (default: <code>FALSE</code>)</p></dd>
+
+
 <dt>fill</dt>
 <dd><p>include pedon or component records without horizon data in result? (default: <code>FALSE</code>)</p></dd>
+
+
 <dt>stringsAsFactors</dt>
 <dd><p>deprecated</p></dd>
+
+
 <dt>dsn</dt>
 <dd><p>Optional: path to local SQLite database containing NASIS
 table structure; default: <code>NULL</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A SoilProfileCollection object</p>
+    
+
+<p>A SoilProfileCollection object</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -153,7 +176,7 @@ overlapping horizon records.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

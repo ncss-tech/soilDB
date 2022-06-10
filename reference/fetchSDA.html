@@ -106,30 +106,47 @@ Access, and create soil profile collection objects (SPC).</p>
     <h2>Arguments</h2>
     <dl><dt>WHERE</dt>
 <dd><p>text string formatted as an SQL WHERE clause (default: FALSE)</p></dd>
+
+
 <dt>duplicates</dt>
 <dd><p>logical; if TRUE a record is returned for each unique
 mukey (may be many per nationalmusym)</p></dd>
+
+
 <dt>childs</dt>
 <dd><p>logical; if FALSE parent material and geomorphic child tables
 are not flattened and appended</p></dd>
+
+
 <dt>droplevels</dt>
 <dd><p>logical: indicating whether to drop unused levels in
 classifying factors. This is useful when a class has large number of unused
 classes, which can waste space in tables and figures.</p></dd>
+
+
 <dt>nullFragsAreZero</dt>
 <dd><p>should fragment volumes of NULL be interpreted as 0?
 (default: TRUE), see details</p></dd>
+
+
 <dt>stringsAsFactors</dt>
 <dd><p>deprecated</p></dd>
+
+
 <dt>mrulename</dt>
 <dd><p>character. Interpretation rule names</p></dd>
+
+
 <dt>rmHzErrors</dt>
 <dd><p>should pedons with horizonation errors be removed from the
 results? (default: FALSE)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.frame or SoilProfileCollection object.</p>
+    
+
+<p>A data.frame or SoilProfileCollection object.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -173,7 +190,7 @@ values should be interpreted as 0.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -69,24 +69,41 @@
     <h2>Arguments</h2>
     <dl><dt>table</dt>
 <dd><p>Target table to summarize. Default: <code>"cosurfmorphgc"</code> (3D Geomorphic Component). Alternate choices include <code>cosurfmorphhpp</code> (2D Hillslope Position), <code>cosurfmorphss</code> (Surface Shape), and  <code>cosurfmorphmr</code> (Microrelief).</p></dd>
+
+
 <dt>by</dt>
 <dd><p>Grouping variable. Default: <code>"compname"</code></p></dd>
+
+
 <dt>areasymbols</dt>
 <dd><p>A vector of soil survey area symbols (e.g. <code>'CA067'</code>)</p></dd>
+
+
 <dt>mukeys</dt>
 <dd><p>A vector of map unit keys (e.g. <code>466627</code>)</p></dd>
+
+
 <dt>WHERE</dt>
 <dd><p>WHERE clause added to SQL query. For example: <code>areasymbol = 'CA067'</code></p></dd>
+
+
 <dt>db</dt>
 <dd><p>Either <code>'SSURGO'</code> (default) or <code>'STATSGO'</code>. If <code>'SSURGO'</code> is specified <code>areasymbol = 'US'</code> records are excluded. If <code>'STATSGO'</code> only <code>areasymbol = 'US'</code> records are included.</p></dd>
+
+
 <dt>dsn</dt>
 <dd><p>Path to local SSURGO database SQLite database. Default <code>NULL</code> uses Soil Data Access.</p></dd>
+
+
 <dt>query_string</dt>
 <dd><p>Return query instead of sending to Soil Data Access / local database. Default: <code>FALSE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>data.frame</code> containing the grouping variable (<code>by</code>) and tabular summaries of counts and proportions of geomorphic records.</p>
+    
+
+<p>a <code>data.frame</code> containing the grouping variable (<code>by</code>) and tabular summaries of counts and proportions of geomorphic records.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -137,7 +154,7 @@ Full component data including surface morphometry summaries at the "site" level 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

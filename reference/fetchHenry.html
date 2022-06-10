@@ -77,46 +77,69 @@ Mount Soil Temperature and Water Database.</p>
 metadata + soil moisture data | 'airtemp': sensor metadata + air temperature
 data | 'waterlevel': sensor metadata + water level data |'all': sensor
 metadata + all sensor data</p></dd>
+
+
 <dt>usersiteid</dt>
 <dd><p>(optional) filter results using a NASIS user site ID</p></dd>
+
+
 <dt>project</dt>
 <dd><p>(optional) filter results using a project ID</p></dd>
+
+
 <dt>sso</dt>
 <dd><p>(optional) filter results using a soil survey office code</p></dd>
+
+
 <dt>gran</dt>
 <dd><p>data granularity: "hour" (if available), "day", "week", "month", "year"; returned data
 are averages</p></dd>
+
+
 <dt>start.date</dt>
 <dd><p>(optional) starting date filter</p></dd>
+
+
 <dt>stop.date</dt>
 <dd><p>(optional) ending date filter</p></dd>
+
+
 <dt>pad.missing.days</dt>
 <dd><p>should missing data ("day" granularity) be filled
 with NA? see details</p></dd>
+
+
 <dt>soiltemp.summaries</dt>
 <dd><p>should soil temperature ("day" granularity only)
 be summarized? see details</p></dd>
+
+
 <dt>tz</dt>
 <dd><p>Used for custom timezone. Default <code>""</code> is current locale</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list containing:</p>
+    
+
+<p>a list containing:</p>
 <dl><dt>sensors</dt>
 <dd><p>a <code>sf</code> <code>data.frame</code>
 object containing site-level information</p></dd>
-<dt>soiltemp</dt>
+ <dt>soiltemp</dt>
 <dd><p>a
 <code>data.frame</code> object containing soil temperature timeseries data</p></dd>
+
 <dt>soilVWC</dt>
 <dd><p>a <code>data.frame</code> object containing soil moisture
 timeseries data</p></dd>
-<dt>airtemp</dt>
+ <dt>airtemp</dt>
 <dd><p>a <code>data.frame</code> object containing air
 temperature timeseries data</p></dd>
-<dt>waterlevel</dt>
+ <dt>waterlevel</dt>
 <dd><p>a <code>data.frame</code> object
 containing water level timeseries data</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -159,7 +182,7 @@ progress.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

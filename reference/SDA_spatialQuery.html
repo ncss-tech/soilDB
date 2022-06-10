@@ -69,24 +69,41 @@
     <h2>Arguments</h2>
     <dl><dt>geom</dt>
 <dd><p>an <code>sf</code> or <code>Spatial*</code> object, with valid CRS. May contain multiple features.</p></dd>
+
+
 <dt>what</dt>
 <dd><p>a character vector specifying what to return. <code>'mukey'</code>: <code>data.frame</code> with intersecting map unit keys and names, <code>'mupolygon'</code> overlapping or intersecting map unit polygons from selected database, <code>'areasymbol'</code>: <code>data.frame</code> with intersecting soil survey areas, <code>'sapolygon'</code>: overlapping or intersecting soil survey area polygons (SSURGO only)</p></dd>
+
+
 <dt>geomIntersection</dt>
 <dd><p>logical; <code>FALSE</code>: overlapping map unit polygons returned, <code>TRUE</code>: intersection of <code>geom</code> + map unit polygons is returned.</p></dd>
+
+
 <dt>db</dt>
 <dd><p>a character vector identifying the Soil Geographic Databases (<code>'SSURGO'</code> or <code>'STATSGO'</code>) to query. Option <var>STATSGO</var> works with <code>what = "mukey"</code> and <code>what = "mupolygon"</code>.</p></dd>
+
+
 <dt>byFeature</dt>
 <dd><p>Iterate over features, returning a combined data.frame where each feature is uniquely identified by value in <code>idcol</code>. Default <code>FALSE</code>.</p></dd>
+
+
 <dt>idcol</dt>
 <dd><p>Unique IDs used for individual features when <code>byFeature = TRUE</code>; Default <code>"gid"</code></p></dd>
+
+
 <dt>query_string</dt>
 <dd><p>Default: <code>FALSE</code>; if <code>TRUE</code> return a character string containing query that would be sent to SDA via <code>SDA_query</code></p></dd>
+
+
 <dt>as_Spatial</dt>
 <dd><p>Return sp classes? e.g. <code>Spatial*DataFrame</code>. Default: <code>FALSE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> if <code>what = 'mukey'</code>, otherwise an <code>sf</code> object.</p>
+    
+
+<p>A <code>data.frame</code> if <code>what = 'mukey'</code>, otherwise an <code>sf</code> object. A <code>try-error</code> in the event the request cannot be made or if there is an error in the query.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -253,7 +270,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

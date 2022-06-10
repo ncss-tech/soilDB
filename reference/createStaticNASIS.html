@@ -69,20 +69,33 @@ tables.</p>
     <h2>Arguments</h2>
     <dl><dt>tables</dt>
 <dd><p>Character vector of target tables. Default: <code>NULL</code> is whatever tables are listed by <code><a href="https://dbi.r-dbi.org/reference/dbListTables.html" class="external-link">DBI::dbListTables</a></code> for the connection typ being used.</p></dd>
+
+
 <dt>new_names</dt>
 <dd><p>Optional: new table names (should match length of vector of matching <code>tables</code> in <code>dsn</code>)</p></dd>
+
+
 <dt>SS</dt>
 <dd><p>Logical. Include "selected set" tables (ending with suffix <code>"_View_1"</code>). Default: <code>TRUE</code></p></dd>
+
+
 <dt>dsn</dt>
 <dd><p>Optional: path to SQLite database containing NASIS table structure; or a <code>DBIConnection</code>. Default: <code>NULL</code></p></dd>
+
+
 <dt>output_path</dt>
 <dd><p>Optional: path to new/existing SQLite database to write tables to. Default: <code>NULL</code> returns table results as named list.</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Show error messages from attempts to dump individual tables? Default <code>FALSE</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A named list of results from calling <code>dbQueryNASIS</code> for all
+    
+
+<p>A named list of results from calling <code>dbQueryNASIS</code> for all
 columns in each NASIS table.</p>
     </div>
 
@@ -98,7 +111,7 @@ columns in each NASIS table.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

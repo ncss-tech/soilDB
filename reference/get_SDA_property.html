@@ -74,32 +74,57 @@
     <h2>Arguments</h2>
     <dl><dt>property</dt>
 <dd><p>character vector of labels from property dictionary tables (see details) OR physical column names from <code>component</code> or <code>chorizon</code> table.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>one of: "Dominant Component (Category)", "Dominant Component (Numeric)", "Weighted Average", "MIN", "MAX", "Dominant Condition", or "None". If "None" is selected, the number of rows returned will depend on whether a component or horizon level property was selected, otherwise the result will be 1:1 with the number of map units.</p></dd>
+
+
 <dt>areasymbols</dt>
 <dd><p>vector of soil survey area symbols</p></dd>
+
+
 <dt>mukeys</dt>
 <dd><p>vector of map unit keys</p></dd>
+
+
 <dt>WHERE</dt>
 <dd><p>character containing SQL WHERE clause specified in terms of fields in <code>legend</code> or <code>mapunit</code> tables, used in lieu of <code>mukeys</code> or <code>areasymbols</code>. With aggregation method <code>"NONE"</code> the WHERE clause may additionally contain logic for columns from the <code>component</code> and <code>chorizon</code> table.</p></dd>
+
+
 <dt>top_depth</dt>
 <dd><p>Default: <code>0</code> (centimeters); a numeric value for upper boundary (top depth) used only for method="Weighted Average", "Dominant Component (Numeric)", and "MIN/MAX"</p></dd>
+
+
 <dt>bottom_depth</dt>
 <dd><p>Default: <code>200</code> (centimeters); a numeric value for lower boundary (bottom depth) used only for method="Weighted Average", "Dominant Component (Numeric)", and "MIN/MAX"</p></dd>
+
+
 <dt>FUN</dt>
 <dd><p>Optional: character representing SQL aggregation function either "MIN" or "MAX" used only for method="min/max"; this argument is calculated internally if you specify <code>method="MIN"</code> or <code>method="MAX"</code></p></dd>
+
+
 <dt>include_minors</dt>
 <dd><p>Include minor components in "Weighted Average" or "MIN/MAX" results?</p></dd>
+
+
 <dt>miscellaneous_areas</dt>
 <dd><p>Include miscellaneous areas  (non-soil components) in "Weighted Average", "MIN" or "MAX" results?</p></dd>
+
+
 <dt>query_string</dt>
 <dd><p>Default: <code>FALSE</code>; if <code>TRUE</code> return a character string containing query that would be sent to SDA via <code>SDA_query</code></p></dd>
+
+
 <dt>dsn</dt>
 <dd><p>Path to local SQLite database or a DBIConnection object. If <code>NULL</code> (default) use Soil Data Access API via <code><a href="SDA_query.html">SDA_query()</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data.frame with result</p>
+    
+
+<p>a data.frame with result</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -534,7 +559,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

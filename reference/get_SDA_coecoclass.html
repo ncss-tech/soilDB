@@ -71,24 +71,43 @@
     <h2>Arguments</h2>
     <dl><dt>method</dt>
 <dd><p>aggregation method. One of: "Dominant Component", "Dominant Condition", "None". If "None" is selected one row will be returned per component, otherwise one row will be returned per map unit.</p></dd>
+
+
 <dt>areasymbols</dt>
 <dd><p>vector of soil survey area symbols</p></dd>
+
+
 <dt>mukeys</dt>
 <dd><p>vector of map unit keys</p></dd>
+
+
 <dt>WHERE</dt>
 <dd><p>character containing SQL WHERE clause specified in terms of fields in <code>legend</code>, <code>mapunit</code>, <code>component</code> or <code>coecosite</code> tables, used in lieu of <code>mukeys</code> or <code>areasymbols</code></p></dd>
+
+
 <dt>query_string</dt>
 <dd><p>Default: <code>FALSE</code>; if <code>TRUE</code> return a character string containing query that would be sent to SDA via <code>SDA_query</code></p></dd>
+
+
 <dt>ecoclasstypename</dt>
 <dd><p>If <code>NULL</code> no constraint on <code>ecoclasstypename</code> is used in the query.</p></dd>
+
+
 <dt>ecoclassref</dt>
 <dd><p>Default: <code>"Ecological Site Description Database"</code>. If <code>NULL</code> no constraint on <code>ecoclassref</code> is used in the query.</p></dd>
+
+
 <dt>not_rated_value</dt>
 <dd><p>Default: <code>"Not assigned"</code></p></dd>
+
+
 <dt>miscellaneous_areas</dt>
 <dd><p>Include miscellaneous areas (non-soil components)?</p></dd>
+
+
 <dt>dsn</dt>
 <dd><p>Path to local SQLite database or a DBIConnection object. If <code>NULL</code> (default) use Soil Data Access API via <code><a href="SDA_query.html">SDA_query()</a></code>.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -108,7 +127,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
