@@ -9,6 +9,8 @@ test_that("fetchLDM works", {
                   what = "corr_taxsubgrp",
                   tables = c("lab_physical_properties",
                              "lab_chemical_properties"))
+  skip_if(inherits(res, 'try-error') || is.null(res))
+  
   expect_true(inherits(res, 'SoilProfileCollection'))
 
   # xray/thermal table allows for different prep_code and analyzed_size_frac
@@ -18,6 +20,9 @@ test_that("fetchLDM works", {
                    tables = c("lab_physical_properties",
                               "lab_chemical_properties",
                               "lab_xray_and_thermal")))
+  
+  skip_if(inherits(res2, 'try-error') || is.null(res2))
+  
   #   parameters an all-NA table of XRD data is joined
   expect_true(inherits(res2, 'SoilProfileCollection') &&
                 all(is.na(res2$analyzed_size_frac)))
@@ -30,6 +35,8 @@ test_that("fetchLDM works", {
                              "lab_chemical_properties",
                              "lab_xray_and_thermal"),
                   analyzed_size_frac = "0.02-0.05 mm")
+  
+  skip_if(inherits(res3, 'try-error') || is.null(res3))
   expect_true(inherits(res3, 'SoilProfileCollection') &&
                 length(res) == length(res3) &&
                 nrow(res) == nrow(res3))

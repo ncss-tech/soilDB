@@ -153,10 +153,10 @@ fetchLDM <- function(x = NULL,
                        "LEFT JOIN lab_area ON
                        lab_combine_nasis_ncss.ssa_key = lab_area.area_key
                        WHERE LOWER", site_query)
-    sites <- SDA_query(site_query_ssaarea)
+    sites <- suppressMessages(SDA_query(site_query_ssaarea))
   }
 
-  if (!inherits(sites, 'try-error')) {
+  if (!inherits(sites, 'try-error') && !is.null(sites)) {
 
     # TODO: this shouldn't be needed
     sites <- sites[,unique(colnames(sites))]
@@ -171,7 +171,7 @@ fetchLDM <- function(x = NULL,
                                         prep_code = prep_code,
                                         analyzed_size_frac = analyzed_size_frac)
     } else {
-      hz <- try(stop(""), silent = TRUE)
+      hz <- try(stop("Failed to access Web Service or query returned no results", call. = FALSE), silent = TRUE)
     }
     
     .do_chunk <- function(con, size) {

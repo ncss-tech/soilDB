@@ -151,7 +151,7 @@ SCAN_site_metadata <- function(site.code = NULL) {
 #'     curl::has_internet()) {
 #'
 #'     # get data
-#'     x <- fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016))
+#'     x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016)))
 #'     str(x)
 #'
 #'     # get sensor metadata
@@ -194,7 +194,12 @@ fetchSCAN <- function(site.code, year, report = 'SCAN', ...) {
   # format raw data into a list of lists:
   # sensor suite -> site number -> year
   d.list <- list()
-
+  
+  # save: sensor suite -> site number -> year
+  sensors <- c('SMS', 'STO', 'SAL', 'TAVG', 'TMIN',
+               'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ',
+               'WDIRV', 'WSPDV', 'LRADT')
+  
   for (i in req.list) {
 
     # when there are no data, result is NULL
@@ -209,11 +214,6 @@ fetchSCAN <- function(site.code, year, report = 'SCAN', ...) {
     if (is.null(d)) {
       return(NULL)
     }
-
-    # save: sensor suite -> site number -> year
-    sensors <- c('SMS', 'STO', 'SAL', 'TAVG', 'TMIN',
-                 'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ',
-                 'WDIRV', 'WSPDV', 'LRADT')
 
     for (sensor.i in sensors) {
 

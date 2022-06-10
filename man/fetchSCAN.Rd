@@ -45,7 +45,7 @@ if(requireNamespace("curl") &
     curl::has_internet()) {
 
     # get data
-    x <- fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016))
+    x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016)))
     str(x)
 
     # get sensor metadata
