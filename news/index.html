@@ -53,9 +53,14 @@
 <code><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass()</a></code> better handling of <code>NULL</code> <code>ecoclassref</code>; support for filtering on <code>ecoclasstypename</code>; <code>not_assigned_value</code> now applies to <code>ecoclassname</code>, <code>ecoclasstypename</code> and <code>ecoclassref</code> columns in addition to <code>ecoclassid</code>; Thanks to Andy Paolucci and Jason Nemecek. Also, added additional columns from legend/mapunit tables (<code>areasymbol</code>, <code>lkey</code>, <code>muname</code>).</li>
 <li>
 <code>fetchNASIS(from="components")</code> now returns mapunit and legend information (if loaded in local NASIS database); results now contain <code>mustatus</code> and <code>repdmu</code> which can be used to remove components from additional mapunits and non-representative data mapunits; thanks to Nathan Roe</li>
-<li>Convert UTF8 strings in <code>us_ss_timeline</code> result to ASCII</li>
+<li>Convert UTF-8 strings in <code>us_ss_timeline</code> result to ASCII</li>
 <li>
 <code><a href="../reference/SDA_query.html">SDA_query()</a></code>: Fixed POST request that could produce unhandled errors on network failure (now returns <code>try-error</code> like other error-causing code)</li>
+<li>
+<code><a href="../reference/SDA_query.html">SDA_query()</a></code>: In the event of a syntax error, error contents are now returned as a message, not a warning.</li>
+<li>
+<code><a href="../reference/uncode.html">uncode()</a></code> and <code><a href="../reference/uncode.html">code()</a></code> now work with <code>data.table</code> and <code>tibble</code> objects.</li>
+<li>Various fixes to tests and error handling code to reduce likelihood of thrown errors from network problems or missing suggested packages.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.7.0" id="soildb-270-2022-05-18">soilDB 2.7.0 (2022-05-18)<small>2022-05-18</small><a class="anchor" aria-label="anchor" href="#soildb-270-2022-05-18"></a></h2>
