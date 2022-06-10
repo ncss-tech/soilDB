@@ -44,7 +44,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get component tables from NASIS Web Reports</h1>
-    <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/fetchNASISWebReport.R" class="external-link"><code>R/fetchNASISWebReport.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/fetchNASISWebReport.R" class="external-link"><code>R/fetchNASISWebReport.R</code></a>, <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/get_cosoilmoist_from_LIMS.R" class="external-link"><code>R/get_cosoilmoist_from_LIMS.R</code></a></small>
     <div class="hidden name"><code>fetchNASISWebReport.Rd</code></div>
     </div>
 
@@ -104,7 +104,15 @@
   <span class="va">mlrassoarea</span>,
   <span class="va">fiscalyear</span>,
   <span class="va">projectname</span>
-<span class="op">)</span></code></pre></div>
+<span class="op">)</span>
+
+<span class="fu">get_cosoilmoist_from_NASISWebReport</span><span class="op">(</span>
+  <span class="va">projectname</span>,
+  impute <span class="op">=</span> <span class="cn">TRUE</span>,
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">get_sitesoilmoist_from_NASISWebReport</span><span class="op">(</span><span class="va">usiteid</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -157,6 +165,16 @@ into a SQL WHERE clause (default: <code>NA</code>)</p></dd>
 <dt>projecttypename</dt>
 <dd><p>text string value identifying the project type name
 inserted into a SQL WHERE clause (default: <code>NA</code>)</p></dd>
+
+
+<dt>impute</dt>
+<dd><p>replace missing (i.e. <code>NULL</code>) values with <code>"Not_Populated"</code> for
+categorical data, or the "RV" for numeric data or <code>201</code> cm if the "RV" is also
+<code>NULL</code> (default: <code>TRUE</code>)</p></dd>
+
+
+<dt>usiteid</dt>
+<dd><p>character: User Site IDs</p></dd>
 
 </dl></div>
     <div id="value">
