@@ -69,7 +69,7 @@ get_SDA_coecoclass <- function(method = "None",
     return(q)
   
   if (is.null(dsn)) {
-    res <- SDA_query(q)
+    res <- suppressMessages(SDA_query(q))
   } else {
     if (!inherits(dsn, 'DBIConnection')) {
       dsn <- dbConnect(RSQLite::SQLite(), dsn)
@@ -79,7 +79,8 @@ get_SDA_coecoclass <- function(method = "None",
   }
   
   if (length(res) == 0) {
-    stop('query returned no results', call. = FALSE)
+    message('query returned no results')
+    return(NULL)
   }
   
   .I <- NULL
