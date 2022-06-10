@@ -200,7 +200,7 @@
 #' }
 #' 
 #' }
-#' 
+#' @export
 taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup'), formativeElement = FALSE, timeout = 60) {
  
   ## sanity checks

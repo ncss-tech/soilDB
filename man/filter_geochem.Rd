@@ -24,7 +24,7 @@ filter_geochem(
 \item{trace_element_method}{Character vector of trace element method(s) to include in result.}
 }
 \value{
-A data.frame, subsetted according to the constraints specified in arguments.
+A data.frame, subset according to the constraints specified in arguments.
 }
 \description{
 A function to subset KSSL "geochem" / elemental analysis result table to obtain rows/columns based on: column name, preparation code, major / trace element method.

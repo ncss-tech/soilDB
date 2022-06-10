@@ -1,5 +1,5 @@
 
-#' Get logic errors in NASIS Pedon Horizon  
+#' Get Logic Errors in NASIS/PedonPC Pedon Horizon  
 #' @param strict how strict should horizon boundaries be checked for
 #' consistency: TRUE=more | FALSE=less
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
@@ -8,7 +8,7 @@
 #' table structure; default: NULL
 #' @return A data.frame containing problematic records with columns:
 #' 'peiid','pedon_id','hzdept','hzdepb','hzname'
-#' @export getHzErrorsNASIS
+#' @export 
 getHzErrorsNASIS <- function(strict = TRUE, SS = TRUE, dsn = NULL) {
 
   if (!local_NASIS_defined(dsn))

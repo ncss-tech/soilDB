@@ -218,7 +218,6 @@ if(requireNamespace("curl") &
 }
 
 }
-
 }
 \author{
 D.E. Beaudette and A.G. Brown

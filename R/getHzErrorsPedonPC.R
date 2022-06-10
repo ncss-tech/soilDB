@@ -1,4 +1,6 @@
 ## TODO: this isn't really needed any more
+#' @export 
+#' @rdname fetchPedonPC
 getHzErrorsPedonPC <- function(dsn, strict=TRUE) {
 
 	# get data
@@ -6,7 +8,7 @@ getHzErrorsPedonPC <- function(dsn, strict=TRUE) {
 	hz_data <- get_hz_data_from_pedon_db(dsn)
 
 	# combine pieces
-  f <- merge(hz_data, site_data, by='peiid', all.x = TRUE, sort = FALSE)
+	f <- merge(hz_data, site_data, by = 'peiid', all.x = TRUE, sort = FALSE)
 
 	f.test <- aqp::checkHzDepthLogic(f, hzdepths = c('hzdept', 'hzdepb'),
 	                                 idname = 'pedon_id', fast = TRUE)

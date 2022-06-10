@@ -1,3 +1,5 @@
+#' @export 
+#' @rdname fetchGDB
 get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, childs = FALSE, droplevels = TRUE, stringsAsFactors = NULL) {
 
   # check
@@ -61,8 +63,9 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
   return(co)
 }
 
-
-
+#' @export 
+#' @rdname fetchGDB
+#' @param stats Return statistics (number of mapunit keys per legend; number of components, major components per mapunit, total and hydric component percentage)? Default: `FALSE`
 get_legend_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, droplevels = TRUE, stringsAsFactors = NULL, stats = FALSE) {
   
   if (!is.null(WHERE)) {
@@ -106,8 +109,8 @@ get_legend_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, droplev
 
 }
 
-
-
+#' @export 
+#' @rdname fetchGDB
 get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, droplevels = TRUE, stringsAsFactors = NULL, stats = FALSE) {
 
   # tests

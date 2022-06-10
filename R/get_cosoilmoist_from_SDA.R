@@ -1,3 +1,6 @@
+#' @export
+#' @rdname fetchSDA
+#' @param impute replace missing (i.e. `NULL`) values with `"Not_Populated"` forcategorical data, or the "RV" for numeric data or `201` cm if the "RV" is also`NULL` (default: `TRUE`)
 get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = TRUE,
                                      stringsAsFactors = NULL
                                      ) {

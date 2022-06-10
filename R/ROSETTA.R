@@ -86,7 +86,14 @@
   return(vg.data)
 }
 
+# 2020-11-19:
+# * NA are handled safely by the API now
+# * model selection is automatic when model code = 0
+# * work with Todd to determin the optimal request / record count trade-off
 
+# 2021-01-06
+# * best model (0) is always used, API no longer accepts `model` as a parameter
+# * versions 1,2,3 supported
 
 
 #' @title Query USDA-ARS ROSETTA Model API
@@ -164,17 +171,7 @@
 #'
 #' Zhang, Y., and M.G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology 547: 39-53. doi: \doi{10.1016/j.jhydrol.2017.01.004}.
 #'
-#'
-
-# 2020-11-19:
-# * NA are handled safely by the API now
-# * model selection is automatic when model code = 0
-# * work with Todd to determin the optimal request / record count trade-off
-
-# 2021-01-06
-# * best model (0) is always used, API no longer accepts `model` as a parameter
-# * versions 1,2,3 supported
-
+#' @export
 ROSETTA <- function(x, vars, v = c('1', '2', '3'), include.sd = FALSE, chunkSize = 10000, conf = NULL) {
 
   # check for required packages

@@ -8,7 +8,8 @@
 #' @examples
 #' \dontrun{
 #' get_NASIS_table_key_by_name(c("site","phorizon_View_1","not_a_table"))
-#' }
+#' }#' 
+#' @export 
 get_NASIS_table_key_by_name <- function(tables, 
                                          keycol = c("all", "fkey", "pkeyref", "pkey")) {
   

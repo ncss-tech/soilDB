@@ -7,7 +7,7 @@
 #' @param prep_code Character vector of prep code(s) to include in result.
 #' @param major_element_method Character vector of major element method(s) to include in result.
 #' @param trace_element_method Character vector of trace element method(s) to include in result.
-#' @return A data.frame, subsetted according to the constraints specified in arguments.
+#' @return A data.frame, subset according to the constraints specified in arguments.
 #' @author Andrew G. Brown.
 #' @rdname filter_geochem
 #' @export filter_geochem

@@ -1,3 +1,5 @@
+#' @export 
+#' @rdname fetchNASIS
 get_RMF_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
   # RMF

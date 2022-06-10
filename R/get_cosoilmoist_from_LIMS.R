@@ -1,3 +1,5 @@
+#' @export
+#' @rdname fetchNASISWebReport
 get_cosoilmoist_from_NASISWebReport <- function(projectname, impute = TRUE, stringsAsFactors = NULL) {
   
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
@@ -24,7 +26,8 @@ get_cosoilmoist_from_NASISWebReport <- function(projectname, impute = TRUE, stri
   return(d.cosoilmoist)
   }
 
-
+#' @export
+#' @rdname fetchNASISWebReport
 get_sitesoilmoist_from_NASISWebReport <- function(usiteid) {
   
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_sitesoilmoist_from_NASISWebReport"

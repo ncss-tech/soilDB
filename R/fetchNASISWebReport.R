@@ -29,6 +29,10 @@
 #' @param droplevels logical: indicating whether to drop unused levels in
 #' classifying factors. This is useful when a class has large number of unused
 #' classes, which can waste space in tables and figures.
+#' @param impute replace missing (i.e. `NULL`) values with `"Not_Populated"` for
+#' categorical data, or the "RV" for numeric data or `201` cm if the "RV" is also
+#' `NULL` (default: `TRUE`)
+#' @param usiteid character: User Site IDs
 #' @return A data.frame or list with the results.
 #' @author Stephen Roecker
 #' @keywords manip

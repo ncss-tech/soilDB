@@ -1,3 +1,5 @@
+#' @export 
+#' @rdname fetchNASIS
 get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = NULL, dsn = NULL) {
 
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {

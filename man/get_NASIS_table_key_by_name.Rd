@@ -26,5 +26,5 @@ Get a NASIS table key by type and table name
 \examples{
 \dontrun{
 get_NASIS_table_key_by_name(c("site","phorizon_View_1","not_a_table"))
-}
+}#' 
 }

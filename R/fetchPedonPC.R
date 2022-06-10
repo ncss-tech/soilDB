@@ -7,6 +7,7 @@
 #' Fetch commonly used site/horizon data from a version 5.x PedonPC database, return as a SoilProfileCollection object.
 #' @aliases fetchPedonPC getHzErrorsPedonPC
 #' @param dsn The path to a PedonPC version 6.x database
+#' @param strict Use "strict" horizon error checking? Default: `TRUE`
 #' @return a SoilProfileCollection class object
 #' @note This function attempts to do most of the boilerplate work when
 #' extracting site/horizon data from a PedonPC or local NASIS database. Pedons
