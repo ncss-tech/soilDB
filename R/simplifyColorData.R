@@ -53,11 +53,13 @@
 #' \code{aqp::rgb2Munsell}
 #' @author D.E. Beaudette
 #' @keywords manip
-#' @export simplifyColorData
-simplifyColorData <- function(d, id.var='phiid', wt='colorpct', bt=FALSE) {
+#' @export 
+#' @importFrom grDevices rgb
+#' @importFrom aqp munsell2rgb rgb2munsell
+simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) {
   
-  # sanity check: must contain 1 row
-  if(nrow(d) < 1) {
+  # sanity check: must contain at least 1 row
+  if (nrow(d) < 1) {
     warning('simplifyColorData: 0 rows of colors data, doing nothing', call. = FALSE)
     return(d)
   }
@@ -94,7 +96,7 @@ simplifyColorData <- function(d, id.var='phiid', wt='colorpct', bt=FALSE) {
   
   # mix/combine if there are any horizons that need mixing
   if (length(dry.to.mix) > 0) {
-    message(paste('mixing dry colors ... [', length(dry.to.mix), ' of ', nrow(dry.colors), ' horizons]', sep=''))
+    message(paste('mixing dry colors ... [', length(dry.to.mix), ' of ', nrow(dry.colors), ' horizons]', sep = ''))
     
     # filter out and mix only colors with >1 color / horizon
     dry.mix.idx <- which(dry.colors[[id.var]] %in% dry.to.mix)
@@ -113,7 +115,7 @@ simplifyColorData <- function(d, id.var='phiid', wt='colorpct', bt=FALSE) {
     mixed.dry <- mixed.dry[, estimateColorMixture(.SD, wt = wt, backTransform = bt), by = id.var]
     
     # back-transform mixture to Munsell using best-available method
-    m <- rgb2munsell(as.data.frame(mixed.dry[, .SD, .SDcols = c('r', 'g', 'b')]))
+    m <- aqp::rgb2munsell(as.data.frame(mixed.dry[, .SD, .SDcols = c('r', 'g', 'b')]))
     
     # adjust names to match NASIS
     names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")

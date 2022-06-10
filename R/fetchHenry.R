@@ -20,6 +20,9 @@
 # }
 
 # summarize daily values by Julian day
+#' @param soiltemp.data A `data.frame` containing soil temperature data 
+#' @export
+#' @rdname fetchHenry
 summarizeSoilTemperature <- function(soiltemp.data) {
   
   # hacks to make R CMD check --as-cran happy:
@@ -70,7 +73,7 @@ summarizeSoilTemperature <- function(soiltemp.data) {
   d <- dd[, .doySummary(.SD), by = c('sid', 'doy')]
   
   # convert DOY -> month
-  d$month <- format(as.Date(as.character(d$doy), format="%j"), "%b")
+  d$month <- format(as.Date(as.character(d$doy), format = "%j"), "%b")
   d$season <- month2season(d$month)
   
   # compute unbiased MAST, number of obs, complete records per average no. days in year
@@ -78,7 +81,7 @@ summarizeSoilTemperature <- function(soiltemp.data) {
     res <- data.frame(
       gap.index = round(1 - (sum(i$n) / sum(i$n.total)), 2),
       days.of.data = sum(i$n), 
-      MAST = round(mean(i$daily.mean, na.rm=TRUE), 2)
+      MAST = round(mean(i$daily.mean, na.rm = TRUE), 2)
     )
     return(res)
   }
@@ -114,9 +117,11 @@ summarizeSoilTemperature <- function(soiltemp.data) {
   return(d.summary[, c('sid', 'days.of.data', 'gap.index', 'functional.yrs', 'complete.yrs', 'MAST', 'Winter', 'Summer', 'STR')])
 }
 
-
+#' @export
+#' @param x character vector containing month abbreviation e.g. `c('Jun', 'Dec', 'Sep')`
+#' @rdname fetchHenry
 month2season <- function(x) {
-  season <- rep(NA, times=length(x))
+  season <- rep(NA, times = length(x))
   
   season[x %in% c('Jun', 'Jul', 'Aug')] <- 'Summer'
   season[x %in% c('Dec', 'Jan', 'Feb')] <- 'Winter'
@@ -124,7 +129,7 @@ month2season <- function(x) {
   season[x %in% c('Sep', 'Oct', 'Nov')] <- 'Fall'
   
   # fix factor levels for season
-  season <- factor(season, levels=c('Winter', 'Spring', 'Summer', 'Fall'))
+  season <- factor(season, levels = c('Winter', 'Spring', 'Summer', 'Fall'))
   return(season)
 }
 
@@ -137,7 +142,7 @@ month2season <- function(x) {
   missing.days <- which(is.na(match(1:365, x$doy)))
   
   # short-circuit
-  if(length(missing.days) < 1) {
+  if (length(missing.days) < 1) {
     return(x)
   }
   
@@ -150,7 +155,7 @@ month2season <- function(x) {
   
   # TODO: this will result in timezone specific to locale; 
   #  especially an issue when granularity is less than daily or for large extents
-  fake.datetimes <- as.POSIXct(fake.datetimes, format="%Y %j %H:%M")
+  fake.datetimes <- as.POSIXct(fake.datetimes, format = "%Y %j %H:%M")
   
   # generate DF with missing information
   fake.data <- data.frame(
@@ -168,7 +173,7 @@ month2season <- function(x) {
   }
   
   # make datatypes for time match
-  x$date_time <- as.POSIXct(x$date_time, format="%Y-%m-%d %H:%M:%S")
+  x$date_time <- as.POSIXct(x$date_time, format = "%Y-%m-%d %H:%M:%S")
   
   # splice in missing data
   y <- rbind(x, fake.data)
@@ -191,7 +196,7 @@ month2season <- function(x) {
   
   # must have data, otherwise do nothing
   # when sensor data are missing, sensor.data is a list of length 0
-  if(length(sensor.data) > 0) {
+  if (length(sensor.data) > 0) {
     
     sensor.data$date_time <- as.POSIXct(sensor.data$date_time, format = format, tz = tz)
     sensor.data$year <- as.integer(format(sensor.data$date_time, "%Y"))
@@ -199,10 +204,10 @@ month2season <- function(x) {
     sensor.data$month <- format(sensor.data$date_time, "%b")
     
     # re-level months
-    sensor.data$month <- factor(sensor.data$month, levels=c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
+    sensor.data$month <- factor(sensor.data$month, levels = c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
     
     # optionally pad daily data with NA
-    if(gran == 'day' & pad.missing.days) {
+    if (gran == 'day' & pad.missing.days) {
       sensor.data <- as.data.table(sensor.data)
       cnm <- colnames(sensor.data)
       sensor.data <- sensor.data[, .fill_missing_days(.SD), by = c('sid', 'year'), .SDcols = cnm]
@@ -284,23 +289,23 @@ month2season <- function(x) {
 fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran='day', start.date=NULL, stop.date=NULL, pad.missing.days=TRUE, soiltemp.summaries=TRUE, tz='') {
   
   # check for required packages
-  if(!requireNamespace('jsonlite', quietly=TRUE))
-    stop('please install the `jsonlite` package', call.=FALSE)
+  if (!requireNamespace('jsonlite', quietly = TRUE))
+    stop('please install the `jsonlite` package', call. = FALSE)
   
-  if(!requireNamespace('sf', quietly=TRUE))
-    stop('please install the `sf` package', call.=FALSE)
+  if (!requireNamespace('sf', quietly = TRUE))
+    stop('please install the `sf` package', call. = FALSE)
   
   # important: backward compatibility R <4.0
   opt.original <- options(stringsAsFactors = FALSE)
   
   # sanity-check: `what` should be within the legal set of options
-  if(! what %in% c('all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp', 'waterlevel'))
-    stop("`what` must be either: 'all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp', or 'waterlevel'", call.=FALSE)
+  if (!what %in% c('all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp', 'waterlevel'))
+    stop("`what` must be either: 'all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp', or 'waterlevel'", call. = FALSE)
   
   # sanity-check: user must supply some kind of criteria
-  if(what != 'sensors') {
-    if(missing(usersiteid) & missing(project) & missing(sso))
-      stop('you must provide some filtering criteria', call.=FALSE)
+  if (what != 'sensors') {
+    if (missing(usersiteid) & missing(project) & missing(sso))
+      stop('you must provide some filtering criteria', call. = FALSE)
   }
   
   # init empty filter
@@ -310,41 +315,41 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   s <- NULL
   
   # process filter components
-  if(!is.null(usersiteid)) {
-    f <- c(f, paste('&usersiteid=', usersiteid, sep=''))
+  if (!is.null(usersiteid)) {
+    f <- c(f, paste('&usersiteid=', usersiteid, sep = ''))
   }
   
-  if(!is.null(project)) {
-    project <- paste(project, collapse=',')
-    f <- c(f, paste('&project=', project, sep=''))
+  if (!is.null(project)) {
+    project <- paste(project, collapse = ',')
+    f <- c(f, paste('&project=', project, sep = ''))
   }
   
-  if(!is.null(sso)) {
-    sso <- paste(sso, collapse=',')
-    f <- c(f, paste('&sso=', sso, sep=''))
+  if (!is.null(sso)) {
+    sso <- paste(sso, collapse = ',')
+    f <- c(f, paste('&sso=', sso, sep = ''))
   }
   
-  if(!is.null(gran)) {
-    f <- c(f, paste('&gran=', gran, sep=''))
+  if (!is.null(gran)) {
+    f <- c(f, paste('&gran=', gran, sep = ''))
   }
   
-  if(!is.null(start.date)) {
-    f <- c(f, paste('&start=', start.date, sep=''))
+  if (!is.null(start.date)) {
+    f <- c(f, paste('&start=', start.date, sep = ''))
   }
   
-  if(!is.null(stop.date)) {
-    f <- c(f, paste('&stop=', stop.date, sep=''))
+  if (!is.null(stop.date)) {
+    f <- c(f, paste('&stop=', stop.date, sep = ''))
   }
   
   # combine filters
-  f <- paste(f, collapse='')
+  f <- paste(f, collapse = '')
   
   # everything in one URL / JSON package
-  json.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?what=', what, f, sep=''))
+  json.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?what=', what, f, sep = ''))
   
   # this is a little noisy, but people like to see progress
   tf.json <- tempfile()
-  download.file(url=json.url, destfile=tf.json, mode='wb', quiet=FALSE)
+  download.file(url = json.url, destfile = tf.json, mode = 'wb', quiet = FALSE)
   
   ## TODO: check NA handling
   # parse JSON into list of DF
@@ -353,12 +358,12 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   })
   
   # report query that returns no data and stop
-  if( length(s$sensors) == 0 ) {
-    stop('query returned no data', call.=FALSE)
+  if (length(s$sensors) == 0 ) {
+    stop('query returned no data', call. = FALSE)
   }
   
   # post-process data, if there are some
-  if( length(s$soiltemp) > 0 | length(s$soilVWC) > 0 | length(s$airtemp) > 0 | length(s$waterlevel) > 0 ) {
+  if (length(s$soiltemp) > 0 | length(s$soilVWC) > 0 | length(s$airtemp) > 0 | length(s$waterlevel) > 0 ) {
     
     .SD <- NULL
     
@@ -379,16 +384,16 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
     
     
     # convert dates and add helper column
-    s$soiltemp <- .formatDates(s$soiltemp, gran=gran, pad.missing.days=pad.missing.days, tz=tz)
-    s$soilVWC <- .formatDates(s$soilVWC, gran=gran, pad.missing.days=pad.missing.days, tz=tz)
-    s$airtemp <- .formatDates(s$airtemp, gran=gran, pad.missing.days=pad.missing.days, tz=tz)
-    s$waterlevel <- .formatDates(s$waterlevel, gran=gran, pad.missing.days=pad.missing.days, tz=tz)
+    s$soiltemp <- .formatDates(s$soiltemp, gran = gran, pad.missing.days = pad.missing.days, tz = tz)
+    s$soilVWC <- .formatDates(s$soilVWC, gran = gran, pad.missing.days = pad.missing.days, tz = tz)
+    s$airtemp <- .formatDates(s$airtemp, gran = gran, pad.missing.days = pad.missing.days, tz = tz)
+    s$waterlevel <- .formatDates(s$waterlevel, gran = gran, pad.missing.days = pad.missing.days, tz = tz)
     
     # optionally compute summaries, requires padded NA values and, daily granularity
-    if(soiltemp.summaries & pad.missing.days & (length(s$soiltemp) > 0)) {
+    if (soiltemp.summaries & pad.missing.days & (length(s$soiltemp) > 0)) {
       message('computing un-biased soil temperature summaries')
       
-      if(gran != 'day')
+      if (gran != 'day')
         stop('soil temperature summaries can only be computed from daily data', call. = FALSE)
       
       # compute unbiased estimates of MAST and summer/winter temp
@@ -404,28 +409,28 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   
   # copy over sensor name + depth to all sensor tables--if present
   # "name" is the sensor name - depth for plotting
-  if(length(s$soiltemp) > 0) {
+  if (length(s$soiltemp) > 0) {
     name.idx <- match(s$soiltemp$sid, s$sensors$sid)
     s$soiltemp$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
     s$soiltemp$sensor_name <- s$sensors$name[name.idx]
     s$soiltemp$sensor_depth <- s$sensors$sensor_depth[name.idx]
   }
   
-  if(length(s$soilVWC) > 0) {
+  if (length(s$soilVWC) > 0) {
     name.idx <- match(s$soilVWC$sid, s$sensors$sid)
     s$soilVWC$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
     s$soilVWC$sensor_name <- s$sensors$name[name.idx]
     s$soilVWC$sensor_depth <- s$sensors$sensor_depth[name.idx]
   }
   
-  if(length(s$airtemp) > 0) {
+  if (length(s$airtemp) > 0) {
     name.idx <- match(s$airtemp$sid, s$sensors$sid)
     s$airtemp$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
     s$airtemp$sensor_name <- s$sensors$name[name.idx]
     s$airtemp$sensor_depth <- s$sensors$sensor_depth[name.idx]
   }
   
-  if(length(s$waterlevel) > 0) {
+  if (length(s$waterlevel) > 0) {
     name.idx <- match(s$waterlevel$sid, s$sensors$sid)
     s$waterlevel$name <- paste0(s$sensors$name[name.idx], '-', s$sensors$sensor_depth[name.idx])
     s$waterlevel$sensor_name <- s$sensors$name[name.idx]
@@ -433,7 +438,7 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   }
   
   # init coordinates
-  if(!is.null(s$sensors)) {
+  if (!is.null(s$sensors)) {
     s$sensors <- sf::st_as_sf(s$sensors,
                               coords = c("wgs84_longitude", "wgs84_latitude"),
                               crs = 'EPSG:4326')
@@ -444,7 +449,7 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   
   # some feedback via message:
   s.size <- round(object.size(s) / 1024 / 1024, 2)
-  message(paste(nrow(s$sensors), ' sensors loaded (', s.size, ' Mb transferred)', sep=''))
+  message(paste(nrow(s$sensors), ' sensors loaded (', s.size, ' Mb transferred)', sep = ''))
   
   # done
   return(s)

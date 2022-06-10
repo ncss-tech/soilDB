@@ -16,11 +16,7 @@ seriesExtent(s, type = c("vector", "raster"), timeout = 60)
 \description{
 This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{sf} object) or gridded representation of area proportion falling within 800m cells (\code{SpatRaster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (\code{EPSG:5070}).
 }
-\note{
-This function requires the \code{rgdal} package.
-}
 \examples{
-  
 \donttest{
 if(requireNamespace("curl") &
    requireNamespace("sf") &

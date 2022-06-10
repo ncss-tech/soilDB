@@ -26,7 +26,6 @@
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
 #' @return a data.frame
 #' @export
-#' @importFrom soilDB format_SQL_in_statement SDA_query
 get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, method = "MAPUNIT", query_string = FALSE, dsn = NULL) {
 
         method <- match.arg(toupper(method), c("MAPUNIT", "DOMINANT COMPONENT", "DOMINANT CONDITION", "NONE"))
@@ -105,7 +104,7 @@ get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, meth
      res <- suppressMessages(SDA_query(q))
    } else {
      if (!inherits(dsn, 'DBIConnection')) {
-       dsn <- dbConnect(RSQLite::SQLite(), dsn)
+       dsn <- RSQLite::dbConnect(RSQLite::SQLite(), dsn)
        on.exit(DBI::dbDisconnect(dsn), add = TRUE)
      }
      res <- dbGetQuery(dsn, q)

@@ -8,11 +8,15 @@
 #' @return A list with a data.frame element for each element of `where` containing `"attributekey"`, `"attributename"`, `"attributetype"`, `"attributetablename"`, `"attributecolumnname"`, `"attributedescription"`, `"nasisrulename"`, `"label"`, `"order"`, `"value"`, `"lower_value"`, `"upper_value"`,`"red"`, `"green"`, `"blue"` and `"hex"` columns.
 #' @export
 #'
-#' @importFrom xml2 read_xml as_list 
+#' @importFrom grDevices rgb
 get_SDV_legend_elements <- function(WHERE,
                                     alpha = 255,
                                     notratedcolor = rgb(1, 1, 1, 0),
                                     simplify = TRUE) {
+  
+  if (!requireNamespace("xml2", quietly = TRUE)) {
+    stop("package `xml2` is required", call. = FALSE)
+  }
   
   y <- lapply(WHERE, function(ak) {
     
@@ -102,7 +106,7 @@ get_SDV_legend_elements <- function(WHERE,
                                    
                                    cbind(d, d2)
                                  }))
-  if (!is.na(x$notratedphrase) && x$notratedphrase != ""){
+  if (!is.na(x$notratedphrase) && x$notratedphrase != "") {
     dnr <- res[1,]
     dnr$value <- gsub("^not", "Not", x$notratedphrase)
     dnr$label <- dnr$value

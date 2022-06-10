@@ -58,5 +58,4 @@ groupedProfilePlot(res, groups = "mukey", color = "hzname", cex.names=0.8,
                    id.style = "side", label = "labelname")
 }
 
-
 }

@@ -9,7 +9,16 @@
 #' @aliases soilDB.env soilDB-package soilDB
 #' @docType package
 #' @author J.M. Skovlin, D.E. Beaudette, S.M Roecker, A.G. Brown
-#' @seealso \code{\link{fetchPedonPC}, \link{fetchNASIS}, \link{SDA_query}, \link{loafercreek}}
+#'  @seealso \code{\link{fetchPedonPC}, \link{fetchNASIS}, \link{SDA_query}, \link{loafercreek}}
+#' @importFrom grDevices rgb convertColor col2rgb
+#' @importFrom stats aggregate complete.cases na.omit as.formula splinefun weighted.mean
+#' @importFrom utils URLencode download.file object.size read.csv read.table read.delim setTxtProgressBar txtProgressBar write.table type.convert unzip
+#' @importFrom data.table rbindlist data.table as.data.table merge.data.table
+#' @importFrom DBI dbGetQuery dbConnect dbSendQuery dbFetch
+#' @importFrom methods slot slot<- as is
+#' @importFrom aqp plotSPC checkHzDepthLogic pbindlist SoilTextureLevels parseMunsell
+#' @importClassesFrom aqp SoilProfileCollection
+#' @importMethodsFrom aqp plot length nrow site site<- horizons horizons<- hzidname<- idname hzidname horizonDepths diagnostic_hz diagnostic_hz<- restrictions restrictions<- metadata metadata<- hzdesgnname hzdesgnname<- hztexclname hztexclname<- profile_id profile_id<- hzID hzID<- aqp_df_class aqp_df_class<- siteNames horizonNames
 #' @keywords package
 NULL
 
@@ -116,6 +125,29 @@ NULL
 #' - `"state"`: State abbreviation, a character vector
 #' 
 #' @source https://www.nrcs.usda.gov/wps/portal/nrcs/soilsurvey/soils/survey/state/
+#' @keywords datasets
+NULL
+
+#' NASIS 7 Metadata
+#' 
+#' NASIS 7 Metadata from MetadataDomainDetail, MetadataDomainMaster, and MetadataTableColumn tables
+#' 
+#' @format A `data.frame` with the following columns:
+#'  - `DomainID` - Integer. ID that uniquely identifies a domain in a data model, not just within a database.
+#'  - `DomainName` - Character. Domain Name.
+#'  - `DomainRanked` - Integer. Is domain ranked? `0` = No; `1` = Yes
+#'  - `DisplayLabel` - Character. Domain Display Label.
+#'  - `ChoiceSequence` - Integer. Order or sequence of Choices.
+#'  - `ChoiceValue` - Integer. Value of choice level.
+#'  - `ChoiceName` - Character. Name of choice level.
+#'  - `ChoiceLabel` - Character. Label of choice level.
+#'  - `ChoiceObsolete` - Integer. Is choice level obsolete? `0` = No; `1` = Yes
+#'  - `ColumnPhysicalName` - Character. Physical column name.
+#'  - `ColumnLogicalName` - Character. Logical column name.
+#' 
+#' @name metadata
+#' @docType data
+#' 
 #' @keywords datasets
 NULL
 

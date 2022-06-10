@@ -14,10 +14,8 @@ This package provides methods for extracting soils information from local
 PedonPC and AKSite databases (MS Access format), local NASIS databases (MS
 SQL Server), Soil Data Access and various other soil-related web services.
 }
-\seealso{
-\code{\link{fetchPedonPC}, \link{fetchNASIS}, \link{SDA_query}, \link{loafercreek}}
-}
 \author{
 J.M. Skovlin, D.E. Beaudette, S.M Roecker, A.G. Brown
+@seealso \code{\link{fetchPedonPC}, \link{fetchNASIS}, \link{SDA_query}, \link{loafercreek}}
 }
 \keyword{package}

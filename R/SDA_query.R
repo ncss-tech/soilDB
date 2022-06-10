@@ -4,7 +4,6 @@
 #' @param size chunk (group) size
 #'
 #' @return A numeric vector
-#' @export makeChunks
 #'
 #' @examples
 #'
@@ -14,25 +13,21 @@
 #'           by = list(makeChunks(letters, size=13)),
 #'           FUN = paste0, collapse=",")
 #'
+#' @export 
 makeChunks <- function(ids, size=100) {
   n <- length(ids)
-  chunk.id <- seq(from=1, to=floor(n / size)+1)
-  chunk.ids <- rep(chunk.id, each=size)
+  chunk.id <- seq(from = 1, to = floor(n / size) + 1)
+  chunk.ids <- rep(chunk.id, each = size)
   chunk.ids <- chunk.ids[1:n]
   return(chunk.ids)
 }
 
-#' @title Format vector of values into a string suitable for an SQL `IN` statement.
-#'
+#' Format vector of values into a string suitable for an SQL `IN` statement.
 #' @description Concatenate a vector to SQL \code{IN}-compatible syntax: \code{letters[1:3]} becomes \code{('a','b','c')}. Values in \code{x} are first passed through \code{unique()}.
-#'
 #' @note Only \code{character} output is supported.
-#'
 #' @param x A character vector.
-#'
 #' @return A character vector (unit length) containing concatenated group syntax for use in SQL \code{IN}, with unique value found in \code{x}.
-#' @export format_SQL_in_statement
-#'
+#' @export
 #' @examples
 #'
 #' \donttest{
@@ -73,7 +68,6 @@ makeChunks <- function(ids, size=100) {
 #'                    id.style = "side", label = "labelname")
 #'}
 #'
-#'
 format_SQL_in_statement <- function(x) {
   # there is no reason to preserve duplicates
   # and, plenty safe to perform a second time, in case this was done outside of the function call
@@ -94,12 +88,12 @@ format_SQL_in_statement <- function(x) {
 #'
 #' SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
 #'
-#' @note This function requires the `httr`, `jsonlite`, and `XML` packages
+#' @note This function requires the `httr`, `jsonlite`, and `xml2` packages
 #' @return a data.frame result (\code{NULL} if empty, try-error on error)
-#' @export
 #' @author D.E. Beaudette
 #' @seealso \code{\link{SDA_spatialQuery}}
 #' @keywords manip
+#' @export
 #' @examples
 #' \donttest{
 #' if(requireNamespace("curl") & requireNamespace("wk") &
@@ -155,9 +149,15 @@ format_SQL_in_statement <- function(x) {
 SDA_query <- function(q) {
 
   # check for required packages
-  if (!requireNamespace('httr', quietly = TRUE) | !requireNamespace('jsonlite', quietly = TRUE))
-    stop('please install the `httr` and `jsonlite` packages', call. = FALSE)
-
+  if (!requireNamespace('httr', quietly = TRUE))
+    stop('please install the `httr` package', call. = FALSE)
+  
+  if (!requireNamespace('xml2', quietly = TRUE))
+    stop('please install the `xml2` package', call. = FALSE)
+  
+  if (!requireNamespace('jsonlite', quietly = TRUE))
+    stop('please install the `jsonlite` package', call. = FALSE)
+  
   if (length(q) > 1) {
     stop('Query vector must be length 1')
   }
@@ -205,7 +205,7 @@ SDA_query <- function(q) {
   if (inherits(r.content,'try-error'))
       return(invisible(r.content))
 
-  d <- try(jsonlite::fromJSON(r.content))
+  d <- try(jsonlite::fromJSON(r.content), silent = TRUE)
 
   if (inherits(d, 'try-error'))
     return(invisible(d))

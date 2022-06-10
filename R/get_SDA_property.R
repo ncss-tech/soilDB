@@ -121,7 +121,6 @@
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
 #' @return a data.frame with result
 #' @export
-#' @importFrom soilDB format_SQL_in_statement SDA_query
 get_SDA_property <-
   function(property, # property -- a label or column name from property dictionary
            method = c("Dominant Component (Category)", "Weighted Average",

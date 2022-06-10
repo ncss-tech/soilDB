@@ -16,7 +16,6 @@
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
 #' @return a data.frame
 #' @export
-#' @importFrom soilDB format_SQL_in_statement SDA_query
 get_SDA_pmgroupname <- function(areasymbols = NULL,
                                 mukeys = NULL,
                                 WHERE = NULL,

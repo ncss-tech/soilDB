@@ -19,12 +19,12 @@
 #' U.S. Department of Agriculture, Natural Resources Conservation Service,
 #' National Soil Survey Center, Lincoln, Nebraska.
 #' @keywords hplot
+#' @importFrom graphics axis legend mtext rect segments text plot
+#' @export 
 #' @examples
 #' 
 #' par(mar=c(4,1,0,1))
 #' STRplot(mast = 0:25, msst = 10, mwst = 1)
-#' 
-#' @export STRplot
 STRplot <- function(mast, msst, mwst, permafrost=FALSE, pt.cex=2.75, leg.cex=0.85) {
   
   # make a row of rectangles with colors based on STR

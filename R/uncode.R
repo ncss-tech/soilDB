@@ -27,8 +27,8 @@
 #' 
 #' Set `options(soilDB.NASIS.skip_uncode = TRUE)` to bypass decoding logic; for instance when using soilDB NASIS functions with custom NASIS snapshots that have already been decoded.
 #'
-#' @aliases metadata uncode code
-#'
+#' @aliases uncode code
+#' 
 #' @param df data.frame
 #'
 #' @param invert converts the code labels back to their coded values (`FALSE`)
@@ -49,15 +49,13 @@
 #' @return A `data.frame` with the results.
 #' @author Stephen Roecker
 #' @keywords manip
+#' @export
 #' @examples
-#'
 #' # convert column name `fraghard` (fragment hardness) codes to labels
 #' uncode(data.frame(fraghard = 1:10))
 #' 
 #' # convert column name `fragshp` (fragment shape) labels to codes
 #' code(data.frame(fragshp = c("flat", "nonflat")))
-#'
-#' @export uncode
 uncode <- function(df,
                    invert = FALSE,
                    db = "NASIS",
@@ -166,8 +164,14 @@ uncode <- function(df,
 }
 
 # convenient, inverted version of uncode()
-code <- function(df, ...) {
-  res <- uncode(df, invert = TRUE, ...)
+#' @export
+#' @rdname uncode
+code <- function(df, 
+                 db = "NASIS",
+                 droplevels = FALSE,
+                 stringsAsFactors = NULL,
+                 dsn = NULL) {
+  res <- uncode(df, invert = TRUE, db = db, droplevels = droplevels, stringsAsFactors = stringsAsFactors, dsn = dsn) 
   return(res)
 }
 

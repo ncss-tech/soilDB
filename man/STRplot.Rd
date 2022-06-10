@@ -29,7 +29,6 @@ Graphical Description of US Soil Taxonomy Soil Temperature Regimes
 
 par(mar=c(4,1,0,1))
 STRplot(mast = 0:25, msst = 10, mwst = 1)
-
 }
 \references{
 Soil Survey Staff. 2015. Illustrated guide to soil taxonomy.

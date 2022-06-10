@@ -2,7 +2,6 @@
 % Please edit documentation in R/uncode.R
 \name{uncode}
 \alias{uncode}
-\alias{metadata}
 \alias{code}
 \title{Convert coded values returned from NASIS and SDA queries into human-readable values}
 \usage{
@@ -14,6 +13,8 @@ uncode(
   stringsAsFactors = NULL,
   dsn = NULL
 )
+
+code(df, db = "NASIS", droplevels = FALSE, stringsAsFactors = NULL, dsn = NULL)
 }
 \arguments{
 \item{df}{data.frame}
@@ -65,13 +66,11 @@ package.
 Set \code{options(soilDB.NASIS.skip_uncode = TRUE)} to bypass decoding logic; for instance when using soilDB NASIS functions with custom NASIS snapshots that have already been decoded.
 }
 \examples{
-
 # convert column name `fraghard` (fragment hardness) codes to labels
 uncode(data.frame(fraghard = 1:10))
 
 # convert column name `fragshp` (fragment shape) labels to codes
 code(data.frame(fragshp = c("flat", "nonflat")))
-
 }
 \author{
 Stephen Roecker

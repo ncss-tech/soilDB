@@ -1,21 +1,12 @@
-#' @title Retrieve Soil Series Extent Maps from SoilWeb
-#' 
+#' Retrieve Soil Series Extent Maps from SoilWeb
 #' @description This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{sf} object) or gridded representation of area proportion falling within 800m cells (\code{SpatRaster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (`EPSG:5070`).
-#' 
 #' @param s a soil series name, case-insensitive
-#' 
 #' @param type series extent representation, \code{vector} results in a \code{SpatialPolygonsDataFrame} object and \code{raster} results in a \code{raster} object
-#' 
 #' @param timeout time that we are willing to wait for a response, in seconds
-#' 
 #' @references \url{https://casoilresource.lawr.ucdavis.edu/see/}
-#' 
 #' @author D.E. Beaudette
-#' 
-#' @note This function requires the \code{rgdal} package.
-#' 
+#' @export
 #' @examples
-#'   
 #' \donttest{
 #' if(requireNamespace("curl") &
 #'    requireNamespace("sf") &
@@ -59,7 +50,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   type <- match.arg(type)
   
   # encode series name: spaces -> underscores
-  s <- gsub(pattern=' ', replacement='_', x = tolower(s), fixed = TRUE)
+  s <- gsub(pattern = ' ', replacement = '_', x = tolower(s), fixed = TRUE)
   
   # select type of output
   res <- switch(
@@ -80,18 +71,18 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   u <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/series-extent-cache/json/', s, '.json'))
   
   # init temp files
-  tf <- tempfile(fileext='.json')
+  tf <- tempfile(fileext = '.json')
   
   # safely download GeoJSON file
   res <- tryCatch(
     suppressWarnings(
-      download.file(url=u, destfile=tf, extra=c(timeout = timeout), quiet=TRUE)
+      download.file(url = u, destfile = tf, extra = c(timeout = timeout), quiet = TRUE)
     ),
     error = function(e) {e}
   )
 
   # trap errors
-  if(inherits(res, 'error')){
+  if (inherits(res, 'error')) {
     message('no data returned')
     return(NULL)
   }
@@ -117,20 +108,20 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   u <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/series-extent-cache/grid/', s, '.tif'))
   
   # init temp files
-  tf <- tempfile(fileext='.tif')
+  tf <- tempfile(fileext = '.tif')
   
   # safely download GeoTiff file
   # Mac / Linux: file automatically downloaded via binary transfer
   # Windows: must manually specify binary transfer
   res <- tryCatch(
     suppressWarnings(
-      download.file(url = u, destfile = tf, extra = c(timeout = timeout), quiet=TRUE, mode = 'wb')  
+      download.file(url = u, destfile = tf, extra = c(timeout = timeout), quiet = TRUE, mode = 'wb')  
     ),
     error = function(e) {e}
   )
   
   # trap errors
-  if(inherits(res, 'error')){
+  if (inherits(res, 'error')) {
     message('no data returned')
     return(NULL)
   }
@@ -145,7 +136,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   unlink(tf)
   
   # transfer layer name
-  names(x) <- gsub(pattern='_', replacement=' ', x = s, fixed = TRUE)
+  names(x) <- gsub(pattern = '_', replacement = ' ', x = s, fixed = TRUE)
   
   # make CRS explicit
   terra::crs(x) <- 'EPSG:5070'
