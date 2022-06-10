@@ -31,7 +31,7 @@ test_that("SDA properties (dominant component category) works", {
   skip_if_offline()
 
   skip_on_cran()
-  c <- get_SDA_property(property = "Taxonomic Suborder",
+  x <- get_SDA_property(property = "Taxonomic Suborder",
                    method = "Dominant Component (Category)",
                    areasymbols = target_areas)
   skip_if(is.null(x))

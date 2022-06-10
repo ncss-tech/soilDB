@@ -17,5 +17,5 @@ test_that("get_SDA_pmgroupname works", {
   
   res <- get_SDA_pmgroupname(mukeys = c(461994, 461995), simplify = FALSE, method = "dominant condition")
   skip_if(is.null(res))
-  expect_equal(nrow(), 2)
+  expect_equal(nrow(res), 2)
 })
