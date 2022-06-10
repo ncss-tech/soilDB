@@ -18,7 +18,6 @@
 #' @author D.E. Beaudette, A.G. Brown
 #'
 #' @return An `sf` object or if `as_sf` is `FALSE` a `Spatial*` object.
-#' @author D.E. Beaudette
 #' @export processSDA_WKT
 processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
   if (!is.null(p4s)) {

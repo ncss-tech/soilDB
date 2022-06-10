@@ -66,11 +66,11 @@ if(requireNamespace("curl") & requireNamespace("wk") &
   # there is no need to filter STATSGO because
   # SDA_Get_Mukey_from_intersection_with_WktWgs84() implies SSURGO
   p <- wk::as_wkt(wk::rct(-120.9, 37.7, -120.8, 37.8))
-  q <- paste0("SELECT mukey, cokey, compname, comppct_r FROM component 
+  q <- paste0("SELECT mukey, cokey, compname, comppct_r FROM component
       WHERE mukey IN (SELECT DISTINCT mukey FROM
       SDA_Get_Mukey_from_intersection_with_WktWgs84('", p,
        "')) ORDER BY mukey, cokey, comppct_r DESC")
-    
+
    x <- SDA_query(q)
    str(x)
  }
