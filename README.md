@@ -38,8 +38,8 @@ Citation
     ## 
     ## To cite soilDB in publications use:
     ## 
-    ##   Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown
-    ##   (2022). soilDB: Soil Database Interface. R package version 2.7.0.
+    ##   Beaudette, D., Skovlin, J., Roecker, S., Brown, A. (2022). 
+    ##   soilDB: Soil Database Interface. R package version 2.7.1.
     ##   <https://CRAN.R-project.org/package=soilDB>
     ## 
     ## A BibTeX entry for LaTeX users is
@@ -47,7 +47,7 @@ Citation
     ##   @Manual{,
     ##     title = {soilDB: Soil Database Interface},
     ##     author = {Dylan Beaudette and Jay Skovlin and Stephen Roecker and Andrew Brown},
-    ##     note = {R package version 2.7.0},
+    ##     note = {R package version 2.7.1},
     ##     url = {https://CRAN.R-project.org/package=soilDB},
     ##     year = {2022},
     ##   }

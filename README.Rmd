@@ -26,7 +26,7 @@ citEntry(
   note = "R package version %s",
   url = "https://CRAN.R-project.org/package=soilDB",
   year = "%s",
-  textVersion = "Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown (%s). soilDB: Soil Database Interface. R package version %s. <https://CRAN.R-project.org/package=soilDB>"
+  textVersion = "Beaudette, D., Skovlin, J., Roecker, S., Brown, A. (%s). soilDB: Soil Database Interface. R package version %s. <https://CRAN.R-project.org/package=soilDB>"
 )
 ', version, format(Sys.time(), "%Y"), format(Sys.time(), "%Y"), version)
   suppressWarnings(writeLines(strsplit(x, "\n")[[1]], "inst/CITATION"))

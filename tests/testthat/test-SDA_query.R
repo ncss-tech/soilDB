@@ -214,7 +214,7 @@ test_that("SDA_query() works with multi-line records", {
 
   skip_on_cran()
   
-  skip_if(inherits(x.3, 'try-error'))
+  skip_if(inherits(x.4, 'try-error'))
   
   # https://github.com/ncss-tech/soilDB/issues/28
   expect_true(inherits(x.4, 'data.frame'))
