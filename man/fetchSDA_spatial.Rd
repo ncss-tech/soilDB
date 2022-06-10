@@ -54,21 +54,28 @@ Note that STATSGO data are fetched where \code{CLIPAREASYMBOL = 'US'} to avoid d
 \donttest{
 if(requireNamespace("curl") &
    curl::has_internet()) {
-
-   # get spatial data for a single mukey
-    single.mukey <- fetchSDA_spatial(x = "2924882")
+ 
+    # get spatial data for a single mukey
+    single.mukey <- try(fetchSDA_spatial(x = "2924882"))
 
     # demonstrate fetching full extent (multi-mukey) of national musym
-    full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by = "nmusym")
+    full.extent.nmusym <- try(fetchSDA_spatial(x = "2x8l5", by = "nmusym"))
 
     # compare extent of nmusym to single mukey within it
-    if (requireNamespace("sf")) {
-     plot(sf::st_geometry(full.extent.nmusym), col = "RED", border = 0)
-     plot(sf::st_geometry(single.mukey), add = TRUE, col = "BLUE", border = 0)
+    if (!inherits(single.mukey, 'try-error') && 
+        !inherits(full.extent.nmusym, 'try-error')) {
+        
+        if (requireNamespace("sf")) {
+      
+         plot(sf::st_geometry(full.extent.nmusym), col = "RED", border = 0)
+         plot(sf::st_geometry(single.mukey), add = TRUE, col = "BLUE", border = 0)
+       
+        }
+        
     }
 
     # demo adding a field (`muname`) to attribute table of result
-    head(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname"))
+    head(try(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname")))
 }
 }
 }

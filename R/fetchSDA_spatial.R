@@ -28,21 +28,28 @@
 #' \donttest{
 #' if(requireNamespace("curl") &
 #'    curl::has_internet()) {
-#'
-#'    # get spatial data for a single mukey
-#'     single.mukey <- fetchSDA_spatial(x = "2924882")
+#'  
+#'     # get spatial data for a single mukey
+#'     single.mukey <- try(fetchSDA_spatial(x = "2924882"))
 #'
 #'     # demonstrate fetching full extent (multi-mukey) of national musym
-#'     full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by = "nmusym")
+#'     full.extent.nmusym <- try(fetchSDA_spatial(x = "2x8l5", by = "nmusym"))
 #'
 #'     # compare extent of nmusym to single mukey within it
-#'     if (requireNamespace("sf")) {
-#'      plot(sf::st_geometry(full.extent.nmusym), col = "RED", border = 0)
-#'      plot(sf::st_geometry(single.mukey), add = TRUE, col = "BLUE", border = 0)
+#'     if (!inherits(single.mukey, 'try-error') && 
+#'         !inherits(full.extent.nmusym, 'try-error')) {
+#'         
+#'         if (requireNamespace("sf")) {
+#'       
+#'          plot(sf::st_geometry(full.extent.nmusym), col = "RED", border = 0)
+#'          plot(sf::st_geometry(single.mukey), add = TRUE, col = "BLUE", border = 0)
+#'        
+#'         }
+#'         
 #'     }
 #'
 #'     # demo adding a field (`muname`) to attribute table of result
-#'     head(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname"))
+#'     head(try(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname")))
 #' }
 #' }
 #' @rdname fetchSDA_spatial
@@ -78,7 +85,7 @@ fetchSDA_spatial <- function(x,
   x <- unique(x)
 
   # lkey and areasymbol are the option for sapolygon
-  if (geom.src == 'sapolygon' & (by.col %in% c("mukey", "nmusym", "nationalmusym"))) {
+  if (geom.src == 'sapolygon' && (by.col %in% c("mukey", "nmusym", "nationalmusym"))) {
     if (is.numeric(x)) {
       by.col <- "lkey"
     } else {
@@ -87,11 +94,12 @@ fetchSDA_spatial <- function(x,
   }
 
   # default interface is mukey
-  if (by.col == "mukey" | by.col == "lkey") {
+  if (by.col == "mukey" || by.col == "lkey") {
+    
     mukey.list <- x
-
+    
   # a convenience interface is by nmusym -- may have several mukey per nmusym
-  } else if (by.col == "nmusym" | by.col == "nationalmusym") {
+  } else if (by.col == "nmusym" || by.col == "nationalmusym") {
 
     # do additional query to determine mapping of nmusym:mukey
     q.mukey <- paste0("SELECT nationalmusym, mukey FROM mapunit WHERE nationalmusym IN ",
@@ -99,29 +107,36 @@ fetchSDA_spatial <- function(x,
 
     suppressMessages( {res <- SDA_query(q.mukey)} )
 
-    if (inherits(res, 'try-error'))
-      stop("fetchSDA_spatial: fatal error in national mapunit -> mukey conversion.", call. = FALSE)
-
+    if (inherits(res, 'try-error')) {
+      message("fetchSDA_spatial: fatal error in national mapunit -> mukey conversion.", call. = FALSE)
+      return(res)
+    }
     mukey.list <- unique(res$mukey)
 
   # a convenience interface for lkey is by areasymbol/areaname or other legend column
   } else if (by.col %in% c("areasymbol", "areasym", "areaname", "mlraoffice", "mouagncyresp")) {
-    if (by.col == "areasym") by.col <- "areasymbol"
+    if (by.col == "areasym") {
+      by.col <- "areasymbol"
+    }
 
-    if (by.col != "areasymbol") add.fields <- unique(c(add.fields, by.col))
-
+    if (by.col != "areasymbol") {
+      add.fields <- unique(c(add.fields, by.col))
+    }
+    
     # do additional query to determine mapping of areasymbol:lkey
     q.mukey <- paste0("SELECT areasymbol, lkey FROM legend WHERE ", by.col, " IN ",
                       format_SQL_in_statement(x),";")
 
     suppressMessages( {res <- SDA_query(q.mukey)} )
 
-    if (inherits(res, 'try-error'))
-      stop("fetchSDA_spatial: fatal error in ", by.col, " -> lkey conversion.", call. = FALSE)
-
+    if (inherits(res, 'try-error')) {
+      message("fetchSDA_spatial: fatal error in ", by.col, " -> lkey conversion.", call. = FALSE)
+      return(res)
+    }
+    
     mukey.list <- unique(res$lkey)
   } else {
-    stop(paste0("Unknown mapunit identifier (",by.col,")"), call. = FALSE)
+    return(try(stop(paste0("Unknown mapunit identifier (",by.col,")"), call. = FALSE)))
   }
 
   mukey.chunk <- makeChunks(mukey.list, chunk.size)
@@ -152,9 +167,9 @@ fetchSDA_spatial <- function(x,
     mukeys <- mukey.list[idx]
 
     # SDA_query may generate a warning + try-error result
-    chunk.res <- suppressWarnings(.fetchSDA_spatial(mukeys, geom.type, geom.src,
-                                                    use_statsgo, add.fields,
-                                                    verbose, i))
+    chunk.res <- .fetchSDA_spatial(mukeys, geom.type, geom.src,
+                                   use_statsgo, add.fields,
+                                   verbose, i)
 
     # this almost always is because the query was too big
     # retry -- do each mukey individually
@@ -167,7 +182,7 @@ fetchSDA_spatial <- function(x,
 
         if (inherits(sub.res$result, 'try-error')) {
           # explicit handling for a hypothetical unqueryable single mukey
-          warning("Symbol ", xx, " dropped from result due to error! May exceed the JSON serialization limit or have other topologic problems.",
+          message("Symbol ", xx, " dropped from result due to error! May exceed the JSON serialization limit or have other topologic problems.",
                   call. = FALSE)
           return(NULL)
         }
