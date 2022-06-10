@@ -12,6 +12,8 @@ test_that("fetchNASISWebReport() works", {
 
   x <<- suppressMessages(fetchNASISWebReport(projectname = pn))
 
+  skip_if(is.null(x))
+  
   # standard request
   expect_true(inherits(x, 'list'))
 
@@ -23,6 +25,8 @@ test_that("fetchNASISWebReport() returns an SPC of component/horizon data and da
   skip_if_offline()
 
   skip_on_cran()
+  
+  skip_if(is.null(x))
 
   # SPC + morphologic data
   expect_true(inherits(x$spc, 'SoilProfileCollection'))
@@ -36,7 +40,9 @@ test_that("fetchNASISWebReport() returns reasonable data", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if(is.null(x))
+  
   # standard request
   expect_equal(nrow(site(x$spc)) > 0, TRUE)
   expect_equal(nrow(horizons(x$spc)) > 0, TRUE)
@@ -51,7 +57,9 @@ test_that("fetchNASISWebReport() returns data for component name (Sierra)", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if(is.null(x))
+  
   # all major components are Sierra
   f <- grepl('Sierra', x$spc$compname[x$spc$majcompflag == 1], ignore.case = TRUE)
   expect_equal(all(f), TRUE)
@@ -64,7 +72,7 @@ test_that("fetchNASISWebReport() returns NULL with bogus query", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
   # a message is printed and NULL returned when no results
   res <- suppressMessages(fetchNASISWebReport(projectname = 'XXX'))
   expect_null(res)

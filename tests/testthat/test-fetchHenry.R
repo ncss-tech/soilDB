@@ -1,8 +1,5 @@
 context("fetchHenry and related")
 
-
-
-
 test_that("month2season() works as expected", {
   
   x <- c('Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May')

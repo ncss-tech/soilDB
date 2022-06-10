@@ -12,7 +12,9 @@ test_that("fetchOSD() works", {
 
   ## sample data
   x <<- fetchOSD(soils = c('sierra', 'cecil'))
-  x.extended <<- fetchOSD(soils = c('sierra', 'cecil'), extended = TRUE)
+  
+  skip_if(is.null(x))
+  
 
   # standard request
   expect_true(inherits(x, 'SoilProfileCollection'))
@@ -44,7 +46,11 @@ test_that("fetchOSD() returns a list + SPC in extended mode", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  x.extended <<- fetchOSD(soils = c('sierra', 'cecil'), extended = TRUE)
+  
+  skip_if(is.null(x.extended))
+  
   # extended request
   expect_true(inherits(x.extended, 'list'))
   expect_true(inherits(x.extended$SPC, 'SoilProfileCollection'))
@@ -59,7 +65,9 @@ test_that("fetchOSD() returns reasonable data", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if(is.null(x))
+  
   # standard request
   expect_equal(nrow(site(x)) == 2, TRUE)
   expect_equal(nrow(horizons(x)) > 0, TRUE)
@@ -74,7 +82,9 @@ test_that("fetchOSD() returns reasonable data in extended mode", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if(is.null(x.extended))
+  
   # extended request
   expect_equal(
     names(x.extended), extended.table.names
