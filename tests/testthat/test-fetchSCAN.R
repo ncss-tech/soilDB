@@ -1,5 +1,7 @@
 context("fetchSCAN() -- requires internet connection")
 
+x <- NULL
+
 test_that("fetchSCAN() works", {
 
   skip_if_offline()
@@ -7,10 +9,10 @@ test_that("fetchSCAN() works", {
   skip_on_cran()
 
   ## sample data
-  x <<- fetchSCAN(site.code=2001, year=c(2014))
+  x <<- fetchSCAN(site.code = 2001, year = c(2014))
   
   # skip on error
-  skip_if(is.null(x))
+  skip_if(inherits(x, 'try-error') || is.null(x))
   
   # standard request
   expect_true(inherits(x, 'list'))
@@ -24,7 +26,8 @@ test_that("fetchSCAN() returns the right kind of data", {
   skip_on_cran()
   
   # skip on error
-  skip_if(is.null(x))
+  # skip on error
+  skip_if(inherits(x, 'try-error') || is.null(x))
   
   # metadata + some sensor data
   expect_true(inherits(x, 'list'))
