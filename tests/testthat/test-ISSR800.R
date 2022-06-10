@@ -10,6 +10,8 @@ test_that("works as expected", {
   
   expect_true(inherits(WCS_details("ISSR800"), 'data.frame'))
   
+  skip_if_not_installed("terra")
+  
   # 800m grid
   x <- ISSR800.wcs(
       aoi = list(aoi = c(-114.16, 47.6,-114.15, 47.7),
@@ -21,7 +23,7 @@ test_that("works as expected", {
   expect_true(inherits(x, 'SpatRaster') || inherits(x, 'try-error'))
   
   # if it downloaded
-  if(inherits(x, 'SpatRaster')) {
+  if (inherits(x, 'SpatRaster')) {
     
     # expected dimensions
     expect_true(all(dim(x) == c(14, 4, 1)))
@@ -39,8 +41,10 @@ test_that("categorical data", {
   
   skip_on_cran()
   
+  skip_if_not_installed("terra")
+  
   x <- NULL
-    
+  
   # 800m grid
   x <- ISSR800.wcs(
       aoi = list(aoi = c(-114.16, 47.6,-114.15, 47.7),
@@ -53,7 +57,7 @@ test_that("categorical data", {
   expect_true(inherits(x, 'SpatRaster') || inherits(x, 'try-error'))
   
   # if it downloaded
-  if(inherits(x, 'SpatRaster')) {
+  if (inherits(x, 'SpatRaster')) {
     # expected dimensions
     expect_true(all(dim(x) == c(14, 4, 1)))
     
