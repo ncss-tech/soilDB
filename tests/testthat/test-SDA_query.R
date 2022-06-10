@@ -25,8 +25,11 @@ test_that("SDA_query() works", {
   # point with known SSURGO data
   p <<- sf::st_as_sf(data.frame(x=-121.77100, y=37.368402),  coords=c("x","y"),
                      crs = "EPSG:4326")
-
-
+  
+  skip_if(inherits(x.1, 'try-error'))
+  
+  skip_if(inherits(x.2, 'try-error'))
+  
   # standard request
   expect_true(inherits(x.1, 'data.frame'))
   expect_true(inherits(x.2, 'list'))
@@ -39,6 +42,10 @@ test_that("SDA_query() returns expected result", {
 
   skip_on_cran()
 
+  skip_if(inherits(x.1, 'try-error'))
+  
+  skip_if(inherits(x.2, 'try-error'))
+  
   # table dimensions
   expect_equal(nrow(x.1), 1)
   expect_equal(ncol(x.1), 2)
@@ -62,10 +69,14 @@ test_that("SDA_query() SQL error / no results -> NULL", {
   skip_on_cran()
 
   # bad SQL should result in a warning and try-error result.
-  expect_true(inherits(expect_warning(SDA_query("SELECT this from that")), 'try-error'))
+  expect_true(inherits(expect_message(SDA_query("SELECT this from that")), 'try-error'))
 
   # queries that result in 0 rows should return NULL
   x <- suppressMessages(SDA_query("SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'xxx';"))
+  
+  skip_if(inherits(x, 'try-error'))
+  
+  # if service is unavailable this returns try-error, not NULL
   expect_null(x)
 
 })
@@ -82,7 +93,9 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
   
   if (requireNamespace("sf")) {
     res <- suppressWarnings(SDA_spatialQuery(sf::st_as_sf(p), what = 'mukey'))
-  
+    
+    skip_if(inherits(res, 'try-error'))
+    
     # testing known values
     expect_true(inherits(res, 'data.frame'))
     expect_equal(nrow(res), 1)
@@ -91,6 +104,9 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
   
   # test with what = "sapolygon" 
   res <- suppressWarnings(SDA_spatialQuery(p, what = "areasymbol"))
+  
+  skip_if(inherits(res, 'try-error'))
+  
   expect_true(inherits(res, 'data.frame'))
   expect_equal(nrow(res), 1)
   expect_match(res$areasymbol, 'CA641')
@@ -106,7 +122,9 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
 
   # test with default db = "SSURGO"
   res <- suppressWarnings(SDA_spatialQuery(p, what = 'geom'))
-
+  
+  skip_if(inherits(res, 'try-error'))
+  
   # testing known values
   expect_true(inherits(res, 'sf'))
   expect_equal(nrow(res), 1)
@@ -114,13 +132,17 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
 
   # test with db = "STATSGO"
   res <- suppressWarnings(SDA_spatialQuery(p, what = 'geom', db = "STATSGO"))
-
+  
+  skip_if(inherits(res, 'try-error'))
+  
   # testing known values
   expect_true(inherits(res, 'sf'))
   expect_equal(nrow(res), 1)
   
   # test with what = "sapolygon" 
   res <- suppressWarnings(SDA_spatialQuery(p, what = "sapolygon"))
+  
+  skip_if(inherits(res, 'try-error'))
   
   # testing known values
   expect_true(inherits(res, 'sf'))
@@ -139,6 +161,8 @@ test_that("SDA_spatialQuery() spatial query of MUKEY with multiple features", {
   
   res <- SDA_spatialQuery(x)
   
+  skip_if(inherits(res, 'try-error'))
+  
   expect_equal(nrow(res), 2)
   
   res2 <- SDA_spatialQuery(x, db = "STATSGO")
@@ -150,12 +174,14 @@ test_that("SDA_query() interprets column names", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if(inherits(x.3, 'try-error'))
+  
   # x.3 is from the component table
   expect_equal(
     names(x.3),
     c("mukey", "cokey", "compkind", "comppct_r", "majcompflag", "elev_r", "slope_r", "wei", "weg")
-    )
+  )
 
 })
 
@@ -166,7 +192,9 @@ test_that("SDA_query() interprets data type correctly", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if(inherits(x.3, 'try-error'))
+  
   # x.3 is from the component table
   expect_true(inherits(x.3$mukey, 'integer'))
   expect_true(inherits(x.3$cokey, 'integer'))
@@ -180,14 +208,14 @@ test_that("SDA_query() interprets data type correctly", {
 
 })
 
-
-
 test_that("SDA_query() works with multi-line records", {
 
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if(inherits(x.3, 'try-error'))
+  
   # https://github.com/ncss-tech/soilDB/issues/28
   expect_true(inherits(x.4, 'data.frame'))
   expect_true(nrow(x.4) == 6)

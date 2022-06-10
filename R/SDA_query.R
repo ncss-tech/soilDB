@@ -189,8 +189,8 @@ SDA_query <- function(q) {
     # parse the XML to get the error message
     error.msg <- xml_text(r.content)
 
-    ## warning: bad result
-    warning(error.msg, call. = FALSE)
+    ## message about bad result (previously error/warning)
+    message(error.msg)
 
     # return the error object so calling function/user can handle it
     return(invisible(request.status))

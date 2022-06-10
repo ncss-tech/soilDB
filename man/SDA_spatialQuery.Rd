@@ -33,7 +33,7 @@ SDA_spatialQuery(
 \item{as_Spatial}{Return sp classes? e.g. \code{Spatial*DataFrame}. Default: \code{FALSE}.}
 }
 \value{
-A \code{data.frame} if \code{what = 'mukey'}, otherwise an \code{sf} object.
+A \code{data.frame} if \code{what = 'mukey'}, otherwise an \code{sf} object. A \code{try-error} in the event the request cannot be made or if there is an error in the query.
 }
 \description{
 Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersection of \code{geom} + SSURGO / STATSGO polygons can be returned. See details.

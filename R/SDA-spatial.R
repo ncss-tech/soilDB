@@ -24,10 +24,17 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
     .Deprecated(msg = "Passing PROJ4 strings via `p4s` is deprecated. SDA interfaces in soilDB use the WGS84 Geographic Coordinate System (EPSG:4326) by default. Use the `crs` argument to customize.")
   }
 
+  if (inherits(d,  'try-error')) {
+    message("Invalid SDA WKT result, returning try-error")
+    return(d)
+  }
+  
   if (!requireNamespace("sf")) {
     stop("package `sf` is required", call. = FALSE)
   }
-
+  
+  
+  
   # convert wkt to sf/SPDF
   d[[g]] <- sf::st_as_sfc(d[,g], crs = crs)
   sfobj <- sf::st_as_sf(d)
@@ -146,7 +153,7 @@ FROM geom_data;
 #' @param idcol Unique IDs used for individual features when `byFeature = TRUE`; Default `"gid"`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @param as_Spatial Return sp classes? e.g. `Spatial*DataFrame`. Default: `FALSE`.
-#' @return A `data.frame` if `what = 'mukey'`, otherwise an `sf` object.
+#' @return A `data.frame` if `what = 'mukey'`, otherwise an `sf` object. A `try-error` in the event the request cannot be made or if there is an error in the query.
 #' @note Row-order is not preserved across features in \code{geom} and returned object. Use `byFeature` argument to iterate over features and return results that are 1:1 with the inputs. Polygon area in acres is computed server-side when `what = 'mupolygon'` and `geomIntersection = TRUE`.
 #' @author D.E. Beaudette, A.G. Brown, D.R. Schlaepfer
 #' @seealso \code{\link{SDA_query}}
@@ -428,6 +435,11 @@ SDA_spatialQuery <- function(geom,
     # single query for all of the features
     # note that row-order / number of rows in results may not match geom
     res <- suppressMessages(SDA_query(q))
+    
+    if (inherits(res,  'try-error')) {
+      return(res)
+    }
+    
     res <- processSDA_WKT(res, as_sf = return_sf)
     if (return_terra) {
       # sf -> terra
@@ -459,6 +471,10 @@ SDA_spatialQuery <- function(geom,
     # single query for all of the features
     # note that row-order / number of rows in results may not match geom
     res <- suppressMessages(SDA_query(q))
+    
+    if (inherits(res,  'try-error')) {
+      return(res)
+    }
   }
 
   # SSURGO only
@@ -476,7 +492,11 @@ SDA_spatialQuery <- function(geom,
     # single query for all of the features
     # note that row-order / number of rows in results may not match geom
     res <- suppressMessages(SDA_query(q))
+    
+    if (inherits(res,  'try-error')) {
+      return(res)
+    }
   }
 
-  return(res)
+  res
 }

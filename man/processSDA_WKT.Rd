@@ -35,6 +35,4 @@ This function requires the \code{sf} package.
 }
 \author{
 D.E. Beaudette, A.G. Brown
-
-D.E. Beaudette
 }
