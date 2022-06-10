@@ -26,16 +26,6 @@ importFrom(DBI,
   dbFetch
 )
 
-importFrom(curl,
-  curl,
-  new_handle
-)
-
-importFrom(xml2,
-  read_html,
-  xml_text
-)
-
 importFrom(aqp,
   "depths<-",
   "site<-",

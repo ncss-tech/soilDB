@@ -42,15 +42,21 @@
 #' }
 #' 
 #' @export parseWebReport
-parseWebReport <- function(url, args, index=1) {
+parseWebReport <- function(url, args, index = 1) {
   
-  # sanity check: package requirements
-  if(!requireNamespace('rvest'))
+  # suggested packages
+  if (!requireNamespace('rvest'))
     stop('please install the package: rvest', call. = FALSE)
+  
+  if (!requireNamespace('xml2'))
+    stop('please install the package: xml2', call. = FALSE)
+  
+  if (!requireNamespace('curl'))
+    stop('please install the package: curl', call. = FALSE)
   
   # parse args and create final URL
   args2 <- lapply(args, function(x) URLencode(as.character(x), reserved = TRUE))
-  URLargs <- paste0('&', paste(names(args2), unlist(args2), sep = '='), collapse='')
+  URLargs <- paste0('&', paste(names(args2), unlist(args2), sep = '='), collapse = '')
   url <- paste0(url, URLargs)
   
   # get HTML, result is NULL when HTTP ERROR is encountered
@@ -59,27 +65,31 @@ parseWebReport <- function(url, args, index=1) {
   ## TODO: random timeouts / SSL errors / evaluation errors
   # this happens when asking for many web reports in a row (5-10% of the time for 150+ calls)
   # solution: use a while() loop and n-iterations until there is no error, or i > n
+  
+  # TODO: evaluate whether we can achieve this without suggesting curl 
   x <- tryCatch(
-    read_html(curl(url,  handle = new_handle(verbose=FALSE, useragent = "Mozilla/5.0", CONNECTTIMEOUT = 60)))
-    , error = function(e) {
+    xml2::read_html(curl::curl(url, handle = curl::new_handle(verbose = FALSE,
+                                                              useragent = "Mozilla/5.0",
+                                                              CONNECTTIMEOUT = 60))), 
+    error = function(e) {
       print(e)
       return(NULL)
     }
   )
   
   # catch (likely) HTTP errors here
-  if(is.null(x))
+  if (is.null(x))
     return(NULL)
   
   # read all of the HTML tables
-  d <- rvest::html_table(x, header=TRUE)
+  d <- rvest::html_table(x, header = TRUE)
   
   # sanity check empty list = no data
-  if(length(d) < 1)
+  if (length(d) < 1)
     return(NULL)
   
   # if specified, get only the indexed table
-  if(! is.null(index)) {
+  if (!is.null(index)) {
     d <- d[[index]]
   }
   

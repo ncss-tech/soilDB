@@ -187,7 +187,7 @@ SDA_query <- function(q) {
     r.content <- httr::content(r, as = 'parsed', encoding = 'UTF-8')
 
     # parse the XML to get the error message
-    error.msg <- xml_text(r.content)
+    error.msg <- xml2::xml_text(r.content)
 
     ## message about bad result (previously error/warning)
     message(error.msg)
