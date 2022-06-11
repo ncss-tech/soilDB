@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -79,11 +79,11 @@
         </td>
         <td><p>Estimate Soil Temperature Regime</p></td>
       </tr><tr><td>
-          <p><code><a href="fetchGDB.html">fetchGDB()</a></code> </p>
+          <p><code><a href="fetchGDB.html">get_component_from_GDB()</a></code> <code><a href="fetchGDB.html">get_legend_from_GDB()</a></code> <code><a href="fetchGDB.html">get_mapunit_from_GDB()</a></code> <code><a href="fetchGDB.html">fetchGDB()</a></code> </p>
         </td>
         <td><p>Get a SoilProfileCollection from a SSURGO file geodatabase</p></td>
       </tr><tr><td>
-          <p><code><a href="fetchHenry.html">fetchHenry()</a></code> </p>
+          <p><code><a href="fetchHenry.html">summarizeSoilTemperature()</a></code> <code><a href="fetchHenry.html">month2season()</a></code> <code><a href="fetchHenry.html">fetchHenry()</a></code> </p>
         </td>
         <td><p>Get data from Henry Mount Soil Temperature and Water Database</p></td>
       </tr><tr><td>
@@ -95,7 +95,7 @@
         </td>
         <td><p>Query data from Kellogg Soil Survey Laboratory Data Mart via Soil Data Access or local SQLite snapshot</p></td>
       </tr><tr><td>
-          <p><code><a href="fetchNASIS.html">fetchNASIS()</a></code> </p>
+          <p><code><a href="fetchNASIS.html">fetchNASIS()</a></code> <code><a href="fetchNASIS.html">get_RMF_from_NASIS_db()</a></code> <code><a href="fetchNASIS.html">get_concentrations_from_NASIS_db()</a></code> <code><a href="fetchNASIS.html">get_phfmp_from_NASIS_db()</a></code> </p>
         </td>
         <td><p>Get a pedon or component data SoilProfileCollection from NASIS</p></td>
       </tr><tr><td>
@@ -103,7 +103,7 @@
         </td>
         <td><p>Get NCSS Pedon laboratory data from NASIS</p></td>
       </tr><tr><td>
-          <p><code><a href="fetchNASISWebReport.html">fetchNASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_component_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_chorizon_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_legend_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_lmuaoverlap_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_mapunit_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_projectmapunit_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_projectmapunit2_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_project_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_progress_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_project_correlation_from_NASISWebReport()</a></code> </p>
+          <p><code><a href="fetchNASISWebReport.html">fetchNASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_component_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_chorizon_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_legend_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_lmuaoverlap_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_mapunit_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_projectmapunit_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_projectmapunit2_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_project_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_progress_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_project_correlation_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_cosoilmoist_from_NASISWebReport()</a></code> <code><a href="fetchNASISWebReport.html">get_sitesoilmoist_from_NASISWebReport()</a></code> </p>
         </td>
         <td><p>Get component tables from NASIS Web Reports</p></td>
       </tr><tr><td>
@@ -111,7 +111,7 @@
         </td>
         <td><p>Get Official Series Descriptions and summaries from SoilWeb API</p></td>
       </tr><tr><td>
-          <p><code><a href="fetchPedonPC.html">fetchPedonPC()</a></code> </p>
+          <p><code><a href="fetchPedonPC.html">fetchPedonPC()</a></code> <code><a href="fetchPedonPC.html">getHzErrorsPedonPC()</a></code> </p>
         </td>
         <td><p>Get a SoilProfileCollection from a PedonPC v.5 database</p></td>
       </tr><tr><td>
@@ -123,7 +123,7 @@
         </td>
         <td><p>Get daily climate data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations</p></td>
       </tr><tr><td>
-          <p><code><a href="fetchSDA.html">get_component_from_SDA()</a></code> <code><a href="fetchSDA.html">get_cointerp_from_SDA()</a></code> <code><a href="fetchSDA.html">get_legend_from_SDA()</a></code> <code><a href="fetchSDA.html">get_lmuaoverlap_from_SDA()</a></code> <code><a href="fetchSDA.html">get_mapunit_from_SDA()</a></code> <code><a href="fetchSDA.html">get_chorizon_from_SDA()</a></code> <code><a href="fetchSDA.html">fetchSDA()</a></code> </p>
+          <p><code><a href="fetchSDA.html">get_component_from_SDA()</a></code> <code><a href="fetchSDA.html">get_cointerp_from_SDA()</a></code> <code><a href="fetchSDA.html">get_legend_from_SDA()</a></code> <code><a href="fetchSDA.html">get_lmuaoverlap_from_SDA()</a></code> <code><a href="fetchSDA.html">get_mapunit_from_SDA()</a></code> <code><a href="fetchSDA.html">get_chorizon_from_SDA()</a></code> <code><a href="fetchSDA.html">fetchSDA()</a></code> <code><a href="fetchSDA.html">get_cosoilmoist_from_SDA()</a></code> </p>
         </td>
         <td><p>Get SSURGO/STATSGO2 Mapunit Data from Soil Data Access</p></td>
       </tr><tr><td>
@@ -149,7 +149,7 @@
       </tr><tr><td>
           <p><code><a href="getHzErrorsNASIS.html">getHzErrorsNASIS()</a></code> </p>
         </td>
-        <td><p>Get logic errors in NASIS Pedon Horizon</p></td>
+        <td><p>Get Logic Errors in NASIS/PedonPC Pedon Horizon</p></td>
       </tr><tr><td>
           <p><code><a href="get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code> </p>
         </td>
@@ -323,9 +323,9 @@
         </td>
         <td><p>Make Ecological Dynamics Interpretive Tool (EDIT) web services URL</p></td>
       </tr><tr><td>
-          <p><code><a href="mix_and_clean_colors.html">mix_and_clean_colors()</a></code> </p>
+          <p><code><a href="metadata.html">metadata</a></code> </p>
         </td>
-        <td><p>Mix and Clean Colors</p></td>
+        <td><p>NASIS 7 Metadata</p></td>
       </tr><tr><td>
           <p><code><a href="mukey.wcs.html">mukey.wcs()</a></code> </p>
         </td>
@@ -399,9 +399,9 @@
         </td>
         <td><p>Get SoilWeb 800m Major Component Soil Taxonomy Grids</p></td>
       </tr><tr><td>
-          <p><code><a href="uncode.html">uncode()</a></code> </p>
+          <p><code><a href="uncode.html">uncode()</a></code> <code><a href="uncode.html">code()</a></code> </p>
         </td>
-        <td><p>Convert coded values returned from NASIS and SDA queries to factors</p></td>
+        <td><p>Convert coded values returned from NASIS and SDA queries into human-readable values</p></td>
       </tr><tr><td>
           <p><code><a href="us_ss_timeline.html">us_ss_timeline</a></code> </p>
         </td>
@@ -427,7 +427,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

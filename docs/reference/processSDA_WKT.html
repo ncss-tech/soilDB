@@ -18,7 +18,7 @@ WKT (well-known text) representation of geometry to an sf or sp object."><!-- ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -62,18 +62,29 @@ WKT (well-known text) representation of geometry to an <code>sf</code> or <code>
     <h2>Arguments</h2>
     <dl><dt>d</dt>
 <dd><p><code>data.frame</code> returned by <code>SDA_query</code>, containing WKT representation of geometry</p></dd>
+
+
 <dt>g</dt>
 <dd><p>name of column in <code>d</code> containing WKT geometry</p></dd>
+
+
 <dt>crs</dt>
 <dd><p>CRS definition (e.g. an EPSG code). Default <code>4326</code> for WGS84 Geographic Coordinate System</p></dd>
+
+
 <dt>p4s</dt>
 <dd><p>Deprecated: PROJ4 CRS definition</p></dd>
+
+
 <dt>as_sf</dt>
 <dd><p>Return an <code>sf</code> <code>data.frame</code>? If <code>FALSE</code> return a <code>Spatial*</code> object.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An <code>sf</code> object or if <code>as_sf</code> is <code>FALSE</code> a <code>Spatial*</code> object.</p>
+    
+
+<p>An <code>sf</code> object or if <code>as_sf</code> is <code>FALSE</code> a <code>Spatial*</code> object.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -88,7 +99,6 @@ See the <a href="http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html" class=
     <div id="author">
     <h2>Author</h2>
     <p>D.E. Beaudette, A.G. Brown</p>
-<p>D.E. Beaudette</p>
     </div>
 
   </div>
@@ -103,7 +113,7 @@ See the <a href="http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html" class=
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

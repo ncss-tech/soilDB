@@ -18,7 +18,7 @@ series name query, from the KSSL database."><!-- mathjax --><script src="https:/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -73,33 +73,54 @@ series name query, from the KSSL database.</p>
     <h2>Arguments</h2>
     <dl><dt>series</dt>
 <dd><p>vector of soil series names, case insensitive</p></dd>
+
+
 <dt>bbox</dt>
 <dd><p>a single bounding box in WGS84 geographic coordinates e.g.
 <code>c(-120, 37, -122, 38)</code></p></dd>
+
+
 <dt>mlra</dt>
 <dd><p>vector of MLRA IDs, e.g. "18" or "22A"</p></dd>
+
+
 <dt>pedlabsampnum</dt>
 <dd><p>vector of KSSL pedon lab sample number</p></dd>
+
+
 <dt>pedon_id</dt>
 <dd><p>vector of user pedon ID</p></dd>
+
+
 <dt>pedon_key</dt>
 <dd><p>vector of KSSL internal pedon ID</p></dd>
+
+
 <dt>returnMorphologicData</dt>
 <dd><p>logical, optionally request basic morphologic
 data, see details section</p></dd>
+
+
 <dt>returnGeochemicalData</dt>
 <dd><p>logical, optionally request geochemical,
 optical and XRD/thermal data, see details section</p></dd>
+
+
 <dt>simplifyColors</dt>
 <dd><p>logical, simplify colors (from morphologic data) and
 join with horizon data</p></dd>
+
+
 <dt>progress</dt>
 <dd><p>logical, optionally give progress when iterating over
 multiple requests</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>SoilProfileCollection</code> object when
+    
+
+<p>a <code>SoilProfileCollection</code> object when
 <code>returnMorphologicData</code> is FALSE, otherwise a list.</p>
     </div>
     <div id="details">
@@ -214,7 +235,7 @@ the link below for the live data.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -55,7 +55,7 @@
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">taxaExtent</span><span class="op">(</span>
   <span class="va">x</span>,
-  level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"order"</span>, <span class="st">"suborder"</span>, <span class="st">"greatgroup"</span>, <span class="st">"subgroup"</span><span class="op">)</span>,
+  level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"order"</span>, <span class="st">"suborder"</span>, <span class="st">"greatgroup"</span>, <span class="st">"subgroup"</span><span class="op">)</span>,
   formativeElement <span class="op">=</span> <span class="cn">FALSE</span>,
   timeout <span class="op">=</span> <span class="fl">60</span>
 <span class="op">)</span></code></pre></div>
@@ -65,16 +65,25 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>single taxon label (e.g. <code>haploxeralfs</code>) or formative element (e.g. <code>pale</code>), case-insensitive</p></dd>
+
+
 <dt>level</dt>
 <dd><p>the taxonomic level within the top 4 tiers of Soil Taxonomy, one of <code>c('order', 'suborder', 'greatgroup', 'subgroup')</code></p></dd>
+
+
 <dt>formativeElement</dt>
 <dd><p>logical, search using formative elements instead of taxon label</p></dd>
+
+
 <dt>timeout</dt>
 <dd><p>time that we are willing to wait for a response, in seconds</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>SpatRaster</code> object</p>
+    
+
+<p>a <code>SpatRaster</code> object</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -250,7 +259,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -77,21 +77,36 @@
     <dl><dt>rf</dt>
 <dd><p>a <code>data.frame</code> object, typically returned from NASIS, see
 details</p></dd>
+
+
 <dt>id.var</dt>
 <dd><p>character vector with the name of the column containing an ID
 that is unique among all horizons in <code>rf</code></p></dd>
+
+
 <dt>vol.var</dt>
 <dd><p>character vector with the name of the column containing the coarse fragment volume. Default <code>"fragvol"</code> or <code>"huartvol</code>".</p></dd>
+
+
 <dt>prefix</dt>
 <dd><p>a character vector prefix for input</p></dd>
+
+
 <dt>nullFragsAreZero</dt>
 <dd><p>should fragment volumes of NULL be interpreted as 0? (default: <code>TRUE</code>), see details</p></dd>
+
+
 <dt>msg</dt>
 <dd><p>Identifier of data being summarized. Default is <code>"rock fragment volume"</code> but this routine is also used for <code>"surface fragment cover"</code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments passed to sieving function (e.g. <code>sieves</code> a named numeric containing sieve size thresholds with class name)</p></dd>
+
+
 <dt>art</dt>
 <dd><p>a <code>data.frame</code> object, typically returned from NASIS, see details</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -120,7 +135,7 @@ classes, split into hard and para- fragments. Likewise, <code>simplifyArtifactDa
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

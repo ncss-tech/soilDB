@@ -18,7 +18,7 @@ Access, and create soil profile collection objects (SPC)."><!-- mathjax --><scri
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -45,7 +45,7 @@ Access, and create soil profile collection objects (SPC)."><!-- mathjax --><scri
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get SSURGO/STATSGO2 Mapunit Data from Soil Data Access</h1>
-    <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/get_component_from_SDA.R" class="external-link"><code>R/get_component_from_SDA.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/get_component_from_SDA.R" class="external-link"><code>R/get_component_from_SDA.R</code></a>, <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/get_cosoilmoist_from_SDA.R" class="external-link"><code>R/get_cosoilmoist_from_SDA.R</code></a></small>
     <div class="hidden name"><code>fetchSDA.Rd</code></div>
     </div>
 
@@ -99,6 +99,13 @@ Access, and create soil profile collection objects (SPC).</p>
   rmHzErrors <span class="op">=</span> <span class="cn">FALSE</span>,
   droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
   stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
+
+<span class="fu">get_cosoilmoist_from_SDA</span><span class="op">(</span>
+  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
+  duplicates <span class="op">=</span> <span class="cn">FALSE</span>,
+  impute <span class="op">=</span> <span class="cn">TRUE</span>,
+  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -106,30 +113,51 @@ Access, and create soil profile collection objects (SPC).</p>
     <h2>Arguments</h2>
     <dl><dt>WHERE</dt>
 <dd><p>text string formatted as an SQL WHERE clause (default: FALSE)</p></dd>
+
+
 <dt>duplicates</dt>
 <dd><p>logical; if TRUE a record is returned for each unique
 mukey (may be many per nationalmusym)</p></dd>
+
+
 <dt>childs</dt>
 <dd><p>logical; if FALSE parent material and geomorphic child tables
 are not flattened and appended</p></dd>
+
+
 <dt>droplevels</dt>
 <dd><p>logical: indicating whether to drop unused levels in
 classifying factors. This is useful when a class has large number of unused
 classes, which can waste space in tables and figures.</p></dd>
+
+
 <dt>nullFragsAreZero</dt>
 <dd><p>should fragment volumes of NULL be interpreted as 0?
 (default: TRUE), see details</p></dd>
+
+
 <dt>stringsAsFactors</dt>
 <dd><p>deprecated</p></dd>
+
+
 <dt>mrulename</dt>
 <dd><p>character. Interpretation rule names</p></dd>
+
+
 <dt>rmHzErrors</dt>
 <dd><p>should pedons with horizonation errors be removed from the
 results? (default: FALSE)</p></dd>
+
+
+<dt>impute</dt>
+<dd><p>replace missing (i.e. <code>NULL</code>) values with <code>"Not_Populated"</code> forcategorical data, or the "RV" for numeric data or <code>201</code> cm if the "RV" is also<code>NULL</code> (default: <code>TRUE</code>)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.frame or SoilProfileCollection object.</p>
+    
+
+<p>A data.frame or SoilProfileCollection object.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -173,7 +201,7 @@ values should be interpreted as 0.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -44,7 +44,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get a SoilProfileCollection from a PedonPC v.5 database</h1>
-    <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/fetchPedonPC.R" class="external-link"><code>R/fetchPedonPC.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/fetchPedonPC.R" class="external-link"><code>R/fetchPedonPC.R</code></a>, <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/R/getHzErrorsPedonPC.R" class="external-link"><code>R/getHzErrorsPedonPC.R</code></a></small>
     <div class="hidden name"><code>fetchPedonPC.Rd</code></div>
     </div>
 
@@ -53,17 +53,26 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">fetchPedonPC</span><span class="op">(</span><span class="va">dsn</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">fetchPedonPC</span><span class="op">(</span><span class="va">dsn</span><span class="op">)</span>
+
+<span class="fu">getHzErrorsPedonPC</span><span class="op">(</span><span class="va">dsn</span>, strict <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dsn</dt>
 <dd><p>The path to a PedonPC version 6.x database</p></dd>
+
+
+<dt>strict</dt>
+<dd><p>Use "strict" horizon error checking? Default: <code>TRUE</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a SoilProfileCollection class object</p>
+    
+
+<p>a SoilProfileCollection class object</p>
     </div>
     <div id="note">
     <h2>Note</h2>
@@ -97,7 +106,7 @@ of missing data.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

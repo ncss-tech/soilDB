@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -60,16 +60,27 @@
     <h2>Arguments</h2>
     <dl><dt>mast</dt>
 <dd><p>single value or vector of mean annual soil temperature (deg C)</p></dd>
+
+
 <dt>msst</dt>
 <dd><p>single value or vector of mean summer soil temperature (deg C)</p></dd>
+
+
 <dt>mwst</dt>
 <dd><p>single value of mean winter soil temperature (deg C)</p></dd>
+
+
 <dt>permafrost</dt>
 <dd><p>logical: permafrost presence / absence</p></dd>
+
+
 <dt>pt.cex</dt>
 <dd><p>symbol size</p></dd>
+
+
 <dt>leg.cex</dt>
 <dd><p>legend size</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -93,10 +104,9 @@ National Soil Survey Center, Lincoln, Nebraska.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">STRplot</span><span class="op">(</span>mast <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">25</span>, msst <span class="op">=</span> <span class="fl">10</span>, mwst <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span class="r-plt img"><img src="STRplot-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"></span>
 </code></pre></div>
     </div>
   </div>
@@ -111,7 +121,7 @@ National Soil Survey Center, Lincoln, Nebraska.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -60,10 +60,13 @@
     <h2>Arguments</h2>
     <dl><dt>q</dt>
 <dd><p>A valid T-SQL query surrounded by double quotes</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data.frame result (<code>NULL</code> if empty, try-error on error)</p>
+    
+
+<p>a data.frame result (<code>NULL</code> if empty, try-error on error)</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -72,7 +75,7 @@
     </div>
     <div id="note">
     <h2>Note</h2>
-    <p>This function requires the <code>httr</code>, <code>jsonlite</code>, and <code>XML</code> packages</p>
+    <p>This function requires the <code>httr</code>, <code>jsonlite</code>, and <code>xml2</code> packages</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -94,7 +97,7 @@
 <span class="r-in">  <span class="co"># because we are filtering on SSURGO area symbols</span></span>
 <span class="r-in">  <span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA%';"</span></span>
 <span class="r-in">  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">SDA_query</span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"></span>
 <span class="r-in">  <span class="co">## get SSURGO component data associated with the</span></span>
@@ -127,11 +130,11 @@
 <span class="r-in">  <span class="co"># there is no need to filter STATSGO because</span></span>
 <span class="r-in">  <span class="co"># SDA_Get_Mukey_from_intersection_with_WktWgs84() implies SSURGO</span></span>
 <span class="r-in">  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">wk</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/wk/reference/wkt.html" class="external-link">as_wkt</a></span><span class="op">(</span><span class="fu">wk</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/wk/reference/rct.html" class="external-link">rct</a></span><span class="op">(</span><span class="op">-</span><span class="fl">120.9</span>, <span class="fl">37.7</span>, <span class="op">-</span><span class="fl">120.8</span>, <span class="fl">37.8</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"SELECT mukey, cokey, compname, comppct_r FROM component </span>
+<span class="r-in">  <span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"SELECT mukey, cokey, compname, comppct_r FROM component</span>
 <span class="r-in">      WHERE mukey IN (SELECT DISTINCT mukey FROM</span>
 <span class="r-in">      SDA_Get_Mukey_from_intersection_with_WktWgs84('"</span>, <span class="va">p</span>,</span>
 <span class="r-in">       <span class="st">"')) ORDER BY mukey, cokey, comppct_r DESC"</span><span class="op">)</span></span>
-<span class="r-in">    </span>
+<span class="r-in"></span>
 <span class="r-in">   <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">SDA_query</span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span>
 <span class="r-in">   <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-in"> <span class="op">}</span></span>
@@ -177,7 +180,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

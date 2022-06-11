@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -60,16 +60,25 @@
     <h2>Arguments</h2>
     <dl><dt>aoi</dt>
 <dd><p>area of interest (AOI) defined using a <code>Spatial*</code>, <code>RasterLayer</code>, <code>sf</code>, <code>sfc</code> or <code>bbox</code> object, OR a <code>list</code>, see details</p></dd>
+
+
 <dt>var</dt>
 <dd><p>ISSR-800 grid name (case insensitive), see details</p></dd>
+
+
 <dt>res</dt>
 <dd><p>grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>logical, passed to <code>download.file</code> to enable / suppress URL and progress bar for download.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the <code>terra</code> package are returned. If the input object class is from the <code>raster</code> or <code>sp</code> packages a RasterLayer is returned.</p>
+    
+
+<p>A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the <code>terra</code> package are returned. If the input object class is from the <code>raster</code> or <code>sp</code> packages a RasterLayer is returned.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -102,9 +111,9 @@
 <span class="r-in"><span class="fu"><a href="WCS_details.html">WCS_details</a></span><span class="op">(</span>wcs <span class="op">=</span> <span class="st">'ISSR800'</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># get wind erodibility group</span></span>
-<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">ISSR800.wcs</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">116</span>, <span class="fl">35</span>, <span class="op">-</span><span class="fl">115.5</span>, <span class="fl">35.5</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span>, </span>
+<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">ISSR800.wcs</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">116</span>, <span class="fl">35</span>, <span class="op">-</span><span class="fl">115.5</span>, <span class="fl">35.5</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span>, </span>
 <span class="r-in">                   var <span class="op">=</span> <span class="st">'weg'</span>, res <span class="op">=</span> <span class="fl">800</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>
@@ -120,7 +129,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

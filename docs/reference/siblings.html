@@ -24,7 +24,7 @@ SSSA 2019 Presentation - Mapping Soilscapes Using Soil Co-Occurrence Networks
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -71,16 +71,25 @@ SSSA 2019 Presentation - Mapping Soilscapes Using Soil Co-Occurrence Networks
     <h2>Arguments</h2>
     <dl><dt>s</dt>
 <dd><p>character vector, the name of a single soil series, case-insensitive.</p></dd>
+
+
 <dt>only.major</dt>
 <dd><p>logical, should only return siblings that are major components</p></dd>
+
+
 <dt>component.data</dt>
 <dd><p>logical, should component data for siblings (and optionally cousins) be returned?</p></dd>
+
+
 <dt>cousins</dt>
 <dd><p>logical, should siblings-of-siblings (cousins) be returned?</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>list</code> containing:</p><ul><li><p>sib: <code>data.frame</code> containing siblings, major component flag, and number of co-occurrences</p></li>
+    
+
+<p>A <code>list</code> containing:</p><ul><li><p>sib: <code>data.frame</code> containing siblings, major component flag, and number of co-occurrences</p></li>
 <li><p>sib.data: <code>data.frame</code> containing sibling component data (only when <code>component.data = TRUE</code>)</p></li>
 <li><p>cousins: <code>data.frame</code> containing cousins, major component flag, and number of co-occurrences (only when <code>cousins = TRUE</code>)</p></li>
 <li><p>cousin.data: <code>data.frame</code> containing cousin component data (only when <code>cousins = TRUE, component.data = TRUE</code>)</p></li>
@@ -145,7 +154,7 @@ SSSA 2019 Presentation - Mapping Soilscapes Using Soil Co-Occurrence Networks
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

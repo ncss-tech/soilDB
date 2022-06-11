@@ -18,7 +18,7 @@ A Soil Data Access query returns geometry and key identifying information about 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -72,26 +72,45 @@ A Soil Data Access query returns geometry and key identifying information about 
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>A vector of map unit keys (<code>mukey</code>) or national map unit symbols (<code>nmusym</code>) for <code>mupolygon</code> geometry OR legend keys (<code>lkey</code>) or soil survey area symbols (<code>areasymbol</code>) for <code>sapolygon</code> geometry</p></dd>
+
+
 <dt>by.col</dt>
 <dd><p>Column name containing map unit identifier <code>"mukey"</code>, <code>"nmusym"</code>/<code>"nationalmusym"</code> for <code>geom.src</code> <code>mupolygon</code> OR <code>"areasymbol"</code>, <code>"areaname"</code>, <code>"mlraoffice"</code>, <code>"mouagncyresp"</code> for <code>geom.src</code> <code>sapolygon</code>; default is determined by <code>is.numeric(x)</code> <code>TRUE</code> for <code>mukey</code> or <code>lkey</code> and <code>nationalmusym</code> or <code>areasymbol</code> otherwise.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>geometry result type: <code>"feature"</code> returns polygons, <code>"bbox"</code> returns the bounding box of each polygon (via <code>STEnvelope()</code>), and <code>"point"</code> returns a single point (via <code>STPointOnSurface()</code>) within each polygon.</p></dd>
+
+
 <dt>geom.src</dt>
 <dd><p>Either <code>mupolygon</code> (map unit polygons) or <code>sapolygon</code> (soil survey area boundary polygons)</p></dd>
+
+
 <dt>db</dt>
 <dd><p>Default: <code>"SSURGO"</code>. When <code>geom.src</code> is <code>mupolygon</code>, use STATSGO polygon geometry instead of SSURGO by setting <code>db = "STATSGO"</code></p></dd>
+
+
 <dt>add.fields</dt>
 <dd><p>Column names from <code>mapunit</code> or <code>legend</code> table to add to result. Must specify parent table name as the prefix before column name e.g. <code>mapunit.muname</code>.</p></dd>
+
+
 <dt>chunk.size</dt>
 <dd><p>Number of values of <code>x</code> to process per query. Necessary for large results. Default: <code>10</code></p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Print messages?</p></dd>
+
+
 <dt>as_Spatial</dt>
 <dd><p>Return sp classes? e.g. <code>Spatial*DataFrame</code>. Default: <code>FALSE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>an <code>sf</code> data.frame corresponding to SDA spatial data for all symbols requested. If <code>as_Spatial=TRUE</code> returns a <code>Spatial*DataFrame</code> from the sp package via <code><a href="https://r-spatial.github.io/sf/reference/coerce-methods.html" class="external-link">sf::as_Spatial()</a></code> for backward compatibility. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with <code>add.fields</code>.</p>
+    
+
+<p>an <code>sf</code> data.frame corresponding to SDA spatial data for all symbols requested. If <code>as_Spatial=TRUE</code> returns a <code>Spatial*DataFrame</code> from the sp package via <code><a href="https://r-spatial.github.io/sf/reference/coerce-methods.html" class="external-link">sf::as_Spatial()</a></code> for backward compatibility. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with <code>add.fields</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -109,31 +128,38 @@ A Soil Data Access query returns geometry and key identifying information about 
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
 <span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"curl"</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span class="r-in">   <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/nslookup.html" class="external-link">has_internet</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"></span>
-<span class="r-in">   <span class="co"># get spatial data for a single mukey</span></span>
-<span class="r-in">    <span class="va">single.mukey</span> <span class="op">&lt;-</span> <span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2924882"</span><span class="op">)</span></span>
+<span class="r-in"> </span>
+<span class="r-in">    <span class="co"># get spatial data for a single mukey</span></span>
+<span class="r-in">    <span class="va">single.mukey</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2924882"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in">    <span class="co"># demonstrate fetching full extent (multi-mukey) of national musym</span></span>
-<span class="r-in">    <span class="va">full.extent.nmusym</span> <span class="op">&lt;-</span> <span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2x8l5"</span>, by <span class="op">=</span> <span class="st">"nmusym"</span><span class="op">)</span></span>
+<span class="r-in">    <span class="va">full.extent.nmusym</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2x8l5"</span>, by <span class="op">=</span> <span class="st">"nmusym"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in">    <span class="co"># compare extent of nmusym to single mukey within it</span></span>
-<span class="r-in">    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">     <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">full.extent.nmusym</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"RED"</span>, border <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span class="r-in">     <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">single.mukey</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">"BLUE"</span>, border <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span class="r-in">    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">single.mukey</span>, <span class="st">'try-error'</span><span class="op">)</span> <span class="op">&amp;&amp;</span> </span>
+<span class="r-in">        <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">full.extent.nmusym</span>, <span class="st">'try-error'</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">        </span>
+<span class="r-in">        <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">      </span>
+<span class="r-in">         <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">full.extent.nmusym</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"RED"</span>, border <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span class="r-in">         <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">single.mukey</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">"BLUE"</span>, border <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span class="r-in">       </span>
+<span class="r-in">        <span class="op">}</span></span>
+<span class="r-in">        </span>
 <span class="r-in">    <span class="op">}</span></span>
 <span class="r-in"></span>
 <span class="r-in">    <span class="co"># demo adding a field (`muname`) to attribute table of result</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2x8l5"</span>, by<span class="op">=</span><span class="st">"nmusym"</span>, add.fields<span class="op">=</span><span class="st">"muname"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2x8l5"</span>, by<span class="op">=</span><span class="st">"nmusym"</span>, add.fields<span class="op">=</span><span class="st">"muname"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 chunks...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 1; 0.9 secs)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 0.9 secs; mean/chunk: 0.9 secs; mean/symbol: 0.92 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 0.9 secs; mean/chunk: 0.9 secs; mean/symbol: 0.87 secs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 chunks...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 3; 0.9 secs)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 1.1 secs; mean/chunk: 0.9 secs; mean/symbol: 0.37 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 1.1 secs; mean/chunk: 0.9 secs; mean/symbol: 0.35 secs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 chunks...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 3; 0.6 secs)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 0.8 secs; mean/chunk: 0.6 secs; mean/symbol: 0.27 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 3; 0.7 secs)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 0.9 secs; mean/chunk: 0.7 secs; mean/symbol: 0.29 secs.</span>
 <span class="r-plt img"><img src="fetchSDA_spatial-1.png" alt="" width="768" height="475"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 6 features and 4 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
@@ -169,7 +195,7 @@ A Soil Data Access query returns geometry and key identifying information about 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

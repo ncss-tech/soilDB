@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
       </span>
     </div>
 
@@ -64,16 +64,25 @@
     <h2>Arguments</h2>
     <dl><dt>site.code</dt>
 <dd><p>a vector of site codes. If <code>NULL</code> <code>SCAN_site_metadata()</code> returns metadata for all SCAN sites.</p></dd>
+
+
 <dt>year</dt>
 <dd><p>a vector of years</p></dd>
+
+
 <dt>report</dt>
 <dd><p>report name, single value only</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional arguments (not used)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>data.frame</code> object; <code>NULL</code> on bad request.</p>
+    
+
+<p>a <code>data.frame</code> object; <code>NULL</code> on bad request.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -99,7 +108,7 @@
 <span class="r-in">    <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/nslookup.html" class="external-link">has_internet</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"></span>
 <span class="r-in">    <span class="co"># get data</span></span>
-<span class="r-in">    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">fetchSCAN</span><span class="op">(</span>site.code<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">356</span>, <span class="fl">2072</span><span class="op">)</span>, year<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2015</span>, <span class="fl">2016</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">    <span class="va">x</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSCAN</span><span class="op">(</span>site.code<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">356</span>, <span class="fl">2072</span><span class="op">)</span>, year<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2015</span>, <span class="fl">2016</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in">    <span class="co"># get sensor metadata</span></span>
@@ -215,7 +224,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
