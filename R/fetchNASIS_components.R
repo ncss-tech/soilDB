@@ -7,9 +7,11 @@
                                    nullFragsAreZero = TRUE,
                                    fill = FALSE,
                                    stringsAsFactors = NULL,
-                                   dsn = NULL) {
+                                   dsn = NULL,
+                                   dropAdditional = TRUE,
+                                   dropNotRepresentative = TRUE,
+                                   duplicates = FALSE) {
 
-  
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
@@ -22,23 +24,9 @@
   
   # optionally legend and mapunit information are included if in local DB/selected set
   #   includes possible results for rep and non-rep DMUs and any mustatus
-  f.lg         <- get_legend_from_NASIS(SS = SS, dsn = dsn)
-  mu.q <- "SELECT ng.grpname, liid, lmapunitiid, lmapunitiid AS mukey, areatypename,
-           nationalmusym, muiid, musym, muname, mukind, mutype, muacres, mustatus,
-           dmuinvesintens, farmlndcl, dmuiid, repdmu 
-           FROM area a 
-            INNER JOIN areatype at ON at.areatypeiid = a.areatypeiidref
-            INNER JOIN legend_View_1 l ON l.areaiidref = a.areaiid 
-            INNER JOIN lmapunit_View_1 lmu ON lmu.liidref = l.liid 
-            INNER JOIN mapunit_View_1 mu ON mu.muiid = lmu.muiidref
-            INNER JOIN nasisgroup ng ON ng.grpiid = mu.grpiidref
-            INNER JOIN correlation_View_1 cor ON cor.muiidref = mu.muiid
-            INNER JOIN datamapunit_View_1 dmu ON dmu.dmuiid = cor.dmuiidref"
-  if (!SS) {
-    mu.q <- gsub("_View_1", "", mu.q)
+  if (duplicates) {
+    f.corr       <- get_component_correlation_data_from_NASIS_db(SS = SS, dsn = dsn, dropAdditional = dropAdditional, dropNotRepresentative = dropNotRepresentative)
   }
-  f.mu         <- uncode(dbQueryNASIS(NASIS(dsn = dsn), mu.q), dsn = dsn)
-  
   # load data in pieces
   f.comp       <- get_component_data_from_NASIS_db(SS = SS, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
@@ -81,8 +69,20 @@
   }
 
   if (nrow(f.chorizon) > 0) {
+    if (duplicates) {
+      f.chorizon <- merge(f.chorizon, f.comp[,c("coiid","dmuiid")], by = "coiid", all.x = TRUE, all.y = TRUE, sort = FALSE)
+      f.chorizon <- merge(f.corr[,c("dmuiid","muiid","lmapunitiid")], f.chorizon, by = "dmuiid", all.x = TRUE, all.y = TRUE, sort = FALSE)
+      f.chorizon$coiidref <- f.chorizon$coiid
+      f.chorizon$coiid <- paste0(f.chorizon$lmapunitiid, ":", f.chorizon$muiid, ":", f.chorizon$dmuiid, ":", f.chorizon$coiid)
+    }
+    
     # upgrade to SoilProfilecollection
     depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
+    
+    if (duplicates) {
+      site(f.chorizon) <- ~ dmuiid + muiid + lmapunitiid + coiidref
+    }
+    
   } else {
     stop("No horizon data in NASIS component query result.", call. = FALSE)
   }
@@ -90,16 +90,10 @@
   # add site data to object
   site(f.chorizon) <- f.comp # left-join via coiid
   
-  # add mapunit data to object if any
-  if (!is.null(f.mu) && nrow(f.mu) > 0) {
-    site(f.chorizon) <- f.mu # left-join via dmuiid
+  if (duplicates && !is.null(f.corr) && nrow(f.corr) > 0) {
+    site(f.chorizon) <- f.corr # left-join via dmuiid, muiid, lmapunitiid
   }
   
-  # add legend data to object if any
-  if (!is.null(f.lg) && nrow(f.lg) > 0) {
-    site(f.chorizon) <- f.lg # left-join via liid
-  }
-
   ## 2017-3-13: short-circuits need testing, consider pre-marking mistakes before parsing
   ## 2021-10-28: TODO: harmonize strategies for .formatXXXXString methods and ID variables
   .SD <- NULL

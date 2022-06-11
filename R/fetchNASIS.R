@@ -56,9 +56,11 @@
 #' @param lab should the `phlabresults` child table be fetched with
 #' site/pedon/horizon data (default: `FALSE`)
 #' @param fill include pedon or component records without horizon data in result? (default: `FALSE`)
+#' @param dropAdditional Used only for `from='components'` with `duplicates=TRUE`. Prevent "duplication" of `mustatus=="additional"`  mapunits? Default: `TRUE`
+#' @param dropNonRepresentative Used only for `from='components'` with `duplicates=TRUE`. Prevent "duplication" of non-representative data mapunits? Default: `TRUE`
+#' @param duplicates Used only for `from='components'`. Duplicate components for all instances of use (i.e. one for each legend data mapunit is used on; optionally for additional mapunits, and/or non-representative data mapunits?)
 #' @param stringsAsFactors deprecated
-#' @param dsn Optional: path to local SQLite database containing NASIS
-#' table structure; default: `NULL`
+#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
 #' @return A SoilProfileCollection object
 #' @seealso `get_component_data_from_NASIS()`
 #' @author D. E. Beaudette, J. M. Skovlin, S.M. Roecker, A.G. Brown
@@ -73,6 +75,9 @@ fetchNASIS <- function(from = 'pedons',
                        mixColors = TRUE,
                        lab = FALSE,
                        fill = FALSE,
+                       dropAdditional = TRUE,
+                       dropNonRepresentative = TRUE,
+                       duplicates = FALSE,
                        stringsAsFactors = NULL,
                        dsn = NULL) {
 
@@ -114,7 +119,10 @@ fetchNASIS <- function(from = 'pedons',
                                   rmHzErrors = rmHzErrors,
                                   nullFragsAreZero = nullFragsAreZero,
                                   fill = fill,
-                                  dsn = dsn)
+                                  dsn = dsn,
+                                  dropAdditional = dropAdditional,
+                                  dropNotRepresentative = dropNonRepresentative,
+                                  duplicates = duplicates)
   }
 
   if (from == 'pedon_report') {
