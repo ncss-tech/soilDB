@@ -5,6 +5,7 @@ library(sf)
 # need latest sharpshootR from GH
 library(sharpshootR)
 
+library(SoilTaxonomy)
 
 ## copy / paste viewport bounding-box from SoilWeb
 ## click somewhere on the map
@@ -29,6 +30,8 @@ library(sharpshootR)
 # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=45.90325,-86.56538,z16
 bb <- '-86.5810 45.8964,-86.5810 45.9107,-86.5481 45.9107,-86.5481 45.8964,-86.5810 45.8964'
 
+# Asheville, NC
+bb <- '-82.5218 35.5270,-82.5218 35.5354,-82.5047 35.5354,-82.5047 35.5270,-82.5218 35.5270'
 
 ## assemble AOI polygon into WKT
 wkt <- sprintf('POLYGON((%s))', bb)
@@ -52,7 +55,7 @@ sql <- sprintf(
   "SELECT mukey, cokey, compname, compkind, comppct_r 
   FROM component 
   WHERE mukey IN %s 
-  AND majcompflag = 'Yes'
+  -- AND majcompflag = 'Yes'
   AND compkind != 'Miscellaneous area'
   ", format_SQL_in_statement(as.integer(m$mukey))
 )
@@ -95,6 +98,32 @@ SoilTaxonomyDendrogram(
   axis.line.offset = -3,
   hz.distinctness.offset = 'hzd'
 )
+
+## arrange according to classification, accounting for order within keys
+data("ST_unique_list")
+
+osd$SPC$soilorder <- droplevels(factor(osd$SPC$soilorder, levels = ST_unique_list$order, ordered = TRUE))
+osd$SPC$suborder <- droplevels(factor(osd$SPC$suborder, levels = ST_unique_list$suborder, ordered = TRUE))
+osd$SPC$greatgroup <- droplevels(factor(osd$SPC$greatgroup, levels = ST_unique_list$greatgroup, ordered = TRUE))
+osd$SPC$subgroup <- droplevels(factor(osd$SPC$subgroup, levels = ST_unique_list$subgroup, ordered = TRUE))
+
+## better with default rotation applied
+
+SoilTaxonomyDendrogram(
+  spc = osd$SPC, 
+  y.offset = 0.4, 
+  rotationOrder = profile_id(osd$SPC)[order(osd$SPC$subgroup)],
+  scaling.factor = 0.014, 
+  cex.taxon.labels = 0.75,
+  cex.id = 0.85,
+  cex.names = 0.75,
+  width = 0.3, 
+  name.style = 'center-center', 
+  plot.depth.axis = TRUE,
+  axis.line.offset = -3.5,
+  hz.distinctness.offset = 'hzd'
+)
+
 
 
 ## 3D geomorphic summary
