@@ -32,6 +32,11 @@ bb <- '-86.5810 45.8964,-86.5810 45.9107,-86.5481 45.9107,-86.5481 45.8964,-86.5
 
 # Asheville, NC
 bb <- '-82.5218 35.5270,-82.5218 35.5354,-82.5047 35.5354,-82.5047 35.5270,-82.5218 35.5270'
+bb <- '-82.3652 35.4593,-82.3652 35.4929,-82.2971 35.4929,-82.2971 35.4593,-82.3652 35.4593'
+
+# Hendersonville, NC
+bb <- '-82.4952 35.3743,-82.4952 35.4079,-82.4271 35.4079,-82.4271 35.3743,-82.4952 35.3743'
+
 
 ## assemble AOI polygon into WKT
 wkt <- sprintf('POLYGON((%s))', bb)
@@ -55,7 +60,7 @@ sql <- sprintf(
   "SELECT mukey, cokey, compname, compkind, comppct_r 
   FROM component 
   WHERE mukey IN %s 
-  -- AND majcompflag = 'Yes'
+  --AND majcompflag = 'Yes'
   AND compkind != 'Miscellaneous area'
   ", format_SQL_in_statement(as.integer(m$mukey))
 )
@@ -220,10 +225,13 @@ mtext('Probability', side = 2, line = -2, font = 2)
 ## TODO: encode Shannon entropy
 par(mar = c(0.5, 0, 0, 2))
 layout(matrix(c(1,2)), widths = c(1,1), heights = c(2,1))
-plotProfileDendrogram(sub, res$clust, dend.y.scale = 3, scaling.factor = 0.012, y.offset = 0.2, width = 0.32, name.style = 'center-center', cex.names = 0.7, shrink = TRUE, cex.id = 0.55)
+plotProfileDendrogram(sub, res$clust, dend.y.scale = 3, scaling.factor = 0.012, y.offset = 0.2, width = 0.32, name.style = 'center-center', cex.names = 0.7, shrink = TRUE, cex.id = 0.55, hz.distinctness.offset = 'hzd')
 
 sp <- c(1.5, rep(1, times = length(sub) - 1))
 barplot(height = t(as.matrix(hp[, 2:6])), beside = FALSE, width = 0.5, space = sp, col = hp.cols,  axes = FALSE, xlab = '', ylab = '', xlim = c(0.5, length(sub) + 1), ylim = c(0, 1.2))
+
+idx <- match(hp$series, profile_id(sub))
+text(x = (1:nrow(hp)) + 0.4, y = 0.5, labels = sub$subgroup[idx], cex = 0.75, srt = 90, font = 2)
 
 legend(x = 0.75, y = 1.2, legend = rev(nm), col = rev(hp.cols), pch = 15, bty = 'n', cex = 0.8, pt.cex = 1.25, horiz = TRUE)
 mtext('Probability', side = 2, line = -2, font = 2)
