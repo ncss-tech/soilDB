@@ -83,45 +83,40 @@
 <span class="r-in"><span class="co"># get some mukeys</span></span>
 <span class="r-in"><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"select top(2) mukey from mapunit;"</span></span>
 <span class="r-in"><span class="va">mukeys</span> <span class="op">&lt;-</span> <span class="fu"><a href="SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Service UnavailableService UnavailableHTTP Error 503. The service is unavailable.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># format for use in an SQL IN statement</span></span>
 <span class="r-in"><span class="va">mukey.inst</span> <span class="op">&lt;-</span> <span class="fu">format_SQL_in_statement</span><span class="op">(</span><span class="va">mukeys</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in mukeys$mukey:</span> $ operator is invalid for atomic vectors</span>
 <span class="r-in"><span class="va">mukey.inst</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'mukey.inst' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "('2648889','2648890')"</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># make a more specific query: for component+horizon data, just for those mukeys</span></span>
 <span class="r-in"><span class="va">q2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM mapunit</span>
 <span class="r-in">               INNER JOIN component ON mapunit.mukey = component.mukey</span>
 <span class="r-in">               INNER JOIN chorizon ON component.cokey = chorizon.cokey</span>
 <span class="r-in">               WHERE mapunit.mukey IN %s;"</span>, <span class="va">mukey.inst</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in sprintf("SELECT * FROM mapunit\n               INNER JOIN component ON mapunit.mukey = component.mukey\n               INNER JOIN chorizon ON component.cokey = chorizon.cokey\n               WHERE mapunit.mukey IN %s;",     mukey.inst):</span> object 'mukey.inst' not found</span>
 <span class="r-in"><span class="co"># do the query</span></span>
 <span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q2</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in SDA_query(q2):</span> object 'q2' not found</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># build a SoilProfileCollection from horizon-level records</span></span>
 <span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cokey</span> <span class="op">~</span> <span class="va">hzdept_r</span> <span class="op">+</span> <span class="va">hzdepb_r</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in depths(res) &lt;- cokey ~ hzdept_r + hzdepb_r:</span> object 'res' not found</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> converting profile IDs from integer to character</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># normalize mapunit/component level attributes to site-level for plot</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/site.html" class="external-link">site</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">muname</span> <span class="op">+</span> <span class="va">mukey</span> <span class="op">+</span> <span class="va">compname</span> <span class="op">+</span> <span class="va">comppct_r</span> <span class="op">+</span> <span class="va">taxclname</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in site(res) &lt;- ~muname + mukey + compname + comppct_r + taxclname:</span> object 'res' not found</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># make a nice label</span></span>
 <span class="r-in"><span class="va">res</span><span class="op">$</span><span class="va">labelname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s (%s%s)"</span>, <span class="va">res</span><span class="op">$</span><span class="va">compname</span>, <span class="va">res</span><span class="op">$</span><span class="va">comppct_r</span>, <span class="st">"%"</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in sprintf("%s (%s%s)", res$compname, res$comppct_r, "%"):</span> object 'res' not found</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># major components only</span></span>
 <span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">res</span>, <span class="va">comppct_r</span> <span class="op">&gt;=</span> <span class="fl">85</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'subset': object 'res' not found</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># inspect plot of result</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/groupedProfilePlot.html" class="external-link">groupedProfilePlot</a></span><span class="op">(</span><span class="va">res</span>, groups <span class="op">=</span> <span class="st">"mukey"</span>, color <span class="op">=</span> <span class="st">"hzname"</span>, cex.names<span class="op">=</span><span class="fl">0.8</span>,</span>
 <span class="r-in">                   id.style <span class="op">=</span> <span class="st">"side"</span>, label <span class="op">=</span> <span class="st">"labelname"</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'object' in selecting a method for function 'siteNames': object 'res' not found</span>
+<span class="r-plt img"><img src="format_SQL_in_statement-1.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span class="co"># }</span></span>
 <span class="r-in"></span>
 </code></pre></div>
