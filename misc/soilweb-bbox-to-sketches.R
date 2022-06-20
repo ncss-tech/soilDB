@@ -89,6 +89,11 @@ osd$SPC$hzd <- hzDistinctnessCodeToOffset(
   codes = c('very abrupt', 'abrubt', 'clear', 'gradual', 'diffuse')
 )
 
+
+
+## TODO: latest SoilTaxonomy + sharpshootR packages do this via argument
+
+
 ## arrange sketches according to soil classification
 SoilTaxonomyDendrogram(
   osd$SPC, 
@@ -113,6 +118,20 @@ osd$SPC$greatgroup <- droplevels(factor(osd$SPC$greatgroup, levels = ST_unique_l
 osd$SPC$subgroup <- droplevels(factor(osd$SPC$subgroup, levels = ST_unique_list$subgroup, ordered = TRUE))
 
 ## better with default rotation applied
+
+SoilTaxonomyDendrogram(
+  spc = osd$SPC, 
+  y.offset = 0.4, 
+  scaling.factor = 0.014, 
+  cex.taxon.labels = 0.75,
+  cex.id = 0.85,
+  cex.names = 0.75,
+  width = 0.3, 
+  name.style = 'center-center', 
+  plot.depth.axis = TRUE,
+  axis.line.offset = -3.5,
+  hz.distinctness.offset = 'hzd'
+)
 
 SoilTaxonomyDendrogram(
   spc = osd$SPC, 
