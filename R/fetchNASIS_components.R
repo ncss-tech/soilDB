@@ -68,19 +68,33 @@
     assign('component.hz.problems', value = bad.ids, envir = soilDB.env)
   }
 
+  # diagnostics and restrictions
+  # 2021-11-30: subset to hide aqp warnings for <- methods
+  f.diaghz2 <- f.diaghz[which(f.diaghz$coiid %in% f.chorizon$coiid),]
+  f.restrict2 <- f.restrict[which(f.restrict$coiid %in% f.chorizon$coiid),]
+  
   if (nrow(f.chorizon) > 0) {
     if (duplicates) {
       f.chorizon <- merge(f.chorizon, f.comp[,c("coiid","dmuiid")], by = "coiid", all.x = TRUE, all.y = TRUE, sort = FALSE)
-      f.chorizon <- merge(f.corr[,c("dmuiid","muiid","lmapunitiid")], f.chorizon, by = "dmuiid", all.x = TRUE, all.y = TRUE, sort = FALSE)
-      f.chorizon$coiidref <- f.chorizon$coiid
-      f.chorizon$coiid <- paste0(f.chorizon$lmapunitiid, ":", f.chorizon$muiid, ":", f.chorizon$dmuiid, ":", f.chorizon$coiid)
+      f.chorizon <- merge(f.corr[,c("dmuiid","muiid","lmapunitiid")], f.chorizon, all.y = TRUE, by = "dmuiid", sort = FALSE)
+      f.chorizon$coiidcmb <- paste0(f.chorizon$lmapunitiid, ":", f.chorizon$muiid, ":", f.chorizon$dmuiid, ":", f.chorizon$coiid)
+      
+      f.diaghz2 <- merge(f.diaghz2, f.comp[,c("coiid","dmuiid")], by = "coiid", all.x = TRUE, all.y = TRUE, sort = FALSE)
+      f.diaghz2 <- merge(f.corr[,c("dmuiid","muiid","lmapunitiid")], f.diaghz2, all.y = TRUE, by = "dmuiid", sort = FALSE)
+      f.diaghz2$coiidcmb <- paste0(f.diaghz2$lmapunitiid, ":", f.diaghz2$muiid, ":", f.diaghz2$dmuiid, ":", f.diaghz2$coiid)
+      
+      f.restrict2 <- merge(f.restrict2, f.comp[,c("coiid","dmuiid")], by = "coiid", all.x = TRUE, all.y = TRUE, sort = FALSE)
+      f.restrict2 <- merge(f.corr[,c("dmuiid","muiid","lmapunitiid")], f.restrict2, all.y = TRUE, by = "dmuiid", sort = FALSE)
+      f.restrict2$coiidcmb <- paste0(f.restrict2$lmapunitiid, ":", f.restrict2$muiid, ":", f.restrict2$dmuiid, ":", f.restrict2$coiid)
     }
     
-    # upgrade to SoilProfilecollection
-    depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
-    
     if (duplicates) {
-      site(f.chorizon) <- ~ dmuiid + muiid + lmapunitiid + coiidref
+      # use combined coiid (lmapunitiid, muiid, dmuiid, coiid) under name coiidcmb
+      depths(f.chorizon) <- coiidcmb ~ hzdept_r + hzdepb_r
+      site(f.chorizon) <- ~ dmuiid + muiid + lmapunitiid + coiid
+    } else {
+      # upgrade to SoilProfilecollection
+      depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
     }
     
   } else {
@@ -93,6 +107,10 @@
   if (duplicates && !is.null(f.corr) && nrow(f.corr) > 0) {
     site(f.chorizon) <- f.corr # left-join via dmuiid, muiid, lmapunitiid
   }
+  
+  # add diagnostic features and restrictions to SPC
+  diagnostic_hz(f.chorizon) <- f.diaghz2
+  restrictions(f.chorizon) <- f.restrict2
   
   ## 2017-3-13: short-circuits need testing, consider pre-marking mistakes before parsing
   ## 2021-10-28: TODO: harmonize strategies for .formatXXXXString methods and ID variables
@@ -125,14 +143,6 @@
   if (nrow(ov) > 0) {
     site(f.chorizon) <- ov
   }
-  # 2021-11-30: subset to hide aqp warnings for <- methods
-  
-  # add diagnostic features to SPC
-  diagnostic_hz(f.chorizon) <- f.diaghz[which(f.diaghz$coiid %in% f.chorizon$coiid),]
-
-  # add restrictions to SPC
-  # required new setter in aqp SPC object (AGB added 2019/12/23)
-  restrictions(f.chorizon) <- f.restrict[which(f.restrict$coiid %in% f.chorizon$coiid),]
 
   # print any messages on possible data quality problems:
   if (exists('component.hz.problems', envir = soilDB.env)) {
