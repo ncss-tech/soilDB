@@ -100,6 +100,8 @@ get_OSD <- function(series, base_url = NULL, result = c("json","html","txt"), ve
   })
 }
 
+#' @export
+#' @rdname get_OSD
 get_OSD_JSON <- function(series, base_url = NULL) {
   # .Deprecated("get_OSD")
   .get_OSD_JSON(series, base_url)

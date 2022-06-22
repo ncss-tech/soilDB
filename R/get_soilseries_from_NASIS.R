@@ -3,8 +3,6 @@
 #' These functions return records from the Soil Classification database, either
 #' from the local NASIS database (all series) or via web report (named series
 #' only).
-#'
-#' @aliases get_soilseries_from_NASIS get_soilseries_from_NASISWebReport
 #' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
@@ -17,7 +15,7 @@
 #'
 #' @keywords manip
 #'
-#' @export get_soilseries_from_NASIS
+#' @export
 get_soilseries_from_NASIS <- function(stringsAsFactors = NULL,
                                       dsn = NULL, delimiter = " over ") {
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
@@ -76,6 +74,9 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = NULL,
                 "areaacres", "obterm", "areatypename")])
 }
 
+#' @param soils A vector of soil series names
+#' @rdname get_soilseries_from_NASIS
+#' @export
 get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = NULL) {
 
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {

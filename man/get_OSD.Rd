@@ -11,6 +11,8 @@ get_OSD(
   result = c("json", "html", "txt"),
   verbose = FALSE
 )
+
+get_OSD_JSON(series, base_url = NULL)
 }
 \arguments{
 \item{series}{A character vector of Official Series names e.g. \code{"Chewacla"}}

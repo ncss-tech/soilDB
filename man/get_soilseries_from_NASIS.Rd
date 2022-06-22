@@ -10,6 +10,8 @@ get_soilseries_from_NASIS(
   dsn = NULL,
   delimiter = " over "
 )
+
+get_soilseries_from_NASISWebReport(soils, stringsAsFactors = NULL)
 }
 \arguments{
 \item{stringsAsFactors}{deprecated}
@@ -18,6 +20,8 @@ get_soilseries_from_NASIS(
 table structure; default: \code{NULL}}
 
 \item{delimiter}{\emph{character}. Used to collapse \code{taxminalogy} records where multiple values are used to describe strongly contrasting control sections. Default \code{" over "} creates combination mineralogy classes as they would be used in the family name.}
+
+\item{soils}{A vector of soil series names}
 }
 \value{
 A \code{data.frame}
