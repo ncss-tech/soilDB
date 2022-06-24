@@ -573,7 +573,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
     d.chorizon <- within(d.chorizon, {
       nationalmusym = NULL
       texture = tolower(texture)
-      if (getOption("stringsAsFactors", default = FALSE)) {
+      if (getOption("stringsAsFactors", default = FALSE) || getOption("soilDB.NASIS.DomainsAsFactor", default = FALSE)) {
         texcl = factor(texcl, levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceLabel"])
       }
       if (droplevels == droplevels && is.factor(texcl)) {
