@@ -1,3 +1,9 @@
+# soilDB 2.7.2 (2022-06-24)
+
+ * `fetchNASIS("components')`: Fix and refactor ( **breaking change** from 2.7.1, which introduced a bug/inconsistency) of recent change; `duplicates` argument is now _required_ to merge in data from mapunit/legend tables (where many:1 relationships between legend/mapunit and datamapunit are possible). In 2.7.1 possibly incomplete mapunit/legend tables could be joined to SoilProfileCollection result (if and only if the tables were populated in selected set/local DB). Does not change historic (<=2.7.0) default behavior. Thanks to @dylanbeaudette for suggesting use of `get_component_correlation_data_from_NASIS_db()` here.
+
+ * Several fixes for Roxygen documentation (notably for `ROSETTA()` and various NASIS web report related functions) that were missing `@export` tags. Several previously-exported functions missed being explicitly exported in the new Roxygen-generate NAMESPACE. These unintentional omissions from 2.7.1 NAMESPACE have been resolved.
+ 
 # soilDB 2.7.1 (2022-06-10)
    - `get_SDA_coecoclass()` better handling of `NULL` `ecoclassref`; support for filtering on `ecoclasstypename`; `not_assigned_value` now applies to `ecoclassname`, `ecoclasstypename` and `ecoclassref` columns in addition to `ecoclassid`; Thanks to Andy Paolucci and Jason Nemecek. Also, added additional columns from legend/mapunit tables (`areasymbol`, `lkey`, `muname`).
    - `fetchNASIS(from="components")` now returns mapunit and legend information (if loaded in local NASIS database); results now contain `mustatus` and `repdmu` which can be used to remove components from additional mapunits and non-representative data mapunits; thanks to Nathan Roe
