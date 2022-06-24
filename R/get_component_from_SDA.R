@@ -545,7 +545,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
   "INNER JOIN
    component    c    ON c.mukey      = mu.mukey   LEFT JOIN
    chorizon     ch   ON ch.cokey     = c.cokey    LEFT OUTER JOIN
-   chtexturegrp chtg ON chtg.chkey   = ch.chkey AND rvindicator = 'Yes' LEFT JOIN
+   chtexturegrp chtg ON chtg.chkey   = ch.chkey AND rvindicator = 'Yes' RIGHT JOIN
    chtexture    cht  ON cht.chtgkey  = chtg.chtgkey
 
    LEFT OUTER JOIN
