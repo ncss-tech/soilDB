@@ -7,9 +7,11 @@
                                    nullFragsAreZero = TRUE,
                                    fill = FALSE,
                                    stringsAsFactors = NULL,
-                                   dsn = NULL) {
+                                   dsn = NULL,
+                                   dropAdditional = TRUE,
+                                   dropNotRepresentative = TRUE,
+                                   duplicates = FALSE) {
 
-  
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
@@ -22,23 +24,9 @@
   
   # optionally legend and mapunit information are included if in local DB/selected set
   #   includes possible results for rep and non-rep DMUs and any mustatus
-  f.lg         <- get_legend_from_NASIS(SS = SS, dsn = dsn)
-  mu.q <- "SELECT ng.grpname, liid, lmapunitiid, lmapunitiid AS mukey, areatypename,
-           nationalmusym, muiid, musym, muname, mukind, mutype, muacres, mustatus,
-           dmuinvesintens, farmlndcl, dmuiid, repdmu 
-           FROM area a 
-            INNER JOIN areatype at ON at.areatypeiid = a.areatypeiidref
-            INNER JOIN legend_View_1 l ON l.areaiidref = a.areaiid 
-            INNER JOIN lmapunit_View_1 lmu ON lmu.liidref = l.liid 
-            INNER JOIN mapunit_View_1 mu ON mu.muiid = lmu.muiidref
-            INNER JOIN nasisgroup ng ON ng.grpiid = mu.grpiidref
-            INNER JOIN correlation_View_1 cor ON cor.muiidref = mu.muiid
-            INNER JOIN datamapunit_View_1 dmu ON dmu.dmuiid = cor.dmuiidref"
-  if (!SS) {
-    mu.q <- gsub("_View_1", "", mu.q)
+  if (duplicates) {
+    f.corr       <- get_component_correlation_data_from_NASIS_db(SS = SS, dsn = dsn, dropAdditional = dropAdditional, dropNotRepresentative = dropNotRepresentative)
   }
-  f.mu         <- uncode(dbQueryNASIS(NASIS(dsn = dsn), mu.q), dsn = dsn)
-  
   # load data in pieces
   f.comp       <- get_component_data_from_NASIS_db(SS = SS, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
   f.chorizon   <- get_component_horizon_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn, nullFragsAreZero = nullFragsAreZero)
@@ -80,9 +68,35 @@
     assign('component.hz.problems', value = bad.ids, envir = soilDB.env)
   }
 
+  # diagnostics and restrictions
+  # 2021-11-30: subset to hide aqp warnings for <- methods
+  f.diaghz2 <- f.diaghz[which(f.diaghz$coiid %in% f.chorizon$coiid),]
+  f.restrict2 <- f.restrict[which(f.restrict$coiid %in% f.chorizon$coiid),]
+  
   if (nrow(f.chorizon) > 0) {
-    # upgrade to SoilProfilecollection
-    depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
+    if (duplicates) {
+      f.chorizon <- merge(f.chorizon, f.comp[,c("coiid","dmuiid")], by = "coiid", all.x = TRUE, all.y = TRUE, sort = FALSE)
+      f.chorizon <- merge(f.corr[,c("dmuiid","muiid","lmapunitiid")], f.chorizon, all.y = TRUE, by = "dmuiid", sort = FALSE)
+      f.chorizon$coiidcmb <- paste0(f.chorizon$lmapunitiid, ":", f.chorizon$muiid, ":", f.chorizon$dmuiid, ":", f.chorizon$coiid)
+      
+      f.diaghz2 <- merge(f.diaghz2, f.comp[,c("coiid","dmuiid")], by = "coiid", all.x = TRUE, all.y = TRUE, sort = FALSE)
+      f.diaghz2 <- merge(f.corr[,c("dmuiid","muiid","lmapunitiid")], f.diaghz2, all.y = TRUE, by = "dmuiid", sort = FALSE)
+      f.diaghz2$coiidcmb <- paste0(f.diaghz2$lmapunitiid, ":", f.diaghz2$muiid, ":", f.diaghz2$dmuiid, ":", f.diaghz2$coiid)
+      
+      f.restrict2 <- merge(f.restrict2, f.comp[,c("coiid","dmuiid")], by = "coiid", all.x = TRUE, all.y = TRUE, sort = FALSE)
+      f.restrict2 <- merge(f.corr[,c("dmuiid","muiid","lmapunitiid")], f.restrict2, all.y = TRUE, by = "dmuiid", sort = FALSE)
+      f.restrict2$coiidcmb <- paste0(f.restrict2$lmapunitiid, ":", f.restrict2$muiid, ":", f.restrict2$dmuiid, ":", f.restrict2$coiid)
+    }
+    
+    if (duplicates) {
+      # use combined coiid (lmapunitiid, muiid, dmuiid, coiid) under name coiidcmb
+      depths(f.chorizon) <- coiidcmb ~ hzdept_r + hzdepb_r
+      site(f.chorizon) <- ~ dmuiid + muiid + lmapunitiid + coiid
+    } else {
+      # upgrade to SoilProfilecollection
+      depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
+    }
+    
   } else {
     stop("No horizon data in NASIS component query result.", call. = FALSE)
   }
@@ -90,16 +104,14 @@
   # add site data to object
   site(f.chorizon) <- f.comp # left-join via coiid
   
-  # add mapunit data to object if any
-  if (!is.null(f.mu) && nrow(f.mu) > 0) {
-    site(f.chorizon) <- f.mu # left-join via dmuiid
+  if (duplicates && !is.null(f.corr) && nrow(f.corr) > 0) {
+    site(f.chorizon) <- f.corr # left-join via dmuiid, muiid, lmapunitiid
   }
   
-  # add legend data to object if any
-  if (!is.null(f.lg) && nrow(f.lg) > 0) {
-    site(f.chorizon) <- f.lg # left-join via liid
-  }
-
+  # add diagnostic features and restrictions to SPC
+  diagnostic_hz(f.chorizon) <- f.diaghz2
+  restrictions(f.chorizon) <- f.restrict2
+  
   ## 2017-3-13: short-circuits need testing, consider pre-marking mistakes before parsing
   ## 2021-10-28: TODO: harmonize strategies for .formatXXXXString methods and ID variables
   .SD <- NULL
@@ -131,14 +143,6 @@
   if (nrow(ov) > 0) {
     site(f.chorizon) <- ov
   }
-  # 2021-11-30: subset to hide aqp warnings for <- methods
-  
-  # add diagnostic features to SPC
-  diagnostic_hz(f.chorizon) <- f.diaghz[which(f.diaghz$coiid %in% f.chorizon$coiid),]
-
-  # add restrictions to SPC
-  # required new setter in aqp SPC object (AGB added 2019/12/23)
-  restrictions(f.chorizon) <- f.restrict[which(f.restrict$coiid %in% f.chorizon$coiid),]
 
   # print any messages on possible data quality problems:
   if (exists('component.hz.problems', envir = soilDB.env)) {

@@ -180,7 +180,7 @@ get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  q <- "SELECT lmapunitiid, mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
+  q <- "SELECT lmapunitiid, lmapunitiid AS mukey, mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
 
   FROM  mapunit_View_1 AS mu
 
