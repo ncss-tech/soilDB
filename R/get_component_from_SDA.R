@@ -566,7 +566,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
   # hacks to make R CMD check --as-cran happy:
   metadata <- NULL
   # load local copy of metadata
-  load(system.file("data/metadata.rda", package="soilDB")[1])
+  load(system.file("data/metadata.rda", package = "soilDB")[1])
 
   # transform variables and metadata
   if (!is.null(d.chorizon) && nrow(d.chorizon) > 0){
@@ -574,7 +574,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
       nationalmusym = NULL
       texture = tolower(texture)
       if (getOption("stringsAsFactors", default = FALSE)) {
-        texcl = factor(tolower(texcl), levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"])
+        texcl = factor(texcl, levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceLabel"])
       }
       if (droplevels == droplevels && is.factor(texcl)) {
         texcl = droplevels(texcl)
