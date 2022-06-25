@@ -55,58 +55,58 @@ Access, and create soil profile collection objects (SPC).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_component_from_SDA</span><span class="op">(</span>
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  duplicates <span class="op">=</span> <span class="cn">FALSE</span>,
-  childs <span class="op">=</span> <span class="cn">TRUE</span>,
-  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">get_cointerp_from_SDA</span><span class="op">(</span>
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  mrulename <span class="op">=</span> <span class="cn">NULL</span>,
-  duplicates <span class="op">=</span> <span class="cn">FALSE</span>,
-  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">get_legend_from_SDA</span><span class="op">(</span>WHERE <span class="op">=</span> <span class="cn">NULL</span>, droplevels <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">get_lmuaoverlap_from_SDA</span><span class="op">(</span>
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">get_mapunit_from_SDA</span><span class="op">(</span>WHERE <span class="op">=</span> <span class="cn">NULL</span>, droplevels <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">get_chorizon_from_SDA</span><span class="op">(</span>
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  duplicates <span class="op">=</span> <span class="cn">FALSE</span>,
-  childs <span class="op">=</span> <span class="cn">TRUE</span>,
-  nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>,
-  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">fetchSDA</span><span class="op">(</span>
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  duplicates <span class="op">=</span> <span class="cn">FALSE</span>,
-  childs <span class="op">=</span> <span class="cn">TRUE</span>,
-  nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>,
-  rmHzErrors <span class="op">=</span> <span class="cn">FALSE</span>,
-  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">get_cosoilmoist_from_SDA</span><span class="op">(</span>
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  duplicates <span class="op">=</span> <span class="cn">FALSE</span>,
-  impute <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_component_from_SDA</span><span class="op">(</span></span>
+<span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  duplicates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  childs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_cointerp_from_SDA</span><span class="op">(</span></span>
+<span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mrulename <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  duplicates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_legend_from_SDA</span><span class="op">(</span>WHERE <span class="op">=</span> <span class="cn">NULL</span>, droplevels <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_lmuaoverlap_from_SDA</span><span class="op">(</span></span>
+<span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_mapunit_from_SDA</span><span class="op">(</span>WHERE <span class="op">=</span> <span class="cn">NULL</span>, droplevels <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_chorizon_from_SDA</span><span class="op">(</span></span>
+<span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  duplicates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  childs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">fetchSDA</span><span class="op">(</span></span>
+<span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  duplicates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  childs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rmHzErrors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_cosoilmoist_from_SDA</span><span class="op">(</span></span>
+<span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  duplicates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  impute <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -201,7 +201,7 @@ values should be interpreted as 0.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -53,18 +53,18 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">make_EDIT_service_URL</span><span class="op">(</span>
-  src <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"descriptions"</span>, <span class="st">"downloads"</span>, <span class="st">"plant-community-tables"</span>, <span class="st">"models"</span>, <span class="st">"keys"</span><span class="op">)</span>,
-  catalog <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"esd"</span>, <span class="st">"esg"</span><span class="op">)</span>,
-  geoUnit <span class="op">=</span> <span class="cn">NULL</span>,
-  ecoclass <span class="op">=</span> <span class="cn">NULL</span>,
-  landuse <span class="op">=</span> <span class="cn">NULL</span>,
-  state <span class="op">=</span> <span class="cn">NULL</span>,
-  community <span class="op">=</span> <span class="cn">NULL</span>,
-  key <span class="op">=</span> <span class="cn">NULL</span>,
-  endpoint <span class="op">=</span> <span class="cn">NULL</span>,
-  querystring <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_EDIT_service_URL</span><span class="op">(</span></span>
+<span>  src <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"descriptions"</span>, <span class="st">"downloads"</span>, <span class="st">"plant-community-tables"</span>, <span class="st">"models"</span>, <span class="st">"keys"</span><span class="op">)</span>,</span>
+<span>  catalog <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"esd"</span>, <span class="st">"esg"</span><span class="op">)</span>,</span>
+<span>  geoUnit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ecoclass <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  landuse <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  state <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  community <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  endpoint <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  querystring <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -127,46 +127,46 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># url for all geoUnit keys as PDF</span></span>
-<span class="r-in"><span class="fu">make_EDIT_service_URL</span><span class="op">(</span>src <span class="op">=</span> <span class="st">"descriptions"</span>,</span>
-<span class="r-in">                      catalog <span class="op">=</span> <span class="st">"esd"</span>,</span>
-<span class="r-in">                      geoUnit <span class="op">=</span> <span class="st">"039X"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># url for all geoUnit keys as PDF</span></span></span>
+<span class="r-in"><span><span class="fu">make_EDIT_service_URL</span><span class="op">(</span>src <span class="op">=</span> <span class="st">"descriptions"</span>,</span></span>
+<span class="r-in"><span>                      catalog <span class="op">=</span> <span class="st">"esd"</span>,</span></span>
+<span class="r-in"><span>                      geoUnit <span class="op">=</span> <span class="st">"039X"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "https://edit.jornada.nmsu.edu/services/descriptions/esd/039X.pdf"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># url for a single key within geoUnit as PDF</span></span>
-<span class="r-in"><span class="fu">make_EDIT_service_URL</span><span class="op">(</span>src <span class="op">=</span> <span class="st">"descriptions"</span>,</span>
-<span class="r-in">                      catalog <span class="op">=</span> <span class="st">"esd"</span>,</span>
-<span class="r-in">                      geoUnit <span class="op">=</span> <span class="st">"039X"</span>,</span>
-<span class="r-in">                      key <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># url for a single key within geoUnit as PDF</span></span></span>
+<span class="r-in"><span><span class="fu">make_EDIT_service_URL</span><span class="op">(</span>src <span class="op">=</span> <span class="st">"descriptions"</span>,</span></span>
+<span class="r-in"><span>                      catalog <span class="op">=</span> <span class="st">"esd"</span>,</span></span>
+<span class="r-in"><span>                      geoUnit <span class="op">=</span> <span class="st">"039X"</span>,</span></span>
+<span class="r-in"><span>                      key <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "https://edit.jornada.nmsu.edu/services/descriptions/esd/039X/1.pdf"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># query for "full" description in JSON</span></span>
-<span class="r-in"><span class="va">desc</span> <span class="op">&lt;-</span>  <span class="fu">make_EDIT_service_URL</span><span class="op">(</span>src <span class="op">=</span> <span class="st">"descriptions"</span>,</span>
-<span class="r-in">                               catalog <span class="op">=</span> <span class="st">"esd"</span>,</span>
-<span class="r-in">                               geoUnit <span class="op">=</span> <span class="st">"039X"</span>,</span>
-<span class="r-in">                               endpoint <span class="op">=</span> <span class="st">"R039XA109AZ.json"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># query for "overview"</span></span>
-<span class="r-in"><span class="va">desc_ov</span> <span class="op">&lt;-</span> <span class="fu">make_EDIT_service_URL</span><span class="op">(</span>src <span class="op">=</span> <span class="st">"descriptions"</span>,</span>
-<span class="r-in">                                 catalog <span class="op">=</span> <span class="st">"esd"</span>,</span>
-<span class="r-in">                                 geoUnit <span class="op">=</span> <span class="st">"039X"</span>,</span>
-<span class="r-in">                                 ecoclass <span class="op">=</span> <span class="st">"R039XA109AZ"</span>,</span>
-<span class="r-in">                                 endpoint <span class="op">=</span> <span class="st">"overview.json"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># query for specific section, e.g. "water features"</span></span>
-<span class="r-in"><span class="va">desc_wf</span> <span class="op">&lt;-</span> <span class="fu">make_EDIT_service_URL</span><span class="op">(</span>src <span class="op">=</span> <span class="st">"descriptions"</span>,</span>
-<span class="r-in">                                 catalog <span class="op">=</span> <span class="st">"esd"</span>,</span>
-<span class="r-in">                                 geoUnit <span class="op">=</span> <span class="st">"039X"</span>,</span>
-<span class="r-in">                                 ecoclass <span class="op">=</span> <span class="st">"R039XA109AZ"</span>,</span>
-<span class="r-in">                                 endpoint <span class="op">=</span> <span class="st">"water-features.json"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># construct the URLs -- that is a query essentially</span></span>
-<span class="r-in"><span class="co"># then download the result with read_json</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#full &lt;- jsonlite::read_json(desc)</span></span>
-<span class="r-in"><span class="co">#overview &lt;- jsonlite::read_json(desc_ov)</span></span>
-<span class="r-in"><span class="co">#waterfeature &lt;- jsonlite::read_json(desc_wf)</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># query for "full" description in JSON</span></span></span>
+<span class="r-in"><span><span class="va">desc</span> <span class="op">&lt;-</span>  <span class="fu">make_EDIT_service_URL</span><span class="op">(</span>src <span class="op">=</span> <span class="st">"descriptions"</span>,</span></span>
+<span class="r-in"><span>                               catalog <span class="op">=</span> <span class="st">"esd"</span>,</span></span>
+<span class="r-in"><span>                               geoUnit <span class="op">=</span> <span class="st">"039X"</span>,</span></span>
+<span class="r-in"><span>                               endpoint <span class="op">=</span> <span class="st">"R039XA109AZ.json"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># query for "overview"</span></span></span>
+<span class="r-in"><span><span class="va">desc_ov</span> <span class="op">&lt;-</span> <span class="fu">make_EDIT_service_URL</span><span class="op">(</span>src <span class="op">=</span> <span class="st">"descriptions"</span>,</span></span>
+<span class="r-in"><span>                                 catalog <span class="op">=</span> <span class="st">"esd"</span>,</span></span>
+<span class="r-in"><span>                                 geoUnit <span class="op">=</span> <span class="st">"039X"</span>,</span></span>
+<span class="r-in"><span>                                 ecoclass <span class="op">=</span> <span class="st">"R039XA109AZ"</span>,</span></span>
+<span class="r-in"><span>                                 endpoint <span class="op">=</span> <span class="st">"overview.json"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># query for specific section, e.g. "water features"</span></span></span>
+<span class="r-in"><span><span class="va">desc_wf</span> <span class="op">&lt;-</span> <span class="fu">make_EDIT_service_URL</span><span class="op">(</span>src <span class="op">=</span> <span class="st">"descriptions"</span>,</span></span>
+<span class="r-in"><span>                                 catalog <span class="op">=</span> <span class="st">"esd"</span>,</span></span>
+<span class="r-in"><span>                                 geoUnit <span class="op">=</span> <span class="st">"039X"</span>,</span></span>
+<span class="r-in"><span>                                 ecoclass <span class="op">=</span> <span class="st">"R039XA109AZ"</span>,</span></span>
+<span class="r-in"><span>                                 endpoint <span class="op">=</span> <span class="st">"water-features.json"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># construct the URLs -- that is a query essentially</span></span></span>
+<span class="r-in"><span><span class="co"># then download the result with read_json</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#full &lt;- jsonlite::read_json(desc)</span></span></span>
+<span class="r-in"><span><span class="co">#overview &lt;- jsonlite::read_json(desc_ov)</span></span></span>
+<span class="r-in"><span><span class="co">#waterfeature &lt;- jsonlite::read_json(desc_wf)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -181,7 +181,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
