@@ -6,7 +6,7 @@ on:
 name: revdepcheck
 
 jobs:
-  pkgdown:
+  revdepcheck:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -21,7 +21,6 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
-          extra-packages: pkgdown
           needs: website
 
       - name: Query dependencies
