@@ -79,9 +79,6 @@ osd <- fetchOSD(unique(s$compname), extended = TRUE)
 str(osd, 1)
 
 
-
-
-
 ## convert horizon boundary distinctness -> vertical distance
 # see manual page
 osd$SPC$hzd <- hzDistinctnessCodeToOffset(
@@ -90,13 +87,10 @@ osd$SPC$hzd <- hzDistinctnessCodeToOffset(
 )
 
 
-
-## TODO: latest SoilTaxonomy + sharpshootR packages do this via argument
-
-
-## arrange sketches according to soil classification
+## classic arrangement, using normal (nominal) factors
 SoilTaxonomyDendrogram(
   osd$SPC, 
+  KST.order = FALSE,
   y.offset = 0.4, 
   scaling.factor = 0.0135, 
   cex.taxon.labels = 0.75, 
@@ -109,34 +103,12 @@ SoilTaxonomyDendrogram(
   hz.distinctness.offset = 'hzd'
 )
 
-## arrange according to classification, accounting for order within keys
-data("ST_unique_list")
-
-osd$SPC$soilorder <- droplevels(factor(osd$SPC$soilorder, levels = ST_unique_list$order, ordered = TRUE))
-osd$SPC$suborder <- droplevels(factor(osd$SPC$suborder, levels = ST_unique_list$suborder, ordered = TRUE))
-osd$SPC$greatgroup <- droplevels(factor(osd$SPC$greatgroup, levels = ST_unique_list$greatgroup, ordered = TRUE))
-osd$SPC$subgroup <- droplevels(factor(osd$SPC$subgroup, levels = ST_unique_list$subgroup, ordered = TRUE))
-
-## better with default rotation applied
-
+## arrange according to classification, accounting for order within KST
+## using ordered factors
 SoilTaxonomyDendrogram(
   spc = osd$SPC, 
+  KST.order = TRUE, 
   y.offset = 0.4, 
-  scaling.factor = 0.014, 
-  cex.taxon.labels = 0.75,
-  cex.id = 0.85,
-  cex.names = 0.75,
-  width = 0.3, 
-  name.style = 'center-center', 
-  plot.depth.axis = TRUE,
-  axis.line.offset = -3.5,
-  hz.distinctness.offset = 'hzd'
-)
-
-SoilTaxonomyDendrogram(
-  spc = osd$SPC, 
-  y.offset = 0.4, 
-  rotationOrder = profile_id(osd$SPC)[order(osd$SPC$subgroup)],
   scaling.factor = 0.014, 
   cex.taxon.labels = 0.75,
   cex.id = 0.85,
