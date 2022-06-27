@@ -14,7 +14,7 @@ Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech
 Installation
 ------------
 
-Get the stable version (2.7.1) from CRAN:
+Get the stable version from CRAN:
 
     install.packages('soilDB', dependencies = TRUE)
 
@@ -75,7 +75,7 @@ Functions by Data Source
         -   [`get_SDA_muaggatt`](http://ncss-tech.github.io/soilDB/reference/get_SDA_muaggatt.html)
         -   [`get_SDA_pmgroupname`](http://ncss-tech.github.io/soilDB/reference/get_SDA_pmgroupname.html)
         -   [`get_SDA_property`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.html)
-        -   [`get_SDA_coecosite`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecosite.html)
+        -   [`get_SDA_coecoclass`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecoclass.html)
         -   [`get_SDA_metrics`](http://ncss-tech.github.io/soilDB/reference/get_SDA_metrics.html)
         -   [`get_SDA_cosurfmorph`](http://ncss-tech.github.io/soilDB/reference/get_SDA_cosurfmorph.html)
 -   SSURGO Local Geodatabases
