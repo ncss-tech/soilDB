@@ -98,16 +98,37 @@ uncode <- function(df,
     
     if (!invert) {
       # replace values with ChoiceName, try filling NA with replace based on ChoiceLabel
-      nc <- factor(df[[i]], levels = sub[[value_col]], labels = sub[[name_col]])
-      lc <- factor(df[[i]], levels = sub[[value_col]], labels = sub[[label_col]])
-      nc[is.na(nc)] <- lc[is.na(nc)]
-      df[[i]] <- nc
-    } else {
+      # do not explicitly set `levels` if none of the values in value_col (numeric) are present
+      if (any(df[[i]] %in% sub[[value_col]])) {
+        nc <- factor(df[[i]], levels = sub[[value_col]], labels = sub[[name_col]])
+        lc <- factor(df[[i]], levels = sub[[value_col]], labels = sub[[label_col]])
+        if (all(is.na(nc))) {
+          df[[i]] <- lc
+        } else {
+          nc[is.na(nc)] <- lc[is.na(nc)]
+          df[[i]] <- nc
+        }
+        df[[i]] <- nc
+      } else {
+        nc <- factor(df[[i]], levels = sub[[name_col]], labels = sub[[name_col]])
+        lc <- factor(df[[i]], levels = sub[[label_col]], labels = sub[[label_col]])
+        if (all(is.na(nc))) {
+          df[[i]] <- lc
+        } else {
+          nc[is.na(nc)] <- lc[is.na(nc)]
+          df[[i]] <- nc
+        }
+      }
+    } else if (invert) {
       # replace values with ChoiceName, try filling NA with replace based on ChoiceLabel
       nc <- factor(df[[i]], levels = sub[[name_col]], labels = sub[[value_col]])
       lc <- factor(df[[i]], levels = sub[[label_col]], labels = sub[[value_col]])
-      nc[is.na(nc)] <- lc[is.na(nc)]
-      df[[i]] <- nc
+      if (all(is.na(nc))) {
+        df[[i]] <- lc
+      } else {
+        nc[is.na(nc)] <- lc[is.na(nc)]
+        df[[i]] <- nc
+      }
     }
   }
 
@@ -219,7 +240,7 @@ get_NASIS_metadata <- function(dsn = NULL) {
 #' Get NASIS metadata entries for specific domains or choices
 #'
 #' @param x character vector to match in NASIS metadata
-#' @param what Column to match `x` against. Default "ColumnPhysicalName"; alternate options include `"DomainID"`, `"DomainName"`, `"DomainRanked"`, `"DisplayLabel"`, `"ChoiceSequence"`, `"ChoiceValue"`, `"ChoiceName"`, `"ChoiceLabel"`, `"ChoiceObsolete"`, `"ChoiceDescription"`, `"ColumnLogicalName"`
+#' @param what Column to match `x` against. Default `"ColumnPhysicalName"`; alternate options include `"DomainID"`, `"DomainName"`, `"DomainRanked"`, `"DisplayLabel"`, `"ChoiceSequence"`, `"ChoiceValue"`, `"ChoiceName"`, `"ChoiceLabel"`, `"ChoiceObsolete"`, `"ChoiceDescription"`, `"ColumnLogicalName"`
 #' @return a `data.frame` containing selected NASIS metadata sorted first on `DomainID` and then on `ChoiceSequence`
 #' @export
 #' @rdname get_NASIS_metadata

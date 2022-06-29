@@ -734,47 +734,48 @@
   orig_names <- names(df)
 
   # relabel names
-  names(df) <- gsub("^soimoist", "", names(df))
-  old_names <- "stat"
-  new_names <- "status"
-  names(df)[names(df) %in% old_names] <- new_names
-
+  # names(df) <- gsub("^soimoist", "", names(df))
+  # old_names <- "stat"
+  # new_names <- "status"
+  # names(df)[names(df) %in% old_names] <- new_names
 
   # setting frequency levels and order
+  
+  # NOTE: the next block of code require factor levels be set, regardless of package options
   # NOTE: the SDA domains for flooding and ponding have different levels, and "Common" is obsolete
-  # TODO: replace with ordering derived from NASIS ChoiceSequence 
-  flod_lev <- factor(df$flodfreqcl, levels = c("None", "Very rare", "Rare",  "Occasional", "Common", "Frequent", "Very frequent"))
-  pond_lev <- factor(df$pondfreqcl, levels = c("None", "Rare", "Occasional", "Common", "Frequent"))
 
+  # .:. ordering implied in get_NASIS_column_metadata result from NASIS ChoiceSequence 
+  flod_lev <- factor(df$flodfreqcl, levels = get_NASIS_column_metadata("flodfreqcl")$ChoiceLabel)
+  pond_lev <- factor(df$pondfreqcl, levels = get_NASIS_column_metadata("pondfreqcl")$ChoiceLabel)
+  mois_lev <- factor(df$soimoiststat, levels = get_NASIS_column_metadata("soimoiststat")$ChoiceLabel)
+  
   # impute NA freqcl values, default = "not populated"
-  if (impute == TRUE) {
+  if (impute) {
 
     missing <- "Not populated"
-    lev_flodfreqcl <- c(missing, levels(df$flodfreqcl))
-    lev_pondfreqcl <- c(missing, levels(df$pondfreqcl))
-    lev_status <- c(missing, levels(df$status))
+    lev_flodfreqcl <- c(missing, levels(flod_lev))
+    lev_pondfreqcl <- c(missing, levels(pond_lev))
+    lev_status <- c(missing, levels(mois_lev))
 
-    df <- within(df, {
-      # replace NULL RV depths with 201 cm if pondfreqcl or flodqcl is not NULL
-      dept_r[is.na(dept_r) & (!is.na(pondfreqcl) | !is.na(flodfreqcl))] = 201
-      depb_r[is.na(depb_r) & (!is.na(pondfreqcl) | !is.na(flodfreqcl))] = 201
+    # replace NULL RV depths with 201 cm if pondfreqcl or flodqcl is not NULL
+    df$soimoistdept_r[is.na(df$soimoistdept_r) & (!is.na(df$pondfreqcl) | !is.na(df$flodfreqcl))] <- 201
+    df$soimoistdepb_r[is.na(df$soimoistdepb_r) & (!is.na(df$pondfreqcl) | !is.na(df$flodfreqcl))] <- 201
 
-      # replace NULL L and H depths with the RV
-      dept_l = ifelse(is.na(dept_l), dept_r, dept_l)
-      dept_h = ifelse(is.na(dept_h), dept_r, dept_h)
+    # replace NULL L and H depths with the RV
+    df$soimoistdept_l <- ifelse(is.na(df$soimoistdept_l), df$soimoistdept_r, df$soimoistdept_l)
+    df$soimoistdept_h <- ifelse(is.na(df$soimoistdept_h), df$soimoistdept_r, df$soimoistdept_h)
+    df$soimoistdepb_l <- ifelse(is.na(df$soimoistdepb_l), df$soimoistdepb_r, df$soimoistdepb_l)
+    df$soimoistdepb_h <- ifelse(is.na(df$soimoistdepb_h), df$soimoistdepb_r, df$soimoistdepb_h)
 
-      depb_l = ifelse(is.na(depb_l), depb_r, depb_l)
-      depb_h = ifelse(is.na(depb_h), depb_r, depb_h)
+    # relevel factors with "Not populated" as first level
+    df$soimoiststat <- factor(as.character(df$soimoiststat), levels = lev_status)
+    df$flodfreqcl <- factor(as.character(df$flodfreqcl), levels = lev_flodfreqcl)
+    df$pondfreqcl <- factor(as.character(df$pondfreqcl), levels = lev_flodfreqcl)
 
-      # replace NULL freqcl with "Not_Populated"
-      status = factor(levels(status)[status], levels = lev_status)
-      flodfreqcl = factor(levels(flodfreqcl)[flodfreqcl], levels = lev_flodfreqcl)
-      pondfreqcl = factor(levels(pondfreqcl)[pondfreqcl], levels = lev_flodfreqcl)
-
-      status[is.na(status)] <- missing
-      flodfreqcl[is.na(flodfreqcl)] <- missing
-      pondfreqcl[is.na(pondfreqcl)] <- missing
-    })
+    # replace NULL moist state and frequency class with "Not populated"
+    df$soimoiststat[is.na(df$soimoiststat)] <- missing
+    df$flodfreqcl[is.na(df$flodfreqcl)] <- missing
+    df$pondfreqcl[is.na(df$pondfreqcl)] <- missing
   }
 
   # convert factors to strings
