@@ -77,20 +77,7 @@ uncode <- function(df,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  # load current metadata table
-  if (local_NASIS_defined(dsn = dsn)) {
-    
-    # cache NASIS metadata in soilDB.env within an R session
-    if (!exists("NASIS.metadata", envir = soilDB.env)) {
-      metadata <- .get_NASIS_metadata(dsn = dsn)
-      assign('NASIS.metadata', value = metadata, envir = soilDB.env)
-    } else {
-      metadata <- get("NASIS.metadata", envir = soilDB.env)
-    }
-    
-  } else {
-    load(system.file("data/metadata.rda", package = "soilDB")[1])
-  }
+  metadata <- get_NASIS_metadata(dsn = dsn)
 
   # unique set of possible columns that will need replacement
   metadata_col <- names(metadata)[grep("ColumnPhysicalName", names(metadata), ignore.case = TRUE)]
@@ -140,29 +127,6 @@ uncode <- function(df,
   return(df)
 }
 
-.get_NASIS_metadata <- function(dsn = NULL) {
-  
-  q <- "SELECT mdd.DomainID, DomainName, DomainRanked, DisplayLabel, 
-               ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, 
-               ColumnPhysicalName, ColumnLogicalName
-          FROM MetadataDomainDetail mdd
-            INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
-            INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName
-                        FROM MetadataTableColumn GROUP BY DomainID, ColumnPhysicalName) mtc ON mtc.DomainID = mdd.DomainID
-          ORDER BY mdd.DomainID, ColumnPhysicalName, ChoiceValue;"
-  
-  channel <- dbConnectNASIS(dsn)
-  
-  if (inherits(channel, 'try-error'))
-    return(data.frame())
-  
-  # exec query
-  d <- dbQueryNASIS(channel, q)
-  
-  # done
-  return(d)
-}
-
 # convenient, inverted version of uncode()
 #' @export
 #' @rdname uncode
@@ -195,3 +159,85 @@ NASISDomainsAsFactor <- function(x = NULL) {
   invisible(getOption("soilDB.NASIS.DomainsAsFactor", default = FALSE))
 }
 
+#' Get NASIS Metadata (Domain, Column and Choice Lists)
+#' 
+#' Retrieve a table containing domain and column names with choice list labels/names/sequences/values from the NASIS 7 metadata tables.
+#' 
+#' These data are derived from the MetadataDomainDetail, MetadataDomainMaster, and MetadataTableColumn tables and help with mapping between values stored in the NASIS database and human-readable values. The human-readable values align with the values returned in public facing interfaces such as SSURGO via Soil Data Access and NASIS Web Reports. The data in these tables can also be used to create _ordered_ factors where options for levels of a particular data element follow a logical `ChoiceSequence`.
+#'
+#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
+#' 
+#' @details If a local NASIS instance is set up, and this is the first time `get_NASIS_metadata()` has been called, the metadata will be obtained from the NASIS local database. Subsequent runs in the same session will use a copy of the data object `NASIS.metadata` cached in `soilDB.env`.
+#' 
+#' For users without a local NASIS instance, a cached copy of the NASIS metadata are used `(data/metadata.rda)`. 
+#' 
+#' See `?soilDB::metadata` for additional details.
+#' 
+#' @return a `data.frame` containing DomainID, DomainName, DomainRanked, DisplayLabel, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ColumnPhysicalName, ColumnLogicalName
+#' @export
+#' 
+#' @examples
+#' get_NASIS_metadata()
+get_NASIS_metadata <- function(dsn = NULL) {
+  
+  .doQuery <- function(dsn){
+    q <- "SELECT mdd.DomainID, DomainName, DomainRanked, DisplayLabel, 
+                 ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, 
+                 ColumnPhysicalName, ColumnLogicalName
+            FROM MetadataDomainDetail mdd
+              INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
+              INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName
+                          FROM MetadataTableColumn GROUP BY DomainID, ColumnPhysicalName) mtc ON mtc.DomainID = mdd.DomainID
+            ORDER BY mdd.DomainID, ColumnPhysicalName, ChoiceValue;"
+    
+    channel <- dbConnectNASIS(dsn)
+    
+    if (inherits(channel, 'try-error'))
+      return(data.frame())
+    
+    # exec query
+    dbQueryNASIS(channel, q)
+  }
+  
+  # load current metadata table
+  if (local_NASIS_defined(dsn = dsn)) {
+    
+    # cache NASIS metadata in soilDB.env within an R session
+    if (!exists("NASIS.metadata", envir = soilDB.env)) {
+      metadata <- .doQuery(dsn = dsn)
+      assign('NASIS.metadata', value = metadata, envir = soilDB.env)
+    } else {
+      metadata <- get("NASIS.metadata", envir = soilDB.env)
+    }
+    
+  } else {
+    load(system.file("data/metadata.rda", package = "soilDB")[1])
+  }
+  
+}
+
+#' Get NASIS metadata entries for specific domains or choices
+#'
+#' @param x character vector to match in NASIS metadata
+#' @param what Column to match `x` against. Default "ColumnPhysicalName"; alternate options include `"DomainID"`, `"DomainName"`, `"DomainRanked"`, `"DisplayLabel"`, `"ChoiceSequence"`, `"ChoiceValue"`, `"ChoiceName"`, `"ChoiceLabel"`, `"ChoiceObsolete"`, `"ChoiceDescription"`, `"ColumnLogicalName"`
+#' @return a `data.frame` containing selected NASIS metadata sorted first on `DomainID` and then on `ChoiceSequence`
+#' @export
+#' @rdname get_NASIS_metadata
+#' @examples
+#' get_NASIS_column_metadata("texcl")
+get_NASIS_column_metadata <- function(x, 
+                                      what = "ColumnPhysicalName",
+                                      dsn = NULL) {
+  metadata <- get_NASIS_metadata(dsn = dsn)
+  mds <- metadata[metadata[[what]] %in% x, ] 
+  mds <- mds[order(mds$DomainID, mds$ChoiceSequence), ]
+  mds
+}
+
+#' @keywords internal
+#' @noRd
+.get_NASIS_metadata <- function(dsn = NULL) {
+  # for backward compatibility or anyone who is using the .get method in the wild
+  .Deprecated("get_NASIS_metadata")
+  get_NASIS_metadata(dsn)
+}
