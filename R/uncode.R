@@ -201,6 +201,8 @@ NASISDomainsAsFactor <- function(x = NULL) {
 #' get_NASIS_metadata()
 get_NASIS_metadata <- function(dsn = NULL) {
   
+  metadata <- NULL
+  
   .doQuery <- function(dsn){
     q <- "SELECT mdd.DomainID, DomainName, DomainRanked, DisplayLabel, 
                  ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, 
@@ -231,10 +233,13 @@ get_NASIS_metadata <- function(dsn = NULL) {
       metadata <- get("NASIS.metadata", envir = soilDB.env)
     }
     
-  } else {
+  } 
+  
+  if (is.null(metadata) || (is.data.frame(metadata) && nrow(metadata) == 0)) {
     load(system.file("data/metadata.rda", package = "soilDB")[1])
   }
-  
+
+  metadata
 }
 
 #' Get NASIS metadata entries for specific domains or choices
