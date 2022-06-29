@@ -138,11 +138,12 @@ uncode <- function(df,
     df <- droplevels(df, except = idx)
   }
 
-  # convert factors to strings, check soilDB option first
-  if ((length(stringsAsFactors) > 0 && !stringsAsFactors) ||
-      !getOption("soilDB.NASIS.DomainsAsFactor", default = FALSE)) {
+  # convert factors to strings/numeric, check soilDB option first
+  if (invert || (length(stringsAsFactors) > 0 && !stringsAsFactors) || !NASISDomainsAsFactor()) {
     idx <- unlist(lapply(df, is.factor))
-    df[idx] <- lapply(df[idx], as.character)
+    df[idx] <- lapply(df[idx], function(x) {
+      type.convert(x, as.is = TRUE)
+    })
   }
   
   return(df)
@@ -152,11 +153,11 @@ uncode <- function(df,
 #' @export
 #' @rdname uncode
 code <- function(df, 
-                 db = "NASIS",
+                 db = NULL,
                  droplevels = FALSE,
                  stringsAsFactors = NULL,
                  dsn = NULL) {
-  res <- uncode(df, invert = TRUE, db = db, droplevels = droplevels, stringsAsFactors = stringsAsFactors, dsn = dsn) 
+  res <- uncode(df, invert = TRUE, droplevels = droplevels, stringsAsFactors = stringsAsFactors, dsn = dsn) 
   return(res)
 }
 

@@ -14,7 +14,7 @@ get_NASIS_column_metadata(x, what = "ColumnPhysicalName", dsn = NULL)
 
 \item{x}{character vector to match in NASIS metadata}
 
-\item{what}{Column to match \code{x} against. Default "ColumnPhysicalName"; alternate options include \code{"DomainID"}, \code{"DomainName"}, \code{"DomainRanked"}, \code{"DisplayLabel"}, \code{"ChoiceSequence"}, \code{"ChoiceValue"}, \code{"ChoiceName"}, \code{"ChoiceLabel"}, \code{"ChoiceObsolete"}, \code{"ChoiceDescription"}, \code{"ColumnLogicalName"}}
+\item{what}{Column to match \code{x} against. Default \code{"ColumnPhysicalName"}; alternate options include \code{"DomainID"}, \code{"DomainName"}, \code{"DomainRanked"}, \code{"DisplayLabel"}, \code{"ChoiceSequence"}, \code{"ChoiceValue"}, \code{"ChoiceName"}, \code{"ChoiceLabel"}, \code{"ChoiceObsolete"}, \code{"ChoiceDescription"}, \code{"ColumnLogicalName"}}
 }
 \value{
 a \code{data.frame} containing DomainID, DomainName, DomainRanked, DisplayLabel, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ColumnPhysicalName, ColumnLogicalName
