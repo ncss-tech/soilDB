@@ -170,6 +170,9 @@ fetchLDM <- function(x = NULL,
                                         layer_type = layer_type,
                                         prep_code = prep_code,
                                         analyzed_size_frac = analyzed_size_frac)
+      if (inherits(hz, 'try-error') && grepl("Layer data query failed", hz[1])) {
+        return(hz)
+      }
     } else {
       hz <- try(stop("Failed to access Web Service or query returned no results", call. = FALSE), silent = TRUE)
     }
@@ -348,7 +351,7 @@ fetchLDM <- function(x = NULL,
 
   
   if (inherits(layerdata, 'try-error')) {
-    stop("Layer data query failed", call. = FALSE)
+    return(try(stop("Layer data query failed", call. = FALSE)))
   }
   
   # TODO: this shouldn't be needed
