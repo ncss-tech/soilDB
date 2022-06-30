@@ -44,8 +44,9 @@
 
 #' Check for presence of \code{nasis_local} ODBC data source
 #' 
-#' Check for presence of \code{nasis_local} ODBC data source
+#' Check for presence of a NASIS data source. This function _always_ returns `FALSE` when the `odbc` package is not available (regardless of whether you have an ODBC data source properly set up).
 #' 
+#' If `dsn` is specified, it is assumed to refer to a SQLite data source. The result will be `TRUE` or `FALSE` depending on the result of `RSQLite::dbCanConnect()`.
 #' 
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: NULL
