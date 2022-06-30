@@ -261,6 +261,82 @@ get_NASIS_column_metadata <- function(x,
   mds
 }
 
+#' Work with NASIS Choice Lists
+#'
+#' Create (ordered) factors and interchange between choice names, values and labels for lists of input vectors.
+#'
+#' @param x A named list of vectors to use as input for NASIS Choice List lookup
+#' @param colnames vector of values of the column specified by `what`. E.g. `colnames="texcl"` for `what="ColumnPhysicalName"`. Default: `names(x)` (if x is named)
+#' @param what passed to `get_NASIS_column_metadata()`; Column to match `x` against. Default `"ColumnPhysicalName"`; alternate options include `"DomainID"`, `"DomainName"`, `"DomainRanked"`, `"DisplayLabel"`, `"ChoiceSequence"`, `"ChoiceValue"`, `"ChoiceName"`, `"ChoiceLabel"`, `"ChoiceObsolete"`, `"ChoiceDescription"`, `"ColumnLogicalName"`
+#' @param choice one of: `"ChoiceName"`, `"ChoiceValue"`, or `"ChoiceLabel"`
+#' @param obsolete Include "obsolete" choices? Default: `FALSE`
+#' @param factor Convert result to factor? Default: `TRUE`
+#' @param droplevels Drop unused factor levels? Default: `TRUE` (used only when `factor=TRUE`)
+#' @param ordered Should the result be an ordered factor? Default: `TRUE` (use _only_ if `DomainRanked` is true for all choices)
+#' @param simplify Should list result with length 1 be reduced to a single vector? Default: `TRUE`
+#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: NULL
+#' @return A list of "choices" based on the input `x` that have been converted to a consistent target set of levels (specified by `choice`) via NASIS 7 metadata. 
+#' 
+#' When `factor=TRUE` the result is a factor, possibly ordered when `ordered=TRUE` and the target domain is a "ranked" domain (i.e. `ChoiceSequence` has logical meaning).
+#' 
+#' When `factor=FALSE` the result is a character or numeric vector. Numeric vectors are always returned when `choice` is `"ChoiceValue"`.
+#' 
+#' @export
+#'
+#' @examples
+#' 
+#' NASISChoiceList(1:3, "texcl")
+#' 
+#' NASISChoiceList(1:3, "pondfreqcl")
+#' 
+#' NASISChoiceList("Clay loam", "texcl", choice = "ChoiceValue")
+#' 
+#' NASISChoiceList("Silty clay loam", "texcl", choice = "ChoiceName")
+NASISChoiceList <- function(x,
+           colnames = names(x),
+           what = "ColumnPhysicalName",
+           choice = c("ChoiceName", "ChoiceValue", "ChoiceLabel"),
+           obsolete = FALSE,
+           factor = TRUE,
+           droplevels = FALSE,
+           ordered = TRUE,
+           simplify = TRUE,
+           dsn = NULL) {
+  choice <- match.arg(choice, choices = c("ChoiceName", "ChoiceValue", "ChoiceLabel"))
+  if (!is.list(x)) {
+    n <- colnames
+    x <- list(x)
+    if (length(n) == length(x)) {
+      names(x) <- n
+    }
+  }
+  res <- lapply(names(x), function(xx) {
+    y <- get_NASIS_column_metadata(xx, what = what, dsn = dsn)
+    if (!obsolete) {
+      y <- y[y$ChoiceObsolete == 0, ]
+    }
+    idx <- na.omit(as.numeric(apply(do.call('cbind', lapply(y[c("ChoiceValue", "ChoiceName", "ChoiceLabel")], function(xxx) match(x[[xx]], xxx))), MARGIN = 1, \(xxx) as.numeric(na.omit(xxx)))))
+    yy <- y[idx,]
+    if (choice != "ChoiceValue" && factor) {
+      f <- factor(yy[[choice]], 
+                  levels = y[[choice]], 
+                  ordered = ordered && all(yy$DomainRanked))
+      if (droplevels) {
+        return(droplevels(x))
+      } else {
+        return(f)
+      }
+    } else {
+      return(yy[[choice]])
+    }
+  })
+  
+  if (simplify && length(res) == 1) {
+    return(res[[1]])
+  }
+  res
+}
+
 #' @keywords internal
 #' @noRd
 .get_NASIS_metadata <- function(dsn = NULL) {

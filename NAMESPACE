@@ -3,6 +3,7 @@
 export(ISSR800.wcs)
 export(KSSL_VG_model)
 export(NASIS)
+export(NASISChoiceList)
 export(NASISDomainsAsFactor)
 export(OSDquery)
 export(ROSETTA)

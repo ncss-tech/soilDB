@@ -23,3 +23,23 @@ test_that("code() works w/ NASISDomainsAsFactor(TRUE)", {
   expect_equal(code(x)$texcl, 1:10) 
   NASISDomainsAsFactor(FALSE)
 })
+
+test_that("NASISChoiceList() works", {
+  x <- NASISChoiceList(1:3, colnames = "texcl")
+  expect_equal(x, structure(c(3L, 12L, 5L), .Label = c("c", "cl", "cos", "cosl", 
+                                       "fs", "fsl", "l", "lcos", "lfs", "ls", "lvfs", "s", "sc", "scl", 
+                                       "si", "sic", "sicl", "sil", "sl", "vfs", "vfsl"), class = "factor"))
+  
+  x <- NASISChoiceList(1:3, colnames = "pondfreqcl", factor = FALSE)
+  expect_equal(x, c('none', 'rare', 'occasional'))
+  
+  # convert a label to value
+  x <- NASISChoiceList("Clay loam", colnames = "texcl", choice = "ChoiceValue")
+  expect_equal(x, 17L)
+
+  # ordered factor including obsolete choices
+  x <- NASISChoiceList("common", colnames = "flodfreqcl", choice = "ChoiceName", obsolete = TRUE)
+  expect_equal(x, structure(5L, .Label = c("none", "very rare", "rare", "occasional", 
+                                           "common", "frequent", "very frequent"), 
+                            class = c("ordered", "factor")))
+})
