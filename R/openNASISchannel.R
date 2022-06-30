@@ -65,8 +65,9 @@ local_NASIS_defined <- function(dsn = NULL) {
   if (is.null(dsn)) {
     
     # assuming that default connection uses ODBC
-    if (!requireNamespace("odbc"))
-      stop("package `odbc` is required ", call. = FALSE)
+    if (!requireNamespace("odbc", quietly = TRUE)) {
+      return(FALSE)
+    }
     
     if ('nasis_local' %in% odbc::odbcListDataSources()$name) {
       return(TRUE)
@@ -75,9 +76,9 @@ local_NASIS_defined <- function(dsn = NULL) {
     }
   } else {
     
-    if (!requireNamespace("RSQLite"))
-      stop("package `RSQLite` is required", call. = FALSE)
-    
+    if (!requireNamespace("RSQLite", quietly = TRUE)) {
+      stop("package `RSQLite` is required to use `dsn` argument", call. = FALSE)
+    }
     return(RSQLite::dbCanConnect(RSQLite::SQLite(), dsn, extended_types = TRUE))
   }
 }
