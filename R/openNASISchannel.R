@@ -46,10 +46,11 @@
 #' 
 #' Check for presence of a NASIS data source. This function _always_ returns `FALSE` when the `odbc` package is not available (regardless of whether you have an ODBC data source properly set up).
 #' 
-#' If `dsn` is specified, it is assumed to refer to a SQLite data source. The result will be `TRUE` or `FALSE` depending on the result of `RSQLite::dbCanConnect()`.
+#' If `dsn` is specified as a character vector it is assumed to refer to a SQLite data source. The result will be `TRUE` or `FALSE` depending on the result of `RSQLite::dbCanConnect()`.
 #' 
-#' @param dsn Optional: path to local SQLite database containing NASIS
-#' table structure; default: NULL
+#' If `dsn` is specified as a `DBIConnection` the function returns the value of `DBI::dbExistsTable("MetadataDomainMaster")`
+#' 
+#' @param dsn Optional: path to local SQLite database, or a DBIConnection, containing NASIS table structure; default: NULL
 #' @return logical
 #' @examples
 #' 
@@ -60,7 +61,8 @@
 #'   message('could not find `nasis_local` ODBC data source')
 #' }
 #' 
-#' @export local_NASIS_defined
+#' @export
+#' @importFrom DBI dbExistsTable
 local_NASIS_defined <- function(dsn = NULL) {
   
   if (is.null(dsn)) {
@@ -70,16 +72,23 @@ local_NASIS_defined <- function(dsn = NULL) {
       return(FALSE)
     }
     
-    if ('nasis_local' %in% odbc::odbcListDataSources()$name) {
+    if ("nasis_local" %in% odbc::odbcListDataSources()$name) {
       return(TRUE)
     } else {
       return(FALSE)
     }
-  } else {
+  } else if (inherits(dsn, "DBIConnection")) {
+    
+    # check for metadata domain table as indicator of dsn NASIS origins
+    return(DBI::dbExistsTable(dsn, "MetadataDomainMaster") ||
+             DBI::dbExistsTable(dsn, "metadatadomainmaster") )
+    
+  } else if (is.character(dsn)) {
     
     if (!requireNamespace("RSQLite", quietly = TRUE)) {
-      stop("package `RSQLite` is required to use `dsn` argument", call. = FALSE)
+      stop("package `RSQLite` is required to use character path as `dsn` argument", call. = FALSE)
     }
     return(RSQLite::dbCanConnect(RSQLite::SQLite(), dsn, extended_types = TRUE))
   }
+  FALSE
 }

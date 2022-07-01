@@ -7,8 +7,7 @@
 local_NASIS_defined(dsn = NULL)
 }
 \arguments{
-\item{dsn}{Optional: path to local SQLite database containing NASIS
-table structure; default: NULL}
+\item{dsn}{Optional: path to local SQLite database, or a DBIConnection, containing NASIS table structure; default: NULL}
 }
 \value{
 logical
@@ -17,7 +16,9 @@ logical
 Check for presence of a NASIS data source. This function \emph{always} returns \code{FALSE} when the \code{odbc} package is not available (regardless of whether you have an ODBC data source properly set up).
 }
 \details{
-If \code{dsn} is specified, it is assumed to refer to a SQLite data source. The result will be \code{TRUE} or \code{FALSE} depending on the result of \code{RSQLite::dbCanConnect()}.
+If \code{dsn} is specified as a character vector it is assumed to refer to a SQLite data source. The result will be \code{TRUE} or \code{FALSE} depending on the result of \code{RSQLite::dbCanConnect()}.
+
+If \code{dsn} is specified as a \code{DBIConnection} the function returns the value of \code{DBI::dbExistsTable("MetadataDomainMaster")}
 }
 \examples{
 
