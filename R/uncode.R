@@ -77,20 +77,7 @@ uncode <- function(df,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  # load current metadata table
-  if (local_NASIS_defined(dsn = dsn)) {
-    
-    # cache NASIS metadata in soilDB.env within an R session
-    if (!exists("NASIS.metadata", envir = soilDB.env)) {
-      metadata <- .get_NASIS_metadata(dsn = dsn)
-      assign('NASIS.metadata', value = metadata, envir = soilDB.env)
-    } else {
-      metadata <- get("NASIS.metadata", envir = soilDB.env)
-    }
-    
-  } else {
-    load(system.file("data/metadata.rda", package = "soilDB")[1])
-  }
+  metadata <- get_NASIS_metadata(dsn = dsn)
 
   # unique set of possible columns that will need replacement
   metadata_col <- names(metadata)[grep("ColumnPhysicalName", names(metadata), ignore.case = TRUE)]
@@ -111,16 +98,37 @@ uncode <- function(df,
     
     if (!invert) {
       # replace values with ChoiceName, try filling NA with replace based on ChoiceLabel
-      nc <- factor(df[[i]], levels = sub[[value_col]], labels = sub[[name_col]])
-      lc <- factor(df[[i]], levels = sub[[value_col]], labels = sub[[label_col]])
-      nc[is.na(nc)] <- lc[is.na(nc)]
-      df[[i]] <- nc
-    } else {
+      # do not explicitly set `levels` if none of the values in value_col (numeric) are present
+      if (any(df[[i]] %in% sub[[value_col]])) {
+        nc <- factor(df[[i]], levels = sub[[value_col]], labels = sub[[name_col]])
+        lc <- factor(df[[i]], levels = sub[[value_col]], labels = sub[[label_col]])
+        if (all(is.na(nc))) {
+          df[[i]] <- lc
+        } else {
+          nc[is.na(nc)] <- lc[is.na(nc)]
+          df[[i]] <- nc
+        }
+        df[[i]] <- nc
+      } else {
+        nc <- factor(df[[i]], levels = sub[[name_col]], labels = sub[[name_col]])
+        lc <- factor(df[[i]], levels = sub[[label_col]], labels = sub[[label_col]])
+        if (all(is.na(nc))) {
+          df[[i]] <- lc
+        } else {
+          nc[is.na(nc)] <- lc[is.na(nc)]
+          df[[i]] <- nc
+        }
+      }
+    } else if (invert) {
       # replace values with ChoiceName, try filling NA with replace based on ChoiceLabel
       nc <- factor(df[[i]], levels = sub[[name_col]], labels = sub[[value_col]])
       lc <- factor(df[[i]], levels = sub[[label_col]], labels = sub[[value_col]])
-      nc[is.na(nc)] <- lc[is.na(nc)]
-      df[[i]] <- nc
+      if (all(is.na(nc))) {
+        df[[i]] <- lc
+      } else {
+        nc[is.na(nc)] <- lc[is.na(nc)]
+        df[[i]] <- nc
+      }
     }
   }
 
@@ -130,48 +138,26 @@ uncode <- function(df,
     df <- droplevels(df, except = idx)
   }
 
-  # convert factors to strings, check soilDB option first
-  if ((length(stringsAsFactors) > 0 && !stringsAsFactors) ||
-      !getOption("soilDB.NASIS.DomainsAsFactor", default = FALSE)) {
+  # convert factors to strings/numeric, check soilDB option first
+  if (invert || (length(stringsAsFactors) > 0 && !stringsAsFactors) || !NASISDomainsAsFactor()) {
     idx <- unlist(lapply(df, is.factor))
-    df[idx] <- lapply(df[idx], as.character)
+    df[idx] <- lapply(df[idx], function(x) {
+      type.convert(x, as.is = TRUE)
+    })
   }
   
   return(df)
-}
-
-.get_NASIS_metadata <- function(dsn = NULL) {
-  
-  q <- "SELECT mdd.DomainID, DomainName, DomainRanked, DisplayLabel, 
-               ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, 
-               ColumnPhysicalName, ColumnLogicalName
-          FROM MetadataDomainDetail mdd
-            INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
-            INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName
-                        FROM MetadataTableColumn GROUP BY DomainID, ColumnPhysicalName) mtc ON mtc.DomainID = mdd.DomainID
-          ORDER BY mdd.DomainID, ColumnPhysicalName, ChoiceValue;"
-  
-  channel <- dbConnectNASIS(dsn)
-  
-  if (inherits(channel, 'try-error'))
-    return(data.frame())
-  
-  # exec query
-  d <- dbQueryNASIS(channel, q)
-  
-  # done
-  return(d)
 }
 
 # convenient, inverted version of uncode()
 #' @export
 #' @rdname uncode
 code <- function(df, 
-                 db = "NASIS",
+                 db = NULL,
                  droplevels = FALSE,
                  stringsAsFactors = NULL,
                  dsn = NULL) {
-  res <- uncode(df, invert = TRUE, db = db, droplevels = droplevels, stringsAsFactors = stringsAsFactors, dsn = dsn) 
+  res <- uncode(df, invert = TRUE, droplevels = droplevels, stringsAsFactors = stringsAsFactors, dsn = dsn) 
   return(res)
 }
 
@@ -195,3 +181,166 @@ NASISDomainsAsFactor <- function(x = NULL) {
   invisible(getOption("soilDB.NASIS.DomainsAsFactor", default = FALSE))
 }
 
+#' Get NASIS Metadata (Domain, Column and Choice Lists)
+#' 
+#' Retrieve a table containing domain and column names with choice list labels/names/sequences/values from the NASIS 7 metadata tables.
+#' 
+#' These data are derived from the MetadataDomainDetail, MetadataDomainMaster, and MetadataTableColumn tables and help with mapping between values stored in the NASIS database and human-readable values. The human-readable values align with the values returned in public facing interfaces such as SSURGO via Soil Data Access and NASIS Web Reports. The data in these tables can also be used to create _ordered_ factors where options for levels of a particular data element follow a logical `ChoiceSequence`.
+#'
+#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
+#' 
+#' @details If a local NASIS instance is set up, and this is the first time `get_NASIS_metadata()` has been called, the metadata will be obtained from the NASIS local database. Subsequent runs in the same session will use a copy of the data object `NASIS.metadata` cached in `soilDB.env`.
+#' 
+#' For users without a local NASIS instance, a cached copy of the NASIS metadata are used `(data/metadata.rda)`. 
+#' 
+#' See `?soilDB::metadata` for additional details.
+#' 
+#' @return a `data.frame` containing DomainID, DomainName, DomainRanked, DisplayLabel, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ColumnPhysicalName, ColumnLogicalName
+#' @export
+#' 
+#' @examples
+#' get_NASIS_metadata()
+get_NASIS_metadata <- function(dsn = NULL) {
+  
+  metadata <- NULL
+  
+  .doQuery <- function(dsn){
+    q <- "SELECT mdd.DomainID, DomainName, DomainRanked, DisplayLabel, 
+                 ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, 
+                 ColumnPhysicalName, ColumnLogicalName
+            FROM MetadataDomainDetail mdd
+              INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
+              INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName
+                          FROM MetadataTableColumn GROUP BY DomainID, ColumnPhysicalName) mtc ON mtc.DomainID = mdd.DomainID
+            ORDER BY mdd.DomainID, ColumnPhysicalName, ChoiceValue;"
+    
+    channel <- dbConnectNASIS(dsn)
+    
+    if (inherits(channel, 'try-error'))
+      return(data.frame())
+    
+    # exec query
+    dbQueryNASIS(channel, q)
+  }
+  
+  # load current metadata table
+  if (local_NASIS_defined(dsn = dsn)) {
+    
+    # cache NASIS metadata in soilDB.env within an R session
+    if (!exists("NASIS.metadata", envir = soilDB.env)) {
+      metadata <- .doQuery(dsn = dsn)
+      assign('NASIS.metadata', value = metadata, envir = soilDB.env)
+    } else {
+      metadata <- get("NASIS.metadata", envir = soilDB.env)
+    }
+    
+  } 
+  
+  if (is.null(metadata) || (is.data.frame(metadata) && nrow(metadata) == 0)) {
+    load(system.file("data/metadata.rda", package = "soilDB")[1])
+  }
+
+  metadata
+}
+
+#' Get NASIS metadata entries for specific domains or choices
+#'
+#' @param x character vector to match in NASIS metadata
+#' @param what Column to match `x` against. Default `"ColumnPhysicalName"`; alternate options include `"DomainID"`, `"DomainName"`, `"DomainRanked"`, `"DisplayLabel"`, `"ChoiceSequence"`, `"ChoiceValue"`, `"ChoiceName"`, `"ChoiceLabel"`, `"ChoiceObsolete"`, `"ChoiceDescription"`, `"ColumnLogicalName"`
+#' @return a `data.frame` containing selected NASIS metadata sorted first on `DomainID` and then on `ChoiceSequence`
+#' @export
+#' @rdname get_NASIS_metadata
+#' @examples
+#' get_NASIS_column_metadata("texcl")
+get_NASIS_column_metadata <- function(x, 
+                                      what = "ColumnPhysicalName",
+                                      dsn = NULL) {
+  metadata <- get_NASIS_metadata(dsn = dsn)
+  mds <- metadata[metadata[[what]] %in% x, ] 
+  mds <- mds[order(mds$DomainID, mds$ChoiceSequence), ]
+  mds
+}
+
+#' Work with NASIS Choice Lists
+#'
+#' Create (ordered) factors and interchange between choice names, values and labels for lists of input vectors.
+#'
+#' @param x A named list of vectors to use as input for NASIS Choice List lookup
+#' @param colnames vector of values of the column specified by `what`. E.g. `colnames="texcl"` for `what="ColumnPhysicalName"`. Default: `names(x)` (if x is named)
+#' @param what passed to `get_NASIS_column_metadata()`; Column to match `x` against. Default `"ColumnPhysicalName"`; alternate options include `"DomainID"`, `"DomainName"`, `"DomainRanked"`, `"DisplayLabel"`, `"ChoiceSequence"`, `"ChoiceValue"`, `"ChoiceName"`, `"ChoiceLabel"`, `"ChoiceObsolete"`, `"ChoiceDescription"`, `"ColumnLogicalName"`
+#' @param choice one of: `"ChoiceName"`, `"ChoiceValue"`, or `"ChoiceLabel"`
+#' @param obsolete Include "obsolete" choices? Default: `FALSE`
+#' @param factor Convert result to factor? Default: `TRUE`
+#' @param droplevels Drop unused factor levels? Default: `TRUE` (used only when `factor=TRUE`)
+#' @param ordered Should the result be an ordered factor? Default: `TRUE` (use _only_ if `DomainRanked` is true for all choices)
+#' @param simplify Should list result with length 1 be reduced to a single vector? Default: `TRUE`
+#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: NULL
+#' @return A list of "choices" based on the input `x` that have been converted to a consistent target set of levels (specified by `choice`) via NASIS 7 metadata. 
+#' 
+#' When `factor=TRUE` the result is a factor, possibly ordered when `ordered=TRUE` and the target domain is a "ranked" domain (i.e. `ChoiceSequence` has logical meaning).
+#' 
+#' When `factor=FALSE` the result is a character or numeric vector. Numeric vectors are always returned when `choice` is `"ChoiceValue"`.
+#' 
+#' @export
+#'
+#' @examples
+#' 
+#' NASISChoiceList(1:3, "texcl")
+#' 
+#' NASISChoiceList(1:3, "pondfreqcl")
+#' 
+#' NASISChoiceList("Clay loam", "texcl", choice = "ChoiceValue")
+#' 
+#' NASISChoiceList("Silty clay loam", "texcl", choice = "ChoiceName")
+NASISChoiceList <- function(x,
+           colnames = names(x),
+           what = "ColumnPhysicalName",
+           choice = c("ChoiceName", "ChoiceValue", "ChoiceLabel"),
+           obsolete = FALSE,
+           factor = TRUE,
+           droplevels = FALSE,
+           ordered = TRUE,
+           simplify = TRUE,
+           dsn = NULL) {
+  choice <- match.arg(choice, choices = c("ChoiceName", "ChoiceValue", "ChoiceLabel"))
+  if (!is.list(x)) {
+    n <- colnames
+    x <- list(x)
+    if (length(n) == length(x)) {
+      names(x) <- n
+    }
+  }
+  res <- lapply(names(x), function(xx) {
+    y <- get_NASIS_column_metadata(xx, what = what, dsn = dsn)
+    if (!obsolete) {
+      y <- y[y$ChoiceObsolete == 0, ]
+    }
+    idx <- na.omit(as.numeric(apply(do.call('cbind', lapply(y[c("ChoiceValue", "ChoiceName", "ChoiceLabel")], function(xxx) match(x[[xx]], xxx))), MARGIN = 1, \(xxx) as.numeric(na.omit(xxx)))))
+    yy <- y[idx,]
+    if (choice != "ChoiceValue" && factor) {
+      f <- factor(yy[[choice]], 
+                  levels = y[[choice]], 
+                  ordered = ordered && all(yy$DomainRanked))
+      if (droplevels) {
+        return(droplevels(x))
+      } else {
+        return(f)
+      }
+    } else {
+      return(yy[[choice]])
+    }
+  })
+  
+  if (simplify && length(res) == 1) {
+    return(res[[1]])
+  }
+  res
+}
+
+#' @keywords internal
+#' @noRd
+.get_NASIS_metadata <- function(dsn = NULL) {
+  # for backward compatibility or anyone who is using the .get method in the wild
+  .Deprecated("get_NASIS_metadata")
+  get_NASIS_metadata(dsn)
+}

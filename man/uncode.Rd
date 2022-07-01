@@ -14,7 +14,7 @@ uncode(
   dsn = NULL
 )
 
-code(df, db = "NASIS", droplevels = FALSE, stringsAsFactors = NULL, dsn = NULL)
+code(df, db = NULL, droplevels = FALSE, stringsAsFactors = NULL, dsn = NULL)
 }
 \arguments{
 \item{df}{data.frame}
