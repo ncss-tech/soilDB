@@ -15,6 +15,10 @@ test_that("uncode() works w/ NASISDomainsAsFactor(TRUE)", {
 test_that("code() works", {
   x <- data.frame(texcl = c("cos", "s", "fs", "vfs", "lcos", "ls", "lfs", "lvfs", "cosl", "sl"))
   expect_equal(code(x)$texcl, 1:10) 
+  
+  # heterogeneous names and labels
+  x <- data.frame(texcl = c("cos", "Sand", "fs", "vfs", "lcos", "Loamy sand", "lfs", "lvfs", "cosl", "Sandy loam"))
+  expect_equal(code(x)$texcl, 1:10) 
 })
 
 test_that("code() works w/ NASISDomainsAsFactor(TRUE)", {
@@ -41,5 +45,11 @@ test_that("NASISChoiceList() works", {
   x <- NASISChoiceList("common", colnames = "flodfreqcl", choice = "ChoiceName", obsolete = TRUE)
   expect_equal(x, structure(5L, .Label = c("none", "very rare", "rare", "occasional", 
                                            "common", "frequent", "very frequent"), 
+                            class = c("ordered", "factor")))
+  
+  # obsolete value, ordered factor excluding obsolete choices
+  x <- NASISChoiceList("common", colnames = "flodfreqcl", choice = "ChoiceName")
+  expect_equal(x, structure(integer(0), levels = c("none", "very rare", "rare", 
+                                                   "occasional", "frequent", "very frequent"), 
                             class = c("ordered", "factor")))
 })
