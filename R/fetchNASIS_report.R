@@ -162,7 +162,7 @@
   # aggregate NASIS returns empty rows
   # NASIS text reports return empty columns
   # remove
-  temp = temp[!is.na(temp$peiid), - ncol(temp)]
+  temp = temp[!is.na(temp$siteiid), - ncol(temp)]
   idx  = names(temp) %in% c("pmkind", "pmorigin")
   temp[!idx] = uncode(temp[!idx])
   idx  = sapply(temp, is.character)
