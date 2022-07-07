@@ -151,14 +151,23 @@
   }
 
 
-  temp = read.csv(
-    textConnection(
-      readLines(tf)
-      ),
-    sep = "|",
-    quote = "",
-    stringsAsFactors = FALSE
-    )
+  # check to see if data is coming from fetchNASIS or get_site
+  temp <- readLines(tf)
+  begin = grep("@begin get_site_from_NASIS", temp[1])
+  
+  if (length(begin) > 0) {
+    
+    end = grep("@end get_site_from_NASIS", temp)
+    # check to see if there is any data
+    diff.idx <- end - begin
+    
+    if(all(diff.idx == 1))
+      stop("empty result set -- check parameters used to run `fetchNASIS` export report.", call.=FALSE)
+    
+    x2 <- temp[seq(begin + 1, end - 1)]
+    temp <- read.csv(textConnection(x2), sep = "|", quote = "", stringsAsFactors = FALSE)
+  } else   temp <- read.csv(textConnection(temp), sep = "|", quote = "", stringsAsFactors = FALSE)
+  
   # aggregate NASIS returns empty rows
   # NASIS text reports return empty columns
   # remove
