@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.3</span>
       </span>
     </div>
 
@@ -57,8 +57,10 @@
   <span class="va">filename</span>,
   <span class="va">exdir</span>,
   pattern <span class="op">=</span> <span class="cn">NULL</span>,
+  include_spatial <span class="op">=</span> <span class="cn">TRUE</span>,
   overwrite <span class="op">=</span> <span class="cn">FALSE</span>,
   header <span class="op">=</span> <span class="cn">FALSE</span>,
+  quiet <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -74,7 +76,11 @@
 
 
 <dt>pattern</dt>
-<dd><p>Character. Optional regular expression to use to filter subdirectories of <code>exdir</code>. Default: <code>NULL</code> will search all subdirectories for SSURGO export files.#' @param include_spatial Logical. Include spatial data layers in database? Default: <code>TRUE</code>.</p></dd>
+<dd><p>Character. Optional regular expression to use to filter subdirectories of <code>exdir</code>. Default: <code>NULL</code> will search all subdirectories for SSURGO export files.</p></dd>
+
+
+<dt>include_spatial</dt>
+<dd><p>Logical. Include spatial data layers in database? Default: <code>TRUE</code>.</p></dd>
 
 
 <dt>overwrite</dt>
@@ -83,6 +89,10 @@
 
 <dt>header</dt>
 <dd><p>Logical. Passed to <code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.delim()</a></code> for reading pipe-delimited (<code>|</code>) text files containing tabular data.</p></dd>
+
+
+<dt>quiet</dt>
+<dd><p>Logical. Suppress messages and other output from database read/write operations?</p></dd>
 
 
 <dt>...</dt>
