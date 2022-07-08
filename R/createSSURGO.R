@@ -193,7 +193,7 @@ createSSURGO <- function(filename, exdir, pattern = NULL, overwrite = FALSE, hea
           }
         }
         y
-    }))), silent = FALSE)
+    }))), silent = TRUE)
     
     if (length(mstab_lut[x]) && is.na(mstab_lut[x])) {
       mstab_lut[x] <- x
