@@ -8,8 +8,10 @@ createSSURGO(
   filename,
   exdir,
   pattern = NULL,
+  include_spatial = TRUE,
   overwrite = FALSE,
   header = FALSE,
+  quiet = TRUE,
   ...
 )
 }
@@ -18,11 +20,15 @@ createSSURGO(
 
 \item{exdir}{Path containing containing SSURGO spatial (.shp) and tabular (.txt) files.}
 
-\item{pattern}{Character. Optional regular expression to use to filter subdirectories of \code{exdir}. Default: \code{NULL} will search all subdirectories for SSURGO export files.#' @param include_spatial Logical. Include spatial data layers in database? Default: \code{TRUE}.}
+\item{pattern}{Character. Optional regular expression to use to filter subdirectories of \code{exdir}. Default: \code{NULL} will search all subdirectories for SSURGO export files.}
+
+\item{include_spatial}{Logical. Include spatial data layers in database? Default: \code{TRUE}.}
 
 \item{overwrite}{Logical. Overwrite existing layers? Default \code{FALSE} will append to existing tables/layers.}
 
 \item{header}{Logical. Passed to \code{read.delim()} for reading pipe-delimited (\code{|}) text files containing tabular data.}
+
+\item{quiet}{Logical. Suppress messages and other output from database read/write operations?}
 
 \item{...}{Additional arguments passed to \code{write_sf()} for writing spatial layers.}
 }
