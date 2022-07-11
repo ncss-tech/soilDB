@@ -153,7 +153,7 @@
 
   # check to see if data is coming from fetchNASIS or get_site
   temp <- readLines(tf)
-  begin = grep("@begin get_site_from_NASIS", temp[1])
+  begin = grep("@begin get_site_from_NASIS", temp)
   
   if (length(begin) > 0) {
     
