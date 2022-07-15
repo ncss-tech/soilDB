@@ -5,7 +5,9 @@ test_that("fetchSDA_spatial basic mupolygon functionality", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("sf")
+  
   # expect 3, relatively non-extensive join delineations
   single.mukey <- fetchSDA_spatial(x = "2924882", by.col = 'mukey')
   expect_equal(nrow(single.mukey), 3)
@@ -30,7 +32,9 @@ test_that("fetchSDA_spatial sapolygon and gsmmupolygon", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("sf")
+  
   # test SSA geometry sapolygon
 
   symbs <- c('CA077','CA632','CA644','CA630', 'CA628', 'CA649')

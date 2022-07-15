@@ -7,6 +7,8 @@ test_that("works as expected", {
   
   skip_on_cran()
   
+  skip_if_not_installed("sf")
+  
   skip_if_not_installed("terra")
   
   x <- NULL

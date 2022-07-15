@@ -21,10 +21,11 @@ test_that("SDA_query() works", {
   ## TODO: mukeys change through time, figure out a better way to query a known record
   # table with multi-line records
   x.4 <<- suppressMessages(SDA_query(q = "SELECT * from mutext WHERE mukey = '2596937';"))
-
+  
+  skip_if_not_installed("sf")
+  
   # point with known SSURGO data
-  p <<- sf::st_as_sf(data.frame(x=-121.77100, y=37.368402),  coords=c("x","y"),
-                     crs = "EPSG:4326")
+  p <<- sf::st_as_sf(data.frame(x=-121.77100, y=37.368402),  coords=c("x","y"), crs = "EPSG:4326")
   
   skip_if(inherits(x.1, 'try-error'))
   
@@ -119,7 +120,9 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("sf")
+  
   # test with default db = "SSURGO"
   res <- suppressWarnings(SDA_spatialQuery(p, what = 'geom'))
   
@@ -155,6 +158,8 @@ test_that("SDA_spatialQuery() spatial query of MUKEY with multiple features", {
   skip_if_offline()
   
   skip_on_cran()
+  
+  skip_if_not_installed("sf")
   
   x <- sf::st_as_sf(data.frame(x = c(-120, -120, -120), y = c(37, 37, 38)),
                 coords = c('x', 'y'), crs = 4326)

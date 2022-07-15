@@ -10,6 +10,8 @@ test_that("works as expected", {
   
   expect_true(inherits(WCS_details("ISSR800"), 'data.frame'))
   
+  skip_if_not_installed("sf")
+  
   skip_if_not_installed("terra")
   
   # 800m grid
@@ -40,6 +42,8 @@ test_that("categorical data", {
   skip_if_offline()
   
   skip_on_cran()
+  
+  skip_if_not_installed("sf")
   
   skip_if_not_installed("terra")
   
