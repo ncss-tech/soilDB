@@ -4,7 +4,7 @@
  
  * Adds `get_NASIS_metadata()` and helper method `get_NASIS_column_metadata()` and other new tools for working with uncode, factors and NASIS metadata cached in the package.
  
- * Bug fix for `.cosoilmoist_prep()` 
+ * Bug fix for `get_cosoilmoist_from_SDA()`; thanks to @monikashea for reporting the problem
  
  * `fetchNASIS_report()` now works with the output from `"get_site_from_NASIS"` report (useful for site records without associated pedons)
  
