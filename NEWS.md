@@ -1,3 +1,16 @@
+# soilDB 2.7.3 (2022-07-15)
+
+ * `get_SDA_property()` all methods now support `miscellaneous_areas` argument. This defaults to `FALSE` for the methods it was previously implemented for--so be aware that queries using `"Dominant Component"` or `"Dominant Condition"` (which previously did not respond to `miscellaneous_areas`) may have the number of rows in result reduced due to omission of miscellaneous land types. If this is unexpected or undesired, please use `miscellaneous_areas=TRUE`.
+ 
+ * Adds `get_NASIS_metadata()` and helper method `get_NASIS_column_metadata()` and other new tools for working with uncode, factors and NASIS metadata cached in the package.
+ 
+ * Bug fix for `.cosoilmoist_prep()` 
+ 
+ * `fetchNASIS_report()` now works with the output from `"get_site_from_NASIS"` report (useful for site records without associated pedons)
+ 
+ * `createSSURGO()` gains arguments `quiet` and `include_spatial` to toggle messages and inclusion of spatial data in created SQLite database, respectively
+ 
+ 
 # soilDB 2.7.2 (2022-06-24)
  * `fetchNASIS("components')`: Fix and refactor ( **breaking change** from 2.7.1, which introduced a bug/inconsistency) of recent change; `duplicates` argument is now _required_ to merge in data from mapunit/legend tables (where many:1 relationships between legend/mapunit and datamapunit are possible). In 2.7.1 possibly incomplete mapunit/legend tables could be joined to SoilProfileCollection result (if and only if the tables were populated in selected set/local DB). Does not change historic (<=2.7.0) default behavior. Thanks to @dylanbeaudette for suggesting use of `get_component_correlation_data_from_NASIS_db()` here.
 

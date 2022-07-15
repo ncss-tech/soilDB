@@ -37,9 +37,9 @@ get_SDA_property(
 
 \item{FUN}{Optional: character representing SQL aggregation function either "MIN" or "MAX" used only for method="min/max"; this argument is calculated internally if you specify \code{method="MIN"} or \code{method="MAX"}}
 
-\item{include_minors}{Include minor components in "Weighted Average" or "MIN/MAX" results?}
+\item{include_minors}{Include minor components in "Weighted Average" or "MIN/MAX" results? Default: \code{TRUE}}
 
-\item{miscellaneous_areas}{Include miscellaneous areas  (non-soil components) in "Weighted Average", "MIN" or "MAX" results?}
+\item{miscellaneous_areas}{Include miscellaneous areas  (non-soil components) in results? Default: \code{FALSE}. Now works with all \code{method} types)}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 

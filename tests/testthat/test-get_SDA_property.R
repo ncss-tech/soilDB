@@ -1,8 +1,12 @@
 target_areas <-  c("CA649", "CA630")
+
 target_area_rows <- 220 # 1:1 with mukey
 target_area_rows_all <- 1021 # 1:1 with component
 target_area_rows_all_chorizon <- 3178 # 1:1 with chorizon
+
 n_misc_area_rows <- 9
+n_misc_area_rows_all <- 283
+n_misc_area_rows_all_chorizon <- 20
 
 target_mukeys <- c(463263, 463264)
 
@@ -16,6 +20,13 @@ test_that("SDA properties (dominant condition) works", {
   x <- get_SDA_property(property = "Taxonomic Suborder",
                         method = "Dominant Condition",
                         areasymbols = target_areas)
+  skip_if(is.null(x))
+  expect_equal(nrow(x), target_area_rows - n_misc_area_rows)
+  
+  x <- get_SDA_property(property = "Taxonomic Suborder",
+                        method = "Dominant Condition",
+                        areasymbols = target_areas,
+                        miscellaneous_areas = TRUE)
   skip_if(is.null(x))
   expect_equal(nrow(x), target_area_rows)
   
@@ -32,10 +43,10 @@ test_that("SDA properties (dominant component category) works", {
 
   skip_on_cran()
   x <- get_SDA_property(property = "Taxonomic Suborder",
-                   method = "Dominant Component (Category)",
-                   areasymbols = target_areas)
+                        method = "Dominant Component (Category)",
+                        areasymbols = target_areas)
   skip_if(is.null(x))
-  expect_equal(nrow(x), target_area_rows)
+  expect_equal(nrow(x), target_area_rows - n_misc_area_rows)
   
   x <- get_SDA_property(property = c("Taxonomic Suborder","Taxonomic Order"),
                         method = "Dominant Component (Category)",
@@ -218,8 +229,18 @@ test_that("SDA properties (no aggregation) works", {
   x <- get_SDA_property(
       property = c('rsprod_l', 'rsprod_r', 'rsprod_h'),
       method = "NONE",
-      areasymbols = target_areas
+      areasymbols = target_areas,
+      miscellaneous_areas = FALSE
     )
+  skip_if(is.null(x))
+  expect_equal(nrow(x), target_area_rows_all - n_misc_area_rows_all)
+  
+  x <- get_SDA_property(
+    property = c('rsprod_l', 'rsprod_r', 'rsprod_h'),
+    method = "NONE",
+    areasymbols = target_areas,
+    miscellaneous_areas = TRUE
+  )
   skip_if(is.null(x))
   expect_equal(nrow(x), target_area_rows_all)
 
@@ -229,6 +250,15 @@ test_that("SDA properties (no aggregation) works", {
     c('sandtotal_l', 'sandtotal_r', 'sandtotal_h'),
     method = "NONE",
     areasymbols = target_areas
+  )
+  skip_if(is.null(x))
+  expect_equal(nrow(x), target_area_rows_all_chorizon - n_misc_area_rows_all_chorizon)
+  
+  x <- get_SDA_property(
+    c('sandtotal_l', 'sandtotal_r', 'sandtotal_h'),
+    method = "NONE",
+    areasymbols = target_areas,
+    miscellaneous_areas = TRUE
   )
   skip_if(is.null(x))
   expect_equal(nrow(x), target_area_rows_all_chorizon)

@@ -13,8 +13,8 @@
 #' @param top_depth Default: `0` (centimeters); a numeric value for upper boundary (top depth) used only for method="Weighted Average", "Dominant Component (Numeric)", and "MIN/MAX"
 #' @param bottom_depth Default: `200` (centimeters); a numeric value for lower boundary (bottom depth) used only for method="Weighted Average", "Dominant Component (Numeric)", and "MIN/MAX"
 #' @param FUN Optional: character representing SQL aggregation function either "MIN" or "MAX" used only for method="min/max"; this argument is calculated internally if you specify `method="MIN"` or `method="MAX"`
-#' @param include_minors Include minor components in "Weighted Average" or "MIN/MAX" results?
-#' @param miscellaneous_areas Include miscellaneous areas  (non-soil components) in "Weighted Average", "MIN" or "MAX" results?
+#' @param include_minors Include minor components in "Weighted Average" or "MIN/MAX" results? Default: `TRUE`
+#' @param miscellaneous_areas Include miscellaneous areas  (non-soil components) in results? Default: `FALSE`. Now works with all `method` types)
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @examples
@@ -476,9 +476,9 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", "),
 paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
   }
 
-  .property_dominant_component_numeric <- function(property, top_depth, bottom_depth, WHERE) {
+  .property_dominant_component_numeric <- function(property, top_depth, bottom_depth, WHERE, miscellaneous_areas = FALSE) {
     # dominant component numeric is a more specific case of weighted average
-    .property_weighted_average(property, top_depth, bottom_depth, WHERE, dominant = TRUE, include_minors = FALSE, miscellaneous_areas = FALSE)
+    .property_weighted_average(property, top_depth, bottom_depth, WHERE, dominant = TRUE, include_minors = FALSE, miscellaneous_areas = miscellaneous_areas)
   }
 
   # create query based on method
@@ -491,11 +491,12 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
              INNER JOIN component ON component.mukey = mapunit.mukey AND
                                      component.cokey = (SELECT TOP 1 c1.cokey FROM component AS c1
                                                 INNER JOIN mapunit AS mu ON component.mukey = mu.mukey AND 
-                                                                            c1.mukey = mapunit.mukey 
+                                                                            c1.mukey = mapunit.mukey %s
                                                 ORDER BY c1.comppct_r DESC, c1.cokey)",
 
             paste0(sapply(agg_property, function(x) sprintf("%s AS %s", x, x)), collapse = ", "),
-            WHERE),
+            WHERE,
+            ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'")),
 
     # weighted average (.weighted_average handles vector agg_property)
     "WEIGHTED AVERAGE" = .property_weighted_average(agg_property, top_depth, bottom_depth, WHERE, include_minors = include_minors, miscellaneous_areas = miscellaneous_areas),
@@ -514,7 +515,7 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
               paste0(paste0(FUN, "(", agg_property, ") AS ", agg_property), collapse = ",")), 
 
     # dominant component (numeric) (.dominant_component_numeric handles vector agg_property)
-    "DOMINANT COMPONENT (NUMERIC)" = .property_dominant_component_numeric(agg_property, top_depth, bottom_depth, WHERE),
+    "DOMINANT COMPONENT (NUMERIC)" = .property_dominant_component_numeric(agg_property, top_depth, bottom_depth, WHERE, miscellaneous_areas),
 
     # dominant condition
     "DOMINANT CONDITION" =
@@ -524,12 +525,13 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
               INNER JOIN component ON component.mukey = mapunit.mukey AND
                                            component.cokey = (SELECT TOP 1 c1.cokey FROM component AS c1
                                                       INNER JOIN mapunit AS mu ON component.mukey = mu.mukey AND
-                                                                            c1.mukey = mapunit.mukey
+                                                                            c1.mukey = mapunit.mukey %s
                                                       ORDER BY c1.comppct_r DESC, c1.cokey)
               GROUP BY areasymbol, musym, muname, mapunit.mukey, component.cokey, compname, comppct_r
               ORDER BY areasymbol, musym, muname, mapunit.mukey, comppct_r DESC, component.cokey",
             paste0(sapply(agg_property, .property_dominant_condition_category), collapse = ", "),
-            WHERE),
+            WHERE, 
+            ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'")),
 
     # NO AGGREGATION 
   "NONE" = sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey,
@@ -537,14 +539,14 @@ paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
                            %s %s%s %s
              FROM legend
               INNER JOIN mapunit ON mapunit.lkey = legend.lkey
-              INNER JOIN component ON component.mukey = mapunit.mukey %s
+              INNER JOIN component ON component.mukey = mapunit.mukey %s%s
               ORDER BY areasymbol, musym, muname, mapunit.mukey, component.comppct_r DESC, component.cokey%s",
             ifelse(any(is_hz), "chorizon.chkey AS chkey, chorizon.hzdept_r AS hzdept_r, chorizon.hzdepb_r AS hzdepb_r,", ""),
             paste0(sapply(agg_property[!is_hz], function(x) sprintf("component.%s AS %s", x, x)), collapse = ", "),
             ifelse(any(is_hz) & !all(is_hz), ",", ""),
             paste0(sapply(agg_property[is_hz], function(x) sprintf("chorizon.%s AS %s", x, x)), collapse = ", "),
-            ifelse(any(is_hz),  paste0("\nINNER JOIN chorizon ON chorizon.cokey = component.cokey", " AND ", WHERE),
-                   paste0("AND ", WHERE)),
+            ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
+            ifelse(any(is_hz),  paste0("\nINNER JOIN chorizon ON chorizon.cokey = component.cokey", " AND ", WHERE), paste0("AND ", WHERE)),
             ifelse(any(is_hz), ", hzdept_r", ""))
   )
 
