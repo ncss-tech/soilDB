@@ -110,7 +110,7 @@ A Soil Data Access query returns geometry and key identifying information about 
     <h2>Value</h2>
     
 
-<p>an <code>sf</code> data.frame corresponding to SDA spatial data for all symbols requested. If <code>as_Spatial=TRUE</code> returns a <code>Spatial*DataFrame</code> from the sp package via <code><a href="https://r-spatial.github.io/sf/reference/coerce-methods.html" class="external-link">sf::as_Spatial()</a></code> for backward compatibility. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with <code>add.fields</code>.</p>
+<p>an <code>sf</code> data.frame corresponding to SDA spatial data for all symbols requested. If <code>as_Spatial=TRUE</code> returns a <code>Spatial*DataFrame</code> from the sp package via <code>sf::as_Spatial()</code> for backward compatibility. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with <code>add.fields</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -141,8 +141,8 @@ A Soil Data Access query returns geometry and key identifying information about 
 <span class="r-in"><span>        </span></span>
 <span class="r-in"><span>        <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>      </span></span>
-<span class="r-in"><span>         <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">full.extent.nmusym</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"RED"</span>, border <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
-<span class="r-in"><span>         <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">single.mukey</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">"BLUE"</span>, border <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
+<span class="r-in"><span>         <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu">st_geometry</span><span class="op">(</span><span class="va">full.extent.nmusym</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"RED"</span>, border <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
+<span class="r-in"><span>         <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu">st_geometry</span><span class="op">(</span><span class="va">single.mukey</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">"BLUE"</span>, border <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span>       </span></span>
 <span class="r-in"><span>        <span class="op">}</span></span></span>
 <span class="r-in"><span>        </span></span>
@@ -152,34 +152,12 @@ A Soil Data Access query returns geometry and key identifying information about 
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2x8l5"</span>, by<span class="op">=</span><span class="st">"nmusym"</span>, add.fields<span class="op">=</span><span class="st">"muname"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 chunks...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 1; 1 secs)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 1 secs; mean/chunk: 1 secs; mean/symbol: 1.04 secs.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in loadNamespace(x) : there is no package called 'sf'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 chunks...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 3; 0.5 secs)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 0.7 secs; mean/chunk: 0.5 secs; mean/symbol: 0.23 secs.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in loadNamespace(x) : there is no package called 'sf'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 chunks...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 3; 0.4 secs)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 0.6 secs; mean/chunk: 0.4 secs; mean/symbol: 0.2 secs.</span>
-<span class="r-plt img"><img src="fetchSDA_spatial-1.png" alt="" width="768" height="475"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 6 features and 4 fields</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -121.034 ymin: 38.01706 xmax: -120.9596 ymax: 38.24938</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    mukey areasymbol nationalmusym                                        muname</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 462101      CA077         2x8l5 Pentz-Bellota complex, 2 to 15 percent slopes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 462101      CA077         2x8l5 Pentz-Bellota complex, 2 to 15 percent slopes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 462101      CA077         2x8l5 Pentz-Bellota complex, 2 to 15 percent slopes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 462101      CA077         2x8l5 Pentz-Bellota complex, 2 to 15 percent slopes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 462101      CA077         2x8l5 Pentz-Bellota complex, 2 to 15 percent slopes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 462101      CA077         2x8l5 Pentz-Bellota complex, 2 to 15 percent slopes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                             geom</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 POLYGON ((-121.0226 38.2276...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 POLYGON ((-121.0141 38.2325...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 POLYGON ((-121.0339 38.2325...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 POLYGON ((-120.9955 38.0674...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 POLYGON ((-121.0102 38.1891...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 POLYGON ((-120.9648 38.0208...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in loadNamespace(x) : there is no package called 'sf'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Error in loadNamespace(x) : there is no package called 'sf'\n"</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
