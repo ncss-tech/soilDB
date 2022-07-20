@@ -1199,6 +1199,6 @@ get_SDA_interpretation <- function(rulename,
 }
 
 .LIMIT_N <- function(query, n = 1, sqlite = FALSE) {
-  if (!sqlite) return(gsub("SELECT ", paste("SELECT TOP", n), query))
-  paste(query, paste("LIMIT", n))
+  if (!sqlite) return(gsub("SELECT ", paste("SELECT TOP", n, ""), query))
+  paste(query, paste("LIMIT", n, ""))
 }
