@@ -409,8 +409,8 @@ get_SDA_property <-
             INTO #main
             FROM legend
             INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
-            INNER JOIN component ON component.mukey = mapunit.mukey
-            INNER JOIN chorizon ON chorizon.cokey = component.cokey AND hzdepb_r >= %s AND hzdept_r <= %s
+            INNER JOIN component ON component.mukey = mapunit.mukey %s
+            INNER JOIN chorizon ON chorizon.cokey = component.cokey AND hzdepb_r > %s AND hzdept_r <= %s
             WHERE chorizon.hzdept_r IS NOT NULL
             ORDER BY areasymbol, musym, muname, mapunit.mukey, comppct_r DESC, cokey, hzdept_r, hzdepb_r
             %s",
@@ -418,15 +418,17 @@ get_SDA_property <-
             WHERE,
             ifelse(include_minors, "", "AND component.majcompflag = 'Yes'"),
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
-            ifelse(dominant, "            AND component.cokey = (SELECT TOP 1 c2.cokey FROM component AS c2
-                            INNER JOIN mapunit AS mm1 ON c2.mukey = mm1.mukey AND c2.mukey = mapunit.mukey
-                            ORDER BY c2.comppct_r DESC, c2.cokey)", ""),
+            ifelse(dominant, paste0("            AND component.cokey = (SELECT TOP 1 c2.cokey FROM component AS c2
+                            INNER JOIN mapunit AS mm1 ON c2.mukey = mm1.mukey AND c2.mukey = mapunit.mukey ",
+                            ifelse(miscellaneous_areas, ""," AND c2.compkind != 'Miscellaneous area'"),"
+                            ORDER BY c2.comppct_r DESC, c2.cokey)"), ""),
             top_depth, top_depth,
             bottom_depth, bottom_depth,
             paste0(sprintf("CASE WHEN %s is NULL THEN NULL ELSE CAST (CASE WHEN hzdepb_r > %s THEN %s ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS decimal (5,2)) END AS thickness_wt_%s", property, bottom_depth, bottom_depth, top_depth, top_depth, property), collapse = ", \n"),
             paste0(sprintf("CAST (SUM(CAST((CASE WHEN hzdepb_r > %s THEN %s WHEN %s is NULL THEN NULL ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s WHEN %s is NULL THEN NULL ELSE hzdept_r END) AS decimal (5,2))) OVER (PARTITION BY component.cokey) AS decimal (5,2)) AS sum_thickness_%s", bottom_depth, bottom_depth, property, top_depth, top_depth, property, property), collapse = ", \n"),
             paste0(sprintf("CAST(%s AS decimal (5,2)) AS %s", property, property), collapse = ", "),
             WHERE,
+            ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
             top_depth, bottom_depth,
             sprintf("SELECT #main.areasymbol, #main.musym, #main.muname, #main.mukey,
 #main.cokey, #main.chkey, #main.compname, #main.compkind, hzname, hzdept_r, hzdepb_r, hzdept_r_ADJ, hzdepb_r_ADJ, %s, %s, comppct_r, SUM_COMP_PCT, WEIGHTED_COMP_PCT, %s

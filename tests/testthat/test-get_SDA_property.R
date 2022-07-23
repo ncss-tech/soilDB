@@ -80,6 +80,17 @@ test_that("SDA properties (dominant component numeric) works", {
   skip_if(is.null(x))
   expect_equal(x$mukey, target_mukeys)
 
+  # dominant component of 1st mapunit is rock outcrop (excluded), pH 5 from Thermalrocks 10-13cm
+  # dominant component of 2nd mapunit is very shallow soil with R at 10cm
+  x <- get_SDA_property(property = c("ph1to1h2o_r", "claytotal_r"),
+                        method = "Dominant Component (Numeric)",
+                        mukeys = c(461213L, 461265L),
+                        miscellaneous_areas = FALSE,
+                        include_minors = TRUE,
+                        top_depth = 10,
+                        bottom_depth = 20)
+  expect_equal(x$ph1to1h2o_r, c(5, NA))
+  expect_equal(x$claytotal_r, c(22, NA))
 })
 
 test_that("SDA properties (weighted average) works", {
@@ -116,6 +127,17 @@ test_that("SDA properties (weighted average) works", {
 
   skip_if(is.null(x))
   expect_equal(x$mukey, target_mukeys)
+
+  # check miscellaneous areas and NULL data in horizons
+  x <- get_SDA_property(property = c("ph1to1h2o_r", "claytotal_r"),
+                        method = "Weighted Average",
+                        mukeys = c(461213L, 461265L),
+                        miscellaneous_areas = FALSE,
+                        include_minors = TRUE,
+                        top_depth = 10,
+                        bottom_depth = 20)
+  expect_equal(round(x$ph1to1h2o_r, 2), c(5.44, 6.9))
+  expect_equal(round(x$claytotal_r, 1), c(21.2, 22.1))
 
   # check filtering of NULL
   agg <- get_SDA_property(property = c("sandtotal_r","silttotal_r","claytotal_r"),
