@@ -2,13 +2,13 @@
 #'
 #' @param series A character vector of Official Series names e.g. `"Chewacla"`
 #' @param result Select `"json"`, `"html"`, or `"txt"` output
-#'
 #' @param base_url Optional: alternate JSON/HTML/TXT repository path. Default: `NULL` uses `"https://github.com/ncss-tech/SoilKnowledgeBase"` for `result="json"`
-#'
-#' @param verbose Print errors and warning messages related to HTTP requests? Default: `FALSE`
+#' @param fix_ocr_errors Default: `FALSE`; Applies only to `result='json'`. Convert clear cases of Optical Character Recognition (OCR) errors to likely actual values. 
+#' @param verbose Print errors and warning messages related to HTTP requests? Default: `FALSE` 
 #'
 #' @details The default `base_url` for `result="json"` is to JSON files stored in a GitHub repository  that is regularly updated from the official source of Series Descriptions. Using format: `https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/{LETTER}/{SERIES}.json` for JSON. And `"https://soilseriesdesc.sc.egov.usda.gov/OSD_Docs/{LETTER}/{SERIES}.html` is for `result="html"` (official source).
-#'
+#' 
+#' `fix_ocr_errors` by default is turned off (`FALSE`). When `TRUE`, assume that in color data hue/value/chroma lowercase "L" (`"l"`) is a 1, and a capital "O" is interpreted as zero. Also, in horizon desgignations assume lowercase "L" is a `1`, and a string that starts with `0` starts with the capital letter `"O"`.
 #' @return For JSON result: A `data.frame` with 1 row per series, and 1 column per "section" in the OSD as defined in National Soil Survey Handbook. For TXT or HTML result a list of character vectors containing OSD text with 1 element per series and one value per line.
 #' @export
 #' @aliases get_OSD_JSON
@@ -22,7 +22,7 @@
 #' get_OSD(series)
 #' }
 #' }
-get_OSD <- function(series, base_url = NULL, result = c("json","html","txt"), verbose = FALSE) {
+get_OSD <- function(series, base_url = NULL, result = c("json","html","txt"), fix_ocr_errors = FALSE, verbose = FALSE) {
   result <- match.arg(tolower(result), c("json","html","txt"))
 
   a_url <- NULL
@@ -31,7 +31,7 @@ get_OSD <- function(series, base_url = NULL, result = c("json","html","txt"), ve
   }
 
   switch(result,
-         "json" = { .get_OSD_JSON(series, base_url = a_url, verbose = verbose) },
+         "json" = { .get_OSD_JSON(series, base_url = a_url, verbose = verbose, fix_ocr_errors = fix_ocr_errors) },
          "html" = { .get_OSD_HTML(series, base_url = a_url, verbose = verbose) },
          "txt" =  { .get_OSD_TXT(series, verbose = verbose)  })
 }
@@ -41,8 +41,8 @@ get_OSD <- function(series, base_url = NULL, result = c("json","html","txt"), ve
 ## DEB: there is no new-line between date and "XXX SERIES" because an <H1> element is used to create vertical space
 
 .get_OSD_HTML <- function(series, base_url = NULL, verbose = FALSE) {
-  if(!requireNamespace('rvest', quietly=TRUE))
-    stop('please install the `rvest` package', call.=FALSE)
+  if (!requireNamespace('rvest', quietly = TRUE))
+    stop('please install the `rvest` package', call. = FALSE)
 
   if (missing(base_url) || is.null(base_url))
     base_url <- 'https://soilseriesdesc.sc.egov.usda.gov/OSD_Docs/'
@@ -107,7 +107,7 @@ get_OSD_JSON <- function(series, base_url = NULL) {
   .get_OSD_JSON(series, base_url)
 }
 
-.get_OSD_JSON <- function(series, base_url = NULL, verbose = FALSE) {
+.get_OSD_JSON <- function(series, base_url = NULL, verbose = FALSE, fix_ocr_errors = FALSE) {
 
   # http://github.com/ncss-tech/SoilKnowledgeBase is default JSON repository path
   if (missing(base_url) || is.null(base_url))
@@ -168,7 +168,22 @@ get_OSD_JSON <- function(series, base_url = NULL) {
     res <- type.convert(res, na.strings = "NA", as.is = TRUE)
     res$SITE[[1]] <- type.convert(res$SITE[[1]], na.strings = "NA", as.is = TRUE)
     res$HORIZONS[[1]] <- type.convert(res$HORIZONS[[1]], na.strings = "NA", as.is = TRUE)
-
+    
+    if (fix_ocr_errors) {
+      # specific "easy" fixes for common OCR errors in character columns
+      ocr_cols_color <- c('dry_hue', 'dry_value', 'dry_chroma', 'moist_hue', 'moist_value', 'moist_chroma')
+      ocr_cols_hzdesgn <- c('name')
+      res$HORIZONS[[1]][ocr_cols_color] <- lapply(res$HORIZONS[[1]][ocr_cols_color], function(chr) {
+        # assume in colors hue/value/chroma lowercase L is a 1, and a capital "O" is a zero
+        gsub("l", 1, gsub("O", 0, chr))
+      })
+      res$HORIZONS[[1]][ocr_cols_hzdesgn] <- lapply(res$HORIZONS[[1]][ocr_cols_hzdesgn], function(chr) {
+        # assume in horizon desgn lowercase L is a 1, and starts with 0 is the capital letter O
+        gsub("l", 1, gsub("^0", "O", chr))
+      })
+    }
+    
+    
     # handles weird cases
     if (inherits(res, 'try-error'))
       return(NULL)

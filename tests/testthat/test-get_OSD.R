@@ -20,9 +20,11 @@ test_that("get_OSD works", {
   res2 <- get_OSD(series, result = "html")
   expect_equal(length(res2), 6)
   expect_null(res2[[4]])
+  
+  # using fix_ocr_errors argument (this test still "works" even if OSD is fixed)
+  expect_equal(get_OSD("sycamore", fix_ocr_errors = TRUE)$HORIZONS[[1]]$dry_hue, 
+               c("2.5Y", "2.5Y","2.5Y", "10YR"))
 })
-
-
 
 test_that("correct laundering of HTML source", {
   
