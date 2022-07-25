@@ -44,7 +44,7 @@ Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files w
 \details{
 To specify the Soil Survey Areas you would like to obtain data you use a \code{WHERE} clause for query of \code{sacatalog} table such as \code{areasymbol = 'CA067'}, \code{"areasymbol IN ('CA628', 'CA067')"} or  \verb{areasymbol LIKE 'CT\%'}.
 
-Pipe-delimited TXT files are found in \emph{/tabular/} folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the \emph{Soil Data Access Tables and Columns Report}: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files.
+Pipe-delimited TXT files are found in \emph{/tabular/} folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the \emph{Soil Data Access Tables and Columns Report}: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files. The function returns a \code{try-error} if the \code{WHERE}/\code{areasymbols} arguments result in
 
 Several ESRI shapefiles are found in the \emph{/spatial/} folder extracted from a SSURGO ZIP. These have prefix \code{soilmu_} (mapunit), \code{soilsa_} (survey area), \code{soilsf_} (special features). There will also be a TXT file with prefix \code{soilsf_} describing any special features. Shapefile names then have an \code{a_} (polygon), \code{l_} (line), \code{p_} (point) followed by the soil survey area symbol.
 }

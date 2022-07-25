@@ -15,12 +15,11 @@
 #' @param quiet Logical. Passed to `download.file()`.
 #' @export
 #' 
-#' @details Pipe-delimited TXT files are found in _/tabular/_ folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the _Soil Data Access Tables and Columns Report_: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files.
+#' @details Pipe-delimited TXT files are found in _/tabular/_ folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the _Soil Data Access Tables and Columns Report_: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files. The function returns a `try-error` if the `WHERE`/`areasymbols` arguments result in
 #' 
 #' Several ESRI shapefiles are found in the _/spatial/_ folder extracted from a SSURGO ZIP. These have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
 #' 
 #' @return Character. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip = TRUE`.
-
 downloadSSURGO <- function(WHERE = NULL, 
                            areasymbols = NULL,
                            destdir = tempdir(), 
@@ -47,6 +46,11 @@ downloadSSURGO <- function(WHERE = NULL,
   
   # make WSS download URLs from areasymbol, template, date
   urls <- .make_WSS_download_url(WHERE, include_template = include_template)
+  
+  if (inherits(urls, 'try-error')) {
+    message(urls[1])
+    return(invisible(urls))
+  }
   
   if (!dir.exists(destdir)) {
     dir.create(destdir, recursive = TRUE)
