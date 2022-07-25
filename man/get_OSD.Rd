@@ -9,6 +9,7 @@ get_OSD(
   series,
   base_url = NULL,
   result = c("json", "html", "txt"),
+  fix_ocr_errors = FALSE,
   verbose = FALSE
 )
 
@@ -21,6 +22,8 @@ get_OSD_JSON(series, base_url = NULL)
 
 \item{result}{Select \code{"json"}, \code{"html"}, or \code{"txt"} output}
 
+\item{fix_ocr_errors}{Default: \code{FALSE}; Applies only to \code{result='json'}. Convert clear cases of Optical Character Recognition (OCR) errors to likely actual values.}
+
 \item{verbose}{Print errors and warning messages related to HTTP requests? Default: \code{FALSE}}
 }
 \value{
@@ -31,6 +34,8 @@ Get Official Series Description Data from JSON, HTML or TXT sources
 }
 \details{
 The default \code{base_url} for \code{result="json"} is to JSON files stored in a GitHub repository  that is regularly updated from the official source of Series Descriptions. Using format: \verb{https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/\{LETTER\}/\{SERIES\}.json} for JSON. And \verb{"https://soilseriesdesc.sc.egov.usda.gov/OSD_Docs/\{LETTER\}/\{SERIES\}.html} is for \code{result="html"} (official source).
+
+\code{fix_ocr_errors} by default is turned off (\code{FALSE}). When \code{TRUE}, assume that in color data hue/value/chroma lowercase "L" (\code{"l"}) is a 1, and a capital "O" is interpreted as zero. Also, in horizon desgignations assume lowercase "L" is a \code{1}, and a string that starts with \code{0} starts with the capital letter \code{"O"}.
 }
 \examples{
 
