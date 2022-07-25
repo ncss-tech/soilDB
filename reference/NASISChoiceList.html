@@ -53,18 +53,18 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">NASISChoiceList</span><span class="op">(</span>
-  <span class="va">x</span>,
-  colnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
-  what <span class="op">=</span> <span class="st">"ColumnPhysicalName"</span>,
-  choice <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ChoiceName"</span>, <span class="st">"ChoiceValue"</span>, <span class="st">"ChoiceLabel"</span><span class="op">)</span>,
-  obsolete <span class="op">=</span> <span class="cn">FALSE</span>,
-  factor <span class="op">=</span> <span class="cn">TRUE</span>,
-  droplevels <span class="op">=</span> <span class="cn">FALSE</span>,
-  ordered <span class="op">=</span> <span class="cn">TRUE</span>,
-  simplify <span class="op">=</span> <span class="cn">TRUE</span>,
-  dsn <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">NASISChoiceList</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  colnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>  what <span class="op">=</span> <span class="st">"ColumnPhysicalName"</span>,</span>
+<span>  choice <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ChoiceName"</span>, <span class="st">"ChoiceValue"</span>, <span class="st">"ChoiceLabel"</span><span class="op">)</span>,</span>
+<span>  obsolete <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  factor <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ordered <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  simplify <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -124,19 +124,19 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu">NASISChoiceList</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="st">"texcl"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">NASISChoiceList</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="st">"texcl"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] cos s   fs </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21 Levels: c cl cos cosl fs fsl l lcos lfs ls lvfs s sc scl si sic sicl ... vfsl</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">NASISChoiceList</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="st">"pondfreqcl"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">NASISChoiceList</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="st">"pondfreqcl"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] none       rare       occasional</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Levels: none &lt; rare &lt; occasional &lt; frequent</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">NASISChoiceList</span><span class="op">(</span><span class="st">"Clay loam"</span>, <span class="st">"texcl"</span>, choice <span class="op">=</span> <span class="st">"ChoiceValue"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">NASISChoiceList</span><span class="op">(</span><span class="st">"Clay loam"</span>, <span class="st">"texcl"</span>, choice <span class="op">=</span> <span class="st">"ChoiceValue"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 17</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">NASISChoiceList</span><span class="op">(</span><span class="st">"Silty clay loam"</span>, <span class="st">"texcl"</span>, choice <span class="op">=</span> <span class="st">"ChoiceName"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">NASISChoiceList</span><span class="op">(</span><span class="st">"Silty clay loam"</span>, <span class="st">"texcl"</span>, choice <span class="op">=</span> <span class="st">"ChoiceName"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] sicl</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21 Levels: c cl cos cosl fs fsl l lcos lfs ls lvfs s sc scl si sic sicl ... vfsl</span>
 </code></pre></div>
@@ -153,7 +153,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -53,21 +53,21 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_SDA_property</span><span class="op">(</span>
-  <span class="va">property</span>,
-  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Dominant Component (Category)"</span>, <span class="st">"Weighted Average"</span>, <span class="st">"Min/Max"</span>,
-    <span class="st">"Dominant Component (Numeric)"</span>, <span class="st">"Dominant Condition"</span>, <span class="st">"None"</span><span class="op">)</span>,
-  areasymbols <span class="op">=</span> <span class="cn">NULL</span>,
-  mukeys <span class="op">=</span> <span class="cn">NULL</span>,
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  top_depth <span class="op">=</span> <span class="fl">0</span>,
-  bottom_depth <span class="op">=</span> <span class="fl">200</span>,
-  FUN <span class="op">=</span> <span class="cn">NULL</span>,
-  include_minors <span class="op">=</span> <span class="cn">FALSE</span>,
-  miscellaneous_areas <span class="op">=</span> <span class="cn">FALSE</span>,
-  query_string <span class="op">=</span> <span class="cn">FALSE</span>,
-  dsn <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_SDA_property</span><span class="op">(</span></span>
+<span>  <span class="va">property</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Dominant Component (Category)"</span>, <span class="st">"Weighted Average"</span>, <span class="st">"Min/Max"</span>,</span>
+<span>    <span class="st">"Dominant Component (Numeric)"</span>, <span class="st">"Dominant Condition"</span>, <span class="st">"None"</span><span class="op">)</span>,</span>
+<span>  areasymbols <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mukeys <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  top_depth <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  bottom_depth <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  FUN <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include_minors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  miscellaneous_areas <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  query_string <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -144,18 +144,18 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"curl"</span><span class="op">)</span> <span class="op">&amp;</span></span>
-<span class="r-in">    <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/nslookup.html" class="external-link">has_internet</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"></span>
-<span class="r-in"> <span class="co"># get 1/3 bar bulk density [0,25] centimeter depth weighted average from dominant component</span></span>
-<span class="r-in"> <span class="fu">get_SDA_property</span><span class="op">(</span>property <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dbthirdbar_l"</span>,<span class="st">"dbthirdbar_r"</span>,<span class="st">"dbthirdbar_h"</span><span class="op">)</span>,</span>
-<span class="r-in">                  method <span class="op">=</span> <span class="st">"Dominant Component (Numeric)"</span>,</span>
-<span class="r-in">                  areasymbols <span class="op">=</span> <span class="st">"CA630"</span>,</span>
-<span class="r-in">                  top_depth <span class="op">=</span> <span class="fl">0</span>,</span>
-<span class="r-in">                  bottom_depth <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"curl"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>    <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/nslookup.html" class="external-link">has_internet</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span> <span class="co"># get 1/3 bar bulk density [0,25] centimeter depth weighted average from dominant component</span></span></span>
+<span class="r-in"><span> <span class="fu">get_SDA_property</span><span class="op">(</span>property <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dbthirdbar_l"</span>,<span class="st">"dbthirdbar_r"</span>,<span class="st">"dbthirdbar_h"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  method <span class="op">=</span> <span class="st">"Dominant Component (Numeric)"</span>,</span></span>
+<span class="r-in"><span>                  areasymbols <span class="op">=</span> <span class="st">"CA630"</span>,</span></span>
+<span class="r-in"><span>                  top_depth <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                  bottom_depth <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     areasymbol musym</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        CA630  1012</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2        CA630  1013</span>
@@ -416,7 +416,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 128                                                                                            Water</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       mukey dbthirdbar_l dbthirdbar_r dbthirdbar_h</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   2403709           NA           NA           NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2924914           NA           NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2924914         1.50         1.54         1.58</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3   2924833         1.33         1.45         1.57</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4   2924834         1.45         1.52         1.60</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5   2924907         1.43         1.48         1.54</span>
@@ -527,24 +527,24 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 110 2436792         1.24         1.34         1.44</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 111 2436790         1.11         1.27         1.42</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 112 2403711         1.33         1.44         1.55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 113 2403710           NA           NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113 2403710         1.16         1.22         1.29</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 114 2424959         1.13         1.37         1.48</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 115 2424960         1.23         1.35         1.47</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 116 2424961         1.34         1.44         1.54</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 117 2924890         1.06         1.11         1.30</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 118 2403722           NA           NA           NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 119 2403721           NA           NA           NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 120 2403720           NA           NA           NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 121 2403719           NA           NA           NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 122 2424975           NA           NA           NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 123 2600480           NA           NA           NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 124 2600481           NA           NA           NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 125 2600537           NA           NA           NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 126 2924835           NA           NA           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119 2403721         1.37         1.45         1.52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120 2403720         1.36         1.43         1.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121 2403719         1.32         1.44         1.56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122 2424975         1.33         1.43         1.53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123 2600480         1.39         1.47         1.55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124 2600481         1.30         1.30         1.43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125 2600537         1.50         1.56         1.62</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126 2924835         1.36         1.43         1.50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 127 2924912           NA           NA           NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 128 2462630           NA           NA           NA</span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -559,7 +559,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

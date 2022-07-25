@@ -59,16 +59,16 @@ the metadata is pulled from a static snapshot in the soilDB package
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">uncode</span><span class="op">(</span>
-  <span class="va">df</span>,
-  invert <span class="op">=</span> <span class="cn">FALSE</span>,
-  db <span class="op">=</span> <span class="st">"NASIS"</span>,
-  droplevels <span class="op">=</span> <span class="cn">FALSE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,
-  dsn <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">code</span><span class="op">(</span><span class="va">df</span>, db <span class="op">=</span> <span class="cn">NULL</span>, droplevels <span class="op">=</span> <span class="cn">FALSE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">uncode</span><span class="op">(</span></span>
+<span>  <span class="va">df</span>,</span>
+<span>  invert <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  db <span class="op">=</span> <span class="st">"NASIS"</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">code</span><span class="op">(</span><span class="va">df</span>, db <span class="op">=</span> <span class="cn">NULL</span>, droplevels <span class="op">=</span> <span class="cn">FALSE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -135,8 +135,8 @@ package.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># convert column name `fraghard` (fragment hardness) codes to labels</span></span>
-<span class="r-in"><span class="fu">uncode</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>fraghard <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># convert column name `fraghard` (fragment hardness) codes to labels</span></span></span>
+<span class="r-in"><span><span class="fu">uncode</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>fraghard <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               fraghard</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          noncemented</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2            indurated</span>
@@ -148,9 +148,9 @@ package.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8        very strongly</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9               weakly</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10          moderately</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># convert column name `fragshp` (fragment shape) labels to codes</span></span>
-<span class="r-in"><span class="fu">code</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>fragshp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flat"</span>, <span class="st">"nonflat"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># convert column name `fragshp` (fragment shape) labels to codes</span></span></span>
+<span class="r-in"><span><span class="fu">code</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>fragshp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flat"</span>, <span class="st">"nonflat"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   fragshp</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1       1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2       2</span>
@@ -168,7 +168,7 @@ package.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

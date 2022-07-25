@@ -53,7 +53,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">KSSL_VG_model</span><span class="op">(</span><span class="va">VG_params</span>, phi_min <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="op">-</span><span class="fl">6</span>, phi_max <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">8</span>, pts <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">KSSL_VG_model</span><span class="op">(</span><span class="va">VG_params</span>, phi_min <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="op">-</span><span class="fl">6</span>, phi_max <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">8</span>, pts <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -120,25 +120,25 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># basic example</span></span>
-<span class="r-in"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  theta_r <span class="op">=</span> <span class="fl">0.0337216</span>, </span>
-<span class="r-in">  theta_s <span class="op">=</span> <span class="fl">0.4864061</span>, </span>
-<span class="r-in">  alpha <span class="op">=</span> <span class="op">-</span><span class="fl">1.581517</span>, </span>
-<span class="r-in">  npar <span class="op">=</span> <span class="fl">0.1227247</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">vg</span> <span class="op">&lt;-</span> <span class="fu">KSSL_VG_model</span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">vg</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># basic example</span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  theta_r <span class="op">=</span> <span class="fl">0.0337216</span>, </span></span>
+<span class="r-in"><span>  theta_s <span class="op">=</span> <span class="fl">0.4864061</span>, </span></span>
+<span class="r-in"><span>  alpha <span class="op">=</span> <span class="op">-</span><span class="fl">1.581517</span>, </span></span>
+<span class="r-in"><span>  npar <span class="op">=</span> <span class="fl">0.1227247</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">vg</span> <span class="op">&lt;-</span> <span class="fu">KSSL_VG_model</span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">vg</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ VG_curve           :'data.frame':	100 obs. of  2 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ phi  : num [1:100] 1.00e-06 1.38e-06 1.92e-06 2.66e-06 3.68e-06 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ theta: num [1:100] 0.486 0.486 0.486 0.486 0.486 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ VG_function        :function (x, deriv = 0L)  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ VG_inverse_function:function (x, deriv = 0L)  </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -153,7 +153,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -53,7 +53,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">format_SQL_in_statement</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">format_SQL_in_statement</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -75,50 +75,50 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get some mukeys</span></span>
-<span class="r-in"><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"select top(2) mukey from mapunit;"</span></span>
-<span class="r-in"><span class="va">mukeys</span> <span class="op">&lt;-</span> <span class="fu"><a href="SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get some mukeys</span></span></span>
+<span class="r-in"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"select top(2) mukey from mapunit;"</span></span></span>
+<span class="r-in"><span><span class="va">mukeys</span> <span class="op">&lt;-</span> <span class="fu"><a href="SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># format for use in an SQL IN statement</span></span>
-<span class="r-in"><span class="va">mukey.inst</span> <span class="op">&lt;-</span> <span class="fu">format_SQL_in_statement</span><span class="op">(</span><span class="va">mukeys</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mukey.inst</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># format for use in an SQL IN statement</span></span></span>
+<span class="r-in"><span><span class="va">mukey.inst</span> <span class="op">&lt;-</span> <span class="fu">format_SQL_in_statement</span><span class="op">(</span><span class="va">mukeys</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mukey.inst</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "('2648889','2648890')"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># make a more specific query: for component+horizon data, just for those mukeys</span></span>
-<span class="r-in"><span class="va">q2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM mapunit</span>
-<span class="r-in">               INNER JOIN component ON mapunit.mukey = component.mukey</span>
-<span class="r-in">               INNER JOIN chorizon ON component.cokey = chorizon.cokey</span>
-<span class="r-in">               WHERE mapunit.mukey IN %s;"</span>, <span class="va">mukey.inst</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># do the query</span></span>
-<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># make a more specific query: for component+horizon data, just for those mukeys</span></span></span>
+<span class="r-in"><span><span class="va">q2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT * FROM mapunit</span></span></span>
+<span class="r-in"><span><span class="st">               INNER JOIN component ON mapunit.mukey = component.mukey</span></span></span>
+<span class="r-in"><span><span class="st">               INNER JOIN chorizon ON component.cokey = chorizon.cokey</span></span></span>
+<span class="r-in"><span><span class="st">               WHERE mapunit.mukey IN %s;"</span>, <span class="va">mukey.inst</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># do the query</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="SDA_query.html">SDA_query</a></span><span class="op">(</span><span class="va">q2</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># build a SoilProfileCollection from horizon-level records</span></span>
-<span class="r-in"><span class="fu">depths</span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cokey</span> <span class="op">~</span> <span class="va">hzdept_r</span> <span class="op">+</span> <span class="va">hzdepb_r</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># build a SoilProfileCollection from horizon-level records</span></span></span>
+<span class="r-in"><span><span class="fu">depths</span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">cokey</span> <span class="op">~</span> <span class="va">hzdept_r</span> <span class="op">+</span> <span class="va">hzdepb_r</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> converting profile IDs from integer to character</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># normalize mapunit/component level attributes to site-level for plot</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/site.html" class="external-link">site</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">muname</span> <span class="op">+</span> <span class="va">mukey</span> <span class="op">+</span> <span class="va">compname</span> <span class="op">+</span> <span class="va">comppct_r</span> <span class="op">+</span> <span class="va">taxclname</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># make a nice label</span></span>
-<span class="r-in"><span class="va">res</span><span class="op">$</span><span class="va">labelname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s (%s%s)"</span>, <span class="va">res</span><span class="op">$</span><span class="va">compname</span>, <span class="va">res</span><span class="op">$</span><span class="va">comppct_r</span>, <span class="st">"%"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># major components only</span></span>
-<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">res</span>, <span class="va">comppct_r</span> <span class="op">&gt;=</span> <span class="fl">85</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># inspect plot of result</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/groupedProfilePlot.html" class="external-link">groupedProfilePlot</a></span><span class="op">(</span><span class="va">res</span>, groups <span class="op">=</span> <span class="st">"mukey"</span>, color <span class="op">=</span> <span class="st">"hzname"</span>, cex.names<span class="op">=</span><span class="fl">0.8</span>,</span>
-<span class="r-in">                   id.style <span class="op">=</span> <span class="st">"side"</span>, label <span class="op">=</span> <span class="st">"labelname"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># normalize mapunit/component level attributes to site-level for plot</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/site.html" class="external-link">site</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="op">~</span> <span class="va">muname</span> <span class="op">+</span> <span class="va">mukey</span> <span class="op">+</span> <span class="va">compname</span> <span class="op">+</span> <span class="va">comppct_r</span> <span class="op">+</span> <span class="va">taxclname</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># make a nice label</span></span></span>
+<span class="r-in"><span><span class="va">res</span><span class="op">$</span><span class="va">labelname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%s (%s%s)"</span>, <span class="va">res</span><span class="op">$</span><span class="va">compname</span>, <span class="va">res</span><span class="op">$</span><span class="va">comppct_r</span>, <span class="st">"%"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># major components only</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/subset-SoilProfileCollection-method.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">res</span>, <span class="va">comppct_r</span> <span class="op">&gt;=</span> <span class="fl">85</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># inspect plot of result</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/groupedProfilePlot.html" class="external-link">groupedProfilePlot</a></span><span class="op">(</span><span class="va">res</span>, groups <span class="op">=</span> <span class="st">"mukey"</span>, color <span class="op">=</span> <span class="st">"hzname"</span>, cex.names<span class="op">=</span><span class="fl">0.8</span>,</span></span>
+<span class="r-in"><span>                   id.style <span class="op">=</span> <span class="st">"side"</span>, label <span class="op">=</span> <span class="st">"labelname"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="format_SQL_in_statement-1.png" alt="" width="768" height="475"></span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -133,7 +133,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

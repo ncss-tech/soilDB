@@ -53,19 +53,19 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">fetchLDM</span><span class="op">(</span>
-  x <span class="op">=</span> <span class="cn">NULL</span>,
-  what <span class="op">=</span> <span class="st">"pedlabsampnum"</span>,
-  bycol <span class="op">=</span> <span class="st">"pedon_key"</span>,
-  tables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lab_physical_properties"</span>, <span class="st">"lab_chemical_properties"</span>,
-    <span class="st">"lab_calculations_including_estimates_and_default_values"</span>, <span class="st">"lab_rosetta_Key"</span><span class="op">)</span>,
-  chunk.size <span class="op">=</span> <span class="fl">1000</span>,
-  ntries <span class="op">=</span> <span class="fl">3</span>,
-  layer_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"horizon"</span>, <span class="st">"layer"</span>, <span class="st">"reporting layer"</span><span class="op">)</span>,
-  prep_code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">""</span><span class="op">)</span>,
-  analyzed_size_frac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"&lt;2 mm"</span>, <span class="st">""</span><span class="op">)</span>,
-  dsn <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fetchLDM</span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  what <span class="op">=</span> <span class="st">"pedlabsampnum"</span>,</span>
+<span>  bycol <span class="op">=</span> <span class="st">"pedon_key"</span>,</span>
+<span>  tables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lab_physical_properties"</span>, <span class="st">"lab_chemical_properties"</span>,</span>
+<span>    <span class="st">"lab_calculations_including_estimates_and_default_values"</span>, <span class="st">"lab_rosetta_Key"</span><span class="op">)</span>,</span>
+<span>  chunk.size <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  ntries <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  layer_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"horizon"</span>, <span class="st">"layer"</span>, <span class="st">"reporting layer"</span><span class="op">)</span>,</span>
+<span>  prep_code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">""</span><span class="op">)</span>,</span>
+<span>  analyzed_size_frac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"&lt;2 mm"</span>, <span class="st">""</span><span class="op">)</span>,</span>
+<span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -125,24 +125,24 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"curl"</span><span class="op">)</span> <span class="op">&amp;</span></span>
-<span class="r-in">   <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/nslookup.html" class="external-link">has_internet</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># fetch by ssa_key</span></span>
-<span class="r-in">  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">fetchLDM</span><span class="op">(</span><span class="fl">8297</span>, what <span class="op">=</span> <span class="st">"ssa_key"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># physical properties correlated as taxonomic subgroup "Typic Argialbolls"</span></span>
-<span class="r-in">  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">fetchLDM</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Typic Argialbolls"</span>, </span>
-<span class="r-in">                  what <span class="op">=</span> <span class="st">"corr_taxsubgrp"</span>, </span>
-<span class="r-in">                  tables <span class="op">=</span> <span class="st">"lab_physical_properties"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># fetch by area_code (SSA only)  </span></span>
-<span class="r-in">  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">fetchLDM</span><span class="op">(</span><span class="st">"CA630"</span>, what <span class="op">=</span> <span class="st">"area_code"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"curl"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>   <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/nslookup.html" class="external-link">has_internet</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># fetch by ssa_key</span></span></span>
+<span class="r-in"><span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">fetchLDM</span><span class="op">(</span><span class="fl">8297</span>, what <span class="op">=</span> <span class="st">"ssa_key"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># physical properties correlated as taxonomic subgroup "Typic Argialbolls"</span></span></span>
+<span class="r-in"><span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">fetchLDM</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Typic Argialbolls"</span>, </span></span>
+<span class="r-in"><span>                  what <span class="op">=</span> <span class="st">"corr_taxsubgrp"</span>, </span></span>
+<span class="r-in"><span>                  tables <span class="op">=</span> <span class="st">"lab_physical_properties"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># fetch by area_code (SSA only)  </span></span></span>
+<span class="r-in"><span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">fetchLDM</span><span class="op">(</span><span class="st">"CA630"</span>, what <span class="op">=</span> <span class="st">"area_code"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -157,7 +157,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

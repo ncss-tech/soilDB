@@ -53,7 +53,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mukey.wcs</span><span class="op">(</span><span class="va">aoi</span>, db <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/combine-SoilProfileCollection-method.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gNATSGO"</span>, <span class="st">"gSSURGO"</span>, <span class="st">"RSS"</span><span class="op">)</span>, res <span class="op">=</span> <span class="fl">30</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mukey.wcs</span><span class="op">(</span><span class="va">aoi</span>, db <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gNATSGO"</span>, <span class="st">"gSSURGO"</span>, <span class="st">"RSS"</span><span class="op">)</span>, res <span class="op">=</span> <span class="fl">30</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -104,33 +104,33 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/terra/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">mukey.wcs</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">116.7400</span>, <span class="fl">35.2904</span>, <span class="op">-</span><span class="fl">116.7072</span>, <span class="fl">35.3026</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span>,</span>
-<span class="r-in">                 db <span class="op">=</span> <span class="st">'gNATSGO'</span>, res <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> </span>
-<span class="r-in">  </span>
-<span class="r-in"><span class="va">MUKEY</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">prp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fu"><a href="get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ph1to1h2o_r"</span>, <span class="st">"claytotal_r"</span><span class="op">)</span>,</span>
-<span class="r-in">    <span class="st">"weighted average"</span>,</span>
-<span class="r-in">    mukeys <span class="op">=</span> <span class="va">MUKEY</span>,</span>
-<span class="r-in">    top_depth <span class="op">=</span> <span class="fl">0</span>,</span>
-<span class="r-in">    bottom_depth <span class="op">=</span> <span class="fl">25</span>,</span>
-<span class="r-in">    include_minors <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">    miscellaneous_areas <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span class="r-in">  <span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mukey"</span>, <span class="st">"ph1to1h2o_r"</span>, <span class="st">"claytotal_r"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>,    <span class="st">"pH1to1_0to25"</span>, <span class="st">"clay_0to25"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/terra/man/factors.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">prp</span></span>
-<span class="r-in"><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/catalyze.html" class="external-link">catalyze</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">res2</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res2</span><span class="op">[[</span><span class="st">'pH1to1_0to25'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/terra/" class="external-link">terra</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">mukey.wcs</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">116.7400</span>, <span class="fl">35.2904</span>, <span class="op">-</span><span class="fl">116.7072</span>, <span class="fl">35.3026</span><span class="op">)</span>, crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 db <span class="op">=</span> <span class="st">'gNATSGO'</span>, res <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> </span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span><span class="va">MUKEY</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">prp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ph1to1h2o_r"</span>, <span class="st">"claytotal_r"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"weighted average"</span>,</span></span>
+<span class="r-in"><span>    mukeys <span class="op">=</span> <span class="va">MUKEY</span>,</span></span>
+<span class="r-in"><span>    top_depth <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>    bottom_depth <span class="op">=</span> <span class="fl">25</span>,</span></span>
+<span class="r-in"><span>    include_minors <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>    miscellaneous_areas <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mukey"</span>, <span class="st">"ph1to1h2o_r"</span>, <span class="st">"claytotal_r"</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>,    <span class="st">"pH1to1_0to25"</span>, <span class="st">"clay_0to25"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/factors.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">prp</span></span></span>
+<span class="r-in"><span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/catalyze.html" class="external-link">catalyze</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res2</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res2</span><span class="op">[[</span><span class="st">'pH1to1_0to25'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -145,7 +145,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

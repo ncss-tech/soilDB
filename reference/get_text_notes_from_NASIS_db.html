@@ -53,11 +53,11 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_text_notes_from_NASIS_db</span><span class="op">(</span>SS <span class="op">=</span> <span class="cn">TRUE</span>, fixLineEndings <span class="op">=</span> <span class="cn">TRUE</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">get_mutext_from_NASIS_db</span><span class="op">(</span>SS <span class="op">=</span> <span class="cn">TRUE</span>, fixLineEndings <span class="op">=</span> <span class="cn">TRUE</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">get_cotext_from_NASIS_db</span><span class="op">(</span>SS <span class="op">=</span> <span class="cn">TRUE</span>, fixLineEndings <span class="op">=</span> <span class="cn">TRUE</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_text_notes_from_NASIS_db</span><span class="op">(</span>SS <span class="op">=</span> <span class="cn">TRUE</span>, fixLineEndings <span class="op">=</span> <span class="cn">TRUE</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_mutext_from_NASIS_db</span><span class="op">(</span>SS <span class="op">=</span> <span class="cn">TRUE</span>, fixLineEndings <span class="op">=</span> <span class="cn">TRUE</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_cotext_from_NASIS_db</span><span class="op">(</span>SS <span class="op">=</span> <span class="cn">TRUE</span>, fixLineEndings <span class="op">=</span> <span class="cn">TRUE</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -94,22 +94,22 @@ table structure; default: <code>NULL</code></p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="local_NASIS_defined.html">local_NASIS_defined</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"> <span class="co"># query text note data</span></span>
-<span class="r-in"> <span class="va">t</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">get_text_notes_from_NASIS_db</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"> <span class="co"># show contents text note data, includes: siteobs, site, pedon, horizon level text notes data.</span></span>
-<span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"> <span class="co"># view text categories for site text notes</span></span>
-<span class="r-in"> <span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">t</span>, <span class="st">'try-error'</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">t</span><span class="op">$</span><span class="va">site_text</span><span class="op">$</span><span class="va">textcat</span><span class="op">)</span></span>
-<span class="r-in"> <span class="op">}</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="local_NASIS_defined.html">local_NASIS_defined</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span> <span class="co"># query text note data</span></span></span>
+<span class="r-in"><span> <span class="va">t</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">get_text_notes_from_NASIS_db</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span> <span class="co"># show contents text note data, includes: siteobs, site, pedon, horizon level text notes data.</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span> <span class="co"># view text categories for site text notes</span></span></span>
+<span class="r-in"><span> <span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">t</span>, <span class="st">'try-error'</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">t</span><span class="op">$</span><span class="va">site_text</span><span class="op">$</span><span class="va">textcat</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -124,7 +124,7 @@ table structure; default: <code>NULL</code></p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

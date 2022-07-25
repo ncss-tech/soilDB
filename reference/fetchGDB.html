@@ -55,37 +55,37 @@ geodatabases, and create soil profile collection objects (SPC).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_component_from_GDB</span><span class="op">(</span>
-  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  childs <span class="op">=</span> <span class="cn">FALSE</span>,
-  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">get_legend_from_GDB</span><span class="op">(</span>
-  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,
-  stats <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">get_mapunit_from_GDB</span><span class="op">(</span>
-  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,
-  stats <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">fetchGDB</span><span class="op">(</span>
-  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,
-  WHERE <span class="op">=</span> <span class="cn">NULL</span>,
-  childs <span class="op">=</span> <span class="cn">TRUE</span>,
-  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_component_from_GDB</span><span class="op">(</span></span>
+<span>  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,</span>
+<span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  childs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_legend_from_GDB</span><span class="op">(</span></span>
+<span>  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,</span>
+<span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stats <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_mapunit_from_GDB</span><span class="op">(</span></span>
+<span>  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,</span>
+<span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stats <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">fetchGDB</span><span class="op">(</span></span>
+<span>  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,</span>
+<span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  childs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -142,29 +142,29 @@ with the WHERE clause).</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## replace `dsn` with path to your own geodatabase (SSURGO OR gNATSGO)</span></span>
-<span class="r-in"><span class="co">##</span></span>
-<span class="r-in"><span class="co">##</span></span>
-<span class="r-in"><span class="co">##  download CONUS gNATSGO from here:</span></span>
-<span class="r-in"><span class="co">##    https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/geo/?cid=nrcseprd1464625</span></span>
-<span class="r-in"><span class="co">##</span></span>
-<span class="r-in"><span class="co">##</span></span>
-<span class="r-in"><span class="co"># dsn &lt;- "D:/geodata/soils/gNATSGO_CONUS.gdb"</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># le &lt;- get_legend_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE '%'")</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># mu &lt;- get_mapunit_from_GDB(dsn = dsn, WHERE = "muname LIKE 'Miami%'")</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># co &lt;- get_component_from_GDB(dsn, WHERE = "compname = 'Miami'</span></span>
-<span class="r-in"><span class="co">#                              AND majcompflag = 'Yes'", childs = FALSE)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># f_in_GDB &lt;- fetchGDB(WHERE = "areasymbol LIKE 'IN%'")</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## replace `dsn` with path to your own geodatabase (SSURGO OR gNATSGO)</span></span></span>
+<span class="r-in"><span><span class="co">##</span></span></span>
+<span class="r-in"><span><span class="co">##</span></span></span>
+<span class="r-in"><span><span class="co">##  download CONUS gNATSGO from here:</span></span></span>
+<span class="r-in"><span><span class="co">##    https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/geo/?cid=nrcseprd1464625</span></span></span>
+<span class="r-in"><span><span class="co">##</span></span></span>
+<span class="r-in"><span><span class="co">##</span></span></span>
+<span class="r-in"><span><span class="co"># dsn &lt;- "D:/geodata/soils/gNATSGO_CONUS.gdb"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># le &lt;- get_legend_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE '%'")</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># mu &lt;- get_mapunit_from_GDB(dsn = dsn, WHERE = "muname LIKE 'Miami%'")</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># co &lt;- get_component_from_GDB(dsn, WHERE = "compname = 'Miami'</span></span></span>
+<span class="r-in"><span><span class="co">#                              AND majcompflag = 'Yes'", childs = FALSE)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># f_in_GDB &lt;- fetchGDB(WHERE = "areasymbol LIKE 'IN%'")</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -180,7 +180,7 @@ with the WHERE clause).</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
