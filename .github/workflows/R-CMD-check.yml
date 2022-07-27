@@ -29,9 +29,6 @@ jobs:
           - {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
 
     env:
-      _R_REMOTES_NO_ERRORS_FROM_WARNINGS_: true
-      _R_CHECK_CRAN_INCOMING_REMOTE_: false
-      _R_CHECK_FORCE_SUGGESTS_: false
       RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
@@ -108,7 +105,9 @@ jobs:
         
       - name: Check
         env:
+          _R_CHECK_FORCE_SUGGESTS_: false
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
+          _R_REMOTES_NO_ERRORS_FROM_WARNINGS_: true
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
