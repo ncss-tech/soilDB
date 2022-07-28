@@ -367,3 +367,40 @@
 
   return(site_data)
 }
+
+
+.get_copedon_from_NASISReport <- function(nasissitename = NULL, grpname = NULL, areasymbol = NULL) {
+  
+  # fp <- "C:/ProgramData/USDA/NASIS/Temp/get_copedon_from_NASIS.html"
+  # 
+  # # test
+  # tf_idx <- file.exists(tf)
+  p_idx  <- sapply(list(nasissitename, grpname, areasymbol), is.null)
+  
+  # if (tf_idx & any(! p_idx)) {
+  #   stop("the temp file ", tf, "\n doesn't exist and some of the argument parameters are NULL, please run the get_copedon_from_NASIS report in NASIS or enter the necessary argument parameters")
+  # }
+  if (any(p_idx)) {
+    stop("some of the argument parameters are NULL")
+    }
+  
+  
+  # # local report
+  # if (tf_idx & all(p_idx)) {
+  #   df <- tf |> 
+  #     xml2::read_html() |> 
+  #     rvest::html_table(header = TRUE) |> 
+  #     as.data.frame()
+  #   } 
+  
+  # web report
+  if (! all(p_idx)) {
+    url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_copedon_from_NASISWebReport"
+    args <- list(p_nasissitename = nasissitename, p_grpname = grpname, p_areasymbol = areasymbol)
+    
+    df <- parseWebReport(url, args)
+  }
+  
+  return(df)
+}
+
