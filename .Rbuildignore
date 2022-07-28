@@ -15,3 +15,4 @@ README.Rmd
 ^pkgdown$
 ^CRAN-SUBMISSION$
 ^data-raw$
+^CITATION\.cff$
