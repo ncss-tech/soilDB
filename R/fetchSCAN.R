@@ -66,7 +66,7 @@
   n.tables <- rvest::html_nodes(r.content, "table")
 
   # the metadata table we want is the last one
-  m <- rvest::html_table(n.tables[[length(n.tables)]], header=FALSE)
+  m <- rvest::html_table(n.tables[[length(n.tables)]], header = FALSE)
 
   # clean-up table
   # 1st row is header
@@ -86,8 +86,8 @@
 SCAN_sensor_metadata <- function(site.code) {
 
   # check for required packages
-  if(!requireNamespace('httr', quietly = TRUE) | !requireNamespace('rvest', quietly = TRUE))
-    stop('please install the `httr` and `rvest` packages', call.=FALSE)
+  if (!requireNamespace('httr', quietly = TRUE) | !requireNamespace('rvest', quietly = TRUE))
+    stop('please install the `httr` and `rvest` packages', call. = FALSE)
 
   # iterate over site codes, returning DF + site.code
 
@@ -270,12 +270,13 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', ...) {
   d.cols <- grep(code, names(d))
 
   # return NULL if no data
-  if(length(d.cols) == 0)
+  if (length(d.cols) == 0) {
     return(NULL)
-
+  }
+  
   ## https://github.com/ncss-tech/soilDB/issues/14
   ## there may be multiple above-ground sensors (takes the first)
-  if(length(d.cols) > 1 & code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC',
+  if (length(d.cols) > 1 & code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC',
                                       'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
     message(paste0('multiple sensors per site [site ', d$Site[1], '] ',
                    paste0(names(d)[d.cols], collapse = ',')))
@@ -284,7 +285,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', ...) {
   }
 
   # coerce all values to double (avoids data.table warnings)
-  mvars <- names(d)[d.cols]
+  mvars <- unique(names(d)[d.cols])
   d[mvars] <- lapply(d[mvars], as.double)
 
   # convert to long format
