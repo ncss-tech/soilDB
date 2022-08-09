@@ -38,7 +38,7 @@ test_that("get_EDIT_ecoclass_by_geoUnit works", {
   
   skip_on_cran()
   
-  res <- get_EDIT_ecoclass_by_geoUnit(c("018X","022A"))
+  res <- suppressWarnings(get_EDIT_ecoclass_by_geoUnit(c("018X","022A")))
   
   # skip on error
   skip_if(is.null(res))
