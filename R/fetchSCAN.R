@@ -173,7 +173,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', ...) {
   l.extra <- list(...)
   # TODO do this after expansion to iterate over site.code*year + ???
   l <- c(sitenum = site.code, year = year, report = report, l.extra)
-  if (length(l) > 3) {
+  if (length(l.extra) > 0) {
     if ("req" %in% names(l)) {
       .Deprecated("`req` argument is deprecated; custom form inputs can be specified as named arguments via `...`")
       l <- l[["req"]]
