@@ -122,6 +122,7 @@ jobs:
 
       - name: Commit results
         if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        continue-on-error: true
         run: |
           git add README.md 
           git commit -m 'Render README.Rmd' || echo "No changes to commit"
