@@ -139,7 +139,7 @@ SCAN_site_metadata <- function(site.code = NULL) {
 #' @param site.code a vector of site codes. If `NULL` `SCAN_site_metadata()` returns metadata for all SCAN sites.
 #' @param year a vector of years
 #' @param report report name, single value only
-#' @param ... additional arguments (not used)
+#' @param ... additional arguments. May include `intervalType`, `report`, `timeseries`, `format`, `sitenum`, `interval`, `year`, `month`; bypasses default batching functionality provided in the function and submits a 'raw' request to the API form.
 #' @return a \code{data.frame} object; `NULL` on bad request.
 #' @author D.E. Beaudette, A.G. Brown
 #' @references https://www.nrcs.usda.gov/wps/portal/wcc/home/
@@ -163,19 +163,24 @@ SCAN_site_metadata <- function(site.code = NULL) {
 #' }
 #'
 #' @export fetchSCAN
-fetchSCAN <- function(site.code, year, report = 'SCAN', ...) {
+fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', ...) {
 
   # check for required packages
   if (!requireNamespace('httr', quietly = TRUE))
     stop('please install the `httr` package', call. = FALSE)
 
-  ## backwards compatibility
-  l <- list(...)
-  if (length(l) > 0) {
+  ## allow for arbitary queries using `req` argument or additional arguments via ...
+  l.extra <- list(...)
+  # TODO do this after expansion to iterate over site.code*year + ???
+  l <- c(sitenum = site.code, year = year, report = report, l.extra)
+  if (length(l) > 3) {
     if ("req" %in% names(l)) {
-        .Deprecated(msg = "`req` argument is deprecated")
-        return(.get_SCAN_data(req = l[["req"]]))
+      .Deprecated("`req` argument is deprecated; custom form inputs can be specified as named arguments via `...`")
+      l <- l[["req"]]
+    } else {
+      l <- unlist(l)
     }
+    return(.get_SCAN_data(req = l))
   }
 
   # init list to store results

@@ -10,7 +10,7 @@ SCAN_sensor_metadata(site.code)
 
 SCAN_site_metadata(site.code = NULL)
 
-fetchSCAN(site.code, year, report = "SCAN", ...)
+fetchSCAN(site.code = NULL, year = NULL, report = "SCAN", ...)
 }
 \arguments{
 \item{site.code}{a vector of site codes. If \code{NULL} \code{SCAN_site_metadata()} returns metadata for all SCAN sites.}
@@ -19,7 +19,7 @@ fetchSCAN(site.code, year, report = "SCAN", ...)
 
 \item{report}{report name, single value only}
 
-\item{...}{additional arguments (not used)}
+\item{...}{additional arguments. May include \code{intervalType}, \code{report}, \code{timeseries}, \code{format}, \code{sitenum}, \code{interval}, \code{year}, \code{month}; bypasses default batching functionality provided in the function and submits a 'raw' request to the API form.}
 }
 \value{
 a \code{data.frame} object; \code{NULL} on bad request.
