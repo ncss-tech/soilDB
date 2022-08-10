@@ -53,7 +53,7 @@ jobs:
           git pull --no-rebase origin ${{ env.BRANCH_NAME }}
           echo ${{ env.BRANCH_NAME }}
 
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
 
