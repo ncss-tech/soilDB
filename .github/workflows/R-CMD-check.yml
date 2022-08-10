@@ -96,7 +96,9 @@ jobs:
 
       - name: Install aqp off GitHub  (devel only)
         if: matrix.config.r == 'devel'
-        run: remotes::install_github("ncss-tech/aqp", dependencies = FALSE, build = FALSE)
+        run: |
+          install.packages("stringi")
+          remotes::install_github("ncss-tech/aqp", dependencies = FALSE, build = FALSE)
         shell: Rscript {0}
         
       - name: Install terra off r-universe (devel only)
