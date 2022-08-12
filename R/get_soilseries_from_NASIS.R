@@ -1,12 +1,10 @@
-#' Get records from the Soil Classification (SC) database
+#' Get records from the Series Classification (SC) database
 #'
-#' These functions return records from the Soil Classification database, either
+#' These functions return records from the Series Classification (SC) database, either
 #' from the local NASIS database (all series) or via web report (named series
 #' only).
 #' @param stringsAsFactors deprecated
-#' @param dsn Optional: path to local SQLite database containing NASIS
-#' table structure; default: `NULL`
-#'
+#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
 #' @param delimiter _character_. Used to collapse `taxminalogy` records where multiple values are used to describe strongly contrasting control sections. Default `" over "` creates combination mineralogy classes as they would be used in the family name.
 #'
 #' @return A \code{data.frame}
@@ -98,4 +96,24 @@ get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = NULL) {
 
   # return data.frame
   return(d.ss)
+}
+
+
+#' @description `get_competing_soilseries_from_NASIS():` Get Soil Series from NASIS Matching Taxonomic Class Name
+#'
+#' @param x Taxonomic Class Name (or other field specified by `what`) to match, use `%` for wildcard
+#' @param what Column name to match `x` against, default: `'taxclname'`
+#' @export
+#' @rdname get_soilseries_from_NASIS
+# @examples
+# get_competing_soilseries_from_NASIS("fine-loamy, mixed, %, thermic ultic haploxeralfs")
+get_competing_soilseries_from_NASIS <- function(x, what = 'taxclname', dsn = NULL) {
+  
+  con <- dbConnectNASIS(dsn)
+  
+  q <- sprintf("SELECT * FROM soilseries WHERE %s LIKE '%s'", what, x)
+  
+  res <- dbQueryNASIS(con, q)
+  
+  uncode(res, dsn = dsn)
 }

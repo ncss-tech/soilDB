@@ -3,7 +3,8 @@
 \name{get_soilseries_from_NASIS}
 \alias{get_soilseries_from_NASIS}
 \alias{get_soilseries_from_NASISWebReport}
-\title{Get records from the Soil Classification (SC) database}
+\alias{get_competing_soilseries_from_NASIS}
+\title{Get records from the Series Classification (SC) database}
 \usage{
 get_soilseries_from_NASIS(
   stringsAsFactors = NULL,
@@ -12,24 +13,31 @@ get_soilseries_from_NASIS(
 )
 
 get_soilseries_from_NASISWebReport(soils, stringsAsFactors = NULL)
+
+get_competing_soilseries_from_NASIS(x, what = "taxclname", dsn = NULL)
 }
 \arguments{
 \item{stringsAsFactors}{deprecated}
 
-\item{dsn}{Optional: path to local SQLite database containing NASIS
-table structure; default: \code{NULL}}
+\item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default: \code{NULL}}
 
 \item{delimiter}{\emph{character}. Used to collapse \code{taxminalogy} records where multiple values are used to describe strongly contrasting control sections. Default \code{" over "} creates combination mineralogy classes as they would be used in the family name.}
 
 \item{soils}{A vector of soil series names}
+
+\item{x}{Taxonomic Class Name (or other field specified by \code{what}) to match, use \verb{\%} for wildcard}
+
+\item{what}{Column name to match \code{x} against, default: \code{'taxclname'}}
 }
 \value{
 A \code{data.frame}
 }
 \description{
-These functions return records from the Soil Classification database, either
+These functions return records from the Series Classification (SC) database, either
 from the local NASIS database (all series) or via web report (named series
 only).
+
+\verb{get_competing_soilseries_from_NASIS():} Get Soil Series from NASIS Matching Taxonomic Class Name
 }
 \author{
 Stephen Roecker
