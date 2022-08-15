@@ -54,11 +54,8 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   if (!requireNamespace("curl")) 
     stop("package curl is required to download series extent data", call. = FALSE)
   
-  # setup curl options
-  h <- curl::new_handle()
-  # download timeout should be longer than default (13 seconds)
-  # value must be a number
-  curl::handle_setopt(h, timeout = timeout);
+  # download timeout should be longer than default (13 seconds) 
+  h <- .soilDB_curl_handle(timeout = timeout)
   
   # sanity check on type
   type <- match.arg(type)
