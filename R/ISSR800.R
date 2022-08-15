@@ -5,7 +5,7 @@
 #' @param aoi area of interest (AOI) defined using a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, OR a \code{list}, see details
 #' @param var ISSR-800 grid name (case insensitive), see details 
 #' @param res grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.
-#' @param quiet logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.
+#' @param quiet logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.
 #'  
 #' @details \code{aoi} should be specified as a \code{SpatRaster}, \code{Spatial*}, \code{RasterLayer}, \code{SpatRaster}/\code{SpatVector}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
 #' 
@@ -116,7 +116,7 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   tf <- tempfile()
   dl.try <- try(
     suppressWarnings(
-      download.file(u, destfile = tf, mode = 'wb', quiet = quiet)
+      curl::curl_download(u, destfile = tf, mode = 'wb', handle = .soilDB_curl_handle(), quiet = quiet)
     ),
     silent = TRUE
   )

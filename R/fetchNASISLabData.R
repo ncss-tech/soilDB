@@ -22,10 +22,9 @@
 #' @export fetchNASISLabData
 fetchNASISLabData <- function(SS = TRUE, dsn = NULL) {
 
-	# test connection
-	if (!local_NASIS_defined(dsn))
-			stop('Local NASIS ODBC connection has not been setup. Please see the `setup_ODBC_local_NASIS.pdf` document included with this package.')
-
+  # check if NASIS local DB instance/ODBC data source is available
+  .soilDB_test_NASIS_connection(dsn = dsn)
+  
 	# 1. load data in pieces, results are DF objects
 	s <- get_labpedon_data_from_NASIS_db(SS = SS, dsn = dsn)
 	h <- get_lablayer_data_from_NASIS_db(SS = SS, dsn = dsn)

@@ -109,12 +109,12 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   tf.vnir <- tempfile()
 
   # download pieces
-  download.file(url=site.url, destfile=tf.site, mode='wb', quiet=TRUE)
-  download.file(url=hz.url, destfile=tf.hz, mode='wb', quiet=TRUE)
-  download.file(url=trees.url, destfile=tf.trees, mode='wb', quiet=TRUE)
-  download.file(url=veg.url, destfile=tf.veg, mode='wb', quiet=TRUE)
-  download.file(url=stock.url, destfile=tf.stock, mode='wb', quiet=TRUE)
-  download.file(url=sample.url, destfile=tf.sample, mode='wb', quiet=TRUE)
+  curl::curl_download(url = site.url, destfile = tf.site, mode = 'wb', handle = .soilDB_curl_handle(), quiet = TRUE)
+  curl::curl_download(url = hz.url, destfile = tf.hz, mode = 'wb', handle = .soilDB_curl_handle(), quiet = TRUE)
+  curl::curl_download(url = trees.url, destfile = tf.trees, mode = 'wb',  handle = .soilDB_curl_handle(), quiet = TRUE)
+  curl::curl_download(url = veg.url, destfile = tf.veg, mode = 'wb', handle = .soilDB_curl_handle(), quiet = TRUE)
+  curl::curl_download(url = stock.url, destfile = tf.stock, mode = 'wb', handle = .soilDB_curl_handle(), quiet = TRUE)
+  curl::curl_download(url = sample.url, destfile = tf.sample, mode = 'wb',  handle = .soilDB_curl_handle(), quiet = TRUE)
 
   # load pieces
   try(s <- read.table(gzfile(tf.site), header=TRUE, sep='|', quote='', comment.char=''), silent=TRUE)
@@ -132,7 +132,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
     message('spectra are large, download may take some time...', appendLF=TRUE)
 
     # save the file locally
-    download.file(url=vnir.url, destfile=tf.vnir, mode='wb', quiet=TRUE)
+    curl::curl_download(url = vnir.url, destfile = tf.vnir, mode = 'wb',  handle = .soilDB_curl_handle(), quiet = TRUE)
     # try to open
     try(vnir <- read.table(gzfile(tf.vnir), header=TRUE, sep='|'), silent=TRUE)
 

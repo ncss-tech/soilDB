@@ -349,7 +349,7 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   
   # this is a little noisy, but people like to see progress
   tf.json <- tempfile()
-  download.file(url = json.url, destfile = tf.json, mode = 'wb', quiet = FALSE)
+  curl::curl_download(url = json.url, destfile = tf.json, mode = 'wb', handle = .soilDB_curl_handle(), quiet = FALSE)
   
   ## TODO: check NA handling
   # parse JSON into list of DF

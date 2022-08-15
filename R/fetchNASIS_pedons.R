@@ -17,10 +17,9 @@
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  # test connection
-  if (!local_NASIS_defined(dsn) & !inherits(dsn, 'DBIConnection'))
-    stop('Local NASIS ODBC connection has not been set up. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
-
+  # check if NASIS local DB instance/ODBC data source is available
+  .soilDB_test_NASIS_connection(dsn = dsn)
+  
   # sanity check
   if (!soilColorState %in% c('dry', 'moist'))
     stop('soilColorState must be either `dry` or `moist`', call. = FALSE)

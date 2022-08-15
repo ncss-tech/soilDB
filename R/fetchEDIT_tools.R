@@ -156,7 +156,12 @@ get_EDIT_ecoclass_by_geoUnit <- function(geoUnit, catalog = c("esd", "esg")) {
                                        catalog = catalog,
                                        geoUnit = aUnit,
                                        endpoint = "class-list.json")
-    thelist <- try(jsonlite::read_json(desclist))
+    tf <- tempfile(fileext = ".json")
+    
+    thelist <- try({
+        curl::curl_download(desclist, tf, quiet = TRUE, handle = .soilDB_curl_handle())
+        jsonlite::read_json(tf)
+      })
     if (inherits(thelist, 'try-error')) return(NULL)
     do.call('rbind', lapply(thelist[[2]], data.frame))
   })))

@@ -25,10 +25,10 @@ fetchVegdata <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  # test connection
-  if (!local_NASIS_defined(dsn))
-    stop('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
-	
+  
+  # check if NASIS local DB instance/ODBC data source is available
+  .soilDB_test_NASIS_connection(dsn = dsn)
+  
 	# 1. load data in pieces
   vegplot <- get_vegplot_from_NASIS_db(SS = SS, dsn =  dsn)
   vegplotlocation <-get_vegplot_location_from_NASIS_db(SS = SS,  dsn =  dsn)

@@ -12,7 +12,7 @@
 #' @param extract Logical. Extract ZIP files to `exdir`? Default: `TRUE`
 #' @param remove_zip Logical. Remove ZIP files after extracting? Default: `FALSE` 
 #' @param overwrite Logical. Overwrite by re-extracting if directory already exists? Default: `FALSE`
-#' @param quiet Logical. Passed to `download.file()`.
+#' @param quiet Logical. Passed to `curl::curl_download()`.
 #' @export
 #' 
 #' @details Pipe-delimited TXT files are found in _/tabular/_ folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the _Soil Data Access Tables and Columns Report_: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files. The function returns a `try-error` if the `WHERE`/`areasymbols` arguments result in
@@ -60,7 +60,7 @@ downloadSSURGO <- function(WHERE = NULL,
   for (i in seq_along(urls)) {
     destfile <- file.path(destdir, basename(urls[i]))
     if (!file.exists(destfile)) {
-      try(download.file(urls[i], destfile = destfile, quiet = quiet, mode = "wb"), silent = quiet)
+      try(curl::curl_download(urls[i], destfile = destfile, quiet = quiet, mode = "wb", handle = .soilDB_curl_handle()), silent = quiet)
     }
   }
   

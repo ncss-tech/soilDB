@@ -11,9 +11,10 @@
 #' @export 
 getHzErrorsNASIS <- function(strict = TRUE, SS = TRUE, dsn = NULL) {
 
-  if (!local_NASIS_defined(dsn))
-    stop('Local NASIS ODBC connection has not been setup. Please see `http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html`.')
-
+  
+  # check if NASIS local DB instance/ODBC data source is available
+  .soilDB_test_NASIS_connection(dsn = dsn)
+  
 	# get data
 	site_data <- get_site_data_from_NASIS_db(SS = SS, dsn = dsn)
 	site_data$pedon_id <- NULL

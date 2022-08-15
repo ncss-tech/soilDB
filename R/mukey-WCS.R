@@ -9,7 +9,7 @@
 #' @param aoi area of interest (AOI) defined using either a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, or a \code{list}, see details
 #' @param db name of the gridded map unit key grid to access, should be either 'gNATSGO' or 'gSSURGO' (case insensitive)
 #' @param res grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; and Raster Soil Surveys (RSS) are at 10m resolution. If `res` is not specified the native resolution of the source is used.
-#' @param quiet logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.
+#' @param quiet logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.
 #'
 #' @note The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
 #'
@@ -153,7 +153,7 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS'), res = 30, quiet 
   tf <- tempfile()
   dl.try <- try(
     suppressWarnings(
-      download.file(u, destfile = tf, mode = 'wb', quiet = quiet)
+      curl::curl_download(u, destfile = tf, mode = 'wb', handle = .soilDB_curl_handle(), quiet = quiet)
     ),
     silent = TRUE
   )
