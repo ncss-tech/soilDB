@@ -9,7 +9,7 @@ seriesExtent(s, type = c("vector", "raster"), timeout = 60)
 \arguments{
 \item{s}{a soil series name, case-insensitive}
 
-\item{type}{series extent representation, \code{vector} results in a \code{SpatialPolygonsDataFrame} object and \code{raster} results in a \code{raster} object}
+\item{type}{series extent representation, 'vector': results in an \code{sf} object and 'raster' results in a \code{SpatRaster} object}
 
 \item{timeout}{time that we are willing to wait for a response, in seconds}
 }
