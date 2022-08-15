@@ -274,7 +274,7 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   # Windows: must manually specify binary transfer
   res <- tryCatch(
     suppressWarnings(
-      curl::curl_download(url = u, destfile = tf, handle = .soilDB_curl_handle(), quiet = TRUE, mode = 'wb')
+      curl::curl_download(url = u, destfile = tf, handle = .soilDB_curl_handle(timeout = timeout), quiet = TRUE, mode = 'wb')
     ),
     error = function(e) {e}
   )
