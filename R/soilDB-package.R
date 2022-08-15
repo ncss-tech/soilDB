@@ -12,7 +12,7 @@
 #'  @seealso \code{\link{fetchPedonPC}, \link{fetchNASIS}, \link{SDA_query}, \link{loafercreek}}
 #' @importFrom grDevices rgb convertColor col2rgb
 #' @importFrom stats aggregate complete.cases na.omit as.formula splinefun weighted.mean
-#' @importFrom utils URLencode curl::curl_download object.size read.csv read.table read.delim setTxtProgressBar txtProgressBar write.table type.convert unzip
+#' @importFrom utils URLencode object.size read.csv read.table read.delim setTxtProgressBar txtProgressBar write.table type.convert unzip
 #' @importFrom data.table rbindlist data.table as.data.table merge.data.table
 #' @importFrom DBI dbGetQuery dbConnect dbSendQuery dbFetch
 #' @importFrom methods slot slot<- as is

@@ -12,8 +12,8 @@ Description: A collection of functions for reading data from USDA-NCSS soil data
 License: GPL (>= 3)
 LazyLoad: yes
 Depends: R (>= 3.5.0)
-Imports: grDevices, graphics, stats, utils, methods, aqp, data.table, DBI
-Suggests: jsonlite, httr, xml2, rvest, curl, sf, wk, terra, raster, odbc, RSQLite, testthat, scales
+Imports: grDevices, graphics, stats, utils, methods, aqp, data.table, DBI, curl
+Suggests: jsonlite, httr, xml2, rvest, sf, wk, terra, raster, odbc, RSQLite, testthat, scales
 Repository: CRAN
 URL: http://ncss-tech.github.io/soilDB/, http://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues

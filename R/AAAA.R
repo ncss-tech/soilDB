@@ -4,9 +4,6 @@ soilDB.env <- new.env(hash=TRUE, parent = parent.frame())
 
 # safely register some options at package load time
 .onLoad <- function(libname, pkgname) {
-
-  # deprecated: soilDB 2.5.9 CRAN release
-  options(.soilDB_testNetworkFunctions = TRUE)
   
   # function verbosity
   options(soilDB.verbose = FALSE)
