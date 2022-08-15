@@ -33,7 +33,7 @@ downloadSSURGO(
 
 \item{overwrite}{Logical. Overwrite by re-extracting if directory already exists? Default: \code{FALSE}}
 
-\item{quiet}{Logical. Passed to \code{download.file()}.}
+\item{quiet}{Logical. Passed to \code{curl::curl_download()}.}
 }
 \value{
 Character. Paths to downloaded ZIP files (invisibly). May not exist if \code{remove_zip = TRUE}.

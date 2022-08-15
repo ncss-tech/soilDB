@@ -13,7 +13,7 @@ ISSR800.wcs(aoi, var, res = 800, quiet = FALSE)
 
 \item{res}{grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.}
 
-\item{quiet}{logical, passed to \code{download.file} to enable / suppress URL and progress bar for download.}
+\item{quiet}{logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.}
 }
 \value{
 A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the \code{terra} package are returned. If the input object class is from the \code{raster} or \code{sp} packages a RasterLayer is returned.
