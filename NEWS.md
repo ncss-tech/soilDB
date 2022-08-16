@@ -4,7 +4,7 @@
  
  * Adds `get_NASIS_metadata()` and helper method `get_NASIS_column_metadata()` and other new tools for working with `uncode()`, factors and NASIS metadata cached in the package.
  
- * Bug fix for `get_cosoilmoist_from_SDA()`; thanks to Monkika Shea @monikashea for reporting the problem (https://github.com/ncss-tech/soilDB/issues/253)
+ * Bug fix for `get_cosoilmoist_from_SDA()`; thanks to Monika Shea @monikashea for reporting the problem (https://github.com/ncss-tech/soilDB/issues/253)
  
  * `fetchNASIS_report()` now works with the output from `"get_site_from_NASIS"` report (useful for site records without associated pedons)
  
@@ -14,7 +14,7 @@
  
  * `get_OSD()`: Add `fix_ocr_errors` argument for `result='json'` to fix common optical character recognition errors associated with horizon designations and colors (NOTE: does NOT fix depths)
  
- * `fetchSCAN()` gains `timeseries` argument to support batch downloads of hourly data. Additional arguments (`...`) are passed as a raw request, allowing other parameters sent in request to be modified, bypassing batch functionality. Thanks to Matthew Morriss for raising the discussion item @morrismc99 (https://github.com/ncss-tech/soilDB/discussions/260).
+ * `fetchSCAN()` gains `timeseries` argument to support batch downloads of hourly data. Additional arguments (`...`) are passed as a raw request, allowing other parameters sent in request to be modified if needed, and bypassing batch functionality. This is similar to the `req` argument syntax used in earlier versions of this function, which had been deprecated for some time now. Thanks to Matthew Morriss for raising the discussion item @morrismc99 (https://github.com/ncss-tech/soilDB/discussions/260).
  
  * {curl} moved from Suggests to Imports; `curl::curl_download()` is now used instead of `utils::download.file()` because it seems to handle SSL certificates better on some networks.
  
