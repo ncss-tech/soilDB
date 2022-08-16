@@ -77,7 +77,7 @@
 
 
 <dt>report</dt>
-<dd><p>report name, single value only</p></dd>
+<dd><p>report name, single value only; default <code>'SCAN'</code>, other example options include individual sensor codes, e.g. <code>'SMS'</code> for Soil Moisture Storage, <code>'TEMP'</code> for temperature</p></dd>
 
 
 <dt>timeseries</dt>
@@ -92,7 +92,7 @@
     <h2>Value</h2>
     
 
-<p>a <code>data.frame</code> object; <code>NULL</code> on bad request.</p>
+<p>a <code>list</code> of <code>data.frame</code> objects, where each element name is a sensor type, plus a <code>metadata</code> table; different <code>report</code> types change the types of sensor data returned. <code>SCAN_sensor_metadata()</code> and <code>SCAN_site_metadata()</code> return a <code>data.frame</code>. <code>NULL</code> on bad request.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
