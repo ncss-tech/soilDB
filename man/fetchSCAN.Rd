@@ -23,14 +23,14 @@ SCAN_site_metadata(site.code = NULL)
 
 \item{year}{a vector of years}
 
-\item{report}{report name, single value only}
+\item{report}{report name, single value only; default \code{'SCAN'}, other example options include individual sensor codes, e.g. \code{'SMS'} for Soil Moisture Storage, \code{'TEMP'} for temperature}
 
 \item{timeseries}{either \code{'Daily'} or \code{'Hourly'}}
 
 \item{...}{additional arguments. May include \code{intervalType}, \code{format}, \code{sitenum}, \code{interval}, \code{year}, \code{month}. Presence of additional arguments bypasses default batching functionality provided in the function and submits a 'raw' request to the API form.}
 }
 \value{
-a \code{data.frame} object; \code{NULL} on bad request.
+a \code{list} of \code{data.frame} objects, where each element name is a sensor type, plus a \code{metadata} table; different \code{report} types change the types of sensor data returned. \code{SCAN_sensor_metadata()} and \code{SCAN_site_metadata()} return a \code{data.frame}. \code{NULL} on bad request.
 }
 \description{
 Query soil/climate data from USDA-NRCS SCAN Stations

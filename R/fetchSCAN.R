@@ -73,10 +73,10 @@
 #' 
 #' @param site.code a vector of site codes. If `NULL` `SCAN_site_metadata()` returns metadata for all SCAN sites.
 #' @param year a vector of years
-#' @param report report name, single value only
+#' @param report report name, single value only; default `'SCAN'`, other example options include individual sensor codes, e.g. `'SMS'` for Soil Moisture Storage, `'TEMP'` for temperature
 #' @param timeseries either `'Daily'` or `'Hourly'`
 #' @param ... additional arguments. May include `intervalType`, `format`, `sitenum`, `interval`, `year`, `month`. Presence of additional arguments bypasses default batching functionality provided in the function and submits a 'raw' request to the API form.
-#' @return a \code{data.frame} object; `NULL` on bad request.
+#' @return a `list` of `data.frame` objects, where each element name is a sensor type, plus a `metadata` table; different `report` types change the types of sensor data returned. `SCAN_sensor_metadata()` and `SCAN_site_metadata()` return a `data.frame`. `NULL` on bad request. 
 #' @author D.E. Beaudette, A.G. Brown
 #' @keywords manip
 #' @examples
@@ -277,7 +277,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   
   # Time ranges from  "00:00" to "23:00" [24 hourly readings]
   # set Time to 12:00 (middle of day) for daily data
-  if (all(res$Time == "")) {
+  if (is.null(res$Time) || all(res$Time == "")) {
     res$Time <- "12:00"
   }
   
