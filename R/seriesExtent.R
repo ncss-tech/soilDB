@@ -3,9 +3,10 @@
 #' @description This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (`sf` object) or gridded representation of area proportion falling within 800m cells (`SpatRaster` object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (`EPSG:5070`).
 #' 
 #' @param s a soil series name, case-insensitive
-#' @param type series extent representation, 'vector': results in an `sf` object and 'raster' results in a `SpatRaster` object
+#' @param type series extent representation, `'vector'`: results in an `sf` object and `'raster'` results in a `SpatRaster` object
 #' @param timeout time that we are willing to wait for a response, in seconds
-#' 
+#' @param as_Spatial Return sp (`SpatialPolygonsDataFrame`) / raster (`RasterLayer`) classes? Default: `FALSE`.
+#' @return An R spatial object, class depending on `type` and `as_Spatial` arguments
 #' @references \url{https://casoilresource.lawr.ucdavis.edu/see/}
 #' @author D.E. Beaudette
 #' 
@@ -49,10 +50,8 @@
 #' }
 #' }
 #' 
-seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
-
-  if (!requireNamespace("curl")) 
-    stop("package curl is required to download series extent data", call. = FALSE)
+seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60, 
+                         as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {
   
   # download timeout should be longer than default (13 seconds) 
   h <- .soilDB_curl_handle(timeout = timeout)
@@ -67,15 +66,15 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   # ch: this is a shared curl handle with options set
   res <- switch(
     type,
-    vector = {.vector_extent(s, ch = h)},
-    raster = {.raster_extent(s, ch = h)}
+    vector = {.vector_extent(s, ch = h, as_Spatial = as_Spatial)},
+    raster = {.raster_extent(s, ch = h, as_Spatial = as_Spatial)}
   )
   
   return(res)
 }
 
 # 2022-08-15: converted from download.file() -> curl::curl_download() due to SSL errors
-.vector_extent <- function(s, ch) {
+.vector_extent <- function(s, ch, as_Spatial) {
   
   if (!requireNamespace("sf")) 
     stop("package sf is required to return vector series extent grids", call. = FALSE)
@@ -109,12 +108,16 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   # reset row names in attribute data to series name
   rownames(x) <- as.character(x$series)
   
+  if (as_Spatial) {
+    x <- sf::as_Spatial(x)
+  }
+  
   # GCS WGS84
   return(x)
 }
 
 # 2022-08-15: converted from download.file() -> curl::curl_download() due to SSL errors
-.raster_extent <- function(s, ch) {
+.raster_extent <- function(s, ch, as_Spatial) {
   
   if (!requireNamespace("terra")) 
     stop("package terra is required to return raster series extent grids", call. = FALSE)
@@ -156,6 +159,14 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60) {
   
   # make CRS explicit
   terra::crs(x) <- 'EPSG:5070'
+  
+  if (as_Spatial) {
+    if (requireNamespace("raster", quietly = TRUE)) {
+      x <- raster::raster(x) 
+    } else {
+      stop("Package `raster` is required to return raster data as a RasterLayer object with soilDB.return_Spatial=TRUE")
+    }
+  }
   
   return(x)
 }

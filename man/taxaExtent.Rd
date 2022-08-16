@@ -8,20 +8,23 @@ taxaExtent(
   x,
   level = c("order", "suborder", "greatgroup", "subgroup"),
   formativeElement = FALSE,
-  timeout = 60
+  timeout = 60,
+  as_Spatial = getOption("soilDB.return_Spatial", default = FALSE)
 )
 }
 \arguments{
 \item{x}{single taxon label (e.g. \code{haploxeralfs}) or formative element (e.g. \code{pale}), case-insensitive}
 
-\item{level}{the taxonomic level within the top 4 tiers of Soil Taxonomy, one of \code{c('order', 'suborder', 'greatgroup', 'subgroup')}}
+\item{level}{the taxonomic level within the top 4 tiers of Soil Taxonomy, one of \code{'order'}, \code{'suborder'}, \code{'greatgroup'}, \code{'subgroup'}}
 
 \item{formativeElement}{logical, search using formative elements instead of taxon label}
 
 \item{timeout}{time that we are willing to wait for a response, in seconds}
+
+\item{as_Spatial}{Return raster (\code{RasterLayer}) classes? Default: \code{FALSE}.}
 }
 \value{
-a \code{SpatRaster} object
+a \code{SpatRaster} object (or \code{RasterLayer} when \code{as_Spatial=TRUE})
 }
 \description{
 This function downloads a generalized representation of the geographic extent of any single taxon from the top 4 levels of Soil Taxonomy, or taxa matching a given formative element used in Great Group or subgroup taxa. Data are provided by SoilWeb, ultimately sourced from the current SSURGO snapshot. Data are returned as \code{raster} objects representing area proportion falling within 800m cells. Currently area proportions are based on major components only. Data are only available in CONUS and returned using an Albers Equal Area / NAD83(2011) coordinate reference system (EPSG: 5070).
@@ -30,13 +33,13 @@ This function downloads a generalized representation of the geographic extent of
 See the \href{https://ncss-tech.github.io/AQP/soilDB/taxa-extent.html}{Geographic Extent of Soil Taxa} tutorial for more detailed examples.
 \subsection{Taxon Queries}{
 
-Taxon labels can be conveniently extracted from the "ST_unique_list" sample data, provided by the \href{https://github.com/ncss-tech/SoilTaxonomy}{SoilTaxonomy package}.
+Taxon labels can be conveniently extracted from the \code{"ST_unique_list"} sample data, provided by the \href{https://github.com/ncss-tech/SoilTaxonomy}{SoilTaxonomy package}.
 }
 
 \subsection{Formative Element Queries}{
 \subsection{Greatgroup:}{
 
-The following labels are used to access taxa containing the following formative elements (in parenthesis).
+The following labels are used to access taxa containing the following formative elements (in parentheses)
 \itemize{
 \item acr: (acro/acr) extreme weathering
 \item alb: (alb) presence of an albic horizon

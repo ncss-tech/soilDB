@@ -5,13 +5,15 @@
 #' 
 #' @param x single taxon label (e.g. `haploxeralfs`) or formative element (e.g. `pale`), case-insensitive
 #' 
-#' @param level the taxonomic level within the top 4 tiers of Soil Taxonomy, one of \code{c('order', 'suborder', 'greatgroup', 'subgroup')}
+#' @param level the taxonomic level within the top 4 tiers of Soil Taxonomy, one of `'order'`, `'suborder'`, `'greatgroup'`, `'subgroup'`
 #' 
 #' @param formativeElement logical, search using formative elements instead of taxon label
 #' 
 #' @param timeout time that we are willing to wait for a response, in seconds
 #' 
-#' @return a `SpatRaster` object
+#' @param as_Spatial Return raster (`RasterLayer`) classes? Default: `FALSE`.
+#' 
+#' @return a `SpatRaster` object (or `RasterLayer` when `as_Spatial=TRUE`)
 #' 
 #' @author D.E. Beaudette and A.G. Brown
 #' 
@@ -19,12 +21,12 @@
 #' 
 #' ## Taxon Queries
 #' 
-#' Taxon labels can be conveniently extracted from the "ST_unique_list" sample data, provided by the [SoilTaxonomy package](https://github.com/ncss-tech/SoilTaxonomy).
+#' Taxon labels can be conveniently extracted from the `"ST_unique_list"` sample data, provided by the [SoilTaxonomy package](https://github.com/ncss-tech/SoilTaxonomy).
 #' 
 #' ## Formative Element Queries
 #' 
 #' ### Greatgroup:
-#' The following labels are used to access taxa containing the following formative elements (in parenthesis).
+#' The following labels are used to access taxa containing the following formative elements (in parentheses)
 #' 
 #' * acr: (acro/acr) extreme weathering
 #' * alb: (alb) presence of an albic horizon
@@ -201,7 +203,9 @@
 #' 
 #' }
 #' @export
-taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup'), formativeElement = FALSE, timeout = 60) {
+taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup'),
+                       formativeElement = FALSE, timeout = 60,
+                       as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {
  
   ## sanity checks
   
@@ -213,10 +217,10 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   
   # main branch
   # formative element query
-  if(formativeElement) {
+  if (formativeElement) {
     
     # formative elements are only available at the greatgroup / subgroup for now
-    if(level %in% c('order', 'suborder')) {
+    if (level %in% c('order', 'suborder')) {
       stop('formative element queries are only supported for greatgroup and subgroup taxa', call. = FALSE)
     }
     
@@ -240,8 +244,8 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   } else {
     # taxon query
     
-    # encode taxa name: spaces -> underscores
-    x <- gsub(pattern=' ', replacement='_', x = tolower(x), fixed = TRUE)
+    # encode taxon name: spaces -> underscores
+    x <- gsub(pattern = ' ', replacement = '_', x = tolower(x), fixed = TRUE)
     
     # convert taxa level to path
     subdir <- switch(
@@ -264,8 +268,6 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
     
   }
   
-  
-  
   # init temp files
   tf <- tempfile(fileext = '.tif')
   
@@ -280,7 +282,7 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   )
   
   # trap errors
-  if(inherits(res, 'error')){
+  if (inherits(res, 'error')) {
     message('no data returned')
     return(NULL)
   }
@@ -296,10 +298,18 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   
   # transfer layer name
   # conversion of '_' -> ' ' only meaningful in taxon query
-  names(r) <- gsub(pattern='_', replacement=' ', x = x, fixed = TRUE)
+  names(r) <- gsub(pattern = '_', replacement = ' ', x = x, fixed = TRUE)
   
   # make CRS explicit
   terra::crs(r) <- 'EPSG:5070'
+  
+  if (as_Spatial) {
+    if (requireNamespace("raster", quietly = TRUE)) {
+      r <- raster::raster(r) 
+    } else {
+      stop("Package `raster` is required to return raster data as a RasterLayer object with as_Spatial=TRUE")
+    }
+  }
   
   return(r)
   

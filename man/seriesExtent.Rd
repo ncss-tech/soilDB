@@ -4,14 +4,24 @@
 \alias{seriesExtent}
 \title{Retrieve Soil Series Extent Maps from SoilWeb}
 \usage{
-seriesExtent(s, type = c("vector", "raster"), timeout = 60)
+seriesExtent(
+  s,
+  type = c("vector", "raster"),
+  timeout = 60,
+  as_Spatial = getOption("soilDB.return_Spatial", default = FALSE)
+)
 }
 \arguments{
 \item{s}{a soil series name, case-insensitive}
 
-\item{type}{series extent representation, 'vector': results in an \code{sf} object and 'raster' results in a \code{SpatRaster} object}
+\item{type}{series extent representation, \code{'vector'}: results in an \code{sf} object and \code{'raster'} results in a \code{SpatRaster} object}
 
 \item{timeout}{time that we are willing to wait for a response, in seconds}
+
+\item{as_Spatial}{Return sp (\code{SpatialPolygonsDataFrame}) / raster (\code{RasterLayer}) classes? Default: \code{FALSE}.}
+}
+\value{
+An R spatial object, class depending on \code{type} and \code{as_Spatial} arguments
 }
 \description{
 This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{sf} object) or gridded representation of area proportion falling within 800m cells (\code{SpatRaster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (\code{EPSG:5070}).
