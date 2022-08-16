@@ -33,6 +33,6 @@ test_that("fetchSCAN() returns the right kind of data", {
   expect_true(inherits(x, 'list'))
   expect_true(inherits(x$metadata, 'data.frame'))
   expect_true(inherits(x$STO, 'data.frame'))
-  expect_true(ncol(x$STO) == 7)
+  expect_true(ncol(x$STO) == 9)
 
 })
