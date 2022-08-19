@@ -1,4 +1,4 @@
-# soilDB 2.7.3 (2022-08-16)
+# soilDB 2.7.3 (2022-08-19)
 
  * `get_SDA_property()` all methods now support `miscellaneous_areas` argument. This defaults to `FALSE` for the methods it was previously implemented for--so be aware that queries using `"Dominant Component"` or `"Dominant Condition"` (which previously did not respond to `miscellaneous_areas`) may have the number of rows in result reduced due to omission of miscellaneous land types. If this is unexpected or undesired, please use `miscellaneous_areas=TRUE`. (https://github.com/ncss-tech/soilDB/issues/257)
  

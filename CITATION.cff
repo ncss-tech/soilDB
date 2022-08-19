@@ -1,5 +1,5 @@
 # -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v0.2.2
+# CITATION file created with {cffr} R package, v0.2.3
 # See also: https://docs.ropensci.org/cffr/
 # -----------------------------------------------------------
  
@@ -35,7 +35,7 @@ preferred-citation:
   - family-names: Brown
     given-names: Andrew
     email: andrew.g.brown@usda.gov
-  notes: R package version 2.7.2
+  notes: R package version 2.7.3
   url: https://CRAN.R-project.org/package=soilDB
   year: '2022'
 repository: https://CRAN.R-project.org/package=soilDB
@@ -172,6 +172,17 @@ references:
   year: '2022'
   url: https://CRAN.R-project.org/package=DBI
 - type: software
+  title: curl
+  abstract: 'curl: A Modern and Flexible Web Client for R'
+  notes: Imports
+  authors:
+  - family-names: Ooms
+    given-names: Jeroen
+    email: jeroen@berkeley.edu
+    orcid: https://orcid.org/0000-0002-4035-0289
+  year: '2022'
+  url: https://CRAN.R-project.org/package=curl
+- type: software
   title: jsonlite
   abstract: 'jsonlite: A Simple and Robust JSON Parser and Generator for R'
   notes: Suggests
@@ -216,17 +227,6 @@ references:
     email: hadley@rstudio.com
   year: '2022'
   url: https://CRAN.R-project.org/package=rvest
-- type: software
-  title: curl
-  abstract: 'curl: A Modern and Flexible Web Client for R'
-  notes: Suggests
-  authors:
-  - family-names: Ooms
-    given-names: Jeroen
-    email: jeroen@berkeley.edu
-    orcid: https://orcid.org/0000-0002-4035-0289
-  year: '2022'
-  url: https://CRAN.R-project.org/package=curl
 - type: software
   title: sf
   abstract: 'sf: Simple Features for R'
