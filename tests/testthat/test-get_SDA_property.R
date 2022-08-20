@@ -204,7 +204,7 @@ test_that("SDA properties (weighted average) works", {
   compwtom[is.nan(compwtom)] <- 0
   noagg$compwt <- noagg$compwt / sum(noagg$compwt)
 
-  expect_equal(sum(noagg$compwt * compwtom), agg$om_r)
+  expect_equal(sum(noagg$compwt * compwtom), agg$om_r, tolerance = 1e-5)
 
   # testing unpopulated minors + significant misc. areas
   noagg1 <- get_SDA_property("ph1to1h2o_r", mukeys = 466601, method = "weighted average", include_minors = TRUE)
@@ -215,7 +215,8 @@ test_that("SDA properties (weighted average) works", {
   skip_if(is.null(noagg2))
   skip_if(is.null(noagg3))
 
-  expect_true(all(c(noagg1$ph1to1h2o_r,  noagg2$ph1to1h2o_r, noagg3$ph1to1h2o_r) == 7))
+  expect_equal(c(noagg1$ph1to1h2o_r, noagg2$ph1to1h2o_r, noagg3$ph1to1h2o_r),
+               rep(7, 3), tolerance = 1e-5)
 })
 
 test_that("SDA properties (min/max) works", {
