@@ -105,7 +105,7 @@ test_that("SDA properties (weighted average) works", {
                    include_minors = TRUE,
                    top_depth = 10,
                    bottom_depth = 20)
-  expect_equal(x$ph1to1h2o_r, 6.5)
+  expect_equal(x$ph1to1h2o_r, 6.5, tolerance = 1e-5)
 
   x <- get_SDA_property(
     property = "Total Clay - Rep Value",
@@ -172,7 +172,7 @@ test_that("SDA properties (weighted average) works", {
   compwtsand[is.nan(compwtsand)] <- 0
   noagg$compwt <- noagg$compwt / sum(noagg$compwt)
 
-  expect_equal(sum(noagg$compwt * compwtsand), agg$sandtotal_r)
+  expect_equal(sum(noagg$compwt * compwtsand), agg$sandtotal_r, tolerance = 1e-5)
 
   # check previously filtered textures and including minors
   agg <- get_SDA_property(
