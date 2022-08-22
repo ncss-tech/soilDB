@@ -315,7 +315,8 @@ NASISChoiceList <- function(x,
     if (!obsolete) {
       y <- y[y$ChoiceObsolete == 0, ]
     }
-    idx <- na.omit(as.numeric(apply(do.call('cbind', lapply(y[c("ChoiceValue", "ChoiceName", "ChoiceLabel")], function(xxx) match(x[[xx]], xxx))), MARGIN = 1, \(xxx) as.numeric(na.omit(xxx)))))
+    idx <-  na.omit(as.numeric(apply(do.call('cbind', lapply(y[c("ChoiceValue", "ChoiceName", "ChoiceLabel")], function(xxx)
+        match(x[[xx]], xxx))), MARGIN = 1, function(xxx) as.numeric(na.omit(xxx)))))
     yy <- y[idx,]
     if (choice != "ChoiceValue" && factor) {
       f <- factor(yy[[choice]], 
