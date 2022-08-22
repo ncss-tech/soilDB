@@ -8,7 +8,7 @@ message: 'To cite package "soilDB" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'soilDB: Soil Database Interface'
-version: 2.7.3
+version: 2.7.4
 abstract: A collection of functions for reading data from USDA-NCSS soil databases.
 authors:
 - family-names: Beaudette
@@ -142,8 +142,8 @@ references:
   - family-names: Brown
     given-names: Andrew
     email: andrew.g.brown@usda.gov
-  url: https://CRAN.R-project.org/package=aqp
   year: '2022'
+  url: https://CRAN.R-project.org/package=aqp
 - type: software
   title: data.table
   abstract: 'data.table: Extension of `data.frame`'
@@ -263,7 +263,7 @@ references:
     email: r.hijmans@gmail.com
     orcid: https://orcid.org/0000-0001-5872-2872
   year: '2022'
-  url: https://rspatial.org/terra/
+  url: https://CRAN.R-project.org/package=terra
 - type: software
   title: raster
   abstract: 'raster: Geographic Data Analysis and Modeling'
@@ -294,7 +294,7 @@ references:
   authors:
   - family-names: Müller
     given-names: Kirill
-    email: krlmlr+r@mailbox.org
+    email: kirill@cynkra.com
     orcid: https://orcid.org/0000-0002-1416-3412
   - family-names: Wickham
     given-names: Hadley
