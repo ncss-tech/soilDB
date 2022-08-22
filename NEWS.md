@@ -1,3 +1,9 @@
+# soilDB 2.7.4 (2022-08-22)
+
+ * `uncode()` replaced `\(x)` syntax inadvertently included in a recent update to fix R < 4.1 compatibility; thanks to @cbrueffer for catching this (#262)!
+ 
+ * `get_SDA_property()` fixes for weighted average method (#261)
+
 # soilDB 2.7.3 (2022-08-19)
 
  * `get_SDA_property()` all methods now support `miscellaneous_areas` argument. This defaults to `FALSE` for the methods it was previously implemented for--so be aware that queries using `"Dominant Component"` or `"Dominant Condition"` (which previously did not respond to `miscellaneous_areas`) may have the number of rows in result reduced due to omission of miscellaneous land types. If this is unexpected or undesired, please use `miscellaneous_areas=TRUE`. (https://github.com/ncss-tech/soilDB/issues/257)
