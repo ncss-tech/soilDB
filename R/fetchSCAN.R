@@ -277,7 +277,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   
   # Time ranges from  "00:00" to "23:00" [24 hourly readings]
   # set Time to 12:00 (middle of day) for daily data
-  if (is.null(res$Time) || all(res$Time == "")) {
+  if (is.null(res$Time) || all(is.na(res$Time) | res$Time == "")) {
     res$Time <- "12:00"
   }
   
