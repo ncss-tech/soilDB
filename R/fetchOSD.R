@@ -305,7 +305,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	hztexclname(h) <- "texture_class"
 	
 	# encode horizon distinctness
-	h$hdz <- hzDistinctnessCodeToOffset(
+	h$hzd <- hzDistinctnessCodeToOffset(
 	  h$distinctness, 
 	  codes = c('very abrupt', 'abrubt', 'clear', 'gradual', 'diffuse')
 	)
