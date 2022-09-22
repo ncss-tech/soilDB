@@ -1,8 +1,12 @@
-# soilDB 2.7.4 (2022-08-22)
+# soilDB 2.7.4 (2022-09-22)
 
  * `uncode()` replaced `\(x)` syntax inadvertently included in a recent update to fix R < 4.1 compatibility; thanks to @cbrueffer for catching this (https://github.com/ncss-tech/soilDB/issues/262)!
  
  * `get_SDA_property()` fixes for weighted average method (https://github.com/ncss-tech/soilDB/issues/229, https://github.com/ncss-tech/soilDB/issues/261)
+ 
+ * `fetchOSD()` now automatically encodes horizon distinctness codes to default depth offsets, stored in hz-level attr: `hzd`
+
+
 
 # soilDB 2.7.3 (2022-08-19)
 

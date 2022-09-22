@@ -1,3 +1,6 @@
+# 2018-10-11: updated to new API, URL subject to change
+# fetch basic OSD, SC, and SoilWeb summaries from new API
+
 
 ## tabulate the number of records within each geomorphic table
 ## there could be some cases where there are no records, resulting in FALSE
@@ -45,9 +48,6 @@
 ## TODO: consider adding an argument for "growing" very thin bottom R|Cr|Cd horizons
 # https://github.com/ncss-tech/aqp/issues/173
 
-
-# 2018-10-11: updated to new API, URL subject to change
-# fetch basic OSD, SC, and SoilWeb summaries from new API
 #' @title Get Official Series Descriptions and summaries from SoilWeb API
 #' 
 #' @description This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.
@@ -170,10 +170,13 @@
 #' }
 #' }
 #' @keywords manip
-fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
+#' 
+#' @importFrom aqp hzDistinctnessCodeToOffset
+#' 
+fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	
   # sanity check
-  if( !requireNamespace('jsonlite', quietly=TRUE))
+  if( !requireNamespace('jsonlite', quietly = TRUE))
     stop('please install the `jsonlite` package', call.=FALSE)
   
   
@@ -186,7 +189,7 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
   }
   
   # format series list and append to url
-  final.url <- paste(url, URLencode(paste(soils, collapse=',')), sep='')
+  final.url <- paste(url, URLencode(paste(soils, collapse = ',')), sep = '')
   
   ## TODO: implement HTTP POST + JSON for safer encapsulation
   ## https://github.com/ncss-tech/soilDB/issues/239
@@ -301,9 +304,14 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	hzdesgnname(h) <- "hzname"
 	hztexclname(h) <- "texture_class"
 	
+	# encode horizon distinctness
+	h$hdz <- hzDistinctnessCodeToOffset(
+	  h$distinctness, 
+	  codes = c('very abrupt', 'abrubt', 'clear', 'gradual', 'diffuse')
+	)
+	
 	# mode: standard (SPC returned) or extended (list returned)
 	if(extended) {
-	  
 	  
 	  ## TODO: finish this and decide: report or filter
 	  # https://github.com/ncss-tech/soilDB/issues/128
@@ -368,23 +376,23 @@ fetchOSD <- function(soils, colorState='moist', extended=FALSE) {
 	  
 	  # compose into a list
 	  data.list <- list(
-	    SPC=h,
-	    competing=res$competing,
-	    geog_assoc_soils=res$geog_assoc_soils,
-	    geomcomp=res$geomcomp,
-	    hillpos=res$hillpos,
-	    mtnpos=res$mtnpos,
-	    terrace=res$terrace,
-	    flats=res$flats,
-	    shape_across=res$shape_across,
-	    shape_down=res$shape_down,
-	    pmkind=res$pmkind,
-	    pmorigin=res$pmorigin,
-	    mlra=res$mlra,
-	    climate.annual=annual.data,
-	    climate.monthly=monthly.data,
+	    SPC = h,
+	    competing = res$competing,
+	    geog_assoc_soils = res$geog_assoc_soils,
+	    geomcomp = res$geomcomp,
+	    hillpos = res$hillpos,
+	    mtnpos = res$mtnpos,
+	    terrace = res$terrace,
+	    flats = res$flats,
+	    shape_across = res$shape_across,
+	    shape_down = res$shape_down,
+	    pmkind = res$pmkind,
+	    pmorigin = res$pmorigin,
+	    mlra = res$mlra,
+	    climate.annual = annual.data,
+	    climate.monthly = monthly.data,
 	    NCCPI = res$nccpi,
-	    soilweb.metadata=res$metadata
+	    soilweb.metadata = res$metadata
 	  )
 	  
 	  return(data.list)
