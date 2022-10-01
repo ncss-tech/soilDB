@@ -1,6 +1,8 @@
 # soilDB 2.7.5 (2022-10-01)
 
  * Updated row count and data expectations for FY22 SSURGO refresh
+ 
+ * SoilWeb KSSL data JSON API queries now use a `gzcon()` modifier on the URL connection to avoid issues with {jsonlite} >1.8.1
 
 # soilDB 2.7.4 (2022-09-30)
 
@@ -14,7 +16,7 @@
 
 # soilDB 2.7.3 (2022-08-19)
 
- * `get_SDA_property()` all methods now support `miscellaneous_areas` argument. This defaults to `FALSE` for the methods it was previously implemented for--so be aware that queries using `"Dominant Component"` or `"Dominant Condition"` (which previously did not respond to `miscellaneous_areas`) may have the number of rows in result reduced due to omission of miscellaneous land types. If this is unexpected or undesired, please use `miscellaneous_areas=TRUE`. (https://github.com/ncss-tech/soilDB/issues/257)
+ * `get_SDA_property()` all methods now support `miscellaneous_areas` argument. This defaults to `FALSE` for the methods it was pr eviously implemented for--so be aware that queries using `"Dominant Component"` or `"Dominant Condition"` (which previously did not respond to `miscellaneous_areas`) may have the number of rows in result reduced due to omission of miscellaneous land types. If this is unexpected or undesired, please use `miscellaneous_areas=TRUE`. (https://github.com/ncss-tech/soilDB/issues/257)
  
  * Adds `get_NASIS_metadata()` and helper method `get_NASIS_column_metadata()` and other new tools for working with `uncode()`, factors and NASIS metadata cached in the package.
  
