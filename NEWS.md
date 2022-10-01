@@ -1,4 +1,8 @@
-# soilDB 2.7.4 (2022-09-22)
+# soilDB 2.7.5 (2022-10-01)
+
+ * Updated row count and data expectations for FY22 SSURGO refresh
+
+# soilDB 2.7.4 (2022-09-30)
 
  * `uncode()` replaced `\(x)` syntax inadvertently included in a recent update to fix R < 4.1 compatibility; thanks to @cbrueffer for catching this (https://github.com/ncss-tech/soilDB/issues/262)!
  
