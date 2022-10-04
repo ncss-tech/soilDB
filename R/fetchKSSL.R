@@ -46,13 +46,15 @@
 .getExtended_SoilWeb <- function(f) {
 
   # KSSL geochem, XRD, glass
-  extended.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=extended', f))
-
+  x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=extended', f))
+  
+  tf <- tempfile()
+  curl::curl_download(x, tf, quiet = TRUE, mode = "wb", handle = .soilDB_curl_handle())
+  
   ## get data
-  # note: missing data are returned as FALSE by the API
-  # when data are available, list of data.frame objects
-  ext <- jsonlite::fromJSON(gzcon(url(extended.url)))
-  # unlink(tf)
+  # list of dataframe objects; note: missing data are returned as FALSE
+  ext <- jsonlite::fromJSON(gzfile(tf))
+  unlink(tf)
 
   # done
   return(ext)
@@ -62,13 +64,16 @@
 .getMorphologic_SoilWeb <- function(f) {
 
   # NASIS morphology
-  morph.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=nasis_morphologic', f))
+  x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=nasis_morphologic', f))
 
+  tf <- tempfile()
+  curl::curl_download(x, tf, quiet = TRUE, mode = "wb", handle = .soilDB_curl_handle())
+  
   ## get data
-  # note: missing data are returned as FALSE
-  # list of dataframe objects
-  m <- jsonlite::fromJSON(gzcon(url(morph.url)))
-
+  # list of dataframe objects; note: missing data are returned as FALSE
+  m <- jsonlite::fromJSON(gzfile(tf))
+  unlink(tf)
+  
   # done
   return(m)
 }
@@ -78,13 +83,16 @@
 .getKSSL_SoilWeb <- function(f) {
 
   # KSSL site + horizon
-  site_hz.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=site_hz', f))
+  x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=site_hz', f))
 
-  # ## get data
-  # # note: missing data are returned as FALSE
-  # # list of dataframe objects
-  site_hz <- jsonlite::fromJSON(gzcon(url(site_hz.url)))
-
+  tf <- tempfile()
+  curl::curl_download(x, tf, quiet = TRUE, mode = "wb", handle = .soilDB_curl_handle())
+  
+  ## get data
+  # list of dataframe objects; note: missing data are returned as FALSE
+  site_hz <- jsonlite::fromJSON(gzfile(tf))
+  unlink(tf)
+  
   # report missing data
   if(
     all(
