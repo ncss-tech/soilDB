@@ -155,7 +155,7 @@ month2season <- function(x) {
   
   # TODO: this will result in timezone specific to locale; 
   #  especially an issue when granularity is less than daily or for large extents
-  fake.datetimes <- as.POSIXct(fake.datetimes, format = "%Y %j %H:%M")
+  fake.datetimes <- as.POSIXct(as.Date(fake.datetimes, format = "%Y %j %H:%M"))
   
   # generate DF with missing information
   fake.data <- data.frame(
@@ -173,7 +173,7 @@ month2season <- function(x) {
   }
   
   # make datatypes for time match
-  x$date_time <- as.POSIXct(x$date_time, format = "%Y-%m-%d %H:%M:%S")
+  x$date_time <- as.POSIXct(as.Date(x$date_time, format = "%Y-%m-%d %H:%M:%S"))
   
   # splice in missing data
   y <- rbind(x, fake.data)
