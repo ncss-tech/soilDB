@@ -59,17 +59,17 @@ siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FA
     u <- URLencode(sprintf('https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=siblings&s=%s', i))
     
     # attempt query to API for basic sibling set, result is JSON
-    sib <- try(jsonlite::fromJSON(u))[[1]]
+    sib <- .soilDB_curl_get_JSON(u)[[1]]
     
     # a data.frame result means we have data, otherwise return NULL
-    if(inherits(sib, 'data.frame')) {
+    if (inherits(sib, 'data.frame')) {
       
       # convert 'Yes'|'No' -> TRUE|FALSE
       sib$majcompflag <- ifelse(sib$majcompflag == 'Yes', TRUE, FALSE)
       
       # note: there may be both major and minor siblings
       # optionally cut-down to just major siblings
-      if(only.major)
+      if (only.major)
         sib <- sib[which(sib$majcompflag), ]
       
       return(sib)
@@ -87,10 +87,10 @@ siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FA
     
     # attempt query to API for component data, result is JSON
     # result is FALSE if no matching data
-    sib <- try(jsonlite::fromJSON(u))[[1]]
+    sib <- .soilDB_curl_get_JSON(u)[[1]]
     
     # a data.frame result means we have data, otherwise return NULL
-    if(inherits(sib, 'data.frame')) {
+    if (inherits(sib, 'data.frame')) {
       return(sib)
     } else {
       return(NULL)
@@ -101,25 +101,25 @@ siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FA
   res <- list()
   
   # sanity check
-  if( !requireNamespace('jsonlite', quietly=TRUE))
-    stop('please install the `jsonlite` package', call.=FALSE)
+  if (!requireNamespace('jsonlite', quietly = TRUE))
+    stop('please install the `jsonlite` package', call. = FALSE)
   
   # get basic data
   res$sib <- .getSibling(s, only.major = only.major)
   
   # optionally get data
-  if(component.data) {
+  if (component.data) {
     res$sib.data <- .getSiblingData(s)
   }
   
   # optionally get second set of siblings
   # flatten into single DF
-  if(cousins) {
+  if (cousins) {
     cousins <- lapply(res$sib$sibling, .getSibling, only.major = only.major)
     res$cousins <- do.call('rbind', cousins)
     
     # data too?
-    if(component.data) {
+    if (component.data) {
       cousin.data <- lapply(res$sib$sibling, .getSiblingData)
       res$cousin.data <- do.call('rbind', cousin.data)
     }

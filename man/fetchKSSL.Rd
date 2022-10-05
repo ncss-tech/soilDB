@@ -95,38 +95,38 @@ the link below for the live data.
 \donttest{
 if(requireNamespace("curl") &
     curl::has_internet()) {
-    
+
     library(aqp)
-    
+
     # search by series name
     s <- fetchKSSL(series='auburn')
-    
+
     # search by bounding-box
     # s <- fetchKSSL(bbox=c(-120, 37, -122, 38))
-    
+
     # how many pedons
     length(s)
-    
-    # plot 
+
+    # plot
     plotSPC(s, name='hzn_desgn', max.depth=150)
-    
+
     ##
     ## morphologic data
     ##
-    
+
     # get lab and morphologic data
     s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE)
-    
+
     # extract SPC
     pedons <- s$SPC
-    
+
     ## automatically simplify color data
     s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE, simplifyColors=TRUE)
-    
+
     # check
     par(mar=c(0,0,0,0))
     plot(pedons, color='moist_soil_color', print.id=FALSE)
-    
+
 }
 }
 

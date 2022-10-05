@@ -42,7 +42,7 @@ test_that("siblings(..., cousins = TRUE)", {
   
   skip_on_cran()
   
-  x <- siblings('amador', only.major = TRUE, cousins = TRUE)
+    x <- siblings('amador', only.major = TRUE, cousins = TRUE)
   
   expect_true(inherits(x, 'list'))
   expect_equal(length(x), 2)

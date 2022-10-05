@@ -28,7 +28,25 @@ soilDB.env <- new.env(hash=TRUE, parent = parent.frame())
   }
 }
 
-#' @importFrom curl new_handle curl_download
+#' @importFrom curl new_handle 
 .soilDB_curl_handle <- function(timeout = 300, ssl_verifyhost = 0, ...) {
-  curl::new_handle(timeout = timeout, ssl_verifyhost = 0, ...)
+  curl::new_handle(timeout = timeout, ssl_verifyhost = ssl_verifyhost, ...)
+}
+
+#' @importFrom curl curl_download
+.soilDB_curl_get_JSON <- function(x, gzip = FALSE) {
+  tf <- tempfile()
+  dl <- try(curl::curl_download(x, tf, quiet = TRUE, mode = "wb", handle = .soilDB_curl_handle()), silent = TRUE)
+  if (inherits(dl, 'try-error')) {
+    message(dl[1])
+    return(NULL)
+  }
+  
+  if (gzip) {
+    tf <- gzfile(tf)
+  }
+  
+  res <- jsonlite::fromJSON(tf)
+  unlink(tf)
+  res
 }

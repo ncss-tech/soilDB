@@ -48,13 +48,8 @@
   # KSSL geochem, XRD, glass
   x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=extended', f))
   
-  tf <- tempfile()
-  curl::curl_download(x, tf, quiet = TRUE, mode = "wb", handle = .soilDB_curl_handle())
-  
-  ## get data
   # list of dataframe objects; note: missing data are returned as FALSE
-  ext <- jsonlite::fromJSON(gzfile(tf))
-  unlink(tf)
+  ext <-  .soilDB_curl_get_JSON(x, gzip = TRUE)
 
   # done
   return(ext)
@@ -66,13 +61,8 @@
   # NASIS morphology
   x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=nasis_morphologic', f))
 
-  tf <- tempfile()
-  curl::curl_download(x, tf, quiet = TRUE, mode = "wb", handle = .soilDB_curl_handle())
-  
-  ## get data
   # list of dataframe objects; note: missing data are returned as FALSE
-  m <- jsonlite::fromJSON(gzfile(tf))
-  unlink(tf)
+  m <- .soilDB_curl_get_JSON(x, gzip = TRUE)
   
   # done
   return(m)
@@ -84,23 +74,13 @@
 
   # KSSL site + horizon
   x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=site_hz', f))
-
-  tf <- tempfile()
-  curl::curl_download(x, tf, quiet = TRUE, mode = "wb", handle = .soilDB_curl_handle())
   
-  ## get data
   # list of dataframe objects; note: missing data are returned as FALSE
-  site_hz <- jsonlite::fromJSON(gzfile(tf))
-  unlink(tf)
+  site_hz <- .soilDB_curl_get_JSON(x, gzip = TRUE)
   
   # report missing data
-  if(
-    all(
-      c(isFALSE(site_hz[['site']]),
-        isFALSE(site_hz[['horizon']])
-      )
-    )
-  ) {
+  if (all(c(isFALSE(site_hz[['site']]),
+            isFALSE(site_hz[['horizon']])))) {
     # no data
     return(NULL)
   }

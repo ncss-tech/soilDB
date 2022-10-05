@@ -176,35 +176,33 @@
 fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	
   # sanity check
-  if( !requireNamespace('jsonlite', quietly = TRUE))
-    stop('please install the `jsonlite` package', call.=FALSE)
-  
+  if (!requireNamespace('jsonlite', quietly = TRUE))
+    stop('please install the `jsonlite` package', call. = FALSE)
   
   # compose query
   # note: this is the load-balancer
-  if(extended) {
-    url <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=all&s='
+  if (extended) {
+    x <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=all&s='
   } else {
-    url <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=site_hz&s='
+    x <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=site_hz&s='
   }
   
   # format series list and append to url
-  final.url <- paste(url, URLencode(paste(soils, collapse = ',')), sep = '')
+  final.url <- paste(x, URLencode(paste(soils, collapse = ',')), sep = '')
   
   ## TODO: implement HTTP POST + JSON for safer encapsulation
   ## https://github.com/ncss-tech/soilDB/issues/239
   # using HTTP GET is convenient but comes with limits on the number of chars in the URL
   # limiting to 2048 will likely save some trouble
-  if(nchar(final.url) > 2048) {
+  if (nchar(final.url) > 2048) {
     stop('URL too long, consider splitting input vector of soil series with `makeChunks()` and iterating over chunks', call. = FALSE)
   }
   
   # attempt query to API, result is JSON
-  res <- try(jsonlite::fromJSON(final.url), silent = TRUE)
+  res <- .soilDB_curl_get_JSON(final.url, gzip = FALSE)
   
-  # trap errors
-  if (inherits(res, 'try-error')) {
-    message(res[1])
+  # errors are trapped above, returning NULL
+  if (is.null(res)) {
     return(NULL)
   }
   
@@ -216,13 +214,14 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	# report missing data
   # no data condition: s == FALSE | h == FALSE
   # otherwise both will be a data.frame
-	if( (is.logical(s) & length(s) == 1) | (is.logical(h) & length(h) == 1)) {
-		message('query returned no data')
-	  return(NULL)
-	}
+  if ((is.logical(s) && length(s) == 1) ||
+      (is.logical(h) & length(h) == 1)) {
+    message('query returned no data')
+    return(NULL)
+  }
 	
 	# reformatting and color conversion
-	if(colorState == 'moist') {
+	if (colorState == 'moist') {
 	  h$soil_color <- with(h, munsell2rgb(matrix_wet_color_hue, matrix_wet_color_value, matrix_wet_color_chroma))
 	  
 	  h <- with(h, data.frame(
@@ -250,7 +249,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	  ) 
 	}
 	
-	if(colorState == 'dry') {
+	if (colorState == 'dry') {
 	  h$soil_color <- with(h, munsell2rgb(matrix_dry_color_hue, matrix_dry_color_value, matrix_dry_color_chroma))
 	  
 	  h <- with(h, data.frame(
@@ -285,11 +284,12 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	# texture clases, in order
 	textures <- SoilTextureLevels(which = 'names')
 	
+	# TODO: use aqp::ReactionClassLevels()
 	pH_classes <- c('ultra acid', 'extremely acid', 'very strongly acid', 'strongly acid', 'moderately acid', 'slightly acid', 'neutral', 'slightly alkaline', 'mildly alkaline', 'moderately alkaline', 'strongly alkaline', 'very strongly alkaline')
 	
 	# convert some columns into factors
-	h$texture_class <- factor(h$texture_class, levels=textures, ordered = TRUE)
-	h$pH_class <- factor(h$pH_class, levels=pH_classes, ordered = TRUE)
+	h$texture_class <- factor(h$texture_class, levels = textures, ordered = TRUE)
+	h$pH_class <- factor(h$pH_class, levels = pH_classes, ordered = TRUE)
 	
 	# safely LEFT JOIN to @site
 	s$id <- s$seriesname
