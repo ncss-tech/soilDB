@@ -59,25 +59,29 @@ siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FA
     u <- URLencode(sprintf('https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=siblings&s=%s', i))
     
     # attempt query to API for basic sibling set, result is JSON
-    sib <- .soilDB_curl_get_JSON(u)[[1]]
+    sib <- .soilDB_curl_get_JSON(u)
     
-    # a data.frame result means we have data, otherwise return NULL
-    if (inherits(sib, 'data.frame')) {
-      
-      # convert 'Yes'|'No' -> TRUE|FALSE
-      sib$majcompflag <- ifelse(sib$majcompflag == 'Yes', TRUE, FALSE)
-      
-      # note: there may be both major and minor siblings
-      # optionally cut-down to just major siblings
-      if (only.major)
-        sib <- sib[which(sib$majcompflag), ]
-      
-      return(sib)
-      
+    if (length(sib) >= 1) {
+      sib <- sib[[1]]
+      # a data.frame result means we have data, otherwise return NULL
+      if (inherits(sib, 'data.frame')) {
+        
+        # convert 'Yes'|'No' -> TRUE|FALSE
+        sib$majcompflag <- ifelse(sib$majcompflag == 'Yes', TRUE, FALSE)
+        
+        # note: there may be both major and minor siblings
+        # optionally cut-down to just major siblings
+        if (only.major)
+          sib <- sib[which(sib$majcompflag), ]
+        
+        return(sib)
+        
+      } else {
+        return(NULL)
+      }
     } else {
       return(NULL)
     }
-    
   }
   
   # note: this does not launder component names through SC database
@@ -87,11 +91,16 @@ siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FA
     
     # attempt query to API for component data, result is JSON
     # result is FALSE if no matching data
-    sib <- .soilDB_curl_get_JSON(u)[[1]]
+    sib <- .soilDB_curl_get_JSON(u)
     
-    # a data.frame result means we have data, otherwise return NULL
-    if (inherits(sib, 'data.frame')) {
-      return(sib)
+    if (length(sib) >= 1) {
+      sib <- sib[[1]]
+      # a data.frame result means we have data, otherwise return NULL
+      if (inherits(sib, 'data.frame')) {
+        return(sib)
+      } else {
+        return(NULL)
+      }
     } else {
       return(NULL)
     }

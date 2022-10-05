@@ -36,7 +36,14 @@ soilDB.env <- new.env(hash=TRUE, parent = parent.frame())
 #' @importFrom curl curl_download
 .soilDB_curl_get_JSON <- function(x, gzip = FALSE) {
   tf <- tempfile()
-  dl <- try(curl::curl_download(x, tf, quiet = TRUE, mode = "wb", handle = .soilDB_curl_handle()), silent = TRUE)
+  dl <- try(curl::curl_download(
+      x,
+      tf,
+      quiet = TRUE,
+      mode = ifelse(gzip, "wb", "w"),
+      handle = .soilDB_curl_handle()
+    ), silent = TRUE)
+  
   if (inherits(dl, 'try-error')) {
     message(dl[1])
     return(NULL)
