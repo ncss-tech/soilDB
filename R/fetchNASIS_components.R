@@ -176,6 +176,14 @@
   hzdesgnname(f.chorizon) <- "hzname"
   hztexclname(f.chorizon) <- "texture"
 
+  if (duplicates && dropNotRepresentative) {
+    f.chorizon <- f.chorizon[which(!is.na(f.chorizon$repdmu)), ]
+  }
+  
+  if (duplicates && dropAdditional) {
+    f.chorizon <- f.chorizon[which(f.chorizon$mustatus != "additional"), ]
+  }
+  
   # done, return SPC
   return(f.chorizon)
 
