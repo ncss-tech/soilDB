@@ -173,14 +173,16 @@ get_OSD_JSON <- function(series, base_url = NULL) {
       # specific "easy" fixes for common OCR errors in character columns
       ocr_cols_color <- c('dry_hue', 'dry_value', 'dry_chroma', 'moist_hue', 'moist_value', 'moist_chroma')
       ocr_cols_hzdesgn <- c('name')
-      res$HORIZONS[[1]][ocr_cols_color] <- lapply(res$HORIZONS[[1]][ocr_cols_color], function(chr) {
-        # assume in colors hue/value/chroma lowercase L is a 1, and a capital "O" is a zero
-        gsub("l", 1, gsub("O", 0, chr))
-      })
-      res$HORIZONS[[1]][ocr_cols_hzdesgn] <- lapply(res$HORIZONS[[1]][ocr_cols_hzdesgn], function(chr) {
-        # assume in horizon desgn lowercase L is a 1, and starts with 0 is the capital letter O
-        gsub("l", 1, gsub("^0", "O", chr))
-      })
+      if (nrow(res$HORIZONS[[1]]) > 0) {
+        res$HORIZONS[[1]][ocr_cols_color] <- lapply(res$HORIZONS[[1]][ocr_cols_color], function(chr) {
+          # assume in colors hue/value/chroma lowercase L is a 1, and a capital "O" is a zero
+          gsub("l", 1, gsub("O", 0, chr))
+        })
+        res$HORIZONS[[1]][ocr_cols_hzdesgn] <- lapply(res$HORIZONS[[1]][ocr_cols_hzdesgn], function(chr) {
+          # assume in horizon desgn lowercase L is a 1, and starts with 0 is the capital letter O
+          gsub("l", 1, gsub("^0", "O", chr))
+        })
+      }
     }
     
     
