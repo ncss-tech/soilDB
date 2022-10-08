@@ -25,6 +25,8 @@ test_that("fetchKSSL() returns an SPC or list", {
 
   skip_on_cran()
 
+  skip_if_not_installed("farver")
+
   x.morph <<- fetchKSSL(series = 'sierra',
                         returnMorphologicData = TRUE,
                         progress = FALSE)
@@ -56,6 +58,8 @@ test_that("fetchKSSL() returns reasonable data", {
 
   skip_on_cran()
 
+  skip_if_not_installed("farver")
+
   skip_if(inherits(x, 'try-error') || is.null(x))
 
   # standard request
@@ -71,6 +75,8 @@ test_that("fetchKSSL() returns data associated with named series (sierra)", {
   skip_if_offline()
 
   skip_on_cran()
+
+  skip_if_not_installed("farver")
 
   skip_if(inherits(x, 'try-error') || is.null(x))
 
