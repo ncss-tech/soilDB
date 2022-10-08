@@ -6,11 +6,13 @@ test_that("fetchKSSL() works", {
 
   skip_on_cran()
 
+  skip_if_not_installed("farver")
+
   ## sample data
   x <<- try(fetchKSSL(series = 'sierra'), silent = TRUE)
-  
+
   skip_if(inherits(x, 'try-error') || is.null(x))
-  
+
   # standard request
   expect_true(inherits(x, 'SoilProfileCollection'))
 
@@ -22,21 +24,21 @@ test_that("fetchKSSL() returns an SPC or list", {
   skip_if_offline()
 
   skip_on_cran()
-  
+
   x.morph <<- fetchKSSL(series = 'sierra',
                         returnMorphologicData = TRUE,
                         progress = FALSE)
-  
+
   x.morp.simple.colors <<- fetchKSSL(series = 'sierra',
                                      returnMorphologicData = TRUE,
                                      simplifyColors = TRUE,
                                      progress = FALSE)
-  
+
   skip_if(inherits(x.morph, 'try-error') || is.null(x.morph))
-  
+
   skip_if(inherits(x.morp.simple.colors, 'try-error') || is.null(x.morp.simple.colors))
-  
-  
+
+
   # SPC + morphologic data
   expect_true(inherits(x.morph, 'list'))
   expect_true(inherits(x.morph$SPC, 'SoilProfileCollection'))
@@ -53,9 +55,9 @@ test_that("fetchKSSL() returns reasonable data", {
   skip_if_offline()
 
   skip_on_cran()
-  
+
   skip_if(inherits(x, 'try-error') || is.null(x))
-  
+
   # standard request
   expect_equal(nrow(site(x)) > 0, TRUE)
   expect_equal(nrow(horizons(x)) > 0, TRUE)
@@ -69,9 +71,9 @@ test_that("fetchKSSL() returns data associated with named series (sierra)", {
   skip_if_offline()
 
   skip_on_cran()
-  
+
   skip_if(inherits(x, 'try-error') || is.null(x))
-  
+
   # all of the results should contain the search term
   f <- grepl('sierra', x$taxonname, ignore.case = TRUE)
   expect_equal(all(f), TRUE)
@@ -86,9 +88,9 @@ test_that("fetchKSSL() returns data associated with multiple named series", {
   skip_on_cran()
 
   x.multiple <- fetchKSSL(series = c('sierra', 'amador'), progress = FALSE)
-  
+
   skip_if(inherits(x.multiple, 'try-error') || is.null(x.multiple))
-  
+
   f <- unique(toupper(x.multiple$taxonname)) %in% c('SIERRA', 'AMADOR')
   expect_true(all(f))
 
@@ -102,7 +104,7 @@ test_that("fetchKSSL() returns NULL with bogus query", {
 
   # a message is printed and NULL returned when no results
   res <- suppressMessages(fetchKSSL(series = 'XXX'))
-  
+
   expect_null(res)
 
 })
@@ -126,9 +128,9 @@ test_that("fetchKSSL() fails gracefully when morphology data are missing", {
       progress = FALSE
     )
   )
-  
+
   skip_if(inherits(res, 'try-error') || is.null(res))
-  
+
   expect_false(res$morph$phcolor)
   expect_false(res$morph$phfrags)
   expect_false(res$morph$phpores)
@@ -150,27 +152,27 @@ test_that("fetchKSSL() geochem result", {
 
   # get geochemical data for a single pedlabsampnum, do some basic filtering
   res <- try(fetchKSSL(pedlabsampnum = c("93P0249"), returnGeochemicalData = TRUE, progress = FALSE))
-  
+
   skip_if(inherits(res, 'try-error') || is.null(res))
 
   expect_true(all(filter_geochem(res$geochem, prep_code = 'S')$prep_code == 'S'))
 
-  expect_true(all(na.omit(filter_geochem(res$geochem, prep_code = 'S', 
+  expect_true(all(na.omit(filter_geochem(res$geochem, prep_code = 'S',
                                          major_element_method = "4H1b",
                                          trace_element_method = "4H1a")$prep_code == "S")))
 
   expect_true(all(na.omit(filter_geochem(res$geochem,
                                           major_element_method = "4H1b",
                                           trace_element_method = "4H1a")$prep_code == "S")))
-  
+
   # try an ID without geochem data
   res <- try(fetchKSSL(pedlabsampnum = "05N0025", returnGeochemicalData = TRUE), silent = TRUE)
-  
+
   skip_if(inherits(res, 'try-error') || is.null(res))
-  
+
   # should be a data.frame, even when missing data
   # it is a 0-length data.frame
   expect_true(inherits(res$geochem, 'data.frame'))
   expect_true(inherits(res$optical, 'data.frame'))
-  
+
 })

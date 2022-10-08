@@ -38,101 +38,105 @@ x.missing <- data.frame(
 )
 
 test_that("simplifyColorData: single color / moisture state / horizon", {
-  
+
   # single color / moisture state / horizon
   res <- simplifyColorData(x.simple, id.var = 'phiid', wt = 'pct')
-  
+
   # perform conversion manually
   # dry is first row
   res.rgb <- munsell2rgb(x.simple$colorhue, x.simple$colorvalue, x.simple$colorchroma, return_triplets = TRUE, returnLAB = TRUE)
-  
+
   # should be a single row
   expect_equal(nrow(res), 1)
-  
+
   # check parsing / conversion of dry color
   expect_equal(res$d_r, res.rgb$r[1])
   expect_equal(res$d_g, res.rgb$g[1])
   expect_equal(res$d_b, res.rgb$b[1])
-  
+
   # check parsing / conversion of moist color
   expect_equal(res$m_r, res.rgb$r[2])
   expect_equal(res$m_g, res.rgb$g[2])
   expect_equal(res$m_b, res.rgb$b[2])
-  
+
 })
 
 
 test_that("simplifyColorData: two colors / moisture state, color percentages provided", {
-  
+
+  skip_if_not_installed("farver")
+
   # two colors / moisture state, color percentages provided
   suppressMessages({
     res <- simplifyColorData(x.multiple,
                              id.var = 'phiid',
                              wt = 'pct')
   })
-  
+
   # should be 2 rows
   expect_equal(nrow(res), 2)
-  
+
   # check dry color mixture, should be ~ 2.5Y 6/2
   # using wide tolerance, because changes in the Munsell LUT can create errors
   # dry colors first
   expect_equal(res$d_r[1], 0.6, tolerance = .tol)
   expect_equal(res$d_g[1], 0.6, tolerance = .tol)
   expect_equal(res$d_b[1], 0.5, tolerance = .tol)
-  
+
   # check moist color mixture, should be ~ 10YR 5/5
   # moist colors second
   expect_equal(res$m_r[2], 0.6, tolerance = .tol)
   expect_equal(res$m_g[2], 0.4, tolerance = .tol)
   expect_equal(res$m_b[2], 0.2, tolerance = .tol)
-  
+
 })
 
 test_that("simplifyColorData: missing data", {
-  
+
+  skip_if_not_installed("rvest")
+
   # two colors / moisture state, color percentages provided
   suppressMessages({
-    res <- simplifyColorData(x.missing, 
-                             id.var = 'phiid', 
+    res <- simplifyColorData(x.missing,
+                             id.var = 'phiid',
                              wt = 'pct')
   })
-  
+
   # should be 2 rows
   expect_equal(nrow(res), 2)
-  
+
   # using wide tolerance, because changes in the Munsell LUT can create errors
-  
+
   # check dry color mixture, should be ~ 2.5Y 6/2
   expect_equal(res$d_r[1], 0.6, tolerance = .tol)
   expect_equal(res$d_g[1], 0.6, tolerance = .tol)
   expect_equal(res$d_b[1], 0.5, tolerance = .tol)
-  
+
   # check moist color mixture, should be ~ 10YR 5/4 with added neutral hue
   expect_equal(res$m_r[2], 0.4, tolerance = .tol)
   expect_equal(res$m_g[2], 0.3, tolerance = .tol)
   expect_equal(res$m_b[2], 0.2, tolerance = .tol)
-  
+
 })
 
 test_that(".dominantColors: missing data", {
-  
+
   res <- .dominantColors(x.missing)
-  
+
   # should be 2 rows
-  expect_equal(nrow(res), 2)  
-  
+  expect_equal(nrow(res), 2)
+
   # dry color dominant should be 2.5Y 6/1 (75%)
   idx1 <- which(res$phiid == "2889133")
   expect_equal(res$d_hue[idx1], '2.5Y')
   expect_equal(res$d_value[idx1], 6)
   expect_equal(res$d_chroma[idx1], 1)
-  
+
   # moist color dominant should be 10YR 5/6 (80%)
   idx2 <- which(res$phiid == "2889103")
   expect_equal(res$m_hue[idx2], '10YR')
   expect_equal(res$m_value[idx2], 5)
   expect_equal(res$m_chroma[idx2], 6)
-  
+
 })
 
