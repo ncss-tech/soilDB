@@ -34,7 +34,7 @@ get_mapunit_from_GDB(
 fetchGDB(
   dsn = "gNATSGO_CONUS.gdb",
   WHERE = NULL,
-  childs = TRUE,
+  childs = FALSE,
   droplevels = TRUE,
   stringsAsFactors = NULL
 )
@@ -70,8 +70,8 @@ geodatabases, and create soil profile collection objects (SPC).
 These functions return data from SSURGO file geodatabases with the use of a
 simple text string that formatted as an SQL WHERE clause (e.g. \code{WHERE =
 "areasymbol = 'IN001'"}. Any columns within the target table can be
-specified (except for fetchGDB() currently, which only targets the legend
-with the WHERE clause).
+specified (except for fetchGDB() which currently can only target one table
+(e.g. legend, mapunit or component) at a time with the WHERE clause).
 }
 \examples{
 

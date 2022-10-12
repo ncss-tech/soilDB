@@ -2,7 +2,7 @@ library(soilDB)
 library(sf)
 
 # new GDB examples
-dsn <- "C:/geodata/soils/gNATSGO_CONUS_FY20.gdb"
+dsn <- "D:/geodata/soils/gNATSGO_CONUS_Oct2021/gNATSGO_CONUS.gdb"
 
 le <- get_legend_from_GDB(dsn = dsn)
 le <- get_legend_from_GDB(dsn = dsn, stats = TRUE)
