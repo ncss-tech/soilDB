@@ -93,7 +93,7 @@ the link below for the live data.
 \examples{
 
 \donttest{
-if(requireNamespace("curl") &
+if(requireNamespace("curl") &&
     curl::has_internet()) {
 
     library(aqp)
@@ -120,13 +120,13 @@ if(requireNamespace("curl") &
     # extract SPC
     pedons <- s$SPC
 
-    ## automatically simplify color data
-    s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE, simplifyColors=TRUE)
-
-    # check
-    par(mar=c(0,0,0,0))
-    plot(pedons, color='moist_soil_color', print.id=FALSE)
-
+   # if (requireNamespace("farver")) {
+   #   ## automatically simplify color data (requires farver)
+   #   s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE, simplifyColors=TRUE)
+   #   # check
+   #   par(mar=c(0,0,0,0))
+   #   plot(pedons, color='moist_soil_color', print.id=FALSE)
+   # }
 }
 }
 

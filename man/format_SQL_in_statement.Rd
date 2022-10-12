@@ -52,10 +52,12 @@ res$labelname <- sprintf("\%s (\%s\%s)", res$compname, res$comppct_r, "\%")
 # major components only
 res <- subset(res, comppct_r >= 85)
 
-# inspect plot of result
-par(mar=c(0,0,0,0))
-groupedProfilePlot(res, groups = "mukey", color = "hzname", cex.names=0.8,
-                   id.style = "side", label = "labelname")
+if (requireNamespace("scales")) {
+  # inspect plot of result
+  par(mar=c(0,0,0,0))
+  groupedProfilePlot(res, groups = "mukey", color = "hzname", cex.names=0.8,
+                     id.style = "side", label = "labelname")
+}
 }
 
 }

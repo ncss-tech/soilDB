@@ -32,11 +32,11 @@
 #' @description Query soil/climate data from USDA-NRCS SCAN Stations
 #'
 #' @details Possible above and below ground sensor types include: 'SMS' (soil moisture), 'STO' (soil temperature), 'SAL' (salinity), 'TAVG' (daily average air temperature), 'TMIN' (daily minimum air temperature), 'TMAX' (daily maximum air temperature), 'PRCP' (daily precipitation), 'PREC' (daily precipitation), 'SNWD' (snow depth), 'WTEQ' (snow water equivalent),'WDIRV' (wind direction), 'WSPDV' (wind speed), 'LRADT' (solar radiation/langley total).
-#' 
+#'
 #' ## SCAN Sensors
-#' 
+#'
 #' All Soil Climate Analysis Network (SCAN) sensor measurements are reported hourly.
-#' 
+#'
 #' |Element Measured         |Sensor Type                                                                                                |Precision                   |
 #' |:------------------------|:----------------------------------------------------------------------------------------------------------|:---------------------------|
 #' |Air Temperature          |Shielded thermistor                                                                                        |0.1 degrees C               |
@@ -49,11 +49,11 @@
 #' |Soil Temperature         |Encapsulated thermistor. Typical measurements are at 2", 4", 8", 20", and 40" where possible.              |0.1 degrees C               |
 #' |Solar Radiation          |Pyranometer                                                                                                |0.01 watts per meter        |
 #' |Wind Speed and Direction |Propellor-type anemometer                                                                                  |Speed: 0.1 miles per hour; Direction: 1 degree|
-#'  
+#'
 #' ## SNOTEL Sensors
-#' 
+#'
 #' All Snow Telemetry (SNOTEL) sensor measurements are reported daily.
-#' 
+#'
 #' |Element Measured         |Sensor Type                                                                                                |Precision                   |
 #' |:------------------------|:----------------------------------------------------------------------------------------------------------|:---------------------------|
 #' |Air Temperature          |Shielded thermistor                                                                                        |0.1 degrees C               |
@@ -66,24 +66,26 @@
 #' |Soil Temperature         |Encapsulated thermistor. Typical measurements are at 2", 4", 8", 20", and 40" where possible.              |0.1 degrees C               |
 #' |Solar Radiation          |Pyranometer                                                                                                |0.01 watts per meter        |
 #' |Wind Speed and Direction |Propellor-type anemometer                                                                                  |Speed: 0.1 miles per hour; Direction: 1 degree|
-#' 
-#' See the [fetchSCAN tutorial](http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html) for additional usage and visualization examples. 
-#' 
+#'
+#' See the [fetchSCAN tutorial](http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html) for additional usage and visualization examples.
+#'
 #' @references See the [National Water and Climate Center](https://www.nrcs.usda.gov/wps/portal/wcc/home/) home page for more information on the SCAN and SNOTEL programs, information on web services, and interactive maps of snow water equivalent, precipitation and streamflow.
-#' 
+#'
 #' @param site.code a vector of site codes. If `NULL` `SCAN_site_metadata()` returns metadata for all SCAN sites.
 #' @param year a vector of years
 #' @param report report name, single value only; default `'SCAN'`, other example options include individual sensor codes, e.g. `'SMS'` for Soil Moisture Storage, `'TEMP'` for temperature
 #' @param timeseries either `'Daily'` or `'Hourly'`
 #' @param ... additional arguments. May include `intervalType`, `format`, `sitenum`, `interval`, `year`, `month`. Presence of additional arguments bypasses default batching functionality provided in the function and submits a 'raw' request to the API form.
-#' @return a `list` of `data.frame` objects, where each element name is a sensor type, plus a `metadata` table; different `report` types change the types of sensor data returned. `SCAN_sensor_metadata()` and `SCAN_site_metadata()` return a `data.frame`. `NULL` on bad request. 
+#' @return a `list` of `data.frame` objects, where each element name is a sensor type, plus a `metadata` table; different `report` types change the types of sensor data returned. `SCAN_sensor_metadata()` and `SCAN_site_metadata()` return a `data.frame`. `NULL` on bad request.
 #' @author D.E. Beaudette, A.G. Brown
 #' @keywords manip
 #' @examples
 #'
 #' \donttest{
-#' if(requireNamespace("curl") &
-#'     curl::has_internet()) {
+#' if(requireNamespace("curl") &&
+#'     curl::has_internet() &&
+#'     requireNamespace("httr") &&
+#'     requireNamespace("rvest")) {
 #'
 #'     # get data
 #'     x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016)))
@@ -94,7 +96,7 @@
 #'
 #'     # get site metadata
 #'     m <- SCAN_site_metadata(site.code=c(356, 2072))
-#'     
+#'
 #'     # get hourly data (396315 records)
 #'     # x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016), timeseries = "Hourly"))
 #' }
@@ -137,17 +139,17 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   # format raw data into a list of lists:
   # sensor suite -> site number -> year
   d.list <- list()
-  
+
   # save: sensor suite -> site number -> year
   sensors <- c('SMS', 'STO', 'SAL', 'TAVG', 'TMIN',
                'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ',
                'WDIRV', 'WSPDV', 'LRADT')
-  
+
   for (i in req.list) {
 
     # when there are no data, result is NULL
     d <- try(.get_SCAN_data(i), silent = TRUE)
-    
+
     if (inherits(d, 'try-error')) {
       message(d)
       return(NULL)
@@ -211,7 +213,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   if (length(d.cols) == 0) {
     return(NULL)
   }
-  
+
   ## https://github.com/ncss-tech/soilDB/issues/14
   ## there may be multiple above-ground sensors (takes the first)
   if (length(d.cols) > 1 & code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC',
@@ -274,16 +276,16 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   # format and return
   res <- as.data.frame(d.long[, c('Site', 'Date', 'Time', 'water_year', 'water_day',
   'value', 'depth', 'sensor.id')])
-  
+
   # Time ranges from  "00:00" to "23:00" [24 hourly readings]
   # set Time to 12:00 (middle of day) for daily data
   if (is.null(res$Time) || all(is.na(res$Time) | res$Time == "")) {
     res$Time <- "12:00"
   }
-  
+
   # TODO: what is the correct timezone for each site's data? Is it local? Or corrected to some default?
   # res$datetime <- as.POSIXct(strptime(paste(res$Date, res$Time), "%Y-%m-%d %H:%M"), tz = "GMT")
-  
+
   res
 }
 
@@ -338,18 +340,18 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     return(NULL)
 
   res <- try(httr::stop_for_status(r), silent = TRUE)
-  
+
   if (inherits(res, 'try-error')) {
     return(NULL)
   }
 
   # extract content as text, cannot be directly read-in
   r.content <- try(httr::content(r, as = 'text'), silent = TRUE)
-  
+
   if (inherits(r.content, 'try-error')) {
     return(NULL)
   }
-  
+
   # connect to the text as a standard file
   tc <- textConnection(r.content)
 
@@ -428,22 +430,22 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 .get_single_SCAN_metadata <- function(site.code) {
   # base URL to service
   uri <- 'https://wcc.sc.egov.usda.gov/nwcc/sensors'
-  
+
   # note: the SCAN form processor checks the refering page and user-agent
   new.headers <-  c("Referer" = "https://wcc.sc.egov.usda.gov/nwcc/sensors")
-  
+
   # enable follow-location
   # http://stackoverflow.com/questions/25538957/suppressing-302-error-returned-by-httr-post
   # cf <- httr::config(followlocation = 1L, verbose=1L) # debugging
   cf <- httr::config(followlocation = 1L)
-  
+
   req <- list(
     sitenum = site.code,
     report = 'ALL',
     interval = 'DAY',
     timeseries = " View Daily Sensor Descriptions "
   )
-  
+
   # submit request
   r <- httr::POST(
     uri,
@@ -453,23 +455,23 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     httr::add_headers(new.headers)
   )
   httr::stop_for_status(r)
-  
+
   # parsed XML
   r.content <- httr::content(r, as = 'parsed')
-  
+
   # get tables
   n.tables <- rvest::html_nodes(r.content, "table")
-  
+
   # the metadata table we want is the last one
   m <- rvest::html_table(n.tables[[length(n.tables)]], header = FALSE)
-  
+
   # clean-up table
   # 1st row is header
   h <- make.names(m[1, ])
   # second row is junk
   m <- m[-c(1:2), ]
   names(m) <- h
-  
+
   m$site.code <- site.code
   return(m)
 }
@@ -479,15 +481,15 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 #' @rdname fetchSCAN
 #' @export
 SCAN_sensor_metadata <- function(site.code) {
-  
+
   # check for required packages
   if (!requireNamespace('httr', quietly = TRUE) | !requireNamespace('rvest', quietly = TRUE))
     stop('please install the `httr` and `rvest` packages', call. = FALSE)
-  
+
   # iterate over site codes, returning DF + site.code
-  
+
   res <- do.call('rbind', lapply(site.code, .get_single_SCAN_metadata))
-  
+
   return(as.data.frame(res))
 }
 
@@ -496,21 +498,21 @@ SCAN_sensor_metadata <- function(site.code) {
 #' @rdname fetchSCAN
 #' @export
 SCAN_site_metadata <- function(site.code = NULL) {
-  
+
   # hack to please R CMD check
   SCAN_SNOTEL_metadata <- NULL
-  
+
   # cached copy available in soilDB::SCAN_SNOTEL_metadata
   load(system.file("data/SCAN_SNOTEL_metadata.rda", package = "soilDB")[1])
-  
+
   if (is.null(site.code)) {
     idx <- 1:nrow(SCAN_SNOTEL_metadata)
   } else {
     idx <- which(SCAN_SNOTEL_metadata$Site %in% site.code)
   }
-  
+
   # subset requested codes
   res <- SCAN_SNOTEL_metadata[idx, ]
-  
+
   return(res)
 }

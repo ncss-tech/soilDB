@@ -78,8 +78,10 @@ See the \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{fetchSC
 \examples{
 
 \donttest{
-if(requireNamespace("curl") &
-    curl::has_internet()) {
+if(requireNamespace("curl") &&
+    curl::has_internet() &&
+    requireNamespace("httr") &&
+    requireNamespace("rvest")) {
 
     # get data
     x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016)))
@@ -90,7 +92,7 @@ if(requireNamespace("curl") &
 
     # get site metadata
     m <- SCAN_site_metadata(site.code=c(356, 2072))
-    
+
     # get hourly data (396315 records)
     # x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016), timeseries = "Hourly"))
 }

@@ -47,7 +47,7 @@
 
   # KSSL geochem, XRD, glass
   x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=extended', f))
-  
+
   # list of dataframe objects; note: missing data are returned as FALSE
   ext <-  .soilDB_curl_get_JSON(x, gzip = TRUE)
 
@@ -63,7 +63,7 @@
 
   # list of dataframe objects; note: missing data are returned as FALSE
   m <- .soilDB_curl_get_JSON(x, gzip = TRUE)
-  
+
   # done
   return(m)
 }
@@ -74,10 +74,10 @@
 
   # KSSL site + horizon
   x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=site_hz', f))
-  
+
   # list of dataframe objects; note: missing data are returned as FALSE
   site_hz <- .soilDB_curl_get_JSON(x, gzip = TRUE)
-  
+
   # report missing data
   if (all(c(isFALSE(site_hz[['site']]),
             isFALSE(site_hz[['horizon']])))) {
@@ -225,7 +225,7 @@
 #' @examples
 #'
 #' \donttest{
-#' if(requireNamespace("curl") &
+#' if(requireNamespace("curl") &&
 #'     curl::has_internet()) {
 #'
 #'     library(aqp)
@@ -252,13 +252,13 @@
 #'     # extract SPC
 #'     pedons <- s$SPC
 #'
-#'     ## automatically simplify color data
-#'     s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE, simplifyColors=TRUE)
-#'
-#'     # check
-#'     par(mar=c(0,0,0,0))
-#'     plot(pedons, color='moist_soil_color', print.id=FALSE)
-#'
+#'    # if (requireNamespace("farver")) {
+#'    #   ## automatically simplify color data (requires farver)
+#'    #   s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE, simplifyColors=TRUE)
+#'    #   # check
+#'    #   par(mar=c(0,0,0,0))
+#'    #   plot(pedons, color='moist_soil_color', print.id=FALSE)
+#'    # }
 #' }
 #' }
 #'

@@ -13,7 +13,7 @@
 #'           by = list(makeChunks(letters, size=13)),
 #'           FUN = paste0, collapse=",")
 #'
-#' @export 
+#' @export
 makeChunks <- function(ids, size=100) {
   n <- length(ids)
   chunk.id <- seq(from = 1, to = floor(n / size) + 1)
@@ -62,10 +62,12 @@ makeChunks <- function(ids, size=100) {
 #' # major components only
 #' res <- subset(res, comppct_r >= 85)
 #'
-#' # inspect plot of result
-#' par(mar=c(0,0,0,0))
-#' groupedProfilePlot(res, groups = "mukey", color = "hzname", cex.names=0.8,
-#'                    id.style = "side", label = "labelname")
+#' if (requireNamespace("scales")) {
+#'   # inspect plot of result
+#'   par(mar=c(0,0,0,0))
+#'   groupedProfilePlot(res, groups = "mukey", color = "hzname", cex.names=0.8,
+#'                      id.style = "side", label = "labelname")
+#' }
 #'}
 #'
 format_SQL_in_statement <- function(x) {
@@ -151,13 +153,13 @@ SDA_query <- function(q) {
   # check for required packages
   if (!requireNamespace('httr', quietly = TRUE))
     stop('please install the `httr` package', call. = FALSE)
-  
+
   if (!requireNamespace('xml2', quietly = TRUE))
     stop('please install the `xml2` package', call. = FALSE)
-  
+
   if (!requireNamespace('jsonlite', quietly = TRUE))
     stop('please install the `jsonlite` package', call. = FALSE)
-  
+
   if (length(q) > 1) {
     stop('Query vector must be length 1')
   }

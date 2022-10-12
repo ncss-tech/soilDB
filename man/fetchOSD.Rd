@@ -72,54 +72,54 @@ These last two cases are problematic for analysis that makes use of morphology a
 \donttest{
 if(requireNamespace("curl") &
    curl::has_internet()) {
-  
+
   # soils of interest
-  s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz', 
+  s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz',
               'reiff', 'san joaquin', 'montpellier', 'grangeville', 'pollasky', 'ramona')
-  
+
   # fetch and convert data into an SPC
   s.moist <- fetchOSD(s.list, colorState='moist')
   s.dry <- fetchOSD(s.list, colorState='dry')
-  
+
   # plot profiles
   # moist soil colors
-  if(require("aqp")) {
-    
+  if (require("aqp") && requireNamespace("scales")) {
+
     par(mar=c(0,0,0,0), mfrow=c(2,1))
-    plot(s.moist, name='hzname', 
+    plot(s.moist, name='hzname',
          cex.names=0.85, axis.line.offset=-4)
-    plot(s.dry, name='hzname', 
+    plot(s.dry, name='hzname',
          cex.names=0.85, axis.line.offset=-4)
-    
+
     # extended mode: return a list with SPC + summary tables
     x <- fetchOSD(s.list, extended = TRUE, colorState = 'dry')
-    
+
     par(mar=c(0,0,1,1))
     plot(x$SPC)
     str(x, 1)
-    
-    
+
+
   # use makeChunks() for iteration over larger sequences of soil series
-  s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz', 
+  s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz',
               'reiff', 'san joaquin', 'montpellier', 'grangeville', 'pollasky', 'ramona')
-              
+
   # make a vector of chunk IDs, with 2 series / chunk
   ck <- makeChunks(s.list, size = 2)
-  
+
   # split original data by chunk IDs
   # iterate over resulting list
   # run fetchOSD() on pieces
   # result is a list of SoilProfileCollection objects
   x <- lapply(split(s.list, ck), fetchOSD)
-  
+
   # flatten into a single SPC
   x <- combine(x)
-  
+
   # there should be 11 profiles
   length(x)
   }
-  
-  
+
+
 }
 }
 }
