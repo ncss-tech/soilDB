@@ -71,6 +71,9 @@ test_that("non-standard `end` of water year", {
 }
 
 test_that("waterDayYear gives consistent result within a timezone", {
+  
+  skip_on_cran()
+  
   # test waterDayYear in other timezones
   res <- sapply(OlsonNames(),
               function(x)
@@ -84,6 +87,9 @@ test_that("waterDayYear gives consistent result within a timezone", {
 })
 
 test_that("waterDayYear tz='UTC' behaves the same across timezones" , {
+  
+  skip_on_cran()
+  
   # test waterDayYear behavior with constant (UTC) timezone in simulated other timezones
   res <- sapply(OlsonNames(),
                 function(x)
