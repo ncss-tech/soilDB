@@ -82,7 +82,7 @@ geodatabases, and create soil profile collection objects (SPC).</p>
 <span><span class="fu">fetchGDB</span><span class="op">(</span></span>
 <span>  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,</span>
 <span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  childs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  childs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -132,8 +132,8 @@ classes, which can waste space in tables and figures.</p></dd>
     <p>These functions return data from SSURGO file geodatabases with the use of a
 simple text string that formatted as an SQL WHERE clause (e.g. <code>WHERE =
 "areasymbol = 'IN001'"</code>. Any columns within the target table can be
-specified (except for fetchGDB() currently, which only targets the legend
-with the WHERE clause).</p>
+specified (except for fetchGDB() which currently can only target one table
+(e.g. legend, mapunit or component) at a time with the WHERE clause).</p>
     </div>
     <div id="author">
     <h2>Author</h2>
