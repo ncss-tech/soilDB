@@ -307,13 +307,26 @@ NASISChoiceList <- function(x,
     if (!obsolete) {
       y <- y[y$ChoiceObsolete == 0, ]
     }
-    idx <-  na.omit(as.numeric(apply(do.call('cbind', lapply(y[c("ChoiceValue", "ChoiceName", "ChoiceLabel")], function(xxx)
-        match(x[[xx]], xxx))), MARGIN = 1, function(xxx) as.numeric(na.omit(xxx)))))
-    yy <- y[idx,]
+    
+    # create lut of value:name:choice
+    lut <- do.call('cbind', lapply(y[c("ChoiceValue", "ChoiceName", "ChoiceLabel")],
+                                   function(xxx) match(x[[xx]], xxx)))
+    
+    # pick the best (possibly there is overlap between name and choice)
+    lut.y <- lut[, which.max(apply(lut, MARGIN = 2, function(xxx) sum(!is.na(xxx))))]
+    yy <- y[lut.y,]
+    
     if (choice != "ChoiceValue" && factor) {
+      newlevels <- y[[choice]]
+      if (all(is.na(y$DomainRanked) | y$DomainRanked == 0)) {
+        ordered <- FALSE
+      } else {
+        # if ordered and domain is ranked, reorder levels based on sequence if needed
+        newlevels <- newlevels[order(y[["ChoiceSequence"]])]
+      }
       f <- factor(yy[[choice]], 
-                  levels = y[[choice]], 
-                  ordered = ordered && all(yy$DomainRanked))
+                  levels = newlevels, 
+                  ordered = ordered)
       if (droplevels) {
         return(droplevels(x))
       } else {

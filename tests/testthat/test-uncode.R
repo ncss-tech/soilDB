@@ -49,7 +49,7 @@ test_that("NASISChoiceList() works", {
   
   # obsolete value, ordered factor excluding obsolete choices
   x <- NASISChoiceList("common", colnames = "flodfreqcl", choice = "ChoiceName")
-  expect_equal(x, structure(integer(0), levels = c("none", "very rare", "rare", 
+  expect_equal(x, structure(NA_integer_, levels = c("none", "very rare", "rare", 
                                                    "occasional", "frequent", "very frequent"), 
                             class = c("ordered", "factor")))
 })
