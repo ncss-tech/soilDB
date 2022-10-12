@@ -102,28 +102,20 @@ uncode <- function(df,
       if (any(df[[i]] %in% sub[[value_col]])) {
         nc <- factor(df[[i]], levels = sub[[value_col]], labels = sub[[name_col]])
         lc <- factor(df[[i]], levels = sub[[value_col]], labels = sub[[label_col]])
-        if (all(is.na(nc))) {
-          df[[i]] <- lc
-        } else {
-          nc[is.na(nc)] <- lc[is.na(nc)]
-          df[[i]] <- nc
-        }
-        df[[i]] <- nc
       } else {
         nc <- factor(df[[i]], levels = sub[[name_col]], labels = sub[[name_col]])
         lc <- factor(df[[i]], levels = sub[[label_col]], labels = sub[[label_col]])
-        if (all(is.na(nc))) {
-          df[[i]] <- lc
-        } else {
-          nc[is.na(nc)] <- lc[is.na(nc)]
-          df[[i]] <- nc
-        }
+      }
+      if (sum(is.na(nc)) > sum(is.na(lc))) {
+        df[[i]] <- lc
+      } else {
+        df[[i]] <- nc
       }
     } else if (invert) {
       # replace values with ChoiceName, try filling NA with replace based on ChoiceLabel
       nc <- factor(df[[i]], levels = sub[[name_col]], labels = sub[[value_col]])
       lc <- factor(df[[i]], levels = sub[[label_col]], labels = sub[[value_col]])
-      if (all(is.na(nc))) {
+      if (sum(is.na(nc)) > sum(is.na(lc))) {
         df[[i]] <- lc
       } else {
         nc[is.na(nc)] <- lc[is.na(nc)]
