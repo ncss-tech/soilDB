@@ -4,7 +4,7 @@
 \alias{waterDayYear}
 \title{Compute Water Day and Year}
 \usage{
-waterDayYear(d, end = "09-30", format = "\%Y-\%m-\%d", tz = "")
+waterDayYear(d, end = "09-30", format = "\%Y-\%m-\%d", tz = "UTC")
 }
 \arguments{
 \item{d}{anything the can be safely converted to \code{POSIXlt}}
@@ -13,7 +13,7 @@ waterDayYear(d, end = "09-30", format = "\%Y-\%m-\%d", tz = "")
 
 \item{format}{Used in POSIXlt conversion. Default \code{"\%Y-\%m-\%d"}}
 
-\item{tz}{Used in POSIXlt conversion for custom timezone. Default \code{""} is current locale}
+\item{tz}{Used in POSIXlt conversion for custom timezone. Default is \code{"UTC"}}
 }
 \value{
 A \code{data.frame} object with the following \item{wy}{the "water
