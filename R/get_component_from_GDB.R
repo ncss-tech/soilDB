@@ -14,14 +14,14 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
 
   # query
   message("getting components from ", substr(WHERE, 1, 20), "...")
-  qry <- paste(
+  qry <- paste0(
     "SELECT mukey, cokey, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, erocl, earthcovkind1, earthcovkind2, elev_r, slope_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, hydgrp,  nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, tfact, wei, weg, corcon, corsteel, frostact, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition
 
     FROM component
 
-    WHERE", WHERE
+    WHERE ", WHERE
   )
-  if (is.null(WHERE)) qry <- gsub("WHERE", "", qry)
+  if (is.null(WHERE)) qry <- gsub("WHERE ", "", qry)
   co <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE)
   
   
@@ -180,7 +180,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
     
     co <- by(mu, mu$idx, function(x) {
 
-      qry <- paste(
+      qry <- paste0(
         "SELECT mukey, cokey, comppct_r, majcompflag, hydricrating
 
          FROM component
