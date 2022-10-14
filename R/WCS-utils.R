@@ -10,14 +10,15 @@
 #' @examples
 #' 
 #' WCS_details(wcs = 'ISSR800')
-WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
+WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
   
   # select a WCS
   wcs <- match.arg(wcs)
   
   spec <- switch(wcs,
                  'mukey' = .mukey.spec,
-                 'ISSR800' = .ISSR800.spec
+                 'ISSR800' = .ISSR800.spec,
+                 'soilColor' = .soilColor.spec
                  )
   
   ## TODO: spec names / DSN are assumed to be identical
@@ -158,6 +159,36 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800')) {
   attr(res, '.input_class') <- return_class
   res
 }
+
+
+## moist soil colors
+# these are 16bit (unsigned) integers
+.soilColor.spec <- list(
+  
+  'sc005cm' = list(
+    dsn = 'sc005cm',
+    type = 'GEOTIFF_16',
+    desc = 'Moist soil color, 5cm (270m)',
+    na = 0,
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+  ),
+  
+  'sc025cm' = list(
+    dsn = 'sc025cm',
+    type = 'GEOTIFF_16',
+    desc = 'Moist soil color, 25cm (270m)',
+    na = 0,
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+  ),
+  
+  'sc025cm_hr' = list(
+    dsn = 'sc025cm_hr',
+    type = 'GEOTIFF_16',
+    desc = 'Moist soil color, 25cm (30m)',
+    na = 0,
+    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+  )
+)
 
 
 ## TODO: next release include suggested colors
