@@ -13,7 +13,7 @@ a.CA <- st_as_sfc(a.CA)
 
 # query WCS
 # result is in EPSG:5070
-m <- soilColor.wcs(a.CA, var = 'sc025cm', res = 270)
+m <- soilColor.wcs(a.CA, var = 'sc015cm', res = 270)
 
 # looks OK
 plot(m, col = cats(m)[[1]]$col, legend = FALSE, axes = FALSE, main = attr(m, 'layer name'))
@@ -27,8 +27,11 @@ a <- st_bbox(
   crs = st_crs(4326)
 )
 
-m <- soilColor.wcs(a, var = 'sc025cm_hr', res = 30)
+m <- soilColor.wcs(a, var = 'sc075cm_hr', res = 30)
 
 # looks OK
 plot(m, col = cats(m)[[1]]$col, legend = FALSE, axes = FALSE, main = attr(m, 'layer name'))
 box()
+
+
+# -89.2633 37.9833,-89.2633 38.0151,-89.1809 38.0151,-89.1809 37.9833,-89.2633 37.9833

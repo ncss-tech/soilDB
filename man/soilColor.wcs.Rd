@@ -11,7 +11,7 @@ soilColor.wcs(aoi, var, res = 270, quiet = FALSE)
 
 \item{var}{soil color grid name (case insensitive), see details}
 
-\item{res}{grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.}
+\item{res}{grid resolution, units of meters, typically '270', or '30', depending on \code{var}. See details.}
 
 \item{quiet}{logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.}
 }
@@ -31,7 +31,7 @@ Moist soil colors, 2022.
 
 The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the soil color grids.
 
-Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}.
+Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}. The full resolution version of the soil color grids use a \code{hr} suffix, e.g. 'sc025cm_hr'.
 }
 \examples{
 \dontrun{

@@ -9,7 +9,7 @@
 #' 
 #' @param var soil color grid name (case insensitive), see details
 #' 
-#' @param res grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.
+#' @param res grid resolution, units of meters, typically '270', or '30', depending on `var`. See details.
 #' 
 #' @param quiet logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.
 #'  
@@ -22,7 +22,7 @@
 #' 
 #' The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the soil color grids.
 #' 
-#' Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}.
+#' Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}. The full resolution version of the soil color grids use a `hr` suffix, e.g. 'sc025cm_hr'.
 #' 
 #' 
 #' @return A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the `terra` package are returned. If the input object class is from the `raster` or `sp` packages a RasterLayer is returned.
