@@ -2,7 +2,7 @@
 #' 
 #' @description List variables or databases provided by soilDB web coverage service (WCS) abstraction. These lists will be expanded in future versions.
 #'
-#' @param wcs a WCS label ('mukey' or 'ISSR800')
+#' @param wcs a WCS label ('mukey', 'ISSR800', or 'soilColor')
 #'
 #' @return a \code{data.frame}
 #' @export

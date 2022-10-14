@@ -4,10 +4,10 @@
 \alias{WCS_details}
 \title{Web Coverage Services Details}
 \usage{
-WCS_details(wcs = c("mukey", "ISSR800"))
+WCS_details(wcs = c("mukey", "ISSR800", "soilColor"))
 }
 \arguments{
-\item{wcs}{a WCS label ('mukey' or 'ISSR800')}
+\item{wcs}{a WCS label ('mukey', 'ISSR800', or 'soilColor')}
 }
 \value{
 a \code{data.frame}

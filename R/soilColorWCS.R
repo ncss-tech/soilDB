@@ -1,5 +1,48 @@
 
-
+#' @title Get 30m or 270m gridded soil soil color data from SoilWeb Web Coverage Service (WCS)
+#' 
+#' @author D.E. Beaudette and A.G. Brown
+#' 
+#' @description Moist soil colors, 2022.
+#' 
+#' @param aoi area of interest (AOI) defined using a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, OR a \code{list}, see details
+#' 
+#' @param var soil color grid name (case insensitive), see details
+#' 
+#' @param res grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.
+#' 
+#' @param quiet logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.
+#'  
+#' @details \code{aoi} should be specified as a \code{SpatRaster}, \code{Spatial*}, \code{RasterLayer}, \code{SpatRaster}/\code{SpatVector}, \code{sf}, \code{sfc}, or \code{bbox} object or a \code{list} containing:
+#' 
+#' \describe{
+#'   \item{\code{aoi}}{bounding-box specified as (xmin, ymin, xmax, ymax) e.g. c(-114.16, 47.65, -114.08, 47.68)}
+#'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)}
+#' }
+#' 
+#' The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the soil color grids.
+#' 
+#' Variables available from this WCS can be queried using \code{WCS_details(wcs = 'soilColor')}.
+#' 
+#' 
+#' @return A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the `terra` package are returned. If the input object class is from the `raster` or `sp` packages a RasterLayer is returned.
+#' 
+#' @examples 
+#' \dontrun{
+#' library(terra)
+#' 
+#' # see WCS_details() for variable options
+#' WCS_details(wcs = 'soilColor')
+#' 
+#' # moist soil color at 25cm, 270m version
+#' res <- soilColor.wcs(list(aoi = c(-116, 35, -115.5, 35.5), crs = "EPSG:4326"), 
+#'                    var = 'sc025cm', res = 270)
+#'
+#' # note colors and other metadata are stored
+#' # in raster attribute table
+#' plot(res, col = cats(res)[[1]]$col, axes = FALSE, legend = FALSE)
+#' }
+#' @export
 soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   
   # sanity check: aoi specification
