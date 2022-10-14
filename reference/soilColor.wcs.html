@@ -67,7 +67,7 @@
 
 
 <dt>res</dt>
-<dd><p>grid resolution, units of meters. The native resolution of ISSR-800 grids (this WCS) is 800m.</p></dd>
+<dd><p>grid resolution, units of meters, typically '270', or '30', depending on <code>var</code>. See details.</p></dd>
 
 
 <dt>quiet</dt>
@@ -91,7 +91,7 @@
 
 
 </dl><p>The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the soil color grids.</p>
-<p>Variables available from this WCS can be queried using <code>WCS_details(wcs = 'soilColor')</code>.</p>
+<p>Variables available from this WCS can be queried using <code>WCS_details(wcs = 'soilColor')</code>. The full resolution version of the soil color grids use a <code>hr</code> suffix, e.g. 'sc025cm_hr'.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
