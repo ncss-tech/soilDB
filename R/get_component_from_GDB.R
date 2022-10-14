@@ -382,13 +382,17 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
       if (nrow(cht) > 0) {
         cht  <- aggregate(texcl   ~ chtgkey,         data = cht,  paste0, collapse = ", ")
       } else cht <- cht[c("chtgkey", "texcl")]
+      
+      
+      # chfrags
+      qry  <- paste0("SELECT * FROM chfrags WHERE chkey IN ('", paste0(x$chkey, collapse = "', '"), "')")
+      chf <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE)
+      chf <- simplifyFragmentData(chf, id.var = "chkey", vol.var = "fragvol_r", prefix = "frag")
 
       # merge
-      ch <- merge(x, chtg, by = "chkey",    all.x = TRUE, sort = FALSE)
-      ch <- merge(ch, cht,  by = "chtgkey", all.x = TRUE, sort = FALSE)
-
-      vars <- c("cokey", "chkey", "hzname", "hzdept_r", "hzdepb_r", "texture", "texcl", "sandtotal_l", "sandtotal_r", "sandtotal_h", "silttotal_l", "silttotal_r", "silttotal_h", "claytotal_l", "claytotal_r", "claytotal_h", "om_l", "om_r", "om_h", "dbthirdbar_l", "dbthirdbar_r", "dbthirdbar_h", "ksat_l", "ksat_r", "ksat_h", "awc_l", "awc_r", "awc_h", "lep_r", "sar_r", "ec_r", "cec7_r", "sumbases_r", "ph1to1h2o_l", "ph1to1h2o_r", "ph1to1h2o_h", "caco3_l", "caco3_r", "caco3_h", "kwfact", "kffact")
-      ch <- ch[vars]
+      ch <- merge(x, chtg, by = "chkey",   all.x = TRUE, sort = FALSE)
+      ch <- merge(ch, cht, by = "chtgkey", all.x = TRUE, sort = FALSE)
+      ch <- merge(ch, chf, by = "chkey",   all.x = TRUE, sort = FALSE)
 
       return(ch)
     })
@@ -399,7 +403,26 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
     ch  <- cbind(ch[1:idx], texture = as.character(NULL), texcl = as.character(NULL), ch[(idx + 1):ncol(ch)])
   }
   
-  } else ch <- sf::read_sf(dsn = dsn, query = "SELECT * FROM component LIMIT 0")
+  } else ch <- sf::read_sf(dsn = dsn, query = "SELECT * FROM chorizon LIMIT 0")
+  
+  vars <- c("cokey", "chkey", "hzname", "hzdept_r", "hzdepb_r", "texture", "texcl", "sandtotal_l", "sandtotal_r", "sandtotal_h", "silttotal_l", "silttotal_r", "silttotal_h", "claytotal_l", "claytotal_r", "claytotal_h", "om_l", "om_r", "om_h", "dbthirdbar_l", "dbthirdbar_r", "dbthirdbar_h", "ksat_l", "ksat_r", "ksat_h", "awc_l", "awc_r", "awc_h", "lep_r", "sar_r", "ec_r", "cec7_r", "sumbases_r", "ph1to1h2o_l", "ph1to1h2o_r", "ph1to1h2o_h", "caco3_l", "caco3_r", "caco3_h", "kwfact", "kffact", "fine_gravel", "gravel", "cobbles", "stones", "boulders", "channers", "flagstones", "parafine_gravel", "paragravel", "paracobbles", "parastones", "paraboulders", "parachanners", "paraflagstones", "unspecified", "total_frags_pct_nopf", "total_frags_pct")
+  idx <- unlist(lapply(vars, function(x) which(names(ch) %in% x)))
+  ch <- ch[idx]
+  
+  # append missing columns from ch LIMIT 0
+  if (ncol(ch) < length(vars)) {
+
+    mis <- vars[! vars %in% names(ch)]
+    mis_df <- as.data.frame(matrix(ncol = length(mis), nrow = nrow(ch)))
+    names(mis_df) <- mis
+
+    idx <- 1:2
+    mis_df[idx] <- lapply(mis_df[idx], as.character)
+    mis_df[-idx] <- lapply(mis_df[-idx], as.numeric)
+    
+    ch <- cbind(ch, mis_df)
+  }
+  
 
   ch <- uncode(ch,
                droplevels = droplevels)
