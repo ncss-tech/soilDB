@@ -9,7 +9,7 @@
  - Fix for `get_OSD(..., fix_ocr_errors = TRUE)` with empty typical profile for #271 by @dylanbeaudette
  - `fetchNASIS()` drops non-representative and additional when `dropNotRepresentative`/`dropAdditional` are set (@natearoe) 
  - Fix for `as.POSIXct()` in R 4.3+; for #265
- - Fix for "status was 'SSL connect error" for `fetchKSSL()` and other functions that download JSON 
+ - Fix for "status was 'SSL connect error" for `fetchKSSL()` and other functions that download JSON (@kramdog)
     - Now uses standard soilDB {curl} handle, which includes a longer timeout and  `ssl_verifyhost=0`
  - Fixes for compatibility with {jsonlite} >1.8.1 that now uses {base} rather than {curl}
  - Update row count expectations for end of FY22 SSURGO refresh
