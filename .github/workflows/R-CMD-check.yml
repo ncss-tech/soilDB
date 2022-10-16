@@ -121,7 +121,6 @@ jobs:
           install.packages(c("rmarkdown","devtools","pkgdown","aqp"))
           remotes::install_github(c("ncss-tech/aqp"), dependencies = FALSE)
           rmarkdown::render("README.Rmd")
-          devtools::build_site()
         shell: Rscript {0}
 
       - name: Commit results
