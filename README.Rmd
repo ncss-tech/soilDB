@@ -88,7 +88,11 @@ citation("soilDB")
       - [`get_SDA_coecoclass`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecosite.html)
       - [`get_SDA_metrics`](http://ncss-tech.github.io/soilDB/reference/get_SDA_metrics.html)
       - [`get_SDA_cosurfmorph`](http://ncss-tech.github.io/soilDB/reference/get_SDA_cosurfmorph.html)
-    
+      
+  * SSURGO Web Soil Survey 
+    + [`downloadSSURGO`](http://ncss-tech.github.io/soilDB/reference/downloadSSURGO.html)
+    + [`createSSURGO`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.html)
+ 
   * SSURGO Local Geodatabases
     + [`fetchGDB`](http://ncss-tech.github.io/soilDB/reference/fetchGDB.html)
 
