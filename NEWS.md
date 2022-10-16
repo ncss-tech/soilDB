@@ -1,8 +1,18 @@
-# soilDB 2.7.5 (2022-10-01)
-
- * Updated row count and data expectations for FY22 SSURGO refresh
- 
- * SoilWeb KSSL data JSON API queries now use a `gzcon()` modifier on the URL connection to avoid issues with {jsonlite} >1.8.1
+# soilDB 2.7.5 (2022-10-17)
+ - Updates to SSURGO File Geodatabase functions (`fetchGDB()` and related) by @smroecker
+ - Added `soilColor.wcs()` to access a web coverage service for soil color at various depths by @dylanbeaudette
+ - `waterDayYear()`: fix for CRAN and different timezones; now defaults to `tz="UTC"` #268
+    - `summarizeSoilTemperature()`: set default timezone to `tz="UTC"`
+ - Fix for `uncode()` on pre-decoded values when ChoiceName and ChoiceLabel overlap #273 
+    - Fix for `NASISChoiceList()` related to #273 
+ - `get_soilseries_from_NASIS()`: Remove `areaacres` and `obterm` for #272 by @smroecker
+ - Fix for `get_OSD(..., fix_ocr_errors = TRUE)` with empty typical profile for #271 by @dylanbeaudette
+ - `fetchNASIS()` drops non-representative and additional when `dropNotRepresentative`/`dropAdditional` are set (@natearoe) 
+ - Fix for `as.POSIXct()` in R 4.3+; for #265
+ - Fix for "status was 'SSL connect error" for `fetchKSSL()` and other functions that download JSON 
+    - Now uses standard soilDB {curl} handle, which includes a longer timeout and  `ssl_verifyhost=0`
+ - Fixes for compatibility with {jsonlite} >1.8.1 that now uses {base} rather than {curl}
+ - Update row count expectations for end of FY22 SSURGO refresh
 
 # soilDB 2.7.4 (2022-09-30)
 
