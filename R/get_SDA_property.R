@@ -17,11 +17,9 @@
 #' @param miscellaneous_areas Include miscellaneous areas  (non-soil components) in results? Default: `FALSE`. Now works with all `method` types)
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
+#' @examplesIf requireNamespace("curl") && curl::has_internet()
 #' @examples
-#'
 #' \donttest{
-#' if(requireNamespace("curl") &
-#'     curl::has_internet()) {
 #'
 #'  # get 1/3 bar bulk density [0,25] centimeter depth weighted average from dominant component
 #'  get_SDA_property(property = c("dbthirdbar_l","dbthirdbar_r","dbthirdbar_h"),
@@ -29,7 +27,6 @@
 #'                   areasymbols = "CA630",
 #'                   top_depth = 0,
 #'                   bottom_depth = 25)
-#' }
 #' }
 #'
 #' @details

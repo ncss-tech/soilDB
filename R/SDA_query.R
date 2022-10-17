@@ -96,11 +96,9 @@ format_SQL_in_statement <- function(x) {
 #' @seealso \code{\link{SDA_spatialQuery}}
 #' @keywords manip
 #' @export
+#' @examplesIf requireNamespace("curl") && curl::has_internet() && requireNamespace("wk")
 #' @examples
 #' \donttest{
-#' if(requireNamespace("curl") & requireNamespace("wk") &
-#'    curl::has_internet()) {
-#'
 #'   ## get SSURGO export date for all soil survey areas in California
 #'   # there is no need to filter STATSGO
 #'   # because we are filtering on SSURGO area symbols
@@ -119,7 +117,6 @@ format_SQL_in_statement <- function(x) {
 #'
 #'   res <- SDA_query(q)
 #'   str(res)
-#'
 #'
 #'   ## get component-level data for a specific soil survey area (Yolo county, CA)
 #'   # there is no need to filter STATSGO because the query contains
@@ -146,7 +143,6 @@ format_SQL_in_statement <- function(x) {
 #'
 #'    x <- SDA_query(q)
 #'    str(x)
-#'  }
 #' }
 SDA_query <- function(q) {
 

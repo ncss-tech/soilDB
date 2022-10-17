@@ -76,13 +76,9 @@ See the \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{fetchSC
 }
 }
 \examples{
-
+\dontshow{if (requireNamespace("curl") && curl::has_internet() && requireNamespace("httr") && requireNamespace("rvest")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
 \donttest{
-if(requireNamespace("curl") &&
-    curl::has_internet() &&
-    requireNamespace("httr") &&
-    requireNamespace("rvest")) {
-
     # get data
     x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016)))
     str(x)
@@ -95,7 +91,6 @@ if(requireNamespace("curl") &&
 
     # get hourly data (396315 records)
     # x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016), timeseries = "Hourly"))
-}
 }
 }
 \references{

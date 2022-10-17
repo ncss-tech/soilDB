@@ -27,15 +27,9 @@ An R spatial object, class depending on \code{type} and \code{as_Spatial} argume
 This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{sf} object) or gridded representation of area proportion falling within 800m cells (\code{SpatRaster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (\code{EPSG:5070}).
 }
 \examples{
+\dontshow{if (requireNamespace("curl") && curl::has_internet() && requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
 \donttest{
-if(requireNamespace("curl") &
-   requireNamespace("sf") &
-   requireNamespace("terra") &
-   curl::has_internet()) {
-  
-  # required packages
-  library(sf)
-  library(terra)
   
   # specify a soil series name
   s <- 'magnor'
@@ -46,25 +40,22 @@ if(requireNamespace("curl") &
   # return a terra SpatRasters
   y <- seriesExtent(s, type = 'raster')
   
+  library(terra)
   if (!is.null(x) && !is.null(y)) {
+    x <- terra::vect(x)
     # note that CRS are different
-    sf::st_crs(x)
+    terra::crs(x)
     terra::crs(y)
   
     # transform vector representation to CRS of raster
-    x <- sf::st_transform(x, terra::crs(y))
+    x <- terra::project(x, terra::crs(y))
   
     # graphical comparison
     par(mar = c(1, 1 , 1, 3))
     plot(y, axes = FALSE)
-    
-    # no fill color
-    plot(x['series'], add = TRUE, col = NA)
+    plot(x, add = TRUE)
   }
-  
 }
-}
-
 }
 \references{
 \url{https://casoilresource.lawr.ucdavis.edu/see/}

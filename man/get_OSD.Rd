@@ -38,13 +38,10 @@ The default \code{base_url} for \code{result="json"} is to JSON files stored in 
 \code{fix_ocr_errors} by default is turned off (\code{FALSE}). When \code{TRUE}, assume that in color data hue/value/chroma lowercase "L" (\code{"l"}) is a 1, and a capital "O" is interpreted as zero. Also, in horizon desgignations assume lowercase "L" is a \code{1}, and a string that starts with \code{0} starts with the capital letter \code{"O"}.
 }
 \examples{
-
+\dontshow{if (requireNamespace("curl") && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
 \donttest{
-if(requireNamespace("curl") &
-   curl::has_internet()) {
-
-series <- c("Musick", "Hector", "Chewacla")
-get_OSD(series)
-}
+  series <- c("Musick", "Hector", "Chewacla")
+  get_OSD(series)
 }
 }

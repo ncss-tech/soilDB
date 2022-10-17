@@ -24,13 +24,9 @@
 #'
 #' @return a `SoilProfileCollection` for a successful query, a `try-error` if no site/pedon locations can be found or `NULL` for an empty `lab_layer` (within sites/pedons) result
 #' @export
-#'
+#' @examplesIf requireNamespace("curl") && curl::has_internet()
 #' @examples
 #' \dontrun{
-#'
-#' if(requireNamespace("curl") &
-#'    curl::has_internet()) {
-#'
 #'   # fetch by ssa_key
 #'   res <- fetchLDM(8297, what = "ssa_key")
 #'
@@ -41,8 +37,6 @@
 #'
 #'   # fetch by area_code (SSA only)  
 #'   res <- fetchLDM("CA630", what = "area_code")
-#' }
-#'
 #' }
 #' @importFrom aqp `depths<-` `site<-`
 #' @importFrom data.table rbindlist

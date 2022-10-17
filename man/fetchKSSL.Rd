@@ -91,11 +91,9 @@ snapshot was developed using methods described here:
 the link below for the live data.
 }
 \examples{
-
+\dontshow{if (requireNamespace("curl") && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
 \donttest{
-if(requireNamespace("curl") &&
-    curl::has_internet()) {
-
     library(aqp)
 
     # search by series name
@@ -127,7 +125,6 @@ if(requireNamespace("curl") &&
    #   par(mar=c(0,0,0,0))
    #   plot(pedons, color='moist_soil_color', print.id=FALSE)
    # }
-}
 }
 
 }

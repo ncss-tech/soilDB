@@ -138,10 +138,9 @@ The \code{property} argument refers to one of the property names or columns spec
 }
 }
 \examples{
-
+\dontshow{if (requireNamespace("curl") && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
 \donttest{
-if(requireNamespace("curl") &
-    curl::has_internet()) {
 
  # get 1/3 bar bulk density [0,25] centimeter depth weighted average from dominant component
  get_SDA_property(property = c("dbthirdbar_l","dbthirdbar_r","dbthirdbar_h"),
@@ -149,7 +148,6 @@ if(requireNamespace("curl") &
                   areasymbols = "CA630",
                   top_depth = 0,
                   bottom_depth = 25)
-}
 }
 
 }

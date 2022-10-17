@@ -51,9 +51,9 @@ Querying regions with complex mapping may require smaller \code{chunk.size}. Num
 Note that STATSGO data are fetched where \code{CLIPAREASYMBOL = 'US'} to avoid duplicating state and national subsets of the geometry.
 }
 \examples{
+\dontshow{if (requireNamespace("curl") && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
 \donttest{
-if(requireNamespace("curl") &
-   curl::has_internet()) {
  
     # get spatial data for a single mukey
     single.mukey <- try(fetchSDA_spatial(x = "2924882"))
@@ -76,7 +76,6 @@ if(requireNamespace("curl") &
 
     # demo adding a field (`muname`) to attribute table of result
     head(try(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname")))
-}
 }
 }
 \author{

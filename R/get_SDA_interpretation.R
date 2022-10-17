@@ -13,21 +13,15 @@
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @param not_rated_value used where rating class is "Not Rated". Default: `NA_real`
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
-#'
+#' @examplesIf requireNamespace("curl") && curl::has_internet()
 #' @examples
 #' \donttest{
-#' if(requireNamespace("curl") &
-#'     curl::has_internet()) {
-#'
-#'  # get two forestry interpretations for CA630
-#'  get_SDA_interpretation(c("FOR - Potential Seedling Mortality",
-#'                           "FOR - Road Suitability (Natural Surface)"),
-#'                         method = "Dominant Condition",
-#'                         areasymbols = "CA630")
+#'   # get two forestry interpretations for CA630
+#'   get_SDA_interpretation(c("FOR - Potential Seedling Mortality",
+#'                            "FOR - Road Suitability (Natural Surface)"),
+#'                          method = "Dominant Condition",
+#'                          areasymbols = "CA630")
 #' }
-#' }
-#'
-#'
 #' @details
 #'
 #' ## Rule Names in `cointerp` table

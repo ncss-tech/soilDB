@@ -56,15 +56,10 @@
 #'
 #' @return a \code{data.frame} object containing soil series names that match patterns supplied as arguments.
 #' @export
-#'
-#' @examples
-#'
+#' @examplesIf requireNamespace("curl") && curl::has_internet() && require(aqp)
+#' @examples 
 #'
 #' \donttest{
-#' if(requireNamespace("curl") &
-#'    curl::has_internet() &
-#'    require(aqp)) {
-#'
 #'   # find all series that list Pardee as a geographically associated soil.
 #'   s <- OSDquery(geog_assoc_soils = 'pardee')
 #'
@@ -74,7 +69,6 @@
 #'   # simple figure
 #'   par(mar=c(0,0,1,1))
 #'   plot(x$SPC)
-#' }
 #' }
 #' 
 OSDquery <- function(everything = NULL, mlra='', taxonomic_class='', typical_pedon='', brief_narrative='', ric='', use_and_veg='', competing_series='', geog_location='', geog_assoc_soils='') {

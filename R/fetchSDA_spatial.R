@@ -23,11 +23,9 @@
 #' Note that STATSGO data are fetched where `CLIPAREASYMBOL = 'US'` to avoid duplicating state and national subsets of the geometry.
 #'
 #' @author Andrew G. Brown, Dylan E. Beaudette
-#'
+#' @examplesIf requireNamespace("curl") && curl::has_internet()
 #' @examples
 #' \donttest{
-#' if(requireNamespace("curl") &
-#'    curl::has_internet()) {
 #'  
 #'     # get spatial data for a single mukey
 #'     single.mukey <- try(fetchSDA_spatial(x = "2924882"))
@@ -50,7 +48,6 @@
 #'
 #'     # demo adding a field (`muname`) to attribute table of result
 #'     head(try(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname")))
-#' }
 #' }
 #' @rdname fetchSDA_spatial
 #' @export fetchSDA_spatial

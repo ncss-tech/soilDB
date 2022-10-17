@@ -21,18 +21,15 @@
 #' @note SDA now supports spatial queries, consider using \code{\link{SDA_spatialQuery}} instead.
 #' @author D.E. Beaudette
 #' @keywords manip
+#' @examplesIf requireNamespace("curl") && curl::has_internet()
 #' @examples
 #' 
 #' \donttest{
-#' if(requireNamespace("curl") &
-#'     curl::has_internet()) {
-#'     
 #'     # query by bbox
 #'     SoilWeb_spatial_query(bbox=c(-122.05, 37, -122, 37.05))
 #'     
 #'     # query by coordinate pair
 #'     SoilWeb_spatial_query(coords=c(-121, 38))
-#' }
 #' }
 #' 
 #' @export SoilWeb_spatial_query

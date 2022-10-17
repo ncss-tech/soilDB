@@ -222,12 +222,9 @@
 #' @seealso \code{\link{fetchOSD}}
 #' @references \url{http://ncsslabdatamart.sc.egov.usda.gov/}
 #' @keywords utilities
+#' @examplesIf requireNamespace("curl") && curl::has_internet()
 #' @examples
-#'
 #' \donttest{
-#' if(requireNamespace("curl") &&
-#'     curl::has_internet()) {
-#'
 #'     library(aqp)
 #'
 #'     # search by series name
@@ -259,7 +256,6 @@
 #'    #   par(mar=c(0,0,0,0))
 #'    #   plot(pedons, color='moist_soil_color', print.id=FALSE)
 #'    # }
-#' }
 #' }
 #'
 #' @export fetchKSSL

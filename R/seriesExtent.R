@@ -9,18 +9,10 @@
 #' @return An R spatial object, class depending on `type` and `as_Spatial` arguments
 #' @references \url{https://casoilresource.lawr.ucdavis.edu/see/}
 #' @author D.E. Beaudette
-#' 
+#' @examplesIf requireNamespace("curl") && curl::has_internet() && requireNamespace("terra")
 #' @export
 #' @examples
 #' \donttest{
-#' if(requireNamespace("curl") &
-#'    requireNamespace("sf") &
-#'    requireNamespace("terra") &
-#'    curl::has_internet()) {
-#'   
-#'   # required packages
-#'   library(sf)
-#'   library(terra)
 #'   
 #'   # specify a soil series name
 #'   s <- 'magnor'
@@ -31,25 +23,22 @@
 #'   # return a terra SpatRasters
 #'   y <- seriesExtent(s, type = 'raster')
 #'   
+#'   library(terra)
 #'   if (!is.null(x) && !is.null(y)) {
+#'     x <- terra::vect(x)
 #'     # note that CRS are different
-#'     sf::st_crs(x)
+#'     terra::crs(x)
 #'     terra::crs(y)
 #'   
 #'     # transform vector representation to CRS of raster
-#'     x <- sf::st_transform(x, terra::crs(y))
+#'     x <- terra::project(x, terra::crs(y))
 #'   
 #'     # graphical comparison
 #'     par(mar = c(1, 1 , 1, 3))
 #'     plot(y, axes = FALSE)
-#'     
-#'     # no fill color
-#'     plot(x['series'], add = TRUE, col = NA)
+#'     plot(x, add = TRUE)
 #'   }
-#'   
 #' }
-#' }
-#' 
 seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60, 
                          as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {
   

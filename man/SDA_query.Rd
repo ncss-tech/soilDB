@@ -24,10 +24,9 @@ SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are sto
 This function requires the \code{httr}, \code{jsonlite}, and \code{xml2} packages
 }
 \examples{
+\dontshow{if (requireNamespace("curl") && curl::has_internet() && requireNamespace("wk")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
 \donttest{
-if(requireNamespace("curl") & requireNamespace("wk") &
-   curl::has_internet()) {
-
   ## get SSURGO export date for all soil survey areas in California
   # there is no need to filter STATSGO
   # because we are filtering on SSURGO area symbols
@@ -46,7 +45,6 @@ if(requireNamespace("curl") & requireNamespace("wk") &
 
   res <- SDA_query(q)
   str(res)
-
 
   ## get component-level data for a specific soil survey area (Yolo county, CA)
   # there is no need to filter STATSGO because the query contains
@@ -73,7 +71,6 @@ if(requireNamespace("curl") & requireNamespace("wk") &
 
    x <- SDA_query(q)
    str(x)
- }
 }
 }
 \seealso{

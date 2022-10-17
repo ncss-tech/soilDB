@@ -158,15 +158,10 @@
 #' * vitric: (vitric) presence of glassy material
 #' * xanthic: (xanthic) more yellow than typic subgroup
 #' * xeric: (xeric) more xeric than typic subgroup
-#' 
+#' @export
+#' @examplesIf requireNamespace("curl") && curl::has_internet() && requireNamespace("terra")
 #' @examples 
 #' \dontrun{
-#' \donttest{
-#' 
-#' if(requireNamespace("curl") &
-#'    requireNamespace("terra") &
-#'    curl::has_internet()) {
-#'   
 #'   library(terra)
 #'   
 #'   # soil order
@@ -199,10 +194,6 @@
 #'   # quick evaluation of the result
 #'   terra::plot(a, axes = FALSE)
 #' }
-#' }
-#' 
-#' }
-#' @export
 taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup'),
                        formativeElement = FALSE, timeout = 60,
                        as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {

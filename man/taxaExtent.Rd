@@ -179,13 +179,9 @@ The following labels are used to access taxa containing the following formative 
 }
 }
 \examples{
+\dontshow{if (requireNamespace("curl") && curl::has_internet() && requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
 \dontrun{
-\donttest{
-
-if(requireNamespace("curl") &
-   requireNamespace("terra") &
-   curl::has_internet()) {
-  
   library(terra)
   
   # soil order
@@ -217,9 +213,6 @@ if(requireNamespace("curl") &
   
   # quick evaluation of the result
   terra::plot(a, axes = FALSE)
-}
-}
-
 }
 }
 \author{

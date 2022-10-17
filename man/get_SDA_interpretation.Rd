@@ -672,19 +672,15 @@ Get map unit interpretations from Soil Data Access by rule name
 }
 }
 \examples{
+\dontshow{if (requireNamespace("curl") && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
 \donttest{
-if(requireNamespace("curl") &
-    curl::has_internet()) {
-
- # get two forestry interpretations for CA630
- get_SDA_interpretation(c("FOR - Potential Seedling Mortality",
-                          "FOR - Road Suitability (Natural Surface)"),
-                        method = "Dominant Condition",
-                        areasymbols = "CA630")
+  # get two forestry interpretations for CA630
+  get_SDA_interpretation(c("FOR - Potential Seedling Mortality",
+                           "FOR - Road Suitability (Natural Surface)"),
+                         method = "Dominant Condition",
+                         areasymbols = "CA630")
 }
-}
-
-
 }
 \author{
 Jason Nemecek, Chad Ferguson, Andrew Brown

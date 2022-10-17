@@ -70,13 +70,10 @@ Related documentation can be found in the following tutorials
 SoilWeb maintains a snapshot of the Official Series Description data.
 }
 \examples{
-
+\dontshow{if (requireNamespace("curl") && curl::has_internet() && require(aqp)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
 
 \donttest{
-if(requireNamespace("curl") &
-   curl::has_internet() &
-   require(aqp)) {
-
   # find all series that list Pardee as a geographically associated soil.
   s <- OSDquery(geog_assoc_soils = 'pardee')
 
@@ -86,7 +83,6 @@ if(requireNamespace("curl") &
   # simple figure
   par(mar=c(0,0,1,1))
   plot(x$SPC)
-}
 }
 
 }

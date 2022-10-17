@@ -32,12 +32,10 @@
 #' @references O'Geen, A., Walkinshaw, M. and Beaudette, D. (2017), SoilWeb: A Multifaceted Interface to Soil Survey Information. Soil Science Society of America Journal, 81: 853-862. \doi{https://doi.org/10.2136/sssaj2016.11.0386n}
 #' 
 #' @keywords manip
+#' @export siblings
+#' @examplesIf requireNamespace("curl") && curl::has_internet()
 #' @examples
-#' 
 #' \donttest{
-#' if(requireNamespace("curl") &
-#'     curl::has_internet()) {
-#'     
 #'     # basic usage
 #'     x <- siblings('zook')
 #'     x$sib
@@ -47,10 +45,6 @@
 #'     x <- siblings('zook', only.major = TRUE)
 #'     x$sib
 #' }
-#' }
-#' 
-#' @export siblings
-#' 
 siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FALSE) {
   
   # helper functions

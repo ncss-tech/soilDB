@@ -53,22 +53,19 @@ Find out more information about the SoilGrids and GlobalSoilMap products here:
 }
 }
 \examples{
+\dontshow{if (requireNamespace("curl") && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
 \dontrun{
- if(requireNamespace("curl") &
-   curl::has_internet()) {
-  
-  library(aqp)
 
   your.points <- data.frame(id  = c("A", "B"), 
                            lat = c(37.9, 38.1), 
                            lon = c(-120.3, -121.5), 
                            stringsAsFactors = FALSE)
-
   x <- try(fetchSoilGrids(your.points))
  
+  library(aqp)
   if (!inherits(x, 'try-error'))
    plotSPC(x, name = NA, color = "socQ50")
- }
 }
 }
 \references{

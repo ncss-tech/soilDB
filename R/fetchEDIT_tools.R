@@ -140,13 +140,10 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
 #' @return A `data.frame` containing: `geoUnit`, `id`, `legacyId`, `name`. `NULL` if no result.
 #'
 #' @export
-#'
+#' @examplesIf requireNamespace("curl") && curl::has_internet()
 #' @examples
 #' \donttest{
-#'  if(requireNamespace("curl") &
-#'    curl::has_internet()) {
 #'    get_EDIT_ecoclass_by_geoUnit(c("018X","022A"))
-#'  }
 #' }
 get_EDIT_ecoclass_by_geoUnit <- function(geoUnit, catalog = c("esd", "esg")) {
   # essentially vectorized application of make_EDIT_service_URL / read_json and
