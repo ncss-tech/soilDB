@@ -151,12 +151,7 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"curl"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
-<span class="r-in"><span>   <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/nslookup.html" class="external-link">has_internet</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
-<span class="r-in"><span>   <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># find all series that list Pardee as a geographically associated soil.</span></span></span>
 <span class="r-in"><span>  <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">OSDquery</span><span class="op">(</span>geog_assoc_soils <span class="op">=</span> <span class="st">'pardee'</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -165,10 +160,7 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># simple figure</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">SPC</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: aqp</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> This is aqp 1.42</span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">SPC</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="OSDquery-1.png" alt="" width="768" height="475"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>

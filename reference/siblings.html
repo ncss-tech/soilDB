@@ -109,20 +109,59 @@ SSSA 2019 Presentation - Mapping Soilscapes Using Soil Co-Occurrence Networks
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"curl"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
-<span class="r-in"><span>    <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/nslookup.html" class="external-link">has_internet</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    </span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span>    <span class="co"># basic usage</span></span></span>
 <span class="r-in"><span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">siblings</span><span class="op">(</span><span class="st">'zook'</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">x</span><span class="op">$</span><span class="va">sib</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    series      sibling majcompflag  n</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    zook       Olmitz        TRUE 17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    zook        Vigar        TRUE 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    zook       Vesser        TRUE 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    zook          Ely        TRUE 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    zook      Excello        TRUE  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    zook         Colo        TRUE  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7    zook      Nodaway        TRUE  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8    zook Mt. Sterling        TRUE  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9    zook          Zoe        TRUE  3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10   zook        Kezan        TRUE  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11   zook        Clamo        TRUE  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12   zook     Humeston        TRUE  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13   zook         Klum        TRUE  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14   zook       Quiver        TRUE  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15   zook         Colo       FALSE 73</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16   zook       Wabash       FALSE 59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17   zook      Nodaway       FALSE 45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18   zook     Chequest       FALSE 45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19   zook     Humeston       FALSE 27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20   zook       Arbela       FALSE 23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21   zook      Ackmore       FALSE 18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22   zook       Bremer       FALSE 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23   zook      Dockery       FALSE 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24   zook         Lamo       FALSE 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25   zook       Landes       FALSE 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26   zook         Napa       FALSE 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27   zook        Shell       FALSE 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28   zook     Kennebec       FALSE 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29   zook       Vesser       FALSE  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30   zook      Sawmill       FALSE  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31   zook       Coland       FALSE  9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32   zook       Olmitz       FALSE  8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33   zook     Blackoar       FALSE  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34   zook       Nishna       FALSE  5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35   zook       Quiver       FALSE  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36   zook        Chase       FALSE  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37   zook        Calco       FALSE  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38   zook       Judson       FALSE  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39   zook      Reading       FALSE  2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40   zook     Clarinda       FALSE  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41   zook          Ely       FALSE  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42   zook         Muir       FALSE  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43   zook       Eudora       FALSE  1</span>
 <span class="r-in"><span>    </span></span>
 <span class="r-in"><span>    <span class="co"># restrict to siblings that are major components</span></span></span>
 <span class="r-in"><span>    <span class="co"># e.g. the most likely siblings</span></span></span>
 <span class="r-in"><span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">siblings</span><span class="op">(</span><span class="st">'zook'</span>, only.major <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="va">x</span><span class="op">$</span><span class="va">sib</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    series      sibling majcompflag  n</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    zook       Olmitz        TRUE 17</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    zook        Vigar        TRUE 12</span>
@@ -139,7 +178,6 @@ SSSA 2019 Presentation - Mapping Soilscapes Using Soil Co-Occurrence Networks
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13   zook         Klum        TRUE  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14   zook       Quiver        TRUE  1</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>

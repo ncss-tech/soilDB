@@ -108,17 +108,160 @@ servers, or a "snapshot" via SoilWeb.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"curl"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
-<span class="r-in"><span>    <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/nslookup.html" class="external-link">has_internet</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    </span></span>
 <span class="r-in"><span>    <span class="co"># query by bbox</span></span></span>
 <span class="r-in"><span>    <span class="fu">SoilWeb_spatial_query</span><span class="op">(</span>bbox<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">122.05</span>, <span class="fl">37</span>, <span class="op">-</span><span class="fl">122</span>, <span class="fl">37.05</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    area_ac areasymbol   mukey musym</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1123.9      ca087  455958   182</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    749.0      ca087  455891   115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    586.7      ca087  455889   113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    523.9      ca087  455920   144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    459.8      ca087  455934   158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    267.7      ca087  455935   159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7    231.4      ca087  455921   145</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8    175.0      ca087  455947   171</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9    165.9      ca087  455894   118</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10   150.3      ca087  455909   133</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11   149.7      ca087  455918   142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12   131.9      ca087  455955   179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13   117.3      ca087  455919   143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14   107.1      ca087  455953   177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15    84.9      ca087  455936   160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16    83.8      ca087  455893   117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17    83.8      ca087  455927   151</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18    73.9      ca087  455940   164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19    73.0      ca087  455886   110</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20    72.3      ca087  455960   184</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21    66.2      ca087  455950   174</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22    57.3      ca087  455949   173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23    54.5      ca087  455959   183</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24    47.2      ca087  455951   175</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25    43.7      ca087 2833423   130</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26    43.2      ca087  455892   116</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27    37.4      ca087 2833403   131</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28    33.6      ca087  455924   148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29    31.2      ca087  455882   106</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30    28.2      ca087  455877   101</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31    26.6      ca087  455881   105</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32    25.6      ca087  455876   100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33    25.3      ca087  455901   125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34    22.2      ca087  455954   178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35    19.8      ca087  455874   185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36    19.1      ca087  455933   157</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37    17.2      ca087  455912   136</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38    16.8      ca087  455890   114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39    15.4      ca087  455911   135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40    14.2      ca087  455880   104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41    11.7      ca087  455887   111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42     7.0      ca087  455915   139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43     5.9      ca087  455946   170</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44     5.0      ca087  455922   146</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45     4.7      ca087  455956   180</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46     3.5      ca087  455910   134</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47     3.0      ca087  455941   165</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48     1.4      ca087  455948   172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                          muname</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                   Zayante coarse sand, 5 to 30 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                            Ben Lomond-Felton complex, 50 to 75 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                       Ben Lomond-Catelli-Sur complex, 30 to 75 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                      Lompico-Felton complex, 50 to 75 percent slopes, MLRA 4B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                 Nisene-Aptos complex, 50 to 75 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                         Pfeiffer gravelly sandy loam, 15 to 30 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                  Lompico variant loam, 5 to 30 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                            Soquel loam, 2 to 9 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                       Bonnydoon-Rock outcrop complex, 50 to 85 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                    Elkhorn sandy loam, 2 to 9 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                               Lompico-Felton complex, 5 to 30 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                      Watsonville loam, thick surface, 2 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                     Lompico-Felton complex, 30 to 50 percent slopes, MLRA 4B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14                                     Watsonville loam, 2 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                        Pfeiffer gravelly sandy loam, 30 to 50 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                                      Bonnydoon loam, 30 to 50 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                   Maymen stony loam, 30 to 75 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                                           Pits-Dumps complex</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                Ben Lomond sandy loam, 5 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                        Zayante-Rock outcrop complex, 15 to 75 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                          Tierra-Watsonville complex, 15 to 30 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                                 Sur-Catelli complex, 50 to 75 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                                 Zayante coarse sand, 30 to 50 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24                          Tierra-Watsonville complex, 30 to 50 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25                             Elder sandy loam, 2 to 9 percent slopes, MLRA 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26                              Bonnydoon loam, 5 to 50 percent slopes, MLRA 4B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27                            Elder sandy loam, 9 to 15 percent slopes, MLRA 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28                                Los Osos loam, 30 to 50 percent slopes, moist</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29                                  Baywood loamy sand, 15 to 30 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30                                    Aptos loam, warm, 30 to 50 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31                                   Baywood loamy sand, 2 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32                                    Aptos loam, warm, 15 to 30 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33                                         Danville loam, 2 to 9 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34                       Watsonville loam, thick surface, 0 to 2 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35                                                                        Water</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36                                Nisene-Aptos complex, 30 to 50 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37                            Elkhorn-Pfeiffer complex, 30 to 50 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38                           Ben Lomond-Felton complex, 30 to 50 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39                                  Elkhorn sandy loam, 15 to 30 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40                                    Baywood loamy sand, 0 to 2 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41                               Ben Lomond sandy loam, 15 to 50 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42 Fluvaquentic Haploxerolls-Aquic Xerofluvents complex, 0 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43                                           Soquel loam, 0 to 2 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44                                        Los Osos loam, 5 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45                    Watsonville loam, thick surface, 15 to 30 percent slope s</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46                                   Elkhorn sandy loam, 9 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47                                                                    Riverwash</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48                                          Soquel loam, 9 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    soilweb_last_update</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7           2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8           2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9           2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47          2022-09-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48          2022-09-14</span>
 <span class="r-in"><span>    </span></span>
 <span class="r-in"><span>    <span class="co"># query by coordinate pair</span></span></span>
 <span class="r-in"><span>    <span class="fu">SoilWeb_spatial_query</span><span class="op">(</span>coords<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">121</span>, <span class="fl">38</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ogc_fid areasymbol musym  mukey soilweb_last_update dist_meters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1493878      ca077   220 462112          2022-09-14 92.17456302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1494846      ca077   220 462112          2022-09-14 92.17456302</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

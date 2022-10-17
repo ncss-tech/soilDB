@@ -89,15 +89,20 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"curl"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"wk"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
-<span class="r-in"><span>   <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/nslookup.html" class="external-link">has_internet</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co">## get SSURGO export date for all soil survey areas in California</span></span></span>
 <span class="r-in"><span>  <span class="co"># there is no need to filter STATSGO</span></span></span>
 <span class="r-in"><span>  <span class="co"># because we are filtering on SSURGO area symbols</span></span></span>
 <span class="r-in"><span>  <span class="va">q</span> <span class="op">&lt;-</span> <span class="st">"SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol LIKE 'CA%';"</span></span></span>
 <span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">SDA_query</span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   areasymbol              saverest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      CA011 8/30/2022 10:52:02 PM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      CA013  8/31/2022 3:46:49 PM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      CA021   9/1/2022 4:04:38 AM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      CA031 8/31/2022 10:00:07 PM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      CA033   9/1/2022 4:06:38 AM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      CA041  9/13/2022 9:48:32 PM</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co">## get SSURGO component data associated with the</span></span></span>
@@ -109,8 +114,13 @@
 <span class="r-in"><span><span class="st">    WHERE legend.areasymbol != 'US' AND compname = 'Amador';"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">SDA_query</span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	54 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ cokey    : int  22732753 23459437 22485048 22521674 22523194 23467336 23471184 22557939 22732652 22733290 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ compname : chr  "Amador" "Amador" "Amador" "Amador" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ comppct_r: int  25 10 3 3 10 10 85 5 7 45 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "SDA_id")= chr "Table"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co">## get component-level data for a specific soil survey area (Yolo county, CA)</span></span></span>
 <span class="r-in"><span>  <span class="co"># there is no need to filter STATSGO because the query contains</span></span></span>
@@ -124,29 +134,8 @@
 <span class="r-in"><span><span class="st">    WHERE legend.areasymbol = 'CA113' ;"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">SDA_query</span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co">## get tabular data based on result from spatial query</span></span></span>
-<span class="r-in"><span>  <span class="co"># there is no need to filter STATSGO because</span></span></span>
-<span class="r-in"><span>  <span class="co"># SDA_Get_Mukey_from_intersection_with_WktWgs84() implies SSURGO</span></span></span>
-<span class="r-in"><span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">wk</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/wk/reference/wkt.html" class="external-link">as_wkt</a></span><span class="op">(</span><span class="fu">wk</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/wk/reference/rct.html" class="external-link">rct</a></span><span class="op">(</span><span class="op">-</span><span class="fl">120.9</span>, <span class="fl">37.7</span>, <span class="op">-</span><span class="fl">120.8</span>, <span class="fl">37.8</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"SELECT mukey, cokey, compname, comppct_r FROM component</span></span></span>
-<span class="r-in"><span><span class="st">      WHERE mukey IN (SELECT DISTINCT mukey FROM</span></span></span>
-<span class="r-in"><span><span class="st">      SDA_Get_Mukey_from_intersection_with_WktWgs84('"</span>, <span class="va">p</span>,</span></span>
-<span class="r-in"><span>       <span class="st">"')) ORDER BY mukey, cokey, comppct_r DESC"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>   <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">SDA_query</span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-in"><span> <span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: wk</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	54 obs. of  3 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ cokey    : int  22732753 23459437 22485048 22521674 22523194 23467336 23471184 22557939 22732652 22733290 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ compname : chr  "Amador" "Amador" "Amador" "Amador" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ comppct_r: int  25 10 3 3 10 10 85 5 7 45 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "SDA_id")= chr "Table"</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	608 obs. of  9 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ mukey      : int  459154 459204 459205 459208 459208 459208 459208 459209 459209 459209 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ cokey      : int  22734238 22734512 22734700 22734523 22734524 22734525 22734526 22734243 22734244 22734245 ...</span>
@@ -158,7 +147,19 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ taxgrtgroup: chr  NA NA NA NA ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ taxsubgrp  : chr  NA NA NA NA ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "SDA_id")= chr "Table"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co">## get tabular data based on result from spatial query</span></span></span>
+<span class="r-in"><span>  <span class="co"># there is no need to filter STATSGO because</span></span></span>
+<span class="r-in"><span>  <span class="co"># SDA_Get_Mukey_from_intersection_with_WktWgs84() implies SSURGO</span></span></span>
+<span class="r-in"><span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">wk</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/wk/reference/wkt.html" class="external-link">as_wkt</a></span><span class="op">(</span><span class="fu">wk</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/wk/reference/rct.html" class="external-link">rct</a></span><span class="op">(</span><span class="op">-</span><span class="fl">120.9</span>, <span class="fl">37.7</span>, <span class="op">-</span><span class="fl">120.8</span>, <span class="fl">37.8</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"SELECT mukey, cokey, compname, comppct_r FROM component</span></span></span>
+<span class="r-in"><span><span class="st">      WHERE mukey IN (SELECT DISTINCT mukey FROM</span></span></span>
+<span class="r-in"><span><span class="st">      SDA_Get_Mukey_from_intersection_with_WktWgs84('"</span>, <span class="va">p</span>,</span></span>
+<span class="r-in"><span>       <span class="st">"')) ORDER BY mukey, cokey, comppct_r DESC"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>   <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">SDA_query</span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
+<span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	337 obs. of  4 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ mukey    : int  462527 462527 462527 462554 462554 462554 462555 462555 462555 462558 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ cokey    : int  23471173 23471174 23471175 23471263 23471264 23471265 23471266 23471267 23471268 23471272 ...</span>
