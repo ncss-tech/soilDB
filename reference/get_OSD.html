@@ -100,9 +100,14 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span>  <span class="va">series</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Musick"</span>, <span class="st">"Hector"</span>, <span class="st">"Chewacla"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">get_OSD</span><span class="op">(</span><span class="va">series</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"curl"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>   <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/nslookup.html" class="external-link">has_internet</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">series</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Musick"</span>, <span class="st">"Hector"</span>, <span class="st">"Chewacla"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_OSD</span><span class="op">(</span><span class="va">series</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     SERIES             STATUS                        BYREV REVDATE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   MUSICK Established Series Rev. RCH-LCL-DJE/AJT-AGB-JTW 12/2018</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   HECTOR Established Series                 Rev. ORC:RLT 05/2001</span>

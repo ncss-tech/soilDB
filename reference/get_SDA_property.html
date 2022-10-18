@@ -144,7 +144,10 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"curl"</span><span class="op">)</span> <span class="op">&amp;</span></span></span>
+<span class="r-in"><span>    <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curl/man/nslookup.html" class="external-link">has_internet</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span> <span class="co"># get 1/3 bar bulk density [0,25] centimeter depth weighted average from dominant component</span></span></span>
 <span class="r-in"><span> <span class="fu">get_SDA_property</span><span class="op">(</span>property <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dbthirdbar_l"</span>,<span class="st">"dbthirdbar_r"</span>,<span class="st">"dbthirdbar_h"</span><span class="op">)</span>,</span></span>
@@ -152,6 +155,7 @@
 <span class="r-in"><span>                  areasymbols <span class="op">=</span> <span class="st">"CA630"</span>,</span></span>
 <span class="r-in"><span>                  top_depth <span class="op">=</span> <span class="fl">0</span>,</span></span>
 <span class="r-in"><span>                  bottom_depth <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     areasymbol musym</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        CA630  1012</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2        CA630  1013</span>
