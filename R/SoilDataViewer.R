@@ -80,7 +80,9 @@ get_SDV_legend_elements <- function(WHERE,
                                      attributedescription = x$attributedescription,
                                      nasisrulename = x$nasisrulename,
                                      label = attr(z, 'label'),
-                                     order = attr(z, 'order'))
+                                     order = attr(z, 'order'),
+                                     stringsAsFactors = FALSE
+                                   )
                                    d <- cbind(d, attvalue)
                                    d2 <- data.frame(
                                      red = attr(z$Color, 'red'),
@@ -91,7 +93,8 @@ get_SDV_legend_elements <- function(WHERE,
                                      d2 <- data.frame(red = NA, 
                                                       green = NA, 
                                                       blue = NA, 
-                                                      hex = notratedcolor)
+                                                      hex = notratedcolor,
+                                                      stringsAsFactors = FALSE)
                                    } else {                                      
                                      newcolor <- rgb(
                                        red = d2$red,
