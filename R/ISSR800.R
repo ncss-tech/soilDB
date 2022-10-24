@@ -155,7 +155,7 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   if (!is.null(var.spec$rat)) {
     
     # get rat
-    rat <- try(read.csv(var.spec$rat, stringsAsFactors = FALSE), silent = !quiet)
+    rat <- try(read.csv(var.spec$rat, stringsAsFactors = FALSE), silent = quiet)
     
     if (inherits(rat, 'try-error')) {
       message("Failed to download RAT from ", var.spec$rat, "; returning non-categorical grid")
