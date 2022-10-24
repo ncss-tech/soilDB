@@ -16,7 +16,7 @@ A list of metadata about the gdb.
 Get SRI Layers
 }
 \note{
-Refer to \link{get_SRI} for information on gdb availability.
+Refer to \code{\link{get_SRI}} for information on gdb availability.
 }
 \examples{
 \donttest{

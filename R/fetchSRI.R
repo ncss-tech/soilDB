@@ -2,14 +2,14 @@
 
 #' Get SRI
 #'
-#' @description This function calls the ECOSHARE data access (zip files) to get Soil Inventory Resource (SRI) data. These
-#' datasets contains both spatial and non-spatial data in the form of a gdb.
+#' @description This function calls ECOSHARE (zip files) to get Soil Inventory Resource (SRI) data. These
+#' datasets contain both spatial and non-spatial data in the form of a gdb.
 #' @param gdb A \code{character} of the gdb, e.g. \code{'Deschutes'}.
 #' @param layer A \code{character} of the layer within the gdb, e.g. \code{'MapUnits'} (default).
 #'
 #' @return An \code{sf} or \code{data.frame} object.
 #'
-#' @note Please use \link{get_SRI_layers} to get the layer id information needed for the layer argument. This will
+#' @note Please use \code{\link{get_SRI_layers}} to get the layer id information needed for the layer argument. This will
 #' help with joining \code{sf} and \code{data.frame} objects.
 #'
 #' @details  Due to the fact that many Region 6 Forests do not have NRCS SSURGO surveys (at a scale of 1:24,000, these are the highest-resolution soils data generally available), Region 6 initiated a project in 2012 to bring these legacy SRI soils data into digital databases to facilitate their use in regional planning activities.  The datasets available on this page are the results of that effort.
@@ -40,7 +40,6 @@
 #' \item \strong{Willamette}
 #' \item \strong{Winema}
 #' }
-
 #' @export
 #'
 #' @examples
@@ -56,7 +55,9 @@ get_SRI <- function(gdb, layer = 'MapUnits') {
 
   temp <- tempfile(fileext = paste0(gdb, '.zip'))
 
-  download.file(paste0('https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'),temp)
+  curl::curl_download(paste0('https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'),
+                      destfile = temp,
+                      handle = .soilDB_curl_handle())
 
   temp2 <- tempfile()
 
@@ -78,7 +79,7 @@ get_SRI <- function(gdb, layer = 'MapUnits') {
 #' @return A list of metadata about the gdb.
 #' @export
 #'
-#' @note Refer to \link{get_SRI} for information on gdb availability.
+#' @note Refer to \code{\link{get_SRI}} for information on gdb availability.
 #'
 #' @examples
 #' \donttest{
