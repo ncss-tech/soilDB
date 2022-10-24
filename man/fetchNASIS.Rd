@@ -64,7 +64,7 @@ site/pedon/horizon data (default: \code{FALSE})}
 
 \item{dropNonRepresentative}{Used only for \code{from='components'} with \code{duplicates=TRUE}. Prevent "duplication" of non-representative data mapunits? Default: \code{TRUE}}
 
-\item{duplicates}{Used only for \code{from='components'}. Duplicate components for all instances of use (i.e. one for each legend data mapunit is used on; optionally for additional mapunits, and/or non-representative data mapunits?)}
+\item{duplicates}{Used only for \code{from='components'}. Duplicate components for all instances of use (i.e. one for each legend data mapunit is used on; optionally for additional mapunits, and/or non-representative data mapunits?). This will include columns from \code{get_component_correlation_data_from_NASIS_db()} that identify which legend(s) a component is used on.}
 
 \item{stringsAsFactors}{deprecated}
 
