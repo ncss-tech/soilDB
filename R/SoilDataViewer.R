@@ -68,7 +68,8 @@ get_SDV_legend_elements <- function(WHERE,
                                      attvalue <- data.frame(
                                        value = NA,
                                        lower_value = attr(z, 'lower_value'),
-                                       upper_value = attr(z, 'upper_value')
+                                       upper_value = attr(z, 'upper_value'),
+                                       stringsAsFactors = FALSE
                                      )
                                    }
                                    d <- data.frame(
@@ -87,7 +88,8 @@ get_SDV_legend_elements <- function(WHERE,
                                    d2 <- data.frame(
                                      red = attr(z$Color, 'red'),
                                      green = attr(z$Color, 'green'),
-                                     blue = attr(z$Color, 'blue')
+                                     blue = attr(z$Color, 'blue'),
+                                     stringsAsFactors = FALSE
                                    )
                                    if (nrow(d2) == 0) {
                                      d2 <- data.frame(red = NA, 
