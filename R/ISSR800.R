@@ -155,7 +155,12 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   if (!is.null(var.spec$rat)) {
     
     # get rat
-    rat <- read.csv(var.spec$rat, stringsAsFactors = FALSE)
+    rat <- try(read.csv(var.spec$rat, stringsAsFactors = FALSE), silent = !quiet)
+    
+    if (inherits(rat, 'try-error')) {
+      message("Failed to download RAT from ", var.spec$rat, "; returning non-categorical grid")
+      return(r)
+    }
     
     # the cell value / ID column is always the 2nd colum
     # name it for reference later
