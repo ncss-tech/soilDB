@@ -134,6 +134,12 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     stop('result is not a valid GeoTIFF', call. = FALSE)
   }
   
+  ## NOTE: terra (as of 1.6-28) will create 0-indexed grids sometimes when
+  ##       values(x) <- function_that_returns_factors(...)
+  ##
+  ## soil texture grids remain indexed from 1 for this reason
+  ##
+  
   ## TODO: this isn't quite right... '0' is returned by the WCS sometimes
   # specification of NODATA using local definitions
   # NAvalue(r) <- var.spec$na
