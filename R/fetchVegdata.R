@@ -31,7 +31,7 @@ fetchVegdata <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
   
 	# 1. load data in pieces
   vegplot <- get_vegplot_from_NASIS_db(SS = SS, dsn =  dsn)
-  vegplotlocation <-get_vegplot_location_from_NASIS_db(SS = SS,  dsn =  dsn)
+  vegplotlocation <- get_vegplot_location_from_NASIS_db(SS = SS,  dsn =  dsn)
   vegplotrhi <-  get_vegplot_trhi_from_NASIS_db(SS = SS, dsn =  dsn)
   vegplotspecies <- get_vegplot_species_from_NASIS_db(SS = SS, dsn =  dsn)
   vegtransect <- get_vegplot_transect_from_NASIS_db(SS = SS, dsn =  dsn)
