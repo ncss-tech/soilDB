@@ -175,7 +175,7 @@ get_vegplot_species_from_NASIS_db <-  function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  q.vegplotspecies <- "SELECT siteiid, vegplotid, vegplotname, obsdate, primarydatacollector, 
+  q.vegplotspecies <- "SELECT siteiid, siteobsiid, vegplotiid, vegplotid, vegplotname, obsdate, primarydatacollector, 
     datacollectionpurpose, assocuserpedonid, ppi.seqnum, plantsym, plantsciname, plantnatvernm,
     planttypegroup, plantheightcllowerlimit, plantheightclupperlimit, 
     plantnativity, sociabilityclass, livecanopyhtbottom, livecanopyhttop, overstorydbhmin,
@@ -231,7 +231,7 @@ get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
   }
   
   # veg transect data - many transects to one vegplot
-  q.vegtransect <- "SELECT siteiid, p.peiid, vegplotiidref, vegtransectiid, usiteid as site_id, assocuserpedonid as pedon_id, vegplotid as vegplot_id, vegplotname, vegtransectid as vegtransect_id, obsdate, primarydatacollector, datacollectionpurpose, transectstartlatitude, transectstartlongitude, transectendlatitude, transectendlongitude, transectazimuth, transectlength, transectstartelevation, transectendelevation, dblsampquadratssampled, dblsampquadratsclipped, nestedfreqquadratssampled, freqquadratssampled, dwrquadratssampled, daubenmirequadratssampled, quadratsizedomlegacy, quadratsizeseclegacy, quadratshapedomlegacy, quadratshapeseclegacy, beltwidth, dblsampannualprod, totharvestannualprod, wtunitannualprod, dwrannualprod, comparativeyieldprod, comparativeyieldranktotal, comparativeyieldrankave, comparativerefclipwtave, abovegroundbiomasstotal, standingherbbiomass, transectbasalcovpct, basalcovpcttotal, basalgapsizemin, canopygapsizemin, gapsmeasuredbetween, canopygaplengthtotal, canopygappcttotal, basalgaplengthtotal, basalgappcttotal, vt.understoryreprodabundance, vt.woodyunderstoryabundance, vt.herbundertoryabundance, vt.lichensunderstoryabundance, cancovpcttotaltrans, cancovtotalclasstrans, cancovassessmethod, vt.crowncanclosurepct, vt.crowncancloseassessmethod, vt.crowncompfactorlpp, vt.crowncomplppavedbh, overstorycancovpcttrans, overstorycancovclasstrans, groundcovassessmethod, groundcovquadratssampled, groundcovpointssampled, groundsurfcovassessmethod, groundsurfcovquadratsamp, groundsurfcovpointssamp, lpiobsinterval, totalpointssampledcount, topcanopyhtave, topcanopyhtstddev, totalnumplantsbelt, totalnumspeciesbelt, totalplantdensitybelt
+  q.vegtransect <- "SELECT  siteiid, siteobsiid, vegplotiid, p.peiid, vegplotiidref, vegtransectiid, usiteid as site_id, assocuserpedonid as pedon_id, vegplotid as vegplot_id, vegplotname, vegtransectid as vegtransect_id, obsdate, primarydatacollector, datacollectionpurpose, transectstartlatitude, transectstartlongitude, transectendlatitude, transectendlongitude, transectazimuth, transectlength, transectstartelevation, transectendelevation, dblsampquadratssampled, dblsampquadratsclipped, nestedfreqquadratssampled, freqquadratssampled, dwrquadratssampled, daubenmirequadratssampled, quadratsizedomlegacy, quadratsizeseclegacy, quadratshapedomlegacy, quadratshapeseclegacy, beltwidth, dblsampannualprod, totharvestannualprod, wtunitannualprod, dwrannualprod, comparativeyieldprod, comparativeyieldranktotal, comparativeyieldrankave, comparativerefclipwtave, abovegroundbiomasstotal, standingherbbiomass, transectbasalcovpct, basalcovpcttotal, basalgapsizemin, canopygapsizemin, gapsmeasuredbetween, canopygaplengthtotal, canopygappcttotal, basalgaplengthtotal, basalgappcttotal, vt.understoryreprodabundance, vt.woodyunderstoryabundance, vt.herbundertoryabundance, vt.lichensunderstoryabundance, cancovpcttotaltrans, cancovtotalclasstrans, cancovassessmethod, vt.crowncanclosurepct, vt.crowncancloseassessmethod, vt.crowncompfactorlpp, vt.crowncomplppavedbh, overstorycancovpcttrans, overstorycancovclasstrans, groundcovassessmethod, groundcovquadratssampled, groundcovpointssampled, groundsurfcovassessmethod, groundsurfcovquadratsamp, groundsurfcovpointssamp, lpiobsinterval, totalpointssampledcount, topcanopyhtave, topcanopyhtstddev, totalnumplantsbelt, totalnumspeciesbelt, totalplantdensitybelt
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
@@ -279,7 +279,7 @@ get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
   }
   
   # veg transect species data - many species to one veg transect
-  q.vtps <- "SELECT siteiid, vegtransectiidref as vegtransect_id, vegplotid, vegplotname,
+  q.vtps <- "SELECT siteiid, siteobsiid, vegplotiid, vegtransectiidref as vegtransect_id, vegplotid, vegplotname,
     obsdate, vegtransplantsummiid as vtpsiid, vtps.seqnum, plantsym, plantsciname,
     plantnatvernm, plantnativity, planttypegroup, 
     plantheightcllowerlimit, plantheightclupperlimit, sociabilityclass, 
@@ -343,7 +343,7 @@ get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
   }
   
   # plot tree site index summary data
-  q.pltsis <- "SELECT vegplotiidref AS vegplotiid, pltsis.seqnum, plantiidref, plantsym, plantsciname, plantnatvernm, plantnativity, siteindexbase, speciestreecount, siteindexplotave, speciesdbhaverage, treeageave, treecanopyhttopave, plottreesiteindsumiid
+  q.pltsis <- "SELECT siteiid, siteobsiid, vegplotiid, pltsis.seqnum, plantiidref, plantsym, plantsciname, plantnatvernm, plantnativity, siteindexbase, speciestreecount, siteindexplotave, speciesdbhaverage, treeageave, treecanopyhttopave, plottreesiteindsumiid
 
   FROM
   site_View_1 AS s
@@ -386,7 +386,7 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE,
                                                       dsn = NULL) {
   
   # plot tree site index detail data
-  q.pltsid <- "SELECT plottreesiteindsumiidref, pltsid.seqnum, plantsym, plantsciname, plantnatvernm, treenumber, crownclass, reproductionsource, treediameterbreastheight, tenyeargrowthradius, growthringcount, growthringcountheight, growthringcountage, treeage, treecanopyhtbottom, treecanopyhttop, plottreesiteinddetailsiid
+  q.pltsid <- "SELECT  siteiid, siteobsiid, vegplotiid, plottreesiteindsumiidref, pltsid.seqnum, plantsym, plantsciname, plantnatvernm, treenumber, crownclass, reproductionsource, treediameterbreastheight, tenyeargrowthradius, growthringcount, growthringcountheight, growthringcountage, treeage, treecanopyhtbottom, treecanopyhttop, plottreesiteinddetailsiid
 
   FROM
   site_View_1 AS s
@@ -439,7 +439,7 @@ get_vegplot_textnote_from_NASIS_db <- function(SS = TRUE,
   }
   
   # vegplot textnotes
-  q.vegplottext <- "SELECT vegplotiidref as vegplotiid, seqnum, recdate, recauthor, vegplottextkind,
+  q.vegplottext <- "SELECT vegplotiidref AS vegplotiid, seqnum, recdate, recauthor, vegplottextkind,
 textcat, textsubcat, vegplottextiid, CAST(textentry as text) AS textentry
 FROM vegplottext_View_1;"
 

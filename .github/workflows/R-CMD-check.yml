@@ -72,8 +72,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -98,8 +98,7 @@ jobs:
       - name: Install aqp off GitHub  (devel only)
         if: matrix.config.r == 'devel'
         run: |
-          install.packages("stringi")
-          remotes::install_github("ncss-tech/aqp", dependencies = FALSE, build = FALSE)
+          remotes::install_github("ncss-tech/aqp", dependencies = TRUE, build = FALSE)
         shell: Rscript {0}
         
       - name: Install terra off r-universe (devel only)
