@@ -58,7 +58,7 @@
 #' @param fill include pedon or component records without horizon data in result? (default: `FALSE`)
 #' @param dropAdditional Used only for `from='components'` with `duplicates=TRUE`. Prevent "duplication" of `mustatus=="additional"`  mapunits? Default: `TRUE`
 #' @param dropNonRepresentative Used only for `from='components'` with `duplicates=TRUE`. Prevent "duplication" of non-representative data mapunits? Default: `TRUE`
-#' @param duplicates Used only for `from='components'`. Duplicate components for all instances of use (i.e. one for each legend data mapunit is used on; optionally for additional mapunits, and/or non-representative data mapunits?)
+#' @param duplicates Used only for `from='components'`. Duplicate components for all instances of use (i.e. one for each legend data mapunit is used on; optionally for additional mapunits, and/or non-representative data mapunits?). This will include columns from `get_component_correlation_data_from_NASIS_db()` that identify which legend(s) a component is used on.
 #' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
 #' @return A SoilProfileCollection object

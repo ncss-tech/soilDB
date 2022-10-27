@@ -14,10 +14,10 @@ the entire local database (default: \code{TRUE})}
 table structure; default: \code{NULL}}
 }
 \value{
-A list with the results.
+A list of data.frame
 }
 \description{
-Get veg data from a local NASIS Database.
+Get vegetation data from a local NASIS Database. Result includes two data.frames corresponding to the "Plot Plant Inventory" and "Vegetation Transect" child tables of "Vegetation Plot".
 }
 \examples{
 
