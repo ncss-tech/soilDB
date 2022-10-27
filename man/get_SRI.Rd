@@ -2,20 +2,20 @@
 % Please edit documentation in R/fetchSRI.R
 \name{get_SRI}
 \alias{get_SRI}
-\title{Get SRI}
+\title{Get Soil Inventory Resource (SRI) for USFS Region 6}
 \usage{
-get_SRI(gdb, layer = "MapUnits")
+get_SRI(gdb, layers = "MapUnits")
 }
 \arguments{
 \item{gdb}{A \code{character} of the gdb, e.g. \code{'Deschutes'}.}
 
-\item{layer}{A \code{character} of the layer within the gdb, e.g. \code{'MapUnits'} (default).}
+\item{layers}{A \code{character} of the layer(s) within the gdb, e.g. \code{'MapUnits'} (default).}
 }
 \value{
 An \code{sf} or \code{data.frame} object.
 }
 \description{
-This function calls ECOSHARE (zip files) to get Soil Inventory Resource (SRI) data. These
+This function calls ECOSHARE (zip files) to get Soil Inventory Resource (SRI) data for USFS Region 6. These
 datasets contain both spatial and non-spatial data in the form of a gdb.
 }
 \details{
@@ -55,8 +55,12 @@ help with joining \code{sf} and \code{data.frame} objects.
 \examples{
 \donttest{
 
-#get Deschutes SRI
+# get Deschutes SRI
 sri_deschutes <- get_SRI('Deschutes')
+
+# get multiple layers in a list
+
+sri_deschutes_multiple <- get_SRI(gdb = 'Deschutes', layers = c('MapUnits', 'ErosionAndHydro', 'SampleSites_MaterialsTesting'))
 }
 
 }

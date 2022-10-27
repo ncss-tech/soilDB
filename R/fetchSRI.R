@@ -1,11 +1,11 @@
 
 
-#' Get SRI
+#' Get Soil Inventory Resource (SRI) for USFS Region 6
 #'
-#' @description This function calls ECOSHARE (zip files) to get Soil Inventory Resource (SRI) data. These
+#' @description This function calls ECOSHARE (zip files) to get Soil Inventory Resource (SRI) data for USFS Region 6. These
 #' datasets contain both spatial and non-spatial data in the form of a gdb.
 #' @param gdb A \code{character} of the gdb, e.g. \code{'Deschutes'}.
-#' @param layer A \code{character} of the layer within the gdb, e.g. \code{'MapUnits'} (default).
+#' @param layers A \code{character} of the layer(s) within the gdb, e.g. \code{'MapUnits'} (default).
 #'
 #' @return An \code{sf} or \code{data.frame} object.
 #'
@@ -45,28 +45,37 @@
 #' @examples
 #' \donttest{
 #'
-#' #get Deschutes SRI
+#' # get Deschutes SRI
 #' sri_deschutes <- get_SRI('Deschutes')
+#'
+#' # get multiple layers in a list
+#'
+#' sri_deschutes_multiple <- get_SRI(gdb = 'Deschutes', layers = c('MapUnits', 'ErosionAndHydro', 'SampleSites_MaterialsTesting'))
 #' }
 #'
-get_SRI <- function(gdb, layer = 'MapUnits') {
+get_SRI <- function(gdb, layers = 'MapUnits') {
 
   gdb <- ifelse(gdb == 'Willamette', 'Wilamette', gdb)
 
-  temp <- tempfile(fileext = paste0(gdb, '.zip'))
+  if(length(layers) > 1){
 
-  curl::curl_download(paste0('https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'),
-                      destfile = temp,
-                      handle = .soilDB_curl_handle())
+    sri = list()
 
-  temp2 <- tempfile()
+    for(i in layers){
 
-  unzip(temp, exdir = temp2)
+      sri_get <- list(sf::st_read(paste0('/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'), layer = i))
 
-  sri <- sf::st_read(paste0(temp2, '/', gdb,'_SoilResourceInventory.gdb' ), layer = layer)
+      names(sri_get) <- i
 
-  unlink(temp)
-  unlink(temp2)
+      sri <- append(sri, sri_get)
+
+    }
+
+  } else {
+
+  sri <- sf::st_read(paste0('/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'), layer = layers)
+
+  }
 
   sri
 
@@ -89,7 +98,7 @@ get_SRI <- function(gdb, layer = 'MapUnits') {
 get_SRI_layers <- function(gdb) {
 
   gdb <- ifelse(gdb == 'Willamette', 'Wilamette', gdb)
-  sf::st_layers(paste0('https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'))
+  sf::st_layers(paste0('/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'))
 
 }
 
