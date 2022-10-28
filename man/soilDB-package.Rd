@@ -3,7 +3,6 @@
 \docType{package}
 \name{soilDB-package}
 \alias{soilDB-package}
-\alias{soilDB.env}
 \alias{soilDB}
 \title{Soil Database Interface}
 \description{

@@ -6,7 +6,7 @@
 #' PedonPC and AKSite databases (MS Access format), local NASIS databases (MS
 #' SQL Server), Soil Data Access and various other soil-related web services.
 #' @name soilDB-package
-#' @aliases soilDB.env soilDB-package soilDB
+#' @aliases soilDB-package soilDB
 #' @docType package
 #' @author J.M. Skovlin, D.E. Beaudette, S.M Roecker, A.G. Brown
 #'  @seealso \code{\link{fetchPedonPC}, \link{fetchNASIS}, \link{SDA_query}, \link{loafercreek}}

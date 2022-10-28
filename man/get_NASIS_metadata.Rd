@@ -27,7 +27,7 @@ Retrieve a table containing domain and column names with choice list labels/name
 \details{
 These data are derived from the MetadataDomainDetail, MetadataDomainMaster, and MetadataTableColumn tables and help with mapping between values stored in the NASIS database and human-readable values. The human-readable values align with the values returned in public facing interfaces such as SSURGO via Soil Data Access and NASIS Web Reports. The data in these tables can also be used to create \emph{ordered} factors where options for levels of a particular data element follow a logical \code{ChoiceSequence}.
 
-If a local NASIS instance is set up, and this is the first time \code{get_NASIS_metadata()} has been called, the metadata will be obtained from the NASIS local database. Subsequent runs in the same session will use a copy of the data object \code{NASIS.metadata} cached in \code{soilDB.env}.
+If a local NASIS instance is set up, and this is the first time \code{get_NASIS_metadata()} has been called, the metadata will be obtained from the NASIS local database. Subsequent runs in the same session will use a copy of the data object \code{NASIS.metadata} cached in \code{soilDB.env} which can be accessed with \code{get_soilDB_env()$NASIS.metadata}.
 
 For users without a local NASIS instance, a cached copy of the NASIS metadata are used \code{(data/metadata.rda)}.
 

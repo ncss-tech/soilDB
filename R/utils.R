@@ -2,7 +2,7 @@
 ## misc functions used by soilDB
 ##
 
-## TODO: keep track of funky records in the soilDB.env
+## TODO: keep track of funky records in the soilDB env
 
 ## TODO: consider toggling paralithic contact to FALSE when lithic contact is TRUE
 # convert diagnostic horizon info into wide-formatted, boolean table

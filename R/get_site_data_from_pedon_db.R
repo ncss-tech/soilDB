@@ -82,15 +82,15 @@ get_site_data_from_pedon_db <- function(dsn) {
   t.pedon_id <- table(d$pedon_id)
   not.unique.pedon_id <- t.pedon_id > 1
   if(any(not.unique.pedon_id)) {
-  	assign('dup.pedon.ids', value=names(t.pedon_id[which(not.unique.pedon_id)]), envir=soilDB.env)
-  	message("NOTICE: duplicate pedons: use `get('dup.pedon.ids', envir=soilDB.env)` for a list of pedon IDs")
+  	assign('dup.pedon.ids', value=names(t.pedon_id[which(not.unique.pedon_id)]), envir=get_soilDB_env())
+  	message("NOTICE: duplicate pedons: use `get('dup.pedon.ids', envir=get_soilDB_env())` for a list of pedon IDs")
   }
   
   # warn about sites without a matching pedon (records missing peiid)
   missing.pedon <- which(is.na(d$peiid))
   if(length(missing.pedon)> 0) {
-  	assign('sites.missing.pedons', value=unique(d$site_id[missing.pedon]), envir=soilDB.env)
-  	message("NOTICE: sites without pedons: use `get('sites.missing.pedons', envir=soilDB.env)` for a list of site IDs")
+  	assign('sites.missing.pedons', value=unique(d$site_id[missing.pedon]), envir=get_soilDB_env())
+  	message("NOTICE: sites without pedons: use `get('sites.missing.pedons', envir=get_soilDB_env())` for a list of site IDs")
   }
   
   # done

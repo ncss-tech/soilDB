@@ -181,7 +181,7 @@ NASISDomainsAsFactor <- function(x = NULL) {
 #'
 #' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
 #' 
-#' @details If a local NASIS instance is set up, and this is the first time `get_NASIS_metadata()` has been called, the metadata will be obtained from the NASIS local database. Subsequent runs in the same session will use a copy of the data object `NASIS.metadata` cached in `soilDB.env`.
+#' @details If a local NASIS instance is set up, and this is the first time `get_NASIS_metadata()` has been called, the metadata will be obtained from the NASIS local database. Subsequent runs in the same session will use a copy of the data object `NASIS.metadata` cached in `soilDB.env` which can be accessed with `get_soilDB_env()$NASIS.metadata`.
 #' 
 #' For users without a local NASIS instance, a cached copy of the NASIS metadata are used `(data/metadata.rda)`. 
 #' 
@@ -219,11 +219,11 @@ get_NASIS_metadata <- function(dsn = NULL) {
   if (local_NASIS_defined(dsn = dsn)) {
     
     # cache NASIS metadata in soilDB.env within an R session
-    if (!exists("NASIS.metadata", envir = soilDB.env)) {
+    if (!exists("NASIS.metadata", envir = get_soilDB_env())) {
       metadata <- .doQuery(dsn = dsn)
-      assign('NASIS.metadata', value = metadata, envir = soilDB.env)
+      assign('NASIS.metadata', value = metadata, envir = get_soilDB_env())
     } else {
-      metadata <- get("NASIS.metadata", envir = soilDB.env)
+      metadata <- get("NASIS.metadata", envir = get_soilDB_env())
     }
     
   } 
