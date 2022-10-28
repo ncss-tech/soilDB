@@ -53,7 +53,7 @@ Find out more information about the SoilGrids and GlobalSoilMap products here:
 }
 }
 \examples{
-\dontshow{if (requireNamespace("curl") && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
 \dontrun{
 

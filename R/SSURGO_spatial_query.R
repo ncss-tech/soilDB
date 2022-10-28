@@ -21,7 +21,7 @@
 #' @note SDA now supports spatial queries, consider using \code{\link{SDA_spatialQuery}} instead.
 #' @author D.E. Beaudette
 #' @keywords manip
-#' @examplesIf requireNamespace("curl") && curl::has_internet()
+#' @examplesIf curl::has_internet()
 #' @examples
 #' 
 #' \donttest{

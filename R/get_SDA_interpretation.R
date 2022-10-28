@@ -13,7 +13,7 @@
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @param not_rated_value used where rating class is "Not Rated". Default: `NA_real`
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
-#' @examplesIf requireNamespace("curl") && curl::has_internet()
+#' @examplesIf curl::has_internet()
 #' @examples
 #' \donttest{
 #'   # get two forestry interpretations for CA630

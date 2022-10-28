@@ -36,7 +36,7 @@
 #' @export fetchSoilGrids
 #' 
 #' @author Andrew G. Brown
-#' @examplesIf requireNamespace("curl") && curl::has_internet()
+#' @examplesIf curl::has_internet()
 #' @examples
 #' \dontrun{
 #' 

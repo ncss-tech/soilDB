@@ -76,7 +76,7 @@ See the \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{fetchSC
 }
 }
 \examples{
-\dontshow{if (requireNamespace("curl") && curl::has_internet() && requireNamespace("httr") && requireNamespace("rvest")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr") && requireNamespace("rvest")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
 \donttest{
     # get data

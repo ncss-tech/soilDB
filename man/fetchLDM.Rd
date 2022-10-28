@@ -53,7 +53,7 @@ Currently the \code{lab_area} tables are joined only for the "Soil Survey Area" 
 When requesting data from \code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_mineralogy_glass_count"}, or \code{"lab_xray_and_thermal"} multiple preparation codes (\code{prep_code}) or size fractions (\code{analyzed_size_frac}) are possible. The default behavior of \code{fetchLDM()} is to attempt to return a topologically valid (minimal overlaps) \emph{SoilProfileCollection}. This is achieved by setting \code{prep_code="S"} ("sieved") and \code{analyzed_size_frac="<2 mm"}. You may specify alternate or additional preparation codes or fractions as needed, but note that this may cause "duplication" of some layers where measurements were made with different preparation or on fractionated samples
 }
 \examples{
-\dontshow{if (requireNamespace("curl") && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
 \dontrun{
   # fetch by ssa_key

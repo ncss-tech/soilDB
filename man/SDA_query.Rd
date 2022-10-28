@@ -24,7 +24,7 @@ SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are sto
 This function requires the \code{httr}, \code{jsonlite}, and \code{xml2} packages
 }
 \examples{
-\dontshow{if (requireNamespace("curl") && curl::has_internet() && requireNamespace("wk")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("wk")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
 \donttest{
   ## get SSURGO export date for all soil survey areas in California

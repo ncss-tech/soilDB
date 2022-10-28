@@ -96,7 +96,7 @@ format_SQL_in_statement <- function(x) {
 #' @seealso \code{\link{SDA_spatialQuery}}
 #' @keywords manip
 #' @export
-#' @examplesIf requireNamespace("curl") && curl::has_internet() && requireNamespace("wk")
+#' @examplesIf curl::has_internet() && requireNamespace("wk")
 #' @examples
 #' \donttest{
 #'   ## get SSURGO export date for all soil survey areas in California

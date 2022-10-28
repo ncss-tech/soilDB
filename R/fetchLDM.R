@@ -24,7 +24,7 @@
 #'
 #' @return a `SoilProfileCollection` for a successful query, a `try-error` if no site/pedon locations can be found or `NULL` for an empty `lab_layer` (within sites/pedons) result
 #' @export
-#' @examplesIf requireNamespace("curl") && curl::has_internet()
+#' @examplesIf curl::has_internet()
 #' @examples
 #' \dontrun{
 #'   # fetch by ssa_key

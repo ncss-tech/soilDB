@@ -159,7 +159,7 @@
 #' * xanthic: (xanthic) more yellow than typic subgroup
 #' * xeric: (xeric) more xeric than typic subgroup
 #' @export
-#' @examplesIf requireNamespace("curl") && curl::has_internet() && requireNamespace("terra")
+#' @examplesIf curl::has_internet() && requireNamespace("terra")
 #' @examples 
 #' \dontrun{
 #'   library(terra)

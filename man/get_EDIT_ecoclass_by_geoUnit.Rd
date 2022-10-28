@@ -18,7 +18,7 @@ A \code{data.frame} containing: \code{geoUnit}, \code{id}, \code{legacyId}, \cod
 Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services: https://edit.jornada.nmsu.edu/resources/esd. \code{geoUnit} refers to MLRA codes, possibly with a leading zero and trailing "X" for two digit MLRA symbols.
 }
 \examples{
-\dontshow{if (requireNamespace("curl") && curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
 \donttest{
    get_EDIT_ecoclass_by_geoUnit(c("018X","022A"))

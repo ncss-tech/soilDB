@@ -56,7 +56,7 @@
 #'
 #' @return a \code{data.frame} object containing soil series names that match patterns supplied as arguments.
 #' @export
-#' @examplesIf requireNamespace("curl") && curl::has_internet() && require(aqp)
+#' @examplesIf curl::has_internet() && require(aqp)
 #' @examples 
 #'
 #' \donttest{

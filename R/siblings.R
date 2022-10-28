@@ -33,7 +33,7 @@
 #' 
 #' @keywords manip
 #' @export siblings
-#' @examplesIf requireNamespace("curl") && curl::has_internet()
+#' @examplesIf curl::has_internet()
 #' @examples
 #' \donttest{
 #'     # basic usage

@@ -23,7 +23,7 @@
 #' Note that STATSGO data are fetched where `CLIPAREASYMBOL = 'US'` to avoid duplicating state and national subsets of the geometry.
 #'
 #' @author Andrew G. Brown, Dylan E. Beaudette
-#' @examplesIf requireNamespace("curl") && curl::has_internet()
+#' @examplesIf curl::has_internet()
 #' @examples
 #' \donttest{
 #'  

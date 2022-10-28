@@ -41,7 +41,7 @@ get_soilDB_env <- function() {
   }
 }
 
-#' @importFrom curl new_handle 
+#' @importFrom curl new_handle has_internet
 .soilDB_curl_handle <- function(timeout = 300, ssl_verifyhost = 0, ...) {
   curl::new_handle(timeout = timeout, ssl_verifyhost = ssl_verifyhost, ...)
 }
