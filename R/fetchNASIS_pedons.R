@@ -65,7 +65,7 @@
   missing.lower.depth.idx <- which(!is.na(hz_data$hzdept) & is.na(hz_data$hzdepb))
 
   # keep track of affected pedon IDs (if none, this will have zero length)
-  assign('missing.bottom.depths', value = unique(hz_data$pedon_id[missing.lower.depth.idx]), envir = soilDB.env)
+  assign('missing.bottom.depths', value = unique(hz_data$pedon_id[missing.lower.depth.idx]), envir = get_soilDB_env())
 
   if (length(missing.lower.depth.idx) > 0) {
     message(paste0('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]'))
@@ -78,7 +78,7 @@
   top.eq.bottom.idx <- which(hz_data$hzdept == hz_data$hzdepb)
 
   # keep track of affected pedon IDs (if none, this will have zero length)
-  assign('top.bottom.equal', value = unique(hz_data$pedon_id[	top.eq.bottom.idx]), envir = soilDB.env)
+  assign('top.bottom.equal', value = unique(hz_data$pedon_id[	top.eq.bottom.idx]), envir = get_soilDB_env())
 
   if (length(top.eq.bottom.idx) > 0) {
     message(paste0('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]'))
@@ -120,8 +120,8 @@
     }
     
     # keep track of those pedons with horizonation errors
-    assign('bad.pedon.ids', value = bad.pedon.ids, envir = soilDB.env)
-    assign("bad.horizons", value = data.frame(bad.horizons), envir = soilDB.env)
+    assign('bad.pedon.ids', value = bad.pedon.ids, envir = get_soilDB_env())
+    assign("bad.horizons", value = data.frame(bad.horizons), envir = get_soilDB_env())
   }
 
   # convert pedon and horizon unique ID to character
@@ -253,16 +253,16 @@
   metadata(hz_data) <- m
 
   # print any messages on possible data quality problems:
-  if (exists('sites.missing.pedons', envir = soilDB.env)) {
-    if (length(get('sites.missing.pedons', envir = soilDB.env)) > 0) {
+  if (exists('sites.missing.pedons', envir = get_soilDB_env())) {
+    if (length(get('sites.missing.pedons', envir = get_soilDB_env())) > 0) {
       message(
-        "-> QC: sites without pedons: \n\tUse `get('sites.missing.pedons', envir=soilDB.env) for site record IDs (siteiid)`"
+        "-> QC: sites without pedons: \n\tUse `get('sites.missing.pedons', envir=get_soilDB_env())` for site record IDs (siteiid)"
       )
     }
   }
-  if (exists('dup.pedon.ids', envir = soilDB.env))
-    if (length(get('dup.pedon.ids', envir = soilDB.env)) > 0)
-      message("-> QC: duplicate pedons: \n\tUse `get('dup.pedon.ids', envir=soilDB.env) for pedon record IDs (peiid)`")
+  if (exists('dup.pedon.ids', envir = get_soilDB_env()))
+    if (length(get('dup.pedon.ids', envir = get_soilDB_env())) > 0)
+      message("-> QC: duplicate pedons: \n\tUse `get('dup.pedon.ids', envir=get_soilDB_env())` for pedon record IDs (peiid)")
 
   # set NASIS component specific horizon identifier
   if (!fill & length(filled.ids) == 0) {
@@ -283,17 +283,17 @@
   hzdesgnname(hz_data) <- "hzname"
   hztexclname(hz_data) <- "texture"
 
-  if (exists('bad.pedon.ids', envir = soilDB.env))
-    if (length(get('bad.pedon.ids', envir = soilDB.env)) > 0)
-      message("-> QC: horizon errors detected:\n\tUse `get('bad.pedon.ids', envir=soilDB.env)` for pedon record IDs (peiid)\n\tUse `get('bad.horizons', envir=soilDB.env)` for horizon designations")
+  if (exists('bad.pedon.ids', envir = get_soilDB_env()))
+    if (length(get('bad.pedon.ids', envir = get_soilDB_env())) > 0)
+      message("-> QC: horizon errors detected:\n\tUse `get('bad.pedon.ids', envir=get_soilDB_env())` for pedon record IDs (peiid)\n\tUse `get('bad.horizons', envir=get_soilDB_env())` for horizon designations")
 
-  if (exists('missing.bottom.depths', envir = soilDB.env))
-    if (length(get('missing.bottom.depths', envir = soilDB.env)) > 0)
-      message("-> QC: pedons missing bottom hz depths:\n\tUse `get('missing.bottom.depths', envir=soilDB.env)` for pedon record IDs (peiid)")
+  if (exists('missing.bottom.depths', envir = get_soilDB_env()))
+    if (length(get('missing.bottom.depths', envir = get_soilDB_env())) > 0)
+      message("-> QC: pedons missing bottom hz depths:\n\tUse `get('missing.bottom.depths', envir=get_soilDB_env())` for pedon record IDs (peiid)")
 
-  if (exists('top.bottom.equal', envir = soilDB.env))
-    if (length(get('top.bottom.equal', envir = soilDB.env)) > 0)
-      message("-> QC: equal hz top and bottom depths:\n\tUse `get('top.bottom.equal', envir=soilDB.env)` for pedon record IDs (peiid)")
+  if (exists('top.bottom.equal', envir = get_soilDB_env()))
+    if (length(get('top.bottom.equal', envir = get_soilDB_env())) > 0)
+      message("-> QC: equal hz top and bottom depths:\n\tUse `get('top.bottom.equal', envir=get_soilDB_env())` for pedon record IDs (peiid)")
 
   # done
   return(hz_data)

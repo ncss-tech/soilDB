@@ -73,7 +73,7 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
 
     # keep track of those components with horizonation errors
     if(length(bad.ids) > 0)
-      assign('component.hz.problems', value=bad.ids, envir=soilDB.env)
+      assign('component.hz.problems', value=bad.ids, envir=get_soilDB_env())
   }
 
   # upgrade to SoilProfilecollection
@@ -89,8 +89,8 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
   hzidname(f.chorizon) <- 'chiid'
 
   # print any messages on possible data quality problems:
-  if (exists('component.hz.problems', envir=soilDB.env))
-    message("-> QC: horizon errors detected:\n\tUse `get('component.hz.problems', envir=soilDB.env)` for component keys (cokey)")
+  if (exists('component.hz.problems', envir=get_soilDB_env()))
+    message("-> QC: horizon errors detected:\n\tUse `get('component.hz.problems', envir=get_soilDB_env())` for component keys (cokey)")
 
   # done, return SPC
   return(list(spc = f.chorizon, mapunit = f.mapunit))

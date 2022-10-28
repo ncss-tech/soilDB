@@ -18,8 +18,8 @@
   }
   
   # ensure that any old hz errors are cleared
-  if (exists('component.hz.problems', envir = soilDB.env)) {
-    assign('component.hz.problems', value = character(0), envir = soilDB.env)
+  if (exists('component.hz.problems', envir = get_soilDB_env())) {
+    assign('component.hz.problems', value = character(0), envir = get_soilDB_env())
   }
   
   # optionally legend and mapunit information are included if in local DB/selected set
@@ -65,7 +65,7 @@
 
     # keep track of those components with horizonation errors
     #if(length(bad.ids) > 0) # AGB removed this line of code b/c it prevents update of 'component.hz.problems' on subsequent error-free calls
-    assign('component.hz.problems', value = bad.ids, envir = soilDB.env)
+    assign('component.hz.problems', value = bad.ids, envir = get_soilDB_env())
   }
 
   # diagnostics and restrictions
@@ -145,10 +145,10 @@
   }
 
   # print any messages on possible data quality problems:
-  if (exists('component.hz.problems', envir = soilDB.env)) {
-    if (length(get("component.hz.problems", envir = soilDB.env)) > 0) {
+  if (exists('component.hz.problems', envir = get_soilDB_env())) {
+    if (length(get("component.hz.problems", envir = get_soilDB_env())) > 0) {
       message(
-        "-> QC: horizon errors detected:\n\tUse `get('component.hz.problems', envir=soilDB.env)` for component record IDs (coiid)"
+        "-> QC: horizon errors detected:\n\tUse `get('component.hz.problems', envir=get_soilDB_env())` for component record IDs (coiid)"
       )
     }
   }

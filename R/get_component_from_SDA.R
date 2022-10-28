@@ -152,8 +152,8 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
     cokeys <- as.integer(names(idx[idx == TRUE]))
     idx    <- d.component$cokey %in% cokeys
 
-    assign('component.ecosite.problems', value = cokeys, envir = soilDB.env)
-    message("-> QC: multiple ecosites linked to 1 component\n\tUse `get('component.ecosite.problems', envir = soilDB.env)` for component keys (cokey)")
+    assign('component.ecosite.problems', value = cokeys, envir = get_soilDB_env())
+    message("-> QC: multiple ecosites linked to 1 component\n\tUse `get('component.ecosite.problems', envir = get_soilDB_env())` for component keys (cokey)")
 
     nodups <- {
       d.component[idx, ] ->.;
@@ -846,7 +846,7 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
 
     # keep track of those components with horizonation errors
     if(length(bad.ids) > 0)
-      assign('component.hz.problems', value=bad.ids, envir=soilDB.env)
+      assign('component.hz.problems', value=bad.ids, envir=get_soilDB_env())
   }
 
 
@@ -882,8 +882,8 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
   }
 
   # print any messages on possible data quality problems:
-  if (exists('component.hz.problems', envir=soilDB.env))
-    message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=soilDB.env)` for component keys (cokey)")
+  if (exists('component.hz.problems', envir=get_soilDB_env()))
+    message("-> QC: horizon errors detected, use `get('component.hz.problems', envir=get_soilDB_env())` for component keys (cokey)")
 
   # done, return SPC
   return(f.chorizon)

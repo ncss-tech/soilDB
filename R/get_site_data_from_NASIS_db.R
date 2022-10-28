@@ -104,8 +104,8 @@ ORDER BY pedon_View_1.peiid ;"
 	multi.siteobs <- unique(sfr[, c("siteiid","siteobsiid")])
 	multisite <- table(multi.siteobs$siteiid) 
 	if (any(multisite > 1)) {
-	  message("-> QC: surface fragment records from multiple site observations.\n\tUse `get('multisiteobs.surface', envir=soilDB.env)` for site (siteiid) and site observation (siteobsiid)")
-	  assign("multisiteobs.surface", value = multi.siteobs[multi.siteobs$siteiid %in% names(multisite[multisite > 1]),], envir = soilDB.env)
+	  message("-> QC: surface fragment records from multiple site observations.\n\tUse `get('multisiteobs.surface', envir=get_soilDB_env())` for site (siteiid) and site observation (siteobsiid)")
+	  assign("multisiteobs.surface", value = multi.siteobs[multi.siteobs$siteiid %in% names(multisite[multisite > 1]),], envir = get_soilDB_env())
 	}
 	
 	phs <- simplifyFragmentData(
@@ -153,12 +153,12 @@ ORDER BY pedon_View_1.peiid ;"
 	t.pedon_id <- table(d2$pedon_id)
 	not.unique.pedon_id <- t.pedon_id > 1
 	if (any(not.unique.pedon_id))
-		assign('dup.pedon.ids', value=names(t.pedon_id[which(not.unique.pedon_id)]), envir=soilDB.env)
+		assign('dup.pedon.ids', value=names(t.pedon_id[which(not.unique.pedon_id)]), envir=get_soilDB_env())
 
 	# warn about sites without a matching pedon (records missing peiid)
 	missing.pedon <- which(is.na(d2$peiid))
 	if (length(missing.pedon) > 0)
-		assign('sites.missing.pedons', value=unique(d2$site_id[missing.pedon]), envir=soilDB.env)
+		assign('sites.missing.pedons', value=unique(d2$site_id[missing.pedon]), envir=get_soilDB_env())
 
   ## set factor levels, when it makes sense
 	# most of these are done via uncode()

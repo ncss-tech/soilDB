@@ -290,7 +290,7 @@
   # keep track of affected pedon IDs (if none, this will have zero length)
   assign("missing.bottom.depths",
          value = unique(hz_data[[pedon_id]][missing.lower.depth.idx]),
-         envir = soilDB.env
+         envir = get_soilDB_env()
   )
 
   if (length(missing.lower.depth.idx) > 0) {
@@ -307,7 +307,7 @@
   # keep track of affected pedon IDs (if none, this will have zero length)
   assign('top.bottom.equal',
          value = unique(hz_data[[pedon_id]][top.eq.bottom.idx]),
-         envir = soilDB.env
+         envir = get_soilDB_env()
   )
   # make the edit
   if (length(top.eq.bottom.idx) > 0) {
@@ -332,11 +332,11 @@
   # keep track of those pedons with horizonation errors
   assign('bad.pedon.ids',
          value = bad.pedon.ids,
-         envir = soilDB.env
+         envir = get_soilDB_env()
   )
   assign("bad.horizons",
          value = data.frame(bad.horizons),
-         envir = soilDB.env
+         envir = get_soilDB_env()
   )
 
   #4 - optionally convert NA fragvol to 0

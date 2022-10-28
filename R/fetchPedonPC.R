@@ -108,9 +108,9 @@ fetchPedonPC <- function(dsn) {
   hzidname(h) <- 'phiid'
 
 	# 7. save and mention bad pedons
-	assign('bad.pedon.ids', value=bad.pedon.ids, envir=soilDB.env)
+	assign('bad.pedon.ids', value=bad.pedon.ids, envir=get_soilDB_env())
 	if(length(bad.pedon.ids) > 0)
-		message("horizon errors detected, use `get('bad.pedon.ids', envir=soilDB.env)` for a list of pedon IDs")
+		message("horizon errors detected, use `get('bad.pedon.ids', envir=get_soilDB_env())` for a list of pedon IDs")
 
 	# done
 	return(h)

@@ -69,8 +69,8 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
   idx <- which(table(d$coiid) > 1)
   if (length(idx) > 0) {
     dupes <- names(idx)
-    assign('dupe.coiids', value=dupes, envir=soilDB.env)
-    message("-> QC: duplicate coiids, this should not happen.\n\tUse `get('dupe.coiids', envir=soilDB.env)` for component record IDs (coiid)")
+    assign('dupe.coiids', value=dupes, envir=get_soilDB_env())
+    message("-> QC: duplicate coiids, this should not happen.\n\tUse `get('dupe.coiids', envir=get_soilDB_env())` for component record IDs (coiid)")
   }
   # surface fragments
   chs <- simplifyFragmentData(
@@ -229,8 +229,8 @@ get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
   idx <- which(table(d$muiid) > 1)
   if(length(idx) > 0) {
     dupes <- names(idx)
-    assign('dupe.muiids', value=dupes, envir=soilDB.env)
-    message("-> QC: duplicate muiids: multiple 'representative' DMU / MU?.\n\tUse `get('dupe.muiids', envir=soilDB.env)` for mapunit record IDs (muiid)")
+    assign('dupe.muiids', value=dupes, envir=get_soilDB_env())
+    message("-> QC: duplicate muiids: multiple 'representative' DMU / MU?.\n\tUse `get('dupe.muiids', envir=get_soilDB_env())` for mapunit record IDs (muiid)")
   }
 
 
@@ -238,8 +238,8 @@ get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
   idx <- which(table(d$dmuiid) > 1)
   if(length(idx) > 0) {
     dupes <- names(idx)
-    assign('multiple.mu.per.dmu', value=dupes, envir=soilDB.env)
-    message("-> QC: DMUs assigned to multiple MU.\n\tUse `get('multiple.mu.per.dmu', envir=soilDB.env)` for data mapunit record IDs (dmuiid)")
+    assign('multiple.mu.per.dmu', value=dupes, envir=get_soilDB_env())
+    message("-> QC: DMUs assigned to multiple MU.\n\tUse `get('multiple.mu.per.dmu', envir=get_soilDB_env())` for data mapunit record IDs (dmuiid)")
   }
 
 
@@ -389,9 +389,9 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
   # check for more than 1 record / coiid
   idx <- which(table(d$coiid) > 1)
   dupes <- names(idx)
-  assign('multiple.ecosite.per.coiid', value=dupes, envir=soilDB.env)
+  assign('multiple.ecosite.per.coiid', value=dupes, envir=get_soilDB_env())
   if (length(idx) > 0) {
-    message("-> QC: multiple ecosites / component.\n\tUse `get('multiple.ecosite.per.coiid', envir=soilDB.env)` for component record IDs (coiid)")
+    message("-> QC: multiple ecosites / component.\n\tUse `get('multiple.ecosite.per.coiid', envir=get_soilDB_env())` for component record IDs (coiid)")
   }
 
   # uncode metadata domains
@@ -430,8 +430,8 @@ get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   idx <- which(table(d$coiid) > 1)
   if (length(idx) > 0) {
     dupes <- names(idx)
-    assign('multiple.otherveg.per.coiid', value=dupes, envir=soilDB.env)
-    message("-> QC: multiple othervegclasses / component.\n\tUse `get('multiple.otherveg.per.coiid', envir=soilDB.env)` for component record IDs (coiid)")
+    assign('multiple.otherveg.per.coiid', value=dupes, envir=get_soilDB_env())
+    message("-> QC: multiple othervegclasses / component.\n\tUse `get('multiple.otherveg.per.coiid', envir=get_soilDB_env())` for component record IDs (coiid)")
   }
 
   # uncode metadata domains
