@@ -1,4 +1,6 @@
 # setup a new environment to store error messages, etc.
+#' @export
+#' @rdname get_soilDB_env
 soilDB.env <- new.env(hash = TRUE)
 
 # safely register some options at package load time
@@ -22,7 +24,7 @@ soilDB.env <- new.env(hash = TRUE)
 #' 
 #' The soilDB package uses an environment to store variables that are created as side effects of various data access and processing routines. 
 #' `get_soilDB_env()` provides a method to access this environment from the global (user) environment.
-#' 
+#' @aliases soilDB.env
 #' @return a `environment` object
 #' @export
 #' @examples
