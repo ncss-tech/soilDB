@@ -18,10 +18,9 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (SS == FALSE) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
-
 
   # exec query
   d.phlabresults <- dbQueryNASIS(channel, q)
@@ -49,7 +48,7 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
     id_vars <- c("peiid","phiid")
     num_vars <- names(d.dups)[!grepl("ph1to1h2o|ph01mcacl2|peiid|phiid", names(d.dups)) & 
                                 sapply(d.dups, is.numeric)]
-    d.dups_num <- cbind(d.dups[, id_vars, drop=FALSE], d.dups[, num_vars, drop=FALSE])
+    d.dups_num <- cbind(d.dups[, id_vars, drop = FALSE], d.dups[, num_vars, drop = FALSE])
 
     var <- "phiid"
     d.dups_num <- do.call("rbind",
@@ -57,13 +56,13 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
         data.frame(
         peiid = unique(x[['peiid']]),
         lapply(x[,colnames(x)[2:ncol(x)]], function(x2)
-          weighted.mean(x2, w = x$hzthk, na.rm =TRUE))
+          weighted.mean(x2, w = x$hzthk, na.rm = TRUE))
         )})
       )
 
     char_vars <- names(d.dups)[names(d.dups) %in% c("hzthk") |
-                                 sapply(d.dups, function(x) is.character(x) | is.factor(x))]
-    d.dups_char <- cbind(d.dups[, id_vars, drop=FALSE], d.dups[, char_vars, drop=FALSE])
+                                 sapply(d.dups, function(x) is.character(x) | is.factor(x) | is.logical(x))]
+    d.dups_char <- cbind(d.dups[, id_vars, drop = FALSE], d.dups[, char_vars, drop = FALSE])
 
     d.dups_char <- do.call(
       "rbind", by(d.dups_char, d.dups_char[[var]], function(x) { 
@@ -73,12 +72,10 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
         )})
       )
 
-    d.dups_char$hzthk <- NULL
-
     num_ph <- names(d.dups)[names(d.dups) %in% c("hzthk") |
                           grepl("ph1to1h2o|ph01mcacl2", names(d.dups))]
-    d.dups_ph <- cbind(d.dups[, id_vars, drop=FALSE], d.dups[, num_ph, drop=FALSE])
-
+    d.dups_ph <- cbind(d.dups[, id_vars, drop = FALSE], d.dups[, num_ph, drop = FALSE])
+    
     d.dups_ph <- do.call(
       "rbind",
       by(d.dups_ph, d.dups_ph[[var]], function(x) { data.frame(
@@ -88,15 +85,25 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
         )})
       )
 
+    # remove calculated horizon thickness
+    # TODO: should hzthk be returned as metadata? relevant to interpretation of combined lab results
+    d.dups_num$hzthk <- NULL
+    d.dups_char$hzthk <- NULL
     d.dups_ph$hzthk <- NULL
+    d.phlabresults$hzthk <- NULL
 
     d.nodups <- merge(d.dups_num, d.dups_char, by = c("peiid", "phiid"), all.x = TRUE)
     d.nodups <- merge(d.nodups, d.dups_ph, by  = c("peiid", "phiid"), all.x = TRUE)
-    d.nodups <- d.nodups[orig_names]
-    d.phlabresults$hzthk <- NULL
-    d.phlabresults <- rbind(d.phlabresults[-dup_idx, ], d.nodups)
-
-    }
+    
+    # fill missing columns in "duplicates removed" data with NA
+    # these are choice lists e.g. "sandtotmethod", "sandvfmethod", "atterbergsampcond", "ecdeterminemeth", 
+    #                           "pyrophoshue", "pyrophosvalue", "pyrophoschroma"
+    # when these columns area all NA the data type is logical and they fall through the cracks of data type splits                     
+    d.nodups[orig_names[!orig_names %in% colnames(d.nodups)]] <- NA
+    
+    # recombine duplicated and non-duplicated data
+    d.phlabresults <- rbind(d.phlabresults[-dup_idx, orig_names], d.nodups[orig_names])
+  }
 
   # relabel names
   d.phlabresults[c("sampledepthtop", "sampledepthbottom", "hzthk")] <- NULL
@@ -111,7 +118,7 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
 
   # TODO: final cleaning of duplicate rows - dups exist in NASIS for some reason, so should this happen first
   # to eliminate extra rows with no data? Not sure what is causing this on the NASIS side
-  d.phlabresults <-  d.phlabresults[rowSums(is.na(d.phlabresults))<(length(d.phlabresults)-1),]
+  d.phlabresults <-  d.phlabresults[rowSums(is.na(d.phlabresults)) < (length(d.phlabresults) - 1),]
 
   # done
   return(d.phlabresults)
