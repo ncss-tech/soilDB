@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">soilDB</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.7.6</span>
       </span>
     </div>
 
@@ -48,24 +48,30 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="2.7.6" id="soildb-276-2022-10-28">soilDB 2.7.6 (2022-10-28)<a class="anchor" aria-label="anchor" href="#soildb-276-2022-10-28"></a></h2>
+<ul><li>All references to <code>soilDB.env</code> have been replaced with a function that returns that environment object (<code><a href="../reference/get_soilDB_env.html">get_soilDB_env()</a></code>); thanks to <a href="https://github.com/MollicMeyer" class="external-link">@MollicMeyer</a> for identifying this as a problem in <a href="https://github.com/ncss-tech/soilDB/issues/277" class="external-link">#277</a></li></ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="2.7.5" id="soildb-275-2022-10-17">soilDB 2.7.5 (2022-10-17)<small>2022-10-18</small><a class="anchor" aria-label="anchor" href="#soildb-275-2022-10-17"></a></h2>
-<ul><li>Updates to SSURGO File Geodatabase functions (<code><a href="../reference/fetchGDB.html">fetchGDB()</a></code> and related) by <a href="https://github.com/smroecker" class="external-link">@smroecker</a></li>
-<li>Added <code><a href="../reference/soilColor.wcs.html">soilColor.wcs()</a></code> to access a web coverage service for soil color at various depths by <a href="https://github.com/dylanbeaudette" class="external-link">@dylanbeaudette</a></li>
+<ul><li><p>Updates to SSURGO File Geodatabase functions (<code><a href="../reference/fetchGDB.html">fetchGDB()</a></code> and related) by <a href="https://github.com/smroecker" class="external-link">@smroecker</a></p></li>
+<li><p>Added <code><a href="../reference/soilColor.wcs.html">soilColor.wcs()</a></code> to access a web coverage service for soil color at various depths by <a href="https://github.com/dylanbeaudette" class="external-link">@dylanbeaudette</a></p></li>
 <li>
-<code><a href="../reference/waterDayYear.html">waterDayYear()</a></code>: fix for CRAN and different timezones; now defaults to <code>tz="UTC"</code> <a href="https://github.com/ncss-tech/soilDB/issues/268" class="external-link">#268</a><ul><li>
+<p><code><a href="../reference/waterDayYear.html">waterDayYear()</a></code>: fix for CRAN and different timezones; now defaults to <code>tz="UTC"</code> <a href="https://github.com/ncss-tech/soilDB/issues/268" class="external-link">#268</a></p>
+<ul><li>
 <code><a href="../reference/fetchHenry.html">summarizeSoilTemperature()</a></code>: set default timezone to <code>tz="UTC"</code>
 </li></ul></li>
-<li>Fix for <code><a href="../reference/uncode.html">uncode()</a></code> on pre-decoded values when ChoiceName and ChoiceLabel overlap <a href="https://github.com/ncss-tech/soilDB/issues/273" class="external-link">#273</a><ul><li>Fix for <code><a href="../reference/NASISChoiceList.html">NASISChoiceList()</a></code> related to <a href="https://github.com/ncss-tech/soilDB/issues/273" class="external-link">#273</a></li></ul></li>
 <li>
-<code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code>: Remove <code>areaacres</code> and <code>obterm</code> for <a href="https://github.com/ncss-tech/soilDB/issues/272" class="external-link">#272</a> by <a href="https://github.com/smroecker" class="external-link">@smroecker</a></li>
-<li>Fix for <code>get_OSD(..., fix_ocr_errors = TRUE)</code> with empty typical profile for <a href="https://github.com/ncss-tech/soilDB/issues/271" class="external-link">#271</a> by <a href="https://github.com/dylanbeaudette" class="external-link">@dylanbeaudette</a></li>
+<p>Fix for <code><a href="../reference/uncode.html">uncode()</a></code> on pre-decoded values when ChoiceName and ChoiceLabel overlap <a href="https://github.com/ncss-tech/soilDB/issues/273" class="external-link">#273</a></p>
+<ul><li>Fix for <code><a href="../reference/NASISChoiceList.html">NASISChoiceList()</a></code> related to <a href="https://github.com/ncss-tech/soilDB/issues/273" class="external-link">#273</a></li></ul></li>
+<li><p><code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code>: Remove <code>areaacres</code> and <code>obterm</code> for <a href="https://github.com/ncss-tech/soilDB/issues/272" class="external-link">#272</a> by <a href="https://github.com/smroecker" class="external-link">@smroecker</a></p></li>
+<li><p>Fix for <code>get_OSD(..., fix_ocr_errors = TRUE)</code> with empty typical profile for <a href="https://github.com/ncss-tech/soilDB/issues/271" class="external-link">#271</a> by <a href="https://github.com/dylanbeaudette" class="external-link">@dylanbeaudette</a></p></li>
+<li><p><code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> drops non-representative and additional when <code>dropNotRepresentative</code>/<code>dropAdditional</code> are set (<a href="https://github.com/natearoe" class="external-link">@natearoe</a>)</p></li>
+<li><p>Fix for <code><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct()</a></code> in R 4.3+; for <a href="https://github.com/ncss-tech/soilDB/issues/265" class="external-link">#265</a></p></li>
 <li>
-<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> drops non-representative and additional when <code>dropNotRepresentative</code>/<code>dropAdditional</code> are set (<a href="https://github.com/natearoe" class="external-link">@natearoe</a>)</li>
-<li>Fix for <code><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct()</a></code> in R 4.3+; for <a href="https://github.com/ncss-tech/soilDB/issues/265" class="external-link">#265</a></li>
-<li>Fix for “status was ’SSL connect error” for <code><a href="../reference/fetchKSSL.html">fetchKSSL()</a></code> and other functions that download JSON (<a href="https://github.com/kramdog" class="external-link">@kramdog</a>)<ul><li>Now uses standard soilDB {curl} handle, which includes a longer timeout and <code>ssl_verifyhost=0</code>
+<p>Fix for “status was ’SSL connect error” for <code><a href="../reference/fetchKSSL.html">fetchKSSL()</a></code> and other functions that download JSON (<a href="https://github.com/kramdog" class="external-link">@kramdog</a>)</p>
+<ul><li>Now uses standard soilDB {curl} handle, which includes a longer timeout and <code>ssl_verifyhost=0</code>
 </li></ul></li>
-<li>Fixes for compatibility with {jsonlite} &gt;1.8.1 that now uses {base} rather than {curl}</li>
-<li>Update row count expectations for end of FY22 SSURGO refresh</li>
+<li><p>Fixes for compatibility with {jsonlite} &gt;1.8.1 that now uses {base} rather than {curl}</p></li>
+<li><p>Update row count expectations for end of FY22 SSURGO refresh</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.7.4" id="soildb-274-2022-09-30">soilDB 2.7.4 (2022-09-30)<small>2022-09-30</small><a class="anchor" aria-label="anchor" href="#soildb-274-2022-09-30"></a></h2>
