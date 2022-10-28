@@ -49,7 +49,7 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.7.6" id="soildb-276-2022-10-28">soilDB 2.7.6 (2022-10-28)<a class="anchor" aria-label="anchor" href="#soildb-276-2022-10-28"></a></h2>
-<ul><li>All references to <code>soilDB.env</code> have been replaced with a function that returns that environment object (<code><a href="../reference/get_soilDB_env.html">get_soilDB_env()</a></code>); thanks to <a href="https://github.com/MollicMeyer" class="external-link">@MollicMeyer</a> for identifying this as a problem in <a href="https://github.com/ncss-tech/soilDB/issues/277" class="external-link">#277</a></li></ul></div>
+<ul><li>All references to <code>soilDB.env</code> have been replaced with a function that returns that environment object (<code><a href="../reference/get_soilDB_env.html">get_soilDB_env()</a></code>); thanks to <a href="https://github.com/MollicMeyer" class="external-link">@MollicMeyer</a> for identifying this as a problem in <a href="https://github.com/ncss-tech/soilDB/issues/277" class="external-link">#277</a>. This object used to be exported but was unintentionally omitted from NAMESPACE; this has been fixed.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="2.7.5" id="soildb-275-2022-10-17">soilDB 2.7.5 (2022-10-17)<small>2022-10-18</small><a class="anchor" aria-label="anchor" href="#soildb-275-2022-10-17"></a></h2>
 <ul><li><p>Updates to SSURGO File Geodatabase functions (<code><a href="../reference/fetchGDB.html">fetchGDB()</a></code> and related) by <a href="https://github.com/smroecker" class="external-link">@smroecker</a></p></li>
