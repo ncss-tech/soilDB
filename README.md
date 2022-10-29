@@ -11,10 +11,9 @@ Downloads](http://cranlogs.r-pkg.org/badges/grand-total/soilDB)](https://cran.r-
 ![CRAN/METACRAN](https://img.shields.io/cran/l/soilDB) [![soilDB
 Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/soilDB/)
 
-Installation
-------------
+## Installation
 
-Get the stable version from CRAN:
+Get the stable version (2.7.5) from CRAN:
 
     install.packages('soilDB', dependencies = TRUE)
 
@@ -22,24 +21,20 @@ Get the development version from GitHub:
 
     remotes::install_github("ncss-tech/soilDB", dependencies = FALSE)
 
-Website
--------
+## Website
 
--   CRAN Package:
-    <a href="https://cran.r-project.org/package=soilDB" class="uri">https://cran.r-project.org/package=soilDB</a>
--   Package Manual:
-    <a href="http://ncss-tech.github.io/soilDB/" class="uri">http://ncss-tech.github.io/soilDB/</a>
+-   CRAN Package: <https://cran.r-project.org/package=soilDB>
+-   Package Manual: <http://ncss-tech.github.io/soilDB/>
 -   Algorithms for Quantitative Pedology (AQP) Project:
-    <a href="http://ncss-tech.github.io/AQP/" class="uri">http://ncss-tech.github.io/AQP/</a>
+    <http://ncss-tech.github.io/AQP/>
 
-Citation
---------
+## Citation
 
     ## 
     ## To cite soilDB in publications use:
     ## 
     ##   Beaudette, D., Skovlin, J., Roecker, S., Brown, A. (2022). soilDB:
-    ##   Soil Database Interface. R package version 2.7.5.
+    ##   Soil Database Interface. R package version 2.7.4.
     ##   <https://CRAN.R-project.org/package=soilDB>
     ## 
     ## A BibTeX entry for LaTeX users is
@@ -47,13 +42,12 @@ Citation
     ##   @Manual{,
     ##     title = {soilDB: Soil Database Interface},
     ##     author = {Dylan Beaudette and Jay Skovlin and Stephen Roecker and Andrew Brown},
-    ##     note = {R package version 2.7.5},
+    ##     note = {R package version 2.7.4},
     ##     url = {https://CRAN.R-project.org/package=soilDB},
     ##     year = {2022},
     ##   }
 
-soilDB 2.7.5
-------------
+## soilDB 2.7.6
 
 <!-- ### Notices on Database Interfaces -->
 <!-- #### NASIS -->
@@ -61,8 +55,7 @@ soilDB 2.7.5
 <!-- #### SoilWeb API -->
 <!-- #### MS Access -->
 
-Functions by Data Source
-------------------------
+## Functions by Data Source
 
 -   Soil Data Access (SDA)
     -   [`fetchSDA`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_component.html)
@@ -78,6 +71,9 @@ Functions by Data Source
         -   [`get_SDA_coecoclass`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecosite.html)
         -   [`get_SDA_metrics`](http://ncss-tech.github.io/soilDB/reference/get_SDA_metrics.html)
         -   [`get_SDA_cosurfmorph`](http://ncss-tech.github.io/soilDB/reference/get_SDA_cosurfmorph.html)
+-   SSURGO Web Soil Survey
+    -   [`downloadSSURGO`](http://ncss-tech.github.io/soilDB/reference/downloadSSURGO.html)
+    -   [`createSSURGO`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.html)
 -   SSURGO Local Geodatabases
     -   [`fetchGDB`](http://ncss-tech.github.io/soilDB/reference/fetchGDB.html)
 -   ROSETTA
@@ -108,8 +104,7 @@ Functions by Data Source
 -   SoilGrids
     -   [`fetchSoilGrids`](http://ncss-tech.github.io/soilDB/reference/fetchSoilGrids.html)
 
-Miscellaneous Functions
------------------------
+## Miscellaneous Functions
 
 -   [`estimateSTR`](http://ncss-tech.github.io/soilDB/reference/estimateSTR.html)
 -   [`STRplot`](http://ncss-tech.github.io/soilDB/reference/STRplot.html)
@@ -120,8 +115,7 @@ Miscellaneous Functions
 -   [`code`](http://ncss-tech.github.io/soilDB/reference/code.html)
 -   [`get_NOAA_GHCND`](http://ncss-tech.github.io/soilDB/reference/get_NOAA_GHCND.html)
 
-Tutorials and Demonstrations
-----------------------------
+## Tutorials and Demonstrations
 
 -   [fetchKSSL](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
 -   [SDA\_query](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html)
@@ -129,14 +123,12 @@ Tutorials and Demonstrations
 -   [SCAN/SNOTEL
     Data](http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html)
 
-Related Packages
-----------------
+## Related Packages
 
 -   [aqp](https://github.com/ncss-tech/aqp)
 -   [sharpshootR](https://github.com/ncss-tech/sharpshootR)
 -   [SoilTaxonomy](https://github.com/ncss-tech/SoilTaxonomy)
 
-Dependency Graph
-----------------
+## Dependency Graph
 
 ![](https://cran.microsoft.com/packagedata/graphs/soilDB.png)
