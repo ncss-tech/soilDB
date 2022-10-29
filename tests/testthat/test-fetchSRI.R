@@ -10,7 +10,13 @@ test_that("get_SRI() works", {
 
   # multiple layers
 
-  sri_deschutes_multiple <- get_SRI(gdb = 'Deschutes', layers = c('MapUnits', 'ErosionAndHydro', 'SampleSites_MaterialsTesting'))
+  sri_deschutes_multiple <- get_SRI(gdb = 'Deschutes', layers = c('MapUnits', 'ErosionAndHydro', 'SampleSites_MaterialsTesting'), quiet = T)
+
+  expect_equal(length(sri_deschutes_multiple), 3)
+
+  # short name
+
+  sri_deschutes_multiple <- get_SRI(gdb = 'desc', layers = c('MapUnits', 'ErosionAndHydro', 'SampleSites_MaterialsTesting'), quiet = T)
 
   expect_equal(length(sri_deschutes_multiple), 3)
 
@@ -23,6 +29,10 @@ test_that("get_SRI_layers() works", {
   skip_on_cran()
 
   sri_layers <- get_SRI_layers(gdb =  'Winema')
+
+  # short name
+
+  sri_layers <- get_SRI_layers(gdb = 'win')
 
   expect_equal(lengths(sri_layers)[[1]], 11)
 

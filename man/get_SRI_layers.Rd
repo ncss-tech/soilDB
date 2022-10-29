@@ -19,8 +19,9 @@ Get SRI Layers
 Refer to \code{\link{get_SRI}} for information on gdb availability.
 }
 \examples{
+\dontshow{if (curl::has_internet() && requireNamespace("sf")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 sri_layers <- get_SRI_layers('Willamette')
 }
-
+\dontshow{\}) # examplesIf}
 }

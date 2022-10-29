@@ -6,7 +6,8 @@
 #' datasets contain both spatial and non-spatial data in the form of a gdb.
 #' @param gdb A \code{character} of the gdb, e.g. \code{'Deschutes'}.
 #' @param layers A \code{character} of the layer(s) within the gdb, e.g. \code{'MapUnits'} (default).
-#'
+#' @param quiet A \code{logical}; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers.
+#' @param simplify A \code{logical}; whether to return a simplified list (\code{data.frame} or \code{sf}) if length(layers) == 1.
 #' @return An \code{sf} or \code{data.frame} object.
 #'
 #' @note Please use \code{\link{get_SRI_layers}} to get the layer id information needed for the layer argument. This will
@@ -42,7 +43,7 @@
 #' }
 #' @export
 #'
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("sf")
 #' \donttest{
 #'
 #' # get Deschutes SRI
@@ -50,20 +51,24 @@
 #'
 #' # get multiple layers in a list
 #'
-#' sri_deschutes_multiple <- get_SRI(gdb = 'Deschutes', layers = c('MapUnits', 'ErosionAndHydro', 'SampleSites_MaterialsTesting'))
+#' sri_deschutes_multiple <- get_SRI(gdb = 'Deschutes',
+#' layers = c('MapUnits', 'ErosionAndHydro', 'SampleSites_MaterialsTesting'))
+#'
 #' }
 #'
-get_SRI <- function(gdb, layers = 'MapUnits') {
+#'
+get_SRI <- function(gdb, layers = 'MapUnits', quiet = FALSE, simplify = TRUE) {
 
-  gdb <- ifelse(gdb == 'Willamette', 'Wilamette', gdb)
+  if (!requireNamespace("sf"))
+    stop("package `sf` is required", call. = FALSE)
 
-  if(length(layers) > 1){
+  gdb <- .get_SRI_gdb_names(gdb)
 
-    sri = list()
+  sri <- list()
 
     for(i in layers){
 
-      sri_get <- list(sf::st_read(paste0('/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'), layer = i))
+      sri_get <- try(list(sf::read_sf(paste0('/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'), layer = i, quiet = quiet)), silent = TRUE)
 
       names(sri_get) <- i
 
@@ -71,11 +76,7 @@ get_SRI <- function(gdb, layers = 'MapUnits') {
 
     }
 
-  } else {
-
-  sri <- sf::st_read(paste0('/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'), layer = layers)
-
-  }
+  if(length(layers) == 1) {if(isTRUE(simplify)){sri <- sri[[1]]} else {sri}}
 
   sri
 
@@ -90,15 +91,58 @@ get_SRI <- function(gdb, layers = 'MapUnits') {
 #'
 #' @note Refer to \code{\link{get_SRI}} for information on gdb availability.
 #'
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("sf")
 #' \donttest{
 #' sri_layers <- get_SRI_layers('Willamette')
 #' }
 #'
 get_SRI_layers <- function(gdb) {
 
-  gdb <- ifelse(gdb == 'Willamette', 'Wilamette', gdb)
-  sf::st_layers(paste0('/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'))
+  if (!requireNamespace("sf"))
+    stop("package `sf` is required", call. = FALSE)
+
+  gdb <- .get_SRI_gdb_names(gdb)
+
+  layers <- try(sf::st_layers(paste0('/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip')), silent = TRUE)
+
+  list2DF(layers)
 
 }
 
+
+#' matching helper
+#' @param gdb A character.
+#' @return A gdb character.
+.get_SRI_gdb_names <- function(gdb) {
+
+  gdb_names <- tolower(c('Region6', 'Deschutes', 'Fremont', 'GiffordPinchot', 'Malheur',
+  'MtBaker', 'MtHood', 'Ochoco', 'Okanogan', 'Olympic', 'RogueRiver',
+  'Siskiyou', 'Siuslaw', 'Umatilla', 'Umpqua', 'WallowaWhitman',
+  'Wenatchee', 'Willamette', 'Winema', 'Region 6', 'Gifford Pinchot',
+  'Mt. Baker', 'Mt. Hood', 'Mt Hood', 'Mt Baker',
+  'Rogue River','Wallowa Whitman', 'Wilamette'
+  ))
+
+  gdb <- match.arg(tolower(gdb), choices = gdb_names)
+
+  ifelse(gdb %in% c('region6', 'region 6'), 'Region6',
+           ifelse(gdb %in% c('deschutes'), 'Deschutes',
+           ifelse(gdb %in% c('fremont'), 'Fremont',
+           ifelse(gdb %in% c('giffordpinchot', 'giford pinchot'), 'GiffordPinchot',
+           ifelse(gdb %in% c('malheur'), 'Malheur',
+           ifelse(gdb %in% c( 'mtbaker','mt. baker', 'mt baker'), 'MtBaker',
+           ifelse(gdb %in% c('mthood','mt hood','mt. hood'), 'MtHood',
+           ifelse(gdb %in% c('ochoco'), 'Ochoco',
+           ifelse(gdb %in% c('okanogan'), 'Okanogan',
+           ifelse(gdb %in% c('olympic'), 'Olympic',
+           ifelse(gdb %in% c('rogueriver','rogue river'), 'RogueRiver',
+           ifelse(gdb %in% c('siskiyou'), 'Siskiyou',
+           ifelse(gdb %in% c('siuslaw'), 'Siuslaw',
+           ifelse(gdb %in% c('umatilla'), 'Umatilla',
+           ifelse(gdb %in% c('umpqua'), 'Umpqua',
+           ifelse(gdb %in% c('wallowawhitman','wallowa whitman'), 'WallowaWhitman',
+           ifelse(gdb %in% c('wenatchee'), 'Wenatchee',
+           ifelse(gdb %in% c('wilamette', 'willamette'), 'Wilamette',
+           ifelse(gdb %in% c('winema'), 'Winema', NA)))))))))))))))))))
+
+}

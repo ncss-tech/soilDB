@@ -4,12 +4,16 @@
 \alias{get_SRI}
 \title{Get Soil Inventory Resource (SRI) for USFS Region 6}
 \usage{
-get_SRI(gdb, layers = "MapUnits")
+get_SRI(gdb, layers = "MapUnits", quiet = FALSE, simplify = TRUE)
 }
 \arguments{
 \item{gdb}{A \code{character} of the gdb, e.g. \code{'Deschutes'}.}
 
 \item{layers}{A \code{character} of the layer(s) within the gdb, e.g. \code{'MapUnits'} (default).}
+
+\item{quiet}{A \code{logical}; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers.}
+
+\item{simplify}{A \code{logical}; whether to return a simplified list (\code{data.frame} or \code{sf}) if length(layers) == 1.}
 }
 \value{
 An \code{sf} or \code{data.frame} object.
@@ -53,6 +57,7 @@ Please use \code{\link{get_SRI_layers}} to get the layer id information needed f
 help with joining \code{sf} and \code{data.frame} objects.
 }
 \examples{
+\dontshow{if (curl::has_internet() && requireNamespace("sf")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 
 # get Deschutes SRI
@@ -60,7 +65,10 @@ sri_deschutes <- get_SRI('Deschutes')
 
 # get multiple layers in a list
 
-sri_deschutes_multiple <- get_SRI(gdb = 'Deschutes', layers = c('MapUnits', 'ErosionAndHydro', 'SampleSites_MaterialsTesting'))
+sri_deschutes_multiple <- get_SRI(gdb = 'Deschutes',
+layers = c('MapUnits', 'ErosionAndHydro', 'SampleSites_MaterialsTesting'))
+
 }
 
+\dontshow{\}) # examplesIf}
 }
