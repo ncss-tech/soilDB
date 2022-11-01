@@ -5,19 +5,26 @@
 \alias{get_NASIS_column_metadata}
 \title{Get NASIS Metadata (Domain, Column and Choice Lists)}
 \usage{
-get_NASIS_metadata(dsn = NULL)
+get_NASIS_metadata(dsn = NULL, include_description = FALSE)
 
-get_NASIS_column_metadata(x, what = "ColumnPhysicalName", dsn = NULL)
+get_NASIS_column_metadata(
+  x,
+  what = "ColumnPhysicalName",
+  include_description = FALSE,
+  dsn = NULL
+)
 }
 \arguments{
 \item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default: \code{NULL}}
+
+\item{include_description}{Include "ChoiceDescription" column? Default: \code{FALSE}}
 
 \item{x}{character vector to match in NASIS metadata}
 
 \item{what}{Column to match \code{x} against. Default \code{"ColumnPhysicalName"}; alternate options include \code{"DomainID"}, \code{"DomainName"}, \code{"DomainRanked"}, \code{"DisplayLabel"}, \code{"ChoiceSequence"}, \code{"ChoiceValue"}, \code{"ChoiceName"}, \code{"ChoiceLabel"}, \code{"ChoiceObsolete"}, \code{"ChoiceDescription"}, \code{"ColumnLogicalName"}}
 }
 \value{
-a \code{data.frame} containing DomainID, DomainName, DomainRanked, DisplayLabel, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ColumnPhysicalName, ColumnLogicalName
+a \code{data.frame} containing DomainID, DomainName, DomainRanked, DisplayLabel, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ColumnPhysicalName, ColumnLogicalName and optionally ChoiceDescription when \code{include_description=TRUE}.
 
 a \code{data.frame} containing selected NASIS metadata sorted first on \code{DomainID} and then on \code{ChoiceSequence}
 }
