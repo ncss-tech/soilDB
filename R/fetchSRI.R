@@ -1,4 +1,29 @@
 
+#' Fetch Soil Inventory Resource (SRI) for USFS Region 6
+#'
+#' @descrition This is a higher level wrapper around the \link{get_SRI} and \link{get_SRI_layers}
+#' functions. This function can fetch multiple gdb's and returns all the layers within the gdb.
+#' @param gdb A \code{character} vector of the gdb(s), e.g. \code{'Deschutes'}.
+#' @param ... Arguments to pass to \link{get_SRI}.
+#'
+#' @return A list.
+#' @export
+#'
+#' @examplesIf curl::has_internet() && requireNamespace("sf")
+#' \donttest{
+#'
+#' # fetch Willamette and Winema SRI
+#'
+#' sri <- fetchSRI(gdb = c('will', 'win'), quiet = TRUE)
+#'
+#' }
+
+fetchSRI <- function(gdb, ...) {
+
+  lapply(gdb, function(x) {
+    suppressWarnings(get_SRI(x, layers = get_SRI_layers(x)$name, ...))
+  })
+}
 
 #' Get Soil Inventory Resource (SRI) for USFS Region 6
 #'
@@ -105,8 +130,7 @@ get_SRI_layers <- function(gdb) {
 
   layers <- try(sf::st_layers(paste0('/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip')), silent = TRUE)
 
-  list2DF(layers)
-
+  as.data.frame(sapply(layers, I))
 }
 
 

@@ -30,11 +30,13 @@ test_that("get_SRI_layers() works", {
 
   sri_layers <- get_SRI_layers(gdb =  'Winema')
 
+  expect_equal(nrow(sri_layers), 11)
+
   # short name
 
   sri_layers <- get_SRI_layers(gdb = 'win')
 
-  expect_equal(lengths(sri_layers)[[1]], 11)
+  expect_equal(nrow(sri_layers), 11)
 
 })
 
