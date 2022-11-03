@@ -7,7 +7,7 @@
 fetchSRI(gdb, ...)
 }
 \arguments{
-\item{gdb}{A \code{character} vector of the gdb(s), e.g. \code{'Deschutes'}.}
+\item{gdb}{A \code{character} vector of the GDB(s), e.g. \code{'Deschutes'}.}
 
 \item{...}{Arguments to pass to \link{get_SRI}.}
 }
@@ -15,7 +15,8 @@ fetchSRI(gdb, ...)
 A list.
 }
 \description{
-Fetch Soil Inventory Resource (SRI) for USFS Region 6
+This is a higher level wrapper around the \link{get_SRI} and \link{get_SRI_layers}
+functions. This function can fetch multiple File Geodatabases (GDB) and returns all the layers within the GDB.
 }
 \examples{
 \dontshow{if (curl::has_internet() && requireNamespace("sf")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -27,4 +28,10 @@ sri <- fetchSRI(gdb = c('will', 'win'), quiet = TRUE)
 
 }
 \dontshow{\}) # examplesIf}
+}
+\seealso{
+\code{get_SRI()} \code{get_SRI_layers()}
+}
+\author{
+Josh Erickson
 }

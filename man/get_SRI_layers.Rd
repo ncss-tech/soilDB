@@ -7,16 +7,16 @@
 get_SRI_layers(gdb)
 }
 \arguments{
-\item{gdb}{A \code{character} of the gdb, e.g. \code{'Deschutes'}.}
+\item{gdb}{A \code{character} of the GDB, e.g. \code{'Deschutes'}.}
 }
 \value{
-A list of metadata about the gdb.
+A list of metadata about the GDB
 }
 \description{
 Get SRI Layers
 }
 \note{
-Refer to \code{\link{get_SRI}} for information on gdb availability.
+Refer to \code{\link{get_SRI}} for information on File Geodatabase (GDB) availability.
 }
 \examples{
 \dontshow{if (curl::has_internet() && requireNamespace("sf")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -24,4 +24,7 @@ Refer to \code{\link{get_SRI}} for information on gdb availability.
 sri_layers <- get_SRI_layers('Willamette')
 }
 \dontshow{\}) # examplesIf}
+}
+\author{
+Josh Erickson
 }

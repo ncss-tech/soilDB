@@ -1,12 +1,13 @@
 
 #' Fetch Soil Inventory Resource (SRI) for USFS Region 6
 #'
-#' @descrition This is a higher level wrapper around the \link{get_SRI} and \link{get_SRI_layers}
-#' functions. This function can fetch multiple gdb's and returns all the layers within the gdb.
-#' @param gdb A \code{character} vector of the gdb(s), e.g. \code{'Deschutes'}.
+#' @description This is a higher level wrapper around the \link{get_SRI} and \link{get_SRI_layers}
+#' functions. This function can fetch multiple File Geodatabases (GDB) and returns all the layers within the GDB.
+#' @param gdb A \code{character} vector of the GDB(s), e.g. \code{'Deschutes'}.
 #' @param ... Arguments to pass to \link{get_SRI}.
-#'
+#' @author Josh Erickson
 #' @return A list.
+#' @seealso `get_SRI()` `get_SRI_layers()`
 #' @export
 #'
 #' @examplesIf curl::has_internet() && requireNamespace("sf")
@@ -20,7 +21,9 @@
 
 fetchSRI <- function(gdb, ...) {
 
-  lapply(gdb, function(x) {
+  gdb <- .get_SRI_gdb_names(gdb)
+
+  sapply(gdb, function(x) {
     suppressWarnings(get_SRI(x, layers = get_SRI_layers(x)$name, ...))
   })
 }
@@ -28,11 +31,13 @@ fetchSRI <- function(gdb, ...) {
 #' Get Soil Inventory Resource (SRI) for USFS Region 6
 #'
 #' @description This function calls ECOSHARE (zip files) to get Soil Inventory Resource (SRI) data for USFS Region 6. These
-#' datasets contain both spatial and non-spatial data in the form of a gdb.
-#' @param gdb A \code{character} of the gdb, e.g. \code{'Deschutes'}.
-#' @param layers A \code{character} of the layer(s) within the gdb, e.g. \code{'MapUnits'} (default).
+#' datasets contain both spatial and non-spatial data in the form of a File Geodatabase (GDB).
+#' @param gdb A \code{character} of the GDB, e.g. \code{'Deschutes'}.
+#' @param layers A \code{character} of the layer(s) within the GDB, e.g. \code{'MapUnits'} (default).
 #' @param quiet A \code{logical}; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers.
 #' @param simplify A \code{logical}; whether to return a simplified list (\code{data.frame} or \code{sf}) if length(layers) == 1.
+#' @author Josh Erickson
+#' @seealso `get_SRI_layers()`
 #' @return An \code{sf} or \code{data.frame} object.
 #'
 #' @note Please use \code{\link{get_SRI_layers}} to get the layer id information needed for the layer argument. This will
@@ -42,9 +47,9 @@ fetchSRI <- function(gdb, ...) {
 #'
 #' The SRI were originally compiled in 20 volumes, with the original year of publication ranging from 1969 to 1979. The Gifford-Pinchot SRI was redone following the eruption of Mt Saint Helens, and that version was published in 1992. The Olympic NF also produced two versions, the original version being published in 1969, with an update in 1982. The Colville National Forest was the only Region 6 forest that did not compile a SRI.
 #'
-#' The data are organized into one single regional geodatabase, together with twenty individual forest-level geodatabases.  The regional database contains polygons from all twenty SRIs together with a common set of attributes for the two or three soil layers delineated in the individual mapping unit descriptions, such as texture, depth, color, rock content, etc.  In general, the regional database contains physical soil attributes that could be compiled more or less completely and consistently across all forests. The individual forest-level databases contain the polygons for each individual SRI, together with various tables of management interpretations and laboratory data, together with a variety of miscellaneous tables.  The information contained in these forest-level databases varies widely from forest to forest, which is why they were not merged into a regional view.  Full metadata are included with each database, and scans of the original SRI volumes are provided for reference as well.  A Forest Service General Technical Report that fully describes the available data is currently in preparation.
+#' The data are organized into one single regional GDB, together with twenty individual forest-level GDBs.  The regional database contains polygons from all twenty SRIs together with a common set of attributes for the two or three soil layers delineated in the individual mapping unit descriptions, such as texture, depth, color, rock content, etc.  In general, the regional database contains physical soil attributes that could be compiled more or less completely and consistently across all forests. The individual forest-level databases contain the polygons for each individual SRI, together with various tables of management interpretations and laboratory data, together with a variety of miscellaneous tables.  The information contained in these forest-level databases varies widely from forest to forest, which is why they were not merged into a regional view.  Full metadata are included with each database, and scans of the original SRI volumes are provided for reference as well.  A Forest Service General Technical Report that fully describes the available data is currently in preparation.
 #'
-#' The gdb's currently available:
+#' The GDB's currently available:
 #' \itemize{
 #' \item  \strong{Region6}
 #' \item  \strong{Deschutes}
@@ -93,7 +98,7 @@ get_SRI <- function(gdb, layers = 'MapUnits', quiet = FALSE, simplify = TRUE) {
 
     for(i in layers){
 
-      sri_get <- try(list(sf::read_sf(paste0('/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'), layer = i, quiet = quiet)), silent = TRUE)
+      sri_get <- try(list(sf::read_sf(paste0('/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/',gdb,'_SoilResourceInventory.gdb.zip'), layer = i, quiet = quiet, as_tibble = FALSE)), silent = TRUE)
 
       names(sri_get) <- i
 
@@ -109,12 +114,13 @@ get_SRI <- function(gdb, layers = 'MapUnits', quiet = FALSE, simplify = TRUE) {
 
 #' Get SRI Layers
 #'
-#' @param gdb A \code{character} of the gdb, e.g. \code{'Deschutes'}.
+#' @param gdb A \code{character} of the GDB, e.g. \code{'Deschutes'}.
+#' @author Josh Erickson
 #'
-#' @return A list of metadata about the gdb.
+#' @return A list of metadata about the GDB
 #' @export
 #'
-#' @note Refer to \code{\link{get_SRI}} for information on gdb availability.
+#' @note Refer to \code{\link{get_SRI}} for information on File Geodatabase (GDB) availability.
 #'
 #' @examplesIf curl::has_internet() && requireNamespace("sf")
 #' \donttest{
@@ -147,7 +153,7 @@ get_SRI_layers <- function(gdb) {
   'Rogue River','Wallowa Whitman', 'Wilamette'
   ))
 
-  gdb <- match.arg(tolower(gdb), choices = gdb_names)
+  gdb <- match.arg(tolower(gdb), choices = gdb_names, several.ok = TRUE)
 
   ifelse(gdb %in% c('region6', 'region 6'), 'Region6',
            ifelse(gdb %in% c('deschutes'), 'Deschutes',
@@ -166,7 +172,7 @@ get_SRI_layers <- function(gdb) {
            ifelse(gdb %in% c('umpqua'), 'Umpqua',
            ifelse(gdb %in% c('wallowawhitman','wallowa whitman'), 'WallowaWhitman',
            ifelse(gdb %in% c('wenatchee'), 'Wenatchee',
-           ifelse(gdb %in% c('wilamette', 'willamette'), 'Wilamette',
+           ifelse(gdb %in% c('willamette', 'wilamette'), 'Wilamette',
            ifelse(gdb %in% c('winema'), 'Winema', NA)))))))))))))))))))
 
 }
