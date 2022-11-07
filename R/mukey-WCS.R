@@ -131,8 +131,8 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS'), res = 30, quiet 
   # scly <- ((ymax - ymin) / res) / wcs.geom$height
   
   # recalculate x/ymax based on xmin + resolution multiplied by AOI dims
-  xmax2 <- xmin + res * wcs.geom$width
-  ymax2 <- ymin + res * wcs.geom$height
+  xmax2 <- xmin + res * wcs.geom$width[[1]]
+  ymax2 <- ymin + res * wcs.geom$height[[1]]
   
   # compile WCS 2.0 style URL
   u <- paste0(
@@ -172,13 +172,15 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS'), res = 30, quiet 
   }
   
   # warn about requested v.s. received grid dimensions
-  if ((ymax2 - ymin) / res != nrow(r)) warning("expected ", (ymax2 - ymin) / res, " rows, received ", nrow(r), "; Y resolution may be affected. Try requesting a smaller extent.", call. = FALSE)
-  if ((xmax2 - xmin) / res != ncol(r)) warning("expected ", (xmax2 - xmin) / res, " columns, received ", ncol(r), "; X resolution may be affected. Try requesting a smaller extent.", call. = FALSE)
+  if (round((ymax2 - ymin) / res) != nrow(r)) 
+    warning("expected ", (ymax2 - ymin) / res, " rows, received ", nrow(r), "; Y resolution may be affected. Try requesting a smaller extent.", call. = FALSE)
+  if (round((xmax2 - xmin) / res) != ncol(r)) 
+    warning("expected ", (xmax2 - xmin) / res, " columns, received ", ncol(r), "; X resolution may be affected. Try requesting a smaller extent.", call. = FALSE)
   
   ## TODO: is this needed?
   ## '0' is returned by the WCS sometimes -- never valid for MUKEY
-  # r <- terra::classify(r, matrix(c(0,  var.spec$na,
-  #                                  NaN, var.spec$na), ncol = 2, byrow = TRUE), include.lowest = TRUE)
+  r <- terra::classify(r, matrix(c(0,  var.spec$na,
+                                   NaN, var.spec$na), ncol = 2, byrow = TRUE), include.lowest = TRUE)
 
 
   # load all values into memory
