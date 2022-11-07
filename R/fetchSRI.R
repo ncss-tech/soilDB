@@ -10,7 +10,7 @@
 #' @seealso `get_SRI()` `get_SRI_layers()`
 #' @export
 #'
-#' @examplesIf curl::has_internet() && requireNamespace("sf")
+#' @examplesIf curl::has_internet() && requireNamespace("sf") && !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))
 #' \donttest{
 #'
 #' # fetch Willamette and Winema SRI
@@ -73,7 +73,7 @@ fetchSRI <- function(gdb, ...) {
 #' }
 #' @export
 #'
-#' @examplesIf curl::has_internet() && requireNamespace("sf")
+#' @examplesIf curl::has_internet() && requireNamespace("sf") && !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))
 #' \donttest{
 #'
 #' # get Deschutes SRI
@@ -122,7 +122,7 @@ get_SRI <- function(gdb, layers = 'MapUnits', quiet = FALSE, simplify = TRUE) {
 #'
 #' @note Refer to \code{\link{get_SRI}} for information on File Geodatabase (GDB) availability.
 #'
-#' @examplesIf curl::has_internet() && requireNamespace("sf")
+#' @examplesIf curl::has_internet() && requireNamespace("sf") && !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))
 #' \donttest{
 #' sri_layers <- get_SRI_layers('Willamette')
 #' }

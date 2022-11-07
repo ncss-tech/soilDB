@@ -3,6 +3,8 @@ test_that("get_SRI() works", {
   skip_if_offline()
 
   skip_on_cran()
+  
+  skip_if(as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)))
 
   sri_deschutes <- get_SRI(gdb = 'Deschutes')
 
@@ -27,7 +29,9 @@ test_that("get_SRI_layers() works", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if(as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)))
+  
   sri_layers <- get_SRI_layers(gdb =  'Winema')
 
   expect_equal(nrow(sri_layers), 11)
