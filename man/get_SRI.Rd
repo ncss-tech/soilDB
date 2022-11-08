@@ -57,8 +57,7 @@ Please use \code{\link{get_SRI_layers}} to get the layer id information needed f
 help with joining \code{sf} and \code{data.frame} objects.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("sf") && !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
+\dontrun{
 
 # get Deschutes SRI
 sri_deschutes <- get_SRI('Deschutes')
@@ -70,7 +69,7 @@ layers = c('MapUnits', 'ErosionAndHydro', 'SampleSites_MaterialsTesting'))
 
 }
 
-\dontshow{\}) # examplesIf}
+
 }
 \seealso{
 \code{get_SRI_layers()}

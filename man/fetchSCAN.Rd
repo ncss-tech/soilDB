@@ -76,9 +76,7 @@ See the \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{fetchSC
 }
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("httr") && requireNamespace("rvest") && !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
-\donttest{
+\dontrun{
     # get data
     x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016)))
     str(x)

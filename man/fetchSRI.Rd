@@ -19,15 +19,13 @@ This is a higher level wrapper around the \link{get_SRI} and \link{get_SRI_layer
 functions. This function can fetch multiple File Geodatabases (GDB) and returns all the layers within the GDB.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("sf") && !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
+\dontrun{
 
 # fetch Willamette and Winema SRI
 
 sri <- fetchSRI(gdb = c('will', 'win'), quiet = TRUE)
 
 }
-\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{get_SRI()} \code{get_SRI_layers()}

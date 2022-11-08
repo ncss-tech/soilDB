@@ -79,9 +79,8 @@
 #' @return a `list` of `data.frame` objects, where each element name is a sensor type, plus a `metadata` table; different `report` types change the types of sensor data returned. `SCAN_sensor_metadata()` and `SCAN_site_metadata()` return a `data.frame`. `NULL` on bad request.
 #' @author D.E. Beaudette, A.G. Brown
 #' @keywords manip
-#' @examplesIf curl::has_internet() && requireNamespace("httr") && requireNamespace("rvest") && !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'     # get data
 #'     x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016)))
 #'     str(x)

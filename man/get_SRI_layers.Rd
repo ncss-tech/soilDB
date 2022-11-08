@@ -19,11 +19,10 @@ Get SRI Layers
 Refer to \code{\link{get_SRI}} for information on File Geodatabase (GDB) availability.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("sf") && !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
+\dontrun{
 sri_layers <- get_SRI_layers('Willamette')
 }
-\dontshow{\}) # examplesIf}
+
 }
 \author{
 Josh Erickson
