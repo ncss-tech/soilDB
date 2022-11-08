@@ -123,45 +123,18 @@ help with joining <code>sf</code> and <code>data.frame</code> objects.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get Deschutes SRI</span></span></span>
 <span class="r-in"><span><span class="va">sri_deschutes</span> <span class="op">&lt;-</span> <span class="fu">get_SRI</span><span class="op">(</span><span class="st">'Deschutes'</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `MapUnits' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/Deschutes_SoilResourceInventory.gdb.zip' </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `OpenFileGDB'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 4114 features and 9 fields</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 425785.1 ymin: 1023015 xmax: 539210.4 ymax: 1179993</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: NAD_1983_Albers</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get multiple layers in a list</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sri_deschutes_multiple</span> <span class="op">&lt;-</span> <span class="fu">get_SRI</span><span class="op">(</span>gdb <span class="op">=</span> <span class="st">'Deschutes'</span>,</span></span>
 <span class="r-in"><span>layers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'MapUnits'</span>, <span class="st">'ErosionAndHydro'</span>, <span class="st">'SampleSites_MaterialsTesting'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `MapUnits' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/Deschutes_SoilResourceInventory.gdb.zip' </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `OpenFileGDB'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 4114 features and 9 fields</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 425785.1 ymin: 1023015 xmax: 539210.4 ymax: 1179993</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: NAD_1983_Albers</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `ErosionAndHydro' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/Deschutes_SoilResourceInventory.gdb.zip' </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `OpenFileGDB'</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no simple feature geometries present: returning a data.frame or tbl_df</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `SampleSites_MaterialsTesting' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/vsizip//vsicurl/https://ecoshare.info/uploads/soils/soil_resource_inventory/Deschutes_SoilResourceInventory.gdb.zip' </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `OpenFileGDB'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 15 features and 2 fields</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 451225.2 ymin: 1024278 xmax: 486316.6 ymax: 1166857</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: NAD_1983_Albers</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

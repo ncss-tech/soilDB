@@ -121,110 +121,10 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>    <span class="co"># get data</span></span></span>
 <span class="r-in"><span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSCAN</span><span class="op">(</span>site.code<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">356</span>, <span class="fl">2072</span><span class="op">)</span>, year<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2015</span>, <span class="fl">2016</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 396315 records (19.69 Mb transferred)</span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> List of 14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ SMS     :'data.frame':	137883 obs. of  8 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Site      : int [1:137883] 356 356 356 356 356 356 356 356 356 356 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Date      : Date[1:137883], format: "2015-01-01" "2015-01-01" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Time      : chr [1:137883] "00:00" "01:00" "02:00" "03:00" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_year: num [1:137883] 2015 2015 2015 2015 2015 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_day : int [1:137883] 93 93 93 93 93 93 93 93 93 93 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ value     : num [1:137883] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ depth     : num [1:137883] 5 5 5 5 5 5 5 5 5 5 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sensor.id : Factor w/ 5 levels "SMS.I_2","SMS.I_8",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ STO     :'data.frame':	140075 obs. of  8 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Site      : int [1:140075] 356 356 356 356 356 356 356 356 356 356 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Date      : Date[1:140075], format: "2015-01-01" "2015-01-01" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Time      : chr [1:140075] "00:00" "01:00" "02:00" "03:00" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_year: num [1:140075] 2015 2015 2015 2015 2015 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_day : int [1:140075] 93 93 93 93 93 93 93 93 93 93 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ value     : num [1:140075] 1.4 1.4 1.4 1.4 1.4 1.4 1.4 1.4 1.4 1.4 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ depth     : num [1:140075] 5 5 5 5 5 5 5 5 5 5 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sensor.id : Factor w/ 5 levels "STO.I_2","STO.I_8",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ SAL     :'data.frame':	0 obs. of  0 variables</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ TAVG    :'data.frame':	17498 obs. of  8 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Site      : int [1:17498] 2072 2072 2072 2072 2072 2072 2072 2072 2072 2072 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Date      : Date[1:17498], format: "2015-01-01" "2015-01-01" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Time      : chr [1:17498] "00:00" "01:00" "02:00" "03:00" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_year: num [1:17498] 2015 2015 2015 2015 2015 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_day : int [1:17498] 93 93 93 93 93 93 93 93 93 93 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ value     : num [1:17498] -11.9 -12.2 -12.4 -11.2 -10.8 -10.6 -10.6 -9.5 -8.9 -7.7 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ depth     : num [1:17498] NA NA NA NA NA NA NA NA NA NA ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "TAVG.H": 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ TMIN    :'data.frame':	17498 obs. of  8 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Site      : int [1:17498] 2072 2072 2072 2072 2072 2072 2072 2072 2072 2072 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Date      : Date[1:17498], format: "2015-01-01" "2015-01-01" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Time      : chr [1:17498] "00:00" "01:00" "02:00" "03:00" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_year: num [1:17498] 2015 2015 2015 2015 2015 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_day : int [1:17498] 93 93 93 93 93 93 93 93 93 93 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ value     : num [1:17498] -12.2 -12.7 -12.6 -12.3 -11.1 -11 -11 -9.6 -9.1 -8.6 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ depth     : num [1:17498] NA NA NA NA NA NA NA NA NA NA ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "TMIN.H": 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ TMAX    :'data.frame':	17500 obs. of  8 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Site      : int [1:17500] 2072 2072 2072 2072 2072 2072 2072 2072 2072 2072 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Date      : Date[1:17500], format: "2015-01-01" "2015-01-01" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Time      : chr [1:17500] "00:00" "01:00" "02:00" "03:00" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_year: num [1:17500] 2015 2015 2015 2015 2015 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_day : int [1:17500] 93 93 93 93 93 93 93 93 93 93 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ value     : num [1:17500] -11.7 -11.8 -12.3 -10.6 -10.4 -10.3 -9.6 -8.9 -8.6 -6.5 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ depth     : num [1:17500] NA NA NA NA NA NA NA NA NA NA ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "TMAX.H": 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ PRCP    :'data.frame':	13976 obs. of  8 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Site      : int [1:13976] 2072 2072 2072 2072 2072 2072 2072 2072 2072 2072 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Date      : Date[1:13976], format: "2015-01-01" "2015-01-01" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Time      : chr [1:13976] "00:00" "01:00" "02:00" "03:00" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_year: num [1:13976] 2015 2015 2015 2015 2015 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_day : int [1:13976] 93 93 93 93 93 93 93 93 93 93 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ value     : num [1:13976] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ depth     : num [1:13976] NA NA NA NA NA NA NA NA NA NA ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "PRCP.H": 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ PREC    :'data.frame':	18058 obs. of  8 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Site      : int [1:18058] 356 356 356 356 356 356 356 356 356 356 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Date      : Date[1:18058], format: "2015-01-01" "2015-01-01" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Time      : chr [1:18058] "00:00" "01:00" "02:00" "03:00" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_year: num [1:18058] 2015 2015 2015 2015 2015 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_day : int [1:18058] 93 93 93 93 93 93 93 93 93 93 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ value     : num [1:18058] 9.1 8.8 8.8 8.8 8.8 8.8 8.8 8.8 8.8 8.8 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ depth     : num [1:18058] NA NA NA NA NA NA NA NA NA NA ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "PREC.I": 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ SNWD    :'data.frame':	16828 obs. of  8 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Site      : int [1:16828] 356 356 356 356 356 356 356 356 356 356 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Date      : Date[1:16828], format: "2015-01-01" "2015-01-01" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Time      : chr [1:16828] "00:00" "01:00" "02:00" "03:00" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_year: num [1:16828] 2015 2015 2015 2015 2015 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_day : int [1:16828] 93 93 93 93 93 93 93 93 93 93 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ value     : num [1:16828] 21 21 21 21 21 20 21 21 21 21 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ depth     : num [1:16828] NA NA NA NA NA NA NA NA NA NA ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "SNWD.I": 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ WTEQ    :'data.frame':	16999 obs. of  8 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Site      : int [1:16999] 356 356 356 356 356 356 356 356 356 356 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Date      : Date[1:16999], format: "2015-01-01" "2015-01-01" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Time      : chr [1:16999] "00:00" "01:00" "02:00" "03:00" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_year: num [1:16999] 2015 2015 2015 2015 2015 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ water_day : int [1:16999] 93 93 93 93 93 93 93 93 93 93 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ value     : num [1:16999] 6.1 6.2 6.2 6.2 6.2 6.2 6.2 6.2 6.3 6.2 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ depth     : num [1:16999] NA NA NA NA NA NA NA NA NA NA ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sensor.id : Factor w/ 1 level "WTEQ.I": 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ WDIRV   :'data.frame':	0 obs. of  0 variables</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ WSPDV   :'data.frame':	0 obs. of  0 variables</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ LRADT   :'data.frame':	0 obs. of  0 variables</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ metadata:'data.frame':	2 obs. of  12 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Name         : chr [1:2] "Blue Lakes" "Eros Data Center"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Site         : num [1:2] 356 2072</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ State        : chr [1:2] "California" "South Dakota"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Network      : chr [1:2] "SNOTEL" "SCAN"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ County       : chr [1:2] "Alpine" "Minnehaha"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Elevation_ft : num [1:2] 8067 1602</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Latitude     : num [1:2] 38.6 43.7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Longitude    : num [1:2] -119.9 -96.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ HUC          : chr [1:2] "180400120101" "101702031402"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ climstanm    : chr [1:2] NA "Eros Data Center"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upedonid     : chr [1:2] NA "S2003SD099001"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ pedlabsampnum: chr [1:2] NA "03N0688"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># get sensor metadata</span></span></span>
 <span class="r-in"><span>    <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">SCAN_sensor_metadata</span><span class="op">(</span>site.code<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">356</span>, <span class="fl">2072</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -234,7 +134,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># get hourly data (396315 records)</span></span></span>
 <span class="r-in"><span>    <span class="co"># x &lt;- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016), timeseries = "Hourly"))</span></span></span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
