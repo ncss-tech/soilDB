@@ -224,6 +224,7 @@ fetchLDM <- function(x = NULL,
       hzn <- aqp::horizonNames(hz)
       hzn <- hzn[hzn != idname(hz)]
       site(hz) <- sites[, !colnames(sites) %in% hzn]
+      hzdesgnname(hz) <- 'hzn_desgn'
 
       return(hz)
     } else {
