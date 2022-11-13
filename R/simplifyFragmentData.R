@@ -142,7 +142,7 @@
 #' Examples:
 #'  - [KSSL data](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
 #'
-#' @aliases simplifyFragmentData simplfyFragmentData simplifyArtifactData
+#' @aliases simplifyFragmentData simplifyArtifactData
 #' @param rf a \code{data.frame} object, typically returned from NASIS, see
 #' details
 #' @param id.var character vector with the name of the column containing an ID
