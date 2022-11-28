@@ -101,8 +101,8 @@ jobs:
           remotes::install_github("ncss-tech/aqp", dependencies = TRUE, build = FALSE)
         shell: Rscript {0}
         
-      - name: Install terra off r-universe (devel only)
-        if: matrix.config.r == 'devel'
+      - name: Install terra off r-universe (devel+Windows only)
+        if: matrix.config.r == 'devel' || runner.os == 'Windows'
         run: install.packages('terra', repos = 'https://rspatial.r-universe.dev')
         shell: Rscript {0}
         
