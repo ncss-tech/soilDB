@@ -1,6 +1,18 @@
-# soilDB 2.7.6 (2022-10-28)
+# soilDB 2.7.6 (2022-11-28)
 
  - All references to `soilDB.env` have been replaced with a function that returns that environment object (`get_soilDB_env()`); thanks to @MollicMeyer for identifying this as a problem in #277. This object used to be exported but was unintentionally omitted from NAMESPACE; this has been fixed.
+ 
+ - `fetchNASIS(lab=TRUE)` bug fix related to many:1 relationships between lab samples and morphologic horizons with all-missing columns having _logical_ datatype (#277)
+ 
+ - Added `get_SRI()` and `fetchSRI()` functions for accessing USFS Region 6 Soil Resource Inventory information from https://ecoshare.info/; thanks to @joshualerickson for the contribution (https://github.com/ncss-tech/soilDB/pull/274)
+ 
+ - `fetchLDM()` now sets the horizon designation metadata like other fetch* functions that return SoilProfileCollection objects (@dylanbeaudette)
+ 
+ - `mukey.wcs()` fix spurious warnings occasionally given due to minor differences (rounding) of grid dimensions
+ 
+ - {curl} has been moved from Suggests to Imports
+ 
+ - `simplfyFragmentData()` alias for `simplifyFragmentData()` removed (@infotroph)
  
 # soilDB 2.7.5 (2022-10-17)
 
