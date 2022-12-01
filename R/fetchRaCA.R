@@ -1,12 +1,10 @@
 #' @title Get Rapid Carbon Assessment (RaCA) data
 #' 
-#' @description Get Rapid Carbon Assessment (RaCA) data by state, geographic bounding-box, RaCA site ID, or soil series query from the SoilWeb API. This interface to the data was an experimental delivery service that does not include the latest soil carbon measurements. 
+#' @description Get Rapid Carbon Assessment (RaCA) data by state, geographic bounding-box, RaCA site ID, or soil series query from the SoilWeb API. This interface to the data was an experimental delivery service that does not include the latest soil organic carbon (SOC) measurements. 
 #' 
-#' Please use [current RaCA distribution](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164) if you need measured SOC.
+#' Please use [current RaCA distribution](https://data.nal.usda.gov/dataset/rapid-carbon-assessment-raca) if you need lab _measured_ SOC rather than SOC estimated by VNIR.
 #' 
 #' This interface will be updated sometime calendar year 2022 to include the latest soil morphology, taxonomic classification, and measured SOC values. More detailed coordinates for sample sites should also be available.
-#' 
-#' See https://www.nrcs.usda.gov/Internet/FSE_MANUSCRIPTS/alabama/raca_download/raca_download.zip for direct download of the full dataset.
 #' 
 #' @param series a soil series name; case-insensitive
 #' 
@@ -32,7 +30,7 @@
 #' }
 #' @author D.E. Beaudette, USDA-NRCS staff
 #' @references {
-#'   \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/?cid=nrcs142p2_054164}
+#'   \url{https://data.nal.usda.gov/dataset/rapid-carbon-assessment-raca}
 #' }
 #' @seealso \code{\link{fetchOSD}}
 #' @export

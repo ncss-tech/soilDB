@@ -32,11 +32,6 @@ This function doesn't know about leap-years. Probably worth checking.
 waterDayYear('2019-01-01')
 
 }
-\references{
-Ideas borrowed from:
-\url{https://github.com/USGS-R/dataRetrieval/issues/246} and
-\url{https://stackoverflow.com/questions/48123049/create-day-index-based-on-water-year}
-}
 \author{
 D.E. Beaudette
 }

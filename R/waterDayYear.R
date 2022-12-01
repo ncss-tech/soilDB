@@ -19,9 +19,6 @@
 #' @return A \code{data.frame} object with the following \item{wy}{the "water
 #' year"} \item{wd}{the "water day"}
 #' @author D.E. Beaudette
-#' @references Ideas borrowed from:
-#' \url{https://github.com/USGS-R/dataRetrieval/issues/246} and
-#' \url{https://stackoverflow.com/questions/48123049/create-day-index-based-on-water-year}
 #' @keywords manip
 #' @examples
 #'
