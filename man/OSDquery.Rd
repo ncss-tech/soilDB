@@ -87,7 +87,7 @@ SoilWeb maintains a snapshot of the Official Series Description data.
 
 }
 \references{
-\url{https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587}
+USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
 }
 \seealso{
 \code{\link{fetchOSD}, \link{siblings}, \link{fetchOSD}}

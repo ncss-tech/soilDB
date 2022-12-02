@@ -109,7 +109,7 @@
 #'
 #' @return a \code{SoilProfileCollection} object containing basic soil morphology and taxonomic information.
 #'
-#' @references USDA-NRCS OSD search tools: \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587}
+#' @references USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
 #'
 #' @author D.E. Beaudette, A.G. Brown
 #' @seealso \link{OSDquery}, \link{siblings}

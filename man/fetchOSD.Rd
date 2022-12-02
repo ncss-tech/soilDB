@@ -117,7 +117,7 @@ These last two cases are problematic for analysis that makes use of morphology a
 }
 }
 \references{
-USDA-NRCS OSD search tools: \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587}
+USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
 }
 \seealso{
 \link{OSDquery}, \link{siblings}

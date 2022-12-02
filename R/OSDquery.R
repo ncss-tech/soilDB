@@ -43,8 +43,7 @@
 #'  - [competing soil series](https://ncss-tech.github.io/AQP/soilDB/competing-series.html)
 #'  - [siblings](https://ncss-tech.github.io/AQP/soilDB/siblings.html)
 #'
-#'
-#' @references \url{https://www.nrcs.usda.gov/wps/portal/nrcs/detailfull/soils/home/?cid=nrcs142p2_053587}
+#' @references USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
 #'
 #' @author D.E. Beaudette
 #'
