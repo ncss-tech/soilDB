@@ -1,315 +1,315 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/404.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/404.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/authors.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/authors.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/index.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/index.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/news/index.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/news/index.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/ISSR800.wcs.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/ISSR800.wcs.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/KSSL_VG_model.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/KSSL_VG_model.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/NASISChoiceList.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/NASISChoiceList.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/NASISDomainsAsFactor.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/NASISDomainsAsFactor.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/NASIS_table_column_keys.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/NASIS_table_column_keys.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/OSDquery.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/OSDquery.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/ROSETTA.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/ROSETTA.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/SCAN_SNOTEL_metadata.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/SCAN_SNOTEL_metadata.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/SDA_query.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/SDA_query.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/STRplot.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/STRplot.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/SoilWeb_spatial_query.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/SoilWeb_spatial_query.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/WCS_details.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/WCS_details.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/createSSURGO.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/createSSURGO.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/createStaticNASIS.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/createStaticNASIS.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/dbConnectNASIS.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/dbConnectNASIS.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/dbQueryNASIS.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/dbQueryNASIS.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/dot-get_SRI_gdb_names.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/dot-get_SRI_gdb_names.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/downloadSSURGO.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/downloadSSURGO.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/estimateColorMixture.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/estimateColorMixture.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/estimateSTR.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/estimateSTR.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchGDB.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchGDB.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchHenry.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchHenry.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchKSSL.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchKSSL.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchLDM.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchLDM.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchNASIS.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchNASIS.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchNASISLabData.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchNASISLabData.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchNASISWebReport.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchNASISWebReport.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchOSD.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchOSD.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchPedonPC.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchPedonPC.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchRaCA.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchRaCA.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchSCAN.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchSCAN.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchSDA.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchSDA.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchSRI.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchSRI.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchSoilGrids.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchSoilGrids.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/fetchVegdata.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/fetchVegdata.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/filter_geochem.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/filter_geochem.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/format_SQL_in_statement.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/format_SQL_in_statement.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/getHzErrorsNASIS.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/getHzErrorsNASIS.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_EDIT_ecoclass_by_geoUnit.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_EDIT_ecoclass_by_geoUnit.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_NASIS_metadata.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_NASIS_metadata.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_NASIS_table_key_by_name.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_NASIS_table_key_by_name.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_NASIS_table_name_by_purpose.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_NASIS_table_name_by_purpose.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_NOAA_GHCND.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_NOAA_GHCND.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_NOAA_stations_nearXY.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_NOAA_stations_nearXY.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_OSD.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_OSD.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_SDA_coecoclass.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_SDA_coecoclass.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_SDA_cosurfmorph.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_SDA_cosurfmorph.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_SDA_hydric.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_SDA_hydric.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_SDA_interpretation.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_SDA_interpretation.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_SDA_metrics.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_SDA_metrics.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_SDA_muaggatt.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_SDA_muaggatt.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_SDA_pmgroupname.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_SDA_pmgroupname.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_SDA_property.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_SDA_property.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_SDV_legend_elements.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_SDV_legend_elements.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_SRI.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_SRI.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_SRI_layers.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_SRI_layers.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_colors_from_NASIS_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_colors_from_NASIS_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_colors_from_pedon_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_colors_from_pedon_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_comonth_from_NASIS_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_comonth_from_NASIS_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_component_data_from_NASIS_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_component_data_from_NASIS_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_cosoilmoist_from_NASIS.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_cosoilmoist_from_NASIS.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_extended_data_from_NASIS_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_extended_data_from_NASIS_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_extended_data_from_pedon_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_extended_data_from_pedon_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_hz_data_from_NASIS_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_hz_data_from_NASIS_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_hz_data_from_pedon_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_hz_data_from_pedon_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_lablayer_data_from_NASIS_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_lablayer_data_from_NASIS_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_labpedon_data_from_NASIS_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_labpedon_data_from_NASIS_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_mapunit_from_NASIS.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_mapunit_from_NASIS.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_site_data_from_NASIS_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_site_data_from_NASIS_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_site_data_from_pedon_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_site_data_from_pedon_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_soilDB_env.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_soilDB_env.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_soilseries_from_NASIS.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_soilseries_from_NASIS.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_text_notes_from_NASIS_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_text_notes_from_NASIS_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_veg_data_from_NASIS_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_veg_data_from_NASIS_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_veg_from_AK_Site.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_veg_from_AK_Site.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_veg_from_MT_veg_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_veg_from_MT_veg_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_veg_from_NPS_PLOTS_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_veg_from_NPS_PLOTS_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_veg_other_from_MT_veg_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_veg_other_from_MT_veg_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/get_veg_species_from_MT_veg_db.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_veg_species_from_MT_veg_db.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/index.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/loafercreek.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/loafercreek.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/local_NASIS_defined.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/local_NASIS_defined.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/makeChunks.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/makeChunks.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/make_EDIT_service_URL.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/make_EDIT_service_URL.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/metadata.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/metadata.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/mukey.wcs.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/mukey.wcs.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/parseWebReport.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/parseWebReport.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/processSDA_WKT.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/processSDA_WKT.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/seriesExtent.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/seriesExtent.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/siblings.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/siblings.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/simplifyColorData.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/simplifyColorData.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/simplifyFragmentData.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/simplifyFragmentData.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/soilColor.wcs.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/soilColor.wcs.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/soilDB-package.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/soilDB-package.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/taxaExtent.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/taxaExtent.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/uncode.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/uncode.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/us_ss_timeline.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/us_ss_timeline.html</loc>
   </url>
   <url>
-    <loc>https://ncss-tech.github.io/soilDB/reference/waterDayYear.html</loc>
+    <loc>http://ncss-tech.github.io/soilDB/reference/waterDayYear.html</loc>
   </url>
 </urlset>
