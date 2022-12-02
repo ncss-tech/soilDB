@@ -1,9 +1,4 @@
-figures:
-  dev: grDevices::png
-  dpi: 96
-  dev.args: []
-  fig.ext: png
-  fig.width: 8
-  fig.height: ~
-  fig.retina: 2
-url: https://ncss-tech.github.io/soilDB/
+url: http://ncss-tech.github.io/soilDB/
+template:
+  bootstrap: 5
+
