@@ -35,7 +35,7 @@ preferred-citation:
   - family-names: Brown
     given-names: Andrew
     email: andrew.g.brown@usda.gov
-  notes: R package version 2.7.5
+  notes: R package version 2.7.6
   url: https://CRAN.R-project.org/package=soilDB
   year: '2022'
 repository: https://CRAN.R-project.org/package=soilDB
