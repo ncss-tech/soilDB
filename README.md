@@ -13,7 +13,7 @@ Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech
 
 ## Installation
 
-Get the stable version from CRAN:
+Get the stable version (2.7.5) from CRAN:
 
     install.packages('soilDB', dependencies = TRUE)
 
@@ -34,7 +34,7 @@ Get the development version from GitHub:
     ## To cite soilDB in publications use:
     ## 
     ##   Beaudette, D., Skovlin, J., Roecker, S., Brown, A. (2022). soilDB:
-    ##   Soil Database Interface. R package version 2.7.6.
+    ##   Soil Database Interface. R package version 2.7.5.
     ##   <https://CRAN.R-project.org/package=soilDB>
     ## 
     ## A BibTeX entry for LaTeX users is
@@ -42,7 +42,7 @@ Get the development version from GitHub:
     ##   @Manual{,
     ##     title = {soilDB: Soil Database Interface},
     ##     author = {Dylan Beaudette and Jay Skovlin and Stephen Roecker and Andrew Brown},
-    ##     note = {R package version 2.7.6},
+    ##     note = {R package version 2.7.5},
     ##     url = {https://CRAN.R-project.org/package=soilDB},
     ##     year = {2022},
     ##   }
