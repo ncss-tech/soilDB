@@ -17,29 +17,34 @@ dbQueryNASIS <- function(conn, q, close = TRUE, ...) {
   if (close) {
     # don't close connections we tagged as user-defined
     isUserDefined <- attr(conn, 'isUserDefined')
-    if(!is.null(isUserDefined) && isUserDefined) {
+    if (!is.null(isUserDefined) && isUserDefined) {
       close <- FALSE
     }
   }
   
+  ## close connection if needed
+  on.exit({
+    if (close) {
+      DBI::dbDisconnect(conn)
+    }
+  }, add = TRUE)
+  
   # vectorize queries (return a [possibly named] list)
-  if(length(q) > 1) {
+  if (length(q) > 1) {
+    
     # recursively call dbQueryNASIS(close=FALSE)
     res <- lapply(q, function(x) dbQueryNASIS(conn, x, close = FALSE))
     names(res) <- names(q)
     dd <- res
+    
   } else {
+    
     ## exec query
     d <- DBI::dbGetQuery(conn, q, ...)
-
     dd <- data.frame(d)
-
+    
   }
 
-  ## close connection if needed
-  if (close) {
-    DBI::dbDisconnect(conn)
-  }
   return(dd)
 }
 
