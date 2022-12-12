@@ -76,6 +76,12 @@ ORDER BY pedon_View_1.peiid ;"
          LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
          ORDER BY pedon_View_1.peiid ;"
 
+
+  q3 <- "SELECT site_View_1.siteiid, ovegclid, ovegclname, ovegcldesc, ovegcliid 
+        FROM site_View_1
+        INNER JOIN siteothvegclass_View_1 ON siteothvegclass_View_1.siteiidref = site_View_1.siteiid
+        INNER JOIN othvegclass ON siteothvegclass_View_1.ovegcliidref = othvegclass.ovegcliid"
+
   channel <- dbConnectNASIS(dsn)
 
   if (inherits(channel, 'try-error'))
@@ -85,6 +91,7 @@ ORDER BY pedon_View_1.peiid ;"
 	if (SS == FALSE) {
 	  q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
 	  q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
+	  q3 <- gsub(pattern = '_View_1', replacement = '', x = q3, fixed = TRUE)
 	}
 
 	# exec query
@@ -99,7 +106,7 @@ ORDER BY pedon_View_1.peiid ;"
 	d <- uncode(d, dsn = dsn)
 	
 	# surface fragments
-	sfr <- dbQueryNASIS(channel, q2)
+	sfr <- dbQueryNASIS(channel, q2, close = FALSE)
 	
 	multi.siteobs <- unique(sfr[, c("siteiid","siteobsiid")])
 	multisite <- table(multi.siteobs$siteiid) 
@@ -144,6 +151,18 @@ ORDER BY pedon_View_1.peiid ;"
 	  return(d2)
 	}
 
+	# join-in othervegclass string
+	sov <- try(dbQueryNASIS(channel, q3))
+	
+	if (!inherits(sov, 'try-error') && nrow(sov) > 0) {
+  	ov <- data.table::data.table(sov)[, .formatOtherVegString(.SD, id.name = "siteiid", name.sep = ' & '), 
+  	                                         by = "siteiid", .SDcols = colnames(sov)]
+  	ov$siteiid <- NULL
+  	if (nrow(ov) > 0) {
+  	  d2 <- merge(d2, ov, by = "siteiid", all.x = TRUE, sort = FALSE)
+  	}
+	}
+	
   # https://github.com/ncss-tech/soilDB/issues/41
 	# warn if mixed datums
 	if (length(na.omit(unique(d2$horizdatnm))) > 1)
