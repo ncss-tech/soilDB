@@ -234,7 +234,7 @@ simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", prefix = "frag
     idx <- unique(unlist(lapply(gt.100[class.idx], which)))
     flagged.ids <- rf.wide[[id.var]][idx]
 
-    warning(sprintf("%s >= 100%%\n%s:\n%s", msg, id.var, paste(flagged.ids, collapse = "\n")), call. = FALSE)
+    message(sprintf("NOTE: %s >= 100%% in %s: %s", msg, id.var, paste(flagged.ids, collapse = ",")))
   }
 
   # compute total fragments
