@@ -649,44 +649,43 @@
   return(data.frame(coiid=u.coiid, ecosite_id=str.ecoid, ecosite_name=str.econm, stringsAsFactors=FALSE))
 }
 
-
-
 # attempt to flatten multiple other veg class entries into 1 string
-.formatOtherVegString <- function(i.ov, name.sep='|') {
+.formatOtherVegString <- function(i.ov, name.sep='|', id.name = "coiid") {
   # get the current site
-  u.coiid <- unique(i.ov$coiid)
-
-  if(length(u.coiid) == 0)
-    return(data.frame(coiid=NA_integer_, othervegid=NA, othervegclass=NA, stringsAsFactors=FALSE)[0,])
+  u.iid <- unique(i.ov[[id.name]])
+  n.iid <- length(u.iid)
+  emptydf <- data.frame(coiid = u.iid, 
+                        othervegid = NA[seq_len(n.iid)], 
+                        othervegclass = NA[seq_len(n.iid)], 
+                        stringsAsFactors = FALSE)
+  colnames(emptydf)[1] <- id.name
+  
+  if (n.iid == 0) 
+    return(emptydf)
 
   # sanity check: this function can only be applied to data from a single component
-  if(length(u.coiid) > 1)
-    stop('data are from multiple component records')
+  if (n.iid > 1)
+    stop('data are from multiple parent records, this function can only be applied to data from a single component')
 
   # subset othervegcl data to remove any with NA for othervegclass
   i.ov <- i.ov[which(!is.na(i.ov$ovegclid)), ]
 
   # if there is no data, then return a DF formatted as if there were data
-  if(nrow(i.ov) == 0)
-    return(data.frame(coiid=u.coiid, othervegid=NA, othervegclass=NA, stringsAsFactors=FALSE))
-
-  # short-circuit: if any otherveg are NA, then we don't know the order
-  # string together as-is, in row-order
-  # if(any(is.na(i.ov$pmorder))) {
-  #   # optional information on which sites have issues
-  #   if(getOption('soilDB.verbose', default=FALSE))
-  #     warning(paste0('Using row-order. NA in pmorder:', u.coiid), call.=FALSE)
-  # }
-  # else{
-  #   # there are no NAs in pmorder --> sort according to pmorder
-  #   i.ov <- i.ov[order(i.ov$pmorder), ]
-  # }
-
+  if (nrow(i.ov) == 0)
+    return(emptydf)
+  
   # composite strings and return
-  str.ovegid <- paste(i.ov$ovegclid, collapse=name.sep)
-  str.ovegclnm <- paste(unique(i.ov$ovegclname), collapse=name.sep)
-
-  return(data.frame(coiid=u.coiid, othervegid=str.ovegid, othervegclass=str.ovegclnm, stringsAsFactors=FALSE))
+  str.ovegid <- paste(i.ov$ovegclid, collapse = name.sep)
+  str.ovegclnm <- paste(unique(i.ov$ovegclname), collapse = name.sep)
+  
+  res <- data.frame(
+      coiid = u.iid,
+      othervegid = str.ovegid,
+      othervegclass = str.ovegclnm,
+      stringsAsFactors = FALSE
+    )
+  colnames(res)[1] <- id.name
+  return(res)
 }
 
 

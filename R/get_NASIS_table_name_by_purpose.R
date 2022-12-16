@@ -40,7 +40,8 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "n
       "MetadataIndexDetail"
     ),
     lookup = c("ecologicalsite", "plant",
-               "geomorfeat", "geomorfeattype"),
+               "geomorfeat", "geomorfeattype",
+               "othvegclass"),
     site = c(
       "site",
       "siteaoverlap",
@@ -58,7 +59,8 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "n
       "siteassoc",
       "siteassocsite",
       "siteassocsoi",
-      "siteassoctext"
+      "siteassoctext",
+      "siteothvegclass"
     ),
     pedon = c(
       "pedon",
