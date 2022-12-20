@@ -149,7 +149,7 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
              WHEN pmgroupname LIKE '%shale-calcareous%' THEN 'Miscoded - should be pmorigin'
              WHEN pmgroupname LIKE '%siltstone%' THEN 'Miscoded - should be pmorigin'
              WHEN pmgroupname LIKE '%mixed%' THEN 'Miscellaneous Deposits'
-             WHEN pmgroupname LIKE '%NULL%' THEN 'NULL' ELSE 'NULL' END AS pmgroupname"
+             WHEN pmgroupname LIKE '%NULL%' THEN NULL ELSE NULL END AS pmgroupname"
 
         if (!simplify) {
                 case_pmgroupname <- "pmgroupname"
