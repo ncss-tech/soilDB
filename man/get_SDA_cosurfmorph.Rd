@@ -10,6 +10,7 @@ get_SDA_cosurfmorph(
   areasymbols = NULL,
   mukeys = NULL,
   WHERE = NULL,
+  miscellaneous_areas = FALSE,
   db = c("SSURGO", "STATSGO"),
   dsn = NULL,
   query_string = FALSE
@@ -25,6 +26,8 @@ get_SDA_cosurfmorph(
 \item{mukeys}{A vector of map unit keys (e.g. \code{466627})}
 
 \item{WHERE}{WHERE clause added to SQL query. For example: \code{areasymbol = 'CA067'}}
+
+\item{miscellaneous_areas}{Include miscellaneous areas  (non-soil components) in results? Default: \code{FALSE}.}
 
 \item{db}{Either \code{'SSURGO'} (default) or \code{'STATSGO'}. If \code{'SSURGO'} is specified \code{areasymbol = 'US'} records are excluded. If \code{'STATSGO'} only \code{areasymbol = 'US'} records are included.}
 

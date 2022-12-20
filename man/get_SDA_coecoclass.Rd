@@ -34,7 +34,7 @@ get_SDA_coecoclass(
 
 \item{not_rated_value}{Default: \code{"Not assigned"}}
 
-\item{miscellaneous_areas}{Include miscellaneous areas (non-soil components)?}
+\item{miscellaneous_areas}{logical. Include miscellaneous areas (non-soil components)?}
 
 \item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL} (default) use Soil Data Access API via \code{SDA_query()}.}
 }

@@ -11,6 +11,7 @@
 #' @param areasymbols A vector of soil survey area symbols (e.g. `'CA067'`)
 #' @param mukeys A vector of map unit keys (e.g. `466627`)
 #' @param WHERE WHERE clause added to SQL query. For example: `areasymbol = 'CA067'`
+#' @param miscellaneous_areas Include miscellaneous areas  (non-soil components) in results? Default: `FALSE`. 
 #' @param db Either `'SSURGO'` (default) or `'STATSGO'`. If `'SSURGO'` is specified `areasymbol = 'US'` records are excluded. If `'STATSGO'` only `areasymbol = 'US'` records are included.
 #' @param dsn Path to local SSURGO database SQLite database. Default `NULL` uses Soil Data Access.
 #' @param query_string Return query instead of sending to Soil Data Access / local database. Default: `FALSE`.
@@ -49,6 +50,7 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
                                 areasymbols = NULL,
                                 mukeys = NULL,
                                 WHERE = NULL,
+                                miscellaneous_areas = FALSE,
                                 db = c('SSURGO', 'STATSGO'),
                                 dsn = NULL,
                                 query_string = FALSE) {
@@ -97,7 +99,8 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
     sprintf("LEFT JOIN %s ON cogeomordesc.cogeomdkey = %s.cogeomdkey", x, x)
   }
 
-  .NULL_FILTER <- function(v) {
+  .NULL_FILTER <- function(v, miscellaneous_areas = FALSE) {
+    if (miscellaneous_areas) return("1=1")
     paste0(paste0(v, collapse = " IS NOT NULL OR "), " IS NOT NULL")
   }
 
@@ -107,7 +110,9 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
 
   # excludes custom calculated columns (e.g. surfaceshape concatenated from across/down)
   vars_default <- vars[!grepl("surfaceshape", vars)]
-
+  
+  misc_area_join_type <- ifelse(miscellaneous_areas, "LEFT", "INNER")
+  misc_area_filter <- ifelse(miscellaneous_areas, "LEFT", "INNER")
   q <- paste0("SELECT a.[BYVARNAME] AS [BYVARNAME],
                  ", .SELECT_STATEMENT0(vars), ",
                  total
@@ -117,20 +122,22 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
                  FROM legend
                    INNER JOIN mapunit ON mapunit.lkey = legend.lkey
                    INNER JOIN component ON mapunit.mukey = component.mukey
+                   ", ifelse(miscellaneous_areas, "", " AND NOT component.compkind = 'Miscellaneous area'"),"
                    LEFT JOIN cogeomordesc ON component.cokey = cogeomordesc.cokey
                    ", .JOIN_TABLE(table), "
                  WHERE legend.areasymbol ", statsgo_filter, " 'US'
-                   AND (", .NULL_FILTER(vars_default), ")
+                   AND (", .NULL_FILTER(vars_default, miscellaneous_areas), ")
                    AND ", WHERE, "
                  GROUP BY [BYVAR], ", paste0(vars_default, collapse = ", "), "
                ) AS a JOIN (SELECT [BYVAR] AS BYVAR, CAST(count([BYVAR]) AS numeric) AS total
                  FROM legend
                    INNER JOIN mapunit ON mapunit.lkey = legend.lkey
                    INNER JOIN component ON mapunit.mukey = component.mukey
+                   ", ifelse(miscellaneous_areas, "", " AND NOT component.compkind = 'Miscellaneous area'"),"
                    LEFT JOIN cogeomordesc ON component.cokey = cogeomordesc.cokey
                    ", .JOIN_TABLE(table), "
                  WHERE legend.areasymbol != 'US'
-                   AND (", .NULL_FILTER(vars_default), ")
+                   AND (", .NULL_FILTER(vars_default, miscellaneous_areas), ")
                    AND ", WHERE, "
                  GROUP BY [BYVAR]) AS b
                ON a.BYVAR = b.BYVAR

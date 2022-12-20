@@ -11,6 +11,7 @@
 #' @param WHERE character containing SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, `component`, or `copmgrp` tables, used in lieu of `mukeys` or `areasymbols`
 #' @param method One of: `"Dominant Component"`, `"Dominant Condition"`, `"None"`
 #' @param simplify logical; group into generalized parent material groups? Default `TRUE`
+#' @param miscellaneous_areas Include miscellaneous areas  (non-soil components) in results? Default: `FALSE`. 
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
@@ -21,6 +22,7 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
                                 WHERE = NULL,
                                 method = "DOMINANT COMPONENT",
                                 simplify = TRUE,
+                                miscellaneous_areas = FALSE,
                                 query_string = FALSE,
                                 dsn = NULL) {
 
@@ -147,7 +149,7 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
              WHEN pmgroupname LIKE '%shale-calcareous%' THEN 'Miscoded - should be pmorigin'
              WHEN pmgroupname LIKE '%siltstone%' THEN 'Miscoded - should be pmorigin'
              WHEN pmgroupname LIKE '%mixed%' THEN 'Miscellaneous Deposits'
-             WHEN pmgroupname LIKE '%NULL%' THEN 'NULL' ELSE 'NULL' END AS pmgroupname"
+             WHEN pmgroupname LIKE '%NULL%' THEN NULL ELSE NULL END AS pmgroupname"
 
         if (!simplify) {
                 case_pmgroupname <- "pmgroupname"
@@ -155,21 +157,28 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
 
 
         if (method %in% c("DOMINANT COMPONENT", "DOMINANT CONDITION")) {
-                comp_selection <- sprintf("AND component.cokey = (%s)", .LIMIT_N("SELECT c1.cokey FROM component AS c1
+                dcq <- sprintf("SELECT c1.cokey FROM component AS c1
+                 INNER JOIN mapunit AS mu1 ON c1.mukey = mu1.mukey AND c1.mukey = mapunit.mukey %s ORDER BY c1.comppct_r DESC, c1.cokey ",
+                      ifelse(miscellaneous_areas, "", " AND NOT c1.compkind = 'Miscellaneous area'"))
+                comp_selection <- sprintf("AND component.cokey = (%s)", .LIMIT_N(
+                  "SELECT c1.cokey FROM component AS c1
                  INNER JOIN mapunit AS mu1 ON c1.mukey = mu1.mukey AND c1.mukey = mapunit.mukey ORDER BY c1.comppct_r DESC, c1.cokey ", n = 1, sqlite = !is.null(dsn)))
         } else {
                 comp_selection <- ""
         }
 
         if (method == "DOMINANT CONDITION") {
-                pm_selection <- sprintf("AND pmgroupname = (%s)", .LIMIT_N("SELECT pmgroupname FROM mapunit AS mu
+                dcq <- sprintf("SELECT pmgroupname FROM mapunit AS mu
                 INNER JOIN component AS c1 ON c1.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
-                INNER JOIN copmgrp ON copmgrp.cokey = component.cokey
-                GROUP BY pmgroupname, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY pmgroupname) DESC", n = 1, sqlite = !is.null(dsn)))
+                INNER JOIN copmgrp ON copmgrp.cokey = component.cokey %s
+                GROUP BY pmgroupname, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY pmgroupname) DESC",
+                               ifelse(miscellaneous_areas, "", " AND NOT c1.compkind = 'Miscellaneous area'"))
+                pm_selection <- sprintf("AND pmgroupname = (%s)", .LIMIT_N(dcq, n = 1, sqlite = !is.null(dsn)))
         } else {
                 pm_selection <- ""
         }
 
+        misc_area_join_type <- ifelse(miscellaneous_areas, "LEFT", "INNER")
         q <- sprintf(
                 paste0("SELECT DISTINCT
                          legend.areasymbol AS areasymbol,
@@ -180,12 +189,12 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
                          "%s
                          FROM legend
                          INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
-                         INNER JOIN component ON component.mukey = mapunit.mukey %s
-                         INNER JOIN copmgrp ON copmgrp.cokey = component.cokey %s"),
+                         %s JOIN component ON component.mukey = mapunit.mukey %s %s
+                         %s JOIN copmgrp ON copmgrp.cokey = component.cokey %s"),
                 case_pmgroupname,
                 WHERE,
-                comp_selection,
-                pm_selection
+                misc_area_join_type, comp_selection, ifelse(miscellaneous_areas, "", " AND NOT component.compkind = 'Miscellaneous area'"),
+                misc_area_join_type, pm_selection
         )
 
    if (query_string) {

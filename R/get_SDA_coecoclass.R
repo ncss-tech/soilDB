@@ -12,7 +12,7 @@
 #' @param ecoclasstypename If `NULL` no constraint on `ecoclasstypename` is used in the query.
 #' @param ecoclassref Default: `"Ecological Site Description Database"`. If `NULL` no constraint on `ecoclassref` is used in the query.
 #' @param not_rated_value Default: `"Not assigned"`
-#' @param miscellaneous_areas Include miscellaneous areas (non-soil components)?
+#' @param miscellaneous_areas logical. Include miscellaneous areas (non-soil components)?
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @export 
 get_SDA_coecoclass <- function(method = "None",
