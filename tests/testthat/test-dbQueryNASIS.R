@@ -28,5 +28,5 @@ test_that("dbQueryNASIS works", {
   expect_equal(res, res2[["geomorfeattype"]])
   
   # connection is closed from close=TRUE from end of res2 call
-  expect_error(dbQueryNASIS(conn, "SELECT geomftname, geomftiid FROM geomorfeattype"))
+  expect_error(expect_warning(dbQueryNASIS(conn, "SELECT geomftname, geomftiid FROM geomorfeattype")))
 })
