@@ -23,7 +23,6 @@ test_that("fetchSoilGrids() works as expected", {
   expect_equal(length(res), 2)
   expect_equal(nrow(res),   2*6)
 
-  expect_equal(ncol(site(res)), 1)
   expect_equal(ncol(horizons(res)), 2*25)
 
   # data conversion works
