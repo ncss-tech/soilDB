@@ -43,6 +43,8 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
                                         nullFragsAreZero = TRUE,
                                         stringsAsFactors = NULL,
                                         dsn = NULL) {
+  .SD <- NULL
+  
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
