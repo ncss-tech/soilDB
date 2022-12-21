@@ -5,3 +5,4 @@ docs/reference/*.pdf
 .Rhistory
 README_files
 docs
+inst/doc

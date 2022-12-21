@@ -13,7 +13,21 @@ License: GPL (>= 3)
 LazyLoad: yes
 Depends: R (>= 3.5.0)
 Imports: grDevices, graphics, stats, utils, methods, aqp, data.table, DBI, curl
-Suggests: jsonlite, httr, xml2, rvest, sf, wk, terra, raster, odbc, RSQLite, testthat, scales
+Suggests: 
+    jsonlite,
+    httr,
+    xml2,
+    rvest,
+    sf,
+    wk,
+    terra,
+    raster,
+    odbc,
+    RSQLite,
+    testthat,
+    scales,
+    knitr,
+    rmarkdown
 Repository: CRAN
 URL: https://ncss-tech.github.io/soilDB/, https://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues
@@ -21,3 +35,4 @@ RoxygenNote: 7.2.3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 LazyData: false
+VignetteBuilder: knitr
