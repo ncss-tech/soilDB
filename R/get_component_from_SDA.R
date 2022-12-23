@@ -126,6 +126,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
     d.pm    <- SDA_query(q.pm)
     d.cogmd <- SDA_query(q.lf)
     d.cosrf <- .get_cosurffrags_from_SDA(unique(d.component$cokey), nullFragsAreZero = nullFragsAreZero)
+    d.cm    <- uncode(.get_comonth_from_SDA(d.component$cokey))
 
     # prep
     d.pm    <- .copm_prep(d.pm, db = "SDA")
@@ -135,6 +136,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
     d.component <- merge(d.component, d.pm,    by = "cokey", all.x = TRUE)
     d.component <- merge(d.component, d.cogmd, by = "cokey", all.x = TRUE)
     d.component <- merge(d.component, d.cosrf, by = "cokey", all.x = TRUE)
+    d.component <- merge(d.component, d.cm,    by = "cokey", all.x = TRUE)
 
     # r.rf.data.v2 nullFragsAreZero = TRUE
     idx <- grepl("surface_", names(d.component))
@@ -179,6 +181,119 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   return(d.component)
 }
 
+
+.get_comonth_from_SDA <- function(cokey) {
+  
+  q <- paste(
+  
+  .md(ColumnPhysicalName = "flodfreqcl", temp = TRUE, drop = FALSE),
+  .md(ColumnPhysicalName = "pondfreqcl", temp = TRUE, drop = FALSE),
+  .md(ColumnPhysicalName = "floddurcl",  temp = TRUE, drop = FALSE),
+  .md(ColumnPhysicalName = "ponddurcl",  temp = TRUE, drop = FALSE),
+  
+  "CREATE TABLE #CM1 (cokey INT, flodfreqcl CHAR(13), n_flodfreqcl INT, floddurcl CHAR(32), n_floddurcl INT, pondfreqcl CHAR(10), n_pondfreqcl INT, ponddurcl CHAR(29), n_ponddurcl INT, flodfreqcl_ChoiceSequence INT, floddurcl_ChoiceSequence INT, pondfreqcl_ChoiceSequence INT, ponddurcl_ChoiceSequence INT)
+  
+  INSERT INTO #CM1 (cokey, flodfreqcl, n_flodfreqcl, floddurcl, n_floddurcl, pondfreqcl, n_pondfreqcl, ponddurcl, n_ponddurcl, flodfreqcl_ChoiceSequence, floddurcl_ChoiceSequence, pondfreqcl_ChoiceSequence, ponddurcl_ChoiceSequence)
+  
+  SELECT
+  cokey, 
+  flodfreqcl, COUNT(flodfreqcl) n_flodfreqcl, floddurcl, COUNT(floddurcl) n_floddurcl,
+  pondfreqcl, COUNT(pondfreqcl) n_pondfreqcl, ponddurcl, COUNT(ponddurcl) n_ponddurcl,
+  flodfreqcl_ChoiceSequence, pondfreqcl_ChoiceSequence, floddurcl_ChoiceSequence, ponddurcl_ChoiceSequence
+  
+  FROM comonth cm 
+  
+  -- flodfreqcl_ChoiceSequence
+  LEFT JOIN (SELECT ChoiceLabel, ChoiceSequence flodfreqcl_ChoiceSequence FROM #MD_flodfreqcl) md_flod ON md_flod.ChoiceLabel = cm.flodfreqcl
+  
+  -- floddurcl_ChoiceSequence
+  LEFT JOIN (SELECT ChoiceLabel, ChoiceSequence floddurcl_ChoiceSequence FROM #MD_floddurcl) md_flod2 ON md_flod2.ChoiceLabel = cm.floddurcl
+  
+  -- pondfreqcl_ChoiceSequence
+  LEFT JOIN (SELECT ChoiceLabel, ChoiceSequence pondfreqcl_ChoiceSequence FROM #MD_pondfreqcl) md_pond ON md_pond.ChoiceLabel = cm.pondfreqcl
+  
+  -- ponddurcl_ChoiceSequence
+  LEFT JOIN (SELECT ChoiceLabel, ChoiceSequence ponddurcl_ChoiceSequence FROM #MD_ponddurcl) md_pond2 ON md_pond2.ChoiceLabel = cm.ponddurcl
+  
+  WHERE cokey IN ", format_SQL_in_statement(cokey),
+  
+  "GROUP BY cokey, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, flodfreqcl_ChoiceSequence, pondfreqcl_ChoiceSequence, floddurcl_ChoiceSequence, ponddurcl_ChoiceSequence
+  
+  ORDER BY cokey;
+  
+  
+  SELECT DISTINCT
+  cokey,
+  -- FIRST_VALUE(cokey)        OVER (PARTITION BY cokey ORDER BY cokey) cokey, 
+  FIRST_VALUE(flodfreqcl)   OVER (PARTITION BY cokey ORDER BY flodfreqcl_ChoiceSequence DESC) flodfreqcl,
+  FIRST_VALUE(n_flodfreqcl) OVER (PARTITION BY cokey ORDER BY flodfreqcl_ChoiceSequence DESC) n_flodfreqcl,
+  FIRST_VALUE(floddurcl)    OVER (PARTITION BY cokey ORDER BY floddurcl_ChoiceSequence DESC) floddurcl,
+  FIRST_VALUE(n_floddurcl)  OVER (PARTITION BY cokey ORDER BY floddurcl_ChoiceSequence DESC) n_floddurcl,
+  FIRST_VALUE(pondfreqcl)   OVER (PARTITION BY cokey ORDER BY pondfreqcl_ChoiceSequence DESC) pondfreqcl,
+  FIRST_VALUE(n_pondfreqcl) OVER (PARTITION BY cokey ORDER BY pondfreqcl_ChoiceSequence DESC) n_pondfreqcl,
+  FIRST_VALUE(ponddurcl)    OVER (PARTITION BY cokey ORDER BY ponddurcl_ChoiceSequence DESC) ponddurcl,
+  FIRST_VALUE(n_ponddurcl)  OVER (PARTITION BY cokey ORDER BY ponddurcl_ChoiceSequence DESC) n_ponddurcl
+  
+  FROM #CM1;
+  
+  
+  -- cleanup
+  DROP TABLE #CM1
+  DROP TABLE #MD_flodfreqcl;
+  DROP TABLE #MD_pondfreqcl;
+  DROP TABLE #MD_floddurcl;
+  DROP TABLE #MD_ponddurcl;
+  ")
+  
+  df <- SDA_query(q)
+  vars <- c("flodfreqcl", "floddurcl", "pondfreqcl", "ponddurcl")
+  df[vars] <- lapply(df[vars], function(x) gsub(" ", "", x))
+  
+  return(df)
+}
+
+
+.md <-  function(ColumnPhysicalName = NULL, temp = FALSE, drop = FALSE) {
+  
+  if (!is.null(ColumnPhysicalName)) {
+    nm <- paste0("#MD_", ColumnPhysicalName) 
+    } else nm <- "#MD"
+  
+  
+  q <- paste0(
+    
+  if (temp == TRUE) paste("CREATE TABLE", nm, "(DomainID INT, DomainName CHAR(37), DomainRanked INT, DisplayLabel INT, ChoiceSequence INT, ChoiceValue INT, ChoiceName CHAR(56), ChoiceLabel CHAR(154), ChoiceObsolete INT, ColumnPhysicalName CHAR(30), ColumnLogicalName CHAR(30)); "),
+  
+  if (temp == TRUE) paste("INSERT INTO", nm, "(DomainID, DomainName, DomainRanked, DisplayLabel, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ColumnPhysicalName, ColumnLogicalName) "),
+
+  "SELECT 
+  mdd.DomainID AS DomainID, DomainName, DomainRanked, DisplayLabel, 
+  ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, 
+  ColumnPhysicalName, ColumnLogicalName
+  
+  FROM MetadataDomainDetail mdd
+  INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
+  INNER JOIN (
+  SELECT DomainID, ColumnPhysicalName, ColumnLogicalName
+  FROM MetadataTableColumn 
+  GROUP BY DomainID, ColumnPhysicalName, ColumnLogicalName
+  ) mtc ON mtc.DomainID = mdd.DomainID
+  ",
+  
+  if (!is.null(ColumnPhysicalName)) {
+    paste0("WHERE ColumnPhysicalName = '", ColumnPhysicalName, "'") 
+  }, 
+  "ORDER BY mdd.DomainID, ColumnPhysicalName, ChoiceSequence;
+  ",
+  
+  if (drop == TRUE) {
+    paste0("SELECT * FROM ", nm, ";
+    -- cleanup
+    DROP TABLE ", nm, ";")
+    } else ""
+  )
+  return(q)
+}
 
 
 .get_cosurffrags_from_SDA <- function(cokey, nullFragsAreZero = nullFragsAreZero) {
