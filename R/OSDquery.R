@@ -70,30 +70,21 @@
 #'   plot(x$SPC)
 #' }
 #' 
-OSDquery <- function(everything = NULL,
-                     mlra = '',
-                     taxonomic_class = '',
-                     typical_pedon = '',
-                     brief_narrative = '',
-                     ric = '',
-                     use_and_veg = '',
-                     competing_series = '',
-                     geog_location = '',
-                     geog_assoc_soils = '') {
-  
+OSDquery <- function(everything = NULL, mlra='', taxonomic_class='', typical_pedon='', brief_narrative='', ric='', use_and_veg='', competing_series='', geog_location='', geog_assoc_soils='') {
+ 
   # check for required packages
-  if (!requireNamespace('httr', quietly = TRUE) | !requireNamespace('jsonlite', quietly = TRUE))
-    stop('please install the `httr` and `jsonlite` packages', call. = FALSE)
+  if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('jsonlite', quietly=TRUE))
+    stop('please install the `httr` and `jsonlite` packages', call.=FALSE)
 
   # sanity checks
   
   # mode selection
-  if (is.null(everything)) {
+  if(is.null(everything)) {
     
     ## searching by sections
     
     # build parameters list
-    parameters <- list(
+    parameters=list(
       json = 1,
       mlra = mlra,
       taxonomic_class = taxonomic_class, 
@@ -115,7 +106,7 @@ OSDquery <- function(everything = NULL,
     ## searching entire OSD text
     
     # build parameters list
-    parameters <- list(
+    parameters=list(
       json = 1,
       query = everything,
       mlra = mlra
@@ -126,12 +117,22 @@ OSDquery <- function(everything = NULL,
     u <- 'https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php'
   }
  
-  ur <- paste0(u, "?json=1&", paste0(names(parameters)[2:length(parameters)]), "=", 
-            paste0(parameters[2:length(parameters)], collapse = "&"))
+  # submit via POST
+  res <- httr::POST(u, body = parameters, encode='form')
   
-  d <- .soilDB_curl_get_JSON(ur)
-  
-  if (inherits(d, 'list') & length(d) < 1)
+  # TODO: figure out what an error state looks like
+  # trap errors, likely related to SQL syntax errors
+  request.status <- try(httr::stop_for_status(res), silent = TRUE)
+
+  # the result is JSON
+  # should simplify to data.frame nicely
+  r.content <- httr::content(res, as = 'text', encoding = 'UTF-8')
+  d <- jsonlite::fromJSON(r.content)
+
+  # results will either be: data.frame, empty list, or NULL
+
+  # ensure result is either data.frame or NULL
+  if(inherits(d, 'list') & length(d) < 1)
     return(NULL)
 
   return(d)
