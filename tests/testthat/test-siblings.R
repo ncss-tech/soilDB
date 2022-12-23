@@ -8,7 +8,10 @@ test_that("siblings() returns reasonable data", {
   skip_on_cran()
 
   x <- siblings('amador', component.data = TRUE)
-
+  
+  # if load balancer or server is down, skip tests
+  skip_if(is.null(x))
+  
   # standard request
   expect_true(inherits(x, 'list'))
   expect_equal(length(x), 2)
@@ -29,9 +32,8 @@ test_that("siblings() returns skeleton with bogus query", {
 
   # a skeleton list should be returned
   res <- siblings('XXX')
-  expect_true(inherits(res, 'list'))
-
-  # TODO: elements should be NULL vs. FALSE
+  
+  expect_null(res)
 
 })
 
@@ -42,8 +44,11 @@ test_that("siblings(..., cousins = TRUE)", {
   
   skip_on_cran()
   
-    x <- siblings('amador', only.major = TRUE, cousins = TRUE)
-  
+  x <- siblings('amador', only.major = TRUE, cousins = TRUE)
+    
+  # if load balancer or server is down, skip tests
+  skip_if(is.null(x))
+    
   expect_true(inherits(x, 'list'))
   expect_equal(length(x), 2)
   

@@ -128,6 +128,8 @@ siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FA
     }
   }
   
+  if (length(res) == 0) 
+    res <- NULL
   
   return(res)
 }

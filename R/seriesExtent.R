@@ -71,38 +71,23 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60,
   # base URL to cached data
   u <- URLencode(paste0('http://casoilresource.lawr.ucdavis.edu/series-extent-cache/json/', s, '.json'))
   
-  # init temp files
-  tf <- tempfile(fileext = '.json')
+  res <- .soilDB_curl_get_JSON(u, gzip = FALSE, FUN = sf::st_read, quiet = TRUE)
   
-  # safely download GeoJSON file
-  res <- tryCatch(
-    curl::curl_download(url = u, destfile = tf, quiet = TRUE, handle = ch),
-    error = function(e) {
-      warning(e)
-      return(e)
-      }
-  )
-
-  # trap errors
-  if (inherits(res, 'error')) {
+  # trapped errors return NULL
+  if (is.null(res)) {
     message('no data returned')
     return(NULL)
   }
-    
-  # load into sf object and clean-up
-  # can use terra::vect() also
-  x <- sf::st_read(tf, quiet = TRUE)
-  unlink(tf)
   
   # reset row names in attribute data to series name
-  rownames(x) <- as.character(x$series)
+  rownames(res) <- as.character(res$series)
   
   if (as_Spatial) {
-    x <- sf::as_Spatial(x)
+    res <- sf::as_Spatial(res)
   }
   
   # GCS WGS84
-  return(x)
+  return(res)
 }
 
 # 2022-08-15: converted from download.file() -> curl::curl_download() due to SSL errors
@@ -117,19 +102,12 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60,
   # init temp files
   tf <- tempfile(fileext = '.tif')
   
-  # safely download GeoTiff file
-  # Mac / Linux: file automatically downloaded via binary transfer
-  # Windows: must manually specify binary transfer
-  res <- tryCatch(
-    curl::curl_download(url = u, destfile = tf, quiet = TRUE, handle = ch),
-    error = function(e) {
-      warning(e)
-      return(e)
-    }
-  )
+  # download GeoTiff file
+  res <- try(curl::curl_download(url = u, destfile = tf, quiet = TRUE, handle = ch))
   
   # trap errors
-  if (inherits(res, 'error')) {
+  if (inherits(res, 'try-error')) {
+    message(res[1])
     message('no data returned')
     return(NULL)
   }

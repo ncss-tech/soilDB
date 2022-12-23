@@ -9,6 +9,9 @@ test_that("OSDquery() works", {
   # a message is printed and NULL returned when no results
   res <- suppressMessages(OSDquery(geog_assoc_soils = 'pardee'))
 
+  # if load balancer or server is down, skip tests
+  skip_if(is.null(res))
+  
   # standard request
   expect_true(inherits(res, 'data.frame'))
   
