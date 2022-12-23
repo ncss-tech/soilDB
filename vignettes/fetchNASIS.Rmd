@@ -228,13 +228,14 @@ res <- subset(x,
               TablePhysicalName %in% nasis_tables &
               ColumnPhysicalName %in% c(nasis_names, alias_pnames), 
                     select = c("TablePhysicalName", 
+                               "TableDescription",
                                "ColumnPhysicalName", 
                                "ColumnDescription"))
 res$fetchNASIS_Column <- res$ColumnPhysicalName
 ressub <- data.frame(TablePhysicalName = alias_tnames,
                      ColumnPhysicalName = alias_pnames,
                      fetchNASIS_Column = names(aliases))
-newalias <- merge(data.table::data.table(res[,1:2]), ressub, all.x = TRUE, sort = FALSE)$fetchNASIS_Column
+newalias <- merge(data.table::data.table(res[,1:3]), ressub, all.x = TRUE, sort = FALSE)$fetchNASIS_Column
 res$fetchNASIS_Column[!is.na(newalias)] <- na.omit(newalias)
   
 res$ColumnDescription <- gsub("\r\n\r\n", " ", res$ColumnDescription)
@@ -246,11 +247,13 @@ res2 <- split(res, res$TablePhysicalName)
 makeTable <- function(d) {
   cat(paste0("# ", "`", d$TablePhysicalName[1], "`"), "\n")
   cat("\n")
+  cat(d$TableDescription[1], "\n")
+  cat("\n")
   d$Alias <- ifelse(d$ColumnPhysicalName == d$fetchNASIS_Column, "No", "Yes")
-  colnames(d)[3] <- "Column Description"
-  colnames(d)[4] <- "`fetchNASIS()` Column"
+  colnames(d)[4] <- "Column Description"
+  colnames(d)[5] <- "`fetchNASIS()` Column"
   d$`Physical Name` <- paste0(d$TablePhysicalName, ".", d$ColumnPhysicalName)
-  cat(knitr::kable(d[c(4:6, 3)], row.names = FALSE), sep = "\n")
+  cat(knitr::kable(d[c(5:7, 4)], row.names = FALSE), sep = "\n")
   cat("\n")
   cat("\n")
 }
