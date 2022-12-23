@@ -402,7 +402,7 @@ get_NASIS_table_metadata <- function(table = NULL, column = NULL,
                       PhysicalDataType, LogicalDataType, DomainID, ColumnDescription, ColumnHelpText,
                       FieldSize, DecimalPrecision, DatetimePrecision, Minimum, Maximum, DefaultType,
                       DefaultValue, Alignment, DisplaySize, SortSequence, SortType, SortDirection,
-                      UnitsOfMeasureUnabbreviated, UnitsOfMeasureAbbreviated, NotNull,
+                      UnitsOfMeasureUnabbreviated, UnitsOfMeasureAbbreviated, [NotNull],
                       MetadataTableColumn.Visible AS MetadataTableColumn_Visible,
                       Protected, SetDefaultOnObjectChange, SetDefaultOnRowChange,
                       IncludeInReplicationSelectList, FileContentColumnID

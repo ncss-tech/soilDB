@@ -190,7 +190,7 @@ library(soilDB)
 
 # get fetchNASIS result and categorize columns by table source
 f <- fetchNASIS(dsn = soilDBdata_pedon_dsn)
-x <- get_NASIS_table_metadata()
+x <- get_NASIS_table_metadata(dsn = soilDBdata_pedon_dsn)
 y <- get_NASIS_table_name_by_purpose(c("area", "site", "pedon", "transect",
                                        "metadata", "lookup", "nasis"))
 ```
