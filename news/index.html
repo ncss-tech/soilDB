@@ -46,8 +46,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.7.7" id="soildb-277-2022-12-12">soilDB 2.7.7 (2022-12-12)<a class="anchor" aria-label="anchor" href="#soildb-277-2022-12-12"></a></h2>
-<ul><li>
-<code>dbQueryNASIS(..., close=TRUE)</code> now calls <code>dbDisconnect()</code> <code><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit()</a></code> (ensuring connections get closed on error)</li>
+<ul><li><p><code>dbQueryNASIS(..., close=TRUE)</code> now calls <code>dbDisconnect()</code> <code><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit()</a></code> (ensuring connections get closed on error)</p></li>
+<li><p>bug fixes in <code><a href="../reference/fetchSCAN.html">fetchSCAN()</a></code>: 2x requests when <code>timeseries</code> argument not specified, account for no results (e.g. year = 1800)</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.7.6" id="soildb-276-2022-11-28">soilDB 2.7.6 (2022-11-28)<a class="anchor" aria-label="anchor" href="#soildb-276-2022-11-28"></a></h2><p class="text-muted">CRAN release: 2022-12-02</p>
