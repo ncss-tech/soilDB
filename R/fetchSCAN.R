@@ -101,7 +101,11 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   # check for required packages
   if (!requireNamespace('httr', quietly = TRUE))
     stop('please install the `httr` package', call. = FALSE)
-
+  
+  # sanity check on granularity
+  # required to flatten possible arguments to single value
+  timeseries <- match.arg(timeseries)
+  
   ## allow for arbitary queries using `req` argument or additional arguments via ...
   l.extra <- list(...)
   # TODO do this after expansion to iterate over site.code*year + ???
