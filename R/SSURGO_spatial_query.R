@@ -1,9 +1,9 @@
 # currently only queries SoilWeb for mapunit-level data
 
 
-#' Get SSURGO Data via Spatial Query
+#' @title Get SSURGO Data via Spatial Query
 #' 
-#' Get SSURGO Data via Spatial Query to SoilWeb
+#' @description Get SSURGO Data via Spatial Query to SoilWeb
 #' 
 #' Data are currently available from SoilWeb. These data are a snapshot of the
 #' "official" data. The snapshot date is encoded in the "soilweb_last_update"
@@ -18,7 +18,7 @@
 #' @param source the data source, currently ignored
 #' @return The data returned from this function will depend on the query style.
 #' See examples below.
-#' @note SDA now supports spatial queries, consider using \code{\link{SDA_spatialQuery}} instead.
+#' @note SDA now supports spatial queries, consider using [SDA_spatialQuery()] instead.
 #' @author D.E. Beaudette
 #' @keywords manip
 #' @examplesIf curl::has_internet()
@@ -43,39 +43,42 @@ SoilWeb_spatial_query <- function(bbox=NULL, coords=NULL, what='mapunit', source
   options(stringsAsFactors=FALSE)
   
   # sanity-check: user must supply some kind of criteria
-  if(missing(coords) & missing(bbox))
+  if(missing(coords) & missing(bbox)) {
     stop('you must provide some filtering criteria')
-  
+  }
+    
   # can't provide both coords and bbox
-  if(! missing(coords) & ! missing(bbox))
+  if(! missing(coords) & ! missing(bbox)) {
     stop('query cannot include both bbox and point coordinates')
-  
-  # init empty filter
-  f <- vector()
-  
-  # init empty pieces
-  res <- NULL
+  }
   
   # process filter components
   if(!missing(coords)) {
-    f <- c(f, paste('&lon=', coords[1], '&lat=', coords[2], sep=''))
+    f <- paste('&lon=', coords[1], '&lat=', coords[2], sep='')
   }
   
   if(!missing(bbox)) {
     bbox <- paste(bbox, collapse=',')
-    f <- c(f, paste('&bbox=', bbox, sep=''))
+    f <- paste('&bbox=', bbox, sep='')
   }
   
   # build URL
   the.url <- paste('https://casoilresource.lawr.ucdavis.edu/soil_web/api/ssurgo.php?what=mapunit', f, sep='')
   
-  ## TODO: this isn't robust
-  # load data from JSON
-  suppressWarnings(try(res <- jsonlite::fromJSON(the.url), silent=TRUE))
+  # attempt to load data from URL/JSON
+  # note: this may fail when done over gov VPN
+  suppressWarnings(res <- try(jsonlite::fromJSON(the.url), silent=TRUE))
   
-  # report missing data
-  if(is.null(res)) {
-    stop('query returned no data', call.=FALSE)
+  # trap errors
+  if(inherits(res, 'try-error')) {
+    message(as.character(res))
+    return(NULL)
+  }
+  
+  # report no results
+  if(inherits(res, 'logical')) {
+    message('query returned no data')
+    return(NULL)
   }
   
   return(res)

@@ -2,6 +2,8 @@
 
  - `dbQueryNASIS(..., close=TRUE)` now calls `dbDisconnect()` `on.exit()` (ensuring connections get closed on error)
  
+ - bug fixes in `fetchSCAN()`: 2x requests when `timeseries` argument not specified, account for no results (e.g. year = 1800)
+ 
 # soilDB 2.7.6 (2022-11-28)
 
  - All references to `soilDB.env` have been replaced with a function that returns that environment object (`get_soilDB_env()`); thanks to @MollicMeyer for identifying this as a problem in #277. This object used to be exported but was unintentionally omitted from NAMESPACE; this has been fixed.
