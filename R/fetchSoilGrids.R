@@ -26,7 +26,7 @@
 #'  - \url{https://www.isric.org/sites/default/files/GlobalSoilMap_specifications_december_2015_2.pdf}
 #' 
 #' @references Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217-240, 2021. \doi{https://doi.org/10.5194/soil-7-217-2021}
-#'
+#' @importFrom utils packageVersion
 #' @param x A \code{data.frame} containing 3 columns referring to site ID, latitude and longitude.
 #' @param loc.names Optional: Column names referring to site ID, latitude and longitude. Default: \code{c("id","lat","lon")}
 #' @param verbose Print messages? Default: `FALSE`
@@ -161,9 +161,14 @@ fetchSoilGrids <- function(x,
   
   # move location information to site
   aqp::site(spc) <- ~ longitude + latitude
-  aqp::coordinates(spc) <- ~ longitude + latitude
-  aqp::proj4string(spc) <- "EPSG:4326"
- 
+  
+  if (utils::packageVersion("aqp") >= 2.0) {
+    aqp::initSpatial(spc, crs = "OGC:CRS84") <- ~ longitude + latitude
+  } else {
+    aqp::coordinates(spc) <- ~ longitude + latitude
+    aqp::proj4string(spc) <- "EPSG:4326"
+  }
+  
   # merge the rest of the sf object into the site table 
   if (spatial_input) {
     site(spc) <- cbind(id = 1:nrow(x), sf::st_drop_geometry(x))
