@@ -50,7 +50,7 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-	q <- "SELECT siteiid as siteiid, peiid, CAST(usiteid AS varchar(60)) as site_id, CAST(upedonid AS varchar(60)) as pedon_id, obsdate as obs_date,
+	q <- "SELECT siteiid, siteobsiid, peiid, CAST(usiteid AS varchar(60)) as site_id, CAST(upedonid AS varchar(60)) as pedon_id, obsdate as obs_date,
 utmzone, utmeasting, utmnorthing, horizdatnm, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, longstddecimaldegrees, latstddecimaldegrees,
 gpspositionalerror, descname as describer, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag,
 tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth,

@@ -101,7 +101,11 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   # check for required packages
   if (!requireNamespace('httr', quietly = TRUE))
     stop('please install the `httr` package', call. = FALSE)
-
+  
+  # sanity check on granularity
+  # required to flatten possible arguments to single value
+  timeseries <- match.arg(timeseries)
+  
   ## allow for arbitary queries using `req` argument or additional arguments via ...
   l.extra <- list(...)
   # TODO do this after expansion to iterate over site.code*year + ???
@@ -273,7 +277,10 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   # Time ranges from  "00:00" to "23:00" [24 hourly readings]
   # set Time to 12:00 (middle of day) for daily data
   if (is.null(res$Time) || all(is.na(res$Time) | res$Time == "")) {
-    res$Time <- "12:00"
+    # only when there are data
+    if(nrow(res) > 0) {
+      res$Time <- "12:00" 
+    }
   }
 
   # TODO: what is the correct timezone for each site's data? Is it local? Or corrected to some default?
@@ -391,7 +398,8 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   if (inherits(x, 'try-error')) {
     close.connection(tc)
 
-    message("Error [site ", req$sitenum, "]: ", attr(x, 'condition')[["message"]])
+    .msg <- sprintf("* site %s [%s]: %s", req$sitenum, req$y, attr(x, 'condition')[["message"]])
+    message(.msg)
 
     x <- as.data.frame(matrix(ncol = 12, nrow = 0))
     return(x)

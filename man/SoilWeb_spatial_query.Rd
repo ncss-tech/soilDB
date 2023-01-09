@@ -27,8 +27,7 @@ See examples below.
 }
 \description{
 Get SSURGO Data via Spatial Query to SoilWeb
-}
-\details{
+
 Data are currently available from SoilWeb. These data are a snapshot of the
 "official" data. The snapshot date is encoded in the "soilweb_last_update"
 column in the function return value. Planned updates to this function will
@@ -36,7 +35,7 @@ include a switch to determine the data source: "official" data via USDA-NRCS
 servers, or a "snapshot" via SoilWeb.
 }
 \note{
-SDA now supports spatial queries, consider using \code{\link{SDA_spatialQuery}} instead.
+SDA now supports spatial queries, consider using \code{\link[=SDA_spatialQuery]{SDA_spatialQuery()}} instead.
 }
 \examples{
 \dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

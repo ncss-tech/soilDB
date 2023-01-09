@@ -1,7 +1,7 @@
 [![CRAN Version
 (Stable)](http://www.r-pkg.org/badges/version-ago/soilDB)](https://cran.r-project.org/package=soilDB)
 [![CRAN
-status](https://cranchecks.info/badges/summary/soilDB)](https://cran.r-project.org/web/checks/check_results_soilDB.html)
+status](https://badges.cranchecks.info/worst/soilDB.svg)](https://cran.r-project.org/web/checks/check_results_soilDB.html)
 [![Development
 Version](https://ncss-tech.r-universe.dev/badges/soilDB)](https://ncss-tech.r-universe.dev/)
 [![R-CMD-check Build

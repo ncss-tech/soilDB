@@ -2,16 +2,18 @@
 ## note: this isn't real mixing, reflectance curves and / or Kubella-Monk modeling required for that
 ## all colors are mixed, should be applied to groups of related colors
 
+## TODO: consider using aqp::mixMunsell(mixingMethod = 'estimate') to replace this function
+
 
 #' @title Estimate color mixtures using weighted average of CIELAB color coordinates
 #'
-#' @note See \code{\link[aqp]{mixMunsell}} for a more realistic (but slower) simulation of subtractive mixing of pigments.
+#' @note See [aqp::mixMunsell()] for a more realistic (but slower) simulation of subtractive mixing of pigments.
 #' 
 #' @author D.E. Beaudette
 #'
 #' @param x data.frame, typically from NASIS containing at least CIE LAB ('L', 'A', 'B') and some kind of weight
 #' @param wt  fractional weights, usually area of hz face
-#' @param backTransform logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by aqp::rgb2Munsell default: \code{FALSE}
+#' @param backTransform logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by [aqp::rgb2munsell()] default: `FALSE`
 #'
 #' @return A data.frame containing estimated color mixture
 #' @export estimateColorMixture
