@@ -1,8 +1,10 @@
-# soilDB 2.7.7 (2022-12-12)
+# soilDB 2.7.7 (2023-01-09)
 
  - `dbQueryNASIS(..., close=TRUE)` now calls `dbDisconnect()` `on.exit()` (ensuring connections get closed on error)
  
  - bug fixes in `fetchSCAN()`: 2x requests when `timeseries` argument not specified, account for no results (e.g. year = 1800)
+ 
+ - `fetchNASIS(from="pedons")` and `get_site_data_from_NASIS_db()` now return `siteobsiid` column (@natearoe)
  
 # soilDB 2.7.6 (2022-11-28)
 
