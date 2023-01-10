@@ -8,26 +8,12 @@ Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut"), email = 
              person(given="Andrew", family="Brown", role = c("aut","cre"), email = "andrew.g.brown@usda.gov"))
 Author: Dylan Beaudette [aut], Jay Skovlin [aut], Stephen Roecker [aut], Andrew Brown [aut, cre]
 Maintainer: Andrew Brown <andrew.g.brown@usda.gov>
-Description: A collection of functions for reading data from USDA-NCSS soil databases.
+Description: A collection of functions for reading soil data from U.S. Department of Agriculture, Natural Resources Conservation Service (USDA-NRCS) and National Cooperative Soil Survey (NCSS) databases.
 License: GPL (>= 3)
 LazyLoad: yes
 Depends: R (>= 3.5.0)
 Imports: grDevices, graphics, stats, utils, methods, aqp, data.table, DBI, curl
-Suggests: 
-    jsonlite,
-    httr,
-    xml2,
-    rvest,
-    sf,
-    wk,
-    terra,
-    raster,
-    odbc,
-    RSQLite,
-    testthat,
-    scales,
-    knitr,
-    rmarkdown
+Suggests: jsonlite, xml2, httr, rvest, odbc, RSQLite, sf, wk, terra, raster, scales, knitr, rmarkdown, testthat
 Repository: CRAN
 URL: https://ncss-tech.github.io/soilDB/, https://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues
