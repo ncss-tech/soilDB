@@ -8,7 +8,7 @@ Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut"), email = 
              person(given="Andrew", family="Brown", role = c("aut","cre"), email = "andrew.g.brown@usda.gov"))
 Author: Dylan Beaudette [aut], Jay Skovlin [aut], Stephen Roecker [aut], Andrew Brown [aut, cre]
 Maintainer: Andrew Brown <andrew.g.brown@usda.gov>
-Description: A collection of functions for reading soil data from U.S. Department of Agriculture, Natural Resources Conservation Service (USDA-NRCS) and National Cooperative Soil Survey (NCSS) databases.
+Description: A collection of functions for reading soil data from U.S. Department of Agriculture Natural Resources Conservation Service (USDA-NRCS) and National Cooperative Soil Survey (NCSS) databases.
 License: GPL (>= 3)
 LazyLoad: yes
 Depends: R (>= 3.5.0)

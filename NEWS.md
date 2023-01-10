@@ -5,6 +5,10 @@
  - bug fixes in `fetchSCAN()`: 2x requests when `timeseries` argument not specified, account for no results (e.g. year = 1800)
  
  - `fetchNASIS(from="pedons")` and `get_site_data_from_NASIS_db()` now return `siteobsiid` column (@natearoe)
+
+ - Add `get_NASIS_table_metadata()` for returning information about columns in NASIS tables.
+ 
+   - This function complements the existing `get_NASIS_column_metadata()` which focuses on the values within columns such as domain choice names, labels, and order. Both functions now take an `include_descriptions` argument to optionally include the narrative description of the column or column choice list item.
  
 # soilDB 2.7.6 (2022-11-28)
 
