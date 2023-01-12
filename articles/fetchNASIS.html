@@ -96,7 +96,2074 @@ these are derived from data in NASIS and queries of child tables of
 site/pedon/horizon, but do not have an analog or corresponding metadata
 description in NASIS. These column entries have custom descriptions and
 mention the soilDB functions responsible for generating them.</p>
-  </main>
+<div class="section level2">
+<h2 id="ecologicalsite">
+<code>ecologicalsite</code><a class="anchor" aria-label="anchor" href="#ecologicalsite"></a>
+</h2>
+<p>The Ecological Site table records the official list of range and
+forest ecological sites maintained by NRCS and described in the
+Ecosystem Dynamics Interpretive Tool (EDIT). This table records only the
+identifier and name of an ecological site. The complete ecological site
+characterization resides in the EDIT database. The official list of
+ecological sites is maintained in EDIT.</p>
+<table class="table">
+<colgroup>
+<col width="6%">
+<col width="1%">
+<col width="7%">
+<col width="84%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">ecositenm</td>
+<td align="left">No</td>
+<td align="left">ecologicalsite.ecositenm</td>
+<td align="left">The name of an ecological site expressed as the
+concatenation of a number of underlying individual name components. Due
+to the size and number of name components, the concatenated name field
+may not be wide enough to contain the full ecological site name. The
+Ecological Site Name from ESIS.</td>
+</tr>
+<tr class="even">
+<td align="left">ecositeid</td>
+<td align="left">No</td>
+<td align="left">ecologicalsite.ecositeid</td>
+<td align="left">The legacy 11 character long unique identifier for a
+particular ecological site. It is the concatenated form of the five
+ecological site ID key fields, ecological site type, ecological site
+MLRA, ecological site LRU, ecological site number and ecological site
+state FIPS alpha code.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="pedon">
+<code>pedon</code><a class="anchor" aria-label="anchor" href="#pedon"></a>
+</h2>
+<p>The Pedon table contains information collected at the time a soil
+profile description is made. It has data that relates to the profile as
+a whole.</p>
+<table class="table">
+<colgroup>
+<col width="8%">
+<col width="2%">
+<col width="8%">
+<col width="81%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">peiid</td>
+<td align="left">No</td>
+<td align="left">pedon.peiid</td>
+<td align="left">An internal ID (integer) that is part (or all) of a key
+that uniquely identifies a record. Also known as part (or all) of the
+“primary key”. This value is managed by NASIS and cannot be edited.</td>
+</tr>
+<tr class="even">
+<td align="left">describer</td>
+<td align="left">Yes</td>
+<td align="left">pedon.descname</td>
+<td align="left">Name of person(s) that described the soil.</td>
+</tr>
+<tr class="odd">
+<td align="left">taxonkind</td>
+<td align="left">No</td>
+<td align="left">pedon.taxonkind</td>
+<td align="left">Identifies the kind of taxonomic unit described.
+Examples are series and miscellaneous areas.</td>
+</tr>
+<tr class="even">
+<td align="left">pedontype</td>
+<td align="left">No</td>
+<td align="left">pedon.pedontype</td>
+<td align="left">Identification of what the description represents in
+relation to a series, component, etc.</td>
+</tr>
+<tr class="odd">
+<td align="left">pedonpurpose</td>
+<td align="left">No</td>
+<td align="left">pedon.pedonpurpose</td>
+<td align="left">The identification of the intended purpose of the
+profile description.</td>
+</tr>
+<tr class="even">
+<td align="left">erocl</td>
+<td align="left">No</td>
+<td align="left">pedon.erocl</td>
+<td align="left">Class of accelerated erosion. (SSM)</td>
+</tr>
+<tr class="odd">
+<td align="left">pedlabsampnum</td>
+<td align="left">No</td>
+<td align="left">pedon.pedlabsampnum</td>
+<td align="left">An identifier for the pedon sample that is assigned by
+the Kellogg Soil Survey Laboratory. This identifier is used to link the
+morphological pedon description with the associated measured property
+values from the laboratory.</td>
+</tr>
+<tr class="even">
+<td align="left">pedon_id</td>
+<td align="left">Yes</td>
+<td align="left">pedon.upedonid</td>
+<td align="left">A short label to help a user identify a particular
+pedon.</td>
+</tr>
+<tr class="odd">
+<td align="left">tsectstopnum</td>
+<td align="left">No</td>
+<td align="left">pedon.tsectstopnum</td>
+<td align="left">The stop number along the specified transect.</td>
+</tr>
+<tr class="even">
+<td align="left">tsectinterval</td>
+<td align="left">No</td>
+<td align="left">pedon.tsectinterval</td>
+<td align="left">The distance between the previous point and the current
+point in a transect.</td>
+</tr>
+<tr class="odd">
+<td align="left">labdatadescflag</td>
+<td align="left">No</td>
+<td align="left">pedon.labdatadescflag</td>
+<td align="left">An indicator of whether or not this pedon record is the
+one certified for distribution with analytical lab results from the Soil
+Survey Laboratory and other National Cooperative Soil Survey
+Laboratories.</td>
+</tr>
+<tr class="even">
+<td align="left">taxonname</td>
+<td align="left">No</td>
+<td align="left">pedon.taxonname</td>
+<td align="left">The name of the taxonomic unit.</td>
+</tr>
+<tr class="odd">
+<td align="left">taxclname</td>
+<td align="left">No</td>
+<td align="left">pedon.taxclname</td>
+<td align="left">A concatenation of the Soil Taxonomy subgroup and
+family for a soil (long name).</td>
+</tr>
+<tr class="even">
+<td align="left">localphase</td>
+<td align="left">No</td>
+<td align="left">pedon.localphase</td>
+<td align="left">Phase criterion to be used to help uniquely identify
+soil components or pedons. These are terms such as “drained”, “eroded”,
+etc.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="petaxhistmoistcl">
+<code>petaxhistmoistcl</code><a class="anchor" aria-label="anchor" href="#petaxhistmoistcl"></a>
+</h2>
+<p>The Pedon Taxonomic History Moisture Class table provides clear
+identification of the intended taxonomic moisture class, even though
+moisture class is implied at a higher taxonomic level. The class or
+classes listed in this table describe the representative situation for
+the pedon.</p>
+<table class="table">
+<colgroup>
+<col width="8%">
+<col width="2%">
+<col width="11%">
+<col width="77%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">taxmoistcl</td>
+<td align="left">No</td>
+<td align="left">petaxhistmoistcl.taxmoistcl</td>
+<td align="left">Soil moisture classes are unique to the family
+classification, though not included specifically in the name, this is a
+mechanism to provide clear identification of the actual moisture
+regime.</td>
+</tr></tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="petaxhistory">
+<code>petaxhistory</code><a class="anchor" aria-label="anchor" href="#petaxhistory"></a>
+</h2>
+<p>This table records the taxonomic classification history of a pedon
+record from the time it is first described and classified in the field
+and throughout the life of the data record.</p>
+<table class="table">
+<colgroup>
+<col width="6%">
+<col width="1%">
+<col width="9%">
+<col width="82%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">soiltaxedition</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.soiltaxedition</td>
+<td align="left">The edition of Keys to Soil Taxonomy used to classify
+the soil.</td>
+</tr>
+<tr class="even">
+<td align="left">taxclname</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.taxclname</td>
+<td align="left">A concatenation of the Soil Taxonomy subgroup and
+family for a soil (long name).</td>
+</tr>
+<tr class="odd">
+<td align="left">taxreaction</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.taxreaction</td>
+<td align="left">Indicates the presence or absence of carbonates and the
+reaction. They are treated together because of their intimate
+relationship, and are used to indicate family differentiae. (Soil
+Taxonomy)</td>
+</tr>
+<tr class="even">
+<td align="left">taxorder</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.taxorder</td>
+<td align="left">The highest level in Soil Taxonomy.</td>
+</tr>
+<tr class="odd">
+<td align="left">taxsubgrp</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.taxsubgrp</td>
+<td align="left">The fourth level of Soil Taxonomy. The subgroup is
+below great group and above family.</td>
+</tr>
+<tr class="even">
+<td align="left">taxtempregime</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.taxtempregime</td>
+<td align="left">Soil temperature regime as defined in Soil
+Taxonomy.</td>
+</tr>
+<tr class="odd">
+<td align="left">classdate</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.classdate</td>
+<td align="left">The date this particular classification and/or taxon
+name was assigned.</td>
+</tr>
+<tr class="even">
+<td align="left">seriesstatus</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.seriesstatus</td>
+<td align="left">The status assigned to the named series in the Soil
+Classification database.</td>
+</tr>
+<tr class="odd">
+<td align="left">classtype</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.classtype</td>
+<td align="left">The location or type of classification and/or taxon
+name applied.</td>
+</tr>
+<tr class="even">
+<td align="left">taxonkind</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.taxonkind</td>
+<td align="left">Identifies the kind of taxonomic unit described.
+Examples are series and miscellaneous areas.</td>
+</tr>
+<tr class="odd">
+<td align="left">classifier</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.classifier</td>
+<td align="left">The name of the person who assigned this particular
+classification.</td>
+</tr>
+<tr class="even">
+<td align="left">taxonname</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.taxonname</td>
+<td align="left">The name of the taxonomic unit.</td>
+</tr>
+<tr class="odd">
+<td align="left">taxpartsize</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.taxpartsize</td>
+<td align="left">Particle-size classes are used as family differentiae.
+Particle-size refers to grain-size distribution of the whole soil and is
+not the same as texture. (Soil Taxonomy).</td>
+</tr>
+<tr class="even">
+<td align="left">taxgrtgroup</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.taxgrtgroup</td>
+<td align="left">The third level of Soil Taxonomy. The category is below
+the suborder and above the subgroup.</td>
+</tr>
+<tr class="odd">
+<td align="left">taxsuborder</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.taxsuborder</td>
+<td align="left">The second level of Soil Taxonomy. The suborder is
+below the order and above the great group.</td>
+</tr>
+<tr class="even">
+<td align="left">osdtypelocflag</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.osdtypelocflag</td>
+<td align="left">An indicator of whether or not this pedon record is/was
+used as the typical pedon for the named series.</td>
+</tr>
+<tr class="odd">
+<td align="left">pscbotdepth</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.pscbotdepth</td>
+<td align="left">Depth to the bottom of the taxonomic particle size
+control section. (Soil Taxonomy)</td>
+</tr>
+<tr class="even">
+<td align="left">psctopdepth</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.psctopdepth</td>
+<td align="left">Depth to the top of the taxonomic particle size control
+section. (Soil Taxonomy)</td>
+</tr>
+<tr class="odd">
+<td align="left">taxfamhahatmatcl</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.taxfamhahatmatcl</td>
+<td align="left">Human-altered and human-transported material classes
+are used as family differentiae. They are intended to provide useful
+information on the behavior and interpretations for use of soils formed
+in human-altered or human-transported material (Keys to Soil
+Taxonomy).</td>
+</tr>
+<tr class="even">
+<td align="left">localphase</td>
+<td align="left">No</td>
+<td align="left">petaxhistory.localphase</td>
+<td align="left">Phase criterion to be used to help uniquely identify
+soil components or pedons. These are terms such as “drained”, “eroded”,
+etc.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="petxhistfmother">
+<code>petxhistfmother</code><a class="anchor" aria-label="anchor" href="#petxhistfmother"></a>
+</h2>
+<p>The Pedon Taxonomic History Family Other Criteria table lists the
+other taxonomic characteristics, such as classes of coatings or
+permanent cracks, that apply to the pedon. The characteristics listed in
+this table, as a group, describe the representative situation for this
+pedon.</p>
+<table class="table">
+<colgroup>
+<col width="8%">
+<col width="2%">
+<col width="10%">
+<col width="78%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">taxfamother</td>
+<td align="left">No</td>
+<td align="left">petxhistfmother.taxfamother</td>
+<td align="left">Soil characteristics other than the defined family
+characteristics of particle-size classes, mineralogy classes,
+cation-exchange activity classes, calcareous and reaction classes, and
+soil temperature classes.</td>
+</tr></tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="phorizon">
+<code>phorizon</code><a class="anchor" aria-label="anchor" href="#phorizon"></a>
+</h2>
+<p>The Pedon Horizon table lists the horizons for each pedon. If the
+horizon thickness is greater than zero (low=5, RV=8, high=12), the
+horizon exists throughout the exposure of the profile. If the horizon
+thickness includes zero (low=0, RV=1, high=3), the horizon may exist in
+some places, but may not exist in other places.</p>
+<p>Horizons that have two distinct parts, such as E/B or E&amp;Bt, are
+recorded twice. Once for the characteristics of the first part; and
+again on another row, using the same depths and thicknesses, for the
+characteristics of the other part.</p>
+<table class="table">
+<colgroup>
+<col width="5%">
+<col width="1%">
+<col width="5%">
+<col width="87%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">phiid</td>
+<td align="left">No</td>
+<td align="left">phorizon.phiid</td>
+<td align="left">An internal ID (integer) that is part (or all) of a key
+that uniquely identifies a record. Also known as part (or all) of the
+“primary key”. This value is managed by NASIS and cannot be edited.</td>
+</tr>
+<tr class="even">
+<td align="left">hzname</td>
+<td align="left">No</td>
+<td align="left">phorizon.hzname</td>
+<td align="left">The concatenation of three kinds of symbols (four data
+elements) used in various combinations to designate layers within the
+soil. (SSM)</td>
+</tr>
+<tr class="odd">
+<td align="left">hzdept</td>
+<td align="left">No</td>
+<td align="left">phorizon.hzdept</td>
+<td align="left">The distance from the top of the soil to the upper
+boundary of the soil horizon.</td>
+</tr>
+<tr class="even">
+<td align="left">hzdepb</td>
+<td align="left">No</td>
+<td align="left">phorizon.hzdepb</td>
+<td align="left">The distance from the top of the soil to the base of
+the soil horizon.</td>
+</tr>
+<tr class="odd">
+<td align="left">texture</td>
+<td align="left">No</td>
+<td align="left">phorizon.texture</td>
+<td align="left">Name for the concatenation of TEXTURE_MODIFIER and
+TEXTURE_CLASS.</td>
+</tr>
+<tr class="even">
+<td align="left">clay</td>
+<td align="left">Yes</td>
+<td align="left">phorizon.claytotest</td>
+<td align="left">Mineral particles less than 0.002mm in equivalent
+diameter as a weight percentage of the less than 2.0mm fraction,
+estimated at the time of sampling or description.</td>
+</tr>
+<tr class="odd">
+<td align="left">silt</td>
+<td align="left">Yes</td>
+<td align="left">phorizon.silttotest</td>
+<td align="left">Mineral particles 0.002 to 0.05mm in equivalent
+diameter as a weight percentage of the less than 2.0mm fraction,
+estimated at the time of sampling or description.</td>
+</tr>
+<tr class="even">
+<td align="left">sand</td>
+<td align="left">Yes</td>
+<td align="left">phorizon.sandtotest</td>
+<td align="left">Mineral particles 0.05mm to 2.0mm in equivalent
+diameter as a weight percentage of the less than 2 mm fraction,
+estimated at the time of sampling or description.</td>
+</tr>
+<tr class="odd">
+<td align="left">rupresblkmst</td>
+<td align="left">No</td>
+<td align="left">phorizon.rupresblkmst</td>
+<td align="left">The rupture resistance of a block-shaped specimen of 25
+to 30 mm size and moist water state. (SSM)</td>
+</tr>
+<tr class="even">
+<td align="left">rupresblkdry</td>
+<td align="left">No</td>
+<td align="left">phorizon.rupresblkdry</td>
+<td align="left">The rupture resistance of a block-shaped specimen of 25
+to 30 mm size and dry water state. (SSM)</td>
+</tr>
+<tr class="odd">
+<td align="left">rupresblkcem</td>
+<td align="left">No</td>
+<td align="left">phorizon.rupresblkcem</td>
+<td align="left">The rupture resistance of a block-like specimen of 25
+to 30 mm size that has been air dried and then submerged in water.
+(SSM)</td>
+</tr>
+<tr class="even">
+<td align="left">plasticity</td>
+<td align="left">No</td>
+<td align="left">phorizon.plasticity</td>
+<td align="left">The degree to which a puddled, wet soil mass is
+permanently deformed without rupturing by a slow continuous application
+of force in any direction. (SSM)</td>
+</tr>
+<tr class="odd">
+<td align="left">stickiness</td>
+<td align="left">No</td>
+<td align="left">phorizon.stickiness</td>
+<td align="left">The maximum capacity of thoroughly puddled soil to
+adhere to other objects.</td>
+</tr>
+<tr class="even">
+<td align="left">effclass</td>
+<td align="left">No</td>
+<td align="left">phorizon.effclass</td>
+<td align="left">General terms used to describe the degree of
+effervescence of soil material when tested for carbonates in the
+field.</td>
+</tr>
+<tr class="odd">
+<td align="left">bounddistinct</td>
+<td align="left">No</td>
+<td align="left">phorizon.bounddistinct</td>
+<td align="left">Thickness of the interface between adjacent soil
+horizons. (SSM)</td>
+</tr>
+<tr class="even">
+<td align="left">boundtopo</td>
+<td align="left">No</td>
+<td align="left">phorizon.boundtopo</td>
+<td align="left">Horizontal shape of the interface between adjacent soil
+horizons. (SSM)</td>
+</tr>
+<tr class="odd">
+<td align="left">phfield</td>
+<td align="left">No</td>
+<td align="left">phorizon.phfield</td>
+<td align="left">The negative common logarithm, of the hydrogen ion
+activity in the soil at field moisture conditions using field test
+methods. A numerical expression of the relative acidity or alkalinity of
+a soil sample. (SSM) This is also the initial pH that should be used
+when performing SSIR51V1-7.1.3 the Hydrogen Peroxide Test, Delta pH for
+Acid Sulfate Soils.</td>
+</tr>
+<tr class="even">
+<td align="left">ksatpedon</td>
+<td align="left">No</td>
+<td align="left">phorizon.ksatpedon</td>
+<td align="left">The calculated average of field measured saturated
+hydraulic conductivity. Describes the ability of soil (porous media) to
+transmit water when the soil is saturated.</td>
+</tr>
+<tr class="odd">
+<td align="left">genhz</td>
+<td align="left">Yes</td>
+<td align="left">phorizon.dspcomplayerid</td>
+<td align="left">An arbitrary alpha and/or numeric label assigned to
+this horizon to indicate which horizons should be combined for analysis
+and data aggregation purposes.</td>
+</tr>
+<tr class="even">
+<td align="left">fragvoltot</td>
+<td align="left">No</td>
+<td align="left">phorizon.fragvoltot</td>
+<td align="left">The total volume percentage of the horizon occupied by
+the 2 mm or larger fraction (20 mm or larger for wood fragments), on a
+whole soil base.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="phsample">
+<code>phsample</code><a class="anchor" aria-label="anchor" href="#phsample"></a>
+</h2>
+<p>The Pedon Horizon Sample table describes the relationship between a
+soil horizon description and other types of data that may be in the
+database that relate to that specific horizon, i.e. laboratory analysis
+results.</p>
+<table class="table">
+<colgroup>
+<col width="8%">
+<col width="2%">
+<col width="8%">
+<col width="80%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">labsampnum</td>
+<td align="left">No</td>
+<td align="left">phsample.labsampnum</td>
+<td align="left">A unique identifier number for the pedon assigned by
+the laboratory. This number is used to link the morphological pedon
+description with the associated measured property values from the
+laboratory.</td>
+</tr></tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="phtexture">
+<code>phtexture</code><a class="anchor" aria-label="anchor" href="#phtexture"></a>
+</h2>
+<p>The Horizon Texture table lists the texture, or terms in lieu of
+texture, for the texture modifier and class shown above in the Pedon
+Horizon table. Only the unmodified texture term is listed in the Pedon
+Horizon Texture table; modifiers are listed in the Pedon Horizon Texture
+Modifier table. For example, a gravelly loamy sand is shown as “GR-LS”
+in the Pedon Horizon table, “ls” in this table, and “gr” in the Pedon
+Horizon Texture Modifier table.</p>
+<table class="table">
+<colgroup>
+<col width="9%">
+<col width="2%">
+<col width="7%">
+<col width="80%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">texcl</td>
+<td align="left">No</td>
+<td align="left">phtexture.texcl</td>
+<td align="left">An expression, based on the USDA system of particle
+sizes, for the relative portions of the various size groups of
+individual mineral grains less than 2mm equivalent diameter in a mass of
+soil.</td>
+</tr>
+<tr class="even">
+<td align="left">lieutex</td>
+<td align="left">No</td>
+<td align="left">phtexture.lieutex</td>
+<td align="left">Substitute terms applied to materials that do not fit
+into a textural class because of organic matter content, size, rupture
+resistance, solubility, or another reason.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="site">
+<code>site</code><a class="anchor" aria-label="anchor" href="#site"></a>
+</h2>
+<p>The Site table describes the locational information and
+characteristics of a particular geographic location. A site may be a
+specific location such as a point where a soil profile description is
+taken, or it may have some spatial area that is chosen to be treated as
+a single point. Various kinds of data such as soil profile descriptions,
+lab data, vegetative data, etc. may be linked to a site in this
+database.</p>
+<table class="table">
+<colgroup>
+<col width="6%">
+<col width="1%">
+<col width="7%">
+<col width="84%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">geomposhill</td>
+<td align="left">No</td>
+<td align="left">site.geomposhill</td>
+<td align="left">A mappable part of the earth’s surface (three
+dimensional) that represents an episode of landscape development of
+hills.</td>
+</tr>
+<tr class="even">
+<td align="left">geomposmntn</td>
+<td align="left">No</td>
+<td align="left">site.geomposmntn</td>
+<td align="left">A mappable part of the earth’s surface (three
+dimensional) that represents an episode of landscape development of
+mountains.</td>
+</tr>
+<tr class="odd">
+<td align="left">geompostrce</td>
+<td align="left">No</td>
+<td align="left">site.geompostrce</td>
+<td align="left">A mappable part of the earth’s surface (three
+dimensional) that represents an episode of landscape development of
+terraces.</td>
+</tr>
+<tr class="even">
+<td align="left">geomposflats</td>
+<td align="left">No</td>
+<td align="left">site.geomposflats</td>
+<td align="left">Description of the geomorphic component for flats.</td>
+</tr>
+<tr class="odd">
+<td align="left">elev_field</td>
+<td align="left">Yes</td>
+<td align="left">site.elev</td>
+<td align="left">The vertical distance from mean sea level to a point on
+the earth’s surface.</td>
+</tr>
+<tr class="even">
+<td align="left">slope_field</td>
+<td align="left">Yes</td>
+<td align="left">site.slope</td>
+<td align="left">The difference in elevation between two points,
+expressed as a percentage of the distance between those points.
+(SSM)</td>
+</tr>
+<tr class="odd">
+<td align="left">aspect_field</td>
+<td align="left">Yes</td>
+<td align="left">site.aspect</td>
+<td align="left">The direction toward which the surface of the soil
+faces, expressed as an angle between 0 and 360 degrees, inclusive,
+measured clockwise from true north.</td>
+</tr>
+<tr class="even">
+<td align="left">shapeacross</td>
+<td align="left">No</td>
+<td align="left">site.shapeacross</td>
+<td align="left">The geometric, two dimensional profile (shape) of the
+slope parallel to elevation contours.</td>
+</tr>
+<tr class="odd">
+<td align="left">shapedown</td>
+<td align="left">No</td>
+<td align="left">site.shapedown</td>
+<td align="left">The geometric, two dimensional profile (shape) of the
+slope perpendicular to elevation contours.</td>
+</tr>
+<tr class="even">
+<td align="left">slopecomplex</td>
+<td align="left">No</td>
+<td align="left">site.slopecomplex</td>
+<td align="left">The identification of whether the landscape surface is
+simple or complex.</td>
+</tr>
+<tr class="odd">
+<td align="left">geomslopeseg</td>
+<td align="left">No</td>
+<td align="left">site.geomslopeseg</td>
+<td align="left">Position of the pedon site within the segment of the
+slope.</td>
+</tr>
+<tr class="even">
+<td align="left">hillslopeprof</td>
+<td align="left">No</td>
+<td align="left">site.hillslopeprof</td>
+<td align="left">Two dimensional slope segments of a hillslope that have
+similar geometric, erosional, or depositional characteristics.</td>
+</tr>
+<tr class="odd">
+<td align="left">drainagecl</td>
+<td align="left">No</td>
+<td align="left">site.drainagecl</td>
+<td align="left">Identifies the natural drainage conditions of the soil
+and refers to the frequency and duration of wet periods. An example of a
+drainage class is well drained.</td>
+</tr>
+<tr class="even">
+<td align="left">horizdatnm</td>
+<td align="left">No</td>
+<td align="left">site.horizdatnm</td>
+<td align="left">The identification given to the reference system used
+for defining the coordinates of points. (Content Standards for Spatial
+Metadata, FGDC, 3/31/94 draft). This entry applies to both lat/long and
+UTM coordinates. NO LONGER USED BECAUSE CAN’T DIFFERENTIATE BETWEEN UTM
+AND DMS.</td>
+</tr>
+<tr class="odd">
+<td align="left">utmeasting</td>
+<td align="left">No</td>
+<td align="left">site.utmeasting</td>
+<td align="left">The distance, in meters, proceeding east for the UTM
+zone. The UTM zone central meridian is the origin and is designated a
+value of 500,000 meters creating a “false” easting.</td>
+</tr>
+<tr class="even">
+<td align="left">utmnorthing</td>
+<td align="left">No</td>
+<td align="left">site.utmnorthing</td>
+<td align="left">The distance, in meters, north from the UTM zone
+origin. For “north”, origin is the equator equal zero. For the southern
+hemisphere it is a false northing with origin, i.e. the equator, equal
+to 10,000,000 meters.</td>
+</tr>
+<tr class="odd">
+<td align="left">utmzone</td>
+<td align="left">No</td>
+<td align="left">site.utmzone</td>
+<td align="left">Zones of the Universal Transverse Mercator projection
+system bounded by meridians, the longitudes are multiples of 6 degrees.
+Zones are numbered from 1 to 60 proceeding east from the 180th meridian
+from Greenwich, England.</td>
+</tr>
+<tr class="even">
+<td align="left">site_id</td>
+<td align="left">Yes</td>
+<td align="left">site.usiteid</td>
+<td align="left">A short label to help a user identify a particular
+site.</td>
+</tr>
+<tr class="odd">
+<td align="left">floddurcl</td>
+<td align="left">No</td>
+<td align="left">site.floddurcl</td>
+<td align="left">Average duration of inundation per flood occurrence and
+expressed as a class. (NSSH)</td>
+</tr>
+<tr class="even">
+<td align="left">flodfreqcl</td>
+<td align="left">No</td>
+<td align="left">site.flodfreqcl</td>
+<td align="left">The annual probability of a flood event (inundation by
+flowing water), expressed as a class. (SSM).</td>
+</tr>
+<tr class="odd">
+<td align="left">flodmonthbeg</td>
+<td align="left">No</td>
+<td align="left">site.flodmonthbeg</td>
+<td align="left">The month of the year in which the predicted flooding
+period of a soil is likely to begin.</td>
+</tr>
+<tr class="even">
+<td align="left">ponddurcl</td>
+<td align="left">No</td>
+<td align="left">site.ponddurcl</td>
+<td align="left">The average duration, or length of time, of the ponding
+occurrence. (NSSH)</td>
+</tr>
+<tr class="odd">
+<td align="left">pondfreqcl</td>
+<td align="left">No</td>
+<td align="left">site.pondfreqcl</td>
+<td align="left">The annual probability of a ponding event (inundation
+by standing water), expressed as a class.</td>
+</tr>
+<tr class="even">
+<td align="left">pondmonthbeg</td>
+<td align="left">No</td>
+<td align="left">site.pondmonthbeg</td>
+<td align="left">The month of the year in which the predicted flooding
+period of a soil is likely to begin.</td>
+</tr>
+<tr class="odd">
+<td align="left">y_std</td>
+<td align="left">Yes</td>
+<td align="left">site.latstddecimaldegrees</td>
+<td align="left">Standardized latitude value in decimal degrees, in
+geographic coordinate system, WGS84 datum. Values are either
+auto-populated from GPS, or computed from original latitude coordinates
+using standard conversion algorithms.</td>
+</tr>
+<tr class="even">
+<td align="left">x_std</td>
+<td align="left">Yes</td>
+<td align="left">site.longstddecimaldegrees</td>
+<td align="left">Standardized longitude value in decimal degrees, in
+geographic coordinate system, WGS84 datum. Values are either
+auto-populated from GPS, or computed from original longitude coordinates
+using standard conversion algorithms.</td>
+</tr>
+<tr class="odd">
+<td align="left">gpspositionalerror</td>
+<td align="left">No</td>
+<td align="left">site.gpspositionalerror</td>
+<td align="left">The potential distance in meters between the GPS
+coordinate location and the “true” location of a point observation. The
+“true” location of the point observation usually lies within the area
+covered by a circle centered on the GPS coordinate location with a
+radius equal to the positional error.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="sitebedrock">
+<code>sitebedrock</code><a class="anchor" aria-label="anchor" href="#sitebedrock"></a>
+</h2>
+<p>This table records the kind(s) of bedrock layers observed at the
+site. Multiple layers of bedrock can be described.</p>
+<table class="table">
+<colgroup>
+<col width="20%">
+<col width="5%">
+<col width="25%">
+<col width="48%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">bedrckdepth</td>
+<td align="left">No</td>
+<td align="left">sitebedrock.bedrckdepth</td>
+<td align="left">The observed depth to the top of the bedrock
+layer.</td>
+</tr>
+<tr class="even">
+<td align="left">bedrckhardness</td>
+<td align="left">No</td>
+<td align="left">sitebedrock.bedrckhardness</td>
+<td align="left">The degree of hardness of the underlying rock.</td>
+</tr>
+<tr class="odd">
+<td align="left">bedrckkind</td>
+<td align="left">No</td>
+<td align="left">sitebedrock.bedrckkind</td>
+<td align="left">Lithology (composition) of bedrock. (AGI)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="siteecositehistory">
+<code>siteecositehistory</code><a class="anchor" aria-label="anchor" href="#siteecositehistory"></a>
+</h2>
+<p>This table records the history of ecological site correlation with
+this Site table record.</p>
+<table class="table">
+<colgroup>
+<col width="15%">
+<col width="4%">
+<col width="24%">
+<col width="56%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">ecositecorrdate</td>
+<td align="left">No</td>
+<td align="left">siteecositehistory.ecositecorrdate</td>
+<td align="left">The date this particular correlation between a Site and
+Ecological Site was made.</td>
+</tr>
+<tr class="even">
+<td align="left">es_classifier</td>
+<td align="left">Yes</td>
+<td align="left">siteecositehistory.classifier</td>
+<td align="left">The name of the person who assigned this particular
+classification.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="siteobs">
+<code>siteobs</code><a class="anchor" aria-label="anchor" href="#siteobs"></a>
+</h2>
+<p>The Site Observation table records the date that the various
+observation or analytical data is collected for the specific site or
+location. Soil or site properties that may change with time are also
+recorded here. If a site is revisited at a later date for additional
+data collection, a new row with the appropriate date is entered in this
+table. Separate tables exist for properties that may have multiple
+entries.</p>
+<table class="table">
+<colgroup>
+<col width="5%">
+<col width="1%">
+<col width="5%">
+<col width="87%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">obs_date</td>
+<td align="left">Yes</td>
+<td align="left">siteobs.obsdate</td>
+<td align="left">The date on which this particular soil was described or
+sampled, expressed as month, day, year – MM/DD/YYYY.</td>
+</tr>
+<tr class="even">
+<td align="left">siteobsiid</td>
+<td align="left">No</td>
+<td align="left">siteobs.siteobsiid</td>
+<td align="left">An internal ID (integer) that is part (or all) of a key
+that uniquely identifies a record. Also known as part (or all) of the
+“primary key”. This value is managed by NASIS and cannot be edited.</td>
+</tr>
+<tr class="odd">
+<td align="left">swaterdepth</td>
+<td align="left">No</td>
+<td align="left">siteobs.swaterdepth</td>
+<td align="left">The observed depth of water on the soil surface.</td>
+</tr>
+<tr class="even">
+<td align="left">earthcovkind1</td>
+<td align="left">No</td>
+<td align="left">siteobs.earthcovkind1</td>
+<td align="left">The natural or artificial material that is observed to
+cover a portion of the earth’s surface. It is determined (at least
+conceptually) as a vertical projection downward. Level one of a
+hierarchical system. (1992 NRI Instructions)</td>
+</tr>
+<tr class="odd">
+<td align="left">earthcovkind2</td>
+<td align="left">No</td>
+<td align="left">siteobs.earthcovkind2</td>
+<td align="left">The description of ground cover based on a set of
+vegetal and non-vegetal classes. It is determined (at least
+conceptually) as a vertical projection downward. Level two of a
+hierarchical system.</td>
+</tr>
+<tr class="even">
+<td align="left">plantassocnm</td>
+<td align="left">No</td>
+<td align="left">siteobs.plantassocnm</td>
+<td align="left">The name assigned to a particular plant community found
+at a particular location. A plant association is a kind of plant
+community represented by a high degree of floristic uniformity in all
+layers. Plant Associations are identified and named for the dominant
+plant species in a layer. (Nat. Soil-Range Team, 1988, Instr. for
+Completing the Stand. Site Descrip.)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="sitepm">
+<code>sitepm</code><a class="anchor" aria-label="anchor" href="#sitepm"></a>
+</h2>
+<p>The Site Parent Material table lists the individual parent materials,
+and their vertical sequence, from which the soil at this site developed.
+The Parent Material Group Name is shown above in the Site table.</p>
+<table class="table">
+<colgroup>
+<col width="8%">
+<col width="2%">
+<col width="6%">
+<col width="82%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">pmkind</td>
+<td align="left">No</td>
+<td align="left">sitepm.pmkind</td>
+<td align="left">A term describing the general physical, chemical and
+mineralogical composition of the material, mineral or organic, from
+which the soil develops. Mode of deposition and/or weathering may be
+implied or implicit.</td>
+</tr>
+<tr class="even">
+<td align="left">pmorigin</td>
+<td align="left">No</td>
+<td align="left">sitepm.pmorigin</td>
+<td align="left">The type of bedrock from which the parent material was
+derived.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="transect">
+<code>transect</code><a class="anchor" aria-label="anchor" href="#transect"></a>
+</h2>
+<p>The Transect table is used to record groupings of pedons that are the
+stops along transects.</p>
+<table class="table">
+<colgroup>
+<col width="7%">
+<col width="1%">
+<col width="7%">
+<col width="84%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
+<th align="left">Alias</th>
+<th align="left">Physical Name</th>
+<th align="left">Column Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">utransectid</td>
+<td align="left">No</td>
+<td align="left">transect.utransectid</td>
+<td align="left">An identifier assigned by the user to a particular
+transect that is intended to aid in the identification of the transect
+for the user.</td>
+</tr>
+<tr class="even">
+<td align="left">tsectkind</td>
+<td align="left">No</td>
+<td align="left">transect.tsectkind</td>
+<td align="left">The kind of transect (geometrically described).
+Described as one of the following: Straight, zigzag, or random point. If
+straight or zigzag then the actual interval since the last observation
+point is a required entry. This is a required entry for a transect.</td>
+</tr>
+<tr class="odd">
+<td align="left">tsectselmeth</td>
+<td align="left">No</td>
+<td align="left">transect.tsectselmeth</td>
+<td align="left">Describes how the transect location was selected.
+Described as being one of the following. Randomly selected or selected
+based on some bias. This is a required entry field for transect
+data.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="calculated">Calculated<a class="anchor" aria-label="anchor" href="#calculated"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="12%">
+<col width="9%">
+<col width="27%">
+<col width="4%">
+<col width="45%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">fetchNASIS_Column</th>
+<th align="left"></th>
+<th align="left">RelatedFunction</th>
+<th align="left">Deprecated</th>
+<th align="left">ColumnDescription</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">albic.horizon</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">albic.materials</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">andic.soil.properties</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">aquic.conditions</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">argillic.horizon</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">art_by</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Artifact volume (%) in the &gt;600mm size range</td>
+</tr>
+<tr class="odd">
+<td align="left">art_cb</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Artifact volume (%) in the 75 - 250 mm size range</td>
+</tr>
+<tr class="even">
+<td align="left">art_ch</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Flat artifact volume (%) in the 2 - 150 mm size
+range</td>
+</tr>
+<tr class="odd">
+<td align="left">art_fgr</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Artifact volume (%) in 2 - 5 mm size range</td>
+</tr>
+<tr class="even">
+<td align="left">art_fl</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Flat artifact volume (%) in the &gt;150 mm size
+range</td>
+</tr>
+<tr class="odd">
+<td align="left">art_gr</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Artifact volume (%) in 2 - 75 mm size range (includes
+fine_gravel)</td>
+</tr>
+<tr class="even">
+<td align="left">art_st</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Artifact volume (%) in the 250 - 600 mm size range</td>
+</tr>
+<tr class="odd">
+<td align="left">art_unspecified</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Artifact volume (%) with unspecified/incomplete size
+specification</td>
+</tr>
+<tr class="even">
+<td align="left">boulders</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Rock fragment volume (%) in the &gt;600mm size
+range</td>
+</tr>
+<tr class="odd">
+<td align="left">cambic.horizon</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">channers</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Flat rock fragment volume (%) in the 2 - 150 mm size
+range</td>
+</tr>
+<tr class="odd">
+<td align="left">cobbles</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Rock fragment volume (%) in the 75 - 250 mm size
+range</td>
+</tr>
+<tr class="even">
+<td align="left">d_b</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Dry Color B</td>
+</tr>
+<tr class="odd">
+<td align="left">d_chroma</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Dry Color Chroma</td>
+</tr>
+<tr class="even">
+<td align="left">d_g</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Dry Color G</td>
+</tr>
+<tr class="odd">
+<td align="left">d_hue</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Dry Color Hue</td>
+</tr>
+<tr class="even">
+<td align="left">d_r</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Dry Color R</td>
+</tr>
+<tr class="odd">
+<td align="left">d_sigma</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Dry Color Sigma</td>
+</tr>
+<tr class="even">
+<td align="left">d_value</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Dry Color Value</td>
+</tr>
+<tr class="odd">
+<td align="left">densic.materials</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">dry_soil_color</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Dry Munsell Soil Color</td>
+</tr>
+<tr class="odd">
+<td align="left">es_selection_method</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Ecological Site History record selection method from
+<code>soilDB:::.pickBestEcosite()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">fine_gravel</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Rock fragment volume (%) in 2 - 5 mm size range</td>
+</tr>
+<tr class="odd">
+<td align="left">flagstones</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Flat rock fragment volume (%) in the &gt;150 mm size
+range</td>
+</tr>
+<tr class="even">
+<td align="left">geomicrorelief_string</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Concatenated microrelief string via
+<code>soilDB:::.formatLandformString()</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">glossic.horizon</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">gravel</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Rock fragment volume (%) in 2 - 75 mm size range
+(includes fine_gravel)</td>
+</tr>
+<tr class="odd">
+<td align="left">huartvol_cohesive</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Cohesive artifact volume (%)</td>
+</tr>
+<tr class="even">
+<td align="left">huartvol_innocuous</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Innocuous artifact volume (%)</td>
+</tr>
+<tr class="odd">
+<td align="left">huartvol_penetrable</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Penetrable artifact volume (%)</td>
+</tr>
+<tr class="even">
+<td align="left">huartvol_persistent</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Persistent artifact volume (%)</td>
+</tr>
+<tr class="odd">
+<td align="left">hzID</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Internal horizon row ID (unique) calculated in aqp
+SoilProfileCollection objects</td>
+</tr>
+<tr class="even">
+<td align="left">landform_string</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Concatenated landform string via
+<code>soilDB:::.formatLandformString()</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">landscape_string</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Concatenated landscape string via
+<code>soilDB:::.formatLandformString()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">lithic.contact</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">lithologic.discontinuity</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">m_b</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Moist Color B</td>
+</tr>
+<tr class="odd">
+<td align="left">m_chroma</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Moist Color Chroma</td>
+</tr>
+<tr class="even">
+<td align="left">m_g</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Moist Color G</td>
+</tr>
+<tr class="odd">
+<td align="left">m_hue</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Moist Color Hue</td>
+</tr>
+<tr class="even">
+<td align="left">m_r</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Moist Color R</td>
+</tr>
+<tr class="odd">
+<td align="left">m_sigma</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Moist Color Sigma</td>
+</tr>
+<tr class="even">
+<td align="left">m_value</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Moist Color Value</td>
+</tr>
+<tr class="odd">
+<td align="left">microfeature_string</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Concatenated microfeature string via
+<code>soilDB:::.formatLandformString()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">moist_soil_color</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Moist Munsell Soil Color</td>
+</tr>
+<tr class="odd">
+<td align="left">mollic.epipedon</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">ochric.epipedon</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">paraboulders</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Pararock fragment volume (%) in the &gt;600mm size
+range</td>
+</tr>
+<tr class="even">
+<td align="left">parachanners</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Flat pararock fragment volume (%) in the 2 - 150 mm
+size range</td>
+</tr>
+<tr class="odd">
+<td align="left">paracobbles</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Pararock fragment volume (%) in the 75 - 250 mm size
+range</td>
+</tr>
+<tr class="even">
+<td align="left">parafine_gravel</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Pararock fragment volume (%) in 2 - 5 mm size
+range</td>
+</tr>
+<tr class="odd">
+<td align="left">paraflagstones</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Flat pararock fragment volume (%) in the &gt;150 mm
+size range</td>
+</tr>
+<tr class="even">
+<td align="left">paragravel</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Pararock fragment volume (%) in 2 - 75 mm size range
+(includes parafine_gravel)</td>
+</tr>
+<tr class="odd">
+<td align="left">parastones</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Pararock fragment volume (%) in the 250 - 600 mm size
+range</td>
+</tr>
+<tr class="even">
+<td align="left">redox.concentrations</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">reduced.matrix</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">sapric.soil.materials</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">secondary.carbonates</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">selection_method</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Pedon Taxonomic History record selection method from
+<code>soilDB:::.pickBestTaxHistory()</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">slope_shape</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Calculated factor where levels are concatenation of
+site.shapeacross + ” / ” + site.shapedown</td>
+</tr>
+<tr class="even">
+<td align="left">soil_color</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Default Munsell Soil Color; Moist by default, based on
+<code>fetchNASIS(soilColorState="moist")</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">spodic.horizon</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">spodic.materials</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">stones</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Rock fragment volume (%) in the 250 - 600 mm size
+range</td>
+</tr>
+<tr class="even">
+<td align="left">surface_boulders</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface rock fragment volume (%) in the &gt;600mm size
+range</td>
+</tr>
+<tr class="odd">
+<td align="left">surface_channers</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface flat rock fragment volume (%) in the 2 - 150 mm
+size range</td>
+</tr>
+<tr class="even">
+<td align="left">surface_cobbles</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface rock fragment volume (%) in the 75 - 250 mm
+size range</td>
+</tr>
+<tr class="odd">
+<td align="left">surface_fgravel</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">TRUE</td>
+<td align="left">Deprecated alias of surface_fine_gravel</td>
+</tr>
+<tr class="even">
+<td align="left">surface_fine_gravel</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface rock fragment volume (%) in 2 - 5 mm size
+range</td>
+</tr>
+<tr class="odd">
+<td align="left">surface_flagstones</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface flat rock fragment volume (%) in the &gt;150 mm
+size range</td>
+</tr>
+<tr class="even">
+<td align="left">surface_gravel</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface rock fragment volume (%) in 2 - 75 mm size
+range (includes fine_gravel)</td>
+</tr>
+<tr class="odd">
+<td align="left">surface_paraboulders</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface pararock fragment volume (%) in the &gt;600mm
+size range</td>
+</tr>
+<tr class="even">
+<td align="left">surface_parachanners</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface flat pararock fragment volume (%) in the 2 -
+150 mm size range</td>
+</tr>
+<tr class="odd">
+<td align="left">surface_paracobbles</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface pararock fragment volume (%) in the 75 - 250 mm
+size range</td>
+</tr>
+<tr class="even">
+<td align="left">surface_parafine_gravel</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface pararock fragment volume (%) in 2 - 5 mm size
+range</td>
+</tr>
+<tr class="odd">
+<td align="left">surface_paraflagstones</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface flat pararock fragment volume (%) in the
+&gt;150 mm size range</td>
+</tr>
+<tr class="even">
+<td align="left">surface_paragravel</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface pararock fragment volume (%) in 2 - 75 mm size
+range (includes parafine_gravel)</td>
+</tr>
+<tr class="odd">
+<td align="left">surface_parastones</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface pararock fragment volume (%) in the 250 - 600
+mm size range</td>
+</tr>
+<tr class="even">
+<td align="left">surface_stones</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface rock fragment volume (%) in the 250 - 600 mm
+size range</td>
+</tr>
+<tr class="odd">
+<td align="left">surface_total_frags_pct</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Total surface fragment volume (%), including
+parafragments</td>
+</tr>
+<tr class="even">
+<td align="left">surface_total_frags_pct_nopf</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Total surface fragment volume (%), excluding
+parafragments</td>
+</tr>
+<tr class="odd">
+<td align="left">surface_unspecified</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Surface fragment volume (%) with unspecified/incomplete
+size specification</td>
+</tr>
+<tr class="even">
+<td align="left">total_art_pct</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyArtifactData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Total artifact volume (%)</td>
+</tr>
+<tr class="odd">
+<td align="left">total_frags_pct</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Total rock fragment volume (%), including
+parafragments</td>
+</tr>
+<tr class="even">
+<td align="left">total_frags_pct_nopf</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Total rock fragment volume (%), excluding
+parafragments</td>
+</tr>
+<tr class="odd">
+<td align="left">umbric.epipedon</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+<td align="left">Presence/absence. Calculated from Pedon Diagnostic
+Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">unspecified</td>
+<td align="left"><small><span class="math display">\[C\]</span></small></td>
+<td align="left">
+<code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code>,
+<code><a href="../reference/simplifyFragmentData.html">simplifyFragmentData()</a></code>
+</td>
+<td align="left">FALSE</td>
+<td align="left">Rock fragment volume (%) with unspecified/incomplete
+fragsize</td>
+</tr>
+</tbody>
+</table>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
