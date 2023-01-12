@@ -1,5 +1,5 @@
 ---
-title: "`fetchNASIS(from='pedons')` Columns"
+title: "fetchNASIS(from='pedons') Columns"
 output: 
   rmarkdown::html_document:
     toc: true
@@ -7,12 +7,12 @@ output:
       toc_collapsed: true
     toc_depth: 3
 vignette: >
-  %\VignetteIndexEntry{`fetchNASIS(from='pedons')` Columns}
+  %\VignetteIndexEntry{fetchNASIS(from='pedons') Columns}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-s
-This is a guide that identifies the source tables and columns for each column in the `fetchNASIS(from='pedons')` result. Many data elements have a 1:1 relationship with a table and column in NASIS, these are described in order of alphabetical order of their parent NASIS table. 
+
+This guide identifies source tables and columns for each column in the `fetchNASIS(from='pedons')` result. Many data elements have a 1:1 relationship with a table and column in NASIS, these are described in order of alphabetical order of their parent NASIS table. 
 
 The parent table physical name, column physical name and column description are reported from the NASIS 7 metadata. Any columns that deviate from the NASIS naming, but are 1:1 with a NASIS column, are flagged `Alias="Yes"` and have a different `fetchNASIS()` column name from the physical column name. In the future these will be changed to match the NASIS metadata.
 
@@ -264,14 +264,11 @@ cat("# Calculated", "\n", "\n")
 ldx <- !names(f) %in% res$fetchNASIS_Column
 res3 <- res[0,][seq_len(sum(ldx)),]
 res3$fetchNASIS_Column <- names(f)[ldx]
-res3$TablePhysicalName <- "<small>\\[C\\]</small>"
 res3$ColumnPhysicalName <- NULL
 res3$ColumnDescription <- "TODO"
-calcdef <- calcdef[,c(3,4,1,2)]
 calcdef$RelatedFunction <- sapply(strsplit(calcdef$RelatedFunction, ","), function(z) { paste0(paste0("`", trimws(z), "`"), collapse = ", ") })
-res4 <- merge(res3[,c(4,1)], calcdef, by = "fetchNASIS_Column")
-colnames(res4)[2] <- ""
-knitr::kable(res4[complete.cases(res4),], row.names = FALSE)
+res4 <- merge(res3[, 4, drop = FALSE], calcdef, by = "fetchNASIS_Column")
+knitr::kable(res4[complete.cases(res4), ], row.names = FALSE)
 cat(" \n")
 
 # dbQueryNASIS(NASIS(), "SELECT siteecositehistory.classifier AS [siteecositehistory.classifier] FROM siteecositehistory") |> 
