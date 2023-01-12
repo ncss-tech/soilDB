@@ -74,20 +74,6 @@ get_extended_data_from_NASIS_db <- function(SS = TRUE,
     q.structure <- gsub(pattern = '_View_1', replacement = '', x = q.structure, fixed = TRUE)
   }
 
-
-  # ecological site
-  q.ecosite <- "SELECT siteiidref AS siteiid, ecositeid, ecositenm, ecositecorrdate, classifier As es_classifier
-  FROM siteecositehistory_View_1 AS seh
-  -- note: ecologicalsite table not managed by SS
-  LEFT OUTER JOIN ecologicalsite AS es ON es.ecositeiid=seh.ecositeiidref
-  ORDER BY siteiid;"
-
-  # toggle selected set vs. local DB
-  if (SS == FALSE) {
-    q.ecosite <- gsub(pattern = '_View_1', replacement = '', x = q.ecosite, fixed = TRUE)
-  }
-
-
   ## TODO: include all peiid from pedon table so that there are no NA in the boolean summary
   ## https://github.com/ncss-tech/soilDB/issues/59
   # query diagnostic horizons, usually a 1:many relationship with pedons
@@ -443,9 +429,9 @@ LEFT OUTER JOIN (
 
   if (inherits(channel, 'try-error'))
     return(data.frame())
-
+  
 	# exec queries
-  d.ecosite <- dbQueryNASIS(channel, q.ecosite, close = FALSE)
+  d.ecosite <- get_ecosite_history_from_NASIS_db(dsn = channel) # this query has been abstracted out
   d.diagnostic <- dbQueryNASIS(channel, q.diagnostic, close = FALSE)
   d.restriction <- dbQueryNASIS(channel, q.restriction, close = FALSE)
 
