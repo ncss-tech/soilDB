@@ -189,13 +189,8 @@
                           by = list(peiid = ed.tax$peiid)]
   site(hz_data) <- as.data.frame(best.tax.data)
 
-
-  # load best-guess optimal records from ecositehistory
-  # method is added to the new field called 'es_selection_method'
-  ed.es <- data.table::as.data.table(extended_data$ecositehistory)
-  best.ecosite.data <- ed.es[, .pickBestEcosite(.SD),
-                             by = list(siteiid = ed.es$siteiid)]
-  site(hz_data) <- as.data.frame(best.ecosite.data)
+  # get "best" ecosite data (most recent correlation, or most complete if no date)
+  site(hz_data) <- get_ecosite_history_from_NASIS_db(best = TRUE)
 
   ## TODO: NA in diagnostic boolean columns are related to pedons with no diagnostic features
   ## https://github.com/ncss-tech/soilDB/issues/59

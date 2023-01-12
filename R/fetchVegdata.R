@@ -30,6 +30,7 @@ fetchVegdata <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
   .soilDB_test_NASIS_connection(dsn = dsn)
   
 	# 1. load data in pieces
+	site <- get_site_data_from_NASIS_db(SS = SS, dsn = dsn)
   vegplot <- get_vegplot_from_NASIS_db(SS = SS, dsn =  dsn)
   vegplotlocation <- get_vegplot_location_from_NASIS_db(SS = SS,  dsn =  dsn)
   vegplotrhi <-  get_vegplot_trhi_from_NASIS_db(SS = SS, dsn =  dsn)
@@ -42,9 +43,14 @@ fetchVegdata <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
 
 
 	# test to see if the selected set is loaded
-	if (nrow(vegplot) == 0) message('your selected set is missing either the vegplot, pedon or site table, please load and try again :)')
+	if (nrow(site) == 0 || nrow(vegplot) == 0) {
+	  message('Selected set is missing either the vegplot, pedon or site table, please load and try again :)')
+	}
 	
-	
+  # add ecosite id, corrdate, selection method to vegplot
+  vegplot <- merge(site[,c("siteiid", "ecositeid",  "ecositecorrdate", "siteecositehistory.classifier", "es_selection_method")],
+                   vegplot, by = "siteiid", all.x = TRUE, sort = FALSE)
+  
 	# done
 	return(list(
 	    vegplot = vegplot,
@@ -55,7 +61,8 @@ fetchVegdata <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
 	    vegtransplantsum = vegtransplantsum,
 	    vegsiteindexsum = vegsiteindexsum,
 	    vegsiteindexdet = vegsiteindexdet,
-	    vegplottext = vegplottext
+	    vegplottext = vegplottext,
+	    site = site
 	  ))
 }	
 

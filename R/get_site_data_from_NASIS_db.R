@@ -153,12 +153,18 @@ ORDER BY pedon_View_1.peiid ;"
 	  return(d2)
 	}
 
+	# join in "best" ecological site
+	bes <- get_ecosite_history_from_NASIS_db()
+	if (length(bes) > 0) {
+	  d2 <- merge(d2, bes, by = "siteiid", all.x = TRUE, sort = FALSE)
+	}
+	
 	# join-in othervegclass string
 	sov <- try(dbQueryNASIS(channel, q3))
 	
 	if (!inherits(sov, 'try-error') && nrow(sov) > 0) {
   	ov <- data.table::data.table(sov)[, .formatOtherVegString(.SD, id.name = "siteiid", name.sep = ' & '), 
-  	                                         by = "siteiid", .SDcols = colnames(sov)]
+  	                                         by = "siteiid", .SDcols = colnames(sov)] 
   	ov$siteiid <- NULL
   	if (nrow(ov) > 0) {
   	  d2 <- merge(d2, ov, by = "siteiid", all.x = TRUE, sort = FALSE)
