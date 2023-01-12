@@ -180,31 +180,32 @@ NASISDomainsAsFactor <- function(x = NULL) {
 #' These data are derived from the MetadataDomainDetail, MetadataDomainMaster, and MetadataTableColumn tables and help with mapping between values stored in the NASIS database and human-readable values. The human-readable values align with the values returned in public facing interfaces such as SSURGO via Soil Data Access and NASIS Web Reports. The data in these tables can also be used to create _ordered_ factors where options for levels of a particular data element follow a logical `ChoiceSequence`.
 #'
 #' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
-#' 
+#' @param include_description Include "ChoiceDescription" column? Default: `FALSE`
 #' @details If a local NASIS instance is set up, and this is the first time `get_NASIS_metadata()` has been called, the metadata will be obtained from the NASIS local database. Subsequent runs in the same session will use a copy of the data object `NASIS.metadata` cached in `soilDB.env` which can be accessed with `get_soilDB_env()$NASIS.metadata`.
 #' 
 #' For users without a local NASIS instance, a cached copy of the NASIS metadata are used `(data/metadata.rda)`. 
 #' 
 #' See `?soilDB::metadata` for additional details.
 #' 
-#' @return a `data.frame` containing DomainID, DomainName, DomainRanked, DisplayLabel, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ColumnPhysicalName, ColumnLogicalName
+#' @return a `data.frame` containing DomainID, DomainName, DomainRanked, DisplayLabel, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ColumnPhysicalName, ColumnLogicalName and optionally ChoiceDescription when `include_description=TRUE`.
 #' @export
 #' 
 #' @examples
 #' get_NASIS_metadata()
-get_NASIS_metadata <- function(dsn = NULL) {
+get_NASIS_metadata <- function(dsn = NULL, include_description = FALSE) {
   
   metadata <- NULL
   
   .doQuery <- function(dsn){
-    q <- "SELECT mdd.DomainID, DomainName, DomainRanked, DisplayLabel, 
+    q <- sprintf("SELECT mdd.DomainID, DomainName, DomainRanked, DisplayLabel, 
                  ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, 
-                 ColumnPhysicalName, ColumnLogicalName
+                 ColumnPhysicalName, ColumnLogicalName %s
             FROM MetadataDomainDetail mdd
               INNER JOIN MetadataDomainMaster mdm ON mdm.DomainID = mdd.DomainID
               INNER JOIN (SELECT MIN(DomainID) DomainID, MIN(ColumnPhysicalName) ColumnPhysicalName, MIN(ColumnLogicalName) ColumnLogicalName
                           FROM MetadataTableColumn GROUP BY DomainID, ColumnPhysicalName) mtc ON mtc.DomainID = mdd.DomainID
-            ORDER BY mdd.DomainID, ColumnPhysicalName, ChoiceValue;"
+            ORDER BY mdd.DomainID, ColumnPhysicalName, ChoiceValue;", 
+            ifelse(include_description, ", ChoiceDescription", ""))
     
     channel <- dbConnectNASIS(dsn)
     
@@ -246,8 +247,9 @@ get_NASIS_metadata <- function(dsn = NULL) {
 #' get_NASIS_column_metadata("texcl")
 get_NASIS_column_metadata <- function(x, 
                                       what = "ColumnPhysicalName",
+                                      include_description = FALSE,
                                       dsn = NULL) {
-  metadata <- get_NASIS_metadata(dsn = dsn)
+  metadata <- get_NASIS_metadata(dsn = dsn, include_description = include_description)
   mds <- metadata[metadata[[what]] %in% x, ] 
   mds <- mds[order(mds$DomainID, mds$ChoiceSequence), ]
   mds
@@ -349,4 +351,68 @@ NASISChoiceList <- function(x,
   # for backward compatibility or anyone who is using the .get method in the wild
   .Deprecated("get_NASIS_metadata")
   get_NASIS_metadata(dsn)
+}
+
+#' Get NASIS Table Metadata (Table and Column Descriptions)
+#' 
+#' Retrieve a table containing table and column names with descriptions, help text, units of measure, etc. from NASIS 7 metadata tables.
+#' 
+#' These data are derived from the MetadataTable and MetadataTableColumn tables and describe the expected contents of standard NASIS tables and columns.
+#' @param table Character vector of table identifiers to match. Default `NULL` for "all tables" (no constraint)
+#' @param column Character vector of column identifiers to match. Default `NULL` for "all columns" (in selected tables, if any, otherwise no constraint)
+#' @param what.table Column to match `table` against. Default: `TablePhysicalName`.
+#' @param what.column Column to match `column` against. Default: `ColumnPhysicalName`.
+#' @param query_string Default: `FALSE`; if `TRUE` return a character containing query that would be sent to NASIS.
+#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
+#' @details For NASIS choice lists based on domain and column names see `get_NASIS_metadata()` and `NASISChoiceList()`. This function (`get_NASIS_table_metadata()`) is intended for higher-level description of the expected contents of a NASIS database instance, rather than the codes/specific values used within columns.
+#' @seealso `get_NASIS_metadata()` `NASISChoiceList()` `uncode()` `code()`
+#' @return a `data.frame` 
+#' @export
+#' @examples
+#' if (local_NASIS_defined())
+#'  str(get_NASIS_table_metadata())
+get_NASIS_table_metadata <- function(table = NULL, column = NULL, 
+                                     what.table = "TablePhysicalName", 
+                                     what.column = "ColumnPhysicalName",
+                                     query_string = FALSE, dsn = NULL) {
+  constraint <- ""
+  
+  if (!is.null(table) || !is.null(column)) {
+    constraint <- " WHERE "
+  }
+  
+  if (!is.null(table)) {
+    constraint <- paste0(constraint, what.table, " IN ", format_SQL_in_statement(table))
+  }
+  
+  if (!is.null(table) && !is.null(column)) {
+    constraint <- paste0(constraint, " AND ")
+  }
+  
+  if (!is.null(column)) {
+    constraint <- paste0(constraint, what.column, " IN ", format_SQL_in_statement(column))
+  }
+  
+  q <- paste0("SELECT MetadataTableColumn.TableID AS TableID, TablePhysicalName, TableLogicalName, TableLabel,
+                      TableDescription, ImportExportFileName, TableCollectionID, DAGLevel,
+                      MetadataTable.Visible AS MetadataTable_Visible,
+                      Selectable, Editable, NoInsertOrDelete, RootTable, CreateAsView, ClientDatabaseOnly,
+                      ServerDatabaseOnly, ColumnID, TableColumnSequence, BaseColumnPhysicalName,
+                      ColumnPhysicalName, ColumnLogicalName, ColumnGroupLabel, ColumnLabel,
+                      PhysicalDataType, LogicalDataType, DomainID, ColumnDescription, ColumnHelpText,
+                      FieldSize, DecimalPrecision, DatetimePrecision, Minimum, Maximum, DefaultType,
+                      DefaultValue, Alignment, DisplaySize, SortSequence, SortType, SortDirection,
+                      UnitsOfMeasureUnabbreviated, UnitsOfMeasureAbbreviated, [NotNull],
+                      MetadataTableColumn.Visible AS MetadataTableColumn_Visible,
+                      Protected, SetDefaultOnObjectChange, SetDefaultOnRowChange,
+                      IncludeInReplicationSelectList, FileContentColumnID
+        FROM MetadataTable
+        INNER JOIN MetadataTableColumn ON MetadataTable.TableID = MetadataTableColumn.TableID
+        ", constraint)
+  
+  if (query_string) {
+    return(q)
+  }
+  
+  uncode(dbQueryNASIS(NASIS(dsn = dsn), q))
 }
