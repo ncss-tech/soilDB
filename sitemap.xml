@@ -4,6 +4,12 @@
     <loc>http://ncss-tech.github.io/soilDB/404.html</loc>
   </url>
   <url>
+    <loc>http://ncss-tech.github.io/soilDB/articles/fetchNASIS.html</loc>
+  </url>
+  <url>
+    <loc>http://ncss-tech.github.io/soilDB/articles/index.html</loc>
+  </url>
+  <url>
     <loc>http://ncss-tech.github.io/soilDB/authors.html</loc>
   </url>
   <url>
@@ -140,6 +146,9 @@
   </url>
   <url>
     <loc>http://ncss-tech.github.io/soilDB/reference/get_NASIS_table_key_by_name.html</loc>
+  </url>
+  <url>
+    <loc>http://ncss-tech.github.io/soilDB/reference/get_NASIS_table_metadata.html</loc>
   </url>
   <url>
     <loc>http://ncss-tech.github.io/soilDB/reference/get_NASIS_table_name_by_purpose.html</loc>
