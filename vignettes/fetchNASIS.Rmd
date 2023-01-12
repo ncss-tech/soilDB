@@ -11,8 +11,8 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-This is a draft guide that identifies the source tables and columns for each column in the `fetchNASIS(from='pedons')` result. Many data elements have a 1:1 relationship with a table and column in NASIS, these are described in order of alphabetical order of their parent NASIS table. 
+s
+This is a guide that identifies the source tables and columns for each column in the `fetchNASIS(from='pedons')` result. Many data elements have a 1:1 relationship with a table and column in NASIS, these are described in order of alphabetical order of their parent NASIS table. 
 
 The parent table physical name, column physical name and column description are reported from the NASIS 7 metadata. Any columns that deviate from the NASIS naming, but are 1:1 with a NASIS column, are flagged `Alias="Yes"` and have a different `fetchNASIS()` column name from the physical column name. In the future these will be changed to match the NASIS metadata.
 
@@ -50,33 +50,33 @@ calcdef <- structure(list(fetchNASIS_Column = c("hzID", "d_r", "d_g", "d_b",
 "Moist Color G", "Moist Color B", "Moist Color Hue", "Moist Color Value", 
 "Moist Color Chroma", "Moist Color Sigma", "Moist Munsell Soil Color", 
 "Dry Munsell Soil Color", "Default Munsell Soil Color; Moist by default, based on `fetchNASIS(soilColorState=\"moist\")`", 
-"Rock fragment volume (%) in 2 - 5 mm size range", "Rock fragment volume (%) in 2 - 76 mm size range (includes fine_gravel)", 
-"Rock fragment volume (%) in the 76 - 250 mm size range", "Rock fragment volume (%) in the 250 - 600 mm size range", 
+"Rock fragment volume (%) in 2 - 5 mm size range", "Rock fragment volume (%) in 2 - 75 mm size range (includes fine_gravel)", 
+"Rock fragment volume (%) in the 75 - 250 mm size range", "Rock fragment volume (%) in the 250 - 600 mm size range", 
 "Rock fragment volume (%) in the >600mm size range", "Flat rock fragment volume (%) in the 2 - 150 mm size range", 
 "Flat rock fragment volume (%) in the >150 mm size range", "Pararock fragment volume (%) in 2 - 5 mm size range", 
-"Pararock fragment volume (%) in 2 - 76 mm size range (includes parafine_gravel)", 
-"Pararock fragment volume (%) in the 76 - 250 mm size range", 
+"Pararock fragment volume (%) in 2 - 75 mm size range (includes parafine_gravel)", 
+"Pararock fragment volume (%) in the 75 - 250 mm size range", 
 "Pararock fragment volume (%) in the 250 - 600 mm size range", 
 "Pararock fragment volume (%) in the >600mm size range", "Flat pararock fragment volume (%) in the 2 - 150 mm size range", 
 "Flat pararock fragment volume (%) in the >150 mm size range", 
 "Rock fragment volume (%) with unspecified/incomplete fragsize ", 
 "Total rock fragment volume (%), excluding parafragments", "Total rock fragment volume (%), including parafragments", 
-"Artifact volume (%) in 2 - 5 mm size range", "Artifact volume (%) in 2 - 76 mm size range (includes fine_gravel)", 
-"Artifact volume (%) in the 76 - 250 mm size range", "Artifact volume (%) in the 250 - 600 mm size range", 
+"Artifact volume (%) in 2 - 5 mm size range", "Artifact volume (%) in 2 - 75 mm size range (includes fine_gravel)", 
+"Artifact volume (%) in the 75 - 250 mm size range", "Artifact volume (%) in the 250 - 600 mm size range", 
 "Artifact volume (%) in the >600mm size range", "Flat artifact volume (%) in the 2 - 150 mm size range", 
 "Flat artifact volume (%) in the >150 mm size range", "Artifact volume (%) with unspecified/incomplete size specification", 
 "Total artifact volume (%)", "Cohesive artifact volume (%)", 
 "Penetrable artifact volume (%)", "Innocuous artifact volume (%)", 
 "Persistent artifact volume (%)", "Surface rock fragment volume (%) in 2 - 5 mm size range", 
-"Deprecated alias of surface_fine_gravel", "Surface rock fragment volume (%) in 2 - 76 mm size range (includes fine_gravel)", 
-"Surface rock fragment volume (%) in the 76 - 250 mm size range", 
+"Deprecated alias of surface_fine_gravel", "Surface rock fragment volume (%) in 2 - 75 mm size range (includes fine_gravel)", 
+"Surface rock fragment volume (%) in the 75 - 250 mm size range", 
 "Surface rock fragment volume (%) in the 250 - 600 mm size range", 
 "Surface rock fragment volume (%) in the >600mm size range", 
 "Surface flat rock fragment volume (%) in the 2 - 150 mm size range", 
 "Surface flat rock fragment volume (%) in the >150 mm size range", 
 "Surface pararock fragment volume (%) in 2 - 5 mm size range", 
-"Surface pararock fragment volume (%) in 2 - 76 mm size range (includes parafine_gravel)", 
-"Surface pararock fragment volume (%) in the 76 - 250 mm size range", 
+"Surface pararock fragment volume (%) in 2 - 75 mm size range (includes parafine_gravel)", 
+"Surface pararock fragment volume (%) in the 75 - 250 mm size range", 
 "Surface pararock fragment volume (%) in the 250 - 600 mm size range", 
 "Surface pararock fragment volume (%) in the >600mm size range", 
 "Surface flat pararock fragment volume (%) in the 2 - 150 mm size range", 
@@ -267,9 +267,9 @@ res3$fetchNASIS_Column <- names(f)[ldx]
 res3$TablePhysicalName <- "<small>\\[C\\]</small>"
 res3$ColumnPhysicalName <- NULL
 res3$ColumnDescription <- "TODO"
-calcdef <- calcdef[,c(4,3,1,2)]
+calcdef <- calcdef[,c(3,4,1,2)]
 calcdef$RelatedFunction <- sapply(strsplit(calcdef$RelatedFunction, ","), function(z) { paste0(paste0("`", trimws(z), "`"), collapse = ", ") })
-res4 <- merge(res3[,c(1,3)], calcdef, all.x = TRUE, sort = FALSE)
+res4 <- merge(res3[,c(4,1)], calcdef, by = "fetchNASIS_Column")
 colnames(res4)[2] <- ""
 knitr::kable(res4[complete.cases(res4),], row.names = FALSE)
 cat(" \n")
