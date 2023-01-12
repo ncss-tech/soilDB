@@ -97,54 +97,6 @@ site/pedon/horizon, but do not have an analog or corresponding metadata
 description in NASIS. These column entries have custom descriptions and
 mention the soilDB functions responsible for generating them.</p>
 <div class="section level2">
-<h2 id="ecologicalsite">
-<code>ecologicalsite</code><a class="anchor" aria-label="anchor" href="#ecologicalsite"></a>
-</h2>
-<p>The Ecological Site table records the official list of range and
-forest ecological sites maintained by NRCS and described in the
-Ecosystem Dynamics Interpretive Tool (EDIT). This table records only the
-identifier and name of an ecological site. The complete ecological site
-characterization resides in the EDIT database. The official list of
-ecological sites is maintained in EDIT.</p>
-<table class="table">
-<colgroup>
-<col width="6%">
-<col width="1%">
-<col width="7%">
-<col width="84%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">
-<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> Column</th>
-<th align="left">Alias</th>
-<th align="left">Physical Name</th>
-<th align="left">Column Description</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">ecositenm</td>
-<td align="left">No</td>
-<td align="left">ecologicalsite.ecositenm</td>
-<td align="left">The name of an ecological site expressed as the
-concatenation of a number of underlying individual name components. Due
-to the size and number of name components, the concatenated name field
-may not be wide enough to contain the full ecological site name. The
-Ecological Site Name from ESIS.</td>
-</tr>
-<tr class="even">
-<td align="left">ecositeid</td>
-<td align="left">No</td>
-<td align="left">ecologicalsite.ecositeid</td>
-<td align="left">The legacy 11 character long unique identifier for a
-particular ecological site. It is the concatenated form of the five
-ecological site ID key fields, ecological site type, ecological site
-MLRA, ecological site LRU, ecological site number and ecological site
-state FIPS alpha code.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level2">
 <h2 id="pedon">
 <code>pedon</code><a class="anchor" aria-label="anchor" href="#pedon"></a>
 </h2>
@@ -1061,10 +1013,10 @@ layer.</td>
 this Site table record.</p>
 <table class="table">
 <colgroup>
-<col width="15%">
+<col width="17%">
 <col width="4%">
-<col width="24%">
-<col width="56%">
+<col width="23%">
+<col width="53%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">
@@ -1073,22 +1025,13 @@ this Site table record.</p>
 <th align="left">Physical Name</th>
 <th align="left">Column Description</th>
 </tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">ecositecorrdate</td>
-<td align="left">No</td>
-<td align="left">siteecositehistory.ecositecorrdate</td>
-<td align="left">The date this particular correlation between a Site and
-Ecological Site was made.</td>
-</tr>
-<tr class="even">
+<tbody><tr class="odd">
 <td align="left">es_classifier</td>
 <td align="left">Yes</td>
 <td align="left">siteecositehistory.classifier</td>
 <td align="left">The name of the person who assigned this particular
 classification.</td>
-</tr>
-</tbody>
+</tr></tbody>
 </table>
 </div>
 <div class="section level2">
@@ -1517,15 +1460,6 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left">Dry Munsell Soil Color</td>
 </tr>
 <tr class="odd">
-<td align="left">es_selection_method</td>
-<td align="left"><small><span class="math display">\[C\]</span></small></td>
-<td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
-<td align="left">FALSE</td>
-<td align="left">Ecological Site History record selection method from
-<code>soilDB:::.pickBestEcosite()</code>
-</td>
-</tr>
-<tr class="even">
 <td align="left">fine_gravel</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1535,7 +1469,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left">FALSE</td>
 <td align="left">Rock fragment volume (%) in 2 - 5 mm size range</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">flagstones</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1546,7 +1480,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left">Flat rock fragment volume (%) in the &gt;150 mm size
 range</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">geomicrorelief_string</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1555,7 +1489,7 @@ range</td>
 <code>soilDB:::.formatLandformString()</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">glossic.horizon</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1564,7 +1498,7 @@ range</td>
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">gravel</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1575,7 +1509,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left">Rock fragment volume (%) in 2 - 75 mm size range
 (includes fine_gravel)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">huartvol_cohesive</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1585,7 +1519,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left">FALSE</td>
 <td align="left">Cohesive artifact volume (%)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">huartvol_innocuous</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1595,7 +1529,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left">FALSE</td>
 <td align="left">Innocuous artifact volume (%)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">huartvol_penetrable</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1605,7 +1539,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left">FALSE</td>
 <td align="left">Penetrable artifact volume (%)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">huartvol_persistent</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1615,7 +1549,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left">FALSE</td>
 <td align="left">Persistent artifact volume (%)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">hzID</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code></td>
@@ -1623,7 +1557,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left">Internal horizon row ID (unique) calculated in aqp
 SoilProfileCollection objects</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">landform_string</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1632,7 +1566,7 @@ SoilProfileCollection objects</td>
 <code>soilDB:::.formatLandformString()</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">landscape_string</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1641,7 +1575,7 @@ SoilProfileCollection objects</td>
 <code>soilDB:::.formatLandformString()</code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">lithic.contact</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1650,7 +1584,7 @@ SoilProfileCollection objects</td>
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">lithologic.discontinuity</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1659,56 +1593,56 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">m_b</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
 <td align="left">FALSE</td>
 <td align="left">Moist Color B</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">m_chroma</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
 <td align="left">FALSE</td>
 <td align="left">Moist Color Chroma</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">m_g</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
 <td align="left">FALSE</td>
 <td align="left">Moist Color G</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">m_hue</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
 <td align="left">FALSE</td>
 <td align="left">Moist Color Hue</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">m_r</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
 <td align="left">FALSE</td>
 <td align="left">Moist Color R</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">m_sigma</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
 <td align="left">FALSE</td>
 <td align="left">Moist Color Sigma</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">m_value</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
 <td align="left">FALSE</td>
 <td align="left">Moist Color Value</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">microfeature_string</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1717,14 +1651,14 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <code>soilDB:::.formatLandformString()</code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">moist_soil_color</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
 <td align="left">FALSE</td>
 <td align="left">Moist Munsell Soil Color</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">mollic.epipedon</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1733,7 +1667,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">ochric.epipedon</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1742,7 +1676,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">paraboulders</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1753,7 +1687,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left">Pararock fragment volume (%) in the &gt;600mm size
 range</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">parachanners</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1764,7 +1698,7 @@ range</td>
 <td align="left">Flat pararock fragment volume (%) in the 2 - 150 mm
 size range</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">paracobbles</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1775,7 +1709,7 @@ size range</td>
 <td align="left">Pararock fragment volume (%) in the 75 - 250 mm size
 range</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">parafine_gravel</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1786,7 +1720,7 @@ range</td>
 <td align="left">Pararock fragment volume (%) in 2 - 5 mm size
 range</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">paraflagstones</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1797,7 +1731,7 @@ range</td>
 <td align="left">Flat pararock fragment volume (%) in the &gt;150 mm
 size range</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">paragravel</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1808,7 +1742,7 @@ size range</td>
 <td align="left">Pararock fragment volume (%) in 2 - 75 mm size range
 (includes parafine_gravel)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">parastones</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1819,7 +1753,7 @@ size range</td>
 <td align="left">Pararock fragment volume (%) in the 250 - 600 mm size
 range</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">redox.concentrations</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1828,7 +1762,7 @@ range</td>
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">reduced.matrix</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1837,7 +1771,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">sapric.soil.materials</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1846,7 +1780,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">secondary.carbonates</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1855,7 +1789,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">selection_method</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1864,7 +1798,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <code>soilDB:::.pickBestTaxHistory()</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">slope_shape</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code></td>
@@ -1872,7 +1806,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left">Calculated factor where levels are concatenation of
 site.shapeacross + ” / ” + site.shapedown</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">soil_color</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code></td>
@@ -1881,7 +1815,7 @@ site.shapeacross + ” / ” + site.shapedown</td>
 <code>fetchNASIS(soilColorState="moist")</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">spodic.horizon</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1890,7 +1824,7 @@ site.shapeacross + ” / ” + site.shapedown</td>
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">spodic.materials</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -1899,7 +1833,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">stones</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1910,7 +1844,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left">Rock fragment volume (%) in the 250 - 600 mm size
 range</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">surface_boulders</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1921,7 +1855,7 @@ range</td>
 <td align="left">Surface rock fragment volume (%) in the &gt;600mm size
 range</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">surface_channers</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1932,7 +1866,7 @@ range</td>
 <td align="left">Surface flat rock fragment volume (%) in the 2 - 150 mm
 size range</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">surface_cobbles</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1943,7 +1877,7 @@ size range</td>
 <td align="left">Surface rock fragment volume (%) in the 75 - 250 mm
 size range</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">surface_fgravel</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1953,7 +1887,7 @@ size range</td>
 <td align="left">TRUE</td>
 <td align="left">Deprecated alias of surface_fine_gravel</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">surface_fine_gravel</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1964,7 +1898,7 @@ size range</td>
 <td align="left">Surface rock fragment volume (%) in 2 - 5 mm size
 range</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">surface_flagstones</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1975,7 +1909,7 @@ range</td>
 <td align="left">Surface flat rock fragment volume (%) in the &gt;150 mm
 size range</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">surface_gravel</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1986,7 +1920,7 @@ size range</td>
 <td align="left">Surface rock fragment volume (%) in 2 - 75 mm size
 range (includes fine_gravel)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">surface_paraboulders</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -1997,7 +1931,7 @@ range (includes fine_gravel)</td>
 <td align="left">Surface pararock fragment volume (%) in the &gt;600mm
 size range</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">surface_parachanners</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2008,7 +1942,7 @@ size range</td>
 <td align="left">Surface flat pararock fragment volume (%) in the 2 -
 150 mm size range</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">surface_paracobbles</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2019,7 +1953,7 @@ size range</td>
 <td align="left">Surface pararock fragment volume (%) in the 75 - 250 mm
 size range</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">surface_parafine_gravel</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2030,7 +1964,7 @@ size range</td>
 <td align="left">Surface pararock fragment volume (%) in 2 - 5 mm size
 range</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">surface_paraflagstones</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2041,7 +1975,7 @@ range</td>
 <td align="left">Surface flat pararock fragment volume (%) in the
 &gt;150 mm size range</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">surface_paragravel</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2052,7 +1986,7 @@ range</td>
 <td align="left">Surface pararock fragment volume (%) in 2 - 75 mm size
 range (includes parafine_gravel)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">surface_parastones</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2063,7 +1997,7 @@ range (includes parafine_gravel)</td>
 <td align="left">Surface pararock fragment volume (%) in the 250 - 600
 mm size range</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">surface_stones</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2074,7 +2008,7 @@ mm size range</td>
 <td align="left">Surface rock fragment volume (%) in the 250 - 600 mm
 size range</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">surface_total_frags_pct</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2085,7 +2019,7 @@ size range</td>
 <td align="left">Total surface fragment volume (%), including
 parafragments</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">surface_total_frags_pct_nopf</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2096,7 +2030,7 @@ parafragments</td>
 <td align="left">Total surface fragment volume (%), excluding
 parafragments</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">surface_unspecified</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2107,7 +2041,7 @@ parafragments</td>
 <td align="left">Surface fragment volume (%) with unspecified/incomplete
 size specification</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">total_art_pct</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2117,7 +2051,7 @@ size specification</td>
 <td align="left">FALSE</td>
 <td align="left">Total artifact volume (%)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">total_frags_pct</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2128,7 +2062,7 @@ size specification</td>
 <td align="left">Total rock fragment volume (%), including
 parafragments</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">total_frags_pct_nopf</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
@@ -2139,7 +2073,7 @@ parafragments</td>
 <td align="left">Total rock fragment volume (%), excluding
 parafragments</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">umbric.epipedon</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
@@ -2148,7 +2082,7 @@ parafragments</td>
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">unspecified</td>
 <td align="left"><small><span class="math display">\[C\]</span></small></td>
 <td align="left">
