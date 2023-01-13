@@ -154,7 +154,7 @@ ORDER BY pedon_View_1.peiid ;"
 	}
 
 	# join in "best" ecological site
-	bes <- get_ecosite_history_from_NASIS_db()
+	bes <- get_ecosite_history_from_NASIS_db(SS = TRUE, best = TRUE, dsn = dsn)
 	if (length(bes) > 0) {
 	  d2 <- merge(d2, bes, by = "siteiid", all.x = TRUE, sort = FALSE)
 	}

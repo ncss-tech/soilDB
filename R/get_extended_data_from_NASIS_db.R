@@ -431,7 +431,7 @@ LEFT OUTER JOIN (
     return(data.frame())
   
 	# exec queries
-  d.ecosite <- get_ecosite_history_from_NASIS_db(dsn = channel) # this query has been abstracted out
+  d.ecosite <- get_ecosite_history_from_NASIS_db(SS = SS, dsn = channel) # this query has been abstracted out
   d.diagnostic <- dbQueryNASIS(channel, q.diagnostic, close = FALSE)
   d.restriction <- dbQueryNASIS(channel, q.restriction, close = FALSE)
 

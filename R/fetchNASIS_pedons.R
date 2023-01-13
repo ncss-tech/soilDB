@@ -190,7 +190,7 @@
   site(hz_data) <- as.data.frame(best.tax.data)
 
   # get "best" ecosite data (most recent correlation, or most complete if no date)
-  site(hz_data) <- get_ecosite_history_from_NASIS_db(best = TRUE)
+  site(hz_data) <- extended_data$ecositehistory
 
   ## TODO: NA in diagnostic boolean columns are related to pedons with no diagnostic features
   ## https://github.com/ncss-tech/soilDB/issues/59
