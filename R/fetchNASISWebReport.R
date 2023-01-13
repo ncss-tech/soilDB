@@ -198,13 +198,8 @@ get_legend_from_NASISWebReport <- function(mlraoffice, areasymbol, droplevels = 
 
   d.legend <- parseWebReport(url, args)
 
-
   # set factor levels according to metadata domains
-  # data is coming back uncoded from LIMS so db is set to "SDA"
-  d.legend <- uncode(d.legend,
-                     db = "SDA",
-                     droplevels = droplevels
-  )
+  d.legend <- uncode(d.legend, droplevels = droplevels)
 
   # date
   d.legend$cordate <- as.Date(d.legend$cordate)
@@ -236,11 +231,7 @@ get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, s
 
 
   # set factor levels according to metadata domains
-  # data is coming back uncoded from LIMS so db is set to "SDA"
-  d <- uncode(d,
-              db = "SDA",
-              droplevels = droplevels
-  )
+  d <- uncode(d, droplevels = droplevels)
 
   # return data.frame
   return(d)
@@ -270,10 +261,7 @@ get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, strin
   d.mapunit$musym = as.character(d.mapunit$musym)
 
   # set factor levels according to metadata domains
-  # data is coming back uncoded from LIMS so db is set to "SDA"
-  d.mapunit <- uncode(d.mapunit,
-                      db = "SDA",
-                      droplevels = droplevels
+  d.mapunit <- uncode(d.mapunit, droplevels = droplevels
   )
 
   # return data.frame
