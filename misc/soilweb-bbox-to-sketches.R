@@ -16,7 +16,7 @@ library(soilDB)
 # # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=41.83547,-90.12201,z16
 bb <- '-90.1378 41.8273,-90.1378 41.8420,-90.1051 41.8420,-90.1051 41.8273,-90.1378 41.8273'
 
-# # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=38.54538,-121.74458,z14
+# https://casoilresource.lawr.ucdavis.edu/gmap/?loc=38.54538,-121.74458,z14
 bb <- '-121.8100 38.5145,-121.8100 38.5762,-121.6792 38.5762,-121.6792 38.5145,-121.8100 38.5145'
  
  
@@ -42,10 +42,9 @@ bb <- '-82.4952 35.3743,-82.4952 35.4079,-82.4271 35.4079,-82.4271 35.3743,-82.4
 wkt <- sprintf('POLYGON((%s))', bb)
 
 ## init sf polygon
-x <- st_as_sfc(wkt)
+# WGS84 GCS
+x <- st_as_sfc(wkt, crs = 4326)
 
-# set CRS as GCS WGS84
-st_crs(x) <- 4326
 
 ## get overlapping map unit keys
 # could also use SDA_query() with more elaborate SQL
@@ -76,15 +75,6 @@ osd <- fetchOSD(unique(s$compname), extended = TRUE)
 ## check out results
 str(osd, 1)
 
-
-## Note: latest soilDB::fetchOSD() does this automatically now
-
-## convert horizon boundary distinctness -> vertical distance
-# see manual page
-osd$SPC$hzd <- hzDistinctnessCodeToOffset(
-  osd$SPC$distinctness, 
-  codes = c('very abrupt', 'abrubt', 'clear', 'gradual', 'diffuse')
-)
 
 
 ## classic arrangement, using normal (nominal) factors
