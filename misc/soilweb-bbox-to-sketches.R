@@ -130,43 +130,43 @@ plotGeomorphCrossSection(osd, type = 'bar')
 o <- reconcileOSDGeomorph(osd, 'hillpos')
 res <- vizHillslopePosition(o$geom)
 print(res$fig)
-res$score
+res$match.rate
 
 # 3D geomorphic summary
 o <- reconcileOSDGeomorph(osd, 'geomcomp')
 res <- vizGeomorphicComponent(o$geom)
 print(res$fig)
-res$score
+res$match.rate
 
 # flats geomorphic summary
 o <- reconcileOSDGeomorph(osd, 'flats')
 res <- vizFlatsPosition(o$geom)
 print(res$fig)
-res$score
+res$match.rate
 
 # terrace geomorphic summary
 o <- reconcileOSDGeomorph(osd, 'terrace')
 res <- vizTerracePosition(o$geom)
 print(res$fig)
-res$score
+res$match.rate
 
 # mountain geomorphic summary
 o <- reconcileOSDGeomorph(osd, 'mtnpos')
 res <- vizMountainPosition(o$geom)
 print(res$fig)
-res$score
+res$match.rate
 
 # shape geomorphic summary
 o <- reconcileOSDGeomorph(osd, 'shape_across')
 res <- vizSurfaceShape(o$geom, title = 'Shape Across')
 print(res$fig)
-res$score
+res$match.rate
 
 # shape geomorphic summary
 o <- reconcileOSDGeomorph(osd, 'shape_down')
 res <- vizSurfaceShape(o$geom, title = 'Shape Down')
 print(res$fig)
-res$score
+res$match.rate
 
 
 
