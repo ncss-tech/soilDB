@@ -247,7 +247,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   
   df <- SDA_query(q)
   vars <- c("flodfreqcl", "floddurcl", "pondfreqcl", "ponddurcl")
-  df[vars] <- lapply(df[vars], function(x) gsub(" ", "", x))
+  df[vars] <- lapply(df[vars], trimws)
   
   return(df)
 }
