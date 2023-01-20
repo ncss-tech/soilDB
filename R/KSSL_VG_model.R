@@ -74,12 +74,24 @@
 #' 
 #' str(vg)
 #' 
-KSSL_VG_model <- function(VG_params, phi_min=10^-6, phi_max=10^8, pts=100) {
+KSSL_VG_model <- function(VG_params, phi_min = 10^-6, phi_max = 10^8, pts = 100) {
+  
+  # sanity check, expected columns
+  if( any(! c('theta_r', 'theta_s', 'alpha', 'npar') %in% names(VG_params)) ) {
+    message('one or more required column is missing')
+    return(list(VG_curve = NULL, VG_inverse_function = NULL))
+  }
+  
+  # subset to to expected columns
+  VG_params <- VG_params[, c('theta_r', 'theta_s', 'alpha', 'npar')]
   
   # sanity check: no NA allowed
   # return NULL if present
-  if(any(is.na(VG_params)))
-    return(list(VG_curve=NULL, VG_inverse_function=NULL))
+  if(any(is.na(VG_params))) {
+    message('one or more required value is NA')
+    return(list(VG_curve = NULL, VG_inverse_function = NULL))
+  }
+    
   
   # useful range in kPa suctions
   phi <- 10^seq(log(phi_min, base=10), log(phi_max, base=10), length.out = pts)
