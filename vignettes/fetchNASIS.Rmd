@@ -21,7 +21,7 @@ The final set of columns reported in this guide are "calculated": these are deri
 ```{r, include = FALSE}
 soilDBdata_pedon_dsn <- system.file("extdata/fetchNASIS_pedons.sqlite", package = "soilDBdata")
 
-calcdef <- structure(list(fetchNASIS_Column = c("hzID", "d_r", "d_g", "d_b", 
+calcdef <- structure(list(fetchNASIS_Column = c("hzID", "texture_class", "d_r", "d_g", "d_b", 
 "d_hue", "d_value", "d_chroma", "d_sigma", "m_r", "m_g", "m_b", 
 "m_hue", "m_value", "m_chroma", "m_sigma", "moist_soil_color", 
 "dry_soil_color", "soil_color", "fine_gravel", "gravel", "cobbles", 
@@ -44,7 +44,7 @@ calcdef <- structure(list(fetchNASIS_Column = c("hzID", "d_r", "d_g", "d_b",
 "sapric.soil.materials", "aquic.conditions", "reduced.matrix", 
 "albic.horizon", "spodic.horizon", "glossic.horizon", "spodic.materials", 
 "lithologic.discontinuity", "densic.materials", "umbric.epipedon", 
-"albic.materials"), ColumnDescription = c("Internal horizon row ID (unique) calculated in aqp SoilProfileCollection objects", 
+"albic.materials"), ColumnDescription = c("Internal horizon row ID (unique) calculated in aqp SoilProfileCollection objects", "Texture class of fine-earth fraction (`phtexture.texcl`). If missing, then the in lieu class is used (`phtexture.lieutex`).",
 "Dry Color R", "Dry Color G", "Dry Color B", "Dry Color Hue", 
 "Dry Color Value", "Dry Color Chroma", "Dry Color Sigma", "Moist Color R", 
 "Moist Color G", "Moist Color B", "Moist Color Hue", "Moist Color Value", 
@@ -110,7 +110,7 @@ calcdef <- structure(list(fetchNASIS_Column = c("hzID", "d_r", "d_g", "d_b",
 "Presence/absence. Calculated from Pedon Diagnostic Horizon Table with `soilDB:::.diagHzLongtoWide()`", 
 "Presence/absence. Calculated from Pedon Diagnostic Horizon Table with `soilDB:::.diagHzLongtoWide()`", 
 "Presence/absence. Calculated from Pedon Diagnostic Horizon Table with `soilDB:::.diagHzLongtoWide()`"
-), RelatedFunction = c("`get_hz_data_from_NASIS_db()`", "`get_colors_from_NASIS_db()`", 
+), RelatedFunction = c("`get_hz_data_from_NASIS_db()`", "`get_hz_data_from_NASIS_db()`", "`get_colors_from_NASIS_db()`", 
 "`get_colors_from_NASIS_db()`", "`get_colors_from_NASIS_db()`", 
 "`get_colors_from_NASIS_db()`", "`get_colors_from_NASIS_db()`", 
 "`get_colors_from_NASIS_db()`", "`get_colors_from_NASIS_db()`", 
@@ -165,7 +165,7 @@ calcdef <- structure(list(fetchNASIS_Column = c("hzID", "d_r", "d_g", "d_b",
 "`get_extended_data_from_NASIS_db()`", "`get_extended_data_from_NASIS_db()`", 
 "`get_extended_data_from_NASIS_db()`", "`get_extended_data_from_NASIS_db()`", 
 "`get_extended_data_from_NASIS_db()`", "`get_extended_data_from_NASIS_db()`"
-), Deprecated = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
+), Deprecated = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
 FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
 FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
 FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
@@ -175,7 +175,7 @@ FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
 FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
 FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
 FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
-FALSE, FALSE, FALSE, FALSE)), row.names = c(NA, -92L), class = "data.frame")
+FALSE, FALSE, FALSE, FALSE)), row.names = c(NA, -93L), class = "data.frame")
 
 knitr::opts_chunk$set(
   collapse = TRUE,
