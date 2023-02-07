@@ -124,6 +124,17 @@ fetchSoilGrids <- function(x,
     r.content <- httr::content(response, as = "text", encoding = "UTF-8")
     jres <- jsonlite::fromJSON(r.content)
     
+    # add handling for messages from api about erroneous input
+    if (!is.null(jres$detail)) {
+      if (!is.null(jres$detail$msg)) {
+        if (!is.null(jres$detail$loc) && length(jres$detail$loc) > 0)
+          message("Check ", 
+                  paste0(jres$detail$loc[[1]], collapse = " "), 
+                  " (", loc.names[1], ":", locations[[loc.names[1]]][i], "); ",
+                  jres$detail$msg)
+      }
+    }
+    
     # create new horizon data, merge in each property using standard depth labels
     depth.intervals <-  c("0-5", "5-15", "15-30", "30-60", "60-100", "100-200")
     hz.data <- data.frame(id = id, latitude = lat, longitude = lon, label = depth.intervals, stringsAsFactors = FALSE)
@@ -148,7 +159,7 @@ fetchSoilGrids <- function(x,
   }
   
   # combine horizon data together
-  spc <- do.call('rbind', res)
+  spc <- data.table::rbindlist(res, fill = TRUE)
   
   # calculate top and bottom depths from label
   labelsplit <- strsplit(as.character(spc$label), split = "-")
@@ -188,13 +199,23 @@ fetchSoilGrids <- function(x,
   
   out[["values"]] <- cbind(sgvalues, uncertainty)
   
-  # fix names and labels for downstream
-  out <- out[,colnames(out)[grep("range", colnames(out), invert = TRUE)]]
-  out <- data.frame(label = gsub("cm", "", out$label), values = out$values)
-  colnames(out) <- gsub("\\.Q0\\.", "Q", colnames(out))
-  colnames(out) <- gsub("Q5", "Q50", colnames(out))
-  colnames(out) <- gsub("values", x, colnames(out))
-  colnames(out) <- gsub("\\.", "", colnames(out))
-  
+  if (nrow(out[["values"]]) == 0) {
+    out <- data.frame(range = NA, 
+                      label = c("0-5", "5-15", "15-30", 
+                                "30-60", "60-100", "100-200"), 
+                      values = data.frame(
+                          Q0.05 = rep(NA_real_, 6), Q0.5 = rep(NA_real_, 6), Q0.95 = rep(NA_real_, 6),
+                          mean = rep(NA_real_, 6), uncertainty = rep(NA_real_, 6)
+                       ))
+  }
+  # } else {
+    # fix names and labels for downstream
+    out <- out[,colnames(out)[grep("range", colnames(out), invert = TRUE)]]
+    out <- cbind(label = gsub("cm", "", out$label), values = out$values)
+    colnames(out) <- gsub("\\.Q0\\.", "Q", colnames(out))
+    colnames(out) <- gsub("Q5", "Q50", colnames(out))
+    colnames(out) <- gsub("values", x, colnames(out))
+    colnames(out) <- gsub("\\.", "", colnames(out))
+  # }
   return(out)
 }

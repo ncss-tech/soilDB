@@ -27,7 +27,9 @@ test_that("fetchSoilGrids() works as expected", {
 
   # data conversion works
   expect_equal(res$claymean[1], 18.7)
-
+  
+  skip_if(as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)))
+  
   # default names kick in
   expect_silent( {res <- fetchSoilGrids(your.points, loc.names = NULL)} )
 
