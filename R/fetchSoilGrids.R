@@ -60,8 +60,9 @@ fetchSoilGrids <- function(x,
   
   if (inherits(locations, 'sf') || inherits(locations, 'Spatial')) {
     if (requireNamespace("sf")) {
-      if (inherits(locations, 'Spatial')) {
-        # convert sp -> sf
+      if (inherits(locations, 'Spatial') ||
+          inherits(locations, 'SpatVector')) {
+        # convert sp -> sf & terra -> sf
         locations <- sf::st_as_sf(locations)
       }
       
