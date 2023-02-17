@@ -1264,12 +1264,12 @@ data.</td>
 <div class="section level2">
 <h2 id="calculated">Calculated<a class="anchor" aria-label="anchor" href="#calculated"></a>
 </h2>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
-<col width="14%">
-<col width="49%">
-<col width="30%">
-<col width="5%">
+<col width="12%">
+<col width="54%">
+<col width="27%">
+<col width="4%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">fetchNASIS_Column</th>
@@ -2019,6 +2019,14 @@ size specification</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="even">
+<td align="left">texture_class</td>
+<td align="left">Texture class of fine-earth fraction
+(<code>phtexture.texcl</code>). If missing, then the in lieu class is
+used (<code>phtexture.lieutex</code>).</td>
+<td align="left"><code><a href="../reference/get_hz_data_from_NASIS_db.html">get_hz_data_from_NASIS_db()</a></code></td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
 <td align="left">total_art_pct</td>
 <td align="left">Total artifact volume (%)</td>
 <td align="left">
@@ -2027,7 +2035,7 @@ size specification</td>
 </td>
 <td align="left">FALSE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">total_frags_pct</td>
 <td align="left">Total rock fragment volume (%), including
 parafragments</td>
@@ -2037,7 +2045,7 @@ parafragments</td>
 </td>
 <td align="left">FALSE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">total_frags_pct_nopf</td>
 <td align="left">Total rock fragment volume (%), excluding
 parafragments</td>
@@ -2047,7 +2055,7 @@ parafragments</td>
 </td>
 <td align="left">FALSE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">umbric.epipedon</td>
 <td align="left">Presence/absence. Calculated from Pedon Diagnostic
 Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
@@ -2055,7 +2063,7 @@ Horizon Table with <code>soilDB:::.diagHzLongtoWide()</code>
 <td align="left"><code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code></td>
 <td align="left">FALSE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">unspecified</td>
 <td align="left">Rock fragment volume (%) with unspecified/incomplete
 fragsize</td>

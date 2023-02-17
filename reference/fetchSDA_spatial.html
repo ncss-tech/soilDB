@@ -135,14 +135,14 @@ A Soil Data Access query returns geometry and key identifying information about 
 <span class="r-in"><span>    <span class="co"># get spatial data for a single mukey</span></span></span>
 <span class="r-in"><span>    <span class="va">single.mukey</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2924882"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 chunks...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Bad chunk encountered. Querying each individually...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Bad chunk encountered. Querying each individually...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Symbol 2924882 dropped from result due to error! May exceed the JSON serialization limit or have other topologic problems.FALSE</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 0.6 secs; mean/chunk: 0 secs; mean/symbol: 0.59 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 1; 0.8 secs)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 0.8 secs; mean/chunk: 0.8 secs; mean/symbol: 0.81 secs.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># demonstrate fetching full extent (multi-mukey) of national musym</span></span></span>
 <span class="r-in"><span>    <span class="va">full.extent.nmusym</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2x8l5"</span>, by <span class="op">=</span> <span class="st">"nmusym"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> fetchSDA_spatial: fatal error in national mapunit -&gt; mukey conversion.FALSE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 chunks...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 3; 3.4 secs)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 3.6 secs; mean/chunk: 3.4 secs; mean/symbol: 1.21 secs.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># compare extent of nmusym to single mukey within it</span></span></span>
 <span class="r-in"><span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">single.mukey</span>, <span class="st">'try-error'</span><span class="op">)</span> <span class="op">&amp;&amp;</span> </span></span>
@@ -156,11 +156,32 @@ A Soil Data Access query returns geometry and key identifying information about 
 <span class="r-in"><span>        <span class="op">}</span></span></span>
 <span class="r-in"><span>        </span></span>
 <span class="r-in"><span>    <span class="op">}</span></span></span>
+<span class="r-plt img"><img src="fetchSDA_spatial-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># demo adding a field (`muname`) to attribute table of result</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2x8l5"</span>, by<span class="op">=</span><span class="st">"nmusym"</span>, add.fields<span class="op">=</span><span class="st">"muname"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> fetchSDA_spatial: fatal error in national mapunit -&gt; mukey conversion.FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Error : lexical error: invalid char in json text.\n                                       &lt;!DOCTYPE html&gt;  &lt;html lang=\"en\n                     (right here) ------^\n\n"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 chunks...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 3; 0.7 secs)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 0.9 secs; mean/chunk: 0.7 secs; mean/symbol: 0.3 secs.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 6 features and 4 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -121.034 ymin: 38.01706 xmax: -120.9596 ymax: 38.24938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    mukey areasymbol nationalmusym                                        muname</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 462101      CA077         2x8l5 Pentz-Bellota complex, 2 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 462101      CA077         2x8l5 Pentz-Bellota complex, 2 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 462101      CA077         2x8l5 Pentz-Bellota complex, 2 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 462101      CA077         2x8l5 Pentz-Bellota complex, 2 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 462101      CA077         2x8l5 Pentz-Bellota complex, 2 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 462101      CA077         2x8l5 Pentz-Bellota complex, 2 to 15 percent slopes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             geom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 POLYGON ((-121.0226 38.2276...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 POLYGON ((-121.0141 38.2325...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 POLYGON ((-121.0339 38.2325...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 POLYGON ((-120.9955 38.0674...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 POLYGON ((-121.0102 38.1891...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 POLYGON ((-120.9648 38.0208...</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
