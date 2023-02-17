@@ -1,6 +1,19 @@
+
+
+#' @title Get RMF data from local NASIS
+#' 
+#' @description Prepare a list of `data.frame` objects with data from the "phrdxfeatures" and "phredoxfcolor" tables. These tables are related by "phrdxfiid" column, and related to horizon data via "phiid".
+#'
+#' @param SS logical, limit query to the selected set
+#'
+#' @param dsn optional path to local SQLite database containing NASIS table structure; default: `NULL`
+#' 
+#' @return a `list` with two `data.frame` objects:
+#'   * `RMF`: contents of "phrdxfeatures" table, often >1 row per horizon
+#'   * `RMF_colors`: contents of "phredoxfcolor", pusually >1 row per record in "phrdxfeatures"
+#'   
 #' @export 
-#' @rdname fetchNASIS
-get_RMF_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
+get_RMF_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
   # RMF
   # unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
@@ -20,8 +33,12 @@ get_RMF_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
 
   channel <- dbConnectNASIS(dsn)
 
-  if (inherits(channel, 'try-error'))
-    return(data.frame())
+  # error condition, empty DF
+  # consider NULL
+  if (inherits(channel, 'try-error')) {
+    return(list(RMF = data.frame(), RMF_colors = data.frame()))
+  }
+    
 
   # toggle selected set vs. local DB
   if (SS == FALSE) {
@@ -33,7 +50,7 @@ get_RMF_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
   d <- dbQueryNASIS(channel, q, close = FALSE)
   d.c <- dbQueryNASIS(channel, q.c)
 
-  # uncode domained columns
+  # convert coded -> text/factor representation of values
   d <- uncode(d, dsn = dsn)
   d.c <- uncode(d.c, dsn = dsn)
 
