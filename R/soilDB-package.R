@@ -1,15 +1,16 @@
 #' Soil Database Interface
 #'
-#' A collection of functions for reading data from USDA-NCSS soil databases.
+#' A collection of functions for reading soil data from U.S. Department of Agriculture Natural Resources Conservation Service (USDA-NRCS) and National Cooperative Soil Survey (NCSS) databases
 #'
-#' This package provides methods for extracting soils information from local
-#' PedonPC and AKSite databases (MS Access format), local NASIS databases (MS
-#' SQL Server), Soil Data Access and various other soil-related web services.
+#' This package provides methods for extracting soils information from local NASIS databases (MS
+#' SQL Server), local PedonPC and AKSite databases (MS Access format), Soil Data Access, and 
+#' other soil-related web services.
+#' 
 #' @name soilDB-package
 #' @aliases soilDB-package soilDB
 #' @docType package
 #' @author J.M. Skovlin, D.E. Beaudette, S.M Roecker, A.G. Brown
-#'  @seealso \code{\link{fetchPedonPC}, \link{fetchNASIS}, \link{SDA_query}, \link{loafercreek}}
+#' @seealso \code{\link{fetchNASIS}, \link{SDA_query}, \link{loafercreek}}
 #' @importFrom grDevices rgb convertColor col2rgb
 #' @importFrom stats aggregate complete.cases na.omit as.formula splinefun weighted.mean
 #' @importFrom utils URLencode object.size read.csv read.table read.delim setTxtProgressBar txtProgressBar write.table type.convert unzip
@@ -26,7 +27,6 @@ NULL
 #'
 #' Several examples of soil profile collections returned by
 #' \code{fetchNASIS(from='pedons')} as \code{SoilProfileCollection} objects.
-#'
 #'
 #' @name loafercreek
 #' @aliases loafercreek gopheridge mineralKing
