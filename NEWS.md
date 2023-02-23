@@ -5,6 +5,8 @@
  - bug fixes in `fetchSCAN()`: 2x requests when `timeseries` argument not specified, account for no results (e.g. year = 1800)
  
  - `fetchNASIS(from="pedons")` and `get_site_data_from_NASIS_db()` now return `siteobsiid` column (@natearoe)
+ 
+ - `mukey.wcs()` gains experimental gridded STATSGO layer (300m)
 
  - Add `get_NASIS_table_metadata()` for returning information about columns in NASIS tables.
  

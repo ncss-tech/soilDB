@@ -670,6 +670,15 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     rat = NULL
   ),
   
+  'statsgo' = list(
+    dsn = 'statsgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'STATSGO2 map unit keys',
+    na = 0L,
+    res = 300,
+    rat = NULL
+  ),
+  
   'rss' = list(
     dsn = 'rss',
     type = 'GEOTIFF_FLOAT',

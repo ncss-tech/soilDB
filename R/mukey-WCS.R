@@ -1,14 +1,14 @@
 
 
-#' @title Get gNATSGO / gSSURGO Map Unit Key (`mukey`) grid from SoilWeb Web Coverage Service (WCS)
+#' @title Get Map Unit Key (`mukey`) grid from SoilWeb Web Coverage Service (WCS)
 #' 
-#' @description Download chunks of the gNATSGO or gSSURGO map unit key grid via bounding-box from the SoilWeb WCS.
+#' @description Download chunks of the gNATSGO, gSSURGO, RSS, and STATSGO2 map unit key grid via bounding-box from the SoilWeb WCS.
 #' 
 #' @author D.E. Beaudette and A.G. Brown
 #'
 #' @param aoi area of interest (AOI) defined using either a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, or a \code{list}, see details
-#' @param db name of the gridded map unit key grid to access, should be either 'gNATSGO' or 'gSSURGO' (case insensitive)
-#' @param res grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; and Raster Soil Surveys (RSS) are at 10m resolution. If `res` is not specified the native resolution of the source is used.
+#' @param db name of the gridded map unit key grid to access, should be either 'gNATSGO', 'gSSURGO', or 'STATSGO' (case insensitive)
+#' @param res grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; STATSGO (this WCS) is 300m; and Raster Soil Surveys (RSS) are at 10m resolution. If `res` is not specified the native resolution of the source is used.
 #' @param quiet logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.
 #'
 #' @note The gNATSGO grid includes raster soil survey map unit keys which are not in SDA.
@@ -20,7 +20,7 @@
 #'   \item{\code{crs}}{coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)}
 #' }
 #'
-#' The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the gNATSGO / gSSURGO grid.
+#' The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the WCS grids.
 #' 
 #' Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.
 #' 
@@ -34,13 +34,13 @@
 #' res <- mukey.wcs(list(aoi = c(-116.7400, 35.2904, -116.7072, 35.3026), crs = "EPSG:4326"),
 #'                  db = 'gNATSGO', res = 30) 
 #'   
-#' MUKEY <- unique(values(res))
+#' m <- unique(values(res))
 #' 
 #' prp <- setNames(
 #'   get_SDA_property(
 #'     c("ph1to1h2o_r", "claytotal_r"),
 #'     "weighted average",
-#'     mukeys = MUKEY,
+#'     mukeys = m,
 #'     top_depth = 0,
 #'     bottom_depth = 25,
 #'     include_minors = TRUE,
@@ -55,10 +55,10 @@
 #' 
 #' plot(res2[['pH1to1_0to25']])
 #' }
-mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS'), res = 30, quiet = FALSE) {
+mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO'), res = 30, quiet = FALSE) {
 
   # sanity check: db name
-  db <- match.arg(tolower(db[1]), choices = c('gnatsgo', 'gssurgo', 'rss'))
+  db <- match.arg(tolower(db[1]), choices = c('gnatsgo', 'gssurgo', 'rss', 'statsgo'))
 
   # sanity check: aoi specification
   if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
@@ -69,13 +69,13 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS'), res = 30, quiet 
   # list-lookup is lower-case
   var.spec <- .mukey.spec[[db]]
   
-  ##if a resolution isn't specified, use the data-specific default
+  # if a resolution isn't specified, use the data-specific default
   if (missing(res)) {
     res <- var.spec$res
   }
   
   # reasonable resolution
-  if (db %in% c('gssurgo', 'gnatsgo')) {
+  if (db %in% c('gssurgo', 'gnatsgo', 'statsgo')) {
     if (res < 30 || res > 3000) {
       stop('`res` should be within 30 <= res <= 3000 meters')
     }
@@ -189,12 +189,13 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS'), res = 30, quiet 
   # specification of NODATA
   # this doesn't make it through the WCS
   # value in spec is derived from the original UINT32 grid
-  # gSSURGO / gNATSGO use a different value vs. RSS
+  # gSSURGO / gNATSGO, STATSGO, RSS all use different NODATA values
   terra::NAflag(r) <- var.spec$na
   
   # remove tempfile 
   unlink(tf)
 
+  ## TODO: use terra::as.factor()
   # build RAT
   # NB: unique() takes na.rm argument on terra >1.5-21 <https://github.com/rspatial/terra/issues/561>
   uids <- na.omit(terra::unique(r)[,1])  

@@ -2,16 +2,21 @@
 % Please edit documentation in R/mukey-WCS.R
 \name{mukey.wcs}
 \alias{mukey.wcs}
-\title{Get gNATSGO / gSSURGO Map Unit Key (\code{mukey}) grid from SoilWeb Web Coverage Service (WCS)}
+\title{Get Map Unit Key (\code{mukey}) grid from SoilWeb Web Coverage Service (WCS)}
 \usage{
-mukey.wcs(aoi, db = c("gNATSGO", "gSSURGO", "RSS"), res = 30, quiet = FALSE)
+mukey.wcs(
+  aoi,
+  db = c("gNATSGO", "gSSURGO", "RSS", "STATSGO"),
+  res = 30,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{aoi}{area of interest (AOI) defined using either a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, or a \code{list}, see details}
 
-\item{db}{name of the gridded map unit key grid to access, should be either 'gNATSGO' or 'gSSURGO' (case insensitive)}
+\item{db}{name of the gridded map unit key grid to access, should be either 'gNATSGO', 'gSSURGO', or 'STATSGO' (case insensitive)}
 
-\item{res}{grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; and Raster Soil Surveys (RSS) are at 10m resolution. If \code{res} is not specified the native resolution of the source is used.}
+\item{res}{grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; STATSGO (this WCS) is 300m; and Raster Soil Surveys (RSS) are at 10m resolution. If \code{res} is not specified the native resolution of the source is used.}
 
 \item{quiet}{logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.}
 }
@@ -19,7 +24,7 @@ mukey.wcs(aoi, db = c("gNATSGO", "gSSURGO", "RSS"), res = 30, quiet = FALSE)
 A SpatRaster (or RasterLayer) object containing indexed map unit keys and associated raster attribute table or a try-error if request fails. By default, spatial classes from the \code{terra} package are returned. If the input object class is from the \code{raster} or \code{sp} packages a RasterLayer is returned.
 }
 \description{
-Download chunks of the gNATSGO or gSSURGO map unit key grid via bounding-box from the SoilWeb WCS.
+Download chunks of the gNATSGO, gSSURGO, RSS, and STATSGO2 map unit key grid via bounding-box from the SoilWeb WCS.
 }
 \details{
 \code{aoi} should be specified as one of: \code{SpatRaster}, \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc}, \code{bbox} object, OR a \code{list} containing:
@@ -29,7 +34,7 @@ Download chunks of the gNATSGO or gSSURGO map unit key grid via bounding-box fro
 \item{\code{crs}}{coordinate reference system of BBOX, e.g. 'OGC:CRS84' (EPSG:4326, WGS84 Longitude/Latitude)}
 }
 
-The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the gNATSGO / gSSURGO grid.
+The WCS query is parameterized using a rectangular extent derived from the above AOI specification, after conversion to the native CRS (EPSG:5070) of the WCS grids.
 
 Databases available from this WCS can be queried using \code{WCS_details(wcs = 'mukey')}.
 }
@@ -43,13 +48,13 @@ library(terra)
 res <- mukey.wcs(list(aoi = c(-116.7400, 35.2904, -116.7072, 35.3026), crs = "EPSG:4326"),
                  db = 'gNATSGO', res = 30) 
   
-MUKEY <- unique(values(res))
+m <- unique(values(res))
 
 prp <- setNames(
   get_SDA_property(
     c("ph1to1h2o_r", "claytotal_r"),
     "weighted average",
-    mukeys = MUKEY,
+    mukeys = m,
     top_depth = 0,
     bottom_depth = 25,
     include_minors = TRUE,
