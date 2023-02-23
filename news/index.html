@@ -55,6 +55,7 @@
 <ul><li><p><code>dbQueryNASIS(..., close=TRUE)</code> now calls <code>dbDisconnect()</code> <code><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit()</a></code> (ensuring connections get closed on error)</p></li>
 <li><p>bug fixes in <code><a href="../reference/fetchSCAN.html">fetchSCAN()</a></code>: 2x requests when <code>timeseries</code> argument not specified, account for no results (e.g. year = 1800)</p></li>
 <li><p><code>fetchNASIS(from="pedons")</code> and <code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code> now return <code>siteobsiid</code> column (<a href="https://github.com/natearoe" class="external-link">@natearoe</a>)</p></li>
+<li><p><code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code> gains experimental gridded STATSGO layer (300m)</p></li>
 <li>
 <p>Add <code><a href="../reference/get_NASIS_table_metadata.html">get_NASIS_table_metadata()</a></code> for returning information about columns in NASIS tables.</p>
 <ul><li>This function complements the existing <code><a href="../reference/get_NASIS_metadata.html">get_NASIS_column_metadata()</a></code> which focuses on the values within columns such as domain choice names, labels, and order. Both functions now take an <code>include_descriptions</code> argument to optionally include the narrative description of the column or column choice list item.</li>
