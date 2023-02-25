@@ -81,7 +81,7 @@ downloadSSURGO <- function(WHERE = NULL,
     }
     
     for (i in seq_along(paths2)) {
-      ssa <- gsub(".*wss_SSA_(.*)_soildb.*", "\\1", paths2[i])
+      ssa <- gsub(".*wss_SSA_(.*)_.*", "\\1", paths2[i])
       if ((!dir.exists(file.path(exdir, ssa)) || overwrite) && 
           length(utils::unzip(paths2[i], exdir = exdir)) == 0) {
         message(paste('Invalid zipfile:', paths2[i]))
