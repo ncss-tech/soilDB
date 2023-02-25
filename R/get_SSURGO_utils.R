@@ -13,7 +13,7 @@
   q2 <- ifelse(!is.null(WHERE), paste0(q, " AND (", WHERE, ")"), q)
   sacatalog <- suppressMessages(SDA_query(q2))
 
-  if (is.null(sacatalog)) {
+  if (inherits(sacatalog, 'try-error') || is.null(sacatalog)) {
     return(try(stop("Query of Soil Survey Area Catalog (", 
                     WHERE, ") failed to return any data", call. = FALSE), silent = TRUE))
   }
