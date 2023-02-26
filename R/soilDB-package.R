@@ -32,10 +32,10 @@ NULL
 #' @aliases loafercreek gopheridge mineralKing
 #' @docType data
 #' @keywords datasets
+#' @examplesIf require("aqp")
 #' @examples
 #'
 #' \donttest{
-#' if (require("aqp") && requireNamespace("scales")) {
 #' # load example dataset
 #'   data("gopheridge")
 #'
@@ -82,7 +82,6 @@ NULL
 #'
 #'   # add diagnostic horizons
 #'   addDiagnosticBracket(loafercreek[1:10, ], kind='argillic horizon', col='red', offset=-0.4)
-#' }
 #' }
 #'
 NULL

@@ -62,7 +62,7 @@ makeChunks <- function(ids, size=100) {
 #' # major components only
 #' res <- subset(res, comppct_r >= 85)
 #'
-#' if (requireNamespace("scales")) {
+#' if (TRUE) {
 #'   # inspect plot of result
 #'   par(mar=c(0,0,0,0))
 #'   groupedProfilePlot(res, groups = "mukey", color = "hzname", cex.names=0.8,
