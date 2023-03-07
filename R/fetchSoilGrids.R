@@ -174,12 +174,14 @@ fetchSoilGrids <- function(x,
   # move location information to site
   aqp::site(spc) <- ~ longitude + latitude
   
-  if (utils::packageVersion("aqp") >= 2.0) {
-    aqp::initSpatial(spc, crs = "OGC:CRS84") <- ~ longitude + latitude
-  } else {
+  # if (utils::packageVersion("aqp") >= 2.0) {
+  #   aqp::initSpatial(spc, crs = "OGC:CRS84") <- ~ longitude + latitude
+  # } else {
+  suppressWarnings({
     aqp::coordinates(spc) <- ~ longitude + latitude
     aqp::proj4string(spc) <- "EPSG:4326"
-  }
+  })  
+  # }
   
   # merge the rest of the sf object into the site table 
   if (spatial_input) {
