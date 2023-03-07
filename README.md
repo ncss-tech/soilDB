@@ -33,7 +33,7 @@ Get the development version from GitHub:
     ## 
     ## To cite soilDB in publications use:
     ## 
-    ##   Beaudette, D., Skovlin, J., Roecker, S., Brown, A. (2022). soilDB:
+    ##   Beaudette, D., Skovlin, J., Roecker, S., Brown, A. (2023). soilDB:
     ##   Soil Database Interface. R package version 2.7.6.
     ##   <https://CRAN.R-project.org/package=soilDB>
     ## 
@@ -44,7 +44,7 @@ Get the development version from GitHub:
     ##     author = {Dylan Beaudette and Jay Skovlin and Stephen Roecker and Andrew Brown},
     ##     note = {R package version 2.7.6},
     ##     url = {https://CRAN.R-project.org/package=soilDB},
-    ##     year = {2022},
+    ##     year = {2023},
     ##   }
 
 ## soilDB 2.7.7
@@ -58,7 +58,7 @@ Get the development version from GitHub:
 ## Functions by Data Source
 
 -   Soil Data Access (SDA)
-    -   [`fetchSDA`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_component.html)
+    -   [`fetchSDA`](http://ncss-tech.github.io/soilDB/reference/fetchSDA.html)
     -   [`fetchSDA_spatial`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html)
     -   [`SDA_query`](http://ncss-tech.github.io/soilDB/reference/SDA_query.html)
     -   [`SDA_spatialQuery`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html)

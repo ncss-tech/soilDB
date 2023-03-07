@@ -75,7 +75,7 @@ citation("soilDB")
 ## Functions by Data Source 
     
   * Soil Data Access (SDA)
-    + [`fetchSDA`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_component.html)
+    + [`fetchSDA`](http://ncss-tech.github.io/soilDB/reference/fetchSDA.html)
     + [`fetchSDA_spatial`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html)
     + [`SDA_query`](http://ncss-tech.github.io/soilDB/reference/SDA_query.html)
     + [`SDA_spatialQuery`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html)
