@@ -16,7 +16,7 @@ Enhancements
  
    - Add `SpatVector` coercion for input locations (already supported sf/sp classes) 
    
-   - Add handling for messages from api about erroneous input 
+   - Add handling for messages from API about erroneous input 
    
  - Add `fetchNASIS("pedons")` columns vignette 
  
