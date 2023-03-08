@@ -55,6 +55,12 @@ Bug fixes
  - Fix selected set (`SS` argument) for `get_ecosite_history_from_NASIS_db()`
  
  - `get_SDA_pmgroupname`: return `NA` (not "NULL") for empty/missing `pmgroupname` when `simplify=TRUE `
+ 
+ - `SDA_spatialQuery()`: 
+ 
+   - `geomIntersection=TRUE` with `db="SAPOLYGON"` now correctly labels the `areasymbol` column (previously was `mukey`) to match `geomIntersection=FALSE` and SDA schema
+   
+   - Bounding box extent polygons are now only calculated for `SpatRaster` (not `SpatVector`) input
 
 # soilDB 2.7.6 (2022-11-28)
 
