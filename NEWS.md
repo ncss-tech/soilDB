@@ -48,11 +48,15 @@ Bug fixes
  
    - Handle `SDA_query()` with invalid syntax in `WHERE` clause
    
-   - Fix for `include_template=FALSE `
+   - Fix for `include_template=FALSE`
+   
+ - `createSSURGO()`
  
+   - Attribute tables are now added to `gpkg_contents` when output `filename` is a GeoPackage
+  
  - Fix for `.get_comonth_from_SDA()`
  
- - Fix selected set (`SS` argument) for `get_ecosite_history_from_NASIS_db()`
+ - Fix selected set (`SS` argument) for `get_ecosite_history_from_NASIS_db()` in `get_site_data_from_NASIS_db()`
  
  - `get_SDA_pmgroupname`: return `NA` (not "NULL") for empty/missing `pmgroupname` when `simplify=TRUE `
  
