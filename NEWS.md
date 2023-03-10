@@ -1,6 +1,6 @@
-# soilDB 2.7.7 (2023-03-07)
+# soilDB 2.7.7 (2023-03-10)
 
-Enhancements
+## Enhancements
 
  - `fetchNASIS(from="pedons")` and `get_site_data_from_NASIS_db()` now return `siteobsiid` column (@natearoe)
  
@@ -32,7 +32,7 @@ Enhancements
    
    - Add `siteothvegclass` id/name  - add tables to default lookup/site sets
    
-Bug fixes
+## Bug fixes
 
  - `dbQueryNASIS(..., close=TRUE)` now calls `dbDisconnect()` `on.exit()` (ensuring connections get closed on error)
  
@@ -116,8 +116,6 @@ Bug fixes
  * `get_SDA_property()` fixes for weighted average method (https://github.com/ncss-tech/soilDB/issues/229, https://github.com/ncss-tech/soilDB/issues/261)
  
  * `fetchOSD()` now automatically encodes horizon distinctness codes to default depth offsets, stored in hz-level attr: `hzd`
-
-
 
 # soilDB 2.7.3 (2022-08-19)
 
