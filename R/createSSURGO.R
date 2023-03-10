@@ -122,6 +122,13 @@ createSSURGO <- function(filename,
                          header = FALSE,
                          quiet = TRUE,
                          ...) {
+  
+  if (missing(filename) || length(filename) == 0) {
+    stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to.")
+  }
+  
+  IS_GPKG <- grepl("\\.gpkg$", filename, ignore.case = TRUE)[1]
+  
   f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE)
   
   if (!requireNamespace("sf"))
@@ -234,9 +241,16 @@ createSSURGO <- function(filename,
         }, silent = quiet)
       }
       
-      # update gpkg_contents table entry
-      try(.gpkg_delete_contents(con, mstab_lut[x]))
-      try(.gpkg_add_contents(con, mstab_lut[x]))
+      # for GPKG output, add gpkg_contents (metadata for features and attributes)
+      if (IS_GPKG) {
+        # update gpkg_contents table entry
+        if (!include_spatial) {
+          # if no spatial data inserted, there will be no gpkg_contents table initally
+          try(.gpkg_create_contents(con))
+        }
+        try(.gpkg_delete_contents(con, mstab_lut[x]))
+        try(.gpkg_add_contents(con, mstab_lut[x]))
+      }
       
       # TODO: other foreign keys/relationships? ALTER TABLE/ADD CONSTRAINT not available in SQLite
       #  the only way to add a foreign key is via CREATE TABLE which means refactoring above two
@@ -260,6 +274,8 @@ createSSURGO <- function(filename,
 #' @noRd
 #' @keywords internal
 .gpkg_add_contents <- function(con, table_name, description = "", template = NULL) {
+  
+  stopifnot(requireNamespace("RSQLite"))
   
   if (!missing(template) &&
       !is.null(template) &&
@@ -298,5 +314,38 @@ createSSURGO <- function(filename,
 #' @noRd
 #' @keywords internal
 .gpkg_delete_contents <- function(con, table_name) {
+  stopifnot(requireNamespace("RSQLite"))
   RSQLite::dbExecute(con, paste0("DELETE FROM gpkg_contents WHERE table_name = '", table_name, "'"))
+}
+
+#' @description `.gpkg_has_contents()`: Determine if a database has table named `"gpkg_contents"` 
+#' @noRd
+#' @keywords internal
+.gpkg_has_contents <- function(con) {
+  stopifnot(requireNamespace("RSQLite"))
+  isTRUE("gpkg_contents" %in% RSQLite::dbListTables(con))
+}
+
+#' @description `.gpkg_has_contents()`: Determine if a database has table named `"gpkg_contents"` 
+#' @noRd
+#' @keywords internal
+.gpkg_create_contents <- function(con) {
+    stopifnot(requireNamespace("RSQLite"))
+    q <- "CREATE TABLE gpkg_contents (
+      table_name TEXT NOT NULL PRIMARY KEY,
+      data_type TEXT NOT NULL,
+      identifier TEXT UNIQUE,
+      description TEXT DEFAULT '',
+      last_change DATETIME NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+      min_x DOUBLE,
+      min_y DOUBLE,
+      max_x DOUBLE,
+      max_y DOUBLE,
+      srs_id INTEGER,
+      CONSTRAINT fk_gc_r_srs_id FOREIGN KEY (srs_id) REFERENCES gpkg_spatial_ref_sys(srs_id)
+    )"
+    
+    if (!.gpkg_has_contents(con)) {
+      RSQLite::dbExecute(con, q)
+    } else return(1)
 }
