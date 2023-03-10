@@ -1,7 +1,7 @@
 citHeader("To cite soilDB in publications use:")
 
 bibentry(
-  entry = "Manual",
+  bibtype = "Manual",
   title = "soilDB: Soil Database Interface",
   author = "Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown",
   note = "R package version 2.7.7",
