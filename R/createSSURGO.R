@@ -184,6 +184,7 @@ createSSURGO <- function(filename,
   }
   
   con <- RSQLite::dbConnect(RSQLite::SQLite(), filename, loadable.extensions = TRUE)  
+  on.exit(RSQLite::dbDisconnect(con))
   lapply(names(f.txt.grp), function(x) {
     
     if (!is.null(mstabcol)) {
@@ -233,6 +234,10 @@ createSSURGO <- function(filename,
         }, silent = quiet)
       }
       
+      # update gpkg_contents table entry
+      try(.gpkg_delete_contents(con, mstab_lut[x]))
+      try(.gpkg_add_contents(con, mstab_lut[x]))
+      
       # TODO: other foreign keys/relationships? ALTER TABLE/ADD CONSTRAINT not available in SQLite
       #  the only way to add a foreign key is via CREATE TABLE which means refactoring above two
       #  steps into a single SQL statement (create table with primary and foreign keys)
@@ -240,6 +245,58 @@ createSSURGO <- function(filename,
   })
   
   res <- RSQLite::dbListTables(con)
-  RSQLite::dbDisconnect(con)
   invisible(res)
+}
+
+## From https://github.com/brownag/gpkg -----
+
+#' Add, Remove, Update and Create `gpkg_contents` table and records
+#' @description `gpkg_add_contents()`: Add a record to `gpkg_contents`
+#' @param con A _geopackage_
+#' @param table_name Name of table to add or remove record for in _gpkg_contents_
+#' @param description Default `""`
+#' @param template Default `NULL` uses global EPSG:4326 with bounds -180,-90:180,90
+#' @return Result of `RSQLite::dbExecute()`
+#' @noRd
+#' @keywords internal
+.gpkg_add_contents <- function(con, table_name, description = "", template = NULL) {
+  
+  if (!missing(template) &&
+      !is.null(template) &&
+      is.list(template) &&
+      all(c("ext", "srsid") %in% names(template))) {
+    ex <- template$ext
+    cr <- as.integer(template$srsid)
+  } else {
+    ex <- c(-180, -90, 180, 90)
+    cr <- 4326
+  }
+  
+  # append to gpkg_contents
+  RSQLite::dbExecute(con,
+                    paste0(
+                      "INSERT INTO gpkg_contents (table_name, data_type, identifier, 
+                                  description, last_change,
+                                  min_x, min_y, max_x, max_y, srs_id) 
+       VALUES ('",
+       table_name ,
+       "', 'attributes', '",
+       table_name,
+       "', '",
+       description,
+       "','",
+       strftime(Sys.time(), '%Y-%m-%dT%H:%M:%OS3Z'),
+       "', ", ex[1], ", ", ex[2], ", ",
+       ex[3], ", ", ex[4], ", ",
+       cr, "
+                      );"
+                    )
+  )
+}
+
+#' @description `.gpkg_delete_contents()`: Delete a record from `gpkg_contents` based on table name
+#' @noRd
+#' @keywords internal
+.gpkg_delete_contents <- function(con, table_name) {
+  RSQLite::dbExecute(con, paste0("DELETE FROM gpkg_contents WHERE table_name = '", table_name, "'"))
 }
