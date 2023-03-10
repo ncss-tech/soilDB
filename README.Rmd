@@ -19,8 +19,8 @@ library(rvest)
 .update_CITATION <- function(version) {
   x <- sprintf('citHeader("To cite soilDB in publications use:")
 
-citEntry(
-  entry = "Manual",
+bibentry(
+  bibtype = "Manual",
   title = "soilDB: Soil Database Interface",
   author = "Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown",
   note = "R package version %s",

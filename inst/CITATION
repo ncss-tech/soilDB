@@ -1,11 +1,11 @@
 citHeader("To cite soilDB in publications use:")
 
-citEntry(
+bibentry(
   entry = "Manual",
   title = "soilDB: Soil Database Interface",
   author = "Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown",
-  note = "R package version 2.7.6",
+  note = "R package version 2.7.7",
   url = "https://CRAN.R-project.org/package=soilDB",
   year = "2023",
-  textVersion = "Beaudette, D., Skovlin, J., Roecker, S., Brown, A. (2023). soilDB: Soil Database Interface. R package version 2.7.6. <https://CRAN.R-project.org/package=soilDB>"
+  textVersion = "Beaudette, D., Skovlin, J., Roecker, S., Brown, A. (2023). soilDB: Soil Database Interface. R package version 2.7.7. <https://CRAN.R-project.org/package=soilDB>"
 )
