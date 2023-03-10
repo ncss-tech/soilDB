@@ -23,6 +23,23 @@ authors:
 - family-names: Brown
   given-names: Andrew
   email: andrew.g.brown@usda.gov
+preferred-citation:
+  type: manual
+  title: 'soilDB: Soil Database Interface'
+  authors:
+  - family-names: Beaudette
+    given-names: Dylan
+    email: dylan.beaudette@usda.gov
+  - family-names: Skovlin
+    given-names: Jay
+  - family-names: Roecker
+    given-names: Stephen
+  - family-names: Brown
+    given-names: Andrew
+    email: andrew.g.brown@usda.gov
+  notes: R package version 2.7.7
+  url: https://CRAN.R-project.org/package=soilDB
+  year: '2023'
 repository: https://CRAN.R-project.org/package=soilDB
 repository-code: https://github.com/ncss-tech/soilDB
 url: https://ncss-tech.github.io/soilDB/
