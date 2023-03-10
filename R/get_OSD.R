@@ -8,7 +8,7 @@
 #'
 #' @details The default `base_url` for `result="json"` is to JSON files stored in a GitHub repository  that is regularly updated from the official source of Series Descriptions. Using format: `https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/{LETTER}/{SERIES}.json` for JSON. And `"https://soilseriesdesc.sc.egov.usda.gov/OSD_Docs/{LETTER}/{SERIES}.html` is for `result="html"` (official source).
 #' 
-#' `fix_ocr_errors` by default is turned off (`FALSE`). When `TRUE`, assume that in color data hue/value/chroma lowercase "L" (`"l"`) is a 1, and a capital "O" is interpreted as zero. Also, in horizon desgignations assume lowercase "L" is a `1`, and a string that starts with `0` starts with the capital letter `"O"`.
+#' `fix_ocr_errors` by default is turned off (`FALSE`). When `TRUE`, assume that in color data hue/value/chroma lowercase "L" (`"l"`) is a 1, and a capital "O" is interpreted as zero. Also, in horizon designations assume lowercase "L" is a `1`, and a string that starts with `0` starts with the capital letter `"O"`.
 #' @return For JSON result: A `data.frame` with 1 row per series, and 1 column per "section" in the OSD as defined in National Soil Survey Handbook. For TXT or HTML result a list of character vectors containing OSD text with 1 element per series and one value per line.
 #' @export
 #' @aliases get_OSD_JSON

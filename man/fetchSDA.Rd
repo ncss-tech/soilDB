@@ -88,7 +88,7 @@ classes, which can waste space in tables and figures.}
 \item{rmHzErrors}{should pedons with horizonation errors be removed from the
 results? (default: FALSE)}
 
-\item{impute}{replace missing (i.e. \code{NULL}) values with \code{"Not_Populated"} forcategorical data, or the "RV" for numeric data or \code{201} cm if the "RV" is also\code{NULL} (default: \code{TRUE})}
+\item{impute}{replace missing (i.e. \code{NULL}) values with \code{"Not_Populated"} for categorical data, or the "RV" for numeric data or \code{201} cm if the "RV" is also\code{NULL} (default: \code{TRUE})}
 }
 \value{
 A data.frame or SoilProfileCollection object.
