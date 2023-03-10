@@ -1,5 +1,5 @@
 # -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v0.4.0
+# CITATION file created with {cffr} R package, v0.4.1
 # See also: https://docs.ropensci.org/cffr/
 # -----------------------------------------------------------
  
@@ -23,23 +23,6 @@ authors:
 - family-names: Brown
   given-names: Andrew
   email: andrew.g.brown@usda.gov
-preferred-citation:
-  type: manual
-  title: 'soilDB: Soil Database Interface'
-  authors:
-  - family-names: Beaudette
-    given-names: Dylan
-    email: dylan.beaudette@usda.gov
-  - family-names: Skovlin
-    given-names: Jay
-  - family-names: Roecker
-    given-names: Stephen
-  - family-names: Brown
-    given-names: Andrew
-    email: andrew.g.brown@usda.gov
-  notes: R package version 2.7.6
-  url: https://CRAN.R-project.org/package=soilDB
-  year: '2023'
 repository: https://CRAN.R-project.org/package=soilDB
 repository-code: https://github.com/ncss-tech/soilDB
 url: https://ncss-tech.github.io/soilDB/
@@ -219,7 +202,7 @@ references:
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   year: '2023'
 - type: software
   title: rvest
@@ -236,7 +219,7 @@ references:
   title: odbc
   abstract: 'odbc: Connect to ODBC Compatible Databases (using the DBI Interface)'
   notes: Suggests
-  url: https://db.rstudio.com
+  url: https://r-dbi.github.io/odbc/
   repository: https://CRAN.R-project.org/package=odbc
   authors:
   - family-names: Hester
