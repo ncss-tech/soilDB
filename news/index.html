@@ -51,14 +51,51 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.7.7" id="soildb-277-2023-01-09">soilDB 2.7.7 (2023-01-09)<a class="anchor" aria-label="anchor" href="#soildb-277-2023-01-09"></a></h2>
-<ul><li><p><code>dbQueryNASIS(..., close=TRUE)</code> now calls <code>dbDisconnect()</code> <code><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit()</a></code> (ensuring connections get closed on error)</p></li>
-<li><p>bug fixes in <code><a href="../reference/fetchSCAN.html">fetchSCAN()</a></code>: 2x requests when <code>timeseries</code> argument not specified, account for no results (e.g. year = 1800)</p></li>
-<li><p><code>fetchNASIS(from="pedons")</code> and <code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code> now return <code>siteobsiid</code> column (<a href="https://github.com/natearoe" class="external-link">@natearoe</a>)</p></li>
+<h2 class="pkg-version" data-toc-text="2.7.7" id="soildb-277-2023-03-07">soilDB 2.7.7 (2023-03-07)<a class="anchor" aria-label="anchor" href="#soildb-277-2023-03-07"></a></h2>
+<p>Enhancements</p>
+<ul><li><p><code>fetchNASIS(from="pedons")</code> and <code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code> now return <code>siteobsiid</code> column (<a href="https://github.com/natearoe" class="external-link">@natearoe</a>)</p></li>
 <li><p><code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code> gains experimental gridded STATSGO layer (300m)</p></li>
+<li><p>Add <code><a href="../reference/get_NASIS_table_metadata.html">get_NASIS_table_metadata()</a></code> for returning information about columns in NASIS tables.</p></li>
+<li><p><code>simplifyFragment/ArtifactData()</code>: downgrade warnings</p></li>
+<li><p><code><a href="../reference/fetchSDA.html">get_cosoilmoist_from_SDA()</a></code>: <code>mukey</code> and <code>cokey</code> now included when <code>duplicates=TRUE</code>; thanks to <a href="https://github.com/andypaolucci" class="external-link">@andypaolucci</a> for catching this</p></li>
 <li>
-<p>Add <code><a href="../reference/get_NASIS_table_metadata.html">get_NASIS_table_metadata()</a></code> for returning information about columns in NASIS tables.</p>
-<ul><li>This function complements the existing <code><a href="../reference/get_NASIS_metadata.html">get_NASIS_column_metadata()</a></code> which focuses on the values within columns such as domain choice names, labels, and order. Both functions now take an <code>include_descriptions</code> argument to optionally include the narrative description of the column or column choice list item.</li>
+<p><code><a href="../reference/fetchSoilGrids.html">fetchSoilGrids()</a></code></p>
+<ul><li><p>Add <code>SpatVector</code> coercion for input locations (already supported sf/sp classes)</p></li>
+<li><p>Add handling for messages from API about erroneous input</p></li>
+</ul></li>
+<li><p>Add <code>fetchNASIS("pedons")</code> columns vignette</p></li>
+<li><p>Add <code><a href="../reference/get_NASIS_table_metadata.html">get_NASIS_table_metadata()</a></code> and optional argument <code>include_description</code> for <code><a href="../reference/get_NASIS_metadata.html">get_NASIS_metadata()</a></code> and <code><a href="../reference/get_NASIS_metadata.html">get_NASIS_column_metadata()</a></code></p></li>
+<li><p><code><a href="../reference/get_SDA_cosurfmorph.html">get_SDA_cosurfmorph()</a></code> + <code><a href="../reference/get_SDA_pmgroupname.html">get_SDA_pmgroupname()</a></code>: support for including or excluding misc. areas via <code>miscellaneous_areas</code> argument</p></li>
+<li>
+<p><code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>:</p>
+<ul><li><p>Omit “multiple horizontal datums” warning</p></li>
+<li><p>Remove calculated X/Y long/lat + add proper NASIS alias for long/lat</p></li>
+<li><p>Add <code>siteothvegclass</code> id/name - add tables to default lookup/site sets</p></li>
+</ul></li>
+</ul><p>Bug fixes</p>
+<ul><li><p><code>dbQueryNASIS(..., close=TRUE)</code> now calls <code>dbDisconnect()</code> <code><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit()</a></code> (ensuring connections get closed on error)</p></li>
+<li>
+<p><code><a href="../reference/fetchSCAN.html">fetchSCAN()</a></code>:</p>
+<ul><li><p>2x requests when <code>timeseries</code> argument not specified</p></li>
+<li><p>Account for no results (e.g. year = 1800)</p></li>
+<li><p>Bug fix in vectorization when daily + hourly data requested</p></li>
+</ul></li>
+<li>
+<p><code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code>:</p>
+<ul><li><p>Handle <code><a href="../reference/SDA_query.html">SDA_query()</a></code> with invalid syntax in <code>WHERE</code> clause</p></li>
+<li><p>Fix for <code>include_template=FALSE</code></p></li>
+</ul></li>
+<li>
+<p><code><a href="../reference/createSSURGO.html">createSSURGO()</a></code></p>
+<ul><li>Attribute tables are now added to <code>gpkg_contents</code> when output <code>filename</code> is a GeoPackage</li>
+</ul></li>
+<li><p>Fix for <code>.get_comonth_from_SDA()</code></p></li>
+<li><p>Fix selected set (<code>SS</code> argument) for <code><a href="../reference/get_ecosite_history_from_NASIS_db.html">get_ecosite_history_from_NASIS_db()</a></code> in <code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code></p></li>
+<li><p><code>get_SDA_pmgroupname</code>: return <code>NA</code> (not “NULL”) for empty/missing <code>pmgroupname</code> when <code>simplify=TRUE</code></p></li>
+<li>
+<p><code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code>:</p>
+<ul><li><p><code>geomIntersection=TRUE</code> with <code>db="SAPOLYGON"</code> now correctly labels the <code>areasymbol</code> column (previously was <code>mukey</code>) to match <code>geomIntersection=FALSE</code> and SDA schema</p></li>
+<li><p>Bounding box extent polygons are now only calculated for <code>SpatRaster</code> (not <code>SpatVector</code>) input</p></li>
 </ul></li>
 </ul></div>
     <div class="section level2">
@@ -105,7 +142,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.7.3" id="soildb-273-2022-08-19">soilDB 2.7.3 (2022-08-19)<a class="anchor" aria-label="anchor" href="#soildb-273-2022-08-19"></a></h2><p class="text-muted">CRAN release: 2022-08-19</p>
-<ul><li><p><code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code> all methods now support <code>miscellaneous_areas</code> argument. This defaults to <code>FALSE</code> for the methods it was pr eviously implemented for–so be aware that queries using <code>"Dominant Component"</code> or <code>"Dominant Condition"</code> (which previously did not respond to <code>miscellaneous_areas</code>) may have the number of rows in result reduced due to omission of miscellaneous land types. If this is unexpected or undesired, please use <code>miscellaneous_areas=TRUE</code>. (<a href="https://github.com/ncss-tech/soilDB/issues/257" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/257</a>)</p></li>
+<ul><li><p><code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code> all methods now support <code>miscellaneous_areas</code> argument. This defaults to <code>FALSE</code> for the methods it was previously implemented for–so be aware that queries using <code>"Dominant Component"</code> or <code>"Dominant Condition"</code> (which previously did not respond to <code>miscellaneous_areas</code>) may have the number of rows in result reduced due to omission of miscellaneous land types. If this is unexpected or undesired, please use <code>miscellaneous_areas=TRUE</code>. (<a href="https://github.com/ncss-tech/soilDB/issues/257" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/257</a>)</p></li>
 <li><p>Adds <code><a href="../reference/get_NASIS_metadata.html">get_NASIS_metadata()</a></code> and helper method <code><a href="../reference/get_NASIS_metadata.html">get_NASIS_column_metadata()</a></code> and other new tools for working with <code><a href="../reference/uncode.html">uncode()</a></code>, factors and NASIS metadata cached in the package.</p></li>
 <li><p>Bug fix for <code><a href="../reference/fetchSDA.html">get_cosoilmoist_from_SDA()</a></code>; thanks to Monika Shea <a href="https://github.com/monikashea" class="external-link">@monikashea</a> for reporting the problem (<a href="https://github.com/ncss-tech/soilDB/issues/253" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/253</a>)</p></li>
 <li><p><code>fetchNASIS_report()</code> now works with the output from <code>"get_site_from_NASIS"</code> report (useful for site records without associated pedons)</p></li>
