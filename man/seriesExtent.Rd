@@ -29,7 +29,7 @@ This function downloads a generalized representations of a soil series extent fr
 \examples{
 \dontshow{if (curl::has_internet() && requireNamespace("terra") && requireNamespace("sf")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
-\donttest{
+\dontrun{
   
   # specify a soil series name
   s <- 'magnor'

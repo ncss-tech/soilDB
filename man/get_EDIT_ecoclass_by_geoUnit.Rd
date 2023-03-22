@@ -20,7 +20,7 @@ Data are accessed via Ecological Dynamics Interpretive Tool (EDIT) web services:
 \examples{
 \dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
-\donttest{
+\dontrun{
    get_EDIT_ecoclass_by_geoUnit(c("018X","022A"))
 }
 }
