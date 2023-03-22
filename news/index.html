@@ -51,8 +51,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.7.7" id="soildb-277-2023-03-07">soilDB 2.7.7 (2023-03-07)<a class="anchor" aria-label="anchor" href="#soildb-277-2023-03-07"></a></h2>
-<p>Enhancements</p>
+<h2 class="pkg-version" data-toc-text="2.7.7" id="soildb-277-2023-03-10">soilDB 2.7.7 (2023-03-10)<a class="anchor" aria-label="anchor" href="#soildb-277-2023-03-10"></a></h2><p class="text-muted">CRAN release: 2023-03-10</p>
+<div class="section level3">
+<h3 id="enhancements-2-7-7">Enhancements<a class="anchor" aria-label="anchor" href="#enhancements-2-7-7"></a></h3>
 <ul><li><p><code>fetchNASIS(from="pedons")</code> and <code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code> now return <code>siteobsiid</code> column (<a href="https://github.com/natearoe" class="external-link">@natearoe</a>)</p></li>
 <li><p><code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code> gains experimental gridded STATSGO layer (300m)</p></li>
 <li><p>Add <code><a href="../reference/get_NASIS_table_metadata.html">get_NASIS_table_metadata()</a></code> for returning information about columns in NASIS tables.</p></li>
@@ -72,7 +73,9 @@
 <li><p>Remove calculated X/Y long/lat + add proper NASIS alias for long/lat</p></li>
 <li><p>Add <code>siteothvegclass</code> id/name - add tables to default lookup/site sets</p></li>
 </ul></li>
-</ul><p>Bug fixes</p>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-2-7-7">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2-7-7"></a></h3>
 <ul><li><p><code>dbQueryNASIS(..., close=TRUE)</code> now calls <code>dbDisconnect()</code> <code><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit()</a></code> (ensuring connections get closed on error)</p></li>
 <li>
 <p><code><a href="../reference/fetchSCAN.html">fetchSCAN()</a></code>:</p>
@@ -98,6 +101,7 @@
 <li><p>Bounding box extent polygons are now only calculated for <code>SpatRaster</code> (not <code>SpatVector</code>) input</p></li>
 </ul></li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.7.6" id="soildb-276-2022-11-28">soilDB 2.7.6 (2022-11-28)<a class="anchor" aria-label="anchor" href="#soildb-276-2022-11-28"></a></h2><p class="text-muted">CRAN release: 2022-12-02</p>
 <ul><li><p>All references to <code>soilDB.env</code> have been replaced with a function that returns that environment object (<code><a href="../reference/get_soilDB_env.html">get_soilDB_env()</a></code>); thanks to <a href="https://github.com/MollicMeyer" class="external-link">@MollicMeyer</a> for identifying this as a problem in <a href="https://github.com/ncss-tech/soilDB/issues/277" class="external-link">#277</a>. This object used to be exported but was unintentionally omitted from NAMESPACE; this has been fixed.</p></li>
