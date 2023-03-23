@@ -486,7 +486,7 @@ get_SDA_property <-
 
   .property_dominant_component_numeric <- function(property, top_depth, bottom_depth, WHERE, miscellaneous_areas = FALSE) {
     # dominant component numeric is a more specific case of weighted average
-    .property_weighted_average(property, top_depth, bottom_depth, WHERE, dominant = TRUE, include_minors = FALSE, miscellaneous_areas = miscellaneous_areas)
+    .property_weighted_average(property, top_depth, bottom_depth, WHERE, dominant = TRUE, include_minors = TRUE, miscellaneous_areas = miscellaneous_areas)
   }
 
   # create query based on method
