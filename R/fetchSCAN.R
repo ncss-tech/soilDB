@@ -149,12 +149,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 
     if (inherits(d, 'try-error')) {
       message(d)
-      return(NULL)
-    }
-
-    # handle timeouts or other bad requests
-    if (is.null(d)) {
-      return(NULL)
+      # NB: do not exit process mid loop if one fails!
     }
 
     for (sensor.i in sensors) {
@@ -163,10 +158,16 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
       year.i <- as.character(i$year)
 
       if (is.null(d)) {
-        res <- data.frame(Site = integer(0), Date = as.Date(NULL),
-                          water_year = numeric(0), water_day = integer(0),
-                          value = numeric(0), depth = numeric(0),
-                          sensor.id = integer(0), row.names = integer(0))
+        res <- data.frame(Site = integer(0), 
+                          Date = as.Date(NULL),
+                          Time = character(0),
+                          water_year = numeric(0), 
+                          water_day = integer(0),
+                          value = numeric(0), 
+                          depth = numeric(0),
+                          sensor.id = integer(0), 
+                          row.names = NULL, 
+                          stringsAsFactors = FALSE)
       } else {
         res <- .formatSCAN_soil_sensor_suites(d, code = sensor.i)
       }
@@ -179,9 +180,14 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   for (sensor.i in sensors) {
 
     # flatten individual sensors over years, by site number
-    r.i <- data.table::rbindlist(lapply(d.list[[sensor.i]], data.table::rbindlist))
+    r.i <- data.table::rbindlist(lapply(d.list[[sensor.i]], data.table::rbindlist, fill = TRUE), fill = TRUE)
     rownames(r.i) <- NULL
 
+    # res should be a list
+    if (inherits(res, 'data.frame')) {
+      res <- list()
+    }
+    
     res[[sensor.i]] <- as.data.frame(r.i)
   }
 
@@ -203,6 +209,8 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 
   value <- NULL
 
+  stopifnot(length(code) == 1)
+  
   # locate named columns
   d.cols <- grep(code, names(d))
 
@@ -213,7 +221,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 
   ## https://github.com/ncss-tech/soilDB/issues/14
   ## there may be multiple above-ground sensors (takes the first)
-  if (length(d.cols) > 1 & code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC',
+  if (length(d.cols) > 1 && code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC',
                                       'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
     message(paste0('multiple sensors per site [site ', d$Site[1], '] ',
                    paste0(names(d)[d.cols], collapse = ',')))
@@ -278,7 +286,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   # set Time to 12:00 (middle of day) for daily data
   if (is.null(res$Time) || all(is.na(res$Time) | res$Time == "")) {
     # only when there are data
-    if(nrow(res) > 0) {
+    if (nrow(res) > 0) {
       res$Time <- "12:00" 
     }
   }
@@ -310,12 +318,14 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 }
 
 # req is a named vector or list
+
 .get_SCAN_data <- function(req) {
 
   # convert to list as needed
-  if (!inherits(req, 'list'))
+  if (!inherits(req, 'list')) {
     req <- as.list(req)
-
+  }
+  
   # base URL to service
   uri <- 'https://wcc.sc.egov.usda.gov/nwcc/view'
 
@@ -333,7 +343,8 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     body = req,
     encode = 'form',
     config = cf,
-    httr::add_headers(new.headers)
+    httr::add_headers(new.headers),
+    httr::timeout(3)
   ))
 
   if (inherits(r, 'try-error'))
