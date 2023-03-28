@@ -146,12 +146,15 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   
   for (i in req.list) {
 
-    # when there are no data, result is NULL
+    # when there are no data, result is an empty data.frame
     d <- try(.get_SCAN_data(i), silent = TRUE)
 
+    # errors occur in exceptional situations 
+    # so we terminate the request loop 
+    # (rather than possibly incomplete results)
     if (inherits(d, 'try-error')) {
       message(d)
-      # NB: do not exit process mid loop if one fails!
+      return(NULL)
     }
 
     for (sensor.i in sensors) {
