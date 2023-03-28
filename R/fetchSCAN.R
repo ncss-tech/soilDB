@@ -346,7 +346,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     encode = 'form',
     config = cf,
     httr::add_headers(new.headers),
-    httr::timeout(10)
+    httr::timeout(getOption("soilDB.timeout", default = 300))
   ))
 
   if (inherits(r, 'try-error'))

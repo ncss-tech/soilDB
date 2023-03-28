@@ -7,7 +7,9 @@ soilDB.env <- new.env(hash = TRUE)
 .onLoad <- function(libname, pkgname) {
   
   # function verbosity
-  options(soilDB.verbose = FALSE)
+  options(soilDB.verbose = FALSE,
+          soilDB.timeout = 300,
+          soilDB.ssl_verifyhost = 0)
   
   # set default local nasis authentication
   options(soilDB.NASIS.credentials = "DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
@@ -44,7 +46,8 @@ get_soilDB_env <- function() {
 }
 
 #' @importFrom curl new_handle has_internet
-.soilDB_curl_handle <- function(timeout = 300, ssl_verifyhost = 0, ...) {
+.soilDB_curl_handle <- function(timeout = getOption("soilDB.timeout", default = 300), 
+                                ssl_verifyhost = getOption("soilDB.verify_host", default = 0), ...) {
   curl::new_handle(timeout = timeout, ssl_verifyhost = ssl_verifyhost, ...)
 }
 
