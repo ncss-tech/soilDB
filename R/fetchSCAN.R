@@ -161,7 +161,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 
       if (is.null(d)) {
         res <- data.frame(Site = integer(0), 
-                          Date = as.Date(NULL),
+                          Date = as.Date(numeric(0)),
                           Time = character(0),
                           water_year = numeric(0), 
                           water_day = integer(0),
