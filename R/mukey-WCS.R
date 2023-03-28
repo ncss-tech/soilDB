@@ -198,7 +198,7 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO'), res =
   ## TODO: use terra::as.factor()
   # build RAT
   # NB: unique() takes na.rm argument on terra >1.5-21 <https://github.com/rspatial/terra/issues/561>
-  uids <- na.omit(terra::unique(r)[,1])  
+  uids <- na.omit(terra::unique(r)[[1]])  
   rat <- data.frame(value = uids, 
                     mukey = uids,
                     ID = uids)
