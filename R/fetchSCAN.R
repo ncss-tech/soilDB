@@ -106,7 +106,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   # required to flatten possible arguments to single value
   timeseries <- match.arg(timeseries)
   
-  ## allow for arbitary queries using `req` argument or additional arguments via ...
+  ## allow for arbitrary queries using `req` argument or additional arguments via ...
   l.extra <- list(...)
   # TODO do this after expansion to iterate over site.code*year + ???
   l <- c(sitenum = site.code, year = year, report = report, timeseries = timeseries, l.extra)
@@ -142,6 +142,8 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
                'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ',
                'WDIRV', 'WSPDV', 'LRADT')
 
+  ## TODO: consider submitting queries in parallel, possible at the inner for-loop, over sensors
+  
   for (i in req.list) {
 
     # when there are no data, result is NULL
@@ -344,7 +346,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     encode = 'form',
     config = cf,
     httr::add_headers(new.headers),
-    httr::timeout(3)
+    httr::timeout(10)
   ))
 
   if (inherits(r, 'try-error'))
