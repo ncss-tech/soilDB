@@ -6,7 +6,7 @@
 \usage{
 mukey.wcs(
   aoi,
-  db = c("gNATSGO", "gSSURGO", "RSS", "STATSGO"),
+  db = c("gNATSGO", "gSSURGO", "RSS", "STATSGO", "PR_SSURGO", "HI_SSURGO"),
   res = 30,
   quiet = FALSE
 )
@@ -14,7 +14,7 @@ mukey.wcs(
 \arguments{
 \item{aoi}{area of interest (AOI) defined using either a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, or a \code{list}, see details}
 
-\item{db}{name of the gridded map unit key grid to access, should be either 'gNATSGO', 'gSSURGO', or 'STATSGO' (case insensitive)}
+\item{db}{name of the gridded map unit key grid to access, should be either 'gNATSGO', 'gSSURGO', 'STATSGO', 'HI_SSURGO', or 'PR_SSURGO' (case insensitive)}
 
 \item{res}{grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; STATSGO (this WCS) is 300m; and Raster Soil Surveys (RSS) are at 10m resolution. If \code{res} is not specified the native resolution of the source is used.}
 

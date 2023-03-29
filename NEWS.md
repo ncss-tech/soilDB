@@ -1,6 +1,8 @@
 # soilDB 2.7.8 (2023-03-22)
 
  - `get_SDA_property(method="Dominant Component (Numeric)")` now includes minors by default, fixing issues with STATSGO mapunits that have no major components flagged. (@dylanbeaudette)
+ 
+ - `mukey.wcs()` gains a 30m gridded version of HI and PR SSURGO 
 
 # soilDB 2.7.7 (2023-03-10)
 

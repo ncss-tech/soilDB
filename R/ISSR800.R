@@ -54,7 +54,7 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   var.spec <- .ISSR800.spec[[var]]
   
   # compute BBOX / IMG geometry in native CRS
-  wcs.geom <- .prepare_AEA_AOI(aoi, res = res)
+  wcs.geom <- .prepare_AEA_AOI(aoi, res = res, native_crs = 'EPSG:5070')
   
   ## TODO: investigate why this is so
   # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 
