@@ -7,11 +7,14 @@
 ## see: http://www.wcc.nrcs.usda.gov/web_service/awdb_webservice_announcements.htm
 ##      http://www.wcc.nrcs.usda.gov/web_service/AWDB_Web_Service_Reference.htm
 ##      http://www.wcc.nrcs.usda.gov/report_generator/WebReportScripting.htm
-
+##
 ## 5. we will need to address the potential for multiple sensor ID per type/depth
 ## examples in:
 ## https://github.com/ncss-tech/soilDB/issues/14
-
+##
+## 6. use API vs. scraping report output
+## https://github.com/bluegreen-labs/snotelr/blob/master/R/snotel_download.r#L65
+## --> this would require enumeration of sensors, etc.
 
 ### sensor codes: http://wcc.sc.egov.usda.gov/nwcc/sensors
 
@@ -27,11 +30,18 @@
 ## https://wcc.sc.egov.usda.gov/nwcc/sitenotes?sitenum=462
 ##
 
-#' Get Daily Climate Data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations
+
+
+
+
+
+#' @title Get Daily Climate Data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations
 #'
-#' @description Query soil/climate data from USDA-NRCS SCAN Stations
+#' @description Query soil/climate data from USDA-NRCS SCAN Stations.
 #'
 #' @details Possible above and below ground sensor types include: 'SMS' (soil moisture), 'STO' (soil temperature), 'SAL' (salinity), 'TAVG' (daily average air temperature), 'TMIN' (daily minimum air temperature), 'TMAX' (daily maximum air temperature), 'PRCP' (daily precipitation), 'PREC' (daily precipitation), 'SNWD' (snow depth), 'WTEQ' (snow water equivalent),'WDIRV' (wind direction), 'WSPDV' (wind speed), 'LRADT' (solar radiation/langley total).
+#' 
+#' This function converts below-ground sensor depth from inches to cm. All temperature values are reported as degrees C. Precipitation, snow depth, and snow water content are reported as *inches*.
 #'
 #' ## SCAN Sensors
 #'
