@@ -15,7 +15,7 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
   # query
   message("getting components from ", substr(WHERE, 1, 20), "...")
   qry <- paste0(
-    "SELECT mukey, cokey, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, erocl, earthcovkind1, earthcovkind2, elev_r, slope_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, hydgrp,  nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, tfact, wei, weg, corcon, corsteel, frostact, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition
+    "SELECT *
 
     FROM component
 
@@ -338,44 +338,54 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 }
 
 
-.get_chorizon_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", co, droplevels = TRUE, stringsAsFactors = NULL) {
-
-  # chorizon
-  idx <- c(0, rep(3000, 1000) * 1:1000)
+.get_chorizon_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", cokey = NULL, droplevels = TRUE, stringsAsFactors = NULL, childs = FALSE) {
   
-  if (nrow(co) > 0) {
-    co$idx <- as.character(cut(1:nrow(co), breaks = idx))
+  # chorizon
+  idx <- seq(0, 2e8, 3000)
+  
+  if (!is.null(cokey)) {
+    idx2 <- as.character(cut(1:length(cokey), breaks = idx))
+    co   <- data.frame(cokey, idx2)
   
   ch <- by(co, co$idx, function(x) {
     qry <- paste0(
-      "SELECT cokey, chkey, hzname, hzdept_r, hzdepb_r, sandtotal_l, sandtotal_r, sandtotal_h, silttotal_l, silttotal_r, silttotal_h, claytotal_l, claytotal_r, claytotal_h, om_l, om_r, om_h, dbthirdbar_l, dbthirdbar_r, dbthirdbar_h, ksat_l, ksat_r, ksat_h, awc_l, awc_r, awc_h, lep_r, sar_r, ec_r, cec7_r, sumbases_r, ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h, caco3_l, caco3_r, caco3_h, kwfact, kffact
+      "SELECT *
 
     FROM chorizon
 
-    WHERE cokey IN ('", paste0(x$cokey, collapse = "', '"), "')"
+    WHERE cokey IN ", format_SQL_in_statement(x$cokey)
     )
     ch  <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE)
   })
   ch <- do.call("rbind", ch)
 
+  } else ch <- sf::read_sf(dsn = dsn, query = "SELECT * FROM chorizon", as_tibble = FALSE)
 
+  
   # iterate over the threshold
-  if (nrow(ch) > 0) {
+  if (nrow(ch) > 0 & childs == TRUE) {
+    
+    idx <- seq(0, 2e8, 3000)
 
-    idx <- c(0, rep(3000, 50) * 1:50)
-    ch$idx <- as.character(cut(1:nrow(ch), breaks = idx, labels = paste0("i", 1:50)))
-
+    if (! is.null(WHERE)) ch$idx <- as.character(cut(1:nrow(ch), breaks = idx))
+    if (  is.null(WHERE)) ch$idx <- 1
+    
+    
     temp <- by(ch, ch$idx, function(x) {
 
-      # chtexturegrp
-      qry  <- paste0("SELECT * FROM chtexturegrp WHERE rvindicator = 'Yes' AND chkey IN ('", paste0(x$chkey, collapse = "', '"), "')")
-      chtg <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE)
-
-      # chtexture
-      qry  <- paste0("SELECT * FROM chtexture WHERE chtgkey IN ('", paste0(chtg$chtgkey, collapse = "', '"), "')")
-      cht <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE)
-
-      # aggregate
+      # chtexturegrp ----
+      chtg <- .get_chtexturegrp_from_GDB(
+        dsn   = dsn, 
+        chkey = if (!is.null(cokey)) x$chkey else NULL
+        )
+      
+      # chtexture ----
+      cht <- .get_chtexture_from_GDB(
+        dsn     = dsn, 
+        chtgkey = if (!is.null(cokey)) chtg$chtgkey else NULL
+        )
+      
+      # aggregate ----
       if (nrow(chtg) > 0) {
         chtg <- aggregate(texture ~ chkey + chtgkey, data = chtg, paste0, collapse = ", ")
       } else chtg <- chtg[c("chkey", "chtgkey", "texture")]
@@ -384,10 +394,11 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
       } else cht <- cht[c("chtgkey", "texcl")]
       
       
-      # chfrags
-      qry  <- paste0("SELECT * FROM chfrags WHERE chkey IN ('", paste0(x$chkey, collapse = "', '"), "')")
-      chf <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE)
-      chf <- simplifyFragmentData(chf, id.var = "chkey", vol.var = "fragvol_r", prefix = "frag")
+      # chfrags ----
+      chf <- .get_chfrags_from_GDB(
+        dsn   = dsn, 
+        chkey = if (!is.null(cokey)) x$chkey else NULL
+        )
 
       # merge
       ch <- merge(x, chtg, by = "chkey",   all.x = TRUE, sort = FALSE)
@@ -399,37 +410,73 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
     ch <- do.call("rbind", temp)
     ch$idx <- NULL
   } else {
-    idx <- which(names(ch) == "hzdepb_r")
-    ch  <- cbind(ch[1:idx], texture = as.character(NULL), texcl = as.character(NULL), ch[(idx + 1):ncol(ch)])
-  }
-  
-  } else ch <- sf::read_sf(dsn = dsn, query = "SELECT * FROM chorizon LIMIT 0")
-  
-  vars <- c("cokey", "chkey", "hzname", "hzdept_r", "hzdepb_r", "texture", "texcl", "sandtotal_l", "sandtotal_r", "sandtotal_h", "silttotal_l", "silttotal_r", "silttotal_h", "claytotal_l", "claytotal_r", "claytotal_h", "om_l", "om_r", "om_h", "dbthirdbar_l", "dbthirdbar_r", "dbthirdbar_h", "ksat_l", "ksat_r", "ksat_h", "awc_l", "awc_r", "awc_h", "lep_r", "sar_r", "ec_r", "cec7_r", "sumbases_r", "ph1to1h2o_l", "ph1to1h2o_r", "ph1to1h2o_h", "caco3_l", "caco3_r", "caco3_h", "kwfact", "kffact", "fine_gravel", "gravel", "cobbles", "stones", "boulders", "channers", "flagstones", "parafine_gravel", "paragravel", "paracobbles", "parastones", "paraboulders", "parachanners", "paraflagstones", "unspecified", "total_frags_pct_nopf", "total_frags_pct")
-  idx <- unlist(lapply(vars, function(x) which(names(ch) %in% x)))
-  ch <- ch[idx]
-  
-  # append missing columns from ch LIMIT 0
-  if (ncol(ch) < length(vars)) {
-
-    mis <- vars[! vars %in% names(ch)]
-    mis_df <- as.data.frame(matrix(ncol = length(mis), nrow = nrow(ch)))
-    names(mis_df) <- mis
-
-    idx <- 1:2
-    mis_df[idx] <- lapply(mis_df[idx], as.character)
-    mis_df[-idx] <- lapply(mis_df[-idx], as.numeric)
-    
+    vars <- c('texture', 'texcl', 'fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones', 'unspecified', 'total_frags_pct_nopf', 'total_frags_pct')
+    mis_df <- as.data.frame(matrix(ncol = 19, nrow = nrow(ch)))
+    names(mis_df) <- vars
     ch <- cbind(ch, mis_df)
   }
   
-
-  ch <- uncode(ch,
-               droplevels = droplevels)
+ 
+  
+  vars <- c('cokey', 'chkey', 'hzname', 'hzdept_r', 'hzdepb_r', 'hzthk_r', 'texture', 'texcl', 'sandtotal_l', 'sandtotal_r', 'sandtotal_h', 'silttotal_l', 'silttotal_r', 'silttotal_h', 'claytotal_l', 'claytotal_r', 'claytotal_h', 'fine_gravel', 'gravel', 'cobbles', 'stones', 'boulders', 'channers', 'flagstones', 'parafine_gravel', 'paragravel', 'paracobbles', 'parastones', 'paraboulders', 'parachanners', 'paraflagstones', 'unspecified', 'total_frags_pct_nopf', 'total_frags_pct', 'om_l', 'om_r', 'om_h', 'dbtenthbar_l', 'dbtenthbar_r', 'dbtenthbar_h', 'dbthirdbar_l', 'dbthirdbar_r', 'dbthirdbar_h', 'dbfifteenbar_l', 'dbfifteenbar_r', 'dbfifteenbar_h', 'dbovendry_l', 'dbovendry_r', 'dbovendry_h', 'partdensity', 'ksat_l', 'ksat_r', 'ksat_h', 'awc_l', 'awc_r', 'awc_h', 'wtenthbar_l', 'wtenthbar_r', 'wtenthbar_h', 'wthirdbar_l', 'wthirdbar_r', 'wthirdbar_h', 'wfifteenbar_l', 'wfifteenbar_r', 'wfifteenbar_h', 'wsatiated_l', 'wsatiated_r', 'wsatiated_h', 'lep_l', 'lep_r', 'lep_h', 'll_l', 'll_r', 'll_h', 'pi_l', 'pi_r', 'pi_h', 'aashind_l', 'aashind_r', 'aashind_h', 'kwfact', 'kffact', 'caco3_l', 'caco3_r', 'caco3_h', 'gypsum_l', 'gypsum_r', 'gypsum_h', 'sar_l', 'sar_r', 'sar_h', 'ec_l', 'ec_r', 'ec_h', 'cec7_l', 'cec7_r', 'cec7_h', 'ecec_l', 'ecec_r', 'ecec_h', 'sumbases_l', 'sumbases_r', 'sumbases_h', 'ph1to1h2o_l', 'ph1to1h2o_r', 'ph1to1h2o_h', 'ph01mcacl2_l', 'ph01mcacl2_r', 'ph01mcacl2_h', 'freeiron_l', 'freeiron_r', 'freeiron_h', 'feoxalate_l', 'feoxalate_r', 'feoxalate_h', 'extracid_l', 'extracid_r', 'extracid_h', 'extral_l', 'extral_r', 'extral_h', 'aloxalate_l', 'aloxalate_r', 'aloxalate_h', 'pbray1_l', 'pbray1_r', 'pbray1_h', 'poxalate_l', 'poxalate_r', 'poxalate_h', 'ph2osoluble_l', 'ph2osoluble_r', 'ph2osoluble_h', 'ptotal_l', 'ptotal_r', 'ptotal_h', 'excavdifcl', 'excavdifms', 'desgndisc', 'desgnmaster', 'desgnmasterprime', 'desgnvert', 'hzdept_l', 'hzdepb_l', 'hzthk_l', 'hzdept_h', 'hzdepb_h', 'hzthk_h', 'fraggt10_l', 'fraggt10_r', 'fraggt10_h', 'frag3to10_l', 'frag3to10_r', 'frag3to10_h', 'sieveno4_l', 'sieveno4_r', 'sieveno4_h', 'sieveno10_l', 'sieveno10_r', 'sieveno10_h', 'sieveno40_l', 'sieveno40_r', 'sieveno40_h', 'sieveno200_l', 'sieveno200_r', 'sieveno200_h', 'sandvc_l', 'sandvc_r', 'sandvc_h', 'sandco_l', 'sandco_r', 'sandco_h', 'sandmed_l', 'sandmed_r', 'sandmed_h', 'sandfine_l', 'sandfine_r', 'sandfine_h', 'sandvf_l', 'sandvf_r', 'sandvf_h', 'siltco_l', 'siltco_r', 'siltco_h', 'siltfine_l', 'siltfine_r', 'siltfine_h', 'claysizedcarb_l', 'claysizedcarb_r', 'claysizedcarb_h')
+  idx <- unlist(lapply(vars, function(x) which(names(ch) %in% x)))
+  ch <- ch[idx]
+  
+  # # append missing columns from ch LIMIT 0
+  # if (ncol(ch) < length(vars)) {
+  # 
+  #   mis <- vars[! vars %in% names(ch)]
+  #   mis_df <- as.data.frame(matrix(ncol = length(mis), nrow = nrow(ch)))
+  #   names(mis_df) <- mis
+  # 
+  #   idx <- 1:2
+  #   mis_df[idx] <- lapply(mis_df[idx], as.character)
+  #   mis_df[-idx] <- lapply(mis_df[-idx], as.numeric)
+  #   
+  #   ch <- cbind(ch, mis_df)
+  # }
+  
+  # ch$texture <- tolower(ch$texture)
+  # ch$texcl   <- tolower(ch$texcl)
+  ch <- uncode(ch, droplevels = droplevels, stringsAsFactors = stringsAsFactors)
 
   return(ch)
 }
 
+
+## chtexturegrp ----
+.get_chtexturegrp_from_GDB <-  function(dsn, chkey = NULL) {
+  
+  if (!is.null(chkey)) {
+         qry  <- paste0("SELECT * FROM chtexturegrp WHERE rvindicator = 'Yes' AND chkey IN ", format_SQL_in_statement(chkey))
+  } else qry <-         "SELECT * FROM chtexturegrp WHERE rvindicator = 'Yes'"
+  
+  chtg <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE)
+}
+
+
+## chtexture -----
+.get_chtexture_from_GDB <- function(dsn, chtgkey = NULL) {
+  
+  if (!is.null(chtgkey)) {
+         qry  <- paste0("SELECT * FROM chtexture WHERE chtgkey IN ", format_SQL_in_statement(chtgkey))
+  } else qry <-         "SELECT * FROM chtexture"
+  
+  cht <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE)
+}
+  
+
+
+## chfrags -----
+.get_chfrags_from_GDB <- function(dsn, chkey = NULL) {
+  
+  if (!is.null(chkey)) {
+           qry  <- paste0("SELECT * FROM chfrags WHERE chkey IN ", format_SQL_in_statement(chkey))
+    } else qry <-         "SELECT * FROM chfrags"
+  
+  chf <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE)
+  chf <- simplifyFragmentData(chf, id.var = "chkey", vol.var = "fragvol_r", prefix = "frag")
+}
 
 
 
@@ -542,7 +589,8 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
       } else message("getting components and horizons from ", WHERE)
 
       # components
-      idx <- c(0, rep(375, 15) * 1:15)
+      # idx <- c(0, rep(375, 15) * 1:15)
+      idx <- seq(0, 2e8, 3000)
       x$idx <- as.character(cut(1:nrow(x), breaks = idx))
       co <- by(x, x$idx, function(x2) {
         qry <- paste0("mukey IN ('", paste0(x2$mukey, collapse = "', '"), "')")
@@ -595,7 +643,8 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
   
   
   # horizons
-  h <- .get_chorizon_from_GDB(dsn = dsn, co)
+  if (is.null(WHERE)) cokey <- NULL else cokey <- co$cokey
+  h <- .get_chorizon_from_GDB(dsn = dsn, cokey = cokey, childs = childs)
   
   
   if (nrow(co) > 0) {
