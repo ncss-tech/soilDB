@@ -296,7 +296,13 @@ get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
     weatheradjustment, numberofquadratsin, speciesfreqdaubenmire, dwronetally,
     dwrtwotally, dwrthreetally, dwrweightedtally, speciescomppctdwr, speciesaveyielddwr,
     wtunitweight, wtunitcounttotal, speciesaveyieldwtunit, wtunitwtclippedtotal,
-    speciescancovhitcount, speciescancovpct, speciescancovpctavedaub, speciescancovaveclass, speciesfoliarcovhitcount, speciesfoliarcovpctlineint, speciestotfoliarcovlineint, speciesbasalcovhitcount, speciesbasalcovpctlineint, speciestotbasalcovlineint, maturecounttotal, maturedensityave, maturedensityaveclass, seedlingcounttotal, seedlingdensityave, seedlingdensityaveclass, speciesgroundcovabundclass, speciescancovportion, speciesbasalarea, vtps.basalareaassessmethod
+    speciescancovhitcount, speciescancovpct, speciescancovpctavedaub, speciescancovaveclass,
+    speciesfoliarcovhitcount, speciesfoliarcovpctlineint, speciestotfoliarcovlineint, 
+    speciesbasalcovhitcount, speciesbasalcovpctlineint, speciestotbasalcovlineint, 
+    maturecounttotal, maturedensityave, maturedensityaveclass, seedlingcounttotal,
+    seedlingdensityave, seedlingdensityaveclass, speciesgroundcovabundclass, 
+    speciescancovportion, speciesbasalarea, vtps.basalareaassessmethod,
+    vegtransplantsummiid
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
@@ -328,6 +334,64 @@ get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
 
   # done
   return(d)
+}
+
+# get point plant cover details for vegtransect plant summary
+#' @export
+#' @rdname fetchVegdata
+get_vegplot_transpoints_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
+  q <- "SELECT siteiid, siteobsiid, vegplotiid, vegtransectiid,
+               plantsym, plantsciname, plantnatvernm,
+               transectpointlocation,
+               livecanopyhtbottom, livecanopyhttop, 
+               canopycoverpresent, foliarcoverpresent, basalcoverpresent, 
+               plantprodquaddetailsiid, vegtransplantsummiidref
+              FROM site_View_1 AS s
+              INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
+              INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
+              LEFT JOIN vegtransect_View_1 AS vt 
+                     ON vt.vegplotiidref = v.vegplotiid
+              INNER JOIN vegtransectplantsummary_View_1 AS vtps 
+                     ON vtps.vegtransectiidref = vt.vegtransectiid
+              INNER JOIN pointplantcoverdetails_View_1 AS ppcd
+                     ON ppcd.vegtransplantsummiidref = vtps.vegtransplantsummiid
+              INNER JOIN plant ON plant.plantiid = vtps.plantiidref"
+  if (!SS) {
+    q <- gsub("_View_1", "", q)
+  }
+  
+  res <- dbQueryNASIS(NASIS(dsn = dsn), q)
+  uncode(res)
+}
+
+
+# get vegplot transect production quadrats 
+#' @export
+#' @rdname fetchVegdata
+get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
+  q <- "SELECT siteiid, siteobsiid, vegplotiid, vegtransectiid,
+               plantsym, plantsciname, plantnatvernm,
+               quadratnumber, transectpointlocation, quadratclippedindicator,
+               specieswtairdry, specieswtclipped, specieswtestimated, 
+               ppqd.speciestraceamtflag, weightunitcount, ppqd.speciescancovpct, 
+               speciescancovclass, 
+               plantprodquaddetailsiid, vegtransplantsummiidref
+              FROM site_View_1 AS s
+              INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
+              INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
+              LEFT JOIN vegtransect_View_1 AS vt 
+                     ON vt.vegplotiidref = v.vegplotiid
+              INNER JOIN vegtransectplantsummary_View_1 AS vtps 
+                     ON vtps.vegtransectiidref = vt.vegtransectiid
+              INNER JOIN plantprodquadratdetails_View_1 AS ppqd
+                     ON ppqd.vegtransplantsummiidref = vtps.vegtransplantsummiid
+              INNER JOIN plant ON plant.plantiid = vtps.plantiidref"
+  if (!SS) {
+    q <- gsub("_View_1", "", q)
+  }
+  
+  res <- dbQueryNASIS(NASIS(dsn = dsn), q)
+  uncode(res)
 }
 
 # get vegplot tree site index summary data
