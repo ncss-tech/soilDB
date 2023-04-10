@@ -364,6 +364,10 @@ get_vegplot_transpoints_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   uncode(res)
 }
 
+
+# get vegplot transect production quadrats 
+#' @export
+#' @rdname fetchVegdata
 get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   q <- "SELECT siteiid, siteobsiid, vegplotiid, vegtransectiid,
                plantsym, plantsciname, plantnatvernm,

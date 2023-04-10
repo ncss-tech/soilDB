@@ -13,6 +13,7 @@
 \alias{get_vegplot_tree_si_summary_from_NASIS_db}
 \alias{get_vegplot_trhi_from_NASIS_db}
 \alias{get_vegplot_transpoints_from_NASIS_db}
+\alias{get_vegplot_prodquadrats_from_NASIS_db}
 \title{Get vegetation plot data from local NASIS database}
 \usage{
 fetchVegdata(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
@@ -46,6 +47,8 @@ get_vegplot_transpecies_from_NASIS_db(
 )
 
 get_vegplot_transpoints_from_NASIS_db(SS = TRUE, dsn = NULL)
+
+get_vegplot_prodquadrats_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 get_vegplot_tree_si_summary_from_NASIS_db(
   SS = TRUE,
