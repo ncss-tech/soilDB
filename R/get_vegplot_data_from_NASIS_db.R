@@ -364,7 +364,31 @@ get_vegplot_transpoints_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   uncode(res)
 }
 
-
+get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
+  q <- "SELECT siteiid, siteobsiid, vegplotiid, vegtransectiid,
+               plantsym, plantsciname, plantnatvernm,
+               quadratnumber, transectpointlocation, quadratclippedindicator,
+               specieswtairdry, specieswtclipped, specieswtestimated, 
+               ppqd.speciestraceamtflag, weightunitcount, ppqd.speciescancovpct, 
+               speciescancovclass, 
+               plantprodquaddetailsiid, vegtransplantsummiidref
+              FROM site_View_1 AS s
+              INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
+              INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
+              LEFT JOIN vegtransect_View_1 AS vt 
+                     ON vt.vegplotiidref = v.vegplotiid
+              INNER JOIN vegtransectplantsummary_View_1 AS vtps 
+                     ON vtps.vegtransectiidref = vt.vegtransectiid
+              INNER JOIN plantprodquadratdetails_View_1 AS ppqd
+                     ON ppqd.vegtransplantsummiidref = vtps.vegtransplantsummiid
+              INNER JOIN plant ON plant.plantiid = vtps.plantiidref"
+  if (!SS) {
+    q <- gsub("_View_1", "", q)
+  }
+  
+  res <- dbQueryNASIS(NASIS(dsn = dsn), q)
+  uncode(res)
+}
 
 # get vegplot tree site index summary data
 #' @export

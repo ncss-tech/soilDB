@@ -37,7 +37,8 @@ fetchVegdata <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
   vegplotspecies <- get_vegplot_species_from_NASIS_db(SS = SS, dsn =  dsn)
   vegtransect <- get_vegplot_transect_from_NASIS_db(SS = SS, dsn =  dsn)
   vegtransplantsum <- get_vegplot_transpecies_from_NASIS_db(SS = SS, dsn =  dsn)
-  vegtranspoints <- get_vegplot_transpoints_from_NASIS_db(SS = SS, dsn = dsn)
+  vegtranspoint <- get_vegplot_transpoints_from_NASIS_db(SS = SS, dsn = dsn)
+  vegprodquadrat <- get_vegplot_prodquadrats_from_NASIS_db(SS = SS, dsn =  dsn)
   vegsiteindexsum <- get_vegplot_tree_si_summary_from_NASIS_db(SS = SS, dsn =  dsn)
   vegsiteindexdet <- get_vegplot_tree_si_details_from_NASIS_db(SS = SS, dsn =  dsn)
   vegplottext <-  get_vegplot_textnote_from_NASIS_db(SS = SS, fixLineEndings = TRUE, dsn =  dsn)
@@ -60,7 +61,8 @@ fetchVegdata <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
 	    vegplotspecies = vegplotspecies,
 	    vegtransect = vegtransect,
 	    vegtransplantsum = vegtransplantsum,
-	    vegtranspoints = vegtranspoints,
+	    vegtranspoint = vegtranspoint,
+	    vegprodquadrat = vegprodquadrat,
 	    vegsiteindexsum = vegsiteindexsum,
 	    vegsiteindexdet = vegsiteindexdet,
 	    vegplottext = vegplottext,
