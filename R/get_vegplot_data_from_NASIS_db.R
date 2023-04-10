@@ -360,8 +360,8 @@ get_vegplot_transpoints_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
     q <- gsub("_View_1", "", q)
   }
   
-  res <- data.table::data.table(dbQueryNASIS(NASIS(dsn = dsn), q))
-  uncode(data.frame(res))
+  res <- dbQueryNASIS(NASIS(dsn = dsn), q)
+  uncode(res)
 }
 
 
