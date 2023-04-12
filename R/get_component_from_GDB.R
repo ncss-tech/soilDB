@@ -338,8 +338,13 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 }
 
 
-.get_chorizon_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", cokey = NULL, droplevels = TRUE, stringsAsFactors = NULL, childs = FALSE) {
-  
+.get_chorizon_from_GDB <-
+  function(dsn = "gNATSGO_CONUS.gdb",
+           cokey = NULL,
+           droplevels = TRUE,
+           stringsAsFactors = NULL,
+           childs = FALSE) {
+    
   # chorizon
   idx <- seq(0, 2e8, 3000)
   
@@ -366,10 +371,13 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   if (nrow(ch) > 0 & childs == TRUE) {
     
     idx <- seq(0, 2e8, 3000)
-
-    if (! is.null(WHERE)) ch$idx <- as.character(cut(1:nrow(ch), breaks = idx))
-    if (  is.null(WHERE)) ch$idx <- 1
     
+    
+    if (!is.null(WHERE))
+      ch$idx <- as.character(cut(1:nrow(ch), breaks = idx))
+    
+    if (is.null(WHERE))
+      ch$idx <- 1
     
     temp <- by(ch, ch$idx, function(x) {
 

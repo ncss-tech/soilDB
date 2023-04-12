@@ -12,6 +12,7 @@
 #' @param ecoclasstypename If `NULL` no constraint on `ecoclasstypename` is used in the query.
 #' @param ecoclassref Default: `"Ecological Site Description Database"`. If `NULL` no constraint on `ecoclassref` is used in the query.
 #' @param not_rated_value Default: `"Not assigned"`
+#' @param include_minors logical. Include minor components? Default: `TRUE`.
 #' @param miscellaneous_areas logical. Include miscellaneous areas (non-soil components)?
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @export 
@@ -22,28 +23,30 @@ get_SDA_coecoclass <- function(method = "None",
                                ecoclassref = "Ecological Site Description Database",
                                not_rated_value = "Not assigned",
                                miscellaneous_areas = TRUE,
+                               include_minors = TRUE,
                                dsn = NULL) {
   method <- match.arg(toupper(method), c('NONE', "DOMINANT COMPONENT", "DOMINANT CONDITION"))
   
   if (!is.null(ecoclassref)) {
-    ecoclassref <- soilDB::format_SQL_in_statement(ecoclassref)
+    ecoclassref_in <- soilDB::format_SQL_in_statement(ecoclassref)
   }
   
   if (!is.null(ecoclasstypename)) {
-    ecoclasstypename <- soilDB::format_SQL_in_statement(ecoclasstypename)
+    ecoclasstypename_in <- soilDB::format_SQL_in_statement(ecoclasstypename)
   }
   
   base_query <- "SELECT legend.areasymbol, legend.lkey, mapunit.muname, mapunit.mukey, component.cokey, coecoclasskey, 
                   comppct_r, majcompflag, compname, compkind, ecoclassid, ecoclassname, ecoclasstypename, ecoclassref FROM legend
    LEFT JOIN mapunit ON legend.lkey = mapunit.lkey
    LEFT JOIN component ON mapunit.mukey = component.mukey %s
-   LEFT JOIN coecoclass ON component.cokey = coecoclass.cokey
+   LEFT JOIN coecoclass ON component.cokey = coecoclass.cokey %s
    WHERE %s"
   
   include_misc <- ifelse(miscellaneous_areas, "", " AND compkind != 'miscellaneous area'")
+  include_mnrs <- ifelse(include_minors, "", " AND majcompflag = 'Yes'")
   
-  include_src <- ifelse(is.null(ecoclassref), "", sprintf("(coecoclass.ecoclassref IS NULL OR coecoclass.ecoclassref IN %s)", ecoclassref))
-  include_src2 <- ifelse(is.null(ecoclasstypename), "", sprintf("(coecoclass.ecoclasstypename IS NULL OR coecoclass.ecoclasstypename IN %s)", ecoclasstypename))
+  include_src <- ifelse(is.null(ecoclassref), "", sprintf("(coecoclass.ecoclassref IS NULL OR coecoclass.ecoclassref IN %s)", ecoclassref_in))
+  include_src2 <- ifelse(is.null(ecoclasstypename), "", sprintf("(coecoclass.ecoclasstypename IS NULL OR coecoclass.ecoclasstypename IN %s)", ecoclasstypename_in))
   
   if (is.null(mukeys) && is.null(areasymbols) && is.null(WHERE)) {
     stop("Please specify one of the following arguments: mukeys, areasymbols, WHERE", call. = FALSE)
@@ -55,15 +58,16 @@ get_SDA_coecoclass <- function(method = "None",
     WHERE <- paste("legend.areasymbol IN", format_SQL_in_statement(areasymbols))
   } 
   
+  foo <- ""
   if (include_src != "") {
-    WHERE <- paste(WHERE, "AND", include_src)
+    foo <- paste(foo, "AND", include_src)
   }
   
   if (include_src2 != "") {
-    WHERE <- paste(WHERE, "AND", include_src2)
+    foo <- paste(foo, "AND", include_src2)
   }
   
-  q <- sprintf(base_query, include_misc, WHERE)
+  q <- sprintf(base_query, paste0(include_misc, include_mnrs), foo, WHERE)
   
   if (query_string)
     return(q)
@@ -88,6 +92,17 @@ get_SDA_coecoclass <- function(method = "None",
   comppct_r <- NULL
   ecoclasspct_r <- NULL
   
+  res$ecoclassid[is.na(res$ecoclassid)] <- not_rated_value
+  res$ecoclassname[is.na(res$ecoclassname)] <- not_rated_value
+  if (length(ecoclasstypename) == 1) {
+    # if only one type name requested, we can fill it in
+    res$ecoclasstypename[is.na(res$ecoclasstypename)] <- ecoclasstypename
+  } else {
+    res$ecoclasstypename[is.na(res$ecoclasstypename)] <- not_rated_value
+  }
+  
+  res$ecoclassref[is.na(res$ecoclassref)] <- not_rated_value
+  
   if (method == "NONE") {
     return(res)
   } else if (method == "DOMINANT COMPONENT") {
@@ -96,11 +111,6 @@ get_SDA_coecoclass <- function(method = "None",
     return(res[idx1, ])
   } 
   
-  res$ecoclassid[is.na(res$ecoclassid)] <- not_rated_value
-  res$ecoclassname[is.na(res$ecoclassname)] <- not_rated_value
-  res$ecoclasstypename[is.na(res$ecoclasstypename)] <- not_rated_value
-  res$ecoclassref[is.na(res$ecoclassref)] <- not_rated_value
-
   idx2 <- data.table::data.table(res)[, list(idx = .I[which.max(comppct_r)],
                                              ecoclasspct_r = sum(comppct_r)), 
                                       by = c("mukey", "ecoclassid")][,
