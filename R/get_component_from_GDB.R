@@ -227,8 +227,10 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 
 
   # recode metadata domains
-  mu <- uncode(mu,
-               droplevels = droplevels
+  mu <- uncode(
+    mu,
+    droplevels = droplevels,
+    stringsAsFactors = stringsAsFactors
   )
 
   vars <- c("areasymbol", "lkey", "mukey", "musym", "muname", "mukind", "mustatus", "invesintens", "muacres", "farmlndcl", "pct_component", "pct_hydric", "n_component", "n_majcompflag")
@@ -373,10 +375,10 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
     idx <- seq(0, 2e8, 3000)
     
     
-    if (!is.null(WHERE))
+    if (!is.null(cokey))
       ch$idx <- as.character(cut(1:nrow(ch), breaks = idx))
     
-    if (is.null(WHERE))
+    if (is.null(cokey))
       ch$idx <- 1
     
     temp <- by(ch, ch$idx, function(x) {
