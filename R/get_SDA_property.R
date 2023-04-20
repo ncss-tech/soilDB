@@ -366,11 +366,14 @@ get_SDA_property <-
           property, property, property)
   }
 
-  .property_min_max <- function(property, top_depth, bottom_depth, FUN) {
+  .property_min_max <- function(property, top_depth, bottom_depth, FUN, include_minors = TRUE, miscellaneous_areas = FALSE) {
     sprintf("(SELECT TOP 1 %s(chm1.%s) FROM component AS cm1
-             INNER JOIN chorizon AS chm1 ON cm1.cokey = chm1.cokey AND cm1.cokey = component.cokey
+             INNER JOIN chorizon AS chm1 ON cm1.cokey = chm1.cokey AND cm1.cokey = component.cokey %s
              WHERE chm1.hzdept_r BETWEEN %s AND %s OR chm1.hzdepb_r BETWEEN %s AND %s) AS %s",
-            FUN, property, top_depth, bottom_depth, top_depth, bottom_depth, property)
+            FUN, property, 
+            
+            ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
+            top_depth, bottom_depth, top_depth, bottom_depth, property)
   }
 
   .property_weighted_average <- function(property,
@@ -516,7 +519,7 @@ get_SDA_property <-
                     LEFT JOIN component ON component.mukey = mapunit.mukey %s %s
                SELECT areasymbol, musym, muname, mukey, %s FROM #funagg
                GROUP BY areasymbol, musym, muname, mukey",
-              paste0(sapply(agg_property, function(x) .property_min_max(x, top_depth, bottom_depth, FUN = FUN)), collapse = ", "),
+              paste0(sapply(agg_property, function(x) .property_min_max(x, top_depth, bottom_depth, FUN = FUN, miscellaneous_areas = miscellaneous_areas)), collapse = ", "),
               WHERE,
               ifelse(include_minors, ""," AND component.majcompflag = 'Yes'"),
               ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
