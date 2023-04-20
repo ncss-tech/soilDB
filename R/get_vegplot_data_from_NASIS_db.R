@@ -441,6 +441,34 @@ get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
   return(d)
 }
 
+# get vegplot species basal area
+#' @export
+#' @rdname fetchVegdata
+get_vegplot_speciesbasalarea_from_NASIS <- function(SS = TRUE, dsn = NULL) {
+  q <- "SELECT siteiid, siteobsiid, vegplotiid, vegplotid, vegplotname, obsdate, 
+  primarydatacollector, plantiidref AS plantiid, 
+  plotspeciebasalareaiid, basalareatreescountediid
+            plantsym, plantsciname, plantnatvernm,
+            basalareafactor, speciesnumbertreesin, speciesbasalarea,
+            treenumber, treeheight, treediameterbreastheight
+FROM site_View_1 AS s
+  INNER JOIN siteobs_View_1 AS so ON so.siteiidref = s.siteiid
+  LEFT JOIN vegplot_View_1 AS v ON v.siteobsiidref = so.siteobsiid
+  LEFT JOIN plotspeciesbasalarea_View_1 AS vb ON vb.vegplotiidref = v.vegplotiid
+    LEFT JOIN basalareatreescounted_View_1 AS ba ON ba.plotspeciebasalareaiidref = vb.plotspeciebasalareaiid
+    INNER JOIN plant ON plant.plantiid = vb.plantiidref"
+  
+  channel <- dbConnectNASIS(dsn)
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
+  if (!SS) {
+    q <- gsub("_View_1", "", q)
+  }
+  
+  uncode(dbQueryNASIS(channel, q), dsn = dsn)
+}
 
 # get vegplot tree site index details data
 #' @export
