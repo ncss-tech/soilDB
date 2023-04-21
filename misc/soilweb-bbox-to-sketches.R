@@ -19,6 +19,10 @@ bb <- '-90.1378 41.8273,-90.1378 41.8420,-90.1051 41.8420,-90.1051 41.8273,-90.1
 # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=38.54538,-121.74458,z14
 bb <- '-121.8100 38.5145,-121.8100 38.5762,-121.6792 38.5762,-121.6792 38.5145,-121.8100 38.5145'
  
+## OH
+# https://casoilresource.lawr.ucdavis.edu/gmap/?loc=39.33287,-82.68023,z15
+bb <- '-82.7149 39.3168,-82.7149 39.3487,-82.6417 39.3487,-82.6417 39.3168,-82.7149 39.3168'
+
  
 # bb <- '-120.5453 37.5718,-120.5453 37.5796,-120.5289 37.5796,-120.5289 37.5718,-120.5453 37.5718'
 
@@ -36,6 +40,13 @@ bb <- '-82.3652 35.4593,-82.3652 35.4929,-82.2971 35.4929,-82.2971 35.4593,-82.3
 
 # Hendersonville, NC
 bb <- '-82.4952 35.3743,-82.4952 35.4079,-82.4271 35.4079,-82.4271 35.3743,-82.4952 35.3743'
+
+
+# KY155
+# https://casoilresource.lawr.ucdavis.edu/gmap/?loc=37.63262,-85.36737,z15
+bb <- '-85.4077 37.6151,-85.4077 37.6488,-85.3345 37.6488,-85.3345 37.6151,-85.4077 37.6151'
+
+
 
 
 ## assemble AOI polygon into WKT
@@ -90,7 +101,8 @@ SoilTaxonomyDendrogram(
   name.style = 'center-center', 
   plot.depth.axis = TRUE,
   axis.line.offset = -3,
-  hz.distinctness.offset = 'hzd'
+  hz.distinctness.offset = 'hzd',
+  max.depth = 100
 )
 
 ## arrange according to classification, accounting for order within KST
