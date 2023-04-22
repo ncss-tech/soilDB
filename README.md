@@ -30,7 +30,6 @@ Get the development version from GitHub:
 
 ## Citation
 
-    ## 
     ## To cite soilDB in publications use:
     ## 
     ##   Beaudette, D., Skovlin, J., Roecker, S., Brown, A. (2023). soilDB:
