@@ -189,7 +189,7 @@ get_vegplot_species_from_NASIS_db <-  function(SS = TRUE,
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref = s.siteiid
   LEFT JOIN vegplot_View_1 AS v ON v.siteobsiidref = so.siteobsiid
   LEFT JOIN plotplantinventory_View_1 AS ppi ON ppi.vegplotiidref = v.vegplotiid
-  INNER JOIN plant ON plant.plantiid = ppi.plantiidref
+  LEFT JOIN plant ON plant.plantiid = ppi.plantiidref
   ORDER BY s.siteiid, ppi.orderofdominance, ppi.seqnum;"
 
   channel <- dbConnectNASIS(dsn)
@@ -309,7 +309,7 @@ get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
   INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
   LEFT JOIN vegtransect_View_1 AS vt ON vt.vegplotiidref=v.vegplotiid
   LEFT JOIN vegtransectplantsummary_View_1 AS vtps ON vtps.vegtransectiidref=vt.vegtransectiid
-  INNER JOIN plant ON plant.plantiid=vtps.plantiidref
+  LEFT JOIN plant ON plant.plantiid=vtps.plantiidref
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(dsn)
@@ -414,7 +414,7 @@ get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
   INNER JOIN vegplot_View_1 AS v on v.siteobsiidref=so.siteobsiid
   LEFT JOIN plottreesiteindexsummary_View_1 AS pltsis ON pltsis.vegplotiidref=v.vegplotiid
-  INNER JOIN plant ON plant.plantiid=pltsis.plantiidref
+  LEFT JOIN plant ON plant.plantiid=pltsis.plantiidref
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(dsn)
@@ -487,7 +487,7 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE,
   LEFT JOIN vegtransect_View_1 AS vt ON vt.vegplotiidref=v.vegplotiid
   LEFT JOIN plottreesiteindexsummary_View_1 AS pltsis ON pltsis.vegplotiidref=v.vegplotiid
   LEFT JOIN plottreesiteindexdetails_View_1 AS pltsid ON pltsid.plottreesiteindsumiidref=pltsis.plottreesiteindsumiid
-  INNER JOIN plant ON plant.plantiid=pltsis.plantiidref
+  LEFT JOIN plant ON plant.plantiid=pltsis.plantiidref
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(dsn)
