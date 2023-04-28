@@ -114,14 +114,14 @@ FROM geom_data;
     },
     SAPOLYGON = { switch(method,
                         intersection = "
-  WITH geom_data (geom, mukey) AS (
+  WITH geom_data (geom, areasymbol) AS (
   SELECT
   sapolygongeo.STIntersection( geometry::STGeomFromText('%s', 4326) ) AS geom, areasymbol
   FROM sapolygon
   WHERE sapolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1
 )
 SELECT
-geom.STAsText() AS geom, mukey,
+geom.STAsText() AS geom, areasymbol,
 GEOGRAPHY::STGeomFromWKB(geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).STArea() * 0.000247105 AS area_ac
 FROM geom_data;
   ",
@@ -357,12 +357,14 @@ SDA_spatialQuery <- function(geom,
     geom <- terra::rast(geom)
   }
 
-  if (inherits(geom, 'SpatRaster') | inherits(geom, 'SpatVector')) {
+  if (inherits(geom, 'SpatRaster') || inherits(geom, 'SpatVector')) {
     # terra support
     return_terra <- TRUE
     return_sf <- TRUE
-    geom <- terra::as.polygons(terra::ext(geom),
-                               crs = terra::crs(geom))
+    # convert raster to extent polygon if needed
+    if (inherits(geom, 'SpatRaster')) {
+      geom <- terra::as.polygons(terra::ext(geom), crs = terra::crs(geom))
+    }
     geom <- sf::st_as_sf(geom)
   } else if (inherits(geom, 'sf') || inherits(geom, 'sfc')) {
     return_sf <- TRUE

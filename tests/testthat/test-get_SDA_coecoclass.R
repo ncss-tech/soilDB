@@ -38,7 +38,7 @@ test_that("get_SDA_coecoclass works", {
   skip_if(is.null(res6))
   expect_equal(length(unique(res6$mukey)), 2)
   
-  res7 <- get_SDA_coecoclass(mukeys = c(461994, 461995))
+  res7 <- get_SDA_coecoclass(mukeys = c(461994, 461995), include_minors = FALSE)
   skip_if(is.null(res7))
   expect_equal(length(unique(res7$cokey)), nrow(res7))
   
@@ -47,5 +47,12 @@ test_that("get_SDA_coecoclass works", {
                              ecoclassref = "Ecological Site Description Database")
   skip_if(is.null(res8))
   expect_equal(length(unique(res8$mukey)), nrow(res8))
+  
+  res9 <- get_SDA_coecoclass(mukeys = c(461994, 461995), 
+                             ecoclasstypename = "Forage Suitability Group", 
+                             method = "none", 
+                             include_minors = FALSE)
+  skip_if(is.null(res9))
+  expect_equal(nrow(res9), nrow(res7))
   
 })

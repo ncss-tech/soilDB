@@ -33,10 +33,12 @@ SCAN_site_metadata(site.code = NULL)
 a \code{list} of \code{data.frame} objects, where each element name is a sensor type, plus a \code{metadata} table; different \code{report} types change the types of sensor data returned. \code{SCAN_sensor_metadata()} and \code{SCAN_site_metadata()} return a \code{data.frame}. \code{NULL} on bad request.
 }
 \description{
-Query soil/climate data from USDA-NRCS SCAN Stations
+Query soil/climate data from USDA-NRCS SCAN Stations.
 }
 \details{
 Possible above and below ground sensor types include: 'SMS' (soil moisture), 'STO' (soil temperature), 'SAL' (salinity), 'TAVG' (daily average air temperature), 'TMIN' (daily minimum air temperature), 'TMAX' (daily maximum air temperature), 'PRCP' (daily precipitation), 'PREC' (daily precipitation), 'SNWD' (snow depth), 'WTEQ' (snow water equivalent),'WDIRV' (wind direction), 'WSPDV' (wind speed), 'LRADT' (solar radiation/langley total).
+
+This function converts below-ground sensor depth from inches to cm. All temperature values are reported as degrees C. Precipitation, snow depth, and snow water content are reported as \emph{inches}.
 \subsection{SCAN Sensors}{
 
 All Soil Climate Analysis Network (SCAN) sensor measurements are reported hourly.\tabular{lll}{

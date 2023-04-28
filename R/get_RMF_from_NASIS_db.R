@@ -10,7 +10,7 @@
 #' 
 #' @return a `list` with two `data.frame` objects:
 #'   * `RMF`: contents of "phrdxfeatures" table, often >1 row per horizon
-#'   * `RMF_colors`: contents of "phredoxfcolor", pusually >1 row per record in "phrdxfeatures"
+#'   * `RMF_colors`: contents of "phredoxfcolor", usually >1 row per record in "phrdxfeatures"
 #'   
 #' @export 
 get_RMF_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {

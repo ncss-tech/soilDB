@@ -142,7 +142,7 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
 #' @export
 #' @examplesIf curl::has_internet()
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'    get_EDIT_ecoclass_by_geoUnit(c("018X","022A"))
 #' }
 get_EDIT_ecoclass_by_geoUnit <- function(geoUnit, catalog = c("esd", "esg")) {

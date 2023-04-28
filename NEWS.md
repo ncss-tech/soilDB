@@ -1,17 +1,77 @@
-# soilDB 2.7.7 (2023-01-09)
+# soilDB 2.7.8 (2023-03-22)
 
- - `dbQueryNASIS(..., close=TRUE)` now calls `dbDisconnect()` `on.exit()` (ensuring connections get closed on error)
+ - `get_SDA_property(method="Dominant Component (Numeric)")` now includes minors by default, fixing issues with STATSGO mapunits that have no major components flagged. (@dylanbeaudette)
  
- - bug fixes in `fetchSCAN()`: 2x requests when `timeseries` argument not specified, account for no results (e.g. year = 1800)
- 
+ - `mukey.wcs()` gains a 30m gridded version of HI and PR SSURGO 
+
+# soilDB 2.7.7 (2023-03-10)
+
+## Enhancements
+
  - `fetchNASIS(from="pedons")` and `get_site_data_from_NASIS_db()` now return `siteobsiid` column (@natearoe)
  
  - `mukey.wcs()` gains experimental gridded STATSGO layer (300m)
 
  - Add `get_NASIS_table_metadata()` for returning information about columns in NASIS tables.
+
+ - `simplifyFragment/ArtifactData()`: downgrade warnings
  
-   - This function complements the existing `get_NASIS_column_metadata()` which focuses on the values within columns such as domain choice names, labels, and order. Both functions now take an `include_descriptions` argument to optionally include the narrative description of the column or column choice list item.
+ - `get_cosoilmoist_from_SDA()`: `mukey` and `cokey` now included when `duplicates=TRUE`; thanks to @andypaolucci for catching this 
  
+ - `fetchSoilGrids()`
+ 
+   - Add `SpatVector` coercion for input locations (already supported sf/sp classes) 
+   
+   - Add handling for messages from API about erroneous input 
+   
+ - Add `fetchNASIS("pedons")` columns vignette 
+ 
+ - Add `get_NASIS_table_metadata()` and optional argument `include_description` for `get_NASIS_metadata()` and `get_NASIS_column_metadata()` 
+ 
+ - `get_SDA_cosurfmorph()` + `get_SDA_pmgroupname()`: support for including or excluding misc. areas via `miscellaneous_areas` argument
+ 
+ - `get_site_data_from_NASIS_db()`:  
+ 
+   - Omit "multiple horizontal datums" warning
+   
+   - Remove calculated X/Y long/lat + add proper NASIS alias for long/lat
+   
+   - Add `siteothvegclass` id/name  - add tables to default lookup/site sets
+   
+## Bug fixes
+
+ - `dbQueryNASIS(..., close=TRUE)` now calls `dbDisconnect()` `on.exit()` (ensuring connections get closed on error)
+ 
+ - `fetchSCAN()`:
+ 
+    - 2x requests when `timeseries` argument not specified
+    
+    - Account for no results (e.g. year = 1800)
+    
+    - Bug fix in vectorization when daily + hourly data requested 
+ 
+ - `downloadSSURGO()`: 
+ 
+   - Handle `SDA_query()` with invalid syntax in `WHERE` clause
+   
+   - Fix for `include_template=FALSE`
+   
+ - `createSSURGO()`
+ 
+   - Attribute tables are now added to `gpkg_contents` when output `filename` is a GeoPackage
+  
+ - Fix for `.get_comonth_from_SDA()`
+ 
+ - Fix selected set (`SS` argument) for `get_ecosite_history_from_NASIS_db()` in `get_site_data_from_NASIS_db()`
+ 
+ - `get_SDA_pmgroupname`: return `NA` (not "NULL") for empty/missing `pmgroupname` when `simplify=TRUE `
+ 
+ - `SDA_spatialQuery()`: 
+ 
+   - `geomIntersection=TRUE` with `db="SAPOLYGON"` now correctly labels the `areasymbol` column (previously was `mukey`) to match `geomIntersection=FALSE` and SDA schema
+   
+   - Bounding box extent polygons are now only calculated for `SpatRaster` (not `SpatVector`) input
+
 # soilDB 2.7.6 (2022-11-28)
 
  - All references to `soilDB.env` have been replaced with a function that returns that environment object (`get_soilDB_env()`); thanks to @MollicMeyer for identifying this as a problem in #277. This object used to be exported but was unintentionally omitted from NAMESPACE; this has been fixed.
@@ -63,11 +123,9 @@
  
  * `fetchOSD()` now automatically encodes horizon distinctness codes to default depth offsets, stored in hz-level attr: `hzd`
 
-
-
 # soilDB 2.7.3 (2022-08-19)
 
- * `get_SDA_property()` all methods now support `miscellaneous_areas` argument. This defaults to `FALSE` for the methods it was pr eviously implemented for--so be aware that queries using `"Dominant Component"` or `"Dominant Condition"` (which previously did not respond to `miscellaneous_areas`) may have the number of rows in result reduced due to omission of miscellaneous land types. If this is unexpected or undesired, please use `miscellaneous_areas=TRUE`. (https://github.com/ncss-tech/soilDB/issues/257)
+ * `get_SDA_property()` all methods now support `miscellaneous_areas` argument. This defaults to `FALSE` for the methods it was previously implemented for--so be aware that queries using `"Dominant Component"` or `"Dominant Condition"` (which previously did not respond to `miscellaneous_areas`) may have the number of rows in result reduced due to omission of miscellaneous land types. If this is unexpected or undesired, please use `miscellaneous_areas=TRUE`. (https://github.com/ncss-tech/soilDB/issues/257)
  
  * Adds `get_NASIS_metadata()` and helper method `get_NASIS_column_metadata()` and other new tools for working with `uncode()`, factors and NASIS metadata cached in the package.
  

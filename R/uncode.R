@@ -286,7 +286,7 @@ get_NASIS_column_metadata <- function(x,
 #' NASISChoiceList("Clay loam", "texcl", choice = "ChoiceValue")
 #' 
 #' NASISChoiceList("Silty clay loam", "texcl", choice = "ChoiceName")
-NASISChoiceList <- function(x,
+NASISChoiceList <- function(x = NULL,
            colnames = names(x),
            what = "ColumnPhysicalName",
            choice = c("ChoiceName", "ChoiceValue", "ChoiceLabel"),

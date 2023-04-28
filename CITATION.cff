@@ -1,5 +1,5 @@
 # -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v0.4.0
+# CITATION file created with {cffr} R package, v0.4.1
 # See also: https://docs.ropensci.org/cffr/
 # -----------------------------------------------------------
  
@@ -8,7 +8,7 @@ message: 'To cite package "soilDB" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'soilDB: Soil Database Interface'
-version: 2.7.7
+version: 2.7.8
 abstract: A collection of functions for reading soil data from U.S. Department of
   Agriculture Natural Resources Conservation Service (USDA-NRCS) and National Cooperative
   Soil Survey (NCSS) databases.
@@ -37,7 +37,7 @@ preferred-citation:
   - family-names: Brown
     given-names: Andrew
     email: andrew.g.brown@usda.gov
-  notes: R package version 2.7.6
+  notes: R package version 2.7.7
   url: https://CRAN.R-project.org/package=soilDB
   year: '2023'
 repository: https://CRAN.R-project.org/package=soilDB
@@ -219,7 +219,7 @@ references:
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   year: '2023'
 - type: software
   title: rvest
@@ -236,7 +236,7 @@ references:
   title: odbc
   abstract: 'odbc: Connect to ODBC Compatible Databases (using the DBI Interface)'
   notes: Suggests
-  url: https://db.rstudio.com
+  url: https://r-dbi.github.io/odbc/
   repository: https://CRAN.R-project.org/package=odbc
   authors:
   - family-names: Hester

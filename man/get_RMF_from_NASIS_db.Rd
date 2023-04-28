@@ -15,7 +15,7 @@ get_RMF_from_NASIS_db(SS = TRUE, dsn = NULL)
 a \code{list} with two \code{data.frame} objects:
 \itemize{
 \item \code{RMF}: contents of "phrdxfeatures" table, often >1 row per horizon
-\item \code{RMF_colors}: contents of "phredoxfcolor", pusually >1 row per record in "phrdxfeatures"
+\item \code{RMF_colors}: contents of "phredoxfcolor", usually >1 row per record in "phrdxfeatures"
 }
 }
 \description{

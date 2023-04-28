@@ -7,12 +7,12 @@
 #' @return a vector of URLs to Web Soil Survey ZIP files
 #' @noRd
 .make_WSS_download_url <- function(WHERE = NULL, include_template = FALSE) {
-
+  
   # use SDA to get areasymbol and last updated date to build WSS cache urls
   q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol != 'US'"
   q2 <- ifelse(!is.null(WHERE), paste0(q, " AND (", WHERE, ")"), q)
   sacatalog <- suppressMessages(SDA_query(q2))
-
+  
   if (inherits(sacatalog, 'try-error') || is.null(sacatalog)) {
     return(try(stop("Query of Soil Survey Area Catalog (", 
                     WHERE, ") failed to return any data", call. = FALSE), silent = TRUE))
@@ -21,7 +21,7 @@
   areasymbol <- sacatalog$areasymbol
   saverest <- sacatalog$saverest
   statecode <- substr(areasymbol, 0, 2)
-
+  
   # handle custom (state-specific) template DBs
   # TODO: NPS urls cannot be derived from areasymbol alone
   # NB: no (current) usage of "NPS" template
@@ -34,10 +34,11 @@
                               'HI','NPS')] <- "US"
   res <- paste0(
     "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/Cache/SSA/wss_SSA_",
-    areasymbol, ifelse(include_template, paste0("_soildb_", statecode, "_2003"), ""), "_[",
+    areasymbol, ifelse(rep(include_template, length(areasymbol)), 
+                       paste0("_soildb_", statecode, "_2003"), ""), "_[",
     as.Date(saverest, format = "%m/%d/%Y %H:%M:%S"), "].zip"
   )
-
+  
   unique(res)
 }
 
@@ -57,13 +58,13 @@
   if (!requireNamespace('sf')) {
     stop("package `sf` is required to extract tabular and spatial data from a File Geodatabase")
   }
-
+  
   if (!dir.exists(file.path(exdir, "tabular")))
     dir.create(file.path(exdir, "tabular"), recursive = TRUE)
-
+  
   if (!dir.exists(file.path(exdir, "spatial")))
     dir.create(file.path(exdir, "spatial"), recursive = TRUE)
-
+  
   x <- sf::st_layers(dsn)
   lapply(seq_len(length(x$name)), function(i) {
     xn <- x$name[i]
@@ -102,27 +103,27 @@
 #' @keywords internal
 #' @noRd
 .prepare_RSS_raster <- function(x, destfile = gsub('\\.tif$', '_trim.tif', x)) {
-
+  
   if (!requireNamespace('terra'))
     stop("package `terra` is required to prepare Raster Soil Survey grids", call. = FALSE)
-
+  
   r <- terra::rast(x)
   tf1 <- tempfile(fileext = ".tif")
   tf2 <- tempfile(fileext = ".tif")
   tf3 <- tempfile(fileext = ".tif")
-
+  
   terra::NAflag(r) <- 0
   r2 <- terra::trim(r, filename = tf1, overwrite = TRUE)
-
+  
   r3 <- terra::classify(r2, matrix(
     c(-2147483648, 1, 2147483647,
       2147483647, 2147483648, 2147483647),
     ncol = 3, byrow = TRUE
   ), include.lowest = TRUE, filename = tf2, overwrite = TRUE)
-
+  
   terra::NAflag(r3) <- 2147483647
   r4 <- terra::trim(r3, filename = tf3, overwrite = TRUE)
-
+  
   res <- terra::writeRaster(r4, filename = destfile, datatype = "INT4U", overwrite = TRUE)
   unlink(c(tf1, tf2, tf3))
   res
@@ -191,13 +192,13 @@
 #' @keywords internal
 #' @return data.frame containing interpretation rules and ratings
 .get_SSURGO_interp <- function(dsn, rules = NULL) {
-
+  
   # interpretations are unique to component
   idcols <- c("lmapunitiid","coiid")
-
+  
   # TODO: include low, high, low RV in addition to default "high RV"
   rulecols <- c("mrulename","rating","class","reasons")
-
+  
   # using same logic as the get_SDA* methods for multi-rule results
   .cleanRuleColumnName <- function(x) gsub("[^A-Za-z0-9]", "", x)
   ruleresult <-  lapply(rules,
@@ -209,7 +210,7 @@
                           colnames(subres) <- newcolnames
                           subres
                         })
-
+  
   # left join each flattened rule result sequentially
   last <- ruleresult[[1]]
   for (i in 2:length(ruleresult)) {
@@ -267,54 +268,54 @@
   cokey <- NULL
   if (grepl("\\.mdb", dsn)) {
     channel <- DBI::dbConnect(odbc::odbc(),
-        .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
+                              .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
   } else if (grepl("\\.sqlite", dsn)) {
     channel <- DBI::dbConnect(RSQLite::SQLite(), dsn)
   } else {
     stop("invalid dsn", call. = FALSE)
   }
-
+  
   q <- sprintf("SELECT * FROM cointerp
                 WHERE [mrulename] = '%s' AND [ruledepth] = 0
                 ORDER BY [interphr] DESC", mrulename)
   cointerpbase <- data.table::as.data.table(DBI::dbGetQuery(channel, q))
-
+  
   # TODO: allow extend reasons to rules with ruledepth > 1?
   q <- sprintf("SELECT cokey, interphrc FROM cointerp
                 WHERE [mrulename] = '%s' AND [ruledepth] = 1
                 ORDER BY [interphr] DESC", mrulename)
   res <- data.table::as.data.table(DBI::dbGetQuery(channel, q))
-
+  
   # identify the key components of the cointerp table to relate to NASIS
   cointerpkey <- data.frame(do.call('rbind', strsplit(cointerpbase$cointerpkey, ":")))
   colnames(cointerpkey) <- c("lmapunitiid","coiid","mrulekey","seqnum")
-
+  
   # unique "cokey" is a composition of mukey (SSURGO) plus coiid (NASIS)
   cointerpbase$lmapunitiid <- as.integer(gsub("(\\d+):.*", "\\1", cointerpbase$cokey))
   res$lmapunitiid <- as.integer(gsub("(\\d+):.*", "\\1", res$cokey))
   cointerpbase$coiid <- as.integer(gsub(".*:(\\d+)", "\\1", cointerpbase$cokey))
   res$coiid <- as.integer(gsub(".*:(\\d+)", "\\1", res$cokey))
-
+  
   # get lookup table
   res2 <- .get_SSURGO_export_iid_table(cointerpkey$coiid)
-
+  
   # extract the "high representative" rating and class for 0th level rule
   high_rep_rating_class <- cointerpbase[,c("lmapunitiid","coiid","interphr","interphrc")]
   colnames(high_rep_rating_class) <- c("lmapunitiid","coiid","interphr","interphrc")
-
+  
   # flatten the reasons so they are 1:1 with component, join to lookup tables
   result <- as.data.frame(res[, list(mrulename = unique(mrulename),
-                           cokeyref = unique(cokey),
-                           reasons = paste0(.SD[["interphrc"]][1:pmin(.N, n)], collapse = "; ")),
-                    by = c("lmapunitiid", "coiid")][res2,
-                                              on = c("lmapunitiid", "coiid")][high_rep_rating_class,
-                                                                        on = c("lmapunitiid","coiid")])
-
+                                     cokeyref = unique(cokey),
+                                     reasons = paste0(.SD[["interphrc"]][1:pmin(.N, n)], collapse = "; ")),
+                              by = c("lmapunitiid", "coiid")][res2,
+                                                              on = c("lmapunitiid", "coiid")][high_rep_rating_class,
+                                                                                              on = c("lmapunitiid","coiid")])
+  
   result$rating <- result$interphr
   result$class <- result$interphrc
   # add mukey:lmapunitiid alias for convenience
   result$mukey <- result$lmapunitiid
-
+  
   return(result)
 }
 
@@ -337,9 +338,9 @@
   channel_out <- DBI::dbConnect(RSQLite::SQLite(), dsn_out)
   tables <- DBI::dbListTables(channel)
   res <- lapply(tables, function(x) {
-      y <- try(DBI::dbReadTable(channel, x))
-      if (!inherits(y, 'try-error')) DBI::dbCreateTable(channel_out, x, y)
-    })
+    y <- try(DBI::dbReadTable(channel, x))
+    if (!inherits(y, 'try-error')) DBI::dbCreateTable(channel_out, x, y)
+  })
   DBI::dbDisconnect(channel)
   DBI::dbDisconnect(channel_out)
   res

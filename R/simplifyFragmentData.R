@@ -1,6 +1,5 @@
-## TODO: generalize, export, and make sieve sizes into an argument
 ## 2022 I propose we move .sieve to aqp and export it there, see updates --agb
-
+## 2023 Added to aqp as aqp::sieve()
 # internally-used function to test size classes
 # diameter is in mm
 # NA diameter results in NA class

@@ -386,7 +386,8 @@ LEFT OUTER JOIN (
   q.sitepm <- "SELECT siteiidref as siteiid, seqnum, pmorder, pmdept, pmdepb, pmmodifier, pmgenmod, pmkind, pmorigin 
   FROM
   sitepm_View_1 AS spm
-  INNER JOIN site_View_1 AS s ON spm.siteiidref = s.siteiid;"
+  INNER JOIN site_View_1 AS s ON spm.siteiidref = s.siteiid
+  ORDER BY spm.siteiidref, pmorder;"
 
   # toggle selected set vs. local DB
   if (SS == FALSE) {

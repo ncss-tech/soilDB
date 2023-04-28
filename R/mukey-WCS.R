@@ -7,7 +7,9 @@
 #' @author D.E. Beaudette and A.G. Brown
 #'
 #' @param aoi area of interest (AOI) defined using either a \code{Spatial*}, \code{RasterLayer}, \code{sf}, \code{sfc} or \code{bbox} object, or a \code{list}, see details
-#' @param db name of the gridded map unit key grid to access, should be either 'gNATSGO', 'gSSURGO', or 'STATSGO' (case insensitive)
+#' 
+#' @param db name of the gridded map unit key grid to access, should be either 'gNATSGO', 'gSSURGO', 'STATSGO', 'HI_SSURGO', or 'PR_SSURGO' (case insensitive)
+#' 
 #' @param res grid resolution, units of meters. The native resolution of gNATSGO and gSSURGO (this WCS) is 30m; STATSGO (this WCS) is 300m; and Raster Soil Surveys (RSS) are at 10m resolution. If `res` is not specified the native resolution of the source is used.
 #' @param quiet logical, passed to \code{curl::curl_download} to enable / suppress URL and progress bar for download.
 #'
@@ -55,10 +57,22 @@
 #' 
 #' plot(res2[['pH1to1_0to25']])
 #' }
-mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO'), res = 30, quiet = FALSE) {
+mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SSURGO', 'HI_SSURGO'), res = 30, quiet = FALSE) {
 
   # sanity check: db name
-  db <- match.arg(tolower(db[1]), choices = c('gnatsgo', 'gssurgo', 'rss', 'statsgo'))
+  db <- match.arg(tolower(db[1]), choices = c('gnatsgo', 'gssurgo', 'rss', 'statsgo', 'pr_ssurgo', 'hi_ssurgo'))
+  
+  # lookup native CRS
+  if(db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo')) {
+    # CONUS
+    .crs <- 'EPSG:5070'
+  } else if(db == 'pr_ssurgo') {
+    # PR
+    .crs <- 'EPSG:32161'
+  } else if(db == 'hi_ssurgo') {
+    # HI
+    .crs <- 'EPSG:6628'
+  }
 
   # sanity check: aoi specification
   if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
@@ -89,7 +103,7 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO'), res =
   }
   
   # prepare AOI in native CRS
-  wcs.geom <- .prepare_AEA_AOI(obj = aoi, res = res)
+  wcs.geom <- .prepare_AEA_AOI(obj = aoi, res = res, native_crs = .crs)
   
   ## TODO: investigate why
   # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 
@@ -141,7 +155,7 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO'), res =
     '&COVERAGEID=', var.spec$dsn,
     '&FORMAT=image/tiff',
     '&GEOTIFF:COMPRESSION=DEFLATE',
-    '&SUBSETTINGCRS=EPSG:5070',
+    '&SUBSETTINGCRS=', .crs, 
     '&FORMAT=GEOTIFF_FLOAT',
     '&SUBSET=x(', xmin, ',', xmax2, ')',
     '&SUBSET=y(', ymin, ',', ymax2, ')',
@@ -198,7 +212,7 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO'), res =
   ## TODO: use terra::as.factor()
   # build RAT
   # NB: unique() takes na.rm argument on terra >1.5-21 <https://github.com/rspatial/terra/issues/561>
-  uids <- na.omit(terra::unique(r)[,1])  
+  uids <- na.omit(terra::unique(r)[[1]])  
   rat <- data.frame(value = uids, 
                     mukey = uids,
                     ID = uids)

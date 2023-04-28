@@ -242,12 +242,16 @@ test_that("SDA properties (min/max) works", {
   )
   skip_if(is.null(x))
   expect_equal(nrow(x), target_area_rows)
-
+  
+  # 463263      Daulton loam, 15 to 30 percent slopes
+  # 463264      Daulton very rocky loam, 15 to 30 percent slopes
+  # mukey 463264 Rock outcrop component has a hzdepb_r @ 152cm
   x <- get_SDA_property(
-    property = c("ksat_l","ksat_r","ksat_h"),
+    property = c("ksat_l","hzdepb_r","ksat_h"),
     method = "Min/Max",
     mukeys = target_mukeys,
-    FUN = "MIN"
+    FUN = "MAX", 
+    miscellaneous_areas = TRUE
   )
   skip_if(is.null(x))
   expect_equal(x$mukey, target_mukeys)

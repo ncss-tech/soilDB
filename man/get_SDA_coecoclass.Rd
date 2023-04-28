@@ -14,6 +14,7 @@ get_SDA_coecoclass(
   ecoclassref = "Ecological Site Description Database",
   not_rated_value = "Not assigned",
   miscellaneous_areas = TRUE,
+  include_minors = TRUE,
   dsn = NULL
 )
 }
@@ -35,6 +36,8 @@ get_SDA_coecoclass(
 \item{not_rated_value}{Default: \code{"Not assigned"}}
 
 \item{miscellaneous_areas}{logical. Include miscellaneous areas (non-soil components)?}
+
+\item{include_minors}{logical. Include minor components? Default: \code{TRUE}.}
 
 \item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL} (default) use Soil Data Access API via \code{SDA_query()}.}
 }

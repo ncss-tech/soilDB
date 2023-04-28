@@ -7,11 +7,14 @@
 ## see: http://www.wcc.nrcs.usda.gov/web_service/awdb_webservice_announcements.htm
 ##      http://www.wcc.nrcs.usda.gov/web_service/AWDB_Web_Service_Reference.htm
 ##      http://www.wcc.nrcs.usda.gov/report_generator/WebReportScripting.htm
-
+##
 ## 5. we will need to address the potential for multiple sensor ID per type/depth
 ## examples in:
 ## https://github.com/ncss-tech/soilDB/issues/14
-
+##
+## 6. use API vs. scraping report output
+## https://github.com/bluegreen-labs/snotelr/blob/master/R/snotel_download.r#L65
+## --> this would require enumeration of sensors, etc.
 
 ### sensor codes: http://wcc.sc.egov.usda.gov/nwcc/sensors
 
@@ -27,11 +30,18 @@
 ## https://wcc.sc.egov.usda.gov/nwcc/sitenotes?sitenum=462
 ##
 
-#' Get Daily Climate Data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations
+
+
+
+
+
+#' @title Get Daily Climate Data from USDA-NRCS SCAN (Soil Climate Analysis Network) Stations
 #'
-#' @description Query soil/climate data from USDA-NRCS SCAN Stations
+#' @description Query soil/climate data from USDA-NRCS SCAN Stations.
 #'
 #' @details Possible above and below ground sensor types include: 'SMS' (soil moisture), 'STO' (soil temperature), 'SAL' (salinity), 'TAVG' (daily average air temperature), 'TMIN' (daily minimum air temperature), 'TMAX' (daily maximum air temperature), 'PRCP' (daily precipitation), 'PREC' (daily precipitation), 'SNWD' (snow depth), 'WTEQ' (snow water equivalent),'WDIRV' (wind direction), 'WSPDV' (wind speed), 'LRADT' (solar radiation/langley total).
+#' 
+#' This function converts below-ground sensor depth from inches to cm. All temperature values are reported as degrees C. Precipitation, snow depth, and snow water content are reported as *inches*.
 #'
 #' ## SCAN Sensors
 #'
@@ -106,7 +116,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   # required to flatten possible arguments to single value
   timeseries <- match.arg(timeseries)
   
-  ## allow for arbitary queries using `req` argument or additional arguments via ...
+  ## allow for arbitrary queries using `req` argument or additional arguments via ...
   l.extra <- list(...)
   # TODO do this after expansion to iterate over site.code*year + ???
   l <- c(sitenum = site.code, year = year, report = report, timeseries = timeseries, l.extra)
@@ -142,18 +152,18 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
                'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ',
                'WDIRV', 'WSPDV', 'LRADT')
 
+  ## TODO: consider submitting queries in parallel, possible at the inner for-loop, over sensors
+  
   for (i in req.list) {
 
-    # when there are no data, result is NULL
+    # when there are no data, result is an empty data.frame
     d <- try(.get_SCAN_data(i), silent = TRUE)
 
+    # errors occur in exceptional situations 
+    # so we terminate the request loop 
+    # (rather than possibly incomplete results)
     if (inherits(d, 'try-error')) {
       message(d)
-      return(NULL)
-    }
-
-    # handle timeouts or other bad requests
-    if (is.null(d)) {
       return(NULL)
     }
 
@@ -163,10 +173,17 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
       year.i <- as.character(i$year)
 
       if (is.null(d)) {
-        res <- data.frame(Site = integer(0), Date = as.Date(NULL),
-                          water_year = numeric(0), water_day = integer(0),
-                          value = numeric(0), depth = numeric(0),
-                          sensor.id = integer(0), row.names = integer(0))
+        res <- data.frame(Site = integer(0), 
+                          Date = as.Date(numeric(0), 
+                                         origin = "1970-01-01"),
+                          Time = character(0),
+                          water_year = numeric(0), 
+                          water_day = integer(0),
+                          value = numeric(0), 
+                          depth = numeric(0),
+                          sensor.id = integer(0), 
+                          row.names = NULL, 
+                          stringsAsFactors = FALSE)
       } else {
         res <- .formatSCAN_soil_sensor_suites(d, code = sensor.i)
       }
@@ -179,9 +196,14 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   for (sensor.i in sensors) {
 
     # flatten individual sensors over years, by site number
-    r.i <- data.table::rbindlist(lapply(d.list[[sensor.i]], data.table::rbindlist))
+    r.i <- data.table::rbindlist(lapply(d.list[[sensor.i]], data.table::rbindlist, fill = TRUE), fill = TRUE)
     rownames(r.i) <- NULL
 
+    # res should be a list
+    if (inherits(res, 'data.frame')) {
+      res <- list()
+    }
+    
     res[[sensor.i]] <- as.data.frame(r.i)
   }
 
@@ -203,6 +225,8 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 
   value <- NULL
 
+  stopifnot(length(code) == 1)
+  
   # locate named columns
   d.cols <- grep(code, names(d))
 
@@ -213,7 +237,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 
   ## https://github.com/ncss-tech/soilDB/issues/14
   ## there may be multiple above-ground sensors (takes the first)
-  if (length(d.cols) > 1 & code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC',
+  if (length(d.cols) > 1 && code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC',
                                       'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
     message(paste0('multiple sensors per site [site ', d$Site[1], '] ',
                    paste0(names(d)[d.cols], collapse = ',')))
@@ -278,7 +302,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   # set Time to 12:00 (middle of day) for daily data
   if (is.null(res$Time) || all(is.na(res$Time) | res$Time == "")) {
     # only when there are data
-    if(nrow(res) > 0) {
+    if (nrow(res) > 0) {
       res$Time <- "12:00" 
     }
   }
@@ -310,12 +334,14 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 }
 
 # req is a named vector or list
+
 .get_SCAN_data <- function(req) {
 
   # convert to list as needed
-  if (!inherits(req, 'list'))
+  if (!inherits(req, 'list')) {
     req <- as.list(req)
-
+  }
+  
   # base URL to service
   uri <- 'https://wcc.sc.egov.usda.gov/nwcc/view'
 
@@ -333,7 +359,8 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     body = req,
     encode = 'form',
     config = cf,
-    httr::add_headers(new.headers)
+    httr::add_headers(new.headers),
+    httr::timeout(getOption("soilDB.timeout", default = 300))
   ))
 
   if (inherits(r, 'try-error'))

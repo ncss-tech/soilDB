@@ -7,6 +7,9 @@
 fetchSoilGrids(
   x,
   loc.names = c("id", "lat", "lon"),
+  depth_intervals = c("0-5", "5-15", "15-30", "30-60", "60-100", "100-200"),
+  variables = c("bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt",
+    "soc", "ocd"),
   verbose = FALSE,
   progress = FALSE
 )
@@ -14,7 +17,11 @@ fetchSoilGrids(
 \arguments{
 \item{x}{A \code{data.frame} containing 3 columns referring to site ID, latitude and longitude.}
 
-\item{loc.names}{Optional: Column names referring to site ID, latitude and longitude. Default: \code{c("id","lat","lon")}}
+\item{loc.names}{Optional: Column names referring to site ID, latitude and longitude. Default: \code{c("id", "lat", "lon")}}
+
+\item{depth_intervals}{Default: \code{"0-5"}, \code{"5-15"}, \code{"15-30"}, \code{"30-60"}, \code{"60-100"}, \code{"100-200"}}
+
+\item{variables}{Default: \code{"bdod"}, \code{"cec"}, \code{"cfvo"}, \code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}}
 
 \item{verbose}{Print messages? Default: \code{FALSE}}
 
@@ -39,11 +46,16 @@ This function obtains SoilGrids properties information (250m raster resolution) 
    silt \tab Proportion of silt particles (= 0.002 mm and = 0.05 mm) in the fine earth fraction \tab g/kg \tab 10 \tab g/100g (\%) \cr
    soc \tab Soil organic carbon content in the fine earth fraction \tab dg/kg \tab 10 \tab g/kg \cr
    ocd \tab Organic carbon density \tab hg/m^3 \tab 10 \tab kg/m^3 \cr
-   ocs \tab Organic carbon stocks \tab t/ha \tab 10 \tab kg/m^2 \cr
+   ocs \tab Organic carbon stocks (0-30cm depth interval only) \tab t/ha \tab 10 \tab kg/m^2 \cr
 }
 
 
-SoilGrids predictions are made for the six standard depth intervals specified in the GlobalSoilMap IUSS working group and its specifications. The depth intervals returned are: \code{"0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm", "100-200cm"} and the properties returned are \code{"bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt", "soc"} -- each with 5th, 50th, 95th, mean and uncertainty values. The uncertainty values are the ratio between the inter-quantile range (90\% prediction interval width) and the median : \code{(Q0.95-Q0.05)/Q0.50.} Point data requests are made through \code{properties/query} endpoint of the \href{https://www.isric.org/explore/soilgrids/faq-soilgrids}{SoilGrids v2.0 REST API}. Please check ISRIC's data policy, disclaimer and citation: \url{https://www.isric.org/about/data-policy}.
+SoilGrids predictions are made for the six standard depth intervals specified in the GlobalSoilMap IUSS working group and its specifications. The default depth
+intervals returned are (in centimeters): \code{"0-5"}, \code{"5-15"}, \code{"15-30"}, \code{"30-60"}, \code{"60-100"}, \code{"100-200"} for the properties \code{"bdod"}, \code{"cec"}, \code{"cfvo"},
+\code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}--each with 5th, 50th, 95th, mean and uncertainty values. Soil organic carbon stocks (0-30cm) (\code{variables="ocs"}) are returned only for \code{depth_intervals="0-30"}. The uncertainty values are the ratio
+between the inter-quantile range (90\% prediction interval width) and the median : \code{(Q0.95-Q0.05)/Q0.50.} All values are converted from "mapped" to "conventional"
+based on above table conversion factors. Point data requests are made through \code{"properties/query"} endpoint of the \href{https://www.isric.org/explore/soilgrids/faq-soilgrids}{SoilGrids v2.0 REST API}.
+Please check ISRIC's data policy, disclaimer and citation: \url{https://www.isric.org/about/data-policy}.
 
 Find out more information about the SoilGrids and GlobalSoilMap products here:
 \itemize{
@@ -56,16 +68,39 @@ Find out more information about the SoilGrids and GlobalSoilMap products here:
 \dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
 \dontrun{
-
+  library(aqp)
+  
   your.points <- data.frame(id  = c("A", "B"), 
                            lat = c(37.9, 38.1), 
                            lon = c(-120.3, -121.5), 
                            stringsAsFactors = FALSE)
   x <- try(fetchSoilGrids(your.points))
  
-  library(aqp)
   if (!inherits(x, 'try-error'))
-   plotSPC(x, name = NA, color = "socQ50")
+   aqp::plotSPC(x, name = NA, color = "socQ50")
+ 
+  # organic carbon stocks use 0-30cm interval
+  y <- try(fetchSoilGrids(your.points[1, ], 
+                          depth_interval = c("0-5", "0-30", "5-15", "15-30"),
+                          variables = c("soc", "bdod", "ocd", "ocs")))
+                          
+  # extract horizons from a SoilProfileCollection where horizon 2 overlaps 1, 3, and 4
+  h <- aqp::horizons(y)
+  
+  # "ocs" (organic carbon stock 0-30cm interval)
+  h[2, ]
+  
+  h$thickness_meters <- ((h$hzdepb - h$hzdept) / 100)
+
+  # estimate "ocs" from modeled organic carbon and bulk density in 0-5, 5-15, 15-30 intervals
+  #  (sum the product of soc, bdod, and thickness in meters)
+  #  (1 gram per cubic decimeter = 1 kilogram per cubic meter)
+  sum(h$socmean * h$bdodmean * h$thickness_meters, na.rm = TRUE)
+  
+  # estimate "ocs" from modeled organic carbon density in 0-5, 5-15, 15-30 intervals
+  #  (sum the product of "ocd" and thickness in meters)
+  sum(h$ocdmean * h$thickness_meters, na.rm = TRUE)
+ 
 }
 }
 \references{

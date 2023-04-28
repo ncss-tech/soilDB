@@ -12,7 +12,7 @@
 #' @examplesIf curl::has_internet() && requireNamespace("terra") && requireNamespace("sf")
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'   
 #'   # specify a soil series name
 #'   s <- 'magnor'

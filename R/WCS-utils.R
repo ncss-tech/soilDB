@@ -4,7 +4,7 @@
 #'
 #' @param wcs a WCS label ('mukey', 'ISSR800', or 'soilColor')
 #'
-#' @return a \code{data.frame}
+#' @return a `data.frame`
 #' @export
 #'
 #' @examples
@@ -51,7 +51,9 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
 
 # obj: list(aoi, crs) or Spatial*, sf, sfc, bbox object
 # res: grid resolution in native CRS (meters) [ISSR-800: 800, gNATSGO: 30]
-.prepare_AEA_AOI <- function(obj, res) {
+# native_crs: native CRS, usually EPSG:5070
+#             outside of CONUS will be different
+.prepare_AEA_AOI <- function(obj, res, native_crs = 'EPSG:5070') {
   
   return_class <- 'terra'
   
@@ -118,11 +120,13 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
   }
   
   
-  # ISSR-800 and gNATSGO CRS
+  # CONUS grids: ISSR800, gNATSGO, gSSURGO, STATSGO, RSS
+  # 
   # NOTE: EPSG:6350 NAD83 (2011) v.s. EPSG:5070 NAD83
   # we use EPSG:5070 (https://github.com/ncss-tech/soilDB/issues/205)
   # NOTE: +init=epsg:XXXX syntax is deprecated in GDAL. It might return a CRS with a non-EPSG compliant axis order.
-  native_crs <- 'EPSG:5070' 
+  
+  
   
   # transform bounding polygon to WCS CRS
   # could be either, 
@@ -666,6 +670,24 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_FLOAT',
     desc = 'gSSURGO map unit keys',
     na = 2147483647L,
+    res = 30,
+    rat = NULL
+  ),
+  
+  'hi_ssurgo' = list(
+    dsn = 'hi_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'HI map unit keys',
+    na = 4294967295,
+    res = 30,
+    rat = NULL
+  ),
+  
+  'pr_ssurgo' = list(
+    dsn = 'pr_ssurgo',
+    type = 'GEOTIFF_FLOAT',
+    desc = 'PR map unit keys',
+    na = 4294967295,
     res = 30,
     rat = NULL
   ),

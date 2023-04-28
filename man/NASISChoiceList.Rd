@@ -5,7 +5,7 @@
 \title{Work with NASIS Choice Lists}
 \usage{
 NASISChoiceList(
-  x,
+  x = NULL,
   colnames = names(x),
   what = "ColumnPhysicalName",
   choice = c("ChoiceName", "ChoiceValue", "ChoiceLabel"),

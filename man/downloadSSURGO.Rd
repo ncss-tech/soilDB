@@ -19,7 +19,7 @@ downloadSSURGO(
 \arguments{
 \item{WHERE}{A SQL \code{WHERE} clause expression used to filter records in \code{sacatalog} table. Alternately \code{WHERE} can be any spatial object supported by \code{SDA_spatialQuery()} for defining the target extent.}
 
-\item{areasymbols}{Character vector of soil survey area symbols e.g. \code{c("CA067", "CA077")}. Used in lieu of \code{WHERE} arugment.}
+\item{areasymbols}{Character vector of soil survey area symbols e.g. \code{c("CA067", "CA077")}. Used in lieu of \code{WHERE} argument.}
 
 \item{destdir}{Directory to download ZIP files into. Default \code{tempdir()}.}
 
