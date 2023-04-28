@@ -255,22 +255,12 @@ fetchSoilGrids <- function(x,
   
   out[["values"]] <- cbind(sgvalues, uncertainty)
   
-  if (nrow(out[["values"]]) == 0) {
-    out <- data.frame(range = NA, 
-                      label = depth.intervals, 
-                      values = data.frame(
-                          Q0.05 = rep(NA_real_, 6), Q0.5 = rep(NA_real_, 6), Q0.95 = rep(NA_real_, 6),
-                          mean = rep(NA_real_, 6), uncertainty = rep(NA_real_, 6)
-                       ))
-  }
-  # } else {
-    # fix names and labels for downstream
-    out <- out[,colnames(out)[grep("range", colnames(out), invert = TRUE)]]
-    out <- cbind(label = gsub("cm", "", out$label), values = out$values)
-    colnames(out) <- gsub("\\.Q0\\.", "Q", colnames(out))
-    colnames(out) <- gsub("Q5", "Q50", colnames(out))
-    colnames(out) <- gsub("values", x, colnames(out))
-    colnames(out) <- gsub("\\.", "", colnames(out))
-  # }
+  # fix names and labels for downstream
+  out <- out[, colnames(out)[grep("range", colnames(out), invert = TRUE)]]
+  out <- cbind(label = gsub("cm", "", out$label), values = out$values)
+  colnames(out) <- gsub("\\.Q0\\.", "Q", colnames(out))
+  colnames(out) <- gsub("Q5", "Q50", colnames(out))
+  colnames(out) <- gsub("values", x, colnames(out))
+  colnames(out) <- gsub("\\.", "", colnames(out))
   return(out)
 }
