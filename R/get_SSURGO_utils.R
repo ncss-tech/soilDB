@@ -34,7 +34,8 @@
                               'HI','NPS')] <- "US"
   res <- paste0(
     "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/Cache/SSA/wss_SSA_",
-    areasymbol, ifelse(include_template, paste0("_soildb_", statecode, "_2003"), ""), "_[",
+    areasymbol, ifelse(rep(include_template, length(areasymbol)), 
+                      paste0("_soildb_", statecode, "_2003"), ""), "_[",
     as.Date(saverest, format = "%m/%d/%Y %H:%M:%S"), "].zip"
   )
 
