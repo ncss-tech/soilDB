@@ -401,7 +401,7 @@ get_SDA_property <-
             %s
             INTO #comp_temp3
             FROM #comp_temp
-            SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey, component.cokey AS cokey, chorizon.chkey/1 AS chkey, compname, compkind, hzname, hzdept_r, hzdepb_r, CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS hzdept_r_ADJ,
+            SELECT mapunit.mukey, areasymbol, musym, muname, component.cokey AS cokey, chorizon.chkey/1 AS chkey, compname, compkind, hzname, hzdept_r, hzdepb_r, CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS hzdept_r_ADJ,
             CASE WHEN hzdepb_r > %s THEN %s ELSE hzdepb_r END AS hzdepb_r_ADJ,
             %s, %s,
             comppct_r,
@@ -496,7 +496,7 @@ get_SDA_property <-
   switch(toupper(agg_method$method),
     # dominant component (category)
     "DOMINANT COMPONENT (CATEGORY)" =
-    sprintf("SELECT areasymbol, musym, muname, mapunit.mukey AS mukey, %s
+    sprintf("SELECT mapunit.mukey, areasymbol, musym, muname, %s
              FROM legend
              INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
              INNER JOIN component ON component.mukey = mapunit.mukey AND
@@ -512,7 +512,7 @@ get_SDA_property <-
     # weighted average (.weighted_average handles vector agg_property)
     "WEIGHTED AVERAGE" = .property_weighted_average(agg_property, top_depth, bottom_depth, WHERE, include_minors = include_minors, miscellaneous_areas = miscellaneous_areas),
     "MIN/MAX" =
-      sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey, %s
+      sprintf("SELECT mapunit.mukey, areasymbol, musym, muname, %s
                INTO #funagg
                     FROM legend
                     INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
@@ -530,7 +530,7 @@ get_SDA_property <-
 
     # dominant condition
     "DOMINANT CONDITION" =
-    sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey, %s
+    sprintf("SELECT mapunit.mukey, areasymbol, musym, muname, %s
              FROM legend
               INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
               INNER JOIN component ON component.mukey = mapunit.mukey AND
@@ -545,8 +545,8 @@ get_SDA_property <-
             ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'")),
 
     # NO AGGREGATION
-  "NONE" = sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey,
-                           compname, compkind, component.comppct_r, majcompflag, component.cokey,
+  "NONE" = sprintf("SELECT mapunit.mukey, component.cokey, areasymbol, musym, muname,
+                           compname, compkind, component.comppct_r, majcompflag, 
                            %s %s%s %s
              FROM legend
               INNER JOIN mapunit ON mapunit.lkey = legend.lkey
@@ -554,7 +554,7 @@ get_SDA_property <-
               ORDER BY areasymbol, musym, muname, mapunit.mukey, component.comppct_r DESC, component.cokey%s",
             ifelse(any(is_hz), "chorizon.chkey AS chkey, chorizon.hzdept_r AS hzdept_r, chorizon.hzdepb_r AS hzdepb_r,", ""),
             paste0(sapply(agg_property[!is_hz], function(x) sprintf("component.%s AS %s", x, x)), collapse = ", "),
-            ifelse(any(is_hz) & !all(is_hz), ",", ""),
+            ifelse(any(is_hz) && !all(is_hz), ",", ""),
             paste0(sapply(agg_property[is_hz], function(x) sprintf("chorizon.%s AS %s", x, x)), collapse = ", "),
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
             ifelse(any(is_hz),  paste0("\nINNER JOIN chorizon ON chorizon.cokey = component.cokey", " AND ", WHERE), paste0("AND ", WHERE)),

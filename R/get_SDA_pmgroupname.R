@@ -181,8 +181,8 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
         misc_area_join_type <- ifelse(miscellaneous_areas, "LEFT", "INNER")
         q <- sprintf(
                 paste0("SELECT DISTINCT
+                         mapunit.mukey,
                          legend.areasymbol AS areasymbol,
-                         mapunit.mukey/1 AS mukey,
                          mapunit.musym AS musym,
                          mapunit.muname AS muname,",
                          ifelse(method == "DOMINANT CONDITION", "", "compname, compkind, comppct_r, majcompflag,"),
