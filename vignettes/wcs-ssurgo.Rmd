@@ -1,5 +1,5 @@
 ---
-title: "Thematic Maps of SSURGO Data"
+title: "Map Unit Key Grids and Thematic Maps of SSURGO Data"
 output: 
   html_document:
     mathjax: null
@@ -12,7 +12,7 @@ output:
       collapsed: true
       smooth_scroll: false
 vignette: >
-  %\VignetteIndexEntry{Thematic Maps of SSURGO Data via Soil Data Access and SoilWeb Web Coverage Services}
+  %\VignetteIndexEntry{Map Unit Key Grids and Thematic Maps of SSURGO Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -34,45 +34,47 @@ options(width = 100, stringsAsFactors = FALSE)
 ```
 
 
-This vignette will explore how to use the soilDB package to create thematic maps of SSURGO data via Soil Data Access and SoilWeb Coverage Services.
+This vignette will explore how to use the soilDB package to create thematic maps of SSURGO data via Soil Data Access and SoilWeb coverage services.
 
 # Introduction
 
-A web coverage service (WCS) is provided for the gSSURGO and gNATGSO [map unit key grids](https://nrcs.app.box.com/v/soils/folder/180456387335). These grids are a raster representation of the gSSURGO and gNATSGO map unit keys (`mukey`) for the conterminous United States at a resolution of 30m.  The GeoTIFF format is used to ensure maximum compatibility. Cell values are map unit keys, encoded as unsigned 32-bit integers. The standard spatial reference for these grids is Albers Equal Area Conic (NAD83) coordinate reference system (`"EPSG:5070"`). The grids are 'LZW' compressed and internally tiled for efficient random access. The grid topology and cell values are identical to the rasters contained within the gSSURGO and gNATSGO File Geodatabases (FGDB).
+A web coverage service (WCS) is provided for the gSSURGO and gNATGSO [map unit key grids](https://nrcs.app.box.com/v/soils/folder/180456387335)  by the [UCDavis California Soil Resource Lab](https://casoilresource.lawr.ucdavis.edu/) SoilWeb server. These grids are a raster representation of the gSSURGO and gNATSGO map unit keys (`mukey`) for the conterminous United States at a resolution of 30m. The GeoTIFF format is used to ensure maximum compatibility. Cell values are map unit keys, encoded as unsigned 32-bit integers. The standard spatial reference for the grids is Albers Equal Area Conic (NAD83) coordinate reference system (`"EPSG:5070"`). The grids are 'LZW' compressed and internally tiled for efficient random access. The grid topology and cell values are identical to the rasters contained within the gSSURGO and gNATSGO File Geodatabases (FGDB).
 
-The files backing each WCS are re-created annually as part of the SSURGO refresh cycle. The gSSURGO and gNATSGO grids are updated annually, and typically in-sync with the live version of the data hosted by SDA (updated Oct 1st) by early November. Map unit keys can change over time, especially in soil survey areas that were updated during the last fiscal year.
+The files backing each WCS are re-created annually after the SSURGO annual refresh on October 1st. They are typically in-sync with the official version of the data hosted by Soil Data Access by early November. Map unit keys can change over time, especially in soil survey areas that were updated during the last fiscal year.
 
-In addition to the standard CONUS gSSURGO and gNATSGO grids, the following web coverage services are also provided:
+In addition to the standard CONUS gSSURGO and gNATSGO grids, these web coverage services are also provided:
 
  - Raster Soil Survey (RSS) products at 10m resolution.
 
  - STATSGO2 (2016) at 300m resolution.
 
- - SSURGO in HI (EPSG:6628) and PR (EPSG:32161), at 30m resolution.
+ - SSURGO in HI (EPSG:6628) and PR (EPSG:32161) at 30m resolution.
  
  - [ISSR-800 soil property grids](https://casoilresource.lawr.ucdavis.edu/soil-properties/).
 
+
 # Setup
 
-Get the latest version of `soilDB` and `terra`, along with all packages specified below.
+Get the latest CRAN version of `soilDB`, `terra` and `sf` for the following examples. `terra` is required for handling of raster data. `sf` or `terra` may be used for handling vector data for as inputs to web coverage service functions, and examples demonstrate usage of both packages for this purpose. In general for `soilDB` functions that take spatial inputs, if `terra` objects are used as input, `terra` objects are returned. 
 
 ```{r eval = FALSE}
-install.packages(c('soilDB', 'terra'))
+install.packages(c('soilDB', 'terra', 'sf'))
 ```
 
-Consider also installing the latest development versions from GitHub/r-universe:
+Consider also installing the latest development versions from GitHub or [r-universe](https://r-universe.dev/):
 
 ```{r eval = FALSE}
-remotes::install_github("ncss-tech/soilDB", dependencies = FALSE)
-
-# terra
-install.packages('terra', repos = 'https://rspatial.r-universe.dev')
+install.packages(c('soilDB', 'terra', 'sf'),
+  repos = c('https://ncss-tech.r-universe.dev',
+            'https://rspatial.r-universe.dev',
+            'https://r-spatial.r-universe.dev')
+)
 ```
 
 
 ## Grid Selection
 
-Here are some basic usage examples for the various coverage services that can be accessed with `mukey.wcs()`.
+Here are some basic usage examples for the coverage services that can be accessed with `mukey.wcs()`.
 
 See the [`mukey.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html) manual pages for details.
 
@@ -88,12 +90,16 @@ x <- mukey.wcs(aoi = aoi, db = 'RSS', ...)
 
 # select STATSGO2 grid, 300m resolution
 x <- mukey.wcs(aoi = aoi, db = 'statsgo', ...)
+```
 
+[`ISSR800.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html) is a similar function that makes available a variety of pre-aggregated 800m resolution properties derived from gNATSGO.
+
+```{r eval = FALSE}
 # select various ISSR-800 grids, details below
 x <- ISSR800.wcs(aoi = aoi, var = 'paws')
 ```
 
-[`ISSR800.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html) is a similar function that makes available a variety of pre-aggregated 800m resolution properties derived from gNATSGO.
+This is where we will link to a more detailed ISSR800 vignette in the future.
 
 
 ### gSSURGO
@@ -145,6 +151,7 @@ Thematic mapping or analysis of soil information requires connecting the grids t
 
   * Requests are limited to images sizes of 5000x5000 pixels, this is approximately 1 degree x 1 degree (longitude, latitude) at 30m.
 
+
 ## Web Coverage Service Requests Using Bounding Boxes 
 
 A buffer applied to a [single WGS84 coordinate](https://casoilresource.lawr.ucdavis.edu/gmap/?loc=36.52578,-118.55639,z13) can be used to create a bounding box (BBOX):
@@ -194,7 +201,7 @@ Sometimes it is convenient to specify a BBOX created from a website or single po
    
 Right-clicking anywhere in the map interface will also generate a link to those coordinates and zoom level.
 
-```{r fig.width = 6.5, fig.height=5}
+```{r fig.width = 8, fig.height = 7}
 library(sf)
 library(soilDB)
 library(terra)
@@ -219,6 +226,7 @@ box()
 # add original BBOX, after transforming to mukey grid CRS
 plot(st_transform(x, 5070), add = TRUE)
 ```
+
 
 # Map Unit Key Grids
 
@@ -263,21 +271,21 @@ First get intersecting SSURGO polygons from SDA with `SDA_spatialQuery()`
 # because mu is a SpatRaster, result is a SpatVector object (GCS WGS84)
 p <- SDA_spatialQuery(mu, what = 'mupolygon', geomIntersection = TRUE)
 ```
+
 Then transform to AEA coordinate reference system used by CONUS gSSURGO / gNATSGO (`"EPSG:5070"`).
+
 ```{r}
 p <- project(p, crs(mu))
 ```
 
-Inspect the result by overlay SSURGO polygons on the 30m map unit key grid.
+Inspect the result by overlaying SSURGO polygons on the 30m map unit key grid.
 
-```{r}
-par(mar = c(1, 0, 2, 0))
+```{r fig.width = 8, fig.height = 7}
 plot(mu,
      main = 'gSSURGO Grid (WCS)\nSSURGO Polygons (SDA)',
      axes = FALSE,
      legend = FALSE)
 plot(p, add = TRUE, border = 'white')
-
 mtext('CONUS Albers Equal Area Projection (EPSG:5070)', side = 1, line = 1)
 ```
 
@@ -318,7 +326,7 @@ plot(
 
 The specific RSS (state-level) data sets can be downloaded (map unit key grids, tabular data) on Box: <https://nrcs.app.box.com/v/soils/>. Please note that tabular data for Raster Soil Surveys are not yet available via Soil Data Access.
 
-```{r fig.width=12, fig.height=6}
+```{r fig.width=8, fig.height=6}
 # Coweeta Hydrologic Laboratory extent; specified in EPSG:5070
 a <- st_bbox(
   c(xmin = 1129000, xmax = 1135000, ymin = 1403000, ymax = 1411000), 
@@ -340,16 +348,33 @@ a <- st_as_sfc(a)
 # graphical comparison
 par(mfcol = c(1, 3))
 
+
 # gSSURGO
-plot(x, axes = FALSE, legend = FALSE, main = attr(x, 'layer name'))
+plot(
+  x,
+  axes = FALSE,
+  legend = FALSE,
+  main = attr(x, 'layer name')
+)
 plot(a, add = TRUE)
 
 # gNATSGO
-plot(y, axes = FALSE, legend = FALSE, main = attr(y, 'layer name'))
+plot(
+  y,
+  axes = FALSE,
+  legend = FALSE,
+  main = attr(y, 'layer name')
+)
 plot(a, add = TRUE)
 
 # RSS
-plot(z, axes = FALSE, legend = FALSE, main = attr(z, 'layer name'), ext = x)
+plot(
+  z,
+  axes = FALSE,
+  legend = FALSE,
+  main = attr(z, 'layer name'),
+  ext = x
+)
 plot(a, add = TRUE)
 ```
 
@@ -365,10 +390,20 @@ Continuing from the example above, we can use `db='statsgo'` to compare gSSURGO 
 par(mfcol = c(1, 2))
 
 # gSSURGO
-plot(x, axes = FALSE, legend = FALSE, main = attr(x, 'layer name'))
+plot(
+  x,
+  axes = FALSE,
+  legend = FALSE,
+  main = attr(x, 'layer name')
+)
 
 # STATSGO
-plot(statsgo, axes = FALSE, legend = FALSE, main = attr(statsgo, 'layer name'))
+plot(
+  statsgo,
+  axes = FALSE,
+  legend = FALSE,
+  main = attr(statsgo, 'layer name')
+)
 ```
 
 
@@ -390,7 +425,13 @@ x <- st_as_sfc(wkt, crs = 4326)
 mu <- mukey.wcs(x, db = 'hi_ssurgo')
 
 # make NA (the ocean) blue
-plot(mu, legend = FALSE, axes = FALSE, main = attr(mu, 'layer name'), colNA = 'royalblue')
+plot(
+  mu,
+  legend = FALSE,
+  axes = FALSE,
+  main = attr(mu, 'layer name'),
+  colNA = 'royalblue'
+)
 ```
 
 ```{r eval=FALSE, include=FALSE}
@@ -403,7 +444,7 @@ plot(mu, legend = FALSE, axes = FALSE, main = attr(mu, 'layer name'), colNA = 'r
 
 ## Puerto Rico SSURGO 
 
-A new 30m SSURGO map unit key WCS based on the  `"EPSG:32161"` coordinate reference system has been added for Puerto Rico.
+A new 30m SSURGO map unit key WCS based on the `"EPSG:32161"` coordinate reference system has been added for Puerto Rico.
 
 The example bounding box is centered on the [eastern coast of Puerto Rico](https://casoilresource.lawr.ucdavis.edu/gmap/?loc=18.24843,-65.67369,z13).
 
@@ -461,7 +502,7 @@ The "Mapunit Aggregate Attribute" table records a variety of soil attributes and
 
 Use the `get_SDA_muaggatt()` function, or write a query in SQL and submit via `SDA_query()`.
 
-```{r fig.width=10, fig.align='center'}
+```{r fig.width=12, fig.align='center'}
 # copy example grid
 mu2 <- mu
 
@@ -484,13 +525,13 @@ tab <- SDA_query(.sql)
 # check
 head(tab)
 
-# merge data values in to raster attribute table, joining on "mukey" column
+# set raster categories
 levels(mu2) <- tab
 
-# convert grid + RAT -> stack of propery grids
+# convert grid + RAT -> stack of property grids
 aws <- catalyze(mu2)
 
-# simple plot, set a common range [0, 20] for both layers
+# plot, set a common range [0, 20] for both layers
 plot(
   aws,
   axes = FALSE,
@@ -507,14 +548,15 @@ plot(
 
 You can use the `get_SDA_interpretation()`  function to return interpretation ratings for specific components, or aggregated up to the map unit level. Here, we produce maps using two interpretation rules: `'ENG - Construction Materials; Roadfill'`, and `'AWM - Irrigation Disposal of Wastewater'`.
 
-```{r fig.width=6, fig.height=5, fig.align='center'}
+```{r fig.align="center"}
 # copy example grid
 mu2 <- mu
 
 # extract RAT for thematic mapping
 rat <- cats(mu2)[[1]]
 
-rules <- c('ENG - Construction Materials; Roadfill', 'AWM - Irrigation Disposal of Wastewater')
+rules <- c('ENG - Construction Materials; Roadfill',
+           'AWM - Irrigation Disposal of Wastewater')
 
 tab <- get_SDA_interpretation(
   rulename = rules, 
@@ -539,9 +581,11 @@ tab$class_ENGConstructionMaterialsRoadfill <- factor(
   ordered = TRUE
 )
 
+par(mar = c(4, 12, 3, 3))
 boxplot(
   rating_ENGConstructionMaterialsRoadfill ~ class_ENGConstructionMaterialsRoadfill,
   main = 'ENG - Construction Materials; Roadfill',
+  ylab = "",
   data = tab,
   horizontal = TRUE, # fuzzy ratings on X axis
   las = 1            # rotate axis labels 90 degrees
@@ -554,11 +598,13 @@ Next, we can view the ratings as a thematic map:
 
 ```{r fig.width=10, fig.align='center'}
 vars <- c(
-    'rating_ENGConstructionMaterialsRoadfill',
-    'rating_AWMIrrigationDisposalofWastewater'
-  )
+  'rating_ENGConstructionMaterialsRoadfill',
+  'rating_AWMIrrigationDisposalofWastewater'
+)
 
+# set raster categories
 levels(mu2) <- tab[, c('mukey', vars)]
+
 rating <- catalyze(mu2)
 
 # inspect
@@ -579,7 +625,7 @@ Soil "components" are the members (land types) of a map unit. A map unit may con
 
 A widely-used property which is calculated as a standard part of SSURGO soil map unit components is the "steel corrosion potential".
 
-```{r, fig.width = 6, fig.height = 4}
+```{r, fig.width = 8, fig.height = 6}
 # copy example grid
 mu2 <- mu
 
@@ -588,68 +634,26 @@ rat <- cats(mu2)[[1]]
 
 tab <- get_SDA_property(property = 'Corrosion of Steel', 
                         method = 'DOMINANT CONDITION',
-                        mukeys = as.integer(rat$mukey)
-)
+                        mukeys = as.integer(rat$mukey),
+                        miscellaneous_areas = TRUE)
 
-tab$corsteel <- factor(tab$corsteel, levels = c("Low", "Moderate", "High"), ordered = TRUE)
-
+# set raster categories
 levels(mu2) <- tab[, c('mukey', 'corsteel')]
 
-# set active category to corsteel
+# set active category
 activeCat(mu2) <- 'corsteel'
 
 # plot
-plot(mu2, axes = FALSE)
-box()
+plot(
+  mu2,
+  axes = FALSE,
+  legend = "topleft",
+  type = "classes", # allow setting logical order of levels
+  levels = c("Low", "Moderate", "High") # ordered levels
+)
 ```
 
-
-Another example is thematic mapping of the "simplified component parent material group".
-
-```{r, fig.width = 7, fig.height = 6}
-# copy example grid
-mu2 <- mu
-
-# extract RAT for thematic mapping
-rat <- cats(mu2)[[1]]
-
-# simplified parent material group name
-tab <- get_SDA_pmgroupname(mukeys = as.integer(rat$mukey))
-
-# merge aggregate soil data into RAT
-levels(mu2) <- tab[,c('mukey','pmgroupname')]
-
-# set active category to corsteel
-activeCat(mu2) <- 'pmgroupname'
-plot(mu2, axes = FALSE)
-box()
-```
-
-We can also inspect the "Hydric Rating".
-
-```{r, fig.width = 6, fig.height = 5.5}
-# copy example grid
-mu2 <- mu
-
-# extract RAT for thematic mapping
-rat <- cats(mu2)[[1]]
-
-# simplified parent material group name
-tab <- get_SDA_hydric(mukeys = as.integer(rat$mukey))
-
-levels(mu2) <- tab[,c('mukey', 'HYDRIC_RATING')]
-
-# set active category to corsteel
-activeCat(mu2) <- 'HYDRIC_RATING'
-plot(mu2, axes = FALSE)
-```
-
-
-## Several Horizon-level Soil Properties
-
-The [`get_SDA_property()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.html) function from `soilDB` is a general interface to aggregated SSURGO/STATSGO tabular data via SDA. It was used to obtain a component-level property previously (steel corrosion), and now we will use it to aggregate several horizon-level property values for a specific depth interval.
-
-First, set up a new AOI for the following examples:
+Another example is thematic mapping of the "simplified component parent material group". First, set up a new AOI for the following examples:
 
 ```{r}
 # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=36.57666,-96.70175,z14
@@ -669,6 +673,52 @@ plot(
   main = 'gSSURGO Map Unit Key Grid'
 )
 ```
+
+We use `get_SDA_pmgroupname()` to obtain the tabular parent material information to relate to map unit keys:
+
+```{r, fig.width = 10, fig.height = 6}
+# copy example grid
+mu2 <- mu
+
+# extract RAT for thematic mapping
+rat <- cats(mu2)[[1]]
+
+# simplified parent material group name
+tab <- get_SDA_pmgroupname(mukeys = as.integer(rat$mukey),
+                           miscellaneous_areas = TRUE)
+
+# set raster categories
+levels(mu2) <- tab[, c('mukey', 'pmgroupname')]
+
+# set active category
+activeCat(mu2) <- 'pmgroupname'
+
+plot(mu2, legend = "topleft", axes = FALSE)
+```
+
+We can also inspect a mapunit-level hydric rating derived from the default aggregation method in `get_SDA_hydric()`. 
+
+```{r, fig.width = 10, fig.height = 6}
+# copy example grid
+mu2 <- mu
+
+# extract RAT for thematic mapping
+rat <- cats(mu2)[[1]]
+
+# simplified parent material group name
+tab <- get_SDA_hydric(mukeys = as.integer(rat$mukey))
+
+levels(mu2) <- tab[, c('mukey', 'HYDRIC_RATING')]
+
+# set active category 
+activeCat(mu2) <- 'HYDRIC_RATING'
+plot(mu2, legend = "topleft", axes = FALSE)
+```
+
+
+## Several Horizon-level Soil Properties
+
+The [`get_SDA_property()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.html) function from `soilDB` is a general interface to aggregated SSURGO/STATSGO tabular data via SDA. It was used to obtain a component-level property previously (steel corrosion), and now we will use it to aggregate several horizon-level property values for a specific depth interval.
 
 Derive aggregate soil properties, merge with raster attribute table (RAT).
 
@@ -694,7 +744,7 @@ head(tab)
 # convert areasymbol into a factor easy plotting later
 tab$areasymbol <- factor(tab$areasymbol)
 
-# merge aggregate soil data into RAT
+# set raster categories
 levels(mu) <- tab[, c('mukey', vars)]
 
 # list variables in the RAT
@@ -768,7 +818,7 @@ tab <-  get_SDA_property(property = vars,
 # check
 head(tab)
 
-# merge aggregate soil data into RAT
+# set raster categories
 levels(mu) <- tab[, c('mukey', vars)]
 
 # convert mukey grid + RAT -> stack of numerical grids
@@ -786,10 +836,11 @@ values(texture.class) <- aqp::ssc_to_texcl(
   clay = values(ssc[['claytotal_r']]), 
   droplevels = FALSE
 )
+r <- c(ssc, texture.class)
 
 # graphical check
 plot(
-  c(ssc, texture.class),
-  main = 'Sand, Silt, Clay (RV) & Texture Class\nDominant Component\n25-50cm'
+  r,
+  main = paste0(names(r), " - 25-50cm\nDominant Component")
 )
 ```
