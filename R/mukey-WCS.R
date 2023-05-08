@@ -213,9 +213,8 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   # build RAT
   # NB: unique() takes na.rm argument on terra >1.5-21 <https://github.com/rspatial/terra/issues/561>
   uids <- na.omit(terra::unique(r)[[1]])  
-  rat <- data.frame(value = uids, 
-                    mukey = uids,
-                    ID = uids)
+  rat <- data.frame(ID = uids, 
+                    mukey = uids)
   levels(r)[[1]] <- rat
   
   # set layer name in object
