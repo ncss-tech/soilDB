@@ -636,6 +636,7 @@ tab <- get_SDA_property(property = 'Corrosion of Steel',
                         method = 'DOMINANT CONDITION',
                         mukeys = as.integer(rat$mukey),
                         miscellaneous_areas = TRUE)
+as.integer(rat$mukey) %in% tab$mukey
 
 # set raster categories
 levels(mu2) <- tab[, c('mukey', 'corsteel')]
@@ -647,9 +648,7 @@ activeCat(mu2) <- 'corsteel'
 plot(
   mu2,
   axes = FALSE,
-  legend = "topleft",
-  type = "classes", # allow setting logical order of levels
-  levels = c("Low", "Moderate", "High") # ordered levels
+  legend = "topleft"
 )
 ```
 
