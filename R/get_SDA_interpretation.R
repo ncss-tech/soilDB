@@ -1092,7 +1092,7 @@ get_SDA_interpretation <- function(rulename,
   FROM legend
   INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
   INNER JOIN component ON component.mukey = mapunit.mukey %s
-  ORDER BY areasymbol, musym, muname, mapunit.mukey",
+  ORDER BY mapunit.mukey, areasymbol, musym, muname",
   paste0(sapply(interp, function(x) sprintf("
     (%s) AS [rating_%s],
     (%s) AS [total_comppct_%s],

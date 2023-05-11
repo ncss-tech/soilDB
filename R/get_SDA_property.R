@@ -412,7 +412,7 @@ get_SDA_property <-
             INNER JOIN component ON component.mukey = mapunit.mukey %s
             INNER JOIN chorizon ON chorizon.cokey = component.cokey AND hzdepb_r > %s AND hzdept_r <= %s
             WHERE chorizon.hzdept_r IS NOT NULL
-            ORDER BY areasymbol, musym, muname, mapunit.mukey, comppct_r DESC, cokey, hzdept_r, hzdepb_r
+            ORDER BY mapunit.mukey, areasymbol, musym, muname, comppct_r DESC, cokey, hzdept_r, hzdepb_r
             %s",
             WHERE,
             WHERE,
@@ -431,13 +431,14 @@ get_SDA_property <-
             WHERE,
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
             top_depth, bottom_depth,
-            sprintf("SELECT #main.areasymbol, #main.musym, #main.muname, #main.mukey,
+            sprintf("SELECT #main.mukey, #main.areasymbol, #main.musym, #main.muname, 
 #main.cokey, #main.chkey, #main.compname, #main.compkind, hzname, hzdept_r, hzdepb_r, hzdept_r_ADJ, hzdepb_r_ADJ, %s, %s, comppct_r, SUM_COMP_PCT, %s, %s
                         INTO #comp_temp2
                         FROM #main
                         INNER JOIN #comp_temp3 ON #comp_temp3.cokey = #main.cokey
-                        ORDER BY #main.areasymbol, #main.musym, #main.muname, #main.mukey,
-                                 comppct_r DESC, #main.cokey, hzdept_r, hzdepb_r
+                        ORDER BY #main.mukey, comppct_r DESC, 
+                                 #main.cokey, #main.areasymbol, #main.musym, #main.muname, 
+                                 hzdept_r, hzdepb_r
                         SELECT DISTINCT #comp_temp2.mukey, #comp_temp2.cokey, %s
                           INTO #weights
                           FROM #comp_temp2
@@ -452,17 +453,17 @@ get_SDA_property <-
                           INNER JOIN #weights2 ON #weights2.mukey = #comp_temp2.mukey
                           %s
                           GROUP BY #comp_temp2.mukey, #comp_temp2.cokey, %s, %s, %s
-                          SELECT areasymbol, musym, muname, #kitchensink.mukey, #last_step.cokey, %s, %s
+                          SELECT #kitchensink.mukey, #last_step.cokey, areasymbol, musym, muname, %s, %s
                             INTO #last_step2
                             FROM #last_step
                             RIGHT OUTER JOIN #kitchensink ON #kitchensink.mukey = #last_step.mukey
                             GROUP BY #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname, #kitchensink.mukey, %s, %s, #last_step.cokey
-                            ORDER BY #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname, #kitchensink.mukey
+                            ORDER BY #kitchensink.mukey, #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname
                             SELECT #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
                               FROM #last_step2
                               LEFT OUTER JOIN #last_step ON #last_step.mukey = #last_step2.mukey
                                   GROUP BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
-                                  ORDER BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s",
+                                  ORDER BY #last_step2.mukey, #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, %s",
       paste0(sprintf("(CASE WHEN ISNULL(sum_thickness_%s, 0) = 0 THEN 0 ELSE WEIGHTED_COMP_PCT%s END) AS CORRECT_COMP_PCT%s", property, n, n), collapse = ", "),
       paste0(sprintf("ISNULL(thickness_wt_%s, 0) AS thickness_wt_%s, sum_thickness_%s", property, property, property), collapse = ", "),
       paste0(property, collapse = ", "),
@@ -539,7 +540,7 @@ get_SDA_property <-
                                                                             c1.mukey = mapunit.mukey %s
                                                       ORDER BY c1.comppct_r DESC, c1.cokey)
               GROUP BY areasymbol, musym, muname, mapunit.mukey, component.cokey, compname, comppct_r
-              ORDER BY areasymbol, musym, muname, mapunit.mukey, comppct_r DESC, component.cokey",
+              ORDER BY mapunit.mukey, areasymbol, musym, muname, comppct_r DESC, component.cokey",
             paste0(sapply(agg_property, .property_dominant_condition_category), collapse = ", "),
             WHERE,
             ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'")),
@@ -551,7 +552,7 @@ get_SDA_property <-
              FROM legend
               INNER JOIN mapunit ON mapunit.lkey = legend.lkey
               INNER JOIN component ON component.mukey = mapunit.mukey %s%s
-              ORDER BY areasymbol, musym, muname, mapunit.mukey, component.comppct_r DESC, component.cokey%s",
+              ORDER BY mapunit.mukey, areasymbol, musym, muname, component.comppct_r DESC, component.cokey%s",
             ifelse(any(is_hz), "chorizon.chkey AS chkey, chorizon.hzdept_r AS hzdept_r, chorizon.hzdepb_r AS hzdepb_r,", ""),
             paste0(sapply(agg_property[!is_hz], function(x) sprintf("component.%s AS %s", x, x)), collapse = ", "),
             ifelse(any(is_hz) && !all(is_hz), ",", ""),
