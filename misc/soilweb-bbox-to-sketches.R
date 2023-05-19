@@ -47,6 +47,11 @@ bb <- '-82.4952 35.3743,-82.4952 35.4079,-82.4271 35.4079,-82.4271 35.3743,-82.4
 bb <- '-85.4077 37.6151,-85.4077 37.6488,-85.3345 37.6488,-85.3345 37.6151,-85.4077 37.6151'
 
 
+# TN015
+# https://casoilresource.lawr.ucdavis.edu/gmap/?loc=35.69268,-86.04904,z16
+bb <- '-86.0838 35.6759,-86.0838 35.7094,-86.0156 35.7094,-86.0156 35.6759,-86.0838 35.6759'
+
+
 
 
 ## assemble AOI polygon into WKT
@@ -102,7 +107,7 @@ SoilTaxonomyDendrogram(
   plot.depth.axis = TRUE,
   axis.line.offset = -3,
   hz.distinctness.offset = 'hzd',
-  max.depth = 100
+  max.depth = 150
 )
 
 ## arrange according to classification, accounting for order within KST
@@ -119,7 +124,8 @@ SoilTaxonomyDendrogram(
   name.style = 'center-center', 
   plot.depth.axis = TRUE,
   axis.line.offset = -3.5,
-  hz.distinctness.offset = 'hzd'
+  hz.distinctness.offset = 'hzd',
+  max.depth = 200
 )
 
 
@@ -129,11 +135,16 @@ SoilTaxonomyDendrogram(
 
 # reconcileOSDGeomorph() will perform cross-check between SPC--geomorph summary
 # vizHillslopePosition() makes the cross-section
-
-
+options(.aqp.plotSPC.args = NULL)
+options(.aqp.plotSPC.args = list(width = 0.35, scaling.factor = 0.01, max.depth = 200))
 par(mar = c(0.5, 0, 0, 2), bg = 'black', fg = 'white')
 plotGeomorphCrossSection(osd, type = 'line')
 plotGeomorphCrossSection(osd, type = 'bar')
+
+options(.aqp.plotSPC.args = list(width = 0.35, max.depth = 200))
+plotGeomorphCrossSection(osd, type = 'line', clust = FALSE)
+plotGeomorphCrossSection(osd, type = 'bar', clust = FALSE)
+
 
 
 ## also updated, better hydrologic sorting
