@@ -62,7 +62,7 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
         })
       cogmd <- do.call("rbind", cogmd)
     } else {
-      cogmd <- <- .get_cogeomordesc_from_GDB(dsn = dsn)
+      cogmd <- .get_cogeomordesc_from_GDB(dsn = dsn)
     }
 
     
