@@ -44,9 +44,9 @@ The files backing each WCS are re-created annually after the SSURGO annual refre
 
 In addition to the standard CONUS gSSURGO and gNATSGO grids, these web coverage services are also provided:
 
- - Raster Soil Survey (RSS) products at 10m resolution.
+ - Raster Soil Survey (RSS) products at 10m resolution (EPSG:5070).
 
- - STATSGO2 (2016) at 300m resolution.
+ - STATSGO2 (2016) at 300m resolution (EPSG:5070).
 
  - SSURGO in HI (EPSG:6628) and PR (EPSG:32161) at 30m resolution.
  
@@ -623,7 +623,7 @@ plot(
 
 Soil "components" are the members (land types) of a map unit. A map unit may contain several distinct soil and non-soil areas. 
 
-A widely-used property which is calculated as a standard part of SSURGO soil map unit components is the "steel corrosion potential".
+A widely-used property which is calculated as a standard part of SSURGO soil map unit components is the "steel corrosion potential". Here we also use `get_SDV_legend_elements()` to get the standard Soil Data Viewer colors for the selected property/interpretation.
 
 ```{r, fig.width = 8, fig.height = 6}
 # copy example grid
@@ -636,7 +636,9 @@ tab <- get_SDA_property(property = 'Corrosion of Steel',
                         method = 'DOMINANT CONDITION',
                         mukeys = as.integer(rat$mukey),
                         miscellaneous_areas = TRUE)
-as.integer(rat$mukey) %in% tab$mukey
+
+# get soil data viewer standard colors for corsteel
+cols <- get_SDV_legend_elements("attributecolumnname = 'corsteel'")
 
 # set raster categories
 levels(mu2) <- tab[, c('mukey', 'corsteel')]
@@ -647,6 +649,7 @@ activeCat(mu2) <- 'corsteel'
 # plot
 plot(
   mu2,
+  col = cols$hex,
   axes = FALSE,
   legend = "topleft"
 )
@@ -658,7 +661,8 @@ Another example is thematic mapping of the "simplified component parent material
 # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=36.57666,-96.70175,z14
 # make a bounding box and assign a CRS (4326: GCS, WGS84)
 a <- st_bbox(
-  c(xmin = -96.7696, xmax = -96.6477, ymin = 36.5477, ymax = 36.6139), 
+  c(xmin = -96.7696, xmax = -96.6477, 
+    ymin = 36.5477, ymax = 36.6139), 
   crs = st_crs(4326)
 )
 
