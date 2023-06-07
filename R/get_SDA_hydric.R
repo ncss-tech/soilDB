@@ -41,19 +41,19 @@ get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, meth
         }
         .h0 <- function(w) .LIMIT_N(paste("SELECT ISNULL(SUM(comppct_r), 0) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey", w), n = 1, sqlite = !is.null(dsn))
 
-        q <- paste0("SELECT areasymbol, musym, mapunit.muname, mapunit.mukey AS mukey,
+        q <- paste0("SELECT mapunit.mukey, areasymbol, musym, mapunit.muname, 
                       (", .h0(""), ") AS total_comppct,
                       (", .h0("AND majcompflag = 'Yes'"), ") AS count_maj_comp,
                       (", .h0("AND hydricrating = 'Yes'"), ") AS all_hydric,
                       (", .h0("AND majcompflag = 'Yes' AND hydricrating = 'Yes'"), ") AS hydric_majors,
                       (", .h0("AND majcompflag = 'Yes' AND hydricrating != 'Yes'"), ") AS maj_not_hydric,
-                      (", .h0("AND majcompflag != 'Yes' AND hydricrating  = 'Yes'"), ") AS hydric_inclusions,
+                      (", .h0("AND majcompflag != 'Yes' AND hydricrating = 'Yes'"), ") AS hydric_inclusions,
                       (", .h0("AND hydricrating != 'Yes'"), ") AS all_not_hydric,
                       (", .h0("AND hydricrating IS NULL"), ") AS hydric_null
                     INTO #main_query
                     FROM legend
                     INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND ", WHERE, "
-                    SELECT areasymbol, mukey, musym, muname,
+                    SELECT mukey, areasymbol, musym, muname,
                            total_comppct AS total_comppct,
                            hydric_majors AS hydric_majors,
                            hydric_inclusions AS hydric_inclusions,
