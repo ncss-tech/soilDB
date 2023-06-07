@@ -1,16 +1,6 @@
 ---
 title: "Map Unit Key Grids and Thematic Maps of SSURGO Data"
-output: 
-  html_document:
-    mathjax: null
-    jquery: null
-    smart: no
-    number_sections: no
-    toc: yes
-    toc_depth: 3
-    toc_float:
-      collapsed: true
-      smooth_scroll: false
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Map Unit Key Grids and Thematic Maps of SSURGO Data}
   %\VignetteEngine{knitr::rmarkdown}
