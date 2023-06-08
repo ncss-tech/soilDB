@@ -15,8 +15,9 @@ knitr::opts_chunk$set(
   warning = FALSE,
   background = '#F7F7F7',
   fig.align = 'center',
-  fig.retina = 2,
-  dev = 'png',
+  fig.width = 8,
+  fig.height = 6, 
+  dev = 'jpeg',
   tidy = FALSE,
   verbose = FALSE
 )
@@ -492,7 +493,7 @@ The "Mapunit Aggregate Attribute" table records a variety of soil attributes and
 
 Use the `get_SDA_muaggatt()` function, or write a query in SQL and submit via `SDA_query()`.
 
-```{r fig.width=12, fig.align='center'}
+```{r fig.width=8}
 # copy example grid
 mu2 <- mu
 
@@ -538,7 +539,7 @@ plot(
 
 You can use the `get_SDA_interpretation()`  function to return interpretation ratings for specific components, or aggregated up to the map unit level. Here, we produce maps using two interpretation rules: `'ENG - Construction Materials; Roadfill'`, and `'AWM - Irrigation Disposal of Wastewater'`.
 
-```{r fig.align="center"}
+```{r}
 # copy example grid
 mu2 <- mu
 
@@ -586,7 +587,7 @@ From above graph we can see that the different suitability rating classes  `clas
 
 Next, we can view the ratings as a thematic map:
 
-```{r fig.width=10, fig.align='center'}
+```{r fig.width=8}
 vars <- c(
   'rating_ENGConstructionMaterialsRoadfill',
   'rating_AWMIrrigationDisposalofWastewater'
@@ -669,7 +670,7 @@ plot(
 
 We use `get_SDA_pmgroupname()` to obtain the tabular parent material information to relate to map unit keys:
 
-```{r, fig.width = 10, fig.height = 6}
+```{r, fig.width = 8, fig.height = 6}
 # copy example grid
 mu2 <- mu
 
@@ -691,7 +692,7 @@ plot(mu2, legend = "topleft", axes = FALSE)
 
 We can also inspect a mapunit-level hydric rating derived from the default aggregation method in `get_SDA_hydric()`. 
 
-```{r, fig.width = 10, fig.height = 6}
+```{r, fig.width = 8, fig.height = 6}
 # copy example grid
 mu2 <- mu
 
