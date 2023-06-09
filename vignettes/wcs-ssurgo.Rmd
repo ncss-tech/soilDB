@@ -13,7 +13,6 @@ knitr::opts_chunk$set(
   comment = "#>",
   message = FALSE,
   warning = FALSE,
-  background = '#F7F7F7',
   fig.align = 'center',
   fig.width = 8,
   fig.height = 6, 
