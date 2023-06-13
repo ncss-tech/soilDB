@@ -52,18 +52,13 @@ get_soilDB_env <- function() {
 }
 
 #' @importFrom curl curl_download
-.soilDB_curl_get_JSON <- function(x, gzip = FALSE, FUN = jsonlite::fromJSON, ...) {
+.soilDB_curl_get_JSON <- function(x, gzip = FALSE, FUN = jsonlite::fromJSON, quiet = TRUE, ...) {
   tf <- tempfile()
-  
-  quiet <- list(...)[["quiet"]]
-  if (!is.logical(quiet) || is.na(quiet)) {
-    quiet <- FALSE
-  }
   
   dl <- try(curl::curl_download(
       x,
       tf,
-      quiet = TRUE,
+      quiet = quiet,
       mode = ifelse(gzip, "wb", "w"),
       handle = .soilDB_curl_handle()
     ), silent = TRUE)
