@@ -54,6 +54,12 @@ get_soilDB_env <- function() {
 #' @importFrom curl curl_download
 .soilDB_curl_get_JSON <- function(x, gzip = FALSE, FUN = jsonlite::fromJSON, ...) {
   tf <- tempfile()
+  
+  quiet <- list(...)[["quiet"]]
+  if (!is.logical(quiet) || is.na(quiet)) {
+    quiet <- FALSE
+  }
+  
   dl <- try(curl::curl_download(
       x,
       tf,
@@ -63,7 +69,9 @@ get_soilDB_env <- function() {
     ), silent = TRUE)
   
   if (inherits(dl, 'try-error')) {
-    message(dl[1])
+    if (!quiet) {
+      message(dl[1])
+    }
     return(NULL)
   }
   

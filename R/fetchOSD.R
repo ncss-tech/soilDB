@@ -190,7 +190,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
   }
 
   # attempt query to API, result is JSON
-  res <- .soilDB_curl_get_JSON(final.url, gzip = FALSE)
+  res <- .soilDB_curl_get_JSON(final.url, gzip = FALSE, quiet = TRUE)
 
   # errors are trapped above, returning NULL
   if (is.null(res)) {
