@@ -53,7 +53,7 @@ siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FA
     u <- URLencode(sprintf('https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=siblings&s=%s', i))
     
     # attempt query to API for basic sibling set, result is JSON
-    sib <- .soilDB_curl_get_JSON(u)
+    sib <- .soilDB_curl_get_JSON(u, quiet = TRUE)
     
     if (length(sib) >= 1) {
       sib <- sib[[1]]
@@ -85,7 +85,7 @@ siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FA
     
     # attempt query to API for component data, result is JSON
     # result is FALSE if no matching data
-    sib <- .soilDB_curl_get_JSON(u)
+    sib <- .soilDB_curl_get_JSON(u, quiet = TRUE)
     
     if (length(sib) >= 1) {
       sib <- sib[[1]]
