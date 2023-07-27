@@ -1,5 +1,5 @@
 ---
-title: "Map Unit Key Grids and Thematic Maps of SSURGO Data"
+title: "Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Map Unit Key Grids and Thematic Maps of SSURGO Data}
@@ -26,7 +26,7 @@ options(width = 100, stringsAsFactors = FALSE)
 ```
 
 
-This vignette will explore how to use the soilDB package to create thematic maps of SSURGO data via Soil Data Access and SoilWeb coverage services.
+This vignette will explore how to use the soilDB package to create thematic maps of the Soil Survey Geographic Database (SSURGO) via Soil Data Access (SDA) and SoilWeb coverage services.
 
 # Introduction
 
@@ -527,6 +527,7 @@ aws <- catalyze(mu2)
 plot(
   aws,
   axes = FALSE,
+  cex.main = 0.7,
   main = c(
     'Plant Available Water Storage (cm)\nWeighted Mean over Components, 0-50cm',
     'Plant Available Water Storage (cm)\nWeighted Mean over Components, 0-100cm'
@@ -576,6 +577,7 @@ tab$class_ENGConstructionMaterialsRoadfill <- factor(
 par(mar = c(4, 12, 3, 3))
 boxplot(
   rating_ENGConstructionMaterialsRoadfill ~ class_ENGConstructionMaterialsRoadfill,
+  cex.main = 0.7,
   main = 'ENG - Construction Materials; Roadfill',
   ylab = "",
   data = tab,
@@ -603,6 +605,7 @@ rating <- catalyze(mu2)
 plot(
   rating,
   axes = FALSE,
+  cex.main = 0.7,
   main = c(
     'Construction Materials; Roadfill\nWeighted Mean over Components',
     'Irrigation Disposal of Wastewater\nWeighted Mean over Components'
@@ -665,6 +668,7 @@ plot(
   mu, 
   legend = FALSE, 
   axes = FALSE, 
+  cex.main = 0.7,
   main = 'gSSURGO Map Unit Key Grid'
 )
 ```
@@ -759,13 +763,13 @@ box()
 Plot aggregate soil properties.
 
 ```{r}
-plot(mu2[['dbthirdbar_r']],
+plot(mu2[['dbthirdbar_r']], cex.main = 0.7,
      main = '1/3 Bar Bulk Density (g/cm^3)\nDominant Component\n0-25cm')
 
-plot(mu2[['awc_r']],
+plot(mu2[['awc_r']], cex.main = 0.7,
      main = 'AWC (cm/cm)\nDominant Component\n0-25cm')
 
-plot(mu2[['ph1to1h2o_r']],
+plot(mu2[['ph1to1h2o_r']], cex.main = 0.7,
      main = 'pH 1:1 H2O\nDominant Component\n0-25cm')
 ```
 
@@ -836,6 +840,7 @@ r <- c(ssc, texture.class)
 # graphical check
 plot(
   r,
+  cex.main = 0.7,
   main = paste0(names(r), " - 25-50cm\nDominant Component")
 )
 ```
