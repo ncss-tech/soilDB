@@ -140,18 +140,27 @@ SDA_query <- function(q) {
 
   # error message is encapsulated in XML, use xml2 library functions to extract
   if (inherits(request.status, 'try-error')) {
-
+    
     # get the request response, this will contain an error message
-    r.content <- httr::content(r, as = 'parsed', encoding = 'UTF-8')
-
-    # parse the XML to get the error message
-    error.msg <- xml2::xml_text(r.content)
-
-    ## message about bad result (previously error/warning)
-    message(error.msg)
-
+    r.content <- try(httr::content(r, as = 'parsed', encoding = 'UTF-8'), silent = TRUE)
+    
+    if (!inherits(r.content, 'try-error')) {
+      
+      # parse the XML to get the error message
+      error.msg <- try(xml2::xml_text(r.content), silent = TRUE)
+      
+      if (inherits(error.msg, 'try-error')) {
+        error.msg <- "Unable to parse error message from XML response"
+      }
+      
+      ## message about bad result (previously error/warning)
+      message(error.msg)
+      
+    }
+    
     # return the error object so calling function/user can handle it
     return(invisible(request.status))
+    
   }
 
   # the result is JSON:
