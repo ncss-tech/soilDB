@@ -49,7 +49,7 @@
   x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=extended', f))
 
   # list of dataframe objects; note: missing data are returned as FALSE
-  ext <-  .soilDB_curl_get_JSON(x, gzip = TRUE)
+  ext <-  .soilDB_curl_get_JSON(x, gzip = TRUE, quiet = TRUE)
 
   # done
   return(ext)
@@ -62,7 +62,7 @@
   x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=nasis_morphologic', f))
 
   # list of dataframe objects; note: missing data are returned as FALSE
-  m <- .soilDB_curl_get_JSON(x, gzip = TRUE)
+  m <- .soilDB_curl_get_JSON(x, gzip = TRUE, quiet = TRUE)
 
   # done
   return(m)
@@ -76,7 +76,7 @@
   x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=site_hz', f))
 
   # list of dataframe objects; note: missing data are returned as FALSE
-  site_hz <- .soilDB_curl_get_JSON(x, gzip = TRUE)
+  site_hz <- .soilDB_curl_get_JSON(x, gzip = TRUE, quiet = TRUE)
 
   # report missing data
   if (all(c(isFALSE(site_hz[['site']]),

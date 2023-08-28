@@ -40,7 +40,7 @@
   filled.ids <- character(0)
 
   # optionally test for bad horizonation... flag, and remove
-  if (rmHzErrors & nrow(f.chorizon) > 0) {
+  if (nrow(f.chorizon) > 0) {
     f.chorizon.test <- aqp::checkHzDepthLogic(f.chorizon, c('hzdept_r', 'hzdepb_r'), idname = 'coiid', fast = TRUE)
 
     # fill=TRUE adds horizons with NA chiid will have NA depths -- will not pass hzDepthTests
@@ -60,9 +60,11 @@
       bad.ids <- unique(bad.ids[!bad.ids %in% filled.ids])
     }
 
-    # keep the good ones
-    f.chorizon <- f.chorizon[which(f.chorizon$coiid %in% good.ids), ]
-
+    if (rmHzErrors) {
+      # keep the good ones
+      f.chorizon <- f.chorizon[which(f.chorizon$coiid %in% good.ids), ]
+    }
+    
     # keep track of those components with horizonation errors
     #if(length(bad.ids) > 0) # AGB removed this line of code b/c it prevents update of 'component.hz.problems' on subsequent error-free calls
     assign('component.hz.problems', value = bad.ids, envir = get_soilDB_env())

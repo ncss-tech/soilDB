@@ -401,7 +401,7 @@ get_SDA_property <-
             %s
             INTO #comp_temp3
             FROM #comp_temp
-            SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey, component.cokey AS cokey, chorizon.chkey/1 AS chkey, compname, compkind, hzname, hzdept_r, hzdepb_r, CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS hzdept_r_ADJ,
+            SELECT mapunit.mukey, areasymbol, musym, muname, component.cokey AS cokey, chorizon.chkey/1 AS chkey, compname, compkind, hzname, hzdept_r, hzdepb_r, CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS hzdept_r_ADJ,
             CASE WHEN hzdepb_r > %s THEN %s ELSE hzdepb_r END AS hzdepb_r_ADJ,
             %s, %s,
             comppct_r,
@@ -412,7 +412,7 @@ get_SDA_property <-
             INNER JOIN component ON component.mukey = mapunit.mukey %s
             INNER JOIN chorizon ON chorizon.cokey = component.cokey AND hzdepb_r > %s AND hzdept_r <= %s
             WHERE chorizon.hzdept_r IS NOT NULL
-            ORDER BY areasymbol, musym, muname, mapunit.mukey, comppct_r DESC, cokey, hzdept_r, hzdepb_r
+            ORDER BY mapunit.mukey, areasymbol, musym, muname, comppct_r DESC, cokey, hzdept_r, hzdepb_r
             %s",
             WHERE,
             WHERE,
@@ -431,13 +431,14 @@ get_SDA_property <-
             WHERE,
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
             top_depth, bottom_depth,
-            sprintf("SELECT #main.areasymbol, #main.musym, #main.muname, #main.mukey,
+            sprintf("SELECT #main.mukey, #main.areasymbol, #main.musym, #main.muname, 
 #main.cokey, #main.chkey, #main.compname, #main.compkind, hzname, hzdept_r, hzdepb_r, hzdept_r_ADJ, hzdepb_r_ADJ, %s, %s, comppct_r, SUM_COMP_PCT, %s, %s
                         INTO #comp_temp2
                         FROM #main
                         INNER JOIN #comp_temp3 ON #comp_temp3.cokey = #main.cokey
-                        ORDER BY #main.areasymbol, #main.musym, #main.muname, #main.mukey,
-                                 comppct_r DESC, #main.cokey, hzdept_r, hzdepb_r
+                        ORDER BY #main.mukey, comppct_r DESC, 
+                                 #main.cokey, #main.areasymbol, #main.musym, #main.muname, 
+                                 hzdept_r, hzdepb_r
                         SELECT DISTINCT #comp_temp2.mukey, #comp_temp2.cokey, %s
                           INTO #weights
                           FROM #comp_temp2
@@ -452,17 +453,17 @@ get_SDA_property <-
                           INNER JOIN #weights2 ON #weights2.mukey = #comp_temp2.mukey
                           %s
                           GROUP BY #comp_temp2.mukey, #comp_temp2.cokey, %s, %s, %s
-                          SELECT areasymbol, musym, muname, #kitchensink.mukey, #last_step.cokey, %s, %s
+                          SELECT #kitchensink.mukey, #last_step.cokey, areasymbol, musym, muname, %s, %s
                             INTO #last_step2
                             FROM #last_step
                             RIGHT OUTER JOIN #kitchensink ON #kitchensink.mukey = #last_step.mukey
                             GROUP BY #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname, #kitchensink.mukey, %s, %s, #last_step.cokey
-                            ORDER BY #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname, #kitchensink.mukey
+                            ORDER BY #kitchensink.mukey, #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname
                             SELECT #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
                               FROM #last_step2
                               LEFT OUTER JOIN #last_step ON #last_step.mukey = #last_step2.mukey
                                   GROUP BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
-                                  ORDER BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s",
+                                  ORDER BY #last_step2.mukey, #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, %s",
       paste0(sprintf("(CASE WHEN ISNULL(sum_thickness_%s, 0) = 0 THEN 0 ELSE WEIGHTED_COMP_PCT%s END) AS CORRECT_COMP_PCT%s", property, n, n), collapse = ", "),
       paste0(sprintf("ISNULL(thickness_wt_%s, 0) AS thickness_wt_%s, sum_thickness_%s", property, property, property), collapse = ", "),
       paste0(property, collapse = ", "),
@@ -496,7 +497,7 @@ get_SDA_property <-
   switch(toupper(agg_method$method),
     # dominant component (category)
     "DOMINANT COMPONENT (CATEGORY)" =
-    sprintf("SELECT areasymbol, musym, muname, mapunit.mukey AS mukey, %s
+    sprintf("SELECT mapunit.mukey, areasymbol, musym, muname, %s
              FROM legend
              INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
              INNER JOIN component ON component.mukey = mapunit.mukey AND
@@ -512,7 +513,7 @@ get_SDA_property <-
     # weighted average (.weighted_average handles vector agg_property)
     "WEIGHTED AVERAGE" = .property_weighted_average(agg_property, top_depth, bottom_depth, WHERE, include_minors = include_minors, miscellaneous_areas = miscellaneous_areas),
     "MIN/MAX" =
-      sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey, %s
+      sprintf("SELECT mapunit.mukey, areasymbol, musym, muname, %s
                INTO #funagg
                     FROM legend
                     INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
@@ -530,7 +531,7 @@ get_SDA_property <-
 
     # dominant condition
     "DOMINANT CONDITION" =
-    sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey, %s
+    sprintf("SELECT mapunit.mukey, areasymbol, musym, muname, %s
              FROM legend
               INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
               INNER JOIN component ON component.mukey = mapunit.mukey AND
@@ -539,22 +540,22 @@ get_SDA_property <-
                                                                             c1.mukey = mapunit.mukey %s
                                                       ORDER BY c1.comppct_r DESC, c1.cokey)
               GROUP BY areasymbol, musym, muname, mapunit.mukey, component.cokey, compname, comppct_r
-              ORDER BY areasymbol, musym, muname, mapunit.mukey, comppct_r DESC, component.cokey",
+              ORDER BY mapunit.mukey, areasymbol, musym, muname, comppct_r DESC, component.cokey",
             paste0(sapply(agg_property, .property_dominant_condition_category), collapse = ", "),
             WHERE,
             ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'")),
 
     # NO AGGREGATION
-  "NONE" = sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey,
-                           compname, compkind, component.comppct_r, majcompflag, component.cokey,
+  "NONE" = sprintf("SELECT mapunit.mukey, component.cokey, areasymbol, musym, muname,
+                           compname, compkind, component.comppct_r, majcompflag, 
                            %s %s%s %s
              FROM legend
               INNER JOIN mapunit ON mapunit.lkey = legend.lkey
               INNER JOIN component ON component.mukey = mapunit.mukey %s%s
-              ORDER BY areasymbol, musym, muname, mapunit.mukey, component.comppct_r DESC, component.cokey%s",
+              ORDER BY mapunit.mukey, areasymbol, musym, muname, component.comppct_r DESC, component.cokey%s",
             ifelse(any(is_hz), "chorizon.chkey AS chkey, chorizon.hzdept_r AS hzdept_r, chorizon.hzdepb_r AS hzdepb_r,", ""),
             paste0(sapply(agg_property[!is_hz], function(x) sprintf("component.%s AS %s", x, x)), collapse = ", "),
-            ifelse(any(is_hz) & !all(is_hz), ",", ""),
+            ifelse(any(is_hz) && !all(is_hz), ",", ""),
             paste0(sapply(agg_property[is_hz], function(x) sprintf("chorizon.%s AS %s", x, x)), collapse = ", "),
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
             ifelse(any(is_hz),  paste0("\nINNER JOIN chorizon ON chorizon.cokey = component.cokey", " AND ", WHERE), paste0("AND ", WHERE)),

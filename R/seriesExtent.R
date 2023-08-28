@@ -75,7 +75,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60,
   
   # trapped errors return NULL
   if (is.null(res)) {
-    message('no data returned')
+    message('no data returned for series: ', s)
     return(NULL)
   }
   

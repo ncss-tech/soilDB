@@ -1087,12 +1087,12 @@ get_SDA_interpretation <- function(rulename,
   .q1 <- function(x) .q0("SELECT ROUND (AVG(interphr) OVER (PARTITION BY interphrc), 2) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, interphr ORDER BY SUM (comppct_r) DESC", x)
   .q2 <- function(x) .q0("SELECT SUM(comppct_r) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY interphrc) DESC", x)
   .q3 <- function(x) .q0("SELECT interphrc FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY interphrc) DESC", x)
-  sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey,
+  sprintf("SELECT mapunit.mukey, areasymbol, musym, muname, 
   %s
   FROM legend
   INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
   INNER JOIN component ON component.mukey = mapunit.mukey %s
-  ORDER BY areasymbol, musym, muname, mapunit.mukey",
+  ORDER BY mapunit.mukey, areasymbol, musym, muname",
   paste0(sapply(interp, function(x) sprintf("
     (%s) AS [rating_%s],
     (%s) AS [total_comppct_%s],
@@ -1108,7 +1108,7 @@ get_SDA_interpretation <- function(rulename,
 .interpretation_aggregation <- function(interp, where_clause, dominant = FALSE, sqlite = FALSE) {
   aggfun <- "STRING_AGG"
   if (sqlite) aggfun <- "GROUP_CONCAT"
-  sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey, component.cokey AS cokey, compname, compkind, comppct_r, majcompflag,
+  sprintf("SELECT mapunit.mukey, component.cokey, areasymbol, musym, muname, compname, compkind, comppct_r, majcompflag,
                 %s
                 FROM legend
                 INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
@@ -1129,7 +1129,7 @@ get_SDA_interpretation <- function(rulename,
 
 .interpretation_weighted_average <- function(interp, where_clause, sqlite = FALSE) {
   stopifnot(!sqlite)
-  sprintf("SELECT areasymbol, musym, muname, mapunit.mukey/1 AS mukey,
+  sprintf("SELECT mapunit.mukey, areasymbol, musym, muname,
                 %s
                 INTO #main
                 FROM legend

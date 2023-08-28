@@ -25,7 +25,7 @@ get_SDA_muaggatt <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, qu
     WHERE <- paste("legend.areasymbol IN", format_SQL_in_statement(areasymbols))
   } 
 
-  q <- sprintf("SELECT muaggatt.*
+  q <- sprintf("SELECT muaggatt.mukey, muaggatt.*
                 FROM legend 
                 INNER JOIN mapunit ON mapunit.lkey = legend.lkey
                 INNER JOIN muaggatt ON mapunit.mukey = muaggatt.mukey
@@ -51,6 +51,9 @@ get_SDA_muaggatt <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, qu
     warnings()
     stop(attr(res, 'condition'))
   }
+  
+  # remove duplicated mukey column
+  res[[ncol(res)]] <- NULL
 
   return(res)
 }

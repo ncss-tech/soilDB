@@ -35,7 +35,7 @@ get_SDA_coecoclass <- function(method = "None",
     ecoclasstypename_in <- soilDB::format_SQL_in_statement(ecoclasstypename)
   }
   
-  base_query <- "SELECT legend.areasymbol, legend.lkey, mapunit.muname, mapunit.mukey, component.cokey, coecoclasskey, 
+  base_query <- "SELECT mapunit.mukey, legend.areasymbol, legend.lkey, mapunit.muname, component.cokey, coecoclasskey, 
                   comppct_r, majcompflag, compname, compkind, ecoclassid, ecoclassname, ecoclasstypename, ecoclassref FROM legend
    LEFT JOIN mapunit ON legend.lkey = mapunit.lkey
    LEFT JOIN component ON mapunit.mukey = component.mukey %s

@@ -39,30 +39,40 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
 
     # exec sub query
     ## pm
-    idx <- c(0, rep(1500, 10) * 1:10)
+    idx <- seq(0, 2e8, 1000)
     co$idx <- as.character(cut(1:nrow(co), breaks = idx))
     
-    copm <- by(co, co$idx, function(x) {
-      temp <- .get_copmgrp_from_GDB(dsn = dsn, x)
-    })
-    copm <- do.call("rbind", copm)
+    if (!is.null(WHERE)) {
+      copm <- by(co, co$idx, function(x) {
+        temp <- .get_copmgrp_from_GDB(dsn = dsn, x)
+        })
+      copm <- do.call("rbind", copm)
+    } else {
+      copm <- .get_copmgrp_from_GDB(dsn)
+    }
+    
     
     ## gmd
-    idx <- c(0, rep(1500, 10) * 1:10)
+    idx <- seq(0, 2e8, 1000)
     co$idx <- as.character(cut(1:nrow(co), breaks = idx))
+    
+    if (!is.null(WHERE)) {
+      cogmd <- by(co, co$idx, function(x) {
+        temp <- .get_cogeomordesc_from_GDB(dsn = dsn, x)
+        })
+      cogmd <- do.call("rbind", cogmd)
+    } else {
+      cogmd <- .get_cogeomordesc_from_GDB(dsn = dsn)
+    }
 
-    cogmd <- by(co, co$idx, function(x) {
-      temp <- .get_cogeomordesc_from_GDB(dsn = dsn, x)
-    })
-    cogmd <- do.call("rbind", cogmd)
-
+    
     # prep
     copm  <- .copm_prep(copm, db = "SDA")
     cogmd <- .cogmd_prep(cogmd, db = "SDA")
 
     # merge
     co$idx <- NULL
-    co <- merge(co, copm,    by = "cokey", all.x = TRUE, sort = FALSE)
+    co <- merge(co, copm,  by = "cokey", all.x = TRUE, sort = FALSE)
     co <- merge(co, cogmd, by = "cokey", all.x = TRUE, sort = FALSE)
   }
 
@@ -246,25 +256,28 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 }
 
 
-.get_copmgrp_from_GDB <- function(dsn = dsn, co) {
+.get_copmgrp_from_GDB <- function(dsn = dsn, co = NULL) {
 
   # message("getting ", unique(substr(x$areasymbol, 1, 2)))
   qry <- paste0(
     "SELECT cokey, copmgrpkey, pmgroupname
 
-     FROM copmgrp
-
-     WHERE rvindicator = 'Yes' AND
-          cokey IN ('", paste0(co$cokey, collapse = "', '"), "')"
+     FROM copmgrp"
+    
+    , if (!is.null(co)) {
+      paste0("WHERE rvindicator = 'Yes' AND cokey IN ", soilDB::format_SQL_in_statement(co$cokey))
+    }
   )
   pmg <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE)
 
   qry <- paste0(
     "SELECT copmgrpkey, pmorder, pmkind, pmorigin
 
-     FROM copm
-
-     WHERE copmgrpkey IN ('", paste0(pmg$copmgrpkey, collapse = "', '"), "')"
+     FROM copm"
+    
+    , if (!is.null(co)) {
+      paste0("WHERE copmgrpkey IN ", soilDB::format_SQL_in_statement(co$copmgrpkey))
+    }
   )
   pm <- sf::read_sf(dsn = dsn, query = qry, as_tibble = FALSE)
 
@@ -284,7 +297,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
       FROM cogeomordesc
 
       WHERE rvindicator = 'Yes' AND
-            cokey IN ('", paste0(co$cokey, collapse = "', '"), "')"
+            cokey IN ", format_SQL_in_statement(co$cokey)
   )
   cogmd    <- sf::read_sf(dsn, query = qry, as_tibble = FALSE)
   cogmd_ls <- cogmd[cogmd$geomftname == "Landscape", ]
@@ -301,7 +314,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 
       FROM cosurfmorphgc
 
-      WHERE cogeomdkey IN ('", paste0(cogmd_lf$cogeomdkey, collapse = "', '"), "')"
+      WHERE cogeomdkey IN ", format_SQL_in_statement(cogmd_lf$cogeomdkey)
   )
   lf_3d <- sf::read_sf(dsn, query = qry, as_tibble = FALSE)
   names(lf_3d)[1:4] <- gsub("geompos", "", names(lf_3d)[1:4])
@@ -313,7 +326,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 
       FROM cosurfmorphss
 
-      WHERE cogeomdkey IN ('", paste0(cogmd_lf$cogeomdkey, collapse = "', '"), "')"
+      WHERE cogeomdkey IN ", format_SQL_in_statement(cogmd_lf$cogeomdkey)
   )
   lf_ss <- sf::read_sf(dsn, query = qry, as_tibble = FALSE)
 
@@ -324,7 +337,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 
       FROM cosurfmorphhpp
 
-      WHERE cogeomdkey IN ('", paste0(cogmd_lf$cogeomdkey, collapse = "', '"), "')"
+      WHERE cogeomdkey IN ", format_SQL_in_statement(cogmd_lf$cogeomdkey)
   )
   lf_2d <- sf::read_sf(dsn, query = qry, as_tibble = FALSE)
 

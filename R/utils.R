@@ -110,11 +110,18 @@
 
 	# try to get the most recent:
 	d.order <- order(d$ecositecorrdate, decreasing=TRUE)
-
+	
 	# if there are multiple (unique) dates, return the most recent
-	if(length(unique(d$ecositecorrdate)) > 1) {
+	if (length(unique(d$ecositecorrdate)) > 1) {
 		d$es_selection_method <- 'most recent'
+		d$recwlupdated <- NULL
 		return(d[d.order[1], ])
+	}
+	
+	# sort order is not stable when no correlation dates are populated (use record date)
+	if (all(is.na(d$ecositecorrdate))) {
+	  d.order <- order(d$recwlupdated, decreasing=TRUE)
+	  d <- d[d.order,]
 	}
 
 	# otherwise, return the record with the least number of missing cells
@@ -123,6 +130,7 @@
 	best.record <- which.min(n.na)
 
 	d$es_selection_method <- 'least missing data'
+	d$recwlupdated <- NULL
 	return(d[best.record, ])
 }
 

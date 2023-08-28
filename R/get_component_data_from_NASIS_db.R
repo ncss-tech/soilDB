@@ -41,10 +41,18 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  q1 <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, reannualprecip_r, ffd_l, ffd_r, ffd_h, tfact, wei, weg, nirrcapcl, nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, frostact, hydricrating, hydgrp, corcon, corsteel, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
-
-  FROM
-  datamapunit_View_1 AS dmu
+  q1 <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, 
+                localphase, drainagecl, hydricrating, hydgrp, tfact, wei, weg, frostact, corcon, corsteel, 
+                elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, 
+                aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, 
+                airtempa_l, airtempa_r, airtempa_h, soiltempa_l, soiltempa_r, soiltempa_h,
+                airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, 
+                reannualprecip_r, ffd_l, ffd_r, ffd_h,
+                nirrcapcl,  nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, 
+                taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, 
+                taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, 
+                taxmoistscl, taxtempregime, soiltaxedition, coiid, dmuiid
+  FROM datamapunit_View_1 AS dmu
   INNER JOIN component_View_1 AS co ON co.dmuiidref = dmu.dmuiid
 
   ORDER BY dmudesc, comppct_r DESC, compname ASC;"
@@ -256,9 +264,9 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
   FROM
   component_View_1 AS co
-  INNER JOIN cogeomordesc_View_1 AS cogeo ON co.coiid = cogeo.coiidref
-  INNER JOIN geomorfeat ON geomorfeat.geomfiid = cogeo.geomfiidref
-  INNER JOIN geomorfeattype ON geomorfeattype.geomftiid = geomorfeat.geomftiidref
+  LEFT JOIN cogeomordesc_View_1 AS cogeo ON co.coiid = cogeo.coiidref
+  LEFT JOIN geomorfeat ON geomorfeat.geomfiid = cogeo.geomfiidref
+  LEFT JOIN geomorfeattype ON geomorfeattype.geomftiid = geomorfeat.geomftiidref
 
   ORDER BY coiid, geomfeatid ASC;"
 
@@ -287,9 +295,9 @@ get_component_cogeomorph_data_from_NASIS_db2 <- function(SS = TRUE, dsn = NULL) 
 
   FROM
   component_View_1 AS co
-  INNER JOIN cogeomordesc_View_1 AS cogeo ON co.coiid = cogeo.coiidref
-  INNER JOIN geomorfeat ON geomorfeat.geomfiid = cogeo.geomfiidref
-  INNER JOIN geomorfeattype ON geomorfeattype.geomftiid = geomorfeat.geomftiidref
+  LEFT JOIN cogeomordesc_View_1 AS cogeo ON co.coiid = cogeo.coiidref
+  LEFT JOIN geomorfeat ON geomorfeat.geomfiid = cogeo.geomfiidref
+  LEFT JOIN geomorfeattype ON geomorfeattype.geomftiid = geomorfeat.geomftiidref
   LEFT JOIN cosurfmorphhpp ON cosurfmorphhpp.cogeomdiidref = cogeo.cogeomdiid
   LEFT JOIN cosurfmorphgc ON cosurfmorphgc.cogeomdiidref = cogeo.cogeomdiid
   LEFT JOIN cosurfmorphmr ON cosurfmorphmr.cogeomdiidref = cogeo.cogeomdiid
@@ -324,12 +332,12 @@ get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  q <- "SELECT cpmg.coiidref as coiid, cpm.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
+  q <- "SELECT co.coiid as coiid, cpm.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
 
   FROM
   component_View_1 AS co
-  INNER JOIN copmgrp_View_1 AS cpmg ON cpmg.coiidref = co.coiid
-  INNER JOIN copm_View_1 AS cpm ON cpm.copmgrpiidref = cpmg.copmgrpiid
+  LEFT JOIN copmgrp_View_1 AS cpmg ON cpmg.coiidref = co.coiid
+  LEFT JOIN copm_View_1 AS cpm ON cpm.copmgrpiidref = cpmg.copmgrpiid
 
   ORDER BY coiidref, seqnum, pmorder, copmgrpiid ASC;"
 
@@ -649,8 +657,6 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   # exec query
   d <- dbQueryNASIS(channel, q, close = FALSE)
 
-  ## TODO: better documentation for "fill" argument
-  # https://github.com/ncss-tech/soilDB/issues/50
   # remove records what are missing horizon data
   if (fill == FALSE) {
     d <- d[!is.na(d$chiid), ]

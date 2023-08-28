@@ -6,6 +6,8 @@ on:
     branches: [main, master]
     paths:
       - '**.Rd'
+      - '**.Rmd'
+      - 'pkgdown.yml'
     tags: ['*']
   release:
     types: [published]

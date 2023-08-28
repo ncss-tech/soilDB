@@ -601,16 +601,15 @@ get_mapunit_from_SDA <- function(WHERE = NULL,
   # exec query
   d.mapunit <- SDA_query(q.mapunit)
 
-  d.mapunit$musym = as.character(d.mapunit$musym)
-
-  # recode metadata domains
-  d.mapunit <- uncode(d.mapunit, droplevels = droplevels)
-
-
-  # cache original column names
-  orig_names <- names(d.mapunit)
-
-
+  if (!inherits(d.mapunit, 'try-error')) {
+    d.mapunit$musym = as.character(d.mapunit$musym)
+  
+    # recode metadata domains
+    d.mapunit <- uncode(d.mapunit, droplevels = droplevels)
+  } else {
+    d.mapunit <- NULL
+  }
+  
   # done
   return(d.mapunit)
 }
