@@ -69,7 +69,7 @@ These last two cases are problematic for analysis that makes use of morphology a
 }
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("scales")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
 \donttest{
   library(aqp)

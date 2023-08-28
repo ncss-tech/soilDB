@@ -11,9 +11,10 @@ Several examples of soil profile collections returned by
 \code{fetchNASIS(from='pedons')} as \code{SoilProfileCollection} objects.
 }
 \examples{
+\dontshow{if (require("aqp")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{\}) # examplesIf}
 
 \donttest{
-if (require("aqp") && requireNamespace("scales")) {
 # load example dataset
   data("gopheridge")
 
@@ -60,7 +61,6 @@ if (require("aqp") && requireNamespace("scales")) {
 
   # add diagnostic horizons
   addDiagnosticBracket(loafercreek[1:10, ], kind='argillic horizon', col='red', offset=-0.4)
-}
 }
 
 }

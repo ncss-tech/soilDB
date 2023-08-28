@@ -114,7 +114,7 @@
 #' @author D.E. Beaudette, A.G. Brown
 #' @seealso \link{OSDquery}, \link{siblings}
 #' @export
-#' @examplesIf curl::has_internet() && requireNamespace("scales")
+#' @examplesIf curl::has_internet()
 #' @examples
 #' \donttest{
 #'   library(aqp)
