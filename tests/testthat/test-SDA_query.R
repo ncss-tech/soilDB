@@ -166,7 +166,8 @@ test_that("SDA_spatialQuery() spatial query of MUKEY with multiple features", {
   
   res <- SDA_spatialQuery(x)
   
-  skip_if(inherits(res, 'try-error'))
+  # if the result set is empty rather than an error, SDA_query() result can be NULL
+  skip_if(is.null(res) || inherits(res, 'try-error'))
   
   expect_equal(nrow(res), 2)
   
