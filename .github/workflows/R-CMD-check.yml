@@ -63,7 +63,7 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck, any::remotes, local::.
-          upgrade: TRUE
+          upgrade: true
           needs: check
 
       - name: Install soilDBdata off GitHub
