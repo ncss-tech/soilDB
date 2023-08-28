@@ -1,5 +1,5 @@
 # -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v0.4.1
+# CITATION file created with {cffr} R package, v0.5.0
 # See also: https://docs.ropensci.org/cffr/
 # -----------------------------------------------------------
  
@@ -48,9 +48,11 @@ contact:
   given-names: Andrew
   email: andrew.g.brown@usda.gov
 keywords:
+- cran
 - kssl
 - nasis
 - nrcs
+- r
 - soil
 - soil-data-access
 - soil-survey
@@ -129,7 +131,7 @@ references:
   title: aqp
   abstract: 'aqp: Algorithms for Quantitative Pedology'
   notes: Imports
-  url: https://github.com/ncss-tech/aqp
+  url: https://ncss-tech.github.io/AQP/
   repository: https://CRAN.R-project.org/package=aqp
   authors:
   - family-names: Beaudette
@@ -175,7 +177,7 @@ references:
   title: curl
   abstract: 'curl: A Modern and Flexible Web Client for R'
   notes: Imports
-  url: https://curl.se/libcurl/
+  url: https://jeroen.r-universe.dev/curl
   repository: https://CRAN.R-project.org/package=curl
   authors:
   - family-names: Ooms
@@ -187,7 +189,7 @@ references:
   title: jsonlite
   abstract: 'jsonlite: A Simple and Robust JSON Parser and Generator for R'
   notes: Suggests
-  url: https://arxiv.org/abs/1403.2805
+  url: https://jeroen.r-universe.dev/jsonlite
   repository: https://CRAN.R-project.org/package=jsonlite
   authors:
   - family-names: Ooms
@@ -244,6 +246,8 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
+  - family-names: Gjoneski
+    given-names: Oliver
   year: '2023'
 - type: software
   title: RSQLite
@@ -295,7 +299,7 @@ references:
   title: terra
   abstract: 'terra: Spatial Data Analysis'
   notes: Suggests
-  url: https://rspatial.org/terra/
+  url: https://rspatial.org/
   repository: https://CRAN.R-project.org/package=terra
   authors:
   - family-names: Hijmans
@@ -314,19 +318,6 @@ references:
     given-names: Robert J.
     email: r.hijmans@gmail.com
     orcid: https://orcid.org/0000-0001-5872-2872
-  year: '2023'
-- type: software
-  title: scales
-  abstract: 'scales: Scale Functions for Visualization'
-  notes: Suggests
-  url: https://scales.r-lib.org
-  repository: https://CRAN.R-project.org/package=scales
-  authors:
-  - family-names: Wickham
-    given-names: Hadley
-    email: hadley@rstudio.com
-  - family-names: Seidel
-    given-names: Dana
   year: '2023'
 - type: software
   title: knitr
@@ -349,35 +340,38 @@ references:
   authors:
   - family-names: Allaire
     given-names: JJ
-    email: jj@rstudio.com
+    email: jj@posit.co
   - family-names: Xie
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
+  - family-names: Dervieux
+    given-names: Christophe
+    email: cderv@posit.co
+    orcid: https://orcid.org/0000-0003-4474-2498
   - family-names: McPherson
     given-names: Jonathan
-    email: jonathan@rstudio.com
+    email: jonathan@posit.co
   - family-names: Luraschi
     given-names: Javier
-    email: javier@rstudio.com
   - family-names: Ushey
     given-names: Kevin
-    email: kevin@rstudio.com
+    email: kevin@posit.co
   - family-names: Atkins
     given-names: Aron
-    email: aron@rstudio.com
+    email: aron@posit.co
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   - family-names: Cheng
     given-names: Joe
-    email: joe@rstudio.com
+    email: joe@posit.co
   - family-names: Chang
     given-names: Winston
-    email: winston@rstudio.com
+    email: winston@posit.co
   - family-names: Iannone
     given-names: Richard
-    email: rich@rstudio.com
+    email: rich@posit.co
     orcid: https://orcid.org/0000-0003-3925-190X
   year: '2023'
 - type: software
@@ -389,7 +383,7 @@ references:
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   year: '2023'
 identifiers:
 - type: url
