@@ -53,9 +53,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.7.8" id="soildb-278-2023-08-29">soilDB 2.7.8 (2023-08-29)<a class="anchor" aria-label="anchor" href="#soildb-278-2023-08-29"></a></h2><p class="text-muted">CRAN release: 2023-08-29</p>
-<ul><li><p>Added new SoilWeb “Web Coverage Service” vignette (<a href="https://github.com/ncss-tech/soilDB/issues/263" class="external-link uri">https://github.com/ncss-tech/soilDB/issues/263</a>) related to creating thematic maps using gridded maps of mapunit keys from SoilWeb with aggregated tabular data from Soil Data Access.</p></li>
+<ul><li><p>Added new SoilWeb “Web Coverage Service” vignette (<a href="https://ncss-tech.github.io/soilDB/articles/wcs-ssurgo.html" class="external-link uri">https://ncss-tech.github.io/soilDB/articles/wcs-ssurgo.html</a>) related to creating thematic maps using grids of mapunit keys from SoilWeb with aggregated tabular data from Soil Data Access.</p></li>
 <li><p><code>get_SDA_*()</code> functions now all return <code>mukey</code> values in first column</p></li>
 <li><p><code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code> gains a 30m gridded version of Hawaii and Puerto Rico SSURGO data via <code>db="HI_SSURGO"</code> and <code>db="PR_SSURGO"</code>, respectively.</p></li>
+<li><p><code>get_vegplot_data_from_NASIS_db()</code>: now uses LEFT join to plant table so that empty records can be diagnosed; thanks to <a href="https://github.com/natearoe" class="external-link">@natearoe</a> for suggestion</p></li>
+<li><p>Added new NASIS query functions for vegetation transect point and quadrat details: <code><a href="../reference/fetchVegdata.html">get_vegplot_prodquadrats_from_NASIS_db()</a></code> and <code><a href="../reference/fetchVegdata.html">get_vegplot_transpoints_from_NASIS_db()</a></code></p></li>
 </ul><div class="section level3">
 <h3 id="bug-fixes-2-7-8">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2-7-8"></a></h3>
 <ul><li><p><code>get_SDA_property(method="Dominant Component (Numeric)")</code> now includes minors by default, fixing issues with STATSGO mapunits that have no major components flagged. (<a href="https://github.com/dylanbeaudette" class="external-link">@dylanbeaudette</a>)</p></li>
