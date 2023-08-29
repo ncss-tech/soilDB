@@ -22,6 +22,7 @@ jobs:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_SOILDB_SKIP_LONG_EXAMPLES: false
     steps:
       - uses: actions/checkout@v3
 
