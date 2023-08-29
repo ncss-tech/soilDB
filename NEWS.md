@@ -1,9 +1,23 @@
-# soilDB 2.7.8 (2023-03-22)
+# soilDB 2.7.8 (2023-08-29)
+
+ - Added new SoilWeb "Web Coverage Service" vignette (https://github.com/ncss-tech/soilDB/issues/263) related to creating thematic maps using gridded maps of mapunit keys from SoilWeb with aggregated tabular data from Soil Data Access.
+ 
+ - `get_SDA_*()` functions now all return `mukey` values in first column
+ 
+ - `mukey.wcs()` gains a 30m gridded version of Hawaii and Puerto Rico SSURGO data via `db="HI_SSURGO"` and `db="PR_SSURGO"`, respectively.
+
+## Bug Fixes
 
  - `get_SDA_property(method="Dominant Component (Numeric)")` now includes minors by default, fixing issues with STATSGO mapunits that have no major components flagged. (@dylanbeaudette)
  
- - `mukey.wcs()` gains a 30m gridded version of HI and PR SSURGO 
-
+ - `get_component_data_from_NASIS_db()`: removed duplicated `hydricrating` column, also now includes climate columns with standard names. This is a continuation of the idea that custom aliases for standard NASIS columns are deprecated (https://github.com/ncss-tech/soilDB/issues/242)
+ 
+ - `.pickBestEcosite()` now considers `record_when_last_updated` in lieu of correlation date; this stabilizes sort order from SQLite snapshot v.s. NASIS local database sources (https://github.com/ncss-tech/soilDB/issues/295)
+ 
+ - `get_component_from_GDB()`: fixes for batching over component geomorphic description and parent material group
+ 
+ - `get_mapunit_from_SDA()`: handle possibility of mapunit-level SDA query failure
+ 
 # soilDB 2.7.7 (2023-03-10)
 
 ## Enhancements
