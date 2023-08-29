@@ -145,7 +145,7 @@
 #'
 #' Rosetta Model Home Page: \url{https://www.ars.usda.gov/pacific-west-area/riverside-ca/agricultural-water-efficiency-and-salinity-research-unit/docs/model/rosetta-model/}.
 #'
-#' Python ROSETTA model: \url{http://www.u.arizona.edu/~ygzhang/download.html}.
+#' Python ROSETTA model: \url{https://www.u.arizona.edu/~ygzhang/download.html}.
 #'
 #' Yonggen Zhang, Marcel G. Schaap. 2017. Weighted recalibration of the Rosetta pedotransfer model with improved estimates of hydraulic parameter distributions and summary statistics (Rosetta3). Journal of Hydrology. 547: 39-53. \doi{10.1016/j.jhydrol.2017.01.004}.
 #'

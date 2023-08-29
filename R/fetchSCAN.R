@@ -79,7 +79,7 @@
 #'
 #' See the [fetchSCAN tutorial](http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html) for additional usage and visualization examples.
 #'
-#' @references See the [National Water and Climate Center](https://www.nrcs.usda.gov/wps/portal/wcc/home/) home page for more information on the SCAN and SNOTEL programs, information on web services, and interactive maps of snow water equivalent, precipitation and streamflow.
+#' @references See the [Soil Climate Analysis Network](https://www.nrcs.usda.gov/resources/data-and-reports/soil-climate-analysis-network) home page for more information on the SCAN program,  and links to other associated programs such as SNOTEL, at the National Weather and Climate Center. You can get information on available web services, as well as interactive maps of snow water equivalent, precipitation and streamflow.
 #'
 #' @param site.code a vector of site codes. If `NULL` `SCAN_site_metadata()` returns metadata for all SCAN sites.
 #' @param year a vector of years

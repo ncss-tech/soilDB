@@ -68,7 +68,7 @@ install.packages(c('soilDB', 'terra', 'sf'),
 
 Here are some basic usage examples for the coverage services that can be accessed with `mukey.wcs()`.
 
-See the [`mukey.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/mukey.wcs.html) manual pages for details.
+See the [`mukey.wcs`](http://ncss-tech.github.io/soilDB/reference/mukey.wcs.html) manual pages for details.
 
 ```{r eval = FALSE}
 # select gSSURGO grid, 30m resolution
@@ -84,7 +84,7 @@ x <- mukey.wcs(aoi = aoi, db = 'RSS', ...)
 x <- mukey.wcs(aoi = aoi, db = 'statsgo', ...)
 ```
 
-[`ISSR800.wcs`](http://ncss-tech.github.io/soilDB/docs/reference/ISSR800.wcs.html) is a similar function that makes available a variety of pre-aggregated 800m resolution properties derived from gNATSGO.
+[`ISSR800.wcs`](http://ncss-tech.github.io/soilDB/reference/ISSR800.wcs.html) is a similar function that makes available a variety of pre-aggregated 800m resolution properties derived from gNATSGO.
 
 ```{r eval = FALSE}
 # select various ISSR-800 grids, details below
@@ -96,7 +96,7 @@ This is where we will link to a more detailed ISSR800 vignette in the future.
 
 ### gSSURGO
 
-Excerpt from the [gSSURGO documentation](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/home/?cid=nrcs142p2_053628#release).
+Excerpt from the [gSSURGO documentation](https://www.nrcs.usda.gov/resources/data-and-reports/gridded-soil-survey-geographic-gssurgo-database#release).
 
 <div style="padding: 10px; font-size:90%;">
 The gSSURGO Database is derived from the official Soil Survey Geographic (SSURGO) Database. SSURGO generally has the most detailed level of soil geographic data developed by the National Cooperative Soil Survey (NCSS) in accordance with NCSS mapping standards. The tabular data represent the soil attributes and are derived from properties and characteristics stored in the National Soil Information System (NASIS). The gSSURGO data were prepared by merging the traditional vector-based SSURGO digital map data and tabular data into statewide extents, adding a statewide gridded map layer derived from the vector layer, and adding a new value-added look up table (Valu1) containing “ready to map” attributes. The gridded map layer is a file geodatabase raster in an ArcGIS file geodatabase. The raster and vector map data have a statewide extent. The raster map data have a 10-meter cell size that approximates the vector polygons in an Albers Equal Area projection. Each cell (and polygon) is linked to a map unit identifier called the map unit key. A unique map unit key is used to link the raster cells and polygons to attribute tables. Due to file size, the raster layer for the conterminous United States is only available in a 30-meter resolution.
@@ -105,7 +105,7 @@ The gSSURGO Database is derived from the official Soil Survey Geographic (SSURGO
 
 ### gNATSGO
 
-Excerpt from the [gNATSGO documentation](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/geo/?cid=nrcseprd1464625).
+Excerpt from the [gNATSGO documentation](https://www.nrcs.usda.gov/resources/data-and-reports/gridded-national-soil-survey-geographic-database-gnatsgo).
 
 <div style="padding: 10px; font-size:90%;">
 The gNATSGO databases contain a raster of the soil map units and 70 related tables of soil properties and interpretations. They are designed to work with the SPSD gSSURGO ArcTools. Users can create full coverage thematic maps and grids of soil properties and interpretations for large geographic areas, such as the extent of a State or the conterminous United States. Please note that the State-wide geodatabases contain a 10 meter raster and the CONUS database contains a 30 meter raster.
@@ -116,7 +116,7 @@ The gNATSGO database is composed primarily of SSURGO data, but STATSGO2 data was
 
 ### Raster Soil Survey
 
-Excerpt from the [RSS documentation](https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/geo/?cid=nrcseprd1759022).
+Excerpt from the [RSS documentation](https://www.nrcs.usda.gov/resources/data-and-reports/raster-soil-surveys-rss).
 
 <div style="padding: 10px; font-size:90%;">
 Raster Soil Survey is a reference to the products of soil survey work completed using digital soil mapping methodologies. Digital soil mapping is the production of georeferenced soil databases based on the quantitative relationships between soil measurements made in the field or laboratory and environmental data and may be represented as either discrete classes or continuous soil properties. Both digital and traditional soil mapping use a conceptual soil-landscape model as a means for organizing environmental information into discrete divisions. The primary difference between these two approaches is that digital methods exploit quantitative relationships of the environmental information, while traditional methods utilize a more subjective approach and the approximate relationships of the environmental information to spatially represent where the divisions are represented.
@@ -316,7 +316,7 @@ plot(
 
 ## Raster Soil Survey Data
 
-The specific RSS (state-level) data sets can be downloaded (map unit key grids, tabular data) on Box: <https://nrcs.app.box.com/v/soils/>. Please note that tabular data for Raster Soil Surveys are not yet available via Soil Data Access.
+The specific RSS (state-level) data sets can be downloaded (map unit key grids, tabular data) on Box: <https://nrcs.app.box.com/v/soils>. Please note that tabular data for Raster Soil Surveys are not yet available via Soil Data Access.
 
 ```{r fig.width=8, fig.height=6}
 # Coweeta Hydrologic Laboratory extent; specified in EPSG:5070
