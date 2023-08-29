@@ -316,7 +316,7 @@ plot(
 
 ## Raster Soil Survey Data
 
-The specific RSS (state-level) data sets can be downloaded (map unit key grids, tabular data) on Box: <https://nrcs.app.box.com/v/soils>. Please note that tabular data for Raster Soil Surveys are not yet available via Soil Data Access.
+The specific RSS (state-level) data sets can be downloaded (map unit key grids, tabular data) on Box: `https://nrcs.app.box.com/v/soils`. Please note that tabular data for Raster Soil Surveys are not yet available via Soil Data Access.
 
 ```{r fig.width=8, fig.height=6}
 # Coweeta Hydrologic Laboratory extent; specified in EPSG:5070
