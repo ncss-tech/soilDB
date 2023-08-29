@@ -153,7 +153,3 @@ citation("soilDB")
  * [sharpshootR](https://github.com/ncss-tech/sharpshootR)
  * [SoilTaxonomy](https://github.com/ncss-tech/SoilTaxonomy)
  
-## Dependency Graph
-
-![](https://cran.microsoft.com/packagedata/graphs/soilDB.png)
-
