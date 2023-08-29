@@ -94,6 +94,9 @@ test_that("simplifyColorData: two colors / moisture state, color percentages pro
 test_that("simplifyColorData: missing data", {
 
   skip_if_not_installed("rvest")
+  
+  # fix for running tests with aqp <2.0
+  skip_if_not_installed("farver")
 
   # two colors / moisture state, color percentages provided
   suppressMessages({
