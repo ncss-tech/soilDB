@@ -539,8 +539,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 #' ##
 #' ##
 #' ##  download CONUS gNATSGO from here:
-#' ##    https://www.nrcs.usda.gov/resources/data-and-reports/gridded-national-soil-survey-geographic-database-gnatsgo
-#' ##
+#' ##    https://nrcs.app.box.com/v/soils/folder/191790828371
 #' ##
 #' # dsn <- "D:/geodata/soils/gNATSGO_CONUS.gdb"
 #' 
