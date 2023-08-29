@@ -1,10 +1,14 @@
 # soilDB 2.7.8 (2023-08-29)
 
- - Added new SoilWeb "Web Coverage Service" vignette (https://github.com/ncss-tech/soilDB/issues/263) related to creating thematic maps using gridded maps of mapunit keys from SoilWeb with aggregated tabular data from Soil Data Access.
+ - Added new SoilWeb "Web Coverage Service" vignette (https://ncss-tech.github.io/soilDB/articles/wcs-ssurgo.html) related to creating thematic maps using grids of mapunit keys from SoilWeb with aggregated tabular data from Soil Data Access.
  
  - `get_SDA_*()` functions now all return `mukey` values in first column
  
  - `mukey.wcs()` gains a 30m gridded version of Hawaii and Puerto Rico SSURGO data via `db="HI_SSURGO"` and `db="PR_SSURGO"`, respectively.
+ 
+ - `get_vegplot_data_from_NASIS_db()`: now uses LEFT join to plant table so that empty records can be diagnosed; thanks to @natearoe for suggestion
+ 
+ - Added new NASIS query functions for vegetation transect point and quadrat details: `get_vegplot_prodquadrats_from_NASIS_db()` and `get_vegplot_transpoints_from_NASIS_db()`
 
 ## Bug Fixes
 
