@@ -345,7 +345,7 @@ get_vegplot_transpoints_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
                transectpointlocation,
                livecanopyhtbottom, livecanopyhttop, 
                canopycoverpresent, foliarcoverpresent, basalcoverpresent, 
-               plantprodquaddetailsiid, vegtransplantsummiidref
+               pointplantcovdetailsiid, vegtransplantsummiidref
               FROM site_View_1 AS s
               INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
               INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
