@@ -1,3 +1,9 @@
+# soilDB 2.7.9 (2023-09-01)
+
+## Bug Fixes
+
+ - Bug fix for `get_vegplot_transpoints_from_NASIS_db()`; using wrong record ID for transect points
+
 # soilDB 2.7.8 (2023-08-29)
 
  - Added new SoilWeb "Web Coverage Service" vignette (https://ncss-tech.github.io/soilDB/articles/wcs-ssurgo.html) related to creating thematic maps using grids of mapunit keys from SoilWeb with aggregated tabular data from Soil Data Access.
