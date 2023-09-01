@@ -1,5 +1,8 @@
 # soilDB 2.7.9 (2023-09-01)
-
+ 
+ - Added new `method="extent"` option for `fetchSDA_spatial()`. This method calculates a bounding box for each `mukey` or `nationalmusym` extent. 
+  - This contrasts with existing `method="bbox"` which returns a rectangular bounding box for each delineation. Mapunits used on multiple legends, having multiple `mukey` are concatenated into comma separated list for the result.
+ 
 ## Bug Fixes
 
  - Bug fix for `get_vegplot_transpoints_from_NASIS_db()`; using wrong record ID for transect points
