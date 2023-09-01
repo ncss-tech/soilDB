@@ -6,7 +6,7 @@
 #'
 #' @param x A vector of map unit keys (`mukey`) or national map unit symbols (`nmusym`) for `mupolygon` geometry OR legend keys (`lkey`) or soil survey area symbols (`areasymbol`) for `sapolygon` geometry
 #' @param by.col Column name containing map unit identifier `"mukey"`, `"nmusym"`/`"nationalmusym"` for `geom.src` `mupolygon` OR `"areasymbol"`, `"areaname"`, `"mlraoffice"`, `"mouagncyresp"` for `geom.src` `sapolygon`; default is determined by `is.numeric(x)` `TRUE` for `mukey` or `lkey` and `nationalmusym` or `areasymbol` otherwise.
-#' @param method geometry result type: `"feature"` returns polygons, `"bbox"` returns the bounding box of each polygon (via `STEnvelope()`), `"point"` returns a single point (via `STPointOnSurface()`) within each polygon, `"extent"` returns an aggregate bounding box (the extent of all polygons, `geometry::EnvelopeAggregate()`) ), `"convexhull"` (`geometry::ConvexHullAggregate()`) returns the aggregate convex hull around all polygons, `"union"` (`geometry::UnionAggregate()`)  returns a `MULTIPOLYGON` for each `mukey`, `nationalmusym`, or `areasymbol `. In the case of the latter three aggregation methods, the groups for aggregation depend on `by.col` (default by `"mukey"`).
+#' @param method geometry result type: `"feature"` returns polygons, `"bbox"` returns the bounding box of each polygon (via `STEnvelope()`), `"point"` returns a single point (via `STPointOnSurface()`) within each polygon, `"extent"` returns an aggregate bounding box (the extent of all polygons, `geometry::EnvelopeAggregate()`) ), `"convexhull"` (`geometry::ConvexHullAggregate()`) returns the aggregate convex hull around all polygons, `"union"` (`geometry::UnionAggregate()`) and `"collection"` (`geometry::CollectionAggregate()`) return a `MULTIPOLYGON` or a `GEOMETRYCOLLECTION`, respectively, for each `mukey`, `nationalmusym`, or `areasymbol `. In the case of the latter four aggregation methods, the groups for aggregation depend on `by.col` (default by `"mukey"`).
 #' @param geom.src Either `mupolygon` (map unit polygons) or `sapolygon` (soil survey area boundary polygons)
 #' @param db Default: `"SSURGO"`. When `geom.src` is `mupolygon`, use STATSGO polygon geometry instead of SSURGO by setting `db = "STATSGO"`
 #' @param add.fields Column names from `mapunit` or `legend` table to add to result. Must specify parent table name as the prefix before column name e.g. `mapunit.muname`.
@@ -72,8 +72,8 @@ fetchSDA_spatial <- function(x,
   tstart <- Sys.time()
 
   # sanity check: method must be one of:
-  if (!method %in% c('feature', 'bbox', 'extent', 'point', 'convexhull', 'union')) {
-    stop("method must be one of: 'feature', 'bbox', 'extent', 'point', 'convexhull', or 'union'.", call. = FALSE)
+  if (!method %in% c('feature', 'bbox', 'extent', 'point', 'convexhull', 'union', 'collection')) {
+    stop("method must be one of: 'feature', 'bbox', 'extent', 'point', 'convexhull', 'union', or 'collection'.", call. = FALSE)
   }
 
   # remove any redundancy in input off the top -- this is important
@@ -133,7 +133,7 @@ fetchSDA_spatial <- function(x,
     
     mukey.list <- unique(res$lkey)
   } else {
-    return(try(stop(paste0("Unknown mapunit identifier (",by.col,")"), call. = FALSE)))
+    return(try(stop(paste0("Unknown mapunit identifier (", by.col, ")"), call. = FALSE)))
   }
 
   mukey.chunk <- makeChunks(mukey.list, chunk.size)
@@ -144,6 +144,7 @@ fetchSDA_spatial <- function(x,
   geom.type <- switch(method,
                       feature = 'mupolygongeo.STAsText()',
                       bbox = 'mupolygongeo.STEnvelope().STAsText()',
+                      collection = 'geometry::CollectionAggregate(mupolygongeo).STAsText()',
                       extent = 'geometry::EnvelopeAggregate(mupolygongeo).STAsText()',
                       convexhull = 'geometry::ConvexHullAggregate(mupolygongeo).STAsText()',
                       union = 'geometry::UnionAggregate(mupolygongeo).STAsText()',
@@ -182,8 +183,7 @@ fetchSDA_spatial <- function(x,
 
         if (inherits(sub.res$result, 'try-error')) {
           # explicit handling for a hypothetical unqueryable single mukey
-          message("Symbol ", xx, " dropped from result due to error! May exceed the JSON serialization limit or have other topologic problems.",
-                  call. = FALSE)
+          message("Symbol ", xx, " dropped from result due to error! May exceed the JSON serialization limit or have other topologic problems.")
           return(NULL)
         }
         return(sub.res)
