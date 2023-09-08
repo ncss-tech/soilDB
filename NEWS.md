@@ -4,6 +4,8 @@
 
  - Bug fix for `get_vegplot_transpoints_from_NASIS_db()`; using wrong record ID for transect points
 
+ - `get_NASIS_table_name_by_purpose()` now includes `"pointplantcoverdetails"`, `"plantprodquadratdetails"` in the `"vegetation"` table purpose group
+ 
 # soilDB 2.7.8 (2023-08-29)
 
  - Added new SoilWeb "Web Coverage Service" vignette (https://ncss-tech.github.io/soilDB/articles/wcs-ssurgo.html) related to creating thematic maps using grids of mapunit keys from SoilWeb with aggregated tabular data from Soil Data Access.
