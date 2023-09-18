@@ -2,10 +2,6 @@
 
  - `get_SDA_coecoclass()` gains `method="all"` for aggregating information about ecological sites and related components. The method performs a condition-based aggregation for each ecological site condition in the map unit, producing a "wide" data.frame result with as many columns as needed to portray all site conditions.
  
- - `fetchSDA_spatial()` gains `geom.src="mlrapolygon"` for obtaining Major Land Resource Area (MLRA) polygon boundaries. When using this geometry source `x` is a vector of `MLRARSYM` (MLRA Symbols).
- 
-   - The geometry source is the MLRA Geographic Database v5.2 (2022) which is not (yet) part of Soil Data Access. Instead of SDA, GDAL utilities are used to read a zipped ESRI Shapefile from a remote URL: <https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip>. Therefore, most additional `fetchSDA_spatial()` arguments are _not_ currently supported for the MLRA geometry source. In the future a `mlrapolygon` table may be added to SDA (analogous to  `mupolygon` and `sapolygon`), and the function will be updated accordingly at that time.
-
 # soilDB 2.7.9 (2023-09-01)
 
 ## Bug Fixes
