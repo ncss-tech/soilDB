@@ -4,11 +4,11 @@
 #'
 #' A Soil Data Access query returns geometry and key identifying information about the map unit or area of interest. Additional columns from the map unit or legend table can be included; see `add.fields` argument.
 #'
-#' @param x A vector of map unit keys (`mukey`) or national map unit symbols (`nmusym`) for `mupolygon` geometry OR legend keys (`lkey`) or soil survey area symbols (`areasymbol`) for `sapolygon` geometry
-#' @param by.col Column name containing map unit identifier `"mukey"`, `"nmusym"`/`"nationalmusym"` for `geom.src` `mupolygon` OR `"areasymbol"`, `"areaname"`, `"mlraoffice"`, `"mouagncyresp"` for `geom.src` `sapolygon`; default is determined by `is.numeric(x)` `TRUE` for `mukey` or `lkey` and `nationalmusym` or `areasymbol` otherwise.
+#' @param x A vector of map unit keys (`mukey`) or national map unit symbols (`nmusym`) for `mupolygon` geometry OR legend keys (`lkey`) or soil survey area symbols (`areasymbol`) for `sapolygon` geometry. If `geom.src="mlrapolygon"` then `x` refers to `MLRARSYM` (major land resource area symbols).
+#' @param by.col Column name containing map unit identifier `"mukey"`, `"nmusym"`/`"nationalmusym"` for `geom.src="mupolygon"` OR `"areasymbol"`, `"areaname"`, `"mlraoffice"`, `"mouagncyresp"` for `geom.src="sapolygon"`; default is determined by `is.numeric(x)` `TRUE` for `mukey` or `lkey` and `nationalmusym` or `areasymbol` otherwise.
 #' @param method geometry result type: `"feature"` returns polygons, `"bbox"` returns the bounding box of each polygon (via `STEnvelope()`), and `"point"` returns a single point (via `STPointOnSurface()`) within each polygon.
-#' @param geom.src Either `mupolygon` (map unit polygons) or `sapolygon` (soil survey area boundary polygons)
-#' @param db Default: `"SSURGO"`. When `geom.src` is `mupolygon`, use STATSGO polygon geometry instead of SSURGO by setting `db = "STATSGO"`
+#' @param geom.src Either `mupolygon` (map unit polygons), `sapolygon` (soil survey area boundary polygons), or `mlrapolygon` (major land resource area boundary polygons)
+#' @param db Default: `"SSURGO"`. When `geom.src` is `mupolygon`, use STATSGO polygon geometry instead of SSURGO by setting `db = "STATSGO"`.
 #' @param add.fields Column names from `mapunit` or `legend` table to add to result. Must specify parent table name as the prefix before column name e.g. `mapunit.muname`.
 #' @param chunk.size Number of values of `x` to process per query. Necessary for large results. Default: `10`
 #' @param verbose Print messages?
@@ -21,10 +21,17 @@
 #' Querying regions with complex mapping may require smaller `chunk.size`. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform "poorly" (slow or error) no matter what the chunk size is. Shuffling the order of the inputs using `sample()` may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use `muacres` as a heuristic to adjust for total acreage within chunks.
 #'
 #' Note that STATSGO data are fetched where `CLIPAREASYMBOL = 'US'` to avoid duplicating state and national subsets of the geometry.
-#'
+#' 
+#' A prototype interface, `geom.src="mlrapolygon"`, is provided for obtaining Major Land Resource Area (MLRA) polygon 
+#' boundaries. When using this geometry source `x` is a vector of `MLRARSYM` (MLRA Symbols). The geometry source is
+#' the MLRA Geographic Database v5.2 (2022) which is not (yet) part of Soil Data Access.Instead of SDA, GDAL utilities
+#' are used to read a zipped ESRI Shapefile from a remote URL: <https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip>.
+#' Therefore, most additional `fetchSDA_spatial()` arguments are _not_ currently supported for the MLRA geometry source. 
+#' In the future a `mlrapolygon` table may be added to SDA (analogous to  `mupolygon` and `sapolygon`), 
+#' and the function will be updated accordingly at that time.
+#' 
 #' @author Andrew G. Brown, Dylan E. Beaudette
 #' @examplesIf curl::has_internet()
-#' @examples
 #' \donttest{
 #'  
 #'     # get spatial data for a single mukey
@@ -60,12 +67,14 @@ fetchSDA_spatial <- function(x,
                              chunk.size = 10,
                              verbose = TRUE,
                              as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {
+  geom.src <- match.arg(tolower(geom.src), choices = c("mupolygon", "sapolygon", "mlrapolygon"))
   db <- match.arg(toupper(db), choices = c("SSURGO", "STATSGO"))
 
   # survey area polygons only available in SSURGO
   if (geom.src == 'sapolygon') {
     db <- 'SSURGO'
   }
+  
   # statsgo flag
   use_statsgo <- (db == "STATSGO")
 
@@ -81,8 +90,11 @@ fetchSDA_spatial <- function(x,
   # be in different chunks
   x <- unique(x)
 
-  # lkey and areasymbol are the option for sapolygon
-  if (geom.src == 'sapolygon' && (by.col %in% c("mukey", "nmusym", "nationalmusym"))) {
+  if (geom.src == "mlrapolygon") {
+    # mlra polygons are not part of SSURGO or STATSGO
+    by.col <- "MLRARSYM"
+  } else if (geom.src == 'sapolygon' && (by.col %in% c("mukey", "nmusym", "nationalmusym"))) {
+    # lkey and areasymbol are the option for sapolygon
     if (is.numeric(x)) {
       by.col <- "lkey"
     } else {
@@ -132,6 +144,14 @@ fetchSDA_spatial <- function(x,
     }
     
     mukey.list <- unique(res$lkey)
+    
+  } else if (by.col == "MLRARSYM") {
+    if (!requireNamespace("sf")) {
+      stop("package 'sf' is required to read MLRA boundaries from ZIP file source", call. = FALSE)
+    }
+    return(sf::read_sf("/vsizip//vsicurl/https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip/MLRA_52_2022",                      query = sprintf("SELECT * FROM MLRA_52 WHERE MLRARSYM IN %s", format_SQL_in_statement(x)), 
+                       as_tibble = FALSE, 
+                       stringsAsFactors = FALSE))
   } else {
     return(try(stop(paste0("Unknown mapunit identifier (",by.col,")"), call. = FALSE)))
   }
