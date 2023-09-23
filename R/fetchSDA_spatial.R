@@ -245,9 +245,9 @@ fetchSDA_spatial <- function(x,
       geom.type,
       ifelse(grepl("Aggregate", geom.type), 
              "(SELECT STRING_AGG(value,', ') FROM 
-               (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(P.mukey, ','),',')) t) AS mukey,
+               (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(CONVERT(NVARCHAR(max), P.mukey), ','),',')) t) AS mukey,
               (SELECT STRING_AGG(value,', ') FROM 
-               (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(legend.areasymbol, ','),',')) t) AS areasymbol, 
+               (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(CONVERT(NVARCHAR(max), legend.areasymbol), ','),',')) t) AS areasymbol, 
               mapunit.nationalmusym", 
              "P.mukey, legend.areasymbol, mapunit.nationalmusym"),
       ifelse(use_statsgo, "gsmmupolygon", "mupolygon"),
