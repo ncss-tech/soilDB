@@ -24,7 +24,7 @@
 #' 
 #' A prototype interface, `geom.src="mlrapolygon"`, is provided for obtaining Major Land Resource Area (MLRA) polygon 
 #' boundaries. When using this geometry source `x` is a vector of `MLRARSYM` (MLRA Symbols). The geometry source is
-#' the MLRA Geographic Database v5.2 (2022) which is not (yet) part of Soil Data Access.Instead of SDA, GDAL utilities
+#' the MLRA Geographic Database v5.2 (2022) which is not (yet) part of Soil Data Access. Instead of SDA, GDAL utilities
 #' are used to read a zipped ESRI Shapefile from a remote URL: <https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip>.
 #' Therefore, most additional `fetchSDA_spatial()` arguments are _not_ currently supported for the MLRA geometry source. 
 #' In the future a `mlrapolygon` table may be added to SDA (analogous to  `mupolygon` and `sapolygon`), 
@@ -149,9 +149,14 @@ fetchSDA_spatial <- function(x,
     if (!requireNamespace("sf")) {
       stop("package 'sf' is required to read MLRA boundaries from ZIP file source", call. = FALSE)
     }
-    return(sf::read_sf("/vsizip//vsicurl/https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip/MLRA_52_2022",                      query = sprintf("SELECT * FROM MLRA_52 WHERE MLRARSYM IN %s", format_SQL_in_statement(x)), 
+    res <- sf::read_sf("/vsizip//vsicurl/https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip/MLRA_52_2022",                      query = sprintf("SELECT * FROM MLRA_52 WHERE MLRARSYM IN %s", format_SQL_in_statement(x)), 
                        as_tibble = FALSE, 
-                       stringsAsFactors = FALSE))
+                       stringsAsFactors = FALSE)
+    # use "geom" for consistency with other spatial outputs from SDA; requires sf >= 1.0-6
+    sf::st_geometry(res) <- "geom"
+    # TODO: could provide custom MLRA aggregation methods here: centroid, bbox, convex hull?
+    #       in the future a T-SQL implementation would allow for any of the defined method options
+    return(res)
   } else {
     return(try(stop(paste0("Unknown mapunit identifier (",by.col,")"), call. = FALSE)))
   }
@@ -195,7 +200,7 @@ fetchSDA_spatial <- function(x,
       subchunk.res <- lapply(mukeys, function(xx) {
         sub.res <- .fetchSDA_spatial(mukeys, geom.type, geom.src,
                                      use_statsgo, add.fields,
-                                     verbose, paste0(i,"_",xx))
+                                     verbose, paste0(i, "_", xx))
 
         if (inherits(sub.res$result, 'try-error')) {
           # explicit handling for a hypothetical unqueryable single mukey

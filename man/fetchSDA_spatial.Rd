@@ -52,7 +52,7 @@ Note that STATSGO data are fetched where \code{CLIPAREASYMBOL = 'US'} to avoid d
 
 A prototype interface, \code{geom.src="mlrapolygon"}, is provided for obtaining Major Land Resource Area (MLRA) polygon
 boundaries. When using this geometry source \code{x} is a vector of \code{MLRARSYM} (MLRA Symbols). The geometry source is
-the MLRA Geographic Database v5.2 (2022) which is not (yet) part of Soil Data Access.Instead of SDA, GDAL utilities
+the MLRA Geographic Database v5.2 (2022) which is not (yet) part of Soil Data Access. Instead of SDA, GDAL utilities
 are used to read a zipped ESRI Shapefile from a remote URL: \url{https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip}.
 Therefore, most additional \code{fetchSDA_spatial()} arguments are \emph{not} currently supported for the MLRA geometry source.
 In the future a \code{mlrapolygon} table may be added to SDA (analogous to  \code{mupolygon} and \code{sapolygon}),
