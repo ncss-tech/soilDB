@@ -64,10 +64,16 @@ test_that("fetchSDA_spatial sapolygon and gsmmupolygon", {
                                          "Mariposa County Area, California",
                                          "Stanislaus County, California, Northern Part")))
 
-  # test STATSGO mupolygon
-  statsgo.bbox <- fetchSDA_spatial(660848, db = 'STATSGO', method = "bbox",
-                                   add.fields = c("mapunit.muname","legend.areaname"))
+  # test STATSGO gsmmupolygon (5 delineations)
+  statsgo.bbox <- fetchSDA_spatial(660848, db = 'STATSGO',
+                                   add.fields = c("mapunit.muname", "legend.areaname"))
   expect_equal(nrow(statsgo.bbox), 5)
+  
+  # test STATSGO gsmmupolygon convex hull around all delineations
+  statsgo.bbox <- fetchSDA_spatial(660848, db = 'STATSGO', method = "convexhull",
+                                   add.fields = c("mapunit.muname", "legend.areaname"))
+  expect_equal(nrow(statsgo.bbox), 1)
+  
 
   # skip_if_not_installed('sf')
   # suppressWarnings(requireNamespace("sf"))

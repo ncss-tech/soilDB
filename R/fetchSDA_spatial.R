@@ -71,10 +71,7 @@ fetchSDA_spatial <- function(x,
 
   tstart <- Sys.time()
 
-  # sanity check: method must be one of:
-  if (!method %in% c('feature', 'bbox', 'extent', 'point', 'convexhull', 'union', 'collection')) {
-    stop("method must be one of: 'feature', 'bbox', 'extent', 'point', 'convexhull', 'union', or 'collection'.", call. = FALSE)
-  }
+  method <- match.arg(tolower(method), c('feature', 'bbox', 'extent', 'envelope', 'point', 'convexhull', 'union', 'collection'))
 
   # remove any redundancy in input off the top -- this is important
   # in case x is not ordered and contains duplicates which will possibly
@@ -140,6 +137,11 @@ fetchSDA_spatial <- function(x,
 
   s <- NULL
 
+  # alias
+  if (method == "envelope"){
+    method <- "extent"
+  }
+  
   # select method
   geom.type <- switch(method,
                       feature = 'mupolygongeo.STAsText()',
@@ -234,6 +236,8 @@ fetchSDA_spatial <- function(x,
 }
 
 .fetchSDA_spatial <- function(mukey.list, geom.type, geom.src, use_statsgo, add.fields, verbose, .parentchunk = NA, by.col) {
+  base.fields <- "P.mukey, legend.areasymbol, mapunit.nationalmusym"
+  
   if (geom.src == "mupolygon") {
     q <- sprintf(
       "SELECT
@@ -257,6 +261,9 @@ fetchSDA_spatial <- function(x,
              ifelse(by.col == "mukey", "GROUP BY P.mukey, mapunit.nationalmusym", "GROUP BY mapunit.nationalmusym"), "")
     )
   } else if (geom.src == "sapolygon") {
+    
+    base.fields <- "legend.areasymbol"
+    
     q <- sprintf(
       "SELECT
          %s AS geom, legend.lkey, legend.areasymbol
@@ -268,10 +275,14 @@ fetchSDA_spatial <- function(x,
       ifelse(grepl("Aggregate", geom.type), "GROUP BY legend.lkey, legend.areasymbol", "")
     )
   }
+  
   # add any additional fields from mapunit/legend
   if (!is.null(add.fields)) {
     q <- gsub(q, pattern = "FROM ([a-z]+)polygon",
-              replacement = paste0(", ", paste0(add.fields, collapse = ", "), " FROM \\1polygon"))
+              replacement = paste0(", ", paste0(ifelse(rep(grepl("Aggregate", geom.type), length(add.fields)),
+               sprintf("(SELECT STRING_AGG(value,', ') FROM (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(CONVERT(NVARCHAR(max), %s), ','),',')) t) AS %s",
+                       add.fields, gsub(".*\\.([a-z]+)", "\\1", add.fields)),
+              base.fields), collapse = ", "), " FROM \\1polygon"))
   }
   t1 <- Sys.time()
 
