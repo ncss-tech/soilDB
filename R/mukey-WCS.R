@@ -209,11 +209,11 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   # remove tempfile 
   unlink(tf)
 
-  # build RAT
-  r <- terra::as.factor(r)
-  
   # set layer name in object
   names(r) <- 'mukey'
+  
+  # build RAT
+  r <- terra::as.factor(r)
   
   # and as an attribute
   attr(r, 'layer name') <- var.spec$desc
