@@ -683,7 +683,6 @@ get_SDA_interpretation <- function(rulename,
                                    areasymbols = NULL,
                                    mukeys = NULL,
                                    WHERE = NULL,
-                                   ruledepth = 0,
                                    query_string = FALSE,
                                    not_rated_value = NA_real_,
                                    dsn = NULL) {
@@ -692,7 +691,6 @@ get_SDA_interpretation <- function(rulename,
       interp = rulename,
       areasymbols = areasymbols,
       mukeys = mukeys,
-      ruledepth = ruledepth,
       WHERE = WHERE,
       sqlite = !is.null(dsn)
     )
@@ -777,8 +775,8 @@ get_SDA_interpretation <- function(rulename,
 .cleanRuleColumnName <- function(x) gsub("[^A-Za-z0-9]", "", x)
 
 .interpretation_by_condition <- function(interp, where_clause, dominant = TRUE, sqlite = FALSE) {
-  aggfun <- "STRING_AGG"
-  if (sqlite) aggfun <- "GROUP_CONCAT"
+  aggfun <- "STRING_AGG(CONCAT(interphrc, ' (', interphr, ')'), '; ')"
+  if (sqlite) aggfun <- "GROUP_CONCAT(interphrc || ' (' || interphr || ')' || '; ')"
   .q0 <- function(q, x) .LIMIT_N(sprintf(q, x), n = 1, sqlite = sqlite)
   .q1 <- function(x) .q0("SELECT ROUND (AVG(interphr) OVER (PARTITION BY interphrc), 2) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, interphr ORDER BY SUM (comppct_r) DESC", x)
   .q2 <- function(x) .q0("SELECT SUM(comppct_r) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY interphrc) DESC", x)
@@ -802,8 +800,8 @@ get_SDA_interpretation <- function(rulename,
 }
 
 .interpretation_aggregation <- function(interp, where_clause, dominant = FALSE, sqlite = FALSE) {
-  aggfun <- "STRING_AGG"
-  if (sqlite) aggfun <- "GROUP_CONCAT"
+  aggfun <- "STRING_AGG(CONCAT(interphrc, ' (', interphr, ')'), '; ')"
+  if (sqlite) aggfun <- "GROUP_CONCAT(interphrc || ' (' || interphr || ')' || '; ')"
   sprintf("SELECT mapunit.mukey, component.cokey, areasymbol, musym, muname, compname, compkind, comppct_r, majcompflag,
                 %s
                 FROM legend
@@ -812,7 +810,7 @@ get_SDA_interpretation <- function(rulename,
                 paste0(sapply(interp, function(x) sprintf("
   (SELECT interphr FROM component AS c0 INNER JOIN cointerp ON c0.cokey = cointerp.cokey AND component.cokey = c0.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [rating_%s],
   (SELECT interphrc FROM component AS c1 INNER JOIN cointerp ON c1.cokey = cointerp.cokey AND c1.cokey = component.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [class_%s],
-  (SELECT %s(interphrc, '; ') FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND c.compkind != 'miscellaneous area' AND c.cokey = component.cokey AND mu.mukey = mapunit.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename = '%s') as [reason_%s]",
+  (SELECT %s FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND c.compkind != 'miscellaneous area' AND c.cokey = component.cokey AND mu.mukey = mapunit.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename = '%s') as [reason_%s]",
                                       x, .cleanRuleColumnName(x),
                                       x, .cleanRuleColumnName(x),
                                       aggfun,
@@ -854,7 +852,7 @@ get_SDA_interpretation <- function(rulename,
                   INNER JOIN component AS c ON c.mukey = mu.mukey
                   INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
                   AND (interphr) IS NOT NULL GROUP BY mu.mukey),2) AS [sum_com_%s],
-                  (SELECT STRING_AGG(interphrc, '; ')
+                  (SELECT STRING_AGG(CONCAT(interphrc, ' (', interphr, ')', '; ')
                    FROM mapunit AS mu
                    INNER JOIN component AS c ON c.mukey = mu.mukey AND compkind != 'miscellaneous area'
                    INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
