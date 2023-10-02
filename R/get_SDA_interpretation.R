@@ -791,7 +791,7 @@ get_SDA_interpretation <- function(rulename,
     (%s) AS [rating_%s],
     (%s) AS [total_comppct_%s],
     (%s) AS [class_%s],
-    (SELECT %s(interphrc, '; ') FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND c.compkind != 'miscellaneous area' AND c.cokey = component.cokey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s') AS [reason_%s]",
+    (SELECT %s FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND c.compkind != 'miscellaneous area' AND c.cokey = component.cokey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s') AS [reason_%s]",
    .q1(x), .cleanRuleColumnName(x),
    .q2(x), .cleanRuleColumnName(x),
    .q3(x), .cleanRuleColumnName(x),
@@ -852,7 +852,7 @@ get_SDA_interpretation <- function(rulename,
                   INNER JOIN component AS c ON c.mukey = mu.mukey
                   INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
                   AND (interphr) IS NOT NULL GROUP BY mu.mukey),2) AS [sum_com_%s],
-                  (SELECT STRING_AGG(CONCAT(interphrc, ' (', interphr, ')', '; ')
+                  (SELECT STRING_AGG(CONCAT(interphrc, ' (', interphr, ')'), '; ')
                    FROM mapunit AS mu
                    INNER JOIN component AS c ON c.mukey = mu.mukey AND compkind != 'miscellaneous area'
                    INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
