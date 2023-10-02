@@ -6,7 +6,7 @@
 #'
 #' @param x A vector of map unit keys (`mukey`) or national map unit symbols (`nmusym`) for `mupolygon` geometry OR legend keys (`lkey`) or soil survey area symbols (`areasymbol`) for `sapolygon` geometry
 #' @param by.col Column name containing map unit identifier `"mukey"`, `"nmusym"`/`"nationalmusym"` for `geom.src` `mupolygon` OR `"areasymbol"`, `"areaname"`, `"mlraoffice"`, `"mouagncyresp"` for `geom.src` `sapolygon`; default is determined by `is.numeric(x)` `TRUE` for `mukey` or `lkey` and `nationalmusym` or `areasymbol` otherwise.
-#' @param method geometry result type: `"feature"` returns polygons, `"bbox"` returns the bounding box of each polygon (via `STEnvelope()`), and `"point"` returns a single point (via `STPointOnSurface()`) within each polygon.
+#' @param method geometry result type: `"feature"` returns polygons, `"bbox"` returns the bounding box of each polygon (via `STEnvelope()`), `"point"` returns a single point (via `STPointOnSurface()`) within each polygon, `"extent"` returns an aggregate bounding box (the extent of all polygons, `geometry::EnvelopeAggregate()`) ), `"convexhull"` (`geometry::ConvexHullAggregate()`) returns the aggregate convex hull around all polygons, `"union"` (`geometry::UnionAggregate()`) and `"collection"` (`geometry::CollectionAggregate()`) return a `MULTIPOLYGON` or a `GEOMETRYCOLLECTION`, respectively, for each `mukey`, `nationalmusym`, or `areasymbol `. In the case of the latter four aggregation methods, the groups for aggregation depend on `by.col` (default by `"mukey"`).
 #' @param geom.src Either `mupolygon` (map unit polygons) or `sapolygon` (soil survey area boundary polygons)
 #' @param db Default: `"SSURGO"`. When `geom.src` is `mupolygon`, use STATSGO polygon geometry instead of SSURGO by setting `db = "STATSGO"`
 #' @param add.fields Column names from `mapunit` or `legend` table to add to result. Must specify parent table name as the prefix before column name e.g. `mapunit.muname`.
@@ -71,10 +71,7 @@ fetchSDA_spatial <- function(x,
 
   tstart <- Sys.time()
 
-  # sanity check: method must be one of:
-  if (!method %in% c('feature', 'bbox', 'point')) {
-    stop('method must be one of: `feature`, `bbox`, or `point`.', call. = FALSE)
-  }
+  method <- match.arg(tolower(method), c('feature', 'bbox', 'extent', 'envelope', 'point', 'convexhull', 'union', 'collection'))
 
   # remove any redundancy in input off the top -- this is important
   # in case x is not ordered and contains duplicates which will possibly
@@ -133,17 +130,26 @@ fetchSDA_spatial <- function(x,
     
     mukey.list <- unique(res$lkey)
   } else {
-    return(try(stop(paste0("Unknown mapunit identifier (",by.col,")"), call. = FALSE)))
+    return(try(stop(paste0("Unknown mapunit identifier (", by.col, ")"), call. = FALSE)))
   }
 
   mukey.chunk <- makeChunks(mukey.list, chunk.size)
 
   s <- NULL
 
+  # alias
+  if (method == "envelope"){
+    method <- "extent"
+  }
+  
   # select method
   geom.type <- switch(method,
                       feature = 'mupolygongeo.STAsText()',
                       bbox = 'mupolygongeo.STEnvelope().STAsText()',
+                      collection = 'geometry::CollectionAggregate(mupolygongeo).STAsText()',
+                      extent = 'geometry::EnvelopeAggregate(mupolygongeo).STAsText()',
+                      convexhull = 'geometry::ConvexHullAggregate(mupolygongeo).STAsText()',
+                      union = 'geometry::UnionAggregate(mupolygongeo).STAsText()',
                       point = 'mupolygongeo.STPointOnSurface().STAsText()')
 
   if (geom.src == 'sapolygon')
@@ -166,7 +172,7 @@ fetchSDA_spatial <- function(x,
     # SDA_query may generate a warning + try-error result
     chunk.res <- .fetchSDA_spatial(mukeys, geom.type, geom.src,
                                    use_statsgo, add.fields,
-                                   verbose, i)
+                                   verbose, i, by.col)
 
     # this almost always is because the query was too big
     # retry -- do each mukey individually
@@ -175,12 +181,11 @@ fetchSDA_spatial <- function(x,
       subchunk.res <- lapply(mukeys, function(xx) {
         sub.res <- .fetchSDA_spatial(mukeys, geom.type, geom.src,
                                      use_statsgo, add.fields,
-                                     verbose, paste0(i,"_",xx))
+                                     verbose, paste0(i, "_", xx), by.col)
 
         if (inherits(sub.res$result, 'try-error')) {
           # explicit handling for a hypothetical unqueryable single mukey
-          message("Symbol ", xx, " dropped from result due to error! May exceed the JSON serialization limit or have other topologic problems.",
-                  call. = FALSE)
+          message("Symbol ", xx, " dropped from result due to error! May exceed the JSON serialization limit or have other topologic problems.")
           return(NULL)
         }
         return(sub.res)
@@ -230,36 +235,54 @@ fetchSDA_spatial <- function(x,
   return(s)
 }
 
-.fetchSDA_spatial <- function(mukey.list, geom.type, geom.src, use_statsgo, add.fields, verbose, .parentchunk = NA) {
+.fetchSDA_spatial <- function(mukey.list, geom.type, geom.src, use_statsgo, add.fields, verbose, .parentchunk = NA, by.col) {
+  base.fields <- "P.mukey, legend.areasymbol, mapunit.nationalmusym"
+  
   if (geom.src == "mupolygon") {
     q <- sprintf(
       "SELECT
-        %s AS geom,
-        P.mukey, legend.areasymbol, mapunit.nationalmusym
+        %s AS geom, %s
       FROM %s AS P
         INNER JOIN mapunit ON P.mukey = mapunit.mukey
         INNER JOIN legend ON mapunit.lkey = legend.lkey
-      WHERE P.mukey IN %s %s",
+      WHERE P.mukey IN %s %s %s",
       geom.type,
+      ifelse(grepl("Aggregate", geom.type), 
+             "(SELECT STRING_AGG(value,', ') FROM 
+               (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(CONVERT(NVARCHAR(max), P.mukey), ','),',')) t) AS mukey,
+              (SELECT STRING_AGG(value,', ') FROM 
+               (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(CONVERT(NVARCHAR(max), legend.areasymbol), ','),',')) t) AS areasymbol, 
+              mapunit.nationalmusym", 
+             "P.mukey, legend.areasymbol, mapunit.nationalmusym"),
       ifelse(use_statsgo, "gsmmupolygon", "mupolygon"),
       format_SQL_in_statement(mukey.list),
-      ifelse(use_statsgo, "AND CLIPAREASYMBOL = 'US'","")
+      ifelse(use_statsgo, "AND CLIPAREASYMBOL = 'US'",""),
+      ifelse(grepl("Aggregate", geom.type), 
+             ifelse(by.col == "mukey", "GROUP BY P.mukey, mapunit.nationalmusym", "GROUP BY mapunit.nationalmusym"), "")
     )
   } else if (geom.src == "sapolygon") {
+    
+    base.fields <- "legend.areasymbol"
+    
     q <- sprintf(
       "SELECT
          %s AS geom, legend.lkey, legend.areasymbol
        FROM sapolygon AS P
           INNER JOIN legend ON P.lkey = legend.lkey
-       WHERE legend.lkey IN %s",
+       WHERE legend.lkey IN %s %s",
       geom.type,
-      format_SQL_in_statement(mukey.list)
+      format_SQL_in_statement(mukey.list),
+      ifelse(grepl("Aggregate", geom.type), "GROUP BY legend.lkey, legend.areasymbol", "")
     )
   }
+  
   # add any additional fields from mapunit/legend
   if (!is.null(add.fields)) {
     q <- gsub(q, pattern = "FROM ([a-z]+)polygon",
-              replacement = paste0(", ", paste0(add.fields, collapse = ", "), " FROM \\1polygon"))
+              replacement = paste0(", ", paste0(ifelse(rep(grepl("Aggregate", geom.type), length(add.fields)),
+               sprintf("(SELECT STRING_AGG(value,', ') FROM (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(CONVERT(NVARCHAR(max), %s), ','),',')) t) AS %s",
+                       add.fields, gsub(".*\\.([a-z]+)", "\\1", add.fields)),
+              base.fields), collapse = ", "), " FROM \\1polygon"))
   }
   t1 <- Sys.time()
 

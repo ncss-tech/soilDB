@@ -1,5 +1,11 @@
 # soilDB 2.7.9 (2023-09-01)
-
+ 
+ - Added new `method` options for `fetchSDA_spatial()`. Aggregation grouping is controlled by the `by.col` argument. This works for mapunit and survey area polygon geometries, aggregating all polygons in the group for each `mukey`, `nationalmusym`, `lkey`, or `areasymbol` extent.
+  - `method="extent"` method calculates a bounding rectangle  
+  - `method="convexhull"` calculates the convex hull 
+  - `method="union"` returns a MULTIPOLYGON 
+  - `method="collection"` returns a GEOMETRYCOLLECTION 
+ 
 ## Bug Fixes
 
  - Bug fix for `get_vegplot_transpoints_from_NASIS_db()`; using wrong record ID for transect points
