@@ -791,7 +791,7 @@ get_SDA_interpretation <- function(rulename,
     (%s) AS [rating_%s],
     (%s) AS [total_comppct_%s],
     (%s) AS [class_%s],
-    (SELECT %s FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND c.compkind != 'miscellaneous area' AND c.cokey = component.cokey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s') AS [reason_%s]",
+    (SELECT %s FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND c.compkind != 'miscellaneous area' AND c.cokey = component.cokey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth != 0 AND mrulename LIKE '%s') AS [reason_%s]",
    .q1(x), .cleanRuleColumnName(x),
    .q2(x), .cleanRuleColumnName(x),
    .q3(x), .cleanRuleColumnName(x),
@@ -810,7 +810,7 @@ get_SDA_interpretation <- function(rulename,
                 paste0(sapply(interp, function(x) sprintf("
   (SELECT interphr FROM component AS c0 INNER JOIN cointerp ON c0.cokey = cointerp.cokey AND component.cokey = c0.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [rating_%s],
   (SELECT interphrc FROM component AS c1 INNER JOIN cointerp ON c1.cokey = cointerp.cokey AND c1.cokey = component.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [class_%s],
-  (SELECT %s FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND c.compkind != 'miscellaneous area' AND c.cokey = component.cokey AND mu.mukey = mapunit.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename = '%s') as [reason_%s]",
+  (SELECT %s FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND c.compkind != 'miscellaneous area' AND c.cokey = component.cokey AND mu.mukey = mapunit.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth != 0 AND mrulename = '%s') as [reason_%s]",
                                       x, .cleanRuleColumnName(x),
                                       x, .cleanRuleColumnName(x),
                                       aggfun,
@@ -856,7 +856,7 @@ get_SDA_interpretation <- function(rulename,
                    FROM mapunit AS mu
                    INNER JOIN component AS c ON c.mukey = mu.mukey AND compkind != 'miscellaneous area'
                    INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
-                   AND ruledepth != 0 AND interphrc NOT LIKE 'Not%%' AND mrulename LIKE '%s'
+                   AND ruledepth != 0 AND mrulename LIKE '%s'
                    GROUP BY mu.mukey) AS [reason_%s]",
                                                     x, .cleanRuleColumnName(x),
                                                     x, .cleanRuleColumnName(x),
