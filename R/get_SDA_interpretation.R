@@ -775,8 +775,8 @@ get_SDA_interpretation <- function(rulename,
 .cleanRuleColumnName <- function(x) gsub("[^A-Za-z0-9]", "", x)
 
 .interpretation_by_condition <- function(interp, where_clause, dominant = TRUE, sqlite = FALSE) {
-  aggfun <- "STRING_AGG(CONCAT(interphrc, ' (', interphr, ')'), '; ')"
-  if (sqlite) aggfun <- "GROUP_CONCAT(interphrc || ' (' || interphr || ')' || '; ')"
+  aggfun <- "STRING_AGG(CONCAT(rulename, ' \"', interphrc, '\" (', interphr, ')'), '; ')"
+  if (sqlite) aggfun <- "GROUP_CONCAT(rulename || ' ' || interphrc || ' (' || interphr || ')' || '; ')"
   .q0 <- function(q, x) .LIMIT_N(sprintf(q, x), n = 1, sqlite = sqlite)
   .q1 <- function(x) .q0("SELECT ROUND (AVG(interphr) OVER (PARTITION BY interphrc), 2) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, interphr ORDER BY SUM (comppct_r) DESC", x)
   .q2 <- function(x) .q0("SELECT SUM(comppct_r) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY interphrc) DESC", x)
@@ -800,8 +800,8 @@ get_SDA_interpretation <- function(rulename,
 }
 
 .interpretation_aggregation <- function(interp, where_clause, dominant = FALSE, sqlite = FALSE) {
-  aggfun <- "STRING_AGG(CONCAT(interphrc, ' (', interphr, ')'), '; ')"
-  if (sqlite) aggfun <- "GROUP_CONCAT(interphrc || ' (' || interphr || ')' || '; ')"
+  aggfun <- "STRING_AGG(CONCAT(rulename, ' \"', interphrc, '\" (', interphr, ')'), '; ')"
+  if (sqlite) aggfun <- "GROUP_CONCAT(rulename || ' ' || interphrc || ' (' || interphr || ')' || '; ')"
   sprintf("SELECT mapunit.mukey, component.cokey, areasymbol, musym, muname, compname, compkind, comppct_r, majcompflag,
                 %s
                 FROM legend
