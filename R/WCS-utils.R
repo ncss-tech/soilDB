@@ -174,7 +174,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 5cm (270m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc010cm' = list(
@@ -182,7 +182,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 10cm (270m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc015cm' = list(
@@ -190,7 +190,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 15cm (270m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc025cm' = list(
@@ -198,7 +198,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 25cm (270m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc050cm' = list(
@@ -206,7 +206,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 50cm (270m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc075cm' = list(
@@ -214,7 +214,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 75cm (270m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc100cm' = list(
@@ -222,7 +222,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 100cm (270m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc125cm' = list(
@@ -230,7 +230,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 125cm (270m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   
@@ -239,7 +239,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 5cm (30m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc010cm_hr' = list(
@@ -247,7 +247,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 10cm (30m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc015cm_hr' = list(
@@ -255,7 +255,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 15cm (30m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc025cm_hr' = list(
@@ -263,7 +263,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 25cm (30m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc050cm_hr' = list(
@@ -271,7 +271,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 50cm (30m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc075cm_hr' = list(
@@ -279,7 +279,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 75cm (30m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc100cm_hr' = list(
@@ -287,7 +287,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 100cm (30m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   ),
   
   'sc125cm_hr' = list(
@@ -295,7 +295,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Moist soil color, 125cm (30m)',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/wcs/soilcolor/unique-moist-color-LUT.csv'
   )
 )
 
@@ -542,7 +542,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_16',
     desc = 'Soil Series Name',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/series_name.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/series_name.csv'
   ),
   
   'hydgrp' = list(
@@ -550,7 +550,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Hydrologic Soil Group',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/hydgrp.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/hydgrp.csv'
   ),
   
   
@@ -559,7 +559,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Drainage Class',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/drainage_class.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/drainage_class.csv'
   ),
   
   'weg' = list(
@@ -567,7 +567,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Wind Erodibility Group',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/weg.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/weg.csv'
   ),
   
   'wei' = list(
@@ -583,7 +583,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Temperature Regime',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/str.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/str.csv'
   ),
   
   'soilorder' = list(
@@ -591,7 +591,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Taxonomy: Soil Order',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/soilorder.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/soilorder.csv'
   ),
   
   'suborder' = list(
@@ -599,7 +599,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Taxonomy: Suborder',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/suborder.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/suborder.csv'
   ),
   
   'greatgroup' = list(
@@ -607,7 +607,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Taxonomy: Greatgroup',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/greatgroup.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/greatgroup.csv'
   ),
   
   'texture_05cm' = list(
@@ -615,7 +615,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Texture Class, 0-5cm',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/texture_05.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/texture_05.csv'
   ),
   
   'texture_025cm' = list(
@@ -623,7 +623,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Texture Class, 0-25cm',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/texture_025.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/texture_025.csv'
   ),
   
   'texture_2550cm' = list(
@@ -631,7 +631,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Soil Texture Class, 25-50cm',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/texture_2550.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/texture_2550.csv'
   ),
   
   'lcc_irrigated' = list(
@@ -639,7 +639,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Land Capability Class, irrigated',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/lcc.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/lcc.csv'
   ),
   
   'lcc_nonirrigated' = list(
@@ -647,7 +647,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
     type = 'GEOTIFF_BYTE',
     desc = 'Land Capability Class, non-irrigated',
     na = 0,
-    rat = 'http://soilmap2-1.lawr.ucdavis.edu/800m_grids/RAT/lcc.csv'
+    rat = 'http://casoilresource.lawr.ucdavis.edu/800m_grids/RAT/lcc.csv'
   )
   
   
