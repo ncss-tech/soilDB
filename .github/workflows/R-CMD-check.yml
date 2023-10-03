@@ -62,7 +62,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, any::remotes, local::.
+          extra-packages: any::rcmdcheck, any::remotes, terra=?ignore-before-r=4.1.0, local::.
           # upgrade: 'TRUE' ## NB: required to force building of source packages
           needs: check
 
