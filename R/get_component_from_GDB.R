@@ -683,12 +683,12 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
       co <- by(x, x$idx, function(x2) {
         qry <- paste0("mukey IN ('", paste0(x2$mukey, collapse = "', '"), "')")
         tryCatch({
-          co  <- suppressMessages(get_component_from_GDB(
+          co  <- get_component_from_GDB(
             dsn        = dsn,
             WHERE      = qry,
             childs     = childs,
             droplevels = droplevels
-          ))
+          )
         },
         error = function(err) {
           print(paste("Error occured: ", err))
@@ -702,7 +702,7 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
 
       # horizons
       tryCatch({
-        h   <- .get_chorizon_from_GDB(dsn = dsn, co$cokey)
+        h   <- .get_chorizon_from_GDB(dsn = dsn, co = co$cokey)
       },
       error = function(err) {
         print(paste("Error occured: ", err))
@@ -723,18 +723,19 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
     message("getting components and horizons from ", WHERE)
 
     # target component table
-    co <- suppressMessages(get_component_from_GDB(
+    co <- get_component_from_GDB(
       dsn        = dsn,
       WHERE      = WHERE,
       childs     = childs,
       droplevels = droplevels
-      ))
-  }
+      )
   
   
   # horizons
   if (is.null(WHERE)) cokey <- NULL else cokey <- co$cokey
   h <- .get_chorizon_from_GDB(dsn = dsn, cokey = cokey, childs = childs)
+  
+  }
   
   
   if (nrow(co) > 0) {
