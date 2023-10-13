@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,29 @@
       <small>Source: <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.7.9.9000" id="soildb-2799000-2023-10-04">soilDB 2.7.9.9000 (2023-10-04)<a class="anchor" aria-label="anchor" href="#soildb-2799000-2023-10-04"></a></h2>
+<ul><li><p><code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code> gains <code>geom.src="mlrapolygon"</code> for obtaining Major Land Resource Area (MLRA) polygon boundaries. When using this geometry source <code>x</code> is a vector of <code>MLRARSYM</code> (MLRA Symbols).</p></li>
+<li><p>The geometry source is the MLRA Geographic Database v5.2 (2022) which is not (yet) part of Soil Data Access. Instead of SDA, GDAL utilities are used to read a zipped ESRI Shapefile from a remote URL: <a href="https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip" class="external-link uri">https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip</a>. Therefore, most additional <code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code> arguments are <em>not</em> currently supported for the MLRA geometry source. In the future a <code>mlrapolygon</code> table may be added to SDA (analogous to <code>mupolygon</code> and <code>sapolygon</code>), and the function will be updated accordingly at that time.</p></li>
+<li><p>web coverage services and related raster attribute tables provided by SoilWeb (<code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code> etc.) are now using the load-balancer URL</p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.7.9" id="soildb-279-2023-09-01">soilDB 2.7.9 (2023-09-01)<a class="anchor" aria-label="anchor" href="#soildb-279-2023-09-01"></a></h2>
+<ul><li>Added new <code>method</code> options for <code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code>. Aggregation grouping is controlled by the <code>by.col</code> argument. This works for mapunit and survey area polygon geometries, aggregating all polygons in the group for each <code>mukey</code>, <code>nationalmusym</code>, <code>lkey</code>, or <code>areasymbol</code> extent.</li>
+<li>
+<code>method="extent"</code> method calculates a bounding rectangle<br></li>
+<li>
+<code>method="convexhull"</code> calculates the convex hull</li>
+<li>
+<code>method="union"</code> returns a MULTIPOLYGON</li>
+<li>
+<code>method="collection"</code> returns a GEOMETRYCOLLECTION</li>
+</ul><div class="section level3">
+<h3 id="bug-fixes-2-7-9">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2-7-9"></a></h3>
+<ul><li><p>Bug fix for <code><a href="../reference/fetchVegdata.html">get_vegplot_transpoints_from_NASIS_db()</a></code>; using wrong record ID for transect points</p></li>
+<li><p><code><a href="../reference/get_NASIS_table_name_by_purpose.html">get_NASIS_table_name_by_purpose()</a></code> now includes <code>"pointplantcoverdetails"</code>, <code>"plantprodquadratdetails"</code> in the <code>"vegetation"</code> table purpose group</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.7.8" id="soildb-278-2023-08-29">soilDB 2.7.8 (2023-08-29)<a class="anchor" aria-label="anchor" href="#soildb-278-2023-08-29"></a></h2><p class="text-muted">CRAN release: 2023-08-29</p>
 <ul><li><p>Added new SoilWeb “Web Coverage Service” vignette (<a href="https://ncss-tech.github.io/soilDB/articles/wcs-ssurgo.html" class="external-link uri">https://ncss-tech.github.io/soilDB/articles/wcs-ssurgo.html</a>) related to creating thematic maps using grids of mapunit keys from SoilWeb with aggregated tabular data from Soil Data Access.</p></li>

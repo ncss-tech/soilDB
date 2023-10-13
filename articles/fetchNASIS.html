@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -800,6 +800,14 @@ database.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="left">siteiid</td>
+<td align="left">No</td>
+<td align="left">site.siteiid</td>
+<td align="left">An internal ID (integer) that is part (or all) of a key
+that uniquely identifies a record. Also known as part (or all) of the
+“primary key”. This value is managed by NASIS and cannot be edited.</td>
+</tr>
+<tr class="even">
 <td align="left">geomposhill</td>
 <td align="left">No</td>
 <td align="left">site.geomposhill</td>
@@ -807,7 +815,7 @@ database.</p>
 dimensional) that represents an episode of landscape development of
 hills.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">geomposmntn</td>
 <td align="left">No</td>
 <td align="left">site.geomposmntn</td>
@@ -815,7 +823,7 @@ hills.</td>
 dimensional) that represents an episode of landscape development of
 mountains.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">geompostrce</td>
 <td align="left">No</td>
 <td align="left">site.geompostrce</td>
@@ -823,20 +831,20 @@ mountains.</td>
 dimensional) that represents an episode of landscape development of
 terraces.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">geomposflats</td>
 <td align="left">No</td>
 <td align="left">site.geomposflats</td>
 <td align="left">Description of the geomorphic component for flats.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">elev_field</td>
 <td align="left">Yes</td>
 <td align="left">site.elev</td>
 <td align="left">The vertical distance from mean sea level to a point on
 the earth’s surface.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">slope_field</td>
 <td align="left">Yes</td>
 <td align="left">site.slope</td>
@@ -844,7 +852,7 @@ the earth’s surface.</td>
 expressed as a percentage of the distance between those points.
 (SSM)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">aspect_field</td>
 <td align="left">Yes</td>
 <td align="left">site.aspect</td>
@@ -852,42 +860,42 @@ expressed as a percentage of the distance between those points.
 faces, expressed as an angle between 0 and 360 degrees, inclusive,
 measured clockwise from true north.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">shapeacross</td>
 <td align="left">No</td>
 <td align="left">site.shapeacross</td>
 <td align="left">The geometric, two dimensional profile (shape) of the
 slope parallel to elevation contours.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">shapedown</td>
 <td align="left">No</td>
 <td align="left">site.shapedown</td>
 <td align="left">The geometric, two dimensional profile (shape) of the
 slope perpendicular to elevation contours.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">slopecomplex</td>
 <td align="left">No</td>
 <td align="left">site.slopecomplex</td>
 <td align="left">The identification of whether the landscape surface is
 simple or complex.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">geomslopeseg</td>
 <td align="left">No</td>
 <td align="left">site.geomslopeseg</td>
 <td align="left">Position of the pedon site within the segment of the
 slope.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">hillslopeprof</td>
 <td align="left">No</td>
 <td align="left">site.hillslopeprof</td>
 <td align="left">Two dimensional slope segments of a hillslope that have
 similar geometric, erosional, or depositional characteristics.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">drainagecl</td>
 <td align="left">No</td>
 <td align="left">site.drainagecl</td>
@@ -895,7 +903,7 @@ similar geometric, erosional, or depositional characteristics.</td>
 and refers to the frequency and duration of wet periods. An example of a
 drainage class is well drained.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">horizdatnm</td>
 <td align="left">No</td>
 <td align="left">site.horizdatnm</td>
@@ -905,7 +913,7 @@ Metadata, FGDC, 3/31/94 draft). This entry applies to both lat/long and
 UTM coordinates. NO LONGER USED BECAUSE CAN’T DIFFERENTIATE BETWEEN UTM
 AND DMS.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">utmeasting</td>
 <td align="left">No</td>
 <td align="left">site.utmeasting</td>
@@ -913,7 +921,7 @@ AND DMS.</td>
 zone. The UTM zone central meridian is the origin and is designated a
 value of 500,000 meters creating a “false” easting.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">utmnorthing</td>
 <td align="left">No</td>
 <td align="left">site.utmnorthing</td>
@@ -922,7 +930,7 @@ origin. For “north”, origin is the equator equal zero. For the southern
 hemisphere it is a false northing with origin, i.e. the equator, equal
 to 10,000,000 meters.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">utmzone</td>
 <td align="left">No</td>
 <td align="left">site.utmzone</td>
@@ -931,56 +939,56 @@ system bounded by meridians, the longitudes are multiples of 6 degrees.
 Zones are numbered from 1 to 60 proceeding east from the 180th meridian
 from Greenwich, England.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">site_id</td>
 <td align="left">Yes</td>
 <td align="left">site.usiteid</td>
 <td align="left">A short label to help a user identify a particular
 site.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">floddurcl</td>
 <td align="left">No</td>
 <td align="left">site.floddurcl</td>
 <td align="left">Average duration of inundation per flood occurrence and
 expressed as a class. (NSSH)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">flodfreqcl</td>
 <td align="left">No</td>
 <td align="left">site.flodfreqcl</td>
 <td align="left">The annual probability of a flood event (inundation by
 flowing water), expressed as a class. (SSM).</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">flodmonthbeg</td>
 <td align="left">No</td>
 <td align="left">site.flodmonthbeg</td>
 <td align="left">The month of the year in which the predicted flooding
 period of a soil is likely to begin.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">ponddurcl</td>
 <td align="left">No</td>
 <td align="left">site.ponddurcl</td>
 <td align="left">The average duration, or length of time, of the ponding
 occurrence. (NSSH)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pondfreqcl</td>
 <td align="left">No</td>
 <td align="left">site.pondfreqcl</td>
 <td align="left">The annual probability of a ponding event (inundation
 by standing water), expressed as a class.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pondmonthbeg</td>
 <td align="left">No</td>
 <td align="left">site.pondmonthbeg</td>
 <td align="left">The month of the year in which the predicted flooding
 period of a soil is likely to begin.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">y_std</td>
 <td align="left">Yes</td>
 <td align="left">site.latstddecimaldegrees</td>
@@ -989,7 +997,7 @@ geographic coordinate system, WGS84 datum. Values are either
 auto-populated from GPS, or computed from original latitude coordinates
 using standard conversion algorithms.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">x_std</td>
 <td align="left">Yes</td>
 <td align="left">site.longstddecimaldegrees</td>
@@ -998,7 +1006,7 @@ geographic coordinate system, WGS84 datum. Values are either
 auto-populated from GPS, or computed from original longitude coordinates
 using standard conversion algorithms.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">gpspositionalerror</td>
 <td align="left">No</td>
 <td align="left">site.gpspositionalerror</td>
