@@ -19,13 +19,13 @@ fetchSDA_spatial(
 \arguments{
 \item{x}{A vector of map unit keys (\code{mukey}) or national map unit symbols (\code{nmusym}) for \code{mupolygon} geometry OR legend keys (\code{lkey}) or soil survey area symbols (\code{areasymbol}) for \code{sapolygon} geometry. If \code{geom.src="mlrapolygon"} then \code{x} refers to \code{MLRARSYM} (major land resource area symbols).}
 
-\item{by.col}{Column name containing map unit identifier \code{"mukey"}, \code{"nmusym"}/\code{"nationalmusym"} for \code{geom.src="mupolygon"} OR \code{"areasymbol"}, \code{"areaname"}, \code{"mlraoffice"}, \code{"mouagncyresp"} for \code{geom.src="sapolygon"}; default is determined by \code{is.numeric(x)} \code{TRUE} for \code{mukey} or \code{lkey} and \code{nationalmusym} or \code{areasymbol} otherwise.}
+\item{by.col}{Column name containing map unit identifier \code{"mukey"}, \code{"nmusym"}/\code{"nationalmusym"} for \code{geom.src} \code{mupolygon} OR \code{"areasymbol"}, \code{"areaname"}, \code{"mlraoffice"}, \code{"mouagncyresp"} for \code{geom.src} \code{sapolygon}; default is determined by \code{is.numeric(x)} \code{TRUE} for \code{mukey} or \code{lkey} and \code{nationalmusym} or \code{areasymbol} otherwise.}
 
 \item{method}{geometry result type: \code{"feature"} returns polygons, \code{"bbox"} returns the bounding box of each polygon (via \code{STEnvelope()}), \code{"point"} returns a single point (via \code{STPointOnSurface()}) within each polygon, \code{"extent"} returns an aggregate bounding box (the extent of all polygons, \code{geometry::EnvelopeAggregate()}) ), \code{"convexhull"} (\code{geometry::ConvexHullAggregate()}) returns the aggregate convex hull around all polygons, \code{"union"} (\code{geometry::UnionAggregate()}) and \code{"collection"} (\code{geometry::CollectionAggregate()}) return a \code{MULTIPOLYGON} or a \code{GEOMETRYCOLLECTION}, respectively, for each \code{mukey}, \code{nationalmusym}, or \code{areasymbol }. In the case of the latter four aggregation methods, the groups for aggregation depend on \code{by.col} (default by \code{"mukey"}).}
 
 \item{geom.src}{Either \code{mupolygon} (map unit polygons), \code{sapolygon} (soil survey area boundary polygons), or \code{mlrapolygon} (major land resource area boundary polygons)}
 
-\item{db}{Default: \code{"SSURGO"}. When \code{geom.src} is \code{mupolygon}, use STATSGO polygon geometry instead of SSURGO by setting \code{db = "STATSGO"}.}
+\item{db}{Default: \code{"SSURGO"}. When \code{geom.src} is \code{mupolygon}, use STATSGO polygon geometry instead of SSURGO by setting \code{db = "STATSGO"}}
 
 \item{add.fields}{Column names from \code{mapunit} or \code{legend} table to add to result. Must specify parent table name as the prefix before column name e.g. \code{mapunit.muname}.}
 

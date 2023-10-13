@@ -18,30 +18,30 @@
 # args = list(msso='2-MIN', fy='2018', asym='%', proj='0')
 
 
-#' Parse contents of a web report, based on supplied arguments.
+#' @title Parse contents of a web report, based on supplied arguments.
 #' 
-#' Parse contents of a web report, based on supplied arguments.
+#' @description Parse contents of a web report, based on supplied arguments.
 #' 
-#' Report argument names can be inferred by inspection of the HTML source
+#' @details Report argument names can be inferred by inspection of the HTML source
 #' associated with any given web report.
 #' 
 #' @param url Base URL to a LIMS/NASIS web report.
+#' 
 #' @param args List of named arguments to send to report, see details.
+#' 
 #' @param index Integer index specifying the table to return, or, NULL for a
 #' list of tables
-#' @return A \code{data.frame} object in the case of a single integer passed to
-#' \code{index}, a \code{list} object in the case of an integer vector or NULL
-#' passed to \code{index}.
-#' @note Most web reports are for internal use only.
-#' @author D.E. Beaudette and S.M. Roecker
-#' @keywords IO
-#' @examples
 #' 
-#' \donttest{
-#' # pending
-#' }
+#' @return A `data.frame` object in the case of a single integer `index`, otherwise a `list`
+#' 
+#' @note Most web reports are for internal use only.
+#' 
+#' @author D.E. Beaudette and S.M. Roecker
+#' 
+#' @keywords IO
 #' 
 #' @export parseWebReport
+#' 
 parseWebReport <- function(url, args, index = 1) {
   
   # suggested packages
@@ -82,25 +82,47 @@ parseWebReport <- function(url, args, index = 1) {
     return(NULL)
   
   # read all of the HTML tables
+  # result is a list
   d <- rvest::html_table(x, header = TRUE)
   
   # sanity check empty list = no data
   if (length(d) < 1)
     return(NULL)
   
-  # if specified, get only the indexed table
-  if (!is.null(index)) {
-    d <- d[[index]]
+  ## TODO: consider message when length(d) > length(index)
+  
+  # iterate over tables
+  d <- lapply(d, function(i) {
+    
+    # replace blanks with NA, problem with LIMS (NASIS Web) reports
+    idx <- unlist(lapply(i, is.character))
+    if (any(idx)) {
+      i[idx] <- lapply(i[idx], function(x) ifelse(x == "", NA, x))
+    }
+    
+    # convert to DF
+    # note: col names aren't legal data.frame names
+    i <- as.data.frame(i)
+    return(i)
+  })
+  
+  
+  # return requested tables via `index`
+  # or all tables if NULL
+  if(is.null(index)) {
+    
+    # result is a list
+    return(d)
+  } else {
+   
+     # single table -> data.frame
+    if(length(index) == 1) {
+      return(d[[index]])
+    } else {
+      # multiple tables -> list
+      return(d[index])
+    }
+    
   }
   
-  # replace blanks with NA, problem with LIMS reports
-  idx <- unlist(lapply(d, is.character))
-  if (any(idx)) {
-    d[idx] <- lapply(d[idx], function(x) ifelse(x == "", NA, x))
-  }
-  
-  # note: col names aren't legal data.frame names
-  
-  # done
-  return(as.data.frame(d))
 }
