@@ -1009,9 +1009,7 @@
   # test <- {
   #   strsplit(pmk1$pmkind, " over ") ->.;
   #   lapply(., function(x) {
-  #     rle(x)$lengths |> 
-  #       cumsum() |> 
-  #       x[i = _] ->.;
+  #     x[i = cumsum(rle(x)$lengths)] ->.;
   #     paste(., collapse = " over ")
   #   }) ->.;
   #   unlist(.)
@@ -1032,8 +1030,7 @@
     vars <- c("key", "pmkind", "id_k")
     # ..vars = NULL
     pm_k <- pm[!is.na(pm$pmkind), vars, with = FALSE]
-    idx <- rle(pm_k$id_k)$lengths |>
-      cumsum()
+    idx <- cumsum(rle(pm_k$id_k)$lengths)
     pm_k[idx, ]
   }
   .      = NULL
@@ -1047,17 +1044,14 @@
     vars <- c("key", "pmorigin", "id_o")
     # ..vars = NULL
     pm_o <- pm[!is.na(pm$pmorigin), vars, with = FALSE]
-    idx  <- rle(pm_o$id_o)$lengths |>
-      cumsum()
+    idx  <- cumsum(rle(pm_o$id_o)$lengths)
     pm_o[idx, ]
   }
   pm_o <- pm_o[, .(pmorigin = paste0(pmorigin, collapse = " over ")), by = .(key)]
   
   
   # merge
-  pm <- merge(pm_k, pm_o, by = "key", all = TRUE, sort = FALSE) |>
-    as.data.frame()
-  
+  pm <- as.data.frame(merge(pm_k, pm_o, by = "key", all = TRUE, sort = FALSE))
   
   names(pm)[1] <- c(key) 
   
@@ -1111,14 +1105,11 @@
   
   
   # find chaos within a component ----
-  tb <- with(data, table(key, row_dir)) |>
-    as.data.frame.matrix() 
-  chaos <- tb |> 
-    within({
+  tb <- as.data.frame.matrix(with(data, table(key, row_dir))) 
+  chaos <- cbind(within(tb, {
       tot   = rowSums(cbind(top2bot > 0, bot2top > 0, chaos > 0))
       co_dir = ifelse(tot > 1, "chaos", "ordered")
-    }) |>
-    cbind(key = row.names(tb))
+    }), key = row.names(tb))
   data <- merge(data, chaos, by = "key", all.x = TRUE, sort = FALSE)
   data <- within(data, {
     co_dir = ifelse(N == n_bot | N == n_mis_geomfeatid | N == missing, "missing", co_dir)
@@ -1185,7 +1176,7 @@
     
     if (length(dups) > 0) {
     nodups <- {
-      len <- {data$key2[dups] |> rle() ->.; .$lengths}
+      len <- {rle(data$key2[dups]) -> .; .$lengths}
       len <- cumsum(len) - len + 1
     }
     nodups <- dups[nodups]
@@ -1197,13 +1188,13 @@
     data_sub <- data[dups, vars, with = FALSE]
   
     # flatten duplicates
-    data_sub <- .flatten_gmd(as.data.frame(data_sub), key = "key2") |> data.table::as.data.table()
+    data_sub <- data.table::as.data.table(.flatten_gmd(as.data.frame(data_sub), key = "key2"))
     
     # replace duplicates
     data[nodups, vars] <- data_sub
     
     # remove duplicates
-    data <- data[- idx, ]
+    data <- data[-idx, ]
   }
   data$key2 <- NULL
   
@@ -1215,14 +1206,8 @@
   
   vars <- c("key", "landform", "mntn", "hill","trce", "flats", "shapeacross", "shapedown", "slopeshape", "hillslopeprof")
   # ..vars = NULL
-  data_mis <- data_mis[, vars, with = FALSE] |>
-    as.data.frame() |>
-    .flatten_gmd(sep = " and ") |> 
-    data.table::as.data.table()
-  data_simp <- data_simp[, vars, with = FALSE] |>
-    as.data.frame() |>
-    .flatten_gmd(sep = " on ") |> 
-    data.table::as.data.table()
+  data_mis <- data.table::as.data.table(.flatten_gmd(as.data.frame(data_mis[, vars, with = FALSE]), sep = " and "))
+  data_simp <- data.table::as.data.table(.flatten_gmd(as.data.frame(data_simp[, vars, with = FALSE]), sep = " on "))
   
   
   # iterate over sites with unsorted overlapping landforms ----
@@ -1265,11 +1250,10 @@
     return(x_sorted)
   })
   data_comb_l3 <- do.call("rbind", data_comb_l)
-  data_comb <- .flatten_gmd(as.data.frame(data_comb_l3), key = "key") |> data.table::as.data.table()
+  data_comb <- data.table::as.data.table(.flatten_gmd(as.data.frame(data_comb_l3), key = "key") )
   } else data_comb <- data_comb[, vars, with = FALSE]
   
-  data <- rbind(data_simp, data_mis, data_comb) |>
-    as.data.frame()
+  data <- as.data.frame(rbind(data_simp, data_mis, data_comb))
   names(data)[names(data) == "key"] <- key
   
   
@@ -1287,11 +1271,11 @@
 
 
 # vars <- c("geomfeatid", "existsonfeat")
-# idx <- sapply(1:nrow(test), function(i) {
-#   test[i, vars, drop = TRUE] |> unlist() |> unname()
+# idx <- unlist(sapply(1:nrow(test), function(i) {
+#    unname(unlist(test[i, vars, drop = TRUE]))
 #   },
 #   simplify = FALSE
-# ) |> unlist()
+# ))
 # idx <- idx[!duplicated(idx) & !is.na(idx)]
 
 
@@ -1342,17 +1326,16 @@
   if (test > 0) {
     message(test, " ", key, " values were found in the ", table, " table that contain multiple entries, the resulting values will be flattened/combined into 1 record per ", key, " and separated with 'and'")
     
-    data_sub <- data[idx, ] |> data.table::as.data.table()
+    data_sub <- data.table::as.data.table(data[idx, ])
     .SD = NULL
-    data_sub <- data_sub[
+    data_sub <- as.data.frame(data_sub[
       ,
       lapply(.SD, function(x) {
         if (SORT) {paste0(sort(unique(x[!is.na(x)])), collapse = sep)
         } else    {paste0(     unique(x[!is.na(x)]),  collapse = sep)}
       }),
       by = key
-    ] |>
-      as.data.frame()
+    ])
     
     data <- rbind(data[!idx, ], data_sub)
     

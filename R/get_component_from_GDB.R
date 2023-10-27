@@ -222,15 +222,14 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
       cokey        = NULL
       majcompflag  = NULL
       mukey        = NULL
-      co2 <- co2[, .(
+      co2 <- as.data.frame(co2[, .(
         pct_component = sum(comppct_r, na.rm = TRUE),
         pct_hydric    = sum((hydricrating == "Yes") * comppct_r, na.rm = TRUE),
         n_component   = length(cokey),
         n_majcompflag = sum(majcompflag == "Yes", na.rm = TRUE)
         ),
         by = mukey
-        ] |>
-        as.data.frame()
+      ])
       
       # co2 <- {
       #   temp <- data.frame(
@@ -301,12 +300,10 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   
   
   # remove duplicate rvindicators
-  dat <- table(pmg$cokey, pmg$rvindicator) |> 
-    as.data.frame.matrix()
+  dat <- as.data.frame.matrix(table(pmg$cokey, pmg$rvindicator))
   n_rvindicator = NULL
-  dat <- data.frame(cokey = row.names(dat), n_rvindicator = dat$Yes) |>
-    subset(n_rvindicator > 1)
-  assign('dup.compmgrp.cokeyrvindictor', value=dat, envir=get_soilDB_env())
+  dat <- subset(data.frame(cokey = row.names(dat), n_rvindicator = dat$Yes), n_rvindicator > 1)
+  assign('dup.compmgrp.cokeyrvindictor', value = dat, envir = get_soilDB_env())
   message("-> QC: ", formatC(nrow(dat), format = "fg", big.mark = ","), " duplicate 'representative' rvindicators in the copmgrp table. \n\tUse `get('dup.compmgrp.cokeyrvindictor', envir=get_soilDB_env())` for offending component record IDs (cokey)")
   
   pmg$rvindicator <- NULL
@@ -702,7 +699,7 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
 
       # horizons
       tryCatch({
-        h   <- .get_chorizon_from_GDB(dsn = dsn, co = co$cokey)
+        h   <- .get_chorizon_from_GDB(dsn = dsn, cokey = co$cokey)
       },
       error = function(err) {
         print(paste("Error occured: ", err))

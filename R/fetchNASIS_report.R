@@ -407,14 +407,11 @@
   
   # # local report
   # if (tf_idx & all(p_idx)) {
-  #   df <- tf |> 
-  #     xml2::read_html() |> 
-  #     rvest::html_table(header = TRUE) |> 
-  #     as.data.frame()
-  #   } 
+  #   df <- as.data.frame(rvest::html_table(xml2::read_html(tf), header = TRUE))
+  # } 
   
   # web report
-  if (! all(p_idx)) {
+  if (!all(p_idx)) {
     url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_copedon_from_NASISWebReport"
     args <- list(p_nasissitename = nasissitename, p_grpname = grpname, p_areasymbol = areasymbol)
     
