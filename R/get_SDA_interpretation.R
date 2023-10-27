@@ -779,7 +779,7 @@ get_SDA_interpretation <- function(rulename,
   )
 }
 
-.cleanRuleColumnName <- function(x) gsub("[^A-Za-z0-9]", "", x)
+.cleanRuleColumnName <- function(x) gsub("[^A-Za-z0-9]", "", gsub(">", "GT", gsub("<", "LT", gsub("=", "EQ", x, fixed = TRUE), fixed = TRUE), fixed = TRUE))
 
 .interpretation_by_condition <- function(interp, where_clause, dominant = TRUE, sqlite = FALSE) {
   aggfun <- "STRING_AGG(CONCAT(rulename, ' \"', interphrc, '\" (', interphr, ')'), '; ')"
