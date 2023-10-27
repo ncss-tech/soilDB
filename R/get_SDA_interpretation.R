@@ -11,7 +11,8 @@
 #' @param mukeys vector of map unit keys
 #' @param WHERE character containing SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, or `component` tables, used in lieu of `mukeys` or `areasymbols`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
-#' @param not_rated_value used where rating class is "Not Rated". Default: `NA_real`
+#' @param not_rated_value used where rating class is "Not Rated". Default: `NA_real_`
+#' @param wide_reason Default: `FALSE`; if  `TRUE` apply post-processing to all columns with prefix `"reason_"` to create additional columns for sub-rule ratings.
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @examplesIf curl::has_internet()
 #' @examples
@@ -685,6 +686,7 @@ get_SDA_interpretation <- function(rulename,
                                    WHERE = NULL,
                                    query_string = FALSE,
                                    not_rated_value = NA_real_,
+                                   wide_reason = FALSE,
                                    dsn = NULL) {
   q <- .constructInterpQuery(
       method = method,
@@ -726,6 +728,11 @@ get_SDA_interpretation <- function(rulename,
     }
     y
   })
+  
+  if (wide_reason) {
+    res <- .create_wide_reason(res)
+  }
+  
   return(res)
 }
 
@@ -889,4 +896,22 @@ get_SDA_interpretation <- function(rulename,
 .LIMIT_N <- function(query, n = 1, sqlite = FALSE) {
   if (!sqlite) return(gsub("SELECT ", paste("SELECT TOP", n, ""), query))
   paste(query, paste("LIMIT", n, ""))
+}
+
+.create_wide_reason <- function(x, not_rated_value = NA_real_) {
+  cn <- colnames(x)[grepl("^reason_", colnames(x))]
+  for (n in cn) {
+    x <- cbind(x, data.table::rbindlist(lapply(strsplit(x[[n]], "; "), function(x) {
+        x3 <- do.call('rbind', strsplit(gsub("(.*) \"(.*)\" \\((.*)\\)", "\\1;\\2;\\3", x), ";"))
+        if (ncol(x3) == 3) {
+          x4 <- as.data.frame(as.list(x3[, 3]))
+          colnames(x4) <- paste0("rating_", n , "_", .cleanRuleColumnName(x3[, 1]))
+        } else {
+          x4 <- data.frame(NA_real_) # numeric ratings are always NA if not rated, class "Not rated"
+          colnames(x4) <- paste0("rating_", n , "_Notrated")
+        }
+        x4
+    }), fill = TRUE))
+  }
+  x
 }
