@@ -66,6 +66,8 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   if(db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo')) {
     # CONUS
     .crs <- 'EPSG:5070'
+    .grid <- terra::rast(nrows = 96754, ncols = 153999, crs = .crs, 
+                         extent = terra::ext(-2356155, 2263815, 270015, 3172635))
   } else if(db == 'pr_ssurgo') {
     # PR
     .crs <- 'EPSG:32161'
@@ -224,6 +226,11 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   attr(r, 'layer name') <- var.spec$desc
 
   input_class <- attr(wcs.geom, '.input_class')
+  
+  if (db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo')) {
+    # TODO: HI, PR, ISSR800
+    terra::ext(r) <- terra::align(terra::ext(r), .grid)
+  }
   
   if ((!is.null(input_class) && input_class == "raster") ||
       getOption('soilDB.return_Spatial', default = FALSE)) {
