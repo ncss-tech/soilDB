@@ -18,6 +18,7 @@
     } else if (file.exists(dsn)) {
       if (requireNamespace("RSQLite")) {
         con <- try(RSQLite::dbConnect(RSQLite::SQLite(), dsn))
+        on.exit(DBI::dbDisconnect(con), add = TRUE)
         if (!inherits(con, 'try-error')) {
           return(RSQLite::dbGetQuery(con, x))
         } else {

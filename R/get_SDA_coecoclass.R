@@ -15,7 +15,7 @@
 #' @param not_rated_value Default: `"Not assigned"`
 #' @param miscellaneous_areas logical. Include miscellaneous areas (non-soil components)?
 #' @param include_minors logical. Include minor components? Default: `TRUE`.
-#' @param threshold integer. Default: `0`. Minimum component percentage (RV) for inclusion. Used only for `method="all"`.
+#' @param threshold integer. Default: `0`. Minimum combined component percentage (RV) for inclusion of a mapunit's ecological site in wide-format tabular sumamry. Used only for `method="all"`.
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @export 
 get_SDA_coecoclass <- function(method = "None",
@@ -146,7 +146,7 @@ get_SDA_coecoclass <- function(method = "None",
   res2
 }
 
-get_SDA_coecoclass_agg <- function(areasymbols = NULL,
+.get_SDA_coecoclass_agg <- function(areasymbols = NULL,
                                     mukeys = NULL,
                                     ecoclasstypename = NULL,
                                     ecoclassref = "Ecological Site Description Database",
@@ -162,37 +162,39 @@ get_SDA_coecoclass_agg <- function(areasymbols = NULL,
   
   if (!is.null(areasymbols)) {
     res0 <- do.call('rbind', lapply(areasymbols, function(x) {
-      soilDB::SDA_query(paste0(
+      .SSURGO_query(paste0(
         "SELECT DISTINCT mukey, nationalmusym, muname FROM mapunit
         INNER JOIN legend ON legend.lkey = mapunit.lkey
         WHERE areasymbol = '", x, "'"
       ))
     }))
-    idx <- soilDB::makeChunks(res0$mukey, 1000)
+    idx <- makeChunks(res0$mukey, 1000)
     l <- split(res0$mukey, idx)
   } else {
-    idx <- soilDB::makeChunks(mukeys, 1000)
+    idx <- makeChunks(mukeys, 1000)
     l <- split(mukeys, idx)
     res0 <- do.call('rbind', lapply(l, function(x) {
-      soilDB::SDA_query(paste0(
+      .SSURGO_query(paste0(
         "SELECT DISTINCT mukey, nationalmusym, muname FROM mapunit
         INNER JOIN legend ON legend.lkey = mapunit.lkey
         WHERE mukey IN ", format_SQL_in_statement(x), ""
       ))
     }))
-    idx <- soilDB::makeChunks(res0$mukey, 1000)
+    idx <- makeChunks(res0$mukey, 1000)
     l <- split(res0$mukey, idx)
   }
   
   res1 <- do.call('rbind', lapply(l, function(x) {
-    soilDB::get_SDA_coecoclass(mukeys = x, 
-                               method = "None",
-                               ecoclasstypename = ecoclasstypename,
-                               ecoclassref = ecoclassref,
-                               not_rated_value = not_rated_value,
-                               miscellaneous_areas = miscellaneous_areas,
-                               include_minors = include_minors,
-                               dsn = dsn)
+    get_SDA_coecoclass(
+      mukeys = x,
+      method = "None",
+      ecoclasstypename = ecoclasstypename,
+      ecoclassref = ecoclassref,
+      not_rated_value = not_rated_value,
+      miscellaneous_areas = miscellaneous_areas,
+      include_minors = include_minors,
+      dsn = dsn
+    )
   }))
   
   res1 <- data.table::data.table(res1)[, .SD[order(comppct_r, decreasing = TRUE), ], by = "mukey"]
@@ -201,6 +203,7 @@ get_SDA_coecoclass_agg <- function(areasymbols = NULL,
   # remove FSG etc. some components have no ES assigned, but have other eco class
   idx <- !res2$ecoclassref %in% c(not_rated_value, "Not assigned", "Ecological Site Description Database") &
     !res2$ecoclasstypename %in% c(not_rated_value, "Not assigned", "NRCS Rangeland Site", "NRCS Forestland Site")
+  
   res2$ecoclassid[idx] <- not_rated_value
   res2$ecoclassref[idx] <- not_rated_value
   res2$ecoclassname[idx] <- not_rated_value
@@ -227,9 +230,9 @@ get_SDA_coecoclass_agg <- function(areasymbols = NULL,
   res3 <- res3[nchar(res3$compnames) > 0,]
   
   # could do up to max_sites, but generally cut to some minimum condition percentage `threshold`
-  max_sites <- max(res3[, .N, by = "mukey"]$N)
+  max_sites <- suppressWarnings(max(res3[, .N, by = "mukey"]$N))
   res3 <- res3[res3$condpct_r >= threshold, ]
-  max_sites_pruned <- max(res3[, .N, by = "mukey"]$N)
+  max_sites_pruned <- suppressWarnings(max(res3[, .N, by = "mukey"]$N))
   res3$condpct_r <- as.integer(res3$condpct_r)
   
   if (max_sites > max_sites_pruned) {
@@ -238,9 +241,15 @@ get_SDA_coecoclass_agg <- function(areasymbols = NULL,
             threshold, "%) per mukey: ", max_sites_pruned)
   }
   
+  if (!is.finite(max_sites_pruned)) {
+    sdx <- 1
+  } else {
+    sdx <- seq(max_sites_pruned)
+  }
+  
   .coecoclass_long_to_wide <- function(x, group) {
     res <- data.frame(grpid = group)
-    for (i in 1:max_sites_pruned) {
+    for (i in sdx) {
       if (i > nrow(x)) {
         d <- data.frame(
           siten = NA_character_,
@@ -281,8 +290,7 @@ get_SDA_coecoclass_agg <- function(areasymbols = NULL,
     res
   }
   
-  res <- merge(data.table::data.table(res0), res3, 
-               by = "mukey", all.x = TRUE)[, 
+  res <- merge(data.table::data.table(res0), res3, by = "mukey", all.x = TRUE)[, 
           .coecoclass_long_to_wide(.SD, .GRP), 
           by = c("mukey", "muname", "nationalmusym"), ]
   

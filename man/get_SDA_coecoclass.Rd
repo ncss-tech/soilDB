@@ -40,7 +40,7 @@ get_SDA_coecoclass(
 
 \item{include_minors}{logical. Include minor components? Default: \code{TRUE}.}
 
-\item{threshold}{integer. Default: \code{0}. Minimum component percentage (RV) for inclusion. Used only for \code{method="all"}.}
+\item{threshold}{integer. Default: \code{0}. Minimum combined component percentage (RV) for inclusion of a mapunit's ecological site in wide-format tabular sumamry. Used only for \code{method="all"}.}
 
 \item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL} (default) use Soil Data Access API via \code{SDA_query()}.}
 }
