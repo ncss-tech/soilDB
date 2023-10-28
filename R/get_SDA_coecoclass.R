@@ -13,8 +13,9 @@
 #' @param ecoclasstypename If `NULL` no constraint on `ecoclasstypename` is used in the query.
 #' @param ecoclassref Default: `"Ecological Site Description Database"`. If `NULL` no constraint on `ecoclassref` is used in the query.
 #' @param not_rated_value Default: `"Not assigned"`
-#' @param include_minors logical. Include minor components? Default: `TRUE`.
 #' @param miscellaneous_areas logical. Include miscellaneous areas (non-soil components)?
+#' @param include_minors logical. Include minor components? Default: `TRUE`.
+#' @param threshold integer. Default: `0`. Minimum component percentage (RV) for inclusion. Used only for `method="all"`.
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @export 
 get_SDA_coecoclass <- function(method = "None",
@@ -25,16 +26,18 @@ get_SDA_coecoclass <- function(method = "None",
                                not_rated_value = "Not assigned",
                                miscellaneous_areas = TRUE,
                                include_minors = TRUE,
+                               threshold = 0,
                                dsn = NULL) {
+  
   method <- match.arg(toupper(method), c("NONE", "ALL", "DOMINANT COMPONENT", "DOMINANT CONDITION"))
   
   if (method == "ALL") {
     if (!is.null(WHERE)) {
-      stop("`method='all'` does not support custom `WHERE` clause", call. = FALSE)
+      stop("`method='all'` does not support custom `WHERE` clauses", call. = FALSE)
     }
     
     if (isTRUE(query_string)) {
-      stop("`method='all'` does not support custom `query_string=TRUE`", call. = FALSE)
+      stop("`method='all'` does not support `query_string=TRUE`", call. = FALSE)
     } 
     
     return(.get_SDA_coecoclass_agg(areasymbols = areasymbols, 
@@ -44,6 +47,7 @@ get_SDA_coecoclass <- function(method = "None",
                                    not_rated_value = not_rated_value,
                                    miscellaneous_areas = miscellaneous_areas,
                                    include_minors = include_minors,
+                                   threshold = threshold,
                                    dsn = dsn))
   }
   
@@ -142,7 +146,7 @@ get_SDA_coecoclass <- function(method = "None",
   res2
 }
 
-.get_SDA_coecoclass_agg <- function(areasymbols = NULL,
+get_SDA_coecoclass_agg <- function(areasymbols = NULL,
                                     mukeys = NULL,
                                     ecoclasstypename = NULL,
                                     ecoclassref = "Ecological Site Description Database",
@@ -182,6 +186,7 @@ get_SDA_coecoclass <- function(method = "None",
   
   res1 <- do.call('rbind', lapply(l, function(x) {
     soilDB::get_SDA_coecoclass(mukeys = x, 
+                               method = "None",
                                ecoclasstypename = ecoclasstypename,
                                ecoclassref = ecoclassref,
                                not_rated_value = not_rated_value,
