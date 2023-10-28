@@ -129,7 +129,7 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   }
 
   # base URL + parameters
-  base.url <- 'http://soilmap2-1.lawr.ucdavis.edu/cgi-bin/mapserv?'
+  base.url <- 'http://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?'
   service.url <- 'map=/soilmap2/website/wcs/mukey.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage'
 
   # unpack BBOX for WCS 2.0
@@ -172,6 +172,8 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
     silent = TRUE
   )
 
+  if (!quiet) cat("\n")
+  
   if (inherits(dl.try, 'try-error')) {
    message('bad WCS request')
    return(dl.try)
@@ -185,20 +187,34 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
     stop('result is not a valid GeoTIFF', call. = FALSE)
   }
   
-  # warn about requested v.s. received grid dimensions
-  if (round((ymax2 - ymin) / res) != nrow(r)) 
-    warning("expected ", (ymax2 - ymin) / res, " rows, received ", nrow(r), "; Y resolution may be affected. Try requesting a smaller extent.", call. = FALSE)
-  if (round((xmax2 - xmin) / res) != ncol(r)) 
-    warning("expected ", (xmax2 - xmin) / res, " columns, received ", ncol(r), "; X resolution may be affected. Try requesting a smaller extent.", call. = FALSE)
+  test_y <- round((ymax2 - ymin) / res) != nrow(r)
+  test_x <- round((xmax2 - xmin) / res) != ncol(r)
   
-  ## TODO: is this needed?
+  # fix requested vs. received grid dimensions
+  if (test_x || test_y) {
+    if (test_x)
+      message("Request partially outside boundary of coverage source data: expected ", 
+              (xmax2 - xmin) / res, " columns, received ", ncol(r))
+    if (test_y)
+      message("Request partially outside boundary of coverage source data: expected ", 
+              (ymax2 - ymin) / res, " rows, received ", nrow(r))
+    
+    # fix extent of result due to rounding error/incomplete pixels at edges of map
+    rex <- terra::ext(r) 
+    terra::ext(r) <- terra::ext(c(rex[1], rex[1] + ncol(r) * res, rex[3], rex[3] + nrow(r) * res))
+    
+    # extend to input extent
+    r <- terra::extend(r, terra::ext(c(xmin, xmax2, ymin, ymax2)))
+  }
+  
+  ## TODO: is this needed? (yes, still needed; AGB 2023/09/30)
   ## '0' is returned by the WCS sometimes -- never valid for MUKEY
   r <- terra::classify(r, matrix(c(0,  var.spec$na,
+                                   NA, var.spec$na,
                                    NaN, var.spec$na), ncol = 2, byrow = TRUE), include.lowest = TRUE)
 
-
   # load all values into memory
-  terra::values(r) <- terra::values(r)
+  terra::set.values(r)
   
   # specification of NODATA
   # this doesn't make it through the WCS
@@ -209,16 +225,11 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   # remove tempfile 
   unlink(tf)
 
-  ## TODO: use terra::as.factor()
-  # build RAT
-  # NB: unique() takes na.rm argument on terra >1.5-21 <https://github.com/rspatial/terra/issues/561>
-  uids <- na.omit(terra::unique(r)[[1]])  
-  rat <- data.frame(ID = uids, 
-                    mukey = uids)
-  levels(r)[[1]] <- rat
-  
   # set layer name in object
   names(r) <- 'mukey'
+  
+  # build RAT
+  r <- terra::as.factor(r)
   
   # and as an attribute
   attr(r, 'layer name') <- var.spec$desc

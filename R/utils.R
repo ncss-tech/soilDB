@@ -989,3 +989,366 @@
 
   return(df)
   }
+
+
+
+
+.copm_prep2 <- function(x, key = NULL) {
+  
+  idx_key   <- grep(key, names(x))
+  idx_pmkey <- grep("pmgrpkey", names(x))
+  nm_pmkey  <- names(x)[idx_pmkey]
+  names(x)[c(idx_key, idx_pmkey)] <- c("key", "pmgrpkey")
+  
+  vars <- c("key", "pmgrpkey", "pmorder", "pmkind")
+  
+  # pmk1 <- pmk
+  # pmk1 <- pmk1[with(pmk1, order(key, pmgrpkey, pmorder)), ]
+  # pmk1 <- aggregate(pmkind ~ key, data = pmk1, FUN = function(x) paste0(x, collapse = " over "))
+  # 
+  # test <- {
+  #   strsplit(pmk1$pmkind, " over ") ->.;
+  #   lapply(., function(x) {
+  #     x[i = cumsum(rle(x)$lengths)] ->.;
+  #     paste(., collapse = " over ")
+  #   }) ->.;
+  #   unlist(.)
+  # }
+  # pmk1$pmkind <- test
+  
+  
+  pm    <- data.table::as.data.table(x); rm(x)
+  pm    <- pm[order(pm$key, pm$pmgrpkey, pm$pmorder)]
+  
+  pm$id_k <- paste(pm$key, pm$pmkind)
+  pm$id_o <- paste(pm$key, pm$pmorigin)
+  
+  
+  # pmkind
+  # remove duplicate pmkind by cokey
+  pm_k <- {
+    vars <- c("key", "pmkind", "id_k")
+    # ..vars = NULL
+    pm_k <- pm[!is.na(pm$pmkind), vars, with = FALSE]
+    idx <- cumsum(rle(pm_k$id_k)$lengths)
+    pm_k[idx, ]
+  }
+  .      = NULL
+  pmkind = NULL
+  pm_k <- pm_k[, .(pmkind   = paste0(pmkind,   collapse = " over ")), by = .(key)]
+  
+  
+  # pmorigin
+  pmorigin = NULL
+  pm_o <- {
+    vars <- c("key", "pmorigin", "id_o")
+    # ..vars = NULL
+    pm_o <- pm[!is.na(pm$pmorigin), vars, with = FALSE]
+    idx  <- cumsum(rle(pm_o$id_o)$lengths)
+    pm_o[idx, ]
+  }
+  pm_o <- pm_o[, .(pmorigin = paste0(pmorigin, collapse = " over ")), by = .(key)]
+  
+  
+  # merge
+  pm <- as.data.frame(merge(pm_k, pm_o, by = "key", all = TRUE, sort = FALSE))
+  
+  names(pm)[1] <- c(key) 
+  
+  return(pm)
+}
+
+
+
+.cogmd_prep2 <- function(data, key = "cokey") {
+  
+  idx_key   <- grep(key, names(data))
+  names(data)[c(idx_key)] <- c("key")
+  
+  
+  # find sites with overlapping landforms ----
+  n_bot = NULL
+  n_mis_geomfeatid = NULL
+  geomfeatid = NULL
+  .N = NULL
+  N = NULL
+  
+  test  <- data.table::as.data.table(data)[
+    , .(
+      # n_bot = sum(! existsonfeat %in% geomfeatid, na.rm = TRUE),
+      n_bot = sum(! match(existsonfeat, geomfeatid, nomatch = 0, incomparables = NA_integer_) > 0, na.rm = TRUE),
+      n_geomfeatid  = sum(!is.na(geomfeatid)),
+      n_existonfeat = sum(!is.na(existsonfeat)),
+      .N,
+      n_mis_geomfeatid = sum(is.na(geomfeatid))
+    ), 
+    by = key
+  ]
+  data <- merge(test, data, by = "key", all.y = TRUE)
+  
+  
+  # determine row direction ----
+  # ordered
+  data <- within(data, {
+    existsonfeat = ifelse(geomfeatid == existsonfeat, NA, existsonfeat)
+    existsonfeat = ifelse(n_bot == N,                 NA, existsonfeat)
+    
+    row_dir    = ifelse(geomfeatid <  existsonfeat, "top2bot", "bot2top")
+    row_dir    = ifelse(
+      geomfeatid == existsonfeat + 1 | geomfeatid == existsonfeat - 1,
+      row_dir,
+      "chaos"
+    )
+    row_dir    = ifelse(n_bot == N | is.na(existsonfeat), "missing", row_dir)
+    row_dir = factor(row_dir, levels = c("top2bot", "bot2top", "chaos", "missing"))
+  })
+  
+  
+  # find chaos within a component ----
+  tb <- as.data.frame.matrix(with(data, table(key, row_dir))) 
+  chaos <- cbind(within(tb, {
+      tot   = rowSums(cbind(top2bot > 0, bot2top > 0, chaos > 0))
+      co_dir = ifelse(tot > 1, "chaos", "ordered")
+    }), key = row.names(tb))
+  data <- merge(data, chaos, by = "key", all.x = TRUE, sort = FALSE)
+  data <- within(data, {
+    co_dir = ifelse(N == n_bot | N == n_mis_geomfeatid | N == missing, "missing", co_dir)
+  })
+  
+  
+  # replace NA row direction, where the component direction == "ordered" ----
+  vars <- c("top2bot", "bot2top", "chaos")
+  # ..vars = NULL
+  idx  <- which(data$row_dir == "missing" & data$co_dir == "ordered")
+  ordered_mis  <- names(data[, vars, with = FALSE])[max.col(data[idx, vars, with = FALSE])]
+  data[idx, "row_dir"] <- ordered_mis
+  
+  # subset(data, key == "22230267")
+  
+  
+  # subset and sort different ordering conventions ----
+  # top2bot & NA
+  top2bot <- {
+    subset(data, row_dir  == "top2bot" & co_dir == "ordered") ->.;
+    .[order(.$key,   .$geomfeatid,   .$existsonfeat), ]
+  }
+  # bot2top
+  bot2top <- {
+    subset(data, row_dir == "bot2top" & co_dir == "ordered") ->.;
+    .[order(.$key, - .$geomfeatid, - .$existsonfeat), ]
+  }
+  # chaos and missing ordered
+  chaos2 <- {
+    subset(data, co_dir %in% c("chaos", "missing") | row_dir == "chaos") ->.;
+    .[order(.$key,   .$geomfeatid,   .$existsonfeat), ]
+  }
+  
+  
+  # recombine
+  data <- rbind(top2bot, bot2top, chaos2)
+  rm(top2bot, bot2top, chaos2)
+  
+  
+  # find N tops ----
+  # test  <- data.table::as.data.table(data)[
+  #   , .(
+  #     # n_bot = sum(! existsonfeat %in% geomfeatid, na.rm = TRUE),
+  #     n_bot = sum(! match(existsonfeat, geomfeatid, nomatch = 0, incomparables = NA_integer_) > 0, na.rm = TRUE),
+  #     
+  #     .N,
+  #     n_mis_geomfeatid = sum(is.na(geomfeatid))
+  #   ), 
+  #   by = key
+  # ]
+  # data <- merge(test, data, by = "key", all.y = TRUE)
+  
+  
+  # flatten duplicated ids ----
+  # create unique key
+  data$key2 <- with(data, paste(key, geomfeatid, existsonfeat))
+  
+  ## find duplicates ----
+  idx <- which(duplicated(data$key2))
+  
+  if (length(idx) > 0) {
+    tb  <- table(data$key2)
+    dups <- which(data$key2 %in% names(tb)[tb > 1])
+    
+    if (length(dups) > 0) {
+    nodups <- {
+      len <- {rle(data$key2[dups]) -> .; .$lengths}
+      len <- cumsum(len) - len + 1
+    }
+    nodups <- dups[nodups]
+    } else nodups <- 1:nrow(data)
+    
+    # subset duplicates
+    vars <- c("key2", "landform", "mntn", "hill","trce", "flats", "shapeacross", "shapedown", "slopeshape", "hillslopeprof")
+    # ..vars = NULL
+    data_sub <- data[dups, vars, with = FALSE]
+  
+    # flatten duplicates
+    data_sub <- data.table::as.data.table(.flatten_gmd(as.data.frame(data_sub), key = "key2"))
+    
+    # replace duplicates
+    data[nodups, vars] <- data_sub
+    
+    # remove duplicates
+    data <- data[-idx, ]
+  }
+  data$key2 <- NULL
+  
+  # subset different conventions ----
+  data_comb <- subset(data, n_bot > 1 & co_dir != "missing")
+  data_mis  <- subset(data, n_bot > 1 & co_dir == "missing")
+  data_simp <- subset(data, n_bot < 2)
+  
+  
+  vars <- c("key", "landform", "mntn", "hill","trce", "flats", "shapeacross", "shapedown", "slopeshape", "hillslopeprof")
+  # ..vars = NULL
+  data_mis <- data.table::as.data.table(.flatten_gmd(as.data.frame(data_mis[, vars, with = FALSE]), sep = " and "))
+  data_simp <- data.table::as.data.table(.flatten_gmd(as.data.frame(data_simp[, vars, with = FALSE]), sep = " on "))
+  
+  
+  # iterate over sites with unsorted overlapping landforms ----
+  if (nrow(data_comb) > 0) {
+  data_comb_l <- split(data_comb, data_comb$key)
+  data_comb_l <- lapply(data_comb_l, function(x) {
+    
+    # replace landscape existsonfeat with NA
+    x$existsonfeat <- sapply(x$existsonfeat, function(y) {
+      ifelse(any(y == x$geomfeatid), y, NA)
+    })
+    
+    
+    # find bottom landform
+    bot <- subset(x, is.na(existsonfeat))
+    
+    
+    # iterate over bottoms
+    len <- nrow(x)
+    sep <- ifelse(x$co_dir == "ordered", " on ", " and ")
+    
+    bot <- split(bot, bot$geomfeatid)
+    x_sorted <- lapply(bot, function(y) {
+      rank <- integer(len)
+      rank[1] <- y$geomfeatid[1]
+      for (i in 1:len) {
+        idx <- x$geomfeatid[which(x$existsonfeat == rank[i])]
+        if (length(idx) > 0) rank[i + 1] = idx
+      }
+      rank <- rank[which(rank > 0)]
+      rank <- which(x$geomfeatid %in% rank)
+      vars <- c("key", "landform", "mntn", "hill","trce", "flats", "shapeacross", "shapedown", "slopeshape", "hillslopeprof")
+      # ..vars = NULL
+      x2 <- x[rank, vars, with = FALSE]
+      suppressMessages(y <- .flatten_gmd(x2, sep = sep, SORT = FALSE)) 
+      return(y)
+    })
+    x_sorted <- do.call("rbind", x_sorted)
+    
+    return(x_sorted)
+  })
+  data_comb_l3 <- do.call("rbind", data_comb_l)
+  data_comb <- data.table::as.data.table(.flatten_gmd(as.data.frame(data_comb_l3), key = "key") )
+  } else data_comb <- data_comb[, vars, with = FALSE]
+  
+  data <- as.data.frame(rbind(data_simp, data_mis, data_comb))
+  names(data)[names(data) == "key"] <- key
+  
+  
+  # # uncode
+  # data("metadata", package = "soilDB")
+  # vars <- c("mntn", "hill", "trce", "flats")
+  # idx <- names(data) %in% vars
+  # names(data)[idx] <- paste0("geompos", vars)
+  # idx <- names(data) %in% metadata$ColumnPhysicalName
+  # data
+  
+  
+  return(data)
+}
+
+
+# vars <- c("geomfeatid", "existsonfeat")
+# idx <- unlist(sapply(1:nrow(test), function(i) {
+#    unname(unlist(test[i, vars, drop = TRUE]))
+#   },
+#   simplify = FALSE
+# ))
+# idx <- idx[!duplicated(idx) & !is.na(idx)]
+
+
+.format_slopeshape <- function(dat) {
+  
+  shapeacross = NA
+  shapedown   = NA
+  
+  dat <- within(dat, {
+    ssa = NA # slope shape across
+    ssd = NA # slope shape down
+    slopeshape = NA
+    
+    ssa = gsub("Concave", "C", shapeacross)
+    ssa = gsub("Linear",  "L", ssa)
+    ssa = gsub("Convex",  "V", ssa)
+    
+    ssd = gsub("Concave", "C", shapedown)
+    ssd = gsub("Linear",  "L", ssd)
+    ssd = gsub("Convex",  "V", ssd)
+    
+    slopeshape = paste0(ssd, ssa, sep = "")
+    slopeshape[slopeshape %in% c("NANA", "")] = NA
+  })
+  dat[c("ssa", "ssd")] <- NULL
+  
+  # ss_vars <- c("CC", "CV", "CL", "LC", "LL", "LV", "VL", "VC", "VV")
+  # if (all(dat$slopeshape[!is.na(dat$slopeshape)] %in% ss_vars)) {
+  #   dat$slopeshape <- factor(dat$slopeshape, levels = ss_vars)
+  #   dat$slopeshape <- droplevels(dat$slopeshape)
+  # }
+  return(dat)
+}
+
+
+.flatten_gmd <- function(data, key = "key", table = NULL, sep = " and ", SORT = TRUE) {
+  
+  idx_key   <- grep(key, names(data))
+  if (length(idx_key) != 1L) stop("the key/id argument does not match any of the column names in the data.frame")
+  names(data)[c(idx_key)] <- c("key")
+  
+  
+  tb <- table(data$key)
+  idx <- names(tb[tb > 1])
+  idx <- data$key %in% idx
+  
+  test <- sum(idx, na.rm = TRUE)
+  if (test > 0) {
+    message(test, " ", key, " values were found in the ", table, " table that contain multiple entries, the resulting values will be flattened/combined into 1 record per ", key, " and separated with 'and'")
+    
+    data_sub <- data.table::as.data.table(data[idx, ])
+    .SD = NULL
+    data_sub <- as.data.frame(data_sub[
+      ,
+      lapply(.SD, function(x) {
+        if (SORT) {paste0(sort(unique(x[!is.na(x)])), collapse = sep)
+        } else    {paste0(     unique(x[!is.na(x)]),  collapse = sep)}
+      }),
+      by = key
+    ])
+    
+    data <- rbind(data[!idx, ], data_sub)
+    
+  }
+  
+  # replace "" values with NA
+  idx <- 1:ncol(data)
+  data[idx] <- lapply(data, function(x) ifelse(x == "", NA, x))
+  
+  
+  names(data)[idx_key] <- key
+  
+  return(data)
+}
+
+

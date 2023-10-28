@@ -15,9 +15,7 @@ parseWebReport(url, args, index = 1)
 list of tables}
 }
 \value{
-A \code{data.frame} object in the case of a single integer passed to
-\code{index}, a \code{list} object in the case of an integer vector or NULL
-passed to \code{index}.
+A \code{data.frame} object in the case of a single integer \code{index}, otherwise a \code{list}
 }
 \description{
 Parse contents of a web report, based on supplied arguments.
@@ -28,13 +26,6 @@ associated with any given web report.
 }
 \note{
 Most web reports are for internal use only.
-}
-\examples{
-
-\donttest{
-# pending
-}
-
 }
 \author{
 D.E. Beaudette and S.M. Roecker

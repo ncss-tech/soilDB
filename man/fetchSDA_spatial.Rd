@@ -17,13 +17,13 @@ fetchSDA_spatial(
 )
 }
 \arguments{
-\item{x}{A vector of map unit keys (\code{mukey}) or national map unit symbols (\code{nmusym}) for \code{mupolygon} geometry OR legend keys (\code{lkey}) or soil survey area symbols (\code{areasymbol}) for \code{sapolygon} geometry}
+\item{x}{A vector of map unit keys (\code{mukey}) or national map unit symbols (\code{nmusym}) for \code{mupolygon} geometry OR legend keys (\code{lkey}) or soil survey area symbols (\code{areasymbol}) for \code{sapolygon} geometry. If \code{geom.src="mlrapolygon"} then \code{x} refers to \code{MLRARSYM} (major land resource area symbols).}
 
 \item{by.col}{Column name containing map unit identifier \code{"mukey"}, \code{"nmusym"}/\code{"nationalmusym"} for \code{geom.src} \code{mupolygon} OR \code{"areasymbol"}, \code{"areaname"}, \code{"mlraoffice"}, \code{"mouagncyresp"} for \code{geom.src} \code{sapolygon}; default is determined by \code{is.numeric(x)} \code{TRUE} for \code{mukey} or \code{lkey} and \code{nationalmusym} or \code{areasymbol} otherwise.}
 
-\item{method}{geometry result type: \code{"feature"} returns polygons, \code{"bbox"} returns the bounding box of each polygon (via \code{STEnvelope()}), and \code{"point"} returns a single point (via \code{STPointOnSurface()}) within each polygon.}
+\item{method}{geometry result type: \code{"feature"} returns polygons, \code{"bbox"} returns the bounding box of each polygon (via \code{STEnvelope()}), \code{"point"} returns a single point (via \code{STPointOnSurface()}) within each polygon, \code{"extent"} returns an aggregate bounding box (the extent of all polygons, \code{geometry::EnvelopeAggregate()}) ), \code{"convexhull"} (\code{geometry::ConvexHullAggregate()}) returns the aggregate convex hull around all polygons, \code{"union"} (\code{geometry::UnionAggregate()}) and \code{"collection"} (\code{geometry::CollectionAggregate()}) return a \code{MULTIPOLYGON} or a \code{GEOMETRYCOLLECTION}, respectively, for each \code{mukey}, \code{nationalmusym}, or \code{areasymbol }. In the case of the latter four aggregation methods, the groups for aggregation depend on \code{by.col} (default by \code{"mukey"}).}
 
-\item{geom.src}{Either \code{mupolygon} (map unit polygons) or \code{sapolygon} (soil survey area boundary polygons)}
+\item{geom.src}{Either \code{mupolygon} (map unit polygons), \code{sapolygon} (soil survey area boundary polygons), or \code{mlrapolygon} (major land resource area boundary polygons)}
 
 \item{db}{Default: \code{"SSURGO"}. When \code{geom.src} is \code{mupolygon}, use STATSGO polygon geometry instead of SSURGO by setting \code{db = "STATSGO"}}
 
@@ -49,10 +49,17 @@ This function automatically "chunks" the input vector (using \code{makeChunks()}
 Querying regions with complex mapping may require smaller \code{chunk.size}. Numerically adjacent IDs in the input vector may share common qualities (say, all from same soil survey area or region) which could cause specific chunks to perform "poorly" (slow or error) no matter what the chunk size is. Shuffling the order of the inputs using \code{sample()} may help to eliminate problems related to this, depending on how you obtained your set of MUKEY/nationalmusym to query. One could feasibly use \code{muacres} as a heuristic to adjust for total acreage within chunks.
 
 Note that STATSGO data are fetched where \code{CLIPAREASYMBOL = 'US'} to avoid duplicating state and national subsets of the geometry.
+
+A prototype interface, \code{geom.src="mlrapolygon"}, is provided for obtaining Major Land Resource Area (MLRA) polygon
+boundaries. When using this geometry source \code{x} is a vector of \code{MLRARSYM} (MLRA Symbols). The geometry source is
+the MLRA Geographic Database v5.2 (2022) which is not (yet) part of Soil Data Access. Instead of SDA, GDAL utilities
+are used to read a zipped ESRI Shapefile from a remote URL: \url{https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip}.
+Therefore, most additional \code{fetchSDA_spatial()} arguments are \emph{not} currently supported for the MLRA geometry source.
+In the future a \code{mlrapolygon} table may be added to SDA (analogous to  \code{mupolygon} and \code{sapolygon}),
+and the function will be updated accordingly at that time.
 }
 \examples{
 \dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
 \donttest{
  
     # get spatial data for a single mukey
@@ -77,6 +84,7 @@ Note that STATSGO data are fetched where \code{CLIPAREASYMBOL = 'US'} to avoid d
     # demo adding a field (`muname`) to attribute table of result
     head(try(fetchSDA_spatial(x = "2x8l5", by="nmusym", add.fields="muname")))
 }
+\dontshow{\}) # examplesIf}
 }
 \author{
 Andrew G. Brown, Dylan E. Beaudette
