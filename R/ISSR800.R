@@ -36,6 +36,10 @@
 #' @export
 ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   
+  if (!requireNamespace("terra")) {
+    stop("package 'terra' is required", call. = FALSE)
+  }
+  
   # sanity check: aoi specification
   if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
     stop('invalid `aoi` specification', call. = FALSE)

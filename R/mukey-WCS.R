@@ -62,6 +62,10 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   # sanity check: db name
   db <- match.arg(tolower(db[1]), choices = c('gnatsgo', 'gssurgo', 'rss', 'statsgo', 'pr_ssurgo', 'hi_ssurgo'))
   
+  if (!requireNamespace("terra")) {
+    stop("package 'terra' is required", call. = FALSE)
+  }
+  
   # lookup native CRS
   if (db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo')) {
     # CONUS
