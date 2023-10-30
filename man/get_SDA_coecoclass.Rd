@@ -15,11 +15,12 @@ get_SDA_coecoclass(
   not_rated_value = "Not assigned",
   miscellaneous_areas = TRUE,
   include_minors = TRUE,
+  threshold = 0,
   dsn = NULL
 )
 }
 \arguments{
-\item{method}{aggregation method. One of: "Dominant Component", "Dominant Condition", "None". If "None" is selected one row will be returned per component, otherwise one row will be returned per map unit.}
+\item{method}{aggregation method. One of: \code{"Dominant Component"}, \code{"Dominant Condition"}, \code{"All"} or \code{"None"} (default). If \code{method="all"} multiple numbered columns represent site composition within each map unit e.g. \code{site1...}, \code{site2...}. If \code{method="none"} is selected one row will be returned per \emph{component}; in all other cases one row will be returned per \emph{map unit}.}
 
 \item{areasymbols}{vector of soil survey area symbols}
 
@@ -39,13 +40,17 @@ get_SDA_coecoclass(
 
 \item{include_minors}{logical. Include minor components? Default: \code{TRUE}.}
 
+\item{threshold}{integer. Default: \code{0}. Minimum combined component percentage (RV) for inclusion of a mapunit's ecological site in wide-format tabular sumamry. Used only for \code{method="all"}.}
+
 \item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL} (default) use Soil Data Access API via \code{SDA_query()}.}
 }
 \description{
 Get mapunit ecological sites from Soil Data Access
 }
 \details{
-When \code{method="Dominant Condition"} an additional field \code{ecoclasspct_r} is returned in the result with the sum of \code{comppct_r} that have the dominant condition \code{ecoclassid}. The component with the greatest \code{comppct_r} is returned for the \code{component} and \code{coecosite} level information.
+When \code{method="Dominant Condition"} an additional field \code{ecoclasspct_r} is returned in the result
+with the sum of \code{comppct_r} that have the dominant condition \code{ecoclassid}. The component with the greatest
+\code{comppct_r} is returned for the \code{component} and \code{coecosite} level information.
 
 Note that if there are multiple \code{coecoclasskey} per \code{ecoclassid} there may be more than one record per component.
 }
