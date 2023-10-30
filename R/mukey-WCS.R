@@ -236,7 +236,6 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   input_class <- attr(wcs.geom, '.input_class')
   
   if (db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo')) {
-    # TODO: HI, PR, ISSR800
     terra::ext(r) <- terra::align(terra::ext(r), .grid)
   }
   
