@@ -63,17 +63,21 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   db <- match.arg(tolower(db[1]), choices = c('gnatsgo', 'gssurgo', 'rss', 'statsgo', 'pr_ssurgo', 'hi_ssurgo'))
   
   # lookup native CRS
-  if(db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo')) {
+  if (db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo')) {
     # CONUS
     .crs <- 'EPSG:5070'
     .grid <- terra::rast(nrows = 96754, ncols = 153999, crs = .crs, 
                          extent = terra::ext(-2356155, 2263815, 270015, 3172635))
-  } else if(db == 'pr_ssurgo') {
+  } else if (db == 'pr_ssurgo') {
     # PR
     .crs <- 'EPSG:32161'
-  } else if(db == 'hi_ssurgo') {
+    .grid <- terra::rast(nrows = 9608, ncols = 2229, crs = .crs, 
+                         extent = terra::ext(208815.704, 275685.704, 39904.225, 328144.225))
+  } else if (db == 'hi_ssurgo') {
     # HI
     .crs <- 'EPSG:6628'
+    .grid <- terra::rast(nrows = 17193, ncols = 12440, crs = .crs, 
+                         extent = terra::ext(8585.137, 381785.137, 56991.645, 572781.645))
   }
 
   # sanity check: aoi specification
