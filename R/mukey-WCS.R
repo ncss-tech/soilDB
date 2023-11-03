@@ -75,13 +75,13 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   } else if (db == 'pr_ssurgo') {
     # PR
     .crs <- 'EPSG:32161'
-    .grid <- terra::rast(nrows = 9608, ncols = 2229, crs = .crs, 
-                         extent = terra::ext(208815.704, 275685.704, 39904.225, 328144.225))
+    .grid <- terra::rast(nrows = 2229, ncols = 9608, crs = .crs, 
+                         extent = terra::ext(39905, 328145, 208815, 275685))
   } else if (db == 'hi_ssurgo') {
     # HI
     .crs <- 'EPSG:6628'
-    .grid <- terra::rast(nrows = 17193, ncols = 12440, crs = .crs, 
-                         extent = terra::ext(8585.137, 381785.137, 56991.645, 572781.645))
+    .grid <- terra::rast(nrows = 12441, ncols = 17193, crs = .crs, 
+                         extent = terra::ext(56992, 572782, 8585, 381815))
   }
 
   # sanity check: aoi specification
@@ -246,7 +246,7 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
 
   input_class <- attr(wcs.geom, '.input_class')
   
-  if (db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo')) {
+  if (db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo', 'hi_ssurgo', 'pr_ssurgo')) {
     terra::ext(r) <- terra::align(terra::ext(r), .grid)
   }
   
