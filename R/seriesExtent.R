@@ -1,3 +1,9 @@
+
+## TODO:
+# * consider using terra vs. sf for vector handling
+# * consider direct GDAL access vs. curl download:
+#    x <- vect('https://soilmap2-1.lawr.ucdavis.edu/ecoclassid-extent-cache/json/R109XY031MO.json')
+
 #' @title Retrieve Soil Series Extent Maps from SoilWeb
 #' 
 #' @description This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (`sf` object) or gridded representation of area proportion falling within 800m cells (`SpatRaster` object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (`EPSG:5070`).
