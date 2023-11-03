@@ -62,16 +62,26 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   # sanity check: db name
   db <- match.arg(tolower(db[1]), choices = c('gnatsgo', 'gssurgo', 'rss', 'statsgo', 'pr_ssurgo', 'hi_ssurgo'))
   
+  if (!requireNamespace("terra")) {
+    stop("package 'terra' is required", call. = FALSE)
+  }
+  
   # lookup native CRS
-  if(db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo')) {
+  if (db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo')) {
     # CONUS
     .crs <- 'EPSG:5070'
-  } else if(db == 'pr_ssurgo') {
+    .grid <- terra::rast(nrows = 96754, ncols = 153999, crs = .crs, 
+                         extent = terra::ext(-2356155, 2263815, 270015, 3172635))
+  } else if (db == 'pr_ssurgo') {
     # PR
     .crs <- 'EPSG:32161'
-  } else if(db == 'hi_ssurgo') {
+    .grid <- terra::rast(nrows = 2229, ncols = 9608, crs = .crs, 
+                         extent = terra::ext(39905, 328145, 208815, 275685))
+  } else if (db == 'hi_ssurgo') {
     # HI
     .crs <- 'EPSG:6628'
+    .grid <- terra::rast(nrows = 12441, ncols = 17193, crs = .crs, 
+                         extent = terra::ext(56992, 572782, 8585, 381815))
   }
 
   # sanity check: aoi specification
@@ -235,6 +245,10 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   attr(r, 'layer name') <- var.spec$desc
 
   input_class <- attr(wcs.geom, '.input_class')
+  
+  if (db %in% c('gnatsgo', 'gssurgo', 'rss', 'statsgo', 'hi_ssurgo', 'pr_ssurgo')) {
+    terra::ext(r) <- terra::align(terra::ext(r), .grid)
+  }
   
   if ((!is.null(input_class) && input_class == "raster") ||
       getOption('soilDB.return_Spatial', default = FALSE)) {

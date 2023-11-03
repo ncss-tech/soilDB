@@ -36,6 +36,10 @@
 #' @export
 ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   
+  if (!requireNamespace("terra")) {
+    stop("package 'terra' is required", call. = FALSE)
+  }
+  
   # sanity check: aoi specification
   if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
     stop('invalid `aoi` specification', call. = FALSE)
@@ -53,8 +57,13 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   # get variable specs
   var.spec <- .ISSR800.spec[[var]]
   
+  # authoritative CONUS = grid
+  .crs <- 'EPSG:5070'
+  .grid <- terra::rast(nrows = 3621, ncols = 5770, crs = .crs, 
+                       extent = terra::ext(-2357200, 2258800, 276400, 3173200))
+  
   # compute BBOX / IMG geometry in native CRS
-  wcs.geom <- .prepare_AEA_AOI(aoi, res = res, native_crs = 'EPSG:5070')
+  wcs.geom <- .prepare_AEA_AOI(aoi, res = res, native_crs = .crs)
   
   ## TODO: investigate why this is so
   # sanity check: a 1x1 pixel request to WCS results in a corrupt GeoTiff 
@@ -190,6 +199,9 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     # register categories in new order
     levels(r) <- rat[cat.idx, col.names]
   }
+  
+  # align to authoritative grid
+  terra::ext(r) <- terra::align(terra::ext(r), .grid)
   
   input_class <- attr(wcs.geom, '.input_class')
   
