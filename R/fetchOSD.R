@@ -84,6 +84,7 @@
 #'   \item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
 #'   \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
 #'   \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
+#'   \item{ecoclassid}{area cross-tabulation of ecoclassid by soil series name, derived from the current SSURGO snapshot, major components only}
 #'   \item{climate}{experimental climate summaries from PRISM stack (CONUS only)}
 #'
 #'   \item{NCCPI}{select quantiles of NCCPI and Irrigated NCCPI, derived from the current SSURGO snapshot}
@@ -380,6 +381,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	    pmkind = res$pmkind,
 	    pmorigin = res$pmorigin,
 	    mlra = res$mlra,
+	    ecoclassid = res$ecoclassid,
 	    climate.annual = annual.data,
 	    climate.monthly = monthly.data,
 	    NCCPI = res$nccpi,
