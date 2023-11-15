@@ -161,13 +161,11 @@ get_SDA_coecoclass <- function(method = "None",
   mukey <- NULL; .N <- NULL; .SD <- NULL; .GRP <- NULL;
   
   if (!is.null(areasymbols)) {
-    res0 <- do.call('rbind', lapply(areasymbols, function(x) {
-      .SSURGO_query(paste0(
+    res0 <- .SSURGO_query(paste0(
         "SELECT DISTINCT mukey, nationalmusym, muname FROM mapunit
         INNER JOIN legend ON legend.lkey = mapunit.lkey
-        WHERE areasymbol = '", x, "'"
+        WHERE areasymbol IN ", format_SQL_in_statement(areasymbols)
       ))
-    }))
     idx <- makeChunks(res0$mukey, 1000)
     l <- split(res0$mukey, idx)
   } else {
