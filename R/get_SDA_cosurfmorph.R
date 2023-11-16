@@ -20,7 +20,7 @@
 #' @details Default `table="cosurfmorphgc"` summarizes columns `geomposmntn`, `geomposhill`, `geomposflats`, and `geompostrce`.
 #'          `table="cosurfmorphhpp"` summarizes `"hillslopeprof"`,  `table="cosurfmorphss"` summarizes `shapeacross` and `shapedown`, and `table="cosurfmorphmr"` summarizes `geomicrorelief`.
 #'
-#'  Queries are a generalization of now-deprecated functions from {sharpshootR} by Dylan Beaudette: `geomPosMountainProbability()`, `geomPosHillProbability()`, `surfaceShapeProbability()`, `hillslopeProbability()`
+#'  Queries are a generalization of now-deprecated functions from sharpshootR package by Dylan Beaudette: `geomPosMountainProbability()`, `geomPosHillProbability()`, `surfaceShapeProbability()`, `hillslopeProbability()`
 #'
 #'  Similar summaries of SSURGO component surface morphometry data by series name can be found in `fetchOSD(, extended=TRUE)` or downloaded from \url{https://github.com/ncss-tech/SoilWeb-data}
 #'  Full component data including surface morphometry summaries at the "site" level can be obtained with `fetchSDA()`.

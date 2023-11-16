@@ -45,7 +45,7 @@ Get Geomorphic/Surface Morphometry Data from Soil Data Access or a local SSURGO 
 Default \code{table="cosurfmorphgc"} summarizes columns \code{geomposmntn}, \code{geomposhill}, \code{geomposflats}, and \code{geompostrce}.
 \code{table="cosurfmorphhpp"} summarizes \code{"hillslopeprof"},  \code{table="cosurfmorphss"} summarizes \code{shapeacross} and \code{shapedown}, and \code{table="cosurfmorphmr"} summarizes \code{geomicrorelief}.
 
-Queries are a generalization of now-deprecated functions from {sharpshootR} by Dylan Beaudette: \code{geomPosMountainProbability()}, \code{geomPosHillProbability()}, \code{surfaceShapeProbability()}, \code{hillslopeProbability()}
+Queries are a generalization of now-deprecated functions from sharpshootR package by Dylan Beaudette: \code{geomPosMountainProbability()}, \code{geomPosHillProbability()}, \code{surfaceShapeProbability()}, \code{hillslopeProbability()}
 
 Similar summaries of SSURGO component surface morphometry data by series name can be found in \code{fetchOSD(, extended=TRUE)} or downloaded from \url{https://github.com/ncss-tech/SoilWeb-data}
 Full component data including surface morphometry summaries at the "site" level can be obtained with \code{fetchSDA()}.
