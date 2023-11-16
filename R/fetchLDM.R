@@ -9,6 +9,7 @@
 #' @param what A single column name from tables: `lab_combine_nasis_ncss`, `lab_webmap`, `lab_site`, `lab_pedon` or `lab_area`
 #' @param bycol A single column name from `lab_layer` used for processing chunks; default: `"pedon_key"`
 #' @param tables A vector of table names; Default is `"lab_physical_properties"`, `"lab_chemical_properties"`, `"lab_calculations_including_estimates_and_default_values"`, and `"lab_rosetta_Key"`. May also include one or more of: `"lab_mir"`, `"lab_mineralogy_glass_count"`, `"lab_major_and_trace_elements_and_oxides"`, `"lab_xray_and_thermal"` but it will be necessary to select appropriate `prep_code` and `analyzed_size_frac` for your analysis (see _Details_).
+#' @param WHERE character. A custom SQL WHERE clause, which overrides `x`, `what`, and `bycol`, such as `CASE WHEN corr_name IS NOT NULL THEN LOWER(corr_name) ELSE LOWER(samp_name) END = 'musick'`
 #' @param chunk.size Number of pedons per chunk (for queries that may exceed `maxJsonLength`)
 #' @param ntries Number of tries (times to halve `chunk.size`) before returning `NULL`; default `3`
 #' @param layer_type Default: `"horizon"`, `"layer"`, and `"reporting layer"`
@@ -54,6 +55,7 @@ fetchLDM <- function(x = NULL,
              "lab_rosetta_Key"
              # "lab_mir"
              ),
+           WHERE = NULL,
            chunk.size = 1000,
            ntries = 3,
            layer_type = c("horizon","layer","reporting layer"),
@@ -122,6 +124,10 @@ fetchLDM <- function(x = NULL,
   # TODO: set up arbitrary area queries by putting area table into groups:
   #       country, state, county, mlra, ssa, npark, nforest
 
+  if (!is.null(x) && (missing(WHERE) || is.null(WHERE))) {
+    WHERE <- sprintf("LOWER(%s) IN %s", what, format_SQL_in_statement(tolower(x)))
+  } 
+  
   # get site/pedon/area information
   site_query <- paste0(
     "SELECT * FROM lab_combine_nasis_ncss
@@ -131,7 +137,7 @@ fetchLDM <- function(x = NULL,
                   lab_combine_nasis_ncss.site_key = lab_site.site_key
               LEFT JOIN lab_pedon ON
                   lab_combine_nasis_ncss.site_key = lab_pedon.site_key ", 
-            ifelse(is.null(x), "", sprintf("WHERE LOWER(%s) IN %s", what, format_SQL_in_statement(tolower(x)))))
+            ifelse(is.null(x) && is.null(WHERE), "", paste("WHERE", WHERE)))
 
   if (inherits(con, 'DBIConnection')) {
     # query con using (modified) site_query
@@ -143,10 +149,10 @@ fetchLDM <- function(x = NULL,
   } else {
     # the lab_area table allows for overlap with many different area types
     # for now we only offer the "ssa" (soil survey area) area_type 
-    site_query_ssaarea <- gsub("WHERE LOWER", 
+    site_query_ssaarea <- gsub("WHERE", 
                        "LEFT JOIN lab_area ON
                        lab_combine_nasis_ncss.ssa_key = lab_area.area_key
-                       WHERE LOWER", site_query)
+                       WHERE", site_query)
     sites <- suppressMessages(SDA_query(site_query_ssaarea))
   }
 

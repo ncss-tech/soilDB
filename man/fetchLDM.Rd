@@ -10,6 +10,7 @@ fetchLDM(
   bycol = "pedon_key",
   tables = c("lab_physical_properties", "lab_chemical_properties",
     "lab_calculations_including_estimates_and_default_values", "lab_rosetta_Key"),
+  WHERE = NULL,
   chunk.size = 1000,
   ntries = 3,
   layer_type = c("horizon", "layer", "reporting layer"),
@@ -26,6 +27,8 @@ fetchLDM(
 \item{bycol}{A single column name from \code{lab_layer} used for processing chunks; default: \code{"pedon_key"}}
 
 \item{tables}{A vector of table names; Default is \code{"lab_physical_properties"}, \code{"lab_chemical_properties"}, \code{"lab_calculations_including_estimates_and_default_values"}, and \code{"lab_rosetta_Key"}. May also include one or more of: \code{"lab_mir"}, \code{"lab_mineralogy_glass_count"}, \code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_xray_and_thermal"} but it will be necessary to select appropriate \code{prep_code} and \code{analyzed_size_frac} for your analysis (see \emph{Details}).}
+
+\item{WHERE}{character. A custom SQL WHERE clause, which overrides \code{x}, \code{what}, and \code{bycol}, such as \verb{CASE WHEN corr_name IS NOT NULL THEN LOWER(corr_name) ELSE LOWER(samp_name) END = 'musick'}}
 
 \item{chunk.size}{Number of pedons per chunk (for queries that may exceed \code{maxJsonLength})}
 
