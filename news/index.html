@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.9.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.10</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,13 +52,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.7.9.9000" id="soildb-2799000-2023-10-04">soilDB 2.7.9.9000 (2023-10-04)<a class="anchor" aria-label="anchor" href="#soildb-2799000-2023-10-04"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.7.10" id="soildb-2710-2023-11-16">soilDB 2.7.10 (2023-11-16)<a class="anchor" aria-label="anchor" href="#soildb-2710-2023-11-16"></a></h2>
 <ul><li>
 <p><code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code> gains <code>geom.src="mlrapolygon"</code> for obtaining Major Land Resource Area (MLRA) polygon boundaries. When using this geometry source <code>x</code> is a vector of <code>MLRARSYM</code> (MLRA Symbols).</p>
 <ul><li>The geometry source is the MLRA Geographic Database v5.2 (2022) which is not (yet) part of Soil Data Access. Instead of SDA, GDAL utilities are used to read a zipped ESRI Shapefile from a remote URL: <a href="https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip" class="external-link uri">https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip</a>. Therefore, most additional <code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code> arguments are <em>not</em> currently supported for the MLRA geometry source. In the future a <code>mlrapolygon</code> table may be added to SDA (analogous to <code>mupolygon</code> and <code>sapolygon</code>), and the function will be updated accordingly at that time.</li>
 </ul></li>
 <li><p>Web coverage services and related raster attribute tables provided by SoilWeb (<code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code> etc.) are now using the SoilWeb load-balancer URL</p></li>
 <li><p><code><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass()</a></code> gains <code>method="all"</code> for aggregating information about ecological sites and related components. The method performs a condition-based aggregation for each ecological site condition in the map unit, producing a “wide” data.frame result with as many columns as needed to portray all site conditions.</p></li>
+<li><p><code><a href="../reference/fetchLDM.html">fetchLDM()</a></code> gains new argument <code>WHERE</code> for supplying a custom SQL where clause for selecting sites of interest. For example: <code>fetchLDM(WHERE = "CASE WHEN corr_name IS NOT NULL THEN LOWER(corr_name) ELSE LOWER(samp_name) END = 'musick'")</code></p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.7.9" id="soildb-279-2023-09-01">soilDB 2.7.9 (2023-09-01)<a class="anchor" aria-label="anchor" href="#soildb-279-2023-09-01"></a></h2>

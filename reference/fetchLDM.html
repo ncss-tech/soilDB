@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.9.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.10</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,7 @@
 <span>  bycol <span class="op">=</span> <span class="st">"pedon_key"</span>,</span>
 <span>  tables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lab_physical_properties"</span>, <span class="st">"lab_chemical_properties"</span>,</span>
 <span>    <span class="st">"lab_calculations_including_estimates_and_default_values"</span>, <span class="st">"lab_rosetta_Key"</span><span class="op">)</span>,</span>
+<span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  chunk.size <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  ntries <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  layer_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"horizon"</span>, <span class="st">"layer"</span>, <span class="st">"reporting layer"</span><span class="op">)</span>,</span>
@@ -89,6 +90,10 @@
 
 <dt>tables</dt>
 <dd><p>A vector of table names; Default is <code>"lab_physical_properties"</code>, <code>"lab_chemical_properties"</code>, <code>"lab_calculations_including_estimates_and_default_values"</code>, and <code>"lab_rosetta_Key"</code>. May also include one or more of: <code>"lab_mir"</code>, <code>"lab_mineralogy_glass_count"</code>, <code>"lab_major_and_trace_elements_and_oxides"</code>, <code>"lab_xray_and_thermal"</code> but it will be necessary to select appropriate <code>prep_code</code> and <code>analyzed_size_frac</code> for your analysis (see <em>Details</em>).</p></dd>
+
+
+<dt>WHERE</dt>
+<dd><p>character. A custom SQL WHERE clause, which overrides <code>x</code>, <code>what</code>, and <code>bycol</code>, such as <code>CASE WHEN corr_name IS NOT NULL THEN LOWER(corr_name) ELSE LOWER(samp_name) END = 'musick'</code></p></dd>
 
 
 <dt>chunk.size</dt>

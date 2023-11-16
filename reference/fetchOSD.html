@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.9.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.10</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,7 +99,8 @@
 <dd><p>empirical probabilities for surface shape (down-slope) from the current SSURGO snapshot</p></dd><dt>pmkind</dt>
 <dd><p>empirical probabilities for parent material kind, derived from the current SSURGO snapshot</p></dd><dt>pmorigin</dt>
 <dd><p>empirical probabilities for parent material origin, derived from the current SSURGO snapshot</p></dd><dt>mlra</dt>
-<dd><p>empirical MLRA membership values, derived from the current SSURGO snapshot</p></dd><dt>climate</dt>
+<dd><p>empirical MLRA membership values, derived from the current SSURGO snapshot</p></dd><dt>ecoclassid</dt>
+<dd><p>area cross-tabulation of ecoclassid by soil series name, derived from the current SSURGO snapshot, major components only</p></dd><dt>climate</dt>
 <dd><p>experimental climate summaries from PRISM stack (CONUS only)</p></dd><dt>NCCPI</dt>
 <dd><p>select quantiles of NCCPI and Irrigated NCCPI, derived from the current SSURGO snapshot</p></dd><dt>metadata</dt>
 <dd><p>metadata associated with SoilWeb cached summaries</p></dd></dl>When using <code>extended = TRUE</code>, there are a couple of scenarios in which series morphology contained in <code>SPC</code> do not fully match records in the associated series summaries (e.g. <code>competing</code>).<dl><dt>1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).</dt>
@@ -148,7 +149,7 @@
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">SPC</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> List of 17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 18</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ SPC             :Formal class 'SoilProfileCollection' [package "aqp"] with 9 slots</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ competing       :'data.frame':	84 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ geog_assoc_soils:'data.frame':	77 obs. of  2 variables:</span>
@@ -162,10 +163,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ pmkind          :'data.frame':	18 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ pmorigin        :'data.frame':	33 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ mlra            :'data.frame':	47 obs. of  4 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ ecoclassid      :'data.frame':	59 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ climate.annual  :'data.frame':	88 obs. of  12 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ climate.monthly :'data.frame':	264 obs. of  14 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ NCCPI           :'data.frame':	11 obs. of  16 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ soilweb.metadata:'data.frame':	22 obs. of  2 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ soilweb.metadata:'data.frame':	24 obs. of  2 variables:</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># use makeChunks() for iteration over larger sequences of soil series</span></span></span>
 <span class="r-in"><span>  <span class="va">s.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'musick'</span>, <span class="st">'cecil'</span>, <span class="st">'drummer'</span>, <span class="st">'amador'</span>, <span class="st">'pentz'</span>,</span></span>
