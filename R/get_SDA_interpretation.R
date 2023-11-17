@@ -707,7 +707,6 @@ get_SDA_interpretation <- function(rulename,
       dsn <- dbConnect(RSQLite::SQLite(), dsn)
       on.exit(DBI::dbDisconnect(dsn), add = TRUE)
     }
-    q <- gsub("STRING_AGG(", "GROUP_CONCAT( ", q, fixed = TRUE)
     res <- dbGetQuery(dsn, q)
   }
 
@@ -783,7 +782,7 @@ get_SDA_interpretation <- function(rulename,
 
 .interpretation_by_condition <- function(interp, where_clause, dominant = TRUE, sqlite = FALSE) {
   aggfun <- "STRING_AGG(CONCAT(rulename, ' \"', interphrc, '\" (', interphr, ')'), '; ')"
-  if (sqlite) aggfun <- "GROUP_CONCAT(rulename || ' ' || interphrc || ' (' || interphr || ')' || '; ')"
+  if (sqlite) aggfun <- "(GROUP_CONCAT(rulename || '  \"' || interphrc || '\" (' || interphr || ')', '; ') || '; ')"
   .q0 <- function(q, x) .LIMIT_N(sprintf(q, x), n = 1, sqlite = sqlite)
   .q1 <- function(x) .q0("SELECT ROUND (AVG(interphr) OVER (PARTITION BY interphrc), 2) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, interphr ORDER BY SUM (comppct_r) DESC", x)
   .q2 <- function(x) .q0("SELECT SUM(comppct_r) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY interphrc) DESC", x)
@@ -808,7 +807,7 @@ get_SDA_interpretation <- function(rulename,
 
 .interpretation_aggregation <- function(interp, where_clause, dominant = FALSE, sqlite = FALSE) {
   aggfun <- "STRING_AGG(CONCAT(rulename, ' \"', interphrc, '\" (', interphr, ')'), '; ')"
-  if (sqlite) aggfun <- "GROUP_CONCAT(rulename || ' ' || interphrc || ' (' || interphr || ')' || '; ')"
+  if (sqlite) aggfun <- "(GROUP_CONCAT(rulename || '  \"' || interphrc || '\" (' || interphr || ')', '; ') || '; ')"
   sprintf("SELECT mapunit.mukey, component.cokey, areasymbol, musym, muname, compname, compkind, comppct_r, majcompflag,
                 %s
                 FROM legend
@@ -901,7 +900,7 @@ get_SDA_interpretation <- function(rulename,
 .create_wide_reason <- function(x, not_rated_value = NA_real_) {
   cn <- colnames(x)[grepl("^reason_", colnames(x))]
   for (n in cn) {
-    x <- cbind(x, data.table::rbindlist(lapply(strsplit(x[[n]], "; "), function(x) {
+    x <- cbind(x, data.table::rbindlist(lapply(strsplit(as.character(x[[n]]), "; "), function(x) {
       x3 <- as.data.frame(data.table::rbindlist(lapply(
           strsplit(gsub(
             "(.*) \"(.*)\" \\((.*)\\)", "\\1;\\2;\\3", x
