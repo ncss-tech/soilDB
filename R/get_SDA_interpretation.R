@@ -902,7 +902,11 @@ get_SDA_interpretation <- function(rulename,
   cn <- colnames(x)[grepl("^reason_", colnames(x))]
   for (n in cn) {
     x <- cbind(x, data.table::rbindlist(lapply(strsplit(x[[n]], "; "), function(x) {
-        x3 <- do.call('rbind', strsplit(gsub("(.*) \"(.*)\" \\((.*)\\)", "\\1;\\2;\\3", x), ";"))
+      x3 <- as.data.frame(data.table::rbindlist(lapply(
+          strsplit(gsub(
+            "(.*) \"(.*)\" \\((.*)\\)", "\\1;\\2;\\3", x
+          ), ";"), function(y) as.data.frame(t(y))
+        ), fill = TRUE))
         if (ncol(x3) == 3) {
           x4 <- as.data.frame(as.list(x3[, 3]))
           colnames(x4) <- paste0("rating_", n , "_", .cleanRuleColumnName(x3[, 1]))
