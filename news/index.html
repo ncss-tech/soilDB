@@ -52,7 +52,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.7.10" id="soildb-2710-2023-11-16">soilDB 2.7.10 (2023-11-16)<a class="anchor" aria-label="anchor" href="#soildb-2710-2023-11-16"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.7.10" id="soildb-2710-2023-11-16">soilDB 2.7.10 (2023-11-16)<a class="anchor" aria-label="anchor" href="#soildb-2710-2023-11-16"></a></h2><p class="text-muted">CRAN release: 2023-11-16</p>
 <ul><li>
 <p><code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code> gains <code>geom.src="mlrapolygon"</code> for obtaining Major Land Resource Area (MLRA) polygon boundaries. When using this geometry source <code>x</code> is a vector of <code>MLRARSYM</code> (MLRA Symbols).</p>
 <ul><li>The geometry source is the MLRA Geographic Database v5.2 (2022) which is not (yet) part of Soil Data Access. Instead of SDA, GDAL utilities are used to read a zipped ESRI Shapefile from a remote URL: <a href="https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip" class="external-link uri">https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip</a>. Therefore, most additional <code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code> arguments are <em>not</em> currently supported for the MLRA geometry source. In the future a <code>mlrapolygon</code> table may be added to SDA (analogous to <code>mupolygon</code> and <code>sapolygon</code>), and the function will be updated accordingly at that time.</li>
