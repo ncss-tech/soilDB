@@ -200,6 +200,7 @@ createSSURGO <- function(filename,
     
     if (!is.null(msidxdet)) {
       indexPK <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("PK_", msidxdet[[2]])])
+      indexDI <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("DI_", msidxdet[[2]])])
     }
     
     d <- try(as.data.frame(data.table::rbindlist(lapply(seq_along(f.txt.grp[[x]]), function(i) {
@@ -239,6 +240,16 @@ createSSURGO <- function(filename,
           RSQLite::dbExecute(con, sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
                                           paste0('PK_', mstab_lut[x]), mstab_lut[x], paste0(indexPK, collapse = ",")))
         }, silent = quiet)
+      }
+      
+      # create key indices
+      if (!is.null(indexDI) && length(indexDI) > 0) {
+        for (i in seq_along(indexDI)) {
+          try({
+            RSQLite::dbExecute(con, sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
+                                            paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i]))
+          }, silent = quiet)
+        }
       }
       
       # for GPKG output, add gpkg_contents (metadata for features and attributes)
