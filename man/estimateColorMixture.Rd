@@ -20,7 +20,7 @@ A data.frame containing estimated color mixture
 Estimate color mixtures using weighted average of CIELAB color coordinates
 }
 \note{
-See \code{\link[aqp:mixMunsell]{aqp::mixMunsell()}} for a more realistic (but slower) simulation of subtractive mixing of pigments.
+See \code{\link[aqp:mixMunsell]{aqp::mixMunsell()}} for a more realistic (but slower) simulation of subtractive mixing of pigments. An efficient replacement for this function (wt. mean in CIELAB coordinates) is implemented in \code{aqp::mixMunsell(..., mixingMethod = 'estimate')}.
 }
 \author{
 D.E. Beaudette

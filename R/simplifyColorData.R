@@ -1,19 +1,19 @@
-## 2020-07-20: re-write / replacement of previous interface which depeneded on plyr
 
 ## TODO:
+# once aqp 2.0.2 is on CRAN use col2Munsell()
 # deprecate mix_and_clean_colors
 # check usage in fetchNASIS 
 # convert to roxygen / update docs
 # fix tutorials
 
-# This function is heavily biased towared NASIS-specific data structures and assumptions
+# This function is heavily biased toward NASIS-specific data structures and assumptions
 # d: data.frame with color data from horizon-color table: expects "colorhue", "colorvalue", "colorchroma"
 # id.var: name of the column with unique horizon IDs
 
 
-#' Simplify Color Data by ID
+#' @title Simplify Color Data by ID
 #' 
-#' Simplify multiple Munsell color observations associated with each horizon.
+#' @description Simplify multiple Munsell color observations associated with each horizon.
 #' 
 #' This function is mainly intended for the processing of NASIS pedon/horizon
 #' data which may or may not contain multiple colors per horizon/moisture
@@ -48,9 +48,7 @@
 #' @param wt a character vector with the name of the column containing color
 #' weights for mixing
 #' @param bt logical, should the mixed sRGB representation of soil color be
-#' transformed to closest Munsell chips? This is performed by
-#' \code{aqp::rgb2Munsell}
-#' \code{aqp::rgb2Munsell}
+#' transformed to closest Munsell chips? This is performed by `aqp::rgb2munsell`
 #' @author D.E. Beaudette
 #' @keywords manip
 #' @export 
@@ -115,6 +113,7 @@ simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) 
     mixed.dry <- mixed.dry[, estimateColorMixture(.SD, wt = wt, backTransform = bt), by = id.var]
     
     # back-transform mixture to Munsell using best-available method
+    ## TODO: once aqp 2.0.2 is on CRAN use col2Munsell()
     m <- aqp::rgb2munsell(as.data.frame(mixed.dry[, .SD, .SDcols = c('r', 'g', 'b')]))
     
     # adjust names to match NASIS
@@ -151,8 +150,9 @@ simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) 
     # mixed.moist[[id.var]] <- row.names(mixed.moist)
     mixed.moist <- moist.colors[moist.mix.idx, .SD, .SDcols =  c(id.var, mix.vars)]
     mixed.moist <- mixed.moist[, estimateColorMixture(.SD, wt = wt, backTransform = bt), by = id.var]
-    # 
+    
     # back-transform mixture to Munsell using best-available method
+    ## TODO: once aqp 2.0.2 is on CRAN use col2Munsell()
     m <- rgb2munsell(as.data.frame(mixed.moist[, .SD, .SDcols = c('r', 'g', 'b')]))
     
     # adjust names to match NASIS

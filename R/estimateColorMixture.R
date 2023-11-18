@@ -2,25 +2,28 @@
 ## note: this isn't real mixing, reflectance curves and / or Kubella-Monk modeling required for that
 ## all colors are mixed, should be applied to groups of related colors
 
-## TODO: consider using aqp::mixMunsell(mixingMethod = 'estimate') to replace this function
+## TODO: future release wrap / replace with aqp::mixMunsell(mixingMethod = 'estimate') as it is better maintained / tested
 
 
 #' @title Estimate color mixtures using weighted average of CIELAB color coordinates
 #'
-#' @note See [aqp::mixMunsell()] for a more realistic (but slower) simulation of subtractive mixing of pigments.
+#' @note See [aqp::mixMunsell()] for a more realistic (but slower) simulation of subtractive mixing of pigments. An efficient replacement for this function (wt. mean in CIELAB coordinates) is implemented in `aqp::mixMunsell(..., mixingMethod = 'estimate')`.
 #' 
 #' @author D.E. Beaudette
 #'
 #' @param x data.frame, typically from NASIS containing at least CIE LAB ('L', 'A', 'B') and some kind of weight
+#' 
 #' @param wt  fractional weights, usually area of hz face
+#' 
 #' @param backTransform logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by [aqp::rgb2munsell()] default: `FALSE`
 #'
 #' @return A data.frame containing estimated color mixture
 #' @export estimateColorMixture
 #'
-estimateColorMixture <- function(x, wt='pct', backTransform=FALSE) {
+estimateColorMixture <- function(x, wt = 'pct', backTransform = FALSE) {
   
-  ## TODO: account for backtransform == TRUE, different return structure
+  ## TODO: account for `backTransform == TRUE`, different return structure
+  
   # sanity check: no NA
   if(any(c(is.na(x$L), is.na(x$A), is.na(x$B)))) {
     return(data.frame(r = NA_real_, g = NA_real_, b = NA_real_))
@@ -43,20 +46,31 @@ estimateColorMixture <- function(x, wt='pct', backTransform=FALSE) {
   ## https://arxiv.org/ftp/arxiv/papers/1710/1710.06364.pdf
   ## http://en.wikipedia.org/wiki/Weighted_geometric_mean
   
-  # 2020-01-22 DEB: mixing always in CIELAB, roughly linear in terms of avg. human perception of color
-  L <- weighted.mean(x[['L']], w=x[[wt]], na.rm = TRUE)
-  A <- weighted.mean(x[['A']], w=x[[wt]], na.rm = TRUE)
-  B <- weighted.mean(x[['B']], w=x[[wt]], na.rm = TRUE)
+  # 2020-01-22 DEB: mixing always in CIELAB, 
+  # better than sRGB but still not a true mixture
+  # roughly linear in terms of avg. human perception of color
+  L <- weighted.mean(x[['L']], w = x[[wt]], na.rm = TRUE)
+  A <- weighted.mean(x[['A']], w = x[[wt]], na.rm = TRUE)
+  B <- weighted.mean(x[['B']], w = x[[wt]], na.rm = TRUE)
   
   # back to sRGB
-  mixed.color <- data.frame(convertColor(cbind(L, A, B), from='Lab', to='sRGB', from.ref.white='D65', to.ref.white = 'D65'))
+  mixed.color <- data.frame(
+    convertColor(
+      cbind(L, A, B), 
+      from = 'Lab', 
+      to = 'sRGB', 
+      from.ref.white = 'D65', 
+      to.ref.white = 'D65')
+  )
   names(mixed.color) <- c('r', 'g', 'b')
   
   # optionally back-transform mixture to Munsell
-  # performance penalty due to color distance eval against entire munsell library
+  # performance penalty due to color distance eval against entire Munsell library
   if(backTransform) {
     
     # convert with best available metric
+    ## TODO: once aqp 2.0.2 is on CRAN use col2Munsell()
+    # m <- col2Munsell(mixed.color[, c('r', 'g', 'b')])
     m <- rgb2munsell(mixed.color[, c('r', 'g', 'b')])
     
     # adjust names to match NASIS

@@ -17,14 +17,11 @@ that is unique among all horizons in \code{d}}
 weights for mixing}
 
 \item{bt}{logical, should the mixed sRGB representation of soil color be
-transformed to closest Munsell chips? This is performed by
-\code{aqp::rgb2Munsell}
-\code{aqp::rgb2Munsell}}
+transformed to closest Munsell chips? This is performed by \code{aqp::rgb2munsell}}
 }
 \description{
 Simplify multiple Munsell color observations associated with each horizon.
-}
-\details{
+
 This function is mainly intended for the processing of NASIS pedon/horizon
 data which may or may not contain multiple colors per horizon/moisture
 status combination. \code{simplifyColorData} will "mix" multiple colors
