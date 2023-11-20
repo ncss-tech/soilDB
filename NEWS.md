@@ -1,3 +1,9 @@
+# soilDB 2.7.11 (development)
+ - Fix bugs in `get_SDA_interpretation()` when `dsn` refers to a local SQLite source
+and in concatenation of reason string when `wide_reason=TRUE`
+ - `createSSURGO()` now creates indices for foreign keys and other columns important data analysis, dramatically improving the performance of standard soilDB queries on SQLite sources.
+ - `get_SDA_property()`: weighted average/dominant component numeric methods now returns `mukey` in first column position; for parity with other `get_SDA*` methods recently updated/already doing this, making it easier to use these columns for raster attribute tables via `terra::set.levels()`
+
 # soilDB 2.7.10 (2023-11-16)
 
  - `fetchSDA_spatial()` gains `geom.src="mlrapolygon"` for obtaining Major Land Resource Area (MLRA) polygon boundaries. When using this geometry source `x` is a vector of `MLRARSYM` (MLRA Symbols).
