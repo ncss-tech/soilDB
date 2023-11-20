@@ -387,7 +387,7 @@ get_SDA_property <-
     n <- 1:length(property)
     stopifnot(n > 0)
 
-    sprintf("SELECT areasymbol, musym, muname, mukey
+    sprintf("SELECT mukey, areasymbol, musym, muname
             INTO #kitchensink
             FROM legend
             INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
@@ -459,7 +459,7 @@ get_SDA_property <-
                             RIGHT OUTER JOIN #kitchensink ON #kitchensink.mukey = #last_step.mukey
                             GROUP BY #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname, #kitchensink.mukey, %s, %s, #last_step.cokey
                             ORDER BY #kitchensink.mukey, #kitchensink.areasymbol, #kitchensink.musym, #kitchensink.muname
-                            SELECT #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
+                            SELECT #last_step2.mukey, #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, %s
                               FROM #last_step2
                               LEFT OUTER JOIN #last_step ON #last_step.mukey = #last_step2.mukey
                                   GROUP BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
@@ -518,8 +518,8 @@ get_SDA_property <-
                     FROM legend
                     INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
                     LEFT JOIN component ON component.mukey = mapunit.mukey %s %s
-               SELECT areasymbol, musym, muname, mukey, %s FROM #funagg
-               GROUP BY areasymbol, musym, muname, mukey",
+               SELECT mukey, areasymbol, musym, muname,  %s FROM #funagg
+               GROUP BY mukey, areasymbol, musym, muname",
               paste0(sapply(agg_property, function(x) .property_min_max(x, top_depth, bottom_depth, FUN = FUN, miscellaneous_areas = miscellaneous_areas)), collapse = ", "),
               WHERE,
               ifelse(include_minors, ""," AND component.majcompflag = 'Yes'"),
