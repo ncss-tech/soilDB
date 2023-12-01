@@ -3,6 +3,7 @@
 and in concatenation of reason string when `wide_reason=TRUE`
  - `createSSURGO()` now creates indices for foreign keys and other columns important data analysis, dramatically improving the performance of standard soilDB queries on SQLite sources.
  - `createSSURGO()` now works properly on STATSGO datasets for individual states or CONUS. Previously tabular data would be transferred but spatial data were not.
+ - `downloadSSURGO()` gains `db` argument which gives ability to download STATSGO by state or all of US from Web Soil Survey. Thanks to Meghan Krueger for suggestion.
  - `get_SDA_property()`: weighted average/dominant component numeric methods now returns `mukey` in first column position; for parity with other `get_SDA*` methods recently updated/already doing this, making it easier to use these columns for raster attribute tables via `terra::set.levels()`
 
 # soilDB 2.7.10 (2023-11-16)

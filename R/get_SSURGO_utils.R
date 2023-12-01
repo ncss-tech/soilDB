@@ -6,40 +6,52 @@
 #'
 #' @return a vector of URLs to Web Soil Survey ZIP files
 #' @noRd
-.make_WSS_download_url <- function(WHERE = NULL, include_template = FALSE) {
+.make_WSS_download_url <- function(WHERE = NULL, include_template = FALSE, db = c('SSURGO', 'STATSGO')) {
   
-  # use SDA to get areasymbol and last updated date to build WSS cache urls
-  q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol != 'US'"
-  q2 <- ifelse(!is.null(WHERE), paste0(q, " AND (", WHERE, ")"), q)
-  sacatalog <- suppressMessages(SDA_query(q2))
+  db <- match.arg(toupper(db), c('SSURGO', 'STATSGO'))
   
-  if (inherits(sacatalog, 'try-error') || is.null(sacatalog)) {
-    return(try(stop("Query of Soil Survey Area Catalog (", 
-                    WHERE, ") failed to return any data", call. = FALSE), silent = TRUE))
+  if (db == "STATSGO") {
+    q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'US'"
+    sacatalog <- suppressMessages(SDA_query(q))
+    res <- paste0(
+      "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/Cache/STATSGO2/wss_gsmsoil_",
+      WHERE, "_[", as.Date(sacatalog$saverest, format = "%m/%d/%Y %H:%M:%S"), "].zip"
+    )
+    unique(res)
+  } else {
+    # use SDA to get areasymbol and last updated date to build WSS cache urls
+    q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol != 'US'"
+    q2 <- ifelse(!is.null(WHERE), paste0(q, " AND (", WHERE, ")"), q)
+    sacatalog <- suppressMessages(SDA_query(q2))
+    
+    if (inherits(sacatalog, 'try-error') || is.null(sacatalog)) {
+      return(try(stop("Query of Soil Survey Area Catalog (", 
+                      WHERE, ") failed to return any data", call. = FALSE), silent = TRUE))
+    }
+    areasymbol <- sacatalog$areasymbol
+    saverest <- sacatalog$saverest
+    
+    statecode <- substr(areasymbol, 0, 2)
+    
+    # handle custom (state-specific) template DBs
+    # TODO: NPS urls cannot be derived from areasymbol alone
+    # NB: no (current) usage of "NPS" template
+    # TODO: authoritative source of release dates of templates?
+    statecode[!statecode %in% c('AK','CT','FL','GA','HI',
+                                'ID','IN','IA','ME','MI',
+                                'MN','MT','NE','NJ','NC',
+                                'OH','OR','PA','SD','UT',
+                                'VT','WA','WV','WI','WY',
+                                'HI','NPS')] <- "US"
+    res <- paste0(
+      "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/Cache/SSA/wss_SSA_",
+      areasymbol, ifelse(rep(include_template, length(areasymbol)), 
+                         paste0("_soildb_", statecode, "_2003"), ""), "_[",
+      as.Date(saverest, format = "%m/%d/%Y %H:%M:%S"), "].zip"
+    )
+    
+    unique(res)
   }
-  
-  areasymbol <- sacatalog$areasymbol
-  saverest <- sacatalog$saverest
-  statecode <- substr(areasymbol, 0, 2)
-  
-  # handle custom (state-specific) template DBs
-  # TODO: NPS urls cannot be derived from areasymbol alone
-  # NB: no (current) usage of "NPS" template
-  # TODO: authoritative source of release dates of templates?
-  statecode[!statecode %in% c('AK','CT','FL','GA','HI',
-                              'ID','IN','IA','ME','MI',
-                              'MN','MT','NE','NJ','NC',
-                              'OH','OR','PA','SD','UT',
-                              'VT','WA','WV','WI','WY',
-                              'HI','NPS')] <- "US"
-  res <- paste0(
-    "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/Cache/SSA/wss_SSA_",
-    areasymbol, ifelse(rep(include_template, length(areasymbol)), 
-                       paste0("_soildb_", statecode, "_2003"), ""), "_[",
-    as.Date(saverest, format = "%m/%d/%Y %H:%M:%S"), "].zip"
-  )
-  
-  unique(res)
 }
 
 

@@ -10,6 +10,7 @@ downloadSSURGO(
   destdir = tempdir(),
   exdir = destdir,
   include_template = FALSE,
+  db = c("SSURGO", "STATSGO"),
   extract = TRUE,
   remove_zip = FALSE,
   overwrite = FALSE,
@@ -27,6 +28,8 @@ downloadSSURGO(
 
 \item{include_template}{Include the (possibly state-specific) MS Access template database? Default: \code{FALSE}}
 
+\item{db}{Either \code{"SSURGO"} (default; detailed soil map) or \code{"STATSGO"} (general soil map).}
+
 \item{extract}{Logical. Extract ZIP files to \code{exdir}? Default: \code{TRUE}}
 
 \item{remove_zip}{Logical. Remove ZIP files after extracting? Default: \code{FALSE}}
@@ -43,6 +46,8 @@ Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files w
 }
 \details{
 To specify the Soil Survey Areas you would like to obtain data you use a \code{WHERE} clause for query of \code{sacatalog} table such as \code{areasymbol = 'CA067'}, \code{"areasymbol IN ('CA628', 'CA067')"} or  \verb{areasymbol LIKE 'CT\%'}.
+
+When \code{db="STATSGO"} the \code{WHERE} argument is not supported. Allowed \code{areasymbols} include \code{"US"} and two-letter state codes e.g. \code{"WY"} for the Wyoming general soils map.
 
 Pipe-delimited TXT files are found in \emph{/tabular/} folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the \emph{Soil Data Access Tables and Columns Report}: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files. The function returns a \code{try-error} if the \code{WHERE}/\code{areasymbols} arguments result in
 

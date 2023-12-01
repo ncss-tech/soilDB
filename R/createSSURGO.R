@@ -9,10 +9,14 @@
 #' @param destdir Directory to download ZIP files into. Default `tempdir()`.
 #' @param exdir Directory to extract ZIP archives into. May be a directory that does not yet exist. Each ZIP file will extract to a folder labeled with `areasymbol` in this directory. Default: `destdir`
 #' @param include_template Include the (possibly state-specific) MS Access template database? Default: `FALSE`
+#' @param db Either `"SSURGO"` (default; detailed soil map) or `"STATSGO"` (general soil map).
 #' @param extract Logical. Extract ZIP files to `exdir`? Default: `TRUE`
 #' @param remove_zip Logical. Remove ZIP files after extracting? Default: `FALSE` 
 #' @param overwrite Logical. Overwrite by re-extracting if directory already exists? Default: `FALSE`
 #' @param quiet Logical. Passed to `curl::curl_download()`.
+#' @details
+#' When `db="STATSGO"` the `WHERE` argument is not supported. Allowed `areasymbols` include `"US"` and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
+#' 
 #' @export
 #' 
 #' @details Pipe-delimited TXT files are found in _/tabular/_ folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the _Soil Data Access Tables and Columns Report_: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files. The function returns a `try-error` if the `WHERE`/`areasymbols` arguments result in
@@ -25,10 +29,21 @@ downloadSSURGO <- function(WHERE = NULL,
                            destdir = tempdir(), 
                            exdir = destdir, 
                            include_template = FALSE,
+                           db = c('SSURGO', 'STATSGO'),
                            extract = TRUE, 
                            remove_zip = FALSE,
                            overwrite = FALSE,
                            quiet = FALSE) {
+  
+  db <- match.arg(toupper(db), c('SSURGO', 'STATSGO'))
+  
+  if (!is.null(WHERE) && db == "STATSGO") {
+    stop('custom WHERE clause not supported with db="STATSGO"', call. = FALSE)
+  }
+  
+  if (!is.null(areasymbols) && db == "STATSGO") {
+    WHERE <- areasymbols
+  }
   
   if (is.null(WHERE) && is.null(areasymbols)) {
     stop('must specify either `WHERE` or `areasymbols` argument', call. = FALSE)
@@ -45,7 +60,7 @@ downloadSSURGO <- function(WHERE = NULL,
   }
   
   # make WSS download URLs from areasymbol, template, date
-  urls <- .make_WSS_download_url(WHERE, include_template = include_template)
+  urls <- .make_WSS_download_url(WHERE, include_template = include_template, db = db)
   
   if (inherits(urls, 'try-error')) {
     message(urls[1])
@@ -65,7 +80,7 @@ downloadSSURGO <- function(WHERE = NULL,
   }
   
   paths <- list.files(destdir, pattern = "\\.zip$", full.names = TRUE)
-  paths2 <- paths[grep(".*wss_SSA_(.*)_.*", paths)]
+  paths2 <- paths[grep(".*wss_(SSA|gsmsoil)_(.*)_.*", paths)]
   
   if  (extract) {
     if (!quiet) {
