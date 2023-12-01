@@ -140,8 +140,9 @@ createSSURGO <- function(filename,
   # create and add combined vector datasets:
   #   "soilmu_a", "soilmu_l", "soilmu_p", "soilsa_a", "soilsf_l", "soilsf_p" 
   f.shp <- f[grepl(".*\\.shp$", f)]
-  shp.grp <- do.call('rbind', strsplit(gsub(".*soil([musfa]{2})_([apl])_([a-z]{2}\\d{3})\\.shp", "\\1;\\2;\\3", f.shp), ";", fixed = TRUE))
-  if (length(shp.grp) > 1 && include_spatial) {
+  shp.grp <- do.call('rbind', strsplit(gsub(".*soil([musfa]{2})_([apl])_([a-z]{2}\\d{3}|[a-z]{2})\\.shp", "\\1;\\2;\\3", f.shp), ";", fixed = TRUE))
+  
+  if (nrow(shp.grp) >= 1 && ncol(shp.grp) == 3 && include_spatial) {
     f.shp.grp <- split(f.shp, list(feature = shp.grp[,1], geom = shp.grp[,2]))
     
     lapply(seq_along(f.shp.grp), function(i) {
@@ -151,9 +152,6 @@ createSSURGO <- function(filename,
         if (overwrite && j == 1) {
           sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, overwrite = TRUE, ...)
         } else sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, append = TRUE, ...)
-        
-        # TODO: check/optimize: GPKG vector data includes R*Tree spatial index
-        
         NULL
       })
     })
@@ -192,6 +190,7 @@ createSSURGO <- function(filename,
   
   con <- RSQLite::dbConnect(RSQLite::SQLite(), filename, loadable.extensions = TRUE)  
   on.exit(RSQLite::dbDisconnect(con))
+  
   lapply(names(f.txt.grp), function(x) {
     
     if (!is.null(mstabcol)) {
@@ -254,11 +253,11 @@ createSSURGO <- function(filename,
       
       # for GPKG output, add gpkg_contents (metadata for features and attributes)
       if (IS_GPKG) {
-        # update gpkg_contents table entry
-        if (!include_spatial) {
+        if (!.gpkg_has_contents(con)) {
           # if no spatial data inserted, there will be no gpkg_contents table initally
           try(.gpkg_create_contents(con))
         }
+        # update gpkg_contents table entry
         try(.gpkg_delete_contents(con, mstab_lut[x]))
         try(.gpkg_add_contents(con, mstab_lut[x]))
       }
