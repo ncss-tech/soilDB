@@ -152,17 +152,25 @@ createSSURGO <- function(filename,
   if (!requireNamespace("RSQLite"))
     stop("package `RSQLite` is required to write tabular datasets to SSURGO SQLite databases", call. = FALSE)
   
+  if (isTRUE(overwrite) && file.exists(filename)) {
+    file.remove(filename)
+  }
+  
   # create and add combined vector datasets:
   #   "soilmu_a", "soilmu_l", "soilmu_p", "soilsa_a", "soilsf_l", "soilsf_p" 
   f.shp <- f[grepl(".*\\.shp$", f)]
   shp.grp <- do.call('rbind', strsplit(gsub(".*soil([musfa]{2})_([apl])_([a-z]{2}\\d{3}|[a-z]{2})\\.shp", "\\1;\\2;\\3", f.shp), ";", fixed = TRUE))
+  
+  layer_names <- c(`mu_a` = "mupolygon", `mu_l` = "muline",   `mu_p` = "mupoint", 
+                   `sa_a` = "sapolygon", `sf_l` = "featline", `sf_p` = "featpoint")
   
   if (nrow(shp.grp) >= 1 && ncol(shp.grp) == 3 && include_spatial) {
     f.shp.grp <- split(f.shp, list(feature = shp.grp[,1], geom = shp.grp[,2]))
     
     lapply(seq_along(f.shp.grp), function(i) {
       lapply(seq_along(f.shp.grp[[i]]), function(j){
-        lnm <- gsub(".*(soil[musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j])
+        lnm <- layer_names[match(gsub(".*soil([musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j]),
+                                 names(layer_names))]
         
         if (overwrite && j == 1) {
           sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, overwrite = TRUE, ...)
