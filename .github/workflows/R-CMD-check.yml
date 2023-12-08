@@ -93,16 +93,11 @@ jobs:
           rmarkdown::render("README.Rmd")
         shell: Rscript {0}
 
-      - name: Commit results
+      - name: Commit and push results
         if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
-        continue-on-error: true
         run: |
           git add README.md 
           git commit -m 'Render README.Rmd' || echo "No changes to commit"
           git add inst/\*
           git commit -m 'Update inst' || echo "No changes to commit"
-
-      - name: Push results
-        if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
-        run: |
-          git push origin HEAD:${{ env.BRANCH_NAME }} || echo "No changes to commit"
+          git push origin HEAD:${{ env.BRANCH_NAME }} 
