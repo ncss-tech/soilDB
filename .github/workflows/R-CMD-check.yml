@@ -62,13 +62,9 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, any::remotes, terra=?ignore-before-r=4.1.0, local::.
+          extra-packages: any::rcmdcheck, any::remotes, terra=?ignore-before-r=4.1.0, local::., brownag/soilDBdata
           # upgrade: 'TRUE' ## NB: required to force building of source packages
           needs: check
-
-      - name: Install soilDBdata off GitHub
-        run: remotes::install_github("brownag/soilDBdata", dependencies = FALSE, build = FALSE)
-        shell: Rscript {0}
 
       - name: Install aqp off GitHub  (devel only)
         if: matrix.config.r == 'devel'
