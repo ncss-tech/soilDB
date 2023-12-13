@@ -137,12 +137,24 @@ createSSURGO <- function(filename,
                          header = FALSE,
                          quiet = TRUE,
                          ...) {
+  mode <- "sqlite"
   
-  if (missing(filename) || length(filename) == 0) {
-    stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to.")
+  # different modes for different database interfaces
+  if (inherits(filename, 'DBIConnection')) {
+    if (inherits(filename, 'duckdb_driver')) {
+      mode <- "duckdb"
+    }
+  } else if (missing(filename) || length(filename) == 0) {
+    stop("`filename` should be a DBIConnection, or path to a .gpkg or .sqlite file to create or append to.")
   }
   
-  IS_GPKG <- grepl("\\.gpkg$", filename, ignore.case = TRUE)[1]
+  if (grepl("\\.gpkg$", filename, ignore.case = TRUE)[1]) {
+    mode <- "gpkg"
+  } 
+  
+  if (grepl("\\.duckdb$", filename, ignore.case = TRUE)[1]) {
+    mode <- "duckdb"
+  }
   
   f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE)
   
@@ -155,6 +167,23 @@ createSSURGO <- function(filename,
   if (isTRUE(overwrite) && file.exists(filename)) {
     file.remove(filename)
   }
+  
+  drv <- NULL
+  args <- list()
+  if (mode == "sqlite" || mode == "gpkg") {
+    args <- c(args, list(loadable.extensions = TRUE))
+    drv <- RSQLite::SQLite()
+  } else if (mode == "duckdb") {
+    if (!inherits(filename, 'DBIConnection')) {
+      drv <- duckdb::duckdb()
+    } else {
+      drv <- filename
+      filename <- ":memory:"
+    }
+  } else stop("unknown database mode: ", mode, call. = FALSE)
+  
+  con <- do.call(DBI::dbConnect, c(list(drv, filename), args))
+  on.exit(DBI::dbDisconnect(con))
   
   # create and add combined vector datasets:
   #   "soilmu_a", "soilmu_l", "soilmu_p", "soilsa_a", "soilsf_l", "soilsf_p" 
@@ -171,10 +200,15 @@ createSSURGO <- function(filename,
       lapply(seq_along(f.shp.grp[[i]]), function(j){
         lnm <- layer_names[match(gsub(".*soil([musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j]),
                                  names(layer_names))]
-        
-        if (overwrite && j == 1) {
-          sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, overwrite = TRUE, ...)
-        } else sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, append = TRUE, ...)
+        if (mode == "duckdb") {
+          DBI::dbExecute(con, "INSTALL spatial;")
+          DBI::dbExecute(con, "LOAD spatial;")
+          DBI::dbExecute(con, paste0("CREATE TABLE ", lnm, " AS SELECT * FROM ST_Read('", f.shp.grp[[i]][j], "');"))
+        } else {
+          if (overwrite && j == 1) {
+            sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, overwrite = TRUE, ...)
+          } else sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, append = TRUE, ...)
+        }
         NULL
       })
     })
@@ -210,9 +244,6 @@ createSSURGO <- function(filename,
   if (length(msidxdn) >= 1) {
     msidxdet <- read.delim(msidxdn[1], sep = "|", stringsAsFactors = FALSE, header = header)
   }
-  
-  con <- RSQLite::dbConnect(RSQLite::SQLite(), filename, loadable.extensions = TRUE)  
-  on.exit(RSQLite::dbDisconnect(con))
   
   lapply(names(f.txt.grp), function(x) {
     
@@ -252,15 +283,15 @@ createSSURGO <- function(filename,
       # write tabular data to file
       try({
         if (overwrite) {
-          RSQLite::dbWriteTable(con, mstab_lut[x], d, overwrite = TRUE)
-        } else RSQLite::dbWriteTable(con, mstab_lut[x], d, append = TRUE)
+          DBI::dbWriteTable(con, mstab_lut[x], d, overwrite = TRUE)
+        } else DBI::dbWriteTable(con, mstab_lut[x], d, append = TRUE)
       }, silent = quiet)
       
       # create pkey indices
       if (!is.null(indexPK) && length(indexPK) > 0) {
         try({
-          RSQLite::dbExecute(con, sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
-                                          paste0('PK_', mstab_lut[x]), mstab_lut[x], paste0(indexPK, collapse = ",")))
+          DBI::dbExecute(con, sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)",
+                                      paste0('PK_', mstab_lut[x]), mstab_lut[x], paste0(indexPK, collapse = ",")))
         }, silent = quiet)
       }
       
@@ -268,14 +299,14 @@ createSSURGO <- function(filename,
       if (!is.null(indexDI) && length(indexDI) > 0) {
         for (i in seq_along(indexDI)) {
           try({
-            RSQLite::dbExecute(con, sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
-                                            paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i]))
+            DBI::dbExecute(con, sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)",
+                                        paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i]))
           }, silent = quiet)
         }
       }
       
       # for GPKG output, add gpkg_contents (metadata for features and attributes)
-      if (IS_GPKG) {
+      if (mode == "gpkg") {
         if (!.gpkg_has_contents(con)) {
           # if no spatial data inserted, there will be no gpkg_contents table initally
           try(.gpkg_create_contents(con))
@@ -291,7 +322,7 @@ createSSURGO <- function(filename,
     }
   })
   
-  res <- RSQLite::dbListTables(con)
+  res <- DBI::dbListTables(con)
   invisible(res)
 }
 
