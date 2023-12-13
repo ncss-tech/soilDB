@@ -67,8 +67,8 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
     d.dups_char <- do.call(
       "rbind", by(d.dups_char, d.dups_char[[var]], function(x) { 
         data.frame(
-        peiid = unique(x[['peiid']]),
-        lapply(x[2:ncol(x)], function(x2) x2[which.max(x$hzthk)])
+          peiid = unique(x[['peiid']]),
+          lapply(x[2:ncol(x)], function(x2) x2[max(c(1, which.max(x$hzthk)), na.rm = TRUE)])
         )})
       )
 
@@ -79,9 +79,9 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
     d.dups_ph <- do.call(
       "rbind",
       by(d.dups_ph, d.dups_ph[[var]], function(x) { data.frame(
-        peiid = unique(x[['peiid']]),
-        phiid = unique(x[['phiid']]),
-        lapply(x[3:ncol(x)], function(x2) -log10(weighted.mean(1/10^x2, weights = x$hzthk, na.rm = TRUE)))
+          peiid = unique(x[['peiid']]),
+          phiid = unique(x[['phiid']]),
+          lapply(x[3:ncol(x)], function(x2) -log10(weighted.mean(1/10^x2, weights = x$hzthk, na.rm = TRUE)))
         )})
       )
 
