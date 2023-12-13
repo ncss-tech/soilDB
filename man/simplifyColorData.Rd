@@ -17,7 +17,7 @@ that is unique among all horizons in \code{d}}
 weights for mixing}
 
 \item{bt}{logical, should the mixed sRGB representation of soil color be
-transformed to closest Munsell chips? This is performed by \code{aqp::rgb2munsell}}
+transformed to closest Munsell chips? This is performed by \code{\link[aqp:col2Munsell]{aqp::col2Munsell()}}}
 }
 \description{
 Simplify multiple Munsell color observations associated with each horizon.
