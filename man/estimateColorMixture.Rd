@@ -11,7 +11,7 @@ estimateColorMixture(x, wt = "pct", backTransform = FALSE)
 
 \item{wt}{fractional weights, usually area of hz face}
 
-\item{backTransform}{logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by \code{\link[aqp:rgb2munsell]{aqp::rgb2munsell()}} default: \code{FALSE}}
+\item{backTransform}{logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by \code{\link[aqp:col2Munsell]{aqp::col2Munsell()}} default: \code{FALSE}}
 }
 \value{
 A data.frame containing estimated color mixture

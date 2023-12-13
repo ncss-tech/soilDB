@@ -48,12 +48,12 @@
 #' @param wt a character vector with the name of the column containing color
 #' weights for mixing
 #' @param bt logical, should the mixed sRGB representation of soil color be
-#' transformed to closest Munsell chips? This is performed by `aqp::rgb2munsell`
+#' transformed to closest Munsell chips? This is performed by [aqp::col2Munsell()]
 #' @author D.E. Beaudette
 #' @keywords manip
 #' @export 
 #' @importFrom grDevices rgb
-#' @importFrom aqp munsell2rgb rgb2munsell
+#' @importFrom aqp munsell2rgb col2Munsell
 simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) {
   
   # sanity check: must contain at least 1 row
@@ -112,9 +112,9 @@ simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) 
     mixed.dry <- dry.colors[dry.mix.idx, .SD, .SDcols =  c(id.var, mix.vars)]
     mixed.dry <- mixed.dry[, estimateColorMixture(.SD, wt = wt, backTransform = bt), by = id.var]
     
-    # back-transform mixture to Munsell using best-available method
-    ## TODO: once aqp 2.0.2 is on CRAN use col2Munsell()
-    m <- aqp::rgb2munsell(as.data.frame(mixed.dry[, .SD, .SDcols = c('r', 'g', 'b')]))
+    # convert sRGB -> Munsell
+    # requires >= aqp 2.0.2
+    m <- col2Munsell(as.data.frame(mixed.dry[, .SD, .SDcols = c('r', 'g', 'b')]))
     
     # adjust names to match NASIS
     names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")
@@ -151,9 +151,9 @@ simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) 
     mixed.moist <- moist.colors[moist.mix.idx, .SD, .SDcols =  c(id.var, mix.vars)]
     mixed.moist <- mixed.moist[, estimateColorMixture(.SD, wt = wt, backTransform = bt), by = id.var]
     
-    # back-transform mixture to Munsell using best-available method
-    ## TODO: once aqp 2.0.2 is on CRAN use col2Munsell()
-    m <- rgb2munsell(as.data.frame(mixed.moist[, .SD, .SDcols = c('r', 'g', 'b')]))
+    # convert sRGB -> Munsell
+    # requires >= aqp 2.0.2
+    m <- col2Munsell(as.data.frame(mixed.moist[, .SD, .SDcols = c('r', 'g', 'b')]))
     
     # adjust names to match NASIS
     names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")

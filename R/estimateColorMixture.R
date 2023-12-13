@@ -15,11 +15,13 @@
 #' 
 #' @param wt  fractional weights, usually area of hz face
 #' 
-#' @param backTransform logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by [aqp::rgb2munsell()] default: `FALSE`
+#' @param backTransform logical, should the mixed sRGB representation of soil color be transformed to closest Munsell chips? This is performed by [aqp::col2Munsell()] default: `FALSE`
 #'
 #' @return A data.frame containing estimated color mixture
 #' @export estimateColorMixture
-#'
+#' 
+#' @importFrom aqp col2Munsell
+#' 
 estimateColorMixture <- function(x, wt = 'pct', backTransform = FALSE) {
   
   ## TODO: account for `backTransform == TRUE`, different return structure
@@ -68,10 +70,9 @@ estimateColorMixture <- function(x, wt = 'pct', backTransform = FALSE) {
   # performance penalty due to color distance eval against entire Munsell library
   if(backTransform) {
     
-    # convert with best available metric
-    ## TODO: once aqp 2.0.2 is on CRAN use col2Munsell()
-    # m <- col2Munsell(mixed.color[, c('r', 'g', 'b')])
-    m <- rgb2munsell(mixed.color[, c('r', 'g', 'b')])
+    # convert sRGB -> Munsell
+    # requires >= aqp 2.0.2
+    m <- col2Munsell(mixed.color[, c('r', 'g', 'b')])
     
     # adjust names to match NASIS
     names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")
