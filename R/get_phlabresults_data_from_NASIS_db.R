@@ -38,8 +38,12 @@ LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
   idx <- which(duplicated(d.phlabresults$phiid))
 
   if (length(idx) > 0) {
-    message(paste("NOTICE: multiple phiid values exist in the `phlabresults` table, computing weighted averages and dominant values based on horizon thickness"))
-
+    message(paste("NOTICE: multiple records per pedon horizon exist in the `phlabresults` table, computing weighted averages and dominant values based on sample thickness"))
+    
+    if (any(is.na(d.phlabresults[idx, "sampledepthbottom"]))) {
+      message("NOTICE: some `phlabresults` records are missing `sampledepthbottom`; affected weighted averages will return `NA` and dominant values will be from the first (shallowest top depth) record per horizon")
+    }
+  
     # aggregate dup phiid
     dup <- d.phlabresults[idx, "phiid"]
     dup_idx <- which(d.phlabresults$phiid %in% dup)
