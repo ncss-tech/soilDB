@@ -1,10 +1,14 @@
-# soilDB 2.7.11 (development)
+# soilDB 2.8.0 (development)
+
+ - Minimum {aqp} version set to v2.0.2. This is due to changes in the namespace related to `aqp::col2Munsell()`, to "encourage" users to update to the more efficient routines provided in {aqp} 2+ (if they haven't already), and prepare for future updates in the 2.x series.
  - Fix bugs in `get_SDA_interpretation()` when `dsn` refers to a local SQLite source
 and in concatenation of reason string when `wide_reason=TRUE`
- - `createSSURGO()` now creates indices for foreign keys and other columns important data analysis, dramatically improving the performance of standard soilDB queries on SQLite sources.
- - `createSSURGO()` now works properly on STATSGO datasets for individual states or CONUS. Previously tabular data would be transferred but spatial data were not.
+ - `createSSURGO()` updates:
+   - *Breaking change*: Now uses the standard SSURGO layer names for spatial data (e.g. `"mupolygon"` rather than `"soilmu_a"`).
+   - Creates indices for foreign keys and other columns important for data analysis, dramatically improving the performance of standard queries on SQLite sources.
+   - Now works properly on STATSGO data sets for individual states or CONUS. Previously tabular data would be transferred but spatial data were not.
  - `downloadSSURGO()` gains `db` argument which gives ability to download STATSGO by state or all of US from Web Soil Survey. Thanks to Meghan Krueger for suggestion.
- - `get_SDA_property()`: weighted average/dominant component numeric methods now returns `mukey` in first column position; for parity with other `get_SDA*` methods recently updated/already doing this, making it easier to use these columns for raster attribute tables via `terra::set.levels()`
+ - `get_SDA_property()`: weighted average/dominant component numeric methods now return `mukey` in first column position; for parity with other `get_SDA*` methods recently updated/already doing this, making it easier to use these columns for raster attribute tables via `terra::set.levels()`
 
 # soilDB 2.7.10 (2023-11-16)
 
