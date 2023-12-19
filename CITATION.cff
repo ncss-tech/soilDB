@@ -8,7 +8,7 @@ message: 'To cite package "soilDB" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'soilDB: Soil Database Interface'
-version: 2.7.11
+version: 2.8.0
 abstract: A collection of functions for reading soil data from U.S. Department of
   Agriculture Natural Resources Conservation Service (USDA-NRCS) and National Cooperative
   Soil Survey (NCSS) databases.
@@ -144,6 +144,7 @@ references:
     given-names: Andrew
     email: andrew.g.brown@usda.gov
   year: '2023'
+  version: '>= 2.0.2'
 - type: software
   title: data.table
   abstract: 'data.table: Extension of `data.frame`'
@@ -151,6 +152,9 @@ references:
   url: https://r-datatable.com
   repository: https://CRAN.R-project.org/package=data.table
   authors:
+  - family-names: Barrett
+    given-names: Tyson
+    email: t.barrett88@gmail.com
   - family-names: Dowle
     given-names: Matt
     email: mattjdowle@gmail.com
@@ -206,7 +210,7 @@ references:
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   - family-names: Hester
     given-names: Jim
   - family-names: Ooms
@@ -245,7 +249,7 @@ references:
     given-names: Jim
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@rstudio.com
+    email: hadley@posit.co
   - family-names: Gjoneski
     given-names: Oliver
   year: '2023'
