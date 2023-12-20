@@ -58,6 +58,22 @@ test_that("fetchOSD() returns a list + SPC in extended mode", {
 })
 
 
+test_that("fetchOSD() sensible values when missing in extended mode", {
+  
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  x.extended <<- fetchOSD(soils = c('palau'), extended = TRUE)
+  
+  skip_if(is.null(x.extended))
+  
+  # extended request
+  expect_false(x.extended$flats)
+  expect_false(x.extended$climate.annual)
+  
+})
+
 
 
 test_that("fetchOSD() returns reasonable data", {

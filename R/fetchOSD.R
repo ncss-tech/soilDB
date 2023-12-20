@@ -50,12 +50,14 @@
 
 #' @title Get Official Series Descriptions and summaries from SoilWeb API
 #'
-#' @description This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.
+#' @description This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are updated quarterly and made available via SoilWeb. Set `extended = TRUE` and see the `soilweb.metadata` list element for information on when the source data were last updated. 
 #'
 #' @param soils a character vector of named soil series; case-insensitive
 #' @param colorState color state for horizon soil color visualization: "moist" or "dry"
-#' @param extended if \code{TRUE} additional soil series summary data are returned, see details
-#'
+#' @param extended if `TRUE` additional soil series summary data are returned, see details
+#' 
+#' @note Requests to the SoilWeb API are split into batches of 100 series names from `soils` via [makeChunks()].
+#' 
 #' @details {
 #' \itemize{
 #'   \item{\href{https://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html}{overview of all soil series query functions}}
@@ -65,11 +67,10 @@
 #'   \item{\href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}}
 #' }
 #'
-#'
-#' The standard set of "site" and "horizon" data are returned as a \code{SoilProfileCollection} object (\code{extended=FALSE}. The "extended" suite of summary data can be requested by setting \code{extended=TRUE}. The resulting object will be a \code{list} with the following elements:)
+#' The standard set of "site" and "horizon" data are returned as a `SoilProfileCollection` object (`extended = FALSE`). The "extended" suite of summary data can be requested by setting `extended = TRUE`. The resulting object will be a `list` with the following elements:
 #'
 #' \describe{
-#'   \item{SPC}{\code{SoilProfileCollection} containing standards "site" and "horizon" data}
+#'   \item{SPC}{`SoilProfileCollection` containing standards "site" and "horizon" data}
 #'   \item{competing}{competing soil series from the SC database snapshot}
 #'   \item{geog_assoc_soils}{geographically associated soils, extracted from named section in the OSD}
 #'   \item{geomcomp}{empirical probabilities for geomorphic component, derived from the current SSURGO snapshot}
@@ -94,7 +95,7 @@
 #' }
 #'
 #'
-#' When using `extended = TRUE`, there are a couple of scenarios in which series morphology contained in `SPC` do not fully match records in the associated series summaries (e.g. `competing`).
+#' When using `extended = TRUE`, there are a couple of scenarios in which series morphology contained in `SPC` do not fully match records in the associated series summary tables (e.g. `competing`).
 #'
 #' \describe{
 #'
@@ -104,16 +105,16 @@
 #'
 #' }
 #'
-#' These last two cases are problematic for analysis that makes use of morphology and extended data, such as outlined in this tutorial on \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}.
+#' These last two cases are problematic for analysis that makes use of morphology and extended data, such as outlined in this tutorial on [competing soil series](https://ncss-tech.github.io/AQP/soilDB/competing-series.html).
 #'
 #'}
 #'
-#' @return a \code{SoilProfileCollection} object containing basic soil morphology and taxonomic information.
+#' @return a `SoilProfileCollection` object containing basic soil morphology and taxonomic information.
 #'
 #' @references USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
 #'
 #' @author D.E. Beaudette, A.G. Brown
-#' @seealso \link{OSDquery}, \link{siblings}
+#' @seealso [OSDquery()], [siblings()]
 #' @export
 #' @examplesIf curl::has_internet()
 #' @examples
@@ -142,24 +143,6 @@
 #'   plot(x$SPC)
 #'   str(x, 1)
 #'
-#'   # use makeChunks() for iteration over larger sequences of soil series
-#'   s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz',
-#'               'reiff', 'san joaquin', 'montpellier', 'grangeville', 'pollasky', 'ramona')
-#'
-#'   # make a vector of chunk IDs, with 2 series / chunk
-#'   ck <- makeChunks(s.list, size = 2)
-#'
-#'   # split original data by chunk IDs
-#'   # iterate over resulting list
-#'   # run fetchOSD() on pieces
-#'   # result is a list of SoilProfileCollection objects
-#'   x <- lapply(split(s.list, ck), fetchOSD)
-#'
-#'   # flatten into a single SPC
-#'   x <- combine(x)
-#'
-#'   # there should be 11 profiles
-#'   length(x)
 #' }
 #' @keywords manip
 #'
@@ -167,37 +150,97 @@
 #'
 fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 
+  .SoilWebOSD <- function(i, e) {
+    # compose base URL
+    if (e) {
+      x <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=all&s='
+    } else {
+      x <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=site_hz&s='
+    }
+    
+    # format series list and append to URL
+    final.url <- paste(x, URLencode(paste(i, collapse = ',')), sep = '')
+    
+    # using HTTP GET is convenient but comes with limits on the number of chars in the URL
+    if (nchar(final.url) > 2048) {
+      stop('URL too long', call. = FALSE)
+    }
+    
+    # attempt query to API, result is JSON
+    res <- .soilDB_curl_get_JSON(final.url, gzip = FALSE, quiet = TRUE)
+    
+    # errors are trapped above, returning NULL
+    if (is.null(res)) {
+      return(NULL)
+    }
+    
+    return(res)
+  }
+  
+  # enforce uniqueness withing series name list
+  soils <- unique(tolower(soils))
+  
   # sanity check
   if (!requireNamespace('jsonlite', quietly = TRUE))
     stop('please install the `jsonlite` package', call. = FALSE)
 
-  # compose query
-  # note: this is the load-balancer
-  if (extended) {
-    x <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=all&s='
-  } else {
-    x <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=site_hz&s='
+  # # compose base URL
+  # if (extended) {
+  #   x <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=all&s='
+  # } else {
+  #   x <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=site_hz&s='
+  # }
+  # 
+  # # format series list and append to URL
+  # final.url <- paste(x, URLencode(paste(soils, collapse = ',')), sep = '')
+  # 
+  # ## TODO: implement HTTP POST + JSON for safer encapsulation
+  # ## https://github.com/ncss-tech/soilDB/issues/239
+  # # using HTTP GET is convenient but comes with limits on the number of chars in the URL
+  # # limiting to 2048 will likely save some trouble
+  # if (nchar(final.url) > 2048) {
+  #   stop('URL too long, consider splitting input vector of soil series with `makeChunks()` and iterating over chunks', call. = FALSE)
+  # }
+  # 
+  # # attempt query to API, result is JSON
+  # res <- .soilDB_curl_get_JSON(final.url, gzip = FALSE, quiet = TRUE)
+  # 
+  # # errors are trapped above, returning NULL
+  # if (is.null(res)) {
+  #   return(NULL)
+  # }
+
+  ## get data by chunk (https://github.com/ncss-tech/soilDB/issues/239)
+  # this creates some additional overhead + copying
+  # should generalize beyond limits of GET requests
+  
+  # create chunks based on heuristic:
+  # 100 soil series names will always be < 2048 characters
+  chunks <- makeChunks(soils, size = 100)
+  
+  # feedback
+  .uniqeChunks <- length(unique(chunks))
+  if(.uniqeChunks > 1) {
+    message(sprintf('%s requests for %s total soil series', .uniqeChunks, length(chunks)))
   }
-
-  # format series list and append to url
-  final.url <- paste(x, URLencode(paste(soils, collapse = ',')), sep = '')
-
-  ## TODO: implement HTTP POST + JSON for safer encapsulation
-  ## https://github.com/ncss-tech/soilDB/issues/239
-  # using HTTP GET is convenient but comes with limits on the number of chars in the URL
-  # limiting to 2048 will likely save some trouble
-  if (nchar(final.url) > 2048) {
-    stop('URL too long, consider splitting input vector of soil series with `makeChunks()` and iterating over chunks', call. = FALSE)
-  }
-
-  # attempt query to API, result is JSON
-  res <- .soilDB_curl_get_JSON(final.url, gzip = FALSE, quiet = TRUE)
-
-  # errors are trapped above, returning NULL
-  if (is.null(res)) {
-    return(NULL)
-  }
-
+  
+  # iterate over chunks
+  # result is a nested list of lists
+  sl <- split(soils, chunks)
+  r <- lapply(sl, FUN = .SoilWebOSD, e = extended)
+  
+  # unravel nested lists, site + horizon data
+  # extended data are done later
+  res <- list()
+  res$site <- do.call('rbind', lapply(r, '[[', 'site'))
+  res$hz <- do.call('rbind', lapply(r, '[[', 'hz'))
+  
+  # launder row names
+  res <- lapply(res, function(i) {
+    row.names(i) <- NULL
+    return(i)
+  })
+  
   # extract site+hz data
   # these will be FALSE if query returns NULL
   s <- res$site
@@ -304,10 +347,53 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 
 	# mode: standard (SPC returned) or extended (list returned)
 	if(extended) {
-
-	  ## TODO: finish this and decide: report or filter
-	  # https://github.com/ncss-tech/soilDB/issues/128
-
+	  
+	  # unravel nested lists
+	  .tables <- c('competing', 'geog_assoc_soils', 'geomcomp', 'hillpos', 'mtnpos', 'terrace', 'flats', 'shape_across', 'shape_down', 'pmkind', 'pmorigin', 'mlra', 'ecoclassid', 'climate', 'nccpi')
+	  
+	  # chunk-wise missing tabular data is reported as FALSE
+	  # cannot rbind(FALSE) or rbind(FALSE, data.frame) -> corruption of data
+	  for(.tab in .tables) {
+	    .tabdata <- lapply(r, '[[', .tab)
+	    .idx <- which(sapply(.tabdata, inherits, 'data.frame'))
+	    
+	    # keep only non-missing by chunk
+	    if(length(.idx) > 0) {
+	      res[[.tab]] <- do.call('rbind', .tabdata[.idx]) 
+	    } else {
+	      # result is FALSE
+	      res[[.tab]] <- FALSE
+	    }
+	    
+	  }
+	  
+	  # res$competing <- do.call('rbind', lapply(r, '[[', 'competing'))
+	  # res$geog_assoc_soils <- do.call('rbind', lapply(r, '[[', 'geog_assoc_soils'))
+	  # res$geomcomp <- do.call('rbind', lapply(r, '[[', 'geomcomp'))
+	  # res$hillpos <- do.call('rbind', lapply(r, '[[', 'hillpos'))
+	  # res$mtnpos <- do.call('rbind', lapply(r, '[[', 'mtnpos'))
+	  # res$terrace <- do.call('rbind', lapply(r, '[[', 'terrace'))
+	  # res$flats <- do.call('rbind', lapply(r, '[[', 'flats'))
+	  # res$shape_across <- do.call('rbind', lapply(r, '[[', 'shape_across'))
+	  # res$shape_down <- do.call('rbind', lapply(r, '[[', 'shape_down'))
+	  # res$pmkind <- do.call('rbind', lapply(r, '[[', 'pmkind'))
+	  # res$pmorigin <- do.call('rbind', lapply(r, '[[', 'pmorigin'))
+	  # res$mlra <- do.call('rbind', lapply(r, '[[', 'mlra'))
+	  # res$ecoclassid <- do.call('rbind', lapply(r, '[[', 'ecoclassid'))
+	  # res$climate <- do.call('rbind', lapply(r, '[[', 'climate'))
+	  # res$nccpi <- do.call('rbind', lapply(r, '[[', 'nccpi'))
+	  
+	  # metadata are identical across chunks
+	  res$metadata <- unique(do.call('rbind', lapply(r, '[[', 'metadata')))
+	  
+	  # conditionally launder row names
+	  res <- lapply(res, function(i) {
+	    if(inherits(i, 'data.frame')) {
+	      row.names(i) <- NULL
+	    }
+	    return(i)
+	  })
+	  
 	  # profile IDs for reference, done outside of loop for efficiency
 	  pIDs <- profile_id(h)
 	  # iterate over extended tables

@@ -17,7 +17,7 @@ fetchOSD(soils, colorState = "moist", extended = FALSE)
 a \code{SoilProfileCollection} object containing basic soil morphology and taxonomic information.
 }
 \description{
-This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are periodically updated and made available via SoilWeb.
+This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are updated quarterly and made available via SoilWeb. Set \code{extended = TRUE} and see the \code{soilweb.metadata} list element for information on when the source data were last updated.
 }
 \details{
 {
@@ -29,7 +29,7 @@ This function fetches a variety of data associated with named soil series, extra
 \item{\href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}}
 }
 
-The standard set of "site" and "horizon" data are returned as a \code{SoilProfileCollection} object (\code{extended=FALSE}. The "extended" suite of summary data can be requested by setting \code{extended=TRUE}. The resulting object will be a \code{list} with the following elements:)
+The standard set of "site" and "horizon" data are returned as a \code{SoilProfileCollection} object (\code{extended = FALSE}). The "extended" suite of summary data can be requested by setting \code{extended = TRUE}. The resulting object will be a \code{list} with the following elements:
 
 \describe{
 \item{SPC}{\code{SoilProfileCollection} containing standards "site" and "horizon" data}
@@ -55,7 +55,7 @@ The standard set of "site" and "horizon" data are returned as a \code{SoilProfil
 \item{metadata}{metadata associated with SoilWeb cached summaries}
 }
 
-When using \code{extended = TRUE}, there are a couple of scenarios in which series morphology contained in \code{SPC} do not fully match records in the associated series summaries (e.g. \code{competing}).
+When using \code{extended = TRUE}, there are a couple of scenarios in which series morphology contained in \code{SPC} do not fully match records in the associated series summary tables (e.g. \code{competing}).
 
 \describe{
 
@@ -68,6 +68,9 @@ When using \code{extended = TRUE}, there are a couple of scenarios in which seri
 These last two cases are problematic for analysis that makes use of morphology and extended data, such as outlined in this tutorial on \href{https://ncss-tech.github.io/AQP/soilDB/competing-series.html}{competing soil series}.
 
 }
+}
+\note{
+Requests to the SoilWeb API are split into batches of 100 series names from \code{soils} via \code{\link[=makeChunks]{makeChunks()}}.
 }
 \examples{
 \dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -97,31 +100,13 @@ These last two cases are problematic for analysis that makes use of morphology a
   plot(x$SPC)
   str(x, 1)
 
-  # use makeChunks() for iteration over larger sequences of soil series
-  s.list <- c('musick', 'cecil', 'drummer', 'amador', 'pentz',
-              'reiff', 'san joaquin', 'montpellier', 'grangeville', 'pollasky', 'ramona')
-
-  # make a vector of chunk IDs, with 2 series / chunk
-  ck <- makeChunks(s.list, size = 2)
-
-  # split original data by chunk IDs
-  # iterate over resulting list
-  # run fetchOSD() on pieces
-  # result is a list of SoilProfileCollection objects
-  x <- lapply(split(s.list, ck), fetchOSD)
-
-  # flatten into a single SPC
-  x <- combine(x)
-
-  # there should be 11 profiles
-  length(x)
 }
 }
 \references{
 USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
 }
 \seealso{
-\link{OSDquery}, \link{siblings}
+\code{\link[=OSDquery]{OSDquery()}}, \code{\link[=siblings]{siblings()}}
 }
 \author{
 D.E. Beaudette, A.G. Brown
