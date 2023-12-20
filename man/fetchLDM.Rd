@@ -60,7 +60,6 @@ When requesting data from \code{"lab_major_and_trace_elements_and_oxides"}, \cod
 }
 \examples{
 \dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
 \dontrun{
   # fetch by ssa_key
   res <- fetchLDM(8297, what = "ssa_key")
@@ -73,4 +72,5 @@ When requesting data from \code{"lab_major_and_trace_elements_and_oxides"}, \cod
   # fetch by area_code (SSA only)  
   res <- fetchLDM("CA630", what = "area_code")
 }
+\dontshow{\}) # examplesIf}
 }

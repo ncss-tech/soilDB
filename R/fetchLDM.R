@@ -312,14 +312,14 @@ fetchLDM <- function(x = NULL,
   layer_type <- match.arg(layer_type, c("horizon", "layer", "reporting layer"), several.ok = TRUE)
   
   if (any(tables %in% flattables)) {
+    nt <- flattables[flattables %in% tables[!tables %in% c("lab_rosetta_Key", "lab_mir")]]
     layer_query <-  sprintf(
-      "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s %s AND %s",
+      "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s %s %s",
       paste0(sapply(flattables[flattables %in% tables], function(a) tablejoincriteria[[a]]), collapse = "\n"),
       format_SQL_in_statement(layer_type),
       ifelse(is.null(x), "", paste0(" AND ", bycol, " IN ", format_SQL_in_statement(x))),
-      paste0(paste0(sapply(flattables[flattables %in% tables[!tables %in% c("lab_rosetta_Key", "lab_mir")]], 
-                           function(b) paste0("IsNull(",b,".prep_code, '')")), 
-                    " IN ", format_SQL_in_statement(prep_code)), collapse = " AND "))
+      ifelse(length(nt) == 0, "", paste0(" AND ", paste0(sapply(nt, function(b) paste0("IsNull(",b,".prep_code, '')")), 
+                    " IN ", format_SQL_in_statement(prep_code)), collapse = " AND ")))
   } else {
     layer_query <- sprintf(
       "SELECT * FROM lab_layer WHERE lab_layer.layer_type IN %s %s",
@@ -370,6 +370,8 @@ fetchLDM <- function(x = NULL,
       layerdata <- merge(layerdata, layerfracdata[,c("labsampnum", colnames(layerfracdata)[!colnames(layerfracdata) %in% colnames(layerdata)])], by = "labsampnum", all.x = TRUE, incomparables = NA)
     }
   }
-  layerdata$prep_code[is.na(layerdata$prep_code)] <- ""
+  if (!is.null(layerdata$prep_code)) {
+    layerdata$prep_code[is.na(layerdata$prep_code)] <- ""
+  }
   layerdata
 }
