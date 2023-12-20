@@ -14,6 +14,7 @@ fetchLDM(
   chunk.size = 1000,
   ntries = 3,
   layer_type = c("horizon", "layer", "reporting layer"),
+  area_type = c("ssa", "country", "state", "county", "mlra", "nforest", "npark"),
   prep_code = c("S", ""),
   analyzed_size_frac = c("<2 mm", ""),
   dsn = NULL
@@ -35,6 +36,8 @@ fetchLDM(
 \item{ntries}{Number of tries (times to halve \code{chunk.size}) before returning \code{NULL}; default \code{3}}
 
 \item{layer_type}{Default: \code{"horizon"}, \code{"layer"}, and \code{"reporting layer"}}
+
+\item{area_type}{Default: \code{"ssa"} (Soil Survey Area). Other options include (choose one): \code{"country"}, \code{"state"}, \code{"county"}, \code{"mlra"} (Major Land Resource Area), \code{"nforest"} (National Forest), \code{"npark"} (National Park)}
 
 \item{prep_code}{Default: \code{"S"} and \code{""}. May also include one or more of: \code{"F"}, \code{"HM"}, \code{"HM_SK"} \code{"GP"}, \code{"M"}, \code{"N"}, or \code{"S"}}
 
