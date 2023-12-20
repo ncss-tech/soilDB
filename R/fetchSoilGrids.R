@@ -46,7 +46,7 @@
 #' @param overwrite Only used when `grid=TRUE`. Default: `FALSE`
 #' @param target_resolution Only used when `grid=TRUE`. Default: `c(250, 250)` (250m x 250m pixels)
 #' @param summary_type Only used when `grid=TRUE`. One or more of `"Q0.05"`, `"Q0.5"`, `"Q0.95"`, `"mean"`; these are summary statistics that
-#'  corresponding to 5th, 50th and 95th percentiles and mean value for selected `variables`.
+#'  correspond to 5th, 50th, 95th percentiles, and mean value for selected `variables`.
 #' @param ... Additional arguments passed to `terra::writeRaster()` when `grid=TRUE`.
 #' @param verbose Print messages? Default: `FALSE`
 #' @param progress logical, give progress when iterating over multiple requests; Default: `FALSE`
@@ -124,6 +124,7 @@ fetchSoilGrids <- function(x,
     return(.get_soilgrids(locations, 
                           filename = filename, 
                           overwrite = overwrite, 
+                          variables = variables,
                           target_resolution = target_resolution,
                           depth = depth_intervals,
                           summary_type = summary_type,
@@ -307,7 +308,7 @@ fetchSoilGrids <- function(x,
   stopifnot(requireNamespace("terra"))
   stopifnot(requireNamespace("sf"))
   
-  if (!all(substr(depth, nchar(depth) - 2, nchar(depth)) == "cm")) {
+  if (!all(substr(depth, nchar(depth) - 1, nchar(depth)) == "cm")) {
     depth <- paste0(depth, "cm")
   }
   

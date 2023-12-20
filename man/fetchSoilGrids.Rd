@@ -38,7 +38,7 @@ fetchSoilGrids(
 \item{target_resolution}{Only used when \code{grid=TRUE}. Default: \code{c(250, 250)} (250m x 250m pixels)}
 
 \item{summary_type}{Only used when \code{grid=TRUE}. One or more of \code{"Q0.05"}, \code{"Q0.5"}, \code{"Q0.95"}, \code{"mean"}; these are summary statistics that
-corresponding to 5th, 50th and 95th percentiles and mean value for selected \code{variables}.}
+correspond to 5th, 50th, 95th percentiles, and mean value for selected \code{variables}.}
 
 \item{...}{Additional arguments passed to \code{terra::writeRaster()} when \code{grid=TRUE}.}
 
