@@ -1,6 +1,10 @@
-#' Get SoilGrids Estimates for Points or Spatial Extent
+#' Get SoilGrids Properties Estimates for Points or Spatial Extent
 #'
-#' This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes. SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
+#' This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent. 
+#' 
+#' SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
+#' 
+#' @details
 #' 
 #' ## Properties
 #' 
@@ -33,11 +37,11 @@
 #' @references Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217-240, 2021. \doi{https://doi.org/10.5194/soil-7-217-2021}
 #' @importFrom utils packageVersion
 #'
-#' @param x A `data.frame` containing 3 columns referring to site ID, latitude and longitude.
+#' @param x A `data.frame` containing 3 columns referring to site ID, latitude and longitude. Or a spatial (sf, terra) object for which a bounding box can be calculated when `grid=TRUE`.
 #' @param loc.names Optional: Column names referring to site ID, latitude and longitude. Default: `c("id", "lat", "lon")`
 #' @param depth_intervals Default: `"0-5"`, `"5-15"`, `"15-30"`, `"30-60"`, `"60-100"`, `"100-200"`
 #' @param variables Default: `"bdod"`, `"cec"`, `"cfvo"`, `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`. Optionally `"ocs"` for 0 to 30 cm interval. 
-#' @param grid Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: FALSE
+#' @param grid Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: `FALSE`
 #' @param filename Only used when `grid=TRUE`. If `NULL` defaults to an in-memory raster, or temporary file if result does not fit in memory.
 #' @param overwrite Only used when `grid=TRUE`. Default: `FALSE`
 #' @param target_resolution Only used when `grid=TRUE`. Default: `c(250, 250)` (250m x 250m pixels)

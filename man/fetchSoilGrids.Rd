@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchSoilGrids.R
 \name{fetchSoilGrids}
 \alias{fetchSoilGrids}
-\title{Get SoilGrids Estimates for Points or Spatial Extent}
+\title{Get SoilGrids Properties Estimates for Points or Spatial Extent}
 \usage{
 fetchSoilGrids(
   x,
@@ -21,7 +21,7 @@ fetchSoilGrids(
 )
 }
 \arguments{
-\item{x}{A \code{data.frame} containing 3 columns referring to site ID, latitude and longitude.}
+\item{x}{A \code{data.frame} containing 3 columns referring to site ID, latitude and longitude. Or a spatial (sf, terra) object for which a bounding box can be calculated when \code{grid=TRUE}.}
 
 \item{loc.names}{Optional: Column names referring to site ID, latitude and longitude. Default: \code{c("id", "lat", "lon")}}
 
@@ -29,7 +29,7 @@ fetchSoilGrids(
 
 \item{variables}{Default: \code{"bdod"}, \code{"cec"}, \code{"cfvo"}, \code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}. Optionally \code{"ocs"} for 0 to 30 cm interval.}
 
-\item{grid}{Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: FALSE}
+\item{grid}{Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: \code{FALSE}}
 
 \item{filename}{Only used when \code{grid=TRUE}. If \code{NULL} defaults to an in-memory raster, or temporary file if result does not fit in memory.}
 
@@ -50,9 +50,10 @@ corresponding to 5th, 50th and 95th percentiles and mean value for selected \cod
 A SoilProfileCollection or SpatRaster when \code{grid=TRUE}
 }
 \description{
-This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes. SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
+This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent.
 }
 \details{
+SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
 \subsection{Properties}{\tabular{lllrl}{
    Name \tab Description \tab Mapped units \tab Conversion factor \tab Conventional units \cr
    bdod \tab Bulk density of the fine earth fraction \tab cg/cm^3 \tab 100 \tab kg/dm^3 \cr
