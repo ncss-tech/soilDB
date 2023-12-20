@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchSoilGrids.R
 \name{fetchSoilGrids}
 \alias{fetchSoilGrids}
-\title{Get SoilGrids 250m properties information from point locations}
+\title{Get SoilGrids Estimates for Points or Spatial Extent}
 \usage{
 fetchSoilGrids(
   x,
@@ -10,6 +10,11 @@ fetchSoilGrids(
   depth_intervals = c("0-5", "5-15", "15-30", "30-60", "60-100", "100-200"),
   variables = c("bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt",
     "soc", "ocd"),
+  grid = FALSE,
+  filename = NULL,
+  overwrite = TRUE,
+  target_resolution = c(250, 250),
+  summary_type = c("Q0.05", "Q0.5", "Q0.95", "mean"),
   verbose = FALSE,
   progress = FALSE
 )
@@ -21,14 +26,25 @@ fetchSoilGrids(
 
 \item{depth_intervals}{Default: \code{"0-5"}, \code{"5-15"}, \code{"15-30"}, \code{"30-60"}, \code{"60-100"}, \code{"100-200"}}
 
-\item{variables}{Default: \code{"bdod"}, \code{"cec"}, \code{"cfvo"}, \code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}}
+\item{variables}{Default: \code{"bdod"}, \code{"cec"}, \code{"cfvo"}, \code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}. Optionally \code{"ocs"} for 0 to 30 cm interval.}
+
+\item{grid}{Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: FALSE}
+
+\item{filename}{Only used when \code{grid=TRUE}. If \code{NULL} defaults to a temporary file with .tif extension.}
+
+\item{overwrite}{Only used when \code{grid=TRUE}. Default: \code{FALSE}}
+
+\item{target_resolution}{Only used when \code{grid=TRUE}. Default: \code{c(250, 250)} (250m x 250m pixels)}
+
+\item{summary_type}{Only used when \code{grid=TRUE}. One or more of \code{"Q0.05"}, \code{"Q0.5"}, \code{"Q0.95"}, \code{"mean"}; these are summary statistics that
+corresponding to 5th, 50th and 95th percentiles and mean value for selected \code{variables}.}
 
 \item{verbose}{Print messages? Default: \code{FALSE}}
 
 \item{progress}{logical, give progress when iterating over multiple requests; Default: \code{FALSE}}
 }
 \value{
-A SoilProfileCollection
+A SoilProfileCollection or SpatRaster when \code{grid=TRUE}
 }
 \description{
 This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes. SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
