@@ -132,6 +132,7 @@
   # set metadata
   m <- metadata(h)
   m$origin <- "NASIS pedons (export)"
+  m$created <- Sys.time()
   metadata(h) <- m
   
   # set NASIS-specific horizon identifier

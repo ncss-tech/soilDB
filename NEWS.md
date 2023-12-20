@@ -9,7 +9,8 @@ and in concatenation of reason string when `wide_reason=TRUE`
    - Now works properly on STATSGO data sets for individual states or CONUS. Previously tabular data would be transferred but spatial data were not.
  - `downloadSSURGO()` gains `db` argument which gives ability to download STATSGO by state or all of US from Web Soil Survey. Thanks to Meghan Krueger for suggestion.
  - `get_SDA_property()`: weighted average/dominant component numeric methods now return `mukey` in first column position; for parity with other `get_SDA*` methods recently updated/already doing this, making it easier to use these columns for raster attribute tables via `terra::set.levels()`
-
+ - SoilProfileCollection objects now include a time stamp in their metadata, accessed as: `metadata(x)$created` (#235)
+ 
 # soilDB 2.7.10 (2023-11-16)
 
  - `fetchSDA_spatial()` gains `geom.src="mlrapolygon"` for obtaining Major Land Resource Area (MLRA) polygon boundaries. When using this geometry source `x` is a vector of `MLRARSYM` (MLRA Symbols).

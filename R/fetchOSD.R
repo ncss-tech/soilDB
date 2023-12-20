@@ -291,7 +291,8 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	## safely set metadata
 	# TODO: check before clobbering / consider standard var name
 	metadata(h)$origin <- 'OSD via Soilweb / fetchOSD'
-
+	metadata(h)$created <- Sys.time()
+	
 	# set optional hz designation and texture slots
 	hzdesgnname(h) <- "hzname"
 	hztexclname(h) <- "texture_class"
