@@ -172,6 +172,7 @@
   # set metadata
   m <- metadata(f.chorizon)
   m$origin <- 'NASIS components'
+  m$created <- Sys.time()
   metadata(f.chorizon) <- m
 
   # set optional hz designation and texture slots

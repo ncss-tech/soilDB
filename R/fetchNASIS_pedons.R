@@ -245,6 +245,7 @@
   # set metadata
   m <- metadata(hz_data)
   m$origin <- 'NASIS pedons'
+  m$created <- Sys.time()
   metadata(hz_data) <- m
 
   # print any messages on possible data quality problems:

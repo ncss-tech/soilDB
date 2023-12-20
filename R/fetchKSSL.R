@@ -407,6 +407,7 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
   ## set metadata
   # TODO: check before clobbering / consider standard var name
   metadata(h)$origin <- 'KSSL via Soilweb / fetchKSSL'
+  metadata(h)$created <- Sys.time()
 
 
   # cleaning up the results
