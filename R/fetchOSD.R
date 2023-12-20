@@ -184,32 +184,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
   if (!requireNamespace('jsonlite', quietly = TRUE))
     stop('please install the `jsonlite` package', call. = FALSE)
 
-  # # compose base URL
-  # if (extended) {
-  #   x <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=all&s='
-  # } else {
-  #   x <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=site_hz&s='
-  # }
-  # 
-  # # format series list and append to URL
-  # final.url <- paste(x, URLencode(paste(soils, collapse = ',')), sep = '')
-  # 
-  # ## TODO: implement HTTP POST + JSON for safer encapsulation
-  # ## https://github.com/ncss-tech/soilDB/issues/239
-  # # using HTTP GET is convenient but comes with limits on the number of chars in the URL
-  # # limiting to 2048 will likely save some trouble
-  # if (nchar(final.url) > 2048) {
-  #   stop('URL too long, consider splitting input vector of soil series with `makeChunks()` and iterating over chunks', call. = FALSE)
-  # }
-  # 
-  # # attempt query to API, result is JSON
-  # res <- .soilDB_curl_get_JSON(final.url, gzip = FALSE, quiet = TRUE)
-  # 
-  # # errors are trapped above, returning NULL
-  # if (is.null(res)) {
-  #   return(NULL)
-  # }
-
+  
   ## get data by chunk (https://github.com/ncss-tech/soilDB/issues/239)
   # this creates some additional overhead + copying
   # should generalize beyond limits of GET requests
@@ -331,8 +306,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	s$seriesname <- NULL
 	site(h) <- s
 
-	## safely set metadata
-	# TODO: check before clobbering / consider standard var name
+	## safely set SPC metadata
 	metadata(h)$origin <- 'OSD via Soilweb / fetchOSD'
 	metadata(h)$created <- Sys.time()
 	
