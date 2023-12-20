@@ -15,6 +15,7 @@ fetchSoilGrids(
   overwrite = TRUE,
   target_resolution = c(250, 250),
   summary_type = c("Q0.05", "Q0.5", "Q0.95", "mean"),
+  ...,
   verbose = FALSE,
   progress = FALSE
 )
@@ -30,7 +31,7 @@ fetchSoilGrids(
 
 \item{grid}{Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: FALSE}
 
-\item{filename}{Only used when \code{grid=TRUE}. If \code{NULL} defaults to a temporary file with .tif extension.}
+\item{filename}{Only used when \code{grid=TRUE}. If \code{NULL} defaults to an in-memory raster, or temporary file if result does not fit in memory.}
 
 \item{overwrite}{Only used when \code{grid=TRUE}. Default: \code{FALSE}}
 
@@ -38,6 +39,8 @@ fetchSoilGrids(
 
 \item{summary_type}{Only used when \code{grid=TRUE}. One or more of \code{"Q0.05"}, \code{"Q0.5"}, \code{"Q0.95"}, \code{"mean"}; these are summary statistics that
 corresponding to 5th, 50th and 95th percentiles and mean value for selected \code{variables}.}
+
+\item{...}{Additional arguments passed to \code{terra::writeRaster()} when \code{grid=TRUE}.}
 
 \item{verbose}{Print messages? Default: \code{FALSE}}
 
@@ -82,7 +85,6 @@ Find out more information about the SoilGrids and GlobalSoilMap products here:
 }
 \examples{
 \dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
 \dontrun{
   library(aqp)
   
@@ -118,6 +120,7 @@ Find out more information about the SoilGrids and GlobalSoilMap products here:
   sum(h$ocdmean * h$thickness_meters, na.rm = TRUE)
  
 }
+\dontshow{\}) # examplesIf}
 }
 \references{
 Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217-240, 2021. \doi{https://doi.org/10.5194/soil-7-217-2021}
