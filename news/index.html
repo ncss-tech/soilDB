@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,18 +52,23 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.7.11" id="soildb-2711-development">soilDB 2.7.11 (development)<a class="anchor" aria-label="anchor" href="#soildb-2711-development"></a></h2>
-<ul><li>Fix bugs in <code><a href="../reference/get_SDA_interpretation.html">get_SDA_interpretation()</a></code> when <code>dsn</code> refers to a local SQLite source and in concatenation of reason string when <code>wide_reason=TRUE</code>
+<h2 class="pkg-version" data-toc-text="2.8.0" id="soildb-280-development">soilDB 2.8.0 (development)<a class="anchor" aria-label="anchor" href="#soildb-280-development"></a></h2>
+<ul><li>Minimum {aqp} version set to v2.0.2. This is due to changes in the namespace related to <code><a href="https://rdrr.io/pkg/aqp/man/col2Munsell.html" class="external-link">aqp::col2Munsell()</a></code>, to “encourage” users to update to the more efficient routines provided in {aqp} 2+ (if they haven’t already), and prepare for future updates in the 2.x series.</li>
+<li>Fix bugs in <code><a href="../reference/get_SDA_interpretation.html">get_SDA_interpretation()</a></code> when <code>dsn</code> refers to a local SQLite source and in concatenation of reason string when <code>wide_reason=TRUE</code>
 </li>
 <li>
-<code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> now creates indices for foreign keys and other columns important data analysis, dramatically improving the performance of standard soilDB queries on SQLite sources.</li>
-<li>
-<code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> now works properly on STATSGO datasets for individual states or CONUS. Previously tabular data would be transferred but spatial data were not.</li>
+<code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> updates:
+<ul><li>
+<em>Breaking change</em>: Now uses the standard SSURGO layer names for spatial data (e.g. <code>"mupolygon"</code> rather than <code>"soilmu_a"</code>).</li>
+<li>Creates indices for foreign keys and other columns important for data analysis, dramatically improving the performance of standard queries on SQLite sources.</li>
+<li>Now works properly on STATSGO data sets for individual states or CONUS. Previously tabular data would be transferred but spatial data were not.</li>
+</ul></li>
 <li>
 <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> gains <code>db</code> argument which gives ability to download STATSGO by state or all of US from Web Soil Survey. Thanks to Meghan Krueger for suggestion.</li>
 <li>
-<code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code>: weighted average/dominant component numeric methods now returns <code>mukey</code> in first column position; for parity with other <code>get_SDA*</code> methods recently updated/already doing this, making it easier to use these columns for raster attribute tables via <code>terra::set.levels()</code>
+<code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code>: weighted average/dominant component numeric methods now return <code>mukey</code> in first column position; for parity with other <code>get_SDA*</code> methods recently updated/already doing this, making it easier to use these columns for raster attribute tables via <code>terra::set.levels()</code>
 </li>
+<li>SoilProfileCollection objects now include a time stamp in their metadata, accessed as: <code>metadata(x)$created</code> (<a href="https://github.com/ncss-tech/soilDB/issues/235" class="external-link">#235</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.7.10" id="soildb-2710-2023-11-16">soilDB 2.7.10 (2023-11-16)<a class="anchor" aria-label="anchor" href="#soildb-2710-2023-11-16"></a></h2><p class="text-muted">CRAN release: 2023-11-16</p>
