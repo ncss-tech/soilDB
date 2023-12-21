@@ -13,6 +13,7 @@
 #' @param chunk.size Number of pedons per chunk (for queries that may exceed `maxJsonLength`)
 #' @param ntries Number of tries (times to halve `chunk.size`) before returning `NULL`; default `3`
 #' @param layer_type Default: `"horizon"`, `"layer"`, and `"reporting layer"`
+#' @param area_type Default: `"ssa"` (Soil Survey Area). Other options include (choose one): `"country"`, `"state"`, `"county"`, `"mlra"` (Major Land Resource Area), `"nforest"` (National Forest), `"npark"` (National Park)
 #' @param prep_code Default: `"S"` and `""`. May also include one or more of: `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
 #' @param analyzed_size_frac Default: `"<2 mm"` and `""`. May also include one or more of: `"<0.002 mm"`, `"0.02-0.05 mm"`, `"0.05-0.1 mm"`, `"0.1-0.25 mm"`, `"0.25-0.5 mm"`, `"0.5-1 mm"`, `"1-2 mm"`, `"0.02-2 mm"`, `"0.05-2 mm"`
 #' @param dsn Data source name; either a path to a SQLite database, an open DBIConnection or (default) `NULL` (to use `soilDB::SDA_query`)
@@ -26,7 +27,6 @@
 #' @return a `SoilProfileCollection` for a successful query, a `try-error` if no site/pedon locations can be found or `NULL` for an empty `lab_layer` (within sites/pedons) result
 #' @export
 #' @examplesIf curl::has_internet()
-#' @examples
 #' \dontrun{
 #'   # fetch by ssa_key
 #'   res <- fetchLDM(8297, what = "ssa_key")
@@ -58,7 +58,8 @@ fetchLDM <- function(x = NULL,
            WHERE = NULL,
            chunk.size = 1000,
            ntries = 3,
-           layer_type = c("horizon","layer","reporting layer"),
+           layer_type = c("horizon", "layer", "reporting layer"), 
+           area_type = c("ssa", "country", "state", "county", "mlra", "nforest", "npark"),
            prep_code = c("S", ""), # , `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
            analyzed_size_frac = c("<2 mm", ""),#  optional: "<0.002 mm", "0.02-0.05 mm", "0.05-0.1 mm", "0.1-0.25 mm", "0.25-0.5 mm", "0.5-1 mm", "1-2 mm", "0.02-2 mm", "0.05-2 mm"
            dsn = NULL) {
@@ -75,6 +76,8 @@ fetchLDM <- function(x = NULL,
     # otherwise we are using SDA_query
     con <- NULL
   }
+  
+  area_type <- match.arg(tolower(area_type[1]),  c("ssa", "country", "state", "county", "mlra", "nforest", "npark"))
   
   lab_combine_nasis_ncss <- c("pedon_key", "site_key", "pedlabsampnum", "pedoniid", "upedonid", 
                               "labdatadescflag", "priority", "priority2", "samp_name", "samp_class_type", 
@@ -120,9 +123,6 @@ fetchLDM <- function(x = NULL,
                                         paste0("lab_site.", lab_site),
                                         paste0("lab_pedon.", lab_pedon)))
   }
-  
-  # TODO: set up arbitrary area queries by putting area table into groups:
-  #       country, state, county, mlra, ssa, npark, nforest
 
   if (!is.null(x) && (missing(WHERE) || is.null(WHERE))) {
     WHERE <- sprintf("LOWER(%s) IN %s", what, format_SQL_in_statement(tolower(x)))
@@ -149,17 +149,17 @@ fetchLDM <- function(x = NULL,
   } else {
     # the lab_area table allows for overlap with many different area types
     # for now we only offer the "ssa" (soil survey area) area_type 
-    site_query_ssaarea <- gsub("WHERE", 
-                       "LEFT JOIN lab_area ON
-                       lab_combine_nasis_ncss.ssa_key = lab_area.area_key
-                       WHERE", site_query)
-    sites <- suppressMessages(SDA_query(site_query_ssaarea))
+    site_query_byarea <- gsub("WHERE",
+                              sprintf("LEFT JOIN lab_area ON
+                                      lab_combine_nasis_ncss.%s_key = lab_area.area_key
+                                      WHERE", area_type), site_query)
+    sites <- suppressMessages(SDA_query(site_query_byarea))
   }
 
   if (!inherits(sites, 'try-error') && !is.null(sites)) {
 
     # TODO: this shouldn't be needed
-    sites <- sites[,unique(colnames(sites))]
+    sites <- sites[, unique(colnames(sites))]
 
     if (is.null(chunk.size) || nrow(sites) < chunk.size) {
       # get data for lab layers within pedon_key returned
@@ -312,14 +312,14 @@ fetchLDM <- function(x = NULL,
   layer_type <- match.arg(layer_type, c("horizon", "layer", "reporting layer"), several.ok = TRUE)
   
   if (any(tables %in% flattables)) {
+    nt <- flattables[flattables %in% tables[!tables %in% c("lab_rosetta_Key", "lab_mir")]]
     layer_query <-  sprintf(
-      "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s %s AND %s",
+      "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s %s %s",
       paste0(sapply(flattables[flattables %in% tables], function(a) tablejoincriteria[[a]]), collapse = "\n"),
       format_SQL_in_statement(layer_type),
       ifelse(is.null(x), "", paste0(" AND ", bycol, " IN ", format_SQL_in_statement(x))),
-      paste0(paste0(sapply(flattables[flattables %in% tables[!tables %in% c("lab_rosetta_Key", "lab_mir")]], 
-                           function(b) paste0("IsNull(",b,".prep_code, '')")), 
-                    " IN ", format_SQL_in_statement(prep_code)), collapse = " AND "))
+      ifelse(length(nt) == 0, "", paste0(" AND ", paste0(sapply(nt, function(b) paste0("IsNull(",b,".prep_code, '')")), 
+                    " IN ", format_SQL_in_statement(prep_code)), collapse = " AND ")))
   } else {
     layer_query <- sprintf(
       "SELECT * FROM lab_layer WHERE lab_layer.layer_type IN %s %s",
@@ -370,6 +370,8 @@ fetchLDM <- function(x = NULL,
       layerdata <- merge(layerdata, layerfracdata[,c("labsampnum", colnames(layerfracdata)[!colnames(layerfracdata) %in% colnames(layerdata)])], by = "labsampnum", all.x = TRUE, incomparables = NA)
     }
   }
-  layerdata$prep_code[is.na(layerdata$prep_code)] <- ""
+  if (!is.null(layerdata$prep_code)) {
+    layerdata$prep_code[is.na(layerdata$prep_code)] <- ""
+  }
   layerdata
 }
