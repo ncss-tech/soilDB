@@ -1,6 +1,10 @@
-#' Get SoilGrids 250m properties information from point locations
+#' Get SoilGrids Properties Estimates for Points or Spatial Extent
 #'
-#' This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes. SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
+#' This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent. 
+#' 
+#' SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
+#' 
+#' @details
 #' 
 #' ## Properties
 #' 
@@ -32,19 +36,26 @@
 #' 
 #' @references Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217-240, 2021. \doi{https://doi.org/10.5194/soil-7-217-2021}
 #' @importFrom utils packageVersion
-#' @param x A `data.frame` containing 3 columns referring to site ID, latitude and longitude.
+#'
+#' @param x A `data.frame` containing 3 columns referring to site ID, latitude and longitude. Or a spatial (sf, terra) object for which a bounding box can be calculated when `grid=TRUE`.
 #' @param loc.names Optional: Column names referring to site ID, latitude and longitude. Default: `c("id", "lat", "lon")`
 #' @param depth_intervals Default: `"0-5"`, `"5-15"`, `"15-30"`, `"30-60"`, `"60-100"`, `"100-200"`
-#' @param variables Default: `"bdod"`, `"cec"`, `"cfvo"`, `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`
+#' @param variables Default: `"bdod"`, `"cec"`, `"cfvo"`, `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`. Optionally `"ocs"` for 0 to 30 cm interval. 
+#' @param grid Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: `FALSE`
+#' @param filename Only used when `grid=TRUE`. If `NULL` defaults to an in-memory raster, or temporary file if result does not fit in memory.
+#' @param overwrite Only used when `grid=TRUE`. Default: `FALSE`
+#' @param target_resolution Only used when `grid=TRUE`. Default: `c(250, 250)` (250m x 250m pixels)
+#' @param summary_type Only used when `grid=TRUE`. One or more of `"Q0.05"`, `"Q0.5"`, `"Q0.95"`, `"mean"`; these are summary statistics that
+#'  correspond to 5th, 50th, 95th percentiles, and mean value for selected `variables`.
+#' @param ... Additional arguments passed to `terra::writeRaster()` when `grid=TRUE`.
 #' @param verbose Print messages? Default: `FALSE`
 #' @param progress logical, give progress when iterating over multiple requests; Default: `FALSE`
 #' 
-#' @return A SoilProfileCollection
+#' @return A SoilProfileCollection or SpatRaster when `grid=TRUE`
 #' @export fetchSoilGrids
 #' 
 #' @author Andrew G. Brown
 #' @examplesIf curl::has_internet()
-#' @examples
 #' \dontrun{
 #'   library(aqp)
 #'   
@@ -87,6 +98,12 @@ fetchSoilGrids <- function(x,
                            variables = c("bdod", "cec", "cfvo", "clay", 
                                          "nitrogen", "phh2o", "sand", "silt", 
                                          "soc", "ocd"),
+                           grid = FALSE,
+                           filename = NULL, 
+                           overwrite = TRUE, 
+                           target_resolution = c(250, 250),
+                           summary_type = c("Q0.05", "Q0.5", "Q0.95", "mean"),
+                           ...,
                            verbose = FALSE,
                            progress = FALSE) {
   
@@ -100,21 +117,33 @@ fetchSoilGrids <- function(x,
         # convert sp -> sf & terra -> sf
         locations <- sf::st_as_sf(locations)
       }
-      
-      # only supporting POINT geometry for now
-      if (inherits(sf::st_geometry(locations), 'sfc_POINT')) {
-        if (is.na(sf::st_crs(locations)$wkt)) {
-          message("CRS is missing; assuming WGS84 decimal degrees (EPSG:4326)")
-          sf::st_crs(locations) <- sf::st_crs(4326)
-        }
-        locations <- data.frame(id = 1:nrow(locations), 
-                                do.call('rbind', sf::st_geometry(locations)))
-        spatial_input <- TRUE
-        colnames(locations) <- c("id", "lon", "lat")
-        loc.names <- c("id", "lat", "lon")
-      } else {
-        stop("only POINT geometries are supported as input", call. = FALSE) 
+    }
+  }
+  
+  if (grid) {
+    return(.get_soilgrids(locations, 
+                          filename = filename, 
+                          overwrite = overwrite, 
+                          variables = variables,
+                          target_resolution = target_resolution,
+                          depth = depth_intervals,
+                          summary_type = summary_type,
+                          ...,
+                          verbose = verbose))
+  } else {
+    # only supporting POINT geometry for now
+    if (inherits(sf::st_geometry(locations), 'sfc_POINT')) {
+      if (is.na(sf::st_crs(locations)$wkt)) {
+        message("CRS is missing; assuming WGS84 decimal degrees (EPSG:4326)")
+        sf::st_crs(locations) <- sf::st_crs(4326)
       }
+      locations <- data.frame(id = 1:nrow(locations),
+                              do.call('rbind', sf::st_geometry(locations)))
+      spatial_input <- TRUE
+      colnames(locations) <- c("id", "lon", "lat")
+      loc.names <- c("id", "lat", "lon")
+    } else {
+      stop("only POINT geometries are supported as input", call. = FALSE)
     }
   }
   
@@ -263,4 +292,93 @@ fetchSoilGrids <- function(x,
   colnames(out) <- gsub("values", x, colnames(out))
   colnames(out) <- gsub("\\.", "", colnames(out))
   return(out)
+}
+
+.get_soilgrids <- function(x, 
+                           filename = NULL, 
+                           overwrite = TRUE, 
+                           target_resolution = c(250, 250),
+                           depth = c("0-5", "5-15", "15-30", "30-60", "60-100", "100-200"),
+                           summary_type = c("Q0.05", "Q0.5", "Q0.95", "mean"),
+                           variables = c("bdod", "cec", "cfvo", "clay", "nitrogen", 
+                                         "phh2o", "sand", "silt", "soc"),
+                           ...,
+                           verbose = TRUE) {
+  
+  stopifnot(requireNamespace("terra"))
+  stopifnot(requireNamespace("sf"))
+  
+  if (!all(substr(depth, nchar(depth) - 1, nchar(depth)) == "cm")) {
+    depth <- paste0(depth, "cm")
+  }
+  
+  if (inherits(x, 'Spatial')) {
+    x <- sf::st_as_sf(x) # sp support
+  }
+  
+  if (!inherits(x, 'bbox')) {
+    # sf/sfc/stars/Raster*/SpatVector/SpatRaster support
+    xbbox <- sf::st_bbox(x)
+  } else xbbox <- x
+  
+  sg_crs <- '+proj=igh'
+  
+  # specifying vsicurl parameters appears to not work with GDAL 3.2.1
+  # sg_url <- paste0("/vsicurl?max_retry=", max_retry,
+  #                  "&retry_delay=", retry_delay,
+  #                  "&list_dir=no&url=https://files.isric.org/soilgrids/latest/data/")
+  
+  # WORKS
+  sg_url <- "/vsicurl/https://files.isric.org/soilgrids/latest/data/"
+  
+  # calculate homolosine bbox
+  xbbox <- sf::st_bbox(sf::st_transform(sf::st_as_sfc(xbbox), sg_crs)) 
+  
+  # numeric values are returned as integers that need to be scaled to match typical measurement units
+  data.factor <- c(0.01, 0.1, 0.1, 0.1, 0.01, 0.1, 0.1, 0.1, 0.1)
+  names(data.factor) <- c("bdod", "cec", "cfvo", "clay", "nitrogen", 
+                          "phh2o", "sand", "silt", "soc")
+  
+  # calculate temporary file names for each variable*depth*summary grid
+  vardepth <- apply(expand.grid(variables, summary_type, depth), 1, paste0, collapse = "_")
+  tfs <- tempfile(pattern = paste0(vardepth, "_"), fileext = ".tif")
+  names(tfs) <- vardepth
+  
+  # helper function for gdal_utils options
+  .gdal_utils_opts <- function(lst) do.call('c', lapply(names(lst), function(y) c(y, lst[[y]])))
+  
+  # iterate over variable*depth
+  for (i in seq_along(tfs)) {
+    
+    # translate remote .vrt -> local .tif
+    vd <- strsplit(vardepth[i], "_")[[1]]
+    v <- vd[1]; d <- vd[2]; s <- vd[3]
+    
+    sf::gdal_utils(
+      util = "translate",
+      source = paste0(sg_url, paste0(v, '/', v, '_', s, '_', d, '.vrt')),
+      destination = tfs[i],
+      options = .gdal_utils_opts(
+        list(
+          "-of" = "GTiff",
+          "-tr" = target_resolution,
+          "-projwin" = as.numeric(xbbox)[c(1, 4, 3, 2)],
+          "-projwin_srs" = sg_crs
+        )
+      ),
+      quiet = !verbose
+    )
+  }
+  
+  stk <- terra::rast(tfs)
+  names(stk) <- vardepth
+  
+  if (!is.null(filename)) {
+    terra::writeRaster(stk, filename = filename, overwrite = overwrite, ...)
+  }
+  
+  # apply conversion factor
+  stk2 <- terra::app(stk, function(x) x * data.factor[gsub("([a-z]+)_.*", "\\1", names(x))])
+  
+  stk2
 }

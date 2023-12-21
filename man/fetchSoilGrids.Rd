@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchSoilGrids.R
 \name{fetchSoilGrids}
 \alias{fetchSoilGrids}
-\title{Get SoilGrids 250m properties information from point locations}
+\title{Get SoilGrids Properties Estimates for Points or Spatial Extent}
 \usage{
 fetchSoilGrids(
   x,
@@ -10,30 +10,50 @@ fetchSoilGrids(
   depth_intervals = c("0-5", "5-15", "15-30", "30-60", "60-100", "100-200"),
   variables = c("bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt",
     "soc", "ocd"),
+  grid = FALSE,
+  filename = NULL,
+  overwrite = TRUE,
+  target_resolution = c(250, 250),
+  summary_type = c("Q0.05", "Q0.5", "Q0.95", "mean"),
+  ...,
   verbose = FALSE,
   progress = FALSE
 )
 }
 \arguments{
-\item{x}{A \code{data.frame} containing 3 columns referring to site ID, latitude and longitude.}
+\item{x}{A \code{data.frame} containing 3 columns referring to site ID, latitude and longitude. Or a spatial (sf, terra) object for which a bounding box can be calculated when \code{grid=TRUE}.}
 
 \item{loc.names}{Optional: Column names referring to site ID, latitude and longitude. Default: \code{c("id", "lat", "lon")}}
 
 \item{depth_intervals}{Default: \code{"0-5"}, \code{"5-15"}, \code{"15-30"}, \code{"30-60"}, \code{"60-100"}, \code{"100-200"}}
 
-\item{variables}{Default: \code{"bdod"}, \code{"cec"}, \code{"cfvo"}, \code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}}
+\item{variables}{Default: \code{"bdod"}, \code{"cec"}, \code{"cfvo"}, \code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}. Optionally \code{"ocs"} for 0 to 30 cm interval.}
+
+\item{grid}{Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: \code{FALSE}}
+
+\item{filename}{Only used when \code{grid=TRUE}. If \code{NULL} defaults to an in-memory raster, or temporary file if result does not fit in memory.}
+
+\item{overwrite}{Only used when \code{grid=TRUE}. Default: \code{FALSE}}
+
+\item{target_resolution}{Only used when \code{grid=TRUE}. Default: \code{c(250, 250)} (250m x 250m pixels)}
+
+\item{summary_type}{Only used when \code{grid=TRUE}. One or more of \code{"Q0.05"}, \code{"Q0.5"}, \code{"Q0.95"}, \code{"mean"}; these are summary statistics that
+correspond to 5th, 50th, 95th percentiles, and mean value for selected \code{variables}.}
+
+\item{...}{Additional arguments passed to \code{terra::writeRaster()} when \code{grid=TRUE}.}
 
 \item{verbose}{Print messages? Default: \code{FALSE}}
 
 \item{progress}{logical, give progress when iterating over multiple requests; Default: \code{FALSE}}
 }
 \value{
-A SoilProfileCollection
+A SoilProfileCollection or SpatRaster when \code{grid=TRUE}
 }
 \description{
-This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes. SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
+This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent.
 }
 \details{
+SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
 \subsection{Properties}{\tabular{lllrl}{
    Name \tab Description \tab Mapped units \tab Conversion factor \tab Conventional units \cr
    bdod \tab Bulk density of the fine earth fraction \tab cg/cm^3 \tab 100 \tab kg/dm^3 \cr
@@ -66,7 +86,6 @@ Find out more information about the SoilGrids and GlobalSoilMap products here:
 }
 \examples{
 \dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
 \dontrun{
   library(aqp)
   
@@ -102,6 +121,7 @@ Find out more information about the SoilGrids and GlobalSoilMap products here:
   sum(h$ocdmean * h$thickness_meters, na.rm = TRUE)
  
 }
+\dontshow{\}) # examplesIf}
 }
 \references{
 Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217-240, 2021. \doi{https://doi.org/10.5194/soil-7-217-2021}
