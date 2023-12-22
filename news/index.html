@@ -68,7 +68,13 @@
 <li>
 <code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code>: weighted average/dominant component numeric methods now return <code>mukey</code> in first column position; for parity with other <code>get_SDA*</code> methods recently updated/already doing this, making it easier to use these columns for raster attribute tables via <code>terra::set.levels()</code>
 </li>
+<li>
+<code>fetchNASIS(lab=TRUE)</code> fixed a bug when multiple <code>phlabresults</code> records are present for a single horizon, but one or both is missing bottom depth. Thanks to Meyer Bohn (<a href="https://github.com/MollicMeyer" class="external-link">@MollicMeyer</a>) for reporting.</li>
 <li>SoilProfileCollection objects now include a time stamp in their metadata, accessed as: <code>metadata(x)$created</code> (<a href="https://github.com/ncss-tech/soilDB/issues/235" class="external-link">#235</a>)</li>
+<li>Added <code>area_type</code> argument to <code><a href="../reference/fetchLDM.html">fetchLDM()</a></code> for non-SSA area queries (<a href="https://github.com/ncss-tech/soilDB/issues/328" class="external-link">#328</a>)</li>
+<li>Added <code>grid</code> argument to <code><a href="../reference/fetchSoilGrids.html">fetchSoilGrids()</a></code> for downloading Cloud-Optimized GeoTIFF subsets for spatial extent (<a href="https://github.com/ncss-tech/soilDB/issues/329" class="external-link">#329</a>)</li>
+<li>
+<code><a href="../reference/fetchOSD.html">fetchOSD()</a></code> now automatically batches requests into sets of 100 series, allowing arbitrarily large requests to be made (<a href="https://github.com/ncss-tech/soilDB/issues/239" class="external-link">#239</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.7.10" id="soildb-2710-2023-11-16">soilDB 2.7.10 (2023-11-16)<a class="anchor" aria-label="anchor" href="#soildb-2710-2023-11-16"></a></h2><p class="text-muted">CRAN release: 2023-11-16</p>
