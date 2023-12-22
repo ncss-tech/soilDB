@@ -319,7 +319,7 @@ fetchLDM <- function(x = NULL,
       format_SQL_in_statement(layer_type),
       ifelse(is.null(x), "", paste0(" AND ", bycol, " IN ", format_SQL_in_statement(x))),
       ifelse(length(nt) == 0, "", paste0(" AND ", paste0(sapply(nt, function(b) paste0("IsNull(",b,".prep_code, '')")), 
-                    " IN ", format_SQL_in_statement(prep_code)), collapse = " AND ")))
+                    " IN ", format_SQL_in_statement(prep_code), collapse = " AND "))))
   } else {
     layer_query <- sprintf(
       "SELECT * FROM lab_layer WHERE lab_layer.layer_type IN %s %s",
