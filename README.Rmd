@@ -41,7 +41,7 @@ soilDB_CRAN_VERSION <- .getLatestCRANRelease()
 
 ## Installation
 
-Get the stable version (`r soilDB_CRAN_VERSION`) from CRAN:
+Get the stable version from CRAN:
 
 ```r
 install.packages('soilDB', dependencies = TRUE)
