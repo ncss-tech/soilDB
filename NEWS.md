@@ -1,4 +1,4 @@
-# soilDB 2.8.0 (development)
+# soilDB 2.8.0 (2023-12-22)
 
  - Minimum {aqp} version set to v2.0.2. This is due to changes in the namespace related to `aqp::col2Munsell()`, to "encourage" users to update to the more efficient routines provided in {aqp} 2+ (if they haven't already), and prepare for future updates in the 2.x series.
  - Fix bugs in `get_SDA_interpretation()` when `dsn` refers to a local SQLite source
