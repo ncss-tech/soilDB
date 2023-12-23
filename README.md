@@ -5,7 +5,7 @@ status](https://badges.cranchecks.info/worst/soilDB.svg)](https://cran.r-project
 [![Development
 Version](https://ncss-tech.r-universe.dev/badges/soilDB)](https://ncss-tech.r-universe.dev/)
 [![R-CMD-check Build
-Status](https://github.com/ncss-tech/soilDB/workflows/R-CMD-check/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
+Status](https://github.com/ncss-tech/soilDB/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
 [![Total CRAN
 Downloads](http://cranlogs.r-pkg.org/badges/grand-total/soilDB)](https://cran.r-project.org/package=soilDB)
 ![CRAN/METACRAN](https://img.shields.io/cran/l/soilDB) [![soilDB
