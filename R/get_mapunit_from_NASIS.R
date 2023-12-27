@@ -5,12 +5,17 @@
 #' @param repdmu Return only "representative" data mapunits? Default: `TRUE`
 #' @param droplevels Drop unused levels from `farmlndcl` and other factor levels from NASIS domains?
 #' @param stringsAsFactors deprecated
+#' @param areatypename Used for `get_legend_from_NASIS()`. Default: `c('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area')`
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' 
 #' @export
-get_mapunit_from_NASIS <- function(SS = TRUE, repdmu = TRUE, droplevels = TRUE, stringsAsFactors = NULL, dsn = NULL) {
-  
+get_mapunit_from_NASIS <- function(SS = TRUE,
+                                   repdmu = TRUE,
+                                   droplevels = TRUE,
+                                   stringsAsFactors = NULL,
+                                   areatypename = c('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area'),
+                                   dsn = NULL) {
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
@@ -51,9 +56,8 @@ get_mapunit_from_NASIS <- function(SS = TRUE, repdmu = TRUE, droplevels = TRUE, 
                      GROUP BY cor.muiidref, dmuiid, repdmu, dmuinvesintens
                     ) co ON co.cor_muiidref = mu.muiid
 
-                     WHERE
-                         areatypename IN ('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area')
-
+                     ", ifelse(length(areatypename) > 0, paste0("WHERE areatypename IN ",
+                                                                format_SQL_in_statement(areatypename)), ""), "
                      ORDER BY areasymbol, musym
                      ;")
   
@@ -105,6 +109,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE, repdmu = TRUE, droplevels = TRUE, 
 get_legend_from_NASIS <- function(SS = TRUE,
                                   droplevels = TRUE,
                                   stringsAsFactors = NULL,
+                                  areatypename = c('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area'),
                                   dsn = NULL) {
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
@@ -126,8 +131,8 @@ get_legend_from_NASIS <- function(SS = TRUE,
                      INNER JOIN
                      areatype at  ON at.areatypeiid = areatypeiidref
 
-                     WHERE
-                         areatypename IN ('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area')
+                     ", ifelse(length(areatypename) > 0, paste0("WHERE areatypename IN ",
+                               format_SQL_in_statement(areatypename)), ""), "
 
                      GROUP BY mlraoffice, areasymbol, areaname, areatypename, areaacres, ssastatus, projectscale, legendsuituse, cordate, liid
 
@@ -161,9 +166,10 @@ get_legend_from_NASIS <- function(SS = TRUE,
 get_lmuaoverlap_from_NASIS <- function(SS = TRUE,
                                        droplevels = TRUE,
                                        stringsAsFactors = NULL,
+                                       areatypename = c('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area'),
                                        dsn = NULL) {
   
-  q <- "SELECT
+  q <- paste0("SELECT
              a.areasymbol, a.areaname, a.areaacres,
              at2.areatypename lao_areatypename, a2.areasymbol lao_areasymbol, a2.areaname lao_areaname, lao.areaovacres lao_areaovacres,
              lmapunitiid, musym, nationalmusym, muname, mustatus, muacres,
@@ -186,12 +192,11 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE,
              LEFT OUTER JOIN
                  lmuaoverlap_View_1 lmuao ON lmuao.lmapunitiidref = lmu.lmapunitiid
                                      AND lmuao.lareaoviidref  = lao.lareaoviid
-
-             WHERE 
-                 at.areatypename IN ('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area')
+             ", ifelse(length(areatypename) > 0, paste0("WHERE at.areatypename IN ",
+                                                                format_SQL_in_statement(areatypename)), ""), "
 
              ORDER BY a.areasymbol, lmu.musym, lao_areatypename
-             ;"
+             ;")
   
   
   # toggle selected set vs. local DB
