@@ -250,8 +250,8 @@ get_SDA_coecoclass <- function(method = "None",
     for (i in sdx) {
       if (i > nrow(x)) {
         d <- data.frame(
-          siten = NA_character_,
-          sitenname = NA_character_,
+          siten = not_rated_value,
+          sitenname = not_rated_value,
           sitencompname = NA_character_,
           sitenpct_r = NA_integer_,
           sitenlink = NA_character_
