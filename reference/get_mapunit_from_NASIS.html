@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,6 +63,7 @@
 <span>  repdmu <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  areatypename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Non-MLRA Soil Survey Area"</span>, <span class="st">"MLRA Soil Survey Area"</span><span class="op">)</span>,</span>
 <span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -70,6 +71,7 @@
 <span>  SS <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  areatypename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Non-MLRA Soil Survey Area"</span>, <span class="st">"MLRA Soil Survey Area"</span><span class="op">)</span>,</span>
 <span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -77,6 +79,7 @@
 <span>  SS <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  areatypename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Non-MLRA Soil Survey Area"</span>, <span class="st">"MLRA Soil Survey Area"</span><span class="op">)</span>,</span>
 <span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -99,6 +102,10 @@
 
 <dt>stringsAsFactors</dt>
 <dd><p>deprecated</p></dd>
+
+
+<dt>areatypename</dt>
+<dd><p>Used for <code>get_legend_from_NASIS()</code>. Default: <code>c('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area')</code></p></dd>
 
 
 <dt>dsn</dt>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,12 @@
       <small>Source: <a href="https://github.com/ncss-tech/soilDB/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.8.1" id="soildb-281-development">soilDB 2.8.1 (development)<a class="anchor" aria-label="anchor" href="#soildb-281-development"></a></h2>
+<ul><li>
+<code><a href="../reference/get_mapunit_from_NASIS.html">get_mapunit_from_NASIS()</a></code>, <code><a href="../reference/get_mapunit_from_NASIS.html">get_lmuaoverlap_from_NASIS()</a></code> and <code><a href="../reference/get_mapunit_from_NASIS.html">get_legend_from_NASIS()</a></code> gain <code>areatypename</code> argument used for filtering legends by <code>areatypename</code>.</li>
+<li>Default results include <code>"Non-MLRA Soil Survey Area"</code> and <code>"MLRA Soil Survey Area"</code>. Set to <code>NULL</code> for no filter.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.8.0" id="soildb-280-2023-12-22">soilDB 2.8.0 (2023-12-22)<a class="anchor" aria-label="anchor" href="#soildb-280-2023-12-22"></a></h2><p class="text-muted">CRAN release: 2023-12-22</p>
 <ul><li>Minimum {aqp} version set to v2.0.2. This is due to changes in the namespace related to <code><a href="https://rdrr.io/pkg/aqp/man/col2Munsell.html" class="external-link">aqp::col2Munsell()</a></code>, to “encourage” users to update to the more efficient routines provided in {aqp} 2+ (if they haven’t already), and prepare for future updates in the 2.x series.</li>
