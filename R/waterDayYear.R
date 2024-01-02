@@ -35,7 +35,7 @@ waterDayYear <- function(d, end = "09-30", format = "%Y-%m-%d", tz = "UTC") {
   water_year <- dLT$year + 1900
 
   # extract julian day the new water year starts
-  startDay <- as.POSIXlt(as.Date(end[1], format = "%m-%d") + 1, tz = "UTC")$yday
+  startDay <- as.POSIXlt(as.Date(paste0(water_year, "-", end[1]), format = "%Y-%m-%d") + 1, tz = "UTC")$yday
 
   # water year starts day after `end` of _prior_ year,
   # so increment calendar year for days after `end`

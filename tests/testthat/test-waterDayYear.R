@@ -3,6 +3,8 @@ context("water year/day")
 
 test_that("works as expected", {
 
+  skip_on_cran()
+  
   # NOTE: waterDayYear requires `tz` argument for consistent conversion across locales
 
   # 2008 is a leap year
@@ -20,7 +22,7 @@ test_that("works as expected", {
   # first day of water year 2019
   x <- as.Date("2018-10-01")
   res <- waterDayYear(x)
-
+  
   expect_equal(res$wy, 2019)
   expect_equal(res$wd, 1)
 
@@ -53,6 +55,9 @@ test_that("works as expected", {
 })
 
 test_that("non-standard `end` of water year", {
+  
+  skip_on_cran()
+  
   x <- as.Date("2018-09-30")
 
   # water year "2019" starts hypothetically on March 11th, 2018
