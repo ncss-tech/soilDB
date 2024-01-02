@@ -63,6 +63,7 @@ summarizeSoilTemperature <- function(soiltemp.data) {
   # daily.mean: mean of non-NA values
   .doySummary <- function(i) {
     res <- data.frame(
+      year = i$year[1],
       n.total = length(i$sensor_value),
       n = length(na.omit(i$sensor_value)),
       daily.mean = mean(i$sensor_value, na.rm = TRUE)
@@ -73,7 +74,7 @@ summarizeSoilTemperature <- function(soiltemp.data) {
   d <- dd[, .doySummary(.SD), by = c('sid', 'doy')]
 
   # convert DOY -> month
-  d$month <- format(as.Date(as.character(d$doy), format = "%j"), "%b")
+  d$month <- format(as.Date(paste0(d$year, "-", d$doy), format = "%Y-%j"), "%b")
   d$season <- month2season(d$month)
 
   # compute unbiased MAST, number of obs, complete records per average no. days in year
