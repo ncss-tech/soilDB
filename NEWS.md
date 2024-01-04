@@ -1,7 +1,13 @@
 # soilDB 2.8.1 (development)
 
  - `get_mapunit_from_NASIS()`, `get_lmuaoverlap_from_NASIS()` and `get_legend_from_NASIS()` gain `areatypename` argument used for filtering legends by `areatypename`. 
-  - Default results include `"Non-MLRA Soil Survey Area"` and `"MLRA Soil Survey Area"`. Set to `NULL` for no filter.
+   - Default results include `"Non-MLRA Soil Survey Area"` and `"MLRA Soil Survey Area"`. Set to `NULL` for no filter.
+ - Fixed bugs in `waterDayYear()` and `summarizeSoilTemperature()` for leap years (#333)
+ - `fetchSoilGrids()` upgrades
+   - Fixed a bug with `data.frame` output
+   - Requests for more than 5 sites now include a call to `Sys.sleep()`
+   - Upgraded SoilProfileCollection spatial promotion for aqp 2.0+
+   - Added 10 kPa, 33 kPa and 1500 kPa water content estimates to default variable sets for point and grid queries
 
 # soilDB 2.8.0 (2023-12-22)
 
