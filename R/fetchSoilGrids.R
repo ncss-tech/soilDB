@@ -237,6 +237,12 @@ fetchSoilGrids <- function(x,
     }
     
     res[[i]] <- hz.data
+    
+    if ((i %% 5) == 0) {
+      # ISRIC states "Fair Use" of API should not exceed 5 requests per minute.
+      # This should prevent requests for more than 5 sites from erroring out, but will not affect requests <5 sites
+      Sys.sleep(61)
+    }
   }
   
   # combine horizon data together
