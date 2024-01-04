@@ -1,6 +1,6 @@
-#' Get SoilGrids Properties Estimates for Points or Spatial Extent
+#' Get SoilGrids 2.0 Property Estimates for Points or Spatial Extent
 #'
-#' This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent. 
+#' This function obtains [SoilGrids 2.0](https://soilgrids.org) properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent. 
 #' 
 #' SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
 #' 
@@ -21,10 +21,13 @@
 #' |soc      |Soil organic carbon content in the fine earth fraction                             |dg/kg          |                10|g/kg               |
 #' |ocd      |Organic carbon density                                                             |hg/m^3         |                10|kg/m^3             |
 #' |ocs      |Organic carbon stocks (0-30cm depth interval only)                                 |t/ha           |                10|kg/m^2             |
+#' |wv0010   |Volumetric Water Content at 10kPa                                                  |0.1 v% or 1 mm/m|                10|volume (%)         |
+#' |wv0033   |Volumetric Water Content at 33kPa                                                  |0.1 v% or 1 mm/m|                10|volume (%)         |
+#' |wv1500   |Volumetric Water Content at 1500kPa                                                |0.1 v% or 1 mm/m|                10|volume (%)         |
 #' 
 #' SoilGrids predictions are made for the six standard depth intervals specified in the GlobalSoilMap IUSS working group and its specifications. The default depth 
 #' intervals returned are (in centimeters): `"0-5"`, `"5-15"`, `"15-30"`, `"30-60"`, `"60-100"`, `"100-200"` for the properties `"bdod"`, `"cec"`, `"cfvo"`, 
-#' `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`--each with 5th, 50th, 95th, mean and uncertainty values. Soil organic carbon stocks (0-30cm) (`variables="ocs"`) are returned only for `depth_intervals="0-30"`. The uncertainty values are the ratio
+#' `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`, `"wv0010"`, `"wv0033"`, `"wv1500"`--each with 5th, 50th, 95th, mean and uncertainty values. Soil organic carbon stocks (0-30cm) (`variables="ocs"`) are returned only for `depth_intervals="0-30"`. The uncertainty values are the ratio
 #' between the inter-quantile range (90% prediction interval width) and the median : `(Q0.95-Q0.05)/Q0.50.` All values are converted from "mapped" to "conventional" 
 #' based on above table conversion factors. Point data requests are made through `"properties/query"` endpoint of the [SoilGrids v2.0 REST API](https://www.isric.org/explore/soilgrids/faq-soilgrids). 
 #' Please check ISRIC's data policy, disclaimer and citation: \url{https://www.isric.org/about/data-policy}.
@@ -34,13 +37,18 @@
 #'  - \url{https://www.isric.org/explore/soilgrids/faq-soilgrids}
 #'  - \url{https://www.isric.org/sites/default/files/GlobalSoilMap_specifications_december_2015_2.pdf}
 #' 
-#' @references Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217-240, 2021. \doi{https://doi.org/10.5194/soil-7-217-2021}
+#' @references 
+#'  - **Common soil chemical and physical properties:**
+#'    Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217–240, 2021. DOI: \doi{https://doi.org/10.5194/soil-7-217-2021}
+#'  - **Soil water content at different pressure heads:**
+#'    Turek, M.E.,  Poggio, L., Batjes, N. H., Armindo, R. A.,  de Jong van Lier, Q.,  de Sousa, L.M.,  Heuvelink, G. B. M. : Global mapping of volumetric water retention at 100, 330 and 15 000 cm suction using the WoSIS database, International Soil and Water Conservation Research, 11-2, 225-239, 2023. DOI: \doi{https://doi.org/10.1016/j.iswcr.2022.08.001}
+#' 
 #' @importFrom utils packageVersion
 #'
 #' @param x A `data.frame` containing 3 columns referring to site ID, latitude and longitude. Or a spatial (sf, terra) object for which a bounding box can be calculated when `grid=TRUE`.
 #' @param loc.names Optional: Column names referring to site ID, latitude and longitude. Default: `c("id", "lat", "lon")`
 #' @param depth_intervals Default: `"0-5"`, `"5-15"`, `"15-30"`, `"30-60"`, `"60-100"`, `"100-200"`
-#' @param variables Default: `"bdod"`, `"cec"`, `"cfvo"`, `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`. Optionally `"ocs"` for 0 to 30 cm interval. 
+#' @param variables Default: `"bdod"`, `"cec"`, `"cfvo"`, `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`, `"wv0010"`, `"wv0033"`, `"wv1500"`. Optionally `"ocs"` (only for 0 to 30 cm interval). 
 #' @param grid Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: `FALSE`
 #' @param filename Only used when `grid=TRUE`. If `NULL` defaults to an in-memory raster, or temporary file if result does not fit in memory.
 #' @param overwrite Only used when `grid=TRUE`. Default: `FALSE`
@@ -97,7 +105,7 @@ fetchSoilGrids <- function(x,
                                                "30-60", "60-100", "100-200"),
                            variables = c("bdod", "cec", "cfvo", "clay", 
                                          "nitrogen", "phh2o", "sand", "silt", 
-                                         "soc", "ocd"),
+                                         "soc", "ocd", "wv0010", "wv0033", "wv1500"),
                            grid = FALSE,
                            filename = NULL, 
                            overwrite = TRUE, 
@@ -130,7 +138,7 @@ fetchSoilGrids <- function(x,
                           summary_type = summary_type,
                           ...,
                           verbose = verbose))
-  } else {
+  } else if (!inherits(locations, 'data.frame')) {
     # only supporting POINT geometry for now
     if (inherits(sf::st_geometry(locations), 'sfc_POINT')) {
       if (is.na(sf::st_crs(locations)$wkt)) {
@@ -166,7 +174,9 @@ fetchSoilGrids <- function(x,
   
   res <- vector('list', nrow(locations))
   locsplit <- split(locations, f = locations[[loc.names[1]]])
+  
   for (i in seq_along(res)) {
+    
     yd <- locsplit[[i]]
     id <- as.character(yd[[loc.names[1]]])
     lat <- as.numeric(yd[[loc.names[2]]])
@@ -212,11 +222,13 @@ fetchSoilGrids <- function(x,
     data.types <- match.arg(gsub(" ", "", variables), c("bdod", "cec", "cfvo", 
                                                         "clay", "nitrogen", "phh2o",
                                                         "sand", "silt", "soc",
-                                                        "ocd", "ocs"), several.ok = TRUE)
+                                                        "ocd", "ocs", 
+                                                        "wv0010", "wv0033", "wv1500"), several.ok = TRUE)
     
     # numeric values are returned as integers that need to be scaled to match typical measurement units
     data.factors <- c(bdod = 0.01, cec = 0.1, cfvo = 0.1, clay = 0.1, nitrogen = 0.01, 
-                      phh2o = 0.1, sand = 0.1, silt = 0.1, soc = 0.1, ocd = 0.1, ocs = 0.1)
+                      phh2o = 0.1, sand = 0.1, silt = 0.1, soc = 0.1, ocd = 0.1, ocs = 0.1, 
+                      wv0010 = 0.1, wv0033 = 0.1, wv1500 = 0.1)
     data.factor <- data.factors[data.types]
     hz.data <- hz.data0
     all_x <- FALSE
@@ -237,6 +249,12 @@ fetchSoilGrids <- function(x,
     }
     
     res[[i]] <- hz.data
+    
+    if ((i %% 5) == 0) {
+      # ISRIC states "Fair Use" of API should not exceed 5 requests per minute.
+      # This should prevent requests for more than 5 sites from erroring out, but will not affect requests <5 sites
+      Sys.sleep(61)
+    }
   }
   
   # combine horizon data together
@@ -248,7 +266,7 @@ fetchSoilGrids <- function(x,
   #  note sort order of labels may differ from sort order of depths
   spc$hzdept <- as.numeric(lapply(labelsplit, function(x) x[1]))
   spc$hzdepb <- as.numeric(lapply(labelsplit, function(x) x[2]))
-  spc <- spc[order(spc$id, spc$hzdept, spc$hzdepb),]
+  spc <- spc[order(spc$id, spc$hzdept, spc$hzdepb), ]
   
   # promote to SoilProfileCollection
   aqp::depths(spc) <- id ~ hzdept + hzdepb
@@ -256,14 +274,8 @@ fetchSoilGrids <- function(x,
   # move location information to site
   aqp::site(spc) <- ~ longitude + latitude
   
-  # if (utils::packageVersion("aqp") >= 2.0) {
-  #   aqp::initSpatial(spc, crs = "OGC:CRS84") <- ~ longitude + latitude
-  # } else {
-  suppressWarnings({
-    aqp::coordinates(spc) <- ~ longitude + latitude
-    aqp::proj4string(spc) <- "EPSG:4326"
-  })  
-  # }
+  # requires aqp > 2.0 (now set in DESCRIPTION)
+  aqp::initSpatial(spc, crs = "OGC:CRS84") <- ~ longitude + latitude
   
   # merge the rest of the sf object into the site table 
   if (spatial_input) {
@@ -301,7 +313,7 @@ fetchSoilGrids <- function(x,
                            depth = c("0-5", "5-15", "15-30", "30-60", "60-100", "100-200"),
                            summary_type = c("Q0.05", "Q0.5", "Q0.95", "mean"),
                            variables = c("bdod", "cec", "cfvo", "clay", "nitrogen", 
-                                         "phh2o", "sand", "silt", "soc"),
+                                         "phh2o", "sand", "silt", "soc", "wv0010", "wv0033", "wv1500"),
                            ...,
                            verbose = TRUE) {
   
@@ -335,9 +347,9 @@ fetchSoilGrids <- function(x,
   xbbox <- sf::st_bbox(sf::st_transform(sf::st_as_sfc(xbbox), sg_crs)) 
   
   # numeric values are returned as integers that need to be scaled to match typical measurement units
-  data.factor <- c(0.01, 0.1, 0.1, 0.1, 0.01, 0.1, 0.1, 0.1, 0.1)
+  data.factor <- c(0.01, 0.1, 0.1, 0.1, 0.01, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)
   names(data.factor) <- c("bdod", "cec", "cfvo", "clay", "nitrogen", 
-                          "phh2o", "sand", "silt", "soc")
+                          "phh2o", "sand", "silt", "soc", "wv0010", "wv0033", "wv1500")
   
   # calculate temporary file names for each variable*depth*summary grid
   vardepth <- apply(expand.grid(variables, summary_type, depth), 1, paste0, collapse = "_")

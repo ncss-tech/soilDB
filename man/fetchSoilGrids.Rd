@@ -2,14 +2,14 @@
 % Please edit documentation in R/fetchSoilGrids.R
 \name{fetchSoilGrids}
 \alias{fetchSoilGrids}
-\title{Get SoilGrids Properties Estimates for Points or Spatial Extent}
+\title{Get SoilGrids 2.0 Property Estimates for Points or Spatial Extent}
 \usage{
 fetchSoilGrids(
   x,
   loc.names = c("id", "lat", "lon"),
   depth_intervals = c("0-5", "5-15", "15-30", "30-60", "60-100", "100-200"),
   variables = c("bdod", "cec", "cfvo", "clay", "nitrogen", "phh2o", "sand", "silt",
-    "soc", "ocd"),
+    "soc", "ocd", "wv0010", "wv0033", "wv1500"),
   grid = FALSE,
   filename = NULL,
   overwrite = TRUE,
@@ -27,7 +27,7 @@ fetchSoilGrids(
 
 \item{depth_intervals}{Default: \code{"0-5"}, \code{"5-15"}, \code{"15-30"}, \code{"30-60"}, \code{"60-100"}, \code{"100-200"}}
 
-\item{variables}{Default: \code{"bdod"}, \code{"cec"}, \code{"cfvo"}, \code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}. Optionally \code{"ocs"} for 0 to 30 cm interval.}
+\item{variables}{Default: \code{"bdod"}, \code{"cec"}, \code{"cfvo"}, \code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}, \code{"wv0010"}, \code{"wv0033"}, \code{"wv1500"}. Optionally \code{"ocs"} (only for 0 to 30 cm interval).}
 
 \item{grid}{Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: \code{FALSE}}
 
@@ -50,7 +50,7 @@ correspond to 5th, 50th, 95th percentiles, and mean value for selected \code{var
 A SoilProfileCollection or SpatRaster when \code{grid=TRUE}
 }
 \description{
-This function obtains SoilGrids properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent.
+This function obtains \href{https://soilgrids.org}{SoilGrids 2.0} properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent.
 }
 \details{
 SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
@@ -67,12 +67,15 @@ SoilGrids API and maps return values as whole (integer) numbers to minimize the 
    soc \tab Soil organic carbon content in the fine earth fraction \tab dg/kg \tab 10 \tab g/kg \cr
    ocd \tab Organic carbon density \tab hg/m^3 \tab 10 \tab kg/m^3 \cr
    ocs \tab Organic carbon stocks (0-30cm depth interval only) \tab t/ha \tab 10 \tab kg/m^2 \cr
+   wv0010 \tab Volumetric Water Content at 10kPa \tab 0.1 v\% or 1 mm/m \tab 10 \tab volume (\%) \cr
+   wv0033 \tab Volumetric Water Content at 33kPa \tab 0.1 v\% or 1 mm/m \tab 10 \tab volume (\%) \cr
+   wv1500 \tab Volumetric Water Content at 1500kPa \tab 0.1 v\% or 1 mm/m \tab 10 \tab volume (\%) \cr
 }
 
 
 SoilGrids predictions are made for the six standard depth intervals specified in the GlobalSoilMap IUSS working group and its specifications. The default depth
 intervals returned are (in centimeters): \code{"0-5"}, \code{"5-15"}, \code{"15-30"}, \code{"30-60"}, \code{"60-100"}, \code{"100-200"} for the properties \code{"bdod"}, \code{"cec"}, \code{"cfvo"},
-\code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}--each with 5th, 50th, 95th, mean and uncertainty values. Soil organic carbon stocks (0-30cm) (\code{variables="ocs"}) are returned only for \code{depth_intervals="0-30"}. The uncertainty values are the ratio
+\code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}, \code{"wv0010"}, \code{"wv0033"}, \code{"wv1500"}--each with 5th, 50th, 95th, mean and uncertainty values. Soil organic carbon stocks (0-30cm) (\code{variables="ocs"}) are returned only for \code{depth_intervals="0-30"}. The uncertainty values are the ratio
 between the inter-quantile range (90\% prediction interval width) and the median : \code{(Q0.95-Q0.05)/Q0.50.} All values are converted from "mapped" to "conventional"
 based on above table conversion factors. Point data requests are made through \code{"properties/query"} endpoint of the \href{https://www.isric.org/explore/soilgrids/faq-soilgrids}{SoilGrids v2.0 REST API}.
 Please check ISRIC's data policy, disclaimer and citation: \url{https://www.isric.org/about/data-policy}.
@@ -124,7 +127,12 @@ Find out more information about the SoilGrids and GlobalSoilMap products here:
 \dontshow{\}) # examplesIf}
 }
 \references{
-Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217-240, 2021. \doi{https://doi.org/10.5194/soil-7-217-2021}
+\itemize{
+\item \strong{Common soil chemical and physical properties:}
+Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217–240, 2021. DOI: \doi{https://doi.org/10.5194/soil-7-217-2021}
+\item \strong{Soil water content at different pressure heads:}
+Turek, M.E.,  Poggio, L., Batjes, N. H., Armindo, R. A.,  de Jong van Lier, Q.,  de Sousa, L.M.,  Heuvelink, G. B. M. : Global mapping of volumetric water retention at 100, 330 and 15 000 cm suction using the WoSIS database, International Soil and Water Conservation Research, 11-2, 225-239, 2023. DOI: \doi{https://doi.org/10.1016/j.iswcr.2022.08.001}
+}
 }
 \author{
 Andrew G. Brown
