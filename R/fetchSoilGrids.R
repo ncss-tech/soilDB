@@ -130,7 +130,7 @@ fetchSoilGrids <- function(x,
                           summary_type = summary_type,
                           ...,
                           verbose = verbose))
-  } else {
+  } else if (!inherits(locations, 'data.frame')) {
     # only supporting POINT geometry for now
     if (inherits(sf::st_geometry(locations), 'sfc_POINT')) {
       if (is.na(sf::st_crs(locations)$wkt)) {
