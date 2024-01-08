@@ -8,6 +8,7 @@
    - Requests for more than 5 sites now include a call to `Sys.sleep()` to conform with ISRIC "Fair Use" policy
    - Upgraded SoilProfileCollection spatial promotion for aqp 2.0+
    - Added 10 kPa, 33 kPa and 1500 kPa water content estimates to default variable sets for point and grid queries
+ - `fetchSDA_spatial()` gains ability to query mapunit delineations by Ecological Site ID (`by.col="ecoclassid"`)
 
 # soilDB 2.8.0 (2023-12-22)
 

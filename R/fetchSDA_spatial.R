@@ -5,7 +5,7 @@
 #' A Soil Data Access query returns geometry and key identifying information about the map unit or area of interest. Additional columns from the map unit or legend table can be included; see `add.fields` argument.
 #'
 #' @param x A vector of map unit keys (`mukey`) or national map unit symbols (`nmusym`) for `mupolygon` geometry OR legend keys (`lkey`) or soil survey area symbols (`areasymbol`) for `sapolygon` geometry. If `geom.src="mlrapolygon"` then `x` refers to `MLRARSYM` (major land resource area symbols).
-#' @param by.col Column name containing map unit identifier `"mukey"`, `"nmusym"`/`"nationalmusym"` for `geom.src` `mupolygon` OR `"areasymbol"`, `"areaname"`, `"mlraoffice"`, `"mouagncyresp"` for `geom.src` `sapolygon`; default is determined by `is.numeric(x)` `TRUE` for `mukey` or `lkey` and `nationalmusym` or `areasymbol` otherwise.
+#' @param by.col Column name containing map unit identifier `"mukey"`, `"nmusym"`/`"nationalmusym"`, or `"ecoclassid"` for `geom.src` `mupolygon` OR `"areasymbol"`, `"areaname"`, `"mlraoffice"`, `"mouagncyresp"` for `geom.src` `sapolygon`; default is determined by `is.numeric(x)` `TRUE` for `mukey` or `lkey` and `nationalmusym` or `areasymbol` otherwise.
 #' @param method geometry result type: `"feature"` returns polygons, `"bbox"` returns the bounding box of each polygon (via `STEnvelope()`), `"point"` returns a single point (via `STPointOnSurface()`) within each polygon, `"extent"` returns an aggregate bounding box (the extent of all polygons, `geometry::EnvelopeAggregate()`) ), `"convexhull"` (`geometry::ConvexHullAggregate()`) returns the aggregate convex hull around all polygons, `"union"` (`geometry::UnionAggregate()`) and `"collection"` (`geometry::CollectionAggregate()`) return a `MULTIPOLYGON` or a `GEOMETRYCOLLECTION`, respectively, for each `mukey`, `nationalmusym`, or `areasymbol `. In the case of the latter four aggregation methods, the groups for aggregation depend on `by.col` (default by `"mukey"`).
 #' @param geom.src Either `mupolygon` (map unit polygons), `sapolygon` (soil survey area boundary polygons), or `mlrapolygon` (major land resource area boundary polygons)
 #' @param db Default: `"SSURGO"`. When `geom.src` is `mupolygon`, use STATSGO polygon geometry instead of SSURGO by setting `db = "STATSGO"`
@@ -67,6 +67,7 @@ fetchSDA_spatial <- function(x,
                              chunk.size = 10,
                              verbose = TRUE,
                              as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {
+  by.col <- tolower(by.col)
   geom.src <- match.arg(tolower(geom.src), choices = c("mupolygon", "sapolygon", "mlrapolygon"))
   db <- match.arg(toupper(db), choices = c("SSURGO", "STATSGO"))
 
@@ -118,7 +119,23 @@ fetchSDA_spatial <- function(x,
       return(res)
     }
     mukey.list <- unique(res$mukey)
-
+   } else if (by.col == "ecoclassid") {
+      
+      # do additional query to determine mapping of nmusym:mukey
+      q.esid <- paste0("SELECT DISTINCT nationalmusym, mapunit.mukey FROM mapunit 
+                        INNER JOIN component ON component.mukey = mapunit.mukey 
+                        INNER JOIN coecoclass ON coecoclass.cokey = component.cokey
+                        WHERE ecoclassid IN ",
+                        format_SQL_in_statement(x),";")
+      
+      suppressMessages( {res <- SDA_query(q.esid)} )
+      
+      if (inherits(res, 'try-error')) {
+        message("fetchSDA_spatial: fatal error in ecoclassid -> mukey conversion.")
+        return(res)
+      }
+      mukey.list <- unique(res$mukey)
+      
   # a convenience interface for lkey is by areasymbol/areaname or other legend column
   } else if (by.col %in% c("areasymbol", "areasym", "areaname", "mlraoffice", "mouagncyresp")) {
     if (by.col == "areasym") {
@@ -163,7 +180,7 @@ fetchSDA_spatial <- function(x,
   s <- NULL
 
   # alias
-  if (method == "envelope"){
+  if (method == "envelope") {
     method <- "extent"
   }
   
