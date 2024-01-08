@@ -19,6 +19,7 @@ URL: https://ncss-tech.github.io/soilDB/, https://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues
 RoxygenNote: 7.2.3
 Encoding: UTF-8
+Language: en-US
 Roxygen: list(markdown = TRUE)
 LazyData: false
 VignetteBuilder: knitr

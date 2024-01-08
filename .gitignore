@@ -6,3 +6,5 @@ docs/reference/*.pdf
 README_files
 docs
 inst/doc
+/doc/
+/Meta/

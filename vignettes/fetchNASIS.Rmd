@@ -1,11 +1,6 @@
 ---
 title: "fetchNASIS(from='pedons') Columns"
-output: 
-  rmarkdown::html_document:
-    toc: true
-    toc_float:
-      toc_collapsed: true
-    toc_depth: 3
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fetchNASIS(from='pedons') Columns}
   %\VignetteEngine{knitr::rmarkdown}

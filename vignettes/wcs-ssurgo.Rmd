@@ -2,7 +2,7 @@
 title: "Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Map Unit Key Grids and Thematic Maps of SSURGO Data}
+  %\VignetteIndexEntry{Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -131,7 +131,7 @@ Find out more information about the SoilGrids and GlobalSoilMap products here:
 \item \strong{Common soil chemical and physical properties:}
 Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217–240, 2021. DOI: \doi{https://doi.org/10.5194/soil-7-217-2021}
 \item \strong{Soil water content at different pressure heads:}
-Turek, M.E.,  Poggio, L., Batjes, N. H., Armindo, R. A.,  de Jong van Lier, Q.,  de Sousa, L.M.,  Heuvelink, G. B. M. : Global mapping of volumetric water retention at 100, 330 and 15 000 cm suction using the WoSIS database, International Soil and Water Conservation Research, 11-2, 225-239, 2023. DOI: \doi{https://doi.org/10.1016/j.iswcr.2022.08.001}
+Turek, M.E.,  Poggio, L., Batjes, N. H., Armindo, R. A.,  de Jong van Lier, Q.,  de Sousa, L.M.,  Heuvelink, G. B. M. : Global mapping of volumetric water retention at 100, 330 and 15000 cm suction using the WoSIS database, International Soil and Water Conservation Research, 11-2, 225-239, 2023. DOI: \doi{https://doi.org/10.1016/j.iswcr.2022.08.001}
 }
 }
 \author{

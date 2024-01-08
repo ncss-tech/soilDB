@@ -16,3 +16,5 @@ README.Rmd
 ^CRAN-SUBMISSION$
 ^data-raw$
 ^CITATION\.cff$
+^doc$
+^Meta$

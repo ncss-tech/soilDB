@@ -15,7 +15,7 @@
 #' @param not_rated_value Default: `"Not assigned"`
 #' @param miscellaneous_areas logical. Include miscellaneous areas (non-soil components)?
 #' @param include_minors logical. Include minor components? Default: `TRUE`.
-#' @param threshold integer. Default: `0`. Minimum combined component percentage (RV) for inclusion of a mapunit's ecological site in wide-format tabular sumamry. Used only for `method="all"`.
+#' @param threshold integer. Default: `0`. Minimum combined component percentage (RV) for inclusion of a mapunit's ecological site in wide-format tabular summary. Used only for `method="all"`.
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @export 
 get_SDA_coecoclass <- function(method = "None",
