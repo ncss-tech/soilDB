@@ -37,9 +37,9 @@ preferred-citation:
   - family-names: Brown
     given-names: Andrew
     email: andrew.g.brown@usda.gov
-  notes: R package version 2.8.0
+  notes: R package version 2.8.1
   url: https://CRAN.R-project.org/package=soilDB
-  year: '2023'
+  year: '2024'
 repository: https://CRAN.R-project.org/package=soilDB
 repository-code: https://github.com/ncss-tech/soilDB
 url: https://ncss-tech.github.io/soilDB/
@@ -68,7 +68,7 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2023'
+  year: '2024'
   institution:
     name: R Foundation for Statistical Computing
   version: '>= 3.5.0'
@@ -80,7 +80,7 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2023'
+  year: '2024'
   institution:
     name: R Foundation for Statistical Computing
 - type: software
@@ -91,7 +91,7 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2023'
+  year: '2024'
   institution:
     name: R Foundation for Statistical Computing
 - type: software
@@ -102,7 +102,7 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2023'
+  year: '2024'
   institution:
     name: R Foundation for Statistical Computing
 - type: software
@@ -113,7 +113,7 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2023'
+  year: '2024'
   institution:
     name: R Foundation for Statistical Computing
 - type: software
@@ -124,7 +124,7 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2023'
+  year: '2024'
   institution:
     name: R Foundation for Statistical Computing
 - type: software
@@ -143,7 +143,7 @@ references:
   - family-names: Brown
     given-names: Andrew
     email: andrew.g.brown@usda.gov
-  year: '2023'
+  year: '2024'
   version: '>= 2.0.2'
 - type: software
   title: data.table
@@ -161,7 +161,7 @@ references:
   - family-names: Srinivasan
     given-names: Arun
     email: asrini@pm.me
-  year: '2023'
+  year: '2024'
 - type: software
   title: DBI
   abstract: 'DBI: R Database Interface'
@@ -176,7 +176,7 @@ references:
     given-names: Kirill
     email: krlmlr+r@mailbox.org
     orcid: https://orcid.org/0000-0002-1416-3412
-  year: '2023'
+  year: '2024'
 - type: software
   title: curl
   abstract: 'curl: A Modern and Flexible Web Client for R'
@@ -188,7 +188,7 @@ references:
     given-names: Jeroen
     email: jeroen@berkeley.edu
     orcid: https://orcid.org/0000-0002-4035-0289
-  year: '2023'
+  year: '2024'
 - type: software
   title: jsonlite
   abstract: 'jsonlite: A Simple and Robust JSON Parser and Generator for R'
@@ -200,7 +200,7 @@ references:
     given-names: Jeroen
     email: jeroen@berkeley.edu
     orcid: https://orcid.org/0000-0002-4035-0289
-  year: '2023'
+  year: '2024'
 - type: software
   title: xml2
   abstract: 'xml2: Parse XML'
@@ -215,7 +215,7 @@ references:
     given-names: Jim
   - family-names: Ooms
     given-names: Jeroen
-  year: '2023'
+  year: '2024'
 - type: software
   title: httr
   abstract: 'httr: Tools for Working with URLs and HTTP'
@@ -226,7 +226,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2023'
+  year: '2024'
 - type: software
   title: rvest
   abstract: 'rvest: Easily Harvest (Scrape) Web Pages'
@@ -237,7 +237,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@rstudio.com
-  year: '2023'
+  year: '2024'
 - type: software
   title: odbc
   abstract: 'odbc: Connect to ODBC Compatible Databases (using the DBI Interface)'
@@ -252,7 +252,7 @@ references:
     email: hadley@posit.co
   - family-names: Gjoneski
     given-names: Oliver
-  year: '2023'
+  year: '2024'
 - type: software
   title: RSQLite
   abstract: 'RSQLite: SQLite Interface for R'
@@ -270,7 +270,7 @@ references:
     given-names: David A.
   - family-names: Falcon
     given-names: Seth
-  year: '2023'
+  year: '2024'
 - type: software
   title: sf
   abstract: 'sf: Simple Features for R'
@@ -282,7 +282,7 @@ references:
     given-names: Edzer
     email: edzer.pebesma@uni-muenster.de
     orcid: https://orcid.org/0000-0001-8049-7069
-  year: '2023'
+  year: '2024'
 - type: software
   title: wk
   abstract: 'wk: Lightweight Well-Known Geometry Parsing'
@@ -298,7 +298,7 @@ references:
     given-names: Edzer
     email: edzer.pebesma@uni-muenster.de
     orcid: https://orcid.org/0000-0001-8049-7069
-  year: '2023'
+  year: '2024'
 - type: software
   title: terra
   abstract: 'terra: Spatial Data Analysis'
@@ -310,7 +310,7 @@ references:
     given-names: Robert J.
     email: r.hijmans@gmail.com
     orcid: https://orcid.org/0000-0001-5872-2872
-  year: '2023'
+  year: '2024'
 - type: software
   title: raster
   abstract: 'raster: Geographic Data Analysis and Modeling'
@@ -322,7 +322,7 @@ references:
     given-names: Robert J.
     email: r.hijmans@gmail.com
     orcid: https://orcid.org/0000-0001-5872-2872
-  year: '2023'
+  year: '2024'
 - type: software
   title: knitr
   abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
@@ -334,7 +334,7 @@ references:
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
-  year: '2023'
+  year: '2024'
 - type: software
   title: rmarkdown
   abstract: 'rmarkdown: Dynamic Documents for R'
@@ -377,7 +377,7 @@ references:
     given-names: Richard
     email: rich@posit.co
     orcid: https://orcid.org/0000-0003-3925-190X
-  year: '2023'
+  year: '2024'
 - type: software
   title: testthat
   abstract: 'testthat: Unit Testing for R'
@@ -388,7 +388,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2023'
+  year: '2024'
 identifiers:
 - type: url
   value: https://ncss-tech.github.io/AQP/
