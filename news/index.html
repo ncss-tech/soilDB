@@ -52,10 +52,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.8.1" id="soildb-281-development">soilDB 2.8.1 (development)<a class="anchor" aria-label="anchor" href="#soildb-281-development"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.8.1" id="soildb-281-2024-01-08">soilDB 2.8.1 (2024-01-08)<a class="anchor" aria-label="anchor" href="#soildb-281-2024-01-08"></a></h2>
 <ul><li>
-<code><a href="../reference/get_mapunit_from_NASIS.html">get_mapunit_from_NASIS()</a></code>, <code><a href="../reference/get_mapunit_from_NASIS.html">get_lmuaoverlap_from_NASIS()</a></code> and <code><a href="../reference/get_mapunit_from_NASIS.html">get_legend_from_NASIS()</a></code> gain <code>areatypename</code> argument used for filtering legends by <code>areatypename</code>.</li>
-<li>Default results include <code>"Non-MLRA Soil Survey Area"</code> and <code>"MLRA Soil Survey Area"</code>. Set to <code>NULL</code> for no filter.</li>
+<code><a href="../reference/get_mapunit_from_NASIS.html">get_mapunit_from_NASIS()</a></code>, <code><a href="../reference/get_mapunit_from_NASIS.html">get_lmuaoverlap_from_NASIS()</a></code> and <code><a href="../reference/get_mapunit_from_NASIS.html">get_legend_from_NASIS()</a></code> gain <code>areatypename</code> argument used for filtering legends by <code>areatypename</code>.
+<ul><li>Default results include <code>"Non-MLRA Soil Survey Area"</code> and <code>"MLRA Soil Survey Area"</code>. Set to <code>NULL</code> for no filter.</li>
+</ul></li>
+<li>Fixed bugs in <code><a href="../reference/waterDayYear.html">waterDayYear()</a></code> and <code><a href="../reference/fetchHenry.html">summarizeSoilTemperature()</a></code> for leap years (<a href="https://github.com/ncss-tech/soilDB/issues/333" class="external-link">#333</a>)</li>
+<li>
+<code><a href="../reference/fetchSoilGrids.html">fetchSoilGrids()</a></code> upgrades
+<ul><li>Fixed a bug with <code>data.frame</code> output</li>
+<li>Requests for more than 5 sites now include a call to <code><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep()</a></code> to conform with ISRIC “Fair Use” policy</li>
+<li>Upgraded SoilProfileCollection spatial promotion for aqp 2.0+</li>
+<li>Added 10 kPa, 33 kPa and 1500 kPa water content estimates to default variable sets for point and grid queries</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.8.0" id="soildb-280-2023-12-22">soilDB 2.8.0 (2023-12-22)<a class="anchor" aria-label="anchor" href="#soildb-280-2023-12-22"></a></h2><p class="text-muted">CRAN release: 2023-12-22</p>
