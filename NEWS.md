@@ -1,4 +1,4 @@
-# soilDB 2.8.1 (development)
+# soilDB 2.8.1 (2024-01-08)
 
  - `get_mapunit_from_NASIS()`, `get_lmuaoverlap_from_NASIS()` and `get_legend_from_NASIS()` gain `areatypename` argument used for filtering legends by `areatypename`. 
    - Default results include `"Non-MLRA Soil Survey Area"` and `"MLRA Soil Survey Area"`. Set to `NULL` for no filter.
