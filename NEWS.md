@@ -1,4 +1,4 @@
-# soilDB 2.8.1 (2024-01-08)
+# soilDB 2.8.1 (2024-01-09)
 
  - `get_mapunit_from_NASIS()`, `get_lmuaoverlap_from_NASIS()` and `get_legend_from_NASIS()` gain `areatypename` argument used for filtering legends by `areatypename`. 
    - Default results include `"Non-MLRA Soil Survey Area"` and `"MLRA Soil Survey Area"`. Set to `NULL` for no filter.
@@ -9,7 +9,10 @@
    - Upgraded SoilProfileCollection spatial promotion for aqp 2.0+
    - Added 10 kPa, 33 kPa and 1500 kPa water content estimates to default variable sets for point and grid queries
  - `fetchSDA_spatial()` gains ability to query mapunit delineations by Ecological Site ID (`by.col="ecoclassid"`)
-
+ - `get_SDA_coecoclass()` default `ecoclasstypename` is now `c("NRCS Rangeland Site", "NRCS Forestland Site")`, as this is the most common type of aggregation and is least prone to producing unusual composition-related errors due to duplications
+   - Fixed bug related to merging tables/integer data type
+   - Fixed bug in calculation of "Not assigned" fraction of mapunits which could result in negative aggregate component percentages below the default threshold
+   
 # soilDB 2.8.0 (2023-12-22)
 
  - Minimum {aqp} version set to v2.0.2. This is due to changes in the namespace related to `aqp::col2Munsell()`, to "encourage" users to update to the more efficient routines provided in {aqp} 2+ (if they haven't already), and prepare for future updates in the 2.x series.

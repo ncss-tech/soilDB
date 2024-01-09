@@ -10,7 +10,7 @@
 #' @param mukeys vector of map unit keys
 #' @param WHERE character containing SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, `component` or `coecosite` tables, used in lieu of `mukeys` or `areasymbols`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
-#' @param ecoclasstypename If `NULL` no constraint on `ecoclasstypename` is used in the query.
+#' @param ecoclasstypename Default: `c("NRCS Rangeland Site", "NRCS Forestland Site")`. If `NULL` no constraint on `ecoclasstypename` is used in the query.
 #' @param ecoclassref Default: `"Ecological Site Description Database"`. If `NULL` no constraint on `ecoclassref` is used in the query.
 #' @param not_rated_value Default: `"Not assigned"`
 #' @param miscellaneous_areas logical. Include miscellaneous areas (non-soil components)?
@@ -21,7 +21,7 @@
 get_SDA_coecoclass <- function(method = "None",
                                areasymbols = NULL, mukeys = NULL, WHERE = NULL,
                                query_string = FALSE, 
-                               ecoclasstypename = NULL,
+                               ecoclasstypename = c("NRCS Rangeland Site", "NRCS Forestland Site"),
                                ecoclassref = "Ecological Site Description Database",
                                not_rated_value = "Not assigned",
                                miscellaneous_areas = TRUE,
@@ -148,7 +148,7 @@ get_SDA_coecoclass <- function(method = "None",
 
 .get_SDA_coecoclass_agg <- function(areasymbols = NULL,
                                     mukeys = NULL,
-                                    ecoclasstypename = NULL,
+                                    ecoclasstypename = c("NRCS Rangeland Site", "NRCS Forestland Site"),
                                     ecoclassref = "Ecological Site Description Database",
                                     not_rated_value = "Not assigned",
                                     miscellaneous_areas = TRUE,
@@ -156,7 +156,7 @@ get_SDA_coecoclass <- function(method = "None",
                                     dsn = NULL,
                                     threshold = 0) {
                                       
-  comppct_r <- NULL; condpct_r <- NULL; compname <- NULL; ecoclasstypename <- NULL
+  comppct_r <- NULL; condpct_r <- NULL; compname <- NULL; # ecoclasstypename <- NULL
   areasymbol <- NULL; compnames <- NULL; unassigned <- NULL;
   mukey <- NULL; .N <- NULL; .SD <- NULL; .GRP <- NULL;
   
@@ -199,21 +199,21 @@ get_SDA_coecoclass <- function(method = "None",
   res2 <- data.table::data.table(subset(res1, areasymbol != "US"))
   
   # remove FSG etc. some components have no ES assigned, but have other eco class
-  idx <- !res2$ecoclassref %in% c(not_rated_value, "Not assigned", "Ecological Site Description Database") &
-    !res2$ecoclasstypename %in% c(not_rated_value, "Not assigned", "NRCS Rangeland Site", "NRCS Forestland Site")
+  idx <- !res2$ecoclassref %in% c(not_rated_value, "Not assigned", ecoclassref) &
+    !res2$ecoclasstypename %in% c(not_rated_value, "Not assigned", ecoclasstypename)
   
   res2$ecoclassid[idx] <- not_rated_value
   res2$ecoclassref[idx] <- not_rated_value
   res2$ecoclassname[idx] <- not_rated_value
   res2$ecoclasstypename[idx] <- not_rated_value
   
+  .ECOCLASSTYPENAME <- ecoclasstypename
+  
   res3 <- res2[, list(
     condpct_r = sum(comppct_r, na.rm = TRUE),
-    compnames = paste0(compname[ecoclasstypename %in% c("NRCS Rangeland Site", 
-                                                        "NRCS Forestland Site")],
+    compnames = paste0(compname[ecoclasstypename %in% .ECOCLASSTYPENAME],
                        collapse = ", "),
-    unassigned = paste0(compname[!ecoclasstypename %in% c("NRCS Rangeland Site", 
-                                                          "NRCS Forestland Site")],
+    unassigned = paste0(compname[!ecoclasstypename %in% .ECOCLASSTYPENAME],
                         collapse = ", ")
   ), by = c("mukey", "ecoclassid", "ecoclassname")][, rbind(
     .SD[, 1:4],
