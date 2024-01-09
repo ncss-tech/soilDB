@@ -261,7 +261,7 @@ get_SDA_coecoclass <- function(method = "None",
           siten = ifelse(isTRUE(is.na(x$ecoclassid[i])), not_rated_value, x$ecoclassid[i]),
           sitenname = ifelse(isTRUE(is.na(x$ecoclassname[i])), not_rated_value, x$ecoclassname[i]),
           sitencompname = ifelse(isTRUE(is.na(x$compnames[i])), NA_character_, x$compnames[i]),
-          sitenpct_r = ifelse(isTRUE(is.na(x$condpct_r[i])), 0, x$condpct_r[i]),
+          sitenpct_r = ifelse(isTRUE(is.na(x$condpct_r[i])), 0L, x$condpct_r[i]),
           sitenlink = ifelse(
             isTRUE(x$ecoclassid[i] == not_rated_value | is.na(x$ecoclassid[i])),
             NA_character_,
