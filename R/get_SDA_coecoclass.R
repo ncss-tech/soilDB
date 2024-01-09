@@ -220,7 +220,7 @@ get_SDA_coecoclass <- function(method = "None",
     data.frame(
       ecoclassid = not_rated_value,
       ecoclassname = not_rated_value,
-      condpct_r = 100 - sum(condpct_r[nchar(compnames) > 0], na.rm = TRUE),
+      condpct_r = sum(condpct_r[nchar(unassigned) > 0 & !unassigned %in% compnames], na.rm = TRUE),
       compnames = paste0(unassigned[nchar(unassigned) > 0 & !unassigned %in% compnames],
                          collapse = ",")
     )
