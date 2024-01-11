@@ -46,7 +46,7 @@
 soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   
   ## vintage of source data
-  .vintage <- 'FY2023'
+  .vintage <- 'FY2022'
   
   # sanity check: AOI specification
   if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
