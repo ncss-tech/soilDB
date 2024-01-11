@@ -36,6 +36,9 @@
 #' @export
 ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   
+  ## vintage of source data
+  .vintage <- 'FY2023'
+  
   if (!requireNamespace("terra")) {
     stop("package 'terra' is required", call. = FALSE)
   }
@@ -163,9 +166,6 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   # set layer name in object
   names(r) <- var.spec$desc
   
-  # and as an attribute
-  attr(r, 'layer name') <- var.spec$desc
-  
   # optional processing of RAT
   if (!is.null(var.spec$rat)) {
     
@@ -211,6 +211,9 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
       r <- raster::raster(r)
     }
   }
+  
+  # set metadata
+  metags(r) <- c(description = var.spec$desc, vintage = .vintage)
   
   return(r)
 }

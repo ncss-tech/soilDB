@@ -219,10 +219,18 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   
   ## TODO: is this needed? (yes, still needed; AGB 2023/09/30)
   ## '0' is returned by the WCS sometimes -- never valid for MUKEY
-  r <- terra::classify(r, matrix(c(0,  var.spec$na,
-                                   NA, var.spec$na,
-                                   NaN, var.spec$na), ncol = 2, byrow = TRUE), include.lowest = TRUE)
-
+  r <- terra::classify(
+    r, 
+    matrix(
+      c(0,  var.spec$na,
+        NA, var.spec$na,
+        NaN, var.spec$na), 
+      ncol = 2, 
+      byrow = TRUE
+    ), 
+    include.lowest = TRUE
+  )
+  
   # load all values into memory
   terra::set.values(r)
   
@@ -240,9 +248,6 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   
   # build RAT
   r <- terra::as.factor(r)
-  
-  # and as an attribute
-  attr(r, 'layer name') <- var.spec$desc
 
   input_class <- attr(wcs.geom, '.input_class')
   
@@ -256,6 +261,9 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
       r <- raster::raster(r)
     }
   }
+  
+  # set metadata
+  metags(r) <- c(description = var.spec$desc, vintage = var.spec$vintage)
   
   return(r)
 }
