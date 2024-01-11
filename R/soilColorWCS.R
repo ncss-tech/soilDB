@@ -43,7 +43,6 @@
 #' plot(res, col = cats(res)[[1]]$col, axes = FALSE, legend = FALSE)
 #' }
 #' @export
-#' @importFrom terra `metags<-`
 soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   
   ## vintage of source data
@@ -206,7 +205,7 @@ soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   }
   
   # set metadata
-  metags(r) <- c(description = var.spec$desc, vintage = .vintage)
+  terra::metags(r) <- c(description = var.spec$desc, vintage = .vintage)
   
   return(r)
 }

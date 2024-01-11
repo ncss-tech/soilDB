@@ -213,7 +213,7 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   }
   
   # set metadata
-  metags(r) <- c(description = var.spec$desc, vintage = .vintage)
+  terra::metags(r) <- c(description = var.spec$desc, vintage = .vintage)
   
   return(r)
 }

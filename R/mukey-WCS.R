@@ -263,7 +263,7 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   }
   
   # set metadata
-  metags(r) <- c(description = var.spec$desc, vintage = var.spec$vintage)
+  terra::metags(r) <- c(description = var.spec$desc, vintage = var.spec$vintage)
   
   return(r)
 }
