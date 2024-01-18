@@ -8,7 +8,6 @@
 #' 
 #' @name soilDB-package
 #' @aliases soilDB-package soilDB
-#' @docType package
 #' @author J.M. Skovlin, D.E. Beaudette, S.M Roecker, A.G. Brown
 #' @seealso \code{\link{fetchNASIS}, \link{SDA_query}, \link{loafercreek}}
 #' @importFrom grDevices rgb convertColor col2rgb
@@ -19,9 +18,8 @@
 #' @importFrom methods slot slot<- as is
 #' @importFrom aqp plotSPC checkHzDepthLogic pbindlist SoilTextureLevels parseMunsell
 #' @importClassesFrom aqp SoilProfileCollection
-#' @importMethodsFrom aqp plot length nrow site site<- horizons horizons<- hzidname<- idname hzidname horizonDepths diagnostic_hz diagnostic_hz<- restrictions restrictions<- metadata metadata<- hzdesgnname hzdesgnname<- hztexclname hztexclname<- profile_id profile_id<- hzID hzID<- aqp_df_class aqp_df_class<- siteNames horizonNames
-#' @keywords package
-NULL
+#' @importMethodsFrom aqp plot length nrow site depths<- site<- horizons horizons<- hzidname<- idname hzidname horizonDepths diagnostic_hz diagnostic_hz<- restrictions restrictions<- metadata metadata<- hzdesgnname hzdesgnname<- hztexclname hztexclname<- profile_id profile_id<- hzID hzID<- aqp_df_class aqp_df_class<- siteNames horizonNames
+"_PACKAGE"
 
 #' Example \code{SoilProfilecollection} Objects Returned by \code{fetchNASIS}.
 #'

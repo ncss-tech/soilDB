@@ -1,7 +1,7 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 2.8.1
+Version: 2.8.2
 Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut"), email = "dylan.beaudette@usda.gov"),
              person(given="Jay", family="Skovlin", role = c("aut")), 
              person(given="Stephen", family="Roecker", role = c("aut")), 
@@ -17,7 +17,7 @@ Suggests: jsonlite, xml2, httr, rvest, odbc, RSQLite, sf, wk, terra, raster, kni
 Repository: CRAN
 URL: https://ncss-tech.github.io/soilDB/, https://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)

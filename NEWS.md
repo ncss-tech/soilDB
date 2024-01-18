@@ -1,3 +1,11 @@
+# soilDB 2.8.2 (development)
+
+ - SoilWeb Web Coverage Service MUKEY grid data source (used for `mukey.wcs()`) and metadata have been updated for FY2024
+
+  - Note that ISSR800 WCS (`ISSR800.wcs(`) source) are still using FY2023/FY2022 data
+  
+ - `get_SDA_coecoclass()` default data returned for methods 
+
 # soilDB 2.8.1 (2024-01-09)
 
  - `get_mapunit_from_NASIS()`, `get_lmuaoverlap_from_NASIS()` and `get_legend_from_NASIS()` gain `areatypename` argument used for filtering legends by `areatypename`. 

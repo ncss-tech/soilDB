@@ -39,8 +39,6 @@
 #'   # fetch by area_code (SSA only)  
 #'   res <- fetchLDM("CA630", what = "area_code")
 #' }
-#' @importFrom aqp `depths<-` `site<-`
-#' @importFrom data.table rbindlist
 fetchLDM <- function(x = NULL,
            what = "pedlabsampnum",
            bycol = "pedon_key",

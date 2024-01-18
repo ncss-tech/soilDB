@@ -19,4 +19,3 @@ other soil-related web services.
 \author{
 J.M. Skovlin, D.E. Beaudette, S.M Roecker, A.G. Brown
 }
-\keyword{package}
