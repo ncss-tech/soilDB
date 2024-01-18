@@ -8,7 +8,7 @@ message: 'To cite package "soilDB" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'soilDB: Soil Database Interface'
-version: 2.8.1
+version: 2.8.2
 abstract: A collection of functions for reading soil data from U.S. Department of
   Agriculture Natural Resources Conservation Service (USDA-NRCS) and National Cooperative
   Soil Survey (NCSS) databases.
@@ -174,7 +174,7 @@ references:
     given-names: Hadley
   - family-names: Müller
     given-names: Kirill
-    email: krlmlr+r@mailbox.org
+    email: kirill@cynkra.com
     orcid: https://orcid.org/0000-0002-1416-3412
   year: '2024'
 - type: software
