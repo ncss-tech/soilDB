@@ -642,7 +642,7 @@ activeCat(mu2) <- 'corsteel'
 # plot
 plot(
   mu2,
-  col = cols$hex,
+  col = cols$hex[na.omit(match(unique(tab$corsteel), cols$label))],
   axes = FALSE,
   legend = "topleft"
 )
