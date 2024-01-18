@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -303,8 +303,7 @@ create a 1000m radius circular polygon around the point with
 <span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">b</span>, db <span class="op">=</span> <span class="st">'gSSURGO'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># inspect</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">mu</span>, <span class="st">'layer name'</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/box.html" class="external-link">box</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add buffer, after transforming to mukey grid CRS</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">b</span>, <span class="st">"EPSG:5070"</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -351,8 +350,7 @@ link to those coordinates and zoom level.</p>
 <span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">x</span>, db <span class="op">=</span> <span class="st">'gSSURGO'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># inspect</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">mu</span>, <span class="st">'layer name'</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/box.html" class="external-link">box</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add original BBOX, after transforming to mukey grid CRS</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">5070</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -396,7 +394,7 @@ the map.</p>
 <span><span class="co">#&gt; extent      : -1365495, -1358925, 2869245, 2873655  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file216618dfe3eb </span></span>
+<span><span class="co">#&gt; varname     : file21e4337bded1 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   :  144983 </span></span>
@@ -504,7 +502,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file216670eea268 </span></span>
+<span><span class="co">#&gt; varname     : file21e478a741fc </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :  mukey </span></span>
 <span><span class="co">#&gt; min value   : 545800 </span></span>
@@ -518,7 +516,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file21664cf30d43 </span></span>
+<span><span class="co">#&gt; varname     : file21e41eaf3442 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   :  545800 </span></span>
@@ -532,7 +530,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file2166599684b5 </span></span>
+<span><span class="co">#&gt; varname     : file21e473481dce </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   : 3244721 </span></span>
@@ -547,7 +545,7 @@ Access.</p>
 <span>  <span class="va">x</span>,</span>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">'layer name'</span><span class="op">)</span></span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">a</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -556,7 +554,7 @@ Access.</p>
 <span>  <span class="va">y</span>,</span>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">y</span>, <span class="st">'layer name'</span><span class="op">)</span></span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">a</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -565,7 +563,7 @@ Access.</p>
 <span>  <span class="va">z</span>,</span>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">z</span>, <span class="st">'layer name'</span><span class="op">)</span>,</span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span>,</span>
 <span>  ext <span class="op">=</span> <span class="va">x</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">a</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -587,7 +585,7 @@ reflect the relative generality of this product.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411095  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file2166857ac90 </span></span>
+<span><span class="co">#&gt; varname     : file21e41cf7518b </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :  mukey </span></span>
 <span><span class="co">#&gt; min value   : 659074 </span></span>
@@ -601,7 +599,7 @@ reflect the relative generality of this product.</p>
 <span>  <span class="va">x</span>,</span>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">'layer name'</span><span class="op">)</span></span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># STATSGO</span></span>
@@ -609,7 +607,7 @@ reflect the relative generality of this product.</p>
 <span>  <span class="va">statsgo</span>,</span>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">statsgo</span>, <span class="st">'layer name'</span><span class="op">)</span></span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">statsgo</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-13-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
@@ -637,7 +635,7 @@ coast of Kauai</a>.</p>
 <span>  <span class="va">mu</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">mu</span>, <span class="st">'layer name'</span><span class="op">)</span>,</span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span>,</span>
 <span>  colNA <span class="op">=</span> <span class="st">'royalblue'</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-14-1.png" width="624" style="display: block; margin: auto;"></p>
@@ -666,7 +664,7 @@ coast of Puerto Rico</a>.</p>
 <span>  <span class="va">mu</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">mu</span>, <span class="st">'layer name'</span><span class="op">)</span>,</span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span>,</span>
 <span>  colNA <span class="op">=</span> <span class="st">'royalblue'</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-16-1.png" width="624" style="display: block; margin: auto;"></p>
@@ -937,7 +935,7 @@ Soil Data Viewer colors for the selected property/interpretation.</p>
 <span><span class="co"># plot</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">mu2</span>,</span>
-<span>  col <span class="op">=</span> <span class="va">cols</span><span class="op">$</span><span class="va">hex</span>,</span>
+<span>  col <span class="op">=</span> <span class="va">cols</span><span class="op">$</span><span class="va">hex</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/na.omit.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">tab</span><span class="op">$</span><span class="va">corsteel</span><span class="op">)</span>, <span class="va">cols</span><span class="op">$</span><span class="va">label</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,</span>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  legend <span class="op">=</span> <span class="st">"topleft"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -1063,8 +1061,7 @@ depth interval.</p>
 <span><span class="va">mu2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/catalyze.html" class="external-link">catalyze</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span></span></code></pre></div>
 <p>Inspect just the plant available water 0-25cm.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">$</span><span class="va">awc_r</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/box.html" class="external-link">box</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">$</span><span class="va">awc_r</span><span class="op">)</span></span></code></pre></div>
 <p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-27-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>Plot aggregate soil properties.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
