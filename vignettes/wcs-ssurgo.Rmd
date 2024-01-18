@@ -172,8 +172,7 @@ b <- buffer(p, 1000)
 mu <- mukey.wcs(b, db = 'gSSURGO')
 
 # inspect
-plot(mu, legend = FALSE, axes = FALSE, main = attr(mu, 'layer name'))
-box()
+plot(mu, legend = FALSE, axes = FALSE, main = metags(mu)['description'])
 
 # add buffer, after transforming to mukey grid CRS
 plot(project(b, "EPSG:5070"), add = TRUE)
@@ -212,8 +211,7 @@ st_crs(x) <- 4326
 mu <- mukey.wcs(x, db = 'gSSURGO')
 
 # inspect
-plot(mu, legend = FALSE, axes = FALSE, main = attr(mu, 'layer name'))
-box()
+plot(mu, legend = FALSE, axes = FALSE, main = metags(mu)['description'])
 
 # add original BBOX, after transforming to mukey grid CRS
 plot(st_transform(x, 5070), add = TRUE)
@@ -346,7 +344,7 @@ plot(
   x,
   axes = FALSE,
   legend = FALSE,
-  main = attr(x, 'layer name')
+  main = metags(x)['description']
 )
 plot(a, add = TRUE)
 
@@ -355,7 +353,7 @@ plot(
   y,
   axes = FALSE,
   legend = FALSE,
-  main = attr(y, 'layer name')
+  main = metags(y)['description']
 )
 plot(a, add = TRUE)
 
@@ -364,7 +362,7 @@ plot(
   z,
   axes = FALSE,
   legend = FALSE,
-  main = attr(z, 'layer name'),
+  main = metags(z)['description'],
   ext = x
 )
 plot(a, add = TRUE)
@@ -386,7 +384,7 @@ plot(
   x,
   axes = FALSE,
   legend = FALSE,
-  main = attr(x, 'layer name')
+  main = metags(x)['description']
 )
 
 # STATSGO
@@ -394,7 +392,7 @@ plot(
   statsgo,
   axes = FALSE,
   legend = FALSE,
-  main = attr(statsgo, 'layer name')
+  main = metags(statsgo)['description']
 )
 ```
 
@@ -421,7 +419,7 @@ plot(
   mu,
   legend = FALSE,
   axes = FALSE,
-  main = attr(mu, 'layer name'),
+  main = metags(mu)['description'],
   colNA = 'royalblue'
 )
 ```
@@ -456,7 +454,7 @@ plot(
   mu,
   legend = FALSE,
   axes = FALSE,
-  main = attr(mu, 'layer name'),
+  main = metags(mu)['description'],
   colNA = 'royalblue'
 )
 ```
@@ -757,7 +755,6 @@ Inspect just the plant available water 0-25cm.
 
 ```{r fig.width = 6, fig.height = 4}
 plot(mu2$awc_r)
-box()
 ```
 
 Plot aggregate soil properties.
