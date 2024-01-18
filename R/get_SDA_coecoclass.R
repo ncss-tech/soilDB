@@ -60,7 +60,7 @@ get_SDA_coecoclass <- function(method = "None",
   }
   
   base_query <- "SELECT mapunit.mukey, legend.areasymbol, legend.lkey, mapunit.muname, component.cokey, coecoclasskey, 
-                  comppct_r, majcompflag, compname, compkind, ecoclassid, ecoclassname, ecoclasstypename, ecoclassref FROM legend
+                  comppct_r, majcompflag, compname, localphase, compkind, ecoclassid, ecoclassname, ecoclasstypename, ecoclassref FROM legend
    LEFT JOIN mapunit ON legend.lkey = mapunit.lkey
    LEFT JOIN component ON mapunit.mukey = component.mukey %s
    LEFT JOIN coecoclass ON component.cokey = coecoclass.cokey %s
