@@ -15,6 +15,8 @@ fetchSoilGrids(
   overwrite = TRUE,
   target_resolution = c(250, 250),
   summary_type = c("Q0.05", "Q0.5", "Q0.95", "mean"),
+  endpoint = ifelse(!grid, "https://rest.isric.org/soilgrids/v2.0/properties/query",
+    "https://files.isric.org/soilgrids/latest/data/"),
   ...,
   verbose = FALSE,
   progress = FALSE
@@ -40,6 +42,8 @@ fetchSoilGrids(
 \item{summary_type}{Only used when \code{grid=TRUE}. One or more of \code{"Q0.05"}, \code{"Q0.5"}, \code{"Q0.95"}, \code{"mean"}; these are summary statistics that
 correspond to 5th, 50th, 95th percentiles, and mean value for selected \code{variables}.}
 
+\item{endpoint}{Optional: custom API endpoint. Default: \code{"https://rest.isric.org/soilgrids/v2.0/properties/query"} when \code{grid=FALSE}; \code{"https://files.isric.org/soilgrids/latest/data/"} when \code{grid=TRUE}.}
+
 \item{...}{Additional arguments passed to \code{terra::writeRaster()} when \code{grid=TRUE}.}
 
 \item{verbose}{Print messages? Default: \code{FALSE}}
@@ -47,13 +51,13 @@ correspond to 5th, 50th, 95th percentiles, and mean value for selected \code{var
 \item{progress}{logical, give progress when iterating over multiple requests; Default: \code{FALSE}}
 }
 \value{
-A SoilProfileCollection or SpatRaster when \code{grid=TRUE}
+A \emph{SoilProfileCollection} or \emph{SpatRaster} when \code{grid=TRUE}. Returns \code{try-error} if all requests fail. Any error messages resulting from parsing will be echoed when \code{verbose=TRUE}.
 }
 \description{
-This function obtains \href{https://soilgrids.org}{SoilGrids 2.0} properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent.
+This function obtains \href{https://soilgrids.org}{SoilGrids 2.0} properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent (see \code{grid=TRUE} argument).
 }
 \details{
-SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
+SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values have conversion factors applied by \code{fetchSoilGrids()} to produce conventional units shown in the table below (see Details).
 \subsection{Properties}{\tabular{lllrl}{
    Name \tab Description \tab Mapped units \tab Conversion factor \tab Conventional units \cr
    bdod \tab Bulk density of the fine earth fraction \tab cg/cm^3 \tab 100 \tab kg/dm^3 \cr
@@ -63,7 +67,7 @@ SoilGrids API and maps return values as whole (integer) numbers to minimize the 
    nitrogen \tab Total nitrogen (N) \tab cg/kg \tab 100 \tab g/kg \cr
    phh2o \tab Soil pH \tab pH*10 \tab 10 \tab pH \cr
    sand \tab Proportion of sand particles (> 0.05 mm) in the fine earth fraction \tab g/kg \tab 10 \tab g/100g (\%) \cr
-   silt \tab Proportion of silt particles (= 0.002 mm and = 0.05 mm) in the fine earth fraction \tab g/kg \tab 10 \tab g/100g (\%) \cr
+   silt \tab Proportion of silt particles (>= 0.002 mm and <= 0.05 mm) in the fine earth fraction \tab g/kg \tab 10 \tab g/100g (\%) \cr
    soc \tab Soil organic carbon content in the fine earth fraction \tab dg/kg \tab 10 \tab g/kg \cr
    ocd \tab Organic carbon density \tab hg/m^3 \tab 10 \tab kg/m^3 \cr
    ocs \tab Organic carbon stocks (0-30cm depth interval only) \tab t/ha \tab 10 \tab kg/m^2 \cr

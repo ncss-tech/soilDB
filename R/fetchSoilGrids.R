@@ -1,8 +1,8 @@
 #' Get SoilGrids 2.0 Property Estimates for Points or Spatial Extent
 #'
-#' This function obtains [SoilGrids 2.0](https://soilgrids.org) properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent. 
+#' This function obtains [SoilGrids 2.0](https://soilgrids.org) properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent (see `grid=TRUE` argument).
 #' 
-#' SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values are converted by to produce conventional units by `fetchSoilGrids()``
+#' SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values have conversion factors applied by `fetchSoilGrids()` to produce conventional units shown in the table below (see Details).
 #' 
 #' @details
 #' 
@@ -17,7 +17,7 @@
 #' |nitrogen |Total nitrogen (N)                                                                 |cg/kg          |               100|g/kg               |
 #' |phh2o    |Soil pH                                                                            |pH*10          |                10|pH                 |
 #' |sand     |Proportion of sand particles (> 0.05 mm) in the fine earth fraction                |g/kg           |                10|g/100g (%)         |
-#' |silt     |Proportion of silt particles (= 0.002 mm and = 0.05 mm) in the fine earth fraction |g/kg           |                10|g/100g (%)         |
+#' |silt     |Proportion of silt particles (>= 0.002 mm and <= 0.05 mm) in the fine earth fraction |g/kg           |                10|g/100g (%)         |
 #' |soc      |Soil organic carbon content in the fine earth fraction                             |dg/kg          |                10|g/kg               |
 #' |ocd      |Organic carbon density                                                             |hg/m^3         |                10|kg/m^3             |
 #' |ocs      |Organic carbon stocks (0-30cm depth interval only)                                 |t/ha           |                10|kg/m^2             |
@@ -55,11 +55,12 @@
 #' @param target_resolution Only used when `grid=TRUE`. Default: `c(250, 250)` (250m x 250m pixels)
 #' @param summary_type Only used when `grid=TRUE`. One or more of `"Q0.05"`, `"Q0.5"`, `"Q0.95"`, `"mean"`; these are summary statistics that
 #'  correspond to 5th, 50th, 95th percentiles, and mean value for selected `variables`.
+#' @param endpoint Optional: custom API endpoint. Default: `"https://rest.isric.org/soilgrids/v2.0/properties/query"` when `grid=FALSE`; `"https://files.isric.org/soilgrids/latest/data/"` when `grid=TRUE`.
 #' @param ... Additional arguments passed to `terra::writeRaster()` when `grid=TRUE`.
 #' @param verbose Print messages? Default: `FALSE`
 #' @param progress logical, give progress when iterating over multiple requests; Default: `FALSE`
 #' 
-#' @return A SoilProfileCollection or SpatRaster when `grid=TRUE`
+#' @return A _SoilProfileCollection_ or _SpatRaster_ when `grid=TRUE`. Returns `try-error` if all requests fail. Any error messages resulting from parsing will be echoed when `verbose=TRUE`.
 #' @export fetchSoilGrids
 #' 
 #' @author Andrew G. Brown
@@ -111,6 +112,9 @@ fetchSoilGrids <- function(x,
                            overwrite = TRUE, 
                            target_resolution = c(250, 250),
                            summary_type = c("Q0.05", "Q0.5", "Q0.95", "mean"),
+                           endpoint = ifelse(!grid, 
+                                             "https://rest.isric.org/soilgrids/v2.0/properties/query",
+                                             "https://files.isric.org/soilgrids/latest/data/"),
                            ...,
                            verbose = FALSE,
                            progress = FALSE) {
@@ -136,9 +140,13 @@ fetchSoilGrids <- function(x,
                           target_resolution = target_resolution,
                           depth = depth_intervals,
                           summary_type = summary_type,
+                          endpoint = endpoint,
                           ...,
                           verbose = verbose))
   } else if (!inherits(locations, 'data.frame')) {
+    if (inherits(locations, 'SpatVector')) {
+      locations <- sf::st_as_sf(locations)
+    }
     # only supporting POINT geometry for now
     if (inherits(sf::st_geometry(locations), 'sfc_POINT')) {
       if (is.na(sf::st_crs(locations)$wkt)) {
@@ -188,7 +196,7 @@ fetchSoilGrids <- function(x,
       res[[i]] <- NULL    
     }
     
-    response <- try(httr::GET(sprintf("https://rest.isric.org/soilgrids/v2.0/properties/query?lat=%s&lon=%s", lat, lon)), silent = !verbose)
+    response <- try(httr::GET(sprintf(paste0(endpoint, "?lat=%s&lon=%s"), lat, lon)), silent = !verbose)
     
     if (inherits(response, 'try-error')) {
       if (verbose)
@@ -196,8 +204,16 @@ fetchSoilGrids <- function(x,
       res[[i]] <- NULL    
     }
     
-    r.content <- httr::content(response, as = "text", encoding = "UTF-8")
-    jres <- jsonlite::fromJSON(r.content)
+    r.content <- try(httr::content(response, as = "text", encoding = "UTF-8"), silent = !verbose)
+    if (inherits(r.content, 'try-error')) {
+      res[[i]] <- NULL   
+    }
+
+    jres <- try(jsonlite::fromJSON(r.content), silent = !verbose)
+    if (inherits(jres, 'try-error')) {
+      jres <- list(jres)
+      res[[i]] <- NULL   
+    }
     
     # add handling for messages from api about erroneous input
     if (!is.null(jres$detail)) {
@@ -233,12 +249,14 @@ fetchSoilGrids <- function(x,
     hz.data <- hz.data0
     all_x <- FALSE
     for (d in 1:length(data.types)) {
-      hz.data <- merge(
-          merge(hz.data0, hz.data, by = c("label", "id", "latitude", "longitude"),
-                sort = FALSE, all.x = TRUE),
-          .extractSGLayerProperties(jres, data.types[d], data.factor[d]),
-          all.x = all_x, sort = FALSE, by = "label"
+      if (nrow(hz.data0) > 0 && !inherits(jres[[1]], 'try-error')) {
+        hz.data <- merge(
+            merge(hz.data0, hz.data, by = c("label", "id", "latitude", "longitude"),
+                  sort = FALSE, all.x = TRUE),
+            .extractSGLayerProperties(jres, data.types[d], data.factor[d]),
+            all.x = all_x, sort = FALSE, by = "label"
         )
+      }
       all_x <- TRUE
     }
     
@@ -281,7 +299,11 @@ fetchSoilGrids <- function(x,
   if (spatial_input) {
     aqp::site(spc) <- cbind(id = 1:nrow(x), sf::st_drop_geometry(x))
   }
-  
+  if (ncol(aqp::horizons(spc)) == 5) {
+    res <- try(stop("SoilGrids API is not accessible", call. = FALSE), silent = !verbose)
+    return(invisible(res))
+    # this occurs if all requests fail to retrieve data/JSON response
+  }
   return(spc)
 }
 
@@ -297,12 +319,15 @@ fetchSoilGrids <- function(x,
   out[["values"]] <- cbind(sgvalues, uncertainty)
   
   # fix names and labels for downstream
-  out <- out[, colnames(out)[grep("range", colnames(out), invert = TRUE)]]
-  out <- cbind(label = gsub("cm", "", out$label), values = out$values)
-  colnames(out) <- gsub("\\.Q0\\.", "Q", colnames(out))
-  colnames(out) <- gsub("Q5", "Q50", colnames(out))
-  colnames(out) <- gsub("values", x, colnames(out))
-  colnames(out) <- gsub("\\.", "", colnames(out))
+  cn <- colnames(out)[grep("range", colnames(out), invert = TRUE)]
+  if (length(cn) > 0) {
+    out <- out[, cn]
+    out <- cbind(label = gsub("cm", "", out$label), values = out$values)
+    colnames(out) <- gsub("\\.Q0\\.", "Q", colnames(out))
+    colnames(out) <- gsub("Q5", "Q50", colnames(out))
+    colnames(out) <- gsub("values", x, colnames(out))
+    colnames(out) <- gsub("\\.", "", colnames(out))
+  }
   return(out)
 }
 
@@ -341,7 +366,7 @@ fetchSoilGrids <- function(x,
   #                  "&list_dir=no&url=https://files.isric.org/soilgrids/latest/data/")
   
   # WORKS
-  sg_url <- "/vsicurl/https://files.isric.org/soilgrids/latest/data/"
+  sg_url <- paste0("/vsicurl/", endpoint)
   
   # calculate homolosine bbox
   xbbox <- sf::st_bbox(sf::st_transform(sf::st_as_sfc(xbbox), sg_crs)) 
