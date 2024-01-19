@@ -2,7 +2,7 @@
 
  - SoilWeb Web Coverage Service MUKEY grid data source (used for `mukey.wcs()`) and metadata have been updated for FY2024
 
-  - Note that ISSR800 WCS (`ISSR800.wcs(`) source) are still using FY2023/FY2022 data
+   - Note that ISSR800 WCS (`ISSR800.wcs(`) source) are still using FY2023/FY2022 data
   
  - `get_SDA_coecoclass()` default data returned for methods "Dominant Component", "Dominant Condition" and "None" now include `localphase` column
 
