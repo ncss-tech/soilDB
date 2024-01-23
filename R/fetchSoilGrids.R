@@ -339,6 +339,7 @@ fetchSoilGrids <- function(x,
                            summary_type = c("Q0.05", "Q0.5", "Q0.95", "mean"),
                            variables = c("bdod", "cec", "cfvo", "clay", "nitrogen", 
                                          "phh2o", "sand", "silt", "soc", "wv0010", "wv0033", "wv1500"),
+                           endpoint = "https://files.isric.org/soilgrids/latest/data/",
                            ...,
                            verbose = TRUE) {
   
