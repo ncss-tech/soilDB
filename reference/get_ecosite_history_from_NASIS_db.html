@@ -58,7 +58,12 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_ecosite_history_from_NASIS_db</span><span class="op">(</span>best <span class="op">=</span> <span class="cn">TRUE</span>, SS <span class="op">=</span> <span class="cn">TRUE</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_ecosite_history_from_NASIS_db</span><span class="op">(</span></span>
+<span>  best <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  SS <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  es_classifier <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -69,6 +74,10 @@
 
 <dt>SS</dt>
 <dd><p>Use selected set? Default: <code>TRUE</code></p></dd>
+
+
+<dt>es_classifier</dt>
+<dd><p>Optional: character. Vector of classifier names (and corresponding records) to retain in final result.</p></dd>
 
 
 <dt>dsn</dt>
