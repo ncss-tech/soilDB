@@ -103,13 +103,17 @@
 
 ## TODO: this may need some review
 ## try and pick the best possible ecosite record
-.pickBestEcosite <- function(d) {
+.pickBestEcosite <- function(d, es_classifier = NULL) {
 
+  if (!is.null(es_classifier)) {
+    d <- d[which(d$es_classifier %in% es_classifier),]
+  }
+  
 	# add a method field
 	d$es_selection_method <- NA_character_
 
 	# try to get the most recent:
-	d.order <- order(d$ecositecorrdate, decreasing=TRUE)
+	d.order <- order(d$ecositecorrdate, decreasing = TRUE)
 	
 	# if there are multiple (unique) dates, return the most recent
 	if (length(unique(d$ecositecorrdate)) > 1) {

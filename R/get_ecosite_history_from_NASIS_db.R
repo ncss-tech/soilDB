@@ -4,13 +4,14 @@
 #' 
 #' @param best Should the "best" ecological site correlation be chosen? Creates field called `es_selection_method` with `"most recent"` or `"least missing data"` for resolving many:1 relationships in site history.
 #' @param SS Use selected set? Default: `TRUE`
+#' @param es_classifier Optional: character. Vector of classifier names (and corresponding records) to retain in final result. 
 #' @param dsn Path to SQLite data source, or a `DBIConnection` to database with NASIS schema.
 #'
 #' @seealso [get_extended_data_from_NASIS_db()]
 #' 
 #' @return a `data.frame`, or `NULL` on error
 #' @export
-get_ecosite_history_from_NASIS_db <- function(best = TRUE, SS = TRUE, dsn = NULL) {
+get_ecosite_history_from_NASIS_db <- function(best = TRUE, SS = TRUE, es_classifier = NULL, dsn = NULL) {
   
   .SD <- NULL
   
@@ -39,5 +40,5 @@ get_ecosite_history_from_NASIS_db <- function(best = TRUE, SS = TRUE, dsn = NULL
   }
   
   # load "best" siteecositehistory records: creates column 'es_selection_method' w/ "most recent" or "least missing data"
-  as.data.frame(data.table::as.data.table(ecositehistory)[, .pickBestEcosite(.SD), by = list(siteiid = ecositehistory$siteiid)])
+  as.data.frame(data.table::as.data.table(ecositehistory)[, .pickBestEcosite(.SD, es_classifier = es_classifier), by = list(siteiid = ecositehistory$siteiid)])
 }

@@ -4,12 +4,19 @@
 \alias{get_ecosite_history_from_NASIS_db}
 \title{Get Site Ecological Site History}
 \usage{
-get_ecosite_history_from_NASIS_db(best = TRUE, SS = TRUE, dsn = NULL)
+get_ecosite_history_from_NASIS_db(
+  best = TRUE,
+  SS = TRUE,
+  es_classifier = NULL,
+  dsn = NULL
+)
 }
 \arguments{
 \item{best}{Should the "best" ecological site correlation be chosen? Creates field called \code{es_selection_method} with \code{"most recent"} or \code{"least missing data"} for resolving many:1 relationships in site history.}
 
 \item{SS}{Use selected set? Default: \code{TRUE}}
+
+\item{es_classifier}{Optional: character. Vector of classifier names (and corresponding records) to retain in final result.}
 
 \item{dsn}{Path to SQLite data source, or a \code{DBIConnection} to database with NASIS schema.}
 }
