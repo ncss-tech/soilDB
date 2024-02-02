@@ -44,6 +44,7 @@ test_that("fetchSDA_spatial sapolygon and gsmmupolygon", {
                                       method = "bbox",
                                       geom.src = "sapolygon",
                                       add.fields = "legend.areaname")
+  expect_true(!is.null(by.areasym.bbox$areaname))
   expect_equal(nrow(by.areasym.bbox), 6)
 
   ## this one is slow

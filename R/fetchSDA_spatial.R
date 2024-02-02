@@ -323,7 +323,7 @@ fetchSDA_spatial <- function(x,
               replacement = paste0(", ", paste0(ifelse(rep(grepl("Aggregate", geom.type), length(add.fields)),
                sprintf("(SELECT STRING_AGG(value,', ') FROM (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(CONVERT(NVARCHAR(max), %s), ','),',')) t) AS %s",
                        add.fields, gsub(".*\\.([a-z]+)", "\\1", add.fields)),
-              base.fields), collapse = ", "), " FROM \\1polygon"))
+              add.fields), collapse = ", "), " FROM \\1polygon"))
   }
   t1 <- Sys.time()
 
