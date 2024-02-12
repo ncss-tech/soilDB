@@ -9,12 +9,18 @@
 get_soilseries_from_NASIS(
   stringsAsFactors = NULL,
   dsn = NULL,
-  delimiter = " over "
+  delimiter = " over ",
+  SS = FALSE
 )
 
 get_soilseries_from_NASISWebReport(soils, stringsAsFactors = NULL)
 
-get_competing_soilseries_from_NASIS(x, what = "taxclname", dsn = NULL)
+get_competing_soilseries_from_NASIS(
+  x,
+  what = "taxclname",
+  dsn = NULL,
+  SS = FALSE
+)
 }
 \arguments{
 \item{stringsAsFactors}{deprecated}
@@ -22,6 +28,8 @@ get_competing_soilseries_from_NASIS(x, what = "taxclname", dsn = NULL)
 \item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default: \code{NULL}}
 
 \item{delimiter}{\emph{character}. Used to collapse \code{taxminalogy} records where multiple values are used to describe strongly contrasting control sections. Default \code{" over "} creates combination mineralogy classes as they would be used in the family name.}
+
+\item{SS}{\emph{logical}. Fetch data from the currently loaded selected set in NASIS or from the entire local database (default: \code{FALSE}; this is to allow for queries against the full Series Classification database as default)}
 
 \item{soils}{A vector of soil series names}
 
