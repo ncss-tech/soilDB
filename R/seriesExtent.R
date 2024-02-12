@@ -77,7 +77,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60,
   # base URL to cached data
   u <- URLencode(paste0('http://casoilresource.lawr.ucdavis.edu/series-extent-cache/json/', s, '.json'))
   
-  res <- .soilDB_curl_get_JSON(u, gzip = FALSE, FUN = sf::st_read, quiet = TRUE)
+  res <- .soilDB_curl_get_JSON(u, gzip = FALSE, FUN = function(x) sf::st_read(x, quiet = TRUE), quiet = TRUE)
   
   # trapped errors return NULL
   if (is.null(res)) {
