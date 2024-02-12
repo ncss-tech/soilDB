@@ -23,7 +23,12 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = NULL,
   }
   
   q.soilseries <- "
-  SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, soiltaxclasslastupdated, mlraoffice, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxfamhahatmatcl, originyear, establishedyear, descriptiondateinitial, descriptiondateupdated, statsgoflag,  soilseriesiid, areasymbol, areaname, areatypename, soilseriesedithistory
+  SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, 
+  soiltaxclasslastupdated, mlraoffice, taxclname, 
+  taxorder, taxsuborder, taxgrtgroup, taxsubgrp, 
+  taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxfamhahatmatcl, 
+  originyear, establishedyear, descriptiondateinitial, descriptiondateupdated, statsgoflag, 
+  soilseriesiid, areasymbol AS soilseries_typelocst, soilseriesedithistory
   FROM soilseries_View_1 ss
   INNER JOIN area a ON a.areaiid = ss.typelocstareaiidref
   INNER JOIN areatype at ON at.areatypeiid = ss.typelocstareatypeiidref
@@ -74,7 +79,7 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = NULL,
                 "taxsuborder", "taxgrtgroup", "taxsubgrp", "taxpartsize", "taxpartsizemod",
                 "taxceactcl", "taxreaction", "taxtempcl", "taxminalogy", "taxfamhahatmatcl",
                 "originyear", "establishedyear", "descriptiondateinitial", "descriptiondateupdated",
-                "statsgoflag", "soilseriesedithistory", "areasymbol", "areaname", "areatypename")])
+                "statsgoflag", "soilseriesedithistory", "soilseries_typelocst")])
 }
 
 #' @param soils A vector of soil series names
