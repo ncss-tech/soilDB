@@ -5,6 +5,18 @@
    - Note that ISSR800 WCS (`ISSR800.wcs(`) source) are still using FY2023/FY2022 data
   
  - `get_SDA_coecoclass()` default data returned for methods "Dominant Component", "Dominant Condition" and "None" now include `localphase` column
+ 
+ - `get_soilseries_from_NASIS()` and `get_competing_soilseries_from_NASIS()`: add `SS` argument for parity with all other NASIS "get" methods
+  - default to `FALSE` for backward compatibility/common use cases
+
+ - Changes in column names (Area table / `"areasymbol"` related; #172)
+ 
+   - `get_site_data_from_NASIS_db()`: Add state, county, and MLRA areasymbol references (`"site_state"`, `"site_county"`, `"site_mlra"`)
+
+   - `get_mapunit_from_NASIS_db()`: Add dominant MLRA areasymbol reference column `"lmapunit_mlra"`
+
+   - `get_soilseries_from_NASIS()`: replace `areasymbol` column to use
+relationship-style name `"soilseries_typelocst"` (minor breaking change)
 
 # soilDB 2.8.1 (2024-01-09)
 
@@ -54,10 +66,10 @@ and in concatenation of reason string when `wide_reason=TRUE`
 # soilDB 2.7.9 (2023-09-01)
  
  - Added new `method` options for `fetchSDA_spatial()`. Aggregation grouping is controlled by the `by.col` argument. This works for mapunit and survey area polygon geometries, aggregating all polygons in the group for each `mukey`, `nationalmusym`, `lkey`, or `areasymbol` extent.
-  - `method="extent"` method calculates a bounding rectangle  
-  - `method="convexhull"` calculates the convex hull 
-  - `method="union"` returns a MULTIPOLYGON 
-  - `method="collection"` returns a GEOMETRYCOLLECTION 
+   - `method="extent"` method calculates a bounding rectangle  
+   - `method="convexhull"` calculates the convex hull 
+   - `method="union"` returns a MULTIPOLYGON 
+   - `method="collection"` returns a GEOMETRYCOLLECTION 
  
 ## Bug Fixes
 
