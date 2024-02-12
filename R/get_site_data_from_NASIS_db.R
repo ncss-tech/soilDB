@@ -50,12 +50,19 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-	q <- "SELECT siteiid, siteobsiid, peiid, CAST(usiteid AS varchar(60)) as site_id, CAST(upedonid AS varchar(60)) as pedon_id, obsdate as obs_date,
-utmzone, utmeasting, utmnorthing, horizdatnm, longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, longstddecimaldegrees, latstddecimaldegrees,
+	q <- "SELECT siteiid, siteobsiid, peiid, 
+CAST(usiteid AS varchar(60)) as site_id, CAST(upedonid AS varchar(60)) as pedon_id, obsdate as obs_date,
+utmzone, utmeasting, utmnorthing, horizdatnm, 
+longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, longstddecimaldegrees, latstddecimaldegrees,
 gpspositionalerror, descname as describer, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag,
 tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth,
-elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, siteobs_View_1.earthcovkind1, siteobs_View_1.earthcovkind2, erocl, bedrckdepth, bedrckkind, bedrckhardness, hillslopeprof, geomslopeseg, shapeacross, shapedown, slopecomplex, drainagecl,
-flodfreqcl, floddurcl, flodmonthbeg, pondfreqcl, ponddurcl, pondmonthbeg, geomposhill, geomposmntn, geompostrce, geomposflats, swaterdepth
+elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, 
+siteobs_View_1.earthcovkind1, siteobs_View_1.earthcovkind2, erocl, 
+bedrckdepth, bedrckkind, bedrckhardness, pmgroupname, 
+hillslopeprof, geomslopeseg, shapeacross, shapedown, slopecomplex, drainagecl,
+geomposhill, geomposmntn, geompostrce, geomposflats, swaterdepth,
+flodfreqcl, floddurcl, flodmonthbeg, pondfreqcl, ponddurcl, pondmonthbeg, 
+climstaid, climstanm, climstatype, ffd, map, reannualprecip, airtempa, soiltempa, airtemps, soiltemps
 
 FROM
 
