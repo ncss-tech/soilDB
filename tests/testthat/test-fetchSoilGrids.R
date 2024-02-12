@@ -6,6 +6,8 @@ test_that("fetchSoilGrids() works as expected", {
 
   skip_on_cran()
 
+  skip_if(as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)))
+  
   your.points <- data.frame(id = c("A", "B"),
                             lat = c(37.9, 38.1),
                             lon = c(-120.3, -121.5),
