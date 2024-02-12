@@ -70,12 +70,18 @@ only).</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_soilseries_from_NASIS</span><span class="op">(</span></span>
 <span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dsn <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  delimiter <span class="op">=</span> <span class="st">" over "</span></span>
+<span>  delimiter <span class="op">=</span> <span class="st">" over "</span>,</span>
+<span>  SS <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">get_soilseries_from_NASISWebReport</span><span class="op">(</span><span class="va">soils</span>, stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">get_competing_soilseries_from_NASIS</span><span class="op">(</span><span class="va">x</span>, what <span class="op">=</span> <span class="st">"taxclname"</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">get_competing_soilseries_from_NASIS</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  what <span class="op">=</span> <span class="st">"taxclname"</span>,</span>
+<span>  dsn <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  SS <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -90,6 +96,10 @@ only).</p>
 
 <dt>delimiter</dt>
 <dd><p><em>character</em>. Used to collapse <code>taxminalogy</code> records where multiple values are used to describe strongly contrasting control sections. Default <code>" over "</code> creates combination mineralogy classes as they would be used in the family name.</p></dd>
+
+
+<dt>SS</dt>
+<dd><p><em>logical</em>. Fetch data from the currently loaded selected set in NASIS or from the entire local database (default: <code>FALSE</code>; this is to allow for queries against the full Series Classification database as default)</p></dd>
 
 
 <dt>soils</dt>

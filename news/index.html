@@ -58,6 +58,14 @@
 <ul><li>Note that ISSR800 WCS (<code>ISSR800.wcs(</code>) source) are still using FY2023/FY2022 data</li>
 </ul></li>
 <li><p><code><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass()</a></code> default data returned for methods “Dominant Component”, “Dominant Condition” and “None” now include <code>localphase</code> column</p></li>
+<li><p><code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code> and <code><a href="../reference/get_soilseries_from_NASIS.html">get_competing_soilseries_from_NASIS()</a></code>: add <code>SS</code> argument for parity with all other NASIS “get” methods</p></li>
+<li><p>default to <code>FALSE</code> for backward compatibility/common use cases</p></li>
+<li>
+<p>Changes in column names (Area table / <code>"areasymbol"</code> related; <a href="https://github.com/ncss-tech/soilDB/issues/172" class="external-link">#172</a>)</p>
+<ul><li><p><code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>: Add state, county, and MLRA areasymbol references (<code>"site_state"</code>, <code>"site_county"</code>, <code>"site_mlra"</code>)</p></li>
+<li><p><code>get_mapunit_from_NASIS_db()</code>: Add dominant MLRA areasymbol reference column <code>"lmapunit_mlra"</code></p></li>
+<li><p><code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code>: replace <code>areasymbol</code> column to use relationship-style name <code>"soilseries_typelocst"</code> (minor breaking change)</p></li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.8.1" id="soildb-281-2024-01-09">soilDB 2.8.1 (2024-01-09)<a class="anchor" aria-label="anchor" href="#soildb-281-2024-01-09"></a></h2><p class="text-muted">CRAN release: 2024-01-09</p>
@@ -118,8 +126,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.7.9" id="soildb-279-2023-09-01">soilDB 2.7.9 (2023-09-01)<a class="anchor" aria-label="anchor" href="#soildb-279-2023-09-01"></a></h2>
-<ul><li>Added new <code>method</code> options for <code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code>. Aggregation grouping is controlled by the <code>by.col</code> argument. This works for mapunit and survey area polygon geometries, aggregating all polygons in the group for each <code>mukey</code>, <code>nationalmusym</code>, <code>lkey</code>, or <code>areasymbol</code> extent.</li>
-<li>
+<ul><li>Added new <code>method</code> options for <code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code>. Aggregation grouping is controlled by the <code>by.col</code> argument. This works for mapunit and survey area polygon geometries, aggregating all polygons in the group for each <code>mukey</code>, <code>nationalmusym</code>, <code>lkey</code>, or <code>areasymbol</code> extent.
+<ul><li>
 <code>method="extent"</code> method calculates a bounding rectangle<br></li>
 <li>
 <code>method="convexhull"</code> calculates the convex hull</li>
@@ -127,6 +135,7 @@
 <code>method="union"</code> returns a MULTIPOLYGON</li>
 <li>
 <code>method="collection"</code> returns a GEOMETRYCOLLECTION</li>
+</ul></li>
 </ul><div class="section level3">
 <h3 id="bug-fixes-2-7-9">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2-7-9"></a></h3>
 <ul><li><p>Bug fix for <code><a href="../reference/fetchVegdata.html">get_vegplot_transpoints_from_NASIS_db()</a></code>; using wrong record ID for transect points</p></li>

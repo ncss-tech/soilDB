@@ -786,10 +786,10 @@ lab data, vegetative data, etc. may be linked to a site in this
 database.</p>
 <table class="table">
 <colgroup>
-<col width="6%">
+<col width="5%">
 <col width="1%">
-<col width="7%">
-<col width="84%">
+<col width="6%">
+<col width="85%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">
@@ -808,6 +808,97 @@ that uniquely identifies a record. Also known as part (or all) of the
 “primary key”. This value is managed by NASIS and cannot be edited.</td>
 </tr>
 <tr class="even">
+<td align="left">climstaid</td>
+<td align="left">No</td>
+<td align="left">site.climstaid</td>
+<td align="left">The station identifier. This is assigned by the
+responsible agency. This identifier uniquely identifies a climate
+station.</td>
+</tr>
+<tr class="odd">
+<td align="left">climstanm</td>
+<td align="left">No</td>
+<td align="left">site.climstanm</td>
+<td align="left">The full descriptive name of the station as recognized
+by the agency responsible for the station.</td>
+</tr>
+<tr class="even">
+<td align="left">climstatype</td>
+<td align="left">No</td>
+<td align="left">site.climstatype</td>
+<td align="left">The type of the weather station, U.S. Official or
+Other.</td>
+</tr>
+<tr class="odd">
+<td align="left">ffd</td>
+<td align="left">No</td>
+<td align="left">site.ffd</td>
+<td align="left">The expected number of days between the last freezing
+temperature (0 degrees Celsius) in spring (Jan-Jul) and the first
+freezing temperature (0 degrees Celsius) in the fall (Aug-Dec). The
+number of days is based on the probability that the values for the
+standard “normal” period of 1961 to 1990 will be exceeded in 5 years out
+of 10.</td>
+</tr>
+<tr class="even">
+<td align="left">map</td>
+<td align="left">No</td>
+<td align="left">site.map</td>
+<td align="left">The arithmetic average of the total annual (liquid)
+precipitation taken over the standard “normal” period, 1961-1990.</td>
+</tr>
+<tr class="odd">
+<td align="left">airtempa</td>
+<td align="left">No</td>
+<td align="left">site.airtempa</td>
+<td align="left">The arithmetic average of the daily maximum and minimum
+temperatures for a calendar year taken over the standard “normal”
+period, 1961 to 1990.</td>
+</tr>
+<tr class="even">
+<td align="left">soiltempa</td>
+<td align="left">No</td>
+<td align="left">site.soiltempa</td>
+<td align="left">The mean annual soil temperature (MAST) at a depth of
+50 cm below the soil surface, or at the upper boundary of a
+root-limiting layer as defined in Soil Taxonomy, whichever is
+shallower.</td>
+</tr>
+<tr class="odd">
+<td align="left">airtemps</td>
+<td align="left">No</td>
+<td align="left">site.airtemps</td>
+<td align="left">The mean of the mean June, July and August mean air
+temperatures in the northern hemisphere. (USDA, 1941, Climate &amp; Man,
+pg. 690)</td>
+</tr>
+<tr class="even">
+<td align="left">soiltemps</td>
+<td align="left">No</td>
+<td align="left">site.soiltemps</td>
+<td align="left">The mean of June, July and August monthly mean soil
+temperatures (in the northern hemisphere) at a depth of 50 cm below the
+soil surface, or at the upper boundary of a root-limiting layer as
+defined in Soil Taxonomy, whichever is shallower.</td>
+</tr>
+<tr class="odd">
+<td align="left">airtempw</td>
+<td align="left">No</td>
+<td align="left">site.airtempw</td>
+<td align="left">The mean of the mean December, January and February
+mean air temperatures in the northern hemisphere. (USDA, 1941, Climate
+&amp; Man, pg. 690)</td>
+</tr>
+<tr class="even">
+<td align="left">soiltempw</td>
+<td align="left">No</td>
+<td align="left">site.soiltempw</td>
+<td align="left">The mean of December, January, and February monthly
+mean soil temperatures (in the northern hemisphere) at a depth of 50 cm
+below the soil surface, or at the upper boundary of a root-limiting
+layer as defined in Soil Taxonomy, whichever is shallower.</td>
+</tr>
+<tr class="odd">
 <td align="left">geomposhill</td>
 <td align="left">No</td>
 <td align="left">site.geomposhill</td>
@@ -815,7 +906,7 @@ that uniquely identifies a record. Also known as part (or all) of the
 dimensional) that represents an episode of landscape development of
 hills.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">geomposmntn</td>
 <td align="left">No</td>
 <td align="left">site.geomposmntn</td>
@@ -823,7 +914,7 @@ hills.</td>
 dimensional) that represents an episode of landscape development of
 mountains.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">geompostrce</td>
 <td align="left">No</td>
 <td align="left">site.geompostrce</td>
@@ -831,20 +922,20 @@ mountains.</td>
 dimensional) that represents an episode of landscape development of
 terraces.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">geomposflats</td>
 <td align="left">No</td>
 <td align="left">site.geomposflats</td>
 <td align="left">Description of the geomorphic component for flats.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">elev_field</td>
 <td align="left">Yes</td>
 <td align="left">site.elev</td>
 <td align="left">The vertical distance from mean sea level to a point on
 the earth’s surface.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">slope_field</td>
 <td align="left">Yes</td>
 <td align="left">site.slope</td>
@@ -852,7 +943,7 @@ the earth’s surface.</td>
 expressed as a percentage of the distance between those points.
 (SSM)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">aspect_field</td>
 <td align="left">Yes</td>
 <td align="left">site.aspect</td>
@@ -860,42 +951,42 @@ expressed as a percentage of the distance between those points.
 faces, expressed as an angle between 0 and 360 degrees, inclusive,
 measured clockwise from true north.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">shapeacross</td>
 <td align="left">No</td>
 <td align="left">site.shapeacross</td>
 <td align="left">The geometric, two dimensional profile (shape) of the
 slope parallel to elevation contours.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">shapedown</td>
 <td align="left">No</td>
 <td align="left">site.shapedown</td>
 <td align="left">The geometric, two dimensional profile (shape) of the
 slope perpendicular to elevation contours.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">slopecomplex</td>
 <td align="left">No</td>
 <td align="left">site.slopecomplex</td>
 <td align="left">The identification of whether the landscape surface is
 simple or complex.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">geomslopeseg</td>
 <td align="left">No</td>
 <td align="left">site.geomslopeseg</td>
 <td align="left">Position of the pedon site within the segment of the
 slope.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">hillslopeprof</td>
 <td align="left">No</td>
 <td align="left">site.hillslopeprof</td>
 <td align="left">Two dimensional slope segments of a hillslope that have
 similar geometric, erosional, or depositional characteristics.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">drainagecl</td>
 <td align="left">No</td>
 <td align="left">site.drainagecl</td>
@@ -903,7 +994,7 @@ similar geometric, erosional, or depositional characteristics.</td>
 and refers to the frequency and duration of wet periods. An example of a
 drainage class is well drained.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">horizdatnm</td>
 <td align="left">No</td>
 <td align="left">site.horizdatnm</td>
@@ -912,6 +1003,14 @@ for defining the coordinates of points. (Content Standards for Spatial
 Metadata, FGDC, 3/31/94 draft). This entry applies to both lat/long and
 UTM coordinates. NO LONGER USED BECAUSE CAN’T DIFFERENTIATE BETWEEN UTM
 AND DMS.</td>
+</tr>
+<tr class="odd">
+<td align="left">pmgroupname</td>
+<td align="left">No</td>
+<td align="left">site.pmgroupname</td>
+<td align="left">Name for the concatenation of PARENT_MATERIAL_MODIFIER,
+PARENT_MATERIAL_KIND, and PARENT_MATERIAL_ORIGIN for each of the parent
+materials that may occur in a vertical cross section of a soil.</td>
 </tr>
 <tr class="even">
 <td align="left">utmeasting</td>
@@ -989,6 +1088,15 @@ by standing water), expressed as a class.</td>
 period of a soil is likely to begin.</td>
 </tr>
 <tr class="even">
+<td align="left">reannualprecip</td>
+<td align="left">No</td>
+<td align="left">site.reannualprecip</td>
+<td align="left">An estimate of the amount of moisture available for
+plant use and/or soil forming processes at a given site. It may vary,
+plus or minus, from “actual” precipitation amounts as a function of
+runon, runoff, temperature, aspect, etc.</td>
+</tr>
+<tr class="odd">
 <td align="left">y_std</td>
 <td align="left">Yes</td>
 <td align="left">site.latstddecimaldegrees</td>
@@ -997,7 +1105,7 @@ geographic coordinate system, WGS84 datum. Values are either
 auto-populated from GPS, or computed from original latitude coordinates
 using standard conversion algorithms.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">x_std</td>
 <td align="left">Yes</td>
 <td align="left">site.longstddecimaldegrees</td>
@@ -1006,7 +1114,7 @@ geographic coordinate system, WGS84 datum. Values are either
 auto-populated from GPS, or computed from original longitude coordinates
 using standard conversion algorithms.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">gpspositionalerror</td>
 <td align="left">No</td>
 <td align="left">site.gpspositionalerror</td>
