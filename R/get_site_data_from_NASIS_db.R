@@ -62,7 +62,7 @@ bedrckdepth, bedrckkind, bedrckhardness, pmgroupname,
 hillslopeprof, geomslopeseg, shapeacross, shapedown, slopecomplex, drainagecl,
 geomposhill, geomposmntn, geompostrce, geomposflats, swaterdepth,
 flodfreqcl, floddurcl, flodmonthbeg, pondfreqcl, ponddurcl, pondmonthbeg, 
-climstaid, climstanm, climstatype, ffd, map, reannualprecip, airtempa, soiltempa, airtemps, soiltemps
+climstaid, climstanm, climstatype, ffd, map, reannualprecip, airtempa, soiltempa, airtemps, soiltemps, airtempw, soiltempw
 
 FROM
 
