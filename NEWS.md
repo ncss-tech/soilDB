@@ -1,11 +1,12 @@
 # soilDB 2.8.2 (development)
 
  - SoilWeb Web Coverage Service MUKEY grid data source (used for `mukey.wcs()`) and metadata have been updated for FY2024
-   - Note that ISSR800 WCS (`ISSR800.wcs(`) source) are still using FY2023/FY2022 data
+   - Note that ISSR800 WCS (`ISSR800.wcs()` source) is still using FY2023/FY2022 data
  - `get_SDA_coecoclass()` default data returned for methods "Dominant Component", "Dominant Condition" and "None" now include `localphase` column
  - `get_soilseries_from_NASIS()` and `get_competing_soilseries_from_NASIS()`: add `SS` argument for parity with all other NASIS "get" methods
    - default to `FALSE` for backward compatibility/common use cases
- - Changes in column names (Area table / `"areasymbol"` related; #272); thanks to Zach Van Abbema for suggestion
+ - `get_site_data_from_NASIS_db()` gains Frost Free Days, MAP, REAP, MAAT, MAST, MSAT, MSST, MWAT, MWST, and Parent Material Group Name; thanks to Zach Van Abbema for suggestion 
+ - Changes in column names related to Area table / `"areasymbol"` (#272); thanks to Zach Van Abbema for suggestion
    - `get_site_data_from_NASIS_db()`: Add state, county, and MLRA areasymbol references (`"site_state"`, `"site_county"`, `"site_mlra"`)
    - `get_mapunit_from_NASIS_db()`: Add dominant MLRA areasymbol reference column `"lmapunit_mlra"`
    - `get_soilseries_from_NASIS()`: replace `areasymbol` column to use relationship-style name `"soilseries_typelocst"` (minor breaking change)
