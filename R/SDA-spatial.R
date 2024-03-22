@@ -65,7 +65,7 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
 SELECT
 geom.STAsText() AS geom, mukey,
 GEOGRAPHY::STGeomFromWKB(
-    geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).STArea() * 0.000247105 AS area_ac
+    geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).MakeValid().STArea() * 0.000247105 AS area_ac
 FROM geom_data;
   "
              },
@@ -95,7 +95,7 @@ FROM geom_data;
 SELECT
 geom.STAsText() AS geom, mukey,
 GEOGRAPHY::STGeomFromWKB(
-    geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).STArea() * 0.000247105 AS area_ac
+    geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).MakeValid().STArea() * 0.000247105 AS area_ac
 FROM geom_data;
   "
              },
@@ -122,7 +122,7 @@ FROM geom_data;
 )
 SELECT
 geom.STAsText() AS geom, areasymbol,
-GEOGRAPHY::STGeomFromWKB(geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).STArea() * 0.000247105 AS area_ac
+GEOGRAPHY::STGeomFromWKB(geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).MakeValid().STArea() * 0.000247105 AS area_ac
 FROM geom_data;
   ",
 
