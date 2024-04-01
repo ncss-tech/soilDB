@@ -59,6 +59,10 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
                       SSURGO = "mukey",
                       STATSGO = "mukey",
                       SAPOLYGON = "areasymbol")
+  clip_sql <- switch(db,
+                     SSURGO = "",
+                     STATSGO = "AND CLIPAREASYMBOL = 'US'",
+                     SAPOLYGON = "")
   area_ac_sql <- ", GEOGRAPHY::STGeomFromWKB(geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).MakeValid().STArea() * 0.000247105 AS area_ac"
   geom_sql <- sprintf(switch(method,
                              intersection = "%s.STIntersection(geometry::STGeomFromText('%%s', 4326)) AS geom",
@@ -67,11 +71,10 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
       "WITH geom_data (geom, %s) AS (
           SELECT %s, %s
           FROM %s 
-          WHERE %s.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1
-                AND CLIPAREASYMBOL = 'US'
+          WHERE %s.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1 %s
         ) SELECT geom.STAsText() AS geom, %s%s
         FROM geom_data",
-      id_column, geom_sql, id_column, db_table, db_column, id_column,
+      id_column, geom_sql, id_column, db_table, db_column, clip_sql, id_column,
       ifelse(geomAcres, area_ac_sql, "")
     )
   return(res)
