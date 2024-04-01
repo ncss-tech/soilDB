@@ -44,79 +44,36 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
   return(sf::as_Spatial(sfobj))
 }
 
-## TODO consider adding an 'identity' method for more generic use 
-##  -- what is the intent here? AB 2024/04/01
-
 # STATSGO features require AND CLIPAREASYMBOL = 'US' to avoid state areasymbol copy
 # select the right query for SSURGO / STATSGO geometry filters submitted to SDA
 .SDA_geometrySelector <- function(db, method, geomAcres = TRUE) {
+  db_table <- switch(db,
+                     SSURGO = "mupolygon",
+                     STATSGO = "gsmmupolygon",
+                     SAPOLYGON = "sapolygon")
+  db_column <- switch(db,
+                      SSURGO = "mupolygongeo",
+                      STATSGO = "mupolygongeo",
+                      SAPOLYGON = "sapolygongeo")
+  id_column <- switch(db,
+                      SSURGO = "mukey",
+                      STATSGO = "mukey",
+                      SAPOLYGON = "areasymbol")
   area_ac_sql <- ", GEOGRAPHY::STGeomFromWKB(geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).MakeValid().STArea() * 0.000247105 AS area_ac"
-  # db_table <- switch(db, 
-  #                    SSURGO = "mupolygon",
-  #                    STATSGO = "gsmmupolygon",
-  #                    SAPOLYGON = "sapolygon")
-  # intersection_sql <- sprintf("
-  #       WITH geom_data (geom, mukey) AS (
-  #         SELECT mupolygongeo.STIntersection(geometry::STGeomFromText('%%s', 4326)) AS geom, P.mukey
-  #         FROM %s AS P
-  #         WHERE mupolygongeo.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1
-  #       ) SELECT geom.STAsText() AS geom, mukey %s
-  #       FROM geom_data", 
-  #       db_table, ifelse(geomAcres, area_ac_sql, ""))
-  # overlap_sql <- sprintf("
-  #       SELECT mupolygongeo.STAsText() AS geom, P.mukey %s
-  #       FROM %s AS P
-  #       WHERE mupolygongeo.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1", 
-  #       db_table, ifelse(geomAcres, area_ac_sql, ""))
-  res <- switch(db,
-    SSURGO = switch(method,
-      intersection = sprintf("
-        WITH geom_data (geom, mukey) AS (
-          SELECT mupolygongeo.STIntersection(geometry::STGeomFromText('%%s', 4326)) AS geom, P.mukey
-          FROM mupolygon AS P
-          WHERE mupolygongeo.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1
-        ) SELECT geom.STAsText() AS geom, mukey %s
-        FROM geom_data", 
-        ifelse(geomAcres, area_ac_sql, "")),
-      overlap = sprintf("
-        SELECT mupolygongeo.STAsText() AS geom, P.mukey %s
-        FROM mupolygon AS P
-        WHERE mupolygongeo.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1", 
-        ifelse(geomAcres, area_ac_sql, ""))),
-    STATSGO = switch(method, 
-      intersection = sprintf("
-        WITH geom_data (geom, mukey) AS (
-          SELECT mupolygongeo.STIntersection(geometry::STGeomFromText('%%s', 4326)) AS geom, P.mukey
-          FROM gsmmupolygon AS P
-          WHERE mupolygongeo.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1
-          AND CLIPAREASYMBOL = 'US'
-        )
-        SELECT geom.STAsText() AS geom, mukey %s
-        FROM geom_data;", 
-        ifelse(geomAcres, area_ac_sql, "")),
-      overlap = sprintf("
-        SELECT mupolygongeo.STAsText() AS geom, P.mukey %s
-        FROM gsmmupolygon AS P
-        WHERE mupolygongeo.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1
-        AND CLIPAREASYMBOL = 'US';", 
-        ifelse(geomAcres, area_ac_sql, ""))),
-    SAPOLYGON = switch(method,
-      intersection = sprintf("
-        WITH geom_data (geom, areasymbol) AS (
-          SELECT
-          sapolygongeo.STIntersection(geometry::STGeomFromText('%%s', 4326)) AS geom, areasymbol
-          FROM sapolygon
-          WHERE sapolygongeo.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1
-        )
-        SELECT geom.STAsText() AS geom, areasymbol %s
-        FROM geom_data;", 
-      ifelse(geomAcres, area_ac_sql, "")),
-      overlap = sprintf("
-        SELECT sapolygongeo.STAsText() AS geom, areasymbol %s
-        FROM sapolygon
-        WHERE sapolygongeo.STIntersects(geometry::STGeomFromText('%%s', 4326) ) = 1", 
-      ifelse(geomAcres, area_ac_sql, "")))
-  )
+  geom_sql <- sprintf(switch(method,
+                             intersection = "%s.STIntersection(geometry::STGeomFromText('%%s', 4326)) AS geom",
+                             overlap = "%s AS geom"), db_column)
+  res <- sprintf(
+      "WITH geom_data (geom, %s) AS (
+          SELECT %s, %s
+          FROM %s 
+          WHERE %s.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1
+                AND CLIPAREASYMBOL = 'US'
+        ) SELECT geom.STAsText() AS geom, %s%s
+        FROM geom_data",
+      id_column, geom_sql, id_column, db_table, db_column, id_column,
+      ifelse(geomAcres, area_ac_sql, "")
+    )
   return(res)
 }
 
