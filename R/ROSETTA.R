@@ -89,7 +89,7 @@
 # 2020-11-19:
 # * NA are handled safely by the API now
 # * model selection is automatic when model code = 0
-# * work with Todd to determin the optimal request / record count trade-off
+# * work with Todd to determine the optimal request / record count trade-off
 
 # 2021-01-06
 # * best model (0) is always used, API no longer accepts `model` as a parameter
@@ -102,9 +102,9 @@
 #'
 #' @author D.E. Beaudette, Todd Skaggs (ARS), Richard Reid
 #'
-#' @param x a \code{data.frame} of required soil properties, may contain other columns, see details
+#' @param x a `data.frame` of required soil properties, may contain other columns, see details
 #'
-#' @param vars character vector of column names in \code{x} containing relevant soil property values, see details
+#' @param vars character vector of column names in `x` containing relevant soil property values, see details
 #'
 #' @param v ROSETTA model version number: '1', '2', or '3', see details and references.
 #' 
@@ -112,12 +112,12 @@
 #'
 #' @param chunkSize number of records per API call
 #'
-#' @param conf configuration passed to \code{httr::POST()} such as \code{verbose()}.
+#' @param conf configuration passed to `httr::POST()` such as `verbose()`.
 #'
-#' @details Soil properties supplied in \code{x} must be described, in order, via \code{vars} argument. The API does not use the names but column ordering must follow: sand, silt, clay, bulk density, volumetric water content at 33kPa (1/3 bar), and volumetric water content at 1500kPa (15 bar).
+#' @details Soil properties supplied in `x` must be described, in order, via `vars` argument. The API does not use the names but column ordering must follow: sand, silt, clay, bulk density, volumetric water content at 33kPa (1/3 bar), and volumetric water content at 1500kPa (15 bar).
 #'
 #' The ROSETTA model relies on a minimum of 3 soil properties, with increasing (expected) accuracy as additional properties are included:
-#'  - required, sand, silt, clay: USDA soil texture separates (percentages) that sum to 100\%
+#'  - required, sand, silt, clay: USDA soil texture separates (percentages) that sum to 100 percent
 #'  - optional, bulk density (any moisture basis): mass per volume after accounting for >2mm fragments, units of gm/cm3
 #'  - optional, volumetric water content at 33 kPa: roughly "field capacity" for most soils, units of cm^3/cm^3
 #'  - optional, volumetric water content at 1500 kPa: roughly "permanent wilting point" for most plants, units of cm^3/cm^3
@@ -130,9 +130,9 @@
 #'  - log10(npar) : retention shape parameter
 #'  - log10(ksat) : saturated hydraulic conductivity `[log10(cm/d)]`
 #' 
-#' Column names not specified in \code{vars} are retained in the output.
+#' Column names not specified in `vars` are retained in the output.
 #'
-#' Three versions of the ROSETTA model are available, selected using \code{v = 1}, \code{v = 2}, or \code{v = 3}.
+#' Three versions of the ROSETTA model are available, selected using "v = 1", "v = 2", or "v = 3".
 #'
 #'  - version 1 - Schaap, M.G., F.J. Leij, and M.Th. van Genuchten. 2001. ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions. Journal of Hydrology 251(3-4): 163-176. doi: \doi{10.1016/S0022-1694(01)00466-8}.
 #'

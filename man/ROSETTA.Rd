@@ -34,7 +34,7 @@ Soil properties supplied in \code{x} must be described, in order, via \code{vars
 
 The ROSETTA model relies on a minimum of 3 soil properties, with increasing (expected) accuracy as additional properties are included:
 \itemize{
-\item required, sand, silt, clay: USDA soil texture separates (percentages) that sum to 100\\%
+\item required, sand, silt, clay: USDA soil texture separates (percentages) that sum to 100 percent
 \item optional, bulk density (any moisture basis): mass per volume after accounting for >2mm fragments, units of gm/cm3
 \item optional, volumetric water content at 33 kPa: roughly "field capacity" for most soils, units of cm^3/cm^3
 \item optional, volumetric water content at 1500 kPa: roughly "permanent wilting point" for most plants, units of cm^3/cm^3
@@ -51,7 +51,7 @@ The Rosetta pedotransfer function predicts five parameters for the van Genuchten
 
 Column names not specified in \code{vars} are retained in the output.
 
-Three versions of the ROSETTA model are available, selected using \code{v = 1}, \code{v = 2}, or \code{v = 3}.
+Three versions of the ROSETTA model are available, selected using "v = 1", "v = 2", or "v = 3".
 \itemize{
 \item version 1 - Schaap, M.G., F.J. Leij, and M.Th. van Genuchten. 2001. ROSETTA: a computer program for estimating soil hydraulic parameters with hierarchical pedotransfer functions. Journal of Hydrology 251(3-4): 163-176. doi: \doi{10.1016/S0022-1694(01)00466-8}.
 \item version 2 - Schaap, M.G., A. Nemes, and M.T. van Genuchten. 2004. Comparison of Models for Indirect Estimation of Water Retention and Available Water in Surface Soils. Vadose Zone Journal 3(4): 1455-1463. doi: \doi{10.2136/vzj2004.1455}.
