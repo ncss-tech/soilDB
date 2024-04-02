@@ -53,18 +53,25 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.8.2" id="soildb-282-development">soilDB 2.8.2 (development)<a class="anchor" aria-label="anchor" href="#soildb-282-development"></a></h2>
-<ul><li>
-<p>SoilWeb Web Coverage Service MUKEY grid data source (used for <code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code>) and metadata have been updated for FY2024</p>
-<ul><li>Note that ISSR800 WCS (<code>ISSR800.wcs(</code>) source) are still using FY2023/FY2022 data</li>
+<ul><li>SoilWeb Web Coverage Service MUKEY grid data source (used for <code><a href="../reference/mukey.wcs.html">mukey.wcs()</a></code>) and metadata have been updated for FY2024
+<ul><li>Note that ISSR800 WCS (<code><a href="../reference/ISSR800.wcs.html">ISSR800.wcs()</a></code> source) is still using FY2023/FY2022 data</li>
 </ul></li>
-<li><p><code><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass()</a></code> default data returned for methods “Dominant Component”, “Dominant Condition” and “None” now include <code>localphase</code> column</p></li>
-<li><p><code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code> and <code><a href="../reference/get_soilseries_from_NASIS.html">get_competing_soilseries_from_NASIS()</a></code>: add <code>SS</code> argument for parity with all other NASIS “get” methods</p></li>
-<li><p>default to <code>FALSE</code> for backward compatibility/common use cases</p></li>
 <li>
-<p>Changes in column names (Area table / <code>"areasymbol"</code> related; <a href="https://github.com/ncss-tech/soilDB/issues/172" class="external-link">#172</a>)</p>
-<ul><li><p><code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>: Add state, county, and MLRA areasymbol references (<code>"site_state"</code>, <code>"site_county"</code>, <code>"site_mlra"</code>)</p></li>
-<li><p><code>get_mapunit_from_NASIS_db()</code>: Add dominant MLRA areasymbol reference column <code>"lmapunit_mlra"</code></p></li>
-<li><p><code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code>: replace <code>areasymbol</code> column to use relationship-style name <code>"soilseries_typelocst"</code> (minor breaking change)</p></li>
+<code><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass()</a></code> default data returned for methods “Dominant Component”, “Dominant Condition” and “None” now include <code>localphase</code> column</li>
+<li>
+<code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code> and <code><a href="../reference/get_soilseries_from_NASIS.html">get_competing_soilseries_from_NASIS()</a></code>: add <code>SS</code> argument for parity with all other NASIS “get” methods
+<ul><li>default to <code>FALSE</code> for backward compatibility/common use cases</li>
+</ul></li>
+<li>
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code> gains Frost Free Days, MAP, REAP, MAAT, MAST, MSAT, MSST, MWAT, MWST, and Parent Material Group Name; thanks to Zach Van Abbema for suggestion</li>
+<li>Changes in column names related to Area table / <code>"areasymbol"</code> (<a href="https://github.com/ncss-tech/soilDB/issues/272" class="external-link">#272</a>); thanks to Zach Van Abbema for suggestion
+<ul><li>
+<code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code>: Add state, county, and MLRA areasymbol references (<code>"site_state"</code>, <code>"site_county"</code>, <code>"site_mlra"</code>)</li>
+<li>
+<code>get_mapunit_from_NASIS_db()</code>: Add dominant MLRA areasymbol reference column <code>"lmapunit_mlra"</code>
+</li>
+<li>
+<code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code>: replace <code>areasymbol</code> column to use relationship-style name <code>"soilseries_typelocst"</code> (minor breaking change)</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
