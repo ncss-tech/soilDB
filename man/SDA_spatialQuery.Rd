@@ -8,6 +8,7 @@ SDA_spatialQuery(
   geom,
   what = "mukey",
   geomIntersection = FALSE,
+  geomAcres = TRUE,
   db = c("SSURGO", "STATSGO", "SAPOLYGON"),
   byFeature = FALSE,
   idcol = "gid",
@@ -20,7 +21,9 @@ SDA_spatialQuery(
 
 \item{what}{a character vector specifying what to return. \code{'mukey'}: \code{data.frame} with intersecting map unit keys and names, \code{'mupolygon'} overlapping or intersecting map unit polygons from selected database, \code{'areasymbol'}: \code{data.frame} with intersecting soil survey areas, \code{'sapolygon'}: overlapping or intersecting soil survey area polygons (SSURGO only)}
 
-\item{geomIntersection}{logical; \code{FALSE}: overlapping map unit polygons returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is returned.}
+\item{geomIntersection}{logical; \code{FALSE} (default): overlapping map unit polygons returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is returned.}
+
+\item{geomAcres}{logical; \code{TRUE} (default): calculate acres of result geometry in column \code{"area_ac"} when \code{what} returns a geometry column. \code{FALSE} does not calculate acres.}
 
 \item{db}{a character vector identifying the Soil Geographic Databases (\code{'SSURGO'} or \code{'STATSGO'}) to query. Option \var{STATSGO} works with \code{what = "mukey"} and \code{what = "mupolygon"}.}
 
