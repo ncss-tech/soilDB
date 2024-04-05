@@ -44,96 +44,40 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
   return(sf::as_Spatial(sfobj))
 }
 
-
-## TODO consider adding an 'identity' method for more generic use
+# STATSGO features require AND CLIPAREASYMBOL = 'US' to avoid state areasymbol copy
 # select the right query for SSURGO / STATSGO geometry filters submitted to SDA
-# this is important because STATSGO features require the additional
-# AND CLIPAREASYMBOL = 'US'
-.SDA_geometrySelector <- function(db, method) {
-
-  res <- switch(db,
-    SSURGO = {
-      switch(method,
-             intersection = {
-               "
-  WITH geom_data (geom, mukey) AS (
-  SELECT
-  mupolygongeo.STIntersection( geometry::STGeomFromText('%s', 4326) ) AS geom, P.mukey
-  FROM mupolygon AS P
-  WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1
-)
-SELECT
-geom.STAsText() AS geom, mukey,
-GEOGRAPHY::STGeomFromWKB(
-    geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).MakeValid().STArea() * 0.000247105 AS area_ac
-FROM geom_data;
-  "
-             },
-
-             overlap = {
-               "
-  SELECT
-  mupolygongeo.STAsText() AS geom, P.mukey
-  FROM mupolygon AS P
-  WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1;
-"
-             }
-             )
-    },
-
-    STATSGO = {
-      switch(method,
-             intersection = {
-               "
-  WITH geom_data (geom, mukey) AS (
-  SELECT
-  mupolygongeo.STIntersection( geometry::STGeomFromText('%s', 4326) ) AS geom, P.mukey
-  FROM gsmmupolygon AS P
-  WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1
-  AND CLIPAREASYMBOL = 'US'
-)
-SELECT
-geom.STAsText() AS geom, mukey,
-GEOGRAPHY::STGeomFromWKB(
-    geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).MakeValid().STArea() * 0.000247105 AS area_ac
-FROM geom_data;
-  "
-             },
-
-             overlap = {
-               "
-  SELECT
-  mupolygongeo.STAsText() AS geom, P.mukey
-  FROM gsmmupolygon AS P
-  WHERE mupolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1
-  AND CLIPAREASYMBOL = 'US' ;
-"
-
-             }
-      )
-    },
-    SAPOLYGON = { switch(method,
-                        intersection = "
-  WITH geom_data (geom, areasymbol) AS (
-  SELECT
-  sapolygongeo.STIntersection( geometry::STGeomFromText('%s', 4326) ) AS geom, areasymbol
-  FROM sapolygon
-  WHERE sapolygongeo.STIntersects( geometry::STGeomFromText('%s', 4326) ) = 1
-)
-SELECT
-geom.STAsText() AS geom, areasymbol,
-GEOGRAPHY::STGeomFromWKB(geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).MakeValid().STArea() * 0.000247105 AS area_ac
-FROM geom_data;
-  ",
-
-                        overlap = "SELECT
-                                     sapolygongeo.STAsText() AS geom, areasymbol
-                                     FROM sapolygon
-                                     WHERE sapolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326) ) = 1")}
-  )
-
+.SDA_geometrySelector <- function(db, method, geomAcres = TRUE) {
+  db_table <- switch(db,
+                     SSURGO = "mupolygon",
+                     STATSGO = "gsmmupolygon",
+                     SAPOLYGON = "sapolygon")
+  db_column <- switch(db,
+                      SSURGO = "mupolygongeo",
+                      STATSGO = "mupolygongeo",
+                      SAPOLYGON = "sapolygongeo")
+  id_column <- switch(db,
+                      SSURGO = "mukey",
+                      STATSGO = "mukey",
+                      SAPOLYGON = "areasymbol")
+  clip_sql <- switch(db,
+                     SSURGO = "",
+                     STATSGO = "AND CLIPAREASYMBOL = 'US'",
+                     SAPOLYGON = "")
+  area_ac_sql <- ", GEOGRAPHY::STGeomFromWKB(geom.STUnion(geom.STStartPoint()).STAsBinary(), 4326).MakeValid().STArea() * 0.000247105 AS area_ac"
+  geom_sql <- sprintf(switch(method,
+                             intersection = "%s.STIntersection(geometry::STGeomFromText('%%s', 4326)) AS geom",
+                             overlap = "%s AS geom"), db_column)
+  res <- sprintf(
+      "WITH geom_data (geom, %s) AS (
+          SELECT %s, %s
+          FROM %s 
+          WHERE %s.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1 %s
+        ) SELECT geom.STAsText() AS geom, %s%s
+        FROM geom_data",
+      id_column, geom_sql, id_column, db_table, db_column, clip_sql, id_column,
+      ifelse(geomAcres, area_ac_sql, "")
+    )
   return(res)
-
 }
 
 #' Query Soil Data Access by spatial intersection with supplied geometry
@@ -145,14 +89,17 @@ FROM geom_data;
 #' SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO (generalized soil survey, 1:250,000 scale) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the [SDA Tutorial](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html) for details.
 #'
 #' @aliases SDA_spatialQuery
+#'
 #' @param geom an `sf` or `Spatial*` object, with valid CRS. May contain multiple features.
 #' @param what a character vector specifying what to return. `'mukey'`: `data.frame` with intersecting map unit keys and names, `'mupolygon'` overlapping or intersecting map unit polygons from selected database, `'areasymbol'`: `data.frame` with intersecting soil survey areas, `'sapolygon'`: overlapping or intersecting soil survey area polygons (SSURGO only)
-#' @param geomIntersection logical; `FALSE`: overlapping map unit polygons returned, `TRUE`: intersection of `geom` + map unit polygons is returned.
+#' @param geomIntersection logical; `FALSE` (default): overlapping map unit polygons returned, `TRUE`: intersection of `geom` + map unit polygons is returned.
+#' @param geomAcres logical; `TRUE` (default): calculate acres of result geometry in column `"area_ac"` when `what` returns a geometry column. `FALSE` does not calculate acres.
 #' @param db a character vector identifying the Soil Geographic Databases (`'SSURGO'` or `'STATSGO'`) to query. Option \var{STATSGO} works with `what = "mukey"` and `what = "mupolygon"`.
 #' @param byFeature Iterate over features, returning a combined data.frame where each feature is uniquely identified by value in `idcol`. Default `FALSE`.
 #' @param idcol Unique IDs used for individual features when `byFeature = TRUE`; Default `"gid"`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @param as_Spatial Return sp classes? e.g. `Spatial*DataFrame`. Default: `FALSE`.
+#'
 #' @return A `data.frame` if `what = 'mukey'`, otherwise an `sf` object. A `try-error` in the event the request cannot be made or if there is an error in the query.
 #' @note Row-order is not preserved across features in \code{geom} and returned object. Use `byFeature` argument to iterate over features and return results that are 1:1 with the inputs. Polygon area in acres is computed server-side when `what = 'mupolygon'` and `geomIntersection = TRUE`.
 #' @author D.E. Beaudette, A.G. Brown, D.R. Schlaepfer
@@ -294,6 +241,7 @@ FROM geom_data;
 SDA_spatialQuery <- function(geom,
                              what = 'mukey',
                              geomIntersection = FALSE,
+                             geomAcres = TRUE,
                              db = c("SSURGO", "STATSGO", "SAPOLYGON"),
                              byFeature = FALSE,
                              idcol = "gid",
@@ -318,6 +266,7 @@ SDA_spatialQuery <- function(geom,
     geom = geom,
     what = what,
     geomIntersection = geomIntersection,
+    geomAcres = geomAcres,
     db = db,
     query_string = query_string
   )
@@ -330,11 +279,12 @@ SDA_spatialQuery <- function(geom,
 }
 
 .SDA_spatialQuery <- function(geom,
-                             what = 'mukey',
-                             geomIntersection = FALSE,
-                             db = c("SSURGO", "STATSGO", "SAPOLYGON"),
-                             query_string = FALSE) {
-
+                              what = 'mukey',
+                              geomIntersection = FALSE,
+                              geomAcres = TRUE,
+                              db = c("SSURGO", "STATSGO", "SAPOLYGON"),
+                              query_string = FALSE) {
+  
   # check for required packages
   if (!requireNamespace('sf', quietly = TRUE))
     stop('please install the `sf` package', call. = FALSE)
@@ -419,14 +369,14 @@ SDA_spatialQuery <- function(geom,
     if (geomIntersection) {
 
       # select the appropriate query
-      .template <- .SDA_geometrySelector(db = db, method = 'intersection')
+      .template <- .SDA_geometrySelector(db = db, method = 'intersection', geomAcres = geomAcres)
       q <- sprintf(.template, as.character(wkt), as.character(wkt))
 
     } else {
       # return overlapping
 
       # select the appropriate query
-      .template <- .SDA_geometrySelector(db = db, method = 'overlap')
+      .template <- .SDA_geometrySelector(db = db, method = 'overlap', geomAcres = geomAcres)
       q <- sprintf(.template, as.character(wkt))
     }
 
