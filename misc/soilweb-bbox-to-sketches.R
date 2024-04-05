@@ -11,6 +11,9 @@ library(soilDB)
 ## click somewhere on the map
 ## press 'b', BBOX is copied to the clipboard
 
+## GCL's soil pit digging competition site
+bb <- '-122.0050 39.6933,-122.0050 39.7543,-121.8931 39.7543,-121.8931 39.6933,-122.0050 39.6933'
+
 
 # # https://twitter.com/MoreorLoess/status/1471935030746304521
 # # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=41.83547,-90.12201,z16
@@ -104,8 +107,7 @@ SoilTaxonomyDendrogram(
   cex.names = 0.66,
   width = 0.3, 
   name.style = 'center-center', 
-  plot.depth.axis = TRUE,
-  axis.line.offset = -3,
+  depth.axis = list(line = -3),
   hz.distinctness.offset = 'hzd',
   max.depth = 150
 )
@@ -122,8 +124,7 @@ SoilTaxonomyDendrogram(
   cex.names = 0.75,
   width = 0.3, 
   name.style = 'center-center', 
-  plot.depth.axis = TRUE,
-  axis.line.offset = -3.5,
+  depth.axis = list(line = -3.5),
   hz.distinctness.offset = 'hzd',
   max.depth = 200
 )
