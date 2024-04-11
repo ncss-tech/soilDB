@@ -105,7 +105,7 @@ simplifyArtifactData <- function(art, id.var, vol.var = "huartvol", nullFragsAre
     idx <- unique(unlist(lapply(gt.100[class.idx], which)))
     flagged.ids <- art.wide[[id.var]][idx]
     
-    message(sprintf("NOTE: artifact volume >= 100% in %s: %s", id.var, paste(flagged.ids, collapse = "\n")))
+    message(sprintf("NOTE: artifact volume >= 100%% in %s: %s", id.var, paste(flagged.ids, collapse = "\n")))
   }
 
   # compute total artifacts
