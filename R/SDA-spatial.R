@@ -46,7 +46,7 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
 
 # STATSGO features require AND CLIPAREASYMBOL = 'US' to avoid state areasymbol copy
 # select the right query for SSURGO / STATSGO geometry filters submitted to SDA
-.SDA_geometrySelector <- function(db, method, geomAcres = TRUE) {
+.SDA_geometrySelector <- function(db, what, method, geomAcres = TRUE) {
   db_table <- switch(db,
                      SSURGO = "mupolygon",
                      STATSGO = "gsmmupolygon",
@@ -77,6 +77,14 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
       id_column, geom_sql, id_column, db_table, db_column, clip_sql, id_column,
       ifelse(geomAcres, area_ac_sql, "")
     )
+  
+  # handle non-polygon results
+  if (db == "SSURGO" && what %in% c("mupoint", "muline", "featpoint", "featline")) {
+    res <- gsub("mupolygon", what, res)
+    if (what %in% c("featpoint", "featline")) {
+      res <- gsub("mukey", "featkey", res)
+    }
+  }
   return(res)
 }
 
@@ -373,22 +381,15 @@ SDA_spatialQuery <- function(geom,
     if (geomIntersection) {
 
       # select the appropriate query
-      .template <- .SDA_geometrySelector(db = db, method = 'intersection', geomAcres = geomAcres)
+      .template <- .SDA_geometrySelector(db = db, what = what, method = 'intersection', geomAcres = geomAcres)
       q <- sprintf(.template, as.character(wkt), as.character(wkt))
 
     } else {
       # return overlapping
 
       # select the appropriate query
-      .template <- .SDA_geometrySelector(db = db, method = 'overlap', geomAcres = geomAcres)
+      .template <- .SDA_geometrySelector(db = db, what = what, method = 'overlap', geomAcres = geomAcres)
       q <- sprintf(.template, as.character(wkt))
-    }
-    
-    if (db == "SSURGO" && what %in% c("mupoint", "muline", "featpoint", "featline")) {
-      q <- gsub("mupolygon", what, q)
-      if (what %in% c("featpoint", "featline")) {
-        q <- gsub("mukey", "featkey", q)
-      }
     }
 
     if (query_string) {
