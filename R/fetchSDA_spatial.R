@@ -68,11 +68,12 @@ fetchSDA_spatial <- function(x,
                              verbose = TRUE,
                              as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {
   by.col <- tolower(by.col)
-  geom.src <- match.arg(tolower(geom.src), choices = c("mupolygon", "sapolygon", "mlrapolygon"))
+  geom.src <- match.arg(tolower(geom.src), choices = c("mupolygon", "sapolygon", "mlrapolygon",
+                                                       "mupoint", "muline", "featpoint", "featline"))
   db <- match.arg(toupper(db), choices = c("SSURGO", "STATSGO"))
 
-  # survey area polygons only available in SSURGO
-  if (geom.src == 'sapolygon') {
+  # survey area polygons, point, and line mapunits/features only available in SSURGO
+  if (geom.src %in% c("sapolygon", "mupoint", "muline", "featpoint", "featline")) {
     db <- 'SSURGO'
   }
   
@@ -100,8 +101,8 @@ fetchSDA_spatial <- function(x,
     }
   }
 
-  # default interface is mukey
-  if (by.col == "mukey" || by.col == "lkey") {
+  # default interface is mukey/lkey/featkey
+  if (by.col %in% c("mukey", "lkey", "featkey")) {
     
     mukey.list <- x
     
@@ -172,7 +173,7 @@ fetchSDA_spatial <- function(x,
     #       in the future a T-SQL implementation would allow for any of the defined method options
     return(res)
   } else {
-    return(try(stop(paste0("Unknown mapunit identifier (", by.col, ")"), call. = FALSE)))
+    return(try(stop(paste0("Unknown feature identifier (", by.col, ")"), call. = FALSE)))
   }
 
   mukey.chunk <- makeChunks(mukey.list, chunk.size)
@@ -194,9 +195,9 @@ fetchSDA_spatial <- function(x,
                       union = 'geometry::UnionAggregate(mupolygongeo).STAsText()',
                       point = 'mupolygongeo.STPointOnSurface().STAsText()')
 
-  if (geom.src == 'sapolygon')
-    geom.type <- gsub('mupolygon', 'sapolygon', geom.type)
-
+  if (geom.src %in% c('sapolygon', 'featline', 'featpoint', 'mupoint', 'muline'))
+    geom.type <- gsub('mupolygon', geom.src, geom.type)
+  
   if (verbose)
     message(sprintf("Using %s chunks...", length(unique(mukey.chunk))))
 
@@ -279,7 +280,7 @@ fetchSDA_spatial <- function(x,
 .fetchSDA_spatial <- function(mukey.list, geom.type, geom.src, use_statsgo, add.fields, verbose, .parentchunk = NA, by.col) {
   base.fields <- "P.mukey, legend.areasymbol, mapunit.nationalmusym"
   
-  if (geom.src == "mupolygon") {
+  if (geom.src %in% c("mupolygon", "mupoint", "muline")) {
     q <- sprintf(
       "SELECT
         %s AS geom, %s
@@ -295,7 +296,7 @@ fetchSDA_spatial <- function(x,
                (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(CONVERT(NVARCHAR(max), legend.areasymbol), ','),',')) t) AS areasymbol, 
               mapunit.nationalmusym", 
              "P.mukey, legend.areasymbol, mapunit.nationalmusym"),
-      ifelse(use_statsgo, "gsmmupolygon", "mupolygon"),
+      ifelse(use_statsgo, "gsmmupolygon", geom.src),
       format_SQL_in_statement(mukey.list),
       ifelse(use_statsgo, "AND CLIPAREASYMBOL = 'US'",""),
       ifelse(grepl("Aggregate", geom.type), 
@@ -314,6 +315,17 @@ fetchSDA_spatial <- function(x,
       geom.type,
       format_SQL_in_statement(mukey.list),
       ifelse(grepl("Aggregate", geom.type), "GROUP BY legend.lkey, legend.areasymbol", "")
+    )
+  } else if (geom.src == "featpoint" || geom.src == "featline") {
+    q <- sprintf(
+      "SELECT
+         %s AS geom, areasymbol, featsym, featkey
+       FROM %s AS P
+       WHERE featkey IN %s %s",
+      geom.type,
+      geom.src,
+      format_SQL_in_statement(mukey.list),
+      ifelse(grepl("Aggregate", geom.type), "GROUP BY areasymbol, featsym, featkey", "")
     )
   }
   
