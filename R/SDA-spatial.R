@@ -331,9 +331,9 @@ SDA_spatialQuery <- function(geom,
     what <- "mupolygon"
   }
 
-  # sanity checks
-  if (!what %in% c('mukey', 'mupolygon', 'areasymbol', 'sapolygon')) {
-    stop("query type (argument `what`) must be either 'mukey' / 'areasymbol' (tabular result) OR 'mupolygon' / 'sapolygon' (geometry result)", call. = FALSE)
+  # determine if requested data type is allowed
+  if (!what %in% c('mukey', 'mupolygon', 'mupoint', 'muline', 'featpoint', 'featline', 'areasymbol', 'sapolygon')) {
+    stop("query type (argument `what`) must be either 'mukey' / 'areasymbol' (tabular result) OR 'mupolygon', 'mupoint', 'muline', 'featpoint', 'featline', 'sapolygon' (geometry result)", call. = FALSE)
   }
 
   # areasymbol is allowed with db = "SSURGO" (default) and db = "SAPOLYGON"
@@ -363,8 +363,12 @@ SDA_spatialQuery <- function(geom,
   wkt <- wk::wk_collection(wk::as_wkt(geom))
 
   # returning geom + mukey or geom + areasymbol
-  if (what %in% c('mupolygon', 'sapolygon')) {
+  if (what %in% c("mupolygon", "sapolygon", "mupoint", "muline", "featpoint", "featline")) {
 
+    if (what %in% c("mupoint", "muline", "featpoint", "featline")) {
+      geomAcres <- FALSE
+    }
+    
     # return intersection + area
     if (geomIntersection) {
 
@@ -379,6 +383,13 @@ SDA_spatialQuery <- function(geom,
       .template <- .SDA_geometrySelector(db = db, method = 'overlap', geomAcres = geomAcres)
       q <- sprintf(.template, as.character(wkt))
     }
+    
+    if (db == "SSURGO" && what %in% c("mupoint", "muline", "featpoint", "featline")) {
+      q <- gsub("mupolygon", what, q)
+      if (what %in% c("featpoint", "featline")) {
+        q <- gsub("mukey", "featkey", q)
+      }
+    }
 
     if (query_string) {
       return(q)
@@ -388,7 +399,7 @@ SDA_spatialQuery <- function(geom,
     # note that row-order / number of rows in results may not match geom
     res <- suppressMessages(SDA_query(q))
     
-    if (inherits(res,  'try-error')) {
+    if (is.null(res) || inherits(res, 'try-error')) {
       return(res)
     }
     
@@ -397,58 +408,40 @@ SDA_spatialQuery <- function(geom,
       # sf -> terra
       res <- terra::vect(res)
     }
-  }
-
-  if (what == 'mukey') {
-    if (db == "SSURGO") {
-      q <- sprintf("SELECT mukey, muname
-                  FROM mapunit
-                  WHERE mukey IN (
-                  SELECT DISTINCT mukey from SDA_Get_Mukey_from_intersection_with_WktWgs84('%s')
+    
+  } else {
+      
+    if (what == 'mukey') {
+      if (db == "SSURGO") {
+        q <- sprintf("SELECT mukey, muname
+                    FROM mapunit
+                    WHERE mukey IN (
+                    SELECT DISTINCT mukey from SDA_Get_Mukey_from_intersection_with_WktWgs84('%s')
+                    )", wkt)
+      } else if (db == "STATSGO") {
+        q <- sprintf("SELECT DISTINCT P.mukey, mapunit.muname
+                      FROM gsmmupolygon AS P
+                      INNER JOIN mapunit ON mapunit.mukey = P.mukey
+                      WHERE mupolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326)) = 1
+                        AND CLIPAREASYMBOL = 'US'", wkt)
+      } else {
+        stop("query type 'mukey' for 'SAPOLYGON' is not supported", call. = FALSE)
+      }
+  
+    } else if (what == 'areasymbol') {
+      # SSURGO only
+      q <- sprintf("SELECT areasymbol
+                  FROM sapolygon
+                  WHERE sapolygonkey IN (
+                  SELECT DISTINCT sapolygonkey from SDA_Get_Sapolygonkey_from_intersection_with_WktWgs84('%s')
                   )", wkt)
-    } else if (db == "STATSGO") {
-      q <- sprintf("SELECT DISTINCT P.mukey, mapunit.muname
-                    FROM gsmmupolygon AS P
-                    INNER JOIN mapunit ON mapunit.mukey = P.mukey
-                    WHERE mupolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326) ) = 1
-                      AND CLIPAREASYMBOL = 'US'", wkt)
-    } else {
-      stop("query type 'mukey' for 'SAPOLYGON' is not supported", call. = FALSE)
     }
-
+    
     if (query_string) {
       return(q)
     }
-
-    # single query for all of the features
-    # note that row-order / number of rows in results may not match geom
-    res <- suppressMessages(SDA_query(q))
     
-    if (inherits(res,  'try-error')) {
-      return(res)
-    }
-  }
-
-  # SSURGO only
-  if (what == 'areasymbol') {
-    q <- sprintf("SELECT areasymbol
-                FROM sapolygon
-                WHERE sapolygonkey IN (
-                SELECT DISTINCT sapolygonkey from SDA_Get_Sapolygonkey_from_intersection_with_WktWgs84('%s')
-                )", wkt)
-
-    if (query_string) {
-      return(q)
-    }
-
-    # single query for all of the features
-    # note that row-order / number of rows in results may not match geom
     res <- suppressMessages(SDA_query(q))
-    
-    if (inherits(res,  'try-error')) {
-      return(res)
-    }
   }
-
   res
 }
