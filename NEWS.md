@@ -12,7 +12,8 @@
    - `get_soilseries_from_NASIS()`: replace `areasymbol` column to use relationship-style name `"soilseries_typelocst"` (minor breaking change)
  - `fetchSDA_spatial()`: Add support for querying mapunit point (`"mupoint"`), mapunit line (`"muline"`), special feature point (`"featpoint"`), special feature line (`"featline"`) by `mukey` or `featkey`, geometry type selectable via `geom.src` argument
  - `SDA_spatialQuery()`: Add support for querying mapunit point (`"mupoint"`), mapunit line (`"muline"`), special feature point (`"featpoint"`), special feature line (`"featline"`) for a spatial extent, geometry type selectable via `what` argument
-
+ - `simplifyFragmentData()` / `simplifyArtifactData()` efficiency improvement when all records are missing data
+ 
 # soilDB 2.8.1 (2024-01-09)
 
  - `get_mapunit_from_NASIS()`, `get_lmuaoverlap_from_NASIS()` and `get_legend_from_NASIS()` gain `areatypename` argument used for filtering legends by `areatypename`. 

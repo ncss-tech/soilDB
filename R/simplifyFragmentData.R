@@ -166,16 +166,13 @@ simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", prefix = "frag
   result.columns <- c(id.var, frag.classes, "total_frags_pct", "total_frags_pct_nopf")
 
   # warn the user and remove the NA records
-  
-  # if all fragvol are NA then rf is an empty data.frame and we are done
+  # if all fragvol are NA then result is a data frame with all ID values NA
   if (nrow(rf[which(!is.na(rf[[vol.var]])),]) == 0) {
     message(sprintf('NOTE: all records are missing %s', msg))
-    dat <- as.data.frame(t(rep(NA, length(result.columns))))
-    for (i in 1:length(rf[[id.var]])) {
-      dat[i,] <- dat[1,]
-      dat[i,which(result.columns == id.var)] <- rf[[id.var]][i]
-    }
+    dat <- as.data.frame(t(rep(NA, length(result.columns))))[seq_len(length(rf[[id.var]])),]
+    dat[[which(result.columns == id.var)]] <- rf[[id.var]]
     colnames(dat) <- result.columns
+    rownames(dat) <- NULL
     return(dat)
   } else if (any(is.na(rf[[vol.var]]))) {
     rf <- rf[which(!is.na(rf[[vol.var]])), ]

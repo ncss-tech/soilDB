@@ -50,18 +50,15 @@ simplifyArtifactData <- function(art, id.var, vol.var = "huartvol", nullFragsAre
   # artifact size classes, using fragment breaks, are used in this function
   art.classes <- c('art_fgr', 'art_gr', 'art_cb', 'art_st', 'art_by', 'art_ch', 'art_fl', 'art_unspecified')
   result.columns <- c(id.var, art.classes, "total_art_pct", "huartvol_cohesive", "huartvol_penetrable", "huartvol_innocuous", "huartvol_persistent")
-
-  # warn the user and remove the NA records
   
-  # if all fragvol are NA then rf is an empty data.frame and we are done
+  # warn the user and remove the NA records
+  # if all huartvol are NA then result is a data frame with all ID values NA
   if (nrow(art[which(!is.na(art[[vol.var]])),]) == 0) {
     message('NOTE: all records are missing artifact volume')
-    dat <- as.data.frame(t(rep(NA, length(result.columns))))
-    for (i in 1:length(art[[id.var]])) {
-      dat[i, ] <- dat[1, ]
-      dat[i, which(result.columns == id.var)] <- art[[id.var]][i]
-    }
+    dat <- as.data.frame(t(rep(NA, length(result.columns))))[seq_len(length(art[[id.var]])),]
+    dat[[which(result.columns == id.var)]] <- art[[id.var]]
     colnames(dat) <- result.columns
+    rownames(dat) <- NULL
     return(dat)
   } else if (any(is.na(art[[vol.var]]))) {
     art <- art[which(!is.na(art[[vol.var]])), ]
