@@ -38,7 +38,7 @@ library(soilDB)
 
 # path to data source (NULL = use ODBC to local nasis,
 #                     otherwise path to SQLite)
-# dsn <- "misc/testStatic.sqlite"
+dsn <- "misc/testStatic.sqlite"
 # 
 # # RUN IF NEEDED:
 # # dsn <- "misc/testStatic.sqlite"
