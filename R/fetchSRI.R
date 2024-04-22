@@ -142,6 +142,7 @@ get_SRI_layers <- function(gdb) {
 #' matching helper
 #' @param gdb A character.
 #' @return A gdb character.
+#' @noRd
 .get_SRI_gdb_names <- function(gdb) {
 
   gdb_names <- tolower(c('Region6', 'Deschutes', 'Fremont', 'GiffordPinchot', 'Malheur',
@@ -159,7 +160,7 @@ get_SRI_layers <- function(gdb) {
            ifelse(gdb %in% c('fremont'), 'Fremont',
            ifelse(gdb %in% c('giffordpinchot', 'giford pinchot'), 'GiffordPinchot',
            ifelse(gdb %in% c('malheur'), 'Malheur',
-           ifelse(gdb %in% c( 'mtbaker','mt. baker', 'mt baker'), 'MtBaker',
+           ifelse(gdb %in% c('mtbaker','mt. baker', 'mt baker'), 'MtBaker',
            ifelse(gdb %in% c('mthood','mt hood','mt. hood'), 'MtHood',
            ifelse(gdb %in% c('ochoco'), 'Ochoco',
            ifelse(gdb %in% c('okanogan'), 'Okanogan',

@@ -1,4 +1,4 @@
-# soilDB 2.8.2 (development)
+# soilDB 2.8.2 (2024-04-22)
 
  - SoilWeb Web Coverage Service MUKEY grid data source (used for `mukey.wcs()`) and metadata have been updated for FY2024
    - Note that ISSR800 WCS (`ISSR800.wcs()` source) is still using FY2023/FY2022 data
