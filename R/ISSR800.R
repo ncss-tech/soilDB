@@ -60,6 +60,10 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   # get variable specs
   var.spec <- .ISSR800.spec[[var]]
   
+  # 2024-04-23: updated grid system
+  # 3620, 5769, 1  (nrow, ncol, nlyr)
+  # -2356800, 2258400, 276800, 3172800  (xmin, xmax, ymin, ymax)
+  
   # authoritative CONUS = grid
   .crs <- 'EPSG:5070'
   .grid <- terra::rast(nrows = 3621, ncols = 5770, crs = .crs, 
