@@ -46,7 +46,13 @@
 soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   
   ## vintage of source data
-  .vintage <- 'FY2022'
+  
+  # TODO: use remote metadata
+  #  --> must add to load-balancer
+  # .vintage <- readLines('http://casoilresource.lawr.ucdavis.edu/wcs-files/soilcolor/vintage')
+  
+  # hard-coded
+  .vintage <- 'FY2023'
   
   # sanity check: AOI specification
   if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
@@ -160,39 +166,31 @@ soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   # set layer name in object
   names(r) <- var.spec$desc
   
-  # optional processing of RAT
+  # make categories + RAT
+  r <- terra::as.factor(r)
+  rat <- terra::cats(r)[[1]]
+  
+  # optional processing of color LUT
   if (!is.null(var.spec$rat)) {
     
-    # get rat
-    rat <- read.csv(var.spec$rat, stringsAsFactors = FALSE)
+    # get color LUT
+    lut <- read.csv(var.spec$rat, stringsAsFactors = FALSE)
     
-    # the cell value / ID column is always the 2nd colum
-    # name it for reference later
-    names(rat)[1] <- 'ID'
-    
-    ## TODO: changes since previous version
-    ##         * the raster-based version set only existing levels
-    ##         * there may be more than ID, code in the RAT: see texture RATS
-    ##         * very large RATs with mostly un-used levels (series name) will be a problem
-    
-    # re-order columns by name
-    # there may be > 2 columns (hex colors, etc.)
-    col.names <- c('ID', names(rat)[-1])
-    
-    # unique cell values
-    u.values <- terra::unique(r)[[1]]
-    
-    # index those categories present in r
-    cat.idx <- which(rat$ID %in% u.values)
-    
-    # subset RAT
-    rat <- rat[cat.idx, col.names]
+    # color ID is always in the first column
+    # use the name expected by terra::levels() and terra::cats()
+    names(lut)[1] <- 'ID'
     
     # create hex notation for color
-    rat$col <- rgb(rat$r, rat$g, rat$b, maxColorValue = 255)
+    lut$col <- rgb(lut$r, lut$g, lut$b, maxColorValue = 255)
     
-    # register categories in new order
+    # merge RAT + LUT
+    rat <- merge(rat[, 'ID', drop = FALSE], lut, by = 'ID', all.x = TRUE, sort = FALSE)
+    
+    # register RAT
     levels(r) <- rat
+    
+    # set color table
+    terra::coltab(r) <- rat[, c('ID', 'r', 'g', 'b')]
   }
   
   input_class <- attr(wcs.geom, '.input_class')

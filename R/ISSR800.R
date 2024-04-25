@@ -176,32 +176,35 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     # get rat
     rat <- try(suppressWarnings(read.csv(var.spec$rat, stringsAsFactors = FALSE)), silent = TRUE)
     
+    # trap missing RAT
     if (inherits(rat, 'try-error')) {
       message("\nFailed to download RAT from ", var.spec$rat, "; returning integer grid")
       return(r)
+    } else {
+      # the cell value / ID column is always the 2nd column
+      # name it for reference later
+      names(rat)[2] <- 'ID'
+      
+      # re-order columns by name
+      # there may be > 2 columns (hex colors, etc.)
+      col.names <- c('ID', names(rat)[-2])
+      
+      # make categories + RAT
+      r <- terra::as.factor(r)
+      r.rat <- terra::cats(r)[[1]]
+      
+      # merge basic RAT + ISSR800 RAT
+      rat <- merge(r.rat[, 'ID', drop = FALSE], rat, by = 'ID', all.x = TRUE, sort = FALSE)
+      
+      # register RAT
+      levels(r) <- rat
+      
+      # set color table if there is a column named 'hex'
+      if('hex' %in% names(rat)) {
+        terra::coltab(r) <- rat[, c('ID', 'hex')]
+      }
+      
     }
-    
-    # the cell value / ID column is always the 2nd colum
-    # name it for reference later
-    names(rat)[2] <- 'ID'
-    
-    ## TODO: changes since previous version
-    ##         * the raster-based version set only existing levels
-    ##         * there may be more than ID, code in the RAT: see texture RATS
-    ##         * very large RATs with mostly un-used levels (series name) will be a problem
-    
-    # re-order columns by name
-    # there may be > 2 columns (hex colors, etc.)
-    col.names <- c('ID', names(rat)[-2])
-    
-    # unique cell values
-    u.values <- terra::unique(r)[[1]]
-    
-    # index those categories present in r
-    cat.idx <- which(rat$ID %in% u.values)
-    
-    # register categories in new order
-    levels(r) <- rat[cat.idx, col.names]
   }
   
   # align to authoritative grid
