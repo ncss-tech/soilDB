@@ -1,3 +1,8 @@
+# soilDB 2.8.3 (development)
+ - ISSR800 authoritative grid system altered slightly
+ - `ISSR800.wcs()` and `soilColor.wcs()` now set color table internally when possible
+ - updated source data: ISSR800 (FY24) and soil color (FY23)
+
 # soilDB 2.8.2 (2024-04-22)
 
  - SoilWeb Web Coverage Service MUKEY grid data source (used for `mukey.wcs()`) and metadata have been updated for FY2024
