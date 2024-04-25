@@ -1,14 +1,14 @@
-# -----------------------------------------------------------
-# CITATION file created with {cffr} R package, v1.0.0
+# --------------------------------------------
+# CITATION file created with {cffr} R package
 # See also: https://docs.ropensci.org/cffr/
-# -----------------------------------------------------------
+# --------------------------------------------
  
 cff-version: 1.2.0
 message: 'To cite package "soilDB" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'soilDB: Soil Database Interface'
-version: 2.8.2
+version: 2.8.3
 abstract: A collection of functions for reading soil data from U.S. Department of
   Agriculture Natural Resources Conservation Service (USDA-NRCS) and National Cooperative
   Soil Survey (NCSS) databases.
@@ -393,3 +393,4 @@ references:
 identifiers:
 - type: url
   value: https://ncss-tech.github.io/AQP/
+
