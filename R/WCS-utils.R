@@ -12,6 +12,8 @@
 #' WCS_details(wcs = 'ISSR800')
 WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
   
+  ## TODO: add md5sum + vintage
+  
   # select a WCS
   wcs <- match.arg(wcs)
   

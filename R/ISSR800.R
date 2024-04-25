@@ -37,7 +37,13 @@
 ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   
   ## vintage of source data
-  .vintage <- 'FY2023'
+  
+  # TODO: use remote metadata
+  #  --> must add to load-balancer
+  # .vintage <- readLines('http://casoilresource.lawr.ucdavis.edu/wcs-files/...')
+  
+  # hard-coded
+  .vintage <- 'FY2024'
   
   if (!requireNamespace("terra")) {
     stop("package 'terra' is required", call. = FALSE)
@@ -66,8 +72,8 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   
   # authoritative CONUS = grid
   .crs <- 'EPSG:5070'
-  .grid <- terra::rast(nrows = 3621, ncols = 5770, crs = .crs, 
-                       extent = terra::ext(-2357200, 2258800, 276400, 3173200))
+  .grid <- terra::rast(nrows = 3620, ncols = 5769, crs = .crs, 
+                       extent = terra::ext(-2356800, 2258400, 276800, 3172800))
   
   # compute BBOX / IMG geometry in native CRS
   wcs.geom <- .prepare_AEA_AOI(aoi, res = res, native_crs = .crs)
