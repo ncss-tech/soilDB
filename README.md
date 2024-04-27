@@ -46,7 +46,7 @@ Get the development version from GitHub:
     ##     year = {2024},
     ##   }
 
-## soilDB 2.8.2
+## soilDB 2.8.3
 
 <!-- ### Notices on Database Interfaces -->
 <!-- #### NASIS -->
