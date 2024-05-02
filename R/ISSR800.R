@@ -49,7 +49,7 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     stop("package 'terra' is required", call. = FALSE)
   }
   
-  # sanity check: aoi specification
+  # sanity check: AOI specification
   if (!inherits(aoi, c('list', 'Spatial', 'sf', 'sfc', 'bbox', 'RasterLayer', 'SpatRaster', 'SpatVector'))) { 
     stop('invalid `aoi` specification', call. = FALSE)
   }
@@ -176,8 +176,17 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   # set layer name in object
   names(r) <- var.spec$desc
   
+  # test for all NA
+  # if TRUE, we cannot process RATs
+  .allNA <- terra::global(r, fun = "isNA")$isNA == terra::ncell(r)
+  
+  # message when all cells are NA
+  if(.allNA) {
+    message('all cells are NA')
+  }
+  
   # optional processing of RAT
-  if (!is.null(var.spec$rat)) {
+  if (!is.null(var.spec$rat) && !.allNA) {
     
     # get rat
     rat <- try(suppressWarnings(read.csv(var.spec$rat, stringsAsFactors = FALSE)), silent = TRUE)

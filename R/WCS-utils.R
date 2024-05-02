@@ -659,6 +659,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
 )
 
 
+## TODO: dynamically get vintage from ... where?
 .mukey.spec <- list(
   
   'gnatsgo' = list(
