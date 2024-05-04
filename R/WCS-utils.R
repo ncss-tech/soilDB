@@ -659,9 +659,20 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
 )
 
 
-## TODO: dynamically get vintage from ... where?
+##
+## TODO:
+##       
+##  * host WCS specifications as JSON on server so that changes don't require a soilDB release
+##  * each suite of products should have their own spec
+##  * remove xx.spec lists from soilDB
+##  * top-level names in specs via JSON are used to determine available products
+##  * are we just re-inventing a crummy version of STAC?
+##
+
 .mukey.spec <- list(
   
+  # FY24 data were exported as INT32 instead of UINT32
+  # NODATA is -2147483648
   'gnatsgo' = list(
     dsn = 'gnatsgo',
     type = 'GEOTIFF_FLOAT',
