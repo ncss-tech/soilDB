@@ -121,6 +121,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param header Logical. Passed to `read.delim()` for reading pipe-delimited (`|`) text files containing tabular data.
 #' @param quiet Logical. Suppress messages and other output from database read/write operations?
 #' @param ... Additional arguments passed to `write_sf()` for writing spatial layers.
+#' @param duckdb Logical. Create DuckDB rather than SQLite database? Default: `FALSE`.
 #'
 #' @return Character. Vector of layer/table names in `filename`.
 #' @export
@@ -136,6 +137,7 @@ createSSURGO <- function(filename,
                          overwrite = FALSE,
                          header = FALSE,
                          quiet = TRUE,
+                         duckdb = FALSE,
                          ...) {
   
   if (missing(filename) || length(filename) == 0) {
@@ -143,17 +145,27 @@ createSSURGO <- function(filename,
   }
   
   IS_GPKG <- grepl("\\.gpkg$", filename, ignore.case = TRUE)[1]
+  IS_DUCKDB <- duckdb
   
   f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE)
   
   if (!requireNamespace("sf"))
     stop("package `sf` is required to write spatial datasets to SSURGO SQLite databases", call. = FALSE)
   
-  if (!requireNamespace("RSQLite"))
-    stop("package `RSQLite` is required to write tabular datasets to SSURGO SQLite databases", call. = FALSE)
-  
   if (isTRUE(overwrite) && file.exists(filename)) {
     file.remove(filename)
+  }
+  
+  if (IS_DUCKDB) {
+    if (!requireNamespace("duckdb"))
+      stop("package `duckdb` is required to write datasets to SSURGO DuckDB databases", call. = FALSE)
+    con <- duckdb::dbConnect(duckdb::duckdb(filename), filename)
+    on.exit(duckdb::dbDisconnect(con, shutdown = TRUE))
+  } else {
+    if (!requireNamespace("RSQLite"))
+      stop("package `RSQLite` is required to write datasets to SSURGO SQLite databases", call. = FALSE)
+    con <- RSQLite::dbConnect(RSQLite::SQLite(), filename, loadable.extensions = TRUE)  
+    on.exit(RSQLite::dbDisconnect(con))
   }
   
   # create and add combined vector datasets:
@@ -166,15 +178,28 @@ createSSURGO <- function(filename,
   
   if (nrow(shp.grp) >= 1 && ncol(shp.grp) == 3 && include_spatial) {
     f.shp.grp <- split(f.shp, list(feature = shp.grp[,1], geom = shp.grp[,2]))
-    
+    if (IS_DUCKDB)
+      duckdb::dbSendQuery(con, "INSTALL spatial; LOAD spatial;")
     lapply(seq_along(f.shp.grp), function(i) {
       lapply(seq_along(f.shp.grp[[i]]), function(j){
         lnm <- layer_names[match(gsub(".*soil([musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j]),
                                  names(layer_names))]
-        
-        if (overwrite && j == 1) {
-          sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, overwrite = TRUE, ...)
-        } else sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, append = TRUE, ...)
+        if (IS_DUCKDB) {
+          if (overwrite && j == 1) {
+            duckdb::dbSendQuery(con, sprintf("DROP TABLE IF EXISTS %s;", lnm))
+            duckdb::dbSendQuery(con, sprintf("CREATE TABLE %s AS SELECT * FROM ST_Read('%s');",
+                                lnm, f.shp.grp[[i]][j]))
+          } else {
+            duckdb::dbSendQuery(con, sprintf("INSERT INTO %s SELECT * FROM ST_Read('%s');",
+                                             lnm, f.shp.grp[[i]][j]))
+          }
+        } else {
+          if (overwrite && j == 1) {
+            sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, overwrite = TRUE, ...)
+          } else {
+            sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, append = TRUE, ...)
+          }
+        }
         NULL
       })
     })
@@ -211,9 +236,6 @@ createSSURGO <- function(filename,
     msidxdet <- read.delim(msidxdn[1], sep = "|", stringsAsFactors = FALSE, header = header)
   }
   
-  con <- RSQLite::dbConnect(RSQLite::SQLite(), filename, loadable.extensions = TRUE)  
-  on.exit(RSQLite::dbDisconnect(con))
-  
   lapply(names(f.txt.grp), function(x) {
     
     if (!is.null(mstabcol)) {
@@ -226,7 +248,7 @@ createSSURGO <- function(filename,
     }
     
     d <- try(as.data.frame(data.table::rbindlist(lapply(seq_along(f.txt.grp[[x]]), function(i) {
-        
+        # print(f.txt.grp[[x]][i])
         y <- read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header)
         
         if (length(y) == 1) {
@@ -251,16 +273,32 @@ createSSURGO <- function(filename,
       
       # write tabular data to file
       try({
-        if (overwrite) {
-          RSQLite::dbWriteTable(con, mstab_lut[x], d, overwrite = TRUE)
-        } else RSQLite::dbWriteTable(con, mstab_lut[x], d, append = TRUE)
+        if (IS_DUCKDB) {
+          if (overwrite) {
+            duckdb::dbWriteTable(con, mstab_lut[x], d, overwrite = TRUE)
+          } else {
+            duckdb::dbWriteTable(con, mstab_lut[x], d, append = TRUE)
+          }
+        } else {
+          if (overwrite) {
+            RSQLite::dbWriteTable(con, mstab_lut[x], d, overwrite = TRUE)
+          } else {
+            RSQLite::dbWriteTable(con, mstab_lut[x], d, append = TRUE)
+          }
+        }
       }, silent = quiet)
       
       # create pkey indices
       if (!is.null(indexPK) && length(indexPK) > 0) {
         try({
-          RSQLite::dbExecute(con, sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
-                                          paste0('PK_', mstab_lut[x]), mstab_lut[x], paste0(indexPK, collapse = ",")))
+          q <- sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
+                       paste0('PK_', mstab_lut[x]), mstab_lut[x], 
+                       paste0(indexPK, collapse = ","))
+          if (IS_DUCKDB) {
+            duckdb::dbSendQuery(con, q)
+          } else {
+            RSQLite::dbExecute(con, q)
+          }
         }, silent = quiet)
       }
       
@@ -268,8 +306,13 @@ createSSURGO <- function(filename,
       if (!is.null(indexDI) && length(indexDI) > 0) {
         for (i in seq_along(indexDI)) {
           try({
-            RSQLite::dbExecute(con, sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
-                                            paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i]))
+            q <- sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
+                         paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i])
+            if (IS_DUCKDB) {
+              duckdb::dbSendQuery(con, q)
+            } else {
+              RSQLite::dbExecute(con, q)
+            }
           }, silent = quiet)
         }
       }
@@ -291,7 +334,12 @@ createSSURGO <- function(filename,
     }
   })
   
-  res <- RSQLite::dbListTables(con)
+  res <- NULL
+  if (IS_DUCKDB) {
+    res <- duckdb::dbListTables(con)
+  } else {
+    res <- RSQLite::dbListTables(con)
+  }
   invisible(res)
 }
 

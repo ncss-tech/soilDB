@@ -12,6 +12,7 @@ createSSURGO(
   overwrite = FALSE,
   header = FALSE,
   quiet = TRUE,
+  duckdb = FALSE,
   ...
 )
 }
@@ -29,6 +30,8 @@ createSSURGO(
 \item{header}{Logical. Passed to \code{read.delim()} for reading pipe-delimited (\code{|}) text files containing tabular data.}
 
 \item{quiet}{Logical. Suppress messages and other output from database read/write operations?}
+
+\item{duckdb}{Logical. Create DuckDB rather than SQLite database? Default: \code{FALSE}.}
 
 \item{...}{Additional arguments passed to \code{write_sf()} for writing spatial layers.}
 }
