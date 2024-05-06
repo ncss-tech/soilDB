@@ -11,6 +11,11 @@ library(soilDB)
 ## click somewhere on the map
 ## press 'b', BBOX is copied to the clipboard
 
+
+## TX069
+bb <- '-102.2001 34.4354,-102.2001 34.5009,-102.0756 34.5009,-102.0756 34.4354,-102.2001 34.4354'
+
+
 ## GCL's soil pit digging competition site
 bb <- '-122.0050 39.6933,-122.0050 39.7543,-121.8931 39.7543,-121.8931 39.6933,-122.0050 39.6933'
 
