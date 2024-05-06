@@ -3,6 +3,7 @@ library(terra)
 library(soilDB)
 library(elevatr)
 
+# https://casoilresource.lawr.ucdavis.edu/soil-properties/?prop=texture_025&lat=34.3774&lon=-101.7197&z=9
 # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=34.47387,-102.12719,z13
 # TX069
 bb <- '-102.2633 34.4032,-102.2633 34.5341,-102.0142 34.5341,-102.0142 34.4032,-102.2633 34.4032'
@@ -96,7 +97,23 @@ par(mfcol = c(1, 2))
 plot(ee, col = hcl.colors(50, palette = 'mako'), axes = FALSE, main = 'Elevation (m) ~4m', legend = FALSE, mar = c(1, 1, 1, 4))
 plot(texture.class, axes = FALSE, main = 'Soil Texture Class <2mm Fraction\nDominant Component, 25-50cm (SSURGO)', mar = c(1, 1, 1, 4))
 
+par(mfcol = c(1, 1), bg = 'black', fg = 'white')
+plot(ee, col = hcl.colors(50, palette = 'mako'), axes = FALSE, main = 'Elevation (m) ~4m', legend = FALSE, mar = c(0, 0, 0, 0), smooth = TRUE)
 
+plot(ee, col = hcl.colors(50, palette = 'spectral'), axes = FALSE, main = 'Elevation (m) ~4m', legend = FALSE, mar = c(0, 0, 0, 0), smooth = TRUE)
+
+
+## feeling artistic...
+
+v <- as.contour(ee, levels = quantile(values(ee), na.rm = TRUE, prob = seq(0, 1, by = 0.05)))
+
+par(mfcol = c(1, 1), bg = 'black')
+plot(v, col = hcl.colors(n = nrow(v), palette = 'zissou1'), mar = c(0, 0, 0, 0), lwd = 1, axes = FALSE)
+
+
+par(mfcol = c(1, 1), bg = 'black', fg = 'white')
+plot(ee, col = hcl.colors(50, palette = 'mako'), axes = FALSE, main = 'Elevation (m) ~4m', legend = FALSE, mar = c(0, 0, 0, 0), smooth = TRUE)
+lines(v, col = 'white', lwd = 0.5)
 
 
 
