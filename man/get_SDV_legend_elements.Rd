@@ -21,7 +21,7 @@ get_SDV_legend_elements(
 \item{simplify}{Return a data.frame when \code{WHERE} is length 1? Return a list with 1 element per legend when \code{WHERE} is length > \code{1}? Default: \code{TRUE}}
 }
 \value{
-A list with a data.frame element for each element of \code{where} containing \code{"attributekey"}, \code{"attributename"}, \code{"attributetype"}, \code{"attributetablename"}, \code{"attributecolumnname"}, \code{"attributedescription"}, \code{"nasisrulename"}, \code{"label"}, \code{"order"}, \code{"value"}, \code{"lower_value"}, \code{"upper_value"},\code{"red"}, \code{"green"}, \code{"blue"} and \code{"hex"} columns.
+A list with a data.frame element for each element of \code{WHERE} containing \code{"attributekey"}, \code{"attributename"}, \code{"attributetype"}, \code{"attributetablename"}, \code{"attributecolumnname"}, \code{"attributedescription"}, \code{"nasisrulename"}, \code{"label"}, \code{"order"}, \code{"value"}, \code{"lower_value"}, \code{"upper_value"},\code{"red"}, \code{"green"}, \code{"blue"} and \code{"hex"} columns.
 }
 \description{
 Get Soil Data Viewer Attribute Information

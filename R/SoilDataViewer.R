@@ -5,7 +5,7 @@
 #' @param notratedcolor Used to add 'Not rated' color entries where applicable. Default: `"#FFFFFF00"` (transparent white).
 #' @param simplify Return a data.frame when `WHERE` is length 1? Return a list with 1 element per legend when `WHERE` is length > `1`? Default: `TRUE`
 #'
-#' @return A list with a data.frame element for each element of `where` containing `"attributekey"`, `"attributename"`, `"attributetype"`, `"attributetablename"`, `"attributecolumnname"`, `"attributedescription"`, `"nasisrulename"`, `"label"`, `"order"`, `"value"`, `"lower_value"`, `"upper_value"`,`"red"`, `"green"`, `"blue"` and `"hex"` columns.
+#' @return A list with a data.frame element for each element of `WHERE` containing `"attributekey"`, `"attributename"`, `"attributetype"`, `"attributetablename"`, `"attributecolumnname"`, `"attributedescription"`, `"nasisrulename"`, `"label"`, `"order"`, `"value"`, `"lower_value"`, `"upper_value"`,`"red"`, `"green"`, `"blue"` and `"hex"` columns.
 #' @export
 #'
 #' @importFrom grDevices rgb
