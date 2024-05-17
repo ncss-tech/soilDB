@@ -125,13 +125,26 @@ SDA_query <- function(q) {
   }
 
   # submit request
-  r <- try(httr::POST(url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
-                  body = list(query = q,
-                              format = "json+columnname+metadata"),
-                  encode = "form"), silent = TRUE)
-
+  r <- try(httr::POST(
+    url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
+    body = list(query = q,
+                format = "json+columnname+metadata"),
+    encode = "form"
+  ), silent = TRUE)
+  
+  # check response content type
+  h <- r$all_headers
+  if (!is.null(h)) {
+    if (length(h) == 0 || !h[[1]]$headers$`content-type` %in% 
+                            c("application/json; charset=utf-8", # data response
+                              "text/xml; charset=utf-8") # error response
+       )  {
+      r <- try(stop("Soil Data Access POST REST API is not currently available, please try again later.", call. = FALSE), silent = TRUE)
+    }
+  }
+  
   if (inherits(r, 'try-error')) {
-    message("Soil Data Access POST request failed, returning try-error\n\n", r)
+    message("Soil Data Access POST request failed, returning try-error.\n\n", r)
     return(invisible(r))
   }
 
