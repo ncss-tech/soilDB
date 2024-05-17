@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -300,8 +300,9 @@ create a 1000m radius circular polygon around the point with
 <span></span>
 <span><span class="co"># query WCS</span></span>
 <span><span class="co"># result is in EPSG:5070</span></span>
-<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">b</span>, db <span class="op">=</span> <span class="st">'gSSURGO'</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">b</span>, db <span class="op">=</span> <span class="st">'gSSURGO'</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># inspect</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -331,7 +332,7 @@ as:
 </ul>
 <p>Right-clicking anywhere in the map interface will also generate a
 link to those coordinates and zoom level.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ncss-tech.github.io/soilDB/" class="external-link">soilDB</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
@@ -347,8 +348,9 @@ link to those coordinates and zoom level.</p>
 <span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">4326</span></span>
 <span></span>
 <span><span class="co"># query WCS</span></span>
-<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">x</span>, db <span class="op">=</span> <span class="st">'gSSURGO'</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">x</span>, db <span class="op">=</span> <span class="st">'gSSURGO'</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># inspect</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -376,7 +378,7 @@ data for specific soil components, depths, and properties within a map
 unit can be aggregated so the aggregate values are 1:1 with
 <code>mukey</code>, then the resulting values can be used to symbolize
 the map.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># make a bounding box and assign a CRS (4326: GCS, WGS84)</span></span>
 <span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>xmin <span class="op">=</span> <span class="op">-</span><span class="fl">114.16</span>, xmax <span class="op">=</span> <span class="op">-</span><span class="fl">114.08</span>, ymin <span class="op">=</span> <span class="fl">47.65</span>, ymax <span class="op">=</span> <span class="fl">47.68</span><span class="op">)</span>, </span>
@@ -384,8 +386,9 @@ the map.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># fetch gSSURGO map unit keys at native resolution (30m)</span></span>
-<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="va">a</span>, db <span class="op">=</span> <span class="st">'gssurgo'</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="va">a</span>, db <span class="op">=</span> <span class="st">'gssurgo'</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># check:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
@@ -394,12 +397,13 @@ the map.</p>
 <span><span class="co">#&gt; extent      : -1365495, -1358925, 2869245, 2873655  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file211c23a1ba39 </span></span>
+<span><span class="co">#&gt; varname     : file209b68244c09 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   :  144983 </span></span>
-<span><span class="co">#&gt; max value   : 1716001</span></span>
-<span></span>
+<span><span class="co">#&gt; max value   : 1716001</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">mu</span>, </span>
 <span>  main <span class="op">=</span> <span class="st">'gSSURGO map unit keys'</span>,</span>
@@ -422,16 +426,16 @@ Overlaying SSURGO polygons and map unit key grids will therefore require
 a simple transformation.</p>
 <p>First get intersecting SSURGO polygons from SDA with
 <code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># because mu is a SpatRaster, result is a SpatVector object (GCS WGS84)</span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery</a></span><span class="op">(</span><span class="va">mu</span>, what <span class="op">=</span> <span class="st">'mupolygon'</span>, geomIntersection <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Then transform to AEA coordinate reference system used by CONUS
 gSSURGO / gNATSGO (<code>"EPSG:5070"</code>).</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">p</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Inspect the result by overlaying SSURGO polygons on the 30m map unit
 key grid.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">'gSSURGO Grid (WCS)\nSSURGO Polygons (SDA)'</span>,</span>
 <span>     axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -453,7 +457,7 @@ convert the source 30m grid to the coarser scale. A coarser
 representation of data can be used for inspection of general patterns.
 Detailed analysis should be based on derived property data sets
 aggregated up from 30m results.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># make a bounding box (in California) and assign a CRS (GCS WGS84 / EPSG:4326)</span></span>
 <span><span class="va">a.CA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  xmin <span class="op">=</span> <span class="op">-</span><span class="fl">121</span>,</span>
@@ -465,8 +469,9 @@ aggregated up from 30m results.</p>
 <span><span class="co"># fetch gSSURGO map unit keys at ~800m</span></span>
 <span><span class="co"># nearest-neighbor resampling = this is a "preview"</span></span>
 <span><span class="co"># result is a SpatRaster object</span></span>
-<span><span class="va">x.800</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="va">a.CA</span>, db <span class="op">=</span> <span class="st">'gssurgo'</span>, res <span class="op">=</span> <span class="fl">800</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">x.800</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="va">a.CA</span>, db <span class="op">=</span> <span class="st">'gssurgo'</span>, res <span class="op">=</span> <span class="fl">800</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">x.800</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">'A Preview of gSSURGO Map Unit Keys'</span>,</span>
@@ -484,7 +489,7 @@ key grids, tabular data) on Box:
 <code>https://nrcs.app.box.com/v/soils</code>. Please note that tabular
 data for Raster Soil Surveys are not yet available via Soil Data
 Access.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Coweeta Hydrologic Laboratory extent; specified in EPSG:5070</span></span>
 <span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>xmin <span class="op">=</span> <span class="fl">1129000</span>, xmax <span class="op">=</span> <span class="fl">1135000</span>, ymin <span class="op">=</span> <span class="fl">1403000</span>, ymax <span class="op">=</span> <span class="fl">1411000</span><span class="op">)</span>, </span>
@@ -502,12 +507,13 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file211c77fefba2 </span></span>
+<span><span class="co">#&gt; varname     : file209b274cbcdf </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :  mukey </span></span>
 <span><span class="co">#&gt; min value   : 545800 </span></span>
-<span><span class="co">#&gt; max value   : 545887</span></span>
-<span></span>
+<span><span class="co">#&gt; max value   : 545887</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># gNATSGO grid: 30m resolution</span></span>
 <span><span class="op">(</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">a</span>, db <span class="op">=</span> <span class="st">'gNATSGO'</span>, res <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
@@ -516,12 +522,13 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file211c5e08bc15 </span></span>
+<span><span class="co">#&gt; varname     : file209b69407c32 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   :  545800 </span></span>
-<span><span class="co">#&gt; max value   : 3244759</span></span>
-<span></span>
+<span><span class="co">#&gt; max value   : 3244759</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># RSS grid: 10m resolution</span></span>
 <span><span class="op">(</span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">a</span>, db <span class="op">=</span> <span class="st">'RSS'</span>, res <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
@@ -530,12 +537,13 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file211c5c731ae1 </span></span>
+<span><span class="co">#&gt; varname     : file209b56998850 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   : 3244721 </span></span>
-<span><span class="co">#&gt; max value   : 3244759</span></span>
-<span></span>
+<span><span class="co">#&gt; max value   : 3244759</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># graphical comparison</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfcol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -577,7 +585,7 @@ Access.</p>
 General Soil Map of the United States (STATSGO2). STATSGO data are
 provided at 10x the nominal resolution of gSSURGO (300m v.s. 30m) to
 reflect the relative generality of this product.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">statsgo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">a</span>, db <span class="op">=</span> <span class="st">'statsgo'</span>, res <span class="op">=</span> <span class="fl">300</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
 <span><span class="co">#&gt; dimensions  : 27, 20, 1  (nrow, ncol, nlyr)</span></span>
@@ -585,12 +593,13 @@ reflect the relative generality of this product.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411095  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file211c3b9319e7 </span></span>
+<span><span class="co">#&gt; varname     : file209b246b60d1 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :  mukey </span></span>
 <span><span class="co">#&gt; min value   : 659074 </span></span>
-<span><span class="co">#&gt; max value   : 664845</span></span>
-<span></span>
+<span><span class="co">#&gt; max value   : 664845</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># graphical comparison</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfcol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -619,7 +628,7 @@ reflect the relative generality of this product.</p>
 Hawaii.</p>
 <p>The example bounding box is centered on the <a href="https://casoilresource.lawr.ucdavis.edu/gmap/?loc=21.97839,-159.61727,z13" class="external-link">southern
 coast of Kauai</a>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># paste your BBOX text here</span></span>
 <span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="st">'-159.7426 21.9059,-159.7426 22.0457,-159.4913 22.0457,-159.4913 21.9059,-159.7426 21.9059'</span></span>
 <span></span>
@@ -628,8 +637,9 @@ coast of Kauai</a>.</p>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="va">wkt</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># query WCS</span></span>
-<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">x</span>, db <span class="op">=</span> <span class="st">'hi_ssurgo'</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">x</span>, db <span class="op">=</span> <span class="st">'hi_ssurgo'</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># make NA (the ocean) blue</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">mu</span>,</span>
@@ -648,7 +658,7 @@ coast of Kauai</a>.</p>
 Puerto Rico.</p>
 <p>The example bounding box is centered on the <a href="https://casoilresource.lawr.ucdavis.edu/gmap/?loc=18.24843,-65.67369,z13" class="external-link">eastern
 coast of Puerto Rico</a>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># paste your BBOX text here</span></span>
 <span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="st">'-65.7741 18.1711,-65.7741 18.3143,-65.5228 18.3143,-65.5228 18.1711,-65.7741 18.1711'</span></span>
 <span></span>
@@ -657,8 +667,9 @@ coast of Puerto Rico</a>.</p>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="va">wkt</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># query WCS</span></span>
-<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">x</span>, db <span class="op">=</span> <span class="st">'pr_ssurgo'</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">x</span>, db <span class="op">=</span> <span class="st">'pr_ssurgo'</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># make missing data (NA; the ocean) blue</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">mu</span>,</span>
@@ -675,7 +686,7 @@ coast of Puerto Rico</a>.</p>
 </h2>
 <p>The following example BBOX + resulting gSSURGO map unit key grid will
 be used for thematic mapping examples:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># make a bounding box and assign a CRS (4326: GCS, WGS84)</span></span>
 <span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>xmin <span class="op">=</span> <span class="op">-</span><span class="fl">114.16</span>, xmax <span class="op">=</span> <span class="op">-</span><span class="fl">114.08</span>, ymin <span class="op">=</span> <span class="fl">47.65</span>, ymax <span class="op">=</span> <span class="fl">47.68</span><span class="op">)</span>, </span>
@@ -697,7 +708,7 @@ aggregated by one or more appropriate means in order to express a
 consolidated value or interpretation for the map unit as a whole.</p>
 <p>Use the <code><a href="../reference/get_SDA_muaggatt.html">get_SDA_muaggatt()</a></code> function, or write a query in
 SQL and submit via <code><a href="../reference/SDA_query.html">SDA_query()</a></code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># copy example grid</span></span>
 <span><span class="va">mu2</span> <span class="op">&lt;-</span> <span class="va">mu</span></span>
 <span></span>
@@ -743,8 +754,9 @@ SQL and submit via <code><a href="../reference/SDA_query.html">SDA_query()</a></
 <span><span class="co">#&gt; 37  145343  145343</span></span>
 <span><span class="co">#&gt; 38  145385  145385</span></span>
 <span><span class="co">#&gt; 39 1715935 1715935</span></span>
-<span><span class="co">#&gt; 40 1716001 1716001</span></span>
-<span></span>
+<span><span class="co">#&gt; 40 1716001 1716001</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># optionally use convenience function:</span></span>
 <span><span class="co"># * returns all fields from muaggatt table</span></span>
 <span><span class="co"># * along with map unit name</span></span>
@@ -766,8 +778,9 @@ SQL and submit via <code><a href="../reference/SDA_query.html">SDA_query()</a></
 <span><span class="co">#&gt; 3 144985      7.36      14.27</span></span>
 <span><span class="co">#&gt; 4 144986      7.06      13.19</span></span>
 <span><span class="co">#&gt; 5 145005      5.21       9.34</span></span>
-<span><span class="co">#&gt; 6 145009      5.49       9.16</span></span>
-<span></span>
+<span><span class="co">#&gt; 6 145009      5.49       9.16</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># set raster categories</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">tab</span></span>
 <span></span>
@@ -795,7 +808,7 @@ return interpretation ratings for specific components, or aggregated up
 to the map unit level. Here, we produce maps using two interpretation
 rules: <code>'ENG - Construction Materials; Roadfill'</code>, and
 <code>'AWM - Irrigation Disposal of Wastewater'</code>.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># copy example grid</span></span>
 <span><span class="va">mu2</span> <span class="op">&lt;-</span> <span class="va">mu</span></span>
 <span></span>
@@ -847,8 +860,9 @@ rules: <code>'ENG - Construction Materials; Roadfill'</code>, and
 <span><span class="co">#&gt; 3                                                                                                                                                                                                                                                                                                                                                                                                                                             Too steep for surface application (0.68); Too steep for surface application (0.68)</span></span>
 <span><span class="co">#&gt; 4                                                                                                                                                                                                                                                                                                                                                                                                                                                               Filtering capacity (1); Filtering capacity (1); Droughty (0.918)</span></span>
 <span><span class="co">#&gt; 5                                                                                                                                                                                                                                                                                                                                                                                 Droughty (0.133); Large stones on the surface (0.141); Droughty (0.117); Filtering capacity (1); Droughty (0.918); Slow water movement (0.372)</span></span>
-<span><span class="co">#&gt; 6 Too steep for surface application (1); Too steep for sprinkler application (1); Droughty (0.061); Too steep for surface application (1); Too steep for sprinkler application (1); Large stones on the surface (0.141); Droughty (0.117); Droughty (1); Too steep for surface application (1); Too steep for sprinkler application (1); Depth to bedrock (1); Large stones on the surface (0.684); Filtering capacity (1); Too steep for surface application (1); Droughty (0.918); Too steep for sprinkler application (0.395)</span></span>
-<span></span>
+<span><span class="co">#&gt; 6 Too steep for surface application (1); Too steep for sprinkler application (1); Droughty (0.061); Too steep for surface application (1); Too steep for sprinkler application (1); Large stones on the surface (0.141); Droughty (0.117); Droughty (1); Too steep for surface application (1); Too steep for sprinkler application (1); Depth to bedrock (1); Large stones on the surface (0.684); Filtering capacity (1); Too steep for surface application (1); Droughty (0.918); Too steep for sprinkler application (0.395)</span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># set ordered factor levels (for nice label/legend order)</span></span>
 <span><span class="va">tab</span><span class="op">$</span><span class="va">class_ENGConstructionMaterialsRoadfill</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
 <span>  <span class="va">tab</span><span class="op">$</span><span class="va">class_ENGConstructionMaterialsRoadfill</span>,</span>
@@ -879,7 +893,7 @@ classes <code>class_ENGConstructionMaterialsRoadfill</code> each
 correspond to a range of fuzzy values
 (<code>rating_ENGConstructionMaterialsRoadfill</code>).</p>
 <p>Next, we can view the ratings as a thematic map:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">'rating_ENGConstructionMaterialsRoadfill'</span>,</span>
 <span>  <span class="st">'rating_AWMIrrigationDisposalofWastewater'</span></span>
@@ -911,7 +925,7 @@ unit may contain several distinct soil and non-soil areas.</p>
 SSURGO soil map unit components is the “steel corrosion potential”. Here
 we also use <code><a href="../reference/get_SDV_legend_elements.html">get_SDV_legend_elements()</a></code> to get the standard
 Soil Data Viewer colors for the selected property/interpretation.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># copy example grid</span></span>
 <span><span class="va">mu2</span> <span class="op">&lt;-</span> <span class="va">mu</span></span>
 <span></span>
@@ -943,7 +957,7 @@ Soil Data Viewer colors for the selected property/interpretation.</p>
 <p>Another example is thematic mapping of the “simplified component
 parent material group”. First, set up a new AOI for the following
 examples:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># https://casoilresource.lawr.ucdavis.edu/gmap/?loc=36.57666,-96.70175,z14</span></span>
 <span><span class="co"># make a bounding box and assign a CRS (4326: GCS, WGS84)</span></span>
 <span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span></span>
@@ -953,8 +967,9 @@ examples:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># fetch gSSURGO map unit keys at native resolution (~30m)</span></span>
-<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="va">a</span>, db <span class="op">=</span> <span class="st">'gssurgo'</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="va">a</span>, db <span class="op">=</span> <span class="st">'gssurgo'</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">mu</span>, </span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>, </span>
@@ -965,7 +980,7 @@ examples:</p>
 <p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-23-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>We use <code><a href="../reference/get_SDA_pmgroupname.html">get_SDA_pmgroupname()</a></code> to obtain the tabular
 parent material information to relate to map unit keys:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># copy example grid</span></span>
 <span><span class="va">mu2</span> <span class="op">&lt;-</span> <span class="va">mu</span></span>
 <span></span>
@@ -986,7 +1001,7 @@ parent material information to relate to map unit keys:</p>
 <p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-24-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>We can also inspect a mapunit-level hydric rating derived from the
 default aggregation method in <code><a href="../reference/get_SDA_hydric.html">get_SDA_hydric()</a></code>.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># copy example grid</span></span>
 <span><span class="va">mu2</span> <span class="op">&lt;-</span> <span class="va">mu</span></span>
 <span></span>
@@ -1014,7 +1029,7 @@ use it to aggregate several horizon-level property values for a specific
 depth interval.</p>
 <p>Derive aggregate soil properties, merge with raster attribute table
 (RAT).</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># extract RAT for thematic mapping</span></span>
 <span><span class="va">rat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">cats</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
@@ -1045,8 +1060,9 @@ depth interval.</p>
 <span><span class="co">#&gt; 3         1.43  0.17        7.30</span></span>
 <span><span class="co">#&gt; 4         1.35  0.20        6.20</span></span>
 <span><span class="co">#&gt; 5         1.30  0.20        6.30</span></span>
-<span><span class="co">#&gt; 6         1.34  0.20        6.30</span></span>
-<span></span>
+<span><span class="co">#&gt; 6         1.34  0.20        6.30</span></span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># convert areasymbol into a factor easy plotting later</span></span>
 <span><span class="va">tab</span><span class="op">$</span><span class="va">areasymbol</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">tab</span><span class="op">$</span><span class="va">areasymbol</span><span class="op">)</span></span>
 <span></span>
@@ -1055,25 +1071,26 @@ depth interval.</p>
 <span></span>
 <span><span class="co"># list variables in the RAT</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">cats</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "mukey"        "dbthirdbar_r" "awc_r"        "ph1to1h2o_r"</span></span>
-<span></span>
+<span><span class="co">#&gt; [1] "mukey"        "dbthirdbar_r" "awc_r"        "ph1to1h2o_r"</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># convert categories associated with keys to values</span></span>
 <span><span class="va">mu2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/catalyze.html" class="external-link">catalyze</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span></span></code></pre></div>
 <p>Inspect just the plant available water 0-25cm.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">$</span><span class="va">awc_r</span><span class="op">)</span></span></code></pre></div>
 <p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-27-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>Plot aggregate soil properties.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">[[</span><span class="st">'dbthirdbar_r'</span><span class="op">]</span><span class="op">]</span>, cex.main <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">'1/3 Bar Bulk Density (g/cm^3)\nDominant Component\n0-25cm'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-28-1.png" width="768" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">[[</span><span class="st">'awc_r'</span><span class="op">]</span><span class="op">]</span>, cex.main <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">'AWC (cm/cm)\nDominant Component\n0-25cm'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-28-2.png" width="768" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">[[</span><span class="st">'ph1to1h2o_r'</span><span class="op">]</span><span class="op">]</span>, cex.main <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">'pH 1:1 H2O\nDominant Component\n0-25cm'</span><span class="op">)</span></span></code></pre></div>
@@ -1086,7 +1103,7 @@ depth interval.</p>
 areas. In this case the one soil survey was published in 1979 and the
 other in 2004.</p>
 <p>First, we setup BBOX and query map unit key WCS.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># extract a BBOX like this from SoilWeb by pressing "b"</span></span>
 <span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="st">'-91.6853 36.4617,-91.6853 36.5281,-91.5475 36.5281,-91.5475 36.4617,-91.6853 36.4617'</span></span>
 <span><span class="va">wkt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'POLYGON((%s))'</span>, <span class="va">bb</span><span class="op">)</span></span>
@@ -1095,8 +1112,9 @@ other in 2004.</p>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="va">wkt</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># get gSSURGO grid here</span></span>
-<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="va">x</span>, db <span class="op">=</span> <span class="st">'gssurgo'</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span>aoi <span class="op">=</span> <span class="va">x</span>, db <span class="op">=</span> <span class="st">'gssurgo'</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># note SSA boundary</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-29-1.png" width="768" style="display: block; margin: auto;"></p>
@@ -1104,7 +1122,7 @@ other in 2004.</p>
 largest component, taking the weighted mean over 25-50cm depth interval.
 We also will take the sand and clay values to calculate the surface
 texture class for comparison.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># extract RAT for thematic mapping</span></span>
 <span><span class="va">rat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">cats</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
@@ -1136,8 +1154,9 @@ texture class for comparison.</p>
 <span><span class="co">#&gt; 3       28.69       51.11       20.20</span></span>
 <span><span class="co">#&gt; 4       40.00       40.00       20.00</span></span>
 <span><span class="co">#&gt; 5       25.65       49.00       25.35</span></span>
-<span><span class="co">#&gt; 6       26.91       48.08       25.02</span></span>
-<span></span>
+<span><span class="co">#&gt; 6       26.91       48.08       25.02</span></span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># set raster categories</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">tab</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'mukey'</span>, <span class="va">vars</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
