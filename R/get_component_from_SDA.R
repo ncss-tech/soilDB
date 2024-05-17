@@ -663,8 +663,8 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
     )
   },
   "INNER JOIN component c ON c.mukey = mu.mukey   
-   INNER JOIN chorizon ch ON ch.cokey = c.cokey    
-   INNER JOIN (SELECT ch2.chkey, texture,
+   LEFT JOIN chorizon ch ON ch.cokey = c.cokey    
+   LEFT JOIN (SELECT ch2.chkey, texture,
                      STRING_AGG(texcl, ',') texcl, 
                      STRING_AGG(lieutex, ',') lieutex
                     FROM chorizon ch2
