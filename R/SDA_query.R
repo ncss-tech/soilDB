@@ -42,21 +42,22 @@ format_SQL_in_statement <- function(x) {
 
 #' Query Soil Data Access
 #'
-#' @param q A valid T-SQL query surrounded by double quotes
+#' @param q character. A valid T-SQL query surrounded by double quotes.
+#' @param dsn character. Default: `NULL` uses Soil Data Access remote data source via REST API. Alternately, `dsn` may be a file path to an SQLite database using the SSURGO schema, or a `DBIConnection` that has already been created.
 #'
-#' @description Submit a query to the Soil Data Access (SDA) REST/JSON web-service and return the results as a data.frame. There is a 100,000 record limit and 32Mb JSON serializer limit, per query. Queries should contain a WHERE statement or JOIN condition to limit the number of rows affected / returned. Consider wrapping calls to \code{SDA_query} in a function that can iterate over logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function \code{makeChunks} can help with such iteration.
+#' @description Submit a query to the Soil Data Access (SDA) REST/JSON web-service and return the results as a data.frame. There is a 100,000 record and 32Mb JSON serialization limit per query. Queries should contain a WHERE clause or JOIN condition to limit the number of rows affected / returned. Consider wrapping calls to `SDA_query()` in a function that can iterate over logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function `makeChunks()` can help with such iteration. All usages of `SDA_query()` should handle the possibility of a `try-error` result in case the web service connection is down or if an invalid query is passed to the endpoint.
 #'
 #' @details The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov} and query examples can be found at \url{https://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx}. A library of query examples can be found at \url{https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home}.
 #'
 #' SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
 #'
 #' @note This function requires the `httr`, `jsonlite`, and `xml2` packages
-#' @return a data.frame result (\code{NULL} if empty, try-error on error)
-#' @author D.E. Beaudette
-#' @seealso \code{\link{SDA_spatialQuery}}
+#' @return A data.frame result for queries that return a single table. A list of data.frame for queries that return multiple tables. `NULL` if result is empty, and `try-error` on error.
+#' @author D.E. Beaudette, A.G Brown
+#' @seealso [SDA_spatialQuery()]
 #' @keywords manip
 #' @export
-#' @examplesIf curl::has_internet() && requireNamespace("wk")
+#' @examplesIf curl::has_internet() && requireNamespace("wk", quietly = TRUE)
 #' @examples
 #' \donttest{
 #'   ## get SSURGO export date for all soil survey areas in California
@@ -104,7 +105,33 @@ format_SQL_in_statement <- function(x) {
 #'    x <- SDA_query(q)
 #'    str(x)
 #' }
-SDA_query <- function(q) {
+SDA_query <- function(q, dsn = NULL) {
+  if (is.null(dsn)) {
+    res <- .SDA_query(q)
+    if (inherits(res, 'try-error')) {
+      message(res)
+    }
+    return(invisible(res))
+  } else {
+    if (inherits(dsn, 'DBIConnection')) {
+      return(DBI::dbGetQuery(dsn, q))
+    } else if (file.exists(dsn)) {
+      if (requireNamespace("RSQLite")) {
+        con <- try(RSQLite::dbConnect(RSQLite::SQLite(), dsn))
+        on.exit(DBI::dbDisconnect(con), add = TRUE)
+        if (!inherits(con, 'try-error')) {
+          return(RSQLite::dbGetQuery(con, q))
+        } else {
+          return(invisible(con))
+        }
+      }
+    } else {
+      stop("Invalid data source name: ", dsn, call. = FALSE)
+    }
+  }
+}
+
+.SDA_query <- function(q) {
 
   # check for required packages
   if (!requireNamespace('httr', quietly = TRUE))
@@ -166,9 +193,9 @@ SDA_query <- function(q) {
         error.msg <- "Unable to parse error message from XML response"
       }
       
-      ## message about bad result (previously error/warning)
-      message(error.msg)
-      
+      ## inject specific message into a try-error result
+      request.status <- try(stop(paste0(attr(request.status, 'condition')$message, "\n",
+                                        error.msg), call. = FALSE), silent = TRUE)
     }
     
     # return the error object so calling function/user can handle it
@@ -224,7 +251,7 @@ SDA_query <- function(q) {
 }
 
 
-## See https://github.com/ncss-tech/soilDB/pull/191 for a list of possibly data types
+## See https://github.com/ncss-tech/soilDB/pull/191 for a list of possible data types
 
 # note: empty strings and 'NA' are converted into <NA>
 # convert the raw results from SDA into a proper data.frame
@@ -293,7 +320,6 @@ SDA_query <- function(q) {
 
   ## TODO further error checking?
 
-  # done
   return(df)
 }
 

@@ -58,5 +58,5 @@ get_SDA_metrics <- function(query_name, query_frequency, query_year, state = NUL
     format_SQL_in_statement(query_frequency),
     format_SQL_in_statement(query_year),
     format_SQL_in_statement(state))
-  SDA_query(q)
+  SDA_query(q, dsn = NULL)
 }

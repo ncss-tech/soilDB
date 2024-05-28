@@ -12,7 +12,7 @@
   
   if (db == "STATSGO") {
     q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol = 'US'"
-    sacatalog <- suppressMessages(SDA_query(q))
+    sacatalog <- SDA_query(q, dsn = NULL)
     res <- paste0(
       "https://websoilsurvey.sc.egov.usda.gov/DSD/Download/Cache/STATSGO2/wss_gsmsoil_",
       WHERE, "_[", as.Date(sacatalog$saverest, format = "%m/%d/%Y %H:%M:%S"), "].zip"
@@ -22,7 +22,7 @@
     # use SDA to get areasymbol and last updated date to build WSS cache urls
     q <- "SELECT areasymbol, saverest FROM sacatalog WHERE areasymbol != 'US'"
     q2 <- ifelse(!is.null(WHERE), paste0(q, " AND (", WHERE, ")"), q)
-    sacatalog <- suppressMessages(SDA_query(q2))
+    sacatalog <- SDA_query(q2, dsn = NULL)
     
     if (inherits(sacatalog, 'try-error') || is.null(sacatalog)) {
       return(try(stop("Query of Soil Survey Area Catalog (", 

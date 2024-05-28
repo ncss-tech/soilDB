@@ -149,20 +149,11 @@ get_SDA_property <-
   if (query_string) return(q)
 
   # execute query
-  if (is.null(dsn)) {
-    res <- suppressMessages(SDA_query(q))
-  } else {
-    if (!inherits(dsn, 'DBIConnection')) {
-      dsn <- dbConnect(RSQLite::SQLite(), dsn)
-      on.exit(DBI::dbDisconnect(dsn), add = TRUE)
-    }
-    res <- dbGetQuery(dsn, q)
-  }
-
-  # stop if bad
+  res <- SDA_query(q, dsn = dsn)
+  
+  # return if bad
   if (inherits(res, 'try-error')) {
-    warnings()
-    stop(attr(res, 'condition'))
+    return(res)
   }
 
   return(res)
@@ -326,7 +317,7 @@ get_SDA_property <-
   method <- toupper(method)
 
   if (method == "NONE") {
-    # dput(colnames(suppressMessages(SDA_query("SELECT TOP 1 * FROM chorizon")))) # without cokey
+    # dput(colnames(SDA_query("SELECT TOP 1 * FROM chorizon"))) # without cokey
     is_hz <- agg_property %in% .valid_chorizon_columns()
   }
 

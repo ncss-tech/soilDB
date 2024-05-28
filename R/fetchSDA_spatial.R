@@ -339,7 +339,7 @@ fetchSDA_spatial <- function(x,
   }
   t1 <- Sys.time()
 
-  sp.res.sub <- try(suppressMessages(soilDB::SDA_query(q)))
+  sp.res.sub <- try(suppressMessages(SDA_query(q)))
 
   if (inherits(sp.res.sub, 'try-error')) {
     message("Bad chunk encountered. Querying each individually...")

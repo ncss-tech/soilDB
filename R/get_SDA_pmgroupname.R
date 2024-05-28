@@ -202,20 +202,11 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
    }
 
    # execute query
-   if (is.null(dsn)) {
-     res <- suppressMessages(SDA_query(q))
-   } else {
-     if (!inherits(dsn, 'DBIConnection')) {
-       dsn <- dbConnect(RSQLite::SQLite(), dsn)
-       on.exit(DBI::dbDisconnect(dsn), add = TRUE)
-     }
-     res <- dbGetQuery(dsn, q)
-   }
-
-   # stop if bad
+   res <- SDA_query(q, dsn = dsn)
+   
+   # return if bad
    if (inherits(res, 'try-error')) {
-     warnings()
-     stop(attr(res, 'condition'))
+     return(res)
    }
 
    return(res)

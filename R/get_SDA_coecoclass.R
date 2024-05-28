@@ -96,15 +96,7 @@ get_SDA_coecoclass <- function(method = "None",
   if (query_string)
     return(q)
   
-  if (is.null(dsn)) {
-    res <- suppressMessages(SDA_query(q))
-  } else {
-    if (!inherits(dsn, 'DBIConnection')) {
-      dsn <- dbConnect(RSQLite::SQLite(), dsn)
-      on.exit(DBI::dbDisconnect(dsn), add = TRUE)
-    } 
-    res <- dbGetQuery(dsn, q)
-  }
+  res <- SDA_query(q)
   
   if (length(res) == 0) {
     message('query returned no results')
@@ -161,7 +153,7 @@ get_SDA_coecoclass <- function(method = "None",
   mukey <- NULL; .N <- NULL; .SD <- NULL; .GRP <- NULL;
   
   if (!is.null(areasymbols)) {
-    res0 <- .SSURGO_query(paste0(
+    res0 <- SDA_query(paste0(
         "SELECT DISTINCT mukey, nationalmusym, muname FROM mapunit
         INNER JOIN legend ON legend.lkey = mapunit.lkey
         WHERE areasymbol IN ", format_SQL_in_statement(areasymbols)
@@ -172,7 +164,7 @@ get_SDA_coecoclass <- function(method = "None",
     idx <- makeChunks(mukeys, 1000)
     l <- split(mukeys, idx)
     res0 <- do.call('rbind', lapply(l, function(x) {
-      .SSURGO_query(paste0(
+      SDA_query(paste0(
         "SELECT DISTINCT mukey, nationalmusym, muname FROM mapunit
         INNER JOIN legend ON legend.lkey = mapunit.lkey
         WHERE mukey IN ", format_SQL_in_statement(x), ""
