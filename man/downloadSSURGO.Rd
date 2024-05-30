@@ -53,3 +53,6 @@ Pipe-delimited TXT files are found in \emph{/tabular/} folder extracted from a S
 
 Several ESRI shapefiles are found in the \emph{/spatial/} folder extracted from a SSURGO ZIP. These have prefix \code{soilmu_} (mapunit), \code{soilsa_} (survey area), \code{soilsf_} (special features). There will also be a TXT file with prefix \code{soilsf_} describing any special features. Shapefile names then have an \code{a_} (polygon), \code{l_} (line), \code{p_} (point) followed by the soil survey area symbol.
 }
+\seealso{
+\code{\link[=createSSURGO]{createSSURGO()}}
+}
