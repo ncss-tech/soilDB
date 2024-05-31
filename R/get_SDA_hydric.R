@@ -100,21 +100,7 @@ get_SDA_hydric <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, meth
    }
 
    # execute query
-   if (is.null(dsn)) {
-     res <- suppressMessages(SDA_query(q))
-   } else {
-     if (!inherits(dsn, 'DBIConnection')) {
-       dsn <- RSQLite::dbConnect(RSQLite::SQLite(), dsn)
-       on.exit(DBI::dbDisconnect(dsn), add = TRUE)
-     }
-     res <- dbGetQuery(dsn, q)
-   }
-
-   # stop if bad
-   if (inherits(res, 'try-error')) {
-    warnings()
-    stop(attr(res, 'condition'))
-   }
+   res <- SDA_query(q, dsn = dsn)
 
    return(res)
 }
