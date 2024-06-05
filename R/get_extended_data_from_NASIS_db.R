@@ -459,6 +459,7 @@ LEFT OUTER JOIN (
 	d.rf.data    <- uncode(d.rf.data, dsn = dsn)
 	d.art.data  <-  uncode(d.art.data, dsn = dsn)
 	d.hz.texmod  <- uncode(d.hz.texmod, dsn = dsn)
+	d.geomorph  <- uncode(d.geomorph, dsn = dsn)
 	# ensure that taxhistory is always character
 	d.taxhistory[] <- lapply(uncode(d.taxhistory, dsn = dsn), 
 	                         function(x) if (is.factor(x)) as.character(x) else x)
