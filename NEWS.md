@@ -1,7 +1,13 @@
-# soilDB 2.8.3 (development)
- - ISSR800 authoritative grid system altered slightly
- - `ISSR800.wcs()` and `soilColor.wcs()` now set color table internally when possible
- - updated source data: ISSR800 (FY24) and soil color (FY23)
+# soilDB 2.8.3 (2024-06-10)
+ - Updates to SoilWeb web coverage services
+   - ISSR800 authoritative grid system altered slightly
+   - `ISSR800.wcs()` and `soilColor.wcs()` now set color table internally when possible
+   - updated source data: ISSR800 (FY24) and soil color (FY23)
+ - `SDA_query()` updates
+   - Better messaging on error
+   - Handle try-error result more gracefully in high-level functions (#352)
+ - `createSSURGO()`: added support for creating DuckDB, PostgreSQL, and other DBI-compatible databases (#352) via `conn` argument
+ - `fetchSDA()` and `get_chorizon_from_SDA()` concatenate multiple `texcl` using a comma when a texture group contains multiple texture classes (e.g. stratified textures) (fixes #353)
 
 # soilDB 2.8.2 (2024-04-22)
 
