@@ -273,22 +273,6 @@ references:
     given-names: Seth
   year: '2024'
 - type: software
-  title: duckdb
-  abstract: 'duckdb: DBI Package for the DuckDB Database Management System'
-  notes: Suggests
-  url: https://r.duckdb.org/
-  repository: https://CRAN.R-project.org/package=duckdb
-  authors:
-  - family-names: Mühleisen
-    given-names: Hannes
-    email: hannes@cwi.nl
-    orcid: https://orcid.org/0000-0001-8552-0029
-  - family-names: Raasveldt
-    given-names: Mark
-    email: mark.raasveldt@cwi.nl
-    orcid: https://orcid.org/0000-0001-5005-6844
-  year: '2024'
-- type: software
   title: sf
   abstract: 'sf: Simple Features for R'
   notes: Suggests
