@@ -99,7 +99,7 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
 #' @aliases SDA_spatialQuery
 #'
 #' @param geom an `sf` or `Spatial*` object, with valid CRS. May contain multiple features.
-#' @param what a character vector specifying what to return. `'mukey'`: `data.frame` with intersecting map unit keys and names, `'mupolygon'` overlapping or intersecting map unit polygons from selected database, `'areasymbol'`: `data.frame` with intersecting soil survey areas, `'sapolygon'`: overlapping or intersecting soil survey area polygons (SSURGO only)
+#' @param what a character vector specifying what to return. `'mukey'`: `data.frame` with intersecting map unit keys and names, `'mupolygon'`, `'mupoint'`, `'muline'` overlapping or intersecting map unit polygons, points or lines from selected database, ``featpoint'` or `'featline'` for special feature points and lines, 'areasymbol'`: `data.frame` with intersecting soil survey areas, `'sapolygon'`: overlapping or intersecting soil survey area polygons (SSURGO only)
 #' @param geomIntersection logical; `FALSE` (default): overlapping map unit polygons returned, `TRUE`: intersection of `geom` + map unit polygons is returned.
 #' @param geomAcres logical; `TRUE` (default): calculate acres of result geometry in column `"area_ac"` when `what` returns a geometry column. `FALSE` does not calculate acres.
 #' @param db a character vector identifying the Soil Geographic Databases (`'SSURGO'` or `'STATSGO'`) to query. Option \var{STATSGO} works with `what = "mukey"` and `what = "mupolygon"`.

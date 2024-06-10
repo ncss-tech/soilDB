@@ -19,7 +19,7 @@ SDA_spatialQuery(
 \arguments{
 \item{geom}{an \code{sf} or \verb{Spatial*} object, with valid CRS. May contain multiple features.}
 
-\item{what}{a character vector specifying what to return. \code{'mukey'}: \code{data.frame} with intersecting map unit keys and names, \code{'mupolygon'} overlapping or intersecting map unit polygons from selected database, \code{'areasymbol'}: \code{data.frame} with intersecting soil survey areas, \code{'sapolygon'}: overlapping or intersecting soil survey area polygons (SSURGO only)}
+\item{what}{a character vector specifying what to return. \code{'mukey'}: \code{data.frame} with intersecting map unit keys and names, \code{'mupolygon'}, \code{'mupoint'}, \code{'muline'} overlapping or intersecting map unit polygons, points or lines from selected database, ``featpoint'\code{or}'featline'` for special feature points and lines, 'areasymbol'`: `data.frame` with intersecting soil survey areas, `'sapolygon'`: overlapping or intersecting soil survey area polygons (SSURGO only)}
 
 \item{geomIntersection}{logical; \code{FALSE} (default): overlapping map unit polygons returned, \code{TRUE}: intersection of \code{geom} + map unit polygons is returned.}
 
