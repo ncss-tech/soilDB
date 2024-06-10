@@ -2,11 +2,12 @@
 % Please edit documentation in R/createSSURGO.R
 \name{createSSURGO}
 \alias{createSSURGO}
-\title{Create a SQLite database or GeoPackage from one or more SSURGO Exports}
+\title{Create a database from SSURGO Exports}
 \usage{
 createSSURGO(
   filename,
   exdir,
+  conn = DBI::dbConnect(DBI::dbDriver("SQLite"), filename, loadable.extensions = TRUE),
   pattern = NULL,
   include_spatial = TRUE,
   overwrite = FALSE,
@@ -16,9 +17,11 @@ createSSURGO(
 )
 }
 \arguments{
-\item{filename}{Output file name (e.g. \code{'db.sqlite'} or \code{'db.gpkg'})}
+\item{filename}{Output file name (e.g. \code{'db.sqlite'} or \code{'db.gpkg'}). Only used when \code{con} is not specified by the user.}
 
-\item{exdir}{Path containing containing SSURGO spatial (.shp) and tabular (.txt) files.}
+\item{exdir}{Path containing containing input SSURGO spatial (.shp) and tabular (.txt) files, downloaded and extracted by \code{downloadSSURGO()} or similar.}
+
+\item{conn}{A \emph{DBIConnection} object. Default is a \code{SQLiteConnection} used for writing .sqlite or .gpkg files. Alternate options are any DBI connection types. When \code{include_spatial=TRUE}, the sf package is used to write spatial data to the database.}
 
 \item{pattern}{Character. Optional regular expression to use to filter subdirectories of \code{exdir}. Default: \code{NULL} will search all subdirectories for SSURGO export files.}
 
@@ -36,11 +39,21 @@ createSSURGO(
 Character. Vector of layer/table names in \code{filename}.
 }
 \description{
-Create a SQLite database or GeoPackage from one or more SSURGO Exports
+The following database types are tested and fully supported:
+\itemize{
+\item SQLite or Geopackage
+\item DuckDB
+\item Postgres or PostGIS
+}
+
+In theory any other DBI-compatible data source can be used for output. See \code{conn} argument. If you encounter issues using specific DBI connection types, please report in the soilDB issue tracker.
 }
 \examples{
 \dontrun{
  downloadSSURGO("areasymbol IN ('CA067', 'CA077', 'CA632')", destdir = "SSURGO_test")
  createSSURGO("test.gpkg", "SSURGO_test")
 }
+}
+\seealso{
+\code{\link[=downloadSSURGO]{downloadSSURGO()}}
 }

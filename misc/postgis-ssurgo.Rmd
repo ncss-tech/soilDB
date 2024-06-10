@@ -1,0 +1,91 @@
+---
+title: "`createSSURGO()` + PostGIS"
+output: md_document
+---
+
+## Setup PostGIS Docker Container
+
+First, install [Docker](https://docs.docker.com/engine/install/).
+
+Then, pull the `postgis` image you want. 
+
+Here, we get the latest version using tag `"latest"`:
+
+```sh
+docker pull postgis/postgis:latest    
+```
+
+Then run an instance of the image. 
+
+```sh
+docker run --name steep-piano -e POSTGRES_PASSWORD=mypassword -d -p 5432:5432 postgis/postgis
+```
+
+Give it a name (e.g. `steep-piano`). The default username is `postgres`. Set a password (e.g. `"mypassword"`) and port to forward (e.g. `5432`) from your docker container to your public host network address.
+
+In the simplest case you are just running `postgis` for local testing, so the host address will simply be `localhost`.
+
+You can then make a connection to the PostGIS instance running in the Docker container. 
+
+To make sure everything is working open up the `psql` SQL prompt: 
+
+```sh
+psql -h localhost -p 5432 -U postgres
+```
+
+Then use command `\l` to list databases then `\q` to quit.
+
+# Connecting with R
+
+Create a database connection to your local PostGIS instance. To do this we use DBI and RPostgres packages.
+
+```{r}
+library(soilDB)
+library(RPostgres)
+
+con <- DBI::dbConnect(DBI::dbDriver("Postgres"), 
+                      host = "localhost",
+                      port = 5432L,
+                      user = "postgres",
+                      password = "password")
+```
+
+Download some SSURGO data, if needed, and extract the files/folder structure to `"SSURGO_test"` subfolder of current working directory.
+
+```{r, eval = FALSE}
+if (!dir.exists("SSURGO_test"))
+  downloadSSURGO(areasymbols = c("CA067", "CA077", "CA632"),
+                 destdir = "SSURGO_test")
+```
+
+Pass the `con` argument to `createSSURGO()` to override the default SQLite connection that is created to `filename`. When `con` is not the default SQLite connection, the `filename` argument can take any value (including `NULL`).
+
+```{r, eval = FALSE}
+createSSURGO(exdir = "SSURGO_test", 
+             con = con)
+```
+
+Once the tables have been written to the database, you can write queries involving spatial and tabular data.
+Perhaps the easiest way to do this is to use `sf::st_read()`. 
+
+The `st_read()` function can take a DBIConnection as a data source, and takes a `query` argument. It will return an `sf` data frame if the result table contains a geometry column. Otherwise, it will return a data.frame (with a warning).
+
+```{r}
+res <- sf::st_read(con, query = "SELECT 
+                                  ST_Centroid(geometry) AS centroid, 
+                                  ST_Area(geometry) AS polygon_area,
+                                  muaggatt.*
+                                 FROM mupolygon 
+                                 LEFT JOIN muaggatt ON muaggatt.mukey = CAST(mupolygon.mukey AS integer)
+                                 LIMIT 2")
+
+res
+
+plot(res["musym"], pch = "+")
+```
+
+Close the connection when you are done.
+
+```{r}
+DBI::dbDisconnect(con)
+```
