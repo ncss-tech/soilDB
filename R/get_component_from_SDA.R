@@ -655,46 +655,55 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
                                   childs = TRUE,
                                   nullFragsAreZero = TRUE,
                                   droplevels = TRUE,
-                                  stringsAsFactors = NULL
-                                  ) {
+                                  stringsAsFactors = NULL) {
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
 
   q.chorizon <- paste("
-  SELECT", if (duplicates == FALSE) {"DISTINCT"}
-  , "hzname, hzdept_r, hzdepb_r, texture, texcl, lieutex,
-     fragvol_l, fragvol_r, fragvol_h, 
-     sandtotal_l, sandtotal_r, sandtotal_h, 
-     silttotal_l, silttotal_r, silttotal_h, 
-     claytotal_l, claytotal_r, claytotal_h,
-     om_l, om_r, om_h, 
-     dbthirdbar_l, dbthirdbar_r, dbthirdbar_h,
-     ksat_l, ksat_r, ksat_h,  
-     awc_l, awc_r, awc_h, 
-     lep_r, sar_r, ec_r, cec7_r, sumbases_r, 
-     ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h,
-     caco3_l, caco3_r, caco3_h, 
-     kwfact, kffact, c.cokey, ch.chkey
-  FROM legend l INNER JOIN
-       mapunit mu ON mu.lkey = l.lkey",
-  if (duplicates == FALSE) { paste(" INNER JOIN
-  (SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2
-   FROM mapunit
-   GROUP BY nationalmusym) AS mu2 ON mu2.mukey2 = mu.mukey
-  ")
-  } else { paste(" INNER JOIN
-   (SELECT nationalmusym, mukey
-    FROM mapunit) AS mu2 ON mu2.mukey = mu.mukey
-   ")
+    SELECT ", ifelse(!duplicates, "DISTINCT", ""),
+     " hzname, hzdept_r, hzdepb_r, texture, texcl, lieutex,
+       fragvol_l, fragvol_r, fragvol_h, 
+       sandtotal_l, sandtotal_r, sandtotal_h, 
+       silttotal_l, silttotal_r, silttotal_h, 
+       claytotal_l, claytotal_r, claytotal_h,
+       om_l, om_r, om_h, 
+       dbthirdbar_l, dbthirdbar_r, dbthirdbar_h,
+       ksat_l, ksat_r, ksat_h,  
+       awc_l, awc_r, awc_h, 
+       lep_r, sar_r, ec_r, cec7_r, sumbases_r, 
+       ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h,
+       caco3_l, caco3_r, caco3_h, 
+       kwfact, kffact, c.cokey, ch.chkey
+    FROM legend l INNER JOIN
+    mapunit mu ON mu.lkey = l.lkey",
+    
+  if (duplicates == FALSE) {
+    paste(
+      "INNER JOIN
+       (SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2
+        FROM mapunit
+        GROUP BY nationalmusym) AS mu2 ON mu2.mukey2 = mu.mukey
+      "
+    )
+  } else {
+    paste(
+      "INNER JOIN
+       (SELECT nationalmusym, mukey
+        FROM mapunit) AS mu2 ON mu2.mukey = mu.mukey
+      "
+    )
   },
-  "INNER JOIN
-   component    c    ON c.mukey      = mu.mukey   LEFT JOIN
-   chorizon     ch   ON ch.cokey     = c.cokey    LEFT OUTER JOIN
-   chtexturegrp chtg ON chtg.chkey   = ch.chkey AND rvindicator = 'Yes' RIGHT JOIN
-   chtexture    cht  ON cht.chtgkey  = chtg.chtgkey
-
+  "INNER JOIN component c ON c.mukey = mu.mukey   
+   LEFT JOIN chorizon ch ON ch.cokey = c.cokey    
+   LEFT JOIN (SELECT ch2.chkey, texture,
+                     STRING_AGG(texcl, ',') texcl, 
+                     STRING_AGG(lieutex, ',') lieutex
+                    FROM chorizon ch2
+                    LEFT JOIN chtexturegrp chtg ON chtg.chkey = ch2.chkey AND rvindicator = 'Yes' 
+                    LEFT JOIN chtexture cht ON cht.chtgkey = chtg.chtgkey
+                    GROUP BY ch2.chkey, chtg.texture) texagg ON texagg.chkey = ch.chkey
    LEFT OUTER JOIN
        (SELECT SUM(fragvol_l) fragvol_l, SUM(fragvol_r) fragvol_r, SUM(fragvol_h) fragvol_h, ch2.chkey
         FROM chorizon ch2
@@ -705,19 +714,16 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
   WHERE", WHERE,
 
   "ORDER BY c.cokey, hzdept_r ASC;")
-
+  
   # exec query
   d.chorizon <- SDA_query(q.chorizon)
+
+  # get metadata
+  metadata <- get_NASIS_metadata()
   
   if (inherits(d.chorizon, 'try-error')) {
     return(invisible(d.chorizon))
   }
-  
-  ## TODO: might be nice to abstract this into a new function
-  # hacks to make R CMD check --as-cran happy:
-  metadata <- NULL
-  # load local copy of metadata
-  load(system.file("data/metadata.rda", package = "soilDB")[1])
 
   # transform variables and metadata
   if (!is.null(d.chorizon) && nrow(d.chorizon) > 0){
@@ -854,7 +860,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
         d.chfrags[idx] <- lapply(d.chfrags[idx], function(x) ifelse(is.na(x), 0, x))
       }
   
-      d.chorizon <- merge(d.chorizon, d.chfrags, all.x = TRUE, by = "chkey")
+      d.chorizon <- merge(d.chorizon, d.chfrags, all.x = TRUE, by = "chkey", sort = FALSE)
   
     }
   # } else {
