@@ -385,10 +385,11 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   # attempt to read column headers, after skipping the first two lines of data
   # note: this moves the text connection cursor forward 3 lines
   # 2018-03-06 DEB: results have an extra line up top, now need to skip 3 lines
+  # 2024-05-17 AGB: results have 2 more extra lines; thanks to Daniel Schlaepfer for reporting
   h <- unlist(read.table(
       tc,
       nrows = 1,
-      skip = 3,
+      skip = 5,
       header = FALSE,
       stringsAsFactors = FALSE,
       sep = ',',

@@ -24,6 +24,7 @@
 #' Several ESRI shapefiles are found in the _/spatial/_ folder extracted from a SSURGO ZIP. These have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
 #' 
 #' @return Character. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip = TRUE`.
+#' @seealso [createSSURGO()]
 downloadSSURGO <- function(WHERE = NULL, 
                            areasymbols = NULL,
                            destdir = tempdir(), 
@@ -111,10 +112,18 @@ downloadSSURGO <- function(WHERE = NULL,
   invisible(paths2)
 }
  
-#' Create a SQLite database or GeoPackage from one or more SSURGO Exports
+#' Create a database from SSURGO Exports
+#' 
+#' The following database types are tested and fully supported:
+#'  - SQLite or Geopackage
+#'  - DuckDB
+#'  - Postgres or PostGIS
+#'  
+#' In theory any other DBI-compatible data source can be used for output. See `conn` argument. If you encounter issues using specific DBI connection types, please report in the soilDB issue tracker.
 #'
-#' @param filename Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`)
-#' @param exdir Path containing containing SSURGO spatial (.shp) and tabular (.txt) files. 
+#' @param filename Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`). Only used when `con` is not specified by the user.
+#' @param exdir Path containing containing input SSURGO spatial (.shp) and tabular (.txt) files, downloaded and extracted by `downloadSSURGO()` or similar.
+#' @param conn A _DBIConnection_ object. Default is a `SQLiteConnection` used for writing .sqlite or .gpkg files. Alternate options are any DBI connection types. When `include_spatial=TRUE`, the sf package is used to write spatial data to the database.
 #' @param pattern Character. Optional regular expression to use to filter subdirectories of `exdir`. Default: `NULL` will search all subdirectories for SSURGO export files.
 #' @param include_spatial Logical. Include spatial data layers in database? Default: `TRUE`. 
 #' @param overwrite Logical. Overwrite existing layers? Default `FALSE` will append to existing tables/layers.
@@ -123,6 +132,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param ... Additional arguments passed to `write_sf()` for writing spatial layers.
 #'
 #' @return Character. Vector of layer/table names in `filename`.
+#' @seealso [downloadSSURGO()]
 #' @export
 #' @examples
 #' \dontrun{
@@ -131,6 +141,9 @@ downloadSSURGO <- function(WHERE = NULL,
 #' }
 createSSURGO <- function(filename,
                          exdir,
+                         conn = DBI::dbConnect(DBI::dbDriver("SQLite"), 
+                                              filename, 
+                                              loadable.extensions = TRUE), 
                          pattern = NULL,
                          include_spatial = TRUE,
                          overwrite = FALSE,
@@ -138,22 +151,34 @@ createSSURGO <- function(filename,
                          quiet = TRUE,
                          ...) {
   
-  if (missing(filename) || length(filename) == 0) {
-    stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to.")
+  if ((missing(filename) || length(filename) == 0) && missing(conn)) {
+    stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to, or a DBIConnection should be provided via `conn`.")
+  } else {
+    filename <- NULL
   }
   
-  IS_GPKG <- grepl("\\.gpkg$", filename, ignore.case = TRUE)[1]
+  # DuckDB has special spatial format, so it gets custom handling for
+  IS_DUCKDB <- inherits(conn, "duckdb_connection")
   
   f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE)
   
-  if (!requireNamespace("sf"))
-    stop("package `sf` is required to write spatial datasets to SSURGO SQLite databases", call. = FALSE)
+  if (!IS_DUCKDB) {
+    if (!requireNamespace("sf"))
+      stop("package `sf` is required to write spatial datasets to DBI data sources", call. = FALSE)
+  } 
   
-  if (!requireNamespace("RSQLite"))
-    stop("package `RSQLite` is required to write tabular datasets to SSURGO SQLite databases", call. = FALSE)
-  
-  if (isTRUE(overwrite) && file.exists(filename)) {
-    file.remove(filename)
+  if (missing(conn)) {
+    # delete existing file if overwrite=TRUE
+    if (isTRUE(overwrite) && file.exists(filename)) {
+      file.remove(filename)
+    }
+    
+    # if user did not specify their own connection, close on exit
+    on.exit(DBI::dbDisconnect(conn))
+  } else {
+    if (isTRUE(overwrite)) {
+      message("`filename` and `overwrite` arguments ignored when `conn` is specified")
+    }
   }
   
   # create and add combined vector datasets:
@@ -167,14 +192,35 @@ createSSURGO <- function(filename,
   if (nrow(shp.grp) >= 1 && ncol(shp.grp) == 3 && include_spatial) {
     f.shp.grp <- split(f.shp, list(feature = shp.grp[,1], geom = shp.grp[,2]))
     
+    if (IS_DUCKDB) {
+      DBI::dbExecute(conn, "INSTALL spatial; LOAD spatial;")
+    }
+    
     lapply(seq_along(f.shp.grp), function(i) {
-      lapply(seq_along(f.shp.grp[[i]]), function(j){
+      lapply(seq_along(f.shp.grp[[i]]), function(j) {
         lnm <- layer_names[match(gsub(".*soil([musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j]),
                                  names(layer_names))]
-        
-        if (overwrite && j == 1) {
-          sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, overwrite = TRUE, ...)
-        } else sf::write_sf(sf::read_sf(f.shp.grp[[i]][j]), filename, layer = lnm, append = TRUE, ...)
+        if (IS_DUCKDB) {
+          if (overwrite && j == 1) {
+            DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s;", lnm))
+            DBI::dbExecute(conn, sprintf("CREATE TABLE %s AS SELECT * FROM ST_Read('%s');",
+                                lnm, f.shp.grp[[i]][j]))
+          } else {
+            DBI::dbExecute(conn, sprintf("INSERT INTO %s SELECT * FROM ST_Read('%s');",
+                                             lnm, f.shp.grp[[i]][j]))
+          }
+        } else {
+          shp <- sf::read_sf(f.shp.grp[[i]][j])
+          
+          colnames(shp) <- tolower(colnames(shp))
+          sf::st_geometry(shp) <- "geometry"
+          
+          if (overwrite && j == 1) {
+            sf::write_sf(shp, conn, layer = lnm, delete_layer = TRUE, ...)
+          } else {
+            sf::write_sf(shp, conn, layer = lnm, append = TRUE, ...)
+          }
+        }
         NULL
       })
     })
@@ -211,9 +257,6 @@ createSSURGO <- function(filename,
     msidxdet <- read.delim(msidxdn[1], sep = "|", stringsAsFactors = FALSE, header = header)
   }
   
-  con <- RSQLite::dbConnect(RSQLite::SQLite(), filename, loadable.extensions = TRUE)  
-  on.exit(RSQLite::dbDisconnect(con))
-  
   lapply(names(f.txt.grp), function(x) {
     
     if (!is.null(mstabcol)) {
@@ -226,7 +269,7 @@ createSSURGO <- function(filename,
     }
     
     d <- try(as.data.frame(data.table::rbindlist(lapply(seq_along(f.txt.grp[[x]]), function(i) {
-        
+        # print(f.txt.grp[[x]][i])
         y <- read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header)
         
         if (length(y) == 1) {
@@ -252,15 +295,19 @@ createSSURGO <- function(filename,
       # write tabular data to file
       try({
         if (overwrite) {
-          RSQLite::dbWriteTable(con, mstab_lut[x], d, overwrite = TRUE)
-        } else RSQLite::dbWriteTable(con, mstab_lut[x], d, append = TRUE)
+          DBI::dbWriteTable(conn, mstab_lut[x], d, overwrite = TRUE)
+        } else {
+          DBI::dbWriteTable(conn, mstab_lut[x], d, append = TRUE)
+        }
       }, silent = quiet)
       
       # create pkey indices
       if (!is.null(indexPK) && length(indexPK) > 0) {
         try({
-          RSQLite::dbExecute(con, sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
-                                          paste0('PK_', mstab_lut[x]), mstab_lut[x], paste0(indexPK, collapse = ",")))
+          q <- sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
+                       paste0('PK_', mstab_lut[x]), mstab_lut[x], 
+                       paste0(indexPK, collapse = ","))
+          DBI::dbExecute(conn, q)
         }, silent = quiet)
       }
       
@@ -268,21 +315,28 @@ createSSURGO <- function(filename,
       if (!is.null(indexDI) && length(indexDI) > 0) {
         for (i in seq_along(indexDI)) {
           try({
-            RSQLite::dbExecute(con, sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
-                                            paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i]))
+            q <- sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
+                         paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i])
+            DBI::dbExecute(conn, q)
           }, silent = quiet)
         }
       }
       
+      if (inherits(conn, 'SQLiteConnection')) {
+        IS_GPKG <- grepl("\\.gpkg$", conn@dbname, ignore.case = TRUE)[1]
+      } else {
+        IS_GPKG <- FALSE
+      }
+      
       # for GPKG output, add gpkg_contents (metadata for features and attributes)
       if (IS_GPKG) {
-        if (!.gpkg_has_contents(con)) {
+        if (!.gpkg_has_contents(conn)) {
           # if no spatial data inserted, there will be no gpkg_contents table initally
-          try(.gpkg_create_contents(con))
+          try(.gpkg_create_contents(conn))
         }
         # update gpkg_contents table entry
-        try(.gpkg_delete_contents(con, mstab_lut[x]))
-        try(.gpkg_add_contents(con, mstab_lut[x]))
+        try(.gpkg_delete_contents(conn, mstab_lut[x]))
+        try(.gpkg_add_contents(conn, mstab_lut[x]))
       }
       
       # TODO: other foreign keys/relationships? ALTER TABLE/ADD CONSTRAINT not available in SQLite
@@ -291,7 +345,7 @@ createSSURGO <- function(filename,
     }
   })
   
-  res <- RSQLite::dbListTables(con)
+  res <- DBI::dbListTables(conn)
   invisible(res)
 }
 

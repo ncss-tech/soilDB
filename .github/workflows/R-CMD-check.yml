@@ -34,7 +34,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Get branch name (push)
         if: github.event_name != 'pull_request'
@@ -73,7 +73,7 @@ jobs:
         shell: Rscript {0}
         
       - name: Install terra off r-universe (devel+Windows only)
-        if: matrix.config.r == 'devel' || runner.os == 'Windows'
+        if: matrix.config.r == 'devel' #|| runner.os == 'Windows'
         run: install.packages('terra', repos = 'https://rspatial.r-universe.dev')
         shell: Rscript {0}
                 

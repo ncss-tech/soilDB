@@ -15,6 +15,11 @@ library(soilDB)
 ## TX069
 bb <- '-102.2001 34.4354,-102.2001 34.5009,-102.0756 34.5009,-102.0756 34.4354,-102.2001 34.4354'
 
+## TX045
+bb <- '-101.3237 34.5037,-101.3237 34.5711,-101.1752 34.5711,-101.1752 34.5037,-101.3237 34.5037'
+
+
+
 
 ## GCL's soil pit digging competition site
 bb <- '-122.0050 39.6933,-122.0050 39.7543,-121.8931 39.7543,-121.8931 39.6933,-122.0050 39.6933'
@@ -106,7 +111,7 @@ SoilTaxonomyDendrogram(
   osd$SPC, 
   KST.order = FALSE,
   y.offset = 0.4, 
-  scaling.factor = 0.0135, 
+  scaling.factor = 0.015, 
   cex.taxon.labels = 0.75, 
   cex.id = 0.66,
   cex.names = 0.66,
@@ -114,7 +119,7 @@ SoilTaxonomyDendrogram(
   name.style = 'center-center', 
   depth.axis = list(line = -3),
   hz.distinctness.offset = 'hzd',
-  max.depth = 150
+  max.depth = 200
 )
 
 ## arrange according to classification, accounting for order within KST
@@ -123,7 +128,7 @@ SoilTaxonomyDendrogram(
   spc = osd$SPC, 
   KST.order = TRUE, 
   y.offset = 0.4, 
-  scaling.factor = 0.014, 
+  scaling.factor = 0.015, 
   cex.taxon.labels = 0.75,
   cex.id = 0.85,
   cex.names = 0.75,
@@ -151,6 +156,42 @@ options(.aqp.plotSPC.args = list(width = 0.35, max.depth = 200))
 plotGeomorphCrossSection(osd, type = 'line', clust = FALSE)
 plotGeomorphCrossSection(osd, type = 'bar', clust = FALSE)
 
+
+
+## TODO: combine 2D hillsope + flats
+hp <- reconcileOSDGeomorph(osd, selection = 'hillpos')
+fl <- reconcileOSDGeomorph(osd, selection = 'flats')
+
+# safely combine SPCs, recognizing that there will be duplication
+hp <- hp$geom
+fl <- fl$geom
+
+o <- subset(osd$SPC, profile_id(osd$SPC) %in% unique(c(hp$series, fl$series)))
+
+hp$shannon_entropy <- NULL
+fl$shannon_entropy <- NULL
+hp$n <- NULL
+fl$n <- NULL
+
+
+g <- merge(hp, fl, by = 'series', all.x = TRUE, all.y = TRUE, sort = FALSE)
+
+g2 <- lapply(g[, -1], function(i) {
+  idx <- which(is.na(i)) 
+  i[idx] <- rep(0, times = length(idx))
+  return(i)
+})
+
+g2 <- as.data.frame(g2)
+
+g2 <- sweep(g2, MARGIN = 1, STATS = rowSums(g2), FUN = '/')
+
+g <- cbind(series = g[, 1], g2)
+
+# check:
+nrow(g) == length(o)
+
+plotSPC(o)
 
 
 ## also updated, better hydrologic sorting

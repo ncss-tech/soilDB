@@ -36,20 +36,11 @@ get_SDA_muaggatt <- function(areasymbols = NULL, mukeys = NULL, WHERE = NULL, qu
   }
   
   # execute query
-  if (is.null(dsn)) {
-    res <- suppressMessages(SDA_query(q))
-  } else {
-    if (!inherits(dsn, 'DBIConnection')) {
-      dsn <- dbConnect(RSQLite::SQLite(), dsn)
-      on.exit(DBI::dbDisconnect(dsn), add = TRUE)
-    } 
-    res <- dbGetQuery(dsn, q)
-  }
+  res <- SDA_query(q, dsn = dsn)
   
-  # stop if bad
+  # return if bad
   if (inherits(res, 'try-error')) {
-    warnings()
-    stop(attr(res, 'condition'))
+    return(res)
   }
   
   # remove duplicated mukey column

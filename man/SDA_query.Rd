@@ -4,16 +4,18 @@
 \alias{SDA_query}
 \title{Query Soil Data Access}
 \usage{
-SDA_query(q)
+SDA_query(q, dsn = NULL)
 }
 \arguments{
-\item{q}{A valid T-SQL query surrounded by double quotes}
+\item{q}{character. A valid T-SQL query surrounded by double quotes.}
+
+\item{dsn}{character. Default: \code{NULL} uses Soil Data Access remote data source via REST API. Alternately, \code{dsn} may be a file path to an SQLite database using the SSURGO schema, or a \code{DBIConnection} that has already been created.}
 }
 \value{
-a data.frame result (\code{NULL} if empty, try-error on error)
+A data.frame result for queries that return a single table. A list of data.frame for queries that return multiple tables. \code{NULL} if result is empty, and \code{try-error} on error.
 }
 \description{
-Submit a query to the Soil Data Access (SDA) REST/JSON web-service and return the results as a data.frame. There is a 100,000 record limit and 32Mb JSON serializer limit, per query. Queries should contain a WHERE statement or JOIN condition to limit the number of rows affected / returned. Consider wrapping calls to \code{SDA_query} in a function that can iterate over logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function \code{makeChunks} can help with such iteration.
+Submit a query to the Soil Data Access (SDA) REST/JSON web-service and return the results as a data.frame. There is a 100,000 record and 32Mb JSON serialization limit per query. Queries should contain a WHERE clause or JOIN condition to limit the number of rows affected / returned. Consider wrapping calls to \code{SDA_query()} in a function that can iterate over logical chunks (e.g. areasymbol, mukey, cokey, etc.). The function \code{makeChunks()} can help with such iteration. All usages of \code{SDA_query()} should handle the possibility of a \code{try-error} result in case the web service connection is down or if an invalid query is passed to the endpoint.
 }
 \details{
 The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov} and query examples can be found at \url{https://sdmdataaccess.nrcs.usda.gov/QueryHelp.aspx}. A library of query examples can be found at \url{https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=SDA-SQL_Library_Home}.
@@ -24,7 +26,7 @@ SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are sto
 This function requires the \code{httr}, \code{jsonlite}, and \code{xml2} packages
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("wk")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("wk", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
 \donttest{
   ## get SSURGO export date for all soil survey areas in California
@@ -74,9 +76,9 @@ This function requires the \code{httr}, \code{jsonlite}, and \code{xml2} package
 }
 }
 \seealso{
-\code{\link{SDA_spatialQuery}}
+\code{\link[=SDA_spatialQuery]{SDA_spatialQuery()}}
 }
 \author{
-D.E. Beaudette
+D.E. Beaudette, A.G Brown
 }
 \keyword{manip}

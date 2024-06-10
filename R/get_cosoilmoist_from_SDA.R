@@ -39,13 +39,16 @@ get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = 
 
   # exec query
   d.cosoilmoist <- SDA_query(q.cosoilmoist)
-
+  
+  if (inherits(d.cosoilmoist, 'try-error')) {
+    return(invisible(d.cosoilmoist))
+  }
+  
   # set factor levels according to metadata domains
   d.cosoilmoist <- uncode(d.cosoilmoist)
 
   # prep dataset: rename columns, impute empty values, stringsAsFactors
   d.cosoilmoist <- .cosoilmoist_prep(d.cosoilmoist, impute = impute)
 
-  # done
   return(d.cosoilmoist)
-  }
+}

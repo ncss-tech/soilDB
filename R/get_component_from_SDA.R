@@ -57,7 +57,12 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
 
   # exec query
   d.component <- SDA_query(q.component)
-
+  
+  # return if bad
+  if (inherits(d.component, 'try-error')) {
+    return(invisible(d.component))
+  }
+  
   # empty result set should short circuit (no error, just message)
   if(length(d.component) == 0)
     return(d.component)
@@ -124,7 +129,15 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
 
     # exec query
     d.pm    <- SDA_query(q.pm)
+    if (inherits(d.pm, 'try-error')) {
+      return(invisible(d.pm))
+    }
+    
     d.cogmd <- SDA_query(q.lf)
+    if (inherits(d.cogmd, 'try-error')) {
+      return(invisible(d.cogmd))
+    }
+    
     d.cosrf <- .get_cosurffrags_from_SDA(unique(d.component$cokey), nullFragsAreZero = nullFragsAreZero)
     d.cm    <- uncode(.get_comonth_from_SDA(d.component$cokey))
 
@@ -246,6 +259,11 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   ")
   
   df <- SDA_query(q)
+  
+  if (inherits(df, 'try-error')) {
+    return(invisible(df))
+  }
+  
   vars <- c("flodfreqcl", "floddurcl", "pondfreqcl", "ponddurcl")
   df[vars] <- lapply(df[vars], trimws)
   
@@ -409,7 +427,11 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   ")
 
   d <- SDA_query(q)
-
+  
+  if (inherits(d, 'try-error')) {
+    return(invisible(d))
+  }
+  
   if (is.null(d)) {
     d <- data.frame(
       cokey = cokey[1],
@@ -484,12 +506,16 @@ get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = F
   )
 
   d.cointerp <- SDA_query(q.cointerp)
-
+  
+  if (inherits(d.cointerp, 'try-error')) {
+    return(invisible(d.cointerp))
+  }
+  
   # recode metadata domains
   d.cointerp <- uncode(d.cointerp)
-
+  
   return(d.cointerp)
-  }
+}
 
 #' @export 
 #' @rdname fetchSDA
@@ -550,13 +576,18 @@ get_lmuaoverlap_from_SDA <- function(WHERE = NULL, droplevels = TRUE, stringsAsF
 
   # exec query
   d <- SDA_query(q)
-
-  d$musym = as.character(d$musym)
-
-  # recode metadata domains
-  d <- uncode(d, droplevels = droplevels)
-
-  # done
+  
+  if (inherits(d, 'try-error')) {
+    return(invisible(d))
+  }
+    
+  if (!is.null(d)) {
+    d$musym <- as.character(d$musym)
+  
+    # recode metadata domains
+    d <- uncode(d, droplevels = droplevels)
+  }
+  
   return(d)
 }
 
@@ -600,14 +631,16 @@ get_mapunit_from_SDA <- function(WHERE = NULL,
 
   # exec query
   d.mapunit <- SDA_query(q.mapunit)
-
-  if (!inherits(d.mapunit, 'try-error')) {
+  
+  if (inherits(d.mapunit, 'try-error')) {
+    return(invisible(d.mapunit))
+  }
+  
+  if (!is.null(d.mapunit)) {
     d.mapunit$musym = as.character(d.mapunit$musym)
   
     # recode metadata domains
     d.mapunit <- uncode(d.mapunit, droplevels = droplevels)
-  } else {
-    d.mapunit <- NULL
   }
   
   # done
@@ -687,6 +720,10 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 
   # get metadata
   metadata <- get_NASIS_metadata()
+  
+  if (inherits(d.chorizon, 'try-error')) {
+    return(invisible(d.chorizon))
+  }
 
   # transform variables and metadata
   if (!is.null(d.chorizon) && nrow(d.chorizon) > 0){
@@ -812,7 +849,11 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
                             ")
   
       d.chfrags  <- SDA_query(q.chfrags)
-  
+      
+      if (inherits(d.chfrags, 'try-error')) {
+        return(invisible(d.chfrags))
+      }
+      
       # r.rf.data.v2 nullFragsAreZero = TRUE
       idx <- !names(d.chfrags) %in% "chkey"
       if (nullFragsAreZero == TRUE) {
@@ -854,17 +895,15 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 .get_diagnostics_from_SDA <- function(target_cokeys) {
   # query SDA to get corresponding codiagfeatures
   q <- paste0('SELECT * FROM codiagfeatures WHERE cokey IN ', format_SQL_in_statement(target_cokeys), ";")
-  return(SDA_query(q))
+  SDA_query(q)
 }
 
 
 .get_restrictions_from_SDA <- function(target_cokeys) {
   # query SDA to get corresponding corestrictions
   q <- paste0('SELECT * FROM corestrictions WHERE cokey IN ', format_SQL_in_statement(target_cokeys), ";")
-  return(SDA_query(q))
+  SDA_query(q)
 }
-
-
 
 
 #' @title Get SSURGO/STATSGO2 Mapunit Data from Soil Data Access
@@ -936,6 +975,10 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
                                         droplevels = droplevels,
                                         nullFragsAreZero = TRUE
                                         )
+  if (inherits(f.component, 'try-error')) {
+    return(invisible(f.component))
+  }
+  
   if (is.null(f.component)) {
     stop("WHERE clause returned no components.", call. = FALSE)
   }
@@ -969,7 +1012,10 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
       assign('component.hz.problems', value=bad.ids, envir=get_soilDB_env())
   }
 
-
+  if (inherits(f.chorizon, 'try-error')) {
+    return(invisible(f.chorizon))
+  }
+  
   # upgrade to SoilProfilecollection
   depths(f.chorizon) <- cokey ~ hzdept_r + hzdepb_r
 

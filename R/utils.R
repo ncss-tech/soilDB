@@ -209,10 +209,10 @@
   }
 
   # landscape
-  landsc.string <- paste0(unique(i.ls$geomfname), collapse = name.sep)
+  landsc.string <- paste0(unique(trimws(paste(i.ls$geomfmod[!is.na(i.ls$geomfmod)], i.ls$geomfname))), collapse = name.sep)
 
   # microfeature
-  mf.string <- paste0(unique(i.mf$geomfname[!is.na(i.mf$geomfname)]), collapse = name.sep)
+  mf.string <- paste0(unique(trimws(paste(i.mf$geomfmod[!is.na(i.mf$geomfmod)], i.mf$geomfname[!is.na(i.mf$geomfname)]))), collapse = name.sep)
 
   # 2d hillslope position
   hspp <- unique(paste0(i.gm$hillslopeprof, ifelse(i.gm$cosurfmorphhpprv, "*",""))[!is.na(i.gm$hillslopeprof)])
@@ -246,7 +246,7 @@
     if(getOption('soilDB.verbose', default=FALSE))
       message(paste0('Using row-order. NA in geomfeatid:', soiliid))
 
-    ft.string <- paste(unique(i.gm$geomfname), collapse = name.sep)
+    ft.string <- paste(unique(trimws(paste(i.gm$geomfmod[!is.na(i.gm$geomfmod)], i.gm$geomfname))), collapse = name.sep)
     return(data.frame(
       peiid = soiliid,
       landform_string = ft.string,

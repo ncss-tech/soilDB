@@ -37,7 +37,7 @@ preferred-citation:
   - family-names: Brown
     given-names: Andrew
     email: andrew.g.brown@usda.gov
-  notes: R package version 2.8.1
+  notes: R package version 2.8.2
   url: https://CRAN.R-project.org/package=soilDB
   year: '2024'
 repository: https://CRAN.R-project.org/package=soilDB
@@ -271,6 +271,22 @@ references:
     given-names: David A.
   - family-names: Falcon
     given-names: Seth
+  year: '2024'
+- type: software
+  title: duckdb
+  abstract: 'duckdb: DBI Package for the DuckDB Database Management System'
+  notes: Suggests
+  url: https://r.duckdb.org/
+  repository: https://CRAN.R-project.org/package=duckdb
+  authors:
+  - family-names: Mühleisen
+    given-names: Hannes
+    email: hannes@cwi.nl
+    orcid: https://orcid.org/0000-0001-8552-0029
+  - family-names: Raasveldt
+    given-names: Mark
+    email: mark.raasveldt@cwi.nl
+    orcid: https://orcid.org/0000-0001-5005-6844
   year: '2024'
 - type: software
   title: sf
