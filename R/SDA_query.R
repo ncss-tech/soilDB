@@ -110,8 +110,9 @@ SDA_query <- function(q, dsn = NULL) {
     res <- .SDA_query(q)
     if (inherits(res, 'try-error')) {
       message(res)
+      return(invisible(res))
     }
-    return(invisible(res))
+    return(res)
   } else {
     if (inherits(dsn, 'DBIConnection')) {
       return(DBI::dbGetQuery(dsn, q))
