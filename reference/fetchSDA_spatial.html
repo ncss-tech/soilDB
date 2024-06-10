@@ -77,11 +77,11 @@ A Soil Data Access query returns geometry and key identifying information about 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>A vector of map unit keys (<code>mukey</code>) or national map unit symbols (<code>nmusym</code>) for <code>mupolygon</code> geometry OR legend keys (<code>lkey</code>) or soil survey area symbols (<code>areasymbol</code>) for <code>sapolygon</code> geometry. If <code>geom.src="mlrapolygon"</code> then <code>x</code> refers to <code>MLRARSYM</code> (major land resource area symbols).</p></dd>
+<dd><p>A vector of map unit keys (<code>mukey</code>) or national map unit symbols (<code>nationalmusym</code>) for <code>mupolygon</code>, <code>muline</code> or <code>mupoint</code>; feature keys (<code>featkey</code>) for <code>featpoint</code> and <code>featline</code>; legend keys (<code>lkey</code>) or soil survey area symbols (<code>areasymbol</code>) for <code>sapolygon</code> geometry. If <code>geom.src="mlrapolygon"</code> then <code>x</code> refers to <code>MLRARSYM</code> (major land resource area symbols).</p></dd>
 
 
 <dt>by.col</dt>
-<dd><p>Column name containing map unit identifier <code>"mukey"</code>, <code>"nmusym"</code>/<code>"nationalmusym"</code>, or <code>"ecoclassid"</code> for <code>geom.src</code> <code>mupolygon</code> OR <code>"areasymbol"</code>, <code>"areaname"</code>, <code>"mlraoffice"</code>, <code>"mouagncyresp"</code> for <code>geom.src</code> <code>sapolygon</code>; default is determined by <code>is.numeric(x)</code> <code>TRUE</code> for <code>mukey</code> or <code>lkey</code> and <code>nationalmusym</code> or <code>areasymbol</code> otherwise.</p></dd>
+<dd><p>Column name containing map unit identifier <code>"mukey"</code>, <code>"nationalmusym"</code>, or <code>"ecoclassid"</code> for <code>geom.src</code> <code>mupolygon</code> OR <code>"areasymbol"</code>, <code>"areaname"</code>, <code>"mlraoffice"</code>, <code>"mouagncyresp"</code> for <code>geom.src</code> <code>sapolygon</code>; default is determined by <code>isTRUE(is.numeric(x))</code> for <code>mukey</code>, <code>featkey</code> or <code>lkey</code>, using <code>nationalmusym</code> or <code>areasymbol</code> otherwise.</p></dd>
 
 
 <dt>method</dt>
@@ -89,7 +89,7 @@ A Soil Data Access query returns geometry and key identifying information about 
 
 
 <dt>geom.src</dt>
-<dd><p>Either <code>mupolygon</code> (map unit polygons), <code>sapolygon</code> (soil survey area boundary polygons), or <code>mlrapolygon</code> (major land resource area boundary polygons)</p></dd>
+<dd><p>Either <code>mupolygon</code> (map unit polygons), <code>muline</code> (map unit lines), <code>mupoint</code> (map unit points), <code>featpoint</code> (feature points), <code>featline</code> (feature lines), <code>sapolygon</code> (soil survey area boundary polygons), or <code>mlrapolygon</code> (major land resource area boundary polygons)</p></dd>
 
 
 <dt>db</dt>
@@ -149,8 +149,8 @@ and the function will be updated accordingly at that time.</p>
 <span class="r-in"><span>    <span class="co"># demonstrate fetching full extent (multi-mukey) of national musym</span></span></span>
 <span class="r-in"><span>    <span class="va">full.extent.nmusym</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2x8l5"</span>, by <span class="op">=</span> <span class="st">"nmusym"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 chunks...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 3; 0.8 secs)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 1.1 secs; mean/chunk: 0.8 secs; mean/symbol: 0.35 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 3; 0.7 secs)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 0.9 secs; mean/chunk: 0.7 secs; mean/symbol: 0.29 secs.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># compare extent of nmusym to single mukey within it</span></span></span>
 <span class="r-in"><span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">single.mukey</span>, <span class="st">'try-error'</span><span class="op">)</span> <span class="op">&amp;&amp;</span> </span></span>
