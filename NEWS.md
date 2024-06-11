@@ -8,6 +8,9 @@
    - Handle try-error result more gracefully in high-level functions (#352)
  - `createSSURGO()`: added support for creating DuckDB, PostgreSQL, and other DBI-compatible databases (#352) via `conn` argument
  - `fetchSDA()` and `get_chorizon_from_SDA()` concatenate multiple `texcl` using a comma when a texture group contains multiple texture classes (e.g. stratified textures) (fixes #353)
+ - `fetchNASIS()`/`.formatLandformString()`: append `geomfmod` column to landscape, landform, and microfeature strings where present; thanks to Gabriel Benitez for suggestion
+ - `fetchNASIS()`/`get_extended_data_from_NASIS_db()`: fix conversion of codes to labels for microrelief
+ - `fetchSCAN()`: fix header format; thanks to @dschlaep for reporting and providing a fix
 
 # soilDB 2.8.2 (2024-04-22)
 
