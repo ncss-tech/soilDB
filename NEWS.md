@@ -1,4 +1,4 @@
-# soilDB 2.8.3 (2024-06-10)
+# soilDB 2.8.3 (2024-06-11)
  - Updates to SoilWeb web coverage services
    - ISSR800 authoritative grid system altered slightly
    - `ISSR800.wcs()` and `soilColor.wcs()` now set color table internally when possible
