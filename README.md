@@ -41,7 +41,7 @@ Get the development version from GitHub:
     ##   @Manual{,
     ##     title = {soilDB: Soil Database Interface},
     ##     author = {Dylan Beaudette and Jay Skovlin and Stephen Roecker and Andrew Brown},
-    ##     note = {R package version 2.8.2},
+    ##     note = {R package version 2.8.3},
     ##     url = {https://CRAN.R-project.org/package=soilDB},
     ##     year = {2024},
     ##   }
