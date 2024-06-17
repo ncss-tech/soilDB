@@ -23,7 +23,7 @@
     if (!requireNamespace("odbc"))
       stop("package `odbc` is required ", call. = FALSE)
 
-    columns <- odbc::odbcConnectionColumns(con, table_name)
+    columns <- odbc::dbListFields(con, table_name)
 
     # re-arrange VARCHAR(MAX) columns
     longcols <- subset(columns, columns$field.type == "varchar" & columns$column_size == 0)$name
