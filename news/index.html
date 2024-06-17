@@ -52,7 +52,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.8.3" id="soildb-283-2024-06-11">soilDB 2.8.3 (2024-06-11)<a class="anchor" aria-label="anchor" href="#soildb-283-2024-06-11"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.8.3" id="soildb-283-2024-06-11">soilDB 2.8.3 (2024-06-11)<a class="anchor" aria-label="anchor" href="#soildb-283-2024-06-11"></a></h2><p class="text-muted">CRAN release: 2024-06-11</p>
 <ul><li>Updates to SoilWeb web coverage services
 <ul><li>ISSR800 authoritative grid system altered slightly</li>
 <li>
@@ -68,6 +68,12 @@
 <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code>: added support for creating DuckDB, PostgreSQL, and other DBI-compatible databases (<a href="https://github.com/ncss-tech/soilDB/issues/352" class="external-link">#352</a>) via <code>conn</code> argument</li>
 <li>
 <code><a href="../reference/fetchSDA.html">fetchSDA()</a></code> and <code><a href="../reference/fetchSDA.html">get_chorizon_from_SDA()</a></code> concatenate multiple <code>texcl</code> using a comma when a texture group contains multiple texture classes (e.g. stratified textures) (fixes <a href="https://github.com/ncss-tech/soilDB/issues/353" class="external-link">#353</a>)</li>
+<li>
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code>/<code>.formatLandformString()</code>: append <code>geomfmod</code> column to landscape, landform, and microfeature strings where present; thanks to Gabriel Benitez for suggestion</li>
+<li>
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code>/<code><a href="../reference/get_extended_data_from_NASIS_db.html">get_extended_data_from_NASIS_db()</a></code>: fix conversion of codes to labels for microrelief</li>
+<li>
+<code><a href="../reference/fetchSCAN.html">fetchSCAN()</a></code>: fix header format; thanks to <a href="https://github.com/dschlaep" class="external-link">@dschlaep</a> for reporting and providing a fix</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.8.2" id="soildb-282-2024-04-22">soilDB 2.8.2 (2024-04-22)<a class="anchor" aria-label="anchor" href="#soildb-282-2024-04-22"></a></h2><p class="text-muted">CRAN release: 2024-04-22</p>
