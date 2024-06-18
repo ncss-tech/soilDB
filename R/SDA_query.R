@@ -160,6 +160,11 @@ SDA_query <- function(q, dsn = NULL) {
     encode = "form"
   ), silent = TRUE)
   
+  if (inherits(r, 'try-error')) {
+    message("Soil Data Access POST request failed, returning try-error.\n\n", r)
+    return(invisible(r))
+  }
+  
   # check response content type
   h <- r$all_headers
   if (!is.null(h)) {
