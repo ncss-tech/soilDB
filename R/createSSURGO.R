@@ -141,9 +141,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #' }
 createSSURGO <- function(filename,
                          exdir,
-                         conn = DBI::dbConnect(DBI::dbDriver("SQLite"), 
-                                              filename, 
-                                              loadable.extensions = TRUE), 
+                         conn = NULL, 
                          pattern = NULL,
                          include_spatial = TRUE,
                          overwrite = FALSE,
@@ -153,33 +151,24 @@ createSSURGO <- function(filename,
   
   if ((missing(filename) || length(filename) == 0) && missing(conn)) {
     stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to, or a DBIConnection should be provided via `conn`.")
-  } else {
-    filename <- NULL
   }
   
   # DuckDB has special spatial format, so it gets custom handling for
   IS_DUCKDB <- inherits(conn, "duckdb_connection")
   
-  f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE)
+  if (inherits(conn, 'SQLiteConnection')) {
+    IS_GPKG <- grepl("\\.gpkg$", conn@dbname, ignore.case = TRUE)[1]
+    filename <- conn@dbname
+  } else {
+    IS_GPKG <- grepl("\\.gpkg$", filename, ignore.case = TRUE)[1]
+  }
   
   if (!IS_DUCKDB) {
     if (!requireNamespace("sf"))
       stop("package `sf` is required to write spatial datasets to DBI data sources", call. = FALSE)
   } 
   
-  if (missing(conn)) {
-    # delete existing file if overwrite=TRUE
-    if (isTRUE(overwrite) && file.exists(filename)) {
-      file.remove(filename)
-    }
-    
-    # if user did not specify their own connection, close on exit
-    on.exit(DBI::dbDisconnect(conn))
-  } else {
-    if (isTRUE(overwrite)) {
-      message("`filename` and `overwrite` arguments ignored when `conn` is specified")
-    }
-  }
+  f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE)
   
   # create and add combined vector datasets:
   #   "soilmu_a", "soilmu_l", "soilmu_p", "soilsa_a", "soilsf_l", "soilsf_p" 
@@ -196,8 +185,8 @@ createSSURGO <- function(filename,
       DBI::dbExecute(conn, "INSTALL spatial; LOAD spatial;")
     }
     
-    lapply(seq_along(f.shp.grp), function(i) {
-      lapply(seq_along(f.shp.grp[[i]]), function(j) {
+    for (i in seq_along(f.shp.grp)) {
+      for (j in seq_along(f.shp.grp[[i]])) {
         lnm <- layer_names[match(gsub(".*soil([musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j]),
                                  names(layer_names))]
         if (IS_DUCKDB) {
@@ -215,15 +204,47 @@ createSSURGO <- function(filename,
           colnames(shp) <- tolower(colnames(shp))
           sf::st_geometry(shp) <- "geometry"
           
-          if (overwrite && j == 1) {
-            sf::write_sf(shp, conn, layer = lnm, delete_layer = TRUE, ...)
+          .st_write_sf_conn <-  function(x, dsn, layer, overwrite, j) {
+            if (overwrite || j == 1) {
+              sf::write_sf(x, dsn = dsn, layer = layer, delete_layer = TRUE, ...)
+            } else {
+              sf::write_sf(x, dsn = dsn, layer = layer, append = TRUE, ...)
+            }
+          }
+          
+          if (IS_GPKG && missing(conn)) {
+            # writing to SQLiteConnection fails to create proper gpkg_contents entries
+            # so use the path for GPKG only
+            .st_write_sf_conn(shp, filename, lnm, overwrite, j)
           } else {
-            sf::write_sf(shp, conn, layer = lnm, append = TRUE, ...)
+            .st_write_sf_conn(shp, conn, lnm, overwrite, j)
           }
         }
         NULL
-      })
-    })
+      }
+    }
+  }
+  
+  if (missing(conn) || is.null(conn)) {
+    # delete existing file if overwrite=TRUE
+    if (isTRUE(overwrite) && file.exists(filename)) {
+      file.remove(filename)
+    }
+    
+    if (!requireNamespace("RSQLite")) {
+      stop("package 'RSQLite' is required (when `conn` is not specified)", call. = FALSE)
+    }
+    
+    conn <- DBI::dbConnect(DBI::dbDriver("SQLite"),
+                           filename, 
+                           loadable.extensions = TRUE)
+    
+    # if user did not specify their own connection, close on exit
+    on.exit(DBI::dbDisconnect(conn))
+  } else {
+    if (isTRUE(overwrite)) {
+      message("`filename` and `overwrite` arguments ignored when `conn` is specified")
+    }
   }
   
   # create and add combined tabular datasets
@@ -320,12 +341,6 @@ createSSURGO <- function(filename,
             DBI::dbExecute(conn, q)
           }, silent = quiet)
         }
-      }
-      
-      if (inherits(conn, 'SQLiteConnection')) {
-        IS_GPKG <- grepl("\\.gpkg$", conn@dbname, ignore.case = TRUE)[1]
-      } else {
-        IS_GPKG <- FALSE
       }
       
       # for GPKG output, add gpkg_contents (metadata for features and attributes)

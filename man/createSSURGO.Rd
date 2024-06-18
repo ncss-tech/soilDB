@@ -7,7 +7,7 @@
 createSSURGO(
   filename,
   exdir,
-  conn = DBI::dbConnect(DBI::dbDriver("SQLite"), filename, loadable.extensions = TRUE),
+  conn = NULL,
   pattern = NULL,
   include_spatial = TRUE,
   overwrite = FALSE,
