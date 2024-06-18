@@ -22,7 +22,7 @@ In theory any other DBI-compatible data source can be used for output. See conn 
     
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@ In theory any other DBI-compatible data source can be used for output. See conn 
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">createSSURGO</span><span class="op">(</span></span>
 <span>  <span class="va">filename</span>,</span>
 <span>  <span class="va">exdir</span>,</span>
-<span>  conn <span class="op">=</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDriver.html" class="external-link">dbDriver</a></span><span class="op">(</span><span class="st">"SQLite"</span><span class="op">)</span>, <span class="va">filename</span>, loadable.extensions <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  conn <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  include_spatial <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
