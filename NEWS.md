@@ -1,3 +1,9 @@
+# soilDB 2.8.4 (development)
+ - `createSSURGO()` bug fixes following changes in 2.8.3
+   - generating `gpkg_contents` for GeoPackage files failed to add entries for "features" data_type
+   - `filename` argument not properly handled in some cases
+ - `SDA_query()` handle another possible failure point in error handling code
+ 
 # soilDB 2.8.3 (2024-06-11)
  - Updates to SoilWeb web coverage services
    - ISSR800 authoritative grid system altered slightly
