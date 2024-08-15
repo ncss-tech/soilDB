@@ -1,11 +1,11 @@
 ---
 output: md_document 
 ---
-[![CRAN Version (Stable)](http://www.r-pkg.org/badges/version-ago/soilDB)](https://cran.r-project.org/package=soilDB)
+[![CRAN version](https://www.r-pkg.org/badges/version/soilDB)](https://CRAN.R-project.org/package=soilDB)
 [![CRAN status](https://badges.cranchecks.info/worst/soilDB.svg)](https://cran.r-project.org/web/checks/check_results_soilDB.html)
 [![Development Version](https://ncss-tech.r-universe.dev/badges/soilDB)](https://ncss-tech.r-universe.dev/)
 [![R-CMD-check Build Status](https://github.com/ncss-tech/soilDB/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
-[![Total CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/soilDB)](https://cran.r-project.org/package=soilDB)
+[![Total CRAN Downloads](https://cranlogs.r-pkg.org/badges/soilDB)](https://cran.r-project.org/package=soilDB)
 ![CRAN/METACRAN](https://img.shields.io/cran/l/soilDB)
 [![soilDB Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/soilDB/)
 
@@ -35,8 +35,16 @@ bibentry(
 # get latest tagged release from github
 soilDB_CRAN_VERSION <- .getLatestCRANRelease()
 
+# get installed version
+soilDB_INSTALLED_VERSION <- packageVersion("soilDB")
+
+if (soilDB_INSTALLED_VERSION > soilDB_CRAN_VERSION) {
+  .update_CITATION(soilDB_INSTALLED_VERSION)
+} else {
+  .update_CITATION(soilDB_CRAN_VERSION)
+}
+
 # update inst/CITATION
-.update_CITATION(soilDB_CRAN_VERSION)
 ```
 
 ## Installation
@@ -85,7 +93,7 @@ citation("soilDB")
       - [`get_SDA_muaggatt`](http://ncss-tech.github.io/soilDB/reference/get_SDA_muaggatt.html)
       - [`get_SDA_pmgroupname`](http://ncss-tech.github.io/soilDB/reference/get_SDA_pmgroupname.html)
       - [`get_SDA_property`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.html)
-      - [`get_SDA_coecoclass`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecosite.html)
+      - [`get_SDA_coecoclass`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecoclass.html)
       - [`get_SDA_metrics`](http://ncss-tech.github.io/soilDB/reference/get_SDA_metrics.html)
       - [`get_SDA_cosurfmorph`](http://ncss-tech.github.io/soilDB/reference/get_SDA_cosurfmorph.html)
       

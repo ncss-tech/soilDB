@@ -1,5 +1,5 @@
-[![CRAN Version
-(Stable)](http://www.r-pkg.org/badges/version-ago/soilDB)](https://cran.r-project.org/package=soilDB)
+[![CRAN
+version](https://www.r-pkg.org/badges/version/soilDB)](https://CRAN.R-project.org/package=soilDB)
 [![CRAN
 status](https://badges.cranchecks.info/worst/soilDB.svg)](https://cran.r-project.org/web/checks/check_results_soilDB.html)
 [![Development
@@ -7,7 +7,7 @@ Version](https://ncss-tech.r-universe.dev/badges/soilDB)](https://ncss-tech.r-un
 [![R-CMD-check Build
 Status](https://github.com/ncss-tech/soilDB/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
 [![Total CRAN
-Downloads](http://cranlogs.r-pkg.org/badges/grand-total/soilDB)](https://cran.r-project.org/package=soilDB)
+Downloads](https://cranlogs.r-pkg.org/badges/soilDB)](https://cran.r-project.org/package=soilDB)
 ![CRAN/METACRAN](https://img.shields.io/cran/l/soilDB) [![soilDB
 Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/soilDB/)
 
@@ -33,7 +33,7 @@ Get the development version from GitHub:
     ## To cite soilDB in publications use:
     ## 
     ##   Beaudette, D., Skovlin, J., Roecker, S., Brown, A. (2024). soilDB:
-    ##   Soil Database Interface. R package version 2.8.3.
+    ##   Soil Database Interface. R package version 2.8.4.
     ##   <https://CRAN.R-project.org/package=soilDB>
     ## 
     ## A BibTeX entry for LaTeX users is
@@ -41,7 +41,7 @@ Get the development version from GitHub:
     ##   @Manual{,
     ##     title = {soilDB: Soil Database Interface},
     ##     author = {Dylan Beaudette and Jay Skovlin and Stephen Roecker and Andrew Brown},
-    ##     note = {R package version 2.8.3},
+    ##     note = {R package version 2.8.4},
     ##     url = {https://CRAN.R-project.org/package=soilDB},
     ##     year = {2024},
     ##   }
@@ -67,7 +67,7 @@ Get the development version from GitHub:
         -   [`get_SDA_muaggatt`](http://ncss-tech.github.io/soilDB/reference/get_SDA_muaggatt.html)
         -   [`get_SDA_pmgroupname`](http://ncss-tech.github.io/soilDB/reference/get_SDA_pmgroupname.html)
         -   [`get_SDA_property`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.html)
-        -   [`get_SDA_coecoclass`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecosite.html)
+        -   [`get_SDA_coecoclass`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecoclass.html)
         -   [`get_SDA_metrics`](http://ncss-tech.github.io/soilDB/reference/get_SDA_metrics.html)
         -   [`get_SDA_cosurfmorph`](http://ncss-tech.github.io/soilDB/reference/get_SDA_cosurfmorph.html)
 -   SSURGO Web Soil Survey
