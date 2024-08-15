@@ -17,7 +17,7 @@ Suggests: jsonlite, xml2, httr, rvest, odbc, RSQLite, sf, wk, terra, raster, kni
 Repository: CRAN
 URL: https://github.com/ncss-tech/soilDB/, https://ncss-tech.github.io/soilDB/, https://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
