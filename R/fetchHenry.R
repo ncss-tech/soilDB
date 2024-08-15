@@ -134,7 +134,7 @@ month2season <- function(x) {
   return(season)
 }
 
-## experimental function for padding daily time-series with NA in the presence of missing days
+## function for padding daily time-series with NA in the presence of missing days
 ## must be run on subsets defined by year
 .fill_missing_days <- function(x) {
 

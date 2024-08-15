@@ -165,9 +165,8 @@
 #' Download soil characterization and morphologic data via BBOX, MLRA, or soil
 #' series name query, from the KSSL database.
 #'
-#' This is an experimental interface to a subset for the most commonly used
-#' data from a snapshot of KSSL (lab characterization) and NASIS (morphologic)
-#' data.
+#' This interface has largely been superseded by the Soil Data Access
+#'snapshot of the Laboratory Data Mart, available via `fetchLDM()`.
 #'
 #' Series-queries are case insensitive. Series name is based on the "correlated
 #' as" field (from KSSL snapshot) when present.  The "sampled as"

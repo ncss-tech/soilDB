@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
   fig.align = 'center',
   fig.width = 8,
   fig.height = 6, 
+  dpi = 36,
   tidy = FALSE,
   verbose = FALSE,
   # run when NASIS is defined or when R_SOILDB_SKIP_LONG_EXAMPLES is FALSE

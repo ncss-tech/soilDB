@@ -3,6 +3,8 @@
    - generating `gpkg_contents` for GeoPackage files failed to add entries for "features" data_type
    - `filename` argument not properly handled in some cases
  - `SDA_query()` handle another possible failure point in error handling code
+ - `createStaticNASIS()` use `odbc::dbListFields()` instead of `odbc::odbcConnectionColumns()`
+ - fetchNASIS Vignette
  
 # soilDB 2.8.3 (2024-06-11)
  - Updates to SoilWeb web coverage services

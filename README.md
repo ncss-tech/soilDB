@@ -6,7 +6,7 @@ status](https://badges.cranchecks.info/worst/soilDB.svg)](https://cran.r-project
 Version](https://ncss-tech.r-universe.dev/badges/soilDB)](https://ncss-tech.r-universe.dev/)
 [![R-CMD-check Build
 Status](https://github.com/ncss-tech/soilDB/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/ncss-tech/soilDB/actions)
-[![Total CRAN
+[![Monthly CRAN
 Downloads](https://cranlogs.r-pkg.org/badges/soilDB)](https://cran.r-project.org/package=soilDB)
 ![CRAN/METACRAN](https://img.shields.io/cran/l/soilDB) [![soilDB
 Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/soilDB/)
@@ -61,6 +61,7 @@ Get the development version from GitHub:
     -   [`fetchSDA_spatial`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html)
     -   [`SDA_query`](http://ncss-tech.github.io/soilDB/reference/SDA_query.html)
     -   [`SDA_spatialQuery`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html)
+    -   [`fetchLDM`](http://ncss-tech.github.io/soilDB/reference/fetchLDM.html)
     -   “SSURGO On Demand” Queries
         -   [`get_SDA_hydric`](http://ncss-tech.github.io/soilDB/reference/get_SDA_hydric.html)
         -   [`get_SDA_interpretation`](http://ncss-tech.github.io/soilDB/reference/get_SDA_interpretation.html)
