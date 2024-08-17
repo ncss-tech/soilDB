@@ -61,7 +61,6 @@ Get the development version from GitHub:
     -   [`fetchSDA_spatial`](http://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html)
     -   [`SDA_query`](http://ncss-tech.github.io/soilDB/reference/SDA_query.html)
     -   [`SDA_spatialQuery`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html)
-    -   [`fetchLDM`](http://ncss-tech.github.io/soilDB/reference/fetchLDM.html)
     -   “SSURGO On Demand” Queries
         -   [`get_SDA_hydric`](http://ncss-tech.github.io/soilDB/reference/get_SDA_hydric.html)
         -   [`get_SDA_interpretation`](http://ncss-tech.github.io/soilDB/reference/get_SDA_interpretation.html)
