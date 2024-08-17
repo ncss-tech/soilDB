@@ -4,6 +4,7 @@ library(terra)
 library(rasterVis)
 library(viridisLite)
 library(sf)
+library(aqp)
 
 # https://twitter.com/MoreorLoess/status/1471935030746304521
 # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=41.83547,-90.12201,z16
@@ -11,6 +12,11 @@ library(sf)
 ## copy / paste from SoilWeb
 ## 'b' keypress
 bb <- '-90.1378 41.8273,-90.1378 41.8420,-90.1051 41.8420,-90.1051 41.8273,-90.1378 41.8273'
+
+
+## Northern CA
+bb <- '-122.5164 41.6966,-122.5164 41.7267,-122.4540 41.7267,-122.4540 41.6966,-122.5164 41.6966'
+
 
 # near Ithica, NY
 # bb <- '-76.6811 42.3178,-76.6811 42.3526,-76.5987 42.3526,-76.5987 42.3178,-76.6811 42.3178'
@@ -37,11 +43,14 @@ rat <- cats(mu)[[1]]
 levelplot(mu, att = 'mukey', margin = FALSE, colorkey = FALSE, col.regions = viridis)
 
 # get thematic data from SDA
-# dominant component
+# weighted mean
+# 
 # depth-weighted average
 # sand, silt, clay (RV)
 p <-  get_SDA_property(property = c("sandtotal_r","silttotal_r","claytotal_r"),
-                       method = "Dominant Component (Numeric)", 
+                       method = "Weighted Average", 
+                       miscellaneous_areas = FALSE, 
+                       include_minors = TRUE,
                        mukeys = as.integer(rat$mukey),
                        top_depth = 25,
                        bottom_depth = 50)
@@ -50,6 +59,9 @@ head(p)
 
 # re-create raster attribute table with aggregate soil properties
 rat <- merge(rat, p, by.x = 'mukey', by.y = 'mukey', sort = FALSE, all.x = TRUE)
+
+# 
+rat$mukey <- as.integer(rat$mukey)
 
 # re-pack RAT
 levels(mu) <- rat

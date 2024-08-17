@@ -11,6 +11,11 @@ library(soilDB)
 ## click somewhere on the map
 ## press 'b', BBOX is copied to the clipboard
 
+## CA607
+bb <- '-122.2687 40.4450,-122.2687 40.4757,-122.2063 40.4757,-122.2063 40.4450,-122.2687 40.4450'
+
+## CA602
+bb <- '-122.5402 41.6320,-122.5402 41.6923,-122.4154 41.6923,-122.4154 41.6320,-122.5402 41.6320'
 
 ## TX069
 bb <- '-102.2001 34.4354,-102.2001 34.5009,-102.0756 34.5009,-102.0756 34.4354,-102.2001 34.4354'
@@ -19,6 +24,8 @@ bb <- '-102.2001 34.4354,-102.2001 34.5009,-102.0756 34.5009,-102.0756 34.4354,-
 bb <- '-101.3237 34.5037,-101.3237 34.5711,-101.1752 34.5711,-101.1752 34.5037,-101.3237 34.5037'
 
 
+# CA630
+bb <- '-120.9782 38.1506,-120.9782 38.1828,-120.9039 38.1828,-120.9039 38.1506,-120.9782 38.1506'
 
 
 ## GCL's soil pit digging competition site
@@ -31,12 +38,12 @@ bb <- '-90.1378 41.8273,-90.1378 41.8420,-90.1051 41.8420,-90.1051 41.8273,-90.1
 
 # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=38.54538,-121.74458,z14
 bb <- '-121.8100 38.5145,-121.8100 38.5762,-121.6792 38.5762,-121.6792 38.5145,-121.8100 38.5145'
- 
+
 ## OH
 # https://casoilresource.lawr.ucdavis.edu/gmap/?loc=39.33287,-82.68023,z15
 bb <- '-82.7149 39.3168,-82.7149 39.3487,-82.6417 39.3487,-82.6417 39.3168,-82.7149 39.3168'
 
- 
+
 # bb <- '-120.5453 37.5718,-120.5453 37.5796,-120.5289 37.5796,-120.5289 37.5718,-120.5453 37.5718'
 
 # near Ithica, NY
@@ -112,12 +119,12 @@ SoilTaxonomyDendrogram(
   KST.order = FALSE,
   y.offset = 0.4, 
   scaling.factor = 0.015, 
-  cex.taxon.labels = 0.75, 
-  cex.id = 0.66,
-  cex.names = 0.66,
+  cex.taxon.labels = 1, 
+  cex.id = 1,
+  cex.names = 0.85,
   width = 0.3, 
   name.style = 'center-center', 
-  depth.axis = list(line = -3),
+  depth.axis = list(line = -4),
   hz.distinctness.offset = 'hzd',
   max.depth = 200
 )
@@ -129,12 +136,12 @@ SoilTaxonomyDendrogram(
   KST.order = TRUE, 
   y.offset = 0.4, 
   scaling.factor = 0.015, 
-  cex.taxon.labels = 0.75,
-  cex.id = 0.85,
-  cex.names = 0.75,
-  width = 0.3, 
+  cex.taxon.labels = 1,
+  cex.id = 1,
+  cex.names = 0.9,
+  width = 0.35, 
   name.style = 'center-center', 
-  depth.axis = list(line = -3.5),
+  depth.axis = list(line = -4),
   hz.distinctness.offset = 'hzd',
   max.depth = 200
 )
@@ -146,35 +153,61 @@ SoilTaxonomyDendrogram(
 
 # reconcileOSDGeomorph() will perform cross-check between SPC--geomorph summary
 # vizHillslopePosition() makes the cross-section
+
+## notes:
+# * the following functions will nearly always require tinkering with `scaling.factor`
+
 options(.aqp.plotSPC.args = NULL)
-options(.aqp.plotSPC.args = list(width = 0.35, scaling.factor = 0.01, max.depth = 200))
+options(.aqp.plotSPC.args = list(width = 0.35, scaling.factor = 0.013, max.depth = 150, cex.id = 0.7))
+
 par(mar = c(0.5, 0, 0, 2), bg = 'black', fg = 'white')
 plotGeomorphCrossSection(osd, type = 'line')
 plotGeomorphCrossSection(osd, type = 'bar')
 
-options(.aqp.plotSPC.args = list(width = 0.35, max.depth = 200))
+options(.aqp.plotSPC.args = list(width = 0.35, max.depth = 150, cex.id = 0.7))
 plotGeomorphCrossSection(osd, type = 'line', clust = FALSE)
 plotGeomorphCrossSection(osd, type = 'bar', clust = FALSE)
 
 
 
 ## TODO: combine 2D hillsope + flats
-hp <- reconcileOSDGeomorph(osd, selection = 'hillpos')
-fl <- reconcileOSDGeomorph(osd, selection = 'flats')
-
+o1 <- reconcileOSDGeomorph(osd, selection = 'geomcomp')
+o2 <- reconcileOSDGeomorph(osd, selection = 'flats')
+# http://127.0.0.1:27837/graphics/8f1172c7-7e9e-49dd-9f4f-df3118a383b8.png
 # safely combine SPCs, recognizing that there will be duplication
-hp <- hp$geom
-fl <- fl$geom
+o1 <- o1$geom
+o2 <- o2$geom
 
-o <- subset(osd$SPC, profile_id(osd$SPC) %in% unique(c(hp$series, fl$series)))
+o <- subset(osd$SPC, profile_id(osd$SPC) %in% unique(c(o1$series, o2$series)))
 
-hp$shannon_entropy <- NULL
-fl$shannon_entropy <- NULL
-hp$n <- NULL
-fl$n <- NULL
+o1$shannon_entropy <- NULL
+o2$shannon_entropy <- NULL
 
 
-g <- merge(hp, fl, by = 'series', all.x = TRUE, all.y = TRUE, sort = FALSE)
+o1
+o2
+
+o1.counts <- data.frame(
+  round(
+    sweep(o1[, -1], MARGIN = 1, STATS = o1$n, FUN = '*')
+  )
+)
+
+o2.counts <- data.frame(
+  round(
+    sweep(o2[, -1], MARGIN = 1, STATS = o2$n, FUN = '*')
+  )
+)
+
+
+o1.counts$n <- NULL
+o2.counts$n <- NULL
+
+o1 <- cbind(series = o1[, 1], o1.counts)
+o2 <- cbind(series = o2[, 1], o2.counts)
+
+
+g <- merge(o1, o2, by = 'series', all.x = TRUE, all.y = TRUE, sort = FALSE)
 
 g2 <- lapply(g[, -1], function(i) {
   idx <- which(is.na(i)) 
@@ -192,6 +225,8 @@ g <- cbind(series = g[, 1], g2)
 nrow(g) == length(o)
 
 plotSPC(o)
+
+knitr::kable(g, row.names = FALSE, digits = 2)
 
 
 ## also updated, better hydrologic sorting
