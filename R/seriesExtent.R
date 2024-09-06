@@ -109,11 +109,11 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60,
   tf <- tempfile(fileext = '.tif')
   
   # download GeoTiff file
-  res <- try(curl::curl_download(url = u, destfile = tf, quiet = TRUE, handle = ch))
+  res <- try(curl::curl_download(url = u, destfile = tf, quiet = TRUE, handle = ch), silent = TRUE)
   
   # trap errors
   if (inherits(res, 'try-error')) {
-    message(res[1])
+    # message(res[1])
     message('no data returned')
     return(NULL)
   }
