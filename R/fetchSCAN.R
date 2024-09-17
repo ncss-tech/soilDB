@@ -97,7 +97,7 @@
 #' @rdname fetchSCAN
 #' @export
 fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries = c('Daily', 'Hourly'), ...) {
-
+  
   # check for required packages
   if (!requireNamespace('httr', quietly = TRUE))
     stop('please install the `httr` package', call. = FALSE)
@@ -119,36 +119,36 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     }
     return(.get_SCAN_data(req = l))
   }
-
+  
   # init list to store results
   res <- list()
-
+  
   # add metadata from cached table in soilDB
   m <- SCAN_site_metadata(site.code)
   site.code <- m$Site
-
+  
   # all possible combinations of site codes and year | single report and timeseries type
   g <- expand.grid(s = site.code, y = year, r = report, dt = timeseries)
-
+  
   # get a list of request lists
   req.list <- mapply(.make_SCAN_req, s = g$s, y = g$y, r = g$r, dt = g$dt, SIMPLIFY = FALSE)
-
+  
   # format raw data into a list of lists:
   # sensor suite -> site number -> year
   d.list <- list()
-
+  
   # save: sensor suite -> site number -> year
   sensors <- c('SMS', 'STO', 'SAL', 'TAVG', 'TMIN',
                'TMAX', 'PRCP', 'PREC', 'SNWD', 'WTEQ',
                'WDIRV', 'WSPDV', 'LRADT')
-
+  
   ## TODO: consider submitting queries in parallel, possible at the inner for-loop, over sensors
   
   for (i in req.list) {
-
+    
     # when there are no data, result is an empty data.frame
     d <- try(.get_SCAN_data(i), silent = TRUE)
-
+    
     # errors occur in exceptional situations 
     # so we terminate the request loop 
     # (rather than possibly incomplete results)
@@ -156,12 +156,12 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
       message(d)
       return(NULL)
     }
-
+    
     for (sensor.i in sensors) {
-
+      
       site.i <- as.character(i$sitenum)
       year.i <- as.character(i$year)
-
+      
       if (is.null(d)) {
         res <- data.frame(Site = integer(0), 
                           Date = as.Date(numeric(0), 
@@ -175,20 +175,25 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
                           row.names = NULL, 
                           stringsAsFactors = FALSE)
       } else {
-        res <- .formatSCAN_soil_sensor_suites(d, code = sensor.i)
+        res <- .formatSCAN_soil_sensor_suites(
+          d, 
+          code = sensor.i, 
+          meta = m, 
+          hourlyFlag = timeseries == 'Hourly'
+        )
       }
-
+      
       d.list[[sensor.i]][[site.i]][[year.i]] <- res
     }
   }
-
+  
   # iterate over sensors
   for (sensor.i in sensors) {
-
+    
     # flatten individual sensors over years, by site number
     r.i <- data.table::rbindlist(lapply(d.list[[sensor.i]], data.table::rbindlist, fill = TRUE), fill = TRUE)
     rownames(r.i) <- NULL
-
+    
     # res should be a list
     if (inherits(res, 'data.frame')) {
       res <- list()
@@ -196,75 +201,75 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     
     res[[sensor.i]] <- as.data.frame(r.i)
   }
-
+  
   # report object size
   if (length(res) > 0) {
-
+    
     res.size <- round(object.size(res) / 1024 / 1024, 2)
     res.rows <- sum(sapply(res, nrow), na.rm = TRUE)
     message(paste(res.rows, ' records (', res.size, ' Mb transferred)', sep = ''))
-
+    
   } else message('query returned no data')
-
+  
   res[['metadata']] <- m
   return(res)
 }
 
 # combine soil sensor suites into stackable format
-.formatSCAN_soil_sensor_suites <- function(d, code) {
-
+.formatSCAN_soil_sensor_suites <- function(d, code, meta, hourlyFlag) {
+  
   value <- NULL
-
+  
   stopifnot(length(code) == 1)
   
   # locate named columns
   d.cols <- grep(code, names(d))
-
+  
   # return NULL if no data
   if (length(d.cols) == 0) {
     return(NULL)
   }
-
+  
   ## https://github.com/ncss-tech/soilDB/issues/14
   ## there may be multiple above-ground sensors (takes the first)
   if (length(d.cols) > 1 && code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC',
-                                      'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
+                                        'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
     message(paste0('multiple sensors per site [site ', d$Site[1], '] ',
                    paste0(names(d)[d.cols], collapse = ',')))
     # use only the first sensor
     d.cols <- d.cols[1]
   }
-
+  
   # coerce all values to double (avoids data.table warnings)
   mvars <- unique(names(d)[d.cols])
   d[mvars] <- lapply(d[mvars], as.double)
-
+  
   # convert to long format
   d.long <- data.table::melt(
     data.table::as.data.table(d),
     id.vars = c('Site', 'Date', 'Time'),
     measure.vars = mvars
   )
-
+  
   # extract depths
   d.depths <- strsplit(as.character(d.long$variable), '_', fixed = TRUE)
   d.long$depth <- sapply(d.depths, function(i) as.numeric(i[2]))
-
+  
   # convert depths (in to cm)
   d.long$depth <- round(d.long$depth * 2.54)
-
+  
   # change 'variable' to 'sensor.id'
   names(d.long)[which(names(d.long) == 'variable')] <- 'sensor.id'
-
+  
   ## there can be multiple sensors at below-ground label
   .SD <- NULL
   no.na <- NULL
   sensors.per.depth <- d.long[, list(no.na = sum(complete.cases(.SD))),
                               by = c('sensor.id', 'depth'),
                               .SDcols = c('sensor.id', 'depth', 'value')]
-
+  
   most.data <- sensors.per.depth[, .SD[which.max(no.na)], by = 'depth']
-
+  
   # check for multiple sensors per depth
   tab <- table(sensors.per.depth$depth) > 1
   if (any(tab)) {
@@ -272,37 +277,46 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     message(paste0('multiple sensors per depth [site ', d$Site[1], '] ',
                    paste(multiple.sensor.ids, collapse = ', ')))
   }
-
+  
   # multiple rows / day, remove NA in sensor values
   idx <- which(!is.na(d.long$value))
   d.long <- d.long[idx, ]
-
+  
   # water year/day: October 1st -- September 30th
   w <- waterDayYear(d.long$Date)
-
+  
   # row-order is preserved
   d.long$water_year <- w$wy
   d.long$water_day <- w$wd
-
+  
   # format and return
   res <- as.data.frame(d.long[, c('Site', 'Date', 'Time', 'water_year', 'water_day',
-  'value', 'depth', 'sensor.id')])
-
+                                  'value', 'depth', 'sensor.id')])
+  
+  
+  ## set dummy time column to noon when not requesting hourly data
+  
   # Time ranges from  "00:00" to "23:00" [24 hourly readings]
   # set Time to 12:00 (middle of day) for daily data
-  if (is.null(res$Time) || all(is.na(res$Time) | res$Time == "")) {
+  if(!hourlyFlag) {
     # only when there are data
     if (nrow(res) > 0) {
       res$Time <- "12:00" 
     }
   }
-
-  ## --> get this from the updated station metadata
-  ##
-  # TODO: what is the correct timezone for each site's data? Is it local? Or corrected to some default?
-  # res$datetime <- as.POSIXct(strptime(paste(res$Date, res$Time), "%Y-%m-%d %H:%M"), tz = "GMT")
-
-  res
+  
+  ## create datetime stamp + timezone if hourly data
+  # GMT offset from current station metadata.. maybe faster to do this in bulk
+  
+  # setup timezone code
+  # odd, but we have to negate the offset from GMT here
+  # trust me it works
+  .tz <- sprintf('etc/gmt+%s', -meta$dataTimeZone)
+  
+  # create datetime stamp + timezone
+  res$datetime <- as.POSIXct(strptime(paste(res$Date, res$Time), "%Y-%m-%d %H:%M"), tz = .tz)
+  
+  return(res)
 }
 
 # format a list request for SCAN data
@@ -328,7 +342,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 # req is a named vector or list
 
 .get_SCAN_data <- function(req) {
-
+  
   # convert to list as needed
   if (!inherits(req, 'list')) {
     req <- as.list(req)
@@ -336,15 +350,15 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   
   # base URL to service
   uri <- 'https://wcc.sc.egov.usda.gov/nwcc/view'
-
+  
   # note: the SCAN form processor checks the referring page and user-agent
   new.headers <- c("Referer" = "https://wcc.sc.egov.usda.gov/nwcc/")
-
+  
   # enable follow-location
   # http://stackoverflow.com/questions/25538957/suppressing-302-error-returned-by-httr-post
   # cf <- httr::config(followlocation = 1L, verbose=1L) # debugging
   cf <- httr::config(followlocation = 1L)
-
+  
   # submit request
   r <- try(httr::POST(
     uri,
@@ -354,53 +368,53 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     httr::add_headers(new.headers),
     httr::timeout(getOption("soilDB.timeout", default = 300))
   ))
-
+  
   if (inherits(r, 'try-error'))
     return(NULL)
-
+  
   res <- try(httr::stop_for_status(r), silent = TRUE)
-
+  
   if (inherits(res, 'try-error')) {
     return(NULL)
   }
-
+  
   # extract content as text, cannot be directly read-in
   r.content <- try(httr::content(r, as = 'text'), silent = TRUE)
-
+  
   if (inherits(r.content, 'try-error')) {
     return(NULL)
   }
-
+  
   # connect to the text as a standard file
   tc <- textConnection(r.content)
-
+  
   # attempt to read column headers, after skipping the first two lines of data
   # note: this moves the text connection cursor forward 3 lines
   # 2018-03-06 DEB: results have an extra line up top, now need to skip 3 lines
   # 2024-05-17 AGB: results have 2 more extra lines; thanks to Daniel Schlaepfer for reporting
   h <- unlist(read.table(
-      tc,
-      nrows = 1,
-      skip = 5,
-      header = FALSE,
-      stringsAsFactors = FALSE,
-      sep = ',',
-      quote = '',
-      strip.white = TRUE,
-      na.strings = '-99.9',
-      comment.char = ''
-    ))
-
+    tc,
+    nrows = 1,
+    skip = 5,
+    header = FALSE,
+    stringsAsFactors = FALSE,
+    sep = ',',
+    quote = '',
+    strip.white = TRUE,
+    na.strings = '-99.9',
+    comment.char = ''
+  ))
+  
   # the last header is junk (NA)
   h <- as.vector(na.omit(h))
-
+  
   # split column names on white space and keep the first element
   h <- sapply(strsplit(h, split = ' '),  function(i) i[[1]])
-
+  
   # clean some more junk
   h <- gsub('-1', '', fixed = TRUE, h)
   h <- gsub(':-', '_', h)
-
+  
   # NOTE: we have already read-in the first 3 lines above, therefore we don't need to skip lines here
   # read as CSV, skipping junk + headers, accommodating white-space and NA values encoded as -99.9
   x <- try(read.table(
@@ -413,30 +427,30 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     na.strings = '-99.9',
     comment.char = ''
   ), silent = TRUE)
-
+  
   # catch errors
   if (inherits(x, 'try-error')) {
     close.connection(tc)
-
+    
     .msg <- sprintf("* site %s [%s]: %s", req$sitenum, req$y, attr(x, 'condition')[["message"]])
     message(.msg)
-
+    
     x <- as.data.frame(matrix(ncol = 12, nrow = 0))
     return(x)
   }
-
+  
   # the last column is always junk
   x[[names(x)[length(x)]]] <- NULL
-
+  
   # apply truncated column names:
   names(x) <- h
-
+  
   # clean-up connections
   close.connection(tc)
-
+  
   # convert date to Date class
   x$Date <- as.Date(x$Date)
-
+  
   # done
   return(x)
 }
@@ -451,22 +465,22 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 .get_single_SCAN_metadata <- function(site.code) {
   # base URL to service
   uri <- 'https://wcc.sc.egov.usda.gov/nwcc/sensors'
-
+  
   # note: the SCAN form processor checks the refering page and user-agent
   new.headers <-  c("Referer" = "https://wcc.sc.egov.usda.gov/nwcc/sensors")
-
+  
   # enable follow-location
   # http://stackoverflow.com/questions/25538957/suppressing-302-error-returned-by-httr-post
   # cf <- httr::config(followlocation = 1L, verbose=1L) # debugging
   cf <- httr::config(followlocation = 1L)
-
+  
   req <- list(
     sitenum = site.code,
     report = 'ALL',
     interval = 'DAY',
     timeseries = " View Daily Sensor Descriptions "
   )
-
+  
   # submit request
   r <- httr::POST(
     uri,
@@ -476,23 +490,23 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     httr::add_headers(new.headers)
   )
   httr::stop_for_status(r)
-
+  
   # parsed XML
   r.content <- httr::content(r, as = 'parsed')
-
+  
   # get tables
   n.tables <- rvest::html_nodes(r.content, "table")
-
+  
   # the metadata table we want is the last one
   m <- rvest::html_table(n.tables[[length(n.tables)]], header = FALSE)
-
+  
   # clean-up table
   # 1st row is header
   h <- make.names(m[1, ])
   # second row is junk
   m <- m[-c(1:2), ]
   names(m) <- h
-
+  
   m$site.code <- site.code
   return(m)
 }
@@ -502,15 +516,15 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 #' @rdname fetchSCAN
 #' @export
 SCAN_sensor_metadata <- function(site.code) {
-
+  
   # check for required packages
   if (!requireNamespace('httr', quietly = TRUE) | !requireNamespace('rvest', quietly = TRUE))
     stop('please install the `httr` and `rvest` packages', call. = FALSE)
-
+  
   # iterate over site codes, returning DF + site.code
-
+  
   res <- do.call('rbind', lapply(site.code, .get_single_SCAN_metadata))
-
+  
   return(as.data.frame(res))
 }
 
@@ -519,21 +533,21 @@ SCAN_sensor_metadata <- function(site.code) {
 #' @rdname fetchSCAN
 #' @export
 SCAN_site_metadata <- function(site.code = NULL) {
-
+  
   # hack to please R CMD check
   SCAN_SNOTEL_metadata <- NULL
-
+  
   # cached copy available in soilDB::SCAN_SNOTEL_metadata
   load(system.file("data/SCAN_SNOTEL_metadata.rda", package = "soilDB")[1])
-
+  
   if (is.null(site.code)) {
     idx <- 1:nrow(SCAN_SNOTEL_metadata)
   } else {
     idx <- which(SCAN_SNOTEL_metadata$Site %in% site.code)
   }
-
+  
   # subset requested codes
   res <- SCAN_SNOTEL_metadata[idx, ]
-
+  
   return(res)
 }
