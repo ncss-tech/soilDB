@@ -66,13 +66,13 @@ jobs:
           # upgrade: 'TRUE' ## NB: required to force building of source packages
           needs: check
 
-      - name: Install aqp off GitHub  (devel only)
-        if: matrix.config.r == 'devel'
+      - name: Install aqp off GitHub  (devel and 3.6 only)
+        if: matrix.config.r == 'devel' || matrix.config.r == '3.6'
         run: |
           remotes::install_github("ncss-tech/aqp", dependencies = TRUE, build = FALSE)
         shell: Rscript {0}
         
-      - name: Install terra off r-universe (devel+Windows only)
+      - name: Install terra off r-universe (devel only)
         if: matrix.config.r == 'devel' #|| runner.os == 'Windows'
         run: install.packages('terra', repos = 'https://rspatial.r-universe.dev')
         shell: Rscript {0}
