@@ -307,6 +307,8 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     }
   }
 
+  ## --> get this from the updated station metadata
+  ##
   # TODO: what is the correct timezone for each site's data? Is it local? Or corrected to some default?
   # res$datetime <- as.POSIXct(strptime(paste(res$Date, res$Time), "%Y-%m-%d %H:%M"), tz = "GMT")
 
