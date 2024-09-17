@@ -136,21 +136,20 @@ fetchLDM <- function(x = NULL,
               LEFT JOIN lab_pedon ON
                   lab_combine_nasis_ncss.site_key = lab_pedon.site_key ", 
             ifelse(is.null(x) && is.null(WHERE), "", paste("WHERE", WHERE)))
-
+  
+  
+  # the lab_area table allows for overlap with many different area types, only join for specified area_type
+  site_query_byarea <- gsub(
+    "WHERE",
+    sprintf(
+      "LEFT JOIN lab_area ON
+      lab_combine_nasis_ncss.%s_key = lab_area.area_key
+      WHERE", area_type
+    ), site_query)
+  
   if (inherits(con, 'DBIConnection')) {
-    # query con using (modified) site_query
-    # if (FALSE) {
-    #   # fixes for old version of SQLite db
-    #   site_query <- gsub("\\blab_|\\blab_combine_", "", gsub("lab_(site|pedon)", "nasis_\\1", site_query))
-    # }
-    sites <- try(DBI::dbGetQuery(con, site_query))
+    sites <- try(DBI::dbGetQuery(con, site_query_byarea))
   } else {
-    # the lab_area table allows for overlap with many different area types
-    # for now we only offer the "ssa" (soil survey area) area_type 
-    site_query_byarea <- gsub("WHERE",
-                              sprintf("LEFT JOIN lab_area ON
-                                      lab_combine_nasis_ncss.%s_key = lab_area.area_key
-                                      WHERE", area_type), site_query)
     sites <- suppressMessages(SDA_query(site_query_byarea))
   }
 
