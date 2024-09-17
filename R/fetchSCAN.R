@@ -1,20 +1,10 @@
 ## TODO:
-## 1. get a list of stations
-## 2. get a list of reports and matching headers / units
-## 3. better documentation / testing
-## 4. work with Deb / programmers to get compressed output
+
 ##
-## see: http://www.wcc.nrcs.usda.gov/web_service/awdb_webservice_announcements.htm
-##      http://www.wcc.nrcs.usda.gov/web_service/AWDB_Web_Service_Reference.htm
-##      http://www.wcc.nrcs.usda.gov/report_generator/WebReportScripting.htm
-##
-## 5. we will need to address the potential for multiple sensor ID per type/depth
+## multiple sensor ID per type/depth
 ## examples in:
 ## https://github.com/ncss-tech/soilDB/issues/14
 ##
-## 6. use API vs. scraping report output
-## https://github.com/bluegreen-labs/snotelr/blob/master/R/snotel_download.r#L65
-## --> this would require enumeration of sensors, etc.
 
 ### sensor codes: http://wcc.sc.egov.usda.gov/nwcc/sensors
 
@@ -87,22 +77,22 @@
 #' @param timeseries either `'Daily'` or `'Hourly'`
 #' @param ... additional arguments. May include `intervalType`, `format`, `sitenum`, `interval`, `year`, `month`. Presence of additional arguments bypasses default batching functionality provided in the function and submits a 'raw' request to the API form.
 #' @return a `list` of `data.frame` objects, where each element name is a sensor type, plus a `metadata` table; different `report` types change the types of sensor data returned. `SCAN_sensor_metadata()` and `SCAN_site_metadata()` return a `data.frame`. `NULL` on bad request.
-#' @author D.E. Beaudette, A.G. Brown
+#' @author D.E. Beaudette, A.G. Brown, J.M. Skovlin
 #' @keywords manip
 #' @examples
 #' \dontrun{
 #'     # get data
-#'     x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016)))
+#'     x <- try(fetchSCAN(site.code = c(356, 2072), year = c(2015, 2016)))
 #'     str(x)
 #'
 #'     # get sensor metadata
-#'     m <- SCAN_sensor_metadata(site.code=c(356, 2072))
+#'     m <- SCAN_sensor_metadata(site.code = c(356, 2072))
 #'
 #'     # get site metadata
-#'     m <- SCAN_site_metadata(site.code=c(356, 2072))
+#'     m <- SCAN_site_metadata(site.code = c(356, 2072))
 #'
-#'     # get hourly data (396315 records)
-#'     # x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016), timeseries = "Hourly"))
+#'     # get hourly data (warning, result is very large)
+#'     # x <- try(fetchSCAN(site.code = c(356, 2072), year = c(2015, 2016), timeseries = "Hourly"))
 #' }
 #' @rdname fetchSCAN
 #' @export
@@ -524,7 +514,7 @@ SCAN_sensor_metadata <- function(site.code) {
   return(as.data.frame(res))
 }
 
-## https://github.com/ncss-tech/soilDB/issues/61
+
 # site.code: vector of SCAN site codes
 #' @rdname fetchSCAN
 #' @export

@@ -80,23 +80,23 @@ See the \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{fetchSC
 \examples{
 \dontrun{
     # get data
-    x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016)))
+    x <- try(fetchSCAN(site.code = c(356, 2072), year = c(2015, 2016)))
     str(x)
 
     # get sensor metadata
-    m <- SCAN_sensor_metadata(site.code=c(356, 2072))
+    m <- SCAN_sensor_metadata(site.code = c(356, 2072))
 
     # get site metadata
-    m <- SCAN_site_metadata(site.code=c(356, 2072))
+    m <- SCAN_site_metadata(site.code = c(356, 2072))
 
-    # get hourly data (396315 records)
-    # x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016), timeseries = "Hourly"))
+    # get hourly data (warning, result is very large)
+    # x <- try(fetchSCAN(site.code = c(356, 2072), year = c(2015, 2016), timeseries = "Hourly"))
 }
 }
 \references{
 See the \href{https://www.nrcs.usda.gov/resources/data-and-reports/soil-climate-analysis-network}{Soil Climate Analysis Network} home page for more information on the SCAN program,  and links to other associated programs such as SNOTEL, at the National Weather and Climate Center. You can get information on available web services, as well as interactive maps of snow water equivalent, precipitation and streamflow.
 }
 \author{
-D.E. Beaudette, A.G. Brown
+D.E. Beaudette, A.G. Brown, J.M. Skovlin
 }
 \keyword{manip}
