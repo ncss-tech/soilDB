@@ -8,7 +8,7 @@ message: 'To cite package "soilDB" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'soilDB: Soil Database Interface'
-version: 2.8.4
+version: 2.8.5
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.soilDB
@@ -88,7 +88,6 @@ references:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
   year: '2024'
-  doi: 10.32614/CRAN.package.grDevices
 - type: software
   title: graphics
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -99,7 +98,6 @@ references:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
   year: '2024'
-  doi: 10.32614/CRAN.package.graphics
 - type: software
   title: stats
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -110,7 +108,6 @@ references:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
   year: '2024'
-  doi: 10.32614/CRAN.package.stats
 - type: software
   title: utils
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -121,7 +118,6 @@ references:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
   year: '2024'
-  doi: 10.32614/CRAN.package.utils
 - type: software
   title: methods
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -132,7 +128,6 @@ references:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
   year: '2024'
-  doi: 10.32614/CRAN.package.methods
 - type: software
   title: aqp
   abstract: 'aqp: Algorithms for Quantitative Pedology'
@@ -162,6 +157,7 @@ references:
   - family-names: Barrett
     given-names: Tyson
     email: t.barrett88@gmail.com
+    orcid: https://orcid.org/0000-0002-2137-1391
   - family-names: Dowle
     given-names: Matt
     email: mattjdowle@gmail.com
@@ -172,9 +168,13 @@ references:
     given-names: Jan
   - family-names: Chirico
     given-names: Michael
+    orcid: https://orcid.org/0000-0003-0787-087X
   - family-names: Hocking
     given-names: Toby
     orcid: https://orcid.org/0000-0002-3146-0865
+  - family-names: Schwendinger
+    given-names: Benjamin
+    orcid: https://orcid.org/0000-0003-3315-8114
   year: '2024'
   doi: 10.32614/CRAN.package.data.table
 - type: software
