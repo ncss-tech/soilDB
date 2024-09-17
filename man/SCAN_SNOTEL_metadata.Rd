@@ -3,6 +3,7 @@
 \docType{data}
 \name{SCAN_SNOTEL_metadata}
 \alias{SCAN_SNOTEL_metadata}
+\alias{state_FIPS_codes}
 \title{USDA-NRCS Station Metadata for SCAN, CSCAN, SNOTEL, SNOWLITE Networks}
 \format{
 A \code{data.frame} with 1186 SCAN, CSCAN, SNOTEL, and SNOWLITE station metadata records

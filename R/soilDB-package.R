@@ -89,7 +89,7 @@ NULL
 #' These metadata are a work in progress.
 #'
 #' @name SCAN_SNOTEL_metadata
-#' @aliases SCAN_SNOTEL_metadata
+#' @aliases SCAN_SNOTEL_metadata state_FIPS_codes
 #' @docType data
 #' @format A `data.frame` with 1186 SCAN, CSCAN, SNOTEL, and SNOWLITE station metadata records
 #' @keywords datasets
