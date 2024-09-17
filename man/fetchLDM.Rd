@@ -23,7 +23,7 @@ fetchLDM(
 \arguments{
 \item{x}{A vector of values to find in column specified by \code{what}, default \code{NULL} uses no constraints on \code{what}}
 
-\item{what}{A single column name from tables: \code{lab_combine_nasis_ncss}, \code{lab_webmap}, \code{lab_site}, \code{lab_pedon} or \code{lab_area}}
+\item{what}{A single column name from tables: \code{lab_combine_nasis_ncss}, \code{lab_webmap}, \code{lab_site}, \code{lab_pedon} or \code{lab_area}. Common choices include \code{pedlabsampnum} (Laboratory Pedon ID), \code{upedonid} (User Pedon ID), \code{corr_name} ('Correlated' Taxon Name), \code{samp_name} ('Sampled As' Taxon Name), or \code{area_code} (area symbol for specified \code{lab_area} records, see \code{area_type}).}
 
 \item{bycol}{A single column name from \code{lab_layer} used for processing chunks; default: \code{"pedon_key"}}
 
@@ -49,28 +49,40 @@ fetchLDM(
 a \code{SoilProfileCollection} for a successful query, a \code{try-error} if no site/pedon locations can be found or \code{NULL} for an empty \code{lab_layer} (within sites/pedons) result
 }
 \description{
-LDM model diagram: \url{https://jneme910.github.io/Lab_Data_Mart_Documentation/Documents/SDA_KSSL_Data_model.html}
+This function provides access to the Kellogg Soil Survey Laboratory Data Mart via Soil Data Access or a local SQLite snapshot. See details and examples for additional usage instructions.
 }
 \details{
+You can download SQLite or GeoPackage snapshots here: \url{https://ncsslabdatamart.sc.egov.usda.gov/database_download.aspx}. Specify the \code{dsn} argument to use a local copy of the lab data rather than Soil Data Access web service.
+
+Lab Data Mart model diagram: \url{https://jneme910.github.io/Lab_Data_Mart_Documentation/Documents/SDA_KSSL_Data_model.html}
 If the \code{chunk.size} parameter is set too large and the Soil Data Access request fails, the algorithm will re-try the query with a smaller (halved) \code{chunk.size} argument. This will be attempted up to 3 times before returning \code{NULL}
 
-Currently the \code{lab_area} tables are joined only for the "Soil Survey Area" related records.
+The default behavior joins the \code{lab_area} tables only for the "Soil Survey Area" related records. You can specify alternative area records for use in \code{x}, \code{what} or \code{WHERE} arguments by setting \code{area_type} to a different value.
 
 When requesting data from \code{"lab_major_and_trace_elements_and_oxides"}, \code{"lab_mineralogy_glass_count"}, or \code{"lab_xray_and_thermal"} multiple preparation codes (\code{prep_code}) or size fractions (\code{analyzed_size_frac}) are possible. The default behavior of \code{fetchLDM()} is to attempt to return a topologically valid (minimal overlaps) \emph{SoilProfileCollection}. This is achieved by setting \code{prep_code="S"} ("sieved") and \code{analyzed_size_frac="<2 mm"}. You may specify alternate or additional preparation codes or fractions as needed, but note that this may cause "duplication" of some layers where measurements were made with different preparation or on fractionated samples
 }
 \examples{
 \dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
-  # fetch by ssa_key
-  res <- fetchLDM(8297, what = "ssa_key")
+  
+  # fetch by Soil Survey Area area symbol (area_code using default "ssa" area_type)
+  res <- fetchLDM("CA630", what = "area_code")
+  
+  # fetch by Major Land Resource area symbol (area_code using "mlra" area_type)
+  res <- fetchLDM("22A", what = "area_code", area_type = "mlra")
+  
+  # fetch by multiple case-insensitive taxon name
+  # (correlated or sampled as Musick or Holland series)
+  res <- fetchLDM(WHERE = "(CASE WHEN corr_name IS NOT NULL 
+                                THEN LOWER(corr_name) 
+                                ELSE LOWER(samp_name) 
+                            END) IN ('musick', 'holland')")
 
-  # physical properties correlated as taxonomic subgroup "Typic Argialbolls"
+  # physical properties of soils correlated as taxonomic subgroup "Typic Argialbolls"
   res <- fetchLDM(x = "Typic Argialbolls", 
                   what = "corr_taxsubgrp", 
                   tables = "lab_physical_properties")
 
-  # fetch by area_code (SSA only)  
-  res <- fetchLDM("CA630", what = "area_code")
 }
 \dontshow{\}) # examplesIf}
 }
