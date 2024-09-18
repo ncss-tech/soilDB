@@ -70,6 +70,6 @@ test_that("timezone check", {
   # linux returns c('etc', '-08')
   
   # platform agnostic test
-  .test <- any(grepl('-08', c(names(.tz), 'etc')))
+  .test <- any(grepl('-08', names(.tz)))
   expect_true(.test)
 })
