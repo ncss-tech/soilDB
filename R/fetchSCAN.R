@@ -32,7 +32,9 @@
 #' @details Possible above and below ground sensor types include: 'SMS' (soil moisture), 'STO' (soil temperature), 'SAL' (salinity), 'TAVG' (daily average air temperature), 'TMIN' (daily minimum air temperature), 'TMAX' (daily maximum air temperature), 'PRCP' (daily precipitation), 'PREC' (daily precipitation), 'SNWD' (snow depth), 'WTEQ' (snow water equivalent),'WDIRV' (wind direction), 'WSPDV' (wind speed), 'LRADT' (solar radiation/langley total).
 #' 
 #' This function converts below-ground sensor depth from inches to cm. All temperature values are reported as degrees C. Precipitation, snow depth, and snow water content are reported as *inches*.
-#'
+#' 
+#' Times are converted to the time zone of the *first* station specified in `site.code`.
+#' 
 #' ## SCAN Sensors
 #'
 #' All Soil Climate Analysis Network (SCAN) sensor measurements are reported hourly.
@@ -71,19 +73,27 @@
 #'
 #' @references See the [Soil Climate Analysis Network](https://www.nrcs.usda.gov/resources/data-and-reports/soil-climate-analysis-network) home page for more information on the SCAN program,  and links to other associated programs such as SNOTEL, at the National Weather and Climate Center. You can get information on available web services, as well as interactive maps of snow water equivalent, precipitation and streamflow.
 #'
-#' @param site.code a vector of site codes. If `NULL` `SCAN_site_metadata()` returns metadata for all SCAN sites.
+#' @param site.code a vector of site codes. If `NULL` `SCAN_site_metadata()` returns metadata for all SCAN sites and no sensor data.
+#' 
 #' @param year a vector of years
+#' 
 #' @param report report name, single value only; default `'SCAN'`, other example options include individual sensor codes, e.g. `'SMS'` for Soil Moisture Storage, `'TEMP'` for temperature
+#' 
 #' @param timeseries either `'Daily'` or `'Hourly'`
+#' 
 #' @param ... additional arguments. May include `intervalType`, `format`, `sitenum`, `interval`, `year`, `month`. Presence of additional arguments bypasses default batching functionality provided in the function and submits a 'raw' request to the API form.
+#' 
 #' @return a `list` of `data.frame` objects, where each element name is a sensor type, plus a `metadata` table; different `report` types change the types of sensor data returned. `SCAN_sensor_metadata()` and `SCAN_site_metadata()` return a `data.frame`. `NULL` on bad request.
+#' 
 #' @author D.E. Beaudette, A.G. Brown, J.M. Skovlin
+#' 
 #' @keywords manip
+#' 
 #' @examples
 #' \dontrun{
 #'     # get data
 #'     x <- try(fetchSCAN(site.code = c(356, 2072), year = c(2015, 2016)))
-#'     str(x)
+#'     str(x, 1)
 #'
 #'     # get sensor metadata
 #'     m <- SCAN_sensor_metadata(site.code = c(356, 2072))
@@ -91,8 +101,11 @@
 #'     # get site metadata
 #'     m <- SCAN_site_metadata(site.code = c(356, 2072))
 #'
-#'     # get hourly data (warning, result is very large)
-#'     # x <- try(fetchSCAN(site.code = c(356, 2072), year = c(2015, 2016), timeseries = "Hourly"))
+#'     # get hourly data (warning, result is very large ~ 11MB)
+#'     # x <- try(fetchSCAN(site.code = c(356, 2072), year = c(2015), timeseries = "Hourly"))
+#'     #
+#'     # note hourly data are all referenced to GMT-8, the time zone of station 356
+#'     # format(x$SMS$datetime[1], '%Z')
 #' }
 #' @rdname fetchSCAN
 #' @export
@@ -124,11 +137,13 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   res <- list()
   
   # add metadata from cached table in soilDB
-  # note row-order may not match ordering in site.code
+  # notes: 
+  #  * metadata returned in the order specified by site.code, if codes are valid
+  #  * all stations returned when site.code is NULL
   m <- SCAN_site_metadata(site.code)
   
   # all possible combinations of site codes and year | single report and timeseries type
-  g <- expand.grid(s = site.code, y = year, r = report, dt = timeseries)
+  g <- expand.grid(s = m$Site, y = year, r = report, dt = timeseries)
   
   # get a list of request lists
   req.list <- mapply(.make_SCAN_req, s = g$s, y = g$y, r = g$r, dt = g$dt, SIMPLIFY = FALSE)
@@ -298,7 +313,6 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   res <- as.data.frame(d.long[, c('Site', 'Date', 'Time', 'water_year', 'water_day',
                                   'value', 'depth', 'sensor.id')])
   
-  
   ## set dummy time column to noon when not requesting hourly data
   
   # Time ranges from  "00:00" to "23:00" [24 hourly readings]
@@ -320,6 +334,9 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   
   # create datetime stamp + timezone
   res$datetime <- as.POSIXct(strptime(paste(res$Date, res$Time), "%Y-%m-%d %H:%M"), tz = .tz)
+  
+  ## TODO: implement user-supplied TZ
+  # format(res$datetime, tz = .userTZ, usetz = TRUE)
   
   return(res)
 }
@@ -345,7 +362,6 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 }
 
 # req is a named vector or list
-
 .get_SCAN_data <- function(req) {
   
   # convert to list as needed
@@ -545,10 +561,22 @@ SCAN_site_metadata <- function(site.code = NULL) {
   # cached copy available in soilDB::SCAN_SNOTEL_metadata
   load(system.file("data/SCAN_SNOTEL_metadata.rda", package = "soilDB")[1])
   
+  # all stations
   if (is.null(site.code)) {
     idx <- 1:nrow(SCAN_SNOTEL_metadata)
   } else {
-    idx <- which(SCAN_SNOTEL_metadata$Site %in% site.code)
+    
+    # ensure order of site.code is preserved, if valid
+    idx <- match(site.code, SCAN_SNOTEL_metadata$Site)
+    
+    # strip invalid site codes NA from match()
+    idx <- na.omit(idx)
+    
+    # if there are no valid site codes, return all stations
+    if(length(idx) < 1) {
+      message('no valid site codes specified, returning all stations')
+      idx <- 1:nrow(SCAN_SNOTEL_metadata)
+    }
   }
   
   # subset requested codes

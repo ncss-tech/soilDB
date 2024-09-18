@@ -19,7 +19,7 @@ SCAN_sensor_metadata(site.code)
 SCAN_site_metadata(site.code = NULL)
 }
 \arguments{
-\item{site.code}{a vector of site codes. If \code{NULL} \code{SCAN_site_metadata()} returns metadata for all SCAN sites.}
+\item{site.code}{a vector of site codes. If \code{NULL} \code{SCAN_site_metadata()} returns metadata for all SCAN sites and no sensor data.}
 
 \item{year}{a vector of years}
 
@@ -39,6 +39,8 @@ Query soil/climate data from USDA-NRCS SCAN Stations.
 Possible above and below ground sensor types include: 'SMS' (soil moisture), 'STO' (soil temperature), 'SAL' (salinity), 'TAVG' (daily average air temperature), 'TMIN' (daily minimum air temperature), 'TMAX' (daily maximum air temperature), 'PRCP' (daily precipitation), 'PREC' (daily precipitation), 'SNWD' (snow depth), 'WTEQ' (snow water equivalent),'WDIRV' (wind direction), 'WSPDV' (wind speed), 'LRADT' (solar radiation/langley total).
 
 This function converts below-ground sensor depth from inches to cm. All temperature values are reported as degrees C. Precipitation, snow depth, and snow water content are reported as \emph{inches}.
+
+Times are converted to the time zone of the \emph{first} station specified in \code{site.code}.
 \subsection{SCAN Sensors}{
 
 All Soil Climate Analysis Network (SCAN) sensor measurements are reported hourly.\tabular{lll}{
@@ -81,7 +83,7 @@ See the \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{fetchSC
 \dontrun{
     # get data
     x <- try(fetchSCAN(site.code = c(356, 2072), year = c(2015, 2016)))
-    str(x)
+    str(x, 1)
 
     # get sensor metadata
     m <- SCAN_sensor_metadata(site.code = c(356, 2072))
@@ -89,8 +91,11 @@ See the \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{fetchSC
     # get site metadata
     m <- SCAN_site_metadata(site.code = c(356, 2072))
 
-    # get hourly data (warning, result is very large)
-    # x <- try(fetchSCAN(site.code = c(356, 2072), year = c(2015, 2016), timeseries = "Hourly"))
+    # get hourly data (warning, result is very large ~ 11MB)
+    # x <- try(fetchSCAN(site.code = c(356, 2072), year = c(2015), timeseries = "Hourly"))
+    #
+    # note hourly data are all referenced to GMT-8, the time zone of station 356
+    # format(x$SMS$datetime[1], '\%Z')
 }
 }
 \references{
