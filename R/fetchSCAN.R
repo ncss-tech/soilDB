@@ -125,6 +125,8 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   
   # add metadata from cached table in soilDB
   m <- SCAN_site_metadata(site.code)
+  
+  # why do this?
   site.code <- m$Site
   
   # all possible combinations of site codes and year | single report and timeseries type
@@ -161,25 +163,30 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
       
       site.i <- as.character(i$sitenum)
       year.i <- as.character(i$year)
+      m.i <- m[which(m$Site == site.i), ]
       
+      # if no data, return an empty skeleton data.frame
       if (is.null(d)) {
-        res <- data.frame(Site = integer(0), 
-                          Date = as.Date(numeric(0), 
-                                         origin = "1970-01-01"),
-                          Time = character(0),
-                          water_year = numeric(0), 
-                          water_day = integer(0),
-                          value = numeric(0), 
-                          depth = numeric(0),
-                          sensor.id = integer(0), 
-                          row.names = NULL, 
-                          stringsAsFactors = FALSE)
+        res <- data.frame(
+          Site = integer(0), 
+          Date = as.Date(numeric(0), 
+                         origin = "1970-01-01"),
+          Time = character(0),
+          water_year = numeric(0), 
+          water_day = integer(0),
+          value = numeric(0), 
+          depth = numeric(0),
+          sensor.id = integer(0),
+          datetime = as.POSIXct(character(0)),
+          row.names = NULL, 
+          stringsAsFactors = FALSE
+        )
       } else {
         res <- .formatSCAN_soil_sensor_suites(
           d, 
           code = sensor.i, 
-          meta = m, 
-          hourlyFlag = timeseries == 'Hourly'
+          meta = m.i, 
+          hourlyFlag = (timeseries == 'Hourly')
         )
       }
       
