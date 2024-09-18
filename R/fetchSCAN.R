@@ -320,7 +320,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   
   # Time ranges from  "00:00" to "23:00" [24 hourly readings]
   # set Time to 12:00 (middle of day) for daily data
-  if(!hourlyFlag) {
+  if (!hourlyFlag) {
     # only when there are data
     if (nrow(res) > 0) {
       res$Time <- "12:00" 
@@ -331,7 +331,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   .so <- formatC(meta$dataTimeZone * 100, 4, flag = 0)
   
   # create datetime stamp standardized to user-specified timezone
-  res$datetime <- as.POSIXct(strptime(paste(res$Date, res$Time, .so), "%Y-%m-%d %H:%M %z"),
+  res$datetime <- as.POSIXct(paste(res$Date, res$Time, .so),
                              format = "%Y-%m-%d %H:%M %z",
                              tz = tz)
   
