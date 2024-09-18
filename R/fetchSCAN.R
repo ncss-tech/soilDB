@@ -33,7 +33,7 @@
 #' 
 #' This function converts below-ground sensor depth from inches to cm. All temperature values are reported as degrees C. Precipitation, snow depth, and snow water content are reported as *inches*.
 #' 
-#' Times are converted to the time zone of the *first* station specified in `site.code`.
+#' The `datetime` column in sensor data results is converted to the target time zone specified in `tz` argument, the default is `"US/Central"`. Use `tz = "UTC"` (or other `OlsonNames()` that do not use daylight savings, e.g. `"US/Arizona"`) to avoid having a mix of time offsets due to daylight savings time.
 #' 
 #' ## SCAN Sensors
 #'
@@ -81,6 +81,8 @@
 #' 
 #' @param timeseries either `'Daily'` or `'Hourly'`
 #' 
+#' @param tz Target timezone to convert `datetime` columns of results. Default: `"US/Central"`.
+#' 
 #' @param ... additional arguments. May include `intervalType`, `format`, `sitenum`, `interval`, `year`, `month`. Presence of additional arguments bypasses default batching functionality provided in the function and submits a 'raw' request to the API form.
 #' 
 #' @return a `list` of `data.frame` objects, where each element name is a sensor type, plus a `metadata` table; different `report` types change the types of sensor data returned. `SCAN_sensor_metadata()` and `SCAN_site_metadata()` return a `data.frame`. `NULL` on bad request.
@@ -109,7 +111,7 @@
 #' }
 #' @rdname fetchSCAN
 #' @export
-fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries = c('Daily', 'Hourly'), ...) {
+fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries = c('Daily', 'Hourly'), tz = "US/Central", ...) {
   
   # check for required packages
   if (!requireNamespace('httr', quietly = TRUE))
@@ -199,7 +201,8 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
           d, 
           code = sensor.i, 
           meta = m.i, 
-          hourlyFlag = (timeseries == 'Hourly')
+          hourlyFlag = (timeseries == 'Hourly'),
+          tz = tz
         )
       }
       
@@ -236,7 +239,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
 }
 
 # combine soil sensor suites into stackable format
-.formatSCAN_soil_sensor_suites <- function(d, code, meta, hourlyFlag) {
+.formatSCAN_soil_sensor_suites <- function(d, code, meta, hourlyFlag, tz) {
   
   value <- NULL
   
@@ -324,19 +327,13 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     }
   }
   
-  ## create datetime stamp + timezone if hourly data
-  # GMT offset from current station metadata.. maybe faster to do this in bulk
+  # setup signed offset in hours and minutes from UTC, e.g. -0800 is 8 hours behind
+  .so <- formatC(meta$dataTimeZone * 100, 4, flag = 0)
   
-  # setup timezone code
-  # odd, but we have to negate the offset from GMT here
-  # trust me it works
-  .tz <- sprintf('etc/gmt+%s', -meta$dataTimeZone)
-  
-  # create datetime stamp + timezone
-  res$datetime <- as.POSIXct(strptime(paste(res$Date, res$Time), "%Y-%m-%d %H:%M"), tz = .tz)
-  
-  ## TODO: implement user-supplied TZ
-  # format(res$datetime, tz = .userTZ, usetz = TRUE)
+  # create datetime stamp standardized to user-specified timezone
+  res$datetime <- as.POSIXct(strftime(paste(res$Date, res$Time, .so), "%Y-%m-%d %H:%M %z"),
+                             format = "%Y-%m-%d %H:%M %z",
+                             tz = tz)
   
   return(res)
 }

@@ -61,15 +61,10 @@ test_that("timezone check", {
   skip_on_cran()
   
   # skip on error
-  # skip on error
   skip_if(inherits(z, 'try-error') || is.null(z))
   
-  # should be GMT-8, that of the first station (2218)
-  .tz <- table(format(z$SMS$datetime, format = '%Z'))
-  # windows and macos should return '-08'
-  # linux returns c('etc', '-08')
+  # default target timezone is US/Central, including CDT (-0500) and CST (-0600)
+  .tz <- table(format(z$SMS$datetime, format = '%z'))
   
-  # platform agnostic test
-  .test <- any(grepl('-08', names(.tz)))
-  expect_true(.test)
+  expect_equal(names(.tz), c("-0500", "-0600"))
 })

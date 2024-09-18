@@ -11,6 +11,7 @@ fetchSCAN(
   year = NULL,
   report = "SCAN",
   timeseries = c("Daily", "Hourly"),
+  tz = "US/Central",
   ...
 )
 
@@ -27,6 +28,8 @@ SCAN_site_metadata(site.code = NULL)
 
 \item{timeseries}{either \code{'Daily'} or \code{'Hourly'}}
 
+\item{tz}{Target timezone to convert \code{datetime} columns of results. Default: \code{"US/Central"}.}
+
 \item{...}{additional arguments. May include \code{intervalType}, \code{format}, \code{sitenum}, \code{interval}, \code{year}, \code{month}. Presence of additional arguments bypasses default batching functionality provided in the function and submits a 'raw' request to the API form.}
 }
 \value{
@@ -40,7 +43,7 @@ Possible above and below ground sensor types include: 'SMS' (soil moisture), 'ST
 
 This function converts below-ground sensor depth from inches to cm. All temperature values are reported as degrees C. Precipitation, snow depth, and snow water content are reported as \emph{inches}.
 
-Times are converted to the time zone of the \emph{first} station specified in \code{site.code}.
+The \code{datetime} column in sensor data results is converted to the target time zone specified in \code{tz} argument, the default is \code{"US/Central"}. Use \code{tz = "UTC"} (or other \code{OlsonNames()} that do not use daylight savings, e.g. \code{"US/Arizona"}) to avoid having a mix of time offsets due to daylight savings time.
 \subsection{SCAN Sensors}{
 
 All Soil Climate Analysis Network (SCAN) sensor measurements are reported hourly.\tabular{lll}{
