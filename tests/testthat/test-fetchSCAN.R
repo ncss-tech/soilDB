@@ -66,5 +66,10 @@ test_that("timezone check", {
   
   # should be GMT-8, that of the first station (2218)
   .tz <- table(format(z$SMS$datetime, format = '%Z'))
-  expect_equal(names(.tz), '-08')
+  # windows and macos should return '-08'
+  # linux returns c('etc', '-08')
+  
+  # platform agnostic test
+  .test <- any(grepl('-08', c(names(.tz), 'etc')))
+  expect_true(.test)
 })
