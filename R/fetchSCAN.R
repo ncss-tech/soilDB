@@ -306,7 +306,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   d.long <- d.long[idx, ]
   
   # water year/day: October 1st -- September 30th
-  w <- waterDayYear(d.long$Date)
+  w <- waterDayYear(d.long$Date, tz = tz)
   
   # row-order is preserved
   d.long$water_year <- w$wy
