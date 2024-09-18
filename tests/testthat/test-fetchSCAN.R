@@ -62,7 +62,7 @@ test_that("timezone check", {
   
   # skip on error
   # skip on error
-  skip_if(inherits(x, 'try-error') || is.null(x))
+  skip_if(inherits(z, 'try-error') || is.null(z))
   
   # should be GMT-8, that of the first station (2218)
   .tz <- table(format(z$SMS$datetime, format = '%Z'))
