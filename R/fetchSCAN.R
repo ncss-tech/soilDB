@@ -124,10 +124,8 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   res <- list()
   
   # add metadata from cached table in soilDB
+  # note row-order may not match ordering in site.code
   m <- SCAN_site_metadata(site.code)
-  
-  # why do this?
-  site.code <- m$Site
   
   # all possible combinations of site codes and year | single report and timeseries type
   g <- expand.grid(s = site.code, y = year, r = report, dt = timeseries)

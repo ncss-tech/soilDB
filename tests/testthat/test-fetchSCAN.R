@@ -20,8 +20,8 @@ test_that("fetchSCAN() works", {
   # completely empty request for valid site (bogus year)
   y <<- fetchSCAN(site.code = 2072, year = 1800)
   
-  # multiple sites / years
-  z <<- fetchSCAN(site.code = c(356, 2072), year = c(2015, 2016))
+  # multiple sites / years / time zones (GMT-8, GMT-5)
+  z <<- fetchSCAN(site.code = c(2218, 2005), year = c(2015, 2016))
   
 })
 
@@ -52,4 +52,19 @@ test_that("fetchSCAN() returns the right kind of data", {
   expect_true(ncol(y$STO) == 9)
   expect_true(inherits(y$SMS, 'data.frame'))
   expect_true(ncol(y$SMS) == 9)
+})
+
+test_that("timezone check", {
+  
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  # skip on error
+  # skip on error
+  skip_if(inherits(x, 'try-error') || is.null(x))
+  
+  # should be GMT-8, that of the first station (2218)
+  .tz <- table(format(z$SMS$datetime, format = '%Z'))
+  expect_true(names(.tz) == '-08')
 })
