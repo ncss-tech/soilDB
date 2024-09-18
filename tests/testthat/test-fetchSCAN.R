@@ -66,5 +66,5 @@ test_that("timezone check", {
   
   # should be GMT-8, that of the first station (2218)
   .tz <- table(format(z$SMS$datetime, format = '%Z'))
-  expect_true(names(.tz) == '-08')
+  expect_equal(names(.tz), '-08')
 })
