@@ -253,14 +253,11 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     return(NULL)
   }
   
-  ## https://github.com/ncss-tech/soilDB/issues/14
-  ## there may be multiple above-ground sensors (takes the first)
+  ## there may be multiple above-ground sensors 
   if (length(d.cols) > 1 && code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC',
                                         'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
     message(paste0('multiple sensors per site [site ', d$Site[1], '] ',
                    paste0(names(d)[d.cols], collapse = ',')))
-    # use only the first sensor
-    d.cols <- d.cols[1]
   }
   
   # coerce all values to double (avoids data.table warnings)
