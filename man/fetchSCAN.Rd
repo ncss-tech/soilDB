@@ -90,15 +90,21 @@ See the \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{fetchSC
 
     # get sensor metadata
     m <- SCAN_sensor_metadata(site.code = c(356, 2072))
-
+    m
+    
     # get site metadata
     m <- SCAN_site_metadata(site.code = c(356, 2072))
-
-    # get hourly data (warning, result is very large ~ 11MB)
-    # x <- try(fetchSCAN(site.code = c(356, 2072), year = c(2015), timeseries = "Hourly"))
+    m
+    
+    # # get hourly data (warning, result is large ~11MB)
+    # x <- try(fetchSCAN(site.code = c(356, 2072), year = 2015, timeseries = "Hourly"))
     #
-    # note hourly data are all referenced to GMT-8, the time zone of station 356
-    # format(x$SMS$datetime[1], '\%Z')
+    # # note hourly data are in US/Central time, with standard or daylight savings time depending on day of year
+    # unique(format(x$SMS$datetime, '\%Z'))
+    #
+    # # the site metadata indicate timeseries data time zone (dataTimeZone; for site 356 offset of 8 hours behind UTC)
+    # x <- try(fetchSCAN(site.code = c(356, 2072), year = 2015, timeseries = "Hourly", tz = "Etc/GMT+8"))
+    
 }
 }
 \references{
