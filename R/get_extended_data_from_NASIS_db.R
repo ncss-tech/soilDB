@@ -96,117 +96,6 @@ FROM perestrictions_View_1 As prf
     q.restriction <- gsub(pattern = '_View_1', replacement = '', x = q.restriction, fixed = TRUE)
   }
 
-  # TODO: convert this to simplifyFragmentData
-  q.surf.rf.summary <- "SELECT pedon_View_1.peiid,
-f1_fgr.gravel as surface_fgravel,
-f1_gr.gravel as surface_gravel,
-f2_cb.cobbles as surface_cobbles,
-f3.stones as surface_stones,
-f4.boulders as surface_boulders,
-f5.channers as surface_channers,
-f6.flagstones as surface_flagstones,
-f1_pgr.gravel as surface_paragravel,
-f2_pcb.cobbles as surface_paracobbles
-
-FROM
-
-pedon_View_1
-
-INNER JOIN siteobs_View_1
-ON siteobsiid = pedon_View_1.siteobsiidref
-
-LEFT OUTER JOIN
-(
-SELECT DISTINCT siteobsiidref FROM sitesurffrags_View_1
-) as p ON p.siteobsiidref = siteobs_View_1.siteobsiid
-
-LEFT OUTER JOIN (
-  	SELECT siteobsiidref, Sum(sfragcov) AS gravel
-		FROM sitesurffrags_View_1
-		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
-		WHERE (sfragsize_r <= 5 OR sfragsize_h <= 5) AND (sfragshp != 1 OR sfragshp IS NULL)
-		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
-		GROUP BY siteobsiidref
-	) as f1_fgr ON p.siteobsiidref = f1_fgr.siteobsiidref
-
-LEFT OUTER JOIN (
-		SELECT siteobsiidref, Sum(sfragcov) AS gravel
-		FROM sitesurffrags_View_1
-		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
-		WHERE (sfragsize_r <= 76 OR sfragsize_h <= 76) AND (sfragshp != 1 OR sfragshp IS NULL)
-		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
-		GROUP BY siteobsiidref
-	) as f1_gr ON p.siteobsiidref = f1_gr.siteobsiidref
-
-LEFT OUTER JOIN (
-		SELECT siteobsiidref, Sum(sfragcov) AS gravel
-		FROM sitesurffrags_View_1
-		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
-		WHERE (sfragsize_r <= 76 OR sfragsize_h <= 76) AND (sfragshp != 1 OR sfragshp IS NULL)
-		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
-		GROUP BY siteobsiidref
-	) as f1_pgr ON p.siteobsiidref = f1_pgr.siteobsiidref
-
-	LEFT OUTER JOIN (
-		SELECT siteobsiidref, Sum(sfragcov) AS cobbles
-		FROM sitesurffrags_View_1
-		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
-		WHERE (sfragsize_r >= 76 OR sfragsize_l >= 76) AND (sfragsize_r <= 250 OR sfragsize_h <= 250) AND (sfragshp != 1 OR sfragshp IS NULL)
-		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
-		GROUP BY siteobsiidref
-	) as f2_cb ON p.siteobsiidref = f2_cb.siteobsiidref
-
-	LEFT OUTER JOIN (
-		SELECT siteobsiidref, Sum(sfragcov) AS cobbles
-		FROM sitesurffrags_View_1
-		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
-		WHERE (sfragsize_r >= 76 OR sfragsize_l >= 76) AND (sfragsize_r <= 250 OR sfragsize_h <= 250) AND (sfragshp != 1 OR sfragshp IS NULL)
-		AND m.ChoiceName NOT IN ('strongly', 'very strongly', 'indurated')
-		GROUP BY siteobsiidref
-	) as f2_pcb ON p.siteobsiidref = f2_pcb.siteobsiidref
-
-	LEFT OUTER JOIN (
-		SELECT siteobsiidref, Sum(sfragcov) AS stones
-		FROM sitesurffrags_View_1
-		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
-		WHERE (sfragsize_r >= 250 OR sfragsize_l >= 250) AND (sfragsize_r <= 600 OR sfragsize_h <= 600) AND (sfragshp != 1 OR sfragshp IS NULL)
-		GROUP BY siteobsiidref
-	) as f3 ON p.siteobsiidref = f3.siteobsiidref
-
-	LEFT OUTER JOIN (
-		SELECT siteobsiidref, Sum(sfragcov) AS boulders
-		FROM sitesurffrags_View_1
-		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
-		WHERE sfragsize_r >= 600 OR sfragsize_l >= 600
-		GROUP BY siteobsiidref
-	) as f4 ON p.siteobsiidref = f4.siteobsiidref
-
-	LEFT OUTER JOIN (
-		SELECT siteobsiidref, Sum(sfragcov) AS channers
-		FROM sitesurffrags_View_1
-		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
-		WHERE (sfragsize_r <= 76 OR sfragsize_h <= 76) AND sfragshp = 1
-		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
-		GROUP BY siteobsiidref
-	) as f5 ON p.siteobsiidref = f5.siteobsiidref
-
-	LEFT OUTER JOIN (
-		SELECT siteobsiidref, Sum(sfragcov) AS flagstones
-		FROM sitesurffrags_View_1
-		LEFT OUTER JOIN (SELECT * FROM MetadataDomainDetail WHERE DomainID = 173) AS m ON sfraghard = m.ChoiceValue
-		WHERE (sfragsize_r >= 150 OR sfragsize_l >= 150) AND (sfragsize_r <= 380 OR sfragsize_h <= 380) AND sfragshp = 1
-		AND (m.ChoiceName IN ('strongly', 'very strongly', 'indurated') OR m.ChoiceName IS NULL)
-		GROUP BY siteobsiidref
-	) as f6 ON p.siteobsiidref = f6.siteobsiidref
-
-	ORDER BY pedon_View_1.peiid;"
-
-
-  # toggle selected set vs. local DB
-  if (SS == FALSE) {
-    q.surf.rf.summary <- gsub(pattern = '_View_1', replacement = '', x = q.surf.rf.summary, fixed = TRUE)
-  }
-
   # base table is phorizon so that NULL data can be converted to 0s later
   q.rf.data <- "SELECT p.phiid, fragvol, fragsize_l, fragsize_r, fragsize_h, fragshp, fraghard
   FROM
@@ -441,7 +330,10 @@ LEFT OUTER JOIN (
   d.art.data <- dbQueryNASIS(channel, q.art.data, close = FALSE)
   
   # 2021-11-05: leaving this in the extended data result for now, but no longer used in fetchNASIS('pedons')
-  d.surf.rf.summary <- dbQueryNASIS(channel, q.surf.rf.summary, close = FALSE)
+  # 2024-09-24: surface fragments have been handled by simplifyFragmentData for some time; 
+  #             removing query because it relies on domain information internally 
+  #             decoding domains should all be handled through uncode()/standard NASIS metadata options
+  # d.surf.rf.summary <- dbQueryNASIS(channel, q.surf.rf.summary, close = FALSE)
 
   d.hz.texmod <- dbQueryNASIS(channel, q.hz.texmod, close = FALSE)
   d.geomorph <- dbQueryNASIS(channel, q.geomorph, close = FALSE)
@@ -572,7 +464,7 @@ LEFT OUTER JOIN (
 							frag_summary = d.rf.summary,
 							# frag_summary_v2 = d.rf.data.v2,
 							art_summary = d.art.summary,
-							surf_frag_summary = d.surf.rf.summary,
+							# surf_frag_summary = d.surf.rf.summary,
 							texmodifier = d.hz.texmod,
 							geomorph = d.geomorph,
 							taxhistory = d.taxhistory,
