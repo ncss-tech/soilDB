@@ -152,6 +152,12 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   #  * all stations returned when site.code is NULL
   m <- SCAN_site_metadata(site.code)
   
+  if (length(unique(m$dataTimeZone)) > 1) {
+    message("NOTE: data requested occurs in multiple timezones; returning in tz=\"", tz, "\"")
+  } else if (!all(m$dataTimeZone %in% c(-5, -6)) && missing(tz)) {
+    message("NOTE: data requested occurs in timezones outside of US/Central; returning in tz=\"", tz, "\"")
+  } 
+  
   # all possible combinations of site codes and year | single report and timeseries type
   g <- expand.grid(s = m$Site, y = year, r = report, dt = timeseries)
   
