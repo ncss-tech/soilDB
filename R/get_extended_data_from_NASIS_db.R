@@ -119,112 +119,6 @@ FROM perestrictions_View_1 As prf
     q.art.data <- gsub(pattern = '_View_1', replacement = '', x = q.art.data, fixed = TRUE)
   }
 
-  # new phfrags summary SQL
-  q.rf.data.v2 <- "
-  SET NOCOUNT ON
-
-  -- find fragsize_r
-  CREATE TABLE #RF1 (peiid INT, phiid INT, phfragsiid INT, fragvol REAL,
-  shape CHAR(7), para INT, nonpara INT, fragsize_r2 INT);
-
-  INSERT INTO  #RF1 (peiid, phiid, phfragsiid, fragvol, shape, para, nonpara, fragsize_r2)
-  SELECT             peiid, phiid, phfragsiid, fragvol,
-  -- shape
-  CASE WHEN fragshp = 2 OR fragshp IS NULL THEN 'nonflat' ELSE 'flat' END shape,
-  -- hardness
-  CASE WHEN fraghard IN (6, 7, 9, 5, 10, 3, 14)                     THEN 1 ELSE NULL END para,
-  CASE WHEN fraghard IN (11, 4, 8, 12, 2, 13)   OR fraghard IS NULL THEN 1 ELSE NULL END nonpara,
-  -- fragsize_r
-  CASE WHEN fragsize_r IS NOT NULL THEN fragsize_r
-       WHEN fragsize_r IS NULL     AND fragsize_h IS NOT NULL AND fragsize_l IS NOT NULL
-       THEN (fragsize_h + fragsize_l) / 2
-       WHEN fragsize_h IS NOT NULL THEN fragsize_h
-       WHEN fragsize_l IS NOT NULL THEN fragsize_l
-       ELSE NULL END
-  fragsize_r2
-
-  FROM
-  pedon_View_1    pe                           LEFT OUTER JOIN
-  phorizon_View_1 ph ON ph.peiidref = pe.peiid LEFT OUTER JOIN
-  phfrags_View_1  pf ON pf.phiidref = ph.phiid
-
-  ORDER BY pe.peiid, ph.phiid, pf.phfragsiid;
-
-
-  -- compute logicals
-  CREATE TABLE #RF2 (
-  peiid INT, phiid INT, phfragsiid INT, fragvol REAL, para INT, nonpara INT,
-  fine_gravel INT, gravel INT, cobbles INT, stones INT, boulders INT, channers INT, flagstones INT,
-  unspecified INT
-  );
-  INSERT INTO  #RF2 (
-  peiid, phiid, phfragsiid, fragvol, para, nonpara,
-  fine_gravel, gravel, cobbles, stones, boulders, channers, flagstones,
-  unspecified
-  )
-  SELECT
-  peiid, phiid, phfragsiid, fragvol, para, nonpara,
-  -- fragments
-  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 5   AND shape = 'nonflat' THEN 1 ELSE NULL END fine_gravel,
-  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 76  AND shape = 'nonflat' THEN 1 ELSE NULL END gravel,
-  CASE WHEN   fragsize_r2 > 76  AND fragsize_r2 <= 250 AND shape = 'nonflat' THEN 1 ELSE NULL END cobbles,
-  CASE WHEN ((fragsize_r2 > 250 AND fragsize_r2 <= 600 AND shape = 'nonflat') OR
-  (fragsize_r2 >= 380 AND fragsize_r2 < 600 AND shape = 'flat'))
-  THEN 1 ELSE NULL END stones,
-  CASE WHEN   fragsize_r2 > 600 THEN 1 ELSE NULL END boulders,
-  CASE WHEN   fragsize_r2 >= 2  AND fragsize_r2 <= 150 AND shape = 'flat' THEN 1 ELSE NULL END channers,
-  CASE WHEN   fragsize_r2 > 150 AND fragsize_r2 <= 380 AND shape = 'flat' THEN 1 ELSE NULL END flagstones,
-  CASE WHEN   fragsize_r2 IS NULL                                         THEN 1 ELSE NULL END unspecified
-
-  FROM
-  #RF1
-
-  ORDER BY peiid, phiid, phfragsiid;
-
-
-  -- summarize rock fragments
-  SELECT
-  phiid,
-  -- nonpara rock fragments
-  SUM(fragvol * fine_gravel * nonpara)  fine_gravel,
-  SUM(fragvol * gravel      * nonpara)  gravel,
-  SUM(fragvol * cobbles     * nonpara)  cobbles,
-  SUM(fragvol * stones      * nonpara)  stones,
-  SUM(fragvol * boulders    * nonpara)  boulders,
-  SUM(fragvol * channers    * nonpara)  channers,
-  SUM(fragvol * flagstones  * nonpara)  flagstones,
-  -- para rock fragments
-  SUM(fragvol * fine_gravel * para)     parafine_gravel,
-  SUM(fragvol * gravel      * para)     paragravel,
-  SUM(fragvol * cobbles     * para)     paracobbles,
-  SUM(fragvol * stones      * para)     parastones,
-  SUM(fragvol * boulders    * para)     paraboulders,
-  SUM(fragvol * channers    * para)     parachanners,
-  SUM(fragvol * flagstones  * para)     paraflagstones,
-  -- unspecified
-  SUM(fragvol * unspecified)            unspecified,
-  -- total_frags_pct_para
-  SUM(fragvol               * nonpara)  total_frags_pct_nopf,
-  -- total_frags_pct
-  SUM(fragvol)                          total_frags_pct
-
-  FROM #RF2
-
-  GROUP BY peiid, phiid
-
-  ORDER BY phiid;
-
-
-  -- cleanup
-  DROP TABLE #RF1;
-  DROP TABLE #RF2;
-  "
-  # toggle selected set vs. local DB
-  if (SS == FALSE) {
-    q.rf.data.v2 <- gsub(pattern = '_View_1', replacement = '', x = q.rf.data.v2, fixed = TRUE)
-  }
-
-
   # get horizon texture modifiers
   q.hz.texmod <- "SELECT phz.peiidref AS peiid, phz.phiid AS phiid, pht.phtiid AS phtiid, phtm.seqnum, texmod
   FROM
@@ -326,7 +220,6 @@ FROM perestrictions_View_1 As prf
   d.restriction <- dbQueryNASIS(channel, q.restriction, close = FALSE)
 
   d.rf.data <- dbQueryNASIS(channel, q.rf.data, close = FALSE)
-  # d.rf.data.v2 <- dbQueryNASIS(channel, q.rf.data.v2, close = FALSE)
   d.art.data <- dbQueryNASIS(channel, q.art.data, close = FALSE)
   
   # 2021-11-05: leaving this in the extended data result for now, but no longer used in fetchNASIS('pedons')
