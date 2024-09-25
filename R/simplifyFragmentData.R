@@ -176,7 +176,7 @@ simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", prefix = "frag
     return(dat)
   } else if (any(is.na(rf[[vol.var]]))) {
     rf <- rf[which(!is.na(rf[[vol.var]])), ]
-    message(sprintf('NOTE: some records are missing %s', msg))
+    # message(sprintf('NOTE: some records are missing %s', msg))
   }
 
   # extract classes

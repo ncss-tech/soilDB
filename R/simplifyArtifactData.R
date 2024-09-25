@@ -62,7 +62,7 @@ simplifyArtifactData <- function(art, id.var, vol.var = "huartvol", nullFragsAre
     return(dat)
   } else if (any(is.na(art[[vol.var]]))) {
     art <- art[which(!is.na(art[[vol.var]])), ]
-    message('NOTE: some records are missing artifact volume')
+    # message('NOTE: some records are missing artifact volume')
   }
 
   # extract classes
