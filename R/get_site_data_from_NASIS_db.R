@@ -136,7 +136,7 @@ ORDER BY pedon_View_1.peiid ;"
 	
 	phs <- simplifyFragmentData(
 	  uncode(sfr, dsn = dsn),
-	  id.var = "peiid",
+	  id.var = "siteobsiid",
 	  vol.var = "sfragcov",
 	  prefix = "sfrag",
 	  msg = "surface fragment cover"

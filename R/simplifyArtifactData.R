@@ -102,7 +102,10 @@ simplifyArtifactData <- function(art, id.var, vol.var = "huartvol", nullFragsAre
     idx <- unique(unlist(lapply(gt.100[class.idx], which)))
     flagged.ids <- art.wide[[id.var]][idx]
     
-    message(sprintf("NOTE: artifact volume >= 100%% in %s: %s", id.var, paste(flagged.ids, collapse = ",")))
+    gt100nm <- paste0("artifact.volume.gt100.", id.var)
+    assign(gt100nm, value = flagged.ids, envir = get_soilDB_env())
+    
+    message(sprintf("NOTE: some %s have artifact volume >= 100%%", id.var))
   }
 
   # compute total artifacts

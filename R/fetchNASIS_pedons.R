@@ -256,10 +256,23 @@
       )
     }
   }
+  
   if (exists('dup.pedon.ids', envir = get_soilDB_env()))
     if (length(get('dup.pedon.ids', envir = get_soilDB_env())) > 0)
       message("-> QC: duplicate pedons: \n\tUse `get('dup.pedon.ids', envir=get_soilDB_env())` for pedon record IDs (peiid)")
-
+  
+  if (exists('rock.fragment.volume.gt100.phiid', envir = get_soilDB_env()))
+    if (length(get('rock.fragment.volume.gt100.phiid', envir = get_soilDB_env())) > 0)
+      message("-> QC: pedon horizons with rock fragment volume >=100%: \n\tUse `get('rock.fragment.volume.gt100.phiid', envir=get_soilDB_env())` for pedon horizon record IDs (phiid)")
+  
+  if (exists('artifact.volume.gt100.phiid', envir = get_soilDB_env()))
+    if (length(get('artifact.volume.gt100.phiid', envir = get_soilDB_env())) > 0)
+      message("-> QC: pedon horizons with artifact volume >=100%: \n\tUse `get('artifact.volume.gt100.phiid', envir=get_soilDB_env())` for pedon horizon record IDs (phiid)")
+  
+  if (exists('surface.fragment.cover.gt100.siteobsiid', envir = get_soilDB_env()))
+    if (length(get('surface.fragment.cover.gt100.siteobsiid', envir = get_soilDB_env())) > 0)
+      message("-> QC: pedons with surface fragment cover >=100%: \n\tUse `get('surface.fragment.cover.gt100.siteobsiid', envir=get_soilDB_env())` for site observation record IDs (siteobsiid)")
+  
   # set NASIS component specific horizon identifier
   if (!fill & length(filled.ids) == 0) {
     res <- try(hzidname(hz_data) <- 'phiid')
