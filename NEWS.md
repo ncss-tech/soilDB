@@ -1,5 +1,7 @@
 # soilDB 2.8.5 (development)
  - `fetchLDM()` add support for `area_type` with local database connections (`dsn` argument)
+ - updated SCAN, CSCAN, SNOTEL, SNOWLITE station metadata (#61) via @jskovlin
+ - timezone support for hourly data requested by `fetchSCAN()` (#184) thanks to new WCIS API
  
 # soilDB 2.8.4 (2024-08-17)
  - `createSSURGO()` bug fixes following changes in 2.8.3

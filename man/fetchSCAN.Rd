@@ -11,6 +11,7 @@ fetchSCAN(
   year = NULL,
   report = "SCAN",
   timeseries = c("Daily", "Hourly"),
+  tz = "US/Central",
   ...
 )
 
@@ -19,13 +20,15 @@ SCAN_sensor_metadata(site.code)
 SCAN_site_metadata(site.code = NULL)
 }
 \arguments{
-\item{site.code}{a vector of site codes. If \code{NULL} \code{SCAN_site_metadata()} returns metadata for all SCAN sites.}
+\item{site.code}{a vector of site codes. If \code{NULL} \code{SCAN_site_metadata()} returns metadata for all SCAN sites and no sensor data.}
 
 \item{year}{a vector of years}
 
 \item{report}{report name, single value only; default \code{'SCAN'}, other example options include individual sensor codes, e.g. \code{'SMS'} for Soil Moisture Storage, \code{'TEMP'} for temperature}
 
 \item{timeseries}{either \code{'Daily'} or \code{'Hourly'}}
+
+\item{tz}{Target timezone to convert \code{datetime} columns of results. Default: \code{"US/Central"}.}
 
 \item{...}{additional arguments. May include \code{intervalType}, \code{format}, \code{sitenum}, \code{interval}, \code{year}, \code{month}. Presence of additional arguments bypasses default batching functionality provided in the function and submits a 'raw' request to the API form.}
 }
@@ -39,6 +42,8 @@ Query soil/climate data from USDA-NRCS SCAN Stations.
 Possible above and below ground sensor types include: 'SMS' (soil moisture), 'STO' (soil temperature), 'SAL' (salinity), 'TAVG' (daily average air temperature), 'TMIN' (daily minimum air temperature), 'TMAX' (daily maximum air temperature), 'PRCP' (daily precipitation), 'PREC' (daily precipitation), 'SNWD' (snow depth), 'WTEQ' (snow water equivalent),'WDIRV' (wind direction), 'WSPDV' (wind speed), 'LRADT' (solar radiation/langley total).
 
 This function converts below-ground sensor depth from inches to cm. All temperature values are reported as degrees C. Precipitation, snow depth, and snow water content are reported as \emph{inches}.
+
+The \code{datetime} column in sensor data results is converted to the target time zone specified in \code{tz} argument, the default is \code{"US/Central"}. Use \code{tz = "UTC"} (or other \code{OlsonNames()} that do not use daylight savings, e.g. \code{"US/Arizona"}) to avoid having a mix of time offsets due to daylight savings time.
 \subsection{SCAN Sensors}{
 
 All Soil Climate Analysis Network (SCAN) sensor measurements are reported hourly.\tabular{lll}{
@@ -80,23 +85,32 @@ See the \href{http://ncss-tech.github.io/AQP/soilDB/fetchSCAN-demo.html}{fetchSC
 \examples{
 \dontrun{
     # get data
-    x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016)))
-    str(x)
+    x <- try(fetchSCAN(site.code = c(356, 2072), year = c(2015, 2016)))
+    str(x, 1)
 
     # get sensor metadata
-    m <- SCAN_sensor_metadata(site.code=c(356, 2072))
-
+    m <- SCAN_sensor_metadata(site.code = c(356, 2072))
+    m
+    
     # get site metadata
-    m <- SCAN_site_metadata(site.code=c(356, 2072))
-
-    # get hourly data (396315 records)
-    # x <- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016), timeseries = "Hourly"))
+    m <- SCAN_site_metadata(site.code = c(356, 2072))
+    m
+    
+    # # get hourly data (warning, result is large ~11MB)
+    # x <- try(fetchSCAN(site.code = c(356, 2072), year = 2015, timeseries = "Hourly"))
+    #
+    # # note hourly data are in US/Central time, with standard or daylight savings time depending on day of year
+    # unique(format(x$SMS$datetime, '\%Z'))
+    #
+    # # the site metadata indicate timeseries data time zone (dataTimeZone; for site 356 offset of 8 hours behind UTC)
+    # x <- try(fetchSCAN(site.code = c(356, 2072), year = 2015, timeseries = "Hourly", tz = "Etc/GMT+8"))
+    
 }
 }
 \references{
 See the \href{https://www.nrcs.usda.gov/resources/data-and-reports/soil-climate-analysis-network}{Soil Climate Analysis Network} home page for more information on the SCAN program,  and links to other associated programs such as SNOTEL, at the National Weather and Climate Center. You can get information on available web services, as well as interactive maps of snow water equivalent, precipitation and streamflow.
 }
 \author{
-D.E. Beaudette, A.G. Brown
+D.E. Beaudette, A.G. Brown, J.M. Skovlin
 }
 \keyword{manip}

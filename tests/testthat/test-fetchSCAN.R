@@ -17,8 +17,11 @@ test_that("fetchSCAN() works", {
   # standard request
   expect_true(inherits(x, 'list'))
   
-  # completely empty request for valid site
+  # completely empty request for valid site (bogus year)
   y <<- fetchSCAN(site.code = 2072, year = 1800)
+  
+  # multiple sites / years / time zones (GMT-8, GMT-5)
+  z <<- fetchSCAN(site.code = c(2218, 2005), year = c(2015, 2016))
   
 })
 
@@ -36,8 +39,32 @@ test_that("fetchSCAN() returns the right kind of data", {
   expect_true(inherits(x, 'list'))
   expect_true(inherits(x$metadata, 'data.frame'))
   expect_true(inherits(x$STO, 'data.frame'))
-  expect_true(ncol(x$STO) == 8)
+  expect_true(ncol(x$STO) == 9)
   
+  expect_true(inherits(x$SMS, 'data.frame'))
+  expect_true(ncol(x$SMS) == 9)
+  
+  # empty results should have the same data type and dimensions
   expect_true(inherits(y, 'list'))
   expect_equal(nrow(y$metadata), 1)
+  
+  expect_true(inherits(y$STO, 'data.frame'))
+  expect_true(ncol(y$STO) == 9)
+  expect_true(inherits(y$SMS, 'data.frame'))
+  expect_true(ncol(y$SMS) == 9)
+})
+
+test_that("timezone check", {
+  
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  # skip on error
+  skip_if(inherits(z, 'try-error') || is.null(z))
+  
+  # default target timezone is US/Central, including CDT (-0500) and CST (-0600)
+  .tz <- table(format(z$SMS$datetime, format = '%z'))
+  
+  expect_equal(names(.tz), c("-0500", "-0600"))
 })
