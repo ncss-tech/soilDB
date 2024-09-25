@@ -450,10 +450,10 @@ test_that("simplifyFragmentData complex sample data from NASIS, single horizon",
 
 test_that("simplifyFragmentData when missing fragment sizes, low/rv/high", {
   
-  # all fragments are coallated into the unspecified column
+  # all fragments are collated into the unspecified column
   # totals should be correct
-  # some horizons have no fragment records, should generate a warning
-  expect_message( { res <- simplifyFragmentData(d.missing.size, id.var = 'phiid', nullFragsAreZero = TRUE) } )
+  # some horizons have no fragment records
+  expect_silent( { res <- simplifyFragmentData(d.missing.size, id.var = 'phiid', nullFragsAreZero = TRUE) } )
   
   # rows missing fragvol should be removed from the simplified result
   expect_true(nrow(d.missing.size) == 12)
@@ -467,8 +467,7 @@ test_that("simplifyFragmentData when missing fragment sizes, low/rv/high", {
 
 test_that("simplifyFragmentData warning generated when NA in fragvol", {
   
-  expect_message(simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE), 
-                 regexp = 'some records are missing rock fragment volume')
+  expect_silent(simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE))
   
 })
 
@@ -482,8 +481,8 @@ test_that("simplifyFragmentData warning generated when all fragvol are NA", {
 
 
 test_that("simplifyFragmentData nullFragsAreZero works as expected", {
-  expect_message( { a <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = FALSE) } )
-  expect_message( { b <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE) } )
+  expect_silent( { a <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = FALSE) } )
+  expect_silent( { b <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE) } )
   expect_equal(as.logical(is.na(a)), 
                c(FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, 
                            FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE))
