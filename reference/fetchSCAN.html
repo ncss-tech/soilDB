@@ -49,6 +49,7 @@
 <span>  year <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  report <span class="op">=</span> <span class="st">"SCAN"</span>,</span>
 <span>  timeseries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Daily"</span>, <span class="st">"Hourly"</span><span class="op">)</span>,</span>
+<span>  tz <span class="op">=</span> <span class="st">"US/Central"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -62,7 +63,7 @@
 
 
 <dl><dt id="arg-site-code">site.code<a class="anchor" aria-label="anchor" href="#arg-site-code"></a></dt>
-<dd><p>a vector of site codes. If <code>NULL</code> <code>SCAN_site_metadata()</code> returns metadata for all SCAN sites.</p></dd>
+<dd><p>a vector of site codes. If <code>NULL</code> <code>SCAN_site_metadata()</code> returns metadata for all SCAN sites and no sensor data.</p></dd>
 
 
 <dt id="arg-year">year<a class="anchor" aria-label="anchor" href="#arg-year"></a></dt>
@@ -77,6 +78,10 @@
 <dd><p>either <code>'Daily'</code> or <code>'Hourly'</code></p></dd>
 
 
+<dt id="arg-tz">tz<a class="anchor" aria-label="anchor" href="#arg-tz"></a></dt>
+<dd><p>Target timezone to convert <code>datetime</code> columns of results. Default: <code>"US/Central"</code>.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>additional arguments. May include <code>intervalType</code>, <code>format</code>, <code>sitenum</code>, <code>interval</code>, <code>year</code>, <code>month</code>. Presence of additional arguments bypasses default batching functionality provided in the function and submits a 'raw' request to the API form.</p></dd>
 
@@ -88,7 +93,8 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Possible above and below ground sensor types include: 'SMS' (soil moisture), 'STO' (soil temperature), 'SAL' (salinity), 'TAVG' (daily average air temperature), 'TMIN' (daily minimum air temperature), 'TMAX' (daily maximum air temperature), 'PRCP' (daily precipitation), 'PREC' (daily precipitation), 'SNWD' (snow depth), 'WTEQ' (snow water equivalent),'WDIRV' (wind direction), 'WSPDV' (wind speed), 'LRADT' (solar radiation/langley total).</p>
-<p>This function converts below-ground sensor depth from inches to cm. All temperature values are reported as degrees C. Precipitation, snow depth, and snow water content are reported as <em>inches</em>.</p><div class="section">
+<p>This function converts below-ground sensor depth from inches to cm. All temperature values are reported as degrees C. Precipitation, snow depth, and snow water content are reported as <em>inches</em>.</p>
+<p>The <code>datetime</code> column in sensor data results is converted to the target time zone specified in <code>tz</code> argument, the default is <code>"US/Central"</code>. Use <code>tz = "UTC"</code> (or other <code><a href="https://rdrr.io/r/base/timezones.html" class="external-link">OlsonNames()</a></code> that do not use daylight savings, e.g. <code>"US/Arizona"</code>) to avoid having a mix of time offsets due to daylight savings time.</p><div class="section">
 <h3 id="scan-sensors">SCAN Sensors<a class="anchor" aria-label="anchor" href="#scan-sensors"></a></h3>
 
 
@@ -108,24 +114,38 @@
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
-    <p>D.E. Beaudette, A.G. Brown</p>
+    <p>D.E. Beaudette, A.G. Brown, J.M. Skovlin</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span>    <span class="co"># get data</span></span></span>
-<span class="r-in"><span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSCAN</span><span class="op">(</span>site.code<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">356</span>, <span class="fl">2072</span><span class="op">)</span>, year<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2015</span>, <span class="fl">2016</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSCAN</span><span class="op">(</span>site.code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">356</span>, <span class="fl">2072</span><span class="op">)</span>, year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2015</span>, <span class="fl">2016</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># get sensor metadata</span></span></span>
-<span class="r-in"><span>    <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">SCAN_sensor_metadata</span><span class="op">(</span>site.code<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">356</span>, <span class="fl">2072</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">SCAN_sensor_metadata</span><span class="op">(</span>site.code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">356</span>, <span class="fl">2072</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">m</span></span></span>
+<span class="r-in"><span>    </span></span>
 <span class="r-in"><span>    <span class="co"># get site metadata</span></span></span>
-<span class="r-in"><span>    <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">SCAN_site_metadata</span><span class="op">(</span>site.code<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">356</span>, <span class="fl">2072</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># get hourly data (396315 records)</span></span></span>
-<span class="r-in"><span>    <span class="co"># x &lt;- try(fetchSCAN(site.code=c(356, 2072), year=c(2015, 2016), timeseries = "Hourly"))</span></span></span>
+<span class="r-in"><span>    <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">SCAN_site_metadata</span><span class="op">(</span>site.code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">356</span>, <span class="fl">2072</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">m</span></span></span>
+<span class="r-in"><span>    </span></span>
+<span class="r-in"><span>    <span class="co"># # get hourly data (warning, result is large ~11MB) </span></span></span>
+<span class="r-in"><span>    <span class="co"># x &lt;- try(fetchSCAN(site.code = c(356, 2072), </span></span></span>
+<span class="r-in"><span>    <span class="co">#                    year = 2015, </span></span></span>
+<span class="r-in"><span>    <span class="co">#                    timeseries = "Hourly"))</span></span></span>
+<span class="r-in"><span>    <span class="co">#</span></span></span>
+<span class="r-in"><span>    <span class="co"># # note hourly data are in US/Central time, with standard or daylight savings time depending on day of year</span></span></span>
+<span class="r-in"><span>    <span class="co"># unique(format(x$SMS$datetime, '%Z'))</span></span></span>
+<span class="r-in"><span>    <span class="co">#</span></span></span>
+<span class="r-in"><span>    <span class="co"># # the site metadata indicate timeseries data time zone (dataTimeZone; for site 356 offset of 8 hours behind UTC)</span></span></span>
+<span class="r-in"><span>    <span class="co"># x &lt;- try(fetchSCAN(site.code = c(356, 2072), </span></span></span>
+<span class="r-in"><span>    <span class="co">#          year = 2015, </span></span></span>
+<span class="r-in"><span>    <span class="co">#          timeseries = "Hourly", </span></span></span>
+<span class="r-in"><span>    <span class="co">#          tz = "Etc/GMT+8"))</span></span></span>
+<span class="r-in"><span>    </span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
@@ -138,7 +158,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
