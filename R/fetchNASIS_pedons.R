@@ -269,9 +269,17 @@
     if (length(get('artifact.volume.gt100.phiid', envir = get_soilDB_env())) > 0)
       message("-> QC: pedon horizons with artifact volume >=100%: \n\tUse `get('artifact.volume.gt100.phiid', envir=get_soilDB_env())` for pedon horizon record IDs (phiid)")
   
+  if (exists('multisiteobs.surface', envir = get_soilDB_env()))
+    if (length(get('multisiteobs.surface', envir = get_soilDB_env())) > 0)
+      message("-> QC: surface fragment records from multiple site observations:\n\tUse `get('multisiteobs.surface', envir=get_soilDB_env())` for site (siteiid) and site observation (siteobsiid)")
+  
   if (exists('surface.fragment.cover.gt100.siteobsiid', envir = get_soilDB_env()))
     if (length(get('surface.fragment.cover.gt100.siteobsiid', envir = get_soilDB_env())) > 0)
       message("-> QC: pedons with surface fragment cover >=100%: \n\tUse `get('surface.fragment.cover.gt100.siteobsiid', envir=get_soilDB_env())` for site observation record IDs (siteobsiid)")
+  
+  if (exists('multiple.labsampnum.per.phiid', envir = get_soilDB_env()))
+    if (length(get('multiple.labsampnum.per.phiid', envir = get_soilDB_env())) > 0)
+      message("-> QC: horizons with multiple lab samples: \n\tUse `get('multiple.labsampnum.per.phiid', envir=get_soilDB_env())` for pedon horizon record IDs (phiid)")
   
   # set NASIS component specific horizon identifier
   if (!fill & length(filled.ids) == 0) {

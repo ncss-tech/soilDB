@@ -72,17 +72,13 @@ get_hz_data_from_NASIS_db <- function(SS = TRUE,
   # re-implement texture_class column, with lieutex in cases where texcl is missing
   d$texture_class <- ifelse(is.na(d$texcl) & ! is.na(d$lieutex), as.character(d$lieutex), as.character(d$texcl))
 
-  # test for duplicate horizons:
-  #  bugs in our queries
-  #   multiple lab samples / genetic horizon
+  # test for multiple lab samples per genetic horizon
   hz.tab <- table(d$phiid)
-  dupe.hz <- which(hz.tab > 1)
-  dupe.hz.phiid <- names(hz.tab[dupe.hz])
-  dupe.hz.pedon.ids <- d$pedon_id[d$phiid %in% dupe.hz.phiid]
+  mult.labsampnum.phiid <- names(hz.tab[which(hz.tab > 1)])
 
-  if (length(dupe.hz) > 0) {
-    message(paste0('NOTICE: multiple `labsampnum` values / horizons; see pedon IDs:\n',
-                   paste(unique(dupe.hz.pedon.ids), collapse = ',')))
+  if (length(mult.labsampnum.phiid) > 0) {
+    message(paste0('NOTE: some phiid have multiple lab sample IDs (labsampnum)'))
+    assign("multiple.labsampnum.per.phiid", value = mult.labsampnum.phiid, envir = get_soilDB_env())
   }
 
   # done
