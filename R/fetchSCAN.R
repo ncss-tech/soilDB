@@ -110,12 +110,14 @@
 #'     #                    year = 2015, 
 #'     #                    timeseries = "Hourly"))
 #'     #
-#'     # # note hourly data are in US/Central time, with standard or daylight savings time depending on day of year
+#'     # # data are in US/Central time, standard or daylight savings time based on day of year
 #'     # unique(format(x$SMS$datetime, '%Z'))
 #'     #
-#'     # # the site metadata indicate timeseries data time zone (dataTimeZone; for site 356 offset of 8 hours behind UTC)
-#      # # to obtain all datetime data with a consistent offset use e.g. "Etc/GMT+8"
-#      # # note that the sign is inverted for the Etc/GMT+n timezone specification
+#'     # # the site metadata indicate timeseries data time zone (dataTimeZone)
+#'     # # for site 356 the timezone is offset of 8 hours behind UTC
+#'     #
+#'     # # to obtain all datetime data with a consistent offset use ETC GMT offset
+#'     # # e.g. "Etc/GMT+8". note the sign is inverted ("GMT+8" vs. `dataTimeZone=-8`)
 #'     # x <- try(fetchSCAN(site.code = c(356, 2072), 
 #'     #          year = 2015, 
 #'     #          timeseries = "Hourly", 
