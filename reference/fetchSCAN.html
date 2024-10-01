@@ -137,10 +137,14 @@
 <span class="r-in"><span>    <span class="co">#                    year = 2015, </span></span></span>
 <span class="r-in"><span>    <span class="co">#                    timeseries = "Hourly"))</span></span></span>
 <span class="r-in"><span>    <span class="co">#</span></span></span>
-<span class="r-in"><span>    <span class="co"># # note hourly data are in US/Central time, with standard or daylight savings time depending on day of year</span></span></span>
+<span class="r-in"><span>    <span class="co"># # data are in US/Central time, standard or daylight savings time based on day of year</span></span></span>
 <span class="r-in"><span>    <span class="co"># unique(format(x$SMS$datetime, '%Z'))</span></span></span>
 <span class="r-in"><span>    <span class="co">#</span></span></span>
-<span class="r-in"><span>    <span class="co"># # the site metadata indicate timeseries data time zone (dataTimeZone; for site 356 offset of 8 hours behind UTC)</span></span></span>
+<span class="r-in"><span>    <span class="co"># # the site metadata indicate timeseries data time zone (dataTimeZone)</span></span></span>
+<span class="r-in"><span>    <span class="co"># # for site 356 the timezone is offset of 8 hours behind UTC</span></span></span>
+<span class="r-in"><span>    <span class="co">#</span></span></span>
+<span class="r-in"><span>    <span class="co"># # to obtain all datetime data with a consistent offset use ETC GMT offset</span></span></span>
+<span class="r-in"><span>    <span class="co"># # e.g. "Etc/GMT+8". note the sign is inverted ("GMT+8" vs. `dataTimeZone=-8`)</span></span></span>
 <span class="r-in"><span>    <span class="co"># x &lt;- try(fetchSCAN(site.code = c(356, 2072), </span></span></span>
 <span class="r-in"><span>    <span class="co">#          year = 2015, </span></span></span>
 <span class="r-in"><span>    <span class="co">#          timeseries = "Hourly", </span></span></span>

@@ -91,13 +91,13 @@
 <span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">SDA_query</span><span class="op">(</span><span class="va">q</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   areasymbol              saverest</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      CA011  8/28/2023 9:44:47 PM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      CA013  9/12/2023 8:16:32 PM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      CA021   9/6/2023 8:39:55 PM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      CA031 8/31/2023 10:37:14 PM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      CA033  8/28/2023 9:47:32 PM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      CA041 9/11/2023 11:41:42 PM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   areasymbol             saverest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      CA011 8/28/2024 5:25:44 PM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      CA013 9/9/2024 10:17:57 PM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      CA021 8/28/2024 5:29:14 PM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      CA031 8/30/2024 4:54:36 PM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      CA033 8/28/2024 5:29:14 PM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      CA041  9/8/2024 5:00:20 PM</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co">## get SSURGO component data associated with the</span></span></span>
@@ -112,9 +112,9 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	54 obs. of  3 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ cokey    : int  24044962 24601226 24047878 24051493 24067614 24610752 24613003 24069065 24044875 24044696 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ cokey    : int  26028616 26033495 25505619 25531950 25533791 26037375 26039502 25536667 26028398 26028655 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ compname : chr  "Amador" "Amador" "Amador" "Amador" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ comppct_r: int  45 10 3 3 10 10 85 5 3 3 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ comppct_r: int  7 10 3 3 40 10 85 5 3 25 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "SDA_id")= chr "Table"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co">## get component-level data for a specific soil survey area (Yolo county, CA)</span></span></span>
@@ -132,10 +132,10 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> single result set, returning a data.frame</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	609 obs. of  9 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ mukey      : int  459154 459204 459205 459208 459208 459208 459208 459209 459209 459209 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ cokey      : int  24793311 24793145 24793604 24793157 24793158 24793159 24793156 24793317 24793320 24793318 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ comppct_r  : int  100 100 100 5 85 5 5 5 2 3 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ compname   : chr  "Water" "Gravel pits" "Water" "Positas" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ mukey      : int  459154 459204 459205 459206 459206 459206 459206 459207 459207 459207 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ cokey      : int  25393079 25393080 25393081 25393082 25393083 25393084 25393085 25393086 25393087 25393088 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ comppct_r  : int  100 100 100 5 85 5 5 85 5 3 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ compname   : chr  "Water" "Gravel pits" "Water" "Cortina" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ taxclname  : chr  NA NA NA NA ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ taxorder   : chr  NA NA NA NA ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ taxsuborder: chr  NA NA NA NA ...</span>
@@ -157,9 +157,9 @@
 <span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 'data.frame':	337 obs. of  4 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ mukey    : int  462527 462527 462527 462554 462554 462554 462555 462555 462555 462558 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ cokey    : int  24613423 24613424 24613425 24613451 24613452 24613453 24613021 24613022 24613023 24613673 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ compname : chr  "Alamo" "Madera" "San Joaquin" "Corning" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ comppct_r: int  85 10 5 85 5 10 85 5 10 85 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ cokey    : int  26039490 26039491 26039492 26039557 26039558 26039559 26039533 26039534 26039535 26039539 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ compname : chr  "San Joaquin" "Alamo" "Madera" "Redding" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ comppct_r: int  5 85 10 5 85 10 10 5 85 85 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "SDA_id")= chr "Table"</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
