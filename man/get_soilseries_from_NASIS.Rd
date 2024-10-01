@@ -25,7 +25,7 @@ get_competing_soilseries_from_NASIS(
 \arguments{
 \item{stringsAsFactors}{deprecated}
 
-\item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default: \code{NULL}}
+\item{dsn}{Optional: path or \emph{DBIConnection} to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: \code{NULL}}
 
 \item{delimiter}{\emph{character}. Used to collapse \code{taxminalogy} records where multiple values are used to describe strongly contrasting control sections. Default \code{" over "} creates combination mineralogy classes as they would be used in the family name.}
 

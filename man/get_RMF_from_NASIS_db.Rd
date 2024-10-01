@@ -9,7 +9,7 @@ get_RMF_from_NASIS_db(SS = TRUE, dsn = NULL)
 \arguments{
 \item{SS}{logical, limit query to the selected set}
 
-\item{dsn}{optional path to local SQLite database containing NASIS table structure; default: \code{NULL}}
+\item{dsn}{optional path or \emph{DBIConnection} to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: \code{NULL}}
 }
 \value{
 a \code{list} with two \code{data.frame} objects:

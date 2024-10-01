@@ -34,27 +34,27 @@ get_concentrations_from_NASIS_db(
 get_phfmp_from_NASIS_db(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
 }
 \arguments{
-\item{from}{determines what objects should fetched? Default: \code{'pedons'}. Alternately, \code{'components'}, or \code{'pedon_report'}.}
+\item{from}{Determines what objects should fetched? Default: \code{'pedons'}. Alternately, \code{'components'}, or \code{'pedon_report'}.}
 
-\item{url}{string specifying the url for the NASIS pedon_report (default:
+\item{url}{String specifying the url for the NASIS pedon_report (default:
 \code{NULL})}
 
-\item{SS}{fetch data from the currently loaded selected set in NASIS or from
-the entire local database (default: \code{TRUE})}
+\item{SS}{Fetch data from the currently loaded selected set in NASIS or from
+the entire Local database (default: \code{TRUE})}
 
-\item{rmHzErrors}{should pedons with horizon depth errors be removed from
+\item{rmHzErrors}{Should pedons with horizon depth errors be removed from
 the results? (default: \code{FALSE})}
 
-\item{nullFragsAreZero}{should fragment volumes of \code{NULL} be interpreted as \code{0}?
+\item{nullFragsAreZero}{Should fragment volumes of \code{NULL} be interpreted as \code{0}?
 (default: \code{TRUE}), see details}
 
 \item{soilColorState}{Used only for \code{from = 'pedons'}; which colors should be used to generate the convenience field \code{soil_color}? (\code{'moist'} or \code{'dry'})}
 
-\item{mixColors}{should mixed colors be calculated (Default: \code{TRUE}) where multiple colors are populated for the same moisture state in a horizon? \code{FALSE} takes the dominant color for each horizon moist/dry state.}
+\item{mixColors}{Should mixed colors be calculated (Default: \code{TRUE}) where multiple colors are populated for the same moisture state in a horizon? \code{FALSE} takes the dominant color for each horizon moist/dry state.}
 
-\item{lab}{should the \code{phlabresults} child table be fetched with site/pedon/horizon data (default: \code{FALSE})}
+\item{lab}{Should the \code{phlabresults} child table be fetched with site/pedon/horizon data (default: \code{FALSE})}
 
-\item{fill}{include pedon or component records without horizon data in result? (default: \code{FALSE})}
+\item{fill}{Include pedon or component records without horizon data in result? (default: \code{FALSE})}
 
 \item{dropAdditional}{Used only for \code{from='components'} with \code{duplicates = TRUE}. Prevent "duplication" of \code{mustatus == "additional"}  mapunits? Default: \code{TRUE}}
 
@@ -64,10 +64,10 @@ the results? (default: \code{FALSE})}
 
 \item{stringsAsFactors}{deprecated}
 
-\item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default: \code{NULL}}
+\item{dsn}{Optional: path or \emph{DBIConnection} to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: \code{NULL}}
 }
 \value{
-a \code{SoilProfileCollection} object
+A \code{SoilProfileCollection} object
 }
 \description{
 Fetch commonly used site/pedon/horizon or mapunit component data from NASIS,
