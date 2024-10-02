@@ -26,7 +26,7 @@ get_SDA_pmgroupname(
 
 \item{simplify}{\emph{logical}. Group into generalized parent material groups? Default \code{TRUE}}
 
-\item{miscellaneous_areas}{\emph{logical}. Include miscellaneous areas  (non-soil components) in results? Default: \code{FALSE}.}
+\item{miscellaneous_areas}{\emph{logical}. Include miscellaneous areas (non-soil components) in results? Default: \code{FALSE}.}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 
