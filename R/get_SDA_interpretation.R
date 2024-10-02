@@ -788,19 +788,19 @@ get_SDA_interpretation <- function(rulename,
   INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
   INNER JOIN component ON component.mukey = mapunit.mukey %s
   ORDER BY mapunit.mukey, areasymbol, musym, muname",
-  paste0(sapply(interp, function(x) sprintf("
+          paste0(sapply(interp, function(x) sprintf("
     (%s) AS [rating_%s],
     (%s) AS [total_comppct_%s],
     (%s) AS [class_%s],
     (SELECT %s FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND c.compkind != 'miscellaneous area' AND c.cokey = component.cokey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth != 0 AND mrulename LIKE '%s') AS [reason_%s]",
-   .q1(x), .cleanRuleColumnName(x),
-   .q2(x), .cleanRuleColumnName(x),
-   .q3(x), .cleanRuleColumnName(x),
-   aggfun, x, .cleanRuleColumnName(x))), collapse = ", "), where_clause,
-  ifelse(dominant, paste0("AND component.cokey = (", .LIMIT_N("SELECT c1.cokey FROM component AS c1 INNER JOIN mapunit AS mu ON c1.mukey = mu.mukey AND c1.mukey = mapunit.mukey ORDER BY c1.comppct_r DESC, c1.cokey", n = 1, sqlite = sqlite), ")", "")))
+                                                    .q1(x), .cleanRuleColumnName(x),
+                                                    .q2(x), .cleanRuleColumnName(x),
+                                                    .q3(x), .cleanRuleColumnName(x),
+                                                    aggfun, x, .cleanRuleColumnName(x))), collapse = ", "), where_clause,
+          ifelse(dominant, paste0("AND component.cokey = (", .LIMIT_N("SELECT c1.cokey FROM component AS c1 INNER JOIN mapunit AS mu ON c1.mukey = mu.mukey AND c1.mukey = mapunit.mukey ORDER BY c1.comppct_r DESC, c1.cokey", n = 1, sqlite = sqlite), ")", "")))
 }
 
-.interpretation_aggregation <- function(interp, where_clause, dominant = FALSE, sqlite = FALSE) {
+.interpretation_aggregation <- function(interp, where_clause, dominant = FALSE, miscellaneous_areas = FALSE, include_minors = TRUE, sqlite = FALSE) {
   aggfun <- "STRING_AGG(CONCAT(rulename, ' \"', interphrc, '\" (', interphr, ')'), '; ')"
   if (sqlite) aggfun <- "(GROUP_CONCAT(rulename || '  \"' || interphrc || '\" (' || interphr || ')', '; ') || '; ')"
   sprintf("SELECT mapunit.mukey, component.cokey, areasymbol, musym, muname, compname, compkind, comppct_r, majcompflag,
@@ -809,20 +809,25 @@ get_SDA_interpretation <- function(rulename,
                 INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
                 INNER JOIN component ON component.mukey = mapunit.mukey %s",
                 paste0(sapply(interp, function(x) sprintf("
-  (SELECT interphr FROM component AS c0 INNER JOIN cointerp ON c0.cokey = cointerp.cokey AND component.cokey = c0.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [rating_%s],
-  (SELECT interphrc FROM component AS c1 INNER JOIN cointerp ON c1.cokey = cointerp.cokey AND c1.cokey = component.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [class_%s],
-  (SELECT %s FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND c.compkind != 'miscellaneous area' AND c.cokey = component.cokey AND mu.mukey = mapunit.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth != 0 AND mrulename = '%s') as [reason_%s]",
+  (SELECT interphr FROM component AS c0 
+   INNER JOIN cointerp ON c0.cokey = cointerp.cokey AND component.cokey = c0.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [rating_%s],
+  (SELECT interphrc FROM component AS c1 
+   INNER JOIN cointerp ON c1.cokey = cointerp.cokey AND c1.cokey = component.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [class_%s],
+  (SELECT %s FROM mapunit AS mu 
+   INNER JOIN component AS c ON c.mukey = mu.mukey %s AND c.cokey = component.cokey AND mu.mukey = mapunit.mukey 
+   INNER JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth != 0 AND mrulename = '%s') as [reason_%s]",
                                       x, .cleanRuleColumnName(x),
                                       x, .cleanRuleColumnName(x),
-                                      aggfun,
+                                      aggfun, ifelse(miscellaneous_areas, "", "AND c.compkind != 'miscellaneous area'"),
                                       x, .cleanRuleColumnName(x))),
                                       collapse = ", "), where_clause,
-  ifelse(dominant, sprintf("AND component.cokey = (%s)", .LIMIT_N("SELECT c1.cokey FROM component AS c1
-                                   INNER JOIN mapunit AS mu ON c1.mukey = mu.mukey AND c1.mukey = mapunit.mukey
-                                   ORDER BY c1.comppct_r DESC, c1.cokey", n = 1, sqlite = sqlite)), ""))
+  ifelse(dominant, sprintf("AND component.cokey = (%s)", .LIMIT_N(sprintf("SELECT c1.cokey FROM component AS c1
+                                   INNER JOIN mapunit AS mu ON c1.mukey = mu.mukey AND c1.mukey = mapunit.mukey %s
+                                   ORDER BY c1.comppct_r DESC, c1.cokey", ifelse(miscellaneous_areas, "", "AND c1.compkind != 'miscellaneous area'")), 
+                                                                  n = 1, sqlite = sqlite)), ""))
 }
 
-.interpretation_weighted_average <- function(interp, where_clause, sqlite = FALSE) {
+.interpretation_weighted_average <- function(interp, where_clause, miscellaneous_areas = FALSE, include_minors = TRUE, sqlite = FALSE) {
   stopifnot(!sqlite)
   sprintf("SELECT mapunit.mukey, areasymbol, musym, muname,
                 %s
