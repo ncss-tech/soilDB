@@ -158,11 +158,10 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
 
         if (method %in% c("DOMINANT COMPONENT", "DOMINANT CONDITION")) {
                 dcq <- sprintf("SELECT c1.cokey FROM component AS c1
-                 INNER JOIN mapunit AS mu1 ON c1.mukey = mu1.mukey AND c1.mukey = mapunit.mukey %s ORDER BY c1.comppct_r DESC, c1.cokey ",
+                                INNER JOIN mapunit AS mu1 ON c1.mukey = mu1.mukey AND c1.mukey = mapunit.mukey %s 
+                                ORDER BY c1.comppct_r DESC, c1.cokey ",
                       ifelse(miscellaneous_areas, "", " AND NOT c1.compkind = 'Miscellaneous area'"))
-                comp_selection <- sprintf("AND component.cokey = (%s)", .LIMIT_N(
-                  "SELECT c1.cokey FROM component AS c1
-                 INNER JOIN mapunit AS mu1 ON c1.mukey = mu1.mukey AND c1.mukey = mapunit.mukey ORDER BY c1.comppct_r DESC, c1.cokey ", n = 1, sqlite = !is.null(dsn)))
+                comp_selection <- sprintf("AND component.cokey = (%s)", .LIMIT_N(dcq, n = 1, sqlite = !is.null(dsn)))
         } else {
                 comp_selection <- ""
         }
