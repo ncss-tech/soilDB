@@ -9,8 +9,9 @@ test_that("get_SDA_pmgroupname works", {
   expect_equal(nrow(res), length(unique(res$mukey)))
   
   # some misc areas have geomorph populated (e.g. "Mixed alluvial land", but others, like "Water" are NULL)
-  res <- get_SDA_pmgroupname(mukeys = c(462409, 2462630), simplify = FALSE, method = "dominant condition") # default is miscellaneous_areas=FALSE
-  expect_null(res)
+  res <- get_SDA_pmgroupname(mukeys = c(462409, 2462630, 465186), simplify = FALSE, method = "dominant condition") # default is miscellaneous_areas=FALSE
+  skip_if(is.null(res))
+  expect_equal(nrow(res), 3)
   
   res <- get_SDA_pmgroupname(mukeys = c(462409, 2462630, 465186), simplify = FALSE, miscellaneous_areas = TRUE, method = "dominant condition")
   skip_if(is.null(res))

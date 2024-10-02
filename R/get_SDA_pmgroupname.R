@@ -177,7 +177,7 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
                 pm_selection <- ""
         }
 
-        misc_area_join_type <- ifelse(miscellaneous_areas, "LEFT", "INNER")
+        misc_area_join_type <- "LEFT" # ifelse(miscellaneous_areas, "LEFT", "INNER")
         q <- sprintf(
                 paste0("SELECT DISTINCT
                          mapunit.mukey,
