@@ -775,29 +775,48 @@ get_SDA_interpretation <- function(rulename,
 
 .cleanRuleColumnName <- function(x) gsub("[^A-Za-z0-9]", "", gsub(">", "GT", gsub("<", "LT", gsub("=", "EQ", x, fixed = TRUE), fixed = TRUE), fixed = TRUE))
 
-.interpretation_by_condition <- function(interp, where_clause, dominant = TRUE, sqlite = FALSE) {
+.interpretation_by_condition <- function(interp, where_clause, dominant = TRUE, miscellaneous_areas = FALSE, include_minors = TRUE, sqlite = FALSE) {
   aggfun <- "STRING_AGG(CONCAT(rulename, ' \"', interphrc, '\" (', interphr, ')'), '; ')"
   if (sqlite) aggfun <- "(GROUP_CONCAT(rulename || '  \"' || interphrc || '\" (' || interphr || ')', '; ') || '; ')"
-  .q0 <- function(q, x) .LIMIT_N(sprintf(q, x), n = 1, sqlite = sqlite)
-  .q1 <- function(x) .q0("SELECT ROUND (AVG(interphr) OVER (PARTITION BY interphrc), 2) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, interphr ORDER BY SUM (comppct_r) DESC", x)
-  .q2 <- function(x) .q0("SELECT SUM(comppct_r) FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY interphrc) DESC", x)
-  .q3 <- function(x) .q0("SELECT interphrc FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s' GROUP BY interphrc, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY interphrc) DESC", x)
+  .q0 <- function(q, x) .LIMIT_N(sprintf(q, ifelse(miscellaneous_areas, "", "AND c.compkind != 'miscellaneous area'"), x),
+                                 n = 1, sqlite = sqlite)
+  .q1 <- function(x) .q0("SELECT ROUND (AVG(interphr) OVER (PARTITION BY interphrc), 2) FROM mapunit AS mu 
+                          INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
+                          LEFT JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth = 0 AND mrulename LIKE '%s' 
+                          GROUP BY interphrc, interphr 
+                          ORDER BY SUM (comppct_r) DESC", x)
+  .q2 <- function(x) .q0("SELECT SUM(comppct_r) AS sum_comppct_r FROM mapunit AS mu 
+                          INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
+                          LEFT JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth = 0 AND mrulename LIKE '%s' 
+                          GROUP BY interphrc
+                          ORDER BY sum_comppct_r DESC", x)
+  .q3 <- function(x) .q0("SELECT interphrc FROM mapunit AS mu 
+                          INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
+                          LEFT JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth = 0 AND mrulename LIKE '%s' 
+                          GROUP BY interphrc, comppct_r 
+                          ORDER BY SUM(comppct_r) OVER (PARTITION BY interphrc) DESC", x)
   sprintf("SELECT mapunit.mukey, areasymbol, musym, muname, 
   %s
   FROM legend
   INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
-  INNER JOIN component ON component.mukey = mapunit.mukey %s
+  INNER JOIN component ON component.mukey = mapunit.mukey %s %s
   ORDER BY mapunit.mukey, areasymbol, musym, muname",
           paste0(sapply(interp, function(x) sprintf("
     (%s) AS [rating_%s],
     (%s) AS [total_comppct_%s],
     (%s) AS [class_%s],
-    (SELECT %s FROM mapunit AS mu INNER JOIN component AS c ON c.mukey = mu.mukey AND c.compkind != 'miscellaneous area' AND c.cokey = component.cokey INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth != 0 AND mrulename LIKE '%s') AS [reason_%s]",
-                                                    .q1(x), .cleanRuleColumnName(x),
-                                                    .q2(x), .cleanRuleColumnName(x),
-                                                    .q3(x), .cleanRuleColumnName(x),
-                                                    aggfun, x, .cleanRuleColumnName(x))), collapse = ", "), where_clause,
-          ifelse(dominant, paste0("AND component.cokey = (", .LIMIT_N("SELECT c1.cokey FROM component AS c1 INNER JOIN mapunit AS mu ON c1.mukey = mu.mukey AND c1.mukey = mapunit.mukey ORDER BY c1.comppct_r DESC, c1.cokey", n = 1, sqlite = sqlite), ")", "")))
+    (SELECT %s FROM mapunit AS mu 
+     INNER JOIN component AS c ON c.mukey = mu.mukey %s AND c.cokey = component.cokey
+     INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth != 0 AND mrulename LIKE '%s') AS [reason_%s]",
+   .q1(x), .cleanRuleColumnName(x),
+   .q2(x), .cleanRuleColumnName(x),
+   .q3(x), .cleanRuleColumnName(x),
+   aggfun, ifelse(miscellaneous_areas, "", "AND c.compkind != 'miscellaneous area'"),
+   x, .cleanRuleColumnName(x))), collapse = ", "), where_clause, ifelse(miscellaneous_areas, "", "AND component.compkind != 'miscellaneous area'"),
+  ifelse(dominant, paste0("AND component.cokey = (", .LIMIT_N(sprintf("SELECT c1.cokey FROM component AS c1 
+                                                               INNER JOIN mapunit AS mu ON c1.mukey = mu.mukey AND c1.mukey = mapunit.mukey %s
+                                                               ORDER BY c1.comppct_r DESC, c1.cokey", ifelse(miscellaneous_areas, "", "AND c1.compkind != 'miscellaneous area'")), 
+                                                              n = 1, sqlite = sqlite), ")", "")))
 }
 
 .interpretation_aggregation <- function(interp, where_clause, dominant = FALSE, miscellaneous_areas = FALSE, include_minors = TRUE, sqlite = FALSE) {
