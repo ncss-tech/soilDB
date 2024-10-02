@@ -11,6 +11,8 @@
 #' @param mukeys vector of map unit keys
 #' @param WHERE character containing SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, or `component` tables, used in lieu of `mukeys` or `areasymbols`
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
+#' @param include_minors logical. Include minor components? Default: `TRUE`.
+#' @param miscellaneous_areas _logical_. Include miscellaneous areas (non-soil components) in results? Default: `TRUE`. 
 #' @param not_rated_value used where rating class is "Not Rated". Default: `NA_real_`
 #' @param wide_reason Default: `FALSE`; if  `TRUE` apply post-processing to all columns with prefix `"reason_"` to create additional columns for sub-rule ratings.
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
@@ -684,8 +686,8 @@ get_SDA_interpretation <- function(rulename,
                                    areasymbols = NULL,
                                    mukeys = NULL,
                                    WHERE = NULL,
-                                   miscellaneous_areas = FALSE, 
                                    include_minors = TRUE,
+                                   miscellaneous_areas = FALSE, 
                                    query_string = FALSE,
                                    not_rated_value = NA_real_,
                                    wide_reason = FALSE,
@@ -853,7 +855,7 @@ get_SDA_interpretation <- function(rulename,
                 INTO #main
                 FROM legend
                 INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
-                INNER JOIN component ON component.mukey = mapunit.mukey
+                INNER JOIN component ON component.mukey = mapunit.mukey %s
                 GROUP BY areasymbol, musym, muname, mapunit.mukey
                 SELECT areasymbol, musym, muname, mukey,
                 %s,
@@ -864,30 +866,35 @@ get_SDA_interpretation <- function(rulename,
           paste0(sapply(interp, function(x) sprintf("(SELECT TOP 1 CASE WHEN ruledesign = 1 THEN 'limitation'
                   WHEN ruledesign = 2 THEN 'suitability' END
                   FROM mapunit AS mu
-                  INNER JOIN component AS c ON c.mukey = mu.mukey
-                  INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
+                  INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
+                  INNER JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth = 0 AND mrulename LIKE '%s'
                   GROUP BY mu.mukey, ruledesign) AS [design_%s],
                   ROUND ((SELECT SUM (interphr * comppct_r)
                   FROM mapunit AS mu
-                  INNER JOIN component AS c ON c.mukey = mu.mukey
-                  INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
+                  INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
+                  INNER JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth = 0 AND mrulename LIKE '%s'
                   GROUP BY mu.mukey),2) AS [rating_%s],
                   ROUND ((SELECT SUM (comppct_r)
                   FROM mapunit AS mu
-                  INNER JOIN component AS c ON c.mukey = mu.mukey
-                  INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey AND ruledepth = 0 AND mrulename LIKE '%s'
+                  INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
+                  INNER JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth = 0 AND mrulename LIKE '%s'
                   AND (interphr) IS NOT NULL GROUP BY mu.mukey),2) AS [sum_com_%s],
                   (SELECT STRING_AGG(CONCAT(interphrc, ' (', interphr, ')'), '; ')
                    FROM mapunit AS mu
-                   INNER JOIN component AS c ON c.mukey = mu.mukey AND compkind != 'miscellaneous area'
-                   INNER JOIN cointerp ON c.cokey = cointerp.cokey AND mapunit.mukey = mu.mukey
+                   INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
+                   INNER JOIN cointerp ON c.cokey = cointerp.cokey 
                    AND ruledepth != 0 AND mrulename LIKE '%s'
                    GROUP BY mu.mukey) AS [reason_%s]",
+                                                    ifelse(miscellaneous_areas, "", "AND c.compkind != 'miscellaneous area'"),
                                                     x, .cleanRuleColumnName(x),
+                                                    ifelse(miscellaneous_areas, "", "AND c.compkind != 'miscellaneous area'"),
                                                     x, .cleanRuleColumnName(x),
+                                                    ifelse(miscellaneous_areas, "", "AND c.compkind != 'miscellaneous area'"),
                                                     x, .cleanRuleColumnName(x),
+                                                    ifelse(miscellaneous_areas, "", "AND c.compkind != 'miscellaneous area'"),
                                                     x, .cleanRuleColumnName(x))), collapse = ", "),
            where_clause,
+          ifelse(miscellaneous_areas, "", "AND compkind != 'miscellaneous area'"),
           paste0(sapply(interp,
                         function(x) sprintf("ISNULL(ROUND(([rating_%s] / [sum_com_%s]),2), 99) AS [rating_%s]",
                                             .cleanRuleColumnName(x), .cleanRuleColumnName(x), .cleanRuleColumnName(x))),
