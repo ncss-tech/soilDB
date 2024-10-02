@@ -11,6 +11,7 @@
 #' @param WHERE _character_. SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, `component`, or `copmgrp` tables, used in lieu of `mukeys` or `areasymbols`
 #' @param method _character_. One of: `"Dominant Component"`, `"Dominant Condition"`, `"None"`
 #' @param simplify _logical_. Group into generalized parent material groups? Default `TRUE`
+#' @param include_minors logical. Include minor components? Default: `TRUE`.
 #' @param miscellaneous_areas _logical_. Include miscellaneous areas (non-soil components) in results? Default: `FALSE`. 
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
@@ -22,6 +23,7 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
                                 WHERE = NULL,
                                 method = "DOMINANT COMPONENT",
                                 simplify = TRUE,
+                                include_minors = TRUE,
                                 miscellaneous_areas = FALSE,
                                 query_string = FALSE,
                                 dsn = NULL) {
@@ -158,9 +160,10 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
 
         if (method %in% c("DOMINANT COMPONENT", "DOMINANT CONDITION")) {
                 dcq <- sprintf("SELECT c1.cokey FROM component AS c1
-                                INNER JOIN mapunit AS mu1 ON c1.mukey = mu1.mukey AND c1.mukey = mapunit.mukey %s 
+                                INNER JOIN mapunit AS mu1 ON c1.mukey = mu1.mukey AND c1.mukey = mapunit.mukey %s %s
                                 ORDER BY c1.comppct_r DESC, c1.cokey ",
-                      ifelse(miscellaneous_areas, "", " AND NOT c1.compkind = 'Miscellaneous area'"))
+                               ifelse(include_minors, "", " AND c1.majcompflag = 'Yes'"),
+                               ifelse(miscellaneous_areas, "", " AND NOT c1.compkind = 'Miscellaneous area'"))
                 comp_selection <- sprintf("AND component.cokey = (%s)", .LIMIT_N(dcq, n = 1, sqlite = !is.null(dsn)))
         } else {
                 comp_selection <- ""
@@ -168,9 +171,10 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
 
         if (method == "DOMINANT CONDITION") {
                 dcq <- sprintf("SELECT pmgroupname FROM mapunit AS mu
-                INNER JOIN component AS c1 ON c1.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey
-                INNER JOIN copmgrp ON copmgrp.cokey = component.cokey %s
+                INNER JOIN component AS c1 ON c1.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey %s %s
+                INNER JOIN copmgrp ON copmgrp.cokey = component.cokey 
                 GROUP BY pmgroupname, comppct_r ORDER BY SUM(comppct_r) OVER (PARTITION BY pmgroupname) DESC",
+                               ifelse(include_minors, "", " AND c1.majcompflag = 'Yes'"),
                                ifelse(miscellaneous_areas, "", " AND NOT c1.compkind = 'Miscellaneous area'"))
                 pm_selection <- sprintf("AND pmgroupname = (%s)", .LIMIT_N(dcq, n = 1, sqlite = !is.null(dsn)))
         } else {
@@ -188,11 +192,13 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
                          "%s
                          FROM legend
                          INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
-                         %s JOIN component ON component.mukey = mapunit.mukey %s %s
+                         %s JOIN component ON component.mukey = mapunit.mukey %s %s %s
                          %s JOIN copmgrp ON copmgrp.cokey = component.cokey %s"),
                 case_pmgroupname,
                 WHERE,
-                misc_area_join_type, comp_selection, ifelse(miscellaneous_areas, "", " AND NOT component.compkind = 'Miscellaneous area'"),
+                misc_area_join_type, comp_selection, 
+                ifelse(include_minors, "", " AND component.majcompflag = 'Yes'"),
+                ifelse(miscellaneous_areas, "", " AND NOT component.compkind = 'Miscellaneous area'"),
                 misc_area_join_type, pm_selection
         )
 

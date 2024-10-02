@@ -10,6 +10,7 @@ get_SDA_pmgroupname(
   WHERE = NULL,
   method = "DOMINANT COMPONENT",
   simplify = TRUE,
+  include_minors = TRUE,
   miscellaneous_areas = FALSE,
   query_string = FALSE,
   dsn = NULL
@@ -25,6 +26,8 @@ get_SDA_pmgroupname(
 \item{method}{\emph{character}. One of: \code{"Dominant Component"}, \code{"Dominant Condition"}, \code{"None"}}
 
 \item{simplify}{\emph{logical}. Group into generalized parent material groups? Default \code{TRUE}}
+
+\item{include_minors}{logical. Include minor components? Default: \code{TRUE}.}
 
 \item{miscellaneous_areas}{\emph{logical}. Include miscellaneous areas (non-soil components) in results? Default: \code{FALSE}.}
 
