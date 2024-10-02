@@ -684,6 +684,8 @@ get_SDA_interpretation <- function(rulename,
                                    areasymbols = NULL,
                                    mukeys = NULL,
                                    WHERE = NULL,
+                                   miscellaneous_areas = FALSE, 
+                                   include_minors = TRUE,
                                    query_string = FALSE,
                                    not_rated_value = NA_real_,
                                    wide_reason = FALSE,
@@ -694,6 +696,8 @@ get_SDA_interpretation <- function(rulename,
       areasymbols = areasymbols,
       mukeys = mukeys,
       WHERE = WHERE,
+      miscellaneous_areas = miscellaneous_areas, 
+      include_minors = include_minors,
       sqlite = !is.null(dsn)
     )
 
@@ -746,7 +750,7 @@ get_SDA_interpretation <- function(rulename,
               modifier = modifier))
 }
 
-.constructInterpQuery <- function(method, interp, areasymbols = NULL, mukeys = NULL, WHERE = NULL, sqlite = FALSE) {
+.constructInterpQuery <- function(method, interp, areasymbols = NULL, mukeys = NULL, WHERE = NULL, miscellaneous_areas = FALSE, include_minors = TRUE, sqlite = FALSE) {
 
   if (is.null(mukeys) && is.null(areasymbols) && is.null(WHERE)) {
     stop("Please specify one of the following arguments: mukeys, areasymbols, WHERE", call. = FALSE)
@@ -762,10 +766,10 @@ get_SDA_interpretation <- function(rulename,
   agg_method <- .interpretationAggMethod(method)
   areasymbols <- soilDB::format_SQL_in_statement(areasymbols)
   switch(agg_method$method,
-         "DOMINANT COMPONENT" = .interpretation_aggregation(interp, WHERE, dominant = TRUE, sqlite = sqlite),
-         "DOMINANT CONDITION" = .interpretation_by_condition(interp, WHERE, dominant = TRUE, sqlite = sqlite),
-         "WEIGHTED AVERAGE" =   .interpretation_weighted_average(interp, WHERE, sqlite = sqlite),
-         "NONE" =               .interpretation_aggregation(interp, WHERE, sqlite = sqlite)
+         "DOMINANT COMPONENT" = .interpretation_aggregation(interp, WHERE, dominant = TRUE, miscellaneous_areas = miscellaneous_areas, include_minors = include_minors, sqlite = sqlite),
+         "DOMINANT CONDITION" = .interpretation_by_condition(interp, WHERE, dominant = TRUE, miscellaneous_areas = miscellaneous_areas, include_minors = include_minors, sqlite = sqlite),
+         "WEIGHTED AVERAGE" =   .interpretation_weighted_average(interp, WHERE, miscellaneous_areas = miscellaneous_areas, include_minors = include_minors, sqlite = sqlite),
+         "NONE" =               .interpretation_aggregation(interp, WHERE, miscellaneous_areas = miscellaneous_areas, include_minors = include_minors, sqlite = sqlite)
   )
 }
 
