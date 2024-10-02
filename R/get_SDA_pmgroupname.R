@@ -6,12 +6,12 @@
 #'
 #'@details Default `method` is `"Dominant Component"` to get the dominant component (highest percentage). Use `"Dominant Condition"` or dominant parent material condition (similar conditions aggregated across components). Use `"None"` for no aggregation (one record per component).
 #'
-#' @param areasymbols vector of soil survey area symbols
-#' @param mukeys vector of map unit keys
-#' @param WHERE character containing SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, `component`, or `copmgrp` tables, used in lieu of `mukeys` or `areasymbols`
-#' @param method One of: `"Dominant Component"`, `"Dominant Condition"`, `"None"`
-#' @param simplify logical; group into generalized parent material groups? Default `TRUE`
-#' @param miscellaneous_areas Include miscellaneous areas  (non-soil components) in results? Default: `FALSE`. 
+#' @param areasymbols _character_. Vector of soil survey area symbols
+#' @param mukeys _integer_. Vector of map unit keys
+#' @param WHERE _character_. SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, `component`, or `copmgrp` tables, used in lieu of `mukeys` or `areasymbols`
+#' @param method _character_. One of: `"Dominant Component"`, `"Dominant Condition"`, `"None"`
+#' @param simplify _logical_. Group into generalized parent material groups? Default `TRUE`
+#' @param miscellaneous_areas _logical_. Include miscellaneous areas  (non-soil components) in results? Default: `FALSE`. 
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
 #' @author Jason Nemecek, Chad Ferguson, Andrew Brown
