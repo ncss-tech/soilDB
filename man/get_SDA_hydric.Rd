@@ -9,6 +9,7 @@ get_SDA_hydric(
   mukeys = NULL,
   WHERE = NULL,
   method = "MAPUNIT",
+  include_minors = TRUE,
   miscellaneous_areas = TRUE,
   query_string = FALSE,
   dsn = NULL
@@ -22,6 +23,8 @@ get_SDA_hydric(
 \item{WHERE}{character containing SQL WHERE clause specified in terms of fields in \code{legend}, \code{mapunit}, or \code{component} tables, used in lieu of \code{mukeys} or \code{areasymbols}}
 
 \item{method}{One of: \code{"Mapunit"}, \code{"Dominant Component"}, \code{"Dominant Condition"}, \code{"None"}}
+
+\item{include_minors}{logical. Include minor components? Default: \code{TRUE}.}
 
 \item{miscellaneous_areas}{\emph{logical}. Include miscellaneous areas (non-soil components) in results? Default: \code{TRUE}.}
 
