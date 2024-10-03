@@ -17,9 +17,9 @@ test_that("get_SDA_pmgroupname works", {
   skip_if(is.null(res))
   expect_equal(nrow(res), 3)
   
-  res <- get_SDA_pmgroupname(mukeys = c(461994, 461995, 465186), simplify = FALSE, method = "none")
+  res <- get_SDA_pmgroupname(mukeys = c(461994, 461995, 465186), simplify = FALSE, method = "none", miscellaneous_areas = TRUE, include_minors = FALSE)
   skip_if(is.null(res))
-  expect_equal(nrow(res), 8)  
+  expect_equal(nrow(res), 5)  
   
   res <- get_SDA_pmgroupname(mukeys = c(461994, 461995, 465186), simplify = FALSE, method = "none", miscellaneous_areas = TRUE)
   skip_if(is.null(res))
