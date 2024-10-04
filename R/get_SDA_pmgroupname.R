@@ -181,7 +181,6 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
                 pm_selection <- ""
         }
 
-        misc_area_join_type <- "LEFT" # ifelse(miscellaneous_areas, "LEFT", "INNER")
         q <- sprintf(
                 paste0("SELECT DISTINCT
                          mapunit.mukey,
@@ -192,14 +191,14 @@ get_SDA_pmgroupname <- function(areasymbols = NULL,
                          "%s
                          FROM legend
                          INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
-                         %s JOIN component ON component.mukey = mapunit.mukey %s %s %s
-                         %s JOIN copmgrp ON copmgrp.cokey = component.cokey %s"),
+                         LEFT JOIN component ON component.mukey = mapunit.mukey %s %s %s
+                         LEFT JOIN copmgrp ON copmgrp.cokey = component.cokey %s"),
                 case_pmgroupname,
                 WHERE,
-                misc_area_join_type, comp_selection, 
+                comp_selection, 
                 ifelse(include_minors, "", " AND component.majcompflag = 'Yes'"),
                 ifelse(miscellaneous_areas, "", " AND NOT component.compkind = 'Miscellaneous area'"),
-                misc_area_join_type, pm_selection
+                pm_selection
         )
 
    if (query_string) {

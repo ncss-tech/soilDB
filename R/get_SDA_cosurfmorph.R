@@ -111,8 +111,6 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
   # excludes custom calculated columns (e.g. surfaceshape concatenated from across/down)
   vars_default <- vars[!grepl("surfaceshape", vars)]
   
-  misc_area_join_type <- ifelse(miscellaneous_areas, "LEFT", "INNER")
-  misc_area_filter <- ifelse(miscellaneous_areas, "LEFT", "INNER")
   q <- paste0("SELECT a.[BYVARNAME] AS [BYVARNAME],
                  ", .SELECT_STATEMENT0(vars), ",
                  total
