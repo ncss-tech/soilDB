@@ -6,11 +6,14 @@
 \usage{
 get_SDA_cosurfmorph(
   table = c("cosurfmorphgc", "cosurfmorphhpp", "cosurfmorphss", "cosurfmorphmr"),
-  by = "compname",
+  by = "mapunit.mukey",
   areasymbols = NULL,
   mukeys = NULL,
   WHERE = NULL,
+  method = c("bygroup", "none"),
+  include_minors = TRUE,
   miscellaneous_areas = FALSE,
+  representative_only = TRUE,
   db = c("SSURGO", "STATSGO"),
   dsn = NULL,
   query_string = FALSE
@@ -19,7 +22,7 @@ get_SDA_cosurfmorph(
 \arguments{
 \item{table}{Target table to summarize. Default: \code{"cosurfmorphgc"} (3D Geomorphic Component). Alternate choices include \code{cosurfmorphhpp} (2D Hillslope Position), \code{cosurfmorphss} (Surface Shape), and  \code{cosurfmorphmr} (Microrelief).}
 
-\item{by}{Grouping variable. Default: \code{"compname"}}
+\item{by}{Grouping variable. Default: \code{"mapunit.mukey"}}
 
 \item{areasymbols}{A vector of soil survey area symbols (e.g. \code{'CA067'})}
 
@@ -27,7 +30,13 @@ get_SDA_cosurfmorph(
 
 \item{WHERE}{WHERE clause added to SQL query. For example: \code{areasymbol = 'CA067'}}
 
-\item{miscellaneous_areas}{Include miscellaneous areas  (non-soil components) in results? Default: \code{FALSE}.}
+\item{method}{\emph{character}. One of: \code{"ByGroup"}, \code{"None"}}
+
+\item{include_minors}{logical. Include minor components? Default: \code{TRUE}.}
+
+\item{miscellaneous_areas}{logical. Include miscellaneous areas (non-soil components) in results? Default: \code{FALSE}.}
+
+\item{representative_only}{logical. Include only representative Component Parent Material Groups? Default: \code{TRUE}.}
 
 \item{db}{Either \code{'SSURGO'} (default) or \code{'STATSGO'}. If \code{'SSURGO'} is specified \code{areasymbol = 'US'} records are excluded. If \code{'STATSGO'} only \code{areasymbol = 'US'} records are included.}
 
