@@ -35,25 +35,25 @@
 #' get_phfmp_from_NASIS_db
 #' get_concentrations_from_NASIS_db
 #' 
-#' @param from determines what objects should fetched? Default: `'pedons'`. Alternately, `'components'`, or `'pedon_report'`.
-#' @param url string specifying the url for the NASIS pedon_report (default:
+#' @param from Determines what objects should fetched? Default: `'pedons'`. Alternately, `'components'`, or `'pedon_report'`.
+#' @param url String specifying the url for the NASIS pedon_report (default:
 #' `NULL`)
-#' @param SS fetch data from the currently loaded selected set in NASIS or from
-#' the entire local database (default: `TRUE`)
-#' @param rmHzErrors should pedons with horizon depth errors be removed from
+#' @param SS Fetch data from the currently loaded selected set in NASIS or from
+#' the entire Local database (default: `TRUE`)
+#' @param rmHzErrors Should pedons with horizon depth errors be removed from
 #' the results? (default: `FALSE`)
-#' @param nullFragsAreZero should fragment volumes of `NULL` be interpreted as `0`?
+#' @param nullFragsAreZero Should fragment volumes of `NULL` be interpreted as `0`?
 #' (default: `TRUE`), see details
 #' @param soilColorState Used only for `from = 'pedons'`; which colors should be used to generate the convenience field `soil_color`? (`'moist'` or `'dry'`)
-#' @param mixColors should mixed colors be calculated (Default: `TRUE`) where multiple colors are populated for the same moisture state in a horizon? `FALSE` takes the dominant color for each horizon moist/dry state.
-#' @param lab should the `phlabresults` child table be fetched with site/pedon/horizon data (default: `FALSE`)
-#' @param fill include pedon or component records without horizon data in result? (default: `FALSE`)
+#' @param mixColors Should mixed colors be calculated (Default: `TRUE`) where multiple colors are populated for the same moisture state in a horizon? `FALSE` takes the dominant color for each horizon moist/dry state.
+#' @param lab Should the `phlabresults` child table be fetched with site/pedon/horizon data (default: `FALSE`)
+#' @param fill Include pedon or component records without horizon data in result? (default: `FALSE`)
 #' @param dropAdditional Used only for `from='components'` with `duplicates = TRUE`. Prevent "duplication" of `mustatus == "additional"`  mapunits? Default: `TRUE`
 #' @param dropNonRepresentative Used only for `from='components'` with `duplicates = TRUE`. Prevent "duplication" of non-representative data mapunits? Default: `TRUE`
 #' @param duplicates Used only for `from='components'`. Duplicate components for all instances of use (i.e. one for each legend data mapunit is used on; optionally for additional mapunits, and/or non-representative data mapunits?). This will include columns from `get_component_correlation_data_from_NASIS_db()` that identify which legend(s) a component is used on.
 #' @param stringsAsFactors deprecated
-#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
-#' @return a `SoilProfileCollection` object
+#' @param dsn Optional: path or _DBIConnection_ to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: `NULL`
+#' @return A `SoilProfileCollection` object
 #' @seealso `get_component_data_from_NASIS()`
 #' @author D. E. Beaudette, J. M. Skovlin, S.M. Roecker, A.G. Brown
 #' 

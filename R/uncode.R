@@ -179,7 +179,7 @@ NASISDomainsAsFactor <- function(x = NULL) {
 #' 
 #' These data are derived from the MetadataDomainDetail, MetadataDomainMaster, and MetadataTableColumn tables and help with mapping between values stored in the NASIS database and human-readable values. The human-readable values align with the values returned in public facing interfaces such as SSURGO via Soil Data Access and NASIS Web Reports. The data in these tables can also be used to create _ordered_ factors where options for levels of a particular data element follow a logical `ChoiceSequence`.
 #'
-#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
+#' @param dsn Optional: path or _DBIConnection_ to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: `NULL`
 #' @param include_description Include "ChoiceDescription" column? Default: `FALSE`
 #' @details If a local NASIS instance is set up, and this is the first time `get_NASIS_metadata()` has been called, the metadata will be obtained from the NASIS local database. Subsequent runs in the same session will use a copy of the data object `NASIS.metadata` cached in `soilDB.env` which can be accessed with `get_soilDB_env()$NASIS.metadata`.
 #' 
@@ -268,7 +268,7 @@ get_NASIS_column_metadata <- function(x,
 #' @param droplevels Drop unused factor levels? Default: `TRUE` (used only when `factor=TRUE`)
 #' @param ordered Should the result be an ordered factor? Default: `TRUE` (use _only_ if `DomainRanked` is true for all choices)
 #' @param simplify Should list result with length 1 be reduced to a single vector? Default: `TRUE`
-#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: NULL
+#' @param dsn Optional: path or _DBIConnection_ to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: NULL
 #' @return A list of "choices" based on the input `x` that have been converted to a consistent target set of levels (specified by `choice`) via NASIS 7 metadata. 
 #' 
 #' When `factor=TRUE` the result is a factor, possibly ordered when `ordered=TRUE` and the target domain is a "ranked" domain (i.e. `ChoiceSequence` has logical meaning).
@@ -363,7 +363,7 @@ NASISChoiceList <- function(x = NULL,
 #' @param what.table Column to match `table` against. Default: `TablePhysicalName`.
 #' @param what.column Column to match `column` against. Default: `ColumnPhysicalName`.
 #' @param query_string Default: `FALSE`; if `TRUE` return a character containing query that would be sent to NASIS.
-#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
+#' @param dsn Optional: path or _DBIConnection_ to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: `NULL`
 #' @details For NASIS choice lists based on domain and column names see `get_NASIS_metadata()` and `NASISChoiceList()`. This function (`get_NASIS_table_metadata()`) is intended for higher-level description of the expected contents of a NASIS database instance, rather than the codes/specific values used within columns.
 #' @seealso `get_NASIS_metadata()` `NASISChoiceList()` `uncode()` `code()`
 #' @return a `data.frame` 
