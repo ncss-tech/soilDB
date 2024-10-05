@@ -94,12 +94,14 @@ get_SDA_hydric <- function(areasymbols = NULL,
        }
 
        if (method == "DOMINANT CONDITION") {
-           hyd_selection <- sprintf("AND hydricrating = (%s)", .LIMIT_N(sprintf("SELECT hydricrating FROM mapunit AS mu
-        GROUP BY hydricrating, comppct_r
-        ORDER BY SUM(comppct_r) OVER (PARTITION BY hydricrating) DESC", 
-                                    ifelse(miscellaneous_areas, "", " AND NOT c.compkind = 'Miscellaneous area'"), 
-                                    ifelse(include_minors, "", " AND c.majcompflag = 'Yes'")),
-                                        n = 1, sqlite = !is.null(dsn)))
+           hyd_selection <- sprintf("AND hydricrating = (%s)", 
+             .LIMIT_N(sprintf("SELECT hydricrating FROM mapunit AS mu
+                      INNER JOIN component ON component.mukey = mapunit.mukey %s %s
+                       GROUP BY hydricrating, comppct_r
+                       ORDER BY SUM(comppct_r) OVER (PARTITION BY hydricrating) DESC",
+                              ifelse(miscellaneous_areas, "", " AND NOT component.compkind = 'Miscellaneous area'"),
+                              ifelse(include_minors, "", " AND component.majcompflag = 'Yes'")),
+                      n = 1, sqlite = !is.null(dsn)))
        }
 
        q <- sprintf(paste0("SELECT areasymbol, musym, muname, mapunit.mukey, ",
