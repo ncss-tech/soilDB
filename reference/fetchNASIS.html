@@ -150,26 +150,26 @@ overlapping horizon records.</p>
 
 
 <dl><dt id="arg-from">from<a class="anchor" aria-label="anchor" href="#arg-from"></a></dt>
-<dd><p>determines what objects should fetched? Default: <code>'pedons'</code>. Alternately, <code>'components'</code>, or <code>'pedon_report'</code>.</p></dd>
+<dd><p>Determines what objects should fetched? Default: <code>'pedons'</code>. Alternately, <code>'components'</code>, or <code>'pedon_report'</code>.</p></dd>
 
 
 <dt id="arg-url">url<a class="anchor" aria-label="anchor" href="#arg-url"></a></dt>
-<dd><p>string specifying the url for the NASIS pedon_report (default:
+<dd><p>String specifying the url for the NASIS pedon_report (default:
 <code>NULL</code>)</p></dd>
 
 
 <dt id="arg-ss">SS<a class="anchor" aria-label="anchor" href="#arg-ss"></a></dt>
-<dd><p>fetch data from the currently loaded selected set in NASIS or from
-the entire local database (default: <code>TRUE</code>)</p></dd>
+<dd><p>Fetch data from the currently loaded selected set in NASIS or from
+the entire Local database (default: <code>TRUE</code>)</p></dd>
 
 
 <dt id="arg-rmhzerrors">rmHzErrors<a class="anchor" aria-label="anchor" href="#arg-rmhzerrors"></a></dt>
-<dd><p>should pedons with horizon depth errors be removed from
+<dd><p>Should pedons with horizon depth errors be removed from
 the results? (default: <code>FALSE</code>)</p></dd>
 
 
 <dt id="arg-nullfragsarezero">nullFragsAreZero<a class="anchor" aria-label="anchor" href="#arg-nullfragsarezero"></a></dt>
-<dd><p>should fragment volumes of <code>NULL</code> be interpreted as <code>0</code>?
+<dd><p>Should fragment volumes of <code>NULL</code> be interpreted as <code>0</code>?
 (default: <code>TRUE</code>), see details</p></dd>
 
 
@@ -178,15 +178,15 @@ the results? (default: <code>FALSE</code>)</p></dd>
 
 
 <dt id="arg-mixcolors">mixColors<a class="anchor" aria-label="anchor" href="#arg-mixcolors"></a></dt>
-<dd><p>should mixed colors be calculated (Default: <code>TRUE</code>) where multiple colors are populated for the same moisture state in a horizon? <code>FALSE</code> takes the dominant color for each horizon moist/dry state.</p></dd>
+<dd><p>Should mixed colors be calculated (Default: <code>TRUE</code>) where multiple colors are populated for the same moisture state in a horizon? <code>FALSE</code> takes the dominant color for each horizon moist/dry state.</p></dd>
 
 
 <dt id="arg-lab">lab<a class="anchor" aria-label="anchor" href="#arg-lab"></a></dt>
-<dd><p>should the <code>phlabresults</code> child table be fetched with site/pedon/horizon data (default: <code>FALSE</code>)</p></dd>
+<dd><p>Should the <code>phlabresults</code> child table be fetched with site/pedon/horizon data (default: <code>FALSE</code>)</p></dd>
 
 
 <dt id="arg-fill">fill<a class="anchor" aria-label="anchor" href="#arg-fill"></a></dt>
-<dd><p>include pedon or component records without horizon data in result? (default: <code>FALSE</code>)</p></dd>
+<dd><p>Include pedon or component records without horizon data in result? (default: <code>FALSE</code>)</p></dd>
 
 
 <dt id="arg-dropadditional">dropAdditional<a class="anchor" aria-label="anchor" href="#arg-dropadditional"></a></dt>
@@ -206,12 +206,12 @@ the results? (default: <code>FALSE</code>)</p></dd>
 
 
 <dt id="arg-dsn">dsn<a class="anchor" aria-label="anchor" href="#arg-dsn"></a></dt>
-<dd><p>Optional: path to local SQLite database containing NASIS table structure; default: <code>NULL</code></p></dd>
+<dd><p>Optional: path or <em>DBIConnection</em> to <a href="NASISLocalDatabase.html">local database containing NASIS table structure</a>; default: <code>NULL</code></p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a <code>SoilProfileCollection</code> object</p>
+    <p>A <code>SoilProfileCollection</code> object</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
