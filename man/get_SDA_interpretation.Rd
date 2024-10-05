@@ -11,7 +11,7 @@ get_SDA_interpretation(
   mukeys = NULL,
   WHERE = NULL,
   include_minors = TRUE,
-  miscellaneous_areas = FALSE,
+  miscellaneous_areas = TRUE,
   query_string = FALSE,
   not_rated_value = NA_real_,
   wide_reason = FALSE,
