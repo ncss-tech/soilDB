@@ -50,6 +50,8 @@
 <span>  areasymbols <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  mukeys <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include_minors <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  miscellaneous_areas <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  query_string <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  not_rated_value <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
 <span>  wide_reason <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -79,6 +81,14 @@
 
 <dt id="arg-where">WHERE<a class="anchor" aria-label="anchor" href="#arg-where"></a></dt>
 <dd><p>character containing SQL WHERE clause specified in terms of fields in <code>legend</code>, <code>mapunit</code>, or <code>component</code> tables, used in lieu of <code>mukeys</code> or <code>areasymbols</code></p></dd>
+
+
+<dt id="arg-include-minors">include_minors<a class="anchor" aria-label="anchor" href="#arg-include-minors"></a></dt>
+<dd><p>logical. Include minor components? Default: <code>TRUE</code>.</p></dd>
+
+
+<dt id="arg-miscellaneous-areas">miscellaneous_areas<a class="anchor" aria-label="anchor" href="#arg-miscellaneous-areas"></a></dt>
+<dd><p><em>logical</em>. Include miscellaneous areas (non-soil components) in results? Default: <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg-query-string">query_string<a class="anchor" aria-label="anchor" href="#arg-query-string"></a></dt>
@@ -1157,134 +1167,134 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 127                                  0.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 128                                  0.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     total_comppct_FORPotentialSeedlingMortality</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                             5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                            10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                            52</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                            59</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                            25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                            25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                            25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                            65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                            80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                            94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                            87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                            94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                            88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                            80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                            94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                            97</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9                                            50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                           50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11                                           50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12                                           60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13                                           25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14                                           17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                           65</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16                                           30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                           30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                           75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                                           97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                                          100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14                                           97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                           90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                           80</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 18                                           75</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                           12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20                                           35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21                                           39</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22                                           70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23                                           70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24                                           20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25                                           55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26                                           25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27                                           15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28                                           15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29                                            8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30                                           10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31                                           45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32                                            2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33                                           38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34                                           15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35                                           94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                           97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                                           98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                                           99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                                          100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                                          100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24                                           90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25                                          100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26                                          100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27                                           99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28                                           91</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29                                           93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31                                           75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32                                           52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33                                           98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34                                          100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35                                          100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 36                                           40</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 37                                           65</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 38                                           50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 39                                           65</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 40                                           50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 41                                           85</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42                                           30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42                                           90</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 43                                           45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44                                           25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44                                           75</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 45                                           40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46                                           10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47                                           20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46                                           50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47                                           97</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 48                                           50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49                                           35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50                                           40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51                                           35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52                                           35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53                                           55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54                                           13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55                                           70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56                                           40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57                                           54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58                                           20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49                                           85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54                                           98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55                                           90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56                                           86</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57                                           64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58                                           97</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 59                                           68</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60                                           45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61                                           15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62                                           10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63                                           50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64                                           80</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65                                           10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66                                           35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60                                           65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61                                           90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62                                           97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63                                           85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64                                           85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65                                           75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66                                           95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 67                                          100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68                                           10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69                                           20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70                                           35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71                                            5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72                                           15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73                                           40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74                                           25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75                                           70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76                                           10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68                                           99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69                                           96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72                                           99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73                                          100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74                                           55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75                                           90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76                                           95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 77                                           80</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 78                                           50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 79                                           50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80                                           20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81                                           15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82                                           10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83                                           65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80                                           97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81                                           94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83                                           95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 84                                           60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85                                           15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86                                           85</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87                                           76</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88                                           40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89                                            5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90                                           30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91                                            5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92                                           15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93                                           85</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94                                           58</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95                                            5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96                                           10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97                                            5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98                                           60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99                                           50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100                                           2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 101                                          80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85                                           90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86                                           88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87                                           81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89                                           92</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91                                          100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92                                           99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94                                           68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95                                           99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96                                           94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97                                           63</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98                                           97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99                                           95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100                                          92</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101                                         100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 102                                          65</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103                                           3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104                                           2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105                                           2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106                                           8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107                                           4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108                                          28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109                                          25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110                                           5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111                                           5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112                                           7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 113                                           3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 114                                           3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 115                                          20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103                                          98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104                                          87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105                                         100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106                                          96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107                                         100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108                                          95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109                                          93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110                                          67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111                                          70</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112                                          97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113                                          98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114                                          95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115                                          86</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 116                                         100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 117                                          85</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 118                                          70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 119                                          13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119                                          80</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 120                                          70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 121                                          15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 122                                          55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 123                                          25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 124                                          28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 125                                          35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 126                                           3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127                                           5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128                                          15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121                                          92</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122                                          79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123                                          84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124                                          96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125                                          95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126                                          91</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127                                          94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128                                          95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     class_FORPotentialSeedlingMortality</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                                  High</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                                   Low</span>
@@ -1414,135 +1424,135 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 126                            Moderate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 127                                 Low</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 128                                 Low</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                       reason_FORPotentialSeedlingMortality</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1               Wetness Limitation (7) "Wetness" (1); Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                                                                     &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                     Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                                                                                     &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                                     Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                     Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                                                                                     &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                                                                                     &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                                   Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26                                                  Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28                                                  Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32                                                  Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53                                                  Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56                                                  Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59                                                  Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60            Wetness Limitation (7) "Wetness" (1); Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71                                                  Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90              Wetness Limitation (7) "Wetness" (1); Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92                                                  Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94                                                    Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97                                                  Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 101                                                   Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 102                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103                                                   Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105                                                   Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106                                                   Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107                                                   Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108                                                   Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109                                                   Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112 Low Available Water Limitation "Available water" (0.5); Soil Reaction Limitation "Soil reaction" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 113                                                 Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 114                                                 Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 115                                                 Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 116                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 117           Low Available Water Limitation "Available water" (1); Wetness Limitation (7) "Wetness" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 118                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 119                                                   Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 120                                                   Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 121                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 122                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 123                                                   Low Available Water Limitation "Available water" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 124                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 125                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 126                                                 Low Available Water Limitation "Available water" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128                                                                                                   &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                 reason_FORPotentialSeedlingMortality</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                                                                                         Wetness Limitation (7) "Wetness" (1); Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                                                                                                                                                               &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                                                                                                               Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                                                                                                                                                                               &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                                                                                                                               Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                                                                                                               Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                                                                                                                                                                               &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                                                                                                                                                                               &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                                                                                                                             Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26                                                                                                                                            Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28                                                                                                                                            Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32                                                                                                                                            Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35  Null Horizon Data "Not rated" (); Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38  Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39  Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40  Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41  Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48  Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53                                                                                                                                            Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56                                                                                                                                            Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59                                                                                                                                            Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60                                                                                                      Wetness Limitation (7) "Wetness" (1); Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67  Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71                                                                                                                                            Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78  Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79  Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84  Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90                                                                                                        Wetness Limitation (7) "Wetness" (1); Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92                                                                                                                                            Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94                                                                                                                                              Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97                                                                                                                                            Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99                                                                                                                                                                                              &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100                                                                                                                                                                                             &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101                                                                                                                                             Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102 Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103                                                                                                                                             Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104                                                                                                                                                                                             &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105                                                                                                                                             Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106                                                                                                                                             Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107                                                                                                                                             Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108                                                                                                                                             Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109                                                                                                                                             Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110                                                                                                                                                                                             &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111                                                                                                                                                                                             &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112                                                                                           Low Available Water Limitation "Available water" (0.5); Soil Reaction Limitation "Soil reaction" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113                                                                                                                                           Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114                                                                                                                                           Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115                                                                                                                                           Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116 Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117                                                                                                     Low Available Water Limitation "Available water" (1); Wetness Limitation (7) "Wetness" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 118 Soil Reaction Limitation "Not rated" (); Low Available Water Limitation "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119                                                                                                                                             Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120                                                                                                                                             Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121                                                                                                                                                                                             &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122                                                                                                                                                                                             &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123                                                                                                                                             Low Available Water Limitation "Available water" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124                                                                                                                                                                                             &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125                                                                                                                                                                                             &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126                                                                                                                                           Low Available Water Limitation "Available water" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127                                                                                                                                                                                             &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128                                                                                                                                                                                             &lt;NA&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     rating_FORRoadSuitabilityNaturalSurface</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                                      1.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                                      1.00</span>
@@ -1673,134 +1683,134 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 127                                    1.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 128                                    1.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     total_comppct_FORRoadSuitabilityNaturalSurface</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                                2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                               10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                               35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                               35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                               58</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                               25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                               10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                               32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                               45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                              25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                               47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                               94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                               97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                               94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                               83</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                               85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                               94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                               97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                               95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                              75</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11                                              50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12                                              37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13                                              25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14                                              10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                                              97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                                             100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14                                              97</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15                                              65</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16                                              20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                                              95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                              90</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 18                                              75</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20                                              13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22                                              70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23                                              70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24                                              20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25                                              55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26                                              65</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28                                              15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29                                               3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30                                               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31                                              30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32                                               2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33                                               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34                                              30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35                                              94</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36                                              19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37                                               3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                              97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                                              98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                                              99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                                             100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                                             100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24                                             100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25                                             100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26                                              75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27                                              99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28                                              55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29                                              96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30                                              95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31                                              75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32                                              67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33                                              98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34                                              85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35                                             100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36                                              58</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37                                              68</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 38                                              50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 39                                              65</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 40                                              50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 41                                              85</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42                                              60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42                                              90</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 43                                              45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45                                              25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47                                              12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44                                              75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45                                              65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46                                              50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47                                              97</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 48                                              50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52                                              10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49                                              85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50                                              95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51                                              95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52                                              95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 53                                              55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55                                               9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56                                              40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57                                              54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58                                              20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59                                              30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60                                              34</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62                                               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64                                               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65                                               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66                                              10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54                                              98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55                                              99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56                                              96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57                                              59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58                                              97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59                                              98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60                                              54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61                                              90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62                                              97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63                                              95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64                                              95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65                                              75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66                                              95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 67                                             100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68                                               3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69                                              16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71                                              40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72                                              20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73                                              40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74                                              25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75                                              20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76                                               2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77                                               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68                                              99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69                                              96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70                                              95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71                                              95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72                                              99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73                                             100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74                                              95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75                                              95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76                                              95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77                                              85</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 78                                              50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 79                                              50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80                                              67</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82                                               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80                                              87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81                                              94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82                                              95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 83                                              65</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 84                                              60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86                                               3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85                                              90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86                                              88</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 87                                              76</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88                                               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89                                               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88                                              95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89                                              83</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 90                                              60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91                                               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91                                             100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 92                                              74</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93                                              10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93                                              95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 94                                              58</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95                                               3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96                                              10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97                                               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98                                              37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95                                              99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96                                              94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97                                              98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98                                              97</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 99                                              50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100                                              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100                                             92</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 101                                             80</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 102                                             65</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103                                             85</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104                                              2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105                                              6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106                                              3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107                                              4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108                                              2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109                                              5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110                                              5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111                                              5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112                                              7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 113                                              6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 114                                              7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103                                             91</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104                                             87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105                                             97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106                                             68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107                                             97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108                                             98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109                                             94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110                                             67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111                                             80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112                                            100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113                                             95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114                                             74</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 115                                             66</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 116                                            100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 117                                             85</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 118                                             70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 119                                              7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 120                                             18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 121                                              2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 122                                             24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 123                                             10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 124                                              2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 125                                             20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 126                                             88</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127                                              2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128                                              5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119                                             47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120                                             94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121                                             94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122                                             79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123                                             84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124                                             98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125                                             95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126                                             93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127                                             96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128                                             95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     class_FORRoadSuitabilityNaturalSurface</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                            Poorly suited</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                            Poorly suited</span>
@@ -1930,135 +1940,135 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 126                      Moderately suited</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 127                          Poorly suited</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 128                          Poorly suited</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                    reason_FORRoadSuitabilityNaturalSurface</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                             Ponding Limitation "Ponding" (1); Wetness Limitation (1) "Wetness" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.197)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                                                                                               Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.188)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.27)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                                                                                                               Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.304)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                                                                                                             Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.249)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                         Strength Limitation (2) "Low strength" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.249); Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7                           Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.242)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                                                                                                               Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.018)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                                                         Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.278)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.031)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11                                                                                                                                                                          Dust PM10 and PM2.5 Generation "Dusty" (0.014)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.018)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.223)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.129)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.078)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.171)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                                                                                                               Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.09)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                                                      Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.025)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.029)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.019)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.032)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.023)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23                                                                                                                            Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.022)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24                                                                                 Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.08)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.217)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.108)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.124)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28                                                                                                                                                                          Dust PM10 and PM2.5 Generation "Dusty" (0.104)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.072)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30                                                                                 Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.18)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.087)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32                                                                                        Flooding Limitation "Flooding" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.043)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.067)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34                                                                                                                            Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.216)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35                                                                                                                                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36                                                                                                                                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.133)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38                                                                                                                                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39                                                                                                                                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40                                                                                                                                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41                                                                                                                                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42                                                                      Strength Limitation (2) "Low strength" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.062)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.259)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.203)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.148)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46                                                                                                                            Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.169)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.154)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48                                                                                                                                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.026)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.262)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.317)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.148)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53                            Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.131)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.256)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.322)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.122)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.349)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.3)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.248)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60                                                  Wetness Limitation (1) "Wetness" (1); Strength Limitation (2) "Low strength" (0.5); Ponding Limitation "Ponding" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.239)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61                            Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.313)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62                                                                                 Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.08); Slope Limitation (&lt;6% to &gt;12%) "Slope" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.099)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.034)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Sand Limitation (1), Revised "Sandiness" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.009)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.037)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67                                                                                                                                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.044)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.013)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.091)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.242)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.156)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.242)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74                                                                                                                                                                            Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75                                                                                                                            Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.033)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.063)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.058)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78                                                                                                                                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79                                                                                                                                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80                                                                                                                            Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.208)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.242)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.116)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83                                                                                                                            Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.294)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84                                                                                                                                                                                                                    &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85                                                                                 Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.24)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.293)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87                                                                                                                                                                          Dust PM10 and PM2.5 Generation "Dusty" (0.277)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88                                                                                                                               Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.11)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89                                                                                                                             Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.15)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90                                                                                                   Ponding Limitation "Ponding" (1); Wetness Limitation (1) "Wetness" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.15)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.053)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92                                                                                                                                                                          Dust PM10 and PM2.5 Generation "Dusty" (0.194)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.265)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.175)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.207)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.317)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.314)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.036)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99                                                                                                                                                                          Dust PM10 and PM2.5 Generation "Dusty" (0.026)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100                                                                                                                             Dust PM10 and PM2.5 Generation "Dusty" (0.065); Slope Limitation (&lt;6% to &gt;12%) "Slope" (1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 101                                                                                                                                                                         Dust PM10 and PM2.5 Generation "Dusty" (0.038)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 102                                                                                                                                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103                                                                                                                           Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.037)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104                                                                                                                             Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.037)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105                                                                     Rock Fragments Limitation (1) "Rock fragments" (0.5); Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.034)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106                                                                             Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.455)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107                                              Strength Limitation (2) "Low strength" (0.5); Stickiness Limitation (1), Revised "Stickiness; high plasticity index" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.48)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108                                                                                                                             Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109                                                                             Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.459)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110                                                                               Dust PM10 and PM2.5 Generation "Dusty" (0.459); Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111                                                                                                                             Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.035)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112 Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Stickiness Limitation (1), Revised "Stickiness; high plasticity index" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 113                                                                                                                            Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.25)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 114                                                                                                                           Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.405)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 115                                                                                                                     Rock Fragments Limitation (1) "Rock fragments" (0.5); Strength Limitation (2) "Low strength" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 116                                                                                                                                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 117                                                                                                                                  Dust PM10 and PM2.5 Generation "Dusty" (0.35); Wetness Limitation (1) "Wetness" (0.5)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 118                                                                                                                                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 119                                                                                                                                                                                                                   &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 120                                                                             Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.362)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 121                                                                               Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.429)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 122                           Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.332)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 123                                                                                                                             Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.237)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 124                                                                                                                              Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.01)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 125                                                                                                                             Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.008)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 126                                                                                                                           Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.027)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127                                                                               Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.047)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128                                                                               Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.074)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                              reason_FORRoadSuitabilityNaturalSurface</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                                                                                       Ponding Limitation "Ponding" (1); Wetness Limitation (1) "Wetness" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.197)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                                                                                                                                                         Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.188)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                                                                                                  Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.27)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                                                                                                                                                                         Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.304)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                                                                                                                                                                       Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.249)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                                                   Strength Limitation (2) "Low strength" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.249); Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                                                                     Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.242)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                                                                                                                                                                         Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.018)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                                                                                                                   Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.278)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                                                                                                                                  Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.031)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                                                                                                                                                                                                                                    Dust PM10 and PM2.5 Generation "Dusty" (0.014)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.018)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.223)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.129)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.078)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.171)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                                                                                                                                                                                         Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.09)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18                                                                                                                                Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.025)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.029)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.019)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21                                                                                    Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.032)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.023)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23                                                                                                                                                                                      Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.022)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24                                                                                                                                           Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.08)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25                                                                                    Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.217)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.108)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.124)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28                                                                                                                                                                                                                                    Dust PM10 and PM2.5 Generation "Dusty" (0.104)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.072)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30                                                                                                                                           Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.18)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31                                                                                                                                  Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.087)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32                                                                                                                                                  Flooding Limitation "Flooding" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.043)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.067)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34                                                                                                                                                                                      Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.216)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35         Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" (); Dust PM10 and PM2.5 Generation "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36         Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" (); Dust PM10 and PM2.5 Generation "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.133)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38         Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" (); Dust PM10 and PM2.5 Generation "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39         Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" (); Dust PM10 and PM2.5 Generation "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40         Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" (); Dust PM10 and PM2.5 Generation "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41         Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" (); Dust PM10 and PM2.5 Generation "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42                                                                                                                                Strength Limitation (2) "Low strength" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.062)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43                                                                                    Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.259)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.203)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45                                                                                    Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.148)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46                                                                                                                                                                                      Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.169)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.154)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48         Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" (); Dust PM10 and PM2.5 Generation "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49                                                                                                                                  Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.026)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50                                                                                                                                    Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.262)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.317)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.148)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53                                                                                      Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.131)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.256)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.322)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.122)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.349)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.3)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.248)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60                                                                                                            Wetness Limitation (1) "Wetness" (1); Strength Limitation (2) "Low strength" (0.5); Ponding Limitation "Ponding" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.239)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61                                                                                      Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.313)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62                                                                                                                                           Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.08); Slope Limitation (&lt;6% to &gt;12%) "Slope" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.099)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.034)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Sand Limitation (1), Revised "Sandiness" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.009)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.037)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67  Slope Limitation (&lt;6% to &gt;12%) "Not rated; slope" (); Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68                                                                                    Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.044)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69                                                                                                                                  Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.013)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.091)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.242)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.156)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.242)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74                                                                                                                                                                                                                                      Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75                                                                                                                                                                                      Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.033)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.063)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.058)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78         Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" (); Dust PM10 and PM2.5 Generation "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79         Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" (); Dust PM10 and PM2.5 Generation "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80                                                                                                                                                                                      Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.208)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.242)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.116)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83                                                                                                                                                                                      Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.294)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84         Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" (); Dust PM10 and PM2.5 Generation "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85                                                                                                                                           Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.24)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.293)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87                                                                                                                                                                                                                                    Dust PM10 and PM2.5 Generation "Dusty" (0.277)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88                                                                                                                                                                                         Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.11)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89                                                                                                                                                                                       Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.15)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90                                                                                                                                                             Ponding Limitation "Ponding" (1); Wetness Limitation (1) "Wetness" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.15)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.053)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92                                                                                                                                                                                                                                    Dust PM10 and PM2.5 Generation "Dusty" (0.194)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.265)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.175)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.207)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96                                                                                                                                  Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.317)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97                                                                                                                                  Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.314)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98                                                                                                                                          Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.036)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99                                                                                                                                                                                                                                    Dust PM10 and PM2.5 Generation "Dusty" (0.026)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100                                                                                                                                                                                       Dust PM10 and PM2.5 Generation "Dusty" (0.065); Slope Limitation (&lt;6% to &gt;12%) "Slope" (1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101                                                                                                                                                                                                                                   Dust PM10 and PM2.5 Generation "Dusty" (0.038)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102        Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" (); Dust PM10 and PM2.5 Generation "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103                                                                                                                                                                                     Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.037)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104                                                                                                                                                                                       Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.037)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105                                                                                                                               Rock Fragments Limitation (1) "Rock fragments" (0.5); Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.034)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106                                                                                                                                       Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.455)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107                                                                                                        Strength Limitation (2) "Low strength" (0.5); Stickiness Limitation (1), Revised "Stickiness; high plasticity index" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.48)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108                                                                                                                                                                                       Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109                                                                                                                                       Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.459)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110                                                                                                                                         Dust PM10 and PM2.5 Generation "Dusty" (0.459); Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111                                                                                                                                                                                       Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.035)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112                                                           Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Stickiness Limitation (1), Revised "Stickiness; high plasticity index" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113                                                                                                                                                                                      Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.25)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114                                                                                                                                                                                     Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.405)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115                                                                                                                                                                               Rock Fragments Limitation (1) "Rock fragments" (0.5); Strength Limitation (2) "Low strength" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116 Slope Limitation (&lt;6% to &gt;12%) "Not rated; slope" (); Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117                                                                                                                                                                                            Dust PM10 and PM2.5 Generation "Dusty" (0.35); Wetness Limitation (1) "Wetness" (0.5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 118        Stickiness Limitation (1), Revised "Not rated, Plasticity Index" (); Sand Limitation (1), Revised "Not rated" (); Component Kind Misc. and CHIID is null "Not rated, no horizon data" (); Null Horizon Data "Not rated" (); Dust PM10 and PM2.5 Generation "Not rated" ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119                                                                                                                                                                                                                                                                             &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120                                                                                                                                       Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.362)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121                                                                                                                                         Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.429)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122                                                                                     Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Rock Fragments Limitation (1) "Rock fragments" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.332)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123                                                                                                                                                                                       Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.237)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124                                                                                                                                                                                        Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.01)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125                                                                                                                                                                                       Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Dust PM10 and PM2.5 Generation "Dusty" (0.008)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126                                                                                                                                                                                     Slope Limitation (&lt;6% to &gt;12%) "Slope" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.027)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127                                                                                                                                         Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.047)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128                                                                                                                                         Slope Limitation (&lt;6% to &gt;12%) "Slope" (1); Strength Limitation (2) "Low strength" (0.5); Dust PM10 and PM2.5 Generation "Dusty" (0.074)</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

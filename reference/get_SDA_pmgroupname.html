@@ -50,6 +50,7 @@
 <span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"DOMINANT COMPONENT"</span>,</span>
 <span>  simplify <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  include_minors <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  miscellaneous_areas <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  query_string <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -61,27 +62,31 @@
 
 
 <dl><dt id="arg-areasymbols">areasymbols<a class="anchor" aria-label="anchor" href="#arg-areasymbols"></a></dt>
-<dd><p>vector of soil survey area symbols</p></dd>
+<dd><p><em>character</em>. Vector of soil survey area symbols</p></dd>
 
 
 <dt id="arg-mukeys">mukeys<a class="anchor" aria-label="anchor" href="#arg-mukeys"></a></dt>
-<dd><p>vector of map unit keys</p></dd>
+<dd><p><em>integer</em>. Vector of map unit keys</p></dd>
 
 
 <dt id="arg-where">WHERE<a class="anchor" aria-label="anchor" href="#arg-where"></a></dt>
-<dd><p>character containing SQL WHERE clause specified in terms of fields in <code>legend</code>, <code>mapunit</code>, <code>component</code>, or <code>copmgrp</code> tables, used in lieu of <code>mukeys</code> or <code>areasymbols</code></p></dd>
+<dd><p><em>character</em>. SQL WHERE clause specified in terms of fields in <code>legend</code>, <code>mapunit</code>, <code>component</code>, or <code>copmgrp</code> tables, used in lieu of <code>mukeys</code> or <code>areasymbols</code></p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>One of: <code>"Dominant Component"</code>, <code>"Dominant Condition"</code>, <code>"None"</code></p></dd>
+<dd><p><em>character</em>. One of: <code>"Dominant Component"</code>, <code>"Dominant Condition"</code>, <code>"None"</code></p></dd>
 
 
 <dt id="arg-simplify">simplify<a class="anchor" aria-label="anchor" href="#arg-simplify"></a></dt>
-<dd><p>logical; group into generalized parent material groups? Default <code>TRUE</code></p></dd>
+<dd><p><em>logical</em>. Group into generalized parent material groups? Default <code>TRUE</code></p></dd>
+
+
+<dt id="arg-include-minors">include_minors<a class="anchor" aria-label="anchor" href="#arg-include-minors"></a></dt>
+<dd><p>logical. Include minor components? Default: <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg-miscellaneous-areas">miscellaneous_areas<a class="anchor" aria-label="anchor" href="#arg-miscellaneous-areas"></a></dt>
-<dd><p>Include miscellaneous areas  (non-soil components) in results? Default: <code>FALSE</code>.</p></dd>
+<dd><p><em>logical</em>. Include miscellaneous areas (non-soil components) in results? Default: <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-query-string">query_string<a class="anchor" aria-label="anchor" href="#arg-query-string"></a></dt>
