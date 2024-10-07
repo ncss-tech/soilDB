@@ -10,6 +10,8 @@ get_SDA_interpretation(
   areasymbols = NULL,
   mukeys = NULL,
   WHERE = NULL,
+  include_minors = TRUE,
+  miscellaneous_areas = TRUE,
   query_string = FALSE,
   not_rated_value = NA_real_,
   wide_reason = FALSE,
@@ -26,6 +28,10 @@ get_SDA_interpretation(
 \item{mukeys}{vector of map unit keys}
 
 \item{WHERE}{character containing SQL WHERE clause specified in terms of fields in \code{legend}, \code{mapunit}, or \code{component} tables, used in lieu of \code{mukeys} or \code{areasymbols}}
+
+\item{include_minors}{logical. Include minor components? Default: \code{TRUE}.}
+
+\item{miscellaneous_areas}{\emph{logical}. Include miscellaneous areas (non-soil components) in results? Default: \code{TRUE}.}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 

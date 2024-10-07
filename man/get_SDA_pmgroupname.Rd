@@ -10,23 +10,26 @@ get_SDA_pmgroupname(
   WHERE = NULL,
   method = "DOMINANT COMPONENT",
   simplify = TRUE,
+  include_minors = TRUE,
   miscellaneous_areas = FALSE,
   query_string = FALSE,
   dsn = NULL
 )
 }
 \arguments{
-\item{areasymbols}{vector of soil survey area symbols}
+\item{areasymbols}{\emph{character}. Vector of soil survey area symbols}
 
-\item{mukeys}{vector of map unit keys}
+\item{mukeys}{\emph{integer}. Vector of map unit keys}
 
-\item{WHERE}{character containing SQL WHERE clause specified in terms of fields in \code{legend}, \code{mapunit}, \code{component}, or \code{copmgrp} tables, used in lieu of \code{mukeys} or \code{areasymbols}}
+\item{WHERE}{\emph{character}. SQL WHERE clause specified in terms of fields in \code{legend}, \code{mapunit}, \code{component}, or \code{copmgrp} tables, used in lieu of \code{mukeys} or \code{areasymbols}}
 
-\item{method}{One of: \code{"Dominant Component"}, \code{"Dominant Condition"}, \code{"None"}}
+\item{method}{\emph{character}. One of: \code{"Dominant Component"}, \code{"Dominant Condition"}, \code{"None"}}
 
-\item{simplify}{logical; group into generalized parent material groups? Default \code{TRUE}}
+\item{simplify}{\emph{logical}. Group into generalized parent material groups? Default \code{TRUE}}
 
-\item{miscellaneous_areas}{Include miscellaneous areas  (non-soil components) in results? Default: \code{FALSE}.}
+\item{include_minors}{logical. Include minor components? Default: \code{TRUE}.}
+
+\item{miscellaneous_areas}{\emph{logical}. Include miscellaneous areas (non-soil components) in results? Default: \code{FALSE}.}
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
 
