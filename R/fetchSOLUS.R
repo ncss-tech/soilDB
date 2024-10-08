@@ -35,7 +35,7 @@
 #' 
 #' @export
 #'
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("sf") && requireNamespace("terra")
 #' 
 #' b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
 #' 
@@ -56,6 +56,8 @@
 #'   depth_intervals = "0-5",
 #'   variables = c("sandtotal", "silttotal", "claytotal")
 #' )
+#' 
+#' terra::plot(res)
 fetchSOLUS <- function(x = NULL, 
                        depth_intervals = c("all", "0-5", "5-15", "15-30", "30-60",
                                            "60-100", "100-150", "150-200"), 

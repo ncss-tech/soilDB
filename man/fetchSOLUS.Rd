@@ -53,6 +53,7 @@ When input object \code{x} is specified, a \emph{SpatRaster} object using in mem
 after downloading the data only for the target extent.
 }
 \examples{
+\dontshow{if (curl::has_internet() && requireNamespace("sf") && requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
 
@@ -73,6 +74,9 @@ res <- fetchSOLUS(
   depth_intervals = "0-5",
   variables = c("sandtotal", "silttotal", "claytotal")
 )
+
+terra::plot(res)
+\dontshow{\}) # examplesIf}
 }
 \references{
 Nauman, T.W., Kienast-Brown, S., White, D.A. Brungard, C.W., Philippe, J., Roecker, S.M.,
