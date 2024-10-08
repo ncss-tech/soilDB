@@ -54,7 +54,7 @@
 #' res <- fetchSOLUS(
 #'   ssurgo.geom,
 #'   depth_intervals = "0-5",
-#'   variables = c("sandtotal", "silttotal", "claytotal")
+#'   variables = c("sandtotal", "silttotal", "claytotal", "cec7")
 #' )
 #' 
 #' terra::plot(res)
@@ -83,6 +83,9 @@ fetchSOLUS <- function(x = NULL,
                 ind$depth_interval %in% depth_intervals &
                 ind$filetype %in% filetype,]
   
+  isub$subproperty <- gsub("\\.tif$", "", isub$filename)
+  isub$scalar <- as.numeric(isub$scalar)
+  
   # create virtual raster from list of URLs
   r <- terra::rast(
     paste0("/vsicurl/", isub$url)
@@ -107,8 +110,24 @@ fetchSOLUS <- function(x = NULL,
     # project input object to CRS of SOLUS
     x <- terra::project(x, terra::crs(r))
     
-    # crop to target extent (and write to file)
-    r <- terra::crop(r, x, filename = filename)
+    # crop to target extent (written to temp file if needed)
+    r <- terra::crop(r, x)
+    
+    # apply scaling factors (only when needed)
+    if (any(isub$scalar != 1)) {
+      r <- terra::rast(lapply(seq_len(nrow(isub)), function(i) {
+        r[isub$subproperty[i]] / isub$scalar[i] 
+      }))
+    }
+    
+    # write to final output file (if filename specified)
+    if (!is.null(filename)) {
+      r <- writeRaster(r, x, filename = filename)
+    }
+  } else {
+    if (any(isub$scalar != 1)) {
+      warning("NOTE: virtual reference to remote sources returned; no scaling factors have been applied!", call. = FALSE)
+    }
   }
   
   r

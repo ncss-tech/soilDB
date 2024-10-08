@@ -72,7 +72,7 @@ ssurgo.geom <- soilDB::SDA_spatialQuery(
 res <- fetchSOLUS(
   ssurgo.geom,
   depth_intervals = "0-5",
-  variables = c("sandtotal", "silttotal", "claytotal")
+  variables = c("sandtotal", "silttotal", "claytotal", "cec7")
 )
 
 terra::plot(res)
