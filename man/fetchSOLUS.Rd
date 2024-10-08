@@ -6,8 +6,7 @@
 \usage{
 fetchSOLUS(
   x = NULL,
-  depth_intervals = c("all", "0-5", "5-15", "15-30", "30-60", "60-100", "100-150",
-    "150-200"),
+  depth_slices = c("all", "0", "5", "15", "30", "60", "100", "150"),
   variables = c("anylithicdpt", "caco3", "cec7", "claytotal", "dbovendry", "ec", "ecec",
     "fragvol", "gypsum", "ph1to1h2o", "resdept", "sandco", "sandfine", "sandmed",
     "sandtotal", "sandvc", "sandvf", "sar", "silttotal", "soc"),
@@ -23,8 +22,8 @@ fetchSOLUS(
 \emph{SoilProfileCollection} with coordinates initialized via \verb{aqp::initSpatial<-}. Default: \code{NULL} returns
 the full extent as a virtual raster. Note that this is nearly 30GB compressed}
 
-\item{depth_intervals}{character. One or more of: \code{"all"}, \code{"0-5"}, \code{"5-15"}, \code{"15-30"},
-\code{"30-60"}, \code{"60-100"}, \code{"100-150"}, \code{"150-200"}}
+\item{depth_slices}{character. One or more of: \code{"all"}, \code{"0"}, \code{"5"}, \code{"15"},
+\code{"30"}, \code{"60"}, \code{"100"}, \code{"150"}}
 
 \item{variables}{character. One or more of: \code{"anylithicdpt"}, \code{"caco3"}, \code{"cec7"}, \code{"claytotal"},
 \code{"dbovendry"}, \code{"ec"}, \code{"ecec"}, \code{"fragvol"}, \code{"gypsum"}, \code{"ph1to1h2o"}, \code{"resdept"}, \code{"sandco"},
@@ -71,8 +70,9 @@ ssurgo.geom <- soilDB::SDA_spatialQuery(
 
 res <- fetchSOLUS(
   ssurgo.geom,
-  depth_intervals = "0-5",
-  variables = c("sandtotal", "silttotal", "claytotal", "cec7")
+  depth_slices = "0",
+  variables = c("sandtotal", "silttotal", "claytotal", "cec7"),
+  filetype = "prediction"
 )
 
 terra::plot(res)

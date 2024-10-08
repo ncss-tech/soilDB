@@ -13,8 +13,8 @@
 #' @param x  An R spatial object (such as a _SpatVector_, _SpatRaster_, or _sf_ object) or a 
 #'  _SoilProfileCollection_ with coordinates initialized via `aqp::initSpatial<-`. Default: `NULL` returns 
 #'  the full extent as a virtual raster. Note that this is nearly 30GB compressed
-#' @param depth_intervals character. One or more of: `"all"`, `"0-5"`, `"5-15"`, `"15-30"`,
-#'  `"30-60"`, `"60-100"`, `"100-150"`, `"150-200"`
+#' @param depth_slices character. One or more of: `"all"`, `"0"`, `"5"`, `"15"`,
+#'  `"30"`, `"60"`, `"100"`, `"150"`
 #' @param variables character. One or more of: `"anylithicdpt"`, `"caco3"`, `"cec7"`, `"claytotal"`, 
 #'  `"dbovendry"`, `"ec"`, `"ecec"`, `"fragvol"`, `"gypsum"`, `"ph1to1h2o"`, `"resdept"`, `"sandco"`,
 #'  `"sandfine"`, `"sandmed"`, `"sandtotal"`, `"sandvc"`, `"sandvf"`, `"sar"`, `"silttotal"`, `"soc"`.
@@ -53,14 +53,15 @@
 #' 
 #' res <- fetchSOLUS(
 #'   ssurgo.geom,
-#'   depth_intervals = "0-5",
-#'   variables = c("sandtotal", "silttotal", "claytotal", "cec7")
+#'   depth_slices = "0",
+#'   variables = c("sandtotal", "silttotal", "claytotal", "cec7"),
+#'   filetype = "prediction"
 #' )
 #' 
 #' terra::plot(res)
 fetchSOLUS <- function(x = NULL, 
-                       depth_intervals = c("all", "0-5", "5-15", "15-30", "30-60",
-                                           "60-100", "100-150", "150-200"), 
+                       depth_slices = c("all", "0", "5", "15", "30",
+                                           "60", "100", "150"), 
                        variables = c("anylithicdpt", "caco3", "cec7", "claytotal",
                                      "dbovendry",  "ec", "ecec", "fragvol", "gypsum",
                                      "ph1to1h2o", "resdept", "sandco", "sandfine", 
@@ -80,7 +81,7 @@ fetchSOLUS <- function(x = NULL,
   
   # subset based on user specified properties, depths, and product type
   isub <- ind[ind$property %in% variables & 
-                ind$depth_interval %in% depth_intervals &
+                ind$depth_slice %in% depth_slices &
                 ind$filetype %in% filetype,]
   
   isub$subproperty <- gsub("\\.tif$", "", isub$filename)
@@ -148,14 +149,14 @@ fetchSOLUS <- function(x = NULL,
   
   # fix inconsistencies in depth column
   res$depth[is.na(res$depth) | res$depth == ""] <- "all_cm"
-  dlut <- c(`NA` = "all", "all_cm" = "all", 
-            "0_cm" = "0-5", "5_cm" = "5-15", "15_cm" = "15-30",
-            "30_cm" = "30-60", "60_cm" = "60-100", "100_cm" = "100-150",  
-            "150_cm" = "150-200")
+  dlut <- c("all_cm" = "all", 
+            "0_cm" = "0", "5_cm" = "5", "15" = "15",
+            "30_cm" = "30", "60_cm" = "60", "100_cm" = "100",  
+            "150_cm" = "150")
   
-  # use depth interval formatting analogous to fetchSoilGrids/upper and lower bound explicit
-  res$depth_interval <- dlut[res$depth]
-  res$depth_interval <- factor(res$depth_interval, levels = unique(dlut))
+  # use depth slices
+  res$depth_slice <- dlut[res$depth]
+  res$depth_slice <- factor(res$depth_slice, levels = unique(dlut))
   
   res
 }
