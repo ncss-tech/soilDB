@@ -10,7 +10,7 @@ fetchSOLUS(
   variables = c("anylithicdpt", "caco3", "cec7", "claytotal", "dbovendry", "ec", "ecec",
     "fragvol", "gypsum", "ph1to1h2o", "resdept", "sandco", "sandfine", "sandmed",
     "sandtotal", "sandvc", "sandvf", "sar", "silttotal", "soc"),
-  filetype = c("prediction", "relative prediction interval",
+  output_type = c("prediction", "relative prediction interval",
     "95\% low prediction interval", "95\% high prediction interval"),
   grid = TRUE,
   filename = NULL,
@@ -29,7 +29,7 @@ the full extent as a virtual raster. Note that this is nearly 30GB compressed}
 \code{"dbovendry"}, \code{"ec"}, \code{"ecec"}, \code{"fragvol"}, \code{"gypsum"}, \code{"ph1to1h2o"}, \code{"resdept"}, \code{"sandco"},
 \code{"sandfine"}, \code{"sandmed"}, \code{"sandtotal"}, \code{"sandvc"}, \code{"sandvf"}, \code{"sar"}, \code{"silttotal"}, \code{"soc"}.}
 
-\item{filetype}{character. One or more of: \code{"prediction"}, \code{"relative prediction interval"},
+\item{output_type}{character. One or more of: \code{"prediction"}, \code{"relative prediction interval"},
 \code{"95\% low prediction interval"}, \code{"95\% high prediction interval"}}
 
 \item{grid}{logical. Not used. Currently default \code{TRUE} always returns a \emph{SpatRaster} object for an extent.}
@@ -72,7 +72,7 @@ res <- fetchSOLUS(
   ssurgo.geom,
   depth_slices = "0",
   variables = c("sandtotal", "silttotal", "claytotal", "cec7"),
-  filetype = "prediction"
+  output_type = "prediction"
 )
 
 terra::plot(res)

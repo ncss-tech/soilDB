@@ -18,7 +18,7 @@
 #' @param variables character. One or more of: `"anylithicdpt"`, `"caco3"`, `"cec7"`, `"claytotal"`, 
 #'  `"dbovendry"`, `"ec"`, `"ecec"`, `"fragvol"`, `"gypsum"`, `"ph1to1h2o"`, `"resdept"`, `"sandco"`,
 #'  `"sandfine"`, `"sandmed"`, `"sandtotal"`, `"sandvc"`, `"sandvf"`, `"sar"`, `"silttotal"`, `"soc"`.
-#' @param filetype character. One or more of: `"prediction"`, `"relative prediction interval"`, 
+#' @param output_type character. One or more of: `"prediction"`, `"relative prediction interval"`, 
 #'  `"95% low prediction interval"`, `"95% high prediction interval"`
 #' @param grid logical. Not used. Currently default `TRUE` always returns a _SpatRaster_ object for an extent.
 #' @param filename character. Path to write output raster file. Default: `NULL` will keep result in
@@ -55,7 +55,7 @@
 #'   ssurgo.geom,
 #'   depth_slices = "0",
 #'   variables = c("sandtotal", "silttotal", "claytotal", "cec7"),
-#'   filetype = "prediction"
+#'   output_type = "prediction"
 #' )
 #' 
 #' terra::plot(res)
@@ -67,10 +67,10 @@ fetchSOLUS <- function(x = NULL,
                                      "ph1to1h2o", "resdept", "sandco", "sandfine", 
                                      "sandmed", "sandtotal", "sandvc", "sandvf", 
                                      "sar", "silttotal", "soc"),
-                       filetype = c("prediction",
-                                    "relative prediction interval",
-                                    "95% low prediction interval", 
-                                    "95% high prediction interval"),
+                       output_type = c("prediction",
+                                       "relative prediction interval",
+                                       "95% low prediction interval", 
+                                       "95% high prediction interval"),
                        grid = TRUE,
                        filename = NULL,
                        overwrite = FALSE
@@ -82,7 +82,7 @@ fetchSOLUS <- function(x = NULL,
   # subset based on user specified properties, depths, and product type
   isub <- ind[ind$property %in% variables & 
                 ind$depth_slice %in% depth_slices &
-                ind$filetype %in% filetype,]
+                ind$filetype %in% output_type,]
   
   isub$subproperty <- gsub("\\.tif$", "", isub$filename)
   isub$scalar <- as.numeric(isub$scalar)
