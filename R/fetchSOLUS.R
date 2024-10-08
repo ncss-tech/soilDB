@@ -61,7 +61,7 @@
 #' terra::plot(res)
 fetchSOLUS <- function(x = NULL, 
                        depth_slices = c("all", "0", "5", "15", "30",
-                                           "60", "100", "150"), 
+                                        "60", "100", "150"), 
                        variables = c("anylithicdpt", "caco3", "cec7", "claytotal",
                                      "dbovendry",  "ec", "ecec", "fragvol", "gypsum",
                                      "ph1to1h2o", "resdept", "sandco", "sandfine", 
@@ -150,7 +150,7 @@ fetchSOLUS <- function(x = NULL,
   # fix inconsistencies in depth column
   res$depth[is.na(res$depth) | res$depth == ""] <- "all_cm"
   dlut <- c("all_cm" = "all", 
-            "0_cm" = "0", "5_cm" = "5", "15" = "15",
+            "0_cm" = "0", "5_cm" = "5", "15" = "15_cm",
             "30_cm" = "30", "60_cm" = "60", "100_cm" = "100",  
             "150_cm" = "150")
   
