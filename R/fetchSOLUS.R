@@ -150,7 +150,7 @@ fetchSOLUS <- function(x = NULL,
   # fix inconsistencies in depth column
   res$depth[is.na(res$depth) | res$depth == ""] <- "all_cm"
   dlut <- c("all_cm" = "all", 
-            "0_cm" = "0", "5_cm" = "5", "15" = "15_cm",
+            "0_cm" = "0", "5_cm" = "5", "15_cm" = "15",
             "30_cm" = "30", "60_cm" = "60", "100_cm" = "100",  
             "150_cm" = "150")
   
