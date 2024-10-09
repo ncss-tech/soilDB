@@ -20,7 +20,15 @@
 #'  `"sandfine"`, `"sandmed"`, `"sandtotal"`, `"sandvc"`, `"sandvf"`, `"sar"`, `"silttotal"`, `"soc"`.
 #' @param output_type character. One or more of: `"prediction"`, `"relative prediction interval"`, 
 #'  `"95% low prediction interval"`, `"95% high prediction interval"`
-#' @param grid logical. Not used. Currently default `TRUE` always returns a _SpatRaster_ object for an extent.
+#' @param grid logical. Default `TRUE` returns a _SpatRaster_ object for an extent. `FALSE` returns a _SoilProfileCollection_. 
+#'                      Any other value returns a _list_ object with names `"grid"` and `"spc"` containing both result objects.
+#' @param samples integer. Number of regular samples to return when `grid=FALSE`. Default `NULL` will convert all grid cells 
+#'                         to a unique profile. Note that for a large extent,  this can produce large _SoilProfileCollection_
+#'                         objects with a very large number of layers (especially with `method` other than `"step"`).
+#' @param method character. Used when `grid=FALSE` to determine depth interpolation method. Default: `"linear"`.
+#'               Options include any `method` allowed for `approxfun()` or `splinefun()` pluse `"step"`. 
+#'               `"step"` uses the prediction depths as the top of each interval and returns a number of layers equal
+#'               to length of `depth_slices`. Methods other than "step" return data in interpolated 1cm slices.
 #' @param filename character. Path to write output raster file. Default: `NULL` will keep result in
 #'  memory (or store in temporary file if memory threshold is exceeded)
 #' @param overwrite Overwrite `filename` if it exists? Default: `FALSE`
@@ -51,6 +59,7 @@
 #'   geomIntersection = TRUE
 #' )
 #' 
+#' # grid output
 #' res <- fetchSOLUS(
 #'   ssurgo.geom,
 #'   depth_slices = "0",
@@ -59,9 +68,34 @@
 #' )
 #' 
 #' terra::plot(res)
+#' 
+#' # SoilProfileCollection output, using linear interpolation for 1cm slices
+#' res <- fetchSOLUS(
+#'   ssurgo.geom,
+#'   depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
+#'   variables = c("sandtotal", "silttotal", "claytotal", "cec7"),
+#'   output_type = "prediction",
+#'   method = "linear",
+#'   grid = FALSE,
+#'   samples = 1
+#' )
+#' 
+#' plot(res, color = "claytotal_p", divide.hz = FALSE)
+#' 
+#' # SoilProfileCollection output, using spline (fmm) interpolation for 1cm slices
+#' res <- fetchSOLUS(
+#'   ssurgo.geom,
+#'   depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
+#'   variables = c("sandtotal", "silttotal", "claytotal", "cec7"),
+#'   output_type = "prediction",
+#'   method = "monoH.FC",
+#'   grid = FALSE,
+#'   samples = 1
+#' )
+#' 
+#' plot(res, color = "claytotal_p", divide.hz = FALSE)
 fetchSOLUS <- function(x = NULL, 
-                       depth_slices = c("all", "0", "5", "15", "30",
-                                        "60", "100", "150"), 
+                       depth_slices = c("all", "0", "5", "15", "30", "60", "100", "150"), 
                        variables = c("anylithicdpt", "caco3", "cec7", "claytotal",
                                      "dbovendry",  "ec", "ecec", "fragvol", "gypsum",
                                      "ph1to1h2o", "resdept", "sandco", "sandfine", 
@@ -72,9 +106,14 @@ fetchSOLUS <- function(x = NULL,
                                        "95% low prediction interval", 
                                        "95% high prediction interval"),
                        grid = TRUE,
+                       samples = NULL,
+                       method = c("linear", "constant", "fmm", "natural", "monoH.FC", "step"),
                        filename = NULL,
                        overwrite = FALSE
                        ) {
+  
+  # Not all spline methods are relevant, but they can be allowed to work
+  # method <- match.arg(method, c("linear", "constant", "fmm", "periodic", "natural", "monoH.FC", "hyman", "step"))
   
   # get index of SOLUS COGs
   ind <- .get_SOLUS_index()
@@ -131,7 +170,36 @@ fetchSOLUS <- function(x = NULL,
     }
   }
   
-  r
+  if (isTRUE(grid)) {
+    return(r)
+  } 
+  
+  if (length(depth_slices) == 1 && method != "step") {
+    stop("Cannot interpolate for SoilProfileCollection output with only one depth slice! Change `method` to \"step\" or add another `depth_slice`.", call. = FALSE)
+  }
+    
+  if (!missing(x) && !is.null(x) && terra::is.points(x)) {
+    dat <- terra::extract(r, x)
+  } else {
+    if (!missing(samples) && !is.null(samples)) {
+      dat <- spatSample(r,
+                        size = samples,
+                        method = "regular",
+                        xy = TRUE) # for testing
+    } else {
+      dat <- terra::as.data.frame(r, xy = TRUE)
+    }
+  }
+  
+  dat$ID <- seq(nrow(dat))
+    
+  spc <- .convert_SOLUS_dataframe_to_SPC(dat, idname = "ID", method = method)
+  
+  if (isFALSE(grid)) {
+    return(spc)
+  } else {
+    return(list(grid = r, spc = spc))
+  }
 }
 
 .get_SOLUS_index <- function() {
@@ -142,17 +210,15 @@ fetchSOLUS <- function(x = NULL,
   res <- rvest::html_table(rvest::read_html("https://storage.googleapis.com/solus100pub/index.html"), header = FALSE)[[1]]
   
   # column names are in 4th row
-  colnames(res) <- res[5,]
+  colnames(res) <- res[5, ]
   
   # drop empty rows
   res <- res[-(c(1:5, nrow(res))), ]
   
   # fix inconsistencies in depth column
   res$depth[is.na(res$depth) | res$depth == ""] <- "all_cm"
-  dlut <- c("all_cm" = "all", 
-            "0_cm" = "0", "5_cm" = "5", "15_cm" = "15",
-            "30_cm" = "30", "60_cm" = "60", "100_cm" = "100",  
-            "150_cm" = "150")
+  dlut <- c("all_cm" = "all", "0_cm" = "0", "5_cm" = "5", "15_cm" = "15", 
+            "30_cm" = "30", "60_cm" = "60", "100_cm" = "100", "150_cm" = "150")
   
   # use depth slices
   res$depth_slice <- dlut[res$depth]
@@ -161,4 +227,73 @@ fetchSOLUS <- function(x = NULL,
   res
 }
 
-
+.convert_SOLUS_dataframe_to_SPC <- function(x, idname = "id", method) {
+  # x: data.frame object with column names corresponding to .get_SOLUS_index() filenames
+  # idname: character. column name used to identify profiles
+  # method: character. depth interpolation method
+  
+  .extractTopDepthFromName <- function(x) {
+    gsub("^.*_(\\d+)_cm_.*$", "\\1", x)
+  }
+  
+  .replaceTopDepthInName <- function(x) {
+    gsub("^(.*)_\\d+_cm(_.*)$", "\\1\\2", x)
+  }
+  
+  tdep <- .extractTopDepthFromName(colnames(x))
+  colnames(x) <- .replaceTopDepthInName(colnames(x))
+  
+  h <- data.table::rbindlist(lapply(unique(tdep[!tdep %in% c("x","y",idname)]), function(xx) {
+    data.frame(ID = x[[idname]], depth = xx, x[which(tdep == xx)])
+  }))
+  
+  h$depth <- as.numeric(h$depth)
+  
+  h <- h[order(ID, depth),]
+  
+  stepwise_dept <- c(0, 5, 15, 30, 60, 100, 150)
+  stepwise_depb <- c(0, 15, 30, 60, 100, 150, 150)
+  names(stepwise_depb) <- stepwise_dept
+  
+  h$top <- h$depth
+  h$bottom <- stepwise_depb[as.character(h$depth)]
+  
+  ldx <- names(h) %in% c(idname, "depth", "x", "y", "top", "bottom")
+  iv <- names(h)[ldx]
+  vn <- names(h)[!ldx]
+  
+  if (method == "step") {
+    
+    message("consider using method=\"constant\" or method=\"linear\"; SOLUS predictions represent depth slices that do not directly translate to intervals implied by method=\"step\"")
+    
+    # apply fudge factors for depth slices as property input source
+    h$bottom[h$bottom == 0] <- stepwise_dept[2]
+    h$bottom[h$top == 150] <- 151
+    
+    depths(h) <- c(idname, "top", "bottom")
+    
+    return(h)
+  } else if (method %in% c("linear", "constant", "fmm", "periodic", "natural", "monoH.FC", "hyman")) {
+    
+    mindep <- min(h$top, na.rm = TRUE)
+    maxdep <- max(h$bottom, na.rm = TRUE)
+    
+    if (method %in% c("linear", "constant")) {
+      FUN <- approxfun
+    } else {
+      FUN <- splinefun
+    }
+    
+    h2 <- h[, data.frame(top = mindep:(maxdep - 1),
+                         bottom = (mindep + 1):maxdep,
+                         lapply(.SD, function(x) {
+                           FUN(unique(h$top), x, method = method)((mindep:(maxdep - 1)))
+                         })), 
+            .SDcols = vn, 
+            by = list(ID = h[[idname]])]
+    depths(h2) <- c(idname, "top", "bottom")
+    return(h2)
+  } else {
+    stop("Invalid method argument (\"", method, "\")", call. = FALSE)
+  }
+}

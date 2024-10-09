@@ -13,6 +13,8 @@ fetchSOLUS(
   output_type = c("prediction", "relative prediction interval",
     "95\% low prediction interval", "95\% high prediction interval"),
   grid = TRUE,
+  samples = NULL,
+  method = c("linear", "constant", "fmm", "natural", "monoH.FC", "step"),
   filename = NULL,
   overwrite = FALSE
 )
@@ -32,7 +34,17 @@ the full extent as a virtual raster. Note that this is nearly 30GB compressed}
 \item{output_type}{character. One or more of: \code{"prediction"}, \code{"relative prediction interval"},
 \code{"95\% low prediction interval"}, \code{"95\% high prediction interval"}}
 
-\item{grid}{logical. Not used. Currently default \code{TRUE} always returns a \emph{SpatRaster} object for an extent.}
+\item{grid}{logical. Default \code{TRUE} returns a \emph{SpatRaster} object for an extent. \code{FALSE} returns a \emph{SoilProfileCollection}.
+Any other value returns a \emph{list} object with names \code{"grid"} and \code{"spc"} containing both result objects.}
+
+\item{samples}{integer. Number of regular samples to return when \code{grid=FALSE}. Default \code{NULL} will convert all grid cells
+to a unique profile. Note that for a large extent,  this can produce large \emph{SoilProfileCollection}
+objects with a very large number of layers (especially with \code{method} other than \code{"step"}).}
+
+\item{method}{character. Used when \code{grid=FALSE} to determine depth interpolation method. Default: \code{"linear"}.
+Options include any \code{method} allowed for \code{approxfun()} or \code{splinefun()} pluse \code{"step"}.
+\code{"step"} uses the prediction depths as the top of each interval and returns a number of layers equal
+to length of \code{depth_slices}. Methods other than "step" return data in interpolated 1cm slices.}
 
 \item{filename}{character. Path to write output raster file. Default: \code{NULL} will keep result in
 memory (or store in temporary file if memory threshold is exceeded)}
@@ -68,6 +80,7 @@ ssurgo.geom <- soilDB::SDA_spatialQuery(
   geomIntersection = TRUE
 )
 
+# grid output
 res <- fetchSOLUS(
   ssurgo.geom,
   depth_slices = "0",
@@ -76,6 +89,32 @@ res <- fetchSOLUS(
 )
 
 terra::plot(res)
+
+# SoilProfileCollection output, using linear interpolation for 1cm slices
+res <- fetchSOLUS(
+  ssurgo.geom,
+  depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
+  variables = c("sandtotal", "silttotal", "claytotal", "cec7"),
+  output_type = "prediction",
+  method = "linear",
+  grid = FALSE,
+  samples = 1
+)
+
+plot(res, color = "claytotal_p", divide.hz = FALSE)
+
+# SoilProfileCollection output, using spline (fmm) interpolation for 1cm slices
+res <- fetchSOLUS(
+  ssurgo.geom,
+  depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
+  variables = c("sandtotal", "silttotal", "claytotal", "cec7"),
+  output_type = "prediction",
+  method = "monoH.FC",
+  grid = FALSE,
+  samples = 1
+)
+
+plot(res, color = "claytotal_p", divide.hz = FALSE)
 \dontshow{\}) # examplesIf}
 }
 \references{
