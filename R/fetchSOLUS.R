@@ -13,8 +13,9 @@
 #' @param x  An R spatial object (such as a _SpatVector_, _SpatRaster_, or _sf_ object) or a 
 #'  _SoilProfileCollection_ with coordinates initialized via `aqp::initSpatial<-`. Default: `NULL` returns 
 #'  the full extent as a virtual raster. Note that this is nearly 30GB compressed
-#' @param depth_slices character. One or more of: `"all"`, `"0"`, `"5"`, `"15"`,
-#'  `"30"`, `"60"`, `"100"`, `"150"`
+#' @param depth_slices character. One or more of: `"0"`, `"5"`, `"15"`,
+#'  `"30"`, `"60"`, `"100"`, `"150"`. The "depth slice" `"all"` (used for variables such as 
+#'  `"anylithicdpt"`, and `"resdept"`) is always included if any site-level variables are selected. 
 #' @param variables character. One or more of: `"anylithicdpt"`, `"caco3"`, `"cec7"`, `"claytotal"`, 
 #'  `"dbovendry"`, `"ec"`, `"ecec"`, `"fragvol"`, `"gypsum"`, `"ph1to1h2o"`, `"resdept"`, `"sandco"`,
 #'  `"sandfine"`, `"sandmed"`, `"sandtotal"`, `"sandvc"`, `"sandvf"`, `"sar"`, `"silttotal"`, `"soc"`.
@@ -70,32 +71,21 @@
 #' terra::plot(res)
 #' 
 #' # SoilProfileCollection output, using linear interpolation for 1cm slices
+#' # site-level variables (e.g. resdept) added to site data.frame of SPC
 #' res <- fetchSOLUS(
 #'   ssurgo.geom,
 #'   depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
-#'   variables = c("sandtotal", "silttotal", "claytotal", "cec7"),
+#'   variables = c("sandtotal", "silttotal", "claytotal", "cec7", "resdept"),
 #'   output_type = "prediction",
 #'   method = "linear",
 #'   grid = FALSE,
-#'   samples = 1
+#'   samples = 10
 #' )
 #' 
-#' plot(res, color = "claytotal_p", divide.hz = FALSE)
-#' 
-#' # SoilProfileCollection output, using spline (fmm) interpolation for 1cm slices
-#' res <- fetchSOLUS(
-#'   ssurgo.geom,
-#'   depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
-#'   variables = c("sandtotal", "silttotal", "claytotal", "cec7"),
-#'   output_type = "prediction",
-#'   method = "monoH.FC",
-#'   grid = FALSE,
-#'   samples = 1
-#' )
-#' 
-#' plot(res, color = "claytotal_p", divide.hz = FALSE)
+#' # plot, truncating each profile to the predicted restriction depth
+#' plot(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FALSE)
 fetchSOLUS <- function(x = NULL, 
-                       depth_slices = c("all", "0", "5", "15", "30", "60", "100", "150"), 
+                       depth_slices = c("0", "5", "15", "30", "60", "100", "150"), 
                        variables = c("anylithicdpt", "caco3", "cec7", "claytotal",
                                      "dbovendry",  "ec", "ecec", "fragvol", "gypsum",
                                      "ph1to1h2o", "resdept", "sandco", "sandfine", 
@@ -120,11 +110,15 @@ fetchSOLUS <- function(x = NULL,
   
   # subset based on user specified properties, depths, and product type
   isub <- ind[ind$property %in% variables & 
-                ind$depth_slice %in% depth_slices &
+                ind$depth_slice %in% c("all", depth_slices) &
                 ind$filetype %in% output_type,]
   
   isub$subproperty <- gsub("\\.tif$", "", isub$filename)
   isub$scalar <- as.numeric(isub$scalar)
+  
+  if (!requireNamespace("terra")) {
+    stop("package 'terra' is required", call. = FALSE)
+  }
   
   # create virtual raster from list of URLs
   r <- terra::rast(
@@ -162,7 +156,7 @@ fetchSOLUS <- function(x = NULL,
     
     # write to final output file (if filename specified)
     if (!is.null(filename)) {
-      r <- writeRaster(r, x, filename = filename)
+      r <- terra::writeRaster(r, x, filename = filename)
     }
   } else {
     if (any(isub$scalar != 1)) {
@@ -182,10 +176,10 @@ fetchSOLUS <- function(x = NULL,
     dat <- terra::extract(r, x)
   } else {
     if (!missing(samples) && !is.null(samples)) {
-      dat <- spatSample(r,
-                        size = samples,
-                        method = "regular",
-                        xy = TRUE) # for testing
+      dat <- terra::spatSample(r,
+                               size = samples,
+                               method = "regular",
+                               xy = TRUE) # for testing
     } else {
       dat <- terra::as.data.frame(r, xy = TRUE)
     }
@@ -233,19 +227,21 @@ fetchSOLUS <- function(x = NULL,
   # method: character. depth interpolation method
   
   .extractTopDepthFromName <- function(x) {
-    gsub("^.*_(\\d+)_cm_.*$", "\\1", x)
+    gsub("^.*_(\\d+|all)_cm_.*$", "\\1", x)
   }
   
   .replaceTopDepthInName <- function(x) {
-    gsub("^(.*)_\\d+_cm(_.*)$", "\\1\\2", x)
+    gsub("^(.*)_(\\d+|all)_cm(_.*)$", "\\1\\3", x)
   }
   
   tdep <- .extractTopDepthFromName(colnames(x))
   colnames(x) <- .replaceTopDepthInName(colnames(x))
   
-  h <- data.table::rbindlist(lapply(unique(tdep[!tdep %in% c("x","y",idname)]), function(xx) {
+  h <- data.table::rbindlist(lapply(unique(tdep[!tdep %in% c("x", "y", "all", idname)]), function(xx) {
     data.frame(ID = x[[idname]], depth = xx, x[which(tdep == xx)])
   }))
+  
+  s <- data.frame(ID = x[[idname]], x[tdep == "all"])
   
   h$depth <- as.numeric(h$depth)
   
@@ -269,10 +265,15 @@ fetchSOLUS <- function(x = NULL,
     # apply fudge factors for depth slices as property input source
     h$bottom[h$bottom == 0] <- stepwise_dept[2]
     h$bottom[h$top == 150] <- 151
-    
+  
+    h <- as.data.frame(h)  
+  
     depths(h) <- c(idname, "top", "bottom")
     
+    site(h) <- s
+    
     return(h)
+    
   } else if (method %in% c("linear", "constant", "fmm", "periodic", "natural", "monoH.FC", "hyman")) {
     
     mindep <- min(h$top, na.rm = TRUE)
@@ -291,8 +292,15 @@ fetchSOLUS <- function(x = NULL,
                          })), 
             .SDcols = vn, 
             by = list(ID = h[[idname]])]
+    
+    h2 <- as.data.frame(h2)
+    
     depths(h2) <- c(idname, "top", "bottom")
+    
+    site(h2) <- s
+    
     return(h2)
+    
   } else {
     stop("Invalid method argument (\"", method, "\")", call. = FALSE)
   }

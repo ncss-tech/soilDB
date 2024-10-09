@@ -6,7 +6,7 @@
 \usage{
 fetchSOLUS(
   x = NULL,
-  depth_slices = c("all", "0", "5", "15", "30", "60", "100", "150"),
+  depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
   variables = c("anylithicdpt", "caco3", "cec7", "claytotal", "dbovendry", "ec", "ecec",
     "fragvol", "gypsum", "ph1to1h2o", "resdept", "sandco", "sandfine", "sandmed",
     "sandtotal", "sandvc", "sandvf", "sar", "silttotal", "soc"),
@@ -24,8 +24,9 @@ fetchSOLUS(
 \emph{SoilProfileCollection} with coordinates initialized via \verb{aqp::initSpatial<-}. Default: \code{NULL} returns
 the full extent as a virtual raster. Note that this is nearly 30GB compressed}
 
-\item{depth_slices}{character. One or more of: \code{"all"}, \code{"0"}, \code{"5"}, \code{"15"},
-\code{"30"}, \code{"60"}, \code{"100"}, \code{"150"}}
+\item{depth_slices}{character. One or more of: \code{"0"}, \code{"5"}, \code{"15"},
+\code{"30"}, \code{"60"}, \code{"100"}, \code{"150"}. The "depth slice" \code{"all"} (used for variables such as
+\code{"anylithicdpt"}, and \code{"resdept"}) is always included if any site-level variables are selected.}
 
 \item{variables}{character. One or more of: \code{"anylithicdpt"}, \code{"caco3"}, \code{"cec7"}, \code{"claytotal"},
 \code{"dbovendry"}, \code{"ec"}, \code{"ecec"}, \code{"fragvol"}, \code{"gypsum"}, \code{"ph1to1h2o"}, \code{"resdept"}, \code{"sandco"},
@@ -91,30 +92,19 @@ res <- fetchSOLUS(
 terra::plot(res)
 
 # SoilProfileCollection output, using linear interpolation for 1cm slices
+# site-level variables (e.g. resdept) added to site data.frame of SPC
 res <- fetchSOLUS(
   ssurgo.geom,
   depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
-  variables = c("sandtotal", "silttotal", "claytotal", "cec7"),
+  variables = c("sandtotal", "silttotal", "claytotal", "cec7", "resdept"),
   output_type = "prediction",
   method = "linear",
   grid = FALSE,
-  samples = 1
+  samples = 10
 )
 
-plot(res, color = "claytotal_p", divide.hz = FALSE)
-
-# SoilProfileCollection output, using spline (fmm) interpolation for 1cm slices
-res <- fetchSOLUS(
-  ssurgo.geom,
-  depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
-  variables = c("sandtotal", "silttotal", "claytotal", "cec7"),
-  output_type = "prediction",
-  method = "monoH.FC",
-  grid = FALSE,
-  samples = 1
-)
-
-plot(res, color = "claytotal_p", divide.hz = FALSE)
+# plot, truncating each profile to the predicted restriction depth
+plot(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FALSE)
 \dontshow{\}) # examplesIf}
 }
 \references{
