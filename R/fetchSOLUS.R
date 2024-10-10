@@ -190,6 +190,7 @@ fetchSOLUS <- function(x = NULL,
   dat$ID <- seq(nrow(dat))
     
   spc <- .convert_SOLUS_dataframe_to_SPC(dat, idname = "ID", method = method)
+  initSpatial(spc, terra::crs(r)) <- ~ x + y
   
   if (isFALSE(grid)) {
     return(spc)
@@ -248,7 +249,7 @@ fetchSOLUS <- function(x = NULL,
     data.frame(ID = x[[idname]], depth = xx, x[which(tdep == xx)])
   }))
   
-  s <- data.frame(ID = x[[idname]], x[tdep == "all"])
+  s <- data.frame(ID = x[[idname]], x[tdep %in% c("x", "y", "all")])
   
   h$depth <- as.numeric(h$depth)
   
