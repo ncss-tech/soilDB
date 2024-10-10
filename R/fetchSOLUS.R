@@ -42,6 +42,8 @@
 #' 
 #' @author Andrew G. Brown
 #' 
+#' @importFrom stats approxfun splinefun
+#' 
 #' @export
 #'
 #' @examplesIf curl::has_internet() && requireNamespace("sf") && requireNamespace("terra")
@@ -83,7 +85,7 @@
 #' )
 #' 
 #' # plot, truncating each profile to the predicted restriction depth
-#' plot(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FALSE)
+#' aqp::plotSPC(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FALSE)
 fetchSOLUS <- function(x = NULL, 
                        depth_slices = c("0", "5", "15", "30", "60", "100", "150"), 
                        variables = c("anylithicdpt", "caco3", "cec7", "claytotal",
@@ -225,6 +227,11 @@ fetchSOLUS <- function(x = NULL,
   # x: data.frame object with column names corresponding to .get_SOLUS_index() filenames
   # idname: character. column name used to identify profiles
   # method: character. depth interpolation method
+  
+  # dummy global definitions
+  .SD <- NULL
+  ID <- NULL
+  depth <- NULL
   
   .extractTopDepthFromName <- function(x) {
     gsub("^.*_(\\d+|all)_cm_.*$", "\\1", x)

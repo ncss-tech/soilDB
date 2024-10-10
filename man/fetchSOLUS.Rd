@@ -104,7 +104,7 @@ res <- fetchSOLUS(
 )
 
 # plot, truncating each profile to the predicted restriction depth
-plot(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FALSE)
+aqp::plotSPC(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FALSE)
 \dontshow{\}) # examplesIf}
 }
 \references{
