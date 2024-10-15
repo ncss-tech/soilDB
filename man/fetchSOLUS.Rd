@@ -21,31 +21,35 @@ fetchSOLUS(
 }
 \arguments{
 \item{x}{An R spatial object (such as a \emph{SpatVector}, \emph{SpatRaster}, or \emph{sf} object) or a
-\emph{SoilProfileCollection} with coordinates initialized via \verb{aqp::initSpatial<-}. Default: \code{NULL} returns
-the full extent as a virtual raster. Note that this is nearly 30GB compressed}
+\emph{SoilProfileCollection} with coordinates initialized via \verb{aqp::initSpatial<-}. Default: \code{NULL}
+returns the full extent as a virtual raster. Note that this is nearly 30GB compressed}
 
-\item{depth_slices}{character. One or more of: \code{"0"}, \code{"5"}, \code{"15"},
-\code{"30"}, \code{"60"}, \code{"100"}, \code{"150"}. The "depth slice" \code{"all"} (used for variables such as
-\code{"anylithicdpt"}, and \code{"resdept"}) is always included if any site-level variables are selected.}
+\item{depth_slices}{character. One or more of: \code{"0"}, \code{"5"}, \code{"15"}, \code{"30"}, \code{"60"}, \code{"100"},
+\code{"150"}. The "depth slice" \code{"all"} (used for variables such as \code{"anylithicdpt"}, and
+\code{"resdept"}) is always included if any site-level variables are selected.}
 
 \item{variables}{character. One or more of: \code{"anylithicdpt"}, \code{"caco3"}, \code{"cec7"}, \code{"claytotal"},
-\code{"dbovendry"}, \code{"ec"}, \code{"ecec"}, \code{"fragvol"}, \code{"gypsum"}, \code{"ph1to1h2o"}, \code{"resdept"}, \code{"sandco"},
-\code{"sandfine"}, \code{"sandmed"}, \code{"sandtotal"}, \code{"sandvc"}, \code{"sandvf"}, \code{"sar"}, \code{"silttotal"}, \code{"soc"}.}
+\code{"dbovendry"}, \code{"ec"}, \code{"ecec"}, \code{"fragvol"}, \code{"gypsum"}, \code{"ph1to1h2o"}, \code{"resdept"},
+\code{"sandco"}, \code{"sandfine"}, \code{"sandmed"}, \code{"sandtotal"}, \code{"sandvc"}, \code{"sandvf"}, \code{"sar"},
+\code{"silttotal"}, \code{"soc"}.}
 
 \item{output_type}{character. One or more of: \code{"prediction"}, \code{"relative prediction interval"},
 \code{"95\% low prediction interval"}, \code{"95\% high prediction interval"}}
 
-\item{grid}{logical. Default \code{TRUE} returns a \emph{SpatRaster} object for an extent. \code{FALSE} returns a \emph{SoilProfileCollection}.
-Any other value returns a \emph{list} object with names \code{"grid"} and \code{"spc"} containing both result objects.}
+\item{grid}{logical. Default \code{TRUE} returns a \emph{SpatRaster} object for an extent. \code{FALSE} returns
+a \emph{SoilProfileCollection}. Any other value returns a \emph{list} object with names \code{"grid"} and
+\code{"spc"} containing both result objects.}
 
-\item{samples}{integer. Number of regular samples to return when \code{grid=FALSE}. Default \code{NULL} will convert all grid cells
-to a unique profile. Note that for a large extent,  this can produce large \emph{SoilProfileCollection}
-objects with a very large number of layers (especially with \code{method} other than \code{"step"}).}
+\item{samples}{integer. Number of regular samples to return for \emph{SoilProfileCollection} output.
+Default \code{NULL} will convert all grid cells to a unique profile. Note that for a large extent,
+this can produce large objects with a very large number of layers (especially with \code{method}
+other than \code{"step"}).}
 
-\item{method}{character. Used when \code{grid=FALSE} to determine depth interpolation method. Default: \code{"linear"}.
-Options include any \code{method} allowed for \code{approxfun()} or \code{splinefun()} pluse \code{"step"}.
-\code{"step"} uses the prediction depths as the top of each interval and returns a number of layers equal
-to length of \code{depth_slices}. Methods other than "step" return data in interpolated 1cm slices.}
+\item{method}{character. Used to determine depth interpolation method for \emph{SoilProfileCollection}
+output. Default: \code{"linear"}. Options include any \code{method} allowed for \code{approxfun()} or
+\code{splinefun()} plus \code{"step"}. \code{"step"} uses the prediction depths as the top of each interval
+and returns a number of layers equal to length of \code{depth_slices}. Methods other than "step"
+return data in interpolated 1cm slices.}
 
 \item{filename}{character. Path to write output raster file. Default: \code{NULL} will keep result in
 memory (or store in temporary file if memory threshold is exceeded)}
@@ -53,16 +57,18 @@ memory (or store in temporary file if memory threshold is exceeded)}
 \item{overwrite}{Overwrite \code{filename} if it exists? Default: \code{FALSE}}
 }
 \value{
-A \emph{SpatRaster} object containing SOLUS grids for specified extent, depths, variables, and product types.
+A \emph{SpatRaster} object containing SOLUS grids for specified extent, depths, variables, and
+product types.
 }
 \description{
 This tool creates a virtual raster from Cloud Optimized GeoTIFFs (COGs) from the \href{https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_Soil_Landscapes_of_the_United_States_100-meter_SOLUS100_soil_property_maps_project_repository/25033856}{Soil Landscapes of the United States 100-meter (SOLUS100) soil property maps project repository}.
 }
 \details{
-If the input object \code{x} is not specified (\code{NULL} or missing), a \emph{SpatRaster} object using the virtual URLs is returned. The full data
-set can be then downloaded and written to file using \code{terra::writeRaster()} or any other processing step specifying an output file name.
-When input object \code{x} is specified, a \emph{SpatRaster} object using in memory or local (temporary file or \code{filename}) resources is returned
-after downloading the data only for the target extent.
+If the input object \code{x} is not specified (\code{NULL} or missing), a \emph{SpatRaster} object using the
+virtual URLs is returned. The full data set can be then downloaded and written to file using
+\code{terra::writeRaster()} or any other processing step specifying an output file name. When input
+object \code{x} is specified, a \emph{SpatRaster} object using in memory or local (temporary file or
+\code{filename}) resources is returned after downloading the data only for the target extent.
 }
 \examples{
 \dontshow{if (curl::has_internet() && requireNamespace("sf") && requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -108,9 +114,9 @@ aqp::plotSPC(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FA
 \dontshow{\}) # examplesIf}
 }
 \references{
-Nauman, T.W., Kienast-Brown, S., White, D.A. Brungard, C.W., Philippe, J., Roecker, S.M.,
-Thompson, J.A. Soil Landscapes of the United States (SOLUS): developing predictive soil property maps
-of the conterminous US using hybrid training sets. In Prep for SSSAJ.
+Nauman, T.W., Kienast-Brown, S., White, D.A. Brungard, C.W., Philippe, J., Roecker,
+S.M., Thompson, J.A. Soil Landscapes of the United States (SOLUS): developing predictive soil
+property maps of the conterminous US using hybrid training sets. In Prep for SSSAJ.
 }
 \author{
 Andrew G. Brown

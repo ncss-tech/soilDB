@@ -1,44 +1,51 @@
 #' Fetch Soil Landscapes of the United States (SOLUS) Grids
 #'
-#' This tool creates a virtual raster from Cloud Optimized GeoTIFFs (COGs) from the [Soil
-#' Landscapes of the United States 100-meter (SOLUS100) soil property maps project repository](https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_Soil_Landscapes_of_the_United_States_100-meter_SOLUS100_soil_property_maps_project_repository/25033856).
-#' 
+#' This tool creates a virtual raster from Cloud Optimized GeoTIFFs (COGs) from the [Soil Landscapes
+#' of the United States 100-meter (SOLUS100) soil property maps project
+#' repository](https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_Soil_Landscapes_of_the_United_States_100-meter_SOLUS100_soil_property_maps_project_repository/25033856).
+#'
 #' @details
-#'  
-#' If the input object `x` is not specified (`NULL` or missing), a _SpatRaster_ object using the virtual URLs is returned. The full data
-#' set can be then downloaded and written to file using `terra::writeRaster()` or any other processing step specifying an output file name.
-#' When input object `x` is specified, a _SpatRaster_ object using in memory or local (temporary file or `filename`) resources is returned 
-#' after downloading the data only for the target extent.
-#' 
-#' @param x  An R spatial object (such as a _SpatVector_, _SpatRaster_, or _sf_ object) or a 
-#'  _SoilProfileCollection_ with coordinates initialized via `aqp::initSpatial<-`. Default: `NULL` returns 
-#'  the full extent as a virtual raster. Note that this is nearly 30GB compressed
-#' @param depth_slices character. One or more of: `"0"`, `"5"`, `"15"`,
-#'  `"30"`, `"60"`, `"100"`, `"150"`. The "depth slice" `"all"` (used for variables such as 
-#'  `"anylithicdpt"`, and `"resdept"`) is always included if any site-level variables are selected. 
-#' @param variables character. One or more of: `"anylithicdpt"`, `"caco3"`, `"cec7"`, `"claytotal"`, 
-#'  `"dbovendry"`, `"ec"`, `"ecec"`, `"fragvol"`, `"gypsum"`, `"ph1to1h2o"`, `"resdept"`, `"sandco"`,
-#'  `"sandfine"`, `"sandmed"`, `"sandtotal"`, `"sandvc"`, `"sandvf"`, `"sar"`, `"silttotal"`, `"soc"`.
-#' @param output_type character. One or more of: `"prediction"`, `"relative prediction interval"`, 
-#'  `"95% low prediction interval"`, `"95% high prediction interval"`
-#' @param grid logical. Default `TRUE` returns a _SpatRaster_ object for an extent. `FALSE` returns a _SoilProfileCollection_. 
-#'                      Any other value returns a _list_ object with names `"grid"` and `"spc"` containing both result objects.
-#' @param samples integer. Number of regular samples to return when `grid=FALSE`. Default `NULL` will convert all grid cells 
-#'                         to a unique profile. Note that for a large extent,  this can produce large _SoilProfileCollection_
-#'                         objects with a very large number of layers (especially with `method` other than `"step"`).
-#' @param method character. Used when `grid=FALSE` to determine depth interpolation method. Default: `"linear"`.
-#'               Options include any `method` allowed for `approxfun()` or `splinefun()` pluse `"step"`. 
-#'               `"step"` uses the prediction depths as the top of each interval and returns a number of layers equal
-#'               to length of `depth_slices`. Methods other than "step" return data in interpolated 1cm slices.
+#'
+#' If the input object `x` is not specified (`NULL` or missing), a _SpatRaster_ object using the
+#' virtual URLs is returned. The full data set can be then downloaded and written to file using
+#' `terra::writeRaster()` or any other processing step specifying an output file name. When input
+#' object `x` is specified, a _SpatRaster_ object using in memory or local (temporary file or
+#' `filename`) resources is returned after downloading the data only for the target extent.
+#'
+#' @param x  An R spatial object (such as a _SpatVector_, _SpatRaster_, or _sf_ object) or a
+#'   _SoilProfileCollection_ with coordinates initialized via `aqp::initSpatial<-`. Default: `NULL`
+#'   returns the full extent as a virtual raster. Note that this is nearly 30GB compressed
+#' @param depth_slices character. One or more of: `"0"`, `"5"`, `"15"`, `"30"`, `"60"`, `"100"`,
+#'   `"150"`. The "depth slice" `"all"` (used for variables such as `"anylithicdpt"`, and
+#'   `"resdept"`) is always included if any site-level variables are selected.
+#' @param variables character. One or more of: `"anylithicdpt"`, `"caco3"`, `"cec7"`, `"claytotal"`,
+#'   `"dbovendry"`, `"ec"`, `"ecec"`, `"fragvol"`, `"gypsum"`, `"ph1to1h2o"`, `"resdept"`,
+#'   `"sandco"`, `"sandfine"`, `"sandmed"`, `"sandtotal"`, `"sandvc"`, `"sandvf"`, `"sar"`,
+#'   `"silttotal"`, `"soc"`.
+#' @param output_type character. One or more of: `"prediction"`, `"relative prediction interval"`,
+#'   `"95% low prediction interval"`, `"95% high prediction interval"`
+#' @param grid logical. Default `TRUE` returns a _SpatRaster_ object for an extent. `FALSE` returns
+#'   a _SoilProfileCollection_. Any other value returns a _list_ object with names `"grid"` and
+#'   `"spc"` containing both result objects.
+#' @param samples integer. Number of regular samples to return for _SoilProfileCollection_ output.
+#'   Default `NULL` will convert all grid cells to a unique profile. Note that for a large extent,
+#'   this can produce large objects with a very large number of layers (especially with `method`
+#'   other than `"step"`).
+#' @param method character. Used to determine depth interpolation method for _SoilProfileCollection_
+#'   output. Default: `"linear"`. Options include any `method` allowed for `approxfun()` or
+#'   `splinefun()` plus `"step"`. `"step"` uses the prediction depths as the top of each interval
+#'   and returns a number of layers equal to length of `depth_slices`. Methods other than "step"
+#'   return data in interpolated 1cm slices.
 #' @param filename character. Path to write output raster file. Default: `NULL` will keep result in
-#'  memory (or store in temporary file if memory threshold is exceeded)
+#'   memory (or store in temporary file if memory threshold is exceeded)
 #' @param overwrite Overwrite `filename` if it exists? Default: `FALSE`
 #'
-#' @return A _SpatRaster_ object containing SOLUS grids for specified extent, depths, variables, and product types.
-#' 
-#' @references Nauman, T.W., Kienast-Brown, S., White, D.A. Brungard, C.W., Philippe, J., Roecker, S.M., 
-#'  Thompson, J.A. Soil Landscapes of the United States (SOLUS): developing predictive soil property maps
-#'  of the conterminous US using hybrid training sets. In Prep for SSSAJ.
+#' @return A _SpatRaster_ object containing SOLUS grids for specified extent, depths, variables, and
+#'   product types.
+#'
+#' @references Nauman, T.W., Kienast-Brown, S., White, D.A. Brungard, C.W., Philippe, J., Roecker,
+#'   S.M., Thompson, J.A. Soil Landscapes of the United States (SOLUS): developing predictive soil
+#'   property maps of the conterminous US using hybrid training sets. In Prep for SSSAJ.
 #' 
 #' @author Andrew G. Brown
 #' 
@@ -183,14 +190,14 @@ fetchSOLUS <- function(x = NULL,
                                method = "regular",
                                xy = TRUE) # for testing
     } else {
-      dat <- terra::as.data.frame(r, xy = TRUE)
+      dat <- terra::as.data.frame(r, xy = TRUE, na.rm = FALSE)
     }
   }
   
   dat$ID <- seq(nrow(dat))
     
   spc <- .convert_SOLUS_dataframe_to_SPC(dat, idname = "ID", method = method)
-  initSpatial(spc, terra::crs(r)) <- ~ x + y
+  aqp::initSpatial(spc, terra::crs(r)) <- ~ x + y
   
   if (isFALSE(grid)) {
     return(spc)
@@ -293,10 +300,14 @@ fetchSOLUS <- function(x = NULL,
       FUN <- splinefun
     }
     
+    xx <- (mindep:(maxdep - 1))
+    y <- unique(h$top)
     h2 <- h[, data.frame(top = mindep:(maxdep - 1),
                          bottom = (mindep + 1):maxdep,
                          lapply(.SD, function(x) {
-                           FUN(unique(h$top), x, method = method)((mindep:(maxdep - 1)))
+                           if (all(is.na(x)))
+                             return(rep(NA_real_, length(xx)))
+                           FUN(y, x, method = method)(xx)
                          })), 
             .SDcols = vn, 
             by = list(ID = h[[idname]])]
