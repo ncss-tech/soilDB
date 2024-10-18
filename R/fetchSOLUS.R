@@ -7,14 +7,19 @@
 #' @details
 #'
 #' If the input object `x` is not specified (`NULL` or missing), a _SpatRaster_ object using the
-#' virtual URLs is returned. The full data set can be then downloaded and written to file using
-#' `terra::writeRaster()` or any other processing step specifying an output file name. When input
-#' object `x` is specified, a _SpatRaster_ object using in memory or local (temporary file or
-#' `filename`) resources is returned after downloading the data only for the target extent.
-#'
+#' virtual URLs is returned. The full extent and resolution data set can be then downloaded and
+#' written to file using `terra::writeRaster()` (or any other processing step specifying an output
+#' file name). When input object `x` is specified, a _SpatRaster_ object using in memory or local
+#' (temporary file or `filename`) resources is returned after downloading the data only for the
+#' target extent. In the case where `x` is a _SoilProfileCollection_ or an _sf_ or _SpatVector_
+#' object containing point geometries, the result will be a _SoilProfileCollection_ for values
+#' extracted at the point locations. To return both the _SpatRaster_ and _SoilProfileCollection_
+#' object output in a _list_, use `grid = NULL`.
+#' 
 #' @param x  An R spatial object (such as a _SpatVector_, _SpatRaster_, or _sf_ object) or a
 #'   _SoilProfileCollection_ with coordinates initialized via `aqp::initSpatial<-`. Default: `NULL`
-#'   returns the full extent as a virtual raster. Note that this is nearly 30GB compressed
+#'   returns the CONUS extent as virtual raster. If `x` is a _SpatRaster_ the coordinate reference
+#'   system, extent, and resolution are used as a template for the output raster.
 #' @param depth_slices character. One or more of: `"0"`, `"5"`, `"15"`, `"30"`, `"60"`, `"100"`,
 #'   `"150"`. The "depth slice" `"all"` (used for variables such as `"anylithicdpt"`, and
 #'   `"resdept"`) is always included if any site-level variables are selected.
@@ -142,19 +147,21 @@ fetchSOLUS <- function(x = NULL,
       x <- as(x, 'sf')
     }
     
-    if (inherits(x, 'SpatRaster')) {
-      x <- terra::as.polygons(x, extent = TRUE)
-    }
-    
-    if (!inherits(x, 'SpatVector')) {
+    if (!inherits(x, c('SpatRaster', 'SpatVector'))) {
       x <- terra::vect(x)
     }
     
-    # project input object to CRS of SOLUS
-    x <- terra::project(x, terra::crs(r))
-    
-    # crop to target extent (written to temp file if needed)
-    r <- terra::crop(r, x)
+    if (!inherits(x, 'SpatRaster')){
+      # project input object to CRS of SOLUS
+      x <- terra::project(x, terra::crs(r))
+      
+      # crop to target extent (written to temp file if needed)
+      r <- terra::crop(r, x)
+    } else {
+      
+      # if x is a spatraster, use it as a template for GDAL warp
+      r <- terra::project(r, x, align_only = FALSE, mask = TRUE, threads = TRUE)
+    }
     
     # apply scaling factors (only when needed)
     if (any(isub$scalar != 1)) {

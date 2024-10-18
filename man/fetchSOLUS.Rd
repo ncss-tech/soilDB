@@ -22,7 +22,8 @@ fetchSOLUS(
 \arguments{
 \item{x}{An R spatial object (such as a \emph{SpatVector}, \emph{SpatRaster}, or \emph{sf} object) or a
 \emph{SoilProfileCollection} with coordinates initialized via \verb{aqp::initSpatial<-}. Default: \code{NULL}
-returns the full extent as a virtual raster. Note that this is nearly 30GB compressed}
+returns the CONUS extent as virtual raster. If \code{x} is a \emph{SpatRaster} the coordinate reference
+system, extent, and resolution are used as a template for the output raster.}
 
 \item{depth_slices}{character. One or more of: \code{"0"}, \code{"5"}, \code{"15"}, \code{"30"}, \code{"60"}, \code{"100"},
 \code{"150"}. The "depth slice" \code{"all"} (used for variables such as \code{"anylithicdpt"}, and
@@ -65,10 +66,14 @@ This tool creates a virtual raster from Cloud Optimized GeoTIFFs (COGs) from the
 }
 \details{
 If the input object \code{x} is not specified (\code{NULL} or missing), a \emph{SpatRaster} object using the
-virtual URLs is returned. The full data set can be then downloaded and written to file using
-\code{terra::writeRaster()} or any other processing step specifying an output file name. When input
-object \code{x} is specified, a \emph{SpatRaster} object using in memory or local (temporary file or
-\code{filename}) resources is returned after downloading the data only for the target extent.
+virtual URLs is returned. The full extent and resolution data set can be then downloaded and
+written to file using \code{terra::writeRaster()} (or any other processing step specifying an output
+file name). When input object \code{x} is specified, a \emph{SpatRaster} object using in memory or local
+(temporary file or \code{filename}) resources is returned after downloading the data only for the
+target extent. In the case where \code{x} is a \emph{SoilProfileCollection} or an \emph{sf} or \emph{SpatVector}
+object containing point geometries, the result will be a \emph{SoilProfileCollection} for values
+extracted at the point locations. To return both the \emph{SpatRaster} and \emph{SoilProfileCollection}
+object output in a \emph{list}, use \code{grid = NULL}.
 }
 \examples{
 \dontshow{if (curl::has_internet() && requireNamespace("sf") && requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
