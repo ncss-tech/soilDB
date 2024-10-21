@@ -14,7 +14,7 @@ fetchSOLUS(
     "95\% low prediction interval", "95\% high prediction interval"),
   grid = TRUE,
   samples = NULL,
-  method = c("linear", "constant", "fmm", "natural", "monoH.FC", "step"),
+  method = c("linear", "constant", "fmm", "natural", "monoH.FC", "step", "slice"),
   filename = NULL,
   overwrite = FALSE
 )
@@ -49,8 +49,8 @@ other than \code{"step"}).}
 \item{method}{character. Used to determine depth interpolation method for \emph{SoilProfileCollection}
 output. Default: \code{"linear"}. Options include any \code{method} allowed for \code{approxfun()} or
 \code{splinefun()} plus \code{"step"} and \code{"slice"}. \code{"step"} uses the prediction depths as the top and
-bottom of each interval to create a piecewise continuous profile to (maximum depth of 151 cm
-for 150 cm prediction depth). \code{"slice"} returns a discontinuous profile with 1 cm thick
+bottom of each interval to create a piecewise continuous profile to maximum of 200 cm depth
+(for 150 cm upper prediction depth). \code{"slice"} returns a discontinuous profile with 1 cm thick
 slices at the predicted depths. Both \code{"step"} and \code{"slice"} return a number of layers equal to
 length of \code{depth_slices}, and all other methods return data in interpolated 1cm slices.}
 

@@ -6,7 +6,7 @@
 #' repository](https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_Soil_Landscapes_of_the_United_States_100-meter_SOLUS100_soil_property_maps_project_repository/25033856).
 #'
 #' @details
-#' 
+#'
 #' If the input object `x` is not specified (`NULL` or missing), a _SpatRaster_ object using the
 #' virtual URLs is returned. The full extent and resolution data set can be then downloaded and
 #' written to file using `terra::writeRaster()` (or any other processing step specifying an output
@@ -16,7 +16,7 @@
 #' object containing point geometries, the result will be a _SoilProfileCollection_ for values
 #' extracted at the point locations. To return both the _SpatRaster_ and _SoilProfileCollection_
 #' object output in a _list_, use `grid = NULL`.
-#' 
+#'
 #' @param x  An R spatial object (such as a _SpatVector_, _SpatRaster_, or _sf_ object) or a
 #'   _SoilProfileCollection_ with coordinates initialized via `aqp::initSpatial<-`. Default: `NULL`
 #'   returns the CONUS extent as virtual raster. If `x` is a _SpatRaster_ the coordinate reference
@@ -40,8 +40,8 @@
 #' @param method character. Used to determine depth interpolation method for _SoilProfileCollection_
 #'   output. Default: `"linear"`. Options include any `method` allowed for `approxfun()` or
 #'   `splinefun()` plus `"step"` and `"slice"`. `"step"` uses the prediction depths as the top and
-#'   bottom of each interval to create a piecewise continuous profile to (maximum depth of 151 cm 
-#'   for 150 cm prediction depth). `"slice"` returns a discontinuous profile with 1 cm thick
+#'   bottom of each interval to create a piecewise continuous profile to maximum of 200 cm depth
+#'   (for 150 cm upper prediction depth). `"slice"` returns a discontinuous profile with 1 cm thick
 #'   slices at the predicted depths. Both `"step"` and `"slice"` return a number of layers equal to
 #'   length of `depth_slices`, and all other methods return data in interpolated 1cm slices.
 #' @param filename character. Path to write output raster file. Default: `NULL` will keep result in
@@ -54,7 +54,7 @@
 #' @references Nauman, T.W., Kienast-Brown, S., White, D.A. Brungard, C.W., Philippe, J., Roecker,
 #'   S.M., Thompson, J.A. Soil Landscapes of the United States (SOLUS): developing predictive soil
 #'   property maps of the conterminous US using hybrid training sets. In Prep for SSSAJ.
-#' 
+#'
 #' @author Andrew G. Brown
 #' 
 #' @importFrom stats approxfun splinefun
@@ -114,13 +114,13 @@ fetchSOLUS <- function(x = NULL,
                                        "95% high prediction interval"),
                        grid = TRUE,
                        samples = NULL,
-                       method = c("linear", "constant", "fmm", "natural", "monoH.FC", "step"),
+                       method = c("linear", "constant", "fmm", "natural", "monoH.FC", "step", "slice"),
                        filename = NULL,
                        overwrite = FALSE
                        ) {
   
   # Not all spline methods are relevant, but they can be allowed to work
-  # method <- match.arg(method, c("linear", "constant", "fmm", "periodic", "natural", "monoH.FC", "hyman", "step"))
+  method <- match.arg(method[1], c("linear", "constant", "fmm", "periodic", "natural", "monoH.FC", "hyman", "step", "slice"))
   
   # get index of SOLUS COGs
   ind <- .get_SOLUS_index()
@@ -296,13 +296,18 @@ fetchSOLUS <- function(x = NULL,
   iv <- names(h)[ldx]
   vn <- names(h)[!ldx]
   
-  if (method == "step") {
+  if (method %in% c("slice", "step")) {
     
     message("consider using method=\"constant\" or method=\"linear\"; SOLUS predictions represent depth slices that do not directly translate to intervals implied by method=\"step\"")
-    
-    # apply fudge factors for depth slices as property input source
-    h$bottom[h$bottom == 0] <- stepwise_dept[2]
-    h$bottom[h$top == 150] <- 151
+    if (method == "slice") {
+      
+      h$bottom <- h$top + 1
+        
+    } else {
+      # apply fudge factors for depth slices as property input source
+      h$bottom[h$bottom == 0] <- stepwise_dept[2]
+      h$bottom[h$top == 150] <- 151
+    }
   
     h <- as.data.frame(h)  
   
