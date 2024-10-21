@@ -12,7 +12,7 @@ data("mineralKing", package = "soilDB")
 # # load source data sets (CA630 and CA792 pedons)
 nasis_pedons <- fetchNASIS(rmHzErrors = FALSE, SS = FALSE)
 
-p <- rebuildSPC(subset(nasis_pedons, siteiid %in% as.double(c(loafercreek, gopheridge, mineralKing)$siteiid)))
+p <- rebuildSPC(subset(nasis_pedons, siteiid %in% c(loafercreek, gopheridge, mineralKing)$siteiid))
 write.csv(horizons(p), "data-raw/spc-horizons.csv", row.names = FALSE)
 write.csv(site(p), "data-raw/spc-site.csv", row.names = FALSE)
 write.csv(diagnostic_hz(p), "data-raw/spc-diagnostic_hz.csv", row.names = FALSE)
@@ -33,6 +33,10 @@ hztexclname(recent1822a) <- "texcl"
 loafercreek2 <- rebuildSPC(subset(recent1822a, profile_id(recent1822a) %in% profile_id(loafercreek)))
 gopheridge2 <- rebuildSPC(subset(recent1822a, profile_id(recent1822a) %in% profile_id(gopheridge)))
 mineralKing2 <- rebuildSPC(subset(recent1822a, profile_id(recent1822a) %in% profile_id(mineralKing)))
+
+loafercreek2$hzID <- loafercreek$hzID
+gopheridge2$hzID <- gopheridge2$hzID
+mineralKing2$hzID <- mineralKing2$hzID
 
 # ensure that phiid is set as hzID 
 hzidname(loafercreek2) <- "phiid"
