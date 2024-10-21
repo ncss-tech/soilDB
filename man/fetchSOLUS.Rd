@@ -48,9 +48,11 @@ other than \code{"step"}).}
 
 \item{method}{character. Used to determine depth interpolation method for \emph{SoilProfileCollection}
 output. Default: \code{"linear"}. Options include any \code{method} allowed for \code{approxfun()} or
-\code{splinefun()} plus \code{"step"}. \code{"step"} uses the prediction depths as the top of each interval
-and returns a number of layers equal to length of \code{depth_slices}. Methods other than "step"
-return data in interpolated 1cm slices.}
+\code{splinefun()} plus \code{"step"} and \code{"slice"}. \code{"step"} uses the prediction depths as the top and
+bottom of each interval to create a piecewise continuous profile to (maximum depth of 151 cm
+for 150 cm prediction depth). \code{"slice"} returns a discontinuous profile with 1 cm thick
+slices at the predicted depths. Both \code{"step"} and \code{"slice"} return a number of layers equal to
+length of \code{depth_slices}, and all other methods return data in interpolated 1cm slices.}
 
 \item{filename}{character. Path to write output raster file. Default: \code{NULL} will keep result in
 memory (or store in temporary file if memory threshold is exceeded)}
@@ -62,7 +64,8 @@ A \emph{SpatRaster} object containing SOLUS grids for specified extent, depths, 
 product types.
 }
 \description{
-This tool creates a virtual raster from Cloud Optimized GeoTIFFs (COGs) from the \href{https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_Soil_Landscapes_of_the_United_States_100-meter_SOLUS100_soil_property_maps_project_repository/25033856}{Soil Landscapes of the United States 100-meter (SOLUS100) soil property maps project repository}.
+This tool creates a virtual raster or downloads data for an extent from Cloud Optimized GeoTIFFs
+(COGs) from the \href{https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_Soil_Landscapes_of_the_United_States_100-meter_SOLUS100_soil_property_maps_project_repository/25033856}{Soil Landscapes of the United States 100-meter (SOLUS100) soil property maps project repository}.
 }
 \details{
 If the input object \code{x} is not specified (\code{NULL} or missing), a \emph{SpatRaster} object using the

@@ -1,11 +1,12 @@
 #' Fetch Soil Landscapes of the United States (SOLUS) Grids
 #'
-#' This tool creates a virtual raster from Cloud Optimized GeoTIFFs (COGs) from the [Soil Landscapes
-#' of the United States 100-meter (SOLUS100) soil property maps project
+#' This tool creates a virtual raster or downloads data for an extent from Cloud Optimized GeoTIFFs
+#' (COGs) from the [Soil Landscapes of the United States 100-meter (SOLUS100) soil property maps
+#' project
 #' repository](https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_Soil_Landscapes_of_the_United_States_100-meter_SOLUS100_soil_property_maps_project_repository/25033856).
 #'
 #' @details
-#'
+#' 
 #' If the input object `x` is not specified (`NULL` or missing), a _SpatRaster_ object using the
 #' virtual URLs is returned. The full extent and resolution data set can be then downloaded and
 #' written to file using `terra::writeRaster()` (or any other processing step specifying an output
@@ -38,9 +39,11 @@
 #'   other than `"step"`).
 #' @param method character. Used to determine depth interpolation method for _SoilProfileCollection_
 #'   output. Default: `"linear"`. Options include any `method` allowed for `approxfun()` or
-#'   `splinefun()` plus `"step"`. `"step"` uses the prediction depths as the top of each interval
-#'   and returns a number of layers equal to length of `depth_slices`. Methods other than "step"
-#'   return data in interpolated 1cm slices.
+#'   `splinefun()` plus `"step"` and `"slice"`. `"step"` uses the prediction depths as the top and
+#'   bottom of each interval to create a piecewise continuous profile to (maximum depth of 151 cm 
+#'   for 150 cm prediction depth). `"slice"` returns a discontinuous profile with 1 cm thick
+#'   slices at the predicted depths. Both `"step"` and `"slice"` return a number of layers equal to
+#'   length of `depth_slices`, and all other methods return data in interpolated 1cm slices.
 #' @param filename character. Path to write output raster file. Default: `NULL` will keep result in
 #'   memory (or store in temporary file if memory threshold is exceeded)
 #' @param overwrite Overwrite `filename` if it exists? Default: `FALSE`
