@@ -147,22 +147,35 @@ fetchSOLUS <- function(x = NULL,
       x <- as(x, 'sf')
     }
     
+    if (inherits(x, c('RasterLayer', 'RasterStack'))) {
+      x <- terra::rast(x)
+    }
+    
     if (!inherits(x, c('SpatRaster', 'SpatVector'))) {
       x <- terra::vect(x)
     }
     
-    if (!inherits(x, 'SpatRaster')){
-      # project input object to CRS of SOLUS
+    if (inherits(x, 'SpatVector')) {
+      # project any input vector object to CRS of SOLUS
       x <- terra::project(x, terra::crs(r))
-      
+    }
+    
+    xe <- terra::ext(terra::project(terra::as.polygons(x, ext = TRUE), r))
+    
+    # handle requests out-of-bounds
+    if (!terra::relate(terra::ext(r), xe, relation = "contains")[1]) {
+      stop("Extent of `x` is outside the boundaries of the source data extent.", call. = FALSE)
+    }
+    
+    if (!inherits(x, 'SpatRaster')){
       # crop to target extent (written to temp file if needed)
       r <- terra::crop(r, x)
     } else {
-      
       # if x is a spatraster, use it as a template for GDAL warp
       r <- terra::project(r, x, align_only = FALSE, mask = TRUE, threads = TRUE)
     }
     
+    # TODO: apply scaling factor in COG metadata
     # apply scaling factors (only when needed)
     if (any(isub$scalar != 1)) {
       r <- terra::rast(lapply(seq_len(nrow(isub)), function(i) {

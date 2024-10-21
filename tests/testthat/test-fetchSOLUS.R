@@ -28,16 +28,55 @@ test_that("fetchSOLUS works", {
   # site-level variables (e.g. resdept) added to site data.frame of SPC
   res <- fetchSOLUS(
     ssurgo.geom,
-    depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
+    # depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
     variables = c("sandtotal", "silttotal", "claytotal", "cec7", "resdept"),
     output_type = "prediction",
     method = "linear",
+    # samples = 1709,
     grid = NULL
-    #, samples = 1709
   )
   
   expect_length(res, 2)
   expect_equal(terra::ncell(res$grid), 3417)
   expect_equal(length(res$spc), 3417)
+  
+})
+
+
+test_that("virtual and out-of-bounds requests", {
+  
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  skip_if(as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)))
+  
+  skip_if_not_installed("sf")
+  
+  skip_if_not_installed("terra")
+  
+  # virtual raster for one variable*depth
+  tmp <- fetchSOLUS(variables = "claytotal",
+                    output_type = "prediction",
+                    depth_slices = "0")
+  
+  expect_true(inherits(tmp, "SpatRaster"))
+  
+  # virtual raster covers large area
+  pe <- terra::as.polygons(tmp, ext = TRUE)
+  expect_true(terra::expanse(pe, unit = "km") > 1e7)
+  
+  # extract corner point and buffer 500m
+  te <- terra::buffer(terra::as.points(terra::simplifyGeom(pe))[1], 500)
+  
+  expect_error(
+    fetchSOLUS(
+      x = te,
+      variables = "claytotal",
+      output_type = "prediction",
+      depth_slices = "0"
+    ),
+    regexp = "outside the boundaries of the source data extent"
+  )
   
 })
