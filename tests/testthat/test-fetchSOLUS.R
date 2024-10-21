@@ -24,7 +24,7 @@ test_that("fetchSOLUS works", {
     geomIntersection = TRUE
   )
   
-  # SoilProfileCollection output, using linear interpolation for 1cm slices
+  # raster and SoilProfileCollection output, using linear interpolation for 1cm slices
   # site-level variables (e.g. resdept) added to site data.frame of SPC
   res <- fetchSOLUS(
     ssurgo.geom,
@@ -61,17 +61,32 @@ test_that("virtual and out-of-bounds requests", {
                     depth_slices = "0")
   
   expect_true(inherits(tmp, "SpatRaster"))
+  expect_true(grepl("claytotal_0_cm_p", terra::sources(tmp)))
   
   # virtual raster covers large area
   pe <- terra::as.polygons(tmp, ext = TRUE)
   expect_true(terra::expanse(pe, unit = "km") > 1e7)
   
-  # extract corner point and buffer 500m
-  te <- terra::buffer(terra::as.points(terra::simplifyGeom(pe))[1], 500)
+  # extract corner point and buffer 500km
+  te1 <- terra::buffer(terra::as.points(terra::simplifyGeom(pe))[1], 5e5)
+  
+  # only bottom-right corner returns data (expected 5000x5000 cells at 100m resolution)
+  expect_equal(terra::ncell(
+    fetchSOLUS(
+      x = te1,
+      variables = "claytotal",
+      output_type = "prediction",
+      depth_slices = "0"
+    )
+  ), 2.5e7)
+  
+  # choose an area that does not overlap the source raster at all
+  te2 <- terra::as.polygons(terra::ext(-1, 1, -1, 1))
+  terra::crs(te2) <- "OGC:CRS84"
   
   expect_error(
     fetchSOLUS(
-      x = te,
+      x = te2,
       variables = "claytotal",
       output_type = "prediction",
       depth_slices = "0"

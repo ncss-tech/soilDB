@@ -166,7 +166,8 @@ fetchSOLUS <- function(x = NULL,
     xe <- terra::ext(terra::project(terra::as.polygons(x, ext = TRUE), r))
     
     # handle requests out-of-bounds
-    if (!terra::relate(terra::ext(r), xe, relation = "contains")[1]) {
+    if (!(terra::relate(terra::ext(r), xe, relation = "contains")[1] || 
+        terra::relate(terra::ext(r), xe, relation = "overlaps")[1])) {
       stop("Extent of `x` is outside the boundaries of the source data extent.", call. = FALSE)
     }
     
