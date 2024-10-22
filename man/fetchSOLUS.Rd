@@ -15,6 +15,7 @@ fetchSOLUS(
   grid = TRUE,
   samples = NULL,
   method = c("linear", "constant", "fmm", "natural", "monoH.FC", "step", "slice"),
+  max_depth = 151,
   filename = NULL,
   overwrite = FALSE
 )
@@ -53,6 +54,10 @@ bottom of each interval to create a piecewise continuous profile to maximum of 2
 (for 150 cm upper prediction depth). \code{"slice"} returns a discontinuous profile with 1 cm thick
 slices at the predicted depths. Both \code{"step"} and \code{"slice"} return a number of layers equal to
 length of \code{depth_slices}, and all other methods return data in interpolated 1cm slices.}
+
+\item{max_depth}{integer. Maximum depth to interpolate 150 cm slice data to. Default: \code{151}.
+Interpolation deeper than 151 cm is not possible for methods other than \code{"step"} and will
+result in missing values.}
 
 \item{filename}{character. Path to write output raster file. Default: \code{NULL} will keep result in
 memory (or store in temporary file if memory threshold is exceeded)}

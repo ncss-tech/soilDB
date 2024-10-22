@@ -44,9 +44,12 @@
 #'   (for 150 cm upper prediction depth). `"slice"` returns a discontinuous profile with 1 cm thick
 #'   slices at the predicted depths. Both `"step"` and `"slice"` return a number of layers equal to
 #'   length of `depth_slices`, and all other methods return data in interpolated 1cm slices.
+#' @param max_depth integer. Maximum depth to interpolate 150 cm slice data to. Default: `151`.
+#'   Interpolation deeper than 151 cm is not possible for methods other than `"step"` and will
+#'   result in missing values.
 #' @param filename character. Path to write output raster file. Default: `NULL` will keep result in
 #'   memory (or store in temporary file if memory threshold is exceeded)
-#' @param overwrite Overwrite `filename` if it exists? Default: `FALSE`
+#' @param overwrite Overwrite `filename` if it exists? Default: `FALSE` 
 #'
 #' @return A _SpatRaster_ object containing SOLUS grids for specified extent, depths, variables, and
 #'   product types.
@@ -115,6 +118,7 @@ fetchSOLUS <- function(x = NULL,
                        grid = TRUE,
                        samples = NULL,
                        method = c("linear", "constant", "fmm", "natural", "monoH.FC", "step", "slice"),
+                       max_depth = 151,
                        filename = NULL,
                        overwrite = FALSE
                        ) {
@@ -220,7 +224,7 @@ fetchSOLUS <- function(x = NULL,
   
   dat$ID <- seq(nrow(dat))
     
-  spc <- .convert_SOLUS_dataframe_to_SPC(dat, idname = "ID", method = method)
+  spc <- .convert_SOLUS_dataframe_to_SPC(dat, idname = "ID", method = method, max_depth = max_depth)
   aqp::initSpatial(spc, terra::crs(r)) <- ~ x + y
   
   if (isFALSE(grid)) {
@@ -255,7 +259,7 @@ fetchSOLUS <- function(x = NULL,
   res
 }
 
-.convert_SOLUS_dataframe_to_SPC <- function(x, idname = "id", method) {
+.convert_SOLUS_dataframe_to_SPC <- function(x, idname = "id", method, max_depth = 151) {
   # x: data.frame object with column names corresponding to .get_SOLUS_index() filenames
   # idname: character. column name used to identify profiles
   # method: character. depth interpolation method
@@ -299,15 +303,16 @@ fetchSOLUS <- function(x = NULL,
   
   if (method %in% c("slice", "step")) {
     
-    message("consider using method=\"constant\" or method=\"linear\"; SOLUS predictions represent depth slices that do not directly translate to intervals implied by method=\"step\"")
     if (method == "slice") {
       
       h$bottom <- h$top + 1
         
     } else {
+      message("NOTE: SOLUS predictions represent depth slices (method=\"slice\")\nConsider using method=\"constant\" or method=\"linear\".") 
+    
       # apply fudge factors for depth slices as property input source
-      h$bottom[h$bottom == 0] <- stepwise_dept[2]
-      h$bottom[h$top == 150] <- 151
+      h$bottom[h$bottom == 0] <- 5
+      h$bottom[h$top == 150] <- max_depth
     }
   
     h <- as.data.frame(h)  
@@ -317,11 +322,14 @@ fetchSOLUS <- function(x = NULL,
     site(h) <- s
     
     return(h)
-    
   } else if (method %in% c("linear", "constant", "fmm", "periodic", "natural", "monoH.FC", "hyman")) {
     
     mindep <- min(h$top, na.rm = TRUE)
     maxdep <- max(h$bottom, na.rm = TRUE)
+    
+    if (maxdep == 150) {
+      maxdep <- max_depth
+    }
     
     if (method %in% c("linear", "constant")) {
       FUN <- approxfun
