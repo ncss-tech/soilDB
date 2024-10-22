@@ -146,6 +146,9 @@ fetchSOLUS <- function(x = NULL,
     paste0("/vsicurl/", isub$url)
   )
   
+  # manually apply scaling factors to source raster
+  terra::scoff(r) <- cbind(1 / isub$scalar, 0)
+  
   # do conversion of input spatial object 
   if (!missing(x) && !is.null(x)) {
     
@@ -177,27 +180,10 @@ fetchSOLUS <- function(x = NULL,
     
     if (!inherits(x, 'SpatRaster')){
       # crop to target extent (written to temp file if needed)
-      r <- terra::crop(r, x)
+      r <- terra::crop(r, x, filename = filename)
     } else {
       # if x is a spatraster, use it as a template for GDAL warp
-      r <- terra::project(r, x, align_only = FALSE, mask = TRUE, threads = TRUE)
-    }
-    
-    # TODO: apply scaling factor in COG metadata
-    # apply scaling factors (only when needed)
-    if (any(isub$scalar != 1)) {
-      r <- terra::rast(lapply(seq_len(nrow(isub)), function(i) {
-        r[isub$subproperty[i]] / isub$scalar[i] 
-      }))
-    }
-    
-    # write to final output file (if filename specified)
-    if (!is.null(filename)) {
-      r <- terra::writeRaster(r, x, filename = filename)
-    }
-  } else {
-    if (any(isub$scalar != 1)) {
-      warning("NOTE: virtual reference to remote sources returned; no scaling factors have been applied!", call. = FALSE)
+      r <- terra::project(r, x, filename = filename, align_only = FALSE, mask = TRUE, threads = TRUE)
     }
   }
   
