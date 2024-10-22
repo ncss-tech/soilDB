@@ -105,7 +105,7 @@
 #' # plot, truncating each profile to the predicted restriction depth
 #' aqp::plotSPC(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FALSE)
 fetchSOLUS <- function(x = NULL, 
-                       depth_slices = c("0", "5", "15", "30", "60", "100", "150"), 
+                       depth_slices = c(0, 5, 15, 30, 60, 100, 150), 
                        variables = c("anylithicdpt", "caco3", "cec7", "claytotal",
                                      "dbovendry",  "ec", "ecec", "fragvol", "gypsum",
                                      "ph1to1h2o", "resdept", "sandco", "sandfine", 
@@ -127,11 +127,15 @@ fetchSOLUS <- function(x = NULL,
   method <- match.arg(method[1], c("linear", "constant", "fmm", "periodic", "natural", "monoH.FC", "hyman", "step", "slice"))
   
   # get index of SOLUS COGs
-  ind <- .get_SOLUS_index()
+  ind <- try(.get_SOLUS_index())
+  
+  if (inherits(ind, 'try-error')) {
+    stop("Failed to fetch SOLUS grid index", call. = FALSE)
+  }
   
   # subset based on user specified properties, depths, and product type
   isub <- ind[ind$property %in% variables & 
-                ind$depth_slice %in% c("all", depth_slices) &
+                as.character(ind$depth_slice) %in% c("all", depth_slices) &
                 ind$filetype %in% output_type,]
   
   isub$subproperty <- gsub("\\.tif$", "", isub$filename)

@@ -6,7 +6,7 @@
 \usage{
 fetchSOLUS(
   x = NULL,
-  depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
+  depth_slices = c(0, 5, 15, 30, 60, 100, 150),
   variables = c("anylithicdpt", "caco3", "cec7", "claytotal", "dbovendry", "ec", "ecec",
     "fragvol", "gypsum", "ph1to1h2o", "resdept", "sandco", "sandfine", "sandmed",
     "sandtotal", "sandvc", "sandvf", "sar", "silttotal", "soc"),
