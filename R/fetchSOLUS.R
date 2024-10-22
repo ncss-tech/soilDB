@@ -36,14 +36,16 @@
 #' @param samples integer. Number of regular samples to return for _SoilProfileCollection_ output.
 #'   Default `NULL` will convert all grid cells to a unique profile. Note that for a large extent,
 #'   this can produce large objects with a very large number of layers (especially with `method`
-#'   other than `"step"`).
+#' other than `"step"`).
 #' @param method character. Used to determine depth interpolation method for _SoilProfileCollection_
 #'   output. Default: `"linear"`. Options include any `method` allowed for `approxfun()` or
-#'   `splinefun()` plus `"step"` and `"slice"`. `"step"` uses the prediction depths as the top and
-#'   bottom of each interval to create a piecewise continuous profile to maximum of 200 cm depth
-#'   (for 150 cm upper prediction depth). `"slice"` returns a discontinuous profile with 1 cm thick
-#'   slices at the predicted depths. Both `"step"` and `"slice"` return a number of layers equal to
-#'   length of `depth_slices`, and all other methods return data in interpolated 1cm slices.
+#'   `splinefun()` plus `"step"`, `"slice"` and several mass-preserving spline methods. `"step"`
+#'   uses the prediction depths as the top and bottom of each interval to create a piecewise
+#'   continuous profile. `"slice"` returns a discontinuous profile with 1 cm thick slices at the
+#'   predicted depths. To use mass-preserving (equal area) splines via `mpspline2::mpspline()` use
+#'   `"mpspline_est_icm"`, `"mpspline_est_1cm"`, or `"mpspline_est_dcm"`. Methods `"step"`,
+#'   `"slice"`, `"mpspline_est_icm"`, and `"mpspline_est_dcm"` return a number of layers equal to
+#'   length of `depth_slices`, and all other methods return values for interpolated 1 cm slices.
 #' @param max_depth integer. Maximum depth to interpolate 150 cm slice data to. Default: `151`.
 #'   Interpolation deeper than 151 cm is not possible for methods other than `"step"` and will
 #'   result in missing values.
@@ -124,7 +126,8 @@ fetchSOLUS <- function(x = NULL,
                        ) {
   
   # Not all spline methods are relevant, but they can be allowed to work
-  method <- match.arg(method[1], c("linear", "constant", "fmm", "periodic", "natural", "monoH.FC", "hyman", "step", "slice"))
+  method <- match.arg(method[1], c("linear", "constant", "fmm", "periodic", "natural", "monoH.FC", "hyman", "step", "slice", 
+                                   "mpspline", "mpspline_est_1cm", "mpspline_est_icm", "mpspline_est_dcm"))
   
   # get index of SOLUS COGs
   ind <- try(.get_SOLUS_index())
@@ -312,6 +315,74 @@ fetchSOLUS <- function(x = NULL,
     site(h) <- s
     
     return(h)
+  } else if (grepl("^mpspline", method)) {
+    if (!requireNamespace("mpspline2")) {
+      stop("package 'mpspline2' is required for `method=\"", method, "\"", call. = FALSE)
+    }
+    
+    # default uses the input (standard SOLUS) depth intervals
+    # optionally produce 1cm intervals or global soil map standard depths (+150)
+    mpspline_method <- switch(method,
+                              "mpspline_est_1cm" = "est_1cm",
+                              "mpspline_est_dcm" = "est_dcm",
+                              "est_icm")
+    
+    h$bottom[h$bottom == 0] <- 5
+    h$bottom[h$top == 150] <- max_depth
+    
+    .top <- unique(h$top)
+    .bottom <- unique(h$bottom)
+    
+    if (mpspline_method == "est_1cm") {
+      .top <- 0:199
+      .bottom <- .top + 1
+    } else if (mpspline_method == "est_dcm") {
+      .top2 <- c(0, 5, 15, 30, 60, 100, 150)
+      .top <- .top2[.top2 %in% .top]
+      .bottom2 <- c(5, 15, 30, 60, 100, 150, max_depth)
+      .bottom <- .bottom2[.bottom2 %in% .bottom]
+    }
+    
+    h2 <- h[, data.frame(top = .top, 
+                         bottom = .bottom, 
+                         lapply(vn, 
+                          function(n) {
+                            x <- .SD[[n]]
+                            
+                            out <- rep(NA_real_, length(.top))
+                            
+                            if (all(is.na(x)))
+                              return(out)
+                            
+                            out2 <- mpspline2::mpspline_one(
+                              data.frame(
+                                ID = .GRP,
+                                top = top,
+                                bottom = bottom,
+                                var = x
+                              ),
+                              var_name = "var",
+                              d = c(0, 5, 15, 30, 60, 100, 150, max_depth)
+                            )[[mpspline_method]]
+                            out[seq(out2)] <- out2
+                            
+                            if (mpspline_method == "est_dcm") {
+                              return(out[.top2 %in% .top])
+                            } else {
+                              return(out)
+                            }
+                         })),
+                         .SDcols = vn, 
+                         by = list(ID = h[[idname]])]
+    colnames(h2) <- c("ID", "top", "bottom", vn)
+    
+    h2 <- as.data.frame(h2)
+    
+    depths(h2) <- c(idname, "top", "bottom")
+    
+    site(h2) <- s
+    
+    return(h2)
   } else if (method %in% c("linear", "constant", "fmm", "periodic", "natural", "monoH.FC", "hyman")) {
     
     mindep <- min(h$top, na.rm = TRUE)
