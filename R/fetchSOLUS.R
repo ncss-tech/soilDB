@@ -199,7 +199,7 @@ fetchSOLUS <- function(x = NULL,
     stop("Cannot interpolate for SoilProfileCollection output with only one depth slice! Change `method` to \"step\" or add another `depth_slice`.", call. = FALSE)
   }
     
-  if (!missing(x) && !is.null(x) && terra::is.points(x)) {
+  if (!missing(x) && !is.null(x) && inherits(x, 'SpatVector') && terra::is.points(x)) {
     dat <- terra::extract(r, x)
   } else {
     if (!missing(samples) && !is.null(samples)) {
