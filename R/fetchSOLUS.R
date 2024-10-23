@@ -335,7 +335,7 @@ fetchSOLUS <- function(x = NULL,
     h2 <- h[, data.frame(top = mindep:(maxdep - 1),
                          bottom = (mindep + 1):maxdep,
                          lapply(.SD, function(x) {
-                           if (all(is.na(x)))
+                           if (sum(!is.na(x)) <= 1)
                              return(rep(NA_real_, length(xx)))
                            FUN(y, x, method = method)(xx)
                          })), 
