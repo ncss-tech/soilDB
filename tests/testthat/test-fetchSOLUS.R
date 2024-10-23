@@ -10,6 +10,8 @@ test_that("fetchSOLUS works", {
   
   skip_if_not_installed("terra")
   
+  skip_if_not_installed("rvest")
+  
   b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
   
   bbox.sp <- sf::st_as_sf(wk::rct(
@@ -54,6 +56,8 @@ test_that("virtual and out-of-bounds requests", {
   skip_if_not_installed("sf")
   
   skip_if_not_installed("terra")
+  
+  skip_if_not_installed("rvest")
   
   # virtual raster for one variable*depth
   tmp <- fetchSOLUS(variables = "claytotal",

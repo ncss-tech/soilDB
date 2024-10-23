@@ -227,6 +227,9 @@ fetchSOLUS <- function(x = NULL,
 .get_SOLUS_index <- function() {
   
   # TODO: parse XML directly instead of HTML?
+  if (!requireNamespace("rvest")) {
+    stop("package 'rvest' is required", call. = FALSE)  
+  }
   
   # read index as HTML table
   res <- rvest::html_table(rvest::read_html("https://storage.googleapis.com/solus100pub/index.html"), header = FALSE)[[1]]
