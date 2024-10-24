@@ -11,6 +11,8 @@ library(soilDB)
 ## click somewhere on the map
 ## press 'b', BBOX is copied to the clipboard
 
+## TN085
+bb <- '-87.9174 35.8424,-87.9174 35.8756,-87.8487 35.8756,-87.8487 35.8424,-87.9174 35.8424'
 
 ## TN149
 bb <- '-86.5358 35.6571,-86.5358 35.6737,-86.4971 35.6737,-86.4971 35.6571,-86.5358 35.6571'
@@ -168,7 +170,7 @@ par(mar = c(0.5, 0, 0, 2), bg = 'black', fg = 'white')
 plotGeomorphCrossSection(osd, type = 'line')
 plotGeomorphCrossSection(osd, type = 'bar')
 
-options(.aqp.plotSPC.args = list(width = 0.35, max.depth = 150, cex.id = 0.7))
+options(.aqp.plotSPC.args = list(width = 0.35, max.depth = 150, cex.id = 0.7, cex.names = 0.8))
 plotGeomorphCrossSection(osd, type = 'line', clust = FALSE)
 plotGeomorphCrossSection(osd, type = 'bar', clust = FALSE)
 
