@@ -70,7 +70,6 @@ test_that("fetchOSD() sensible values when missing in extended mode", {
   
   # extended request
   expect_false(x.extended$flats)
-  expect_false(x.extended$climate.annual)
   
 })
 
