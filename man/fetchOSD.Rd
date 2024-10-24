@@ -89,9 +89,9 @@ Requests to the SoilWeb API are split into batches of 100 series names from \cod
   # moist soil colors
   par(mar=c(0,0,0,0), mfrow=c(2,1))
   plot(s.moist, name='hzname',
-       cex.names=0.85, axis.line.offset=-4)
+       cex.names=0.85, depth.axis = list(line = -4))
   plot(s.dry, name='hzname',
-       cex.names=0.85, axis.line.offset=-4)
+       cex.names=0.85, depth.axis = list(line = -4))
 
   # extended mode: return a list with SPC + summary tables
   x <- fetchOSD(s.list, extended = TRUE, colorState = 'dry')
