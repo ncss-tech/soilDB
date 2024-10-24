@@ -126,11 +126,9 @@
 <span class="r-in"><span>  <span class="co"># moist soil colors</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">s.moist</span>, name<span class="op">=</span><span class="st">'hzname'</span>,</span></span>
-<span class="r-in"><span>       cex.names<span class="op">=</span><span class="fl">0.85</span>, axis.line.offset<span class="op">=</span><span class="op">-</span><span class="fl">4</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> `axis.line.offset` is now deprecated, please use `depth.axis` argument</span>
+<span class="r-in"><span>       cex.names<span class="op">=</span><span class="fl">0.85</span>, depth.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>line <span class="op">=</span> <span class="op">-</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">s.dry</span>, name<span class="op">=</span><span class="st">'hzname'</span>,</span></span>
-<span class="r-in"><span>       cex.names<span class="op">=</span><span class="fl">0.85</span>, axis.line.offset<span class="op">=</span><span class="op">-</span><span class="fl">4</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> `axis.line.offset` is now deprecated, please use `depth.axis` argument</span>
+<span class="r-in"><span>       cex.names<span class="op">=</span><span class="fl">0.85</span>, depth.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>line <span class="op">=</span> <span class="op">-</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="fetchOSD-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># extended mode: return a list with SPC + summary tables</span></span></span>
@@ -142,17 +140,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 18</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ SPC             :Formal class 'SoilProfileCollection' [package "aqp"] with 8 slots</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ competing       :'data.frame':	84 obs. of  3 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ geog_assoc_soils:'data.frame':	77 obs. of  2 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ geog_assoc_soils:'data.frame':	6 obs. of  2 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ geomcomp        :'data.frame':	11 obs. of  9 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ hillpos         :'data.frame':	11 obs. of  8 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ mtnpos          :'data.frame':	1 obs. of  9 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ terrace         :'data.frame':	8 obs. of  5 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ terrace         :'data.frame':	9 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ flats           :'data.frame':	5 obs. of  7 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ shape_across    :'data.frame':	11 obs. of  8 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ shape_down      :'data.frame':	11 obs. of  8 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ pmkind          :'data.frame':	18 obs. of  5 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ pmkind          :'data.frame':	19 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ pmorigin        :'data.frame':	33 obs. of  5 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ mlra            :'data.frame':	47 obs. of  4 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ mlra            :'data.frame':	11 obs. of  4 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ ecoclassid      :'data.frame':	59 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ climate.annual  :'data.frame':	88 obs. of  12 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ climate.monthly :'data.frame':	264 obs. of  14 variables:</span>
