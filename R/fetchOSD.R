@@ -1,6 +1,10 @@
 # 2018-10-11: updated to new API, URL subject to change
 # fetch basic OSD, SC, and SoilWeb summaries from new API
 
+# 2024-10-24: API changes and preparing for a move to new soilweb servers
+#             * annual.climate is now a data.frame padded with NA when series is outside of CONUS
+#             * eff_class added to horizon data
+
 
 ## tabulate the number of records within each geomorphic table
 ## there could be some cases where there are no records, resulting in FALSE
@@ -249,6 +253,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	    cf_class = cf_class,
 	    pH = ph,
 	    pH_class = ph_class,
+	    eff_class = eff_class,
 	    distinctness = distinctness,
 	    topography = topography,
 	    dry_color_estimated = as.logical(dry_color_estimated),
