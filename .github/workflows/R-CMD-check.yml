@@ -64,6 +64,7 @@ jobs:
         with:
           extra-packages: any::rcmdcheck, any::remotes, terra=?ignore-before-r=4.1.0, knitr=?ignore-before-r=4.0.0, rmarkdown=?ignore-before-r=4.0.0, testthat=?ignore-before-r=4.0.0, local::., brownag/soilDBdata
           # upgrade: 'TRUE' ## NB: required to force building of source packages
+          cache: false
           needs: check
 
       - name: Install aqp off GitHub  (devel and 3.6 only)
