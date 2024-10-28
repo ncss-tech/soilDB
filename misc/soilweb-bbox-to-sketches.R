@@ -11,6 +11,12 @@ library(soilDB)
 ## click somewhere on the map
 ## press 'b', BBOX is copied to the clipboard
 
+## PA055
+bb <- '-77.5878 39.9331,-77.5878 39.9645,-77.5191 39.9645,-77.5191 39.9331,-77.5878 39.9331'
+
+## VA191
+bb <- '-82.1785 36.6716,-82.1785 36.7044,-82.1098 36.7044,-82.1098 36.6716,-82.1785 36.6716'
+
 ## TN085
 bb <- '-87.9174 35.8424,-87.9174 35.8756,-87.8487 35.8756,-87.8487 35.8424,-87.9174 35.8424'
 
@@ -164,7 +170,7 @@ SoilTaxonomyDendrogram(
 # * the following functions will nearly always require tinkering with `scaling.factor`
 
 options(.aqp.plotSPC.args = NULL)
-options(.aqp.plotSPC.args = list(width = 0.35, scaling.factor = 0.013, max.depth = 150, cex.id = 0.7))
+options(.aqp.plotSPC.args = list(width = 0.35, scaling.factor = 0.013, max.depth = 150, cex.id = 0.7, cex.names = 0.85))
 
 par(mar = c(0.5, 0, 0, 2), bg = 'black', fg = 'white')
 plotGeomorphCrossSection(osd, type = 'line')
