@@ -1,7 +1,14 @@
-# soilDB 2.8.5 (development)
- - `fetchLDM()` add support for `area_type` with local database connections (`dsn` argument)
- - updated SCAN, CSCAN, SNOTEL, SNOWLITE station metadata (#61) via @jskovlin
- - timezone support for hourly data requested by `fetchSCAN()` (#184) thanks to new WCIS API
+# soilDB 2.8.5 (2024-11-04)
+ - `fetchLDM()` add support for `area_type` argument with local database connections (`dsn` argument)
+ - `fetchSCAN()` updates:
+   - Improved  SCAN, CSCAN, SNOTEL, SNOWLITE station metadata (#61) via @jskovlin
+   - Timezone support for hourly data requested by `fetchSCAN()` (#184)
+   - All above-ground sensors are now returned, instead of just the first of each type (#359)
+ - Added new help file on NASIS database sources; see `?NASISLocalDatabase` (#360)
+ - `get_SDA_*()` function updates related to consistent parameters for miscellaneous areas and minor components (#361)
+ - `fetchSOLUS()`: New function for downloading data from Soil Landscapes of the United States 100-meter (SOLUS100) soil property maps project repository (#362)
+ - `fetchNASIS()` more consistent QC messages and output for multiple site observations and lab samples
+ - Updated SoilProfileCollection data sets (`loafercreek`, `gopheridge`, `mineralKing`) for aqp 2.1.x object definition and recent changes to `fetchNASIS()` (#363)
  
 # soilDB 2.8.4 (2024-08-17)
  - `createSSURGO()` bug fixes following changes in 2.8.3
@@ -25,7 +32,6 @@
  - `fetchSCAN()`: fix header format; thanks to @dschlaep for reporting and providing a fix
 
 # soilDB 2.8.2 (2024-04-22)
-
  - SoilWeb Web Coverage Service MUKEY grid data source (used for `mukey.wcs()`) and metadata have been updated for FY2024
    - Note that ISSR800 WCS (`ISSR800.wcs()` source) is still using FY2023/FY2022 data
  - `get_SDA_coecoclass()` default data returned for methods "Dominant Component", "Dominant Condition" and "None" now include `localphase` column
