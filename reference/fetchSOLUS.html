@@ -162,6 +162,7 @@ property maps of the conterminous US using hybrid training sets. In Prep for SSS
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">119.747629</span>, <span class="op">-</span><span class="fl">119.67935</span>, <span class="fl">36.912019</span>, <span class="fl">36.944987</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">bbox.sp</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">wk</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/wk/reference/rct.html" class="external-link">rct</a></span><span class="op">(</span></span></span>
@@ -183,10 +184,8 @@ property maps of the conterminous US using hybrid training sets. In Prep for SSS
 <span class="r-in"><span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sandtotal"</span>, <span class="st">"silttotal"</span>, <span class="st">"claytotal"</span>, <span class="st">"cec7"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  output_type <span class="op">=</span> <span class="st">"prediction"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: rvest</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="fetchSOLUS-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># SoilProfileCollection output, using linear interpolation for 1cm slices</span></span></span>
 <span class="r-in"><span><span class="co"># site-level variables (e.g. resdept) added to site data.frame of SPC</span></span></span>
@@ -199,11 +198,10 @@ property maps of the conterminous US using hybrid training sets. In Prep for SSS
 <span class="r-in"><span>  grid <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  samples <span class="op">=</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> converting profile IDs from integer to character</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot, truncating each profile to the predicted restriction depth</span></span></span>
 <span class="r-in"><span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">trunc</a></span><span class="op">(</span><span class="va">res</span>, <span class="fl">0</span>, <span class="va">res</span><span class="op">$</span><span class="va">resdept_p</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"claytotal_p"</span>, divide.hz <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="fetchSOLUS-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
