@@ -86,6 +86,7 @@ object output in a \emph{list}, use \code{grid = NULL}.
 \examples{
 \dontshow{if (curl::has_internet() && requireNamespace("sf") && requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
+\dontrun{
 b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
 
 bbox.sp <- sf::st_as_sf(wk::rct(
@@ -124,6 +125,7 @@ res <- fetchSOLUS(
 
 # plot, truncating each profile to the predicted restriction depth
 aqp::plotSPC(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FALSE)
+}
 \dontshow{\}) # examplesIf}
 }
 \references{

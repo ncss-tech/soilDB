@@ -66,6 +66,7 @@
 #'
 #' @examplesIf curl::has_internet() && requireNamespace("sf") && requireNamespace("terra")
 #' 
+#' \dontrun{
 #' b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
 #' 
 #' bbox.sp <- sf::st_as_sf(wk::rct(
@@ -104,6 +105,7 @@
 #' 
 #' # plot, truncating each profile to the predicted restriction depth
 #' aqp::plotSPC(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FALSE)
+#' }
 fetchSOLUS <- function(x = NULL, 
                        depth_slices = c(0, 5, 15, 30, 60, 100, 150), 
                        variables = c("anylithicdpt", "caco3", "cec7", "claytotal",
