@@ -129,9 +129,10 @@ aqp::plotSPC(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FA
 \dontshow{\}) # examplesIf}
 }
 \references{
-Nauman, T.W., Kienast-Brown, S., White, D.A. Brungard, C.W., Philippe, J., Roecker,
-S.M., Thompson, J.A. Soil Landscapes of the United States (SOLUS): developing predictive soil
-property maps of the conterminous US using hybrid training sets. In Prep for SSSAJ.
+Nauman, T. W., Kienast-Brown, S., Roecker, S. M., Brungard, C., White, D., Philippe,
+J., & Thompson, J. A. (2024). Soil landscapes of the United States (SOLUS): developing
+predictive soil property maps of the conterminous United States using hybrid training sets.
+Soil Science Society of America Journal, 88, 2046–2065. \doi{https://doi.org/10.1002/saj2.20769}
 }
 \author{
 Andrew G. Brown
