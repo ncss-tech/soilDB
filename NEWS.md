@@ -1,3 +1,6 @@
+# soilDB 2.8.6 (development)
+ - `fetchNASIS()` and `get_site_data_from_NASIS_db()` now return Ecological Site State and Community Phase information (ecostatename, ecostateid, commphasename, commphaseid columns) from Site Observation table
+
 # soilDB 2.8.5 (2024-11-04)
  - `fetchLDM()` add support for `area_type` argument with local database connections (`dsn` argument)
  - `fetchSCAN()` updates:
