@@ -15,7 +15,7 @@ fetchNASIS(
   rmHzErrors = FALSE,
   nullFragsAreZero = TRUE,
   soilColorState = "moist",
-  mixColors = TRUE,
+  mixColors = FALSE,
   lab = FALSE,
   fill = FALSE,
   dropAdditional = TRUE,
@@ -50,7 +50,7 @@ the results? (default: \code{FALSE})}
 
 \item{soilColorState}{Used only for \code{from = 'pedons'}; which colors should be used to generate the convenience field \code{soil_color}? (\code{'moist'} or \code{'dry'})}
 
-\item{mixColors}{Should mixed colors be calculated (Default: \code{TRUE}) where multiple colors are populated for the same moisture state in a horizon? \code{FALSE} takes the dominant color for each horizon moist/dry state.}
+\item{mixColors}{Should mixed colors be calculated where multiple colors are populated for the same moisture state in a horizon? Default \code{FALSE} takes the dominant color for each horizon moist/dry state.}
 
 \item{lab}{Should the \code{phlabresults} child table be fetched with site/pedon/horizon data (default: \code{FALSE})}
 

@@ -45,7 +45,7 @@
 #' @param nullFragsAreZero Should fragment volumes of `NULL` be interpreted as `0`?
 #' (default: `TRUE`), see details
 #' @param soilColorState Used only for `from = 'pedons'`; which colors should be used to generate the convenience field `soil_color`? (`'moist'` or `'dry'`)
-#' @param mixColors Should mixed colors be calculated (Default: `TRUE`) where multiple colors are populated for the same moisture state in a horizon? `FALSE` takes the dominant color for each horizon moist/dry state.
+#' @param mixColors Should mixed colors be calculated where multiple colors are populated for the same moisture state in a horizon? Default `FALSE` takes the dominant color for each horizon moist/dry state.
 #' @param lab Should the `phlabresults` child table be fetched with site/pedon/horizon data (default: `FALSE`)
 #' @param fill Include pedon or component records without horizon data in result? (default: `FALSE`)
 #' @param dropAdditional Used only for `from='components'` with `duplicates = TRUE`. Prevent "duplication" of `mustatus == "additional"`  mapunits? Default: `TRUE`
@@ -64,7 +64,7 @@ fetchNASIS <- function(from = 'pedons',
                        rmHzErrors = FALSE,
                        nullFragsAreZero = TRUE,
                        soilColorState = 'moist',
-                       mixColors = TRUE,
+                       mixColors = FALSE,
                        lab = FALSE,
                        fill = FALSE,
                        dropAdditional = TRUE,
