@@ -6,7 +6,7 @@
                                rmHzErrors = FALSE,
                                nullFragsAreZero = TRUE,
                                soilColorState = 'moist',
-                               mixColors = TRUE,
+                               mixColors = FALSE,
                                lab = FALSE,
                                stringsAsFactors = NULL,
                                dsn = NULL
@@ -28,7 +28,7 @@
   # these fail gracefully when no data in local DB | selected set
   site_data  <- get_site_data_from_NASIS_db(SS = SS, dsn = dsn)
   hz_data    <- get_hz_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn)
-  color_data <- get_colors_from_NASIS_db(SS = SS, mixColors = mixColors, dsn = dsn)
+  color_data <- get_colors_from_NASIS_db(SS = SS, method = ifelse(isTRUE(mixColors), "mixed", "dominant"), dsn = dsn)
 
   ## ensure there are enough data to create an SPC object
   ds <- ifelse(SS, "NASIS selected set", "NASIS local database")

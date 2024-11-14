@@ -2,6 +2,7 @@
  - `fetchNASIS()` and `get_site_data_from_NASIS_db()` now return Ecological Site State and Community Phase information (ecostatename, ecostateid, commphasename, commphaseid columns) from Site Observation table
  - `createStaticNASIS()` removed workaround for {odbc}/nanoodbc VARCHAR(MAX) columns; now can directly use `DBI::dbReadTable()` for all tables via NASIS ODBC connection
  - `fetchNASIS()` changed default behavior to `mixColors = FALSE` which returns dominant condition for each moisture state rather than mixing LAB color coordinates
+   - `get_colors_from_NASIS_db()` deprecate `mixColors` argument, add `method` argument with options "dominant", "mixed", and "none". New aggregation method `"none"` returns long format representation of color data from phcolor table with no aggregation applied. 
 
 # soilDB 2.8.5 (2024-11-04)
  - `fetchLDM()` add support for `area_type` argument with local database connections (`dsn` argument)

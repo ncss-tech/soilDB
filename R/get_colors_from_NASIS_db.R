@@ -9,7 +9,8 @@
 #'
 #' @param SS fetch data from Selected Set in NASIS or from the entire local
 #' database (default: `TRUE`)
-#' @param mixColors should mixed colors be calculated (Default: `TRUE`) where multiple colors are populated for the same moisture state in a horizon? `FALSE` takes the dominant color based on `colorpct` or first record based on horizon ID (`phiid`) sorting for "moist" and "dry" state. Pedon Horizon Color records without a moisture state populated are ignored.
+#' @param method Aggregation method to handle multiple colors per horizon and moisture state. Default `"dominant"` for dominant condition (or first record) within moisture state. Other options include `"mixed"` to calculate mixture using `simplifyColorData()` and `"none"` to do no aggregation (returns a long format representation that may have multiple values per horizon and moisture state)
+#' @param mixColors Deprecated. See `method`. Should mixed colors be calculated where multiple colors are populated for the same moisture state in a horizon? Default `FALSE` takes the dominant color based on `colorpct` or first record based on horizon ID (`phiid`) sorting for "moist" and "dry" state. Pedon Horizon Color records without a moisture state populated are ignored.
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' @return A data.frame with the results.
@@ -19,8 +20,17 @@
 #' \code{\link{get_site_data_from_NASIS_db}}
 #' @keywords manip
 #' @export get_colors_from_NASIS_db
-get_colors_from_NASIS_db <- function(SS = TRUE, mixColors = TRUE, dsn = NULL) {
+get_colors_from_NASIS_db <- function(SS = TRUE, method = "dominant", mixColors = FALSE, dsn = NULL) {
 
+  if (!missing(mixColors)) {
+    .Deprecated(msg = "`mixColors` argument is deprecated, see `method` argument for additional aggregation options")
+    if (isTRUE(mixColors)) {
+      method <- "mixed"
+    }
+  }
+  
+  method <- match.arg(method, c("dominant", "mixed", "none"))
+  
 	# unique-ness enforced via peiid (pedon-level) and phiid (horizon-level)
 	# TODO: is alias of colorpct necessary?
   q <- "SELECT peiid, phiid, colormoistst, colorpct as pct, colorhue, colorvalue, colorchroma
@@ -53,11 +63,13 @@ get_colors_from_NASIS_db <- function(SS = TRUE, mixColors = TRUE, dsn = NULL) {
 	d$colorchroma <- as.numeric(as.character(d$colorchroma))
 
   # sanity check, only attempt to simplify colors if there are > 1 rows
-  if (nrow(d) > 1 && mixColors) {
+  if (nrow(d) > 1 && (method == "mixed")) {
     # mix colors as-needed, mixing done in CIE LAB space
     d.final <- simplifyColorData(d, id.var = 'phiid', wt = 'pct')
-  } else {
+  } else if (method == "dominant") {
     d.final <- .dominantColors(d)
+  } else {
+    d.final <- d
   }
 
 	# done
