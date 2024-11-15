@@ -44,7 +44,10 @@
 <li>
 <code><a href="../reference/createStaticNASIS.html">createStaticNASIS()</a></code> removed workaround for {odbc}/nanoodbc VARCHAR(MAX) columns; now can directly use <code><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">DBI::dbReadTable()</a></code> for all tables via NASIS ODBC connection</li>
 <li>
-<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> changed default behavior to <code>mixColors = FALSE</code> which returns dominant condition for each moisture state rather than mixing LAB color coordinates</li>
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> changed default behavior to <code>mixColors = FALSE</code> which returns dominant condition for each moisture state rather than mixing LAB color coordinates
+<ul><li>
+<code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code> deprecate <code>mixColors</code> argument, add <code>method</code> argument with options “dominant”, “mixed”, and “none”. New aggregation method <code>"none"</code> returns long format representation of color data from phcolor table with no aggregation applied.</li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.8.5" id="soildb-285-2024-11-04">soilDB 2.8.5 (2024-11-04)<a class="anchor" aria-label="anchor" href="#soildb-285-2024-11-04"></a></h2><p class="text-muted">CRAN release: 2024-11-05</p>
