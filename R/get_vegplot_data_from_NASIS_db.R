@@ -5,13 +5,13 @@
 get_vegplot_from_NASIS_db <- function(SS = TRUE,
                                       stringsAsFactors = NULL,
                                       dsn = NULL) {
-  
+
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
-  
-  q.vegplot <- "SELECT siteiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, vegdataorigin, vegplotsize, soilprofileindicator, soil232idlegacy, ahorizondepth, alkalinesalineindicator, alkalineaffected, salinityclass, restrictivelayerdepthlegacy, legacysoilcompname, legacysoilphase, legacylocalsoilphase, legacysoilsurftext, legacysurftextmod, legacyterminlieu, erosionclasslegacy, landformgrouplegacy, cryptogamcovcllegacy, rangelandusehistory, cancovpctplotave, cancovtotalpct, cancovtotalclass, overstorycancontotalpct, overstorycancovtotalclass, dblsampannualprodave, compyieldproductionave, abovegroundbiomasstotave, understoryreprodabundance, woodyunderstoryabundance, herbundertoryabundance, lichensunderstoryabundance, crowncanclosurepct, crowncancloseassessmethod, crowncompfactorlpp, crowncomplppavedbh, basalcoverpctave, basalareaplottotal, basalareaassessmethod, constreeshrubgrp, windbreakrowonedirection, windbreaktrappedsoildepth, windbreaktrappedsoiltexture, understorydescindicator, mensurationdataindicator, vigorclasslegacy, siteconditionlegacy, overstoryspecieslegacy, plantmoiststate, currenttreedensity, currenttreespacing, currentdxspacing, currentplotavedbh, plotbasalareafactor, currentbasalarea, foreststandtype, foreststratainventoried, foreststandregen, foreststandquality, desiredtreedensity, desireddxspacing, desiredbasalarea, excessbasalarea, excesstreedensity, stockingchangepct, treepctgoodcondition, treepctfaircondition, treepctpoorcondition, treecounttotal, treesnagdensityhard, treesnagdensitysoft, pastureforagetype, pasturestanddensityave, pastureplanthtave, pastureprodave, pcidesirableplants, pciplantcover, pciplantdiversity, pcigroundcovresidue, pcistandingdeadforage, pciplantresiduecompscore, pciplantvigor, pcilegumepctclass, pciuseuniformity, pcilivestockconcareas, pcisoilcompaction, pcisheetrillerosion, pciwinderosion, pcistreamshoreerosion, pcigullyerosion, pcierosioncompscore, pcipastureconditionscore, refplantcommunity, repannualprod, totestannualprod, totallowableannualprod, totpalatableannualprod, similarityindex, annualuseableprod, harvesteffpct, takehalfleavehalf, acresperaum, aumperacre, audperacre, desirableplantvigor, desirableseedlingabundance, decadentplantabundance, plantresidueadequacy, undesirableinvadingspecies, majorinvadingspecies, invadingspeciescancovpct, soilsurferosion, soilcrusting, soilcompaction, baregroundpct, gullyrillpresence, soildegradationrating, rangetrendcurrent, rangetrendplanned, qcreviewperson, qcreviewdate, qareviewperson, qareviewdate, swcdlegacy, fieldofficelegacy, nrcsarealegacy, aktotallichencoverpct, aktotallitter1coverpct, aktotallitter2coverpct, aktotalmosscoverpct, aktotalrockcoverpct, aktotalsoilcoverpct, aktotalwatercoverpct, akecologicalsitestatus, aktotalbedrockcoverpct, akfieldecositeid
+
+  q.vegplot <- "SELECT siteiid, so.siteobsiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, vegdataorigin, vegplotsize, soilprofileindicator, soil232idlegacy, ahorizondepth, alkalinesalineindicator, alkalineaffected, salinityclass, restrictivelayerdepthlegacy, legacysoilcompname, legacysoilphase, legacylocalsoilphase, legacysoilsurftext, legacysurftextmod, legacyterminlieu, erosionclasslegacy, landformgrouplegacy, cryptogamcovcllegacy, rangelandusehistory, cancovpctplotave, cancovtotalpct, cancovtotalclass, overstorycancontotalpct, overstorycancovtotalclass, dblsampannualprodave, compyieldproductionave, abovegroundbiomasstotave, understoryreprodabundance, woodyunderstoryabundance, herbundertoryabundance, lichensunderstoryabundance, crowncanclosurepct, crowncancloseassessmethod, crowncompfactorlpp, crowncomplppavedbh, basalcoverpctave, basalareaplottotal, basalareaassessmethod, constreeshrubgrp, windbreakrowonedirection, windbreaktrappedsoildepth, windbreaktrappedsoiltexture, understorydescindicator, mensurationdataindicator, vigorclasslegacy, siteconditionlegacy, overstoryspecieslegacy, plantmoiststate, currenttreedensity, currenttreespacing, currentdxspacing, currentplotavedbh, plotbasalareafactor, currentbasalarea, foreststandtype, foreststratainventoried, foreststandregen, foreststandquality, desiredtreedensity, desireddxspacing, desiredbasalarea, excessbasalarea, excesstreedensity, stockingchangepct, treepctgoodcondition, treepctfaircondition, treepctpoorcondition, treecounttotal, treesnagdensityhard, treesnagdensitysoft, pastureforagetype, pasturestanddensityave, pastureplanthtave, pastureprodave, pcidesirableplants, pciplantcover, pciplantdiversity, pcigroundcovresidue, pcistandingdeadforage, pciplantresiduecompscore, pciplantvigor, pcilegumepctclass, pciuseuniformity, pcilivestockconcareas, pcisoilcompaction, pcisheetrillerosion, pciwinderosion, pcistreamshoreerosion, pcigullyerosion, pcierosioncompscore, pcipastureconditionscore, refplantcommunity, repannualprod, totestannualprod, totallowableannualprod, totpalatableannualprod, similarityindex, annualuseableprod, harvesteffpct, takehalfleavehalf, acresperaum, aumperacre, audperacre, desirableplantvigor, desirableseedlingabundance, decadentplantabundance, plantresidueadequacy, undesirableinvadingspecies, majorinvadingspecies, invadingspeciescancovpct, soilsurferosion, soilcrusting, soilcompaction, baregroundpct, gullyrillpresence, soildegradationrating, rangetrendcurrent, rangetrendplanned, qcreviewperson, qcreviewdate, qareviewperson, qareviewdate, swcdlegacy, fieldofficelegacy, nrcsarealegacy, aktotallichencoverpct, aktotallitter1coverpct, aktotallitter2coverpct, aktotalmosscoverpct, aktotalrockcoverpct, aktotalsoilcoverpct, aktotalwatercoverpct, akecologicalsitestatus, aktotalbedrockcoverpct, akfieldecositeid
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
@@ -61,9 +61,9 @@ get_vegplot_location_from_NASIS_db <- function(SS = TRUE,
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
-  
+
   # query the coordinate, plss description, and site characteristics data for these records from the site table
-  q.plotlocation <- "SELECT s.siteiid, s.usiteid as site_id, v.vegplotid as vegplot_id, vegplotiid, so.obsdate, v.datacollectionpurpose, latdegrees, latminutes, latseconds, latdir, longdegrees, longminutes, longseconds, longdir, horizdatnm, plsssection, plsstownship, plssrange, plssmeridian, utmzone, utmnorthing, utmeasting, latstddecimaldegrees, longstddecimaldegrees, geocoordsource, elev, slope, aspect, CAST(plsssdetails as text) AS plsssdetails, CAST(locdesc as text) AS locdesc
+  q.plotlocation <- "SELECT s.siteiid, so.siteobsiid, s.usiteid as site_id, v.vegplotid as vegplot_id, vegplotiid, so.obsdate, v.datacollectionpurpose, latdegrees, latminutes, latseconds, latdir, longdegrees, longminutes, longseconds, longdir, horizdatnm, plsssection, plsstownship, plssrange, plssmeridian, utmzone, utmnorthing, utmeasting, latstddecimaldegrees, longstddecimaldegrees, geocoordsource, elev, slope, aspect, CAST(plsssdetails as text) AS plsssdetails, CAST(locdesc as text) AS locdesc
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
@@ -123,13 +123,13 @@ get_vegplot_location_from_NASIS_db <- function(SS = TRUE,
 get_vegplot_trhi_from_NASIS_db <- function(SS = TRUE,
                                            stringsAsFactors = NULL,
                                            dsn = NULL) {
-    
+
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
-  
-  q.vegplotrhi <- "SELECT siteiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, rhiannualprod, rhibareground, rhicompactionlayer, rhifuncstructgroups, rhierosionresistance, rhigullies, rhirills, rhipedastalsterracettes, rhiinfilrunoff, rhilitteramount, rhilittermovement, rhiplantmortality, rhireprodcapability, rhiinvasiveplants, rhisoilsurfdegradation, rhiwaterflowpatterns, rhiwindscourareas, rhisoilsitestabsumm, rhibioticintegritysumm, rhihydrofunctionsumm
+
+  q.vegplotrhi <- "SELECT siteiid, so.siteobsiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, rhiannualprod, rhibareground, rhicompactionlayer, rhifuncstructgroups, rhierosionresistance, rhigullies, rhirills, rhipedastalsterracettes, rhiinfilrunoff, rhilitteramount, rhilittermovement, rhiplantmortality, rhireprodcapability, rhiinvasiveplants, rhisoilsurfdegradation, rhiwaterflowpatterns, rhiwindscourareas, rhisoilsitestabsumm, rhibioticintegritysumm, rhihydrofunctionsumm
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
@@ -169,20 +169,20 @@ get_vegplot_trhi_from_NASIS_db <- function(SS = TRUE,
 get_vegplot_species_from_NASIS_db <-  function(SS = TRUE,
                                                stringsAsFactors = NULL,
                                                dsn = NULL) {
-  
+
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
-  
-  q.vegplotspecies <- "SELECT siteiid, siteobsiid, vegplotiid, vegplotid, vegplotname, obsdate, primarydatacollector, 
+
+  q.vegplotspecies <- "SELECT siteiid, siteobsiid, vegplotiid, vegplotid, vegplotname, obsdate, primarydatacollector,
     datacollectionpurpose, assocuserpedonid, ppi.seqnum, plantsym, plantsciname, plantnatvernm,
-    planttypegroup, plantheightcllowerlimit, plantheightclupperlimit, 
+    planttypegroup, plantheightcllowerlimit, plantheightclupperlimit,
     plantnativity, sociabilityclass, livecanopyhtbottom, livecanopyhttop, overstorydbhmin,
-    overstorydbhmax, speciescancovpct, speciescancovclass, speciescomppct, speciesdbhaverage, 
+    overstorydbhmax, speciescancovpct, speciescancovclass, speciescomppct, speciesdbhaverage,
     speciescompbywtpct, speciestreecount, speciestraceamtflag, speciesbasalarea, understorygrcovpct,
     understorygrcovclass, seedlingdensityclass, maturedensityclass, vegetationstratalevel, orderofdominance,
-    outsideplotindicator, estannualprod, esdannualprod, allowableannualprod, palatableannualprod, 
+    outsideplotindicator, estannualprod, esdannualprod, allowableannualprod, palatableannualprod,
     akstratumcoverclass, akfunctionalgroup, akstratumcoverclasspct
   FROM
   site_View_1 AS s
@@ -224,12 +224,12 @@ get_vegplot_species_from_NASIS_db <-  function(SS = TRUE,
 get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
                                                 stringsAsFactors = NULL,
                                                 dsn = NULL) {
-  
+
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
-  
+
   # veg transect data - many transects to one vegplot
   q.vegtransect <- "SELECT  siteiid, siteobsiid, vegplotiid, p.peiid, vegplotiidref, vegtransectiid, usiteid as site_id, assocuserpedonid as pedon_id, vegplotid as vegplot_id, vegplotname, vegtransectid as vegtransect_id, obsdate, primarydatacollector, datacollectionpurpose, transectstartlatitude, transectstartlongitude, transectendlatitude, transectendlongitude, transectazimuth, transectlength, transectstartelevation, transectendelevation, dblsampquadratssampled, dblsampquadratsclipped, nestedfreqquadratssampled, freqquadratssampled, dwrquadratssampled, daubenmirequadratssampled, quadratsizedomlegacy, quadratsizeseclegacy, quadratshapedomlegacy, quadratshapeseclegacy, beltwidth, dblsampannualprod, totharvestannualprod, wtunitannualprod, dwrannualprod, comparativeyieldprod, comparativeyieldranktotal, comparativeyieldrankave, comparativerefclipwtave, abovegroundbiomasstotal, standingherbbiomass, transectbasalcovpct, basalcovpcttotal, basalgapsizemin, canopygapsizemin, gapsmeasuredbetween, canopygaplengthtotal, canopygappcttotal, basalgaplengthtotal, basalgappcttotal, vt.understoryreprodabundance, vt.woodyunderstoryabundance, vt.herbundertoryabundance, vt.lichensunderstoryabundance, cancovpcttotaltrans, cancovtotalclasstrans, cancovassessmethod, vt.crowncanclosurepct, vt.crowncancloseassessmethod, vt.crowncompfactorlpp, vt.crowncomplppavedbh, overstorycancovpcttrans, overstorycancovclasstrans, groundcovassessmethod, groundcovquadratssampled, groundcovpointssampled, groundsurfcovassessmethod, groundsurfcovquadratsamp, groundsurfcovpointssamp, lpiobsinterval, totalpointssampledcount, topcanopyhtave, topcanopyhtstddev, totalnumplantsbelt, totalnumspeciesbelt, totalplantdensitybelt
   FROM
@@ -272,35 +272,35 @@ get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
 get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
                                                    stringsAsFactors = NULL,
                                                    dsn = NULL) {
-    
+
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
-  
+
   # veg transect species data - many species to one veg transect
   q.vtps <- "SELECT siteiid, siteobsiid, vegplotiid, vegtransectiidref as vegtransect_id, vegplotid, vegplotname,
     obsdate, vegtransplantsummiid as vtpsiid, vtps.seqnum, plantsym, plantsciname,
-    plantnatvernm, plantnativity, planttypegroup, 
-    plantheightcllowerlimit, plantheightclupperlimit, sociabilityclass, 
-    specieslivecanhtbotave, specieslivecanhttopave, overstorydbhmin, 
-    overstorydbhmax, speciesovercancovpct, speciesovercancovclass, 
+    plantnatvernm, plantnativity, planttypegroup,
+    plantheightcllowerlimit, plantheightclupperlimit, sociabilityclass,
+    specieslivecanhtbotave, specieslivecanhttopave, overstorydbhmin,
+    overstorydbhmax, speciesovercancovpct, speciesovercancovclass,
     plantprodquadratsize, plantprodquadratshape, nestedfreqquadratsize,
     nestedfreqquadratshape, frequencyquadratsize, frequencyquadratshape,
     dwrquadratsize, dwrquadratshape, densityquadratsize, densityquadratshape,
     speciestotwtclippedest, speciestotwtclippedfresh, speciestotwtclippedairdry,
     speciestotwtairdry, speciestotwtest, speciestotwtexisting, speciesdrywtpct,
     speciestotwt, speciesaveyielddblsamp, speciescomppctdblsamp, speciescomppctdaubenmire,
-    speciescomppctlineintercept, speciestraceamtflag, weightconvfactor, 
+    speciescomppctlineintercept, speciestraceamtflag, weightconvfactor,
     dblsampcorrectionfactor, airdrywtadjustment, utilizationadjustment, growthadjustment,
     weatheradjustment, numberofquadratsin, speciesfreqdaubenmire, dwronetally,
     dwrtwotally, dwrthreetally, dwrweightedtally, speciescomppctdwr, speciesaveyielddwr,
     wtunitweight, wtunitcounttotal, speciesaveyieldwtunit, wtunitwtclippedtotal,
     speciescancovhitcount, speciescancovpct, speciescancovpctavedaub, speciescancovaveclass,
-    speciesfoliarcovhitcount, speciesfoliarcovpctlineint, speciestotfoliarcovlineint, 
-    speciesbasalcovhitcount, speciesbasalcovpctlineint, speciestotbasalcovlineint, 
+    speciesfoliarcovhitcount, speciesfoliarcovpctlineint, speciestotfoliarcovlineint,
+    speciesbasalcovhitcount, speciesbasalcovpctlineint, speciestotbasalcovlineint,
     maturecounttotal, maturedensityave, maturedensityaveclass, seedlingcounttotal,
-    seedlingdensityave, seedlingdensityaveclass, speciesgroundcovabundclass, 
+    seedlingdensityave, seedlingdensityaveclass, speciesgroundcovabundclass,
     speciescancovportion, speciesbasalarea, vtps.basalareaassessmethod,
     vegtransplantsummiid
   FROM
@@ -343,15 +343,15 @@ get_vegplot_transpoints_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   q <- "SELECT siteiid, siteobsiid, vegplotiid, vegtransectiid,
                plantsym, plantsciname, plantnatvernm,
                transectpointlocation,
-               livecanopyhtbottom, livecanopyhttop, 
-               canopycoverpresent, foliarcoverpresent, basalcoverpresent, 
+               livecanopyhtbottom, livecanopyhttop,
+               canopycoverpresent, foliarcoverpresent, basalcoverpresent,
                pointplantcovdetailsiid, vegtransplantsummiidref
               FROM site_View_1 AS s
               INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
               INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
-              LEFT JOIN vegtransect_View_1 AS vt 
+              LEFT JOIN vegtransect_View_1 AS vt
                      ON vt.vegplotiidref = v.vegplotiid
-              INNER JOIN vegtransectplantsummary_View_1 AS vtps 
+              INNER JOIN vegtransectplantsummary_View_1 AS vtps
                      ON vtps.vegtransectiidref = vt.vegtransectiid
               INNER JOIN pointplantcoverdetails_View_1 AS ppcd
                      ON ppcd.vegtransplantsummiidref = vtps.vegtransplantsummiid
@@ -359,29 +359,29 @@ get_vegplot_transpoints_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   if (!SS) {
     q <- gsub("_View_1", "", q)
   }
-  
+
   res <- dbQueryNASIS(NASIS(dsn = dsn), q)
   uncode(res)
 }
 
 
-# get vegplot transect production quadrats 
+# get vegplot transect production quadrats
 #' @export
 #' @rdname fetchVegdata
 get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   q <- "SELECT siteiid, siteobsiid, vegplotiid, vegtransectiid,
                plantsym, plantsciname, plantnatvernm,
                quadratnumber, transectpointlocation, quadratclippedindicator,
-               specieswtairdry, specieswtclipped, specieswtestimated, 
-               ppqd.speciestraceamtflag, weightunitcount, ppqd.speciescancovpct, 
-               speciescancovclass, 
+               specieswtairdry, specieswtclipped, specieswtestimated,
+               ppqd.speciestraceamtflag, weightunitcount, ppqd.speciescancovpct,
+               speciescancovclass,
                plantprodquaddetailsiid, vegtransplantsummiidref
               FROM site_View_1 AS s
               INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
               INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
-              LEFT JOIN vegtransect_View_1 AS vt 
+              LEFT JOIN vegtransect_View_1 AS vt
                      ON vt.vegplotiidref = v.vegplotiid
-              INNER JOIN vegtransectplantsummary_View_1 AS vtps 
+              INNER JOIN vegtransectplantsummary_View_1 AS vtps
                      ON vtps.vegtransectiidref = vt.vegtransectiid
               INNER JOIN plantprodquadratdetails_View_1 AS ppqd
                      ON ppqd.vegtransplantsummiidref = vtps.vegtransplantsummiid
@@ -389,7 +389,7 @@ get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   if (!SS) {
     q <- gsub("_View_1", "", q)
   }
-  
+
   res <- dbQueryNASIS(NASIS(dsn = dsn), q)
   uncode(res)
 }
@@ -400,12 +400,12 @@ get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
                                                        stringsAsFactors = NULL,
                                                        dsn = NULL) {
-  
+
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
-  
+
   # plot tree site index summary data
   q.pltsis <- "SELECT siteiid, siteobsiid, vegplotiid, pltsis.seqnum, plantiidref, plantsym, plantsciname, plantnatvernm, plantnativity, siteindexbase, speciestreecount, siteindexplotave, speciesdbhaverage, treeageave, treecanopyhttopave, plottreesiteindsumiid
 
@@ -445,8 +445,8 @@ get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
 #' @export
 #' @rdname fetchVegdata
 get_vegplot_speciesbasalarea_from_NASIS <- function(SS = TRUE, dsn = NULL) {
-  q <- "SELECT siteiid, siteobsiid, vegplotiid, vegplotid, vegplotname, obsdate, 
-  primarydatacollector, plantiidref AS plantiid, 
+  q <- "SELECT siteiid, siteobsiid, vegplotiid, vegplotid, vegplotname, obsdate,
+  primarydatacollector, plantiidref AS plantiid,
   plotspeciebasalareaiid, basalareatreescountediid
             plantsym, plantsciname, plantnatvernm,
             basalareafactor, speciesnumbertreesin, speciesbasalarea,
@@ -457,16 +457,16 @@ FROM site_View_1 AS s
   LEFT JOIN plotspeciesbasalarea_View_1 AS vb ON vb.vegplotiidref = v.vegplotiid
     LEFT JOIN basalareatreescounted_View_1 AS ba ON ba.plotspeciebasalareaiidref = vb.plotspeciebasalareaiid
     INNER JOIN plant ON plant.plantiid = vb.plantiidref"
-  
+
   channel <- dbConnectNASIS(dsn)
-  
+
   if (inherits(channel, 'try-error'))
     return(data.frame())
-  
+
   if (!SS) {
     q <- gsub("_View_1", "", q)
   }
-  
+
   uncode(dbQueryNASIS(channel, q), dsn = dsn)
 }
 
@@ -476,7 +476,7 @@ FROM site_View_1 AS s
 get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE,
                                                       stringsAsFactors = NULL,
                                                       dsn = NULL) {
-  
+
   # plot tree site index detail data
   q.pltsid <- "SELECT  siteiid, siteobsiid, vegplotiid, plottreesiteindsumiidref, pltsid.seqnum, plantsym, plantsciname, plantnatvernm, treenumber, crownclass, reproductionsource, treediameterbreastheight, tenyeargrowthradius, growthringcount, growthringcountheight, growthringcountage, treeage, treecanopyhtbottom, treecanopyhttop, plottreesiteinddetailsiid
 
@@ -524,12 +524,12 @@ get_vegplot_textnote_from_NASIS_db <- function(SS = TRUE,
                                                fixLineEndings = TRUE,
                                                stringsAsFactors = NULL,
                                                dsn = NULL) {
-  
+
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
   }
-  
+
   # vegplot textnotes
   q.vegplottext <- "SELECT vegplotiidref AS vegplotiid, seqnum, recdate, recauthor, vegplottextkind,
 textcat, textsubcat, vegplottextiid, CAST(textentry as text) AS textentry
