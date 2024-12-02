@@ -17,6 +17,9 @@
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
+  # check if NASIS local DB instance/ODBC data source is available
+  .soilDB_test_NASIS_connection(dsn = dsn)
+  
   # ensure that any old hz errors are cleared
   if (exists('component.hz.problems', envir = get_soilDB_env())) {
     assign('component.hz.problems', value = character(0), envir = get_soilDB_env())
