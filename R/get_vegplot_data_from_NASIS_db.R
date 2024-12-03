@@ -68,7 +68,7 @@ get_vegplot_from_NASIS_db <- function(SS = TRUE,
   # test for no data
   if (nrow(d.vegplot) == 0) {
     ds <- ifelse(SS, "NASIS selected set", "NASIS local database")
-    stop('No NASIS Site+Vegetation Plot records in ', ds, '!', call. = FALSE)
+    stop('No NASIS site/vegetation plot records in ', ds, call. = FALSE)
   }
   # uncode metadata domains
   d <- uncode(d.vegplot, dsn = dsn)

@@ -103,7 +103,8 @@
     }
     
   } else {
-    stop("No horizon data in NASIS component query result.", call. = FALSE)
+    ds <- ifelse(SS, "NASIS selected set", "NASIS local database")
+    stop("No component/horizon records in ", ds, call. = FALSE)
   }
 
   # add site data to object
