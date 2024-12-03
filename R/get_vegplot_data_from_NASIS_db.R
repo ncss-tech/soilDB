@@ -11,12 +11,40 @@ get_vegplot_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
 
-  q.vegplot <- "SELECT siteiid, so.siteobsiid, p.peiid, usiteid as site_id, assocuserpedonid as pedon_id, v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, vegdataorigin, vegplotsize, soilprofileindicator, soil232idlegacy, ahorizondepth, alkalinesalineindicator, alkalineaffected, salinityclass, restrictivelayerdepthlegacy, legacysoilcompname, legacysoilphase, legacylocalsoilphase, legacysoilsurftext, legacysurftextmod, legacyterminlieu, erosionclasslegacy, landformgrouplegacy, cryptogamcovcllegacy, rangelandusehistory, cancovpctplotave, cancovtotalpct, cancovtotalclass, overstorycancontotalpct, overstorycancovtotalclass, dblsampannualprodave, compyieldproductionave, abovegroundbiomasstotave, understoryreprodabundance, woodyunderstoryabundance, herbundertoryabundance, lichensunderstoryabundance, crowncanclosurepct, crowncancloseassessmethod, crowncompfactorlpp, crowncomplppavedbh, basalcoverpctave, basalareaplottotal, basalareaassessmethod, constreeshrubgrp, windbreakrowonedirection, windbreaktrappedsoildepth, windbreaktrappedsoiltexture, understorydescindicator, mensurationdataindicator, vigorclasslegacy, siteconditionlegacy, overstoryspecieslegacy, plantmoiststate, currenttreedensity, currenttreespacing, currentdxspacing, currentplotavedbh, plotbasalareafactor, currentbasalarea, foreststandtype, foreststratainventoried, foreststandregen, foreststandquality, desiredtreedensity, desireddxspacing, desiredbasalarea, excessbasalarea, excesstreedensity, stockingchangepct, treepctgoodcondition, treepctfaircondition, treepctpoorcondition, treecounttotal, treesnagdensityhard, treesnagdensitysoft, pastureforagetype, pasturestanddensityave, pastureplanthtave, pastureprodave, pcidesirableplants, pciplantcover, pciplantdiversity, pcigroundcovresidue, pcistandingdeadforage, pciplantresiduecompscore, pciplantvigor, pcilegumepctclass, pciuseuniformity, pcilivestockconcareas, pcisoilcompaction, pcisheetrillerosion, pciwinderosion, pcistreamshoreerosion, pcigullyerosion, pcierosioncompscore, pcipastureconditionscore, refplantcommunity, repannualprod, totestannualprod, totallowableannualprod, totpalatableannualprod, similarityindex, annualuseableprod, harvesteffpct, takehalfleavehalf, acresperaum, aumperacre, audperacre, desirableplantvigor, desirableseedlingabundance, decadentplantabundance, plantresidueadequacy, undesirableinvadingspecies, majorinvadingspecies, invadingspeciescancovpct, soilsurferosion, soilcrusting, soilcompaction, baregroundpct, gullyrillpresence, soildegradationrating, rangetrendcurrent, rangetrendplanned, qcreviewperson, qcreviewdate, qareviewperson, qareviewdate, swcdlegacy, fieldofficelegacy, nrcsarealegacy, aktotallichencoverpct, aktotallitter1coverpct, aktotallitter2coverpct, aktotalmosscoverpct, aktotalrockcoverpct, aktotalsoilcoverpct, aktotalwatercoverpct, akecologicalsitestatus, aktotalbedrockcoverpct, akfieldecositeid
+  q.vegplot <- "SELECT siteiid, so.siteobsiid, usiteid as site_id, assocuserpedonid as pedon_id, 
+    v.vegplotid as vegplot_id, vegplotiid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose,
+    vegdataorigin, vegplotsize, soilprofileindicator, soil232idlegacy, ahorizondepth, alkalinesalineindicator,
+    alkalineaffected, salinityclass, restrictivelayerdepthlegacy, legacysoilcompname, legacysoilphase, 
+    legacylocalsoilphase, legacysoilsurftext, legacysurftextmod, legacyterminlieu, erosionclasslegacy, 
+    landformgrouplegacy, cryptogamcovcllegacy, rangelandusehistory, cancovpctplotave, cancovtotalpct, 
+    cancovtotalclass, overstorycancontotalpct, overstorycancovtotalclass, dblsampannualprodave, 
+    compyieldproductionave, abovegroundbiomasstotave, understoryreprodabundance, woodyunderstoryabundance,
+    herbundertoryabundance, lichensunderstoryabundance, crowncanclosurepct, crowncancloseassessmethod,
+    crowncompfactorlpp, crowncomplppavedbh, basalcoverpctave, basalareaplottotal, basalareaassessmethod,
+    constreeshrubgrp, windbreakrowonedirection, windbreaktrappedsoildepth, windbreaktrappedsoiltexture,
+    understorydescindicator, mensurationdataindicator, vigorclasslegacy, siteconditionlegacy, 
+    overstoryspecieslegacy, plantmoiststate, currenttreedensity, currenttreespacing, currentdxspacing,
+    currentplotavedbh, plotbasalareafactor, currentbasalarea, foreststandtype, foreststratainventoried,
+    foreststandregen, foreststandquality, desiredtreedensity, desireddxspacing, desiredbasalarea, 
+    excessbasalarea, excesstreedensity, stockingchangepct, treepctgoodcondition, treepctfaircondition, 
+    treepctpoorcondition, treecounttotal, treesnagdensityhard, treesnagdensitysoft, pastureforagetype, 
+    pasturestanddensityave, pastureplanthtave, pastureprodave, pcidesirableplants, pciplantcover, 
+    pciplantdiversity, pcigroundcovresidue, pcistandingdeadforage, pciplantresiduecompscore, pciplantvigor,
+    pcilegumepctclass, pciuseuniformity, pcilivestockconcareas, pcisoilcompaction, pcisheetrillerosion, 
+    pciwinderosion, pcistreamshoreerosion, pcigullyerosion, pcierosioncompscore, pcipastureconditionscore,
+    refplantcommunity, repannualprod, totestannualprod, totallowableannualprod, totpalatableannualprod,
+    similarityindex, annualuseableprod, harvesteffpct, takehalfleavehalf, acresperaum, aumperacre, 
+    audperacre, desirableplantvigor, desirableseedlingabundance, decadentplantabundance, 
+    plantresidueadequacy, undesirableinvadingspecies, majorinvadingspecies, invadingspeciescancovpct,
+    soilsurferosion, soilcrusting, soilcompaction, baregroundpct, gullyrillpresence, soildegradationrating,
+    rangetrendcurrent, rangetrendplanned, qcreviewperson, qcreviewdate, qareviewperson, 
+    qareviewdate, swcdlegacy, fieldofficelegacy, nrcsarealegacy, aktotallichencoverpct, 
+    aktotallitter1coverpct, aktotallitter2coverpct, aktotalmosscoverpct, aktotalrockcoverpct,
+    aktotalsoilcoverpct, aktotalwatercoverpct, akecologicalsitestatus, aktotalbedrockcoverpct, akfieldecositeid
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
   INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
-  LEFT OUTER JOIN pedon_View_1 AS p ON p.siteobsiidref=so.siteobsiid
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(dsn)

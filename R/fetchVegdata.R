@@ -51,7 +51,7 @@ fetchVegdata <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
 	}
 
   # add ecosite id, corrdate, selection method to vegplot
-  vegplot <- merge(site[,c("siteiid", "ecositeid",  "ecositecorrdate", "siteecositehistory.classifier", "es_selection_method")],
+  vegplot <- merge(site[,c("siteiid", "ecositeid", "peiid", "ecositecorrdate", "siteecositehistory.classifier", "es_selection_method")],
                    vegplot, by = "siteiid", all.x = TRUE, sort = FALSE)
 
 	# done
