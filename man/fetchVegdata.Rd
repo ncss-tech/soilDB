@@ -17,7 +17,12 @@
 \alias{get_vegplot_speciesbasalarea_from_NASIS}
 \title{Get vegetation plot data from local NASIS database}
 \usage{
-fetchVegdata(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
+fetchVegdata(
+  SS = TRUE,
+  include_pedon = TRUE,
+  stringsAsFactors = NULL,
+  dsn = NULL
+)
 
 get_vegplot_from_NASIS_db(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
 
@@ -75,6 +80,8 @@ get_vegplot_textnote_from_NASIS_db(
 \arguments{
 \item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: \code{TRUE})}
 
+\item{include_pedon}{Include pedon and transect data joined to site? (default: \code{TRUE})}
+
 \item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
@@ -83,7 +90,7 @@ table structure; default: \code{NULL}}
 \item{fixLineEndings}{Replace \code{'\\r\\n'} with \code{'\\n'}; Default: \code{TRUE}}
 }
 \value{
-A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies", "vegtransect", "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", and  "vegplottext" tables
+A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies", "vegtransect", "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", "vegbasalarea", and  "vegplottext" tables
 }
 \description{
 Get vegetation plot data from local NASIS database

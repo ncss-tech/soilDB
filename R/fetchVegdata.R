@@ -10,6 +10,7 @@
 #' get_vegplot_tree_si_summary_from_NASIS_db get_vegplot_trhi_from_NASIS_db
 #'
 #' @param SS fetch data from the currently loaded selected set in NASIS or from the entire local database (default: `TRUE`)
+#' @param include_pedon Include pedon and transect data joined to site? (default: `TRUE`)
 #' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
@@ -18,7 +19,7 @@
 #'
 #' @export
 #'
-fetchVegdata <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
+fetchVegdata <- function(SS=TRUE, include_pedon = TRUE, stringsAsFactors = NULL, dsn = NULL) {
 
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
@@ -30,7 +31,7 @@ fetchVegdata <- function(SS=TRUE, stringsAsFactors = NULL, dsn = NULL) {
   .soilDB_test_NASIS_connection(dsn = dsn)
 
 	# 1. load data in pieces
-	site <- get_site_data_from_NASIS_db(SS = SS, dsn = dsn)
+	site <- get_site_data_from_NASIS_db(SS = SS, include_pedon = include_pedon, dsn = dsn)
   vegplot <- get_vegplot_from_NASIS_db(SS = SS, dsn =  dsn)
   vegplotlocation <- get_vegplot_location_from_NASIS_db(SS = SS,  dsn =  dsn)
   vegplotrhi <-  get_vegplot_trhi_from_NASIS_db(SS = SS, dsn =  dsn)
