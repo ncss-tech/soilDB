@@ -589,7 +589,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
 #' @rdname get_component_data_from_NASIS_db
 get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
-  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative
+  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid, rvindicator as representative
 
   FROM copedon_View_1 copedon
 
@@ -610,7 +610,7 @@ get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   d <- dbQueryNASIS(channel, q)
 
   # missing pedon ID suggests records not in the selected set or local database
-  if(nrow(d) > 0 & any(is.na(d$pedon_id))) {
+  if(nrow(d) > 0 & any(is.na(d$upedonid))) {
     message('some linked pedons not in selected set or local database')
   }
 

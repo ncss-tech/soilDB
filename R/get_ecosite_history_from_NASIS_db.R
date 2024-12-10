@@ -17,7 +17,7 @@ get_ecosite_history_from_NASIS_db <- function(best = TRUE, SS = TRUE, es_classif
   
   # ecological site
   q.ecosite <- "SELECT siteiidref AS siteiid, ecositeid, ecositenm, ecositecorrdate, seh.recwlupdated,
-                       classifier As es_classifier, classifier AS [siteecositehistory.classifier]
+                       classifier AS [siteecositehistory.classifier]
   FROM siteecositehistory_View_1 AS seh
   LEFT OUTER JOIN ecologicalsite AS es ON es.ecositeiid=seh.ecositeiidref
   ORDER BY siteiid;"
