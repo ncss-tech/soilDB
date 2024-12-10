@@ -93,5 +93,5 @@ table structure; default: \code{NULL}}
 A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies", "vegtransect", "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", "vegbasalarea", and  "vegplottext" tables
 }
 \description{
-Get vegetation plot data from local NASIS database
+Convenience function for loading most commonly used Vegetation Plot information from local NASIS database.
 }
