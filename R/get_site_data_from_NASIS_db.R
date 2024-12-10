@@ -48,12 +48,13 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-	q <- paste0("SELECT siteiid, siteobsiid, CAST(usiteid AS varchar(60)) as site_id, 
-  	", ifelse(include_pedon, "peiid, CAST(upedonid AS varchar(60)) as pedon_id, ", ""), "
-  	obsdate as obs_date, utmzone, utmeasting, utmnorthing, horizdatnm, 
-    longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, longstddecimaldegrees, latstddecimaldegrees, gpspositionalerror, 
-    ", ifelse(include_pedon, "descname as describer, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag, tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth, erocl,", ""), "
-    elev as elev_field, slope as slope_field, aspect as aspect_field, 
+	q <- paste0("SELECT siteiid, siteobsiid, usiteid, 
+  	", ifelse(include_pedon, "peiid, upedonid, ", ""), "
+  	obsdate, utmzone, utmeasting, utmnorthing, horizdatnm,
+  	longstddecimaldegrees, latstddecimaldegrees, gpspositionalerror, 
+    ", ifelse(include_pedon, "descname, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag, 
+    tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth, erocl,", ""), "
+    elev, slope, aspect, 
     ecostatename, ecostateid, commphasename, commphaseid, plantassocnm, 
     siteobs_View_1.earthcovkind1, siteobs_View_1.earthcovkind2, 
     bedrckdepth, bedrckkind, bedrckhardness, pmgroupname, 
@@ -209,7 +210,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
 	# 	message('multiple horizontal datums present, consider using WGS84 coordinates (x_std, y_std)')
 
 	# are there any duplicate pedon IDs?
-	t.pedon_id <- table(d2$pedon_id)
+	t.pedon_id <- table(d2$upedonid)
 	not.unique.pedon_id <- t.pedon_id > 1
 	if (any(not.unique.pedon_id))
 	  assign('dup.pedon.ids', value = names(t.pedon_id[which(not.unique.pedon_id)]), envir = get_soilDB_env())
@@ -217,7 +218,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
 	# warn about sites without a matching pedon (records missing peiid)
 	missing.pedon <- which(is.na(d2$peiid))
 	if (length(missing.pedon) > 0)
-	  assign('sites.missing.pedons', value = unique(d2$site_id[missing.pedon]), envir = get_soilDB_env())
+	  assign('sites.missing.pedons', value = unique(d2$usiteid[missing.pedon]), envir = get_soilDB_env())
 
   ## set factor levels, when it makes sense
 	# most of these are done via uncode()
