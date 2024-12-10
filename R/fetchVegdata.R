@@ -19,7 +19,7 @@
 #'
 #' @export
 #'
-fetchVegdata <- function(SS=TRUE, include_pedon = TRUE, stringsAsFactors = NULL, dsn = NULL) {
+fetchVegdata <- function(SS = TRUE, include_pedon = TRUE, stringsAsFactors = NULL, dsn = NULL) {
 
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
@@ -52,8 +52,11 @@ fetchVegdata <- function(SS=TRUE, include_pedon = TRUE, stringsAsFactors = NULL,
 	}
 
   # add ecosite id, corrdate, selection method to vegplot
-  vegplot <- merge(site[,c("siteiid", "ecositeid", "peiid", "ecositecorrdate", "siteecositehistory.classifier", "es_selection_method")],
-                   vegplot, by = "siteiid", all.x = TRUE, sort = FALSE)
+  es_cols <- c("siteiid", "ecositeid", "ecositecorrdate", "siteecositehistory.classifier", "es_selection_method")
+  if (include_pedon) {
+    es_cols <- c(es_cols, "peiid")
+  }
+  vegplot <- merge(site[, es_cols], vegplot, by = "siteiid", all.x = TRUE, sort = FALSE)
 
 	# done
 	return(list(
