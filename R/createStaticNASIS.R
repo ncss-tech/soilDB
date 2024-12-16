@@ -1,13 +1,9 @@
 # Method for "dumping" contents of an entire NASIS table
 #
-# Method for "dumping" contents of an entire NASIS table
-#
-#
 # @param table_name Character name of table.
 # @param dsn Optional: path to SQLite database containing NASIS table
 # structure; Default: \code{NULL}
 # @return A data.frame or other result of \code{DBI::dbGetQuery}
-# @export .dump_NASIS_table
 # .dump_NASIS_table <- function(table_name, dsn = NULL) {
 # 
 #   # connect to NASIS, identify columns
@@ -127,8 +123,7 @@ createStaticNASIS <- function(tables = NULL,
   if (is.null(output_path)) {
 
     # return named list of data.frames or try-error (one per table)
-    res <- lapply(nasis_table_names, function(n) try(.dump_NASIS_table(n, dsn = dsn),
-                                                     silent = verbose))
+    res <- lapply(nasis_table_names, function(n) try(DBI::dbReadTable(con, n), silent = verbose))
     if(!is.null(new_names))
       names(res) <- new_names
     else names(res) <- nasis_table_names
