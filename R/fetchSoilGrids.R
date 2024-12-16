@@ -62,7 +62,7 @@
 #' 
 #' @return A _SoilProfileCollection_ or _SpatRaster_ when `grid=TRUE`. Returns `try-error` if all requests fail. Any error messages resulting from parsing will be echoed when `verbose=TRUE`.
 #' @export fetchSoilGrids
-#' 
+#' @importFrom aqp initSpatial<-
 #' @author Andrew G. Brown
 #' @examplesIf curl::has_internet()
 #' \dontrun{
