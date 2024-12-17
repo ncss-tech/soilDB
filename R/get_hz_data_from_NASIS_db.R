@@ -33,9 +33,14 @@ get_hz_data_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  q <- sprintf("SELECT peiid, phiid, upedonid,
+  .soilDB_warn_deprecated_aliases(c("upedonid" = "pedon_id", "claytotest" = "clay", "silttotest" = "silt", "sandtotest" = "sand"))
+  
+  q <- sprintf("SELECT peiid, phiid, upedonid AS pedon_id, upedonid,
     hzname, dspcomplayerid, hzdept, hzdepb,
     bounddistinct, boundtopo, claytotest, silttotest, sandtotest, 
+    claytotest AS clay,
+    CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END AS silt,
+    sandtotest AS sand,
     fragvoltot, texture, texcl, lieutex, phfield, effclass, phs.labsampnum, 
     rupresblkdry, rupresblkmst, rupresblkcem, stickiness, plasticity, ksatpedon
   FROM pedon_View_1 p

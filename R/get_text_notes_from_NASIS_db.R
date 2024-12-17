@@ -32,7 +32,9 @@
 #'
 #' @export get_text_notes_from_NASIS_db
 get_text_notes_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, dsn = NULL) {
-
+  
+  .soilDB_warn_deprecated_aliases(c("siteiid" = "site_id"))
+  
 	# petext
 	q.petext <- "SELECT recdate, recauthor, pedontextkind, textcat, textsubcat, peiidref AS peiid, petextiid, CAST(textentry as text) AS textentry FROM petext_View_1;"
 

@@ -9,7 +9,8 @@ soilDB.env <- new.env(hash = TRUE)
   # function verbosity
   options(soilDB.verbose = FALSE,
           soilDB.timeout = 300,
-          soilDB.ssl_verifyhost = 0)
+          soilDB.ssl_verifyhost = 0,
+          soilDB.alias_warnings = TRUE)
   
   # set default local nasis authentication
   options(soilDB.NASIS.credentials = "DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
@@ -77,4 +78,24 @@ get_soilDB_env <- function() {
   res <- FUN(tf, ...)
   unlink(tf)
   res
+}
+
+.soilDB_warn_deprecated_aliases <- function(aliases, FUN = deparse(sys.calls()[[sys.nframe() - 1]][[1]])) {
+  if (.soilDB_warn_deprecated(FUN) && length(aliases) > 0) {
+    message("------------------------------------------")
+    message("NOTE: `", FUN, "()` column aliases will be removed in the next soilDB release.")
+    message("Please replace use of the following column names with NASIS physical column name:")
+    sapply(seq(aliases), function(i) message("\t - ", aliases[i], " => ", names(aliases)[i]))
+    message("Set `options(soilDB.alias_warnings=FALSE)` to prevent this message from displaying in future sessions.")
+    message("------------------------------------------")
+  }
+}
+
+.soilDB_warn_deprecated <- function(x) {
+  if (isFALSE(getOption("soilDB.alias_warnings", default = TRUE)) || x %in% soilDB.env$soilDB.alias_warnings_fnlist) {
+    return(FALSE)
+  } else {
+    soilDB.env$soilDB.alias_warnings_fnlist <- c(unique(soilDB.env$soilDB.alias_warnings_fnlist), x)
+    return(TRUE)
+  }
 }

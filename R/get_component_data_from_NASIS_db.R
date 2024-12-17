@@ -589,7 +589,9 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
 #' @rdname get_component_data_from_NASIS_db
 get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
-  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid, rvindicator as representative
+  .soilDB_warn_deprecated_aliases(c("upedonid" = "pedon_id", "rvindicator" = "representative"))
+  
+  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, upedonid, rvindicator as representative, rvindicator
 
   FROM copedon_View_1 copedon
 

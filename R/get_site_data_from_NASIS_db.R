@@ -41,6 +41,19 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
                                         nullFragsAreZero = TRUE,
                                         stringsAsFactors = NULL,
                                         dsn = NULL) {
+  
+  .soilDB_warn_deprecated_aliases(
+    c(
+      "upedonid" = "pedon_id",
+      "longstddecimaldegrees" = "x_std",
+      "latstddecimaldegrees" = "y_std",
+      "descname" = "describer",
+      "elev" = "elev_field",
+      "slope" = "slope_field",
+      "aspect" = "aspect_field"
+    )
+  )
+  
   .SD <- NULL
   
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
@@ -49,11 +62,12 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
   }
   
 	q <- paste0("SELECT siteiid, siteobsiid, usiteid, 
-  	", ifelse(include_pedon, "peiid, upedonid, ", ""), "
+  	", ifelse(include_pedon, "peiid, CAST(upedonid AS varchar(60)) as pedon_id, upedonid, ", ""), "
   	obsdate, utmzone, utmeasting, utmnorthing, horizdatnm,
   	longstddecimaldegrees, latstddecimaldegrees, gpspositionalerror, 
-    ", ifelse(include_pedon, "descname, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag, 
+    ", ifelse(include_pedon, "descname AS describer, descname, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag, 
     tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth, erocl,", ""), "
+    elev as elev_field, slope as slope_field, aspect as aspect_field,
     elev, slope, aspect, 
     ecostatename, ecostateid, commphasename, commphaseid, plantassocnm, 
     siteobs_View_1.earthcovkind1, siteobs_View_1.earthcovkind2, 
