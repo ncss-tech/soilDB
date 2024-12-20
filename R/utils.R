@@ -106,7 +106,7 @@
 .pickBestEcosite <- function(d, es_classifier = NULL) {
 
   if (!is.null(es_classifier)) {
-    d <- d[which(d$es_classifier %in% es_classifier),]
+    d <- d[which(d$siteecositehistory.classifier %in% es_classifier), ]
   }
   
 	# add a method field

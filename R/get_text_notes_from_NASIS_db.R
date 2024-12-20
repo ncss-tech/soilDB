@@ -32,7 +32,9 @@
 #'
 #' @export get_text_notes_from_NASIS_db
 get_text_notes_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, dsn = NULL) {
-
+  
+  .soilDB_warn_deprecated_aliases(c("siteiid" = "site_id"))
+  
 	# petext
 	q.petext <- "SELECT recdate, recauthor, pedontextkind, textcat, textsubcat, peiidref AS peiid, petextiid, CAST(textentry as text) AS textentry FROM petext_View_1;"
 
@@ -40,7 +42,7 @@ get_text_notes_from_NASIS_db <- function(SS=TRUE, fixLineEndings=TRUE, dsn = NUL
 	q.sitetext <- "SELECT recdate, recauthor, sitetextkind, textcat, textsubcat, siteiidref AS siteiid, sitetextiid, CAST(textentry as text) AS textentry FROM sitetext_View_1;"
 
 	# siteobstext
-	q.siteobstext <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, siteiidref AS site_id, siteobstextiid, CAST(textentry as text) AS textentry FROM (
+	q.siteobstext <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, siteiidref AS siteiid, siteobstextiid, CAST(textentry as text) AS textentry FROM (
 siteobs_View_1 LEFT OUTER JOIN
 siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref);"
 
@@ -48,7 +50,7 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 	q.phtext <- "SELECT recdate, recauthor, phorizontextkind, textcat, textsubcat, phiidref AS phiid, phtextiid, CAST(textentry as text) AS textentry FROM phtext_View_1;"
 
 	# photo links
-	q.photos <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, siteiidref AS site_id, siteobstextiid, CAST(textentry as text) AS textentry FROM (siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
+	q.photos <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, siteiidref AS siteiid, siteobstextiid, CAST(textentry as text) AS textentry FROM (siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
 
 	# toggle selected set vs. local DB
 	if (SS == FALSE) {
