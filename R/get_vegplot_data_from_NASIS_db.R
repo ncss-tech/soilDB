@@ -326,7 +326,9 @@ get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
 get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
                                                    stringsAsFactors = NULL,
                                                    dsn = NULL) {
-
+  
+  .soilDB_warn_deprecated_aliases(c("vegtransplantsummiid" = "vstpiid"))
+  
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
