@@ -156,43 +156,7 @@ fetchSOLUS <- function(x = NULL,
   # manually apply scaling factors to source raster
   terra::scoff(r) <- cbind(1 / isub$scalar, 0)
   
-  # do conversion of input spatial object 
-  if (!missing(x) && !is.null(x)) {
-    
-    # convert various input types to SpatVector
-    if (inherits(x, 'SoilProfileCollection')) {
-      x <- as(x, 'sf')
-    }
-    
-    if (inherits(x, c('RasterLayer', 'RasterStack'))) {
-      x <- terra::rast(x)
-    }
-    
-    if (!inherits(x, c('SpatRaster', 'SpatVector'))) {
-      x <- terra::vect(x)
-    }
-    
-    if (inherits(x, 'SpatVector')) {
-      # project any input vector object to CRS of SOLUS
-      x <- terra::project(x, terra::crs(r))
-    }
-    
-    xe <- terra::ext(terra::project(terra::as.polygons(x, ext = TRUE), r))
-    
-    # handle requests out-of-bounds
-    if (!(terra::relate(terra::ext(r), xe, relation = "contains")[1] || 
-        terra::relate(terra::ext(r), xe, relation = "overlaps")[1])) {
-      stop("Extent of `x` is outside the boundaries of the source data extent.", call. = FALSE)
-    }
-    
-    if (!inherits(x, 'SpatRaster')){
-      # crop to target extent (written to temp file if needed)
-      r <- terra::crop(r, x, filename = filename)
-    } else {
-      # if x is a spatraster, use it as a template for GDAL warp
-      r <- terra::project(r, x, filename = filename, align_only = FALSE, mask = TRUE, threads = TRUE)
-    }
-  }
+  r <- .process_raster_extent(r, x, filename = filename, overwrite = overwrite)
   
   if (isTRUE(grid)) {
     return(r)
@@ -356,4 +320,60 @@ fetchSOLUS <- function(x = NULL,
   } else {
     stop("Invalid method argument (\"", method, "\")", call. = FALSE)
   }
+}
+
+#' Crop or Warp a SpatRaster to Conform with a Spatial Object
+#' 
+#' If `x` is a raster object, it is used as a template to warp `r` to match `x`.
+#' Otherwise, if `x` is a vector object, the extent of `x` is used to crop `r`.
+#' 
+#' This is very useful for supporting various user input types to extract subsets from large grids
+#' that may be remotely hosted.
+#'
+#' @param r A SpatRaster Object
+#' @param x A SoilProfileCollection, sf, RasterLayer, RasterStack, SpatRaster or SpatVector object.
+#' @param filename Optional: File name to write intermediate file. If `NULL` (default) a temporary
+#'   file is used if result does not fit in memory.
+#' @seealso [fetchSOLUS()], [fetchSTEDUS()]
+#' @return A SpatRaster Object
+#' @noRd
+.process_raster_extent <- function(r, x, filename = NULL, overwrite = FALSE) {
+  # do conversion of input spatial object 
+  if (!missing(x) && !is.null(x)) {
+    
+    # convert various input types to SpatVector
+    if (inherits(x, 'SoilProfileCollection')) {
+      x <- as(x, 'sf')
+    }
+    
+    if (inherits(x, c('RasterLayer', 'RasterStack'))) {
+      x <- terra::rast(x)
+    }
+    
+    if (!inherits(x, c('SpatRaster', 'SpatVector'))) {
+      x <- terra::vect(x)
+    }
+    
+    if (inherits(x, 'SpatVector')) {
+      # project any input vector object to CRS of SOLUS
+      x <- terra::project(x, terra::crs(r))
+    }
+    
+    xe <- terra::ext(terra::project(terra::as.polygons(x, ext = TRUE), r))
+    
+    # handle requests out-of-bounds
+    if (!(terra::relate(terra::ext(r), xe, relation = "contains")[1] || 
+          terra::relate(terra::ext(r), xe, relation = "overlaps")[1])) {
+      stop("Extent of `x` is outside the boundaries of the source data extent.", call. = FALSE)
+    }
+    
+    if (!inherits(x, 'SpatRaster')){
+      # crop to target extent (written to temp file if needed)
+      r <- terra::crop(r, x, filename = filename, overwrite = overwrite)
+    } else {
+      # if x is a spatraster, use it as a template for GDAL warp
+      r <- terra::project(r, x, filename = filename, overwrite = overwrite, align_only = FALSE, mask = TRUE, threads = TRUE)
+    }
+  }
+  r
 }
