@@ -10,6 +10,7 @@ createSSURGO(
   conn = NULL,
   pattern = NULL,
   include_spatial = TRUE,
+  include_tabular = TRUE,
   dissolve_field = NULL,
   maxruledepth = 0,
   overwrite = FALSE,
@@ -32,9 +33,16 @@ sf package is used to write spatial data to the database.}
 \item{pattern}{\emph{character}. Optional regular expression to use to filter subdirectories of \code{exdir}.
 Default: \code{NULL} will search all subdirectories for SSURGO export files.}
 
-\item{include_spatial}{\emph{logical}. Include spatial data layers in database? Default: \code{TRUE}.}
+\item{include_spatial}{\emph{logical} or \emph{character}. Include spatial data layers in database?
+Default: \code{TRUE} inserts all spatial tables. If \code{include_spatial} is a \emph{character} vector
+containing table names, only that set are written to file. e.g. \code{include_spatial=c("mupolygon", "featpoint")} writes only the mapunit polygons and special feature points.}
 
-\item{dissolve_field}{\emph{character}. Dissolve geometries to create MULTIPOLYGON features? Column name
+\item{include_tabular}{\emph{logical} or \emph{character}. Include tabular data layers in database?
+Default: \code{TRUE} inserts all tabular tables. If \code{include_tabular} is a \emph{character} vector
+containing table names, only that set are written to file. e.g. \code{include_tabular=c("mapunit", "muaggatt")} writes only the \code{mapunit} and \code{muaggatt} tables.}
+
+\item{dissolve_field}{\emph{character}. Dissolve geometries to create MULTIPOLYGON features? Column
+name
 specified is the grouping variable. Default: \code{NULL} does no aggregation, giving 1 \code{POLYGON}
 feature per delineation. \code{"mukey"} aggregates all related delineations within a soil survey
 area.}

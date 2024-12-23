@@ -153,9 +153,16 @@ downloadSSURGO <- function(WHERE = NULL,
 #'   sf package is used to write spatial data to the database.
 #' @param pattern  _character_. Optional regular expression to use to filter subdirectories of `exdir`.
 #'   Default: `NULL` will search all subdirectories for SSURGO export files.
-#' @param include_spatial _logical_. Include spatial data layers in database? Default: `TRUE`.
-#' @param include_tabular _logical_. Include tabular data layers in database? Default: `TRUE`.
-#' @param dissolve_field _character_. Dissolve geometries to create MULTIPOLYGON features? Column name
+#' @param include_spatial _logical_ or _character_. Include spatial data layers in database?
+#'   Default: `TRUE` inserts all spatial tables. If `include_spatial` is a _character_ vector
+#'   containing table names, only that set are written to file. e.g. `include_spatial=c("mupolygon",
+#'   "featpoint")` writes only the mapunit polygons and special feature points.
+#' @param include_tabular _logical_ or _character_. Include tabular data layers in database?
+#'   Default: `TRUE` inserts all tabular tables. If `include_tabular` is a _character_ vector
+#'   containing table names, only that set are written to file. e.g. `include_tabular=c("mapunit",
+#'   "muaggatt")` writes only the `mapunit` and `muaggatt` tables.
+#' @param dissolve_field _character_. Dissolve geometries to create MULTIPOLYGON features? Column
+#'   name
 #'   specified is the grouping variable. Default: `NULL` does no aggregation, giving 1 `POLYGON`
 #'   feature per delineation. `"mukey"` aggregates all related delineations within a soil survey
 #'   area.
@@ -225,8 +232,15 @@ createSSURGO <- function(filename = NULL,
   layer_names <- c(`mu_a` = "mupolygon", `mu_l` = "muline",   `mu_p` = "mupoint", 
                    `sa_a` = "sapolygon", `sf_l` = "featline", `sf_p` = "featpoint")
   
+  if (is.character(include_spatial)) {
+    idx <- paste0(shp.grp[, 1], "_", shp.grp[, 2]) %in% names(layer_names[layer_names %in% include_spatial])
+    shp.grp <- shp.grp[idx, ]
+    f.shp <- f.shp[idx]
+    include_spatial <- TRUE
+  }
+  
   if (nrow(shp.grp) >= 1 && ncol(shp.grp) == 3 && include_spatial) {
-    f.shp.grp <- split(f.shp, list(feature = shp.grp[,1], geom = shp.grp[,2]))
+    f.shp.grp <- split(f.shp, list(feature = shp.grp[, 1], geom = shp.grp[, 2]), drop = TRUE)
     
     if (IS_DUCKDB) {
       DBI::dbExecute(conn, "INSTALL spatial; LOAD spatial;")
@@ -315,31 +329,36 @@ createSSURGO <- function(filename = NULL,
     on.exit(DBI::dbDisconnect(conn))
   } 
   
-  if (include_tabular) {
+  # create and add combined tabular datasets
+  f.txt <- f[grepl(".*\\.txt$", f)]
+  txt.grp <- gsub("\\.txt", "", basename(f.txt))
   
-    # create and add combined tabular datasets
-    f.txt <- f[grepl(".*\\.txt$", f)]
-    txt.grp <- gsub("\\.txt", "", basename(f.txt))
-    
-    # explicit handling special feature descriptions -> "featdesc" table
-    txt.grp[grepl("soilsf_t_", txt.grp)] <- "featdesc"
-    
-    f.txt.grp <- split(f.txt, txt.grp)
-    
-    # get table, column, index lookup tables
-    mstabn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstab", "mdstattabs", "MetadataTable"))[1]]][[1]]
-    mstabcn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstabcol", "mdstattabcols", "MetadataColumnLookup"))[1]]][[1]]
-    msidxdn <- f.txt.grp[[which(names(f.txt.grp) %in% c("msidxdet", "mdstatidxdet", "MetadataIndexDetail"))[1]]][[1]]
-    
-    if (length(mstabn) >= 1) {
-      mstab <- read.delim(mstabn[1], sep = "|", stringsAsFactors = FALSE, header = header)
-      mstab_lut <- mstab[[1]]
-      names(mstab_lut) <- mstab[[5]]
-    } else {
-      mstab_lut <- names(f.txt.grp)
-      names(mstab_lut) <- names(f.txt.grp)
-    }
-    
+  # explicit handling special feature descriptions -> "featdesc" table
+  txt.grp[grepl("soilsf_t_", txt.grp)] <- "featdesc"
+
+  f.txt.grp <- split(f.txt, txt.grp)
+  
+  # get table, column, index lookup tables
+  mstabn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstab", "mdstattabs", "MetadataTable"))[1]]][[1]]
+  mstabcn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstabcol", "mdstattabcols", "MetadataColumnLookup"))[1]]][[1]]
+  msidxdn <- f.txt.grp[[which(names(f.txt.grp) %in% c("msidxdet", "mdstatidxdet", "MetadataIndexDetail"))[1]]][[1]]
+  
+  if (length(mstabn) >= 1) {
+    mstab <- read.delim(mstabn[1], sep = "|", stringsAsFactors = FALSE, header = header)
+    mstab_lut <- mstab[[1]]
+    names(mstab_lut) <- mstab[[5]]
+  } else {
+    mstab_lut <- names(f.txt.grp)
+    names(mstab_lut) <- names(f.txt.grp)
+  }
+  
+  if (is.character(include_tabular)) {
+    f.txt.grp <- f.txt.grp[names(mstab_lut[mstab_lut %in% include_tabular])]
+    include_tabular <- TRUE
+  }
+  
+  if (include_tabular) {
+
     if (length(mstabcn) >= 1) {
       mstabcol <- read.delim(mstabcn[1], sep = "|", stringsAsFactors = FALSE, header = header)
     }
