@@ -126,6 +126,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param conn A _DBIConnection_ object. Default is a `SQLiteConnection` used for writing .sqlite or .gpkg files. Alternate options are any DBI connection types. When `include_spatial=TRUE`, the sf package is used to write spatial data to the database.
 #' @param pattern Character. Optional regular expression to use to filter subdirectories of `exdir`. Default: `NULL` will search all subdirectories for SSURGO export files.
 #' @param include_spatial Logical. Include spatial data layers in database? Default: `TRUE`. 
+#' @param maxruledepth Integer. Maximum rule depth for `"cointerp"` table. Default `0` includes only shallowest ratings for smaller database size.
 #' @param overwrite Logical. Overwrite existing layers? Default `FALSE` will append to existing tables/layers.
 #' @param header Logical. Passed to `read.delim()` for reading pipe-delimited (`|`) text files containing tabular data.
 #' @param quiet Logical. Suppress messages and other output from database read/write operations?
@@ -144,6 +145,7 @@ createSSURGO <- function(filename,
                          conn = NULL, 
                          pattern = NULL,
                          include_spatial = TRUE,
+                         maxruledepth = 0,
                          overwrite = FALSE,
                          header = FALSE,
                          quiet = TRUE,
@@ -301,6 +303,12 @@ createSSURGO <- function(filename,
           if (!is.null(mstab) && !header) { # preserve headers if present 
             colnames(y) <- newnames
           }
+        }
+        
+        # remove deeper rules from cointerp for smaller DB size
+        # most people only use depth==0 (default)
+        if (mstab_lut[x] == "cointerp" && !is.null(maxruledepth)) {
+          y <- y[y$ruledepth <= maxruledepth, ]
         }
         
         try({

@@ -10,6 +10,7 @@ createSSURGO(
   conn = NULL,
   pattern = NULL,
   include_spatial = TRUE,
+  maxruledepth = 0,
   overwrite = FALSE,
   header = FALSE,
   quiet = TRUE,
@@ -26,6 +27,8 @@ createSSURGO(
 \item{pattern}{Character. Optional regular expression to use to filter subdirectories of \code{exdir}. Default: \code{NULL} will search all subdirectories for SSURGO export files.}
 
 \item{include_spatial}{Logical. Include spatial data layers in database? Default: \code{TRUE}.}
+
+\item{maxruledepth}{Integer. Maximum rule depth for \code{"cointerp"} table. Default \code{0} includes only shallowest ratings for smaller database size.}
 
 \item{overwrite}{Logical. Overwrite existing layers? Default \code{FALSE} will append to existing tables/layers.}
 
