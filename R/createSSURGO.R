@@ -1,7 +1,7 @@
 #' Get SSURGO ZIP files from Web Soil Survey 'Download Soils Data'
-#' 
+#'
 #' Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with standard SSURGO format; optionally including the corresponding SSURGO Template Database with `include_template=TRUE`.
-#' 
+#'
 #' To specify the Soil Survey Areas you would like to obtain data you use a `WHERE` clause for query of `sacatalog` table such as `areasymbol = 'CA067'`, `"areasymbol IN ('CA628', 'CA067')"` or  `areasymbol LIKE 'CT%'`.
 #'
 #' @param WHERE A SQL `WHERE` clause expression used to filter records in `sacatalog` table. Alternately `WHERE` can be any spatial object supported by `SDA_spatialQuery()` for defining the target extent.
@@ -16,13 +16,13 @@
 #' @param quiet Logical. Passed to `curl::curl_download()`.
 #' @details
 #' When `db="STATSGO"` the `WHERE` argument is not supported. Allowed `areasymbols` include `"US"` and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
-#' 
+#'
 #' @export
-#' 
+#'
 #' @details Pipe-delimited TXT files are found in _/tabular/_ folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the _Soil Data Access Tables and Columns Report_: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files. The function returns a `try-error` if the `WHERE`/`areasymbols` arguments result in
-#' 
+#'
 #' Several ESRI shapefiles are found in the _/spatial/_ folder extracted from a SSURGO ZIP. These have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
-#' 
+#'
 #' @return Character. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip = TRUE`.
 #' @seealso [createSSURGO()]
 downloadSSURGO <- function(WHERE = NULL, 
@@ -113,12 +113,12 @@ downloadSSURGO <- function(WHERE = NULL,
 }
  
 #' Create a database from SSURGO Exports
-#' 
+#'
 #' The following database types are tested and fully supported:
 #'  - SQLite or Geopackage
 #'  - DuckDB
 #'  - Postgres or PostGIS
-#'  
+#'
 #' In theory any other DBI-compatible data source can be used for output. See `conn` argument. If you encounter issues using specific DBI connection types, please report in the soilDB issue tracker.
 #'
 #' @param filename Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`). Only used when `con` is not specified by the user.
@@ -145,6 +145,7 @@ createSSURGO <- function(filename = NULL,
                          conn = NULL, 
                          pattern = NULL,
                          include_spatial = TRUE,
+                         dissolve_field = NULL,
                          maxruledepth = 0,
                          overwrite = FALSE,
                          header = FALSE,
@@ -211,6 +212,35 @@ createSSURGO <- function(filename = NULL,
               sf::write_sf(x, dsn = dsn, layer = layer, delete_layer = TRUE, ...)
             } else {
               sf::write_sf(x, dsn = dsn, layer = layer, append = TRUE, ...)
+            }
+          }
+          
+          # dissolve on dissolve_field
+          # TODO: add nationalmusym to spatial layer?
+          if (!is.null(dissolve_field) && dissolve_field %in% colnames(shp)) {
+            l <- list(shp[[dissolve_field]])
+            names(l) <- dissolve_field
+            if (nrow(shp) > 0) {
+              shp <- aggregate(shp, by = l, FUN = function(y) {
+                yy <- unique(y)
+                if (length(yy) > 1) {
+                  res <- NA
+                  mode(res) <- mode(y)
+                  return(res)
+                }
+                y[1]
+              }, do_union = TRUE)
+              
+              shp[[paste0(dissolve_field, ".1")]] <- NULL
+              
+              destgeom <- "MULTIPOLYGON"
+              if (any(sf::st_geometry_type(shp) %in% c("POINT", "MULTIPOINT"))) {
+                destgeom <- "MULTIPOINT"
+              } else if (any(sf::st_geometry_type(shp) %in% c("LINESTRING", "MULTILINESTRING"))) {
+                destgeom <- "MULTILINESTRING"
+              }
+              
+              shp <- sf::st_cast(shp, destgeom)
             }
           }
           
