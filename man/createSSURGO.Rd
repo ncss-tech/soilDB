@@ -10,6 +10,7 @@ createSSURGO(
   conn = NULL,
   pattern = NULL,
   include_spatial = TRUE,
+  dissolve_field = NULL,
   maxruledepth = 0,
   overwrite = FALSE,
   header = FALSE,
@@ -18,23 +19,36 @@ createSSURGO(
 )
 }
 \arguments{
-\item{filename}{Output file name (e.g. \code{'db.sqlite'} or \code{'db.gpkg'}). Only used when \code{con} is not specified by the user.}
+\item{filename}{\emph{character}. Output file name (e.g. \code{'db.sqlite'} or \code{'db.gpkg'}). Only used when \code{con} is not
+specified by the user.}
 
-\item{exdir}{Path containing containing input SSURGO spatial (.shp) and tabular (.txt) files, downloaded and extracted by \code{downloadSSURGO()} or similar.}
+\item{exdir}{\emph{character}. Path containing containing input SSURGO spatial (.shp) and tabular (.txt) files,
+downloaded and extracted by \code{downloadSSURGO()} or similar.}
 
-\item{conn}{A \emph{DBIConnection} object. Default is a \code{SQLiteConnection} used for writing .sqlite or .gpkg files. Alternate options are any DBI connection types. When \code{include_spatial=TRUE}, the sf package is used to write spatial data to the database.}
+\item{conn}{A \emph{DBIConnection} object. Default is a \code{SQLiteConnection} used for writing .sqlite or
+.gpkg files. Alternate options are any DBI connection types. When \code{include_spatial=TRUE}, the
+sf package is used to write spatial data to the database.}
 
-\item{pattern}{Character. Optional regular expression to use to filter subdirectories of \code{exdir}. Default: \code{NULL} will search all subdirectories for SSURGO export files.}
+\item{pattern}{\emph{character}. Optional regular expression to use to filter subdirectories of \code{exdir}.
+Default: \code{NULL} will search all subdirectories for SSURGO export files.}
 
-\item{include_spatial}{Logical. Include spatial data layers in database? Default: \code{TRUE}.}
+\item{include_spatial}{\emph{logical}. Include spatial data layers in database? Default: \code{TRUE}.}
 
-\item{maxruledepth}{Integer. Maximum rule depth for \code{"cointerp"} table. Default \code{0} includes only shallowest ratings for smaller database size.}
+\item{dissolve_field}{\emph{character}. Dissolve geometries to create MULTIPOLYGON features? Column name
+specified is the grouping variable. Default: \code{NULL} does no aggregation, giving 1 \code{POLYGON}
+feature per delineation. \code{"mukey"} aggregates all related delineations within a soil survey
+area.}
 
-\item{overwrite}{Logical. Overwrite existing layers? Default \code{FALSE} will append to existing tables/layers.}
+\item{maxruledepth}{\emph{integer}. Maximum rule depth for \code{"cointerp"} table. Default \code{0} includes only
+shallowest ratings for smaller database size.}
 
-\item{header}{Logical. Passed to \code{read.delim()} for reading pipe-delimited (\code{|}) text files containing tabular data.}
+\item{overwrite}{\emph{logical}. Overwrite existing layers? Default \code{FALSE} will append to existing
+tables/layers.}
 
-\item{quiet}{Logical. Suppress messages and other output from database read/write operations?}
+\item{header}{\emph{logical}. Passed to \code{read.delim()} for reading pipe-delimited (\code{|}) text files
+containing tabular data.}
+
+\item{quiet}{\emph{logical}. Suppress messages and other output from database read/write operations?}
 
 \item{...}{Additional arguments passed to \code{write_sf()} for writing spatial layers.}
 }
@@ -48,8 +62,11 @@ The following database types are tested and fully supported:
 \item DuckDB
 \item Postgres or PostGIS
 }
-
-In theory any other DBI-compatible data source can be used for output. See \code{conn} argument. If you encounter issues using specific DBI connection types, please report in the soilDB issue tracker.
+}
+\details{
+In theory any other DBI-compatible data source can be used for output. See \code{conn} argument. If
+you encounter issues using specific DBI connection types, please report in the soilDB issue
+tracker.
 }
 \examples{
 \dontrun{

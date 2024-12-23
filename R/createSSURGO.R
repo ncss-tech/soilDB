@@ -1,29 +1,50 @@
 #' Get SSURGO ZIP files from Web Soil Survey 'Download Soils Data'
 #'
-#' Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with standard SSURGO format; optionally including the corresponding SSURGO Template Database with `include_template=TRUE`.
+#' Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with standard
+#' SSURGO format; optionally including the corresponding SSURGO Template Database with
+#' `include_template=TRUE`.
 #'
-#' To specify the Soil Survey Areas you would like to obtain data you use a `WHERE` clause for query of `sacatalog` table such as `areasymbol = 'CA067'`, `"areasymbol IN ('CA628', 'CA067')"` or  `areasymbol LIKE 'CT%'`.
+#' To specify the Soil Survey Areas you would like to obtain data you use a `WHERE` clause for query
+#' of `sacatalog` table such as `areasymbol = 'CA067'`, `"areasymbol IN ('CA628', 'CA067')"` or
+#' `areasymbol LIKE 'CT%'`.
 #'
-#' @param WHERE A SQL `WHERE` clause expression used to filter records in `sacatalog` table. Alternately `WHERE` can be any spatial object supported by `SDA_spatialQuery()` for defining the target extent.
-#' @param areasymbols Character vector of soil survey area symbols e.g. `c("CA067", "CA077")`. Used in lieu of `WHERE` argument.
-#' @param destdir Directory to download ZIP files into. Default `tempdir()`.
-#' @param exdir Directory to extract ZIP archives into. May be a directory that does not yet exist. Each ZIP file will extract to a folder labeled with `areasymbol` in this directory. Default: `destdir`
-#' @param include_template Include the (possibly state-specific) MS Access template database? Default: `FALSE`
-#' @param db Either `"SSURGO"` (default; detailed soil map) or `"STATSGO"` (general soil map).
-#' @param extract Logical. Extract ZIP files to `exdir`? Default: `TRUE`
-#' @param remove_zip Logical. Remove ZIP files after extracting? Default: `FALSE` 
-#' @param overwrite Logical. Overwrite by re-extracting if directory already exists? Default: `FALSE`
-#' @param quiet Logical. Passed to `curl::curl_download()`.
-#' @details
-#' When `db="STATSGO"` the `WHERE` argument is not supported. Allowed `areasymbols` include `"US"` and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
+#' @param WHERE _character_. A SQL `WHERE` clause expression used to filter records in `sacatalog` table.
+#'   Alternately `WHERE` can be any spatial object supported by `SDA_spatialQuery()` for defining
+#'   the target extent.
+#' @param areasymbols _character_. Character vector of soil survey area symbols e.g. `c("CA067", "CA077")`. Used
+#'   in lieu of `WHERE` argument.
+#' @param destdir _character_. Directory to download ZIP files into. Default `tempdir()`.
+#' @param exdir _character_. Directory to extract ZIP archives into. May be a directory that does not yet exist.
+#'   Each ZIP file will extract to a folder labeled with `areasymbol` in this directory. Default:
+#'   `destdir`
+#' @param include_template _logical_. Include the (possibly state-specific) MS Access template database?
+#'   Default: `FALSE`
+#' @param db _character_. Either `"SSURGO"` (default; detailed soil map) or `"STATSGO"` (general soil map).
+#' @param extract _logical_. Extract ZIP files to `exdir`? Default: `TRUE`
+#' @param remove_zip _logical_. Remove ZIP files after extracting? Default: `FALSE`
+#' @param overwrite _logical_. Overwrite by re-extracting if directory already exists? Default:
+#'   `FALSE`
+#' @param quiet _logical_. Passed to `curl::curl_download()`.
+#' 
+#' @details When `db="STATSGO"` the `WHERE` argument is not supported. Allowed `areasymbols` include
+#' `"US"` and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
 #'
 #' @export
 #'
-#' @details Pipe-delimited TXT files are found in _/tabular/_ folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the _Soil Data Access Tables and Columns Report_: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files. The function returns a `try-error` if the `WHERE`/`areasymbols` arguments result in
+#' @details Pipe-delimited TXT files are found in _/tabular/_ folder extracted from a SSURGO ZIP.
+#'   The files are named for tables in the SSURGO schema. There is no header / the files do not have
+#'   column names. See the _Soil Data Access Tables and Columns Report_:
+#'   \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on
+#'   tables, column names and metadata including the default sequence of columns used in TXT files.
+#'   The function returns a `try-error` if the `WHERE`/`areasymbols` arguments result in
 #'
-#' Several ESRI shapefiles are found in the _/spatial/_ folder extracted from a SSURGO ZIP. These have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
+#'   Several ESRI shapefiles are found in the _/spatial/_ folder extracted from a SSURGO ZIP. These
+#'   have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There
+#'   will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names
+#'   then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
 #'
-#' @return Character. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip = TRUE`.
+#' @return _character_. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip =
+#'   TRUE`.
 #' @seealso [createSSURGO()]
 downloadSSURGO <- function(WHERE = NULL, 
                            areasymbols = NULL,
@@ -119,17 +140,31 @@ downloadSSURGO <- function(WHERE = NULL,
 #'  - DuckDB
 #'  - Postgres or PostGIS
 #'
-#' In theory any other DBI-compatible data source can be used for output. See `conn` argument. If you encounter issues using specific DBI connection types, please report in the soilDB issue tracker.
+#' In theory any other DBI-compatible data source can be used for output. See `conn` argument. If
+#' you encounter issues using specific DBI connection types, please report in the soilDB issue
+#' tracker.
 #'
-#' @param filename Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`). Only used when `con` is not specified by the user.
-#' @param exdir Path containing containing input SSURGO spatial (.shp) and tabular (.txt) files, downloaded and extracted by `downloadSSURGO()` or similar.
-#' @param conn A _DBIConnection_ object. Default is a `SQLiteConnection` used for writing .sqlite or .gpkg files. Alternate options are any DBI connection types. When `include_spatial=TRUE`, the sf package is used to write spatial data to the database.
-#' @param pattern Character. Optional regular expression to use to filter subdirectories of `exdir`. Default: `NULL` will search all subdirectories for SSURGO export files.
-#' @param include_spatial Logical. Include spatial data layers in database? Default: `TRUE`. 
-#' @param maxruledepth Integer. Maximum rule depth for `"cointerp"` table. Default `0` includes only shallowest ratings for smaller database size.
-#' @param overwrite Logical. Overwrite existing layers? Default `FALSE` will append to existing tables/layers.
-#' @param header Logical. Passed to `read.delim()` for reading pipe-delimited (`|`) text files containing tabular data.
-#' @param quiet Logical. Suppress messages and other output from database read/write operations?
+#' @param filename _character_. Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`). Only used when `con` is not
+#'   specified by the user.
+#' @param exdir  _character_. Path containing containing input SSURGO spatial (.shp) and tabular (.txt) files,
+#'   downloaded and extracted by `downloadSSURGO()` or similar.
+#' @param conn A _DBIConnection_ object. Default is a `SQLiteConnection` used for writing .sqlite or
+#'   .gpkg files. Alternate options are any DBI connection types. When `include_spatial=TRUE`, the
+#'   sf package is used to write spatial data to the database.
+#' @param pattern  _character_. Optional regular expression to use to filter subdirectories of `exdir`.
+#'   Default: `NULL` will search all subdirectories for SSURGO export files.
+#' @param include_spatial _logical_. Include spatial data layers in database? Default: `TRUE`.
+#' @param dissolve_field _character_. Dissolve geometries to create MULTIPOLYGON features? Column name
+#'   specified is the grouping variable. Default: `NULL` does no aggregation, giving 1 `POLYGON`
+#'   feature per delineation. `"mukey"` aggregates all related delineations within a soil survey
+#'   area.
+#' @param maxruledepth _integer_. Maximum rule depth for `"cointerp"` table. Default `0` includes only
+#'   shallowest ratings for smaller database size.
+#' @param overwrite _logical_. Overwrite existing layers? Default `FALSE` will append to existing
+#'   tables/layers.
+#' @param header _logical_. Passed to `read.delim()` for reading pipe-delimited (`|`) text files
+#'   containing tabular data.
+#' @param quiet _logical_. Suppress messages and other output from database read/write operations?
 #' @param ... Additional arguments passed to `write_sf()` for writing spatial layers.
 #'
 #' @return Character. Vector of layer/table names in `filename`.
