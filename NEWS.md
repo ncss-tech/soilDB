@@ -3,6 +3,16 @@
  - `createStaticNASIS()` removed workaround for {odbc}/nanoodbc VARCHAR(MAX) columns; now can directly use `DBI::dbReadTable()` for all tables via NASIS ODBC connection
  - `fetchNASIS()` changed default behavior to `mixColors = FALSE` which returns dominant condition for each moisture state rather than mixing LAB color coordinates
    - `get_colors_from_NASIS_db()` deprecate `mixColors` argument, add `method` argument with options "dominant", "mixed", and "none". New aggregation method `"none"` returns long format representation of color data from phcolor table with no aggregation applied. 
+ - `createSSURGO()` updates:
+   - Added incremental write of tabular data by table and soil survey area, which is much more memory efficient
+   - Added `maxruledepth` argument to allow filtering of `cointerp` table, and set default to `0`.
+     - This reduces number of `cointerp` rows by about 75% for published SSURGO. Generally, Web Soil Survey exports have maximum rule depth of `1`, but custom NASIS exports can be "deeper"
+   - Updated behavior of `filename` argument when `conn` _DBIConnection_ is specified and improved `overwrite` logic
+   - Added `dissolve_field` to facilitate creating aggregate geometries by `"mukey"` or other spatial attribute
+   - Added `include_tabular` argument to support omitting tabular data when building a database
+   - Now `include_spatial` and `include_tabular` are allowed to be a _character_ vectors of table names
+      - `TRUE` is all tables, `FALSE` is no tables. This allows for subsets of the SSURGO data model to be specified with finer user control over database contents.
+   - Now a composite `"soil_metadata"` table is made with `"areasymbol"` column and one row per soil survey area, rather than one table per soil survey area. This is more compact and scales better to larger databases.
 
 # soilDB 2.8.5 (2024-11-04)
  - `fetchLDM()` add support for `area_type` argument with local database connections (`dsn` argument)
