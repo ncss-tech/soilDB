@@ -154,6 +154,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param pattern  _character_. Optional regular expression to use to filter subdirectories of `exdir`.
 #'   Default: `NULL` will search all subdirectories for SSURGO export files.
 #' @param include_spatial _logical_. Include spatial data layers in database? Default: `TRUE`.
+#' @param include_tabular _logical_. Include tabular data layers in database? Default: `TRUE`.
 #' @param dissolve_field _character_. Dissolve geometries to create MULTIPOLYGON features? Column name
 #'   specified is the grouping variable. Default: `NULL` does no aggregation, giving 1 `POLYGON`
 #'   feature per delineation. `"mukey"` aggregates all related delineations within a soil survey
@@ -180,6 +181,7 @@ createSSURGO <- function(filename = NULL,
                          conn = NULL, 
                          pattern = NULL,
                          include_spatial = TRUE,
+                         include_tabular = TRUE,
                          dissolve_field = NULL,
                          maxruledepth = 0,
                          overwrite = FALSE,
@@ -313,120 +315,123 @@ createSSURGO <- function(filename = NULL,
     on.exit(DBI::dbDisconnect(conn))
   } 
   
-  # create and add combined tabular datasets
-  f.txt <- f[grepl(".*\\.txt$", f)]
-  txt.grp <- gsub("\\.txt", "", basename(f.txt))
+  if (include_tabular) {
   
-  # explicit handling special feature descriptions -> "featdesc" table
-  txt.grp[grepl("soilsf_t_", txt.grp)] <- "featdesc"
-  
-  f.txt.grp <- split(f.txt, txt.grp)
-  
-  # get table, column, index lookup tables
-  mstabn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstab", "mdstattabs", "MetadataTable"))[1]]][[1]]
-  mstabcn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstabcol", "mdstattabcols", "MetadataColumnLookup"))[1]]][[1]]
-  msidxdn <- f.txt.grp[[which(names(f.txt.grp) %in% c("msidxdet", "mdstatidxdet", "MetadataIndexDetail"))[1]]][[1]]
-  
-  if (length(mstabn) >= 1) {
-    mstab <- read.delim(mstabn[1], sep = "|", stringsAsFactors = FALSE, header = header)
-    mstab_lut <- mstab[[1]]
-    names(mstab_lut) <- mstab[[5]]
-  } else {
-    mstab_lut <- names(f.txt.grp)
-    names(mstab_lut) <- names(f.txt.grp)
-  }
-  
-  if (length(mstabcn) >= 1) {
-    mstabcol <- read.delim(mstabcn[1], sep = "|", stringsAsFactors = FALSE, header = header)
-  }
-  
-  if (length(msidxdn) >= 1) {
-    msidxdet <- read.delim(msidxdn[1], sep = "|", stringsAsFactors = FALSE, header = header)
-  }
-  
-  lapply(names(f.txt.grp), function(x) {
+    # create and add combined tabular datasets
+    f.txt <- f[grepl(".*\\.txt$", f)]
+    txt.grp <- gsub("\\.txt", "", basename(f.txt))
     
-    if (!is.null(mstabcol)) {
-      newnames <- mstabcol[[3]][mstabcol[[1]] == mstab_lut[x]]
+    # explicit handling special feature descriptions -> "featdesc" table
+    txt.grp[grepl("soilsf_t_", txt.grp)] <- "featdesc"
+    
+    f.txt.grp <- split(f.txt, txt.grp)
+    
+    # get table, column, index lookup tables
+    mstabn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstab", "mdstattabs", "MetadataTable"))[1]]][[1]]
+    mstabcn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstabcol", "mdstattabcols", "MetadataColumnLookup"))[1]]][[1]]
+    msidxdn <- f.txt.grp[[which(names(f.txt.grp) %in% c("msidxdet", "mdstatidxdet", "MetadataIndexDetail"))[1]]][[1]]
+    
+    if (length(mstabn) >= 1) {
+      mstab <- read.delim(mstabn[1], sep = "|", stringsAsFactors = FALSE, header = header)
+      mstab_lut <- mstab[[1]]
+      names(mstab_lut) <- mstab[[5]]
+    } else {
+      mstab_lut <- names(f.txt.grp)
+      names(mstab_lut) <- names(f.txt.grp)
     }
     
-    if (!is.null(msidxdet)) {
-      indexPK <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("PK_", msidxdet[[2]])])
-      indexDI <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("DI_", msidxdet[[2]])])
+    if (length(mstabcn) >= 1) {
+      mstabcol <- read.delim(mstabcn[1], sep = "|", stringsAsFactors = FALSE, header = header)
     }
     
-    d <- try(lapply(seq_along(f.txt.grp[[x]]), function(i) {
-        # message(f.txt.grp[[x]][i])
-        y <- try(read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header), silent = quiet)
-        
-        if (inherits(y, 'try-error')) {
-          return(NULL)
-        } else if (length(y) == 1) {
-          y <- data.frame(content = y)
-        } else {
-          if (!is.null(mstab) && !header) { # preserve headers if present 
-            colnames(y) <- newnames
-          }
-        }
-        
-        # remove deeper rules from cointerp for smaller DB size
-        # most people only use depth==0 (default)
-        if (mstab_lut[x] == "cointerp" && !is.null(maxruledepth)) {
-          y <- y[y$ruledepth <= maxruledepth, ]
-        }
-        
-        try({
-          if (overwrite && i == 1) {
-            DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = TRUE)
-          } else {
-            DBI::dbWriteTable(conn, mstab_lut[x], y, append = TRUE)
-          }
-        }, silent = quiet)
-    }), silent = quiet)
-    
-    if (length(mstab_lut[x]) && is.na(mstab_lut[x])) {
-      mstab_lut[x] <- x
+    if (length(msidxdn) >= 1) {
+      msidxdet <- read.delim(msidxdn[1], sep = "|", stringsAsFactors = FALSE, header = header)
     }
     
-    if (length(mstab_lut[x]) && !is.na(mstab_lut[x]) && inherits(d, 'data.frame') && nrow(d) > 0) {
+    lapply(names(f.txt.grp), function(x) {
       
-      # create pkey indices
-      if (!is.null(indexPK) && length(indexPK) > 0) {
-        try({
-          q <- sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
-                       paste0('PK_', mstab_lut[x]), mstab_lut[x], 
-                       paste0(indexPK, collapse = ","))
-          DBI::dbExecute(conn, q)
-        }, silent = quiet)
+      if (!is.null(mstabcol)) {
+        newnames <- mstabcol[[3]][mstabcol[[1]] == mstab_lut[x]]
       }
       
-      # create key indices
-      if (!is.null(indexDI) && length(indexDI) > 0) {
-        for (i in seq_along(indexDI)) {
+      if (!is.null(msidxdet)) {
+        indexPK <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("PK_", msidxdet[[2]])])
+        indexDI <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("DI_", msidxdet[[2]])])
+      }
+      
+      d <- try(lapply(seq_along(f.txt.grp[[x]]), function(i) {
+          # message(f.txt.grp[[x]][i])
+          y <- try(read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header), silent = quiet)
+          
+          if (inherits(y, 'try-error')) {
+            return(NULL)
+          } else if (length(y) == 1) {
+            y <- data.frame(content = y)
+          } else {
+            if (!is.null(mstab) && !header) { # preserve headers if present 
+              colnames(y) <- newnames
+            }
+          }
+          
+          # remove deeper rules from cointerp for smaller DB size
+          # most people only use depth==0 (default)
+          if (mstab_lut[x] == "cointerp" && !is.null(maxruledepth)) {
+            y <- y[y$ruledepth <= maxruledepth, ]
+          }
+          
           try({
-            q <- sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
-                         paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i])
+            if (overwrite && i == 1) {
+              DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = TRUE)
+            } else {
+              DBI::dbWriteTable(conn, mstab_lut[x], y, append = TRUE)
+            }
+          }, silent = quiet)
+      }), silent = quiet)
+      
+      if (length(mstab_lut[x]) && is.na(mstab_lut[x])) {
+        mstab_lut[x] <- x
+      }
+      
+      if (length(mstab_lut[x]) && !is.na(mstab_lut[x]) && inherits(d, 'data.frame') && nrow(d) > 0) {
+        
+        # create pkey indices
+        if (!is.null(indexPK) && length(indexPK) > 0) {
+          try({
+            q <- sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
+                         paste0('PK_', mstab_lut[x]), mstab_lut[x], 
+                         paste0(indexPK, collapse = ","))
             DBI::dbExecute(conn, q)
           }, silent = quiet)
         }
-      }
-      
-      # for GPKG output, add gpkg_contents (metadata for features and attributes)
-      if (IS_GPKG) {
-        if (!.gpkg_has_contents(conn)) {
-          # if no spatial data inserted, there will be no gpkg_contents table initally
-          try(.gpkg_create_contents(conn))
+        
+        # create key indices
+        if (!is.null(indexDI) && length(indexDI) > 0) {
+          for (i in seq_along(indexDI)) {
+            try({
+              q <- sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
+                           paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i])
+              DBI::dbExecute(conn, q)
+            }, silent = quiet)
+          }
         }
-        # update gpkg_contents table entry
-        try(.gpkg_delete_contents(conn, mstab_lut[x]))
-        try(.gpkg_add_contents(conn, mstab_lut[x]))
+        
+        # for GPKG output, add gpkg_contents (metadata for features and attributes)
+        if (IS_GPKG) {
+          if (!.gpkg_has_contents(conn)) {
+            # if no spatial data inserted, there will be no gpkg_contents table initally
+            try(.gpkg_create_contents(conn))
+          }
+          # update gpkg_contents table entry
+          try(.gpkg_delete_contents(conn, mstab_lut[x]))
+          try(.gpkg_add_contents(conn, mstab_lut[x]))
+        }
+        
+        # TODO: other foreign keys/relationships? ALTER TABLE/ADD CONSTRAINT not available in SQLite
+        #  the only way to add a foreign key is via CREATE TABLE which means refactoring above two
+        #  steps into a single SQL statement (create table with primary and foreign keys)
       }
-      
-      # TODO: other foreign keys/relationships? ALTER TABLE/ADD CONSTRAINT not available in SQLite
-      #  the only way to add a foreign key is via CREATE TABLE which means refactoring above two
-      #  steps into a single SQL statement (create table with primary and foreign keys)
-    }
-  })
+    })
+  }
   
   res <- DBI::dbListTables(conn)
   invisible(res)
