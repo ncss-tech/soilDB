@@ -140,7 +140,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #'  downloadSSURGO("areasymbol IN ('CA067', 'CA077', 'CA632')", destdir = "SSURGO_test")
 #'  createSSURGO("test.gpkg", "SSURGO_test")
 #' }
-createSSURGO <- function(filename,
+createSSURGO <- function(filename = NULL,
                          exdir,
                          conn = NULL, 
                          pattern = NULL,
@@ -243,11 +243,7 @@ createSSURGO <- function(filename,
     
     # if user did not specify their own connection, close on exit
     on.exit(DBI::dbDisconnect(conn))
-  } else {
-    if (isTRUE(overwrite)) {
-      message("`filename` argument is ignored when `conn` is specified")
-    }
-  }
+  } 
   
   # create and add combined tabular datasets
   f.txt <- f[grepl(".*\\.txt$", f)]

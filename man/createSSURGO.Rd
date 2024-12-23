@@ -5,7 +5,7 @@
 \title{Create a database from SSURGO Exports}
 \usage{
 createSSURGO(
-  filename,
+  filename = NULL,
   exdir,
   conn = NULL,
   pattern = NULL,
