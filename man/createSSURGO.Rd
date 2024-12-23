@@ -39,7 +39,9 @@ containing table names, only that set are written to file. e.g. \code{include_sp
 
 \item{include_tabular}{\emph{logical} or \emph{character}. Include tabular data layers in database?
 Default: \code{TRUE} inserts all tabular tables. If \code{include_tabular} is a \emph{character} vector
-containing table names, only that set are written to file. e.g. \code{include_tabular=c("mapunit", "muaggatt")} writes only the \code{mapunit} and \code{muaggatt} tables.}
+containing table names, only that set are written to file. e.g. \code{include_tabular=c("mapunit", "muaggatt")} writes only the \code{mapunit} and \code{muaggatt} tables. Note that special feature
+descriptions are stored in table \code{"featdesc"} and metadata for each soil survey area are stored
+in \code{"soil_metadata"} tables.}
 
 \item{dissolve_field}{\emph{character}. Dissolve geometries to create MULTIPOLYGON features? Column
 name

@@ -160,7 +160,9 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param include_tabular _logical_ or _character_. Include tabular data layers in database?
 #'   Default: `TRUE` inserts all tabular tables. If `include_tabular` is a _character_ vector
 #'   containing table names, only that set are written to file. e.g. `include_tabular=c("mapunit",
-#'   "muaggatt")` writes only the `mapunit` and `muaggatt` tables.
+#'   "muaggatt")` writes only the `mapunit` and `muaggatt` tables. Note that special feature
+#'   descriptions are stored in table `"featdesc"` and metadata for each soil survey area are stored
+#'   in `"soil_metadata"` tables.
 #' @param dissolve_field _character_. Dissolve geometries to create MULTIPOLYGON features? Column
 #'   name
 #'   specified is the grouping variable. Default: `NULL` does no aggregation, giving 1 `POLYGON`
@@ -335,6 +337,7 @@ createSSURGO <- function(filename = NULL,
   
   # explicit handling special feature descriptions -> "featdesc" table
   txt.grp[grepl("soilsf_t_", txt.grp)] <- "featdesc"
+  txt.grp[grepl("soil_metadata_", txt.grp)] <- "soil_metadata"
 
   f.txt.grp <- split(f.txt, txt.grp)
   
@@ -345,8 +348,8 @@ createSSURGO <- function(filename = NULL,
   
   if (length(mstabn) >= 1) {
     mstab <- read.delim(mstabn[1], sep = "|", stringsAsFactors = FALSE, header = header)
-    mstab_lut <- mstab[[1]]
-    names(mstab_lut) <- mstab[[5]]
+    mstab_lut <- c(mstab[[1]], "soil_metadata")
+    names(mstab_lut) <- c(mstab[[5]], "soil_metadata")
   } else {
     mstab_lut <- names(f.txt.grp)
     names(mstab_lut) <- names(f.txt.grp)
@@ -385,7 +388,11 @@ createSSURGO <- function(filename = NULL,
           if (inherits(y, 'try-error')) {
             return(NULL)
           } else if (length(y) == 1) {
-            y <- data.frame(content = y)
+            if (grepl("soil_metadata", f.txt.grp[[x]][i])) {
+              y <- data.frame(areasymbol = toupper(gsub(".*soil_metadata_(.*)\\.txt", "\\1", f.txt.grp[[x]][i])), content = paste0(y[[1]], collapse = "\n"))
+            } else {
+              y <- data.frame(content = y)
+            }
           } else {
             if (!is.null(mstab) && !header) { # preserve headers if present 
               colnames(y) <- newnames
