@@ -29,7 +29,9 @@
 #' 
 #' @export get_veg_data_from_NASIS_db
 get_veg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
-
+  
+  .soilDB_warn_deprecated_aliases(c("vegtransplantsummiid" = "vstpiid"))
+  
   # existing veg
   # NOTE: left join of siteobs:vegplot ensures that all site/siteobs are in this result, 
   #       records will be NA filled when no vegplot available
@@ -46,7 +48,7 @@ get_veg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
   }
   
   # veg transect
-  q.vegtransect <- "SELECT siteiid, vegplotiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, vegtransectid, vegtransplantsummiid vtpsiid, transectlength, plantsym, plantsciname, plantnatvernm
+  q.vegtransect <- "SELECT siteiid, vegplotiid, vegplotid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose, assocuserpedonid, vegtransectid, vegtransplantsummiid AS vtpsiid, vegtransplantsummiid, transectlength, plantsym, plantsciname, plantnatvernm
   
     FROM site_View_1 AS s
     INNER JOIN siteobs ON siteobs.siteiidref=s.siteiid

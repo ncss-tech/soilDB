@@ -60,7 +60,7 @@ fetchVegdata <- function(SS = TRUE, include_pedon = TRUE, stringsAsFactors = NUL
   
   # add peiid information to vegplot
   if (is.character(include_pedon) && include_pedon == "assocuserpedonid") {
-    match.idx <- match(vegplot$pedon_id, site$pedon_id)  # TODO: remove alias for assocuserpedonid
+    match.idx <- match(vegplot$assocuserpedonid, site$upedonid)
     vegplot$peiid <- site$peiid[match.idx]
   } else if (isTRUE(include_pedon)) {
     # any pedon linked to the same site is included (may cause duplication)

@@ -13,11 +13,13 @@
 #' @export
 get_ecosite_history_from_NASIS_db <- function(best = TRUE, SS = TRUE, es_classifier = NULL, dsn = NULL) {
   
+  .soilDB_warn_deprecated_aliases(c("siteecositehistory.classifier" = "es_classifier"))
+  
   .SD <- NULL
   
   # ecological site
   q.ecosite <- "SELECT siteiidref AS siteiid, ecositeid, ecositenm, ecositecorrdate, seh.recwlupdated,
-                       classifier As es_classifier, classifier AS [siteecositehistory.classifier]
+                       classifier AS es_classifier, classifier AS [siteecositehistory.classifier]
   FROM siteecositehistory_View_1 AS seh
   LEFT OUTER JOIN ecologicalsite AS es ON es.ecositeiid=seh.ecositeiidref
   ORDER BY siteiid;"
