@@ -243,7 +243,7 @@ createSSURGO <- function(filename,
     on.exit(DBI::dbDisconnect(conn))
   } else {
     if (isTRUE(overwrite)) {
-      message("`filename` and `overwrite` arguments ignored when `conn` is specified")
+      message("`filename` argument is ignored when `conn` is specified")
     }
   }
   
@@ -289,38 +289,34 @@ createSSURGO <- function(filename,
       indexDI <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("DI_", msidxdet[[2]])])
     }
     
-    d <- try(as.data.frame(data.table::rbindlist(lapply(seq_along(f.txt.grp[[x]]), function(i) {
-        # print(f.txt.grp[[x]][i])
-        y <- read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header)
+    d <- try(lapply(seq_along(f.txt.grp[[x]]), function(i) {
+        # message(f.txt.grp[[x]][i])
+        y <- try(read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header), silent = quiet)
         
-        if (length(y) == 1) {
+        if (inherits(y, 'try-error')) {
+          return(NULL)
+        } else if (length(y) == 1) {
           y <- data.frame(content = y)
         } else {
           if (!is.null(mstab) && !header) { # preserve headers if present 
             colnames(y) <- newnames
           }
         }
-        y
-    }))), silent = quiet)
+        
+        try({
+          if (overwrite && i == 1) {
+            DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = TRUE)
+          } else {
+            DBI::dbWriteTable(conn, mstab_lut[x], y, append = TRUE)
+          }
+        }, silent = quiet)
+    }), silent = quiet)
     
     if (length(mstab_lut[x]) && is.na(mstab_lut[x])) {
       mstab_lut[x] <- x
     }
     
     if (length(mstab_lut[x]) && !is.na(mstab_lut[x]) && inherits(d, 'data.frame') && nrow(d) > 0) {
-      # remove repeated records/metadata
-      if (ncol(d) > 1) {
-        d <- unique(d) 
-      }
-      
-      # write tabular data to file
-      try({
-        if (overwrite) {
-          DBI::dbWriteTable(conn, mstab_lut[x], d, overwrite = TRUE)
-        } else {
-          DBI::dbWriteTable(conn, mstab_lut[x], d, append = TRUE)
-        }
-      }, silent = quiet)
       
       # create pkey indices
       if (!is.null(indexPK) && length(indexPK) > 0) {
