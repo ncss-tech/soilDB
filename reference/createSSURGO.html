@@ -4,14 +4,12 @@ SQLite or Geopackage
 DuckDB
 Postgres or PostGIS
 
-
-In theory any other DBI-compatible data source can be used for output. See conn argument. If you encounter issues using specific DBI connection types, please report in the soilDB issue tracker."><meta property="og:description" content="The following database types are tested and fully supported:
+"><meta property="og:description" content="The following database types are tested and fully supported:
 SQLite or Geopackage
 DuckDB
 Postgres or PostGIS
 
-
-In theory any other DBI-compatible data source can be used for output. See conn argument. If you encounter issues using specific DBI connection types, please report in the soilDB issue tracker."></head><body>
+"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -54,17 +52,19 @@ In theory any other DBI-compatible data source can be used for output. See conn 
     <p>The following database types are tested and fully supported:</p><ul><li><p>SQLite or Geopackage</p></li>
 <li><p>DuckDB</p></li>
 <li><p>Postgres or PostGIS</p></li>
-</ul><p>In theory any other DBI-compatible data source can be used for output. See <code>conn</code> argument. If you encounter issues using specific DBI connection types, please report in the soilDB issue tracker.</p>
-    </div>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">createSSURGO</span><span class="op">(</span></span>
-<span>  <span class="va">filename</span>,</span>
+<span>  filename <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">exdir</span>,</span>
 <span>  conn <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  include_spatial <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  include_tabular <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  dissolve_field <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  maxruledepth <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  header <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -77,35 +77,65 @@ In theory any other DBI-compatible data source can be used for output. See conn 
 
 
 <dl><dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
-<dd><p>Output file name (e.g. <code>'db.sqlite'</code> or <code>'db.gpkg'</code>). Only used when <code>con</code> is not specified by the user.</p></dd>
+<dd><p><em>character</em>. Output file name (e.g. <code>'db.sqlite'</code> or <code>'db.gpkg'</code>). Only used when <code>con</code> is not
+specified by the user.</p></dd>
 
 
 <dt id="arg-exdir">exdir<a class="anchor" aria-label="anchor" href="#arg-exdir"></a></dt>
-<dd><p>Path containing containing input SSURGO spatial (.shp) and tabular (.txt) files, downloaded and extracted by <code><a href="downloadSSURGO.html">downloadSSURGO()</a></code> or similar.</p></dd>
+<dd><p><em>character</em>. Path containing containing input SSURGO spatial (.shp) and tabular (.txt) files,
+downloaded and extracted by <code><a href="downloadSSURGO.html">downloadSSURGO()</a></code> or similar.</p></dd>
 
 
 <dt id="arg-conn">conn<a class="anchor" aria-label="anchor" href="#arg-conn"></a></dt>
-<dd><p>A <em>DBIConnection</em> object. Default is a <code>SQLiteConnection</code> used for writing .sqlite or .gpkg files. Alternate options are any DBI connection types. When <code>include_spatial=TRUE</code>, the sf package is used to write spatial data to the database.</p></dd>
+<dd><p>A <em>DBIConnection</em> object. Default is a <code>SQLiteConnection</code> used for writing .sqlite or
+.gpkg files. Alternate options are any DBI connection types. When <code>include_spatial=TRUE</code>, the
+sf package is used to write spatial data to the database.</p></dd>
 
 
 <dt id="arg-pattern">pattern<a class="anchor" aria-label="anchor" href="#arg-pattern"></a></dt>
-<dd><p>Character. Optional regular expression to use to filter subdirectories of <code>exdir</code>. Default: <code>NULL</code> will search all subdirectories for SSURGO export files.</p></dd>
+<dd><p><em>character</em>. Optional regular expression to use to filter subdirectories of <code>exdir</code>.
+Default: <code>NULL</code> will search all subdirectories for SSURGO export files.</p></dd>
 
 
 <dt id="arg-include-spatial">include_spatial<a class="anchor" aria-label="anchor" href="#arg-include-spatial"></a></dt>
-<dd><p>Logical. Include spatial data layers in database? Default: <code>TRUE</code>.</p></dd>
+<dd><p><em>logical</em> or <em>character</em>. Include spatial data layers in database?
+Default: <code>TRUE</code> inserts all spatial tables. If <code>include_spatial</code> is a <em>character</em> vector
+containing table names, only that set are written to file. e.g. <code>include_spatial=c("mupolygon", "featpoint")</code> writes only the mapunit polygons and special feature points.</p></dd>
+
+
+<dt id="arg-include-tabular">include_tabular<a class="anchor" aria-label="anchor" href="#arg-include-tabular"></a></dt>
+<dd><p><em>logical</em> or <em>character</em>. Include tabular data layers in database?
+Default: <code>TRUE</code> inserts all tabular tables. If <code>include_tabular</code> is a <em>character</em> vector
+containing table names, only that set are written to file. e.g. <code>include_tabular=c("mapunit", "muaggatt")</code> writes only the <code>mapunit</code> and <code>muaggatt</code> tables. Note that special feature
+descriptions are stored in table <code>"featdesc"</code> and metadata for each soil survey area are stored
+in <code>"soil_metadata"</code> tables.</p></dd>
+
+
+<dt id="arg-dissolve-field">dissolve_field<a class="anchor" aria-label="anchor" href="#arg-dissolve-field"></a></dt>
+<dd><p><em>character</em>. Dissolve geometries to create MULTIPOLYGON features? Column
+name
+specified is the grouping variable. Default: <code>NULL</code> does no aggregation, giving 1 <code>POLYGON</code>
+feature per delineation. <code>"mukey"</code> aggregates all related delineations within a soil survey
+area.</p></dd>
+
+
+<dt id="arg-maxruledepth">maxruledepth<a class="anchor" aria-label="anchor" href="#arg-maxruledepth"></a></dt>
+<dd><p><em>integer</em>. Maximum rule depth for <code>"cointerp"</code> table. Default <code>0</code> includes only
+shallowest ratings for smaller database size.</p></dd>
 
 
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
-<dd><p>Logical. Overwrite existing layers? Default <code>FALSE</code> will append to existing tables/layers.</p></dd>
+<dd><p><em>logical</em>. Overwrite existing layers? Default <code>FALSE</code> will append to existing
+tables/layers.</p></dd>
 
 
 <dt id="arg-header">header<a class="anchor" aria-label="anchor" href="#arg-header"></a></dt>
-<dd><p>Logical. Passed to <code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.delim()</a></code> for reading pipe-delimited (<code>|</code>) text files containing tabular data.</p></dd>
+<dd><p><em>logical</em>. Passed to <code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.delim()</a></code> for reading pipe-delimited (<code>|</code>) text files
+containing tabular data.</p></dd>
 
 
 <dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>
-<dd><p>Logical. Suppress messages and other output from database read/write operations?</p></dd>
+<dd><p><em>logical</em>. Suppress messages and other output from database read/write operations?</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -115,6 +145,12 @@ In theory any other DBI-compatible data source can be used for output. See conn 
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Character. Vector of layer/table names in <code>filename</code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>In theory any other DBI-compatible data source can be used for output. See <code>conn</code> argument. If
+you encounter issues using specific DBI connection types, please report in the soilDB issue
+tracker.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
