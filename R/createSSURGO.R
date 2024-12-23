@@ -191,6 +191,13 @@ createSSURGO <- function(filename = NULL,
     stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to, or a DBIConnection should be provided via `conn`.")
   }
   
+  if (missing(conn) || is.null(conn)) {
+    # delete existing file if overwrite=TRUE
+    if (isTRUE(overwrite) && file.exists(filename)) {
+      file.remove(filename)
+    }
+  }
+  
   # DuckDB has special spatial format, so it gets custom handling for
   IS_DUCKDB <- inherits(conn, "duckdb_connection")
   
@@ -293,10 +300,6 @@ createSSURGO <- function(filename = NULL,
   }
   
   if (missing(conn) || is.null(conn)) {
-    # delete existing file if overwrite=TRUE
-    if (isTRUE(overwrite) && file.exists(filename)) {
-      file.remove(filename)
-    }
     
     if (!requireNamespace("RSQLite")) {
       stop("package 'RSQLite' is required (when `conn` is not specified)", call. = FALSE)
