@@ -217,6 +217,9 @@ createSSURGO <- function(filename = NULL,
     filename <- conn@dbname
   } else {
     IS_GPKG <- grepl("\\.gpkg$", filename, ignore.case = TRUE)[1]
+    if (is.na(IS_GPKG)) {
+      IS_GPKG <- FALSE
+    }
   }
   
   if (!IS_DUCKDB) {
@@ -253,7 +256,7 @@ createSSURGO <- function(filename = NULL,
         lnm <- layer_names[match(gsub(".*soil([musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j]),
                                  names(layer_names))]
         if (IS_DUCKDB) {
-          if (overwrite && j == 1) {
+          if (j == 1) {
             DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s;", lnm))
             DBI::dbExecute(conn, sprintf("CREATE TABLE %s AS SELECT * FROM ST_Read('%s');",
                                 lnm, f.shp.grp[[i]][j]))
@@ -267,8 +270,8 @@ createSSURGO <- function(filename = NULL,
           colnames(shp) <- tolower(colnames(shp))
           sf::st_geometry(shp) <- "geometry"
           
-          .st_write_sf_conn <-  function(x, dsn, layer, overwrite, j) {
-            if (overwrite || j == 1) {
+          .st_write_sf_conn <-  function(x, dsn, layer, j) {
+            if (j == 1) {
               sf::write_sf(x, dsn = dsn, layer = layer, delete_layer = TRUE, ...)
             } else {
               sf::write_sf(x, dsn = dsn, layer = layer, append = TRUE, ...)
@@ -307,9 +310,9 @@ createSSURGO <- function(filename = NULL,
           if (IS_GPKG && missing(conn)) {
             # writing to SQLiteConnection fails to create proper gpkg_contents entries
             # so use the path for GPKG only
-            .st_write_sf_conn(shp, filename, lnm, overwrite, j)
+            .st_write_sf_conn(shp, filename, lnm, j)
           } else {
-            .st_write_sf_conn(shp, conn, lnm, overwrite, j)
+            .st_write_sf_conn(shp, conn, lnm, j)
           }
         }
         NULL
@@ -405,8 +408,12 @@ createSSURGO <- function(filename = NULL,
             y <- y[y$ruledepth <= maxruledepth, ]
           }
           
+          if ("musym" %in% colnames(y)) {
+            y$musym <- as.character(y$musym)
+          }
+          
           try({
-            if (overwrite && i == 1) {
+            if (i == 1) {
               DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = TRUE)
             } else {
               DBI::dbWriteTable(conn, mstab_lut[x], y, append = TRUE)
@@ -418,7 +425,7 @@ createSSURGO <- function(filename = NULL,
         mstab_lut[x] <- x
       }
       
-      if (length(mstab_lut[x]) && !is.na(mstab_lut[x]) && inherits(d, 'data.frame') && nrow(d) > 0) {
+      if (length(mstab_lut[x]) && !is.na(mstab_lut[x])) {
         
         # create pkey indices
         if (!is.null(indexPK) && length(indexPK) > 0) {
