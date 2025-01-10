@@ -589,7 +589,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
 #' @rdname get_component_data_from_NASIS_db
 get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
-  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid, rvindicator as representative
+  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid, rvindicator
 
   FROM copedon_View_1 copedon
 
