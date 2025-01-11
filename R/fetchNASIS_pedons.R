@@ -65,7 +65,7 @@
   missing.lower.depth.idx <- which(!is.na(hz_data$hzdept) & is.na(hz_data$hzdepb))
 
   # keep track of affected pedon IDs (if none, this will have zero length)
-  assign('missing.bottom.depths', value = unique(hz_data$pedon_id[missing.lower.depth.idx]), envir = get_soilDB_env())
+  assign('missing.bottom.depths', value = unique(hz_data$upedonid[missing.lower.depth.idx]), envir = get_soilDB_env())
 
   if (length(missing.lower.depth.idx) > 0) {
     message(paste0('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]'))
@@ -78,7 +78,7 @@
   top.eq.bottom.idx <- which(hz_data$hzdept == hz_data$hzdepb)
 
   # keep track of affected pedon IDs (if none, this will have zero length)
-  assign('top.bottom.equal', value = unique(hz_data$pedon_id[	top.eq.bottom.idx]), envir = get_soilDB_env())
+  assign('top.bottom.equal', value = unique(hz_data$upedonid[top.eq.bottom.idx]), envir = get_soilDB_env())
 
   if (length(top.eq.bottom.idx) > 0) {
     message(paste0('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]'))
@@ -105,8 +105,8 @@
     good.ids <- as.character(h.test$peiid[which(h.test$valid)])
     bad.ids <- as.character(h.test$peiid[which(!h.test$valid)])
     bad.horizons <- hz_data[hz_data$peiid %in% h.test$peiid[which(!h.test$valid)], 
-                            c("peiid", "phiid", "pedon_id", "hzname", "hzdept", "hzdepb")]
-    bad.pedon.ids <- site_data$pedon_id[which(site_data$peiid %in% bad.ids)]
+                            c("peiid", "phiid", "upedonid", "hzname", "hzdept", "hzdepb")]
+    bad.pedon.ids <- site_data$upedonid[which(site_data$peiid %in% bad.ids)]
     
     # handle fill=TRUE
     if(length(filled.ids) > 0) {
@@ -131,8 +131,8 @@
   # upgrade to SoilProfilecollection
   depths(hz_data) <- peiid ~ hzdept + hzdepb
 
-  # move pedon_id into @site
-  site(hz_data) <- ~ pedon_id
+  # move upedonid into @site
+  site(hz_data) <- ~ upedonid
 
   ## copy pre-computed colors into a convenience field for plotting
   # moist colors
@@ -164,7 +164,8 @@
   horizons(hz_data) <- extended_data$art_summary
 
   # add site data to object
-  # remove 'pedon_id' column from site_data
+  # remove 'upedonid' column from site_data
+  site_data$upedonid <- NULL
   site_data$pedon_id <- NULL
   
   # TODO: duplicating surface fine gravel column with old name for backward compatibility
