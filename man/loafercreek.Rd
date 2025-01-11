@@ -43,7 +43,7 @@ Several examples of soil profile collections returned by
   plot(gopheridge, name='', print.id=FALSE, plot.order=order(gopheridge$bedrckdepth))
 
   # plot first 10 profiles
-  plot(gopheridge[1:10, ], name='hzname', color='soil_color', label='pedon_id', id.style='side')
+  plot(gopheridge[1:10, ], name='hzname', color='soil_color', label='upedonid', id.style='side')
 
   # add rock fragment data to plot:
   addVolumeFraction(gopheridge[1:10, ], colname='total_frags_pct')
@@ -54,7 +54,7 @@ Several examples of soil profile collections returned by
   ## loafercreek
   data("loafercreek")
   # plot first 10 profiles
-  plot(loafercreek[1:10, ], name='hzname', color='soil_color', label='pedon_id', id.style='side')
+  plot(loafercreek[1:10, ], name='hzname', color='soil_color', label='upedonid', id.style='side')
 
   # add rock fragment data to plot:
   addVolumeFraction(loafercreek[1:10, ], colname='total_frags_pct')
