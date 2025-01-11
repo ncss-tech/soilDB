@@ -31,7 +31,7 @@ fetchNASISLabData <- function(SS = TRUE, dsn = NULL) {
 
   # stop if selected set is not loaded
   if (nrow(h) == 0 | nrow(s) == 0)
-    stop('Selected set is missing either the Pedon or Layer NCSS Lab Data table, please load and try again :)')
+    stop('Selected set is missing either the NCSS Pedon or NSSS Layer Lab Data table', call. = FALSE)
 
 	# fix some common problems
 	# replace missing lower boundaries
