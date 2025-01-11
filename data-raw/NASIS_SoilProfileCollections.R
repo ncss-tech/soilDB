@@ -9,10 +9,10 @@ data("mineralKing", package = "soilDB")
 
 # # create CSVs (requires NASIS setup)
 # # query CA630 and CA792 w/ R08 PEDON/SITE by SSA ID or similar
-# # load source data sets (CA630 and CA792 pedons)
+# # load source data sets (CA630 and CA792 pedons, including lab pedons)
 nasis_pedons <- fetchNASIS(rmHzErrors = FALSE, SS = FALSE)
 
-p <- rebuildSPC(subset(nasis_pedons, peiid %in% c(loafercreek, gopheridge, mineralKing)$peiid))
+p <- rebuildSPC(subset(nasis_pedons, siteiid %in% site(c(loafercreek, gopheridge, mineralKing))$siteiid))
 write.csv(horizons(p), "data-raw/spc-horizons.csv", row.names = FALSE)
 write.csv(site(p), "data-raw/spc-site.csv", row.names = FALSE)
 write.csv(diagnostic_hz(p), "data-raw/spc-diagnostic_hz.csv", row.names = FALSE)
