@@ -267,7 +267,7 @@ get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
   }
 
   # veg transect data - many transects to one vegplot
-  q.vegtransect <- "SELECT siteiid, siteobsiid, vegplotiid, p.peiid, vegplotiidref, vegtransectiid,
+  q.vegtransect <- "SELECT siteiid, siteobsiid, vegplotiid, p.peiid, vegplotiid, vegtransectiid,
     usiteid AS site_id, usiteid, assocuserpedonid AS pedon_id, assocuserpedonid, 
     vegplotid AS vegplot_id, vegplotid, vegplotname, vegtransectid as vegtransect_id, vegtransectid, 
     obsdate, primarydatacollector, datacollectionpurpose, transectstartlatitude, 
@@ -463,7 +463,7 @@ get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
   }
 
   # plot tree site index summary data
-  q.pltsis <- "SELECT siteiid, siteobsiid, vegplotiid, pltsis.seqnum, plantiidref, plantsym, plantsciname, plantnatvernm, plantnativity, siteindexbase, speciestreecount, siteindexplotave, speciesdbhaverage, treeageave, treecanopyhttopave, plottreesiteindsumiid
+  q.pltsis <- "SELECT siteiid, siteobsiid, vegplotiid, pltsis.seqnum, plantiid, plantsym, plantsciname, plantnatvernm, plantnativity, siteindexbase, speciestreecount, siteindexplotave, speciesdbhaverage, treeageave, treecanopyhttopave, plottreesiteindsumiid
 
   FROM
   site_View_1 AS s
@@ -534,7 +534,7 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE,
                                                       dsn = NULL) {
 
   # plot tree site index detail data
-  q.pltsid <- "SELECT  siteiid, siteobsiid, vegplotiid, plottreesiteindsumiidref, pltsid.seqnum, plantsym, plantsciname, plantnatvernm, treenumber, crownclass, reproductionsource, treediameterbreastheight, tenyeargrowthradius, growthringcount, growthringcountheight, growthringcountage, treeage, treecanopyhtbottom, treecanopyhttop, plottreesiteinddetailsiid
+  q.pltsid <- "SELECT  siteiid, siteobsiid, vegplotiid, plottreesiteindsumiid, pltsid.seqnum, plantsym, plantsciname, plantnatvernm, treenumber, crownclass, reproductionsource, treediameterbreastheight, tenyeargrowthradius, growthringcount, growthringcountheight, growthringcountage, treeage, treecanopyhtbottom, treecanopyhttop, plottreesiteinddetailsiid
 
   FROM
   site_View_1 AS s
