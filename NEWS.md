@@ -1,12 +1,7 @@
 # soilDB 2.8.7 (2025-01-10)
  - Several aliases of NASIS physical column names have been deprecated and will be removed in the next minor release (2.9.x). See https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html for details (#369)
- - `createSSURGO()` updates
-   - Improvements for more efficient writing of tabular data
-   - Added `maxruledepth`, `dissolve_field`, `include_tabular` arguments; updated `overwrite` and `filename` logic
-   - Allow `include_spatial` and `include_tabular` arguments to be a character vector of table names to include
-   - Create composite `"soil_metadata"` table with one row per Soil Survey Area
-   
-# soilDB 2.8.6 (2024-12-16)
+
+# soilDB 2.8.6 (2024-12-23)
  - `fetchNASIS()` and `get_site_data_from_NASIS_db()` now return Ecological Site State and Community Phase information (ecostatename, ecostateid, commphasename, commphaseid columns) from Site Observation table
  - `createStaticNASIS()` bug fixes
    - Removed workaround for {odbc}/nanoodbc VARCHAR(MAX) columns; now can directly use `DBI::dbReadTable()` for all tables via NASIS ODBC connection
