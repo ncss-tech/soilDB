@@ -126,7 +126,8 @@ test_that("get_text_notes_from_NASIS_db works", {
   if (!local_NASIS_defined(dsn = dsn)) {
     skip("local NASIS database not available")
   }
-  expect_silent({get_text_notes_from_NASIS_db()})
+  res <- get_text_notes_from_NASIS_db()
+  expect_true(inherits(res, 'list') && inherits(res[[1]], 'data.frame'))
 })
 
 test_that("getHzErrorsNASIS works", {
