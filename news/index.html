@@ -38,15 +38,38 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.8.6" id="soildb-286-development">soilDB 2.8.6 (development)<a class="anchor" aria-label="anchor" href="#soildb-286-development"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.8.7" id="soildb-287-2025-01-10">soilDB 2.8.7 (2025-01-10)<a class="anchor" aria-label="anchor" href="#soildb-287-2025-01-10"></a></h2>
+<ul><li>Several aliases of NASIS physical column names have been deprecated and will be removed in the next minor release (2.9.x). See <a href="https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html" class="external-link uri">https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html</a> for details (<a href="https://github.com/ncss-tech/soilDB/issues/369" class="external-link">#369</a>)</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.8.6" id="soildb-286-2024-12-23">soilDB 2.8.6 (2024-12-23)<a class="anchor" aria-label="anchor" href="#soildb-286-2024-12-23"></a></h2>
 <ul><li>
 <code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> and <code><a href="../reference/get_site_data_from_NASIS_db.html">get_site_data_from_NASIS_db()</a></code> now return Ecological Site State and Community Phase information (ecostatename, ecostateid, commphasename, commphaseid columns) from Site Observation table</li>
 <li>
-<code><a href="../reference/createStaticNASIS.html">createStaticNASIS()</a></code> removed workaround for {odbc}/nanoodbc VARCHAR(MAX) columns; now can directly use <code><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">DBI::dbReadTable()</a></code> for all tables via NASIS ODBC connection</li>
+<code><a href="../reference/createStaticNASIS.html">createStaticNASIS()</a></code> bug fixes
+<ul><li>Removed workaround for {odbc}/nanoodbc VARCHAR(MAX) columns; now can directly use <code><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">DBI::dbReadTable()</a></code> for all tables via NASIS ODBC connection</li>
+<li>Fixed error when <code>output_path=NULL</code>
+</li>
+</ul></li>
 <li>
-<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> changed default behavior to <code>mixColors = FALSE</code> which returns dominant condition for each moisture state rather than mixing LAB color coordinates
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code> changed default behavior to <code>mixColors=FALSE</code> which returns dominant condition for each moisture state rather than mixing LAB color coordinates
 <ul><li>
 <code><a href="../reference/get_colors_from_NASIS_db.html">get_colors_from_NASIS_db()</a></code> deprecate <code>mixColors</code> argument, add <code>method</code> argument with options “dominant”, “mixed”, and “none”. New aggregation method <code>"none"</code> returns long format representation of color data from phcolor table with no aggregation applied.</li>
+</ul></li>
+<li>
+<code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> updates:
+<ul><li>Added incremental write of tabular data by table and soil survey area, which is much more memory efficient</li>
+<li>Added <code>maxruledepth</code> argument to allow filtering of <code>cointerp</code> table, and set default to <code>0</code>.
+<ul><li>This reduces number of <code>cointerp</code> rows by about 75% for published SSURGO. Generally, Web Soil Survey exports have maximum rule depth of <code>1</code>, but custom NASIS exports can be “deeper”</li>
+</ul></li>
+<li>Updated behavior of <code>filename</code> argument when <code>conn</code> <em>DBIConnection</em> is specified and improved <code>overwrite</code> logic</li>
+<li>Added <code>dissolve_field</code> to facilitate creating aggregate geometries by <code>"mukey"</code> or other spatial attribute</li>
+<li>Added <code>include_tabular</code> argument to support omitting tabular data when building a database</li>
+<li>Now <code>include_spatial</code> and <code>include_tabular</code> are allowed to be a <em>character</em> vectors of table names
+<ul><li>
+<code>TRUE</code> is all tables, <code>FALSE</code> is no tables. This allows for subsets of the SSURGO data model to be specified with finer user control over database contents.</li>
+</ul></li>
+<li>Now a composite <code>"soil_metadata"</code> table is made with <code>"areasymbol"</code> column and one row per soil survey area, rather than one table per soil survey area. This is more compact and scales better to larger databases.</li>
 </ul></li>
 </ul></div>
     <div class="section level2">
@@ -330,7 +353,7 @@
 <li><p><code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> now handles queries against <code>sacatalog</code> that return no results more gracefully</p></li>
 <li><p><code><a href="../reference/get_OSD.html">get_OSD()</a></code>: Add <code>fix_ocr_errors</code> argument for <code>result='json'</code> to fix common optical character recognition errors associated with horizon designations and colors (NOTE: does NOT fix depths)</p></li>
 <li><p><code><a href="../reference/fetchSCAN.html">fetchSCAN()</a></code> gains <code>timeseries</code> argument to support batch downloads of hourly data. Additional arguments (<code>...</code>) are passed as a raw request, allowing other parameters sent in request to be modified if needed, and bypassing batch functionality. This is similar to the <code>req</code> argument syntax used in earlier versions of this function, which had been deprecated for some time now. Thanks to Matthew Morriss for raising the discussion item <a href="https://github.com/morrismc99" class="external-link">@morrismc99</a> (<a href="https://github.com/ncss-tech/soilDB/discussions/260" class="external-link uri">https://github.com/ncss-tech/soilDB/discussions/260</a>).</p></li>
-<li><p>{curl} moved from Suggests to Imports; <code><a href="https://rdrr.io/pkg/curl/man/curl_download.html" class="external-link">curl::curl_download()</a></code> is now used instead of <code><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">utils::download.file()</a></code> because it seems to handle SSL certificates better on some networks.</p></li>
+<li><p>{curl} moved from Suggests to Imports; <code><a href="https://jeroen.r-universe.dev/curl/reference/curl_download.html" class="external-link">curl::curl_download()</a></code> is now used instead of <code><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">utils::download.file()</a></code> because it seems to handle SSL certificates better on some networks.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.7.2" id="soildb-272-2022-06-24">soilDB 2.7.2 (2022-06-24)<a class="anchor" aria-label="anchor" href="#soildb-272-2022-06-24"></a></h2><p class="text-muted">CRAN release: 2022-06-27</p>
