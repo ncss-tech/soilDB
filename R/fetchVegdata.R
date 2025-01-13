@@ -55,8 +55,9 @@ fetchVegdata <- function(SS = TRUE, include_pedon = TRUE, stringsAsFactors = NUL
 	}
 
   # add ecosite id, corrdate, selection method to vegplot
-  es_cols <- c("siteiid", "ecositeid", "ecositecorrdate", "siteecositehistory.classifier", "es_selection_method")
-  vegplot <- merge(vegplot, site[, es_cols], by = "siteiid", all.x = TRUE, sort = FALSE)
+  es_cols <- c("siteobsiid", "ecositeid", "ecositecorrdate", "siteecositehistory.classifier", 
+               "ecostateid", "ecostatename", "commphaseid", "commphasename", "es_selection_method")
+  vegplot <- merge(vegplot, site[, es_cols], by = "siteobsiid", all.x = TRUE, sort = FALSE)
   
   # add peiid information to vegplot
   if (is.character(include_pedon) && include_pedon == "assocuserpedonid") {
