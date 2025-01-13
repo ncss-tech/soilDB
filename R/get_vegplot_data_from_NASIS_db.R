@@ -291,7 +291,7 @@ get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
   INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
   LEFT OUTER JOIN pedon_View_1 AS p ON so.siteobsiid = p.siteobsiidref
-  LEFT JOIN vegtransect_View_1 AS vt ON vt.vegplotiidref=v.vegplotiid
+  INNER JOIN vegtransect_View_1 AS vt ON vt.vegplotiidref=v.vegplotiid
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(dsn)
@@ -363,7 +363,7 @@ get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
   INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
-  LEFT JOIN vegtransect_View_1 AS vt ON vt.vegplotiidref=v.vegplotiid
+  INNER JOIN vegtransect_View_1 AS vt ON vt.vegplotiidref=v.vegplotiid
   LEFT JOIN vegtransectplantsummary_View_1 AS vtps ON vtps.vegtransectiidref=vt.vegtransectiid
   LEFT JOIN plant ON plant.plantiid=vtps.plantiidref
   ORDER BY s.siteiid;"
@@ -405,13 +405,13 @@ get_vegplot_transpoints_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
               FROM site_View_1 AS s
               INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
               INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
-              LEFT JOIN vegtransect_View_1 AS vt
+              INNER JOIN vegtransect_View_1 AS vt
                      ON vt.vegplotiidref = v.vegplotiid
-              INNER JOIN vegtransectplantsummary_View_1 AS vtps
+              LEFT JOIN vegtransectplantsummary_View_1 AS vtps
                      ON vtps.vegtransectiidref = vt.vegtransectiid
-              INNER JOIN pointplantcoverdetails_View_1 AS ppcd
+              LEFT JOIN pointplantcoverdetails_View_1 AS ppcd
                      ON ppcd.vegtransplantsummiidref = vtps.vegtransplantsummiid
-              INNER JOIN plant ON plant.plantiid = vtps.plantiidref"
+              LEFT JOIN plant ON plant.plantiid = vtps.plantiidref"
   if (!SS) {
     q <- gsub("_View_1", "", q)
   }
@@ -435,7 +435,7 @@ get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
               FROM site_View_1 AS s
               INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
               INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
-              LEFT JOIN vegtransect_View_1 AS vt
+              INNER JOIN vegtransect_View_1 AS vt
                      ON vt.vegplotiidref = v.vegplotiid
               INNER JOIN vegtransectplantsummary_View_1 AS vtps
                      ON vtps.vegtransectiidref = vt.vegtransectiid
@@ -507,12 +507,12 @@ get_vegplot_speciesbasalarea_from_NASIS <- function(SS = TRUE, dsn = NULL) {
             plantsym, plantsciname, plantnatvernm,
             basalareafactor, speciesnumbertreesin, speciesbasalarea,
             treenumber, treeheight, treediameterbreastheight
-FROM site_View_1 AS s
-  INNER JOIN siteobs_View_1 AS so ON so.siteiidref = s.siteiid
-  LEFT JOIN vegplot_View_1 AS v ON v.siteobsiidref = so.siteobsiid
-  LEFT JOIN plotspeciesbasalarea_View_1 AS vb ON vb.vegplotiidref = v.vegplotiid
+    FROM site_View_1 AS s
+    INNER JOIN siteobs_View_1 AS so ON so.siteiidref = s.siteiid
+    INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref = so.siteobsiid
+    LEFT JOIN plotspeciesbasalarea_View_1 AS vb ON vb.vegplotiidref = v.vegplotiid
     LEFT JOIN basalareatreescounted_View_1 AS ba ON ba.plotspeciebasalareaiidref = vb.plotspeciebasalareaiid
-    INNER JOIN plant ON plant.plantiid = vb.plantiidref"
+    LEFT JOIN plant ON plant.plantiid = vb.plantiidref"
 
   channel <- dbConnectNASIS(dsn)
 
@@ -534,13 +534,16 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE,
                                                       dsn = NULL) {
 
   # plot tree site index detail data
-  q.pltsid <- "SELECT  siteiid, siteobsiid, vegplotiid, plottreesiteindsumiid, pltsid.seqnum, plantsym, plantsciname, plantnatvernm, treenumber, crownclass, reproductionsource, treediameterbreastheight, tenyeargrowthradius, growthringcount, growthringcountheight, growthringcountage, treeage, treecanopyhtbottom, treecanopyhttop, plottreesiteinddetailsiid
+  q.pltsid <- "SELECT  siteiid, siteobsiid, vegplotiid, plottreesiteindsumiid, pltsid.seqnum, 
+  plantsym, plantsciname, plantnatvernm, treenumber, crownclass, reproductionsource, 
+  treediameterbreastheight, tenyeargrowthradius, growthringcount, growthringcountheight,
+  growthringcountage, treeage, treecanopyhtbottom, treecanopyhttop, plottreesiteinddetailsiid
 
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
   INNER JOIN vegplot_View_1 AS v on v.siteobsiidref=so.siteobsiid
-  LEFT JOIN vegtransect_View_1 AS vt ON vt.vegplotiidref=v.vegplotiid
+  INNER JOIN vegtransect_View_1 AS vt ON vt.vegplotiidref=v.vegplotiid
   LEFT JOIN plottreesiteindexsummary_View_1 AS pltsis ON pltsis.vegplotiidref=v.vegplotiid
   LEFT JOIN plottreesiteindexdetails_View_1 AS pltsid ON pltsid.plottreesiteindsumiidref=pltsis.plottreesiteindsumiid
   LEFT JOIN plant ON plant.plantiid=pltsis.plantiidref
