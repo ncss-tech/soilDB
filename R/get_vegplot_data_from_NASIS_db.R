@@ -163,12 +163,11 @@ get_vegplot_trhi_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
 
-  q.vegplotrhi <- "SELECT siteiid, so.siteobsiid, p.peiid, usiteid AS site_id, usiteid, assocuserpedonid AS pedon_id, assocuserpedonid, v.vegplotid AS vegplot_id, v.vegplotid, vegplotiid, vegplotname, obsdate, rhiannualprod, rhibareground, rhicompactionlayer, rhifuncstructgroups, rhierosionresistance, rhigullies, rhirills, rhipedastalsterracettes, rhiinfilrunoff, rhilitteramount, rhilittermovement, rhiplantmortality, rhireprodcapability, rhiinvasiveplants, rhisoilsurfdegradation, rhiwaterflowpatterns, rhiwindscourareas, rhisoilsitestabsumm, rhibioticintegritysumm, rhihydrofunctionsumm
+  q.vegplotrhi <- "SELECT siteiid, so.siteobsiid, usiteid AS site_id, usiteid, assocuserpedonid AS pedon_id, assocuserpedonid, v.vegplotid AS vegplot_id, v.vegplotid, vegplotiid, vegplotname, obsdate, rhiannualprod, rhibareground, rhicompactionlayer, rhifuncstructgroups, rhierosionresistance, rhigullies, rhirills, rhipedastalsterracettes, rhiinfilrunoff, rhilitteramount, rhilittermovement, rhiplantmortality, rhireprodcapability, rhiinvasiveplants, rhisoilsurfdegradation, rhiwaterflowpatterns, rhiwindscourareas, rhisoilsitestabsumm, rhibioticintegritysumm, rhihydrofunctionsumm
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
   INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
-  LEFT OUTER JOIN pedon_View_1 AS p ON p.siteobsiidref=so.siteobsiid
   ORDER BY s.siteiid;"
 
   channel <- dbConnectNASIS(dsn)
@@ -267,7 +266,7 @@ get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
   }
 
   # veg transect data - many transects to one vegplot
-  q.vegtransect <- "SELECT siteiid, siteobsiid, vegplotiid, p.peiid, vegplotiid, vegtransectiid,
+  q.vegtransect <- "SELECT siteiid, siteobsiid, vegplotiid, vegplotiid, vegtransectiid,
     usiteid AS site_id, usiteid, assocuserpedonid AS pedon_id, assocuserpedonid, 
     vegplotid AS vegplot_id, vegplotid, vegplotname, vegtransectid as vegtransect_id, vegtransectid, 
     obsdate, primarydatacollector, datacollectionpurpose, transectstartlatitude, 
@@ -290,7 +289,6 @@ get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
   INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
-  LEFT OUTER JOIN pedon_View_1 AS p ON so.siteobsiid = p.siteobsiidref
   INNER JOIN vegtransect_View_1 AS vt ON vt.vegplotiidref=v.vegplotiid
   ORDER BY s.siteiid;"
 
