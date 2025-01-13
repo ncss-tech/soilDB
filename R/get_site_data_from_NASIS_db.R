@@ -45,6 +45,7 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
   .soilDB_warn_deprecated_aliases(
     c(
       "upedonid" = "pedon_id",
+      "obs_date" = "obsdate",
       "longstddecimaldegrees" = "x_std",
       "latstddecimaldegrees" = "y_std",
       "descname" = "describer",
@@ -61,9 +62,9 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-	q <- paste0("SELECT siteiid, siteobsiid, usiteid, 
+	q <- paste0("SELECT siteiid, siteobsiid, usiteid, usiteid AS site_id,
   	", ifelse(include_pedon, "peiid, CAST(upedonid AS varchar(60)) as pedon_id, upedonid, ", ""), "
-  	obsdate, utmzone, utmeasting, utmnorthing, horizdatnm,
+  	obsdate, obsdate AS obs_date,  utmzone, utmeasting, utmnorthing, horizdatnm,
   	longstddecimaldegrees, latstddecimaldegrees, gpspositionalerror, 
     ", ifelse(include_pedon, "descname AS describer, descname, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag, 
     tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth, erocl,", ""), "

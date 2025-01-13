@@ -20,9 +20,14 @@ write.csv(restrictions(p), "data-raw/spc-restrictions.csv", row.names = FALSE)
 
 recent1822a <- read.csv("data-raw/spc-horizons.csv")
 depths(recent1822a) <- peiid ~ hzdept + hzdepb
+
 site(recent1822a) <- read.csv("data-raw/spc-site.csv")
 diagnostic_hz(recent1822a) <- read.csv("data-raw/spc-diagnostic_hz.csv")
 restrictions(recent1822a) <- read.csv("data-raw/spc-restrictions.csv")
+
+# TODO: PATCH for obs_date
+# recent1822a$obs_date <- recent1822a$obsdate
+# recent1822a$site_id <- recent1822a$usiteid
 
 # ensure that phiid is set as hzID 
 hzidname(recent1822a) <- "phiid"
