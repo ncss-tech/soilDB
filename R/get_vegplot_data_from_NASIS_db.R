@@ -588,9 +588,12 @@ get_vegplot_textnote_from_NASIS_db <- function(SS = TRUE,
   }
 
   # vegplot textnotes
-  q.vegplottext <- "SELECT vegplotiidref AS vegplotiid, seqnum, recdate, recauthor, vegplottextkind,
-textcat, textsubcat, vegplottextiid, CAST(textentry as text) AS textentry
-FROM vegplottext_View_1;"
+  q.vegplottext <- "SELECT siteiid, siteobsiid, vegplotiidref AS vegplotiid, vegplottext_View_1.seqnum, recdate, recauthor, vegplottextkind,
+                           textcat, textsubcat, vegplottextiid, CAST(textentry as text) AS textentry
+                           FROM site_View_1 
+                           INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref
+                           INNER JOIN vegplot_View_1 ON siteobs_View_1.siteobsiid = vegplot_View_1.siteobsiidref
+                           INNER JOIN vegplottext_View_1 ON vegplot_View_1.vegplotiid = vegplottext_View_1.vegplotiidref;"
 
   channel <- dbConnectNASIS(dsn)
 
