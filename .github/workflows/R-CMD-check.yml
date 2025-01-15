@@ -70,7 +70,7 @@ jobs:
       - name: Install aqp off GitHub  (devel and 3.6 only)
         if: matrix.config.r == 'devel' || matrix.config.r == '3.6'
         run: |
-          remotes::install_github("ncss-tech/aqp", dependencies = TRUE, build = FALSE)
+          remotes::install_github("ncss-tech/aqp", dependencies = NA, build = FALSE)
         shell: Rscript {0}
         
       - name: Install terra off r-universe (devel only and 3.6 only)
