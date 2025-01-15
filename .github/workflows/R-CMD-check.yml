@@ -60,24 +60,24 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::rcmdcheck, any::remotes, terra=?ignore-before-r=4.1.0, knitr=?ignore-before-r=4.0.0, rmarkdown=?ignore-before-r=4.0.0, RSQLite=?ignore-before-r=4.0.0, testthat=?ignore-before-r=4.0.0, local::., brownag/soilDBdata
-          # upgrade: 'TRUE' ## NB: required to force building of source packages
-          cache: true
-          cache-version: 1
-          needs: check
-
       - name: Install aqp off GitHub  (devel and 3.6 only)
         if: matrix.config.r == 'devel' || matrix.config.r == '3.6'
         run: |
           remotes::install_github("ncss-tech/aqp", dependencies = NA, build = FALSE)
         shell: Rscript {0}
         
-      - name: Install terra off r-universe (devel only and 3.6 only)
+      - name: Install terra off r-universe (devel and 3.6 only)
         if: matrix.config.r == 'devel' || matrix.config.r == '3.6'
         run: install.packages('terra', repos = 'https://rspatial.r-universe.dev')
         shell: Rscript {0}
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck, any::remotes, terra=?ignore-before-r=4.1.0, knitr=?ignore-before-r=4.0.0, rmarkdown=?ignore-before-r=4.0.0, RSQLite=?ignore-before-r=4.0.0, testthat=?ignore-before-r=4.0.0, local::., brownag/soilDBdata
+          # upgrade: 'TRUE' ## NB: required to force building of source packages
+          cache: always
+          cache-version: 1
+          needs: check
                 
       - uses: r-lib/actions/check-r-package@v2
         with:
