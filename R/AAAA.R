@@ -6,11 +6,11 @@ soilDB.env <- new.env(hash = TRUE)
 # safely register some options at package load time
 .onLoad <- function(libname, pkgname) {
   
-  # function verbosity
-  options(soilDB.verbose = FALSE,
-          soilDB.timeout = 300,
-          soilDB.ssl_verifyhost = 0,
-          soilDB.warn.aliases = TRUE)
+  # soilDB package options
+  options(soilDB.verbose = getOption("soilDB.verbose", default = FALSE),
+          soilDB.timeout = getOption("soilDB.timeout", default = 300),
+          soilDB.ssl_verifyhost = getOption("soilDB.ssl_verifyhost", default = 0),
+          soilDB.warn.aliases = getOption("soilDB.warn.aliases", default = TRUE))
   
   # set default local nasis authentication
   options(soilDB.NASIS.credentials = "DSN=nasis_local;UID=NasisSqlRO;PWD=nasisRe@d0n1y")
