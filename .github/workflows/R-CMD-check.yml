@@ -63,6 +63,7 @@ jobs:
       - name: Install aqp off GitHub  (devel and 3.6 only)
         if: matrix.config.r == 'devel' || matrix.config.r == '3.6'
         run: |
+          install.packages("remotes")
           remotes::install_github("ncss-tech/aqp", dependencies = NA, build = FALSE)
         shell: Rscript {0}
         
@@ -86,7 +87,7 @@ jobs:
       - name: Render README
         if: runner.os == 'Windows' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         run: |
-          install.packages(c("rmarkdown","devtools","pkgdown","aqp"))
+          install.packages(c("rmarkdown", "devtools", "pkgdown", "aqp"))
           remotes::install_github(c("ncss-tech/aqp"), dependencies = FALSE)
           rmarkdown::render("README.Rmd")
         shell: Rscript {0}
