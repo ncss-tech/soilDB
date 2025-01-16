@@ -69,7 +69,9 @@ jobs:
         
       - name: Install terra off r-universe (devel and 3.6 only)
         if: matrix.config.r == 'devel' || matrix.config.r == '3.6'
-        run: install.packages('terra', repos = c('https://rspatial.r-universe.dev', getOption("repos")))
+        run: |
+          system("sudo apt-get install gdal-bin libgdal-dev libproj-dev libgeos-dev libsqlite3-dev")
+          install.packages('terra', repos = c('https://rspatial.r-universe.dev', getOption("repos")))
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
