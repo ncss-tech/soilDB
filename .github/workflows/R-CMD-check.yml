@@ -69,7 +69,7 @@ jobs:
         
       - name: Install terra off r-universe (devel and 3.6 only)
         if: matrix.config.r == 'devel' || matrix.config.r == '3.6'
-        run: install.packages('terra', repos = 'https://rspatial.r-universe.dev')
+        run: install.packages('terra', repos = c('https://rspatial.r-universe.dev', getOption("repos")))
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
