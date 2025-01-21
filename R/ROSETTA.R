@@ -19,7 +19,7 @@
   x.chunk.mat <- as.matrix(x.chunk)
 
   # API url: version / model code
-  u <- sprintf("http://www.handbook60.org/api/v1/rosetta/%s", v)
+  u <- sprintf("https://www.handbook60.org/api/v1/rosetta/%s", v)
 
   # submit request
   # note: JSON is composed at function eval time
