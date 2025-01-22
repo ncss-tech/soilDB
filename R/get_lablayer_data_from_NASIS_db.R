@@ -29,7 +29,7 @@ get_lablayer_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
 FROM ncsslayerlabdata_View_1
 
-ORDER BY labpeiid, hzdept ASC;")
+ORDER BY ncsspedonlabdataiid, hzdept ASC;")
 
   channel <- dbConnectNASIS(dsn)
 

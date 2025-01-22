@@ -1,7 +1,8 @@
 # soilDB 2.8.8 (development)
  - `ROSETTA()` now uses HTTPS URL
- - `fetchNASIS()` bux fix for (now deprecated) `pedon_id` in horizon slot rather than site
+ - `fetchNASIS()` bug fix for (now deprecated) `pedon_id` in horizon slot rather than site
  - Rebuilt SPC datasets: `loafercreek`, `gopheridge`, `mineralKing`
+ - `fetchNASISLabData()`: use `ncsspedonlabdataiid` as unique pedon ID
  
 # soilDB 2.8.7 (2025-01-16)
  - Several aliases of NASIS physical column names have been deprecated and will be removed in the next minor release (2.9.x). See https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html for details (#369)

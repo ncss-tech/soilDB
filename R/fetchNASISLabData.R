@@ -45,22 +45,23 @@ fetchNASISLabData <- function(SS = TRUE, dsn = NULL) {
   ## TODO: what to do with multiple samples / hz?
 	# test for bad horizonation... flag
 	message('finding horizonation errors ...')
-	h.test <-	aqp::checkHzDepthLogic(h, c('hzdept', 'hzdepb'), idname = 'labpeiid', fast = TRUE)
+	h.test <-	aqp::checkHzDepthLogic(h, c('hzdept', 'hzdepb'), idname = 'ncsspedonlabdataiid', fast = TRUE)
 
 	# which are the good (valid) ones?
-	# good.ids <- as.character(h.test$labpeiid[which(h.test$valid)])
-	bad.ids <- as.character(h.test$labpeiid[which(!h.test$valid)])
+	# good.ids <- as.character(h.test$ncsspedonlabdataiid[which(h.test$valid)])
+	bad.ids <- as.character(h.test$ncsspedonlabdataiid[which(!h.test$valid)])
   bad.pedon.ids <- s$upedonid[which(s$labpeiid %in% bad.ids)]
 
 	# upgrade to SoilProfilecollection
-	depths(h) <- labpeiid ~ hzdept + hzdepb
+	depths(h) <- ncsspedonlabdataiid ~ hzdept + hzdepb
 
 	## TODO: this will fail in the presence of duplicates
 	# add site data to object
-	site(h) <- s # left-join via labpeiid
+	s$labpeiid <- NULL
+	site(h) <- s # left-join via ncsspedonlabdataiid
 
 	# set NASIS-specific horizon identifier
-	hzidname(h) <- 'labphiid'
+	hzidname(h) <- 'ncsslayerlabdataiid'
 
 	# 7. save and mention bad pedons
 	assign('bad.labpedon.ids', value = bad.pedon.ids, envir = get_soilDB_env())
