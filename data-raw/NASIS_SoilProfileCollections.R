@@ -9,7 +9,7 @@ data("mineralKing", package = "soilDB")
 
 # # create CSVs (requires NASIS setup)
 # # query CA630 and CA792 w/ R08 PEDON/SITE by SSA ID or similar
-# # load source data sets (CA630 and CA792 pedons, including lab pedons)
+# # load source data sets (CA630, CA612 and CA792 pedons, including lab pedons)
 nasis_pedons <- fetchNASIS(rmHzErrors = FALSE, SS = FALSE)
 
 p <- rebuildSPC(subset(nasis_pedons, siteiid %in% site(c(loafercreek, gopheridge, mineralKing))$siteiid))
@@ -24,10 +24,6 @@ depths(recent1822a) <- peiid ~ hzdept + hzdepb
 site(recent1822a) <- read.csv("data-raw/spc-site.csv")
 diagnostic_hz(recent1822a) <- read.csv("data-raw/spc-diagnostic_hz.csv")
 restrictions(recent1822a) <- read.csv("data-raw/spc-restrictions.csv")
-
-# TODO: PATCH for obs_date
-# recent1822a$obs_date <- recent1822a$obsdate
-# recent1822a$site_id <- recent1822a$usiteid
 
 # ensure that phiid is set as hzID 
 hzidname(recent1822a) <- "phiid"
