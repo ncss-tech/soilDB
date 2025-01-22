@@ -8,7 +8,7 @@ message: 'To cite package "soilDB" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'soilDB: Soil Database Interface'
-version: 2.8.7
+version: 2.8.8
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.soilDB
@@ -44,7 +44,7 @@ preferred-citation:
   - family-names: Brown
     given-names: Andrew
     email: andrew.g.brown@usda.gov
-  notes: R package version 2.8.5
+  notes: R package version 2.8.7
   url: https://CRAN.R-project.org/package=soilDB
   year: '2025'
 repository: https://CRAN.R-project.org/package=soilDB
