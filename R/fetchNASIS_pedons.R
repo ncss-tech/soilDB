@@ -166,7 +166,9 @@
   # add site data to object
   # remove 'upedonid' column from site_data
   site_data$upedonid <- NULL
-  site_data$pedon_id <- NULL
+  
+  # remove 'pedon_id' from horizon data
+  hz_data$pedon_id <- NULL
   
   # TODO: duplicating surface fine gravel column with old name for backward compatibility
   site_data$surface_fgravel <- site_data$surface_fine_gravel
