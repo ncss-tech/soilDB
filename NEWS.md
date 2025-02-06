@@ -1,4 +1,5 @@
 # soilDB 2.8.8 (development)
+ - bugfix in `fetchSCAN()` when sensor column contains all NA
  - `ROSETTA()` now uses HTTPS URL
  - `fetchNASIS()` bug fix for (now deprecated) `pedon_id` in horizon slot rather than site
  - Rebuilt SPC datasets: `loafercreek`, `gopheridge`, `mineralKing`
