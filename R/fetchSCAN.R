@@ -349,10 +349,16 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   .so <- formatC(meta$dataTimeZone * 100, 4, flag = 0)
   
   # create datetime stamp standardized to user-specified timezone
-  res$datetime <- as.POSIXct(paste(res$Date, res$Time, .so),
-                             format = "%Y-%m-%d %H:%M %z",
-                             tz = tz)
+  # only if there are >1 records of data
+  if (nrow(res) > 0) {
+    res$datetime <- as.POSIXct(
+      paste(res$Date, res$Time, .so),
+      format = "%Y-%m-%d %H:%M %z",
+      tz = tz
+    )
+  }
   
+  # this will be a 0-row data.frame if all data are NA
   return(res)
 }
 
