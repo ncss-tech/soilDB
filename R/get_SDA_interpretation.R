@@ -16,8 +16,7 @@
 #' @param not_rated_value used where rating class is "Not Rated". Default: `NA_real_`
 #' @param wide_reason Default: `FALSE`; if  `TRUE` apply post-processing to all columns with prefix `"reason_"` to create additional columns for sub-rule ratings.
 #' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
-#' @examplesIf curl::has_internet()
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
 #' \donttest{
 #'   # get two forestry interpretations for CA630
 #'   get_SDA_interpretation(c("FOR - Potential Seedling Mortality",

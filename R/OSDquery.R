@@ -55,8 +55,7 @@
 #'
 #' @return a \code{data.frame} object containing soil series names that match patterns supplied as arguments.
 #' @export
-#' @examplesIf curl::has_internet() && require(aqp)
-#' @examples 
+#' @examplesIf curl::has_internet() && requireNamespace("httr") && requireNamespace("jsonlite") && require(aqp)
 #'
 #' \donttest{
 #'   # find all series that list Pardee as a geographically associated soil.

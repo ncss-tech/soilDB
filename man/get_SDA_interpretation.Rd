@@ -699,8 +699,7 @@ Get map unit interpretations from Soil Data Access by rule name
 }
 }
 \examples{
-\dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
   # get two forestry interpretations for CA630
   get_SDA_interpretation(c("FOR - Potential Seedling Mortality",
@@ -708,6 +707,7 @@ Get map unit interpretations from Soil Data Access by rule name
                          method = "Dominant Condition",
                          areasymbols = "CA630")
 }
+\dontshow{\}) # examplesIf}
 }
 \author{
 Jason Nemecek, Chad Ferguson, Andrew Brown

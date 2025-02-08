@@ -1,7 +1,11 @@
 context("OSDquery() -- requires internet connection")
 
 test_that("OSDquery() works", {
-
+  
+  skip_if_not_installed("httr")
+  
+  skip_if_not_installed("jsonlite")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -26,7 +30,11 @@ test_that("OSDquery() works", {
 
 
 test_that("OSDquery() returns NULL with bogus query", {
-
+  
+  skip_if_not_installed("httr")
+  
+  skip_if_not_installed("jsonlite")
+  
   skip_if_offline()
 
   skip_on_cran()

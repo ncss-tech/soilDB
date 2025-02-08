@@ -65,7 +65,7 @@
 #' 
 #' @export
 #'
-#' @examplesIf curl::has_internet() && requireNamespace("sf") && requireNamespace("terra")
+#' @examplesIf curl::has_internet()  && requireNamespace("httr", quietly = TRUE) && requireNamespace("sf") && requireNamespace("terra")
 #' 
 #' \dontrun{
 #' b <- c(-119.747629, -119.67935, 36.912019, 36.944987)

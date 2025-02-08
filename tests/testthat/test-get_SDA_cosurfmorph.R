@@ -1,5 +1,7 @@
 test_that("get_SDA_cosurfmorph works", {
   
+  skip_if_not_installed("httr")
+  
   skip_on_cran()
   
   skip_if_offline()

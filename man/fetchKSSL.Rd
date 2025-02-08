@@ -90,8 +90,7 @@ snapshot was developed using methods described here:
 the link below for the live data.
 }
 \examples{
-\dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
     library(aqp)
 
@@ -125,7 +124,7 @@ the link below for the live data.
    #   plot(pedons, color='moist_soil_color', print.id=FALSE)
    # }
 }
-
+\dontshow{\}) # examplesIf}
 }
 \references{
 \url{http://ncsslabdatamart.sc.egov.usda.gov/}

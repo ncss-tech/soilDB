@@ -120,8 +120,7 @@
 #' @author D.E. Beaudette, A.G. Brown
 #' @seealso [OSDquery()], [siblings()]
 #' @export
-#' @examplesIf curl::has_internet()
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
 #' \donttest{
 #'   library(aqp)
 #'   # soils of interest

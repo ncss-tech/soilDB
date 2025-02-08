@@ -1,7 +1,9 @@
 context("fetchSDA_spatial -- requires internet connection")
 
 test_that("fetchSDA_spatial basic mupolygon functionality", {
-
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -28,7 +30,9 @@ test_that("fetchSDA_spatial basic mupolygon functionality", {
 })
 
 test_that("fetchSDA_spatial sapolygon and gsmmupolygon", {
-
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()

@@ -37,8 +37,7 @@ Additional resources:
 }
 }
 \examples{
-\dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("jsonlite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
     # basic usage
     x <- siblings('zook')
@@ -49,6 +48,7 @@ Additional resources:
     x <- siblings('zook', only.major = TRUE)
     x$sib
 }
+\dontshow{\}) # examplesIf}
 }
 \references{
 O'Geen, A., Walkinshaw, M. and Beaudette, D. (2017), SoilWeb: A Multifaceted Interface to Soil Survey Information. Soil Science Society of America Journal, 81: 853-862. \doi{https://doi.org/10.2136/sssaj2016.11.0386n}

@@ -4,7 +4,9 @@ context("fetchSDA() -- requires internet connection")
 
 
 test_that("fetchSDA() works", {
-
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -19,7 +21,9 @@ test_that("fetchSDA() works", {
 ## tests
 
 test_that("fetchSDA() returns an SPC", {
-
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -31,7 +35,9 @@ test_that("fetchSDA() returns an SPC", {
 })
 
 test_that("fetchSDA() returns expected results", {
-
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -49,7 +55,9 @@ test_that("fetchSDA() returns expected results", {
 })
 
 test_that("fetchSDA(duplicates=TRUE) works as expected", {
-
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()

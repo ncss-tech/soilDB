@@ -50,137 +50,142 @@ SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO (generalized
 Row-order is not preserved across features in \code{geom} and returned object. Use \code{byFeature} argument to iterate over features and return results that are 1:1 with the inputs. Polygon area in acres is computed server-side when \code{what = 'mupolygon'} and \code{geomIntersection = TRUE}.
 }
 \examples{
+\dontshow{if (requireNamespace("aqp") && requireNamespace("sf")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
-  if (requireNamespace("aqp") && requireNamespace("sf")) {
+library(aqp)
+library(sf)
 
-    library(aqp)
-    library(sf)
+## query at a point
 
-    ## query at a point
+# example point
+p <- sf::st_as_sf(data.frame(x = -119.72330, y = 36.92204),
+                  coords = c('x', 'y'),
+                  crs = 4326)
 
-    # example point
-    p <- sf::st_as_sf(data.frame(x = -119.72330,
-                                 y = 36.92204),
-                      coords = c('x', 'y'),
-                      crs = 4326)
+# query map unit records at this point
+res <- SDA_spatialQuery(p, what = 'mukey')
 
-    # query map unit records at this point
-    res <- SDA_spatialQuery(p, what = 'mukey')
+# convert results into an SQL "IN" statement
+# useful when there are multiple intersecting records
+mu.is <- format_SQL_in_statement(res$mukey)
 
-    # convert results into an SQL "IN" statement
-    # useful when there are multiple intersecting records
-    mu.is <- format_SQL_in_statement(res$mukey)
+# composite SQL WHERE clause
+sql <- sprintf("mukey IN \%s", mu.is)
 
-    # composite SQL WHERE clause
-    sql <- sprintf("mukey IN \%s", mu.is)
+# get commonly used map unit / component / chorizon records
+# as a SoilProfileCollection object
+# request that results contain `mukey` with `duplicates = TRUE`
+x <- fetchSDA(sql, duplicates = TRUE)
 
-    # get commonly used map unit / component / chorizon records
-    # as a SoilProfileCollection object
-    # request that results contain `mukey` with `duplicates = TRUE`
-    x <- fetchSDA(sql, duplicates = TRUE)
+# safely set texture class factor levels
+# by making a copy of this column
+# this will save in lieu of textures in the original
+# `texture` column
+horizons(x)$texture.class <- factor(x$texture, levels = SoilTextureLevels())
 
-    # safely set texture class factor levels
-    # by making a copy of this column
-    # this will save in lieu of textures in the original
-    # `texture` column
-    horizons(x)$texture.class <- factor(x$texture, levels = SoilTextureLevels())
+# graphical depiction of the result
+plotSPC(
+  x,
+  color = 'texture.class',
+  label = 'compname',
+  name = 'hzname',
+  cex.names = 1,
+  width = 0.25,
+  plot.depth.axis = FALSE,
+  hz.depths = TRUE,
+  name.style = 'center-center'
+)
 
-    # graphical depiction of the result
-    plotSPC(x,
-            color = 'texture.class',
-            label = 'compname',
-            name = 'hzname',
-            cex.names = 1,
-            width = 0.25,
-            plot.depth.axis = FALSE,
-            hz.depths = TRUE,
-            name.style = 'center-center')
+## query mukey + geometry that intersect with a bounding box
 
-    ## query mukey + geometry that intersect with a bounding box
+# define a bounding box: xmin, xmax, ymin, ymax
+#
+#         +-------------------(ymax, xmax)
+#         |                        |
+#         |                        |
+#     (ymin, xmin) ----------------+
+b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
 
-    # define a bounding box: xmin, xmax, ymin, ymax
-    #
-    #         +-------------------(ymax, xmax)
-    #         |                        |
-    #         |                        |
-    #     (ymin, xmin) ----------------+
-    b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
+# convert bounding box to WKT
+bbox.sp <- sf::st_as_sf(wk::rct(
+  xmin = b[1],
+  xmax = b[2],
+  ymin = b[3],
+  ymax = b[4],
+  crs = sf::st_crs(4326)
+))
 
-    # convert bounding box to WKT
-    bbox.sp <- sf::st_as_sf(wk::rct(
-      xmin = b[1], xmax = b[2], ymin = b[3], ymax = b[4],
-      crs = sf::st_crs(4326)
-    ))
+# results contain associated map unit keys (mukey)
+# return SSURGO polygons, after intersection with provided BBOX
+ssurgo.geom <- SDA_spatialQuery(bbox.sp,
+                                what = 'mupolygon',
+                                db = 'SSURGO',
+                                geomIntersection = TRUE)
 
-    # results contain associated map unit keys (mukey)
-    # return SSURGO polygons, after intersection with provided BBOX
-    ssurgo.geom <- SDA_spatialQuery(
-      bbox.sp,
-      what = 'mupolygon',
-      db = 'SSURGO',
-      geomIntersection = TRUE
-    )
+# return STATSGO polygons, after intersection with provided BBOX
+statsgo.geom <- SDA_spatialQuery(bbox.sp,
+                                 what = 'mupolygon',
+                                 db = 'STATSGO',
+                                 geomIntersection = TRUE)
 
-    # return STATSGO polygons, after intersection with provided BBOX
-    statsgo.geom <- SDA_spatialQuery(
-      bbox.sp,
-      what = 'mupolygon',
-      db = 'STATSGO',
-      geomIntersection = TRUE
-    )
+# inspect results
+par(mar = c(0, 0, 3, 1))
+plot(sf::st_geometry(ssurgo.geom), border = 'royalblue')
+plot(
+  sf::st_geometry(statsgo.geom),
+  lwd = 2,
+  border = 'firebrick',
+  add = TRUE
+)
+plot(sf::st_geometry(bbox.sp), lwd = 3, add = TRUE)
+legend(
+  x = 'topright',
+  legend = c('BBOX', 'STATSGO', 'SSURGO'),
+  lwd = c(3, 2, 1),
+  col = c('black', 'firebrick', 'royalblue'),
+)
 
-    # inspect results
-    par(mar = c(0,0,3,1))
-    plot(sf::st_geometry(ssurgo.geom), border = 'royalblue')
-    plot(sf::st_geometry(statsgo.geom), lwd = 2, border = 'firebrick', add = TRUE)
-    plot(sf::st_geometry(bbox.sp), lwd = 3, add = TRUE)
-    legend(
-      x = 'topright',
-      legend = c('BBOX', 'STATSGO', 'SSURGO'),
-      lwd = c(3, 2, 1),
-      col = c('black', 'firebrick', 'royalblue'),
-    )
+# quick reminder that STATSGO map units often contain many components
+# format an SQL IN statement using the first STATSGO mukey
+mu.is <- format_SQL_in_statement(statsgo.geom$mukey[1])
 
-    # quick reminder that STATSGO map units often contain many components
-    # format an SQL IN statement using the first STATSGO mukey
-    mu.is <- format_SQL_in_statement(statsgo.geom$mukey[1])
+# composite SQL WHERE clause
+sql <- sprintf("mukey IN \%s", mu.is)
 
-    # composite SQL WHERE clause
-    sql <- sprintf("mukey IN \%s", mu.is)
+# get commonly used map unit / component / chorizon records
+# as a SoilProfileCollection object
+x <- fetchSDA(sql)
 
-    # get commonly used map unit / component / chorizon records
-    # as a SoilProfileCollection object
-    x <- fetchSDA(sql)
+# tighter figure margins
+par(mar = c(0, 0, 3, 1))
 
-    # tighter figure margins
-    par(mar = c(0,0,3,1))
+# organize component sketches by national map unit symbol
+# color horizons via awc
+# adjust legend title
+# add alternate label (vertical text) containing component percent
+# move horizon names into the profile sketches
+# make profiles wider
+aqp::groupedProfilePlot(
+  x,
+  groups = 'nationalmusym',
+  label = 'compname',
+  color = 'awc_r',
+  col.label = 'Available Water Holding Capacity (cm / cm)',
+  alt.label = 'comppct_r',
+  name.style = 'center-center',
+  width = 0.3
+)
 
-    # organize component sketches by national map unit symbol
-    # color horizons via awc
-    # adjust legend title
-    # add alternate label (vertical text) containing component percent
-    # move horizon names into the profile sketches
-    # make profiles wider
-    aqp::groupedProfilePlot(x,
-                            groups = 'nationalmusym',
-                            label = 'compname',
-                            color = 'awc_r',
-                            col.label = 'Available Water Holding Capacity (cm / cm)',
-                            alt.label = 'comppct_r',
-                            name.style = 'center-center',
-                            width = 0.3
-    )
-
-    mtext(
-      'STATSGO (1:250,000) map units contain a lot of components!',
-      side = 1,
-      adj = 0,
-      line = -1.5,
-      at = 0.25,
-      font = 4
-    )
-  }
+mtext(
+  'STATSGO (1:250,000) map units contain a lot of components!',
+  side = 1,
+  adj = 0,
+  line = -1.5,
+  at = 0.25,
+  font = 4
+)
 }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link{SDA_query}}

@@ -3,7 +3,9 @@ context("fetchSCAN() -- requires internet connection")
 x <- NULL
 
 test_that("fetchSCAN() works", {
-
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -26,7 +28,9 @@ test_that("fetchSCAN() works", {
 })
 
 test_that("fetchSCAN() returns the right kind of data", {
-
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -55,6 +59,8 @@ test_that("fetchSCAN() returns the right kind of data", {
 })
 
 test_that("timezone check", {
+  
+  skip_if_not_installed("httr")
   
   skip_if_offline()
   

@@ -27,7 +27,7 @@ An R spatial object, class depending on \code{type} and \code{as_Spatial} argume
 This function downloads a generalized representations of a soil series extent from SoilWeb, derived from the current SSURGO snapshot. Data can be returned as vector outlines (\code{sf} object) or gridded representation of area proportion falling within 800m cells (\code{SpatRaster} object). Gridded series extent data are only available in CONUS. Vector representations are returned with a GCS/WGS84 coordinate reference system and raster representations are returned with an Albers Equal Area / NAD83 coordinate reference system (\code{EPSG:5070}).
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("terra") && requireNamespace("sf")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("terra") && requireNamespace("sf")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontshow{\}) # examplesIf}
 \dontrun{
   

@@ -1,5 +1,7 @@
 test_that("fetchLDM works", {
 
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()

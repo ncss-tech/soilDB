@@ -31,7 +31,7 @@
 #'
 #' @return a `SoilProfileCollection` for a successful query, a `try-error` if no site/pedon locations can be found or `NULL` for an empty `lab_layer` (within sites/pedons) result
 #' @export
-#' @examplesIf curl::has_internet()
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
 #' \dontrun{
 #'   
 #'   # fetch by Soil Survey Area area symbol (area_code using default "ssa" area_type)

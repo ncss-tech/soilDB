@@ -221,8 +221,7 @@
 #' @seealso \code{\link{fetchOSD}}
 #' @references \url{http://ncsslabdatamart.sc.egov.usda.gov/}
 #' @keywords utilities
-#' @examplesIf curl::has_internet()
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
 #' \donttest{
 #'     library(aqp)
 #'

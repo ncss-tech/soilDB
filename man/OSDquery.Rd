@@ -70,8 +70,7 @@ Related documentation can be found in the following tutorials
 SoilWeb maintains a snapshot of the Official Series Description data.
 }
 \examples{
-\dontshow{if (curl::has_internet() && require(aqp)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr") && requireNamespace("jsonlite") && require(aqp)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 \donttest{
   # find all series that list Pardee as a geographically associated soil.
@@ -84,7 +83,7 @@ SoilWeb maintains a snapshot of the Official Series Description data.
   par(mar=c(0,0,1,1))
   plot(x$SPC)
 }
-
+\dontshow{\}) # examplesIf}
 }
 \references{
 USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}

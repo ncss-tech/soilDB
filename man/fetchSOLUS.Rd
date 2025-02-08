@@ -84,7 +84,7 @@ extracted at the point locations. To return both the \emph{SpatRaster} and \emph
 object output in a \emph{list}, use \code{grid = NULL}.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("sf") && requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet()  && requireNamespace("httr", quietly = TRUE) && requireNamespace("sf") && requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 \dontrun{
 b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
