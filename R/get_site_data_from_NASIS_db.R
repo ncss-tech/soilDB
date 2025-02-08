@@ -45,7 +45,7 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
   .soilDB_warn_deprecated_aliases(
     c(
       "upedonid" = "pedon_id",
-      "obs_date" = "obsdate",
+      "obsdate" = "obs_date",
       "longstddecimaldegrees" = "x_std",
       "latstddecimaldegrees" = "y_std",
       "descname" = "describer",
