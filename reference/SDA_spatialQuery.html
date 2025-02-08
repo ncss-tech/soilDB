@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Query Soil Data Access by spatial intersection with supplied geometry</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.8.7/R/SDA-spatial.R" class="external-link"><code>R/SDA-spatial.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/R/SDA-spatial.R" class="external-link"><code>R/SDA-spatial.R</code></a></small>
       <div class="d-none name"><code>SDA_spatialQuery.Rd</code></div>
     </div>
 
@@ -122,135 +122,138 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"aqp"</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## query at a point</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co">## query at a point</span></span></span>
+<span class="r-in"><span><span class="co"># example point</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="op">-</span><span class="fl">119.72330</span>, y <span class="op">=</span> <span class="fl">36.92204</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'x'</span>, <span class="st">'y'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># example point</span></span></span>
-<span class="r-in"><span>    <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="op">-</span><span class="fl">119.72330</span>,</span></span>
-<span class="r-in"><span>                                 y <span class="op">=</span> <span class="fl">36.92204</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                      coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'x'</span>, <span class="st">'y'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                      crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># query map unit records at this point</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">SDA_spatialQuery</span><span class="op">(</span><span class="va">p</span>, what <span class="op">=</span> <span class="st">'mukey'</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># query map unit records at this point</span></span></span>
-<span class="r-in"><span>    <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">SDA_spatialQuery</span><span class="op">(</span><span class="va">p</span>, what <span class="op">=</span> <span class="st">'mukey'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># convert results into an SQL "IN" statement</span></span></span>
+<span class="r-in"><span><span class="co"># useful when there are multiple intersecting records</span></span></span>
+<span class="r-in"><span><span class="va">mu.is</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_SQL_in_statement.html">format_SQL_in_statement</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># convert results into an SQL "IN" statement</span></span></span>
-<span class="r-in"><span>    <span class="co"># useful when there are multiple intersecting records</span></span></span>
-<span class="r-in"><span>    <span class="va">mu.is</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_SQL_in_statement.html">format_SQL_in_statement</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># composite SQL WHERE clause</span></span></span>
+<span class="r-in"><span><span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"mukey IN %s"</span>, <span class="va">mu.is</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># composite SQL WHERE clause</span></span></span>
-<span class="r-in"><span>    <span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"mukey IN %s"</span>, <span class="va">mu.is</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># get commonly used map unit / component / chorizon records</span></span></span>
+<span class="r-in"><span><span class="co"># as a SoilProfileCollection object</span></span></span>
+<span class="r-in"><span><span class="co"># request that results contain `mukey` with `duplicates = TRUE`</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="fetchSDA.html">fetchSDA</a></span><span class="op">(</span><span class="va">sql</span>, duplicates <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># get commonly used map unit / component / chorizon records</span></span></span>
-<span class="r-in"><span>    <span class="co"># as a SoilProfileCollection object</span></span></span>
-<span class="r-in"><span>    <span class="co"># request that results contain `mukey` with `duplicates = TRUE`</span></span></span>
-<span class="r-in"><span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="fetchSDA.html">fetchSDA</a></span><span class="op">(</span><span class="va">sql</span>, duplicates <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># safely set texture class factor levels</span></span></span>
+<span class="r-in"><span><span class="co"># by making a copy of this column</span></span></span>
+<span class="r-in"><span><span class="co"># this will save in lieu of textures in the original</span></span></span>
+<span class="r-in"><span><span class="co"># `texture` column</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/horizons.html" class="external-link">horizons</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">texture.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">texture</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilTextureLevels.html" class="external-link">SoilTextureLevels</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># safely set texture class factor levels</span></span></span>
-<span class="r-in"><span>    <span class="co"># by making a copy of this column</span></span></span>
-<span class="r-in"><span>    <span class="co"># this will save in lieu of textures in the original</span></span></span>
-<span class="r-in"><span>    <span class="co"># `texture` column</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/horizons.html" class="external-link">horizons</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">texture.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">texture</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilTextureLevels.html" class="external-link">SoilTextureLevels</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># graphical depiction of the result</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span>,</span></span>
+<span class="r-in"><span>  color <span class="op">=</span> <span class="st">'texture.class'</span>,</span></span>
+<span class="r-in"><span>  label <span class="op">=</span> <span class="st">'compname'</span>,</span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">'hzname'</span>,</span></span>
+<span class="r-in"><span>  cex.names <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  width <span class="op">=</span> <span class="fl">0.25</span>,</span></span>
+<span class="r-in"><span>  plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  hz.depths <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  name.style <span class="op">=</span> <span class="st">'center-center'</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># graphical depiction of the result</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span><span class="va">x</span>,</span></span>
-<span class="r-in"><span>            color <span class="op">=</span> <span class="st">'texture.class'</span>,</span></span>
-<span class="r-in"><span>            label <span class="op">=</span> <span class="st">'compname'</span>,</span></span>
-<span class="r-in"><span>            name <span class="op">=</span> <span class="st">'hzname'</span>,</span></span>
-<span class="r-in"><span>            cex.names <span class="op">=</span> <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>            width <span class="op">=</span> <span class="fl">0.25</span>,</span></span>
-<span class="r-in"><span>            plot.depth.axis <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
-<span class="r-in"><span>            hz.depths <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>            name.style <span class="op">=</span> <span class="st">'center-center'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## query mukey + geometry that intersect with a bounding box</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co">## query mukey + geometry that intersect with a bounding box</span></span></span>
+<span class="r-in"><span><span class="co"># define a bounding box: xmin, xmax, ymin, ymax</span></span></span>
+<span class="r-in"><span><span class="co">#</span></span></span>
+<span class="r-in"><span><span class="co">#         +-------------------(ymax, xmax)</span></span></span>
+<span class="r-in"><span><span class="co">#         |                        |</span></span></span>
+<span class="r-in"><span><span class="co">#         |                        |</span></span></span>
+<span class="r-in"><span><span class="co">#     (ymin, xmin) ----------------+</span></span></span>
+<span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">119.747629</span>, <span class="op">-</span><span class="fl">119.67935</span>, <span class="fl">36.912019</span>, <span class="fl">36.944987</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># define a bounding box: xmin, xmax, ymin, ymax</span></span></span>
-<span class="r-in"><span>    <span class="co">#</span></span></span>
-<span class="r-in"><span>    <span class="co">#         +-------------------(ymax, xmax)</span></span></span>
-<span class="r-in"><span>    <span class="co">#         |                        |</span></span></span>
-<span class="r-in"><span>    <span class="co">#         |                        |</span></span></span>
-<span class="r-in"><span>    <span class="co">#     (ymin, xmin) ----------------+</span></span></span>
-<span class="r-in"><span>    <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">119.747629</span>, <span class="op">-</span><span class="fl">119.67935</span>, <span class="fl">36.912019</span>, <span class="fl">36.944987</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># convert bounding box to WKT</span></span></span>
+<span class="r-in"><span><span class="va">bbox.sp</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">wk</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/wk/reference/rct.html" class="external-link">rct</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  xmin <span class="op">=</span> <span class="va">b</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  xmax <span class="op">=</span> <span class="va">b</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  ymin <span class="op">=</span> <span class="va">b</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  ymax <span class="op">=</span> <span class="va">b</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># convert bounding box to WKT</span></span></span>
-<span class="r-in"><span>    <span class="va">bbox.sp</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">wk</span><span class="fu">::</span><span class="fu"><a href="https://paleolimbot.github.io/wk/reference/rct.html" class="external-link">rct</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>      xmin <span class="op">=</span> <span class="va">b</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, xmax <span class="op">=</span> <span class="va">b</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, ymin <span class="op">=</span> <span class="va">b</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, ymax <span class="op">=</span> <span class="va">b</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>      crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># results contain associated map unit keys (mukey)</span></span></span>
+<span class="r-in"><span><span class="co"># return SSURGO polygons, after intersection with provided BBOX</span></span></span>
+<span class="r-in"><span><span class="va">ssurgo.geom</span> <span class="op">&lt;-</span> <span class="fu">SDA_spatialQuery</span><span class="op">(</span><span class="va">bbox.sp</span>,</span></span>
+<span class="r-in"><span>                                what <span class="op">=</span> <span class="st">'mupolygon'</span>,</span></span>
+<span class="r-in"><span>                                db <span class="op">=</span> <span class="st">'SSURGO'</span>,</span></span>
+<span class="r-in"><span>                                geomIntersection <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># results contain associated map unit keys (mukey)</span></span></span>
-<span class="r-in"><span>    <span class="co"># return SSURGO polygons, after intersection with provided BBOX</span></span></span>
-<span class="r-in"><span>    <span class="va">ssurgo.geom</span> <span class="op">&lt;-</span> <span class="fu">SDA_spatialQuery</span><span class="op">(</span></span></span>
-<span class="r-in"><span>      <span class="va">bbox.sp</span>,</span></span>
-<span class="r-in"><span>      what <span class="op">=</span> <span class="st">'mupolygon'</span>,</span></span>
-<span class="r-in"><span>      db <span class="op">=</span> <span class="st">'SSURGO'</span>,</span></span>
-<span class="r-in"><span>      geomIntersection <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># return STATSGO polygons, after intersection with provided BBOX</span></span></span>
+<span class="r-in"><span><span class="va">statsgo.geom</span> <span class="op">&lt;-</span> <span class="fu">SDA_spatialQuery</span><span class="op">(</span><span class="va">bbox.sp</span>,</span></span>
+<span class="r-in"><span>                                 what <span class="op">=</span> <span class="st">'mupolygon'</span>,</span></span>
+<span class="r-in"><span>                                 db <span class="op">=</span> <span class="st">'STATSGO'</span>,</span></span>
+<span class="r-in"><span>                                 geomIntersection <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># return STATSGO polygons, after intersection with provided BBOX</span></span></span>
-<span class="r-in"><span>    <span class="va">statsgo.geom</span> <span class="op">&lt;-</span> <span class="fu">SDA_spatialQuery</span><span class="op">(</span></span></span>
-<span class="r-in"><span>      <span class="va">bbox.sp</span>,</span></span>
-<span class="r-in"><span>      what <span class="op">=</span> <span class="st">'mupolygon'</span>,</span></span>
-<span class="r-in"><span>      db <span class="op">=</span> <span class="st">'STATSGO'</span>,</span></span>
-<span class="r-in"><span>      geomIntersection <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># inspect results</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">ssurgo.geom</span><span class="op">)</span>, border <span class="op">=</span> <span class="st">'royalblue'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">statsgo.geom</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  lwd <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  border <span class="op">=</span> <span class="st">'firebrick'</span>,</span></span>
+<span class="r-in"><span>  add <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">bbox.sp</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">3</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="st">'topright'</span>,</span></span>
+<span class="r-in"><span>  legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'BBOX'</span>, <span class="st">'STATSGO'</span>, <span class="st">'SSURGO'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  lwd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'black'</span>, <span class="st">'firebrick'</span>, <span class="st">'royalblue'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># inspect results</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">ssurgo.geom</span><span class="op">)</span>, border <span class="op">=</span> <span class="st">'royalblue'</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">statsgo.geom</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, border <span class="op">=</span> <span class="st">'firebrick'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">bbox.sp</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">3</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>      x <span class="op">=</span> <span class="st">'topright'</span>,</span></span>
-<span class="r-in"><span>      legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'BBOX'</span>, <span class="st">'STATSGO'</span>, <span class="st">'SSURGO'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>      lwd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>      col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'black'</span>, <span class="st">'firebrick'</span>, <span class="st">'royalblue'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># quick reminder that STATSGO map units often contain many components</span></span></span>
+<span class="r-in"><span><span class="co"># format an SQL IN statement using the first STATSGO mukey</span></span></span>
+<span class="r-in"><span><span class="va">mu.is</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_SQL_in_statement.html">format_SQL_in_statement</a></span><span class="op">(</span><span class="va">statsgo.geom</span><span class="op">$</span><span class="va">mukey</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># quick reminder that STATSGO map units often contain many components</span></span></span>
-<span class="r-in"><span>    <span class="co"># format an SQL IN statement using the first STATSGO mukey</span></span></span>
-<span class="r-in"><span>    <span class="va">mu.is</span> <span class="op">&lt;-</span> <span class="fu"><a href="format_SQL_in_statement.html">format_SQL_in_statement</a></span><span class="op">(</span><span class="va">statsgo.geom</span><span class="op">$</span><span class="va">mukey</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># composite SQL WHERE clause</span></span></span>
+<span class="r-in"><span><span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"mukey IN %s"</span>, <span class="va">mu.is</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># composite SQL WHERE clause</span></span></span>
-<span class="r-in"><span>    <span class="va">sql</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"mukey IN %s"</span>, <span class="va">mu.is</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># get commonly used map unit / component / chorizon records</span></span></span>
+<span class="r-in"><span><span class="co"># as a SoilProfileCollection object</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="fetchSDA.html">fetchSDA</a></span><span class="op">(</span><span class="va">sql</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># get commonly used map unit / component / chorizon records</span></span></span>
-<span class="r-in"><span>    <span class="co"># as a SoilProfileCollection object</span></span></span>
-<span class="r-in"><span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="fetchSDA.html">fetchSDA</a></span><span class="op">(</span><span class="va">sql</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># tighter figure margins</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># tighter figure margins</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># organize component sketches by national map unit symbol</span></span></span>
+<span class="r-in"><span><span class="co"># color horizons via awc</span></span></span>
+<span class="r-in"><span><span class="co"># adjust legend title</span></span></span>
+<span class="r-in"><span><span class="co"># add alternate label (vertical text) containing component percent</span></span></span>
+<span class="r-in"><span><span class="co"># move horizon names into the profile sketches</span></span></span>
+<span class="r-in"><span><span class="co"># make profiles wider</span></span></span>
+<span class="r-in"><span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/groupedProfilePlot.html" class="external-link">groupedProfilePlot</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span>,</span></span>
+<span class="r-in"><span>  groups <span class="op">=</span> <span class="st">'nationalmusym'</span>,</span></span>
+<span class="r-in"><span>  label <span class="op">=</span> <span class="st">'compname'</span>,</span></span>
+<span class="r-in"><span>  color <span class="op">=</span> <span class="st">'awc_r'</span>,</span></span>
+<span class="r-in"><span>  col.label <span class="op">=</span> <span class="st">'Available Water Holding Capacity (cm / cm)'</span>,</span></span>
+<span class="r-in"><span>  alt.label <span class="op">=</span> <span class="st">'comppct_r'</span>,</span></span>
+<span class="r-in"><span>  name.style <span class="op">=</span> <span class="st">'center-center'</span>,</span></span>
+<span class="r-in"><span>  width <span class="op">=</span> <span class="fl">0.3</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># organize component sketches by national map unit symbol</span></span></span>
-<span class="r-in"><span>    <span class="co"># color horizons via awc</span></span></span>
-<span class="r-in"><span>    <span class="co"># adjust legend title</span></span></span>
-<span class="r-in"><span>    <span class="co"># add alternate label (vertical text) containing component percent</span></span></span>
-<span class="r-in"><span>    <span class="co"># move horizon names into the profile sketches</span></span></span>
-<span class="r-in"><span>    <span class="co"># make profiles wider</span></span></span>
-<span class="r-in"><span>    <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/groupedProfilePlot.html" class="external-link">groupedProfilePlot</a></span><span class="op">(</span><span class="va">x</span>,</span></span>
-<span class="r-in"><span>                            groups <span class="op">=</span> <span class="st">'nationalmusym'</span>,</span></span>
-<span class="r-in"><span>                            label <span class="op">=</span> <span class="st">'compname'</span>,</span></span>
-<span class="r-in"><span>                            color <span class="op">=</span> <span class="st">'awc_r'</span>,</span></span>
-<span class="r-in"><span>                            col.label <span class="op">=</span> <span class="st">'Available Water Holding Capacity (cm / cm)'</span>,</span></span>
-<span class="r-in"><span>                            alt.label <span class="op">=</span> <span class="st">'comppct_r'</span>,</span></span>
-<span class="r-in"><span>                            name.style <span class="op">=</span> <span class="st">'center-center'</span>,</span></span>
-<span class="r-in"><span>                            width <span class="op">=</span> <span class="fl">0.3</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>      <span class="st">'STATSGO (1:250,000) map units contain a lot of components!'</span>,</span></span>
-<span class="r-in"><span>      side <span class="op">=</span> <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>      adj <span class="op">=</span> <span class="fl">0</span>,</span></span>
-<span class="r-in"><span>      line <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,</span></span>
-<span class="r-in"><span>      at <span class="op">=</span> <span class="fl">0.25</span>,</span></span>
-<span class="r-in"><span>      font <span class="op">=</span> <span class="fl">4</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">'STATSGO (1:250,000) map units contain a lot of components!'</span>,</span></span>
+<span class="r-in"><span>  side <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  adj <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  line <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span>,</span></span>
+<span class="r-in"><span>  at <span class="op">=</span> <span class="fl">0.25</span>,</span></span>
+<span class="r-in"><span>  font <span class="op">=</span> <span class="fl">4</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
