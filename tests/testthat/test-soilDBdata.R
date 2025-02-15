@@ -68,7 +68,8 @@ test_that("soilDBdata: fetchVegdata", {
   
   expect_true(all(sapply(fvp1, inherits, 'data.frame')))
   
-  expect_true(all(!is.na(fvp1$vegtranspoint$plantsym)))
+  # only one transect missing points/species info
+  expect_equal(sum(!is.na(fvp1$vegtranspoint$plantsym)), nrow(fvp1$vegtranspoint) - 1)
 
   # TEST SS=TRUE
   fvp2 <- fetchVegdata(dsn = VEGPLOT_TEST_DSN, SS = TRUE)
