@@ -46,6 +46,10 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   # load data in pieces
   f.mapunit   <- get_projectmapunit_from_NASISWebReport(projectname)
   f.component <- get_component_from_NASISWebReport(projectname)
@@ -56,7 +60,6 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
     message("One or more inputs for fetchNASISWebReport (mapunit, component, or horizon) is NULL, returning NULL.")
     return(NULL)
   }
-
 
   # optionally test for bad horizonation... flag, and remove
   if (rmHzErrors) {
@@ -77,16 +80,15 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE,
   }
 
   # upgrade to SoilProfilecollection
-  depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
-
+  aqp::depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
 
   ## TODO: this will fail in the presence of duplicates
   ## TODO: make this error more informative
   # add site data to object
-  site(f.chorizon) <- f.component # left-join via coiid
+  aqp::site(f.chorizon) <- f.component # left-join via coiid
 
   # set NASIS-specific horizon identifier
-  hzidname(f.chorizon) <- 'chiid'
+  aqp::hzidname(f.chorizon) <- 'chiid'
 
   # print any messages on possible data quality problems:
   if (exists('component.hz.problems', envir=get_soilDB_env()))

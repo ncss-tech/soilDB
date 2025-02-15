@@ -11,11 +11,12 @@ Several examples of soil profile collections returned by
 \code{fetchNASIS(from='pedons')} as \code{SoilProfileCollection} objects.
 }
 \examples{
-\dontshow{if (require("aqp")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
+\dontshow{if (requireNamespace("aqp")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 \donttest{
-# load example dataset
+  library(aqp)
+  
+  # load example dataset
   data("gopheridge")
 
   # what kind of object is this?
@@ -28,40 +29,53 @@ Several examples of soil profile collections returned by
   par(mar=c(0,0,0,0), mfrow=c(2,1))
 
   # plot soil colors
-  plot(gopheridge[1:30, ], name='hzname', color='soil_color')
-  plot(gopheridge[31:60, ], name='hzname', color='soil_color')
+  aqp::plotSPC(gopheridge[1:30, ], name='hzname', color='soil_color')
+  aqp::plotSPC(gopheridge[31:60, ], name='hzname', color='soil_color')
 
   # need a larger top margin for legend
   par(mar=c(0,0,4,0), mfrow=c(2,1))
   # generate colors based on clay content
-  plot(gopheridge[1:30, ], name='hzname', color='clay')
-  plot(gopheridge[31:60, ], name='hzname', color='clay')
+  aqp::plotSPC(gopheridge[1:30, ], name='hzname', color='clay')
+  aqp::plotSPC(gopheridge[31:60, ], name='hzname', color='clay')
 
   # single row and no labels
   par(mar=c(0,0,0,0), mfrow=c(1,1))
   # plot soils sorted by depth to contact
-  plot(gopheridge, name='', print.id=FALSE, plot.order=order(gopheridge$bedrckdepth))
+  aqp::plotSPC(gopheridge, name='', print.id=FALSE, plot.order=order(gopheridge$bedrckdepth))
 
   # plot first 10 profiles
-  plot(gopheridge[1:10, ], name='hzname', color='soil_color', label='upedonid', id.style='side')
+  aqp::plotSPC(
+    gopheridge[1:10, ],
+    name = 'hzname',
+    color = 'soil_color',
+    label = 'upedonid',
+    id.style = 'side'
+  )
 
   # add rock fragment data to plot:
-  addVolumeFraction(gopheridge[1:10, ], colname='total_frags_pct')
+  aqp::addVolumeFraction(gopheridge[1:10, ], colname='total_frags_pct')
 
   # add diagnostic horizons
-  addDiagnosticBracket(gopheridge[1:10, ], kind='argillic horizon', col='red', offset=-0.4)
+  aqp::addDiagnosticBracket(gopheridge[1:10, ], kind='argillic horizon', col='red', offset=-0.4)
 
   ## loafercreek
   data("loafercreek")
+  
   # plot first 10 profiles
-  plot(loafercreek[1:10, ], name='hzname', color='soil_color', label='upedonid', id.style='side')
+  aqp::plotSPC(
+    loafercreek[1:10, ],
+    name = 'hzname',
+    color = 'soil_color',
+    label = 'upedonid',
+    id.style = 'side'
+  )
 
   # add rock fragment data to plot:
-  addVolumeFraction(loafercreek[1:10, ], colname='total_frags_pct')
+  aqp::addVolumeFraction(loafercreek[1:10, ], colname='total_frags_pct')
 
   # add diagnostic horizons
-  addDiagnosticBracket(loafercreek[1:10, ], kind='argillic horizon', col='red', offset=-0.4)
+  aqp::addDiagnosticBracket(loafercreek[1:10, ], kind='argillic horizon', col='red', offset=-0.4)
 }
-
+\dontshow{\}) # examplesIf}
 }
 \keyword{datasets}

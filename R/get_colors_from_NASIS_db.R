@@ -78,6 +78,11 @@ get_colors_from_NASIS_db <- function(SS = TRUE, method = "dominant", mixColors =
 
 .dominantColors <- function(d, id.var = 'phiid', moist_state = 'colormoistst', wt = 'pct',
                             hue = 'colorhue', value = 'colorvalue', chroma = 'colorchroma') {
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   # use data.table
   .I <- NULL; .SD <- NULL
   d <- data.table::as.data.table(d)

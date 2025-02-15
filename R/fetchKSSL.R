@@ -93,7 +93,11 @@
 
 # single record getter function, called by new vectorized interface
 .fetchSingle_KSSL <- function(f, returnMorphologicData=FALSE, returnGeochemicalData=FALSE, simplifyColors=FALSE) {
-
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   # basic site + hz data
   sh <- .getKSSL_SoilWeb(f)
 
@@ -112,8 +116,8 @@
   for(i in logical.idx) { h[[i]] <- as.numeric(h[[i]]) }
 
   # upgrade to SoilProfileCollection
-  suppressMessages(depths(h) <- pedon_key ~ hzn_top + hzn_bot)
-  site(h) <- s
+  suppressMessages(aqp::depths(h) <- pedon_key ~ hzn_top + hzn_bot)
+  aqp::site(h) <- s
 
   # NASIS morphoogy
   if(returnMorphologicData) {
@@ -143,16 +147,26 @@
     }
   }
 
-
-  ## TODO: clean this up
-  if(returnMorphologicData & returnGeochemicalData)
-    return(list(SPC=h, morph=m, geochem=geochem, optical=optical, xrd_thermal=xrd_thermal))
-  else if(returnGeochemicalData)
-    return(list(SPC=h, geochem=geochem, optical=optical, xrd_thermal=xrd_thermal))
-  else if(returnMorphologicData)
-    return(list(SPC=h, morph=m))
-  else
+  if (returnMorphologicData & returnGeochemicalData) {
+    return(list(
+      SPC = h,
+      morph = m,
+      geochem = geochem,
+      optical = optical,
+      xrd_thermal = xrd_thermal
+    ))
+  } else if (returnGeochemicalData) {
+    return(list(
+      SPC = h,
+      geochem = geochem,
+      optical = optical,
+      xrd_thermal = xrd_thermal
+    ))
+  } else if (returnMorphologicData) {
+    return(list(SPC = h, morph = m))
+  } else {
     return(h)
+  }
 }
 
 
@@ -221,7 +235,7 @@
 #' @seealso \code{\link{fetchOSD}}
 #' @references \url{http://ncsslabdatamart.sc.egov.usda.gov/}
 #' @keywords utilities
-#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)
 #' \donttest{
 #'     library(aqp)
 #'
@@ -235,7 +249,7 @@
 #'     length(s)
 #'
 #'     # plot
-#'     plotSPC(s, name='hzn_desgn', max.depth=150)
+#'     aqp::plotSPC(s, name='hzn_desgn', max.depth=150)
 #'
 #'     ##
 #'     ## morphologic data
@@ -246,22 +260,19 @@
 #'
 #'     # extract SPC
 #'     pedons <- s$SPC
-#'
-#'    # if (requireNamespace("farver")) {
-#'    #   ## automatically simplify color data (requires farver)
-#'    #   s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE, simplifyColors=TRUE)
-#'    #   # check
-#'    #   par(mar=c(0,0,0,0))
-#'    #   plot(pedons, color='moist_soil_color', print.id=FALSE)
-#'    # }
 #' }
 #'
 #' @export fetchKSSL
 fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA, pedon_key=NA, returnMorphologicData=FALSE, returnGeochemicalData=FALSE, simplifyColors=FALSE, progress=TRUE) {
 
-  if(!requireNamespace('jsonlite', quietly=TRUE))
+  if(!requireNamespace('jsonlite', quietly=TRUE)){
     stop('please install the `jsonlite` packages', call.=FALSE)
-
+  }
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   # convert BBOX into text representation
   if(!missing(bbox)) {
 
@@ -274,7 +285,6 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
     # not vectorized, would require a different kind of input
     bbox <- paste(bbox, collapse=',')
   }
-
 
   # create argument matrix
   arg <- expand.grid(
@@ -332,7 +342,6 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
     close(pb)
     rm(pb)
   }
-
 
   ## TODO: enforce unique-ness in results: unique.SPC and unique.data.frame on extended data
 
@@ -393,20 +402,18 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
 
   }
 
-
   # do NOT set KSSL-specific horizon identifier
   # labsampnum is NOT unique 0.1% of the time AGB 2019/11/14
-  # hzidname(h) <- "labsampnum"
+  # aqp::hzidname(h) <- "labsampnum"
 
   # set KSSL-specific hzdesgn/hztexcl fields
-  hzdesgnname(h) <- "hzn_desgn"
-  hztexclname(h) <- "lab_texture_class"
+  aqp::hzdesgnname(h) <- "hzn_desgn"
+  aqp::hztexclname(h) <- "lab_texture_class"
 
   ## set metadata
   # TODO: check before clobbering / consider standard var name
-  metadata(h)$origin <- 'KSSL via Soilweb / fetchKSSL'
-  metadata(h)$created <- Sys.time()
-
+  aqp::metadata(h)$origin <- 'KSSL via Soilweb / fetchKSSL'
+  aqp::metadata(h)$created <- Sys.time()
 
   # cleaning up the results
   if(returnMorphologicData & simplifyColors) {
@@ -417,23 +424,34 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
       x.colors <- simplifyColorData(m$phcolor, id.var = 'labsampnum', wt='colorpct')
 
       # safely LEFT JOIN with @horizons
-      suppressMessages(horizons(h) <- x.colors)
+      suppressMessages(aqp::horizons(h) <- x.colors)
     }
   }
 
   # report object size
   res.size <- round(object.size(res) / 1024 / 1024, 2)
+  
   # some feedback via message:
   message(paste(length(h), ' pedons loaded (', res.size, ' Mb transferred)', sep=''))
-
-
-  ## TODO: clean this up
-  if(returnMorphologicData & returnGeochemicalData)
-    return(list(SPC=h, morph=m, geochem=geochem, optical=optical, xrd_thermal=xrd_thermal))
-  else if(returnGeochemicalData)
-    return(list(SPC=h, geochem=geochem, optical=optical, xrd_thermal=xrd_thermal))
-  else if(returnMorphologicData)
-    return(list(SPC=h, morph=m))
-  else
+  
+  if (returnMorphologicData & returnGeochemicalData) {
+    return(list(
+      SPC = h,
+      morph = m,
+      geochem = geochem,
+      optical = optical,
+      xrd_thermal = xrd_thermal
+    ))
+  } else if (returnGeochemicalData) {
+    return(list(
+      SPC = h,
+      geochem = geochem,
+      optical = optical,
+      xrd_thermal = xrd_thermal
+    ))
+  } else if (returnMorphologicData) {
+    return(list(SPC = h, morph = m))
+  } else {
     return(h)
+  }
 }

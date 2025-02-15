@@ -176,7 +176,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   echo = FALSE,
-  eval = (nchar(soilDBdata_pedon_dsn) > 0) && file.exists(soilDBdata_pedon_dsn) && requireNamespace("RSQLite", quietly = TRUE)
+  eval = (nchar(soilDBdata_pedon_dsn) > 0) && file.exists(soilDBdata_pedon_dsn) && requireNamespace("RSQLite", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)
 )
 ```
 

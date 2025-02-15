@@ -65,7 +65,7 @@
 #' 
 #' @export
 #'
-#' @examplesIf curl::has_internet()  && requireNamespace("httr", quietly = TRUE) && requireNamespace("sf") && requireNamespace("terra")
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("sf", quietly = TRUE) && requireNamespace("terra", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)
 #' 
 #' \dontrun{
 #' b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
@@ -196,7 +196,11 @@ fetchSOLUS <- function(x = NULL,
   
   if (isTRUE(grid)) {
     return(r)
-  } 
+  } else {
+    if (!requireNamespace("aqp")) {
+      stop("package 'aqp' is required", call. = FALSE)
+    }
+  }
   
   if (length(depth_slices) == 1 && method != "step") {
     stop("Cannot interpolate for SoilProfileCollection output with only one depth slice! Change `method` to \"step\" or add another `depth_slice`.", call. = FALSE)
@@ -216,7 +220,7 @@ fetchSOLUS <- function(x = NULL,
   }
   
   dat$ID <- seq(nrow(dat))
-    
+  
   spc <- .convert_SOLUS_dataframe_to_SPC(dat, idname = "ID", method = method, max_depth = max_depth)
   aqp::initSpatial(spc, terra::crs(r)) <- ~ x + y
   
@@ -313,9 +317,9 @@ fetchSOLUS <- function(x = NULL,
   
     h <- as.data.frame(h)  
   
-    depths(h) <- c(idname, "top", "bottom")
+    aqp::depths(h) <- c(idname, "top", "bottom")
     
-    site(h) <- s
+    aqp::site(h) <- s
     
     return(h)
   } else if (method %in% c("linear", "constant", "fmm", "periodic", "natural", "monoH.FC", "hyman")) {
@@ -347,9 +351,9 @@ fetchSOLUS <- function(x = NULL,
     
     h2 <- as.data.frame(h2)
     
-    depths(h2) <- c(idname, "top", "bottom")
+    aqp::depths(h2) <- c(idname, "top", "bottom")
     
-    site(h2) <- s
+    aqp::site(h2) <- s
     
     return(h2)
     

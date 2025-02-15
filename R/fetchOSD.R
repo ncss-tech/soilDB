@@ -134,25 +134,35 @@
 #'   # plot profiles
 #'   # moist soil colors
 #'   par(mar=c(0,0,0,0), mfrow=c(2,1))
-#'   plot(s.moist, name='hzname',
-#'        cex.names=0.85, depth.axis = list(line = -4))
-#'   plot(s.dry, name='hzname',
-#'        cex.names=0.85, depth.axis = list(line = -4))
+#'   aqp::plotSPC(
+#'     s.moist,
+#'     name = 'hzname',
+#'     cex.names = 0.85,
+#'     depth.axis = list(line = -4)
+#'   )
+#'   aqp::plotSPC(
+#'     s.dry,
+#'     name = 'hzname',
+#'     cex.names = 0.85,
+#'     depth.axis = list(line = -4)
+#'   )
 #'
 #'   # extended mode: return a list with SPC + summary tables
 #'   x <- fetchOSD(s.list, extended = TRUE, colorState = 'dry')
 #'
 #'   par(mar=c(0,0,1,1))
-#'   plot(x$SPC)
+#'   aqp::plotSPC(x$SPC)
 #'   str(x, 1)
 #'
 #' }
 #' @keywords manip
 #'
-#' @importFrom aqp hzDistinctnessCodeToOffset
-#'
 fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
-
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   .SoilWebOSD <- function(i, e) {
     # compose base URL
     if (e) {
@@ -235,7 +245,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 
 	# reformatting and color conversion
 	if (colorState == 'moist') {
-	  h$soil_color <- with(h, munsell2rgb(matrix_wet_color_hue, matrix_wet_color_value, matrix_wet_color_chroma))
+	  h$soil_color <- with(h, aqp::munsell2rgb(matrix_wet_color_hue, matrix_wet_color_value, matrix_wet_color_chroma))
 
 	  h <- with(h, data.frame(
 	    id = series,
@@ -264,7 +274,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	}
 
 	if (colorState == 'dry') {
-	  h$soil_color <- with(h, munsell2rgb(matrix_dry_color_hue, matrix_dry_color_value, matrix_dry_color_chroma))
+  h$soil_color <- with(h, aqp::munsell2rgb(matrix_dry_color_hue, matrix_dry_color_value, matrix_dry_color_chroma))
 
 	  h <- with(h, data.frame(
 	    id = series,
@@ -293,10 +303,10 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 
 
 	# upgrade to SoilProfileCollection
-	depths(h) <- id ~ top + bottom
+  aqp::depths(h) <- id ~ top + bottom
 
 	# texture clases, in order
-	textures <- SoilTextureLevels(which = 'names')
+	textures <- aqp::SoilTextureLevels(which = 'names')
 
 	# TODO: use aqp::ReactionClassLevels()
 	pH_classes <- c('ultra acid', 'extremely acid', 'very strongly acid', 'strongly acid', 'moderately acid', 'slightly acid', 'neutral', 'slightly alkaline', 'mildly alkaline', 'moderately alkaline', 'strongly alkaline', 'very strongly alkaline')
@@ -308,18 +318,18 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	# safely LEFT JOIN to @site
 	s$id <- s$seriesname
 	s$seriesname <- NULL
-	site(h) <- s
+	aqp::site(h) <- s
 
 	## safely set SPC metadata
-	metadata(h)$origin <- 'OSD via Soilweb / fetchOSD'
-	metadata(h)$created <- Sys.time()
+	aqp::metadata(h)$origin <- 'OSD via Soilweb / fetchOSD'
+	aqp::metadata(h)$created <- Sys.time()
 	
 	# set optional hz designation and texture slots
-	hzdesgnname(h) <- "hzname"
-	hztexclname(h) <- "texture_class"
+	aqp::hzdesgnname(h) <- "hzname"
+	aqp::hztexclname(h) <- "texture_class"
 
 	# encode horizon distinctness
-	h$hzd <- hzDistinctnessCodeToOffset(
+	h$hzd <- aqp::hzDistinctnessCodeToOffset(
 	  h$distinctness,
 	  codes = c('very abrupt', 'abrubt', 'clear', 'gradual', 'diffuse')
 	)
@@ -374,7 +384,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	  })
 	  
 	  # profile IDs for reference, done outside of loop for efficiency
-	  pIDs <- profile_id(h)
+	  pIDs <- aqp::profile_id(h)
 	  # iterate over extended tables
 	  # finding all cases where a series is missing from SPC
 	  missing.series <- unique(
