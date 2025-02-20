@@ -16,6 +16,7 @@
 #' @importFrom data.table rbindlist data.table as.data.table merge.data.table
 #' @importFrom DBI dbGetQuery dbConnect dbSendQuery dbFetch
 #' @importFrom methods slot slot<- as is
+#' @importClassesFrom aqp SoilProfileCollection
 "_PACKAGE"
 
 #' Example \code{SoilProfilecollection} Objects Returned by \code{fetchNASIS}.
