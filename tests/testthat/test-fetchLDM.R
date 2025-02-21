@@ -66,7 +66,7 @@ test_that("fetchLDM works", {
   expect_true(
     inherits(res3, 'SoilProfileCollection') &&
       nrow(aqp::site(res)) == nrow(aqp::site(res3)) &&
-      nrow(aqp::horizons(res)) == nrow(aqp::horizons(res3))
+      aqp::nrow(res) == aqp::nrow(res3)
   )
   
 })

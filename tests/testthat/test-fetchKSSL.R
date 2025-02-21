@@ -70,7 +70,7 @@ test_that("fetchKSSL() returns reasonable data", {
 
   # standard request
   expect_equal(nrow(aqp::site(x)) > 0, TRUE)
-  expect_equal(nrow(aqp::horizons(x)) > 0, TRUE)
+  expect_equal(aqp::nrow(x) > 0, TRUE)
   expect_equal(aqp::idname(x), 'pedon_key')
   expect_equal(aqp::horizonDepths(x), c("hzn_top", "hzn_bot"))
 

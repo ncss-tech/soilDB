@@ -95,7 +95,7 @@ test_that("fetchOSD() returns reasonable data", {
   
   # standard request
   expect_equal(nrow(aqp::site(x)) == 2, TRUE)
-  expect_equal(nrow(aqp::horizons(x)) > 0, TRUE)
+  expect_equal(aqp::nrow(x) > 0, TRUE)
   expect_equal(aqp::idname(x), 'id')
   expect_equal(aqp::horizonDepths(x), c("top", "bottom"))
 

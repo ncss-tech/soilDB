@@ -49,7 +49,7 @@ test_that("fetchSDA() returns expected results", {
   
   # there should be 2 components and 10 horizons
   expect_equal(nrow(aqp::site(x)), 2)
-  expect_equal(nrow(aqp::horizons(x)), 10)
+  expect_equal(aqp::nrow(x), 10)
 
   # should match original WHERE clause
   expect_equal(x$nationalmusym, c('kzc4', 'kzc4'))

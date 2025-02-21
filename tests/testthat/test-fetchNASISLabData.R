@@ -40,7 +40,7 @@ test_that("fetchNASISLabData returns reasonable data", {
   # expected outcomes
   expect_true(inherits(x, 'SoilProfileCollection'))
   expect_equal(nrow(aqp::site(x)) > 0, TRUE)
-  expect_equal(nrow(aqp::horizons(x)) > 0, TRUE)
+  expect_equal(aqp::nrow(x) > 0, TRUE)
   expect_equal(aqp::idname(x), 'ncsspedonlabdataiid')
   expect_equal(aqp::hzidname(x), 'ncsslayerlabdataiid')
   expect_equal(aqp::horizonDepths(x), c("hzdept", "hzdepb"))

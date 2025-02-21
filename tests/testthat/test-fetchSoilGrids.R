@@ -25,7 +25,7 @@ test_that("fetchSoilGrids() works as expected", {
   expect_true(all(aqp::checkHzDepthLogic(res)$valid))
 
   expect_equal(nrow(aqp::site(res)), 2)
-  expect_equal(nrow(aqp::horizons(res)), 2 * 6)
+  expect_equal(aqp::nrow(res), 2 * 6)
   
   # 5 base columns in SPC: label, id, hzdept, hzdepb, hzID
   #   plus 13 default variables w/ 5 columns each 
