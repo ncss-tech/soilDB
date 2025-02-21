@@ -2,6 +2,8 @@ test_that("soilDBdata: fetchNASIS", {
 
   skip_on_cran()
 
+  skip_if_not_installed("RSQLite")
+
   # soilDBdata package is available on GitHub and provides SQLite data sources with real data
   skip_if_not_installed("soilDBdata")
 
@@ -57,6 +59,8 @@ test_that("soilDBdata: fetchNASIS", {
 test_that("soilDBdata: fetchVegdata", {
   
   skip_on_cran()
+  
+  skip_if_not_installed("RSQLite")
   
   # soilDBdata package is available on GitHub and provides SQLite data sources with real data
   skip_if_not_installed("soilDBdata")
