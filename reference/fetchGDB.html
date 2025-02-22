@@ -9,7 +9,7 @@ geodatabases, and create soil profile collection objects (SPC)."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@ geodatabases, and create soil profile collection objects (SPC)."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Get a SoilProfileCollection from a SSURGO file geodatabase</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.8.8/R/get_component_from_GDB.R" class="external-link"><code>R/get_component_from_GDB.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/R/get_component_from_GDB.R" class="external-link"><code>R/get_component_from_GDB.R</code></a></small>
       <div class="d-none name"><code>fetchGDB.Rd</code></div>
     </div>
 
@@ -139,23 +139,17 @@ specified (except for fetchGDB() which currently can only target one table
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## replace `dsn` with path to your own geodatabase (SSURGO OR gNATSGO)</span></span></span>
 <span class="r-in"><span><span class="co">##</span></span></span>
-<span class="r-in"><span><span class="co">##</span></span></span>
 <span class="r-in"><span><span class="co">##  download CONUS gNATSGO from here:</span></span></span>
 <span class="r-in"><span><span class="co">##    https://nrcs.app.box.com/v/soils/folder/191790828371</span></span></span>
 <span class="r-in"><span><span class="co">##</span></span></span>
 <span class="r-in"><span><span class="co"># dsn &lt;- "D:/geodata/soils/gNATSGO_CONUS.gdb"</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># le &lt;- get_legend_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE '%'")</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># mu &lt;- get_mapunit_from_GDB(dsn = dsn, WHERE = "muname LIKE 'Miami%'")</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># co &lt;- get_component_from_GDB(dsn, WHERE = "compname = 'Miami'</span></span></span>
 <span class="r-in"><span><span class="co">#                              AND majcompflag = 'Yes'", childs = FALSE)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># f_in_GDB &lt;- fetchGDB(WHERE = "areasymbol LIKE 'IN%'")</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Get Official Series Descriptions and summaries from SoilWeb API</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.8.8/R/fetchOSD.R" class="external-link"><code>R/fetchOSD.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/R/fetchOSD.R" class="external-link"><code>R/fetchOSD.R</code></a></small>
       <div class="d-none name"><code>fetchOSD.Rd</code></div>
     </div>
 
@@ -125,22 +125,30 @@
 <span class="r-in"><span>  <span class="co"># plot profiles</span></span></span>
 <span class="r-in"><span>  <span class="co"># moist soil colors</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">s.moist</span>, name<span class="op">=</span><span class="st">'hzname'</span>,</span></span>
-<span class="r-in"><span>       cex.names<span class="op">=</span><span class="fl">0.85</span>, depth.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>line <span class="op">=</span> <span class="op">-</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">s.dry</span>, name<span class="op">=</span><span class="st">'hzname'</span>,</span></span>
-<span class="r-in"><span>       cex.names<span class="op">=</span><span class="fl">0.85</span>, depth.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>line <span class="op">=</span> <span class="op">-</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">s.moist</span>,</span></span>
+<span class="r-in"><span>    name <span class="op">=</span> <span class="st">'hzname'</span>,</span></span>
+<span class="r-in"><span>    cex.names <span class="op">=</span> <span class="fl">0.85</span>,</span></span>
+<span class="r-in"><span>    depth.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>line <span class="op">=</span> <span class="op">-</span><span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">s.dry</span>,</span></span>
+<span class="r-in"><span>    name <span class="op">=</span> <span class="st">'hzname'</span>,</span></span>
+<span class="r-in"><span>    cex.names <span class="op">=</span> <span class="fl">0.85</span>,</span></span>
+<span class="r-in"><span>    depth.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>line <span class="op">=</span> <span class="op">-</span><span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-plt img"><img src="fetchOSD-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># extended mode: return a list with SPC + summary tables</span></span></span>
 <span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">fetchOSD</span><span class="op">(</span><span class="va">s.list</span>, extended <span class="op">=</span> <span class="cn">TRUE</span>, colorState <span class="op">=</span> <span class="st">'dry'</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">SPC</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">SPC</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 18</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ SPC             :Formal class 'SoilProfileCollection' [package "aqp"] with 8 slots</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ competing       :'data.frame':	84 obs. of  3 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ geog_assoc_soils:'data.frame':	6 obs. of  2 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ geog_assoc_soils:'data.frame':	77 obs. of  2 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ geomcomp        :'data.frame':	11 obs. of  9 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ hillpos         :'data.frame':	11 obs. of  8 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ mtnpos          :'data.frame':	1 obs. of  9 variables:</span>
@@ -155,7 +163,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ climate.annual  :'data.frame':	88 obs. of  12 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ climate.monthly :'data.frame':	264 obs. of  14 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ NCCPI           :'data.frame':	11 obs. of  16 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ soilweb.metadata:'data.frame':	25 obs. of  2 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ soilweb.metadata:'data.frame':	23 obs. of  2 variables:</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-plt img"><img src="fetchOSD-2.png" alt="" width="700" height="433"></span>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Query Soil Data Access by spatial intersection with supplied geometry</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.8.8/R/SDA-spatial.R" class="external-link"><code>R/SDA-spatial.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/R/SDA-spatial.R" class="external-link"><code>R/SDA-spatial.R</code></a></small>
       <div class="d-none name"><code>SDA_spatialQuery.Rd</code></div>
     </div>
 
@@ -151,10 +151,10 @@
 <span class="r-in"><span><span class="co"># by making a copy of this column</span></span></span>
 <span class="r-in"><span><span class="co"># this will save in lieu of textures in the original</span></span></span>
 <span class="r-in"><span><span class="co"># `texture` column</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/horizons.html" class="external-link">horizons</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">texture.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">texture</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilTextureLevels.html" class="external-link">SoilTextureLevels</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/horizons.html" class="external-link">horizons</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">texture.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">texture</span>, levels <span class="op">=</span> <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilTextureLevels.html" class="external-link">SoilTextureLevels</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># graphical depiction of the result</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">x</span>,</span></span>
 <span class="r-in"><span>  color <span class="op">=</span> <span class="st">'texture.class'</span>,</span></span>
 <span class="r-in"><span>  label <span class="op">=</span> <span class="st">'compname'</span>,</span></span>

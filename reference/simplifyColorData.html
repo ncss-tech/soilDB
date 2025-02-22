@@ -5,7 +5,7 @@ data which may or may not contain multiple colors per horizon/moisture
 status combination. simplifyColorData will &quot;mix&quot; multiple colors
 associated with horizons in d, according to IDs specified by
 id.var, using &quot;weights&quot; (area percentages) specified by the wt
-argument to mix_and_clean_colors.
+argument.
 Note that this function doesn't actually simulate the mixture of pigments on
 a surface, rather, &quot;mixing&quot; is approximated via weighted average in the
 CIELAB colorspace.
@@ -14,10 +14,6 @@ than NASIS by careful use of the id.var and wt arguments.
 However, d must contain Munsell colors split into columns named
 &quot;colorhue&quot;, &quot;colorvalue&quot;, and &quot;colorchroma&quot;. In addition, the moisture state
 (&quot;Dry&quot; or &quot;Moist&quot;) must be specified in a column named &quot;colormoistst&quot;.
-The mix_and_clean_colors function can be applied to arbitrary data
-sources as long as x contains sRGB coordinates in columns named &quot;r&quot;,
-&quot;g&quot;, and &quot;b&quot;. This function should be applied to chunks of rows within which
-color mixtures make sense.
 Examples:
 KSSL data
 soil color mixing tutorial
@@ -28,7 +24,7 @@ data which may or may not contain multiple colors per horizon/moisture
 status combination. simplifyColorData will &quot;mix&quot; multiple colors
 associated with horizons in d, according to IDs specified by
 id.var, using &quot;weights&quot; (area percentages) specified by the wt
-argument to mix_and_clean_colors.
+argument.
 Note that this function doesn't actually simulate the mixture of pigments on
 a surface, rather, &quot;mixing&quot; is approximated via weighted average in the
 CIELAB colorspace.
@@ -37,10 +33,6 @@ than NASIS by careful use of the id.var and wt arguments.
 However, d must contain Munsell colors split into columns named
 &quot;colorhue&quot;, &quot;colorvalue&quot;, and &quot;colorchroma&quot;. In addition, the moisture state
 (&quot;Dry&quot; or &quot;Moist&quot;) must be specified in a column named &quot;colormoistst&quot;.
-The mix_and_clean_colors function can be applied to arbitrary data
-sources as long as x contains sRGB coordinates in columns named &quot;r&quot;,
-&quot;g&quot;, and &quot;b&quot;. This function should be applied to chunks of rows within which
-color mixtures make sense.
 Examples:
 KSSL data
 soil color mixing tutorial
@@ -53,7 +45,7 @@ soil color mixing tutorial
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +72,7 @@ soil color mixing tutorial
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Simplify Color Data by ID</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.8.8/R/simplifyColorData.R" class="external-link"><code>R/simplifyColorData.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/R/simplifyColorData.R" class="external-link"><code>R/simplifyColorData.R</code></a></small>
       <div class="d-none name"><code>simplifyColorData.Rd</code></div>
     </div>
 
@@ -91,7 +83,7 @@ data which may or may not contain multiple colors per horizon/moisture
 status combination. <code>simplifyColorData</code> will "mix" multiple colors
 associated with horizons in <code>d</code>, according to IDs specified by
 <code>id.var</code>, using "weights" (area percentages) specified by the <code>wt</code>
-argument to <code>mix_and_clean_colors</code>.</p>
+argument.</p>
 <p>Note that this function doesn't actually simulate the mixture of pigments on
 a surface, rather, "mixing" is approximated via weighted average in the
 CIELAB colorspace.</p>
@@ -100,10 +92,6 @@ than NASIS by careful use of the <code>id.var</code> and <code>wt</code> argumen
 However, <code>d</code> must contain Munsell colors split into columns named
 "colorhue", "colorvalue", and "colorchroma". In addition, the moisture state
 ("Dry" or "Moist") must be specified in a column named "colormoistst".</p>
-<p>The <code>mix_and_clean_colors</code> function can be applied to arbitrary data
-sources as long as <code>x</code> contains sRGB coordinates in columns named "r",
-"g", and "b". This function should be applied to chunks of rows within which
-color mixtures make sense.</p>
 <p>Examples:</p><ul><li><p><a href="http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html" class="external-link">KSSL data</a></p></li>
 <li><p><a href="http://ncss-tech.github.io/AQP/soilDB/mixing-soil-color-data.html" class="external-link">soil color mixing tutorial</a></p></li>
 </ul></div>
