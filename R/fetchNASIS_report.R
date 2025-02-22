@@ -11,6 +11,10 @@
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   tf <- "C:/ProgramData/USDA/NASIS/Temp/fetchNASIS.txt"
   if (!is.null(url))
     tf <- url
@@ -63,7 +67,6 @@
     .$phcolor <- .color(.$phcolor, soilColorState = soilColorState)
   }
   
-  
   # fix problems
   .$site = .fix_site_problems(.$site, nullFragsAreZero = nullFragsAreZero)
   
@@ -82,30 +85,41 @@
     
     # upgrade to SoilProfilecollection
     h <- .$phorizon
-    depths(h) <- peiid ~ hzdept + hzdepb
+    aqp::depths(h) <- peiid ~ hzdept + hzdepb
     
     # set optional hz designation and texture slots
-    hzdesgnname(h) <- "hzname"
-    hztexclname(h) <- "texture"
+    aqp::hzdesgnname(h) <- "hzname"
+    aqp::hztexclname(h) <- "texture"
     
-    site(h) <- .$site
+    aqp::site(h) <- .$site
     
-    if (!is.null(.$phcolor)) horizons(h) <- .$phcolor
+    if (!is.null(.$phcolor)) {
+      aqp::horizons(h) <- .$phcolor
+    }
     
   } else {
     h <- aqp::SoilProfileCollection(
-      site = .$site
+      idcol = "peiid",
+      site = .$site,
+      horizons = data.frame(
+        peiid = .$site$peiid,
+        hzdept = NA_integer_,
+        hzdepb = NA_integer_,
+        hzID = seq(nrow(.$site))
+      ),
+      depthcols = c("hzdept", "hzdepb"), 
+      hzidcol = "hzID"
     )
   }
-  
   
   # tidy .$pediagfeatures
   pediagfeatures <- .$pediagfeatures
   pediagfeatures[-1] <- lapply(pediagfeatures[-1], function(x) {
     ifelse(!is.na(x), TRUE, FALSE)
   })
+  
   # pediagfeatures[!is.na(.$pediagfeatures)] <- TRUE
-  site(h) <- pediagfeatures
+  aqp::site(h) <- pediagfeatures
   
   if (!is.null(.$pediagfeatures)) {
     vars <- names(.$pediagfeatures)[-1]
@@ -124,19 +138,17 @@
     pediagfeatures <- cbind(pediagfeatures[c("peiid", "featkind")], featdep)
     pediagfeatures$featkind <- gsub("\\.", " ", pediagfeatures$featkind)
     
-    diagnostic_hz(h) <- pediagfeatures
+    aqp::diagnostic_hz(h) <- pediagfeatures
   }
   
-  
-  
   # set metadata
-  m <- metadata(h)
+  m <- aqp::metadata(h)
   m$origin <- "NASIS pedons (export)"
   m$created <- Sys.time()
-  metadata(h) <- m
+  aqp::metadata(h) <- m
   
   # set NASIS-specific horizon identifier
-  tryCatch(hzidname(h) <- 'phiid', error = function(e) {
+  tryCatch(aqp::hzidname(h) <- 'phiid', error = function(e) {
     if(grepl(e$message, pattern="not unique$")) {
       if(!rmHzErrors) {
         # if rmHzErrors = FALSE, keep unique integer assigned ID to all records automatically

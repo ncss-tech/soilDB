@@ -43,6 +43,10 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   # see https://github.com/ncss-tech/soilDB/issues/249
   .Deprecated(msg = "The SoilWeb snapshot of the RaCA data has been deprecated. The latest version of the data, including values measured by the Kellogg Soil Survey Laboratory, and supporting documentation, are available here: <https://www.nrcs.usda.gov/resources/data-and-reports/rapid-carbon-assessment-raca>. Download link on Box.com: <https://nrcs.app.box.com/s/upx5xhlwis7saunfiysclfrhl5vxxudn>")
   
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   # important: change the default behavior of data.frame
   opt.original <- options(stringsAsFactors = FALSE)
 
@@ -53,7 +57,6 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   # sanity-check: cannot request VNIR by state
   if(!missing(state) & get.vnir)
     stop('VNIR spectra cannot be requested for an entire state', call.=FALSE)
-
 
   ## 2015-09-23
   ## releasing point data for privates lands may be a problem, coordinates are truncated to 2 decimal places
@@ -158,7 +161,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   }
 
   # upgrade to SoilProfileCollection
-  depths(h) <- rcapid ~ hzdept + hzdepb
+  aqp::depths(h) <- rcapid ~ hzdept + hzdepb
 
   # extract landuse, region, soilgroup as characters
   s$landuse <- substr(s$rcasiteid, 6, 6)
@@ -166,20 +169,27 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   s$soilgroup <- substr(s$rcasiteid, 2, 5)
 
   # set NASIS-specific horizon identifier
-  hzidname(h) <- 'phiid'
+  aqp::hzidname(h) <- 'phiid'
 
   # set optional hz designation and texture slots
-  hzdesgnname(h) <- "hzname"
-  hztexclname(h) <- "texture_class"
+  aqp::hzdesgnname(h) <- "hzname"
+  aqp::hztexclname(h) <- "texture_class"
 
   # merge-in site data
-  site(h) <- s
+  aqp::site(h) <- s
 
   # reset options:
   options(opt.original)
 
   # pack into a list for the user
-  res <- list(pedons=h, trees=trees, veg=veg, stock=stock, sample=sample, spectra=spectra)
+  res <- list(
+    pedons = h,
+    trees = trees,
+    veg = veg,
+    stock = stock,
+    sample = sample,
+    spectra = spectra
+  )
   res.size <- round(object.size(res) / 1024 / 1024, 2)
 
   # some feedback via message:

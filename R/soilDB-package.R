@@ -16,9 +16,7 @@
 #' @importFrom data.table rbindlist data.table as.data.table merge.data.table
 #' @importFrom DBI dbGetQuery dbConnect dbSendQuery dbFetch
 #' @importFrom methods slot slot<- as is
-#' @importFrom aqp plotSPC checkHzDepthLogic pbindlist SoilTextureLevels parseMunsell
 #' @importClassesFrom aqp SoilProfileCollection
-#' @importMethodsFrom aqp plot length nrow site depths<- site<- horizons horizons<- hzidname<- idname hzidname horizonDepths diagnostic_hz diagnostic_hz<- restrictions restrictions<- metadata metadata<- hzdesgnname hzdesgnname<- hztexclname hztexclname<- profile_id profile_id<- hzID hzID<- aqp_df_class aqp_df_class<- siteNames horizonNames
 "_PACKAGE"
 
 #' Example \code{SoilProfilecollection} Objects Returned by \code{fetchNASIS}.
@@ -30,11 +28,12 @@
 #' @aliases loafercreek gopheridge mineralKing
 #' @docType data
 #' @keywords datasets
-#' @examplesIf require("aqp")
-#' @examples
+#' @examplesIf requireNamespace("aqp")
 #'
 #' \donttest{
-#' # load example dataset
+#'   library(aqp)
+#'   
+#'   # load example dataset
 #'   data("gopheridge")
 #'
 #'   # what kind of object is this?
@@ -47,39 +46,52 @@
 #'   par(mar=c(0,0,0,0), mfrow=c(2,1))
 #'
 #'   # plot soil colors
-#'   plot(gopheridge[1:30, ], name='hzname', color='soil_color')
-#'   plot(gopheridge[31:60, ], name='hzname', color='soil_color')
+#'   aqp::plotSPC(gopheridge[1:30, ], name='hzname', color='soil_color')
+#'   aqp::plotSPC(gopheridge[31:60, ], name='hzname', color='soil_color')
 #'
 #'   # need a larger top margin for legend
 #'   par(mar=c(0,0,4,0), mfrow=c(2,1))
 #'   # generate colors based on clay content
-#'   plot(gopheridge[1:30, ], name='hzname', color='clay')
-#'   plot(gopheridge[31:60, ], name='hzname', color='clay')
+#'   aqp::plotSPC(gopheridge[1:30, ], name='hzname', color='clay')
+#'   aqp::plotSPC(gopheridge[31:60, ], name='hzname', color='clay')
 #'
 #'   # single row and no labels
 #'   par(mar=c(0,0,0,0), mfrow=c(1,1))
 #'   # plot soils sorted by depth to contact
-#'   plot(gopheridge, name='', print.id=FALSE, plot.order=order(gopheridge$bedrckdepth))
+#'   aqp::plotSPC(gopheridge, name='', print.id=FALSE, plot.order=order(gopheridge$bedrckdepth))
 #'
 #'   # plot first 10 profiles
-#'   plot(gopheridge[1:10, ], name='hzname', color='soil_color', label='upedonid', id.style='side')
+#'   aqp::plotSPC(
+#'     gopheridge[1:10, ],
+#'     name = 'hzname',
+#'     color = 'soil_color',
+#'     label = 'upedonid',
+#'     id.style = 'side'
+#'   )
 #'
 #'   # add rock fragment data to plot:
-#'   addVolumeFraction(gopheridge[1:10, ], colname='total_frags_pct')
+#'   aqp::addVolumeFraction(gopheridge[1:10, ], colname='total_frags_pct')
 #'
 #'   # add diagnostic horizons
-#'   addDiagnosticBracket(gopheridge[1:10, ], kind='argillic horizon', col='red', offset=-0.4)
+#'   aqp::addDiagnosticBracket(gopheridge[1:10, ], kind='argillic horizon', col='red', offset=-0.4)
 #'
 #'   ## loafercreek
 #'   data("loafercreek")
+#'   
 #'   # plot first 10 profiles
-#'   plot(loafercreek[1:10, ], name='hzname', color='soil_color', label='upedonid', id.style='side')
+#'   aqp::plotSPC(
+#'     loafercreek[1:10, ],
+#'     name = 'hzname',
+#'     color = 'soil_color',
+#'     label = 'upedonid',
+#'     id.style = 'side'
+#'   )
 #'
 #'   # add rock fragment data to plot:
-#'   addVolumeFraction(loafercreek[1:10, ], colname='total_frags_pct')
+#'   aqp::addVolumeFraction(loafercreek[1:10, ], colname='total_frags_pct')
 #'
 #'   # add diagnostic horizons
-#'   addDiagnosticBracket(loafercreek[1:10, ], kind='argillic horizon', col='red', offset=-0.4)
+#'   aqp::addDiagnosticBracket(loafercreek[1:10, ], kind='argillic horizon', col='red', offset=-0.4)
 #' }
 #'
 NULL

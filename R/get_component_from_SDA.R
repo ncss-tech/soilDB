@@ -956,16 +956,21 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 #' @keywords manip
 #'
 #' @export fetchSDA
-fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
+fetchSDA <- function(WHERE = NULL,
+                     duplicates = FALSE,
+                     childs = TRUE,
                      nullFragsAreZero = TRUE,
                      rmHzErrors = FALSE,
                      droplevels = TRUE,
-                     stringsAsFactors = NULL
-                     ) {
+                     stringsAsFactors = NULL) {
 
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
+  }
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
   }
   
   # load data in pieces
@@ -1017,34 +1022,33 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
   }
   
   # upgrade to SoilProfilecollection
-  depths(f.chorizon) <- cokey ~ hzdept_r + hzdepb_r
-
+  aqp::depths(f.chorizon) <- cokey ~ hzdept_r + hzdepb_r
 
   ## TODO: this will fail in the presence of duplicates
   ## TODO: make this error more informative
   # add site data to object
-  site(f.chorizon) <- f.component # left-join via cokey
+  aqp::site(f.chorizon) <- f.component # left-join via cokey
   
   # join mapunit on nationalmusym/mukey if present
-  site(f.chorizon) <- f.mapunit
+  aqp::site(f.chorizon) <- f.mapunit
   
   # set SDA/SSURGO-specific horizon identifier
   if ('chkey' %in% aqp::horizonNames(f.chorizon) && all(!is.na('chkey'))) {
-      hzidname(f.chorizon) <- 'chkey'
+      aqp::hzidname(f.chorizon) <- 'chkey'
   }
 
   # set optional hz designation and texture slots
-  hzdesgnname(f.chorizon) <- "hzname"
-  hztexclname(f.chorizon) <- "texture"
+  aqp::hzdesgnname(f.chorizon) <- "hzname"
+  aqp::hztexclname(f.chorizon) <- "texture"
 
   # add diagnostics
   if(is.data.frame(f.diag)) {
-    diagnostic_hz(f.chorizon) <- f.diag
+    aqp::diagnostic_hz(f.chorizon) <- f.diag
   }
 
   # add restrictions
   if(is.data.frame(f.restr)) {
-    restrictions(f.chorizon) <- f.restr
+    aqp::restrictions(f.chorizon) <- f.restr
   }
 
   # print any messages on possible data quality problems:
@@ -1053,6 +1057,5 @@ fetchSDA <- function(WHERE = NULL, duplicates = FALSE, childs = TRUE,
 
   # done, return SPC
   return(f.chorizon)
-
 }
 

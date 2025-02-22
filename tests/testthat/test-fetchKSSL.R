@@ -5,6 +5,8 @@ test_that("fetchKSSL() works", {
   skip_if_offline()
 
   skip_on_cran()
+  
+  skip_if_not_installed("aqp")
 
   skip_if_not_installed("farver")
 
@@ -24,7 +26,9 @@ test_that("fetchKSSL() returns an SPC or list", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("aqp")
+  
   skip_if_not_installed("farver")
 
   x.morph <<- fetchKSSL(series = 'sierra',
@@ -57,16 +61,18 @@ test_that("fetchKSSL() returns reasonable data", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("aqp")
+  
   skip_if_not_installed("farver")
 
   skip_if(inherits(x, 'try-error') || is.null(x))
 
   # standard request
-  expect_equal(nrow(site(x)) > 0, TRUE)
-  expect_equal(nrow(horizons(x)) > 0, TRUE)
-  expect_equal(idname(x), 'pedon_key')
-  expect_equal(horizonDepths(x), c("hzn_top", "hzn_bot"))
+  expect_equal(nrow(aqp::site(x)) > 0, TRUE)
+  expect_equal(aqp::nrow(x) > 0, TRUE)
+  expect_equal(aqp::idname(x), 'pedon_key')
+  expect_equal(aqp::horizonDepths(x), c("hzn_top", "hzn_bot"))
 
 })
 
@@ -75,7 +81,9 @@ test_that("fetchKSSL() returns data associated with named series (sierra)", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("aqp")
+  
   skip_if_not_installed("farver")
 
   skip_if(inherits(x, 'try-error') || is.null(x))
@@ -92,7 +100,9 @@ test_that("fetchKSSL() returns data associated with multiple named series", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("aqp")
+  
   x.multiple <- fetchKSSL(series = c('sierra', 'amador'), progress = FALSE)
 
   skip_if(inherits(x.multiple, 'try-error') || is.null(x.multiple))
@@ -107,7 +117,9 @@ test_that("fetchKSSL() returns NULL with bogus query", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("aqp")
+  
   # a message is printed and NULL returned when no results
   res <- suppressMessages(fetchKSSL(series = 'XXX'))
 
@@ -121,7 +133,9 @@ test_that("fetchKSSL() fails gracefully when morphology data are missing", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("aqp")
+  
   # pedon_key 37457 is missing:
   # * most lab data
   # * all morphologic data
@@ -155,7 +169,9 @@ test_that("fetchKSSL() geochem result", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("aqp")
+  
   # get geochemical data for a single pedlabsampnum, do some basic filtering
   res <- try(fetchKSSL(pedlabsampnum = c("93P0249"), returnGeochemicalData = TRUE, progress = FALSE))
 

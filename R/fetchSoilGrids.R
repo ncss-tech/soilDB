@@ -62,16 +62,15 @@
 #' 
 #' @return A _SoilProfileCollection_ or _SpatRaster_ when `grid=TRUE`. Returns `try-error` if all requests fail. Any error messages resulting from parsing will be echoed when `verbose=TRUE`.
 #' @export fetchSoilGrids
-#' @importFrom aqp initSpatial<-
 #' @author Andrew G. Brown
-#' @examplesIf curl::has_internet()
+#' @examplesIf curl::has_internet() && requireNamespace("aqp")
 #' \dontrun{
 #'   library(aqp)
 #'   
 #'   your.points <- data.frame(id  = c("A", "B"), 
-#'                            lat = c(37.9, 38.1), 
-#'                            lon = c(-120.3, -121.5), 
-#'                            stringsAsFactors = FALSE)
+#'                             lat = c(37.9, 38.1), 
+#'                             lon = c(-120.3, -121.5), 
+#'                             stringsAsFactors = FALSE)
 #'   x <- try(fetchSoilGrids(your.points))
 #'  
 #'   if (!inherits(x, 'try-error'))
@@ -286,6 +285,10 @@ fetchSoilGrids <- function(x,
   spc$hzdepb <- as.numeric(lapply(labelsplit, function(x) x[2]))
   spc <- spc[order(spc$id, spc$hzdept, spc$hzdepb), ]
   
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   # promote to SoilProfileCollection
   aqp::depths(spc) <- id ~ hzdept + hzdepb
   
@@ -299,11 +302,13 @@ fetchSoilGrids <- function(x,
   if (spatial_input) {
     aqp::site(spc) <- cbind(id = 1:nrow(x), sf::st_drop_geometry(x))
   }
+  
   if (ncol(aqp::horizons(spc)) == 5) {
     res <- try(stop("SoilGrids API is not accessible", call. = FALSE), silent = !verbose)
     return(invisible(res))
     # this occurs if all requests fail to retrieve data/JSON response
   }
+  
   return(spc)
 }
 

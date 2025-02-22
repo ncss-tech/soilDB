@@ -87,16 +87,24 @@ Requests to the SoilWeb API are split into batches of 100 series names from \cod
   # plot profiles
   # moist soil colors
   par(mar=c(0,0,0,0), mfrow=c(2,1))
-  plot(s.moist, name='hzname',
-       cex.names=0.85, depth.axis = list(line = -4))
-  plot(s.dry, name='hzname',
-       cex.names=0.85, depth.axis = list(line = -4))
+  aqp::plotSPC(
+    s.moist,
+    name = 'hzname',
+    cex.names = 0.85,
+    depth.axis = list(line = -4)
+  )
+  aqp::plotSPC(
+    s.dry,
+    name = 'hzname',
+    cex.names = 0.85,
+    depth.axis = list(line = -4)
+  )
 
   # extended mode: return a list with SPC + summary tables
   x <- fetchOSD(s.list, extended = TRUE, colorState = 'dry')
 
   par(mar=c(0,0,1,1))
-  plot(x$SPC)
+  aqp::plotSPC(x$SPC)
   str(x, 1)
 
 }

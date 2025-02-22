@@ -1,6 +1,9 @@
+# soilDB 2.8.9 (development)
+ - 
+ 
 # soilDB 2.8.8 (2025-02-10)
  - `fetchSCAN()`: Bug fix when sensor column contains all `NA`
- - `ROSETTA()` now uses HTTPS URL
+ - `ROSETTA()`: now uses HTTPS URL for API endpoint
  - `fetchNASIS()`: Bug fix for (now deprecated) `pedon_id` in horizon slot rather than site
  - Rebuilt SPC datasets: `loafercreek`, `gopheridge`, `mineralKing`
  - `fetchNASISLabData()`: use `ncsspedonlabdataiid` as unique pedon ID

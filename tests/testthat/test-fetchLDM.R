@@ -1,11 +1,15 @@
 test_that("fetchLDM works", {
-
-  skip_if_not_installed("httr")
   
   skip_if_offline()
 
   skip_on_cran()
+  
+  skip_if_not_installed("aqp")
+  
+  skip_if_not_installed("httr")
 
+  library(aqp)
+  
   # physical and chemical properties tables are 1:1 with lab_layer
   res <- expect_warning(
     fetchLDM(
@@ -59,8 +63,10 @@ test_that("fetchLDM works", {
   
   skip_if(inherits(res3, 'try-error') || is.null(res3))
   
-  expect_true(inherits(res3, 'SoilProfileCollection') &&
-                length(res) == length(res3) &&
-                nrow(res) == nrow(res3))
-
+  expect_true(
+    inherits(res3, 'SoilProfileCollection') &&
+      nrow(aqp::site(res)) == nrow(aqp::site(res3)) &&
+      aqp::nrow(res) == aqp::nrow(res3)
+  )
+  
 })

@@ -81,7 +81,7 @@ SoilWeb maintains a snapshot of the Official Series Description data.
 
   # simple figure
   par(mar=c(0,0,1,1))
-  plot(x$SPC)
+  aqp::plotSPC(x$SPC)
 }
 \dontshow{\}) # examplesIf}
 }

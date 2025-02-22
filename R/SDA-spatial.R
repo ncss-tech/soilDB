@@ -144,10 +144,10 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
 #' # by making a copy of this column
 #' # this will save in lieu of textures in the original
 #' # `texture` column
-#' horizons(x)$texture.class <- factor(x$texture, levels = SoilTextureLevels())
+#' aqp::horizons(x)$texture.class <- factor(x$texture, levels = aqp::SoilTextureLevels())
 #' 
 #' # graphical depiction of the result
-#' plotSPC(
+#' aqp::plotSPC(
 #'   x,
 #'   color = 'texture.class',
 #'   label = 'compname',

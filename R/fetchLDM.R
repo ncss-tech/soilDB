@@ -31,7 +31,7 @@
 #'
 #' @return a `SoilProfileCollection` for a successful query, a `try-error` if no site/pedon locations can be found or `NULL` for an empty `lab_layer` (within sites/pedons) result
 #' @export
-#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)
 #' \dontrun{
 #'   
 #'   # fetch by Soil Survey Area area symbol (area_code using default "ssa" area_type)
@@ -75,7 +75,11 @@ fetchLDM <- function(x = NULL,
            prep_code = c("S", ""), # , `"F"`, `"HM"`, `"HM_SK"` `"GP"`, `"M"`, `"N"`, or `"S"`
            analyzed_size_frac = c("<2 mm", ""),#  optional: "<0.002 mm", "0.02-0.05 mm", "0.05-0.1 mm", "0.1-0.25 mm", "0.25-0.5 mm", "0.5-1 mm", "1-2 mm", "0.02-2 mm", "0.05-2 mm"
            dsn = NULL) {
-
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   # set up data source connection if needed
 
   if (inherits(dsn, 'DBIConnection')) {
@@ -224,24 +228,15 @@ fetchLDM <- function(x = NULL,
 
     if (!is.null(hz) && nrow(hz) > 0) {
 
-      # local SQLite: sometimes prep_code differs for bulk density with no difference in value
-      #               e.g. pedon_key 10010
-      # prep_code is also repeated across multiple tables
-
-      # hz$prep_code <- NULL
-
       # site_key used in multiple tables
       hz$site_key <- NULL
       
-      # hacks to deal with problems in the various databases
-      # hz <- unique(hz[,unique(colnames(hz))]) 
-      
       # build SoilProfileCollection
-      depths(hz) <- pedon_key ~ hzn_top + hzn_bot
+      aqp::depths(hz) <- pedon_key ~ hzn_top + hzn_bot
       hzn <- aqp::horizonNames(hz)
-      hzn <- hzn[hzn != idname(hz)]
-      site(hz) <- sites[, !colnames(sites) %in% hzn]
-      hzdesgnname(hz) <- 'hzn_desgn'
+      hzn <- hzn[hzn != aqp::idname(hz)]
+      aqp::site(hz) <- sites[, !colnames(sites) %in% hzn]
+      aqp::hzdesgnname(hz) <- 'hzn_desgn'
 
       return(hz)
     } else {

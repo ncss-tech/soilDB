@@ -90,7 +90,7 @@ snapshot was developed using methods described here:
 the link below for the live data.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
     library(aqp)
 
@@ -104,7 +104,7 @@ the link below for the live data.
     length(s)
 
     # plot
-    plotSPC(s, name='hzn_desgn', max.depth=150)
+    aqp::plotSPC(s, name='hzn_desgn', max.depth=150)
 
     ##
     ## morphologic data
@@ -115,14 +115,6 @@ the link below for the live data.
 
     # extract SPC
     pedons <- s$SPC
-
-   # if (requireNamespace("farver")) {
-   #   ## automatically simplify color data (requires farver)
-   #   s <- fetchKSSL(series='auburn', returnMorphologicData = TRUE, simplifyColors=TRUE)
-   #   # check
-   #   par(mar=c(0,0,0,0))
-   #   plot(pedons, color='moist_soil_color', print.id=FALSE)
-   # }
 }
 \dontshow{\}) # examplesIf}
 }

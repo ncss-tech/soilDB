@@ -1,16 +1,3 @@
-
-## TODO:
-# once aqp 2.0.2 is on CRAN use col2Munsell()
-# deprecate mix_and_clean_colors
-# check usage in fetchNASIS 
-# convert to roxygen / update docs
-# fix tutorials
-
-# This function is heavily biased toward NASIS-specific data structures and assumptions
-# d: data.frame with color data from horizon-color table: expects "colorhue", "colorvalue", "colorchroma"
-# id.var: name of the column with unique horizon IDs
-
-
 #' @title Simplify Color Data by ID
 #' 
 #' @description Simplify multiple Munsell color observations associated with each horizon.
@@ -20,7 +7,7 @@
 #' status combination. \code{simplifyColorData} will "mix" multiple colors
 #' associated with horizons in \code{d}, according to IDs specified by
 #' \code{id.var}, using "weights" (area percentages) specified by the \code{wt}
-#' argument to \code{mix_and_clean_colors}.
+#' argument.
 #' 
 #' Note that this function doesn't actually simulate the mixture of pigments on
 #' a surface, rather, "mixing" is approximated via weighted average in the
@@ -31,11 +18,6 @@
 #' However, \code{d} must contain Munsell colors split into columns named
 #' "colorhue", "colorvalue", and "colorchroma". In addition, the moisture state
 #' ("Dry" or "Moist") must be specified in a column named "colormoistst".
-#' 
-#' The \code{mix_and_clean_colors} function can be applied to arbitrary data
-#' sources as long as \code{x} contains sRGB coordinates in columns named "r",
-#' "g", and "b". This function should be applied to chunks of rows within which
-#' color mixtures make sense.
 #' 
 #' Examples: 
 #'  - [KSSL data](http://ncss-tech.github.io/AQP/soilDB/KSSL-demo.html)
@@ -53,8 +35,11 @@
 #' @keywords manip
 #' @export 
 #' @importFrom grDevices rgb
-#' @importFrom aqp munsell2rgb col2Munsell
 simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) {
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
   
   # sanity check: must contain at least 1 row
   if (nrow(d) < 1) {
@@ -63,7 +48,7 @@ simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) 
   }
   
   # convert Munsell -> CIELAB + sRGB
-  d.lab <- with(d, munsell2rgb(colorhue, colorvalue, colorchroma, returnLAB = TRUE, return_triplets = TRUE))
+  d.lab <- with(d, aqp::munsell2rgb(colorhue, colorvalue, colorchroma, returnLAB = TRUE, return_triplets = TRUE))
   d <- cbind(d, d.lab)
   
   # add a fake column for storing `sigma`
@@ -91,7 +76,6 @@ simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) 
   # variables required for mixing
   mix.vars <- c(wt, 'L', 'A', 'B')
   
-  
   # mix/combine if there are any horizons that need mixing
   if (length(dry.to.mix) > 0) {
     message(paste('mixing dry colors ... [', length(dry.to.mix), ' of ', nrow(dry.colors), ' horizons]', sep = ''))
@@ -114,7 +98,7 @@ simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) 
     
     # convert sRGB -> Munsell
     # requires >= aqp 2.0.2
-    m <- col2Munsell(as.data.frame(mixed.dry[, .SD, .SDcols = c('r', 'g', 'b')]))
+    m <- aqp::col2Munsell(as.data.frame(mixed.dry[, .SD, .SDcols = c('r', 'g', 'b')]))
     
     # adjust names to match NASIS
     names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")
@@ -153,7 +137,7 @@ simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) 
     
     # convert sRGB -> Munsell
     # requires >= aqp 2.0.2
-    m <- col2Munsell(as.data.frame(mixed.moist[, .SD, .SDcols = c('r', 'g', 'b')]))
+    m <- aqp::col2Munsell(as.data.frame(mixed.moist[, .SD, .SDcols = c('r', 'g', 'b')]))
     
     # adjust names to match NASIS
     names(m) <- c("colorhue", "colorvalue", "colorchroma", "sigma")

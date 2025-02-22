@@ -594,37 +594,35 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 #' @return A \code{data.frame} or \code{SoilProfileCollection} object.
 #' @author Stephen Roecker
 #' @keywords manip
-#' @examples
+#' @examplesIf requireNamespace("aqp", quietly = TRUE)
 #' 
 #' \donttest{
 #' 
 #' ## replace `dsn` with path to your own geodatabase (SSURGO OR gNATSGO)
 #' ##
-#' ##
 #' ##  download CONUS gNATSGO from here:
 #' ##    https://nrcs.app.box.com/v/soils/folder/191790828371
 #' ##
 #' # dsn <- "D:/geodata/soils/gNATSGO_CONUS.gdb"
-#' 
 #' # le <- get_legend_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE '%'")
-#' 
 #' # mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = "muname LIKE 'Miami%'")
-#' 
 #' # co <- get_component_from_GDB(dsn, WHERE = "compname = 'Miami'
 #' #                              AND majcompflag = 'Yes'", childs = FALSE)
-#' 
 #' # f_in_GDB <- fetchGDB(WHERE = "areasymbol LIKE 'IN%'")
 #' 
 #' }
-#' 
+#'
 #' @export fetchGDB
 fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
                      WHERE = NULL,
                      childs = FALSE,
                      droplevels = TRUE,
-                     stringsAsFactors = NULL
-) {
-
+                     stringsAsFactors = NULL) {
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   # checks
   vars_le <- "mlraoffice|areasymbol|areaname|areatypename|areaacres|ssastatus|projectscale|cordate|lkey"
   vars_mu <- "mukey|musym|muname|mukind|mustatus|invesintens|muacres|farmlndcl"
@@ -643,36 +641,43 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
     idx_mu <- FALSE
     idx_co <- FALSE
   }
-
+  
 
   # target legend table
   if (idx_le) {
-    le <- get_legend_from_GDB(dsn = dsn, WHERE = WHERE, stats = FALSE)
-
+    le <- get_legend_from_GDB(dsn = dsn,
+                              WHERE = WHERE,
+                              stats = FALSE)
+    
     qry <- paste0("lkey IN ('", paste(le$lkey, collapse = "', '"), "')")
     mu <- suppressMessages(get_mapunit_from_GDB(dsn = dsn, WHERE = qry))
     mu <- mu[order(mu$areasymbol), ]
   }
-
+  
   # target mapunit table
   if (idx_mu) {
     mu <- suppressMessages(get_mapunit_from_GDB(dsn = dsn, WHERE = WHERE))
     mu <- mu[order(mu$areasymbol), ]
   }
 
-
   # get components
-  if (idx_le | idx_mu) {
-
-    if (idx_le) mu$idx <- mu$areasymbol
-    if (idx_mu) mu$idx <- "1"
-
+  if (idx_le || idx_mu) {
+    
+    if (idx_le) {
+      mu$idx <- mu$areasymbol
+    }
+    
+    if (idx_mu) {
+      mu$idx <- "1"
+    }
+    
     temp <- by(mu, mu$idx, function(x) {
-
       if (idx_le) {
         message("getting components and horizons from areasymbol = '", unique(x$idx), "'")
-      } else message("getting components and horizons from ", WHERE)
-
+      } else{
+        message("getting components and horizons from ", WHERE)
+      }
+      
       # components
       # idx <- c(0, rep(375, 15) * 1:15)
       idx <- seq(0, 2e8, 3000)
@@ -686,36 +691,31 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
             childs     = childs,
             droplevels = droplevels
           )
-        },
-        error = function(err) {
+        }, error = function(err) {
           print(paste("Error occured: ", err))
           return(NULL)
-        }
-        )
+        })
       })
       co <- do.call("rbind", co)
       co$idx <- NULL
       
-
       # horizons
       tryCatch({
         h   <- .get_chorizon_from_GDB(dsn = dsn, cokey = co$cokey)
-      },
-      error = function(err) {
+      }, error = function(err) {
         print(paste("Error occured: ", err))
         return(NULL)
-      }
-      )
-
+      })
+      
       return(list(co = co, h = h))
     })
-
+    
+    # TODO: rbindlist() would be more efficient here
     co <- do.call("rbind", lapply(temp, function(x) x$co))
     h  <- do.call("rbind", lapply(temp, function(x) x$h))
-
   } 
   
-  if (idx_co | is.null(WHERE)) {
+  if (idx_co || is.null(WHERE)) {
 
     message("getting components and horizons from ", WHERE)
 
@@ -725,28 +725,36 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
       WHERE      = WHERE,
       childs     = childs,
       droplevels = droplevels
-      )
+    )
   
-  
-  # horizons
-  if (is.null(WHERE)) cokey <- NULL else cokey <- co$cokey
-  h <- .get_chorizon_from_GDB(dsn = dsn, cokey = cokey, childs = childs)
-  
+    # horizons
+    if (is.null(WHERE)) {
+      cokey <- NULL
+    } else {
+      cokey <- co$cokey
+    }
+    
+    h <- .get_chorizon_from_GDB(dsn = dsn,
+                                cokey = cokey,
+                                childs = childs)
   }
   
   
   if (nrow(co) > 0) {
     f <- merge(co["cokey"], h, by = "cokey", all.x = TRUE, sort = FALSE)
     f <- f[order(f$cokey), ]
-    depths(f) <- cokey ~ hzdept_r + hzdepb_r
-    site(f) <- co
+    aqp::depths(f) <- cokey ~ hzdept_r + hzdepb_r
+    aqp::site(f) <- co
   } else {
-    f <- aqp::SoilProfileCollection(site = co)
-    horizons(f) <- h
+    f <- aqp::SoilProfileCollection(idcol = "cokey", 
+                                    site = data.frame(cokey = character()),
+                                    horizons =  data.frame(cokey = character(), 
+                                                           hzdept_r = integer(), 
+                                                           hzdepb_r = integer(),
+                                                           hzID = character()),
+                                    depthcols = c("hzdept_r", "hzdepb_r"))
+    
   }
-  
   
   return(f)
 }
-
-

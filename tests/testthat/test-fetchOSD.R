@@ -9,7 +9,9 @@ test_that("fetchOSD() works", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("aqp")
+  
   ## sample data
   x <<- fetchOSD(soils = c('sierra', 'cecil'))
   
@@ -32,7 +34,9 @@ test_that("fetchOSD() returns NULL with bogus query", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("aqp")
+  
   # a message is printed and NULL returned when no results
   res <- suppressMessages(fetchOSD(soils='XXX'))
   expect_null(res)
@@ -46,6 +50,8 @@ test_that("fetchOSD() returns a list + SPC in extended mode", {
   skip_if_offline()
 
   skip_on_cran()
+  
+  skip_if_not_installed("aqp")
   
   x.extended <<- fetchOSD(soils = c('sierra', 'cecil'), extended = TRUE)
   
@@ -64,6 +70,8 @@ test_that("fetchOSD() sensible values when missing in extended mode", {
   
   skip_on_cran()
   
+  skip_if_not_installed("aqp")
+  
   x.extended <<- fetchOSD(soils = c('palau'), extended = TRUE)
   
   skip_if(is.null(x.extended))
@@ -81,13 +89,15 @@ test_that("fetchOSD() returns reasonable data", {
 
   skip_on_cran()
   
+  skip_if_not_installed("aqp")
+  
   skip_if(is.null(x))
   
   # standard request
-  expect_equal(nrow(site(x)) == 2, TRUE)
-  expect_equal(nrow(horizons(x)) > 0, TRUE)
-  expect_equal(idname(x), 'id')
-  expect_equal(horizonDepths(x), c("top", "bottom"))
+  expect_equal(nrow(aqp::site(x)) == 2, TRUE)
+  expect_equal(aqp::nrow(x) > 0, TRUE)
+  expect_equal(aqp::idname(x), 'id')
+  expect_equal(aqp::horizonDepths(x), c("top", "bottom"))
 
 })
 
@@ -98,12 +108,12 @@ test_that("fetchOSD() returns reasonable data in extended mode", {
 
   skip_on_cran()
   
+  skip_if_not_installed("aqp")
+  
   skip_if(is.null(x.extended))
   
   # extended request
-  expect_equal(
-    names(x.extended), extended.table.names
-    )
+  expect_equal(names(x.extended), extended.table.names)
 
 })
 
@@ -115,6 +125,8 @@ test_that("fetchOSD() returns reasonable data in extended mode", {
 #   skip_if_offline()
 # 
 #   skip_on_cran()
+#   
+#   skip_if_not_installed("aqp")
 # 
 #   # warning added in response to #128
 #   expect_warning(

@@ -25,6 +25,10 @@ fetchNASISLabData <- function(SS = TRUE, dsn = NULL) {
   # check if NASIS local DB instance/ODBC data source is available
   .soilDB_test_NASIS_connection(dsn = dsn)
   
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
 	# 1. load data in pieces, results are DF objects
 	s <- get_labpedon_data_from_NASIS_db(SS = SS, dsn = dsn)
 	h <- get_lablayer_data_from_NASIS_db(SS = SS, dsn = dsn)
@@ -53,15 +57,15 @@ fetchNASISLabData <- function(SS = TRUE, dsn = NULL) {
   bad.pedon.ids <- s$upedonid[which(s$labpeiid %in% bad.ids)]
 
 	# upgrade to SoilProfilecollection
-	depths(h) <- ncsspedonlabdataiid ~ hzdept + hzdepb
+	aqp::depths(h) <- ncsspedonlabdataiid ~ hzdept + hzdepb
 
 	## TODO: this will fail in the presence of duplicates
 	# add site data to object
 	s$labpeiid <- NULL
-	site(h) <- s # left-join via ncsspedonlabdataiid
+	aqp::site(h) <- s # left-join via ncsspedonlabdataiid
 
 	# set NASIS-specific horizon identifier
-	hzidname(h) <- 'ncsslayerlabdataiid'
+	aqp::hzidname(h) <- 'ncsslayerlabdataiid'
 
 	# 7. save and mention bad pedons
 	assign('bad.labpedon.ids', value = bad.pedon.ids, envir = get_soilDB_env())
