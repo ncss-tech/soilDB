@@ -1,6 +1,5 @@
-# soilDB 2.8.9 (2025-02-15)
- - `aqp` package has been moved to Suggests
- - Use `aqp_data()` instead of `data()` to load SoilProfileCollection datasets i.e. `loafercreek`, `gopheridge`, and `mineralKing`
+# soilDB 2.8.9 (development)
+ - 
  
 # soilDB 2.8.8 (2025-02-10)
  - `fetchSCAN()`: Bug fix when sensor column contains all `NA`
