@@ -14,6 +14,9 @@
 \alias{get_vegplot_trhi_from_NASIS_db}
 \alias{get_vegplot_transpoints_from_NASIS_db}
 \alias{get_vegplot_prodquadrats_from_NASIS_db}
+\alias{get_vegplot_groundsurface_from_NASIS_db}
+\alias{get_vegplot_transplantfoliar_from_NASIS_db}
+\alias{get_vegplot_BA_snags_from_NASIS_db}
 \alias{get_vegplot_speciesbasalarea_from_NASIS}
 \title{Get vegetation plot data from local NASIS database}
 \usage{
@@ -56,6 +59,12 @@ get_vegplot_transpoints_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 get_vegplot_prodquadrats_from_NASIS_db(SS = TRUE, dsn = NULL)
 
+get_vegplot_groundsurface_from_NASIS_db(SS = TRUE, dsn = NULL, si = TRUE)
+
+get_vegplot_transplantfoliar_from_NASIS_db(SS = TRUE, dsn = NULL, si = TRUE)
+
+get_vegplot_BA_snags_from_NASIS_db(SS = TRUE, dsn = NULL, si = TRUE)
+
 get_vegplot_tree_si_summary_from_NASIS_db(
   SS = TRUE,
   stringsAsFactors = NULL,
@@ -90,14 +99,40 @@ Associated User Pedon ID column will have their peiid reported in the \code{vegp
 \item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default:
 \code{NULL}}
 
+\item{si}{Convert legacy units to SI (above ground measurements); default: \code{TRUE}}
+
 \item{fixLineEndings}{Replace \code{'\\r\\n'} with \code{'\\n'}; Default: \code{TRUE}}
 }
 \value{
 A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies",
 "vegtransect", "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", "vegbasalarea", and
 "vegplottext" tables
+
+\code{get_vegplot_groundsurface_from_NASIS_db()}: a data.frame containing summary data for line point intercept ground surface cover hits by cover type.
+
+\code{get_vegplot_transplantfoliar_from_NASIS_db()}: a data.frame containing a summary data for line point intercept foliar cover hits by plant taxon.
+
+\code{get_vegplot_BA_snags_from_NASIS_db()}: a data.frame containing a plot summary of snag density and tree basal area
 }
 \description{
 Convenience function for loading most commonly used Vegetation Plot information from local NASIS
 database.
+}
+\examples{
+\dontshow{if (local_NASIS_defined()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
+vsurf <- get_vegplot_groundsurface_from_NASIS_db()
+}
+\dontshow{\}) # examplesIf}
+\dontshow{if (local_NASIS_defined()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
+vfoliar <- get_vegplot_transplantfoliar_from_NASIS_db()
+}
+\dontshow{\}) # examplesIf}
+\dontshow{if (local_NASIS_defined()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
+vplot <- get_vegplot_BA_snags_from_NASIS_db(si = FALSE) 
+transform(vplot, treatment = substr(vegplotname, 1, 4))
+}
+\dontshow{\}) # examplesIf}
 }

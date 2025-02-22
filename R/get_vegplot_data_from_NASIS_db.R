@@ -448,6 +448,99 @@ get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   uncode(res)
 }
 
+
+#' @param si Convert legacy units to SI (above ground measurements); default: `TRUE`
+#'
+#' @return `get_vegplot_groundsurface_from_NASIS_db()`: a data.frame containing summary data for line point intercept ground surface cover hits by cover type.
+#' @export
+#' @rdname fetchVegdata
+#' @examplesIf local_NASIS_defined()
+#' \donttest{
+#' vsurf <- get_vegplot_groundsurface_from_NASIS_db()
+#' }
+get_vegplot_groundsurface_from_NASIS_db <- function(SS = TRUE, dsn = NULL, si = TRUE) {
+  q <- "SELECT siteiid, siteobsiid, vegplotid, vegplotname, vegtransectid, vt.totalpointssampledcount, vt.transectlength, groundsurfcovtype, groundcoverptcount, groundcoverptpct, quadratsize, quadratshape, groundcoverquadpctave
+              FROM site_View_1 AS s
+              INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
+              INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
+              INNER JOIN vegtransect_View_1 AS vt
+                     ON vt.vegplotiidref = v.vegplotiid
+              LEFT JOIN transectgroundsurfcover_View_1 AS vtps
+                     ON vtps.vegtransectiidref = vt.vegtransectiid"
+  # LEFT JOIN groundsurfcovdetails_View_1 AS vtpsd
+  #        ON vtpsd.transectgrsurfcoviidref = vtps.transectgroundsurfcoveriid
+  
+  if (!SS) {
+    q <- gsub("_View_1", "", q)
+  }
+  
+  res <- dbQueryNASIS(NASIS(dsn = dsn), q)
+  if(si){res$transectlength <- round(res$transectlength*0.3048,0)}
+  uncode(res)
+}
+
+#' @return `get_vegplot_transplantfoliar_from_NASIS_db()`: a data.frame containing a summary data for line point intercept foliar cover hits by plant taxon.
+#' @export
+#' @rdname fetchVegdata
+#'
+#' @examplesIf local_NASIS_defined()
+#' \donttest{
+#' vfoliar <- get_vegplot_transplantfoliar_from_NASIS_db()
+#' }
+get_vegplot_transplantfoliar_from_NASIS_db <- function(SS = TRUE, dsn = NULL, si = TRUE) {
+  
+  q <- "SELECT siteiid, siteobsiid, vegplotid, vegplotname, vt.vegtransectid, vt.totalpointssampledcount,
+  vt.transectlength, plantsym, plantsciname, plantnatvernm, speciesfoliarcovhitcount, speciesfoliarcovpctlineint,plantheightcllowerlimit,plantheightclupperlimit
+              FROM site_View_1 AS s
+              INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
+              INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
+              INNER JOIN vegtransect_View_1 AS vt
+                     ON vt.vegplotiidref = v.vegplotiid
+              LEFT JOIN vegtransectplantsummary_View_1 AS vtps
+                     ON vtps.vegtransectiidref = vt.vegtransectiid
+              LEFT JOIN plant ON plant.plantiid = vtps.plantiidref"
+  if (!SS) {
+    q <- gsub("_View_1", "", q)
+  }
+  
+  res <- dbQueryNASIS(NASIS(dsn = dsn), q)
+  if(si){
+    res$transectlength <- round(res$transectlength*0.3048,0)
+    res$plantheightcllowerlimit <- round(res$plantheightcllowerlimit*0.3048,1)
+    res$plantheightclupperlimit <- round(res$plantheightclupperlimit*0.3048,1)
+  }
+  uncode(res)
+}
+
+#' @export
+#' @rdname fetchVegdata
+#' @return `get_vegplot_BA_snags_from_NASIS_db()`: a data.frame containing a plot summary of snag density and tree basal area
+#'
+#' @examplesIf local_NASIS_defined()
+#' \donttest{
+#' vplot <- get_vegplot_BA_snags_from_NASIS_db(si = FALSE) 
+#' transform(vplot, treatment = substr(vegplotname, 1, 4))
+#' }
+get_vegplot_BA_snags_from_NASIS_db <- function(SS = TRUE, dsn = NULL, si=TRUE) {
+  q <- "SELECT siteiid, siteobsiid, vegplotid, vegplotname, overstorycancontotalpct, basalareaplottotal, treesnagdensityhard, treesnagdensitysoft
+              FROM site_View_1 AS s
+              INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
+              INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
+              "
+  if (!SS) {
+    q <- gsub("_View_1", "", q)
+  }
+  
+  res <- dbQueryNASIS(NASIS(dsn = dsn), q)
+  if (si) {
+    res$basalareaplottotal <- round(res$basalareaplottotal * 0.229568, 1)
+    res$treesnagdensityhard <- round(res$treesnagdensityhard / 0.4046856, 0)
+    res$treesnagdensitysoft <- round(res$treesnagdensitysoft / 0.4046856, 0)
+  }
+  uncode(res)
+}
+
+
 # get vegplot tree site index summary data
 #' @export
 #' @rdname fetchVegdata
