@@ -63,19 +63,23 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, any::remotes, RSQLite=?ignore-before-r=4.0.0, testthat=?ignore-before-r=4.0.0, local::., brownag/soilDBdata
+          extra-packages: any::rcmdcheck, any::remotes, RSQLite=?ignore-before-r=4.0.0, testthat=?ignore-before-r=4.0.0, local::.
           # upgrade: 'TRUE' ## NB: required to force building of source packages
           cache: always
           cache-version: 1
           needs: check
 
-      - name: Install aqp off GitHub  (devel and 3.6 only)
+      - name: Install aqp off GitHub (devel and 3.6 only)
         if: matrix.config.r == 'devel' || matrix.config.r == '3.6'
         run: |
-          install.packages("remotes")
           remotes::install_github("ncss-tech/aqp", dependencies = NA, build = FALSE)
         shell: Rscript {0}
-
+        
+      - name: Install soilDBdata off GitHub
+        run: |
+          remotes::install_github("brownag/soilDBdata", dependencies = NA, build = FALSE)
+        shell: Rscript {0}
+        
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
