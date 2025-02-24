@@ -447,7 +447,6 @@ get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 }
 
 
-#' @param si Convert legacy units to SI (above ground measurements); default: `TRUE`
 #' @return `get_vegplot_groundsurface_from_NASIS_db()`: a data.frame containing summary data for line point intercept ground surface cover hits by cover type.
 #' @export
 #' @rdname fetchVegdata
@@ -455,7 +454,7 @@ get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' \donttest{
 #' vsurf <- get_vegplot_groundsurface_from_NASIS_db()
 #' }
-get_vegplot_groundsurface_from_NASIS_db <- function(SS = TRUE, dsn = NULL, si = TRUE) {
+get_vegplot_groundsurface_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   q <- "SELECT siteiid, siteobsiid, vegplotid, vegplotname, vegtransectid, vt.totalpointssampledcount, vt.transectlength, groundsurfcovtype, groundcoverptcount, groundcoverptpct, quadratsize, quadratshape, groundcoverquadpctave
               FROM site_View_1 AS s
               INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
@@ -472,7 +471,6 @@ get_vegplot_groundsurface_from_NASIS_db <- function(SS = TRUE, dsn = NULL, si = 
   }
   
   res <- dbQueryNASIS(NASIS(dsn = dsn), q)
-  if(si){res$transectlength <- round(res$transectlength*0.3048,0)}
   uncode(res)
 }
 

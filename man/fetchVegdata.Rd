@@ -57,7 +57,7 @@ get_vegplot_transpoints_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 get_vegplot_prodquadrats_from_NASIS_db(SS = TRUE, dsn = NULL)
 
-get_vegplot_groundsurface_from_NASIS_db(SS = TRUE, dsn = NULL, si = TRUE)
+get_vegplot_groundsurface_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 get_vegplot_tree_si_summary_from_NASIS_db(
   SS = TRUE,
@@ -92,8 +92,6 @@ Associated User Pedon ID column will have their peiid reported in the \code{vegp
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default:
 \code{NULL}}
-
-\item{si}{Convert legacy units to SI (above ground measurements); default: \code{TRUE}}
 
 \item{fixLineEndings}{Replace \code{'\\r\\n'} with \code{'\\n'}; Default: \code{TRUE}}
 }
