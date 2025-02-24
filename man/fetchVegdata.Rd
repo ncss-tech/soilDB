@@ -15,7 +15,6 @@
 \alias{get_vegplot_transpoints_from_NASIS_db}
 \alias{get_vegplot_prodquadrats_from_NASIS_db}
 \alias{get_vegplot_groundsurface_from_NASIS_db}
-\alias{get_vegplot_transplantfoliar_from_NASIS_db}
 \alias{get_vegplot_speciesbasalarea_from_NASIS}
 \title{Get vegetation plot data from local NASIS database}
 \usage{
@@ -59,8 +58,6 @@ get_vegplot_transpoints_from_NASIS_db(SS = TRUE, dsn = NULL)
 get_vegplot_prodquadrats_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 get_vegplot_groundsurface_from_NASIS_db(SS = TRUE, dsn = NULL, si = TRUE)
-
-get_vegplot_transplantfoliar_from_NASIS_db(SS = TRUE, dsn = NULL, si = TRUE)
 
 get_vegplot_tree_si_summary_from_NASIS_db(
   SS = TRUE,
@@ -121,8 +118,6 @@ Associated User Pedon ID column will have their peiid reported in the \code{vegp
 
 \code{get_vegplot_groundsurface_from_NASIS_db()}: a data.frame containing summary data for line point intercept ground surface cover hits by cover type.
 
-\code{get_vegplot_transplantfoliar_from_NASIS_db()}: a data.frame containing a summary data for line point intercept foliar cover hits by plant taxon.
-
 \code{get_vegplot_tree_si_summary_from_NASIS_db()}: a data.frame containing Vegetation Plot Tree Site Index Summary data
 
 \code{get_vegplot_speciesbasalarea_from_NASIS()}: a data.frame containing Vegetation Plot Species Basal Area and Trees Counted data
@@ -139,11 +134,6 @@ database.
 \dontshow{if (local_NASIS_defined()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 vsurf <- get_vegplot_groundsurface_from_NASIS_db()
-}
-\dontshow{\}) # examplesIf}
-\dontshow{if (local_NASIS_defined()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
-vfoliar <- get_vegplot_transplantfoliar_from_NASIS_db()
 }
 \dontshow{\}) # examplesIf}
 }

@@ -448,7 +448,6 @@ get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
 
 #' @param si Convert legacy units to SI (above ground measurements); default: `TRUE`
-#'
 #' @return `get_vegplot_groundsurface_from_NASIS_db()`: a data.frame containing summary data for line point intercept ground surface cover hits by cover type.
 #' @export
 #' @rdname fetchVegdata
@@ -474,39 +473,6 @@ get_vegplot_groundsurface_from_NASIS_db <- function(SS = TRUE, dsn = NULL, si = 
   
   res <- dbQueryNASIS(NASIS(dsn = dsn), q)
   if(si){res$transectlength <- round(res$transectlength*0.3048,0)}
-  uncode(res)
-}
-
-#' @return `get_vegplot_transplantfoliar_from_NASIS_db()`: a data.frame containing a summary data for line point intercept foliar cover hits by plant taxon.
-#' @export
-#' @rdname fetchVegdata
-#'
-#' @examplesIf local_NASIS_defined()
-#' \donttest{
-#' vfoliar <- get_vegplot_transplantfoliar_from_NASIS_db()
-#' }
-get_vegplot_transplantfoliar_from_NASIS_db <- function(SS = TRUE, dsn = NULL, si = TRUE) {
-  
-  q <- "SELECT siteiid, siteobsiid, vegplotid, vegplotname, vt.vegtransectid, vt.totalpointssampledcount,
-  vt.transectlength, plantsym, plantsciname, plantnatvernm, speciesfoliarcovhitcount, speciesfoliarcovpctlineint,plantheightcllowerlimit,plantheightclupperlimit
-              FROM site_View_1 AS s
-              INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
-              INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
-              INNER JOIN vegtransect_View_1 AS vt
-                     ON vt.vegplotiidref = v.vegplotiid
-              LEFT JOIN vegtransectplantsummary_View_1 AS vtps
-                     ON vtps.vegtransectiidref = vt.vegtransectiid
-              LEFT JOIN plant ON plant.plantiid = vtps.plantiidref"
-  if (!SS) {
-    q <- gsub("_View_1", "", q)
-  }
-  
-  res <- dbQueryNASIS(NASIS(dsn = dsn), q)
-  if (si) {
-    res$transectlength <- round(res$transectlength * 0.3048, 0)
-    res$plantheightcllowerlimit <- round(res$plantheightcllowerlimit * 0.3048, 1)
-    res$plantheightclupperlimit <- round(res$plantheightclupperlimit * 0.3048, 1)
-  }
   uncode(res)
 }
 
