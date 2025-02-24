@@ -16,7 +16,6 @@
 \alias{get_vegplot_prodquadrats_from_NASIS_db}
 \alias{get_vegplot_groundsurface_from_NASIS_db}
 \alias{get_vegplot_transplantfoliar_from_NASIS_db}
-\alias{get_vegplot_BA_snags_from_NASIS_db}
 \alias{get_vegplot_speciesbasalarea_from_NASIS}
 \title{Get vegetation plot data from local NASIS database}
 \usage{
@@ -63,8 +62,6 @@ get_vegplot_groundsurface_from_NASIS_db(SS = TRUE, dsn = NULL, si = TRUE)
 
 get_vegplot_transplantfoliar_from_NASIS_db(SS = TRUE, dsn = NULL, si = TRUE)
 
-get_vegplot_BA_snags_from_NASIS_db(SS = TRUE, dsn = NULL, si = TRUE)
-
 get_vegplot_tree_si_summary_from_NASIS_db(
   SS = TRUE,
   stringsAsFactors = NULL,
@@ -104,15 +101,35 @@ Associated User Pedon ID column will have their peiid reported in the \code{vegp
 \item{fixLineEndings}{Replace \code{'\\r\\n'} with \code{'\\n'}; Default: \code{TRUE}}
 }
 \value{
-A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies",
+\code{fetchVegdata()}: A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies",
 "vegtransect", "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", "vegbasalarea", and
 "vegplottext" tables
+
+\code{get_vegplot_location_from_NASIS_db()}: a data.frame containing location data from the corresponding record in the site table
+
+\code{get_vegplot_trhi_from_NASIS_db()}: a data.frame containing Rangeland Health Indicator (RHI) data from the \code{vegplot} table
+
+\code{get_vegplot_species_from_NASIS_db()}: a data.frame containing Plot Plant Inventory data
+
+\code{get_vegplot_transect_from_NASIS_db()}: a data.frame containing Vegetation Transect data
+
+\code{get_vegplot_transect_from_NASIS_db()}: a data.frame containing Vegetation Transect Plant Summary data
+
+\code{get_vegplot_transpoints_from_NASIS_db()}: a data.frame containing Vegetation Transect Point Plant Cover Details
+
+\code{get_vegplot_prodquadrats_from_NASIS_db()}: a data.frame containing Vegetation Transect Production Quadrat data
 
 \code{get_vegplot_groundsurface_from_NASIS_db()}: a data.frame containing summary data for line point intercept ground surface cover hits by cover type.
 
 \code{get_vegplot_transplantfoliar_from_NASIS_db()}: a data.frame containing a summary data for line point intercept foliar cover hits by plant taxon.
 
-\code{get_vegplot_BA_snags_from_NASIS_db()}: a data.frame containing a plot summary of snag density and tree basal area
+\code{get_vegplot_tree_si_summary_from_NASIS_db()}: a data.frame containing Vegetation Plot Tree Site Index Summary data
+
+\code{get_vegplot_speciesbasalarea_from_NASIS()}: a data.frame containing Vegetation Plot Species Basal Area and Trees Counted data
+
+\code{get_vegplot_tree_si_details_from_NASIS_db()}: a data.frame containing Vegetation Plot Tree Site Index Details data
+
+\code{get_vegplot_textnote_from_NASIS_db()}: a data.frame containing Vegetation Plot text notes
 }
 \description{
 Convenience function for loading most commonly used Vegetation Plot information from local NASIS
@@ -127,12 +144,6 @@ vsurf <- get_vegplot_groundsurface_from_NASIS_db()
 \dontshow{if (local_NASIS_defined()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 vfoliar <- get_vegplot_transplantfoliar_from_NASIS_db()
-}
-\dontshow{\}) # examplesIf}
-\dontshow{if (local_NASIS_defined()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
-vplot <- get_vegplot_BA_snags_from_NASIS_db(si = FALSE) 
-transform(vplot, treatment = substr(vegplotname, 1, 4))
 }
 \dontshow{\}) # examplesIf}
 }
