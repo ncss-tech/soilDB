@@ -141,16 +141,26 @@
   if (nrow(lf) > 0) {
     aqp::site(f.chorizon) <- lf
   }
+  
+  .soilDB_warn_deprecated_aliases(c("ecositeid" = "ecosite_id",
+                                    "ecositenm" = "ecosite_name",
+                                    "ovegclid" = "othervegid",
+                                    "ovegclname" = "othervegclass"))
+  
   # join-in ecosite string
   es <- data.table::data.table(f.ecosite)[, .formatEcositeString(.SD, name.sep = ' & '), by = "coiid", .SDcols = colnames(f.ecosite)]
   es$coiid <- NULL
-  
+  es$ecosite_id <- es$ecositeid
+  es$ecosite_name <- es$ecositenm
   if (nrow(es) > 0) {
     aqp::site(f.chorizon) <- es
   }
+  
   # join-in othervegclass string
   ov <- data.table::data.table(f.otherveg)[, .formatOtherVegString(.SD, name.sep = ' & '), by = "coiid", .SDcols = colnames(f.otherveg)]
-  ov$coiid <- NULL
+  ov$coiid <- NULL 
+  ov$othervegid <- ov$ovegclid
+  ov$othervegclass <- ov$ovegclname
   if (nrow(ov) > 0) {
     aqp::site(f.chorizon) <- ov
   }

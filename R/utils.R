@@ -2,9 +2,6 @@
 ## misc functions used by soilDB
 ##
 
-## TODO: keep track of funky records in the soilDB env
-
-## TODO: consider toggling paralithic contact to FALSE when lithic contact is TRUE
 # convert diagnostic horizon info into wide-formatted, boolean table
 .diagHzLongtoWide <- function(d, feature = 'featkind', id = 'peiid') {
 
@@ -35,8 +32,6 @@
 
 }
 
-
-## TODO: this may need some review
 ## convert horizon designation pieces info into wide-formatted, boolean table
 .hzSuffixLongtoWide <- function(d) {
 
@@ -67,8 +62,6 @@
 
 }
 
-
-## TODO: this may need some review
 ## try and pick the best possible taxhistory record
 .pickBestTaxHistory <- function(d) {
 
@@ -81,7 +74,6 @@
 	  return(d)
 	}
 
-	## TODO: this must be a POSIXct / Date class object, if not results will be incorrect
 	# try to get the most recent
 	d.order <- order(d$classdate, decreasing=TRUE)
 
@@ -100,8 +92,6 @@
 	return(d[best.record, ])
 }
 
-
-## TODO: this may need some review
 ## try and pick the best possible ecosite record
 .pickBestEcosite <- function(d, es_classifier = NULL) {
 
@@ -137,31 +127,6 @@
 	d$recwlupdated <- NULL
 	return(d[best.record, ])
 }
-
-## TODO: this may need some review
-## try and pick the best possible ecosite record
-# .pickBestOtherVeg <- function(d) {
-#
-#   # add a method field
-#   d$es_selection_method <- NA
-#
-#   # try to get the most recent:
-#   d.order <- order(d$ecositecorrdate, decreasing=TRUE)
-#
-#   # if there are multiple (unique) dates, return the most recent
-#   if(length(unique(d$ecositecorrdate)) > 1) {
-#     d$es_selection_method <- 'most recent'
-#     return(d[d.order[1], ])
-#   }
-#
-#   # otherwise, return the record with the least number of missing cells
-#   # if there are the same number of missing cells, the first record is returned
-#   n.na <- apply(d, 1, function(i) length(which(is.na(i))))
-#   best.record <- which.min(n.na)
-#
-#   d$es_selection_method <- 'least missing data'
-#   return(d[best.record, ])
-# }
 
 ## https://github.com/ncss-tech/soilDB/issues/84
 ## TODO: https://github.com/ncss-tech/soilDB/issues/47
@@ -394,7 +359,7 @@
 
 ## https://github.com/ncss-tech/soilDB/issues/84
 # attempt to flatten site parent material data into 2 strings
-.formatParentMaterialString <- function(i.pm, uid = NULL, name.sep='|') {
+.formatParentMaterialString <- function(i.pm, uid = NULL, name.sep = '|') {
 
   # get the current group of rows by unique ID (either passed by caller or calculated)
   if (is.null(uid))
@@ -424,7 +389,7 @@
   # string together as-is, in row-order
   if (any(is.na(i.pm$pmorder))) {
     # optional information on which sites have issues
-    if(getOption('soilDB.verbose', default=FALSE))
+    if(getOption('soilDB.verbose', default = FALSE))
       warning(paste0('Using row-order. NA in pmorder:', u.siteiid), call.=FALSE)
   } else {
     # there are no NAs in pmorder --> sort according to pmorder
@@ -432,10 +397,10 @@
   }
 
   # composite strings and return
-  str.kind <- paste(i.pm$pmkind, collapse=name.sep)
-  str.origin <- paste(unique(i.pm$pmorigin), collapse=name.sep)
+  str.kind <- paste(i.pm$pmkind, collapse = name.sep)
+  str.origin <- paste(unique(i.pm$pmorigin), collapse = name.sep)
 
-  return(data.frame(siteiid=u.siteiid, pmkind=str.kind, pmorigin=str.origin, stringsAsFactors=FALSE))
+  return(data.frame(siteiid = u.siteiid, pmkind = str.kind, pmorigin = str.origin, stringsAsFactors = FALSE))
 }
 
 
@@ -629,18 +594,18 @@
   u.coiid <- unique(i.esd$coiid)
 
   if(length(u.coiid) == 0)
-    return(data.frame(coiid=NA_integer_, ecosite_id=NA, ecosite_name=NA, stringsAsFactors=FALSE)[0,])
+    return(data.frame(coiid = NA_integer_, ecositeid = NA, ecositenm = NA, stringsAsFactors = FALSE)[0, ])
 
   # sanity check: this function can only be applied to data from a single component
-  if(length(u.coiid) > 1)
+  if (length(u.coiid) > 1)
     stop('data are from multiple component records')
 
   # subset othervegcl data to remove any with NA for othervegclass
   i.esd <- i.esd[which(!is.na(i.esd$ecositeid)), ]
 
   # if there is no data, then return a DF formatted as if there were data
-  if(nrow(i.esd) == 0)
-    return(data.frame(coiid=u.coiid, ecosite_id=NA, ecosite_name=NA, stringsAsFactors=FALSE))
+  if (nrow(i.esd) == 0)
+    return(data.frame(coiid = u.coiid, ecositeid = NA, ecositenm = NA, stringsAsFactors = FALSE))
 
   # short-circuit: if any otherveg are NA, then we don't know the order
   # string together as-is, in row-order
@@ -667,8 +632,8 @@
   u.iid <- unique(i.ov[[id.name]])
   n.iid <- length(u.iid)
   emptydf <- data.frame(coiid = u.iid, 
-                        othervegid = NA[seq_len(n.iid)], 
-                        othervegclass = NA[seq_len(n.iid)], 
+                        ovegclid = NA[seq_len(n.iid)], 
+                        ovegclname = NA[seq_len(n.iid)], 
                         stringsAsFactors = FALSE)
   colnames(emptydf)[1] <- id.name
   
@@ -687,15 +652,15 @@
     return(emptydf)
   
   # composite strings and return
-  str.ovegid <- paste(i.ov$ovegclid, collapse = name.sep)
-  str.ovegclnm <- paste(unique(i.ov$ovegclname), collapse = name.sep)
+  str.ovegclid <- paste(i.ov$ovegclid, collapse = name.sep)
+  str.ovegclname <- paste(unique(i.ov$ovegclname), collapse = name.sep)
   
   res <- data.frame(
-      coiid = u.iid,
-      othervegid = str.ovegid,
-      othervegclass = str.ovegclnm,
-      stringsAsFactors = FALSE
-    )
+    coiid = u.iid,
+    ovegclid = str.ovegclid,
+    ovegclname = str.ovegclname,
+    stringsAsFactors = FALSE
+  )
   colnames(res)[1] <- id.name
   return(res)
 }

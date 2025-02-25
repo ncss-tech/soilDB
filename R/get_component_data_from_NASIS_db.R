@@ -41,6 +41,11 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
+  .soilDB_warn_deprecated_aliases(c("airtempa_l" = "maat_l",
+                                    "airtempa_r" = "maat_r",
+                                    "airtempa_h" = "maat_h",
+                                    "soiltempa_r" = "mast_r"))
+  
   q1 <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, 
                 localphase, drainagecl, hydricrating, hydgrp, tfact, wei, weg, frostact, corcon, corsteel, 
                 elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, 
