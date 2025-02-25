@@ -189,9 +189,6 @@ NASISDomainsAsFactor <- function(x = NULL) {
 #' 
 #' @return a `data.frame` containing DomainID, DomainName, DomainRanked, DisplayLabel, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ColumnPhysicalName, ColumnLogicalName and optionally ChoiceDescription when `include_description=TRUE`.
 #' @export
-#' 
-#' @examples
-#' get_NASIS_metadata()
 get_NASIS_metadata <- function(dsn = NULL, include_description = FALSE) {
   
   metadata <- NULL
