@@ -623,7 +623,7 @@
   str.ecoid <- paste(i.esd$ecositeid, collapse=name.sep)
   str.econm <- paste(unique(i.esd$ecositenm), collapse=name.sep)
 
-  return(data.frame(coiid=u.coiid, ecosite_id=str.ecoid, ecosite_name=str.econm, stringsAsFactors=FALSE))
+  return(data.frame(coiid=u.coiid, ecositeid=str.ecoid, ecositenm=str.econm, stringsAsFactors=FALSE))
 }
 
 # attempt to flatten multiple other veg class entries into 1 string
