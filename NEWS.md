@@ -1,5 +1,7 @@
 # soilDB 2.8.9 (development)
- - 
+ - Added `get_vegplot_groundsurface_from_NASIS_db()` thanks to Greg Schmidt (@phytoclast; #373)
+ - Added `"transectgroundsurfcover"` table to `"vegetation"` set for `get_NASIS_table_name_by_purpose()`
+ - Added missing `fetchNASIS("components")` deprecation messages for maat_l, maat_r, maat_h, mast_r, ecosite_id, ecosite_name, othervegid, and othervegclass columns
  
 # soilDB 2.8.8 (2025-02-10)
  - `fetchSCAN()`: Bug fix when sensor column contains all `NA`
