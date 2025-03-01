@@ -170,7 +170,8 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "n
       "pointplantcoverdetails",
       "plantprodquadratdetails",
       "plotspeciesbasalarea",
-      "basalareatreescounted"
+      "basalareatreescounted",
+      "transectgroundsurfcover"
     ),
     project = c(
       "project",

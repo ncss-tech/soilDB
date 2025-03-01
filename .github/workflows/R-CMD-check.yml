@@ -57,13 +57,13 @@ jobs:
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
-          extra-repositories: "https://rspatial.r-universe.dev/"
+          extra-repositories: "https://ncss-tech.r-universe.dev/"
 
       - uses: r-lib/actions/setup-pandoc@v2
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, any::remotes, RSQLite=?ignore-before-r=4.0.0, testthat=?ignore-before-r=4.0.0, local::.
+          extra-packages: any::rcmdcheck, any::remotes, any::soilDBdata, RSQLite=?ignore-before-r=4.0.0, testthat=?ignore-before-r=4.0.0, local::.
           # upgrade: 'TRUE' ## NB: required to force building of source packages
           cache: always
           cache-version: 1
@@ -73,11 +73,6 @@ jobs:
         if: matrix.config.r == 'devel' || matrix.config.r == '3.6'
         run: |
           remotes::install_github("ncss-tech/aqp", dependencies = NA, build = FALSE)
-        shell: Rscript {0}
-        
-      - name: Install soilDBdata off GitHub
-        run: |
-          remotes::install_github("brownag/soilDBdata", dependencies = NA, build = FALSE)
         shell: Rscript {0}
         
       - uses: r-lib/actions/check-r-package@v2

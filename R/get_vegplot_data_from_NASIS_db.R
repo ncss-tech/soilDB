@@ -80,8 +80,8 @@ get_vegplot_from_NASIS_db <- function(SS = TRUE,
 }
 
 
-# get location data from the corresponding record in the site table
 #' @export
+#' @return `get_vegplot_location_from_NASIS_db()`: a data.frame containing location data from the corresponding record in the site table
 #' @rdname fetchVegdata
 get_vegplot_location_from_NASIS_db <- function(SS = TRUE,
                                                stringsAsFactors = NULL,
@@ -149,7 +149,7 @@ get_vegplot_location_from_NASIS_db <- function(SS = TRUE,
 
 
 
-# get Rangeland Health Indicator(RHI) associated fields in the vegplot table
+#' @return `get_vegplot_trhi_from_NASIS_db()`: a data.frame containing Rangeland Health Indicator (RHI) data from the `vegplot` table
 #' @export
 #' @rdname fetchVegdata
 get_vegplot_trhi_from_NASIS_db <- function(SS = TRUE,
@@ -195,8 +195,7 @@ get_vegplot_trhi_from_NASIS_db <- function(SS = TRUE,
   return(d)
 }
 
-
-# get vegplot species - this is a reconstruction of a site existing species list
+#' @return `get_vegplot_species_from_NASIS_db()`: a data.frame containing Plot Plant Inventory data
 #' @export
 #' @rdname fetchVegdata
 get_vegplot_species_from_NASIS_db <-  function(SS = TRUE,
@@ -251,7 +250,7 @@ get_vegplot_species_from_NASIS_db <-  function(SS = TRUE,
 }
 
 
-# get vegplot transect data
+#' @return `get_vegplot_transect_from_NASIS_db()`: a data.frame containing Vegetation Transect data
 #' @export
 #' @rdname fetchVegdata
 get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
@@ -318,7 +317,7 @@ get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
 }
 
 
-# get vegplot transect species data
+#' @return `get_vegplot_transect_from_NASIS_db()`: a data.frame containing Vegetation Transect Plant Summary data
 #' @export
 #' @rdname fetchVegdata
 get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
@@ -390,7 +389,7 @@ get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
   return(d)
 }
 
-# get point plant cover details for vegtransect plant summary
+#' @return `get_vegplot_transpoints_from_NASIS_db()`: a data.frame containing Vegetation Transect Point Plant Cover Details
 #' @export
 #' @rdname fetchVegdata
 get_vegplot_transpoints_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
@@ -418,8 +417,7 @@ get_vegplot_transpoints_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   uncode(res)
 }
 
-
-# get vegplot transect production quadrats
+#' @return `get_vegplot_prodquadrats_from_NASIS_db()`: a data.frame containing Vegetation Transect Production Quadrat data
 #' @export
 #' @rdname fetchVegdata
 get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
@@ -448,7 +446,35 @@ get_vegplot_prodquadrats_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   uncode(res)
 }
 
-# get vegplot tree site index summary data
+
+#' @return `get_vegplot_groundsurface_from_NASIS_db()`: a data.frame containing summary data for line point intercept ground surface cover hits by cover type.
+#' @export
+#' @rdname fetchVegdata
+#' @examplesIf local_NASIS_defined()
+#' \donttest{
+#' vsurf <- get_vegplot_groundsurface_from_NASIS_db()
+#' }
+get_vegplot_groundsurface_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
+  q <- "SELECT siteiid, siteobsiid, vegplotid, vegplotname, vegtransectid, vt.totalpointssampledcount, vt.transectlength, groundsurfcovtype, groundcoverptcount, groundcoverptpct, quadratsize, quadratshape, groundcoverquadpctave
+              FROM site_View_1 AS s
+              INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
+              INNER JOIN vegplot_View_1 AS v ON v.siteobsiidref=so.siteobsiid
+              INNER JOIN vegtransect_View_1 AS vt
+                     ON vt.vegplotiidref = v.vegplotiid
+              LEFT JOIN transectgroundsurfcover_View_1 AS vtps
+                     ON vtps.vegtransectiidref = vt.vegtransectiid"
+  # LEFT JOIN groundsurfcovdetails_View_1 AS vtpsd
+  #        ON vtpsd.transectgrsurfcoviidref = vtps.transectgroundsurfcoveriid
+  
+  if (!SS) {
+    q <- gsub("_View_1", "", q)
+  }
+  
+  res <- dbQueryNASIS(NASIS(dsn = dsn), q)
+  uncode(res)
+}
+
+#' @return `get_vegplot_tree_si_summary_from_NASIS_db()`: a data.frame containing Vegetation Plot Tree Site Index Summary data
 #' @export
 #' @rdname fetchVegdata
 get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
@@ -495,7 +521,7 @@ get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
   return(d)
 }
 
-# get vegplot species basal area
+#' @return `get_vegplot_speciesbasalarea_from_NASIS()`: a data.frame containing Vegetation Plot Species Basal Area and Trees Counted data
 #' @export
 #' @rdname fetchVegdata
 get_vegplot_speciesbasalarea_from_NASIS <- function(SS = TRUE, dsn = NULL) {
@@ -524,7 +550,7 @@ get_vegplot_speciesbasalarea_from_NASIS <- function(SS = TRUE, dsn = NULL) {
   uncode(dbQueryNASIS(channel, q), dsn = dsn)
 }
 
-# get vegplot tree site index details data
+#' @return `get_vegplot_tree_si_details_from_NASIS_db()`: a data.frame containing Vegetation Plot Tree Site Index Details data
 #' @export
 #' @rdname fetchVegdata
 get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE,
@@ -573,7 +599,7 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE,
 }
 
 
-# get vegplot textnotes
+#' @return `get_vegplot_textnote_from_NASIS_db()`: a data.frame containing Vegetation Plot text notes
 #' @param fixLineEndings Replace `'\r\n'` with `'\n'`; Default: `TRUE`
 #' @export
 #' @rdname fetchVegdata
