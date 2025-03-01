@@ -51,14 +51,11 @@ other than \code{"step"}).}
 output. Default: \code{"linear"}. Options include any \code{method} allowed for \code{approxfun()} or
 \code{splinefun()} plus \code{"step"}, \code{"slice"} and several mass-preserving spline methods. \code{"step"}
 uses the prediction depths as the top and bottom of each interval to create a piecewise
-continuous profile. \code{"slice"} returns a discontinuous profile with 1 cm thick
-slices at the predicted depths. To use mass-preserving (equal area) splines via
-\code{mpspline2::mpspline()} use \code{"mpspline_est_icm"}, \code{"mpspline_est_1cm"}, or
-\code{"mpspline_est_dcm"}. Methods \code{"step"}, \code{"slice"}, \code{"mpspline_est_icm"}, and
-\code{"mpspline_est_dcm"} return a number of layers equal to length of \code{depth_slices}, and all other
-methods return values for interpolated 1 cm slices.}
-
-\item{max_depth}{integer. Maximum depth to interpolate 150 cm slice data to. Default: \code{151}}
+continuous profile. \code{"slice"} returns a discontinuous profile with 1 cm thick slices at the
+predicted depths. To use mass-preserving (equal area) splines via \code{mpspline2::mpspline()} use
+\code{"mpspline_est_icm"}, \code{"mpspline_est_1cm"}, or \code{"mpspline_est_dcm"}. Methods \code{"step"},
+\code{"slice"}, \code{"mpspline_est_icm"}, and \code{"mpspline_est_dcm"} return a number of layers equal to
+length of \code{depth_slices}, and all other methods return values for interpolated 1 cm slices.}
 
 \item{max_depth}{integer. Maximum depth to interpolate 150 cm slice data to. Default: \code{151}.
 Interpolation deeper than 151 cm is not possible for methods other than \code{"step"} and will

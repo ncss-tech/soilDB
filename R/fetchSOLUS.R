@@ -271,6 +271,9 @@ fetchSOLUS <- function(x = NULL,
   .SD <- NULL
   ID <- NULL
   depth <- NULL
+  .GRP <- NULL
+  top <- NULL
+  bottom <- NULL
   
   .extractTopDepthFromName <- function(x) {
     gsub("^.*_(\\d+|all)_cm_.*$", "\\1", x)
@@ -388,9 +391,9 @@ fetchSOLUS <- function(x = NULL,
     
     h2 <- as.data.frame(h2)
     
-    depths(h2) <- c(idname, "top", "bottom")
+    aqp::depths(h2) <- c(idname, "top", "bottom")
     
-    site(h2) <- s
+    aqp::site(h2) <- s
     
     return(h2)
   } else if (method %in% c("linear", "constant", "fmm", "periodic", "natural", "monoH.FC", "hyman")) {
