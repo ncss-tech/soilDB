@@ -39,8 +39,12 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.8.9" id="soildb-289-development">soilDB 2.8.9 (development)<a class="anchor" aria-label="anchor" href="#soildb-289-development"></a></h2>
-<ul><li>
-</li></ul></div>
+<ul><li>soilDB now requires aqp &gt;= 2.1.0</li>
+<li>Added <code><a href="../reference/fetchVegdata.html">get_vegplot_groundsurface_from_NASIS_db()</a></code> thanks to Greg Schmidt (<a href="https://github.com/phytoclast" class="external-link">@phytoclast</a>; <a href="https://github.com/ncss-tech/soilDB/issues/373" class="external-link">#373</a>)</li>
+<li>Added <code>"transectgroundsurfcover"</code> table to <code>"vegetation"</code> set for <code><a href="../reference/get_NASIS_table_name_by_purpose.html">get_NASIS_table_name_by_purpose()</a></code>
+</li>
+<li>Added missing <code>fetchNASIS("components")</code> deprecation messages for maat_l, maat_r, maat_h, mast_r, ecosite_id, ecosite_name, othervegid, and othervegclass columns</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.8.8" id="soildb-288-2025-02-10">soilDB 2.8.8 (2025-02-10)<a class="anchor" aria-label="anchor" href="#soildb-288-2025-02-10"></a></h2><p class="text-muted">CRAN release: 2025-02-10</p>
 <ul><li>
