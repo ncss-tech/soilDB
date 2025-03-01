@@ -9,6 +9,8 @@ get_SDA_hydric(
   mukeys = NULL,
   WHERE = NULL,
   method = "MAPUNIT",
+  include_minors = TRUE,
+  miscellaneous_areas = TRUE,
   query_string = FALSE,
   dsn = NULL
 )
@@ -22,7 +24,11 @@ get_SDA_hydric(
 
 \item{method}{One of: \code{"Mapunit"}, \code{"Dominant Component"}, \code{"Dominant Condition"}, \code{"None"}}
 
-\item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
+\item{include_minors}{logical. Include minor components? Default: \code{TRUE}.}
+
+\item{miscellaneous_areas}{\emph{logical}. Include miscellaneous areas (non-soil components) in results? Default: \code{TRUE}.}
+
+\item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query()}}
 
 \item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL} (default) use Soil Data Access API via \code{SDA_query()}.}
 }

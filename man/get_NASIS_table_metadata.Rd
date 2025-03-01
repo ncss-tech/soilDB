@@ -24,7 +24,7 @@ get_NASIS_table_metadata(
 
 \item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character containing query that would be sent to NASIS.}
 
-\item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default: \code{NULL}}
+\item{dsn}{Optional: path or \emph{DBIConnection} to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: \code{NULL}}
 }
 \value{
 a \code{data.frame}

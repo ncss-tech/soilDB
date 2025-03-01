@@ -56,18 +56,20 @@
 #' @return A _SpatRaster_ object containing SOLUS grids for specified extent, depths, variables, and
 #'   product types.
 #'
-#' @references Nauman, T.W., Kienast-Brown, S., White, D.A. Brungard, C.W., Philippe, J., Roecker,
-#'   S.M., Thompson, J.A. Soil Landscapes of the United States (SOLUS): developing predictive soil
-#'   property maps of the conterminous US using hybrid training sets. In Prep for SSSAJ.
-#'
+#' @references Nauman, T. W., Kienast-Brown, S., Roecker, S. M., Brungard, C., White, D., Philippe,
+#'   J., & Thompson, J. A. (2024). Soil landscapes of the United States (SOLUS): developing
+#'   predictive soil property maps of the conterminous United States using hybrid training sets.
+#'   Soil Science Society of America Journal, 88, 2046–2065. \doi{https://doi.org/10.1002/saj2.20769}
+#' 
 #' @author Andrew G. Brown
 #' 
 #' @importFrom stats approxfun splinefun
 #' 
 #' @export
 #'
-#' @examplesIf curl::has_internet() && requireNamespace("sf") && requireNamespace("terra")
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("sf", quietly = TRUE) && requireNamespace("terra", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)
 #' 
+#' \dontrun{
 #' b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
 #' 
 #' bbox.sp <- sf::st_as_sf(wk::rct(
@@ -106,6 +108,7 @@
 #' 
 #' # plot, truncating each profile to the predicted restriction depth
 #' aqp::plotSPC(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FALSE)
+#' }
 fetchSOLUS <- function(x = NULL, 
                        depth_slices = c(0, 5, 15, 30, 60, 100, 150), 
                        variables = c("anylithicdpt", "caco3", "cec7", "claytotal",
@@ -196,13 +199,17 @@ fetchSOLUS <- function(x = NULL,
   
   if (isTRUE(grid)) {
     return(r)
-  } 
+  } else {
+    if (!requireNamespace("aqp")) {
+      stop("package 'aqp' is required", call. = FALSE)
+    }
+  }
   
   if (length(depth_slices) == 1 && method != "step") {
     stop("Cannot interpolate for SoilProfileCollection output with only one depth slice! Change `method` to \"step\" or add another `depth_slice`.", call. = FALSE)
   }
     
-  if (!missing(x) && !is.null(x) && terra::is.points(x)) {
+  if (!missing(x) && !is.null(x) && inherits(x, 'SpatVector') && terra::is.points(x)) {
     dat <- terra::extract(r, x)
   } else {
     if (!missing(samples) && !is.null(samples)) {
@@ -216,7 +223,7 @@ fetchSOLUS <- function(x = NULL,
   }
   
   dat$ID <- seq(nrow(dat))
-    
+  
   spc <- .convert_SOLUS_dataframe_to_SPC(dat, idname = "ID", method = method, max_depth = max_depth)
   aqp::initSpatial(spc, terra::crs(r)) <- ~ x + y
   
@@ -230,6 +237,9 @@ fetchSOLUS <- function(x = NULL,
 .get_SOLUS_index <- function() {
   
   # TODO: parse XML directly instead of HTML?
+  if (!requireNamespace("rvest")) {
+    stop("package 'rvest' is required", call. = FALSE)  
+  }
   
   # read index as HTML table
   res <- rvest::html_table(rvest::read_html("https://storage.googleapis.com/solus100pub/index.html"), header = FALSE)[[1]]
@@ -310,9 +320,9 @@ fetchSOLUS <- function(x = NULL,
   
     h <- as.data.frame(h)  
   
-    depths(h) <- c(idname, "top", "bottom")
+    aqp::depths(h) <- c(idname, "top", "bottom")
     
-    site(h) <- s
+    aqp::site(h) <- s
     
     return(h)
   } else if (grepl("^mpspline", method)) {
@@ -403,7 +413,7 @@ fetchSOLUS <- function(x = NULL,
     h2 <- h[, data.frame(top = mindep:(maxdep - 1),
                          bottom = (mindep + 1):maxdep,
                          lapply(.SD, function(x) {
-                           if (all(is.na(x)))
+                           if (sum(!is.na(x)) <= 1)
                              return(rep(NA_real_, length(xx)))
                            FUN(y, x, method = method)(xx)
                          })), 
@@ -412,9 +422,9 @@ fetchSOLUS <- function(x = NULL,
     
     h2 <- as.data.frame(h2)
     
-    depths(h2) <- c(idname, "top", "bottom")
+    aqp::depths(h2) <- c(idname, "top", "bottom")
     
-    site(h2) <- s
+    aqp::site(h2) <- s
     
     return(h2)
     

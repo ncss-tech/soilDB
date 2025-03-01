@@ -1,54 +1,52 @@
 # Method for "dumping" contents of an entire NASIS table
 #
-# Method for "dumping" contents of an entire NASIS table
-#
-#
 # @param table_name Character name of table.
 # @param dsn Optional: path to SQLite database containing NASIS table
 # structure; Default: \code{NULL}
 # @return A data.frame or other result of \code{DBI::dbGetQuery}
-# @export .dump_NASIS_table
-.dump_NASIS_table <- function(table_name, dsn = NULL) {
-
-  # connect to NASIS, identify columns
-  con <- dbConnectNASIS(dsn)
-  allcols <- "*"
-
-  columns <- NULL
-  
-  # handling for MSSQL/ODBC weirdness
-  if (is.null(dsn) || inherits(con, 'OdbcConnection')) {
-
-    # assuming that default connection uses ODBC
-    if (!requireNamespace("odbc"))
-      stop("package `odbc` is required ", call. = FALSE)
-
-    columns <- odbc::dbListFields(con, table_name)
-
-    # re-arrange VARCHAR(MAX) columns
-    longcols <- subset(columns, columns$field.type == "varchar" & columns$column_size == 0)$name
-    allcols <- columns$name
-
-    if (length(longcols) > 0) {
-      allcols[which(allcols %in% longcols)] <- NA
-      allcols <- c(na.omit(allcols), longcols)
-    }
-  }
-
-  # construct query and return result
-  q <- sprintf("SELECT %s FROM %s", paste(allcols, collapse = ", "), table_name)
-  
-  q <- gsub('\\brule\\b', '\"rule\"', q)
-  
-  res <- dbQueryNASIS(con, q)
-  
-  if (is.null(columns)) {
-    columns <- data.frame(name = colnames(res))
-  }
-  
-  # put back into original order from NASIS
-  return(res[, match(colnames(res), columns$name)])
-}
+# .dump_NASIS_table <- function(table_name, dsn = NULL) {
+# 
+#   # connect to NASIS, identify columns
+#   con <- dbConnectNASIS(dsn)
+#   allcols <- "*"
+# 
+#   columns <- NULL
+#   
+#   # # handling for MSSQL/ODBC weirdness
+#   # # previously required for issues with nanoodbc driver 
+#   # # see https://github.com/ncss-tech/soilDB/pull/149
+#   # if (is.null(dsn) || inherits(con, 'OdbcConnection')) {
+#   # 
+#   #   # assuming that default connection uses ODBC
+#   #   if (!requireNamespace("odbc"))
+#   #     stop("package `odbc` is required ", call. = FALSE)
+#   # 
+#   #   columns <- odbc::dbListFields(con, table_name)
+#   # 
+#   #   # re-arrange VARCHAR(MAX) columns
+#   #   longcols <- subset(columns, columns$field.type == "varchar" & columns$column_size == 0)$name
+#   #   allcols <- columns$name
+#   # 
+#   #   if (length(longcols) > 0) {
+#   #     allcols[which(allcols %in% longcols)] <- NA
+#   #     allcols <- c(na.omit(allcols), longcols)
+#   #   }
+#   # }
+# 
+#   # construct query and return result
+#   q <- sprintf("SELECT %s FROM %s", paste(allcols, collapse = ", "), table_name)
+#   
+#   q <- gsub('\\brule\\b', '\"rule\"', q)
+#   
+#   res <- dbQueryNASIS(con, q)
+#   
+#   if (is.null(columns)) {
+#     columns <- data.frame(name = colnames(res))
+#   }
+#   
+#   # put back into original order from NASIS
+#   return(res[, match(colnames(res), columns$name)])
+# }
 
 #' Create a memory or file-based instance of NASIS database
 #'
@@ -125,8 +123,7 @@ createStaticNASIS <- function(tables = NULL,
   if (is.null(output_path)) {
 
     # return named list of data.frames or try-error (one per table)
-    res <- lapply(nasis_table_names, function(n) try(.dump_NASIS_table(n, dsn = dsn),
-                                                     silent = verbose))
+    res <- lapply(nasis_table_names, function(n) try(DBI::dbReadTable(con, n), silent = verbose))
     if(!is.null(new_names))
       names(res) <- new_names
     else names(res) <- nasis_table_names
@@ -157,7 +154,7 @@ createStaticNASIS <- function(tables = NULL,
             newname <- new_names[i]
           else newname <- n
 
-          newdata <- try(.dump_NASIS_table(n, dsn = dsn), silent = verbose)
+          newdata <- try(DBI::dbReadTable(con, n), silent = verbose)
           
           # previously processed Date/Times -> character for output
           

@@ -6,6 +6,7 @@
 \usage{
 get_site_data_from_NASIS_db(
   SS = TRUE,
+  include_pedon = TRUE,
   nullFragsAreZero = TRUE,
   stringsAsFactors = NULL,
   dsn = NULL
@@ -15,12 +16,13 @@ get_site_data_from_NASIS_db(
 \item{SS}{fetch data from Selected Set in NASIS or from the entire local
 database (default: \code{TRUE})}
 
-\item{nullFragsAreZero}{should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)}
+\item{include_pedon}{Include pedon and transect data joined to site? (default: \code{TRUE})}
+
+\item{nullFragsAreZero}{should surface fragment cover percentages of \code{NULL} be interpreted as \code{0}? (default: \code{TRUE})}
 
 \item{stringsAsFactors}{deprecated}
 
-\item{dsn}{Optional: path to local SQLite database containing NASIS
-table structure; default: \code{NULL}}
+\item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default: \code{NULL}}
 }
 \value{
 A data.frame
@@ -29,11 +31,23 @@ A data.frame
 Get site-level data from a local NASIS database.
 }
 \details{
-When multiple "site bedrock" entries are present, only the shallowest is
-returned by this function.
+It is possible to have multiple pedon records per site observation and multiple site observations
+per site, which will result in multiple records per site. See argument \code{include_pedon=FALSE} to
+omit joins to pedon and transect tables.
+
+The following aggregations of child table information are performed by this function:
+\itemize{
+\item Site Area Overlap for State, County and MLRA are returned for related area records, as specified in the site table, as the following column names: \code{site_state}, \code{site_county}, and \code{site_mlra}.
+\item Site Observation Surface Fragment data are simplified (converted to wide format) using \code{simplifyFragmentData()}.
+\item The best Ecological Site History record is selected using \code{get_ecosite_history_from_NASIS_db(best = TRUE)}.
+\item Site Other Vegetation Class information is aggregated by class name, using \code{" & "} as the
+separator when multiple classes are assigned.
+\item When multiple Site Bedrock entries are present, only the shallowest is returned by this
+function. In lieu of bedrock depth the first record in the table is returned.
+}
 }
 \seealso{
-\code{\link{get_hz_data_from_NASIS_db}}
+\code{\link[=get_hz_data_from_NASIS_db]{get_hz_data_from_NASIS_db()}}, \code{\link[=fetchNASIS]{fetchNASIS()}}, \code{\link[=fetchVegdata]{fetchVegdata()}}
 }
 \author{
 Jay M. Skovlin and Dylan E. Beaudette

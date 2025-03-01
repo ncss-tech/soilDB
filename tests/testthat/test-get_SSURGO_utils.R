@@ -1,4 +1,6 @@
 test_that(".make_WSS_download_url works", {
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
   
   skip_on_cran()

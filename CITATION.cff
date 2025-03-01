@@ -8,7 +8,7 @@ message: 'To cite package "soilDB" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'soilDB: Soil Database Interface'
-version: 2.8.5
+version: 2.8.9
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.soilDB
@@ -44,9 +44,9 @@ preferred-citation:
   - family-names: Brown
     given-names: Andrew
     email: andrew.g.brown@usda.gov
-  notes: R package version 2.8.4
+  notes: R package version 2.8.8
   url: https://CRAN.R-project.org/package=soilDB
-  year: '2024'
+  year: '2025'
 repository: https://CRAN.R-project.org/package=soilDB
 repository-code: https://github.com/ncss-tech/soilDB
 url: https://github.com/ncss-tech/soilDB/
@@ -76,7 +76,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2024'
+  year: '2025'
   version: '>= 3.5.0'
 - type: software
   title: grDevices
@@ -87,7 +87,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2024'
+  year: '2025'
 - type: software
   title: graphics
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -97,7 +97,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2024'
+  year: '2025'
 - type: software
   title: stats
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -107,7 +107,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2024'
+  year: '2025'
 - type: software
   title: utils
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -117,7 +117,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2024'
+  year: '2025'
 - type: software
   title: methods
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -127,7 +127,7 @@ references:
   institution:
     name: R Foundation for Statistical Computing
     address: Vienna, Austria
-  year: '2024'
+  year: '2025'
 - type: software
   title: aqp
   abstract: 'aqp: Algorithms for Quantitative Pedology'
@@ -144,9 +144,9 @@ references:
   - family-names: Brown
     given-names: Andrew
     email: andrew.g.brown@usda.gov
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.aqp
-  version: '>= 2.0.2'
+  version: '>= 2.1.0'
 - type: software
   title: data.table
   abstract: 'data.table: Extension of `data.frame`'
@@ -175,7 +175,7 @@ references:
   - family-names: Schwendinger
     given-names: Benjamin
     orcid: https://orcid.org/0000-0003-3315-8114
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.data.table
 - type: software
   title: DBI
@@ -191,7 +191,7 @@ references:
     given-names: Kirill
     email: kirill@cynkra.com
     orcid: https://orcid.org/0000-0002-1416-3412
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.DBI
 - type: software
   title: curl
@@ -202,9 +202,9 @@ references:
   authors:
   - family-names: Ooms
     given-names: Jeroen
-    email: jeroen@berkeley.edu
+    email: jeroenooms@gmail.com
     orcid: https://orcid.org/0000-0002-4035-0289
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.curl
 - type: software
   title: jsonlite
@@ -215,9 +215,9 @@ references:
   authors:
   - family-names: Ooms
     given-names: Jeroen
-    email: jeroen@berkeley.edu
+    email: jeroenooms@gmail.com
     orcid: https://orcid.org/0000-0002-4035-0289
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.jsonlite
 - type: software
   title: xml2
@@ -233,7 +233,7 @@ references:
     given-names: Jim
   - family-names: Ooms
     given-names: Jeroen
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.xml2
 - type: software
   title: httr
@@ -245,7 +245,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.httr
 - type: software
   title: rvest
@@ -257,7 +257,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.rvest
 - type: software
   title: odbc
@@ -273,7 +273,7 @@ references:
     email: hadley@posit.co
   - family-names: Gjoneski
     given-names: Oliver
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.odbc
 - type: software
   title: RSQLite
@@ -292,7 +292,7 @@ references:
     given-names: David A.
   - family-names: Falcon
     given-names: Seth
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.RSQLite
 - type: software
   title: sf
@@ -305,7 +305,7 @@ references:
     given-names: Edzer
     email: edzer.pebesma@uni-muenster.de
     orcid: https://orcid.org/0000-0001-8049-7069
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.sf
 - type: software
   title: wk
@@ -322,7 +322,7 @@ references:
     given-names: Edzer
     email: edzer.pebesma@uni-muenster.de
     orcid: https://orcid.org/0000-0001-8049-7069
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.wk
 - type: software
   title: terra
@@ -335,7 +335,7 @@ references:
     given-names: Robert J.
     email: r.hijmans@gmail.com
     orcid: https://orcid.org/0000-0001-5872-2872
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.terra
 - type: software
   title: raster
@@ -348,7 +348,7 @@ references:
     given-names: Robert J.
     email: r.hijmans@gmail.com
     orcid: https://orcid.org/0000-0001-5872-2872
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.raster
 - type: software
   title: knitr
@@ -361,7 +361,7 @@ references:
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.knitr
 - type: software
   title: rmarkdown
@@ -405,7 +405,7 @@ references:
     given-names: Richard
     email: rich@posit.co
     orcid: https://orcid.org/0000-0003-3925-190X
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.rmarkdown
 - type: software
   title: testthat
@@ -417,6 +417,6 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2024'
+  year: '2025'
   doi: 10.32614/CRAN.package.testthat
 

@@ -1,29 +1,50 @@
 #' Get SSURGO ZIP files from Web Soil Survey 'Download Soils Data'
-#' 
-#' Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with standard SSURGO format; optionally including the corresponding SSURGO Template Database with `include_template=TRUE`.
-#' 
-#' To specify the Soil Survey Areas you would like to obtain data you use a `WHERE` clause for query of `sacatalog` table such as `areasymbol = 'CA067'`, `"areasymbol IN ('CA628', 'CA067')"` or  `areasymbol LIKE 'CT%'`.
 #'
-#' @param WHERE A SQL `WHERE` clause expression used to filter records in `sacatalog` table. Alternately `WHERE` can be any spatial object supported by `SDA_spatialQuery()` for defining the target extent.
-#' @param areasymbols Character vector of soil survey area symbols e.g. `c("CA067", "CA077")`. Used in lieu of `WHERE` argument.
-#' @param destdir Directory to download ZIP files into. Default `tempdir()`.
-#' @param exdir Directory to extract ZIP archives into. May be a directory that does not yet exist. Each ZIP file will extract to a folder labeled with `areasymbol` in this directory. Default: `destdir`
-#' @param include_template Include the (possibly state-specific) MS Access template database? Default: `FALSE`
-#' @param db Either `"SSURGO"` (default; detailed soil map) or `"STATSGO"` (general soil map).
-#' @param extract Logical. Extract ZIP files to `exdir`? Default: `TRUE`
-#' @param remove_zip Logical. Remove ZIP files after extracting? Default: `FALSE` 
-#' @param overwrite Logical. Overwrite by re-extracting if directory already exists? Default: `FALSE`
-#' @param quiet Logical. Passed to `curl::curl_download()`.
-#' @details
-#' When `db="STATSGO"` the `WHERE` argument is not supported. Allowed `areasymbols` include `"US"` and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
+#' Download ZIP files containing spatial (ESRI shapefile) and tabular (TXT) files with standard
+#' SSURGO format; optionally including the corresponding SSURGO Template Database with
+#' `include_template=TRUE`.
+#'
+#' To specify the Soil Survey Areas you would like to obtain data you use a `WHERE` clause for query
+#' of `sacatalog` table such as `areasymbol = 'CA067'`, `"areasymbol IN ('CA628', 'CA067')"` or
+#' `areasymbol LIKE 'CT%'`.
+#'
+#' @param WHERE _character_. A SQL `WHERE` clause expression used to filter records in `sacatalog` table.
+#'   Alternately `WHERE` can be any spatial object supported by `SDA_spatialQuery()` for defining
+#'   the target extent.
+#' @param areasymbols _character_. Character vector of soil survey area symbols e.g. `c("CA067", "CA077")`. Used
+#'   in lieu of `WHERE` argument.
+#' @param destdir _character_. Directory to download ZIP files into. Default `tempdir()`.
+#' @param exdir _character_. Directory to extract ZIP archives into. May be a directory that does not yet exist.
+#'   Each ZIP file will extract to a folder labeled with `areasymbol` in this directory. Default:
+#'   `destdir`
+#' @param include_template _logical_. Include the (possibly state-specific) MS Access template database?
+#'   Default: `FALSE`
+#' @param db _character_. Either `"SSURGO"` (default; detailed soil map) or `"STATSGO"` (general soil map).
+#' @param extract _logical_. Extract ZIP files to `exdir`? Default: `TRUE`
+#' @param remove_zip _logical_. Remove ZIP files after extracting? Default: `FALSE`
+#' @param overwrite _logical_. Overwrite by re-extracting if directory already exists? Default:
+#'   `FALSE`
+#' @param quiet _logical_. Passed to `curl::curl_download()`.
 #' 
+#' @details When `db="STATSGO"` the `WHERE` argument is not supported. Allowed `areasymbols` include
+#' `"US"` and two-letter state codes e.g. `"WY"` for the Wyoming general soils map.
+#'
 #' @export
-#' 
-#' @details Pipe-delimited TXT files are found in _/tabular/_ folder extracted from a SSURGO ZIP. The files are named for tables in the SSURGO schema. There is no header / the files do not have column names. See the _Soil Data Access Tables and Columns Report_: \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on tables, column names and metadata including the default sequence of columns used in TXT files. The function returns a `try-error` if the `WHERE`/`areasymbols` arguments result in
-#' 
-#' Several ESRI shapefiles are found in the _/spatial/_ folder extracted from a SSURGO ZIP. These have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
-#' 
-#' @return Character. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip = TRUE`.
+#'
+#' @details Pipe-delimited TXT files are found in _/tabular/_ folder extracted from a SSURGO ZIP.
+#'   The files are named for tables in the SSURGO schema. There is no header / the files do not have
+#'   column names. See the _Soil Data Access Tables and Columns Report_:
+#'   \url{https://sdmdataaccess.nrcs.usda.gov/documents/TablesAndColumnsReport.pdf} for details on
+#'   tables, column names and metadata including the default sequence of columns used in TXT files.
+#'   The function returns a `try-error` if the `WHERE`/`areasymbols` arguments result in
+#'
+#'   Several ESRI shapefiles are found in the _/spatial/_ folder extracted from a SSURGO ZIP. These
+#'   have prefix `soilmu_` (mapunit), `soilsa_` (survey area), `soilsf_` (special features). There
+#'   will also be a TXT file with prefix `soilsf_` describing any special features. Shapefile names
+#'   then have an `a_` (polygon), `l_` (line), `p_` (point) followed by the soil survey area symbol.
+#'
+#' @return _character_. Paths to downloaded ZIP files (invisibly). May not exist if `remove_zip =
+#'   TRUE`.
 #' @seealso [createSSURGO()]
 downloadSSURGO <- function(WHERE = NULL, 
                            areasymbols = NULL,
@@ -113,22 +134,47 @@ downloadSSURGO <- function(WHERE = NULL,
 }
  
 #' Create a database from SSURGO Exports
-#' 
+#'
 #' The following database types are tested and fully supported:
 #'  - SQLite or Geopackage
 #'  - DuckDB
 #'  - Postgres or PostGIS
-#'  
-#' In theory any other DBI-compatible data source can be used for output. See `conn` argument. If you encounter issues using specific DBI connection types, please report in the soilDB issue tracker.
 #'
-#' @param filename Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`). Only used when `con` is not specified by the user.
-#' @param exdir Path containing containing input SSURGO spatial (.shp) and tabular (.txt) files, downloaded and extracted by `downloadSSURGO()` or similar.
-#' @param conn A _DBIConnection_ object. Default is a `SQLiteConnection` used for writing .sqlite or .gpkg files. Alternate options are any DBI connection types. When `include_spatial=TRUE`, the sf package is used to write spatial data to the database.
-#' @param pattern Character. Optional regular expression to use to filter subdirectories of `exdir`. Default: `NULL` will search all subdirectories for SSURGO export files.
-#' @param include_spatial Logical. Include spatial data layers in database? Default: `TRUE`. 
-#' @param overwrite Logical. Overwrite existing layers? Default `FALSE` will append to existing tables/layers.
-#' @param header Logical. Passed to `read.delim()` for reading pipe-delimited (`|`) text files containing tabular data.
-#' @param quiet Logical. Suppress messages and other output from database read/write operations?
+#' In theory any other DBI-compatible data source can be used for output. See `conn` argument. If
+#' you encounter issues using specific DBI connection types, please report in the soilDB issue
+#' tracker.
+#'
+#' @param filename _character_. Output file name (e.g. `'db.sqlite'` or `'db.gpkg'`). Only used when `con` is not
+#'   specified by the user.
+#' @param exdir  _character_. Path containing containing input SSURGO spatial (.shp) and tabular (.txt) files,
+#'   downloaded and extracted by `downloadSSURGO()` or similar.
+#' @param conn A _DBIConnection_ object. Default is a `SQLiteConnection` used for writing .sqlite or
+#'   .gpkg files. Alternate options are any DBI connection types. When `include_spatial=TRUE`, the
+#'   sf package is used to write spatial data to the database.
+#' @param pattern  _character_. Optional regular expression to use to filter subdirectories of `exdir`.
+#'   Default: `NULL` will search all subdirectories for SSURGO export files.
+#' @param include_spatial _logical_ or _character_. Include spatial data layers in database?
+#'   Default: `TRUE` inserts all spatial tables. If `include_spatial` is a _character_ vector
+#'   containing table names, only that set are written to file. e.g. `include_spatial=c("mupolygon",
+#'   "featpoint")` writes only the mapunit polygons and special feature points.
+#' @param include_tabular _logical_ or _character_. Include tabular data layers in database?
+#'   Default: `TRUE` inserts all tabular tables. If `include_tabular` is a _character_ vector
+#'   containing table names, only that set are written to file. e.g. `include_tabular=c("mapunit",
+#'   "muaggatt")` writes only the `mapunit` and `muaggatt` tables. Note that special feature
+#'   descriptions are stored in table `"featdesc"` and metadata for each soil survey area are stored
+#'   in `"soil_metadata"` tables.
+#' @param dissolve_field _character_. Dissolve geometries to create MULTIPOLYGON features? Column
+#'   name
+#'   specified is the grouping variable. Default: `NULL` does no aggregation, giving 1 `POLYGON`
+#'   feature per delineation. `"mukey"` aggregates all related delineations within a soil survey
+#'   area.
+#' @param maxruledepth _integer_. Maximum rule depth for `"cointerp"` table. Default `0` includes only
+#'   shallowest ratings for smaller database size.
+#' @param overwrite _logical_. Overwrite existing layers? Default `FALSE` will append to existing
+#'   tables/layers.
+#' @param header _logical_. Passed to `read.delim()` for reading pipe-delimited (`|`) text files
+#'   containing tabular data.
+#' @param quiet _logical_. Suppress messages and other output from database read/write operations?
 #' @param ... Additional arguments passed to `write_sf()` for writing spatial layers.
 #'
 #' @return Character. Vector of layer/table names in `filename`.
@@ -139,11 +185,14 @@ downloadSSURGO <- function(WHERE = NULL,
 #'  downloadSSURGO("areasymbol IN ('CA067', 'CA077', 'CA632')", destdir = "SSURGO_test")
 #'  createSSURGO("test.gpkg", "SSURGO_test")
 #' }
-createSSURGO <- function(filename,
+createSSURGO <- function(filename = NULL,
                          exdir,
                          conn = NULL, 
                          pattern = NULL,
                          include_spatial = TRUE,
+                         include_tabular = TRUE,
+                         dissolve_field = NULL,
+                         maxruledepth = 0,
                          overwrite = FALSE,
                          header = FALSE,
                          quiet = TRUE,
@@ -153,6 +202,13 @@ createSSURGO <- function(filename,
     stop("`filename` should be a path to a .gpkg or .sqlite file to create or append to, or a DBIConnection should be provided via `conn`.")
   }
   
+  if (missing(conn) || is.null(conn)) {
+    # delete existing file if overwrite=TRUE
+    if (isTRUE(overwrite) && file.exists(filename)) {
+      file.remove(filename)
+    }
+  } 
+  
   # DuckDB has special spatial format, so it gets custom handling for
   IS_DUCKDB <- inherits(conn, "duckdb_connection")
   
@@ -161,6 +217,9 @@ createSSURGO <- function(filename,
     filename <- conn@dbname
   } else {
     IS_GPKG <- grepl("\\.gpkg$", filename, ignore.case = TRUE)[1]
+    if (is.na(IS_GPKG)) {
+      IS_GPKG <- FALSE
+    }
   }
   
   if (!IS_DUCKDB) {
@@ -178,8 +237,15 @@ createSSURGO <- function(filename,
   layer_names <- c(`mu_a` = "mupolygon", `mu_l` = "muline",   `mu_p` = "mupoint", 
                    `sa_a` = "sapolygon", `sf_l` = "featline", `sf_p` = "featpoint")
   
+  if (is.character(include_spatial)) {
+    idx <- paste0(shp.grp[, 1], "_", shp.grp[, 2]) %in% names(layer_names[layer_names %in% include_spatial])
+    shp.grp <- shp.grp[idx, ]
+    f.shp <- f.shp[idx]
+    include_spatial <- TRUE
+  }
+  
   if (nrow(shp.grp) >= 1 && ncol(shp.grp) == 3 && include_spatial) {
-    f.shp.grp <- split(f.shp, list(feature = shp.grp[,1], geom = shp.grp[,2]))
+    f.shp.grp <- split(f.shp, list(feature = shp.grp[, 1], geom = shp.grp[, 2]), drop = TRUE)
     
     if (IS_DUCKDB) {
       DBI::dbExecute(conn, "INSTALL spatial; LOAD spatial;")
@@ -190,7 +256,7 @@ createSSURGO <- function(filename,
         lnm <- layer_names[match(gsub(".*soil([musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j]),
                                  names(layer_names))]
         if (IS_DUCKDB) {
-          if (overwrite && j == 1) {
+          if (j == 1) {
             DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s;", lnm))
             DBI::dbExecute(conn, sprintf("CREATE TABLE %s AS SELECT * FROM ST_Read('%s');",
                                 lnm, f.shp.grp[[i]][j]))
@@ -204,20 +270,49 @@ createSSURGO <- function(filename,
           colnames(shp) <- tolower(colnames(shp))
           sf::st_geometry(shp) <- "geometry"
           
-          .st_write_sf_conn <-  function(x, dsn, layer, overwrite, j) {
-            if (overwrite || j == 1) {
+          .st_write_sf_conn <-  function(x, dsn, layer, j) {
+            if (j == 1) {
               sf::write_sf(x, dsn = dsn, layer = layer, delete_layer = TRUE, ...)
             } else {
               sf::write_sf(x, dsn = dsn, layer = layer, append = TRUE, ...)
             }
           }
           
+          # dissolve on dissolve_field
+          # TODO: add nationalmusym to spatial layer?
+          if (!is.null(dissolve_field) && dissolve_field %in% colnames(shp)) {
+            l <- list(shp[[dissolve_field]])
+            names(l) <- dissolve_field
+            if (nrow(shp) > 0) {
+              shp <- aggregate(shp, by = l, FUN = function(y) {
+                yy <- unique(y)
+                if (length(yy) > 1) {
+                  res <- NA
+                  mode(res) <- mode(y)
+                  return(res)
+                }
+                y[1]
+              }, do_union = TRUE)
+              
+              shp[[paste0(dissolve_field, ".1")]] <- NULL
+              
+              destgeom <- "MULTIPOLYGON"
+              if (any(sf::st_geometry_type(shp) %in% c("POINT", "MULTIPOINT"))) {
+                destgeom <- "MULTIPOINT"
+              } else if (any(sf::st_geometry_type(shp) %in% c("LINESTRING", "MULTILINESTRING"))) {
+                destgeom <- "MULTILINESTRING"
+              }
+              
+              shp <- sf::st_cast(shp, destgeom)
+            }
+          }
+          
           if (IS_GPKG && missing(conn)) {
             # writing to SQLiteConnection fails to create proper gpkg_contents entries
             # so use the path for GPKG only
-            .st_write_sf_conn(shp, filename, lnm, overwrite, j)
+            .st_write_sf_conn(shp, filename, lnm, j)
           } else {
-            .st_write_sf_conn(shp, conn, lnm, overwrite, j)
+            .st_write_sf_conn(shp, conn, lnm, j)
           }
         }
         NULL
@@ -226,10 +321,6 @@ createSSURGO <- function(filename,
   }
   
   if (missing(conn) || is.null(conn)) {
-    # delete existing file if overwrite=TRUE
-    if (isTRUE(overwrite) && file.exists(filename)) {
-      file.remove(filename)
-    }
     
     if (!requireNamespace("RSQLite")) {
       stop("package 'RSQLite' is required (when `conn` is not specified)", call. = FALSE)
@@ -241,11 +332,7 @@ createSSURGO <- function(filename,
     
     # if user did not specify their own connection, close on exit
     on.exit(DBI::dbDisconnect(conn))
-  } else {
-    if (isTRUE(overwrite)) {
-      message("`filename` and `overwrite` arguments ignored when `conn` is specified")
-    }
-  }
+  } 
   
   # create and add combined tabular datasets
   f.txt <- f[grepl(".*\\.txt$", f)]
@@ -253,7 +340,8 @@ createSSURGO <- function(filename,
   
   # explicit handling special feature descriptions -> "featdesc" table
   txt.grp[grepl("soilsf_t_", txt.grp)] <- "featdesc"
-  
+  txt.grp[grepl("soil_metadata_", txt.grp)] <- "soil_metadata"
+
   f.txt.grp <- split(f.txt, txt.grp)
   
   # get table, column, index lookup tables
@@ -263,102 +351,120 @@ createSSURGO <- function(filename,
   
   if (length(mstabn) >= 1) {
     mstab <- read.delim(mstabn[1], sep = "|", stringsAsFactors = FALSE, header = header)
-    mstab_lut <- mstab[[1]]
-    names(mstab_lut) <- mstab[[5]]
+    mstab_lut <- c(mstab[[1]], "soil_metadata")
+    names(mstab_lut) <- c(mstab[[5]], "soil_metadata")
   } else {
     mstab_lut <- names(f.txt.grp)
     names(mstab_lut) <- names(f.txt.grp)
   }
   
-  if (length(mstabcn) >= 1) {
-    mstabcol <- read.delim(mstabcn[1], sep = "|", stringsAsFactors = FALSE, header = header)
+  if (is.character(include_tabular)) {
+    f.txt.grp <- f.txt.grp[names(mstab_lut[mstab_lut %in% include_tabular])]
+    include_tabular <- TRUE
   }
   
-  if (length(msidxdn) >= 1) {
-    msidxdet <- read.delim(msidxdn[1], sep = "|", stringsAsFactors = FALSE, header = header)
-  }
-  
-  lapply(names(f.txt.grp), function(x) {
-    
-    if (!is.null(mstabcol)) {
-      newnames <- mstabcol[[3]][mstabcol[[1]] == mstab_lut[x]]
+  if (include_tabular) {
+
+    if (length(mstabcn) >= 1) {
+      mstabcol <- read.delim(mstabcn[1], sep = "|", stringsAsFactors = FALSE, header = header)
     }
     
-    if (!is.null(msidxdet)) {
-      indexPK <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("PK_", msidxdet[[2]])])
-      indexDI <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("DI_", msidxdet[[2]])])
+    if (length(msidxdn) >= 1) {
+      msidxdet <- read.delim(msidxdn[1], sep = "|", stringsAsFactors = FALSE, header = header)
     }
     
-    d <- try(as.data.frame(data.table::rbindlist(lapply(seq_along(f.txt.grp[[x]]), function(i) {
-        # print(f.txt.grp[[x]][i])
-        y <- read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header)
-        
-        if (length(y) == 1) {
-          y <- data.frame(content = y)
-        } else {
-          if (!is.null(mstab) && !header) { # preserve headers if present 
-            colnames(y) <- newnames
+    lapply(names(f.txt.grp), function(x) {
+      
+      if (!is.null(mstabcol)) {
+        newnames <- mstabcol[[3]][mstabcol[[1]] == mstab_lut[x]]
+      }
+      
+      if (!is.null(msidxdet)) {
+        indexPK <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("PK_", msidxdet[[2]])])
+        indexDI <- na.omit(msidxdet[[4]][msidxdet[[1]] == mstab_lut[x] & grepl("DI_", msidxdet[[2]])])
+      }
+      
+      d <- try(lapply(seq_along(f.txt.grp[[x]]), function(i) {
+          # message(f.txt.grp[[x]][i])
+          y <- try(read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header), silent = quiet)
+          
+          if (inherits(y, 'try-error')) {
+            return(NULL)
+          } else if (length(y) == 1) {
+            if (grepl("soil_metadata", f.txt.grp[[x]][i])) {
+              y <- data.frame(areasymbol = toupper(gsub(".*soil_metadata_(.*)\\.txt", "\\1", f.txt.grp[[x]][i])), content = paste0(y[[1]], collapse = "\n"))
+            } else {
+              y <- data.frame(content = y)
+            }
+          } else {
+            if (!is.null(mstab) && !header) { # preserve headers if present 
+              colnames(y) <- newnames
+            }
           }
-        }
-        y
-    }))), silent = quiet)
-    
-    if (length(mstab_lut[x]) && is.na(mstab_lut[x])) {
-      mstab_lut[x] <- x
-    }
-    
-    if (length(mstab_lut[x]) && !is.na(mstab_lut[x]) && inherits(d, 'data.frame') && nrow(d) > 0) {
-      # remove repeated records/metadata
-      if (ncol(d) > 1) {
-        d <- unique(d) 
-      }
-      
-      # write tabular data to file
-      try({
-        if (overwrite) {
-          DBI::dbWriteTable(conn, mstab_lut[x], d, overwrite = TRUE)
-        } else {
-          DBI::dbWriteTable(conn, mstab_lut[x], d, append = TRUE)
-        }
-      }, silent = quiet)
-      
-      # create pkey indices
-      if (!is.null(indexPK) && length(indexPK) > 0) {
-        try({
-          q <- sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
-                       paste0('PK_', mstab_lut[x]), mstab_lut[x], 
-                       paste0(indexPK, collapse = ","))
-          DBI::dbExecute(conn, q)
-        }, silent = quiet)
-      }
-      
-      # create key indices
-      if (!is.null(indexDI) && length(indexDI) > 0) {
-        for (i in seq_along(indexDI)) {
+          
+          # remove deeper rules from cointerp for smaller DB size
+          # most people only use depth==0 (default)
+          if (mstab_lut[x] == "cointerp" && !is.null(maxruledepth)) {
+            y <- y[y$ruledepth <= maxruledepth, ]
+          }
+          
+          if ("musym" %in% colnames(y)) {
+            y$musym <- as.character(y$musym)
+          }
+          
           try({
-            q <- sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
-                         paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i])
+            if (i == 1) {
+              DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = TRUE)
+            } else {
+              DBI::dbWriteTable(conn, mstab_lut[x], y, append = TRUE)
+            }
+          }, silent = quiet)
+      }), silent = quiet)
+      
+      if (length(mstab_lut[x]) && is.na(mstab_lut[x])) {
+        mstab_lut[x] <- x
+      }
+      
+      if (length(mstab_lut[x]) && !is.na(mstab_lut[x])) {
+        
+        # create pkey indices
+        if (!is.null(indexPK) && length(indexPK) > 0) {
+          try({
+            q <- sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
+                         paste0('PK_', mstab_lut[x]), mstab_lut[x], 
+                         paste0(indexPK, collapse = ","))
             DBI::dbExecute(conn, q)
           }, silent = quiet)
         }
-      }
-      
-      # for GPKG output, add gpkg_contents (metadata for features and attributes)
-      if (IS_GPKG) {
-        if (!.gpkg_has_contents(conn)) {
-          # if no spatial data inserted, there will be no gpkg_contents table initally
-          try(.gpkg_create_contents(conn))
+        
+        # create key indices
+        if (!is.null(indexDI) && length(indexDI) > 0) {
+          for (i in seq_along(indexDI)) {
+            try({
+              q <- sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
+                           paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i])
+              DBI::dbExecute(conn, q)
+            }, silent = quiet)
+          }
         }
-        # update gpkg_contents table entry
-        try(.gpkg_delete_contents(conn, mstab_lut[x]))
-        try(.gpkg_add_contents(conn, mstab_lut[x]))
+        
+        # for GPKG output, add gpkg_contents (metadata for features and attributes)
+        if (IS_GPKG) {
+          if (!.gpkg_has_contents(conn)) {
+            # if no spatial data inserted, there will be no gpkg_contents table initally
+            try(.gpkg_create_contents(conn))
+          }
+          # update gpkg_contents table entry
+          try(.gpkg_delete_contents(conn, mstab_lut[x]))
+          try(.gpkg_add_contents(conn, mstab_lut[x]))
+        }
+        
+        # TODO: other foreign keys/relationships? ALTER TABLE/ADD CONSTRAINT not available in SQLite
+        #  the only way to add a foreign key is via CREATE TABLE which means refactoring above two
+        #  steps into a single SQL statement (create table with primary and foreign keys)
       }
-      
-      # TODO: other foreign keys/relationships? ALTER TABLE/ADD CONSTRAINT not available in SQLite
-      #  the only way to add a foreign key is via CREATE TABLE which means refactoring above two
-      #  steps into a single SQL statement (create table with primary and foreign keys)
-    }
-  })
+    })
+  }
   
   res <- DBI::dbListTables(conn)
   invisible(res)

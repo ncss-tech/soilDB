@@ -74,28 +74,24 @@ specified (except for fetchGDB() which currently can only target one table
 (e.g. legend, mapunit or component) at a time with the WHERE clause).
 }
 \examples{
+\dontshow{if (requireNamespace("aqp", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 \donttest{
 
 ## replace `dsn` with path to your own geodatabase (SSURGO OR gNATSGO)
 ##
-##
 ##  download CONUS gNATSGO from here:
 ##    https://nrcs.app.box.com/v/soils/folder/191790828371
 ##
 # dsn <- "D:/geodata/soils/gNATSGO_CONUS.gdb"
-
 # le <- get_legend_from_GDB(dsn = dsn, WHERE = "areasymbol LIKE '\%'")
-
 # mu <- get_mapunit_from_GDB(dsn = dsn, WHERE = "muname LIKE 'Miami\%'")
-
 # co <- get_component_from_GDB(dsn, WHERE = "compname = 'Miami'
 #                              AND majcompflag = 'Yes'", childs = FALSE)
-
 # f_in_GDB <- fetchGDB(WHERE = "areasymbol LIKE 'IN\%'")
 
 }
-
+\dontshow{\}) # examplesIf}
 }
 \author{
 Stephen Roecker

@@ -12,7 +12,7 @@
 #' @return For JSON result: A `data.frame` with 1 row per series, and 1 column per "section" in the OSD as defined in National Soil Survey Handbook. For TXT or HTML result a list of character vectors containing OSD text with 1 element per series and one value per line.
 #' @export
 #' @aliases get_OSD_JSON
-#' @examplesIf curl::has_internet()
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("jsonlite", quietly = TRUE)
 #' @examples
 #' \donttest{
 #'   series <- c("Musick", "Hector", "Chewacla")

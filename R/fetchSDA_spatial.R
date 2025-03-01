@@ -31,7 +31,7 @@
 #' and the function will be updated accordingly at that time.
 #' 
 #' @author Andrew G. Brown, Dylan E. Beaudette
-#' @examplesIf curl::has_internet()
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
 #' \donttest{
 #'  
 #'     # get spatial data for a single mukey

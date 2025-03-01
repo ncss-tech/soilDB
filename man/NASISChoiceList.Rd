@@ -36,7 +36,7 @@ NASISChoiceList(
 
 \item{simplify}{Should list result with length 1 be reduced to a single vector? Default: \code{TRUE}}
 
-\item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default: NULL}
+\item{dsn}{Optional: path or \emph{DBIConnection} to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: NULL}
 }
 \value{
 A list of "choices" based on the input \code{x} that have been converted to a consistent target set of levels (specified by \code{choice}) via NASIS 7 metadata.

@@ -6,7 +6,7 @@
                                rmHzErrors = FALSE,
                                nullFragsAreZero = TRUE,
                                soilColorState = 'moist',
-                               mixColors = TRUE,
+                               mixColors = FALSE,
                                lab = FALSE,
                                stringsAsFactors = NULL,
                                dsn = NULL
@@ -20,6 +20,10 @@
   # check if NASIS local DB instance/ODBC data source is available
   .soilDB_test_NASIS_connection(dsn = dsn)
   
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   # sanity check
   if (!soilColorState %in% c('dry', 'moist'))
     stop('soilColorState must be either `dry` or `moist`', call. = FALSE)
@@ -28,7 +32,7 @@
   # these fail gracefully when no data in local DB | selected set
   site_data  <- get_site_data_from_NASIS_db(SS = SS, dsn = dsn)
   hz_data    <- get_hz_data_from_NASIS_db(SS = SS, fill = fill, dsn = dsn)
-  color_data <- get_colors_from_NASIS_db(SS = SS, mixColors = mixColors, dsn = dsn)
+  color_data <- get_colors_from_NASIS_db(SS = SS, method = ifelse(isTRUE(mixColors), "mixed", "dominant"), dsn = dsn)
 
   ## ensure there are enough data to create an SPC object
   ds <- ifelse(SS, "NASIS selected set", "NASIS local database")
@@ -65,7 +69,7 @@
   missing.lower.depth.idx <- which(!is.na(hz_data$hzdept) & is.na(hz_data$hzdepb))
 
   # keep track of affected pedon IDs (if none, this will have zero length)
-  assign('missing.bottom.depths', value = unique(hz_data$pedon_id[missing.lower.depth.idx]), envir = get_soilDB_env())
+  assign('missing.bottom.depths', value = unique(hz_data$upedonid[missing.lower.depth.idx]), envir = get_soilDB_env())
 
   if (length(missing.lower.depth.idx) > 0) {
     message(paste0('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]'))
@@ -78,7 +82,7 @@
   top.eq.bottom.idx <- which(hz_data$hzdept == hz_data$hzdepb)
 
   # keep track of affected pedon IDs (if none, this will have zero length)
-  assign('top.bottom.equal', value = unique(hz_data$pedon_id[	top.eq.bottom.idx]), envir = get_soilDB_env())
+  assign('top.bottom.equal', value = unique(hz_data$upedonid[top.eq.bottom.idx]), envir = get_soilDB_env())
 
   if (length(top.eq.bottom.idx) > 0) {
     message(paste0('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]'))
@@ -105,8 +109,8 @@
     good.ids <- as.character(h.test$peiid[which(h.test$valid)])
     bad.ids <- as.character(h.test$peiid[which(!h.test$valid)])
     bad.horizons <- hz_data[hz_data$peiid %in% h.test$peiid[which(!h.test$valid)], 
-                            c("peiid", "phiid", "pedon_id", "hzname", "hzdept", "hzdepb")]
-    bad.pedon.ids <- site_data$pedon_id[which(site_data$peiid %in% bad.ids)]
+                            c("peiid", "phiid", "upedonid", "hzname", "hzdept", "hzdepb")]
+    bad.pedon.ids <- site_data$upedonid[which(site_data$peiid %in% bad.ids)]
     
     # handle fill=TRUE
     if(length(filled.ids) > 0) {
@@ -129,10 +133,10 @@
   hz_data$phiid <- as.character(hz_data$phiid)
 
   # upgrade to SoilProfilecollection
-  depths(hz_data) <- peiid ~ hzdept + hzdepb
+  aqp::depths(hz_data) <- peiid ~ hzdept + hzdepb
 
-  # move pedon_id into @site
-  site(hz_data) <- ~ pedon_id
+  # move upedonid into @site
+  aqp::site(hz_data) <- ~ upedonid
 
   ## copy pre-computed colors into a convenience field for plotting
   # moist colors
@@ -145,7 +149,7 @@
     color_data$soil_color <- color_data$dry_soil_color
   }
   
-  horizons(hz_data) <- color_data
+  aqp::horizons(hz_data) <- color_data
 
   # check for empty fragment summary and nullFragsAreZero
   if(nullFragsAreZero & all(is.na(unique(extended_data$frag_summary$phiid)))) {
@@ -153,7 +157,7 @@
   }
   
   ## join hz + fragment summary
-  horizons(hz_data) <- extended_data$frag_summary
+  aqp::horizons(hz_data) <- extended_data$frag_summary
 
   # check for empty artifact summary and nullFragsAreZerod
   if (nullFragsAreZero & all(is.na(unique(extended_data$art_summary$phiid)))) {
@@ -161,18 +165,21 @@
   }
   
   # join hz + artifact summary
-  horizons(hz_data) <- extended_data$art_summary
+  aqp::horizons(hz_data) <- extended_data$art_summary
 
   # add site data to object
-  # remove 'pedon_id' column from site_data
-  site_data$pedon_id <- NULL
+  # remove 'upedonid' column from site_data
+  site_data$upedonid <- NULL
+  
+  # remove 'pedon_id' from horizon data
+  hz_data$pedon_id <- NULL
   
   # TODO: duplicating surface fine gravel column with old name for backward compatibility
   site_data$surface_fgravel <- site_data$surface_fine_gravel
   
   # left-join via peiid
   # < 0.1 second for ~ 4k pedons
-  site(hz_data) <- site_data
+  aqp::site(hz_data) <- site_data
 
   # load best-guess optimal records from taxhistory
   # method is added to the new field called 'selection_method'
@@ -187,15 +194,15 @@
   ed.tax <- data.table::as.data.table(extended_data$taxhistory)
   best.tax.data <- ed.tax[, .pickBestTaxHistory(.SD),
                           by = list(peiid = ed.tax$peiid)]
-  site(hz_data) <- as.data.frame(best.tax.data)
+  aqp::site(hz_data) <- as.data.frame(best.tax.data)
 
   # get "best" ecosite data (most recent correlation, or most complete if no date)
-  site(hz_data) <- extended_data$ecositehistory
+  aqp::site(hz_data) <- extended_data$ecositehistory
 
   ## TODO: NA in diagnostic boolean columns are related to pedons with no diagnostic features
   ## https://github.com/ncss-tech/soilDB/issues/59
   # add diagnostic boolean data into @site
-  site(hz_data) <- extended_data$diagHzBoolean
+  aqp::site(hz_data) <- extended_data$diagHzBoolean
 
   ## optionally convert NA fragvol to 0
   if (nullFragsAreZero) {
@@ -217,11 +224,11 @@
 
   # load diagnostic horizons into @diagnostic:
   # supress warnings: diagnostic_hz() <- is noisy when not all profiles have diagnostic hz data
-  suppressWarnings(diagnostic_hz(hz_data) <- extended_data$diagnostic)
+  suppressWarnings(aqp::diagnostic_hz(hz_data) <- extended_data$diagnostic)
 
   # add restrictions to SPC
   # required new setter in aqp SPC object (AGB added 2019/12/23)
-  suppressWarnings(restrictions(hz_data) <- extended_data$restriction)
+  suppressWarnings(aqp::restrictions(hz_data) <- extended_data$restriction)
 
   # join-in landform string w/ ampersand as separator for hierarchy
   # .formatLandformString <- soilDB:::.formatLandformString
@@ -231,7 +238,7 @@
               by = list(peiid = ed.lf$peiid)]
 
   if (ncol(lf) > 1) {
-    site(hz_data) <- as.data.frame(lf[, c("peiid", "landform_string", "landscape_string", "microfeature_string", "geomicrorelief_string")])
+    aqp::site(hz_data) <- as.data.frame(lf[, c("peiid", "landform_string", "landscape_string", "microfeature_string", "geomicrorelief_string")])
   }
   
   ed.pm <- data.table::as.data.table(extended_data$pm)
@@ -239,14 +246,14 @@
               by = list(siteiid = ed.pm$siteiid)]
   
   if (ncol(pm) > 2) {
-    site(hz_data) <- as.data.frame(pm[, c("siteiid", "pmkind", "pmorigin")])
+    aqp::site(hz_data) <- as.data.frame(pm[, c("siteiid", "pmkind", "pmorigin")])
   }
   
   # set metadata
-  m <- metadata(hz_data)
+  m <- aqp::metadata(hz_data)
   m$origin <- 'NASIS pedons'
   m$created <- Sys.time()
-  metadata(hz_data) <- m
+  aqp::metadata(hz_data) <- m
 
   # print any messages on possible data quality problems:
   if (exists('sites.missing.pedons', envir = get_soilDB_env())) {
@@ -283,7 +290,7 @@
   
   # set NASIS component specific horizon identifier
   if (!fill & length(filled.ids) == 0) {
-    res <- try(hzidname(hz_data) <- 'phiid')
+    res <- try(aqp::hzidname(hz_data) <- 'phiid')
     if (inherits(res, 'try-error')) {
       if (!rmHzErrors) {
         warning("cannot set `phiid` as unique pedon horizon key -- duplicate horizons present with rmHzErrors=FALSE")
@@ -297,8 +304,8 @@
   
   # set hz designation and texture fields -- NB: chose to use calculated texture -- more versatile
   # functions designed to use hztexclname() should handle presence of in-lieu, modifiers, etc.
-  hzdesgnname(hz_data) <- "hzname"
-  hztexclname(hz_data) <- "texture"
+  aqp::hzdesgnname(hz_data) <- "hzname"
+  aqp::hztexclname(hz_data) <- "texture"
 
   if (exists('bad.pedon.ids', envir = get_soilDB_env()))
     if (length(get('bad.pedon.ids', envir = get_soilDB_env())) > 0)

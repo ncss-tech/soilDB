@@ -15,7 +15,7 @@
 #' @return An R spatial object, class depending on `type` and `as_Spatial` arguments
 #' @references \url{https://casoilresource.lawr.ucdavis.edu/see/}
 #' @author D.E. Beaudette
-#' @examplesIf curl::has_internet() && requireNamespace("terra") && requireNamespace("sf")
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("terra") && requireNamespace("sf")
 #' @export
 #' @examples
 #' \dontrun{

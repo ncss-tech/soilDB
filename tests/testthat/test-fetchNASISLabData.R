@@ -21,12 +21,15 @@ check_local_NASIS_labdata_available <- function() {
 ## tests
 
 test_that("fetchNASISLabData returns reasonable data", {
-
+  
+  
   # test for conditions permitting this test to run
   if(!local_NASIS_defined()) {
     skip("local NASIS database not available")
   }
 
+  skip_if_not_installed("aqp")
+  
   # test for lab data to check
   check_local_NASIS_labdata_available()
 
@@ -36,9 +39,9 @@ test_that("fetchNASISLabData returns reasonable data", {
 
   # expected outcomes
   expect_true(inherits(x, 'SoilProfileCollection'))
-  expect_equal(nrow(site(x)) > 0, TRUE)
-  expect_equal(nrow(horizons(x)) > 0, TRUE)
-  expect_equal(idname(x), 'labpeiid')
-  expect_equal(hzidname(x), 'labphiid')
-  expect_equal(horizonDepths(x), c("hzdept", "hzdepb"))
+  expect_equal(nrow(aqp::site(x)) > 0, TRUE)
+  expect_equal(aqp::nrow(x) > 0, TRUE)
+  expect_equal(aqp::idname(x), 'ncsspedonlabdataiid')
+  expect_equal(aqp::hzidname(x), 'ncsslayerlabdataiid')
+  expect_equal(aqp::horizonDepths(x), c("hzdept", "hzdepb"))
 })

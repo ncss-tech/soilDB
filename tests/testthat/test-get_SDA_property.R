@@ -13,6 +13,9 @@ target_mukeys <- c(463263, 463264)
 # test get_SDA_property results -- expect a data.frame result for two legends
 
 test_that("SDA properties (dominant condition) works", {
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -39,9 +42,13 @@ test_that("SDA properties (dominant condition) works", {
 })
 
 test_that("SDA properties (dominant component category) works", {
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
+  
   x <- get_SDA_property(property = "Taxonomic Suborder",
                         method = "Dominant Component (Category)",
                         areasymbols = target_areas)
@@ -56,6 +63,9 @@ test_that("SDA properties (dominant component category) works", {
 })
 
 test_that("SDA properties (dominant component numeric) works", {
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -94,6 +104,9 @@ test_that("SDA properties (dominant component numeric) works", {
 })
 
 test_that("SDA properties (weighted average) works", {
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -220,6 +233,9 @@ test_that("SDA properties (weighted average) works", {
 })
 
 test_that("SDA properties (min/max) works", {
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -258,6 +274,9 @@ test_that("SDA properties (min/max) works", {
 })
 
 test_that("SDA properties (no aggregation) works", {
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()

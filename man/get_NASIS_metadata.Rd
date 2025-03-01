@@ -15,7 +15,7 @@ get_NASIS_column_metadata(
 )
 }
 \arguments{
-\item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default: \code{NULL}}
+\item{dsn}{Optional: path or \emph{DBIConnection} to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: \code{NULL}}
 
 \item{include_description}{Include "ChoiceDescription" column? Default: \code{FALSE}}
 

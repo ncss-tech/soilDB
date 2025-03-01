@@ -6,10 +6,20 @@
   phiidref          <- NULL
   # test_ph <- NULL
 
-  q <- "SELECT peiidref AS peiid, phiid, phl.seqnum, sampledepthtop, sampledepthbottom, sampleid, datacollector, claytotmeasured, claycarbmeasured, silttotmeasured, siltfinemeasured, siltcomeasured, sandtotmeasured, sandtotmethod, sandvcmeasured, sandcomeasured, sandmedmeasured, sandfinemeasured, sandvfmeasured, sandvfmethod, textureclfieldlab, fiberrubbedpct, fiberunrubbedpct, ph1to1h2o, ph01mcacl2, phnaf, phoxidized, phdeltah2o2, liquidlimitmeasured, plasticlimitmeasured, pi, atterbergsampcond, cole, esttotpotacidityetpa, camgmeh2, potassiummeh2, camgsatpaste, extractaciditykcl, basesatmeh2, cec7, cec82, ecec, phosphatephos, nitratenitrogen, ecmeasured, ecdeterminemeth, ec15, caco3equivmeasured, gypsumequiv, sodium, sar, gypsumreq, humiccolor, fulviccolor, humicfulviccolor, alummeasured, pyrophoshue, pyrophosvalue, pyrophoschroma, melanicindex
-FROM
-phorizon_View_1 ph
-LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
+  q <- "SELECT peiidref AS peiid, phiid, phlabresultiid, phl.seqnum, sampledepthtop, sampledepthbottom, sampleid, 
+               datacollector, claytotmeasured, claycarbmeasured, clayfinemeasured, silttotmeasured, siltfinemeasured, 
+               siltcomeasured, sandtotmeasured, sandtotmethod, sandvcmeasured, sandcomeasured, 
+               sandmedmeasured, sandfinemeasured, sandvfmeasured, sandvfmethod, sieve3inch, 
+               sieve34inch, sieveno4, sieveno10, sieveno18, sieveno35, sieveno40, sieveno60, sieveno140,
+               sieveno200, sieveno270, vonposthumification, lossonignition, textureclfieldlab, 
+               fiberrubbedpct, fiberunrubbedpct, ph1to1h2o, ph01mcacl2, phnaf, phoxidized, phdeltah2o2,
+               liquidlimitmeasured, plasticlimitmeasured, pi, atterbergsampcond, cole, esttotpotacidityetpa,
+               camgmeh2, potassiummeh2, camgsatpaste, extractaciditykcl, basesatmeh2, cec7, cec82, ecec,
+               phosphatephos, nitratenitrogen, ecmeasured, ecdeterminemeth, ec15, caco3equivmeasured, 
+               gypsumequiv, sodium, sar, gypsumreq, humiccolor, fulviccolor, humicfulviccolor, alummeasured,
+               pyrophoshue, pyrophosvalue, pyrophoschroma, melanicindex
+  FROM phorizon_View_1 ph
+  LEFT OUTER JOIN phlabresults_View_1 phl on phl.phiidref = ph.phiid
   ORDER BY peiidref, phiid, sampledepthtop;"
 
   channel <- dbConnectNASIS(dsn)

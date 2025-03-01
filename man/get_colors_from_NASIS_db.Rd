@@ -4,13 +4,20 @@
 \alias{get_colors_from_NASIS_db}
 \title{Get Soil Color Data from a local NASIS Database}
 \usage{
-get_colors_from_NASIS_db(SS = TRUE, mixColors = TRUE, dsn = NULL)
+get_colors_from_NASIS_db(
+  SS = TRUE,
+  method = "dominant",
+  mixColors = FALSE,
+  dsn = NULL
+)
 }
 \arguments{
 \item{SS}{fetch data from Selected Set in NASIS or from the entire local
 database (default: \code{TRUE})}
 
-\item{mixColors}{should mixed colors be calculated (Default: \code{TRUE}) where multiple colors are populated for the same moisture state in a horizon? \code{FALSE} takes the dominant color based on \code{colorpct} or first record based on horizon ID (\code{phiid}) sorting for "moist" and "dry" state. Pedon Horizon Color records without a moisture state populated are ignored.}
+\item{method}{Aggregation method to handle multiple colors per horizon and moisture state. Default \code{"dominant"} for dominant condition (or first record) within moisture state. Other options include \code{"mixed"} to calculate mixture using \code{simplifyColorData()} and \code{"none"} to do no aggregation (returns a long format representation that may have multiple values per horizon and moisture state)}
+
+\item{mixColors}{Deprecated. See \code{method}. Should mixed colors be calculated where multiple colors are populated for the same moisture state in a horizon? Default \code{FALSE} takes the dominant color based on \code{colorpct} or first record based on horizon ID (\code{phiid}) sorting for "moist" and "dry" state. Pedon Horizon Color records without a moisture state populated are ignored.}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

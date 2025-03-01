@@ -99,7 +99,7 @@ nasis_static_ss <- test_local_NASIS(SS = TRUE, dsn = dsn)
 
 nasis_static_ss[which(nasis_static_ss)]
 
-get_soilseries_from_NASIS(dsn = dsn)
+# get_soilseries_from_NASIS(dsn = dsn)
 
 # test against whole local database in SQLite instance
 nasis_static_all <- test_local_NASIS(SS = FALSE, dsn = dsn)

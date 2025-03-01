@@ -59,7 +59,7 @@ In the future a \code{mlrapolygon} table may be added to SDA (analogous to  \cod
 and the function will be updated accordingly at that time.
 }
 \examples{
-\dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
  
     # get spatial data for a single mukey

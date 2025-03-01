@@ -26,7 +26,7 @@ get_hz_data_from_pedon_db <- function(dsn) {
   if(!requireNamespace('odbc'))
     stop('please install the `odbc` package', call.=FALSE)
   
-	q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid as pedon_id, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
+	q <- "SELECT pedon.peiid, phorizon.phiid, pedon.upedonid AS pedon_id, pedon.upedonid, phorizon.hzname, phorizon.hzdept, phorizon.hzdepb,
   phorizon.claytotest AS clay, IIF(IsNULL(phorizon.silttotest), (100 - (phorizon.sandtotest + phorizon.claytotest)), phorizon.silttotest) AS silt, phorizon.sandtotest AS sand, texture, phfield, phnaf, eff.choice AS effervescence, l.labsampnum, IIF(IsNULL(f.total_frags_pct), 0, f.total_frags_pct) AS total_frags_pct, fragvoltot
 	FROM (
 	(
@@ -50,7 +50,7 @@ get_hz_data_from_pedon_db <- function(dsn) {
 	# test for duplicate horizons: due to bugs in our queries that lead to >1 row/hz
 	hz.tab <- table(d$phiid)
 	dupe.hz <- which(hz.tab > 1)
-	dupe.hz.pedon.ids <- d$pedon_id[d$phiid %in% names(hz.tab[dupe.hz])]
+	dupe.hz.pedon.ids <- d$upedonid[d$phiid %in% names(hz.tab[dupe.hz])]
 	
 	if(length(dupe.hz) > 0) {
 		message(paste('notice: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), sep=''))

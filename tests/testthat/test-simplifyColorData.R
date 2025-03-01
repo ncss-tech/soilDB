@@ -16,6 +16,24 @@ x.simple <- data.frame(
   colorchroma = c(4, 2)
 )
 
+# perform conversion manually
+# dry is first row
+# res.rgb <- aqp::munsell2rgb(
+#   x.simple$colorhue,
+#   x.simple$colorvalue,
+#   x.simple$colorchroma,
+#   return_triplets = TRUE,
+#   returnLAB = TRUE
+# )
+res.rgb <- data.frame(
+  r = c(0.376458621305308, 0.283665422628007),
+  g = c(0.252292330269399, 0.218599674259645),
+  b = c(0.147759502056216, 0.172956479994321),
+  L = c(30.2671633028639, 24.8998948532788),
+  A = c(10.6076182823961, 5.46708813776506),
+  B = c(21.7311902609193, 10.119764643999)
+)
+
 # two colors / horizon
 x.multiple <- data.frame(
   peiid = c(625874L, 625874L, 625881L, 625881L),
@@ -29,7 +47,7 @@ x.multiple <- data.frame(
 
 x.missing <- data.frame(
   peiid = c(625874L, 625874L, 625874L, 625874L, 625874L, 625874L),
-  phiid = c(2889103L, 2889103L, 2889103L,  2889133L,  2889133L,  2889133L),
+  phiid = c(2889103L, 2889103L, 2889103L, 2889133L,  2889133L,  2889133L),
   colormoistst = c("moist", "moist", "moist", "dry", NA, "dry"),
   pct = c(80L, 20L, NA, 75L, NA, 25L),
   colorhue = c("10YR", "7.5YR", "N", "2.5Y", NA, "2.5Y"),
@@ -38,14 +56,12 @@ x.missing <- data.frame(
 )
 
 test_that("simplifyColorData: single color / moisture state / horizon", {
-
+  
+  skip_if_not_installed("aqp")
+  
   # single color / moisture state / horizon
   res <- simplifyColorData(x.simple, id.var = 'phiid', wt = 'pct')
-
-  # perform conversion manually
-  # dry is first row
-  res.rgb <- munsell2rgb(x.simple$colorhue, x.simple$colorvalue, x.simple$colorchroma, return_triplets = TRUE, returnLAB = TRUE)
-
+  
   # should be a single row
   expect_equal(nrow(res), 1)
 
@@ -123,7 +139,9 @@ test_that("simplifyColorData: missing data", {
 })
 
 test_that(".dominantColors: missing data", {
-
+  
+  skip_if_not_installed("aqp")
+  
   res <- .dominantColors(x.missing)
 
   # should be 2 rows

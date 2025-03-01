@@ -38,7 +38,11 @@ x <- structure(
 )
 
 test_that("ROSETTA() works", {
-
+  
+  skip_if_not_installed("httr")
+  
+  skip_if_not_installed("jsonlite")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -62,6 +66,10 @@ test_that("ROSETTA() works", {
 
 test_that("bootstrap standard deviation", {
   
+  skip_if_not_installed("httr")
+  
+  skip_if_not_installed("jsonlite")
+  
   skip_if_offline()
   
   skip_on_cran()
@@ -84,7 +92,11 @@ test_that("bootstrap standard deviation", {
 })
 
 test_that("correct model selection in the presence of NA", {
-
+  
+  skip_if_not_installed("httr")
+  
+  skip_if_not_installed("jsonlite")
+  
   skip_if_offline()
 
   skip_on_cran()

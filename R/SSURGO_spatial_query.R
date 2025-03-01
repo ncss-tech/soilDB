@@ -21,8 +21,7 @@
 #' @note SDA now supports spatial queries, consider using [SDA_spatialQuery()] instead.
 #' @author D.E. Beaudette
 #' @keywords manip
-#' @examplesIf curl::has_internet()
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
 #' 
 #' \donttest{
 #'     # query by bbox

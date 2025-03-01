@@ -180,7 +180,6 @@ The following labels are used to access taxa containing the following formative 
 }
 \examples{
 \dontshow{if (curl::has_internet() && requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
 \dontrun{
   library(terra)
   
@@ -214,6 +213,7 @@ The following labels are used to access taxa containing the following formative 
   # quick evaluation of the result
   terra::plot(a, axes = FALSE)
 }
+\dontshow{\}) # examplesIf}
 }
 \author{
 D.E. Beaudette and A.G. Brown

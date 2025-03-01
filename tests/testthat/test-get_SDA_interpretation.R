@@ -5,6 +5,9 @@ target_area_rows_all <- 1021
 target_mukeys <- c(463263, 463264)
 
 test_that("SDA interpretations (dominant component) works", {
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -20,6 +23,9 @@ test_that("SDA interpretations (dominant component) works", {
 })
 
 test_that("SDA interpretations (dominant condition) works", {
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -38,6 +44,9 @@ test_that("SDA interpretations (dominant condition) works", {
 })
 
 test_that("SDA interpretations (weighted average) works", {
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()
@@ -56,6 +65,9 @@ test_that("SDA interpretations (weighted average) works", {
 })
 
 test_that("SDA interpretations (no aggregation) works", {
+  
+  skip_if_not_installed("httr")
+  
   skip_if_offline()
 
   skip_on_cran()

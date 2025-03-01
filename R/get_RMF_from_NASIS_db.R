@@ -6,7 +6,7 @@
 #'
 #' @param SS logical, limit query to the selected set
 #'
-#' @param dsn optional path to local SQLite database containing NASIS table structure; default: `NULL`
+#' @param dsn optional path or _DBIConnection_ to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: `NULL`
 #' 
 #' @return a `list` with two `data.frame` objects:
 #'   * `RMF`: contents of "phrdxfeatures" table, often >1 row per horizon

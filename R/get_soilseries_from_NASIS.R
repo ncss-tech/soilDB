@@ -4,7 +4,7 @@
 #' from the local NASIS database (all series) or via web report (named series
 #' only).
 #' @param stringsAsFactors deprecated
-#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
+#' @param dsn Optional: path or _DBIConnection_ to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: `NULL`
 #' @param delimiter _character_. Used to collapse `taxminalogy` records where multiple values are used to describe strongly contrasting control sections. Default `" over "` creates combination mineralogy classes as they would be used in the family name.
 #' @param SS _logical_. Fetch data from the currently loaded selected set in NASIS or from the entire local database (default: `FALSE`; this is to allow for queries against the full Series Classification database as default)
 #' @return A \code{data.frame}

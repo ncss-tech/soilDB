@@ -17,6 +17,14 @@
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
+  
+  # check if NASIS local DB instance/ODBC data source is available
+  .soilDB_test_NASIS_connection(dsn = dsn)
+  
+  if (!requireNamespace("aqp")) {
+    stop("package 'aqp' is required", call. = FALSE)
+  }
+  
   # ensure that any old hz errors are cleared
   if (exists('component.hz.problems', envir = get_soilDB_env())) {
     assign('component.hz.problems', value = character(0), envir = get_soilDB_env())
@@ -92,27 +100,28 @@
     
     if (duplicates) {
       # use combined coiid (lmapunitiid, muiid, dmuiid, coiid) under name coiidcmb
-      depths(f.chorizon) <- coiidcmb ~ hzdept_r + hzdepb_r
-      site(f.chorizon) <- ~ dmuiid + muiid + lmapunitiid + coiid
+      aqp::depths(f.chorizon) <- coiidcmb ~ hzdept_r + hzdepb_r
+      aqp::site(f.chorizon) <- ~ dmuiid + muiid + lmapunitiid + coiid
     } else {
       # upgrade to SoilProfilecollection
-      depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
+      aqp::depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
     }
     
   } else {
-    stop("No horizon data in NASIS component query result.", call. = FALSE)
+    ds <- ifelse(SS, "NASIS selected set", "NASIS local database")
+    stop("No component/horizon records in ", ds, call. = FALSE)
   }
 
   # add site data to object
-  site(f.chorizon) <- f.comp # left-join via coiid
+  aqp::site(f.chorizon) <- f.comp # left-join via coiid
   
   if (duplicates && !is.null(f.corr) && nrow(f.corr) > 0) {
-    site(f.chorizon) <- f.corr # left-join via dmuiid, muiid, lmapunitiid
+    aqp::site(f.chorizon) <- f.corr # left-join via dmuiid, muiid, lmapunitiid
   }
   
   # add diagnostic features and restrictions to SPC
-  diagnostic_hz(f.chorizon) <- f.diaghz2
-  restrictions(f.chorizon) <- f.restrict2
+  aqp::diagnostic_hz(f.chorizon) <- f.diaghz2
+  aqp::restrictions(f.chorizon) <- f.restrict2
   
   ## 2017-3-13: short-circuits need testing, consider pre-marking mistakes before parsing
   ## 2021-10-28: TODO: harmonize strategies for .formatXXXXString methods and ID variables
@@ -123,27 +132,37 @@
   pm <- data.table::data.table(f.copm)[, .formatParentMaterialString(.SD, uid = .BY$coiid, name.sep = ' & '), by = "coiid"]
   pm$siteiid <- NULL
   if (nrow(pm) > 0) {
-    site(f.chorizon) <- pm
+    aqp::site(f.chorizon) <- pm
   }
   
   # join-in cogeomorph strings
   lf <- data.table::data.table(f.cogeomorph)[, .formatLandformString(.SD, uid = .BY$coiid, name.sep = ' & '), by = "coiid"]
   lf$peiid <- NULL
   if (nrow(lf) > 0) {
-    site(f.chorizon) <- lf
+    aqp::site(f.chorizon) <- lf
   }
+  
+  .soilDB_warn_deprecated_aliases(c("ecositeid" = "ecosite_id",
+                                    "ecositenm" = "ecosite_name",
+                                    "ovegclid" = "othervegid",
+                                    "ovegclname" = "othervegclass"))
+  
   # join-in ecosite string
   es <- data.table::data.table(f.ecosite)[, .formatEcositeString(.SD, name.sep = ' & '), by = "coiid", .SDcols = colnames(f.ecosite)]
   es$coiid <- NULL
-  
+  es$ecosite_id <- es$ecositeid
+  es$ecosite_name <- es$ecositenm
   if (nrow(es) > 0) {
-    site(f.chorizon) <- es
+    aqp::site(f.chorizon) <- es
   }
+  
   # join-in othervegclass string
   ov <- data.table::data.table(f.otherveg)[, .formatOtherVegString(.SD, name.sep = ' & '), by = "coiid", .SDcols = colnames(f.otherveg)]
-  ov$coiid <- NULL
+  ov$coiid <- NULL 
+  ov$othervegid <- ov$ovegclid
+  ov$othervegclass <- ov$ovegclname
   if (nrow(ov) > 0) {
-    site(f.chorizon) <- ov
+    aqp::site(f.chorizon) <- ov
   }
 
   # print any messages on possible data quality problems:
@@ -157,7 +176,7 @@
   
   # set NASIS component specific horizon identifier
   if (!fill & length(filled.ids) == 0) {
-    res <- try(hzidname(f.chorizon) <- 'chiid')
+    res <- try(aqp::hzidname(f.chorizon) <- 'chiid')
     if (inherits(res, 'try-error')) {
       if (!rmHzErrors) {
         warning("cannot set `chiid` as unique component horizon key -- duplicate horizons present with rmHzErrors=FALSE", call. = FALSE)
@@ -170,14 +189,14 @@
   }
 
   # set metadata
-  m <- metadata(f.chorizon)
+  m <- aqp::metadata(f.chorizon)
   m$origin <- 'NASIS components'
   m$created <- Sys.time()
-  metadata(f.chorizon) <- m
+  aqp::metadata(f.chorizon) <- m
 
   # set optional hz designation and texture slots
-  hzdesgnname(f.chorizon) <- "hzname"
-  hztexclname(f.chorizon) <- "texture"
+  aqp::hzdesgnname(f.chorizon) <- "hzname"
+  aqp::hztexclname(f.chorizon) <- "texture"
 
   if (duplicates && dropNotRepresentative) {
     f.chorizon <- f.chorizon[which(!is.na(f.chorizon$repdmu)), ]

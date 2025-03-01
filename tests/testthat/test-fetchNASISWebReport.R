@@ -6,7 +6,9 @@ test_that("fetchNASISWebReport() works", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("aqp")
+  
   skip_if_not_installed("rvest")
 
   ## sample data
@@ -27,7 +29,9 @@ test_that("fetchNASISWebReport() returns an SPC of component/horizon data and da
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("aqp")
+  
   skip_if_not_installed("rvest")
 
   skip_if(is.null(x))
@@ -45,16 +49,18 @@ test_that("fetchNASISWebReport() returns reasonable data", {
 
   skip_on_cran()
 
+  skip_if_not_installed("aqp")
+  
   skip_if_not_installed("rvest")
 
   skip_if(is.null(x))
 
   # standard request
-  expect_equal(nrow(site(x$spc)) > 0, TRUE)
-  expect_equal(nrow(horizons(x$spc)) > 0, TRUE)
-  expect_equal(idname(x$spc), 'coiid')
-  expect_equal(hzidname(x$spc), 'chiid')
-  expect_equal(horizonDepths(x$spc), c("hzdept_r", "hzdepb_r"))
+  expect_equal(nrow(aqp::site(x$spc)) > 0, TRUE)
+  expect_equal(aqp::nrow(x$spc) > 0, TRUE)
+  expect_equal(aqp::idname(x$spc), 'coiid')
+  expect_equal(aqp::hzidname(x$spc), 'chiid')
+  expect_equal(aqp::horizonDepths(x$spc), c("hzdept_r", "hzdepb_r"))
 
 })
 
@@ -80,7 +86,9 @@ test_that("fetchNASISWebReport() returns NULL with bogus query", {
   skip_if_offline()
 
   skip_on_cran()
-
+  
+  skip_if_not_installed("aqp")
+  
   skip_if_not_installed("rvest")
 
   # a message is printed and NULL returned when no results

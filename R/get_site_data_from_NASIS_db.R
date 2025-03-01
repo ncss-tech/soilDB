@@ -1,48 +1,60 @@
-## TODO: temporary hack to deal with the possibility of multiple site-bedrock entries:
-# row number is computed for the site-bedrock table... we can't depend on the verticle order column to contain useful information
-# we then filter on sb.rn at the end of the query.
-# this same syntax will not work in Access
-
-## further ideas:
-# http://stackoverflow.com/questions/3800551/select-first-row-in-each-group-by-group
-# ... this would be a lot cleaner if we used WITH ... to define all sub-tables
-
-## TODO: spatial data will likely be referenced to multiple datums...
-# the STD coordiants in NASIS are WGS84, but have to be manually "calculated"
-# see: Import of Standard WGS84 Georeference
-# for now, 'longstddecimaldegrees' and 'latstddecimaldegrees' are read-in as new site-level attributes
-# ... this needs to be synced to PedonPC functions
-
-## TODO: multiple records / site in siteobs are possible and will result in duplicate data
-
 #' Get Site Data from a local NASIS Database
 #'
 #' Get site-level data from a local NASIS database.
-#'
-#' When multiple "site bedrock" entries are present, only the shallowest is
-#' returned by this function.
+#' 
+#' @details
+#' 
+#' It is possible to have multiple pedon records per site observation and multiple site observations
+#' per site, which will result in multiple records per site. See argument `include_pedon=FALSE` to 
+#' omit joins to pedon and transect tables.
+#' 
+#' The following aggregations of child table information are performed by this function: 
+#' 
+#'  - Site Area Overlap for State, County and MLRA are returned for related area records, as specified in the site table, as the following column names: `site_state`, `site_county`, and `site_mlra`.
+#' 
+#'  - Site Observation Surface Fragment data are simplified (converted to wide format) using `simplifyFragmentData()`.
+#' 
+#'  - The best Ecological Site History record is selected using `get_ecosite_history_from_NASIS_db(best = TRUE)`.
+#' 
+#'  - Site Other Vegetation Class information is aggregated by class name, using `" & "` as the 
+#' separator when multiple classes are assigned.
+#' 
+#'  - When multiple Site Bedrock entries are present, only the shallowest is returned by this 
+#' function. In lieu of bedrock depth the first record in the table is returned.
 #'
 #' @param SS fetch data from Selected Set in NASIS or from the entire local
 #' database (default: `TRUE`)
-#' 
-#' @param nullFragsAreZero should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)
-
+#' @param include_pedon Include pedon and transect data joined to site? (default: `TRUE`)
+#' @param nullFragsAreZero should surface fragment cover percentages of `NULL` be interpreted as `0`? (default: `TRUE`)
 #' @param stringsAsFactors deprecated
-#'
-#' @param dsn Optional: path to local SQLite database containing NASIS
-#' table structure; default: `NULL`
+#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
 #'
 #' @return A data.frame
 #'
 #' @author Jay M. Skovlin and Dylan E. Beaudette
-#' @seealso \code{\link{get_hz_data_from_NASIS_db}}
+#' @seealso [get_hz_data_from_NASIS_db()], [fetchNASIS()], [fetchVegdata()]
 #' @keywords manip
 #'
 #' @export get_site_data_from_NASIS_db
 get_site_data_from_NASIS_db <- function(SS = TRUE,
+                                        include_pedon = TRUE,
                                         nullFragsAreZero = TRUE,
                                         stringsAsFactors = NULL,
                                         dsn = NULL) {
+  
+  .soilDB_warn_deprecated_aliases(
+    c(
+      "upedonid" = "pedon_id",
+      "obsdate" = "obs_date",
+      "longstddecimaldegrees" = "x_std",
+      "latstddecimaldegrees" = "y_std",
+      "descname" = "describer",
+      "elev" = "elev_field",
+      "slope" = "slope_field",
+      "aspect" = "aspect_field"
+    )
+  )
+  
   .SD <- NULL
   
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
@@ -50,41 +62,44 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-	q <- "SELECT siteiid, siteobsiid, peiid, 
-CAST(usiteid AS varchar(60)) as site_id, CAST(upedonid AS varchar(60)) as pedon_id, obsdate as obs_date,
-utmzone, utmeasting, utmnorthing, horizdatnm, 
-longstddecimaldegrees as x_std, latstddecimaldegrees as y_std, longstddecimaldegrees, latstddecimaldegrees,
-gpspositionalerror, descname as describer, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag,
-tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth,
-elev as elev_field, slope as slope_field, aspect as aspect_field, plantassocnm, 
-siteobs_View_1.earthcovkind1, siteobs_View_1.earthcovkind2, erocl, 
-bedrckdepth, bedrckkind, bedrckhardness, pmgroupname, 
-hillslopeprof, geomslopeseg, shapeacross, shapedown, slopecomplex, drainagecl,
-geomposhill, geomposmntn, geompostrce, geomposflats, swaterdepth,
-flodfreqcl, floddurcl, flodmonthbeg, pondfreqcl, ponddurcl, pondmonthbeg, 
-climstaid, climstanm, climstatype, ffd, map, reannualprecip, airtempa, soiltempa, airtemps, soiltemps, airtempw, soiltempw
+	q <- paste0("SELECT siteiid, siteobsiid, usiteid, usiteid AS site_id,
+  	", ifelse(include_pedon, "peiid, CAST(upedonid AS varchar(60)) as pedon_id, upedonid, ", ""), "
+  	obsdate, obsdate AS obs_date,  utmzone, utmeasting, utmnorthing, horizdatnm,
+  	longstddecimaldegrees, latstddecimaldegrees, gpspositionalerror, 
+    ", ifelse(include_pedon, "descname AS describer, descname, pedonpurpose, pedontype, pedlabsampnum, labdatadescflag, 
+    tsectstopnum, tsectinterval, utransectid, tsectkind, tsectselmeth, erocl,", ""), "
+    elev as elev_field, slope as slope_field, aspect as aspect_field,
+    elev, slope, aspect, 
+    ecostatename, ecostateid, commphasename, commphaseid, plantassocnm, 
+    siteobs_View_1.earthcovkind1, siteobs_View_1.earthcovkind2, 
+    bedrckdepth, bedrckkind, bedrckhardness, pmgroupname, 
+    hillslopeprof, geomslopeseg, shapeacross, shapedown, slopecomplex, drainagecl,
+    geomposhill, geomposmntn, geompostrce, geomposflats, swaterdepth,
+    flodfreqcl, floddurcl, flodmonthbeg, pondfreqcl, ponddurcl, pondmonthbeg, 
+    climstaid, climstanm, climstatype, ffd, map, reannualprecip, airtempa, soiltempa, airtemps, soiltemps, airtempw, soiltempw
 
-FROM
-
-site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref
-LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
-LEFT OUTER JOIN transect_View_1 ON pedon_View_1.tsectiidref = transect_View_1.tsectiid
-LEFT OUTER JOIN
-(
-      SELECT siteiidref, bedrckdepth, bedrckkind, bedrckhardness, ROW_NUMBER() OVER(PARTITION BY siteiidref ORDER BY bedrckdepth ASC) as rn
-      FROM sitebedrock_View_1
-) as sb ON site_View_1.siteiid = sb.siteiidref
+  FROM
+  
+  site_View_1 INNER JOIN siteobs_View_1 ON site_View_1.siteiid = siteobs_View_1.siteiidref
+  ", ifelse(include_pedon, "LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
+  LEFT OUTER JOIN transect_View_1 ON pedon_View_1.tsectiidref = transect_View_1.tsectiid", ""),"
+  LEFT OUTER JOIN
+  (
+        SELECT siteiidref, bedrckdepth, bedrckkind, bedrckhardness, ROW_NUMBER() OVER(PARTITION BY siteiidref ORDER BY bedrckdepth ASC) as rn
+        FROM sitebedrock_View_1
+  ) as sb ON site_View_1.siteiid = sb.siteiidref
 
 WHERE sb.rn IS NULL OR sb.rn = 1
 
-ORDER BY pedon_View_1.peiid ;"
+ORDER BY siteobs_View_1.siteobsiid;")
       
-  q2 <- "SELECT siteiid, peiid, siteobsiid, sitesurffrags_View_1.* FROM sitesurffrags_View_1 
+  q2 <- paste0("SELECT siteiid, siteobsiid, 
+         ", ifelse(include_pedon, "peiid, ", ""), "
+         sitesurffrags_View_1.* FROM sitesurffrags_View_1 
          INNER JOIN siteobs_View_1 ON sitesurffrags_View_1.siteobsiidref = siteobs_View_1.siteobsiid
          INNER JOIN site_View_1 ON siteobs_View_1.siteiidref = site_View_1.siteiid
-         LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref
-         ORDER BY pedon_View_1.peiid ;"
-
+         ", ifelse(include_pedon, "LEFT OUTER JOIN pedon_View_1 ON siteobs_View_1.siteobsiid = pedon_View_1.siteobsiidref", ""), "
+         ORDER BY siteobs_View_1.siteobsiid;")
 
   q3 <- "SELECT site_View_1.siteiid, ovegclid, ovegclname, ovegcldesc, ovegcliid 
         FROM site_View_1
@@ -142,16 +157,16 @@ ORDER BY pedon_View_1.peiid ;"
 	)
 	
 	colnames(phs) <- paste0("surface_", colnames(phs))
-	colnames(phs)[1] <- "peiid"
+	colnames(phs)[1] <- "siteobsiid"
 	
 	if (nrow(d) > 0) {
-  	ldx <- !d$peiid %in% phs$peiid
+  	ldx <- !d$siteobsiid %in% phs$siteobsiid
   	if (!any(ldx)) {
   	  phs <- phs[1:nrow(d),]
-  	  phs$peiid <- d$peiid
+  	  phs$siteobsiid <- d$siteobsiid
   	} else {
   	  phs_null <- phs[0,][1:sum(ldx),]
-  	  phs_null$peiid <- d$peiid[ldx]
+  	  phs_null$siteobsiid <- d$siteobsiid[ldx]
   	  phs <- rbind(phs, phs_null)
   	}
   	
@@ -159,7 +174,7 @@ ORDER BY pedon_View_1.peiid ;"
   	if (nullFragsAreZero) {
   	  phs[is.na(phs)] <- 0
   	} 
-  	d2 <- merge(d, phs, by = "peiid", all.x = TRUE, sort = FALSE)
+  	d2 <- merge(d, phs, by = "siteobsiid", all.x = TRUE, sort = FALSE)
 	} else {
 	  d2 <- cbind(d, phs[0,])
 	}
@@ -210,7 +225,7 @@ ORDER BY pedon_View_1.peiid ;"
 	# 	message('multiple horizontal datums present, consider using WGS84 coordinates (x_std, y_std)')
 
 	# are there any duplicate pedon IDs?
-	t.pedon_id <- table(d2$pedon_id)
+	t.pedon_id <- table(d2$upedonid)
 	not.unique.pedon_id <- t.pedon_id > 1
 	if (any(not.unique.pedon_id))
 	  assign('dup.pedon.ids', value = names(t.pedon_id[which(not.unique.pedon_id)]), envir = get_soilDB_env())
@@ -218,7 +233,7 @@ ORDER BY pedon_View_1.peiid ;"
 	# warn about sites without a matching pedon (records missing peiid)
 	missing.pedon <- which(is.na(d2$peiid))
 	if (length(missing.pedon) > 0)
-	  assign('sites.missing.pedons', value = unique(d2$site_id[missing.pedon]), envir = get_soilDB_env())
+	  assign('sites.missing.pedons', value = unique(d2$usiteid[missing.pedon]), envir = get_soilDB_env())
 
   ## set factor levels, when it makes sense
 	# most of these are done via uncode()

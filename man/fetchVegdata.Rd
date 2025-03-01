@@ -14,10 +14,16 @@
 \alias{get_vegplot_trhi_from_NASIS_db}
 \alias{get_vegplot_transpoints_from_NASIS_db}
 \alias{get_vegplot_prodquadrats_from_NASIS_db}
+\alias{get_vegplot_groundsurface_from_NASIS_db}
 \alias{get_vegplot_speciesbasalarea_from_NASIS}
 \title{Get vegetation plot data from local NASIS database}
 \usage{
-fetchVegdata(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
+fetchVegdata(
+  SS = TRUE,
+  include_pedon = TRUE,
+  stringsAsFactors = NULL,
+  dsn = NULL
+)
 
 get_vegplot_from_NASIS_db(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
 
@@ -51,6 +57,8 @@ get_vegplot_transpoints_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 get_vegplot_prodquadrats_from_NASIS_db(SS = TRUE, dsn = NULL)
 
+get_vegplot_groundsurface_from_NASIS_db(SS = TRUE, dsn = NULL)
+
 get_vegplot_tree_si_summary_from_NASIS_db(
   SS = TRUE,
   stringsAsFactors = NULL,
@@ -73,18 +81,57 @@ get_vegplot_textnote_from_NASIS_db(
 )
 }
 \arguments{
-\item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local database (default: \code{TRUE})}
+\item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local
+database (default: \code{TRUE})}
+
+\item{include_pedon}{Include pedon and transect data joined to site? (default: \code{TRUE}). If
+\code{include_pedon} is set to \code{"assocuserpedonid"} only pedon records that are linked through the
+Associated User Pedon ID column will have their peiid reported in the \code{vegplot} table.}
 
 \item{stringsAsFactors}{deprecated}
 
-\item{dsn}{Optional: path to local SQLite database containing NASIS
-table structure; default: \code{NULL}}
+\item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default:
+\code{NULL}}
 
 \item{fixLineEndings}{Replace \code{'\\r\\n'} with \code{'\\n'}; Default: \code{TRUE}}
 }
 \value{
-A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies", "vegtransect", "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", and  "vegplottext" tables
+\code{fetchVegdata()}: A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies",
+"vegtransect", "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", "vegbasalarea", and
+"vegplottext" tables
+
+\code{get_vegplot_location_from_NASIS_db()}: a data.frame containing location data from the corresponding record in the site table
+
+\code{get_vegplot_trhi_from_NASIS_db()}: a data.frame containing Rangeland Health Indicator (RHI) data from the \code{vegplot} table
+
+\code{get_vegplot_species_from_NASIS_db()}: a data.frame containing Plot Plant Inventory data
+
+\code{get_vegplot_transect_from_NASIS_db()}: a data.frame containing Vegetation Transect data
+
+\code{get_vegplot_transect_from_NASIS_db()}: a data.frame containing Vegetation Transect Plant Summary data
+
+\code{get_vegplot_transpoints_from_NASIS_db()}: a data.frame containing Vegetation Transect Point Plant Cover Details
+
+\code{get_vegplot_prodquadrats_from_NASIS_db()}: a data.frame containing Vegetation Transect Production Quadrat data
+
+\code{get_vegplot_groundsurface_from_NASIS_db()}: a data.frame containing summary data for line point intercept ground surface cover hits by cover type.
+
+\code{get_vegplot_tree_si_summary_from_NASIS_db()}: a data.frame containing Vegetation Plot Tree Site Index Summary data
+
+\code{get_vegplot_speciesbasalarea_from_NASIS()}: a data.frame containing Vegetation Plot Species Basal Area and Trees Counted data
+
+\code{get_vegplot_tree_si_details_from_NASIS_db()}: a data.frame containing Vegetation Plot Tree Site Index Details data
+
+\code{get_vegplot_textnote_from_NASIS_db()}: a data.frame containing Vegetation Plot text notes
 }
 \description{
-Get vegetation plot data from local NASIS database
+Convenience function for loading most commonly used Vegetation Plot information from local NASIS
+database.
+}
+\examples{
+\dontshow{if (local_NASIS_defined()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
+vsurf <- get_vegplot_groundsurface_from_NASIS_db()
+}
+\dontshow{\}) # examplesIf}
 }

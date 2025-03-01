@@ -140,8 +140,7 @@ make_EDIT_service_URL <- function(src = c("descriptions", "downloads",
 #' @return A `data.frame` containing: `geoUnit`, `id`, `legacyId`, `name`. `NULL` if no result.
 #'
 #' @export
-#' @examplesIf curl::has_internet()
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE)
 #' \dontrun{
 #'    get_EDIT_ecoclass_by_geoUnit(c("018X","022A"))
 #' }

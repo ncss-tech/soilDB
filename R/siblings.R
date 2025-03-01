@@ -33,8 +33,7 @@
 #' 
 #' @keywords manip
 #' @export siblings
-#' @examplesIf curl::has_internet()
-#' @examples
+#' @examplesIf curl::has_internet() && requireNamespace("jsonlite", quietly = TRUE)
 #' \donttest{
 #'     # basic usage
 #'     x <- siblings('zook')

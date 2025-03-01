@@ -7,11 +7,14 @@
 #' Get Geomorphic/Surface Morphometry Data from Soil Data Access or a local SSURGO data source and summarize by counts and proportions ("probabilities").
 #'
 #' @param table Target table to summarize. Default: `"cosurfmorphgc"` (3D Geomorphic Component). Alternate choices include `cosurfmorphhpp` (2D Hillslope Position), `cosurfmorphss` (Surface Shape), and  `cosurfmorphmr` (Microrelief).
-#' @param by Grouping variable. Default: `"compname"`
+#' @param by Grouping variable. Default: `"mapunit.mukey"`
 #' @param areasymbols A vector of soil survey area symbols (e.g. `'CA067'`)
 #' @param mukeys A vector of map unit keys (e.g. `466627`)
 #' @param WHERE WHERE clause added to SQL query. For example: `areasymbol = 'CA067'`
-#' @param miscellaneous_areas Include miscellaneous areas  (non-soil components) in results? Default: `FALSE`. 
+#' @param method _character_. One of: `"ByGroup"`, `"None"`
+#' @param include_minors logical. Include minor components? Default: `TRUE`.
+#' @param miscellaneous_areas logical. Include miscellaneous areas (non-soil components) in results? Default: `FALSE`. 
+#' @param representative_only logical. Include only representative Component Parent Material Groups? Default: `TRUE`.
 #' @param db Either `'SSURGO'` (default) or `'STATSGO'`. If `'SSURGO'` is specified `areasymbol = 'US'` records are excluded. If `'STATSGO'` only `areasymbol = 'US'` records are included.
 #' @param dsn Path to local SSURGO database SQLite database. Default `NULL` uses Soil Data Access.
 #' @param query_string Return query instead of sending to Soil Data Access / local database. Default: `FALSE`.
@@ -46,11 +49,14 @@
 #'  get_SDA_cosurfmorph('cosurfmorphmr', WHERE = "areasymbol = 'CA630'")
 #' }
 get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "cosurfmorphss", "cosurfmorphmr"),
-                                by = "compname",
+                                by = "mapunit.mukey",
                                 areasymbols = NULL,
                                 mukeys = NULL,
                                 WHERE = NULL,
+                                method = c("bygroup", "none"),
+                                include_minors = TRUE,
                                 miscellaneous_areas = FALSE,
+                                representative_only = TRUE,
                                 db = c('SSURGO', 'STATSGO'),
                                 dsn = NULL,
                                 query_string = FALSE) {
@@ -58,6 +64,8 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
   if (is.null(mukeys) && is.null(areasymbols) && is.null(WHERE)) {
     stop("Please specify one of the following arguments: mukeys, areasymbols, WHERE", call. = FALSE)
   }
+  
+  method <- match.arg(toupper(method), c("BYGROUP", "NONE"))
 
   if (!is.null(mukeys)) {
     WHERE <- paste("mapunit.mukey IN", format_SQL_in_statement(as.integer(mukeys)))
@@ -67,7 +75,7 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
 
   db <- match.arg(toupper(db), choices = c('SSURGO', 'STATSGO'))
   table <- match.arg(tolower(table), choices = c("cosurfmorphgc", "cosurfmorphhpp", "cosurfmorphss", "cosurfmorphmr"))
-  statsgo_filter <- switch(db, SSURGO = "!=", STATSGO = "=")
+  statsgo_filter <- switch(db, SSURGO = "legend.areasymbol != 'US'", STATSGO = "legend.areasymbol == 'US'", "1=1")
 
   vars <- switch(table,
                  "cosurfmorphgc" = c("geomposmntn", "geomposhill", "geomposflats", "geompostrce"),
@@ -76,6 +84,7 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
                  # NOTE: surfaceshape is calculated CONCAT(shapeacross, '/', shapedown)
                  "cosurfmorphmr" = "geomicrorelief")
 
+  # TODO: weight probabilities by component percentage? needs refactor
   .SELECT_STATEMENT0 <- function(v) {
     paste0(paste0(v, ", ", paste0(v, "_n"), ", ", paste0(paste0("round(", v, "_n / total, 2) AS p_", v)), collapse = ", "))
   }
@@ -95,15 +104,11 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
     res
   }
 
-  .JOIN_TABLE <- function(x) {
-    sprintf("LEFT JOIN %s ON cogeomordesc.cogeomdkey = %s.cogeomdkey", x, x)
-  }
-
   .NULL_FILTER <- function(v, miscellaneous_areas = FALSE) {
     if (miscellaneous_areas) return("1=1")
     paste0(paste0(v, collapse = " IS NOT NULL OR "), " IS NOT NULL")
   }
-
+  
   .ORDER_COLUMNS <- function(v) {
     paste0(paste0(paste0("p_", v), collapse = " DESC, "), " DESC")
   }
@@ -111,9 +116,8 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
   # excludes custom calculated columns (e.g. surfaceshape concatenated from across/down)
   vars_default <- vars[!grepl("surfaceshape", vars)]
   
-  misc_area_join_type <- ifelse(miscellaneous_areas, "LEFT", "INNER")
-  misc_area_filter <- ifelse(miscellaneous_areas, "LEFT", "INNER")
-  q <- paste0("SELECT a.[BYVARNAME] AS [BYVARNAME],
+  if (method == "BYGROUP") {
+      q <- paste0("SELECT a.[BYVARNAME] AS [BYVARNAME],
                  ", .SELECT_STATEMENT0(vars), ",
                  total
                FROM (
@@ -121,52 +125,62 @@ get_SDA_cosurfmorph <- function(table = c("cosurfmorphgc", "cosurfmorphhpp", "co
                  ", .SELECT_STATEMENT1(vars_default), "
                  FROM legend
                    INNER JOIN mapunit ON mapunit.lkey = legend.lkey
-                   INNER JOIN component ON mapunit.mukey = component.mukey
+                   INNER JOIN component ON mapunit.mukey = component.mukey ", 
+                   ifelse(include_minors, "", "AND majcompflag = 'Yes'") ,"
                    ", ifelse(miscellaneous_areas, "", " AND NOT component.compkind = 'Miscellaneous area'"),"
                    LEFT JOIN cogeomordesc ON component.cokey = cogeomordesc.cokey
-                   ", .JOIN_TABLE(table), "
-                 WHERE legend.areasymbol ", statsgo_filter, " 'US'
+                   ", ifelse(representative_only, "AND rvindicator = 'Yes'", ""), "
+                   ", sprintf("INNER JOIN %s ON cogeomordesc.cogeomdkey = %s.cogeomdkey", table, table), "
+                 WHERE ", statsgo_filter, "
                    AND (", .NULL_FILTER(vars_default, miscellaneous_areas), ")
                    AND ", WHERE, "
                  GROUP BY [BYVAR], ", paste0(vars_default, collapse = ", "), "
                ) AS a JOIN (SELECT [BYVAR] AS BYVAR, CAST(count([BYVAR]) AS numeric) AS total
                  FROM legend
                    INNER JOIN mapunit ON mapunit.lkey = legend.lkey
-                   INNER JOIN component ON mapunit.mukey = component.mukey
+                   INNER JOIN component ON mapunit.mukey = component.mukey ", 
+                   ifelse(include_minors,"", "AND majcompflag = 'Yes'") ,"
                    ", ifelse(miscellaneous_areas, "", " AND NOT component.compkind = 'Miscellaneous area'"),"
                    LEFT JOIN cogeomordesc ON component.cokey = cogeomordesc.cokey
-                   ", .JOIN_TABLE(table), "
-                 WHERE legend.areasymbol != 'US'
+                   ", ifelse(representative_only, "AND rvindicator = 'Yes'", ""),
+                   sprintf("LEFT JOIN %s ON cogeomordesc.cogeomdkey = %s.cogeomdkey", table, table), "
+                 WHERE ", statsgo_filter, "
                    AND (", .NULL_FILTER(vars_default, miscellaneous_areas), ")
                    AND ", WHERE, "
                  GROUP BY [BYVAR]) AS b
                ON a.BYVAR = b.BYVAR
                ORDER BY [BYVARNAME], ", .ORDER_COLUMNS(vars_default))
-
+  
+  } else if (method == "NONE") {
+    
+    if (!missing(by)) {
+      message("NOTE: `by` argument is ignored when method='none'")
+    }
+    
+    q <- paste0("SELECT mapunit.mukey, component.cokey, compname, compkind, comppct_r, majcompflag, cogeomordesc.rvindicator,",
+                paste0(vars, collapse = ", "), "
+                FROM legend
+                  INNER JOIN mapunit ON mapunit.lkey = legend.lkey
+                  INNER JOIN component ON mapunit.mukey = component.mukey ", 
+                            ifelse(include_minors, "", "AND majcompflag = 'Yes'") ,"
+                  ", ifelse(miscellaneous_areas, "", " AND NOT component.compkind = 'Miscellaneous area'"),"
+                  LEFT JOIN cogeomordesc ON component.cokey = cogeomordesc.cokey
+                  ", sprintf("LEFT JOIN %s ON cogeomordesc.cogeomdkey = %s.cogeomdkey", table, table), "
+                  WHERE ", statsgo_filter, "
+                  AND (", .NULL_FILTER(vars_default, miscellaneous_areas), ")
+                  AND ", WHERE, "")
+  }
+  
   # insert grouping variable
   byname <- gsub("(.*\\.)?(.*)", "\\2", by)
   qsub <-  gsub("[BYVARNAME]", byname, gsub("[BYVAR]", by, q, fixed = TRUE), fixed = TRUE)
 
+  
   if (query_string) {
     return(qsub)
   }
-  if (!is.null(dsn)) {
-    # if dsn is specified
-    if (inherits(dsn, 'DBIConnection')) {
-      # allow existing connections (don't close them)
-      res <- DBI::dbGetQuery(dsn, qsub)
-    } else {
-      # otherwise create a connection
-      if (requireNamespace("RSQLite")) {
-        con <- dbConnect(RSQLite::SQLite(), dsn)
-        res <- dbGetQuery(con, qsub)
-        RSQLite::dbDisconnect(con)
-      } else stop("package 'RSQLite' is required to query a local data source (`dsn`)", call. = FALSE)
-    }
-  } else {
-    # otherwise query from SDA
-    res <- SDA_query(qsub)
-  }
+
+  res <- SDA_query(qsub, dsn = dsn)
 
   res
 }

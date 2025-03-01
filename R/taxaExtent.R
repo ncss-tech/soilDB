@@ -160,7 +160,6 @@
 #' * xeric: (xeric) more xeric than typic subgroup
 #' @export
 #' @examplesIf curl::has_internet() && requireNamespace("terra")
-#' @examples 
 #' \dontrun{
 #'   library(terra)
 #'   

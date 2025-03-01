@@ -89,8 +89,9 @@ extracted at the point locations. To return both the \emph{SpatRaster} and \emph
 object output in a \emph{list}, use \code{grid = NULL}.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("sf") && requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("sf", quietly = TRUE) && requireNamespace("terra", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
+\dontrun{
 b <- c(-119.747629, -119.67935, 36.912019, 36.944987)
 
 bbox.sp <- sf::st_as_sf(wk::rct(
@@ -129,12 +130,14 @@ res <- fetchSOLUS(
 
 # plot, truncating each profile to the predicted restriction depth
 aqp::plotSPC(trunc(res, 0, res$resdept_p), color = "claytotal_p", divide.hz = FALSE)
+}
 \dontshow{\}) # examplesIf}
 }
 \references{
-Nauman, T.W., Kienast-Brown, S., White, D.A. Brungard, C.W., Philippe, J., Roecker,
-S.M., Thompson, J.A. Soil Landscapes of the United States (SOLUS): developing predictive soil
-property maps of the conterminous US using hybrid training sets. In Prep for SSSAJ.
+Nauman, T. W., Kienast-Brown, S., Roecker, S. M., Brungard, C., White, D., Philippe,
+J., & Thompson, J. A. (2024). Soil landscapes of the United States (SOLUS): developing
+predictive soil property maps of the conterminous United States using hybrid training sets.
+Soil Science Society of America Journal, 88, 2046–2065. \doi{https://doi.org/10.1002/saj2.20769}
 }
 \author{
 Andrew G. Brown

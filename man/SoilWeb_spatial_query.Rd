@@ -38,8 +38,7 @@ servers, or a "snapshot" via SoilWeb.
 SDA now supports spatial queries, consider using \code{\link[=SDA_spatialQuery]{SDA_spatialQuery()}} instead.
 }
 \examples{
-\dontshow{if (curl::has_internet()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontshow{\}) # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 \donttest{
     # query by bbox
@@ -48,7 +47,7 @@ SDA now supports spatial queries, consider using \code{\link[=SDA_spatialQuery]{
     # query by coordinate pair
     SoilWeb_spatial_query(coords=c(-121, 38))
 }
-
+\dontshow{\}) # examplesIf}
 }
 \author{
 D.E. Beaudette

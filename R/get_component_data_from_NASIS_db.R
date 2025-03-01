@@ -41,6 +41,11 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
+  .soilDB_warn_deprecated_aliases(c("airtempa_l" = "maat_l",
+                                    "airtempa_r" = "maat_r",
+                                    "airtempa_h" = "maat_h",
+                                    "soiltempa_r" = "mast_r"))
+  
   q1 <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, 
                 localphase, drainagecl, hydricrating, hydgrp, tfact, wei, weg, frostact, corcon, corsteel, 
                 elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, 
@@ -589,7 +594,9 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
 #' @rdname get_component_data_from_NASIS_db
 get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
-  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, rvindicator as representative
+  .soilDB_warn_deprecated_aliases(c("upedonid" = "pedon_id", "rvindicator" = "representative"))
+  
+  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, upedonid, rvindicator as representative, rvindicator
 
   FROM copedon_View_1 copedon
 
@@ -610,7 +617,7 @@ get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   d <- dbQueryNASIS(channel, q)
 
   # missing pedon ID suggests records not in the selected set or local database
-  if(nrow(d) > 0 & any(is.na(d$pedon_id))) {
+  if(nrow(d) > 0 & any(is.na(d$upedonid))) {
     message('some linked pedons not in selected set or local database')
   }
 

@@ -1,5 +1,7 @@
 test_that("get_SDA_cosurfmorph works", {
   
+  skip_if_not_installed("httr")
+  
   skip_on_cran()
   
   skip_if_offline()
@@ -23,4 +25,10 @@ test_that("get_SDA_cosurfmorph works", {
   x <- get_SDA_cosurfmorph(WHERE = "areasymbol = 'CA630'", table = 'cosurfmorphss')
   skip_if(is.null(x))
   expect_true(inherits(x, 'data.frame'))
+  
+  x <- get_SDA_cosurfmorph(mukeys = 465186, 
+                           by = "mapunit.mukey", 
+                           miscellaneous_areas = TRUE, 
+                           include_minors = FALSE,
+                           method = "none")
 })
