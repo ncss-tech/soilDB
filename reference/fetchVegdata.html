@@ -86,6 +86,8 @@ database.</p>
 <span></span>
 <span><span class="fu">get_vegplot_prodquadrats_from_NASIS_db</span><span class="op">(</span>SS <span class="op">=</span> <span class="cn">TRUE</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">get_vegplot_groundsurface_from_NASIS_db</span><span class="op">(</span>SS <span class="op">=</span> <span class="cn">TRUE</span>, dsn <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">get_vegplot_tree_si_summary_from_NASIS_db</span><span class="op">(</span></span>
 <span>  SS <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -138,11 +140,32 @@ Associated User Pedon ID column will have their peiid reported in the <code>vegp
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies",
+    <p><code>fetchVegdata()</code>: A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies",
 "vegtransect", "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", "vegbasalarea", and
 "vegplottext" tables</p>
+<p><code>get_vegplot_location_from_NASIS_db()</code>: a data.frame containing location data from the corresponding record in the site table</p>
+<p><code>get_vegplot_trhi_from_NASIS_db()</code>: a data.frame containing Rangeland Health Indicator (RHI) data from the <code>vegplot</code> table</p>
+<p><code>get_vegplot_species_from_NASIS_db()</code>: a data.frame containing Plot Plant Inventory data</p>
+<p><code>get_vegplot_transect_from_NASIS_db()</code>: a data.frame containing Vegetation Transect data</p>
+<p><code>get_vegplot_transect_from_NASIS_db()</code>: a data.frame containing Vegetation Transect Plant Summary data</p>
+<p><code>get_vegplot_transpoints_from_NASIS_db()</code>: a data.frame containing Vegetation Transect Point Plant Cover Details</p>
+<p><code>get_vegplot_prodquadrats_from_NASIS_db()</code>: a data.frame containing Vegetation Transect Production Quadrat data</p>
+<p><code>get_vegplot_groundsurface_from_NASIS_db()</code>: a data.frame containing summary data for line point intercept ground surface cover hits by cover type.</p>
+<p><code>get_vegplot_tree_si_summary_from_NASIS_db()</code>: a data.frame containing Vegetation Plot Tree Site Index Summary data</p>
+<p><code>get_vegplot_speciesbasalarea_from_NASIS()</code>: a data.frame containing Vegetation Plot Species Basal Area and Trees Counted data</p>
+<p><code>get_vegplot_tree_si_details_from_NASIS_db()</code>: a data.frame containing Vegetation Plot Tree Site Index Details data</p>
+<p><code>get_vegplot_textnote_from_NASIS_db()</code>: a data.frame containing Vegetation Plot text notes</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># local_NASIS_defined()</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">vsurf</span> <span class="op">&lt;-</span> <span class="fu">get_vegplot_groundsurface_from_NASIS_db</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
