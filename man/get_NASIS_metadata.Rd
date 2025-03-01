@@ -41,6 +41,5 @@ For users without a local NASIS instance, a cached copy of the NASIS metadata ar
 See \code{?soilDB::metadata} for additional details.
 }
 \examples{
-get_NASIS_metadata()
 get_NASIS_column_metadata("texcl")
 }
