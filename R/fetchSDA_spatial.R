@@ -164,9 +164,15 @@ fetchSDA_spatial <- function(x,
     if (!requireNamespace("sf")) {
       stop("package 'sf' is required to read MLRA boundaries from ZIP file source", call. = FALSE)
     }
-    res <- sf::read_sf("/vsizip//vsicurl/https://www.nrcs.usda.gov/sites/default/files/2022-10/MLRA_52_2022.zip/MLRA_52_2022",                      query = sprintf("SELECT * FROM MLRA_52 WHERE MLRARSYM IN %s", format_SQL_in_statement(x)), 
-                       as_tibble = FALSE, 
-                       stringsAsFactors = FALSE)
+    res <- sf::read_sf(
+      "/vsizip//vsicurl/https://s3-fpac-nrcs-dshub-public.s3.us-gov-west-1.amazonaws.com/MLRA_52_2022.zip",
+      query = sprintf(
+        "SELECT * FROM MLRA_52 WHERE MLRARSYM IN %s",
+        format_SQL_in_statement(x)
+      ),
+      as_tibble = FALSE,
+      stringsAsFactors = FALSE
+    )
     # use "geom" for consistency with other spatial outputs from SDA; requires sf >= 1.0-6
     sf::st_geometry(res) <- "geom"
     # TODO: could provide custom MLRA aggregation methods here: centroid, bbox, convex hull?
