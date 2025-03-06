@@ -11,6 +11,15 @@ library(soilDB)
 ## click somewhere on the map
 ## press 'b', BBOX is copied to the clipboard
 
+
+## TX155: https://casoilresource.lawr.ucdavis.edu/gmap/?loc=34.05629,-99.57999,z14
+bb <- '-99.6431 34.0224,-99.6431 34.0902,-99.5268 34.0902,-99.5268 34.0224,-99.6431 34.0224'
+
+
+##
+bb <- '-80.9121 35.9244,-80.9121 35.9410,-80.8829 35.9410,-80.8829 35.9244,-80.9121 35.9244'
+
+
 ## PA055
 bb <- '-77.5878 39.9331,-77.5878 39.9645,-77.5191 39.9645,-77.5191 39.9331,-77.5878 39.9331'
 
@@ -137,7 +146,7 @@ SoilTaxonomyDendrogram(
   width = 0.3, 
   name.style = 'center-center', 
   depth.axis = list(line = -4),
-  hz.distinctness.offset = 'hzd',
+  # hz.distinctness.offset = 'hzd',
   max.depth = 200
 )
 
@@ -168,6 +177,7 @@ SoilTaxonomyDendrogram(
 
 ## notes:
 # * the following functions will nearly always require tinkering with `scaling.factor`
+
 
 options(.aqp.plotSPC.args = NULL)
 options(.aqp.plotSPC.args = list(width = 0.35, scaling.factor = 0.013, max.depth = 150, cex.id = 0.7, cex.names = 0.85))
