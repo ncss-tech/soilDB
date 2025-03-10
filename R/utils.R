@@ -2,6 +2,19 @@
 ## misc functions used by soilDB
 ##
 
+## simplfied base R implementation of glue::glue()
+# x: character vector with simple braced expressions to replace (NOT evaluate)
+# env: environment where expression values are defined (default: `parent.frame()`)
+.gluelite <- function(x, env = parent.frame()) {
+  as.character(unlist(sapply(x, function(y) {
+    vars <- regmatches(y, gregexpr("\\{[^{}]+\\}", y))[[1]]
+    uvars <- unique(vars) 
+    vals <- lapply(uvars, function(var) unique(get(gsub("[{}]", "", var), env, inherits = TRUE))) 
+    unique(apply(expand.grid(vals, stringsAsFactors = FALSE), 1, function(z) 
+      Reduce(function(y, var) sub(var, z[match(var, uvars)], y, fixed = TRUE), vars, y)))
+  }, simplify = FALSE)))
+}
+
 # convert diagnostic horizon info into wide-formatted, boolean table
 .diagHzLongtoWide <- function(d, feature = 'featkind', id = 'peiid') {
 
