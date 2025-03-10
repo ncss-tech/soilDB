@@ -175,7 +175,7 @@ SDA_query <- function(q, dsn = NULL) {
                               "text/xml; charset=utf-8") # error response (maybe not anymore?)
        ) {
       msg <- "Soil Data Access REST API is not currently available, please try again later."
-      if (is.null(h[[1]]$headers$`content-type`))
+      if (is.null(h[[1]]$headers$`content-type`)) {
         txt <- try(httr::content(r, as = "text", encoding = "UTF-8"), silent = TRUE)
         if (!inherits(txt, 'try-error')) {
           msg <- gsub("<[^>]*>", "", txt)
