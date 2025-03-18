@@ -48,22 +48,23 @@
 #' plot(res) 
 #' }
 fetchSTEDUS <- function(x = NULL, variables = NULL, filename = NULL, overwrite = FALSE) {
-  ind <- try(.get_STEDUS_index())
+  # ind <- try(.get_STEDUS_index())
   
-  if (inherits(ind, 'try-error'))
-    stop("Failed to retrieve STEDUS index", call. = FALSE)
+  # if (inherits(ind, 'try-error'))
+  #   stop("Failed to retrieve STEDUS index", call. = FALSE)
 
   # subset based on user specified properties, depths, and product type
-  if (!is.null(variables)) {
-    isub <- ind[ind$property %in% variables, ]
-  } else isub <- ind
-  if (!requireNamespace("terra")) {
-    stop("package 'terra' is required", call. = FALSE)
-  }
+  # if (!is.null(variables)) {
+  #   isub <- ind[ind$property %in% variables, ]
+  # } else isub <- ind
+  # if (!requireNamespace("terra")) {
+  #   stop("package 'terra' is required", call. = FALSE)
+  # }
+  urls <- paste0("https://storage.googleapis.com/dsm-ft-stedus-30m-public/", variables, ".tif")
   
   # create virtual raster from list of URLs
   r <- terra::rast(
-    paste0("/vsicurl/", isub$url)
+    paste0("/vsicurl/", urls)#isub$url)  
   )
   
   .process_raster_extent(r, x, filename = filename, overwrite = overwrite)
