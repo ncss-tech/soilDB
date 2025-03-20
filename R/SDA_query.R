@@ -166,12 +166,22 @@ SDA_query <- function(q, dsn = NULL) {
   
   # check response content type
   h <- r$all_headers
+  
   if (!is.null(h)) {
-    if (length(h) == 0 || !h[[1]]$headers$`content-type` %in% 
+    if (length(h) == 0 
+        || is.null(h[[1]]$headers$`content-type`)
+        || !h[[1]]$headers$`content-type` %in% 
                             c("application/json; charset=utf-8", # data response
-                              "text/xml; charset=utf-8") # error response
-       )  {
-      r <- try(stop("Soil Data Access POST REST API is not currently available, please try again later.", call. = FALSE), silent = TRUE)
+                              "text/xml; charset=utf-8") # error response (maybe not anymore?)
+       ) {
+      msg <- "Soil Data Access REST API is not currently available, please try again later."
+      if (is.null(h[[1]]$headers$`content-type`)) {
+        txt <- try(httr::content(r, as = "text", encoding = "UTF-8"), silent = TRUE)
+        if (!inherits(txt, 'try-error')) {
+          msg <- gsub("<[^>]*>", "", txt)
+        }
+      }
+      r <- try(stop(msg, call. = FALSE), silent = TRUE)
     }
   }
   
