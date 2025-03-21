@@ -358,7 +358,7 @@ get_SDA_property <-
           property, property, property)
   }
   
-  .property_min_max_CTE <- function(property, top_depth, bottom_depth, WHERE, FUN, include_minors = TRUE, miscellaneous_areas = FALSE) {
+  .property_min_max_CTE <- function(property, top_depth, bottom_depth, WHERE, FUN, include_minors = TRUE, miscellaneous_areas = FALSE, sqlite_dialect = FALSE) {
     sprintf("WITH funagg AS (SELECT mapunit.mukey, areasymbol, musym, muname, %s
                   FROM legend
                   INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
@@ -366,7 +366,7 @@ get_SDA_property <-
              SELECT mukey, areasymbol, musym, muname, %s FROM funagg
              GROUP BY mukey, areasymbol, musym, muname
              ORDER BY mukey",
-            paste0(sapply(property, function(x) .property_min_max_subquery(x, top_depth, bottom_depth, FUN = FUN, miscellaneous_areas = miscellaneous_areas)), collapse = ", "),
+            paste0(sapply(property, function(x) .property_min_max_subquery(x, top_depth, bottom_depth, FUN = FUN, miscellaneous_areas = miscellaneous_areas, sqlite_dialect = sqlite_dialect)), collapse = ", "),
             WHERE,
             ifelse(include_minors, ""," AND component.majcompflag = 'Yes'"),
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
@@ -387,13 +387,14 @@ get_SDA_property <-
             paste0(paste0(FUN, "(", property, ") AS ", property), collapse = ","))
   }
   
-  .property_min_max_subquery <- function(property, top_depth, bottom_depth, FUN, include_minors = TRUE, miscellaneous_areas = FALSE) {
-    sprintf("(SELECT TOP 1 %s(chm1.%s) FROM component AS cm1
+  .property_min_max_subquery <- function(property, top_depth, bottom_depth, FUN, include_minors = TRUE, miscellaneous_areas = FALSE, sqlite_dialect = FALSE) {
+    sprintf("(SELECT %s%s(chm1.%s) FROM component AS cm1
              INNER JOIN chorizon AS chm1 ON cm1.cokey = chm1.cokey AND cm1.cokey = component.cokey %s
-             WHERE chm1.hzdept_r BETWEEN %s AND %s OR chm1.hzdepb_r BETWEEN %s AND %s) AS %s",
-            FUN, property, 
+             WHERE chm1.hzdept_r BETWEEN %s AND %s OR chm1.hzdepb_r BETWEEN %s AND %s%s) AS %s",
+            ifelse(isTRUE(sqlite_dialect), "", "TOP 1 "), FUN, property, 
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
-            top_depth, bottom_depth, top_depth, bottom_depth, property)
+            top_depth, bottom_depth, top_depth, bottom_depth, 
+            ifelse(isTRUE(sqlite_dialect), " LIMIT 1", ""), property)
   }
   
   
@@ -731,7 +732,7 @@ get_SDA_property <-
     "WEIGHTED AVERAGE" = .property_weighted_average_CTE(agg_property, top_depth, bottom_depth, WHERE, include_minors = include_minors, miscellaneous_areas = miscellaneous_areas, dominant = FALSE, sqlite_dialect = sqlite_dialect),
     
     # minimum/maximum value
-    "MIN/MAX" = .property_min_max_CTE(agg_property, top_depth, bottom_depth, WHERE, FUN,  include_minors = include_minors, miscellaneous_areas = miscellaneous_areas),
+    "MIN/MAX" = .property_min_max_CTE(agg_property, top_depth, bottom_depth, WHERE, FUN,  include_minors = include_minors, miscellaneous_areas = miscellaneous_areas, sqlite_dialect = sqlite_dialect),
     
     # dominant component (numeric) (.dominant_component_numeric handles vector agg_property)
     "DOMINANT COMPONENT (NUMERIC)" = .property_dominant_component_numeric(agg_property, top_depth, bottom_depth, WHERE, miscellaneous_areas),
