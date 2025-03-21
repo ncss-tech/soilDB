@@ -1,6 +1,6 @@
 # Based on ssurgoOnDemand by chad ferguson and jason nemecek
 # SDA_hydric.R: translation of SDA_hydric.py into soilDB-style R function by andrew brown
-# last update: 2021/04/03
+# last update: 2025/03/21
 
 #' Get map unit hydric soils information from Soil Data Access
 #'
@@ -56,7 +56,7 @@ get_SDA_hydric <- function(areasymbols = NULL,
                                        ifelse(include_minors, "", " AND c.majcompflag = 'Yes'")), w),
                                 n = 1, sqlite = !is.null(dsn))
 
-    q <- paste0("SELECT mapunit.mukey, areasymbol, musym, mapunit.muname, 
+    q <- paste0("WITH main_query AS (SELECT mapunit.mukey, areasymbol, musym, mapunit.muname, 
               (", .h0(""), ") AS total_comppct,
               (", .h0("AND majcompflag = 'Yes'"), ") AS count_maj_comp,
               (", .h0("AND hydricrating = 'Yes'"), ") AS all_hydric,
@@ -65,9 +65,8 @@ get_SDA_hydric <- function(areasymbols = NULL,
               (", .h0("AND majcompflag != 'Yes' AND hydricrating = 'Yes'"), ") AS hydric_inclusions,
               (", .h0("AND hydricrating != 'Yes'"), ") AS all_not_hydric,
               (", .h0("AND hydricrating IS NULL"), ") AS hydric_null
-            INTO #main_query
             FROM legend
-            INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND ", WHERE, "
+            INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND ", WHERE, ")
             SELECT mukey, areasymbol, musym, muname,
                total_comppct AS total_comppct,
                hydric_majors AS hydric_majors,
@@ -78,7 +77,7 @@ get_SDA_hydric <- function(areasymbols = NULL,
             WHEN hydric_majors > 0 THEN 'Partially Hydric'
             WHEN hydric_majors + hydric_inclusions < total_comppct / 2 THEN 'Predominantly Nonhydric'
             ELSE 'Error' END AS HYDRIC_RATING
-            FROM #main_query")
+            FROM main_query")
             # TODO: refactor out the temp table and CASE WHEN for HYDRIC_RATING calculated in R
 
     comp_selection <- ""
