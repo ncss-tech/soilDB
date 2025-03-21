@@ -769,7 +769,7 @@ get_SDA_interpretation <- function(rulename,
   switch(agg_method$method,
          "DOMINANT COMPONENT" = .interpretation_aggregation(interp, WHERE, dominant = TRUE, miscellaneous_areas = miscellaneous_areas, include_minors = include_minors, sqlite = sqlite),
          "DOMINANT CONDITION" = .interpretation_by_condition(interp, WHERE, dominant = TRUE, miscellaneous_areas = miscellaneous_areas, include_minors = include_minors, sqlite = sqlite),
-         "WEIGHTED AVERAGE" =   .interpretation_weighted_average(interp, WHERE, miscellaneous_areas = miscellaneous_areas, include_minors = include_minors, sqlite = sqlite),
+         "WEIGHTED AVERAGE" =   .interpretation_weighted_average_CTE(interp, WHERE, miscellaneous_areas = miscellaneous_areas, include_minors = include_minors, sqlite = sqlite),
          "NONE" =               .interpretation_aggregation(interp, WHERE, miscellaneous_areas = miscellaneous_areas, include_minors = include_minors, sqlite = sqlite)
   )
 }
@@ -845,6 +845,82 @@ get_SDA_interpretation <- function(rulename,
                                    INNER JOIN mapunit AS mu ON c1.mukey = mu.mukey AND c1.mukey = mapunit.mukey %s
                                    ORDER BY c1.comppct_r DESC, c1.cokey", ifelse(miscellaneous_areas, "", "AND c1.compkind != 'miscellaneous area'")), 
                                                                   n = 1, sqlite = sqlite)), ""))
+}
+
+.interpretation_weighted_average_CTE <- function(interp, where_clause, miscellaneous_areas = FALSE, include_minors = TRUE, sqlite = FALSE) {
+  aggfun <- "STRING_AGG(CONCAT(interphrc, ' (', interphr, ')'), '; ')"
+  nullfun <- "ISNULL"
+  if (sqlite) {
+    nullfun <- "IFNULL"
+    aggfun <- "GROUP_CONCAT(interphrc || ' (' || interphr || ')', '; ')"
+  }
+  sprintf("WITH main AS (SELECT mapunit.mukey, areasymbol, musym, muname,
+                %s
+                FROM legend
+                INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
+                INNER JOIN component ON component.mukey = mapunit.mukey %s
+                GROUP BY areasymbol, musym, muname, mapunit.mukey)
+                SELECT areasymbol, musym, muname, mukey,
+                %s,
+                %s,
+                %s
+                FROM main",
+          paste0(sapply(interp, function(x) sprintf("(SELECT %sCASE WHEN sdvattribute.ruledesign = 1 THEN 'limitation'
+                  WHEN sdvattribute.ruledesign = 2 THEN 'suitability' END
+                  FROM mapunit AS mu
+                  INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
+                  INNER JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth = 0 AND mrulename LIKE '%s'
+                  INNER JOIN sdvattribute ON cointerp.rulename = sdvattribute.nasisrulename
+                  GROUP BY mu.mukey, sdvattribute.ruledesign%s) AS [design_%s],
+                  ROUND ((SELECT SUM (interphr * comppct_r)
+                  FROM mapunit AS mu
+                  INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
+                  INNER JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth = 0 AND mrulename LIKE '%s'
+                  GROUP BY mu.mukey),2) AS [rating_%s],
+                  ROUND ((SELECT SUM (comppct_r)
+                  FROM mapunit AS mu
+                  INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
+                  INNER JOIN cointerp ON c.cokey = cointerp.cokey AND ruledepth = 0 AND mrulename LIKE '%s'
+                  AND (interphr) IS NOT NULL GROUP BY mu.mukey),2) AS [sum_com_%s],
+                  (SELECT %s
+                   FROM mapunit AS mu
+                   INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
+                   INNER JOIN cointerp ON c.cokey = cointerp.cokey 
+                   AND ruledepth != 0 AND mrulename LIKE '%s'
+                   GROUP BY mu.mukey) AS [reason_%s]",
+                                                    ifelse(isTRUE(sqlite), "", "TOP 1 "),
+                                                    ifelse(miscellaneous_areas, "", "AND c.compkind != 'miscellaneous area'"),
+                                                    x, ifelse(isTRUE(sqlite), " LIMIT 1", ""), .cleanRuleColumnName(x),
+                                                    ifelse(miscellaneous_areas, "", "AND c.compkind != 'miscellaneous area'"),
+                                                    x, .cleanRuleColumnName(x),
+                                                    ifelse(miscellaneous_areas, "", "AND c.compkind != 'miscellaneous area'"),
+                                                    x, .cleanRuleColumnName(x),
+                                                    aggfun,
+                                                    ifelse(miscellaneous_areas, "", "AND c.compkind != 'miscellaneous area'"),
+                                                    x, .cleanRuleColumnName(x))), collapse = ", "),
+          where_clause,
+          ifelse(miscellaneous_areas, "", "AND compkind != 'miscellaneous area'"),
+          paste0(sapply(interp,
+                        function(x) sprintf("%s(ROUND(([rating_%s] / [sum_com_%s]),2), 99) AS [rating_%s]",
+                                            nullfun, .cleanRuleColumnName(x), .cleanRuleColumnName(x), .cleanRuleColumnName(x))),
+                 collapse = ", "),
+          paste0(sapply(interp,
+                        function(x) sprintf(gsub("design", paste0("[design_", .cleanRuleColumnName(x),"]"),
+                                                 gsub("sum_com", paste0("[sum_com_", .cleanRuleColumnName(x), "]"),
+                                                      gsub("rating", paste0("[rating_", .cleanRuleColumnName(x), "]"),
+                                                           "CASE WHEN rating IS NULL THEN 'Not Rated'
+                  WHEN design = 'suitability' AND ROUND((rating/sum_com),2) <= 0 THEN 'Not suited'
+                  WHEN design = 'suitability' AND ROUND((rating/sum_com),2) > 0.001 and ROUND((rating/sum_com),2) <=0.333 THEN 'Poorly suited'
+                  WHEN design = 'suitability' AND ROUND((rating/sum_com),2) > 0.334 and ROUND((rating/sum_com),2) <=0.666  THEN 'Moderately suited'
+                  WHEN design = 'suitability' AND ROUND((rating/sum_com),2) > 0.667 and ROUND((rating/sum_com),2) <=0.999  THEN 'Moderately well suited'
+                  WHEN design = 'suitability' AND ROUND((rating/sum_com),2) = 1 THEN 'Well suited'
+                  WHEN design = 'limitation' AND ROUND((rating/sum_com),2) <= 0 THEN 'Not limited'
+                  WHEN design = 'limitation' AND ROUND((rating/sum_com),2) > 0.001 and ROUND((rating/sum_com),2) <=0.333 THEN 'Slightly limited'
+                  WHEN design = 'limitation' AND ROUND((rating/sum_com),2) > 0.334 and ROUND((rating/sum_com),2) <=0.666 THEN 'Somewhat limited'
+                  WHEN design = 'limitation' AND ROUND((rating/sum_com),2) > 0.667 and ROUND((rating/sum_com),2) <=0.999 THEN 'Moderately limited'
+                  WHEN design = 'limitation' AND ROUND((rating/sum_com),2) = 1 THEN 'Very limited' END AS [class_%s]"))),
+                                            .cleanRuleColumnName(x))),
+                 collapse = ", "), paste0(sapply(interp, function(x) sprintf("[reason_%s]", .cleanRuleColumnName(x))), collapse = ", "))
 }
 
 .interpretation_weighted_average <- function(interp, where_clause, miscellaneous_areas = FALSE, include_minors = TRUE, sqlite = FALSE) {
