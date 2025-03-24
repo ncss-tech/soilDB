@@ -3,7 +3,9 @@
  - Added `get_vegplot_groundsurface_from_NASIS_db()` thanks to Greg Schmidt (@phytoclast; #373)
  - Added `"transectgroundsurfcover"` table to `"vegetation"` set for `get_NASIS_table_name_by_purpose()`
  - Added missing `fetchNASIS("components")` deprecation messages for maat_l, maat_r, maat_h, mast_r, ecosite_id, ecosite_name, othervegid, and othervegclass columns
- 
+ - `fetchSDA_spatial(geom.src="mlrapolygon")`: uses an AWS (S3) source and Seek-optimized ZIP file (thanks to @jneme910)
+ - `get_SDA_property()` (`method` `"weighted average"` and `"min/max"`), `get_SDA_hydric()`, and `get_SDA_interpretation()` (`method` `"weighted average"`) now use Common Table Expressions (CTEs) and therefore are compatible with local (SQLite or other) data sources
+
 # soilDB 2.8.8 (2025-02-10)
  - `fetchSCAN()`: Bug fix when sensor column contains all `NA`
  - `ROSETTA()`: now uses HTTPS URL for API endpoint
