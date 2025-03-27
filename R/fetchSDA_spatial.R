@@ -84,6 +84,10 @@ fetchSDA_spatial <- function(x,
 
   method <- match.arg(tolower(method), c('feature', 'bbox', 'extent', 'envelope', 'point', 'convexhull', 'union', 'collection'))
 
+  if (missing(x)) {
+    x <- NULL
+  }
+  
   # remove any redundancy in input off the top -- this is important
   # in case x is not ordered and contains duplicates which will possibly
   # be in different chunks
@@ -91,7 +95,9 @@ fetchSDA_spatial <- function(x,
 
   if (geom.src == "mlrapolygon") {
     # mlra polygons are not part of SSURGO or STATSGO
-    by.col <- "MLRARSYM"
+    if (by.col == "mukey") {
+      by.col <- "MLRARSYM"
+    }
   } else if (geom.src == 'sapolygon' && (by.col %in% c("mukey", "nmusym", "nationalmusym"))) {
     # lkey and areasymbol are the option for sapolygon
     if (is.numeric(x)) {
@@ -160,16 +166,19 @@ fetchSDA_spatial <- function(x,
     
     mukey.list <- unique(res$lkey)
     
-  } else if (by.col == "MLRARSYM") {
+  } else if (geom.src == "mlrapolygon") {
     if (!requireNamespace("sf")) {
       stop("package 'sf' is required to read MLRA boundaries from ZIP file source", call. = FALSE)
     }
     res <- sf::read_sf(
       "/vsizip//vsicurl/https://s3-fpac-nrcs-dshub-public.s3.us-gov-west-1.amazonaws.com/MLRA_52_2022.zip",
-      query = sprintf(
-        "SELECT * FROM MLRA_52 WHERE MLRARSYM IN %s",
-        format_SQL_in_statement(x)
-      ),
+      query = paste0(
+        "SELECT * FROM MLRA_52 ",
+        ifelse(
+          is.null(x),
+          "",
+          sprintf("WHERE %s IN %s", by.col, format_SQL_in_statement(x))
+        )),
       as_tibble = FALSE,
       stringsAsFactors = FALSE
     )
