@@ -40,8 +40,9 @@ get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = NULL, ds
   d.project <- dbQueryNASIS(channel, q)
 
   # test is selected set is empty
-  if (nrow(d.project) == 0) message("your selected set is missing the project table, please load it and try again")
-
+  if (nrow(d.project) == 0)
+    message("Your selected set or local database is missing data in the project table, please load it and try again")
+  
   # uncode metadata domains
   d.project <- uncode(d.project, dsn = dsn)
 

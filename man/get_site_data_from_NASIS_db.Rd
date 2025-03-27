@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_site_data_from_NASIS_db.R
 \name{get_site_data_from_NASIS_db}
 \alias{get_site_data_from_NASIS_db}
+\alias{get_site_association_from_NASIS}
 \title{Get Site Data from a local NASIS Database}
 \usage{
 get_site_data_from_NASIS_db(
@@ -11,6 +12,8 @@ get_site_data_from_NASIS_db(
   stringsAsFactors = NULL,
   dsn = NULL
 )
+
+get_site_association_from_NASIS(SS = TRUE, dsn = NULL)
 }
 \arguments{
 \item{SS}{fetch data from Selected Set in NASIS or from the entire local
@@ -29,6 +32,8 @@ A data.frame
 }
 \description{
 Get site-level data from a local NASIS database.
+
+\code{get_site_association_from_NASIS()}: Get Associated User Site IDs for each Site.
 }
 \details{
 It is possible to have multiple pedon records per site observation and multiple site observations
@@ -50,6 +55,6 @@ function. In lieu of bedrock depth the first record in the table is returned.
 \code{\link[=get_hz_data_from_NASIS_db]{get_hz_data_from_NASIS_db()}}, \code{\link[=fetchNASIS]{fetchNASIS()}}, \code{\link[=fetchVegdata]{fetchVegdata()}}
 }
 \author{
-Jay M. Skovlin and Dylan E. Beaudette
+Jay M. Skovlin, Dylan E. Beaudette, Andrew G. Brown, Greg Schmidt
 }
 \keyword{manip}
