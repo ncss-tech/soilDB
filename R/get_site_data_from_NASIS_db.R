@@ -31,7 +31,7 @@
 #'
 #' @return A data.frame
 #'
-#' @author Jay M. Skovlin and Dylan E. Beaudette
+#' @author Jay M. Skovlin, Dylan E. Beaudette, Andrew G. Brown, Greg Schmidt
 #' @seealso [get_hz_data_from_NASIS_db()], [fetchNASIS()], [fetchVegdata()]
 #' @keywords manip
 #'
@@ -254,3 +254,36 @@ ORDER BY siteobs_View_1.siteobsiid;")
 	return(d2)
 }
 
+#' @description `get_site_association_from_NASIS()`: Get Associated User Site IDs for each Site.
+#' @rdname get_site_data_from_NASIS_db
+#' @export 
+get_site_association_from_NASIS <- function(SS = TRUE, dsn = NULL) {
+  
+  q <-  "SELECT sa.usiteassocid, s.usiteid
+         FROM siteassoc_View_1 sa 
+         INNER JOIN siteassocsite sas ON sas.siteassociidref = sa.siteassociid 
+         LEFT OUTER JOIN site_View_1 s ON s.siteiid = sas.siteiidref"
+      
+  # toggle selected set vs. local DB
+  if (SS == FALSE) {
+    q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
+  }
+  
+  channel <- dbConnectNASIS(dsn)
+  
+  if (inherits(channel, 'try-error'))
+    return(data.frame())
+  
+  # exec query
+  d.association <- dbQueryNASIS(channel, q)
+  
+  # test is selected set is empty
+  if (nrow(d.association) == 0)
+    message("Your selected set or local database is missing data in the site association table, please load it and try again")
+  
+  # uncode metadata domains
+  d.association <- uncode(d.association, dsn = dsn)
+  
+  # done
+  return(d.association)
+}
