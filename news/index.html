@@ -44,6 +44,10 @@
 <li>Added <code>"transectgroundsurfcover"</code> table to <code>"vegetation"</code> set for <code><a href="../reference/get_NASIS_table_name_by_purpose.html">get_NASIS_table_name_by_purpose()</a></code>
 </li>
 <li>Added missing <code>fetchNASIS("components")</code> deprecation messages for maat_l, maat_r, maat_h, mast_r, ecosite_id, ecosite_name, othervegid, and othervegclass columns</li>
+<li>
+<code>fetchSDA_spatial(geom.src="mlrapolygon")</code>: uses an AWS (S3) source and Seek-optimized ZIP file (thanks to <a href="https://github.com/jneme910" class="external-link">@jneme910</a>)</li>
+<li>
+<code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code> (<code>method</code> <code>"weighted average"</code> and <code>"min/max"</code>), <code><a href="../reference/get_SDA_hydric.html">get_SDA_hydric()</a></code>, and <code><a href="../reference/get_SDA_interpretation.html">get_SDA_interpretation()</a></code> (<code>method</code> <code>"weighted average"</code>) now use Common Table Expressions (CTEs) and therefore are compatible with local (SQLite or other) data sources</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.8.8" id="soildb-288-2025-02-10">soilDB 2.8.8 (2025-02-10)<a class="anchor" aria-label="anchor" href="#soildb-288-2025-02-10"></a></h2><p class="text-muted">CRAN release: 2025-02-10</p>
