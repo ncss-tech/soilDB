@@ -1,4 +1,4 @@
-# soilDB 2.8.9 (development)
+# soilDB 2.8.9 (2025-04-04)
  - soilDB now requires aqp >= 2.1.0
  - Added `get_vegplot_groundsurface_from_NASIS_db()` thanks to Greg Schmidt (@phytoclast; #373)
  - Added `"transectgroundsurfcover"` table to `"vegetation"` set for `get_NASIS_table_name_by_purpose()`
