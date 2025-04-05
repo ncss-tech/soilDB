@@ -288,7 +288,12 @@ create a 1000m radius circular polygon around the point with
 <span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">b</span>, db <span class="op">=</span> <span class="st">'gSSURGO'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># inspect</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">mu</span>,</span>
+<span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">$</span><span class="va">value</span>, collapse <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add buffer, after transforming to mukey grid CRS</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">b</span>, <span class="st">"EPSG:5070"</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -335,7 +340,12 @@ link to those coordinates and zoom level.</p>
 <span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mukey.wcs.html">mukey.wcs</a></span><span class="op">(</span><span class="va">x</span>, db <span class="op">=</span> <span class="st">'gSSURGO'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># inspect</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">mu</span>, </span>
+<span>  legend <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>  axes <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">$</span><span class="va">value</span>, collapse <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add original BBOX, after transforming to mukey grid CRS</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">5070</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -379,7 +389,7 @@ the map.</p>
 <span><span class="co">#&gt; extent      : -1365495, -1358925, 2869245, 2873655  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file255c22f5f346 </span></span>
+<span><span class="co">#&gt; varname     : file28c071950028 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   :  144983 </span></span>
@@ -487,7 +497,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file255c3a8de50b </span></span>
+<span><span class="co">#&gt; varname     : file28c02541f1e2 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :  mukey </span></span>
 <span><span class="co">#&gt; min value   : 545800 </span></span>
@@ -501,7 +511,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file255c5490790a </span></span>
+<span><span class="co">#&gt; varname     : file28c02d7679bb </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   :  545800 </span></span>
@@ -515,7 +525,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file255c391c196f </span></span>
+<span><span class="co">#&gt; varname     : file28c03f4d1b6a </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   : 3244721 </span></span>
@@ -530,7 +540,7 @@ Access.</p>
 <span>  <span class="va">x</span>,</span>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  main <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span></span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">value</span>, collapse <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">a</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -539,7 +549,7 @@ Access.</p>
 <span>  <span class="va">y</span>,</span>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  main <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span></span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">$</span><span class="va">value</span>, collapse <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">a</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -548,7 +558,7 @@ Access.</p>
 <span>  <span class="va">z</span>,</span>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  main <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span>,</span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">$</span><span class="va">value</span>, collapse <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span>,</span>
 <span>  ext <span class="op">=</span> <span class="va">x</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">a</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -570,7 +580,7 @@ reflect the relative generality of this product.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411095  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file255c45eb81ee </span></span>
+<span><span class="co">#&gt; varname     : file28c01c91bf3a </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :  mukey </span></span>
 <span><span class="co">#&gt; min value   : 659074 </span></span>
@@ -649,7 +659,7 @@ coast of Puerto Rico</a>.</p>
 <span>  <span class="va">mu</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  main <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">[</span><span class="st">'description'</span><span class="op">]</span>,</span>
+<span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">$</span><span class="va">value</span>, collapse <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span>,</span>
 <span>  colNA <span class="op">=</span> <span class="st">'royalblue'</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-16-1.png" width="234" style="display: block; margin: auto;"></p>
