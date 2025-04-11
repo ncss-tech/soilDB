@@ -395,7 +395,7 @@ plot(
   x,
   axes = FALSE,
   legend = FALSE,
-  main = metags(x)['description']
+  main = paste0(metags(mu)$value, collapse = " - ")
 )
 
 # STATSGO
@@ -403,7 +403,7 @@ plot(
   statsgo,
   axes = FALSE,
   legend = FALSE,
-  main = metags(statsgo)['description']
+  main = paste0(metags(statsgo)$value, collapse = " - ")
 )
 ```
 
@@ -430,7 +430,7 @@ plot(
   mu,
   legend = FALSE,
   axes = FALSE,
-  main = metags(mu)['description'],
+  main = paste0(metags(mu)$value, collapse = " - "),
   colNA = 'royalblue'
 )
 ```
