@@ -14,7 +14,7 @@ get_vegplot_from_NASIS_db <- function(SS = TRUE,
   }
 
   q.vegplot <- "SELECT siteiid, so.siteobsiid, usiteid AS site_id, usiteid, assocuserpedonid as pedon_id, assocuserpedonid, 
-    v.vegplotid AS vegplot_id, v.vegplotid, vegplotiid, vegplotname, obsdate, primarydatacollector, datacollectionpurpose,
+    v.vegplotid AS vegplot_id, v.vegplotid, vegplotiid, vegplotname, obsdate, obsintensity, primarydatacollector, datacollectionpurpose,
     vegdataorigin, vegplotsize, soilprofileindicator, soil232idlegacy, ahorizondepth, alkalinesalineindicator,
     alkalineaffected, salinityclass, restrictivelayerdepthlegacy, legacysoilcompname, legacysoilphase, 
     legacylocalsoilphase, legacysoilsurftext, legacysurftextmod, legacyterminlieu, erosionclasslegacy, 
