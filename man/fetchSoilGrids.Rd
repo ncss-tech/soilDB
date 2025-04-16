@@ -23,41 +23,65 @@ fetchSoilGrids(
 )
 }
 \arguments{
-\item{x}{A \code{data.frame} containing 3 columns referring to site ID, latitude and longitude. Or a spatial (sf, terra) object for which a bounding box can be calculated when \code{grid=TRUE}.}
+\item{x}{A \code{data.frame} containing 3 columns referring to site ID, latitude
+and longitude. Or a spatial (sf, terra) object for which a bounding box can
+be calculated when \code{grid=TRUE}.}
 
-\item{loc.names}{Optional: Column names referring to site ID, latitude and longitude. Default: \code{c("id", "lat", "lon")}}
+\item{loc.names}{Optional: Column names referring to site ID, latitude and
+longitude. Default: \code{c("id", "lat", "lon")}}
 
-\item{depth_intervals}{Default: \code{"0-5"}, \code{"5-15"}, \code{"15-30"}, \code{"30-60"}, \code{"60-100"}, \code{"100-200"}}
+\item{depth_intervals}{Default: \code{"0-5"}, \code{"5-15"}, \code{"15-30"}, \code{"30-60"},
+\code{"60-100"}, \code{"100-200"}}
 
-\item{variables}{Default: \code{"bdod"}, \code{"cec"}, \code{"cfvo"}, \code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}, \code{"wv0010"}, \code{"wv0033"}, \code{"wv1500"}. Optionally \code{"ocs"} (only for 0 to 30 cm interval).}
+\item{variables}{Default: \code{"bdod"}, \code{"cec"}, \code{"cfvo"}, \code{"clay"},
+\code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}, \code{"wv0010"},
+\code{"wv0033"}, \code{"wv1500"}. Optionally \code{"ocs"} (only for 0 to 30 cm interval).}
 
-\item{grid}{Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: \code{FALSE}}
+\item{grid}{Download subset of SoilGrids Cloud Optimized GeoTIFF? Default:
+\code{FALSE}}
 
-\item{filename}{Only used when \code{grid=TRUE}. If \code{NULL} defaults to an in-memory raster, or temporary file if result does not fit in memory.}
+\item{filename}{Only used when \code{grid=TRUE}. If \code{NULL} defaults to an
+in-memory raster, or temporary file if result does not fit in memory.}
 
 \item{overwrite}{Only used when \code{grid=TRUE}. Default: \code{FALSE}}
 
-\item{target_resolution}{Only used when \code{grid=TRUE}. Default: \code{c(250, 250)} (250m x 250m pixels)}
+\item{target_resolution}{Only used when \code{grid=TRUE}. Default: \code{c(250, 250)}
+(250m x 250m pixels)}
 
-\item{summary_type}{Only used when \code{grid=TRUE}. One or more of \code{"Q0.05"}, \code{"Q0.5"}, \code{"Q0.95"}, \code{"mean"}; these are summary statistics that
-correspond to 5th, 50th, 95th percentiles, and mean value for selected \code{variables}.}
+\item{summary_type}{Only used when \code{grid=TRUE}. One or more of \code{"Q0.05"},
+\code{"Q0.5"}, \code{"Q0.95"}, \code{"mean"}; these are summary statistics that correspond
+to 5th, 50th, 95th percentiles, and mean value for selected \code{variables}.}
 
-\item{endpoint}{Optional: custom API endpoint. Default: \code{"https://rest.isric.org/soilgrids/v2.0/properties/query"} when \code{grid=FALSE}; \code{"https://files.isric.org/soilgrids/latest/data/"} when \code{grid=TRUE}.}
+\item{endpoint}{Optional: custom API endpoint. Default:
+\code{"https://rest.isric.org/soilgrids/v2.0/properties/query"} when
+\code{grid=FALSE}; \code{"https://files.isric.org/soilgrids/latest/data/"} when
+\code{grid=TRUE}.}
 
-\item{...}{Additional arguments passed to \code{terra::writeRaster()} when \code{grid=TRUE}.}
+\item{...}{Additional arguments passed to \code{terra::writeRaster()} when
+\code{grid=TRUE}.}
 
 \item{verbose}{Print messages? Default: \code{FALSE}}
 
-\item{progress}{logical, give progress when iterating over multiple requests; Default: \code{FALSE}}
+\item{progress}{logical, give progress when iterating over multiple requests;
+Default: \code{FALSE}}
 }
 \value{
-A \emph{SoilProfileCollection} or \emph{SpatRaster} when \code{grid=TRUE}. Returns \code{try-error} if all requests fail. Any error messages resulting from parsing will be echoed when \code{verbose=TRUE}.
+A \emph{SoilProfileCollection} (or \emph{SpatRaster} when \code{grid=TRUE}). Returns
+\code{try-error} if all requests fail. Any error messages resulting from parsing
+will be echoed when \code{verbose=TRUE}.
 }
 \description{
-This function obtains \href{https://soilgrids.org}{SoilGrids 2.0} properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent (see \code{grid=TRUE} argument).
+This function obtains \href{https://soilgrids.org}{SoilGrids 2.0} properties
+information (250m raster resolution) given a \code{data.frame} containing
+site IDs, latitudes and longitudes, or a spatial extent (see \code{grid=TRUE}
+argument).
+
+SoilGrids API and maps return values as whole (integer) numbers to minimize
+the storage space used. These values have conversion factors applied by
+\code{fetchSoilGrids()} to produce conventional units shown in the table below
+(see Details).
 }
 \details{
-SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values have conversion factors applied by \code{fetchSoilGrids()} to produce conventional units shown in the table below (see Details).
 \subsection{Properties}{\tabular{lllrl}{
    Name \tab Description \tab Mapped units \tab Conversion factor \tab Conventional units \cr
    bdod \tab Bulk density of the fine earth fraction \tab cg/cm^3 \tab 100 \tab kg/dm^3 \cr
@@ -77,14 +101,25 @@ SoilGrids API and maps return values as whole (integer) numbers to minimize the 
 }
 
 
-SoilGrids predictions are made for the six standard depth intervals specified in the GlobalSoilMap IUSS working group and its specifications. The default depth
-intervals returned are (in centimeters): \code{"0-5"}, \code{"5-15"}, \code{"15-30"}, \code{"30-60"}, \code{"60-100"}, \code{"100-200"} for the properties \code{"bdod"}, \code{"cec"}, \code{"cfvo"},
-\code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"}, \code{"ocd"}, \code{"wv0010"}, \code{"wv0033"}, \code{"wv1500"}--each with 5th, 50th, 95th, mean and uncertainty values. Soil organic carbon stocks (0-30cm) (\code{variables="ocs"}) are returned only for \code{depth_intervals="0-30"}. The uncertainty values are the ratio
-between the inter-quantile range (90\% prediction interval width) and the median : \code{(Q0.95-Q0.05)/Q0.50.} All values are converted from "mapped" to "conventional"
-based on above table conversion factors. Point data requests are made through \code{"properties/query"} endpoint of the \href{https://www.isric.org/explore/soilgrids/faq-soilgrids}{SoilGrids v2.0 REST API}.
-Please check ISRIC's data policy, disclaimer and citation: \url{https://www.isric.org/about/data-policy}.
+SoilGrids predictions are made for the six standard depth intervals specified
+in the GlobalSoilMap IUSS working group and its specifications. The default
+depth intervals returned are (in centimeters): \code{"0-5"}, \code{"5-15"}, \code{"15-30"},
+\code{"30-60"}, \code{"60-100"}, \code{"100-200"} for the properties \code{"bdod"}, \code{"cec"},
+\code{"cfvo"}, \code{"clay"}, \code{"nitrogen"}, \code{"phh2o"}, \code{"sand"}, \code{"silt"}, \code{"soc"},
+\code{"ocd"}, \code{"wv0010"}, \code{"wv0033"}, \code{"wv1500"}--each with percentiles (5th,
+50th, 95th), mean and uncertainty values. The summary statistic name will be
+appended to the abbreviate variable name for each depth interval returned.
+Soil organic carbon stocks (0-30cm) (\code{variables="ocs"}) are returned only for
+\code{depth_intervals="0-30"}. The uncertainty values are the ratio between the
+inter-quantile range (90\% prediction interval width) and the median :
+\code{(Q0.95-Q0.05)/Q0.50.} All values are converted from "mapped" to
+"conventional" based on above table conversion factors. Point data requests
+are made through \code{"properties/query"} endpoint of the \href{https://www.isric.org/explore/soilgrids/faq-soilgrids}{SoilGrids v2.0 REST API}. Please check
+ISRIC's data policy, disclaimer and citation:
+\url{https://www.isric.org/about/data-policy}.
 
-Find out more information about the SoilGrids and GlobalSoilMap products here:
+Find out more information about the SoilGrids and GlobalSoilMap products
+here:
 \itemize{
 \item \url{https://www.isric.org/explore/soilgrids/faq-soilgrids}
 \item \url{https://www.isric.org/sites/default/files/GlobalSoilMap_specifications_december_2015_2.pdf}
@@ -133,9 +168,16 @@ Find out more information about the SoilGrids and GlobalSoilMap products here:
 \references{
 \itemize{
 \item \strong{Common soil chemical and physical properties:}
-Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217–240, 2021. DOI: \doi{https://doi.org/10.5194/soil-7-217-2021}
+Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B.,
+Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for
+the globe with quantified spatial uncertainty, SOIL, 7, 217–240, 2021. DOI:
+\doi{https://doi.org/10.5194/soil-7-217-2021}
 \item \strong{Soil water content at different pressure heads:}
-Turek, M.E.,  Poggio, L., Batjes, N. H., Armindo, R. A.,  de Jong van Lier, Q.,  de Sousa, L.M.,  Heuvelink, G. B. M. : Global mapping of volumetric water retention at 100, 330 and 15000 cm suction using the WoSIS database, International Soil and Water Conservation Research, 11-2, 225-239, 2023. DOI: \doi{https://doi.org/10.1016/j.iswcr.2022.08.001}
+Turek, M.E.,  Poggio, L., Batjes, N. H., Armindo, R. A.,  de Jong van Lier,
+Q.,  de Sousa, L.M.,  Heuvelink, G. B. M. : Global mapping of volumetric
+water retention at 100, 330 and 15000 cm suction using the WoSIS database,
+International Soil and Water Conservation Research, 11-2, 225-239, 2023. DOI:
+\doi{https://doi.org/10.1016/j.iswcr.2022.08.001}
 }
 }
 \author{

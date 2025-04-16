@@ -1,9 +1,17 @@
 #' Get SoilGrids 2.0 Property Estimates for Points or Spatial Extent
 #'
-#' This function obtains [SoilGrids 2.0](https://soilgrids.org) properties information (250m raster resolution) given a \code{data.frame} containing site IDs, latitudes and longitudes, or a spatial extent (see `grid=TRUE` argument).
-#' 
-#' SoilGrids API and maps return values as whole (integer) numbers to minimize the storage space used. These values have conversion factors applied by `fetchSoilGrids()` to produce conventional units shown in the table below (see Details).
-#' 
+#' @description
+#'
+#' This function obtains [SoilGrids 2.0](https://soilgrids.org) properties
+#' information (250m raster resolution) given a \code{data.frame} containing
+#' site IDs, latitudes and longitudes, or a spatial extent (see `grid=TRUE`
+#' argument).
+#'
+#' SoilGrids API and maps return values as whole (integer) numbers to minimize
+#' the storage space used. These values have conversion factors applied by
+#' `fetchSoilGrids()` to produce conventional units shown in the table below
+#' (see Details).
+#'
 #' @details
 #' 
 #' ## Properties
@@ -24,43 +32,79 @@
 #' |wv0010   |Volumetric Water Content at 10kPa                                                  |0.1 v% or 1 mm/m|                10|volume (%)         |
 #' |wv0033   |Volumetric Water Content at 33kPa                                                  |0.1 v% or 1 mm/m|                10|volume (%)         |
 #' |wv1500   |Volumetric Water Content at 1500kPa                                                |0.1 v% or 1 mm/m|                10|volume (%)         |
-#' 
-#' SoilGrids predictions are made for the six standard depth intervals specified in the GlobalSoilMap IUSS working group and its specifications. The default depth 
-#' intervals returned are (in centimeters): `"0-5"`, `"5-15"`, `"15-30"`, `"30-60"`, `"60-100"`, `"100-200"` for the properties `"bdod"`, `"cec"`, `"cfvo"`, 
-#' `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`, `"wv0010"`, `"wv0033"`, `"wv1500"`--each with 5th, 50th, 95th, mean and uncertainty values. Soil organic carbon stocks (0-30cm) (`variables="ocs"`) are returned only for `depth_intervals="0-30"`. The uncertainty values are the ratio
-#' between the inter-quantile range (90% prediction interval width) and the median : `(Q0.95-Q0.05)/Q0.50.` All values are converted from "mapped" to "conventional" 
-#' based on above table conversion factors. Point data requests are made through `"properties/query"` endpoint of the [SoilGrids v2.0 REST API](https://www.isric.org/explore/soilgrids/faq-soilgrids). 
-#' Please check ISRIC's data policy, disclaimer and citation: \url{https://www.isric.org/about/data-policy}.
-#' 
-#' Find out more information about the SoilGrids and GlobalSoilMap products here: 
+#'
+#' SoilGrids predictions are made for the six standard depth intervals specified
+#' in the GlobalSoilMap IUSS working group and its specifications. The default
+#' depth intervals returned are (in centimeters): `"0-5"`, `"5-15"`, `"15-30"`,
+#' `"30-60"`, `"60-100"`, `"100-200"` for the properties `"bdod"`, `"cec"`,
+#' `"cfvo"`, `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`,
+#' `"ocd"`, `"wv0010"`, `"wv0033"`, `"wv1500"`--each with percentiles (5th,
+#' 50th, 95th), mean and uncertainty values. The summary statistic name will be
+#' appended to the abbreviate variable name for each depth interval returned.
+#' Soil organic carbon stocks (0-30cm) (`variables="ocs"`) are returned only for
+#' `depth_intervals="0-30"`. The uncertainty values are the ratio between the
+#' inter-quantile range (90% prediction interval width) and the median :
+#' `(Q0.95-Q0.05)/Q0.50.` All values are converted from "mapped" to
+#' "conventional" based on above table conversion factors. Point data requests
+#' are made through `"properties/query"` endpoint of the [SoilGrids v2.0 REST
+#' API](https://www.isric.org/explore/soilgrids/faq-soilgrids). Please check
+#' ISRIC's data policy, disclaimer and citation:
+#' \url{https://www.isric.org/about/data-policy}.
+#'
+#' Find out more information about the SoilGrids and GlobalSoilMap products
+#' here:
 #' 
 #'  - \url{https://www.isric.org/explore/soilgrids/faq-soilgrids}
 #'  - \url{https://www.isric.org/sites/default/files/GlobalSoilMap_specifications_december_2015_2.pdf}
 #' 
-#' @references 
+#' @references
 #'  - **Common soil chemical and physical properties:**
-#'    Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B., Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty, SOIL, 7, 217–240, 2021. DOI: \doi{https://doi.org/10.5194/soil-7-217-2021}
+#' Poggio, L., de Sousa, L. M., Batjes, N. H., Heuvelink, G. B. M., Kempen, B.,
+#' Ribeiro, E., and Rossiter, D.: SoilGrids 2.0: producing soil information for
+#' the globe with quantified spatial uncertainty, SOIL, 7, 217–240, 2021. DOI:
+#' \doi{https://doi.org/10.5194/soil-7-217-2021}
 #'  - **Soil water content at different pressure heads:**
-#'    Turek, M.E.,  Poggio, L., Batjes, N. H., Armindo, R. A.,  de Jong van Lier, Q.,  de Sousa, L.M.,  Heuvelink, G. B. M. : Global mapping of volumetric water retention at 100, 330 and 15000 cm suction using the WoSIS database, International Soil and Water Conservation Research, 11-2, 225-239, 2023. DOI: \doi{https://doi.org/10.1016/j.iswcr.2022.08.001}
+#' Turek, M.E.,  Poggio, L., Batjes, N. H., Armindo, R. A.,  de Jong van Lier,
+#' Q.,  de Sousa, L.M.,  Heuvelink, G. B. M. : Global mapping of volumetric
+#' water retention at 100, 330 and 15000 cm suction using the WoSIS database,
+#' International Soil and Water Conservation Research, 11-2, 225-239, 2023. DOI:
+#' \doi{https://doi.org/10.1016/j.iswcr.2022.08.001}
 #' 
 #' @importFrom utils packageVersion
 #'
-#' @param x A `data.frame` containing 3 columns referring to site ID, latitude and longitude. Or a spatial (sf, terra) object for which a bounding box can be calculated when `grid=TRUE`.
-#' @param loc.names Optional: Column names referring to site ID, latitude and longitude. Default: `c("id", "lat", "lon")`
-#' @param depth_intervals Default: `"0-5"`, `"5-15"`, `"15-30"`, `"30-60"`, `"60-100"`, `"100-200"`
-#' @param variables Default: `"bdod"`, `"cec"`, `"cfvo"`, `"clay"`, `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`, `"wv0010"`, `"wv0033"`, `"wv1500"`. Optionally `"ocs"` (only for 0 to 30 cm interval). 
-#' @param grid Download subset of SoilGrids Cloud Optimized GeoTIFF? Default: `FALSE`
-#' @param filename Only used when `grid=TRUE`. If `NULL` defaults to an in-memory raster, or temporary file if result does not fit in memory.
+#' @param x A `data.frame` containing 3 columns referring to site ID, latitude
+#'   and longitude. Or a spatial (sf, terra) object for which a bounding box can
+#'   be calculated when `grid=TRUE`.
+#' @param loc.names Optional: Column names referring to site ID, latitude and
+#'   longitude. Default: `c("id", "lat", "lon")`
+#' @param depth_intervals Default: `"0-5"`, `"5-15"`, `"15-30"`, `"30-60"`,
+#'   `"60-100"`, `"100-200"`
+#' @param variables Default: `"bdod"`, `"cec"`, `"cfvo"`, `"clay"`,
+#'   `"nitrogen"`, `"phh2o"`, `"sand"`, `"silt"`, `"soc"`, `"ocd"`, `"wv0010"`,
+#'   `"wv0033"`, `"wv1500"`. Optionally `"ocs"` (only for 0 to 30 cm interval).
+#' @param grid Download subset of SoilGrids Cloud Optimized GeoTIFF? Default:
+#'   `FALSE`
+#' @param filename Only used when `grid=TRUE`. If `NULL` defaults to an
+#'   in-memory raster, or temporary file if result does not fit in memory.
 #' @param overwrite Only used when `grid=TRUE`. Default: `FALSE`
-#' @param target_resolution Only used when `grid=TRUE`. Default: `c(250, 250)` (250m x 250m pixels)
-#' @param summary_type Only used when `grid=TRUE`. One or more of `"Q0.05"`, `"Q0.5"`, `"Q0.95"`, `"mean"`; these are summary statistics that
-#'  correspond to 5th, 50th, 95th percentiles, and mean value for selected `variables`.
-#' @param endpoint Optional: custom API endpoint. Default: `"https://rest.isric.org/soilgrids/v2.0/properties/query"` when `grid=FALSE`; `"https://files.isric.org/soilgrids/latest/data/"` when `grid=TRUE`.
-#' @param ... Additional arguments passed to `terra::writeRaster()` when `grid=TRUE`.
+#' @param target_resolution Only used when `grid=TRUE`. Default: `c(250, 250)`
+#'   (250m x 250m pixels)
+#' @param summary_type Only used when `grid=TRUE`. One or more of `"Q0.05"`,
+#'   `"Q0.5"`, `"Q0.95"`, `"mean"`; these are summary statistics that correspond
+#'   to 5th, 50th, 95th percentiles, and mean value for selected `variables`.
+#' @param endpoint Optional: custom API endpoint. Default:
+#'   `"https://rest.isric.org/soilgrids/v2.0/properties/query"` when
+#'   `grid=FALSE`; `"https://files.isric.org/soilgrids/latest/data/"` when
+#'   `grid=TRUE`.
+#' @param ... Additional arguments passed to `terra::writeRaster()` when
+#'   `grid=TRUE`.
 #' @param verbose Print messages? Default: `FALSE`
-#' @param progress logical, give progress when iterating over multiple requests; Default: `FALSE`
+#' @param progress logical, give progress when iterating over multiple requests;
+#'   Default: `FALSE`
 #' 
-#' @return A _SoilProfileCollection_ or _SpatRaster_ when `grid=TRUE`. Returns `try-error` if all requests fail. Any error messages resulting from parsing will be echoed when `verbose=TRUE`.
+#' @return A _SoilProfileCollection_ (or _SpatRaster_ when `grid=TRUE`). Returns
+#'   `try-error` if all requests fail. Any error messages resulting from parsing
+#'   will be echoed when `verbose=TRUE`.
 #' @export fetchSoilGrids
 #' @author Andrew G. Brown
 #' @examplesIf curl::has_internet() && requireNamespace("aqp")
