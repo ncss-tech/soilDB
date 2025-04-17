@@ -34,7 +34,8 @@ get_concentrations_from_NASIS_db(
 get_phfmp_from_NASIS_db(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
 }
 \arguments{
-\item{from}{Determines what objects should fetched? Default: \code{'pedons'}. Alternately, \code{'components'}, or \code{'pedon_report'}.}
+\item{from}{Determines what objects should fetched? Default: \code{'pedons'}.
+Alternately, \code{'components'}, or \code{'pedon_report'}.}
 
 \item{url}{String specifying the url for the NASIS pedon_report (default:
 \code{NULL})}
@@ -42,58 +43,61 @@ get_phfmp_from_NASIS_db(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
 \item{SS}{Fetch data from the currently loaded selected set in NASIS or from
 the entire Local database (default: \code{TRUE})}
 
-\item{rmHzErrors}{Should pedons with horizon depth errors be removed from
-the results? (default: \code{FALSE})}
+\item{rmHzErrors}{Should pedons with horizon depth errors be removed from the
+results? (default: \code{FALSE})}
 
-\item{nullFragsAreZero}{Should fragment volumes of \code{NULL} be interpreted as \code{0}?
-(default: \code{TRUE}), see details}
+\item{nullFragsAreZero}{Should fragment volumes of \code{NULL} be interpreted as
+\code{0}? (default: \code{TRUE}), see details}
 
-\item{soilColorState}{Used only for \code{from = 'pedons'}; which colors should be used to generate the convenience field \code{soil_color}? (\code{'moist'} or \code{'dry'})}
+\item{soilColorState}{Used only for \code{from = 'pedons'}; which colors should be
+used to generate the convenience field \code{soil_color}? (\code{'moist'} or \code{'dry'})}
 
-\item{mixColors}{Should mixed colors be calculated where multiple colors are populated for the same moisture state in a horizon? Default \code{FALSE} takes the dominant color for each horizon moist/dry state.}
+\item{mixColors}{Should mixed colors be calculated where multiple colors are
+populated for the same moisture state in a horizon? Default \code{FALSE} takes
+the dominant color for each horizon moist/dry state.}
 
-\item{lab}{Should the \code{phlabresults} child table be fetched with site/pedon/horizon data (default: \code{FALSE})}
+\item{lab}{Should the \code{phlabresults} child table be fetched with
+site/pedon/horizon data (default: \code{FALSE})}
 
-\item{fill}{Include pedon or component records without horizon data in result? (default: \code{FALSE})}
+\item{fill}{Include pedon or component records without horizon data in
+result? (default: \code{FALSE})}
 
-\item{dropAdditional}{Used only for \code{from='components'} with \code{duplicates = TRUE}. Prevent "duplication" of \code{mustatus == "additional"}  mapunits? Default: \code{TRUE}}
+\item{dropAdditional}{Used only for \code{from='components'} with \code{duplicates = TRUE}. Prevent "duplication" of \code{mustatus == "additional"}  mapunits?
+Default: \code{TRUE}}
 
-\item{dropNonRepresentative}{Used only for \code{from='components'} with \code{duplicates = TRUE}. Prevent "duplication" of non-representative data mapunits? Default: \code{TRUE}}
+\item{dropNonRepresentative}{Used only for \code{from='components'} with
+\code{duplicates = TRUE}. Prevent "duplication" of non-representative data
+mapunits? Default: \code{TRUE}}
 
-\item{duplicates}{Used only for \code{from='components'}. Duplicate components for all instances of use (i.e. one for each legend data mapunit is used on; optionally for additional mapunits, and/or non-representative data mapunits?). This will include columns from \code{get_component_correlation_data_from_NASIS_db()} that identify which legend(s) a component is used on.}
+\item{duplicates}{Used only for \code{from='components'}. Duplicate components for
+all instances of use (i.e. one for each legend data mapunit is used on;
+optionally for additional mapunits, and/or non-representative data
+mapunits?). This will include columns from
+\code{get_component_correlation_data_from_NASIS_db()} that identify which
+legend(s) a component is used on.}
 
 \item{stringsAsFactors}{deprecated}
 
-\item{dsn}{Optional: path or \emph{DBIConnection} to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: \code{NULL}}
+\item{dsn}{Optional: path or \emph{DBIConnection} to
+\link[=NASISLocalDatabase]{local database containing NASIS table
+structure}; default: \code{NULL}}
 }
 \value{
 A \code{SoilProfileCollection} object
 }
 \description{
-Fetch commonly used site/pedon/horizon or mapunit component data from NASIS,
-returned as a \code{SoilProfileCollection} object.
+Fetch commonly used site/pedon/horizon or mapunit component data
+from NASIS, returned as a \code{SoilProfileCollection} object.
 
-This function imports data from NASIS into R as a \code{SoilProfileCollection} object.
-It "flattens" NASIS pedon and component tables, including their child tables, into several
-more manageable data frames. Primarily these functions access the local NASIS database using
-an ODBC connection. The \code{dsn} argument allows you to specify a path or \code{DBIConnection}
-to an SQLite database. The argument \code{from = "pedon_report"}, data can be read
-from the NASIS Report 'fetchNASIS', from either text file or URL (specified as \code{url}). The primary purpose
-of \code{fetchNASIS(from = "pedon_report")} is importing datasets larger than 8000+
-pedons/components.
-
-The value of \code{nullFragsAreZero} will have a significant impact on the
-rock fragment fractions returned by fetchNASIS. Set \code{nullFragsAreZero = FALSE} in those cases where there are many data-gaps and NULL rock
-fragment values should be interpreted as NULL. Set
-\code{nullFragsAreZero = TRUE} in those cases where NULL rock
-fragment values should be interpreted as 0.
-
-This function attempts to do most of the boilerplate work when extracting
-site/pedon/horizon or component data from a local NASIS database. Pedon IDs
-that are missing horizon data, or have errors in their horizonation are printed on the
-console. Pedons with combination horizons (e.g. B/C) are erroneously marked
-as errors due to the way in which they are stored in NASIS as two
-overlapping horizon records.
+This function imports data from NASIS into R as a \code{SoilProfileCollection}
+object. It "flattens" NASIS pedon and component tables, including their
+child tables, into several more manageable data frames. Primarily these
+functions access the local NASIS database using an ODBC connection. The
+\code{dsn} argument allows you to specify a path or \code{DBIConnection} to an SQLite
+database. The argument \code{from = "pedon_report"}, data can be read from the
+NASIS Report 'fetchNASIS', from either text file or URL (specified as
+\code{url}). The primary purpose of \code{fetchNASIS(from = "pedon_report")} is
+importing datasets larger than 8000+ pedons/components.
 
 Tutorials:
 \itemize{
@@ -101,6 +105,20 @@ Tutorials:
 \item \href{http://ncss-tech.github.io/AQP/soilDB/fetchNASIS-mini-tutorial.html}{fetchNASIS Pedons Tutorial}
 \item \href{http://ncss-tech.github.io/AQP/soilDB/NASIS-component-data.html}{fetchNASIS Components Tutorial}
 }
+}
+\details{
+The value of \code{nullFragsAreZero} will have a significant impact on the rock
+fragment fractions returned by fetchNASIS. Set \code{nullFragsAreZero = FALSE}
+in those cases where there are many data-gaps and NULL rock fragment values
+should be interpreted as NULL. Set \code{nullFragsAreZero = TRUE} in those
+cases where NULL rock fragment values should be interpreted as 0.
+
+This function attempts to do most of the boilerplate work when extracting
+site/pedon/horizon or component data from a local NASIS database. Pedon IDs
+that are missing horizon data, or have errors in their horizonation are
+printed on the console. Pedons with combination horizons (e.g. B/C) are
+erroneously marked as errors due to the way in which they are stored in
+NASIS as two overlapping horizon records.
 }
 \seealso{
 \code{get_component_data_from_NASIS()}
