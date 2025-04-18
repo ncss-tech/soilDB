@@ -136,7 +136,7 @@ and the function will be updated accordingly at that time.</p>
 <span class="r-in"><span>    <span class="va">full.extent.nmusym</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2x8l5"</span>, by <span class="op">=</span> <span class="st">"nmusym"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 chunks...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 3; 0.8 secs)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 1 secs; mean/chunk: 0.8 secs; mean/symbol: 0.33 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 1 secs; mean/chunk: 0.8 secs; mean/symbol: 0.32 secs.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># compare extent of nmusym to single mukey within it</span></span></span>
 <span class="r-in"><span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">single.mukey</span>, <span class="st">'try-error'</span><span class="op">)</span> <span class="op">&amp;&amp;</span> </span></span>
@@ -155,8 +155,8 @@ and the function will be updated accordingly at that time.</p>
 <span class="r-in"><span>    <span class="co"># demo adding a field (`muname`) to attribute table of result</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">fetchSDA_spatial</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"2x8l5"</span>, by<span class="op">=</span><span class="st">"nmusym"</span>, add.fields<span class="op">=</span><span class="st">"muname"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 chunks...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 3; 0.6 secs)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 0.7 secs; mean/chunk: 0.6 secs; mean/symbol: 0.24 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Chunk #1 completed (n = 3; 0.5 secs)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in 0.7 secs; mean/chunk: 0.5 secs; mean/symbol: 0.23 secs.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 6 features and 4 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
