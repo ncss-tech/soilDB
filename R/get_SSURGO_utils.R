@@ -337,6 +337,7 @@
 #'
 #' @param dsn Path to MS Access .mdb file.
 #' @param dsn_out Path to output SQLite (.sqlite) file. Default replaces `".mdb"` with `".sqlite"`.
+#' @param quiet logical. Suppress error messages? Default: `FALSE`
 #'
 #' @return a list containing elements either `data.frame` result of table read from .mdb file, or `try-error` on error
 #' @noRd
@@ -345,13 +346,13 @@
 #' \dontrun{
 #' mdb2sqlite("template.mdb")
 #' }
-.mdb2sqlite <- function(dsn, dsn_out = gsub("\\.mdb", ".sqlite", dsn)) {
+.mdb2sqlite <- function(dsn, dsn_out = gsub("\\.mdb", ".sqlite", dsn), quiet = FALSE) {
   channel <- DBI::dbConnect(odbc::odbc(), .connection_string = paste0("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", dsn))
   channel_out <- DBI::dbConnect(RSQLite::SQLite(), dsn_out)
   tables <- DBI::dbListTables(channel)
   res <- lapply(tables, function(x) {
-    y <- try(DBI::dbReadTable(channel, x))
-    if (!inherits(y, 'try-error')) DBI::dbCreateTable(channel_out, x, y)
+    y <- try(DBI::dbReadTable(channel, x), silent = quiet)
+    if (!inherits(y, 'try-error')) DBI::dbWriteTable(channel_out, x, y)
   })
   DBI::dbDisconnect(channel)
   DBI::dbDisconnect(channel_out)
