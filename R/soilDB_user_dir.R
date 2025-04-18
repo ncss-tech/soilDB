@@ -44,7 +44,15 @@ soilDB_user_dir <- function(which = c("data", "config", "cache"),
                             fsep = .Platform$file.sep,
                             mustWork = NA) {
   which <- match.arg(which, c("data", "config", "cache"))
-  data_dir <- file.path(tools::R_user_dir("soilDB", which), ..., fsep = fsep)
+  
+  # conditional usage for R version < 4.0.0
+  if (R.version$major >= 4) {
+    dir <- tools::R_user_dir("soilDB", which)
+  } else {
+    dir <- file.path(tempdir(), "soilDB", which)
+  }
+  
+  data_dir <- file.path(dir, ..., fsep = fsep)
   if (isTRUE(remove)) {
     sapply(data_dir, unlink, recursive = TRUE)
     return(NULL)
