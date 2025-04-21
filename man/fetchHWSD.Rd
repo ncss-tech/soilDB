@@ -12,21 +12,24 @@ Portal, Harmonized World Soil Database (HWSD) v2.0
 fetchHWSD(
   x = NULL,
   hwsd_url = "https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/HWSD/",
+  hwsd_version = 2L,
   force = FALSE
 )
 }
 \arguments{
-\item{x}{Extent of interest that is passed to \code{terra::crop()} \code{y} argument. A
-SpatRaster, SpatVector, SpatExtent, or any other object that has a
-SpatExtent. Default \code{NULL} returns the full dataset.}
+\item{x}{A \emph{SpatRaster}, \emph{SpatVector}, \emph{SpatExtent}, or any other object that has
+a \emph{SpatExtent}. Default \code{NULL} returns the full dataset. Extent of interest
+that is passed to \code{terra::crop()} \code{y} argument.}
 
-\item{hwsd_url}{URL for downloading HWSD dataset. Default
+\item{hwsd_url}{\emph{character}. URL for downloading HWSD dataset. Default
 \code{"https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/HWSD/"}}
+
+\item{hwsd_version}{\emph{integer}. Default \code{2L}.}
 
 \item{force}{Force rebuilding of cache. Default: \code{FALSE}}
 }
 \value{
-A SpatRaster object with mapunit-level aggregate information stored
+A \emph{SpatRaster} object with mapunit-level aggregate information stored
 as categories.
 }
 \description{
@@ -42,11 +45,15 @@ The source tabular database in Microsoft Access (.mdb) format is converted to SQ
   
   # categorical data (WRB class)
   terra::activeCat(res) <- "WRB4"
+  
+  # view WRB4 map
   terra::plot(res)
+  terra::lines(x, col = "white")
   
   # convert categories containing numeric data to numeric values
   res2 <- terra::catalyze(res)
   
+  # view AWC map
   terra::plot(res2$AWC, main = "Available Water Capacity, mm")
   terra::lines(x, col = "white")
 }
