@@ -21,6 +21,7 @@
 fetchVegdata(
   SS = TRUE,
   include_pedon = TRUE,
+  nullFragsAreZero = TRUE,
   stringsAsFactors = NULL,
   dsn = NULL
 )
@@ -81,24 +82,29 @@ get_vegplot_textnote_from_NASIS_db(
 )
 }
 \arguments{
-\item{SS}{fetch data from the currently loaded selected set in NASIS or from the entire local
-database (default: \code{TRUE})}
+\item{SS}{fetch data from the currently loaded selected set in NASIS or from
+the entire local database (default: \code{TRUE})}
 
-\item{include_pedon}{Include pedon and transect data joined to site? (default: \code{TRUE}). If
-\code{include_pedon} is set to \code{"assocuserpedonid"} only pedon records that are linked through the
-Associated User Pedon ID column will have their peiid reported in the \code{vegplot} table.}
+\item{include_pedon}{Include pedon and transect data joined to site?
+(default: \code{TRUE}). If \code{include_pedon} is set to \code{"assocuserpedonid"} only
+pedon records that are linked through the Associated User Pedon ID column
+will have their peiid reported in the \code{vegplot} table.}
+
+\item{nullFragsAreZero}{Should fragment volumes of \code{NULL} be interpreted as
+\code{0}? (default: \code{TRUE}), see details}
 
 \item{stringsAsFactors}{deprecated}
 
-\item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default:
-\code{NULL}}
+\item{dsn}{Optional: path to local SQLite database containing NASIS table
+structure; default: \code{NULL}}
 
 \item{fixLineEndings}{Replace \code{'\\r\\n'} with \code{'\\n'}; Default: \code{TRUE}}
 }
 \value{
-\code{fetchVegdata()}: A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies",
-"vegtransect", "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", "vegbasalarea", and
-"vegplottext" tables
+\code{fetchVegdata()}: A named list containing: "vegplot",
+"vegplotlocation", "vegplotrhi", "vegplotspecies", "vegtransect",
+"vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", "vegbasalarea",
+and "vegplottext" tables
 
 \code{get_vegplot_location_from_NASIS_db()}: a data.frame containing location data from the corresponding record in the site table
 
@@ -125,8 +131,8 @@ Associated User Pedon ID column will have their peiid reported in the \code{vegp
 \code{get_vegplot_textnote_from_NASIS_db()}: a data.frame containing Vegetation Plot text notes
 }
 \description{
-Convenience function for loading most commonly used Vegetation Plot information from local NASIS
-database.
+Convenience function for loading most commonly used Vegetation Plot
+information from local NASIS database.
 }
 \examples{
 \dontshow{if (local_NASIS_defined()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
