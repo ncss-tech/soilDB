@@ -38,7 +38,7 @@ to \code{normalizePath()}. Default \code{NA} generates a warning.}
 }
 \description{
 Wrapper around \code{tools::R_user_dir()} for soilDB-specific file
-storage in a platform-specific, user-level directory.
+storage in a platform-specific, user-level directory. Requires R >= 4.0.
 
 These directories can be used for storing assets used as input to other
 soilDB functions, or for caching results to allow for offline use or fewer
@@ -56,9 +56,6 @@ when \code{create=TRUE}. Output paths are normalized using
 
 soilDB_user_dir("data", c("dataset1", "dataset2"), "source", create = FALSE)
 
-}
-\seealso{
-\code{\link[tools:userdir]{tools::R_user_dir()}} \code{\link[=file.path]{file.path()}}
 }
 \author{
 Andrew Gene Brown

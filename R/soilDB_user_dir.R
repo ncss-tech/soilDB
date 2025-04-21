@@ -1,7 +1,7 @@
 #' Get soilDB User Directory Path
 #'
 #' @description Wrapper around `tools::R_user_dir()` for soilDB-specific file
-#'   storage in a platform-specific, user-level directory.
+#'   storage in a platform-specific, user-level directory. Requires R >= 4.0.
 #'
 #'   These directories can be used for storing assets used as input to other
 #'   soilDB functions, or for caching results to allow for offline use or fewer
@@ -30,7 +30,6 @@
 #' @return _character_. File paths within specified soilDB user directory. When
 #'   `remove=TRUE` result is `NULL`.
 #' 
-#' @seealso [tools::R_user_dir()] [file.path()]
 #' @export
 #' @author Andrew Gene Brown
 #' @examples
