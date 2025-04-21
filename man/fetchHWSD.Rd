@@ -2,6 +2,7 @@
 % Please edit documentation in R/fetchHWSD.R
 \name{fetchHWSD}
 \alias{fetchHWSD}
+\alias{get_HWSD_path}
 \title{Fetch Harmonized World Soil Database Data}
 \source{
 Food and Agriculture Organization of the United Nations (FAO), Soils
@@ -15,6 +16,8 @@ fetchHWSD(
   hwsd_version = 2L,
   force = FALSE
 )
+
+get_HWSD_path(what = c("sqlite", "mdb", "raster", "path"), hwsd_version = 2L)
 }
 \arguments{
 \item{x}{A \emph{SpatRaster}, \emph{SpatVector}, \emph{SpatExtent}, or any other object that has
@@ -27,6 +30,8 @@ that is passed to \code{terra::crop()} \code{y} argument.}
 \item{hwsd_version}{\emph{integer}. Default \code{2L}.}
 
 \item{force}{Force rebuilding of cache. Default: \code{FALSE}}
+
+\item{what}{\emph{character}. One of "sqlite", "raster", or "path"}
 }
 \value{
 A \emph{SpatRaster} object with mapunit-level aggregate information stored
@@ -56,6 +61,9 @@ The source tabular database in Microsoft Access (.mdb) format is converted to SQ
   # view AWC map
   terra::plot(res2$AWC, main = "Available Water Capacity, mm")
   terra::lines(x, col = "white")
+  
+  # access tabular data from cached SQLite database
+  SDA_query("SELECT * FROM HWSD2_SMU LIMIT 1", dsn = get_HWSD_path())
 }
 \dontshow{\}) # examplesIf}
 }

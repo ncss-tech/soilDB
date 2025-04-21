@@ -36,13 +36,16 @@
 #'   # view AWC map
 #'   terra::plot(res2$AWC, main = "Available Water Capacity, mm")
 #'   terra::lines(x, col = "white")
+#'   
+#'   # access tabular data from cached SQLite database
+#'   SDA_query("SELECT * FROM HWSD2_SMU LIMIT 1", dsn = get_HWSD_path())
 #' }
 fetchHWSD <- function(x = NULL, 
                       hwsd_url = "https://s3.eu-west-1.amazonaws.com/data.gaezdev.aws.fao.org/HWSD/", 
                       hwsd_version = 2L,
                       force = FALSE) {
-  data_dir <- HWSD_path(hwsd_version)
-  tiff_path <- file.path(data_dir, sprintf("HWSD%s.tif", hwsd_version))
+  tiff_path <- get_HWSD_path("raster", hwsd_version)
+  data_dir <- dirname(tiff_path)
   if (isTRUE(force) || !file.exists(tiff_path)) {
     bil_url <- paste0(hwsd_url,
                       sprintf("HWSD%s_RASTER.zip/HWSD%s.bil", hwsd_version))
@@ -91,10 +94,25 @@ fetchHWSD <- function(x = NULL,
   r2
 }
 
-HWSD_path <- function(HWSD_VERSION = 2L) {
-  soilDB_user_dir("data", paste0("HWSD", HWSD_VERSION))
-}
-
-HWSD_db <- function(HWSD_VERSION = 2L) {
-  file.path(HWSD_path(HWSD_VERSION), sprintf("HWSD%s.sqlite", HWSD_VERSION))
+#' @param what _character_. One of "sqlite", "raster", or "path"
+#' @export
+#' @rdname fetchHWSD
+get_HWSD_path <- function(what = c("sqlite", "mdb", "raster", "path"), hwsd_version = 2L) {
+  if (missing(what)) {
+    what <- what[1]
+  }
+  if (is.null(what) || is.na(what) || isFALSE(nzchar(what))) {
+    what <- "path"
+  }
+  what <- match.arg(what, c("sqlite", "mdb", "raster", "path"))
+  extension <- switch(what,
+                   "sqlite" = "sqlite",
+                   "mdb" = "mdb",
+                   "raster" = "tif",
+                   NULL)
+  base_dir <- soilDB_user_dir("data", paste0("HWSD", hwsd_version))
+  if (is.null(extension)) {
+    return(base_dir)
+  }
+  file.path(base_dir, sprintf("HWSD%s.%s", hwsd_version, extension))
 }
