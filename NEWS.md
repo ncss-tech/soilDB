@@ -1,3 +1,8 @@
+# soilDB 2.8.10 (development)
+ - `fetchVegdata()` add `nullFragsAreZero` argument (passed to `get_site_data_from_NASIS_db()`)
+ - Added `soilDB_user_dir()` for caching local copies of data for use in soilDB functions (#377)
+ - Added `fetchHWSD()` and `get_HWSD_path()`  for the FAO Harmonized World Soil Database (#391) 
+
 # soilDB 2.8.9 (2025-04-04)
  - soilDB now requires aqp >= 2.1.0
  - Added `get_vegplot_groundsurface_from_NASIS_db()` thanks to Greg Schmidt (@phytoclast; #373)
