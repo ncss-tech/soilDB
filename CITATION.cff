@@ -8,7 +8,7 @@ message: 'To cite package "soilDB" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'soilDB: Soil Database Interface'
-version: 2.8.9
+version: 2.8.10
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.soilDB
@@ -30,6 +30,7 @@ authors:
 - family-names: Brown
   given-names: Andrew
   email: andrew.g.brown@usda.gov
+  orcid: https://orcid.org/0000-0002-4565-533X
 preferred-citation:
   type: manual
   title: 'soilDB: Soil Database Interface'
@@ -44,7 +45,8 @@ preferred-citation:
   - family-names: Brown
     given-names: Andrew
     email: andrew.g.brown@usda.gov
-  notes: R package version 2.8.8
+    orcid: https://orcid.org/0000-0002-4565-533X
+  notes: R package version 2.8.9
   url: https://CRAN.R-project.org/package=soilDB
   year: '2025'
 repository: https://CRAN.R-project.org/package=soilDB
@@ -54,6 +56,7 @@ contact:
 - family-names: Brown
   given-names: Andrew
   email: andrew.g.brown@usda.gov
+  orcid: https://orcid.org/0000-0002-4565-533X
 keywords:
 - cran
 - kssl
@@ -175,6 +178,10 @@ references:
   - family-names: Schwendinger
     given-names: Benjamin
     orcid: https://orcid.org/0000-0003-3315-8114
+  - family-names: Krylov
+    given-names: Ivan
+    email: ikrylov@disroot.org
+    orcid: https://orcid.org/0000-0002-0172-3812
   year: '2025'
   doi: 10.32614/CRAN.package.data.table
 - type: software
@@ -223,16 +230,16 @@ references:
   title: xml2
   abstract: 'xml2: Parse XML'
   notes: Suggests
-  url: https://xml2.r-lib.org/
+  url: https://xml2.r-lib.org
   repository: https://CRAN.R-project.org/package=xml2
   authors:
   - family-names: Wickham
     given-names: Hadley
-    email: hadley@posit.co
   - family-names: Hester
     given-names: Jim
   - family-names: Ooms
     given-names: Jeroen
+    email: jeroenooms@gmail.com
   year: '2025'
   doi: 10.32614/CRAN.package.xml2
 - type: software

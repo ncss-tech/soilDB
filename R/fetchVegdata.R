@@ -1,29 +1,37 @@
 #' Get vegetation plot data from local NASIS database
 #'
-#' Convenience function for loading most commonly used Vegetation Plot information from local NASIS
-#' database.
+#' Convenience function for loading most commonly used Vegetation Plot
+#' information from local NASIS database.
 #'
-#' @param SS fetch data from the currently loaded selected set in NASIS or from the entire local
-#'   database (default: `TRUE`)
-#' @param include_pedon Include pedon and transect data joined to site? (default: `TRUE`). If
-#'   `include_pedon` is set to `"assocuserpedonid"` only pedon records that are linked through the
-#'   Associated User Pedon ID column will have their peiid reported in the `vegplot` table.
+#' @param SS fetch data from the currently loaded selected set in NASIS or from
+#'   the entire local database (default: `TRUE`)
+#' @param include_pedon Include pedon and transect data joined to site?
+#'   (default: `TRUE`). If `include_pedon` is set to `"assocuserpedonid"` only
+#'   pedon records that are linked through the Associated User Pedon ID column
+#'   will have their peiid reported in the `vegplot` table.
+#' @param nullFragsAreZero Should fragment volumes of `NULL` be interpreted as
+#'   `0`? (default: `TRUE`), see details
 #' @param stringsAsFactors deprecated
-#' @param dsn Optional: path to local SQLite database containing NASIS table structure; default:
-#'   `NULL`
+#' @param dsn Optional: path to local SQLite database containing NASIS table
+#'   structure; default: `NULL`
 #'
-#' @return `fetchVegdata()`: A named list containing: "vegplot", "vegplotlocation", "vegplotrhi", "vegplotspecies",
-#'   "vegtransect", "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", "vegbasalarea", and
-#'   "vegplottext" tables
+#' @return `fetchVegdata()`: A named list containing: "vegplot",
+#'   "vegplotlocation", "vegplotrhi", "vegplotspecies", "vegtransect",
+#'   "vegtransplantsum", 'vegsiteindexsum', "vegsiteindexdet", "vegbasalarea",
+#'   and "vegplottext" tables
 #'
 #' @aliases get_vegplot_from_NASIS_db get_vegplot_location_from_NASIS_db
 #'   get_vegplot_species_from_NASIS_db get_vegplot_textnote_from_NASIS_db
 #'   get_vegplot_transect_from_NASIS_db get_vegplot_transpecies_from_NASIS_db
-#'   get_vegplot_tree_si_details_from_NASIS_db get_vegplot_tree_si_summary_from_NASIS_db
-#'   get_vegplot_trhi_from_NASIS_db
+#'   get_vegplot_tree_si_details_from_NASIS_db
+#'   get_vegplot_tree_si_summary_from_NASIS_db get_vegplot_trhi_from_NASIS_db
 #' @export
-fetchVegdata <- function(SS = TRUE, include_pedon = TRUE, stringsAsFactors = NULL, dsn = NULL) {
-
+fetchVegdata <- function(SS = TRUE,
+                         include_pedon = TRUE,
+                         nullFragsAreZero = TRUE,
+                         stringsAsFactors = NULL,
+                         dsn = NULL) {
+  
   if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
     .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
     NASISDomainsAsFactor(stringsAsFactors)
@@ -36,6 +44,7 @@ fetchVegdata <- function(SS = TRUE, include_pedon = TRUE, stringsAsFactors = NUL
   site <- get_site_data_from_NASIS_db(
     SS = SS,
     include_pedon = ifelse(include_pedon == "assocuserpedonid", TRUE, include_pedon),
+    nullFragsAreZero = nullFragsAreZero,
     dsn = dsn
   )
   vegplot <- get_vegplot_from_NASIS_db(SS = SS, dsn =  dsn)
