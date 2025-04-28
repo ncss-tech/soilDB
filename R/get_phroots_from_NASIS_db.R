@@ -37,16 +37,13 @@ get_phroots_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   }
   
   # exec queries
-  d <- dbQueryNASIS(channel, q, close = FALSE)
+  d <- dbQueryNASIS(channel, q)
   
   # convert coded -> text/factor representation of values
   d <- uncode(d, dsn = dsn)
   
   # encode ordered factors
-  d$rootsquantityclass <- factor(
-    d$rootsquantityclass, levels = c('very few', 'moderately few', 'few', 'common', 'many'),
-    ordered = TRUE
-  )
+ d$rootsquantityclass <- NASISChoiceList(d["rootsquantityclass"])
   
   
   # done
