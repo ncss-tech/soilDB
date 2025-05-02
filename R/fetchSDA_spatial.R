@@ -5,15 +5,25 @@
 #' A Soil Data Access query returns geometry and key identifying information about the map unit or area of interest. Additional columns from the map unit or legend table can be included; see `add.fields` argument.
 #'
 #' @param x A vector of map unit keys (`mukey`) or national map unit symbols (`nationalmusym`) for `mupolygon`, `muline` or `mupoint`; feature keys (`featkey`) for `featpoint` and `featline`; legend keys (`lkey`) or soil survey area symbols (`areasymbol`) for `sapolygon` geometry. If `geom.src="mlrapolygon"` then `x` refers to `MLRARSYM` (major land resource area symbols).
+#' 
 #' @param by.col Column name containing map unit identifier `"mukey"`, `"nationalmusym"`, or `"ecoclassid"` for `geom.src` `mupolygon` OR `"areasymbol"`, `"areaname"`, `"mlraoffice"`, `"mouagncyresp"` for `geom.src` `sapolygon`; default is determined by `isTRUE(is.numeric(x))` for `mukey`, `featkey` or `lkey`, using `nationalmusym` or `areasymbol` otherwise.
+#' 
 #' @param method geometry result type: `"feature"` returns polygons, `"bbox"` returns the bounding box of each polygon (via `STEnvelope()`), `"point"` returns a single point (via `STPointOnSurface()`) within each polygon, `"extent"` returns an aggregate bounding box (the extent of all polygons, `geometry::EnvelopeAggregate()`) ), `"convexhull"` (`geometry::ConvexHullAggregate()`) returns the aggregate convex hull around all polygons, `"union"` (`geometry::UnionAggregate()`) and `"collection"` (`geometry::CollectionAggregate()`) return a `MULTIPOLYGON` or a `GEOMETRYCOLLECTION`, respectively, for each `mukey`, `nationalmusym`, or `areasymbol `. In the case of the latter four aggregation methods, the groups for aggregation depend on `by.col` (default by `"mukey"`).
+#' 
 #' @param geom.src Either `mupolygon` (map unit polygons), `muline` (map unit lines), `mupoint` (map unit points), `featpoint` (feature points), `featline` (feature lines), `sapolygon` (soil survey area boundary polygons), or `mlrapolygon` (major land resource area boundary polygons)
+#' 
 #' @param db Default: `"SSURGO"`. When `geom.src` is `mupolygon`, use STATSGO polygon geometry instead of SSURGO by setting `db = "STATSGO"`
+#' 
 #' @param add.fields Column names from `mapunit` or `legend` table to add to result. Must specify parent table name as the prefix before column name e.g. `mapunit.muname`.
+#' 
 #' @param chunk.size Number of values of `x` to process per query. Necessary for large results. Default: `10`
+#' 
 #' @param verbose Print messages?
+#' 
 #' @param as_Spatial Return sp classes? e.g. `Spatial*DataFrame`. Default: `FALSE`.
+#' 
 #' @return an `sf` data.frame corresponding to SDA spatial data for all symbols requested. If `as_Spatial=TRUE` returns a `Spatial*DataFrame` from the sp package via `sf::as_Spatial()` for backward compatibility. Default result contains geometry with attribute table containing unique feature ID, symbol and area symbol plus additional fields in result specified with `add.fields`.
+#' 
 #' @details
 #'
 #' This function automatically "chunks" the input vector (using `makeChunks()`) of map unit identifiers to minimize the likelihood of exceeding the SDA data request size. The number of chunks varies with the `chunk.size` setting and the length of your input vector. If you are working with many map units and/or large extents, you may need to decrease this number in order to have more chunks.
