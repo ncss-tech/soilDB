@@ -330,7 +330,7 @@ test_that("seive returns correct size class, flat, parafragments", {
 test_that("rockFragmentSieve puts fragments without fragsize into 'unspecified' class", {
   
   d <- data.frame(fragvol=25, fragsize_l=NA, fragsize_r=NA, fragsize_h=NA, fragshp=NA, fraghard=NA)
-  res <- soilDB:::.rockFragmentSieve(d)
+  res <- .rockFragmentSieve(d)
   
   expect_identical(res$class, 'unspecified')
   
@@ -340,7 +340,7 @@ test_that("rockFragmentSieve puts fragments without fragsize into 'unspecified' 
 test_that("rockFragmentSieve assumptions are applied, results correct", {
   
   d <- data.frame(fragvol=NA, fragsize_l=NA, fragsize_r=50, fragsize_h=NA, fragshp=NA, fraghard=NA)
-  res <- soilDB:::.rockFragmentSieve(d)
+  res <- .rockFragmentSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
   expect_identical(res$fragshp, 'nonflat')
@@ -351,7 +351,7 @@ test_that("rockFragmentSieve assumptions are applied, results correct", {
   
   # one more try
   d <- data.frame(fragvol=NA, fragsize_l=NA, fragsize_r=200, fragsize_h=NA, fragshp=NA, fraghard=NA)
-  res <- soilDB:::.rockFragmentSieve(d)
+  res <- .rockFragmentSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
   expect_identical(res$fragshp, 'nonflat')
@@ -366,7 +366,7 @@ test_that("rockFragmentSieve assumptions are applied, results correct", {
 test_that("rockFragmentSieve assumptions are applied when all NA", {
   
   d <- data.frame(fragvol=NA, fragsize_l=NA, fragsize_r=NA, fragsize_h=NA, fragshp=NA, fraghard=NA)
-  res <- soilDB:::.rockFragmentSieve(d)
+  res <- .rockFragmentSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
   expect_identical(res$fragshp, 'nonflat')
@@ -382,7 +382,7 @@ test_that("rockFragmentSieve always uses the RV, computed when missing", {
   
   # full specification
   d <- data.frame(fragvol=10, fragsize_l=15, fragsize_r=50, fragsize_h=75, fragshp='nonflat', fraghard='strongly cemented')
-  res <- soilDB:::.rockFragmentSieve(d)
+  res <- .rockFragmentSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
   expect_identical(res$fragshp, 'nonflat')
@@ -393,7 +393,7 @@ test_that("rockFragmentSieve always uses the RV, computed when missing", {
   
   # only RV available
   d <- data.frame(fragvol=10, fragsize_l=NA, fragsize_r=50, fragsize_h=NA, fragshp='nonflat', fraghard='strongly cemented')
-  res <- soilDB:::.rockFragmentSieve(d)
+  res <- .rockFragmentSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
   expect_identical(res$fragshp, 'nonflat')
@@ -404,7 +404,7 @@ test_that("rockFragmentSieve always uses the RV, computed when missing", {
   
   # L/H available
   d <- data.frame(fragvol=10, fragsize_l=5, fragsize_r=NA, fragsize_h=74, fragshp='nonflat', fraghard='strongly cemented')
-  res <- soilDB:::.rockFragmentSieve(d)
+  res <- .rockFragmentSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
   expect_identical(res$fragshp, 'nonflat')
@@ -419,7 +419,7 @@ test_that("rockFragmentSieve always uses the RV, computed when missing", {
 test_that("rockFragmentSieve complex sample data from NASIS, single horizon", {
   
   # pretty common, many fragments specified for a single horizon
-  res <- soilDB:::.rockFragmentSieve(d.single.hz)
+  res <- .rockFragmentSieve(d.single.hz)
   
   # correct classes
   expect_identical(res$class, c('cobbles', 'gravel', 'stones', 'paragravel', 'paracobbles'))
@@ -485,6 +485,6 @@ test_that("simplifyFragmentData nullFragsAreZero works as expected", {
   expect_silent( { b <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE) } )
   expect_identical(as.logical(is.na(a)), c(FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, 
                            FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE))
-  expect_true(!any(is.na(b)))
+  expect_false(anyNA(b))
 })
 

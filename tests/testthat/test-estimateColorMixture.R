@@ -36,7 +36,7 @@ test_that("estimateColorMixture basic functionality", {
   expect_identical(nrow(res), 1)
 
   # ensure values aren't NA
-  expect_true(!any(sapply(res, is.na)))
+  expect_false(any(sapply(res, is.na)))
 
   # check sRGB coordinates
   # using wide tolerance, because changes in the Munsell LUT can create errors

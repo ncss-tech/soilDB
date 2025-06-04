@@ -1,17 +1,10 @@
-# # TODO: finish this
 # .summarizeSoilVWC <- function(soilVWC.data) {
 #
-#   # TODO: strip-out bogus data
-#
-#
 #   d <- ddply(soilVWC.data, c('sid', 'year'), .progress='text', .fun = function(i) {
-#
-#
 #     i.q <- quantile(i$sensor_value, probs = c(0.05, 0.25, 0.5, 0.75, 0.95), na.rm = TRUE)
 #     days.gt.q.crit <- length(which(i$sensor_value >= i.q['50%']))
 #     days.of.data <- length(na.omit(i$sensor_value))
 #
-#     # TODO: these summaries are only useful when you have an entire year of data...
 #     res <- data.frame(days.gt.q.crit, days.of.data)
 #     return(res)
 #   })
@@ -304,8 +297,7 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
     stop("`what` must be either: 'all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp', or 'waterlevel'", call. = FALSE)
 
   # sanity-check: user must supply some kind of criteria
-  if (what != 'sensors') {
-    if (missing(usersiteid) & missing(project) & missing(sso))
+  if (what != 'sensors' && missing(usersiteid) & missing(project) & missing(sso))
       stop('you must provide some filtering criteria', call. = FALSE)
   }
 
@@ -317,36 +309,36 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
 
   # process filter components
   if (!is.null(usersiteid)) {
-    f <- c(f, paste('&usersiteid=', usersiteid, sep = ''))
+    f <- c(f, paste0('&usersiteid=', usersiteid))
   }
 
   if (!is.null(project)) {
     project <- paste(project, collapse = ',')
-    f <- c(f, paste('&project=', project, sep = ''))
+    f <- c(f, paste0('&project=', project))
   }
 
   if (!is.null(sso)) {
     sso <- paste(sso, collapse = ',')
-    f <- c(f, paste('&sso=', sso, sep = ''))
+    f <- c(f, paste0('&sso=', sso))
   }
 
   if (!is.null(gran)) {
-    f <- c(f, paste('&gran=', gran, sep = ''))
+    f <- c(f, paste0('&gran=', gran))
   }
 
   if (!is.null(start.date)) {
-    f <- c(f, paste('&start=', start.date, sep = ''))
+    f <- c(f, paste0('&start=', start.date))
   }
 
   if (!is.null(stop.date)) {
-    f <- c(f, paste('&stop=', stop.date, sep = ''))
+    f <- c(f, paste0('&stop=', stop.date))
   }
 
   # combine filters
   f <- paste(f, collapse = '')
 
   # everything in one URL / JSON package
-  json.url <- URLencode(paste('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?what=', what, f, sep = ''))
+  json.url <- URLencode(paste0('http://soilmap2-1.lawr.ucdavis.edu/henry/query.php?what=', what, f))
 
   # this is a little noisy, but people like to see progress
   tf.json <- tempfile()
@@ -450,7 +442,7 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
 
   # some feedback via message:
   s.size <- round(object.size(s) / 1024 / 1024, 2)
-  message(paste(nrow(s$sensors), ' sensors loaded (', s.size, ' Mb transferred)', sep = ''))
+  message(paste0(nrow(s$sensors), ' sensors loaded (', s.size, ' Mb transferred)'))
 
   # done
   return(s)

@@ -256,29 +256,40 @@
   aqp::metadata(hz_data) <- m
 
   # print any messages on possible data quality problems:
-  if (exists('sites.missing.pedons', envir = get_soilDB_env())) {
-    if (length(get('sites.missing.pedons', envir = get_soilDB_env())) > 0) {
-      message(
-        "-> QC: sites without pedons: \n\tUse `get('sites.missing.pedons', envir=get_soilDB_env())` for site record IDs (siteiid)"
-      )
-    }
+  if (exists('sites.missing.pedons', envir = get_soilDB_env()) &&
+      length(get('sites.missing.pedons', envir = get_soilDB_env())) > 0) {
+    message(
+      "-> QC: sites without pedons: \n\tUse `get('sites.missing.pedons', envir=get_soilDB_env())` for site record IDs (siteiid)"
+    )
   }
   
-  if (exists('dup.pedon.ids', envir = get_soilDB_env()))
-    if (length(get('dup.pedon.ids', envir = get_soilDB_env())) > 0)
-      message("-> QC: duplicate pedons: \n\tUse `get('dup.pedon.ids', envir=get_soilDB_env())` for pedon record IDs (peiid)")
+  if (exists('dup.pedon.ids', envir = get_soilDB_env()) &&
+      length(get('dup.pedon.ids', envir = get_soilDB_env())) > 0) {
+    message(
+      "-> QC: duplicate pedons: \n\tUse `get('dup.pedon.ids', envir=get_soilDB_env())` for pedon record IDs (peiid)"
+    )
+  }
   
-  if (exists('rock.fragment.volume.gt100.phiid', envir = get_soilDB_env()))
-    if (length(get('rock.fragment.volume.gt100.phiid', envir = get_soilDB_env())) > 0)
-      message("-> QC: pedon horizons with rock fragment volume >=100%: \n\tUse `get('rock.fragment.volume.gt100.phiid', envir=get_soilDB_env())` for pedon horizon record IDs (phiid)")
+  if (exists('rock.fragment.volume.gt100.phiid', envir = get_soilDB_env()) &&
+      length(get('rock.fragment.volume.gt100.phiid', envir = get_soilDB_env())) > 0) {
+    message(
+      "-> QC: pedon horizons with rock fragment volume >=100%: \n\tUse `get('rock.fragment.volume.gt100.phiid', envir=get_soilDB_env())` for pedon horizon record IDs (phiid)"
+    )
+  }
   
-  if (exists('artifact.volume.gt100.phiid', envir = get_soilDB_env()))
-    if (length(get('artifact.volume.gt100.phiid', envir = get_soilDB_env())) > 0)
-      message("-> QC: pedon horizons with artifact volume >=100%: \n\tUse `get('artifact.volume.gt100.phiid', envir=get_soilDB_env())` for pedon horizon record IDs (phiid)")
+  if (exists('artifact.volume.gt100.phiid', envir = get_soilDB_env()) &&
+      length(get('artifact.volume.gt100.phiid', envir = get_soilDB_env())) > 0) {
+    message(
+      "-> QC: pedon horizons with artifact volume >=100%: \n\tUse `get('artifact.volume.gt100.phiid', envir=get_soilDB_env())` for pedon horizon record IDs (phiid)"
+    )
+  }
   
-  if (exists('multisiteobs.surface', envir = get_soilDB_env()))
-    if (length(get('multisiteobs.surface', envir = get_soilDB_env())) > 0)
-      message("-> QC: surface fragment records from multiple site observations:\n\tUse `get('multisiteobs.surface', envir=get_soilDB_env())` for site (siteiid) and site observation (siteobsiid)")
+  if (exists('multisiteobs.surface', envir = get_soilDB_env()) &&
+      length(get('multisiteobs.surface', envir = get_soilDB_env())) > 0) {
+    message(
+      "-> QC: surface fragment records from multiple site observations:\n\tUse `get('multisiteobs.surface', envir=get_soilDB_env())` for site (siteiid) and site observation (siteobsiid)"
+    )
+  }
   
   if (exists('surface.fragment.cover.gt100.siteobsiid', envir = get_soilDB_env()))
     if (length(get('surface.fragment.cover.gt100.siteobsiid', envir = get_soilDB_env())) > 0)

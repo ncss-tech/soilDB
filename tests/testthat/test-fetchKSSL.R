@@ -69,8 +69,8 @@ test_that("fetchKSSL() returns reasonable data", {
   skip_if(inherits(x, 'try-error') || is.null(x))
 
   # standard request
-  expect_true(nrow(aqp::site(x)) > 0)
-  expect_true(aqp::nrow(x) > 0)
+  expect_gt(nrow(aqp::site(x)), 0)
+  expect_gt(nrow(aqp::horizons(x)), 0)
   expect_identical(aqp::idname(x), 'pedon_key')
   expect_identical(aqp::horizonDepths(x), c("hzn_top", "hzn_bot"))
 
