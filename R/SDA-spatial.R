@@ -259,7 +259,7 @@ SDA_spatialQuery <- function(geom,
                              query_string = FALSE,
                              as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {
   if (byFeature) {
-    res <- do.call('rbind', lapply(1:nrow(geom), function(i) {
+    res <- do.call('rbind', lapply(seq_len(nrow(geom)), function(i) {
       res2 <- .SDA_spatialQuery(
         geom = geom[i, ],
         what = what,

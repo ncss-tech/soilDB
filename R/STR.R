@@ -194,7 +194,7 @@ estimateSTR <- function(mast, mean.summer, mean.winter, O.hz=NA, saturated=NA, p
   
   for(i in seq_along(mast)) {
     # check for NA
-    if(any(is.na(c(mast[i], mean.summer[i], mean.winter[i])))){
+    if(anyNA(c(mast[i], mean.summer[i], mean.winter[i]))){
       res[i] <- NA
       next
     }

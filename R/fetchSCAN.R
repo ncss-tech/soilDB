@@ -579,7 +579,7 @@ SCAN_site_metadata <- function(site.code = NULL) {
   
   # all stations
   if (is.null(site.code)) {
-    idx <- 1:nrow(SCAN_SNOTEL_metadata)
+    idx <- seq_len(nrow(SCAN_SNOTEL_metadata))
   } else {
     
     # ensure order of site.code is preserved, if valid
@@ -591,7 +591,7 @@ SCAN_site_metadata <- function(site.code = NULL) {
     # if there are no valid site codes, return all stations
     if(length(idx) < 1) {
       message('no valid site codes specified, returning all stations')
-      idx <- 1:nrow(SCAN_SNOTEL_metadata)
+      idx <- seq_len(nrow(SCAN_SNOTEL_metadata))
     }
   }
   

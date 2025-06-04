@@ -169,7 +169,7 @@ month2season <- function(x) {
 
   fill.cols <- which(!colnames(x) %in% colnames(fake.data))
   if (length(fill.cols) > 0) {
-    na.data <- as.data.frame(x)[, fill.cols, drop = FALSE][0,, drop = FALSE][1:nrow(fake.data),, drop = FALSE]
+    na.data <- as.data.frame(x)[, fill.cols, drop = FALSE][0,, drop = FALSE][seq_len(nrow(fake.data)),, drop = FALSE]
     fake.data <- cbind(fake.data, na.data)
   }
 

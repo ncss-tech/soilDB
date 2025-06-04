@@ -171,17 +171,17 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
     message("-> QC: multiple ecosites linked to 1 component\n\tUse `get('component.ecosite.problems', envir = get_soilDB_env())` for component keys (cokey)")
 
     nodups <- {
-      d.component[idx, ] ->.;
-      split(., .$cokey)  ->.;
-      lapply(., function(x) {
-        temp                  = x[1, ]
+      .<- d.component[idx, ];
+      .<- split(., .$cokey);
+      .<- lapply(., function(x) {
+        temp <- x[1, ]
         temp$ecoclassname     = paste0(x$ecoclassname, collapse = ", ")
         temp$ecoclasstypename = paste0(x$ecoclasstypename, collapse = ", ")
         temp$ecoclassref      = paste0(x$ecoclassref,  collapse = ", ")
         temp$ecoclassid       = paste0(x$ecoclassid,   collapse = ", ")
         return(temp)
-      }) ->.;
-      do.call("rbind", .) ->.;
+      });
+      .<- do.call("rbind", .);
     }
     d.component <- rbind(d.component[! idx, ], nodups)
     d.component <- with(d.component,
@@ -435,28 +435,28 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   if (is.null(d)) {
     d <- data.frame(
       cokey = cokey[1],
-      surface_fine_gravel = as.integer(NA),
-      surface_gravel      = as.integer(NA),
-      surface_cobbles     = as.integer(NA),
-      surface_stones      = as.integer(NA),
-      surface_boulders    = as.integer(NA),
-      surface_channers    = as.integer(NA),
-      surface_flagstones  = as.integer(NA),
-      surface_parafine_gravel = as.integer(NA),
-      surface_paragravel      = as.integer(NA),
-      surface_paracobbles     = as.integer(NA),
-      surface_parastones      = as.integer(NA),
-      surface_paraboulders    = as.integer(NA),
-      surface_parachanners    = as.integer(NA),
-      surface_paraflagstones  = as.integer(NA),
-      surface_unspecified     = as.integer(NA),
-      surface_total_frags_pct_nopf = as.integer(NA),
-      surface_total_frags_pct      = as.integer(NA))
+      surface_fine_gravel = NA_integer_,
+      surface_gravel      = NA_integer_,
+      surface_cobbles     = NA_integer_,
+      surface_stones      = NA_integer_,
+      surface_boulders    = NA_integer_,
+      surface_channers    = NA_integer_,
+      surface_flagstones  = NA_integer_,
+      surface_parafine_gravel = NA_integer_,
+      surface_paragravel      = NA_integer_,
+      surface_paracobbles     = NA_integer_,
+      surface_parastones      = NA_integer_,
+      surface_paraboulders    = NA_integer_,
+      surface_parachanners    = NA_integer_,
+      surface_paraflagstones  = NA_integer_,
+      surface_unspecified     = NA_integer_,
+      surface_total_frags_pct_nopf = NA_integer_,
+      surface_total_frags_pct      = NA_integer_)
   }
 
   # set NA values as integer NA
   idx <- sapply(d, function(x) all(is.na(x)))
-  d[idx] <- lapply(d[idx], function(x) x = as.integer(NA))
+  d[idx] <- lapply(d[idx], function(x) x <- NA_integer_)
 
   return(d)
 
@@ -728,13 +728,13 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
   # transform variables and metadata
   if (!is.null(d.chorizon) && nrow(d.chorizon) > 0){
     d.chorizon <- within(d.chorizon, {
-      nationalmusym = NULL
-      texture = tolower(texture)
+      nationalmusym <- NULL
+      texture <- tolower(texture)
       if (getOption("stringsAsFactors", default = FALSE) || getOption("soilDB.NASIS.DomainsAsFactor", default = FALSE)) {
-        texcl = factor(texcl, levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceLabel"])
+        texcl <- factor(texcl, levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceLabel"])
       }
       if (droplevels == droplevels && is.factor(texcl)) {
-        texcl = droplevels(texcl)
+        texcl <- droplevels(texcl)
       }
     })
   
@@ -744,7 +744,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
 
     if (childs == TRUE) {
   
-      WHERE = paste0("WHERE co.cokey IN (", paste0(unique(d.chorizon$cokey), collapse = ","), ")")
+      WHERE <- paste0("WHERE co.cokey IN (", paste0(unique(d.chorizon$cokey), collapse = ","), ")")
   
       q.chfrags <- paste("
   
@@ -1033,7 +1033,7 @@ fetchSDA <- function(WHERE = NULL,
   aqp::site(f.chorizon) <- f.mapunit
   
   # set SDA/SSURGO-specific horizon identifier
-  if ('chkey' %in% aqp::horizonNames(f.chorizon) && all(!is.na('chkey'))) {
+  if ('chkey' %in% aqp::horizonNames(f.chorizon) && !anyNA('chkey')) {
       aqp::hzidname(f.chorizon) <- 'chkey'
   }
 

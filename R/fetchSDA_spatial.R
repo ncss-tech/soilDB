@@ -188,7 +188,7 @@ fetchSDA_spatial <- function(x,
     #       in the future a T-SQL implementation would allow for any of the defined method options
     return(res)
   } else {
-    return(try(stop(paste0("Unknown feature identifier (", by.col, ")"), call. = FALSE)))
+    return(try(stop("Unknown feature identifier (", by.col, ")")))
   }
 
   mukey.chunk <- makeChunks(mukey.list, chunk.size)

@@ -162,7 +162,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
 	if (nrow(d) > 0) {
   	ldx <- !d$siteobsiid %in% phs$siteobsiid
   	if (!any(ldx)) {
-  	  phs <- phs[1:nrow(d),]
+  	  phs <- phs[seq_len(nrow(d)),]
   	  phs$siteobsiid <- d$siteobsiid
   	} else {
   	  phs_null <- phs[0,][1:sum(ldx),]

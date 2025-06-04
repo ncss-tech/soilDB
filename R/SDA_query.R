@@ -209,8 +209,7 @@ SDA_query <- function(q, dsn = NULL) {
       }
       
       ## inject specific message into a try-error result
-      request.status <- try(stop(paste0(attr(request.status, 'condition')$message, "\n",
-                                        error.msg), call. = FALSE), silent = TRUE)
+      request.status <- try(stop(attr(request.status, 'condition')$message, "\n", error.msg), silent = TRUE)
     }
     
     # return the error object so calling function/user can handle it

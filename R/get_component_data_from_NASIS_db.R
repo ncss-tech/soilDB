@@ -102,7 +102,7 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     
     ldx <- !d$coiid %in% chs$coiidref
     if (!any(ldx)) {
-      chs <- chs[1:nrow(d),]
+      chs <- chs[seq_len(nrow(d)),]
       chs$coiidref <- d$coiid
     } else {
       chs_null <- chs[0, ][1:sum(ldx), ]
@@ -617,7 +617,7 @@ get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   d <- dbQueryNASIS(channel, q)
 
   # missing pedon ID suggests records not in the selected set or local database
-  if(nrow(d) > 0 & any(is.na(d$upedonid))) {
+  if(nrow(d) > 0 & anyNA(d$upedonid)) {
     message('some linked pedons not in selected set or local database')
   }
 
@@ -680,7 +680,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
       nullFragsAreZero = nullFragsAreZero
     )
     if (sum(complete.cases(chf)) == 0) {
-      chf <- chf[1:nrow(d),]
+      chf <- chf[seq_len(nrow(d)),]
       chf$chiidref <- d$chiid
     } else {
       ldx <- !d$chiid %in% chf$chiidref
@@ -707,7 +707,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
     
     # handle NULL result
     if (sum(complete.cases(cha)) == 0) {
-      cha <- cha[1:nrow(d),]
+      cha <- cha[seq_len(nrow(d)),]
       cha$chiidref <- d$chiid
     } else {
       ldx <- !d$chiid %in% cha$chiidref

@@ -69,10 +69,10 @@ test_that("fetchKSSL() returns reasonable data", {
   skip_if(inherits(x, 'try-error') || is.null(x))
 
   # standard request
-  expect_equal(nrow(aqp::site(x)) > 0, TRUE)
-  expect_equal(aqp::nrow(x) > 0, TRUE)
-  expect_equal(aqp::idname(x), 'pedon_key')
-  expect_equal(aqp::horizonDepths(x), c("hzn_top", "hzn_bot"))
+  expect_true(nrow(aqp::site(x)) > 0)
+  expect_true(aqp::nrow(x) > 0)
+  expect_identical(aqp::idname(x), 'pedon_key')
+  expect_identical(aqp::horizonDepths(x), c("hzn_top", "hzn_bot"))
 
 })
 
@@ -90,7 +90,7 @@ test_that("fetchKSSL() returns data associated with named series (sierra)", {
 
   # all of the results should contain the search term
   f <- grepl('sierra', x$taxonname, ignore.case = TRUE)
-  expect_equal(all(f), TRUE)
+  expect_true(all(f))
 
 })
 

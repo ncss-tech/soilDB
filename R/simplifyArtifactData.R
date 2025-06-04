@@ -60,7 +60,7 @@ simplifyArtifactData <- function(art, id.var, vol.var = "huartvol", nullFragsAre
     colnames(dat) <- result.columns
     rownames(dat) <- NULL
     return(dat)
-  } else if (any(is.na(art[[vol.var]]))) {
+  } else if (anyNA(art[[vol.var]])) {
     art <- art[which(!is.na(art[[vol.var]])), ]
     # message('NOTE: some records are missing artifact volume')
   }

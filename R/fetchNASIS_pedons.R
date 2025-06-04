@@ -299,7 +299,7 @@
       }
     }
   } else {
-    warning("cannot set `phiid` as unique pedon horizon key - `NA` introduced by fill=TRUE", call.=F)
+    warning("cannot set `phiid` as unique pedon horizon key - `NA` introduced by fill=TRUE", call.=FALSE)
   }
   
   # set hz designation and texture fields -- NB: chose to use calculated texture -- more versatile

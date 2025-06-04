@@ -42,7 +42,7 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
     ## pm
     if (!is.null(WHERE)) {
       idx <- seq(0, 2e8, 1000)
-      co$idx <- as.character(cut(1:nrow(co), breaks = idx))
+      co$idx <- as.character(cut(seq_len(nrow(co)), breaks = idx))
       
       copm <- by(co, co$idx, function(x) {
         temp <- .get_copmgrp_from_GDB(dsn = dsn, x)
@@ -56,7 +56,7 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
     ## gmd
     if (!is.null(WHERE)) {
       idx <- seq(0, 2e8, 1000)
-      co$idx <- as.character(cut(1:nrow(co), breaks = idx))
+      co$idx <- as.character(cut(seq_len(nrow(co)), breaks = idx))
       
        cogmd <- by(co, co$idx, function(x) {
         temp <- .get_cogeomordesc_from_GDB(dsn = dsn, x)
@@ -191,7 +191,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
     
     if (!is.null(WHERE)) {
       idx <- c(0, rep(3000, 1000) * 1:1000)
-      mu$idx <- as.character(cut(1:nrow(mu), breaks = idx))
+      mu$idx <- as.character(cut(seq_len(nrow(mu)), breaks = idx))
       
       co <- by(mu, mu$idx, function(x) {
         qry <- paste0(
@@ -216,12 +216,12 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
     if (nrow(co) > 0) {
       
       co2 <- data.table::as.data.table(co)
-      .            = NULL
-      comppct_r    = NULL
-      hydricrating = NULL
-      cokey        = NULL
-      majcompflag  = NULL
-      mukey        = NULL
+      . <- NULL
+      comppct_r <- NULL
+      hydricrating <- NULL
+      cokey <- NULL
+      majcompflag <- NULL
+      mukey <- NULL
       co2 <- as.data.frame(co2[, .(
         pct_component = sum(comppct_r, na.rm = TRUE),
         pct_hydric    = sum((hydricrating == "Yes") * comppct_r, na.rm = TRUE),
@@ -256,7 +256,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
       # }
       mu <- merge(mu, co2, by = "mukey", all.x = TRUE, sort = FALSE)
       } else {
-        mu = cbind(mu, pct_component = NA_integer_, pct_hydric = NA_integer_, n_component = NA_integer_, n_majcompflag = NA_integer_)
+        mu <- cbind(mu, pct_component = NA_integer_, pct_hydric = NA_integer_, n_component = NA_integer_, n_majcompflag = NA_integer_)
       }
     }
 
@@ -301,7 +301,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   
   # remove duplicate rvindicators
   dat <- as.data.frame.matrix(table(pmg$cokey, pmg$rvindicator))
-  n_rvindicator = NULL
+  n_rvindicator <- NULL
   dat <- subset(data.frame(cokey = row.names(dat), n_rvindicator = dat$Yes), n_rvindicator > 1)
   assign('dup.compmgrp.cokeyrvindictor', value = dat, envir = get_soilDB_env())
   message("-> QC: ", formatC(nrow(dat), format = "fg", big.mark = ","), " duplicate 'representative' rvindicators in the copmgrp table. \n\tUse `get('dup.compmgrp.cokeyrvindictor', envir=get_soilDB_env())` for offending component record IDs (cokey)")
@@ -429,7 +429,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   idx <- seq(0, 2e8, 3000)
   
   if (!is.null(cokey)) {
-    idx2 <- as.character(cut(1:length(cokey), breaks = idx))
+    idx2 <- as.character(cut(seq_along(cokey), breaks = idx))
     co   <- data.frame(cokey, idx2)
     
     ch <- by(co, co$idx, function(x) {
@@ -452,7 +452,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
     
     
     if (!is.null(cokey))
-      ch$idx <- as.character(cut(1:nrow(ch), breaks = idx))
+      ch$idx <- as.character(cut(seq_len(nrow(ch)), breaks = idx))
     
     if (is.null(cokey))
       ch$idx <- 1
@@ -681,7 +681,7 @@ fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
       # components
       # idx <- c(0, rep(375, 15) * 1:15)
       idx <- seq(0, 2e8, 3000)
-      x$idx <- as.character(cut(1:nrow(x), breaks = idx))
+      x$idx <- as.character(cut(seq_len(nrow(x)), breaks = idx))
       co <- by(x, x$idx, function(x2) {
         qry <- paste0("mukey IN ('", paste0(x2$mukey, collapse = "', '"), "')")
         tryCatch({

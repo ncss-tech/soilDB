@@ -602,7 +602,7 @@ get_SDA_property <-
                                          include_minors = FALSE,
                                          miscellaneous_areas = FALSE) {
 
-    n <- 1:length(property)
+    n <- seq_along(property)
     stopifnot(n > 0)
 
     sprintf("SELECT mukey, areasymbol, musym, muname

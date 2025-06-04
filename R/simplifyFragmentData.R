@@ -174,7 +174,7 @@ simplifyFragmentData <- function(rf, id.var, vol.var = "fragvol", prefix = "frag
     colnames(dat) <- result.columns
     rownames(dat) <- NULL
     return(dat)
-  } else if (any(is.na(rf[[vol.var]]))) {
+  } else if (anyNA(rf[[vol.var]])) {
     rf <- rf[which(!is.na(rf[[vol.var]])), ]
     # message(sprintf('NOTE: some records are missing %s', msg))
   }
