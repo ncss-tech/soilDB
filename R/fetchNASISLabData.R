@@ -41,8 +41,8 @@ fetchNASISLabData <- function(SS = TRUE, dsn = NULL) {
 	# replace missing lower boundaries
 	missing.lower.depth.idx <- which(!is.na(h$hzdept) & is.na(h$hzdepb))
   if (length(missing.lower.depth.idx) > 0) {
-    message(paste('replacing missing lower horizon depths with top depth + 1cm ... [',
-                  length(missing.lower.depth.idx), ' horizons]', sep = ''))
+    message(paste0('replacing missing lower horizon depths with top depth + 1cm ... [',
+                  length(missing.lower.depth.idx), ' horizons]'))
     h$hzdepb[missing.lower.depth.idx] <- h$hzdept[missing.lower.depth.idx] + 1
   }
 

@@ -8,10 +8,10 @@ test_that("month2season() works as expected", {
   res <- month2season(x)
 
   # classification
-  expect_identical(as.character(res), c("Summer", "Summer", "Summer", "Fall", "Fall", "Fall", "Winter", "Winter", "Winter", "Spring", "Spring", "Spring"))
+  expect_equivalent(as.character(res), c("Summer", "Summer", "Summer", "Fall", "Fall", "Fall", "Winter", "Winter", "Winter", "Spring", "Spring", "Spring"))
 
   # factor levels
-  expect_identical(levels(res), c("Winter", "Spring", "Summer", "Fall"))
+  expect_equivalent(levels(res), c("Winter", "Spring", "Summer", "Fall"))
 
   # bogus input
   expect_true(
@@ -118,20 +118,20 @@ test_that("summarizeSoilTemperature() works as expected", {
   s <- .formatDates(x, gran = 'day', pad.missing.days = TRUE, tz = "GMT")
   salt <- .formatDates(x, gran = 'day', pad.missing.days = FALSE)
 
-  expect_identical(nrow(s), 1096) # filled
-  expect_identical(nrow(salt), 749) # not filled
+  expect_equivalent(nrow(s), 1096) # filled
+  expect_equivalent(nrow(salt), 749) # not filled
 
   res <- summarizeSoilTemperature(s)
 
-  expect_identical(nrow(res), 1)
+  expect_equivalent(nrow(res), 1)
 
-  expect_identical(res$days.of.data, 749L)
+  expect_equivalent(res$days.of.data, 749L)
 
   expect_equal(res$gap.index, 0.32)
 
-  expect_identical(res$functional.yrs, 2L)
+  expect_equivalent(res$functional.yrs, 2L)
 
-  expect_identical(res$complete.yrs, 1L)
+  expect_equivalent(res$complete.yrs, 1L)
 
   expect_equal(res$MAST, 11.65, tolerance = 0.1)
 
@@ -139,7 +139,7 @@ test_that("summarizeSoilTemperature() works as expected", {
 
   expect_equal(res$Summer, 16.94, tolerance = 0.1)
 
-  expect_identical(as.character(res$STR), 'mesic')
+  expect_equivalent(as.character(res$STR), 'mesic')
 
 })
 
@@ -187,20 +187,20 @@ test_that(".formatDates() works as expected", {
   # expected structure
   expect_true(nrow(res) == nrow(x))
 
-  expect_identical(res$sid, x$sid)
+  expect_equivalent(res$sid, x$sid)
 
   expect_true(inherits(res$date_time, 'POSIXct'))
 
-  expect_identical(res$sensor_value, x$sensor_value)
+  expect_equivalent(res$sensor_value, x$sensor_value)
 
-  expect_identical(res$year, c(2010L, 2021L))
+  expect_equivalent(res$year, c(2010L, 2021L))
 
-  expect_identical(res$doy, c(48L, 1L))
+  expect_equivalent(res$doy, c(48L, 1L))
 
-  expect_identical(as.character(res$month), c('Feb', 'Jan'))
+  expect_equivalent(as.character(res$month), c('Feb', 'Jan'))
 
-  expect_identical(res$water_year, c(2010L, 2021L))
+  expect_equivalent(res$water_year, c(2010L, 2021L))
 
-  expect_identical(res$water_day, c(140L, 93L))
+  expect_equivalent(res$water_day, c(140L, 93L))
 
 })

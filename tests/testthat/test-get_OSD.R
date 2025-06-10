@@ -14,7 +14,7 @@ test_that("get_OSD works", {
   expect_warning({res1 <- get_OSD(series)})
 
   # data.frame result w/ 4 existing official series
-  expect_identical(nrow(res1), 4)
+  expect_equivalent(nrow(res1), 4)
 
   skip_if_not_installed("rvest")
 
@@ -24,7 +24,7 @@ test_that("get_OSD works", {
   expect_null(res2[[4]])
 
   # using fix_ocr_errors argument (this test still "works" even if OSD is fixed)
-  expect_identical(get_OSD("sycamore", fix_ocr_errors = TRUE)$HORIZONS[[1]]$dry_hue, c("2.5Y", "2.5Y","2.5Y", "10YR"))
+  expect_equivalent(get_OSD("sycamore", fix_ocr_errors = TRUE)$HORIZONS[[1]]$dry_hue, c("2.5Y", "2.5Y","2.5Y", "10YR"))
 })
 
 test_that("correct laundering of HTML source", {

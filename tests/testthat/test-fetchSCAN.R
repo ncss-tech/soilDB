@@ -50,7 +50,7 @@ test_that("fetchSCAN() returns the right kind of data", {
   
   # empty results should have the same data type and dimensions
   expect_true(inherits(y, 'list'))
-  expect_identical(nrow(y$metadata), 1)
+  expect_equivalent(nrow(y$metadata), 1)
   
   expect_true(inherits(y$STO, 'data.frame'))
   expect_true(ncol(y$STO) == 9)

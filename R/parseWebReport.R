@@ -1,14 +1,10 @@
 ## parallel requests?
 # https://cran.r-project.org/web/packages/curl/vignettes/intro.html#async_requests
 
-
-## TODO: POST doesn't seem to work either ...
-
 # library(httr)
 # url <- 'https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-PROPERY-COMPONENT_property'
 # r <- POST(url, body=args, encode = "multipart", verbose())
 # rvest::html_table(content(r))
-
 
 # requires rvest
 # note: get argument names from report HTML source
@@ -16,7 +12,6 @@
 # examples:
 # url = 'https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=WEB-PROJECT_MUKEY_BY_GOAL_YEAR'
 # args = list(msso='2-MIN', fy='2018', asym='%', proj='0')
-
 
 #' @title Parse contents of a web report, based on supplied arguments.
 #' 

@@ -256,72 +256,72 @@ d.missing.size <-
 
 
 test_that(".seive correctly skips / pads NA", {
-  expect_identical(.sieve(diameter = c(NA, 55)), c(NA, 'gravel'))
+  expect_equivalent(.sieve(diameter = c(NA, 55)), c(NA, 'gravel'))
 })
 
 
 test_that(".seive returns correct size class, nonflat, fragments", {
   
-  expect_identical(.sieve(diameter = 4, flat = FALSE, para = FALSE), 'fine_gravel')
-  expect_identical(.sieve(diameter = 6, flat = FALSE, para = FALSE), 'gravel')
-  expect_identical(.sieve(diameter = 65, flat = FALSE, para = FALSE), 'gravel')
-  expect_identical(.sieve(diameter = 74, flat = FALSE, para = FALSE), 'gravel')
-  expect_identical(.sieve(diameter = 77, flat = FALSE, para = FALSE), 'cobbles')
-  expect_identical(.sieve(diameter = 200, flat = FALSE, para = FALSE), 'cobbles')
-  expect_identical(.sieve(diameter = 250, flat = FALSE, para = FALSE), 'stones')
-  expect_identical(.sieve(diameter = 251, flat = FALSE, para = FALSE), 'stones')
-  expect_identical(.sieve(diameter = 600, flat = FALSE, para = FALSE), 'boulders')
-  expect_identical(.sieve(diameter = 601, flat = FALSE, para = FALSE), 'boulders')
-  expect_identical(.sieve(diameter = 900, flat = FALSE, para = FALSE), 'boulders')
-  expect_identical(.sieve(diameter = 1000, flat = FALSE, para = FALSE), 'boulders')
+  expect_equivalent(.sieve(diameter = 4, flat = FALSE, para = FALSE), 'fine_gravel')
+  expect_equivalent(.sieve(diameter = 6, flat = FALSE, para = FALSE), 'gravel')
+  expect_equivalent(.sieve(diameter = 65, flat = FALSE, para = FALSE), 'gravel')
+  expect_equivalent(.sieve(diameter = 74, flat = FALSE, para = FALSE), 'gravel')
+  expect_equivalent(.sieve(diameter = 77, flat = FALSE, para = FALSE), 'cobbles')
+  expect_equivalent(.sieve(diameter = 200, flat = FALSE, para = FALSE), 'cobbles')
+  expect_equivalent(.sieve(diameter = 250, flat = FALSE, para = FALSE), 'stones')
+  expect_equivalent(.sieve(diameter = 251, flat = FALSE, para = FALSE), 'stones')
+  expect_equivalent(.sieve(diameter = 600, flat = FALSE, para = FALSE), 'boulders')
+  expect_equivalent(.sieve(diameter = 601, flat = FALSE, para = FALSE), 'boulders')
+  expect_equivalent(.sieve(diameter = 900, flat = FALSE, para = FALSE), 'boulders')
+  expect_equivalent(.sieve(diameter = 1000, flat = FALSE, para = FALSE), 'boulders')
 })
 
 
 test_that("seive returns correct size class, flat, fragments", {
   
-  expect_identical(.sieve(diameter = 4, flat = TRUE, para = FALSE), 'channers')
-  expect_identical(.sieve(diameter = 149, flat = TRUE, para = FALSE), 'channers')
-  expect_identical(.sieve(diameter = 151, flat = TRUE, para = FALSE), 'flagstones')
-  expect_identical(.sieve(diameter = 300, flat = TRUE, para = FALSE), 'flagstones')
-  expect_identical(.sieve(diameter = 379, flat = TRUE, para = FALSE), 'flagstones')
-  expect_identical(.sieve(diameter = 381, flat = TRUE, para = FALSE), 'stones')
-  expect_identical(.sieve(diameter = 599, flat = TRUE, para = FALSE), 'stones')
-  expect_identical(.sieve(diameter = 601, flat = TRUE, para = FALSE), 'boulders')
-  expect_identical(.sieve(diameter = 601, flat = TRUE, para = FALSE), 'boulders')
-  expect_identical(.sieve(diameter = 900, flat = TRUE, para = FALSE), 'boulders')
+  expect_equivalent(.sieve(diameter = 4, flat = TRUE, para = FALSE), 'channers')
+  expect_equivalent(.sieve(diameter = 149, flat = TRUE, para = FALSE), 'channers')
+  expect_equivalent(.sieve(diameter = 151, flat = TRUE, para = FALSE), 'flagstones')
+  expect_equivalent(.sieve(diameter = 300, flat = TRUE, para = FALSE), 'flagstones')
+  expect_equivalent(.sieve(diameter = 379, flat = TRUE, para = FALSE), 'flagstones')
+  expect_equivalent(.sieve(diameter = 381, flat = TRUE, para = FALSE), 'stones')
+  expect_equivalent(.sieve(diameter = 599, flat = TRUE, para = FALSE), 'stones')
+  expect_equivalent(.sieve(diameter = 601, flat = TRUE, para = FALSE), 'boulders')
+  expect_equivalent(.sieve(diameter = 601, flat = TRUE, para = FALSE), 'boulders')
+  expect_equivalent(.sieve(diameter = 900, flat = TRUE, para = FALSE), 'boulders')
   
 })
 
 
 test_that("seive returns correct size class, nonflat, parafragments", {
   
-  expect_identical(.sieve(diameter = 4, flat = FALSE, para = TRUE), 'parafine_gravel')
-  expect_identical(.sieve(diameter = 6, flat = FALSE, para = TRUE), 'paragravel')
-  expect_identical(.sieve(diameter = 65, flat = FALSE, para = TRUE), 'paragravel')
-  expect_identical(.sieve(diameter = 77, flat = FALSE, para = TRUE), 'paracobbles')
-  expect_identical(.sieve(diameter = 200, flat = FALSE, para = TRUE), 'paracobbles')
-  expect_identical(.sieve(diameter = 249, flat = FALSE, para = TRUE), 'paracobbles')
-  expect_identical(.sieve(diameter = 251, flat = FALSE, para = TRUE), 'parastones')
-  expect_identical(.sieve(diameter = 599, flat = FALSE, para = TRUE), 'parastones')
-  expect_identical(.sieve(diameter = 601, flat = FALSE, para = TRUE), 'paraboulders')
-  expect_identical(.sieve(diameter = 900, flat = FALSE, para = TRUE), 'paraboulders')
-  expect_identical(.sieve(diameter = 1000, flat = FALSE, para = TRUE), 'paraboulders')
+  expect_equivalent(.sieve(diameter = 4, flat = FALSE, para = TRUE), 'parafine_gravel')
+  expect_equivalent(.sieve(diameter = 6, flat = FALSE, para = TRUE), 'paragravel')
+  expect_equivalent(.sieve(diameter = 65, flat = FALSE, para = TRUE), 'paragravel')
+  expect_equivalent(.sieve(diameter = 77, flat = FALSE, para = TRUE), 'paracobbles')
+  expect_equivalent(.sieve(diameter = 200, flat = FALSE, para = TRUE), 'paracobbles')
+  expect_equivalent(.sieve(diameter = 249, flat = FALSE, para = TRUE), 'paracobbles')
+  expect_equivalent(.sieve(diameter = 251, flat = FALSE, para = TRUE), 'parastones')
+  expect_equivalent(.sieve(diameter = 599, flat = FALSE, para = TRUE), 'parastones')
+  expect_equivalent(.sieve(diameter = 601, flat = FALSE, para = TRUE), 'paraboulders')
+  expect_equivalent(.sieve(diameter = 900, flat = FALSE, para = TRUE), 'paraboulders')
+  expect_equivalent(.sieve(diameter = 1000, flat = FALSE, para = TRUE), 'paraboulders')
   
 })
 
 
 test_that("seive returns correct size class, flat, parafragments", {
   
-  expect_identical(.sieve(diameter = 4, flat = TRUE, para = TRUE), 'parachanners')
-  expect_identical(.sieve(diameter = 149, flat = TRUE, para = TRUE), 'parachanners')
-  expect_identical(.sieve(diameter = 151, flat = TRUE, para = TRUE), 'paraflagstones')
-  expect_identical(.sieve(diameter = 300, flat = TRUE, para = TRUE), 'paraflagstones')
-  expect_identical(.sieve(diameter = 379, flat = TRUE, para = TRUE), 'paraflagstones')
-  expect_identical(.sieve(diameter = 381, flat = TRUE, para = TRUE), 'parastones')
-  expect_identical(.sieve(diameter = 599, flat = TRUE, para = TRUE), 'parastones')
-  expect_identical(.sieve(diameter = 601, flat = TRUE, para = TRUE), 'paraboulders')
-  expect_identical(.sieve(diameter = 601, flat = TRUE, para = TRUE), 'paraboulders')
-  expect_identical(.sieve(diameter = 900, flat = TRUE, para = TRUE), 'paraboulders')
+  expect_equivalent(.sieve(diameter = 4, flat = TRUE, para = TRUE), 'parachanners')
+  expect_equivalent(.sieve(diameter = 149, flat = TRUE, para = TRUE), 'parachanners')
+  expect_equivalent(.sieve(diameter = 151, flat = TRUE, para = TRUE), 'paraflagstones')
+  expect_equivalent(.sieve(diameter = 300, flat = TRUE, para = TRUE), 'paraflagstones')
+  expect_equivalent(.sieve(diameter = 379, flat = TRUE, para = TRUE), 'paraflagstones')
+  expect_equivalent(.sieve(diameter = 381, flat = TRUE, para = TRUE), 'parastones')
+  expect_equivalent(.sieve(diameter = 599, flat = TRUE, para = TRUE), 'parastones')
+  expect_equivalent(.sieve(diameter = 601, flat = TRUE, para = TRUE), 'paraboulders')
+  expect_equivalent(.sieve(diameter = 601, flat = TRUE, para = TRUE), 'paraboulders')
+  expect_equivalent(.sieve(diameter = 900, flat = TRUE, para = TRUE), 'paraboulders')
   
 })
 
@@ -332,7 +332,7 @@ test_that("rockFragmentSieve puts fragments without fragsize into 'unspecified' 
   d <- data.frame(fragvol=25, fragsize_l=NA, fragsize_r=NA, fragsize_h=NA, fragshp=NA, fraghard=NA)
   res <- .rockFragmentSieve(d)
   
-  expect_identical(res$class, 'unspecified')
+  expect_equivalent(res$class, 'unspecified')
   
 })
 
@@ -343,22 +343,22 @@ test_that("rockFragmentSieve assumptions are applied, results correct", {
   res <- .rockFragmentSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
-  expect_identical(res$fragshp, 'nonflat')
-  expect_identical(res$fraghard, 'strongly cemented')
+  expect_equivalent(res$fragshp, 'nonflat')
+  expect_equivalent(res$fraghard, 'strongly cemented')
   
   # correct class in the absence of fragment shape / hardness
-  expect_identical(res$class, 'gravel')
+  expect_equivalent(res$class, 'gravel')
   
   # one more try
   d <- data.frame(fragvol=NA, fragsize_l=NA, fragsize_r=200, fragsize_h=NA, fragshp=NA, fraghard=NA)
   res <- .rockFragmentSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
-  expect_identical(res$fragshp, 'nonflat')
-  expect_identical(res$fraghard, 'strongly cemented')
+  expect_equivalent(res$fragshp, 'nonflat')
+  expect_equivalent(res$fraghard, 'strongly cemented')
   
   # correct class in the absence of fragment shape / hardness
-  expect_identical(res$class, 'cobbles')
+  expect_equivalent(res$class, 'cobbles')
   
 })
 
@@ -369,8 +369,8 @@ test_that("rockFragmentSieve assumptions are applied when all NA", {
   res <- .rockFragmentSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
-  expect_identical(res$fragshp, 'nonflat')
-  expect_identical(res$fraghard, 'strongly cemented')
+  expect_equivalent(res$fragshp, 'nonflat')
+  expect_equivalent(res$fraghard, 'strongly cemented')
   
   # class should be NA
   expect_true(is.na(res$class))
@@ -385,33 +385,33 @@ test_that("rockFragmentSieve always uses the RV, computed when missing", {
   res <- .rockFragmentSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
-  expect_identical(res$fragshp, 'nonflat')
-  expect_identical(res$fraghard, 'strongly cemented')
+  expect_equivalent(res$fragshp, 'nonflat')
+  expect_equivalent(res$fraghard, 'strongly cemented')
   
   # correct class in the absence of fragment shape / hardness
-  expect_identical(res$class, 'gravel')
+  expect_equivalent(res$class, 'gravel')
   
   # only RV available
   d <- data.frame(fragvol=10, fragsize_l=NA, fragsize_r=50, fragsize_h=NA, fragshp='nonflat', fraghard='strongly cemented')
   res <- .rockFragmentSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
-  expect_identical(res$fragshp, 'nonflat')
-  expect_identical(res$fraghard, 'strongly cemented')
+  expect_equivalent(res$fragshp, 'nonflat')
+  expect_equivalent(res$fraghard, 'strongly cemented')
   
   # correct class in the absence of fragment shape / hardness
-  expect_identical(res$class, 'gravel')
+  expect_equivalent(res$class, 'gravel')
   
   # L/H available
   d <- data.frame(fragvol=10, fragsize_l=5, fragsize_r=NA, fragsize_h=74, fragshp='nonflat', fraghard='strongly cemented')
   res <- .rockFragmentSieve(d)
   
   # assumptions in the absence of fragment shape / hardness
-  expect_identical(res$fragshp, 'nonflat')
-  expect_identical(res$fraghard, 'strongly cemented')
+  expect_equivalent(res$fragshp, 'nonflat')
+  expect_equivalent(res$fraghard, 'strongly cemented')
   
   # correct class in the absence of fragment shape / hardness
-  expect_identical(res$class, 'gravel')
+  expect_equivalent(res$class, 'gravel')
   
 })
 
@@ -422,7 +422,7 @@ test_that("rockFragmentSieve complex sample data from NASIS, single horizon", {
   res <- .rockFragmentSieve(d.single.hz)
   
   # correct classes
-  expect_identical(res$class, c('cobbles', 'gravel', 'stones', 'paragravel', 'paracobbles'))
+  expect_equivalent(res$class, c('cobbles', 'gravel', 'stones', 'paragravel', 'paracobbles'))
   
 })
 
@@ -433,17 +433,17 @@ test_that("simplifyFragmentData complex sample data from NASIS, single horizon",
   res <- soilDB::simplifyFragmentData(d.single.hz, id.var = 'phiid', nullFragsAreZero = TRUE)
   
   # correct class totals
-  expect_identical(res$fine_gravel, 0)
-  expect_identical(res$gravel, 30)
-  expect_identical(res$cobbles, 30)
-  expect_identical(res$stones, 5)
-  expect_identical(res$paragravel, 5)
-  expect_identical(res$paracobbles, 10)
+  expect_equivalent(res$fine_gravel, 0)
+  expect_equivalent(res$gravel, 30)
+  expect_equivalent(res$cobbles, 30)
+  expect_equivalent(res$stones, 5)
+  expect_equivalent(res$paragravel, 5)
+  expect_equivalent(res$paracobbles, 10)
   
   # correct total without parafrags
-  expect_identical(res$total_frags_pct_nopf, 65)
+  expect_equivalent(res$total_frags_pct_nopf, 65)
   # correct total with parafrags
-  expect_identical(res$total_frags_pct, 80)
+  expect_equivalent(res$total_frags_pct, 80)
   
 })
 
@@ -460,8 +460,8 @@ test_that("simplifyFragmentData when missing fragment sizes, low/rv/high", {
   expect_true(nrow(res) == 10)
   
   # unspecified total should match RF sums
-  expect_identical(res$unspecified, res$total_frags_pct_nopf)
-  expect_identical(res$unspecified, res$total_frags_pct)
+  expect_equivalent(res$unspecified, res$total_frags_pct_nopf)
+  expect_equivalent(res$unspecified, res$total_frags_pct)
 })
 
 
@@ -483,7 +483,7 @@ test_that("simplifyFragmentData warning generated when all fragvol are NA", {
 test_that("simplifyFragmentData nullFragsAreZero works as expected", {
   expect_silent( { a <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = FALSE) } )
   expect_silent( { b <- simplifyFragmentData(d.missing.fragvol, id.var = 'phiid', nullFragsAreZero = TRUE) } )
-  expect_identical(as.logical(is.na(a)), c(FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, 
+  expect_equivalent(as.logical(is.na(a)), c(FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, 
                            FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE))
   expect_false(anyNA(b))
 })

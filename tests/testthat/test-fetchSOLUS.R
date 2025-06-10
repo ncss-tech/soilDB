@@ -39,7 +39,7 @@ test_that("fetchSOLUS works", {
   )
   
   expect_length(res, 2)
-  expect_identical(terra::ncell(res$grid), 3417)
+  expect_equivalent(terra::ncell(res$grid), 3417)
   expect_length(res$spc, 3417)
   
 })

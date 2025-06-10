@@ -347,10 +347,10 @@ fetchSDA_spatial <- function(x,
   # add any additional fields from mapunit/legend
   if (!is.null(add.fields)) {
     q <- gsub(q, pattern = "FROM ([a-z]+)polygon",
-              replacement = paste0(", ", paste0(ifelse(rep(grepl("Aggregate", geom.type), length(add.fields)),
+              replacement = paste0(", ", toString(ifelse(rep(grepl("Aggregate", geom.type), length(add.fields)),
                sprintf("(SELECT STRING_AGG(value,', ') FROM (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(CONVERT(NVARCHAR(max), %s), ','),',')) t) AS %s",
                        add.fields, gsub(".*\\.([a-z]+)", "\\1", add.fields)),
-              add.fields), collapse = ", "), " FROM \\1polygon"))
+              add.fields)), " FROM \\1polygon"))
   }
   t1 <- Sys.time()
 
@@ -382,7 +382,7 @@ fetchSDA_spatial <- function(x,
 
     if (verbose)
       message("No spatial data found for: ",
-              paste0(mukey.list, collapse = ","))
+              paste(mukey.list, collapse = ","))
   }
   return(list(result = s, time = times))
 }

@@ -222,7 +222,7 @@ createSSURGO <- function(filename = NULL,
     }
   }
   
-  if (!IS_DUCKDB && !requireNamespace("sf"))
+  if (!IS_DUCKDB && !requireNamespace("sf")) {
       stop("package `sf` is required to write spatial datasets to DBI data sources", call. = FALSE)
   } 
   

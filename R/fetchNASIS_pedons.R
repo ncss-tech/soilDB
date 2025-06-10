@@ -291,16 +291,23 @@
     )
   }
   
-  if (exists('surface.fragment.cover.gt100.siteobsiid', envir = get_soilDB_env()))
-    if (length(get('surface.fragment.cover.gt100.siteobsiid', envir = get_soilDB_env())) > 0)
-      message("-> QC: pedons with surface fragment cover >=100%: \n\tUse `get('surface.fragment.cover.gt100.siteobsiid', envir=get_soilDB_env())` for site observation record IDs (siteobsiid)")
+  if (exists('surface.fragment.cover.gt100.siteobsiid', envir = get_soilDB_env()) &&
+      length(get('surface.fragment.cover.gt100.siteobsiid', envir = get_soilDB_env())) > 0) {
+    message(
+      "-> QC: pedons with surface fragment cover >=100%: \n\tUse `get('surface.fragment.cover.gt100.siteobsiid', envir=get_soilDB_env())` for site observation record IDs (siteobsiid)"
+    )
+  }
   
-  if (exists('multiple.labsampnum.per.phiid', envir = get_soilDB_env()))
-    if (length(get('multiple.labsampnum.per.phiid', envir = get_soilDB_env())) > 0)
-      message("-> QC: horizons with multiple lab samples: \n\tUse `get('multiple.labsampnum.per.phiid', envir=get_soilDB_env())` for pedon horizon record IDs (phiid)")
+  
+  if (exists('multiple.labsampnum.per.phiid', envir = get_soilDB_env()) &&
+      length(get('multiple.labsampnum.per.phiid', envir = get_soilDB_env())) > 0) {
+    message(
+      "-> QC: horizons with multiple lab samples: \n\tUse `get('multiple.labsampnum.per.phiid', envir=get_soilDB_env())` for pedon horizon record IDs (phiid)"
+    )
+  }
   
   # set NASIS component specific horizon identifier
-  if (!fill & length(filled.ids) == 0) {
+  if (!fill && length(filled.ids) == 0) {
     res <- try(aqp::hzidname(hz_data) <- 'phiid')
     if (inherits(res, 'try-error')) {
       if (!rmHzErrors) {
@@ -318,18 +325,21 @@
   aqp::hzdesgnname(hz_data) <- "hzname"
   aqp::hztexclname(hz_data) <- "texture"
 
-  if (exists('bad.pedon.ids', envir = get_soilDB_env()))
-    if (length(get('bad.pedon.ids', envir = get_soilDB_env())) > 0)
-      message("-> QC: horizon errors detected:\n\tUse `get('bad.pedon.ids', envir=get_soilDB_env())` for pedon record IDs (peiid)\n\tUse `get('bad.horizons', envir=get_soilDB_env())` for horizon designations")
-
-  if (exists('missing.bottom.depths', envir = get_soilDB_env()))
-    if (length(get('missing.bottom.depths', envir = get_soilDB_env())) > 0)
-      message("-> QC: pedons missing bottom hz depths:\n\tUse `get('missing.bottom.depths', envir=get_soilDB_env())` for pedon record IDs (peiid)")
-
-  if (exists('top.bottom.equal', envir = get_soilDB_env()))
-    if (length(get('top.bottom.equal', envir = get_soilDB_env())) > 0)
-      message("-> QC: equal hz top and bottom depths:\n\tUse `get('top.bottom.equal', envir=get_soilDB_env())` for pedon record IDs (peiid)")
-
+  if (exists('bad.pedon.ids', envir = get_soilDB_env()) &&
+      length(get('bad.pedon.ids', envir = get_soilDB_env())) > 0) {
+    message("-> QC: horizon errors detected:\n\tUse `get('bad.pedon.ids', envir=get_soilDB_env())` for pedon record IDs (peiid)\n\tUse `get('bad.horizons', envir=get_soilDB_env())` for horizon designations")
+  }
+  
+  if (exists('missing.bottom.depths', envir = get_soilDB_env()) &&
+      length(get('missing.bottom.depths', envir = get_soilDB_env())) > 0) {
+    message("-> QC: pedons missing bottom hz depths:\n\tUse `get('missing.bottom.depths', envir=get_soilDB_env())` for pedon record IDs (peiid)")
+  }
+  
+  if (exists('top.bottom.equal', envir = get_soilDB_env()) &&
+      length(get('top.bottom.equal', envir = get_soilDB_env())) > 0){
+    message("-> QC: equal hz top and bottom depths:\n\tUse `get('top.bottom.equal', envir=get_soilDB_env())` for pedon record IDs (peiid)")
+  }
+  
   # done
   return(hz_data)
 }

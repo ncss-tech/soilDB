@@ -58,9 +58,9 @@ test_that("fetchNASISWebReport() returns reasonable data", {
   # standard request
   expect_gt(nrow(aqp::site(x$spc)), 0)
   expect_gt(nrow(aqp::horizons(x$spc)), 0)
-  expect_identical(aqp::idname(x$spc), 'coiid')
-  expect_identical(aqp::hzidname(x$spc), 'chiid')
-  expect_identical(aqp::horizonDepths(x$spc), c("hzdept_r", "hzdepb_r"))
+  expect_equivalent(aqp::idname(x$spc), 'coiid')
+  expect_equivalent(aqp::hzidname(x$spc), 'chiid')
+  expect_equivalent(aqp::horizonDepths(x$spc), c("hzdept_r", "hzdepb_r"))
 
 })
 

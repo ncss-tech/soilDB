@@ -408,14 +408,15 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
   aqp::metadata(h)$created <- Sys.time()
 
   # cleaning up the results
-  if (returnMorphologicData && simplifyColors && inherits(m$phcolor, 'data.frame')) {
-      
-      # simplify color data: 1 row / horizon, from morphologic data tables
-      x.colors <- simplifyColorData(m$phcolor, id.var = 'labsampnum', wt='colorpct')
-
-      # safely LEFT JOIN with @horizons
-      suppressMessages(aqp::horizons(h) <- x.colors)
-    }
+  if (returnMorphologicData &&
+      simplifyColors && 
+      inherits(m$phcolor, 'data.frame')) {
+    # simplify color data: 1 row / horizon, from morphologic data tables
+    x.colors <- simplifyColorData(m$phcolor, id.var = 'labsampnum', wt =
+                                    'colorpct')
+    
+    # safely LEFT JOIN with @horizons
+    suppressMessages(aqp::horizons(h) <- x.colors)
   }
 
   # report object size

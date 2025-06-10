@@ -327,7 +327,7 @@
   )
   
   if (length(missing.lower.depth.idx) > 0) {
-    message(paste('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]', sep=''))
+    message(paste0('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]'))
     
     # make edit
     hz_data[[hzdepb]][missing.lower.depth.idx] <- hz_data[[hzdept]][missing.lower.depth.idx] + 1
@@ -344,7 +344,7 @@
   )
   # make the edit
   if (length(top.eq.bottom.idx) > 0) {
-    message(paste('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]', sep = '')
+    message(paste0('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]')
     )
     hz_data[[hzdepb]][top.eq.bottom.idx] <- hz_data[[hzdepb]][top.eq.bottom.idx] + 1
   }
@@ -390,7 +390,7 @@
 
 .fix_site_problems <- function(site_data, nullFragsAreZero = nullFragsAreZero) {
   
-  if (nullFragsAreZero == TRUE) {
+  if (isTRUE(nullFragsAreZero)) {
     idx <- grep("fragvol|frags_|gravel|cobbles|stones|boulders|channers|unspecified", names(site_data))
     vars <- names(site_data)[idx]
     site_data[idx] <-lapply(site_data[idx], function(x) {

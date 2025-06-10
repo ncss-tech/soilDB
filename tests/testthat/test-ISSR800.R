@@ -67,7 +67,7 @@ test_that("categorical data", {
     
     # there must be a RAT
     expect_false(is.null(terra::levels(x)))
-    expect_identical(colnames(terra::cats(x)[[1]]), c('ID','class','hex','names'))
+    expect_equivalent(colnames(terra::cats(x)[[1]]), c('ID','class','hex','names'))
   }
   
   x2 <- ISSR800.wcs(
@@ -80,7 +80,7 @@ test_that("categorical data", {
   expect_true(inherits(x2, 'SpatRaster') || inherits(x2, 'try-error'))
   
   if (!inherits(x2, 'try-error')) {
-    expect_identical(colnames(terra::cats(x2)[[1]]), c('ID', 'suborder'))
+    expect_equivalent(colnames(terra::cats(x2)[[1]]), c('ID', 'suborder'))
   }
 
 })

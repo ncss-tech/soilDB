@@ -165,14 +165,11 @@ fetchSoilGrids <- function(x,
   locations <- x
   spatial_input <- FALSE
   
-  if (inherits(locations, 'sf') || inherits(locations, 'Spatial')) {
-    if (requireNamespace("sf")) {
-      if (inherits(locations, 'Spatial') ||
-          inherits(locations, 'SpatVector')) {
-        # convert sp -> sf & terra -> sf
-        locations <- sf::st_as_sf(locations)
-      }
-    }
+  if ((inherits(locations, 'sf') || inherits(locations, 'Spatial')) &&
+      requireNamespace("sf") && 
+      (inherits(locations, 'Spatial') || inherits(locations, 'SpatVector'))) {
+    # convert sp -> sf & terra -> sf
+    locations <- sf::st_as_sf(locations)
   }
   
   if (grid) {
@@ -259,14 +256,14 @@ fetchSoilGrids <- function(x,
     }
     
     # add handling for messages from api about erroneous input
-    if (!is.null(jres$detail)) {
-      if (!is.null(jres$detail$msg)) {
-        if (!is.null(jres$detail$loc) && length(jres$detail$loc) > 0)
-          message("Check ", 
-                  paste0(jres$detail$loc[[1]], collapse = " "), 
-                  " (", loc.names[1], ":", locations[[loc.names[1]]][i], "); ",
-                  jres$detail$msg)
-      }
+    if (!is.null(jres$detail) &&
+        is.null(jres$detail$msg) &&
+        !is.null(jres$detail$loc) &&
+        length(jres$detail$loc) > 0) {
+      message("Check ", 
+              paste(jres$detail$loc[[1]], collapse = " "), 
+              " (", loc.names[1], ":", locations[[loc.names[1]]][i], "); ",
+              jres$detail$msg)
     }
     
     # create new horizon data, merge in each property using standard depth labels
@@ -348,12 +345,12 @@ fetchSoilGrids <- function(x,
   }
   
   if (ncol(aqp::horizons(spc)) == 5) {
-    res <- try(stop("SoilGrids API is not accessible", call. = FALSE), silent = !verbose)
-    return(invisible(res))
     # this occurs if all requests fail to retrieve data/JSON response
+    return(invisible(try(stop("SoilGrids API is not accessible", call. = FALSE), silent = !verbose)))
+  } else {
+    return(spc)
+    
   }
-  
-  return(spc)
 }
 
 .extractSGLayerProperties <- function(jsonres, x, scaling.factor = 1) {

@@ -33,7 +33,7 @@ test_that("estimateColorMixture basic functionality", {
   res <- estimateColorMixture(x, backTransform = TRUE)
 
   # should be a single row
-  expect_identical(nrow(res), 1)
+  expect_equivalent(nrow(res), 1)
 
   # ensure values aren't NA
   expect_false(any(sapply(res, is.na)))

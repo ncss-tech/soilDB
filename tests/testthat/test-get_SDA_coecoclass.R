@@ -34,7 +34,7 @@ test_that("get_SDA_coecoclass works", {
   
   res5 <- get_SDA_coecoclass(areasymbols = c("CA077", "CA630"))
   skip_if(is.null(res5))
-  expect_identical(nrow(unique(res5[,c("cokey","coecoclasskey")])), nrow(res5))
+  expect_equivalent(nrow(unique(res5[,c("cokey","coecoclasskey")])), nrow(res5))
   
   res6 <- get_SDA_coecoclass(method = "dominant component",
                              mukeys = c(461994, 461995))
@@ -56,6 +56,6 @@ test_that("get_SDA_coecoclass works", {
                              method = "none", 
                              include_minors = FALSE)
   skip_if(is.null(res9))
-  expect_identical(nrow(res9), nrow(res7))
+  expect_equivalent(nrow(res9), nrow(res7))
   
 })

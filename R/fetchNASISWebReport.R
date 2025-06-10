@@ -174,7 +174,7 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
   }
 
   # fill
-  if (fill == FALSE) {
+  if (isFALSE(fill)) {
     d.chorizon <- d.chorizon[!is.na(d.chorizon$chiid), ]
   }
 

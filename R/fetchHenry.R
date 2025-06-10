@@ -297,7 +297,7 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
     stop("`what` must be either: 'all', 'sensors', 'soiltemp', 'soilVWC', 'airtemp', or 'waterlevel'", call. = FALSE)
 
   # sanity-check: user must supply some kind of criteria
-  if (what != 'sensors' && missing(usersiteid) & missing(project) & missing(sso))
+  if (what != 'sensors' && missing(usersiteid) && missing(project) && missing(sso)) {
       stop('you must provide some filtering criteria', call. = FALSE)
   }
 
@@ -356,7 +356,7 @@ fetchHenry <- function(what='all', usersiteid=NULL, project=NULL, sso=NULL, gran
   }
 
   # post-process data, if there are some
-  if (length(s$soiltemp) > 0 | length(s$soilVWC) > 0 | length(s$airtemp) > 0 | length(s$waterlevel) > 0 ) {
+  if (length(s$soiltemp) > 0 || length(s$soilVWC) > 0 || length(s$airtemp) > 0 || length(s$waterlevel) > 0 ) {
 
     .SD <- NULL
 

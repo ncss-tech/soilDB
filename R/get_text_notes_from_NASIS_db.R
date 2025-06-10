@@ -53,7 +53,7 @@ siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidr
 	q.photos <- "SELECT recdate, recauthor, siteobstextkind, textcat, textsubcat, siteiidref AS siteiid, siteobstextiid, CAST(textentry as text) AS textentry FROM (siteobs_View_1 LEFT OUTER JOIN siteobstext_View_1 ON siteobs_View_1.siteobsiid = siteobstext_View_1.siteobsiidref) WHERE siteobstext_View_1.textcat LIKE 'Photo%' ORDER BY siteobstext_View_1.siteobstextkind;"
 
 	# toggle selected set vs. local DB
-	if (SS == FALSE) {
+	if (isFALSE(SS)) {
 	  q.petext <- gsub(pattern = '_View_1', replacement = '', x = q.petext, fixed = TRUE)
 	  q.sitetext <- gsub(pattern = '_View_1', replacement = '', x = q.sitetext, fixed = TRUE)
 	  q.siteobstext <- gsub(pattern = '_View_1', replacement = '', x = q.siteobstext, fixed = TRUE)
@@ -116,7 +116,7 @@ get_mutext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NUL
     return(data.frame())
   
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
   
@@ -155,7 +155,7 @@ get_cotext_from_NASIS_db <- function(SS = TRUE, fixLineEndings = TRUE, dsn = NUL
   INNER JOIN cotext_View_1 AS cot ON co.coiid = cot.coiidref;"
   
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
   

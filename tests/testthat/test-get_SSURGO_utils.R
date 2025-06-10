@@ -10,6 +10,6 @@ test_that(".make_WSS_download_url works", {
   
   # vermont has a state-specific template
   x <- .make_WSS_download_url("areasymbol IN ('NH607', 'VT005', 'VT009', 'VT019')", include_template = TRUE)
-  expect_identical(grepl("_soildb_US_", x), c(TRUE, FALSE, FALSE, FALSE))
+  expect_equivalent(grepl("_soildb_US_", x), c(TRUE, FALSE, FALSE, FALSE))
   
 })

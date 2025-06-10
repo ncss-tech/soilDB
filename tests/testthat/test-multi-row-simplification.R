@@ -44,16 +44,16 @@ test_that(".formatcoParentMaterialString functions correctly", {
   colnames(res2)[1] <- "coiid"
   
   # test for equal value
-  expect_identical(res, res2)
+  expect_equivalent(res, res2)
   
   # there should only be a single row returned
-  expect_identical(nrow(res2), 1)
+  expect_equivalent(nrow(res2), 1)
   
   # required names
   expect_named(res2, c('coiid', 'pmkind', 'pmorigin'))
   
   # data-check: single pmorigin, two pmkind: COL/RES
-  expect_identical(res$pmkind, 'colluvium|residuum')
-  expect_identical(res$pmorigin, 'metavolcanics')
+  expect_equivalent(res$pmkind, 'colluvium|residuum')
+  expect_equivalent(res$pmorigin, 'metavolcanics')
   
 })

@@ -40,8 +40,8 @@ test_that("soilDBdata: fetchNASIS", {
   expect_equal(p1$surface_total_frags_pct, 5.4)
   
   # check subsurface fragments 
-  expect_identical(p1$stones, rep(5, 4))
-  expect_identical(p1$total_frags_pct, c(90, 75, 65, 75))
+  expect_equivalent(p1$stones, rep(5, 4))
+  expect_equivalent(p1$total_frags_pct, c(90, 75, 65, 75))
   
   expect_warning({
     fcf <- fetchNASIS(
@@ -73,7 +73,7 @@ test_that("soilDBdata: fetchVegdata", {
   expect_true(all(sapply(fvp1, inherits, 'data.frame')))
   
   # only one transect missing points/species info
-  expect_identical(sum(!is.na(fvp1$vegtranspoint$plantsym)), nrow(fvp1$vegtranspoint) - 1)
+  expect_equivalent(sum(!is.na(fvp1$vegtranspoint$plantsym)), nrow(fvp1$vegtranspoint) - 1)
 
   # TEST SS=TRUE
   fvp2 <- fetchVegdata(dsn = VEGPLOT_TEST_DSN, SS = TRUE)

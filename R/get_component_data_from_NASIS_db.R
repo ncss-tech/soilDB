@@ -70,7 +70,7 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q1 <- gsub(pattern = '_View_1', replacement = '', x = q1, fixed = TRUE)
     q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
   }
@@ -139,7 +139,7 @@ get_component_diaghz_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   q <- "SELECT coiidref as coiid, featkind, featdept_l, featdept_r, featdept_h, featdepb_l, featdepb_r, featdepb_h, featthick_l, featthick_r, featthick_h FROM codiagfeatures_View_1 AS cdf ORDER BY cdf.coiidref, cdf.featdept_r;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -165,7 +165,7 @@ get_component_restrictions_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   q <- "SELECT coiidref as coiid, reskind, resdept_l, resdept_r, resdept_h, resdepb_l, resdepb_r, resdepb_h, resthk_l, resthk_r, resthk_h, reskind, reshard FROM corestrictions_View_1 AS cr ORDER BY cr.coiidref, cr.resdept_r;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -211,17 +211,16 @@ get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   d <- dbQueryNASIS(channel, q)
 
-  ## TODO: is this a good idea?
   # test for no data
-  if(nrow(d) == 0)
+  if (nrow(d) == 0)
     warning('there are no records in your selected set!', call. = FALSE)
-
+  
   # recode metadata domains
   d <- uncode(d, dsn = dsn)
 
@@ -281,7 +280,7 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -315,7 +314,7 @@ get_component_cogeomorph_data_from_NASIS_db2 <- function(SS = TRUE, dsn = NULL) 
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -352,7 +351,7 @@ get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -393,7 +392,7 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -414,7 +413,6 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
   return(d)
 }
 
-## TODO: convert any multiple entries into a comma delimited string
 # get OtherVeg information for each component
 #' @export
 #' @rdname get_component_data_from_NASIS_db
@@ -433,7 +431,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -502,7 +500,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -524,7 +522,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
       return(data.frame())
 
     # toggle selected set vs. local DB
-    if (SS == FALSE) {
+    if (isFALSE(SS)) {
       q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
     }
 
@@ -609,7 +607,7 @@ get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -655,7 +653,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
     q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
     q3 <- gsub(pattern = '_View_1', replacement = '', x = q3, fixed = TRUE)
@@ -665,7 +663,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   d <- dbQueryNASIS(channel, q, close = FALSE)
 
   # remove records what are missing horizon data
-  if (fill == FALSE) {
+  if (isFALSE(fill)) {
     d <- d[!is.na(d$chiid), ]
   }
 

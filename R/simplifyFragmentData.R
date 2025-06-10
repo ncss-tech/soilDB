@@ -32,7 +32,7 @@
 
     # change names if we are working with parafrags
     
-    if (para == TRUE) {
+    if (isTRUE(para)) {
       res[no.na.idx] <- paste0('para', res[no.na.idx])
     }
   }

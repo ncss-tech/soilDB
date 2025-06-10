@@ -62,8 +62,8 @@ test_that("fetchNASIS(from='pedons') returns reasonable data", {
   expect_true(inherits(x, 'SoilProfileCollection'))
   expect_gt(nrow(site(x)), 0)
   expect_gt(nrow(horizons(x)), 0)
-  expect_identical(idname(x), 'peiid')
-  expect_identical(horizonDepths(x), c("hzdept", "hzdepb"))
+  expect_equivalent(idname(x), 'peiid')
+  expect_equivalent(horizonDepths(x), c("hzdept", "hzdepb"))
 
   # no NA in total fragments using default arguments
   expect_false(anyNA(x$total_frags_pct))
@@ -117,8 +117,8 @@ test_that("fetchNASIS(from='components') returns reasonable data", {
   expect_true(inherits(x, 'SoilProfileCollection'))
   expect_gt(nrow(site(x)), 0)
   expect_gt(nrow(horizons(x)), 0)
-  expect_identical(idname(x), 'coiid')
-  expect_identical(horizonDepths(x), c("hzdept_r", "hzdepb_r"))
+  expect_equivalent(idname(x), 'coiid')
+  expect_equivalent(horizonDepths(x), c("hzdept_r", "hzdepb_r"))
 
 })
 

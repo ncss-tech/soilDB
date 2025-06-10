@@ -119,7 +119,7 @@ ORDER BY siteobs_View_1.siteobsiid;")
     return(data.frame())
 
 	# toggle selected set vs. local DB
-	if (SS == FALSE) {
+	if (isFALSE(SS)) {
 	  q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
 	  q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
 	  q3 <- gsub(pattern = '_View_1', replacement = '', x = q3, fixed = TRUE)
@@ -265,7 +265,7 @@ get_site_association_from_NASIS <- function(SS = TRUE, dsn = NULL) {
          LEFT OUTER JOIN site_View_1 s ON s.siteiid = sas.siteiidref"
       
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
   

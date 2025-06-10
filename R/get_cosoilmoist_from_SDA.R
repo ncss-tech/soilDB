@@ -11,7 +11,7 @@ get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = 
   }
 
   q.cosoilmoist <- paste("SELECT",
-                         if (duplicates == FALSE) {
+                         if (isFALSE(duplicates)) {
                            "DISTINCT"
                          } else {
                            "mu.mukey, c.cokey, "
@@ -22,7 +22,7 @@ get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = 
 
   FROM legend l INNER JOIN
        mapunit mu ON mu.lkey = l.lkey INNER JOIN",
-       if (duplicates == FALSE) {
+       if (isFALSE(duplicates)) {
           "(SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2
           FROM mapunit
           GROUP BY nationalmusym) AS mu2 ON mu2.nationalmusym2 = mu.nationalmusym INNER JOIN

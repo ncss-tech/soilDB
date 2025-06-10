@@ -25,7 +25,7 @@ get_projectmilestone_from_NASIS <- function(SS = TRUE, stringsAsFactors = NULL, 
         ORDER BY p.projectname, pms.seqnum;"
   
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
   
@@ -78,7 +78,7 @@ get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = NULL, ds
   )
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 

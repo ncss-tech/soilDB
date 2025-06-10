@@ -64,7 +64,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE,
   q.dommlra <- "SELECT lmapunitiid, area.areasymbol AS lmapunit_mlra FROM area LEFT JOIN lmapunit_View_1 ON area.areaiid = lmapunit_View_1.mlraareaiidref"
   
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.mapunit <- gsub(pattern = '_View_1', replacement = '', x = q.mapunit, fixed = TRUE)
     q.dommlra <- gsub(pattern = '_View_1', replacement = '', x = q.dommlra, fixed = TRUE)
   }
@@ -81,22 +81,18 @@ get_mapunit_from_NASIS <- function(SS = TRUE,
   # recode metadata domains
   d.mapunit <- uncode(d.mapunit, droplevels = droplevels, dsn = dsn)
   
-  # hacks to make R CMD check --as-cran happy:
-  metadata <- NULL
-  
-  # load local copy of metadata
-  load(system.file("data/metadata.rda", package = "soilDB")[1])
+  metadata <- get_NASIS_metadata()
   
   # transform variables and metadata
   d.mapunit$farmlndcl <- factor(d.mapunit$farmlndcl,
                                 levels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceValue"],
                                 labels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceLabel"])
   
-  if (is.null(stringsAsFactors) || stringsAsFactors == FALSE) {
+  if (is.null(stringsAsFactors) || isTRUE(stringsAsFactors)) {
     d.mapunit$farmlndcl  = as.character(d.mapunit$farmlndcl)
   }
   
-  if (droplevels == TRUE & is.factor(d.mapunit$farmlndcl)) {
+  if (isTRUE(droplevels) && is.factor(d.mapunit$farmlndcl)) {
     d.mapunit$farmlndcl = droplevels(d.mapunit$farmlndcl)
   }
   
@@ -143,7 +139,7 @@ get_legend_from_NASIS <- function(SS = TRUE,
                      ;")
   
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.legend <- gsub(pattern = '_View_1', replacement = '', x = q.legend, fixed = TRUE)
   }
   
@@ -203,7 +199,7 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE,
   
   
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
   
