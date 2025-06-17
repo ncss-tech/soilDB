@@ -188,7 +188,7 @@ mtext(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link{SDA_query}}
+\code{\link[=SDA_query]{SDA_query()}}
 }
 \author{
 D.E. Beaudette, A.G. Brown, D.R. Schlaepfer
