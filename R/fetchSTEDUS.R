@@ -19,7 +19,7 @@
 #'   https://storage.googleapis.com/dsm-ft-stedus-30m-public/index.html
 #' 
 #' @return A _SpatRaster_ object.
-#' @export
+#' @noRd
 #'
 #' @examplesIf curl::has_internet() && requireNamespace("sf") && !inherits(try(requireNamespace("terra", quietly = TRUE), silent = TRUE), 'try-error')
 #' \dontrun{
