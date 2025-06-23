@@ -171,7 +171,7 @@ fetchSDA_spatial <- function(x,
       stop("package 'sf' is required to read MLRA boundaries from ZIP file source", call. = FALSE)
     }
     res <- sf::read_sf(
-      "/vsizip//vsicurl/https://s3-fpac-nrcs-dshub-public.s3.us-gov-west-1.amazonaws.com/MLRA_52_2022.zip",
+      "/vsizip//vsicurl/https://s3-fpac-nrcs-dshub-public.s3.us-gov-west-1.amazonaws.com/MLRA/MLRA_52_2022.zip",
       query = paste0(
         "SELECT * FROM MLRA_52 ",
         ifelse(
