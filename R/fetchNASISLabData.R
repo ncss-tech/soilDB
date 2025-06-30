@@ -6,9 +6,6 @@
 #' Fetch KSSL laboratory pedon/horizon layer data from a local NASIS database,
 #' return as a SoilProfileCollection object.
 #'
-#' This function currently works only on Windows, and requires a 'nasis_local'
-#' ODBC connection.
-#'
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: `TRUE`)#'
 #' @param dsn Optional: path to local SQLite database containing NASIS
