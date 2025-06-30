@@ -191,7 +191,9 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "n
       "projectproduct",
       "projectstaff",
       "projecttext",
-      "projecttype"
+      "projecttype",
+      "projectsubtype",
+      "milestonetype"
     ),
     techsoilservice = c(
       "techsoilservice",
