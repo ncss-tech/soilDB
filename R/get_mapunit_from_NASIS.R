@@ -25,36 +25,25 @@ get_mapunit_from_NASIS <- function(SS = TRUE,
                      ng.grpname, areasymbol, areatypename, liid, lmapunitiid,
                      nationalmusym, muiid, musym, muname, mukind, mutype, mustatus, dmuinvesintens, muacres,
                      farmlndcl, dmuiid, repdmu, pct_component, pct_hydric, n_component, n_majcompflag
-
-                     FROM
-                         area            a                               INNER JOIN
-                         legend_View_1   l   ON l.areaiidref = a.areaiid INNER JOIN
-                         lmapunit_View_1 lmu ON lmu.liidref = l.liid     INNER JOIN
-                         mapunit_View_1  mu  ON mu.muiid = lmu.muiidref
-
-                    INNER JOIN
-                         areatype at  ON at.areatypeiid = areatypeiidref
-
-                    INNER JOIN
-                        nasisgroup  ng ON ng.grpiid = mu.grpiidref
-
-                    LEFT OUTER JOIN
-                    --components
-                    (SELECT
-                     cor.muiidref cor_muiidref, dmuiid, repdmu, dmuinvesintens,
-                     SUM(comppct_r)                                                pct_component,
-                     SUM(comppct_r * CASE WHEN hydricrating = 1 THEN 1 ELSE 0 END) pct_hydric,
-                     COUNT(*)                                                      n_component,
-                     SUM(CASE WHEN majcompflag  = 1 THEN 1 ELSE 0 END)             n_majcompflag
-
-                     FROM
-                         component_View_1   co                                  LEFT OUTER JOIN
-                         datamapunit_View_1 dmu ON dmu.dmuiid    = co.dmuiidref LEFT OUTER JOIN
-                         correlation_View_1 cor ON cor.dmuiidref = dmu.dmuiid", 
-                    ifelse(repdmu, "AND cor.repdmu = 1", ""), "
-
-                     GROUP BY cor.muiidref, dmuiid, repdmu, dmuinvesintens
-                    ) co ON co.cor_muiidref = mu.muiid
+                     FROM area a 
+                     INNER JOIN legend_View_1 l ON l.areaiidref = a.areaiid 
+                     INNER JOIN lmapunit_View_1 lmu ON lmu.liidref = l.liid
+                     INNER JOIN mapunit_View_1 mu ON mu.muiid = lmu.muiidref
+                     INNER JOIN areatype at ON at.areatypeiid = areatypeiidref
+                     INNER JOIN nasisgroup ng ON ng.grpiid = mu.grpiidref
+                     LEFT OUTER JOIN
+                     (SELECT
+                      cor.muiidref cor_muiidref, dmuiid, repdmu, dmuinvesintens,
+                      SUM(comppct_r) pct_component,
+                      SUM(comppct_r * CASE WHEN hydricrating = 1 THEN 1 ELSE 0 END) pct_hydric,
+                      COUNT(*) n_component,
+                      SUM(CASE WHEN majcompflag = 1 THEN 1 ELSE 0 END) n_majcompflag 
+                      FROM component_View_1 co                                  
+                      LEFT OUTER JOIN datamapunit_View_1 dmu ON dmu.dmuiid = co.dmuiidref 
+                      LEFT OUTER JOIN correlation_View_1 cor ON cor.dmuiidref = dmu.dmuiid", 
+                      ifelse(repdmu, "AND cor.repdmu = 1", ""), "
+                       GROUP BY cor.muiidref, dmuiid, repdmu, dmuinvesintens
+                      ) co ON co.cor_muiidref = mu.muiid
 
                      ", ifelse(length(areatypename) > 0, paste0("WHERE areatypename IN ",
                                                                 format_SQL_in_statement(areatypename)), ""), "
@@ -85,11 +74,11 @@ get_mapunit_from_NASIS <- function(SS = TRUE,
   
   # transform variables and metadata
   d.mapunit$farmlndcl <- factor(d.mapunit$farmlndcl,
-                                levels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceValue"],
+                                levels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceName"],
                                 labels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceLabel"])
   
   if (is.null(stringsAsFactors) || isTRUE(stringsAsFactors)) {
-    d.mapunit$farmlndcl  = as.character(d.mapunit$farmlndcl)
+    d.mapunit$farmlndcl = as.character(d.mapunit$farmlndcl)
   }
   
   if (isTRUE(droplevels) && is.factor(d.mapunit$farmlndcl)) {
@@ -170,33 +159,24 @@ get_lmuaoverlap_from_NASIS <- function(SS = TRUE,
   
   q <- paste0("SELECT
              a.areasymbol, a.areaname, a.areaacres,
-             at2.areatypename lao_areatypename, a2.areasymbol lao_areasymbol, a2.areaname lao_areaname, lao.areaovacres lao_areaovacres,
-             lmapunitiid, musym, nationalmusym, muname, mustatus, muacres,
+             at2.areatypename lao_areatypename, a2.areasymbol lao_areasymbol, a2.areaname lao_areaname, 
+             lao.areaovacres lao_areaovacres, lmapunitiid, musym, nationalmusym, muname, mustatus, muacres,
              lmuao.areaovacres lmuao_areaovacres
-
              FROM
-             legend_View_1   l                                             INNER JOIN
-             lmapunit_View_1 lmu   ON lmu.liidref          = l.liid        INNER JOIN
-             mapunit_View_1  mu    ON mu.muiid             = lmu.muiidref
-
-             INNER JOIN
-                 area     a  ON a.areaiid      = l.areaiidref INNER JOIN
-                 areatype at ON at.areatypeiid = a.areatypeiidref
-
-             LEFT OUTER JOIN
-                 laoverlap_View_1  lao ON lao.liidref      = l.liid         INNER JOIN
-                 area              a2  ON a2.areaiid       = lao.areaiidref INNER JOIN
-                 areatype          at2  ON at2.areatypeiid = a2.areatypeiidref
-
-             LEFT OUTER JOIN
-                 lmuaoverlap_View_1 lmuao ON lmuao.lmapunitiidref = lmu.lmapunitiid
-                                     AND lmuao.lareaoviidref  = lao.lareaoviid
+             legend_View_1 l                                             
+             INNER JOIN lmapunit_View_1 lmu ON lmu.liidref = l.liid        
+             INNER JOIN mapunit_View_1 mu ON mu.muiid = lmu.muiidref
+             INNER JOIN area a  ON a.areaiid = l.areaiidref 
+             INNER JOIN areatype at ON at.areatypeiid = a.areatypeiidref
+             LEFT OUTER JOIN laoverlap_View_1  lao ON lao.liidref = l.liid\
+             INNER JOIN area a2 ON a2.areaiid = lao.areaiidref 
+             INNER JOIN areatype at2 ON at2.areatypeiid = a2.areatypeiidref
+             LEFT OUTER JOIN lmuaoverlap_View_1 lmuao ON lmuao.lmapunitiidref = lmu.lmapunitiid
+                               AND lmuao.lareaoviidref  = lao.lareaoviid
              ", ifelse(length(areatypename) > 0, paste0("WHERE at.areatypename IN ",
-                                                                format_SQL_in_statement(areatypename)), ""), "
-
+                                                        format_SQL_in_statement(areatypename)), ""), "
              ORDER BY a.areasymbol, lmu.musym, lao_areatypename
              ;")
-  
   
   # toggle selected set vs. local DB
   if (isFALSE(SS)) {
