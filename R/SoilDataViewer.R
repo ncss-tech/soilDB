@@ -27,9 +27,9 @@ get_SDV_legend_elements <- function(WHERE,
                                    FROM sdvattribute WHERE ", ak))
     
     if (inherits(x, 'try-error'))
-      stop(paste0("Invalid WHERE clause: ", ak), call. = FALSE)
+      stop("Invalid WHERE clause: ", ak)
     
-    lapply(1:nrow(x), function(i) {
+    lapply(seq_len(nrow(x)), function(i) {
       res <- .process_SDV_legend_elements(x[i,],
                                           alpha = alpha,
                                           notratedcolor = notratedcolor)

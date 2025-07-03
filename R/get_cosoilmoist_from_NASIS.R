@@ -61,7 +61,7 @@ get_cosoilmoist_from_NASIS <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.cosoilmoist <- gsub(pattern = '_View_1', replacement = '', x = q.cosoilmoist, fixed = TRUE)
   }
 

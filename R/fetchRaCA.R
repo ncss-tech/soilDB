@@ -77,33 +77,33 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
 
   # process filter components
   if(!missing(series)) {
-    f <- c(f, paste('&series=', series, sep=''))
+    f <- c(f, paste0('&series=', series))
   }
 
   if(!missing(bbox)) {
     bbox <- paste(bbox, collapse=',')
-    f <- c(f, paste('&bbox=', bbox, sep=''))
+    f <- c(f, paste0('&bbox=', bbox))
   }
 
   if(!missing(state)) {
-    f <- c(f, paste('&state=', state, sep=''))
+    f <- c(f, paste0('&state=', state))
   }
 
   if(!missing(rcasiteid)) {
-    f <- c(f, paste('&rcasiteid=', rcasiteid, sep=''))
+    f <- c(f, paste0('&rcasiteid=', rcasiteid))
   }
 
   # combine filters
-  f <- paste(f, collapse='')
+  f <- paste(f, collapse = '')
 
   # build URLs
-  site.url <- URLencode(paste('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=site', f, sep=''))
-  hz.url <- URLencode(paste('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=horizon', f, sep=''))
-  trees.url <- URLencode(paste('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=trees', f, sep=''))
-  veg.url <- URLencode(paste('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=veg', f, sep=''))
-  stock.url <- URLencode(paste('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=stock', f, sep=''))
-  sample.url <- URLencode(paste('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=sample', f, sep=''))
-  vnir.url <- URLencode(paste('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=vnir', f, sep=''))
+  site.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=site', f))
+  hz.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=horizon', f))
+  trees.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=trees', f))
+  veg.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=veg', f))
+  stock.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=stock', f))
+  sample.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=sample', f))
+  vnir.url <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/rca/rca_query.php?what=vnir', f))
 
   # init temp files
   tf.site <- tempfile()
@@ -193,7 +193,7 @@ fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vn
   res.size <- round(object.size(res) / 1024 / 1024, 2)
 
   # some feedback via message:
-  message(paste(length(unique(h$rcasiteid)), ' RaCA sites loaded (', res.size, ' Mb transferred)', sep=''))
+  message(paste0(length(unique(h$rcasiteid)), ' RaCA sites loaded (', res.size, ' Mb transferred)'))
 
   # done
   return(res)

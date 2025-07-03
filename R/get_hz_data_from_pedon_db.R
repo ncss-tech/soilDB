@@ -53,17 +53,12 @@ get_hz_data_from_pedon_db <- function(dsn) {
 	dupe.hz.pedon.ids <- d$upedonid[d$phiid %in% names(hz.tab[dupe.hz])]
 	
 	if(length(dupe.hz) > 0) {
-		message(paste('notice: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=','), sep=''))
+		message(paste0('notice: duplicate horizons in query results, matching pedons:\n', paste(unique(dupe.hz.pedon.ids), collapse=',')))
 	}
 	
-	
-	# next, get horizon textures and condence to 1:1 cardinality with results from above
+	# next, get horizon textures and condense to 1:1 cardinality with results from above
 	q.texture <- "SELECT phorizon.phiid, IIF(IsNULL(tx.choice), til.choice, tx.choice) as texture_class
-FROM
-(
-(
-(
-phorizon
+FROM (((phorizon
 LEFT OUTER JOIN (SELECT phtiid, phiidref, texcl, lieutex FROM phtexture) as t ON phorizon.phiid = t.phiidref)
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_detail.domain_id = 189) AS tx ON t.texcl = tx.choice_id)
 LEFT OUTER JOIN (SELECT * FROM metadata_domain_detail WHERE metadata_domain_detail.domain_id = 192) AS til ON t.lieutex = til.choice_id);"

@@ -53,16 +53,16 @@ SoilWeb_spatial_query <- function(bbox=NULL, coords=NULL, what='mapunit', source
   
   # process filter components
   if(!missing(coords)) {
-    f <- paste('&lon=', coords[1], '&lat=', coords[2], sep='')
+    f <- paste0('&lon=', coords[1], '&lat=', coords[2])
   }
   
   if(!missing(bbox)) {
     bbox <- paste(bbox, collapse=',')
-    f <- paste('&bbox=', bbox, sep='')
+    f <- paste0('&bbox=', bbox)
   }
   
   # build URL
-  the.url <- paste('https://casoilresource.lawr.ucdavis.edu/soil_web/api/ssurgo.php?what=mapunit', f, sep='')
+  the.url <- paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/api/ssurgo.php?what=mapunit', f)
   
   # attempt to load data from URL/JSON
   # note: this may fail when done over gov VPN

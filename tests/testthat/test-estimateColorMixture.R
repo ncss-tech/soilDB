@@ -33,10 +33,10 @@ test_that("estimateColorMixture basic functionality", {
   res <- estimateColorMixture(x, backTransform = TRUE)
 
   # should be a single row
-  expect_equal(nrow(res), 1)
+  expect_equivalent(nrow(res), 1)
 
   # ensure values aren't NA
-  expect_true(all(!sapply(res, is.na)))
+  expect_false(any(sapply(res, is.na)))
 
   # check sRGB coordinates
   # using wide tolerance, because changes in the Munsell LUT can create errors

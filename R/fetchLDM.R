@@ -321,7 +321,7 @@ fetchLDM <- function(x = NULL,
     nt <- flattables[flattables %in% tables[!tables %in% c("lab_rosetta_Key", "lab_mir")]]
     layer_query <-  sprintf(
       "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s %s %s",
-      paste0(sapply(flattables[flattables %in% tables], function(a) tablejoincriteria[[a]]), collapse = "\n"),
+      paste(sapply(flattables[flattables %in% tables], function(a) tablejoincriteria[[a]]), collapse = "\n"),
       format_SQL_in_statement(layer_type),
       ifelse(is.null(x), "", paste0(" AND ", bycol, " IN ", format_SQL_in_statement(x))),
       ifelse(length(nt) == 0, "", paste0(" AND ", paste0(sapply(nt, function(b) paste0("IsNull(",b,".prep_code, '')")), 
@@ -336,14 +336,14 @@ fetchLDM <- function(x = NULL,
   if (any(tables %in% fractables)) {
     layer_fraction_query <-  sprintf(
       "SELECT * FROM lab_layer %s WHERE lab_layer.layer_type IN %s AND %s IN %s AND %s AND %s",
-      paste0(sapply(fractables[fractables %in% tables], function(a) fractablejoincriteria[[a]]), collapse = "\n"),
+      paste(sapply(fractables[fractables %in% tables], function(a) fractablejoincriteria[[a]]), collapse = "\n"),
       format_SQL_in_statement(layer_type),
       bycol,
       format_SQL_in_statement(x),
-      paste0(paste0(sapply(fractables[fractables %in% tables], 
+      paste(paste0(sapply(fractables[fractables %in% tables], 
                            function(b) paste0("IsNull(",b,".prep_code, '')")), 
                     " IN ", format_SQL_in_statement(prep_code)), collapse = " AND "),
-      paste0(paste0(sapply(fractables[fractables %in% tables], 
+      paste(paste0(sapply(fractables[fractables %in% tables], 
                          function(b) paste0("IsNull(",b,".analyzed_size_frac, '')")), 
                   " IN ", format_SQL_in_statement(analyzed_size_frac)), collapse = " AND "))
   } else {
@@ -362,7 +362,7 @@ fetchLDM <- function(x = NULL,
   }
   
   # TODO: this shouldn't be needed
-  layerdata <- layerdata[,unique(colnames(layerdata))]
+  layerdata <- layerdata[, unique(colnames(layerdata))]
 
   if (!is.null(layer_fraction_query)) {
     layerfracdata <- suppressWarnings(SDA_query(layer_fraction_query))
@@ -371,7 +371,7 @@ fetchLDM <- function(x = NULL,
 
       if (nrow(layerfracdata) == 0)
         message(sprintf('no fractionated samples found for selected prep_code (%s) and analyzed_size_frac (%s)',
-                paste0(prep_code, collapse = ", "), paste0(analyzed_size_frac, collapse = ", ")))
+                toString(prep_code), toString(analyzed_size_frac)))
 
       layerdata <- merge(layerdata, layerfracdata[,c("labsampnum", colnames(layerfracdata)[!colnames(layerfracdata) %in% colnames(layerdata)])], by = "labsampnum", all.x = TRUE, incomparables = NA)
     }

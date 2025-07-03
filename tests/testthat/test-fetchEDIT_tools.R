@@ -6,25 +6,22 @@ test_that("make_EDIT_service_URL works", {
   #  return PDF, .TXT or JSON result
   
   # url for all geoUnit keys as PDF
-  expect_equal(make_EDIT_service_URL(src = "descriptions",
+  expect_equivalent(make_EDIT_service_URL(src = "descriptions",
                         catalog = "esd",
-                        geoUnit = "039X"), 
-               "https://edit.jornada.nmsu.edu/services/descriptions/esd/039X.pdf")
+                        geoUnit = "039X"), "https://edit.jornada.nmsu.edu/services/descriptions/esd/039X.pdf")
   
   # url for a single key within geoUnit as PDF
-  expect_equal(make_EDIT_service_URL(src = "descriptions",
+  expect_equivalent(make_EDIT_service_URL(src = "descriptions",
                         catalog = "esd",
                         geoUnit = "039X",
-                        key = "1"), 
-               "https://edit.jornada.nmsu.edu/services/descriptions/esd/039X/1.pdf")
+                        key = "1"), "https://edit.jornada.nmsu.edu/services/descriptions/esd/039X/1.pdf")
   
   # query for ecoclass with endpoint "overview"
-  expect_equal(make_EDIT_service_URL(src = "descriptions",
+  expect_equivalent(make_EDIT_service_URL(src = "descriptions",
                                    catalog = "esd",
                                    geoUnit = "039X",
                                    ecoclass = "R039XA109AZ",
-                                   endpoint = "overview.json"),
-               "https://edit.jornada.nmsu.edu/services/descriptions/esd/039X/R039XA109AZ/overview.json")
+                                   endpoint = "overview.json"), "https://edit.jornada.nmsu.edu/services/descriptions/esd/039X/R039XA109AZ/overview.json")
   
 })
 

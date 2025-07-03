@@ -31,7 +31,7 @@ test_that("works as expected", {
     expect_true(all(dim(x) == c(14, 4, 1)))
     
     # no RAT
-    expect_true(is.null(terra::cats(x)[[1]]))
+    expect_null(terra::cats(x)[[1]])
   }
   
 })
@@ -66,8 +66,8 @@ test_that("categorical data", {
     expect_true(all(dim(x) == c(14, 4, 1)))
     
     # there must be a RAT
-    expect_true(!is.null(terra::levels(x)))
-    expect_equal(colnames(terra::cats(x)[[1]]), c('ID','class','hex','names'))
+    expect_false(is.null(terra::levels(x)))
+    expect_equivalent(colnames(terra::cats(x)[[1]]), c('ID','class','hex','names'))
   }
   
   x2 <- ISSR800.wcs(
@@ -80,7 +80,7 @@ test_that("categorical data", {
   expect_true(inherits(x2, 'SpatRaster') || inherits(x2, 'try-error'))
   
   if (!inherits(x2, 'try-error')) {
-    expect_equal(colnames(terra::cats(x2)[[1]]), c('ID', 'suborder'))
+    expect_equivalent(colnames(terra::cats(x2)[[1]]), c('ID', 'suborder'))
   }
 
 })

@@ -32,7 +32,7 @@ test_that("works as expected", {
     expect_true(all(dim(x) == c(20, 16, 1)))
     
     # must have a RAT
-    expect_true(!is.null(terra::levels(x)))
+    expect_false(is.null(terra::levels(x)))
     
   }
   

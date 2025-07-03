@@ -172,7 +172,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
     }
     
     # format series list and append to URL
-    final.url <- paste(x, URLencode(paste(i, collapse = ',')), sep = '')
+    final.url <- paste0(x, URLencode(paste(i, collapse = ',')))
     
     # using HTTP GET is convenient but comes with limits on the number of chars in the URL
     if (nchar(final.url) > 2048) {

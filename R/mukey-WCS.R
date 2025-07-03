@@ -99,17 +99,13 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   }
   
   # reasonable resolution
-  if (db %in% c('gssurgo', 'gnatsgo', 'statsgo')) {
-    if (res < 30 || res > 3000) {
-      stop('`res` should be within 30 <= res <= 3000 meters')
-    }
+  if (db %in% c('gssurgo', 'gnatsgo', 'statsgo') && (res < 30 || res > 3000)) {
+    stop('`res` should be within 30 <= res <= 3000 meters')
   }
   
   # reasonable resolution
-  if (db == 'rss') {
-    if (res < 10 || res > 1000) {
-      stop('`res` should be within 10 <= res <= 1000 meters')
-    }
+  if (db == 'rss' && (res < 10 || res > 1000)) {
+    stop('`res` should be within 10 <= res <= 1000 meters')
   }
   
   # prepare AOI in native CRS
@@ -217,7 +213,7 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
     r <- terra::extend(r, terra::ext(c(xmin, xmax2, ymin, ymax2)))
   }
   
-  ## TODO: is this needed? (yes, still needed; AGB 2023/09/30)
+  ## is this needed? (yes, still needed; AGB 2023/09/30)
   ## '0' is returned by the WCS sometimes -- never valid for MUKEY
   r <- terra::classify(
     r, 
@@ -256,10 +252,9 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
   }
   
   if ((!is.null(input_class) && input_class == "raster") ||
-      getOption('soilDB.return_Spatial', default = FALSE)) {
-    if (requireNamespace("raster")) {
-      r <- raster::raster(r)
-    }
+      getOption('soilDB.return_Spatial', default = FALSE) &&
+      (requireNamespace("raster"))) {
+    r <- raster::raster(r)
   }
   
   # set metadata

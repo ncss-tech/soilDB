@@ -35,7 +35,7 @@ format_SQL_in_statement <- function(x) {
   # and, plenty safe to perform a second time, in case this was done outside of the function call
   x <- unique(x)
 	i <- paste(x, collapse = "','")
-	i <- paste("('", i, "')", sep = '')
+	i <- paste0("('", i, "')")
 	return(i)
 }
 
@@ -167,22 +167,20 @@ SDA_query <- function(q, dsn = NULL) {
   # check response content type
   h <- r$all_headers
   
-  if (!is.null(h)) {
-    if (length(h) == 0 
+  if (!is.null(h) && (length(h) == 0 
         || is.null(h[[1]]$headers$`content-type`)
         || !h[[1]]$headers$`content-type` %in% 
                             c("application/json; charset=utf-8", # data response
                               "text/xml; charset=utf-8") # error response (maybe not anymore?)
-       ) {
-      msg <- "Soil Data Access REST API is not currently available, please try again later."
-      if (is.null(h[[1]]$headers$`content-type`)) {
-        txt <- try(httr::content(r, as = "text", encoding = "UTF-8"), silent = TRUE)
-        if (!inherits(txt, 'try-error')) {
-          msg <- gsub("<[^>]*>", "", txt)
-        }
+  )) {
+    msg <- "Soil Data Access REST API is not currently available, please try again later."
+    if (is.null(h[[1]]$headers$`content-type`)) {
+      txt <- try(httr::content(r, as = "text", encoding = "UTF-8"), silent = TRUE)
+      if (!inherits(txt, 'try-error')) {
+        msg <- gsub("<[^>]*>", "", txt)
       }
-      r <- try(stop(msg, call. = FALSE), silent = TRUE)
     }
+    r <- try(stop(msg, call. = FALSE), silent = TRUE)
   }
   
   if (inherits(r, 'try-error')) {
@@ -209,8 +207,7 @@ SDA_query <- function(q, dsn = NULL) {
       }
       
       ## inject specific message into a try-error result
-      request.status <- try(stop(paste0(attr(request.status, 'condition')$message, "\n",
-                                        error.msg), call. = FALSE), silent = TRUE)
+      request.status <- try(stop(attr(request.status, 'condition')$message, "\n", error.msg), silent = TRUE)
     }
     
     # return the error object so calling function/user can handle it
@@ -223,9 +220,9 @@ SDA_query <- function(q, dsn = NULL) {
   # note: the data returned by SDA/JSON are all character class
   #       we "fix" this later on
   r.content <- try(httr::content(r, as = 'text', encoding = 'UTF-8'), silent = TRUE)
-
-  if (inherits(r.content,'try-error'))
-      return(invisible(r.content))
+  
+  if (inherits(r.content, 'try-error'))
+    return(invisible(r.content))
 
   d <- try(jsonlite::fromJSON(r.content), silent = TRUE)
 
@@ -291,50 +288,36 @@ SDA_query <- function(q, dsn = NULL) {
     dt <- strsplit(j, split = ',', fixed = TRUE)[[1]][8]
     # known data types in SDA and appropriate classes in R
     # fall-back to "character" for unknown data types
-    switch(dt,
-           'DataTypeName=char' = 'character',
-           'DataTypeName=nchar' = 'character',
-           'DataTypeName=varchar' = 'character',
-           'DataTypeName=nvarchar' = 'character',
-           'DataTypeName=text' = 'character',
-           'DataTypeName=ntext' = 'character',
-           'DataTypeName=datetime' = 'character',
-           'DataTypeName=datetime2' = 'character',
-           'DataTypeName=timestamp' = 'character',
-           'DataTypeName=bit' = 'integer',
-           'DataTypeName=int' = 'integer',
-           'DataTypeName=bigint' = 'integer',
-           'DataTypeName=smallint' = 'integer',
-           'DataTypeName=tinyint' = 'integer',
-           'DataTypeName=numeric' = 'numeric',
-           'DataTypeName=real' = 'numeric',
-           'DataTypeName=float' = 'numeric',
-           'DataTypeName=decimal' = 'numeric',
-           'character'
-           )
+    switch(
+      dt,
+      'DataTypeName=char' = 'character',
+      'DataTypeName=nchar' = 'character',
+      'DataTypeName=varchar' = 'character',
+      'DataTypeName=nvarchar' = 'character',
+      'DataTypeName=text' = 'character',
+      'DataTypeName=ntext' = 'character',
+      'DataTypeName=datetime' = 'character',
+      'DataTypeName=datetime2' = 'character',
+      'DataTypeName=timestamp' = 'character',
+      'DataTypeName=bit' = 'integer',
+      'DataTypeName=int' = 'integer',
+      'DataTypeName=bigint' = 'integer',
+      'DataTypeName=smallint' = 'integer',
+      'DataTypeName=tinyint' = 'integer',
+      'DataTypeName=numeric' = 'numeric',
+      'DataTypeName=real' = 'numeric',
+      'DataTypeName=float' = 'numeric',
+      'DataTypeName=decimal' = 'numeric',
+      'character'
+    )
   })
 
   # convert each column that isn't character
   idx <- which(cc != 'character')
-  for(f in idx) {
+  for (f in idx) {
     df[, f] <- as(df[, f], cc[f])
   }
-
-
-  ## strings resembling scientific notation are converted into numeric
-  ## ex: type.convert("8E2") -> 800
-  # https://github.com/ncss-tech/soilDB/issues/190
-
-  # # attempt type conversion
-  # # same result as writing to file and reading-in via read.table()
-  # df <- type.convert(df,
-  #                    na.strings = c('', 'NA'),
-  #                    as.is = TRUE,
-  #                    colClasses = cc
-  #                    )
-
-  ## TODO further error checking?
-
+  
   return(df)
 }
 

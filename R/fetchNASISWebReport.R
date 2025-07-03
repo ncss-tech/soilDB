@@ -112,8 +112,8 @@ get_component_from_NASISWebReport <- function(projectname, stringsAsFactors = NU
 
   d.component <- lapply(projectname, function(x) {
     message("getting project '", x, "' from NasisReportsWebSite \n", sep = "")
-    args = list(p_projectname = x)
-    d    =  tryCatch(parseWebReport(url, args),
+    args <- list(p_projectname = x)
+    d <- tryCatch(parseWebReport(url, args),
                      error = function(e) {
                        message(e)
                        return(NULL)
@@ -149,8 +149,8 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_chorizon_from_NASISWebReport"
 
   d.chorizon <- lapply(projectname, function(x) {
-    args = list(p_projectname = x)
-    d    =  parseWebReport(url, args)
+    args <- list(p_projectname = x)
+    d <- parseWebReport(url, args)
   })
   d.chorizon <- do.call("rbind", d.chorizon)
 
@@ -163,9 +163,9 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
   # transform variables and metadata
   if (!all(is.na(d.chorizon$chiid))) {
     d.chorizon <- within(d.chorizon, {
-      texture = tolower(texture)
+      texture <- tolower(texture)
       if (getOption("stringsAsFactors", default = FALSE)) {
-        texcl = factor(texcl,
+        texcl <- factor(texcl,
                        levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceValue"],
                        labels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceName"]
         )
@@ -174,7 +174,7 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE, stringsA
   }
 
   # fill
-  if (fill == FALSE) {
+  if (isFALSE(fill)) {
     d.chorizon <- d.chorizon[!is.na(d.chorizon$chiid), ]
   }
 
@@ -226,8 +226,8 @@ get_lmuaoverlap_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, s
 
   d <- lapply(areasymbol, function(x) {
     message("getting legend for '", x, "' from NasisReportsWebSite \n", sep = "")
-    args = list(p_areasymbol = x)
-    d    =  parseWebReport(url, args)
+    args <- list(p_areasymbol = x)
+    d <- parseWebReport(url, args)
   })
   d <- do.call("rbind", d)
 
@@ -255,8 +255,8 @@ get_mapunit_from_NASISWebReport <- function(areasymbol, droplevels = TRUE, strin
 
   d.mapunit <- lapply(areasymbol, function(x) {
     message("getting map units for '", x, "' from NasisReportsWebSite \n", sep = "")
-    args = list(p_areasymbol = x)
-    d    =  parseWebReport(url, args)
+    args <- list(p_areasymbol = x)
+    d <- parseWebReport(url, args)
   })
   d.mapunit <- do.call("rbind", d.mapunit)
 
@@ -285,8 +285,8 @@ get_projectmapunit_from_NASISWebReport <- function(projectname, stringsAsFactors
 
 
   d.mapunit <- lapply(projectname, function(x) {
-    args = list(p_projectname = x)
-    d    =  parseWebReport(url, args)
+    args <- list(p_projectname = x)
+    d <- parseWebReport(url, args)
   })
   d.mapunit <- do.call("rbind", d.mapunit)
 
@@ -313,8 +313,8 @@ get_projectmapunit2_from_NASISWebReport <- function(mlrassoarea, fiscalyear, pro
   
   url <-"https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_projectmapunit2_from_NASISWebReport"
 
-  args = list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)
-  d.mapunit    =  parseWebReport(url, args)
+  args <- list(p_mlrassoarea = mlrassoarea, p_fy = fiscalyear, p_projectname = projectname)
+  d.mapunit <- parseWebReport(url, args)
 
   d.mapunit$musym = as.character(d.mapunit$musym)
 
@@ -383,16 +383,16 @@ get_project_correlation_from_NASISWebReport <- function(mlrassoarea, fiscalyear,
   if (! is.null(d.rcor)) {
 
     d.rcor <- within(d.rcor, {
-      n         = nchar(musym)
-      begin_1   = substr(musym, 2, n)
-      end_1     = substr(musym, 1, n - 1)
-      end_4     = substr(musym, 1, n - 4)
+      n <- nchar(musym)
+      begin_1 <- substr(musym, 2, n)
+      end_1 <- substr(musym, 1, n - 1)
+      end_4 <- substr(musym, 1, n - 4)
 
-      idx       = musym != new_musym & !is.na(new_musym)
-      orig_musym = ifelse(idx & musym != begin_1 & (new_musym == begin_1 | substr(musym, 1, 1) %in% c("x", "z")), begin_1, musym)
+      idx <- musym != new_musym & !is.na(new_musym)
+      orig_musym <- ifelse(idx & musym != begin_1 & (new_musym == begin_1 | substr(musym, 1, 1) %in% c("x", "z")), begin_1, musym)
       # Joe recommended using |\\+${1}, but appears to be legit in some cases
-      orig_musym = ifelse(idx & musym != end_1   & new_musym == end_1 , end_1   , orig_musym)
-      orig_musym = ifelse(idx & musym != end_4   & new_musym == end_4 , end_4   , orig_musym)
+      orig_musym <- ifelse(idx & musym != end_1   & new_musym == end_1 , end_1   , orig_musym)
+      orig_musym <- ifelse(idx & musym != end_4   & new_musym == end_4 , end_4   , orig_musym)
     })
   }
 

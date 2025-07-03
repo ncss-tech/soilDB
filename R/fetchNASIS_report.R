@@ -41,8 +41,8 @@
   if(all(be$diff == 1))
     stop("empty result set -- check parameters used to run `fetchNASIS` export report.", call.=FALSE)
   
-  split(be, be$table) ->.;
-  lapply(., function(x) {
+  .<- split(be, be$table);
+  .<- lapply(., function(x) {
     if (x$diff > 1) {
       x2 <- temp[seq(x$begin + 1, x$end - 1)]
       # remove "\" from lines and blank lines e.g. ||
@@ -58,7 +58,7 @@
       x2[idx] <- lapply(x2[idx], function(x) ifelse(x == "", NA, x))
       return(x2)
     } else return(NULL)
-  }) -> .;
+  });
   names(.) <- c("pediagfeatures", "phcolor", "phorizon", "site")
   
   
@@ -105,7 +105,7 @@
         peiid = .$site$peiid,
         hzdept = NA_integer_,
         hzdepb = NA_integer_,
-        hzID = seq(nrow(.$site))
+        hzID = seq_len(nrow(.$site))
       ),
       depthcols = c("hzdept", "hzdepb"), 
       hzidcol = "hzID"
@@ -115,7 +115,7 @@
   # tidy .$pediagfeatures
   pediagfeatures <- .$pediagfeatures
   pediagfeatures[-1] <- lapply(pediagfeatures[-1], function(x) {
-    ifelse(!is.na(x), TRUE, FALSE)
+    !is.na(x)
   })
   
   # pediagfeatures[!is.na(.$pediagfeatures)] <- TRUE
@@ -175,8 +175,8 @@
     NASISDomainsAsFactor(stringsAsFactors)
   }
   
-  tf = "C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt"
-  if (!is.null(url)) tf = url
+  tf <- "C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt"
+  if (!is.null(url)) tf <- url
   
   # check if temp file exists
   if (!file.exists(tf) & is.null(url)) {
@@ -186,11 +186,11 @@
   
   # check to see if data is coming from fetchNASIS or get_site
   temp <- readLines(tf)
-  begin = grep("@begin get_site_from_NASIS", temp)
+  begin <- grep("@begin get_site_from_NASIS", temp)
   
   if (length(begin) > 0) {
     
-    end = grep("@end get_site_from_NASIS", temp)
+    end <- grep("@end get_site_from_NASIS", temp)
     # check to see if there is any data
     diff.idx <- end - begin
     
@@ -204,17 +204,17 @@
   # aggregate NASIS returns empty rows
   # NASIS text reports return empty columns
   # remove
-  temp = temp[!is.na(temp$siteiid), - ncol(temp)]
-  idx  = names(temp) %in% c("pmkind", "pmorigin")
+  temp <- temp[!is.na(temp$siteiid), - ncol(temp)]
+  idx <- names(temp) %in% c("pmkind", "pmorigin")
   temp[!idx] = uncode(temp[!idx])
-  idx  = sapply(temp, is.character)
+  idx <- sapply(temp, is.character)
   temp[idx] = lapply(temp[idx], function(x) ifelse(x == "", NA, x))
   # temp = within(temp, {
   #   obsdate   = as.Date(as.character(obsdate))
   #   classdate = as.Date(as.character(classdate))
   # })
   
-  temp = .fix_site_problems(temp, nullFragsAreZero = nullFragsAreZero)
+  temp <- .fix_site_problems(temp, nullFragsAreZero = nullFragsAreZero)
   
   # impute missing x_std & y_std if utm are present
   # idx <- with(temp, ! complete.cases(x_std, y_std) & complete.cases(utmzone, utmeasting, utmnorthing, horizdatnm))
@@ -238,7 +238,7 @@
     stop("the temp file ", tf, "\n doesn't exist, please run the get_pediagfeatures_from_NASIS report from NASIS")
   }
   
-  temp = read.csv(
+  temp <- read.csv(
     textConnection(
       readLines(tf)
     ),
@@ -248,8 +248,8 @@
   # aggregate NASIS returns empty rows
   # NASIS text reports return empty columns
   # remove
-  temp = temp[!is.na(temp$peiid), - ncol(temp)]
-  temp = uncode(temp)
+  temp <- temp[!is.na(temp$peiid), - ncol(temp)]
+  temp <- uncode(temp)
   # temp = within(temp, {
   #   obsdate   = as.Date(as.character(obsdate))
   #   classdate = as.Date(as.character(classdate))
@@ -327,7 +327,7 @@
   )
   
   if (length(missing.lower.depth.idx) > 0) {
-    message(paste('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]', sep=''))
+    message(paste0('replacing missing lower horizon depths with top depth + 1cm ... [', length(missing.lower.depth.idx), ' horizons]'))
     
     # make edit
     hz_data[[hzdepb]][missing.lower.depth.idx] <- hz_data[[hzdept]][missing.lower.depth.idx] + 1
@@ -344,7 +344,7 @@
   )
   # make the edit
   if (length(top.eq.bottom.idx) > 0) {
-    message(paste('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]', sep = '')
+    message(paste0('top/bottom depths equal, adding 1cm to bottom depth ... [', length(top.eq.bottom.idx), ' horizons]')
     )
     hz_data[[hzdepb]][top.eq.bottom.idx] <- hz_data[[hzdepb]][top.eq.bottom.idx] + 1
   }
@@ -390,7 +390,7 @@
 
 .fix_site_problems <- function(site_data, nullFragsAreZero = nullFragsAreZero) {
   
-  if (nullFragsAreZero == TRUE) {
+  if (isTRUE(nullFragsAreZero)) {
     idx <- grep("fragvol|frags_|gravel|cobbles|stones|boulders|channers|unspecified", names(site_data))
     vars <- names(site_data)[idx]
     site_data[idx] <-lapply(site_data[idx], function(x) {

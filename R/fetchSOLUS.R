@@ -219,7 +219,7 @@ fetchSOLUS <- function(x = NULL,
     }
   }
   
-  dat$ID <- seq(nrow(dat))
+  dat$ID <- seq_len(nrow(dat))
   
   spc <- .convert_SOLUS_dataframe_to_SPC(dat, idname = "ID", method = method, max_depth = max_depth)
   aqp::initSpatial(spc, terra::crs(r)) <- ~ x + y

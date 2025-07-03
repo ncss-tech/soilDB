@@ -11,28 +11,28 @@
 
   # process filter components
   if(!is.na(series)) {
-    f <- c(f, paste('&series=', series, sep=''))
+    f <- c(f, paste0('&series=', series))
   }
 
   # note: bbox has already been converted into text representation, suitable for URL
   if(!is.na(bbox)) {
-    f <- c(f, paste('&bbox=', bbox, sep=''))
+    f <- c(f, paste0('&bbox=', bbox))
   }
 
   if(!is.na(mlra)) {
-    f <- c(f, paste('&mlra=', mlra, sep=''))
+    f <- c(f, paste0('&mlra=', mlra))
   }
 
   if(!is.na(pedlabsampnum)) {
-    f <- c(f, paste('&pedlabsampnum=', pedlabsampnum, sep=''))
+    f <- c(f, paste0('&pedlabsampnum=', pedlabsampnum))
   }
 
   if(!is.na(pedon_id)) {
-    f <- c(f, paste('&pedon_id=', pedon_id, sep=''))
+    f <- c(f, paste0('&pedon_id=', pedon_id))
   }
 
   if(!is.na(pedon_key)) {
-    f <- c(f, paste('&pedon_key=', pedon_key, sep=''))
+    f <- c(f, paste0('&pedon_key=', pedon_key))
   }
 
   # combine filters
@@ -368,9 +368,6 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
       return(NULL)
     }
 
-    ## TODO enforce unique-ness on SPC here
-
-    ## NOTE: simpler with purrr::transpose()
     # morph
     if(returnMorphologicData) {
       # add new tables here
@@ -379,8 +376,6 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
       # iterate over tables and unwind - rbind - store
       for(i in v) {
         m[[i]] <- do.call('rbind', lapply(res, function(j) j$morph[[i]]))
-
-        ## TODO enforce unique-ness on data.frames here
       }
     }
 
@@ -396,8 +391,6 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
       geochem <- as.data.frame(geochem)
       optical <- as.data.frame(optical)
       xrd_thermal <- as.data.frame(xrd_thermal)
-
-      ## TODO enforce unique-ness on data.frames here
     }
 
   }
@@ -411,28 +404,26 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
   aqp::hztexclname(h) <- "lab_texture_class"
 
   ## set metadata
-  # TODO: check before clobbering / consider standard var name
   aqp::metadata(h)$origin <- 'KSSL via Soilweb / fetchKSSL'
   aqp::metadata(h)$created <- Sys.time()
 
   # cleaning up the results
-  if(returnMorphologicData & simplifyColors) {
-
-    if(inherits(m$phcolor, 'data.frame')) {
-
-      # simplify color data: 1 row / horizon, from morphologic data tables
-      x.colors <- simplifyColorData(m$phcolor, id.var = 'labsampnum', wt='colorpct')
-
-      # safely LEFT JOIN with @horizons
-      suppressMessages(aqp::horizons(h) <- x.colors)
-    }
+  if (returnMorphologicData &&
+      simplifyColors && 
+      inherits(m$phcolor, 'data.frame')) {
+    # simplify color data: 1 row / horizon, from morphologic data tables
+    x.colors <- simplifyColorData(m$phcolor, id.var = 'labsampnum', wt =
+                                    'colorpct')
+    
+    # safely LEFT JOIN with @horizons
+    suppressMessages(aqp::horizons(h) <- x.colors)
   }
 
   # report object size
   res.size <- round(object.size(res) / 1024 / 1024, 2)
   
   # some feedback via message:
-  message(paste(length(h), ' pedons loaded (', res.size, ' Mb transferred)', sep=''))
+  message(paste0(length(h), ' pedons loaded (', res.size, ' Mb transferred)'))
   
   if (returnMorphologicData & returnGeochemicalData) {
     return(list(

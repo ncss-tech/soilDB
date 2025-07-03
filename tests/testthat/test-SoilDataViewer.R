@@ -16,7 +16,7 @@ test_that("get_SDV_legend_elements works", {
                                    "nasisrulename = 'DHS - Potential for Radioactive Bioaccumulation'"))
   
   # one list, each element is a different legend
-  expect_equal(length(res), 3)
+  expect_length(res, 3)
   
   # simplify=FALSE, two where clauses returning list of length two
   res <- get_SDV_legend_elements(c("attributekey IN (427, 428)", 
@@ -24,6 +24,6 @@ test_that("get_SDV_legend_elements works", {
                                  simplify = FALSE)
   
   # one list for each WHERE clause
-  expect_equal(length(res), 2)
+  expect_length(res, 2)
   
 })

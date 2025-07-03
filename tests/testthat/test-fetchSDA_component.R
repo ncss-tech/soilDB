@@ -30,8 +30,8 @@ test_that("fetchSDA() returns an SPC", {
   skip_on_cran()
 
   # SPC integrity and expected IDs / hz depths
-  expect_equal(aqp::idname(x), 'cokey')
-  expect_equal(aqp::horizonDepths(x), c('hzdept_r', 'hzdepb_r'))
+  expect_equivalent(aqp::idname(x), 'cokey')
+  expect_equivalent(aqp::horizonDepths(x), c('hzdept_r', 'hzdepb_r'))
 
 })
 
@@ -48,12 +48,12 @@ test_that("fetchSDA() returns expected results", {
   library(aqp)
   
   # there should be 2 components and 10 horizons
-  expect_equal(nrow(aqp::site(x)), 2)
-  expect_equal(aqp::nrow(x), 10)
+  expect_equivalent(nrow(aqp::site(x)), 2)
+  expect_equivalent(aqp::nrow(x), 10)
 
   # should match original WHERE clause
-  expect_equal(x$nationalmusym, c('kzc4', 'kzc4'))
-  expect_equal(aqp::site(x)$nationalmusym, c('kzc4', 'kzc4'))
+  expect_equivalent(x$nationalmusym, c('kzc4', 'kzc4'))
+  expect_equivalent(aqp::site(x)$nationalmusym, c('kzc4', 'kzc4'))
 
   # test that both components have no NRCS forest/range site assigned
   expect_contains(aqp::site(x)$ecoclassid, c("F114XB104IN", "F114XA101IN"))
@@ -73,5 +73,5 @@ test_that("fetchSDA(duplicates=TRUE) works as expected", {
   x3 <<- suppressWarnings(suppressMessages(fetchSDA(WHERE="nationalmusym = '22787'", duplicates = TRUE)))
 
   # we get a "duplicate" for each unique mukey within a nationalmusym -- 1 for each legend
-  expect_equal(length(x2) * length(unique(x3$mukey)), length(x3))
+  expect_equivalent(length(x2) * length(unique(x3$mukey)), length(x3))
 })

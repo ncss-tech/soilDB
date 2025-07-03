@@ -41,7 +41,7 @@ get_RMF_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
     
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
     q.c <- gsub(pattern = '_View_1', replacement = '', x = q.c, fixed = TRUE)
   }

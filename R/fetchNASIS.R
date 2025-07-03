@@ -129,11 +129,12 @@ fetchNASIS <- function(from = 'pedons',
 
   if (from == 'pedon_report') {
     # pass arguments through
-    res <- .fetchNASIS_report(url              = url,
-                              rmHzErrors       = rmHzErrors,
-                              nullFragsAreZero = nullFragsAreZero,
-                              soilColorState   = soilColorState,
-                              )
+    res <- .fetchNASIS_report(
+      url = url,
+      rmHzErrors = rmHzErrors,
+      nullFragsAreZero = nullFragsAreZero,
+      soilColorState   = soilColorState
+    )
   }
 
   return(res)

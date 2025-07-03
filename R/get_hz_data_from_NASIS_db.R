@@ -1,5 +1,4 @@
 ## TODO: when multiple textures have been defined, only the first one is returned (alphabetical ?)
-#
 
 
 #' Get Horizon Data from a local NASIS Database
@@ -61,7 +60,7 @@ get_hz_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 

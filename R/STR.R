@@ -192,176 +192,144 @@ estimateSTR <- function(mast, mean.summer, mean.winter, O.hz=NA, saturated=NA, p
   n <- length(mast)
   res <- vector(mode = 'character', length = n)
   
-  for(i in seq_along(mast)) {
+  for (i in seq_along(mast)) {
     # check for NA
-    if(any(is.na(c(mast[i], mean.summer[i], mean.winter[i])))){
+    if (anyNA(c(mast[i], mean.summer[i], mean.winter[i]))) {
       res[i] <- NA
       next
     }
     
     # gelic, suborder and GG levels
-    if(mast[i] <= 0) {
+    if (mast[i] <= 0) {
       res[i] <- 'gelic'
       next
     }
     
     # gelic, order level
-    if(mast[i] <= 1 & permafrost) {
+    if (mast[i] <= 1 && permafrost) {
       res[i] <- 'gelic'
       next
     }
     
-    
     # possibly cryic, because we don't know saturation and O hz status
-    if(mast[i] < 8) {
-      
+    if (mast[i] < 8) {
       # if we have both saturation and O hz information we can be sure
-      if(! is.na(saturated[i]) & ! is.na(O.hz[i])) {
-        
+      if (!is.na(saturated[i]) && !is.na(O.hz[i])) {
         # not saturated
-        if(! saturated[i]) {
-          
+        if (!saturated[i]) {
           # no O horizon
-          if(! O.hz[i]) {
-            if(mean.summer[i] > 0 & mean.summer[i] < 15) {
-              res[i] <- 'cryic'
-              next
-            }
+          if (!O.hz[i] &&
+              mean.summer[i] > 0 && mean.summer[i] < 15) {
+            res[i] <- 'cryic'
+            next
           }
           
           # O horizon
-          if(O.hz[i]) {
-            if(mean.summer[i] > 0 & mean.summer[i] < 8) {
-              res[i] <- 'cryic'
-              next
-            }
+          if (O.hz[i] && mean.summer[i] > 0 && mean.summer[i] < 8) {
+            res[i] <- 'cryic'
+            next
           }
         }
         
         # saturated
-        if(saturated[i]) {
-          
+        if (saturated[i]) {
           # no O horizon
-          if(! O.hz[i]) {
-            if(mean.summer[i] > 0 & mean.summer[i] < 13) {
-              res[i] <- 'cryic'
-              next
-            }
+          if (!O.hz[i] &&
+              mean.summer[i] > 0 && mean.summer[i] < 13) {
+            res[i] <- 'cryic'
+            next
           }
           
           # O horizon
-          if(O.hz[i]) {
-            if(mean.summer[i] > 0 & mean.summer[i] < 6) {
-              res[i] <- 'cryic'
-              next
-            }
+          if (O.hz[i] && mean.summer[i] > 0 && mean.summer[i] < 6) {
+            res[i] <- 'cryic'
+            next
           }
         }
-        
-      } 
-      
+      }
       
       # saturation information only
       # strategy: split the difference O vs. no O horizon
-      if(!is.na(saturated[i]) & is.na(O.hz[i])) {
-        
+      if (!is.na(saturated[i]) && is.na(O.hz[i])) {
         # not saturated
-        if(! saturated[i]) {
-          if(mean.summer[i] > 0 & mean.summer[i] < 11.5) {
-            res[i] <- 'cryic'
-            next
-          }
+        if (!saturated[i] &&
+            mean.summer[i] > 0 && mean.summer[i] < 11.5) {
+          res[i] <- 'cryic'
+          next
         }
         
         # saturated
-        if(saturated[i]) {
-          if(mean.summer[i] > 0 & mean.summer[i] < 9.5) {
-            res[i] <- 'cryic'
-            next
-          }
-        }
-        
-      }
-      
-      # O horizon information only
-      # strategy: split the difference saturated vs. not saturated
-      if(!is.na(O.hz[i]) & is.na(saturated[i])) {
-        
-        # no O horizon
-        if(! O.hz[i]) {
-          if(mean.summer[i] > 0 & mean.summer[i] < 14) {
-            res[i] <- 'cryic'
-            next
-          }
-        }
-        
-        # O horizon
-        if(O.hz[i]) {
-          if(mean.summer[i] > 0 & mean.summer[i] < 7) {
-            res[i] <- 'cryic'
-            next
-          }
-        }
-        
-      }
-      
-      
-      # no additional information
-      # assume: saturated during part of summer & no O horizon
-      if( is.na(saturated[i] & is.na(O.hz[i]))) {
-        if(mean.summer[i] < 13) {
+        if (saturated[i] &&
+            mean.summer[i] > 0 & mean.summer[i] < 9.5) {
           res[i] <- 'cryic'
           next
         }
       }
-     
       
-    }
-    
-    
-    ## frigid
-    if(mast[i] > 0 & mast[i] < 8) {
-      if(mean.summer[i] - mean.winter[i] >= 6) {
-        res[i] <- 'frigid'
+      # O horizon information only
+      # strategy: split the difference saturated vs. not saturated
+      if (!is.na(O.hz[i]) && is.na(saturated[i])) {
+        # no O horizon
+        if (!O.hz[i] && mean.summer[i] > 0 && mean.summer[i] < 14) {
+          res[i] <- 'cryic'
+          next
+        }
+        
+        # O horizon
+        if (O.hz[i] && mean.summer[i] > 0 & mean.summer[i] < 7) {
+          res[i] <- 'cryic'
+          next
+        }
+      }
+      
+      # no additional information
+      # assume: saturated during part of summer & no O horizon
+      if (is.na(saturated[i]) &&
+          is.na(O.hz[i]) && mean.summer[i] < 13) {
+        res[i] <- 'cryic'
         next
       }
-      else {
+    }
+    
+    ## frigid
+    if (mast[i] > 0 & mast[i] < 8) {
+      if (mean.summer[i] - mean.winter[i] >= 6) {
+        res[i] <- 'frigid'
+        next
+      } else {
         res[i] <- 'isofrigid'
         next
       }
     }
     
     # mesic
-    if(mast[i] >= 8 & mast[i] < 15) {
-      if(mean.summer[i] - mean.winter[i] >= 6) {
+    if (mast[i] >= 8 & mast[i] < 15) {
+      if (mean.summer[i] - mean.winter[i] >= 6) {
         res[i] <- 'mesic'
         next
-      }
-      else {
+      } else {
         res[i] <- 'isomesic'
         next
       }
     }
     
     # thermic
-    if(mast[i] >= 15 & mast[i] < 22) {
-      if(mean.summer[i] - mean.winter[i] >= 6){
+    if (mast[i] >= 15 & mast[i] < 22) {
+      if (mean.summer[i] - mean.winter[i] >= 6) {
         res[i] <- 'thermic'
         next
-      }
-      else {
+      } else {
         res[i] <- 'isothermic'
         next
       }
     }
     
     # hyperthermic
-    if(mast[i] >= 22) {
-      if(mean.summer[i] - mean.winter[i] >= 6) {
+    if (mast[i] >= 22) {
+      if (mean.summer[i] - mean.winter[i] >= 6) {
         res[i] <- 'hyperthermic'
         next
-      }
-      else {
+      } else {
         res[i] <- 'isohyperthermic'
         next
       }

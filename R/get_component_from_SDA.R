@@ -23,20 +23,20 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
 
   es.vars <- "ecoclasstypename, ecoclassref, ecoclassid, ecoclassname"
   co.vars <- "co.cokey, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, erocl, earthcovkind1, earthcovkind2, elev_r, slope_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, hydgrp,  nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, tfact, wei, weg, corcon, corsteel, frostact, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition"
-  vars    <- paste0(unlist(strsplit(co.vars, "earthcovkind2,")), collapse = paste0("earthcovkind2, ", es.vars, ","))
+  vars    <- paste(unlist(strsplit(co.vars, "earthcovkind2,")), collapse = paste0("earthcovkind2, ", es.vars, ","))
 
   q.component <- paste(
 
     # excluding mukey conditionally and DISTINCT are necessary, otherwise querying on states like CA% exceed SDAs record limit
     "SELECT",
-    if (duplicates == FALSE) "DISTINCT" else "mu.mukey AS mukey,",
+    if (isFALSE(duplicates)) "DISTINCT" else "mu.mukey AS mukey,",
     "mu.nationalmusym,", vars,
 
     "FROM
      legend  l                      INNER JOIN
      mapunit mu ON mu.lkey = l.lkey INNER JOIN",
 
-    if (duplicates == FALSE) {
+    if (isFALSE(duplicates)) {
     "(SELECT nationalmusym AS nationalmusym2, MIN(mukey) AS mukey2
       FROM mapunit
       GROUP BY nationalmusym
@@ -48,7 +48,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
       component  co                        LEFT OUTER JOIN
       coecoclass ce ON ce.cokey = co.cokey AND
                        ecoclasstypename IN ('NRCS Rangeland Site', 'NRCS Forestland Site')
-      ) AS co ON co.mukey2 =", if (duplicates == FALSE) "mu2.mukey2" else "mu.mukey",
+      ) AS co ON co.mukey2 =", if (isFALSE(duplicates)) "mu2.mukey2" else "mu.mukey",
 
    "WHERE", WHERE,
 
@@ -73,7 +73,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   # if mukeys are "flattened" to nmusym, make sure the mukey column _exists_ but is empty (NA)
   # presence of NA used to make it clear to user whether they need to set the duplicates flag TRUE,
   # depending on their use case (i.e. need all unique MUKEYS, set duplicates=TRUE; need unique data? duplicates=FALSE)
-  if(duplicates == FALSE) {
+  if (isFALSE(duplicates)) {
     d.component <- cbind(mukey = NA, d.component)
   }
 
@@ -87,7 +87,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
                        pmg.rvindicator = 'Yes'          LEFT OUTER JOIN
     copm      pm  ON pm.copmgrpkey     = pmg.copmgrpkey
 
-    WHERE co.cokey IN (", paste0(d.component$cokey, collapse = ", "), ")
+    WHERE co.cokey IN (", toString(d.component$cokey), ")
 
     ORDER BY co.cokey, pmg.copmgrpkey, pmorder"
     )
@@ -119,13 +119,13 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
     LEFT OUTER JOIN
         cosurfmorphhpp lf_2d ON lf_2d.cogeomdkey = lf.cogeomdkey
 
-    WHERE co.cokey IN (", paste0(d.component$cokey, collapse = ", "), ")
+    WHERE co.cokey IN (", toString(d.component$cokey), ")
 
     ORDER BY cokey, ls.geomftname, ls.geomfeatid, ls.existsonfeat, lf.geomftname, lf.geomfeatid, lf.existsonfeat"
     )
 
   # append child tables
-  if (childs == TRUE) {
+  if (isTRUE(childs)) {
 
     # exec query
     d.pm    <- SDA_query(q.pm)
@@ -164,25 +164,26 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
 
   if (any(idx)) {
 
-    cokeys <- as.integer(names(idx[idx == TRUE]))
+    cokeys <- as.integer(names(idx[which(idx)]))
     idx    <- d.component$cokey %in% cokeys
 
     assign('component.ecosite.problems', value = cokeys, envir = get_soilDB_env())
     message("-> QC: multiple ecosites linked to 1 component\n\tUse `get('component.ecosite.problems', envir = get_soilDB_env())` for component keys (cokey)")
 
     nodups <- {
-      d.component[idx, ] ->.;
-      split(., .$cokey)  ->.;
-      lapply(., function(x) {
-        temp                  = x[1, ]
-        temp$ecoclassname     = paste0(x$ecoclassname, collapse = ", ")
-        temp$ecoclasstypename = paste0(x$ecoclasstypename, collapse = ", ")
-        temp$ecoclassref      = paste0(x$ecoclassref,  collapse = ", ")
-        temp$ecoclassid       = paste0(x$ecoclassid,   collapse = ", ")
+      . <- d.component[idx, ]
+      . <- split(., .$cokey)
+      . <- lapply(., function(x) {
+        temp <- x[1, ]
+        temp$ecoclassname     = toString(x$ecoclassname)
+        temp$ecoclasstypename = toString(x$ecoclasstypename)
+        temp$ecoclassref      = toString(x$ecoclassref)
+        temp$ecoclassid       = toString(x$ecoclassid)
         return(temp)
-      }) ->.;
-      do.call("rbind", .) ->.;
+      })
+      . <- do.call("rbind", .)
     }
+    
     d.component <- rbind(d.component[! idx, ], nodups)
     d.component <- with(d.component,
                         d.component[order(nationalmusym, - comppct_r, compname), ]
@@ -280,9 +281,11 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   
   q <- paste0(
     
-  if (temp == TRUE) paste("CREATE TABLE", nm, "(DomainID INT, DomainName CHAR(37), DomainRanked INT, DisplayLabel INT, ChoiceSequence INT, ChoiceValue INT, ChoiceName CHAR(56), ChoiceLabel CHAR(154), ChoiceObsolete INT, ColumnPhysicalName CHAR(30), ColumnLogicalName CHAR(30)); "),
+  if (isTRUE(temp)) 
+    paste("CREATE TABLE", nm, "(DomainID INT, DomainName CHAR(37), DomainRanked INT, DisplayLabel INT, ChoiceSequence INT, ChoiceValue INT, ChoiceName CHAR(56), ChoiceLabel CHAR(154), ChoiceObsolete INT, ColumnPhysicalName CHAR(30), ColumnLogicalName CHAR(30)); "),
   
-  if (temp == TRUE) paste("INSERT INTO", nm, "(DomainID, DomainName, DomainRanked, DisplayLabel, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ColumnPhysicalName, ColumnLogicalName) "),
+  if (isTRUE(temp)) 
+    paste("INSERT INTO", nm, "(DomainID, DomainName, DomainRanked, DisplayLabel, ChoiceSequence, ChoiceValue, ChoiceName, ChoiceLabel, ChoiceObsolete, ColumnPhysicalName, ColumnLogicalName) "),
 
   "SELECT 
   mdd.DomainID AS DomainID, DomainName, DomainRanked, DisplayLabel, 
@@ -304,7 +307,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   "ORDER BY mdd.DomainID, ColumnPhysicalName, ChoiceSequence;
   ",
   
-  if (drop == TRUE) {
+  if (isTRUE(drop)) {
     paste0("SELECT * FROM ", nm, ";
     -- cleanup
     DROP TABLE ", nm, ";")
@@ -344,7 +347,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
 
   FROM cosurffrags
 
-  WHERE cokey IN (", paste0(cokey, collapse = ", "), ")
+  WHERE cokey IN (", toString(cokey), ")
 
   ORDER BY cokey, cosurffragskey;
 
@@ -435,28 +438,28 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   if (is.null(d)) {
     d <- data.frame(
       cokey = cokey[1],
-      surface_fine_gravel = as.integer(NA),
-      surface_gravel      = as.integer(NA),
-      surface_cobbles     = as.integer(NA),
-      surface_stones      = as.integer(NA),
-      surface_boulders    = as.integer(NA),
-      surface_channers    = as.integer(NA),
-      surface_flagstones  = as.integer(NA),
-      surface_parafine_gravel = as.integer(NA),
-      surface_paragravel      = as.integer(NA),
-      surface_paracobbles     = as.integer(NA),
-      surface_parastones      = as.integer(NA),
-      surface_paraboulders    = as.integer(NA),
-      surface_parachanners    = as.integer(NA),
-      surface_paraflagstones  = as.integer(NA),
-      surface_unspecified     = as.integer(NA),
-      surface_total_frags_pct_nopf = as.integer(NA),
-      surface_total_frags_pct      = as.integer(NA))
+      surface_fine_gravel = NA_integer_,
+      surface_gravel      = NA_integer_,
+      surface_cobbles     = NA_integer_,
+      surface_stones      = NA_integer_,
+      surface_boulders    = NA_integer_,
+      surface_channers    = NA_integer_,
+      surface_flagstones  = NA_integer_,
+      surface_parafine_gravel = NA_integer_,
+      surface_paragravel      = NA_integer_,
+      surface_paracobbles     = NA_integer_,
+      surface_parastones      = NA_integer_,
+      surface_paraboulders    = NA_integer_,
+      surface_parachanners    = NA_integer_,
+      surface_paraflagstones  = NA_integer_,
+      surface_unspecified     = NA_integer_,
+      surface_total_frags_pct_nopf = NA_integer_,
+      surface_total_frags_pct      = NA_integer_)
   }
 
   # set NA values as integer NA
   idx <- sapply(d, function(x) all(is.na(x)))
-  d[idx] <- lapply(d[idx], function(x) x = as.integer(NA))
+  d[idx] <- lapply(d[idx], function(x) x <- NA_integer_)
 
   return(d)
 
@@ -494,12 +497,12 @@ get_cointerp_from_SDA <- function(WHERE = NULL, mrulename = NULL, duplicates = F
        FROM
        component co2                       LEFT OUTER JOIN
        cointerp  coi2 ON coi2.cokey = co2.cokey
-       WHERE co2.cokey IN ('", paste0(d.component$cokey, collapse = "', '"), "')",
+       WHERE co2.cokey IN ('", paste(d.component$cokey, collapse = "', '"), "')",
                        if (!is.null(mrulename)) paste0(" AND mrulename = '", mrulename, "'"), "
        GROUP BY co2.cokey, coi2.mrulekey
       ) coi22 ON coi22.cokey = co.cokey AND coi22.mrulekey = coi.mrulekey
 
-  WHERE co.cokey IN ('", paste0(d.component$cokey, collapse = "', '"), "') AND
+  WHERE co.cokey IN ('", paste(d.component$cokey, collapse = "', '"), "') AND
         mrulename = rulename
 
   ORDER BY co.cokey ASC"
@@ -679,7 +682,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
     FROM legend l INNER JOIN
     mapunit mu ON mu.lkey = l.lkey",
     
-  if (duplicates == FALSE) {
+  if (isFALSE(duplicates)) {
     paste(
       "INNER JOIN
        (SELECT MIN(nationalmusym) nationalmusym2, MIN(mukey) AS mukey2
@@ -728,13 +731,13 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
   # transform variables and metadata
   if (!is.null(d.chorizon) && nrow(d.chorizon) > 0){
     d.chorizon <- within(d.chorizon, {
-      nationalmusym = NULL
-      texture = tolower(texture)
+      nationalmusym <- NULL
+      texture <- tolower(texture)
       if (getOption("stringsAsFactors", default = FALSE) || getOption("soilDB.NASIS.DomainsAsFactor", default = FALSE)) {
-        texcl = factor(texcl, levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceLabel"])
+        texcl <- factor(texcl, levels = metadata[metadata$ColumnPhysicalName == "texcl", "ChoiceLabel"])
       }
       if (droplevels == droplevels && is.factor(texcl)) {
-        texcl = droplevels(texcl)
+        texcl <- droplevels(texcl)
       }
     })
   
@@ -742,9 +745,9 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
     # # recode metadata domains
     # d.chorizon <- uncode(d.chorizon, NASIS = FALSE)
 
-    if (childs == TRUE) {
+    if (isTRUE(childs)) {
   
-      WHERE = paste0("WHERE co.cokey IN (", paste0(unique(d.chorizon$cokey), collapse = ","), ")")
+      WHERE <- paste0("WHERE co.cokey IN (", paste(unique(d.chorizon$cokey), collapse = ","), ")")
   
       q.chfrags <- paste("
   
@@ -856,7 +859,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
       
       # r.rf.data.v2 nullFragsAreZero = TRUE
       idx <- !names(d.chfrags) %in% "chkey"
-      if (nullFragsAreZero == TRUE) {
+      if (isTRUE(nullFragsAreZero)) {
         d.chfrags[idx] <- lapply(d.chfrags[idx], function(x) ifelse(is.na(x), 0, x))
       }
   
@@ -1024,8 +1027,6 @@ fetchSDA <- function(WHERE = NULL,
   # upgrade to SoilProfilecollection
   aqp::depths(f.chorizon) <- cokey ~ hzdept_r + hzdepb_r
 
-  ## TODO: this will fail in the presence of duplicates
-  ## TODO: make this error more informative
   # add site data to object
   aqp::site(f.chorizon) <- f.component # left-join via cokey
   
@@ -1033,7 +1034,7 @@ fetchSDA <- function(WHERE = NULL,
   aqp::site(f.chorizon) <- f.mapunit
   
   # set SDA/SSURGO-specific horizon identifier
-  if ('chkey' %in% aqp::horizonNames(f.chorizon) && all(!is.na('chkey'))) {
+  if ('chkey' %in% aqp::horizonNames(f.chorizon) && !anyNA('chkey')) {
       aqp::hzidname(f.chorizon) <- 'chkey'
   }
 

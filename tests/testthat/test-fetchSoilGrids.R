@@ -24,12 +24,12 @@ test_that("fetchSoilGrids() works as expected", {
   expect_true(aqp::spc_in_sync(res)$valid)
   expect_true(all(aqp::checkHzDepthLogic(res)$valid))
 
-  expect_equal(nrow(aqp::site(res)), 2)
-  expect_equal(aqp::nrow(res), 2 * 6)
+  expect_equivalent(nrow(aqp::site(res)), 2)
+  expect_equivalent(aqp::nrow(res), 2 * 6)
   
   # 5 base columns in SPC: label, id, hzdept, hzdepb, hzID
   #   plus 13 default variables w/ 5 columns each 
-  expect_equal(ncol(aqp::horizons(res)), 5 + (13 * 5))
+  expect_equivalent(ncol(aqp::horizons(res)), 5 + (13 * 5))
 
   # data conversion works
   expect_equal(res$claymean[1], 18.7)

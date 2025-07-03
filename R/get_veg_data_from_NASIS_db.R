@@ -43,7 +43,7 @@ get_veg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
   LEFT OUTER JOIN plant ON plant.plantiid = ppi.plantiidref;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.veg <- gsub(pattern = '_View_1', replacement = '', x = q.veg, fixed = TRUE)
   }
   
@@ -59,7 +59,7 @@ get_veg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
     ORDER BY s.siteiid;"
   
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.vegtransect <- gsub(pattern = '_View_1', replacement = '', x = q.vegtransect, fixed = TRUE)
   }
   

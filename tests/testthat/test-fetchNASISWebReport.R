@@ -56,11 +56,11 @@ test_that("fetchNASISWebReport() returns reasonable data", {
   skip_if(is.null(x))
 
   # standard request
-  expect_equal(nrow(aqp::site(x$spc)) > 0, TRUE)
-  expect_equal(aqp::nrow(x$spc) > 0, TRUE)
-  expect_equal(aqp::idname(x$spc), 'coiid')
-  expect_equal(aqp::hzidname(x$spc), 'chiid')
-  expect_equal(aqp::horizonDepths(x$spc), c("hzdept_r", "hzdepb_r"))
+  expect_gt(nrow(aqp::site(x$spc)), 0)
+  expect_gt(nrow(aqp::horizons(x$spc)), 0)
+  expect_equivalent(aqp::idname(x$spc), 'coiid')
+  expect_equivalent(aqp::hzidname(x$spc), 'chiid')
+  expect_equivalent(aqp::horizonDepths(x$spc), c("hzdept_r", "hzdepb_r"))
 
 })
 
@@ -76,7 +76,7 @@ test_that("fetchNASISWebReport() returns data for component name (Sierra)", {
 
   # all major components are Sierra
   f <- grepl('Sierra', x$spc$compname[x$spc$majcompflag == 1], ignore.case = TRUE)
-  expect_equal(all(f), TRUE)
+  expect_true(all(f))
 
 })
 

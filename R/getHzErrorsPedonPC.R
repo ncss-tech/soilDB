@@ -14,7 +14,7 @@ getHzErrorsPedonPC <- function(dsn, strict=TRUE) {
 	                                 idname = 'pedon_id', fast = TRUE)
 
 	# find bad ones
-	bad.pedon.ids <- as.character(f.test$pedon_id[which(f.test$valid == FALSE)])
+	bad.pedon.ids <- as.character(f.test$pedon_id[which(!f.test$valid)])
 
 	# now describe the problems
 	b <- f[which(f$pedon_id %in% bad.pedon.ids), c('pedon_id','hzdept','hzdepb','hzname')]

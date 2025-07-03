@@ -195,11 +195,10 @@ soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   
   input_class <- attr(wcs.geom, '.input_class')
   
-  if ((!is.null(input_class) && input_class == "raster") ||
-      getOption('soilDB.return_Spatial', default = FALSE)) {
-    if (requireNamespace("raster")) {
-      r <- raster::raster(r)
-    }
+  if (((!is.null(input_class) && input_class == "raster") ||
+      getOption('soilDB.return_Spatial', default = FALSE)) && 
+      requireNamespace("raster")) {
+    r <- raster::raster(r)
   }
   
   # set metadata

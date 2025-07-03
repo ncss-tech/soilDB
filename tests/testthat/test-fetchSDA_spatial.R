@@ -12,13 +12,13 @@ test_that("fetchSDA_spatial basic mupolygon functionality", {
   
   # expect 3, relatively non-extensive join delineations
   single.mukey <- fetchSDA_spatial(x = "2924882", by.col = 'mukey')
-  expect_equal(nrow(single.mukey), 3)
+  expect_equivalent(nrow(single.mukey), 3)
 
   # there are currently 3 MUKEY associated with this national musym
   # expect 48 delineations for this nmusymn
   # also test verbose argument
   expect_silent({full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by.col = "nmusym", verbose = FALSE)})
-  expect_equal(nrow(full.extent.nmusym), 48)
+  expect_equivalent(nrow(full.extent.nmusym), 48)
 
   # mukey value from single result is in full extent result
   expect_true(unique(single.mukey$mukey) %in% unique(full.extent.nmusym$mukey))
@@ -48,8 +48,8 @@ test_that("fetchSDA_spatial sapolygon and gsmmupolygon", {
                                       method = "bbox",
                                       geom.src = "sapolygon",
                                       add.fields = "legend.areaname")
-  expect_true(!is.null(by.areasym.bbox$areaname))
-  expect_equal(nrow(by.areasym.bbox), 6)
+  expect_false(is.null(by.areasym.bbox$areaname))
+  expect_equivalent(nrow(by.areasym.bbox), 6)
 
   ## this one is slow
   # by.areasym <- fetchSDA_spatial(x = unique(by.areasym.bbox$lkey),
@@ -72,12 +72,12 @@ test_that("fetchSDA_spatial sapolygon and gsmmupolygon", {
   # test STATSGO gsmmupolygon (5 bbox around 5 delineations)
   statsgo.bbox <- fetchSDA_spatial(660848, db = 'STATSGO', method = "bbox",
                                    add.fields = c("mapunit.muname", "legend.areaname"))
-  expect_equal(nrow(statsgo.bbox), 5)
+  expect_equivalent(nrow(statsgo.bbox), 5)
   
   # test STATSGO gsmmupolygon (1 envelope around 5 delineations)
   statsgo.bbox <- fetchSDA_spatial(660848, db = 'STATSGO', method = "envelope",
                                    add.fields = c("mapunit.muname", "legend.areaname"))
-  expect_equal(nrow(statsgo.bbox), 1)
+  expect_equivalent(nrow(statsgo.bbox), 1)
   
 
   # skip_if_not_installed('sf')

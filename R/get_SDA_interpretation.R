@@ -802,7 +802,7 @@ get_SDA_interpretation <- function(rulename,
   INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
   INNER JOIN component ON component.mukey = mapunit.mukey %s %s
   ORDER BY mapunit.mukey, areasymbol, musym, muname",
-          paste0(sapply(interp, function(x) sprintf("
+          toString(sapply(interp, function(x) sprintf("
     (%s) AS [rating_%s],
     (%s) AS [total_comppct_%s],
     (%s) AS [class_%s],
@@ -813,7 +813,7 @@ get_SDA_interpretation <- function(rulename,
    .q2(x), .cleanRuleColumnName(x),
    .q3(x), .cleanRuleColumnName(x),
    aggfun, ifelse(miscellaneous_areas, "", "AND c.compkind != 'miscellaneous area'"),
-   x, .cleanRuleColumnName(x))), collapse = ", "), where_clause, ifelse(miscellaneous_areas, "", "AND component.compkind != 'miscellaneous area'"),
+   x, .cleanRuleColumnName(x)))), where_clause, ifelse(miscellaneous_areas, "", "AND component.compkind != 'miscellaneous area'"),
   ifelse(dominant, paste0("AND component.cokey = (", .LIMIT_N(sprintf("SELECT c1.cokey FROM component AS c1 
                                                                INNER JOIN mapunit AS mu ON c1.mukey = mu.mukey AND c1.mukey = mapunit.mukey %s
                                                                ORDER BY c1.comppct_r DESC, c1.cokey", ifelse(miscellaneous_areas, "", "AND c1.compkind != 'miscellaneous area'")), 
@@ -828,7 +828,7 @@ get_SDA_interpretation <- function(rulename,
                 FROM legend
                 INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
                 INNER JOIN component ON component.mukey = mapunit.mukey %s",
-                paste0(sapply(interp, function(x) sprintf("
+                paste(sapply(interp, function(x) sprintf("
   (SELECT interphr FROM component AS c0 
    INNER JOIN cointerp ON c0.cokey = cointerp.cokey AND component.cokey = c0.cokey AND ruledepth = 0 AND mrulename LIKE '%s') as [rating_%s],
   (SELECT interphrc FROM component AS c1 
@@ -865,7 +865,7 @@ get_SDA_interpretation <- function(rulename,
                 %s,
                 %s
                 FROM main",
-          paste0(sapply(interp, function(x) sprintf("(SELECT %sCASE WHEN sdvattribute.ruledesign = 1 THEN 'limitation'
+          paste(sapply(interp, function(x) sprintf("(SELECT %sCASE WHEN sdvattribute.ruledesign = 1 THEN 'limitation'
                   WHEN sdvattribute.ruledesign = 2 THEN 'suitability' END
                   FROM mapunit AS mu
                   INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
@@ -900,11 +900,11 @@ get_SDA_interpretation <- function(rulename,
                                                     x, .cleanRuleColumnName(x))), collapse = ", "),
           where_clause,
           ifelse(miscellaneous_areas, "", "AND compkind != 'miscellaneous area'"),
-          paste0(sapply(interp,
+          paste(sapply(interp,
                         function(x) sprintf("%s(ROUND(([rating_%s] / [sum_com_%s]),2), 99) AS [rating_%s]",
                                             nullfun, .cleanRuleColumnName(x), .cleanRuleColumnName(x), .cleanRuleColumnName(x))),
                  collapse = ", "),
-          paste0(sapply(interp,
+          paste(sapply(interp,
                         function(x) sprintf(gsub("design", paste0("[design_", .cleanRuleColumnName(x),"]"),
                                                  gsub("sum_com", paste0("[sum_com_", .cleanRuleColumnName(x), "]"),
                                                       gsub("rating", paste0("[rating_", .cleanRuleColumnName(x), "]"),
@@ -920,7 +920,7 @@ get_SDA_interpretation <- function(rulename,
                   WHEN design = 'limitation' AND ROUND((rating/sum_com),2) > 0.667 and ROUND((rating/sum_com),2) <=0.999 THEN 'Moderately limited'
                   WHEN design = 'limitation' AND ROUND((rating/sum_com),2) = 1 THEN 'Very limited' END AS [class_%s]"))),
                                             .cleanRuleColumnName(x))),
-                 collapse = ", "), paste0(sapply(interp, function(x) sprintf("[reason_%s]", .cleanRuleColumnName(x))), collapse = ", "))
+                 collapse = ", "), paste(sapply(interp, function(x) sprintf("[reason_%s]", .cleanRuleColumnName(x))), collapse = ", "))
 }
 
 .interpretation_weighted_average <- function(interp, where_clause, miscellaneous_areas = FALSE, include_minors = TRUE, sqlite = FALSE) {
@@ -938,7 +938,7 @@ get_SDA_interpretation <- function(rulename,
                 %s
                 FROM #main
                 DROP TABLE #main",
-          paste0(sapply(interp, function(x) sprintf("(SELECT TOP 1 CASE WHEN ruledesign = 1 THEN 'limitation'
+          paste(sapply(interp, function(x) sprintf("(SELECT TOP 1 CASE WHEN ruledesign = 1 THEN 'limitation'
                   WHEN ruledesign = 2 THEN 'suitability' END
                   FROM mapunit AS mu
                   INNER JOIN component AS c ON c.mukey = mu.mukey AND mapunit.mukey = mu.mukey %s
@@ -970,11 +970,11 @@ get_SDA_interpretation <- function(rulename,
                                                     x, .cleanRuleColumnName(x))), collapse = ", "),
            where_clause,
           ifelse(miscellaneous_areas, "", "AND compkind != 'miscellaneous area'"),
-          paste0(sapply(interp,
+          paste(sapply(interp,
                         function(x) sprintf("ISNULL(ROUND(([rating_%s] / [sum_com_%s]),2), 99) AS [rating_%s]",
                                             .cleanRuleColumnName(x), .cleanRuleColumnName(x), .cleanRuleColumnName(x))),
                  collapse = ", "),
-          paste0(sapply(interp,
+          paste(sapply(interp,
                         function(x) sprintf(gsub("design", paste0("[design_", .cleanRuleColumnName(x),"]"),
                                                  gsub("sum_com", paste0("[sum_com_", .cleanRuleColumnName(x), "]"),
                                                       gsub("rating", paste0("[rating_", .cleanRuleColumnName(x), "]"),
@@ -990,7 +990,7 @@ get_SDA_interpretation <- function(rulename,
                   WHEN design = 'limitation' AND ROUND((rating/sum_com),2) > 0.667 and ROUND((rating/sum_com),2) <=0.999 THEN 'Moderately limited'
                   WHEN design = 'limitation' AND ROUND((rating/sum_com),2) = 1 THEN 'Very limited' END AS [class_%s]"))),
                        .cleanRuleColumnName(x))),
-                 collapse = ", "), paste0(sapply(interp, function(x) sprintf("[reason_%s]", .cleanRuleColumnName(x))), collapse = ", "))
+                 collapse = ", "), paste(sapply(interp, function(x) sprintf("[reason_%s]", .cleanRuleColumnName(x))), collapse = ", "))
 }
 
 .LIMIT_N <- function(query, n = 1, sqlite = FALSE) {

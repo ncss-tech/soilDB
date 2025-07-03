@@ -38,7 +38,7 @@ WCS_details <- function(wcs = c('mukey', 'ISSR800', 'soilColor')) {
   
   # flatten / re-format
   v <- do.call('rbind', v)
-  row.names(v) <- as.character(1:nrow(v))
+  row.names(v) <- as.character(seq_len(nrow(v)))
   
   # alpha order simpler to use
   v <- v[order(v[['var']]), ]

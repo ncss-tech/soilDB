@@ -222,8 +222,7 @@ createSSURGO <- function(filename = NULL,
     }
   }
   
-  if (!IS_DUCKDB) {
-    if (!requireNamespace("sf"))
+  if (!IS_DUCKDB && !requireNamespace("sf")) {
       stop("package `sf` is required to write spatial datasets to DBI data sources", call. = FALSE)
   } 
   
@@ -392,8 +391,12 @@ createSSURGO <- function(filename = NULL,
             return(NULL)
           } else if (length(y) == 1) {
             if (grepl("soil_metadata", f.txt.grp[[x]][i])) {
-              y <- data.frame(areasymbol = toupper(gsub(".*soil_metadata_(.*)\\.txt", "\\1", f.txt.grp[[x]][i])), content = paste0(y[[1]], collapse = "\n"))
-            } else {
+              y <- data.frame(
+                areasymbol = toupper(gsub(".*soil_metadata_(.*)\\.txt", "\\1", f.txt.grp[[x]][i])),
+                content = paste(y[[1]], collapse = "\n")
+              )
+            }
+            else {
               y <- data.frame(content = y)
             }
           } else {
@@ -432,7 +435,7 @@ createSSURGO <- function(filename = NULL,
           try({
             q <- sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
                          paste0('PK_', mstab_lut[x]), mstab_lut[x], 
-                         paste0(indexPK, collapse = ","))
+                         paste(indexPK, collapse = ","))
             DBI::dbExecute(conn, q)
           }, silent = quiet)
         }

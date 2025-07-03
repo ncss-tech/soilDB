@@ -29,7 +29,6 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "n
                                                          "mapunit", "datamapunit"),
                                              SS = FALSE) {
 
-  # TODO: store as .rda?
   table_groups <- list(
     metadata = c(
       "MetadataDomainDetail",

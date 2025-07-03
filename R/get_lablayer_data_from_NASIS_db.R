@@ -53,8 +53,8 @@ ORDER BY ncsspedonlabdataiid, hzdept ASC;")
 
 	# transform variables
 	d.lablayer <- within(d.lablayer, {
-	  cec7clay = round(cec7 / (claytot - claycarb), 2)
-	  organicmatpct = round(carbonorganicpct * 1.724, 2)
+	  cec7clay <- round(cec7 / (claytot - claycarb), 2)
+	  organicmatpct <- round(carbonorganicpct * 1.724, 2)
 	  })
 
 	# return a list of results

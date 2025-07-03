@@ -209,7 +209,7 @@
   idcols <- c("lmapunitiid","coiid")
   
   # TODO: include low, high, low RV in addition to default "high RV"
-  rulecols <- c("mrulename","rating","class","reasons")
+  rulecols <- c("mrulename", "rating", "class", "reasons")
   
   # using same logic as the get_SDA* methods for multi-rule results
   .cleanRuleColumnName <- function(x) gsub("[^A-Za-z0-9]", "", x)
@@ -318,7 +318,7 @@
   # flatten the reasons so they are 1:1 with component, join to lookup tables
   result <- as.data.frame(res[, list(mrulename = unique(mrulename),
                                      cokeyref = unique(cokey),
-                                     reasons = paste0(.SD[["interphrc"]][1:pmin(.N, n)], collapse = "; ")),
+                                     reasons = paste(.SD[["interphrc"]][1:pmin(.N, n)], collapse = "; ")),
                               by = c("lmapunitiid", "coiid")][res2,
                                                               on = c("lmapunitiid", "coiid")][high_rep_rating_class,
                                                                                               on = c("lmapunitiid","coiid")])

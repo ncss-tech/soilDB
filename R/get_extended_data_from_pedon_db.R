@@ -1,8 +1,3 @@
-# TODO: does not have parity with extended data function pulling from NASIS
-# missing queries for veg, ecosite, rf.data, surf.rf.summary, photolink, sitepm, structure
-
-
-
 #' Get accessory tables and summaries from a local pedonPC Database
 #' 
 #' Get accessory tables and summaries from a local pedonPC Database.
