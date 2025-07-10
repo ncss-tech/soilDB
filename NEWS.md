@@ -1,8 +1,15 @@
-# soilDB 2.8.10 (development)
+# soilDB 2.8.11 (development)
+ - Update to NASIS metadata for data model version 7.4.3
+ - `fetchSDA_spatial()` `geom.src="mlrapolygon"` uses a new URL on the DSHub S3 bucket
+ - Added `"projectsubtype"` and `"milestonetype"` to the `"project"` set for `get_NASIS_table_name_by_purpose()`
+ - Initial phase of syntax cleanup affecting many functions
+
+# soilDB 2.8.10 (2025-04-28)
  - `fetchVegdata()` add `nullFragsAreZero` argument (passed to `get_site_data_from_NASIS_db()`)
  - Added `soilDB_user_dir()` for caching local copies of data for use in soilDB functions (#377)
  - Added `fetchHWSD()` and `get_HWSD_path()`  for the FAO Harmonized World Soil Database (#391) 
-
+ - Added `get_phroots_from_NASIS_db()` for getting pedon horizon root information from NASIS (#393)
+ 
 # soilDB 2.8.9 (2025-04-04)
  - soilDB now requires aqp >= 2.1.0
  - Added `get_vegplot_groundsurface_from_NASIS_db()` thanks to Greg Schmidt (@phytoclast; #373)
