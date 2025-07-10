@@ -60,15 +60,15 @@ test_that("fetchNASIS(from='pedons') returns reasonable data", {
 
   # expected outcomes
   expect_true(inherits(x, 'SoilProfileCollection'))
-  expect_equal(nrow(site(x)) > 0, TRUE)
-  expect_equal(nrow(horizons(x)) > 0, TRUE)
-  expect_equal(idname(x), 'peiid')
-  expect_equal(horizonDepths(x), c("hzdept", "hzdepb"))
+  expect_gt(nrow(site(x)), 0)
+  expect_gt(nrow(horizons(x)), 0)
+  expect_equivalent(idname(x), 'peiid')
+  expect_equivalent(horizonDepths(x), c("hzdept", "hzdepb"))
 
   # no NA in total fragments using default arguments
-  expect_equal(any(is.na(x$total_frags_pct)), FALSE)
-  expect_equal(any(is.na(x$total_frags_pct_nopf)), FALSE)
-  expect_equal(any(is.na(x$fragvoltot)), FALSE)
+  expect_false(anyNA(x$total_frags_pct))
+  expect_false(anyNA(x$total_frags_pct_nopf))
+  expect_false(anyNA(x$fragvoltot))
   
   # make sure fill and rmHzErrors work without error
   y <- suppressWarnings(fetchNASIS(from = 'pedons', fill = TRUE))
@@ -115,10 +115,10 @@ test_that("fetchNASIS(from='components') returns reasonable data", {
 
   # expected outcomes
   expect_true(inherits(x, 'SoilProfileCollection'))
-  expect_equal(nrow(site(x)) > 0, TRUE)
-  expect_equal(nrow(horizons(x)) > 0, TRUE)
-  expect_equal(idname(x), 'coiid')
-  expect_equal(horizonDepths(x), c("hzdept_r", "hzdepb_r"))
+  expect_gt(nrow(site(x)), 0)
+  expect_gt(nrow(horizons(x)), 0)
+  expect_equivalent(idname(x), 'coiid')
+  expect_equivalent(horizonDepths(x), c("hzdept_r", "hzdepb_r"))
 
 })
 

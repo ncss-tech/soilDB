@@ -55,7 +55,7 @@ get_vegplot_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.vegplot <- gsub(pattern = '_View_1', replacement = '', x = q.vegplot, fixed = TRUE)
   }
 
@@ -63,7 +63,7 @@ get_vegplot_from_NASIS_db <- function(SS = TRUE,
   d.vegplot <- dbQueryNASIS(channel, q.vegplot)
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.vegplot <- gsub(pattern = '_View_1', replacement = '', x = q.vegplot, fixed = TRUE)
   }
 
@@ -108,7 +108,7 @@ get_vegplot_location_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.plotlocation <- gsub(pattern = '_View_1', replacement = '', x = q.plotlocation, fixed = TRUE)
   }
 
@@ -135,7 +135,7 @@ get_vegplot_location_from_NASIS_db <- function(SS = TRUE,
   fips_state_num <- state_FIPS_codes$state_fips[idx]
   year <- substr(d$usiteid, 8, 9)
   sitenum <- substr(d$usiteid, 10, 12)
-  d$ESIS_id <- paste(sitenum, year, fips_state_num, fips, sep = '')
+  d$ESIS_id <- paste0(sitenum, year, fips_state_num, fips)
 
   # clean PLSS TRS data
   d$plsstownship <- gsub(d$plsstownship, pattern = '\\.', replacement = '', fixed = TRUE)
@@ -176,7 +176,7 @@ get_vegplot_trhi_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.vegplotrhi <- gsub(pattern = '_View_1', replacement = '', x = q.vegplotrhi, fixed = TRUE)
   }
 
@@ -230,7 +230,7 @@ get_vegplot_species_from_NASIS_db <-  function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.vegplotspecies <- gsub(pattern = '_View_1', replacement = '', x = q.vegplotspecies, fixed = TRUE)
   }
 
@@ -297,7 +297,7 @@ get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.vegtransect <- gsub(pattern = '_View_1', replacement = '', x = q.vegtransect, fixed = TRUE)
   }
 
@@ -371,7 +371,7 @@ get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.vtps <- gsub(pattern = '_View_1', replacement = '', x = q.vtps, fixed = TRUE)
   }
 
@@ -503,7 +503,7 @@ get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.pltsis <- gsub(pattern = '_View_1', replacement = '', x = q.pltsis, fixed = TRUE)
   }
 
@@ -579,7 +579,7 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.pltsid <- gsub(pattern = '_View_1', replacement = '', x = q.pltsid, fixed = TRUE)
   }
 
@@ -627,7 +627,7 @@ get_vegplot_textnote_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.vegplottext <- gsub(pattern = '_View_1', replacement = '', x = q.vegplottext, fixed = TRUE)
   }
 

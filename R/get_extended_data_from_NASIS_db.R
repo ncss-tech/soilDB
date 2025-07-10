@@ -1,21 +1,10 @@
-## TODO: need to be careful about how {l, rv, h} are used here...
-
-## TODO: multiple records / site in siteobs are possible and will result in duplicate data
-
-## TODO_JS: incorporated the use of uncode() into all except the fragment queries, which I think are best left as they are.
-
-
-
 #' Get accessory tables and summaries from a local NASIS Database
 #'
 #' @param SS get data from the currently loaded Selected Set in NASIS or from
 #' the entire local database (default: `TRUE`)
-#'
 #' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0?
 #' (default: TRUE), see details
-
 #' @param stringsAsFactors deprecated
-#'
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
@@ -58,7 +47,7 @@ get_extended_data_from_NASIS_db <- function(SS = TRUE,
   ORDER BY sot.siteobstextkind;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.photolink <- gsub(pattern = '_View_1', replacement = '', x = q.photolink, fixed = TRUE)
   }
 
@@ -70,12 +59,10 @@ get_extended_data_from_NASIS_db <- function(SS = TRUE,
 	ORDER BY phiidref, structid ASC;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.structure <- gsub(pattern = '_View_1', replacement = '', x = q.structure, fixed = TRUE)
   }
 
-  ## TODO: include all peiid from pedon table so that there are no NA in the boolean summary
-  ## https://github.com/ncss-tech/soilDB/issues/59
   # query diagnostic horizons, usually a 1:many relationship with pedons
   q.diagnostic <- "SELECT peiidref as peiid, featkind, featdept, featdepb
   FROM
@@ -83,7 +70,7 @@ get_extended_data_from_NASIS_db <- function(SS = TRUE,
 	ORDER BY pdf.peiidref, pdf.featdept;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.diagnostic <- gsub(pattern = '_View_1', replacement = '', x = q.diagnostic, fixed = TRUE)
   }
 
@@ -92,7 +79,7 @@ FROM perestrictions_View_1 As prf
 	ORDER BY prf.peiidref, prf.resdept;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.restriction <- gsub(pattern = '_View_1', replacement = '', x = q.restriction, fixed = TRUE)
   }
 
@@ -105,7 +92,7 @@ FROM perestrictions_View_1 As prf
   LEFT OUTER JOIN phfrags_View_1 ON p.phiid = phfrags_View_1.phiidref;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.rf.data <- gsub(pattern = '_View_1', replacement = '', x = q.rf.data, fixed = TRUE)
   }
 
@@ -115,7 +102,7 @@ FROM perestrictions_View_1 As prf
                        FROM (
                        SELECT DISTINCT phiid FROM phorizon_View_1
                        ) as p LEFT OUTER JOIN phhuarts_View_1 ON p.phiid = phiidref;")
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.art.data <- gsub(pattern = '_View_1', replacement = '', x = q.art.data, fixed = TRUE)
   }
 
@@ -127,7 +114,7 @@ FROM perestrictions_View_1 As prf
 	LEFT OUTER JOIN phtexturemod_View_1 AS phtm ON pht.phtiid = phtm.phtiidref;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.hz.texmod <- gsub(pattern = '_View_1', replacement = '', x = q.hz.texmod, fixed = TRUE)
   }
 
@@ -148,7 +135,7 @@ FROM perestrictions_View_1 As prf
 
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.geomorph <- gsub(pattern = '_View_1', replacement = '', x = q.geomorph, fixed = TRUE)
   }
 
@@ -161,7 +148,7 @@ FROM perestrictions_View_1 As prf
     ORDER BY pth.peiidref;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.taxhistory <- gsub(pattern = '_View_1', replacement = '', x = q.taxhistory, fixed = TRUE)
   }
 
@@ -173,7 +160,7 @@ FROM perestrictions_View_1 As prf
   ORDER BY spm.siteiidref, pmorder;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.sitepm <- gsub(pattern = '_View_1', replacement = '', x = q.sitepm, fixed = TRUE)
   }
 
@@ -182,7 +169,7 @@ FROM perestrictions_View_1 As prf
   ORDER BY phiid;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.hz.desgn <- gsub(pattern = '_View_1', replacement = '', x = q.hz.desgn, fixed = TRUE)
   }
 
@@ -191,7 +178,7 @@ FROM perestrictions_View_1 As prf
   ORDER BY phiidref, seqnum ASC;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.hz.dessuf <- gsub(pattern = '_View_1', replacement = '', x = q.hz.dessuf, fixed = TRUE)
   }
   
@@ -205,7 +192,7 @@ FROM perestrictions_View_1 As prf
                   ORDER BY siteiidref ASC;"
   
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q.siteaoverlap <- gsub(pattern = '_View_1', replacement = '', x = q.siteaoverlap, fixed = TRUE)
   }  
 
@@ -223,7 +210,7 @@ FROM perestrictions_View_1 As prf
   d.art.data <- dbQueryNASIS(channel, q.art.data, close = FALSE)
   
   # 2021-11-05: leaving this in the extended data result for now, but no longer used in fetchNASIS('pedons')
-  # 2024-09-24: surface fragments have been handled by simplifyFragmentData for some time; 
+  # 2024-09-24: surface fragments have been handled by simplifyFragmentData for some time 
   #             removing query because it relies on domain information internally 
   #             decoding domains should all be handled through uncode()/standard NASIS metadata options
   # d.surf.rf.summary <- dbQueryNASIS(channel, q.surf.rf.summary, close = FALSE)

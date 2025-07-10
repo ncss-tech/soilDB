@@ -144,9 +144,9 @@ createStaticNASIS <- function(tables = NULL,
 
     return(res)
 
-  # otherwise, we are writing SQLite to output_path
   } else {
-
+    # otherwise, we are writing SQLite to output_path
+    
     # assuming that default connection uses ODBC
     if (!requireNamespace("RSQLite"))
       stop("package `RSQLite` is required ", call. = FALSE)

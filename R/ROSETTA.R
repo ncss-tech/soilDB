@@ -205,7 +205,7 @@ ROSETTA <- function(x, vars, v = c('1', '2', '3'), include.sd = FALSE, chunkSize
   }
 
   # chunk
-  x[['.chunk']] <- makeChunks(1:nrow(x), size = chunkSize)
+  x[['.chunk']] <- makeChunks(seq_len(nrow(x)), size = chunkSize)
 
   # split
   x <- split(x, x[['.chunk']])
@@ -233,7 +233,7 @@ ROSETTA <- function(x, vars, v = c('1', '2', '3'), include.sd = FALSE, chunkSize
 
   # stack into DF
   res <- do.call('rbind', res)
-  row.names(res) <- as.character(1:nrow(res))
+  row.names(res) <- as.character(seq_len(nrow(res)))
 
   # remove chunkID
   res[['.chunk']] <- NULL
