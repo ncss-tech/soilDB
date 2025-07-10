@@ -8,7 +8,7 @@ message: 'To cite package "soilDB" in publications use:'
 type: software
 license: GPL-3.0-or-later
 title: 'soilDB: Soil Database Interface'
-version: 2.8.10
+version: 2.8.11
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.soilDB
