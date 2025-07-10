@@ -165,10 +165,11 @@ fetchSoilGrids <- function(x,
   locations <- x
   spatial_input <- FALSE
   
-  if ((inherits(locations, 'sf') || inherits(locations, 'Spatial')) &&
-      requireNamespace("sf") && 
-      (inherits(locations, 'Spatial') || inherits(locations, 'SpatVector'))) {
-    # convert sp -> sf & terra -> sf
+  if (!requireNamespace("sf")) {
+    stop("package 'sf' is required")
+  }
+  
+  if (inherits(locations, c("Spatial", "SpatVector"))) {
     locations <- sf::st_as_sf(locations)
   }
   
@@ -184,9 +185,6 @@ fetchSoilGrids <- function(x,
                           ...,
                           verbose = verbose))
   } else if (!inherits(locations, 'data.frame')) {
-    if (inherits(locations, 'SpatVector')) {
-      locations <- sf::st_as_sf(locations)
-    }
     # only supporting POINT geometry for now
     if (inherits(sf::st_geometry(locations), 'sfc_POINT')) {
       if (is.na(sf::st_crs(locations)$wkt)) {
