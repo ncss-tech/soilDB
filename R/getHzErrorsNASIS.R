@@ -36,7 +36,7 @@ getHzErrorsNASIS <- function(strict = TRUE, SS = TRUE, dsn = NULL) {
 	f.test <- aqp::checkHzDepthLogic(f, hzdepths = c('hzdept', 'hzdepb'), idname = 'peiid', fast = TRUE)
 
 	# find bad ones
-	bad.pedon.ids <- as.character(f.test$upedonid[which(f.test$valid == FALSE)])
+	bad.pedon.ids <- as.character(f.test$upedonid[which(!f.test$valid)])
 
 	# now describe the problems
 	b <- f[which(f$pedon_id %in% bad.pedon.ids), c('peiid', 'upedonid','hzdept','hzdepb','hzname')]

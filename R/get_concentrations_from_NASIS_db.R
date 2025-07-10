@@ -29,7 +29,7 @@ get_concentrations_from_NASIS_db <- function(SS=TRUE, stringsAsFactors = NULL, d
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
     q.c <- gsub(pattern = '_View_1', replacement = '', x = q.c, fixed = TRUE)
   }

@@ -203,18 +203,15 @@ get_SDA_coecoclass <- function(method = "None",
   
   res3 <- res2[, list(
     condpct_r = sum(comppct_r, na.rm = TRUE),
-    compnames = paste0(compname[ecoclasstypename %in% .ECOCLASSTYPENAME],
-                       collapse = ", "),
-    unassigned = paste0(compname[!ecoclasstypename %in% .ECOCLASSTYPENAME],
-                        collapse = ", ")
+    compnames = toString(compname[ecoclasstypename %in% .ECOCLASSTYPENAME]),
+    unassigned = toString(compname[!ecoclasstypename %in% .ECOCLASSTYPENAME])
   ), by = c("mukey", "ecoclassid", "ecoclassname")][, rbind(
     .SD[, 1:4],
     data.frame(
       ecoclassid = not_rated_value,
       ecoclassname = not_rated_value,
       condpct_r = sum(condpct_r[nchar(unassigned) > 0 & !unassigned %in% compnames], na.rm = TRUE),
-      compnames = paste0(unassigned[nchar(unassigned) > 0 & !unassigned %in% compnames],
-                         collapse = ",")
+      compnames = toString(unassigned[nchar(unassigned) > 0 & !unassigned %in% compnames])
     )
   ), by = c("mukey")][order(mukey, -condpct_r), ]
   res3 <- res3[nchar(res3$compnames) > 0,]

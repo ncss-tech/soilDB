@@ -70,7 +70,7 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q1 <- gsub(pattern = '_View_1', replacement = '', x = q1, fixed = TRUE)
     q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
   }
@@ -102,7 +102,7 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
     
     ldx <- !d$coiid %in% chs$coiidref
     if (!any(ldx)) {
-      chs <- chs[1:nrow(d),]
+      chs <- chs[seq_len(nrow(d)),]
       chs$coiidref <- d$coiid
     } else {
       chs_null <- chs[0, ][1:sum(ldx), ]
@@ -139,7 +139,7 @@ get_component_diaghz_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   q <- "SELECT coiidref as coiid, featkind, featdept_l, featdept_r, featdept_h, featdepb_l, featdepb_r, featdepb_h, featthick_l, featthick_r, featthick_h FROM codiagfeatures_View_1 AS cdf ORDER BY cdf.coiidref, cdf.featdept_r;"
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -165,7 +165,7 @@ get_component_restrictions_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   q <- "SELECT coiidref as coiid, reskind, resdept_l, resdept_r, resdept_h, resdepb_l, resdepb_r, resdepb_h, resthk_l, resthk_r, resthk_h, reskind, reshard FROM corestrictions_View_1 AS cr ORDER BY cr.coiidref, cr.resdept_r;"
 
   # toggle selected set vs. local DB
-  if(SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -211,17 +211,16 @@ get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
   d <- dbQueryNASIS(channel, q)
 
-  ## TODO: is this a good idea?
   # test for no data
-  if(nrow(d) == 0)
+  if (nrow(d) == 0)
     warning('there are no records in your selected set!', call. = FALSE)
-
+  
   # recode metadata domains
   d <- uncode(d, dsn = dsn)
 
@@ -281,7 +280,7 @@ get_component_cogeomorph_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -315,7 +314,7 @@ get_component_cogeomorph_data_from_NASIS_db2 <- function(SS = TRUE, dsn = NULL) 
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -352,7 +351,7 @@ get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -393,7 +392,7 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -414,7 +413,6 @@ get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
   return(d)
 }
 
-## TODO: convert any multiple entries into a comma delimited string
 # get OtherVeg information for each component
 #' @export
 #' @rdname get_component_data_from_NASIS_db
@@ -433,7 +431,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -502,7 +500,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -524,7 +522,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
       return(data.frame())
 
     # toggle selected set vs. local DB
-    if (SS == FALSE) {
+    if (isFALSE(SS)) {
       q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
     }
 
@@ -609,7 +607,7 @@ get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
   }
 
@@ -617,7 +615,7 @@ get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   d <- dbQueryNASIS(channel, q)
 
   # missing pedon ID suggests records not in the selected set or local database
-  if(nrow(d) > 0 & any(is.na(d$upedonid))) {
+  if(nrow(d) > 0 & anyNA(d$upedonid)) {
     message('some linked pedons not in selected set or local database')
   }
 
@@ -655,7 +653,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
     return(data.frame())
 
   # toggle selected set vs. local DB
-  if (SS == FALSE) {
+  if (isFALSE(SS)) {
     q <- gsub(pattern = '_View_1', replacement = '', x = q, fixed = TRUE)
     q2 <- gsub(pattern = '_View_1', replacement = '', x = q2, fixed = TRUE)
     q3 <- gsub(pattern = '_View_1', replacement = '', x = q3, fixed = TRUE)
@@ -665,7 +663,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
   d <- dbQueryNASIS(channel, q, close = FALSE)
 
   # remove records what are missing horizon data
-  if (fill == FALSE) {
+  if (isFALSE(fill)) {
     d <- d[!is.na(d$chiid), ]
   }
 
@@ -680,7 +678,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
       nullFragsAreZero = nullFragsAreZero
     )
     if (sum(complete.cases(chf)) == 0) {
-      chf <- chf[1:nrow(d),]
+      chf <- chf[seq_len(nrow(d)),]
       chf$chiidref <- d$chiid
     } else {
       ldx <- !d$chiid %in% chf$chiidref
@@ -707,7 +705,7 @@ get_component_horizon_data_from_NASIS_db <- function(SS = TRUE,
     
     # handle NULL result
     if (sum(complete.cases(cha)) == 0) {
-      cha <- cha[1:nrow(d),]
+      cha <- cha[seq_len(nrow(d)),]
       cha$chiidref <- d$chiid
     } else {
       ldx <- !d$chiid %in% cha$chiidref
