@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Get NASIS Metadata (Domain, Column and Choice Lists)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/R/uncode.R" class="external-link"><code>R/uncode.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.8.11/R/uncode.R" class="external-link"><code>R/uncode.R</code></a></small>
       <div class="d-none name"><code>get_NASIS_metadata.Rd</code></div>
     </div>
 
@@ -90,94 +90,94 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">get_NASIS_column_metadata</span><span class="op">(</span><span class="st">"texcl"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       DomainID    DomainName DomainRanked DisplayLabel ChoiceSequence</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12458      189 texture_class            0            1              1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12454      189 texture_class            0            1              2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12438      189 texture_class            0            1              3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12446      189 texture_class            0            1              4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12440      189 texture_class            0            1              5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12448      189 texture_class            0            1              6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12450      189 texture_class            0            1              7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12442      189 texture_class            0            1              8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12444      189 texture_class            0            1              9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12443      189 texture_class            0            1             10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12445      189 texture_class            0            1             11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12439      189 texture_class            0            1             12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12456      189 texture_class            0            1             13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12453      189 texture_class            0            1             14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12452      189 texture_class            0            1             15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12457      189 texture_class            0            1             16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12455      189 texture_class            0            1             17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12451      189 texture_class            0            1             18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12447      189 texture_class            0            1             19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12441      189 texture_class            0            1             20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12449      189 texture_class            0            1             21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       ChoiceValue ChoiceName          ChoiceLabel ChoiceObsolete</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12458          21          c                 Clay              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12454          17         cl            Clay loam              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12438           1        cos          Coarse sand              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12446           9       cosl    Coarse sandy loam              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12440           3         fs            Fine sand              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12448          11        fsl      Fine sandy loam              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12450          13          l                 Loam              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12442           5       lcos    Loamy coarse sand              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12444           7        lfs      Loamy fine sand              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12443           6         ls           Loamy sand              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12445           8       lvfs Loamy very fine sand              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12439           2          s                 Sand              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12456          19         sc           Sandy clay              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12453          16        scl      Sandy clay loam              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12452          15         si                 Silt              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12457          20        sic           Silty clay              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12455          18       sicl      Silty clay loam              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12451          14        sil            Silt loam              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12447          10         sl           Sandy loam              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12441           4        vfs       Very fine sand              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12449          12       vfsl Very fine sandy loam              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                    ChoiceDescription</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12458 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12454 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12438 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12446 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12440 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12448 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12450 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12442 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12444 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12443 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12445 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12439 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12456 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12453 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12452 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12457 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12455 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12451 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12447 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12441 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12449 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       ColumnPhysicalName ColumnLogicalName</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12458              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12454              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12438              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12446              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12440              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12448              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12450              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12442              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12444              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12443              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12445              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12439              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12456              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12453              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12452              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12457              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12455              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12451              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12447              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12441              texcl     texture_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12449              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      DomainID    DomainName DomainRanked DisplayLabel ChoiceSequence</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6363      189 texture_class            0            1              1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6359      189 texture_class            0            1              2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6343      189 texture_class            0            1              3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6351      189 texture_class            0            1              4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6345      189 texture_class            0            1              5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6353      189 texture_class            0            1              6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6355      189 texture_class            0            1              7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6347      189 texture_class            0            1              8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6349      189 texture_class            0            1              9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6348      189 texture_class            0            1             10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6350      189 texture_class            0            1             11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6344      189 texture_class            0            1             12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6361      189 texture_class            0            1             13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6358      189 texture_class            0            1             14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6357      189 texture_class            0            1             15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6362      189 texture_class            0            1             16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6360      189 texture_class            0            1             17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6356      189 texture_class            0            1             18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6352      189 texture_class            0            1             19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6346      189 texture_class            0            1             20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6354      189 texture_class            0            1             21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ChoiceValue ChoiceName          ChoiceLabel ChoiceObsolete</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6363          21          c                 Clay              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6359          17         cl            Clay loam              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6343           1        cos          Coarse sand              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6351           9       cosl    Coarse sandy loam              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6345           3         fs            Fine sand              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6353          11        fsl      Fine sandy loam              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6355          13          l                 Loam              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6347           5       lcos    Loamy coarse sand              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6349           7        lfs      Loamy fine sand              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6348           6         ls           Loamy sand              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6350           8       lvfs Loamy very fine sand              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6344           2          s                 Sand              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6361          19         sc           Sandy clay              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6358          16        scl      Sandy clay loam              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6357          15         si                 Silt              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6362          20        sic           Silty clay              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6360          18       sicl      Silty clay loam              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6356          14        sil            Silt loam              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6352          10         sl           Sandy loam              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6346           4        vfs       Very fine sand              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6354          12       vfsl Very fine sandy loam              0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ColumnPhysicalName ColumnLogicalName</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6363              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6359              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6343              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6351              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6345              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6353              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6355              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6347              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6349              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6348              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6350              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6344              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6361              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6358              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6357              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6362              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6360              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6356              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6352              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6346              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6354              texcl     texture_class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                   ChoiceDescription</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6363 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6359 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6343 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6351 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6345 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6353 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6355 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6347 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6349 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6348 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6350 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6344 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6361 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6358 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6357 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6362 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6360 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6356 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6352 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6346 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6354 Reference:  Soil Survey Manual, Agricultural Handbook No. 18, Soil Survey Staff, USDA, Natural Resources Conservation Service.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
