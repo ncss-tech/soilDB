@@ -83,7 +83,7 @@ OSDquery <- function(everything = NULL, mlra='', taxonomic_class='', typical_ped
     ## searching by sections
     
     # build parameters list
-    parameters=list(
+    parameters <- list(
       json = 1,
       mlra = mlra,
       taxonomic_class = taxonomic_class, 
@@ -105,7 +105,7 @@ OSDquery <- function(everything = NULL, mlra='', taxonomic_class='', typical_ped
     ## searching entire OSD text
     
     # build parameters list
-    parameters=list(
+    parameters <- list(
       json = 1,
       query = everything,
       mlra = mlra

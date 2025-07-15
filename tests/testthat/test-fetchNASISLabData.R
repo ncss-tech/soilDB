@@ -39,9 +39,9 @@ test_that("fetchNASISLabData returns reasonable data", {
 
   # expected outcomes
   expect_true(inherits(x, 'SoilProfileCollection'))
-  expect_equal(nrow(aqp::site(x)) > 0, TRUE)
-  expect_equal(aqp::nrow(x) > 0, TRUE)
-  expect_equal(aqp::idname(x), 'ncsspedonlabdataiid')
-  expect_equal(aqp::hzidname(x), 'ncsslayerlabdataiid')
-  expect_equal(aqp::horizonDepths(x), c("hzdept", "hzdepb"))
+  expect_gt(nrow(aqp::site(x)), 0)
+  expect_gt(nrow(aqp::horizons(x)), 0)
+  expect_equivalent(aqp::idname(x), 'ncsspedonlabdataiid')
+  expect_equivalent(aqp::hzidname(x), 'ncsslayerlabdataiid')
+  expect_equivalent(aqp::horizonDepths(x), c("hzdept", "hzdepb"))
 })

@@ -2,9 +2,6 @@
 #' 
 #' Get lab pedon-level data from a local NASIS database.
 #' 
-#' This function currently works only on Windows, and requires a 'nasis_local'
-#' ODBC connection.
-#' 
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: TRUE)
 #' 

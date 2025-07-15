@@ -14,12 +14,12 @@ test_that("siblings() returns reasonable data", {
   
   # standard request
   expect_true(inherits(x, 'list'))
-  expect_equal(length(x), 2)
+  expect_length(x, 2)
 
   expect_true(inherits(x$sib, 'data.frame'))
   expect_true(inherits(x$sib.data, 'data.frame'))
 
-  expect_equal(names(x$sib), c('series', 'sibling', 'majcompflag', 'n'))
+  expect_named(x$sib, c('series', 'sibling', 'majcompflag', 'n'))
 })
 
 
@@ -50,13 +50,13 @@ test_that("siblings(..., cousins = TRUE)", {
   skip_if(is.null(x))
     
   expect_true(inherits(x, 'list'))
-  expect_equal(length(x), 2)
+  expect_length(x, 2)
   
   expect_true(inherits(x$sib, 'data.frame'))
   expect_true(inherits(x$cousins, 'data.frame'))
   
-  expect_equal(names(x$sib), c('series', 'sibling', 'majcompflag', 'n'))
-  expect_equal(names(x$cousins), c('series', 'sibling', 'majcompflag', 'n'))
+  expect_named(x$sib, c('series', 'sibling', 'majcompflag', 'n'))
+  expect_named(x$cousins, c('series', 'sibling', 'majcompflag', 'n'))
 })
 
 

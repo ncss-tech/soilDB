@@ -165,14 +165,12 @@ fetchSoilGrids <- function(x,
   locations <- x
   spatial_input <- FALSE
   
-  if (inherits(locations, 'sf') || inherits(locations, 'Spatial')) {
-    if (requireNamespace("sf")) {
-      if (inherits(locations, 'Spatial') ||
-          inherits(locations, 'SpatVector')) {
-        # convert sp -> sf & terra -> sf
-        locations <- sf::st_as_sf(locations)
-      }
-    }
+  if (!requireNamespace("sf")) {
+    stop("package 'sf' is required")
+  }
+  
+  if (inherits(locations, c("Spatial", "SpatVector"))) {
+    locations <- sf::st_as_sf(locations)
   }
   
   if (grid) {
@@ -187,16 +185,13 @@ fetchSoilGrids <- function(x,
                           ...,
                           verbose = verbose))
   } else if (!inherits(locations, 'data.frame')) {
-    if (inherits(locations, 'SpatVector')) {
-      locations <- sf::st_as_sf(locations)
-    }
     # only supporting POINT geometry for now
     if (inherits(sf::st_geometry(locations), 'sfc_POINT')) {
       if (is.na(sf::st_crs(locations)$wkt)) {
         message("CRS is missing; assuming WGS84 decimal degrees (EPSG:4326)")
         sf::st_crs(locations) <- sf::st_crs(4326)
       }
-      locations <- data.frame(id = 1:nrow(locations),
+      locations <- data.frame(id = seq_len(nrow(locations)),
                               do.call('rbind', sf::st_geometry(locations)))
       spatial_input <- TRUE
       colnames(locations) <- c("id", "lon", "lat")
@@ -210,7 +205,7 @@ fetchSoilGrids <- function(x,
     loc.names <- c("id", "lat", "lon")
   }
   
-  if (length(loc.names) != 3 | any(!loc.names %in% colnames(locations))) {
+  if (length(loc.names) != 3 | !all(loc.names %in% colnames(locations))) {
     stop("argument `loc.names` must contain three column names: site ID, latitude and longitude", call. = FALSE)
   }
   
@@ -259,14 +254,14 @@ fetchSoilGrids <- function(x,
     }
     
     # add handling for messages from api about erroneous input
-    if (!is.null(jres$detail)) {
-      if (!is.null(jres$detail$msg)) {
-        if (!is.null(jres$detail$loc) && length(jres$detail$loc) > 0)
-          message("Check ", 
-                  paste0(jres$detail$loc[[1]], collapse = " "), 
-                  " (", loc.names[1], ":", locations[[loc.names[1]]][i], "); ",
-                  jres$detail$msg)
-      }
+    if (!is.null(jres$detail) &&
+        is.null(jres$detail$msg) &&
+        !is.null(jres$detail$loc) &&
+        length(jres$detail$loc) > 0) {
+      message("Check ", 
+              paste(jres$detail$loc[[1]], collapse = " "), 
+              " (", loc.names[1], ":", locations[[loc.names[1]]][i], "); ",
+              jres$detail$msg)
     }
     
     # create new horizon data, merge in each property using standard depth labels
@@ -291,7 +286,7 @@ fetchSoilGrids <- function(x,
     data.factor <- data.factors[data.types]
     hz.data <- hz.data0
     all_x <- FALSE
-    for (d in 1:length(data.types)) {
+    for (d in seq_along(data.types)) {
       if (nrow(hz.data0) > 0 && !inherits(jres[[1]], 'try-error')) {
         hz.data <- merge(
             merge(hz.data0, hz.data, by = c("label", "id", "latitude", "longitude"),
@@ -344,16 +339,16 @@ fetchSoilGrids <- function(x,
   
   # merge the rest of the sf object into the site table 
   if (spatial_input) {
-    aqp::site(spc) <- cbind(id = 1:nrow(x), sf::st_drop_geometry(x))
+    aqp::site(spc) <- cbind(id = seq_len(nrow(x)), sf::st_drop_geometry(x))
   }
   
   if (ncol(aqp::horizons(spc)) == 5) {
-    res <- try(stop("SoilGrids API is not accessible", call. = FALSE), silent = !verbose)
-    return(invisible(res))
     # this occurs if all requests fail to retrieve data/JSON response
+    return(invisible(try(stop("SoilGrids API is not accessible", call. = FALSE), silent = !verbose)))
+  } else {
+    return(spc)
+    
   }
-  
-  return(spc)
 }
 
 .extractSGLayerProperties <- function(jsonres, x, scaling.factor = 1) {

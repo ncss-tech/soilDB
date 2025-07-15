@@ -251,7 +251,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     
     res.size <- round(object.size(res) / 1024 / 1024, 2)
     res.rows <- sum(sapply(res, nrow), na.rm = TRUE)
-    message(paste(res.rows, ' records (', res.size, ' Mb transferred)', sep = ''))
+    message(paste0(res.rows, ' records (', res.size, ' Mb transferred)'))
     
   } else message('query returned no data')
   
@@ -278,7 +278,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   if (length(d.cols) > 1 && code %in% c('TAVG', 'TMIN', 'TMAX', 'PRCP', 'PREC',
                                         'SNWD', 'WTEQ', 'WDIRV', 'WSPDV', 'LRADT')) {
     message(paste0('multiple sensors per site [site ', d$Site[1], '] ',
-                   paste0(names(d)[d.cols], collapse = ',')))
+                   paste(names(d)[d.cols], collapse = ',')))
   }
   
   # coerce all values to double (avoids data.table warnings)
@@ -316,7 +316,7 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
   if (any(tab)) {
     multiple.sensor.ids <- as.character(sensors.per.depth$sensor.id[which(sensors.per.depth$depth %in% names(tab))])
     message(paste0('multiple sensors per depth [site ', d$Site[1], '] ',
-                   paste(multiple.sensor.ids, collapse = ', ')))
+                   toString(multiple.sensor.ids)))
   }
   
   # multiple rows / day, remove NA in sensor values
@@ -579,7 +579,7 @@ SCAN_site_metadata <- function(site.code = NULL) {
   
   # all stations
   if (is.null(site.code)) {
-    idx <- 1:nrow(SCAN_SNOTEL_metadata)
+    idx <- seq_len(nrow(SCAN_SNOTEL_metadata))
   } else {
     
     # ensure order of site.code is preserved, if valid
@@ -591,7 +591,7 @@ SCAN_site_metadata <- function(site.code = NULL) {
     # if there are no valid site codes, return all stations
     if(length(idx) < 1) {
       message('no valid site codes specified, returning all stations')
-      idx <- 1:nrow(SCAN_SNOTEL_metadata)
+      idx <- seq_len(nrow(SCAN_SNOTEL_metadata))
     }
   }
   

@@ -39,8 +39,8 @@ test_that("fetchSOLUS works", {
   )
   
   expect_length(res, 2)
-  expect_equal(terra::ncell(res$grid), 3417)
-  expect_equal(length(res$spc), 3417)
+  expect_equivalent(terra::ncell(res$grid), 3417)
+  expect_length(res$spc, 3417)
   
 })
 
@@ -69,7 +69,7 @@ test_that("virtual and out-of-bounds requests", {
   
   # virtual raster covers large area
   pe <- terra::as.polygons(tmp, ext = TRUE)
-  expect_true(terra::expanse(pe, unit = "km") > 1e7)
+  expect_gt(terra::expanse(pe, unit = "km"), 1e7)
   
   # extract corner point and buffer 500km
   te1 <- terra::buffer(terra::as.points(terra::simplifyGeom(pe))[1], 5e5)

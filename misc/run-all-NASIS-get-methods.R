@@ -23,7 +23,7 @@ f <- read.table(text = "R/fetchNASIS.R
                         R/get_labpedon_data_from_NASIS_db.R
                         R/get_phfmp_from_NASIS_db.R
                         R/get_phlabresults_data_from_NASIS_db.R
-                        R/get_projectmapunit_from_NASIS.R
+                        R/get_project_from_NASIS.R
                         R/get_site_data_from_NASIS_db.R
                         R/get_soilseries_from_NASIS.R
                         R/get_text_notes_from_NASIS_db.R
@@ -39,21 +39,22 @@ library(soilDB)
 # path to data source (NULL = use ODBC to local nasis,
 #                     otherwise path to SQLite)
 dsn <- "misc/testStatic.sqlite"
-# 
-# # RUN IF NEEDED:
-# # dsn <- "misc/testStatic.sqlite"
+# RUN IF NEEDED:
+# dsn <- "misc/testStatic.sqlite"
 # createStaticNASIS(tables = c(get_NASIS_table_name_by_purpose(SS = TRUE),
 #                              get_NASIS_table_name_by_purpose(SS = FALSE)),
 #                   dsn = NULL, output_path = dsn)
 
 # Function to load all function names in package, run them using SS and dsn as specified
-test_local_NASIS <- function(SS = FALSE, dsn = NULL) {
+test_local_NASIS <- function(SS = FALSE, dsn = NULL, ...) {
 
   # get package function names
   fnames <- sapply(f, function(x) {
     names(as.list(evalSource(x, package = "soilDB")))
   })
 
+  args <- list(...)
+  
   # iterate over functions by name
   test <- lapply(fnames, function(fname) {
 
@@ -71,7 +72,10 @@ test_local_NASIS <- function(SS = FALSE, dsn = NULL) {
                "local_NASIS_defined" = try(TESTFUN(dsn = dsn)),
                "get_soilseries_from_NASIS" = try(TESTFUN(dsn = dsn)),
                "get_soilseries_from_NASISWebReport" = NULL, 
-               try(TESTFUN(SS = SS, dsn = dsn)) )
+               "get_competing_soilseries_from_NASIS" = try(TESTFUN(SS = SS, 
+                                                                   dsn = dsn, 
+                                                                   x = "fine-loamy, mixed, active, thermic ultic haploxeralfs")),
+               try(TESTFUN(SS = SS, dsn = dsn)))
       })
     })
 

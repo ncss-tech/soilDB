@@ -50,7 +50,7 @@ test_that("fetchSCAN() returns the right kind of data", {
   
   # empty results should have the same data type and dimensions
   expect_true(inherits(y, 'list'))
-  expect_equal(nrow(y$metadata), 1)
+  expect_equivalent(nrow(y$metadata), 1)
   
   expect_true(inherits(y$STO, 'data.frame'))
   expect_true(ncol(y$STO) == 9)
@@ -72,5 +72,5 @@ test_that("timezone check", {
   # default target timezone is US/Central, including CDT (-0500) and CST (-0600)
   .tz <- table(format(z$SMS$datetime, format = '%z'))
   
-  expect_equal(names(.tz), c("-0500", "-0600"))
+  expect_named(.tz, c("-0500", "-0600"))
 })

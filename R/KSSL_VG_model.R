@@ -1,4 +1,3 @@
-
 # define van Genuchten model as a function
 # this is tailored to the parameters stored in our KSSL data
 # https://en.wikipedia.org/wiki/Water_retention_curve
@@ -6,15 +5,11 @@
   theta_r + ((theta_s - theta_r) / ((1 + (alpha * phi) ^ n) ^ (1 - 1 / n)))
 }
 
-
-
-
 ## notes: Rosetta units for alpha and npar are log10(1/cm) and log10([-])
 # VG_params: table of VG parameters from KSSL / Rosetta:  alpha and npar are in log10 form
 # phi_min: lower limit for water potential in kPa
 # phi_max: upper limit for water potential in kPa
 # pts: number of points to include in curve
-
 
 #' @title Develop a Water Retention Curve from KSSL Data
 #' 
@@ -56,8 +51,6 @@
 #' 
 # 'van Genuchten, M.Th. (1980). "A closed-form equation for predicting the hydraulic conductivity of unsaturated soils". Soil Science Society of America Journal. 44 (5): 892-898. 
 #' 
-#' 
-#' 
 #' @export
 #'
 #' @examples
@@ -77,8 +70,8 @@
 KSSL_VG_model <- function(VG_params, phi_min = 10^-6, phi_max = 10^8, pts = 100) {
   
   # sanity check, expected columns
-  if( any(! c('theta_r', 'theta_s', 'alpha', 'npar') %in% names(VG_params)) ) {
-    message('one or more required column is missing')
+  if (!all(c('theta_r', 'theta_s', 'alpha', 'npar') %in% names(VG_params))) {
+    message('one or more required columns is missing')
     return(list(VG_curve = NULL, VG_inverse_function = NULL))
   }
   
@@ -87,15 +80,14 @@ KSSL_VG_model <- function(VG_params, phi_min = 10^-6, phi_max = 10^8, pts = 100)
   
   # sanity check: no NA allowed
   # return NULL if present
-  if(any(is.na(VG_params))) {
+  if (anyNA(VG_params)) {
     message('one or more required value is NA')
     return(list(VG_curve = NULL, VG_inverse_function = NULL))
   }
     
-  
   # useful range in kPa suctions
-  phi <- 10^seq(log(phi_min, base=10), log(phi_max, base=10), length.out = pts)
-  m <- data.frame(phi=phi)
+  phi <- 10^seq(log(phi_min, base = 10), log(phi_max, base = 10), length.out = pts)
+  m <- data.frame(phi = phi)
   
   # Rosetta units for alpha and npar are 1/cm and [-]
   # convert kPa to cm of H20
@@ -121,8 +113,9 @@ KSSL_VG_model <- function(VG_params, phi_min = 10^-6, phi_max = 10^8, pts = 100)
   vg.inv <- splinefun(m$theta, m$phi)
   
   # return curve and spline function
-  return(list(VG_curve=m, VG_function=vg.fwd, VG_inverse_function=vg.inv))
+  return(list(
+    VG_curve = m,
+    VG_function = vg.fwd,
+    VG_inverse_function = vg.inv
+  ))
 }
-
-
-
