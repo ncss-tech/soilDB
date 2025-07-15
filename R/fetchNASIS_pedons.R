@@ -91,7 +91,6 @@
     hz_data$hzdepb[top.eq.bottom.idx] <- hz_data$hzdepb[top.eq.bottom.idx] + 1
   }
 
-  #  aqp uses data.table for efficient logic checking
   filled.ids <- character(0)
   if (rmHzErrors) {
 
@@ -152,15 +151,19 @@
   aqp::horizons(hz_data) <- color_data
 
   # check for empty fragment summary and nullFragsAreZero
-  if(nullFragsAreZero & all(is.na(unique(extended_data$frag_summary$phiid)))) {
+  if (nullFragsAreZero && 
+      all(is.na(unique(extended_data$frag_summary$phiid))) && 
+      nrow(extended_data$frag_summary) != 0) {
     extended_data$frag_summary <- cbind(phiid = unique(hz_data$phiid), extended_data$frag_summary[, -1])
   }
   
   ## join hz + fragment summary
   aqp::horizons(hz_data) <- extended_data$frag_summary
 
-  # check for empty artifact summary and nullFragsAreZerod
-  if (nullFragsAreZero & all(is.na(unique(extended_data$art_summary$phiid)))) {
+  # check for empty artifact summary and nullFragsAreZero
+  if (nullFragsAreZero && 
+      all(is.na(unique(extended_data$art_summary$phiid))) && 
+      nrow(extended_data$art_summary) != 0) {
     extended_data$art_summary <- cbind(phiid = unique(hz_data$phiid), extended_data$art_summary[, -1])
   }
   

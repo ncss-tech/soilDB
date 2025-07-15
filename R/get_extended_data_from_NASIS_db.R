@@ -228,15 +228,15 @@ FROM perestrictions_View_1 As prf
 	## uncode the ones that need that here
 	d.diagnostic <- uncode(d.diagnostic, dsn = dsn)
 	d.restriction <- uncode(d.restriction, dsn = dsn)
-	d.rf.data    <- uncode(d.rf.data, dsn = dsn)
-	d.art.data  <-  uncode(d.art.data, dsn = dsn)
-	d.hz.texmod  <- uncode(d.hz.texmod, dsn = dsn)
-	d.geomorph  <- uncode(d.geomorph, dsn = dsn)
+	d.rf.data <- uncode(d.rf.data, dsn = dsn)
+	d.art.data <- uncode(d.art.data, dsn = dsn)
+	d.hz.texmod <- uncode(d.hz.texmod, dsn = dsn)
+	d.geomorph <- uncode(d.geomorph, dsn = dsn)
 	# ensure that taxhistory is always character
 	d.taxhistory[] <- lapply(uncode(d.taxhistory, dsn = dsn), 
 	                         function(x) if (is.factor(x)) as.character(x) else x)
-	d.sitepm     <- uncode(d.sitepm, dsn = dsn)
-	d.structure  <- uncode(d.structure, dsn = dsn)
+	d.sitepm <- uncode(d.sitepm, dsn = dsn)
+	d.structure <- uncode(d.structure, dsn = dsn)
 	d.hz.desgn <- uncode(d.hz.desgn, dsn = dsn)
 	d.hz.dessuf <- uncode(d.hz.dessuf, dsn = dsn)
 
@@ -303,7 +303,6 @@ FROM perestrictions_View_1 As prf
 	    nm <- names(d.rf.summary)
 	    nm <- nm[grep('phiid', nm, fixed = TRUE, invert = TRUE)]
 
-	    # a for-loop seems fine
 	    for (v in nm) {
 	      d.rf.summary[[v]] <- ifelse(is.na(d.rf.summary[[v]]), 0, d.rf.summary[[v]])
 	    }
@@ -323,7 +322,6 @@ FROM perestrictions_View_1 As prf
 	  nm <- names(d.art.summary)
 	  nm <- nm[grep("phiid", nm, fixed = TRUE, invert = TRUE)]
 
-	  # a for-loop seems fine
 	  for (v in nm) {
 	    d.art.summary[[v]] <- ifelse(is.na(d.art.summary[[v]]), 0, d.art.summary[[v]])
 	  }
