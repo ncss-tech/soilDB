@@ -46,7 +46,7 @@ preferred-citation:
     given-names: Andrew
     email: andrew.g.brown@usda.gov
     orcid: https://orcid.org/0000-0002-4565-533X
-  notes: R package version 2.8.9
+  notes: R package version 2.8.11
   url: https://CRAN.R-project.org/package=soilDB
   year: '2025'
 repository: https://CRAN.R-project.org/package=soilDB
@@ -58,7 +58,6 @@ contact:
   email: andrew.g.brown@usda.gov
   orcid: https://orcid.org/0000-0002-4565-533X
 keywords:
-- cran
 - kssl
 - nasis
 - nrcs
