@@ -487,13 +487,17 @@ get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
   }
 
   # plot tree site index summary data
-  q.pltsis <- "SELECT siteiid, siteobsiid, vegplotiid, pltsis.seqnum, plantiid, plantsym, plantsciname, plantnatvernm, plantnativity, siteindexbase, speciestreecount, siteindexplotave, speciesdbhaverage, treeageave, treecanopyhttopave, plottreesiteindsumiid
+  q.pltsis <- "SELECT siteiid, siteobsiid, vegplotiid, pltsis.seqnum, plantiid,
+                      plantsym, plantsciname, plantnatvernm, plantnativity,
+                      siteindexbase, siteindexagebase, speciestreecount, siteindexplotave, 
+                      speciesdbhaverage, treeageave, treecanopyhttopave, plottreesiteindsumiid
 
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
   INNER JOIN vegplot_View_1 AS v on v.siteobsiidref=so.siteobsiid
   LEFT JOIN plottreesiteindexsummary_View_1 AS pltsis ON pltsis.vegplotiidref=v.vegplotiid
+  LEFT JOIN siteindexcurve AS sic ON sic.siteindexcurveiid = pltsis.siteindexcurveiidref
   LEFT JOIN plant ON plant.plantiid=pltsis.plantiidref
   ORDER BY s.siteiid;"
 

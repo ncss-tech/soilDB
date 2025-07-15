@@ -164,6 +164,7 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "n
       "vegtransectplantsummary",
       "plottreesiteindexsummary",
       "plottreesiteindexdetails",
+      "siteindexcurve",
       "comparativeyielddata",
       "comparativeyieldrefquadrats",
       "pointplantcoverdetails",
