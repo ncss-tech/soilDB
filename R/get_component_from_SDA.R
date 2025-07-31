@@ -863,7 +863,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
         d.chfrags[idx] <- lapply(d.chfrags[idx], function(x) ifelse(is.na(x), 0, x))
       }
   
-      d.chorizon <- merge(d.chorizon, d.chfrags, all.x = TRUE, by = "chkey", sort = FALSE)
+      d.chorizon <- merge(d.chorizon, d.chfrags, all.x = TRUE, by = "chkey", sort = FALSE, incomparables = NA)
   
     }
   # } else {
