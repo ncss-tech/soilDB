@@ -204,10 +204,14 @@ createSSURGO <- function(filename = NULL,
   
   if (missing(conn) || is.null(conn)) {
     # delete existing file if overwrite=TRUE
-    if (isTRUE(overwrite) && file.exists(filename)) {
-      file.remove(filename)
+    if (file.exists(filename)) {
+      if (isTRUE(overwrite)) {
+        file.remove(filename)
+      } else {
+        stop("File '", filename,"' exists and overwrite = FALSE", call. = FALSE)
+      }
     }
-  } 
+  }
   
   # DuckDB has special spatial format, so it gets custom handling for
   IS_DUCKDB <- inherits(conn, "duckdb_connection")
@@ -416,7 +420,7 @@ createSSURGO <- function(filename = NULL,
           }
           
           try({
-            if (i == 1) {
+            if (i == 1 && overwrite) {
               DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = TRUE)
             } else {
               DBI::dbWriteTable(conn, mstab_lut[x], y, append = TRUE)
