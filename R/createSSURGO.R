@@ -292,7 +292,7 @@ createSSURGO <- function(filename = NULL,
           
           .st_write_sf_conn <-  function(x, dsn, layer, j, overwrite) {
              if (j == 1 && isFALSE(append)) {
-              sf::write_sf(x, dsn = dsn, layer = layer, delete_layer = TRUE, ...)
+              sf::write_sf(x, dsn = dsn, layer = layer, delete_layer = overwrite, ...)
             } else {
               sf::write_sf(x, dsn = dsn, layer = layer, append = TRUE, ...)
             }
@@ -330,9 +330,9 @@ createSSURGO <- function(filename = NULL,
           if (IS_GPKG && missing(conn)) {
             # writing to SQLiteConnection fails to create proper gpkg_contents entries
             # so use the path for GPKG only
-            .st_write_sf_conn(shp, filename, lnm, j)
+            .st_write_sf_conn(shp, filename, lnm, j, overwrite)
           } else {
-            .st_write_sf_conn(shp, conn, lnm, j)
+            .st_write_sf_conn(shp, conn, lnm, j, overwrite)
           }
         }
         NULL
@@ -433,7 +433,7 @@ createSSURGO <- function(filename = NULL,
           
           try({
             if (i == 1 && isFALSE(append)) {
-              DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = TRUE)
+              DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = overwrite)
             } else {
               DBI::dbWriteTable(conn, mstab_lut[x], y, append = TRUE)
             }
