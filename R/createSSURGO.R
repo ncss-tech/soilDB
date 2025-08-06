@@ -287,8 +287,8 @@ createSSURGO <- function(filename = NULL,
           colnames(shp) <- tolower(colnames(shp))
           sf::st_geometry(shp) <- "geometry"
           
-          .st_write_sf_conn <-  function(x, dsn, layer, j) {
-            if (j == 1) {
+          .st_write_sf_conn <-  function(x, dsn, layer, j, overwrite) {
+             if (j == 1) {
               sf::write_sf(x, dsn = dsn, layer = layer, delete_layer = TRUE, ...)
             } else {
               sf::write_sf(x, dsn = dsn, layer = layer, append = TRUE, ...)
@@ -429,7 +429,7 @@ createSSURGO <- function(filename = NULL,
           }
           
           try({
-            if (i == 1 && overwrite) {
+            if (i == 1) {
               DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = TRUE)
             } else {
               DBI::dbWriteTable(conn, mstab_lut[x], y, append = TRUE)
@@ -449,7 +449,8 @@ createSSURGO <- function(filename = NULL,
             q <- sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
                          paste0('PK_', mstab_lut[x]), mstab_lut[x], 
                          paste(indexPK, collapse = ","))
-            DBI::dbExecute(conn, q)
+            if (DBI::dbExistsTable(conn, mstab_lut[x]))
+              DBI::dbExecute(conn, q)
           }, silent = quiet)
         }
         
@@ -459,7 +460,8 @@ createSSURGO <- function(filename = NULL,
             try({
               q <- sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
                            paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i])
-              DBI::dbExecute(conn, q)
+              if (DBI::dbExistsTable(conn, mstab_lut[x]))
+                DBI::dbExecute(conn, q)
             }, silent = quiet)
           }
         }
@@ -471,8 +473,10 @@ createSSURGO <- function(filename = NULL,
             try(.gpkg_create_contents(conn))
           }
           # update gpkg_contents table entry
-          try(.gpkg_delete_contents(conn, mstab_lut[x]))
-          try(.gpkg_add_contents(conn, mstab_lut[x]))
+          if (DBI::dbExistsTable(conn, mstab_lut[x])) {
+            try(.gpkg_delete_contents(conn, mstab_lut[x]))
+            try(.gpkg_add_contents(conn, mstab_lut[x]))
+          }
         }
         
         # TODO: other foreign keys/relationships? ALTER TABLE/ADD CONSTRAINT not available in SQLite
