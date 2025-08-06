@@ -170,8 +170,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #'   area.
 #' @param maxruledepth _integer_. Maximum rule depth for `"cointerp"` table. Default `0` includes only
 #'   shallowest ratings for smaller database size.
-#' @param overwrite _logical_. Overwrite existing layers? Default `FALSE` will append to existing
-#'   tables/layers.
+#' @param overwrite _logical_. Overwrite existing layers? Default: `FALSE`
 #' @param header _logical_. Passed to `read.delim()` for reading pipe-delimited (`|`) text files
 #'   containing tabular data.
 #' @param quiet _logical_. Suppress messages and other output from database read/write operations?

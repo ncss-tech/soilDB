@@ -52,8 +52,7 @@ area.}
 \item{maxruledepth}{\emph{integer}. Maximum rule depth for \code{"cointerp"} table. Default \code{0} includes only
 shallowest ratings for smaller database size.}
 
-\item{overwrite}{\emph{logical}. Overwrite existing layers? Default \code{FALSE} will append to existing
-tables/layers.}
+\item{overwrite}{\emph{logical}. Overwrite existing layers? Default: \code{FALSE}}
 
 \item{header}{\emph{logical}. Passed to \code{read.delim()} for reading pipe-delimited (\code{|}) text files
 containing tabular data.}
