@@ -66,6 +66,7 @@ Postgres or PostGIS
 <span>  dissolve_field <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  maxruledepth <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  append <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  header <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -125,8 +126,11 @@ shallowest ratings for smaller database size.</p></dd>
 
 
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
-<dd><p><em>logical</em>. Overwrite existing layers? Default <code>FALSE</code> will append to existing
-tables/layers.</p></dd>
+<dd><p><em>logical</em>. Overwrite existing layers? Default: <code>FALSE</code></p></dd>
+
+
+<dt id="arg-append">append<a class="anchor" aria-label="anchor" href="#arg-append"></a></dt>
+<dd><p><em>logical</em>. Append to existing layers? Default: <code>FALSE</code></p></dd>
 
 
 <dt id="arg-header">header<a class="anchor" aria-label="anchor" href="#arg-header"></a></dt>
