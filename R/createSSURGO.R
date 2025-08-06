@@ -227,7 +227,7 @@ createSSURGO <- function(filename = NULL,
   }
   
   if (!IS_DUCKDB && !requireNamespace("sf")) {
-      stop("package `sf` is required to write spatial datasets to DBI data sources", call. = FALSE)
+    stop("package `sf` is required to write spatial datasets to DBI data sources", call. = FALSE)
   } 
   
   f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE)
@@ -246,6 +246,20 @@ createSSURGO <- function(filename = NULL,
     f.shp <- f.shp[idx]
     include_spatial <- TRUE
   }
+  
+  if (missing(conn) || is.null(conn)) {
+    
+    if (!requireNamespace("RSQLite")) {
+      stop("package 'RSQLite' is required (when `conn` is not specified)", call. = FALSE)
+    }
+    
+    conn <- DBI::dbConnect(DBI::dbDriver("SQLite"),
+                           filename, 
+                           loadable.extensions = TRUE)
+    
+    # if user did not specify their own connection, close on exit
+    on.exit(DBI::dbDisconnect(conn))
+  } 
   
   if (nrow(shp.grp) >= 1 && ncol(shp.grp) == 3 && include_spatial) {
     f.shp.grp <- split(f.shp, list(feature = shp.grp[, 1], geom = shp.grp[, 2]), drop = TRUE)
@@ -323,20 +337,6 @@ createSSURGO <- function(filename = NULL,
     }
   }
   
-  if (missing(conn) || is.null(conn)) {
-    
-    if (!requireNamespace("RSQLite")) {
-      stop("package 'RSQLite' is required (when `conn` is not specified)", call. = FALSE)
-    }
-    
-    conn <- DBI::dbConnect(DBI::dbDriver("SQLite"),
-                           filename, 
-                           loadable.extensions = TRUE)
-    
-    # if user did not specify their own connection, close on exit
-    on.exit(DBI::dbDisconnect(conn))
-  } 
-  
   # create and add combined tabular datasets
   f.txt <- f[grepl(".*\\.txt$", f)]
   txt.grp <- gsub("\\.txt", "", basename(f.txt))
@@ -344,8 +344,10 @@ createSSURGO <- function(filename = NULL,
   # explicit handling special feature descriptions -> "featdesc" table
   txt.grp[grepl("soilsf_t_", txt.grp)] <- "featdesc"
   txt.grp[grepl("soil_metadata_", txt.grp)] <- "soil_metadata"
-
+  txt.first <- unique(txt.grp[grep("^sdv|^ms", txt.grp)])
+  
   f.txt.grp <- split(f.txt, txt.grp)
+  f.txt.grp[txt.first] <- lapply(f.txt.grp[txt.first], .subset, 1)
   
   # get table, column, index lookup tables
   mstabn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstab", "mdstattabs", "MetadataTable"))[1]]][[1]]
