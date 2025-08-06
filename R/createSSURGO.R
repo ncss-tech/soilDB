@@ -171,6 +171,7 @@ downloadSSURGO <- function(WHERE = NULL,
 #' @param maxruledepth _integer_. Maximum rule depth for `"cointerp"` table. Default `0` includes only
 #'   shallowest ratings for smaller database size.
 #' @param overwrite _logical_. Overwrite existing layers? Default: `FALSE`
+#' @param append _logical_. Append to existing layers? Default: `FALSE`
 #' @param header _logical_. Passed to `read.delim()` for reading pipe-delimited (`|`) text files
 #'   containing tabular data.
 #' @param quiet _logical_. Suppress messages and other output from database read/write operations?
@@ -193,6 +194,7 @@ createSSURGO <- function(filename = NULL,
                          dissolve_field = NULL,
                          maxruledepth = 0,
                          overwrite = FALSE,
+                         append = FALSE,
                          header = FALSE,
                          quiet = TRUE,
                          ...) {
@@ -202,12 +204,14 @@ createSSURGO <- function(filename = NULL,
   }
   
   if (missing(conn) || is.null(conn)) {
-    # delete existing file if overwrite=TRUE
+    # delete existing file if overwrite=TRUE; does _not_ apply to DBIConnection
     if (file.exists(filename)) {
-      if (isTRUE(overwrite)) {
-        file.remove(filename)
-      } else {
-        stop("File '", filename,"' exists and overwrite = FALSE", call. = FALSE)
+      if (isTRUE(overwrite) && isFALSE(append)) {
+        file.remove(filename)      
+      } else if (isTRUE(overwrite) && isTRUE(append)) {
+        stop("Both overwrite=TRUE and append=TRUE; set only one argument to TRUE", call. = FALSE)
+      } else if (isFALSE(overwrite) && isFALSE(append)) {
+        stop("File '", filename,"' exists and overwrite=FALSE; use append=TRUE to append to an existing file", call. = FALSE)
       }
     }
   }
@@ -272,7 +276,7 @@ createSSURGO <- function(filename = NULL,
         lnm <- layer_names[match(gsub(".*soil([musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j]),
                                  names(layer_names))]
         if (IS_DUCKDB) {
-          if (j == 1) {
+          if (j == 1 && isFALSE(append)) {
             DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s;", lnm))
             DBI::dbExecute(conn, sprintf("CREATE TABLE %s AS SELECT * FROM ST_Read('%s');",
                                 lnm, f.shp.grp[[i]][j]))
@@ -287,7 +291,7 @@ createSSURGO <- function(filename = NULL,
           sf::st_geometry(shp) <- "geometry"
           
           .st_write_sf_conn <-  function(x, dsn, layer, j, overwrite) {
-             if (j == 1) {
+             if (j == 1 && isFALSE(append)) {
               sf::write_sf(x, dsn = dsn, layer = layer, delete_layer = TRUE, ...)
             } else {
               sf::write_sf(x, dsn = dsn, layer = layer, append = TRUE, ...)
@@ -428,7 +432,7 @@ createSSURGO <- function(filename = NULL,
           }
           
           try({
-            if (i == 1) {
+            if (i == 1 && isFALSE(append)) {
               DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = TRUE)
             } else {
               DBI::dbWriteTable(conn, mstab_lut[x], y, append = TRUE)

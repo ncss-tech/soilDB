@@ -14,6 +14,7 @@ createSSURGO(
   dissolve_field = NULL,
   maxruledepth = 0,
   overwrite = FALSE,
+  append = FALSE,
   header = FALSE,
   quiet = TRUE,
   ...
@@ -53,6 +54,8 @@ area.}
 shallowest ratings for smaller database size.}
 
 \item{overwrite}{\emph{logical}. Overwrite existing layers? Default: \code{FALSE}}
+
+\item{append}{\emph{logical}. Append to existing layers? Default: \code{FALSE}}
 
 \item{header}{\emph{logical}. Passed to \code{read.delim()} for reading pipe-delimited (\code{|}) text files
 containing tabular data.}
