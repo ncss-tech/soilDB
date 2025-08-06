@@ -391,9 +391,12 @@ createSSURGO <- function(filename = NULL,
       
       d <- try(lapply(seq_along(f.txt.grp[[x]]), function(i) {
           # message(f.txt.grp[[x]][i])
-          y <- try(read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header), silent = quiet)
+          y <- try(read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header), silent = TRUE)
           
           if (inherits(y, 'try-error')) {
+            if (!quiet) {
+              message("File ", f.txt.grp[[x]][i], " contains no data")
+            }
             return(NULL)
           } else if (length(y) == 1) {
             if (grepl("soil_metadata", f.txt.grp[[x]][i])) {
@@ -401,14 +404,18 @@ createSSURGO <- function(filename = NULL,
                 areasymbol = toupper(gsub(".*soil_metadata_(.*)\\.txt", "\\1", f.txt.grp[[x]][i])),
                 content = paste(y[[1]], collapse = "\n")
               )
-            }
-            else {
+            } else {
               y <- data.frame(content = y)
             }
           } else {
             if (!is.null(mstab) && !header) { # preserve headers if present 
               colnames(y) <- newnames
             }
+          }
+          
+          if (is.na(mstab_lut[x])) {
+            # readme, version
+            return(NULL)
           }
           
           # remove deeper rules from cointerp for smaller DB size
