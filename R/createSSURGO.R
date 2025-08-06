@@ -347,7 +347,7 @@ createSSURGO <- function(filename = NULL,
   # explicit handling special feature descriptions -> "featdesc" table
   txt.grp[grepl("soilsf_t_", txt.grp)] <- "featdesc"
   txt.grp[grepl("soil_metadata_", txt.grp)] <- "soil_metadata"
-  txt.first <- unique(txt.grp[grep("^sdv|^ms", txt.grp)])
+  txt.first <- unique(txt.grp[grep("^sdv|^md*s|^Metadata", txt.grp)])
   
   f.txt.grp <- split(f.txt, txt.grp)
   f.txt.grp[txt.first] <- lapply(f.txt.grp[txt.first], .subset, 1)
@@ -435,6 +435,10 @@ createSSURGO <- function(filename = NULL,
             if (i == 1 && isFALSE(append)) {
               DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = overwrite)
             } else {
+              if (DBI::dbExistsTable(conn, mstab_lut[x]) && x %in% txt.first) {
+                # skip writing sdv/mds* metadata tables to avoid uniqueness issues 
+                return(FALSE)
+              }
               DBI::dbWriteTable(conn, mstab_lut[x], y, append = TRUE)
             }
           }, silent = quiet)
