@@ -170,8 +170,8 @@ downloadSSURGO <- function(WHERE = NULL,
 #'   area.
 #' @param maxruledepth _integer_. Maximum rule depth for `"cointerp"` table. Default `0` includes only
 #'   shallowest ratings for smaller database size.
-#' @param overwrite _logical_. Overwrite existing layers? Default `FALSE` will append to existing
-#'   tables/layers.
+#' @param overwrite _logical_. Overwrite existing layers? Default: `FALSE`
+#' @param append _logical_. Append to existing layers? Default: `FALSE`
 #' @param header _logical_. Passed to `read.delim()` for reading pipe-delimited (`|`) text files
 #'   containing tabular data.
 #' @param quiet _logical_. Suppress messages and other output from database read/write operations?
@@ -194,6 +194,7 @@ createSSURGO <- function(filename = NULL,
                          dissolve_field = NULL,
                          maxruledepth = 0,
                          overwrite = FALSE,
+                         append = FALSE,
                          header = FALSE,
                          quiet = TRUE,
                          ...) {
@@ -203,11 +204,17 @@ createSSURGO <- function(filename = NULL,
   }
   
   if (missing(conn) || is.null(conn)) {
-    # delete existing file if overwrite=TRUE
-    if (isTRUE(overwrite) && file.exists(filename)) {
-      file.remove(filename)
+    # delete existing file if overwrite=TRUE; does _not_ apply to DBIConnection
+    if (file.exists(filename)) {
+      if (isTRUE(overwrite) && isFALSE(append)) {
+        file.remove(filename)      
+      } else if (isTRUE(overwrite) && isTRUE(append)) {
+        stop("Both overwrite=TRUE and append=TRUE; set only one argument to TRUE", call. = FALSE)
+      } else if (isFALSE(overwrite) && isFALSE(append)) {
+        stop("File '", filename,"' exists and overwrite=FALSE; use append=TRUE to append to an existing file", call. = FALSE)
+      }
     }
-  } 
+  }
   
   # DuckDB has special spatial format, so it gets custom handling for
   IS_DUCKDB <- inherits(conn, "duckdb_connection")
@@ -223,7 +230,7 @@ createSSURGO <- function(filename = NULL,
   }
   
   if (!IS_DUCKDB && !requireNamespace("sf")) {
-      stop("package `sf` is required to write spatial datasets to DBI data sources", call. = FALSE)
+    stop("package `sf` is required to write spatial datasets to DBI data sources", call. = FALSE)
   } 
   
   f <- list.files(exdir, recursive = TRUE, pattern = pattern, full.names = TRUE)
@@ -243,6 +250,20 @@ createSSURGO <- function(filename = NULL,
     include_spatial <- TRUE
   }
   
+  if (missing(conn) || is.null(conn)) {
+    
+    if (!requireNamespace("RSQLite")) {
+      stop("package 'RSQLite' is required (when `conn` is not specified)", call. = FALSE)
+    }
+    
+    conn <- DBI::dbConnect(DBI::dbDriver("SQLite"),
+                           filename, 
+                           loadable.extensions = TRUE)
+    
+    # if user did not specify their own connection, close on exit
+    on.exit(DBI::dbDisconnect(conn))
+  } 
+  
   if (nrow(shp.grp) >= 1 && ncol(shp.grp) == 3 && include_spatial) {
     f.shp.grp <- split(f.shp, list(feature = shp.grp[, 1], geom = shp.grp[, 2]), drop = TRUE)
     
@@ -255,7 +276,7 @@ createSSURGO <- function(filename = NULL,
         lnm <- layer_names[match(gsub(".*soil([musfa]{2}_[apl])_.*", "\\1", f.shp.grp[[i]][j]),
                                  names(layer_names))]
         if (IS_DUCKDB) {
-          if (j == 1) {
+          if (j == 1 && isFALSE(append)) {
             DBI::dbExecute(conn, sprintf("DROP TABLE IF EXISTS %s;", lnm))
             DBI::dbExecute(conn, sprintf("CREATE TABLE %s AS SELECT * FROM ST_Read('%s');",
                                 lnm, f.shp.grp[[i]][j]))
@@ -269,9 +290,9 @@ createSSURGO <- function(filename = NULL,
           colnames(shp) <- tolower(colnames(shp))
           sf::st_geometry(shp) <- "geometry"
           
-          .st_write_sf_conn <-  function(x, dsn, layer, j) {
-            if (j == 1) {
-              sf::write_sf(x, dsn = dsn, layer = layer, delete_layer = TRUE, ...)
+          .st_write_sf_conn <-  function(x, dsn, layer, j, overwrite) {
+             if (j == 1 && isFALSE(append)) {
+              sf::write_sf(x, dsn = dsn, layer = layer, delete_layer = overwrite, ...)
             } else {
               sf::write_sf(x, dsn = dsn, layer = layer, append = TRUE, ...)
             }
@@ -309,29 +330,15 @@ createSSURGO <- function(filename = NULL,
           if (IS_GPKG && missing(conn)) {
             # writing to SQLiteConnection fails to create proper gpkg_contents entries
             # so use the path for GPKG only
-            .st_write_sf_conn(shp, filename, lnm, j)
+            .st_write_sf_conn(shp, filename, lnm, j, overwrite)
           } else {
-            .st_write_sf_conn(shp, conn, lnm, j)
+            .st_write_sf_conn(shp, conn, lnm, j, overwrite)
           }
         }
         NULL
       }
     }
   }
-  
-  if (missing(conn) || is.null(conn)) {
-    
-    if (!requireNamespace("RSQLite")) {
-      stop("package 'RSQLite' is required (when `conn` is not specified)", call. = FALSE)
-    }
-    
-    conn <- DBI::dbConnect(DBI::dbDriver("SQLite"),
-                           filename, 
-                           loadable.extensions = TRUE)
-    
-    # if user did not specify their own connection, close on exit
-    on.exit(DBI::dbDisconnect(conn))
-  } 
   
   # create and add combined tabular datasets
   f.txt <- f[grepl(".*\\.txt$", f)]
@@ -340,8 +347,10 @@ createSSURGO <- function(filename = NULL,
   # explicit handling special feature descriptions -> "featdesc" table
   txt.grp[grepl("soilsf_t_", txt.grp)] <- "featdesc"
   txt.grp[grepl("soil_metadata_", txt.grp)] <- "soil_metadata"
-
+  txt.first <- unique(txt.grp[grep("^sdv|^md*s|^Metadata", txt.grp)])
+  
   f.txt.grp <- split(f.txt, txt.grp)
+  f.txt.grp[txt.first] <- lapply(f.txt.grp[txt.first], .subset, 1)
   
   # get table, column, index lookup tables
   mstabn <- f.txt.grp[[which(names(f.txt.grp) %in% c("mstab", "mdstattabs", "MetadataTable"))[1]]][[1]]
@@ -385,9 +394,12 @@ createSSURGO <- function(filename = NULL,
       
       d <- try(lapply(seq_along(f.txt.grp[[x]]), function(i) {
           # message(f.txt.grp[[x]][i])
-          y <- try(read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header), silent = quiet)
+          y <- try(read.delim(f.txt.grp[[x]][i], sep = "|", stringsAsFactors = FALSE, header = header), silent = TRUE)
           
           if (inherits(y, 'try-error')) {
+            if (!quiet) {
+              message("File ", f.txt.grp[[x]][i], " contains no data")
+            }
             return(NULL)
           } else if (length(y) == 1) {
             if (grepl("soil_metadata", f.txt.grp[[x]][i])) {
@@ -395,14 +407,18 @@ createSSURGO <- function(filename = NULL,
                 areasymbol = toupper(gsub(".*soil_metadata_(.*)\\.txt", "\\1", f.txt.grp[[x]][i])),
                 content = paste(y[[1]], collapse = "\n")
               )
-            }
-            else {
+            } else {
               y <- data.frame(content = y)
             }
           } else {
             if (!is.null(mstab) && !header) { # preserve headers if present 
               colnames(y) <- newnames
             }
+          }
+          
+          if (is.na(mstab_lut[x])) {
+            # readme, version
+            return(NULL)
           }
           
           # remove deeper rules from cointerp for smaller DB size
@@ -416,9 +432,13 @@ createSSURGO <- function(filename = NULL,
           }
           
           try({
-            if (i == 1) {
-              DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = TRUE)
+            if (i == 1 && isFALSE(append)) {
+              DBI::dbWriteTable(conn, mstab_lut[x], y, overwrite = overwrite)
             } else {
+              if (DBI::dbExistsTable(conn, mstab_lut[x]) && x %in% txt.first) {
+                # skip writing sdv/mds* metadata tables to avoid uniqueness issues 
+                return(FALSE)
+              }
               DBI::dbWriteTable(conn, mstab_lut[x], y, append = TRUE)
             }
           }, silent = quiet)
@@ -436,7 +456,8 @@ createSSURGO <- function(filename = NULL,
             q <- sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s)", 
                          paste0('PK_', mstab_lut[x]), mstab_lut[x], 
                          paste(indexPK, collapse = ","))
-            DBI::dbExecute(conn, q)
+            if (DBI::dbExistsTable(conn, mstab_lut[x]))
+              DBI::dbExecute(conn, q)
           }, silent = quiet)
         }
         
@@ -446,7 +467,8 @@ createSSURGO <- function(filename = NULL,
             try({
               q <- sprintf("CREATE INDEX IF NOT EXISTS %s ON %s (%s)", 
                            paste0('DI_', mstab_lut[x]), mstab_lut[x], indexDI[i])
-              DBI::dbExecute(conn, q)
+              if (DBI::dbExistsTable(conn, mstab_lut[x]))
+                DBI::dbExecute(conn, q)
             }, silent = quiet)
           }
         }
@@ -458,8 +480,10 @@ createSSURGO <- function(filename = NULL,
             try(.gpkg_create_contents(conn))
           }
           # update gpkg_contents table entry
-          try(.gpkg_delete_contents(conn, mstab_lut[x]))
-          try(.gpkg_add_contents(conn, mstab_lut[x]))
+          if (DBI::dbExistsTable(conn, mstab_lut[x])) {
+            try(.gpkg_delete_contents(conn, mstab_lut[x]))
+            try(.gpkg_add_contents(conn, mstab_lut[x]))
+          }
         }
         
         # TODO: other foreign keys/relationships? ALTER TABLE/ADD CONSTRAINT not available in SQLite
