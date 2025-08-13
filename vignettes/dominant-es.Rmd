@@ -1,10 +1,10 @@
 ---
-title: "Mapping Dominant Ecological Sites with soilDB"
+title: "Mapping Dominant Ecological Sites using SSURGO Data"
 author: "Andrew G. Brown"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Mapping Dominant Ecological Sites with soilDB}
+  %\VignetteIndexEntry{Mapping Dominant Ecological Sites using SSURGO Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -22,7 +22,9 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-This vignette demonstrates how to extract and map dominant ecological site information for a given Area of Interest (AOI) using the `soilDB` package and open-source geospatial tools in R.
+This vignette demonstrates how to extract and map dominant ecological site information for a given Area of Interest (AOI) using the `soilDB` package and open-source geospatial tools in R. 
+
+For a general introduction to geospatial data in R, see the [`sf` package documentation](https://r-spatial.github.io/sf/), [`terra` package documentation](https://rspatial.github.io/terra/), the [_Geocomputation with R_ book](https://r.geocompx.org/) and the [_Spatial Data Science with R and `terra`_ book](https://rspatial.org/).
 
 We will:
 
@@ -35,6 +37,8 @@ We will:
  - Export and visualize the results
 
 ## Prerequisites
+
+In this vignette we will use `sf` functions and object types for processing and storing spatial data. This package is used under the hood by `soilDB` for processing SSURGO data. The `terra` package can be used with only minor changes in syntax.
 
 ```{r libraries}
 library(soilDB)
@@ -118,7 +122,7 @@ Note that using `add.fields` we have included some additional contextual informa
 
 `fetchSDA_spatial()` `geom.src` argument can be used to return SSURGO map unit polygons and survey area polygons, STATSGO mapunit polygons, and MLRA polygons.
 
-Here is an example using STATSGO. We use `SDA_spatialQuery()`
+Here is an example using STATSGO. We use `SDA_spatialQuery()` to fetch the data for our AOI, then `fetchSDA_spatial()` to get the full extent of those map unit concepts.
 
 ```{r fetch-SDA-spatial-statsgo}
 statsgo_polygons <- SDA_spatialQuery(
@@ -156,17 +160,17 @@ ssa <- fetchSDA_spatial(
 plot(ssa["areasymbol"], main = "SSURGO Soil Survey Area from SDA")
 head(ssa)
 ```
+#### `SDA_spatialQuery()` vs. `fetchSDA_spatial()`
 
-### Notes
+ - `SDA_spatialQuery()` is ideal for spatial queries where you have a specific, possibly complex, area of interest.
 
-- `SDA_spatialQuery()` is ideal for spatial queries where you have a specific area of interest.
-- `fetchSDA_spatial()` returns the full extent of the specified map unit concepts, optionally including more legend and map unit attributes via `add.fields` argument.
+ - `fetchSDA_spatial()` returns the full extent of the specified map unit concepts, optionally including more legend and map unit attributes via `add.fields` argument.
 
 ### Local Data Sources
 
-If working with large extents, it is generally better to be use a local data source. You can download SSURGO data from Web Soil Survey using `downloadSSURGO()`. Then, you can create GeoPackage or other database types using `createSSURGO()` or the [SSURGOPortal R package]().
+If working with large extents, it is generally better to be use a local data source. You can download SSURGO data from Web Soil Survey using `downloadSSURGO()`. Then, you can create GeoPackage or other database types using `createSSURGO()` or the [SSURGOPortal](https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal) tools. See also the [SSURGOPortal R package](https://github.com/brownag/SSURGOPortalR).
 
-Assume you have a GeoPackage from SSURGOPortal (`"soilmu_a.gpkg"`), then you can read it with `sf::st_read()` or `terra::vect()`
+Assuming you have a GeoPackage from SSURGOPortal (`"soilmu_a.gpkg"`), then you can read it with `sf::st_read()` or `terra::vect()`
 
 ```{r load-spatial, eval = FALSE}
 ssurgo_path <- "data/soilmu_a.gpkg"  # Replace with your actual path
@@ -270,17 +274,21 @@ sf::st_write(
 unlink("ecosite_dominant.gpkg")
 ```
 
-## Notes
-
-- The `get_SDA_coecoclass()` function is the only known pre-written method that includes `cokey` in the dominant component aggregation.
-- The DBF format used in shapefiles truncates column names. Consider alternate vector formats such as GeoPackage (`.gpkg` file) for full attribute support. 
-- This approach avoids the need for SSURGOPortal or ESRI tools and is fully scriptable.
-
+Note: The DBF format used in ESRI shapefiles truncates column names. Consider alternate vector formats like GeoPackage (`.gpkg` file) for full attribute support. 
 ## References
- - [`SDA_spatialQuery()` documentation](https://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html)
- - [`fetchSDA_spatial()` documentation](https://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html)
- - [`get_SDA_coecoclass()` documentation](https://ncss-tech.github.io/soilDB/reference/get_SDA_coecoclass.html)
+
+### SSURGO Data and Tools
  - [SSURGOPortal](https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal)
  - [Web Soil Survey](https://websoilsurvey.nrcs.usda.gov/app/)
 
+### soilDB functions
+ - [`SDA_spatialQuery()` documentation](https://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html)
+ - [`fetchSDA_spatial()` documentation](https://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html)
+ - [`get_SDA_coecoclass()` documentation](https://ncss-tech.github.io/soilDB/reference/get_SDA_coecoclass.html)
 
+### Spatial Analysis in R
+ - [`sf` package documentation](https://r-spatial.github.io/sf/)
+ - [`terra` package documentation](https://rspatial.github.io/terra/)
+ - [_Geocomputation with R_ book](https://r.geocompx.org/) 
+ - [_Spatial Data Science with R and `terra`_ book](https://rspatial.org/).
+ 
