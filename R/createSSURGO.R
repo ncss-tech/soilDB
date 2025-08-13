@@ -291,7 +291,7 @@ createSSURGO <- function(filename = NULL,
           sf::st_geometry(shp) <- "geometry"
           
           .st_write_sf_conn <-  function(x, dsn, layer, j, overwrite) {
-            if (j == 1 && isFALSE(append)) {
+            if ((i == 1 && j == 1) && isFALSE(append)) {
               sf::write_sf(
                 x,
                 dsn = dsn,
