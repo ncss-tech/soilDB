@@ -250,7 +250,7 @@ createSSURGO <- function(filename = NULL,
     include_spatial <- TRUE
   }
   
-  if (missing(conn) || is.null(conn)) {
+  if ((missing(conn) || is.null(conn)) && !IS_GPKG) {
     
     if (!requireNamespace("RSQLite")) {
       stop("package 'RSQLite' is required (when `conn` is not specified)", call. = FALSE)
@@ -291,10 +291,22 @@ createSSURGO <- function(filename = NULL,
           sf::st_geometry(shp) <- "geometry"
           
           .st_write_sf_conn <-  function(x, dsn, layer, j, overwrite) {
-             if (j == 1 && isFALSE(append)) {
-              sf::write_sf(x, dsn = dsn, layer = layer, delete_layer = overwrite, ...)
+            if (j == 1 && isFALSE(append)) {
+              sf::write_sf(
+                x,
+                dsn = dsn,
+                layer = layer,
+                delete_layer = IS_GPKG || overwrite,
+                ...
+              )
             } else {
-              sf::write_sf(x, dsn = dsn, layer = layer, append = TRUE, ...)
+              sf::write_sf(
+                x,
+                dsn = dsn,
+                layer = layer,
+                append = TRUE,
+                ...
+              )
             }
           }
           
@@ -339,6 +351,20 @@ createSSURGO <- function(filename = NULL,
       }
     }
   }
+  
+  if (IS_GPKG) {
+    
+    if (!requireNamespace("RSQLite")) {
+      stop("package 'RSQLite' is required (when `conn` is not specified)", call. = FALSE)
+    }
+    
+    conn <- DBI::dbConnect(DBI::dbDriver("SQLite"),
+                           filename, 
+                           loadable.extensions = TRUE)
+    
+    # if user did not specify their own connection, close on exit
+    on.exit(DBI::dbDisconnect(conn))
+  } 
   
   # create and add combined tabular datasets
   f.txt <- f[grepl(".*\\.txt$", f)]
