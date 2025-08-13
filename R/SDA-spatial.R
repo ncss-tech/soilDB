@@ -68,11 +68,11 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
                              intersection = "%s.STIntersection(geometry::STGeomFromText('%%s', 4326)) AS geom",
                              overlap = "%s AS geom"), db_column)
   res <- sprintf(
-      "WITH geom_data (geom, %s) AS (
-          SELECT %s, %s
+      "WITH geom_data (geom, %s, nationalmusym) AS (
+          SELECT %s, %s, nationalmusym
           FROM %s 
           WHERE %s.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1 %s
-        ) SELECT geom.STAsText() AS geom, %s%s
+        ) SELECT geom.STAsText() AS geom, %s%s, nationalmusym
         FROM geom_data",
       id_column, geom_sql, id_column, db_table, db_column, clip_sql, id_column,
       ifelse(geomAcres, area_ac_sql, "")
