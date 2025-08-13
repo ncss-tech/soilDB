@@ -67,16 +67,30 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
   geom_sql <- sprintf(switch(method,
                              intersection = "%s.STIntersection(geometry::STGeomFromText('%%s', 4326)) AS geom",
                              overlap = "%s AS geom"), db_column)
+  include_nationalmusym <- (id_column == "mukey" && db_table != "sapolygon")
+  
   res <- sprintf(
-      "WITH geom_data (geom, %s, nationalmusym) AS (
-          SELECT %s, %s, nationalmusym
+      "WITH geom_data (geom, %s%s) AS (
+          SELECT %s, %s.%s %s
           FROM %s 
+          %s
           WHERE %s.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1 %s
-        ) SELECT geom.STAsText() AS geom, %s%s, nationalmusym
+        ) SELECT geom.STAsText() AS geom, %s%s%s
         FROM geom_data",
-      id_column, geom_sql, id_column, db_table, db_column, clip_sql, id_column,
-      ifelse(geomAcres, area_ac_sql, "")
+      id_column, 
+      ifelse(include_nationalmusym, ", nationalmusym", ""),
+      geom_sql, db_table, id_column,
+      ifelse(include_nationalmusym, ", mapunit.nationalmusym", ""),
+      db_table, 
+      ifelse(include_nationalmusym, 
+             sprintf("INNER JOIN mapunit ON mapunit.mukey = %s.mukey",
+                     db_table), ""),
+      db_column, clip_sql, id_column,
+      ifelse(geomAcres, area_ac_sql, ""),
+      ifelse(include_nationalmusym, ", nationalmusym", "")
+      
     )
+  
   
   # handle non-polygon results
   if (db == "SSURGO" && what %in% c("mupoint", "muline", "featpoint", "featline")) {
@@ -310,8 +324,8 @@ SDA_spatialQuery <- function(geom,
   return_terra <- FALSE
 
   # raster support
-  if (inherits(geom, 'RasterLayer') |
-      inherits(geom, 'RasterBrick') |
+  if (inherits(geom, 'RasterLayer') ||
+      inherits(geom, 'RasterBrick') ||
       inherits(geom, 'RasterStack')) {
     if (!requireNamespace('terra'))
       stop("packages terra is required", call. = FALSE)
