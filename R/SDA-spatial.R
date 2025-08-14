@@ -310,9 +310,7 @@ SDA_spatialQuery <- function(geom,
   return_terra <- FALSE
 
   # raster support
-  if (inherits(geom, 'RasterLayer') |
-      inherits(geom, 'RasterBrick') |
-      inherits(geom, 'RasterStack')) {
+  if (inherits(geom, c('RasterLayer', 'RasterBrick', 'RasterStack'))) {
     if (!requireNamespace('terra'))
       stop("packages terra is required", call. = FALSE)
     geom <- terra::rast(geom)
