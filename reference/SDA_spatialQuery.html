@@ -52,6 +52,7 @@
 <span>  db <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SSURGO"</span>, <span class="st">"STATSGO"</span>, <span class="st">"SAPOLYGON"</span><span class="op">)</span>,</span>
 <span>  byFeature <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  idcol <span class="op">=</span> <span class="st">"gid"</span>,</span>
+<span>  addFields <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  query_string <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  as_Spatial <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"soilDB.return_Spatial"</span>, default <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -87,6 +88,10 @@
 
 <dt id="arg-idcol">idcol<a class="anchor" aria-label="anchor" href="#arg-idcol"></a></dt>
 <dd><p>Unique IDs used for individual features when <code>byFeature = TRUE</code>; Default <code>"gid"</code></p></dd>
+
+
+<dt id="arg-addfields">addFields<a class="anchor" aria-label="anchor" href="#arg-addfields"></a></dt>
+<dd><p>character; Amend result with a query to <code>mapunit</code> table for additional information? Default: <code>NULL</code>. A character vector can be used to specify columns from the <code>legend</code>, <code>mapunit</code>, and <code>muaggatt</code> tables (for <code>mupolygon</code>, <code>mupoint</code>, <code>muline</code> and <code>mukey</code>), <code>legend</code> table for areasymbol and sapolygon, and <code>featdesc</code> for <code>featpoint</code> and <code>featline</code>.  Mapunit and mapunit aggregate attribute tables are ignored for soil survey area polygon results.</p></dd>
 
 
 <dt id="arg-query-string">query_string<a class="anchor" aria-label="anchor" href="#arg-query-string"></a></dt>
