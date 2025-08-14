@@ -105,6 +105,7 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
 #' @param db a character vector identifying the Soil Geographic Databases (`'SSURGO'` or `'STATSGO'`) to query. Option \var{STATSGO} works with `what = "mukey"` and `what = "mupolygon"`.
 #' @param byFeature Iterate over features, returning a combined data.frame where each feature is uniquely identified by value in `idcol`. Default `FALSE`.
 #' @param idcol Unique IDs used for individual features when `byFeature = TRUE`; Default `"gid"`
+#' @param add.fields logical or character; Amend result with a query to `mapunit` table for additional information? Default: `FALSE`. A character vector can be used to specify columns from the `mapunit` table to be included.
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @param as_Spatial Return sp classes? e.g. `Spatial*DataFrame`. Default: `FALSE`.
 #'
@@ -256,6 +257,7 @@ SDA_spatialQuery <- function(geom,
                              db = c("SSURGO", "STATSGO", "SAPOLYGON"),
                              byFeature = FALSE,
                              idcol = "gid",
+                             add.fields = FALSE,
                              query_string = FALSE,
                              as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {
   if (byFeature) {
@@ -281,6 +283,31 @@ SDA_spatialQuery <- function(geom,
     db = db,
     query_string = query_string
   )
+  
+  if (isTRUE(add.fields) || 
+      (is.character(add.fields) && length(add.fields) >= 1)) {
+    mucol <- "*"
+    if (is.character(add.fields)) {
+      add.fields <- trimws(add.fields)
+      add.fields <- add.fields[add.fields != "mukey"]
+      mucol <- toString(unique(c("mapunit.mukey", add.fields)))
+    }
+    
+    mu <- SDA_query(
+      sprintf(
+        "SELECT %s FROM mapunit %s
+         WHERE mapunit.mukey IN %s",
+        mucol,
+        ifelse(mucol != "*", "
+INNER JOIN legend ON legend.lkey = mapunit.lkey
+INNER JOIN muaggatt ON muaggatt.mukey = mapunit.mukey",
+          ""
+        ),
+        format_SQL_in_statement(unique(res$mukey))
+      )
+    )
+    res <- merge(res, mu, sort = FALSE)  
+  }
 
   # flag for Spatial result
   if (as_Spatial && requireNamespace("sf")) {
