@@ -105,7 +105,7 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
 #' @param db a character vector identifying the Soil Geographic Databases (`'SSURGO'` or `'STATSGO'`) to query. Option \var{STATSGO} works with `what = "mukey"` and `what = "mupolygon"`.
 #' @param byFeature Iterate over features, returning a combined data.frame where each feature is uniquely identified by value in `idcol`. Default `FALSE`.
 #' @param idcol Unique IDs used for individual features when `byFeature = TRUE`; Default `"gid"`
-#' @param add.fields logical or character; Amend result with a query to `mapunit` table for additional information? Default: `FALSE`. A character vector can be used to specify columns from the `mapunit` table to be included.
+#' @param add.fields logical or character; Amend result with a query to `mapunit` table for additional information? Default: `FALSE`. If `TRUE` all columns from the `mapunit` table are joined to the result. A character vector can be used to specify columns from the `legend`, `mapunit`, and `muaggatt` tables to be included. Mapunit and mapunit aggregate attribute tables are ignored for soil survey area polygon results.
 #' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
 #' @param as_Spatial Return sp classes? e.g. `Spatial*DataFrame`. Default: `FALSE`.
 #'
@@ -286,29 +286,51 @@ SDA_spatialQuery <- function(geom,
   
   if (isTRUE(add.fields) || 
       (is.character(add.fields) && length(add.fields) >= 1)) {
-    mucol <- "*"
-    if (is.character(add.fields)) {
-      add.fields <- trimws(add.fields)
-      add.fields <- add.fields[add.fields != "mukey"]
-      mucol <- toString(unique(c("mapunit.mukey", add.fields)))
+    
+    MERGE.FUN <- merge
+    if (inherits(res, 'SpatVector') && requireNamespace("terra")) {
+      MERGE.FUN <- terra::merge
     }
     
-    mu <- SDA_query(
-      sprintf(
-        "SELECT %s FROM mapunit %s
-         WHERE mapunit.mukey IN %s",
-        mucol,
-        ifelse(mucol != "*", "
-INNER JOIN legend ON legend.lkey = mapunit.lkey
-INNER JOIN muaggatt ON muaggatt.mukey = mapunit.mukey",
-          ""
-        ),
-        format_SQL_in_statement(unique(res$mukey))
+    if (what %in% c("areasymbol", "sapolygon")) {
+      lecol <- "*"
+  
+      if (is.character(add.fields)) {
+        add.fields <- trimws(add.fields)
+        add.fields <- add.fields[!add.fields %in% c("lkey", "areasymbol")]
+        lecol <- toString(unique(c("legend.areasymbol", add.fields)))
+      }
+      
+      le <- SDA_query(
+        sprintf("SELECT %s FROM legend
+           WHERE legend.areasymbol IN %s", 
+        lecol,
+        format_SQL_in_statement(unique(res$areasymbol)))
       )
-    )
-    res <- merge(res, mu, sort = FALSE)  
+      res <- MERGE.FUN(res, le, sort = FALSE)
+    } else {
+      mucol <- "*"
+      if (is.character(add.fields)) {
+        add.fields <- trimws(add.fields)
+        add.fields <- add.fields[add.fields != "mukey"]
+        mucol <- toString(unique(c("mapunit.mukey", add.fields)))
+      }
+      
+      mu <- SDA_query(
+        sprintf(
+          "SELECT %s FROM mapunit %s
+           WHERE mapunit.mukey IN %s",
+          mucol,
+          ifelse(mucol != "*", "
+  INNER JOIN legend ON legend.lkey = mapunit.lkey
+  INNER JOIN muaggatt ON muaggatt.mukey = mapunit.mukey",
+            ""
+          ), format_SQL_in_statement(unique(res$mukey))
+        )
+      )
+      res <- MERGE.FUN(res, mu, sort = FALSE)
+    }
   }
-
   # flag for Spatial result
   if (as_Spatial && requireNamespace("sf")) {
     res <- sf::as_Spatial(res)
