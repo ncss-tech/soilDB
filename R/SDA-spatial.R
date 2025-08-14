@@ -19,7 +19,11 @@
 #'
 #' @return An `sf` object or if `as_sf` is `FALSE` a `Spatial*` object.
 #' @export processSDA_WKT
-processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
+processSDA_WKT <- function(d,
+                           g = 'geom',
+                           crs = 4326,
+                           p4s = NULL,
+                           as_sf = TRUE) {
   if (!is.null(p4s)) {
     .Deprecated(msg = "Passing PROJ4 strings via `p4s` is deprecated. SDA interfaces in soilDB use the WGS84 Geographic Coordinate System (EPSG:4326) by default. Use the `crs` argument to customize.")
   }
@@ -33,10 +37,8 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
     stop("package `sf` is required", call. = FALSE)
   }
   
-  
-  
   # convert wkt to sf/SPDF
-  d[[g]] <- sf::st_as_sfc(d[,g], crs = crs)
+  d[[g]] <- sf::st_as_sfc(d[, g], crs = crs)
   sfobj <- sf::st_as_sf(d)
   if (as_sf) {
     return(sfobj)
@@ -46,7 +48,7 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
 
 # STATSGO features require AND CLIPAREASYMBOL = 'US' to avoid state areasymbol copy
 # select the right query for SSURGO / STATSGO geometry filters submitted to SDA
-.SDA_geometrySelector <- function(db, what, method, geomAcres = TRUE) {
+.SDA_geometrySelector <- function(db, what, method, geomAcres = TRUE, add.fields = NULL) {
   db_table <- switch(db,
                      SSURGO = "mupolygon",
                      STATSGO = "gsmmupolygon",
@@ -72,7 +74,7 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
           SELECT %s, %s
           FROM %s 
           WHERE %s.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1 %s
-        ) SELECT geom.STAsText() AS geom, %s%s
+        ) SELECT geom_data.%s, geom.STAsText() AS geom%s
         FROM geom_data",
       id_column, geom_sql, id_column, db_table, db_column, clip_sql, id_column,
       ifelse(geomAcres, area_ac_sql, "")
@@ -85,6 +87,8 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
       res <- gsub("mukey", "featkey", res)
     }
   }
+  res <- .appendFields(res, what, add.fields)
+  
   return(res)
 }
 
@@ -257,7 +261,7 @@ SDA_spatialQuery <- function(geom,
                              db = c("SSURGO", "STATSGO", "SAPOLYGON"),
                              byFeature = FALSE,
                              idcol = "gid",
-                             add.fields = FALSE,
+                             add.fields = NULL,
                              query_string = FALSE,
                              as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {
   if (byFeature) {
@@ -281,56 +285,10 @@ SDA_spatialQuery <- function(geom,
     geomIntersection = geomIntersection,
     geomAcres = geomAcres,
     db = db,
+    add.fields = add.fields,
     query_string = query_string
   )
   
-  if (isTRUE(add.fields) || 
-      (is.character(add.fields) && length(add.fields) >= 1)) {
-    
-    MERGE.FUN <- merge
-    if (inherits(res, 'SpatVector') && requireNamespace("terra")) {
-      MERGE.FUN <- terra::merge
-    }
-    
-    if (what %in% c("areasymbol", "sapolygon")) {
-      lecol <- "*"
-  
-      if (is.character(add.fields)) {
-        add.fields <- trimws(add.fields)
-        add.fields <- add.fields[!add.fields %in% c("lkey", "areasymbol")]
-        lecol <- toString(unique(c("legend.areasymbol", add.fields)))
-      }
-      
-      le <- SDA_query(
-        sprintf("SELECT %s FROM legend
-           WHERE legend.areasymbol IN %s", 
-        lecol,
-        format_SQL_in_statement(unique(res$areasymbol)))
-      )
-      res <- MERGE.FUN(res, le, sort = FALSE)
-    } else {
-      mucol <- "*"
-      if (is.character(add.fields)) {
-        add.fields <- trimws(add.fields)
-        add.fields <- add.fields[add.fields != "mukey"]
-        mucol <- toString(unique(c("mapunit.mukey", add.fields)))
-      }
-      
-      mu <- SDA_query(
-        sprintf(
-          "SELECT %s FROM mapunit %s
-           WHERE mapunit.mukey IN %s",
-          mucol,
-          ifelse(mucol != "*", "
-  INNER JOIN legend ON legend.lkey = mapunit.lkey
-  INNER JOIN muaggatt ON muaggatt.mukey = mapunit.mukey",
-            ""
-          ), format_SQL_in_statement(unique(res$mukey))
-        )
-      )
-      res <- MERGE.FUN(res, mu, sort = FALSE)
-    }
-  }
   # flag for Spatial result
   if (as_Spatial && requireNamespace("sf")) {
     res <- sf::as_Spatial(res)
@@ -343,6 +301,7 @@ SDA_spatialQuery <- function(geom,
                               geomIntersection = FALSE,
                               geomAcres = TRUE,
                               db = c("SSURGO", "STATSGO", "SAPOLYGON"),
+                              add.fields = NULL,
                               query_string = FALSE) {
   
   # check for required packages
@@ -431,14 +390,14 @@ SDA_spatialQuery <- function(geom,
     if (geomIntersection) {
 
       # select the appropriate query
-      .template <- .SDA_geometrySelector(db = db, what = what, method = 'intersection', geomAcres = geomAcres)
+      .template <- .SDA_geometrySelector(db = db, what = what, method = 'intersection', add.fields = add.fields, geomAcres = geomAcres)
       q <- sprintf(.template, as.character(wkt), as.character(wkt))
 
     } else {
       # return overlapping
 
       # select the appropriate query
-      .template <- .SDA_geometrySelector(db = db, what = what, method = 'overlap', geomAcres = geomAcres)
+      .template <- .SDA_geometrySelector(db = db, what = what, method = 'overlap', add.fields = add.fields, geomAcres = geomAcres)
       q <- sprintf(.template, as.character(wkt))
     }
 
@@ -464,35 +423,84 @@ SDA_spatialQuery <- function(geom,
       
     if (what == 'mukey') {
       if (db == "SSURGO") {
-        q <- sprintf("SELECT mukey, muname
+        q <- sprintf("WITH geom_data (mukey, muname) AS (SELECT mukey, muname
                     FROM mapunit
-                    WHERE mukey IN (
+                    WHERE mapunit.mukey IN (
                     SELECT DISTINCT mukey from SDA_Get_Mukey_from_intersection_with_WktWgs84('%s')
-                    )", wkt)
+                    ))\n
+                    SELECT geom_data.mukey, geom_data.muname, NULL AS geom FROM geom_data", wkt)
       } else if (db == "STATSGO") {
-        q <- sprintf("SELECT DISTINCT P.mukey, mapunit.muname
+        q <- sprintf("WITH geom_data (mukey, muname) AS (SELECT DISTINCT P.mukey, mapunit.muname
                       FROM gsmmupolygon AS P
                       INNER JOIN mapunit ON mapunit.mukey = P.mukey
                       WHERE mupolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326)) = 1
-                        AND CLIPAREASYMBOL = 'US'", wkt)
+                        AND CLIPAREASYMBOL = 'US')\n
+                      SELECT geom_data.mukey, geom_data.muname, NULL AS geom FROM geom_data", wkt)
       } else {
         stop("query type 'mukey' for 'SAPOLYGON' is not supported", call. = FALSE)
       }
   
     } else if (what == 'areasymbol') {
       # SSURGO only
-      q <- sprintf("SELECT areasymbol
+      q <- sprintf("WITH geom_data (areasymbol) AS (SELECT areasymbol
                   FROM sapolygon
                   WHERE sapolygonkey IN (
                   SELECT DISTINCT sapolygonkey from SDA_Get_Sapolygonkey_from_intersection_with_WktWgs84('%s')
-                  )", wkt)
+                  ))\n
+                  SELECT geom_data.areasymbol, NULL AS geom FROM geom_data", wkt)
     }
+    
+    q <- .appendFields(q, what, add.fields)
     
     if (query_string) {
       return(q)
     }
-    
     res <- suppressMessages(SDA_query(q))
   }
+  
   res
+}
+
+.appendFields <- function(q, what, add.fields, include_key = FALSE) {
+  if (length(add.fields) > 0) {
+    if (!grepl("[^o] AS geom", q))
+      q <- gsub("FROM geom_data", ", NULL AS geom\n FROM geom_data", q)
+    if (what %in% c("areasymbol", "sapolygon")) {
+      key <- character(0)
+      if (include_key) {
+        key <- "legend.lkey"
+      }
+      add.fields <- trimws(add.fields)
+      add.fields <- add.fields[!add.fields == "lkey"]
+      lecol <- toString(unique(c(key, add.fields)))
+      q <- paste0(q, "\nINNER JOIN legend ON legend.areasymbol = geom_data.areasymbol")
+      q <- gsub("([^o]) AS geom", paste0("\\1 AS geom, ", lecol), q)
+    } else if (grepl("feat", what)) {
+      key <- character(0)
+      if (include_key) {
+        key <- "featkey"
+      }
+      add.fields <- trimws(add.fields)
+      add.fields <- add.fields[!add.fields == "featkey"]
+      mucol <- toString(unique(c(key, add.fields)))
+      q <- paste(q, sprintf("INNER JOIN %s ON %s.featkey = geom_data.featkey
+                     INNER JOIN featdesc ON featdesc.featkey = geom_data.featkey",
+                            what, what))
+      q <- gsub("([^o]) AS geom", paste0("\\1 AS geom, ", mucol), q)
+      
+    } else {
+      key <- character(0)
+      if (include_key) {
+        key <- "mapunit.mukey"
+      }
+      add.fields <- trimws(add.fields)
+      add.fields <- add.fields[!add.fields == "mukey"]
+      mucol <- toString(unique(c(key, add.fields)))
+      q <- paste(q, "INNER JOIN mapunit ON mapunit.mukey = geom_data.mukey
+           INNER JOIN muaggatt ON muaggatt.mukey = mapunit.mukey
+           INNER JOIN legend ON legend.lkey = mapunit.lkey ")
+      q <- gsub("([^o]) AS geom", paste0("\\1 AS geom, ", mucol), q)
+    }
+  }
+  gsub(", FROM", " FROM", gsub("NULL AS geom[, ]*", "", q))
 }
