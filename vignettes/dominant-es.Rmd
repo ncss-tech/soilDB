@@ -1,0 +1,294 @@
+---
+title: "Mapping Dominant Ecological Sites using SSURGO Data"
+author: "Andrew G. Brown"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Mapping Dominant Ecological Sites using SSURGO Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  eval = isTRUE(try(local_NASIS_defined(), silent = TRUE)) ||
+           !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = "TRUE")),
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 7 
+)
+```
+
+## Overview
+
+This vignette demonstrates how to extract and map dominant ecological site information for a given Area of Interest (AOI) using the `soilDB` package and open-source geospatial tools in R. 
+
+For a general introduction to geospatial data in R, see the [`sf` package documentation](https://r-spatial.github.io/sf/), [`terra` package documentation](https://rspatial.github.io/terra/), the [_Geocomputation with R_ book](https://r.geocompx.org/) and the [_Spatial Data Science with R and `terra`_ book](https://rspatial.org/).
+
+We will:
+
+ - Load SSURGO spatial data
+
+ - Query Soil Data Access (SDA) for dominant ecological site assignments
+
+ - Join tabular and spatial data
+
+ - Export and visualize the results
+
+## Prerequisites
+
+In this vignette we will use `sf` functions and object types for processing and storing spatial data. This package is used under the hood by `soilDB` for processing SSURGO data. The `terra` package can be used with only minor changes in syntax.
+
+```{r libraries}
+library(soilDB)
+library(sf)
+```
+
+## Load SSURGO Spatial Data
+
+### Using Soil Data Access
+
+You can use `SDA_spatialQuery()` and `fetchSDA_spatial()` to retrieve spatial data directly from Soil Data Access (SDA), bypassing the need for local files.
+
+#### Option 1: Use `SDA_spatialQuery()` to get mukey polygons for an AOI
+
+Define Area of Interest (AOI) as a bounding box `sf` POLYGON.
+
+```{r SDA-spatialQuery}
+aoi <- sf::st_as_sfc(sf::st_bbox(c(
+  xmin = -120.85,
+  xmax = -120.775,
+  ymin = 37.975,
+  ymax = 38.0
+), crs = 4326))
+
+# Query SDA for map unit polygons cropped to the AOI
+soil_polygons <- SDA_spatialQuery(
+  aoi, 
+  what = "mupolygon"
+)
+
+plot(
+  soil_polygons["mukey"],
+  main = "SSURGO Map Units from SDA_spatialQuery"
+)
+head(soil_polygons)
+```
+
+You can also set `geomIntersection = FALSE` so that intersecting geometries are not cropped to the AOI.
+
+This is convenient if you have a very specific AOI in mind or would like to reduce the amount of data you are going to download.
+
+```{r SDA-spatialQuery-geomIntersect}
+# Query SDA for map unit polygons cropped to the AOI
+soil_polygons <- SDA_spatialQuery(
+  aoi, 
+  what = "mupolygon", 
+  geomIntersection = TRUE
+)
+
+plot(
+  soil_polygons["mukey"],
+  main = "Cropped SSURGO Map Units from SDA_spatialQuery"
+)
+head(soil_polygons)
+```
+
+#### Option 2: Use `fetchSDA_spatial()` 
+
+Next, we use `fetchSDA_spatial()`. 
+
+This function is different because instead of using an area of interest, it takes a vector of map unit or legend identifiers.
+
+Here, we take the unique map unit keys from the **Option 1** result and return the _full_ extent of those map units (not just the intersecting polygons). This is particularly helpful when doing studies that involve the full extent of map unit concepts, as opposed to more site-specific analyses.
+
+```{r fetch-SDA-spatial}
+mu_ssurgo <- fetchSDA_spatial(
+  unique(soil_polygons$mukey), 
+  by.col = "mukey",
+  add.fields = c("legend.areaname", 
+                 "mapunit.muname", 
+                 "mapunit.farmlndcl")
+)
+
+plot(mu_ssurgo["mukey"], main = "SSURGO Map Units from fetchSDA_spatial")
+head(mu_ssurgo)
+```
+
+Note that using `add.fields` we have included some additional contextual information: area name, map unit name, and map unit farmland classification.
+
+##### `fetchSDA_spatial()` geometry sources
+
+`fetchSDA_spatial()` `geom.src` argument can be used to return SSURGO map unit polygons and survey area polygons, STATSGO mapunit polygons, and MLRA polygons.
+
+Here is an example using STATSGO. We use `SDA_spatialQuery()` to fetch the data for our AOI, then `fetchSDA_spatial()` to get the full extent of those map unit concepts.
+
+```{r fetch-SDA-spatial-statsgo}
+statsgo_polygons <- SDA_spatialQuery(
+  aoi, 
+  what = "mupolygon",
+  db = "STATSGO",
+  geomIntersection = TRUE
+)
+
+plot(statsgo_polygons["mukey"], main = "STATSGO Map Units from SDA_spatialQuery")
+head(statsgo_polygons)
+
+mu_statsgo <- fetchSDA_spatial(
+  unique(statsgo_polygons$mukey), 
+  by.col = "mukey",
+  db = "STATSGO",
+  add.fields = c("legend.areaname", "mapunit.muname", "mapunit.farmlndcl")
+)
+
+plot(mu_statsgo["mukey"], main = "STATSGO Map Units from fetchSDA_spatial")
+head(mu_statsgo)
+```
+
+```{r fetch-SDA-spatial-ssa}
+ssas <- SDA_spatialQuery(aoi, what = "areasymbol")
+ssas
+
+ssa <- fetchSDA_spatial(
+  ssas$areasymbol, 
+  by.col = "areasymbol",
+  geom.src = "sapolygon",
+  add.fields = c("legend.areaname")
+)
+
+plot(ssa["areasymbol"], main = "SSURGO Soil Survey Area from SDA")
+head(ssa)
+```
+#### `SDA_spatialQuery()` vs. `fetchSDA_spatial()`
+
+ - `SDA_spatialQuery()` is ideal for spatial queries where you have a specific, possibly complex, area of interest.
+
+ - `fetchSDA_spatial()` returns the full extent of the specified map unit concepts, optionally including more legend and map unit attributes via `add.fields` argument.
+
+### Local Data Sources
+
+If working with large extents, it is generally better to be use a local data source. You can download SSURGO data from Web Soil Survey using `downloadSSURGO()`. Then, you can create GeoPackage or other database types using `createSSURGO()` or the [SSURGOPortal](https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal) tools. See also the [SSURGOPortal R package](https://github.com/brownag/SSURGOPortalR).
+
+Assuming you have a GeoPackage from SSURGOPortal (`"soilmu_a.gpkg"`), then you can read it with `sf::st_read()` or `terra::vect()`
+
+```{r load-spatial, eval = FALSE}
+ssurgo_path <- "data/soilmu_a.gpkg"  # Replace with your actual path
+soil_polygons <- sf::st_read(ssurgo_path)
+head(soil_polygons)
+```
+
+This `soil_polygons` object should have the standard set of columns map unit key (`mukey`), area symbol (`areasymbol`), map unit symbol (`musym`) we would expect for a SSURGO map unit data source. 
+
+## Query SDA for Dominant Ecological Site Info
+
+### Extract Unique Map Unit Keys
+
+As we did above for `fetchSDA_spatial()` we are going to get the unique set of map units in our AOI.
+
+```{r extract-mukey}
+mukeys <- unique(soil_polygons$mukey)
+```
+
+### Use `get_SDA_coecoclass()`
+
+```{r query-sda}
+eco_data <- get_SDA_coecoclass(mukeys = mukeys)
+head(eco_data)
+```
+
+This function returns a data frame including `mukey`, `cokey`, `ecoclassid`, and `ecoclassname`. 
+
+There are several methods for aggregating from component to map unit level available in `get_SDA_coecoclass()`. The default aggregation method is `"none"` which will return 1 record per map unit _component_, so many map units will have more than one record.
+
+### Using `method="dominant component"`
+
+Most often, users want "typical" conditions that can apply to a whole map unit. 
+
+Sometimes it is helpful to be able to point to a _specific_ component, so that you do not have to reason over mathematical aggregation of distinct components within map unit concepts. The most common method to select one component per map unit is `"dominant component"`
+
+```{r query-sda-domcomp}
+eco_data_domcond <- get_SDA_coecoclass(
+  mukeys = mukeys,
+  method = "dominant component"
+)
+head(eco_data_domcond)
+```
+
+Note that this output includes information for the dominant component (`comppct_r` and `compname`).
+
+### Using `method="dominant condition"`
+
+The method `"dominant condition"` is convenient because it accounts for the possibility that multiple components have the same class (ecological site) and can have their component percentages summed. 
+
+For a property like ecological site, it is fairly common for multiple components in a map unit to have the same site assigned, so the dominant condition makes up a higher percentage of the area of the map unit than the dominant component alone.
+
+```{r query-sda-domcond}
+eco_data_domcond <- get_SDA_coecoclass(
+  mukeys = mukeys,
+  method = "dominant condition"
+)
+head(eco_data_domcond)
+```
+
+Note that this result includes the aggregate ecological site composition `ecoclasspct_r`.
+
+The `cokey` and `comppct_r` are from the dominant component can be used to link to a specific, common component for other more detailed information.
+
+## Join Tabular and Spatial Data
+
+We want to have a 1:1 relationship between our map unit polygons and the thematic variable we are mapping, so we will use the map unit dominant condition ecological sites (`eco_data_domcond`).
+
+```{r join-data}
+soil_polygons <- merge(
+  soil_polygons, 
+  eco_data_domcond, 
+  by = "mukey"
+)
+```
+
+## Visualize the Result
+
+```{r plot, fig.height = 4}
+plot(
+  soil_polygons["ecoclassid"],
+  main = "Dominant Ecological Site by Map Unit"
+)
+```
+
+This same process for merging in aggregate map unit level information generalizes to other SSURGO tables. You can easily create thematic maps from any data you can aggregate to the point that it is 1:1 with the `mukey`.
+
+## Export to GeoPackage
+
+Finally, we can write our result out to a spatial file, such as a GeoPackage, using `sf` or `terra`:
+
+```{r export, eval=FALSE}
+sf::st_write(
+  soil_polygons, 
+  "ecosite_dominant.gpkg", 
+  delete_dsn = TRUE
+)
+```
+
+```{r cleanup, include=FALSE}
+unlink("ecosite_dominant.gpkg")
+```
+
+Note: The DBF format used in ESRI shapefiles truncates column names. Consider alternate vector formats like GeoPackage (`.gpkg` file) for full attribute support. 
+## References
+
+### SSURGO Data and Tools
+ - [SSURGOPortal](https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal)
+ - [Web Soil Survey](https://websoilsurvey.nrcs.usda.gov/app/)
+
+### soilDB functions
+ - [`SDA_spatialQuery()` documentation](https://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html)
+ - [`fetchSDA_spatial()` documentation](https://ncss-tech.github.io/soilDB/reference/fetchSDA_spatial.html)
+ - [`get_SDA_coecoclass()` documentation](https://ncss-tech.github.io/soilDB/reference/get_SDA_coecoclass.html)
+
+### Spatial Analysis in R
+ - [`sf` package documentation](https://r-spatial.github.io/sf/)
+ - [`terra` package documentation](https://rspatial.github.io/terra/)
+ - [_Geocomputation with R_ book](https://r.geocompx.org/) 
+ - [_Spatial Data Science with R and `terra`_ book](https://rspatial.org/).
+ 
