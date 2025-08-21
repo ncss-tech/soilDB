@@ -1,5 +1,7 @@
 # currently only queries SoilWeb for mapunit-level data
 
+## TODO: this should be deprecated
+
 
 #' @title Get SSURGO Data via Spatial Query
 #' 
