@@ -70,7 +70,7 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
 
 
 <dt id="arg-mlra">mlra<a class="anchor" aria-label="anchor" href="#arg-mlra"></a></dt>
-<dd><p>a comma-delimited string of MLRA to search ('17,18,22A')</p></dd>
+<dd><p>a comma-delimited string of MLRA to search ('17,18,22A'), see Details section below</p></dd>
 
 
 <dt id="arg-taxonomic-class">taxonomic_class<a class="anchor" aria-label="anchor" href="#arg-taxonomic-class"></a></dt>
@@ -111,7 +111,8 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>See <a href="https://casoilresource.lawr.ucdavis.edu/osd-search/" class="external-link">this webpage</a> for more information.</p><ul><li><p>family level taxa are derived from SC database, not parsed OSD records</p></li>
+    <p>The <code>mlra</code> argument must be combined with another argument in order to become active. For example, search for series with 5GY hues in the "typical pedon" section, but limit to just MLRA 18: <code>OSDquery(mlra = '18', typical_pedon = '5GY')</code>.</p>
+<p>See <a href="https://casoilresource.lawr.ucdavis.edu/osd-search/" class="external-link">this webpage</a> for more information.</p><ul><li><p>family level taxa are derived from SC database, not parsed OSD records</p></li>
 <li><p>MLRA are derived via spatial intersection (SSURGO x MLRA polygons)</p></li>
 <li><p>MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)</p></li>
 <li><p>logical AND: &amp;</p></li>
@@ -133,7 +134,7 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="fetchOSD.html">fetchOSD</a>, <a href="siblings.html">siblings</a>, <a href="fetchOSD.html">fetchOSD</a></code></p></div>
+    <div class="dont-index"><p><code><a href="fetchOSD.html">fetchOSD()</a></code>, <code><a href="siblings.html">siblings()</a></code>, <code><a href="fetchOSD.html">fetchOSD()</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
