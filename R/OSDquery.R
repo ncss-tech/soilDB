@@ -9,7 +9,7 @@
 #' OSD records are searched with the [PostgreSQL fulltext indexing](https://www.postgresql.org/docs/9.5/textsearch.html) and query system ([syntax details](https://www.postgresql.org/docs/9.5/datatype-textsearch.html)). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections. 
 #' 
 #' @param everything search entire OSD text (default is NULL), `mlra` may also be specified, all other arguments are ignored
-#' @param mlra a comma-delimited string of MLRA to search ('17,18,22A')
+#' @param mlra a comma-delimited string of MLRA to search ('17,18,22A'), see Details section below
 #' @param taxonomic_class search family level classification
 #' @param typical_pedon search typical pedon section
 #' @param brief_narrative search brief narrative
@@ -20,6 +20,9 @@
 #' @param geog_assoc_soils search geographically associated soils section
 #' 
 #' @details 
+#' 
+#' The `mlra` argument must be combined with another argument in order to become active. For example, search for series with 5GY hues in the "typical pedon" section, but limit to just MLRA 18: `OSDquery(mlra = '18', typical_pedon = '5GY')`.
+#' 
 #' See [this webpage](https://casoilresource.lawr.ucdavis.edu/osd-search/) for more information.
 #'
 #'  - family level taxa are derived from SC database, not parsed OSD records
@@ -69,7 +72,7 @@
 #'   aqp::plotSPC(x$SPC)
 #' }
 #' 
-OSDquery <- function(everything = NULL, mlra='', taxonomic_class='', typical_pedon='', brief_narrative='', ric='', use_and_veg='', competing_series='', geog_location='', geog_assoc_soils='') {
+OSDquery <- function(everything = NULL, mlra = '', taxonomic_class = '', typical_pedon = '', brief_narrative = '', ric = '', use_and_veg = '', competing_series = '', geog_location = '', geog_assoc_soils = '') {
  
   # check for required packages
   if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('jsonlite', quietly=TRUE))
@@ -98,7 +101,7 @@ OSDquery <- function(everything = NULL, mlra='', taxonomic_class='', typical_ped
     
     # API URL
     # note: this is the load-balancer
-    u <- 'https://casoilresource.lawr.ucdavis.edu/osd-search/index.php'
+    u <- 'https://soilmap4-1.lawr.ucdavis.edu/osd-search/index.php'
     
   } else {
     
@@ -113,7 +116,7 @@ OSDquery <- function(everything = NULL, mlra='', taxonomic_class='', typical_ped
     
     # API URL
     # note: this is the load-balancer
-    u <- 'https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php'
+    u <- 'https://soilmap4-1.lawr.ucdavis.edu/osd-search/search-entire-osd.php'
   }
  
   # submit via POST

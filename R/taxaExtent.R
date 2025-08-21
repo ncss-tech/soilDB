@@ -203,7 +203,7 @@ taxaExtent <- function(x, level = c('order', 'suborder', 'greatgroup', 'subgroup
   level <- match.arg(level)
   
   # base URL
-  base.url <- 'https://casoilresource.lawr.ucdavis.edu/taxa-grid-cache'
+  base.url <- 'https://soilmap4-1.lawr.ucdavis.edu/taxa-grid-cache'
   
   # main branch
   # formative element query

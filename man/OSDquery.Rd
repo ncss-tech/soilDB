@@ -20,7 +20,7 @@ OSDquery(
 \arguments{
 \item{everything}{search entire OSD text (default is NULL), \code{mlra} may also be specified, all other arguments are ignored}
 
-\item{mlra}{a comma-delimited string of MLRA to search ('17,18,22A')}
+\item{mlra}{a comma-delimited string of MLRA to search ('17,18,22A'), see Details section below}
 
 \item{taxonomic_class}{search family level classification}
 
@@ -47,6 +47,8 @@ This is the R interface to \href{https://casoilresource.lawr.ucdavis.edu/osd-sea
 OSD records are searched with the \href{https://www.postgresql.org/docs/9.5/textsearch.html}{PostgreSQL fulltext indexing} and query system (\href{https://www.postgresql.org/docs/9.5/datatype-textsearch.html}{syntax details}). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections.
 }
 \details{
+The \code{mlra} argument must be combined with another argument in order to become active. For example, search for series with 5GY hues in the "typical pedon" section, but limit to just MLRA 18: \code{OSDquery(mlra = '18', typical_pedon = '5GY')}.
+
 See \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage} for more information.
 \itemize{
 \item family level taxa are derived from SC database, not parsed OSD records
@@ -89,7 +91,7 @@ SoilWeb maintains a snapshot of the Official Series Description data.
 USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
 }
 \seealso{
-\code{\link{fetchOSD}, \link{siblings}, \link{fetchOSD}}
+\code{\link[=fetchOSD]{fetchOSD()}}, \code{\link[=siblings]{siblings()}}, \code{\link[=fetchOSD]{fetchOSD()}}
 }
 \author{
 D.E. Beaudette

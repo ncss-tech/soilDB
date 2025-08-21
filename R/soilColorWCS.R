@@ -49,7 +49,7 @@ soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   
   # TODO: use remote metadata
   #  --> must add to load-balancer
-  # .vintage <- readLines('http://casoilresource.lawr.ucdavis.edu/wcs-files/soilcolor/vintage')
+  # .vintage <- readLines('http://soilmap4-1.lawr.ucdavis.edu/wcs-files/soilcolor/vintage')
   
   # hard-coded
   .vintage <- 'FY2023'
@@ -98,8 +98,8 @@ soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   }
   
   # base URL + parameters
-  base.url <- 'http://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?'
-  service.url <- 'map=/soilmap2/website/wcs/color.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage'
+  base.url <- 'http://soilmap4-1.lawr.ucdavis.edu/cgi-bin/mapserv?'
+  service.url <- 'map=/data1/website/wcs/color.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage'
   
   # unpack BBOX for WCS 2.0
   xmin <- wcs.geom$bbox[1]
