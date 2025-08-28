@@ -166,11 +166,7 @@ head(ssa)
 
 ### Local Data Sources
 
-<<<<<<< Updated upstream
-If working with large extents, it is generally better to be use a local data source. You can download SSURGO data from Web Soil Survey using `downloadSSURGO()`. Then, you can create GeoPackage or other database types using `createSSURGO()` or the [SSURGOPortal](https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal) tools. See also the [SSURGOPortal R package](https://github.com/brownag/SSURGOPortalR).
-=======
 If working with large extents, it is generally better to be use a local data source. You can download SSURGO data from Web Soil Survey using `downloadSSURGO()`. Then, you can create GeoPackage or other database types using `createSSURGO()` or the [SSURGOPortal](https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal) tools. This process is described in detail in the [Local SSURGO Databases vignette](https://ncss-tech.github.io/soilDB/articles/local-ssurgo.html). See also the [SSURGOPortal R package](https://github.com/brownag/SSURGOPortalR).
->>>>>>> Stashed changes
 
 Assuming you have a GeoPackage from SSURGOPortal (`"soilmu_a.gpkg"`), then you can read it with `sf::st_read()` or `terra::vect()`
 
@@ -180,11 +176,7 @@ soil_polygons <- sf::st_read(ssurgo_path)
 head(soil_polygons)
 ```
 
-<<<<<<< Updated upstream
-This `soil_polygons` object should have the standard set of columns map unit key (`mukey`), area symbol (`areasymbol`), map unit symbol (`musym`) we would expect for a SSURGO map unit data source. 
-=======
 This `soil_polygons` object should have the standard set of columns we would expect for a SSURGO map unit data source, including: map unit key (`mukey`), area symbol (`areasymbol`), map unit symbol (`musym`). 
->>>>>>> Stashed changes
 
 ## Query SDA for Dominant Ecological Site Info
 
@@ -266,11 +258,7 @@ This same process for merging in aggregate map unit level information generalize
 
 ## Export to GeoPackage
 
-<<<<<<< Updated upstream
-Finally, we can write our result out to a spatial file, such as a GeoPackage, using `sf` or `terra`:
-=======
 Finally, we can write our result out to a spatial file, such as a GeoPackage, using `sf` or `terra`. We use the GeoPackage format because it is open and non-proprietary. Note that the DBF format used in ESRI shapefiles truncates column names. Use alternate vector formats like GeoPackage (`.gpkg` file) for full attribute support.
->>>>>>> Stashed changes
 
 ```{r export, eval=FALSE}
 sf::st_write(
@@ -284,10 +272,6 @@ sf::st_write(
 unlink("ecosite_dominant.gpkg")
 ```
 
-<<<<<<< Updated upstream
-Note: The DBF format used in ESRI shapefiles truncates column names. Consider alternate vector formats like GeoPackage (`.gpkg` file) for full attribute support. 
-=======
->>>>>>> Stashed changes
 ## References
 
 ### SSURGO Data and Tools
