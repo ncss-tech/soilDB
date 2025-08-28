@@ -20,37 +20,66 @@ get_SDA_coecoclass(
 )
 }
 \arguments{
-\item{method}{aggregation method. One of: \code{"Dominant Component"}, \code{"Dominant Condition"}, \code{"All"} or \code{"None"} (default). If \code{method="all"} multiple numbered columns represent site composition within each map unit e.g. \code{site1...}, \code{site2...}. If \code{method="none"} is selected one row will be returned per \emph{component}; in all other cases one row will be returned per \emph{map unit}.}
+\item{method}{aggregation method. One of: \code{"Dominant Component"}, \code{"Dominant Condition"}, \code{"All"} or \code{"None"} (default). If \code{method="all"} multiple
+numbered columns represent site composition within each map unit e.g.
+\code{site1...}, \code{site2...}. If \code{method="none"} is selected one row will be
+returned per \emph{component}; in all other cases one row will be returned per
+\emph{map unit}.}
 
 \item{areasymbols}{vector of soil survey area symbols}
 
 \item{mukeys}{vector of map unit keys}
 
-\item{WHERE}{character containing SQL WHERE clause specified in terms of fields in \code{legend}, \code{mapunit}, \code{component} or \code{coecosite} tables, used in lieu of \code{mukeys} or \code{areasymbols}}
+\item{WHERE}{character containing SQL WHERE clause specified in terms of
+fields in \code{legend}, \code{mapunit}, \code{component} or \code{coecosite} tables, used in
+lieu of \code{mukeys} or \code{areasymbols}}
 
-\item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string containing query that would be sent to SDA via \code{SDA_query}}
+\item{query_string}{Default: \code{FALSE}; if \code{TRUE} return a character string
+containing query that would be sent to SDA via \code{SDA_query}}
 
-\item{ecoclasstypename}{Default: \code{c("NRCS Rangeland Site", "NRCS Forestland Site")}. If \code{NULL} no constraint on \code{ecoclasstypename} is used in the query.}
+\item{ecoclasstypename}{Default: \code{c("NRCS Rangeland Site", "NRCS Forestland Site")}. If \code{NULL} no constraint on \code{ecoclasstypename} is used in the
+query.}
 
-\item{ecoclassref}{Default: \code{"Ecological Site Description Database"}. If \code{NULL} no constraint on \code{ecoclassref} is used in the query.}
+\item{ecoclassref}{Default: \code{"Ecological Site Description Database"}. If
+\code{NULL} no constraint on \code{ecoclassref} is used in the query.}
 
 \item{not_rated_value}{Default: \code{"Not assigned"}}
 
-\item{miscellaneous_areas}{logical. Include miscellaneous areas (non-soil components)?}
+\item{miscellaneous_areas}{logical. Include miscellaneous areas (non-soil
+components)?}
 
 \item{include_minors}{logical. Include minor components? Default: \code{TRUE}.}
 
-\item{threshold}{integer. Default: \code{0}. Minimum combined component percentage (RV) for inclusion of a mapunit's ecological site in wide-format tabular summary. Used only for \code{method="all"}.}
+\item{threshold}{integer. Default: \code{0}. Minimum combined component percentage
+(RV) for inclusion of a mapunit's ecological site in wide-format tabular
+summary. Used only for \code{method="all"}.}
 
-\item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL} (default) use Soil Data Access API via \code{SDA_query()}.}
+\item{dsn}{Path to local SQLite database or a DBIConnection object. If \code{NULL}
+(default) use Soil Data Access API via \code{SDA_query()}.}
 }
 \description{
-Get mapunit ecological sites from Soil Data Access
+\code{get_SDA_coecoclass()} retrieves ecological site information from the Soil
+Data Access (SDA) database for a given set of map unit keys (mukeys). It
+returns a data frame containing ecological site IDs, names, and associated
+classification details, enabling users to link soil map units to ecological
+site concepts used in land management and conservation planning.
 }
 \details{
-When \code{method="Dominant Condition"} an additional field \code{ecoclasspct_r} is returned in the result
-with the sum of \code{comppct_r} that have the dominant condition \code{ecoclassid}. The component with the greatest
-\code{comppct_r} is returned for the \code{component} and \code{coecosite} level information.
+When \code{method="Dominant Condition"} an additional field
+\code{ecoclasspct_r} is returned in the result with the sum of \code{comppct_r} that
+have the dominant condition \code{ecoclassid}. The component with the greatest
+\code{comppct_r} is returned for the \code{component} and \code{coecosite} level
+information.
 
-Note that if there are multiple \code{coecoclasskey} per \code{ecoclassid} there may be more than one record per component.
+Note that if there are multiple \code{coecoclasskey} per \code{ecoclassid} there may
+be more than one record per component.
+}
+\examples{
+\dontshow{if (!as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)) ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Basic usage with a vector of mukeys
+get_SDA_coecoclass(mukeys = c(463994, 463995))
+
+# Using a custom WHERE clause (all "range" sites in Hawaii)
+get_SDA_coecoclass(WHERE = "ecoclassid LIKE 'R\%' AND areasymbol LIKE 'HI\%'")
+\dontshow{\}) # examplesIf}
 }
