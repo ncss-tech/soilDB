@@ -350,20 +350,13 @@ unit attributes via <code>add.fields</code> argument.</p></li>
 <div class="section level3">
 <h3 id="local-data-sources">Local Data Sources<a class="anchor" aria-label="anchor" href="#local-data-sources"></a>
 </h3>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream If working with large
-extents, it is generally better to be use a local data source. You can
-download SSURGO data from Web Soil Survey using
-<code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code>. Then, you can create GeoPackage or other
-database types using <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> or the <a href="https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal" class="external-link">SSURGOPortal</a>
-tools. See also the <a href="https://github.com/brownag/SSURGOPortalR" class="external-link">SSURGOPortal R
-package</a>. ======= If working with large extents, it is generally
-better to be use a local data source. You can download SSURGO data from
-Web Soil Survey using <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code>. Then, you can
-create GeoPackage or other database types using
-<code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> or the <a href="https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal" class="external-link">SSURGOPortal</a>
+<p>If working with large extents, it is generally better to be use a
+local data source. You can download SSURGO data from Web Soil Survey
+using <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code>. Then, you can create GeoPackage or
+other database types using <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> or the <a href="https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal" class="external-link">SSURGOPortal</a>
 tools. This process is described in detail in the <a href="https://ncss-tech.github.io/soilDB/articles/local-ssurgo.html" class="external-link">Local
 SSURGO Databases vignette</a>. See also the <a href="https://github.com/brownag/SSURGOPortalR" class="external-link">SSURGOPortal R
-package</a>. &gt;&gt;&gt;&gt;&gt;&gt;&gt; Stashed changes</p>
+package</a>.</p>
 <p>Assuming you have a GeoPackage from SSURGOPortal
 (<code>"soilmu_a.gpkg"</code>), then you can read it with
 <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::st_read()</a></code> or <code><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">terra::vect()</a></code></p>
@@ -371,16 +364,10 @@ package</a>. &gt;&gt;&gt;&gt;&gt;&gt;&gt; Stashed changes</p>
 <code class="sourceCode R"><span><span class="va">ssurgo_path</span> <span class="op">&lt;-</span> <span class="st">"data/soilmu_a.gpkg"</span>  <span class="co"># Replace with your actual path</span></span>
 <span><span class="va">soil_polygons</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="va">ssurgo_path</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">soil_polygons</span><span class="op">)</span></span></code></pre></div>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream This
-<code>soil_polygons</code> object should have the standard set of
-columns map unit key (<code>mukey</code>), area symbol
-(<code>areasymbol</code>), map unit symbol (<code>musym</code>) we would
-expect for a SSURGO map unit data source. ======= This
-<code>soil_polygons</code> object should have the standard set of
-columns we would expect for a SSURGO map unit data source, including:
+<p>This <code>soil_polygons</code> object should have the standard set
+of columns we would expect for a SSURGO map unit data source, including:
 map unit key (<code>mukey</code>), area symbol
-(<code>areasymbol</code>), map unit symbol (<code>musym</code>).
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; Stashed changes</p>
+(<code>areasymbol</code>), map unit symbol (<code>musym</code>).</p>
 </div>
 </div>
 <div class="section level2">
@@ -580,26 +567,22 @@ from any data you can aggregate to the point that it is 1:1 with the
 <div class="section level2">
 <h2 id="export-to-geopackage">Export to GeoPackage<a class="anchor" aria-label="anchor" href="#export-to-geopackage"></a>
 </h2>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream Finally, we can write
-our result out to a spatial file, such as a GeoPackage, using
-<code>sf</code> or <code>terra</code>: ======= Finally, we can write our
-result out to a spatial file, such as a GeoPackage, using
-<code>sf</code> or <code>terra</code>. We use the GeoPackage format
-because it is open and non-proprietary. Note that the DBF format used in
-ESRI shapefiles truncates column names. Use alternate vector formats
-like GeoPackage (<code>.gpkg</code> file) for full attribute support.
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; Stashed changes</p>
+<p>Finally, we can write our result out to a spatial file, such as a
+GeoPackage, using <code>sf</code> or <code>terra</code>. We use the
+GeoPackage format because it is open and non-proprietary. Note that the
+DBF format used in ESRI shapefiles truncates column names. Use alternate
+vector formats like GeoPackage (<code>.gpkg</code> file) for full
+attribute support.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span></span>
 <span>  <span class="va">soil_polygons</span>, </span>
 <span>  <span class="st">"ecosite_dominant.gpkg"</span>, </span>
 <span>  delete_dsn <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream Note: The DBF format
-used in ESRI shapefiles truncates column names. Consider alternate
-vector formats like GeoPackage (<code>.gpkg</code> file) for full
-attribute support. ======= &gt;&gt;&gt;&gt;&gt;&gt;&gt; Stashed changes
-## References</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div class="section level3">
 <h3 id="ssurgo-data-and-tools">SSURGO Data and Tools<a class="anchor" aria-label="anchor" href="#ssurgo-data-and-tools"></a>
 </h3>
