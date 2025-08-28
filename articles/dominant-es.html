@@ -562,14 +562,10 @@ from any data you can aggregate to the point that it is 1:1 with the
 <code>mukey</code>.</p>
 </div>
 <div class="section level2">
-<h2 id="export-to-geopackage">Export to GeoPackage<a class="anchor" aria-label="anchor" href="#export-to-geopackage"></a>
+<h2 id="export-spatial-file">Export Spatial File<a class="anchor" aria-label="anchor" href="#export-spatial-file"></a>
 </h2>
 <p>Finally, we can write our result out to a spatial file, such as a
-GeoPackage, using <code>sf</code> or <code>terra</code>. We use the
-GeoPackage format because it is open and non-proprietary. Note that the
-DBF format used in ESRI shapefiles truncates column names. Use alternate
-vector formats like GeoPackage (<code>.gpkg</code> file) for full
-attribute support.</p>
+GeoPackage, using <code>sf</code> or <code>terra</code>.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html" class="external-link">st_write</a></span><span class="op">(</span></span>
 <span>  <span class="va">soil_polygons</span>, </span>
