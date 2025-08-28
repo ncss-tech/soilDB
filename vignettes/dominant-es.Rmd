@@ -1,7 +1,5 @@
 ---
 title: "Mapping Dominant Ecological Sites using SSURGO Data"
-author: "Andrew G. Brown"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Mapping Dominant Ecological Sites using SSURGO Data}
