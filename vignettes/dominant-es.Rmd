@@ -254,9 +254,9 @@ plot(
 
 This same process for merging in aggregate map unit level information generalizes to other SSURGO tables. You can easily create thematic maps from any data you can aggregate to the point that it is 1:1 with the `mukey`.
 
-## Export to GeoPackage
+## Export Spatial File
 
-Finally, we can write our result out to a spatial file, such as a GeoPackage, using `sf` or `terra`. We use the GeoPackage format because it is open and non-proprietary. Note that the DBF format used in ESRI shapefiles truncates column names. Use alternate vector formats like GeoPackage (`.gpkg` file) for full attribute support.
+Finally, we can write our result out to a spatial file, such as a GeoPackage, using `sf` or `terra`.
 
 ```{r export, eval=FALSE}
 sf::st_write(
@@ -265,7 +265,7 @@ sf::st_write(
   delete_dsn = TRUE
 )
 ```
-
+ 
 ```{r cleanup, include=FALSE}
 unlink("ecosite_dominant.gpkg")
 ```
