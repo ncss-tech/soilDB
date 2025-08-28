@@ -3,8 +3,9 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   fetchNASIS: fetchNASIS.html
+  local-ssurgo: local-ssurgo.html
   wcs-ssurgo: wcs-ssurgo.html
-last_built: 2025-08-21T19:31Z
+last_built: 2025-08-28T20:29Z
 urls:
   reference: http://ncss-tech.github.io/soilDB/reference
   article: http://ncss-tech.github.io/soilDB/articles

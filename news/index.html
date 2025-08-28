@@ -19,6 +19,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
+    <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local SSURGO Databases</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -334,7 +335,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-2-7-7">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-2-7-7"></a></h3>
-<ul><li><p><code>dbQueryNASIS(..., close=TRUE)</code> now calls <code>dbDisconnect()</code> <code><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit()</a></code> (ensuring connections get closed on error)</p></li>
+<ul><li><p><code>dbQueryNASIS(..., close=TRUE)</code> now calls <code><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect()</a></code> <code><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit()</a></code> (ensuring connections get closed on error)</p></li>
 <li>
 <p><code><a href="../reference/fetchSCAN.html">fetchSCAN()</a></code>:</p>
 <ul><li><p>2x requests when <code>timeseries</code> argument not specified</p></li>
@@ -549,7 +550,7 @@
 <code><a href="../reference/fetchSDA.html">fetchSDA()</a></code> now (again) returns mapunit/legend-level information via <code><a href="../reference/get_mapunit_from_NASIS.html">get_mapunit_from_NASIS()</a></code>
 </li>
 <li>
-<code><a href="../reference/createStaticNASIS.html">createStaticNASIS()</a></code> and queries to SQLite NASIS snapshots now preserve date/time using RSQLite 2.2.4+ via <code>extended_types=TRUE</code> argument to <code>dbConnect()</code>
+<code><a href="../reference/createStaticNASIS.html">createStaticNASIS()</a></code> and queries to SQLite NASIS snapshots now preserve date/time using RSQLite 2.2.4+ via <code>extended_types=TRUE</code> argument to <code><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect()</a></code>
 </li>
 <li>
 <code><a href="../reference/get_soilseries_from_NASIS.html">get_soilseries_from_NASIS()</a></code> now returns <code>soiltaxclasslastupdated</code> as a date/time and stores the year in calculated column <code>soiltaxclassyearlastupdated</code>
