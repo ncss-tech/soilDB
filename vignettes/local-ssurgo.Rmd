@@ -24,7 +24,7 @@ The `soilDB` package provides tools for accessing and working with soil survey d
 
 This vignette demonstrates how to use these functions with Morton and Stanton counties, Kansas (`areasymbol = c("KS129", "KS187")`).
 
-## 1. Download SSURGO Data
+## Download SSURGO Data
 
 `downloadSSURGO()` will download the official SSURGO dataset for the specified `areasymbol` and return the path to the ZIP archive.
 
@@ -43,7 +43,7 @@ ssurgo_zip <- downloadSSURGO(
 
 We specify `destdir` as the destination directory to download ZIP files by areasymbol from Web Soil Survey. If unspecified `exdir` is the same as `destdir` and is the directory the ZIP files get extracted to.
 
-## 2. Create a Local SSURGO Database
+## Create a Local SSURGO Database
 
 The `createSSURGO()` function uses the `sf` and `RSQLite` packages internally to build a SQLite database. The suggested SQLite-based format to use is GeoPackage (`".gpkg"` file).
 
@@ -61,7 +61,7 @@ Here we pass `exdir` so `createSSURGO()` knows where to look for the data that `
 
 The resulting `.gpkg` file is a spatially enabled SQLite database that can be used in GIS software or queried directly in R.
 
-## 3. Load and Explore the Database
+## Load and Explore the Database
 
 Once the GeoPackage is created, you can connect to it using `DBI` and explore its contents. The database follows the SSURGO schema, which includes tables like `mapunit`, `component`, `chorizon`, and spatial layers such as the spatial map unit polygon layer, `mupolygon`.
 
@@ -127,7 +127,7 @@ plot(st_geometry(spatial_mu))
 This spatial layer can be used for mapping or spatial joins with other geospatial datasets. The `mukey` column is the unique mapunit identifier. Any SSURGO data that can be queried or aggregated to be 1:1 with `mukey` can
 be used in thematic mapping.
 
-## 4. Visualizing Soil Properties
+## Visualizing Soil Properties
 
 You can visualize soil properties by joining tabular data with the `mupolygon` layer and plotting with base R graphics.
 
@@ -240,7 +240,7 @@ The aggregation of dominant component to map unit level values is one of the sim
 
 You can adapt the aggregation logic depending on your needs (e.g., max, mean, or most frequent value). Many soilDB functions include default aggregations, and you can write custom queries of your own using `SDA_query()` or DBI `dbGetQuery()`. 
 
-## 5. Query and Aggregation Functions
+## Query and Aggregation Functions
 
 This section describes some existing options in the `soilDB` package for querying and aggregating data for thematic maps.
 
@@ -257,9 +257,9 @@ All of the `get_SDA_*()` "SSURGO On Demand" functions can be applied to local co
       -  Component Ecological Classes: [`get_SDA_coecoclass()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecoclass.html)
       -  Component Surface Morphometry: [`get_SDA_cosurfmorph()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_cosurfmorph.html)
 
-## 5. Alternative Tools
+## Alternative Tools
 
-For users who prefer a Python-based or cross-platform solution, the [SSURGOPortal R package](https://github.com/brownag/SSURGOPortalR) wraps the official [SSURGO Portal Python](https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal) code for use in R.
+For users who prefer a Python-based solution, the [SSURGOPortal R package](https://github.com/brownag/SSURGOPortalR) wraps the official [SSURGO Portal Python](https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal) code for use in R.
 
 ## Conclusion
 
