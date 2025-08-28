@@ -101,7 +101,7 @@ OSDquery <- function(everything = NULL, mlra = '', taxonomic_class = '', typical
     
     # API URL
     # note: this is the load-balancer
-    u <- 'https://soilmap4-1.lawr.ucdavis.edu/osd-search/index.php'
+    u <- 'https://casoilresource.lawr.ucdavis.edu/osd-search/index.php'
     
   } else {
     
@@ -116,7 +116,7 @@ OSDquery <- function(everything = NULL, mlra = '', taxonomic_class = '', typical
     
     # API URL
     # note: this is the load-balancer
-    u <- 'https://soilmap4-1.lawr.ucdavis.edu/osd-search/search-entire-osd.php'
+    u <- 'https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php'
   }
  
   # submit via POST

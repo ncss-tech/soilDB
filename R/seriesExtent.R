@@ -75,7 +75,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60,
     stop("package sf is required to return vector series extent grids", call. = FALSE)
   
   # base URL to cached data
-  u <- URLencode(paste0('http://soilmap4-1.lawr.ucdavis.edu/series-extent-cache/json/', s, '.json'))
+  u <- URLencode(paste0('http://casoilresource.lawr.ucdavis.edu/series-extent-cache/json/', s, '.json'))
   
   res <- .soilDB_curl_get_JSON(u, gzip = FALSE, FUN = function(x) sf::st_read(x, quiet = TRUE), quiet = TRUE)
   
@@ -103,7 +103,7 @@ seriesExtent <- function(s, type = c('vector', 'raster'), timeout = 60,
     stop("package terra is required to return raster series extent grids", call. = FALSE)
   
   # base URL to cached data
-  u <- URLencode(paste0('http://soilmap4-1.lawr.ucdavis.edu/series-extent-cache/grid/', s, '.tif'))
+  u <- URLencode(paste0('http://casoilresource.lawr.ucdavis.edu/series-extent-cache/grid/', s, '.tif'))
   
   # init temp files
   tf <- tempfile(fileext = '.tif')

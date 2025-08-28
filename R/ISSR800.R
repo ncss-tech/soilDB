@@ -102,7 +102,7 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
   }
   
   # base URL + parameters
-  base.url <- 'http://soilmap4-1.lawr.ucdavis.edu/cgi-bin/mapserv?'
+  base.url <- 'http://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?'
   service.url <- 'map=/data1/website/wcs/issr800.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage'
   
   # unpack BBOX for WCS 2.0

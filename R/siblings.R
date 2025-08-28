@@ -49,7 +49,7 @@ siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FA
   # helper functions
   .getSibling <- function(i, only.major) {
     # these use the new API
-    u <- URLencode(sprintf('https://soilmap4-1.lawr.ucdavis.edu/api/soil-series.php?q=siblings&s=%s', i))
+    u <- URLencode(sprintf('https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=siblings&s=%s', i))
     
     # attempt query to API for basic sibling set, result is JSON
     sib <- .soilDB_curl_get_JSON(u, quiet = TRUE)
@@ -80,7 +80,7 @@ siblings <- function(s, only.major = FALSE, component.data = FALSE, cousins = FA
   # note: this does not launder component names through SC database
   .getSiblingData <- function(i) {
     # these use the new API
-    u <- URLencode(sprintf('https://soilmap4-1.lawr.ucdavis.edu/api/soil-series.php?q=sibling_data&s=%s', i))
+    u <- URLencode(sprintf('https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=sibling_data&s=%s', i))
     
     # attempt query to API for component data, result is JSON
     # result is FALSE if no matching data

@@ -166,9 +166,9 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
   .SoilWebOSD <- function(i, e) {
     # compose base URL
     if (e) {
-      x <- 'https://soilmap4-1.lawr.ucdavis.edu/api/soil-series.php?q=all&s='
+      x <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=all&s='
     } else {
-      x <- 'https://soilmap4-1.lawr.ucdavis.edu/api/soil-series.php?q=site_hz&s='
+      x <- 'https://casoilresource.lawr.ucdavis.edu/api/soil-series.php?q=site_hz&s='
     }
     
     # format series list and append to URL
