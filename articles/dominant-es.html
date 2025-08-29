@@ -62,7 +62,7 @@
       <h1>Mapping Dominant Ecological Sites using SSURGO Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/vignettes/dominant-es.Rmd" class="external-link"><code>vignettes/dominant-es.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.8.12/vignettes/dominant-es.Rmd" class="external-link"><code>vignettes/dominant-es.Rmd</code></a></small>
       <div class="d-none name"><code>dominant-es.Rmd</code></div>
     </div>
 
@@ -139,15 +139,15 @@ POLYGON.</p>
 <pre><code><span><span class="co">## Simple feature collection with 6 features and 2 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -120.9233 ymin: 37.91407 xmax: -120.823 ymax: 38.0197</span></span>
+<span><span class="co">## Bounding box:  xmin: -120.8786 ymin: 37.95459 xmax: -120.7725 ymax: 38.0197</span></span>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">##     mukey     area_ac                           geom</span></span>
 <span><span class="co">## 1 1403432    5.402344 POLYGON ((-120.8315 37.9853...</span></span>
 <span><span class="co">## 2 2924958   84.229770 POLYGON ((-120.8498 37.9994...</span></span>
-<span><span class="co">## 3 1403418 1647.514959 POLYGON ((-120.9233 37.9183...</span></span>
-<span><span class="co">## 4 1403432    8.221394 POLYGON ((-120.8343 37.9898...</span></span>
-<span><span class="co">## 5 2924958  115.522394 POLYGON ((-120.8393 38.0000...</span></span>
-<span><span class="co">## 6 1605511 1009.514364 POLYGON ((-120.8783 37.9572...</span></span></code></pre>
+<span><span class="co">## 3 1403432    8.221394 POLYGON ((-120.8343 37.9898...</span></span>
+<span><span class="co">## 4 2924958  115.522394 POLYGON ((-120.8393 38.0000...</span></span>
+<span><span class="co">## 5 1605511 1009.514364 POLYGON ((-120.8783 37.9572...</span></span>
+<span><span class="co">## 6 2450844   37.795295 POLYGON ((-120.7763 37.9786...</span></span></code></pre>
 <p>You can also set <code>geomIntersection = TRUE</code> so that
 intersecting geometries are cropped to the AOI. This is convenient if
 you have a very specific AOI in mind or would like to reduce the amount
@@ -263,8 +263,8 @@ concepts.</p>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">##    mukey   area_ac                           geom</span></span>
 <span><span class="co">## 1 660939 2596.0225 POLYGON ((-120.8427 37.975,...</span></span>
-<span><span class="co">## 2 660921 1668.6742 POLYGON ((-120.7998 37.975,...</span></span>
-<span><span class="co">## 3 660960  253.0798 POLYGON ((-120.85 37.975, -...</span></span></code></pre>
+<span><span class="co">## 2 660960  253.0798 POLYGON ((-120.85 37.975, -...</span></span>
+<span><span class="co">## 3 660921 1668.6742 POLYGON ((-120.7998 37.975,...</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mu_statsgo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">statsgo_polygons</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span>, </span>
@@ -280,22 +280,22 @@ concepts.</p>
 <pre><code><span><span class="co">## Simple feature collection with 6 features and 6 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -121.0731 ymin: 37.07511 xmax: -119.9157 ymax: 38.29961</span></span>
+<span><span class="co">## Bounding box:  xmin: -121.2368 ymin: 37.07511 xmax: -119.9157 ymax: 38.29961</span></span>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">##    mukey areasymbol nationalmusym      areaname</span></span>
 <span><span class="co">## 1 660921         US          q5r1 United States</span></span>
 <span><span class="co">## 2 660939         US          q5rm United States</span></span>
 <span><span class="co">## 3 660960         US          q5s9 United States</span></span>
-<span><span class="co">## 4 660939         US          q5rm United States</span></span>
+<span><span class="co">## 4 660960         US          q5s9 United States</span></span>
 <span><span class="co">## 5 660939         US          q5rm United States</span></span>
 <span><span class="co">## 6 660939         US          q5rm United States</span></span>
 <span><span class="co">##                                 muname farmlndcl                           geom</span></span>
 <span><span class="co">## 1 Whiterock-Rock outcrop-Auburn (s818)      &lt;NA&gt; POLYGON ((-120.794 38.18986...</span></span>
 <span><span class="co">## 2                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.9141 38.0735...</span></span>
 <span><span class="co">## 3       Finrod-Cogna-Archerdale (s857)      &lt;NA&gt; POLYGON ((-120.9711 37.9490...</span></span>
-<span><span class="co">## 4                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.8224 37.7205...</span></span>
-<span><span class="co">## 5                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.5867 37.7205...</span></span>
-<span><span class="co">## 6                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-121.0478 38.2898...</span></span></code></pre>
+<span><span class="co">## 4       Finrod-Cogna-Archerdale (s857)      &lt;NA&gt; POLYGON ((-121.1592 38.0989...</span></span>
+<span><span class="co">## 5                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-121.0478 38.2898...</span></span>
+<span><span class="co">## 6                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.8763 37.8606...</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ssas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery</a></span><span class="op">(</span><span class="va">aoi</span>, what <span class="op">=</span> <span class="st">"areasymbol"</span><span class="op">)</span></span>
 <span><span class="va">ssas</span></span></code></pre></div>
