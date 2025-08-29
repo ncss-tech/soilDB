@@ -12,5 +12,7 @@ bibentry(
                       paste(packageVersion("soilDB"), collapse = "."),
                       "x.x.x")),
   url = "https://CRAN.R-project.org/package=soilDB",
-  year = strftime(Sys.Date(), "%Y")
+  year = ifelse(requireNamespace("soilDB", quietly=TRUE),
+                strftime(packageDate("soilDB"), "%Y"),
+                "YYYY")
 )
