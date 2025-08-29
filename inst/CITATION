@@ -7,7 +7,10 @@ bibentry(
               person(given="Jay", family="Skovlin"), 
               person(given="Stephen", family="Roecker"), 
               person(given="Andrew", family="Brown")),
-  note = paste("R package version", packageVersion("soilDB")),
+  note = paste("R package version",
+               ifelse(requireNamespace("soilDB", quietly=TRUE),
+                      paste(packageVersion("soilDB"), collapse = "."),
+                      "x.x.x")),
   url = "https://CRAN.R-project.org/package=soilDB",
   year = strftime(Sys.Date(), "%Y")
 )
