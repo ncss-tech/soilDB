@@ -235,7 +235,7 @@
 #' @seealso \code{\link{fetchOSD}}
 #' @references \url{http://ncsslabdatamart.sc.egov.usda.gov/}
 #' @keywords utilities
-#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE) && as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))
 #' \donttest{
 #'     library(aqp)
 #'
@@ -247,10 +247,11 @@
 #'
 #'     # how many pedons
 #'     length(s)
-#'
-#'     # plot
-#'     aqp::plotSPC(s, name='hzn_desgn', max.depth=150)
-#'
+#'     if (inherits(s, "SoilProfileCollection")) {
+#'       # plot
+#'       aqp::plotSPC(s, name='hzn_desgn', max.depth=150)
+#'     }
+#'     
 #'     ##
 #'     ## morphologic data
 #'     ##
