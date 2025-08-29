@@ -167,35 +167,34 @@ the link below for the live data.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># curl::has_internet() &amp;&amp; requireNamespace("httr", quietly = TRUE) &amp;&amp; requireNamespace("aqp", quietly = TRUE) &amp;&amp; as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># search by series name</span></span></span>
 <span class="r-in"><span>    <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">fetchKSSL</span><span class="op">(</span>series<span class="op">=</span><span class="st">'auburn'</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 14 pedons loaded (0.06 Mb transferred)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># search by bounding-box</span></span></span>
 <span class="r-in"><span>    <span class="co"># s &lt;- fetchKSSL(bbox=c(-120, 37, -122, 38))</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># how many pedons</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 14</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>    <span class="co"># plot</span></span></span>
-<span class="r-in"><span>    <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span><span class="va">s</span>, name<span class="op">=</span><span class="st">'hzn_desgn'</span>, max.depth<span class="op">=</span><span class="fl">150</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="fetchKSSL-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">s</span>, <span class="st">"SoilProfileCollection"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="co"># plot</span></span></span>
+<span class="r-in"><span>      <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span><span class="va">s</span>, name<span class="op">=</span><span class="st">'hzn_desgn'</span>, max.depth<span class="op">=</span><span class="fl">150</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span></span></span>
+<span class="r-in"><span>    </span></span>
 <span class="r-in"><span>    <span class="co">##</span></span></span>
 <span class="r-in"><span>    <span class="co">## morphologic data</span></span></span>
 <span class="r-in"><span>    <span class="co">##</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># get lab and morphologic data</span></span></span>
 <span class="r-in"><span>    <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">fetchKSSL</span><span class="op">(</span>series<span class="op">=</span><span class="st">'auburn'</span>, returnMorphologicData <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 14 pedons loaded (0.09 Mb transferred)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># extract SPC</span></span></span>
 <span class="r-in"><span>    <span class="va">pedons</span> <span class="op">&lt;-</span> <span class="va">s</span><span class="op">$</span><span class="va">SPC</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -40,7 +40,43 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.8.11" id="soildb-2811-development">soilDB 2.8.11 (development)<a class="anchor" aria-label="anchor" href="#soildb-2811-development"></a></h2><p class="text-muted">CRAN release: 2025-07-11</p>
+<h2 class="pkg-version" data-toc-text="2.8.12" id="soildb-2812-2025-08-29">soilDB 2.8.12 (2025-08-29)<a class="anchor" aria-label="anchor" href="#soildb-2812-2025-08-29"></a></h2>
+<ul><li>
+<strong>New Vignettes</strong>:
+<ul><li>Added vignette for thematic maps of dominant ecological site using Soil Data Access via <code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> and <code><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass()</a></code>
+</li>
+<li>Added vignette for creating and using local SSURGO databases via <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> and <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code>
+</li>
+</ul></li>
+<li>
+<code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> now supports <code>addFields</code> argument to add columns to the result from other non-spatial tables.
+<ul><li>You can now specify columns from:
+<ul><li>
+<code>"legend"</code>, <code>"mapunit"</code>, and <code>"muaggatt"</code> tables for <code>what</code> equal to <code>"mupolygon"</code>, <code>"mupoint"</code>, <code>"muline"</code> or <code>"mukey"</code><br></li>
+<li>
+<code>"legend"</code> table for <code>what</code> equal to <code>"areasymbol"</code> or <code>"sapolygon"</code>
+</li>
+<li>
+<code>"featdesc"</code> for <code>what</code> equal to <code>"featpoint"</code> or <code>"featline"</code>
+</li>
+</ul></li>
+</ul></li>
+<li>
+<code><a href="../reference/createSSURGO.html">createSSURGO()</a></code>:
+<ul><li>Added <code>append</code> argument to fix <code>overwrite</code> behavior</li>
+<li>Fixed bug in creating non-GeoPackage, non-spatial SQLite output</li>
+<li>Improved handling of empty export files and <code>overwrite</code> logic for non-file-based RDBMS</li>
+</ul></li>
+<li>
+<code><a href="../reference/fetchNASIS.html">fetchNASIS()</a></code>: fixed bug when <code>fill=TRUE</code> and there are no horizons in the source data for any profile</li>
+<li>
+<code><a href="../reference/fetchSDA.html">get_component_from_SDA()</a></code> fixed bug in join of <code>"chorizon"</code> and <code>"chfrags"</code> tables, now uses <code>merge(incomparables=NA)</code>
+</li>
+<li>
+<code><a href="../reference/fetchVegdata.html">get_vegplot_tree_si_summary_from_NASIS_db()</a></code> updated for new <code>siteindexcurve</code> table in data model version 7.4.3</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.8.11" id="soildb-2811-2025-07-11">soilDB 2.8.11 (2025-07-11)<a class="anchor" aria-label="anchor" href="#soildb-2811-2025-07-11"></a></h2><p class="text-muted">CRAN release: 2025-07-11</p>
 <ul><li>Update to NASIS metadata for data model version 7.4.3</li>
 <li>
 <code><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial()</a></code> <code>geom.src="mlrapolygon"</code> uses a new URL on the DSHub S3 bucket</li>
