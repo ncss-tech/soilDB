@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Local SSURGO Databases • soilDB</title>
+<title>Local Soil Survey Geographic (SSURGO) Databases • soilDB</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Local SSURGO Databases">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Local Soil Survey Geographic (SSURGO) Databases">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -35,7 +35,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/dominant-es.html">Mapping Dominant Ecological Sites using SSURGO Data</a></li>
     <li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
-    <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local SSURGO Databases</a></li>
+    <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local Soil Survey Geographic (SSURGO) Databases</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
   </ul>
 </li>
@@ -59,7 +59,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Local SSURGO Databases</h1>
+      <h1>Local Soil Survey Geographic (SSURGO) Databases</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/vignettes/local-ssurgo.Rmd" class="external-link"><code>vignettes/local-ssurgo.Rmd</code></a></small>
@@ -74,20 +74,20 @@
 <p>The <code>soilDB</code> package provides tools for accessing and
 working with soil survey data from the USDA-NRCS. Two key functions,
 <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> and <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code>,
-streamline the process of acquiring and preparing SSURGO data into a
-local SQLite (GeoPackage) database–similar to the functionality offered
-by <a href="https://nrcs.usda.gov/resources/data-and-reports/ssurgo-portal" class="external-link">SSURGO
+streamline the process of acquiring and preparing Soil Survey Geographic
+database (SSURGO) data into a local SQLite (GeoPackage) database–similar
+to the functionality offered by <a href="https://nrcs.usda.gov/resources/data-and-reports/ssurgo-portal" class="external-link">SSURGO
 Portal</a>.</p>
-<p>This vignette demonstrates how to use these functions with Morton and
-Stanton counties, Kansas
+<p>This vignette demonstrates how to use these functions to obtain and
+view data from <em>Morton and Stanton counties, Kansas</em>
 (<code>areasymbol = c("KS129", "KS187")</code>).</p>
 </div>
 <div class="section level2">
 <h2 id="download-ssurgo-data">Download SSURGO Data<a class="anchor" aria-label="anchor" href="#download-ssurgo-data"></a>
 </h2>
-<p><code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> will download the official SSURGO
-dataset for the specified <code>areasymbol</code> and return the path to
-the ZIP archive.</p>
+<p><code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> will download the official SSURGO data
+from Web Soil Survey for the specified <code>areasymbol</code> and
+return the path to the ZIP archives.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/soilDB/" class="external-link">soilDB</a></span><span class="op">)</span></span>
 <span></span>
@@ -99,18 +99,34 @@ the ZIP archive.</p>
 <span>  areasymbol <span class="op">=</span> <span class="va">AREASYMBOLS</span>, </span>
 <span>  destdir <span class="op">=</span> <span class="va">gpkg_dir</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>Here we specify just two soil survey areas of interest using the
+“area symbol.” Generally, this is a 2-letter state code and a 3-digit
+county FIPS code or other identifier.</p>
+<p>There are more options to specify the area of interest. Any SQL WHERE
+clause that targets the <code>sacatalog</code> (Soil Survey Area
+Catalog) table can be used.</p>
+<p>For example, to do all soil survey areas in Kansas, instead of
+<code>areasymbol</code> we could set
+<code>WHERE = "areasymbol LIKE 'KS%'"</code>. Alternately,
+<code>WHERE</code> can be any R spatial object, which is passed to
+<code><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery()</a></code> to determine area symbols of
+interest.</p>
 <p>We specify <code>destdir</code> as the destination directory to
-download ZIP files by areasymbol from Web Soil Survey. If unspecified
-<code>exdir</code> is the same as <code>destdir</code> and is the
-directory the ZIP files get extracted to.</p>
+download area-specific ZIP files.</p>
+<p>If unspecified, <code>exdir,</code>the directory the ZIP files get
+extracted to, is the same as <code>destdir</code>. If you want to keep
+the ZIP files and extracted data, set <code>destdir</code>. If you only
+want the extracted data, set <code>exdir</code>. If you want both to be
+kept only temporarily in order to create a new database, leave
+<code>destdir</code> as the default (<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>).</p>
 </div>
 <div class="section level2">
 <h2 id="create-a-local-ssurgo-database">Create a Local SSURGO Database<a class="anchor" aria-label="anchor" href="#create-a-local-ssurgo-database"></a>
 </h2>
 <p>The <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> function uses the <code>sf</code> and
-<code>RSQLite</code> packages internally to build a SQLite database. The
-suggested SQLite-based format to use is GeoPackage (<code>".gpkg"</code>
-file).</p>
+<code>RSQLite</code> packages internally to build a SQLite database. A
+suggested SQLite-based format to use is <a href="https://www.geopackage.org/" class="external-link">GeoPackage</a> (<code>".gpkg"</code>
+file), as it is an open format with a well-defined standard.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a local GeoPackage from the downloaded ZIP</span></span>
 <span><span class="va">gpkg_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">gpkg_dir</span>, <span class="st">"ssurgo.gpkg"</span><span class="op">)</span></span>
@@ -121,11 +137,11 @@ file).</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Here we pass <code>exdir</code> so <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code> knows
 where to look for the data that <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> extracted
-from ZIP files. If we supply <code>con</code> argument instaed of
-<code>filename</code> we can connect to arbitrary DBIConnection objects,
-which could include other SQLite connection types, DuckDB,
-PostgresSQL.</p>
-<p>The resulting <code>.gpkg</code> file is a spatially enabled SQLite
+from ZIP files. If we supply <code>con</code> argument instead of
+<code>filename</code> we can connect to arbitrary <em>DBIConnection</em>
+objects, which could include those for other database connection types
+such as DuckDB or PostgresSQL.</p>
+<p>The resulting <code>.gpkg</code> file is a spatially-enabled SQLite
 database that can be used in GIS software or queried directly in R.</p>
 </div>
 <div class="section level2">
@@ -211,9 +227,12 @@ unit.</p>
 <span><span class="co">## [21] "vtsepticsyscl" "mucertstat"    "lkey"          "mukey"</span></span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="preview-data">Preview Data<a class="anchor" aria-label="anchor" href="#preview-data"></a>
+<h3 id="basic-queries">Basic Queries<a class="anchor" aria-label="anchor" href="#basic-queries"></a>
 </h3>
-<p>Preview the first few rows of the <code>mapunit</code> table:</p>
+<p>You can write arbitrary queries to run against the SQLite connection
+to the local database.</p>
+<p>For example, a query to look at the first <code>5</code> rows of the
+<code>mapunit</code> table:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"SELECT * FROM mapunit LIMIT 5"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   musym                                                muname       mukind</span></span>
@@ -275,14 +294,16 @@ their components:</p>
 <div class="section level3">
 <h3 id="load-spatial-data">Load Spatial Data<a class="anchor" aria-label="anchor" href="#load-spatial-data"></a>
 </h3>
-<p>To work with spatial features, use the <code>sf</code> package.</p>
-<p>Here we demonstrate how to read the <code>mupolygon</code> layer:</p>
+<p>To work with spatial data, we will use the <a href="https://r-spatial.github.io/sf/" class="external-link"><code>sf</code> package</a>.</p>
+<p>Here we demonstrate how to read the <code>mupolygon</code> layer,
+which contains the polygon geometries of delineations of specific map
+unit concepts:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Read spatial map units</span></span>
 <span><span class="va">spatial_mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="va">gpkg_path</span>, layer <span class="op">=</span> <span class="st">"mupolygon"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Reading layer `mupolygon' from data source `/tmp/RtmpBZU03w/ssurgo.gpkg' using driver `GPKG'</span></span>
+<pre><code><span><span class="co">## Reading layer `mupolygon' from data source `/tmp/RtmpkvbaE3/ssurgo.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">## Simple feature collection with 3333 features and 4 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
@@ -310,11 +331,11 @@ their components:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the map units</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">spatial_mu</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="local-ssurgo_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+<p><img src="local-ssurgo_files/figure-html/sf-mupolygon-1.png" width="672"></p>
 <p>This spatial layer can be used for mapping or spatial joins with
-other geospatial datasets. The <code>mukey</code> column is the unique
-mapunit identifier. Any SSURGO data that can be queried or aggregated to
-be 1:1 with <code>mukey</code> can be used in thematic mapping.</p>
+other geospatial data sets. The <code>mukey</code> column is the unique
+map unit identifier. Any SSURGO data that can be queried or aggregated
+to be 1:1 with <code>mukey</code> can be used in thematic mapping.</p>
 </div>
 </div>
 <div class="section level2">
@@ -323,116 +344,263 @@ be 1:1 with <code>mukey</code> can be used in thematic mapping.</p>
 <p>You can visualize soil properties by joining tabular data with the
 <code>mupolygon</code> layer and plotting with base R graphics.</p>
 <div class="section level3">
-<h3 id="load-spatial-and-tabular-data">Load Spatial and Tabular Data<a class="anchor" aria-label="anchor" href="#load-spatial-and-tabular-data"></a>
+<h3 id="load-tabular-data">Load Tabular Data<a class="anchor" aria-label="anchor" href="#load-tabular-data"></a>
 </h3>
+<p>Here we look at the first few rows of <code>mapunit</code> and
+<code>component</code>, two critical tables in the SSURGO schema.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Read spatial map units</span></span>
-<span><span class="va">spatial_mu</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="va">gpkg_path</span>, layer <span class="op">=</span> <span class="st">"mupolygon"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Reading layer `mupolygon' from data source `/tmp/RtmpBZU03w/ssurgo.gpkg' using driver `GPKG'</span></span>
-<span><span class="co">## Simple feature collection with 3333 features and 4 fields</span></span>
-<span><span class="co">## Geometry type: POLYGON</span></span>
-<span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -102.0421 ymin: 36.99309 xmax: -101.5257 ymax: 37.7385</span></span>
-<span><span class="co">## Geodetic CRS:  WGS 84</span></span></code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Read tabular data</span></span>
 <span><span class="va">mapunit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">dbReadTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"mapunit"</span><span class="op">)</span></span>
-<span><span class="va">component</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">dbReadTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"component"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Disconnect when done</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mapunit</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   musym                                                muname       mukind</span></span>
+<span><span class="co">## 1  1510             Atchison clay loam, 3 to 6 percent slopes Consociation</span></span>
+<span><span class="co">## 2  5110       Atchison fine sandy loam, 1 to 3 percent slopes Consociation</span></span>
+<span><span class="co">## 3  1511                  Atchison loam, 1 to 3 percent slopes Consociation</span></span>
+<span><span class="co">## 4  1512                  Atchison loam, 6 to 9 percent slopes Consociation</span></span>
+<span><span class="co">## 5  1515 Atchison-Rock outcrop complex, 6 to 20 percent slopes      Complex</span></span>
+<span><span class="co">## 6  1550         Belfon clay loam, cool, 0 to 1 percent slopes Consociation</span></span>
+<span><span class="co">##   mustatus muacres mapunitlfw_l mapunitlfw_r mapunitlfw_h mapunitpfa_l</span></span>
+<span><span class="co">## 1       NA   15733           NA           NA           NA           NA</span></span>
+<span><span class="co">## 2       NA      62           NA           NA           NA           NA</span></span>
+<span><span class="co">## 3       NA   36516           NA           NA           NA           NA</span></span>
+<span><span class="co">## 4       NA    4666           NA           NA           NA           NA</span></span>
+<span><span class="co">## 5       NA    3488           NA           NA           NA           NA</span></span>
+<span><span class="co">## 6       NA    5811           NA           NA           NA           NA</span></span>
+<span><span class="co">##   mapunitpfa_r mapunitpfa_h                        farmlndcl muhelcl muwathelcl</span></span>
+<span><span class="co">## 1           NA           NA Farmland of statewide importance      NA         NA</span></span>
+<span><span class="co">## 2           NA           NA      Prime farmland if irrigated      NA         NA</span></span>
+<span><span class="co">## 3           NA           NA      Prime farmland if irrigated      NA         NA</span></span>
+<span><span class="co">## 4           NA           NA Farmland of statewide importance      NA         NA</span></span>
+<span><span class="co">## 5           NA           NA Farmland of statewide importance      NA         NA</span></span>
+<span><span class="co">## 6           NA           NA      Prime farmland if irrigated      NA         NA</span></span>
+<span><span class="co">##   muwndhelcl interpfocus invesintens iacornsr nhiforsoigrp nhspiagr</span></span>
+<span><span class="co">## 1         NA                 Order 2       NA           NA       NA</span></span>
+<span><span class="co">## 2         NA                 Order 2       NA           NA       NA</span></span>
+<span><span class="co">## 3         NA                 Order 2       NA           NA       NA</span></span>
+<span><span class="co">## 4         NA                 Order 2       NA           NA       NA</span></span>
+<span><span class="co">## 5         NA                 Order 2       NA           NA       NA</span></span>
+<span><span class="co">## 6         NA    cropland     Order 2       NA           NA       NA</span></span>
+<span><span class="co">##   vtsepticsyscl mucertstat  lkey   mukey</span></span>
+<span><span class="co">## 1            NA         NA 10591 1382580</span></span>
+<span><span class="co">## 2            NA         NA 10591 1382581</span></span>
+<span><span class="co">## 3            NA         NA 10591 1382582</span></span>
+<span><span class="co">## 4            NA         NA 10591 1382583</span></span>
+<span><span class="co">## 5            NA         NA 10591 1382584</span></span>
+<span><span class="co">## 6            NA         NA 10591 1382585</span></span></code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">component</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html" class="external-link">dbReadTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"component"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">component</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   comppct_l comppct_r comppct_h compname compkind majcompflag        otherph</span></span>
+<span><span class="co">## 1        NA        90        NA Atchison   Series         Yes               </span></span>
+<span><span class="co">## 2        NA        10        NA    Otero   Series         No  HIGH PPT, NIRR</span></span>
+<span><span class="co">## 3        NA         5        NA   Bigbow   Series         No                </span></span>
+<span><span class="co">## 4        NA        70        NA Atchison   Series         Yes               </span></span>
+<span><span class="co">## 5        NA        25        NA    Otero   Series         No  HIGH PPT, NIRR</span></span>
+<span><span class="co">## 6        NA         5        NA  Satanta   Series         No  PE&lt;31, MAAT&gt;45</span></span>
+<span><span class="co">##   localphase slope_l slope_r slope_h slopelenusle_l slopelenusle_r</span></span>
+<span><span class="co">## 1                  3       5       6             NA             61</span></span>
+<span><span class="co">## 2                  4      10      15             NA             23</span></span>
+<span><span class="co">## 3                  0       1       1             NA            107</span></span>
+<span><span class="co">## 4                  1       2       3             NA             76</span></span>
+<span><span class="co">## 5                  2       3       4             NA             61</span></span>
+<span><span class="co">## 6                  0       1       1             NA            107</span></span>
+<span><span class="co">##   slopelenusle_h runoff tfact wei weg erocl earthcovkind1 earthcovkind2</span></span>
+<span><span class="co">## 1             NA Medium     5  86  4L                                  </span></span>
+<span><span class="co">## 2             NA Medium     5  86   3                                  </span></span>
+<span><span class="co">## 3             NA    Low     5  86   3                                  </span></span>
+<span><span class="co">## 4             NA    Low     5  86   3                                  </span></span>
+<span><span class="co">## 5             NA    Low     5  86   3                                  </span></span>
+<span><span class="co">## 6             NA    Low     5  56   5                                  </span></span>
+<span><span class="co">##   hydricon hydricrating                   drainagecl elev_l elev_r elev_h</span></span>
+<span><span class="co">## 1                    No                 Well drained    732    915   1097</span></span>
+<span><span class="co">## 2                    No Somewhat excessively drained    732    915   1097</span></span>
+<span><span class="co">## 3                    No                 Well drained    732    915   1097</span></span>
+<span><span class="co">## 4                    No                 Well drained    732    915   1097</span></span>
+<span><span class="co">## 5                    No Somewhat excessively drained   1372   1524   1676</span></span>
+<span><span class="co">## 6                    No                 Well drained    610    915   1219</span></span>
+<span><span class="co">##   aspectccwise aspectrep aspectcwise                                   geomdesc</span></span>
+<span><span class="co">## 1            0       180         359                     fan remnants on breaks</span></span>
+<span><span class="co">## 2            0       180         359                     fan remnants on breaks</span></span>
+<span><span class="co">## 3            0       180         359             paleoterraces on river valleys</span></span>
+<span><span class="co">## 4            0       180         359                     fan remnants on breaks</span></span>
+<span><span class="co">## 5            0       180         359                     fan remnants on breaks</span></span>
+<span><span class="co">## 6            0       180         359 sand sheets on paleoterraces on tablelands</span></span>
+<span><span class="co">##   albedodry_l albedodry_r albedodry_h airtempa_l airtempa_r airtempa_h map_l</span></span>
+<span><span class="co">## 1          NA        0.16          NA          5         13         22   400</span></span>
+<span><span class="co">## 2          NA        0.23          NA          5         13         22   400</span></span>
+<span><span class="co">## 3          NA        0.23          NA          6         13         21   400</span></span>
+<span><span class="co">## 4          NA        0.16          NA          5         13         22   400</span></span>
+<span><span class="co">## 5          NA        0.23          NA          5         13         22   400</span></span>
+<span><span class="co">## 6          NA        0.16          NA          5         13         22   400</span></span>
+<span><span class="co">##   map_r map_h reannualprecip_l reannualprecip_r reannualprecip_h ffd_l ffd_r</span></span>
+<span><span class="co">## 1   450   500               NA               NA               NA   195   215</span></span>
+<span><span class="co">## 2   450   500               NA               NA               NA   195   215</span></span>
+<span><span class="co">## 3   450   500               NA               NA               NA   185   200</span></span>
+<span><span class="co">## 4   450   500               NA               NA               NA   185   200</span></span>
+<span><span class="co">## 5   450   500               NA               NA               NA   185   200</span></span>
+<span><span class="co">## 6   450   500               NA               NA               NA   195   215</span></span>
+<span><span class="co">##   ffd_h nirrcapcl nirrcapscl nirrcapunit irrcapcl irrcapscl irrcapunit</span></span>
+<span><span class="co">## 1   235         3          e          NA       NA                   NA</span></span>
+<span><span class="co">## 2   235         6          e          NA        6         e         NA</span></span>
+<span><span class="co">## 3   215         3          e          NA        2         e         NA</span></span>
+<span><span class="co">## 4   215         3          e          NA       NA                   NA</span></span>
+<span><span class="co">## 5   215         6          e          NA        6         e         NA</span></span>
+<span><span class="co">## 6   235         3          c          NA        1                   NA</span></span>
+<span><span class="co">##   cropprodindex constreeshrubgrp wndbrksuitgrp rsprod_l rsprod_r rsprod_h</span></span>
+<span><span class="co">## 1            NA                8            NA      800     1650     2400</span></span>
+<span><span class="co">## 2            NA                             NA     1000     2000     3000</span></span>
+<span><span class="co">## 3            NA                             NA     1250     2000     3000</span></span>
+<span><span class="co">## 4            NA                8            NA      800     1650     2400</span></span>
+<span><span class="co">## 5            NA                             NA      900     1800     2500</span></span>
+<span><span class="co">## 6            NA                             NA      900     1700     2200</span></span>
+<span><span class="co">##   foragesuitgrpid wlgrain wlgrass wlherbaceous wlshrub wlconiferous wlhardwood</span></span>
+<span><span class="co">## 1              NA      NA      NA           NA      NA           NA         NA</span></span>
+<span><span class="co">## 2              NA      NA      NA           NA      NA           NA         NA</span></span>
+<span><span class="co">## 3              NA      NA      NA           NA      NA           NA         NA</span></span>
+<span><span class="co">## 4              NA      NA      NA           NA      NA           NA         NA</span></span>
+<span><span class="co">## 5              NA      NA      NA           NA      NA           NA         NA</span></span>
+<span><span class="co">## 6              NA      NA      NA           NA      NA           NA         NA</span></span>
+<span><span class="co">##   wlwetplant wlshallowwat wlrangeland wlopenland wlwoodland wlwetland</span></span>
+<span><span class="co">## 1         NA           NA          NA         NA         NA        NA</span></span>
+<span><span class="co">## 2         NA           NA          NA         NA         NA        NA</span></span>
+<span><span class="co">## 3         NA           NA          NA         NA         NA        NA</span></span>
+<span><span class="co">## 4         NA           NA          NA         NA         NA        NA</span></span>
+<span><span class="co">## 5         NA           NA          NA         NA         NA        NA</span></span>
+<span><span class="co">## 6         NA           NA          NA         NA         NA        NA</span></span>
+<span><span class="co">##   soilslippot frostact initsub_l initsub_r initsub_h totalsub_l totalsub_r</span></span>
+<span><span class="co">## 1             Moderate         0         0         0         NA         NA</span></span>
+<span><span class="co">## 2             Moderate         0         0         0         NA         NA</span></span>
+<span><span class="co">## 3             Moderate         0         0         0         NA         NA</span></span>
+<span><span class="co">## 4             Moderate         0         0         0         NA         NA</span></span>
+<span><span class="co">## 5             Moderate         0         0         0         NA         NA</span></span>
+<span><span class="co">## 6             Moderate         0         0         0         NA         NA</span></span>
+<span><span class="co">##   totalsub_h hydgrp   corcon corsteel</span></span>
+<span><span class="co">## 1         NA      B Moderate Moderate</span></span>
+<span><span class="co">## 2         NA      A Moderate Moderate</span></span>
+<span><span class="co">## 3         NA      B      Low      Low</span></span>
+<span><span class="co">## 4         NA      B Moderate Moderate</span></span>
+<span><span class="co">## 5         NA      A Moderate Moderate</span></span>
+<span><span class="co">## 6         NA      B      Low      Low</span></span>
+<span><span class="co">##                                                                taxclname</span></span>
+<span><span class="co">## 1               Fine-loamy, mixed, superactive, mesic Aridic Haplustepts</span></span>
+<span><span class="co">## 2 Coarse-loamy, mixed, superactive, calcareous, mesic Aridic Ustorthents</span></span>
+<span><span class="co">## 3               Fine-loamy, mixed, superactive, mesic Aridic Haplustalfs</span></span>
+<span><span class="co">## 4               Fine-loamy, mixed, superactive, mesic Aridic Haplustepts</span></span>
+<span><span class="co">## 5 Coarse-loamy, mixed, superactive, calcareous, mesic Aridic Ustorthents</span></span>
+<span><span class="co">## 6               Fine-loamy, mixed, superactive, mesic Aridic Argiustolls</span></span>
+<span><span class="co">##      taxorder taxsuborder taxgrtgroup          taxsubgrp  taxpartsize</span></span>
+<span><span class="co">## 1 Inceptisols     Ustepts Haplustepts Aridic Haplustepts   fine-loamy</span></span>
+<span><span class="co">## 2    Entisols    Orthents Ustorthents Aridic Ustorthents coarse-loamy</span></span>
+<span><span class="co">## 3    Alfisols     Ustalfs Haplustalfs Aridic Haplustalfs   fine-loamy</span></span>
+<span><span class="co">## 4 Inceptisols     Ustepts Haplustepts Aridic Haplustepts   fine-loamy</span></span>
+<span><span class="co">## 5    Entisols    Orthents Ustorthents Aridic Ustorthents coarse-loamy</span></span>
+<span><span class="co">## 6   Mollisols     Ustolls Argiustolls Aridic Argiustolls   fine-loamy</span></span>
+<span><span class="co">##   taxpartsizemod  taxceactcl taxreaction taxtempcl     taxmoistscl</span></span>
+<span><span class="co">## 1                superactive    not used     mesic Aridic (torric)</span></span>
+<span><span class="co">## 2                superactive  calcareous     mesic                </span></span>
+<span><span class="co">## 3                superactive    not used     mesic                </span></span>
+<span><span class="co">## 4                superactive    not used     mesic Aridic (torric)</span></span>
+<span><span class="co">## 5                superactive  calcareous     mesic                </span></span>
+<span><span class="co">## 6                superactive    not used     mesic                </span></span>
+<span><span class="co">##   taxtempregime soiltaxedition castorieindex flecolcomnum flhe flphe</span></span>
+<span><span class="co">## 1         mesic  ninth edition            NA           NA   NA    NA</span></span>
+<span><span class="co">## 2         mesic  ninth edition            NA           NA   NA    NA</span></span>
+<span><span class="co">## 3         mesic                           NA           NA   NA    NA</span></span>
+<span><span class="co">## 4         mesic  ninth edition            NA           NA   NA    NA</span></span>
+<span><span class="co">## 5         mesic                           NA           NA   NA    NA</span></span>
+<span><span class="co">## 6         mesic                           NA           NA   NA    NA</span></span>
+<span><span class="co">##   flsoilleachpot flsoirunoffpot fltemik2use fltriumph2use indraingrp</span></span>
+<span><span class="co">## 1             NA             NA         N/A           N/A         NA</span></span>
+<span><span class="co">## 2             NA             NA         N/A           N/A         NA</span></span>
+<span><span class="co">## 3             NA             NA         N/A           N/A         NA</span></span>
+<span><span class="co">## 4             NA             NA         N/A           N/A         NA</span></span>
+<span><span class="co">## 5             NA             NA         N/A           N/A         NA</span></span>
+<span><span class="co">## 6             NA             NA         N/A           N/A         NA</span></span>
+<span><span class="co">##   innitrateleachi misoimgmtgrp vasoimgtgrp   mukey    cokey</span></span>
+<span><span class="co">## 1              NA           NA          NA 1382580 25874954</span></span>
+<span><span class="co">## 2              NA           NA          NA 1382580 25874955</span></span>
+<span><span class="co">## 3              NA           NA          NA 1382581 25874956</span></span>
+<span><span class="co">## 4              NA           NA          NA 1382581 25874957</span></span>
+<span><span class="co">## 5              NA           NA          NA 1382581 25874958</span></span>
+<span><span class="co">## 6              NA           NA          NA 1382582 25874982</span></span></code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Disconnect when done</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-1-dominant-component-percentage-comppct_r">Example 1: Dominant Component Percentage
 (<code>comppct_r</code>)<a class="anchor" aria-label="anchor" href="#example-1-dominant-component-percentage-comppct_r"></a>
 </h3>
-<p>Here we see map units symbolised by the dominant component
-percentage. Numbers closer to 100% are more “pure” concepts.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get dominant component per map unit</span></span>
+<p>As a simple example of how map unit aggregation works, we will
+“manually” calculate a thematic variable using the
+<code>component</code> table and base R <code><a href="https://rspatial.github.io/terra/reference/aggregate.html" class="external-link">aggregate()</a></code>.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate dominant component per map unit</span></span>
 <span><span class="va">dominant_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span></span>
 <span>  <span class="va">comppct_r</span> <span class="op">~</span> <span class="va">mukey</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">component</span>, </span>
 <span>  <span class="va">max</span></span>
 <span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Join with spatial data</span></span>
-<span><span class="va">spatial_mu</span><span class="op">$</span><span class="va">comppct_r</span> <span class="op">&lt;-</span> <span class="va">dominant_comp</span><span class="op">$</span><span class="va">comppct_r</span><span class="op">[</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">spatial_mu</span><span class="op">$</span><span class="va">mukey</span>, <span class="va">dominant_comp</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span><span class="op">]</span></span>
-<span></span>
-<span><span class="co"># Plot (small subset of extent)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dominant_comp</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##     mukey comppct_r</span></span>
+<span><span class="co">## 1 1382547        90</span></span>
+<span><span class="co">## 2 1382548        85</span></span>
+<span><span class="co">## 3 1382549        90</span></span>
+<span><span class="co">## 4 1382550       100</span></span>
+<span><span class="co">## 5 1382551        95</span></span>
+<span><span class="co">## 6 1382552        90</span></span></code></pre>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Match dominant component value for each mukey with mukey of spatial data</span></span>
+<span><span class="va">spatial_mu</span><span class="op">$</span><span class="va">domcomppct_r</span> <span class="op">&lt;-</span> <span class="va">dominant_comp</span><span class="op">$</span><span class="va">comppct_r</span><span class="op">[</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">spatial_mu</span><span class="op">$</span><span class="va">mukey</span>, <span class="va">dominant_comp</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<p>Here we see map units symbolized by the dominant component
+percentage. Numbers closer to 100% are more “pure” concepts.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Visualize </span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
-<span>  <span class="va">spatial_mu</span><span class="op">[</span><span class="st">"comppct_r"</span><span class="op">]</span>, </span>
-<span>  main <span class="op">=</span> <span class="st">"Dominant Component Percentage (comppct_r)"</span>, </span>
+<span>  <span class="va">spatial_mu</span><span class="op">[</span><span class="st">"domcomppct_r"</span><span class="op">]</span>, </span>
+<span>  main <span class="op">=</span> <span class="st">"Dominant Component Percentage (domcomppct_r)"</span>, </span>
 <span>  breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">10</span><span class="op">)</span>, </span>
 <span>  key.pos <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  border <span class="op">=</span> <span class="cn">NA</span>, </span>
 <span>  pal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="local-ssurgo_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+<p><img src="local-ssurgo_files/figure-html/plot-domcomppct-1.png" width="672"></p>
+<p>Note that in the northern part of the map the map units have high
+dominant component percentages, generally greater than 80%. As we look
+to the southern part of the map we see that the dominant component
+percentages are lower, indicating multiple major components per map
+unit.</p>
 </div>
 <div class="section level3">
-<h3 id="example-2-hydrologic-group-hydgrp">Example 2: Hydrologic Group (<code>hydgrp</code>)<a class="anchor" aria-label="anchor" href="#example-2-hydrologic-group-hydgrp"></a>
+<h3 id="example-2-hydrologic-group-hydgrp-and-drainage-class-drainagecl">Example 2: Hydrologic Group (<code>hydgrp</code>) and Drainage Class
+(<code>drainagecl</code>)<a class="anchor" aria-label="anchor" href="#example-2-hydrologic-group-hydgrp-and-drainage-class-drainagecl"></a>
 </h3>
-<p>Here we see map unit dominant condition <a href="https://directives.nrcs.usda.gov/sites/default/files2/1712930597/11905.pdf" class="external-link">Hydrologic
-Group</a>.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get most common hydgrp per mukey</span></span>
-<span><span class="va">hydgrp_tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
-<span>  <span class="st">"hydgrp"</span>,</span>
+<p><code>soilDB</code> provides many functions that can perform
+aggregations of map unit component data. We will use the function
+<code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code> to calculate the map unit dominant
+condition values for several component-level hydrologic properties: the
+<em>Hydrologic Group</em> and the <em>Drainage Class</em>.</p>
+<p>In this case we want to get everything in our local database, so we
+use the <code>WHERE</code> clause <code>"1=1"</code> which is true for
+all map units in the database.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">component_properties</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hydgrp"</span>, <span class="st">"drainagecl"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get most common hydgrp and drainagecl per mukey</span></span>
+<span><span class="va">hyd_tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
+<span>  <span class="va">component_properties</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"dominant condition"</span>,</span>
 <span>  dsn <span class="op">=</span> <span class="va">gpkg_path</span>,</span>
 <span>  WHERE <span class="op">=</span> <span class="st">"1=1"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">hydgrp_tab</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">hyd_tab</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     mukey areasymbol musym                                        muname hydgrp</span></span>
 <span><span class="co">## 1 1382547      KS187  1510     Atchison clay loam, 3 to 6 percent slopes      B</span></span>
 <span><span class="co">## 2 1382548      KS187  1511          Atchison loam, 1 to 3 percent slopes      B</span></span>
 <span><span class="co">## 3 1382549      KS187  1550 Belfon clay loam, cool, 0 to 1 percent slopes      B</span></span>
 <span><span class="co">## 4 1382550      KS187  1342          Bridgeport clay loam, rarely flooded      B</span></span>
 <span><span class="co">## 5 1382551      KS187  1349    Bridgeport silty clay loam, rarely flooded      B</span></span>
-<span><span class="co">## 6 1382552      KS187  2554       Campus clay loam, 0 to 3 percent slopes      C</span></span></code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Convert to ordered factor</span></span>
-<span><span class="va">hydgrp_tab</span><span class="op">[[</span><span class="st">"hydgrp"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NASISChoiceList.html">NASISChoiceList</a></span><span class="op">(</span><span class="va">hydgrp_tab</span><span class="op">[</span><span class="st">"hydgrp"</span><span class="op">]</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span></span>
-<span><span class="co"># Join with spatial data</span></span>
-<span><span class="va">spatial_mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/merge.html" class="external-link">merge</a></span><span class="op">(</span></span>
-<span>  <span class="va">spatial_mu</span>, </span>
-<span>  <span class="va">hydgrp_tab</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mukey"</span>, <span class="st">"hydgrp"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Plot</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
-<span>  <span class="va">spatial_mu</span><span class="op">[</span><span class="st">"hydgrp"</span><span class="op">]</span>,</span>
-<span>  main <span class="op">=</span> <span class="st">"Hydrologic Group (hydgrp)"</span>, </span>
-<span>  key.pos <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  border <span class="op">=</span> <span class="cn">NA</span>, </span>
-<span>  pal <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/flip.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><img src="local-ssurgo_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
-</div>
-<div class="section level3">
-<h3 id="example-3-drainage-class-drainagecl">Example 3: Drainage Class (<code>drainagecl</code>)<a class="anchor" aria-label="anchor" href="#example-3-drainage-class-drainagecl"></a>
-</h3>
-<p>Here we see map unit dominant condition Drainage Class.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get most common drainage class per mukey</span></span>
-<span><span class="va">drainage_tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
-<span>  <span class="st">"drainagecl"</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"dominant condition"</span>,</span>
-<span>  dsn <span class="op">=</span> <span class="va">gpkg_path</span>,</span>
-<span>  WHERE <span class="op">=</span> <span class="st">"1=1"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">drainage_tab</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##     mukey areasymbol musym                                        muname</span></span>
-<span><span class="co">## 1 1382547      KS187  1510     Atchison clay loam, 3 to 6 percent slopes</span></span>
-<span><span class="co">## 2 1382548      KS187  1511          Atchison loam, 1 to 3 percent slopes</span></span>
-<span><span class="co">## 3 1382549      KS187  1550 Belfon clay loam, cool, 0 to 1 percent slopes</span></span>
-<span><span class="co">## 4 1382550      KS187  1342          Bridgeport clay loam, rarely flooded</span></span>
-<span><span class="co">## 5 1382551      KS187  1349    Bridgeport silty clay loam, rarely flooded</span></span>
-<span><span class="co">## 6 1382552      KS187  2554       Campus clay loam, 0 to 3 percent slopes</span></span>
+<span><span class="co">## 6 1382552      KS187  2554       Campus clay loam, 0 to 3 percent slopes      C</span></span>
 <span><span class="co">##     drainagecl</span></span>
 <span><span class="co">## 1 Well drained</span></span>
 <span><span class="co">## 2 Well drained</span></span>
@@ -440,35 +608,108 @@ Group</a>.</p>
 <span><span class="co">## 4 Well drained</span></span>
 <span><span class="co">## 5 Well drained</span></span>
 <span><span class="co">## 6 Well drained</span></span></code></pre>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Convert to ordered factor</span></span>
-<span><span class="va">drainage_tab</span><span class="op">[[</span><span class="st">"drainagecl"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NASISChoiceList.html">NASISChoiceList</a></span><span class="op">(</span><span class="va">drainage_tab</span><span class="op">[</span><span class="st">"drainagecl"</span><span class="op">]</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<p><code>soilDB</code> also includes a function,
+<code><a href="../reference/NASISChoiceList.html">NASISChoiceList()</a></code>, that helps with converting categorical
+attributes to factors with standard labels. The function also handles
+where those labels have a defined natural order.</p>
+<p>We pass a <em>data.frame</em> (or <em>named list</em>) of properties
+we want to convert to factor. The column or list element names are used
+to identify the domain of interest, which stores the different factor
+levels, their order, and other metadata.</p>
+<p>We extract from, and replace into, our <code>hyd_tab</code>
+data.frame using <code>[</code>:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Convert to factor</span></span>
+<span><span class="va">hyd_tab</span><span class="op">[</span><span class="va">component_properties</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NASISChoiceList.html">NASISChoiceList</a></span><span class="op">(</span><span class="va">hyd_tab</span><span class="op">[</span><span class="va">component_properties</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Join with spatial data</span></span>
-<span><span class="va">spatial_mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/merge.html" class="external-link">merge</a></span><span class="op">(</span></span>
-<span>  <span class="va">spatial_mu</span>,</span>
-<span>  <span class="va">drainage_tab</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mukey"</span>, <span class="st">"drainagecl"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># Inspect result</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">hyd_tab</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## 'data.frame':    75 obs. of  6 variables:</span></span>
+<span><span class="co">##  $ mukey     : int  1382547 1382548 1382549 1382550 1382551 1382552 1382553 1382554 1382555 1382556 ...</span></span>
+<span><span class="co">##  $ areasymbol: chr  "KS187" "KS187" "KS187" "KS187" ...</span></span>
+<span><span class="co">##  $ musym     : chr  "1510" "1511" "1550" "1342" ...</span></span>
+<span><span class="co">##  $ muname    : chr  "Atchison clay loam, 3 to 6 percent slopes" "Atchison loam, 1 to 3 percent slopes" "Belfon clay loam, cool, 0 to 1 percent slopes" "Bridgeport clay loam, rarely flooded" ...</span></span>
+<span><span class="co">##  $ hydgrp    : Factor w/ 7 levels "a","b","c","d",..: 2 2 2 2 2 3 3 2 2 2 ...</span></span>
+<span><span class="co">##  $ drainagecl: Ord.factor w/ 8 levels "excessively"&lt;..: 3 3 3 3 3 3 3 3 3 3 ...</span></span></code></pre>
+<p>Above we see that <code>hydgrp</code> and <code>drainagecl</code> are
+now factors and drainage class is an ordinal variable ranging from
+<code>"excessively"</code> drained at the driest to
+<code>"subaqueous"</code> at the wettest.</p>
+<p>Let’s merge this processed tabular data into our <code>sf</code>
+<em>data.frame</em> object using merge.</p>
+<p>Both <code>spatial_mu</code> and <code>hyd_tab</code> have
+<code>"mukey"</code> as a column in common, along with
+<code>"areasymbol"</code>, <code>"musym"</code>, and
+<code>"muname"</code>.</p>
+<p>By default <code><a href="https://rspatial.github.io/terra/reference/merge.html" class="external-link">merge()</a></code> will work on all columns that match
+exactly. If they differ or you only want to join on one specific column
+you specify <code>by</code>. <code>by.x</code>, or
+<code>by.y</code>.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Join with spatial data</span></span>
+<span><span class="va">spatial_mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">spatial_mu</span>, <span class="va">hyd_tab</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Plot</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span><span class="co"># Inspect</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">spatial_mu</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Classes 'sf' and 'data.frame':   3333 obs. of  9 variables:</span></span>
+<span><span class="co">##  $ areasymbol  : chr  "KS129" "KS129" "KS129" "KS129" ...</span></span>
+<span><span class="co">##  $ musym       : chr  "1158" "1158" "1158" "1158" ...</span></span>
+<span><span class="co">##  $ mukey       : chr  "1382599" "1382599" "1382599" "1382599" ...</span></span>
+<span><span class="co">##  $ spatialver  : num  5 5 5 5 5 5 5 5 5 5 ...</span></span>
+<span><span class="co">##  $ domcomppct_r: int  85 85 85 85 85 85 85 85 95 95 ...</span></span>
+<span><span class="co">##  $ muname      : chr  "Glenberg fine sandy loam, occasionally flooded" "Glenberg fine sandy loam, occasionally flooded" "Glenberg fine sandy loam, occasionally flooded" "Glenberg fine sandy loam, occasionally flooded" ...</span></span>
+<span><span class="co">##  $ hydgrp      : Factor w/ 7 levels "a","b","c","d",..: 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span><span class="co">##  $ drainagecl  : Ord.factor w/ 8 levels "excessively"&lt;..: 3 3 3 3 3 3 3 3 3 3 ...</span></span>
+<span><span class="co">##  $ geom        :sfc_POLYGON of length 3333; first list element: List of 1</span></span>
+<span><span class="co">##   ..$ : num [1:50, 1:2] -102 -102 -102 -102 -102 ...</span></span>
+<span><span class="co">##   ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"</span></span>
+<span><span class="co">##  - attr(*, "sf_column")= chr "geom"</span></span>
+<span><span class="co">##  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA</span></span>
+<span><span class="co">##   ..- attr(*, "names")= chr [1:8] "areasymbol" "musym" "mukey" "spatialver" ...</span></span></code></pre>
+<p>You may also need to specify <code>sort=FALSE</code> and
+<code>incomparables=NA</code> for certain applications where the
+original order matters or some keys contain <code>NA</code>.</p>
+<div class="section level4">
+<h4 id="thematic-maps">Thematic Maps<a class="anchor" aria-label="anchor" href="#thematic-maps"></a>
+</h4>
+<p>Now that we have the spatial and tabular data joined, we will make
+some thematic maps.</p>
+<p>First, we plot map unit dominant condition <a href="https://directives.nrcs.usda.gov/sites/default/files2/1712930597/11905.pdf" class="external-link">Hydrologic
+Group</a>.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">spatial_mu</span><span class="op">[</span><span class="st">"hydgrp"</span><span class="op">]</span>,</span>
+<span>  main <span class="op">=</span> <span class="st">"Hydrologic Group (hydgrp)"</span>, </span>
+<span>  key.pos <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  border <span class="op">=</span> <span class="cn">NA</span>, </span>
+<span>  pal <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/flip.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="local-ssurgo_files/figure-html/plot-hsg-1.png" width="672"></p>
+<p>Next, we see map unit dominant condition Drainage Class.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">spatial_mu</span><span class="op">[</span><span class="st">"drainagecl"</span><span class="op">]</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">"Drainage Class (drainagecl)"</span>, </span>
 <span>  border <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  key.pos <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  pal <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/flip.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="local-ssurgo_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
+<p><img src="local-ssurgo_files/figure-html/plot-drainagecl-1.png" width="672"></p>
 <hr>
-<p>The previous examples show how to visualize key soil properties using
-only base R and <code>sf</code>.</p>
+<p>The previous examples show how to visualize component-level
+properties using base R, <code>soilDB</code>, <code>DBI</code>,
+<code>RSQLite</code>, and <code>sf</code>.</p>
 <p>The aggregation of dominant component to map unit level values is one
 of the simplest, and most common, transformations of the SSURGO data for
-creating maps.</p>
+creating maps. Dominant condition aggregation method, combining the
+components with the same classes in the property of interest, is
+extremely useful for any categorical data element, such as
+<code>hydgrp</code> and <code>drainagecl</code> shown in this demo.</p>
 <p>You can adapt the aggregation logic depending on your needs (e.g.,
-max, mean, or most frequent value). Many soilDB functions include
-default aggregations, and you can write custom queries of your own using
-<code><a href="../reference/SDA_query.html">SDA_query()</a></code> or DBI <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery()</a></code>.</p>
+max, mean, or most frequent value). Many <code>soilDB</code> functions
+include default aggregations, and you can write custom queries of your
+own using <code><a href="../reference/SDA_query.html">SDA_query()</a></code> or DBI <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery()</a></code>.</p>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -489,7 +730,7 @@ be applied to local copies of the SSURGO database by passing the
 </li>
 <li>Soil Interpretations: <a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_interpretation.html"><code>get_SDA_interpretation()</code></a>
 </li>
-<li>Mapunit Aggregate Attributes : <a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_muaggatt.html"><code>get_SDA_muaggatt()</code></a>
+<li>Map Unit Aggregate Attributes : <a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_muaggatt.html"><code>get_SDA_muaggatt()</code></a>
 </li>
 <li>Parent Material Groups: <a href="http://ncss-tech.github.io/soilDB/reference/get_SDA_pmgroupname.html"><code>get_SDA_pmgroupname()</code></a>
 </li>
@@ -509,13 +750,6 @@ be applied to local copies of the SSURGO database by passing the
 <p>For users who prefer a Python-based solution, the <a href="https://github.com/brownag/SSURGOPortalR" class="external-link">SSURGOPortal R
 package</a> wraps the official <a href="https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal" class="external-link">SSURGO
 Portal Python</a> code for use in R.</p>
-</div>
-<div class="section level2">
-<h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
-</h2>
-<p>The <code><a href="../reference/downloadSSURGO.html">downloadSSURGO()</a></code> and <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code>
-functions provide a reproducible and scriptable way to access SSURGO
-data for offline spatial and tabular analysis in R.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
