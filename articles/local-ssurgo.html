@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,7 @@
       <h1>Local SSURGO Databases</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.8.12/vignettes/local-ssurgo.Rmd" class="external-link"><code>vignettes/local-ssurgo.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/vignettes/local-ssurgo.Rmd" class="external-link"><code>vignettes/local-ssurgo.Rmd</code></a></small>
       <div class="d-none name"><code>local-ssurgo.Rmd</code></div>
     </div>
 
@@ -282,7 +282,7 @@ their components:</p>
 <span></span>
 <span><span class="co"># Read spatial map units</span></span>
 <span><span class="va">spatial_mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="va">gpkg_path</span>, layer <span class="op">=</span> <span class="st">"mupolygon"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Reading layer `mupolygon' from data source `/tmp/Rtmp0SPRiG/ssurgo.gpkg' using driver `GPKG'</span></span>
+<pre><code><span><span class="co">## Reading layer `mupolygon' from data source `/tmp/RtmpBZU03w/ssurgo.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">## Simple feature collection with 3333 features and 4 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
@@ -330,7 +330,7 @@ be 1:1 with <code>mukey</code> can be used in thematic mapping.</p>
 <span></span>
 <span><span class="co"># Read spatial map units</span></span>
 <span><span class="va">spatial_mu</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="va">gpkg_path</span>, layer <span class="op">=</span> <span class="st">"mupolygon"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Reading layer `mupolygon' from data source `/tmp/Rtmp0SPRiG/ssurgo.gpkg' using driver `GPKG'</span></span>
+<pre><code><span><span class="co">## Reading layer `mupolygon' from data source `/tmp/RtmpBZU03w/ssurgo.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">## Simple feature collection with 3333 features and 4 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
@@ -379,49 +379,31 @@ percentage. Numbers closer to 100% are more “pure” concepts.</p>
 Group</a>.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get most common hydgrp per mukey</span></span>
-<span><span class="va">hydgrp_tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span></span>
-<span>  <span class="va">hydgrp</span> <span class="op">~</span> <span class="va">mukey</span>, </span>
-<span>  data <span class="op">=</span> <span class="va">component</span>,</span>
-<span>  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">hydgrp_tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
+<span>  <span class="st">"hydgrp"</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"dominant condition"</span>,</span>
+<span>  dsn <span class="op">=</span> <span class="va">gpkg_path</span>,</span>
+<span>  WHERE <span class="op">=</span> <span class="st">"1=1"</span></span>
 <span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Convert to ordered factor</span></span>
-<span><span class="va">hydgrp_tab</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NASISChoiceList.html">NASISChoiceList</a></span><span class="op">(</span><span class="va">hydgrp_tab</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">hydgrp_tab</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##     mukey areasymbol musym                                        muname hydgrp</span></span>
+<span><span class="co">## 1 1382547      KS187  1510     Atchison clay loam, 3 to 6 percent slopes      B</span></span>
+<span><span class="co">## 2 1382548      KS187  1511          Atchison loam, 1 to 3 percent slopes      B</span></span>
+<span><span class="co">## 3 1382549      KS187  1550 Belfon clay loam, cool, 0 to 1 percent slopes      B</span></span>
+<span><span class="co">## 4 1382550      KS187  1342          Bridgeport clay loam, rarely flooded      B</span></span>
+<span><span class="co">## 5 1382551      KS187  1349    Bridgeport silty clay loam, rarely flooded      B</span></span>
+<span><span class="co">## 6 1382552      KS187  2554       Campus clay loam, 0 to 3 percent slopes      C</span></span></code></pre>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Convert to ordered factor</span></span>
+<span><span class="va">hydgrp_tab</span><span class="op">[[</span><span class="st">"hydgrp"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NASISChoiceList.html">NASISChoiceList</a></span><span class="op">(</span><span class="va">hydgrp_tab</span><span class="op">[</span><span class="st">"hydgrp"</span><span class="op">]</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># Join with spatial data</span></span>
-<span><span class="va">spatial_mu</span><span class="op">$</span><span class="va">hydgrp</span> <span class="op">&lt;-</span> <span class="va">hydgrp_tab</span><span class="op">$</span><span class="va">hydgrp</span><span class="op">[</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">spatial_mu</span><span class="op">$</span><span class="va">mukey</span>, <span class="va">hydgrp_tab</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="va">spatial_mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/merge.html" class="external-link">merge</a></span><span class="op">(</span></span>
+<span>  <span class="va">spatial_mu</span>, </span>
+<span>  <span class="va">hydgrp_tab</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mukey"</span>, <span class="st">"hydgrp"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">spatial_mu</span></span></code></pre></div>
-<pre><code><span><span class="co">## Simple feature collection with 3333 features and 6 fields</span></span>
-<span><span class="co">## Geometry type: POLYGON</span></span>
-<span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -102.0421 ymin: 36.99309 xmax: -101.5257 ymax: 37.7385</span></span>
-<span><span class="co">## Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">## First 10 features:</span></span>
-<span><span class="co">##    areasymbol spatialver musym   mukey                           geom comppct_r</span></span>
-<span><span class="co">## 1       KS129          5  1996 1382616 POLYGON ((-101.972 37.26513...        80</span></span>
-<span><span class="co">## 2       KS129          5  1511 1382582 POLYGON ((-101.7587 37.2546...        85</span></span>
-<span><span class="co">## 3       KS129          5  1462 1382612 POLYGON ((-101.708 37.27559...        70</span></span>
-<span><span class="co">## 4       KS129          5  1996 1382616 POLYGON ((-101.8841 37.3115...        80</span></span>
-<span><span class="co">## 5       KS129          5  1995 1382615 POLYGON ((-101.8418 37.3153...        75</span></span>
-<span><span class="co">## 6       KS129          5  1511 1382582 POLYGON ((-102.0278 37.2308...        85</span></span>
-<span><span class="co">## 7       KS129          5  1512 1382583 POLYGON ((-101.9374 37.1191...        80</span></span>
-<span><span class="co">## 8       KS129          5  1510 1382580 POLYGON ((-101.6442 37.2200...        90</span></span>
-<span><span class="co">## 9       KS129          5  1995 1382615 POLYGON ((-101.5774 37.3227...        75</span></span>
-<span><span class="co">## 10      KS129          5  1761 1382608 POLYGON ((-102.0419 37.2821...        93</span></span>
-<span><span class="co">##    hydgrp</span></span>
-<span><span class="co">## 1       b</span></span>
-<span><span class="co">## 2       b</span></span>
-<span><span class="co">## 3       b</span></span>
-<span><span class="co">## 4       b</span></span>
-<span><span class="co">## 5       b</span></span>
-<span><span class="co">## 6       b</span></span>
-<span><span class="co">## 7       a</span></span>
-<span><span class="co">## 8       a</span></span>
-<span><span class="co">## 9       b</span></span>
-<span><span class="co">## 10      c</span></span></code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Plot</span></span>
+<span><span class="co"># Plot</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">spatial_mu</span><span class="op">[</span><span class="st">"hydgrp"</span><span class="op">]</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">"Hydrologic Group (hydgrp)"</span>, </span>
@@ -437,17 +419,36 @@ Group</a>.</p>
 <p>Here we see map unit dominant condition Drainage Class.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get most common drainage class per mukey</span></span>
-<span><span class="va">drainage_tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span></span>
-<span>  <span class="va">drainagecl</span> <span class="op">~</span> <span class="va">mukey</span>, </span>
-<span>  data <span class="op">=</span> <span class="va">component</span>, </span>
-<span>  <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">drainage_tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_property.html">get_SDA_property</a></span><span class="op">(</span></span>
+<span>  <span class="st">"drainagecl"</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"dominant condition"</span>,</span>
+<span>  dsn <span class="op">=</span> <span class="va">gpkg_path</span>,</span>
+<span>  WHERE <span class="op">=</span> <span class="st">"1=1"</span></span>
 <span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Convert to ordered factor</span></span>
-<span><span class="va">drainage_tab</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NASISChoiceList.html">NASISChoiceList</a></span><span class="op">(</span><span class="va">drainage_tab</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">drainage_tab</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##     mukey areasymbol musym                                        muname</span></span>
+<span><span class="co">## 1 1382547      KS187  1510     Atchison clay loam, 3 to 6 percent slopes</span></span>
+<span><span class="co">## 2 1382548      KS187  1511          Atchison loam, 1 to 3 percent slopes</span></span>
+<span><span class="co">## 3 1382549      KS187  1550 Belfon clay loam, cool, 0 to 1 percent slopes</span></span>
+<span><span class="co">## 4 1382550      KS187  1342          Bridgeport clay loam, rarely flooded</span></span>
+<span><span class="co">## 5 1382551      KS187  1349    Bridgeport silty clay loam, rarely flooded</span></span>
+<span><span class="co">## 6 1382552      KS187  2554       Campus clay loam, 0 to 3 percent slopes</span></span>
+<span><span class="co">##     drainagecl</span></span>
+<span><span class="co">## 1 Well drained</span></span>
+<span><span class="co">## 2 Well drained</span></span>
+<span><span class="co">## 3 Well drained</span></span>
+<span><span class="co">## 4 Well drained</span></span>
+<span><span class="co">## 5 Well drained</span></span>
+<span><span class="co">## 6 Well drained</span></span></code></pre>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Convert to ordered factor</span></span>
+<span><span class="va">drainage_tab</span><span class="op">[[</span><span class="st">"drainagecl"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NASISChoiceList.html">NASISChoiceList</a></span><span class="op">(</span><span class="va">drainage_tab</span><span class="op">[</span><span class="st">"drainagecl"</span><span class="op">]</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># Join with spatial data</span></span>
-<span><span class="va">spatial_mu</span><span class="op">$</span><span class="va">drainagecl</span> <span class="op">&lt;-</span> <span class="va">drainage_tab</span><span class="op">$</span><span class="va">drainagecl</span><span class="op">[</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">spatial_mu</span><span class="op">$</span><span class="va">mukey</span>, <span class="va">drainage_tab</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="va">spatial_mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/merge.html" class="external-link">merge</a></span><span class="op">(</span></span>
+<span>  <span class="va">spatial_mu</span>,</span>
+<span>  <span class="va">drainage_tab</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mukey"</span>, <span class="st">"drainagecl"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span></span>
