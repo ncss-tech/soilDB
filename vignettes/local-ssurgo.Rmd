@@ -215,7 +215,7 @@ Here we see map unit dominant condition Drainage Class.
 # Get most common drainage class per mukey
 drainage_tab <- get_SDA_spatial(
   "drainagecl",
-  method = "dominant condition"
+  method = "dominant condition",
   dsn = gpkg_path,
   WHERE = "1=1"
 )
