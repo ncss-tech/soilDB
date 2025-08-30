@@ -180,19 +180,22 @@ Here we see map unit dominant condition [Hydrologic Group](https://directives.nr
 
 ```{r}
 # Get most common hydgrp per mukey
-hydgrp_tab <- aggregate(
-  hydgrp ~ mukey, 
-  data = component,
-  function(x) names(sort(table(x), decreasing = TRUE))[1]
+hydgrp_tab <- get_SDA_property(
+  "hydgrp",
+  method = "dominant condition",
+  dsn = gpkg_path,
+  WHERE = "1=1"
 )
+head(hydgrp_tab)
 
 # Convert to ordered factor
-hydgrp_tab[[2]] <- NASISChoiceList(hydgrp_tab)[[2]]
+hydgrp_tab[["hydgrp"]] <- NASISChoiceList(hydgrp_tab["hydgrp"])[[1]]
 
 # Join with spatial data
-spatial_mu$hydgrp <- hydgrp_tab$hydgrp[match(spatial_mu$mukey, hydgrp_tab$mukey)]
-
-spatial_mu
+spatial_mu <- merge(
+  spatial_mu, 
+  hydgrp_tab[c("mukey", "hydgrp")]
+)
 
 # Plot
 plot(
@@ -210,17 +213,22 @@ Here we see map unit dominant condition Drainage Class.
 
 ```{r}
 # Get most common drainage class per mukey
-drainage_tab <- aggregate(
-  drainagecl ~ mukey, 
-  data = component, 
-  function(x) names(sort(table(x), decreasing = TRUE))[1]
+drainage_tab <- get_SDA_spatial(
+  "drainagecl",
+  method = "dominant condition"
+  dsn = gpkg_path,
+  WHERE = "1=1"
 )
+head(drainage_tab)
 
 # Convert to ordered factor
-drainage_tab[[2]] <- NASISChoiceList(drainage_tab)[[2]]
+drainage_tab[["drainagecl"]] <- NASISChoiceList(drainage_tab["drainagecl"])[[1]]
 
 # Join with spatial data
-spatial_mu$drainagecl <- drainage_tab$drainagecl[match(spatial_mu$mukey, drainage_tab$mukey)]
+spatial_mu <- merge(
+  spatial_mu,
+  drainage_tab[c("mukey", "drainagecl")]
+)
 
 # Plot
 plot(
