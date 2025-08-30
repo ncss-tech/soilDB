@@ -348,13 +348,13 @@ get_SDA_property <-
   }
 
   # define several helper methods
-  .property_dominant_condition_category <- function(property, miscellaneous_areas = FALSE) {
-    sprintf("(SELECT TOP 1 %s FROM mapunit AS mu
+  .property_dominant_condition_category <- function(property, miscellaneous_areas = FALSE, sqlite_dialect = FALSE) {
+    sprintf("(SELECT %s%s FROM mapunit AS mu
           INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey %s
-          GROUP BY %s, comppct_r ORDER BY SUM(comppct_r) over(partition by %s) DESC) AS %s",
-          property,
+          GROUP BY %s, comppct_r ORDER BY SUM(comppct_r) over(partition by %s) DESC%s) AS %s",
+          ifelse(isTRUE(sqlite_dialect), "", "TOP 1 "), property,
           ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
-          property, property, property)
+          property, property, ifelse(isTRUE(sqlite_dialect), " LIMIT 1", ""),  property)
   }
   
   .property_min_max_CTE <- function(property, top_depth, bottom_depth, WHERE, FUN, include_minors = TRUE, miscellaneous_areas = FALSE, sqlite_dialect = FALSE) {
@@ -371,7 +371,8 @@ get_SDA_property <-
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
             paste(paste0(FUN, "(", property, ") AS ", property), collapse = ","))
   }
-  .property_min_max <- function(property, top_depth, bottom_depth, WHERE, FUN, include_minors = TRUE, miscellaneous_areas = FALSE) {
+  
+  .property_min_max <- function(property, top_depth, bottom_depth, WHERE, FUN, include_minors = TRUE, miscellaneous_areas = FALSE, sqlite_dialect) {
     sprintf("SELECT mapunit.mukey, areasymbol, musym, muname, %s
              INTO #funagg
                   FROM legend
@@ -379,7 +380,7 @@ get_SDA_property <-
                   LEFT JOIN component ON component.mukey = mapunit.mukey %s %s
              SELECT mukey, areasymbol, musym, muname, %s FROM #funagg
              GROUP BY mukey, areasymbol, musym, muname",
-            paste(sapply(property, function(x) .property_min_max_subquery(x, top_depth, bottom_depth, FUN = FUN, miscellaneous_areas = miscellaneous_areas)), collapse = ", "),
+            paste(sapply(property, function(x) .property_min_max_subquery(x, top_depth, bottom_depth, FUN = FUN, miscellaneous_areas = miscellaneous_areas, sqlite_dialect = sqlite_dialect)), collapse = ", "),
             WHERE,
             ifelse(include_minors, ""," AND component.majcompflag = 'Yes'"),
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
@@ -422,10 +423,10 @@ get_SDA_property <-
     MISCAREAS <- ifelse(miscellaneous_areas, "", "AND component.compkind != 'Miscellaneous area'")
     
     DOMINANT <- ifelse(dominant, paste0(
-      "AND component.cokey = (SELECT ", ifelse(!sqlite_dialect, "TOP 1 ", " "), "c2.cokey FROM component AS c2
+      "AND component.cokey = (SELECT ", ifelse(isTRUE(sqlite_dialect), "", "TOP 1 "), "c2.cokey FROM component AS c2
         INNER JOIN mapunit AS mm1 ON c2.mukey = mm1.mukey AND c2.mukey = mapunit.mukey ",
           gsub("component", "c2", MISCAREAS),
-          "ORDER BY c2.comppct_r DESC, c2.cokey ", ifelse(sqlite_dialect, "LIMIT 1", ""), ")"), "")
+          "ORDER BY c2.comppct_r DESC, c2.cokey", ifelse(isTRUE(sqlite_dialect), " LIMIT 1", ""), ")"), "")
     
     PROPERTY <- paste(property, collapse = ", ")
     
@@ -599,7 +600,8 @@ get_SDA_property <-
                                          WHERE,
                                          dominant = FALSE,
                                          include_minors = FALSE,
-                                         miscellaneous_areas = FALSE) {
+                                         miscellaneous_areas = FALSE,
+                                         sqlite_dialect) {
 
     n <- seq_along(property)
     stopifnot(n > 0)
@@ -635,7 +637,7 @@ get_SDA_property <-
             WHERE,
             ifelse(include_minors, "", "AND component.majcompflag = 'Yes'"),
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
-            ifelse(dominant, paste0("            AND component.cokey = (SELECT TOP 1 c2.cokey FROM component AS c2
+            ifelse(dominant, paste0("            AND component.cokey = (SELECT ", ifelse(isTRUE(sqlite_dialect), "", "TOP 1 "),"c2.cokey FROM component AS c2
                             INNER JOIN mapunit AS mm1 ON c2.mukey = mm1.mukey AND c2.mukey = mapunit.mukey ",
                             ifelse(miscellaneous_areas, ""," AND c2.compkind != 'Miscellaneous area'"),"
                             ORDER BY c2.comppct_r DESC, c2.cokey)"), ""),
@@ -705,9 +707,9 @@ get_SDA_property <-
       paste(sprintf("#last_step2.%s", property), collapse = ", ")))
   }
 
-  .property_dominant_component_numeric <- function(property, top_depth, bottom_depth, WHERE, FUN, miscellaneous_areas = FALSE) {
+  .property_dominant_component_numeric <- function(property, top_depth, bottom_depth, WHERE, FUN, miscellaneous_areas = FALSE, sqlite_dialect = FALSE) {
     # dominant component numeric is a more specific case of weighted average
-    .property_weighted_average(property, top_depth, bottom_depth, WHERE, dominant = TRUE, include_minors = TRUE, miscellaneous_areas = miscellaneous_areas)
+    .property_weighted_average_CTE(property, top_depth, bottom_depth, WHERE, dominant = TRUE, include_minors = TRUE, miscellaneous_areas = miscellaneous_areas, sqlite_dialect = sqlite_dialect)
   }
 
   # create query based on method
@@ -718,14 +720,15 @@ get_SDA_property <-
              FROM legend
              INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
              INNER JOIN component ON component.mukey = mapunit.mukey AND
-                                     component.cokey = (SELECT TOP 1 c1.cokey FROM component AS c1
+                                     component.cokey = (SELECT %sc1.cokey FROM component AS c1
                                                 INNER JOIN mapunit AS mu ON component.mukey = mu.mukey AND
                                                                             c1.mukey = mapunit.mukey %s
-                                                ORDER BY c1.comppct_r DESC, c1.cokey)",
+                                                ORDER BY c1.comppct_r DESC, c1.cokey %s)",
 
             paste(sapply(agg_property, function(x) sprintf("%s AS %s", x, x)), collapse = ", "),
-            WHERE,
-            ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'")),
+            WHERE, ifelse(isTRUE(sqlite_dialect), "", "TOP 1 "),
+            ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'"),
+            ifelse(isTRUE(sqlite_dialect), " LIMIT 1", "")),
 
     # weighted average (weighted_average handles vector agg_property)
     "WEIGHTED AVERAGE" = .property_weighted_average_CTE(agg_property, top_depth, bottom_depth, WHERE, include_minors = include_minors, miscellaneous_areas = miscellaneous_areas, dominant = FALSE, sqlite_dialect = sqlite_dialect),
@@ -734,7 +737,7 @@ get_SDA_property <-
     "MIN/MAX" = .property_min_max_CTE(agg_property, top_depth, bottom_depth, WHERE, FUN,  include_minors = include_minors, miscellaneous_areas = miscellaneous_areas, sqlite_dialect = sqlite_dialect),
     
     # dominant component (numeric) (.dominant_component_numeric handles vector agg_property)
-    "DOMINANT COMPONENT (NUMERIC)" = .property_dominant_component_numeric(agg_property, top_depth, bottom_depth, WHERE, miscellaneous_areas),
+    "DOMINANT COMPONENT (NUMERIC)" = .property_dominant_component_numeric(agg_property, top_depth, bottom_depth, WHERE, miscellaneous_areas, sqlite_dialect = sqlite_dialect),
 
     # dominant condition
     "DOMINANT CONDITION" =
@@ -742,15 +745,16 @@ get_SDA_property <-
              FROM legend
               INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
               INNER JOIN component ON component.mukey = mapunit.mukey AND
-                                           component.cokey = (SELECT TOP 1 c1.cokey FROM component AS c1
+                                           component.cokey = (SELECT %sc1.cokey FROM component AS c1
                                                       INNER JOIN mapunit AS mu ON component.mukey = mu.mukey AND
                                                                             c1.mukey = mapunit.mukey %s
-                                                      ORDER BY c1.comppct_r DESC, c1.cokey)
+                                                      ORDER BY c1.comppct_r DESC, c1.cokey%s)
               GROUP BY areasymbol, musym, muname, mapunit.mukey, component.cokey, compname, comppct_r
               ORDER BY mapunit.mukey, areasymbol, musym, muname, comppct_r DESC, component.cokey",
-            paste(sapply(agg_property, .property_dominant_condition_category), collapse = ", "),
-            WHERE,
-            ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'")),
+            paste(sapply(agg_property, .property_dominant_condition_category, sqlite_dialect = sqlite_dialect), collapse = ", "),
+            WHERE, ifelse(isTRUE(sqlite_dialect), "", "TOP 1 "),
+            ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'"),
+            ifelse(isTRUE(sqlite_dialect), " LIMIT 1", "")),
 
     # NO AGGREGATION
   "NONE" = sprintf("SELECT mapunit.mukey, component.cokey, areasymbol, musym, muname,
