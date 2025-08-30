@@ -1,5 +1,5 @@
 ---
-title: "Local SSURGO Databases"
+title: "Local Soil Survey Geographic (SSURGO) Databases"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Local SSURGO Databases}
@@ -10,25 +10,25 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
-  eval = isTRUE(try(local_NASIS_defined(), silent = TRUE)) ||
-           !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = "TRUE")),
+  eval = !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = "TRUE")),
   message = FALSE,
   warning = FALSE,
   fig.height = 7,
   fig.width = 7
 )
 ```
+
 ## Overview
 
-The `soilDB` package provides tools for accessing and working with soil survey data from the USDA-NRCS. Two key functions, `downloadSSURGO()` and `createSSURGO()`, streamline the process of acquiring and preparing SSURGO data into a local SQLite (GeoPackage) database--similar to the functionality offered by [SSURGO Portal](https://nrcs.usda.gov/resources/data-and-reports/ssurgo-portal).
+The `soilDB` package provides tools for accessing and working with soil survey data from the USDA-NRCS. Two key functions, `downloadSSURGO()` and `createSSURGO()`, streamline the process of acquiring and preparing Soil Survey Geographic database (SSURGO) data into a local SQLite (GeoPackage) database--similar to the functionality offered by [SSURGO Portal](https://nrcs.usda.gov/resources/data-and-reports/ssurgo-portal).
 
-This vignette demonstrates how to use these functions with Morton and Stanton counties, Kansas (`areasymbol = c("KS129", "KS187")`).
+This vignette demonstrates how to use these functions to obtain and view data from _Morton and Stanton counties, Kansas_ (`areasymbol = c("KS129", "KS187")`).
 
 ## Download SSURGO Data
 
-`downloadSSURGO()` will download the official SSURGO dataset for the specified `areasymbol` and return the path to the ZIP archive.
+`downloadSSURGO()` will download the official SSURGO data from Web Soil Survey for the specified `areasymbol` and return the path to the ZIP archives.
 
-```{r}
+```{r download-ssurgo}
 library(soilDB)
 
 gpkg_dir <- tempdir()
@@ -41,13 +41,21 @@ ssurgo_zip <- downloadSSURGO(
 )
 ```
 
-We specify `destdir` as the destination directory to download ZIP files by areasymbol from Web Soil Survey. If unspecified `exdir` is the same as `destdir` and is the directory the ZIP files get extracted to.
+Here we specify just two soil survey areas of interest using the "area symbol." Generally, this is a 2-letter state code and a 3-digit county FIPS code or other identifier.
+
+There are more options to specify the area of interest. Any SQL WHERE clause that targets the `sacatalog` (Soil Survey Area Catalog) table can be used.
+
+For example, to do all soil survey areas in Kansas, instead of `areasymbol` we could set `WHERE = "areasymbol LIKE 'KS%'"`. Alternately, `WHERE` can be any R spatial object, which is passed to `SDA_spatialQuery()` to determine area symbols of interest.
+
+We specify `destdir` as the destination directory to download area-specific ZIP files.
+
+If unspecified, `exdir,`the directory the ZIP files get extracted to, is the same as `destdir`. If you want to keep the ZIP files and extracted data, set `destdir`. If you only want the extracted data, set `exdir`. If you want both to be kept only temporarily in order to create a new database, leave `destdir` as the default (`tempdir()`).
 
 ## Create a Local SSURGO Database
 
-The `createSSURGO()` function uses the `sf` and `RSQLite` packages internally to build a SQLite database. The suggested SQLite-based format to use is GeoPackage (`".gpkg"` file).
+The `createSSURGO()` function uses the `sf` and `RSQLite` packages internally to build a SQLite database. A suggested SQLite-based format to use is [GeoPackage](https://www.geopackage.org/) (`".gpkg"` file), as it is an open format with a well-defined standard.
 
-```{r, warning=FALSE, message=FALSE}
+```{r create-ssurgo, warning=FALSE, message=FALSE}
 # Create a local GeoPackage from the downloaded ZIP
 gpkg_path <- file.path(gpkg_dir, "ssurgo.gpkg")
 
@@ -57,15 +65,15 @@ createSSURGO(
 )
 ```
 
-Here we pass `exdir` so `createSSURGO()` knows where to look for the data that `downloadSSURGO()` extracted from ZIP files. If we supply `con` argument instaed of `filename` we can connect to arbitrary DBIConnection objects, which could include other SQLite connection types, DuckDB, PostgresSQL.
+Here we pass `exdir` so `createSSURGO()` knows where to look for the data that `downloadSSURGO()` extracted from ZIP files. If we supply `con` argument instead of `filename` we can connect to arbitrary *DBIConnection* objects, which could include those for other database connection types such as DuckDB or PostgresSQL.
 
-The resulting `.gpkg` file is a spatially enabled SQLite database that can be used in GIS software or queried directly in R.
+The resulting `.gpkg` file is a spatially-enabled SQLite database that can be used in GIS software or queried directly in R.
 
 ## Load and Explore the Database
 
 Once the GeoPackage is created, you can connect to it using `DBI` and explore its contents. The database follows the SSURGO schema, which includes tables like `mapunit`, `component`, `chorizon`, and spatial layers such as the spatial map unit polygon layer, `mupolygon`.
 
-```{r}
+```{r connect-db}
 library(DBI)
 library(RSQLite)
 
@@ -80,15 +88,17 @@ dbListTables(con)
 
 You can inspect the structure of a specific table, such as `mapunit`, which contains general information about each map unit.
 
-```{r}
+```{r list-fields}
 dbListFields(con, "mapunit")
 ```
 
-### Preview Data
+### Basic Queries
 
-Preview the first few rows of the `mapunit` table:
+You can write arbitrary queries to run against the SQLite connection to the local database.
 
-```{r}
+For example, a query to look at the first `5` rows of the `mapunit` table:
+
+```{r basic-query}
 dbGetQuery(con, "SELECT * FROM mapunit LIMIT 5")
 ```
 
@@ -96,7 +106,7 @@ dbGetQuery(con, "SELECT * FROM mapunit LIMIT 5")
 
 You can join tables to explore relationships between map units and their components:
 
-```{r}
+```{r join-query}
 query <- "
 SELECT mu.musym, mu.muname, c.compname, c.comppct_r
 FROM mapunit mu
@@ -108,11 +118,11 @@ dbGetQuery(con, query)
 
 ### Load Spatial Data
 
-To work with spatial features, use the `sf` package.
+To work with spatial data, we will use the [`sf` package](https://r-spatial.github.io/sf/).
 
-Here we demonstrate how to read the `mupolygon` layer:
+Here we demonstrate how to read the `mupolygon` layer, which contains the polygon geometries of delineations of specific map unit concepts:
 
-```{r}
+```{r sf-mupolygon}
 library(sf)
 
 # Read spatial map units
@@ -124,24 +134,23 @@ spatial_mu
 plot(st_geometry(spatial_mu))
 ```
 
-This spatial layer can be used for mapping or spatial joins with other geospatial datasets. The `mukey` column is the unique mapunit identifier. Any SSURGO data that can be queried or aggregated to be 1:1 with `mukey` can
-be used in thematic mapping.
+This spatial layer can be used for mapping or spatial joins with other geospatial data sets. The `mukey` column is the unique map unit identifier. Any SSURGO data that can be queried or aggregated to be 1:1 with `mukey` can be used in thematic mapping.
 
 ## Visualizing Soil Properties
 
 You can visualize soil properties by joining tabular data with the `mupolygon` layer and plotting with base R graphics.
 
-### Load Spatial and Tabular Data
+### Load Tabular Data
 
-```{r}
-library(sf)
+Here we look at the first few rows of `mapunit` and `component`, two critical tables in the SSURGO schema.
 
-# Read spatial map units
-spatial_mu <- sf::st_read(gpkg_path, layer = "mupolygon")
-
+```{r dbi-read-table}
 # Read tabular data
 mapunit <- dbReadTable(con, "mapunit")
+head(mapunit)
+
 component <- dbReadTable(con, "component")
+head(component)
 
 # Disconnect when done
 dbDisconnect(con)
@@ -149,23 +158,28 @@ dbDisconnect(con)
 
 ### Example 1: Dominant Component Percentage (`comppct_r`)
 
-Here we see map units symbolised by the dominant component percentage. Numbers closer to 100% are more "pure" concepts.
+As a simple example of how map unit aggregation works, we will "manually" calculate a thematic variable using the `component` table and base R `aggregate()`.
 
-```{r}
-# Get dominant component per map unit
+```{r manual-dominant-component}
+# Calculate dominant component per map unit
 dominant_comp <- aggregate(
   comppct_r ~ mukey,
   data = component, 
   max
 )
+head(dominant_comp)
 
-# Join with spatial data
-spatial_mu$comppct_r <- dominant_comp$comppct_r[match(spatial_mu$mukey, dominant_comp$mukey)]
+# Match dominant component value for each mukey with mukey of spatial data
+spatial_mu$domcomppct_r <- dominant_comp$comppct_r[match(spatial_mu$mukey, dominant_comp$mukey)]
+```
 
-# Plot (small subset of extent)
+Here we see map units symbolized by the dominant component percentage. Numbers closer to 100% are more "pure" concepts.
+
+```{r plot-domcomppct}
+# Visualize 
 plot(
-  spatial_mu["comppct_r"], 
-  main = "Dominant Component Percentage (comppct_r)", 
+  spatial_mu["domcomppct_r"], 
+  main = "Dominant Component Percentage (domcomppct_r)", 
   breaks = seq(0, 100, 10), 
   key.pos = 4,
   border = NA, 
@@ -173,31 +187,66 @@ plot(
 )
 ```
 
+Note that in the northern part of the map the map units have high dominant component percentages, generally greater than 80%. As we look to the southern part of the map we see that the dominant component percentages are lower, indicating multiple major components per map unit.
 
-### Example 2: Hydrologic Group (`hydgrp`)
+### Example 2: Hydrologic Group (`hydgrp`) and Drainage Class (`drainagecl`)
 
-Here we see map unit dominant condition [Hydrologic Group](https://directives.nrcs.usda.gov/sites/default/files2/1712930597/11905.pdf).
+`soilDB` provides many functions that can perform aggregations of map unit component data. We will use the function `get_SDA_property()` to calculate the map unit dominant condition values for several component-level hydrologic properties: the *Hydrologic Group* and the *Drainage Class*.
 
-```{r}
-# Get most common hydgrp per mukey
-hydgrp_tab <- get_SDA_property(
-  "hydgrp",
+In this case we want to get everything in our local database, so we use the `WHERE` clause `"1=1"` which is true for all map units in the database.
+
+```{r get-sda-prop-hyd}
+component_properties <- c("hydgrp", "drainagecl")
+
+# Get most common hydgrp and drainagecl per mukey
+hyd_tab <- get_SDA_property(
+  component_properties,
   method = "dominant condition",
   dsn = gpkg_path,
   WHERE = "1=1"
 )
-head(hydgrp_tab)
+head(hyd_tab)
+```
 
-# Convert to ordered factor
-hydgrp_tab[["hydgrp"]] <- NASISChoiceList(hydgrp_tab["hydgrp"])[[1]]
+`soilDB` also includes a function, `NASISChoiceList()`, that helps with converting categorical attributes to factors with standard labels. The function also handles where those labels have a defined natural order.
 
+We pass a *data.frame* (or *named list*) of properties we want to convert to factor. The column or list element names are used to identify the domain of interest, which stores the different factor levels, their order, and other metadata.
+
+We extract from, and replace into, our `hyd_tab` data.frame using `[`:
+
+```{r nasis-choice-list}
+# Convert to factor
+hyd_tab[component_properties] <- NASISChoiceList(hyd_tab[component_properties])
+
+# Inspect result
+str(hyd_tab)
+```
+
+Above we see that `hydgrp` and `drainagecl` are now factors and drainage class is an ordinal variable ranging from `"excessively"` drained at the driest to `"subaqueous"` at the wettest.
+
+Let's merge this processed tabular data into our `sf` *data.frame* object using merge.
+
+Both `spatial_mu` and `hyd_tab` have `"mukey"` as a column in common, along with `"areasymbol"`, `"musym"`, and `"muname"`.
+
+By default `merge()` will work on all columns that match exactly. If they differ or you only want to join on one specific column you specify `by`. `by.x`, or `by.y`.
+
+```{r join-example}
 # Join with spatial data
-spatial_mu <- merge(
-  spatial_mu, 
-  hydgrp_tab[c("mukey", "hydgrp")]
-)
+spatial_mu <- merge(spatial_mu, hyd_tab)
 
-# Plot
+# Inspect
+str(spatial_mu)
+```
+
+You may also need to specify `sort=FALSE` and `incomparables=NA` for certain applications where the original order matters or some keys contain `NA`.
+
+#### Thematic Maps
+
+Now that we have the spatial and tabular data joined, we will make some thematic maps.
+
+First, we plot map unit dominant condition [Hydrologic Group](https://directives.nrcs.usda.gov/sites/default/files2/1712930597/11905.pdf).
+
+```{r plot-hsg}
 plot(
   spatial_mu["hydgrp"],
   main = "Hydrologic Group (hydgrp)", 
@@ -207,30 +256,9 @@ plot(
 )
 ```
 
-### Example 3: Drainage Class (`drainagecl`)
+Next, we see map unit dominant condition Drainage Class.
 
-Here we see map unit dominant condition Drainage Class.
-
-```{r}
-# Get most common drainage class per mukey
-drainage_tab <- get_SDA_property(
-  "drainagecl",
-  method = "dominant condition",
-  dsn = gpkg_path,
-  WHERE = "1=1"
-)
-head(drainage_tab)
-
-# Convert to ordered factor
-drainage_tab[["drainagecl"]] <- NASISChoiceList(drainage_tab["drainagecl"])[[1]]
-
-# Join with spatial data
-spatial_mu <- merge(
-  spatial_mu,
-  drainage_tab[c("mukey", "drainagecl")]
-)
-
-# Plot
+```{r plot-drainagecl}
 plot(
   spatial_mu["drainagecl"],
   main = "Drainage Class (drainagecl)", 
@@ -240,13 +268,13 @@ plot(
 )
 ```
 
----
+------------------------------------------------------------------------
 
-The previous examples show how to visualize key soil properties using only base R and `sf`. 
+The previous examples show how to visualize component-level properties using base R, `soilDB`, `DBI`, `RSQLite`, and `sf`.
 
-The aggregation of dominant component to map unit level values is one of the simplest, and most common, transformations of the SSURGO data for creating maps.
+The aggregation of dominant component to map unit level values is one of the simplest, and most common, transformations of the SSURGO data for creating maps. Dominant condition aggregation method, combining the components with the same classes in the property of interest, is extremely useful for any categorical data element, such as `hydgrp` and `drainagecl` shown in this demo.
 
-You can adapt the aggregation logic depending on your needs (e.g., max, mean, or most frequent value). Many soilDB functions include default aggregations, and you can write custom queries of your own using `SDA_query()` or DBI `dbGetQuery()`. 
+You can adapt the aggregation logic depending on your needs (e.g., max, mean, or most frequent value). Many `soilDB` functions include default aggregations, and you can write custom queries of your own using `SDA_query()` or DBI `dbGetQuery()`.
 
 ## Query and Aggregation Functions
 
@@ -254,21 +282,17 @@ This section describes some existing options in the `soilDB` package for queryin
 
 In the future this section will be expanded.
 
-All of the `get_SDA_*()` "SSURGO On Demand" functions can be applied to local copies of the SSURGO database by passing the `dsn` argument (either a path to a SQLite database or a _DBIConnection_ object).
+All of the `get_SDA_*()` "SSURGO On Demand" functions can be applied to local copies of the SSURGO database by passing the `dsn` argument (either a path to a SQLite database or a *DBIConnection* object).
 
-  -   "SSURGO On Demand" Queries
-      -  Hydric Soils: [`get_SDA_hydric()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_hydric.html)
-      -  Soil Interpretations: [`get_SDA_interpretation()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_interpretation.html)
-      -  Mapunit Aggregate Attributes : [`get_SDA_muaggatt()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_muaggatt.html)
-      -  Parent Material Groups: [`get_SDA_pmgroupname()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_pmgroupname.html)
-      -  Component and Horizon Properties: [`get_SDA_property()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.html)
-      -  Component Ecological Classes: [`get_SDA_coecoclass()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecoclass.html)
-      -  Component Surface Morphometry: [`get_SDA_cosurfmorph()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_cosurfmorph.html)
+-   "SSURGO On Demand" Queries
+    -   Hydric Soils: [`get_SDA_hydric()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_hydric.html)
+    -   Soil Interpretations: [`get_SDA_interpretation()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_interpretation.html)
+    -   Map Unit Aggregate Attributes : [`get_SDA_muaggatt()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_muaggatt.html)
+    -   Parent Material Groups: [`get_SDA_pmgroupname()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_pmgroupname.html)
+    -   Component and Horizon Properties: [`get_SDA_property()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.html)
+    -   Component Ecological Classes: [`get_SDA_coecoclass()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecoclass.html)
+    -   Component Surface Morphometry: [`get_SDA_cosurfmorph()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_cosurfmorph.html)
 
 ## Alternative Tools
 
 For users who prefer a Python-based solution, the [SSURGOPortal R package](https://github.com/brownag/SSURGOPortalR) wraps the official [SSURGO Portal Python](https://www.nrcs.usda.gov/resources/data-and-reports/ssurgo-portal) code for use in R.
-
-## Conclusion
-
-The `downloadSSURGO()` and `createSSURGO()` functions provide a reproducible and scriptable way to access SSURGO data for offline spatial and tabular analysis in R. 
