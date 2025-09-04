@@ -150,14 +150,23 @@ SDA_query <- function(q, dsn = NULL) {
   if (nchar(q, type = "bytes") > 2.5E6) {
     stop('Query string is too long (>2.5 million bytes), consider soilDB::makeChunks() to split inputs into several smaller queries and iterate', call. = FALSE)
   }
-
+  
+  ua <- c(
+    libcurl = curl::curl_version()$version,
+    `r-curl` = as.character(utils::packageVersion("curl")),
+    httr = as.character(utils::packageVersion("httr")),
+    soilDB = paste(as.character(utils::packageVersion('soilDB')), "(SDA_query)")
+  )
+  
   # submit request
   r <- try(httr::POST(
-    url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
-    body = list(query = q,
-                format = "json+columnname+metadata"),
-    encode = "form"
-  ), silent = TRUE)
+      url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
+      body = list(query = q, format = "json+columnname+metadata"),
+      httr::add_headers(`User-Agent` = paste0(names(ua), "/", ua, collapse = " ")),
+      encode = "form"
+    ),
+    silent = TRUE
+  )
   
   if (inherits(r, 'try-error')) {
     message("Soil Data Access POST request failed, returning try-error.\n\n", r)
