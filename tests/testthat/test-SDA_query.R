@@ -245,6 +245,21 @@ test_that("SDA_query() works with multi-line records", {
 
 })
 
-
+test_that("SDA_spatialQuery() validates what and as_Spatial inputs correctly", {
+    
+  skip_if_not_installed("httr")
+  
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  # test combinations of what and as_Spatial
+  err_msg <- "Spatial output requested for non-spatial return type (from `what` param)"
+  expect_error(SDA_spatialQuery(p, as_Spatial=TRUE), err_msg, fixed=TRUE)
+  expect_error(SDA_spatialQuery(p, what = 'areasymbol', as_Spatial=TRUE), err_msg, fixed=TRUE)
+  expect_no_error(SDA_spatialQuery(p, what = 'areasymbol', as_Spatial=FALSE))
+  
+})
+  
 
 

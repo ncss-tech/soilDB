@@ -264,6 +264,12 @@ SDA_spatialQuery <- function(geom,
                              addFields = NULL,
                              query_string = FALSE,
                              as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {
+  
+  stopifnot(
+    "Spatial output requested for non-spatial return type (from `what` param)" =
+      !(what %in% c('mukey', 'areasymbol') && as_Spatial)
+  )
+  
   if (byFeature) {
     res <- do.call('rbind', lapply(seq_len(nrow(geom)), function(i) {
       res2 <- .SDA_spatialQuery(
