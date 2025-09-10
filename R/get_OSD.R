@@ -6,7 +6,7 @@
 #' @param fix_ocr_errors Default: `FALSE`; Applies only to `result='json'`. Convert clear cases of Optical Character Recognition (OCR) errors to likely actual values. 
 #' @param verbose Print errors and warning messages related to HTTP requests? Default: `FALSE` 
 #'
-#' @details The default `base_url` for `result="json"` is to JSON files stored in a GitHub repository  that is regularly updated from the official source of Series Descriptions. Using format: `https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/{LETTER}/{SERIES}.json` for JSON. And `"https://soilseriesdesc.sc.egov.usda.gov/OSD_Docs/{LETTER}/{SERIES}.html` is for `result="html"` (official source).
+#' @details The default `base_url` for `result="json"` is to JSON files stored in a GitHub repository  that is regularly updated from the official source of Series Descriptions. Using format: `https://raw.githubusercontent.com/ncss-tech/SoilKnowledgeBase/main/inst/extdata/OSD/{LETTER}/{SERIES}.json` for JSON. And `"https://soilseries.sc.egov.usda.gov/OSD_Docs/{LETTER}/{SERIES}.html` is for `result="html"` (official source).
 #' 
 #' `fix_ocr_errors` by default is turned off (`FALSE`). When `TRUE`, assume that in color data hue/value/chroma lowercase "L" (`"l"`) is a 1, and a capital "O" is interpreted as zero. Also, in horizon designations assume lowercase "L" is a `1`, and a string that starts with `0` starts with the capital letter `"O"`.
 #' @return For JSON result: A `data.frame` with 1 row per series, and 1 column per "section" in the OSD as defined in National Soil Survey Handbook. For TXT or HTML result a list of character vectors containing OSD text with 1 element per series and one value per line.
@@ -41,7 +41,7 @@ get_OSD <- function(series, base_url = NULL, result = c("json","html","txt"), fi
     stop('please install the `rvest` package', call. = FALSE)
 
   if (missing(base_url) || is.null(base_url))
-    base_url <- 'https://soilseriesdesc.sc.egov.usda.gov/OSD_Docs/'
+    base_url <- 'https://soilseries.sc.egov.usda.gov/OSD_Docs/'
 
   # get HTML content and strip blank / NA lines
   res <- sapply(.seriesNameToURL(series, base_url = base_url), function(x) {
@@ -196,7 +196,7 @@ get_OSD_JSON <- function(series, base_url = NULL) {
 ## D.E. Beaudette
 
 # generate a link to the OSD for a vector of series names
-.seriesNameToURL <- function(s, base_url = 'http://soilseriesdesc.sc.egov.usda.gov/OSD_Docs/',
+.seriesNameToURL <- function(s, base_url = 'http://soilseries.sc.egov.usda.gov/OSD_Docs/',
                              extension = 'html') {
   paste0(base_url, .seriesNameToFileName(s, extension = extension))
 }
