@@ -94,27 +94,66 @@ processSDA_WKT <- function(d,
 
 #' Query Soil Data Access by spatial intersection with supplied geometry
 #'
-#' Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersection of \code{geom} + SSURGO / STATSGO polygons can be returned. See details.
+#' Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied
+#' geometries. Input can be an 'sf', 'terra', or 'sp' object with a valid CRS.
+#' Map unit keys, overlapping polygons, or the spatial intersection of
+#' \code{geom} + SSURGO / STATSGO polygons can be returned. See details.
+#' 
+#' Queries for map unit keys are always more efficient vs. queries for
+#' overlapping or intersecting (i.e. least efficient) features. \code{geom} is
+#' converted to GCS / WGS84 as needed. Map unit keys are always returned when
+#' using \code{what = "mupolygon"}.
 #'
-#' Queries for map unit keys are always more efficient vs. queries for overlapping or intersecting (i.e. least efficient) features. \code{geom} is converted to GCS / WGS84 as needed. Map unit keys are always returned when using \code{what = "mupolygon"}.
-#'
-#' SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO (generalized soil survey, 1:250,000 scale) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the [SDA Tutorial](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html) for details.
+#' SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO
+#' (generalized soil survey, 1:250,000 scale) data are stored together within
+#' SDA. This means that queries that don't specify an area symbol may result in
+#' a mixture of SSURGO and STATSGO records. See the examples below and the [SDA
+#' Tutorial](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html) for
+#' details.
 #'
 #' @aliases SDA_spatialQuery
 #'
-#' @param geom an `sf` or `Spatial*` object, with valid CRS. May contain multiple features.
-#' @param what a character vector specifying what to return. `'mukey'`: `data.frame` with intersecting map unit keys and names, `'mupolygon'`, `'mupoint'`, `'muline'` overlapping or intersecting map unit polygons, points or lines from selected database, `'featpoint'` or `'featline'` for special feature points and lines, `'areasymbol'`: `data.frame` with intersecting soil survey areas, `'sapolygon'`: overlapping or intersecting soil survey area polygons (SSURGO only)
-#' @param geomIntersection logical; `FALSE` (default): overlapping map unit polygons returned, `TRUE`: intersection of `geom` + map unit polygons is returned.
-#' @param geomAcres logical; `TRUE` (default): calculate acres of result geometry in column `"area_ac"` when `what` returns a geometry column. `FALSE` does not calculate acres.
-#' @param db a character vector identifying the Soil Geographic Databases (`'SSURGO'` or `'STATSGO'`) to query. Option \var{STATSGO} works with `what = "mukey"` and `what = "mupolygon"`.
-#' @param byFeature Iterate over features, returning a combined data.frame where each feature is uniquely identified by value in `idcol`. Default `FALSE`.
-#' @param idcol Unique IDs used for individual features when `byFeature = TRUE`; Default `"gid"`
-#' @param addFields character; Amend result with a query to `mapunit` table for additional information? Default: `NULL`. A character vector can be used to specify columns from the `legend`, `mapunit`, and `muaggatt` tables (for `mupolygon`, `mupoint`, `muline` and `mukey`), `legend` table for areasymbol and sapolygon, and `featdesc` for `featpoint` and `featline`.  Mapunit and mapunit aggregate attribute tables are ignored for soil survey area polygon results.
-#' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
-#' @param as_Spatial Return sp classes? e.g. `Spatial*DataFrame`. Default: `FALSE`.
+#' @param geom an sf, terra, or sp object with valid CRS. May contain
+#'   multiple features.
+#' @param what a character vector specifying what to return. `'mukey'`:
+#'   `data.frame` with intersecting map unit keys and names, `'mupolygon'`,
+#'   `'mupoint'`, `'muline'` overlapping or intersecting map unit polygons,
+#'   points or lines from selected database, `'featpoint'` or `'featline'` for
+#'   special feature points and lines, `'areasymbol'`: `data.frame` with
+#'   intersecting soil survey areas, `'sapolygon'`: overlapping or intersecting
+#'   soil survey area polygons (SSURGO only)
+#' @param geomIntersection logical; `FALSE` (default): overlapping map unit
+#'   polygons returned, `TRUE`: intersection of `geom` + map unit polygons is
+#'   returned.
+#' @param geomAcres logical; `TRUE` (default): calculate acres of result
+#'   geometry in column `"area_ac"` when `what` returns a geometry column.
+#'   `FALSE` does not calculate acres.
+#' @param db a character vector identifying the Soil Geographic Databases
+#'   (`'SSURGO'` or `'STATSGO'`) to query. Option \var{STATSGO} works with `what
+#'   = "mukey"` and `what = "mupolygon"`.
+#' @param byFeature Iterate over features, returning a combined data.frame where
+#'   each feature is uniquely identified by value in `idcol`. Default `FALSE`.
+#' @param idcol Unique IDs used for individual features when `byFeature = TRUE`;
+#'   Default `"gid"`
+#' @param addFields character; Amend result with a query to `mapunit` table for
+#'   additional information? Default: `NULL`. A character vector can be used to
+#'   specify columns from the `legend`, `mapunit`, and `muaggatt` tables (for
+#'   `mupolygon`, `mupoint`, `muline` and `mukey`), `legend` table for
+#'   areasymbol and sapolygon, and `featdesc` for `featpoint` and `featline`.
+#'   Mapunit and mapunit aggregate attribute tables are ignored for soil survey
+#'   area polygon results.
+#' @param query_string Default: `FALSE`; if `TRUE` return a character string
+#'   containing query that would be sent to SDA via `SDA_query`
+#' @param as_Spatial For `what` that return spatial data, return `sp` package
+#'   classes instead of `sf`? e.g. `Spatial*DataFrame`. Default: `FALSE`. 
 #'
-#' @return A `data.frame` if `what = 'mukey'`, otherwise an `sf` object. A `try-error` in the event the request cannot be made or if there is an error in the query.
-#' @note Row-order is not preserved across features in \code{geom} and returned object. Use `byFeature` argument to iterate over features and return results that are 1:1 with the inputs. Polygon area in acres is computed server-side when `what = 'mupolygon'` and `geomIntersection = TRUE`.
+#' @return A `data.frame` if `what = 'mukey'`, otherwise an `sf` object. A
+#'   `try-error` in the event the request cannot be made or if there is an error
+#'   in the query.
+#' @note Row-order is not preserved across features in \code{geom} and returned
+#'   object. Use `byFeature` argument to iterate over features and return
+#'   results that are 1:1 with the inputs. Polygon area in acres is computed
+#'   server-side when `what = 'mupolygon'` and `geomIntersection = TRUE`.
 #' @author D.E. Beaudette, A.G. Brown, D.R. Schlaepfer
 #' @seealso \code{\link{SDA_query}}
 #' @keywords manip
