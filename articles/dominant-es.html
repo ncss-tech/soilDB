@@ -139,7 +139,7 @@ POLYGON.</p>
 <pre><code><span><span class="co">## Simple feature collection with 6 features and 2 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -120.8786 ymin: 37.95459 xmax: -120.7814 ymax: 38.0197</span></span>
+<span><span class="co">## Bounding box:  xmin: -120.8786 ymin: 37.95459 xmax: -120.83 ymax: 38.0197</span></span>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">##     mukey     area_ac                           geom</span></span>
 <span><span class="co">## 1 1403432    5.402344 POLYGON ((-120.8315 37.9853...</span></span>
@@ -147,7 +147,7 @@ POLYGON.</p>
 <span><span class="co">## 3 1403432    8.221394 POLYGON ((-120.8343 37.9898...</span></span>
 <span><span class="co">## 4 2924958  115.522394 POLYGON ((-120.8393 38.0000...</span></span>
 <span><span class="co">## 5 1605511 1009.514364 POLYGON ((-120.8783 37.9572...</span></span>
-<span><span class="co">## 6 2766838   21.574741 POLYGON ((-120.7833 37.9753...</span></span></code></pre>
+<span><span class="co">## 6 2924959    6.101858 POLYGON ((-120.8358 37.9969...</span></span></code></pre>
 <p>You can also set <code>geomIntersection = TRUE</code> so that
 intersecting geometries are cropped to the AOI. This is convenient if
 you have a very specific AOI in mind or would like to reduce the amount
@@ -263,8 +263,8 @@ concepts.</p>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">##    mukey   area_ac                           geom</span></span>
 <span><span class="co">## 1 660921 1668.6742 POLYGON ((-120.7998 37.975,...</span></span>
-<span><span class="co">## 2 660939 2596.0225 POLYGON ((-120.8427 37.975,...</span></span>
-<span><span class="co">## 3 660960  253.0798 POLYGON ((-120.85 37.975, -...</span></span></code></pre>
+<span><span class="co">## 2 660960  253.0798 POLYGON ((-120.85 37.975, -...</span></span>
+<span><span class="co">## 3 660939 2596.0225 POLYGON ((-120.8427 37.975,...</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mu_statsgo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">statsgo_polygons</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span>, </span>
@@ -280,22 +280,22 @@ concepts.</p>
 <pre><code><span><span class="co">## Simple feature collection with 6 features and 6 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -121.0731 ymin: 37.07511 xmax: -119.9157 ymax: 38.29961</span></span>
+<span><span class="co">## Bounding box:  xmin: -121.0731 ymin: 37.02103 xmax: -119.8417 ymax: 38.18986</span></span>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">##    mukey areasymbol nationalmusym      areaname</span></span>
 <span><span class="co">## 1 660921         US          q5r1 United States</span></span>
 <span><span class="co">## 2 660939         US          q5rm United States</span></span>
 <span><span class="co">## 3 660960         US          q5s9 United States</span></span>
 <span><span class="co">## 4 660939         US          q5rm United States</span></span>
-<span><span class="co">## 5 660939         US          q5rm United States</span></span>
-<span><span class="co">## 6 660939         US          q5rm United States</span></span>
+<span><span class="co">## 5 660921         US          q5r1 United States</span></span>
+<span><span class="co">## 6 660921         US          q5r1 United States</span></span>
 <span><span class="co">##                                 muname farmlndcl                           geom</span></span>
 <span><span class="co">## 1 Whiterock-Rock outcrop-Auburn (s818)      &lt;NA&gt; POLYGON ((-120.794 38.18986...</span></span>
 <span><span class="co">## 2                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.9141 38.0735...</span></span>
 <span><span class="co">## 3       Finrod-Cogna-Archerdale (s857)      &lt;NA&gt; POLYGON ((-120.9711 37.9490...</span></span>
-<span><span class="co">## 4                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-121.0478 38.2898...</span></span>
-<span><span class="co">## 5                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.8763 37.8606...</span></span>
-<span><span class="co">## 6                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.801 37.92773...</span></span></code></pre>
+<span><span class="co">## 4                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.801 37.92773...</span></span>
+<span><span class="co">## 5 Whiterock-Rock outcrop-Auburn (s818)      &lt;NA&gt; POLYGON ((-119.8862 37.0485...</span></span>
+<span><span class="co">## 6 Whiterock-Rock outcrop-Auburn (s818)      &lt;NA&gt; POLYGON ((-120.5276 37.9624...</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ssas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery</a></span><span class="op">(</span><span class="va">aoi</span>, what <span class="op">=</span> <span class="st">"areasymbol"</span><span class="op">)</span></span>
 <span><span class="va">ssas</span></span></code></pre></div>
@@ -384,34 +384,34 @@ get the unique set of map units in our AOI.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eco_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass</a></span><span class="op">(</span>mukeys <span class="op">=</span> <span class="va">mukeys</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">eco_data</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##     mukey areasymbol  lkey                                     muname    cokey</span></span>
-<span><span class="co">## 1 2766836      CA630 14103 Pardee cobbly loam, 2 to 15 percent slopes 25533361</span></span>
-<span><span class="co">## 2 2766836      CA630 14103 Pardee cobbly loam, 2 to 15 percent slopes 25533362</span></span>
-<span><span class="co">## 3 2766836      CA630 14103 Pardee cobbly loam, 2 to 15 percent slopes 25533363</span></span>
-<span><span class="co">## 4 2766836      CA630 14103 Pardee cobbly loam, 2 to 15 percent slopes 25533364</span></span>
-<span><span class="co">## 5 2766836      CA630 14103 Pardee cobbly loam, 2 to 15 percent slopes 25533365</span></span>
-<span><span class="co">## 6 2766836      CA630 14103 Pardee cobbly loam, 2 to 15 percent slopes 25533366</span></span>
-<span><span class="co">##   coecoclasskey comppct_r majcompflag     compname localphase</span></span>
-<span><span class="co">## 1      11176492        76         Yes       Pardee       &lt;NA&gt;</span></span>
-<span><span class="co">## 2            NA         2         No  Rock outcrop       &lt;NA&gt;</span></span>
-<span><span class="co">## 3      11176493        10         No        Amador       &lt;NA&gt;</span></span>
-<span><span class="co">## 4      11176494         5         No   Miltonhills       &lt;NA&gt;</span></span>
-<span><span class="co">## 5            NA         2         No    Mined land       &lt;NA&gt;</span></span>
-<span><span class="co">## 6      11176495         5         No       Redding       &lt;NA&gt;</span></span>
-<span><span class="co">##             compkind   ecoclassid                       ecoclassname</span></span>
-<span><span class="co">## 1             Series  R018XI107CA Shallow, Undulating Volcanic Hills</span></span>
-<span><span class="co">## 2 Miscellaneous area Not assigned                       Not assigned</span></span>
-<span><span class="co">## 3             Series  R018XI107CA Shallow, Undulating Volcanic Hills</span></span>
-<span><span class="co">## 4             Series  F018XI207CA   Deep Volcanic Plateaus and Hills</span></span>
-<span><span class="co">## 5 Miscellaneous area Not assigned                       Not assigned</span></span>
-<span><span class="co">## 6             Series  F018XI200CA            Low Elevation Foothills</span></span>
-<span><span class="co">##       ecoclasstypename                          ecoclassref</span></span>
-<span><span class="co">## 1  NRCS Rangeland Site Ecological Site Description Database</span></span>
-<span><span class="co">## 2         Not assigned                         Not assigned</span></span>
-<span><span class="co">## 3  NRCS Rangeland Site Ecological Site Description Database</span></span>
-<span><span class="co">## 4 NRCS Forestland Site Ecological Site Description Database</span></span>
-<span><span class="co">## 5         Not assigned                         Not assigned</span></span>
-<span><span class="co">## 6 NRCS Forestland Site Ecological Site Description Database</span></span></code></pre>
+<pre><code><span><span class="co">##     mukey areasymbol  lkey                                      muname    cokey</span></span>
+<span><span class="co">## 1 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 26037166</span></span>
+<span><span class="co">## 2 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 26037167</span></span>
+<span><span class="co">## 3 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 26037230</span></span>
+<span><span class="co">## 4 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 26037231</span></span>
+<span><span class="co">## 5 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 26037232</span></span>
+<span><span class="co">## 6 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 26037233</span></span>
+<span><span class="co">##   coecoclasskey comppct_r majcompflag   compname localphase compkind</span></span>
+<span><span class="co">## 1      11663307        85         Yes Archerdale  clay loam   Series</span></span>
+<span><span class="co">## 2            NA         4         No       Capay       clay   Series</span></span>
+<span><span class="co">## 3            NA         3         No  Hollenbeck       clay   Series</span></span>
+<span><span class="co">## 4            NA         1         No     Chuloak sandy loam   Series</span></span>
+<span><span class="co">## 5            NA         3         No  Hicksville       loam   Series</span></span>
+<span><span class="co">## 6            NA         2         No  Clear Lake       clay   Series</span></span>
+<span><span class="co">##     ecoclassid                    ecoclassname    ecoclasstypename</span></span>
+<span><span class="co">## 1  R017XY903CA Stream Channels and Floodplains NRCS Rangeland Site</span></span>
+<span><span class="co">## 2 Not assigned                    Not assigned        Not assigned</span></span>
+<span><span class="co">## 3 Not assigned                    Not assigned        Not assigned</span></span>
+<span><span class="co">## 4 Not assigned                    Not assigned        Not assigned</span></span>
+<span><span class="co">## 5 Not assigned                    Not assigned        Not assigned</span></span>
+<span><span class="co">## 6 Not assigned                    Not assigned        Not assigned</span></span>
+<span><span class="co">##                            ecoclassref</span></span>
+<span><span class="co">## 1 Ecological Site Description Database</span></span>
+<span><span class="co">## 2                         Not assigned</span></span>
+<span><span class="co">## 3                         Not assigned</span></span>
+<span><span class="co">## 4                         Not assigned</span></span>
+<span><span class="co">## 5                         Not assigned</span></span>
+<span><span class="co">## 6                         Not assigned</span></span></code></pre>
 <p>This function returns a data frame including <code>mukey</code>,
 <code>cokey</code>, <code>ecoclassid</code>, and
 <code>ecoclassname</code>.</p>
