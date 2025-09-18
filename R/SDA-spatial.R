@@ -519,7 +519,7 @@ SDA_spatialQuery <- function(geom,
       addFields <- addFields[!addFields == "lkey"]
       lecol <- toString(unique(c(key, addFields)))
       q <- paste0(q, "\nINNER JOIN legend ON legend.areasymbol = geom_data.areasymbol")
-      q <- gsub("([^o]) AS geom", paste0("\\1 AS geom, ", lecol), q)
+      q <- gsub("(\\) SELECT geom_data.*) AS geom", paste0("\\1 AS geom, ", lecol), q)
     } else if (grepl("feat", what)) {
       key <- character(0)
       if (include_key) {
@@ -528,11 +528,8 @@ SDA_spatialQuery <- function(geom,
       addFields <- trimws(addFields)
       addFields <- addFields[!addFields == "featkey"]
       mucol <- toString(unique(c(key, addFields)))
-      q <- paste(q, sprintf("INNER JOIN %s ON %s.featkey = geom_data.featkey
-                     INNER JOIN featdesc ON featdesc.featkey = geom_data.featkey",
-                            what, what))
-      q <- gsub("([^o]) AS geom", paste0("\\1 AS geom, ", mucol), q)
-      
+      q <- paste(q, sprintf("INNER JOIN featdesc ON geom_data.featkey = featdesc.featkey", what))
+      q <- gsub("(\\) SELECT geom_data.*) AS geom", paste0("\\1 AS geom, ", mucol), q)
     } else {
       key <- character(0)
       if (include_key) {
@@ -544,7 +541,7 @@ SDA_spatialQuery <- function(geom,
       q <- paste(q, "INNER JOIN mapunit ON mapunit.mukey = geom_data.mukey
            INNER JOIN muaggatt ON muaggatt.mukey = mapunit.mukey
            INNER JOIN legend ON legend.lkey = mapunit.lkey ")
-      q <- gsub("([^o]) AS geom", paste0("\\1 AS geom, ", mucol), q)
+      q <- gsub("(\\) SELECT geom_data.*) AS geom", paste0("\\1 AS geom, ", mucol), q)
     }
   }
   gsub(", FROM", " FROM", gsub("NULL AS geom[, ]*", "", q))
