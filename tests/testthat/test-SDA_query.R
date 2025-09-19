@@ -127,10 +127,11 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
 
 test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   
+  
   skip_if_not_installed("httr")
   
   skip_if_offline()
-
+  
   skip_on_cran()
   
   skip_if_not_installed("sf")
@@ -143,10 +144,14 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   # testing known values
   expect_true(inherits(res, 'sf'))
   expect_equivalent(nrow(res), 1)
-
-
+  
   # test with db = "STATSGO"
-  res <- suppressWarnings(SDA_spatialQuery(p, what = 'geom', db = "STATSGO"))
+  res <- suppressWarnings(SDA_spatialQuery(
+    p,
+    what = 'geom',
+    addFields = "mapunit.muname",
+    db = "STATSGO"
+  ))
   
   skip_if(inherits(res, 'try-error'))
   
@@ -154,15 +159,78 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   expect_true(inherits(res, 'sf'))
   expect_equivalent(nrow(res), 1)
   
-  # test with what = "sapolygon" 
-  res <- suppressWarnings(SDA_spatialQuery(p, what = "sapolygon"))
+  # test with what = "sapolygon"
+  res <- suppressWarnings(SDA_spatialQuery(p, what = "sapolygon", addFields = "legend.areaname"))
   
   skip_if(inherits(res, 'try-error'))
   
   # testing known values
   expect_true(inherits(res, 'sf'))
   expect_equivalent(nrow(res), 1)
+  
+})
 
+test_that("SDA_spatialQuery(geomIntersection=TRUE) simple spatial query, spatial results", {
+  
+  
+  skip_if_not_installed("httr")
+  
+  skip_if_offline()
+  
+  skip_on_cran()
+  
+  skip_if_not_installed("sf")
+  
+  # test with default db = "SSURGO"
+  res <- suppressWarnings(
+    SDA_spatialQuery(
+      p,
+      what = 'geom',
+      addFields = "mapunit.muname",
+      geomIntersection = TRUE
+    )
+  )
+  
+  skip_if(inherits(res, 'try-error'))
+  
+  # testing known values
+  expect_true(inherits(res, 'sf'))
+  expect_equivalent(nrow(res), 1)
+  
+  
+  # test with db = "STATSGO"
+  res <- suppressWarnings(
+    SDA_spatialQuery(
+      p,
+      what = 'geom',
+      addFields = "mapunit.muname",
+      geomIntersection = TRUE,
+      db = "STATSGO"
+    )
+  )
+  
+  skip_if(inherits(res, 'try-error'))
+  
+  # testing known values
+  expect_true(inherits(res, 'sf'))
+  expect_equivalent(nrow(res), 1)
+  
+  # test with what = "sapolygon"
+  res <- suppressWarnings(
+    SDA_spatialQuery(
+      p,
+      what = "sapolygon",
+      addFields = "legend.areaname",
+      geomIntersection = TRUE
+    )
+  )
+  
+  skip_if(inherits(res, 'try-error'))
+  
+  # testing known values
+  expect_true(inherits(res, 'sf'))
+  expect_equivalent(nrow(res), 1)
+  
 })
 
 test_that("SDA_spatialQuery() spatial query of MUKEY with multiple features", {
