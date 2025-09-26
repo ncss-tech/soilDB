@@ -53,7 +53,7 @@ get_SDA_NASIS_key <- function(x,
                    "IN",
                    format_SQL_in_statement(x))
   } else if (by %in% c("chkey")) {
-    WHERE <- paste(paste0("chorizon", by),
+    WHERE <- paste(paste0("chorizon.", by),
                    "IN",
                    format_SQL_in_statement(x))
     include_chorizon <- TRUE
