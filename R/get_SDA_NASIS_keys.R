@@ -51,11 +51,11 @@ get_SDA_NASIS_key <- function(x,
   if (by %in% c("mukey", "cokey")) {
     WHERE <- paste(paste0("component.", by),
                    "IN",
-                   soilDB::format_SQL_in_statement(x))
+                   format_SQL_in_statement(x))
   } else if (by %in% c("chkey")) {
     WHERE <- paste(paste0("chorizon", by),
                    "IN",
-                   soilDB::format_SQL_in_statement(x))
+                   format_SQL_in_statement(x))
     include_chorizon <- TRUE
   }
 
@@ -64,7 +64,7 @@ get_SDA_NASIS_key <- function(x,
     INCLUDE_CHORIZON <- "LEFT JOIN chorizon ON chorizon.cokey = component.cokey"
   }
   
-  q <- soilDB:::.gluelite(
+  q <- .gluelite(
     "SELECT component.mukey, component.cokey, nasiscoiid {INCLUDE_CHIID}
     FROM component {INCLUDE_CHORIZON}
     WHERE {WHERE}"
@@ -74,5 +74,5 @@ get_SDA_NASIS_key <- function(x,
     return(q)
   }
 
-  soilDB::SDA_query(q, dsn = dsn)
+  SDA_query(q, dsn = dsn)
 }
