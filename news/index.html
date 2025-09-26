@@ -279,7 +279,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.8.0" id="soildb-280-2023-12-22">soilDB 2.8.0 (2023-12-22)<a class="anchor" aria-label="anchor" href="#soildb-280-2023-12-22"></a></h2><p class="text-muted">CRAN release: 2023-12-22</p>
-<ul><li>Minimum {aqp} version set to v2.0.2. This is due to changes in the namespace related to <code><a href="https://rdrr.io/pkg/aqp/man/col2Munsell.html" class="external-link">aqp::col2Munsell()</a></code>, to “encourage” users to update to the more efficient routines provided in {aqp} 2+ (if they haven’t already), and prepare for future updates in the 2.x series.</li>
+<ul><li>Minimum {aqp} version set to v2.0.2. This is due to changes in the namespace related to <code><a href="https://ncss-tech.github.io/aqp/reference/col2Munsell.html" class="external-link">aqp::col2Munsell()</a></code>, to “encourage” users to update to the more efficient routines provided in {aqp} 2+ (if they haven’t already), and prepare for future updates in the 2.x series.</li>
 <li>Fix bugs in <code><a href="../reference/get_SDA_interpretation.html">get_SDA_interpretation()</a></code> when <code>dsn</code> refers to a local SQLite source and in concatenation of reason string when <code>wide_reason=TRUE</code>
 </li>
 <li>
@@ -493,7 +493,7 @@
 <li>See: <a href="https://github.com/ncss-tech/soilDB/pull/229" class="external-link uri">https://github.com/ncss-tech/soilDB/pull/229</a> for more details on what has changed.</li>
 </ul></li>
 <li>NASIS
-<ul><li>(<em>breaking change</em>) <code>rmHzErrors</code> argument now defaults to <code>FALSE</code>. Please let us know if allowing horizon errors results in unexpected behavior so we can repair various interfaces that rely on no errors being present. See <code><a href="https://rdrr.io/pkg/aqp/man/checkHzDepthLogic.html" class="external-link">aqp::checkHzDepthLogic()</a></code> for more information on the types of things that used to result in profiles being removed from results and for guidelines on how to fix.</li>
+<ul><li>(<em>breaking change</em>) <code>rmHzErrors</code> argument now defaults to <code>FALSE</code>. Please let us know if allowing horizon errors results in unexpected behavior so we can repair various interfaces that rely on no errors being present. See <code><a href="https://ncss-tech.github.io/aqp/reference/checkHzDepthLogic.html" class="external-link">aqp::checkHzDepthLogic()</a></code> for more information on the types of things that used to result in profiles being removed from results and for guidelines on how to fix.</li>
 <li>Added several new columns from the <code>plotplantinventory</code> table to <code><a href="../reference/fetchVegdata.html">get_vegplot_species_from_NASIS_db()</a></code> result; thanks to Zachary Van Abbema for suggestion and feedback</li>
 <li>Local NASIS metadata used for <code><a href="../reference/uncode.html">uncode()</a></code> are now cached within an R session which results in faster query processing times for users with a local NASIS database connection set up.
 <ul><li>The <code>db</code> argument to <code><a href="../reference/uncode.html">uncode()</a></code> has been deprecated. Now, <code><a href="../reference/uncode.html">code()</a></code> and <code><a href="../reference/uncode.html">uncode()</a></code> can use <code>ChoiceName</code> and/or <code>ChoiceLabel</code> in coding and decoding <code>ChoiceValue</code> for all data sources.</li>
@@ -738,7 +738,7 @@
 <li>NASIS methods use <code>dsn</code> argument to specify a local “static” SQLite file containing NASIS tables, or custom <em>DBIConnection</em> to a database with NASIS schema
 <ul><li>Default <code>dsn = NULL</code> uses <code>"nasis_local"</code> <a href="http://ncss-tech.github.io/AQP/soilDB/setup_local_nasis.html" class="external-link">ODBC connection</a> to local NASIS SQL Server</li>
 </ul></li>
-<li>Horizon depth logic checking is now done with <code><a href="https://rdrr.io/pkg/aqp/man/checkHzDepthLogic.html" class="external-link">aqp::checkHzDepthLogic()</a></code>, powered by {data.table}</li>
+<li>Horizon depth logic checking is now done with <code><a href="https://ncss-tech.github.io/aqp/reference/checkHzDepthLogic.html" class="external-link">aqp::checkHzDepthLogic()</a></code>, powered by {data.table}</li>
 <li>Added several new SDA query methods based on <a href="https://github.com/ncss-tech/ssurgoOnDemand" class="external-link uri">https://github.com/ncss-tech/ssurgoOnDemand</a> by <a href="https://github.com/jneme910" class="external-link">@jneme910</a> and <a href="https://github.com/cferguso" class="external-link">@cferguso</a>:
 <ul><li>
 <code>get_SDA_property</code>, <code>get_SDA_interpretation</code>, <code>get_SDA_muaggatt</code>, <code>get_SDA_hydric</code>, <code>get_SDA_pmgroupname</code>

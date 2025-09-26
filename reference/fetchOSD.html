@@ -115,7 +115,7 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ncss-tech.github.io/aqp/" class="external-link">aqp</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="co"># soils of interest</span></span></span>
 <span class="r-in"><span>  <span class="va">s.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'musick'</span>, <span class="st">'cecil'</span>, <span class="st">'drummer'</span>, <span class="st">'amador'</span>, <span class="st">'pentz'</span>,</span></span>
 <span class="r-in"><span>              <span class="st">'reiff'</span>, <span class="st">'san joaquin'</span>, <span class="st">'montpellier'</span>, <span class="st">'grangeville'</span>, <span class="st">'pollasky'</span>, <span class="st">'ramona'</span><span class="op">)</span></span></span>
@@ -127,13 +127,13 @@
 <span class="r-in"><span>  <span class="co"># plot profiles</span></span></span>
 <span class="r-in"><span>  <span class="co"># moist soil colors</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="va">s.moist</span>,</span></span>
 <span class="r-in"><span>    name <span class="op">=</span> <span class="st">'hzname'</span>,</span></span>
 <span class="r-in"><span>    cex.names <span class="op">=</span> <span class="fl">0.85</span>,</span></span>
 <span class="r-in"><span>    depth.axis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>line <span class="op">=</span> <span class="op">-</span><span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="va">s.dry</span>,</span></span>
 <span class="r-in"><span>    name <span class="op">=</span> <span class="st">'hzname'</span>,</span></span>
 <span class="r-in"><span>    cex.names <span class="op">=</span> <span class="fl">0.85</span>,</span></span>
@@ -145,7 +145,7 @@
 <span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">fetchOSD</span><span class="op">(</span><span class="va">s.list</span>, extended <span class="op">=</span> <span class="cn">TRUE</span>, colorState <span class="op">=</span> <span class="st">'dry'</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">SPC</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">SPC</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 18</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ SPC             :Formal class 'SoilProfileCollection' [package "aqp"] with 8 slots</span>

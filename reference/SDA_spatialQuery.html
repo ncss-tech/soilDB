@@ -172,7 +172,7 @@ server-side when <code>what = 'mupolygon'</code> and <code>geomIntersection = TR
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ncss-tech/aqp" class="external-link">aqp</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ncss-tech.github.io/aqp/" class="external-link">aqp</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## query at a point</span></span></span>
@@ -201,10 +201,10 @@ server-side when <code>what = 'mupolygon'</code> and <code>geomIntersection = TR
 <span class="r-in"><span><span class="co"># by making a copy of this column</span></span></span>
 <span class="r-in"><span><span class="co"># this will save in lieu of textures in the original</span></span></span>
 <span class="r-in"><span><span class="co"># `texture` column</span></span></span>
-<span class="r-in"><span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/horizons.html" class="external-link">horizons</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">texture.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">texture</span>, levels <span class="op">=</span> <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilTextureLevels.html" class="external-link">SoilTextureLevels</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/horizons.html" class="external-link">horizons</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">$</span><span class="va">texture.class</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">texture</span>, levels <span class="op">=</span> <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/SoilTextureLevels.html" class="external-link">SoilTextureLevels</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># graphical depiction of the result</span></span></span>
-<span class="r-in"><span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">x</span>,</span></span>
 <span class="r-in"><span>  color <span class="op">=</span> <span class="st">'texture.class'</span>,</span></span>
 <span class="r-in"><span>  label <span class="op">=</span> <span class="st">'compname'</span>,</span></span>
@@ -285,7 +285,7 @@ server-side when <code>what = 'mupolygon'</code> and <code>geomIntersection = TR
 <span class="r-in"><span><span class="co"># add alternate label (vertical text) containing component percent</span></span></span>
 <span class="r-in"><span><span class="co"># move horizon names into the profile sketches</span></span></span>
 <span class="r-in"><span><span class="co"># make profiles wider</span></span></span>
-<span class="r-in"><span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/groupedProfilePlot.html" class="external-link">groupedProfilePlot</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/groupedProfilePlot.html" class="external-link">groupedProfilePlot</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">x</span>,</span></span>
 <span class="r-in"><span>  groups <span class="op">=</span> <span class="st">'nationalmusym'</span>,</span></span>
 <span class="r-in"><span>  label <span class="op">=</span> <span class="st">'compname'</span>,</span></span>

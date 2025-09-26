@@ -391,7 +391,7 @@ the map.</p>
 <span><span class="co">#&gt; extent      : -1365495, -1358925, 2869245, 2873655  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file27132fa8b74f </span></span>
+<span><span class="co">#&gt; varname     : file283758099d28 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   :  144983 </span></span>
@@ -499,7 +499,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file27136e27ce68 </span></span>
+<span><span class="co">#&gt; varname     : file28372986e56a </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :  mukey </span></span>
 <span><span class="co">#&gt; min value   : 545800 </span></span>
@@ -513,7 +513,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file2713120c9536 </span></span>
+<span><span class="co">#&gt; varname     : file28371bba4a54 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   :  545800 </span></span>
@@ -527,7 +527,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file271343f3e068 </span></span>
+<span><span class="co">#&gt; varname     : file28375e4c7b00 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   : 3244721 </span></span>
@@ -582,7 +582,7 @@ reflect the relative generality of this product.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411095  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file271319b52e50 </span></span>
+<span><span class="co">#&gt; varname     : file28372c9386e5 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :  mukey </span></span>
 <span><span class="co">#&gt; min value   : 659074 </span></span>
@@ -1148,7 +1148,7 @@ texture class for comparison.</p>
 <span></span>
 <span><span class="co"># assign soil texture classes for the fine earth fraction</span></span>
 <span><span class="co"># using sand and clay percentages</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">texture.class</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/aqp/man/texture.html" class="external-link">ssc_to_texcl</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">texture.class</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/texture.html" class="external-link">ssc_to_texcl</a></span><span class="op">(</span></span>
 <span>  sand <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">ssc</span><span class="op">[[</span><span class="st">'sandtotal_r'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, </span>
 <span>  clay <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">ssc</span><span class="op">[[</span><span class="st">'claytotal_r'</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, </span>
 <span>  droplevels <span class="op">=</span> <span class="cn">FALSE</span></span>
