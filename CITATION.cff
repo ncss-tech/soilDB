@@ -23,6 +23,7 @@ authors:
 - family-names: Beaudette
   given-names: Dylan
   email: dylan.beaudette@usda.gov
+  orcid: https://orcid.org/0009-0008-2780-4785
 - family-names: Skovlin
   given-names: Jay
 - family-names: Roecker
@@ -38,6 +39,7 @@ preferred-citation:
   - family-names: Beaudette
     given-names: Dylan
     email: dylan.beaudette@usda.gov
+    orcid: https://orcid.org/0009-0008-2780-4785
   - family-names: Skovlin
     given-names: Jay
   - family-names: Roecker
@@ -46,7 +48,7 @@ preferred-citation:
     given-names: Andrew
     email: andrew.g.brown@usda.gov
     orcid: https://orcid.org/0000-0002-4565-533X
-  notes: R package version 2.8.12
+  notes: R package version 2.8.13
   url: https://CRAN.R-project.org/package=soilDB
   year: '2025'
 repository: https://CRAN.R-project.org/package=soilDB
@@ -134,7 +136,7 @@ references:
   title: aqp
   abstract: 'aqp: Algorithms for Quantitative Pedology'
   notes: Imports
-  url: https://ncss-tech.github.io/AQP/
+  url: https://ncss-tech.github.io/aqp/
   repository: https://CRAN.R-project.org/package=aqp
   authors:
   - family-names: Beaudette
@@ -279,6 +281,9 @@ references:
     email: hadley@posit.co
   - family-names: Gjoneski
     given-names: Oliver
+  - family-names: Couch
+    given-names: Simon
+    email: simon.couch@posit.co
   year: '2025'
   doi: 10.32614/CRAN.package.odbc
 - type: software
