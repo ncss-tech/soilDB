@@ -1,3 +1,10 @@
+# soilDB 2.8.13 (2025-09-26)
+ - Added `get_SDA_NASIS_key()` for obtaining NASIS record IDs for component and component horizon data from Soil Data Access (#409)
+ - `SDA_spatialQuery()` fixed a bug with new `addFields` argument and `geomIntersection=TRUE` (#414)
+ - `get_OSD()` replace old base URL for `result='html'`
+ - `SDA_query()` include soilDB package version in User-Agent string
+ - Vignette updates
+ 
 # soilDB 2.8.12 (2025-08-29)
  - **New Vignettes**:
    - Added vignette for thematic maps of dominant ecological site using Soil Data Access via `SDA_spatialQuery()` and `get_SDA_coecoclass()`
