@@ -2,7 +2,7 @@ Package: soilDB
 Type: Package
 Title: Soil Database Interface
 Version: 2.8.13
-Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut"), email = "dylan.beaudette@usda.gov"),
+Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut"), email = "dylan.beaudette@usda.gov", comment=c(ORCID="0009-0008-2780-4785")),
              person(given="Jay", family="Skovlin", role = c("aut")), 
              person(given="Stephen", family="Roecker", role = c("aut")), 
              person(given="Andrew", family="Brown", role = c("aut","cre"), email = "andrew.g.brown@usda.gov", comment=c(ORCID="0000-0002-4565-533X")))
