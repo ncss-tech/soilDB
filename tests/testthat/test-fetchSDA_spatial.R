@@ -18,7 +18,7 @@ test_that("fetchSDA_spatial basic mupolygon functionality", {
   # expect 48 delineations for this nmusymn
   # also test verbose argument
   expect_silent({full.extent.nmusym <- fetchSDA_spatial(x = "2x8l5", by.col = "nmusym", verbose = FALSE)})
-  expect_equivalent(nrow(full.extent.nmusym), 48)
+  expect_equivalent(nrow(full.extent.nmusym), 47)
 
   # mukey value from single result is in full extent result
   expect_true(unique(single.mukey$mukey) %in% unique(full.extent.nmusym$mukey))

@@ -1,14 +1,43 @@
 target_areas <-  c("CA649", "CA630")
-
-target_area_rows <- 221 # 1:1 with mukey
-target_area_rows_all <- 1021 # 1:1 with component
-target_area_rows_all_chorizon <- 3356 # 1:1 with chorizon
-
-n_misc_area_rows <- 9
-n_misc_area_rows_all <- 285
-n_misc_area_rows_all_chorizon <- 19
-
 target_mukeys <- c(463263, 463264)
+  
+test_that("dynamically determine target row counts", {
+
+  skip_if_not_installed("httr")
+  
+  skip_if_offline()
+
+  skip_on_cran()
+
+  q <- "SELECT areasymbol, mapunit.mukey, muname FROM mapunit
+        INNER JOIN legend ON mapunit.lkey = legend.lkey 
+        %s"
+  
+  area_in <- sprintf(" AND legend.areasymbol IN %s",
+                     format_SQL_in_statement(target_areas))
+  comp_in <- paste(area_in, sprintf(" INNER JOIN component ON component.mukey = mapunit.mukey %s", 
+                     c("", sprintf("AND compkind %s 'Miscellaneous area'", c("!=", "=")))))
+  chor_in <- paste(comp_in, "\nINNER JOIN chorizon on component.cokey = chorizon.cokey")
+  
+  r1 <- SDA_query(sprintf(q, area_in))
+  r2a <- SDA_query(sprintf(q, comp_in[1]))
+  r2b <- SDA_query(sprintf(q, comp_in[2]))
+  r2c <- SDA_query(sprintf(q, comp_in[3]))
+  r3a <- SDA_query(sprintf(q, chor_in[1]))
+  r3b <- SDA_query(sprintf(q, chor_in[2]))
+
+  expect_false(inherits(r1, 'try-error'))
+
+  target_area_rows <<- nrow(r1) # 1:1 with mukey
+  target_area_rows_all <<- nrow(r2a) # 1:1 with component
+  target_area_rows_all_chorizon <<- nrow(r3a) # 1:1 with chorizon
+
+  n_misc_area_rows <<- nrow(unique(subset(r2c, !mukey %in% r2b$mukey)))
+  n_misc_area_rows_all <<- nrow(r2a) - nrow(r2b)
+  n_misc_area_rows_all_chorizon <<- nrow(r3a) - nrow(r3b)
+
+})
+
 
 # test get_SDA_property results -- expect a data.frame result for two legends
 
