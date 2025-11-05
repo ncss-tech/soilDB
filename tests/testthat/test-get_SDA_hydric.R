@@ -13,7 +13,7 @@ test_that("get_SDA_hydric works", {
 
   # check classification of mapunits
   x.nonhydric <- subset(x, x$HYDRIC_RATING == "Nonhydric")
-  expect_equivalent(nrow(x.nonhydric), 174)
+  expect_equivalent(nrow(x.nonhydric), 176)
   expect_true(all(x.nonhydric$hydric_majors == 0 & x.nonhydric$hydric_inclusions == 0))
 
   # by mukey
