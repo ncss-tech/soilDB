@@ -1,7 +1,7 @@
 
 #' @title Soil Taxonomy Grids via SoilWeb
 #' 
-#' @description This function downloads gridded, generalized representations of the geographic extent of several types of taxonomic information. These types include any single taxon from the top 4 levels of Soil Taxonomy, formative elements used in great group or subgroup taxa, or family mineralogy class. Data are provided by SoilWeb, ultimately sourced from the current SSURGO snapshot. Data are returned as `SpatRaster` objects representing area proportion falling within 800m cells. Currently area proportions are based on major components only. Data are only available in CONUS and returned using an Albers Equal Area / NAD83(2011) coordinate reference system (EPSG: 5070).
+#' @description This function downloads gridded, generalized representations of the geographic extent for several types of taxonomic information. Options include: a single taxon from the top four levels of Soil Taxonomy, formative elements used in great group or subgroup taxa, or family mineralogy class. Data are provided by SoilWeb, ultimately sourced from the current SSURGO snapshot. Data are returned as `SpatRaster` objects representing soil map unit area proportion falling within 800m cells. Area proportions are based on major component percentages only. Data are available in CONUS and returned using an Albers Equal Area / NAD83(2011) coordinate reference system (EPSG: 5070).
 #' 
 #' @param x single taxon label (e.g. `haploxeralfs`), formative element (e.g. `pale`), or family mineralogy class (see Details)
 #' 
