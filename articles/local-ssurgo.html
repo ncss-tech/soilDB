@@ -62,7 +62,7 @@
       <h1>Local Soil Survey Geographic (SSURGO) Databases</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.8.13/vignettes/local-ssurgo.Rmd" class="external-link"><code>vignettes/local-ssurgo.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/vignettes/local-ssurgo.Rmd" class="external-link"><code>vignettes/local-ssurgo.Rmd</code></a></small>
       <div class="d-none name"><code>local-ssurgo.Rmd</code></div>
     </div>
 
@@ -303,7 +303,7 @@ unit concepts:</p>
 <span></span>
 <span><span class="co"># Read spatial map units</span></span>
 <span><span class="va">spatial_mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="va">gpkg_path</span>, layer <span class="op">=</span> <span class="st">"mupolygon"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Reading layer `mupolygon' from data source `/tmp/Rtmp1JhaZG/ssurgo.gpkg' using driver `GPKG'</span></span>
+<pre><code><span><span class="co">## Reading layer `mupolygon' from data source `/tmp/Rtmpi5lg2z/ssurgo.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">## Simple feature collection with 3333 features and 4 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
@@ -318,16 +318,16 @@ unit concepts:</p>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">## First 10 features:</span></span>
 <span><span class="co">##    areasymbol spatialver musym   mukey                           geom</span></span>
-<span><span class="co">## 1       KS129          5  1996 1382616 POLYGON ((-101.972 37.26513...</span></span>
-<span><span class="co">## 2       KS129          5  1511 1382582 POLYGON ((-101.7587 37.2546...</span></span>
-<span><span class="co">## 3       KS129          5  1462 1382612 POLYGON ((-101.708 37.27559...</span></span>
-<span><span class="co">## 4       KS129          5  1996 1382616 POLYGON ((-101.8841 37.3115...</span></span>
-<span><span class="co">## 5       KS129          5  1995 1382615 POLYGON ((-101.8418 37.3153...</span></span>
-<span><span class="co">## 6       KS129          5  1511 1382582 POLYGON ((-102.0278 37.2308...</span></span>
-<span><span class="co">## 7       KS129          5  1512 1382583 POLYGON ((-101.9374 37.1191...</span></span>
-<span><span class="co">## 8       KS129          5  1510 1382580 POLYGON ((-101.6442 37.2200...</span></span>
-<span><span class="co">## 9       KS129          5  1995 1382615 POLYGON ((-101.5774 37.3227...</span></span>
-<span><span class="co">## 10      KS129          5  1761 1382608 POLYGON ((-102.0419 37.2821...</span></span></code></pre>
+<span><span class="co">## 1       KS129          6  1996 1382616 POLYGON ((-101.6324 37.3092...</span></span>
+<span><span class="co">## 2       KS129          6  1511 1382582 POLYGON ((-101.8048 37.3059...</span></span>
+<span><span class="co">## 3       KS129          6  1462 1382612 POLYGON ((-101.6826 37.2779...</span></span>
+<span><span class="co">## 4       KS129          6  1462 1382612 POLYGON ((-101.7427 37.2780...</span></span>
+<span><span class="co">## 5       KS129          6  1462 1382612 POLYGON ((-101.7587 37.2658...</span></span>
+<span><span class="co">## 6       KS129          6  5236 1382597 POLYGON ((-101.5803 37.2443...</span></span>
+<span><span class="co">## 7       KS129          6  1706 1382607 POLYGON ((-101.6693 37.2019...</span></span>
+<span><span class="co">## 8       KS129          6  1462 1382612 POLYGON ((-101.9686 37.3273...</span></span>
+<span><span class="co">## 9       KS129          6  5220 1382593 POLYGON ((-101.8502 37.0818...</span></span>
+<span><span class="co">## 10      KS129          6  1511 1382582 POLYGON ((-101.9917 37.1193...</span></span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot the map units</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">spatial_mu</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -517,12 +517,12 @@ to be 1:1 with <code>mukey</code> can be used in thematic mapping.</p>
 <span><span class="co">## 5             NA             NA         N/A           N/A         NA</span></span>
 <span><span class="co">## 6             NA             NA         N/A           N/A         NA</span></span>
 <span><span class="co">##   innitrateleachi misoimgmtgrp vasoimgtgrp   mukey    cokey</span></span>
-<span><span class="co">## 1              NA           NA          NA 1382580 25874954</span></span>
-<span><span class="co">## 2              NA           NA          NA 1382580 25874955</span></span>
-<span><span class="co">## 3              NA           NA          NA 1382581 25874956</span></span>
-<span><span class="co">## 4              NA           NA          NA 1382581 25874957</span></span>
-<span><span class="co">## 5              NA           NA          NA 1382581 25874958</span></span>
-<span><span class="co">## 6              NA           NA          NA 1382582 25874982</span></span></code></pre>
+<span><span class="co">## 1              NA           NA          NA 1382580 26369989</span></span>
+<span><span class="co">## 2              NA           NA          NA 1382580 26369990</span></span>
+<span><span class="co">## 3              NA           NA          NA 1382581 26369991</span></span>
+<span><span class="co">## 4              NA           NA          NA 1382581 26369992</span></span>
+<span><span class="co">## 5              NA           NA          NA 1382581 26369993</span></span>
+<span><span class="co">## 6              NA           NA          NA 1382582 26370017</span></span></code></pre>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Disconnect when done</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">con</span><span class="op">)</span></span></code></pre></div>
@@ -546,7 +546,7 @@ to be 1:1 with <code>mukey</code> can be used in thematic mapping.</p>
 <span><span class="co">## 1 1382547        90</span></span>
 <span><span class="co">## 2 1382548        85</span></span>
 <span><span class="co">## 3 1382549        90</span></span>
-<span><span class="co">## 4 1382550       100</span></span>
+<span><span class="co">## 4 1382550        96</span></span>
 <span><span class="co">## 5 1382551        95</span></span>
 <span><span class="co">## 6 1382552        90</span></span></code></pre>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
@@ -655,13 +655,13 @@ you specify <code>by</code>. <code>by.x</code>, or
 <span><span class="co">##  $ areasymbol  : chr  "KS129" "KS129" "KS129" "KS129" ...</span></span>
 <span><span class="co">##  $ musym       : chr  "1158" "1158" "1158" "1158" ...</span></span>
 <span><span class="co">##  $ mukey       : chr  "1382599" "1382599" "1382599" "1382599" ...</span></span>
-<span><span class="co">##  $ spatialver  : num  5 5 5 5 5 5 5 5 5 5 ...</span></span>
+<span><span class="co">##  $ spatialver  : num  6 6 6 6 6 6 6 6 6 6 ...</span></span>
 <span><span class="co">##  $ domcomppct_r: int  85 85 85 85 85 85 85 85 95 95 ...</span></span>
 <span><span class="co">##  $ muname      : chr  "Glenberg fine sandy loam, occasionally flooded" "Glenberg fine sandy loam, occasionally flooded" "Glenberg fine sandy loam, occasionally flooded" "Glenberg fine sandy loam, occasionally flooded" ...</span></span>
 <span><span class="co">##  $ hydgrp      : Factor w/ 7 levels "a","b","c","d",..: 1 1 1 1 1 1 1 1 1 1 ...</span></span>
 <span><span class="co">##  $ drainagecl  : Ord.factor w/ 8 levels "excessively"&lt;..: 3 3 3 3 3 3 3 3 3 3 ...</span></span>
 <span><span class="co">##  $ geom        :sfc_POLYGON of length 3333; first list element: List of 1</span></span>
-<span><span class="co">##   ..$ : num [1:50, 1:2] -102 -102 -102 -102 -102 ...</span></span>
+<span><span class="co">##   ..$ : num [1:619, 1:2] -102 -102 -102 -102 -102 ...</span></span>
 <span><span class="co">##   ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"</span></span>
 <span><span class="co">##  - attr(*, "sf_column")= chr "geom"</span></span>
 <span><span class="co">##  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA</span></span>

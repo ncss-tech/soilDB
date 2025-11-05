@@ -6,7 +6,7 @@ articles:
   fetchNASIS: fetchNASIS.html
   local-ssurgo: local-ssurgo.html
   wcs-ssurgo: wcs-ssurgo.html
-last_built: 2025-09-27T04:57Z
+last_built: 2025-11-05T21:34Z
 urls:
   reference: http://ncss-tech.github.io/soilDB/reference
   article: http://ncss-tech.github.io/soilDB/articles

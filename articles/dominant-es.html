@@ -62,7 +62,7 @@
       <h1>Mapping Dominant Ecological Sites using SSURGO Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/2.8.13/vignettes/dominant-es.Rmd" class="external-link"><code>vignettes/dominant-es.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ncss-tech/soilDB/blob/master/vignettes/dominant-es.Rmd" class="external-link"><code>vignettes/dominant-es.Rmd</code></a></small>
       <div class="d-none name"><code>dominant-es.Rmd</code></div>
     </div>
 
@@ -139,15 +139,15 @@ POLYGON.</p>
 <pre><code><span><span class="co">## Simple feature collection with 6 features and 2 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -120.9233 ymin: 37.91407 xmax: -120.8087 ymax: 38.01049</span></span>
+<span><span class="co">## Bounding box:  xmin: -120.8235 ymin: 37.98283 xmax: -120.7807 ymax: 38.01469</span></span>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">##     mukey     area_ac                           geom</span></span>
-<span><span class="co">## 1 1403432    5.402344 POLYGON ((-120.8315 37.9853...</span></span>
-<span><span class="co">## 2 2924958   84.229770 POLYGON ((-120.8498 37.9994...</span></span>
-<span><span class="co">## 3 1605511  517.139158 POLYGON ((-120.8454 37.9730...</span></span>
-<span><span class="co">## 4 1403418 1647.514959 POLYGON ((-120.9233 37.9183...</span></span>
-<span><span class="co">## 5 1403439  216.854306 POLYGON ((-120.8488 38.0086...</span></span>
-<span><span class="co">## 6 1540892  842.104366 POLYGON ((-120.8351 37.9713...</span></span></code></pre>
+<span><span class="co">##     mukey    area_ac                           geom</span></span>
+<span><span class="co">## 1 2441798 187.863380 POLYGON ((-120.7961 38.0051...</span></span>
+<span><span class="co">## 2 2924886   6.788244 POLYGON ((-120.8201 37.9839...</span></span>
+<span><span class="co">## 3 2450844  30.732837 POLYGON ((-120.7897 37.9864...</span></span>
+<span><span class="co">## 4 2924752  11.813110 POLYGON ((-120.7836 37.9887...</span></span>
+<span><span class="co">## 5 2441798  32.166563 POLYGON ((-120.7884 37.9883...</span></span>
+<span><span class="co">## 6 2450844  48.484422 POLYGON ((-120.7985 37.9945...</span></span></code></pre>
 <p>You can also set <code>geomIntersection = TRUE</code> so that
 intersecting geometries are cropped to the AOI. This is convenient if
 you have a very specific AOI in mind or would like to reduce the amount
@@ -168,17 +168,17 @@ of data you are going to download.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">soil_polygons</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Simple feature collection with 6 features and 2 fields</span></span>
-<span><span class="co">## Geometry type: GEOMETRY</span></span>
+<span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -120.85 ymin: 37.975 xmax: -120.8113 ymax: 38</span></span>
+<span><span class="co">## Bounding box:  xmin: -120.8235 ymin: 37.98283 xmax: -120.7807 ymax: 38</span></span>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">##     mukey     area_ac                           geom</span></span>
-<span><span class="co">## 1 1403432   5.4023439 POLYGON ((-120.8313 37.9853...</span></span>
-<span><span class="co">## 2 2924958   0.6979041 POLYGON ((-120.8498 37.9994...</span></span>
-<span><span class="co">## 3 1605511 486.9764647 POLYGON ((-120.8461 37.975,...</span></span>
-<span><span class="co">## 4 1403418  26.1727977 MULTIPOLYGON (((-120.8495 3...</span></span>
-<span><span class="co">## 5 1403439  50.9568279 MULTIPOLYGON (((-120.85 37....</span></span>
-<span><span class="co">## 6 1540892 299.9533110 MULTIPOLYGON (((-120.8304 3...</span></span></code></pre>
+<span><span class="co">##     mukey   area_ac                           geom</span></span>
+<span><span class="co">## 1 2441798 26.735794 POLYGON ((-120.7922 37.998,...</span></span>
+<span><span class="co">## 2 2924886  6.788244 POLYGON ((-120.82 37.98283,...</span></span>
+<span><span class="co">## 3 2450844 30.732837 POLYGON ((-120.79 37.98505,...</span></span>
+<span><span class="co">## 4 2924752 11.813110 POLYGON ((-120.7836 37.9887...</span></span>
+<span><span class="co">## 5 2441798 32.166563 POLYGON ((-120.786 37.98831...</span></span>
+<span><span class="co">## 6 2450844 48.484422 POLYGON ((-120.8046 37.9885...</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="option-2-use-fetchsda_spatial">Option 2: Use <code>fetchSDA_spatial()</code><a class="anchor" aria-label="anchor" href="#option-2-use-fetchsda_spatial"></a>
@@ -207,29 +207,36 @@ opposed to more site-specific analyses.</p>
 <pre><code><span><span class="co">## Simple feature collection with 6 features and 6 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -120.9259 ymin: 37.81749 xmax: -120.7199 ymax: 37.92694</span></span>
+<span><span class="co">## Bounding box:  xmin: -120.8318 ymin: 37.87806 xmax: -120.6511 ymax: 38.09373</span></span>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">##     mukey areasymbol nationalmusym                                     areaname</span></span>
-<span><span class="co">## 1 1403409      CA632         1j3c8 Stanislaus County, California, Northern Part</span></span>
-<span><span class="co">## 2 1403409      CA632         1j3c8 Stanislaus County, California, Northern Part</span></span>
-<span><span class="co">## 3 1403409      CA632         1j3c8 Stanislaus County, California, Northern Part</span></span>
-<span><span class="co">## 4 1403409      CA632         1j3c8 Stanislaus County, California, Northern Part</span></span>
-<span><span class="co">## 5 1403409      CA632         1j3c8 Stanislaus County, California, Northern Part</span></span>
-<span><span class="co">## 6 1403409      CA632         1j3c8 Stanislaus County, California, Northern Part</span></span>
-<span><span class="co">##                                        muname                   farmlndcl</span></span>
-<span><span class="co">## 1 Archerdale clay loam, 0 to 2 percent slopes Prime farmland if irrigated</span></span>
-<span><span class="co">## 2 Archerdale clay loam, 0 to 2 percent slopes Prime farmland if irrigated</span></span>
-<span><span class="co">## 3 Archerdale clay loam, 0 to 2 percent slopes Prime farmland if irrigated</span></span>
-<span><span class="co">## 4 Archerdale clay loam, 0 to 2 percent slopes Prime farmland if irrigated</span></span>
-<span><span class="co">## 5 Archerdale clay loam, 0 to 2 percent slopes Prime farmland if irrigated</span></span>
-<span><span class="co">## 6 Archerdale clay loam, 0 to 2 percent slopes Prime farmland if irrigated</span></span>
+<span><span class="co">##     mukey areasymbol nationalmusym</span></span>
+<span><span class="co">## 1 2441798      CA630         2mywp</span></span>
+<span><span class="co">## 2 2441798      CA630         2mywp</span></span>
+<span><span class="co">## 3 2441798      CA630         2mywp</span></span>
+<span><span class="co">## 4 2441798      CA630         2mywp</span></span>
+<span><span class="co">## 5 2441798      CA630         2mywp</span></span>
+<span><span class="co">## 6 2441798      CA630         2mywp</span></span>
+<span><span class="co">##                                                                              areaname</span></span>
+<span><span class="co">## 1 Central Sierra Foothills Area, California, Parts of Calaveras and Tuolumne Counties</span></span>
+<span><span class="co">## 2 Central Sierra Foothills Area, California, Parts of Calaveras and Tuolumne Counties</span></span>
+<span><span class="co">## 3 Central Sierra Foothills Area, California, Parts of Calaveras and Tuolumne Counties</span></span>
+<span><span class="co">## 4 Central Sierra Foothills Area, California, Parts of Calaveras and Tuolumne Counties</span></span>
+<span><span class="co">## 5 Central Sierra Foothills Area, California, Parts of Calaveras and Tuolumne Counties</span></span>
+<span><span class="co">## 6 Central Sierra Foothills Area, California, Parts of Calaveras and Tuolumne Counties</span></span>
+<span><span class="co">##                                                muname          farmlndcl</span></span>
+<span><span class="co">## 1 Bonanza-Loafercreek complex, 3 to 15 percent slopes Not prime farmland</span></span>
+<span><span class="co">## 2 Bonanza-Loafercreek complex, 3 to 15 percent slopes Not prime farmland</span></span>
+<span><span class="co">## 3 Bonanza-Loafercreek complex, 3 to 15 percent slopes Not prime farmland</span></span>
+<span><span class="co">## 4 Bonanza-Loafercreek complex, 3 to 15 percent slopes Not prime farmland</span></span>
+<span><span class="co">## 5 Bonanza-Loafercreek complex, 3 to 15 percent slopes Not prime farmland</span></span>
+<span><span class="co">## 6 Bonanza-Loafercreek complex, 3 to 15 percent slopes Not prime farmland</span></span>
 <span><span class="co">##                             geom</span></span>
-<span><span class="co">## 1 POLYGON ((-120.9152 37.9105...</span></span>
-<span><span class="co">## 2 POLYGON ((-120.7258 37.8204...</span></span>
-<span><span class="co">## 3 POLYGON ((-120.876 37.89232...</span></span>
-<span><span class="co">## 4 POLYGON ((-120.8446 37.9237...</span></span>
-<span><span class="co">## 5 POLYGON ((-120.925 37.91919...</span></span>
-<span><span class="co">## 6 POLYGON ((-120.8505 37.8890...</span></span></code></pre>
+<span><span class="co">## 1 POLYGON ((-120.6513 37.9647...</span></span>
+<span><span class="co">## 2 POLYGON ((-120.7555 37.9478...</span></span>
+<span><span class="co">## 3 POLYGON ((-120.7659 38.0160...</span></span>
+<span><span class="co">## 4 POLYGON ((-120.7961 38.0051...</span></span>
+<span><span class="co">## 5 POLYGON ((-120.8276 38.0924...</span></span>
+<span><span class="co">## 6 POLYGON ((-120.7017 37.8785...</span></span></code></pre>
 <p>Note that using <code>add.fields</code> we have included some
 additional contextual information: area name, map unit name, and map
 unit farmland classification.</p>
@@ -263,8 +270,8 @@ concepts.</p>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">##    mukey   area_ac                           geom</span></span>
 <span><span class="co">## 1 660921 1668.6742 POLYGON ((-120.7998 37.975,...</span></span>
-<span><span class="co">## 2 660939 2596.0225 POLYGON ((-120.8427 37.975,...</span></span>
-<span><span class="co">## 3 660960  253.0798 POLYGON ((-120.85 37.975, -...</span></span></code></pre>
+<span><span class="co">## 2 660960  253.0798 POLYGON ((-120.85 37.975, -...</span></span>
+<span><span class="co">## 3 660939 2596.0225 POLYGON ((-120.8427 37.975,...</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mu_statsgo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">statsgo_polygons</span><span class="op">$</span><span class="va">mukey</span><span class="op">)</span>, </span>
@@ -280,28 +287,28 @@ concepts.</p>
 <pre><code><span><span class="co">## Simple feature collection with 6 features and 6 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -121.1757 ymin: 36.96048 xmax: -119.6675 ymax: 38.69719</span></span>
+<span><span class="co">## Bounding box:  xmin: -121.0731 ymin: 37.07511 xmax: -119.9157 ymax: 38.18986</span></span>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">##    mukey areasymbol nationalmusym      areaname</span></span>
 <span><span class="co">## 1 660921         US          q5r1 United States</span></span>
-<span><span class="co">## 2 660921         US          q5r1 United States</span></span>
-<span><span class="co">## 3 660921         US          q5r1 United States</span></span>
-<span><span class="co">## 4 660921         US          q5r1 United States</span></span>
-<span><span class="co">## 5 660921         US          q5r1 United States</span></span>
-<span><span class="co">## 6 660921         US          q5r1 United States</span></span>
+<span><span class="co">## 2 660939         US          q5rm United States</span></span>
+<span><span class="co">## 3 660960         US          q5s9 United States</span></span>
+<span><span class="co">## 4 660960         US          q5s9 United States</span></span>
+<span><span class="co">## 5 660939         US          q5rm United States</span></span>
+<span><span class="co">## 6 660939         US          q5rm United States</span></span>
 <span><span class="co">##                                 muname farmlndcl                           geom</span></span>
-<span><span class="co">## 1 Whiterock-Rock outcrop-Auburn (s818)      &lt;NA&gt; POLYGON ((-120.5276 37.9624...</span></span>
-<span><span class="co">## 2 Whiterock-Rock outcrop-Auburn (s818)      &lt;NA&gt; POLYGON ((-121.1396 38.6962...</span></span>
-<span><span class="co">## 3 Whiterock-Rock outcrop-Auburn (s818)      &lt;NA&gt; POLYGON ((-120.794 38.18986...</span></span>
-<span><span class="co">## 4 Whiterock-Rock outcrop-Auburn (s818)      &lt;NA&gt; POLYGON ((-119.7066 36.9942...</span></span>
-<span><span class="co">## 5 Whiterock-Rock outcrop-Auburn (s818)      &lt;NA&gt; POLYGON ((-120.2493 37.7735...</span></span>
-<span><span class="co">## 6 Whiterock-Rock outcrop-Auburn (s818)      &lt;NA&gt; POLYGON ((-120.2653 37.8824...</span></span></code></pre>
+<span><span class="co">## 1 Whiterock-Rock outcrop-Auburn (s818)      &lt;NA&gt; POLYGON ((-120.794 38.18986...</span></span>
+<span><span class="co">## 2                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.9141 38.0735...</span></span>
+<span><span class="co">## 3       Finrod-Cogna-Archerdale (s857)      &lt;NA&gt; POLYGON ((-120.9711 37.9490...</span></span>
+<span><span class="co">## 4       Finrod-Cogna-Archerdale (s857)      &lt;NA&gt; POLYGON ((-120.7151 37.7056...</span></span>
+<span><span class="co">## 5                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.8224 37.7205...</span></span>
+<span><span class="co">## 6                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.5867 37.7205...</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ssas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery</a></span><span class="op">(</span><span class="va">aoi</span>, what <span class="op">=</span> <span class="st">"areasymbol"</span><span class="op">)</span></span>
 <span><span class="va">ssas</span></span></code></pre></div>
 <pre><code><span><span class="co">##   areasymbol</span></span>
-<span><span class="co">## 1      CA632</span></span>
-<span><span class="co">## 2      CA630</span></span></code></pre>
+<span><span class="co">## 1      CA630</span></span>
+<span><span class="co">## 2      CA632</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ssa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fetchSDA_spatial.html">fetchSDA_spatial</a></span><span class="op">(</span></span>
 <span>  <span class="va">ssas</span><span class="op">$</span><span class="va">areasymbol</span>, </span>
@@ -385,33 +392,26 @@ get the unique set of map units in our AOI.</p>
 <code class="sourceCode R"><span><span class="va">eco_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_SDA_coecoclass.html">get_SDA_coecoclass</a></span><span class="op">(</span>mukeys <span class="op">=</span> <span class="va">mukeys</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">eco_data</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     mukey areasymbol  lkey                                      muname    cokey</span></span>
-<span><span class="co">## 1 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 26037166</span></span>
-<span><span class="co">## 2 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 26037167</span></span>
-<span><span class="co">## 3 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 26037230</span></span>
-<span><span class="co">## 4 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 26037231</span></span>
-<span><span class="co">## 5 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 26037232</span></span>
-<span><span class="co">## 6 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 26037233</span></span>
+<span><span class="co">## 1 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 27449761</span></span>
+<span><span class="co">## 2 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 27449762</span></span>
+<span><span class="co">## 3 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 27449763</span></span>
+<span><span class="co">## 4 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 27449764</span></span>
+<span><span class="co">## 5 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 27449765</span></span>
+<span><span class="co">## 6 1403409      CA632 17969 Archerdale clay loam, 0 to 2 percent slopes 27449766</span></span>
 <span><span class="co">##   coecoclasskey comppct_r majcompflag   compname localphase compkind</span></span>
-<span><span class="co">## 1      11663307        85         Yes Archerdale  clay loam   Series</span></span>
-<span><span class="co">## 2            NA         4         No       Capay       clay   Series</span></span>
-<span><span class="co">## 3            NA         3         No  Hollenbeck       clay   Series</span></span>
-<span><span class="co">## 4            NA         1         No     Chuloak sandy loam   Series</span></span>
+<span><span class="co">## 1            NA         4         No       Capay       clay   Series</span></span>
+<span><span class="co">## 2            NA         1         No     Chuloak sandy loam   Series</span></span>
+<span><span class="co">## 3            NA         2         No  Clear Lake       clay   Series</span></span>
+<span><span class="co">## 4            NA         1         No      Finrod       clay   Series</span></span>
 <span><span class="co">## 5            NA         3         No  Hicksville       loam   Series</span></span>
-<span><span class="co">## 6            NA         2         No  Clear Lake       clay   Series</span></span>
-<span><span class="co">##     ecoclassid                    ecoclassname    ecoclasstypename</span></span>
-<span><span class="co">## 1  R017XY903CA Stream Channels and Floodplains NRCS Rangeland Site</span></span>
-<span><span class="co">## 2 Not assigned                    Not assigned        Not assigned</span></span>
-<span><span class="co">## 3 Not assigned                    Not assigned        Not assigned</span></span>
-<span><span class="co">## 4 Not assigned                    Not assigned        Not assigned</span></span>
-<span><span class="co">## 5 Not assigned                    Not assigned        Not assigned</span></span>
-<span><span class="co">## 6 Not assigned                    Not assigned        Not assigned</span></span>
-<span><span class="co">##                            ecoclassref</span></span>
-<span><span class="co">## 1 Ecological Site Description Database</span></span>
-<span><span class="co">## 2                         Not assigned</span></span>
-<span><span class="co">## 3                         Not assigned</span></span>
-<span><span class="co">## 4                         Not assigned</span></span>
-<span><span class="co">## 5                         Not assigned</span></span>
-<span><span class="co">## 6                         Not assigned</span></span></code></pre>
+<span><span class="co">## 6            NA         3         No  Hollenbeck       clay   Series</span></span>
+<span><span class="co">##     ecoclassid ecoclassname ecoclasstypename  ecoclassref</span></span>
+<span><span class="co">## 1 Not assigned Not assigned     Not assigned Not assigned</span></span>
+<span><span class="co">## 2 Not assigned Not assigned     Not assigned Not assigned</span></span>
+<span><span class="co">## 3 Not assigned Not assigned     Not assigned Not assigned</span></span>
+<span><span class="co">## 4 Not assigned Not assigned     Not assigned Not assigned</span></span>
+<span><span class="co">## 5 Not assigned Not assigned     Not assigned Not assigned</span></span>
+<span><span class="co">## 6 Not assigned Not assigned     Not assigned Not assigned</span></span></code></pre>
 <p>This function returns a data frame including <code>mukey</code>,
 <code>cokey</code>, <code>ecoclassid</code>, and
 <code>ecoclassname</code>.</p>
@@ -438,40 +438,40 @@ common method to select one component per map unit is
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">eco_data_domcond</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      mukey areasymbol  lkey</span></span>
-<span><span class="co">## 1  1403409      CA632 17969</span></span>
-<span><span class="co">## 9  1403418      CA632 17969</span></span>
+<span><span class="co">## 8  1403409      CA632 17969</span></span>
+<span><span class="co">## 13 1403418      CA632 17969</span></span>
 <span><span class="co">## 15 1403432      CA632 17969</span></span>
-<span><span class="co">## 23 1403439      CA632 17969</span></span>
+<span><span class="co">## 19 1403439      CA632 17969</span></span>
 <span><span class="co">## 30 1540892      CA632 17969</span></span>
-<span><span class="co">## 36 1605509      CA632 17969</span></span>
+<span><span class="co">## 31 1605509      CA632 17969</span></span>
 <span><span class="co">##                                                          muname    cokey</span></span>
-<span><span class="co">## 1                   Archerdale clay loam, 0 to 2 percent slopes 26037166</span></span>
-<span><span class="co">## 9  Hicksville loam, 0 to 2 percent slopes, occasionally flooded 26037240</span></span>
-<span><span class="co">## 15            Redding gravelly loam, 0 to 8 percent slopes, dry 26037401</span></span>
-<span><span class="co">## 23              Peters-Pentz association, 2 to 8 percent slopes 26037394</span></span>
-<span><span class="co">## 30                     Mckeonhills clay, 5 to 15 percent slopes 26037481</span></span>
-<span><span class="co">## 36             Pentz-Peters association, 2 to 50 percent slopes 26037413</span></span>
+<span><span class="co">## 8                   Archerdale clay loam, 0 to 2 percent slopes 27449768</span></span>
+<span><span class="co">## 13 Hicksville loam, 0 to 2 percent slopes, occasionally flooded 27449813</span></span>
+<span><span class="co">## 15            Redding gravelly loam, 0 to 8 percent slopes, dry 27449968</span></span>
+<span><span class="co">## 19              Peters-Pentz association, 2 to 8 percent slopes 27450031</span></span>
+<span><span class="co">## 30                     Mckeonhills clay, 5 to 15 percent slopes 27450072</span></span>
+<span><span class="co">## 31             Pentz-Peters association, 2 to 50 percent slopes 27450044</span></span>
 <span><span class="co">##    coecoclasskey comppct_r majcompflag    compname      localphase compkind</span></span>
-<span><span class="co">## 1       11663307        85         Yes  Archerdale       clay loam   Series</span></span>
-<span><span class="co">## 9       11663331        85         Yes  Hicksville            loam   Series</span></span>
-<span><span class="co">## 15      11663401        85         Yes     Redding   gravelly loam   Series</span></span>
-<span><span class="co">## 23      11663397        60         Yes      Peters silty clay loam   Series</span></span>
-<span><span class="co">## 30      11663439        90         Yes Mckeonhills            clay   Series</span></span>
-<span><span class="co">## 36      11663404        62         Yes       Pentz       silt loam   Series</span></span>
+<span><span class="co">## 8       12784144        85         Yes  Archerdale       clay loam   Series</span></span>
+<span><span class="co">## 13      12784163        85         Yes  Hicksville            loam   Series</span></span>
+<span><span class="co">## 15      12784219        85         Yes     Redding   gravelly loam   Series</span></span>
+<span><span class="co">## 19      12784259        60         Yes      Peters silty clay loam   Series</span></span>
+<span><span class="co">## 30      12784278        90         Yes Mckeonhills            clay   Series</span></span>
+<span><span class="co">## 31      12784267        62         Yes       Pentz       silt loam   Series</span></span>
 <span><span class="co">##     ecoclassid                    ecoclassname    ecoclasstypename</span></span>
-<span><span class="co">## 1  R017XY903CA Stream Channels and Floodplains NRCS Rangeland Site</span></span>
-<span><span class="co">## 9  R017XY905CA  Dry Alluvial Fans and Terraces NRCS Rangeland Site</span></span>
+<span><span class="co">## 8  R017XY903CA Stream Channels and Floodplains NRCS Rangeland Site</span></span>
+<span><span class="co">## 13 R017XY905CA  Dry Alluvial Fans and Terraces NRCS Rangeland Site</span></span>
 <span><span class="co">## 15 R017XY902CA            Duripan Vernal Pools NRCS Rangeland Site</span></span>
-<span><span class="co">## 23 R018XI164CA         Clayey Dissected Swales NRCS Rangeland Site</span></span>
+<span><span class="co">## 19 R018XI164CA         Clayey Dissected Swales NRCS Rangeland Site</span></span>
 <span><span class="co">## 30 R018XI163CA       Thermic Low Rolling Hills NRCS Rangeland Site</span></span>
-<span><span class="co">## 36 R018XI163CA       Thermic Low Rolling Hills NRCS Rangeland Site</span></span>
+<span><span class="co">## 31 R018XI163CA       Thermic Low Rolling Hills NRCS Rangeland Site</span></span>
 <span><span class="co">##                             ecoclassref</span></span>
-<span><span class="co">## 1  Ecological Site Description Database</span></span>
-<span><span class="co">## 9  Ecological Site Description Database</span></span>
+<span><span class="co">## 8  Ecological Site Description Database</span></span>
+<span><span class="co">## 13 Ecological Site Description Database</span></span>
 <span><span class="co">## 15 Ecological Site Description Database</span></span>
-<span><span class="co">## 23 Ecological Site Description Database</span></span>
+<span><span class="co">## 19 Ecological Site Description Database</span></span>
 <span><span class="co">## 30 Ecological Site Description Database</span></span>
-<span><span class="co">## 36 Ecological Site Description Database</span></span></code></pre>
+<span><span class="co">## 31 Ecological Site Description Database</span></span></code></pre>
 <p>Note that this output includes information for the dominant component
 (<code>comppct_r</code> and <code>compname</code>).</p>
 </div>
@@ -493,40 +493,40 @@ the dominant component alone.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">eco_data_domcond</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      mukey areasymbol  lkey</span></span>
-<span><span class="co">## 1  1403409      CA632 17969</span></span>
-<span><span class="co">## 9  1403418      CA632 17969</span></span>
+<span><span class="co">## 8  1403409      CA632 17969</span></span>
+<span><span class="co">## 13 1403418      CA632 17969</span></span>
 <span><span class="co">## 15 1403432      CA632 17969</span></span>
-<span><span class="co">## 23 1403439      CA632 17969</span></span>
+<span><span class="co">## 19 1403439      CA632 17969</span></span>
 <span><span class="co">## 30 1540892      CA632 17969</span></span>
-<span><span class="co">## 36 1605509      CA632 17969</span></span>
+<span><span class="co">## 31 1605509      CA632 17969</span></span>
 <span><span class="co">##                                                          muname    cokey</span></span>
-<span><span class="co">## 1                   Archerdale clay loam, 0 to 2 percent slopes 26037166</span></span>
-<span><span class="co">## 9  Hicksville loam, 0 to 2 percent slopes, occasionally flooded 26037240</span></span>
-<span><span class="co">## 15            Redding gravelly loam, 0 to 8 percent slopes, dry 26037401</span></span>
-<span><span class="co">## 23              Peters-Pentz association, 2 to 8 percent slopes 26037394</span></span>
-<span><span class="co">## 30                     Mckeonhills clay, 5 to 15 percent slopes 26037481</span></span>
-<span><span class="co">## 36             Pentz-Peters association, 2 to 50 percent slopes 26037413</span></span>
+<span><span class="co">## 8                   Archerdale clay loam, 0 to 2 percent slopes 27449768</span></span>
+<span><span class="co">## 13 Hicksville loam, 0 to 2 percent slopes, occasionally flooded 27449813</span></span>
+<span><span class="co">## 15            Redding gravelly loam, 0 to 8 percent slopes, dry 27449968</span></span>
+<span><span class="co">## 19              Peters-Pentz association, 2 to 8 percent slopes 27450031</span></span>
+<span><span class="co">## 30                     Mckeonhills clay, 5 to 15 percent slopes 27450072</span></span>
+<span><span class="co">## 31             Pentz-Peters association, 2 to 50 percent slopes 27450044</span></span>
 <span><span class="co">##    coecoclasskey comppct_r majcompflag    compname      localphase compkind</span></span>
-<span><span class="co">## 1       11663307        85         Yes  Archerdale       clay loam   Series</span></span>
-<span><span class="co">## 9       11663331        85         Yes  Hicksville            loam   Series</span></span>
-<span><span class="co">## 15      11663401        85         Yes     Redding   gravelly loam   Series</span></span>
-<span><span class="co">## 23      11663397        60         Yes      Peters silty clay loam   Series</span></span>
-<span><span class="co">## 30      11663439        90         Yes Mckeonhills            clay   Series</span></span>
-<span><span class="co">## 36      11663404        62         Yes       Pentz       silt loam   Series</span></span>
+<span><span class="co">## 8       12784144        85         Yes  Archerdale       clay loam   Series</span></span>
+<span><span class="co">## 13      12784163        85         Yes  Hicksville            loam   Series</span></span>
+<span><span class="co">## 15      12784219        85         Yes     Redding   gravelly loam   Series</span></span>
+<span><span class="co">## 19      12784259        60         Yes      Peters silty clay loam   Series</span></span>
+<span><span class="co">## 30      12784278        90         Yes Mckeonhills            clay   Series</span></span>
+<span><span class="co">## 31      12784267        62         Yes       Pentz       silt loam   Series</span></span>
 <span><span class="co">##     ecoclassid                    ecoclassname    ecoclasstypename</span></span>
-<span><span class="co">## 1  R017XY903CA Stream Channels and Floodplains NRCS Rangeland Site</span></span>
-<span><span class="co">## 9  R017XY905CA  Dry Alluvial Fans and Terraces NRCS Rangeland Site</span></span>
+<span><span class="co">## 8  R017XY903CA Stream Channels and Floodplains NRCS Rangeland Site</span></span>
+<span><span class="co">## 13 R017XY905CA  Dry Alluvial Fans and Terraces NRCS Rangeland Site</span></span>
 <span><span class="co">## 15 R017XY902CA            Duripan Vernal Pools NRCS Rangeland Site</span></span>
-<span><span class="co">## 23 R018XI164CA         Clayey Dissected Swales NRCS Rangeland Site</span></span>
+<span><span class="co">## 19 R018XI164CA         Clayey Dissected Swales NRCS Rangeland Site</span></span>
 <span><span class="co">## 30 R018XI163CA       Thermic Low Rolling Hills NRCS Rangeland Site</span></span>
-<span><span class="co">## 36 R018XI163CA       Thermic Low Rolling Hills NRCS Rangeland Site</span></span>
+<span><span class="co">## 31 R018XI163CA       Thermic Low Rolling Hills NRCS Rangeland Site</span></span>
 <span><span class="co">##                             ecoclassref ecoclasspct_r</span></span>
-<span><span class="co">## 1  Ecological Site Description Database            85</span></span>
-<span><span class="co">## 9  Ecological Site Description Database            85</span></span>
+<span><span class="co">## 8  Ecological Site Description Database            85</span></span>
+<span><span class="co">## 13 Ecological Site Description Database            85</span></span>
 <span><span class="co">## 15 Ecological Site Description Database            85</span></span>
-<span><span class="co">## 23 Ecological Site Description Database            60</span></span>
+<span><span class="co">## 19 Ecological Site Description Database            60</span></span>
 <span><span class="co">## 30 Ecological Site Description Database            92</span></span>
-<span><span class="co">## 36 Ecological Site Description Database            67</span></span></code></pre>
+<span><span class="co">## 31 Ecological Site Description Database            67</span></span></code></pre>
 <p>Note that this result includes the aggregate ecological site
 composition <code>ecoclasspct_r</code>.</p>
 <p>The <code>cokey</code> and <code>comppct_r</code> are from the
