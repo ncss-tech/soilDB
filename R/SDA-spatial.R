@@ -27,7 +27,7 @@ processSDA_WKT <- function(d,
   if (!is.null(p4s)) {
     .Deprecated(msg = "Passing PROJ4 strings via `p4s` is deprecated. SDA interfaces in soilDB use the WGS84 Geographic Coordinate System (EPSG:4326) by default. Use the `crs` argument to customize.")
   }
-
+  
   if (inherits(d,  'try-error')) {
     message("Invalid SDA WKT result, returning try-error")
     return(d)
@@ -70,15 +70,15 @@ processSDA_WKT <- function(d,
                              intersection = "%s.STIntersection(geometry::STGeomFromText('%%s', 4326)) AS geom",
                              overlap = "%s AS geom"), db_column)
   res <- sprintf(
-      "WITH geom_data (geom, %s) AS (
+    "WITH geom_data (geom, %s) AS (
           SELECT %s, %s
           FROM %s 
           WHERE %s.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1 %s
         ) SELECT geom_data.%s, geom.STAsText() AS geom%s
         FROM geom_data",
-      id_column, geom_sql, id_column, db_table, db_column, clip_sql, id_column,
-      ifelse(geomAcres, area_ac_sql, "")
-    )
+    id_column, geom_sql, id_column, db_table, db_column, clip_sql, id_column,
+    ifelse(geomAcres, area_ac_sql, "")
+  )
   
   # handle non-polygon results
   if (db == "SSURGO" && what %in% c("mupoint", "muline", "featpoint", "featline")) {
@@ -113,30 +113,6 @@ processSDA_WKT <- function(d,
 #'
 #' @aliases SDA_spatialQuery
 #'
-<<<<<<< HEAD
-#' @param geom an `sf` or `Spatial*` object, with valid CRS. May contain multiple features.
-#' 
-#' @param what a character vector specifying what to return. `'mukey'`: `data.frame` with intersecting map unit keys and names, `'mupolygon'`, `'mupoint'`, `'muline'` overlapping or intersecting map unit polygons, points or lines from selected database, ``featpoint'` or `'featline'` for special feature points and lines, 'areasymbol'`: `data.frame` with intersecting soil survey areas, `'sapolygon'`: overlapping or intersecting soil survey area polygons (SSURGO only)
-#' 
-#' @param geomIntersection logical; `FALSE` (default): overlapping map unit polygons returned, `TRUE`: intersection of `geom` + map unit polygons is returned.
-#' 
-#' @param geomAcres logical; `TRUE` (default): calculate acres of result geometry in column `"area_ac"` when `what` returns a geometry column. `FALSE` does not calculate acres.
-#' 
-#' @param db a character vector identifying the Soil Geographic Databases (`'SSURGO'` or `'STATSGO'`) to query. Option \var{STATSGO} works with `what = "mukey"` and `what = "mupolygon"`.
-#' 
-#' @param byFeature Iterate over features, returning a combined data.frame where each feature is uniquely identified by value in `idcol`. Default `FALSE`.
-#' 
-#' @param idcol Unique IDs used for individual features when `byFeature = TRUE`; Default `"gid"`
-#' 
-#' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
-#' 
-#' @param as_Spatial Return sp classes? e.g. `Spatial*DataFrame`. Default: `FALSE`.
-#'
-#' @return A `data.frame` if `what = 'mukey'`, otherwise an `sf` object. A `try-error` in the event the request cannot be made or if there is an error in the query.
-#' 
-#' @note Row-order is not preserved across features in `geom` and returned object. Use `byFeature` argument to iterate over features and return results that are 1:1 with the inputs. Polygon area in acres is computed server-side when `what = 'mupolygon'` and `geomIntersection = TRUE`.
-#' 
-=======
 #' @param geom an sf, terra, or sp object with valid CRS. May contain
 #'   multiple features.
 #' @param what a character vector specifying what to return. `'mukey'`:
@@ -178,11 +154,9 @@ processSDA_WKT <- function(d,
 #'   object. Use `byFeature` argument to iterate over features and return
 #'   results that are 1:1 with the inputs. Polygon area in acres is computed
 #'   server-side when `what = 'mupolygon'` and `geomIntersection = TRUE`.
->>>>>>> master
 #' @author D.E. Beaudette, A.G. Brown, D.R. Schlaepfer
-#' @seealso [SDA_query()]
+#' @seealso \code{\link{SDA_query}}
 #' @keywords manip
-#' 
 #' @examplesIf requireNamespace("aqp") && requireNamespace("sf")
 #' \dontrun{
 #' library(aqp)
@@ -345,13 +319,11 @@ SDA_spatialQuery <- function(geom,
         query_string = query_string
       )
       res2[[idcol]] <- i
-      
-      return(res2)
+      res2
     }))
-    
     return(res)
   }
-
+  
   res <- .SDA_spatialQuery(
     geom = geom,
     what = what,
@@ -366,8 +338,7 @@ SDA_spatialQuery <- function(geom,
   if (as_Spatial && requireNamespace("sf")) {
     res <- sf::as_Spatial(res)
   }
-  
-  return(res)
+  res
 }
 
 .SDA_spatialQuery <- function(geom,
@@ -381,23 +352,23 @@ SDA_spatialQuery <- function(geom,
   # check for required packages
   if (!requireNamespace('sf', quietly = TRUE))
     stop('please install the `sf` package', call. = FALSE)
-
+  
   if (!requireNamespace('wk', quietly = TRUE))
     stop('please install the `wk` package', call. = FALSE)
-
+  
   what <- tolower(what)
   db <- toupper(db)
-
+  
   return_sf <- FALSE
   return_terra <- FALSE
-
+  
   # raster support
   if (inherits(geom, c('RasterLayer', 'RasterBrick', 'RasterStack'))) {
     if (!requireNamespace('terra'))
       stop("packages terra is required", call. = FALSE)
     geom <- terra::rast(geom)
   }
-
+  
   if (inherits(geom, 'SpatRaster') || inherits(geom, 'SpatVector')) {
     # terra support
     return_terra <- TRUE
@@ -415,70 +386,70 @@ SDA_spatialQuery <- function(geom,
   } else {
     stop('`geom` must be an sf, terra, or Spatial* object', call. = FALSE)
   }
-
+  
   # backwards compatibility with old value of what argument
   if (what == 'geom') {
     message("converting what='geom' to what='mupolygon'")
     what <- "mupolygon"
   }
-
+  
   # determine if requested data type is allowed
   if (!what %in% c('mukey', 'mupolygon', 'mupoint', 'muline', 'featpoint', 'featline', 'areasymbol', 'sapolygon')) {
     stop("query type (argument `what`) must be either 'mukey' / 'areasymbol' (tabular result) OR 'mupolygon', 'mupoint', 'muline', 'featpoint', 'featline', 'sapolygon' (geometry result)", call. = FALSE)
   }
-
+  
   # areasymbol is allowed with db = "SSURGO" (default) and db = "SAPOLYGON"
   if (what %in% c('areasymbol', 'sapolygon')) {
     db <- 'SAPOLYGON' # geometry selector uses db argument to specify sapolygon queries
   }
-
+  
   db <- match.arg(db)
-
+  
   if (what == 'areasymbol' && db == 'STATSGO') {
     stop("query type 'areasymbol' for 'STATSGO' is not supported", call. = FALSE)
   }
-
+  
   # geom must have a valid CRS
   if (is.na(sf::st_crs(geom)$wkt)) {
     stop('`geom` must have a valid CRS', call. = FALSE)
   }
-
+  
   # CRS conversion if needed
   target.prj <- sf::st_crs(4326)
   if (suppressWarnings(sf::st_crs(geom)) != target.prj) {
     geom <- sf::st_transform(geom, target.prj)
   }
-
+  
   # WKT encoding
   # use a geometry collection
   wkt <- wk::wk_collection(wk::as_wkt(geom))
-
+  
   # returning geom + mukey or geom + areasymbol
   if (what %in% c("mupolygon", "sapolygon", "mupoint", "muline", "featpoint", "featline")) {
-
+    
     if (what %in% c("mupoint", "muline", "featpoint", "featline")) {
       geomAcres <- FALSE
     }
     
     # return intersection + area
     if (geomIntersection) {
-
+      
       # select the appropriate query
       .template <- .SDA_geometrySelector(db = db, what = what, method = 'intersection', addFields = addFields, geomAcres = geomAcres)
       q <- sprintf(.template, as.character(wkt), as.character(wkt))
-
+      
     } else {
       # return overlapping
-
+      
       # select the appropriate query
       .template <- .SDA_geometrySelector(db = db, what = what, method = 'overlap', addFields = addFields, geomAcres = geomAcres)
       q <- sprintf(.template, as.character(wkt))
     }
-
+    
     if (query_string) {
       return(q)
     }
-
+    
     # single query for all of the features
     # note that row-order / number of rows in results may not match geom
     res <- suppressMessages(SDA_query(q))
@@ -494,7 +465,7 @@ SDA_spatialQuery <- function(geom,
     }
     
   } else {
-      
+    
     if (what == 'mukey') {
       if (db == "SSURGO") {
         q <- sprintf("WITH geom_data (mukey, muname) AS (SELECT mukey, muname
@@ -513,7 +484,7 @@ SDA_spatialQuery <- function(geom,
       } else {
         stop("query type 'mukey' for 'SAPOLYGON' is not supported", call. = FALSE)
       }
-  
+      
     } else if (what == 'areasymbol') {
       # SSURGO only
       q <- sprintf("WITH geom_data (areasymbol) AS (SELECT areasymbol
@@ -532,11 +503,7 @@ SDA_spatialQuery <- function(geom,
     res <- suppressMessages(SDA_query(q))
   }
   
-<<<<<<< HEAD
-  return(res)
-=======
   res
->>>>>>> master
 }
 
 .appendFields <- function(q, what, addFields, include_key = FALSE) {
