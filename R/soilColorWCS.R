@@ -99,7 +99,7 @@ soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   
   # base URL + parameters
   base.url <- 'http://casoilresource.lawr.ucdavis.edu/cgi-bin/mapserv?'
-  service.url <- 'map=/soilmap2/website/wcs/color.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage'
+  service.url <- 'map=/data1/website/wcs/color.map&SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage'
   
   # unpack BBOX for WCS 2.0
   xmin <- wcs.geom$bbox[1]
@@ -195,11 +195,10 @@ soilColor.wcs <- function(aoi, var, res = 270, quiet = FALSE) {
   
   input_class <- attr(wcs.geom, '.input_class')
   
-  if ((!is.null(input_class) && input_class == "raster") ||
-      getOption('soilDB.return_Spatial', default = FALSE)) {
-    if (requireNamespace("raster")) {
-      r <- raster::raster(r)
-    }
+  if (((!is.null(input_class) && input_class == "raster") ||
+      getOption('soilDB.return_Spatial', default = FALSE)) && 
+      requireNamespace("raster")) {
+    r <- raster::raster(r)
   }
   
   # set metadata

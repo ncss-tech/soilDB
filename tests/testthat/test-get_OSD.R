@@ -14,18 +14,17 @@ test_that("get_OSD works", {
   expect_warning({res1 <- get_OSD(series)})
 
   # data.frame result w/ 4 existing official series
-  expect_equal(nrow(res1), 4)
+  expect_equivalent(nrow(res1), 4)
 
   skip_if_not_installed("rvest")
 
   # same 404 messages with list result="html" output
   res2 <- get_OSD(series, result = "html")
-  expect_equal(length(res2), 6)
+  expect_length(res2, 6)
   expect_null(res2[[4]])
 
   # using fix_ocr_errors argument (this test still "works" even if OSD is fixed)
-  expect_equal(get_OSD("sycamore", fix_ocr_errors = TRUE)$HORIZONS[[1]]$dry_hue,
-               c("2.5Y", "2.5Y","2.5Y", "10YR"))
+  expect_equivalent(get_OSD("sycamore", fix_ocr_errors = TRUE)$HORIZONS[[1]]$dry_hue, c("2.5Y", "2.5Y","2.5Y", "10YR"))
 })
 
 test_that("correct laundering of HTML source", {

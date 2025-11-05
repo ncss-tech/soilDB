@@ -9,11 +9,7 @@
 #'
 #' @description Construct a URL for Ecological Dynamics Interpretive Tool (EDIT) web services (`https://edit.jornada.nmsu.edu/services/...`) to return PDF, TXT or JSON results.
 #'
-#' @details See the following official EDIT developer resources to see which endpoints are available for Ecological Site Description (ESD) or Ecological Site Group (ESG) catalogs:
-#'
-#' - \url{https://edit.jornada.nmsu.edu/resources/esd}
-#'
-#' - \url{https://edit.jornada.nmsu.edu/resources/esg}
+#' @details See the official EDIT developer resources to see which endpoints are available for Ecological Site Description (ESD) or Ecological Site Group (ESG) catalogs:
 #'
 #' @param src One of: `descriptions`, `downloads`, `plant-community-tables`, `models`, `keys`
 #' @param catalog Catalog ID. One of: `esd` or `esg`

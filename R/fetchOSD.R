@@ -172,7 +172,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
     }
     
     # format series list and append to URL
-    final.url <- paste(x, URLencode(paste(i, collapse = ',')), sep = '')
+    final.url <- paste0(x, URLencode(paste(i, collapse = ',')))
     
     # using HTTP GET is convenient but comes with limits on the number of chars in the URL
     if (nchar(final.url) > 2048) {
@@ -194,9 +194,9 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
   soils <- unique(tolower(soils))
   
   # sanity check
-  if (!requireNamespace('jsonlite', quietly = TRUE))
+  if (!requireNamespace('jsonlite', quietly = TRUE)) {
     stop('please install the `jsonlite` package', call. = FALSE)
-
+  }
   
   ## get data by chunk (https://github.com/ncss-tech/soilDB/issues/239)
   # this creates some additional overhead + copying
@@ -235,10 +235,19 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
   h <- res$hz
 
 	# report missing data
-  # no data condition: s == FALSE | h == FALSE
-  # otherwise both will be a data.frame
-  if ((is.logical(s) && length(s) == 1) ||
-      (is.logical(h) & length(h) == 1)) {
+  # no data condition 2-1/2-2: s and h => FALSE
+  # no data condition 4-1/4-2: s and h => structure(list(), dim = 1:0, dimnames = list(NULL, NULL))
+  
+  # only works for 2-1/2-2 php-pgsql
+  # if ((is.logical(s) && length(s) == 1) ||
+  #     (is.logical(h) & length(h) == 1)) {
+  #   message('query returned no data')
+  #   return(NULL)
+  # }
+  
+  # 4-1/4-2 updated php-pgsql
+  # no data condition: either `s` OR `h` are NOT `data.frame`
+  if ( (!inherits(s, 'data.frame') || !inherits(h, 'data.frame')) ) {
     message('query returned no data')
     return(NULL)
   }

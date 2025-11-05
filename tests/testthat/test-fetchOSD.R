@@ -23,7 +23,7 @@ test_that("fetchOSD() works", {
   
   # all of the results should contain the search term
   f <- grepl('sierra|cecil', x$id, ignore.case = TRUE)
-  expect_equal(all(f), TRUE)
+  expect_true(all(f))
 
 })
 
@@ -94,10 +94,10 @@ test_that("fetchOSD() returns reasonable data", {
   skip_if(is.null(x))
   
   # standard request
-  expect_equal(nrow(aqp::site(x)) == 2, TRUE)
-  expect_equal(aqp::nrow(x) > 0, TRUE)
-  expect_equal(aqp::idname(x), 'id')
-  expect_equal(aqp::horizonDepths(x), c("top", "bottom"))
+  expect_equivalent(nrow(aqp::site(x)), 2)
+  expect_gt(nrow(aqp::horizons(x)), 0)
+  expect_equivalent(aqp::idname(x), 'id')
+  expect_equivalent(aqp::horizonDepths(x), c("top", "bottom"))
 
 })
 
@@ -113,7 +113,7 @@ test_that("fetchOSD() returns reasonable data in extended mode", {
   skip_if(is.null(x.extended))
   
   # extended request
-  expect_equal(names(x.extended), extended.table.names)
+  expect_named(x.extended, extended.table.names)
 
 })
 

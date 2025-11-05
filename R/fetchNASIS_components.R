@@ -166,12 +166,11 @@
   }
 
   # print any messages on possible data quality problems:
-  if (exists('component.hz.problems', envir = get_soilDB_env())) {
-    if (length(get("component.hz.problems", envir = get_soilDB_env())) > 0) {
-      message(
-        "-> QC: horizon errors detected:\n\tUse `get('component.hz.problems', envir=get_soilDB_env())` for component record IDs (coiid)"
-      )
-    }
+  if (exists('component.hz.problems', envir = get_soilDB_env()) &&
+      length(get("component.hz.problems", envir = get_soilDB_env())) > 0) {
+    message(
+      "-> QC: horizon errors detected:\n\tUse `get('component.hz.problems', envir=get_soilDB_env())` for component record IDs (coiid)"
+    )
   }
   
   # set NASIS component specific horizon identifier

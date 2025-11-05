@@ -1,8 +1,46 @@
-# soilDB 2.8.10 (development)
+# soilDB development
+ - new features and breaking changes to `taxaExtent()`:
+   - family mineralogy class grids added
+   - new argument `type` for selecting the type of query
+   - `formativeElement` argument is no longer used
+
+
+# soilDB 2.8.13 (2025-09-26)
+ - Added `get_SDA_NASIS_key()` for obtaining NASIS record IDs for component and component horizon data from Soil Data Access (#409)
+ - `SDA_spatialQuery()` fixed a bug with new `addFields` argument and `geomIntersection=TRUE` (#414)
+ - `get_OSD()` replace old base URL for `result='html'`
+ - `SDA_query()` include soilDB package version in User-Agent string
+ - Vignette updates
+ 
+# soilDB 2.8.12 (2025-08-29)
+ - **New Vignettes**:
+   - Added vignette for thematic maps of dominant ecological site using Soil Data Access via `SDA_spatialQuery()` and `get_SDA_coecoclass()`
+   - Added vignette for creating and using local SSURGO databases via `downloadSSURGO()` and `createSSURGO()`
+ - `SDA_spatialQuery()` now supports `addFields` argument to add columns to the result from other non-spatial tables.
+   - You can now specify columns from:
+     - `"legend"`, `"mapunit"`, and `"muaggatt"` tables for `what` equal to `"mupolygon"`, `"mupoint"`, `"muline"` or `"mukey"`  
+     - `"legend"` table for `what` equal to  `"areasymbol"` or `"sapolygon"`
+     - `"featdesc"` for `what` equal to `"featpoint"` or `"featline"`
+ - `createSSURGO()`:
+   - Added `append` argument to fix `overwrite` behavior
+   - Fixed bug in creating non-GeoPackage, non-spatial SQLite output
+   - Improved handling of empty export files and `overwrite` logic for non-file-based RDBMS
+ - `fetchNASIS()`: fixed bug when `fill=TRUE` and there are no horizons in the source data for any profile 
+ - `get_component_from_SDA()` fixed bug in join of `"chorizon"` and `"chfrags"` tables, now uses `merge(incomparables=NA)` 
+ - `get_vegplot_tree_si_summary_from_NASIS_db()` updated for new `siteindexcurve` table in data model version 7.4.3
+ 
+# soilDB 2.8.11 (2025-07-11)
+ - Update to NASIS metadata for data model version 7.4.3
+ - `fetchSDA_spatial()` `geom.src="mlrapolygon"` uses a new URL on the DSHub S3 bucket
+ - Added `"projectsubtype"` and `"milestonetype"` to the `"project"` set for `get_NASIS_table_name_by_purpose()`
+ - Initial phase of syntax cleanup affecting many functions
+
+# soilDB 2.8.10 (2025-04-28)
  - `fetchVegdata()` add `nullFragsAreZero` argument (passed to `get_site_data_from_NASIS_db()`)
  - Added `soilDB_user_dir()` for caching local copies of data for use in soilDB functions (#377)
  - Added `fetchHWSD()` and `get_HWSD_path()`  for the FAO Harmonized World Soil Database (#391) 
-
+ - Added `get_phroots_from_NASIS_db()` for getting pedon horizon root information from NASIS (#393)
+ 
 # soilDB 2.8.9 (2025-04-04)
  - soilDB now requires aqp >= 2.1.0
  - Added `get_vegplot_groundsurface_from_NASIS_db()` thanks to Greg Schmidt (@phytoclast; #373)

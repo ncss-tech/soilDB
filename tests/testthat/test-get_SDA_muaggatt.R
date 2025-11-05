@@ -10,7 +10,7 @@ test_that("get_SDA_muaggatt works", {
   
   skip_if(is.null(res))
   
-  expect_equal(nrow(res), length(unique(res$mukey)))
-  expect_equal(nrow(get_SDA_muaggatt(mukeys = c(461994, 461995))), 2)
+  expect_length(unique(res$mukey), nrow(res))
+  expect_equivalent(nrow(get_SDA_muaggatt(mukeys = c(461994, 461995))), 2)
 })
 

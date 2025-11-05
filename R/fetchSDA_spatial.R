@@ -181,7 +181,7 @@ fetchSDA_spatial <- function(x,
       stop("package 'sf' is required to read MLRA boundaries from ZIP file source", call. = FALSE)
     }
     res <- sf::read_sf(
-      "/vsizip//vsicurl/https://s3-fpac-nrcs-dshub-public.s3.us-gov-west-1.amazonaws.com/MLRA_52_2022.zip",
+      "/vsizip//vsicurl/https://s3-fpac-nrcs-dshub-public.s3.us-gov-west-1.amazonaws.com/MLRA/MLRA_52_2022.zip",
       query = paste0(
         "SELECT * FROM MLRA_52 ",
         ifelse(
@@ -198,7 +198,7 @@ fetchSDA_spatial <- function(x,
     #       in the future a T-SQL implementation would allow for any of the defined method options
     return(res)
   } else {
-    return(try(stop(paste0("Unknown feature identifier (", by.col, ")"), call. = FALSE)))
+    return(try(stop("Unknown feature identifier (", by.col, ")")))
   }
 
   mukey.chunk <- makeChunks(mukey.list, chunk.size)
@@ -357,10 +357,10 @@ fetchSDA_spatial <- function(x,
   # add any additional fields from mapunit/legend
   if (!is.null(add.fields)) {
     q <- gsub(q, pattern = "FROM ([a-z]+)polygon",
-              replacement = paste0(", ", paste0(ifelse(rep(grepl("Aggregate", geom.type), length(add.fields)),
+              replacement = paste0(", ", toString(ifelse(rep(grepl("Aggregate", geom.type), length(add.fields)),
                sprintf("(SELECT STRING_AGG(value,', ') FROM (SELECT DISTINCT value FROM STRING_SPLIT(STRING_AGG(CONVERT(NVARCHAR(max), %s), ','),',')) t) AS %s",
                        add.fields, gsub(".*\\.([a-z]+)", "\\1", add.fields)),
-              add.fields), collapse = ", "), " FROM \\1polygon"))
+              add.fields)), " FROM \\1polygon"))
   }
   t1 <- Sys.time()
 
@@ -392,7 +392,7 @@ fetchSDA_spatial <- function(x,
 
     if (verbose)
       message("No spatial data found for: ",
-              paste0(mukey.list, collapse = ","))
+              paste(mukey.list, collapse = ","))
   }
   return(list(result = s, time = times))
 }

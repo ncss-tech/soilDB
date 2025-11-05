@@ -9,45 +9,6 @@ output: md_document
 ![CRAN/METACRAN](https://img.shields.io/cran/l/soilDB)
 [![soilDB Manual](https://img.shields.io/badge/docs-HTML-informational)](https://ncss-tech.github.io/soilDB/)
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-library(rvest)
-# get latest release semantic version number for citation
-.getLatestCRANRelease <- function() { 
-  gsub(".*/([0-9\\.]+)$", "\\1", html_text(html_element(html_element(read_html("https://github.com/ncss-tech/soilDB/releases.atom"), "entry"), "id")))
-}
-
-.update_CITATION <- function(version) {
-  x <- sprintf('citHeader("To cite soilDB in publications use:")
-
-bibentry(
-  bibtype = "Manual",
-  title = "soilDB: Soil Database Interface",
-  author = "Dylan Beaudette, Jay Skovlin, Stephen Roecker and Andrew Brown",
-  note = "R package version %s",
-  url = "https://CRAN.R-project.org/package=soilDB",
-  year = "%s",
-  textVersion = "Beaudette, D., Skovlin, J., Roecker, S., Brown, A. (%s). soilDB: Soil Database Interface. R package version %s. <https://CRAN.R-project.org/package=soilDB>"
-)
-', version, format(Sys.time(), "%Y"), format(Sys.time(), "%Y"), version)
-  suppressWarnings(writeLines(strsplit(x, "\n")[[1]], "inst/CITATION"))
-}
-
-# get latest tagged release from github
-soilDB_CRAN_VERSION <- .getLatestCRANRelease()
-
-# get installed version
-soilDB_INSTALLED_VERSION <- packageVersion("soilDB")
-
-# rebuilding readme locally, use installed version
-if (soilDB::local_NASIS_defined() && (soilDB_INSTALLED_VERSION > soilDB_CRAN_VERSION)) {
-  .update_CITATION(soilDB_INSTALLED_VERSION)
-} else {
-  .update_CITATION(soilDB_CRAN_VERSION)
-}
-
-# update inst/CITATION
-```
-
 ## Installation
 
 Get the stable version from CRAN:

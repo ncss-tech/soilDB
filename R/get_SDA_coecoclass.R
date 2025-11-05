@@ -1,23 +1,54 @@
-#' Get mapunit ecological sites from Soil Data Access 
-#' 
-#' @details When `method="Dominant Condition"` an additional field `ecoclasspct_r` is returned in the result
-#' with the sum of `comppct_r` that have the dominant condition `ecoclassid`. The component with the greatest 
-#' `comppct_r` is returned for the `component` and `coecosite` level information. 
-#' 
-#' Note that if there are multiple `coecoclasskey` per `ecoclassid` there may be more than one record per component.
-#' @param method aggregation method. One of: `"Dominant Component"`, `"Dominant Condition"`, `"All"` or `"None"` (default). If `method="all"` multiple numbered columns represent site composition within each map unit e.g. `site1...`, `site2...`. If `method="none"` is selected one row will be returned per _component_; in all other cases one row will be returned per _map unit_.
+#' Get mapunit ecological sites from Soil Data Access
+#'
+#' `get_SDA_coecoclass()` retrieves ecological site information from the Soil
+#' Data Access (SDA) database for a given set of map unit keys (mukeys). It
+#' returns a data frame containing ecological site IDs, names, and associated
+#' classification details, enabling users to link soil map units to ecological
+#' site concepts used in land management and conservation planning.
+#'
+#' @details When `method="Dominant Condition"` an additional field
+#'   `ecoclasspct_r` is returned in the result with the sum of `comppct_r` that
+#'   have the dominant condition `ecoclassid`. The component with the greatest
+#'   `comppct_r` is returned for the `component` and `coecosite` level
+#'   information.
+#'
+#'   Note that if there are multiple `coecoclasskey` per `ecoclassid` there may
+#'   be more than one record per component.
+#' @param method aggregation method. One of: `"Dominant Component"`, `"Dominant
+#'   Condition"`, `"All"` or `"None"` (default). If `method="all"` multiple
+#'   numbered columns represent site composition within each map unit e.g.
+#'   `site1...`, `site2...`. If `method="none"` is selected one row will be
+#'   returned per _component_; in all other cases one row will be returned per
+#'   _map unit_.
 #' @param areasymbols vector of soil survey area symbols
 #' @param mukeys vector of map unit keys
-#' @param WHERE character containing SQL WHERE clause specified in terms of fields in `legend`, `mapunit`, `component` or `coecosite` tables, used in lieu of `mukeys` or `areasymbols`
-#' @param query_string Default: `FALSE`; if `TRUE` return a character string containing query that would be sent to SDA via `SDA_query`
-#' @param ecoclasstypename Default: `c("NRCS Rangeland Site", "NRCS Forestland Site")`. If `NULL` no constraint on `ecoclasstypename` is used in the query.
-#' @param ecoclassref Default: `"Ecological Site Description Database"`. If `NULL` no constraint on `ecoclassref` is used in the query.
+#' @param WHERE character containing SQL WHERE clause specified in terms of
+#'   fields in `legend`, `mapunit`, `component` or `coecosite` tables, used in
+#'   lieu of `mukeys` or `areasymbols`
+#' @param query_string Default: `FALSE`; if `TRUE` return a character string
+#'   containing query that would be sent to SDA via `SDA_query`
+#' @param ecoclasstypename Default: `c("NRCS Rangeland Site", "NRCS Forestland
+#'   Site")`. If `NULL` no constraint on `ecoclasstypename` is used in the
+#'   query.
+#' @param ecoclassref Default: `"Ecological Site Description Database"`. If
+#'   `NULL` no constraint on `ecoclassref` is used in the query.
 #' @param not_rated_value Default: `"Not assigned"`
-#' @param miscellaneous_areas logical. Include miscellaneous areas (non-soil components)?
+#' @param miscellaneous_areas logical. Include miscellaneous areas (non-soil
+#'   components)?
 #' @param include_minors logical. Include minor components? Default: `TRUE`.
-#' @param threshold integer. Default: `0`. Minimum combined component percentage (RV) for inclusion of a mapunit's ecological site in wide-format tabular summary. Used only for `method="all"`.
-#' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL` (default) use Soil Data Access API via `SDA_query()`.
-#' @export 
+#' @param threshold integer. Default: `0`. Minimum combined component percentage
+#'   (RV) for inclusion of a mapunit's ecological site in wide-format tabular
+#'   summary. Used only for `method="all"`.
+#' @param dsn Path to local SQLite database or a DBIConnection object. If `NULL`
+#'   (default) use Soil Data Access API via `SDA_query()`.
+#'
+#' @export
+#' @examplesIf !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)) 
+#' # Basic usage with a vector of mukeys
+#' get_SDA_coecoclass(mukeys = c(463994, 463995))
+#'
+#' # Using a custom WHERE clause (all "range" sites in Hawaii)
+#' get_SDA_coecoclass(WHERE = "ecoclassid LIKE 'R%' AND areasymbol LIKE 'HI%'")
 get_SDA_coecoclass <- function(method = "None",
                                areasymbols = NULL, mukeys = NULL, WHERE = NULL,
                                query_string = FALSE, 
@@ -203,18 +234,15 @@ get_SDA_coecoclass <- function(method = "None",
   
   res3 <- res2[, list(
     condpct_r = sum(comppct_r, na.rm = TRUE),
-    compnames = paste0(compname[ecoclasstypename %in% .ECOCLASSTYPENAME],
-                       collapse = ", "),
-    unassigned = paste0(compname[!ecoclasstypename %in% .ECOCLASSTYPENAME],
-                        collapse = ", ")
+    compnames = toString(compname[ecoclasstypename %in% .ECOCLASSTYPENAME]),
+    unassigned = toString(compname[!ecoclasstypename %in% .ECOCLASSTYPENAME])
   ), by = c("mukey", "ecoclassid", "ecoclassname")][, rbind(
     .SD[, 1:4],
     data.frame(
       ecoclassid = not_rated_value,
       ecoclassname = not_rated_value,
       condpct_r = sum(condpct_r[nchar(unassigned) > 0 & !unassigned %in% compnames], na.rm = TRUE),
-      compnames = paste0(unassigned[nchar(unassigned) > 0 & !unassigned %in% compnames],
-                         collapse = ",")
+      compnames = toString(unassigned[nchar(unassigned) > 0 & !unassigned %in% compnames])
     )
   ), by = c("mukey")][order(mukey, -condpct_r), ]
   res3 <- res3[nchar(res3$compnames) > 0,]

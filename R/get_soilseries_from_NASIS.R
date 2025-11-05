@@ -95,8 +95,8 @@ get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = NULL) {
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_soilseries_from_NASISWebReport"
 
   d.ss <- lapply(soils, function(x) {
-    args = list(p_soilseriesname = x)
-    d    = parseWebReport(url, args)
+    args <- list(p_soilseriesname = x)
+    d <- parseWebReport(url, args)
   })
   d.ss <- do.call("rbind", d.ss)
 

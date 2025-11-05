@@ -11,28 +11,28 @@
 
   # process filter components
   if(!is.na(series)) {
-    f <- c(f, paste('&series=', series, sep=''))
+    f <- c(f, paste0('&series=', series))
   }
 
   # note: bbox has already been converted into text representation, suitable for URL
   if(!is.na(bbox)) {
-    f <- c(f, paste('&bbox=', bbox, sep=''))
+    f <- c(f, paste0('&bbox=', bbox))
   }
 
   if(!is.na(mlra)) {
-    f <- c(f, paste('&mlra=', mlra, sep=''))
+    f <- c(f, paste0('&mlra=', mlra))
   }
 
   if(!is.na(pedlabsampnum)) {
-    f <- c(f, paste('&pedlabsampnum=', pedlabsampnum, sep=''))
+    f <- c(f, paste0('&pedlabsampnum=', pedlabsampnum))
   }
 
   if(!is.na(pedon_id)) {
-    f <- c(f, paste('&pedon_id=', pedon_id, sep=''))
+    f <- c(f, paste0('&pedon_id=', pedon_id))
   }
 
   if(!is.na(pedon_key)) {
-    f <- c(f, paste('&pedon_key=', pedon_key, sep=''))
+    f <- c(f, paste0('&pedon_key=', pedon_key))
   }
 
   # combine filters
@@ -46,7 +46,7 @@
 .getExtended_SoilWeb <- function(f) {
 
   # KSSL geochem, XRD, glass
-  x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=extended', f))
+  x <- URLencode(paste0('https://soilmap2-1.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=extended', f))
 
   # list of dataframe objects; note: missing data are returned as FALSE
   ext <-  .soilDB_curl_get_JSON(x, gzip = TRUE, quiet = TRUE)
@@ -59,7 +59,7 @@
 .getMorphologic_SoilWeb <- function(f) {
 
   # NASIS morphology
-  x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=nasis_morphologic', f))
+  x <- URLencode(paste0('https://soilmap2-1.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=nasis_morphologic', f))
 
   # list of dataframe objects; note: missing data are returned as FALSE
   m <- .soilDB_curl_get_JSON(x, gzip = TRUE, quiet = TRUE)
@@ -73,7 +73,7 @@
 .getKSSL_SoilWeb <- function(f) {
 
   # KSSL site + horizon
-  x <- URLencode(paste0('https://casoilresource.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=site_hz', f))
+  x <- URLencode(paste0('https://soilmap2-1.lawr.ucdavis.edu/soil_web/kssl/query.php?gzip=1&format=json&what=site_hz', f))
 
   # list of dataframe objects; note: missing data are returned as FALSE
   site_hz <- .soilDB_curl_get_JSON(x, gzip = TRUE, quiet = TRUE)
@@ -235,7 +235,7 @@
 #' @seealso \code{\link{fetchOSD}}
 #' @references \url{http://ncsslabdatamart.sc.egov.usda.gov/}
 #' @keywords utilities
-#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE) && as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))
 #' \donttest{
 #'     library(aqp)
 #'
@@ -247,10 +247,11 @@
 #'
 #'     # how many pedons
 #'     length(s)
-#'
-#'     # plot
-#'     aqp::plotSPC(s, name='hzn_desgn', max.depth=150)
-#'
+#'     if (inherits(s, "SoilProfileCollection")) {
+#'       # plot
+#'       aqp::plotSPC(s, name='hzn_desgn', max.depth=150)
+#'     }
+#'     
 #'     ##
 #'     ## morphologic data
 #'     ##
@@ -368,9 +369,6 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
       return(NULL)
     }
 
-    ## TODO enforce unique-ness on SPC here
-
-    ## NOTE: simpler with purrr::transpose()
     # morph
     if(returnMorphologicData) {
       # add new tables here
@@ -379,8 +377,6 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
       # iterate over tables and unwind - rbind - store
       for(i in v) {
         m[[i]] <- do.call('rbind', lapply(res, function(j) j$morph[[i]]))
-
-        ## TODO enforce unique-ness on data.frames here
       }
     }
 
@@ -396,8 +392,6 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
       geochem <- as.data.frame(geochem)
       optical <- as.data.frame(optical)
       xrd_thermal <- as.data.frame(xrd_thermal)
-
-      ## TODO enforce unique-ness on data.frames here
     }
 
   }
@@ -411,28 +405,26 @@ fetchKSSL <- function(series=NA, bbox=NA, mlra=NA, pedlabsampnum=NA, pedon_id=NA
   aqp::hztexclname(h) <- "lab_texture_class"
 
   ## set metadata
-  # TODO: check before clobbering / consider standard var name
   aqp::metadata(h)$origin <- 'KSSL via Soilweb / fetchKSSL'
   aqp::metadata(h)$created <- Sys.time()
 
   # cleaning up the results
-  if(returnMorphologicData & simplifyColors) {
-
-    if(inherits(m$phcolor, 'data.frame')) {
-
-      # simplify color data: 1 row / horizon, from morphologic data tables
-      x.colors <- simplifyColorData(m$phcolor, id.var = 'labsampnum', wt='colorpct')
-
-      # safely LEFT JOIN with @horizons
-      suppressMessages(aqp::horizons(h) <- x.colors)
-    }
+  if (returnMorphologicData &&
+      simplifyColors && 
+      inherits(m$phcolor, 'data.frame')) {
+    # simplify color data: 1 row / horizon, from morphologic data tables
+    x.colors <- simplifyColorData(m$phcolor, id.var = 'labsampnum', wt =
+                                    'colorpct')
+    
+    # safely LEFT JOIN with @horizons
+    suppressMessages(aqp::horizons(h) <- x.colors)
   }
 
   # report object size
   res.size <- round(object.size(res) / 1024 / 1024, 2)
   
   # some feedback via message:
-  message(paste(length(h), ' pedons loaded (', res.size, ' Mb transferred)', sep=''))
+  message(paste0(length(h), ' pedons loaded (', res.size, ' Mb transferred)'))
   
   if (returnMorphologicData & returnGeochemicalData) {
     return(list(

@@ -65,7 +65,7 @@ get_nearest_KSSL <- function(x, y, maxdist = 10000) {
 y <- soilDB::SCAN_site_metadata() |>
   subset(Network == "SCAN", select = c(Site, Longitude, Latitude, upedonid, pedlabsampnum)) |>
   (\(y) { subset(y, is.na(y$upedonid)) })()
-y <- split(y, 1:nrow(y))
+y <- split(y, seq_len(nrow(y)))
 
 newy <- do.call('rbind', lapply(y, function(x) {
     xx <- get_nearest_KSSL(x$Longitude, x$Latitude)

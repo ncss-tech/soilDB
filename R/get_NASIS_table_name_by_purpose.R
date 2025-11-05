@@ -29,7 +29,6 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "n
                                                          "mapunit", "datamapunit"),
                                              SS = FALSE) {
 
-  # TODO: store as .rda?
   table_groups <- list(
     metadata = c(
       "MetadataDomainDetail",
@@ -165,6 +164,7 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "n
       "vegtransectplantsummary",
       "plottreesiteindexsummary",
       "plottreesiteindexdetails",
+      "siteindexcurve",
       "comparativeyielddata",
       "comparativeyieldrefquadrats",
       "pointplantcoverdetails",
@@ -191,7 +191,9 @@ get_NASIS_table_name_by_purpose <- function(purpose = c("metadata", "lookup", "n
       "projectproduct",
       "projectstaff",
       "projecttext",
-      "projecttype"
+      "projecttype",
+      "projectsubtype",
+      "milestonetype"
     ),
     techsoilservice = c(
       "techsoilservice",

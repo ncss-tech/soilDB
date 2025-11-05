@@ -17,8 +17,7 @@ library(jsonlite)
 # * stationID is Site
 
 ## us state names and abbreviations
-s <- structure(
-  list(
+s <- data.frame(
     abbr = c("AK", "AL", "AR", "AZ", "CA", "CO", "CT", 
              "DC", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", 
              "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", 
@@ -35,9 +34,6 @@ s <- structure(
              "Oregon", "Pennsylvania", "Puerto Rico", "Rhode Island", "South Carolina", 
              "South Dakota", "Tennessee", "Texas", "Utah", "Virginia", "Vermont", 
              "Washington", "Wisconsin", "West Virginia", "Wyoming")
-  ), 
-  class = "data.frame", 
-  row.names = c(NA, -52L)
 )
 
 
@@ -92,7 +88,7 @@ head(d)
 
 # ensure no missing pedon_key
 # should not be possible given SQL, but still..
-any(is.na(d$pedon_key))
+anyNA(d$pedon_key)
 
 
 ## combine
@@ -179,4 +175,4 @@ table(x$Network)
 write.csv(x, "data-raw/scan-snotel-current/station-metadata.csv", row.names = FALSE)
 
 SCAN_SNOTEL_metadata <- x
-save(SCAN_SNOTEL_metadata, file = "data/SCAN_SNOTEL_metadata.rda", compress = "xz")
+usethis::use_data(SCAN_SNOTEL_metadata, compress = "xz")

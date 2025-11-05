@@ -19,7 +19,11 @@
 #'
 #' @return An `sf` object or if `as_sf` is `FALSE` a `Spatial*` object.
 #' @export processSDA_WKT
-processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
+processSDA_WKT <- function(d,
+                           g = 'geom',
+                           crs = 4326,
+                           p4s = NULL,
+                           as_sf = TRUE) {
   if (!is.null(p4s)) {
     .Deprecated(msg = "Passing PROJ4 strings via `p4s` is deprecated. SDA interfaces in soilDB use the WGS84 Geographic Coordinate System (EPSG:4326) by default. Use the `crs` argument to customize.")
   }
@@ -33,10 +37,8 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
     stop("package `sf` is required", call. = FALSE)
   }
   
-  
-  
   # convert wkt to sf/SPDF
-  d[[g]] <- sf::st_as_sfc(d[,g], crs = crs)
+  d[[g]] <- sf::st_as_sfc(d[, g], crs = crs)
   sfobj <- sf::st_as_sf(d)
   if (as_sf) {
     return(sfobj)
@@ -46,7 +48,7 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
 
 # STATSGO features require AND CLIPAREASYMBOL = 'US' to avoid state areasymbol copy
 # select the right query for SSURGO / STATSGO geometry filters submitted to SDA
-.SDA_geometrySelector <- function(db, what, method, geomAcres = TRUE) {
+.SDA_geometrySelector <- function(db, what, method, geomAcres = TRUE, addFields = NULL) {
   db_table <- switch(db,
                      SSURGO = "mupolygon",
                      STATSGO = "gsmmupolygon",
@@ -72,7 +74,7 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
           SELECT %s, %s
           FROM %s 
           WHERE %s.STIntersects(geometry::STGeomFromText('%%s', 4326)) = 1 %s
-        ) SELECT geom.STAsText() AS geom, %s%s
+        ) SELECT geom_data.%s, geom.STAsText() AS geom%s
         FROM geom_data",
       id_column, geom_sql, id_column, db_table, db_column, clip_sql, id_column,
       ifelse(geomAcres, area_ac_sql, "")
@@ -85,19 +87,33 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
       res <- gsub("mukey", "featkey", res)
     }
   }
+  res <- .appendFields(res, what, addFields)
+  
   return(res)
 }
 
 #' Query Soil Data Access by spatial intersection with supplied geometry
 #'
-#' Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied geometries. Input can be SpatialPoints, SpatialLines, or SpatialPolygons objects with a valid CRS. Map unit keys, overlapping polygons, or the spatial intersection of \code{geom} + SSURGO / STATSGO polygons can be returned. See details.
+#' Query SDA (SSURGO / STATSGO) records via spatial intersection with supplied
+#' geometries. Input can be an 'sf', 'terra', or 'sp' object with a valid CRS.
+#' Map unit keys, overlapping polygons, or the spatial intersection of
+#' \code{geom} + SSURGO / STATSGO polygons can be returned. See details.
+#' 
+#' Queries for map unit keys are always more efficient vs. queries for
+#' overlapping or intersecting (i.e. least efficient) features. \code{geom} is
+#' converted to GCS / WGS84 as needed. Map unit keys are always returned when
+#' using \code{what = "mupolygon"}.
 #'
-#' Queries for map unit keys are always more efficient vs. queries for overlapping or intersecting (i.e. least efficient) features. \code{geom} is converted to GCS / WGS84 as needed. Map unit keys are always returned when using \code{what = "mupolygon"}.
-#'
-#' SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO (generalized soil survey, 1:250,000 scale) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the [SDA Tutorial](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html) for details.
+#' SSURGO (detailed soil survey, typically 1:24,000 scale) and STATSGO
+#' (generalized soil survey, 1:250,000 scale) data are stored together within
+#' SDA. This means that queries that don't specify an area symbol may result in
+#' a mixture of SSURGO and STATSGO records. See the examples below and the [SDA
+#' Tutorial](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html) for
+#' details.
 #'
 #' @aliases SDA_spatialQuery
 #'
+<<<<<<< HEAD
 #' @param geom an `sf` or `Spatial*` object, with valid CRS. May contain multiple features.
 #' 
 #' @param what a character vector specifying what to return. `'mukey'`: `data.frame` with intersecting map unit keys and names, `'mupolygon'`, `'mupoint'`, `'muline'` overlapping or intersecting map unit polygons, points or lines from selected database, ``featpoint'` or `'featline'` for special feature points and lines, 'areasymbol'`: `data.frame` with intersecting soil survey areas, `'sapolygon'`: overlapping or intersecting soil survey area polygons (SSURGO only)
@@ -120,6 +136,49 @@ processSDA_WKT <- function(d, g='geom', crs = 4326, p4s = NULL, as_sf = TRUE) {
 #' 
 #' @note Row-order is not preserved across features in `geom` and returned object. Use `byFeature` argument to iterate over features and return results that are 1:1 with the inputs. Polygon area in acres is computed server-side when `what = 'mupolygon'` and `geomIntersection = TRUE`.
 #' 
+=======
+#' @param geom an sf, terra, or sp object with valid CRS. May contain
+#'   multiple features.
+#' @param what a character vector specifying what to return. `'mukey'`:
+#'   `data.frame` with intersecting map unit keys and names, `'mupolygon'`,
+#'   `'mupoint'`, `'muline'` overlapping or intersecting map unit polygons,
+#'   points or lines from selected database, `'featpoint'` or `'featline'` for
+#'   special feature points and lines, `'areasymbol'`: `data.frame` with
+#'   intersecting soil survey areas, `'sapolygon'`: overlapping or intersecting
+#'   soil survey area polygons (SSURGO only)
+#' @param geomIntersection logical; `FALSE` (default): overlapping map unit
+#'   polygons returned, `TRUE`: intersection of `geom` + map unit polygons is
+#'   returned.
+#' @param geomAcres logical; `TRUE` (default): calculate acres of result
+#'   geometry in column `"area_ac"` when `what` returns a geometry column.
+#'   `FALSE` does not calculate acres.
+#' @param db a character vector identifying the Soil Geographic Databases
+#'   (`'SSURGO'` or `'STATSGO'`) to query. Option \var{STATSGO} works with `what
+#'   = "mukey"` and `what = "mupolygon"`.
+#' @param byFeature Iterate over features, returning a combined data.frame where
+#'   each feature is uniquely identified by value in `idcol`. Default `FALSE`.
+#' @param idcol Unique IDs used for individual features when `byFeature = TRUE`;
+#'   Default `"gid"`
+#' @param addFields character; Amend result with a query to `mapunit` table for
+#'   additional information? Default: `NULL`. A character vector can be used to
+#'   specify columns from the `legend`, `mapunit`, and `muaggatt` tables (for
+#'   `mupolygon`, `mupoint`, `muline` and `mukey`), `legend` table for
+#'   areasymbol and sapolygon, and `featdesc` for `featpoint` and `featline`.
+#'   Mapunit and mapunit aggregate attribute tables are ignored for soil survey
+#'   area polygon results.
+#' @param query_string Default: `FALSE`; if `TRUE` return a character string
+#'   containing query that would be sent to SDA via `SDA_query`
+#' @param as_Spatial For `what` that return spatial data, return `sp` package
+#'   classes instead of `sf`? e.g. `Spatial*DataFrame`. Default: `FALSE`. 
+#'
+#' @return A `data.frame` if `what = 'mukey'`, otherwise an `sf` object. A
+#'   `try-error` in the event the request cannot be made or if there is an error
+#'   in the query.
+#' @note Row-order is not preserved across features in \code{geom} and returned
+#'   object. Use `byFeature` argument to iterate over features and return
+#'   results that are 1:1 with the inputs. Polygon area in acres is computed
+#'   server-side when `what = 'mupolygon'` and `geomIntersection = TRUE`.
+>>>>>>> master
 #' @author D.E. Beaudette, A.G. Brown, D.R. Schlaepfer
 #' @seealso [SDA_query()]
 #' @keywords manip
@@ -267,10 +326,17 @@ SDA_spatialQuery <- function(geom,
                              db = c("SSURGO", "STATSGO", "SAPOLYGON"),
                              byFeature = FALSE,
                              idcol = "gid",
+                             addFields = NULL,
                              query_string = FALSE,
                              as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)) {
+  
+  stopifnot(
+    "Spatial output requested for non-spatial return type (from `what` param)" =
+      !(what %in% c('mukey', 'areasymbol') && as_Spatial)
+  )
+  
   if (byFeature) {
-    res <- do.call('rbind', lapply(1:nrow(geom), function(i) {
+    res <- do.call('rbind', lapply(seq_len(nrow(geom)), function(i) {
       res2 <- .SDA_spatialQuery(
         geom = geom[i, ],
         what = what,
@@ -292,9 +358,10 @@ SDA_spatialQuery <- function(geom,
     geomIntersection = geomIntersection,
     geomAcres = geomAcres,
     db = db,
+    addFields = addFields,
     query_string = query_string
   )
-
+  
   # flag for Spatial result
   if (as_Spatial && requireNamespace("sf")) {
     res <- sf::as_Spatial(res)
@@ -308,6 +375,7 @@ SDA_spatialQuery <- function(geom,
                               geomIntersection = FALSE,
                               geomAcres = TRUE,
                               db = c("SSURGO", "STATSGO", "SAPOLYGON"),
+                              addFields = NULL,
                               query_string = FALSE) {
   
   # check for required packages
@@ -324,9 +392,7 @@ SDA_spatialQuery <- function(geom,
   return_terra <- FALSE
 
   # raster support
-  if (inherits(geom, 'RasterLayer') |
-      inherits(geom, 'RasterBrick') |
-      inherits(geom, 'RasterStack')) {
+  if (inherits(geom, c('RasterLayer', 'RasterBrick', 'RasterStack'))) {
     if (!requireNamespace('terra'))
       stop("packages terra is required", call. = FALSE)
     geom <- terra::rast(geom)
@@ -398,14 +464,14 @@ SDA_spatialQuery <- function(geom,
     if (geomIntersection) {
 
       # select the appropriate query
-      .template <- .SDA_geometrySelector(db = db, what = what, method = 'intersection', geomAcres = geomAcres)
+      .template <- .SDA_geometrySelector(db = db, what = what, method = 'intersection', addFields = addFields, geomAcres = geomAcres)
       q <- sprintf(.template, as.character(wkt), as.character(wkt))
 
     } else {
       # return overlapping
 
       # select the appropriate query
-      .template <- .SDA_geometrySelector(db = db, what = what, method = 'overlap', geomAcres = geomAcres)
+      .template <- .SDA_geometrySelector(db = db, what = what, method = 'overlap', addFields = addFields, geomAcres = geomAcres)
       q <- sprintf(.template, as.character(wkt))
     }
 
@@ -431,36 +497,85 @@ SDA_spatialQuery <- function(geom,
       
     if (what == 'mukey') {
       if (db == "SSURGO") {
-        q <- sprintf("SELECT mukey, muname
+        q <- sprintf("WITH geom_data (mukey, muname) AS (SELECT mukey, muname
                     FROM mapunit
-                    WHERE mukey IN (
+                    WHERE mapunit.mukey IN (
                     SELECT DISTINCT mukey from SDA_Get_Mukey_from_intersection_with_WktWgs84('%s')
-                    )", wkt)
+                    ))\n
+                    SELECT geom_data.mukey, geom_data.muname, NULL AS geom FROM geom_data", wkt)
       } else if (db == "STATSGO") {
-        q <- sprintf("SELECT DISTINCT P.mukey, mapunit.muname
+        q <- sprintf("WITH geom_data (mukey, muname) AS (SELECT DISTINCT P.mukey, mapunit.muname
                       FROM gsmmupolygon AS P
                       INNER JOIN mapunit ON mapunit.mukey = P.mukey
                       WHERE mupolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326)) = 1
-                        AND CLIPAREASYMBOL = 'US'", wkt)
+                        AND CLIPAREASYMBOL = 'US')\n
+                      SELECT geom_data.mukey, geom_data.muname, NULL AS geom FROM geom_data", wkt)
       } else {
         stop("query type 'mukey' for 'SAPOLYGON' is not supported", call. = FALSE)
       }
   
     } else if (what == 'areasymbol') {
       # SSURGO only
-      q <- sprintf("SELECT areasymbol
+      q <- sprintf("WITH geom_data (areasymbol) AS (SELECT areasymbol
                   FROM sapolygon
                   WHERE sapolygonkey IN (
                   SELECT DISTINCT sapolygonkey from SDA_Get_Sapolygonkey_from_intersection_with_WktWgs84('%s')
-                  )", wkt)
+                  ))\n
+                  SELECT geom_data.areasymbol, NULL AS geom FROM geom_data", wkt)
     }
+    
+    q <- .appendFields(q, what, addFields)
     
     if (query_string) {
       return(q)
     }
-    
     res <- suppressMessages(SDA_query(q))
   }
   
+<<<<<<< HEAD
   return(res)
+=======
+  res
+>>>>>>> master
+}
+
+.appendFields <- function(q, what, addFields, include_key = FALSE) {
+  if (length(addFields) > 0) {
+    if (!grepl("[^o] AS geom", q))
+      q <- gsub("FROM geom_data", ", NULL AS geom\n FROM geom_data", q)
+    if (what %in% c("areasymbol", "sapolygon")) {
+      key <- character(0)
+      if (include_key) {
+        key <- "legend.lkey"
+      }
+      addFields <- trimws(addFields)
+      addFields <- addFields[!addFields == "lkey"]
+      lecol <- toString(unique(c(key, addFields)))
+      q <- paste0(q, "\nINNER JOIN legend ON legend.areasymbol = geom_data.areasymbol")
+      q <- gsub("(\\) SELECT geom_data.*) AS geom", paste0("\\1 AS geom, ", lecol), q)
+    } else if (grepl("feat", what)) {
+      key <- character(0)
+      if (include_key) {
+        key <- "featkey"
+      }
+      addFields <- trimws(addFields)
+      addFields <- addFields[!addFields == "featkey"]
+      mucol <- toString(unique(c(key, addFields)))
+      q <- paste(q, sprintf("INNER JOIN featdesc ON geom_data.featkey = featdesc.featkey", what))
+      q <- gsub("(\\) SELECT geom_data.*) AS geom", paste0("\\1 AS geom, ", mucol), q)
+    } else {
+      key <- character(0)
+      if (include_key) {
+        key <- "mapunit.mukey"
+      }
+      addFields <- trimws(addFields)
+      addFields <- addFields[!addFields == "mukey"]
+      mucol <- toString(unique(c(key, addFields)))
+      q <- paste(q, "INNER JOIN mapunit ON mapunit.mukey = geom_data.mukey
+           INNER JOIN muaggatt ON muaggatt.mukey = mapunit.mukey
+           INNER JOIN legend ON legend.lkey = mapunit.lkey ")
+      q <- gsub("(\\) SELECT geom_data.*) AS geom", paste0("\\1 AS geom, ", mucol), q)
+    }
+  }
+  gsub(", FROM", " FROM", gsub("NULL AS geom[, ]*", "", q))
 }

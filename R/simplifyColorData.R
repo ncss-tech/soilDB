@@ -78,7 +78,7 @@ simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) 
   
   # mix/combine if there are any horizons that need mixing
   if (length(dry.to.mix) > 0) {
-    message(paste('mixing dry colors ... [', length(dry.to.mix), ' of ', nrow(dry.colors), ' horizons]', sep = ''))
+    message(paste0('mixing dry colors ... [', length(dry.to.mix), ' of ', nrow(dry.colors), ' horizons]'))
     
     # filter out and mix only colors with >1 color / horizon
     dry.mix.idx <- which(dry.colors[[id.var]] %in% dry.to.mix)
@@ -117,7 +117,7 @@ simplifyColorData <- function(d, id.var = 'phiid', wt = 'colorpct', bt = FALSE) 
   
   # mix/combine if there are any horizons that need mixing
   if (length(moist.to.mix) > 0) {
-    message(paste('mixing moist colors ... [', length(moist.to.mix), ' of ', nrow(moist.colors), ' horizons]', sep=''))
+    message(paste0('mixing moist colors ... [', length(moist.to.mix), ' of ', nrow(moist.colors), ' horizons]'))
     
     # filter out and mix only colors with >1 color / horizon
     moist.mix.idx <- which(moist.colors[[id.var]] %in% moist.to.mix)

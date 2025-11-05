@@ -279,7 +279,7 @@ get_SDA_property <-
 
   if (method != "NONE" &&
       (grepl("component\\.|chorizon\\.", WHERE)[1] ||
-       grepl(paste0(.valid_chorizon_columns(), collapse = "|"), WHERE)[1])) {
+       grepl(paste(.valid_chorizon_columns(), collapse = "|"), WHERE)[1])) {
     stop('WHERE clause containing component or chorizon level fields is only supported when `method = "NONE"`', call. = FALSE)
   }
 
@@ -340,22 +340,21 @@ get_SDA_property <-
   agg_method <- .propertyAggMethod(method)
 
   # handle top_depth / bottom_depth mis-specified
-  if (agg_method$method %in% c("WEIGHTED AVERAGE","DOMINANT COMPONENT (NUMERIC)")) {
-    if (!all(c(is.numeric(top_depth), is.numeric(bottom_depth))) ||
-         any(c(is.na(top_depth), is.na(bottom_depth)))) {
+  if (agg_method$method %in% c("WEIGHTED AVERAGE", "DOMINANT COMPONENT (NUMERIC)") && 
+      (!all(c(is.numeric(top_depth), is.numeric(bottom_depth))) ||
+         any(c(is.na(top_depth), is.na(bottom_depth))))) {
       stop("`top_depth` and `bottom_depth` must be numeric, non-NA depths in centimeters for method='weighted average' or 'dominant component (numeric)'",
            call. = FALSE)
-    }
   }
 
   # define several helper methods
-  .property_dominant_condition_category <- function(property, miscellaneous_areas = FALSE) {
-    sprintf("(SELECT TOP 1 %s FROM mapunit AS mu
+  .property_dominant_condition_category <- function(property, miscellaneous_areas = FALSE, sqlite_dialect = FALSE) {
+    sprintf("(SELECT %s%s FROM mapunit AS mu
           INNER JOIN component ON component.mukey = mapunit.mukey AND mapunit.mukey = mu.mukey %s
-          GROUP BY %s, comppct_r ORDER BY SUM(comppct_r) over(partition by %s) DESC) AS %s",
-          property,
+          GROUP BY %s, comppct_r ORDER BY SUM(comppct_r) over(partition by %s) DESC%s) AS %s",
+          ifelse(isTRUE(sqlite_dialect), "", "TOP 1 "), property,
           ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
-          property, property, property)
+          property, property, ifelse(isTRUE(sqlite_dialect), " LIMIT 1", ""),  property)
   }
   
   .property_min_max_CTE <- function(property, top_depth, bottom_depth, WHERE, FUN, include_minors = TRUE, miscellaneous_areas = FALSE, sqlite_dialect = FALSE) {
@@ -366,13 +365,14 @@ get_SDA_property <-
              SELECT mukey, areasymbol, musym, muname, %s FROM funagg
              GROUP BY mukey, areasymbol, musym, muname
              ORDER BY mukey",
-            paste0(sapply(property, function(x) .property_min_max_subquery(x, top_depth, bottom_depth, FUN = FUN, miscellaneous_areas = miscellaneous_areas, sqlite_dialect = sqlite_dialect)), collapse = ", "),
+            paste(sapply(property, function(x) .property_min_max_subquery(x, top_depth, bottom_depth, FUN = FUN, miscellaneous_areas = miscellaneous_areas, sqlite_dialect = sqlite_dialect)), collapse = ", "),
             WHERE,
             ifelse(include_minors, ""," AND component.majcompflag = 'Yes'"),
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
-            paste0(paste0(FUN, "(", property, ") AS ", property), collapse = ","))
+            paste(paste0(FUN, "(", property, ") AS ", property), collapse = ","))
   }
-  .property_min_max <- function(property, top_depth, bottom_depth, WHERE, FUN, include_minors = TRUE, miscellaneous_areas = FALSE) {
+  
+  .property_min_max <- function(property, top_depth, bottom_depth, WHERE, FUN, include_minors = TRUE, miscellaneous_areas = FALSE, sqlite_dialect) {
     sprintf("SELECT mapunit.mukey, areasymbol, musym, muname, %s
              INTO #funagg
                   FROM legend
@@ -380,11 +380,11 @@ get_SDA_property <-
                   LEFT JOIN component ON component.mukey = mapunit.mukey %s %s
              SELECT mukey, areasymbol, musym, muname, %s FROM #funagg
              GROUP BY mukey, areasymbol, musym, muname",
-            paste0(sapply(property, function(x) .property_min_max_subquery(x, top_depth, bottom_depth, FUN = FUN, miscellaneous_areas = miscellaneous_areas)), collapse = ", "),
+            paste(sapply(property, function(x) .property_min_max_subquery(x, top_depth, bottom_depth, FUN = FUN, miscellaneous_areas = miscellaneous_areas, sqlite_dialect = sqlite_dialect)), collapse = ", "),
             WHERE,
             ifelse(include_minors, ""," AND component.majcompflag = 'Yes'"),
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
-            paste0(paste0(FUN, "(", property, ") AS ", property), collapse = ","))
+            paste(paste0(FUN, "(", property, ") AS ", property), collapse = ","))
   }
   
   .property_min_max_subquery <- function(property, top_depth, bottom_depth, FUN, include_minors = TRUE, miscellaneous_areas = FALSE, sqlite_dialect = FALSE) {
@@ -423,14 +423,14 @@ get_SDA_property <-
     MISCAREAS <- ifelse(miscellaneous_areas, "", "AND component.compkind != 'Miscellaneous area'")
     
     DOMINANT <- ifelse(dominant, paste0(
-      "AND component.cokey = (SELECT ", ifelse(!sqlite_dialect, "TOP 1 ", " "), "c2.cokey FROM component AS c2
+      "AND component.cokey = (SELECT ", ifelse(isTRUE(sqlite_dialect), "", "TOP 1 "), "c2.cokey FROM component AS c2
         INNER JOIN mapunit AS mm1 ON c2.mukey = mm1.mukey AND c2.mukey = mapunit.mukey ",
           gsub("component", "c2", MISCAREAS),
-          "ORDER BY c2.comppct_r DESC, c2.cokey ", ifelse(sqlite_dialect, "LIMIT 1", ""), ")"), "")
+          "ORDER BY c2.comppct_r DESC, c2.cokey", ifelse(isTRUE(sqlite_dialect), " LIMIT 1", ""), ")"), "")
     
-    PROPERTY <- paste0(property, collapse = ", ")
+    PROPERTY <- paste(property, collapse = ", ")
     
-    PROPHZWTS <- paste0(.gluelite("CASE
+    PROPHZWTS <- paste(.gluelite("CASE
                WHEN main.{property} IS NULL THEN 0 
                ELSE (main.hzdepb_r_ADJ - main.hzdept_r_ADJ) 
               END AS thickness_wt_{property},
@@ -440,30 +440,30 @@ get_SDA_property <-
                END) OVER (PARTITION BY main.cokey) AS sum_thickness_{property},
               main.{property}"), collapse = ",\n")
     
-    MUPROPWTS <- paste0(.gluelite("CASE 
+    MUPROPWTS <- paste(.gluelite("CASE 
            WHEN comppct_r = SUM_COMP_PCT THEN 1 
            ELSE CAST(comppct_r AS REAL) / SUM_COMP_PCT
           END AS WEIGHTED_COMP_PCT_{property}"), collapse = ",\n")
     
-    COMPWTS <- paste0(.gluelite("CASE 
+    COMPWTS <- paste(.gluelite("CASE 
                WHEN sum_thickness_{property} = 0 THEN 0 
                ELSE comp_temp3.WEIGHTED_COMP_PCT_{property} 
               END AS CORRECT_COMP_PCT_{property}"), collapse = ",\n")
     
-    RATEDWTS <- paste0(.gluelite("SUM(CORRECT_COMP_PCT_{property}) AS RATED_PCT_{property}"), 
+    RATEDWTS <- paste(.gluelite("SUM(CORRECT_COMP_PCT_{property}) AS RATED_PCT_{property}"), 
                        collapse = ",\n")
     
-    COMPRATEDWTS <- paste0(.gluelite("RATED_PCT_{property}"), collapse = ", ")
+    COMPRATEDWTS <- paste(.gluelite("RATED_PCT_{property}"), collapse = ", ")
     
-    COMPWTDAVG <- paste0(.gluelite("SUM(
+    COMPWTDAVG <- paste(.gluelite("SUM(
       CAST(weights.CORRECT_COMP_PCT_{property} AS REAL)
       * comp_temp2.thickness_wt_{property} / NULLIF(comp_temp2.sum_thickness_{property}, 0)
       * comp_temp2.{property}
     ) AS COMP_WEIGHTED_AVERAGE_{property}"), collapse = ",\n")
     
-    COMPRATEDAVG <- paste0(.gluelite("COMP_WEIGHTED_AVERAGE_{property}"), collapse = ", ")
+    COMPRATEDAVG <- paste(.gluelite("COMP_WEIGHTED_AVERAGE_{property}"), collapse = ", ")
     
-    MUWTDAVG <- paste0(.gluelite("CAST (SUM(
+    MUWTDAVG <- paste(.gluelite("CAST (SUM(
                   (CASE 
                     WHEN last_step.RATED_PCT_{property} = 0 THEN 0 
                     ELSE last_step.COMP_WEIGHTED_AVERAGE_{property} 
@@ -600,9 +600,10 @@ get_SDA_property <-
                                          WHERE,
                                          dominant = FALSE,
                                          include_minors = FALSE,
-                                         miscellaneous_areas = FALSE) {
+                                         miscellaneous_areas = FALSE,
+                                         sqlite_dialect) {
 
-    n <- 1:length(property)
+    n <- seq_along(property)
     stopifnot(n > 0)
 
     sprintf("SELECT mukey, areasymbol, musym, muname
@@ -636,16 +637,16 @@ get_SDA_property <-
             WHERE,
             ifelse(include_minors, "", "AND component.majcompflag = 'Yes'"),
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
-            ifelse(dominant, paste0("            AND component.cokey = (SELECT TOP 1 c2.cokey FROM component AS c2
+            ifelse(dominant, paste0("            AND component.cokey = (SELECT ", ifelse(isTRUE(sqlite_dialect), "", "TOP 1 "),"c2.cokey FROM component AS c2
                             INNER JOIN mapunit AS mm1 ON c2.mukey = mm1.mukey AND c2.mukey = mapunit.mukey ",
                             ifelse(miscellaneous_areas, ""," AND c2.compkind != 'Miscellaneous area'"),"
                             ORDER BY c2.comppct_r DESC, c2.cokey)"), ""),
-            paste0(sprintf("CASE WHEN comppct_r = SUM_COMP_PCT THEN 1 ELSE CAST((#comp_temp.comppct_r) AS decimal(5,2)) / SUM_COMP_PCT END AS WEIGHTED_COMP_PCT%s", n), collapse = ", "),
+            paste(sprintf("CASE WHEN comppct_r = SUM_COMP_PCT THEN 1 ELSE CAST((#comp_temp.comppct_r) AS decimal(5,2)) / SUM_COMP_PCT END AS WEIGHTED_COMP_PCT%s", n), collapse = ", "),
             top_depth, top_depth,
             bottom_depth, bottom_depth,
-            paste0(sprintf("CASE WHEN %s is NULL THEN NULL ELSE CAST (CASE WHEN hzdepb_r > %s THEN %s ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS decimal(5,2)) END AS thickness_wt_%s", property, bottom_depth, bottom_depth, top_depth, top_depth, property), collapse = ", \n"),
-            paste0(sprintf("CAST (SUM(CAST((CASE WHEN hzdepb_r > %s THEN %s WHEN %s is NULL THEN NULL ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s WHEN %s is NULL THEN NULL ELSE hzdept_r END) AS decimal(5,2))) OVER (PARTITION BY component.cokey) AS decimal(5,2)) AS sum_thickness_%s", bottom_depth, bottom_depth, property, top_depth, top_depth, property, property), collapse = ", \n"),
-            paste0(property, collapse = ", "),
+            paste(sprintf("CASE WHEN %s is NULL THEN NULL ELSE CAST (CASE WHEN hzdepb_r > %s THEN %s ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s ELSE hzdept_r END AS decimal(5,2)) END AS thickness_wt_%s", property, bottom_depth, bottom_depth, top_depth, top_depth, property), collapse = ", \n"),
+            paste(sprintf("CAST (SUM(CAST((CASE WHEN hzdepb_r > %s THEN %s WHEN %s is NULL THEN NULL ELSE hzdepb_r END - CASE WHEN hzdept_r < %s THEN %s WHEN %s is NULL THEN NULL ELSE hzdept_r END) AS decimal(5,2))) OVER (PARTITION BY component.cokey) AS decimal(5,2)) AS sum_thickness_%s", bottom_depth, bottom_depth, property, top_depth, top_depth, property, property), collapse = ", \n"),
+            paste(property, collapse = ", "),
             WHERE,
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
             top_depth, bottom_depth,
@@ -682,33 +683,33 @@ get_SDA_property <-
                               LEFT OUTER JOIN #last_step ON #last_step.mukey = #last_step2.mukey
                                   GROUP BY #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, #last_step2.mukey, %s
                                   ORDER BY #last_step2.mukey, #last_step2.areasymbol, #last_step2.musym, #last_step2.muname, %s",
-      paste0(sprintf("(CASE WHEN ISNULL(sum_thickness_%s, 0) = 0 THEN 0 ELSE WEIGHTED_COMP_PCT%s END) AS CORRECT_COMP_PCT%s", property, n, n), collapse = ", "),
-      paste0(sprintf("ISNULL(thickness_wt_%s, 0) AS thickness_wt_%s, sum_thickness_%s", property, property, property), collapse = ", "),
-      paste0(property, collapse = ", "),
-      paste0(sprintf("((thickness_wt_%s / (CASE WHEN sum_thickness_%s = 0 THEN 1 ELSE sum_thickness_%s END)) * %s) AS DEPTH_WEIGHTED_AVERAGE%s",
+      paste(sprintf("(CASE WHEN ISNULL(sum_thickness_%s, 0) = 0 THEN 0 ELSE WEIGHTED_COMP_PCT%s END) AS CORRECT_COMP_PCT%s", property, n, n), collapse = ", "),
+      paste(sprintf("ISNULL(thickness_wt_%s, 0) AS thickness_wt_%s, sum_thickness_%s", property, property, property), collapse = ", "),
+      paste(property, collapse = ", "),
+      paste(sprintf("((thickness_wt_%s / (CASE WHEN sum_thickness_%s = 0 THEN 1 ELSE sum_thickness_%s END)) * %s) AS DEPTH_WEIGHTED_AVERAGE%s",
                property, property, property, property, n), collapse = ", "),
-      paste0(sprintf("CORRECT_COMP_PCT%s", n), collapse = ", "),
-      paste0("WHERE ", paste0(sprintf("DEPTH_WEIGHTED_AVERAGE%s IS NOT NULL", n), collapse = " OR ")),
-      paste0(sprintf("SUM(CORRECT_COMP_PCT%s) AS RATED_PCT%s", n, n), collapse = ", "),
-      paste0(sprintf("#weights2.RATED_PCT%s", n), collapse = ", "),
-      paste0(sprintf("SUM(CORRECT_COMP_PCT%s * DEPTH_WEIGHTED_AVERAGE%s) AS COMP_WEIGHTED_AVERAGE%s", n, n, n), collapse = ", "),
-      paste0("WHERE ", paste0(sprintf("DEPTH_WEIGHTED_AVERAGE%s IS NOT NULL", n), collapse = " OR ")),
-      paste0(sprintf("CORRECT_COMP_PCT%s", n), collapse = ", "),
-      paste0(sprintf("#weights2.RATED_PCT%s", n), collapse = ", "),
-      paste0(sprintf("DEPTH_WEIGHTED_AVERAGE%s", n), collapse = ", "),
-      paste0(sprintf("#last_step.RATED_PCT%s", n), collapse = ", "),
-      paste0(sprintf("CAST (SUM((CASE WHEN RATED_PCT%s = 0 THEN NULL ELSE COMP_WEIGHTED_AVERAGE%s END) / (CASE WHEN RATED_PCT%s = 0 THEN 1 ELSE RATED_PCT%s END)) OVER (PARTITION BY #kitchensink.mukey) AS decimal(10,2)) AS %s",
+      paste(sprintf("CORRECT_COMP_PCT%s", n), collapse = ", "),
+      paste("WHERE", paste(sprintf("DEPTH_WEIGHTED_AVERAGE%s IS NOT NULL", n), collapse = " OR ")),
+      paste(sprintf("SUM(CORRECT_COMP_PCT%s) AS RATED_PCT%s", n, n), collapse = ", "),
+      paste(sprintf("#weights2.RATED_PCT%s", n), collapse = ", "),
+      paste(sprintf("SUM(CORRECT_COMP_PCT%s * DEPTH_WEIGHTED_AVERAGE%s) AS COMP_WEIGHTED_AVERAGE%s", n, n, n), collapse = ", "),
+      paste("WHERE", paste(sprintf("DEPTH_WEIGHTED_AVERAGE%s IS NOT NULL", n), collapse = " OR ")),
+      paste(sprintf("CORRECT_COMP_PCT%s", n), collapse = ", "),
+      paste(sprintf("#weights2.RATED_PCT%s", n), collapse = ", "),
+      paste(sprintf("DEPTH_WEIGHTED_AVERAGE%s", n), collapse = ", "),
+      paste(sprintf("#last_step.RATED_PCT%s", n), collapse = ", "),
+      paste(sprintf("CAST (SUM((CASE WHEN RATED_PCT%s = 0 THEN NULL ELSE COMP_WEIGHTED_AVERAGE%s END) / (CASE WHEN RATED_PCT%s = 0 THEN 1 ELSE RATED_PCT%s END)) OVER (PARTITION BY #kitchensink.mukey) AS decimal(10,2)) AS %s",
                      n, n, n, n, property), collapse = ", "),
-      paste0(sprintf("#last_step.RATED_PCT%s", n), collapse = ", "),
-      paste0(sprintf("COMP_WEIGHTED_AVERAGE%s", n), collapse = ", "),
-      paste0(sprintf("#last_step2.%s", property), collapse = ", "),
-      paste0(sprintf("#last_step2.%s", property), collapse = ", "),
-      paste0(sprintf("#last_step2.%s", property), collapse = ", ")))
+      paste(sprintf("#last_step.RATED_PCT%s", n), collapse = ", "),
+      paste(sprintf("COMP_WEIGHTED_AVERAGE%s", n), collapse = ", "),
+      paste(sprintf("#last_step2.%s", property), collapse = ", "),
+      paste(sprintf("#last_step2.%s", property), collapse = ", "),
+      paste(sprintf("#last_step2.%s", property), collapse = ", ")))
   }
 
-  .property_dominant_component_numeric <- function(property, top_depth, bottom_depth, WHERE, FUN, miscellaneous_areas = FALSE) {
+  .property_dominant_component_numeric <- function(property, top_depth, bottom_depth, WHERE, FUN, miscellaneous_areas = FALSE, sqlite_dialect = FALSE) {
     # dominant component numeric is a more specific case of weighted average
-    .property_weighted_average(property, top_depth, bottom_depth, WHERE, dominant = TRUE, include_minors = TRUE, miscellaneous_areas = miscellaneous_areas)
+    .property_weighted_average_CTE(property, top_depth, bottom_depth, WHERE, dominant = TRUE, include_minors = TRUE, miscellaneous_areas = miscellaneous_areas, sqlite_dialect = sqlite_dialect)
   }
 
   # create query based on method
@@ -719,14 +720,15 @@ get_SDA_property <-
              FROM legend
              INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
              INNER JOIN component ON component.mukey = mapunit.mukey AND
-                                     component.cokey = (SELECT TOP 1 c1.cokey FROM component AS c1
+                                     component.cokey = (SELECT %sc1.cokey FROM component AS c1
                                                 INNER JOIN mapunit AS mu ON component.mukey = mu.mukey AND
                                                                             c1.mukey = mapunit.mukey %s
-                                                ORDER BY c1.comppct_r DESC, c1.cokey)",
+                                                ORDER BY c1.comppct_r DESC, c1.cokey %s)",
 
-            paste0(sapply(agg_property, function(x) sprintf("%s AS %s", x, x)), collapse = ", "),
-            WHERE,
-            ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'")),
+            paste(sapply(agg_property, function(x) sprintf("%s AS %s", x, x)), collapse = ", "),
+            WHERE, ifelse(isTRUE(sqlite_dialect), "", "TOP 1 "),
+            ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'"),
+            ifelse(isTRUE(sqlite_dialect), " LIMIT 1", "")),
 
     # weighted average (weighted_average handles vector agg_property)
     "WEIGHTED AVERAGE" = .property_weighted_average_CTE(agg_property, top_depth, bottom_depth, WHERE, include_minors = include_minors, miscellaneous_areas = miscellaneous_areas, dominant = FALSE, sqlite_dialect = sqlite_dialect),
@@ -735,7 +737,7 @@ get_SDA_property <-
     "MIN/MAX" = .property_min_max_CTE(agg_property, top_depth, bottom_depth, WHERE, FUN,  include_minors = include_minors, miscellaneous_areas = miscellaneous_areas, sqlite_dialect = sqlite_dialect),
     
     # dominant component (numeric) (.dominant_component_numeric handles vector agg_property)
-    "DOMINANT COMPONENT (NUMERIC)" = .property_dominant_component_numeric(agg_property, top_depth, bottom_depth, WHERE, miscellaneous_areas),
+    "DOMINANT COMPONENT (NUMERIC)" = .property_dominant_component_numeric(agg_property, top_depth, bottom_depth, WHERE, miscellaneous_areas, sqlite_dialect = sqlite_dialect),
 
     # dominant condition
     "DOMINANT CONDITION" =
@@ -743,15 +745,16 @@ get_SDA_property <-
              FROM legend
               INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND %s
               INNER JOIN component ON component.mukey = mapunit.mukey AND
-                                           component.cokey = (SELECT TOP 1 c1.cokey FROM component AS c1
+                                           component.cokey = (SELECT %sc1.cokey FROM component AS c1
                                                       INNER JOIN mapunit AS mu ON component.mukey = mu.mukey AND
                                                                             c1.mukey = mapunit.mukey %s
-                                                      ORDER BY c1.comppct_r DESC, c1.cokey)
+                                                      ORDER BY c1.comppct_r DESC, c1.cokey%s)
               GROUP BY areasymbol, musym, muname, mapunit.mukey, component.cokey, compname, comppct_r
               ORDER BY mapunit.mukey, areasymbol, musym, muname, comppct_r DESC, component.cokey",
-            paste0(sapply(agg_property, .property_dominant_condition_category), collapse = ", "),
-            WHERE,
-            ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'")),
+            paste(sapply(agg_property, .property_dominant_condition_category, sqlite_dialect = sqlite_dialect), collapse = ", "),
+            WHERE, ifelse(isTRUE(sqlite_dialect), "", "TOP 1 "),
+            ifelse(miscellaneous_areas, ""," AND c1.compkind != 'Miscellaneous area'"),
+            ifelse(isTRUE(sqlite_dialect), " LIMIT 1", "")),
 
     # NO AGGREGATION
   "NONE" = sprintf("SELECT mapunit.mukey, component.cokey, areasymbol, musym, muname,
@@ -762,15 +765,14 @@ get_SDA_property <-
               INNER JOIN component ON component.mukey = mapunit.mukey %s%s
               ORDER BY mapunit.mukey, areasymbol, musym, muname, component.comppct_r DESC, component.cokey%s",
             ifelse(any(is_hz), "chorizon.chkey AS chkey, chorizon.hzdept_r AS hzdept_r, chorizon.hzdepb_r AS hzdepb_r,", ""),
-            paste0(sapply(agg_property[!is_hz], function(x) sprintf("component.%s AS %s", x, x)), collapse = ", "),
+            paste(sapply(agg_property[!is_hz], function(x) sprintf("component.%s AS %s", x, x)), collapse = ", "),
             ifelse(any(is_hz) && !all(is_hz), ",", ""),
-            paste0(sapply(agg_property[is_hz], function(x) sprintf("chorizon.%s AS %s", x, x)), collapse = ", "),
+            paste(sapply(agg_property[is_hz], function(x) sprintf("chorizon.%s AS %s", x, x)), collapse = ", "),
             ifelse(miscellaneous_areas, ""," AND component.compkind != 'Miscellaneous area'"),
             ifelse(any(is_hz),  paste0("\nINNER JOIN chorizon ON chorizon.cokey = component.cokey", " AND ", WHERE), paste0("AND ", WHERE)),
             ifelse(any(is_hz), ", hzdept_r", ""))
   )
-
-}
+} 
 
 .valid_chorizon_columns <- function() {
   c("hzname", "desgndisc", "desgnmaster", "desgnmasterprime", "desgnvert",
