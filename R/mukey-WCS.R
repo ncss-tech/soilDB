@@ -255,6 +255,9 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
       getOption('soilDB.return_Spatial', default = FALSE) &&
       (requireNamespace("raster"))) {
     r <- raster::raster(r)
+    
+    # return without setting metadata via terra methods
+    return(r)
   }
   
   # set metadata
