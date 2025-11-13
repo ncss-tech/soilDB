@@ -3,16 +3,13 @@ context("ISSR800.wcs() -- requires internet connection")
 test_that("works as expected", {
   
   skip_if_offline()
-  
   skip_on_cran()
+  skip_if_not_installed("sf")
+  skip_if_not_installed("terra")
   
   x <- NULL
   
   expect_true(inherits(WCS_details("ISSR800"), 'data.frame'))
-  
-  skip_if_not_installed("sf")
-  
-  skip_if_not_installed("terra")
   
   # 800m grid
   x <- ISSR800.wcs(
@@ -40,11 +37,8 @@ test_that("works as expected", {
 test_that("categorical data", {
   
   skip_if_offline()
-  
   skip_on_cran()
-  
   skip_if_not_installed("sf")
-  
   skip_if_not_installed("terra")
   
   x <- NULL

@@ -4,11 +4,8 @@ context("mukey.wcs() -- requires internet connection")
 test_that("works as expected", {
   
   skip_if_offline()
-  
   skip_on_cran()
-  
   skip_if_not_installed("sf")
-  
   skip_if_not_installed("terra")
   
   x <- NULL
