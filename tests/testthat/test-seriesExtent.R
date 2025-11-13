@@ -1,3 +1,6 @@
+context("seriesExtent() -- requires internet connection")
+
+
 test_that("seriesExtent works", {
   
   skip_if_offline()

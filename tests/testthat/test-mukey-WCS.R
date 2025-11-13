@@ -21,6 +21,7 @@ test_that("works as expected", {
 
   })
   
+  # try-error indicates some kind of network related issue
   expect_true(inherits(x, 'SpatRaster') || inherits(x, 'try-error'))
 
   if (inherits(x, 'SpatRaster')) {
