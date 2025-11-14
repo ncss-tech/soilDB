@@ -436,7 +436,7 @@ fetchSoilGrids <- function(x,
     vd <- strsplit(vardepth[i], "_")[[1]]
     v <- vd[1]; d <- vd[2]; s <- vd[3]
     
-    sf::gdal_utils(
+    try(sf::gdal_utils(
       util = "translate",
       source = paste0(sg_url, paste0(v, '/', v, '_', s, '_', d, '.vrt')),
       destination = tfs[i],
@@ -449,10 +449,15 @@ fetchSoilGrids <- function(x,
         )
       ),
       quiet = !verbose
-    )
+    ), silent = FALSE)
   }
   
-  stk <- terra::rast(tfs)
+  stk <- try(terra::rast(tfs), silent = TRUE)
+  
+  if (inherits(stk, 'try-error')) {
+    stop(stk[1], call. = FALSE)
+  }
+  
   names(stk) <- vardepth
   
   if (!is.null(filename)) {
