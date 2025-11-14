@@ -154,7 +154,7 @@ fetchSOLUS <- function(x = NULL,
   ), silent = TRUE)
   
   if (inherits(r, 'try-error')) {
-    stop(r[1], call. = FALSE)
+    stop("Failed to initialize SpatRaster with remote SOLUS GeoTIFF: ", r[1], call. = FALSE)
   }
   
   # manually apply scaling factors to source raster

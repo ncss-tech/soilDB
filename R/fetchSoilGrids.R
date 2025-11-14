@@ -455,7 +455,7 @@ fetchSoilGrids <- function(x,
   stk <- try(terra::rast(tfs), silent = TRUE)
   
   if (inherits(stk, 'try-error')) {
-    stop(stk[1], call. = FALSE)
+    stop("Failed to initialize SpatRaster with remote SoilGrids GeoTIFF: ", stk[1], call. = FALSE)
   }
   
   names(stk) <- vardepth

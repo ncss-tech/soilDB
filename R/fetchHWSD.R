@@ -57,7 +57,7 @@ fetchHWSD <- function(x = NULL,
   }
   
   if (inherits(r, 'try-error')) {
-    stop(r[1], call. = FALSE)
+    stop("Failed to initialize SpatRaster with HWSD GeoTIFF: ", r[1], call. = FALSE)
   }
   
   sqlite_path <- file.path(data_dir, sprintf("HWSD%s.sqlite", hwsd_version))
