@@ -49,11 +49,15 @@ fetchHWSD <- function(x = NULL,
   if (isTRUE(force) || !file.exists(tiff_path)) {
     bil_url <- paste0(hwsd_url,
                       sprintf("HWSD%s_RASTER.zip/HWSD%s.bil", hwsd_version))
-    r <- terra::writeRaster(terra::rast(paste0("/vsizip/vsicurl/", bil_url)), 
+    r <- try(terra::writeRaster(terra::rast(paste0("/vsizip/vsicurl/", bil_url)), 
                             tiff_path, 
-                            datatype = "INT4U")
+                            datatype = "INT4U"), silent = TRUE)
   } else {
-    r <- terra::rast(tiff_path)
+    r <- try(terra::rast(tiff_path), silent = TRUE)
+  }
+  
+  if (inherits(r, 'try-error')) {
+    stop(r[1], call. = FALSE)
   }
   
   sqlite_path <- file.path(data_dir, sprintf("HWSD%s.sqlite", hwsd_version))
