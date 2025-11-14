@@ -28,7 +28,7 @@ test_that("fetchSOLUS works", {
   
   # raster and SoilProfileCollection output, using linear interpolation for 1cm slices
   # site-level variables (e.g. resdept) added to site data.frame of SPC
-  res <- fetchSOLUS(
+  res <- try(fetchSOLUS(
     ssurgo.geom,
     # depth_slices = c("0", "5", "15", "30", "60", "100", "150"),
     variables = c("sandtotal", "silttotal", "claytotal", "cec7", "resdept"),
@@ -36,7 +36,9 @@ test_that("fetchSOLUS works", {
     method = "linear",
     # samples = 1709,
     grid = NULL
-  )
+  ), silent = TRUE)
+  
+  skip_if(inherits(res, 'try-error'))
   
   expect_length(res, 2)
   expect_equivalent(terra::ncell(res$grid), 3417)

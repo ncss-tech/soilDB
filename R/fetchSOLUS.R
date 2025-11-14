@@ -149,9 +149,13 @@ fetchSOLUS <- function(x = NULL,
   }
   
   # create virtual raster from list of URLs
-  r <- terra::rast(
+  r <- try(terra::rast(
     paste0("/vsicurl/", isub$url)
-  )
+  ), silent = TRUE)
+  
+  if (inherits(r, 'try-error')) {
+    stop(r[1], call. = FALSE)
+  }
   
   # manually apply scaling factors to source raster
   terra::scoff(r) <- cbind(1 / isub$scalar, 0)
