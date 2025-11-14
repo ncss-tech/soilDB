@@ -1,5 +1,8 @@
 context("ISSR800.wcs() -- requires internet connection")
 
+# NOTES:
+# * ISSR800.wcs() will stop() if rast() fails
+
 test_that("works as expected", {
   
   skip_if_offline()
@@ -9,15 +12,21 @@ test_that("works as expected", {
   
   x <- NULL
   
+  # check built-in metadata
   expect_true(inherits(WCS_details("ISSR800"), 'data.frame'))
   
-  # 800m grid
-  x <- ISSR800.wcs(
-      aoi = list(aoi = c(-114.16, 47.6,-114.15, 47.7),
-                 crs = 'EPSG:4326'),
+  # make a request
+  # typical failure modes:
+  #  * network error
+  #  * server maintenance
+  #  * incomplete terra package installation, missing proj.db
+  x <- try(
+    ISSR800.wcs(
+      aoi = list(aoi = c(-114.16, 47.6,-114.15, 47.7), crs = 'EPSG:4326'),
       var = 'paws',
       quiet = TRUE
     )
+  )
   
   expect_true(inherits(x, 'SpatRaster') || inherits(x, 'try-error'))
   
@@ -43,14 +52,18 @@ test_that("categorical data", {
   
   x <- NULL
   
-  # 800m grid
-  x <- ISSR800.wcs(
-      aoi = list(aoi = c(-114.16, 47.6,-114.15, 47.7),
-                 crs = 'EPSG:4326'),
+  # make a request
+  # typical failure modes:
+  #  * network error
+  #  * server maintenance
+  #  * incomplete terra package installation, missing proj.db
+  x <- try(
+    ISSR800.wcs(
+      aoi = list(aoi = c(-114.16, 47.6,-114.15, 47.7), crs = 'EPSG:4326'),
       var = 'texture_2550cm',
       quiet = TRUE
     )
-  
+  )
   
   expect_true(inherits(x, 'SpatRaster') || inherits(x, 'try-error'))
   
@@ -64,11 +77,17 @@ test_that("categorical data", {
     expect_equivalent(colnames(terra::cats(x)[[1]]), c('ID','class','hex','names'))
   }
   
-  x2 <- ISSR800.wcs(
-    aoi = list(aoi = c(-114.16, 47.6,-114.15, 47.7),
-               crs = 'EPSG:4326'),
-    var = 'suborder',
-    quiet = TRUE
+  # make a request
+  # typical failure modes:
+  #  * network error
+  #  * server maintenance
+  #  * incomplete terra package installation, missing proj.db
+  x2 <- try(
+    ISSR800.wcs(
+      aoi = list(aoi = c(-114.16, 47.6,-114.15, 47.7), crs = 'EPSG:4326'),
+      var = 'suborder',
+      quiet = TRUE
+    )
   )
   
   expect_true(inherits(x2, 'SpatRaster') || inherits(x2, 'try-error'))
@@ -76,7 +95,7 @@ test_that("categorical data", {
   if (!inherits(x2, 'try-error')) {
     expect_equivalent(colnames(terra::cats(x2)[[1]]), c('ID', 'suborder'))
   }
-
+  
 })
 
 

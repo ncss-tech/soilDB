@@ -333,7 +333,15 @@ taxaExtent <- function(x,
   }
 
   # init SpatRaster
-  r <- terra::rast(tf)
+  # known error conditions:
+  #  * corrupt terra/proj installation (missing proj.db)
+  r <- try(terra::rast(tf))
+  
+  # stop here with a suggestion
+  if(inherits(r, 'try-error')) {
+    message('cannot init SpatRaster, check terra package installation')
+    return(NULL)
+  }
   
   # load all values into memory
   terra::values(r) <- terra::values(r)
@@ -357,6 +365,5 @@ taxaExtent <- function(x,
   }
   
   return(r)
-  
 }
 
