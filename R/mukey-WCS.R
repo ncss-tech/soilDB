@@ -185,7 +185,8 @@ mukey.wcs <- function(aoi, db = c('gNATSGO', 'gSSURGO', 'RSS', 'STATSGO', 'PR_SS
    return(dl.try)
   }
   
-  # load pointer to file 
+  # this may fail if terra installation is missing proj.db
+  # init SpatRaster
   r <- try(terra::rast(tf), silent = TRUE)
   
   if (inherits(r, 'try-error')) {

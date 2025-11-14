@@ -148,7 +148,8 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
     return(dl.try)
   }
   
-  # load pointer to file and return
+  # this may fail if terra installation is missing proj.db
+  # init SpatRaster
   r <- try(terra::rast(tf), silent = TRUE)
   
   if (inherits(r, 'try-error')) {
@@ -231,6 +232,9 @@ ISSR800.wcs <- function(aoi, var, res = 800, quiet = FALSE) {
       getOption('soilDB.return_Spatial', default = FALSE) && 
       requireNamespace("raster")) {
     r <- raster::raster(r)
+    
+    # return without setting metadata via terra methods
+    return(r)
   }
   
   # set metadata

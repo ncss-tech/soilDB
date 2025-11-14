@@ -1,5 +1,7 @@
 context("mukey.wcs() -- requires internet connection")
 
+# NOTES:
+# * mukey.wcs() will stop() if rast() fails
 
 test_that("works as expected", {
   
@@ -10,20 +12,27 @@ test_that("works as expected", {
   
   x <- NULL
   
+  
   expect_true(inherits(WCS_details("mukey"), 'data.frame'))
-
+  
+  # make a request
+  # typical failure modes:
+  #  * network error
+  #  * server maintenance
+  #  * incomplete terra package installation, missing proj.db
   suppressWarnings({
     
     # 30m grid
-    x <- mukey.wcs(aoi = list(aoi = c(-114.16, 47.655, -114.155, 47.66),
-                              crs = 'EPSG:4326'),
-                   db = 'gnatsgo', quiet = TRUE)
-
+    x <- try(
+      mukey.wcs(
+        aoi = list(aoi = c(-114.16, 47.655, -114.155, 47.66), crs = 'EPSG:4326'),
+        db = 'gnatsgo', quiet = TRUE)
+    )
   })
   
   # try-error indicates some kind of network related issue
   expect_true(inherits(x, 'SpatRaster') || inherits(x, 'try-error'))
-
+  
   if (inherits(x, 'SpatRaster')) {
     
     # expected dimensions
@@ -31,7 +40,6 @@ test_that("works as expected", {
     
     # must have a RAT
     expect_false(is.null(terra::levels(x)))
-    
   }
   
 })
