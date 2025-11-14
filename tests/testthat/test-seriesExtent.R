@@ -11,16 +11,15 @@ test_that("seriesExtent works", {
   # test vector representation
   x <- seriesExtent('Amador')
   
-  # NULL result on network-related error
-  skip_if(is.null(x))
-  
-  expect_true(inherits(x, 'sf'))
-  
   # test gridded representation
   x2 <- seriesExtent('Amador', type = 'raster')
   
   # NULL result on network-related error
+  # NULL could also mean incomplete sf/terra installation, likely missing proj.db
+  skip_if(is.null(x))
   skip_if(is.null(x2))
   
+  # expected data type
+  expect_true(inherits(x, 'sf'))
   expect_true(inherits(x2, 'SpatRaster'))
 })
