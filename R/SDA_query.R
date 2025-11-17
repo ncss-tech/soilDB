@@ -106,18 +106,36 @@ format_SQL_in_statement <- function(x) {
 #' }
 SDA_query <- function(q, dsn = NULL) {
   
-  # prepend info about the caller as query comment header
-  fn <- sys.call(which = -1)[[1]]
-  fne <- environmentName(environment(eval(fn)))
-  fn <- as.character(fn)
+  ## prepend info about the caller as query comment header
+  calls <- sys.calls()
+  envs <- sapply(calls, function(x)
+    try(environmentName(environment(eval(x[[1]]))), silent = TRUE)
+  )
+  calls <- calls[!grepl("base|devtools|testthat|Error", as.character(envs))]
   
-  if (length(fn) == 0 || !nzchar(fn)) {
-    fne <- "soilDB"
+  # extract the function call and environment name
+  fn <- calls[[1]][[1]]
+  fne <- try(environmentName(environment(eval(fn))), silent = TRUE)
+  
+  # handle namespaced function calls
+  fn <- as.character(fn)[length(fn)]
+  
+  if (length(fn) == 0 ||
+      !nzchar(fn) ||
+      !nzchar(fne) ||
+      inherits(fne, 'try-error')) {
     fn <- "SDA_query"
+    fne <- "soilDB"
   }
   
   if (nzchar(fne)) {
-    fn <- paste0(fne, "::", fn)
+    sep <- "::"
+    if (fne == "soilDB" && startsWith(fn, ".")) {
+      sep <- ":::"
+    }
+    fn <- paste0(fne, sep, fn)
+  } else {
+    fn <- "<anonymous>"
   }
   
   q <- paste0(.SDA_comment_header(fn), "\n", q)
