@@ -15,6 +15,45 @@
   }, simplify = FALSE)))
 }
 
+#' Generate SDA SQL Comment Header
+#'
+#' This function generates a standardized SQL comment header string to be
+#' prepended to SDA queries.
+#'
+#' @param function_name Character. The name of the high-level `soilDB` function
+#'   generating the query.
+#' @param package_version Character. The current version of the `soilDB`
+#'   package.
+#'
+#' @return A character string containing the SQL comment header.
+#' @noRd
+#' @keywords internal
+#'
+#' @examples
+#' generate_SDA_comment_header("soilDB::get_SDA_property")
+.SDA_comment_header <- function(function_name,
+                                package_version = as.character(packageVersion('soilDB'))) {
+  
+  if (!is.character(function_name) ||
+      length(function_name) != 1 ||
+      nchar(function_name) == 0) {
+    stop("`function_name` must be a non-empty character string.")
+  }
+  
+  if (!is.character(package_version) ||
+      length(package_version) != 1 ||
+      nchar(package_version) == 0) {
+    stop("`package_version` must be a non-empty character string.")
+  }
+  
+  # Construct the SQL comment header
+  sprintf(
+    "/** SDA Query application='soilDB' rule='%s' version='%s' **/",
+    function_name,
+    package_version
+  )
+}
+
 # convert diagnostic horizon info into wide-formatted, boolean table
 .diagHzLongtoWide <- function(d, feature = 'featkind', id = 'peiid') {
 

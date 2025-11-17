@@ -105,6 +105,23 @@ format_SQL_in_statement <- function(x) {
 #'    str(x)
 #' }
 SDA_query <- function(q, dsn = NULL) {
+  
+  # prepend info about the caller as query comment header
+  fn <- sys.call(which = -1)[[1]]
+  fne <- environmentName(environment(eval(fn)))
+  fn <- as.character(fn)
+  
+  if (length(fn) == 0 || !nzchar(fn)) {
+    fne <- "soilDB"
+    fn <- "SDA_query"
+  }
+  
+  if (nzchar(fne)) {
+    fn <- paste0(fne, "::", fn)
+  }
+  
+  q <- paste0(.SDA_comment_header(fn), "\n", q)
+  
   if (is.null(dsn)) {
     res <- .SDA_query(q)
     if (inherits(res, 'try-error')) {
