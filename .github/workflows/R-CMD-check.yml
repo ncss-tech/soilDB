@@ -63,7 +63,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, any::remotes, RSQLite=?ignore-before-r=4.0.0, rvest=?ignore-before-r=4.1.0, odbc=?ignore-before-r=4.0.0, testthat=?ignore-before-r=4.0.0, local::., any::soilDBdata
+          extra-packages: any::rcmdcheck, any::remotes, RSQLite=?ignore-before-r=4.0.0, rvest=?ignore-before-r=4.1.0, odbc=?ignore-before-r=4.0.0, testthat=?ignore-before-r=4.0.0, local::., brownag/soilDBdata
           # upgrade: 'TRUE' ## NB: required to force building of source packages
           cache: always
           cache-version: 1
