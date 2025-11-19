@@ -22,7 +22,7 @@ get_component_from_SDA <- function(WHERE = NULL, duplicates = FALSE, childs = TR
   # paste0("mu.nationalmusym + '_' + CAST(comppct_r AS VARCHAR) + '_' + compname + '-' + ISNULL(localphase, 'no_phase') AS derived_cokey")
 
   es.vars <- "ecoclasstypename, ecoclassref, ecoclassid, ecoclassname"
-  co.vars <- "co.cokey, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, erocl, earthcovkind1, earthcovkind2, elev_r, slope_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, hydgrp,  nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, tfact, wei, weg, corcon, corsteel, frostact, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition"
+  co.vars <- "co.cokey, compname, comppct_r, compkind, majcompflag, localphase, drainagecl, hydricrating, erocl, earthcovkind1, earthcovkind2, elev_r, slope_r, aspectrep, map_r, airtempa_r, reannualprecip_r, ffd_r, hydgrp,  nirrcapcl, nirrcapscl, irrcapcl, irrcapscl, tfact, wei, weg, corcon, corsteel, frostact, taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, taxpartsize, taxpartsizemod, taxceactcl, taxreaction, taxtempcl, taxmoistscl, taxtempregime, soiltaxedition, nasiscoiid"
   vars    <- paste(unlist(strsplit(co.vars, "earthcovkind2,")), collapse = paste0("earthcovkind2, ", es.vars, ","))
 
   q.component <- paste(
@@ -678,7 +678,7 @@ get_chorizon_from_SDA <- function(WHERE = NULL, duplicates = FALSE,
        lep_r, sar_r, ec_r, cec7_r, sumbases_r, 
        ph1to1h2o_l, ph1to1h2o_r, ph1to1h2o_h,
        caco3_l, caco3_r, caco3_h, 
-       kwfact, kffact, c.cokey, ch.chkey
+       kwfact, kffact, c.cokey, ch.chkey, ch.nasischiid
     FROM legend l INNER JOIN
     mapunit mu ON mu.lkey = l.lkey",
     
