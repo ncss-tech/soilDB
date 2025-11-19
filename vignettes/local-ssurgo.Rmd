@@ -24,6 +24,15 @@ The `soilDB` package provides tools for accessing and working with soil survey d
 
 This vignette demonstrates how to use these functions to obtain and view data from _Morton and Stanton counties, Kansas_ (`areasymbol = c("KS129", "KS187")`).
 
+### Remote vs. Local Access
+
+For queries directly against the USDA Soil Data Access (SDA) web service without
+downloading local data, see the [SDA vignette](sda.html). The SDA vignette
+covers remote REST-based queries, property aggregation methods, and soil
+interpretations. Once you have created a local SSURGO database with
+`createSSURGO()`, many of the same functions can be used with the `dsn`
+parameter to query your local database instead.
+
 ## Download SSURGO Data
 
 `downloadSSURGO()` will download the official SSURGO data from Web Soil Survey for the specified `areasymbol` and return the path to the ZIP archives.
@@ -193,6 +202,10 @@ Note that in the northern part of the map the map units have high dominant compo
 
 `soilDB` provides many functions that can perform aggregations of map unit component data. We will use the function `get_SDA_property()` to calculate the map unit dominant condition values for several component-level hydrologic properties: the *Hydrologic Group* and the *Drainage Class*.
 
+For more information on `get_SDA_property()`, including all available aggregation
+methods (Dominant Component, Weighted Average, Min/Max, Dominant Condition,
+None), see the [SDA vignette](sda.html).
+
 In this case we want to get everything in our local database, so we use the `WHERE` clause `"1=1"` which is true for all map units in the database.
 
 ```{r get-sda-prop-hyd}
@@ -278,18 +291,21 @@ You can adapt the aggregation logic depending on your needs (e.g., max, mean, or
 
 ## Query and Aggregation Functions
 
-This section describes some existing options in the `soilDB` package for querying and aggregating data for thematic maps.
+This section describes some existing options in the `soilDB` package for
 
-In the future this section will be expanded.
-
-All of the `get_SDA_*()` "SSURGO On Demand" functions can be applied to local copies of the SSURGO database by passing the `dsn` argument (either a path to a SQLite database or a *DBIConnection* object).
+querying and aggregating data for thematic maps.
+All of the `get_SDA_*()` "SSURGO On Demand" functions can be applied to local
+copies of the SSURGO database by passing the `dsn` argument (either a path to a
+SQLite database or a *DBIConnection* object). For detailed documentation on
+these functions, including usage patterns, aggregation methods, and
+interpretation rules, see the [SDA vignette](sda.html).
 
 -   "SSURGO On Demand" Queries
     -   Hydric Soils: [`get_SDA_hydric()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_hydric.html)
     -   Soil Interpretations: [`get_SDA_interpretation()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_interpretation.html)
     -   Map Unit Aggregate Attributes : [`get_SDA_muaggatt()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_muaggatt.html)
     -   Parent Material Groups: [`get_SDA_pmgroupname()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_pmgroupname.html)
-    -   Component and Horizon Properties: [`get_SDA_property()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.html)
+    -   Component and Horizon Properties: [`get_SDA_property()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.html) 
     -   Component Ecological Classes: [`get_SDA_coecoclass()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_coecoclass.html)
     -   Component Surface Morphometry: [`get_SDA_cosurfmorph()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_cosurfmorph.html)
 

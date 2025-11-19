@@ -1,0 +1,2100 @@
+---
+title: "Soil Data Access"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Soil Data Access}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  eval = !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = "TRUE")),
+  message = FALSE,
+  warning = FALSE,
+  fig.height = 7,
+  fig.width = 7
+)
+```
+
+## Introduction to Soil Data Access (SDA)
+
+The Soil Data Access (SDA) system provides REST-based access to the SSURGO and
+STATSGO2 databases maintained by USDA-NRCS. Instead of downloading large
+databases, SDA allows you to query exactly what you need via a web service.
+
+`soilDB` provides several functions that help with generating requests to the
+web service at a low level, as well as higher-level functions that can return
+complex data structures like the `SoilProfileCollection` from the `aqp` package
+or spatial object types.
+
+### What is SDA?
+
+SDA provides access to a SQL Server database containing a variety of soil information:
+
+ - **Tabular data**: map units, components, horizons, interpretations, ecological classes, laboratory characterization results, and more
+ - **Spatial data**: map unit polygons with geometry (available via WKT or for spatial queries), point locations (XY coordinates)
+
+The SDA REST endpoint is available at:
+
+```
+https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest
+```
+
+All queries to SDA are executed through the `SDA_query()` function in `soilDB`,
+which handles the HTTP POST requests and JSON response parsing automatically.
+
+### SSURGO and STATSGO2 Data
+
+SDA contains both the detailed Soil Survey Geographic Database (**SSURGO**) and
+the generalized U.S. General Soil Map (**STATSGO2**).
+
+*   **SSURGO**: Detailed mapping (scales 1:12,000 to 1:24,000). Identified by specific area symbols (e.g., `CA630`, `IN005`).
+*   **STATSGO2**: Generalized mapping (scale 1:250,000) for regional/national analysis. Identified by the single area symbol `'US'`.
+
+See the Data Filters section below for details on filtering out STATSGO2 data.
+
+### When to Use SDA vs. Local SSURGO
+
+Use SDA for current data from NRCS without manual downloads, queries across
+multiple survey areas, quick one-time analyses, or access to interpretations and
+aggregated properties. Use local SSURGO databases for repeated queries to the
+same survey areas (faster), offline access, complete survey databases with all
+tables, or direct SQLite manipulation.
+
+The same `get_SDA_*()` functions documented in this vignette can be applied to
+local SSURGO databases by passing the `dsn` parameter. See the [Local SSURGO
+vignette](local-ssurgo.html) for downloading and creating local SSURGO
+GeoPackage databases, and for examples of using these functions with local data.
+
+### Package Requirements
+
+```{r load-packages}
+library(soilDB)
+```
+
+For spatial data examples, use `sf` and `terra`, which are both optional but
+recommended.
+
+```{r suggested-packages2, eval=FALSE}
+install.packages(c("sf", "terra"))
+```
+
+---
+
+## Basic `SDA_query()` Function
+
+### Core Syntax
+
+The `SDA_query()` function executes SQL queries directly against the SDA
+database:
+
+```{r basic-query-example}
+# Simple query to get the first 5 map units from an area
+q <- "
+SELECT TOP 5
+  mapunit.mukey,
+  mapunit.nationalmusym,
+  legend.areasymbol,
+  mapunit.musym,
+  mapunit.muname
+FROM legend
+INNER JOIN mapunit ON mapunit.lkey = legend.lkey
+WHERE legend.areasymbol = 'CA630'
+ORDER BY mapunit.musym
+"
+
+result <- SDA_query(q)
+head(result)
+```
+
+### Understanding SDA SQL
+
+SDA uses **Microsoft SQL Server Transact-SQL (T-SQL)** dialect.
+
+Key differences of T-SQL from SQLite and other SQL dialects that are relevant to
+queries used in soilDB include:
+
+| Feature | T-SQL | SQLite | Notes |
+|---------|-----------|--------|-------|
+| Row limit | `TOP 10` | `LIMIT 10` | Place after SELECT |
+| NULL functions | `ISNULL(col, 0)` | `IFNULL(col, 0)` | Different function names |
+| String concat | `col1 + col2` | `col1 || col2` | Different operators |
+
+When using `SDA_query()` with a **local SQLite database** (via `dsn` parameter),
+`soilDB` automatically converts some T-SQL syntax to SQLite equivalents to allow
+for both to work. This behavior is triggered when the `dsn` argument is
+specified. You can view the queries (and save them to run yourself) by passing
+the `query_string=TRUE` argument.
+
+### Basic Table Joins
+
+Many custom SSURGO queries follow a standard pattern of relationships from
+legend, to mapunit, to component, to a related table to component such as
+component horizon.
+
+In SSURGO data model primary and foreign key physical column names all end with
+the word `"key"`. The primary key is a unique identifier of a particular record.
+
+Foreign keys are references to primary keys of other tables and define the
+relationships between tables that can be used for joins.
+
+Here we select a handful of values from all of the above mentioned tables
+corresponding to the first 10 component horizon (`chorizon`) in the SDA table.
+
+```{r basic-join-example}
+# Get map unit, component, and horizon data
+q <- "
+SELECT TOP 10
+  mu.mukey,
+  leg.areasymbol,
+  mu.musym,
+  co.compname,
+  co.comppct_r,
+  ch.hzname,
+  ch.hzdept_r,
+  ch.hzdepb_r,
+  ch.claytotal_r
+FROM legend AS leg
+INNER JOIN mapunit AS mu ON mu.lkey = leg.lkey
+INNER JOIN component AS co ON co.mukey = mu.mukey
+LEFT JOIN chorizon AS ch ON ch.cokey = co.cokey
+WHERE leg.areasymbol = 'CA630'
+  AND co.majcompflag = 'Yes'
+  AND ch.claytotal_r IS NOT NULL
+ORDER BY mu.musym, co.comppct_r DESC, ch.hzdept_r
+"
+
+result <- SDA_query(q)
+head(result, 10)
+```
+
+We supplied all of the filtering constraints in a `WHERE` clause for clarity,
+with joins only using primary and foreign keys.
+
+In general, the same constraints can be expressed as part of a join to relevant
+tables, which can be more efficient in complex queries.
+
+### Understanding LEFT JOIN vs INNER JOIN
+
+One of the most important considerations in SSURGO queries is **data
+completeness**: not all relationships in the SSURGO database are populated for
+all soils or components. Understanding when to use LEFT JOIN vs. INNER JOIN is
+critical for correct analysis.
+
+#### When Data are Complete: INNER JOIN
+
+Use `INNER JOIN` when the relationship **must exist** for meaningful results:
+
+```{r inner-join-complete-data}
+# These relationships are always present in SSURGO:
+# - mapunit always belongs to a legend (survey area)
+# - component always belongs to a mapunit
+q <- "
+SELECT TOP 10
+  leg.areasymbol,
+  mu.musym,
+  co.compname,
+  co.comppct_r
+FROM legend AS leg
+INNER JOIN mapunit AS mu ON mu.lkey = leg.lkey
+INNER JOIN component AS co ON co.mukey = mu.mukey
+WHERE leg.areasymbol = 'CA630'
+ORDER BY mu.musym, co.comppct_r DESC
+"
+
+result <- SDA_query(q)
+
+# Every row represents a valid component with all parent relationships
+head(result)
+```
+
+#### When Data May Be Missing: LEFT JOIN
+
+Use `LEFT JOIN` when a parent record may exist **without child records**. Two
+example cases:
+
+**Case 1: Components Without Horizons**
+Some soil components in SSURGO do **not** have associated horizon data. These
+are often "non-soil" components (`compkind` "Miscellaneous Area") or minor
+components (`majcompflag` "No") which may lack detailed horizon description:
+
+```{r left-join-components-without-horizons}
+# Some components have NO horizons defined
+# INNER JOIN would exclude these components entirely
+# LEFT JOIN preserves components even without horizon data
+q <- "
+SELECT
+  leg.areasymbol,
+  mu.mukey,
+  mu.musym,
+  co.compname,
+  co.comppct_r,
+  ch.chkey,
+  ch.hzdept_r,
+  ch.hzdepb_r
+FROM legend AS leg
+INNER JOIN mapunit AS mu ON mu.lkey = leg.lkey
+INNER JOIN component AS co ON co.mukey = mu.mukey
+LEFT JOIN chorizon AS ch ON ch.cokey = co.cokey
+WHERE leg.areasymbol = 'CA630'
+  AND co.majcompflag = 'Yes'
+ORDER BY mu.musym, co.comppct_r DESC, ch.hzdept_r
+"
+
+result <- SDA_query(q)
+
+# Check for components without horizons:
+# Rows with NA in horizon columns indicate a component with no horizon data
+if (is.data.frame(result) && nrow(result) > 0) {
+  components_no_horizons <- result[is.na(result$chkey), ]
+  if (nrow(components_no_horizons) > 0) {
+    cat('Found', nrow(components_no_horizons), 'components without horizon data:\n')
+    print(components_no_horizons[, c('musym', 'compname', 'comppct_r')])
+  }
+}
+```
+
+**Comparison: INNER JOIN would have excluded those components:**
+
+```{r compare-inner-join-drops-components}
+# Using INNER JOIN on horizons drops components that lack horizon data
+q_inner <- "
+SELECT
+  leg.areasymbol,
+  mu.mukey,
+  mu.musym,
+  co.compname,
+  co.comppct_r,
+  ch.desgnmaster,
+  ch.hzdept_r,
+  ch.hzdepb_r
+FROM legend AS leg
+INNER JOIN mapunit AS mu ON mu.lkey = leg.lkey
+INNER JOIN component AS co ON co.mukey = mu.mukey
+INNER JOIN chorizon AS ch ON ch.cokey = co.cokey
+WHERE leg.areasymbol = 'CA630'
+  AND co.majcompflag = 'Yes'
+ORDER BY mu.musym, co.comppct_r DESC, ch.hzdept_r
+"
+
+result_inner <- SDA_query(q_inner)
+
+# number of rows in LEFT JOIN result
+nrow(result)
+
+# number of rows in INNER JOIN result
+nrow(result_inner)
+```
+
+**Case 2: Horizons Without Rock Fragments**
+
+Similarly, not all horizons have child table rock fragment volume recorded. This
+is conventionally used for horizons with no fragments, but in some cases may be
+used for soils that have non-zero fragment weight fractions (for example, those
+with human artifacts). When you need to include horizons regardless of fragment
+availability, use LEFT JOIN:
+
+```{r left-join-horizons-without-fragments}
+# Some horizons have NO rock fragment data recorded
+# LEFT JOIN preserves horizons even without fragment information
+q <- "
+SELECT
+  mu.musym,
+  co.compname,
+  ch.desgnmaster,
+  ch.hzdept_r,
+  ch.hzdepb_r,
+  rf.fragsize_h,
+  rf.fragvol_r
+FROM legend AS leg
+INNER JOIN mapunit AS mu ON mu.lkey = leg.lkey
+INNER JOIN component AS co ON co.mukey = mu.mukey
+LEFT JOIN chorizon AS ch ON ch.cokey = co.cokey
+LEFT JOIN chfrags AS rf ON rf.chkey = ch.chkey
+WHERE leg.areasymbol = 'CA630'
+  AND co.majcompflag = 'Yes'
+ORDER BY mu.musym, co.comppct_r DESC, ch.hzdept_r
+"
+
+result <- SDA_query(q)
+
+# Check for horizons without fragments:
+if (is.data.frame(result) && nrow(result) > 0) {
+  horizons_no_frags <- result[!duplicated(result$chkey) & is.na(result$fragsize_h), ]
+  if (nrow(horizons_no_frags) > 0) {
+    cat('Found', nrow(horizons_no_frags), 'horizons without rock fragment data:\n')
+    print(horizons_no_frags[, c('musym', 'compname', 'desgnmaster', 'fragvol_r')])
+  }
+}
+```
+
+#### Summary: When to Use Each Join Type
+
+| Situation | Join Type | Reason |
+|-----------|-----------|--------|
+| Query result must have values at all levels | INNER | Filter out incomplete records |
+| Parent may exist without children (components without horizons, horizons without fragments) | LEFT | Preserve parent records even when children are missing |
+| Calculating aggregations (COUNT, SUM, AVG) with missing data | Depends | LEFT includes zero-occurrence groups; INNER ignores them |
+| Applying WHERE filters to child tables | Typically LEFT | INNER JOIN combined with WHERE can lose parents unintentionally |
+
+**Tip:** When using LEFT JOIN, always check for `NA` values in child table columns to identify records with missing child data.
+
+---
+
+### Aggregation Functions
+
+SDA supports standard SQL aggregate functions (COUNT, SUM, AVG, MIN, MAX, etc.):
+
+```{r aggregation-example}
+# Get component statistics per map unit
+q <- "
+SELECT
+  mu.mukey,
+  mu.musym,
+  mu.muname,
+  COUNT(co.cokey) AS n_components,
+  SUM(co.comppct_r) AS total_comppct,
+  AVG(co.comppct_r) AS avg_comppct
+FROM legend AS leg
+INNER JOIN mapunit AS mu ON mu.lkey = leg.lkey
+INNER JOIN component AS co ON co.mukey = mu.mukey
+WHERE leg.areasymbol = 'CA630'
+GROUP BY mu.mukey, mu.musym, mu.muname
+ORDER BY mu.musym
+"
+
+result <- SDA_query(q)
+head(result)
+```
+
+Here we use SQL `GROUP BY` to define the columns used to determine unique
+groups. Other columns that are not part of the GROUP BY statement need to be
+included in some sort of aggregation expression to be used in SELECT clause.
+
+When calculating map unit weighted averages using custom SQL, be aware that
+`comppct_r` (Component Percentage) does not always sum to 100% for a map unit
+due to minor component inclusions that may not be exported or missing data.
+
+A robust weighted average should normalize weights by the sum of component
+percentages present in the data, rather than assuming a sum of 100. This is
+especially important if you are relying on INNER JOIN to chorizon table, as many
+mapunits have at least some components with no horizon data.
+
+### Data Filters
+
+#### Filtering SSURGO vs. STATSGO2
+
+When querying SDA, especially without specific map unit keys or area symbols, it
+is often important to exclude STATSGO2 data to prevent mixing these two distinct
+datasets.
+
+**Common filter to exclude STATSGO2:**
+
+```sql
+WHERE areasymbol != 'US'
+```
+
+#### Filtering Horizon Data
+
+When aggregating soil properties, it is sometimes important to exclude layers
+that do not represent mineral soil so that depth-weighted averages and other
+statistics are not skewed.
+
+Note that if zero values are present for a soil property they can drag down
+averages. If you include a weighting factor in a custom query for the thickness
+of a layer with a `NULL` value, that is essentially the same as if the property
+value were `0`.
+
+The two most common types of non-mineral soil layers to exclude
+are:
+
+1.  **Bedrock and other Root-Limiting Layers:** Below the "bottom of the soil" (e.g., `R`, `Cr` horizons).
+
+2.  **Dry Surface Organic Layers (Duff):** High-carbon, low bulk density, dry organic (O) horizons
+
+#### Filtering Strategy
+
+Since SSURGO data spans decades of standards, no single column perfectly
+identifies these non-soil layers.
+
+The safest approach is to use the new computed `horztype` column *in combination
+with* in lieu texture class codes. Currently `horztype` only supports
+identification of dry organic layers on the surface, but it may be extended to
+other material types in the future.
+
+**1. Filter Bedrock:**
+
+Bedrock layers often have `NULL` property values, which is not much of a problem
+provided there are data available for the overlying soil layers; but you will
+need to exclude the thickness of the bedrock layers for accurate depth-weighted
+average calculations.
+
+The `horztype` column does not capture bedrock. You must filter by texture code:
+
+```sql
+/* Exclude Bedrock */
+AND texturerv NOT IN ('BR', 'WB', 'UWB') 
+```
+
+This includes the modern "bedrock" (BR), as well as the obsolete "weathered
+bedrock" and "unweathered bedrock". For the purposes of excluding non-soil
+bedrock material, they can be treated as equivalent and will cover many cases.
+
+There are a variety of other "in lieu" texture codes that are used to identify
+cemented materials ("CEM", "IND", "MAT") which may or may not have other texture
+information and may also need to be considered for exclusion.
+
+While it might be tempting to just filter on horizon designation (e.g. excluding
+R or Cr layers explicitly), as discussed below this is not completely reliable
+on its own.
+
+**2. Filter Dry Organics (Duff):**
+
+The `horztype` column is currently primarily for identifying "Dry Organic"
+layers. This is a new column that has been programmatically populated to help
+users filter out a common set of data.
+
+Combine `horztype` with texture codes like `"SPM"` (which is the
+least-decomposed organic soil material: dry fibric material) for more robust
+confirmation of filtering logic. You can also include "MPM" and "HPM" if you are
+interested in excluding even more decomposed dry organic materials:
+
+```sql
+/* Exclude "Duff" / Dry Organics */
+AND ISNULL(horztype, '') <> 'Dry Organic'
+AND texturerv NOT IN ('SPM', 'MPM', 'HPM') 
+```
+
+The population of O horizons in SSURGO is inconsistent due to evolving data
+collection standards. While modern surveys often include numerical data for
+organic surface layers, legacy data may only mention them in descriptions
+without populated properties.
+
+Retain these layers when analyzing data completeness or identifying diagnostic
+features like folistic epipedons. However, for analyses focused on mineral soil
+properties, excluding them is often necessary to prevent skewing depth-weighted
+averages.
+
+**Note:** We generally want to *keep* "Wet Organic" layers (PEAT, MPT [mucky peat], and MUCK) as these may be diagnostic for Histosols, Histic epipedons etc., which are important concepts for identification of hydric soils.
+
+**3. Filter by Horizon Designation**
+
+It is also possible, but not completely reliable due to soil survey vintage and
+patterns in historical data population, to filter by horizon designation.
+
+For instance, a logical statement to exclude the master horizon designation "O"
+for organics:
+
+```r
+AND desgnmaster <> 'O'
+```
+
+While using horizon designations is conceptually appealing, it is problematic
+when it is the only logic you are using. Horizon designations were not
+historically populated for the aggregate soil component data (SSURGO).
+
+In the last two decades layers in the `chorizon` table have been assigned
+morphologic horizon designations, but this has not been done retroactively. Some
+older soil surveys still use "H" as the master horizon designation for all
+layers e.g. H1, H2, H3 instead of A, B, C. If this is the case the only way to
+identify bedrock, or organic layers, is to use other data elements such as in
+lieu texture class.
+
+#### Soil Materials
+
+This section demonstrates filtering horizon data based on material types.
+
+We will start with a custom query that targets components with "Histic"
+taxonomic subgroup formative element.
+
+```{r inspect-horizon-data}
+q <- "
+SELECT TOP 10
+  component.compname,
+  ch.hzname,
+  ch.hzdept_r,
+  ch.hzdepb_r,
+  ch.texturerv,
+  ch.horztype,
+  ch.claytotal_r,
+  ch.om_r
+FROM chorizon AS ch
+INNER JOIN component ON component.cokey = ch.cokey AND taxsubgrp LIKE '%Histic%'
+ORDER BY component.cokey, hzdept_r
+"
+
+result <- SDA_query(q)
+result
+```
+
+Here is a sample query to select mineral and wet organic soil layers:
+
+```{r filtering-horizon-data}
+q <- "
+SELECT TOP 10
+  ch.hzname,
+  ch.hzdept_r,
+  ch.hzdepb_r,
+  ch.texturerv,
+  ch.horztype,
+  ch.claytotal_r,
+  ch.om_r
+FROM chorizon AS ch
+WHERE 
+  -- 1. Exclude Bedrock
+  ch.texturerv NOT IN ('BR', 'WB', 'UWB') 
+  
+  -- 2. Exclude Dry Organic / Duff
+  AND ISNULL(ch.horztype, '') <> 'Dry Organic'
+  AND ch.texturerv NOT IN ('SPM', 'MPM', 'HPM')
+ORDER BY cokey, hzdept_r
+"
+
+result <- SDA_query(q)
+head(result)
+```
+
+In contrast to bedrock, organic soil materials are soil materials, whether they
+are wet or dry--but it is important to know when you may need to look past them.
+Organic layers have very low bulk density and very high organic carbon content,
+both of which can skew "mineral soil" averages if included in depth-weighted
+calculations.
+
+Take for example the K factor for estimating erosion hazard: users often want
+properties for an exposed mineral soil surface rather than that of an organic
+layer over the mineral soil surface. In general, the concept of K factor does
+not apply to the organic surface.
+
+To demonstrate, we will look at the whole SSURGO database. We count the number
+of horizons with master designation "O" and horizon top depth `0` within groups
+of different combinations of `Kw` and `Kf`, and sort in decreasing order.
+
+```{r organic-kfact}
+q <- "
+SELECT 
+  COUNT(chkey) AS n, 
+  kwfact, 
+  kffact 
+FROM chorizon 
+WHERE desgnmaster = 'O' AND hzdept_r = 0
+GROUP BY kwfact, kffact
+ORDER BY n DESC
+"
+result <- SDA_query(q)
+result$percent <- round(prop.table(result$n) * 100, 1)
+head(result, 10)
+```
+
+This query shows that many O horizons at the soil surface have NULL K factor values.
+
+The take away from this should be: if your analysis relies on having K factor
+**everywhere** you will either need to filter out the O horizons, or come up with a
+way to impute a value to replace the NULL values.
+
+### Rock Fragment Data
+
+Rock fragments are particles larger than 2 mm. In SSURGO, fragment data are
+stored in several places both aggregated up to the horizon level, and in child
+tables of horizon.
+
+Fragments are classified by size class (e.g. gravel, cobbles, stones, boulders)
+and recorded as volume percentages. Derived weight fractions are also stored at
+the horizon level.
+
+#### Basic Rock Fragment Query
+
+```{r rock-fragment-basic}
+# Query horizons with their rock fragment content
+q <- "
+SELECT TOP 20
+  mu.musym,
+  co.compname,
+  ch.hzname,
+  ch.hzdept_r,
+  ch.hzdepb_r,
+  rf.fragkind,
+  rf.fragsize_h,
+  rf.fragvol_r
+FROM legend AS leg
+INNER JOIN mapunit AS mu ON mu.lkey = leg.lkey
+INNER JOIN component AS co ON co.mukey = mu.mukey
+LEFT JOIN chorizon AS ch ON ch.cokey = co.cokey
+LEFT JOIN chfrags AS rf ON rf.chkey = ch.chkey
+WHERE leg.areasymbol = 'CA630'
+  AND co.majcompflag = 'Yes'
+ORDER BY mu.musym, co.comppct_r DESC, ch.hzdept_r, rf.fragsize_h
+"
+
+result <- SDA_query(q)
+head(result, 20)
+```
+
+Above you can see multiple fragment size classes can exist in a single horizon
+(a many-to-one relationship). Horizons without fragments generally have no
+records in the `chfrags` table.
+
+ - `chfrags` table contains individual fragment records per horizon and size class (e.g. at least one each for gravel, cobbles, stones, boulders, where present)
+
+ - `fragsize_h` indicates upper end of fragment size range for a specific record
+
+ - `fragvol_r` is the representative volume percentage for that specific record
+ 
+#### Aggregating Rock Fragments by Horizon
+
+Sum fragment volumes to get total rock fragment content per horizon:
+
+```{r rock-fragment-aggregation}
+# Total rock fragment content per horizon
+q <- "
+SELECT
+  mu.musym,
+  co.compname,
+  co.comppct_r,
+  ch.hzname,
+  ch.hzdept_r,
+  ch.hzdepb_r,
+  SUM(rf.fragvol_r) AS calc_fragvoltot_r,
+  COUNT(DISTINCT rf.fragsize_h) AS n_frag_classes
+FROM legend AS leg
+INNER JOIN mapunit AS mu ON mu.lkey = leg.lkey
+INNER JOIN component AS co ON co.mukey = mu.mukey
+LEFT JOIN chorizon AS ch ON ch.cokey = co.cokey
+LEFT JOIN chfrags AS rf ON rf.chkey = ch.chkey
+WHERE leg.areasymbol = 'CA630'
+  AND co.majcompflag = 'Yes'
+GROUP BY mu.musym, co.compname, co.comppct_r, ch.hzname,
+         ch.hzdept_r, ch.hzdepb_r, ch.chkey
+ORDER BY mu.musym, co.comppct_r DESC, ch.hzdept_r
+"
+
+result <- SDA_query(q)
+head(result)
+```
+
+**Note:** T-SQL is strict about aggregation syntax. Every column in the SELECT clause that is not wrapped in an aggregate function (SUM, COUNT, etc.) MUST be listed in the GROUP BY clause.
+
+#### Rock Fragment Properties via get_SDA_property()
+
+Use `get_SDA_property()` to retrieve rock fragment properties with aggregation:
+
+```{r rock-fragment-via-property}
+# Get rock fragment weight percentages (3-10 inch class)
+frag_3_10 <- get_SDA_property(
+  property = "Rock Fragments 3 - 10 inches - Rep Value",  # equivalent to 'frag3to10_r'
+  method = "Dominant Component (Numeric)", # dominant component, weighted average by depth
+  areasymbols = "CA630",
+  top_depth = 0,
+  bottom_depth = 100  # depth range for averaging
+)
+
+head(frag_3_10)
+
+# get fragment volume (fragvoltot_l, fragvoltot_r, fragvoltot_h)
+fragvol_total <- get_SDA_property(
+  property = "fragvoltot_r",
+  method = "Weighted Average", # weighted by component percentage and depth
+  top_depth = 0,
+  bottom_depth = 100,
+  areasymbols = "CA630"
+)
+
+head(fragvol_total)
+```
+
+**Note:** Fragment weight fraction properties in `chorizon` (like `frag3to10_r` and `fraggt10_r`) are always populated, but currently the `fragvoltot_*` columns are not and data availability depends on the vintage of the specific SSURGO map unit data.
+
+---
+
+## SDA Query Limits and Strategies
+
+### SDA Query Limitations
+
+The SDA system has important hard limits:
+
+1. **Record Limit**: Queries that return more than **100,000 records** may be rejected or truncated
+
+2. **Result Size**: Response serialization limited to approximately **32 Mb**
+
+3. **Memory Limit**: Queries generally cannot exceed approximately **300 Mb** memory usage
+
+4. **Timeouts and Complexity**: Long-running queries may timeout or hit other internal limits during query planning 
+
+**Note on Local vs. Remote:** These limits primarily apply to the **Remote SDA API**. When querying a **local SQLite database** (e.g. created via `createSSURGO()` or `downloadSSURGO()`), you are generally unrestricted by record counts or timeouts. Complex tabular queries can often be run on entire states or the whole country locally without the need for chunking or simplification.
+
+### Strategies for Large Queries
+
+1. **Add WHERE clause** to reduce result set:
+
+```r
+# Bad: will return >100k records across all of SSURGO
+q <- "SELECT * FROM component"
+   
+# Good: specific component name pattern in WHERE clause
+q <- "SELECT * FROM component 
+      WHERE compname LIKE 'Miami%'"
+```
+
+2. **Use TOP clause** to limit number of results (useful for testing):
+
+```r
+# Test with small result set first
+q <- "SELECT TOP 100 * FROM chorizon"
+result <- SDA_query(q)
+```
+
+TOP can be used after sorting with `ORDER BY` to easily find the values
+associated with an ordered sequence. For instance, if you `ORDER BY comppct_r
+DESC` (order by component percentage in descending order), then take `TOP 1` you
+will get the records associated with the dominant component. This is a very
+common aggregation scheme available as an option in most tools that use SSURGO
+data.
+
+TOP is also generally useful for testing queries, or checking table result
+structure for a few resulting rows. If testing is successful, remove TOP, add
+filtering with WHERE or in JOIN condition (see below), or increase the TOP limit.
+
+3. **Aggregate and apply JOIN constraints early** in the query:
+
+Efficient queries often perform filtering operations as part of their JOIN
+statements. This can improve server-side query planning and reduce overhead that
+is not needed for the final result.
+
+```r
+# Return aggregated results (fewer rows) instead of raw data
+#  and constrain musym in join to mapunit instead of WHERE
+q <- "
+SELECT mu.mukey, 
+  COUNT(*) AS n_hz,
+  AVG(ch.claytotal_r) AS avg_clay
+FROM component co
+INNER JOIN mapunit mu ON mu.mukey = co.mukey AND mu.musym = '101'
+INNER JOIN chorizon ch ON ch.cokey = co.cokey
+GROUP BY mu.mukey
+WHERE compname LIKE 'Musick%'
+"
+```
+
+4. **Explicitly** select the columns you need:
+
+Efficient queries also are explicit about columns in the SELECT clause. 
+
+While `SELECT *` is fine to use for testing, it is prone to issues if schemas
+change, as well as returning more data than is necessary in most cases.
+
+```r
+# `SELECT *` will return all columns, usually including many columns you do not need
+q <- "SELECT TOP 1 *
+      FROM mapunit
+      INNER JOIN component ON mapunit.mukey = component.mukey
+WHERE compname LIKE 'Musick%'
+"
+```
+
+```r
+# Use `SELECT column1, column2, ...` for concise results, with no duplicated columns in complex joins
+q <- "
+SELECT TOP 1 mapunit.mukey, musym, muname, 
+             compname, localphase, comppct_r, majcompflag, compkind, cokey
+FROM mapunit
+INNER JOIN component ON mapunit.mukey = component.mukey
+WHERE compname LIKE 'Musick%'
+"
+```
+
+If a column name occurs multiple times in different tables, you need specify
+which one you want it to come from with `<tablename>.<columname>` syntax.
+
+If you do need all columns from a specific table use `<tablename>.*` syntax, for
+example here we get all columns from `chfrags`, and specific columns from
+`chorizon` and `component`:
+
+```r
+q <- "
+SELECT hzname, chfrags.*, component.cokey
+FROM chfrags
+INNER JOIN chorizon ON chorizon.chkey = chfrags.chkey
+INNER JOIN component ON component.cokey = chorizon.cokey
+WHERE compname LIKE 'Musick%'
+"
+```
+
+5. **Use `makeChunks()` for large vectors** (see next section)
+
+`makeChunks()` is a helper function in the soilDB package. It takes a vector of
+values as input, and assigns each value a group (chunk) number. You can then
+calculate the unique chunk numbers and iterate over them to process data in
+bite-sized pieces. This is covered extensively in the next section.
+
+## SQL Dialect Handling
+
+### T-SQL Syntax Specifics 
+
+#### NULL Handling
+
+```r
+# Check and filter for non-NULL - SDA uses IS NULL / IS NOT NULL
+q <- "SELECT TOP 10 * FROM chorizon WHERE claytotal_r IS NOT NULL"
+
+# Use ISNULL() to provide defaults e.g. convert missing clay content to 0
+q <- "SELECT TOP 10 chkey, claytotal_r, ISNULL(claytotal_r, 0) AS clay FROM chorizon"
+```
+
+#### Type Casting
+
+```r
+# CAST for explicit type conversion
+q <- "
+SELECT TOP 10 
+  claytotal_r,
+  CAST(claytotal_r AS INT) AS clay_int,
+  CAST(chkey AS CHAR(10)) AS chkey_str
+FROM chorizon
+WHERE claytotal_r <> CAST(claytotal_r AS INT) 
+"
+```
+
+**Note:** in example above, casting to INT is equivalent to truncating the value by removing decimals, it does not follow the rounding rules that R `round()` does, for example.
+
+#### String Operations
+
+```r
+# Wildcards with LIKE
+q <- "SELECT * FROM mapunit WHERE muname LIKE '%clay%'"
+
+# String concatenation with +
+q <- "SELECT areasymbol + '-' + musym AS areamusym FROM mapunit"
+```
+
+---
+
+## Query Chunking for Large Datasets
+
+### Why "Chunking"?
+
+When you need data for many map units, components, or other entities, a single
+query can exceed SDA's limits.
+
+SDA is a shared public resource, so it is generally encouraged to make requests
+that are as small and efficient as possible.
+
+The `makeChunks()` function divides a large vector into smaller chunks for
+iterative querying.
+
+### Using `makeChunks()`
+
+Suppose you have 5000 mukeys to query:
+
+```{r chunking-example}
+large_mukey_list <- 461994:466994
+
+# Divide into chunks of 1000
+chunks <- soilDB::makeChunks(large_mukey_list, 1000)
+
+# Now loop through chunks
+results_list <- list()
+for (i in unique(chunks)) {
+  # Subset large list to extract just values in chunk `i`
+  chunk_keys <- large_mukey_list[chunks == i]
+ 
+  # construct query 
+  q <- sprintf(
+    "SELECT mukey, musym, muname FROM mapunit WHERE mukey IN (%s)",
+    paste(chunk_keys, collapse = ",")
+  )
+  
+  results_list[[i]] <- SDA_query(q)
+  
+  cat(sprintf("Chunk %d of %d\n", i, length(unique(chunks))))
+}
+
+# Combine results
+all_results <- do.call(rbind, results_list)
+```
+
+### Example Chunked Property Query
+
+Here we query soil properties for 10 map units in chunks:
+
+```{r chunked-property-example}
+test_mukeys <- c(461994, 461995, 462205, 462206, 462207, 
+                 463263, 463264, 464571, 464572, 465186)
+
+# Chunk into groups of 5
+chunks <- soilDB::makeChunks(test_mukeys, 5)
+
+results_list <- list()
+for (i in unique(chunks)) {
+  chunk_keys <- test_mukeys[chunks == i]
+  
+  # Build IN clause
+  in_clause <- paste(chunk_keys, collapse = ",")
+  
+  q <- sprintf("
+    SELECT
+      mu.mukey,
+      mu.musym,
+      mu.muname,
+      co.cokey,
+      co.compname,
+      SUM(hzdepb_r - hzdept_r) AS sum_hz_thickness
+    FROM mapunit AS mu
+    INNER JOIN component AS co ON co.mukey = mu.mukey
+    INNER JOIN chorizon AS ch ON ch.cokey = co.cokey
+    WHERE mu.mukey IN (%s)
+    GROUP BY mu.mukey, mu.musym, mu.muname, co.cokey, co.compname
+  ", in_clause)
+  
+  results_list[[i]] <- SDA_query(q)
+  cat(sprintf("Chunk %d of %d completed\n", i, length(unique(chunks))))
+}
+
+all_results <- do.call(rbind, results_list)
+head(all_results)
+```
+
+**Note:** The above sample query is not a good way to determine soil thickness, as it does not exclude thickness of non-soil layers (e.g. bedrock) that should not be counted as part of the soil depth. AS an exercise, use the logic from the previous sections to improve this example to filter out bedrock.
+
+### Recommended Chunk Sizes
+
+- **Typical queries**: 1000-10000 items per chunk (safe for most queries)
+
+- **Simple lookups**: 10000-100000 items per chunk (less data per item)
+
+- **Complex joins**: 500-1000 items per chunk (more processing per item)
+
+Monitor your query results and adjust based on SDA response times. 
+
+You may get an error:
+
+> Invalid query: The query processor ran out of internal resources and could not produce a query plan. This is a rare event and only expected for extremely complex queries or queries that reference a very large number of tables or partitions. Please simplify the query. If you believe you have received this message in error, contact Customer Support Services for more information.
+
+If you see this, first confirm that your query syntax is correct for the result
+you are trying to obtain, for instance by trying it on a minimal small set of
+data. Critically evaluate the need for joins, subqueries, and complex filtering
+logic. Identify any areas of repeated logic and refactor to simplify redundant
+steps. If your query works as expected on a small data set, and you have
+optimized it, then consider breaking your big query up into (more) chunks.
+
+---
+
+## `get_SDA_property()`: Component and Horizon Properties
+
+The `get_SDA_property()` function queries the "SSURGO On Demand" service to
+retrieve soil component and horizon properties with automatic aggregation to the
+map unit level.
+
+By default `get_SDA_property()` includes minor components
+(`include_minors=TRUE`) but excludes miscellaneous areas
+`miscellaneous_areas=FALSE`. Even miscellaneous areas that have some soil data
+are excluded.
+
+### Available Properties
+
+SDA has 80+ horizon properties and 40+ component properties.
+
+Here are some common examples.
+
+**Component properties:**
+
+ - `"Taxonomic Order"`, `"Taxonomic Suborder"`, `"Taxonomic Temperature Regime"`
+
+ - `"Drainage Class"`, `"Hydrologic Group"`, `"Corrosion of Steel"`, `"Corrosion of Concrete"`
+
+ - `"Range Production - Favorable/Normal/Unfavorable Year"`
+
+**Horizon properties:**
+
+ - **Water**: `"Available Water Capacity - Rep Value"`, `"0.1 bar H2O - Rep Value"`, `"0.33 bar H2O - Rep Value"`, `"15 bar H2O - Rep Value"`
+
+ - **Bulk Density**: `"Bulk Density 0.1 bar H2O - Rep Value"`, `"Bulk Density 0.33 bar H2O - Rep Value"`, `"Bulk Density 15 bar H2O - Rep Value"`, `"Bulk Density oven dry - Rep Value"`
+ 
+ - **Texture**: `"Total Sand - Rep Value"`, `"Total Silt - Rep Value"`, `"Total Clay - Rep Value"`, and sand/silt sub-fractions
+
+ - **Chemistry**: `"pH 1:1 water - Rep Value"`, `"Electrical Conductivity - Rep Value"`, `"Cation Exchange Capacity - Rep Value"`, `"Sodium Adsorption Ratio - Rep Value"`, `"Calcium Carbonate - Rep Value"`, `"Gypsum - Rep Value"`
+ 
+ - **Other**: `"Saturated Hydraulic Conductivity - Rep Value"`, `"Organic Matter - Rep Value"`, `"Free Iron - Rep Value"`, `"Oxalate Iron - Rep Value"`
+
+Alternately, you can directly use physical column names from the SSURGO schema
+like `"claytotal_r"`, `"ph1to1h2o_r"`, `"ksat_r"`, etc.
+
+### Method: Dominant Component (Category)
+
+Dominant component (category) get the categorical value from the dominant soil
+component. This query is a distinct method as categorical data need to be handled
+differently from numeric data; the numeric method is described below. 
+
+```{r get_sda_property_category}
+# Get taxonomic classification from dominant component
+tax_order <- get_SDA_property(
+  property = "Taxonomic Suborder",
+  method = "Dominant Component (Category)",
+  areasymbols = "CA630"
+)
+
+head(tax_order)
+```
+
+### Method: Dominant Component (Numeric)
+
+Dominant component (numeric) retrieves properties from the dominant component,
+optionally averaged over a depth range (in centimeters):
+
+```{r get_sda_property_numeric}
+# Get bulk density at 0-25 cm depth
+bulk_density <- get_SDA_property(
+  property = c("dbthirdbar_l", "dbthirdbar_r", "dbthirdbar_h"),
+  method = "Dominant Component (Numeric)",
+  areasymbols = "CA630",
+  top_depth = 0,
+  bottom_depth = 25
+)
+
+head(bulk_density)
+```
+
+### Method: Weighted Average
+
+The weighted average method retrieves component percentage and depth-weighted
+average across all components in a map unit. In this example we explicitly
+exclude minor components by changing the default `include_minors` argument.
+
+```{r get_sda_property_weighted}
+# Get weighted average clay content (0-50 cm)
+clay_avg <- get_SDA_property(
+  property = "Total Clay - Rep Value",
+  method = "Weighted Average",
+  areasymbols = "CA630",
+  top_depth = 0,
+  bottom_depth = 50,
+  include_minors = FALSE
+)
+
+head(clay_avg)
+```
+
+### Method: Min/Max
+
+Method `"Min/Max" is used to get minimum or maximum values across all
+components in a mapunit.
+
+```{r get_sda_property_minmax}
+# Get maximum sand content in any component
+sand_max <- get_SDA_property(
+  property = "Total Sand - Rep Value",
+  method = "Min/Max",
+  areasymbols = "CA630",
+  FUN = "MAX",
+  top_depth = 0,
+  bottom_depth = 50
+)
+
+head(sand_max)
+```
+
+### Method: Dominant Condition
+
+Dominant condition aggregates components with the same category value for the
+properties of interest, then picks the dominant percentage. This gives extra
+weight to categories where multiple soils in the same map unit have the same
+value.
+
+```{r get_sda_property_dominant_condition}
+# Get dominant drainage class condition
+drain_dominant <- get_SDA_property(
+  property = "Drainage Class",
+  method = "Dominant Condition",
+  areasymbols = "CA630"
+)
+
+head(drain_dominant)
+```
+
+### Method: None
+
+Method `"none"` returns one row per component or component horizon, depending on
+the property selected, with no map unit aggregation. This generally returns much
+more data, but allows for custom aggregation outside of the SQL query, and
+deeper inspection of the source data. 
+
+You cannot mix component-level and
+horizon-level properties with this method. Run it twice, once for horizon-level
+and once for component-level, then join the component data to the horizon data
+using the `cokey` column to get a single data frame.
+
+Also, the `top_depth` and `bottom_depth` arguments are deliberately ignored with
+this method. Apply your own filtering to the result if you only need a specific
+depth range.
+
+
+```{r get_sda_property_none}
+# Get all pH values by component and horizon
+ph_all <- get_SDA_property(
+  property = "pH 1:1 water - Rep Value",
+  method = "None",
+  areasymbols = "CA630"
+)
+
+head(ph_all)
+```
+
+### Inspecting Generated Queries
+
+We can use `query_string = TRUE` to see the SQL generated by `get_SDA_property()`:
+
+```{r get_sda_property_query_string}
+q <- get_SDA_property(
+  property = "Taxonomic Suborder",
+  method = "Dominant Component (Category)",
+  areasymbols = "CA630",
+  query_string = TRUE
+)
+
+# View first 500 characters of query
+cat(substr(q, 1, 500), "...\n")
+```
+
+---
+
+## `get_SDA_interpretation()`: Soil Interpretations
+
+Soil interpretations are ratings that assess how suitable or limited a soil is
+for various land uses. An interpretation for a specific component or map unit
+includes a rating class, and a numeric value ("fuzzy rating"). The
+`get_SDA_interpretation()` function retrieves these ratings with multiple
+aggregation methods.
+
+### Available Interpretations
+
+SDA contains 600+ interpretations organized by category:
+
+| Category | Examples |
+|----------|----------|
+| `FOR` (Forestry) | Potential Seedling Mortality, Road Suitability, Harvest Suitability, Equipment Operability |
+| `AGR` (Agriculture) | Crop Yield, Irrigation Suitability, Pesticide Pollution Potential |
+| `ENG` (Engineering) | Septic Tank Absorption Fields, Construction Roads, Dwelling Foundations, Dam Sites |
+| `URB/REC` (Urban/Recreation) | Trails, Playgrounds, Picnic Areas, Recreational Development |
+| `AWM` (Animal Waste Management) | Wastewater Application Sites, Manure Storage |
+| `WMS` (Water Management System) | Irrigation Suitability, Drainage, Wetland Rating |
+| `CPI` (Commodity Crop Productivity Index) | National Commodity Crop Productivity Index |
+
+### Method: Dominant Component
+
+Get the rating from the dominant soil component:
+
+```{r get_sda_interpretation_dominant_component}
+# Get forestry ratings for dominant component
+for_ratings <- get_SDA_interpretation(
+  rulename = c("FOR - Potential Seedling Mortality",
+               "FOR - Road Suitability (Natural Surface)"),
+  method = "Dominant Component",
+  areasymbols = "CA630"
+)
+
+head(for_ratings)
+```
+
+### Method: Dominant Condition
+
+Aggregate similar ratings, then return the dominant:
+
+```{r get_sda_interpretation_dominant_condition}
+# Get dominant engineering interpretation
+eng_ratings <- get_SDA_interpretation(
+  rulename = "ENG - Septic Tank Absorption Fields",
+  method = "Dominant Condition",
+  areasymbols = "CA649"
+)
+
+head(eng_ratings)
+```
+
+### Method: Weighted Average
+
+Component-percentage-weighted average of ratings:
+
+```{r get_sda_interpretation_weighted_average}
+# Get weighted average agricultural rating
+agr_weighted <- get_SDA_interpretation(
+  rulename = "AGR - Winter Wheat Yield (MT)",
+  method = "Weighted Average",
+  areasymbols = "MT663",
+  include_minors = TRUE
+)
+
+head(agr_weighted)
+```
+
+Note: in this example, a regional (Montana-specific) interpretation is used, so we used a Montana areasymbol (MT663). Some interpretations are only exported for specific states, regions, or soil survey areas.
+
+### Method: None
+
+Return one row per component with no map unit aggregation:
+
+```{r get_sda_interpretation_none}
+# Get all component-level ratings
+all_ratings <- get_SDA_interpretation(
+  rulename = "FOR - Mechanical Planting Suitability",
+  method = "None",
+  areasymbols = "CA630"
+)
+
+head(all_ratings)
+```
+
+### Understanding Output Columns
+
+Use `wide_reason = TRUE` to pivot reason columns into separate sub-rule columns:
+
+```{r get_sda_interpretation_wide_reason}
+# Get detailed ratings with reasons pivoted
+detailed <- get_SDA_interpretation(
+  rulename = "FOR - Mechanical Planting Suitability",
+  method = "Dominant Component",
+  areasymbols = "CA630",
+  wide_reason = TRUE
+)
+
+head(detailed)
+```
+
+---
+
+## `get_SDA_hydric()`: Hydric Soil Classifications
+
+Hydric soils are inundated or saturated long enough during the growing season to
+develop anaerobic conditions. The `get_SDA_hydric()` function evaluates the
+proportion of hydric components in a map unit.
+
+### Method: MAPUNIT (Default)
+
+Returns an overall classification for each map unit:
+
+```{r get_sda_hydric_mapunit}
+hydric_class <- get_SDA_hydric(
+  areasymbols = c("CA077", "CA630"),
+  method = "MAPUNIT"
+)
+
+head(hydric_class)
+
+# Check unique ratings
+unique(hydric_class$HYDRIC_RATING)
+```
+
+Possible classifications:
+
+ - `"Nonhydric"` - No hydric components
+
+ - `"Hydric"` - All major components are hydric
+
+ - `"Predominantly Hydric"` - Hydric components >= 50%
+
+ - `"Partially Hydric"` - One or more major components are hydric
+
+ - `"Predominantly Nonhydric"` - Hydric components < 50%
+
+The output includes:
+
+ - `hydric_majors` - Percentage of hydric major components
+
+ - `hydric_inclusions` - Percentage of hydric minor/inclusion components
+
+ - `total_comppct` - Total component percentage (should sum to 100)
+
+### Method: DOMINANT COMPONENT
+
+Get hydric status of the dominant component only:
+
+```{r get_sda_hydric_dominant_component}
+hydric_dom <- get_SDA_hydric(
+  areasymbols = "CA630",
+  method = "DOMINANT COMPONENT"
+)
+
+head(hydric_dom)
+```
+
+### Method: DOMINANT CONDITION
+
+Aggregate by hydric condition (Yes/No), then pick the dominant:
+
+```{r get_sda_hydric_dominant_condition}
+hydric_cond <- get_SDA_hydric(
+  mukeys = c(461994, 461995, 462205),
+  method = "DOMINANT CONDITION"
+)
+
+head(hydric_cond)
+```
+
+### Method: NONE
+
+Return one row per component (component-level hydric status):
+
+```{r get_sda_hydric_none}
+hydric_all <- get_SDA_hydric(
+  areasymbols = "CA630",
+  method = "NONE"
+)
+
+head(hydric_all)
+```
+
+---
+
+## `get_SDA_muaggatt()`: Map Unit Aggregate Attributes
+
+Map unit aggregate attributes are pre-computed statistics summarizing the
+components in a map unit. These include surface texture, slope range,
+permeability, and other physical properties.
+
+```{r get_sda_muaggatt}
+muagg <- get_SDA_muaggatt(
+  areasymbols = "CA630"
+)
+
+head(muagg)
+str(muagg)
+```
+
+This function returns a data frame with one row per map unit, containing dozens
+of pre-calculated aggregate properties. See the `get_SDA_muaggatt()`
+documentation for the full list of available columns.
+
+### Filtering Results
+
+You can filter by area symbol, map unit key, or custom WHERE clause:
+
+```{r get_sda_muaggatt_filter}
+# Get aggregate attributes for specific mukeys
+muagg_filtered <- get_SDA_muaggatt(
+  mukeys = c(461994, 461995, 463264)
+)
+
+head(muagg_filtered)
+```
+
+---
+
+## `get_SDA_pmgroupname()`: Parent Material Groups
+
+Parent material groups classify the primary geological or organic origin of soil
+material. The `get_SDA_pmgroupname()` function retrieves parent material
+classifications by component.
+
+### Method: DOMINANT COMPONENT
+
+Get parent material from the dominant component:
+
+```{r get_sda_pmgroupname_dominant_component}
+pm_dom <- get_SDA_pmgroupname(
+  areasymbols = "CA630",
+  method = "DOMINANT COMPONENT",
+  simplify = FALSE
+)
+
+head(pm_dom)
+```
+
+### Method: DOMINANT CONDITION
+
+Aggregate parent materials by group, then return the dominant:
+
+```{r get_sda_pmgroupname_dominant_condition}
+pm_cond <- get_SDA_pmgroupname(
+  mukeys = c(461994, 461995, 462205),
+  method = "DOMINANT CONDITION"
+)
+
+head(pm_cond)
+```
+
+### Simplify Parameter
+
+By default, `simplify = TRUE` groups parent materials into broader categories.
+Set `simplify = FALSE` to get detailed group names:
+
+```{r get_sda_pmgroupname_simplify}
+# Simplified (broader groups)
+pm_simple <- get_SDA_pmgroupname(
+  mukeys = c(461994, 461995),
+  simplify = TRUE
+)
+
+head(pm_simple)
+
+# Detailed (specific groups)
+pm_detailed <- get_SDA_pmgroupname(
+  mukeys = c(461994, 461995),
+  simplify = FALSE
+)
+
+head(pm_detailed)
+```
+
+---
+
+## `get_SDA_coecoclass()`: Component Ecological Classes
+
+Ecological classes describe potential natural vegetation and ecological
+conditions. The `get_SDA_coecoclass()` function retrieves ecological site
+classifications by component.
+
+A worked example of this function is available in the ["Dominant Ecological
+Site" vignette](dominant-es.html).
+
+### Method: NONE (Default)
+
+Return component-level ecological classes without aggregation:
+
+```{r get_sda_coecoclass_none}
+eco_none <- get_SDA_coecoclass(
+  method = "None",
+  areasymbols = "CA630"
+)
+
+head(eco_none)
+```
+
+The default behavior targets the NRCS Ecological Site database-related entries,
+but there are many other ecological/vegetation class types in SSURGO.
+
+Columns include:
+
+ - `ecoclassid` - Ecological Class ID
+
+ - `ecoclassname` - Full ecological class name
+
+ - `ecoclasstypename` - Type (e.g., `"NRCS Rangeland Site"`, `"NRCS Forestland Site"`)
+
+ - `ecoclassref` - Reference document
+
+### Method: DOMINANT COMPONENT
+
+Get ecological site from the dominant component only:
+
+```{r get_sda_coecoclass_dominant_component}
+eco_dom <- get_SDA_coecoclass(
+  method = "Dominant Component",
+  areasymbols = "CA630"
+)
+
+head(eco_dom)
+```
+
+### Method: DOMINANT CONDITION
+
+Aggregate ecological classes by ID, then return the dominant:
+
+```{r get_sda_coecoclass_dominant_condition}
+eco_cond <- get_SDA_coecoclass(
+  method = "Dominant Condition",
+  mukeys = c(461994, 461995, 462205),
+  ecoclasstypename = "NRCS Forestland Site"
+)
+
+head(eco_cond)
+```
+
+### Method: ALL
+
+Return all ecological sites per map unit in wide format:
+
+```{r get_sda_coecoclass_all}
+eco_all <- get_SDA_coecoclass(
+  method = "All",
+  mukeys = c(461994, 461995),
+  threshold = 5
+)
+
+head(eco_all)
+```
+
+Filtering by ecological class type:
+
+```{r get_sda_coecoclass_ecoclasstypename}
+# Get rangeland sites only
+eco_range <- get_SDA_coecoclass(
+  method = "Dominant Condition",
+  areasymbols = "CA630",
+  ecoclasstypename = "NRCS Rangeland Site"
+)
+
+head(eco_range)
+```
+
+---
+
+## `get_SDA_cosurfmorph()`: Component Surface Morphometry
+
+Surface morphometry describes the three-dimensional shape and position of a
+landscape. The `get_SDA_cosurfmorph()` function returns component-level
+geomorphic classifications aggregated in various ways.
+
+### Available Tables
+
+SDA contains four cosurfmorph tables:
+
+| Table | Variables | Description |
+|-------|-----------|-------------|
+| `cosurfmorphgc` | `geomposmntn`, `geomposhill`, `geomposflats`, `geompostrce` | 3D geomorphic classification |
+| `cosurfmorphhpp` | `hillslopeprof` | 2D hillslope position profile |
+| `cosurfmorphss` | `shapeacross`, `shapedown` | Surface shape (convex/concave/linear) |
+| `cosurfmorphmr` | `geomicrorelief` | Microrelief (slope complexity) |
+
+### Example: 3D Geomorphic Classification
+
+```{r get_sda_cosurfmorph_3d}
+# Get geomorphic position by component name
+geom_3d <- get_SDA_cosurfmorph(
+  table = "cosurfmorphgc",
+  areasymbols = "CA630"
+)
+
+head(geom_3d)
+```
+
+Output includes columns like:
+
+ - `compname` - Component name
+
+ - `geomposmntn`, `geomposmntn_n` - Mountain position (count)
+
+ - `p_geomposmntn` - Mountain position proportion
+
+### Example: Hillslope Position by Area
+
+```{r get_sda_cosurfmorph_hillslope}
+# Get hillslope position aggregated by area symbol
+geom_hill <- get_SDA_cosurfmorph(
+  table = "cosurfmorphhpp",
+  by = "areasymbol",
+  areasymbols = "CA630"
+)
+
+head(geom_hill)
+```
+
+### Example: Surface Shape
+
+```{r get_sda_cosurfmorph_surface_shape}
+# Get surface shape classes
+geom_shape <- get_SDA_cosurfmorph(
+  table = "cosurfmorphss",
+  areasymbols = "CA649"
+)
+
+head(geom_shape)
+```
+
+### Example: Microrelief
+
+```{r get_sda_cosurfmorph_microrelief}
+# Get microrelief by component name
+geom_micro <- get_SDA_cosurfmorph(
+  table = "cosurfmorphmr",
+  areasymbols = "CA630"
+)
+
+head(geom_micro)
+```
+
+---
+
+## `fetchSDA()`: Get Soil Profile Collection
+
+The `fetchSDA()` function is a high-level wrapper around `SDA_query()` that
+simplifies the process of downloading and assembling soil profile data into a
+`SoilProfileCollection` object from the package `aqp`. It automatically handles
+the complex joins between map unit, component, and horizon tables.
+
+### Basic Usage
+
+You can fetch all components and horizons for a specific area or set of map
+units using the `WHERE` argument:
+
+```{r fetchsda-example}
+library(aqp)
+
+# Query soil components by areasymbol and musym
+s <- fetchSDA(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
+
+# The result is a SoilProfileCollection
+print(s)
+
+# Check the horizon data
+head(horizons(s))
+```
+
+This function is very powerful for getting a quick snapshot of the soil profiles
+in an area.
+
+It is worth noting that `fetchSDA()` returns data from *both* SSURGO and
+STATSGO2. To limit to SSURGO, use `WHERE = "areasymbol != 'US'"` (see the Data
+Filtering section), or specify a SSURGO area symbol.
+
+### Handling Duplicates
+
+The `duplicates` argument (defaulting to `FALSE`) controls how components that appear in multiple survey areas are handled.
+
+*   **`duplicates = FALSE` (Default)**: Returns only one instance of a component per `nationalmusym`. This eliminates "duplication" where multiple survey area (legend) map units are linked to the same source `mapunit` and `component` records. This is generally preferred for statistical analysis of soil properties.
+*   **`duplicates = TRUE`**: Returns a record for each unique map unit key (`mukey`). This is useful for visualization or when you need to account for every occurrence of a component across different survey area correlations.
+
+---
+
+## `fetchLDM()`: Get Laboratory Data
+
+The `fetchLDM()` function provides access to the Kellogg Soil Survey Laboratory
+(KSSL) Data Mart via Soil Data Access. It allows for querying laboratory data by
+various criteria and returning it as a `SoilProfileCollection`.
+
+### Basic Usage
+
+You can fetch lab data by specifying an identifier (like an area symbol) and the
+column it corresponds to (`what` argument):
+
+```{r fetchldm-example-area}
+# Fetch KSSL data for a specific soil survey area (CA630)
+# 'what' argument specifies we are searching by 'area_code'
+# 'tables' argument specifies which data tables to include (defaults to core tables)
+ldm_data <- fetchLDM("CA630", what = "area_code")
+
+# The result is a SoilProfileCollection
+print(ldm_data)
+
+# Inspect site data
+head(site(ldm_data))
+```
+
+### Querying by Taxon Name
+
+You can also search by correlated or sampled-as taxon names using a custom `WHERE` clause:
+
+```{r fetchldm-example-taxon}
+# Fetch lab data where the correlated or sampled name is 'Musick' or 'Holland'
+# CASE statement handles differences between correlated and sampled names
+ldm_taxon <- fetchLDM(WHERE = "(CASE WHEN corr_name IS NOT NULL 
+                                THEN LOWER(corr_name) 
+                                ELSE LOWER(samp_name) 
+                            END) IN ('musick', 'holland')")
+
+print(ldm_taxon)
+```
+
+### Advanced Usage: Specific Tables
+
+By default, `fetchLDM()` retrieves a standard set of tables. You can request
+specific data, such as physical properties, using the `tables` argument:
+
+```{r fetchldm-example-tables}
+# Fetch physical properties for soils correlated as "Typic Argialbolls"
+ldm_phys <- fetchLDM(x = "Typic Argialbolls", 
+                     what = "corr_taxsubgrp", 
+                     tables = "lab_physical_properties")
+
+# Inspect the available horizon data columns
+names(horizons(ldm_phys))
+```
+
+`fetchLDM` supports retrieving data from various KSSL tables, including chemical properties, mineralogy, and x-ray analysis.
+
+---
+
+## Spatial Queries
+
+This document mainly focuses on details of custom spatial queries using the
+low-level `SDA_query()` function, but there are several functions that provide
+high-level convenience interface for spatial queries in `soilDB`. First we will
+discuss converting spatial data to Well-Known Text for use in generating custom
+queries. Then we will discuss the high- and low-level interfaces in `soilDB`.
+
+### Converting sf Objects to WKT
+
+**Important:** SDA requires spatial inputs (WKT) to be in **WGS84 (EPSG:4326)** geographic coordinates. 
+
+Passing projected coordinates (like UTM or Albers) will result in query failures
+or zero results.
+
+SDA does store an alternate projected version of the geometry data (e.g.
+`mupolygonproj`, rather than `mupolygongeo`). The projection is a Web Mercator
+projection (`"EPSG:3857"`) so it is best avoided in analysis, though it is an
+option for visualization web map applications that lack capability to project
+the data.
+
+You can use `sf` to define a geometry, such as a bounding recatangle, and
+convert it to WKT (Well-Known Text) for spatial queries:
+
+```{r spatial-wkt-example}
+library(sf)
+
+# Define a bounding box for a region of interest
+# (xmin, ymin, xmax, ymax)
+bbox <- c(-120.9, 37.7, -120.8, 37.8)
+bbox_sf <- st_as_sfc(st_bbox(c(
+  xmin = bbox[1],
+  ymin = bbox[2],
+  xmax = bbox[3],
+  ymax = bbox[4]
+), crs = 4326))
+
+wkt <- st_as_text(bbox_sf)
+
+wkt
+```
+
+### High-level Functions
+
+The soilDB package provides two higher-level functions (`SDA_spatialQuery()` and
+`fetchSDA_spatial()`) that make obtaining spatial data easier. Both of these
+functions internally use `SDA_query()` and are often a better option for most
+use cases compared to crafting a custom spatial query.
+
+ - **`SDA_spatialQuery()`**: spatial inputs (e.g. point location, AOI rectangle) => spatial or tabular outputs
+
+ - **`fetchSDA_spatial()`**: tabular inputs (e.g. map unit key, area symbol, ecological site ID) => spatial outputs
+
+The functions take different inputs, and support various outputs including
+SSURGO and STATSGO2 map unit polygon geometry, special feature
+points/lines/polygons, soil survey area boundaries, Major Land Resource Area
+(MLRA) boundaries, or simple tabular information using spatial data as input.
+These functions will handle projection to `"EPSG:4326"` internally as long as the
+input data has the correct CRS metadata.
+
+```{r high-level-spatial-example}
+# Example: Retrieve map unit polygons that intersect a bounding box
+# This handles the WKT conversion and query construction automatically
+# geomIntersection = TRUE clips the polygons to the bounding box
+
+polygons <- SDA_spatialQuery(bbox_sf, what = "mupolygon", geomIntersection = TRUE)
+polygons
+```
+
+This section will be expanded in the future, but for now an example application
+of the two higher-level function is available in the ["Dominant Ecological Site"
+vignette](dominant-es.html).
+
+
+### Spatial Queries: The Two-Step Pattern
+
+For optimal performance, separate your spatial and tabular queries. Fetch the
+list of intersecting map unit keys (`mukey`) first, then use those keys to query
+attribute tables. 
+
+This avoids joining heavy geometry columns with complex attribute tables, which
+can trigger the 32Mb serialization limit. Then we can use the WKT in a custom
+SDA query to get map units intersecting the bounding box:
+
+```{r spatial-sda-query-example}
+# Step 1: Get the mukeys that intersect the bounding box
+q <- sprintf("
+  SELECT DISTINCT mu.mukey
+  FROM mapunit AS mu
+  INNER JOIN mupolygon AS mp ON mp.mukey = mu.mukey
+  WHERE mp.mupolygongeo.STIntersects(geometry::STGeomFromText('%s', 4326)) = 1
+", wkt)
+
+spatial_result <- SDA_query(q)
+head(spatial_result, 5)
+```
+
+This query uses special geospatial functions defined in SQL Server to perform
+the geometric operations (in this case "intersection")
+
+### SDA Spatial Helper Functions
+
+In addition to standard T-SQL spatial functions, SDA provides pre-defined
+**Table-Valued Functions** (TVFs) optimized for intersections.
+
+*   `SDA_Get_Mukey_from_intersection_with_WktWgs84(wkt)`: Returns `mukey` values intersecting the input WKT.
+*   `SDA_Get_MupolygonWktWgs84_from_Mukey(mukey)`: Returns WKT geometry for a specific `mukey`.
+
+This makes the logic much simpler for the common operations of finding `mukey`
+given a spatial location or geometry:
+
+```{r sda-helper-function}
+# Input MUST be WKT in WGS84 (EPSG:4326)
+q <- "SELECT * FROM SDA_Get_Mukey_from_intersection_with_WktWgs84('POINT(-120.9 37.7)')"
+result <- SDA_query(q)
+```
+
+Also, you can do the inverse (mukey to geometry):
+
+```{r sda-helper-function-geometry}
+# 2. Get Geometry from Map Unit Key (mukey)
+# Useful for retrieving the polygon boundary for a specific map unit
+target_mukey <- 461994
+
+q <- sprintf("SELECT * FROM SDA_Get_MupolygonWktWgs84_from_Mukey('%s')", target_mukey)
+
+# Result contains the mukey and the geometry in WKT format
+geometry_df <- SDA_query(q)
+
+head(geometry_df)
+```
+
+Using the 'sf' (or `terra`) package, you can convert the resulting text WKT column to a
+spatial object:
+
+```{r}
+if (requireNamespace("sf", quietly = TRUE) &&
+   !is.null(geometry_df)) {
+  # Parse WKT column (usually named 'mupolygongeo' in mupolygon table, but 'MupolygonWktWgs84' in TVF result)
+  poly_sf <- sf::st_as_sfc(geometry_df$MupolygonWktWgs84, crs = 4326)
+  
+  plot(poly_sf, main = paste("Geometry for mukey=", target_mukey))
+}
+```
+
+**Note:** The TVF function name implies the CRS is WGS84 (authority:code `EPSG:4326`, SRS ID `4326`; or, more correctly, `OGC:CRS84`).
+
+See the [SDA Advanced Query Guide](https://sdmdataaccess.nrcs.usda.gov/documents/AdvancedQueries.html)
+for more details on TVF functions and other high-level features built into SDA.
+ 
+### Spatial and Tabular Property Integration
+
+We can use the result of our spatial filtering with property queries.
+
+Here we extract the unique map unit keys and pass as `mukeys` argument to
+`get_SDA_property()`
+
+```{r spatial-property-integration}
+# Step 2: Use the mukeys to fetch tabular data
+# First, get mukeys in bounding box
+spatial_mukeys <- unique(spatial_result$mukey)
+
+# Then query properties for those mukeys
+if (length(spatial_mukeys) > 0) {
+  clay_in_bbox <- get_SDA_property(
+    property = "Total Clay - Rep Value",
+    method = "Weighted Average",
+    mukeys = spatial_mukeys,
+    top_depth = 0,
+    bottom_depth = 50
+  )
+  
+  head(clay_in_bbox)
+}
+```
+
+This shows how to get the data, see the [Local SSURGO vignette](local-ssurgo.html) 
+for more spatial visualization examples using `sf`.
+
+---
+
+## Integration Examples: Combining Multiple Functions
+
+### Example 1: Multi-Method Property Comparison
+
+Compare the same property using different aggregation methods:
+
+```{r integration-example-1}
+# Get clay content using three different methods
+methods <- c("Dominant Component (Numeric)", "Weighted Average", "Max")
+
+clay_results <- data.frame()
+
+for (method in methods) {
+  result <- get_SDA_property(
+    property = "Total Clay - Rep Value",
+    method = method,
+    areasymbols = "CA630",
+    top_depth = 0,
+    bottom_depth = 50
+  )
+  
+  result$method <- method
+  clay_results <- rbind(clay_results, result)
+}
+
+# compare methods for a single map unit
+subset(clay_results, mukey == 1865918)
+```
+
+### Example 2: Properties and Interpretations for Land Use Planning
+
+Combine soil properties and interpretations for a land use suitability
+assessment:
+
+```{r integration-example-2}
+# Get drainage class and hydrologic group
+drain_hydro <- get_SDA_property(
+  property = c("Drainage Class", "Hydrologic Group"),
+  method = "Dominant Condition",
+  areasymbols = "CA630"
+)
+
+# Get an engineering interpretation
+eng_interp <- get_SDA_interpretation(
+  rulename = "ENG - Septic Tank Absorption Fields",
+  method = "Dominant Condition",
+  areasymbols = "CA630"
+)
+
+# Explicitly merge on mukey (and other shared columns to avoid duplication)
+suitability <- merge(drain_hydro, eng_interp, 
+                     by = c("mukey", "areasymbol", "musym", "muname"))
+
+head(suitability)
+```
+
+### Example 3: Hydric Status and Interpretations
+
+Combine hydric classifications with wetland-related interpretations:
+
+```{r integration-example-3}
+# Get a generalized mapunit-level hydric classification
+# see ?get_SDA_hydric for details on method="mapunit"
+hydric_stat <- get_SDA_hydric(
+  areasymbols = "CA077",
+  method = "MAPUNIT"
+)
+
+wet_interp <- get_SDA_interpretation(
+  rulename = "WMS - Excavated Ponds (Aquifer-fed)",
+  method = "Dominant Condition",
+  areasymbols = "CA077"
+)
+
+wetland_assess <- merge(hydric_stat, wet_interp,
+                        by = c("mukey", "areasymbol", "musym", "muname"),
+                        all.x = TRUE)
+
+subset(wetland_assess, rating_WMSExcavatedPondsAquiferfed < 0.6)
+```
+
+### Example 4: Aggregating Across Multiple Areas
+
+Here we use base R `aggregate()` (feel free to swap in your favorite R
+aggregation method e.g. `dplyr`, `data.table`, or `collapse`) to summarize
+across survey areas:
+
+```{r integration-example-4}
+# Get properties for two areas
+props_ca630 <- get_SDA_property(
+  property = "Total Clay - Rep Value",
+  method = "Dominant Component (Numeric)",
+  areasymbols = "CA630"
+)
+
+props_ca649 <- get_SDA_property(
+  property = "Total Clay - Rep Value",
+  method = "Dominant Component (Numeric)",
+  areasymbols = "CA649"
+)
+
+# Combine
+all_props <- rbind(props_ca630, props_ca649)
+
+# Aggregate by area symbol
+area_summary <- aggregate(
+  claytotal_r ~ areasymbol,
+  data = all_props,
+  FUN = function(x) {
+    c(
+      mean = mean(x, na.rm = TRUE),
+      median = median(x, na.rm = TRUE),
+      sd = sd(x, na.rm = TRUE),
+      n = sum(!is.na(x))
+    )
+  }
+)
+
+area_summary
+```
+
+### Example 5: Component-Level Analysis
+
+Use `method = "None"` to perform custom component-level analysis:
+
+```{r integration-example-5}
+# Get all component properties without aggregation
+clay_by_comp <- get_SDA_property(
+  property = "Total Clay - Rep Value",
+  method = "None",
+  areasymbols = "CA630",
+  top_depth = 0,
+  bottom_depth = 25,
+  include_minors = TRUE
+)
+
+head(clay_by_comp)
+
+# Calculate average clay by major vs. minor components
+clay_summary <- aggregate(
+  claytotal_r ~ majcompflag,
+  data = clay_by_comp,
+  FUN = mean
+)
+
+clay_summary
+```
+
+---
+
+## Summary and Best Practices
+
+### Key Takeaways
+
+1. **Use `SDA_query()`** for custom SQL queries when predefined functions don't fit your needs
+2. **T-SQL syntax**: Use `TOP`, `ISNULL()`, `CAST()` for SDA queries
+3. **Query limits**: Keep result sets < 100k records and < 32 Mb; use chunking for large datasets
+4. **Aggregation methods**: Choose an appropriate method (`Dominant Component`, `Weighted Average`, `None`, etc.) for your analysis
+5. **Local vs. remote**: Use `dsn` parameter to query local SSURGO databases (see [Local SSURGO vignette](local-ssurgo.html))
+6. **Spatial queries**: Combine WKT geometry with `SDA_query()` for location-based searches (or use `SDA_spatialQuery()`)
+
+### Recommended Workflow
+
+1. Start with small test queries using e.g. `TOP 10`, or a small number of inputs, to verify syntax and result table structure
+2. Use `query_string = TRUE` to inspect generated SQL
+3. Scale up with `areasymbols` or `mukeys` parameters
+4. Use chunking for "large" data sets (greater than ~10,000 items, see `makeChunks()` section for suggested chunk sizes)
+5. Cache results locally if repeating queries
+6. Refer to official SDA documentation for table/column details
+
+### SDA Resources
+
+- **SDA Table Relationships Diagram:** [https://sdmdataaccess.sc.egov.usda.gov/documents/TableRelationshipsDiagram.pdf](https://sdmdataaccess.sc.egov.usda.gov/documents/TableRelationshipsDiagram.pdf)
+- **Column Descriptions:** [https://www.nrcs.usda.gov/sites/default/files/2022-08/SSURGO-Metadata-Table-Column-Descriptions-Report.pdf](https://www.nrcs.usda.gov/sites/default/files/2022-08/SSURGO-Metadata-Table-Column-Descriptions-Report.pdf)
+- [SDA Query Help](https://sdmdataaccess.nrcs.usda.gov/queryhelp.aspx)
+- [SDA Query Samples](https://sdmdataaccess.nrcs.usda.gov/queryhelp.aspx#Samples)
+- [SDA Table/Column Descriptions](https://sdmdataaccess.nrcs.usda.gov/documents/TableColumnDescriptionsReport.pdf)
+- [soilDB Reference Index](https://ncss-tech.github.io/soilDB/reference/index.html)
+- [Local SSURGO Vignette](local-ssurgo.html) - For creating and querying local SSURGO databases
+- [Dominant Ecological Sites Vignette](dominant-es.html) - For a fully worked example of combining spatial data with tabular (Ecological Site) data to make thematic maps
+
+---
+
+## Appendix: Common SDA Tables and Columns
+
+### Core Tables
+
+| Table | Primary Key | Parent Table | Description |
+|-------|-------------|-------------|-------------|
+| `legend` | `lkey` | N/A | Soil survey area (e.g., CA630) |
+| `mapunit` | `mukey` | `legend` | Delineated soil mapping unit |
+| `component` | `cokey` | `mapunit` | Soil component within a map unit |
+| `chorizon` | `chkey` | `component` | Soil horizon within a component |
+| `cointerp` | `cointerpkey` | `component` | Component-level interpretations |
+| `coecoclass` | `coecoclasskey` | `component` | Component ecological classes |
+| `copmgrp` | `copmgrpkey` | `component` | Component parent material groups |
+| `mupolygon` | `mupolygonkey` | N/A | Map unit polygons |
+
+### Common Columns
+
+| Column | Table | Description | Example |
+|--------|-------|-------------|---------|
+| `areasymbol` | legend | Soil survey area code | "CA630" |
+| `musym` | mapunit | Map unit symbol | "7159" |
+| `muname` | mapunit | Map unit name | "Sierra coarse sandy loam, 3 to 8 percent slopes" |
+| `compname` | component | Component/soil series name | "Sierra" |
+| `comppct_r` | component | Component percentage (representative) | 85 |
+| `majcompflag` | component | Major component flag | "Yes"/"No" |
+| `claytotal_r` | chorizon | Total clay percentage | 12.5 |
+| `hzdept_r` | chorizon | Horizon depth top (cm) | 0 |
+| `hzdepb_r` | chorizon | Horizon depth bottom (cm) | 25 |
+| `hydricrating` | component | Hydric soil status | "Yes"/"No" |
+| `mrulename` | cointerp | Interpretation rule name | "FOR - Mechanical Planting Suitability" |
+| `interphr` | cointerp | Interpretation rating/class | "Somewhat Limited" |
+| `mupolygongeo` | mupolygon | Map unit polygon geometry (WKT; WGS84 geographic coordinates in decimal degrees) | "POLYGON (...)" |
