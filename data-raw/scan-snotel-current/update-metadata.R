@@ -1,6 +1,6 @@
 ## Coordinate the latest SCAN/SNOTEL/SNOLITE metadata from authoritative sources.
 ## J.M. Skovlin and D.E. Beaudette
-## 2024-09-17
+## 2025-03-06
 
 library(soilDB)
 library(jsonlite)
@@ -40,7 +40,12 @@ s <- data.frame(
 
 
 ## get the latest station metadata from WCIS database API
-x <- fromJSON('https://wcc.sc.egov.usda.gov/awdbRestApi/services/v1/stations?activeOnly=true&returnForecastPointMetadata=false&returnReservoirMetadata=false&returnStationElements=false&stationTriplets=*%3A*%3ASNTL%2C*%3A*%3ASCAN%2C*%3A*%3ASNTLT%2C*%3A*%3ACSCAN')
+# SCAN (SCAN)
+# CSCAN (CSCAN)
+# SNOTEL (SNTL)
+# SNOLITE (SNTLT)
+# snow courses (SNOW)
+x <- fromJSON('https://wcc.sc.egov.usda.gov/awdbRestApi/services/v1/stations?activeOnly=true&returnForecastPointMetadata=false&returnReservoirMetadata=false&returnStationElements=false&stationTriplets=*%3A*%3ASNTL%2C*%3A*%3ASCAN%2C*%3A*%3ASNTLT%2C*%3A*%3ACSCAN%2C*%3A*%3ASNOW')
 
 str(x)
 
@@ -60,7 +65,7 @@ x[idx, ]
 # remove for now
 x <- x[-idx, ]
 
-# 1186
+# 2316
 nrow(x)
 
 
@@ -125,6 +130,10 @@ names(x)[which(nm == 'elevation')] <- 'Elevation_ft'
 # coordinates
 names(x)[which(nm == 'latitude')] <- 'Latitude'
 names(x)[which(nm == 'longitude')] <- 'Longitude'
+
+## tabulate networks
+table(x$Network)
+
 
 
 ## TODO after the next iteration
