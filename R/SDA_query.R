@@ -105,6 +105,55 @@ format_SQL_in_statement <- function(x) {
 #'    str(x)
 #' }
 SDA_query <- function(q, dsn = NULL) {
+  
+  # construct header for SDA metrics
+  fn <- NULL
+  fne <- NULL
+  
+  tryCatch({
+    ## prepend info about the caller as query comment header
+    calls <- sys.calls()
+    
+    # prevent iteration over very large call stacks
+    if (length(calls) > 100) {
+      calls <- calls[1:100]
+    }
+    
+    # determine environment name for each call stack
+    envs <- sapply(calls, function(x)
+      try(environmentName(environment(eval(x[[1]]))), silent = TRUE))
+    
+    # keep only soilDB calls
+    calls <- calls[grepl("soilDB", as.character(envs))]
+    
+    # extract the function call and environment name
+    fn <- calls[[1]][[1]]
+    fne <- try(environmentName(environment(eval(fn))), silent = TRUE)
+    
+    # handle namespaced function calls
+    fn <- as.character(fn)[length(fn)]
+  }, error = function(e) {
+    # silently skip to fallback on error
+  }, finally = {
+    if (length(fn) == 0 ||
+        !nzchar(fn) ||
+        !nzchar(fne) ||
+        inherits(fne, 'try-error')) {
+      fn <- "SDA_query"
+      fne <- "soilDB"
+    }
+  })
+  
+  if (nzchar(fne)) {
+    sep <- "::"
+    if (fne == "soilDB" && startsWith(fn, ".")) {
+      sep <- ":::"
+    }
+    fn <- paste0(fne, sep, fn)
+  }
+  
+  q <- paste0(.SDA_comment_header(fn), "\n", q)
+  
   if (is.null(dsn)) {
     res <- .SDA_query(q)
     if (inherits(res, 'try-error')) {
