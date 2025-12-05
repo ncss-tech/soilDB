@@ -17,7 +17,6 @@
 get_component_data_from_NASIS_db(
   SS = TRUE,
   nullFragsAreZero = TRUE,
-  stringsAsFactors = NULL,
   dsn = NULL
 )
 
@@ -29,7 +28,6 @@ get_component_correlation_data_from_NASIS_db(
   SS = TRUE,
   dropAdditional = TRUE,
   dropNotRepresentative = TRUE,
-  stringsAsFactors = NULL,
   dsn = NULL
 )
 
@@ -37,17 +35,9 @@ get_component_cogeomorph_data_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 get_component_cogeomorph_data_from_NASIS_db2(SS = TRUE, dsn = NULL)
 
-get_component_copm_data_from_NASIS_db(
-  SS = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_component_copm_data_from_NASIS_db(SS = TRUE, dsn = NULL)
 
-get_component_esd_data_from_NASIS_db(
-  SS = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_component_esd_data_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 get_component_otherveg_data_from_NASIS_db(SS = TRUE, dsn = NULL)
 
@@ -65,8 +55,6 @@ get_component_horizon_data_from_NASIS_db(
 the entire local database (default: \code{TRUE})}
 
 \item{nullFragsAreZero}{should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)}
-
-\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path or \emph{DBIConnection} to
 \link[=NASISLocalDatabase]{local database containing NASIS table
@@ -89,8 +77,6 @@ Functions for getting component and related child table data from local NASIS da
 \donttest{
 if(local_NASIS_defined()) {
  fc <- try(get_component_data_from_NASIS_db())
-
- # show structure of component data returned
  str(fc)
 }
 }

@@ -41,8 +41,6 @@
 #' classifying factors. This is useful when a class has large number of unused
 #' classes, which can waste space in tables and figures.
 #'
-#' @param stringsAsFactors deprecated
-#'
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
@@ -60,9 +58,8 @@ uncode <- function(df,
                    invert = FALSE,
                    db = "NASIS",
                    droplevels = FALSE,
-                   stringsAsFactors = NULL,
+                   
                    dsn = NULL) {
-  
   if (!missing(db)) {
     .Deprecated(msg = "passing `db` argument to uncode is no longer necessary, lookups are based on ChoiceName and/or ChoiceLabel")
   }
@@ -70,11 +67,6 @@ uncode <- function(df,
   if (getOption("soilDB.NASIS.skip_uncode", default = FALSE)) {
     # some static instances of NASIS come pre-decoded
     return(df)
-  }
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
   }
   
   metadata <- get_NASIS_metadata(dsn = dsn)
@@ -131,7 +123,7 @@ uncode <- function(df,
   }
 
   # convert factors to strings/numeric, check soilDB option first
-  if (invert || (length(stringsAsFactors) > 0 && !stringsAsFactors) || !NASISDomainsAsFactor()) {
+  if (invert || !NASISDomainsAsFactor()) {
     idx <- unlist(lapply(df, is.factor))
     df[idx] <- lapply(df[idx], function(x) {
       type.convert(x, as.is = TRUE)
@@ -147,9 +139,8 @@ uncode <- function(df,
 code <- function(df, 
                  db = NULL,
                  droplevels = FALSE,
-                 stringsAsFactors = NULL,
                  dsn = NULL) {
-  res <- uncode(df, invert = TRUE, droplevels = droplevels, stringsAsFactors = stringsAsFactors, dsn = dsn) 
+  res <- uncode(df, invert = TRUE, droplevels = droplevels, dsn = dsn) 
   return(res)
 }
 

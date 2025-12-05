@@ -67,7 +67,6 @@
 #'   mapunits?). This will include columns from
 #'   `get_component_correlation_data_from_NASIS_db()` that identify which
 #'   legend(s) a component is used on.
-#' @param stringsAsFactors deprecated
 #' @param dsn Optional: path or _DBIConnection_ to
 #'   \link[=NASISLocalDatabase]{local database containing NASIS table
 #'   structure}; default: `NULL`
@@ -88,15 +87,9 @@ fetchNASIS <- function(from = 'pedons',
                        dropAdditional = TRUE,
                        dropNonRepresentative = TRUE,
                        duplicates = FALSE,
-                       stringsAsFactors = NULL,
                        dsn = NULL) {
 
   res <- NULL
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
 
   # sanity check
   if (!from %in% c('pedons', 'components', 'pedon_report')) {

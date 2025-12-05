@@ -1,8 +1,14 @@
-# soilDB 2.8.14 (development)
+# soilDB 2.9.0 (development)
+ - R version >= 4.1.0 is now required
+ - Deprecated `stringsAsFactors` argument has been removed from many query functions, use `NASISChoiceList()` and/or `NASISDomainsAsFactor()` instead for manual or automatic setting of domain values as factors, respectively
+  
+# soilDB 2.8.14 (2025-12-04)
  - `taxaExtent()` updates:
    - Added family mineralogy class grids 
    - Added argument `type` for selecting the type of query; replaces deprecated `formativeElement`
-
+ - `SDA_query()` now includes additional metadata (comment header in SQL) to inform usage metrics of various access points to SDA
+ - `fetchSDA()` and related lower-level child functions now include `nasiscoiid` and `nasischiid` for relating to internal database record IDs
+ 
 # soilDB 2.8.13 (2025-09-26)
  - Added `get_SDA_NASIS_key()` for obtaining NASIS record IDs for component and component horizon data from Soil Data Access (#409)
  - `SDA_spatialQuery()` fixed a bug with new `addFields` argument and `geomIntersection=TRUE` (#414)

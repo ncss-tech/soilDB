@@ -21,17 +21,12 @@ fetchNASIS(
   dropAdditional = TRUE,
   dropNonRepresentative = TRUE,
   duplicates = FALSE,
-  stringsAsFactors = NULL,
   dsn = NULL
 )
 
-get_concentrations_from_NASIS_db(
-  SS = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_concentrations_from_NASIS_db(SS = TRUE, dsn = NULL)
 
-get_phfmp_from_NASIS_db(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
+get_phfmp_from_NASIS_db(SS = TRUE, dsn = NULL)
 }
 \arguments{
 \item{from}{Determines what objects should fetched? Default: \code{'pedons'}.
@@ -75,8 +70,6 @@ optionally for additional mapunits, and/or non-representative data
 mapunits?). This will include columns from
 \code{get_component_correlation_data_from_NASIS_db()} that identify which
 legend(s) a component is used on.}
-
-\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path or \emph{DBIConnection} to
 \link[=NASISLocalDatabase]{local database containing NASIS table

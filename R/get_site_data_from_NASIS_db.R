@@ -26,7 +26,6 @@
 #' database (default: `TRUE`)
 #' @param include_pedon Include pedon and transect data joined to site? (default: `TRUE`)
 #' @param nullFragsAreZero should surface fragment cover percentages of `NULL` be interpreted as `0`? (default: `TRUE`)
-#' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS table structure; default: `NULL`
 #'
 #' @return A data.frame
@@ -36,11 +35,7 @@
 #' @keywords manip
 #'
 #' @export get_site_data_from_NASIS_db
-get_site_data_from_NASIS_db <- function(SS = TRUE,
-                                        include_pedon = TRUE,
-                                        nullFragsAreZero = TRUE,
-                                        stringsAsFactors = NULL,
-                                        dsn = NULL) {
+get_site_data_from_NASIS_db <- function(SS = TRUE, include_pedon = TRUE, nullFragsAreZero = TRUE,dsn = NULL) {
   
   .soilDB_warn_deprecated_aliases(
     c(
@@ -56,11 +51,6 @@ get_site_data_from_NASIS_db <- function(SS = TRUE,
   )
   
   .SD <- NULL
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
   
 	q <- paste0("SELECT siteiid, siteobsiid, usiteid, usiteid AS site_id,
   	", ifelse(include_pedon, "peiid, CAST(upedonid AS varchar(60)) as pedon_id, upedonid, ", ""), "

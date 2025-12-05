@@ -130,8 +130,7 @@
 
   names(d.phlabresults)[!idx] <- paste0(names(d.phlabresults)[!idx], "_lab")
 
-  # TODO: final cleaning of duplicate rows - dups exist in NASIS for some reason, so should this happen first
-  # to eliminate extra rows with no data? Not sure what is causing this on the NASIS side
+  # final cleaning of duplicate rows
   d.phlabresults <-  d.phlabresults[rowSums(is.na(d.phlabresults)) < (length(d.phlabresults) - 1),]
 
   # done

@@ -12,7 +12,6 @@
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: `TRUE`)
 #' @param nullFragsAreZero should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)
-#' @param stringsAsFactors deprecated
 #' @param dsn Optional: path or _DBIConnection_ to
 #'   \link[=NASISLocalDatabase]{local database containing NASIS table
 #'   structure}; default: `NULL`
@@ -33,12 +32,7 @@
 #' @export 
 get_component_data_from_NASIS_db <- function(SS = TRUE,
                                              nullFragsAreZero = TRUE,
-                                             stringsAsFactors = NULL,
                                              dsn = NULL) {
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
   
   .soilDB_warn_deprecated_aliases(c("airtempa_l" = "maat_l",
                                     "airtempa_r" = "maat_r",
@@ -184,14 +178,8 @@ get_component_restrictions_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 get_component_correlation_data_from_NASIS_db <- function(SS = TRUE,
                                                          dropAdditional = TRUE,
                                                          dropNotRepresentative = TRUE,
-                                                         stringsAsFactors = NULL,
                                                          dsn = NULL) {
 
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
   q <- "SELECT lmapunitiid, lmapunitiid AS mukey, mu.muiid, musym, nationalmusym, mu.muname, mukind, mutype, mustatus, muacres, farmlndcl, repdmu, dmuiid, areasymbol, areaname, ssastatus, cordate
 
   FROM  mapunit_View_1 AS mu
@@ -326,14 +314,7 @@ get_component_cogeomorph_data_from_NASIS_db2 <- function(SS = TRUE, dsn = NULL) 
 # get copm for each component
 #' @export
 #' @rdname get_component_data_from_NASIS_db
-get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
-                                                  stringsAsFactors = NULL,
-                                                  dsn = NULL) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_component_copm_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
   q <- "SELECT co.coiid as coiid, cpm.seqnum as seqnum, pmorder, pmdept_r, pmdepb_r, pmmodifier, pmgenmod, pmkind, pmorigin
 
@@ -366,14 +347,7 @@ get_component_copm_data_from_NASIS_db <- function(SS = TRUE,
 # get ESD information for each component
 #' @export
 #' @rdname get_component_data_from_NASIS_db
-get_component_esd_data_from_NASIS_db <- function(SS = TRUE,
-                                                 stringsAsFactors = NULL,
-                                                 dsn = NULL) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_component_esd_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
   q <- "SELECT coiidref as coiid, ecositeid, ecositenm,
   ecositetype, ecositemlra, ecositelru, ecositenumber, ecositestate, repecosite, ecositepnm, ecositesnm, ecositetnm, ecositeidnew, ecositelrrnew,
@@ -464,7 +438,6 @@ get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' @param dsn Optional: path or _DBIConnection_ to
 #'   \link[=NASISLocalDatabase]{local database containing NASIS table
 #'   structure}; default: `NULL`
-#' @param stringsAsFactors deprecated
 #' @return A list with the results.
 #' @author Stephen Roecker
 #' @seealso \code{\link{fetchNASIS}}
@@ -484,12 +457,7 @@ get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' @export get_comonth_from_NASIS_db
 get_comonth_from_NASIS_db <- function(SS = TRUE,
                                       fill = FALSE,
-                                      stringsAsFactors = NULL,
                                       dsn = NULL) {
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
 
   q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid
   FROM comonth_View_1 AS comonth;"

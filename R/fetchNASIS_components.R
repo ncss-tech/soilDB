@@ -1,22 +1,11 @@
-## TODO: better documentation for "fill" argument
-# https://github.com/ncss-tech/soilDB/issues/50
-## TODO: this will not ID horizons with no depths
-## TODO: better error checking / reporting is needed: coiid, dmu id, component name
 .fetchNASIS_components <- function(SS = TRUE,
                                    rmHzErrors = FALSE,
                                    nullFragsAreZero = TRUE,
                                    fill = FALSE,
-                                   stringsAsFactors = NULL,
                                    dsn = NULL,
                                    dropAdditional = TRUE,
                                    dropNotRepresentative = TRUE,
                                    duplicates = FALSE) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
   
   # check if NASIS local DB instance/ODBC data source is available
   .soilDB_test_NASIS_connection(dsn = dsn)

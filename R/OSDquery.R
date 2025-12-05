@@ -69,7 +69,9 @@
 #'
 #'   # simple figure
 #'   par(mar=c(0,0,1,1))
-#'   aqp::plotSPC(x$SPC)
+#'   if (!is.null(x$SPC) && inherits(x$SPC, "SoilProfileCollection")){
+#'     aqp::plotSPC(x$SPC)
+#'   }
 #' }
 #' 
 OSDquery <- function(everything = NULL, mlra = '', taxonomic_class = '', typical_pedon = '', brief_narrative = '', ric = '', use_and_veg = '', competing_series = '', geog_location = '', geog_assoc_soils = '') {

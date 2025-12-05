@@ -385,15 +385,8 @@ fetchSCAN <- function(site.code = NULL, year = NULL, report = 'SCAN', timeseries
     req <- as.list(req)
   }
   
-  # base URL to service
   uri <- 'https://wcc.sc.egov.usda.gov/nwcc/view'
-  
-  # note: the SCAN form processor checks the referring page and user-agent
   new.headers <- c("Referer" = "https://wcc.sc.egov.usda.gov/nwcc/")
-  
-  # enable follow-location
-  # http://stackoverflow.com/questions/25538957/suppressing-302-error-returned-by-httr-post
-  # cf <- httr::config(followlocation = 1L, verbose=1L) # debugging
   cf <- httr::config(followlocation = 1L)
   
   # submit request

@@ -5,14 +5,12 @@
 \alias{get_projectmapunit_from_NASIS}
 \title{Get NASIS Project Information}
 \usage{
-get_projectmilestone_from_NASIS(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
+get_projectmilestone_from_NASIS(SS = TRUE, dsn = NULL)
 
-get_projectmapunit_from_NASIS(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
+get_projectmapunit_from_NASIS(SS = TRUE)
 }
 \arguments{
 \item{SS}{\emph{logical}. Use selected set? Default: \code{TRUE}. Set \code{FALSE} for local database.}
-
-\item{stringsAsFactors}{Deprecated.}
 
 \item{dsn}{Optional: path or \emph{DBIConnection} to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: \code{NULL}}
 }

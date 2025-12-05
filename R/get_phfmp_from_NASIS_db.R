@@ -1,12 +1,7 @@
 #' @export 
 #' @rdname fetchNASIS
-get_phfmp_from_NASIS_db <- function(SS = TRUE, stringsAsFactors = NULL, dsn = NULL) {
+get_phfmp_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
   # because of alias with fetchNASIS cannot allow setting attr
   # also, attr is a free-form field, so not terribly useful -- consider SQL LIKE?
 

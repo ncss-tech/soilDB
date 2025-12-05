@@ -44,12 +44,7 @@ soilDB_user_dir <- function(which = c("data", "config", "cache"),
                             mustWork = NA) {
   which <- match.arg(which, c("data", "config", "cache"))
   
-  # conditional usage for R version < 4.0.0
-  if (R.version$major >= 4) {
-    dir <- tools::R_user_dir("soilDB", which)
-  } else {
-    dir <- file.path(tempdir(), "soilDB", which)
-  }
+  dir <- tools::R_user_dir("soilDB", which)
   
   data_dir <- file.path(dir, ..., fsep = fsep)
   if (isTRUE(remove)) {

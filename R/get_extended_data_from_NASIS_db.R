@@ -4,7 +4,6 @@
 #' the entire local database (default: `TRUE`)
 #' @param nullFragsAreZero should fragment volumes of NULL be interpreted as 0?
 #' (default: TRUE), see details
-#' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
@@ -28,15 +27,7 @@
 #' }
 #'
 #' @export get_extended_data_from_NASIS_db
-get_extended_data_from_NASIS_db <- function(SS = TRUE,
-                                            nullFragsAreZero = TRUE,
-                                            stringsAsFactors = NULL,
-                                            dsn = NULL) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_extended_data_from_NASIS_db <- function(SS = TRUE, nullFragsAreZero = TRUE, dsn = NULL) {
   
   # photo links from PedonPC stored as sitetext notes
   q.photolink <- "SELECT so.siteiidref AS siteiid, sot.recdate, sot.textcat,  CAST(sot.textentry AS text) AS imagepath

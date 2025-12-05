@@ -83,7 +83,9 @@ SoilWeb maintains a snapshot of the Official Series Description data.
 
   # simple figure
   par(mar=c(0,0,1,1))
-  aqp::plotSPC(x$SPC)
+  if (!is.null(x$SPC) && inherits(x$SPC, "SoilProfileCollection")){
+    aqp::plotSPC(x$SPC)
+  }
 }
 \dontshow{\}) # examplesIf}
 }

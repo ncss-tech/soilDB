@@ -13,7 +13,6 @@
 #' @param impute replace missing (i.e. `NULL`) values with `"Not_Populated"` for
 #' categorical data, or the "RV" for numeric data or `201` cm if the "RV" is also
 #' `NULL` (default: `TRUE`)
-#' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #' @return A data.frame.
@@ -35,17 +34,8 @@
 #' }
 #' }
 #' @export get_cosoilmoist_from_NASIS
-get_cosoilmoist_from_NASIS <- function(SS = TRUE,
-                                       impute = TRUE,
-                                       stringsAsFactors = NULL,
-                                       dsn = NULL) {
+get_cosoilmoist_from_NASIS <- function(SS = TRUE, impute = TRUE, dsn = NULL) {
 
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
   q.cosoilmoist <- "SELECT dmuiidref AS dmuiid, coiid, compname, comppct_r, drainagecl, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, cosoilmoistiid, soimoistdept_l, soimoistdept_r, soimoistdept_h, soimoistdepb_l, soimoistdepb_r, soimoistdepb_h, soimoiststat
 
   FROM component_View_1 co LEFT OUTER JOIN
@@ -70,8 +60,6 @@ get_cosoilmoist_from_NASIS <- function(SS = TRUE,
 
   # recode metadata domains
   d.cosoilmoist <- uncode(d.cosoilmoist, dsn = dsn)
-
-  # prep dataset: rename columns, impute empty values, stringsAsFactors
   d.cosoilmoist <- suppressWarnings(.cosoilmoist_prep(d.cosoilmoist, impute = impute))
 
   # done
