@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -302,7 +302,7 @@ create a 1000m radius circular polygon around the point with
 <span></span>
 <span><span class="co"># add original point, after transforming to mukey grid CRS</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">p</span>, <span class="st">"EPSG:5070"</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, pch <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-5-1.png" width="180" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="180" style="display: block; margin: auto;"></p>
 <div class="section level4">
 <h4 id="manual-creation-of-bounding-boxes">Manual Creation of Bounding Boxes<a class="anchor" aria-label="anchor" href="#manual-creation-of-bounding-boxes"></a>
 </h4>
@@ -351,7 +351,7 @@ link to those coordinates and zoom level.</p>
 <span></span>
 <span><span class="co"># add original BBOX, after transforming to mukey grid CRS</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">5070</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-6-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>
@@ -391,7 +391,7 @@ the map.</p>
 <span><span class="co">#&gt; extent      : -1365495, -1358925, 2869245, 2873655  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file285868c91444 </span></span>
+<span><span class="co">#&gt; varname     : file2427226f1f59 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   :  144983 </span></span>
@@ -404,7 +404,7 @@ the map.</p>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>, </span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-7-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 <div class="section level3">
 <h3 id="ssurgo-polygons-from-sda">SSURGO Polygons from SDA<a class="anchor" aria-label="anchor" href="#ssurgo-polygons-from-sda"></a>
 </h3>
@@ -435,7 +435,7 @@ key grid.</p>
 <span>     legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="st">'CONUS Albers Equal Area Projection (EPSG:5070)'</span>, side <span class="op">=</span> <span class="fl">1</span>, line <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-10-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="grid-resolution-specification">Grid Resolution Specification<a class="anchor" aria-label="anchor" href="#grid-resolution-specification"></a>
@@ -471,7 +471,7 @@ aggregated up from 30m results.</p>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-11-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="raster-soil-survey-data">Raster Soil Survey Data<a class="anchor" aria-label="anchor" href="#raster-soil-survey-data"></a>
@@ -499,7 +499,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file285875cb6dd0 </span></span>
+<span><span class="co">#&gt; varname     : file24274dc82f43 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :  mukey </span></span>
 <span><span class="co">#&gt; min value   : 545800 </span></span>
@@ -513,7 +513,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file28584119b513 </span></span>
+<span><span class="co">#&gt; varname     : file24272421e316 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   :  545800 </span></span>
@@ -527,7 +527,7 @@ Access.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file285840cfd606 </span></span>
+<span><span class="co">#&gt; varname     : file242763cd1a1 </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :   mukey </span></span>
 <span><span class="co">#&gt; min value   : 3244721 </span></span>
@@ -564,7 +564,7 @@ Access.</p>
 <span>  ext <span class="op">=</span> <span class="va">x</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">a</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-12-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="statsgo-1">STATSGO<a class="anchor" aria-label="anchor" href="#statsgo-1"></a>
@@ -582,7 +582,7 @@ reflect the relative generality of this product.</p>
 <span><span class="co">#&gt; extent      : 1129005, 1135005, 1402995, 1411095  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; varname     : file285842cb205e </span></span>
+<span><span class="co">#&gt; varname     : file24277e20ecae </span></span>
 <span><span class="co">#&gt; categories  : mukey </span></span>
 <span><span class="co">#&gt; name        :  mukey </span></span>
 <span><span class="co">#&gt; min value   : 659074 </span></span>
@@ -606,7 +606,7 @@ reflect the relative generality of this product.</p>
 <span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">statsgo</span><span class="op">)</span><span class="op">$</span><span class="va">value</span>, collapse <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-13-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="hawaii-ssurgo">Hawaii SSURGO<a class="anchor" aria-label="anchor" href="#hawaii-ssurgo"></a>
@@ -635,7 +635,7 @@ coast of Kauai</a>.</p>
 <span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">$</span><span class="va">value</span>, collapse <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span>,</span>
 <span>  colNA <span class="op">=</span> <span class="st">'royalblue'</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-14-1.png" width="234" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="234" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="puerto-rico-ssurgo">Puerto Rico SSURGO<a class="anchor" aria-label="anchor" href="#puerto-rico-ssurgo"></a>
@@ -664,7 +664,7 @@ coast of Puerto Rico</a>.</p>
 <span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/metags.html" class="external-link">metags</a></span><span class="op">(</span><span class="va">mu</span><span class="op">)</span><span class="op">$</span><span class="va">value</span>, collapse <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span>,</span>
 <span>  colNA <span class="op">=</span> <span class="st">'royalblue'</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-16-1.png" width="234" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="234" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -782,7 +782,7 @@ SQL and submit via <code><a href="../reference/SDA_query.html">SDA_query()</a></
 <span>  <span class="op">)</span>,</span>
 <span>  range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-19-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="interpretations-for-soil-suitability-limitation">Interpretations for Soil Suitability / Limitation<a class="anchor" aria-label="anchor" href="#interpretations-for-soil-suitability-limitation"></a>
@@ -870,7 +870,7 @@ rules: <code>'ENG - Construction Materials; Roadfill'</code>, and
 <span>  horizontal <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># fuzzy ratings on X axis</span></span>
 <span>  las <span class="op">=</span> <span class="fl">1</span>            <span class="co"># rotate axis labels 90 degrees</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-20-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 <p>From above graph we can see that the different suitability rating
 classes <code>class_ENGConstructionMaterialsRoadfill</code> each
 correspond to a range of fuzzy values
@@ -897,7 +897,7 @@ correspond to a range of fuzzy values
 <span>    <span class="st">'Irrigation Disposal of Wastewater\nWeighted Mean over Components'</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-21-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="component-level-properties">Component-level Properties<a class="anchor" aria-label="anchor" href="#component-level-properties"></a>
@@ -936,7 +936,7 @@ Soil Data Viewer colors for the selected property/interpretation.</p>
 <span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  legend <span class="op">=</span> <span class="st">"topleft"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-22-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 <p>Another example is thematic mapping of the “simplified component
 parent material group”. First, set up a new AOI for the following
 examples:</p>
@@ -959,7 +959,7 @@ examples:</p>
 <span>  cex.main <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">'gSSURGO Map Unit Key Grid'</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-23-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-23-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 <p>We use <code><a href="../reference/get_SDA_pmgroupname.html">get_SDA_pmgroupname()</a></code> to obtain the tabular
 parent material information to relate to map unit keys:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
@@ -980,7 +980,7 @@ parent material information to relate to map unit keys:</p>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/activeCat.html" class="external-link">activeCat</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'pmgroupname'</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu2</span>, legend <span class="op">=</span> <span class="st">"topleft"</span>, axes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-24-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 <p>We can also inspect a mapunit-level hydric rating derived from the
 default aggregation method in <code><a href="../reference/get_SDA_hydric.html">get_SDA_hydric()</a></code>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
@@ -998,7 +998,7 @@ default aggregation method in <code><a href="../reference/get_SDA_hydric.html">g
 <span><span class="co"># set active category </span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/activeCat.html" class="external-link">activeCat</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">'HYDRIC_RATING'</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu2</span>, legend <span class="op">=</span> <span class="st">"topleft"</span>, axes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-25-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-25-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="several-horizon-level-soil-properties">Several Horizon-level Soil Properties<a class="anchor" aria-label="anchor" href="#several-horizon-level-soil-properties"></a>
@@ -1059,22 +1059,22 @@ depth interval.</p>
 <p>Inspect just the plant available water 0-25cm.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">$</span><span class="va">awc_r</span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-27-1.png" width="216" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-27-1.png" class="r-plt" width="216" style="display: block; margin: auto;"></p>
 <p>Plot aggregate soil properties.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">[[</span><span class="st">'dbthirdbar_r'</span><span class="op">]</span><span class="op">]</span>, cex.main <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">'1/3 Bar Bulk Density (g/cm^3)\nDominant Component\n0-25cm'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-28-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-28-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">[[</span><span class="st">'awc_r'</span><span class="op">]</span><span class="op">]</span>, cex.main <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">'AWC (cm/cm)\nDominant Component\n0-25cm'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-28-2.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-28-2.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu2</span><span class="op">[[</span><span class="st">'ph1to1h2o_r'</span><span class="op">]</span><span class="op">]</span>, cex.main <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">'pH 1:1 H2O\nDominant Component\n0-25cm'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-28-3.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-28-3.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="sand-silt-and-clay-at-a-soil-survey-area-boundary">Sand, Silt, and Clay at a Soil Survey Area Boundary<a class="anchor" aria-label="anchor" href="#sand-silt-and-clay-at-a-soil-survey-area-boundary"></a>
@@ -1096,7 +1096,7 @@ other in 2004.</p>
 <span></span>
 <span><span class="co"># note SSA boundary</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-29-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-29-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 <p>Then we derive aggregate sand, silt, clay (RV) values from the
 largest component, taking the weighted mean over 25-50cm depth interval.
 We also will take the sand and clay values to calculate the surface
@@ -1161,7 +1161,7 @@ texture class for comparison.</p>
 <span>  cex.main <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, <span class="st">" - 25-50cm\nDominant Component"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-30-1.png" width="288" style="display: block; margin: auto;"></p>
+<p><img src="wcs-ssurgo_files/figure-html/unnamed-chunk-30-1.png" class="r-plt" width="288" style="display: block; margin: auto;"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -1175,7 +1175,7 @@ texture class for comparison.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

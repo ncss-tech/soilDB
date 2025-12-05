@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -133,7 +133,7 @@ POLYGON.</p>
 <span>  <span class="va">soil_polygons</span><span class="op">[</span><span class="st">"mukey"</span><span class="op">]</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">"SSURGO Map Units from SDA_spatialQuery"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="dominant-es_files/figure-html/SDA-spatialQuery-1.png" width="672"></p>
+<p><img src="dominant-es_files/figure-html/SDA-spatialQuery-1.png" class="r-plt" width="672"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">soil_polygons</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Simple feature collection with 6 features and 2 fields</span></span>
@@ -164,7 +164,7 @@ of data you are going to download.</p>
 <span>  <span class="va">soil_polygons</span><span class="op">[</span><span class="st">"mukey"</span><span class="op">]</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">"Cropped SSURGO Map Units from SDA_spatialQuery"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="dominant-es_files/figure-html/SDA-spatialQuery-geomIntersect-1.png" width="672"></p>
+<p><img src="dominant-es_files/figure-html/SDA-spatialQuery-geomIntersect-1.png" class="r-plt" width="672"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">soil_polygons</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Simple feature collection with 6 features and 2 fields</span></span>
@@ -201,7 +201,7 @@ opposed to more site-specific analyses.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu_ssurgo</span><span class="op">[</span><span class="st">"mukey"</span><span class="op">]</span>, main <span class="op">=</span> <span class="st">"SSURGO Map Units from fetchSDA_spatial"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dominant-es_files/figure-html/fetch-SDA-spatial-1.png" width="672"></p>
+<p><img src="dominant-es_files/figure-html/fetch-SDA-spatial-1.png" class="r-plt" width="672"></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mu_ssurgo</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Simple feature collection with 6 features and 6 fields</span></span>
@@ -260,7 +260,7 @@ concepts.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">statsgo_polygons</span><span class="op">[</span><span class="st">"mukey"</span><span class="op">]</span>, main <span class="op">=</span> <span class="st">"STATSGO Map Units from SDA_spatialQuery"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dominant-es_files/figure-html/fetch-SDA-spatial-statsgo-1.png" width="672"></p>
+<p><img src="dominant-es_files/figure-html/fetch-SDA-spatial-statsgo-1.png" class="r-plt" width="672"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">statsgo_polygons</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Simple feature collection with 3 features and 2 fields</span></span>
@@ -281,28 +281,28 @@ concepts.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mu_statsgo</span><span class="op">[</span><span class="st">"mukey"</span><span class="op">]</span>, main <span class="op">=</span> <span class="st">"STATSGO Map Units from fetchSDA_spatial"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dominant-es_files/figure-html/fetch-SDA-spatial-statsgo-2.png" width="672"></p>
+<p><img src="dominant-es_files/figure-html/fetch-SDA-spatial-statsgo-2.png" class="r-plt" width="672"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mu_statsgo</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Simple feature collection with 6 features and 6 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
-<span><span class="co">## Bounding box:  xmin: -121.0731 ymin: 37.07511 xmax: -119.9157 ymax: 38.18986</span></span>
+<span><span class="co">## Bounding box:  xmin: -121.0731 ymin: 37.07511 xmax: -119.9157 ymax: 38.29961</span></span>
 <span><span class="co">## Geodetic CRS:  WGS 84</span></span>
 <span><span class="co">##    mukey areasymbol nationalmusym      areaname</span></span>
 <span><span class="co">## 1 660921         US          q5r1 United States</span></span>
 <span><span class="co">## 2 660939         US          q5rm United States</span></span>
 <span><span class="co">## 3 660960         US          q5s9 United States</span></span>
-<span><span class="co">## 4 660960         US          q5s9 United States</span></span>
+<span><span class="co">## 4 660939         US          q5rm United States</span></span>
 <span><span class="co">## 5 660939         US          q5rm United States</span></span>
 <span><span class="co">## 6 660939         US          q5rm United States</span></span>
 <span><span class="co">##                                 muname farmlndcl                           geom</span></span>
 <span><span class="co">## 1 Whiterock-Rock outcrop-Auburn (s818)      &lt;NA&gt; POLYGON ((-120.794 38.18986...</span></span>
 <span><span class="co">## 2                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.9141 38.0735...</span></span>
 <span><span class="co">## 3       Finrod-Cogna-Archerdale (s857)      &lt;NA&gt; POLYGON ((-120.9711 37.9490...</span></span>
-<span><span class="co">## 4       Finrod-Cogna-Archerdale (s857)      &lt;NA&gt; POLYGON ((-120.7151 37.7056...</span></span>
-<span><span class="co">## 5                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.8224 37.7205...</span></span>
-<span><span class="co">## 6                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.5867 37.7205...</span></span></code></pre>
+<span><span class="co">## 4                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-121.0478 38.2898...</span></span>
+<span><span class="co">## 5                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.8763 37.8606...</span></span>
+<span><span class="co">## 6                  Peters-Pentz (s836)      &lt;NA&gt; POLYGON ((-120.801 37.92773...</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ssas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SDA_spatialQuery.html">SDA_spatialQuery</a></span><span class="op">(</span><span class="va">aoi</span>, what <span class="op">=</span> <span class="st">"areasymbol"</span><span class="op">)</span></span>
 <span><span class="va">ssas</span></span></code></pre></div>
@@ -318,7 +318,7 @@ concepts.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ssa</span><span class="op">[</span><span class="st">"areasymbol"</span><span class="op">]</span>, main <span class="op">=</span> <span class="st">"SSURGO Soil Survey Area from SDA"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="dominant-es_files/figure-html/fetch-SDA-spatial-ssa-1.png" width="672"></p>
+<p><img src="dominant-es_files/figure-html/fetch-SDA-spatial-ssa-1.png" class="r-plt" width="672"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ssa</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Simple feature collection with 2 features and 3 fields</span></span>
@@ -555,7 +555,7 @@ dominant condition ecological sites (<code>eco_data_domcond</code>).</p>
 <span>  <span class="va">soil_polygons</span><span class="op">[</span><span class="st">"ecoclassid"</span><span class="op">]</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">"Dominant Ecological Site by Map Unit"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="dominant-es_files/figure-html/plot-1.png" width="672"></p>
+<p><img src="dominant-es_files/figure-html/plot-1.png" class="r-plt" width="672"></p>
 <p>This same process for merging in aggregate map unit level information
 generalizes to other SSURGO tables. You can easily create thematic maps
 from any data you can aggregate to the point that it is 1:1 with the
@@ -624,7 +624,7 @@ book</a></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
