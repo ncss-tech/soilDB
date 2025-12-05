@@ -20,8 +20,9 @@ NA (FALSE)}
 
 \item{stringsAsFactors}{deprecated}
 
-\item{dsn}{Optional: path to local SQLite database containing NASIS
-table structure; default: \code{NULL}}
+\item{dsn}{Optional: path or \emph{DBIConnection} to
+\link[=NASISLocalDatabase]{local database containing NASIS table
+structure}; default: \code{NULL}}
 }
 \value{
 A list with the results.

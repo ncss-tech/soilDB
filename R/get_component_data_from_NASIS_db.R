@@ -7,13 +7,15 @@
 
 #' Get component data from a local NASIS Database
 #'
+#' Functions for getting component and related child table data from local NASIS database.
+#'
 #' @param SS fetch data from the currently loaded selected set in NASIS or from
 #' the entire local database (default: `TRUE`)
 #' @param nullFragsAreZero should surface fragment cover percentages of NULL be interpreted as 0? (default: TRUE)
 #' @param stringsAsFactors deprecated
-#'
-#' @param dsn Optional: path to local SQLite database containing NASIS
-#' table structure; default: `NULL`
+#' @param dsn Optional: path or _DBIConnection_ to
+#'   \link[=NASISLocalDatabase]{local database containing NASIS table
+#'   structure}; default: `NULL`
 #'
 #' @return a `data.frame`
 #' @author Dylan E. Beaudette, Stephen Roecker, and Jay M. Skovlin
@@ -23,15 +25,12 @@
 #'
 #' \donttest{
 #' if(local_NASIS_defined()) {
-#'  # query text note data
 #'  fc <- try(get_component_data_from_NASIS_db())
-#'
-#'  # show structure of component data returned
 #'  str(fc)
 #' }
 #' }
 #'
-#' @export get_component_data_from_NASIS_db
+#' @export 
 get_component_data_from_NASIS_db <- function(SS = TRUE,
                                              nullFragsAreZero = TRUE,
                                              stringsAsFactors = NULL,
@@ -462,8 +461,9 @@ get_component_otherveg_data_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' the entire local database (default: TRUE)
 #' @param fill should missing "month" rows in the comonth table be filled with
 #' NA (FALSE)
-#' @param dsn Optional: path to local SQLite database containing NASIS
-#' table structure; default: `NULL`
+#' @param dsn Optional: path or _DBIConnection_ to
+#'   \link[=NASISLocalDatabase]{local database containing NASIS table
+#'   structure}; default: `NULL`
 #' @param stringsAsFactors deprecated
 #' @return A list with the results.
 #' @author Stephen Roecker
