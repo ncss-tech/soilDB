@@ -756,7 +756,7 @@
 
 
 # impute "not populated" into freqcl and "201" into dept_r & depb_r if !is.na(freqcl)
-.cosoilmoist_prep <- function(df, impute, stringsAsFactors = NULL) {
+.cosoilmoist_prep <- function(df, impute) {
 
   # cache original column names
   orig_names <- names(df)
@@ -918,21 +918,25 @@
       nodups   <- df[!dups_idx, ]
 
       dups_clean <- {
-        .<- split(dups, dups$cokey, drop = TRUE)
-        .<- lapply(., function(x) { data.frame(
-          cokey = x$cokey[1],
-          landscape     = paste(unique(x$landscape),           collapse = " and "),
-          landform      = paste(unique(x$landform),            collapse = " on  "),
-          mntn          = paste(sort(unique(x$mntn)),          collapse = ", "   ),
-          hill          = paste(sort(unique(x$hill)),          collapse = ", "   ),
-          trce          = paste(sort(unique(x$trce)),          collapse = ", "   ),
-          flats         = paste(sort(unique(x$flats)),         collapse = ", "   ),
-          shapeacross   = paste(sort(unique(x$shapeacross)),   collapse = ", "   ),
-          shapedown     = paste(sort(unique(x$shapedown)),     collapse = ", "   ),
-          hillslopeprof = paste(sort(unique(x$hillslopeprof)), collapse = ", "),
-          stringsAsFactors = TRUE
-        )})
-        .<- do.call("rbind", .)
+        . <- split(dups, dups$cokey, drop = TRUE)
+        . <- lapply(., function(x) {
+          data.frame(
+            cokey = x$cokey[1],
+            landscape     = paste(unique(x$landscape), collapse = " and "),
+            landform      = paste(unique(x$landform), collapse = " on  "),
+            mntn          = paste(sort(unique(x$mntn)), collapse = ", "),
+            hill          = paste(sort(unique(x$hill)), collapse = ", "),
+            trce          = paste(sort(unique(x$trce)), collapse = ", "),
+            flats         = paste(sort(unique(x$flats)), collapse = ", "),
+            shapeacross   = paste(sort(unique(x$shapeacross)), collapse = ", "),
+            shapedown     = paste(sort(unique(x$shapedown)), collapse = ", "),
+            hillslopeprof = paste(sort(unique(
+              x$hillslopeprof
+            )), collapse = ", "),
+            stringsAsFactors = TRUE # TODO: confirm if this is needed for processing
+          )
+        })
+        . <- do.call("rbind", .)
       }
       nodups <- nodups[! names(nodups) %in% c("geomfeatid", "existsonfeat")]
 
@@ -947,7 +951,6 @@
   idx <- names(df) %in% vars & idx
   df[, idx] <- lapply(df[, idx], function(x) ifelse(x %in% c("", "NA"), NA, x))
 
-  # hack to make CRAN check happy
   mntn <- NA; hill <- NA; trce <- NA; flats <- NA; shapeacross <- NA; shapedown <- NA;
 
   # combine geompos and shapes
@@ -976,8 +979,10 @@
       slopeshape[slopeshape %in% c("NANA", "")] = NA
       })
     df[c("ssa", "ssd")] <- NULL
-  } else df <- cbind(df, geompos = as.character(NULL))
-
+  } else {
+    df <- cbind(df, geompos = as.character(NULL))
+  }
+  
   ss_vars <- c("CC", "CV", "CL", "LC", "LL", "LV", "VL", "VC", "VV")
   if (all(df$slopeshape[!is.na(df$slopeshape)] %in% ss_vars)) {
     df$slopeshape <- factor(df$slopeshape, levels = ss_vars)

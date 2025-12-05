@@ -8,14 +8,8 @@
                                soilColorState = 'moist',
                                mixColors = FALSE,
                                lab = FALSE,
-                               stringsAsFactors = NULL,
                                dsn = NULL
 ) {
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
   
   # check if NASIS local DB instance/ODBC data source is available
   .soilDB_test_NASIS_connection(dsn = dsn)

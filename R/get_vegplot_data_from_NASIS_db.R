@@ -2,17 +2,10 @@
 
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_from_NASIS_db <- function(SS = TRUE,
-                                      stringsAsFactors = NULL,
-                                      dsn = NULL) {
+get_vegplot_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
   .soilDB_warn_deprecated_aliases(c("usiteid" = "site_id", "assocuserpedonid" = "pedon_id", "vegplotid" = "vegplot_id"))
   
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-
   q.vegplot <- "SELECT siteiid, so.siteobsiid, usiteid AS site_id, usiteid, assocuserpedonid as pedon_id, assocuserpedonid, 
     v.vegplotid AS vegplot_id, v.vegplotid, vegplotiid, vegplotname, obsdate, obsintensity, primarydatacollector, datacollectionpurpose,
     vegdataorigin, vegplotsize, soilprofileindicator, soil232idlegacy, ahorizondepth, alkalinesalineindicator,
@@ -83,17 +76,10 @@ get_vegplot_from_NASIS_db <- function(SS = TRUE,
 #' @export
 #' @return `get_vegplot_location_from_NASIS_db()`: a data.frame containing location data from the corresponding record in the site table
 #' @rdname fetchVegdata
-get_vegplot_location_from_NASIS_db <- function(SS = TRUE,
-                                               stringsAsFactors = NULL,
-                                               dsn = NULL) {
+get_vegplot_location_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
   .soilDB_warn_deprecated_aliases(c("usiteid" = "site_id", "vegplotid" = "vegplot_id"))
   
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-
   # query the coordinate, plss description, and site characteristics data for these records from the site table
   q.plotlocation <- "SELECT s.siteiid, so.siteobsiid, s.usiteid AS site_id, s.usiteid, v.vegplotid AS vegplot_id, v.vegplotid, vegplotiid, so.obsdate, v.datacollectionpurpose, latdegrees, latminutes, latseconds, latdir, longdegrees, longminutes, longseconds, longdir, horizdatnm, plsssection, plsstownship, plssrange, plssmeridian, utmzone, utmnorthing, utmeasting, latstddecimaldegrees, longstddecimaldegrees, geocoordsource, elev, slope, aspect, CAST(plsssdetails as text) AS plsssdetails, CAST(locdesc as text) AS locdesc
   FROM
@@ -152,17 +138,10 @@ get_vegplot_location_from_NASIS_db <- function(SS = TRUE,
 #' @return `get_vegplot_trhi_from_NASIS_db()`: a data.frame containing Rangeland Health Indicator (RHI) data from the `vegplot` table
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_trhi_from_NASIS_db <- function(SS = TRUE,
-                                           stringsAsFactors = NULL,
-                                           dsn = NULL) {
+get_vegplot_trhi_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
   .soilDB_warn_deprecated_aliases(c("usiteid" = "site_id", "assocuserpedonid" = "pedon_id", "vegplotid" = "vegplot_id"))
   
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-
   q.vegplotrhi <- "SELECT siteiid, so.siteobsiid, usiteid AS site_id, usiteid, assocuserpedonid AS pedon_id, assocuserpedonid, v.vegplotid AS vegplot_id, v.vegplotid, vegplotiid, vegplotname, obsdate, rhiannualprod, rhibareground, rhicompactionlayer, rhifuncstructgroups, rhierosionresistance, rhigullies, rhirills, rhipedastalsterracettes, rhiinfilrunoff, rhilitteramount, rhilittermovement, rhiplantmortality, rhireprodcapability, rhiinvasiveplants, rhisoilsurfdegradation, rhiwaterflowpatterns, rhiwindscourareas, rhisoilsitestabsumm, rhibioticintegritysumm, rhihydrofunctionsumm
   FROM
   site_View_1 AS s
@@ -198,15 +177,8 @@ get_vegplot_trhi_from_NASIS_db <- function(SS = TRUE,
 #' @return `get_vegplot_species_from_NASIS_db()`: a data.frame containing Plot Plant Inventory data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_species_from_NASIS_db <-  function(SS = TRUE,
-                                               stringsAsFactors = NULL,
-                                               dsn = NULL) {
+get_vegplot_species_from_NASIS_db <-  function(SS = TRUE, dsn = NULL) {
   
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-
   q.vegplotspecies <- "SELECT siteiid, siteobsiid, vegplotiid, vegplotid, vegplotname, obsdate, primarydatacollector,
     datacollectionpurpose, assocuserpedonid, ppi.seqnum, plantsym, plantsciname, plantnatvernm,
     planttypegroup, plantheightcllowerlimit, plantheightclupperlimit,
@@ -253,17 +225,10 @@ get_vegplot_species_from_NASIS_db <-  function(SS = TRUE,
 #' @return `get_vegplot_transect_from_NASIS_db()`: a data.frame containing Vegetation Transect data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
-                                                stringsAsFactors = NULL,
-                                                dsn = NULL) {
+get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE, dsn = NULL) {
   
   .soilDB_warn_deprecated_aliases(c("usiteid" = "site_id", "assocuserpedonid" = "pedon_id", "vegplotid" = "vegplot_id", "vegtransectid" = "vegtransect_id"))
   
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-
   # veg transect data - many transects to one vegplot
   q.vegtransect <- "SELECT siteiid, siteobsiid, vegplotiid, vegplotiid, vegtransectiid,
     usiteid AS site_id, usiteid, assocuserpedonid AS pedon_id, assocuserpedonid, 
@@ -320,17 +285,10 @@ get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE,
 #' @return `get_vegplot_transect_from_NASIS_db()`: a data.frame containing Vegetation Transect Plant Summary data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE,
-                                                   stringsAsFactors = NULL,
-                                                   dsn = NULL) {
+get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE, dsn = NULL) {
   
   .soilDB_warn_deprecated_aliases(c("vegtransplantsummiid" = "vstpiid"))
   
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-
   # veg transect species data - many species to one veg transect
   q.vtps <- "SELECT siteiid, siteobsiid, vegplotiid, vegtransectiidref as vegtransectiid, vegplotid, vegplotname,
     obsdate, vegtransplantsummiid AS vstpiid, vegtransplantsummiid, vtps.seqnum, plantsym, plantsciname,
@@ -477,14 +435,7 @@ get_vegplot_groundsurface_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' @return `get_vegplot_tree_si_summary_from_NASIS_db()`: a data.frame containing Vegetation Plot Tree Site Index Summary data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE,
-                                                       stringsAsFactors = NULL,
-                                                       dsn = NULL) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_vegplot_tree_si_summary_from_NASIS_db <-  function(SS = TRUE, dsn = NULL) {
 
   # plot tree site index summary data
   q.pltsis <- "SELECT siteiid, siteobsiid, vegplotiid, pltsis.seqnum, plantiid,
@@ -557,9 +508,7 @@ get_vegplot_speciesbasalarea_from_NASIS <- function(SS = TRUE, dsn = NULL) {
 #' @return `get_vegplot_tree_si_details_from_NASIS_db()`: a data.frame containing Vegetation Plot Tree Site Index Details data
 #' @export
 #' @rdname fetchVegdata
-get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE,
-                                                      stringsAsFactors = NULL,
-                                                      dsn = NULL) {
+get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
   # plot tree site index detail data
   q.pltsid <- "SELECT  siteiid, siteobsiid, vegplotiid, plottreesiteindsumiid, pltsid.seqnum, 
@@ -609,13 +558,7 @@ get_vegplot_tree_si_details_from_NASIS_db <- function(SS = TRUE,
 #' @rdname fetchVegdata
 get_vegplot_textnote_from_NASIS_db <- function(SS = TRUE,
                                                fixLineEndings = TRUE,
-                                               stringsAsFactors = NULL,
                                                dsn = NULL) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
 
   # vegplot textnotes
   q.vegplottext <- "SELECT siteiid, siteobsiid, vegplotiidref AS vegplotiid, vegplottext_View_1.seqnum, recdate, recauthor, vegplottextkind,

@@ -22,37 +22,20 @@ fetchVegdata(
   SS = TRUE,
   include_pedon = TRUE,
   nullFragsAreZero = TRUE,
-  stringsAsFactors = NULL,
   dsn = NULL
 )
 
-get_vegplot_from_NASIS_db(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
+get_vegplot_from_NASIS_db(SS = TRUE, dsn = NULL)
 
-get_vegplot_location_from_NASIS_db(
-  SS = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_vegplot_location_from_NASIS_db(SS = TRUE, dsn = NULL)
 
-get_vegplot_trhi_from_NASIS_db(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
+get_vegplot_trhi_from_NASIS_db(SS = TRUE, dsn = NULL)
 
-get_vegplot_species_from_NASIS_db(
-  SS = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_vegplot_species_from_NASIS_db(SS = TRUE, dsn = NULL)
 
-get_vegplot_transect_from_NASIS_db(
-  SS = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_vegplot_transect_from_NASIS_db(SS = TRUE, dsn = NULL)
 
-get_vegplot_transpecies_from_NASIS_db(
-  SS = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_vegplot_transpecies_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 get_vegplot_transpoints_from_NASIS_db(SS = TRUE, dsn = NULL)
 
@@ -60,24 +43,15 @@ get_vegplot_prodquadrats_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 get_vegplot_groundsurface_from_NASIS_db(SS = TRUE, dsn = NULL)
 
-get_vegplot_tree_si_summary_from_NASIS_db(
-  SS = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_vegplot_tree_si_summary_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 get_vegplot_speciesbasalarea_from_NASIS(SS = TRUE, dsn = NULL)
 
-get_vegplot_tree_si_details_from_NASIS_db(
-  SS = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_vegplot_tree_si_details_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 get_vegplot_textnote_from_NASIS_db(
   SS = TRUE,
   fixLineEndings = TRUE,
-  stringsAsFactors = NULL,
   dsn = NULL
 )
 }
@@ -92,8 +66,6 @@ will have their peiid reported in the \code{vegplot} table.}
 
 \item{nullFragsAreZero}{Should fragment volumes of \code{NULL} be interpreted as
 \code{0}? (default: \code{TRUE}), see details}
-
-\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS table
 structure; default: \code{NULL}}

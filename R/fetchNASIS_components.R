@@ -6,17 +6,10 @@
                                    rmHzErrors = FALSE,
                                    nullFragsAreZero = TRUE,
                                    fill = FALSE,
-                                   stringsAsFactors = NULL,
                                    dsn = NULL,
                                    dropAdditional = TRUE,
                                    dropNotRepresentative = TRUE,
                                    duplicates = FALSE) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
   
   # check if NASIS local DB instance/ODBC data source is available
   .soilDB_test_NASIS_connection(dsn = dsn)
