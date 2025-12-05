@@ -1,7 +1,7 @@
 Package: soilDB
 Type: Package
 Title: Soil Database Interface
-Version: 2.8.14
+Version: 2.9.0
 Authors@R: c(person(given="Dylan", family="Beaudette", role = c("aut"), email = "dylan.beaudette@usda.gov", comment=c(ORCID="0009-0008-2780-4785")),
              person(given="Jay", family="Skovlin", role = c("aut")), 
              person(given="Stephen", family="Roecker", role = c("aut")), 
@@ -10,7 +10,7 @@ Maintainer: Andrew Brown <andrew.g.brown@usda.gov>
 Description: A collection of functions for reading soil data from U.S. Department of Agriculture Natural Resources Conservation Service (USDA-NRCS) and National Cooperative Soil Survey (NCSS) databases.
 License: GPL (>= 3)
 LazyLoad: yes
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.1.0)
 Imports: grDevices, graphics, stats, utils, methods, aqp (>= 2.1.0), data.table, DBI, curl
 Suggests: jsonlite, xml2, httr, rvest, odbc, RSQLite, sf, wk, terra, raster, knitr, rmarkdown, testthat
 Repository: CRAN
