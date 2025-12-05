@@ -1,9 +1,7 @@
-# soilDB development
- - new features and breaking changes to `taxaExtent()`:
-   - family mineralogy class grids added
-   - new argument `type` for selecting the type of query
-   - `formativeElement` argument is no longer used
-
+# soilDB 2.8.14 (development)
+ - `taxaExtent()` updates:
+   - Added family mineralogy class grids 
+   - Added argument `type` for selecting the type of query; replaces deprecated `formativeElement`
 
 # soilDB 2.8.13 (2025-09-26)
  - Added `get_SDA_NASIS_key()` for obtaining NASIS record IDs for component and component horizon data from Soil Data Access (#409)

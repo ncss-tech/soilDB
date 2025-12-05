@@ -8,7 +8,7 @@ taxaExtent(
   x,
   type = c("taxon", "formative element", "mineralogy class"),
   level = c("order", "suborder", "greatgroup", "subgroup"),
-  formativeElement = FALSE,
+  formativeElement = NULL,
   timeout = 60,
   as_Spatial = getOption("soilDB.return_Spatial", default = FALSE)
 )
@@ -20,7 +20,7 @@ taxaExtent(
 
 \item{level}{the taxonomic level within the top 4 tiers of Soil Taxonomy, one of \code{'order'}, \code{'suborder'}, \code{'greatgroup'}, \code{'subgroup'}}
 
-\item{formativeElement}{no longer used, see \code{level} argument}
+\item{formativeElement}{deprecated, see \code{type} argument}
 
 \item{timeout}{time that we are willing to wait for a response, in seconds}
 
