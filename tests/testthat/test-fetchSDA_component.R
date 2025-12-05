@@ -45,8 +45,6 @@ test_that("fetchSDA() returns expected results", {
 
   skip_on_cran()
 
-  library(aqp)
-  
   # there should be 2 components and 10 horizons
   expect_equivalent(nrow(aqp::site(x)), 2)
   expect_equivalent(aqp::nrow(x), 10)
