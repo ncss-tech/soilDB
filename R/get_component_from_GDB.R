@@ -77,11 +77,8 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb",
 
     
     # prep
-    # copm  <- soilDB:::.copm_prep(copm,   db = "SDA")
-    # cogmd <- soilDB:::.cogmd_prep(cogmd, db = "SDA")
     copm2  <- .copm_prep2(copm, "cokey")
     cogmd2 <- .cogmd_prep2(cogmd, "cokey")
-
     
     # merge
     co$idx <- NULL
