@@ -68,8 +68,9 @@ the entire local database (default: \code{TRUE})}
 
 \item{stringsAsFactors}{deprecated}
 
-\item{dsn}{Optional: path to local SQLite database containing NASIS
-table structure; default: \code{NULL}}
+\item{dsn}{Optional: path or \emph{DBIConnection} to
+\link[=NASISLocalDatabase]{local database containing NASIS table
+structure}; default: \code{NULL}}
 
 \item{dropAdditional}{Remove map units with "additional" status? Default: \code{TRUE}}
 
@@ -81,13 +82,12 @@ table structure; default: \code{NULL}}
 a \code{data.frame}
 }
 \description{
-Get component data from a local NASIS Database
+Functions for getting component and related child table data from local NASIS database.
 }
 \examples{
 
 \donttest{
 if(local_NASIS_defined()) {
- # query text note data
  fc <- try(get_component_data_from_NASIS_db())
 
  # show structure of component data returned

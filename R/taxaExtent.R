@@ -9,7 +9,7 @@
 #' 
 #' @param level the taxonomic level within the top 4 tiers of Soil Taxonomy, one of `'order'`, `'suborder'`, `'greatgroup'`, `'subgroup'`
 #' 
-#' @param formativeElement no longer used, see `level` argument
+#' @param formativeElement deprecated, see `type` argument
 #' 
 #' @param timeout time that we are willing to wait for a response, in seconds
 #' 
@@ -235,11 +235,16 @@
 taxaExtent <- function(x, 
                        type = c('taxon', 'formative element', 'mineralogy class'), 
                        level = c('order', 'suborder', 'greatgroup', 'subgroup'),
-                       formativeElement = FALSE, 
+                       formativeElement = NULL, 
                        timeout = 60,
                        as_Spatial = getOption('soilDB.return_Spatial', default = FALSE)
                        ) {
- 
+  
+  if (!missing(formativeElement)) {
+    .Deprecated(msg = "Argument `formativeElement` is deprecated, please use `type` instead.")
+    type <- "formative element"
+  }
+  
   ## sanity checks
   
   # arguments with fixed possibilities  
