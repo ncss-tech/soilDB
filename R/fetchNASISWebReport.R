@@ -75,8 +75,6 @@ fetchNASISWebReport <- function(projectname, rmHzErrors = FALSE, fill = FALSE) {
   # upgrade to SoilProfilecollection
   aqp::depths(f.chorizon) <- coiid ~ hzdept_r + hzdepb_r
 
-  ## TODO: this will fail in the presence of duplicates
-  ## TODO: make this error more informative
   # add site data to object
   aqp::site(f.chorizon) <- f.component # left-join via coiid
 
@@ -137,12 +135,8 @@ get_chorizon_from_NASISWebReport <- function(projectname, fill = FALSE) {
   })
   d.chorizon <- do.call("rbind", d.chorizon)
 
-  ## TODO: might be nice to abstract this into a new function
-  # hacks to make R CMD check --as-cran happy:
-  metadata <- NULL
-  # load local copy of metadata
-  load(system.file("data/metadata.rda", package="soilDB")[1])
-
+  metadata <- get_NASIS_metadata()
+  
   # transform variables and metadata
   if (!all(is.na(d.chorizon$chiid))) {
     d.chorizon <- within(d.chorizon, {

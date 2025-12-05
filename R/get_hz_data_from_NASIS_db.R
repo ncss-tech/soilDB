@@ -1,6 +1,3 @@
-## TODO: when multiple textures have been defined, only the first one is returned (alphabetical ?)
-
-
 #' Get Horizon Data from a local NASIS Database
 #'
 #' Get horizon-level data from a local NASIS database.

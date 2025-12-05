@@ -47,11 +47,6 @@
   return(m5)
 }
 
-
-
-## TODO: consider adding an argument for "growing" very thin bottom R|Cr|Cd horizons
-# https://github.com/ncss-tech/aqp/issues/173
-
 #' @title Get Official Series Descriptions and summaries from SoilWeb API
 #'
 #' @description This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are updated quarterly and made available via SoilWeb. Set `extended = TRUE` and see the `soilweb.metadata` list element for information on when the source data were last updated. 
@@ -316,22 +311,18 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	# upgrade to SoilProfileCollection
   aqp::depths(h) <- id ~ top + bottom
 
-	# texture clases, in order
+	# texture and pH classes are ordered factors
 	textures <- aqp::SoilTextureLevels(which = 'names')
-
-	# TODO: use aqp::ReactionClassLevels()
-	pH_classes <- c('ultra acid', 'extremely acid', 'very strongly acid', 'strongly acid', 'moderately acid', 'slightly acid', 'neutral', 'slightly alkaline', 'mildly alkaline', 'moderately alkaline', 'strongly alkaline', 'very strongly alkaline')
-
-	# convert some columns into factors
+	pH_classes <- aqp::ReactionClassLevels()
 	h$texture_class <- factor(h$texture_class, levels = textures, ordered = TRUE)
 	h$pH_class <- factor(h$pH_class, levels = pH_classes, ordered = TRUE)
 
-	# safely LEFT JOIN to @site
+	# join additonal site data to SPC object
 	s$id <- s$seriesname
 	s$seriesname <- NULL
 	aqp::site(h) <- s
 
-	## safely set SPC metadata
+	# set metadata
 	aqp::metadata(h)$origin <- 'OSD via Soilweb / fetchOSD'
 	aqp::metadata(h)$created <- Sys.time()
 	

@@ -196,9 +196,8 @@
   # get "best" ecosite data (most recent correlation, or most complete if no date)
   aqp::site(hz_data) <- extended_data$ecositehistory
 
-  ## TODO: NA in diagnostic boolean columns are related to pedons with no diagnostic features
-  ## https://github.com/ncss-tech/soilDB/issues/59
-  # add diagnostic boolean data into @site
+  ## NA in diagnostic boolean columns are related to pedons with no diagnostic features
+  ## this is intentional, see: https://github.com/ncss-tech/soilDB/issues/59
   aqp::site(hz_data) <- extended_data$diagHzBoolean
 
   ## optionally convert NA fragvol to 0
