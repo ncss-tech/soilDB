@@ -54,6 +54,15 @@
   )
 }
 
+# check if terra namespace can be loaded and used to initialize objects
+.terra_can_initialize_spatial_object <- function() {
+  requireNamespace("terra", quietly = TRUE) && tryCatch({
+    terra::rast(matrix(0), crs = "OGC:CRS84")
+    terra::vect("POINT (0 0)", crs = "OGC:CRS84")
+    TRUE
+  }, warning = FALSE, error = FALSE)
+}
+
 # convert diagnostic horizon info into wide-formatted, boolean table
 .diagHzLongtoWide <- function(d, feature = 'featkind', id = 'peiid') {
 
