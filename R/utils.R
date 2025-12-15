@@ -54,6 +54,15 @@
   )
 }
 
+# check if terra namespace can be loaded and used to initialize objects
+.terra_can_initialize_spatial_object <- function() {
+  requireNamespace("terra", quietly = TRUE) && tryCatch({
+    terra::rast(matrix(0), crs = "OGC:CRS84")
+    terra::vect("POINT (0 0)", crs = "OGC:CRS84")
+    TRUE
+  }, warning = FALSE, error = FALSE)
+}
+
 # convert diagnostic horizon info into wide-formatted, boolean table
 .diagHzLongtoWide <- function(d, feature = 'featkind', id = 'peiid') {
 
@@ -180,8 +189,6 @@
 	return(d[best.record, ])
 }
 
-## https://github.com/ncss-tech/soilDB/issues/84
-## TODO: https://github.com/ncss-tech/soilDB/issues/47
 ## 2015-11-30: short-circuits could use some work, consider pre-marking mistakes in calling function
 # attempt to format "landform" records into a single string
 # note: there are several assumptions made about the data,
@@ -756,7 +763,7 @@
 
 
 # impute "not populated" into freqcl and "201" into dept_r & depb_r if !is.na(freqcl)
-.cosoilmoist_prep <- function(df, impute, stringsAsFactors = NULL) {
+.cosoilmoist_prep <- function(df, impute) {
 
   # cache original column names
   orig_names <- names(df)
@@ -918,24 +925,29 @@
       nodups   <- df[!dups_idx, ]
 
       dups_clean <- {
-        .<- split(dups, dups$cokey, drop = TRUE)
-        .<- lapply(., function(x) { data.frame(
-          cokey = x$cokey[1],
-          landscape     = paste(unique(x$landscape),           collapse = " and "),
-          landform      = paste(unique(x$landform),            collapse = " on  "),
-          mntn          = paste(sort(unique(x$mntn)),          collapse = ", "   ),
-          hill          = paste(sort(unique(x$hill)),          collapse = ", "   ),
-          trce          = paste(sort(unique(x$trce)),          collapse = ", "   ),
-          flats         = paste(sort(unique(x$flats)),         collapse = ", "   ),
-          shapeacross   = paste(sort(unique(x$shapeacross)),   collapse = ", "   ),
-          shapedown     = paste(sort(unique(x$shapedown)),     collapse = ", "   ),
-          hillslopeprof = paste(sort(unique(x$hillslopeprof)), collapse = ", "),
-          stringsAsFactors = TRUE
-        )})
-        .<- do.call("rbind", .)
+        . <- split(dups, dups$cokey, drop = TRUE)
+        . <- lapply(., function(x) {
+          data.frame(
+            cokey = x$cokey[1],
+            landscape     = paste(unique(x$landscape), collapse = " and "),
+            landform      = paste(unique(x$landform), collapse = " on  "),
+            mntn          = paste(sort(unique(x$mntn)), collapse = ", "),
+            hill          = paste(sort(unique(x$hill)), collapse = ", "),
+            trce          = paste(sort(unique(x$trce)), collapse = ", "),
+            flats         = paste(sort(unique(x$flats)), collapse = ", "),
+            shapeacross   = paste(sort(unique(x$shapeacross)), collapse = ", "),
+            shapedown     = paste(sort(unique(x$shapedown)), collapse = ", "),
+            hillslopeprof = paste(sort(unique(
+              x$hillslopeprof
+            )), collapse = ", ")
+            # stringsAsFactors = TRUE # 2025-12-05: confirmed this has no effect on result
+          )
+        })
+        . <- do.call("rbind", .)
       }
       nodups <- nodups[! names(nodups) %in% c("geomfeatid", "existsonfeat")]
-
+      
+      # NOTE: this rbind wipes out factors
       df <- rbind(nodups, dups_clean)
       df <- df[order(df$cokey), ]
       row.names(df) <- seq_len(nrow(df))
@@ -947,9 +959,10 @@
   idx <- names(df) %in% vars & idx
   df[, idx] <- lapply(df[, idx], function(x) ifelse(x %in% c("", "NA"), NA, x))
 
-  # hack to make CRAN check happy
   mntn <- NA; hill <- NA; trce <- NA; flats <- NA; shapeacross <- NA; shapedown <- NA;
 
+  ## construct factor levels
+  
   # combine geompos and shapes
   if (nrow(df) > 0) {
     df <- within(df, {
@@ -976,42 +989,43 @@
       slopeshape[slopeshape %in% c("NANA", "")] = NA
       })
     df[c("ssa", "ssd")] <- NULL
-  } else df <- cbind(df, geompos = as.character(NULL))
-
+  } else {
+    df <- cbind(df, geompos = as.character(NULL))
+  }
+  
+  # custom combined slope shape variable (no corresponding single domain in NASIS)
   ss_vars <- c("CC", "CV", "CL", "LC", "LL", "LV", "VL", "VC", "VV")
   if (all(df$slopeshape[!is.na(df$slopeshape)] %in% ss_vars)) {
     df$slopeshape <- factor(df$slopeshape, levels = ss_vars)
     df$slopeshape <- droplevels(df$slopeshape)
   }
 
-  hs_vars <- c("Toeslope", "Footslope", "Backslope", "Shoulder", "Summit")
+  hs_vars <- levels(NASISChoiceList(data.frame(hillslopeprof = ""), choice = "ChoiceLabel"))
   if (all(df$hillslopeprof[!is.na(df$hillslopeprof)] %in% hs_vars)) {
     df$hillslopeprof <- factor(df$hillslopeprof, levels = hs_vars)
     df$hillslopeprof <- droplevels(df$hillslopeprof)
   }
 
-  hill_vars <- c("Base Slope", "Head Slope", "Side Slope", "Free Face", "Nose Slope", "Crest", "Interfluve")
+  hill_vars <- levels(NASISChoiceList(data.frame(geomposhill = ""), choice = "ChoiceLabel"))
   if (all(df$hill[!is.na(df$hill)] %in% hill_vars)) {
     df$hill <- factor(df$hill, levels = hill_vars)
     df$hill <- droplevels(df$hill)
   }
 
-  flats_vars <- c("Dip", "Talf", "Rise")
+  flats_vars <- levels(NASISChoiceList(data.frame(geomposflats = ""), choice = "ChoiceLabel"))
   if (all(df$flats[!is.na(df$flats)] %in% flats_vars)) {
     df$flats <- factor(df$flats, levels = flats_vars)
     df$flats <- droplevels(df$flats)
   }
 
-  trce_vars <- c("Tread", "Riser")
+  trce_vars <- levels(NASISChoiceList(data.frame(geompostrce = ""), choice = "ChoiceLabel"))
   if (all(df$trce[!is.na(df$trce)] %in% trce_vars)) {
     df$trce <- factor(df$trce, levels = trce_vars)
     df$trce <- droplevels(df$trce)
   }
-
+  
   return(df)
-  }
-
-
+}
 
 
 .copm_prep2 <- function(x, key = NULL) {

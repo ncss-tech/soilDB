@@ -4,7 +4,6 @@
 #' @param SS Fetch data from the currently loaded selected set in NASIS or from the entire local database (default: `TRUE`)
 #' @param repdmu Return only "representative" data mapunits? Default: `TRUE`
 #' @param droplevels Drop unused levels from `farmlndcl` and other factor levels from NASIS domains?
-#' @param stringsAsFactors deprecated
 #' @param areatypename Used for `get_legend_from_NASIS()`. Default: `c('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area')`
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
@@ -13,14 +12,8 @@
 get_mapunit_from_NASIS <- function(SS = TRUE,
                                    repdmu = TRUE,
                                    droplevels = TRUE,
-                                   stringsAsFactors = NULL,
                                    areatypename = c('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area'),
                                    dsn = NULL) {
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
   q.mapunit <- paste("SELECT
                      ng.grpname, areasymbol, areatypename, liid, lmapunitiid,
                      nationalmusym, muiid, musym, muname, mukind, mutype, mustatus, dmuinvesintens, muacres,
@@ -77,7 +70,7 @@ get_mapunit_from_NASIS <- function(SS = TRUE,
                                 levels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceName"],
                                 labels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceLabel"])
   
-  if (is.null(stringsAsFactors) || isTRUE(stringsAsFactors)) {
+  if (is.null(stringsAsFactors) || isFALSE(stringsAsFactors)) {
     d.mapunit$farmlndcl = as.character(d.mapunit$farmlndcl)
   }
   
@@ -96,13 +89,8 @@ get_mapunit_from_NASIS <- function(SS = TRUE,
 #' @rdname get_mapunit_from_NASIS
 get_legend_from_NASIS <- function(SS = TRUE,
                                   droplevels = TRUE,
-                                  stringsAsFactors = NULL,
                                   areatypename = c('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area'),
                                   dsn = NULL) {
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
   
   q.legend  <- paste("
                      SELECT
@@ -153,7 +141,6 @@ get_legend_from_NASIS <- function(SS = TRUE,
 #' @rdname get_mapunit_from_NASIS
 get_lmuaoverlap_from_NASIS <- function(SS = TRUE,
                                        droplevels = TRUE,
-                                       stringsAsFactors = NULL,
                                        areatypename = c('Non-MLRA Soil Survey Area', 'MLRA Soil Survey Area'),
                                        dsn = NULL) {
   

@@ -9,7 +9,6 @@ get_site_data_from_NASIS_db(
   SS = TRUE,
   include_pedon = TRUE,
   nullFragsAreZero = TRUE,
-  stringsAsFactors = NULL,
   dsn = NULL
 )
 
@@ -22,8 +21,6 @@ database (default: \code{TRUE})}
 \item{include_pedon}{Include pedon and transect data joined to site? (default: \code{TRUE})}
 
 \item{nullFragsAreZero}{should surface fragment cover percentages of \code{NULL} be interpreted as \code{0}? (default: \code{TRUE})}
-
-\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS table structure; default: \code{NULL}}
 }

@@ -1,14 +1,7 @@
 #' @export
 #' @rdname fetchSDA
 #' @param impute replace missing (i.e. `NULL`) values with `"Not_Populated"` for categorical data, or the "RV" for numeric data or `201` cm if the "RV" is also`NULL` (default: `TRUE`)
-get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = TRUE,
-                                     stringsAsFactors = NULL
-                                     ) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = TRUE) {
 
   q.cosoilmoist <- paste("SELECT",
                          if (isFALSE(duplicates)) {
@@ -46,8 +39,6 @@ get_cosoilmoist_from_SDA <- function(WHERE = NULL, duplicates = FALSE, impute = 
   
   # set factor levels according to metadata domains
   d.cosoilmoist <- uncode(d.cosoilmoist)
-
-  # prep dataset: rename columns, impute empty values, stringsAsFactors
   d.cosoilmoist <- .cosoilmoist_prep(d.cosoilmoist, impute = impute)
 
   return(d.cosoilmoist)

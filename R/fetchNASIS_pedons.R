@@ -8,14 +8,8 @@
                                soilColorState = 'moist',
                                mixColors = FALSE,
                                lab = FALSE,
-                               stringsAsFactors = NULL,
                                dsn = NULL
 ) {
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
   
   # check if NASIS local DB instance/ODBC data source is available
   .soilDB_test_NASIS_connection(dsn = dsn)
@@ -202,9 +196,8 @@
   # get "best" ecosite data (most recent correlation, or most complete if no date)
   aqp::site(hz_data) <- extended_data$ecositehistory
 
-  ## TODO: NA in diagnostic boolean columns are related to pedons with no diagnostic features
-  ## https://github.com/ncss-tech/soilDB/issues/59
-  # add diagnostic boolean data into @site
+  ## NA in diagnostic boolean columns are related to pedons with no diagnostic features
+  ## this is intentional, see: https://github.com/ncss-tech/soilDB/issues/59
   aqp::site(hz_data) <- extended_data$diagHzBoolean
 
   ## optionally convert NA fragvol to 0

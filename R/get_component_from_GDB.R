@@ -1,7 +1,10 @@
 #' @export 
 #' @rdname fetchGDB
-get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, childs = FALSE, droplevels = TRUE, stringsAsFactors = NULL) {
-
+get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb",
+                                   WHERE = NULL,
+                                   childs = FALSE,
+                                   droplevels = TRUE) {
+  
   # check
   vars_co <- "comppct_l|comppct_r|comppct_h|compname|compkind|majcompflag|otherph|localphase|slope_l|slope_r|slope_h|slopelenusle_l|slopelenusle_r|slopelenusle_h|runoff|tfact|wei|weg|erocl|earthcovkind1|earthcovkind2|hydricon|hydricrating|drainagecl|elev_l|elev_r|elev_h|aspectccwise|aspectrep|aspectcwise|geomdesc|albedodry_l|albedodry_r|albedodry_h|airtempa_l|airtempa_r|airtempa_h|mast_l|mast_r|mast_h|map_l|map_r|map_h|reannualprecip_l|reannualprecip_r|reannualprecip_h|ffd_l|ffd_r|ffd_h|nirrcapcl|nirrcapscl|nirrcapunit|irrcapcl|irrcapscl|irrcapunit|cropprodindex|constreeshrubgrp|wndbrksuitgrp|rsprod_l|rsprod_r|rsprod_h|foragesuitgrpid|wlgrain|wlgrass|wlherbaceous|wlshrub|wlconiferous|wlhardwood|wlwetplant|wlshallowwat|wlrangeland|wlopenland|wlwoodland|wlwetland|soilslippot|frostact|initsub_l|initsub_r|initsub_h|totalsub_l|totalsub_r|totalsub_h|hydgrp|corcon|corsteel|taxclname|taxorder|taxsuborder|taxgrtgroup|taxsubgrp|taxpartsize|taxpartsizemod|taxceactcl|taxreaction|taxtempcl|taxmoistscl|taxtempregime|soiltaxedition|castorieindex|flecolcomnum|flhe|flphe|flsoilleachpot|flsoirunoffpot|fltemik2use|fltriumph2use|indraingrp|innitrateleachi|misoimgmtgrp|vasoimgtgrp|cokey|mukey"
   
@@ -35,8 +38,7 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
   # recode metadata domains
   co <- uncode(
     co,
-    droplevels = droplevels,
-    stringsAsFactors = stringsAsFactors
+    droplevels = droplevels
   )
   
 
@@ -75,11 +77,8 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
 
     
     # prep
-    # copm  <- soilDB:::.copm_prep(copm,   db = "SDA")
-    # cogmd <- soilDB:::.cogmd_prep(cogmd, db = "SDA")
     copm2  <- .copm_prep2(copm, "cokey")
     cogmd2 <- .cogmd_prep2(cogmd, "cokey")
-
     
     # merge
     co$idx <- NULL
@@ -95,7 +94,10 @@ get_component_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, chil
 #' @export 
 #' @rdname fetchGDB
 #' @param stats Return statistics (number of mapunit keys per legend; number of components, major components per mapunit, total and hydric component percentage)? Default: `FALSE`
-get_legend_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, droplevels = TRUE, stringsAsFactors = NULL, stats = FALSE) {
+get_legend_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb",
+                                WHERE = NULL,
+                                droplevels = TRUE,
+                                stats = FALSE) {
   
   if (!is.null(WHERE)) {
     # check
@@ -139,8 +141,11 @@ get_legend_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, droplev
 
 #' @export 
 #' @rdname fetchGDB
-get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, droplevels = TRUE, stringsAsFactors = NULL, stats = FALSE) {
-
+get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb",
+                                 WHERE = NULL,
+                                 droplevels = TRUE,
+                                 stats = FALSE) {
+  
   # tests
   if (!is.null(WHERE)) {
     
@@ -271,8 +276,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   # recode metadata domains
   mu <- uncode(
     mu,
-    droplevels = droplevels,
-    stringsAsFactors = stringsAsFactors
+    droplevels = droplevels
   )
 
   vars <- c("areasymbol", "lkey", "mukey", "musym", "muname", "mukind", "mustatus", "invesintens", "muacres", "farmlndcl", "pct_component", "pct_hydric", "n_component", "n_majcompflag")
@@ -429,7 +433,6 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   function(dsn = "gNATSGO_CONUS.gdb",
            cokey = NULL,
            droplevels = TRUE,
-           stringsAsFactors = NULL,
            childs = FALSE) {
     
   # chorizon
@@ -531,7 +534,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
   
   # ch$texture <- tolower(ch$texture)
   # ch$texcl   <- tolower(ch$texcl)
-  ch <- uncode(ch, droplevels = droplevels, stringsAsFactors = stringsAsFactors)
+  ch <- uncode(ch, droplevels = droplevels)
 
   return(ch)
 }
@@ -597,7 +600,6 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 #' @param droplevels logical: indicating whether to drop unused levels in
 #' classifying factors. This is useful when a class has large number of unused
 #' classes, which can waste space in tables and figures.
-#' @param stringsAsFactors deprecated
 #' @return A \code{data.frame} or \code{SoilProfileCollection} object.
 #' @author Stephen Roecker
 #' @keywords manip
@@ -623,8 +625,7 @@ get_mapunit_from_GDB <- function(dsn = "gNATSGO_CONUS.gdb", WHERE = NULL, drople
 fetchGDB <- function(dsn = "gNATSGO_CONUS.gdb",
                      WHERE = NULL,
                      childs = FALSE,
-                     droplevels = TRUE,
-                     stringsAsFactors = NULL) {
+                     droplevels = TRUE) {
   
   if (!requireNamespace("aqp")) {
     stop("package 'aqp' is required", call. = FALSE)

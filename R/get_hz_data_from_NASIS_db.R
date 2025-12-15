@@ -1,16 +1,9 @@
-## TODO: when multiple textures have been defined, only the first one is returned (alphabetical ?)
-
-
 #' Get Horizon Data from a local NASIS Database
 #'
 #' Get horizon-level data from a local NASIS database.
 #'
 #' @param SS fetch data from Selected Set in NASIS or from the entire local database (default: `TRUE`)
-#' 
 #' @param fill include pedons without horizon data in result? default: `FALSE`
-
-#' @param stringsAsFactors deprecated
-#'
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
@@ -23,14 +16,7 @@
 #' @seealso \code{\link{get_hz_data_from_NASIS_db}}, \code{\link{get_site_data_from_NASIS_db}}
 #' @keywords manip
 #' @export get_hz_data_from_NASIS_db
-get_hz_data_from_NASIS_db <- function(SS = TRUE,
-                                      fill = FALSE,
-                                      stringsAsFactors = NULL,
-                                      dsn = NULL) {
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_hz_data_from_NASIS_db <- function(SS = TRUE, fill = FALSE, dsn = NULL) {
   
   .soilDB_warn_deprecated_aliases(c("upedonid" = "pedon_id", "claytotest" = "clay", "silttotest" = "silt", "sandtotest" = "sand"))
   

@@ -3,7 +3,6 @@
 #' These functions return records from the Series Classification (SC) database, either
 #' from the local NASIS database (all series) or via web report (named series
 #' only).
-#' @param stringsAsFactors deprecated
 #' @param dsn Optional: path or _DBIConnection_ to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: `NULL`
 #' @param delimiter _character_. Used to collapse `taxminalogy` records where multiple values are used to describe strongly contrasting control sections. Default `" over "` creates combination mineralogy classes as they would be used in the family name.
 #' @param SS _logical_. Fetch data from the currently loaded selected set in NASIS or from the entire local database (default: `FALSE`; this is to allow for queries against the full Series Classification database as default)
@@ -14,14 +13,7 @@
 #' @keywords manip
 #'
 #' @export
-get_soilseries_from_NASIS <- function(stringsAsFactors = NULL,
-                                      dsn = NULL, delimiter = " over ",
-                                      SS = FALSE) {
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
+get_soilseries_from_NASIS <- function(dsn = NULL, delimiter = " over ", SS = FALSE) {
   q.soilseries <- "
   SELECT soilseriesname, soilseriesstatus, benchmarksoilflag, 
   soiltaxclasslastupdated, mlraoffice, taxclname, 
@@ -85,13 +77,8 @@ get_soilseries_from_NASIS <- function(stringsAsFactors = NULL,
 #' @param soils A vector of soil series names
 #' @rdname get_soilseries_from_NASIS
 #' @export
-get_soilseries_from_NASISWebReport <- function(soils, stringsAsFactors = NULL) {
+get_soilseries_from_NASISWebReport <- function(soils) {
 
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
   url <- "https://nasis.sc.egov.usda.gov/NasisReportsWebSite/limsreport.aspx?report_name=get_soilseries_from_NASISWebReport"
 
   d.ss <- lapply(soils, function(x) {

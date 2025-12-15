@@ -4,19 +4,12 @@
 \alias{get_hz_data_from_NASIS_db}
 \title{Get Horizon Data from a local NASIS Database}
 \usage{
-get_hz_data_from_NASIS_db(
-  SS = TRUE,
-  fill = FALSE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_hz_data_from_NASIS_db(SS = TRUE, fill = FALSE, dsn = NULL)
 }
 \arguments{
 \item{SS}{fetch data from Selected Set in NASIS or from the entire local database (default: \code{TRUE})}
 
 \item{fill}{include pedons without horizon data in result? default: \code{FALSE}}
-
-\item{stringsAsFactors}{deprecated}
 
 \item{dsn}{Optional: path to local SQLite database containing NASIS
 table structure; default: \code{NULL}}

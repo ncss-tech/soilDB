@@ -4,13 +4,12 @@
 #' Helper functions for accessing the NASIS Project object.
 #' 
 #' @param SS _logical_. Use selected set? Default: `TRUE`. Set `FALSE` for local database.
-#' @param stringsAsFactors Deprecated.
 #' @param dsn Optional: path or _DBIConnection_ to \link[=NASISLocalDatabase]{local database containing NASIS table structure}; default: `NULL`
 #'
 #' @return `get_projectmilestone_from_NASIS()`: _data.frame_ containing project and project milestone information
 #' @export
 #' @rdname get_project_from_NASIS
-get_projectmilestone_from_NASIS <- function(SS = TRUE, stringsAsFactors = NULL, dsn = NULL) {
+get_projectmilestone_from_NASIS <- function(SS = TRUE, dsn = NULL) {
 
   q <- "SELECT p.projectiid, p.uprojectid, p.projectname, pt.projecttypename, pst.projectsubtypename, 
                a.areasymbol AS mlra_sso, pms.seqnum, mst.milestonetypename, pms.milestonedesc, 
@@ -51,12 +50,7 @@ get_projectmilestone_from_NASIS <- function(SS = TRUE, stringsAsFactors = NULL, 
 #' @return `get_projectmapunit_from_NASIS()`: _data.frame_ containing project and project mapunit information
 #' @export
 #' @rdname get_project_from_NASIS
-get_projectmapunit_from_NASIS <- function(SS = TRUE, stringsAsFactors = NULL, dsn = NULL) {
-
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_projectmapunit_from_NASIS <- function(SS = TRUE) {
   
   q <- paste("SELECT p.projectiid, p.uprojectid, p.projectname, pmu.seqnum pmu_seqnum, a2.areasymbol, lmu.musym, lmu.lmapunitiid AS mukey, mu.nationalmusym, mutype, lmu.mustatus, muname, muacres
 
