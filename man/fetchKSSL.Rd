@@ -90,7 +90,7 @@ snapshot was developed using methods described here:
 the link below for the live data.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE) && as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE) && as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE))) withAutoprint(\{ # examplesIf}
 \donttest{
     library(aqp)
 

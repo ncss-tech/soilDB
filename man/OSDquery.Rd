@@ -72,7 +72,7 @@ Related documentation can be found in the following tutorials
 SoilWeb maintains a snapshot of the Official Series Description data.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("httr") && requireNamespace("jsonlite") && require(aqp)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr") && requireNamespace("jsonlite") && require(aqp)) withAutoprint(\{ # examplesIf}
 
 \donttest{
   # find all series that list Pardee as a geographically associated soil.

@@ -127,7 +127,7 @@ here:
 }
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("aqp")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("aqp")) withAutoprint(\{ # examplesIf}
 \dontrun{
   library(aqp)
   

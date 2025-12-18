@@ -7,7 +7,7 @@
 \usage{
 get_projectmilestone_from_NASIS(SS = TRUE, dsn = NULL)
 
-get_projectmapunit_from_NASIS(SS = TRUE)
+get_projectmapunit_from_NASIS(SS = TRUE, dsn = NULL)
 }
 \arguments{
 \item{SS}{\emph{logical}. Use selected set? Default: \code{TRUE}. Set \code{FALSE} for local database.}

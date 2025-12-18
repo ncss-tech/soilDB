@@ -138,7 +138,7 @@ The \code{property} argument refers to one of the property names or columns spec
 }
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \donttest{
 
  # get 1/3 bar bulk density [0,25] centimeter depth weighted average from dominant component

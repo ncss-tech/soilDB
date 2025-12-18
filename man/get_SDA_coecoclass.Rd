@@ -75,7 +75,7 @@ Note that if there are multiple \code{coecoclasskey} per \code{ecoclassid} there
 be more than one record per component.
 }
 \examples{
-\dontshow{if (!as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)) ) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (!as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = TRUE)) ) withAutoprint(\{ # examplesIf}
 # Basic usage with a vector of mukeys
 get_SDA_coecoclass(mukeys = c(463994, 463995))
 

@@ -68,7 +68,7 @@ specified (except for fetchGDB() which currently can only target one table
 (e.g. legend, mapunit or component) at a time with the WHERE clause).
 }
 \examples{
-\dontshow{if (requireNamespace("aqp", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("aqp", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 
 \donttest{
 

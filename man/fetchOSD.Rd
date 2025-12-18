@@ -73,7 +73,7 @@ These last two cases are problematic for analysis that makes use of morphology a
 Requests to the SoilWeb API are split into batches of 100 series names from \code{soils} via \code{\link[=makeChunks]{makeChunks()}}.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \donttest{
   library(aqp)
   # soils of interest

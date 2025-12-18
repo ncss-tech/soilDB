@@ -38,7 +38,7 @@ servers, or a "snapshot" via SoilWeb.
 SDA now supports spatial queries, consider using \code{\link[=SDA_spatialQuery]{SDA_spatialQuery()}} instead.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 
 \donttest{
     # query by bbox

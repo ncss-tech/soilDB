@@ -107,7 +107,7 @@ Convenience function for loading most commonly used Vegetation Plot
 information from local NASIS database.
 }
 \examples{
-\dontshow{if (local_NASIS_defined()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (local_NASIS_defined()) withAutoprint(\{ # examplesIf}
 \donttest{
 vsurf <- get_vegplot_groundsurface_from_NASIS_db()
 }

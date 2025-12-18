@@ -216,7 +216,7 @@ The following simplified mineralogy classes are available. Descriptions have bee
 }
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("terra")) withAutoprint(\{ # examplesIf}
 \dontrun{
   library(terra)
   
