@@ -26,7 +26,7 @@ aqp_data <- function(...,
   # This is a draft function that would support moving SoilProfileCollection objects to inst/extdata
   # In theory this would eliminate the need for soilDB to explicitly import the SPC class and the aqp package
   
-  if (!requireNamespace("aqp")) {
+  if (!requireNamespace("aqp", quietly = TRUE)) {
     stop("package 'aqp' is required", call. = FALSE)
   }
   
