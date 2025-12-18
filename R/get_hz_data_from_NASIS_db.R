@@ -18,14 +18,9 @@
 #' @export get_hz_data_from_NASIS_db
 get_hz_data_from_NASIS_db <- function(SS = TRUE, fill = FALSE, dsn = NULL) {
   
-  .soilDB_warn_deprecated_aliases(c("upedonid" = "pedon_id", "claytotest" = "clay", "silttotest" = "silt", "sandtotest" = "sand"))
-  
-  q <- sprintf("SELECT peiid, phiid, upedonid AS pedon_id, upedonid,
+  q <- sprintf("SELECT peiid, phiid, upedonid,
     hzname, dspcomplayerid, hzdept, hzdepb,
     bounddistinct, boundtopo, claytotest, silttotest, sandtotest, 
-    claytotest AS clay,
-    CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END AS silt,
-    sandtotest AS sand,
     fragvoltot, texture, texcl, lieutex, phfield, effclass, phs.labsampnum, 
     rupresblkdry, rupresblkmst, rupresblkcem, stickiness, plasticity, ksatpedon
   FROM pedon_View_1 p
@@ -33,9 +28,9 @@ get_hz_data_from_NASIS_db <- function(SS = TRUE, fill = FALSE, dsn = NULL) {
   LEFT OUTER JOIN phsample_View_1 phs ON phs.phiidref = ph.phiid
   LEFT OUTER JOIN
   (
-  SELECT phiidref, MIN(texcl) AS texcl, MIN(lieutex) as lieutex
-  FROM phtexture_View_1
-  GROUP BY phiidref
+    SELECT phiidref, MIN(texcl) AS texcl, MIN(lieutex) as lieutex
+    FROM phtexture_View_1
+    GROUP BY phiidref
   ) AS pht ON pht.phiidref = ph.phiid
 
   ORDER BY p.upedonid, ph.hzdept ASC;", ifelse(fill, "LEFT", "INNER"))
