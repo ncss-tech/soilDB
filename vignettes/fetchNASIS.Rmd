@@ -206,15 +206,6 @@ aliases <- c(genhz = "phorizon.dspcomplayerid",
              silt = "phorizon.silttotest",
              sand = "phorizon.sandtotest",
              texture_class = "phorizon.texcl",
-             y_std = "site.latstddecimaldegrees",
-             x_std = "site.longstddecimaldegrees",
-             pedon_id = "pedon.upedonid",
-             describer = "pedon.descname",
-             site_id = "site.usiteid",
-             elev_field = "site.elev",
-             slope_field = "site.slope",
-             aspect_field = "site.aspect",
-             obs_date = "siteobs.obsdate",
              es_classifier = "siteecositehistory.classifier") 
 alias_tnames <- gsub("(.*)\\..*|([^.]*)", "\\1\\2", aliases)
 alias_pnames <- gsub(".*\\.(.*)|([^.]*)", "\\1\\2", aliases)
