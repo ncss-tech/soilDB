@@ -50,7 +50,7 @@ get_projectmilestone_from_NASIS <- function(SS = TRUE, dsn = NULL) {
 #' @return `get_projectmapunit_from_NASIS()`: _data.frame_ containing project and project mapunit information
 #' @export
 #' @rdname get_project_from_NASIS
-get_projectmapunit_from_NASIS <- function(SS = TRUE) {
+get_projectmapunit_from_NASIS <- function(SS = TRUE, dsn = NULL) {
   
   q <- paste("SELECT p.projectiid, p.uprojectid, p.projectname, pmu.seqnum pmu_seqnum, a2.areasymbol, lmu.musym, lmu.lmapunitiid AS mukey, mu.nationalmusym, mutype, lmu.mustatus, muname, muacres
 
