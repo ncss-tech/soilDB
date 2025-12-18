@@ -4,7 +4,7 @@
 #' @rdname fetchVegdata
 get_vegplot_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
-  q.vegplot <- "SELECT siteiid, so.siteobsiid, siteid, assocuserpedonid, 
+  q.vegplot <- "SELECT siteiid, so.siteobsiid, usiteid, assocuserpedonid, 
     v.vegplotid, vegplotiid, vegplotname, obsdate, obsintensity, primarydatacollector, datacollectionpurpose,
     vegdataorigin, vegplotsize, soilprofileindicator, soil232idlegacy, ahorizondepth, alkalinesalineindicator,
     alkalineaffected, salinityclass, restrictivelayerdepthlegacy, legacysoilcompname, legacysoilphase, 
