@@ -70,7 +70,8 @@ get_mapunit_from_NASIS <- function(SS = TRUE,
                                 levels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceName"],
                                 labels = metadata[metadata$ColumnPhysicalName == "farmlndcl", "ChoiceLabel"])
   
-  if (is.null(stringsAsFactors) || isFALSE(stringsAsFactors)) {
+  fct <- NASISDomainsAsFactor()
+  if (is.null(fct) || isFALSE(fct)) {
     d.mapunit$farmlndcl = as.character(d.mapunit$farmlndcl)
   }
   
