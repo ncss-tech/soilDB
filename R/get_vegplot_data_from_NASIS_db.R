@@ -4,10 +4,8 @@
 #' @rdname fetchVegdata
 get_vegplot_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
-  .soilDB_warn_deprecated_aliases(c("usiteid" = "site_id", "assocuserpedonid" = "pedon_id", "vegplotid" = "vegplot_id"))
-  
-  q.vegplot <- "SELECT siteiid, so.siteobsiid, usiteid AS site_id, usiteid, assocuserpedonid as pedon_id, assocuserpedonid, 
-    v.vegplotid AS vegplot_id, v.vegplotid, vegplotiid, vegplotname, obsdate, obsintensity, primarydatacollector, datacollectionpurpose,
+  q.vegplot <- "SELECT siteiid, so.siteobsiid, siteid, assocuserpedonid, 
+    v.vegplotid, vegplotiid, vegplotname, obsdate, obsintensity, primarydatacollector, datacollectionpurpose,
     vegdataorigin, vegplotsize, soilprofileindicator, soil232idlegacy, ahorizondepth, alkalinesalineindicator,
     alkalineaffected, salinityclass, restrictivelayerdepthlegacy, legacysoilcompname, legacysoilphase, 
     legacylocalsoilphase, legacysoilsurftext, legacysurftextmod, legacyterminlieu, erosionclasslegacy, 
@@ -78,10 +76,8 @@ get_vegplot_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' @rdname fetchVegdata
 get_vegplot_location_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
-  .soilDB_warn_deprecated_aliases(c("usiteid" = "site_id", "vegplotid" = "vegplot_id"))
-  
   # query the coordinate, plss description, and site characteristics data for these records from the site table
-  q.plotlocation <- "SELECT s.siteiid, so.siteobsiid, s.usiteid AS site_id, s.usiteid, v.vegplotid AS vegplot_id, v.vegplotid, vegplotiid, so.obsdate, v.datacollectionpurpose, latdegrees, latminutes, latseconds, latdir, longdegrees, longminutes, longseconds, longdir, horizdatnm, plsssection, plsstownship, plssrange, plssmeridian, utmzone, utmnorthing, utmeasting, latstddecimaldegrees, longstddecimaldegrees, geocoordsource, elev, slope, aspect, CAST(plsssdetails as text) AS plsssdetails, CAST(locdesc as text) AS locdesc
+  q.plotlocation <- "SELECT s.siteiid, so.siteobsiid, s.usiteid, v.vegplotid, vegplotiid, so.obsdate, v.datacollectionpurpose, latdegrees, latminutes, latseconds, latdir, longdegrees, longminutes, longseconds, longdir, horizdatnm, plsssection, plsstownship, plssrange, plssmeridian, utmzone, utmnorthing, utmeasting, latstddecimaldegrees, longstddecimaldegrees, geocoordsource, elev, slope, aspect, CAST(plsssdetails as text) AS plsssdetails, CAST(locdesc as text) AS locdesc
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
@@ -140,9 +136,7 @@ get_vegplot_location_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 #' @rdname fetchVegdata
 get_vegplot_trhi_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   
-  .soilDB_warn_deprecated_aliases(c("usiteid" = "site_id", "assocuserpedonid" = "pedon_id", "vegplotid" = "vegplot_id"))
-  
-  q.vegplotrhi <- "SELECT siteiid, so.siteobsiid, usiteid AS site_id, usiteid, assocuserpedonid AS pedon_id, assocuserpedonid, v.vegplotid AS vegplot_id, v.vegplotid, vegplotiid, vegplotname, obsdate, rhiannualprod, rhibareground, rhicompactionlayer, rhifuncstructgroups, rhierosionresistance, rhigullies, rhirills, rhipedastalsterracettes, rhiinfilrunoff, rhilitteramount, rhilittermovement, rhiplantmortality, rhireprodcapability, rhiinvasiveplants, rhisoilsurfdegradation, rhiwaterflowpatterns, rhiwindscourareas, rhisoilsitestabsumm, rhibioticintegritysumm, rhihydrofunctionsumm
+  q.vegplotrhi <- "SELECT siteiid, so.siteobsiid, usiteid, assocuserpedonid, v.vegplotid, vegplotiid, vegplotname, obsdate, rhiannualprod, rhibareground, rhicompactionlayer, rhifuncstructgroups, rhierosionresistance, rhigullies, rhirills, rhipedastalsterracettes, rhiinfilrunoff, rhilitteramount, rhilittermovement, rhiplantmortality, rhireprodcapability, rhiinvasiveplants, rhisoilsurfdegradation, rhiwaterflowpatterns, rhiwindscourareas, rhisoilsitestabsumm, rhibioticintegritysumm, rhihydrofunctionsumm
   FROM
   site_View_1 AS s
   INNER JOIN siteobs_View_1 AS so ON so.siteiidref=s.siteiid
@@ -227,12 +221,9 @@ get_vegplot_species_from_NASIS_db <-  function(SS = TRUE, dsn = NULL) {
 #' @rdname fetchVegdata
 get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE, dsn = NULL) {
   
-  .soilDB_warn_deprecated_aliases(c("usiteid" = "site_id", "assocuserpedonid" = "pedon_id", "vegplotid" = "vegplot_id", "vegtransectid" = "vegtransect_id"))
-  
   # veg transect data - many transects to one vegplot
   q.vegtransect <- "SELECT siteiid, siteobsiid, vegplotiid, vegplotiid, vegtransectiid,
-    usiteid AS site_id, usiteid, assocuserpedonid AS pedon_id, assocuserpedonid, 
-    vegplotid AS vegplot_id, vegplotid, vegplotname, vegtransectid as vegtransect_id, vegtransectid, 
+    usiteid, assocuserpedonid, vegplotid, vegplotname, vegtransectid, 
     obsdate, primarydatacollector, datacollectionpurpose, transectstartlatitude, 
     transectstartlongitude, transectendlatitude, transectendlongitude, transectazimuth, transectlength,
     transectstartelevation, transectendelevation, dblsampquadratssampled, dblsampquadratsclipped, 
@@ -287,11 +278,9 @@ get_vegplot_transect_from_NASIS_db <-  function(SS = TRUE, dsn = NULL) {
 #' @rdname fetchVegdata
 get_vegplot_transpecies_from_NASIS_db <-  function(SS = TRUE, dsn = NULL) {
   
-  .soilDB_warn_deprecated_aliases(c("vegtransplantsummiid" = "vstpiid"))
-  
   # veg transect species data - many species to one veg transect
   q.vtps <- "SELECT siteiid, siteobsiid, vegplotiid, vegtransectiidref as vegtransectiid, vegplotid, vegplotname,
-    obsdate, vegtransplantsummiid AS vstpiid, vegtransplantsummiid, vtps.seqnum, plantsym, plantsciname,
+    obsdate, vegtransplantsummiid, vtps.seqnum, plantsym, plantsciname,
     plantnatvernm, plantnativity, planttypegroup,
     plantheightcllowerlimit, plantheightclupperlimit, sociabilityclass,
     specieslivecanhtbotave, specieslivecanhttopave, overstorydbhmin,

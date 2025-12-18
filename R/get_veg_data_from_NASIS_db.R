@@ -15,22 +15,11 @@
 #' @return A list of data.frame 
 #' @author Jay M. Skovlin and Dylan E. Beaudette
 #' @keywords manip
-#' @examples
-#' 
-#' \donttest{
-#' if(local_NASIS_defined()) {
-#'  # query text note data
-#'  v <- try(get_veg_from_NASIS_db())
-#' 
-#'  # show contents veg data returned
-#'  str(v)
-#' }
-#' }
-#' 
+#' @seealso [fetchVegdata()]
 #' @export get_veg_data_from_NASIS_db
 get_veg_data_from_NASIS_db <- function(SS=TRUE, dsn = NULL) {
   
-  .soilDB_warn_deprecated_aliases(c("vegtransplantsummiid" = "vstpiid"))
+  .Deprecated("fetchVegdata")
   
   # existing veg
   # NOTE: left join of siteobs:vegplot ensures that all site/siteobs are in this result, 
