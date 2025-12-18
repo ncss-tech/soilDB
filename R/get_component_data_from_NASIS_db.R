@@ -34,17 +34,11 @@ get_component_data_from_NASIS_db <- function(SS = TRUE,
                                              nullFragsAreZero = TRUE,
                                              dsn = NULL) {
   
-  .soilDB_warn_deprecated_aliases(c("airtempa_l" = "maat_l",
-                                    "airtempa_r" = "maat_r",
-                                    "airtempa_h" = "maat_h",
-                                    "soiltempa_r" = "mast_r"))
-  
   q1 <- "SELECT dmudesc, compname, comppct_r, compkind, majcompflag, 
                 localphase, drainagecl, hydricrating, hydgrp, tfact, wei, weg, frostact, corcon, corsteel, 
                 elev_l, elev_r, elev_h, slope_l, slope_r, slope_h, 
                 aspectccwise, aspectrep, aspectcwise, map_l, map_r, map_h, 
                 airtempa_l, airtempa_r, airtempa_h, soiltempa_l, soiltempa_r, soiltempa_h,
-                airtempa_l as maat_l, airtempa_r as maat_r, airtempa_h as maat_h, soiltempa_r as mast_r, 
                 reannualprecip_r, ffd_l, ffd_r, ffd_h,
                 nirrcapcl,  nirrcapscl, nirrcapunit, irrcapcl, irrcapscl, irrcapunit, 
                 taxclname, taxorder, taxsuborder, taxgrtgroup, taxsubgrp, 
@@ -459,6 +453,8 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
                                       fill = FALSE,
                                       dsn = NULL) {
 
+  # TODO: clean up custom factors to utilize domains
+  
   q <- "SELECT coiidref AS coiid, month, flodfreqcl, floddurcl, pondfreqcl, ponddurcl, ponddep_l, ponddep_r, ponddep_h, dlyavgprecip_l, dlyavgprecip_r, dlyavgprecip_h, comonthiid
   FROM comonth_View_1 AS comonth;"
 
@@ -560,9 +556,7 @@ get_comonth_from_NASIS_db <- function(SS = TRUE,
 #' @rdname get_component_data_from_NASIS_db
 get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
 
-  .soilDB_warn_deprecated_aliases(c("upedonid" = "pedon_id", "rvindicator" = "representative"))
-  
-  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid as pedon_id, upedonid, rvindicator as representative, rvindicator
+  q <- "SELECT coiidref as coiid, peiidref as peiid, upedonid, rvindicator
 
   FROM copedon_View_1 copedon
 
@@ -583,7 +577,7 @@ get_copedon_from_NASIS_db <- function(SS = TRUE, dsn = NULL) {
   d <- dbQueryNASIS(channel, q)
 
   # missing pedon ID suggests records not in the selected set or local database
-  if(nrow(d) > 0 & anyNA(d$upedonid)) {
+  if (nrow(d) > 0 && anyNA(d$upedonid)) {
     message('some linked pedons not in selected set or local database')
   }
 
