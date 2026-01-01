@@ -22,11 +22,8 @@ The SDA website can be found at \url{https://sdmdataaccess.nrcs.usda.gov} and qu
 
 SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
 }
-\note{
-This function requires the \code{httr}, \code{jsonlite}, and \code{xml2} packages
-}
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("wk", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("wk", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \donttest{
   ## get SSURGO export date for all soil survey areas in California
   # there is no need to filter STATSGO

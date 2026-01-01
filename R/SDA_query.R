@@ -51,13 +51,12 @@ format_SQL_in_statement <- function(x) {
 #'
 #' SSURGO (detailed soil survey) and STATSGO (generalized soil survey) data are stored together within SDA. This means that queries that don't specify an area symbol may result in a mixture of SSURGO and STATSGO records. See the examples below and the \href{http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.html}{SDA Tutorial} for details.
 #'
-#' @note This function requires the `httr`, `jsonlite`, and `xml2` packages
 #' @return A data.frame result for queries that return a single table. A list of data.frame for queries that return multiple tables. `NULL` if result is empty, and `try-error` on error.
 #' @author D.E. Beaudette, A.G Brown
 #' @seealso [SDA_spatialQuery()]
 #' @keywords manip
 #' @export
-#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("wk", quietly = TRUE)
+#' @examplesIf curl::has_internet() && requireNamespace("wk", quietly = TRUE)
 #' \donttest{
 #'   ## get SSURGO export date for all soil survey areas in California
 #'   # there is no need to filter STATSGO
@@ -182,13 +181,6 @@ SDA_query <- function(q, dsn = NULL) {
 
 .SDA_query <- function(q) {
 
-  # check for required packages
-  if (!requireNamespace('httr', quietly = TRUE))
-    stop('please install the `httr` package', call. = FALSE)
-
-  if (!requireNamespace('xml2', quietly = TRUE))
-    stop('please install the `xml2` package', call. = FALSE)
-
   if (!requireNamespace('jsonlite', quietly = TRUE))
     stop('please install the `jsonlite` package', call. = FALSE)
 
@@ -203,99 +195,79 @@ SDA_query <- function(q, dsn = NULL) {
   ua <- c(
     libcurl = curl::curl_version()$version,
     `r-curl` = as.character(utils::packageVersion("curl")),
-    httr = as.character(utils::packageVersion("httr")),
     soilDB = paste(as.character(utils::packageVersion('soilDB')), "(SDA_query)")
   )
   
-  # submit request
-  r <- try(httr::POST(
-      url = "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest",
-      body = list(query = q, format = "json+columnname+metadata"),
-      httr::add_headers(`User-Agent` = paste0(names(ua), "/", ua, collapse = " ")),
-      encode = "form"
-    ),
-    silent = TRUE
+  # format=json+columnname+metadata
+  post_body <- paste0("query=", curl::curl_escape(q), "&format=json%2Bcolumnname%2Bmetadata")
+  
+  # setup curl handle
+  h <- curl::new_handle()
+  curl::handle_setopt(h, 
+                      copypostfields = post_body,
+                      post = TRUE,
+                      useragent = paste0(names(ua), "/", ua, collapse = " ")
   )
   
-  if (inherits(r, 'try-error')) {
-    message("Soil Data Access POST request failed, returning try-error.\n\n", r)
-    return(invisible(r))
+  # submit request
+  url <- "https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest"
+  req <- try(curl::curl_fetch_memory(url, handle = h), silent = TRUE)
+  
+  if (inherits(req, 'try-error')) {
+    message("Soil Data Access POST request failed, returning try-error.\n\n", req)
+    return(invisible(req))
   }
   
-  # check response content type
-  h <- r$all_headers
-  
-  if (!is.null(h) && (length(h) == 0 
-        || is.null(h[[1]]$headers$`content-type`)
-        || !h[[1]]$headers$`content-type` %in% 
-                            c("application/json; charset=utf-8", # data response
-                              "text/xml; charset=utf-8") # error response (maybe not anymore?)
-  )) {
-    msg <- "Soil Data Access REST API is not currently available, please try again later."
-    if (is.null(h[[1]]$headers$`content-type`)) {
-      txt <- try(httr::content(r, as = "text", encoding = "UTF-8"), silent = TRUE)
-      if (!inherits(txt, 'try-error')) {
-        msg <- gsub("<[^>]*>", "", txt)
-      }
-    }
-    r <- try(stop(msg, call. = FALSE), silent = TRUE)
-  }
-  
-  if (inherits(r, 'try-error')) {
-    message("Soil Data Access POST request failed, returning try-error.\n\n", r)
-    return(invisible(r))
-  }
-
-  # trap errors, likely related to SQL syntax errors
-  request.status <- try(httr::stop_for_status(r), silent = TRUE)
-
-  # error message is encapsulated in XML, use xml2 library functions to extract
-  if (inherits(request.status, 'try-error')) {
+  # check HTTP status code
+  if (req$status_code >= 400) {
+    content <- rawToChar(req$content)
+    err.msg <- paste0("HTTP ", req$status_code)
     
-    # get the request response, this will contain an error message
-    r.content <- try(httr::content(r, as = 'parsed', encoding = 'UTF-8'), silent = TRUE)
-    
-    if (!inherits(r.content, 'try-error')) {
-      
-      # parse the XML to get the error message
-      error.msg <- try(xml2::xml_text(r.content), silent = TRUE)
-      
-      if (inherits(error.msg, 'try-error')) {
-        error.msg <- "Unable to parse error message from XML response"
-      }
-      
-      ## inject specific message into a try-error result
-      request.status <- try(stop(attr(request.status, 'condition')$message, "\n", error.msg), silent = TRUE)
+    # try to extract XML error message (ServiceException)
+    if (grepl("<ServiceException>", content, fixed = TRUE)) {
+       extracted <- sub(".*<ServiceException>(.*)</ServiceException>.*", "\\1", content)
+       # simple unescape for common entities
+       extracted <- gsub("&quot;", "\"", extracted)
+       extracted <- gsub("&apos;", "'", extracted)
+       extracted <- gsub("&lt;", "<", extracted)
+       extracted <- gsub("&gt;", ">", extracted)
+       extracted <- gsub("&amp;", "&", extracted)
+       
+       if (nchar(extracted) > 0) {
+         err.msg <- extracted
+       }
     }
     
-    # return the error object so calling function/user can handle it
-    return(invisible(request.status))
-    
+    err_obj <- try(stop(err.msg, call. = FALSE), silent = TRUE)
+    return(invisible(err_obj))
+  }
+  
+  # check content type
+  ct <- curl::parse_headers_list(req$headers)$`content-type`
+  if (is.null(ct) || !grepl("application/json", ct, ignore.case = TRUE)) {
+     msg <- "Soil Data Access REST API is not currently available, please try again later."
+     content <- try(rawToChar(req$content), silent = TRUE)
+     if (!inherits(content, 'try-error') && nchar(content) < 500) {
+        msg <- paste0(msg, "\nResponse: ", content)
+     }
+     return(invisible(try(stop(msg, call. = FALSE), silent = TRUE)))
   }
 
-  # the result is JSON:
-  # list of character matrix, one for each "Table" returned
-  # note: the data returned by SDA/JSON are all character class
-  #       we "fix" this later on
-  r.content <- try(httr::content(r, as = 'text', encoding = 'UTF-8'), silent = TRUE)
-  
-  if (inherits(r.content, 'try-error'))
-    return(invisible(r.content))
-
+  # Parse JSON
+  r.content <- rawToChar(req$content)
   d <- try(jsonlite::fromJSON(r.content), silent = TRUE)
 
-  if (inherits(d, 'try-error'))
+  if (inherits(d, 'try-error')) {
+    message("Failed to parse JSON response.")
     return(invisible(d))
-
-  # number of results
-  n.tables <- length(d)
-
-  # no results, terminate here
-  if (n.tables < 1) {
+  }
+  
+  # empty result set
+  if (is.null(d) || length(d) == 0) {
     message('empty result set')
     return(NULL)
   }
-
+  
   # process list of tables
   d <- try(lapply(d, .post_process_SDA_result_set), silent = TRUE)
 
@@ -304,12 +276,11 @@ SDA_query <- function(q, dsn = NULL) {
 
   # keep track of SDA result set IDs
   SDA.ids <- names(d)
-  for (i in 1:n.tables) {
+  for (i in 1:length(d)) {
     attr(d[[i]], 'SDA_id') <- SDA.ids[i]
   }
 
-
-  if (n.tables > 1) {
+  if (length(d) > 1) {
     message('multi-part result set, returning a list')
     return(d)
   } else {
@@ -317,8 +288,9 @@ SDA_query <- function(q, dsn = NULL) {
     message('single result set, returning a data.frame')
     return(d[[1]])
   }
-
 }
+
+
 
 
 ## See https://github.com/ncss-tech/soilDB/pull/191 for a list of possible data types
