@@ -227,11 +227,11 @@ SDA_query <- function(q, dsn = NULL) {
     if (grepl("<ServiceException>", content, fixed = TRUE)) {
        extracted <- sub(".*<ServiceException>(.*)</ServiceException>.*", "\\1", content)
        # simple unescape for common entities
-       extracted <- gsub("&quot;", "\"", extracted)
-       extracted <- gsub("&apos;", "'", extracted)
-       extracted <- gsub("&lt;", "<", extracted)
-       extracted <- gsub("&gt;", ">", extracted)
-       extracted <- gsub("&amp;", "&", extracted)
+       extracted <- gsub("&quot;|&#34;", "\"", extracted)
+       extracted <- gsub("&apos;|&#39;", "'", extracted)
+       extracted <- gsub("&lt;|&#60;", "<", extracted)
+       extracted <- gsub("&gt;|&#62;", ">", extracted)
+       extracted <- gsub("&amp;|&#38;", "&", extracted)
        
        if (nchar(extracted) > 0) {
          err.msg <- extracted
