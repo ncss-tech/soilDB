@@ -219,8 +219,8 @@ SDA_query <- function(q, dsn = NULL) {
   }
   
   # check HTTP status code
+  content <- rawToChar(req$content)
   if (req$status_code >= 400) {
-    content <- rawToChar(req$content)
     err.msg <- paste0("HTTP ", req$status_code)
     
     # try to extract XML error message (ServiceException)
@@ -236,11 +236,16 @@ SDA_query <- function(q, dsn = NULL) {
        if (nchar(extracted) > 0) {
          err.msg <- extracted
        }
+    } else if (grepl("Site is under daily maintenance", content, fixed = TRUE)) {
+      # Note that "Site is under daily maintenance from 12:30 AM CST to 12:45 AM
+      # CST. Please try after 12:45 AM CST." response is _not_ delivered as a
+      # standard ServiceException (because the service is down).
+      err.msg <- "Soil Data Access POST REST API is not currently available. Please try again in about 15 minutes."
     }
     
     err_obj <- try(stop(err.msg, call. = FALSE), silent = TRUE)
     return(invisible(err_obj))
-  }
+  } 
   
   # check content type
   ct <- curl::parse_headers_list(req$headers)$`content-type`
