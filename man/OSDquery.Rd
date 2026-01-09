@@ -14,7 +14,8 @@ OSDquery(
   use_and_veg = "",
   competing_series = "",
   geog_location = "",
-  geog_assoc_soils = ""
+  geog_assoc_soils = "",
+  remarks = ""
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ OSDquery(
 \item{geog_location}{search geographic setting section}
 
 \item{geog_assoc_soils}{search geographically associated soils section}
+
+\item{remarks}{search remarks section (typically contains diagnostic horizons / features)}
 }
 \value{
 a \code{data.frame} object containing soil series names that match patterns supplied as arguments.
@@ -47,7 +50,7 @@ This is the R interface to \href{https://casoilresource.lawr.ucdavis.edu/osd-sea
 OSD records are searched with the \href{https://www.postgresql.org/docs/9.5/textsearch.html}{PostgreSQL fulltext indexing} and query system (\href{https://www.postgresql.org/docs/9.5/datatype-textsearch.html}{syntax details}). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections.
 }
 \details{
-The \code{mlra} argument must be combined with another argument in order to become active. For example, search for series with 5GY hues in the "typical pedon" section, but limit to just MLRA 18: \code{OSDquery(mlra = '18', typical_pedon = '5GY')}.
+The \code{mlra} argument must be combined with another argument in order to become active. For example, search for series with "5GY" hues in the "typical pedon" section, but limit to just MLRA 18: \code{OSDquery(mlra = '18', typical_pedon = '5GY')}.
 
 See \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage} for more information.
 \itemize{
@@ -72,7 +75,7 @@ Related documentation can be found in the following tutorials
 SoilWeb maintains a snapshot of the Official Series Description data.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("httr") && requireNamespace("jsonlite") && require(aqp)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr") && requireNamespace("jsonlite") && require(aqp)) withAutoprint(\{ # examplesIf}
 
 \donttest{
   # find all series that list Pardee as a geographically associated soil.
@@ -82,7 +85,7 @@ SoilWeb maintains a snapshot of the Official Series Description data.
   x <- fetchOSD(s$series, extended = TRUE, colorState = 'dry')
 
   # simple figure
-  par(mar=c(0,0,1,1))
+  par(mar = c(0,0,1,1))
   aqp::plotSPC(x$SPC)
 }
 \dontshow{\}) # examplesIf}
@@ -91,7 +94,7 @@ SoilWeb maintains a snapshot of the Official Series Description data.
 USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
 }
 \seealso{
-\code{\link[=fetchOSD]{fetchOSD()}}, \code{\link[=siblings]{siblings()}}, \code{\link[=fetchOSD]{fetchOSD()}}
+\code{\link[=fetchOSD]{fetchOSD()}}, \code{\link[=siblings]{siblings()}}
 }
 \author{
 D.E. Beaudette

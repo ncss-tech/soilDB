@@ -2,7 +2,7 @@
 # https://www.postgresql.org/docs/9.5/static/textsearch-controls.html
 # these are all parameters expected by the SoilWeb OSD Fulltext search
 
-#' Search full text of Official Series Description on SoilWeb 
+#' @title Search full text of Official Series Description on SoilWeb
 #' 
 #' @description This is the R interface to [OSD search by Section](https://casoilresource.lawr.ucdavis.edu/osd-search/) and [OSD Search](https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php) APIs provided by SoilWeb.
 #' 
@@ -18,10 +18,12 @@
 #' @param competing_series search competing series section
 #' @param geog_location search geographic setting section
 #' @param geog_assoc_soils search geographically associated soils section
+#' @param remarks search remarks section (typically contains diagnostic horizons / features)
+#' 
 #' 
 #' @details 
 #' 
-#' The `mlra` argument must be combined with another argument in order to become active. For example, search for series with 5GY hues in the "typical pedon" section, but limit to just MLRA 18: `OSDquery(mlra = '18', typical_pedon = '5GY')`.
+#' The `mlra` argument must be combined with another argument in order to become active. For example, search for series with "5GY" hues in the "typical pedon" section, but limit to just MLRA 18: `OSDquery(mlra = '18', typical_pedon = '5GY')`.
 #' 
 #' See [this webpage](https://casoilresource.lawr.ucdavis.edu/osd-search/) for more information.
 #'
@@ -52,7 +54,7 @@
 #'
 #' @note SoilWeb maintains a snapshot of the Official Series Description data.
 #'
-#' @seealso [fetchOSD()], [siblings()], [fetchOSD()]
+#' @seealso [fetchOSD()], [siblings()]
 #'
 #' @keywords manip
 #'
@@ -68,15 +70,15 @@
 #'   x <- fetchOSD(s$series, extended = TRUE, colorState = 'dry')
 #'
 #'   # simple figure
-#'   par(mar=c(0,0,1,1))
+#'   par(mar = c(0,0,1,1))
 #'   aqp::plotSPC(x$SPC)
 #' }
 #' 
-OSDquery <- function(everything = NULL, mlra = '', taxonomic_class = '', typical_pedon = '', brief_narrative = '', ric = '', use_and_veg = '', competing_series = '', geog_location = '', geog_assoc_soils = '') {
+OSDquery <- function(everything = NULL, mlra = '', taxonomic_class = '', typical_pedon = '', brief_narrative = '', ric = '', use_and_veg = '', competing_series = '', geog_location = '', geog_assoc_soils = '', remarks = '') {
  
   # check for required packages
-  if(!requireNamespace('httr', quietly=TRUE) | !requireNamespace('jsonlite', quietly=TRUE))
-    stop('please install the `httr` and `jsonlite` packages', call.=FALSE)
+  if(!requireNamespace('httr', quietly = TRUE) | !requireNamespace('jsonlite', quietly = TRUE))
+    stop('please install the `httr` and `jsonlite` packages', call. = FALSE)
 
   # sanity checks
   
@@ -96,7 +98,8 @@ OSDquery <- function(everything = NULL, mlra = '', taxonomic_class = '', typical
       use_and_veg = use_and_veg, 
       competing_series = competing_series, 
       geog_location = geog_location, 
-      geog_assoc_soils = geog_assoc_soils
+      geog_assoc_soils = geog_assoc_soils, 
+      remarks = remarks
     )
     
     # API URL
