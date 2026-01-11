@@ -46,6 +46,7 @@ The standard set of "site" and "horizon" data are returned as a \code{SoilProfil
 
 \item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
 \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
+\item{geomorphons}{geomorphons landform classification, derived from the current SSURGO snapshot and ...}
 \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
 \item{ecoclassid}{area cross-tabulation of ecoclassid by soil series name, derived from the current SSURGO snapshot, major components only}
 \item{climate}{climate summaries from PRISM stack (CONUS only)}
@@ -73,7 +74,7 @@ These last two cases are problematic for analysis that makes use of morphology a
 Requests to the SoilWeb API are split into batches of 100 series names from \code{soils} via \code{\link[=makeChunks]{makeChunks()}}.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \donttest{
   library(aqp)
   # soils of interest
