@@ -5,6 +5,8 @@
 #             * annual.climate is now a data.frame padded with NA when series is outside of CONUS
 #             * eff_class added to horizon data
 
+# 2026-01-10: API change, geomorphon proportions added to 'extended'
+
 
 ## tabulate the number of records within each geomorphic table
 ## there could be some cases where there are no records, resulting in FALSE
@@ -88,6 +90,7 @@
 #'
 #'   \item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
 #'   \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
+#'   \item{geomorphons}{geomorphons landform classification, derived from the current SSURGO snapshot and ...}
 #'   \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
 #'   \item{ecoclassid}{area cross-tabulation of ecoclassid by soil series name, derived from the current SSURGO snapshot, major components only}
 #'   \item{climate}{climate summaries from PRISM stack (CONUS only)}
@@ -347,9 +350,9 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	if(extended) {
 	  
 	  # unravel nested lists
-	  .tables <- c('competing', 'geog_assoc_soils', 'geomcomp', 'hillpos', 'mtnpos', 'terrace', 'flats', 'shape_across', 'shape_down', 'pmkind', 'pmorigin', 'mlra', 'ecoclassid', 'climate', 'nccpi')
+	  .tables <- c('competing', 'geog_assoc_soils', 'geomcomp', 'hillpos', 'mtnpos', 'terrace', 'flats', 'shape_across', 'shape_down', 'pmkind', 'pmorigin', 'geomorphons', 'mlra', 'ecoclassid', 'climate', 'nccpi')
 	  
-	  # chunk-wise missing tabular data is reported as FALSE
+	  # chunk-wise missing tabular data are reported as FALSE
 	  # cannot rbind(FALSE) or rbind(FALSE, data.frame) -> corruption of data
 	  for(.tab in .tables) {
 	    .tabdata <- lapply(r, '[[', .tab)
@@ -364,22 +367,6 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	    }
 	    
 	  }
-	  
-	  # res$competing <- do.call('rbind', lapply(r, '[[', 'competing'))
-	  # res$geog_assoc_soils <- do.call('rbind', lapply(r, '[[', 'geog_assoc_soils'))
-	  # res$geomcomp <- do.call('rbind', lapply(r, '[[', 'geomcomp'))
-	  # res$hillpos <- do.call('rbind', lapply(r, '[[', 'hillpos'))
-	  # res$mtnpos <- do.call('rbind', lapply(r, '[[', 'mtnpos'))
-	  # res$terrace <- do.call('rbind', lapply(r, '[[', 'terrace'))
-	  # res$flats <- do.call('rbind', lapply(r, '[[', 'flats'))
-	  # res$shape_across <- do.call('rbind', lapply(r, '[[', 'shape_across'))
-	  # res$shape_down <- do.call('rbind', lapply(r, '[[', 'shape_down'))
-	  # res$pmkind <- do.call('rbind', lapply(r, '[[', 'pmkind'))
-	  # res$pmorigin <- do.call('rbind', lapply(r, '[[', 'pmorigin'))
-	  # res$mlra <- do.call('rbind', lapply(r, '[[', 'mlra'))
-	  # res$ecoclassid <- do.call('rbind', lapply(r, '[[', 'ecoclassid'))
-	  # res$climate <- do.call('rbind', lapply(r, '[[', 'climate'))
-	  # res$nccpi <- do.call('rbind', lapply(r, '[[', 'nccpi'))
 	  
 	  # metadata are identical across chunks
 	  res$metadata <- unique(do.call('rbind', lapply(r, '[[', 'metadata')))
@@ -464,6 +451,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	    shape_down = res$shape_down,
 	    pmkind = res$pmkind,
 	    pmorigin = res$pmorigin,
+	    geomorphons = res$geomorphons,
 	    mlra = res$mlra,
 	    ecoclassid = res$ecoclassid,
 	    climate.annual = annual.data,
