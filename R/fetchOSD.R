@@ -5,7 +5,7 @@
 #             * annual.climate is now a data.frame padded with NA when series is outside of CONUS
 #             * eff_class added to horizon data
 
-# 2026-01-10: API change, geomorphon proportions added to 'extended'
+# 2026-01-10: API change, geomorphon proportions added to 'extended' request
 
 
 ## tabulate the number of records within each geomorphic table
@@ -51,9 +51,6 @@
 
 
 
-## TODO: consider adding an argument for "growing" very thin bottom R|Cr|Cd horizons
-# https://github.com/ncss-tech/aqp/issues/173
-
 #' @title Get Official Series Descriptions and summaries from SoilWeb API
 #'
 #' @description This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are updated quarterly and made available via SoilWeb. Set `extended = TRUE` and see the `soilweb.metadata` list element for information on when the source data were last updated. 
@@ -90,7 +87,7 @@
 #'
 #'   \item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
 #'   \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
-#'   \item{geomorphons}{geomorphons landform classification, derived from the current SSURGO snapshot and ...}
+#'   \item{geomorphons}{geomorphons landform classification (CONUS only), derived from the current gSSURGO snapshot and a 30m CONUS geomoprhons grid, details pending}
 #'   \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
 #'   \item{ecoclassid}{area cross-tabulation of ecoclassid by soil series name, derived from the current SSURGO snapshot, major components only}
 #'   \item{climate}{climate summaries from PRISM stack (CONUS only)}
@@ -106,7 +103,7 @@
 #'
 #' \describe{
 #'
-#'   \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.}
+#'   \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty `data.frame` because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.}
 #'
 #'   \item{2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{ - Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
 #'
@@ -116,7 +113,7 @@
 #'
 #'}
 #'
-#' @return a `SoilProfileCollection` object containing basic soil morphology and taxonomic information.
+#' @return a `SoilProfileCollection` object containing basic soil morphology and taxonomic information, a `list` when `extended = TRUE`.
 #'
 #' @references USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
 #'
