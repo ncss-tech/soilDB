@@ -235,15 +235,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
   h <- res$hz
 
 	# report missing data
-  # no data condition 2-1/2-2: s and h => FALSE
   # no data condition 4-1/4-2: s and h => structure(list(), dim = 1:0, dimnames = list(NULL, NULL))
-  
-  # only works for 2-1/2-2 php-pgsql
-  # if ((is.logical(s) && length(s) == 1) ||
-  #     (is.logical(h) & length(h) == 1)) {
-  #   message('query returned no data')
-  #   return(NULL)
-  # }
   
   # 4-1/4-2 updated php-pgsql
   # no data condition: either `s` OR `h` are NOT `data.frame`

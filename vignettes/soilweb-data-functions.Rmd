@@ -1,0 +1,172 @@
+---
+title: "Functions and Data Sources that Depend on SoilWeb"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{SoilWeb Functions and Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  # eval = !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = "TRUE")),
+  message = FALSE,
+  warning = FALSE,
+  fig.height = 7,
+  fig.width = 7
+)
+```
+
+# Summary
+The soilDB package relies on a number of data sources curated as part of the [SoilWeb](https://casoilresource.lawr.ucdavis.edu/soilweb-apps) ecosystem of web applications, APIs, web coverage services (WCS), and internally-used lookup tables. These data are always updated shortly after the beginning of each fiscal year (October 1st) as part of the SSURGO refresh cycle. Within-cycle updates are typically performed quarterly. 
+
+Many of these curated data sources are documented in:
+
+  * O'Geen, A., Walkinshaw, M. and Beaudette, D.E. (2017), SoilWeb: A Multifaceted Interface to Soil Survey Information. Soil Sci. Soc. Am. J., 81: 853-862. https://doi.org/10.2136/sssaj2016.11.0386n
+  
+  * Beaudette, D.E. and O'Geen, A.T. (2010), An iPhone Application for On-Demand Access to Digital Soil Survey Information. Soil Sci. Soc. Am. J., 74: 1682-1684. https://doi.org/10.2136/sssaj2010.0144N
+  
+  * Beaudette, D.E. and O’Geen, A.T. (2009), Soil-Web: An online soil survey for California, Arizona, and Nevada, Comp. & Geo. Sci., 35:2119-2128, https://doi.org/10.1016/j.cageo.2008.10.016
+
+
+## Primary Data Sources
+
+  * [SSURGO](https://www.nrcs.usda.gov/resources/data-and-reports/soil-survey-geographic-database-ssurgo), the detailed soil survey of the United States
+  * [STATSGO2](https://www.nrcs.usda.gov/resources/data-and-reports/description-of-statsgo2-database), the generalized soil survey of the United States
+  * Official Series Descriptions (OSD) via [SoilKnowledgeBase](https://github.com/ncss-tech/SoilKnowledgeBase/)
+  * Soil Classification database (no public version)
+  * [USDA Ag. Handbook 296 -- Major Land Resource Area (MLRA)](https://www.nrcs.usda.gov/resources/data-and-reports/major-land-resource-area-mlra)
+  * Climate ([PRISM](https://prism.oregonstate.edu/)) data and derivatives
+  * Digital elevation model (DEM) derivatives
+  * [NCSS Lab Data Mart](https://ncsslabdatamart.sc.egov.usda.gov/) snapshot
+  * NRCS [Rapid Carbon Assessment](https://www.nrcs.usda.gov/resources/data-and-reports/rapid-carbon-assessment-raca) (RaCA)
+
+
+
+# SoilWeb Curated Data Sources
+
+## SSURGO Derivatives
+
+
+### MLRA
+
+
+### Geomorphic Summaries
+
+
+### Parent Material Summaries
+
+
+
+
+
+## Climate Data and Derivatives
+
+
+## DEM Derivatives
+
+
+
+
+## OSD Derivatives
+
+
+
+
+
+
+
+
+|product                       |last_update |
+|:-----------------------------|:-----------|
+|ISSR800                       |2024-10-30  |
+|KSSL snapshot                 |2025-01-21  |
+|MLRA membership               |2025-10-07  |
+|OSD fulltext                  |2026-01-02  |
+|OSD morphology                |2026-01-02  |
+|SC database                   |2026-01-02  |
+|series climate summary        |2025-10-08  |
+|series-ESID cross-tabulation  |2025-10-07  |
+|SSURGO geomorphology          |2025-10-06  |
+|SSURGO geomorphon             |2026-01-11  |
+|SSURGO NCCPI Stats            |2025-10-19  |
+|SSURGO parent material        |2025-10-06  |
+|series extent                 |2025-10-04  |
+|taxa extent                   |2025-10-21  |
+
+
+
+
+
+
+
+
+# API Connections
+
+# 
+
+ 
+ * `fetchOSD()`
+ * `OSDquery()`
+ * `siblings()`
+ 
+ * `seriesExtent()`
+ * `taxaExtent()`
+ 
+ * `mukey.wcs()`
+ * `ISSR800.wcs()`
+ * `soilColor.wcs()`
+ 
+ 
+
+ * `fetchKSSL()`
+ * `fetchRaCA()`
+ * `SoilWeb_spatial_query()`
+
+
+```{r}
+library(soilDB)
+library(aqp)
+
+x <- fetchOSD(c('miami', 'pierre', 'tristan', 'lucy', 'musick'), extended = TRUE)
+
+knitr::kable(head(x$competing))
+
+knitr::kable(head(x$geog_assoc_soils))
+
+knitr::kable(head(x$hillpos), digits = 2)
+
+knitr::kable(head(x$geomcomp), digits = 2)
+
+knitr::kable(head(x$mtnpos), digits = 2)
+
+knitr::kable(head(x$terrace), digits = 2)
+
+knitr::kable(head(x$flats), digits = 2)
+
+knitr::kable(head(x$shape_across), digits = 2)
+
+knitr::kable(head(x$shape_down), digits = 2)
+
+knitr::kable(head(x$pmkind), digits = 2)
+
+knitr::kable(head(x$pmorigin), digits = 2)
+
+knitr::kable(head(x$geomorphons), digits = 2)
+
+knitr::kable(head(x$mlra), digits = 2)
+
+knitr::kable(head(x$ecoclassid), digits = 2)
+
+knitr::kable(head(x$climate.annual), digits = 0)
+
+knitr::kable(head(x$climate.monthly), digits = 0)
+
+knitr::kable(head(x$NCCPI), digits = 2)
+
+```
+
+
+
+
