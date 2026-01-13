@@ -53,6 +53,7 @@ get_soilDB_env <- function() {
 }
 
 #' @importFrom curl curl_download
+#' @importFrom jsonlite fromJSON
 .soilDB_curl_get_JSON <- function(x, gzip = FALSE, FUN = jsonlite::fromJSON, quiet = TRUE, ...) {
   tf <- tempfile()
   
