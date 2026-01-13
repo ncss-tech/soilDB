@@ -11,8 +11,8 @@ Description: A collection of functions for reading soil data from U.S. Departmen
 License: GPL (>= 3)
 LazyLoad: yes
 Depends: R (>= 4.1.0)
-Imports: grDevices, graphics, stats, utils, methods, aqp (>= 2.1.0), data.table, DBI, curl
-Suggests: jsonlite, xml2, httr, rvest, odbc, RSQLite, sf, wk, terra, raster, knitr, rmarkdown, testthat
+Imports: grDevices, graphics, stats, utils, methods, aqp (>= 2.1.0), data.table, DBI, curl, jsonlite
+Suggests: xml2, httr, rvest, odbc, RSQLite, sf, wk, terra, raster, knitr, rmarkdown, testthat
 Repository: CRAN
 URL: https://github.com/ncss-tech/soilDB/, https://ncss-tech.github.io/soilDB/, https://ncss-tech.github.io/AQP/
 BugReports: https://github.com/ncss-tech/soilDB/issues
