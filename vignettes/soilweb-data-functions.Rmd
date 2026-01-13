@@ -16,6 +16,12 @@ knitr::opts_chunk$set(
   fig.height = 7,
   fig.width = 7
 )
+
+# get source data for explanations
+library(soilDB)
+library(aqp)
+
+x <- fetchOSD(c('miami', 'pierre', 'tristan', 'lucy', 'musick'), extended = TRUE)
 ```
 
 # Summary
@@ -43,39 +49,118 @@ Many of these curated data sources are documented in:
   * NRCS [Rapid Carbon Assessment](https://www.nrcs.usda.gov/resources/data-and-reports/rapid-carbon-assessment-raca) (RaCA)
 
 
+## `soilDB` Functions
+
+ * `fetchOSD()`: get soil morphology  and many soil series level summaries for one or more soil series names
+ * `OSDquery()`: search the OSD records using the postgresql full text query syntax
+ * `siblings()`: get names and basic information about soil series that co-occurr within soil map units containing  a given series
+ 
+ * `seriesExtent()`: get vector or raster representations of were soil series have been used in SSURGO
+ * `taxaExtent()`: get raster representations of were taxa and formative elements (Soil Taxonomy) have been used in SSURGO
+ 
+ * `mukey.wcs()`: get raster data describing map unit keys, from a variety of sources, by bounding-box
+ * `ISSR800.wcs()`: get raster data describing generalized patterns in soil property and condition, by bounding-box
+ * `soilColor.wcs()`: get raster soil color maps by bounding-box
+ 
+ 
+
+ 
+### Functions Near Retirement
+
+ * `fetchKSSL()`: get soil characterization and (limited) morphology data
+ * `fetchRaCA()`: get records associated with the RaCA collection
+ * `SoilWeb_spatial_query()`: simple interface to spatial intersection between SSURGO polygons and user supplied bounding-box
+
+
+
+
+## Related APIs
+
+ * https://soilmap4-1.lawr.ucdavis.edu/osd-search/index.php
+ * https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php
+ 
+
+
+
 
 # SoilWeb Curated Data Sources
+
 
 ## SSURGO Derivatives
 
 
 ### MLRA
 
+```{r}
+knitr::kable(head(x$mlra), digits = 2)
+```
+
 
 ### Geomorphic Summaries
+
+```{r}
+knitr::kable(head(x$hillpos), digits = 2)
+
+knitr::kable(head(x$geomcomp), digits = 2)
+
+knitr::kable(head(x$mtnpos), digits = 2)
+
+knitr::kable(head(x$terrace), digits = 2)
+
+knitr::kable(head(x$flats), digits = 2)
+
+knitr::kable(head(x$shape_across), digits = 2)
+
+knitr::kable(head(x$shape_down), digits = 2)
+```
+
+### Other
+
+```{r}
+knitr::kable(head(x$NCCPI), digits = 2)
+
+knitr::kable(head(x$ecoclassid), digits = 2)
+```
 
 
 ### Parent Material Summaries
 
+```{r}
+knitr::kable(head(x$pmkind), digits = 2)
 
+knitr::kable(head(x$pmorigin), digits = 2)
+```
 
 
 
 ## Climate Data and Derivatives
 
+```{r}
+knitr::kable(head(x$climate.annual), digits = 0)
+
+knitr::kable(head(x$climate.monthly), digits = 0)
+```
+
+
 
 ## DEM Derivatives
 
+```{r}
+knitr::kable(head(x$geomorphons), digits = 2)
+```
+
+
+## SC and OSD Derivatives
+
+```{r}
+knitr::kable(head(x$competing))
+
+knitr::kable(head(x$geog_assoc_soils))
+```
 
 
 
-## OSD Derivatives
-
-
-
-
-
-
+Relevant SoilWeb data metadata, as reported by `fetchOSD(..., extended = TRUE)`:
 
 
 |product                       |last_update |
@@ -98,72 +183,18 @@ Many of these curated data sources are documented in:
 
 
 
+# Relevant Tutorials
 
 
 
 
-# API Connections
-
-# 
-
- 
- * `fetchOSD()`
- * `OSDquery()`
- * `siblings()`
- 
- * `seriesExtent()`
- * `taxaExtent()`
- 
- * `mukey.wcs()`
- * `ISSR800.wcs()`
- * `soilColor.wcs()`
- 
- 
-
- * `fetchKSSL()`
- * `fetchRaCA()`
- * `SoilWeb_spatial_query()`
-
-
-```{r}
+# Examples
+```{r eval=FALSE}
 library(soilDB)
 library(aqp)
 
 x <- fetchOSD(c('miami', 'pierre', 'tristan', 'lucy', 'musick'), extended = TRUE)
 
-knitr::kable(head(x$competing))
-
-knitr::kable(head(x$geog_assoc_soils))
-
-knitr::kable(head(x$hillpos), digits = 2)
-
-knitr::kable(head(x$geomcomp), digits = 2)
-
-knitr::kable(head(x$mtnpos), digits = 2)
-
-knitr::kable(head(x$terrace), digits = 2)
-
-knitr::kable(head(x$flats), digits = 2)
-
-knitr::kable(head(x$shape_across), digits = 2)
-
-knitr::kable(head(x$shape_down), digits = 2)
-
-knitr::kable(head(x$pmkind), digits = 2)
-
-knitr::kable(head(x$pmorigin), digits = 2)
-
-knitr::kable(head(x$geomorphons), digits = 2)
-
-knitr::kable(head(x$mlra), digits = 2)
-
-knitr::kable(head(x$ecoclassid), digits = 2)
-
-knitr::kable(head(x$climate.annual), digits = 0)
-
-knitr::kable(head(x$climate.monthly), digits = 0)
-
-knitr::kable(head(x$NCCPI), digits = 2)
 
 ```
 
