@@ -23,7 +23,7 @@
 #' 
 #' @details 
 #' 
-#' Queries including the `taxonomic_class` argument make use of the Soil Classification database, not fulltext seasrch of OSD records. Queries including the `mlra` argument make use of a SoilWeb data source based on spatial intersection (SSURGO x MLRA polygons), updated quarterly. MLRA queries are only possible for those soil series used in the current SSURGO snapshot.
+#' Queries including the `taxonomic_class` argument make use of the Soil Classification database, not fulltext search of OSD records. Queries including the `mlra` argument make use of a SoilWeb data source based on spatial intersection (SSURGO x MLRA polygons), updated quarterly. MLRA queries are only possible for those soil series used in the current SSURGO snapshot.
 #' 
 #' The `mlra` argument must be combined with another argument in order to become active. For example, search for series with "5GY" hues in the "typical pedon" section, but limit to just MLRA 18: `OSDquery(mlra = '18', typical_pedon = '5GY')`. 
 #'

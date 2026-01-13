@@ -50,7 +50,7 @@ This is the R interface to \href{https://casoilresource.lawr.ucdavis.edu/osd-sea
 OSD records are searched with the \href{https://www.postgresql.org/docs/current/textsearch.html}{PostgreSQL fulltext indexing} and query system (\href{https://www.postgresql.org/docs/current/textsearch-controls.html}{syntax details}). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections.
 }
 \details{
-Queries including the \code{taxonomic_class} argument make use of the Soil Classification database, not fulltext seasrch of OSD records. Queries including the \code{mlra} argument make use of a SoilWeb data source based on spatial intersection (SSURGO x MLRA polygons), updated quarterly. MLRA queries are only possible for those soil series used in the current SSURGO snapshot.
+Queries including the \code{taxonomic_class} argument make use of the Soil Classification database, not fulltext search of OSD records. Queries including the \code{mlra} argument make use of a SoilWeb data source based on spatial intersection (SSURGO x MLRA polygons), updated quarterly. MLRA queries are only possible for those soil series used in the current SSURGO snapshot.
 
 The \code{mlra} argument must be combined with another argument in order to become active. For example, search for series with "5GY" hues in the "typical pedon" section, but limit to just MLRA 18: \code{OSDquery(mlra = '18', typical_pedon = '5GY')}.
 \subsection{Syntax Notes:}{
