@@ -14,15 +14,16 @@ OSDquery(
   use_and_veg = "",
   competing_series = "",
   geog_location = "",
-  geog_assoc_soils = ""
+  geog_assoc_soils = "",
+  remarks = ""
 )
 }
 \arguments{
 \item{everything}{search entire OSD text (default is NULL), \code{mlra} may also be specified, all other arguments are ignored}
 
-\item{mlra}{a comma-delimited string of MLRA to search ('17,18,22A'), see Details section below}
+\item{mlra}{a comma-delimited string of MLRA to search ('17,18,22A'), see Details}
 
-\item{taxonomic_class}{search family level classification}
+\item{taxonomic_class}{search family level classification, see Details}
 
 \item{typical_pedon}{search typical pedon section}
 
@@ -37,6 +38,8 @@ OSDquery(
 \item{geog_location}{search geographic setting section}
 
 \item{geog_assoc_soils}{search geographically associated soils section}
+
+\item{remarks}{search remarks section (typically contains diagnostic horizons / features)}
 }
 \value{
 a \code{data.frame} object containing soil series names that match patterns supplied as arguments.
@@ -44,21 +47,45 @@ a \code{data.frame} object containing soil series names that match patterns supp
 \description{
 This is the R interface to \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{OSD search by Section} and \href{https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php}{OSD Search} APIs provided by SoilWeb.
 
-OSD records are searched with the \href{https://www.postgresql.org/docs/9.5/textsearch.html}{PostgreSQL fulltext indexing} and query system (\href{https://www.postgresql.org/docs/9.5/datatype-textsearch.html}{syntax details}). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections.
+OSD records are searched with the \href{https://www.postgresql.org/docs/current/textsearch.html}{PostgreSQL fulltext indexing} and query system (\href{https://www.postgresql.org/docs/current/textsearch-controls.html}{syntax details}). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections.
 }
 \details{
-The \code{mlra} argument must be combined with another argument in order to become active. For example, search for series with 5GY hues in the "typical pedon" section, but limit to just MLRA 18: \code{OSDquery(mlra = '18', typical_pedon = '5GY')}.
+Queries including the \code{taxonomic_class} argument make use of the Soil Classification database, not fulltext search of OSD records. Queries including the \code{mlra} argument make use of a SoilWeb data source based on spatial intersection (SSURGO x MLRA polygons), updated quarterly. MLRA queries are only possible for those soil series used in the current SSURGO snapshot.
 
-See \href{https://casoilresource.lawr.ucdavis.edu/osd-search/}{this webpage} for more information.
+The \code{mlra} argument must be combined with another argument in order to become active. For example, search for series with "5GY" hues in the "typical pedon" section, but limit to just MLRA 18: \code{OSDquery(mlra = '18', typical_pedon = '5GY')}.
+\subsection{Syntax Notes:}{
+
+The PostgreSQL fulltext query syntax is complex, but many common text search concepts are familiar:
 \itemize{
-\item family level taxa are derived from SC database, not parsed OSD records
-\item MLRA are derived via spatial intersection (SSURGO x MLRA polygons)
-\item MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)
-\item logical AND: &
-\item logical OR: |
-\item wildcard, e.g. rhy-something rhy:*
-\item search terms with spaces need doubled single quotes: ''san joaquin''
-\item combine search terms into a single expression: (grano:* | granite)
+\item logical AND: \code{&}
+\item logical OR: \code{|}
+\item wildcard, e.g. rhy-something: \verb{rhy:*}
+\item search terms with spaces need doubled single quotes: \verb{''san joaquin''}
+\item combine search terms into a single expression: \verb{(grano:* | granite)}
+}
+}
+
+\subsection{Examples}{
+
+Strategies for searching entire OSD records:
+\itemize{
+\item \verb{iowa & smectitic & verti:* & Cg & ! saturated}
+\item \verb{iowa & smectitic & verti:* & Cg & terrace}
+\item \verb{(sulfi:* | sulfa:*) & aq:*}
+\item \code{Coarse-loamy & mixed & active & thermic & Mollic & Haploxeralfs}
+\item \verb{sierra & nevada & (meta:* | metamorphic) & xer:* & thermic & lithic}
+\item \verb{sierra & nevada & foothill & (grano:* | granite) & thermic}
+\item \verb{rhyo:* & tuff:* & California & thermic}
+\item \code{paralithic & thermic & !mesic & mollic & epipedon}
+\item \verb{(gypsum | gyp:*) (MLRA: 15,17)}
+\item \code{flood & plains & toe & slope}
+}
+
+Strategies for search OSD fields:
+\itemize{
+\item \code{taxonomic_class = 'duri:* & thermic'}: family level classification contains "duri-" prefix and "thermic"
+\item \code{typical_pedon = 'cobbly & ashy & silt & loam'}: "cobbly, ashy, silt, loam", any horizon
+\item \code{geog_location = 'strath & terrace'}: "strath" and "terrace" in geographic setting narrative
 }
 
 Related documentation can be found in the following tutorials
@@ -68,11 +95,12 @@ Related documentation can be found in the following tutorials
 \item \href{https://ncss-tech.github.io/AQP/soilDB/siblings.html}{siblings}
 }
 }
+}
 \note{
-SoilWeb maintains a snapshot of the Official Series Description data.
+SoilWeb maintains a snapshot of the Official Series Description data, updated quarterly.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("httr") && requireNamespace("jsonlite") && require(aqp)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr") && requireNamespace("jsonlite") && require(aqp)) withAutoprint(\{ # examplesIf}
 
 \donttest{
   # find all series that list Pardee as a geographically associated soil.
@@ -82,7 +110,7 @@ SoilWeb maintains a snapshot of the Official Series Description data.
   x <- fetchOSD(s$series, extended = TRUE, colorState = 'dry')
 
   # simple figure
-  par(mar=c(0,0,1,1))
+  par(mar = c(0,0,1,1))
   aqp::plotSPC(x$SPC)
 }
 \dontshow{\}) # examplesIf}
@@ -91,7 +119,7 @@ SoilWeb maintains a snapshot of the Official Series Description data.
 USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
 }
 \seealso{
-\code{\link[=fetchOSD]{fetchOSD()}}, \code{\link[=siblings]{siblings()}}, \code{\link[=fetchOSD]{fetchOSD()}}
+\code{\link[=fetchOSD]{fetchOSD()}}, \code{\link[=siblings]{siblings()}}
 }
 \author{
 D.E. Beaudette
