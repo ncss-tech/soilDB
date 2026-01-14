@@ -132,22 +132,41 @@ get_SDA_property <-
            miscellaneous_areas = FALSE,
            query_string = FALSE,
            dsn = NULL)
-    {
-
-  q <- .constructPropQuery(method = method,
-                           property = property,
-                           areasymbols = areasymbols,
-                           mukeys = mukeys,
-                           WHERE = WHERE,
-                           top_depth = top_depth,
-                           bottom_depth = bottom_depth,
-                           include_minors = include_minors,
-                           miscellaneous_areas = miscellaneous_areas,
-                           FUN = FUN,
-                           sqlite_dialect = !is.null(dsn))
-
-  if (query_string) return(q)
-
+    {    
+    
+    m <- c(
+      "DOMINANT COMPONENT (CATEGORY)",
+      "WEIGHTED AVERAGE",
+      "MIN/MAX",
+      "DOMINANT COMPONENT (NUMERIC)",
+      "DOMINANT CONDITION",
+      "NONE"
+    )
+    
+    if (missing(method)) {
+      stop("Please specify `method` argument as one of the following:\n", 
+           toString(shQuote(m)), call. = FALSE)
+    }
+    
+    method <- match.arg(toupper(method), m)
+    
+    q <- .constructPropQuery(
+      method = method,
+      property = property,
+      areasymbols = areasymbols,
+      mukeys = mukeys,
+      WHERE = WHERE,
+      top_depth = top_depth,
+      bottom_depth = bottom_depth,
+      include_minors = include_minors,
+      miscellaneous_areas = miscellaneous_areas,
+      FUN = FUN,
+      sqlite_dialect = !is.null(dsn)
+    )
+    
+    if (query_string)
+      return(q)
+    
   # execute query
   res <- SDA_query(q, dsn = dsn)
   
@@ -276,7 +295,9 @@ get_SDA_property <-
   } else if (!is.null(areasymbols)) {
     WHERE <- paste("legend.areasymbol IN", format_SQL_in_statement(areasymbols))
   }
-
+  
+  method <- toupper(method)
+  
   if (method != "NONE" &&
       (grepl("component\\.|chorizon\\.", WHERE)[1] ||
        grepl(paste(.valid_chorizon_columns(), collapse = "|"), WHERE)[1])) {
@@ -314,8 +335,6 @@ get_SDA_property <-
 
   if (!is.character(method))
     stop('argument `method` should be character string containing aggregation method, or `"NONE"` for no aggregation', call. = FALSE)
-
-  method <- toupper(method)
 
   if (method == "NONE") {
     # dput(colnames(SDA_query("SELECT TOP 1 * FROM chorizon"))) # without cokey
