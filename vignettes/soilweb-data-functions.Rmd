@@ -1,0 +1,417 @@
+---
+title: "Functions and Data Sources that Depend on SoilWeb"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{SoilWeb Functions and Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  # eval = !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = "TRUE")),
+  message = FALSE,
+  warning = FALSE,
+  fig.height = 7,
+  fig.width = 7
+)
+
+# get source data for explanations
+library(soilDB)
+library(aqp)
+
+x <- fetchOSD(c('miami', 'pierre', 'tristan', 'lucy', 'musick'), extended = TRUE)
+```
+
+# Summary
+The soilDB package relies on a number of data sources curated as part of the [SoilWeb](https://casoilresource.lawr.ucdavis.edu/soilweb-apps) ecosystem of web applications, APIs, web coverage services (WCS), and internally-used lookup tables. These data are always updated shortly after the beginning of each fiscal year (October 1st) as part of the SSURGO refresh cycle. Within-cycle updates are typically performed quarterly. 
+
+Many of these curated data sources and their evolution through time have been documented in:
+
+  * O'Geen, A., Walkinshaw, M. and Beaudette, D.E. (2017), SoilWeb: A Multifaceted Interface to Soil Survey Information. Soil Sci. Soc. Am. J., 81: 853-862. https://doi.org/10.2136/sssaj2016.11.0386n
+  
+  * Beaudette, D.E. and O'Geen, A.T. (2010), An iPhone Application for On-Demand Access to Digital Soil Survey Information. Soil Sci. Soc. Am. J., 74: 1682-1684. https://doi.org/10.2136/sssaj2010.0144N
+  
+  * Beaudette, D.E. and O’Geen, A.T. (2009), Soil-Web: An online soil survey for California, Arizona, and Nevada, Comp. & Geo. Sci., 35:2119-2128, https://doi.org/10.1016/j.cageo.2008.10.016
+
+
+## Primary Data Sources
+
+  * [SSURGO](https://www.nrcs.usda.gov/resources/data-and-reports/soil-survey-geographic-database-ssurgo), the detailed soil survey of the United States
+  * [STATSGO2](https://www.nrcs.usda.gov/resources/data-and-reports/description-of-statsgo2-database), the generalized soil survey of the United States
+  * Official Series Descriptions (OSD) via [SoilKnowledgeBase](https://github.com/ncss-tech/SoilKnowledgeBase/)
+  * Soil Classification database (no public version)
+  * [USDA Ag. Handbook 296 -- Major Land Resource Area (MLRA)](https://www.nrcs.usda.gov/resources/data-and-reports/major-land-resource-area-mlra)
+  * Climate ([PRISM](https://prism.oregonstate.edu/)) data and derivatives
+  * Digital elevation model (DEM) derivatives
+  * [NCSS Lab Data Mart](https://ncsslabdatamart.sc.egov.usda.gov/) snapshot
+  * NRCS [Rapid Carbon Assessment](https://www.nrcs.usda.gov/resources/data-and-reports/rapid-carbon-assessment-raca) (RaCA)
+
+
+## `soilDB` Functions
+The following functions interact with SoilWeb APIs or Web Coverage Service (WCS) to request and download tabular or spatial data. Some functions return `SoilProfileCollection` objects, as defined in the [aqp](https://ncss-tech.github.io/aqp/) package.
+
+
+Tabular data and/or `SoilProfileCollection`:
+
+ * `fetchOSD()`: get soil morphology  and many soil series level summaries for one or more soil series names
+ * `OSDquery()`: search the OSD records using the postgresql full text query syntax
+ * `siblings()`: get names and basic information about soil series that co-occurr within soil map units containing  a given series
+ 
+Spatia ldata:
+
+ * `seriesExtent()`: get vector or raster representations of were soil series have been used in SSURGO
+ * `taxaExtent()`: get raster representations of were taxa and formative elements (Soil Taxonomy) have been used in SSURGO
+ 
+WCS:
+
+ * `mukey.wcs()`: get raster data describing map unit keys, from a variety of sources, by bounding-box
+ * `ISSR800.wcs()`: get raster data describing generalized patterns in soil property and condition, by bounding-box
+ * `soilColor.wcs()`: get raster soil color maps by bounding-box
+ 
+ 
+The `fetchOSD()` function, when specified with the `extended = TRUE` argument, will include the last updated date for curated sources. For example:
+
+|product                       |last_update |
+|:-----------------------------|:-----------|
+|ISSR800                       |2024-10-30  |
+|KSSL snapshot                 |2025-01-21  |
+|MLRA membership               |2025-10-07  |
+|OSD fulltext                  |2026-01-02  |
+|OSD morphology                |2026-01-02  |
+|SC database                   |2026-01-02  |
+|series climate summary        |2025-10-08  |
+|series-ESID cross-tabulation  |2025-10-07  |
+|SSURGO geomorphology          |2025-10-06  |
+|SSURGO geomorphon             |2026-01-11  |
+|SSURGO NCCPI Stats            |2025-10-19  |
+|SSURGO parent material        |2025-10-06  |
+|series extent                 |2025-10-04  |
+|taxa extent                   |2025-10-21  |
+
+Details about these data sources are provided below.
+
+ 
+### Functions with Questionable Future
+Some functions represent temporary solutions to data delivery problems that made sense in the past. `fetchKSSL()` relies on an older snapshot of the NCSS LDM (2020), `fetchRaCA()` relies on a pre-release of the current RaCA database, and `SoilWeb_spatial_query()` has been superseded by soilDB functions which interface with Soil Data Access (see [`SDA_query()`](https://ncss-tech.github.io/soilDB/reference/SDA_query.html) and [`SDA_spatialQuery`](https://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html)). 
+
+
+ * `fetchKSSL()`: get soil characterization and (limited) morphology data
+ * `fetchRaCA()`: get records associated with the RaCA collection
+ * `SoilWeb_spatial_query()`: simple interface to spatial intersection between SSURGO polygons and user supplied bounding-box
+
+There are currently no replacements for all of the functionality provided by `fetchKSSL()` and `fetchRaCA()`. See [`fetchLDM()`](https://ncss-tech.github.io/soilDB/reference/fetchLDM.html) for a modern approach to downloading NCSS LDM snapshot data.
+
+
+## Related Web Applications
+The [`OSDquery()`](https://ncss-tech.github.io/soilDB/reference/OSDquery.html) function provides a convenient interface to the API behind the SoilWeb OSD Search applications:
+
+ * https://soilmap4-1.lawr.ucdavis.edu/osd-search/index.php
+ * https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php
+ 
+The web-based version of this search is limited to 100 records but `OSDquery()` has no record limit.
+
+The [`seriesExtent()`](https://ncss-tech.github.io/soilDB/reference/seriesExtent.html) function provides an interface to the data behind the [SoilWeb Series Extent Explorer](https://casoilresource.lawr.ucdavis.edu/see/) (SEE) application. The SEE website includes a short description of how the source data were created.
+
+The [`taxaExtent()`](https://ncss-tech.github.io/soilDB/reference/taxaExtent.html) function provides an interface to the data behind the [SoilWeb Soil Taxonomy Explorer](https://casoilresource.lawr.ucdavis.edu/ste/) (STE) application. the STE website includes a short description of how the source data were created.
+
+
+# SoilWeb Curated Data Sources
+
+
+## SC and OSD Derivatives
+
+```{r}
+knitr::kable(head(x$competing))
+
+knitr::kable(head(x$geog_assoc_soils))
+```
+
+
+
+
+## SSURGO Derivatives
+
+... normalization of SSURGO component names into qualified soil series names via SC database.
+
+
+### MLRA
+... spatial intersection SSURGO map unit polygons x MLRA polygons
+```{r}
+knitr::kable(head(x$mlra), digits = 2)
+```
+
+
+### Geomorphic Summaries
+cross-tabulation component names → series names x geomorphic tables
+
+```{r}
+knitr::kable(head(x$hillpos), digits = 2)
+
+knitr::kable(head(x$geomcomp), digits = 2)
+
+knitr::kable(head(x$mtnpos), digits = 2)
+
+knitr::kable(head(x$terrace), digits = 2)
+
+knitr::kable(head(x$flats), digits = 2)
+
+knitr::kable(head(x$shape_across), digits = 2)
+
+knitr::kable(head(x$shape_down), digits = 2)
+```
+
+### Other
+
+```{r}
+knitr::kable(head(x$NCCPI), digits = 2)
+
+knitr::kable(head(x$ecoclassid), digits = 2)
+```
+
+
+### Parent Material Summaries
+
+```{r}
+knitr::kable(head(x$pmkind), digits = 2)
+
+knitr::kable(head(x$pmorigin), digits = 2)
+```
+
+
+
+## Climate Data and Derivatives
+
+These maps are derived from the daily, 800m resolution, PRISM data spanning 1981--2010.
+
+  * Mean annual air temperature (deg. C), derived from daily minimum and maximum temperatures.
+  * Mean accumulated annual precipitation (mm), derived from daily totals.
+  * Mean monthly temperature (deg. C), derived from daily minimum and maximum temperatures.
+  * Mean accumulated monthly precipitation (mm), derived from daily totals.
+  * Estimated monthly potential evapotranspiration
+
+
+
+
+```{r}
+knitr::kable(head(x$climate.annual), digits = 0)
+
+knitr::kable(head(x$climate.monthly), digits = 0)
+```
+
+
+
+
+### Frost-Free Period
+
+Number of days in the 50%, 80%, and 90% probability frost-free period, derived from daily minimum temperatures greater than 0 degrees C.
+
+These maps are based on 50/80/90 percent probability estimates for the last spring frost and first fall frost (day of year). See the related [algorithm documentation](http://ncss-tech.github.io/AQP/sharpshootR/FFD-estimates.html) for details.
+
+Values have been cross-checked with 300+ weather stations in CA.
+
+
+ <div align=center><strong>Linear Regression Model</strong></div>
+ 
+ <pre>
+ ols(formula = ffd.50 ~ prism_ffd, data = z)
+ </pre>
+ 
+ <table class='gmisc_table' style='border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;' >
+<thead>
+<tr>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; border-left: 1px solid black; border-right: 1px solid black; text-align: center;'></th>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; border-right: 1px solid black; text-align: center;'>Model Likelihood<br>Ratio Test</th>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; border-right: 1px solid black; text-align: center;'>Discrimination<br>Indexes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style='min-width: 9em; border-left: 1px solid black; border-right: 1px solid black; text-align: center;'>Obs 328</td>
+<td style='min-width: 9em; border-right: 1px solid black; text-align: center;'>LR χ<sup>2</sup> 526.00</td>
+<td style='min-width: 9em; border-right: 1px solid black; text-align: center;'><i>R</i><sup>2</sup> 0.799</td>
+</tr>
+<tr>
+<td style='min-width: 9em; border-left: 1px solid black; border-right: 1px solid black; text-align: center;'>Ïƒ 42.2446</td>
+<td style='min-width: 9em; border-right: 1px solid black; text-align: center;'>d.f. 1</td>
+<td style='min-width: 9em; border-right: 1px solid black; text-align: center;'><i>R</i><sup><span style='font-size: 70%;'>2</span></sup><sub style='position: relative; left: -.47em; bottom: -.4em;'><span style='font-size: 70%;'>adj</span></sub> 0.798</td>
+</tr>
+<tr>
+<td style='min-width: 9em; border-bottom: 2px solid grey; border-left: 1px solid black; border-right: 1px solid black; text-align: center;'>d.f. 326</td>
+<td style='min-width: 9em; border-bottom: 2px solid grey; border-right: 1px solid black; text-align: center;'>Pr(>χ<sup>2</sup>) 0.0000</td>
+<td style='min-width: 9em; border-bottom: 2px solid grey; border-right: 1px solid black; text-align: center;'><i>g</i> 95.935</td>
+</tr>
+</tbody>
+</table>
+
+ 
+ <div align=center>Residuals</div>
+ 
+ <pre>
+      Min       1Q   Median       3Q      Max 
+ -278.344  -16.875    2.436   14.323  274.604 
+ </pre>
+ 
+ 
+ <table class='gmisc_table' style='border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;' >
+<thead>
+<tr>
+<th style='font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;'></th>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: right;'>β</th>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: right;'>S.E.</th>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: right;'><i>t</i></th>
+<th style='border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: right;'>Pr(>|<i>t</i>|)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style='text-align: left;'>Intercept</td>
+<td style='min-width: 7em; text-align: right;'> 15.1397</td>
+<td style='min-width: 7em; text-align: right;'> 5.3455</td>
+<td style='min-width: 7em; text-align: right;'> 2.83</td>
+<td style='min-width: 7em; text-align: right;'>0.0049</td>
+</tr>
+<tr>
+<td style='border-bottom: 2px solid grey; text-align: left;'>prism_ffd</td>
+<td style='min-width: 7em; border-bottom: 2px solid grey; text-align: right;'>  0.9407</td>
+<td style='min-width: 7em; border-bottom: 2px solid grey; text-align: right;'> 0.0261</td>
+<td style='min-width: 7em; border-bottom: 2px solid grey; text-align: right;'>35.98</td>
+<td style='min-width: 7em; border-bottom: 2px solid grey; text-align: right;'><0.0001</td>
+</tr>
+</tbody>
+</table>
+
+
+### Frost-Free Days
+
+   * Frost-free days, 50% probability.
+   * Frost-free days, 80% probability.
+   * Frost-free days, 90% probability.
+
+
+### Design Freeze Index
+
+   * number of degree days below 0 deg C, 90th percentile
+
+From _NSSH Part 618.33 Frost Action, Potential_:
+
+> Part 618, Subpart B, Exhibits, Section 618.85 is a map that shows the design freezing index values in the continental United States. The values **are the number of degree days below 0 deg C for the coldest year in a period of 10 years** . The values indicate duration and intensity of freezing temperatures. The 250 isoline is the approximate boundary below which frost action ceases to be a problem.
+
+
+Methods:
+
+   * using units of degrees Celsius, and daily average air temperature ($Tavg$) 
+   * freezing degree days for a single year: $FI = sum( abs( min(0, Tavg) ) )$
+   * design freezing index, over 30 year record: $DFI = Q90( FI )$ where **FI** is the stack of annual FI
+
+Notes:
+
+   * There is a fairly large difference in where the 250 DFI isoline falls, depending on the temperature units.
+   * The 90th percentile of **FI** seems to track the notion of "coldest year in 10 years".
+   * The "average of 3 coldest years in 30" method gives different results, but spatial patterns are the same.
+   * Related [conversation](https://github.com/ncss-tech/soilReports/issues/84) on the calculation and interpretation.
+
+
+
+### Growing Degree Days (C)
+
+Mean (Celsius) growing degree days, derived from the 800m PRISM daily minimum/maximum temperature data over the interval of 1981--2010.
+
+Calculation reference: http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html
+
+$$GDD_i = [ min(T_{max}, upper_{threshold}) + max(Tmin, lower_{threshold}) / 2 ] - T_{base}$$
+
+$$GDD_i = max(GDD_i, 0)$$
+
+
+### Effective Precipitation
+
+Annual sum of monthly (total) precipitation - monthly (estimated) evapotranspiration, averaged over the interval of 1981--2010. Potential evapotranspiration (PET) estimated via [Thornthwaite's method of 1948](https://en.wikipedia.org/wiki/Potential_evaporation). Input sources included:
+
+   * 800m resolution, monthly, total precipitation (PRISM group)
+   * 800m resolution, monthly, mean air temperature (PRISM group)
+   
+Processing in GRASS GIS.
+
+
+### Fraction of Precipitation as Rain
+
+This map contains estimates of the fraction of total (annual) precipitation as rain, derived from 800m daily PRISM Tmax and PPT grids (1981--2010). Calculations were performed using GRASS GIS, with methods and estimated parameters of the conditional snow probability function from Rajagopal and Harpold (2016).
+
+Partition PPT into snow/rain:
+
+$$rain = PPT - snow$$
+
+$$snow = PPT * Pr(snow)$$
+
+compute $Pr(snow)$ as a function of $Tmax$ using [exponential identity for hyperbolic tangent function](https://en.wikipedia.org/wiki/Hyperbolic_function#Standard_analytic_expressions):
+
+Evaluate conditional probability (fraction) of snow on a daily basis:
+
+$$Pr(snow) = a * ( tanh(b * (Tmax - c) ) - d )$$
+
+a:-0.5, b:0.21, c:0.5, d:1
+
+$$tanh(x) = (1 - exp(-2*x)) / (1 + exp(-2*x))$$
+
+$$Pr(snow) = -0.5 * ( (1 - exp(-2 * (0.21 * (Tmax - 0.5) ))) / (1 + exp(-2 * (0.21 * (Tmax - 0.5) ))) - 1 )$$
+
+$$rain = PPT - (PPT * Pr(snow))$$
+
+For each year($i$): 
+
+$$rain fraction_i = sum(rain_i) / sum(PPT_i)$$
+
+Percentages have been converted to integers ranging from 0 to 100.
+
+
+Rajagopal, S. and A.A. Harpold. 2016. Testing and Improving Temperature Thresholds for Snow and Rain Prediction in the Western United States. Journal of the American Water Resources Association, 52: 1142-1154.
+
+
+
+
+
+## DEM Derivatives
+
+```{r}
+knitr::kable(head(x$geomorphons), digits = 2)
+```
+
+These maps were generated using the [r.geomorphon GRASS GIS module](https://grass.osgeo.org/grass75/manuals/r.geomorphon.html), with the following parameters: 
+
+`r.geomorphon --o dem=elev30_int forms=forms30 search=75 skip=5 flat=1.718`
+
+The source DEM was a 10m / 30m resolution compilation of USGS NED data, rounded to integers. The "flat" threshold (1.718 deg) is based on a 3% slope break.
+
+[Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition approach to classification and mapping of landforms, Geomorphology, vol. 182, 147-156.](http://www.sciencedirect.com/science/article/pii/S0169555X12005028)
+
+
+
+
+
+
+
+
+
+
+
+# Relevant Tutorials
+
+
+
+
+
+# Examples
+```{r eval=FALSE}
+library(soilDB)
+library(aqp)
+
+x <- fetchOSD(c('miami', 'pierre', 'tristan', 'lucy', 'musick'), extended = TRUE)
+
+
+```
+
+
+
+

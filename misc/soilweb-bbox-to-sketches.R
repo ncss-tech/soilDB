@@ -12,6 +12,10 @@ library(soilDB)
 ## press 'b', BBOX is copied to the clipboard
 
 
+## TX Edwards Plateau
+bb <- '-101.1297 30.9521,-101.1297 31.0276,-101.0067 31.0276,-101.0067 30.9521,-101.1297 30.9521'
+
+
 ## TX155: https://casoilresource.lawr.ucdavis.edu/gmap/?loc=34.05629,-99.57999,z14
 bb <- '-99.6431 34.0224,-99.6431 34.0902,-99.5268 34.0902,-99.5268 34.0224,-99.6431 34.0224'
 
