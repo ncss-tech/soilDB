@@ -132,22 +132,41 @@ get_SDA_property <-
            miscellaneous_areas = FALSE,
            query_string = FALSE,
            dsn = NULL)
-    {
-
-  q <- .constructPropQuery(method = method,
-                           property = property,
-                           areasymbols = areasymbols,
-                           mukeys = mukeys,
-                           WHERE = WHERE,
-                           top_depth = top_depth,
-                           bottom_depth = bottom_depth,
-                           include_minors = include_minors,
-                           miscellaneous_areas = miscellaneous_areas,
-                           FUN = FUN,
-                           sqlite_dialect = !is.null(dsn))
-
-  if (query_string) return(q)
-
+    {    
+    
+    m <- c(
+      "DOMINANT COMPONENT (CATEGORY)",
+      "WEIGHTED AVERAGE",
+      "MIN/MAX",
+      "DOMINANT COMPONENT (NUMERIC)",
+      "DOMINANT CONDITION",
+      "NONE"
+    )
+    
+    if (missing(method)) {
+      stop("Please specify `method` argument as one of the following:\n", 
+           toString(shQuote(m)), call. = FALSE)
+    }
+    
+    method <- match.arg(toupper(method), m)
+    
+    q <- .constructPropQuery(
+      method = method,
+      property = property,
+      areasymbols = areasymbols,
+      mukeys = mukeys,
+      WHERE = WHERE,
+      top_depth = top_depth,
+      bottom_depth = bottom_depth,
+      include_minors = include_minors,
+      miscellaneous_areas = miscellaneous_areas,
+      FUN = FUN,
+      sqlite_dialect = !is.null(dsn)
+    )
+    
+    if (query_string)
+      return(q)
+    
   # execute query
   res <- SDA_query(q, dsn = dsn)
   
@@ -276,7 +295,9 @@ get_SDA_property <-
   } else if (!is.null(areasymbols)) {
     WHERE <- paste("legend.areasymbol IN", format_SQL_in_statement(areasymbols))
   }
-
+  
+  method <- toupper(method)
+  
   if (method != "NONE" &&
       (grepl("component\\.|chorizon\\.", WHERE)[1] ||
        grepl(paste(.valid_chorizon_columns(), collapse = "|"), WHERE)[1])) {
@@ -314,8 +335,6 @@ get_SDA_property <-
 
   if (!is.character(method))
     stop('argument `method` should be character string containing aggregation method, or `"NONE"` for no aggregation', call. = FALSE)
-
-  method <- toupper(method)
 
   if (method == "NONE") {
     # dput(colnames(SDA_query("SELECT TOP 1 * FROM chorizon"))) # without cokey
@@ -397,7 +416,6 @@ get_SDA_property <-
             ifelse(isTRUE(sqlite_dialect), " LIMIT 1", ""), property)
   }
   
-  
   .property_weighted_average_CTE <- function(property,
                                              top_depth,
                                              bottom_depth,
@@ -407,191 +425,87 @@ get_SDA_property <-
                                              miscellaneous_areas = FALSE,
                                              sqlite_dialect = FALSE) {
     
-    n <- seq(property)
-    stopifnot(length(n) > 0)
+    stopifnot(length(property) > 0)
     
     if (missing(WHERE)) {
       stop("WHERE clause must be specified")
     }
     
-    if (!is.numeric(top_depth) && !is.numeric(bottom_depth)) {
-      stop("Top and bottom depth must be numeric")      
+    if (!is.numeric(top_depth) ||
+        !is.numeric(bottom_depth)) {
+      stop("Top and bottom depth must be numeric")
     }
     
+    MISCAREAS <- ifelse(miscellaneous_areas, "", "AND component.compkind != 'Miscellaneous area'")
     MINORS <- ifelse(include_minors, "", "AND component.majcompflag = 'Yes'")
     
-    MISCAREAS <- ifelse(miscellaneous_areas, "", "AND component.compkind != 'Miscellaneous area'")
+    TOP <- ifelse(sqlite_dialect, "", "TOP 1 ")
+    LIMIT <- ifelse(sqlite_dialect, " LIMIT 1", "")
+    MISCAREAS_SUB <- gsub("component", "c2", MISCAREAS)
     
-    DOMINANT <- ifelse(dominant, paste0(
-      "AND component.cokey = (SELECT ", ifelse(isTRUE(sqlite_dialect), "", "TOP 1 "), "c2.cokey FROM component AS c2
-        INNER JOIN mapunit AS mm1 ON c2.mukey = mm1.mukey AND c2.mukey = mapunit.mukey ",
-          gsub("component", "c2", MISCAREAS),
-          "ORDER BY c2.comppct_r DESC, c2.cokey", ifelse(isTRUE(sqlite_dialect), " LIMIT 1", ""), ")"), "")
+    DOMINANT_SQL <- "AND component.cokey = (SELECT {TOP} c2.cokey FROM component AS c2 
+    WHERE c2.mukey = kitchensink.mukey
+    {MISCAREAS_SUB}
+    ORDER BY c2.comppct_r DESC, c2.cokey {LIMIT})"
     
-    PROPERTY <- paste(property, collapse = ", ")
+    DOMINANT <- ifelse(dominant, .gluelite(DOMINANT_SQL), "")
     
-    PROPHZWTS <- paste(.gluelite("CASE
-               WHEN main.{property} IS NULL THEN 0 
-               ELSE (main.hzdepb_r_ADJ - main.hzdept_r_ADJ) 
-              END AS thickness_wt_{property},
-              SUM(CASE
-                WHEN main.{property} IS NULL THEN 0 
-                ELSE (main.hzdepb_r_ADJ - main.hzdept_r_ADJ) 
-               END) OVER (PARTITION BY main.cokey) AS sum_thickness_{property},
-              main.{property}"), collapse = ",\n")
+    RAW_COLS <- paste(paste0("chorizon.", property), collapse = ", ")
     
-    MUPROPWTS <- paste(.gluelite("CASE 
-           WHEN comppct_r = SUM_COMP_PCT THEN 1 
-           ELSE CAST(comppct_r AS REAL) / SUM_COMP_PCT
-          END AS WEIGHTED_COMP_PCT_{property}"), collapse = ",\n")
+    COMP_AGG_TMPL <- "CAST(SUM({p} * thickness) AS FLOAT) / NULLIF(SUM(CASE WHEN {p} IS NOT NULL THEN thickness ELSE 0 END), 0) AS avg_{p}"
+    COMP_AGG_SQL <- paste(sapply(property, function(p) .gluelite(COMP_AGG_TMPL)), collapse = ",\n")
     
-    COMPWTS <- paste(.gluelite("CASE 
-               WHEN sum_thickness_{property} = 0 THEN 0 
-               ELSE comp_temp3.WEIGHTED_COMP_PCT_{property} 
-              END AS CORRECT_COMP_PCT_{property}"), collapse = ",\n")
+    MU_AGG_TMPL <- "CAST(SUM(avg_{p} * comppct_r) AS FLOAT) / NULLIF(SUM(CASE WHEN avg_{p} IS NOT NULL THEN comppct_r ELSE 0 END), 0) AS {p}"
+    MU_AGG_SQL <- paste(sapply(property, function(p) .gluelite(MU_AGG_TMPL)), collapse = ",\n")
     
-    RATEDWTS <- paste(.gluelite("SUM(CORRECT_COMP_PCT_{property}) AS RATED_PCT_{property}"), 
-                       collapse = ",\n")
-    
-    COMPRATEDWTS <- paste(.gluelite("RATED_PCT_{property}"), collapse = ", ")
-    
-    COMPWTDAVG <- paste(.gluelite("SUM(
-      CAST(weights.CORRECT_COMP_PCT_{property} AS REAL)
-      * comp_temp2.thickness_wt_{property} / NULLIF(comp_temp2.sum_thickness_{property}, 0)
-      * comp_temp2.{property}
-    ) AS COMP_WEIGHTED_AVERAGE_{property}"), collapse = ",\n")
-    
-    COMPRATEDAVG <- paste(.gluelite("COMP_WEIGHTED_AVERAGE_{property}"), collapse = ", ")
-    
-    MUWTDAVG <- paste(.gluelite("CAST (SUM(
-                  (CASE 
-                    WHEN last_step.RATED_PCT_{property} = 0 THEN 0 
-                    ELSE last_step.COMP_WEIGHTED_AVERAGE_{property} 
-                   END) / NULLIF(last_step.RATED_PCT_{property}, 0)) 
-              OVER (PARTITION BY kitchensink.mukey) AS REAL) AS {property}"), collapse = ",\n")
+    property_cols <- paste(paste0("last_step.", property), collapse = ", ")
     
     q <- .gluelite("
       WITH kitchensink AS (
-          SELECT mukey, areasymbol, musym, muname
+          SELECT DISTINCT mapunit.mukey, legend.areasymbol, mapunit.musym, mapunit.muname
           FROM legend
           INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND {WHERE}
-      ),
-      comp_temp AS (
-          SELECT 
-              mapunit.mukey, 
-              component.cokey, 
-              component.comppct_r, 
-              component.compkind, 
-              component.majcompflag,
-              SUM(component.comppct_r) OVER (PARTITION BY mapunit.mukey) AS SUM_COMP_PCT
-          FROM legend
-          INNER JOIN mapunit ON mapunit.lkey = legend.lkey AND {WHERE}
-          INNER JOIN component ON component.mukey = mapunit.mukey {MISCAREAS} {MINORS} {DOMINANT}
-      ),
-      comp_temp3 AS (
-          SELECT cokey, compkind, majcompflag, SUM_COMP_PCT, 
-          {MUPROPWTS}
-          FROM comp_temp
       ),
       main AS (
           SELECT 
-              mapunit.mukey, 
-              legend.areasymbol, 
-              mapunit.musym, 
-              mapunit.muname, 
+              kitchensink.mukey, 
               component.cokey, 
-              chorizon.chkey, 
-              component.compname, 
-              component.compkind, 
-              chorizon.hzname, 
-              chorizon.hzdept_r, 
-              chorizon.hzdepb_r, 
-              CASE WHEN chorizon.hzdept_r < {top_depth} THEN {top_depth} ELSE chorizon.hzdept_r END AS hzdept_r_ADJ,
-              CASE WHEN chorizon.hzdepb_r > {bottom_depth} THEN {bottom_depth} ELSE chorizon.hzdepb_r END AS hzdepb_r_ADJ,
               component.comppct_r,
-              {PROPERTY}
-          FROM legend
-          INNER JOIN mapunit 
-              ON mapunit.lkey = legend.lkey 
-          INNER JOIN component 
-              ON component.mukey = mapunit.mukey {MISCAREAS} {MINORS}
-          INNER JOIN chorizon 
-              ON chorizon.cokey = component.cokey 
+              {RAW_COLS},
+              (CASE WHEN chorizon.hzdepb_r > {bottom_depth} THEN {bottom_depth} ELSE chorizon.hzdepb_r END - 
+               CASE WHEN chorizon.hzdept_r < {top_depth} THEN {top_depth} ELSE chorizon.hzdept_r END) AS thickness
+          FROM kitchensink
+          INNER JOIN component ON component.mukey = kitchensink.mukey {MISCAREAS} {MINORS} {DOMINANT}
+          INNER JOIN chorizon ON chorizon.cokey = component.cokey 
               AND chorizon.hzdepb_r > {top_depth}
-              AND chorizon.hzdept_r <= {bottom_depth}
-          WHERE {WHERE}
+              AND chorizon.hzdept_r < {bottom_depth}
       ),
-      comp_temp2 AS (
+      comp_temp AS (
           SELECT 
-              main.mukey, 
-              main.areasymbol, 
-              main.musym, 
-              main.muname, 
-              main.cokey, 
-              main.chkey, 
-              main.compname, 
-              main.compkind, 
-              main.hzname, 
-              main.hzdept_r, 
-              main.hzdepb_r, 
-              main.hzdept_r_ADJ, 
-              main.hzdepb_r_ADJ,
-              main.comppct_r,
-              {PROPHZWTS}
+              mukey, cokey, comppct_r,
+              {COMP_AGG_SQL}
           FROM main
-      ),
-      weights AS (
-          SELECT DISTINCT 
-              comp_temp2.mukey, 
-              comp_temp2.cokey, 
-              {COMPWTS}
-          FROM comp_temp2
-          LEFT JOIN comp_temp3 ON comp_temp3.cokey = comp_temp2.cokey
-      ),
-      weights2 AS (
-          SELECT 
-              mukey,
-              {RATEDWTS}
-          FROM weights
-          GROUP BY mukey
+          GROUP BY mukey, cokey, comppct_r
       ),
       last_step AS (
           SELECT 
-              comp_temp2.mukey, 
-              comp_temp2.cokey, 
-              {COMPRATEDWTS},
-              {COMPWTDAVG}
-          FROM comp_temp2
-          LEFT JOIN weights ON weights.cokey = comp_temp2.cokey
-          LEFT JOIN weights2 ON weights2.mukey = comp_temp2.mukey
-          GROUP BY comp_temp2.mukey, comp_temp2.cokey, {COMPRATEDWTS}
-      ),
-      last_step2 AS (
-          SELECT 
-              kitchensink.mukey, 
-              last_step.cokey, 
-              kitchensink.areasymbol, 
-              kitchensink.musym, 
-              kitchensink.muname, 
-              {COMPRATEDWTS},
-              {MUWTDAVG}
-          FROM last_step
-          RIGHT JOIN kitchensink ON kitchensink.mukey = last_step.mukey
-          GROUP BY kitchensink.areasymbol, kitchensink.musym, kitchensink.muname, kitchensink.mukey, {COMPRATEDWTS}, {COMPRATEDAVG}, last_step.cokey
+              mukey,
+              {MU_AGG_SQL}
+          FROM comp_temp
+          GROUP BY mukey
       )
       SELECT
-          last_step2.mukey,
-          last_step2.areasymbol,
-          last_step2.musym,
-          last_step2.muname,
-          {PROPERTY}
-      FROM last_step2
-      LEFT JOIN last_step
-          ON last_step.mukey = last_step2.mukey
-      GROUP BY last_step2.areasymbol, last_step2.musym, last_step2.muname, last_step2.mukey, {PROPERTY}
-      ORDER BY last_step2.mukey, last_step2.areasymbol, last_step2.musym, last_step2.muname, {PROPERTY};
+          kitchensink.mukey,
+          kitchensink.areasymbol,
+          kitchensink.musym,
+          kitchensink.muname,
+          {property_cols}
+      FROM kitchensink
+      LEFT JOIN last_step ON last_step.mukey = kitchensink.mukey
+      ORDER BY kitchensink.areasymbol, kitchensink.musym, kitchensink.mukey
       ")
-    q
+    
+    return(q)
   }
   
   .property_weighted_average <- function(property,
