@@ -14,7 +14,8 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
   fig.height = 7,
-  fig.width = 7
+  fig.width = 7,
+  fig.retina = 2
 )
 
 # get source data for explanations
@@ -22,6 +23,9 @@ library(soilDB)
 library(aqp)
 
 x <- fetchOSD(c('miami', 'pierre', 'tristan', 'lucy', 'musick'), extended = TRUE)
+
+# enable more figures when igraph is available
+igraphAvailable <- requireNamespace('igraph')
 ```
 
 # Summary
@@ -41,11 +45,11 @@ Many of these curated data sources and their evolution through time have been do
   * [SSURGO](https://www.nrcs.usda.gov/resources/data-and-reports/soil-survey-geographic-database-ssurgo), the detailed soil survey of the United States
   * [STATSGO2](https://www.nrcs.usda.gov/resources/data-and-reports/description-of-statsgo2-database), the generalized soil survey of the United States
   * Official Series Descriptions (OSD) via [SoilKnowledgeBase](https://github.com/ncss-tech/SoilKnowledgeBase/)
-  * Soil Classification database (no public version)
+  * Soil Classification (SC) database (no public version)
   * [USDA Ag. Handbook 296 -- Major Land Resource Area (MLRA)](https://www.nrcs.usda.gov/resources/data-and-reports/major-land-resource-area-mlra)
   * Climate ([PRISM](https://prism.oregonstate.edu/)) data and derivatives
   * Digital elevation model (DEM) derivatives
-  * [NCSS Lab Data Mart](https://ncsslabdatamart.sc.egov.usda.gov/) snapshot
+  * [NCSS Lab Data Mart](https://ncsslabdatamart.sc.egov.usda.gov/) (LDM) snapshot
   * NRCS [Rapid Carbon Assessment](https://www.nrcs.usda.gov/resources/data-and-reports/rapid-carbon-assessment-raca) (RaCA)
 
 
@@ -59,7 +63,7 @@ Tabular data and/or `SoilProfileCollection`:
  * `OSDquery()`: search the OSD records using the postgresql full text query syntax
  * `siblings()`: get names and basic information about soil series that co-occurr within soil map units containing  a given series
  
-Spatia ldata:
+Spatial data:
 
  * `seriesExtent()`: get vector or raster representations of were soil series have been used in SSURGO
  * `taxaExtent()`: get raster representations of were taxa and formative elements (Soil Taxonomy) have been used in SSURGO
@@ -97,11 +101,11 @@ Details about these data sources are provided below.
 Some functions represent temporary solutions to data delivery problems that made sense in the past. `fetchKSSL()` relies on an older snapshot of the NCSS LDM (2020), `fetchRaCA()` relies on a pre-release of the current RaCA database, and `SoilWeb_spatial_query()` has been superseded by soilDB functions which interface with Soil Data Access (see [`SDA_query()`](https://ncss-tech.github.io/soilDB/reference/SDA_query.html) and [`SDA_spatialQuery`](https://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.html)). 
 
 
- * `fetchKSSL()`: get soil characterization and (limited) morphology data
+ * `fetchKSSL()`: get soil characterization and (limited) morphology data (soil color, structure, redoximorphic features)
  * `fetchRaCA()`: get records associated with the RaCA collection
  * `SoilWeb_spatial_query()`: simple interface to spatial intersection between SSURGO polygons and user supplied bounding-box
 
-There are currently no replacements for all of the functionality provided by `fetchKSSL()` and `fetchRaCA()`. See [`fetchLDM()`](https://ncss-tech.github.io/soilDB/reference/fetchLDM.html) for a modern approach to downloading NCSS LDM snapshot data.
+There are currently no replacements for full functionality provided by `fetchKSSL()` and `fetchRaCA()`. See [`fetchLDM()`](https://ncss-tech.github.io/soilDB/reference/fetchLDM.html) for a modern approach to downloading NCSS LDM snapshot data.
 
 
 ## Related Web Applications
@@ -117,15 +121,35 @@ The [`seriesExtent()`](https://ncss-tech.github.io/soilDB/reference/seriesExtent
 The [`taxaExtent()`](https://ncss-tech.github.io/soilDB/reference/taxaExtent.html) function provides an interface to the data behind the [SoilWeb Soil Taxonomy Explorer](https://casoilresource.lawr.ucdavis.edu/ste/) (STE) application. the STE website includes a short description of how the source data were created.
 
 
+
 # SoilWeb Curated Data Sources
 
 
 ## SC and OSD Derivatives
+Competing (same family classification) soil series information are derived from the Soil Classification database. Geographically associated soils are derived from the OSD records. These data are available via `fetchOSD()`.
 
 ```{r}
+# series names listed in "competing" have the family classification as "series"
 knitr::kable(head(x$competing))
 
+# series names listed in "gas" are geographically associated with "series"
 knitr::kable(head(x$geog_assoc_soils))
+```
+
+
+One way of visualizing geographically associated soils, requires the igraph package.
+```{r, eval=igraphAvailable, echo=igraphAvailable, fig.cap="Geographically associated soils of selected soil series."}
+library(igraph)
+
+# create a graph object from source series names and their GAS
+g <- graph_from_data_frame(x$geog_assoc_soils[, 1:2]) 
+
+# find central vertices, make font bold
+ct <- centr_degree(g, mode = 'out')
+V(g)$label.font = c(1, 2)[as.integer(ct$res > 0) + 1]
+
+par(mar = c(0, 0, 0, 0))
+plot(g, edge.arrow.size = 0.5, vertex.label.cex = 0.5, vertex.label.family = 'sans', vertex.label.color = 'black', vertex.frame.color = NA) 
 ```
 
 
@@ -133,19 +157,69 @@ knitr::kable(head(x$geog_assoc_soils))
 
 ## SSURGO Derivatives
 
-... normalization of SSURGO component names into qualified soil series names via SC database.
+SSURGO components are often named for soil series. Soil series summaries derived from SSURGO are coordinated using a normalized form of component name and soil series:
+
+  * names are converted to upper case
+  * component names are stripped of modifiers such as "variant" and "family"
+
+See the [Soil Survey Manual](https://www.nrcs.usda.gov/resources/guides-and-instructions/soil-survey-manual) for more complete definitions of "map unit", "component", and "soil series".
+
+The [Querying Soil Series Data](https://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html) tutorial contains additional, relevant examples.
 
 
 ### MLRA
-... spatial intersection SSURGO map unit polygons x MLRA polygons
+Derived from the spatial intersection between MLRA and SSURGO polygons, with area computed on the ellipsoid from geographic coordinates. Membership values are area proportions by soil series.
+
+MLRA "membership" for the [LUCY](https://casoilresource.lawr.ucdavis.edu/sde/?series=lucy#osd) soil series.
 ```{r}
-knitr::kable(head(x$mlra), digits = 2)
+.mlra <- x$mlra[x$mlra$series == 'LUCY', ]
+knitr::kable(.mlra[order(.mlra$membership, decreasing = TRUE), ], digits = 2, row.names = FALSE)
 ```
 
 
-### Geomorphic Summaries
-cross-tabulation component names → series names x geomorphic tables
+One way of visualizing MLRA membership, requires the igraph package.
+```{r, eval=igraphAvailable, echo=igraphAvailable, fig.cap="MLRA membership for selected soil series."}
+library(igraph)
 
+# compute a sum of area by series and MLRA for vertex size
+a1 <- aggregate(x$mlra, area_ac ~ series,  FUN = sum)
+a2 <- aggregate(x$mlra, area_ac ~ mlra,  FUN = sum)
+
+# normalize names
+names(a1) <- c('name', 'ac')
+names(a2) <- c('name', 'ac')
+a <- rbind(a1, a2)
+
+# create a graph object from source series names and MLRA members
+g <- graph_from_data_frame(x$mlra[, 1:2], vertices = a) 
+
+# find central vertices, make font bold
+ct <- centr_degree(g, mode = 'out')
+V(g)$label.font = c(1, 2)[as.integer(ct$res > 0) + 1]
+
+# vertex size is proportional to log(area)
+V(g)$size <- log(V(g)$ac)
+
+par(mar = c(0, 0, 0, 0))
+plot(g, edge.arrow.size = 0.5, vertex.label.cex = 0.5, vertex.label.family = 'sans', vertex.label.color = 'black', vertex.frame.color = NA) 
+```
+
+
+
+### Geomorphic Summaries
+Geomorphic summaries are computed from SSURGO component "geomorphology" tables. These represent a cross-tabulation of soil series name x geomorphic position in several landform and surface shape description systems. These systems are defined in the [Field Book for Describing and Sampling Soils](https://www.nrcs.usda.gov/resources/guides-and-instructions/field-book-for-describing-and-sampling-soils).
+
+There are several associated functions in the [sharpshootR](https://github.com/ncss-tech/sharpshootR/) package for visualizing these summaries (e.g. [`vizHillslopePosition()`](http://ncss-tech.github.io/sharpshootR/reference/vizHillslopePosition.html)).
+
+  * hillslope position (2D)
+  * geomorphic component: hills (3D)
+  * geomorphic component: mountains (3D)
+  * geomorphic component: terrace (3D)
+  * geomorphic component: flats (3D)
+  * surface curvature across-slope
+  * surface curvature down-slope
+
+Note that the `n` column in each table is the number of component geomorphic data records associated with each soil series. It is possible for a single component to have multiple geomorphic positions defined.
 ```{r}
 knitr::kable(head(x$hillpos), digits = 2)
 
@@ -162,16 +236,62 @@ knitr::kable(head(x$shape_across), digits = 2)
 knitr::kable(head(x$shape_down), digits = 2)
 ```
 
+
+### Siblings
+SoilWeb defines the term "siblings" as those components or soil series that co-occur within map units. The `siblings()` function returns siblings for a single soil series, with a tabulation of how many times each sibling shares a common map unit.
+
+Siblings of the PIERRE soil series, limited to just major components. The `n` column describes how many map units are shared between a sibling and the PIERRE series.
+```{r}
+sib <- siblings('PIERRE', only.major = TRUE)
+
+knitr::kable(sib$sib)
+```
+
+
 ### Other
+Percentiles of the [National Commodity Crop
+Productivity Index](https://www.nrcs.usda.gov/sites/default/files/2023-01/NCCPI-User-Guide.pdf) are computed from SSURGO component records, by soil series name. These include both irrigated and non-irrigated versions of the NCCPI.
 
 ```{r}
 knitr::kable(head(x$NCCPI), digits = 2)
+```
 
+
+Ecological classification membership are computed from map unit polygon area and component percentages.
+```{r}
 knitr::kable(head(x$ecoclassid), digits = 2)
+```
+
+One way of visualizing Ecological classification membership, requires the igraph package.
+```{r, eval=igraphAvailable, echo=igraphAvailable, fig.cap="Ecological classification membership for selected soil series."}
+library(igraph)
+
+# compute a sum of area by series and MLRA for vertex size
+a1 <- aggregate(x$ecoclassid, area_ac ~ series,  FUN = sum)
+a2 <- aggregate(x$ecoclassid, area_ac ~ ecoclassid,  FUN = sum)
+
+# normalize names
+names(a1) <- c('name', 'ac')
+names(a2) <- c('name', 'ac')
+a <- rbind(a1, a2)
+
+# create a graph object from source series names and MLRA members
+g <- graph_from_data_frame(x$ecoclassid[, 1:2], vertices = a) 
+
+# find central vertices, make font bold
+ct <- centr_degree(g, mode = 'out')
+V(g)$label.font = c(1, 2)[as.integer(ct$res > 0) + 1]
+
+# vertex size is proportional to log(area)
+V(g)$size <- log(V(g)$ac)
+
+par(mar = c(0, 0, 0, 0))
+plot(g, edge.arrow.size = 0.5, vertex.label.cex = 0.5, vertex.label.family = 'sans', vertex.label.color = 'black', vertex.frame.color = NA) 
 ```
 
 
 ### Parent Material Summaries
+Parent material kind and origin, tabulated by soil series name. The `n` column is the number of component parent material records associated with a specific parent material kind or origin. The `total` column is the total number of component parent material records by soil series. The final column, `P`, is the associated proportion.
 
 ```{r}
 knitr::kable(head(x$pmkind), digits = 2)
@@ -189,11 +309,11 @@ These maps are derived from the daily, 800m resolution, PRISM data spanning 1981
   * Mean accumulated annual precipitation (mm), derived from daily totals.
   * Mean monthly temperature (deg. C), derived from daily minimum and maximum temperatures.
   * Mean accumulated monthly precipitation (mm), derived from daily totals.
-  * Estimated monthly potential evapotranspiration
+  * Estimated monthly potential evapotranspiration, [Thornthwaite, 1948](https://en.wikipedia.org/wiki/Potential_evapotranspiration#Thornthwaite_equation_(1948))
 
+Percentiles of each variable are computed by soil series, from a sampling of one point per SSURGO map unit polygon.
 
-
-
+An example of annual and monthly climate percentiles.
 ```{r}
 knitr::kable(head(x$climate.annual), digits = 0)
 
@@ -284,10 +404,7 @@ Values have been cross-checked with 300+ weather stations in CA.
 
 
 ### Frost-Free Days
-
-   * Frost-free days, 50% probability.
-   * Frost-free days, 80% probability.
-   * Frost-free days, 90% probability.
+Percentiles of frost-free days (FFD) at the 50% probability threshold.
 
 
 ### Design Freeze Index
@@ -374,9 +491,8 @@ Rajagopal, S. and A.A. Harpold. 2016. Testing and Improving Temperature Threshol
 
 ## DEM Derivatives
 
-```{r}
-knitr::kable(head(x$geomorphons), digits = 2)
-```
+### Geomorphons
+A cross-tabulation of geomorphon by soil series name was computed from the current gSSURGO (30m) grid and a 30m grid of geomorphons. Currently, these data are only available within CONUS.
 
 These maps were generated using the [r.geomorphon GRASS GIS module](https://grass.osgeo.org/grass75/manuals/r.geomorphon.html), with the following parameters: 
 
@@ -387,30 +503,34 @@ The source DEM was a 10m / 30m resolution compilation of USGS NED data, rounded 
 [Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition approach to classification and mapping of landforms, Geomorphology, vol. 182, 147-156.](http://www.sciencedirect.com/science/article/pii/S0169555X12005028)
 
 
-
-
-
-
-
-
-
-
-
-# Relevant Tutorials
-
-
-
-
-
-# Examples
-```{r eval=FALSE}
-library(soilDB)
-library(aqp)
-
-x <- fetchOSD(c('miami', 'pierre', 'tristan', 'lucy', 'musick'), extended = TRUE)
-
-
+Proportions are weighted by total soil series area (within CONUS) as informed by the component name and associated component percentage.
+```{r}
+knitr::kable(head(x$geomorphons), digits = 2)
 ```
+
+
+
+
+
+
+
+
+
+<!-- # Relevant Tutorials -->
+
+
+
+
+
+<!-- # Examples -->
+<!-- ```{r eval=FALSE} -->
+<!-- library(soilDB) -->
+<!-- library(aqp) -->
+
+<!-- x <- fetchOSD(c('miami', 'pierre', 'tristan', 'lucy', 'musick'), extended = TRUE) -->
+
+
+<!-- ``` -->
 
 
 
