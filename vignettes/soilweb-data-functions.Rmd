@@ -10,7 +10,7 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
-  # eval = !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = "TRUE")),
+  eval = !as.logical(Sys.getenv("R_SOILDB_SKIP_LONG_EXAMPLES", unset = "TRUE")),
   message = FALSE,
   warning = FALSE,
   fig.height = 7,
@@ -18,6 +18,11 @@ knitr::opts_chunk$set(
   fig.retina = 2
 )
 
+
+igraphAvailable <- FALSE
+```
+
+```{r get-data, echo=FALSE}
 # get source data for explanations
 library(soilDB)
 library(aqp)
@@ -27,6 +32,7 @@ x <- fetchOSD(c('miami', 'pierre', 'tristan', 'lucy', 'musick'), extended = TRUE
 # enable more figures when igraph is available
 igraphAvailable <- requireNamespace('igraph')
 ```
+
 
 # Summary
 The soilDB package relies on a number of data sources curated as part of the [SoilWeb](https://casoilresource.lawr.ucdavis.edu/soilweb-apps) ecosystem of web applications, APIs, web coverage services (WCS), and internally-used lookup tables. These data are always updated shortly after the beginning of each fiscal year (October 1st) as part of the SSURGO refresh cycle. Within-cycle updates are typically performed quarterly. 
