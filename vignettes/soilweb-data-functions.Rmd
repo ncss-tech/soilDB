@@ -512,6 +512,13 @@ knitr::kable(head(x$geomorphons), digits = 2)
 
 
 
+<!-- ## Series and Taxa Extent Maps -->
+
+
+
+
+<!-- ## Web Coverage Services -->
+
 
 
 
