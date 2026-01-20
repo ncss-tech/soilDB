@@ -17,9 +17,6 @@ knitr::opts_chunk$set(
   fig.width = 7,
   fig.retina = 2
 )
-
-
-igraphAvailable <- FALSE
 ```
 
 ```{r get-data, echo=FALSE}
@@ -28,9 +25,6 @@ library(soilDB)
 library(aqp)
 
 x <- fetchOSD(c('miami', 'pierre', 'tristan', 'lucy', 'musick'), extended = TRUE)
-
-# enable more figures when igraph is available
-igraphAvailable <- requireNamespace('igraph')
 ```
 
 
@@ -59,6 +53,7 @@ Many of these curated data sources and their evolution through time have been do
   * NRCS [Rapid Carbon Assessment](https://www.nrcs.usda.gov/resources/data-and-reports/rapid-carbon-assessment-raca) (RaCA)
 
 
+
 ## `soilDB` Functions
 The following functions interact with SoilWeb APIs or Web Coverage Service (WCS) to request and download tabular or spatial data. Some functions return `SoilProfileCollection` objects, as defined in the [aqp](https://ncss-tech.github.io/aqp/) package.
 
@@ -81,7 +76,21 @@ WCS:
  * `soilColor.wcs()`: get raster soil color maps by bounding-box
  
  
-The `fetchOSD()` function, when specified with the `extended = TRUE` argument, will include the last updated date for curated sources. For example:
+The `fetchOSD()` function, when specified with the `extended = TRUE` argument, will include the last updated date for curated sources.
+
+<!-- requires conditional evaluation if vignette -->
+```{r, eval=FALSE}
+# typical invocation
+library(soilDB)
+library(aqp)
+
+x <- fetchOSD(c('lucy'), extended = TRUE)
+
+# access metadata
+x$soilweb.metadata
+```
+
+An abbreviated example of these metadata will look like this:
 
 |product                       |last_update |
 |:-----------------------------|:-----------|
@@ -99,6 +108,7 @@ The `fetchOSD()` function, when specified with the `extended = TRUE` argument, w
 |SSURGO parent material        |2025-10-06  |
 |series extent                 |2025-10-04  |
 |taxa extent                   |2025-10-21  |
+
 
 Details about these data sources are provided below.
 
@@ -127,6 +137,20 @@ The [`seriesExtent()`](https://ncss-tech.github.io/soilDB/reference/seriesExtent
 The [`taxaExtent()`](https://ncss-tech.github.io/soilDB/reference/taxaExtent.html) function provides an interface to the data behind the [SoilWeb Soil Taxonomy Explorer](https://casoilresource.lawr.ucdavis.edu/ste/) (STE) application. the STE website includes a short description of how the source data were created.
 
 
+## Relevant Tutorials
+
+  * [Querying Soil Series Data](https://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html)
+  * [Soil Series Co-Occurrence Data](https://ncss-tech.github.io/AQP/soilDB/siblings.html)
+  * [Competing Soil Series](https://ncss-tech.github.io/AQP/soilDB/competing-series.html)
+  * [Exploring Geomorphic Summaries](https://ncss-tech.github.io/AQP/soilDB/exploring-geomorph-summary.html)
+  * [What does a subgroup look like?](https://ncss-tech.github.io/AQP/soilDB/subgroup-series.html)
+  * [Map Unit Key Web Coverage Service](https://ncss-tech.github.io/AQP/soilDB/WCS-demonstration-01.html)
+  * [Investigating Soil Series Extent](https://ncss-tech.github.io/AQP/soilDB/series-extent.html)
+  * [Geographic Extent of Soil Taxa](https://ncss-tech.github.io/AQP/soilDB/taxa-extent.html)
+
+
+
+
 
 # SoilWeb Curated Data Sources
 
@@ -134,30 +158,26 @@ The [`taxaExtent()`](https://ncss-tech.github.io/soilDB/reference/taxaExtent.htm
 ## SC and OSD Derivatives
 Competing (same family classification) soil series information are derived from the Soil Classification database. Geographically associated soils are derived from the OSD records. These data are available via `fetchOSD()`.
 
-```{r}
+Competing soil series.
+```{r eval=FALSE}
 # series names listed in "competing" have the family classification as "series"
-knitr::kable(head(x$competing))
+head(x$competing)
+```
 
+```{r echo=FALSE}
+knitr::kable(head(x$competing))
+```
+
+Geographically associated series. Series in the same region may have several geographically associated series in common, and can be modeled using [directed graphs](https://en.wikipedia.org/wiki/Directed_graph).
+```{r eval=FALSE}
+# series names listed in "gas" are geographically associated with "series"
+head(x$geog_assoc_soils)
+```
+
+```{r echo=FALSE}
 # series names listed in "gas" are geographically associated with "series"
 knitr::kable(head(x$geog_assoc_soils))
 ```
-
-
-One way of visualizing geographically associated soils, requires the igraph package.
-```{r, eval=igraphAvailable, echo=igraphAvailable, fig.cap="Geographically associated soils of selected soil series."}
-library(igraph)
-
-# create a graph object from source series names and their GAS
-g <- graph_from_data_frame(x$geog_assoc_soils[, 1:2]) 
-
-# find central vertices, make font bold
-ct <- centr_degree(g, mode = 'out')
-V(g)$label.font = c(1, 2)[as.integer(ct$res > 0) + 1]
-
-par(mar = c(0, 0, 0, 0))
-plot(g, edge.arrow.size = 0.5, vertex.label.cex = 0.5, vertex.label.family = 'sans', vertex.label.color = 'black', vertex.frame.color = NA) 
-```
-
 
 
 
@@ -177,38 +197,19 @@ The [Querying Soil Series Data](https://ncss-tech.github.io/AQP/soilDB/soil-seri
 Derived from the spatial intersection between MLRA and SSURGO polygons, with area computed on the ellipsoid from geographic coordinates. Membership values are area proportions by soil series.
 
 MLRA "membership" for the [LUCY](https://casoilresource.lawr.ucdavis.edu/sde/?series=lucy#osd) soil series.
-```{r}
+```{r eval=FALSE}
+.mlra <- x$mlra[x$mlra$series == 'LUCY', ]
+.mlra[order(.mlra$membership, decreasing = TRUE), ]
+```
+
+```{r echo=FALSE}
 .mlra <- x$mlra[x$mlra$series == 'LUCY', ]
 knitr::kable(.mlra[order(.mlra$membership, decreasing = TRUE), ], digits = 2, row.names = FALSE)
 ```
 
 
-One way of visualizing MLRA membership, requires the igraph package.
-```{r, eval=igraphAvailable, echo=igraphAvailable, fig.cap="MLRA membership for selected soil series."}
-library(igraph)
+Soil series can be found in multiple MLRA, therefore MLRA membership can be modeled using [directed graphs](https://en.wikipedia.org/wiki/Directed_graph).
 
-# compute a sum of area by series and MLRA for vertex size
-a1 <- aggregate(x$mlra, area_ac ~ series,  FUN = sum)
-a2 <- aggregate(x$mlra, area_ac ~ mlra,  FUN = sum)
-
-# normalize names
-names(a1) <- c('name', 'ac')
-names(a2) <- c('name', 'ac')
-a <- rbind(a1, a2)
-
-# create a graph object from source series names and MLRA members
-g <- graph_from_data_frame(x$mlra[, 1:2], vertices = a) 
-
-# find central vertices, make font bold
-ct <- centr_degree(g, mode = 'out')
-V(g)$label.font = c(1, 2)[as.integer(ct$res > 0) + 1]
-
-# vertex size is proportional to log(area)
-V(g)$size <- log(V(g)$ac)
-
-par(mar = c(0, 0, 0, 0))
-plot(g, edge.arrow.size = 0.5, vertex.label.cex = 0.5, vertex.label.family = 'sans', vertex.label.color = 'black', vertex.frame.color = NA) 
-```
 
 
 
@@ -226,20 +227,37 @@ There are several associated functions in the [sharpshootR](https://github.com/n
   * surface curvature down-slope
 
 Note that the `n` column in each table is the number of component geomorphic data records associated with each soil series. It is possible for a single component to have multiple geomorphic positions defined.
-```{r}
-knitr::kable(head(x$hillpos), digits = 2)
+```{r eval=FALSE}
+# hillslope position
+head(x$hillpos)
+# geomorphic component: hills
+head(x$geomcomp)
+# geomorphic component: mountains
+head(x$mtnpos)
+# geomorphic component: terraces
+head(x$terrace)
+# geomorphic component: flats
+head(x$flats)
+# surface curvature across slope
+head(x$shape_across)
+# surface curvature down slope
+head(x$shape_down)
+```
 
-knitr::kable(head(x$geomcomp), digits = 2)
+```{r echo=FALSE}
+knitr::kable(head(x$hillpos), digits = 2, caption = 'hillslope position')
 
-knitr::kable(head(x$mtnpos), digits = 2)
+knitr::kable(head(x$geomcomp), digits = 2, caption = 'geomorphic component: hills')
 
-knitr::kable(head(x$terrace), digits = 2)
+knitr::kable(head(x$mtnpos), digits = 2, caption = 'geomorphic component: mountains')
 
-knitr::kable(head(x$flats), digits = 2)
+knitr::kable(head(x$terrace), digits = 2, caption = 'geomorphic component: terraces')
 
-knitr::kable(head(x$shape_across), digits = 2)
+knitr::kable(head(x$flats), digits = 2, caption = 'geomorphic component: flats')
 
-knitr::kable(head(x$shape_down), digits = 2)
+knitr::kable(head(x$shape_across), digits = 2, caption = 'surface curvature across-slope')
+
+knitr::kable(head(x$shape_down), digits = 2, caption = 'surface curvature down-slope')
 ```
 
 
@@ -247,64 +265,52 @@ knitr::kable(head(x$shape_down), digits = 2)
 SoilWeb defines the term "siblings" as those components or soil series that co-occur within map units. The `siblings()` function returns siblings for a single soil series, with a tabulation of how many times each sibling shares a common map unit.
 
 Siblings of the PIERRE soil series, limited to just major components. The `n` column describes how many map units are shared between a sibling and the PIERRE series.
-```{r}
+```{r, eval=FALSE}
 sib <- siblings('PIERRE', only.major = TRUE)
+head(sib$sib)
+```
 
+```{r, echo=FALSE}
+sib <- siblings('PIERRE', only.major = TRUE)
 knitr::kable(sib$sib)
 ```
+
 
 
 ### Other
 Percentiles of the [National Commodity Crop
 Productivity Index](https://www.nrcs.usda.gov/sites/default/files/2023-01/NCCPI-User-Guide.pdf) are computed from SSURGO component records, by soil series name. These include both irrigated and non-irrigated versions of the NCCPI.
 
-```{r}
+```{r eval=FALSE}
+head(x$NCCPI)
+```
+```{r echo=FALSE}
 knitr::kable(head(x$NCCPI), digits = 2)
 ```
 
 
 Ecological classification membership are computed from map unit polygon area and component percentages.
-```{r}
+```{r eval=FALSE}
+head(x$ecoclassid)
+```
+```{r echo=FALSE}
 knitr::kable(head(x$ecoclassid), digits = 2)
 ```
 
-One way of visualizing Ecological classification membership, requires the igraph package.
-```{r, eval=igraphAvailable, echo=igraphAvailable, fig.cap="Ecological classification membership for selected soil series."}
-library(igraph)
 
-# compute a sum of area by series and MLRA for vertex size
-a1 <- aggregate(x$ecoclassid, area_ac ~ series,  FUN = sum)
-a2 <- aggregate(x$ecoclassid, area_ac ~ ecoclassid,  FUN = sum)
-
-# normalize names
-names(a1) <- c('name', 'ac')
-names(a2) <- c('name', 'ac')
-a <- rbind(a1, a2)
-
-# create a graph object from source series names and MLRA members
-g <- graph_from_data_frame(x$ecoclassid[, 1:2], vertices = a) 
-
-# find central vertices, make font bold
-ct <- centr_degree(g, mode = 'out')
-V(g)$label.font = c(1, 2)[as.integer(ct$res > 0) + 1]
-
-# vertex size is proportional to log(area)
-V(g)$size <- log(V(g)$ac)
-
-par(mar = c(0, 0, 0, 0))
-plot(g, edge.arrow.size = 0.5, vertex.label.cex = 0.5, vertex.label.family = 'sans', vertex.label.color = 'black', vertex.frame.color = NA) 
-```
 
 
 ### Parent Material Summaries
 Parent material kind and origin, tabulated by soil series name. The `n` column is the number of component parent material records associated with a specific parent material kind or origin. The `total` column is the total number of component parent material records by soil series. The final column, `P`, is the associated proportion.
 
-```{r}
+```{r eval=FALSE}
+head(x$pmkind)
+head(x$pmorigin)
+```
+```{r echo=FALSE}
 knitr::kable(head(x$pmkind), digits = 2)
-
 knitr::kable(head(x$pmorigin), digits = 2)
 ```
-
 
 
 ## Series and Taxa Extent
@@ -330,12 +336,16 @@ These maps are derived from the daily, 800m resolution, PRISM data spanning 1981
 Percentiles of each variable are computed by soil series, from a sampling of one point per SSURGO map unit polygon.
 
 An example of annual and monthly climate percentiles.
-```{r}
+```{r eval=FALSE}
+head(x$climate.annual)
+
+head(x$climate.monthly)
+```
+```{r echo=FALSE}
 knitr::kable(head(x$climate.annual), digits = 0)
 
 knitr::kable(head(x$climate.monthly), digits = 0)
 ```
-
 
 
 
@@ -520,22 +530,14 @@ The source DEM was a 10m / 30m resolution compilation of USGS NED data, rounded 
 
 
 Proportions are weighted by total soil series area (within CONUS) as informed by the component name and associated component percentage.
-```{r}
-knitr::kable(head(x$geomorphons), digits = 2)
+```{r eval=FALSE}
+head(x$geomorphons)
+```
+```{r echo=FALSE}
+knitr::kable(head(x$geomorphons), digits = 2, caption = 'geomorphon summary')
 ```
 
 
-
-# Relevant Tutorials
-
-  * [Querying Soil Series Data](https://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html)
-  * [Soil Series Co-Occurrence Data](https://ncss-tech.github.io/AQP/soilDB/siblings.html)
-  * [Competing Soil Series](https://ncss-tech.github.io/AQP/soilDB/competing-series.html)
-  * [Exploring Geomorphic Summaries](https://ncss-tech.github.io/AQP/soilDB/exploring-geomorph-summary.html)
-  * [What does a subgroup look like?](https://ncss-tech.github.io/AQP/soilDB/subgroup-series.html)
-  * [Map Unit Key Web Coverage Service](https://ncss-tech.github.io/AQP/soilDB/WCS-demonstration-01.html)
-  * [Investigating Soil Series Extent](https://ncss-tech.github.io/AQP/soilDB/series-extent.html)
-  * [Geographic Extent of Soil Taxa](https://ncss-tech.github.io/AQP/soilDB/taxa-extent.html)
 
 
 
