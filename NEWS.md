@@ -8,7 +8,8 @@
    - Added argument `type` for selecting the type of query; replaces deprecated `formativeElement`
  - `SDA_query()` now includes additional metadata (comment header in SQL) to inform usage metrics of various access points to SDA
  - `fetchSDA()` and related lower-level child functions now include `nasiscoiid` and `nasischiid` for relating to internal database record IDs
- 
+ - `OSDquery()` gains `remarks` argument for searching the REMARKS section of OSDs
+
 # soilDB 2.8.13 (2025-09-26)
  - Added `get_SDA_NASIS_key()` for obtaining NASIS record IDs for component and component horizon data from Soil Data Access (#409)
  - `SDA_spatialQuery()` fixed a bug with new `addFields` argument and `geomIntersection=TRUE` (#414)
