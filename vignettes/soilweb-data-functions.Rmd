@@ -307,6 +307,16 @@ knitr::kable(head(x$pmorigin), digits = 2)
 
 
 
+## Series and Taxa Extent
+Soil series extent vector data are available for all areas where SSURGO has been completed. Vector extents are described as polygons which generalize the underlying SSURGO map unit polygons (EPSG:4326). Soil series extent raster data are available as 800m grids (EPSG:5070) within CONUS only. Taxonomic classes and formative elements are available as 800m grids (EPSG:5070) within CONUS only. Grids are 
+
+
+
+## Web Coverage Services
+Web Coverage Services (WCS) provided by SoilWeb are still an experimental interface to snapshots of authoritative soil survey and derived data sources. The update cycle is slower than the typical SSURGO refresh. All WCS requests return data as compressed GeoTIFF (EPSG:5070).
+
+
+
 ## Climate Data and Derivatives
 
 These maps are derived from the daily, 800m resolution, PRISM data spanning 1981--2010.
@@ -516,20 +526,16 @@ knitr::kable(head(x$geomorphons), digits = 2)
 
 
 
+# Relevant Tutorials
 
-
-<!-- ## Series and Taxa Extent Maps -->
-
-
-
-
-<!-- ## Web Coverage Services -->
-
-
-
-
-
-<!-- # Relevant Tutorials -->
+  * [Querying Soil Series Data](https://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html)
+  * [Soil Series Co-Occurrence Data](https://ncss-tech.github.io/AQP/soilDB/siblings.html)
+  * [Competing Soil Series](https://ncss-tech.github.io/AQP/soilDB/competing-series.html)
+  * [Exploring Geomorphic Summaries](https://ncss-tech.github.io/AQP/soilDB/exploring-geomorph-summary.html)
+  * [What does a subgroup look like?](https://ncss-tech.github.io/AQP/soilDB/subgroup-series.html)
+  * [Map Unit Key Web Coverage Service](https://ncss-tech.github.io/AQP/soilDB/WCS-demonstration-01.html)
+  * [Investigating Soil Series Extent](https://ncss-tech.github.io/AQP/soilDB/series-extent.html)
+  * [Geographic Extent of Soil Taxa](https://ncss-tech.github.io/AQP/soilDB/taxa-extent.html)
 
 
 
