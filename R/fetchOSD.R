@@ -5,6 +5,8 @@
 #             * annual.climate is now a data.frame padded with NA when series is outside of CONUS
 #             * eff_class added to horizon data
 
+# 2026-01-10: API change, geomorphon proportions added to 'extended' request
+
 
 ## tabulate the number of records within each geomorphic table
 ## there could be some cases where there are no records, resulting in FALSE
@@ -47,6 +49,7 @@
   return(m5)
 }
 
+
 #' @title Get Official Series Descriptions and summaries from SoilWeb API
 #'
 #' @description This function fetches a variety of data associated with named soil series, extracted from the USDA-NRCS Official Series Description text files and detailed soil survey (SSURGO). These data are updated quarterly and made available via SoilWeb. Set `extended = TRUE` and see the `soilweb.metadata` list element for information on when the source data were last updated. 
@@ -83,6 +86,7 @@
 #'
 #'   \item{pmkind}{empirical probabilities for parent material kind, derived from the current SSURGO snapshot}
 #'   \item{pmorigin}{empirical probabilities for parent material origin, derived from the current SSURGO snapshot}
+#'   \item{geomorphons}{geomorphons landform classification (CONUS only), derived from the current gSSURGO snapshot and a 30m CONUS geomoprhons grid, details pending}
 #'   \item{mlra}{empirical MLRA membership values, derived from the current SSURGO snapshot}
 #'   \item{ecoclassid}{area cross-tabulation of ecoclassid by soil series name, derived from the current SSURGO snapshot, major components only}
 #'   \item{climate}{climate summaries from PRISM stack (CONUS only)}
@@ -98,7 +102,7 @@
 #'
 #' \describe{
 #'
-#'   \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty \code{data.frames} because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.}
+#'   \item{1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).}{ - Climate summaries are empty `data.frame` because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.}
 #'
 #'   \item{2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).}{ - Extended summaries are present but morphology missing from `SPC`. A warning is issued.}
 #'
@@ -108,7 +112,7 @@
 #'
 #'}
 #'
-#' @return a `SoilProfileCollection` object containing basic soil morphology and taxonomic information.
+#' @return a `SoilProfileCollection` object containing basic soil morphology and taxonomic information, a `list` when `extended = TRUE`.
 #'
 #' @references USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
 #'
@@ -232,15 +236,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
   h <- res$hz
 
 	# report missing data
-  # no data condition 2-1/2-2: s and h => FALSE
   # no data condition 4-1/4-2: s and h => structure(list(), dim = 1:0, dimnames = list(NULL, NULL))
-  
-  # only works for 2-1/2-2 php-pgsql
-  # if ((is.logical(s) && length(s) == 1) ||
-  #     (is.logical(h) & length(h) == 1)) {
-  #   message('query returned no data')
-  #   return(NULL)
-  # }
   
   # 4-1/4-2 updated php-pgsql
   # no data condition: either `s` OR `h` are NOT `data.frame`
@@ -340,9 +336,9 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	if(extended) {
 	  
 	  # unravel nested lists
-	  .tables <- c('competing', 'geog_assoc_soils', 'geomcomp', 'hillpos', 'mtnpos', 'terrace', 'flats', 'shape_across', 'shape_down', 'pmkind', 'pmorigin', 'mlra', 'ecoclassid', 'climate', 'nccpi')
+	  .tables <- c('competing', 'geog_assoc_soils', 'geomcomp', 'hillpos', 'mtnpos', 'terrace', 'flats', 'shape_across', 'shape_down', 'pmkind', 'pmorigin', 'geomorphons', 'mlra', 'ecoclassid', 'climate', 'nccpi')
 	  
-	  # chunk-wise missing tabular data is reported as FALSE
+	  # chunk-wise missing tabular data are reported as FALSE
 	  # cannot rbind(FALSE) or rbind(FALSE, data.frame) -> corruption of data
 	  for(.tab in .tables) {
 	    .tabdata <- lapply(r, '[[', .tab)
@@ -357,22 +353,6 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	    }
 	    
 	  }
-	  
-	  # res$competing <- do.call('rbind', lapply(r, '[[', 'competing'))
-	  # res$geog_assoc_soils <- do.call('rbind', lapply(r, '[[', 'geog_assoc_soils'))
-	  # res$geomcomp <- do.call('rbind', lapply(r, '[[', 'geomcomp'))
-	  # res$hillpos <- do.call('rbind', lapply(r, '[[', 'hillpos'))
-	  # res$mtnpos <- do.call('rbind', lapply(r, '[[', 'mtnpos'))
-	  # res$terrace <- do.call('rbind', lapply(r, '[[', 'terrace'))
-	  # res$flats <- do.call('rbind', lapply(r, '[[', 'flats'))
-	  # res$shape_across <- do.call('rbind', lapply(r, '[[', 'shape_across'))
-	  # res$shape_down <- do.call('rbind', lapply(r, '[[', 'shape_down'))
-	  # res$pmkind <- do.call('rbind', lapply(r, '[[', 'pmkind'))
-	  # res$pmorigin <- do.call('rbind', lapply(r, '[[', 'pmorigin'))
-	  # res$mlra <- do.call('rbind', lapply(r, '[[', 'mlra'))
-	  # res$ecoclassid <- do.call('rbind', lapply(r, '[[', 'ecoclassid'))
-	  # res$climate <- do.call('rbind', lapply(r, '[[', 'climate'))
-	  # res$nccpi <- do.call('rbind', lapply(r, '[[', 'nccpi'))
 	  
 	  # metadata are identical across chunks
 	  res$metadata <- unique(do.call('rbind', lapply(r, '[[', 'metadata')))
@@ -457,6 +437,7 @@ fetchOSD <- function(soils, colorState = 'moist', extended = FALSE) {
 	    shape_down = res$shape_down,
 	    pmkind = res$pmkind,
 	    pmorigin = res$pmorigin,
+	    geomorphons = res$geomorphons,
 	    mlra = res$mlra,
 	    ecoclassid = res$ecoclassid,
 	    climate.annual = annual.data,

@@ -2,6 +2,10 @@
  - R version >= 4.1.0 is now required
  - Deprecated `stringsAsFactors` argument has been removed from many query functions, use `NASISChoiceList()` and/or `NASISDomainsAsFactor()` instead for manual or automatic setting of domain values as factors, respectively
  - Deprecated NASIS column aliases have been removed, see <https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html> for details
+ - New vignette with details on SoilWeb curated data sources, and related functions in soilDB (#435)
+ - `fetchOSD(..., extended = TRUE)` gains geomorphon proportions via SoilWeb (#435)
+ - `get_SDA_property(method="weighted average")` resolved efficiency issues and streamlined SQL Common Table Expressions for processing very large sets of map unit keys (#432)
+ - `OSDquery()` gains `remarks` argument for searching the REMARKS section of OSDs
  
 # soilDB 2.8.14 (2025-12-04)
  - `taxaExtent()` updates:
@@ -9,7 +13,6 @@
    - Added argument `type` for selecting the type of query; replaces deprecated `formativeElement`
  - `SDA_query()` now includes additional metadata (comment header in SQL) to inform usage metrics of various access points to SDA
  - `fetchSDA()` and related lower-level child functions now include `nasiscoiid` and `nasischiid` for relating to internal database record IDs
- - `OSDquery()` gains `remarks` argument for searching the REMARKS section of OSDs
 
 # soilDB 2.8.13 (2025-09-26)
  - Added `get_SDA_NASIS_key()` for obtaining NASIS record IDs for component and component horizon data from Soil Data Access (#409)
