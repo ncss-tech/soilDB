@@ -23,6 +23,7 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/dominant-es.html">Mapping Dominant Ecological Sites using SSURGO Data</a></li>
     <li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
     <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local Soil Survey Geographic (SSURGO) Databases</a></li>
+    <li><a class="dropdown-item" href="../articles/soilweb-data-functions.html">Functions and Data Sources that Depend on SoilWeb</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -44,7 +45,7 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
 
     <div class="ref-description section level2">
     <p>This is the R interface to <a href="https://casoilresource.lawr.ucdavis.edu/osd-search/" class="external-link">OSD search by Section</a> and <a href="https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php" class="external-link">OSD Search</a> APIs provided by SoilWeb.</p>
-<p>OSD records are searched with the <a href="https://www.postgresql.org/docs/9.5/textsearch.html" class="external-link">PostgreSQL fulltext indexing</a> and query system (<a href="https://www.postgresql.org/docs/9.5/datatype-textsearch.html" class="external-link">syntax details</a>). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections.</p>
+<p>OSD records are searched with the <a href="https://www.postgresql.org/docs/current/textsearch.html" class="external-link">PostgreSQL fulltext indexing</a> and query system (<a href="https://www.postgresql.org/docs/current/textsearch-controls.html" class="external-link">syntax details</a>). Each search field (except for the "brief narrative" and MLRA) corresponds with a section header in an OSD. The results may not include every OSD due to formatting errors and typos. Results are scored based on the number of times search terms match words in associated sections.</p>
     </div>
 
     <div class="section level2">
@@ -59,7 +60,8 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
 <span>  use_and_veg <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  competing_series <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  geog_location <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  geog_assoc_soils <span class="op">=</span> <span class="st">""</span></span>
+<span>  geog_assoc_soils <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  remarks <span class="op">=</span> <span class="st">""</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -72,11 +74,11 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
 
 
 <dt id="arg-mlra">mlra<a class="anchor" aria-label="anchor" href="#arg-mlra"></a></dt>
-<dd><p>a comma-delimited string of MLRA to search ('17,18,22A'), see Details section below</p></dd>
+<dd><p>a comma-delimited string of MLRA to search ('17,18,22A'), see Details</p></dd>
 
 
 <dt id="arg-taxonomic-class">taxonomic_class<a class="anchor" aria-label="anchor" href="#arg-taxonomic-class"></a></dt>
-<dd><p>search family level classification</p></dd>
+<dd><p>search family level classification, see Details</p></dd>
 
 
 <dt id="arg-typical-pedon">typical_pedon<a class="anchor" aria-label="anchor" href="#arg-typical-pedon"></a></dt>
@@ -106,6 +108,10 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
 <dt id="arg-geog-assoc-soils">geog_assoc_soils<a class="anchor" aria-label="anchor" href="#arg-geog-assoc-soils"></a></dt>
 <dd><p>search geographically associated soils section</p></dd>
 
+
+<dt id="arg-remarks">remarks<a class="anchor" aria-label="anchor" href="#arg-remarks"></a></dt>
+<dd><p>search remarks section (typically contains diagnostic horizons / features)</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -113,22 +119,44 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The <code>mlra</code> argument must be combined with another argument in order to become active. For example, search for series with 5GY hues in the "typical pedon" section, but limit to just MLRA 18: <code>OSDquery(mlra = '18', typical_pedon = '5GY')</code>.</p>
-<p>See <a href="https://casoilresource.lawr.ucdavis.edu/osd-search/" class="external-link">this webpage</a> for more information.</p><ul><li><p>family level taxa are derived from SC database, not parsed OSD records</p></li>
-<li><p>MLRA are derived via spatial intersection (SSURGO x MLRA polygons)</p></li>
-<li><p>MLRA-filtering is only possible for series used in the current SSURGO snapshot (component name)</p></li>
-<li><p>logical AND: &amp;</p></li>
-<li><p>logical OR: |</p></li>
-<li><p>wildcard, e.g. rhy-something rhy:*</p></li>
-<li><p>search terms with spaces need doubled single quotes: ”san joaquin”</p></li>
-<li><p>combine search terms into a single expression: (grano:* | granite)</p></li>
+    <p>Queries including the <code>taxonomic_class</code> argument make use of the Soil Classification database, not fulltext search of OSD records. Queries including the <code>mlra</code> argument make use of a SoilWeb data source based on spatial intersection (SSURGO x MLRA polygons), updated quarterly. MLRA queries are only possible for those soil series used in the current SSURGO snapshot.</p>
+<p>The <code>mlra</code> argument must be combined with another argument in order to become active. For example, search for series with "5GY" hues in the "typical pedon" section, but limit to just MLRA 18: <code>OSDquery(mlra = '18', typical_pedon = '5GY')</code>.</p><div class="section">
+<h3 id="syntax-notes-">Syntax Notes:<a class="anchor" aria-label="anchor" href="#syntax-notes-"></a></h3>
+
+
+<p>The PostgreSQL fulltext query syntax is complex, but many common text search concepts are familiar:</p><ul><li><p>logical AND: <code>&amp;</code></p></li>
+<li><p>logical OR: <code>|</code></p></li>
+<li><p>wildcard, e.g. rhy-something: <code>rhy:*</code></p></li>
+<li><p>search terms with spaces need doubled single quotes: <code>''san joaquin''</code></p></li>
+<li><p>combine search terms into a single expression: <code>(grano:* | granite)</code></p></li>
+</ul></div>
+
+<div class="section">
+<h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h3>
+
+
+<p>Strategies for searching entire OSD records:</p><ul><li><p><code>iowa &amp; smectitic &amp; verti:* &amp; Cg &amp; ! saturated</code></p></li>
+<li><p><code>iowa &amp; smectitic &amp; verti:* &amp; Cg &amp; terrace</code></p></li>
+<li><p><code>(sulfi:* | sulfa:*) &amp; aq:*</code></p></li>
+<li><p><code>Coarse-loamy &amp; mixed &amp; active &amp; thermic &amp; Mollic &amp; Haploxeralfs</code></p></li>
+<li><p><code>sierra &amp; nevada &amp; (meta:* | metamorphic) &amp; xer:* &amp; thermic &amp; lithic</code></p></li>
+<li><p><code>sierra &amp; nevada &amp; foothill &amp; (grano:* | granite) &amp; thermic</code></p></li>
+<li><p><code>rhyo:* &amp; tuff:* &amp; California &amp; thermic</code></p></li>
+<li><p><code>paralithic &amp; thermic &amp; !mesic &amp; mollic &amp; epipedon</code></p></li>
+<li><p><code>(gypsum | gyp:*) (MLRA: 15,17)</code></p></li>
+<li><p><code>flood &amp; plains &amp; toe &amp; slope</code></p></li>
+</ul><p>Strategies for search OSD fields:</p><ul><li><p><code>taxonomic_class = 'duri:* &amp; thermic'</code>: family level classification contains "duri-" prefix and "thermic"</p></li>
+<li><p><code>typical_pedon = 'cobbly &amp; ashy &amp; silt &amp; loam'</code>: "cobbly, ashy, silt, loam", any horizon</p></li>
+<li><p><code>geog_location = 'strath &amp; terrace'</code>: "strath" and "terrace" in geographic setting narrative</p></li>
 </ul><p>Related documentation can be found in the following tutorials</p><ul><li><p><a href="http://ncss-tech.github.io/AQP/soilDB/soil-series-query-functions.html" class="external-link">overview of all soil series query functions</a></p></li>
 <li><p><a href="https://ncss-tech.github.io/AQP/soilDB/competing-series.html" class="external-link">competing soil series</a></p></li>
 <li><p><a href="https://ncss-tech.github.io/AQP/soilDB/siblings.html" class="external-link">siblings</a></p></li>
 </ul></div>
+
+    </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>SoilWeb maintains a snapshot of the Official Series Description data.</p>
+    <p>SoilWeb maintains a snapshot of the Official Series Description data, updated quarterly.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -136,7 +164,7 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="fetchOSD.html">fetchOSD()</a></code>, <code><a href="siblings.html">siblings()</a></code>, <code><a href="fetchOSD.html">fetchOSD()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="fetchOSD.html">fetchOSD()</a></code>, <code><a href="siblings.html">siblings()</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -154,7 +182,7 @@ OSD records are searched with the PostgreSQL fulltext indexing and query system 
 <span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="fetchOSD.html">fetchOSD</a></span><span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">series</span>, extended <span class="op">=</span> <span class="cn">TRUE</span>, colorState <span class="op">=</span> <span class="st">'dry'</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># simple figure</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">SPC</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="OSDquery-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>

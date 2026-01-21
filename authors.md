@@ -16,7 +16,7 @@
 Source:
 [`inst/CITATION`](https://github.com/ncss-tech/soilDB/blob/master/inst/CITATION)
 
-Beaudette D, Skovlin J, Roecker S, Brown A (2025). *soilDB: Soil
+Beaudette D, Skovlin J, Roecker S, Brown A (2026). *soilDB: Soil
 Database Interface*. R package version 2.8.14,
 <https://CRAN.R-project.org/package=soilDB>.
 
@@ -25,5 +25,5 @@ Database Interface*. R package version 2.8.14,
       author = {Dylan Beaudette and Jay Skovlin and Stephen Roecker and Andrew Brown},
       note = {R package version 2.8.14},
       url = {https://CRAN.R-project.org/package=soilDB},
-      year = {2025},
+      year = {2026},
     }

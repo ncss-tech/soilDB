@@ -2,11 +2,17 @@
 
 ## soilDB 2.8.14 (development)
 
+- new vignette with details on SoilWeb curated data sources, and related
+  functions in soilDB
+- `fetchOSD(..., extended = TRUE)` gains geomorphon proportions via
+  SoilWeb
 - [`taxaExtent()`](http://ncss-tech.github.io/soilDB/reference/taxaExtent.md)
   updates:
   - Added family mineralogy class grids
   - Added argument `type` for selecting the type of query; replaces
     deprecated `formativeElement`
+- [`OSDquery()`](http://ncss-tech.github.io/soilDB/reference/OSDquery.md)
+  gains `remarks` argument for searching the REMARKS section of OSDs
 
 ## soilDB 2.8.13 (2025-09-26)
 

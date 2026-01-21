@@ -21,6 +21,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/dominant-es.html">Mapping Dominant Ecological Sites using SSURGO Data</a></li>
     <li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
     <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local Soil Survey Geographic (SSURGO) Databases</a></li>
+    <li><a class="dropdown-item" href="../articles/soilweb-data-functions.html">Functions and Data Sources that Depend on SoilWeb</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -67,7 +68,7 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a <code>SoilProfileCollection</code> object containing basic soil morphology and taxonomic information.</p>
+    <p>a <code>SoilProfileCollection</code> object containing basic soil morphology and taxonomic information, a <code>list</code> when <code>extended = TRUE</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -86,13 +87,14 @@
 <dd><p>empirical probabilities for surface shape (across-slope) from the current SSURGO snapshot</p></dd><dt>shape_down</dt>
 <dd><p>empirical probabilities for surface shape (down-slope) from the current SSURGO snapshot</p></dd><dt>pmkind</dt>
 <dd><p>empirical probabilities for parent material kind, derived from the current SSURGO snapshot</p></dd><dt>pmorigin</dt>
-<dd><p>empirical probabilities for parent material origin, derived from the current SSURGO snapshot</p></dd><dt>mlra</dt>
+<dd><p>empirical probabilities for parent material origin, derived from the current SSURGO snapshot</p></dd><dt>geomorphons</dt>
+<dd><p>geomorphons landform classification (CONUS only), derived from the current gSSURGO snapshot and a 30m CONUS geomoprhons grid, details pending</p></dd><dt>mlra</dt>
 <dd><p>empirical MLRA membership values, derived from the current SSURGO snapshot</p></dd><dt>ecoclassid</dt>
 <dd><p>area cross-tabulation of ecoclassid by soil series name, derived from the current SSURGO snapshot, major components only</p></dd><dt>climate</dt>
 <dd><p>climate summaries from PRISM stack (CONUS only)</p></dd><dt>NCCPI</dt>
 <dd><p>select quantiles of NCCPI and Irrigated NCCPI, derived from the current SSURGO snapshot</p></dd><dt>metadata</dt>
 <dd><p>metadata associated with SoilWeb cached summaries</p></dd></dl>When using <code>extended = TRUE</code>, there are a couple of scenarios in which series morphology contained in <code>SPC</code> do not fully match records in the associated series summary tables (e.g. <code>competing</code>).<dl><dt>1. A query for soil series that exist entirely outside of CONUS (e.g. PALAU).</dt>
-<dd><p>- Climate summaries are empty <code>data.frames</code> because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.</p></dd><dt>2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).</dt>
+<dd><p>- Climate summaries are empty <code>data.frame</code> because these summaries are currently generated from PRISM. We are working on a solution that uses DAYMET.</p></dd><dt>2. A query for data within CONUS, but OSD morphology missing due to parsing error (e.g. formatting, typos).</dt>
 <dd><p>- Extended summaries are present but morphology missing from <code>SPC</code>. A warning is issued.</p></dd></dl>These last two cases are problematic for analysis that makes use of morphology and extended data, such as outlined in this tutorial on <a href="https://ncss-tech.github.io/AQP/soilDB/competing-series.html" class="external-link">competing soil series</a>.
     </div>
     <div class="section level2">
@@ -147,10 +149,10 @@
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">aqp</span><span class="fu">::</span><span class="fu"><a href="https://ncss-tech.github.io/aqp/reference/SoilProfileCollection-plotting-methods.html" class="external-link">plotSPC</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">SPC</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> List of 18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 19</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ SPC             :Formal class 'SoilProfileCollection' [package "aqp"] with 8 slots</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ competing       :'data.frame':	84 obs. of  3 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ geog_assoc_soils:'data.frame':	77 obs. of  2 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ geog_assoc_soils:'data.frame':	80 obs. of  2 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ geomcomp        :'data.frame':	11 obs. of  9 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ hillpos         :'data.frame':	11 obs. of  8 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ mtnpos          :'data.frame':	1 obs. of  9 variables:</span>
@@ -160,12 +162,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ shape_down      :'data.frame':	11 obs. of  8 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ pmkind          :'data.frame':	18 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ pmorigin        :'data.frame':	32 obs. of  5 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ geomorphons     :'data.frame':	11 obs. of  12 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ mlra            :'data.frame':	47 obs. of  4 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ ecoclassid      :'data.frame':	59 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ climate.annual  :'data.frame':	88 obs. of  12 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ climate.monthly :'data.frame':	264 obs. of  14 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ NCCPI           :'data.frame':	11 obs. of  16 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ soilweb.metadata:'data.frame':	27 obs. of  2 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ soilweb.metadata:'data.frame':	28 obs. of  2 variables:</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-plt img"><img src="fetchOSD-2.png" alt="" width="700" height="433"></span>

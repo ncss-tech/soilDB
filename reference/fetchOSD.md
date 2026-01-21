@@ -31,7 +31,7 @@ fetchOSD(soils, colorState = "moist", extended = FALSE)
 ## Value
 
 a `SoilProfileCollection` object containing basic soil morphology and
-taxonomic information.
+taxonomic information, a `list` when `extended = TRUE`.
 
 ## Details
 
@@ -106,6 +106,12 @@ resulting object will be a `list` with the following elements:
   empirical probabilities for parent material origin, derived from the
   current SSURGO snapshot
 
+- geomorphons:
+
+  geomorphons landform classification (CONUS only), derived from the
+  current gSSURGO snapshot and a 30m CONUS geomoprhons grid, details
+  pending
+
 - mlra:
 
   empirical MLRA membership values, derived from the current SSURGO
@@ -136,7 +142,7 @@ associated series summary tables (e.g. `competing`).
 - 1\. A query for soil series that exist entirely outside of CONUS (e.g.
   PALAU).:
 
-  \- Climate summaries are empty `data.frames` because these summaries
+  \- Climate summaries are empty `data.frame` because these summaries
   are currently generated from PRISM. We are working on a solution that
   uses DAYMET.
 
@@ -206,10 +212,10 @@ D.E. Beaudette, A.G. Brown
   par(mar=c(0,0,1,1))
   aqp::plotSPC(x$SPC)
   str(x, 1)
-#> List of 18
+#> List of 19
 #>  $ SPC             :Formal class 'SoilProfileCollection' [package "aqp"] with 8 slots
 #>  $ competing       :'data.frame':    84 obs. of  3 variables:
-#>  $ geog_assoc_soils:'data.frame':    77 obs. of  2 variables:
+#>  $ geog_assoc_soils:'data.frame':    80 obs. of  2 variables:
 #>  $ geomcomp        :'data.frame':    11 obs. of  9 variables:
 #>  $ hillpos         :'data.frame':    11 obs. of  8 variables:
 #>  $ mtnpos          :'data.frame':    1 obs. of  9 variables:
@@ -219,12 +225,13 @@ D.E. Beaudette, A.G. Brown
 #>  $ shape_down      :'data.frame':    11 obs. of  8 variables:
 #>  $ pmkind          :'data.frame':    18 obs. of  5 variables:
 #>  $ pmorigin        :'data.frame':    32 obs. of  5 variables:
+#>  $ geomorphons     :'data.frame':    11 obs. of  12 variables:
 #>  $ mlra            :'data.frame':    47 obs. of  4 variables:
 #>  $ ecoclassid      :'data.frame':    59 obs. of  5 variables:
 #>  $ climate.annual  :'data.frame':    88 obs. of  12 variables:
 #>  $ climate.monthly :'data.frame':    264 obs. of  14 variables:
 #>  $ NCCPI           :'data.frame':    11 obs. of  16 variables:
-#>  $ soilweb.metadata:'data.frame':    27 obs. of  2 variables:
+#>  $ soilweb.metadata:'data.frame':    28 obs. of  2 variables:
 
 # }
 ```

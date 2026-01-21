@@ -6,9 +6,9 @@ Search](https://casoilresource.lawr.ucdavis.edu/osd-search/search-entire-osd.php
 APIs provided by SoilWeb.
 
 OSD records are searched with the [PostgreSQL fulltext
-indexing](https://www.postgresql.org/docs/9.5/textsearch.html) and query
-system ([syntax
-details](https://www.postgresql.org/docs/9.5/datatype-textsearch.html)).
+indexing](https://www.postgresql.org/docs/current/textsearch.html) and
+query system ([syntax
+details](https://www.postgresql.org/docs/current/textsearch-controls.html)).
 Each search field (except for the "brief narrative" and MLRA)
 corresponds with a section header in an OSD. The results may not include
 every OSD due to formatting errors and typos. Results are scored based
@@ -27,7 +27,8 @@ OSDquery(
   use_and_veg = "",
   competing_series = "",
   geog_location = "",
-  geog_assoc_soils = ""
+  geog_assoc_soils = "",
+  remarks = ""
 )
 ```
 
@@ -41,11 +42,10 @@ OSDquery(
 - mlra:
 
   a comma-delimited string of MLRA to search ('17,18,22A'), see Details
-  section below
 
 - taxonomic_class:
 
-  search family level classification
+  search family level classification, see Details
 
 - typical_pedon:
 
@@ -75,6 +75,11 @@ OSDquery(
 
   search geographically associated soils section
 
+- remarks:
+
+  search remarks section (typically contains diagnostic horizons /
+  features)
+
 ## Value
 
 a `data.frame` object containing soil series names that match patterns
@@ -82,30 +87,67 @@ supplied as arguments.
 
 ## Details
 
+Queries including the `taxonomic_class` argument make use of the Soil
+Classification database, not fulltext search of OSD records. Queries
+including the `mlra` argument make use of a SoilWeb data source based on
+spatial intersection (SSURGO x MLRA polygons), updated quarterly. MLRA
+queries are only possible for those soil series used in the current
+SSURGO snapshot.
+
 The `mlra` argument must be combined with another argument in order to
-become active. For example, search for series with 5GY hues in the
+become active. For example, search for series with "5GY" hues in the
 "typical pedon" section, but limit to just MLRA 18:
 `OSDquery(mlra = '18', typical_pedon = '5GY')`.
 
-See [this webpage](https://casoilresource.lawr.ucdavis.edu/osd-search/)
-for more information.
+### Syntax Notes:
 
-- family level taxa are derived from SC database, not parsed OSD records
+The PostgreSQL fulltext query syntax is complex, but many common text
+search concepts are familiar:
 
-- MLRA are derived via spatial intersection (SSURGO x MLRA polygons)
+- logical AND: `&`
 
-- MLRA-filtering is only possible for series used in the current SSURGO
-  snapshot (component name)
+- logical OR: `|`
 
-- logical AND: &
+- wildcard, e.g. rhy-something: `rhy:*`
 
-- logical OR: \|
+- search terms with spaces need doubled single quotes: `''san joaquin''`
 
-- wildcard, e.g. rhy-something rhy:\*
+- combine search terms into a single expression: `(grano:* | granite)`
 
-- search terms with spaces need doubled single quotes: ”san joaquin”
+### Examples
 
-- combine search terms into a single expression: (grano:\* \| granite)
+Strategies for searching entire OSD records:
+
+- `iowa & smectitic & verti:* & Cg & ! saturated`
+
+- `iowa & smectitic & verti:* & Cg & terrace`
+
+- `(sulfi:* | sulfa:*) & aq:*`
+
+- `Coarse-loamy & mixed & active & thermic & Mollic & Haploxeralfs`
+
+- `sierra & nevada & (meta:* | metamorphic) & xer:* & thermic & lithic`
+
+- `sierra & nevada & foothill & (grano:* | granite) & thermic`
+
+- `rhyo:* & tuff:* & California & thermic`
+
+- `paralithic & thermic & !mesic & mollic & epipedon`
+
+- `(gypsum | gyp:*) (MLRA: 15,17)`
+
+- `flood & plains & toe & slope`
+
+Strategies for search OSD fields:
+
+- `taxonomic_class = 'duri:* & thermic'`: family level classification
+  contains "duri-" prefix and "thermic"
+
+- `typical_pedon = 'cobbly & ashy & silt & loam'`: "cobbly, ashy, silt,
+  loam", any horizon
+
+- `geog_location = 'strath & terrace'`: "strath" and "terrace" in
+  geographic setting narrative
 
 Related documentation can be found in the following tutorials
 
@@ -119,7 +161,8 @@ Related documentation can be found in the following tutorials
 
 ## Note
 
-SoilWeb maintains a snapshot of the Official Series Description data.
+SoilWeb maintains a snapshot of the Official Series Description data,
+updated quarterly.
 
 ## References
 
@@ -128,8 +171,7 @@ USDA-NRCS OSD search tools: <https://soilseries.sc.egov.usda.gov/>
 ## See also
 
 [`fetchOSD()`](http://ncss-tech.github.io/soilDB/reference/fetchOSD.md),
-[`siblings()`](http://ncss-tech.github.io/soilDB/reference/siblings.md),
-[`fetchOSD()`](http://ncss-tech.github.io/soilDB/reference/fetchOSD.md)
+[`siblings()`](http://ncss-tech.github.io/soilDB/reference/siblings.md)
 
 ## Author
 
@@ -146,7 +188,7 @@ D.E. Beaudette
   x <- fetchOSD(s$series, extended = TRUE, colorState = 'dry')
 
   # simple figure
-  par(mar=c(0,0,1,1))
+  par(mar = c(0,0,1,1))
   aqp::plotSPC(x$SPC)
 
 # }
