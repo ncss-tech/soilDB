@@ -1,7 +1,8 @@
 # soilDB 2.9.0 (development)
  - R version >= 4.1.0 is now required
  - Deprecated `stringsAsFactors` argument has been removed from many query functions, use `NASISChoiceList()` and/or `NASISDomainsAsFactor()` instead for manual or automatic setting of domain values as factors, respectively
-  
+ - Deprecated NASIS column aliases have been removed, see <https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html> for details
+ 
 # soilDB 2.8.14 (2025-12-04)
  - `taxaExtent()` updates:
    - Added family mineralogy class grids 
