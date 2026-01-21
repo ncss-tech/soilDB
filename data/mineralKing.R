@@ -6,6 +6,7 @@ if (requireNamespace("aqp", quietly = TRUE)) {
     fn <- system.file("inst", "extdata", "mineralKing.rda", package = "soilDB")
     load(fn)
   }
+  rm(fn)
 } else {
   if (interactive()) {
     message("Install the 'aqp' package to use sample SoilProfileCollection object datasets")
