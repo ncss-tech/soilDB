@@ -3,8 +3,6 @@ context("SDA_query() -- requires internet connection")
 
 test_that("SDA_query() works", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
@@ -41,8 +39,6 @@ test_that("SDA_query() works", {
 
 test_that("SDA_query() returns expected result", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
@@ -63,15 +59,11 @@ test_that("SDA_query() returns expected result", {
 })
 
 test_that("SDA_query() query too long", {
-  skip_if_not_installed("httr")
-  
   q <- paste0("SELECT '1", paste0(rep(0, 1e7), collapse = ""), "' as a;")
   expect_error(soilDB::SDA_query(q), "Query string is too long")
 })
 
 test_that("SDA_query() SQL error / no results -> NULL", {
-  
-  skip_if_not_installed("httr")
   
   skip_if_offline()
 
@@ -92,8 +84,6 @@ test_that("SDA_query() SQL error / no results -> NULL", {
 
 
 test_that("SDA_spatialQuery() simple spatial query, tabular results", {
-  
-  skip_if_not_installed("httr")
   
   skip_if_offline()
 
@@ -127,8 +117,6 @@ test_that("SDA_spatialQuery() simple spatial query, tabular results", {
 
 test_that("SDA_spatialQuery() simple spatial query, spatial results", {
   
-  
-  skip_if_not_installed("httr")
   
   skip_if_offline()
   
@@ -172,8 +160,6 @@ test_that("SDA_spatialQuery() simple spatial query, spatial results", {
 
 test_that("SDA_spatialQuery(geomIntersection=TRUE) simple spatial query, spatial results", {
   
-  
-  skip_if_not_installed("httr")
   
   skip_if_offline()
   
@@ -235,8 +221,6 @@ test_that("SDA_spatialQuery(geomIntersection=TRUE) simple spatial query, spatial
 
 test_that("SDA_spatialQuery() spatial query of MUKEY with multiple features", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
   
   skip_on_cran()
@@ -259,8 +243,6 @@ test_that("SDA_spatialQuery() spatial query of MUKEY with multiple features", {
 
 test_that("SDA_query() interprets column names", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
@@ -275,8 +257,6 @@ test_that("SDA_query() interprets column names", {
 
 
 test_that("SDA_query() interprets data type correctly", {
-  
-  skip_if_not_installed("httr")
   
   skip_if_offline()
 
@@ -299,8 +279,6 @@ test_that("SDA_query() interprets data type correctly", {
 
 test_that("SDA_query() works with multi-line records", {
   
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
 
   skip_on_cran()
@@ -315,8 +293,6 @@ test_that("SDA_query() works with multi-line records", {
 
 test_that("SDA_spatialQuery() validates what and as_Spatial inputs correctly", {
     
-  skip_if_not_installed("httr")
-  
   skip_if_offline()
   
   skip_on_cran()
