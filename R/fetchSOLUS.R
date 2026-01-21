@@ -65,7 +65,7 @@
 #' 
 #' @export
 #'
-#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("sf", quietly = TRUE) && requireNamespace("terra", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)
+#' @examplesIf curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("sf", quietly = TRUE)  && packageVersion("terra") >= '1.8.93' && terra::proj_ok() && requireNamespace("aqp", quietly = TRUE)
 #' 
 #' \dontrun{
 #' b <- c(-119.747629, -119.67935, 36.912019, 36.944987)

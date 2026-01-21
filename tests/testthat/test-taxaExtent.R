@@ -4,7 +4,8 @@ test_that("taxaExtent() works", {
   
   skip_if_offline()
   skip_on_cran()
-  skip_if_not_installed("terra")
+  skip_if_not_installed("terra", minimum_version = "1.8.93")
+  skip_if_not(terra::proj_ok())
   
   # typical request, fully specified arguments
   x <- taxaExtent(x = 'typic haploxeralfs', type = 'taxon', level = 'subgroup')
@@ -21,7 +22,8 @@ test_that("common usage errors", {
   
   skip_if_offline()
   skip_on_cran()
-  skip_if_not_installed("terra")
+  skip_if_not_installed("terra", minimum_version = "1.8.93")
+  skip_if_not(terra::proj_ok())
   
   # problematic arguments
   expect_error(taxaExtent(x = 'typic haploxeralfs', type = 'x', level = 'subgroup'))

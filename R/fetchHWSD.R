@@ -18,7 +18,7 @@
 #'   as categories.
 #' @export
 #' @importFrom utils unzip
-#' @examplesIf requireNamespace("terra", quietly = TRUE)
+#' @examplesIf requireNamespace("terra", quietly = TRUE) && packageVersion("terra") >= '1.8.93' && terra::proj_ok()
 #' \dontrun{
 #'   x <- terra::vect(system.file("ex", "lux.shp", package = "terra"))
 #'   res <- fetchHWSD(x)

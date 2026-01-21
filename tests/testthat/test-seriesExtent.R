@@ -6,7 +6,8 @@ test_that("seriesExtent works", {
   skip_if_offline()
   skip_on_cran()
   skip_if_not_installed("sf")
-  skip_if_not_installed("terra")
+  skip_if_not_installed("terra", minimum_version = "1.8.93")
+  skip_if_not(terra::proj_ok())
   
   # test vector representation
   x <- seriesExtent('Amador')

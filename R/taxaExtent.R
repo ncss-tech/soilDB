@@ -195,7 +195,7 @@
 #' 
 #' @export
 #' 
-#' @examplesIf curl::has_internet() && requireNamespace("terra")
+#' @examplesIf curl::has_internet() && requireNamespace("terra") && packageVersion("terra") >= '1.8.93' && terra::proj_ok()
 #' \dontrun{
 #'   library(terra)
 #'   
