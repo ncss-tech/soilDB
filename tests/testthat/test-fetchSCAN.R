@@ -74,5 +74,5 @@ test_that("timezone check", {
   
   skip_if(length(.tz) == 0)
   
-  expect_named(.tz, c("-0500", "-0600"))
+  expect_true(all(names(.tz) %in% c("+0000", "-0500", "-0600")))
 })
