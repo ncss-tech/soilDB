@@ -40,6 +40,8 @@ Many of these curated data sources and their evolution through time have been do
   * Beaudette, D.E. and O’Geen, A.T. (2009), Soil-Web: An online soil survey for California, Arizona, and Nevada, Comp. & Geo. Sci., 35:2119-2128, https://doi.org/10.1016/j.cageo.2008.10.016
 
 
+Note that this vignette as published on CRAN or from a local R package installation will not contain output from inline code sections. See the Articles tab within the [soilDB package website](https://ncss-tech.github.io/soilDB/) for a more comprehensive version of this document.
+
 ## Primary Data Sources
 
   * [SSURGO](https://www.nrcs.usda.gov/resources/data-and-reports/soil-survey-geographic-database-ssurgo), the detailed soil survey of the United States
