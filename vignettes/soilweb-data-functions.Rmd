@@ -528,7 +528,7 @@ These maps were generated using the [r.geomorphon GRASS GIS module](https://gras
 
 The source DEM was a 10m / 30m resolution compilation of USGS NED data, rounded to integers. The "flat" threshold (1.718 deg) is based on a 3% slope break.
 
-Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition approach to classification and mapping of landforms, Geomorphology, vol. 182, 147-156. (\doi{doi:10.1016/j.geomorph.2012.11.005})
+Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition approach to classification and mapping of landforms, Geomorphology, vol. 182, 147-156. (https://doi.org/10.1016/j.geomorph.2012.11.005)
 
 Proportions are weighted by total soil series area (within CONUS) as informed by the component name and associated component percentage.
 ```{r eval=FALSE}

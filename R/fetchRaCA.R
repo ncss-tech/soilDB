@@ -2,13 +2,13 @@
 #' 
 #' @description 
 #' 
-#' **NOTICE:** The SoilWeb snapshot of the RaCA data has been deprecated. The latest version of the data, including values measured by the Kellogg Soil Survey Laboratory, and supporting documentation, are available here: <https://www.nrcs.usda.gov/resources/data-and-reports/rapid-carbon-assessment-raca>. Download link on National Agricultural Library Ag Data Commons: <https://data.nal.usda.gov/dataset/rapid-carbon-assessment-raca>
+#' **NOTICE:** The SoilWeb snapshot of the RaCA data has been deprecated. The latest version of the data, including values measured by the Kellogg Soil Survey Laboratory, and supporting documentation, are available here: <https://www.nrcs.usda.gov/resources/data-and-reports/rapid-carbon-assessment-raca>. 
 #' 
-#' Get Rapid Carbon Assessment (RaCA) data by state, geographic bounding-box, RaCA site ID, or soil series query from the SoilWeb API. This interface to the data was an experimental delivery service that does not include the latest soil organic carbon (SOC) measurements. 
+#' Please use current RaCA distribution if you need _lab measured_ SOC rather than SOC estimated by VNIR.
 #' 
-#' Please use [current RaCA distribution](https://data.nal.usda.gov/dataset/rapid-carbon-assessment-raca) if you need lab _measured_ SOC rather than SOC estimated by VNIR.
+#' Download link on NRCS Soils Box site: <https://nrcs.box.com/s/upx5xhlwis7saunfiysclfrhl5vxxudn>
 #' 
-#' This interface will be updated sometime calendar year 2022 to include the latest soil morphology, taxonomic classification, and measured SOC values. More detailed coordinates for sample sites should also be available.
+#' Gets Rapid Carbon Assessment (RaCA) data by state, geographic bounding-box, RaCA site ID, or soil series query from the SoilWeb API. This interface to the data was an experimental delivery service that does not include the latest soil organic carbon (SOC) measurements. 
 #' 
 #' @param series a soil series name; case-insensitive
 #' 
