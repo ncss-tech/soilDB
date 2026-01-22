@@ -109,6 +109,56 @@ result <- SDA_query(q)
 head(result)
 ```
 
+### Handling Errors
+
+If `SDA_query()` errors for any reason, the result will not be a data.frame with data. Instead it will be an object of class `"try-error"`. You can handle the possibility of error using `inherits()`. For example:
+
+```{r sda-query-error}
+result <- SDA_query(q)
+
+# check if the result is an error response
+if (!inherits(result, 'try-error')){
+  head(result)
+} else {
+  # stop with error message extracted from result
+  stop("Error occured! ", result[1])
+}
+```
+
+You can set up a loop to retry a query that fails in the event of intermittent
+network or server issues. You should have a brief period of wait time
+(`Sys.sleep()`) between requests.
+
+For repeated failures, it is best to increase that wait time in between each try
+up to, for example, a maximum of 3 attempts. The following example uses
+"exponential backoff" which increases the wait time in between requests
+incrementally from ~3 seconds to ~20 seconds over the course of several
+attempts.
+
+```{r sda-query-error-backoff}
+n_tries <- 1
+while (n_tries <= 3){
+  result <- SDA_query(q)
+  
+  # check if the result is an error response
+  if (!inherits(result, 'try-error')){
+    head(result)
+    
+    # if no error, break out of the loop
+    break
+  } else {
+    # on error, increment the number of tries
+    # and sleep (time in seconds)
+    Sys.sleep(exp(n_tries))
+    
+    n_tries <- n_tries + 1
+    if (n_tries > 3) {
+      stop("Error occured! ", result[1])
+    }
+  }
+}
+```
+
 ### Understanding SDA SQL
 
 SDA uses **Microsoft SQL Server Transact-SQL (T-SQL)** dialect.
@@ -882,6 +932,10 @@ that are as small and efficient as possible.
 The `makeChunks()` function divides a large vector into smaller chunks for
 iterative querying.
 
+Before implementing any chunked query approach, you should also be certain that
+your query can run properly on a small set, for example just single chunk, or a
+result that is truncated using a `TOP` clause.
+
 ### Using `makeChunks()`
 
 Suppose you have 5000 map unit keys to query. We can break that set up into chunks of 1000 map units, and iterate over each chunk using `lapply()`
@@ -912,7 +966,7 @@ all_results <- do.call(rbind, results_list)
 
 The above approach is readily converted to parallel processing, for example using `future::future.lapply()`, or other custom iterator functions that allow for progress reporting and other diagnostics. 
 
-If you do choose to use parallel processing, you should limit the number of concurrent connections made to the API to a reasonable number, say, 2 to 5 requests at a time, with a maximum of about 10. You should also implement proper error handling and retry mechanisms (such as exponential backoff). Before implementing any chunked approach 
+If you do choose to use parallel processing, you should limit the number of concurrent connections made to the API to a reasonable number, say, 2 to 5 requests at a time, with a maximum of about 10. You should also implement proper error handling and retry mechanisms (see Handling Errors section above). 
 
 ### Example Chunked Property Query
 
