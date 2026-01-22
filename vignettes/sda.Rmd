@@ -873,8 +873,8 @@ q <- "SELECT areasymbol + '-' + musym AS areamusym FROM mapunit"
 
 ### Why "Chunking"?
 
-When you need data for many map units, components, or other entities, a single
-query can exceed SDA's limits.
+When you need data for many map units, components, soil survey areas, or other
+entities, a single query can exceed SDA's limits.
 
 SDA is a shared public resource, so it is generally encouraged to make requests
 that are as small and efficient as possible.
@@ -884,52 +884,50 @@ iterative querying.
 
 ### Using `makeChunks()`
 
-Suppose you have 5000 mukeys to query:
+Suppose you have 5000 map unit keys to query. We can break that set up into chunks of 1000 map units, and iterate over each chunk using `lapply()`
 
 ```{r chunking-example}
-large_mukey_list <- 461994:466994
+large_mukey_list <- 461994:466995
 
 # Divide into chunks of 1000
 chunks <- soilDB::makeChunks(large_mukey_list, 1000)
 
 # Now loop through chunks
-results_list <- list()
-for (i in unique(chunks)) {
-  # Subset large list to extract just values in chunk `i`
-  chunk_keys <- large_mukey_list[chunks == i]
- 
+results_list <- lapply(split(large_mukey_list, chunks), function(chunk_keys) {
+  
+  # Build IN clause
+  in_clause <- soilDB::format_SQL_in_statement(chunk_keys) 
+  
   # construct query 
   q <- sprintf(
-    "SELECT mukey, musym, muname FROM mapunit WHERE mukey IN (%s)",
-    paste(chunk_keys, collapse = ",")
+    "SELECT mukey, musym, muname FROM mapunit WHERE mukey IN %s", in_clause
   )
-  
-  results_list[[i]] <- SDA_query(q)
-  
-  cat(sprintf("Chunk %d of %d\n", i, length(unique(chunks))))
-}
+    cat(sprintf("Chunk mukey %d to %d\n", min(chunk_keys), max(chunk_keys))) 
+  SDA_query(q)
+})
 
 # Combine results
 all_results <- do.call(rbind, results_list)
 ```
 
+The above approach is readily converted to parallel processing, for example using `future::future.lapply()`, or other custom iterator functions that allow for progress reporting and other diagnostics. 
+
+If you do choose to use parallel processing, you should limit the number of concurrent connections made to the API to a reasonable number, say, 2 to 5 requests at a time, with a maximum of about 10. You should also implement proper error handling and retry mechanisms (such as exponential backoff). Before implementing any chunked approach 
+
 ### Example Chunked Property Query
 
-Here we query soil properties for 10 map units in chunks:
+Here we query soil properties for 6 soil survey areas in chunks of 2.
 
 ```{r chunked-property-example}
-test_mukeys <- c(461994, 461995, 462205, 462206, 462207, 
-                 463263, 463264, 464571, 464572, 465186)
+test_areasymbols <- c("CA067", "CA077", "CA632", "CA644", "CA630", "CA649")
 
 # Chunk into groups of 5
-chunks <- soilDB::makeChunks(test_mukeys, 5)
+chunks <- soilDB::makeChunks(test_areasymbols, 2)
 
-results_list <- list()
-for (i in unique(chunks)) {
-  chunk_keys <- test_mukeys[chunks == i]
+results_list <- lapply(split(test_areasymbols, chunks), function(chunk_keys) {
   
   # Build IN clause
-  in_clause <- paste(chunk_keys, collapse = ",")
+  in_clause <- soilDB::format_SQL_in_statement(chunk_keys) 
   
   q <- sprintf("
     SELECT
@@ -939,22 +937,23 @@ for (i in unique(chunks)) {
       co.cokey,
       co.compname,
       SUM(hzdepb_r - hzdept_r) AS sum_hz_thickness
-    FROM mapunit AS mu
+    FROM legend AS leg
+    INNER JOIN mapunit AS mu ON mu.lkey = leg.lkey
     INNER JOIN component AS co ON co.mukey = mu.mukey
     INNER JOIN chorizon AS ch ON ch.cokey = co.cokey
-    WHERE mu.mukey IN (%s)
+    WHERE leg.areasymbol IN %s
     GROUP BY mu.mukey, mu.musym, mu.muname, co.cokey, co.compname
   ", in_clause)
   
-  results_list[[i]] <- SDA_query(q)
-  cat(sprintf("Chunk %d of %d completed\n", i, length(unique(chunks))))
-}
+  cat(sprintf("Chunk %s completed\n", paste0(chunk_keys, collapse = ", ")))
+  SDA_query(q)
+})
 
 all_results <- do.call(rbind, results_list)
 head(all_results)
 ```
 
-**Note:** The above sample query is not a good way to determine soil thickness, as it does not exclude thickness of non-soil layers (e.g. bedrock) that should not be counted as part of the soil depth. AS an exercise, use the logic from the previous sections to improve this example to filter out bedrock.
+**Note:** The above sample query is **not** a good way to determine soil thickness, as it does not exclude thickness of non-soil layers (e.g. bedrock) that should not be counted as part of the soil depth. AS an exercise, use the logic from the previous sections to improve this example to filter out bedrock.
 
 ### Recommended Chunk Sizes
 
