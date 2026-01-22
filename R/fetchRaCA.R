@@ -6,7 +6,7 @@
 #' 
 #' Please use current RaCA distribution if you need _lab measured_ SOC rather than SOC estimated by VNIR.
 #' 
-#' Download link on NRCS Soils Box site: <https://nrcs.box.com/s/upx5xhlwis7saunfiysclfrhl5vxxudn>
+#' Download link on NRCS Soils Box site: https://nrcs.app.box.com/s/upx5xhlwis7saunfiysclfrhl5vxxudn
 #' 
 #' Gets Rapid Carbon Assessment (RaCA) data by state, geographic bounding-box, RaCA site ID, or soil series query from the SoilWeb API. This interface to the data was an experimental delivery service that does not include the latest soil organic carbon (SOC) measurements. 
 #' 
@@ -33,9 +33,9 @@
 #' }
 #' }
 #' @author D.E. Beaudette, USDA-NRCS staff
-#' @references {
-#'   \url{https://data.nal.usda.gov/dataset/rapid-carbon-assessment-raca}
-#' }
+#' @references 
+#' USDA Natural Resources Conservation Service (2018). Rapid Carbon Assessment (RaCA). United States Department of Agriculture. Dataset. https://hdl.handle.net/10113/AA21139
+#' 
 #' @seealso \code{\link{fetchOSD}}
 #' @export
 fetchRaCA <- function(series=NULL, bbox=NULL, state=NULL, rcasiteid=NULL, get.vnir=FALSE) {
