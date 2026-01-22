@@ -463,7 +463,7 @@ interested in excluding even more decomposed dry organic materials:
 
 ```sql
 /* Exclude "Duff" / Dry Organics */
-AND ISNULL(horztype, '') <> 'Dry Organic'
+AND ISNULL(horztype, '') != 'Dry Organic'
 AND texturerv NOT IN ('SPM', 'MPM', 'HPM') 
 ```
 
@@ -488,7 +488,7 @@ For instance, a logical statement to exclude the master horizon designation "O"
 for organics:
 
 ```r
-AND desgnmaster <> 'O'
+AND desgnmaster != 'O'
 ```
 
 While using horizon designations is conceptually appealing, it is problematic
@@ -547,7 +547,7 @@ WHERE
   ch.texturerv NOT IN ('BR', 'WB', 'UWB') 
   
   -- 2. Exclude Dry Organic / Duff
-  AND ISNULL(ch.horztype, '') <> 'Dry Organic'
+  AND ISNULL(ch.horztype, '') != 'Dry Organic'
   AND ch.texturerv NOT IN ('SPM', 'MPM', 'HPM')
 ORDER BY cokey, hzdept_r
 "
@@ -851,7 +851,7 @@ SELECT TOP 10
   CAST(claytotal_r AS INT) AS clay_int,
   CAST(chkey AS CHAR(10)) AS chkey_str
 FROM chorizon
-WHERE claytotal_r <> CAST(claytotal_r AS INT) 
+WHERE claytotal_r != CAST(claytotal_r AS INT) 
 "
 ```
 
