@@ -333,14 +333,6 @@ NASISChoiceList <- function(x = NULL,
   res
 }
 
-#' @keywords internal
-#' @noRd
-.get_NASIS_metadata <- function(dsn = NULL) {
-  # for backward compatibility or anyone who is using the .get method in the wild
-  .Deprecated("get_NASIS_metadata")
-  get_NASIS_metadata(dsn)
-}
-
 #' Get NASIS Table Metadata (Table and Column Descriptions)
 #' 
 #' Retrieve a table containing table and column names with descriptions, help text, units of measure, etc. from NASIS 7 metadata tables.

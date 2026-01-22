@@ -594,50 +594,6 @@
   return(data.frame(coiid=u.coiid, landform_string=ft.string, stringsAsFactors=FALSE))
 }
 
-
-## https://github.com/ncss-tech/soilDB/issues/84
-# attempt to flatten component parent material data into 2 strings
-.formatcoParentMaterialString <- function(i.pm, name.sep='|') {
-
-  .Deprecated(".formatParentMaterialString")
-
-  # get the current site
-  u.coiid <- unique(i.pm$coiid)
-
-  if(length(u.coiid) == 0)
-    return(data.frame(coiid=NA_integer_, pmkind=NA, pmorigin=NA, stringsAsFactors=FALSE)[0,])
-
-  # sanity check: this function can only be applied to data from a single site
-  if(length(u.coiid) > 1)
-    stop('data are from multiple site records')
-
-  # subset sitepm data to remove any with NA for pm_kind
-  i.pm <- i.pm[which(!is.na(i.pm$pmkind)), ]
-
-  # if there is no data, then return a DF formatted as if there were data
-  if(nrow(i.pm) == 0)
-    return(data.frame(coiid=u.coiid, pmkind=NA, pmorigin=NA, stringsAsFactors=FALSE))
-
-  # short-circuit: if any pmorder are NA, then we don't know the order
-  # string together as-is, in row-order
-  if(anyNA(i.pm$pmorder)) {
-    # optional information on which sites have issues
-    if(getOption('soilDB.verbose', default=FALSE))
-      warning('Using row-order. NA in pmorder:', u.coiid)
-  }
-  else{
-    # there are no NAs in pmorder --> sort according to pmorder
-    i.pm <- i.pm[order(i.pm$pmorder), ]
-  }
-
-  # composite strings and return
-  str.kind <- paste(i.pm$pmkind, collapse=name.sep)
-  str.origin <- paste(unique(i.pm$pmorigin), collapse=name.sep)
-
-  return(data.frame(coiid=u.coiid, pmkind=str.kind, pmorigin=str.origin, stringsAsFactors=FALSE))
-}
-
-
 # attempt to flatten multiple ecosite entries into 1 string
 .formatEcositeString <- function(i.esd, name.sep='|') {
   # get the current site
