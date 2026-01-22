@@ -114,15 +114,15 @@ Soil organic carbon stocks (0-30cm) (\code{variables="ocs"}) are returned only f
 inter-quantile range (90\% prediction interval width) and the median :
 \code{(Q0.95-Q0.05)/Q0.50.} All values are converted from "mapped" to
 "conventional" based on above table conversion factors. Point data requests
-are made through \code{"properties/query"} endpoint of the \href{https://www.isric.org/explore/soilgrids/faq-soilgrids}{SoilGrids v2.0 REST API}. Please check
+are made through \code{"properties/query"} endpoint of the \href{https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs.html}{SoilGrids v2.0 REST API}. Please check
 ISRIC's data policy, disclaimer and citation:
-\url{https://www.isric.org/about/data-policy}.
+\url{https://isric.org/privacy-and-personal-data/}.
 
 Find out more information about the SoilGrids and GlobalSoilMap products
 here:
 \itemize{
-\item \url{https://www.isric.org/explore/soilgrids/faq-soilgrids}
-\item \url{https://www.isric.org/sites/default/files/GlobalSoilMap_specifications_december_2015_2.pdf}
+\item \url{https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs.html}
+\item \url{https://files.isric.org/public/documents/GlobalSoilMap_specifications_december_2015_2.pdf}
 }
 }
 }

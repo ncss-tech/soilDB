@@ -463,7 +463,7 @@ Notes:
 
 Mean (Celsius) growing degree days, derived from the 800m PRISM daily minimum/maximum temperature data over the interval of 1981--2010.
 
-Calculation reference: http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html
+Calculation reference: [http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html](https://web.archive.org/web/20211018034119/http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html)
 
 $$GDD_i = [ min(T_{max}, upper_{threshold}) + max(Tmin, lower_{threshold}) / 2 ] - T_{base}$$
 
@@ -522,14 +522,13 @@ Rajagopal, S. and A.A. Harpold. 2016. Testing and Improving Temperature Threshol
 ### Geomorphons
 A cross-tabulation of geomorphon by soil series name was computed from the current gSSURGO (30m) grid and a 30m grid of geomorphons. Currently, these data are only available within CONUS.
 
-These maps were generated using the [r.geomorphon GRASS GIS module](https://grass.osgeo.org/grass75/manuals/r.geomorphon.html), with the following parameters: 
+These maps were generated using the [r.geomorphon GRASS GIS module](https://grass.osgeo.org/grass-stable/manuals/r.geomorphon.html), with the following parameters: 
 
 `r.geomorphon --o dem=elev30_int forms=forms30 search=75 skip=5 flat=1.718`
 
 The source DEM was a 10m / 30m resolution compilation of USGS NED data, rounded to integers. The "flat" threshold (1.718 deg) is based on a 3% slope break.
 
-[Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition approach to classification and mapping of landforms, Geomorphology, vol. 182, 147-156.](http://www.sciencedirect.com/science/article/pii/S0169555X12005028)
-
+Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition approach to classification and mapping of landforms, Geomorphology, vol. 182, 147-156. (\doi{doi:10.1016/j.geomorph.2012.11.005})
 
 Proportions are weighted by total soil series area (within CONUS) as informed by the component name and associated component percentage.
 ```{r eval=FALSE}

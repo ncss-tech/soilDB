@@ -114,7 +114,11 @@
 #'
 #' @return a `SoilProfileCollection` object containing basic soil morphology and taxonomic information, a `list` when `extended = TRUE`.
 #'
-#' @references USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
+#' @references
+#' 
+#' USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
+#' 
+#' Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition approach to classification and mapping of landforms, Geomorphology, vol. 182, 147-156. (\doi{doi:10.1016/j.geomorph.2012.11.005})
 #'
 #' @author D.E. Beaudette, A.G. Brown
 #' @seealso [OSDquery()], [siblings()]

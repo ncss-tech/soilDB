@@ -115,6 +115,8 @@ Requests to the SoilWeb API are split into batches of 100 series names from \cod
 }
 \references{
 USDA-NRCS OSD search tools: \url{https://soilseries.sc.egov.usda.gov/}
+
+Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition approach to classification and mapping of landforms, Geomorphology, vol. 182, 147-156. (\doi{doi:10.1016/j.geomorph.2012.11.005})
 }
 \seealso{
 \code{\link[=OSDquery]{OSDquery()}}, \code{\link[=siblings]{siblings()}}

@@ -69,8 +69,10 @@ A \emph{SpatRaster} object containing SOLUS grids for specified extent, depths, 
 product types.
 }
 \description{
-This tool creates a virtual raster or downloads data for an extent from Cloud Optimized GeoTIFFs
-(COGs) from the \href{https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_Soil_Landscapes_of_the_United_States_100-meter_SOLUS100_soil_property_maps_project_repository/25033856}{Soil Landscapes of the United States 100-meter (SOLUS100) soil property maps project repository}.
+This tool creates a virtual raster or downloads data for an extent from Cloud
+Optimized GeoTIFFs (COGs) from the Soil Landscapes of the United States
+100-meter (SOLUS100) soil property maps project
+repository: \doi{https://doi.org/10.15482/USDA.ADC/25033856}.
 }
 \details{
 If the input object \code{x} is not specified (\code{NULL} or missing), a \emph{SpatRaster} object using the
