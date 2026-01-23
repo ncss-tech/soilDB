@@ -11,15 +11,13 @@ get_component_from_GDB(
   dsn = "gNATSGO_CONUS.gdb",
   WHERE = NULL,
   childs = FALSE,
-  droplevels = TRUE,
-  stringsAsFactors = NULL
+  droplevels = TRUE
 )
 
 get_legend_from_GDB(
   dsn = "gNATSGO_CONUS.gdb",
   WHERE = NULL,
   droplevels = TRUE,
-  stringsAsFactors = NULL,
   stats = FALSE
 )
 
@@ -27,7 +25,6 @@ get_mapunit_from_GDB(
   dsn = "gNATSGO_CONUS.gdb",
   WHERE = NULL,
   droplevels = TRUE,
-  stringsAsFactors = NULL,
   stats = FALSE
 )
 
@@ -35,8 +32,7 @@ fetchGDB(
   dsn = "gNATSGO_CONUS.gdb",
   WHERE = NULL,
   childs = FALSE,
-  droplevels = TRUE,
-  stringsAsFactors = NULL
+  droplevels = TRUE
 )
 }
 \arguments{
@@ -55,8 +51,6 @@ are not flattened and appended}
 classifying factors. This is useful when a class has large number of unused
 classes, which can waste space in tables and figures.}
 
-\item{stringsAsFactors}{deprecated}
-
 \item{stats}{Return statistics (number of mapunit keys per legend; number of components, major components per mapunit, total and hydric component percentage)? Default: \code{FALSE}}
 }
 \value{
@@ -74,7 +68,7 @@ specified (except for fetchGDB() which currently can only target one table
 (e.g. legend, mapunit or component) at a time with the WHERE clause).
 }
 \examples{
-\dontshow{if (requireNamespace("aqp", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("aqp", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 
 \donttest{
 

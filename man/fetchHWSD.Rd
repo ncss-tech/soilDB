@@ -43,7 +43,7 @@ information. Source raster map in ESRI Grid format (.bil) is converted to GeoTIF
 The source tabular database in Microsoft Access (.mdb) format is converted to SQLite.
 }
 \examples{
-\dontshow{if (requireNamespace("terra", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("terra", quietly = TRUE) && packageVersion("terra") >= '1.8.93' && terra::proj_ok()) withAutoprint(\{ # examplesIf}
 \dontrun{
   x <- terra::vect(system.file("ex", "lux.shp", package = "terra"))
   res <- fetchHWSD(x)

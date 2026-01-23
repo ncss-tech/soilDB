@@ -11,7 +11,7 @@ Several examples of soil profile collections returned by
 \code{fetchNASIS(from='pedons')} as \code{SoilProfileCollection} objects.
 }
 \examples{
-\dontshow{if (requireNamespace("aqp")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("aqp")) withAutoprint(\{ # examplesIf}
 
 \donttest{
   library(aqp)

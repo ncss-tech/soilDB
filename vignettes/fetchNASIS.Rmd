@@ -201,21 +201,9 @@ nasis_tables <- y[!y %in% c("transectestcomposition",
                             "ncsslayerlabdata")]
 
 # these are 1:1 aliases of a NASIS column (from="pedons")
-aliases <- c(genhz = "phorizon.dspcomplayerid", 
-             clay = "phorizon.claytotest", 
-             silt = "phorizon.silttotest",
-             sand = "phorizon.sandtotest",
-             texture_class = "phorizon.texcl",
-             y_std = "site.latstddecimaldegrees",
-             x_std = "site.longstddecimaldegrees",
-             pedon_id = "pedon.upedonid",
-             describer = "pedon.descname",
-             site_id = "site.usiteid",
-             elev_field = "site.elev",
-             slope_field = "site.slope",
-             aspect_field = "site.aspect",
-             obs_date = "siteobs.obsdate",
-             es_classifier = "siteecositehistory.classifier") 
+
+# TODO: this is not technically an alias, it is a calculated value that combines texcl and lieutex
+aliases <- c(texture_class = "phorizon.texcl") 
 alias_tnames <- gsub("(.*)\\..*|([^.]*)", "\\1\\2", aliases)
 alias_pnames <- gsub(".*\\.(.*)|([^.]*)", "\\1\\2", aliases)
 
@@ -271,6 +259,7 @@ cat(" \n")
 #   View()
 
 # custom calculated
+# - texture class (texcl, but in lieu of texcl uses lieutex)
 # - color (dry/moist, RGB/HVC+sigma, dry_soil_color, moist_soil_color, soil_color)
 # - horizon fragments (fine_gravel, gravel, cobbles, stones, boulders, channers, flagstones + para, total with and w/o para)
 # - horizon artifacts (fine_gravel, gravel, cobbles, stones, boulders, channers, flagstones + para, total cohesive/penetrable/innocuous)
@@ -279,5 +268,5 @@ cat(" \n")
 # - landform, landscape, microfeature and geomicrorelief strings (concatenated landform names)
 
 # these should not be used any more
-# x/y (calculated long/lat), texture_class (replaced by texcl), surface_fgravel (replaced by surface_fine_gravel)
+# x/y (calculated long/lat), surface_fgravel (replaced by surface_fine_gravel)
 ```

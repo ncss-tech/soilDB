@@ -2,15 +2,7 @@
 .fetchNASIS_report <- function(url = NULL,
                                rmHzErrors       = FALSE,
                                nullFragsAreZero = TRUE,
-                               soilColorState   = "moist",
-                               stringsAsFactors = NULL
-) {
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
-  
+                               soilColorState   = "moist") {
   if (!requireNamespace("aqp")) {
     stop("package 'aqp' is required", call. = FALSE)
   }
@@ -167,13 +159,7 @@
 
 # temp <- .fetchNASISTemp()
 
-.get_site_from_NASISReport <- function(url = NULL, nullFragsAreZero = TRUE, stringsAsFactors = NULL
-) {
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+.get_site_from_NASISReport <- function(url = NULL, nullFragsAreZero = TRUE) {
   
   tf <- "C:/ProgramData/USDA/NASIS/Temp/get_site_from_NASIS.txt"
   if (!is.null(url)) tf <- url
@@ -182,7 +168,6 @@
   if (!file.exists(tf) & is.null(url)) {
     stop("the temp file ", tf, "\n doesn't exist, please run the fetchNASIS report from NASIS")
   }
-  
   
   # check to see if data is coming from fetchNASIS or get_site
   temp <- readLines(tf)
@@ -224,12 +209,7 @@
 
 
 
-.get_pediagfeatures_from_NASISTemp <- function(stringsAsFactors = NULL) {
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+.get_pediagfeatures_from_NASISTemp <- function() {
   
   tf <- "C:/ProgramData/USDA/NASIS/Temp/get_pediagfeatures_from_NASIS.txt"
   

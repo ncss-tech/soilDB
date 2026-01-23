@@ -37,7 +37,7 @@ Additional resources:
 }
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("jsonlite", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("jsonlite", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \donttest{
     # basic usage
     x <- siblings('zook')

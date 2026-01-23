@@ -8,7 +8,8 @@ test_that("works as expected", {
   skip_if_offline()
   skip_on_cran()
   skip_if_not_installed("sf")
-  skip_if_not_installed("terra")
+  skip_if_not_installed("terra", minimum_version = "1.8.93")
+  skip_if_not(terra::proj_ok())
   
   x <- NULL
   
@@ -48,7 +49,8 @@ test_that("categorical data", {
   skip_if_offline()
   skip_on_cran()
   skip_if_not_installed("sf")
-  skip_if_not_installed("terra")
+  skip_if_not_installed("terra", minimum_version = "1.8.93")
+  skip_if_not(terra::proj_ok())
   
   x <- NULL
   

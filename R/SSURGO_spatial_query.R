@@ -40,9 +40,6 @@ SoilWeb_spatial_query <- function(bbox=NULL, coords=NULL, what='mapunit', source
   if(!requireNamespace('jsonlite', quietly = TRUE))
     stop('please install the `jsonlite` package', call.=FALSE)
   
-  # no factors in resulting DFs
-  options(stringsAsFactors=FALSE)
-  
   # sanity-check: user must supply some kind of criteria
   if(missing(coords) & missing(bbox)) {
     stop('you must provide some filtering criteria')

@@ -137,7 +137,7 @@ get_SDA_property <-
     m <- c(
       "DOMINANT COMPONENT (CATEGORY)",
       "WEIGHTED AVERAGE",
-      "MIN/MAX",
+      "MIN/MAX", "MIN", "MAX",
       "DOMINANT COMPONENT (NUMERIC)",
       "DOMINANT CONDITION",
       "NONE"

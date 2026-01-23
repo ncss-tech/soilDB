@@ -69,8 +69,10 @@ A \emph{SpatRaster} object containing SOLUS grids for specified extent, depths, 
 product types.
 }
 \description{
-This tool creates a virtual raster or downloads data for an extent from Cloud Optimized GeoTIFFs
-(COGs) from the \href{https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_Soil_Landscapes_of_the_United_States_100-meter_SOLUS100_soil_property_maps_project_repository/25033856}{Soil Landscapes of the United States 100-meter (SOLUS100) soil property maps project repository}.
+This tool creates a virtual raster or downloads data for an extent from Cloud
+Optimized GeoTIFFs (COGs) from the Soil Landscapes of the United States
+100-meter (SOLUS100) soil property maps project
+repository: \doi{https://doi.org/10.15482/USDA.ADC/25033856}.
 }
 \details{
 If the input object \code{x} is not specified (\code{NULL} or missing), a \emph{SpatRaster} object using the
@@ -84,7 +86,7 @@ extracted at the point locations. To return both the \emph{SpatRaster} and \emph
 object output in a \emph{list}, use \code{grid = NULL}.
 }
 \examples{
-\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("sf", quietly = TRUE) && requireNamespace("terra", quietly = TRUE) && requireNamespace("aqp", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (curl::has_internet() && requireNamespace("httr", quietly = TRUE) && requireNamespace("sf", quietly = TRUE)  && packageVersion("terra") >= '1.8.93' && terra::proj_ok() && requireNamespace("aqp", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 
 \dontrun{
 b <- c(-119.747629, -119.67935, 36.912019, 36.944987)

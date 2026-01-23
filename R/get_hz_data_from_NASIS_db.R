@@ -1,16 +1,9 @@
-## TODO: when multiple textures have been defined, only the first one is returned (alphabetical ?)
-
-
 #' Get Horizon Data from a local NASIS Database
 #'
 #' Get horizon-level data from a local NASIS database.
 #'
 #' @param SS fetch data from Selected Set in NASIS or from the entire local database (default: `TRUE`)
-#' 
 #' @param fill include pedons without horizon data in result? default: `FALSE`
-
-#' @param stringsAsFactors deprecated
-#'
 #' @param dsn Optional: path to local SQLite database containing NASIS
 #' table structure; default: `NULL`
 #'
@@ -23,23 +16,11 @@
 #' @seealso \code{\link{get_hz_data_from_NASIS_db}}, \code{\link{get_site_data_from_NASIS_db}}
 #' @keywords manip
 #' @export get_hz_data_from_NASIS_db
-get_hz_data_from_NASIS_db <- function(SS = TRUE,
-                                      fill = FALSE,
-                                      stringsAsFactors = NULL,
-                                      dsn = NULL) {
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
+get_hz_data_from_NASIS_db <- function(SS = TRUE, fill = FALSE, dsn = NULL) {
   
-  .soilDB_warn_deprecated_aliases(c("upedonid" = "pedon_id", "claytotest" = "clay", "silttotest" = "silt", "sandtotest" = "sand"))
-  
-  q <- sprintf("SELECT peiid, phiid, upedonid AS pedon_id, upedonid,
+  q <- sprintf("SELECT peiid, phiid, upedonid,
     hzname, dspcomplayerid, hzdept, hzdepb,
     bounddistinct, boundtopo, claytotest, silttotest, sandtotest, 
-    claytotest AS clay,
-    CASE WHEN silttotest IS NULL THEN 100 - (claytotest + sandtotest) ELSE silttotest END AS silt,
-    sandtotest AS sand,
     fragvoltot, texture, texcl, lieutex, phfield, effclass, phs.labsampnum, 
     rupresblkdry, rupresblkmst, rupresblkcem, stickiness, plasticity, ksatpedon
   FROM pedon_View_1 p
@@ -47,9 +28,9 @@ get_hz_data_from_NASIS_db <- function(SS = TRUE,
   LEFT OUTER JOIN phsample_View_1 phs ON phs.phiidref = ph.phiid
   LEFT OUTER JOIN
   (
-  SELECT phiidref, MIN(texcl) AS texcl, MIN(lieutex) as lieutex
-  FROM phtexture_View_1
-  GROUP BY phiidref
+    SELECT phiidref, MIN(texcl) AS texcl, MIN(lieutex) as lieutex
+    FROM phtexture_View_1
+    GROUP BY phiidref
   ) AS pht ON pht.phiidref = ph.phiid
 
   ORDER BY p.upedonid, ph.hzdept ASC;", ifelse(fill, "LEFT", "INNER"))

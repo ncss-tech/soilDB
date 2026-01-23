@@ -11,7 +11,6 @@
 #'   will have their peiid reported in the `vegplot` table.
 #' @param nullFragsAreZero Should fragment volumes of `NULL` be interpreted as
 #'   `0`? (default: `TRUE`), see details
-#' @param stringsAsFactors deprecated
 #' @param dsn Optional: path to local SQLite database containing NASIS table
 #'   structure; default: `NULL`
 #'
@@ -29,13 +28,7 @@
 fetchVegdata <- function(SS = TRUE,
                          include_pedon = TRUE,
                          nullFragsAreZero = TRUE,
-                         stringsAsFactors = NULL,
                          dsn = NULL) {
-  
-  if (!missing(stringsAsFactors) && is.logical(stringsAsFactors)) {
-    .Deprecated(msg = sprintf("stringsAsFactors argument is deprecated.\nSetting package option with `NASISDomainsAsFactor(%s)`", stringsAsFactors))
-    NASISDomainsAsFactor(stringsAsFactors)
-  }
 
   # check if NASIS local DB instance/ODBC data source is available
   .soilDB_test_NASIS_connection(dsn = dsn)

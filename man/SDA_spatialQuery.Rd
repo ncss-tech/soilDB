@@ -90,7 +90,7 @@ results that are 1:1 with the inputs. Polygon area in acres is computed
 server-side when \code{what = 'mupolygon'} and \code{geomIntersection = TRUE}.
 }
 \examples{
-\dontshow{if (requireNamespace("aqp") && requireNamespace("sf")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("aqp") && requireNamespace("sf")) withAutoprint(\{ # examplesIf}
 \dontrun{
 library(aqp)
 library(sf)
