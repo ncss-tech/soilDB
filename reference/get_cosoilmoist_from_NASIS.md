@@ -6,12 +6,7 @@ NASIS Database.
 ## Usage
 
 ``` r
-get_cosoilmoist_from_NASIS(
-  SS = TRUE,
-  impute = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_cosoilmoist_from_NASIS(SS = TRUE, impute = TRUE, dsn = NULL)
 ```
 
 ## Arguments
@@ -26,10 +21,6 @@ get_cosoilmoist_from_NASIS(
   replace missing (i.e. `NULL`) values with `"Not_Populated"` for
   categorical data, or the "RV" for numeric data or `201` cm if the "RV"
   is also `NULL` (default: `TRUE`)
-
-- stringsAsFactors:
-
-  deprecated
 
 - dsn:
 

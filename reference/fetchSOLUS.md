@@ -1,9 +1,10 @@
 # Fetch Soil Landscapes of the United States (SOLUS) Grids
 
 This tool creates a virtual raster or downloads data for an extent from
-Cloud Optimized GeoTIFFs (COGs) from the [Soil Landscapes of the United
-States 100-meter (SOLUS100) soil property maps project
-repository](https://agdatacommons.nal.usda.gov/articles/dataset/Data_from_Soil_Landscapes_of_the_United_States_100-meter_SOLUS100_soil_property_maps_project_repository/25033856).
+Cloud Optimized GeoTIFFs (COGs) from the Soil Landscapes of the United
+States 100-meter (SOLUS100) soil property maps project repository:
+[doi:10.15482/USDA.ADC/25033856](https://doi.org/10.15482/USDA.ADC/25033856)
+.
 
 ## Usage
 

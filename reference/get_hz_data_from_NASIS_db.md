@@ -5,12 +5,7 @@ Get horizon-level data from a local NASIS database.
 ## Usage
 
 ``` r
-get_hz_data_from_NASIS_db(
-  SS = TRUE,
-  fill = FALSE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_hz_data_from_NASIS_db(SS = TRUE, fill = FALSE, dsn = NULL)
 ```
 
 ## Arguments
@@ -23,10 +18,6 @@ get_hz_data_from_NASIS_db(
 - fill:
 
   include pedons without horizon data in result? default: `FALSE`
-
-- stringsAsFactors:
-
-  deprecated
 
 - dsn:
 

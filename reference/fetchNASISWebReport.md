@@ -5,48 +5,21 @@ Get component tables from NASIS Web Reports
 ## Usage
 
 ``` r
-fetchNASISWebReport(
-  projectname,
-  rmHzErrors = FALSE,
-  fill = FALSE,
-  stringsAsFactors = NULL
-)
+fetchNASISWebReport(projectname, rmHzErrors = FALSE, fill = FALSE)
 
-get_component_from_NASISWebReport(projectname, stringsAsFactors = NULL)
+get_component_from_NASISWebReport(projectname)
 
-get_chorizon_from_NASISWebReport(
-  projectname,
-  fill = FALSE,
-  stringsAsFactors = NULL
-)
+get_chorizon_from_NASISWebReport(projectname, fill = FALSE)
 
-get_legend_from_NASISWebReport(
-  mlraoffice,
-  areasymbol,
-  droplevels = TRUE,
-  stringsAsFactors = NULL
-)
+get_legend_from_NASISWebReport(mlraoffice, areasymbol, droplevels = TRUE)
 
-get_lmuaoverlap_from_NASISWebReport(
-  areasymbol,
-  droplevels = TRUE,
-  stringsAsFactors = NULL
-)
+get_lmuaoverlap_from_NASISWebReport(areasymbol, droplevels = TRUE)
 
-get_mapunit_from_NASISWebReport(
-  areasymbol,
-  droplevels = TRUE,
-  stringsAsFactors = NULL
-)
+get_mapunit_from_NASISWebReport(areasymbol, droplevels = TRUE)
 
-get_projectmapunit_from_NASISWebReport(projectname, stringsAsFactors = NULL)
+get_projectmapunit_from_NASISWebReport(projectname)
 
-get_projectmapunit2_from_NASISWebReport(
-  mlrassoarea,
-  fiscalyear,
-  projectname,
-  stringsAsFactors = NULL
-)
+get_projectmapunit2_from_NASISWebReport(mlrassoarea, fiscalyear, projectname)
 
 get_project_from_NASISWebReport(mlrassoarea, fiscalyear)
 
@@ -58,11 +31,7 @@ get_project_correlation_from_NASISWebReport(
   projectname
 )
 
-get_cosoilmoist_from_NASISWebReport(
-  projectname,
-  impute = TRUE,
-  stringsAsFactors = NULL
-)
+get_cosoilmoist_from_NASISWebReport(projectname, impute = TRUE)
 
 get_sitesoilmoist_from_NASISWebReport(usiteid)
 ```
@@ -82,10 +51,6 @@ get_sitesoilmoist_from_NASISWebReport(usiteid)
 - fill:
 
   should rows with missing component ids be removed (default: `FALSE`)
-
-- stringsAsFactors:
-
-  deprecated
 
 - mlraoffice:
 

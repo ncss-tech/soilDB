@@ -1,18 +1,54 @@
 # Changelog
 
-## soilDB 2.8.14 (development)
+## soilDB 2.9.0 (2026-01-22)
 
-- new vignette with details on SoilWeb curated data sources, and related
+### Breaking Changes
+
+- Deprecated `stringsAsFactors` argument has been removed from many
+  query functions, use
+  [`NASISChoiceList()`](http://ncss-tech.github.io/soilDB/reference/NASISChoiceList.md)
+  and/or
+  [`NASISDomainsAsFactor()`](http://ncss-tech.github.io/soilDB/reference/NASISDomainsAsFactor.md)
+  instead for manual or automatic setting of domain values as factors,
+  respectively
+- Deprecated NASIS column aliases have been removed, see
+  <https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html>
+  for details
+- R version \>= 4.1.0 is now required
+
+### Documentation
+
+- New vignette with details on SoilWeb curated data sources, and related
   functions in soilDB
+  ([\#435](https://github.com/ncss-tech/soilDB/issues/435))
+- New vignette on Soil Data Access,
+  [`SDA_query()`](http://ncss-tech.github.io/soilDB/reference/SDA_query.md)
+  and high-level wrapper functions for SDA queries in soilDB
+
+### Improvements
+
 - `fetchOSD(..., extended = TRUE)` gains geomorphon proportions via
-  SoilWeb
+  SoilWeb ([\#435](https://github.com/ncss-tech/soilDB/issues/435))
+- `get_SDA_property(method="weighted average")` resolved efficiency
+  issues and streamlined SQL Common Table Expressions for processing
+  very large sets of map unit keys
+  ([\#432](https://github.com/ncss-tech/soilDB/issues/432))
+- [`OSDquery()`](http://ncss-tech.github.io/soilDB/reference/OSDquery.md)
+  gains `remarks` argument for searching the REMARKS section of OSDs
+
+## soilDB 2.8.14 (2025-12-04)
+
 - [`taxaExtent()`](http://ncss-tech.github.io/soilDB/reference/taxaExtent.md)
   updates:
   - Added family mineralogy class grids
   - Added argument `type` for selecting the type of query; replaces
     deprecated `formativeElement`
-- [`OSDquery()`](http://ncss-tech.github.io/soilDB/reference/OSDquery.md)
-  gains `remarks` argument for searching the REMARKS section of OSDs
+- [`SDA_query()`](http://ncss-tech.github.io/soilDB/reference/SDA_query.md)
+  now includes additional metadata (comment header in SQL) to inform
+  usage metrics of various access points to SDA
+- [`fetchSDA()`](http://ncss-tech.github.io/soilDB/reference/fetchSDA.md)
+  and related lower-level child functions now include `nasiscoiid` and
+  `nasischiid` for relating to internal database record IDs
 
 ## soilDB 2.8.13 (2025-09-26)
 

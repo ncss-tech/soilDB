@@ -9,7 +9,7 @@ geodatabases, and create soil profile collection objects (SPC)."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,6 +23,7 @@ geodatabases, and create soil profile collection objects (SPC)."></head><body>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/dominant-es.html">Mapping Dominant Ecological Sites using SSURGO Data</a></li>
     <li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
     <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local Soil Survey Geographic (SSURGO) Databases</a></li>
+    <li><a class="dropdown-item" href="../articles/sda.html">Soil Data Access</a></li>
     <li><a class="dropdown-item" href="../articles/soilweb-data-functions.html">Functions and Data Sources that Depend on SoilWeb</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
   </ul></li>
@@ -54,15 +55,13 @@ geodatabases, and create soil profile collection objects (SPC).</p>
 <span>  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,</span>
 <span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  childs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">get_legend_from_GDB</span><span class="op">(</span></span>
 <span>  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,</span>
 <span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  stats <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -70,7 +69,6 @@ geodatabases, and create soil profile collection objects (SPC).</p>
 <span>  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,</span>
 <span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  stats <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -78,8 +76,7 @@ geodatabases, and create soil profile collection objects (SPC).</p>
 <span>  dsn <span class="op">=</span> <span class="st">"gNATSGO_CONUS.gdb"</span>,</span>
 <span>  WHERE <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  childs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -108,10 +105,6 @@ are not flattened and appended</p></dd>
 <dd><p>logical: indicating whether to drop unused levels in
 classifying factors. This is useful when a class has large number of unused
 classes, which can waste space in tables and figures.</p></dd>
-
-
-<dt id="arg-stringsasfactors">stringsAsFactors<a class="anchor" aria-label="anchor" href="#arg-stringsasfactors"></a></dt>
-<dd><p>deprecated</p></dd>
 
 
 <dt id="arg-stats">stats<a class="anchor" aria-label="anchor" href="#arg-stats"></a></dt>

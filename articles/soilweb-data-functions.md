@@ -464,12 +464,12 @@ head(x$ecoclassid)
 
 | series | ecoclassid  | n_components | area_ac | proportion |
 |:-------|:------------|-------------:|--------:|-----------:|
-| LUCY   | F153AY030NC |           15 |   25899 |       0.51 |
-| LUCY   | F133BY006TX |           11 |   20631 |       0.41 |
-| LUCY   | F137XY040SC |            1 |    2279 |       0.05 |
-| LUCY   | F137XY050GA |            2 |    1587 |       0.03 |
-| MIAMI  | F098XA015MI |           82 |   41416 |       0.04 |
-| MIAMI  | F098XA022MI |           59 |   33897 |       0.03 |
+| LUCY   | F133AY610NC |            2 |    2325 |       0.00 |
+| LUCY   | F137XY040SC |            1 |    2279 |       0.00 |
+| LUCY   | F138XY200AL |            6 |    2072 |       0.00 |
+| LUCY   | F137XY050GA |            2 |    1587 |       0.00 |
+| LUCY   | F133AY430NC |          141 |  438630 |       0.63 |
+| LUCY   | F133AY530NC |          108 |  195781 |       0.28 |
 
 #### Parent Material Summaries
 
@@ -637,7 +637,7 @@ Mean (Celsius) growing degree days, derived from the 800m PRISM daily
 minimum/maximum temperature data over the interval of 1981–2010.
 
 Calculation reference:
-[http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html](http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.md)
+[http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html](https://web.archive.org/web/20211018034119/http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html)
 
 $$GDD_{i} = \left\lbrack min\left( T_{max},upper_{threshold} \right) + max\left( Tmin,lower_{threshold} \right)/2 \right\rbrack - T_{base}$$
 
@@ -705,8 +705,8 @@ the current gSSURGO (30m) grid and a 30m grid of geomorphons. Currently,
 these data are only available within CONUS.
 
 These maps were generated using the [r.geomorphon GRASS GIS
-module](https://grass.osgeo.org/grass75/manuals/r.geomorphon.html), with
-the following parameters:
+module](https://grass.osgeo.org/grass-stable/manuals/r.geomorphon.html),
+with the following parameters:
 
 `r.geomorphon --o dem=elev30_int forms=forms30 search=75 skip=5 flat=1.718`
 
@@ -714,10 +714,9 @@ The source DEM was a 10m / 30m resolution compilation of USGS NED data,
 rounded to integers. The “flat” threshold (1.718 deg) is based on a 3%
 slope break.
 
-[Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition
+Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition
 approach to classification and mapping of landforms, Geomorphology,
-vol. 182,
-147-156.](http://www.sciencedirect.com/science/article/pii/S0169555X12005028)
+vol. 182, 147-156. (<https://doi.org/10.1016/j.geomorph.2012.11.005>)
 
 Proportions are weighted by total soil series area (within CONUS) as
 informed by the component name and associated component percentage.

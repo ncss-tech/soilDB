@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,7 @@
 <li><a class="dropdown-item" href="../articles/dominant-es.html">Mapping Dominant Ecological Sites using SSURGO Data</a></li>
     <li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
     <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local Soil Survey Geographic (SSURGO) Databases</a></li>
+    <li><a class="dropdown-item" href="../articles/sda.html">Soil Data Access</a></li>
     <li><a class="dropdown-item" href="../articles/soilweb-data-functions.html">Functions and Data Sources that Depend on SoilWeb</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
   </ul>
@@ -82,6 +83,17 @@ Portal</a>.</p>
 <p>This vignette demonstrates how to use these functions to obtain and
 view data from <em>Morton and Stanton counties, Kansas</em>
 (<code>areasymbol = c("KS129", "KS187")</code>).</p>
+<div class="section level3">
+<h3 id="remote-vs--local-access">Remote vs. Local Access<a class="anchor" aria-label="anchor" href="#remote-vs--local-access"></a>
+</h3>
+<p>For queries directly against the USDA Soil Data Access (SDA) web
+service without downloading local data, see the <a href="sda.html">SDA
+vignette</a>. The SDA vignette covers remote REST-based queries,
+property aggregation methods, and soil interpretations. Once you have
+created a local SSURGO database with <code><a href="../reference/createSSURGO.html">createSSURGO()</a></code>, many
+of the same functions can be used with the <code>dsn</code> parameter to
+query your local database instead.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="download-ssurgo-data">Download SSURGO Data<a class="anchor" aria-label="anchor" href="#download-ssurgo-data"></a>
@@ -304,7 +316,7 @@ unit concepts:</p>
 <span></span>
 <span><span class="co"># Read spatial map units</span></span>
 <span><span class="va">spatial_mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="va">gpkg_path</span>, layer <span class="op">=</span> <span class="st">"mupolygon"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Reading layer `mupolygon' from data source `/tmp/RtmpJygliZ/ssurgo.gpkg' using driver `GPKG'</span></span>
+<pre><code><span><span class="co">## Reading layer `mupolygon' from data source `/tmp/RtmpEx92F0/ssurgo.gpkg' using driver `GPKG'</span></span>
 <span><span class="co">## Simple feature collection with 3333 features and 4 fields</span></span>
 <span><span class="co">## Geometry type: POLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
@@ -581,6 +593,10 @@ aggregations of map unit component data. We will use the function
 <code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code> to calculate the map unit dominant
 condition values for several component-level hydrologic properties: the
 <em>Hydrologic Group</em> and the <em>Drainage Class</em>.</p>
+<p>For more information on <code><a href="../reference/get_SDA_property.html">get_SDA_property()</a></code>, including
+all available aggregation methods (Dominant Component, Weighted Average,
+Min/Max, Dominant Condition, None), see the <a href="sda.html">SDA
+vignette</a>.</p>
 <p>In this case we want to get everything in our local database, so we
 use the <code>WHERE</code> clause <code>"1=1"</code> which is true for
 all map units in the database.</p>
@@ -717,13 +733,13 @@ own using <code><a href="../reference/SDA_query.html">SDA_query()</a></code> or 
 <h2 id="query-and-aggregation-functions">Query and Aggregation Functions<a class="anchor" aria-label="anchor" href="#query-and-aggregation-functions"></a>
 </h2>
 <p>This section describes some existing options in the
-<code>soilDB</code> package for querying and aggregating data for
-thematic maps.</p>
-<p>In the future this section will be expanded.</p>
-<p>All of the <code>get_SDA_*()</code> “SSURGO On Demand” functions can
-be applied to local copies of the SSURGO database by passing the
-<code>dsn</code> argument (either a path to a SQLite database or a
-<em>DBIConnection</em> object).</p>
+<code>soilDB</code> package for</p>
+<p>querying and aggregating data for thematic maps. All of the
+<code>get_SDA_*()</code> “SSURGO On Demand” functions can be applied to
+local copies of the SSURGO database by passing the <code>dsn</code>
+argument (either a path to a SQLite database or a <em>DBIConnection</em>
+object). For detailed documentation on these functions, including usage
+patterns, aggregation methods, and interpretation rules, see the <a href="sda.html">SDA vignette</a>.</p>
 <ul>
 <li>“SSURGO On Demand” Queries
 <ul>

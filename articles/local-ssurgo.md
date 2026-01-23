@@ -16,6 +16,18 @@ This vignette demonstrates how to use these functions to obtain and view
 data from *Morton and Stanton counties, Kansas*
 (`areasymbol = c("KS129", "KS187")`).
 
+### Remote vs. Local Access
+
+For queries directly against the USDA Soil Data Access (SDA) web service
+without downloading local data, see the [SDA
+vignette](http://ncss-tech.github.io/soilDB/articles/sda.md). The SDA
+vignette covers remote REST-based queries, property aggregation methods,
+and soil interpretations. Once you have created a local SSURGO database
+with
+[`createSSURGO()`](http://ncss-tech.github.io/soilDB/reference/createSSURGO.md),
+many of the same functions can be used with the `dsn` parameter to query
+your local database instead.
+
 ## Download SSURGO Data
 
 [`downloadSSURGO()`](http://ncss-tech.github.io/soilDB/reference/downloadSSURGO.md)
@@ -260,7 +272,7 @@ library(sf)
 spatial_mu <- st_read(gpkg_path, layer = "mupolygon")
 ```
 
-    ## Reading layer `mupolygon' from data source `/tmp/RtmpJygliZ/ssurgo.gpkg' using driver `GPKG'
+    ## Reading layer `mupolygon' from data source `/tmp/RtmpEx92F0/ssurgo.gpkg' using driver `GPKG'
     ## Simple feature collection with 3333 features and 4 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
@@ -559,6 +571,12 @@ to calculate the map unit dominant condition values for several
 component-level hydrologic properties: the *Hydrologic Group* and the
 *Drainage Class*.
 
+For more information on
+[`get_SDA_property()`](http://ncss-tech.github.io/soilDB/reference/get_SDA_property.md),
+including all available aggregation methods (Dominant Component,
+Weighted Average, Min/Max, Dominant Condition, None), see the [SDA
+vignette](http://ncss-tech.github.io/soilDB/articles/sda.md).
+
 In this case we want to get everything in our local database, so we use
 the `WHERE` clause `"1=1"` which is true for all map units in the
 database.
@@ -719,13 +737,14 @@ or DBI
 ## Query and Aggregation Functions
 
 This section describes some existing options in the `soilDB` package for
-querying and aggregating data for thematic maps.
 
-In the future this section will be expanded.
-
-All of the `get_SDA_*()` “SSURGO On Demand” functions can be applied to
-local copies of the SSURGO database by passing the `dsn` argument
-(either a path to a SQLite database or a *DBIConnection* object).
+querying and aggregating data for thematic maps. All of the
+`get_SDA_*()` “SSURGO On Demand” functions can be applied to local
+copies of the SSURGO database by passing the `dsn` argument (either a
+path to a SQLite database or a *DBIConnection* object). For detailed
+documentation on these functions, including usage patterns, aggregation
+methods, and interpretation rules, see the [SDA
+vignette](http://ncss-tech.github.io/soilDB/articles/sda.md).
 
 - “SSURGO On Demand” Queries
   - Hydric Soils:

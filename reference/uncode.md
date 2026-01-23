@@ -8,16 +8,9 @@ SDA the metadata is pulled from a static snapshot in the soilDB package
 ## Usage
 
 ``` r
-uncode(
-  df,
-  invert = FALSE,
-  db = "NASIS",
-  droplevels = FALSE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+uncode(df, invert = FALSE, db = "NASIS", droplevels = FALSE, dsn = NULL)
 
-code(df, db = NULL, droplevels = FALSE, stringsAsFactors = NULL, dsn = NULL)
+code(df, db = NULL, droplevels = FALSE, dsn = NULL)
 ```
 
 ## Arguments
@@ -41,10 +34,6 @@ code(df, db = NULL, droplevels = FALSE, stringsAsFactors = NULL, dsn = NULL)
   logical: indicating whether to drop unused levels in classifying
   factors. This is useful when a class has large number of unused
   classes, which can waste space in tables and figures.
-
-- stringsAsFactors:
-
-  deprecated
 
 - dsn:
 

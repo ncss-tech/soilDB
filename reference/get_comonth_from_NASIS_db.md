@@ -5,12 +5,7 @@ Get component month data from a local NASIS Database.
 ## Usage
 
 ``` r
-get_comonth_from_NASIS_db(
-  SS = TRUE,
-  fill = FALSE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_comonth_from_NASIS_db(SS = TRUE, fill = FALSE, dsn = NULL)
 ```
 
 ## Arguments
@@ -24,10 +19,6 @@ get_comonth_from_NASIS_db(
 
   should missing "month" rows in the comonth table be filled with NA
   (FALSE)
-
-- stringsAsFactors:
-
-  deprecated
 
 - dsn:
 

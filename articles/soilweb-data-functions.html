@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,7 @@
 <li><a class="dropdown-item" href="../articles/dominant-es.html">Mapping Dominant Ecological Sites using SSURGO Data</a></li>
     <li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
     <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local Soil Survey Geographic (SSURGO) Databases</a></li>
+    <li><a class="dropdown-item" href="../articles/sda.html">Soil Data Access</a></li>
     <li><a class="dropdown-item" href="../articles/soilweb-data-functions.html">Functions and Data Sources that Depend on SoilWeb</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
   </ul>
@@ -1234,45 +1235,45 @@ polygon area and component percentages.</p>
 <tbody>
 <tr class="odd">
 <td align="left">LUCY</td>
-<td align="left">F153AY030NC</td>
-<td align="right">15</td>
-<td align="right">25899</td>
-<td align="right">0.51</td>
+<td align="left">F133AY610NC</td>
+<td align="right">2</td>
+<td align="right">2325</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
-<td align="left">LUCY</td>
-<td align="left">F133BY006TX</td>
-<td align="right">11</td>
-<td align="right">20631</td>
-<td align="right">0.41</td>
-</tr>
-<tr class="odd">
 <td align="left">LUCY</td>
 <td align="left">F137XY040SC</td>
 <td align="right">1</td>
 <td align="right">2279</td>
-<td align="right">0.05</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">LUCY</td>
+<td align="left">F138XY200AL</td>
+<td align="right">6</td>
+<td align="right">2072</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="even">
 <td align="left">LUCY</td>
 <td align="left">F137XY050GA</td>
 <td align="right">2</td>
 <td align="right">1587</td>
-<td align="right">0.03</td>
+<td align="right">0.00</td>
 </tr>
 <tr class="odd">
-<td align="left">MIAMI</td>
-<td align="left">F098XA015MI</td>
-<td align="right">82</td>
-<td align="right">41416</td>
-<td align="right">0.04</td>
+<td align="left">LUCY</td>
+<td align="left">F133AY430NC</td>
+<td align="right">141</td>
+<td align="right">438630</td>
+<td align="right">0.63</td>
 </tr>
 <tr class="even">
-<td align="left">MIAMI</td>
-<td align="left">F098XA022MI</td>
-<td align="right">59</td>
-<td align="right">33897</td>
-<td align="right">0.03</td>
+<td align="left">LUCY</td>
+<td align="left">F133AY530NC</td>
+<td align="right">108</td>
+<td align="right">195781</td>
+<td align="right">0.28</td>
 </tr>
 </tbody>
 </table>
@@ -1881,7 +1882,7 @@ on the calculation and interpretation.</li>
 </h4>
 <p>Mean (Celsius) growing degree days, derived from the 800m PRISM daily
 minimum/maximum temperature data over the interval of 1981–2010.</p>
-<p>Calculation reference: <a href="http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html" class="external-link uri">http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html</a></p>
+<p>Calculation reference: <a href="https://web.archive.org/web/20211018034119/http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html" class="external-link">http://agron-www.agron.iastate.edu/courses/Agron541/classes/541/lesson02b/2b.1.1.html</a></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>D</mi><msub><mi>D</mi><mi>i</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mi>m</mi><mi>i</mi><mi>n</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>T</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>,</mo><mi>u</mi><mi>p</mi><mi>p</mi><mi>e</mi><msub><mi>r</mi><mrow><mi>t</mi><mi>h</mi><mi>r</mi><mi>e</mi><mi>s</mi><mi>h</mi><mi>o</mi><mi>l</mi><mi>d</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>m</mi><mi>a</mi><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>T</mi><mi>m</mi><mi>i</mi><mi>n</mi><mo>,</mo><mi>l</mi><mi>o</mi><mi>w</mi><mi>e</mi><msub><mi>r</mi><mrow><mi>t</mi><mi>h</mi><mi>r</mi><mi>e</mi><mi>s</mi><mi>h</mi><mi>o</mi><mi>l</mi><mi>d</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mn>2</mn><mo stretchy="true" form="postfix">]</mo></mrow><mo>−</mo><msub><mi>T</mi><mrow><mi>b</mi><mi>a</mi><mi>s</mi><mi>e</mi></mrow></msub></mrow><annotation encoding="application/x-tex">GDD_i = [ min(T_{max}, upper_{threshold}) + max(Tmin, lower_{threshold}) / 2 ] - T_{base}</annotation></semantics></math></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>D</mi><msub><mi>D</mi><mi>i</mi></msub><mo>=</mo><mi>m</mi><mi>a</mi><mi>x</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>G</mi><mi>D</mi><msub><mi>D</mi><mi>i</mi></msub><mo>,</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">GDD_i = max(GDD_i, 0)</annotation></semantics></math></p>
 </div>
@@ -1942,16 +1943,15 @@ United States. Journal of the American Water Resources Association, 52:
 <p>A cross-tabulation of geomorphon by soil series name was computed
 from the current gSSURGO (30m) grid and a 30m grid of geomorphons.
 Currently, these data are only available within CONUS.</p>
-<p>These maps were generated using the <a href="https://grass.osgeo.org/grass75/manuals/r.geomorphon.html" class="external-link">r.geomorphon
+<p>These maps were generated using the <a href="https://grass.osgeo.org/grass-stable/manuals/r.geomorphon.html" class="external-link">r.geomorphon
 GRASS GIS module</a>, with the following parameters:</p>
 <p><code>r.geomorphon --o dem=elev30_int forms=forms30 search=75 skip=5 flat=1.718</code></p>
 <p>The source DEM was a 10m / 30m resolution compilation of USGS NED
 data, rounded to integers. The “flat” threshold (1.718 deg) is based on
 a 3% slope break.</p>
-<p><a href="http://www.sciencedirect.com/science/article/pii/S0169555X12005028" class="external-link">Jasiewicz,
-J., Stepinski, T., 2013, Geomorphons - a pattern recognition approach to
-classification and mapping of landforms, Geomorphology, vol. 182,
-147-156.</a></p>
+<p>Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern
+recognition approach to classification and mapping of landforms,
+Geomorphology, vol. 182, 147-156. (<a href="https://doi.org/10.1016/j.geomorph.2012.11.005" class="external-link uri">https://doi.org/10.1016/j.geomorph.2012.11.005</a>)</p>
 <p>Proportions are weighted by total soil series area (within CONUS) as
 informed by the component name and associated component percentage.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">

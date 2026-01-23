@@ -552,6 +552,7 @@ remotes::install_github("ncss-tech/soilDB", dependencies = FALSE)
   Columns](http://ncss-tech.github.io/soilDB/articles/fetchNASIS.md):
 - [Local Soil Survey Geographic (SSURGO)
   Databases](http://ncss-tech.github.io/soilDB/articles/local-ssurgo.md):
+- [Soil Data Access](http://ncss-tech.github.io/soilDB/articles/sda.md):
 - [Functions and Data Sources that Depend on
   SoilWeb](http://ncss-tech.github.io/soilDB/articles/soilweb-data-functions.md):
 - [Map Unit Key Grids and Thematic Maps of Soil Survey Geographic

@@ -1,7 +1,8 @@
 # Compute Water Day and Year
 
 Compute "water" day and year, based on the end of the typical or legal
-dry season. This is September 30 in California.
+dry season. This is September 30 in California. This function accounts
+for leap years.
 
 ## Usage
 
@@ -38,10 +39,6 @@ A `data.frame` object with the following
 - wd:
 
   the "water day"
-
-## Details
-
-This function doesn't know about leap-years. Probably worth checking.
 
 ## Author
 

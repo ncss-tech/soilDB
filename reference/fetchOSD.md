@@ -167,6 +167,12 @@ from `soils` via
 
 USDA-NRCS OSD search tools: <https://soilseries.sc.egov.usda.gov/>
 
+Jasiewicz, J., Stepinski, T., 2013, Geomorphons - a pattern recognition
+approach to classification and mapping of landforms, Geomorphology, vol.
+182, 147-156.
+([doi:10.1016/j.geomorph.2012.11.005](https://doi.org/10.1016/j.geomorph.2012.11.005)
+)
+
 ## See also
 
 [`OSDquery()`](http://ncss-tech.github.io/soilDB/reference/OSDquery.md),
@@ -210,7 +216,9 @@ D.E. Beaudette, A.G. Brown
   x <- fetchOSD(s.list, extended = TRUE, colorState = 'dry')
 
   par(mar=c(0,0,1,1))
-  aqp::plotSPC(x$SPC)
+  if (!is.null(x$SPC) && inherits(x$SPC, "SoilProfileCollection")){
+    aqp::plotSPC(x$SPC)
+  }
   str(x, 1)
 #> List of 19
 #>  $ SPC             :Formal class 'SoilProfileCollection' [package "aqp"] with 8 slots

@@ -188,8 +188,10 @@ D.E. Beaudette
   x <- fetchOSD(s$series, extended = TRUE, colorState = 'dry')
 
   # simple figure
-  par(mar = c(0,0,1,1))
-  aqp::plotSPC(x$SPC)
+  par(mar=c(0,0,1,1))
+  if (!is.null(x$SPC) && inherits(x$SPC, "SoilProfileCollection")){
+    aqp::plotSPC(x$SPC)
+  }
 
 # }
 ```

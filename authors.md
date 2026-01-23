@@ -17,13 +17,13 @@ Source:
 [`inst/CITATION`](https://github.com/ncss-tech/soilDB/blob/master/inst/CITATION)
 
 Beaudette D, Skovlin J, Roecker S, Brown A (2026). *soilDB: Soil
-Database Interface*. R package version 2.8.14,
+Database Interface*. R package version 2.9.0,
 <https://CRAN.R-project.org/package=soilDB>.
 
     @Manual{,
       title = {soilDB: Soil Database Interface},
       author = {Dylan Beaudette and Jay Skovlin and Stephen Roecker and Andrew Brown},
-      note = {R package version 2.8.14},
+      note = {R package version 2.9.0},
       url = {https://CRAN.R-project.org/package=soilDB},
       year = {2026},
     }

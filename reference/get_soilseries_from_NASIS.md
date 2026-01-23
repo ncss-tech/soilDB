@@ -10,14 +10,9 @@ Matching Taxonomic Class Name
 ## Usage
 
 ``` r
-get_soilseries_from_NASIS(
-  stringsAsFactors = NULL,
-  dsn = NULL,
-  delimiter = " over ",
-  SS = FALSE
-)
+get_soilseries_from_NASIS(dsn = NULL, delimiter = " over ", SS = FALSE)
 
-get_soilseries_from_NASISWebReport(soils, stringsAsFactors = NULL)
+get_soilseries_from_NASISWebReport(soils)
 
 get_competing_soilseries_from_NASIS(
   x,
@@ -28,10 +23,6 @@ get_competing_soilseries_from_NASIS(
 ```
 
 ## Arguments
-
-- stringsAsFactors:
-
-  deprecated
 
 - dsn:
 

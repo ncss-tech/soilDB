@@ -52,10 +52,6 @@ records. See the examples below and the [SDA
 Tutorial](http://ncss-tech.github.io/AQP/soilDB/SDA-tutorial.md) for
 details.
 
-## Note
-
-This function requires the `httr`, `jsonlite`, and `xml2` packages
-
 ## See also
 
 [`SDA_spatialQuery()`](http://ncss-tech.github.io/soilDB/reference/SDA_spatialQuery.md)
@@ -96,9 +92,9 @@ D.E. Beaudette, A.G Brown
 #> single result set, returning a data.frame
   str(res)
 #> 'data.frame':    64 obs. of  3 variables:
-#>  $ cokey    : int  27538223 27538235 27538243 26399537 26399577 26399585 26399598 26399599 26399644 26399647 ...
+#>  $ cokey    : int  27538243 27538223 27538235 26399537 26399577 26399585 26399598 26399599 26399644 26399647 ...
 #>  $ compname : chr  "Amador" "Amador" "Amador" "Amador" ...
-#>  $ comppct_r: int  76 15 15 45 76 30 15 40 10 15 ...
+#>  $ comppct_r: int  15 76 15 45 76 30 15 40 10 15 ...
 #>  - attr(*, "SDA_id")= chr "Table"
 
   ## get component-level data for a specific soil survey area (Yolo county, CA)

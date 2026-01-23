@@ -5,12 +5,7 @@ Get accessory tables and summaries from a local NASIS Database
 ## Usage
 
 ``` r
-get_extended_data_from_NASIS_db(
-  SS = TRUE,
-  nullFragsAreZero = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_extended_data_from_NASIS_db(SS = TRUE, nullFragsAreZero = TRUE, dsn = NULL)
 ```
 
 ## Arguments
@@ -24,10 +19,6 @@ get_extended_data_from_NASIS_db(
 
   should fragment volumes of NULL be interpreted as 0? (default: TRUE),
   see details
-
-- stringsAsFactors:
-
-  deprecated
 
 - dsn:
 

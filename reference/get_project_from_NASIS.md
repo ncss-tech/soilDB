@@ -5,9 +5,9 @@ Helper functions for accessing the NASIS Project object.
 ## Usage
 
 ``` r
-get_projectmilestone_from_NASIS(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
+get_projectmilestone_from_NASIS(SS = TRUE, dsn = NULL)
 
-get_projectmapunit_from_NASIS(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
+get_projectmapunit_from_NASIS(SS = TRUE, dsn = NULL)
 ```
 
 ## Arguments
@@ -16,10 +16,6 @@ get_projectmapunit_from_NASIS(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
 
   *logical*. Use selected set? Default: `TRUE`. Set `FALSE` for local
   database.
-
-- stringsAsFactors:
-
-  Deprecated.
 
 - dsn:
 

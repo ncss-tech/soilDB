@@ -9,7 +9,6 @@ get_mapunit_from_NASIS(
   SS = TRUE,
   repdmu = TRUE,
   droplevels = TRUE,
-  stringsAsFactors = NULL,
   areatypename = c("Non-MLRA Soil Survey Area", "MLRA Soil Survey Area"),
   dsn = NULL
 )
@@ -17,7 +16,6 @@ get_mapunit_from_NASIS(
 get_legend_from_NASIS(
   SS = TRUE,
   droplevels = TRUE,
-  stringsAsFactors = NULL,
   areatypename = c("Non-MLRA Soil Survey Area", "MLRA Soil Survey Area"),
   dsn = NULL
 )
@@ -25,7 +23,6 @@ get_legend_from_NASIS(
 get_lmuaoverlap_from_NASIS(
   SS = TRUE,
   droplevels = TRUE,
-  stringsAsFactors = NULL,
   areatypename = c("Non-MLRA Soil Survey Area", "MLRA Soil Survey Area"),
   dsn = NULL
 )
@@ -46,10 +43,6 @@ get_lmuaoverlap_from_NASIS(
 
   Drop unused levels from `farmlndcl` and other factor levels from NASIS
   domains?
-
-- stringsAsFactors:
-
-  deprecated
 
 - areatypename:
 

@@ -10,15 +10,13 @@ get_component_from_GDB(
   dsn = "gNATSGO_CONUS.gdb",
   WHERE = NULL,
   childs = FALSE,
-  droplevels = TRUE,
-  stringsAsFactors = NULL
+  droplevels = TRUE
 )
 
 get_legend_from_GDB(
   dsn = "gNATSGO_CONUS.gdb",
   WHERE = NULL,
   droplevels = TRUE,
-  stringsAsFactors = NULL,
   stats = FALSE
 )
 
@@ -26,7 +24,6 @@ get_mapunit_from_GDB(
   dsn = "gNATSGO_CONUS.gdb",
   WHERE = NULL,
   droplevels = TRUE,
-  stringsAsFactors = NULL,
   stats = FALSE
 )
 
@@ -34,8 +31,7 @@ fetchGDB(
   dsn = "gNATSGO_CONUS.gdb",
   WHERE = NULL,
   childs = FALSE,
-  droplevels = TRUE,
-  stringsAsFactors = NULL
+  droplevels = TRUE
 )
 ```
 
@@ -63,10 +59,6 @@ fetchGDB(
   logical: indicating whether to drop unused levels in classifying
   factors. This is useful when a class has large number of unused
   classes, which can waste space in tables and figures.
-
-- stringsAsFactors:
-
-  deprecated
 
 - stats:
 

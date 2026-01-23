@@ -9,7 +9,7 @@ get_site_association_from_NASIS(): Get Associated User Site IDs for each Site.">
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,6 +23,7 @@ get_site_association_from_NASIS(): Get Associated User Site IDs for each Site.">
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/dominant-es.html">Mapping Dominant Ecological Sites using SSURGO Data</a></li>
     <li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
     <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local Soil Survey Geographic (SSURGO) Databases</a></li>
+    <li><a class="dropdown-item" href="../articles/sda.html">Soil Data Access</a></li>
     <li><a class="dropdown-item" href="../articles/soilweb-data-functions.html">Functions and Data Sources that Depend on SoilWeb</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
   </ul></li>
@@ -54,7 +55,6 @@ get_site_association_from_NASIS(): Get Associated User Site IDs for each Site.">
 <span>  SS <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  include_pedon <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  nullFragsAreZero <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -76,10 +76,6 @@ database (default: <code>TRUE</code>)</p></dd>
 
 <dt id="arg-nullfragsarezero">nullFragsAreZero<a class="anchor" aria-label="anchor" href="#arg-nullfragsarezero"></a></dt>
 <dd><p>should surface fragment cover percentages of <code>NULL</code> be interpreted as <code>0</code>? (default: <code>TRUE</code>)</p></dd>
-
-
-<dt id="arg-stringsasfactors">stringsAsFactors<a class="anchor" aria-label="anchor" href="#arg-stringsasfactors"></a></dt>
-<dd><p>deprecated</p></dd>
 
 
 <dt id="arg-dsn">dsn<a class="anchor" aria-label="anchor" href="#arg-dsn"></a></dt>

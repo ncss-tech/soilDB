@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,6 +21,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/dominant-es.html">Mapping Dominant Ecological Sites using SSURGO Data</a></li>
     <li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
     <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local Soil Survey Geographic (SSURGO) Databases</a></li>
+    <li><a class="dropdown-item" href="../articles/sda.html">Soil Data Access</a></li>
     <li><a class="dropdown-item" href="../articles/soilweb-data-functions.html">Functions and Data Sources that Depend on SoilWeb</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
   </ul></li>
@@ -51,7 +52,6 @@
 <span>  SS <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  repdmu <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  areatypename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Non-MLRA Soil Survey Area"</span>, <span class="st">"MLRA Soil Survey Area"</span><span class="op">)</span>,</span>
 <span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
@@ -59,7 +59,6 @@
 <span><span class="fu">get_legend_from_NASIS</span><span class="op">(</span></span>
 <span>  SS <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  areatypename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Non-MLRA Soil Survey Area"</span>, <span class="st">"MLRA Soil Survey Area"</span><span class="op">)</span>,</span>
 <span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
@@ -67,7 +66,6 @@
 <span><span class="fu">get_lmuaoverlap_from_NASIS</span><span class="op">(</span></span>
 <span>  SS <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  droplevels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  stringsAsFactors <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  areatypename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Non-MLRA Soil Survey Area"</span>, <span class="st">"MLRA Soil Survey Area"</span><span class="op">)</span>,</span>
 <span>  dsn <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -87,10 +85,6 @@
 
 <dt id="arg-droplevels">droplevels<a class="anchor" aria-label="anchor" href="#arg-droplevels"></a></dt>
 <dd><p>Drop unused levels from <code>farmlndcl</code> and other factor levels from NASIS domains?</p></dd>
-
-
-<dt id="arg-stringsasfactors">stringsAsFactors<a class="anchor" aria-label="anchor" href="#arg-stringsasfactors"></a></dt>
-<dd><p>deprecated</p></dd>
 
 
 <dt id="arg-areatypename">areatypename<a class="anchor" aria-label="anchor" href="#arg-areatypename"></a></dt>

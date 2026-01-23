@@ -147,16 +147,16 @@ width) and the median : `(Q0.95-Q0.05)/Q0.50.` All values are converted
 from "mapped" to "conventional" based on above table conversion factors.
 Point data requests are made through `"properties/query"` endpoint of
 the [SoilGrids v2.0 REST
-API](https://www.isric.org/explore/soilgrids/faq-soilgrids). Please
-check ISRIC's data policy, disclaimer and citation:
-<https://www.isric.org/about/data-policy>.
+API](https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs.html).
+Please check ISRIC's data policy, disclaimer and citation:
+<https://isric.org/privacy-and-personal-data/>.
 
 Find out more information about the SoilGrids and GlobalSoilMap products
 here:
 
-- <https://www.isric.org/explore/soilgrids/faq-soilgrids>
+- <https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs.html>
 
-- <https://www.isric.org/sites/default/files/GlobalSoilMap_specifications_december_2015_2.pdf>
+- <https://files.isric.org/public/documents/GlobalSoilMap_specifications_december_2015_2.pdf>
 
 ## References
 

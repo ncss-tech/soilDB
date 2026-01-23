@@ -26,20 +26,10 @@ get_veg_data_from_NASIS_db(SS = TRUE, dsn = NULL)
 
 A list of data.frame
 
+## See also
+
+[`fetchVegdata()`](http://ncss-tech.github.io/soilDB/reference/fetchVegdata.md)
+
 ## Author
 
 Jay M. Skovlin and Dylan E. Beaudette
-
-## Examples
-
-``` r
-# \donttest{
-if(local_NASIS_defined()) {
- # query text note data
- v <- try(get_veg_from_NASIS_db())
-
- # show contents veg data returned
- str(v)
-}
-# }
-```

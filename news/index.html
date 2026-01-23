@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">soilDB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.8.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,6 +21,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/dominant-es.html">Mapping Dominant Ecological Sites using SSURGO Data</a></li>
     <li><a class="dropdown-item" href="../articles/fetchNASIS.html">fetchNASIS(from='pedons') Columns</a></li>
     <li><a class="dropdown-item" href="../articles/local-ssurgo.html">Local Soil Survey Geographic (SSURGO) Databases</a></li>
+    <li><a class="dropdown-item" href="../articles/sda.html">Soil Data Access</a></li>
     <li><a class="dropdown-item" href="../articles/soilweb-data-functions.html">Functions and Data Sources that Depend on SoilWeb</a></li>
     <li><a class="dropdown-item" href="../articles/wcs-ssurgo.html">Map Unit Key Grids and Thematic Maps of Soil Survey Geographic (SSURGO) Data</a></li>
   </ul></li>
@@ -41,18 +42,40 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.8.14" id="soildb-2814-development">soilDB 2.8.14 (development)<a class="anchor" aria-label="anchor" href="#soildb-2814-development"></a></h2>
-<ul><li>new vignette with details on SoilWeb curated data sources, and related functions in soilDB</li>
+<h2 class="pkg-version" data-toc-text="2.9.0" id="soildb-290-2026-01-22">soilDB 2.9.0 (2026-01-22)<a class="anchor" aria-label="anchor" href="#soildb-290-2026-01-22"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-2-9-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-2-9-0"></a></h3>
+<ul><li>Deprecated <code>stringsAsFactors</code> argument has been removed from many query functions, use <code><a href="../reference/NASISChoiceList.html">NASISChoiceList()</a></code> and/or <code><a href="../reference/NASISDomainsAsFactor.html">NASISDomainsAsFactor()</a></code> instead for manual or automatic setting of domain values as factors, respectively</li>
+<li>Deprecated NASIS column aliases have been removed, see <a href="https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html" class="external-link uri">https://ncss-tech.github.io/AQP/soilDB/bulletins/2025.01-1-soilDB-NASIS-column-aliases.html</a> for details</li>
+<li>R version &gt;= 4.1.0 is now required</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-2-9-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-2-9-0"></a></h3>
+<ul><li>New vignette with details on SoilWeb curated data sources, and related functions in soilDB (<a href="https://github.com/ncss-tech/soilDB/issues/435" class="external-link">#435</a>)</li>
+<li>New vignette on Soil Data Access, <code><a href="../reference/SDA_query.html">SDA_query()</a></code> and high-level wrapper functions for SDA queries in soilDB</li>
+</ul></div>
+<div class="section level3">
+<h3 id="improvements-2-9-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-2-9-0"></a></h3>
+<ul><li>
+<code>fetchOSD(..., extended = TRUE)</code> gains geomorphon proportions via SoilWeb (<a href="https://github.com/ncss-tech/soilDB/issues/435" class="external-link">#435</a>)</li>
 <li>
-<code>fetchOSD(..., extended = TRUE)</code> gains geomorphon proportions via SoilWeb</li>
+<code>get_SDA_property(method="weighted average")</code> resolved efficiency issues and streamlined SQL Common Table Expressions for processing very large sets of map unit keys (<a href="https://github.com/ncss-tech/soilDB/issues/432" class="external-link">#432</a>)</li>
 <li>
+<code><a href="../reference/OSDquery.html">OSDquery()</a></code> gains <code>remarks</code> argument for searching the REMARKS section of OSDs</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.8.14" id="soildb-2814-2025-12-04">soilDB 2.8.14 (2025-12-04)<a class="anchor" aria-label="anchor" href="#soildb-2814-2025-12-04"></a></h2>
+<ul><li>
 <code><a href="../reference/taxaExtent.html">taxaExtent()</a></code> updates:
 <ul><li>Added family mineralogy class grids</li>
 <li>Added argument <code>type</code> for selecting the type of query; replaces deprecated <code>formativeElement</code>
 </li>
 </ul></li>
 <li>
-<code><a href="../reference/OSDquery.html">OSDquery()</a></code> gains <code>remarks</code> argument for searching the REMARKS section of OSDs</li>
+<code><a href="../reference/SDA_query.html">SDA_query()</a></code> now includes additional metadata (comment header in SQL) to inform usage metrics of various access points to SDA</li>
+<li>
+<code><a href="../reference/fetchSDA.html">fetchSDA()</a></code> and related lower-level child functions now include <code>nasiscoiid</code> and <code>nasischiid</code> for relating to internal database record IDs</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.8.13" id="soildb-2813-2025-09-26">soilDB 2.8.13 (2025-09-26)<a class="anchor" aria-label="anchor" href="#soildb-2813-2025-09-26"></a></h2><p class="text-muted">CRAN release: 2025-09-27</p>

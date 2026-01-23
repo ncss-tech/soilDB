@@ -331,7 +331,7 @@ print(mu)
 #> extent      : -1365495, -1358925, 2869245, 2873655  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file26b8eeb6980 
+#> varname     : file26716642d199 
 #> categories  : mukey 
 #> name        :   mukey 
 #> min value   :  144983 
@@ -455,7 +455,7 @@ a <- st_as_sfc(a)
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file26b8235dbe6 
+#> varname     : file267130522853 
 #> categories  : mukey 
 #> name        :  mukey 
 #> min value   : 545800 
@@ -469,7 +469,7 @@ a <- st_as_sfc(a)
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file26b862cc28d 
+#> varname     : file26717f04251 
 #> categories  : mukey 
 #> name        :   mukey 
 #> min value   :  545800 
@@ -483,7 +483,7 @@ a <- st_as_sfc(a)
 #> extent      : 1129005, 1135005, 1402995, 1411005  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file26b84c4f26e5 
+#> varname     : file26714427d44e 
 #> categories  : mukey 
 #> name        :   mukey 
 #> min value   : 3244721 
@@ -540,7 +540,7 @@ product.
 #> extent      : 1129005, 1135005, 1402995, 1411095  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> varname     : file26b8135379b3 
+#> varname     : file267145af8041 
 #> categories  : mukey 
 #> name        :  mukey 
 #> min value   : 659074 
@@ -1027,20 +1027,20 @@ tab <- get_SDA_property(property = vars,
 
 # check
 head(tab)
-#>    mukey areasymbol musym                                                                   muname
-#> 1 623396      OK113     1                          Apperson silty clay loam, 1 to 3 percent slopes
-#> 2 623399      OK113     4                                        Coyle loam, 1 to 3 percent slopes
-#> 3 623402      OK113     7 Keokuk very fine sandy loam, 0 to 1 percent slopes, occasionally flooded
-#> 4 623405      OK113    10                                 Bethany silt loam, 1 to 3 percent slopes
-#> 5 623406      OK113    11                                 Bethany silt loam, 3 to 5 percent slopes
-#> 6 623407      OK113    12                          Bethany-Pawhuska complex, 1 to 5 percent slopes
-#>   dbthirdbar_r  awc_r ph1to1h2o_r
-#> 1       1.4500 0.1800       6.148
-#> 2       1.4000 0.1800       5.700
-#> 3       1.4316 0.1716       7.300
-#> 4       1.3500 0.2000       6.200
-#> 5       1.3000 0.2000       6.300
-#> 6       1.3400 0.2000       6.300
+#>    mukey areasymbol musym                                          muname dbthirdbar_r awc_r
+#> 1 623396      OK113     1 Apperson silty clay loam, 1 to 3 percent slopes         1.45  0.18
+#> 2 623405      OK113    10        Bethany silt loam, 1 to 3 percent slopes         1.35  0.20
+#> 3 623406      OK113    11        Bethany silt loam, 3 to 5 percent slopes         1.30  0.20
+#> 4 623407      OK113    12 Bethany-Pawhuska complex, 1 to 5 percent slopes         1.34  0.20
+#> 5 623408      OK113    13     Lucien-Coyle complex, 3 to 8 percent slopes         1.43  0.18
+#> 6 623410      OK113    15           Agra silt loam, 1 to 3 percent slopes         1.34  0.20
+#>   ph1to1h2o_r
+#> 1       6.148
+#> 2       6.200
+#> 3       6.300
+#> 4       6.300
+#> 5       6.500
+#> 6       6.700
 
 # convert areasymbol into a factor easy plotting later
 tab$areasymbol <- factor(tab$areasymbol)
@@ -1138,20 +1138,20 @@ tab <-  get_SDA_property(property = vars,
 
 # check
 head(tab)
-#>     mukey areasymbol musym                                                              muname
-#> 1  691980      MO091 73306               Gressy-Gatewood complex, 3 to 8 percent slopes, rocky
-#> 2 2502332      MO149 73321                       Alred-Gatewood complex, 1 to 8 percent slopes
-#> 3 2502334      MO149 73322                      Alred-Gatewood complex, 8 to 15 percent slopes
-#> 4 2503322      MO149 76002 Batcave-Farewell complex, 1 to 3 percent slopes, frequently flooded
-#> 5 2503473      MO149 76046             Secesh silt loam, 1 to 3 percent slopes, rarely flooded
-#> 6 2503476      MO149 76047    Secesh-Tilk complex, 1 to 3 percent slopes, occasionally flooded
+#>     mukey areasymbol musym                                                            muname
+#> 1 2804574      AR049    17               Gepp very gravelly silt loam, 3 to 8 percent slopes
+#> 2 2804590      AR049    18              Gepp very gravelly silt loam, 8 to 20 percent slopes
+#> 3 2804581      AR049    25                          Peridge silt loam, 3 to 8 percent slopes
+#> 4 2804605      AR049     3            Arkana-Moko complex, 3 to 8 percent slopes, very rocky
+#> 5 2804592      AR049    30 Secesh and Elsah soils, 0 to 3 percent slopes, frequently flooded
+#> 6 2804602      AR049    32      Sturkie silt loam, 0 to 3 percent slopes, frequently flooded
 #>   sandtotal_r silttotal_r claytotal_r
-#> 1      23.000      59.000      18.000
-#> 2      28.692      51.108      20.200
-#> 3      28.692      51.108      20.200
-#> 4      40.000      40.000      20.000
-#> 5      25.648      49.000      25.352
-#> 6      26.908      48.076      25.016
+#> 1       10.00       26.00       64.00
+#> 2       10.00       26.00       64.00
+#> 3        6.64       64.84       28.52
+#> 4        9.76       28.32       61.92
+#> 5       21.00       52.20       26.80
+#> 6        6.00       75.00       19.00
 
 # set raster categories
 levels(mu) <- tab[, c('mukey', vars)]

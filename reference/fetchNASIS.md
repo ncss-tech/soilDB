@@ -41,17 +41,12 @@ fetchNASIS(
   dropAdditional = TRUE,
   dropNonRepresentative = TRUE,
   duplicates = FALSE,
-  stringsAsFactors = NULL,
   dsn = NULL
 )
 
-get_concentrations_from_NASIS_db(
-  SS = TRUE,
-  stringsAsFactors = NULL,
-  dsn = NULL
-)
+get_concentrations_from_NASIS_db(SS = TRUE, dsn = NULL)
 
-get_phfmp_from_NASIS_db(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
+get_phfmp_from_NASIS_db(SS = TRUE, dsn = NULL)
 ```
 
 ## Arguments
@@ -119,10 +114,6 @@ get_phfmp_from_NASIS_db(SS = TRUE, stringsAsFactors = NULL, dsn = NULL)
   mapunits?). This will include columns from
   [`get_component_correlation_data_from_NASIS_db()`](http://ncss-tech.github.io/soilDB/reference/get_component_data_from_NASIS_db.md)
   that identify which legend(s) a component is used on.
-
-- stringsAsFactors:
-
-  deprecated
 
 - dsn:
 

@@ -12,7 +12,6 @@ get_site_data_from_NASIS_db(
   SS = TRUE,
   include_pedon = TRUE,
   nullFragsAreZero = TRUE,
-  stringsAsFactors = NULL,
   dsn = NULL
 )
 
@@ -34,10 +33,6 @@ get_site_association_from_NASIS(SS = TRUE, dsn = NULL)
 
   should surface fragment cover percentages of `NULL` be interpreted as
   `0`? (default: `TRUE`)
-
-- stringsAsFactors:
-
-  deprecated
 
 - dsn:
 
