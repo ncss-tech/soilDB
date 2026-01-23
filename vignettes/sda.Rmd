@@ -340,11 +340,11 @@ nrow(result_inner)
 
 **Case 2: Horizons Without Rock Fragments**
 
-Similarly, not all horizons have child table rock fragment volume recorded. This
-is conventionally used for horizons with no fragments, but in some cases may be
-used for soils that have non-zero fragment weight fractions (for example, those
-with human artifacts). When you need to include horizons regardless of fragment
-availability, use LEFT JOIN:
+Similarly, not all horizons have child table rock fragment volume recorded. An
+empty chfrags table is conventionally used for horizons with no fragments, but
+in some cases may be used for soils that have non-zero fragment weight fractions
+(for example, those with human artifacts). When you need to include horizons
+regardless of fragment availability, use LEFT JOIN:
 
 ```{r left-join-horizons-without-fragments}
 # Some horizons have NO rock fragment data recorded
@@ -1007,7 +1007,7 @@ all_results <- do.call(rbind, results_list)
 head(all_results)
 ```
 
-**Note:** The above sample query is **not** a good way to determine soil thickness, as it does not exclude thickness of non-soil layers (e.g. bedrock) that should not be counted as part of the soil depth. AS an exercise, use the logic from the previous sections to improve this example to filter out bedrock.
+**Note:** The above sample query is **not** a good way to determine soil thickness, as it does not exclude thickness of non-soil layers (e.g. bedrock) that should not be counted as part of the soil depth. As an exercise, use the logic from the previous sections to improve this example to filter out bedrock.
 
 ### Recommended Chunk Sizes
 
@@ -1052,9 +1052,8 @@ Here are some common examples.
 **Component properties:**
 
  - `"Taxonomic Order"`, `"Taxonomic Suborder"`, `"Taxonomic Temperature Regime"`
-
- - `"Drainage Class"`, `"Hydrologic Group"`, `"Corrosion of Steel"`, `"Corrosion of Concrete"`
-
+ - `"Drainage Class"`, `"Hydrologic Group"`
+ - `"Corrosion of Steel"`, `"Corrosion of Concrete"`
  - `"Range Production - Favorable/Normal/Unfavorable Year"`
 
 **Horizon properties:**
@@ -1272,14 +1271,14 @@ Component-percentage-weighted average of ratings:
 agr_weighted <- get_SDA_interpretation(
   rulename = "AGR - Winter Wheat Yield (MT)",
   method = "Weighted Average",
-  areasymbols = "MT663",
+  areasymbols = "MT041",
   include_minors = TRUE
 )
 
 head(agr_weighted)
 ```
 
-Note: in this example, a regional (Montana-specific) interpretation is used, so we used a Montana areasymbol (MT663). Some interpretations are only exported for specific states, regions, or soil survey areas.
+**Note:** in this example, a regional (Montana-specific) interpretation is used, so we used a Montana areasymbol (MT041). Some interpretations are only exported for specific states, regions, or soil survey areas.
 
 ### Method: None
 
