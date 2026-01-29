@@ -317,17 +317,23 @@
 
   if (exists('bad.pedon.ids', envir = get_soilDB_env()) &&
       length(get('bad.pedon.ids', envir = get_soilDB_env())) > 0) {
-    message("-> QC: horizon errors detected:\n\tUse `get('bad.pedon.ids', envir=get_soilDB_env())` for pedon record IDs (peiid)\n\tUse `get('bad.horizons', envir=get_soilDB_env())` for horizon designations")
+    message(
+      "-> QC: horizon errors detected:\n\tUse `get('bad.pedon.ids', envir=get_soilDB_env())` for User Pedon IDs (upedonid)\n\tUse `get('bad.horizons', envir=get_soilDB_env())` for horizon designations"
+    )
   }
   
   if (exists('missing.bottom.depths', envir = get_soilDB_env()) &&
       length(get('missing.bottom.depths', envir = get_soilDB_env())) > 0) {
-    message("-> QC: pedons missing bottom hz depths:\n\tUse `get('missing.bottom.depths', envir=get_soilDB_env())` for pedon record IDs (peiid)")
+    message(
+      "-> QC: pedons missing bottom horizon depths:\n\tUse `get('missing.bottom.depths', envir=get_soilDB_env())` for User Pedon IDs (upedonid)"
+    )
   }
   
   if (exists('top.bottom.equal', envir = get_soilDB_env()) &&
-      length(get('top.bottom.equal', envir = get_soilDB_env())) > 0){
-    message("-> QC: equal hz top and bottom depths:\n\tUse `get('top.bottom.equal', envir=get_soilDB_env())` for pedon record IDs (peiid)")
+      length(get('top.bottom.equal', envir = get_soilDB_env())) > 0) {
+    message(
+      "-> QC: equal horizon top and bottom depths:\n\tUse `get('top.bottom.equal', envir=get_soilDB_env())` for User Pedon IDs (upedonid)"
+    )
   }
   
   # done

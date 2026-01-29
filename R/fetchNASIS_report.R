@@ -332,9 +332,9 @@
   h.test <- aqp::checkHzDepthLogic(hz_data, c('hzdept', 'hzdepb'), idname = pedon_id, fast = TRUE)
   
   # which are the good (valid) ones?
-  good.ids      <- as.character(h.test[[pedon_id]][which(h.test$valid)])
-  bad.ids       <- as.character(h.test[[pedon_id]][which(!h.test$valid)])
-  bad.horizons  <- hz_data[which(!h.test$valid), c(1:4,6,7)]
+  good.ids <- as.character(h.test[[pedon_id]][which(h.test$valid)])
+  bad.ids <- as.character(h.test[[pedon_id]][which(!h.test$valid)])
+  bad.horizons <- hz_data[which(!h.test$valid), c(1:4, 6, 7)]
   bad.pedon.ids <- site_data[[pedon_id]][which(site_data[[pedon_id]] %in% bad.ids)]
   
   # optionally filter pedons WITH NO horizonation inconsistencies
@@ -354,10 +354,12 @@
   
   #4 - optionally convert NA fragvol to 0
   if (nullFragsAreZero) {
-    
-    idx <- grep("fragvol|frags_|gravel|cobbles|stones|boulders|channers|unspecified", names(hz_data))
+    idx <- grep(
+      "fragvol|frags_|gravel|cobbles|stones|boulders|channers|unspecified",
+      names(hz_data)
+    )
     vars <- names(hz_data)[idx]
-    hz_data[idx] <-lapply(hz_data[idx], function(x) {
+    hz_data[idx] <- lapply(hz_data[idx], function(x) {
       ifelse(is.na(x), 0, x)
     })
   }
