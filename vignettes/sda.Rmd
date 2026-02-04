@@ -537,7 +537,7 @@ patterns in historical data population, to filter by horizon designation.
 For instance, a logical statement to exclude the master horizon designation "O"
 for organics:
 
-```r
+```sql
 AND desgnmaster != 'O'
 ```
 
@@ -777,21 +777,25 @@ The SDA system has important hard limits:
 
 1. **Add WHERE clause** to reduce result set:
 
-```r
-# Bad: will return >100k records across all of SSURGO
-q <- "SELECT * FROM component"
-   
-# Good: specific component name pattern in WHERE clause
-q <- "SELECT * FROM component 
-      WHERE compname LIKE 'Miami%'"
+This query will return >100k records (all components across all of SSURGO and STATSGO) (**bad**):
+
+```sql
+SELECT * FROM component
+```
+
+This query selects a specific component name pattern in `WHERE` clause (good):
+
+```sql
+SELECT * FROM component 
+WHERE compname LIKE 'Miami%'
 ```
 
 2. **Use TOP clause** to limit number of results (useful for testing):
 
-```r
-# Test with small result set first
-q <- "SELECT TOP 100 * FROM chorizon"
-result <- SDA_query(q)
+Use a `TOP` clause to test with small result set first
+
+```sql
+SELECT TOP 100 * FROM chorizon
 ```
 
 TOP can be used after sorting with `ORDER BY` to easily find the values
@@ -811,46 +815,46 @@ Efficient queries often perform filtering operations as part of their JOIN
 statements. This can improve server-side query planning and reduce overhead that
 is not needed for the final result.
 
-```r
-# Return aggregated results (fewer rows) instead of raw data
-#  and constrain musym in join to mapunit instead of WHERE
-q <- "
+Return aggregated results (fewer rows) instead of raw data and constrain musym in join to mapunit instead of WHERE:
+
+```sql
 SELECT mu.mukey, 
   COUNT(*) AS n_hz,
   AVG(ch.claytotal_r) AS avg_clay
 FROM component co
-INNER JOIN mapunit mu ON mu.mukey = co.mukey AND mu.musym = '101'
+INNER JOIN mapunit mu ON mu.mukey = co.mukey AND
 INNER JOIN chorizon ch ON ch.cokey = co.cokey
 GROUP BY mu.mukey
 WHERE compname LIKE 'Musick%'
-"
 ```
 
 4. **Explicitly** select the columns you need:
 
 Efficient queries also are explicit about columns in the SELECT clause. 
 
-While `SELECT *` is fine to use for testing, it is prone to issues if schemas
-change, as well as returning more data than is necessary in most cases.
+While `SELECT *` is fine to use for testing, it is prone to issues if 
+schemas change, as well as returning more data than is necessary in 
+most cases.
 
-```r
-# `SELECT *` will return all columns, usually including many columns you do not need
-q <- "SELECT TOP 1 *
-      FROM mapunit
-      INNER JOIN component ON mapunit.mukey = component.mukey
+`SELECT *` will return all columns, usually including many columns you
+do not need:
+
+```sql
+SELECT TOP 1 *
+FROM mapunit
+INNER JOIN component ON mapunit.mukey = component.mukey
 WHERE compname LIKE 'Musick%'
-"
 ```
 
-```r
-# Use `SELECT column1, column2, ...` for concise results, with no duplicated columns in complex joins
-q <- "
+Use `SELECT column1, column2, ...` for concise results, with no 
+duplicated columns in complex joins:
+
+```sql
 SELECT TOP 1 mapunit.mukey, musym, muname, 
              compname, localphase, comppct_r, majcompflag, compkind, cokey
 FROM mapunit
 INNER JOIN component ON mapunit.mukey = component.mukey
 WHERE compname LIKE 'Musick%'
-"
 ```
 
 If a column name occurs multiple times in different tables, you need specify
@@ -860,14 +864,12 @@ If you do need all columns from a specific table use `<tablename>.*` syntax, for
 example here we get all columns from `chfrags`, and specific columns from
 `chorizon` and `component`:
 
-```r
-q <- "
+```sql
 SELECT hzname, chfrags.*, component.cokey
 FROM chfrags
 INNER JOIN chorizon ON chorizon.chkey = chfrags.chkey
 INNER JOIN component ON component.cokey = chorizon.cokey
 WHERE compname LIKE 'Musick%'
-"
 ```
 
 5. **Use `makeChunks()` for large vectors** (see next section)
@@ -883,38 +885,45 @@ bite-sized pieces. This is covered extensively in the next section.
 
 #### NULL Handling
 
-```r
-# Check and filter for non-NULL - SDA uses IS NULL / IS NOT NULL
-q <- "SELECT TOP 10 * FROM chorizon WHERE claytotal_r IS NOT NULL"
+Check and filter for non-NULL - SDA uses IS NULL / IS NOT NULL:
+```sql
+SELECT TOP 10 * FROM chorizon WHERE claytotal_r IS NOT NULL
+```
 
-# Use ISNULL() to provide defaults e.g. convert missing clay content to 0
-q <- "SELECT TOP 10 chkey, claytotal_r, ISNULL(claytotal_r, 0) AS clay FROM chorizon"
+Use `ISNULL()` to provide defaults such as converting missing clay content to 0
+
+```sql
+SELECT TOP 10 chkey, claytotal_r, ISNULL(claytotal_r, 0) AS clay 
+FROM chorizon
 ```
 
 #### Type Casting
 
-```r
-# CAST for explicit type conversion
-q <- "
+Use `CAST()` for explicit type conversion:
+
+```sql
 SELECT TOP 10 
   claytotal_r,
   CAST(claytotal_r AS INT) AS clay_int,
   CAST(chkey AS CHAR(10)) AS chkey_str
 FROM chorizon
 WHERE claytotal_r != CAST(claytotal_r AS INT) 
-"
 ```
 
 **Note:** in example above, casting to INT is equivalent to truncating the value by removing decimals, it does not follow the rounding rules that R `round()` does, for example.
 
 #### String Operations
 
-```r
-# Wildcards with LIKE
-q <- "SELECT * FROM mapunit WHERE muname LIKE '%clay%'"
+You can use wildcards with `LIKE` operator:
 
-# String concatenation with +
-q <- "SELECT areasymbol + '-' + musym AS areamusym FROM mapunit"
+```sql
+SELECT * FROM mapunit WHERE muname LIKE '%clay%'
+```
+
+Perform string concatenation with `+` operator:
+
+```sql
+SELECT areasymbol + '-' + musym AS areamusym FROM mapunit
 ```
 
 ---
@@ -1884,7 +1893,7 @@ library(aqp)
 s <- fetchSDA(WHERE = "areasymbol = 'IN005' AND musym = 'MnpB2'")
 
 # The result is a SoilProfileCollection
-print(s)
+s
 
 # Check the horizon data
 head(horizons(s))
@@ -1924,7 +1933,7 @@ column it corresponds to (`what` argument):
 ldm_data <- fetchLDM("CA630", what = "area_code")
 
 # The result is a SoilProfileCollection
-print(ldm_data)
+ldm_data
 
 # Inspect site data
 head(site(ldm_data))
@@ -1942,7 +1951,7 @@ ldm_taxon <- fetchLDM(WHERE = "(CASE WHEN corr_name IS NOT NULL
                                 ELSE LOWER(samp_name) 
                             END) IN ('musick', 'holland')")
 
-print(ldm_taxon)
+ldm_taxon
 ```
 
 ### Advanced Usage: Specific Tables
